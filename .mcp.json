@@ -1,0 +1,21 @@
+{
+  "_comment": "Claude Code reads THIS file (.mcp.json). The sibling mcp.json without the dot is Cursor's / the DPS VS Code extension's, per docs/mcp-setup.md. They are different consumers of the same two servers -- keep both in step, and do not 'fix' one by deleting the other.",
+  "mcpServers": {
+    "bonsai": {
+      "command": "node",
+      "args": ["c:/Users/still/Documents/BonsAI/packages/bonsai-mcp/dist/index.js"],
+      "env": {
+        "BONSAI_REPO_ROOT": "c:/Users/still/Documents/BonsAI"
+      }
+    },
+    "decky-plugin-studio": {
+      "command": "node",
+      "args": ["c:/Users/still/decky-plugin-studio/mcp-server/dist/index.js"],
+      "env": {
+        "DECKY_STUDIO_WORKSPACE": "c:/Users/still/Documents/BonsAI",
+        "DECKY_STUDIO_REPO": "c:/Users/still/decky-plugin-studio",
+        "DEBUG_INGEST_PORT": "7684"
+      }
+    }
+  }
+}

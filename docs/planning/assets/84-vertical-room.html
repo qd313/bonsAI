@@ -1,0 +1,1677 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>body{margin:0}</style></head><body>
+<title>bonsAI Vertical Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@600;700&family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,600;0,6..12,700;0,6..12,800;1,6..12,400&display=swap">
+<style>
+/* Layout: one reading column for the findings, then a responsive grid of cards. Each card holds a
+   Deck panel drawn at true size (points) that measures itself; the charts are fed by those measurements. */
+:root {
+  --bg: #eef1f4;
+  --surface: #ffffff;
+  --ink: #17212b;
+  --muted: #566573;
+  --line: #d6dde4;
+  --accent: #1d7547;
+  --accent-soft: #dcefe4;
+  --seg-steam: #9aa6b2;
+  --seg-decky: #cf3b3b;
+  --seg-tabs: #3a73b8;
+  --seg-answer: #2f9a5c;
+  --seg-ask: #c8901a;
+  --sure-yes-bg: #dcefe4; --sure-yes-fg: #17613a;
+  --sure-mid-bg: #fbf0d4; --sure-mid-fg: #7a5600;
+  --sure-no-bg: #f6e1e1; --sure-no-fg: #8c2a2a;
+  --frame-edge: rgba(23, 33, 43, 0.28);
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --font-deck: "Motiva Sans", "Nunito Sans", "Segoe UI", system-ui, sans-serif;
+  /* The Deck is dark in both page themes, so these are fixed values, defined once. */
+  --deck-bg: #0e141b;
+  --deck-ink: #e4e8ec;
+  --deck-btn: #32373d;
+  --deck-lit: #f1c40f;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0f15; --surface: #121a23; --ink: #e5ebf1; --muted: #93a2b2; --line: #233140;
+    --accent: #55d68c; --accent-soft: #15301f;
+    --seg-steam: #6f7c89; --seg-decky: #ef6262; --seg-tabs: #5d9ee6; --seg-answer: #48c27c; --seg-ask: #e7b440;
+    --sure-yes-bg: #15301f; --sure-yes-fg: #7fe0a6;
+    --sure-mid-bg: #33280c; --sure-mid-fg: #f2cf72;
+    --sure-no-bg: #3a1717; --sure-no-fg: #f59c9c;
+    --frame-edge: rgba(255, 255, 255, 0.16);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a0f15; --surface: #121a23; --ink: #e5ebf1; --muted: #93a2b2; --line: #233140;
+  --accent: #55d68c; --accent-soft: #15301f;
+  --seg-steam: #6f7c89; --seg-decky: #ef6262; --seg-tabs: #5d9ee6; --seg-answer: #48c27c; --seg-ask: #e7b440;
+  --sure-yes-bg: #15301f; --sure-yes-fg: #7fe0a6;
+  --sure-mid-bg: #33280c; --sure-mid-fg: #f2cf72;
+  --sure-no-bg: #3a1717; --sure-no-fg: #f59c9c;
+  --frame-edge: rgba(255, 255, 255, 0.16);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 1200px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 64px; }
+.read { max-width: 760px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.08; text-wrap: balance; margin: 0; letter-spacing: 0.01em; }
+h1 { font-size: clamp(2.3rem, 5vw, 3.4rem); }
+h2 { font-size: 1.9rem; margin-top: 56px; margin-bottom: 12px; }
+h3 { font-size: 1.35rem; }
+p { margin: 0 0 12px; }
+.eyebrow { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.85rem; color: var(--muted); margin-bottom: 10px; }
+.lede { font-size: 1.15rem; margin-top: 14px; }
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+mark.decky { background: none; color: var(--seg-decky); font-weight: 700; }
+
+/* Key numbers */
+.keys { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 22px; }
+.key { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; }
+.key b { display: block; font-family: var(--font-display); font-size: 2.4rem; line-height: 1; }
+.key span { color: var(--muted); font-size: 0.95rem; }
+
+/* Anatomy */
+.anatomy { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 28px; align-items: start; margin-top: 8px; }
+.photo-wrap { overflow-x: auto; }
+.photo { position: relative; width: 300px; height: 454px; display: flex; gap: 0; }
+.photo img { width: 300px; height: 454px; display: block; border-radius: 4px; box-shadow: 0 0 0 1px var(--frame-edge); }
+.photo-box { position: relative; width: 430px; height: 454px; }
+.brackets { position: absolute; left: 308px; top: 0; width: 122px; height: 454px; }
+.bk { position: absolute; left: 0; width: 122px; display: flex; align-items: center; gap: 6px; font-size: 0.74rem; line-height: 1.15; }
+.bk::before { content: ""; align-self: stretch; width: 4px; border-radius: 2px; background: var(--c); flex: none; }
+.bk em { font-style: normal; font-family: var(--font-mono); color: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+.tbl { overflow-x: auto; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.03em; }
+td.h { font-family: var(--font-mono); white-space: nowrap; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--c); margin-right: 6px; vertical-align: 0; }
+.facts { margin: 16px 0 0; padding-left: 20px; }
+.facts li { margin-bottom: 8px; }
+
+/* Controls */
+.controls { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); padding: 10px 0; margin-top: 8px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 0.9rem; border: 0; background: transparent; color: var(--ink); padding: 6px 12px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--surface); }
+.seg button:focus-visible, .act:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.controls label { font-size: 0.85rem; color: var(--muted); margin-right: 6px; }
+.controls .hint { font-size: 0.85rem; color: var(--muted); }
+
+/* Charts */
+.chart { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; margin-top: 14px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
+.bar-row { display: grid; grid-template-columns: minmax(120px, 210px) minmax(0, 1fr) 92px; gap: 10px; align-items: center; padding: 4px 0; font-size: 0.9rem; }
+.bar-row .lab { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-row .lab b { font-family: var(--font-display); font-size: 1.05rem; margin-right: 6px; }
+.bar { display: flex; height: 20px; border-radius: 3px; overflow: hidden; background: var(--line); }
+.bar i { display: block; height: 100%; background: var(--c); }
+.bar i + i { box-shadow: inset 1px 0 0 var(--surface); }
+.bar-row .val { font-family: var(--font-mono); font-size: 0.85rem; text-align: right; white-space: nowrap; }
+.bar-row .val small { color: var(--seg-answer); }
+.chart .foot { font-size: 0.82rem; color: var(--muted); margin: 10px 0 0; }
+
+/* Cards */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(var(--frame-w, 300px) + 34px), 1fr)); gap: 18px; margin-top: 16px; align-items: start; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.card.wide-card { grid-column: 1 / -1; }
+.card-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.letter { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+.sure { font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.sure.yes { background: var(--sure-yes-bg); color: var(--sure-yes-fg); }
+.sure.mid { background: var(--sure-mid-bg); color: var(--sure-mid-fg); }
+.sure.no { background: var(--sure-no-bg); color: var(--sure-no-fg); }
+.card p { margin: 0; font-size: 0.95rem; }
+.stage { overflow-x: auto; padding: 2px; }
+.scaler { position: relative; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0; }
+.stats div { background: var(--bg); border-radius: 6px; padding: 8px 10px; }
+.stats dt { font-size: 0.75rem; color: var(--muted); }
+.stats dd { margin: 0; font-family: var(--font-mono); font-size: 0.95rem; }
+.stats dd small { display: block; font-size: 0.78rem; color: var(--seg-answer); }
+.stats dd small.flat { color: var(--muted); }
+.notes { margin: 0; padding-left: 18px; font-size: 0.9rem; }
+.notes li { margin-bottom: 4px; }
+.notes b { font-weight: 700; }
+.try { font-size: 0.85rem; color: var(--accent); font-weight: 700; }
+.blend { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--muted); }
+.blend input { flex: 1; accent-color: var(--accent); }
+.section-note { color: var(--muted); max-width: 760px; }
+.qs { counter-reset: q; padding-left: 0; list-style: none; max-width: 760px; }
+.qs li { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; }
+.qs li b { font-family: var(--font-display); font-size: 1.15rem; display: block; margin-bottom: 2px; }
+.picks { background: var(--accent-soft); border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; }
+.iconpick { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 6px 0; font-size: 0.9rem; color: var(--muted); }
+.method { font-size: 0.88rem; color: var(--muted); max-width: 760px; margin-top: 40px; border-top: 1px solid var(--line); padding-top: 16px; }
+
+@media (max-width: 760px) {
+  .anatomy { grid-template-columns: minmax(0, 1fr); }
+  .bar-row { grid-template-columns: minmax(0, 1fr) 80px; }
+  .bar-row .bar { grid-column: 1 / -1; grid-row: 2; }
+}
+
+/* ===================== The Deck drawing ===================== */
+.deck { position: absolute; left: 0; top: 0; width: 300px; height: var(--h, 454px); background: var(--deck-bg); color: var(--deck-ink); font-family: var(--font-deck); font-size: 12px; line-height: 1.2; display: flex; flex-direction: column; overflow: hidden; transform-origin: 0 0; box-shadow: 0 0 0 1px var(--frame-edge); }
+.deck *, .wide * { box-sizing: border-box; }
+.deck svg, .wide svg { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; display: block; }
+/* The page's own card text rule must never reach text inside a drawing: the Deck draws answers at 12. */
+.card .deck p, .card .wide p { font-size: inherit; }
+.d-gap { flex: 0 0 auto; }
+.d-decky { flex: 0 0 34px; height: 34px; display: flex; align-items: flex-start; gap: 10px; padding: 6px 16px 0; }
+.d-back { flex: none; width: 40px; height: 28px; border-radius: 2px; background: var(--deck-btn); color: #e3e7eb; display: grid; place-items: center; }
+.d-back svg { width: 15px; height: 15px; stroke-width: 2.8; }
+.d-title { font-size: 22px; line-height: 28px; font-weight: 800; font-variant: small-caps; letter-spacing: 0.06em; color: rgba(236, 240, 245, 0.96); -webkit-text-stroke: 1.25px #2e8753; paint-order: stroke fill; white-space: nowrap; }
+.d-title sub { font-variant: normal; font-size: 0.46em; font-weight: 600; letter-spacing: 0.04em; color: rgba(168, 180, 196, 0.5); margin-left: 0.38em; -webkit-text-stroke: 0 transparent; vertical-align: baseline; position: relative; bottom: -0.2em; }
+.d-tabbar { flex: 0 0 20px; height: 20px; display: flex; align-items: center; gap: 10px; padding: 0 8px; }
+.d-sh { flex: none; font-size: 9px; line-height: 1; font-weight: 800; letter-spacing: 0.06em; color: rgba(168, 182, 198, 0.62); cursor: pointer; user-select: none; padding: 3px 2px; }
+.d-sh:hover { color: var(--deck-lit); }
+.d-sh--r { margin-left: auto; }
+.d-dashes { display: inline-flex; align-items: center; gap: 4px; flex: none; }
+.d-dash { width: 14px; height: 3px; border-radius: 2px; background: rgba(168, 182, 198, 0.35); }
+.d-dash.on { height: 5px; background: var(--deck-lit); }
+.d-tabname { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--deck-lit); white-space: nowrap; }
+.d-decky .d-tabbar { flex: 1 1 auto; min-width: 0; height: 28px; padding: 0 0 0 2px; gap: 7px; }
+.d-decky .d-dashes { gap: 3px; }
+.d-decky .d-dash { width: 9px; }
+.d-slim { flex: 0 0 28px; height: 28px; display: flex; align-items: center; gap: 6px; padding: 0 0 0 6px; }
+.d-slim .d-back { width: 30px; height: 24px; }
+.d-slim .d-back svg { width: 13px; height: 13px; }
+.d-slim .d-tabbar { flex: 1 1 auto; height: 28px; padding: 0 8px 0 2px; }
+.d-chatsw { flex: 1 1 auto; min-width: 0; height: 28px; display: flex; align-items: center; gap: 2px; border-radius: 3px; background: rgba(255, 255, 255, 0.05); padding: 0 2px; }
+.d-chatsw .chev { flex: none; width: 18px; height: 22px; display: grid; place-items: center; color: var(--deck-lit); cursor: pointer; }
+.d-chatsw .chev svg { width: 11px; height: 11px; stroke-width: 3; }
+.d-chatsw .nm { flex: 1 1 auto; min-width: 0; text-align: center; line-height: 1.05; }
+.d-chatsw .nm b { display: block; font-size: 12px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.d-chatsw .nm span { display: block; font-size: 8.5px; color: rgba(168, 182, 198, 0.7); letter-spacing: 0.04em; }
+.d-ibtn { flex: none; width: 30px; height: 28px; border-radius: 2px; background: var(--deck-btn); color: #e3e7eb; display: grid; place-items: center; cursor: pointer; }
+.d-ibtn svg { width: 14px; height: 14px; }
+.d-decky.has-chats { gap: 6px; }
+
+.d-row { flex: 1 1 auto; min-height: 0; display: flex; }
+.d-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+.d-rail { flex: 0 0 30px; display: flex; flex-direction: column; gap: 3px; padding-top: 2px; border-right: 1px solid rgba(255, 255, 255, 0.07); margin-right: 2px; }
+.d-railbtn { height: 34px; margin: 0 2px; border-radius: 4px; display: grid; place-items: center; color: rgba(168, 182, 198, 0.55); cursor: pointer; }
+.d-railbtn svg { width: 15px; height: 15px; }
+.d-railbtn.on { color: var(--deck-lit); background: rgba(241, 196, 15, 0.12); }
+
+.d-chat { flex: 1 1 auto; min-height: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; padding: 0 0 6px; position: relative; }
+.d-chat > * { flex: none; }
+.d-q { align-self: flex-end; margin-right: 8px; max-width: 250px; display: flex; align-items: center; gap: 6px; padding: 5px 9px; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; background: rgba(255, 255, 255, 0.04); font-size: 11px; font-weight: 700; color: #dfe6ee; }
+.d-q svg { width: 10px; height: 10px; flex: none; color: rgba(168, 182, 198, 0.7); }
+.d-reason { align-self: center; font-size: 10px; font-weight: 700; color: #9fb0c2; }
+.d-answer { margin: 0 29px 0 5px; padding: 8px 14px 18px 18px; border-radius: 10px; border: 1px solid rgba(241, 196, 15, 0.42); background: #39351b; font-size: 12px; line-height: 14.67px; color: #eef1f4; position: relative; }
+.d-answer p { margin: 0; }
+.d-answer p + p { margin-top: 6px; }
+.d-copy { position: absolute; right: 9px; bottom: 5px; width: 11px; height: 11px; color: rgba(255, 255, 255, 0.45); }
+.d-actions { display: flex; justify-content: flex-end; padding-right: 26px; }
+.d-speak { width: 32px; height: 32px; border-radius: 6px; background: #1a222b; border: 1px solid rgba(255, 255, 255, 0.14); display: grid; place-items: center; color: #dfe6ee; }
+.d-speak svg { width: 14px; height: 14px; }
+.d-elsewhere { margin: 0 10px; padding: 10px 12px; border: 1px dashed rgba(241, 196, 15, 0.5); border-radius: 8px; font-size: 11px; color: #d8c88a; text-align: center; }
+
+.d-dock { flex: 0 0 auto; display: flex; flex-direction: column; }
+.d-chips { flex: none; height: 30px; display: flex; gap: 6px; overflow: hidden; }
+.d-chip { flex: 0 0 147px; height: 30px; border-radius: 4px; border: 1px solid rgba(255, 255, 255, 0.10); background: linear-gradient(180deg, rgba(56, 70, 84, 0.5), rgba(16, 22, 30, 0.55)); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10); display: flex; align-items: center; padding: 0 8px; font-size: 12.5px; color: #c4d3e2; white-space: nowrap; overflow: hidden; }
+.d-g2 { flex: none; height: 2px; }
+.d-box { flex: none; height: 73px; border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 4px; background: #131a22; display: grid; grid-template-columns: 28px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) 29px; }
+.d-avatar { grid-row: 1; grid-column: 1; margin: 5px 0 0 5px; width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f6d65a, #7a5c12); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5); }
+.d-ph { grid-row: 1; grid-column: 2; padding: 6px 8px 0 4px; font-style: italic; font-size: 12px; line-height: 1.25; color: rgba(168, 180, 196, 0.55); overflow: hidden; }
+.d-strip { grid-row: 2; grid-column: 1 / -1; display: flex; align-items: center; gap: 7px; padding: 0 6px 0 10px; min-width: 0; }
+.d-strip .ic { width: 13px; height: 13px; color: rgba(168, 180, 196, 0.6); flex: none; }
+.d-mode { margin-left: auto; flex: none; font-size: 11px; font-weight: 800; font-variant: small-caps; letter-spacing: 0.05em; color: #e4c94e; background: rgba(250, 204, 21, 0.08); border-radius: 3px; padding: 2px 7px 4px; }
+.d-game { flex: 0 1 auto; min-width: 0; display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-style: italic; color: #8fa8c4; white-space: nowrap; overflow: hidden; }
+.d-game svg { width: 13px; height: 13px; flex: none; }
+.d-askpill { flex: none; height: 22px; padding: 0 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.10); border: 1px solid rgba(255, 255, 255, 0.18); font-size: 12px; font-weight: 800; font-variant: small-caps; letter-spacing: 0.04em; color: #d6e0eb; display: inline-flex; align-items: center; gap: 3px; }
+.d-askpill svg { width: 11px; height: 11px; stroke-width: 2.8; }
+.d-ask { flex: none; height: 37px; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 4px; background: #161e27; display: grid; place-items: center; font-size: 15px; font-weight: 700; font-variant: small-caps; letter-spacing: 0.55px; color: #a8b4c4; }
+.d-ctx { flex: none; height: 18px; font-size: 10px; font-style: italic; color: #8fa8c4; padding-top: 4px; line-height: 1.35; white-space: nowrap; overflow: hidden; }
+.d-follow { flex: none; height: 34px; border: 1px solid rgba(255, 255, 255, 0.11); border-radius: 4px; background: #131a22; display: flex; align-items: center; gap: 8px; padding: 0 10px; font-style: italic; font-size: 12px; color: rgba(168, 180, 196, 0.65); cursor: pointer; }
+.d-follow .d-avatar { margin: 0; flex: none; }
+.d-follow .ic { margin-left: auto; width: 13px; height: 13px; color: rgba(168, 180, 196, 0.6); }
+.d-follow:hover { border-color: rgba(241, 196, 15, 0.55); }
+.d-hud { position: absolute; top: 6px; right: 8px; z-index: 2; display: flex; align-items: center; gap: 5px; padding: 3px 7px; border-radius: 999px; background: rgba(14, 20, 27, 0.9); border: 1px solid rgba(255, 255, 255, 0.14); font-size: 9px; font-weight: 800; letter-spacing: 0.08em; color: var(--deck-lit); cursor: pointer; }
+.d-hud .d-sh { padding: 0; }
+.d-sheet { position: absolute; left: 0; right: 0; top: 48px; bottom: 0; z-index: 3; background: var(--deck-bg); padding: 6px 6px; display: none; flex-direction: column; gap: 4px; }
+.deck.sheet-open .d-sheet { display: flex; }
+.d-sheet h4 { margin: 2px 4px 4px; font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #9ce7ff; }
+.d-srow { height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 10px; border-radius: 4px; background: rgba(255, 255, 255, 0.045); font-size: 13px; color: #dfe6ee; }
+.d-srow svg { width: 15px; height: 15px; color: #9fb0c2; }
+.d-srow span { margin-left: auto; font-size: 10px; color: #8fa8c4; }
+.d-sheet p { margin: auto 4px 4px; font-size: 10px; color: #8fa8c4; }
+.d-key { flex: none; font-size: 9px; line-height: 1; font-weight: 800; letter-spacing: 0.04em; color: rgba(200, 212, 226, 0.85); border: 1px solid rgba(168, 182, 198, 0.4); border-radius: 4px; padding: 3px 3px 2px; cursor: pointer; user-select: none; }
+.d-key:hover { color: var(--deck-lit); border-color: var(--deck-lit); }
+.d-cbar { flex: 1 1 auto; min-width: 0; height: 28px; display: flex; align-items: center; gap: 5px; }
+.d-ctitle { flex: 1 1 auto; min-width: 0; text-align: center; line-height: 1.1; }
+.d-ctitle b { display: block; font-size: 13px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.d-ctitle > span { display: block; font-size: 8.5px; color: rgba(168, 182, 198, 0.72); letter-spacing: 0.03em; }
+.d-ctitle .mini { display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 3px; }
+.d-ctitle .mini .d-dashes { gap: 2px; }
+.d-ctitle .mini .d-dash { width: 7px; height: 2px; }
+.d-ctitle .mini .d-dash.on { height: 3px; }
+.d-ctitle .mini .d-tabname { font-size: 8px; letter-spacing: 0.08em; }
+.d-ctitle .mini .d-sh { font-size: 7.5px; padding: 0 1px; }
+.d-chatrow { flex: 0 0 26px; height: 26px; display: flex; align-items: center; gap: 6px; padding: 0 6px 0 8px; background: rgba(255, 255, 255, 0.035); border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.d-chatrow .d-ctitle b { font-size: 12px; }
+.d-chatrow .d-ctitle { display: flex; align-items: baseline; justify-content: center; gap: 6px; }
+.d-chatrow .d-ctitle b { display: inline; }
+.d-chatrow .d-ctitle > span { display: inline; }
+.d-chatrow .d-ibtn { width: 26px; height: 22px; }
+.d-ctag { display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 5px; border-radius: 12px; background: rgba(14, 20, 27, 0.94); border: 1px solid rgba(241, 196, 15, 0.38); max-width: 100%; min-width: 0; flex: none; }
+.d-ctag .d-key { font-size: 8.5px; padding: 2px 3px 1px; }
+.d-cname { display: inline-flex; align-items: center; gap: 4px; min-width: 0; }
+.d-cname[data-act] { cursor: pointer; }
+.d-cname b { font-size: 11.5px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.d-cname .cnt { font-size: 8.5px; color: rgba(168, 182, 198, 0.72); flex: none; }
+.d-cname .car { display: grid; place-items: center; flex: none; color: var(--deck-lit); }
+.d-cname .car svg { width: 10px; height: 10px; stroke-width: 3; }
+.d-cmenu { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 4px; background: rgba(255, 255, 255, 0.08); color: #dfe6ee; cursor: pointer; flex: none; }
+.d-cmenu svg { width: 13px; height: 13px; }
+.d-float { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); z-index: 2; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.55); }
+.d-actions.with-chat { justify-content: space-between; align-items: center; padding-left: 6px; }
+.d-ctag.in-chips { height: 30px; border-radius: 4px; }
+.d-ctag.in-box { height: 22px; border-radius: 4px; flex: 0 1 auto; gap: 4px; padding: 0 4px; }
+.d-ctag.in-box .cnt { display: none; }
+.d-ctag.in-box .d-cname b { font-size: 11px; }
+.d-box { position: relative; }
+.d-gcorner { position: absolute; top: 5px; right: 7px; display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-style: italic; color: #8fa8c4; }
+.d-gcorner svg { width: 12px; height: 12px; }
+.d-sheet { overflow: hidden; }
+.d-decky--chat { flex: 0 0 28px; height: 28px; padding: 0 16px; gap: 6px; align-items: center; }
+.d-cline { flex: 1 1 auto; min-width: 0; height: 28px; display: flex; align-items: center; gap: 6px; }
+.d-cline .d-cname { flex: 1 1 auto; justify-content: center; }
+.d-cline .d-cname b { font-size: 14px; }
+.d-cline .d-cname .cnt { font-size: 9px; }
+.d-cline .d-key { font-size: 9px; padding: 3px 4px 2px; }
+.d-cline .tabttl { flex: 1 1 auto; text-align: center; font-size: 14px; font-weight: 800; letter-spacing: 0.02em; }
+.d-caret { display: inline-block; width: 7px; height: 13px; margin-left: 1px; vertical-align: -2px; background: var(--deck-lit); animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .d-caret { animation: none; } }
+.d-thinking { align-self: flex-start; margin-left: 8px; font-size: 10px; font-weight: 700; color: #9fb0c2; }
+.d-stop { flex: none; width: 22px; height: 22px; border-radius: 4px; display: grid; place-items: center; background: rgba(241, 106, 90, 0.16); border: 1px solid rgba(241, 106, 90, 0.6); }
+.d-stop i { width: 8px; height: 8px; border-radius: 1px; background: #f16a5a; }
+.d-askpill.resting { opacity: 0.38; }
+.d-empty { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #8fa8c4; font-size: 11.5px; text-align: center; padding: 0 30px; }
+.d-empty .logo { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle, rgba(46, 135, 83, 0.35), rgba(46, 135, 83, 0.08)); color: #52d88a; }
+.d-empty .logo svg { width: 30px; height: 30px; }
+.d-stripopen { position: absolute; left: 0; right: 0; top: 0; height: 66px; z-index: 4; display: flex; align-items: center; gap: 2px; padding: 5px 6px; background: #1b232d; border-bottom: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 6px 14px rgba(0, 0, 0, 0.55); }
+.d-stripopen .d-pill { flex: 0 0 20px; text-align: center; font-size: 9px; font-weight: 800; color: rgba(168, 182, 198, 0.75); cursor: pointer; }
+.d-scell { flex: 1 1 0; height: 44px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; gap: 3px; padding-top: 6px; color: rgba(168, 182, 198, 0.6); cursor: pointer; }
+.d-scell svg { width: 20px; height: 20px; }
+.d-scell span { font-size: 9.5px; font-weight: 800; font-variant: small-caps; letter-spacing: 0.04em; visibility: hidden; }
+.d-scell.on { background: rgba(241, 196, 15, 0.13); color: var(--deck-lit); }
+.d-scell.on span { visibility: visible; }
+.d-set { flex: 1 1 auto; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 4px; padding: 6px 6px 0; }
+.d-set h5 { margin: 4px 4px 2px; font-size: 10px; font-weight: 700; letter-spacing: 0.03em; color: #9ce7ff; text-transform: uppercase; }
+.d-srow2 { flex: none; height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 10px; border-radius: 4px; background: rgba(255, 255, 255, 0.04); font-size: 12.5px; color: #dfe6ee; }
+.d-srow2 span { margin-left: auto; font-size: 11px; color: #8fa8c4; }
+.d-tog { margin-left: auto; width: 30px; height: 16px; border-radius: 8px; background: rgba(255, 255, 255, 0.18); position: relative; flex: none; }
+.d-tog::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: #dfe6ee; }
+.d-tog.on { background: #1a9fff; }
+.d-tog.on::after { left: 16px; }
+.d-tabbar.bal { gap: 6px; }
+.d-tabbar.bal .d-sh--r { margin-left: 0; }
+.bal .mid { display: inline-flex; align-items: center; gap: 4px; color: var(--deck-lit); font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+.bal .mid svg { width: 12px; height: 12px; stroke-width: 2.4; }
+.bal .dot { flex: none; width: 5px; height: 5px; border-radius: 50%; background: rgba(168, 182, 198, 0.38); }
+.bal-t1 .cluster { margin: 0 auto; display: inline-flex; align-items: center; gap: 6px; }
+.bal-t1 .mid { padding: 1px 6px 1px 5px; border-radius: 8px; background: rgba(241, 196, 15, 0.12); }
+.bal-t2 .stack { margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.bal-t2 .mid { font-size: 10px; line-height: 11px; }
+.bal-t2 .mid svg { width: 11px; height: 11px; }
+.bal-t2 .dots { display: flex; gap: 4px; }
+.bal-t2 .dot { width: 4px; height: 4px; }
+.bal-t2 .dot.on { background: var(--deck-lit); }
+.d-tabbar.bal-t3, .d-tabbar.bal-t4 { display: grid; grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr) auto; align-items: center; }
+.bal-t3 .side { display: flex; gap: 4px; align-items: center; }
+.bal-t3 .side.l { justify-content: flex-end; }
+.bal-t3 .side.r { justify-content: flex-start; }
+.bal-t3 .side { gap: 7px; }
+.bal-t3 .side svg { width: 11px; height: 11px; color: rgba(168, 182, 198, 0.55); flex: none; }
+.bal-t3 .mid, .bal-t4 .mid { padding: 0 6px; }
+.bal-t4 .nb { font-size: 8.5px; font-weight: 700; letter-spacing: 0.06em; color: rgba(168, 182, 198, 0.62); text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bal-t4 .nb.r { text-align: right; }
+.d-tabbar.bal.edge16 { padding: 0 16px; }
+/* Centre the words, not the groups: the tab's icon hangs off the left of its name, the menu arrow off the right of the chat's. */
+.d-tabbar.bal.edge16 .mid::after { content: ""; flex: none; width: 12px; }
+.d-cpill .nm2::before { content: ""; flex: none; width: 10px; }
+.d-decky--sym { flex: 0 0 28px; height: 28px; padding: 0 16px; gap: 6px; align-items: center; }
+.d-cpill { flex: 1 1 auto; min-width: 0; height: 28px; display: flex; align-items: center; gap: 4px; padding: 0 4px; border-radius: 4px; }
+/* Round seven: hints dim unless the ring is on their row; a white outline marks the ring. */
+.deck.dimkeys .d-tabbar .d-sh, .deck.dimkeys .d-cpill .d-key { opacity: 0.32; transition: opacity 0.15s; }
+.deck.dimkeys.ring-tabs .d-tabbar .d-sh { opacity: 1; color: #eef3f8; }
+.deck.dimkeys.ring-chat .d-cpill .d-key { opacity: 1; color: #eef3f8; border-color: rgba(238, 243, 248, 0.8); }
+.deck.ring-tabs .d-tabbar { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.85); background: rgba(255, 255, 255, 0.06); border-radius: 3px; }
+.deck.ring-chat .d-cpill .d-cname { box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85); border-radius: 4px; background: rgba(255, 255, 255, 0.06); }
+.deck.ring-answer .d-answer { box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85); }
+.deck.ring-box .d-box { box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85); }
+.d-bspeak { position: absolute; right: 25px; bottom: 4px; width: 12px; height: 12px; color: rgba(255, 255, 255, 0.6); }
+.d-bspeak.left { left: 10px; right: auto; }
+/* Round eight: LT and RT on the small line under the name, an optional menu button in the right corner, slim corners. */
+.d-cpill .sub2 { display: inline-flex; align-items: center; gap: 5px; font-size: 8px; line-height: 10px; color: rgba(168, 182, 198, 0.72); letter-spacing: 0.03em; }
+.d-cpill .sub2 .d-key { font-size: 7px; padding: 1px 2px 0; border-radius: 3px; line-height: 8px; }
+.d-cpill .nm2.bare::before { display: none; }
+.d-cpill.roomy { padding: 0 4px; }
+.d-decky--sym.slim .d-back, .d-decky--sym.slim .d-mirror { width: 28px; }
+.d-mirror.menu { cursor: pointer; }
+.d-mirror.menu svg { width: 14px; height: 14px; stroke-width: 3; color: var(--deck-lit); }
+.nm2 b.mq { text-overflow: clip; }
+.nm2 b.mq .mqi { display: inline-block; animation: mq 7s ease-in-out infinite; }
+@keyframes mq { 0%, 18% { transform: translateX(0); } 62%, 78% { transform: translateX(var(--mq, 0px)); } 100% { transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) { .nm2 b.mq .mqi { animation: none; } .nm2 b.mq { text-overflow: ellipsis; } }
+.d-sfloat { position: absolute; right: 36px; bottom: 12px; z-index: 2; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: rgba(14, 20, 27, 0.88); border: 1px solid rgba(255, 255, 255, 0.28); color: #eef3f8; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5); }
+.d-sfloat svg { width: 14px; height: 14px; }
+.d-reason.with-speak { align-self: stretch; display: flex; justify-content: center; align-items: center; position: relative; padding: 0 30px; min-height: 18px; }
+.d-reason.with-speak .spk { position: absolute; right: 29px; top: 50%; transform: translateY(-50%); width: 22px; height: 18px; border-radius: 4px; display: grid; place-items: center; background: #1a222b; border: 1px solid rgba(255, 255, 255, 0.14); color: #dfe6ee; }
+.d-reason.with-speak .spk svg { width: 11px; height: 11px; }
+.d-cpill .d-cname { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; }
+.d-cpill .nm2 { display: inline-flex; align-items: center; gap: 3px; max-width: 100%; min-width: 0; }
+.d-cpill .nm2 b { font-size: 13px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.d-cpill .nm2.big b { font-size: 14px; }
+.d-cpill .sub { font-size: 8px; line-height: 9px; color: rgba(168, 182, 198, 0.72); letter-spacing: 0.03em; }
+.d-mirror { flex: none; width: 40px; height: 28px; border-radius: 2px; display: grid; place-items: center; }
+.d-mirror.btn { background: var(--deck-btn); color: #e3e7eb; }
+.d-mirror.btn svg { width: 15px; height: 15px; stroke-width: 2.8; }
+.d-mirror.num { border: 1px solid rgba(168, 182, 198, 0.28); font-size: 11px; font-weight: 800; color: #dfe6ee; font-variant-numeric: tabular-nums; }
+.guide { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(80, 200, 255, 0.75); pointer-events: none; z-index: 6; }
+.d-tabbar.ringed { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.85); background: rgba(255, 255, 255, 0.06); border-radius: 3px; }
+.deck.closeup { box-shadow: 0 0 0 1px var(--frame-edge); }
+.closeup-stage { margin-bottom: 2px; }
+.d-crow { height: 27px; display: flex; align-items: center; gap: 8px; padding: 0 10px; border-radius: 4px; background: rgba(255, 255, 255, 0.04); font-size: 12px; color: #dfe6ee; border-left: 3px solid transparent; }
+.d-crow.on { border-left-color: var(--deck-lit); background: rgba(241, 196, 15, 0.08); font-weight: 800; }
+.d-crow .dot { width: 6px; height: 6px; border-radius: 50%; background: #52d88a; }
+.d-crow span:last-child { margin-left: auto; font-size: 10px; color: #8fa8c4; font-weight: 400; }
+.d-cacts { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 4px; }
+.d-cact { height: 27px; display: flex; align-items: center; gap: 6px; padding: 0 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.06); font-size: 11px; color: #dfe6ee; white-space: nowrap; overflow: hidden; }
+.d-cact svg { width: 13px; height: 13px; color: #9fb0c2; flex: none; }
+.d-cact.danger { color: #f16a5a; }
+.d-cact.danger svg { color: #f16a5a; }
+
+/* Whole-screen drawings (853 x 533 points = the Deck's 1280 x 800 screen) */
+.wide { position: absolute; left: 0; top: 0; width: 853px; height: 533px; overflow: hidden; font-family: var(--font-deck); color: var(--deck-ink); background: var(--deck-bg); transform-origin: 0 0; box-shadow: 0 0 0 1px var(--frame-edge); }
+.w-top { position: absolute; left: 0; right: 0; top: 0; height: 40px; z-index: 4; display: flex; align-items: center; justify-content: flex-end; gap: 16px; padding: 0 14px; font-size: 13px; font-weight: 700; background: rgba(9, 13, 18, 0.88); }
+.w-top svg { width: 16px; height: 16px; }
+.w-foot { position: absolute; left: 0; right: 0; bottom: 0; height: 40px; z-index: 4; display: flex; align-items: center; gap: 14px; padding: 0 18px; font-size: 12px; font-weight: 800; letter-spacing: 0.06em; background: rgba(9, 13, 18, 0.92); }
+.w-foot .pill { border-radius: 999px; background: #e8edf2; color: #0e141b; padding: 3px 10px; }
+.w-foot .btn { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: #e8edf2; color: #0e141b; font-size: 11px; }
+.w-foot .sp { margin-left: auto; }
+.w-page { position: absolute; top: 40px; bottom: 40px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; padding-top: 14px; background: linear-gradient(180deg, #121b25, #0e141b 40%); }
+.w-head { width: 660px; display: flex; align-items: baseline; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+.w-head b { font-size: 18px; font-weight: 800; }
+.w-head span { font-size: 12px; color: #8fa8c4; }
+.w-head .r { margin-left: auto; }
+.w-scroll { flex: 1 1 auto; min-height: 0; overflow: hidden; width: 660px; padding-top: 10px; }
+.w-scroll .q { font-size: 13px; font-weight: 700; color: #cfd8e2; margin-bottom: 8px; }
+.w-scroll .ans { font-size: 14.5px; line-height: 1.5; color: #eef1f4; }
+.w-scroll .ans p { margin: 0 0 8px; }
+.w-game { position: absolute; inset: 0; background:
+  radial-gradient(ellipse 30% 40% at 30% 55%, rgba(255, 170, 60, 0.35), transparent 70%),
+  radial-gradient(ellipse 25% 30% at 62% 35%, rgba(90, 200, 255, 0.25), transparent 70%),
+  radial-gradient(ellipse 60% 50% at 40% 90%, rgba(120, 40, 160, 0.45), transparent 70%),
+  linear-gradient(160deg, #1b2436, #0b0f1a 60%, #160d22); }
+.w-game::after { content: "your game"; position: absolute; left: 24px; bottom: 52px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255, 255, 255, 0.35); }
+.w-qam { position: absolute; top: 40px; bottom: 40px; right: 0; width: 348px; display: flex; background: var(--deck-bg); }
+.w-qrail { flex: 0 0 48px; display: flex; flex-direction: column; align-items: center; gap: 22px; padding-top: 30px; color: #8b929a; background: #0b1016; }
+.w-qrail svg { width: 18px; height: 18px; }
+.w-qcol { position: relative; flex: 0 0 300px; }
+.w-card { position: absolute; left: 26px; top: 58px; width: 452px; bottom: 58px; z-index: 3; background: rgba(14, 20, 27, 0.9); border: 1px solid rgba(241, 196, 15, 0.45); border-radius: 12px; padding: 12px 16px 10px; display: flex; flex-direction: column; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55); }
+.w-card .w-scroll { width: auto; padding-top: 6px; }
+.w-card .w-scroll .ans { font-size: 13.5px; }
+.w-card .ttl { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; color: var(--deck-lit); text-transform: uppercase; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .d-sheet { animation: none; }
+}
+</style>
+
+<div class="wrap">
+  <header class="read">
+    <div class="eyebrow">bonsAI · the Quick Access panel · measured 8 Oct 2026</div>
+    <h1>Making room for the answer</h1>
+    <p class="picks" style="margin-top: 14px;"><b>Updated after round eight.</b> Round eight, more room for the chat's name (you picked X1), is the first section below. Then the design you picked; the build plan is plan 84 in the repo. Every round follows it, newest first, so you can see how each pick was made. Round four's six states show the final design.</p>
+    <p class="lede">The part in your red box is <mark class="decky">Decky's title bar</mark>: the back arrow and the plugin's name. Decky Loader draws it above every plugin. bonsAI can't remove Decky, but it can move its own tab bar up into that bar, or hide the bar while bonsAI is open. Below is what's possible today, drawn at true size from measurements, plus four ideas from further out.</p>
+  </header>
+
+  <div class="keys read" style="max-width: 900px;">
+    <div class="key"><b class="num">454</b><span>points tall is all bonsAI gets on the Deck's own screen. On a TV it's 766, and that's where the design notes were measured.</span></div>
+    <div class="key"><b class="num">88</b><span>points go to bars before the chat starts. 50 of them are Decky's.</span></div>
+    <div class="key"><b class="num">162</b><span>points go to the ask area at the bottom. That's the biggest single piece.</span></div>
+    <div class="key"><b class="num">204</b><span>points are left for the answer. That's less than half the panel.</span></div>
+  </div>
+
+  <h2>Round eight: more room for the chat's name</h2>
+  <div class="picks read">
+    <b>Your ask.</b> Fit more characters in the chat's name by using the empty space on the right, while keeping it centred and balanced against the tab bar.
+  </div>
+  <p class="section-note"><b>The rule that decides this:</b> to stay centred, the name can only grow by the same amount on both sides, and on the left it stops at Decky's back arrow. So the name itself can't reach into the empty space on the right. <b>Everything else on its line can.</b> Move LT, RT and the menu arrow off the name's line, and the name gets the whole width between the two corners. Every drawing here shows the longest example name, "Second boss, phase two strategy" (31 characters), and counts how much of it fits. <span class="try">Turn on the guides to check the centre line.</span></p>
+  <div class="iconpick"><span>Long names:</span><span class="seg" data-ctl="longname"><button type="button" data-v="cut" aria-pressed="true">Cut short with …</button><button type="button" data-v="scroll" aria-pressed="false">Scroll slowly</button></span><span>Guides:</span><span class="seg" data-ctl="guides"><button type="button" data-v="on" aria-pressed="true">Show</button><button type="button" data-v="off" aria-pressed="false">Hide</button></span></div>
+  <div class="grid">
+    <article class="card" data-card="X0">
+      <div class="card-head"><span class="letter">X0</span><h3>Your current pick, for comparison</h3></div>
+      <p>LT, the name with its menu arrow, and RT share one line between the back arrow and the empty corner.</p>
+      <div class="stage closeup-stage"><div class="scaler"><div class="deck closeup" data-close="X0"></div></div></div>
+      <dl class="stats"><div><dt>Room for the name</dt><dd data-name="X0">…</dd></div><div><dt>Shows</dt><dd data-shows="X0">…</dd></div></dl>
+    </article>
+    <article class="card" data-card="X1">
+      <div class="card-head"><span class="letter">X1</span><h3>LT and RT move under the name</h3></div>
+      <p>LT and RT join the small line under the name: "LT · chat 3 of 5 · RT", still one on each side of the centre. The name's line keeps only the name and its menu arrow. The right corner stays empty.</p>
+      <div class="stage closeup-stage"><div class="scaler"><div class="deck closeup" data-close="X1"></div></div></div>
+      <dl class="stats"><div><dt>Room for the name</dt><dd data-name="X1">…</dd></div><div><dt>Shows</dt><dd data-shows="X1">…</dd></div></dl>
+      <ul class="notes"><li><b>Keeps everything you picked</b> except where LT and RT sit. They get smaller, but they are dimmed most of the time anyway.</li></ul>
+    </article>
+    <article class="card" data-card="X2">
+      <div class="card-head"><span class="letter">X2</span><h3>The menu arrow moves into the right corner</h3></div>
+      <p>As X1, and the menu arrow leaves the name to become a button in the empty corner, mirroring the back arrow. The name's line holds nothing but the name.</p>
+      <div class="stage closeup-stage"><div class="scaler"><div class="deck closeup" data-close="X2"></div></div></div>
+      <dl class="stats"><div><dt>Room for the name</dt><dd data-name="X2">…</dd></div><div><dt>Shows</dt><dd data-shows="X2">…</dd></div></dl>
+      <ul class="notes"><li><b>The most balanced:</b> back on the left, your chats on the right, the name dead centre. A on the name still opens the menu too.</li><li><b>Changes one pick:</b> the corner is no longer empty.</li></ul>
+    </article>
+    <article class="card" data-card="X3">
+      <div class="card-head"><span class="letter">X3</span><h3>As X2, with slimmer corner buttons</h3></div>
+      <p>bonsAI draws Decky's back arrow 28 points wide instead of 40, and the menu button to match, so both corners give the name 12 points each.</p>
+      <div class="stage closeup-stage"><div class="scaler"><div class="deck closeup" data-close="X3"></div></div></div>
+      <dl class="stats"><div><dt>Room for the name</dt><dd data-name="X3">…</dd></div><div><dt>Shows</dt><dd data-shows="X3">…</dd></div></dl>
+      <ul class="notes"><li><b>Catch:</b> it restyles Decky's own button, the same kind of reach as hiding Decky's bar, so it joins that Deck test. The back arrow is still 28 tall, the same height as today.</li></ul>
+    </article>
+  </div>
+  <p class="section-note" style="margin-top: 14px;"><b>You picked X1, with long names scrolling while the ring is on them.</b> The design you picked, below, now uses it: move the ring to "Chat's name" to see a long name scroll.</p>
+  <p class="section-note"><b>"Scroll slowly"</b> is an extra that works with any of them: a name too long to fit slides along once so you can read the rest, then comes back. On the Deck it would only move while the ring is on the name. bonsAI's suggestion chips already do this with long questions.</p>
+
+  <h2>The design you picked</h2>
+  <div class="anatomy" style="grid-template-columns: auto minmax(0, 1fr);">
+    <div>
+      <div class="stage closeup-stage"><div class="scaler"><div class="deck closeup" data-close="Z"></div></div></div>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="Z"></div></div></div>
+      <dl class="stats" data-card="Z" style="max-width: 300px; margin-top: 8px;"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+    </div>
+    <div style="min-width: 0;">
+      <ul class="facts" style="margin-top: 0;">
+        <li><b>Tabs in the top strip</b>, the 20 points that today are Steam's empty margin plus the top of Decky's bar. T3: the tab's icon and name in the middle, the other tabs as small dimmed icons on each side, LB and RB at the ends. No drop-down icon strip.</li>
+        <li><b>The chat's name beside Decky's back arrow</b>, centred under the tab's name, with empty space on the right to balance the arrow. No shading. LT and RT sit on the small line under the name ("LT · chat 3 of 5 · RT") and switch chats; the arrow after the name opens the chats menu. About 20 characters fit; a longer name slides along to show the rest while the ring is on it.</li>
+        <li><b>The hints dim:</b> LB and RB light up only while the ring is on the tab bar, and LT and RT only while it's on the chat's name.</li>
+        <li><b>The chats menu</b> holds the list of chats and New chat, Rename chat, Sum up this chat, Save to Desktop note and Delete chat. The saved-chats row at the top of the chat goes away.</li>
+        <li><b>On the other tabs</b> the row with the back arrow and chat name is hidden completely.</li>
+        <li><b>The ask area:</b> the big ASK button becomes a small one in the box's bottom strip, and the context line becomes a small game tag there.</li>
+        <li><b>Read aloud</b> sits in the answer's lower-left corner, opposite Copy.</li>
+        <li><b>The version number</b> moves to the About tab.</li>
+        <li><b>Reading mode</b> gets a test to find out, separately.</li>
+        <li><b>Built for the Deck's own screen first.</b> The answer gets <b class="num" data-z="answer">…</b>, about <b class="num" data-z="words">…</b> words, against 204 points and <b class="num" data-today="words">…</b> words today.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Round seven: where Read aloud goes</h2>
+  <div class="picks read">
+    <b>Your round-six answer.</b> U3: empty space balances the back arrow. No shading behind the chat's name. LB, RB, LT and RT dim whenever the ring is somewhere else. Then this round: Read aloud.
+  </div>
+  <p class="section-note"><b>The button hints now dim.</b> LB and RB light up only while the ring is on the tab bar, and LT and RT only while it's on the chat's name. Elsewhere all four fade back. The switch below moves the ring in every drawing from round four onwards. The white outline shows where the ring is.</p>
+  <div class="iconpick"><span>Where's the ring?</span><span class="seg" data-ctl="ring"><button type="button" data-v="tabs" aria-pressed="false">Tab bar</button><button type="button" data-v="chat" aria-pressed="false">Chat's name</button><button type="button" data-v="answer" aria-pressed="true">Answer</button><button type="button" data-v="box" aria-pressed="false">Ask box</button></span></div>
+  <p class="section-note" style="margin-top: 12px;"><b>Read aloud today</b> has a row of its own under the newest answer: a 32-point button plus an 8-point gap. Each drawing below moves it somewhere that already exists, so the row goes. The answer area stays 297 points in all of them; what changes is how much of the answer fits in it.</p>
+  <div class="grid">
+    <article class="card" data-card="W0">
+      <div class="card-head"><span class="letter">W0</span><h3>Today: a row of its own</h3></div>
+      <p>The layout so far, with Read aloud where it is now, for comparison.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="W0"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+    </article>
+    <article class="card" data-card="W1">
+      <div class="card-head"><span class="letter">W1</span><h3>In the answer's corner, beside Copy</h3></div>
+      <p>The answer already has a small Copy icon in its bottom corner. Read aloud sits next to it, so the two things you can do with an answer sit together.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="W1"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes"><li><b>Small target</b> for touch, the same size as Copy today. With the D-pad, it's a stop at the end of the answer.</li></ul>
+    </article>
+    <article class="card" data-card="W2">
+      <div class="card-head"><span class="letter">W2</span><h3>In the ask box, beside the mic</h3></div>
+      <p>Voice in and voice out sit side by side: the mic to ask by voice, the speaker to hear the newest answer.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="W2"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes"><li><b>Always in the same place</b>, even while you scroll back through older answers. It reads the newest one.</li><li><b>Catch:</b> one more icon in an already busy strip.</li></ul>
+    </article>
+    <article class="card" data-card="W3">
+      <div class="card-head"><span class="letter">W3</span><h3>Floating over the answer's corner</h3></div>
+      <p>A round button floats over the bottom corner of the answer area, like a "play" button on a video.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="W3"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes"><li><b>Easy to tap</b>, but it covers a few words of the last line. The count leaves those out.</li></ul>
+    </article>
+    <article class="card" data-card="W4">
+      <div class="card-head"><span class="letter">W4</span><h3>On the line above the answer</h3></div>
+      <p>The "Show reasoning" line above each answer has room on its right. Read aloud sits there.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="W4"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes"><li><b>Catch:</b> on a long answer, that line scrolls out of view at the top, so the button is gone when you're reading the end.</li></ul>
+    </article>
+  </div>
+
+  <h2>Round six: lining up the chat's name</h2>
+  <div class="picks read">
+    <b>Your round-five answer.</b> T3, the other tabs' icons around the name. Make the chat's name longer, and make sure it lines up and looks balanced, because Decky's back arrow pushes things off centre.
+  </div>
+  <p class="section-note"><b>The fix is to balance the arrow, not move it.</b> The back arrow belongs to Decky and has to stay on the left, so each drawing puts something the same size on the right. The tab bar's edges also move in to match Decky's bar, 16 points from each side. Now LB sits over the back arrow, RB sits over the right-hand button, and the tab's name and the chat's name share one centre line. The chat's name gets a long pill between the two buttons, with LT and RT at its ends. <span class="try">Press LT or RT to reach "Second boss, phase two strategy" and see how a long name fits.</span></p>
+  <div class="iconpick"><span>Alignment guides:</span><span class="seg" data-ctl="guides"><button type="button" data-v="on" aria-pressed="true">Show</button><button type="button" data-v="off" aria-pressed="false">Hide</button></span></div>
+  <div class="grid">
+    <article class="card" data-card="U1">
+      <div class="card-head"><span class="letter">U1</span><h3>New chat balances the arrow</h3></div>
+      <p>A New chat button, the same size as the back arrow, sits on the right. The chat's number goes in small type under its name.</p>
+      <div class="stage closeup-stage"><div class="scaler"><div class="deck closeup" data-close="U1"></div></div></div>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="U1"></div></div></div>
+      <ul class="notes"><li><b>Useful:</b> New chat becomes one press away, so it doesn't have to live in the chats menu.</li></ul>
+    </article>
+    <article class="card" data-card="U2">
+      <div class="card-head"><span class="letter">U2</span><h3>The chat's number balances the arrow</h3></div>
+      <p>A box the same size as the arrow shows which chat you're on, like 1/5. The name gets the whole pill to itself.</p>
+      <div class="stage closeup-stage"><div class="scaler"><div class="deck closeup" data-close="U2"></div></div></div>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="U2"></div></div></div>
+      <ul class="notes"><li><b>Room for the longest name</b>, in one larger line. The box isn't a button, just a readout.</li></ul>
+    </article>
+    <article class="card" data-card="U3">
+      <div class="card-head"><span class="letter">U3</span><h3>Empty space balances the arrow</h3></div>
+      <p>Nothing on the right, just a gap the arrow's width, so the name still sits on the centre line.</p>
+      <div class="stage closeup-stage"><div class="scaler"><div class="deck closeup" data-close="U3"></div></div></div>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="U3"></div></div></div>
+      <ul class="notes"><li><b>Simplest</b>, but the gap can look like something is missing.</li></ul>
+    </article>
+  </div>
+  <p class="section-note" style="margin-top: 14px;">You picked U3. Round four's six states below use T3 with the edges lined up, and this switch: <span class="iconpick" style="display: inline-flex; margin: 0;"><span class="seg" data-ctl="mirror"><button type="button" data-v="new" aria-pressed="false">U1</button><button type="button" data-v="count" aria-pressed="false">U2</button><button type="button" data-v="blank" aria-pressed="true">U3</button></span></span></p>
+
+  <h2>Round five: a balanced tab bar, no icon strip</h2>
+  <div class="picks read">
+    <b>Your round-four answers.</b> On the other tabs, hide the row under the tabs completely. Make the thin tab bar balanced; today it leans to the left. Consider dropping the fuller strip of tab icons, and put the tab's icon next to its name instead. Read aloud comes in the round after this one.
+  </div>
+  <p class="section-note">Four balanced bars, each drawn in the full panel and in a close-up. All four are the same 20 points tall, put the current tab's icon beside its name in the middle, and keep LB and RB at the two ends. <b>LB on the first tab already wraps round to the last</b>, so a bar can show the neighbours on both sides. <span class="try">Click LB or RB on any of them to feel how it moves.</span> Icons here are stand-ins for the plugin's own: the bonsAI logo, Ollama's llama, a gear, a lock, a bug, and an info sign.</p>
+  <div class="grid">
+    <article class="card" data-card="T1">
+      <div class="card-head"><span class="letter">T1</span><h3>The name rides along the dots</h3></div>
+      <p>Today's bar, centred: one dot per tab, and the current tab's dot becomes its icon and name.</p>
+      <div class="stage closeup-stage"><div class="scaler"><div class="deck closeup" data-close="T1"></div></div></div>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="T1"></div></div></div>
+      <ul class="notes"><li><b>Shows</b> your place in the row of tabs. The name slides left and right as you switch.</li></ul>
+    </article>
+    <article class="card" data-card="T2">
+      <div class="card-head"><span class="letter">T2</span><h3>Name in the middle, dots under it</h3></div>
+      <p>The icon and name stay dead centre. A tiny row of dots under them shows which tab of six you're on.</p>
+      <div class="stage closeup-stage"><div class="scaler"><div class="deck closeup" data-close="T2"></div></div></div>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="T2"></div></div></div>
+      <ul class="notes"><li><b>Calmest:</b> nothing moves sideways. The text is a little smaller to fit the dots underneath.</li></ul>
+    </article>
+    <article class="card" data-card="T3">
+      <div class="card-head"><span class="letter">T3</span><h3>The other tabs' icons around the name</h3></div>
+      <p>The name stays centred. The other tabs sit beside it as small, dimmed icons: the ones LB reaches on the left, the ones RB reaches on the right, wrapping round.</p>
+      <div class="stage closeup-stage"><div class="scaler"><div class="deck closeup" data-close="T3"></div></div></div>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="T3"></div></div></div>
+      <ul class="notes"><li><b>Keeps the strip's icons</b>, inline and with no strip. Always balanced: two icons on one side, three on the other.</li></ul>
+    </article>
+    <article class="card" data-card="T4">
+      <div class="card-head"><span class="letter">T4</span><h3>Neighbours by name</h3></div>
+      <p>The name stays centred, and the tab LB would open and the tab RB would open are named, dimmed, beside each button.</p>
+      <div class="stage closeup-stage"><div class="scaler"><div class="deck closeup" data-close="T4"></div></div></div>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="T4"></div></div></div>
+      <ul class="notes"><li><b>Keeps the strip's job:</b> the icon strip existed so you could see where a shoulder press would take you. This does it in words, with no strip.</li></ul>
+    </article>
+  </div>
+  <ul class="notes read" style="margin-top: 14px;">
+    <li><b>Dropping the icon strip also drops a known bug.</b> The strip has been seen stuck half-faded over the chips (the "ghost strip"), because its fade can freeze while a game runs. No strip, no ghost.</li>
+    <li><b>Touch:</b> today, tapping the thin bar opens the strip so you can tap a tab. Without it, you tap LB or RB, or the left or right half of the bar.</li>
+    <li><b>You picked T3.</b> Round six, above, lines it up with the chat's name.</li>
+  </ul>
+
+  <h2>Round four: tabs in the top strip, your chat under them</h2>
+  <div class="picks read">
+    <b>Your round-three answers.</b> Move the tabs up into the unused strip above them, and put the chat's name underneath, next to Decky's back arrow. Open the chats menu with an arrow on the name. Move Read aloud in a later round. One more mockup round first, showing the layout in its different states.
+  </div>
+  <p class="section-note"><b>It fits exactly.</b> The unused strip is Steam's 14-point top margin plus the 6 points of padding at the top of Decky's bar. That's 20 points, and the tab bar is 20 points tall. The chat's name then takes the tabs' old spot beside the back arrow. Total room matches L: <b class="num" data-r="answer">…</b> for the answer, <b class="num" data-r="words">…</b> words visible, versus 204 points and <b class="num" data-today="words">…</b> words today.</p>
+  <div class="tbl read" style="margin: 10px 0 4px;">
+    <table>
+      <thead><tr><th>Piece</th><th>How sure</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Chat's name beside the back arrow</td><td><span class="sure yes">Decky supports this</span></td><td>It's Decky's own spot for a plugin's title, the one "bonsAI v0.5.0" uses today.</td></tr>
+        <tr><td>Tabs up in the top strip</td><td><span class="sure mid">Needs a Deck test</span></td><td>The strip is Steam's margin, not Decky's or ours. bonsAI can either draw the tabs reaching up out of Decky's bar, which works only if Steam doesn't cut off anything that sticks out, or shrink the margin while bonsAI is open and put it back when you leave.</td></tr>
+        <tr><td>LT and RT switch chats</td><td><span class="sure mid">Needs a Deck test</span></td><td>The same trigger test as before. Without it, the menu and Left/Right on the name still work.</td></tr>
+        <tr><td>Decky's bar on the other tabs</td><td><span class="sure mid">Your call</span></td><td>Decky's bar sits outside bonsAI's tabs, so whatever is in it shows on every tab. See the last drawing.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="grid">
+    <article class="card" data-card="R1">
+      <div class="card-head"><span class="letter">R1</span><h3>Reading an answer</h3></div>
+      <p>The everyday state. <span class="try">LB and RB switch tabs, LT and RT switch chats, and the name opens the chats menu.</span></p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="R1"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+    </article>
+    <article class="card" data-card="R2">
+      <div class="card-head"><span class="letter">R2</span><h3>While an answer is being written</h3></div>
+      <p>The mic turns into Stop, as it does today, and the small ASK button rests until the answer finishes.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="R2"></div></div></div>
+    </article>
+    <article class="card" data-card="R3">
+      <div class="card-head"><span class="letter">R3</span><h3>A new, empty chat</h3></div>
+      <p>The logo and today's empty-chat line fill the answer area. The name reads "New chat" until the first question.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="R3"></div></div></div>
+    </article>
+    <article class="card" data-card="R4">
+      <div class="card-head"><span class="letter">R4</span><h3>The chats menu, open</h3></div>
+      <p>It drops down from the name and covers the answer, leaving the ask box in view. <span class="try">Click the name to close it.</span></p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="R4"></div></div></div>
+    </article>
+    <article class="card" data-card="R5">
+      <div class="card-head"><span class="letter">R5</span><h3>The ring on the tab bar</h3></div>
+      <p>Updated for round five: with the icon strip gone, the bar simply lights up while the ring is on it. Left and Right, or LB and RB, switch tabs; Down goes to the chat's name.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="R5"></div></div></div>
+    </article>
+    <article class="card" data-card="R6">
+      <div class="card-head"><span class="letter">R6</span><h3>On another tab</h3><span class="sure mid">Needs the hide test</span></div>
+      <p>Updated for your answer: off the chat tab, the row under the tabs is hidden completely, so Settings starts right under the tab bar. <span class="try">LB and RB here walk the other tabs.</span></p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="R6"></div></div></div>
+      <ul class="notes">
+        <li><b>The back arrow goes with it</b> on these tabs. B still goes back to Decky's list. People using touch would go back to the chat tab first.</li>
+        <li><b>It's Decky's bar,</b> so this needs the same Deck test as hiding it (option C): showing it on the chat tab and hiding it on the rest.</li>
+      </ul>
+    </article>
+  </div>
+  <ul class="notes read" style="margin-top: 14px;">
+    <li><b>The ring's path changes.</b> Today, Up from the tab bar goes to Decky's back arrow. In this layout the arrow sits below the tabs, so the order from the top is: tabs, then the back arrow and the chat's name, then the answer.</li>
+    <li><b>Touch:</b> at 20 points tall, the tab bar is a small target, but tapping it opens the fuller strip, as it does today, with big icons to tap.</li>
+    <li><b>Read aloud</b> still takes a 32-point row under the answer. Parked for a later round, as you said.</li>
+  </ul>
+
+  <h2>Round three: tabs on top, your chat down by the answer</h2>
+  <div class="picks read">
+    <b>Your round-two answers.</b> The tab bar stays on top in Decky's bar, with LB and RB, as today. The chat's name moves down near the answer, and LT and RT switch chats if the Deck passes them through. The gear becomes an icon that fits a chats menu. The room should match L.
+  </div>
+  <p class="section-note">To match L's room, the chat name can't have a row of its own. So each drawing below puts it in a spot that already exists. <b>The other-tabs question mostly goes away:</b> the chat name is part of the chat screen, so Settings and the rest don't show it, and LT and RT can simply do nothing there. <b>If LT and RT don't reach bonsAI,</b> chats still switch from the menu, or with Left and Right while the ring is on the name.</p>
+  <div class="iconpick">
+    <span>Chats menu icon:</span>
+    <span class="seg" data-ctl="icon"><button type="button" data-v="caret" aria-pressed="true">Arrow on the name</button><button type="button" data-v="chats" aria-pressed="false">Chat bubbles</button><button type="button" data-v="list" aria-pressed="false">List</button><button type="button" data-v="history" aria-pressed="false">Clock</button></span>
+  </div>
+  <p class="section-note" style="font-size: 0.9rem;">"Arrow on the name" means no separate icon. You press A on the chat's name, or tap it, to open the menu. That also saves the most width.</p>
+  <div class="grid">
+    <article class="card" data-card="N">
+      <div class="card-head"><span class="letter">N</span><h3>Floating at the top of the answer</h3><span class="sure mid">Needs the trigger test</span></div>
+      <p>The chat's name floats over the top edge of the answer, right under the tabs. It takes no row, but it covers a few words of the oldest visible line. <span class="try">Click LT or RT to switch chats, and the name or icon to open the menu.</span></p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="N"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>Closest to M</b>, minus M's row. The word count leaves out the words hidden behind the name.</li>
+        <li><b>Could fade while an answer is being written</b> and come back when you press LT or RT. That fits the reading-mode test.</li>
+      </ul>
+    </article>
+
+    <article class="card" data-card="O">
+      <div class="card-head"><span class="letter">O</span><h3>Under the answer, beside Read aloud</h3><span class="sure mid">Needs the trigger test</span></div>
+      <p>The newest answer already has a row under it holding only the Read aloud button, on the right. The chat's name takes the empty left side of that row.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="O"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>Free room:</b> the row is already there.</li>
+        <li><b>Catch:</b> that row belongs to the newest answer and scrolls with it today. It would have to stay put at the bottom of the answer area.</li>
+      </ul>
+    </article>
+
+    <article class="card" data-card="P">
+      <div class="card-head"><span class="letter">P</span><h3>At the start of the chips row</h3><span class="sure mid">Needs the trigger test</span></div>
+      <p>The chat's name sits fixed at the left of the suggestion chips. The chips slide along beside it.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="P"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>Free room</b>, and it never covers the answer.</li>
+        <li><b>Catch:</b> one suggestion fits instead of two. It also mixes two different things in one row, your chat and suggested questions.</li>
+      </ul>
+    </article>
+
+    <article class="card" data-card="Q">
+      <div class="card-head"><span class="letter">Q</span><h3>Inside the ask box</h3><span class="sure mid">Needs the trigger test</span></div>
+      <p>The chat's name sits in the box's bottom strip, like the "To:" line of an email: you can see which chat you're asking in. The game tag moves to the box's top corner.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="Q"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>Free room</b>, and it reads well: the name sits right where you type.</li>
+        <li><b>Catch:</b> the strip gets crowded. Long chat names get cut short, and the count (1/5) is dropped to fit.</li>
+      </ul>
+    </article>
+  </div>
+
+  <h2>Round two: hybrids of E and F</h2>
+  <div class="picks read">
+    <b>Your answers so far.</b> Top: a mix of E and F, with your chat front and center, LB and RB at its ends, a gear for the chats, and the six tabs kept and quick to reach. Ask area: fold both the big ASK button and the context line into the box (D). Screen: the Deck's own screen first. Outside the box: reading mode (G) is worth a test.
+  </div>
+  <p class="section-note">One thing decides these hybrids: <b>if LB and RB switch chats, something else has to switch tabs.</b> Today LB and RB switch tabs anywhere in bonsAI, except on the saved-chats row, where they switch chats. bonsAI doesn't use the triggers (L2 and R2) at all. Decky's own button list includes them, but nobody has checked whether Steam's menu passes them through to a plugin.</p>
+  <div class="tbl read" style="margin-top: 10px;">
+    <table>
+      <thead><tr><th></th><th>LB and RB</th><th>L2 and R2</th><th>Room for the answer</th><th>Needs a Deck test?</th></tr></thead>
+      <tbody>
+        <tr><td><b>K</b> Chat on top, tab row under it</td><td>Chats, always</td><td>Tabs, always</td><td class="h" data-k="K">…</td><td>Yes: do L2 and R2 reach bonsAI?</td></tr>
+        <tr><td><b>L</b> Chat and tabs share Decky's bar</td><td>Chats, always</td><td>Tabs, always</td><td class="h" data-k="L">…</td><td>Same test</td></tr>
+        <tr><td><b>M</b> Tabs on top, chat row under them</td><td>Tabs, or chats while the ring is on the chat row (today's rule)</td><td>Not used</td><td class="h" data-k="M">…</td><td>No</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="grid">
+    <article class="card" data-card="K">
+      <div class="card-head"><span class="letter">K</span><h3>Chat on top, tab row under it</h3><span class="sure mid">Needs the trigger test</span></div>
+      <p>Decky's bar shows your chat: LB, the chat's name, RB, and the chats gear. Today's thin tab bar stays under it, with L2 and R2 at its ends. <span class="try">Click LB or RB for chats, L2 or R2 for tabs, and the gear for the chats menu.</span></p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="K"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>One press each:</b> shoulders for chats, triggers for tabs, wherever the ring is.</li>
+        <li><b>Cost:</b> keeps a 20-point tab row, so 20 points less than E.</li>
+        <li><b>If the triggers don't reach bonsAI,</b> this falls back to M's rule.</li>
+      </ul>
+    </article>
+
+    <article class="card" data-card="L">
+      <div class="card-head"><span class="letter">L</span><h3>Chat and tabs share Decky's bar</h3><span class="sure mid">Needs the trigger test</span></div>
+      <p>Same buttons as K, but the tab dashes sit in a tiny line under the chat's name, inside Decky's bar. No row of its own. <span class="try">Same clicks as K.</span></p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="L"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>As much room as E and F.</b></li>
+        <li><b>Cost:</b> the tab names get very small (8 points). Permissions and Developer show as "perms" and "dev", the short words the open tab strip already uses.</li>
+      </ul>
+    </article>
+
+    <article class="card" data-card="M">
+      <div class="card-head"><span class="letter">M</span><h3>Tabs on top, chat row under them</h3><span class="sure yes">No test needed</span></div>
+      <p>E's tabs in Decky's bar, then a slim chat row that stays put: LB, the chat's name, RB, and the chats gear. LB and RB do what they do today. <span class="try">Click LB or RB on either row.</span></p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="M"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>Familiar:</b> it's today's rule. LB and RB switch tabs, or chats while the ring is on the chat row.</li>
+        <li><b>Cost:</b> two rows of LB and RB marks that mean different things, and the chat row costs 26 points.</li>
+        <li><b>Your chat isn't at the very top</b>, but it's always on screen, unlike today's saved-chats row, which scrolls away.</li>
+      </ul>
+    </article>
+  </div>
+  <p class="section-note" style="margin-top: 14px;"><b>The chats gear in all three</b> holds what the saved-chats row does today: every chat (an unread dot on any with a reply waiting), New chat, Rename chat, Sum up this chat, Save to Desktop note and Delete chat. LB past your newest chat still reaches New chat, as it does today. With all that in the gear, the saved-chats row at the top of the chat goes away.</p>
+
+  <h2>Where the height goes today</h2>
+  <div class="anatomy">
+    <div class="photo-wrap">
+      <div class="photo-box">
+        <div class="photo"><img src="84-today-deck.png" alt="Your screenshot of bonsAI on the Deck's own screen, cropped to the plugin column" width="300" height="454"></div>
+        <div class="brackets" aria-hidden="true">
+          <div class="bk" style="--c: var(--seg-steam); top: 0; height: 14px;">Steam's top strip <em>14</em></div>
+          <div class="bk" style="--c: var(--seg-decky); top: 14px; height: 34px;">Decky's title bar <em>34</em></div>
+          <div class="bk" style="--c: var(--seg-decky); top: 48px; height: 16px;">Decky's gap <em>16</em></div>
+          <div class="bk" style="--c: var(--seg-tabs); top: 64px; height: 24px;">bonsAI tab bar <em>24</em></div>
+          <div class="bk" style="--c: var(--seg-answer); top: 88px; height: 204px;">The answer <em>204</em></div>
+          <div class="bk" style="--c: var(--seg-ask); top: 292px; height: 162px;">Ask area: chips, box, ASK button, context line <em>162</em></div>
+        </div>
+      </div>
+    </div>
+    <div style="min-width: 0;">
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Part, top to bottom</th><th>Points</th><th>Who draws it</th><th>Can bonsAI change it?</th></tr></thead>
+          <tbody>
+            <tr><td><span class="sw" style="--c: var(--seg-steam)"></span>Empty strip at the top</td><td class="h">14</td><td>Steam</td><td>Only by reaching into Steam's own menu. Possible, but riskier. Outside-the-box only.</td></tr>
+            <tr><td><span class="sw" style="--c: var(--seg-decky)"></span>Title bar: back arrow and "bonsAI v0.5.0"</td><td class="h">34</td><td>Decky</td><td><b>Fill it:</b> yes. Decky gives each plugin the spot right of the arrow. That's how the bonsAI name gets there today. <b>Hide it:</b> probably. Needs a Deck test.</td></tr>
+            <tr><td><span class="sw" style="--c: var(--seg-decky)"></span>Empty gap under the title bar</td><td class="h">16</td><td>Decky</td><td>Yes. bonsAI can slide its own content up over it without touching Decky.</td></tr>
+            <tr><td><span class="sw" style="--c: var(--seg-tabs)"></span>Tab bar: LB, dashes, MAIN, RB</td><td class="h">20 + 4</td><td>bonsAI</td><td>Yes, all ours.</td></tr>
+            <tr><td><span class="sw" style="--c: var(--seg-answer)"></span>The answer</td><td class="h">204</td><td>bonsAI</td><td>This is what we're trying to grow.</td></tr>
+            <tr><td><span class="sw" style="--c: var(--seg-ask)"></span>Ask area</td><td class="h">162</td><td>bonsAI</td><td>Yes, all ours. Chips 30, box 73, ASK button 37, context line 18, small gaps.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="facts">
+        <li><b>B still goes back if the bar is hidden.</b> Decky makes the B button close any plugin, so nobody gets stuck. People using touch would need a back arrow of ours.</li>
+        <li><b>It also fixes a focus trap.</b> The D-pad ring has landed on Decky's back arrow before, and LB and RB do nothing while it's there. With the tabs beside the arrow, you can see where the ring went. With the bar hidden, the trap is gone.</li>
+        <li><b>It helps the planned menu icon too.</b> If bonsAI gets its own menu icon through Quick Tab, the same bar shows up there with no back arrow at all. Then the whole bar is wasted space, so every option below helps there as well.</li>
+        <li><b>The handheld is the tight case.</b> The plugin is 300 points wide on both screens, but only 454 tall on the Deck's own screen versus 766 on a TV. That's why it feels cramped in your hands.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="controls" role="group" aria-label="Drawing options">
+    <span><label>Screen</label><span class="seg" data-ctl="screen"><button type="button" data-v="deck" aria-pressed="true">Deck's own screen</button><button type="button" data-v="tv" aria-pressed="false">TV or monitor</button></span></span>
+    <span><label>Zoom</label><span class="seg" data-ctl="zoom"><button type="button" data-v="1" aria-pressed="true">1×</button><button type="button" data-v="1.5" aria-pressed="false">1.5× (Deck pixels)</button></span></span>
+    <span class="hint">Click LB or RB in any drawing to switch tabs.</span>
+  </div>
+
+  <h2>The comparison, measured from the drawings</h2>
+  <div class="chart" id="chart-height">
+    <h3 style="font-size: 1.15rem;">Where the height goes, top to bottom</h3>
+    <div class="legend">
+      <span><span class="sw" style="--c: var(--seg-steam)"></span>Steam's strip</span>
+      <span><span class="sw" style="--c: var(--seg-decky)"></span>Decky's bar and gap</span>
+      <span><span class="sw" style="--c: var(--seg-tabs)"></span>bonsAI's tab bar or header</span>
+      <span><span class="sw" style="--c: var(--seg-answer)"></span>The answer</span>
+      <span><span class="sw" style="--c: var(--seg-ask)"></span>Ask area</span>
+    </div>
+    <div id="rows-height"></div>
+    <p class="foot">The number on the right is the answer's height in points, and the change from today.</p>
+  </div>
+  <div class="chart" id="chart-words">
+    <h3 style="font-size: 1.15rem;">How much of a long answer you can see at once</h3>
+    <div id="rows-words"></div>
+    <p class="foot">Words of the same <span id="total-words">180</span>-word answer that fit on screen without scrolling. Counted on these drawings; this page's font is close to Steam's but not identical, so treat it as a guide.</p>
+  </div>
+
+  <h2>Realistic: could be built now</h2>
+  <p class="section-note">B and C fix the top. D fixes the bottom. E and F are complete proposals that combine them.</p>
+  <div class="grid">
+    <article class="card" data-card="A">
+      <div class="card-head"><span class="letter">A</span><h3>Today</h3></div>
+      <p>Drawn from the live Deck and your screenshot. Slide to fade the drawing into your real photo and check they match.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="A"></div><img class="overlay-photo" src="84-today-deck.png" alt="" style="position: absolute; left: 0; top: 0; width: 300px; height: 454px; opacity: 0; transform-origin: 0 0; pointer-events: none;"></div></div>
+      <div class="blend" id="blend-wrap"><span>Drawing</span><input id="blend-a" type="range" min="0" max="100" value="0" aria-label="Fade between the drawing and the real photo"><span>Photo</span></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+    </article>
+
+    <article class="card" data-card="B">
+      <div class="card-head"><span class="letter">B</span><h3>Tabs move up into Decky's bar</h3><span class="sure yes">Decky supports this</span></div>
+      <p>The tab bar moves into Decky's bar, next to the back arrow, where "bonsAI v0.5.0" sits today. bonsAI also slides up over Decky's empty gap.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="B"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>How:</b> Decky's own spot for plugin titles. Sliding over the gap happens inside bonsAI's own box.</li>
+        <li><b>Cost:</b> the bonsAI name and version leave the top. The version moves to the About tab. The dashes get a little narrower to fit.</li>
+        <li><b>Keeps</b> Decky's own back arrow, so nothing about leaving bonsAI changes.</li>
+      </ul>
+    </article>
+
+    <article class="card" data-card="C">
+      <div class="card-head"><span class="letter">C</span><h3>Hide Decky's bar, draw our own slim one</h3><span class="sure mid">Likely, needs a Deck test</span></div>
+      <p>Decky's bar is hidden while bonsAI is open and comes back when you leave. bonsAI's own 28-point header carries a small back arrow and the tabs.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="C"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>How:</b> Decky has no setting for this. bonsAI would reach outside its own box, the same kind of reach it already makes to keep the panel's height steady.</li>
+        <li><b>Only 8 points more than B</b>, because a touch-friendly back arrow still needs a row of its own.</li>
+        <li><b>Risk:</b> a Decky update could undo the trick. Built carefully, you'd just see today's bar again.</li>
+      </ul>
+    </article>
+
+    <article class="card" data-card="D">
+      <div class="card-head"><span class="letter">D</span><h3>A lighter ask area</h3><span class="sure yes">All bonsAI's own</span></div>
+      <p>The big ASK button becomes a small ASK button in the box's bottom strip, next to the mode and the mic. The "Context: …" line becomes a small game tag in that same strip.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="D"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>The biggest single win:</b> two whole rows go, and nothing else moves.</li>
+        <li><b>Cost:</b> a smaller ASK target. The big button also turns into Stop during an answer, and the small one must do the same.</li>
+        <li><b>D-pad:</b> today Down from the box lands on ASK. That path needs a new stop in the strip and a fresh walk on the Deck.</li>
+      </ul>
+    </article>
+
+    <article class="card" data-card="E">
+      <div class="card-head"><span class="letter">E</span><h3>B and D together: keep the six tabs</h3><span class="sure yes">Can be built now</span></div>
+      <p>The biggest gain that keeps everything where people expect it. Tabs sit beside Decky's arrow; the ask area loses two rows.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="E"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li>Swap B for C here to get 8 more points, if the Deck test for hiding the bar goes well.</li>
+      </ul>
+    </article>
+
+    <article class="card" data-card="F">
+      <div class="card-head"><span class="letter">F</span><h3>Simplest: one gear instead of six tabs</h3><span class="sure yes">Tech is sure; it's a design call</span></div>
+      <p>Decky's bar holds your chats: the chat's name with arrows, New chat, and a gear. Decky's own plugin list already puts store and gear buttons in this bar, so it matches. The five setup tabs live behind the gear as one list. The ask area is D's. <span class="try">Click the gear to try it.</span></p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="F"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>Simpler:</b> one screen to live in. Where AI runs, Settings, Permissions, Developer and About are setup screens most people open rarely.</li>
+        <li><b>LB and RB always switch chats.</b> Today they switch tabs on the tab bar and chats on the chats row.</li>
+        <li><b>Also removes</b> the saved-chats row at the top of the chat, because it moves up into the bar.</li>
+        <li><b>Cost:</b> the biggest change to how people get around, and a full D-pad walk on the Deck.</li>
+      </ul>
+    </article>
+  </div>
+
+  <h2>Outside the box: ideas to think with</h2>
+  <p class="section-note">Not ready to build. Each one solves the height problem in a different way, so it's worth seeing what it would feel like.</p>
+  <div class="grid">
+    <article class="card" data-card="G">
+      <div class="card-head"><span class="letter">G</span><h3>Reading mode</h3><span class="sure mid">Possible; big behaviour change</span></div>
+      <p>While an answer is on screen, everything else folds away. No bars at the top, and the ask area shrinks to one "Ask a follow-up" line. The current tab floats as a small tag. <span class="try">Click the follow-up line to unfold the ask area, and the arrow beside the mic to fold it again.</span></p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="G"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>Why not yet:</b> it needs Decky's bar hidden (C), plus clear rules for when things fold and unfold. People could lose track of where the controls went.</li>
+      </ul>
+    </article>
+
+    <article class="card" data-card="H">
+      <div class="card-head"><span class="letter">H</span><h3>Tabs down the side</h3><span class="sure mid">Possible; costs width</span></div>
+      <p>A thin icon strip on the left edge, like Steam's own menu icons. No bars at the top at all. The ask area is D's.</p>
+      <div class="stage"><div class="scaler"><div class="deck" data-frame="H"></div></div></div>
+      <dl class="stats"><div><dt>Answer area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>Why not yet:</b> width is the scarcer thing in a 300-point column. The answer's lines get shorter, so you gain fewer words than the extra height suggests. The word count above shows the trade.</li>
+      </ul>
+    </article>
+
+    <article class="card wide-card" data-card="I">
+      <div class="card-head"><span class="letter">I</span><h3>Read long answers full screen</h3><span class="sure yes">Decky supports full-screen pages</span></div>
+      <p>A "Read full screen" button opens the answer as a whole Deck page, the same way Decky opens its own store and settings. B goes back. Drawn at the Deck's full screen size.</p>
+      <div class="stage" data-wide-stage><div class="scaler"><div class="wide" data-frame="I"></div></div></div>
+      <dl class="stats"><div><dt>Reading area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>Why not yet:</b> it covers the game. Great for a long guide, wrong for a quick look mid-fight. It's an extra, not a replacement for the panel.</li>
+      </ul>
+    </article>
+
+    <article class="card wide-card" data-card="J">
+      <div class="card-head"><span class="letter">J</span><h3>Answer beside the menu, over the game</h3><span class="sure no">Needs a test to find out</span></div>
+      <p>The menu keeps the ask area. The answer opens in a wide card over the game, to the left of the menu, where the screen has plenty of room.</p>
+      <div class="stage" data-wide-stage><div class="scaler"><div class="wide" data-frame="J"></div></div></div>
+      <dl class="stats"><div><dt>Reading area</dt><dd data-stat="answer">…</dd></div><div><dt>Words you can see</dt><dd data-stat="words">…</dd></div></dl>
+      <ul class="notes">
+        <li><b>Why not yet:</b> Steam's menu page starts at the menu's own left edge (measured today: the extra room it has is off the right side of the screen). So bonsAI can't paint to the left of it from inside. This would need a different layer, like the one Steam uses for notifications.</li>
+      </ul>
+    </article>
+  </div>
+
+  <h2>Simplifying, not just squeezing</h2>
+  <ul class="facts read">
+    <li><b>Six tabs become one chat screen and a gear</b> (F). Five of the six tabs are setup screens.</li>
+    <li><b>Two rows become one strip.</b> The ASK button and the context line fold into the box (D).</li>
+    <li><b>The name and version move to About</b> (B, C, E, F). The menu icon already says bonsAI.</li>
+    <li><b>The saved-chats row folds into the top bar</b> (F), so LB and RB mean one thing.</li>
+    <li><b>Fewer D-pad stops</b> between the answer and the box, in every option that drops the big ASK button.</li>
+  </ul>
+
+  <h2>Decisions for you</h2>
+  <p class="section-note">Settled so far: tabs in the top strip with LB and RB, drawn as T3 (the other tabs' icons around the name), and no drop-down icon strip. The chat's name beside Decky's back arrow, centred under the tab's name with empty space on the right (U3), no shading, switched with LT and RT if the Deck allows it, with an arrow on the name that opens the chats menu. LB, RB, LT and RT dim unless the ring is on their row. On the other tabs, that row is hidden. The ask area folds the big ASK button and the context line into the box. The Deck's own screen comes first. Reading mode gets a test. Read aloud goes in the answer's lower-left corner, opposite Copy. Nothing is left to pick. What's owed is in plan 84:</p>
+  <ol class="qs">
+    <li><b>Three Deck tests, when you free the Deck</b>Do L2 and R2 reach bonsAI inside the menu? Can the tabs go up into Steam's strip? Can Decky's bar be hidden on the other tabs and put back when you leave?</li>
+    <li><b>A test of reading mode</b>Separate from the build, after it.</li>
+  </ol>
+
+  <div class="method">
+    <b>How these numbers were made.</b> A point is the unit Steam lays the menu out in. On the Deck's own screen one point is 1.5 screen pixels; on a 1080p TV it's 1.28. Decky's bar (34), Decky's gap (16), Steam's strip (14), the tab bar (20 plus 4) and the panel's size were read live from the Deck on 8 Oct 2026. The ask area's rows were read pixel by pixel from your screenshot. Each drawing on this page then measures itself in your browser, so the charts and stats come from the drawings, not from typed-in sums. Decky's title bar layout was checked against Decky Loader's own source. <b>Corrected in the final version:</b> earlier versions drew the answer text inside the cards at about 15 points instead of the Deck's 12, so every "words you can see" count shown during rounds one to seven was too low (today read 50, really about 62; the final design read 100, really about 121). The heights in points were right throughout.
+  </div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  const ANSWER = [
+    "Okay, this fight is all about patience. The boss has three attacks, and each one has a tell. When it rears back and the floor starts to glow, it's about to slam. Dash away from the glow, not toward the wall.",
+    "When it spins in place, stay close and keep circling to its left. The spin can't reach you right next to it. The third attack is the charge across the arena. It always aims where you were standing a second ago, so wait for the roar, then step sideways at the last moment.",
+    "Your damage window is right after the charge, when it hits the wall and sits dazed for about two seconds. Get two or three hits in, then back off before it shakes free. Don't get greedy.",
+    "At half health it speeds up and adds a second slam. Nothing new to learn, just less time. If you keep dying here, equip anything that gives you a longer dodge, and save your heals for the second half. Want me to walk through the second phase in more detail?"
+  ];
+  const TOTAL_WORDS = ANSWER.join(" ").split(/\s+/).length;
+  const QUESTION = "how do I beat this boss? it keeps charging me";
+  const CHIPS = ["How do I fix stuttering?", "Why can't bonsAI reach my PC Ollama host?"];
+  const TABS = ["Main", "Ollama", "Settings", "Permissions", "Developer", "About"];
+  const CHATS = ["Boss help", "Battery life", "Second boss, phase two strategy", "Ollama on PC", "Hades build"];
+
+  const I = (d, extra) => `<svg viewBox="0 0 24 24"${extra || ""}>${d}</svg>`;
+  const ICON = {
+    back: I('<path d="M11 5l-7 7 7 7M4.5 12H20"/>'),
+    clip: I('<path d="M20 11.5l-8.3 8.3a5 5 0 0 1-7.1-7.1l8.3-8.3a3.3 3.3 0 0 1 4.7 4.7l-8.3 8.3a1.7 1.7 0 0 1-2.4-2.4l7.6-7.6"/>'),
+    mic: I('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>'),
+    speaker: I('<path d="M4 9.5v5h3.5L12 18V6L7.5 9.5z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>'),
+    copy: I('<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/>'),
+    gear: I('<circle cx="12" cy="12" r="7" stroke-width="3.4" stroke-dasharray="2.75 2.75"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1.6"/>'),
+    pencil: I('<path d="M4 20h4L19.5 8.5l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>'),
+    game: I('<path d="M7 8h10a4.5 4.5 0 0 1 4.5 4.5v.5a3 3 0 0 1-5.3 1.9L15 13.5H9l-1.2 1.4A3 3 0 0 1 2.5 13v-.5A4.5 4.5 0 0 1 7 8z"/><path d="M7.5 10.5v3M6 12h3"/>'),
+    left: I('<path d="M15 5l-7 7 7 7"/>'),
+    right: I('<path d="M9 5l7 7-7 7"/>'),
+    down: I('<path d="M6 9l6 6 6-6"/>'),
+    redo: I('<path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4.5v4.5H15"/>'),
+    send: I('<path d="M5 12h13M13 6.5l5.5 5.5-5.5 5.5"/>'),
+    chat: I('<path d="M4 5h16v11H10l-5 4z"/>'),
+    server: I('<rect x="4" y="4" width="16" height="7" rx="1.5"/><rect x="4" y="13" width="16" height="7" rx="1.5"/><path d="M8 7.5h.01M8 16.5h.01"/>'),
+    shield: I('<path d="M12 3l8 3v6c0 4.8-3.4 7.9-8 9-4.6-1.1-8-4.2-8-9V6z"/>'),
+    bug: I('<rect x="7" y="7.5" width="10" height="12.5" rx="5"/><path d="M12 7.5V4.5M3.5 13h3.5M17 13h3.5M5 19l2.5-1.5M19 19l-2.5-1.5M5.5 7l2.2 2M18.5 7l-2.2 2"/>'),
+    info: I('<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.6v.2"/>'),
+    search: I('<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>'),
+    bell: I('<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>'),
+    friends: I('<circle cx="9" cy="8" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M15.5 5.5a3 3 0 0 1 0 5.5M17.5 14a5 5 0 0 1 3 5"/>'),
+    bolt: I('<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>'),
+    plug: I('<path d="M9 3v5M15 3v5M6 8h12v3a6 6 0 0 1-12 0zM12 17v4"/>'),
+    plus: I('<path d="M12 5v14M5 12h14"/>'),
+    trash: I('<path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6"/>'),
+    sum: I('<path d="M5 6h14M5 10h14M5 14h9M5 18h6"/>'),
+    save: I('<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>'),
+    chats: I('<path d="M3 4.5h12v8.5H8l-3.5 3v-3H3z"/><path d="M18 8.5h3V17h-1.5v3L16 17h-6v-1.5"/>'),
+    list: I('<path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01" stroke-width="2.6"/>'),
+    history: I('<path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4.5v4h4"/><path d="M12 8v4.2l3 1.8"/>'),
+    tree: I('<path d="M12 21v-7M9 21h6"/><path d="M12 14c-4.2 0-6.5-2-6.5-4.6C5.5 6.5 8.4 4 12 4s6.5 2.5 6.5 5.4C18.5 12 16.2 14 12 14z"/>'),
+    lock: I('<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>')
+  };
+  const TICON = [ICON.tree, ICON.server, ICON.gear, ICON.lock, ICON.bug, ICON.info];
+  const RAIL = [ICON.chat, ICON.server, ICON.gear, ICON.shield, ICON.bug, ICON.info];
+
+  const STRIP = ["main", "ollama", "settings", "perms", "dev", "about"];
+  const STATE = { screen: "deck", zoom: 1, tab: 0, chat: 0, reading: true, open: { R4: true }, icon: "caret", other: "tab", r6tab: 2, bar: "T3", mirror: "blank", guides: true, ring: "answer" };
+  const WSTYLE = { W0: "row", W1: "bubble", W2: "strip", W3: "float", W4: "reason" };
+  const TSTYLE = { T1: "T1", T2: "T2", T3: "T3", T4: "T4" };
+  const USTYLE = { U1: "new", U2: "count", U3: "blank" };
+  const TABS_LONG = ["Ask bonsAI", "Where AI runs", "Settings", "Permissions", "Developer", "About bonsAI"];
+  const RMODE = { R1: "read", R2: "writing", R3: "empty", R4: "menu", R5: "strip", R6: "other", Z: "read" };
+  const RES = {};
+
+  // ---------- the column drawing ----------
+  const CFG = {
+    A: { decky: "title", deckyGap: true, head: "tabbar", dock: "today" },
+    B: { decky: "tabs", deckyGap: false, head: null, dock: "today" },
+    C: { decky: null, deckyGap: false, head: "slim", dock: "today" },
+    D: { decky: "title", deckyGap: true, head: "tabbar", dock: "light" },
+    E: { decky: "tabs", deckyGap: false, head: null, dock: "light" },
+    F: { decky: "chats", deckyGap: false, head: null, dock: "light", sheet: true },
+    G: { decky: null, deckyGap: false, head: "hud", dock: "reading" },
+    H: { decky: null, deckyGap: false, head: null, dock: "light", rail: true },
+    K: { decky: "chatbar", deckyGap: false, head: "triggerTabs", dock: "light", chatSheet: 48 },
+    L: { decky: "chatbar2", deckyGap: false, head: null, dock: "light", chatSheet: 48 },
+    M: { decky: "tabs", deckyGap: false, head: "chatrow", dock: "light", chatSheet: 76 },
+    N: { decky: "tabs", deckyGap: false, head: null, dock: "light", chatPos: "float", chatSheet: "auto" },
+    O: { decky: "tabs", deckyGap: false, head: null, dock: "light", chatPos: "footer", chatSheet: "auto" },
+    P: { decky: "tabs", deckyGap: false, head: null, dock: "light", chatPos: "chips", chatSheet: "auto" },
+    Q: { decky: "tabs", deckyGap: false, head: null, dock: "light", chatPos: "box", chatSheet: "auto" },
+    Jcol: { decky: "tabs", deckyGap: false, head: null, dock: "light", elsewhere: true }
+  };
+
+  const words = (paras) => paras.map(p => "<p>" + p.split(" ").map(w => `<span class="w">${w}</span>`).join(" ") + "</p>").join("");
+
+  function tabbar(marks, idx, acts) {
+    const m = marks || ["LB", "RB"];
+    const t = idx == null ? STATE.tab : idx;
+    const a = acts || ["lb", "rb"];
+    const dashes = TABS.map((_, i) => `<span class="d-dash${i === t ? " on" : ""}"></span>`).join("");
+    return `<span class="d-sh" data-act="${a[0]}" role="button" tabindex="0" aria-label="Previous tab">${m[0]}</span>` +
+      `<span class="d-dashes">${dashes}</span><span class="d-tabname">${TABS[t]}</span>` +
+      `<span class="d-sh d-sh--r" data-act="${a[1]}" role="button" tabindex="0" aria-label="Next tab">${m[1]}</span>`;
+  }
+
+  function miniTabs() {
+    const dashes = TABS.map((_, i) => `<span class="d-dash${i === STATE.tab ? " on" : ""}"></span>`).join("");
+    return `<span class="mini"><span class="d-sh" data-act="lb" role="button" tabindex="0" aria-label="Previous tab">L2</span>` +
+      `<span class="d-dashes">${dashes}</span><span class="d-tabname">${STRIP[STATE.tab]}</span>` +
+      `<span class="d-sh" data-act="rb" role="button" tabindex="0" aria-label="Next tab">R2</span></span>`;
+  }
+
+  const chatCount = () => `chat ${STATE.chat + 1} of ${CHATS.length}`;
+  const chatKeys = (inner) =>
+    `<span class="d-key" data-act="chat-prev" role="button" tabindex="0" aria-label="Previous chat">LB</span>${inner}` +
+    `<span class="d-key" data-act="chat-next" role="button" tabindex="0" aria-label="Next chat">RB</span>`;
+  const gearBtn = `<span class="d-ibtn" data-act="gear" role="button" tabindex="0" aria-label="Chats menu">${ICON.gear}</span>`;
+
+  /* Round three: the chat's name as one compact tag, LT/RT at its ends, and the chosen menu icon. */
+  function chatTag(cls) {
+    const caret = STATE.icon === "caret";
+    const open = caret ? ` data-act="gear" role="button" tabindex="0" aria-label="Open the chats menu"` : "";
+    const name = `<span class="d-cname"${open}><b>${CHATS[STATE.chat]}</b>${caret ? `<i class="car">${ICON.down}</i>` : ""}<span class="cnt">${STATE.chat + 1}/${CHATS.length}</span></span>`;
+    const menu = caret ? "" : `<span class="d-cmenu" data-act="gear" role="button" tabindex="0" aria-label="Chats menu">${ICON[STATE.icon]}</span>`;
+    return `<span class="d-ctag ${cls || ""}"><span class="d-key" data-act="chat-prev" role="button" tabindex="0" aria-label="Previous chat">LT</span>` +
+      `${name}<span class="d-key" data-act="chat-next" role="button" tabindex="0" aria-label="Next chat">RT</span>${menu}</span>`;
+  }
+
+  function deckyBar(kind) {
+    const back = `<span class="d-back">${ICON.back}</span>`;
+    if (kind === "title") return `<div class="d-decky" data-seg="decky">${back}<span class="d-title">bonsAI<sub>v0.5.0</sub></span></div>`;
+    if (kind === "tabs") return `<div class="d-decky" data-seg="decky">${back}<div class="d-tabbar">${tabbar()}</div></div>`;
+    if (kind === "chats") {
+      return `<div class="d-decky has-chats" data-seg="decky">${back}` +
+        `<div class="d-chatsw"><span class="chev" data-act="chat-prev" role="button" tabindex="0" aria-label="Previous chat">${ICON.left}</span>` +
+        `<span class="nm"><b>${CHATS[STATE.chat]}</b><span>chat ${STATE.chat + 1} of ${CHATS.length} · LB RB</span></span>` +
+        `<span class="chev" data-act="chat-next" role="button" tabindex="0" aria-label="Next chat">${ICON.right}</span></div>` +
+        `<span class="d-ibtn" aria-label="New chat">${ICON.pencil}</span>` +
+        `<span class="d-ibtn" data-act="gear" role="button" tabindex="0" aria-label="Open setup">${ICON.gear}</span></div>`;
+    }
+    if (kind === "chatbar") {
+      return `<div class="d-decky has-chats" data-seg="decky">${back}<div class="d-cbar">` +
+        chatKeys(`<span class="d-ctitle"><b>${CHATS[STATE.chat]}</b><span>${chatCount()}</span></span>`) + `</div>${gearBtn}</div>`;
+    }
+    if (kind === "chatbar2") {
+      return `<div class="d-decky has-chats" data-seg="decky">${back}<div class="d-cbar">` +
+        chatKeys(`<span class="d-ctitle"><b>${CHATS[STATE.chat]}</b>${miniTabs()}</span>`) + `</div>${gearBtn}</div>`;
+    }
+    return "";
+  }
+
+  function chatSheet(top, auto) {
+    const when = ["now", "2 h", "yesterday", "Mon", "Sep 30"];
+    const rows = CHATS.map((c, i) =>
+      `<div class="d-crow${i === STATE.chat ? " on" : ""}">${c}${i === 1 ? '<span class="dot" title="Reply waiting"></span>' : ""}<span>${when[i]}</span></div>`).join("");
+    const a = (label, icon, cls) => `<span class="d-cact${cls ? " " + cls : ""}">${icon}${label}</span>`;
+    return `<div class="d-sheet"${auto ? " data-auto" : ""} style="top:${top}px"><h4>Your chats</h4>${rows}` +
+      `<div class="d-cacts">${a("New chat", ICON.plus)}${a("Rename chat", ICON.pencil)}${a("Sum up this chat", ICON.sum)}` +
+      `${a("Save to Desktop note", ICON.save)}${a("Delete chat", ICON.trash, "danger")}</div>` +
+      `<p>B, or the same button again, goes back to the chat.</p></div>`;
+  }
+
+  function chatArea(cfg) {
+    let h = `<div class="d-chat" data-seg="answer">`;
+    if (cfg.head === "hud") {
+      h += `<div class="d-hud"><span class="d-sh" data-act="lb" role="button" tabindex="0">LB</span>${TABS[STATE.tab].toUpperCase()}<span class="d-sh" data-act="rb" role="button" tabindex="0">RB</span></div>`;
+    }
+    if (cfg.chatPos === "float") h += chatTag("d-float");
+    h += `<div class="d-q">${ICON.redo}<span>${QUESTION}</span></div>`;
+    if (cfg.elsewhere) {
+      h += `<div class="d-elsewhere">The answer is open beside the menu ←<br>Press Y to bring it back in here</div>`;
+    } else {
+      h += `<div class="d-reason">Show reasoning · 41 s</div>`;
+      h += `<div class="d-answer">${words(ANSWER)}<span class="d-copy">${ICON.copy}</span></div>`;
+      h += cfg.chatPos === "footer"
+        ? `<div class="d-actions with-chat">${chatTag()}<span class="d-speak">${ICON.speaker}</span></div>`
+        : `<div class="d-actions"><span class="d-speak">${ICON.speaker}</span></div>`;
+    }
+    return h + `</div>`;
+  }
+
+  function chips(withTag) {
+    return `<div class="d-chips">${withTag ? chatTag("in-chips") : ""}${CHIPS.map(c => `<span class="d-chip">${c}</span>`).join("")}</div>`;
+  }
+
+  function dock(kind, cfg) {
+    const ph = `<span class="d-avatar"></span><span class="d-ph">Describe the level, boss, or puzzle you're stuck on.</span>`;
+    if (kind === "light" && cfg && cfg.chatPos === "box") {
+      return `<div class="d-dock" data-seg="ask">${chips()}<div class="d-g2"></div>` +
+        `<div class="d-box"><span class="d-avatar"></span><span class="d-ph" style="padding-right:62px">Describe the level, boss, or puzzle you're stuck on.</span>` +
+        `<span class="d-gcorner">${ICON.game}No game</span>` +
+        `<div class="d-strip" style="gap:5px;padding-left:8px"><span class="ic">${ICON.clip}</span>${chatTag("in-box")}` +
+        `<span class="d-mode">Strategy</span><span class="ic">${ICON.mic}</span><span class="d-askpill">Ask${ICON.send}</span></div></div></div>`;
+    }
+    if (kind === "light" && cfg && cfg.chatPos === "chips") {
+      return `<div class="d-dock" data-seg="ask">${chips(true)}<div class="d-g2"></div>` +
+        `<div class="d-box">${ph}<div class="d-strip"><span class="ic">${ICON.clip}</span><span class="d-game">${ICON.game}No game</span>` +
+        `<span class="d-mode">Strategy</span><span class="ic">${ICON.mic}</span><span class="d-askpill">Ask${ICON.send}</span></div></div></div>`;
+    }
+    if (kind === "today") {
+      return `<div class="d-dock" data-seg="ask">${chips()}<div class="d-g2"></div>` +
+        `<div class="d-box">${ph}<div class="d-strip"><span class="ic">${ICON.clip}</span><span class="d-mode">Strategy</span><span class="ic">${ICON.mic}</span></div></div>` +
+        `<div class="d-g2"></div><div class="d-ask">Ask</div><div class="d-ctx">Context: no active game detected</div></div>`;
+    }
+    if (kind === "light" || (kind === "reading" && !STATE.reading)) {
+      const fold = kind === "reading" ? `<span class="ic" data-act="fold" role="button" tabindex="0" aria-label="Fold the ask area" style="cursor:pointer">${ICON.down}</span>` : "";
+      return `<div class="d-dock" data-seg="ask">${chips()}<div class="d-g2"></div>` +
+        `<div class="d-box">${ph}<div class="d-strip"><span class="ic">${ICON.clip}</span><span class="d-game">${ICON.game}No game</span>` +
+        `<span class="d-mode">Strategy</span><span class="ic">${ICON.mic}</span>${fold}<span class="d-askpill">Ask${ICON.send}</span></div></div></div>`;
+    }
+    // reading mode, folded
+    return `<div class="d-dock" data-seg="ask"><div class="d-g2"></div>` +
+      `<div class="d-follow" data-act="unfold" role="button" tabindex="0"><span class="d-avatar"></span>Ask a follow-up…<span class="ic">${ICON.mic}</span></div></div>`;
+  }
+
+  function sheet() {
+    const rows = [["Where AI runs", ICON.server, "Ollama"], ["Settings", ICON.gear, ""], ["Permissions", ICON.shield, ""], ["Developer", ICON.bug, ""], ["About bonsAI", ICON.info, "v0.5.0"]];
+    return `<div class="d-sheet"><h4>Set up bonsAI</h4>` +
+      rows.map(r => `<div class="d-srow">${r[1]}${r[0]}<span>${r[2]}</span></div>`).join("") +
+      `<p>B, or the gear again, goes back to your chat.</p></div>`;
+  }
+
+  function column(cfg) {
+    let h = `<div class="d-gap" data-seg="steam" style="height:14px"></div>`;
+    if (cfg.decky) h += deckyBar(cfg.decky);
+    if (cfg.deckyGap) h += `<div class="d-gap" data-seg="decky" style="height:16px"></div>`;
+    if (cfg.head === "tabbar") h += `<div class="d-tabbar" data-seg="tabs">${tabbar()}</div><div class="d-gap" data-seg="tabs" style="height:4px"></div>`;
+    if (cfg.head === "slim") h += `<div class="d-slim" data-seg="tabs"><span class="d-back">${ICON.back}</span><div class="d-tabbar">${tabbar()}</div></div><div class="d-gap" data-seg="tabs" style="height:2px"></div>`;
+    if (cfg.head === "triggerTabs") h += `<div class="d-tabbar" data-seg="tabs">${tabbar(["L2", "R2"])}</div><div class="d-gap" data-seg="tabs" style="height:4px"></div>`;
+    if (cfg.head === "chatrow") {
+      h += `<div class="d-chatrow" data-seg="tabs">` +
+        chatKeys(`<span class="d-ctitle"><b>${CHATS[STATE.chat]}</b><span>${chatCount()}</span></span>`) + `${gearBtn}</div><div class="d-gap" data-seg="tabs" style="height:2px"></div>`;
+    }
+    if (cfg.decky && !cfg.deckyGap && !cfg.head) h += `<div class="d-gap" data-seg="decky" style="height:4px"></div>`;
+    if (cfg.rail) {
+      const rail = RAIL.map((ic, i) => `<span class="d-railbtn${i === STATE.tab ? " on" : ""}" data-act="tab" data-i="${i}" role="button" tabindex="0" aria-label="${TABS[i]}">${ic}</span>`).join("");
+      h += `<div class="d-row"><div class="d-rail">${rail}</div><div class="d-main">${chatArea(cfg)}${dock(cfg.dock, cfg)}</div></div>`;
+    } else {
+      h += chatArea(cfg) + dock(cfg.dock, cfg);
+    }
+    if (cfg.sheet) h += sheet();
+    if (cfg.chatSheet) h += chatSheet(cfg.chatSheet === "auto" ? 52 : cfg.chatSheet, cfg.chatSheet === "auto");
+    return h;
+  }
+
+  // ---------- round four: tabs in the top strip, the chat's name in Decky's bar ----------
+  function rNameLine(empty) {
+    const name = empty ? "New chat" : CHATS[STATE.chat];
+    const cnt = empty ? `${CHATS.length + 1}/${CHATS.length + 1}` : `${STATE.chat + 1}/${CHATS.length}`;
+    return `<span class="d-key" data-act="chat-prev" role="button" tabindex="0" aria-label="Previous chat">LT</span>` +
+      `<span class="d-cname" data-act="gear" role="button" tabindex="0" aria-label="Open the chats menu"><b>${name}</b><i class="car">${ICON.down}</i><span class="cnt">${cnt}</span></span>` +
+      `<span class="d-key" data-act="chat-next" role="button" tabindex="0" aria-label="Next chat">RT</span>`;
+  }
+
+  function rDock(mode, speak) {
+    const writing = mode === "writing";
+    const micOrStop = (writing ? `<span class="d-stop" aria-label="Stop"><i></i></span>` : `<span class="ic">${ICON.mic}</span>`) +
+      (speak === "strip" ? `<span class="ic" aria-label="Read aloud">${ICON.speaker}</span>` : "");
+    return `<div class="d-dock" data-seg="ask">${chips()}<div class="d-g2"></div>` +
+      `<div class="d-box"><span class="d-avatar"></span><span class="d-ph">Describe the level, boss, or puzzle you're stuck on.</span>` +
+      `<div class="d-strip"><span class="ic">${ICON.clip}</span><span class="d-game">${ICON.game}No game</span>` +
+      `<span class="d-mode">Strategy</span>${micOrStop}<span class="d-askpill${writing ? " resting" : ""}">Ask${ICON.send}</span></div></div></div>`;
+  }
+
+  function rChat(mode, speak) {
+    const sp = speak || "row";
+    let h = `<div class="d-chat" data-seg="answer">`;
+    if (mode === "empty") {
+      return h + `<div class="d-empty"><span class="logo">${ICON.chat}</span>Ask anything — this slot keeps its own history.</div></div>`;
+    }
+    h += `<div class="d-q">${ICON.redo}<span>${QUESTION}</span></div>`;
+    if (mode === "writing") {
+      h += `<div class="d-thinking">Writing · 9 s</div>`;
+      h += `<div class="d-answer">${words(ANSWER.slice(0, 2))}<span class="d-caret"></span></div>`;
+      return h + `</div>`;
+    }
+    h += sp === "reason"
+      ? `<div class="d-reason with-speak">Show reasoning · 41 s<span class="spk" aria-label="Read aloud">${ICON.speaker}</span></div>`
+      : `<div class="d-reason">Show reasoning · 41 s</div>`;
+    h += `<div class="d-answer">${words(ANSWER)}${sp === "bubble" || sp === "bubble-left" ? `<span class="d-bspeak${sp === "bubble-left" ? " left" : ""}" aria-label="Read aloud">${ICON.speaker}</span>` : ""}<span class="d-copy">${ICON.copy}</span></div>`;
+    if (sp === "row") h += `<div class="d-actions"><span class="d-speak">${ICON.speaker}</span></div>`;
+    if (sp === "float") h += `<span class="d-sfloat" aria-label="Read aloud">${ICON.speaker}</span>`;
+    return h + `</div>`;
+  }
+
+  function rSettings(t) {
+    let rows;
+    if (t === 2) {
+      const tog = on => `<span class="d-tog${on ? " on" : ""}"></span>`;
+      rows = `<h5>Settings</h5>` +
+        `<div class="d-srow2">Remember what I typed${tog(true)}</div>` +
+        `<div class="d-srow2">Hide spoilers until I tap${tog(true)}</div>` +
+        `<div class="d-srow2">Show one chip instead of two${tog(false)}</div>` +
+        `<div class="d-srow2">AI voice &amp; personality<span>›</span></div>` +
+        `<div class="d-srow2">Accent intensity<span>›</span></div>` +
+        `<div class="d-srow2">Show Developer tab${tog(true)}</div>`;
+    } else {
+      rows = `<h5>${TABS_LONG[t]}</h5>` + [0, 1, 2, 3].map(() => `<div class="d-srow2" style="color:#6b7c90">This tab's own settings</div>`).join("");
+    }
+    return `<div class="d-set" data-seg="answer">${rows}</div>`;
+  }
+
+  function stripOpen() {
+    const cells = RAIL.map((ic, i) => `<span class="d-scell${i === STATE.tab ? " on" : ""}" data-act="tab" data-i="${i}" role="button" tabindex="0" aria-label="${TABS[i]}">${ic}<span>${STRIP[i]}</span></span>`).join("");
+    return `<div class="d-stripopen"><span class="d-pill" data-act="lb" role="button" tabindex="0">LB</span>${cells}<span class="d-pill" data-act="rb" role="button" tabindex="0">RB</span></div>`;
+  }
+
+  /* Round five: a balanced 20-point tab bar with the current tab's icon beside its name. */
+  function balancedBar(style, t, acts, extra) {
+    const a = acts || ["lb", "rb"];
+    const n = TABS.length;
+    const lb = `<span class="d-sh" data-act="${a[0]}" role="button" tabindex="0" aria-label="Previous tab">LB</span>`;
+    const rb = `<span class="d-sh d-sh--r" data-act="${a[1]}" role="button" tabindex="0" aria-label="Next tab">RB</span>`;
+    const mid = `<span class="mid">${TICON[t]}${TABS[t]}</span>`;
+    let inner;
+    if (style === "T1") {
+      inner = lb + `<span class="cluster">${TABS.map((_, i) => (i === t ? mid : `<span class="dot"></span>`)).join("")}</span>` + rb;
+    } else if (style === "T2") {
+      const dots = TABS.map((_, i) => `<span class="dot${i === t ? " on" : ""}"></span>`).join("");
+      inner = lb + `<span class="stack">${mid}<span class="dots">${dots}</span></span>` + rb;
+    } else if (style === "T3") {
+      const left = [2, 1].map(k => TICON[(t - k + n) % n]).join("");
+      const right = [1, 2, 3].map(k => TICON[(t + k) % n]).join("");
+      inner = lb + `<span class="side l">${left}</span>` + mid + `<span class="side r">${right}</span>` + rb;
+    } else {
+      inner = lb + `<span class="nb l">‹ ${TABS[(t - 1 + n) % n]}</span>` + mid + `<span class="nb r">${TABS[(t + 1) % n]} ›</span>` + rb;
+    }
+    return `<div class="d-tabbar bal bal-${style.toLowerCase()}${extra ? " " + extra : ""}" data-seg="tabs">${inner}</div>`;
+  }
+
+  const nameRow = (empty) =>
+    `<div class="d-decky d-decky--chat" data-seg="decky"><span class="d-back">${ICON.back}</span><div class="d-cline">${rNameLine(empty)}</div></div>`;
+
+  /* Round six: the chat's name in a long pill, centred, with something the arrow's size on the right. */
+  function symRow(mirror, empty) {
+    const name = empty ? "New chat" : CHATS[STATE.chat];
+    const sub = mirror === "count" ? "" : `<span class="sub">${empty ? "not saved yet" : `chat ${STATE.chat + 1} of ${CHATS.length}`}</span>`;
+    const right = mirror === "new"
+      ? `<span class="d-mirror btn" aria-label="New chat">${ICON.plus}</span>`
+      : mirror === "count"
+        ? `<span class="d-mirror num">${empty ? "new" : `${STATE.chat + 1}/${CHATS.length}`}</span>`
+        : `<span class="d-mirror"></span>`;
+    return `<div class="d-decky d-decky--sym" data-seg="decky"><span class="d-back">${ICON.back}</span>` +
+      `<span class="d-cpill"><span class="d-key" data-act="chat-prev" role="button" tabindex="0" aria-label="Previous chat">LT</span>` +
+      `<span class="d-cname" data-act="gear" role="button" tabindex="0" aria-label="Open the chats menu"><span class="nm2${mirror === "count" ? " big" : ""}"><b>${name}</b><i class="car">${ICON.down}</i></span>${sub}</span>` +
+      `<span class="d-key" data-act="chat-next" role="button" tabindex="0" aria-label="Next chat">RT</span></span>${right}</div>`;
+  }
+
+  /* Round eight: the name row with LT and RT moved under the name, and optionally the menu arrow into the right corner. */
+  function xRow(v, o) {
+    const name = o ? o.name : CHATS[2];
+    const scroll = o ? o.scroll : STATE.longname === "scroll";
+    const b = `<b${scroll ? ' class="mq"' : ""}>${scroll ? `<span class="mqi">${name}</span>` : name}</b>`;
+    const lt = `<span class="d-key" data-act="chat-prev" role="button" tabindex="0" aria-label="Previous chat">LT</span>`;
+    const rt = `<span class="d-key" data-act="chat-next" role="button" tabindex="0" aria-label="Next chat">RT</span>`;
+    const back = `<span class="d-back">${ICON.back}</span>`;
+    const caret = `<i class="car">${ICON.down}</i>`;
+    const count = o ? o.count : `chat 3 of ${CHATS.length}`;
+    if (v === "X0") {
+      return `<div class="d-decky d-decky--sym" data-seg="decky">${back}<span class="d-cpill">${lt}` +
+        `<span class="d-cname"><span class="nm2">${b}${caret}</span><span class="sub">${count}</span></span>${rt}</span><span class="d-mirror"></span></div>`;
+    }
+    const sub = `<span class="sub2">${lt}${count}${rt}</span>`;
+    if (v === "X1") {
+      const open = o ? ` data-act="gear" role="button" tabindex="0" aria-label="Open the chats menu"` : "";
+      return `<div class="d-decky d-decky--sym" data-seg="decky">${back}<span class="d-cpill roomy">` +
+        `<span class="d-cname"${open}><span class="nm2">${b}${caret}</span>${sub}</span></span><span class="d-mirror"></span></div>`;
+    }
+    return `<div class="d-decky d-decky--sym${v === "X3" ? " slim" : ""}" data-seg="decky">${back}<span class="d-cpill roomy">` +
+      `<span class="d-cname"><span class="nm2 bare">${b}</span>${sub}</span></span>` +
+      `<span class="d-mirror btn menu" aria-label="Chats menu">${ICON.down}</span></div>`;
+  }
+
+  /* How much of the long example name fits in each round-eight drawing, measured on the drawing itself. */
+  function fitMarquees() {
+    document.querySelectorAll(".nm2 b.mq").forEach(b => {
+      const inner = b.querySelector(".mqi");
+      const over = inner ? inner.scrollWidth - b.clientWidth : 0;
+      if (over > 0) b.style.setProperty("--mq", -(over + 4) + "px");
+      else b.classList.remove("mq");
+    });
+  }
+
+  function measureNames() {
+    document.querySelectorAll('.deck.closeup[data-close^="X"]').forEach(el => {
+      const b = el.querySelector(".nm2 b");
+      const id = el.dataset.close;
+      const room = b.clientWidth;
+      const cs = getComputedStyle(b);
+      const probe = document.createElement("span");
+      probe.style.cssText = `position:absolute;visibility:hidden;white-space:nowrap;font:${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily};letter-spacing:${cs.letterSpacing}`;
+      document.body.appendChild(probe);
+      const name = CHATS[2];
+      const fits = s => { probe.textContent = s; return probe.getBoundingClientRect().width <= room + 0.5; };
+      let k = name.length;
+      if (!fits(name)) { k = name.length - 1; while (k > 0 && !fits(name.slice(0, k) + "…")) k--; }
+      probe.remove();
+      const shows = k >= name.length ? `"${name}" (all ${name.length})` : `"${name.slice(0, k).trimEnd()}…" (${k} of ${name.length} characters)`;
+      const nameEl = document.querySelector(`[data-name="${id}"]`);
+      const showsEl = document.querySelector(`[data-shows="${id}"]`);
+      if (nameEl) nameEl.textContent = `${room} points`;
+      if (showsEl) showsEl.textContent = shows;
+      const inner = b.querySelector(".mqi");
+      if (inner) {
+        const over = inner.scrollWidth - room;
+        if (over > 0) b.style.setProperty("--mq", -(over + 4) + "px");
+        else b.classList.remove("mq");
+      }
+    });
+  }
+
+  const guides = () => STATE.guides ? [16, 150, 284].map(x => `<span class="guide" style="left:${x - 0.5}px"></span>`).join("") : "";
+
+  function rColumn(mode, style, opts) {
+    const st = style || STATE.bar;
+    const sym = !opts || opts.sym !== false;
+    const mirror = (opts && opts.mirror) || STATE.mirror;
+    const edge = sym ? "edge16" : "";
+    if (mode === "other") {
+      return balancedBar(st, STATE.r6tab, ["r6lb", "r6rb"], edge) +
+        `<div class="d-gap" data-seg="tabs" style="height:4px"></div>` + rSettings(STATE.r6tab);
+    }
+    let h = balancedBar(st, STATE.tab, null, [edge, mode === "strip" && !sym ? "ringed" : ""].join(" ").trim());
+    const empty = mode === "empty";
+    /* Round eight's pick (X1): LT and RT under the name; a long name scrolls while the ring is on it. */
+    const x1 = opts && opts.row === "x1"
+      ? xRow("X1", { name: empty ? "New chat" : CHATS[STATE.chat], count: empty ? "not saved yet" : `chat ${STATE.chat + 1} of ${CHATS.length}`, scroll: STATE.ring === "chat" })
+      : null;
+    h += x1 || (sym ? symRow(mirror, empty) : nameRow(empty));
+    h += `<div class="d-gap" data-seg="decky" style="height:4px"></div>`;
+    const speak = opts && opts.speak;
+    h += rChat(mode, speak) + rDock(mode, speak);
+    h += chatSheet(52, false);
+    return h;
+  }
+
+  function sizeCloseups() {
+    document.querySelectorAll(".deck.closeup").forEach(el => {
+      const stage = el.closest(".stage");
+      const s = Math.min(2, Math.max(1, (stage.clientWidth - 4) / 300));
+      el.style.transform = `scale(${s})`;
+      el.parentElement.style.width = 300 * s + "px";
+      el.parentElement.style.height = 52 * s + "px";
+    });
+  }
+
+  // ---------- whole-screen drawings ----------
+  const topBar = `<div class="w-top">${ICON.search}${ICON.bell}<span>80%</span><span>6:21 PM</span></div>`;
+  function wideI() {
+    return topBar +
+      `<div class="w-page"><div class="w-head"><b>bonsAI</b><span>Boss help · Strategy · no active game</span><span class="r">Y Read aloud</span></div>` +
+      `<div class="w-scroll" data-seg="answer"><div class="q">${QUESTION}</div><div class="ans">${words(ANSWER)}</div></div></div>` +
+      `<div class="w-foot"><span class="pill">STEAM</span>MENU<span class="sp"></span><span class="btn">A</span>SELECT<span class="btn">B</span>BACK TO THE MENU</div>`;
+  }
+  function wideJ() {
+    const rail = [ICON.bell, ICON.friends, ICON.gear, ICON.bolt, ICON.plug].join("");
+    return `<div class="w-game"></div>` + topBar +
+      `<div class="w-card"><div class="ttl">bonsAI · answer</div><div class="w-scroll" data-seg="answer"><div class="q">${QUESTION}</div><div class="ans">${words(ANSWER)}</div></div></div>` +
+      `<div class="w-qam"><div class="w-qrail">${rail}</div><div class="w-qcol"><div class="deck" data-inner style="--h:453px">${column(CFG.Jcol)}</div></div></div>` +
+      `<div class="w-foot"><span class="pill">STEAM</span>MENU<span class="sp"></span><span class="btn">A</span>SELECT<span class="btn">B</span>BACK</div>`;
+  }
+
+  // ---------- render + measure ----------
+  const H = () => (STATE.screen === "deck" ? 454 : 766);
+
+  function render() {
+    document.querySelectorAll(".deck[data-frame]").forEach(el => {
+      const id = el.dataset.frame;
+      el.style.setProperty("--h", H() + "px");
+      el.innerHTML = RMODE[id] ? rColumn(RMODE[id], "T3", { speak: "bubble-left", row: "x1" })
+        : TSTYLE[id] ? rColumn("read", TSTYLE[id], { sym: false })
+        : USTYLE[id] ? rColumn("read", "T3", { mirror: USTYLE[id] })
+        : WSTYLE[id] ? rColumn("read", "T3", { mirror: "blank", speak: WSTYLE[id] })
+        : column(CFG[id]);
+      /* Round seven: the new layout's hints dim unless the ring is on their row. */
+      ["dimkeys", "ring-tabs", "ring-chat", "ring-answer", "ring-box"].forEach(c => el.classList.remove(c));
+      if (RMODE[id] || USTYLE[id] || WSTYLE[id]) {
+        el.classList.add("dimkeys", "ring-" + (id === "R5" ? "tabs" : STATE.ring));
+      }
+      el.classList.toggle("sheet-open", !!STATE.open[id]);
+      el.style.transform = `scale(${STATE.zoom})`;
+      const sc = el.parentElement;
+      sc.style.width = 300 * STATE.zoom + "px";
+      sc.style.height = H() * STATE.zoom + "px";
+      /* Round four's menu stops at the ask area, so the box stays in view. */
+      if (RMODE[id] || TSTYLE[id] || USTYLE[id] || WSTYLE[id]) {
+        const rs = el.querySelector(".d-sheet");
+        const dk = el.querySelector(".d-dock");
+        if (rs && dk) rs.style.bottom = dk.offsetHeight + "px";
+      }
+      /* A round-three menu opens away from wherever the chat's name sits, so the name stays visible. */
+      const sh = el.querySelector(".d-sheet[data-auto]");
+      const tag = el.querySelector(".d-ctag");
+      if (sh && tag && CFG[id]) {
+        const dr = el.getBoundingClientRect();
+        const tr = tag.getBoundingClientRect();
+        const tTop = (tr.top - dr.top) / STATE.zoom;
+        const tBot = (tr.bottom - dr.top) / STATE.zoom;
+        if (CFG[id].chatPos === "float") { sh.style.top = tBot + 4 + "px"; sh.style.bottom = "0px"; }
+        else { sh.style.top = "52px"; sh.style.bottom = H() - tTop + 4 + "px"; }
+      }
+    });
+    document.querySelectorAll(".deck.closeup").forEach(el => {
+      el.style.setProperty("--h", "52px");
+      const cid = el.dataset.close;
+      const u = cid === "Z" ? "blank" : USTYLE[cid];
+      el.innerHTML = cid === "Z"
+        ? balancedBar("T3", STATE.tab, null, "edge16") + xRow("X1", { name: CHATS[STATE.chat], count: `chat ${STATE.chat + 1} of ${CHATS.length}`, scroll: STATE.ring === "chat" }) + guides()
+        : cid.startsWith("X")
+        ? balancedBar("T3", STATE.tab, null, "edge16") + xRow(cid) + guides()
+        : u
+          ? balancedBar("T3", STATE.tab, null, "edge16") + symRow(u, false) + guides()
+          : balancedBar(cid, STATE.tab) + nameRow(false);
+      ["dimkeys", "ring-tabs", "ring-chat", "ring-answer", "ring-box"].forEach(c => el.classList.remove(c));
+      if (cid === "Z" || cid.startsWith("X")) el.classList.add("dimkeys", "ring-" + STATE.ring);
+    });
+    sizeCloseups();
+    document.querySelector('.wide[data-frame="I"]').innerHTML = wideI();
+    document.querySelector('.wide[data-frame="J"]').innerHTML = wideJ();
+    document.documentElement.style.setProperty("--frame-w", 300 * STATE.zoom + "px");
+    const photo = document.querySelector(".overlay-photo");
+    photo.style.transform = `scale(${STATE.zoom})`;
+    const onDeck = STATE.screen === "deck";
+    photo.hidden = !onDeck;
+    document.getElementById("blend-wrap").hidden = !onDeck;
+    sizeWide();
+    measure();
+  }
+
+  function sizeWide() {
+    document.querySelectorAll("[data-wide-stage]").forEach(stage => {
+      const sc = stage.querySelector(".scaler");
+      const el = stage.querySelector(".wide");
+      const avail = Math.max(260, stage.clientWidth - 4);
+      const s = Math.min(1, avail / 853);
+      el.style.transform = `scale(${s})`;
+      sc.style.width = 853 * s + "px";
+      sc.style.height = 533 * s + "px";
+    });
+  }
+
+  function countWords(container, cover) {
+    if (!container) return 0;
+    const cr = container.getBoundingClientRect();
+    const cv = cover ? cover.getBoundingClientRect() : null;
+    let n = 0;
+    container.querySelectorAll(".w").forEach(w => {
+      const r = w.getBoundingClientRect();
+      if (r.top < cr.top - 0.5 || r.bottom > cr.bottom + 0.5) return;
+      if (cv && r.right > cv.left && r.left < cv.right && r.bottom > cv.top && r.top < cv.bottom) return;
+      n++;
+    });
+    return n;
+  }
+
+  function measure() {
+    document.querySelectorAll(".deck[data-frame]").forEach(el => {
+      const segs = { steam: 0, decky: 0, tabs: 0, answer: 0, ask: 0 };
+      el.querySelectorAll("[data-seg]").forEach(s => { segs[s.dataset.seg] += s.offsetHeight; });
+      RES[el.dataset.frame] = { segs, total: el.offsetHeight, words: countWords(el.querySelector(".d-chat"), el.querySelector(".d-float, .d-sfloat")) };
+    });
+    ["I", "J"].forEach(id => {
+      const el = document.querySelector(`.wide[data-frame="${id}"]`);
+      const box = el.querySelector(".w-scroll");
+      RES[id] = { segs: { answer: box.offsetHeight }, total: 533, words: countWords(box), area: box.offsetWidth + " × " + box.offsetHeight };
+    });
+    paintStats();
+    paintCharts();
+    measureNames();
+    fitMarquees();
+  }
+
+  const delta = (v, base, unit) => {
+    const d = v - base;
+    if (d === 0) return `<small class="flat">same as today</small>`;
+    const pct = base ? Math.round((d / base) * 100) : 0;
+    return `<small>${d > 0 ? "+" : "−"}${Math.abs(d)} ${unit} vs today (${d > 0 ? "+" : "−"}${Math.abs(pct)}%)</small>`;
+  };
+
+  function paintStats() {
+    const base = RES.A;
+    Object.keys(RES).forEach(id => {
+      const card = document.querySelector(`[data-card="${id}"]`);
+      if (!card) return;
+      const r = RES[id];
+      const a = card.querySelector('[data-stat="answer"]');
+      const w = card.querySelector('[data-stat="words"]');
+      if (!a || !w) return;
+      if (id === "I" || id === "J") {
+        a.innerHTML = `${r.area} points<small class="flat">a different shape: wider and taller</small>`;
+      } else {
+        a.innerHTML = `${r.segs.answer} points` + (id === "A" ? `<small class="flat">${Math.round((r.segs.answer / r.total) * 100)}% of the panel</small>` : delta(r.segs.answer, base.segs.answer, "points"));
+      }
+      const all = r.words >= TOTAL_WORDS ? " (all of it)" : "";
+      if (WSTYLE[id] && id !== "W0") {
+        const d = r.words - RES.W0.words;
+        w.innerHTML = `${r.words} of ${TOTAL_WORDS}<small${d ? "" : ' class="flat"'}>${d > 0 ? "+" : d < 0 ? "−" : ""}${d ? Math.abs(d) + " words vs W0, its own row" : "same as W0"}</small>`;
+        return;
+      }
+      w.innerHTML = `${r.words} of ${TOTAL_WORDS}${all}` + (id === "A" ? `<small class="flat">the rest needs scrolling</small>` : delta(r.words, base.words, "words"));
+    });
+  }
+
+  const NAMES = { A: "Today", B: "Tabs into Decky's bar", C: "Hide Decky's bar", D: "Lighter ask area", E: "B + D", F: "One gear, chats on top", G: "Reading mode", H: "Tabs down the side", I: "Full-screen reading", J: "Answer over the game", K: "Chat on top, tab row", L: "Chat and tabs share", M: "Tabs on top, chat row", N: "Chat floats over answer", O: "Chat beside Read aloud", P: "Chat in chips row", Q: "Chat in the ask box", R1: "Tabs in the top strip" };
+  const ROWS_H = ["A", "R1", "N", "O", "P", "Q", "K", "L", "M", "B", "C", "D", "E", "F", "G", "H"];
+  const ROWS_W = ["A", "R1", "N", "O", "P", "Q", "K", "L", "M", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+
+  function paintCharts() {
+    const base = RES.A.segs.answer;
+    const order = ["steam", "decky", "tabs", "answer", "ask"];
+    const colors = { steam: "--seg-steam", decky: "--seg-decky", tabs: "--seg-tabs", answer: "--seg-answer", ask: "--seg-ask" };
+    const labels = { steam: "Steam's strip", decky: "Decky's bar and gap", tabs: "bonsAI's tab bar or header", answer: "The answer", ask: "Ask area" };
+    document.querySelectorAll("[data-today]").forEach(b => { b.textContent = String(RES.A.words); });
+    document.querySelectorAll("[data-z]").forEach(b => {
+      b.textContent = b.dataset.z === "answer" ? `${RES.Z.segs.answer} points` : String(RES.Z.words);
+    });
+    const r4 = RES.R1;
+    document.querySelectorAll("[data-r]").forEach(b => {
+      b.textContent = b.dataset.r === "answer" ? `${r4.segs.answer} points` : String(r4.words);
+    });
+    document.querySelectorAll("[data-k]").forEach(td => {
+      const r = RES[td.dataset.k];
+      td.textContent = `+${r.segs.answer - base} points, ${r.words} words`;
+    });
+    document.getElementById("rows-height").innerHTML = ROWS_H.map(id => {
+      const r = RES[id];
+      const bar = order.filter(k => r.segs[k] > 0).map(k => `<i style="--c: var(${colors[k]}); width:${(r.segs[k] / r.total) * 100}%" title="${labels[k]}: ${r.segs[k]} points"></i>`).join("");
+      const d = r.segs.answer - base;
+      return `<div class="bar-row"><span class="lab"><b>${id}</b>${NAMES[id]}</span><span class="bar" role="img" aria-label="${NAMES[id]}: answer ${r.segs.answer} of ${r.total} points">${bar}</span>` +
+        `<span class="val">${r.segs.answer}${id === "A" ? "" : ` <small>${d >= 0 ? "+" : "−"}${Math.abs(d)}</small>`}</span></div>`;
+    }).join("");
+    const wbase = RES.A.words;
+    document.getElementById("rows-words").innerHTML = ROWS_W.map(id => {
+      const r = RES[id];
+      const d = r.words - wbase;
+      return `<div class="bar-row"><span class="lab"><b>${id}</b>${NAMES[id]}</span><span class="bar"><i style="--c: var(--seg-answer); width:${Math.min(100, (r.words / TOTAL_WORDS) * 100)}%"></i></span>` +
+        `<span class="val">${r.words}${id === "A" ? "" : ` <small>${d >= 0 ? "+" : "−"}${Math.abs(d)}</small>`}</span></div>`;
+    }).join("");
+  }
+
+  // ---------- interaction ----------
+  function act(name, el) {
+    if (name === "lb") STATE.tab = (STATE.tab + TABS.length - 1) % TABS.length;
+    else if (name === "rb") STATE.tab = (STATE.tab + 1) % TABS.length;
+    else if (name === "tab") STATE.tab = Number(el.dataset.i);
+    else if (name === "r6lb") STATE.r6tab = STATE.r6tab <= 1 ? 5 : STATE.r6tab - 1;
+    else if (name === "r6rb") STATE.r6tab = STATE.r6tab >= 5 ? 1 : STATE.r6tab + 1;
+    else if (name === "chat-prev") STATE.chat = (STATE.chat + CHATS.length - 1) % CHATS.length;
+    else if (name === "chat-next") STATE.chat = (STATE.chat + 1) % CHATS.length;
+    else if (name === "gear") {
+      const frame = el.closest("[data-frame]");
+      if (frame) STATE.open[frame.dataset.frame] = !STATE.open[frame.dataset.frame];
+    }
+    else if (name === "unfold") STATE.reading = false;
+    else if (name === "fold") STATE.reading = true;
+    else return;
+    render();
+  }
+  document.addEventListener("click", e => {
+    const t = e.target.closest("[data-act]");
+    if (t) act(t.dataset.act, t);
+    const b = e.target.closest(".seg button");
+    if (b) {
+      const ctl = b.parentElement.dataset.ctl;
+      /* The same switch can appear in two rounds; keep every copy showing the same choice. */
+      document.querySelectorAll(`.seg[data-ctl="${ctl}"] button`).forEach(x => x.setAttribute("aria-pressed", String(x.dataset.v === b.dataset.v)));
+      if (ctl === "screen") STATE.screen = b.dataset.v;
+      if (ctl === "zoom") STATE.zoom = Number(b.dataset.v);
+      if (ctl === "icon") STATE.icon = b.dataset.v;
+      if (ctl === "other") STATE.other = b.dataset.v;
+      if (ctl === "bar") STATE.bar = b.dataset.v;
+      if (ctl === "mirror") STATE.mirror = b.dataset.v;
+      if (ctl === "guides") STATE.guides = b.dataset.v === "on";
+      if (ctl === "ring") STATE.ring = b.dataset.v;
+      if (ctl === "longname") STATE.longname = b.dataset.v;
+      render();
+    }
+  });
+  document.addEventListener("keydown", e => {
+    if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches("[data-act]")) {
+      e.preventDefault();
+      act(e.target.dataset.act, e.target);
+    }
+  });
+  document.getElementById("blend-a").addEventListener("input", e => {
+    document.querySelector(".overlay-photo").style.opacity = String(Number(e.target.value) / 100);
+  });
+  let rz;
+  window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { sizeWide(); sizeCloseups(); measure(); }, 120); });
+
+  document.getElementById("total-words").textContent = String(TOTAL_WORDS);
+  render();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => measure());
+})();
+</script>
+
+</body></html>

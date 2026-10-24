@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { docsDir, knowledgeDir, safeDocPath } from "./paths.js";
+import { docsDir, knowledgeDir, resolveRepoRoot, safeDocPath } from "./paths.js";
 
 export interface KnowledgeMeta {
   id?: string;
@@ -197,4 +197,47 @@ export function readFileBody(entry: KnowledgeEntry): string {
   const content = fs.readFileSync(entry.filePath, "utf8");
   if (entry.filePath.endsWith(".json")) return content;
   return parseFrontmatter(content).body;
+}
+
+/** When to fetch full policy body (slim bootstrap — avoid dumping full ALWAYS/NEVER every session). */
+const POLICY_FETCH_WHEN: Record<string, string> = {
+  "decky-ui-focus": "editing Settings/QAM/D-pad or fixing focus bugs",
+  "decky-plugin-studio": "DPS bugs, preview/deploy MCP, or Init Pack changes",
+  "git-branch": "branching, push, or Bugbot Autofix questions",
+  "permissions-safety": "permissions, privileged RPCs, or consent UX",
+  "plan-accountability": "drafting plans or triaging subagent reports",
+  "runtime-ownership": "empty/truncated AI replies or multi-writer runtime bugs",
+  "scripts-automation": "build/deploy, watch-deploy, or debug ingest tunnels",
+};
+
+/**
+ * Slim session bootstrap: policy ids + one-liners. Full bodies via `bonsai.policy.get`.
+ * Shared by MCP tool and Cursor sessionStart hook.
+ */
+export function formatSessionBootstrap(opts?: { autoInjected?: boolean }): string {
+  const policies = getPolicies({ alwaysApply: true });
+  const lines = policies.map((p) => {
+    const desc = p.meta.description ?? p.id;
+    const when = POLICY_FETCH_WHEN[p.id] ?? "when the task matches this policy";
+    return `- \`${p.id}\` — ${desc}. Fetch when ${when} (\`bonsai.policy.get\` id=\`${p.id}\`).`;
+  });
+  const title = opts?.autoInjected
+    ? "# bonsAI session bootstrap (auto-injected at sessionStart)"
+    : "# bonsAI session bootstrap";
+  return [
+    title,
+    "",
+    `Repo: ${resolveRepoRoot()}`,
+    "",
+    "Index: `bonsai://index`",
+    "",
+    "Deck operations: **decky-plugin-studio** (`plugin.build`, `deck.deploy`, `preview.*`).",
+    "",
+    "Always-on policies (ids only — do **not** re-fetch full bodies unless the task needs them):",
+    "",
+    ...lines,
+    "",
+    "Focus checklist (always): `AGENTS.md (Decky focus graph)`. Patterns: `bonsai://architecture/focus-graph-patterns`.",
+    "Screenshots: the Deck capture tools in AGENTS.md when the user mentions screenshot/DeckCapture/`screenshots/`.",
+  ].join("\n");
 }

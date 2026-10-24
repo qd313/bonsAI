@@ -1,0 +1,235 @@
+/**
+ * Title: Permissions tab
+ *
+ * Purpose: The Permissions tab — the screen where you turn on the things the
+ * AI is allowed to touch: saving files to your desktop, using the
+ * microphone, downloading from the internet, and
+ * reading game screenshots and Proton logs to help with troubleshooting. Every one of these starts off
+ * for a new install. Turning a toggle on here is what lets the Python side
+ * of the plugin do that thing at all when Ask needs it; leaving it off
+ * blocks the request outright, not just hides a button. The screen also
+ * shows a Back button when you arrived here by tapping a "why is this off"
+ * link from somewhere else, and a banner that greys out every switch when
+ * Steam's parental controls are locked.
+ *
+ * Used for: The Permissions tab in index.tsx.
+ *
+ * Solves: One screen where a person agrees to each sensitive capability
+ * before Ask or settings can use it, instead of the plugin doing these
+ * things silently.
+ *
+ * Does not: Actually enforce these toggles. What happens here only decides
+ * what gets saved; the Python side's capabilities service is what checks a
+ * toggle before it lets a request through.
+ *
+ * Gotchas: A permission row can also be the destination of a jump from a
+ * different tab (a "why is voice off" link, say). Landing there has to move
+ * Steam's own idea of what is focused, not just call a DOM `.focus()` on the
+ * toggle — a plain focus() left the ring on the button the user jumped from
+ * while the browser's own idea of focus moved to the toggle, so the next
+ * D-pad press went nowhere useful. See the comment on PermissionToggleHost
+ * below for how that jump is wired and what it looked like broken on the
+ * Deck.
+ */
+import React, { useEffect, useRef } from "react";
+import { Focusable, PanelSection, PanelSectionRow, ToggleField, Button } from "@decky/ui";
+import type { BonsaiCapabilities } from "../settings/bonsaiSettingsSchema";
+import type { PermissionFocusTargetId } from "./permissionDeepLink";
+import { permissionJumpReturnTabLabel } from "./permissionDeepLink";
+import {
+  registerPermissionRowNavFocus,
+  unregisterPermissionRowNavFocus,
+  restorePermissionJumpFocusWithRetry,
+} from "./permissionJumpRegistry";
+import type { NavRefHolder } from "../../shared/dpad/navFocusRegistry";
+import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
+import { textPx } from "../../styles/textPx";
+import { scaledSteamWords } from "../../shared/text-size/scaledSteamWords";
+
+type Props = {
+  capabilities: BonsaiCapabilities;
+  setCapabilities: React.Dispatch<React.SetStateAction<BonsaiCapabilities>>;
+  /** When set, show a Back control that returns to the tab the user jumped from. */
+  permissionJumpReturnTab?: string | null;
+  onReturnFromPermissionJump?: () => void;
+  /** Steam parental lock — greys toggles without mutating stored capabilities. */
+  kidsLockActive?: boolean;
+};
+
+const ROWS: {
+  key: keyof BonsaiCapabilities;
+  focusId: PermissionFocusTargetId;
+  title: string;
+  description: string;
+}[] = [
+  {
+    key: "filesystem_write",
+    focusId: "filesystem_write",
+    title: "Save files to Desktop",
+    description: "Saves notes and logs to Desktop/bonsAI_logs.",
+  },
+  {
+    key: "microphone_access",
+    focusId: "microphone_access",
+    title: "Voice input (microphone)",
+    description: "Speak your question. Audio stays on this Deck, never saved.",
+  },
+  {
+    key: "internet_downloads",
+    focusId: "internet_downloads",
+    title: "Internet downloads",
+    description: "Lets bonsAI download Ollama, models and the knowledge library. Off: nothing downloads.",
+  },
+];
+
+const KIDS_LOCK_BANNER =
+  "Parental controls active: every switch here is off. Ask still works with your local AI. " +
+  "The switches come back when Steam unlocks. bonsAI does not filter what the AI says.";
+
+function gameContextReadEnabled(caps: BonsaiCapabilities): boolean {
+  return caps.media_library_access && caps.steam_logs_read;
+}
+
+function PermissionToggleHost({
+  focusId,
+  children,
+}: {
+  focusId: PermissionFocusTargetId;
+  children: React.ReactNode;
+}) {
+  /*
+   * Registered as this row's own Steam nav node (navFocusRegistry.ts), not an element ref: a jump
+   * here arrives from a different tab, a different navigation container, and a plain DOM `.focus()`
+   * on a queried element does not carry Steam's gamepad ring across that boundary. Measured on
+   * device 2026-09-05 (build 4/517804a, PERM-JUMP-01 step 3): the ring landed on "Back to Main"
+   * instead of this row's toggle. `Focusable` needs no `focusable` of its own here — the `ToggleField`
+   * inside is the real stop, the same shape `session-context-strip` and the chat permission-hint
+   * rows already use successfully.
+   */
+  const navRef = useRef<NavRefHolder["current"]>(null);
+  useEffect(() => {
+    registerPermissionRowNavFocus(focusId, navRef);
+    return () => unregisterPermissionRowNavFocus(focusId, navRef);
+  }, [focusId]);
+
+  return (
+    <Focusable
+      {...({ navRef } as Record<string, unknown>)}
+      className="bonsai-settings-bleed"
+      style={{ width: "100%" }}
+      data-bonsai-permission-focus={focusId}
+    >
+      {children}
+    </Focusable>
+  );
+}
+
+/**
+ * The whole Permissions screen: the optional Back button, the parental-controls
+ * banner, and one row per toggle.
+ *
+ * In: the capabilities object read from settings, a setter to update it, and
+ * — only when the user arrived here through a "go check permissions" link
+ * from another tab — which tab to return to and a callback that jumps back
+ * there. Also whether Steam's parental controls are currently locked.
+ * Out: the tab's rows: one combined "read game & screenshot context" toggle
+ * that actually sets two capabilities at once, plus one row per entry in
+ * ROWS.
+ *
+ * What can go wrong: none of these toggles do anything by themselves —
+ * turning one on only changes what gets saved. Enforcement happens later,
+ * wherever a specific request checks whether its capability is on. New
+ * installs start with everything off; a settings file saved before these
+ * toggles existed is treated by the backend as fully allowed until this tab
+ * is opened and saved once, after which only what is actually set here
+ * applies.
+ */
+export const PermissionsTab: React.FC<Props> = ({
+  capabilities,
+  setCapabilities,
+  permissionJumpReturnTab,
+  onReturnFromPermissionJump,
+  kidsLockActive = false,
+}) => {
+  useEffect(() => {
+    restorePermissionJumpFocusWithRetry();
+  }, []);
+
+  const showBack = Boolean(permissionJumpReturnTab && onReturnFromPermissionJump);
+  const backLabel = permissionJumpReturnTab
+    ? permissionJumpReturnTabLabel(permissionJumpReturnTab)
+    : "";
+
+  return (
+    <>
+      <PanelSection title={scaledSteamWords("Permissions", 16) as unknown as string}>
+        {showBack ? (
+          <PanelSectionRow>
+            <Button
+              className={FOCUS_RING_BTN_CLASS}
+              onClick={() => onReturnFromPermissionJump?.()}
+              style={{ minHeight: 34, fontSize: textPx(12), padding: "6px 12px" }}
+            >
+              Back to {backLabel}
+            </Button>
+          </PanelSectionRow>
+        ) : null}
+        {kidsLockActive ? (
+          <PanelSectionRow>
+            <Focusable
+              className="bonsai-settings-bleed"
+              style={{ fontSize: textPx(12), color: "#f0c674", lineHeight: 1.45, marginBottom: 4 }}
+              data-bonsai-kids-lock-banner="1"
+            >
+              {KIDS_LOCK_BANNER}
+            </Focusable>
+          </PanelSectionRow>
+        ) : null}
+        <PanelSectionRow>
+          <div
+            className="bonsai-settings-bleed"
+            style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45, marginBottom: 4 }}
+            data-bonsai-permissions-intro="1"
+          >
+            Everything here starts off until you turn it on. AI questions to a PC on your home network are not
+            blocked by these switches.
+          </div>
+        </PanelSectionRow>
+        <PanelSectionRow>
+          <PermissionToggleHost focusId="game_context_read">
+            <ToggleField
+              label={scaledSteamWords("Read game & screenshot context", 16)}
+              description={scaledSteamWords("Attaches screenshots and game logs to your questions for the AI.", 12)}
+              checked={kidsLockActive ? false : gameContextReadEnabled(capabilities)}
+              disabled={kidsLockActive}
+              onChange={(checked) => {
+                if (kidsLockActive) return;
+                setCapabilities((prev) => ({
+                  ...prev,
+                  media_library_access: checked,
+                  steam_logs_read: checked,
+                }));
+              }}
+            />
+          </PermissionToggleHost>
+        </PanelSectionRow>
+        {ROWS.map((row) => (
+          <PanelSectionRow key={row.key}>
+            <PermissionToggleHost focusId={row.focusId}>
+              <ToggleField
+                label={scaledSteamWords(row.title, 16)}
+                description={scaledSteamWords(row.description, 12)}
+                checked={kidsLockActive ? false : capabilities[row.key]}
+                disabled={kidsLockActive}
+                onChange={(checked) => {
+                  if (kidsLockActive) return;
+                  setCapabilities((prev) => ({ ...prev, [row.key]: checked }));
+                }}
+              />
+            </PermissionToggleHost>
+          </PanelSectionRow>
+        ))}
+      </PanelSection>
+    </>
+  );
+};

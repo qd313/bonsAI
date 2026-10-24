@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>bonsAI — Context transparency mockup (F11 hybrid)</title>
+<style>
+  :root {
+    --bg: #0b1016;
+    --panel: #141c28;
+    --text: #dce8f4;
+    --muted: #8fa6bd;
+    --muted-dim: #7a93ad;
+    --accent: #7dd3fc;
+    --bubble-bg: rgba(20, 32, 44, 0.72);
+    --bubble-border: rgba(100, 140, 180, 0.28);
+    --chip-idle-border: rgba(58, 76, 96, 0.85);
+    --chip-idle-bg: rgba(26, 34, 44, 0.88);
+    --focus-ring: rgba(125, 211, 252, 0.95);
+    --warn: #f2cf84;
+    --deck-width: 640px;
+    --tier-foss-border: rgba(74, 222, 128, 0.9);
+    --tier-foss-bg: rgba(18, 48, 32, 0.92);
+    --tier-open-border: rgba(251, 146, 60, 0.92);
+    --tier-open-bg: rgba(52, 32, 14, 0.92);
+    --tier-non-border: rgba(248, 113, 113, 0.92);
+    --tier-non-bg: rgba(48, 20, 24, 0.92);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    line-height: 1.4;
+  }
+  h1 { font-size: 1.1rem; margin: 0 0 6px; }
+  p.lead { color: var(--muted); margin: 0 0 16px; max-width: 72ch; font-size: 0.92rem; }
+  .layout { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+  .controls {
+    flex: 1 1 280px; max-width: 360px; padding: 14px;
+    background: var(--panel); border: 1px solid rgba(72, 98, 124, 0.45);
+    border-radius: 12px; font-size: 0.88rem;
+  }
+  .controls h2 {
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--muted); margin: 14px 0 8px;
+  }
+  .controls h2:first-child { margin-top: 0; }
+  label { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; color: var(--muted); cursor: pointer; }
+  select, button.ctrl {
+    width: 100%; background: #0b1220; color: var(--text); border: 1px solid #334155;
+    border-radius: 8px; padding: 8px 10px; font: inherit; cursor: pointer;
+  }
+  button.ctrl { margin-top: 6px; }
+  button.ctrl:hover { border-color: var(--accent); }
+  .hint { font-size: 0.78rem; color: var(--muted-dim); margin-top: 8px; line-height: 1.45; }
+  kbd {
+    background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px; padding: 1px 5px; font-size: 0.75rem;
+  }
+
+  .deck-frame {
+    flex: 0 0 var(--deck-width); width: var(--deck-width);
+    background: linear-gradient(180deg, #121a24 0%, #0d131b 100%);
+    border: 1px solid rgba(72, 98, 124, 0.5); border-radius: 14px;
+    overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  }
+  .deck-header {
+    padding: 12px 16px; border-bottom: 1px solid rgba(72, 98, 124, 0.35);
+    font-size: 0.8rem; color: var(--muted); display: flex; justify-content: space-between;
+  }
+  .deck-body { padding: 12px 14px 18px; max-height: 82vh; overflow-y: auto; }
+  .turn-header {
+    display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px;
+    background: rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.06);
+    font-size: 0.82rem; color: #b8c9dc; cursor: pointer; margin-bottom: 6px;
+  }
+  .turn-header.focused { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+  .turn-header .chev { opacity: 0.7; font-size: 0.7rem; }
+  .answer-bubble {
+    max-width: 92%; margin: 0 0 10px 4px; padding: 12px 14px; border-radius: 10px;
+    background: var(--bubble-bg); border: 1px solid var(--bubble-border);
+    font-size: 0.9rem; line-height: 1.5; color: #e8f0f8;
+  }
+  .answer-bubble p { margin: 0 0 10px; }
+  .answer-bubble p:last-child { margin-bottom: 0; }
+  .reply-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0 4px; font-size: 0.78rem; }
+  .reply-actions button {
+    background: rgba(64, 93, 124, 0.35); border: 1px solid rgba(150, 187, 223, 0.45);
+    color: #dce8f4; border-radius: 6px; padding: 6px 10px; cursor: pointer; font: inherit;
+  }
+
+  .context-row { margin: 10px 0 0 4px; max-width: 96%; }
+  .context-hint {
+    font-size: 0.78rem; color: var(--muted-dim); font-style: italic;
+    cursor: pointer; padding: 4px 0; border: none; background: none; font: inherit; text-align: left;
+  }
+  .context-hint:hover { color: var(--accent); }
+  .context-hint .jump { color: var(--accent); font-style: normal; }
+
+  /* Vertical chip ladder: 2 truncated above + active + 2 truncated below */
+  .chip-ladder {
+    margin-top: 8px; padding: 10px 0 0; border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex; flex-direction: column; gap: 8px; max-width: 100%;
+    align-items: flex-start;
+  }
+  .chip-ladder-item.truncated { opacity: 0.55; transform: scale(0.96); transform-origin: left center; }
+  .chip-ladder-item.truncated.far { opacity: 0.38; transform: scale(0.92); }
+
+  .chip-ladder .pill {
+    width: auto;
+    max-width: 268px;
+    box-sizing: border-box;
+    display: inline-block;
+    text-align: left;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    font-size: 0.72rem; font-weight: 600; padding: 5px 10px; border-radius: 999px;
+    border: 1px solid var(--chip-idle-border); background: var(--chip-idle-bg); color: #e2e8f0;
+    cursor: pointer; font-family: inherit;
+  }
+  .pill:focus { outline: none; }
+  .pill:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .pill.truncated-pill { font-weight: 500; }
+  .pill.tier-foss { border-color: var(--tier-foss-border); background: var(--tier-foss-bg); }
+  .pill.tier-open { border-color: var(--tier-open-border); background: var(--tier-open-bg); }
+  .pill.tier-non { border-color: var(--tier-non-border); background: var(--tier-non-bg); }
+
+  /* Expanded: compact summary pill + indented body (body may be slightly wider for paths) */
+  .chip-expanded {
+    max-width: 300px;
+    font-size: 0.78rem; line-height: 1.45; color: #c5d8ea;
+  }
+  .chip-expanded .chip-summary {
+    width: auto;
+    max-width: 268px;
+    box-sizing: border-box;
+    display: inline-block;
+    margin-bottom: 8px;
+    cursor: default;
+  }
+  .chip-expanded-body {
+    padding: 0 2px 0 12px;
+    margin-left: 4px;
+    max-width: 292px;
+    border-left: 2px solid rgba(125, 211, 252, 0.22);
+    color: #b8cce0;
+  }
+  .chip-expanded-body h4 {
+    margin: 0 0 6px; font-size: 0.75rem; color: #dce8f4;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .chip-expanded-body .path {
+    font-family: ui-monospace, Consolas, monospace; font-size: 0.68rem;
+    word-break: break-all; color: #9fd4ff; margin: 4px 0;
+  }
+  .chip-expanded-body ul { margin: 6px 0 0; padding-left: 1.1em; }
+  .chip-expanded-body .skip-list {
+    margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.1);
+    font-size: 0.72rem; color: var(--muted-dim); font-style: italic;
+  }
+  .chip-expanded-body pre.dev-json {
+    margin: 0; font-family: ui-monospace, Consolas, monospace; font-size: 0.65rem;
+    color: #9fb7d5; white-space: pre-wrap; word-break: break-word;
+    max-height: 200px; overflow: auto;
+    padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.22);
+  }
+
+  .ladder-meta {
+    font-size: 0.68rem; color: var(--muted); margin-bottom: 4px;
+  }
+  .session-context {
+    margin-top: 20px; padding-top: 12px; border-top: 2px solid rgba(72, 98, 124, 0.35);
+  }
+  .session-context h3 {
+    margin: 0 0 10px; font-size: 0.72rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .session-entry {
+    border: 1px solid rgba(72, 98, 124, 0.35); border-radius: 8px;
+    background: rgba(0,0,0,0.18); margin-bottom: 8px; overflow: hidden;
+  }
+  .session-entry.highlight {
+    border-color: rgba(125, 211, 252, 0.55);
+    box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.2);
+  }
+  .session-entry-btn {
+    width: 100%; text-align: left; padding: 8px 10px; border: none; background: transparent;
+    color: #b8cce0; font: inherit; font-size: 0.78rem; cursor: pointer;
+  }
+  .session-entry-btn:hover { background: rgba(64, 93, 124, 0.2); }
+  .session-entry-body { padding: 0 10px 10px; }
+
+  .log-line {
+    font-size: 0.72rem; color: var(--muted); margin-top: 12px; padding: 8px;
+    background: rgba(0,0,0,0.2); border-radius: 6px;
+  }
+  .log-line strong { color: var(--warn); }
+</style>
+</head>
+<body>
+<h1>Context transparency mockup — F11 hybrid (Option C)</h1>
+<p class="lead">
+  <strong>Live turn:</strong> Expanded chip is a flat block — summary pill + body, no nested card wrapper.<br />
+  <strong>Older turns:</strong> hint only → jumps to <strong>Session context</strong> strip at thread bottom.<br />
+  Journal quick-add dropped for v1. File: <code>docs/demos/context-transparency-mockup.html</code>
+</p>
+
+<div class="layout">
+  <aside class="controls">
+    <h2>Scenario (live turn)</h2>
+    <select id="scenario" class="ctrl">
+      <option value="troubleshoot-rich">Proton troubleshoot (7 chips incl. dev)</option>
+      <option value="no-context">Casual Ask (no chips)</option>
+      <option value="skips-only">Troubleshoot (2 chips + skips)</option>
+    </select>
+
+    <h2>Active transcript turn</h2>
+    <label><input type="radio" name="turn" value="older" /> Older — Elden Ring crash</label>
+    <label><input type="radio" name="turn" value="live" checked /> Live — Proton troubleshoot</label>
+
+    <h2>Simulate</h2>
+    <button type="button" class="ctrl" id="btn-live-context">Open live turn More context</button>
+    <button type="button" class="ctrl" id="btn-jump-older">Tap older turn hint (jump to strip)</button>
+    <button type="button" class="ctrl" id="btn-chip-3">Jump to chip 3 of 7</button>
+    <p class="hint">
+      Chips are <strong>compact</strong> (fit label, max ~268px). Expanded body indented under the pill.
+    </p>
+
+    <h2>Locked for v1</h2>
+    <ul class="hint" style="margin:0;padding-left:1.2em;">
+      <li>F11 Option C (hybrid)</li>
+      <li>Journal: Settings editor + inject (no reply quick-add v1)</li>
+      <li>Proton version: free text + optional log prefill</li>
+      <li>Developer details = last chip in ladder</li>
+    </ul>
+  </aside>
+
+  <div class="deck-frame" id="deck" tabindex="0">
+    <div class="deck-header">
+      <span>bonsAI · Main</span>
+      <span>Chip 3/6 · ladder window</span>
+    </div>
+    <div class="deck-body" id="deck-body"></div>
+  </div>
+</div>
+
+<div class="log-line" id="event-log"><strong>Event log:</strong> Ready.</div>
+
+<script>
+(function () {
+  const HOME = "/home/deck";
+  const WINDOW = 2; // truncated chips above and below active
+
+  const TURN_META = {
+    older: {
+      id: "older",
+      title: "Elden Ring — Proton crash (earlier)",
+      scenarioKey: "skips-only",
+      isLive: false,
+      collapsedLabel: "Context used · <span class=\"jump\">view in session context ↓</span>",
+    },
+    live: {
+      id: "live",
+      title: "Help me troubleshoot a Proton issue",
+      scenarioKey: "troubleshoot-rich",
+      isLive: true,
+      collapsedLabel: "Context used · tap for details",
+    },
+  };
+
+  const SCENARIOS = {
+    "troubleshoot-rich": {
+      sources: [
+        { id: "logs", rank: 1, label: "Read Proton log tail", tierClass: "", popover: {
+          title: "Proton / Steam logs",
+          paths: [`${HOME}/steam-1245620.log`, `${HOME}/.local/share/Steam/steamapps/compatdata/1245620/pfx/…/dxvk.log`],
+          bullets: ["96 KB budget · err/warn filter", "Attached before mode inject"],
+        }},
+        { id: "journal", rank: 2, label: "Inject 3 prior tries", tierClass: "", popover: {
+          title: "Experiment journal",
+          paths: [],
+          bullets: ["Proton 9.0-4 → worse", "Experimental + WINED3D → same", "GE-Proton9-15 → better"],
+        }},
+        { id: "screenshot", rank: 3, label: "Attach 1 screenshot", tierClass: "", popover: {
+          title: "Vision context",
+          paths: [`${HOME}/.local/share/Steam/userdata/…/screenshots/…/crash.png`],
+          bullets: ["Vision chain: qwen2.5vl:3b first"],
+        }},
+        { id: "kb", rank: 4, label: "Pull KB compat cards", tierClass: "", popover: {
+          title: "Local knowledge base",
+          paths: [`${HOME}/.bonsai/knowledge/corpus.sqlite`],
+          bullets: ["2 cards · maintainer-authored"],
+        }},
+        { id: "tdp", rank: 5, label: "Read current TDP", tierClass: "", popover: {
+          title: "TDP grounding",
+          paths: ["/sys/class/drm/…/hwmon/…/power1_cap"],
+          bullets: ["12 W cap · secondary for this reply"],
+        }},
+        { id: "model", rank: 99, label: "Routed llama3.2 · Tier 1", tierClass: "tier-foss", popover: {
+          title: "Model source disclosure",
+          paths: [],
+          bullets: ["llama3.2:latest · foss routing"],
+        }},
+      ],
+      answer: `<p>Try <strong>Proton Experimental</strong> first. Your log shows <code>vkCreateInstance</code> errors — Vulkan/DXVK path, not TDP.</p>`,
+      devJson: { route: "ollama", proton_log_excerpt_attached: true, journal_entries_injected: 3 },
+    },
+    "no-context": {
+      sources: [],
+      answer: `<p>Steam Deck battery life is mostly TDP cap, brightness, and GPU load. 30 FPS caps often help more than ultra settings.</p>`,
+      devJson: { route: "ollama", note: "no context attached" },
+      collapsedLabel: "No extra context",
+    },
+    "skips-only": {
+      sources: [
+        { id: "journal", rank: 2, label: "Inject 1 prior try", tierClass: "", popover: {
+          title: "Experiment journal",
+          paths: [],
+          bullets: ["Experimental + %command% → same"],
+        }},
+        { id: "model", rank: 99, label: "Routed qwen2.5:3b · Tier 2", tierClass: "tier-open", popover: {
+          title: "Model disclosure",
+          paths: [],
+          bullets: ["open_weight routing"],
+        }},
+      ],
+      overflowSkips: [
+        "Proton logs skipped: enable log read in Permissions",
+        "KB skipped: local KB off",
+      ],
+      answer: `<p>Enable <strong>Steam/Proton log read</strong>, set <code>PROTON_LOG=1</code>, reproduce, Ask again.</p>`,
+      devJson: { proton_log_excerpt_attached: false },
+    },
+  };
+
+  const state = {
+    scenarioId: "troubleshoot-rich",
+    activeTranscriptTurn: "live",
+    live: { contextOpen: false, activeChipIndex: 0 },
+    session: {
+      older: { expanded: false, activeChipIndex: 0, highlight: false },
+      live: { expanded: false, activeChipIndex: 0, highlight: false },
+    },
+    ladderFocused: false,
+    focusTarget: null, // 'live-inline' | 'session-older' | 'session-live'
+  };
+
+  function ladderScopeFromFocusTarget() {
+    if (state.focusTarget === "live-inline") return { turnId: "live", scope: "inline" };
+    if (state.focusTarget === "session-older") return { turnId: "older", scope: "session" };
+    if (state.focusTarget === "session-live") return { turnId: "live", scope: "session" };
+    return { turnId: "live", scope: "inline" };
+  }
+
+  function getUiState(turnId, scope) {
+    if (turnId === "live" && scope === "inline") return state.live;
+    return state.session[turnId];
+  }
+
+  const deckBody = document.getElementById("deck-body");
+  const eventLog = document.getElementById("event-log");
+
+  function log(msg) {
+    eventLog.innerHTML = "<strong>Event log:</strong> " + msg;
+  }
+
+  function sourcesForTurn(turnId) {
+    const key = turnId === "live" ? state.scenarioId : TURN_META[turnId].scenarioKey;
+    const sc = SCENARIOS[key];
+    return [...(sc.sources || [])].sort((a, b) => a.rank - b.rank);
+  }
+
+  function scenarioForTurn(turnId) {
+    const key = turnId === "live" ? state.scenarioId : TURN_META[turnId].scenarioKey;
+    return SCENARIOS[key];
+  }
+
+  function windowRange(activeIndex, total) {
+    const start = Math.max(0, activeIndex - WINDOW);
+    const end = Math.min(total - 1, activeIndex + WINDOW);
+    return { start, end };
+  }
+
+  function ladderChipsForTurn(turnId) {
+    const sources = sourcesForTurn(turnId);
+    const scenario = scenarioForTurn(turnId);
+    const devChip = {
+      id: "developer",
+      rank: 1000,
+      label: "Open developer details",
+      tierClass: "",
+      isDev: true,
+      popover: { title: "Developer details", paths: [], bullets: [] },
+      devJson: scenario.devJson,
+      overflowSkips: scenario.overflowSkips || [],
+    };
+    return [...sources, devChip];
+  }
+
+  function renderChipExpanded(source, scenario) {
+    const summary = `<div class="chip-summary pill ${source.tierClass}">${source.label}</div>`;
+
+    if (source.isDev) {
+      const skips = source.overflowSkips || [];
+      return `
+        <div class="chip-expanded">
+          ${summary}
+          <div class="chip-expanded-body">
+            <h4>${source.popover.title}</h4>
+            <pre class="dev-json">${JSON.stringify(source.devJson, null, 2)}</pre>
+            ${skips.length ? `
+              <div class="skip-list">
+                <div style="font-style:normal;color:var(--muted);margin-bottom:4px;">Not attached this Ask</div>
+                ${skips.map((s) => `<div>⊘ ${s}</div>`).join("")}
+              </div>
+            ` : ""}
+          </div>
+        </div>
+      `;
+    }
+    const p = source.popover;
+    return `
+      <div class="chip-expanded">
+        ${summary}
+        <div class="chip-expanded-body">
+          <h4>${p.title}</h4>
+          ${p.paths.map((path) => `<div class="path">${path}</div>`).join("")}
+          ${p.bullets.length ? `<ul>${p.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : ""}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderChipLadder(turnId, uiState, scope) {
+    const chips = ladderChipsForTurn(turnId);
+    if (!chips.length) {
+      return `<p style="font-size:0.78rem;color:var(--muted);margin:8px 0;">No context chips for this Ask.</p>`;
+    }
+
+    const idx = Math.min(uiState.activeChipIndex, chips.length - 1);
+    const { start, end } = windowRange(idx, chips.length);
+    const slots = [];
+    const scenario = scenarioForTurn(turnId);
+
+    for (let i = start; i <= end; i += 1) {
+      const src = chips[i];
+      const isActive = i === idx;
+      const dist = Math.abs(i - idx);
+
+      if (isActive) {
+        slots.push(renderChipExpanded(src, scenario));
+      } else {
+        const truncClass = dist >= 2 ? "chip-ladder-item truncated far" : "chip-ladder-item truncated";
+        slots.push(`
+          <button type="button" class="pill ${src.tierClass} truncated-pill ${truncClass}"
+            data-action="pick-chip" data-turn="${turnId}" data-ladder-scope="${scope}" data-chip-index="${i}">
+            ${src.label}
+          </button>
+        `);
+      }
+    }
+
+    const ladderDomId = `ladder-${turnId}-${scope}`;
+
+    return `
+      <div class="ladder-meta">Chip ${idx + 1} of ${chips.length}</div>
+      <div class="chip-ladder" id="${ladderDomId}" data-ladder-turn="${turnId}" data-ladder-scope="${scope}">
+        ${slots.join("")}
+      </div>
+    `;
+  }
+
+  function renderContextHint(turnId) {
+    const meta = TURN_META[turnId];
+    const scenario = scenarioForTurn(turnId);
+    const label = scenario.collapsedLabel || meta.collapsedLabel;
+
+    if (meta.isLive) {
+      const open = state.live.contextOpen;
+      return `
+        <button type="button" class="context-hint" data-action="toggle-live-context">
+          ${open ? "▼" : "▶"} ${label}
+        </button>
+        ${open ? renderChipLadder("live", state.live, "inline") : ""}
+      `;
+    }
+
+    return `
+      <button type="button" class="context-hint" data-action="jump-session" data-turn="older">
+        ▶ ${label}
+      </button>
+    `;
+  }
+
+  function renderSessionStrip() {
+    return `
+      <div class="session-context" id="session-context">
+        <h3>Session context</h3>
+        ${["older", "live"].map((turnId) => {
+          const meta = TURN_META[turnId];
+          const ui = state.session[turnId];
+          const chips = ladderChipsForTurn(turnId);
+          const top = chips[0]?.isDev ? "No extra context" : chips[0]?.label || "No extra context";
+          const extra = chips.length > 1 ? ` <span style="color:var(--accent);">+${chips.length - 1}</span>` : "";
+          return `
+            <div class="session-entry ${ui.highlight ? "highlight" : ""}" id="session-${turnId}">
+              <button type="button" class="session-entry-btn" data-action="toggle-session" data-turn="${turnId}">
+                ${ui.expanded ? "▼" : "▶"} <strong>${meta.title}</strong> — ${top}${extra}
+              </button>
+              ${ui.expanded ? `<div class="session-entry-body">${renderChipLadder(turnId, ui, "session")}</div>` : ""}
+            </div>
+          `;
+        }).join("")}
+      </div>
+    `;
+  }
+
+  function render() {
+    const liveScenario = SCENARIOS[state.scenarioId];
+    deckBody.innerHTML = `
+      <div class="turn-block">
+        <button type="button" class="turn-header ${state.activeTranscriptTurn === "older" ? "focused" : ""}"
+          data-action="select-transcript" data-turn="older">
+          <span class="chev">▶</span><span>${TURN_META.older.title}</span>
+        </button>
+        ${state.activeTranscriptTurn === "older" ? `
+          <div class="answer-bubble">${scenarioForTurn("older").answer}</div>
+          <div class="reply-actions"><button>Helpful</button><button>Retry</button></div>
+          <div class="context-row">${renderContextHint("older")}</div>
+        ` : ""}
+      </div>
+
+      <div class="turn-block" style="margin-top:14px;">
+        <button type="button" class="turn-header ${state.activeTranscriptTurn === "live" ? "focused" : ""}"
+          data-action="select-transcript" data-turn="live">
+          <span class="chev">▼</span><span>${TURN_META.live.title}</span>
+        </button>
+        ${state.activeTranscriptTurn === "live" ? `
+          <div class="answer-bubble">${liveScenario.answer}</div>
+          <div class="reply-actions"><button>Helpful</button><button>Not really</button><button>Retry</button></div>
+          <div class="context-row">${renderContextHint("live")}</div>
+        ` : ""}
+      </div>
+
+      ${renderSessionStrip()}
+    `;
+
+    bindUI();
+
+    if (state.session.older.highlight || state.session.live.highlight) {
+      const el = document.getElementById("session-context");
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }
+
+  function bindUI() {
+    deckBody.querySelectorAll("[data-action]").forEach((el) => {
+      el.addEventListener("click", onAction);
+    });
+  }
+
+  function navigateLadder(direction) {
+    const { turnId, scope } = ladderScopeFromFocusTarget();
+    const ui = getUiState(turnId, scope);
+    const chips = ladderChipsForTurn(turnId);
+    if (!chips.length) return;
+
+    if (direction === "down" && ui.activeChipIndex < chips.length - 1) {
+      ui.activeChipIndex += 1;
+      log(`↓ chip ${ui.activeChipIndex + 1}/${chips.length} — "${chips[ui.activeChipIndex].label}"`);
+      render();
+      return;
+    }
+    if (direction === "up" && ui.activeChipIndex > 0) {
+      ui.activeChipIndex -= 1;
+      log(`↑ chip ${ui.activeChipIndex + 1}/${chips.length} — "${chips[ui.activeChipIndex].label}"`);
+      render();
+    }
+  }
+
+  function onGlobalKeydown(e) {
+    if (!state.ladderFocused) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      navigateLadder("down");
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      navigateLadder("up");
+    } else if (e.key === "Escape") {
+      const { turnId, scope } = ladderScopeFromFocusTarget();
+      if (scope === "inline" && turnId === "live") {
+        state.live.contextOpen = false;
+      } else {
+        state.session[turnId].expanded = false;
+      }
+      state.ladderFocused = false;
+      log("Esc — context collapsed");
+      render();
+    }
+  }
+
+  function onAction(e) {
+    const el = e.currentTarget;
+    const action = el.getAttribute("data-action");
+
+    if (action === "select-transcript") {
+      state.activeTranscriptTurn = el.getAttribute("data-turn");
+      log(`Transcript turn: ${state.activeTranscriptTurn}`);
+      render();
+      return;
+    }
+    if (action === "toggle-live-context") {
+      state.live.contextOpen = !state.live.contextOpen;
+      if (state.live.contextOpen) {
+        state.live.activeChipIndex = 0;
+        state.focusTarget = "live-inline";
+        state.ladderFocused = true;
+        log("Live More context — chip 1 expanded, neighbors visible when present");
+      } else {
+        state.ladderFocused = false;
+        log("Live context collapsed");
+      }
+      render();
+      return;
+    }
+    if (action === "jump-session") {
+      const turnId = el.getAttribute("data-turn");
+      state.session[turnId].expanded = true;
+      state.session[turnId].highlight = true;
+      state.session.live.highlight = false;
+      state.focusTarget = `session-${turnId}`;
+      state.ladderFocused = true;
+      log(`Older turn hint → session strip expanded for "${TURN_META[turnId].title}"`);
+      render();
+      return;
+    }
+    if (action === "toggle-session") {
+      const turnId = el.getAttribute("data-turn");
+      state.session[turnId].expanded = !state.session[turnId].expanded;
+      state.session[turnId].highlight = state.session[turnId].expanded;
+      state.session[turnId === "older" ? "live" : "older"].highlight = false;
+      state.focusTarget = `session-${turnId}`;
+      state.ladderFocused = state.session[turnId].expanded;
+      log(`Session entry ${state.session[turnId].expanded ? "expanded" : "collapsed"}: ${turnId}`);
+      render();
+      return;
+    }
+    if (action === "pick-chip") {
+      const turnId = el.getAttribute("data-turn");
+      const scope = el.getAttribute("data-ladder-scope");
+      const index = Number(el.getAttribute("data-chip-index"));
+      const ui = getUiState(turnId, scope);
+      ui.activeChipIndex = index;
+      state.ladderFocused = true;
+      state.focusTarget = scope === "inline" ? "live-inline" : `session-${turnId}`;
+      log(`Selected chip ${index + 1}: ${el.textContent.trim()}`);
+      render();
+      return;
+    }
+  }
+
+  document.addEventListener("keydown", onGlobalKeydown);
+
+  document.getElementById("scenario").addEventListener("change", (e) => {
+    state.scenarioId = e.target.value;
+    state.live.activeChipIndex = 0;
+    log(`Live scenario: ${e.target.selectedOptions[0].text}`);
+    render();
+  });
+
+  document.querySelectorAll('input[name="turn"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      if (radio.checked) {
+        state.activeTranscriptTurn = radio.value;
+        render();
+      }
+    });
+  });
+
+  document.getElementById("btn-live-context").addEventListener("click", () => {
+    state.activeTranscriptTurn = "live";
+    state.live.contextOpen = true;
+    state.live.activeChipIndex = 0;
+    state.focusTarget = "live-inline";
+    state.ladderFocused = true;
+    render();
+  });
+
+  document.getElementById("btn-jump-older").addEventListener("click", () => {
+    state.activeTranscriptTurn = "older";
+    state.session.older.expanded = true;
+    state.session.older.highlight = true;
+    state.session.live.highlight = false;
+    state.focusTarget = "session-older";
+    state.ladderFocused = true;
+    render();
+  });
+
+  document.getElementById("btn-chip-3").addEventListener("click", () => {
+    state.activeTranscriptTurn = "live";
+    state.live.contextOpen = true;
+    state.live.activeChipIndex = 2;
+    state.focusTarget = "live-inline";
+    state.ladderFocused = true;
+    log("Jumped to chip 3 — chip 7 is Open developer details (↓ to reach)");
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

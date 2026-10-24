@@ -1,0 +1,2020 @@
+{
+ "version": 1,
+ "description": "Answer-side eval for the knowledge base (decision D45, plan 30 W1). Each case runs the real Ask pipeline (run_game_ai_request) against a local Ollama with the Deck's model tag and checks the reply without a judge model: must_mention (facts copied from the card, any-of groups), must_not_say (things the card contradicts), expect_fence (is a ```bonsai-spoiler fence present?), expect_branches (did a Strategy first turn end with the branch menu?), expect_card (the card that should attach, so a miss can be blamed on retrieval rather than on the model). Written by someone who read the cards on 2026-09-02 -- these are NOT blind retrieval rows and must never be copied into kb_eval_v2.json.",
+ "notes": [
+  "must_mention groups are any-of: the group passes when at least one alternative appears in the reply (case-insensitive).",
+  "expect_fence false on low-narrative titles and on questions that name the entity (spoiler constitution rule 7). true only where the question itself asks for a story beat or ending. null = not checked.",
+  "expect_branches true on Strategy first turns only. Speed and Expert never get a menu.",
+  "app_id \"\" with app_name set mimics an EmuDeck shortcut; retrieval resolves the title from the name.",
+  "expect_attached false marks a control case where nothing should attach at all.",
+  "Calibration edits after a run are allowed for must_mention synonyms only, and are dated in the case note. Never edit a case to make a failing check pass for any other reason.",
+  "must_not_say is now a list of claim groups (D86/D88): each inner list is one wrong claim, written as alternative phrasings, matched the same tolerant way as must_mention, and a hit only counts when no negation word (no, not, never, isn't, no longer, without) sits within three words before the matched words. A flat list of strings (the old shape) still loads, as one implicit claim group, for one wave."
+ ],
+ "cases": [
+  {
+   "id": "A-DRG-01",
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "ask_mode": "strategy",
+   "question": "how do i beat the glyphid dreadnought",
+   "expect_card": "Glyphid Dreadnought",
+   "must_mention": [
+    [
+     "kite",
+     "kiting",
+     "keep moving",
+     "stay mobile",
+     "distance",
+     "keep away",
+     "back off"
+    ],
+    [
+     "weak point",
+     "weak points",
+     "armor plate",
+     "armour plate",
+     "plates",
+     "armor"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "The seed card is two sentences; both facts should survive. 2026-09-02 calibration: the model renders 'kite between waves' as 'keep your distance', which is fair, so distance joined the group."
+  },
+  {
+   "id": "A-DRG-02",
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "ask_mode": "strategy",
+   "question": "the dreadnought twins keep healing back up, what am i doing wrong",
+   "expect_card": "Dreadnought Twins",
+   "must_mention": [
+    [
+     "split",
+     "evenly",
+     "even",
+     "both",
+     "equal",
+     "same time"
+    ],
+    [
+     "health bar",
+     "health bars",
+     "health",
+     "heal"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "kill one first",
+     "focus one first",
+     "burn one down first"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "The card's whole point: keep their health bars level or they turn immune and heal."
+  },
+  {
+   "id": "A-DRG-03",
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "ask_mode": "expert",
+   "question": "what is nitra actually for",
+   "expect_card": "Nitra",
+   "must_mention": [
+    [
+     "weapon upgrade",
+     "upgrade",
+     "weapons",
+     "weapon"
+    ],
+    [
+     "shop",
+     "between-stage",
+     "between stage",
+     "supply pod",
+     "reroll",
+     "re-roll"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "Expert mode: five-card budget, no menu."
+  },
+  {
+   "id": "A-L4D2-01",
+   "app_id": "550",
+   "app_name": "Left 4 Dead 2",
+   "ask_mode": "strategy",
+   "question": "how to beat tank",
+   "expect_card": "Tank",
+   "must_mention": [
+    [
+     "open",
+     "space",
+     "room",
+     "spread out"
+    ],
+    [
+     "punch",
+     "throw",
+     "throws",
+     "projectile",
+     "concrete",
+     "rock",
+     "car"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Fight in the open; anything he can punch becomes a projectile."
+  },
+  {
+   "id": "A-L4D2-02",
+   "app_id": "550",
+   "app_name": "Left 4 Dead 2",
+   "ask_mode": "strategy",
+   "question": "why did the witch suddenly attack me",
+   "expect_card": "The Witch",
+   "must_mention": [
+    [
+     "flashlight",
+     "light"
+    ],
+    [
+     "too close",
+     "close",
+     "startle",
+     "startled",
+     "disturb"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Flashlight or standing too close wakes her."
+  },
+  {
+   "id": "A-L4D2-03",
+   "app_id": "550",
+   "app_name": "Left 4 Dead 2",
+   "ask_mode": "speed",
+   "question": "tips for playing as the hunter in versus",
+   "expect_card": "Playing as the Hunter",
+   "must_mention": [
+    [
+     "pounce"
+    ],
+    [
+     "distance",
+     "height",
+     "run-up",
+     "run up",
+     "straggler",
+     "high ground"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "Speed mode: one card, no menu."
+  },
+  {
+   "id": "A-P2-01",
+   "app_id": "620",
+   "app_name": "Portal 2",
+   "ask_mode": "strategy",
+   "question": "how do the gels work",
+   "expect_card": "Gels",
+   "must_mention": [
+    [
+     "blue",
+     "bounce",
+     "repulsion"
+    ],
+    [
+     "orange",
+     "speed",
+     "friction",
+     "propulsion"
+    ],
+    [
+     "white",
+     "conversion",
+     "portal"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Three gels; all three should be named or described. Portal 2 is protect_progression but a gel question names no story beat."
+  },
+  {
+   "id": "A-P2-02",
+   "app_id": "620",
+   "app_name": "Portal 2",
+   "ask_mode": "speed",
+   "question": "the excursion funnel keeps pushing me the wrong way",
+   "expect_card": "Excursion Funnel",
+   "must_mention": [
+    [
+     "reverse",
+     "reverses",
+     "button",
+     "switch",
+     "flip"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "Look for the button that reverses it."
+  },
+  {
+   "id": "A-HL2-01",
+   "app_id": "220",
+   "app_name": "Half-Life 2",
+   "ask_mode": "strategy",
+   "question": "the antlions keep coming up out of the sand and killing me",
+   "expect_card": "Antlions",
+   "must_mention": [
+    [
+     "rock",
+     "rocks",
+     "stone"
+    ],
+    [
+     "vibration",
+     "vibrations",
+     "sand",
+     "footsteps"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Stay on the rocks; they hunt vibration. Enemy named by the user, so no fence is needed."
+  },
+  {
+   "id": "A-HL2-02",
+   "app_id": "220",
+   "app_name": "Half-Life 2",
+   "ask_mode": "speed",
+   "question": "how do i use the bugbait",
+   "expect_card": "Pheropod (bugbait)",
+   "must_mention": [
+    [
+     "throw",
+     "toss",
+     "lob"
+    ],
+    [
+     "swarm",
+     "attack",
+     "antlion",
+     "antlions"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "Throw it and the antlions swarm what you marked."
+  },
+  {
+   "id": "A-HL2-03",
+   "app_id": "220",
+   "app_name": "Half-Life 2",
+   "ask_mode": "expert",
+   "question": "what can the gravity gun actually pick up and throw",
+   "expect_card": "Gravity Gun",
+   "must_mention": [
+    [
+     "barrel",
+     "barrels",
+     "sawblade",
+     "saw blade",
+     "radiator"
+    ],
+    [
+     "manhack",
+     "manhacks",
+     "scanner",
+     "scanners",
+     "grenade",
+     "grenades"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "Objects yes, most enemies no, manhacks and scanners yes."
+  },
+  {
+   "id": "A-HADES-01",
+   "app_id": "1145360",
+   "app_name": "Hades",
+   "ask_mode": "strategy",
+   "question": "which weapon is easiest to start with",
+   "expect_card": "Weapon choice",
+   "must_mention": [
+    [
+     "stygian blade",
+     "stygian",
+     "blade",
+     "sword"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "The comparison card written 2026-08-31 for exactly this question."
+  },
+  {
+   "id": "A-HADES-02",
+   "app_id": "1145360",
+   "app_name": "Hades",
+   "ask_mode": "strategy",
+   "question": "theseus and asterius keep killing me",
+   "expect_card": "Theseus and Asterius",
+   "must_mention": [
+    [
+     "asterius",
+     "bull"
+    ],
+    [
+     "charge",
+     "sidestep",
+     "side-step",
+     "dodge",
+     "step"
+    ],
+    [
+     "first"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Kill Asterius first; sidestep the charge. Bosses named by the user, so no fence."
+  },
+  {
+   "id": "A-HADES-03",
+   "app_id": "1145360",
+   "app_name": "Hades",
+   "ask_mode": "strategy",
+   "question": "i beat the final boss but the game just keeps going, is that the ending?",
+   "expect_card": "Heat and the Pact of Punishment",
+   "must_mention": [
+    [
+     "not the end",
+     "middle",
+     "continue",
+     "continues",
+     "keep going",
+     "more runs",
+     "several",
+     "several more",
+     "isn't the end",
+     "is not the end"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": true,
+   "expect_branches": true,
+   "note": "Asks about the ending on a story title: the detail should sit inside a spoiler fence."
+  },
+  {
+   "id": "A-CP77-01",
+   "app_id": "1091500",
+   "app_name": "Cyberpunk 2077",
+   "ask_mode": "expert",
+   "question": "what does the berserk operating system do",
+   "expect_card": "Berserk",
+   "must_mention": [
+    [
+     "quarter",
+     "25%",
+     "25 percent",
+     "a fourth",
+     "health"
+    ],
+    [
+     "damage taken",
+     "reduce",
+     "reduces",
+     "less damage",
+     "damage reduction",
+     "mitigat"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "slows time",
+     "slow time",
+     "bullet time"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "Berserk is the melee OS; slowing time is Sandevistan, the card it must not be confused with."
+  },
+  {
+   "id": "A-CP77-02",
+   "app_id": "1091500",
+   "app_name": "Cyberpunk 2077",
+   "ask_mode": "strategy",
+   "question": "which attributes should i put points into for a first playthrough",
+   "expect_card": "Choosing a build",
+   "must_mention": [
+    [
+     "body",
+     "reflexes",
+     "intelligence",
+     "technical",
+     "cool"
+    ],
+    [
+     "spread",
+     "evenly",
+     "even",
+     "threshold",
+     "thresholds",
+     "focus",
+     "two"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Pick two attributes; an even spread is the one reliably bad choice."
+  },
+  {
+   "id": "A-CP77-03",
+   "app_id": "1091500",
+   "app_name": "Cyberpunk 2077",
+   "ask_mode": "strategy",
+   "question": "how does the main story end",
+   "expect_card": null,
+   "must_mention": [],
+   "must_not_say": [],
+   "expect_fence": true,
+   "expect_branches": true,
+   "note": "No card can answer this; the check is fence behaviour on a direct ending question."
+  },
+  {
+   "id": "A-CP77-04",
+   "app_id": "1091500",
+   "app_name": "Cyberpunk 2077",
+   "ask_mode": "expert",
+   "question": "how do i beat adam smasher",
+   "expect_card": "Adam Smasher",
+   "must_mention": [
+    [
+     "leg",
+     "legs"
+    ],
+    [
+     "cover",
+     "rocket",
+     "rockets",
+     "barrage"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "Boss named by the user on a story title: rule 7 unlocks him, no fence."
+  },
+  {
+   "id": "A-FO4-01",
+   "app_id": "377160",
+   "app_name": "Fallout 4",
+   "ask_mode": "strategy",
+   "question": "how do i kill a deathclaw early",
+   "expect_card": "Deathclaw",
+   "must_mention": [
+    [
+     "distance",
+     "cover",
+     "range",
+     "keep away",
+     "high ground"
+    ],
+    [
+     "energy",
+     "laser",
+     "lasers",
+     "resist",
+     "resistant"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Distance and cover; energy weapons are the worst choice."
+  },
+  {
+   "id": "A-FO4-02",
+   "app_id": "377160",
+   "app_name": "Fallout 4",
+   "ask_mode": "strategy",
+   "question": "what special stats should i pick at the start",
+   "expect_card": "Choosing a build",
+   "must_mention": [
+    [
+     "intelligence"
+    ],
+    [
+     "strength",
+     "endurance",
+     "agility",
+     "perception",
+     "charisma"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Intelligence is the quiet strong pick because it speeds levelling."
+  },
+  {
+   "id": "A-FO4-03",
+   "app_id": "377160",
+   "app_name": "Fallout 4",
+   "ask_mode": "speed",
+   "question": "feral ghouls keep swarming me",
+   "expect_card": "Feral ghouls",
+   "must_mention": [
+    [
+     "head",
+     "headshot",
+     "headshots",
+     "leg",
+     "legs"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "Head is the weakness; taking a leg stops the attack."
+  },
+  {
+   "id": "A-FO4-04",
+   "app_id": "377160",
+   "app_name": "Fallout 4",
+   "ask_mode": "expert",
+   "question": "my power armor suddenly stopped working properly",
+   "expect_card": "Power armor and fusion cores",
+   "must_mention": [
+    [
+     "fusion core",
+     "core",
+     "cores"
+    ],
+    [
+     "drain",
+     "drained",
+     "empty",
+     "ran out",
+     "run out",
+     "sprint",
+     "v.a.t.s",
+     "vats",
+     "encumber"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "training perk",
+     "power armor training"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "The core is empty. No training perk exists in this game -- a Fallout 3 fact the model may bring in."
+  },
+  {
+   "id": "A-FO4-05",
+   "app_id": "377160",
+   "app_name": "Fallout 4",
+   "ask_mode": "strategy",
+   "question": "a legendary enemy healed back to full in the middle of the fight",
+   "expect_card": "Legendary enemies",
+   "must_mention": [
+    [
+     "half",
+     "mutate",
+     "mutates",
+     "mutation",
+     "heals",
+     "heal"
+    ],
+    [
+     "twice",
+     "longer",
+     "second half",
+     "save",
+     "don't spend",
+     "do not spend",
+     "hold back"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Mutation at half health; the fight is twice as long as it looks."
+  },
+  {
+   "id": "A-RDR2-01",
+   "app_id": "1174180",
+   "app_name": "Red Dead Redemption 2",
+   "ask_mode": "strategy",
+   "question": "i just came from gta, any tips before i start",
+   "expect_card": "Coming from GTA",
+   "must_mention": [
+    [
+     "slow",
+     "slower",
+     "slowly",
+     "weight",
+     "patience",
+     "patient",
+     "deliberate"
+    ],
+    [
+     "bounty",
+     "bounties",
+     "law",
+     "wanted",
+     "witness",
+     "witnesses",
+     "mask",
+     "cover your face",
+     "bandana"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "The comparison card in the maintainer's own framing."
+  },
+  {
+   "id": "A-RDR2-02",
+   "app_id": "1174180",
+   "app_name": "Red Dead Redemption 2",
+   "ask_mode": "speed",
+   "question": "how do i raise honor",
+   "expect_card": "Honor",
+   "must_mention": [
+    [
+     "greet",
+     "greeting",
+     "help",
+     "helping",
+     "donat",
+     "bount",
+     "pay"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "Small things done often."
+  },
+  {
+   "id": "A-RDR2-03",
+   "app_id": "1174180",
+   "app_name": "Red Dead Redemption 2",
+   "ask_mode": "strategy",
+   "question": "what happens to arthur at the end of the story",
+   "expect_card": null,
+   "must_mention": [],
+   "must_not_say": [],
+   "expect_fence": true,
+   "expect_branches": true,
+   "note": "Ending question on a story title; fence expected."
+  },
+  {
+   "id": "A-RDR2-04",
+   "app_id": "1174180",
+   "app_name": "Red Dead Redemption 2",
+   "ask_mode": "expert",
+   "question": "my horse keeps throwing me off",
+   "expect_card": "Horse bonding",
+   "must_mention": [
+    [
+     "bond",
+     "bonding"
+    ],
+    [
+     "feed",
+     "feeding",
+     "brush",
+     "brushing",
+     "pat",
+     "patting",
+     "calm",
+     "calming"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "A high-bond horse stops throwing you."
+  },
+  {
+   "id": "A-SOE-01",
+   "app_id": "",
+   "app_name": "State of Emergency",
+   "ask_mode": "strategy",
+   "question": "how do i get more time in a round",
+   "expect_card": "Round time and the +15s pickups",
+   "must_mention": [
+    [
+     "pickup",
+     "pickups",
+     "pick-up",
+     "+15",
+     "15 seconds",
+     "fifteen",
+     "15s"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "EmuDeck shortcut resolved by name. The maintainer's own gap-sheet answer."
+  },
+  {
+   "id": "A-SOE-02",
+   "app_id": "",
+   "app_name": "State of Emergency",
+   "ask_mode": "speed",
+   "question": "whats the difference between kaos mode and revolution mode",
+   "expect_card": "Kaos mode and Revolution mode",
+   "must_mention": [
+    [
+     "score",
+     "clock",
+     "timer",
+     "time"
+    ],
+    [
+     "story",
+     "mission",
+     "missions",
+     "campaign"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "Score attack vs the story."
+  },
+  {
+   "id": "A-OOT-01",
+   "app_id": "",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "ask_mode": "strategy",
+   "question": "the shadow temple has floors missing everywhere",
+   "expect_card": "Shadow Temple invisible floors",
+   "must_mention": [
+    [
+     "lens of truth",
+     "lens"
+    ],
+    [
+     "magic",
+     "bursts",
+     "potion",
+     "potions",
+     "fairies",
+     "fairy"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Lens of Truth, used in bursts. Dungeon named by the user."
+  },
+  {
+   "id": "A-OOT-02",
+   "app_id": "",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "ask_mode": "strategy",
+   "question": "how do i beat volvagia",
+   "expect_card": "Volvagia",
+   "must_mention": [
+    [
+     "megaton hammer",
+     "hammer"
+    ],
+    [
+     "hookshot",
+     "head"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Boss named by the user."
+  },
+  {
+   "id": "A-BG3-01",
+   "app_id": "1086940",
+   "app_name": "Baldur's Gate 3",
+   "ask_mode": "strategy",
+   "question": "should i be long resting more often",
+   "expect_card": "Long rest",
+   "must_mention": [
+    [
+     "yes",
+     "more",
+     "often",
+     "camp supplies",
+     "supplies",
+     "plenty",
+     "plentiful"
+    ],
+    [
+     "companion",
+     "companions",
+     "story",
+     "scene",
+     "scenes",
+     "quest",
+     "quests",
+     "dialogue"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Rest more than feels right; it advances companion scenes."
+  },
+  {
+   "id": "A-BG3-02",
+   "app_id": "1086940",
+   "app_name": "Baldur's Gate 3",
+   "ask_mode": "expert",
+   "question": "what party composition should i use for a first run",
+   "expect_card": "Party composition",
+   "must_mention": [
+    [
+     "heal",
+     "healer",
+     "healing",
+     "cleric",
+     "druid"
+    ],
+    [
+     "trap",
+     "traps",
+     "lock",
+     "locks",
+     "rogue",
+     "ranger"
+    ],
+    [
+     "talk",
+     "talker",
+     "bard",
+     "paladin",
+     "charisma",
+     "face",
+     "persuasion",
+     "dialogue"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "Someone to talk, someone to heal, someone for traps and locks."
+  },
+  {
+   "id": "A-SIMS4-01",
+   "app_id": "1222670",
+   "app_name": "The Sims 4",
+   "ask_mode": "speed",
+   "question": "fastest way to make money early",
+   "expect_card": "Making money",
+   "must_mention": [
+    [
+     "paint",
+     "painting",
+     "writing",
+     "write",
+     "novel",
+     "novels"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "Painting and writing are the classic earners."
+  },
+  {
+   "id": "A-GTASA-01",
+   "app_id": "1547000",
+   "app_name": "Grand Theft Auto: San Andreas - The Definitive Edition",
+   "ask_mode": "speed",
+   "question": "how do i recruit more gang members",
+   "expect_card": "Respect",
+   "must_mention": [
+    [
+     "respect"
+    ],
+    [
+     "territory",
+     "territories",
+     "turf",
+     "mission",
+     "missions",
+     "tag",
+     "tags",
+     "green",
+     "clothes",
+     "clothing"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": false,
+   "note": "Respect sets the recruit cap."
+  },
+  {
+   "id": "A-NOCARD-01",
+   "app_id": "1245620",
+   "app_name": "ELDEN RING",
+   "ask_mode": "strategy",
+   "question": "how do i beat margit",
+   "expect_card": null,
+   "expect_attached": null,
+   "must_mention": [],
+   "must_not_say": [],
+   "expect_fence": null,
+   "expect_branches": true,
+   "note": "Uncovered game. Strategy mode deliberately attaches a genre fallback card (Soulslike basics, trust fallback_no_source) when the title is unknown, so attached=True is by design here; expect_card null records that no real card exists. Baseline 2026-09-02: the model fenced the whole tactic on all three samples. Baseline for the D48 no-notes line."
+  },
+  {
+   "id": "A-VAGUE-01",
+   "app_id": "1145360",
+   "app_name": "Hades",
+   "ask_mode": "strategy",
+   "question": "keep dying in tartarus",
+   "expect_card": null,
+   "must_mention": [],
+   "must_not_say": [],
+   "expect_fence": null,
+   "expect_branches": true,
+   "note": "Vague first turn: the orientation-plus-menu shape is the right one here (D54 baseline)."
+  },
+  {
+   "id": "A-BMS-01",
+   "app_id": "362890",
+   "app_name": "Black Mesa",
+   "ask_mode": "strategy",
+   "question": "How do I damage the giant headcrab boss at the end of the Xen caverns in Black Mesa?",
+   "expect_card": "Gonarch",
+   "must_mention": [
+    [
+     "egg sac",
+     "the sac",
+     "underside",
+     "the pale sac swinging underneath",
+     "its belly sac"
+    ],
+    [
+     "shell blocks",
+     "armor shrugs off",
+     "everything else is wasted",
+     "only the sac takes damage",
+     "nowhere else works",
+     "immune everywhere else"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "shoot the legs",
+     "aim for the legs",
+     "target its legs"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Boss named by description, not name, on a protect_progression title, but a boss fight itself is not a story beat. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-BMS-02",
+   "app_id": "362890",
+   "app_name": "Black Mesa",
+   "ask_mode": "strategy",
+   "question": "What's different about the Xen levels in Black Mesa compared to the original Half-Life?",
+   "expect_card": "Starting out in Black Mesa",
+   "must_mention": [
+    [
+     "mostly new",
+     "expanded",
+     "far longer",
+     "much longer",
+     "rebuilt from scratch",
+     "brand new content"
+    ],
+    [
+     "kept the same",
+     "unchanged",
+     "faithful to the original",
+     "same weapons and enemies",
+     "not added to",
+     "stayed close to the original"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "the whole game has new levels",
+     "every chapter was expanded",
+     "all-new content throughout"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "How-it-works card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-HK-01",
+   "app_id": "367520",
+   "app_name": "Hollow Knight",
+   "ask_mode": "strategy",
+   "question": "How do I beat the big armored bug boss in the Forgotten Crossroads?",
+   "expect_card": "False Knight",
+   "must_mention": [
+    [
+     "hit the head",
+     "target his head",
+     "attack when the armor comes off",
+     "expose the head",
+     "aim for the head",
+     "his head is the real target"
+    ],
+    [
+     "jump the shockwave",
+     "jump over the wave",
+     "jump his slam",
+     "hop over the shockwave",
+     "leap the wave"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "back away from the shockwave",
+     "run from the wave",
+     "back off when he slams"
+    ]
+   ],
+   "expect_fence": null,
+   "expect_branches": true,
+   "note": "Boss described by look, not name, on a protect_progression title; a boss mechanic isn't a story beat. 2026-09-06 write-up. Expectation changed 2026-09-26 (plan 70): under D112 #7 a boss name the question did not type is covered whenever the reply names it, so a cover is now correct when the reply names the False Knight and absent when it only describes the fight; not scored either way."
+  },
+  {
+   "id": "A-HK-02",
+   "app_id": "367520",
+   "app_name": "Hollow Knight",
+   "ask_mode": "strategy",
+   "question": "I just started Hollow Knight and don't have a map -- how do I get one, and what do benches actually do?",
+   "expect_card": "Starting out in Hollow Knight",
+   "must_mention": [
+    [
+     "Cornifer",
+     "buy his map",
+     "buy the map from him",
+     "his wife sells the quill",
+     "the cartographer"
+    ],
+    [
+     "save your game",
+     "restore your masks",
+     "heal your masks",
+     "swap charms",
+     "change charms",
+     "rest and heal"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "you start with a full map",
+     "the map is given at the start",
+     "no need to buy a map"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "How-it-works / starting-out card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-DOOME-01",
+   "app_id": "782330",
+   "app_name": "DOOM Eternal",
+   "ask_mode": "strategy",
+   "question": "How do I fight the Marauder in DOOM Eternal? He keeps blocking everything.",
+   "expect_card": "Marauder",
+   "must_mention": [
+    [
+     "shield blocks",
+     "blocks from the front",
+     "chainsaw does nothing",
+     "crucible only works once stunned",
+     "his shield stops everything"
+    ],
+    [
+     "green flash",
+     "eyes flash green",
+     "stagger window",
+     "stay at mid range",
+     "mid-range",
+     "when his eyes glow"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "rush him",
+     "get in close",
+     "close the distance",
+     "stand right next to him"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Low-narrative title, no fence needed regardless. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-DOOME-02",
+   "app_id": "782330",
+   "app_name": "DOOM Eternal",
+   "ask_mode": "strategy",
+   "question": "What's the basic combat loop I'm supposed to be doing in DOOM Eternal?",
+   "expect_card": "Starting out in DOOM Eternal: the combat loop",
+   "must_mention": [
+    [
+     "glory kill",
+     "melee kill for health",
+     "finishing move for health",
+     "glory-kill weak enemies"
+    ],
+    [
+     "chainsaw",
+     "saw a fodder demon",
+     "chainsaw weak enemies for ammo",
+     "sawing enemies refills ammo"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "reload your weapons",
+     "stand still and reload",
+     "take cover and reload"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "How-it-works card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-DOOM64-01",
+   "app_id": "",
+   "app_name": "Doom 64",
+   "ask_mode": "strategy",
+   "question": "How do I beat the final boss in Doom 64, the Mother Demon?",
+   "expect_card": "Mother Demon",
+   "must_mention": [
+    [
+     "Unmaker",
+     "upgraded Unmaker",
+     "point-blank with the Unmaker",
+     "fully powered Unmaker"
+    ],
+    [
+     "get the keys first",
+     "collect the Demon Keys",
+     "all three keys",
+     "avoid the horde fight",
+     "homing rockets",
+     "four rockets"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "skip the keys",
+     "you don't need the keys",
+     "ignore the demon keys"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Emulated title, low-narrative, boss named by the user. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-DOOM64-02",
+   "app_id": "",
+   "app_name": "Doom 64",
+   "ask_mode": "strategy",
+   "question": "Is Doom 64 just a port of the original Doom games, or is it different?",
+   "expect_card": "Starting out in Doom 64",
+   "must_mention": [
+    [
+     "separate sequel",
+     "not a port",
+     "new levels",
+     "thirty-two new levels",
+     "its own game"
+    ],
+    [
+     "nightmare imp",
+     "Unmaker",
+     "no arch-viles",
+     "missing some classic monsters",
+     "one new weapon"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "it's just a port",
+     "it's a remaster of Doom II",
+     "the same levels as Doom II"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "How-it-works card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-GTAV-01",
+   "app_id": "3240220",
+   "app_name": "Grand Theft Auto V",
+   "ask_mode": "strategy",
+   "question": "How does body armor work in GTA V, and does it help against melee?",
+   "expect_card": "Weapons, armour and cover",
+   "must_mention": [
+    [
+     "five tiers",
+     "five levels",
+     "each tier is stronger",
+     "buying a heavier one removes the others",
+     "the lighter ones disappear"
+    ],
+    [
+     "does nothing against melee",
+     "no protection from melee",
+     "melee ignores armor",
+     "useless against punches"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "armor protects you from melee",
+     "armor blocks melee damage"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Item card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-GTAV-02",
+   "app_id": "3240220",
+   "app_name": "Grand Theft Auto V",
+   "ask_mode": "strategy",
+   "question": "How do the special abilities work for the three characters in GTA V?",
+   "expect_card": "Starting out in GTA V",
+   "must_mention": [
+    [
+     "Michael slows time",
+     "Franklin slows time while driving",
+     "Trevor takes less damage and deals more",
+     "Trevor's rage",
+     "bullet time in a gunfight"
+    ],
+    [
+     "yellow meter",
+     "the meter under the radar",
+     "can't switch characters while wanted",
+     "not while you have a wanted level"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "How-it-works card; the card states no clear misconception to contradict. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-GTAIV-01",
+   "app_id": "12210",
+   "app_name": "Grand Theft Auto IV",
+   "ask_mode": "strategy",
+   "question": "Where can I reliably buy weapons in GTA IV, and is there a discount anywhere?",
+   "expect_card": "Weapons and where to buy them",
+   "must_mention": [
+    [
+     "underground gun shops",
+     "after Do You Have Protection",
+     "unlocks after a story mission"
+    ],
+    [
+     "Little Jacob",
+     "his van",
+     "sixty percent off",
+     "60% off",
+     "a discount once he likes you"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Item card; the card states no clear misconception to contradict. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-GTAIV-02",
+   "app_id": "12210",
+   "app_name": "Grand Theft Auto IV",
+   "ask_mode": "strategy",
+   "question": "How does saving work in GTA IV, and does it clear my wanted level?",
+   "expect_card": "Starting out in GTA IV",
+   "must_mention": [
+    [
+     "sleep in the bed",
+     "walk to the bed",
+     "save at a safehouse",
+     "sleeping in a safehouse"
+    ],
+    [
+     "clears your wanted level",
+     "removes the wanted level",
+     "wipes the stars",
+     "resets your wanted level"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "there are garages",
+     "you can store cars in a garage"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "How-it-works card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-FNV-01",
+   "app_id": "22380",
+   "app_name": "Fallout: New Vegas",
+   "ask_mode": "strategy",
+   "question": "Why is Quarry Junction so dangerous, and how do I survive if I have to go through it early?",
+   "expect_card": "Deathclaws and Quarry Junction",
+   "must_mention": [
+    [
+     "alpha male",
+     "hits for three hundred",
+     "much stronger deathclaws",
+     "double or triple health",
+     "tougher than normal deathclaws"
+    ],
+    [
+     "cripple a leg",
+     "crippled leg slows them",
+     "a flare gun makes them flee",
+     "stand somewhere they can't reach",
+     "climb onto a rock"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Enemy card, named location. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-FNV-02",
+   "app_id": "22380",
+   "app_name": "Fallout: New Vegas",
+   "ask_mode": "strategy",
+   "question": "I'm new to Fallout: New Vegas -- how do skill checks work, and can I fail them randomly?",
+   "expect_card": "Starting out in Fallout: New Vegas",
+   "must_mention": [
+    [
+     "fixed threshold",
+     "not a dice roll",
+     "no random chance",
+     "either works or it doesn't",
+     "no luck involved"
+    ],
+    [
+     "Goodsprings",
+     "Sunny Smiles",
+     "the tutorial town",
+     "teaches you shooting"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "skill checks are random",
+     "there's a dice roll",
+     "chance-based"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "How-it-works / starting-out card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-SM64-01",
+   "app_id": "",
+   "app_name": "Super Mario 64",
+   "ask_mode": "strategy",
+   "question": "How do I actually beat Bowser in Super Mario 64? I keep missing the bombs.",
+   "expect_card": "Bowser: the three fights",
+   "must_mention": [
+    [
+     "grab his tail",
+     "spin the stick",
+     "swing him around",
+     "build up speed then throw"
+    ],
+    [
+     "spiked bombs",
+     "throw him into a bomb",
+     "three throws",
+     "throw him three times"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Emulated title, low-narrative, boss named by the user. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-SM64-02",
+   "app_id": "",
+   "app_name": "Super Mario 64",
+   "ask_mode": "strategy",
+   "question": "How does health work in Super Mario 64, and how do I refill it?",
+   "expect_card": "Starting out in Super Mario 64",
+   "must_mention": [
+    [
+     "eight wedges",
+     "power meter",
+     "health meter with eight segments",
+     "the wedge meter"
+    ],
+    [
+     "coins",
+     "spinning hearts",
+     "coming up for air in water",
+     "surfacing underwater refills it"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "How-it-works card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-MK64-01",
+   "app_id": "",
+   "app_name": "Mario Kart 64",
+   "ask_mode": "strategy",
+   "question": "Who gets the blue shell in Mario Kart 64, and can I block it?",
+   "expect_card": "Items and who gets them",
+   "must_mention": [
+    [
+     "fourth place or lower",
+     "only for players in the back",
+     "you need to be behind fourth"
+    ],
+    [
+     "hold it behind your kart",
+     "block incoming shells",
+     "shield yourself with it",
+     "carry it as a shield"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Item card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-MK64-02",
+   "app_id": "",
+   "app_name": "Mario Kart 64",
+   "ask_mode": "strategy",
+   "question": "How do I get a rocket start off the line in Mario Kart 64?",
+   "expect_card": "Starting out in Mario Kart 64",
+   "must_mention": [
+    [
+     "hold the gas",
+     "as the lights turn blue",
+     "when the lights change from red to blue",
+     "gun it right when they go blue"
+    ],
+    [
+     "spin your tires",
+     "start too early",
+     "leave slower",
+     "you'll bog down",
+     "false start"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "How-it-works card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-TTYD-01",
+   "app_id": "",
+   "app_name": "Paper Mario: The Thousand-Year Door",
+   "ask_mode": "strategy",
+   "question": "What's the trick to beating Hooktail in Thousand-Year Door? She keeps healing.",
+   "expect_card": "Hooktail",
+   "must_mention": [
+    [
+     "eats the audience",
+     "eats spectators to heal",
+     "thin the crowd",
+     "keep the audience small"
+    ],
+    [
+     "cricket",
+     "chirping sound",
+     "the badge with the cricket noise",
+     "fire damage",
+     "fire hurts her badly"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "guard her bite",
+     "block her bite attack",
+     "her bite can be blocked"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Boss named by the user on a protect_progression title, but a boss fight is not a story beat. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-TTYD-02",
+   "app_id": "",
+   "app_name": "Paper Mario: The Thousand-Year Door",
+   "ask_mode": "strategy",
+   "question": "How does battling actually work in Thousand-Year Door -- what's an action command?",
+   "expect_card": "Starting out in Paper Mario: The Thousand-Year Door",
+   "must_mention": [
+    [
+     "timed button press",
+     "press the button at the right moment",
+     "extra damage for good timing",
+     "action command"
+    ],
+    [
+     "guard with A",
+     "superguard with B",
+     "block for less damage",
+     "perfectly timed block takes none"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "How-it-works card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-PIK2-01",
+   "app_id": "",
+   "app_name": "Pikmin 2",
+   "ask_mode": "strategy",
+   "question": "How do I deal with the giant bulborb boss that keeps making more enemies?",
+   "expect_card": "Empress Bulblax and the Snagrets",
+   "must_mention": [
+    [
+     "kill the mother",
+     "ignore the babies",
+     "don't waste time on the larvae",
+     "focus the boss not the young"
+    ],
+    [
+     "throw purples at her head",
+     "purple Pikmin",
+     "when she pauses between rolls",
+     "she rolls from wall to wall"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "kill the larvae first",
+     "focus the babies"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Boss described by look, low-narrative title. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-PIK2-02",
+   "app_id": "",
+   "app_name": "Pikmin 2",
+   "ask_mode": "strategy",
+   "question": "What's the actual goal in Pikmin 2, and is there still a day limit?",
+   "expect_card": "Starting out in Pikmin 2",
+   "must_mention": [
+    [
+     "ten thousand Pokos",
+     "no day limit",
+     "unlimited days",
+     "collect treasure to pay off the debt"
+    ],
+    [
+     "two captains",
+     "swap between captains",
+     "one carries while the other fights"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "there's a day limit",
+     "you have a limited number of days"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "How-it-works card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-MELEE-01",
+   "app_id": "",
+   "app_name": "Super Smash Bros. Melee",
+   "ask_mode": "strategy",
+   "question": "What makes Fox and Falco so good in Melee, and what's their weakness?",
+   "expect_card": "Fox and Falco",
+   "must_mention": [
+    [
+     "fastest lightweight",
+     "second fastest dash",
+     "reflector",
+     "shine",
+     "quick jump"
+    ],
+    [
+     "die early",
+     "fall too fast",
+     "easy to combo",
+     "combo'd hard",
+     "light and fast falling"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "Matchup card treated as an enemy/character card, low-narrative title. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-MELEE-02",
+   "app_id": "",
+   "app_name": "Super Smash Bros. Melee",
+   "ask_mode": "strategy",
+   "question": "How does damage and knockback work in Melee if there's no health bar?",
+   "expect_card": "Starting out in Melee",
+   "must_mention": [
+    [
+     "percentage",
+     "damage percent",
+     "the higher it goes the further you fly",
+     "percent instead of health"
+    ],
+    [
+     "launched off the screen",
+     "knocked past the edge",
+     "losing a stock",
+     "sent flying off stage"
+    ]
+   ],
+   "must_not_say": [
+    [
+     "running out of health",
+     "a health bar drains to zero"
+    ]
+   ],
+   "expect_fence": false,
+   "expect_branches": true,
+   "note": "How-it-works card. 2026-09-06 write-up."
+  },
+  {
+   "id": "A-HK-03",
+   "app_id": "367520",
+   "app_name": "Hollow Knight",
+   "ask_mode": "strategy",
+   "question": "How do I beat the boss at the top of the Soul Sanctum in the City of Tears?",
+   "expect_card": "Soul Master",
+   "must_mention": [
+    [
+     "teleport",
+     "teleports"
+    ],
+    [
+     "orb",
+     "orbs"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": true,
+   "expect_branches": true,
+   "note": "D112 #7, the spoiler safety net (plan 70 helper A): the boss is described by location, never named. The card's own text plays dead once and comes back through the roof for round two -- the reply must not name Soul Master, or say that, in plain text. Confirmed against data/kb/strategy_seed.json 2026-09-26 that this note exists (section_id 184)."
+  },
+  {
+   "id": "A-HADES-04",
+   "app_id": "1145360",
+   "app_name": "Hades",
+   "ask_mode": "strategy",
+   "question": "the whip-wielding fury with fast dashes in Tartarus keeps punishing me, how do I punish her recovery windows instead",
+   "expect_card": "Megaera",
+   "must_mention": [
+    [
+     "dash",
+     "recovery"
+    ]
+   ],
+   "must_not_say": [],
+   "expect_fence": true,
+   "expect_branches": true,
+   "note": "D112 #7, the spoiler safety net (plan 70 helper A): the Fury is described by role and location, never named. Confirmed against data/kb/strategy_seed.json 2026-09-26 that this note exists (section_id 13)."
+  }
+ ],
+ "followup_pairs": [
+  {
+   "id": "P-DRG-PHASE-01",
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat the glyphid dreadnought",
+     "expect_card": "Glyphid Dreadnought",
+     "must_mention": [
+      ["kite", "kiting", "keep moving", "stay mobile", "distance", "keep away", "back off"],
+      ["weak point", "weak points", "armor plate", "armour plate", "plates", "armor"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about its second phase",
+     "expect_card": "Glyphid Dreadnought",
+     "must_mention": [],
+     "must_not_say": [
+      ["health bars drift apart", "both turn immune", "heal the gap closed", "healing never starts"],
+      ["lacerator chases", "arbalest hangs back", "fireball spreads", "two smaller dreadnoughts"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "D98's known-failing pair, device row W3-R4: the search now attaches the Glyphid Dreadnought note first, but the Dreadnought Twins note (two smaller dreadnoughts that heal while both turn immune) still attaches second and reads more like a real second phase, so the model wrote about the Twins. must_not_say on turn 2 flags Dreadnought Twins content leaking into the reply."
+  },
+  {
+   "id": "P-DOOME-PHASE-01",
+   "app_id": "782330",
+   "app_name": "DOOM Eternal",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat the doom hunter",
+     "expect_card": "Doom Hunter",
+     "must_mention": [
+      ["plasma rifle", "heat blast", "microwave beam"],
+      ["blood punch"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about its second phase",
+     "expect_card": "Doom Hunter",
+     "must_mention": [],
+     "must_not_say": [
+      ["two phases", "phase one strips the armour", "phase two the flesh", "eight targets"],
+      ["swings the flail", "glory kill the shield off", "phase two starts faster", "sentinel prime"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Second pair for D98's measurement: DOOM Eternal has four boss cards. Doom Hunter's own card never uses the word 'phase' (it says 'first health bar' / 'second bar'), while Icon of Sin and Gladiator both use 'phase' prominently -- the same shape of confound as the Dreadnought Twins pair, chosen from a game with several bosses per the brief. must_not_say on turn 2 flags either rival's content."
+  },
+  {
+   "id": "P-OOT-PHASE-01",
+   "app_id": "",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat morpha",
+     "expect_card": "Morpha",
+     "must_mention": [
+      ["nucleus", "red nucleus"],
+      ["hookshot"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about its second phase",
+     "expect_card": "Morpha",
+     "must_mention": [],
+     "must_not_say": [
+      ["mirror shield reflects", "first phase, the mirror shield", "once they merge", "two witches"],
+      ["only one of the two riders is real", "forest temple boss", "rides out of the wall paintings"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Third pair for D98's measurement: Ocarina of Time has six boss cards. Morpha's card has no phase language at all (a single-stage fight), while Twinrova ('First phase...') and Phantom Ganon ('Phases: only one of the two riders is real') both do. app_id \"\" mimics an EmuDeck shortcut, same convention as A-OOT-01/02."
+  },
+  {
+   "id": "P-HADES-PHASE-01",
+   "app_id": "1145360",
+   "app_name": "Hades",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat megaera",
+     "expect_card": "Megaera",
+     "must_mention": [
+      ["dash", "dash patterns", "dash pattern"],
+      ["recovery window", "recovery windows", "punish the recovery"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about her second phase",
+     "expect_card": "Megaera",
+     "must_mention": [],
+     "must_not_say": [
+      ["asterius", "the bull", "telegraphs a long charge"],
+      ["theseus throws his spear", "a god's power", "briefly stuck"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Required by plan 70 helper K: the Hades sighting (2026-09-19) where search found the right boss but the reply asked which boss was meant instead of naming Megaera. Only two boss cards in this corpus (Megaera; Theseus and Asterius), so the confound is the only other boss in the game -- must_not_say on turn 2 flags Theseus/Asterius content leaking into a Megaera answer."
+  },
+  {
+   "id": "P-L4D2-PHASE-01",
+   "app_id": "550",
+   "app_name": "Left 4 Dead 2",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat the tank",
+     "expect_card": "Tank",
+     "must_mention": [
+      ["fight him in the open", "open area", "in the open"],
+      ["projectile", "punch", "throwing concrete", "chunks of concrete"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about its second phase",
+     "expect_card": "Tank",
+     "must_mention": [],
+     "must_not_say": [
+      ["flashlight wakes her", "standing too close", "the growl is a warning"],
+      ["fire kills her in about fifteen seconds", "already startled", "keeps full speed"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Fourth pair for D98-style measurement (plan 70 helper K): Left 4 Dead 2 has two boss cards, Tank and The Witch, with no shared vocabulary at all -- a clean confound. must_not_say on turn 2 flags Witch content leaking into a Tank answer."
+  },
+  {
+   "id": "P-BLACKMESA-PHASE-01",
+   "app_id": "362890",
+   "app_name": "Black Mesa",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat the gonarch",
+     "expect_card": "Gonarch",
+     "must_mention": [
+      ["egg sac", "pale egg sac", "the sac"],
+      ["headcrab", "headcrabs", "baby headcrabs"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about its second phase",
+     "expect_card": "Gonarch",
+     "must_mention": [],
+     "must_not_say": [
+      ["energy spheres", "orange energy spheres", "break every crystal"],
+      ["vortigaunts", "alien controllers", "green orbs that teleport"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Fifth pair (plan 70 helper K): Black Mesa has three boss cards (Tentacles, Gonarch, Nihilanth). Gonarch's own card never mentions crystals or energy spheres -- that is Nihilanth's fight -- so must_not_say on turn 2 flags Nihilanth content leaking into a Gonarch answer."
+  },
+  {
+   "id": "P-HL2-PHASE-01",
+   "app_id": "220",
+   "app_name": "Half-Life 2",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat the strider",
+     "expect_card": "Strider",
+     "must_mention": [
+      ["rpg", "rocket", "rockets"],
+      ["laser-guided", "steer it wide", "off-axis"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about its second phase",
+     "expect_card": "Strider",
+     "must_mention": [],
+     "must_not_say": [
+      ["fought from the airboat", "contact mines", "pulse turret"],
+      ["bombing run", "falling bombs"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Sixth pair (plan 70 helper K): Half-Life 2's other boss card, the Hunter-Chopper, is fought entirely differently (from the airboat, bombing runs) -- must_not_say on turn 2 flags it leaking into a Strider answer."
+  },
+  {
+   "id": "P-HK-PHASE-01",
+   "app_id": "367520",
+   "app_name": "Hollow Knight",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat the mantis lords",
+     "expect_card": "Mantis Lords",
+     "must_mention": [
+      ["dodge", "lance dash", "spinning boomerang"],
+      ["heal during the boomerang", "boomerang", "slowest attack"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about their second phase",
+     "expect_card": "Mantis Lords",
+     "must_mention": [],
+     "must_not_say": [
+      ["soul master", "teleports between every attack", "homing soul orb"],
+      ["watcher knights", "rolls as a ball", "immune to the nail while rolling"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Seventh pair (plan 70 helper K): Hollow Knight has six boss cards. Mantis Lords already reads as two phases in its own card (one sister, then two together), so this pair checks whether a bare follow-up still stays on Mantis Lords rather than drifting to Soul Master or Watcher Knights, both of which the corpus also describes across stages/rounds."
+  }
+ ]
+}

@@ -3,11 +3,16 @@ param(
     [ValidateSet('auto', 'game', 'desktop')]
     [string]$Mode = 'auto',
     [int]$Seconds = 15,
+    # compressed (default): VP8 ~2.5 Mbps. full: MJPEG / high-bitrate (much larger files).
+    [ValidateSet('compressed', 'full')]
+    [string]$Quality = 'compressed',
+    [switch]$FullQuality,
     [switch]$InstallDeckHelper,
     [switch]$Open
 )
 
 $RepoRoot = Split-Path -Parent $PSScriptRoot
+if ($FullQuality) { $Quality = 'full' }
 if (Test-Path "$RepoRoot\.env") {
     foreach ($line in Get-Content "$RepoRoot\.env") {
         if ($line -match '^\s*([^#]\S+?)\s*=\s*(.+)$') {
@@ -68,7 +73,7 @@ if ($InstallDeckHelper) {
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     ssh "${DeckUser}@${DeckIP}" "chmod +x ~/.local/bin/bonsai-record"
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "Installed. On the Deck run: bonsai-record --seconds $Seconds (open QAM + bonsAI first)." -ForegroundColor Green
+        Write-Host "Installed. On the Deck run: bonsai-record --seconds $Seconds (open QAM + bonsAI first; --quality full for MJPEG)." -ForegroundColor Green
     }
     exit $LASTEXITCODE
 }
@@ -82,28 +87,41 @@ $Timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 $RemoteFile = "/tmp/deck_record.mkv"
 $RemoteDiag = "/tmp/bonsai-record.diag"
 $RemoteResult = "/tmp/bonsai-record.result"
+$RemoteScript = "/tmp/bonsai-record-run.sh"
 $LocalFileTemp = Join-Path $LocalPath "DeckRecord_${Timestamp}.mkv"
 $LocalDiag = Join-Path $LocalPath "DeckRecord_${Timestamp}.log"
 $LocalResult = Join-Path $LocalPath "DeckRecord_${Timestamp}.result"
 
 Write-Host "Connecting to Steam Deck ($DeckIP)..." -ForegroundColor Cyan
 Write-Host "NOTE: You will be prompted for your 'deck' user sudo password." -ForegroundColor Yellow
-Write-Host "Recording ${Seconds}s — open QAM and bonsAI on the Deck BEFORE and DURING capture." -ForegroundColor Yellow
-Write-Host "Mode: $Mode — game: pipewire gamescope only; desktop: wf-recorder. kmsgrab is NOT used (no plugin UI)." -ForegroundColor DarkGray
+Write-Host "Recording ${Seconds}s - open QAM and bonsAI on the Deck BEFORE and DURING capture." -ForegroundColor Yellow
+Write-Host "Mode: $Mode - game: pipewire gamescope only; desktop: wf-recorder. kmsgrab is NOT used (no plugin UI)." -ForegroundColor DarkGray
+Write-Host "Quality: $Quality$(if ($Quality -eq 'compressed') { ' (VP8; use -FullQuality / -Quality full for MJPEG)' } else { ' (MJPEG / high bitrate)' })" -ForegroundColor DarkGray
 
 $bashContent = Get-BundledRecordScript
 $utf8NoBom = New-Object System.Text.UTF8Encoding $false
-$b64 = [Convert]::ToBase64String($utf8NoBom.GetBytes($bashContent))
 
-$remoteArgs = "--mode $Mode --seconds $Seconds --out $RemoteFile --diag $RemoteDiag --result $RemoteResult"
+$remoteArgs = "--mode $Mode --seconds $Seconds --quality $Quality --out $RemoteFile --diag $RemoteDiag --result $RemoteResult"
 if ($env:BONSAI_ALLOW_STEAMOS_RW -eq '0') {
     $remoteArgs = "$remoteArgs --no-steamos-rw"
 }
-$CaptureCommand = "echo $b64 | base64 -d | sudo bash -s -- $remoteArgs"
 
-ssh "${DeckUser}@${DeckIP}" "sudo rm -f $RemoteFile $RemoteDiag $RemoteResult" 2>$null | Out-Null
+# Send the bundled script as a file via SCP rather than inlining base64 in the ssh command.
+# The bundle exceeds the Windows command-line limit (~32767 chars), which raised
+# "ssh.exe failed to run: The filename or extension is too long".
+$tempScript = [System.IO.Path]::GetTempFileName()
+[System.IO.File]::WriteAllBytes($tempScript, $utf8NoBom.GetBytes($bashContent))
 
-& ssh -t "${DeckUser}@${DeckIP}" $CaptureCommand
+ssh "${DeckUser}@${DeckIP}" "sudo rm -f $RemoteFile $RemoteDiag $RemoteResult $RemoteScript" 2>$null | Out-Null
+scp $tempScript "${DeckUser}@${DeckIP}:${RemoteScript}" 2>$null | Out-Null
+$scpExit = $LASTEXITCODE
+Remove-Item $tempScript -Force -ErrorAction SilentlyContinue
+if ($scpExit -ne 0) {
+    Write-Host "Error: Failed to copy the record script to the Deck via SCP." -ForegroundColor Red
+    exit 1
+}
+
+& ssh -t "${DeckUser}@${DeckIP}" "sudo bash $RemoteScript $remoteArgs"
 $sshExit = $LASTEXITCODE
 
 scp "${DeckUser}@${DeckIP}:${RemoteResult}" "$LocalResult" 2>$null | Out-Null
@@ -138,11 +156,14 @@ function Download-DiagLog {
     }
 }
 
+# compressed VP8 can be far smaller than full MJPEG; keep a low floor for empty/corrupt rejects.
+$minBytes = if ($Quality -eq 'full') { 524288 } else { 100000 }
+
 function Test-RecordV1Pass {
     if ($recPluginUi -eq 'no') { return $false }
     if ($recMethod -eq 'kmsgrab' -or $recMethod -eq 'failed') { return $false }
     if ($recMethod -notin @('pipewire-gamescope', 'wf-recorder')) { return $false }
-    if ($recBytes -lt 524288) { return $false }
+    if ($recBytes -lt $minBytes) { return $false }
     return $true
 }
 
@@ -163,7 +184,7 @@ if ($sshExit -eq 0 -and $v1Pass) {
         }
 
         Write-Host "Cleaning up temporary files on the Deck..." -ForegroundColor Cyan
-        ssh "${DeckUser}@${DeckIP}" "sudo rm -f $RemoteFile $RemoteDiag $RemoteResult" 2>$null | Out-Null
+        ssh "${DeckUser}@${DeckIP}" "sudo rm -f $RemoteFile $RemoteDiag $RemoteResult $RemoteScript" 2>$null | Out-Null
 
         Write-Host "Success! Recording saved to: $LocalFile" -ForegroundColor Green
         Write-Host "  mode=$recMode  method=$recMethod  bytes=$recBytes  seconds=$recSeconds" -ForegroundColor DarkGray
@@ -181,9 +202,9 @@ if ($sshExit -eq 0 -and $v1Pass) {
 } else {
     $hint = "Open QAM and bonsAI on the Deck before/during recording. Composited capture (pipewire-gamescope / wf-recorder) is required."
     if ($recPluginUi -eq 'no' -or $recMethod -eq 'failed') {
-        $hint += " Compositor path failed — check gstreamer/gst-plugin-pipewire on the Deck (see .log)."
+        $hint += " Compositor path failed - see .log (needs pipewiresrc + jpegenc/vp8enc or H.264 plugins)."
     }
-    if ($recBytes -gt 0 -and $recBytes -lt 524288) {
+    if ($recBytes -gt 0 -and $recBytes -lt $minBytes) {
         $hint += " Recording too small ($recBytes bytes)."
     }
     if ($sshExit -eq -1) {

@@ -46,7 +46,7 @@ export function docsDir(): string {
 }
 
 export function subagentReportsPath(): string {
-  return path.join(resolveRepoRoot(), ".cursor", "agents", "SUBAGENT_REPORTS.md");
+  return path.join(resolveRepoRoot(), "docs", "audit", "subagent-reports.md");
 }
 
 /** Reject path traversal for docs/{path} reads. */

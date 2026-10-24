@@ -1,0 +1,147 @@
+/**
+ * Guards `effectivePresetVisibleSlots` — the single point where the "one suggestion chip"
+ * setting (roadmap `[chips]` ★★★) overrides how many chips the row shows. `PRESET_VISIBLE_SLOTS`
+ * itself must keep meaning "the shipped default": carouselState.test.ts pins it at exactly 2, and
+ * this file must never weaken that by changing the constant instead of adding an override.
+ */
+import { describe, expect, it } from "vitest";
+import { presetPace, TWO_SPOT_MIN_GAP_MS } from "./presetPace";
+import {
+  effectivePresetVisibleSlots,
+  PRESET_CHIP_END_PAUSE_MS,
+  PRESET_CHIP_READ_PAUSE_MS,
+  PRESET_CHIP_SNAP_BACK_MS,
+  PRESET_CHIP_GAP_PX,
+  PRESET_MARQUEE_DELAY_S,
+  PRESET_MARQUEE_SPEED,
+  PRESET_VISIBLE_SLOTS,
+  presetHoldMs,
+  presetScrollPlan,
+  presetTurnMs,
+} from "./presetRowLayout";
+
+describe("effectivePresetVisibleSlots", () => {
+  it("returns the shipped default (two) when the setting is off", () => {
+    expect(effectivePresetVisibleSlots(false)).toBe(PRESET_VISIBLE_SLOTS);
+    expect(effectivePresetVisibleSlots(false)).toBe(2);
+  });
+
+  it("returns one when the setting is on, regardless of what the default is", () => {
+    expect(effectivePresetVisibleSlots(true)).toBe(1);
+  });
+
+  it("never returns zero or a negative count", () => {
+    expect(effectivePresetVisibleSlots(true)).toBeGreaterThan(0);
+    expect(effectivePresetVisibleSlots(false)).toBeGreaterThan(0);
+  });
+});
+
+describe("PRESET_CHIP_GAP_PX", () => {
+  /* Design boards, 2026-09-16, plan 60 board B: the gap between the two chips widened from 4 to 6
+     so they stop reading as one slab. section-4.ts reads this constant for the row gap, the
+     carousel slide distance and the label-room estimate, so pinning it here is enough to catch a
+     regression anywhere that math is used. */
+  it("is 6, per plan 60 board B", () => {
+    expect(PRESET_CHIP_GAP_PX).toBe(6);
+  });
+});
+
+/*
+ * Plan 78 F: how long a chip stays is one rule that takes the chip count. With one chip showing it
+ * draws the eye, even more so when it fades in, so it needs far less still time than two side by
+ * side. Numbers are the maintainer's to tune, all in presetPace.ts.
+ */
+describe("the pace of a chip", () => {
+  it("has the starting numbers: one chip 160 ms a letter, 6 to 12 s, fade 1.2 s in and 1.2 s out", () => {
+    expect(presetPace(1)).toEqual({ msPerChar: 160, minHoldMs: 6000, maxHoldMs: 12000, fadeInMs: 1200, fadeOutMs: 1200 });
+  });
+
+  it("has the starting numbers: two chips 240 ms a letter, 9 to 18 s, fade 1.2 s in and 1.5 s out", () => {
+    expect(presetPace(2)).toEqual({ msPerChar: 240, minHoldMs: 9000, maxHoldMs: 18000, fadeInMs: 1200, fadeOutMs: 1500 });
+  });
+
+  it("holds a short label for the least time, a medium one by its length, a very long one at the most", () => {
+    expect(presetHoldMs("Hi", 1)).toBe(6000);
+    expect(presetHoldMs("x".repeat(40), 1)).toBe(40 * 160); // fits its wide chip: no scroll wait
+    expect(presetHoldMs("Hi", 2)).toBe(9000);
+  });
+
+  it("a turn is fade in, hold and fade out, so a typical 35-letter label turns over in about 8.4 s with one chip", () => {
+    const text = "x".repeat(35);
+    expect(presetTurnMs(text, 1)).toBe(1200 + 6000 + 1200) // 35 letters is 5.6 s: the 6 s least hold decides;
+    expect(presetTurnMs(text, 1)).toBeGreaterThan(8000);
+    expect(presetTurnMs(text, 1)).toBeLessThan(9000);
+  });
+
+  /* The wait for one full scroll was worked out for the narrow two-chip width even with one wide
+     chip showing, which held a one-chip label longer than it needed. 50 letters is ~322 px: it
+     overflows the ~131 px two-chip room, and needs no scroll at all in the ~284 px one-chip room. */
+  it("works the one-full-scroll wait out for the room the chip really has", () => {
+    const text = "x".repeat(44); // ~284 px: just fits one wide chip
+    expect(presetHoldMs(text, 1)).toBe(44 * 160);
+    const longer = "x".repeat(60); // ~387 px: overflows even the wide chip by ~103 px
+    const scroll = presetScrollPlan(60 * 6.45 - 284)!.stayMs; // the words read twice: ~14.2 s
+    expect(presetHoldMs(longer, 1)).toBeCloseTo(Math.max(60 * 160, scroll), 0); // the scroll decides here (the length gives 9.6 s)
+    // And a 50-letter label scrolls with two chips but not with one.
+    expect(presetHoldMs("x".repeat(50), 2)).toBeGreaterThan(50 * 240);
+    expect(presetHoldMs("x".repeat(40), 1)).toBe(40 * 160);
+  });
+
+  it("two spots never change within 3 s of each other", () => {
+    expect(TWO_SPOT_MIN_GAP_MS).toBe(3000);
+  });
+});
+
+/*
+ * Plan 79 I: a long chip scrolls to the end of its words, stands still for a moment, then leaves.
+ * The time line of that is one function, shared by the chip's scroller and the stay time.
+ */
+describe("the time line of a long chip", () => {
+  it("stands still at the end for 1.5 s, the same wait the words make at the start", () => {
+    expect(PRESET_CHIP_END_PAUSE_MS).toBe(1500);
+    expect(PRESET_CHIP_END_PAUSE_MS).toBe(PRESET_MARQUEE_DELAY_S * 1000);
+  });
+
+  it("has no scroll for words that fit", () => {
+    expect(presetScrollPlan(0)).toBeNull();
+    expect(presetScrollPlan(-12)).toBeNull();
+  });
+
+  it("is wait, then scroll at the set speed, then the pause", () => {
+    const plan = presetScrollPlan(200)!;
+    expect(plan.delayMs).toBe(1500);
+    expect(plan.crawlMs).toBe((200 / PRESET_MARQUEE_SPEED) * 1000);
+    expect(plan.pauseMs).toBe(PRESET_CHIP_END_PAUSE_MS);
+    expect(plan.endMs).toBe(plan.delayMs + plan.crawlMs);
+  });
+
+  /*
+   * Plan 96 F22 (the maintainer, 2026-10-18): every long chip shows its whole text twice before it
+   * changes. Wait 1.5 s, scroll to the end, stand 1 s, snap back (0.4 s), scroll to the end again,
+   * stand 1 s, and only then may the chip leave.
+   */
+  it("reads the words twice: end, a one second stand, a quick snap back, the end again, a second stand", () => {
+    expect(PRESET_CHIP_READ_PAUSE_MS).toBe(1000);
+    expect(PRESET_CHIP_SNAP_BACK_MS).toBe(400);
+    for (const [overflowPx, crawl] of [[50, 2500], [100, 5000]] as const) {
+      const plan = presetScrollPlan(overflowPx)!;
+      expect(plan.crawlMs).toBe(crawl);
+      expect(plan.endMs).toBe(1500 + crawl);
+      expect(plan.backAtMs).toBe(1500 + crawl + 1000);
+      expect(plan.secondStartMs).toBe(1500 + crawl + 1000 + 400);
+      expect(plan.secondEndMs).toBe(1500 + crawl + 1000 + 400 + crawl);
+      expect(plan.stayMs).toBe(1500 + crawl + 1000 + 400 + crawl + 1000);
+    }
+    expect(presetScrollPlan(50)!.stayMs).toBe(8_900);
+    expect(presetScrollPlan(100)!.stayMs).toBe(13_900);
+  });
+
+  it("is never cut short: a long chip stays for the whole scroll and the pause, one chip or two", () => {
+    for (const chips of [1, 2]) {
+      const text = "x".repeat(90);
+      const room = chips === 1 ? 284 : 131; // the label room the stay time works with
+      const plan = presetScrollPlan(text.length * 6.45 - room)!;
+      expect(presetHoldMs(text, chips)).toBeGreaterThanOrEqual(plan.stayMs - 1);
+    }
+  });
+});

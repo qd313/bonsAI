@@ -8,6 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 MODE="auto"
 SECONDS_DURATION=15
+QUALITY="compressed"
 INSTALL_DECK_HELPER=0
 OPEN_AFTER=0
 
@@ -18,6 +19,8 @@ Usage: ./scripts/record-deck.sh [options]
 Options:
   --mode MODE           auto | game | desktop (default: auto)
   --seconds N           Recording duration (default: 15)
+  --quality MODE        compressed (default, VP8) | full (MJPEG / high bitrate)
+  --full-quality        Alias for --quality full
   --install-deck-helper Install bonsai-record to ~/.local/bin on the Deck
   --open                Open the video after download
   -h, --help            Show this help
@@ -30,12 +33,19 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --mode) MODE="${2:-}"; shift 2 ;;
     --seconds) SECONDS_DURATION="${2:-15}"; shift 2 ;;
+    --quality) QUALITY="${2:-compressed}"; shift 2 ;;
+    --full-quality) QUALITY="full"; shift ;;
     --install-deck-helper) INSTALL_DECK_HELPER=1; shift ;;
     --open) OPEN_AFTER=1; shift ;;
     -h|--help) usage; exit 0 ;;
     *) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
   esac
 done
+
+case "$QUALITY" in
+  compressed|full) ;;
+  *) echo "Invalid --quality: $QUALITY (use compressed|full)" >&2; exit 2 ;;
+esac
 
 deck_remote_load_env
 
@@ -62,8 +72,9 @@ deck_remote_cyan "Connecting to Steam Deck ($DECK_IP)..."
 deck_remote_yellow "NOTE: You will be prompted for your 'deck' user sudo password."
 deck_remote_yellow "Recording ${SECONDS_DURATION}s — open QAM and bonsAI on the Deck BEFORE and DURING capture."
 deck_remote_gray "Mode: $MODE — game: pipewire gamescope only; desktop: wf-recorder. No kmsgrab (plugin UI required)."
+deck_remote_gray "Quality: $QUALITY$( [ "$QUALITY" = compressed ] && echo ' (VP8; use --full-quality for MJPEG)' || echo ' (MJPEG / high bitrate)' )"
 
-REMOTE_ARGS="--mode $MODE --seconds $SECONDS_DURATION --out $REMOTE_FILE --diag $REMOTE_DIAG --result $REMOTE_RESULT"
+REMOTE_ARGS="--mode $MODE --seconds $SECONDS_DURATION --quality $QUALITY --out $REMOTE_FILE --diag $REMOTE_DIAG --result $REMOTE_RESULT"
 if [ "${BONSAI_ALLOW_STEAMOS_RW:-}" = "0" ]; then
   REMOTE_ARGS="$REMOTE_ARGS --no-steamos-rw"
 fi
@@ -86,7 +97,10 @@ download_diag() {
   fi
 }
 
-if [ "$SSH_EXIT" -eq 0 ] && deck_remote_record_ok "$LOCAL_RESULT"; then
+MIN_BYTES=100000
+[ "$QUALITY" = "full" ] && MIN_BYTES=524288
+
+if [ "$SSH_EXIT" -eq 0 ] && deck_remote_record_ok "$LOCAL_RESULT" "$MIN_BYTES"; then
   deck_remote_cyan "Recording successful (mode=$REC_MODE method=$REC_METHOD bytes=$REC_BYTES plugin_ui=$REC_PLUGIN_UI). Downloading..."
 
   if scp "${DECK_USER}@${DECK_IP}:${REC_PATH}" "$LOCAL_FILE_TEMP"; then
@@ -124,7 +138,7 @@ HINT="Open QAM and bonsAI on the Deck before/during recording. Composited captur
 if [ "$REC_PLUGIN_UI" = "no" ] || [ "$REC_METHOD" = "failed" ]; then
   HINT="$HINT Compositor path failed — check gstreamer/gst-plugin-pipewire (see .log)."
 fi
-if [ "${REC_BYTES:-0}" -gt 0 ] && [ "${REC_BYTES:-0}" -lt 524288 ]; then
+if [ "${REC_BYTES:-0}" -gt 0 ] && [ "${REC_BYTES:-0}" -lt "$MIN_BYTES" ]; then
   HINT="$HINT Recording too small ($REC_BYTES bytes)."
 fi
 deck_remote_red "Error: Recording failed v1 validation. $HINT"

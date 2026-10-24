@@ -1,0 +1,352 @@
+import { describe, expect, it } from "vitest";
+
+import { lastExchangeFromSavedTurn, newestSavedAnswerIsFinished, turnsToCollapsedTurns } from "./chatSlotTurns";
+
+describe("turnsToCollapsedTurns", () => {
+  it("preserves trailing unpaired user turn as pendingQuestion", () => {
+    const { collapsed, pendingQuestion } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "first?" },
+      { id: "a1", role: "assistant", text: "first answer" },
+      { id: "u2", role: "user", text: "still waiting" },
+    ]);
+    expect(collapsed).toHaveLength(1);
+    expect(collapsed[0]?.question).toBe("first?");
+    expect(pendingQuestion).toBe("still waiting");
+  });
+
+  it("returns empty pending when turns end on assistant", () => {
+    const { collapsed, pendingQuestion } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "q" },
+      { id: "a1", role: "assistant", text: "a" },
+    ]);
+    expect(collapsed).toHaveLength(1);
+    expect(pendingQuestion).toBeNull();
+  });
+
+  it("carries the assistant turn's persisted transparency snapshot onto the collapsed turn", () => {
+    // Regression: this used to be hardcoded to null for every restored turn, which made
+    // SessionContextStrip always report exactly one archived turn regardless of how many
+    // questions were actually asked in the slot (chipsFromSnapshot needs context_chips).
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "first?" },
+      {
+        id: "a1",
+        role: "assistant",
+        text: "first answer",
+        transparency: {
+          route: "ollama",
+          success: true,
+          context_chips: [
+            { id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } },
+          ],
+          overflow_skips: [],
+        },
+      },
+    ]);
+    expect(collapsed[0]?.transparency?.context_chips).toHaveLength(1);
+    expect(collapsed[0]?.transparency?.route).toBe("ollama");
+  });
+
+  it("carries the day the question was asked onto the collapsed turn (plan 79, grouping by day)", () => {
+    // The saved question carries its time (seconds); the screen's turn type did not, so the
+    // "N earlier" list had nothing to group by day with. The question's time wins over the
+    // answer's, and a turn saved with neither stays undated.
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "asked on Monday", created_at: 1_790_000_000 },
+      { id: "a1", role: "assistant", text: "answered a bit later", created_at: 1_790_000_030 },
+      { id: "u2", role: "user", text: "no date saved" },
+      { id: "a2", role: "assistant", text: "no date either" },
+      { id: "u3", role: "user", text: "only the answer is dated" },
+      { id: "a3", role: "assistant", text: "dated answer", created_at: 1_790_100_000 },
+    ]);
+    expect(collapsed[0]?.createdAt).toBe(1_790_000_000);
+    expect(collapsed[1]?.createdAt).toBeUndefined();
+    expect(collapsed[2]?.createdAt).toBe(1_790_100_000);
+  });
+
+  it("carries the persisted app id onto the collapsed turn", () => {
+    // Regression (DRG-GLOSSARY-01, device 2026-08-28): this was hardcoded to "", so a reply that
+    // showed glossary chips while it streamed lost them the moment it settled into history —
+    // MainTabBonsaiAiMarkdownChunk reads the game's glossary words by props.appId.
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "what is kiting?", app_id: "548430" },
+      { id: "a1", role: "assistant", text: "keep moving", app_id: "548430" },
+    ]);
+    expect(collapsed[0]?.appId).toBe("548430");
+  });
+
+  it("prefers each turn's own app id over the slot fallback", () => {
+    // A saved chat outlives a play session: the player can quit one game, start another, and
+    // keep asking in the same chat. The older turns must keep the game they were asked under.
+    const { collapsed } = turnsToCollapsedTurns(
+      [
+        { id: "u1", role: "user", text: "first?", app_id: "548430" },
+        { id: "a1", role: "assistant", text: "first answer", app_id: "548430" },
+        { id: "u2", role: "user", text: "second?", app_id: "1245620" },
+        { id: "a2", role: "assistant", text: "second answer", app_id: "1245620" },
+      ],
+      "999999",
+    );
+    expect(collapsed.map((t) => t.appId)).toEqual(["548430", "1245620"]);
+  });
+
+  it("falls back to the question's app id when only the answer predates the field", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "q", app_id: "548430" },
+      { id: "a1", role: "assistant", text: "a" },
+    ]);
+    expect(collapsed[0]?.appId).toBe("548430");
+  });
+
+  it("falls back to the slot's origin app id for turns saved before the field existed", () => {
+    const { collapsed } = turnsToCollapsedTurns(
+      [
+        { id: "u1", role: "user", text: "q" },
+        { id: "a1", role: "assistant", text: "a" },
+      ],
+      "548430",
+    );
+    expect(collapsed[0]?.appId).toBe("548430");
+  });
+
+  it("reports an empty app id when neither the turns nor the slot know one", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "q" },
+      { id: "a1", role: "assistant", text: "a" },
+    ]);
+    expect(collapsed[0]?.appId).toBe("");
+  });
+
+  it("carries the friendly caption onto the collapsed turn without touching the real question", () => {
+    // Roadmap: "After reopening the panel, a branch-pick turn's header shows the internal
+    // prompt". The header should read "I'm at: the twins" while spoiler unwrap and copy keep
+    // the composed prompt.
+    const { collapsed } = turnsToCollapsedTurns([
+      {
+        id: "u1",
+        role: "user",
+        text: "[Strategy follow-up] I'm at: the twins",
+        display_text: "I'm at: the twins",
+      },
+      { id: "a1", role: "assistant", text: "answer" },
+    ]);
+    expect(collapsed[0]?.questionDisplay).toBe("I'm at: the twins");
+    expect(collapsed[0]?.question).toBe("[Strategy follow-up] I'm at: the twins");
+  });
+
+  it("leaves questionDisplay unset for a plain typed question", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "how do i parry" },
+      { id: "a1", role: "assistant", text: "answer" },
+    ]);
+    expect(collapsed[0]?.questionDisplay).toBeUndefined();
+  });
+
+  it("prefers the friendly caption for a pending question too", () => {
+    const { pendingQuestion } = turnsToCollapsedTurns([
+      {
+        id: "u1",
+        role: "user",
+        text: "[Strategy follow-up] I'm at: the twins",
+        display_text: "I'm at: the twins",
+      },
+    ]);
+    expect(pendingQuestion).toBe("I'm at: the twins");
+  });
+
+  it("keeps transparency null when the persisted turn carries none", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "q" },
+      { id: "a1", role: "assistant", text: "a" },
+    ]);
+    expect(collapsed[0]?.transparency).toBeNull();
+  });
+
+  // Gap 1 (plan 54): a restored turn needs the game's name, not only its AppID, for a title
+  // reachable only by name (an emulator shortcut with no AppID).
+  it("carries the persisted app name onto the collapsed turn", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "boss tips?", app_name: "Doom 64: Retribution" },
+      { id: "a1", role: "assistant", text: "circle-strafe", app_name: "Doom 64: Retribution" },
+    ]);
+    expect(collapsed[0]?.appName).toBe("Doom 64: Retribution");
+  });
+
+  it("falls back to the slot's origin app name for a turn with no app name of its own", () => {
+    const { collapsed } = turnsToCollapsedTurns(
+      [
+        { id: "u1", role: "user", text: "q" },
+        { id: "a1", role: "assistant", text: "a" },
+      ],
+      "",
+      "Doom 64: Retribution",
+    );
+    expect(collapsed[0]?.appName).toBe("Doom 64: Retribution");
+  });
+
+  it("reports an empty app name when neither the turns nor the slot know one", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "q" },
+      { id: "a1", role: "assistant", text: "a" },
+    ]);
+    expect(collapsed[0]?.appName).toBe("");
+  });
+
+  // Gap 2 (plan 54): a restored assistant turn carries the named thing the backend worked out,
+  // so a reopened chat's boss tactics stay unfenced too.
+  it("carries the assistant turn's asked entity onto the collapsed turn", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "wheatley fight" },
+      { id: "a1", role: "assistant", text: "answer", asked_entity: "Wheatley" },
+    ]);
+    expect(collapsed[0]?.askedEntity).toBe("Wheatley");
+  });
+
+  it("falls back to an empty asked entity for a turn without one of its own", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "wheatley fight" },
+      { id: "a1", role: "assistant", text: "answer" },
+    ]);
+    expect(collapsed[0]?.askedEntity).toBeUndefined();
+  });
+
+  // Plan 77 (CONST-SPOIL-CONSENT-01): the reload that follows a finished reply must not re-cover a
+  // turn the person said spoilers were okay for.
+  it("carries a saved spoiler consent onto the collapsed turn", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "spoilers are okay, how do I beat the boss" },
+      { id: "a1", role: "assistant", text: "answer", spoiler_consent: true },
+      { id: "u2", role: "user", text: "and another" },
+      { id: "a2", role: "assistant", text: "answer two" },
+    ]);
+    expect(collapsed[0]?.spoilerConsentEffective).toBe(true);
+    expect(collapsed[1]?.spoilerConsentEffective).toBe(false);
+  });
+
+  // Plan 57: a reopened chat keeps the model's own thinking, so the fold row above the answer is
+  // still there and still opens to the same text with the same seconds.
+  it("carries the saved thinking onto the reopened turn", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "how do i kill the big armoured bug boss" },
+      {
+        id: "a1",
+        role: "assistant",
+        text: "answer",
+        reasoning: { text: "I weighed two routes.", seconds: 41, tokens: 380 },
+      } as never,
+    ]);
+    expect(collapsed[0]?.reasoning).toEqual({
+      text: "I weighed two routes.",
+      seconds: 41,
+      tokens: 380,
+    });
+  });
+
+  it("leaves a turn saved before thinking existed with no thinking on it", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "q" },
+      { id: "a1", role: "assistant", text: "answer" },
+    ]);
+    expect(collapsed[0]?.reasoning).toBeUndefined();
+  });
+
+  it("treats an empty saved think as no thinking, so no row appears with nothing behind it", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "q" },
+      { id: "a1", role: "assistant", text: "answer", reasoning: { text: "", seconds: 2, tokens: 0 } } as never,
+    ]);
+    expect(collapsed[0]?.reasoning).toBeUndefined();
+  });
+
+  // Plan 68 step 2: the field-list trap on the screen side. This function rebuilds a new object
+  // field by field, the same way chat_slot_service.py's sanitize_slot does on the backend -- a
+  // field read off the raw turn but never copied here would reach the transcript as if it had
+  // never been saved at all.
+  it("carries the assistant turn's chat_summary onto the collapsed turn", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "and what about that" },
+      { id: "a1", role: "assistant", text: "answer", chat_summary: "written" },
+    ]);
+    expect(collapsed[0]?.chatSummary).toBe("written");
+  });
+
+  it("carries a failed chat_summary onto the collapsed turn too", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "and what about that" },
+      { id: "a1", role: "assistant", text: "answer", chat_summary: "failed" },
+    ]);
+    expect(collapsed[0]?.chatSummary).toBe("failed");
+  });
+
+  it("leaves chat_summary unset for a turn that never summed the chat up", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "q" },
+      { id: "a1", role: "assistant", text: "answer" },
+    ]);
+    expect(collapsed[0]?.chatSummary).toBeUndefined();
+  });
+});
+
+/*
+ * Plan 76 lane 4: a chat opened from disk has no "last exchange" of its own, so its newest answer
+ * lost its Helpful row. This reads the saved pair back into the shape the row is drawn from.
+ */
+describe("lastExchangeFromSavedTurn", () => {
+  it("turns the saved question and answer into the newest exchange", () => {
+    const { collapsed } = turnsToCollapsedTurns(
+      [
+        { id: "u1", role: "user", text: "[Strategy follow-up] I'm at: the start", display_text: "I'm at: the start" },
+        { id: "a1", role: "assistant", text: "Go left first.", app_name: "Hades", asked_entity: "Megaera" },
+      ],
+      "",
+      "",
+    );
+    const ex = lastExchangeFromSavedTurn(collapsed[0]!);
+    expect(ex).not.toBeNull();
+    /* The raw question, so Retry asks what was really asked and the flush at the next Ask can match
+       the row already in the thread. */
+    expect(ex!.question).toBe("[Strategy follow-up] I'm at: the start");
+    expect(ex!.originalQuestion).toBe("[Strategy follow-up] I'm at: the start");
+    expect(ex!.answer).toBe("Go left first.");
+    expect(ex!.appName).toBe("Hades");
+    expect(ex!.askedEntity).toBe("Megaera");
+    expect(ex!.spoilerConsentEffective).toBe(false);
+  });
+
+  it("gives nothing for a blank answer or the back end's stop placeholder", () => {
+    const blank = { id: "t", question: "q", answer: "   " };
+    const stopped = { id: "t", question: "q", answer: "Request cancelled." };
+    expect(lastExchangeFromSavedTurn(blank)).toBeNull();
+    expect(lastExchangeFromSavedTurn(stopped)).toBeNull();
+    expect(lastExchangeFromSavedTurn(undefined)).toBeNull();
+  });
+});
+
+/*
+ * Roadmap: "After a chat switch, a stopped partial answer or a saved error as the newest turn also
+ * gets live Helpful buttons". The back end marks such a turn; only a finished answer is restored.
+ */
+describe("newestSavedAnswerIsFinished", () => {
+  const q = { id: "u", role: "user" as const, text: "q" };
+  it("is true for a finished answer, an older turn with no mark, or a chat with no answer yet", () => {
+    expect(newestSavedAnswerIsFinished([q, { id: "a", role: "assistant", text: "done" }])).toBe(true);
+    expect(newestSavedAnswerIsFinished([q])).toBe(true);
+    expect(newestSavedAnswerIsFinished([])).toBe(true);
+  });
+
+  it("is false when the newest answer was stopped or failed", () => {
+    expect(newestSavedAnswerIsFinished([q, { id: "a", role: "assistant", text: "half", outcome: "stopped" }])).toBe(false);
+    expect(newestSavedAnswerIsFinished([q, { id: "a", role: "assistant", text: "Error", outcome: "failed" }])).toBe(false);
+  });
+
+  it("only looks at the newest answer, not an older stopped one", () => {
+    expect(
+      newestSavedAnswerIsFinished([
+        q,
+        { id: "a1", role: "assistant", text: "half", outcome: "stopped" },
+        q,
+        { id: "a2", role: "assistant", text: "whole" },
+      ]),
+    ).toBe(true);
+  });
+});

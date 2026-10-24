@@ -1,0 +1,106 @@
+/**
+ * Title: Saved PC hosts rows
+ *
+ * Purpose: On the Ollama tab, when the AI runs on a PC rather than on this Deck, these are the
+ * two rows that let a person keep a short list of PC addresses they use. The first row shows the
+ * saved addresses as buttons; pressing one fills in the PC address and remembers it. The second is
+ * a single button that saves whatever address is typed in right now, under a short name, and
+ * keeps only the newest few (the limit is `MAX_NAMED_OLLAMA_HOSTS`).
+ *
+ * Used for: OllamaWhereAiRunsSection.tsx, in the part shown only while the AI runs on a PC.
+ *
+ * Solves: Keeps the panel's own file from growing past its size limit by holding this
+ * self-contained pair of rows, moved out unchanged.
+ *
+ * Does not: Own the saved list itself or the typed address; both belong to the panel and come in
+ * as props, and every change goes back out through the callbacks it hands in. It also does not
+ * decide when to show itself: the panel draws it only while the AI runs on a PC.
+ */
+import React from "react";
+import { PanelSectionRow, Button, Focusable } from "@decky/ui";
+import { toaster } from "@decky/api";
+import { MAX_NAMED_OLLAMA_HOSTS } from "../settings/bonsaiSettingsSchema";
+import type { NamedOllamaHost } from "../settings/bonsaiSettingsSchema";
+import { isHttpsOllamaAddress } from "./ollamaAddress";
+import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../../styles/settingsGlassButton";
+import { textPx } from "../../styles/textPx";
+
+type OllamaSavedHostsRowsProps = {
+  namedOllamaHosts: NamedOllamaHost[];
+  setNamedOllamaHosts: React.Dispatch<React.SetStateAction<NamedOllamaHost[]>>;
+  ollamaIp: string;
+  onOllamaIpChange: (ip: string) => void;
+  onPersistOllamaIp: (ip: string) => void;
+  /** Steam fills this with the Save row's node, so Up from the PC address row can hand the ring to it. */
+  saveRowNavRef?: React.MutableRefObject<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>;
+  /** Down from the Save row: the PC address box under it (Steam's own move skipped it, plan 97). */
+  onMoveDownFromSave?: () => boolean;
+};
+
+/**
+ * The "Save current PC address" row and one row per saved PC. The Save row sits in its own Focusable so
+ * Up from the PC address box can be handed to it through Steam, and Down from it goes back to the box
+ * (plan 97: Steam's own move skipped the box). Each saved PC's row puts that address in the box.
+ */
+export const OllamaSavedHostsRows: React.FC<OllamaSavedHostsRowsProps> = ({
+  namedOllamaHosts,
+  setNamedOllamaHosts,
+  ollamaIp,
+  onOllamaIpChange,
+  onPersistOllamaIp,
+  saveRowNavRef,
+  onMoveDownFromSave,
+}) => (
+  <>
+    {namedOllamaHosts.length > 0 ? (
+      <PanelSectionRow>
+        <div style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 6 }}>Saved Ollama hosts (LAN)</div>
+        <Focusable flow-children="horizontal" style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {namedOllamaHosts.map((entry) => (
+            <Button
+              key={`${entry.label}-${entry.host}`}
+              className={FOCUS_RING_BTN_CLASS}
+              onClick={() => {
+                onOllamaIpChange(entry.host);
+                onPersistOllamaIp(entry.host);
+              }}
+              style={{ ...SETTINGS_GLASS_BTN, minHeight: 32, fontSize: textPx(11) }}
+            >
+              {entry.label}
+            </Button>
+          ))}
+        </Focusable>
+      </PanelSectionRow>
+    ) : null}
+    <PanelSectionRow>
+      {/* Its own Focusable: a Decky Button passes no move handlers on, and the row needs a Steam node to be handed the ring. */}
+      <Focusable
+        style={{ width: "100%" }}
+        {...({ navRef: saveRowNavRef, onMoveDown: onMoveDownFromSave } as Record<string, unknown>)}
+      >
+      <Button
+        className={FOCUS_RING_BTN_CLASS}
+        disabled={
+          !ollamaIp.trim() ||
+          isHttpsOllamaAddress(ollamaIp) ||
+          namedOllamaHosts.length >= MAX_NAMED_OLLAMA_HOSTS
+        }
+        onClick={() => {
+          const host = ollamaIp.trim();
+          if (!host) return;
+          const label = host.length > 24 ? `${host.slice(0, 21)}…` : host;
+          setNamedOllamaHosts((prev) => {
+            const next = prev.filter((h) => h.host !== host);
+            next.push({ label, host });
+            return next.slice(-MAX_NAMED_OLLAMA_HOSTS);
+          });
+          toaster.toast({ title: "Host saved", body: label, duration: 2500 });
+        }}
+        style={{ ...SETTINGS_GLASS_BTN, width: "100%", minHeight: 34 }}
+      >
+        Save current PC address as quick host
+      </Button>
+      </Focusable>
+    </PanelSectionRow>
+  </>
+);

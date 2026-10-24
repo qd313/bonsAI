@@ -94,6 +94,12 @@ jobs:
           curl -fsSL -o cli/decky "https://github.com/SteamDeckHomebrew/cli/releases/latest/download/decky-linux-x86_64"
           chmod +x cli/decky
 
+      # Decky's tool packs only a fixed list (dist, bin, py_modules, the contents of
+      # defaults/, LICENSE, README.md, main.py, package.json, plugin.json). NOTICE and the
+      # data/ files the back end reads reach the zip only by being staged into defaults/.
+      - name: Stage NOTICE and runtime data into defaults/
+        run: python3 scripts/stage_zip_extras.py
+
       - name: Build plugin zip
         run: sudo ./cli/decky plugin build "$GITHUB_WORKSPACE"
 

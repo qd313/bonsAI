@@ -1,6 +1,95 @@
-import { BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX } from "../../features/unified-input/constants";
-import { uiScalePx } from "./uiScalePx";
+/**
+ * Title: The Ask box and the row of suggestion chips under it
+ *
+ * Purpose: Styles two things that both need to span edge to edge, with no
+ * side gutter: the Ask bar (the typing box, whose own bottom strip holds the
+ * small Ask button since plan 84), and the sideways-scrolling row of
+ * suggested-prompt chips above it. It also draws each chip itself — its
+ * size, its text, and the small sliding animation that reveals the next
+ * batch of suggestions.
+ *
+ *     ┌────────────────────────────────────────┐
+ *     │  [chip]  [chip]        <- suggestions   │
+ *     ├────────────────────────────────────────┤
+ *     │  Ask something...                       │  <- the Ask bar
+ *     │  [📎] (game)      [mode] [mic] [Ask →]  │
+ *     └────────────────────────────────────────┘
+ *
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
+ *
+ * Does not: Style the text actually typed into the box — see section-5.ts
+ * for the typing field itself, or the icon row underneath it — see
+ * section-8.ts.
+ *
+ * How it works: one function returns the CSS text, roughly top to bottom
+ * of the dock: the edge-to-edge resets for the chip row and the question
+ * box; the spacing under the chip row (the dock's one row gap, plan 72; the
+ * box has none under it since plan 84, it is the last row); each chip's own size and
+ * label; the carousel's sliding track; the chip's focus bar and its
+ * out-of-chips flash. (The settings-results card that was drawn here moved to the Search tab, plan 92.) (The big Ask
+ * row's own width rules went with the row, plan 84.)
+ *
+ * What changed on 2026-09-17 (plan 60), and why, since three rules below
+ * only make sense together:
+ *
+ * A measurement on the Deck (workshop:test-evidence/plan60-measure-before.json)
+ * found two things nobody had realised.
+ *
+ * 1. The chips had no room under them at all — the bottom of a chip and
+ *    the top of the question box were the same line — in every animation
+ *    mode but fade. The design boards had assumed a gap everywhere. So
+ *    the chips looked crammed, and the soft shadow the chip gained in the
+ *    same plan could not be seen, because the row hides anything drawn
+ *    outside itself. The row now keeps 8px under the chips (5 for the
+ *    shadow, 3 clear); fade mode's own gap drops from 12 to 4 so its
+ *    total is unchanged; the sideways carousel takes 5px and gives the
+ *    same 5px back off its height, so the shadow shows and nothing moves.
+ *
+ * 2. Steam's white focus ring had never once been visible on a chip. It
+ *    is drawn 2 to 5px outside the button, the chip fills the row
+ *    exactly, and the row hides everything outside itself — so since
+ *    2026-09-01 a focused chip had shown only a thin blue line, which was
+ *    meant as a position marker, not a focus cue. The chips therefore
+ *    stopped taking that ring (gamepadAndPullModels.ts) and show a lit
+ *    bar along their own bottom edge instead, drawn inside the chip where
+ *    nothing can cut it off. The "ran out of chips" flash moved onto the
+ *    same bar. Since 2026-10-02 the resting cue is a pale blue fill, not a
+ *    bar, and only the flash still draws one.
+ *
+ * Both bar rules repeat the chip's resting hairline and drop shadow in
+ * their own list on purpose: box-shadow replaces the whole list rather
+ * than adding to it, so an effect left out is erased while that state
+ * lasts — the "two effects on the same edge can cancel each other"
+ * lesson in docs/lessons-learned.md.
+ *
+ * 3. Moving the flash onto the bar put the two rules in competition for
+ *    the first time, and the flash lost. The chip that flashes is always
+ *    the chip the D-pad is on, so the focus rule is styling it at the
+ *    same moment; both now set the same thing and insist on it, and a
+ *    longer selector wins. While the flash was a border colour and the
+ *    focus cue was a shadow, they never met. The flash rule therefore
+ *    names the whole path down to the chip — every chip sits in a slot
+ *    inside the focus root, so that reaches all of them — and keeps the
+ *    short form as a safety net. It must also stay below the focus rules
+ *    in this file: one of their arms is the same length, and in a tie the
+ *    later rule wins.
+ */
+import { BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX, DOCK_ROW_GAP_PX, PRESET_CHIP_SHADOW_ROOM_PX } from "../../shared/constants";
+import {
+  PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
+  PRESET_CHIP_GAP_PX,
+  PRESET_VISIBLE_SLOTS,
+} from "../../features/preset-carousel/presetRowLayout";
+import { buildPresetChipLabelCss } from "../../features/preset-carousel/presetChipLabel";
 
+/**
+ * In: nothing.
+ * Out: a block of CSS text.
+ * Can go wrong: nothing — this always returns the same fixed string, but
+ * see the comment above the PanelSection rule inside it for a case where
+ * a selector here can look correct and still match nothing on a real Deck.
+ */
 export function buildSection4Section(): string {
   return `
 /* ==========================================================================
@@ -11,8 +100,7 @@ export function buildSection4Section(): string {
           Row width tracks the tab scroll area; side inset lives on TabContentsScroll (BONSAI_PLUGIN_SIDE_PAD_PX).
           Do not use negative margins here — they cancel the scroll inset and hug the QAM edge.
         */
-        .bonsai-scope .bonsai-full-bleed-row,
-        .bonsai-scope .bonsai-ask-bleed-wrap.bonsai-full-bleed-row {
+        .bonsai-scope .bonsai-full-bleed-row {
           width: 100% !important;
           max-width: 100% !important;
           min-width: 0 !important;
@@ -34,110 +122,211 @@ export function buildSection4Section(): string {
           padding-right: 0 !important;
         }
 
+        /* The dock's last row since plan 84 (the big Ask row under it is now a button in its strip):
+           no gap under it, so those points go to the answer instead of the panel's bottom edge. */
         .bonsai-scope .bonsai-unified-input-host.bonsai-full-bleed-row {
-          margin-bottom: 2px !important;
+          margin-bottom: 0 !important;
         }
 
+        /*
+          Reach the PanelSection by structure, because its name cannot be matched on this build.
+
+          Measured on device 2026-08-16 (workshop:scripts/probe_deck_ask_row_width.py): inside the QAM,
+          \`[class*="PanelSection"]\` matches **0 elements** and \`.decky-qam-scope\` does not exist —
+          Steam ships hashed class names here (the PanelSection wrapping our rows is
+          \`_3gY0aBuNR8_NPTpXIYfkby\`), so every section-3 rule keyed on those names is inert. Only
+          \`_TabContentsScroll\` survives as a literal, which is why that one reset does work.
+
+          That PanelSection carries \`padding: 0 16px\`, and it was the entire remaining gutter —
+          probe V1 reported 15.99px on each side, against a 300px QAM column. Rows opting into
+          full bleed must not inherit it.
+
+          Matches the row wrapper holding a full-bleed row, and the section holding that
+          wrapper. :has() is verified supported on the Deck's CEF in the same run. Keyed on
+          .bonsai-full-bleed-row so only rows that asked for edge-to-edge are affected — other
+          tabs do not use that class.
+
+          The .bonsai-main-tab-column line: the Main tab wraps its rows in a fill column + bottom
+          dock (useMainTabColumnFill), which puts the PanelSection two divs further from its
+          full-bleed rows — out of range of both :has() patterns below. Without this line the
+          section's 16px side padding comes back on Main only, which is exactly the original bug.
+        */
+        .bonsai-scope div:has(> .bonsai-full-bleed-row),
+        .bonsai-scope div:has(> div > .bonsai-full-bleed-row),
+        .bonsai-scope div:has(> .bonsai-main-tab-column) {
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+        }
+
+        /* padding-bottom: 5px for the chip's soft shadow to land in (2026-09-17: there was no room
+           at all; file header, point 1). The negative margin leaves the dock's one row gap between
+           chip and question box, the same as under the box (plan 72); the box covers the rest. */
         .bonsai-scope .bonsai-preset-row-host {
           min-width: 0 !important;
           overflow: hidden !important;
           display: grid !important;
           gap: 8px !important;
+          margin-top: 0 !important;
+          padding-top: 0 !important;
+          padding-bottom: ${PRESET_CHIP_SHADOW_ROOM_PX}px !important;
+          margin-bottom: calc(${DOCK_ROW_GAP_PX}px - ${PRESET_CHIP_SHADOW_ROOM_PX}px) !important;
         }
 
+        /* Fade mode had 12px under its chips; since plan 72 it has the same row gap as every mode. */
         .bonsai-scope .bonsai-preset-row-host--fade-anim {
           gap: 3px !important;
-          margin-bottom: 12px !important;
+          margin-bottom: calc(${DOCK_ROW_GAP_PX}px - ${PRESET_CHIP_SHADOW_ROOM_PX}px) !important;
+          margin-top: 0 !important;
         }
 
-        .bonsai-scope button.bonsai-preset-glass {
-          max-width: 100% !important;
-          min-width: 0 !important;
-          overflow: hidden !important;
-        }
-        .bonsai-scope button.bonsai-preset-glass > div,
-        .bonsai-scope button.bonsai-preset-glass .bonsai-preset-chip-label {
-          max-width: 100% !important;
-          min-width: 0 !important;
-          overflow: hidden !important;
-          text-overflow: ellipsis !important;
-          white-space: nowrap !important;
-        }
+        ${buildPresetChipLabelCss()}
 
         .bonsai-scope .bonsai-chat-response-stack {
-          margin-top: ${uiScalePx(BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX)} !important;
+          margin-top: ${BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX}px !important;
         }
 
         .bonsai-scope .bonsai-preset-carousel-focus-root {
           width: 100% !important;
           min-width: 0 !important;
         }
-        .bonsai-scope .bonsai-preset-carousel-vertical {
+        /*
+          Chips side by side: PRESET_VISIBLE_SLOTS across one row, equal shares, a small gap. Two
+          rather than the drawing's three by decision D43 (2026-09-01): on the 300px column three
+          left ~12 characters per chip and two leave ~20. The row keeps the one-row height that the
+          2026-08-31 change bought (the block used to be three stacked rows, 118px of a 245px dock).
+          Width comes from flex, never from a measurement (design-language rule 4).
+        */
+        .bonsai-scope .bonsai-preset-across {
           display: flex !important;
-          flex-direction: column !important;
+          flex-direction: row !important;
+          gap: ${PRESET_CHIP_GAP_PX}px !important;
           width: 100% !important;
           min-width: 0 !important;
-          max-height: 118px !important;
+        }
+        .bonsai-scope .bonsai-preset-across > .bonsai-preset-carousel-slot {
+          flex: 1 1 0 !important;
+          min-width: 0 !important;
+        }
+        /*
+          Sideways carousel. The track holds the whole history (up to five chips) as a flex row and
+          the viewport clips it to one row's width; the chips outside the window are simply clipped
+          and still focusable, so a D-pad step onto one slides it into view. Each chip is an equal
+          share of the viewport, and the slide is a calc on the window-start index the component
+          writes to --bonsai-preset-window-start: one step is (100% + gap) / N, which is exactly one
+          chip plus one gap for any N. No pixel is ever measured.
+        */
+        /* This viewport hides anything outside itself too, so it clips the shadow in carousel mode
+           even after the row above gained room: 5px given, the same 5px taken back off its height,
+           so the shadow shows and nothing on screen moves. */
+        .bonsai-scope .bonsai-preset-carousel-viewport {
+          width: 100% !important;
+          min-width: 0 !important;
           overflow: hidden !important;
+          padding-bottom: 5px !important;
+          margin-bottom: -5px !important;
         }
         .bonsai-scope .bonsai-preset-carousel-track {
           display: flex !important;
-          flex-direction: column !important;
-          gap: 5px !important;
+          flex-direction: row !important;
+          gap: ${PRESET_CHIP_GAP_PX}px !important;
           width: 100% !important;
           min-width: 0 !important;
           will-change: transform !important;
+          /*
+            --bonsai-preset-visible-slots lets the "one suggestion chip" setting override the
+            window width per render (MainTabPresetAnimatedChips writes it alongside
+            --bonsai-preset-window-start); the fallback is PRESET_VISIBLE_SLOTS, the shipped
+            default, for the rare case nothing wrote the variable.
+          */
+          transform: translateX(
+            calc(-1 * var(--bonsai-preset-window-start, 0) * (100% + ${PRESET_CHIP_GAP_PX}px) / var(--bonsai-preset-visible-slots, ${PRESET_VISIBLE_SLOTS}))
+          ) !important;
         }
-        .bonsai-scope .bonsai-preset-carousel-vertical .bonsai-preset-carousel-slot--focus .bonsai-preset-glass {
-          border-color: rgba(56, 189, 248, 0.45) !important;
-        }
-
-        /* Settings search hits — same horizontal track as unified host so results line up under the textarea. */
-        .bonsai-scope .bonsai-main-search-results-pane {
-          width: 100% !important;
-          max-width: none !important;
+        .bonsai-scope .bonsai-preset-carousel-track > .bonsai-preset-carousel-slot {
+          flex: 0 0 calc((100% - ${PRESET_CHIP_GAP_PX}px * (var(--bonsai-preset-visible-slots, ${PRESET_VISIBLE_SLOTS}) - 1)) / var(--bonsai-preset-visible-slots, ${PRESET_VISIBLE_SLOTS})) !important;
           min-width: 0 !important;
-          margin-left: 0 !important;
-          margin-right: 0 !important;
-          box-sizing: border-box !important;
         }
+        /*
+          The soft blue fill on the chip the D-pad is on. It marks which chip a press would act on, and
+          it must never appear on a chip the D-pad has left: ungated, the old version of this sat on
+          a chip permanently, so with the D-pad up on the tab strip the screen still showed a
+          highlighted chip — the fake focus ring found on device 2026-08-28, which fooled the
+          maintainer and the QA rig at once. The gates are unchanged and exist for that reason.
 
-        /* Re-map width for specific askbar rows using CSS Variables with fallbacks */
-        .bonsai-scope .bonsai-ask-bleed-wrap.bonsai-full-bleed-row {
-          width: var(--bonsai-askbar-outer-width, var(--bonsai-search-host-width, 100%)) !important;
-          min-width: 0 !important;
-          margin-left: 0 !important;
-          margin-right: 0 !important;
+          Gate 1 and 2 say "the carousel owns Steam's ring": \`gpfocuswithin\` is what Steam stamps on
+          the ancestor Focusable, and the \`:has(.gpfocus)\` arm covers it directly in case Steam
+          stamps only the chip. Gate 3 keeps the marker on desktop, in the in-IDE preview and on
+          touch, where nothing owns a ring — the fallback \`elementHasGamepadFocus\` uses in
+          uiDocument.ts. The last two arms light the rows whose slots carry no --focus marker at
+          all (fade, static and decode), which get the same fill.
+
+          2026-09-17 (plan 60) changed what these gates draw, not when. See the file header,
+          point 2: the blue line round the chip became a lit bar inside its bottom edge. On 2026-10-02
+          the bar gave way to a pale blue tint laid over the chip's own gradient (the maintainer's
+          pick, "highlight 1"); the hairline and drop shadow stay in the list because box-shadow
+          replaces rather than adds. \`outline: none\` stops Steam's plain focus outline showing up clipped in its place.
+          The two help-chip arms out-rank section-6.ts's green help chip rule, which is as specific as
+          the plain \`.gpfocus\` arm and comes later, so it used to win (Deck, 2026-10-22: no change at all).
+        */
+        .bonsai-scope .bonsai-preset-carousel-focus-root.gpfocuswithin .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
+        .bonsai-scope .bonsai-preset-carousel-focus-root:has(.gpfocus) .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
+        :root:not(:has(.gpfocus)) .bonsai-scope .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
+        .bonsai-scope button.bonsai-preset-glass.gpfocus,
+        :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible,
+        .bonsai-scope button.bonsai-preset-help-chip.bonsai-preset-glass.gpfocus,
+        :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-help-chip.bonsai-preset-glass:focus-visible {
+          outline: none !important;
+          background: linear-gradient(rgba(56, 189, 248, 0.20), rgba(56, 189, 248, 0.20)), linear-gradient(180deg, rgba(56, 70, 84, 0.5) 0%, rgba(16, 22, 30, 0.55) 100%) !important;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 2px 3px rgba(0, 0, 0, 0.4) !important;
+        }
+        /* The label brightens with the fill, so the whole chip reads as the live one. Decode used to
+           be excluded here (its label owned its own colour); that rule is gone (bug fix
+           2026-09-19), so a focused decode chip now brightens like every other mode. */
+        .bonsai-scope .bonsai-preset-carousel-focus-root.gpfocuswithin .bonsai-preset-carousel-slot--focus .bonsai-preset-glass .bonsai-preset-chip-label,
+        .bonsai-scope .bonsai-preset-carousel-focus-root:has(.gpfocus) .bonsai-preset-carousel-slot--focus .bonsai-preset-glass .bonsai-preset-chip-label,
+        :root:not(:has(.gpfocus)) .bonsai-scope .bonsai-preset-carousel-slot--focus .bonsai-preset-glass .bonsai-preset-chip-label,
+        .bonsai-scope button.bonsai-preset-glass.gpfocus .bonsai-preset-chip-label,
+        :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible .bonsai-preset-chip-label {
+          color: #eef7fd !important;
         }
 
         /*
-          H1 fix: never tie min-width to --bonsai-search-host-width (measured px); that inflates tab
-          min-content and causes QAM horizontal spill. Ask inner width uses --bonsai-askbar-outer-width
-          (host + small extra) so the glass matches the unified field spill; max-width stays none so % parents do not clip it.
+          The "ran out of chips" edge cue (roadmap [chips], filed 2026-09-04). Left/Right already
+          claims the move at both row edges without moving anything (presetRowNav.ts's
+          onBlockedEdge, called only when the press was claimed-and-blocked, never when a pinned
+          batch pulled a new entry in) so Steam's own idea of "past the end" -- the Quick Access
+          rail -- never fires; the gap this closes is that the claimed-and-blocked press looked
+          identical on screen to a stall. usePresetRowNav (MainTabPresetAnimatedChips.tsx) flags the
+          one chip that claimed a blocked press with this class for
+          PRESET_CHIP_BLOCKED_EDGE_FLASH_MS, then clears it. Same cyan family as the other
+          focus-adjacent glows here and in gamepadAndPullModels.ts, so it is not a new colour.
+
+          Since 2026-09-17 (plan 60) the cue lives on the same bottom bar the focused chip already
+          shows: the bar flares brighter with a soft cyan glow under it, then settles back. Before,
+          it recoloured the border, which was the old focus marker, so the flash and the focus cue
+          looked alike. All four effects are repeated in one list because box-shadow replaces rather
+          than adds. No transform and no width change, so the chip's own box never grows. The long
+          first arm is not decoration, and this rule must stay below the bar rules: file header,
+          points 2 and 3.
+
+          A plain transition, not @keyframes: section-6.ts's base \`.bonsai-preset-glass\` rule sets
+          its own \`box-shadow: ... !important\`, and an animation cannot out-rank a static !important
+          declaration (only a transition can). It lives on this modifier rule alone, so removing the
+          class removes the transition and cannot touch the carousel's own dimmed/undimmed fade.
         */
-        .bonsai-scope .bonsai-askbar-row-host,
-        .bonsai-scope .bonsai-ask-bleed-wrap .bonsai-askbar-merged {
-          width: var(--bonsai-askbar-outer-width, var(--bonsai-search-host-width, 100%)) !important;
-          min-width: 0 !important;
-          max-width: none !important;
-          /* Left-edge correction (ASK bar shell starts inset from the unified input host).
-           * Applied via CSS var set in useUnifiedInputSurface; ref-set inline styles on the
-           * ask element get wiped by React re-renders, but scope-level vars persist. */
-          margin-left: var(--bonsai-ask-margin-left, 0px) !important;
+        .bonsai-scope .bonsai-preset-carousel-focus-root .bonsai-preset-carousel-slot button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge,
+        .bonsai-scope button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge {
+          transition: box-shadow ${Math.round(PRESET_CHIP_BLOCKED_EDGE_FLASH_MS * 0.45)}ms ease-out;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), inset 0 -2px 0 rgba(150, 225, 255, 1), 0 3px 8px -2px rgba(56, 189, 248, 0.55), 0 2px 3px rgba(0, 0, 0, 0.4) !important;
         }
-
-        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary.DialogButton,
-        .bonsai-scope .bonsai-ask-bleed-wrap .Panel.Focusable {
-          width: 100% !important;
-          max-width: none !important;
-          min-width: 0 !important;
+        /* Reduced motion: no ramp, just the same glow held for the same window and then removed
+           by the JS timeout -- a state change, not movement. Same two arms as above, scoped to the
+           flagged chip alone so it cannot silence any other control's transition. */
+        @media (prefers-reduced-motion: reduce) {
+          .bonsai-scope .bonsai-preset-carousel-focus-root .bonsai-preset-carousel-slot button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge,
+          .bonsai-scope button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge {
+            transition: none !important;
+          }
         }
-
-        .bonsai-scope .bonsai-ask-bleed-wrap,
-        .bonsai-scope .bonsai-ask-bleed-wrap .bonsai-askbar-merged {
-          flex: 1 1 auto !important;
-          align-self: stretch !important;
-        }
-
         `;
 }

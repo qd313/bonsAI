@@ -1,0 +1,275 @@
+{
+ "note": "Hand-written test chats for the summary wording tests (no real player text).",
+ "chats": {
+  "boss_fight": {
+   "id": "w-boss",
+   "origin_app_name": "Hollow Knight",
+   "origin_app_id": "367520",
+   "turns": [
+    {
+     "id": "boss-q0",
+     "role": "user",
+     "text": "How do I beat the False Knight? I keep dying in the second half.",
+     "app_name": "Hollow Knight",
+     "app_id": "0"
+    },
+    {
+     "id": "boss-a0",
+     "role": "assistant",
+     "text": "In the second half he slams the ground and sends out falling rocks, so stay near the middle and jump over the shockwave. Hit his head when he is stunned after a big swing and heal only when he is on the floor.",
+     "app_name": "Hollow Knight",
+     "app_id": "0"
+    },
+    {
+     "id": "boss-q1",
+     "role": "user",
+     "text": "What charm should I use for it?",
+     "app_name": "Hollow Knight",
+     "app_id": "0"
+    },
+    {
+     "id": "boss-a1",
+     "role": "assistant",
+     "text": "Two good picks are Quick Slash for faster hits and Steady Body so his hits do not knock you back as far. Stalwart Shell also helps while healing.",
+     "app_name": "Hollow Knight",
+     "app_id": "0"
+    },
+    {
+     "id": "boss-q2",
+     "role": "user",
+     "text": "I beat him! Where do I go next?",
+     "app_name": "Hollow Knight",
+     "app_id": "0"
+    },
+    {
+     "id": "boss-a2",
+     "role": "assistant",
+     "text": "Head back up and take the path right of Dirtmouth into the Forgotten Crossroads. Look for the Gruz Mother on the way if you want a quick fight.",
+     "app_name": "Hollow Knight",
+     "app_id": "0"
+    },
+    {
+     "id": "boss-q3",
+     "role": "user",
+     "text": "I am stuck on Hornet in Greenpath. She is too fast.",
+     "app_name": "Hollow Knight",
+     "app_id": "0"
+    },
+    {
+     "id": "boss-a3",
+     "role": "assistant",
+     "text": "Wait for her to throw the needle, then dash under it and strike twice. Keep your distance when she spins, and do not chase her across the room. Her second round has a ground sweep you can jump.",
+     "app_name": "Hollow Knight",
+     "app_id": "0"
+    },
+    {
+     "id": "boss-q4",
+     "role": "user",
+     "text": "Please keep answers short, I am playing on the Deck.",
+     "app_name": "Hollow Knight",
+     "app_id": "0"
+    },
+    {
+     "id": "boss-a4",
+     "role": "assistant",
+     "text": "Understood, short answers from now on.",
+     "app_name": "Hollow Knight",
+     "app_id": "0"
+    },
+    {
+     "id": "boss-q5",
+     "role": "user",
+     "text": "What does the Mantis Claw do and where is it?",
+     "app_name": "Hollow Knight",
+     "app_id": "0"
+    },
+    {
+     "id": "boss-a5",
+     "role": "assistant",
+     "text": "It lets you climb walls by sliding down and jumping off them. It is in Mantis Village, in the Fungal Wastes, after you deal with the Mantis Lords or find the path through.",
+     "app_name": "Hollow Knight",
+     "app_id": "0"
+    }
+   ],
+   "summary": null
+  },
+  "no_game": {
+   "id": "w-nogame",
+   "origin_app_name": "",
+   "origin_app_id": "",
+   "turns": [
+    {
+     "id": "nogame-q0",
+     "role": "user",
+     "text": "How can I get better at timing parries in games with fast enemies?",
+     "app_name": "",
+     "app_id": "0"
+    },
+    {
+     "id": "nogame-a0",
+     "role": "assistant",
+     "text": "Pick one slow enemy and drill its single attack until the timing is automatic. Learn the sound cue, not just the animation, and use a training area if the game has one.",
+     "app_name": "",
+     "app_id": "0"
+    },
+    {
+     "id": "nogame-q1",
+     "role": "user",
+     "text": "Should I use a controller or keyboard for that?",
+     "app_name": "",
+     "app_id": "0"
+    },
+    {
+     "id": "nogame-a1",
+     "role": "assistant",
+     "text": "A controller is usually easier for timing because the button is under your thumb. Either works once you know the rhythm.",
+     "app_name": "",
+     "app_id": "0"
+    },
+    {
+     "id": "nogame-q2",
+     "role": "user",
+     "text": "Any general tips for getting better at boss fights?",
+     "app_name": "",
+     "app_id": "0"
+    },
+    {
+     "id": "nogame-a2",
+     "role": "assistant",
+     "text": "Watch the first two attempts and do not attack. Learn the pattern, then add one hit per opening. Heal only after the boss finishes a move.",
+     "app_name": "",
+     "app_id": "0"
+    },
+    {
+     "id": "nogame-q3",
+     "role": "user",
+     "text": "How long should I practise each day?",
+     "app_name": "",
+     "app_id": "0"
+    },
+    {
+     "id": "nogame-a3",
+     "role": "assistant",
+     "text": "Short sessions of twenty to thirty minutes work better than long ones, because you stay focused and can notice what changed.",
+     "app_name": "",
+     "app_id": "0"
+    }
+   ],
+   "summary": null
+  },
+  "performance": {
+   "id": "w-perf",
+   "origin_app_name": "Deep Rock Galactic",
+   "origin_app_id": "548430",
+   "turns": [
+    {
+     "id": "perf-q0",
+     "role": "user",
+     "text": "The game stutters on my Steam Deck, what settings should I lower?",
+     "app_name": "Deep Rock Galactic",
+     "app_id": "0"
+    },
+    {
+     "id": "perf-a0",
+     "role": "assistant",
+     "text": "Set the Steam Deck frame limit to 40 and lower shadows and effects to medium. Turn off motion blur. Those three changes remove most of the stutter.",
+     "app_name": "Deep Rock Galactic",
+     "app_id": "0"
+    },
+    {
+     "id": "perf-q1",
+     "role": "user",
+     "text": "What TDP should I use?",
+     "app_name": "Deep Rock Galactic",
+     "app_id": "0"
+    },
+    {
+     "id": "perf-a1",
+     "role": "assistant",
+     "text": "A TDP limit of 10 watts is a good start. Raise it to 12 only if the frame rate still dips in big fights.",
+     "app_name": "Deep Rock Galactic",
+     "app_id": "0"
+    },
+    {
+     "id": "perf-q2",
+     "role": "user",
+     "text": "Battery lasts only an hour and a half. Is that normal?",
+     "app_name": "Deep Rock Galactic",
+     "app_id": "0"
+    },
+    {
+     "id": "perf-a2",
+     "role": "assistant",
+     "text": "Yes for a demanding game at full speed. Lock the frame rate to 40, drop the screen brightness a little, and set TDP to 8 to 10 watts to stretch it past two hours.",
+     "app_name": "Deep Rock Galactic",
+     "app_id": "0"
+    },
+    {
+     "id": "perf-q3",
+     "role": "user",
+     "text": "Does FSR help here?",
+     "app_name": "Deep Rock Galactic",
+     "app_id": "0"
+    },
+    {
+     "id": "perf-a3",
+     "role": "assistant",
+     "text": "FSR 1 at Balanced is a good choice. It trades a little sharpness for a steadier frame rate.",
+     "app_name": "Deep Rock Galactic",
+     "app_id": "0"
+    },
+    {
+     "id": "perf-q4",
+     "role": "user",
+     "text": "Okay, the stutter is mostly gone. The shaders keep recompiling though.",
+     "app_name": "Deep Rock Galactic",
+     "app_id": "0"
+    },
+    {
+     "id": "perf-a4",
+     "role": "assistant",
+     "text": "That is the shader cache rebuilding after a driver or game update. Let it finish once and it should stay quiet. Do not delete the shader cache folder unless a game is crashing.",
+     "app_name": "Deep Rock Galactic",
+     "app_id": "0"
+    }
+   ],
+   "summary": null
+  },
+  "very_short": {
+   "id": "w-short",
+   "origin_app_name": "Hades",
+   "origin_app_id": "1145360",
+   "turns": [
+    {
+     "id": "short-q0",
+     "role": "user",
+     "text": "Who is the first boss in Hades?",
+     "app_name": "Hades",
+     "app_id": "0"
+    },
+    {
+     "id": "short-a0",
+     "role": "assistant",
+     "text": "The Fury Megaera usually, in Tartarus. Watch her fire and the dash she does before the sweep.",
+     "app_name": "Hades",
+     "app_id": "0"
+    },
+    {
+     "id": "short-q1",
+     "role": "user",
+     "text": "Thanks, how do I dodge it?",
+     "app_name": "Hades",
+     "app_id": "0"
+    },
+    {
+     "id": "short-a1",
+     "role": "assistant",
+     "text": "Dash through the fire orbs, never away from them, and strike her right after she lands.",
+     "app_name": "Hades",
+     "app_id": "0"
+    }
+   ],
+   "summary": null
+  }
+ }
+}

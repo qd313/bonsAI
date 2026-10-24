@@ -1,0 +1,482 @@
+/**
+ * Title: The list of models the Pull Models screen can offer
+ *
+ * Purpose: The Pull Models screen lets the user browse and download AI
+ * models to run on their own computer or Deck. This file is the built-in
+ * list behind that screen: for every model, its Ollama download name, how
+ * big the download is, when it was released, its license and license class
+ * (open-source, open-weight, or neither), which group it belongs in ("Deck
+ * essentials", "More models", "Expert (large)", "Specialist"), what it is
+ * good at (chat, vision, OCR, strategy, coding), a 1-6 star Deck-fit rating,
+ * and a one-line description.
+ *
+ * Used for: the Pull Models screen itself, the model-order screen used to
+ * pick which model is tried first, and anywhere else that needs to know
+ * what a given Ollama tag is or what it is good for.
+ *
+ * Solves: one shipped, offline-safe list built into the plugin, so Pull
+ * Models still has something to show with no internet connection, or before
+ * a fresher list has ever been downloaded.
+ *
+ * Does not: fetch anything live, or stay perfectly current forever. This
+ * file is the list itself; a model is added, changed or removed here, in
+ * a plugin update.
+ *
+ * How it works: (1) the types and the four group ids come first — essentials,
+ * smallest ("More models"), stretch ("Expert (large)"), specialist; (2) small
+ * lookup helpers used by the Pull Models screen and its recommendation logic
+ * (`isEmbeddingOnlyTag`, `isDeckDailyPullModel`, `isDeckEssentialsPullModel`);
+ * (3) `PULL_MODEL_CATALOG` itself, the flat list of entries, grouped in the
+ * source file the same way the screen groups them even though the screen
+ * re-sorts within each group; (4) two comparators the screen sorts a group
+ * with — `comparePullModelEntriesNewestFirst` for every group except stretch,
+ * and `comparePullModelEntriesStretchOrder` for the stretch ("Expert (large)")
+ * group alone, which orders its five bake-off candidates by a fixed ranking
+ * (workshop:planning/41-deck-model-survey.md § 9) instead of by release date, with
+ * anything else in that group falling back to newest-first after them; (5) a
+ * handful of small formatting helpers for the screen (star rating, size, tag
+ * list, short date).
+ */
+export type PullModelLicenseClass = "foss" | "open_weight" | "non_foss" | "unknown";
+
+export type PullModelUseTag = "chat" | "vision" | "ocr" | "strategy" | "coding";
+
+export type PullModelGroup = "essentials" | "smallest" | "stretch" | "specialist";
+
+export interface PullModelEntry {
+  tag: string;
+  params: string;
+  sizeGb: number;
+  /** Public model-family release month (YYYY-MM), not Ollama tag publish date. */
+  releasedYm: string;
+  license: string;
+  licenseClass: PullModelLicenseClass;
+  group: PullModelGroup;
+  tags: ReadonlyArray<PullModelUseTag>;
+  rating: 1 | 2 | 3 | 4 | 5 | 6;
+  blurb: string;
+}
+
+export const PULL_MODEL_GROUP_LABELS: Record<PullModelGroup, string> = {
+  essentials: "Deck essentials",
+  smallest: "More models",
+  stretch: "Expert (large)",
+  specialist: "Specialist",
+};
+
+export const PULL_MODEL_GROUP_ORDER: readonly PullModelGroup[] = [
+  "essentials",
+  "smallest",
+  "stretch",
+  "specialist",
+];
+
+/**
+ * The four "Good for" filters offered in the models screen's filters column (plan 62, § 3d; a
+ * column since plan 91). Replaces the old single-select filter row (all/speed/strategy/expert/vision/coding):
+ * "All" is gone because these are independent tickable rows now (ticking none shows every mode),
+ * and "Coding" was dropped on purpose — nothing in the catalog is coding-only and no Ask mode
+ * matches it. A model matches this group when it fits *any* ticked mode (OR, not AND).
+ */
+export const PULL_MODEL_MODE_FILTER_OPTIONS = [
+  { id: "speed", label: "Speed" },
+  { id: "strategy", label: "Strategy" },
+  { id: "expert", label: "Expert" },
+  { id: "vision", label: "Vision" },
+] as const;
+
+export type PullModelModeFilterId = (typeof PULL_MODEL_MODE_FILTER_OPTIONS)[number]["id"];
+
+/** Pull models table header — curated 1–6 ★ score for quality/fit on Steam Deck. */
+export const PULL_MODEL_RATING_COLUMN_LABEL = "Deck fit";
+
+/** Daily-driver picks — stretch (Expert large) models may run but are slow on Deck CPU/RAM. */
+/**
+ * An installed tag that can only turn text into vectors, never answer a question.
+ *
+ * Used to keep the pull picker from offering **Use for Ask** on one. Found on the Deck
+ * 2026-09-05 (PULL-PIN-01): `nomic-embed-text:latest` is installed to serve the knowledge base
+ * and carried the same star as a chat model, so one press would have pointed Ask at something
+ * that cannot reply.
+ *
+ * Name-based on purpose. These models are not in the curated catalogue — that is exactly why
+ * they land in the "other installed" list — so there is no `modes` field to read, and Ollama's
+ * own tag listing does not say what a model is *for*.
+ */
+export function isEmbeddingOnlyTag(tag: string): boolean {
+  return /embed/i.test(tag);
+}
+
+export function isDeckDailyPullModel(entry: PullModelEntry): boolean {
+  return entry.group !== "stretch";
+}
+
+/** One-pull Deck presets shown by default in Browse models. */
+export function isDeckEssentialsPullModel(entry: PullModelEntry): boolean {
+  return entry.group === "essentials";
+}
+
+export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
+  {
+    tag: "qwen2.5vl:3b",
+    params: "3B",
+    sizeGb: 3.2,
+    releasedYm: "2025-01",
+    license: "Qwen Research (3B size)",
+    licenseClass: "open_weight",
+    group: "essentials",
+    tags: ["chat", "vision", "ocr", "strategy"],
+    rating: 6,
+    blurb:
+      "Small chat, screenshots, OCR, and Strategy mode in one pull. Not open source: Qwen's own card gives the 3B size the Qwen Research license (research use only), so it needs the open-weight setting.",
+  },
+  {
+    tag: "qwen3.5:4b",
+    params: "4B",
+    sizeGb: 3.4,
+    releasedYm: "2026-02",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "essentials",
+    tags: ["chat", "vision", "ocr", "strategy"],
+    rating: 6,
+    blurb:
+      "FOSS native multimodal — an open-source-tier vision model beside gemma4:e2b-it-qat.",
+  },
+  {
+    tag: "gemma4:e2b-it-qat",
+    params: "E2B",
+    sizeGb: 4.3,
+    releasedYm: "2026-04",
+    license: "Apache 2.0 (Gemma)",
+    licenseClass: "foss",
+    group: "essentials",
+    tags: ["chat", "vision", "ocr", "strategy"],
+    rating: 6,
+    blurb: "Tier 1 one-model multimodal — Gemma 4 edge QAT, Apache 2.0 since April 2026.",
+  },
+  {
+    tag: "qwen3:4b",
+    params: "4B",
+    sizeGb: 2.5,
+    releasedYm: "2025-04",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "smallest",
+    tags: ["strategy", "chat"],
+    rating: 5,
+    blurb: 'Optional strategy specialist; optional "thinking" mode.',
+  },
+  {
+    tag: "qwen2.5:7b",
+    params: "7B",
+    sizeGb: 4.7,
+    releasedYm: "2024-09",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "smallest",
+    tags: ["chat", "strategy"],
+    rating: 5,
+    blurb: "Stronger FOSS text when essentials feel too small.",
+  },
+  {
+    tag: "llava:7b",
+    params: "7B",
+    sizeGb: 4.7,
+    releasedYm: "2024-01",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "smallest",
+    tags: ["vision", "ocr"],
+    rating: 4,
+    blurb: "Legacy vision fallback — pinned tag avoids ambiguous `llava:latest` pulls.",
+  },
+  {
+    tag: "gemma4:latest",
+    params: "E4B",
+    sizeGb: 9.6,
+    releasedYm: "2026-04",
+    license: "Apache 2.0 (Gemma)",
+    licenseClass: "foss",
+    group: "smallest",
+    tags: ["chat", "vision"],
+    rating: 4,
+    blurb: "Same as gemma4:e4b on Ollama — heavier than e2b-it-qat; Tier 1, Apache 2.0.",
+  },
+  {
+    tag: "gemma3:4b",
+    params: "4B",
+    sizeGb: 3.3,
+    releasedYm: "2025-03",
+    license: "Gemma Terms",
+    licenseClass: "open_weight",
+    group: "smallest",
+    tags: ["chat", "vision"],
+    rating: 4,
+    blurb: "Older Gemma multimodal — superseded by Gemma 4 edge tags.",
+  },
+  {
+    tag: "qwen3:1.7b",
+    params: "1.7B",
+    sizeGb: 1.4,
+    releasedYm: "2025-04",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "smallest",
+    tags: ["strategy", "chat"],
+    rating: 5,
+    blurb: "Punchy reasoning at 1B-class speed; great fallback if 4b feels slow.",
+  },
+  {
+    tag: "gemma3:1b",
+    params: "1B",
+    sizeGb: 0.8,
+    releasedYm: "2025-03",
+    license: "Gemma Terms",
+    licenseClass: "open_weight",
+    group: "smallest",
+    tags: ["chat"],
+    rating: 4,
+    blurb: "Smallest serious chat; text-only.",
+  },
+  {
+    tag: "qwen2.5:3b",
+    params: "3B",
+    sizeGb: 1.9,
+    releasedYm: "2024-09",
+    license: "Qwen Research (3B size)",
+    licenseClass: "open_weight",
+    group: "smallest",
+    tags: ["chat"],
+    rating: 5,
+    blurb: "Fast text-only fallback. Not open source: Qwen's own card gives the 3B size the Qwen Research license, so it needs the open-weight setting.",
+  },
+  {
+    tag: "qwen2.5:1.5b",
+    params: "1.5B",
+    sizeGb: 1.0,
+    releasedYm: "2024-09",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "smallest",
+    tags: ["chat"],
+    rating: 3,
+    blurb: "Ultra-light text; deprioritized in Ask chains.",
+  },
+  {
+    tag: "llama3.2:3b",
+    params: "3B",
+    sizeGb: 2.0,
+    releasedYm: "2024-09",
+    license: "Llama 3.2",
+    licenseClass: "open_weight",
+    group: "smallest",
+    tags: ["chat"],
+    rating: 5,
+    blurb: "Default fast generic chat; standard baseline at 2 GB.",
+  },
+  {
+    tag: "llama3.2:1b",
+    params: "1B",
+    sizeGb: 1.3,
+    releasedYm: "2024-09",
+    license: "Llama 3.2",
+    licenseClass: "open_weight",
+    group: "smallest",
+    tags: ["chat"],
+    rating: 5,
+    blurb: "Ultra-fast tiny chat; instant, weaker on multi-step reasoning.",
+  },
+  {
+    tag: "moondream",
+    params: "1.8B",
+    sizeGb: 1.7,
+    releasedYm: "2024-03",
+    license: "Apache 2.0",
+    licenseClass: "unknown",
+    group: "smallest",
+    tags: ["vision", "ocr"],
+    rating: 4,
+    blurb: "Tiniest practical vision model; great companion to a chat model.",
+  },
+  {
+    tag: "qwen2.5:14b",
+    params: "14B",
+    sizeGb: 9.0,
+    releasedYm: "2024-09",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "stretch",
+    tags: ["strategy", "chat"],
+    rating: 4,
+    blurb: "Strongest FOSS text that may fit 16 GB — slower on Deck CPU.",
+  },
+  {
+    tag: "minicpm-v:8b",
+    params: "8B",
+    sizeGb: 5.5,
+    releasedYm: "2024-08",
+    license: "MiniCPM",
+    licenseClass: "unknown",
+    group: "stretch",
+    tags: ["vision", "ocr"],
+    rating: 4,
+    blurb: "Heavy-duty OCR of menus/UI strings; tight on Deck RAM but one-shot OK.",
+  },
+  {
+    tag: "llama3.2-vision:11b",
+    params: "11B",
+    sizeGb: 7.8,
+    releasedYm: "2024-09",
+    license: "Llama 3.2",
+    licenseClass: "open_weight",
+    group: "stretch",
+    tags: ["vision", "ocr"],
+    rating: 3,
+    blurb: "High-quality screenshot reasoning when latency doesn't matter.",
+  },
+  {
+    tag: "gemma4:12b-it-qat",
+    params: "12B",
+    sizeGb: 7.2,
+    releasedYm: "2026-06",
+    license: "Apache 2.0 (Gemma)",
+    licenseClass: "foss",
+    group: "stretch",
+    tags: ["chat", "vision", "ocr", "strategy"],
+    rating: 3,
+    blurb: "Sept 2026 bake-off's top Expert pick — best facts of the five, but the largest download and tightest RAM fit.",
+  },
+  {
+    tag: "qwen3.5:9b",
+    params: "9B",
+    sizeGb: 6.6,
+    releasedYm: "2026-03",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "stretch",
+    tags: ["chat", "vision", "ocr", "strategy"],
+    rating: 4,
+    blurb: "Bake-off runner-up — strong facts and vision in a lighter load than the 12B Gemma.",
+  },
+  {
+    tag: "granite4.2:8b",
+    params: "8B",
+    sizeGb: 5.3,
+    releasedYm: "2026-08",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "stretch",
+    tags: ["chat", "strategy"],
+    rating: 4,
+    blurb: "Bake-off third place — no vision, but the safest RAM fit of the stronger Expert picks.",
+  },
+  {
+    tag: "gemma4:e4b-it-qat",
+    params: "E4B",
+    sizeGb: 6.1,
+    releasedYm: "2026-04",
+    license: "Apache 2.0 (Gemma)",
+    licenseClass: "foss",
+    group: "stretch",
+    tags: ["chat", "vision", "ocr", "strategy"],
+    rating: 4,
+    blurb: "QAT Gemma 4, one size up from today's default — same vision and Strategy support, heavier RAM.",
+  },
+  {
+    tag: "lfm2.5:8b",
+    params: "8B-A1B",
+    sizeGb: 5.2,
+    releasedYm: "2026-05",
+    license: "LFM Open License v1.0",
+    licenseClass: "open_weight",
+    group: "stretch",
+    tags: ["chat", "strategy"],
+    rating: 4,
+    blurb: "Always-thinking Liquid model — strong reasoning scores, text only, no vision.",
+  },
+  {
+    tag: "deepseek-r1:1.5b",
+    params: "1.5B",
+    sizeGb: 1.1,
+    releasedYm: "2025-01",
+    license: "MIT",
+    licenseClass: "open_weight",
+    group: "specialist",
+    tags: ["strategy"],
+    rating: 4,
+    blurb: "Cheap reasoning specialist for math/logic; verbose CoT slow on CPU.",
+  },
+  {
+    tag: "llava-phi3",
+    params: "3.8B",
+    sizeGb: 2.9,
+    releasedYm: "2024-04",
+    license: "MIT",
+    licenseClass: "foss",
+    group: "specialist",
+    tags: ["vision"],
+    rating: 4,
+    blurb: "Compact MIT-licensed vision alternative.",
+  },
+  {
+    tag: "qwen2.5-coder:3b",
+    params: "3B",
+    sizeGb: 1.9,
+    releasedYm: "2024-11",
+    license: "Qwen Research (3B size)",
+    licenseClass: "open_weight",
+    group: "specialist",
+    tags: ["coding"],
+    rating: 3,
+    blurb: "Coding/tool-use bonus; low priority for a gamer unless scripting.",
+  },
+] as const;
+
+/** Sort catalog entries newest-first within a group. */
+export function comparePullModelEntriesNewestFirst(a: PullModelEntry, b: PullModelEntry): number {
+  const byDate = b.releasedYm.localeCompare(a.releasedYm);
+  if (byDate !== 0) return byDate;
+  return a.tag.localeCompare(b.tag);
+}
+
+/**
+ * Locked order for the Expert (large) group, strongest first: the models that beat
+ * today's Gemma 4 on the September 2026 answer test, in the maintainer's own bake-off
+ * ranking (workshop:planning/41-deck-model-survey.md § 9, D73).
+ */
+const PULL_MODEL_STRETCH_BAKEOFF_ORDER: readonly string[] = [
+  "gemma4:12b-it-qat", "qwen3.5:9b", "granite4.2:8b", "gemma4:e4b-it-qat", "lfm2.5:8b",
+];
+
+/**
+ * Sort the Expert (large) group by the bake-off order above. Any stretch-group entry
+ * not in that list (an older stretch pick, or one added later without a measured rank)
+ * sorts after all five, newest first — the same fallback every other group uses.
+ */
+export function comparePullModelEntriesStretchOrder(a: PullModelEntry, b: PullModelEntry): number {
+  const aRank = PULL_MODEL_STRETCH_BAKEOFF_ORDER.indexOf(a.tag);
+  const bRank = PULL_MODEL_STRETCH_BAKEOFF_ORDER.indexOf(b.tag);
+  const aKey = aRank === -1 ? PULL_MODEL_STRETCH_BAKEOFF_ORDER.length : aRank;
+  const bKey = bRank === -1 ? PULL_MODEL_STRETCH_BAKEOFF_ORDER.length : bRank;
+  if (aKey !== bKey) return aKey - bKey;
+  return comparePullModelEntriesNewestFirst(a, b);
+}
+
+export function formatSizeGb(gb: number): string {
+  if (gb < 0.1) return "< 0.1 GB";
+  return `${gb.toFixed(gb >= 10 ? 0 : 1)} GB`;
+}
+
+export function formatGtaStars(rating: number): string {
+  const n = Math.max(1, Math.min(6, Math.round(rating)));
+  return "★".repeat(n);
+}
+
+export function formatPullModelTags(tags: ReadonlyArray<PullModelUseTag>): string {
+  return tags.map((t) => t.charAt(0).toUpperCase() + t.slice(1)).join(" · ");
+}
+
+export function bytesToGb(bytes: number): number {
+  return bytes / (1024 * 1024 * 1024);
+}

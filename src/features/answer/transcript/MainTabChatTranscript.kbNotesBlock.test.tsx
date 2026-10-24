@@ -1,0 +1,945 @@
+/**
+ * Title: The "From the notes" block
+ * Purpose: Pin the block plan 58 phase 1 adds under a reply that used a note or a shared tip:
+ *          closed by default, the header naming the note and where it came from in the three
+ *          wordings the plan sets, the note's own words kept as lines when opened, and the block
+ *          staying off a reply with nothing attached or one still hidden behind its own spoiler.
+ * Used for: MainTabChatTranscript.tsx.
+ * Does not: Prove any of it on the device, or prove the live-before-completion wiring end to
+ *           end — that still needs one line in main.py outside this lane's file list (see
+ *           MainTabChatTranscriptProps.liveThinking's own doc comment). This file proves
+ *           the screen side is ready for it: given the same shape a poll would carry, the block
+ *           renders before the reply is done.
+ */
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { render, fireEvent } from "@testing-library/react";
+import { vi } from "vitest";
+
+/*
+ * Nearly every case here is about how the block draws and where the ring goes, not about which
+ * notes an answer used -- that rule has its own tests on real saved answers
+ * (kbNoteUsedByAnswer.test.ts). So the rule counts every attached note as used here, which is what
+ * the block did before the rule existed, except in the one describe below that turns it back on to
+ * prove the transcript really applies it.
+ */
+const usedRule = vi.hoisted(() => ({ countEveryNote: true }));
+vi.mock("../../knowledge-library/kbNoteUsedByAnswer", async (importOriginal) => {
+  const real = await importOriginal<typeof import("../../knowledge-library/kbNoteUsedByAnswer")>();
+  return {
+    ...real,
+    kbNotesUsedByAnswer: (...args: Parameters<typeof real.kbNotesUsedByAnswer>) =>
+      usedRule.countEveryNote ? args[0] : real.kbNotesUsedByAnswer(...args),
+  };
+});
+
+import {
+  MainTabChatTranscript,
+  focusKbNotesBlock,
+  focusUpPastLiveKbNotesBlock,
+  focusUpPastSessionContextStripKbNotesBlock,
+} from "./MainTabChatTranscript";
+import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
+import { resetSpoilerFenceOpenCountForTests } from "../markdown/MainTabBonsaiAiMarkdownChunk";
+import type { AskThreadCollapsedTurn } from "../../../types/bonsaiUi";
+import type { KbAttachedNote } from "../../../types/inputTransparency";
+
+vi.mock("@decky/ui", async () => import("../../../test-harness/fakeDeckyUi"));
+
+function note(overrides: Partial<KbAttachedNote> = {}): KbAttachedNote {
+  return {
+    name: "Starting out in Pikmin 2",
+    kind: "mechanic",
+    card: "There is no day limit this time.",
+    trust_tier: "wiki_verified",
+    source_host: "www.pikminwiki.com",
+    source_license: "CC-BY-SA-4.0",
+    domain: "strategy",
+    game_title: "Pikmin 2",
+    ...overrides,
+  };
+}
+
+function baseProps(overrides: Partial<MainTabChatTranscriptProps> = {}): MainTabChatTranscriptProps {
+  return {
+    fullBleedRowStyle: {},
+    isAsking: false,
+    selectedAttachment: null,
+    ollamaContext: {} as MainTabChatTranscriptProps["ollamaContext"],
+    unifiedInput: "",
+    showSlowWarning: false,
+    latencyWarningSeconds: 30,
+    ollamaResponse: "",
+    elapsedSeconds: null,
+    lastApplied: null,
+    canSaveDesktopNote: false,
+    onOpenDesktopNoteSave: () => {},
+    askMode: "strategy",
+    askThreadCollapsed: [],
+    expandedTurnKey: null,
+    askThreadDisplayQuestion: "",
+    lastExchange: null,
+    ...overrides,
+  };
+}
+
+function archivedTurnProps(
+  turn: AskThreadCollapsedTurn,
+  overrides: Partial<MainTabChatTranscriptProps> = {}
+): MainTabChatTranscriptProps {
+  return baseProps({
+    askThreadCollapsed: [turn],
+    expandedTurnKey: turn.id,
+    ...overrides,
+  });
+}
+
+function block(container: HTMLElement): HTMLElement | null {
+  return container.querySelector(".bonsai-kb-notes-block");
+}
+
+describe("the block on an archived reply", () => {
+  it("shows one line closed by default, naming the note and a wiki by everyday name", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "is there a day limit in pikmin 2",
+      answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note()],
+      },
+    };
+    const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+    const el = block(container);
+    expect(el).not.toBeNull();
+    expect(el?.textContent).toContain("Starting out in Pikmin 2");
+    expect(el?.textContent).toContain("From the Pikmin wiki");
+    // Closed: the note's own words are not on screen yet.
+    expect(el?.textContent).not.toContain("There is no day limit");
+  });
+
+  it("opens on a press, showing the note's own words, and closes again on a second press", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "is there a day limit in pikmin 2",
+      answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note()],
+      },
+    };
+    const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+    fireEvent.click(block(container) as HTMLElement);
+    expect(block(container)?.textContent).toContain("There is no day limit this time.");
+
+    fireEvent.click(block(container) as HTMLElement);
+    expect(block(container)?.textContent).not.toContain("There is no day limit");
+  });
+
+  it("does not render at all when nothing was attached", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "q",
+      answer: "a",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: false, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [],
+      },
+    };
+    const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+    expect(block(container)).toBeNull();
+  });
+
+  it("does not render on a turn saved before this field existed", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "q",
+      answer: "a",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+      },
+    };
+    const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+    expect(block(container)).toBeNull();
+  });
+});
+
+describe("the header's three source wordings", () => {
+  function withNote(n: Partial<KbAttachedNote>) {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "q",
+      answer: "a",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note(n)],
+      },
+    };
+    return render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+  }
+
+  it("names a known wiki host by its everyday name", () => {
+    const { container } = withNote({ source_host: "hollowknight.wiki", name: "Broken Vessel" });
+    expect(block(container)?.textContent).toContain("From the Hollow Knight wiki");
+  });
+
+  it("still credits an unlisted host by its address", () => {
+    const { container } = withNote({ source_host: "example.fandom.com" });
+    expect(block(container)?.textContent).toContain("From example.fandom.com");
+  });
+
+  it("says there is no source when the note has none", () => {
+    const { container } = withNote({ source_host: "", name: "Exploder", domain: "strategy" });
+    expect(block(container)?.textContent).toContain("From bonsAI's own note");
+  });
+
+  it("names a shared tip separately from a strategy note, even with no source_host", () => {
+    const { container } = withNote({ source_host: "", domain: "compat", name: "proton", game_title: "" });
+    expect(block(container)?.textContent).toContain("From the shared Deck tips");
+    expect(block(container)?.textContent).not.toContain("no source");
+  });
+
+  it("says a game's own tip is that game's, not a shared one (plan 70's Render Scale tip)", () => {
+    // The back end sets `game_title` on a tip only when the tip belongs to one game.
+    const { container } = withNote({
+      source_host: "steamcommunity.com",
+      domain: "compat",
+      name: "display",
+      game_title: "Deep Rock Galactic: Survivor",
+    });
+    expect(block(container)?.textContent).toContain("From this game's Deck tips");
+    expect(block(container)?.textContent).not.toContain("shared");
+  });
+});
+
+describe("labelled lines", () => {
+  it("keeps Summary / Weak points / Tips as separate lines, labels bolded", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "q",
+      answer: "a",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [
+          note({
+            name: "Exploder",
+            domain: "strategy",
+            source_host: "",
+            card:
+              "Summary: Large orange glyphids that walk into you and detonate in a wide blast.\n" +
+              "Weak points: Fragile, and the blasts chain, so one popped early clears the group behind it.\n" +
+              "Tips: Weapons fire themselves, so it dies where you stand - keep distance.",
+          }),
+        ],
+      },
+    };
+    const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+    fireEvent.click(block(container) as HTMLElement);
+    const bolds = Array.from(block(container)?.querySelectorAll("b") ?? []).map((b) => b.textContent);
+    expect(bolds).toContain("Summary:");
+    expect(bolds).toContain("Weak points:");
+    expect(bolds).toContain("Tips:");
+    expect(block(container)?.textContent).toContain(
+      "Fragile, and the blasts chain, so one popped early clears the group behind it."
+    );
+  });
+});
+
+describe("several notes attached to one reply", () => {
+  it("names the first in the closed header, with a count of the rest, and lists each name when open", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "q",
+      answer: "a",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [
+          note({ name: "False Knight", card: "The armoured maggot." }),
+          note({ name: "Hornet in Greenpath", card: "The fight for the dash." }),
+        ],
+      },
+    };
+    const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+    expect(block(container)?.textContent).toContain("False Knight");
+    expect(block(container)?.textContent).toContain("(+1 more)");
+    fireEvent.click(block(container) as HTMLElement);
+    expect(block(container)?.textContent).toContain("Hornet in Greenpath");
+    expect(block(container)?.textContent).toContain("The fight for the dash.");
+  });
+});
+
+describe("a fenced reply", () => {
+  beforeEach(() => {
+    resetSpoilerFenceOpenCountForTests();
+  });
+
+  it("does not render the block while the reply's own spoiler cover has not been opened", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "what should i know about the boss that looks like me",
+      answer: "```bonsai-spoiler\nThat's Broken Vessel.\n```",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki" })],
+      },
+    };
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: true })} />
+    );
+    expect(block(container)).toBeNull();
+  });
+
+  it("renders normally once masking is off, even with the same fence text", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "q",
+      answer: "```bonsai-spoiler\nThat's Broken Vessel.\n```",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki" })],
+      },
+    };
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: false })} />
+    );
+    expect(block(container)).not.toBeNull();
+  });
+
+  it("shows the block, still closed itself, once the person opens the spoiler cover", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "what should i know about the boss that looks like me",
+      answer: "```bonsai-spoiler\nThat's Broken Vessel.\n```",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki", card: "The infected husk shaped like you." })],
+      },
+    };
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: true })} />
+    );
+    expect(block(container)).toBeNull();
+
+    const revealButton = container.querySelector(".bonsai-spoiler-reveal-target button");
+    expect(revealButton).not.toBeNull();
+    fireEvent.click(revealButton as HTMLElement);
+
+    // The block itself is closed by default (KB_NOTES_BLOCK_OPEN_BY_DEFAULT), same as any
+    // unfenced reply — only its *availability* depended on the cover.
+    expect(block(container)).not.toBeNull();
+    expect(block(container)?.textContent).toContain("Broken Vessel");
+    expect(block(container)?.textContent).not.toContain("The infected husk shaped like you.");
+  });
+
+  it("hides the block again if the person closes the spoiler cover back up", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "q",
+      answer: "```bonsai-spoiler\nThat's Broken Vessel.\n```",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki" })],
+      },
+    };
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: true })} />
+    );
+    fireEvent.click(container.querySelector(".bonsai-spoiler-reveal-target button") as HTMLElement);
+    expect(block(container)).not.toBeNull();
+
+    const hideButton = container.querySelector(".bonsai-spoiler-expanded button");
+    expect(hideButton).not.toBeNull();
+    fireEvent.click(hideButton as HTMLElement);
+    expect(block(container)).toBeNull();
+  });
+});
+
+describe("the live turn, before the reply is done", () => {
+  it("shows the block from liveThinking.kbAttachedNotes while still asking, before transparencySnapshot exists", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: true,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "is there a day limit in pikmin 2",
+          ollamaResponse: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note()] },
+          transparencySnapshot: null,
+        })}
+      />
+    );
+    expect(block(container)).not.toBeNull();
+    expect(block(container)?.textContent).toContain("Starting out in Pikmin 2");
+  });
+
+  it("shows nothing live while asking with no notes yet published", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: true,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "is there a day limit in pikmin 2",
+          ollamaResponse: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: null },
+        })}
+      />
+    );
+    expect(block(container)).toBeNull();
+  });
+
+  it("switches to the finished transparency snapshot once the reply completes", () => {
+    const { container, rerender } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: true,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "is there a day limit in pikmin 2",
+          ollamaResponse: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note()] },
+        })}
+      />
+    );
+    expect(block(container)).not.toBeNull();
+
+    rerender(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: false,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "is there a day limit in pikmin 2",
+          ollamaResponse: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          lastExchange: {
+            question: "is there a day limit in pikmin 2",
+            answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          },
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note()] },
+          transparencySnapshot: {
+            route: "ollama",
+            raw_question: "",
+            sanitizer_action: "",
+            sanitizer_reason_codes: [],
+            text_after_sanitizer: "",
+            ollama_model: null,
+            system_prompt: null,
+            user_text_for_model: null,
+            user_image_count: 0,
+            attachment_paths: [],
+            assistant_raw: null,
+            assistant_after_attachment_format: null,
+            final_response: "",
+            applied: null,
+            success: true,
+            app_id: "",
+            app_name: "",
+            pc_ip: "",
+            error_message: "",
+            elapsed_seconds: 0,
+            kb_attached_notes: [note({ name: "Finished note" })],
+          },
+        })}
+      />
+    );
+    expect(block(container)?.textContent).toContain("Finished note");
+  });
+});
+
+describe("the gap between the reply finishing and the details fetch landing", () => {
+  it("keeps showing the live notes once the reply is done but the fetch has not landed yet", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: false,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "is there a day limit in pikmin 2",
+          ollamaResponse: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          lastExchange: {
+            question: "is there a day limit in pikmin 2",
+            answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          },
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note()] },
+          transparencySnapshot: null,
+        })}
+      />
+    );
+    expect(block(container)).not.toBeNull();
+    expect(block(container)?.textContent).toContain("Starting out in Pikmin 2");
+  });
+
+  it("defers to the fetched snapshot once it exists, even when it says nothing is attached", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: false,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "is there a day limit in pikmin 2",
+          ollamaResponse: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          lastExchange: {
+            question: "is there a day limit in pikmin 2",
+            answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          },
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note()] },
+          transparencySnapshot: {
+            route: "ollama",
+            raw_question: "",
+            sanitizer_action: "",
+            sanitizer_reason_codes: [],
+            text_after_sanitizer: "",
+            ollama_model: null,
+            system_prompt: null,
+            user_text_for_model: null,
+            user_image_count: 0,
+            attachment_paths: [],
+            assistant_raw: null,
+            assistant_after_attachment_format: null,
+            final_response: "",
+            applied: null,
+            success: true,
+            app_id: "",
+            app_name: "",
+            pc_ip: "",
+            error_message: "",
+            elapsed_seconds: 0,
+            kb_attached_notes: [],
+          },
+        })}
+      />
+    );
+    expect(block(container)).toBeNull();
+  });
+});
+
+function fullTransparencySnapshot(notes: KbAttachedNote[]): MainTabChatTranscriptProps["transparencySnapshot"] {
+  return {
+    route: "ollama",
+    raw_question: "",
+    sanitizer_action: "",
+    sanitizer_reason_codes: [],
+    text_after_sanitizer: "",
+    ollama_model: null,
+    system_prompt: null,
+    user_text_for_model: null,
+    user_image_count: 0,
+    attachment_paths: [],
+    assistant_raw: null,
+    assistant_after_attachment_format: null,
+    final_response: "",
+    applied: null,
+    success: true,
+    app_id: "",
+    app_name: "",
+    pc_ip: "",
+    error_message: "",
+    elapsed_seconds: 0,
+    kb_attached_notes: notes,
+  };
+}
+
+describe("the block is reachable as a real D-pad stop from both directions", () => {
+  it("Down: focusing the block by its registered turn key actually lands the DOM focus on it", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "q",
+      answer: "a",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note()],
+      },
+    };
+    const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+    expect(focusKbNotesBlock("t1")).toBe(true);
+    expect(document.activeElement).toBe(block(container));
+  });
+
+  it("Up: the session context strip's own Up (and the rows below it) land on the live turn's block", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: false,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "is there a day limit in pikmin 2",
+          ollamaResponse: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          lastExchange: {
+            question: "is there a day limit in pikmin 2",
+            answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          },
+          transparencySnapshot: fullTransparencySnapshot([note()]),
+        })}
+      />
+    );
+    expect(focusUpPastLiveKbNotesBlock()).toBe(true);
+    expect(document.activeElement).toBe(block(container));
+  });
+
+  it("Up: falls through cleanly (no throw, reports unhandled) when the live turn has no block", () => {
+    render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: false,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "q",
+          ollamaResponse: "a",
+          lastExchange: { question: "q", answer: "a" },
+          transparencySnapshot: fullTransparencySnapshot([]),
+        })}
+      />
+    );
+    expect(() => focusUpPastLiveKbNotesBlock()).not.toThrow();
+  });
+});
+
+describe("the header's name, count and source never share one truncating span", () => {
+  /*
+   * First Deck rows (NOTES-BLOCK-01/05): on the real 412px column the count or the source's own
+   * tail could be the part an ellipsis ate, because both used to live in one shared span. These
+   * tests pin the DOM *structure* the fix relies on -- jsdom does no layout, so there is no
+   * ellipsis to observe directly, but a count that is not textContent of the same element as the
+   * source can never be cut by that element's own overflow rule.
+   */
+  function turnWith(notes: KbAttachedNote[]): AskThreadCollapsedTurn {
+    return {
+      id: "t1",
+      question: "q",
+      answer: "a",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: notes,
+      },
+    };
+  }
+
+  it("keeps the count out of the source line's own element", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...archivedTurnProps(turnWith([note(), note({ name: "Other note" })]))}
+      />
+    );
+    const el = block(container) as HTMLElement;
+    // The count sits beside the name, not inside the line that carries the source phrase.
+    const sourceLine = Array.from(el.querySelectorAll("div")).find((d) =>
+      (d.textContent || "").startsWith("From ")
+    );
+    expect(sourceLine?.textContent).not.toContain("more)");
+    expect(el.textContent).toContain("(+1 more)");
+  });
+
+  it("reads name, then count, then source, in that order in the closed header's own text", () => {
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turnWith([note(), note()]))} />
+    );
+    const text = block(container)?.textContent || "";
+    const nameAt = text.indexOf("Starting out in Pikmin 2");
+    const countAt = text.indexOf("(+1 more)");
+    const sourceAt = text.indexOf("From the Pikmin wiki");
+    expect(nameAt).toBeGreaterThanOrEqual(0);
+    expect(nameAt).toBeLessThan(countAt);
+    expect(countAt).toBeLessThan(sourceAt);
+  });
+
+  it("capitalizes a shared tip's own topic word instead of showing it lowercase", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...archivedTurnProps(turnWith([note({ domain: "compat", name: "proton", source_host: "" })]))}
+      />
+    );
+    expect(block(container)?.textContent).toContain("Proton");
+    expect(block(container)?.textContent).not.toContain("proton");
+  });
+});
+
+describe("opening a tall block keeps the view at its header", () => {
+  it("scrolls the header into view, not the whole block, on open", async () => {
+    const scrollIntoView = vi.fn();
+    const realScrollIntoView = HTMLElement.prototype.scrollIntoView;
+    HTMLElement.prototype.scrollIntoView = scrollIntoView;
+    try {
+      const turn: AskThreadCollapsedTurn = {
+        id: "t1",
+        question: "q",
+        answer: "a",
+        transparency: {
+          route: "ollama",
+          success: true,
+          context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+          overflow_skips: [],
+          kb_attached_notes: [note(), note({ name: "Second" }), note({ name: "Third" })],
+        },
+      };
+      const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+      fireEvent.click(block(container) as HTMLElement);
+
+      // The scroll is scheduled with requestAnimationFrame so it runs after the open body has
+      // actually been laid out; let one frame pass the same way the component does.
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+
+      /*
+       * Other features in this same file (useStreamScrollPin, useDockClearanceOnFocus,
+       * SessionContextStrip) call the real scrollIntoView too, each with its own arguments —
+       * patching the prototype globally catches all of them, so this test picks out only the
+       * call shape this fix makes: exactly `{ block: "start" }`, nothing else uses that shape.
+       */
+      const ownCalls = scrollIntoView.mock.calls
+        .map((args, i) => ({ args, target: scrollIntoView.mock.instances[i] as unknown as HTMLElement }))
+        .filter(({ args }) => args.length === 1 && args[0]?.block === "start" && !("behavior" in (args[0] as object)));
+      expect(ownCalls).toHaveLength(1);
+      // Called on the header row, not on the block's own outer element (which also contains the
+      // now-tall open body).
+      expect(ownCalls[0].target).not.toBe(block(container));
+      expect(ownCalls[0].target.textContent).toContain("Starting out in Pikmin 2");
+    } finally {
+      HTMLElement.prototype.scrollIntoView = realScrollIntoView;
+    }
+  });
+
+  it("does not scroll again when the block is only closed back up", async () => {
+    const scrollIntoView = vi.fn();
+    const realScrollIntoView = HTMLElement.prototype.scrollIntoView;
+    HTMLElement.prototype.scrollIntoView = scrollIntoView;
+    try {
+      const turn: AskThreadCollapsedTurn = {
+        id: "t1",
+        question: "q",
+        answer: "a",
+        transparency: {
+          route: "ollama",
+          success: true,
+          context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+          overflow_skips: [],
+          kb_attached_notes: [note()],
+        },
+      };
+      const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+      fireEvent.click(block(container) as HTMLElement);
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      scrollIntoView.mockClear();
+
+      fireEvent.click(block(container) as HTMLElement);
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      const ownCalls = scrollIntoView.mock.calls.filter(
+        (args) => args.length === 1 && args[0]?.block === "start" && !("behavior" in (args[0] as object))
+      );
+      expect(ownCalls).toHaveLength(0);
+    } finally {
+      HTMLElement.prototype.scrollIntoView = realScrollIntoView;
+    }
+  });
+});
+
+describe("Up from the session context strip's own header row", () => {
+  /*
+   * Device rerun on 0589565 (NOTES-BLOCK-01): the earlier fix only ever checked the turn key
+   * "live", but a normal, already-completed reply is not "live" any more by the time a person
+   * is sitting on the session context strip -- the post-Ask reload moves `expandedTurnKey` onto
+   * the freshly archived turn's own id, and the block re-mounts under THAT id. These tests use
+   * an archived turn ("t1"), not "live", to prove the strip's own Up now reads the turn that is
+   * actually expanded rather than a hardcoded key.
+   */
+  it("lands on the block when one exists for the turn actually expanded (a normal, completed reply)", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "is there a day limit in pikmin 2",
+      answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note()],
+      },
+    };
+    const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+    expect(focusUpPastSessionContextStripKbNotesBlock("t1")).toBe(true);
+    expect(document.activeElement).toBe(block(container));
+  });
+
+  it("falls through cleanly (no throw, no block focused) when the expanded turn has no block", () => {
+    const turn: AskThreadCollapsedTurn = { id: "t1", question: "q", answer: "a" };
+    const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+    expect(block(container)).toBeNull();
+    expect(() => focusUpPastSessionContextStripKbNotesBlock("t1")).not.toThrow();
+  });
+
+  it("still reaches the live turn's block when the live turn is the one expanded (unarchived)", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: false,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "q",
+          ollamaResponse: "a",
+          lastExchange: { question: "q", answer: "a" },
+          transparencySnapshot: fullTransparencySnapshot([note()]),
+        })}
+      />
+    );
+    expect(focusUpPastSessionContextStripKbNotesBlock("live")).toBe(true);
+    expect(document.activeElement).toBe(block(container));
+  });
+});
+
+describe("the block shows only notes the answer used (roadmap: the gold notes block sits under every answer)", () => {
+  beforeEach(() => {
+    usedRule.countEveryNote = false;
+  });
+  afterEach(() => {
+    usedRule.countEveryNote = true;
+  });
+
+  function turnAnswering(answer: string): AskThreadCollapsedTurn {
+    return {
+      id: "t1",
+      question: "is there a day limit in pikmin 2",
+      answer,
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [],
+        overflow_skips: [],
+        kb_attached_notes: [
+          note({ card: "Pikmin 2 drops the day limit. The goal is repaying the company's debt of ten thousand pokos." }),
+        ],
+      },
+    };
+  }
+
+  it("stays away from an answer that never said anything from the note", () => {
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turnAnswering("Yes, Pikmin 2 keeps the day limit from the first game."))} />
+    );
+    expect(block(container)).toBeNull();
+  });
+
+  it("shows under an answer that repeats the note", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...archivedTurnProps(turnAnswering("No. You are repaying the company's debt, ten thousand pokos, with no clock."))}
+      />
+    );
+    expect(block(container)?.textContent).toContain("Starting out in Pikmin 2");
+  });
+});
+
+/*
+ * Plan 70 (D112 #7): the answer used the Soul Master note without naming him, so it has no cover
+ * and the block used to print "Soul Master" in its header -- live and saved. A note the back end
+ * marks protected shows a neutral title until the person opens the block on purpose.
+ */
+describe("a protected boss note (the answer has no cover of its own)", () => {
+  const soulMaster = note({
+    name: "Soul Master",
+    kind: "boss",
+    card: "Soul Master teleports between attacks; hit him from below while he conjures orbs.",
+    source_host: "hollowknight.wiki",
+    game_title: "Hollow Knight",
+    spoiler_protected: true,
+  });
+  const answer = "Hit him from below while he conjures orbs.";
+  const turn: AskThreadCollapsedTurn = {
+    id: "t1",
+    question: "in hollow knight how do I beat the spell casting boss at the top of the sanctum",
+    answer,
+    transparency: {
+      route: "ollama",
+      success: true,
+      context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+      overflow_skips: [],
+      kb_attached_notes: [soulMaster],
+    },
+  };
+
+  it("shows a neutral title, never the name, while closed", () => {
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: true })} />
+    );
+    const el = block(container);
+    expect(el).not.toBeNull();
+    expect(el?.textContent).not.toContain("Soul Master");
+    expect(el?.getAttribute("aria-label") ?? "").not.toContain("Soul Master");
+    expect(el?.textContent).toContain("Boss note (spoiler)");
+    expect(el?.textContent).toContain("From the Hollow Knight wiki");
+  });
+
+  it("shows the note, name and all, once the person opens the block", () => {
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: true })} />
+    );
+    fireEvent.click(block(container) as HTMLElement);
+    expect(block(container)?.textContent).toContain("Soul Master");
+  });
+
+  it("never names it on the live turn either", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: true,
+          strategySpoilerMaskingEnabled: true,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: turn.question,
+          ollamaResponse: answer,
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [soulMaster] },
+          transparencySnapshot: null,
+        })}
+      />
+    );
+    expect(block(container)).not.toBeNull();
+    expect(block(container)?.textContent).not.toContain("Soul Master");
+  });
+
+  // Risk 2: the screen's own un-hide used to open this cover by word overlap with the question.
+  it("keeps a cover shut that restates the description and names the boss", () => {
+    const covered = {
+      ...turn,
+      answer:
+        "Hit him from below.\n\n```bonsai-spoiler\nThe spell casting boss at the top of the Soul Sanctum is the Soul Master.\n```",
+    };
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(covered, { strategySpoilerMaskingEnabled: true })} />
+    );
+    expect(container.textContent).toContain("Hit him from below.");
+    expect(container.textContent).not.toContain("Soul Master");
+  });
+
+  it("names it as usual when the person has spoiler covers switched off", () => {
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: false })} />
+    );
+    expect(block(container)?.textContent).toContain("Soul Master");
+  });
+});

@@ -28,12 +28,32 @@ bower_components
 .idea
 *.iml
 
+# Agent / IDE instruction files. AGENTS.md is kept: it is the guide any AI tool reads, and a
+# fresh clone needs it. None of these reach the plugin package - the build copies an explicit
+# list (package.json, plugin.json, main.py, py_modules, data, dist) and never a stray file.
+.claude/*
+!.claude/hooks/
+.claude/hooks/*
+!.claude/hooks/*.py
+!.claude/settings.json
+!.claude/agents/
+.claude/agents/*
+!.claude/agents/*.md
+.cursorrules
+
+# Session-only SSH helper — prints deck_pass from .env; never commit
+.cursor/tmp-ssh-askpass.sh
+
 # OS metadata
 .DS_Store
 Thumbs.db
 
 # Ignore built ts files
 dist/
+
+# Corpus build output. Deliberately NOT under dist/ — `npm run build` clears that directory,
+# so a corpus built there was silently deleted by the next plugin build.
+build/
 
 # Generated config (IPs injected at build time)
 src/config.ts
@@ -52,6 +72,11 @@ backend/out
 # Make sure to ignore any instance of the loader's decky_plugin.py
 decky_plugin.py
 
+# Staged into defaults/ by scripts/stage_zip_extras.py right before a zip build; the real
+# copies live at the repo root and in data/.
+defaults/NOTICE
+defaults/data/
+
 # Ignore decky CLI for building plugins
 out
 out/*
@@ -60,13 +85,23 @@ cli/*
 cli/decky
 
 # Local Deck screenshots (scripts/screenshot-deck.sh / screenshot-deck.ps1)
-screenshots/
-
-# Preview suite run artifacts (JUnit-style JSON reports)
-tests/preview-results/
+screenshots/*
+!screenshots/README.md
 
 # Local Deck screen recordings (captured by scripts/record-deck.ps1 / record-deck.sh)
 recordings/
 
 # v0 UI drafts (reference only; not part of the Decky bundle)
 src/v0-drafts/
+
+# Deck walk evidence written by the plugin-studio tools; keep what a testing row cites in the workshop's test-evidence folder (workshop:test-evidence/) instead
+runs/
+
+# Shared "who is driving the Deck right now" queue (scripts/deck_queue.py) — local coordination state, not plugin content
+.decky/deck-queue.json
+
+# Maps built on demand by the tool server and the checks (scripts/architecture_maps.py,
+# packages/bonsai-mcp/src/architectureMaps.ts), not saved in the repo. The two hand-written .md
+# files in the same folder stay tracked. docs/code-map.md: python scripts/code_map.py
+packages/bonsai-mcp/knowledge/architecture/*.json
+docs/code-map.md

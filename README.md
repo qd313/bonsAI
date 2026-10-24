@@ -1,160 +1,314 @@
 # bonsAI
 
-**bonsAI** is a [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader) plugin that brings **self-hosted** AI chat to your Steam Deck Quick Access Menu (QAM). It talks to **Ollama** on your Deck or another machine on your home network. No paid cloud AI API is required for the main workflow: prompts and responses stay on hardware you control. Models can still hallucinate: treat answers as assistant output, not authority.
+[![Latest release](https://img.shields.io/github/v/release/qd313/bonsAI?label=release)](https://github.com/qd313/bonsAI/releases/latest)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+![Runs on your own Deck or PC](https://img.shields.io/badge/runs-on%20your%20own%20Deck%20or%20PC-2ea44f)
+
+**A helper for your Steam Deck that answers questions about your games, using an AI that runs on
+your own Deck or your own PC.**
+
+bonsAI lives in the Deck's **Quick Access Menu**, the panel the **`...`** button opens. Press it
+mid-game, ask how to beat a boss or why the game stutters and keep playing.
 
-> **Beta software!** AI answers can be wrong or incomplete and features may break with Steam/Decky/plugin updates. Verify anything important yourself. Review **Permissions** before enabling. **Strategy** spoiler hiding and **VAC** results are best-effort but not foolproof. **Ollama on this Deck** can tax the system during games. **Power tips:** TDP apply is optional (**Permissions → Adjust power limits (beta)**). GPU clock suggestions are not written to hardware. Check **QAM → Performance** before you change settings.
+<p align="center">
+  <img src="assets/readme/top-answer.png" alt="bonsAI's Main tab on a Steam Deck, answering a question about the game" width="300">
+  &nbsp;
+  <img src="assets/readme/top-details.png" alt="Show details under an answer: the model that wrote it and the notes it used" width="300">
+</p>
 
-![bonsAI v0.4.9 on Steam Deck — Main tab with preset chips and unified Ask bar](assets/readme-hero.png)
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
 
-## Quick start
+- [Free, open and yours](#free-open-and-yours)
+- [What it does](#what-it-does)
+- [Before you start](#before-you-start)
+- [What you need](#what-you-need)
+- [Install](#install)
+  - [1. Add bonsAI to Decky](#1-add-bonsai-to-decky)
+  - [2. Allow downloads](#2-allow-downloads)
+  - [3. Choose where the AI runs](#3-choose-where-the-ai-runs)
+  - [4. Ask something](#4-ask-something)
+- [Getting help](#getting-help)
+- [Help build it](#help-build-it)
+- [License](#license)
+- [Buy me a beer](#buy-me-a-beer)
+<!-- /toc -->
 
-1. Install **[Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** on your Steam Deck
-2. Install **bonsAI** from the **[latest GitHub Release](https://github.com/cantcurecancer/bonsAI/releases)** — open **Decky** from QAM → Settings → Developer → install plugin from URL: [https://github.com/qd313/bonsAI/releases/latest/download/bonsAI.zip](https://github.com/qd313/bonsAI/releases/latest/download/bonsAI.zip)
-3. **Install Ollama and a model**
-  - **Deck**: **bonsAI → Ollama** → enable **Ollama on this Deck** → **Install Tier 1 essentials** `qwen2.5vl:3b` for chat + screenshots). Optional: **Install Tier 2 one-model multimodal** `gemma4:e2b-it-qat`)
-  - **LAN PC:** Install **[Ollama](https://ollama.com/download)**, then `ollama pull qwen2.5vl:3b` (optional: `ollama pull gemma4:e2b-it-qat`)
-4. Open **bonsAI** → **Ollama** → set **Where AI runs** to `http://127.0.0.1:11434` (same device) or `http://<PC-IP>:11434` (PC on your LAN) → **Main** → send a test message
+## Free, open and yours
 
-**Uninstall note:** Removing bonsAI from Decky does **not** erase saved settings or permissions. Run **Settings → Advanced → Clear all data…** before uninstalling for a fresh install, or see [troubleshooting § Uninstall vs Clear all data](docs/troubleshooting.md#1b-uninstall-vs-clear-all-data-settings).
+> [!NOTE]
+> bonsAI is free and open source. It runs on your own hardware, your privacy stays yours. No paid
+> API, no data centers.
+>
+> - **Your questions stay on your hardware**, on your Deck, on your own PC or wherever you point it.
+> - **No account, no cloud service, nothing collected.**
+> - **Every line of code is here to read.**
 
-Unfamiliar with **QAM**, **LAN**, or **Ollama**? See [Glossary](#glossary-quick) below. Network, vision, and permission setup: [docs/troubleshooting.md](docs/troubleshooting.md)
+<!-- This list matches the 0.6.0 security review (workshop:audit/security-review-0.6.0.md, 2026-09-28).
+     Anything new that reaches the internet must be added here. -->
+**What does reach the internet**, so you can check the claim instead of trusting it:
 
-## Glossary (quick)
+- **Installing Ollama** (the program that runs the AI) **and its models**: from **ollama.com**, which
+  hands the program itself over from **GitHub**.
+- **The knowledge library**: from **Hugging Face**, with **GitHub** as backup.
+- **Voice input**: the speech engine from **GitHub**, the tools to build it from **Ubuntu's servers**
+  and the speech model from **Hugging Face**.
 
+Nothing downloads until you switch on **Internet downloads** on the Permissions tab, and bonsAI
+tells you where each download comes from before it starts. Links inside answers open only when you
+tap them.
 
-| Term             | Meaning                                                                                    |
-| ---------------- | ------------------------------------------------------------------------------------------ |
-| **Ollama**       | Free app that runs **LLMs** locally on port **11434** (default)                            |
-| **LLM**          | The model that generates text, pull with `ollama pull <name>`                              |
-| **Decky Loader** | Framework that injects **bonsAI** into Steam's **Quick Access Menu (QAM)**                 |
-| **QAM**          | **Quick Access Menu** — overlay opened with the `...` button, Decky lives here             |
-| **LAN**          | Your home network. Required when Ollama runs on a separate PC                              |
-| **Base URL**     | Address bonsAI uses for Ollama, usually `http://127.0.0.1:11434` or `http://<PC-IP>:11434` |
+## What it does
 
+Every clip is filmed on a Steam Deck in real time. Most use an AI running on a PC on
+the home network; the wiki-notes clip uses the AI on the Deck itself.
 
+<details open>
+<summary><h3>Ask about the game you're playing</h3><br>bonsAI knows which game is running. Ask about a boss, a level or a puzzle.</summary>
+<br>
 
+Open the menu mid-game and type, or pick a suggestion chip; the game's name goes in with your
+question. Pick a mode on the question box: **Speed** for a quick reply, **Strategy** for coaching
+like a strategy guide, **Expert** for the most effort and detail. Switch on **Thinking** and you can
+watch the steps while it works. The answer streams in as it's written.
 
-## What you can do
+<!-- VIDEO: upload recordings/readme-cuts/ask-about-your-game-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<img src="assets/readme/ask-about-your-game.png" alt="A new chat, the three modes, a question about the level, the thinking steps, the answer streaming in, Show reasoning, a kept note and a branch pick" width="560">
 
+*A new chat, the three modes, a question, the thinking steps, the answer streaming in, Show
+reasoning, a kept note and a branch pick. Filmed in real time, with the AI on a PC on the home
+network.*
 
+</details>
 
-### Chat and game help
+<details>
+<summary><h3>Notes from the game's wiki</h3><br>Answers can use notes from community wikis, 38 games so far, and it works offline.</summary>
+<br>
 
-- **Ask** from the **Main** tab. Pick **Speed**, **Strategy**, or **Expert** on the mode chip
-- **Strategy mode**: "How do I beat this level?" type questions with spoiler-safe tips, multiple choice branching, and a per-game **checklist** that remembers progress
-- **Preset chips** above the Ask bar suggest common prompts (battery, performance, controls, troubleshooting, and more). Tap a preset to copy the question to the text area
-- **Game context**: The game title and Steam appID is included in your prompt when a game is running
-- **Screenshots**: Attach to your prompt (attach paperclip icon in the text area). Needs a vision model and **Permissions → Read game & screenshot context**. See [troubleshooting § Screenshot vision](docs/troubleshooting.md#25-screenshot-vision-setup-v1)
-- **Voice input**: Local voice-to-text via the mic button. To enable go to **Permissions → Voice input (microphone)** and install a whisper model under **Settings → Voice input**
-- **Character tone**: You can choose an optional character voice/tone that the AI will respond with. Adjust accent intensity in **Settings**
-- **Conversation history**: collapsible chat rows. **Retry same prompt** and thumbs feedback (local use only). AI reponses will **finish in the background** when you close QAM
+The knowledge library is a one-time download. When an answer uses a note, it says where the note
+came from, and you can open the note under the answer.
 
+<img src="assets/readme/wiki-notes.webp" alt="A Speed answer from the AI on the Deck that uses a wiki note, then the note opening under the answer" width="360">
 
+*Filmed in real time, with the AI running on the Deck itself.*
 
-### Find settings faster
+</details>
 
-- Type in the Ask bar to **search Steam and QAM settings** and jump straight to a matching screen, no AI model required
-- **Search intent packs** (Settings) — import offline alias JSON to extend settings search without cloud services
+<details>
+<summary><h3>Your own notes</h3><br>Tell bonsAI what matters to you and it remembers.</summary>
+<br>
 
+Say something worth keeping, like "I do not want spoilers for later biomes", and a small card under
+the answer offers to keep it, for this game or for every game. Later answers say **Read 1 of your
+notes**; press that line to see your notes, switch one off or remove it.
 
+<!-- VIDEO: upload recordings/readme-cuts/your-notes-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<img src="assets/readme/your-notes.png" alt="Keeping a note from a question, a later answer that read it, then the Your notes box" width="560">
 
-### Power and performance (beta)
+*Filmed in real time, with the AI on a PC on the home network.*
 
-- AI can suggest **TDP** limits. Enable **Permissions → Adjust power limits**, bonsAI applies TDP on the Deck and reminds you to verify in **QAM → Performance**
-- **GPU clock** lines in replies are **recommendations only**, not currently written to hardware
+</details>
 
+<details>
+<summary><h3>Spoilers stay hidden until you ask</h3><br>In Strategy mode, anything that looks like a spoiler is covered.</summary>
+<br>
 
+Press **A** on a cover to open it. This works on a best-effort basis and can miss things.
 
-### Setup and models (Ollama tab)
+<img src="assets/readme/spoiler.webp" alt="A spoiler in a Strategy answer, covered until it is opened" width="360">
 
-- **Where AI runs** — Ollama on the Deck (`127.0.0.1:11434`) or a PC on your LAN
-- **Install Ollama on this Deck** wizard with Tier 1 / Tier 2 essentials pulls when you want local inference
-- **Find LAN** (mDNS) —  save **named hosts**, run a **connection test**, and tune slow-reply warnings and timeouts
-- **AI models** hub — policy tiers (FOSS-first default), browse/pull/delete models, and a short **model source** note on replies
-- **Response verification** — optional rules on the Ollama tab to double-check replies before they reach you
+*Filmed in real time, with the AI on a PC on the home network.*
 
-For **Find LAN**, the Ollama host may need **Avahi/Bonjour** publishing — see [troubleshooting § Find Ollama on LAN](docs/troubleshooting.md#find-ollama-on-lan-mdns--optional).
+</details>
 
-### Trust and control
+<details>
+<summary><h3>"Where are you at?"</h3><br>Strategy can ask where you are in the game, then gives you a checklist of steps.</summary>
+<br>
 
-- **Permissions** gated: read game & screenshot context, save chat/logs to Desktop, adjust power limits, voice input, open web links, and (beta) Steam ban lookup (`bonsai:vac-check`). Steam Web API key lives under **Developer → Integrations** when the Developer tab is enabled
-- **Input handling (last Ask)** on the main tab: See raw vs sanitized text and what was sent to Ollama
-- **Magic Ask commands** (no Ollama required for these): `bonsai:disable-sanitize` / `bonsai:enable-sanitize`, `bonsai:shortcut-setup-deck`, `bonsai:shortcut-setup-stadia`, and `bonsai:vac-check`
-- **Save to Desktop note**: Export Q&A to `~/Desktop/bonsAI_logs/` when **Permissions → Save files to Desktop** is on
+Tick off steps as you go. Your progress is saved on the Deck, for each game.
 
-**Tabs:** **Main · Ollama · Settings · Permissions · About** (+ optional **Developer** via Settings → **Show Developer tab** — logging, token streaming experiment, Steam Input jump).
+<img src="assets/readme/strategy-checklist.webp" alt="Picking where you are in the game, then the checklist of steps arriving" width="360">
 
-## What's planned
+*Filmed in real time, with the AI on a PC on the home network.*
 
-Upcoming work includes user notes stash, couch-distance readability, native QAM shortcut tile, RAG on a LAN PC, and more — see **[docs/roadmap.md](docs/roadmap.md#planned)**. Shipped feature detail: [docs/archive/roadmap-completed.md](docs/archive/roadmap-completed.md).
+</details>
 
-## Requirements
+<details>
+<summary><h3>Ask about a screenshot</h3><br>Take a screenshot and ask what's on screen, like a puzzle, a menu or an error message.</summary>
+<br>
 
-- Steam device with **Decky Loader**
-- **Ollama** reachable from the Deck (on the Deck or a PC on the LAN). You can locally install and update Ollama and its models from bonsAI
-- Download at least one **text** model. A **vision** model is optional (needed for screenshot asks)
+Press the paperclip on the question box and pick **Close menu & take screenshot**. Open the menu
+again, press the paperclip, pick **Attach recent screenshot**, choose the picture and ask. This
+needs a model that can see pictures; the starter model can.
 
+<!-- VIDEO: upload recordings/readme-cuts/ask-about-a-screenshot-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<img src="assets/readme/ask-about-a-screenshot.png" alt="Taking a screenshot from the paperclip menu and asking what is on screen" width="560">
 
+*Filmed in real time, with the AI on a PC on the home network.*
 
-## Where Ollama runs
+</details>
 
+<details>
+<summary><h3>Search your chats, settings and notes</h3><br>A Search tab to the left of Main finds things without any AI.</summary>
+<br>
 
-| Where                 | When to use                                                                                                                                                                                                                                    |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **On the Steam Deck** | Portable; use `http://127.0.0.1:11434`. Heavier CPU/VRAM load — may affect game performance                                                                                                                                                    |
-| **PC on the LAN**     | Much faster on a GPU. Point bonsAI at `http://<PC-IP>:11434`. PC must listen on the network (`OLLAMA_HOST=0.0.0.0`, firewall **TCP 11434**). Details: [troubleshooting § Network](docs/troubleshooting.md#2-network--communication-the-bridge) |
+One find box looks through your chats, the game notes, your own notes and even Steam's own settings. Type
+"brightness" and jump straight to that Steam setting.
 
+<!-- VIDEO: upload recordings/readme-cuts/search-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<img src="assets/readme/search.png" alt="The Search tab: brightness finds a chat and the Steam settings, and opens one" width="560">
 
+*Filmed in real time.*
 
+</details>
 
-## Go deeper
+<details>
+<summary><h3>Close the menu, keep playing</h3><br>Close the menu while an answer is being written, and a popup tells you when it's ready.</summary>
+<br>
 
-**Model policy tiers** — **Ollama tab → AI models** controls how permissive model fallbacks are (Tier 1 FOSS-first default through Tier 3 beta unlock). Each reply can include a short model-source disclosure. See [Model policy tiers](#model-policy-tiers) below and [troubleshooting](docs/troubleshooting.md)
+The answer keeps going in the background. The **Reply ready** popup shows its first lines, and the
+full answer waits in the chat.
 
-**Input sanitization** — On by default; cleans Ask text before Ollama. Disable only via exact phrases `bonsai:disable-sanitize` / `bonsai:enable-sanitize` in the Ask field (not recommended). Details: [troubleshooting](docs/troubleshooting.md)
+<!-- VIDEO: upload recordings/readme-cuts/reply-ready-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<img src="assets/readme/reply-ready.png" alt="Closing the menu while bonsAI answers, then the Reply ready popup arriving" width="560">
 
-**Input handling and logs** — After each Ask, Main can show what was sent vs sanitized. Optional verbose traces go to `~/Desktop/bonsAI_logs/` when **Permissions → Save files to Desktop** is enabled
+*Filmed in real time, with the AI on a PC on the home network.*
 
-**Open bonsAI faster (beta)** — Controller Guide chord macro: [troubleshooting § Shortcut](docs/troubleshooting.md#5-bonsai-shortcut-setup)
+</details>
 
-**Developer tab** — Opt-in under Settings for advanced logging, experimental token streaming, and Steam Input jump to the running game's controller config
+<details>
+<summary><h3>Saved chats</h3><br>Keep up to ten chats and flip between them with the triggers.</summary>
+<br>
 
-### Model policy tiers
+At ten, **New chat** asks which chat to delete first, and nothing is deleted without the **Delete
+chat** box. When a chat gets long, bonsAI sums up the older part so it isn't forgotten, and you can
+ask it to sum up at any time.
 
+<!-- VIDEO: upload recordings/readme-cuts/saved-chats-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<img src="assets/readme/saved-chats.png" alt="Flipping between saved chats, then New chat asking which chat to delete" width="560">
 
-| Tier       | Default stance                                                                                   |
-| ---------- | ------------------------------------------------------------------------------------------------ |
-| **Tier 1** | FOSS-first model fallbacks (recommended default)                                                 |
-| **Tier 2** | Adds open-weight models (e.g. Gemma-class tags)                                                  |
-| **Tier 3** | Unlocks non-FOSS / beta AI models available on Ollama after explicit unlock in the AI models hub |
+*Filmed in real time, with the AI on a PC on the home network.*
 
+</details>
 
-Change tier on **Ollama tab → AI models → Policy**. Licensing and tag-level detail: [troubleshooting](docs/troubleshooting.md) and [development guide § Architecture](docs/development.md#architecture-at-a-glance)
+<details>
+<summary><h3>Talk instead of typing</h3><br>Press the mic button and talk. Your speech becomes text on the Deck itself.</summary>
+<br>
 
-## Build from source
+Words appear as you talk. When you stop, bonsAI reads the whole recording once more and tidies the
+text, which takes a couple of seconds. The recording is deleted as soon as that's done.
 
-Contributors: see **[docs/development.md](docs/development.md)** — Deck-first setup, build/deploy scripts, and architecture overview.
+<img src="assets/readme/talk.webp" alt="Pressing the mic button, the first word appearing, then the tidied text after Stop" width="360">
 
-More docs: [development.md](docs/development.md) · [testing.md](docs/testing.md) · [roadmap.md](docs/roadmap.md) · [CHANGELOG.md](CHANGELOG.md)
+*Filmed in real time, with a computer voice played into the Deck.*
 
-## Documentation
+</details>
 
+<details>
+<summary><h3>See how it answered</h3><br>Show details under any answer shows which model wrote it and which notes it used.</summary>
+<br>
 
-| Doc                                                       | Audience          | What it is                                                         |
-| --------------------------------------------------------- | ----------------- | ------------------------------------------------------------------ |
-| [troubleshooting.md](docs/troubleshooting.md)             | Power users       | GPU, network, vision, permissions, QAM, deploy edge cases          |
-| [development.md](docs/development.md)                     | Contributors      | Deck-first setup, build/deploy, architecture, change-risk hotspots |
-| [testing.md](docs/testing.md)                             | QA / contributors | PR gates, Deck QA runbook, shipped-feature coverage, Test Results  |
-| [roadmap.md](docs/roadmap.md)                             | Planning          | In progress, planned backlog, completed summary                    |
-| [security-audit-report.md](docs/security-audit-report.md) | Maintainers       | RPC/log/UI disclosure review                                       |
-| [foss-advocate-report.md](docs/foss-advocate-report.md)   | Maintainers       | FOSS/transparency review                                           |
-| [archive/](docs/archive/)                                 | —                 | Historical research, plans, and completed-feature detail           |
+The **Session** tab inside it holds the chat's history and the **Sum up this chat** button.
 
+<img src="assets/readme/show-details.webp" alt="Opening Show details under an answer, then the Session tab" width="360">
 
+*Filmed in real time, with the AI on a PC on the home network.*
 
+</details>
+
+There's more: characters that change the tone of replies and a choice of AI models. The
+**[user guide](docs/guide.md)** covers everything.
+
+## Before you start
+
+> [!WARNING]
+> - **AI answers can be wrong.** Treat them as suggestions and check anything that matters.
+> - **Running the AI on the Deck slows your game down**, because they share the same chip. A PC on
+>   your home network is much faster.
+> - **This is a new release.** A few problems are known; see
+>   [known problems](docs/guide.md#known-problems).
+
+## What you need
+
+- A Steam Deck with **[Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** installed.
+  Decky is a free add-on that lets plugins like bonsAI into the Quick Access Menu.
+- Somewhere to run the AI: the Deck itself, or a PC on your home network. bonsAI installs the
+  program it needs, **Ollama**, on the Deck for you.
+- About 5 GB free on the Deck for the starter set, if the AI runs on the Deck.
+
+## Install
+
+bonsAI isn't in Decky's plugin store, because the store doesn't accept plugins built on an AI
+model. You install it from this page instead. It takes a few minutes.
+
+### 1. Add bonsAI to Decky
+
+1. Press **`...`**, open **Decky** (the plug icon), then the **gear** for Decky's settings.
+2. Under **General**, switch on **Developer mode**. A **Developer** section appears.
+3. In **Developer**, find **Install Plugin from URL**, paste this link and press **Install**:
+
+   ```
+   https://github.com/qd313/bonsAI/releases/latest/download/bonsAI.zip
+   ```
+
+4. bonsAI now shows in the Decky list. Open it.
+
+### 2. Allow downloads
+
+Open the **Permissions** tab and switch on **Internet downloads**. Everything is off on a fresh
+install, so nothing downloads without your say-so.
+
+### 3. Choose where the AI runs
+
+<img src="assets/readme/where-ai-runs.png" alt="The Where AI runs section of the Ollama tab" width="300">
+<img src="assets/readme/where-ai-runs-popup.png" alt="The first-run popup: Where should the AI run? with the Run AI on this Deck switch, Install Ollama and Not now" width="560">
+
+The first time bonsAI opens, right after the beta notice, a popup titled **Where should the AI
+run?** asks this for you. **Run AI on this Deck** starts switched on. Pick **Install Ollama** to set
+it up on the Deck, or switch it off and type your PC's address instead. **Not now** closes the popup
+and changes nothing. You can do the same later on the **Ollama** tab:
+
+- **On the Deck** (works anywhere, slower in games): make sure **Run AI on this Deck** is on, then
+  press **Install Ollama**. When it asks whether to add the starter set too, say yes. It brings the
+  answer model (gemma4:e2b-it-qat), the note-search model (nomic-embed-text) and the speech models
+  tiny.en and base.en, about 4.6 GB in all.
+- **On a PC on your home network** (much faster): install [Ollama](https://ollama.com/download) on
+  the PC and download a model there. Then type the PC's address into **PC address** on the Deck,
+  something like `192.168.1.20` (bonsAI adds Ollama's usual port), and press **Test connection**. The
+  [guide](docs/guide.md#running-the-ai-on-a-pc) shows how to let the PC accept the connection.
+
+### 4. Ask something
+
+Open the **Main** tab, pick a suggestion chip or type a question and press **Ask**.
+
+**Then get the game notes.** On its own, the AI on the Deck knows little about any one game. Open
+**Ollama → Knowledge base (offline)** and press **Download knowledge base**; it switches itself on. Answers
+about a game it has notes for then use them, offline.
+
+## Getting help
+
+- The **[user guide](docs/guide.md)** explains every tab and setting.
+- **[Troubleshooting](docs/troubleshooting.md)** covers network, screenshot and permission problems.
+- Found a bug or have an idea? [Open an issue on GitHub](https://github.com/qd313/bonsAI/issues).
+  Please say which bonsAI version you have (the small number beside the bonsAI title) and where the AI
+  runs.
+
+## Help build it
+
+Want to help, or build it yourself? Start with the [development guide](docs/development.md).
+
+## License
+
+- **The code** is [Apache-2.0](LICENSE). A little of it comes from the Decky plugin template, under
+  its own BSD license; [NOTICE](NOTICE) has the details.
+- **The game notes** and the **knowledge library** are CC BY-SA 4.0. Many notes are reworded from fan
+  wikis, and each keeps a link to its source and that wiki's license; see
+  [data/kb/NOTICE.md](data/kb/NOTICE.md).
+- **Other people's code** that bonsAI uses keeps its own license. The download carries all of them in
+  `dist/THIRD-PARTY-LICENSES.txt`.
 
 ## Buy me a beer
 
-Support my Steam Sale habit — scan or tap:
+Supporting my Steam sale habit. Scan or tap:
 
 [![Donate via PayPal](assets/qrcode.png)](https://paypal.me/quentind313)

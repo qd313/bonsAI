@@ -1,0 +1,114 @@
+/**
+ * Title: Thinking effort row
+ *
+ * Purpose: The row on the Ollama tab labeled "Thinking," where you choose how
+ * hard the AI reasons before it answers: Off, Brief, Balanced, or Deep. More
+ * thinking can mean a better answer, but it also takes longer, so this lets a
+ * person pick that trade-off for themselves instead of always getting the
+ * slowest, deepest setting.
+ *
+ * Used for: OllamaTab, directly below the Reply style row.
+ *
+ * Solves: Lets a person change how much the AI thinks without editing
+ * settings.json by hand.
+ *
+ * Does not: Decide what each of the four settings actually asks the model to
+ * do, or what happens when the chosen model cannot think at all — both live
+ * in the backend's `ollama_ask_budgets`, which falls back silently in that
+ * case (decision D21).
+ */
+import { Focusable, Button } from "@decky/ui";
+
+import {
+  ASK_THINK_EFFORT_IDS,
+  ASK_THINK_EFFORT_LABELS,
+  type AskThinkEffortId,
+} from "../settings/askThinkEffort";
+import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
+import { textPx } from "../../styles/textPx";
+
+export type OllamaThinkingEffortRowProps = {
+  value: AskThinkEffortId;
+  onChange: (v: AskThinkEffortId) => void;
+  /** Host for the focus entry point, so neighbours can hand focus to the first button. */
+  hostRef?: React.Ref<HTMLDivElement>;
+  onMoveUp: () => boolean;
+  onMoveDown: () => boolean;
+};
+
+/**
+ * The four buttons under the row's name. The line that explains what the selected one does is not
+ * drawn here any more: the Ollama tab folds (plan 91 § 2b) and shows it in its help strip while the
+ * ring is on the row (OllamaTab.tsx puts it on the row's DenseRow), so it changes with the pick there.
+ *
+ * In: the effort level currently selected, a callback to run when a
+ * different button is pressed, an optional host ref so a neighbouring row
+ * can hand focus straight to the first button, and the Up/Down handlers that
+ * let the D-pad leave this row for whatever sits above or below it.
+ * Out: the "Thinking" label and a horizontal row of four buttons, one per effort level.
+ *
+ * What can go wrong: Up and Down only work when wired on the Focusable that
+ * wraps the buttons, never on the buttons themselves — a Decky Button does
+ * not fire onMoveUp/onMoveDown, so those handlers have to live one level up
+ * (see the comment on the Focusable below).
+ */
+export function OllamaThinkingEffortRow({
+  value,
+  onChange,
+  hostRef,
+  onMoveUp,
+  onMoveDown,
+}: OllamaThinkingEffortRowProps) {
+  return (
+    <div ref={hostRef} style={{ width: "100%", minWidth: 0, maxWidth: "100%" }}>
+      <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 6 }}>Thinking</div>
+      {/* onMove* live on the Focusable, never on the Buttons — they do not fire on a
+          Decky Button. The parent owns the graph; the buttons are leaves. */}
+      <Focusable
+        flow-children="horizontal"
+        style={{
+          display: "flex",
+          gap: 6,
+          width: "100%",
+          minWidth: 0,
+          maxWidth: "100%",
+          alignItems: "stretch",
+        }}
+        {...({
+          onMoveUp: () => onMoveUp(),
+          onMoveDown: () => onMoveDown(),
+        } as unknown as Record<string, unknown>)}
+      >
+        {ASK_THINK_EFFORT_IDS.map((option) => {
+          const active = option === value;
+          return (
+            <Button
+              key={`think-effort-${option}`}
+              onClick={() => onChange(option)}
+              className={FOCUS_RING_BTN_CLASS}
+              style={{
+                flex: 1,
+                minHeight: 36,
+                fontSize: textPx(12),
+                fontWeight: 600,
+                padding: "4px 4px",
+                borderRadius: 4,
+                border: active
+                  ? "1px solid rgba(255,255,255,0.45)"
+                  : "1px solid rgba(255,255,255,0.12)",
+                background: active
+                  ? "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.1) 100%)"
+                  : "rgba(255,255,255,0.04)",
+                color: active ? "#f0f4f8" : "#9fb0c0",
+                boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
+              }}
+              aria-label={`Set thinking to ${ASK_THINK_EFFORT_LABELS[option]}`}
+            >
+              {ASK_THINK_EFFORT_LABELS[option]}
+            </Button>
+          );
+        })}
+      </Focusable>
+    </div>
+  );
+}

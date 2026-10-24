@@ -1,0 +1,176 @@
+# Track A — the ratchet.
+#
+# Runs the three gates that already exist, on every push and pull request:
+#   npx tsc --noEmit   (typecheck — rollup does NOT typecheck, so this is the only one that does)
+#   pnpm test          (vitest, 593 tests)
+#   pnpm test:py       (unittest, 834 tests)
+#   pnpm test:focus    (Track B static focus checks, ratcheted to a baseline)
+#
+# Plan: workshop:planning/21-ai-owned-testing-program.md § 3, Track A.
+# Milestone M1 ("CI rejects a pull request because a test failed") is reached
+# when ADVISORY below flips to "false".
+#
+# BLOCKING since 2026-08-26. The advisory first session is over: the suite came
+# back green on a clean Linux runner, including three tests that had never
+# executed anywhere because they skip on Windows. A red gate now fails the job.
+# That is milestone M1.
+#
+# TO GO BACK TO ADVISORY: set ADVISORY to "true" in the "Gate summary" step.
+# That is the whole change — one line. Do that if a gate turns out to produce
+# false positives, rather than deleting the gate.
+#
+# Note the split: ADVISORY governs the GATES. It does not cover setup — if
+# "Install Node" or "Install dependencies" fails, the job goes red either way,
+# because a workflow that cannot set itself up is broken rather than reporting
+# bad news.
+
+name: Tests
+
+on:
+  push:
+    paths-ignore:
+      - "docs/**"
+      - "screenshots/**"
+      - "**.md"
+  pull_request:
+    paths-ignore:
+      - "docs/**"
+      - "screenshots/**"
+      - "**.md"
+  workflow_dispatch:
+
+# A newer push to the same branch makes the older run irrelevant. Cancelling it
+# keeps the minutes bill roughly flat no matter how often you push.
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    name: tsc + vitest + python + focus
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # pnpm has to exist before setup-node, or setup-node cannot resolve the
+      # pnpm cache backend on the next step.
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          # Pinned exactly. package.json has no "packageManager" field, so
+          # nothing else in the repo states a pnpm version — a floating major
+          # would mean CI silently changing package managers under you.
+          version: 11.23.0
+
+      - name: Install Node
+        uses: actions/setup-node@v7
+        with:
+          # NOT 20, and not whatever validate-mcp.yml says. pnpm 11.23 requires
+          # Node >= 22.13 because it imports node:sqlite; pinning 20 to match the
+          # older workflow failed the very first run at setup, before any test ran.
+          # Checking that vitest/rollup/tsc supported 20 was not enough -- the
+          # package manager is a dependency too. 24 also matches the maintainer's
+          # local Node, so CI runs the suite on the version it is known green on.
+          node-version: "24"
+          cache: pnpm
+
+      - name: Install Python
+        uses: actions/setup-python@v7
+        with:
+          # Matches the maintainer's local 3.12.x. scripts/run_python_tests.py
+          # uses only the standard library, so there is nothing to pip install.
+          python-version: "3.12"
+
+      - name: Install dependencies
+        id: install
+        run: pnpm install --frozen-lockfile
+
+      # All three gates carry `continue-on-error` and run even after an earlier
+      # one goes red, so a single failure cannot hide the other two answers.
+      # The "Gate summary" step is what decides whether the job passes.
+      - name: Typecheck
+        id: tsc
+        if: always() && steps.install.outcome == 'success'
+        continue-on-error: true
+        run: npx tsc --noEmit
+
+      - name: Unit tests
+        id: vitest
+        if: always() && steps.install.outcome == 'success'
+        continue-on-error: true
+        run: pnpm test
+
+      - name: Python tests
+        id: pytests
+        if: always() && steps.install.outcome == 'success'
+        continue-on-error: true
+        run: pnpm test:py
+
+      # Track B. Static focus checks, ratcheted against scripts/focus-baseline.json:
+      # it fails only when a violation count goes UP, so the 77 pre-existing ones
+      # do not block work while new ones cannot get in.
+      - name: Focus patterns
+        id: focus
+        if: always() && steps.install.outcome == 'success'
+        continue-on-error: true
+        run: pnpm test:focus
+
+      - name: Gate summary
+        if: always()
+        env:
+          # <<< Track A flip: "false" makes a red gate block the merge. >>>
+          # Flipped to "false" on 2026-08-26 after the first green run on a clean
+          # Linux runner (1,427 tests, plus three that had never executed anywhere
+          # because they skip on Windows). This is milestone M1.
+          ADVISORY: "false"
+          TSC: ${{ steps.tsc.outcome }}
+          VITEST: ${{ steps.vitest.outcome }}
+          PYTESTS: ${{ steps.pytests.outcome }}
+          FOCUS: ${{ steps.focus.outcome }}
+          INSTALL: ${{ steps.install.outcome }}
+        run: |
+          set -u
+          mark() {
+            case "$1" in
+              success) echo ":white_check_mark: pass" ;;
+              failure) echo ":x: FAIL" ;;
+              skipped|"") echo ":heavy_minus_sign: not run" ;;
+              *)       echo "$1" ;;
+            esac
+          }
+          {
+            echo "## Test gates"
+            echo
+            echo "| Gate | Command | Result |"
+            echo "|---|---|---|"
+            echo "| Install | \`pnpm install --frozen-lockfile\` | $(mark "$INSTALL") |"
+            echo "| Typecheck | \`npx tsc --noEmit\` | $(mark "$TSC") |"
+            echo "| Unit | \`pnpm test\` | $(mark "$VITEST") |"
+            echo "| Python | \`pnpm test:py\` | $(mark "$PYTESTS") |"
+            echo "| Focus | \`pnpm test:focus\` | $(mark "$FOCUS") |"
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          failed=0
+          for r in "$INSTALL" "$TSC" "$VITEST" "$PYTESTS" "$FOCUS"; do
+            [ "$r" = "success" ] || failed=1
+          done
+
+          if [ "$failed" -eq 0 ]; then
+            echo "All gates green." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          if [ "$ADVISORY" = "true" ]; then
+            {
+              echo "**Advisory run — the red gate above did not block this merge.**"
+              echo
+              echo "This is Track A's agreed first-session behaviour. Flip \`ADVISORY\`"
+              echo "to \`false\` in \`.github/workflows/tests.yml\` to start blocking."
+              echo "See \`docs/planning/21-ai-owned-testing-program.md\` § 3."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          echo "**Blocking run — a gate failed.**" >> "$GITHUB_STEP_SUMMARY"
+          exit 1

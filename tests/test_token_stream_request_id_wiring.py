@@ -19,7 +19,7 @@ if "fcntl" not in sys.modules:
 
 class TokenStreamRequestIdWiringTests(unittest.TestCase):
     def test_run_game_ai_request_accepts_token_stream_request_id(self) -> None:
-        from backend.services.game_ai_request import run_game_ai_request
+        from backend.ask.game_ai_request import run_game_ai_request
 
         params = inspect.signature(run_game_ai_request).parameters
         self.assertIn("token_stream_request_id", params)

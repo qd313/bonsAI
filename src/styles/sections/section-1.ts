@@ -1,12 +1,32 @@
-import {
-  TAB_TITLE_DEBUG_TAB_ICON_PX,
-  TAB_TITLE_ICON_PX,
-  TAB_TITLE_MAIN_ICON_SHIFT_X_PX,
-  TAB_TITLE_MAIN_TAB_ICON_PX,
-  TAB_TITLE_TAB_CELL_PX,
-  TAB_TITLE_TAB_GAP_PX,
-} from "../../features/unified-input/constants";
+/**
+ * Title: Tab area frame, and stopping the tab-switch flicker
+ *
+ * Purpose: Styles the box that holds the whole tab area — everything
+ * below the top of the plugin's window: the strip that used to show
+ * Steam's own tab icons (now hidden; the plugin draws its own bar
+ * instead, see tabIndicatorBarStyles.ts) and the scrollable body underneath it.
+ * Also fixes a flicker seen when switching tabs with the shoulder
+ * buttons, where the tab strip visibly dragged sideways for a moment.
+ *
+ *     ┌─ this file's box ─────────────────────┐
+ *     │  (Steam's own tab strip: hidden here)  │
+ *     │  ┌───────────────────────────────────┐ │
+ *     │  │        scrollable tab body         │ │
+ *     │  └───────────────────────────────────┘ │
+ *     └─────────────────────────────────────────┘
+ *
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
+ *
+ * Does not: Draw the plugin's own tab bar that replaced Steam's — see
+ * tabIndicatorBarStyles.ts for that.
+ */
 
+/**
+ * In: nothing.
+ * Out: a block of CSS text.
+ * Can go wrong: nothing — this always returns the same fixed string.
+ */
 export function buildSection1Section(): string {
   return `
 /* ==========================================================================
@@ -21,212 +41,79 @@ export function buildSection1Section(): string {
           min-width: 0 !important;
           min-height: 0 !important;
           box-sizing: border-box !important;
-          overflow-x: clip !important;
+          /* Both axes must say clip. Per spec, clip on one axis computes to hidden when the
+             other axis is hidden — measured on device 2026-08-07: this rule read back as
+             hidden/hidden for as long as it was written as overflow-x only. hidden still
+             allows *programmatic* scrolling, which is what made the strip flicker (see the
+             sibling rule below). */
+          overflow: clip !important;
           display: flex !important;
           flex-direction: column !important;
-          flex: 1 1 auto !important;
+          flex: 1 1 0% !important;
+          align-self: stretch !important;
+        }
+
+        /* Decky Tabs host between strip and TabContentsScroll must shrink, not grow with content.
+
+           clip, not hidden — this is the LB/RB tab-strip flicker fix (TAB-SWITCH-01).
+           Measured on device 2026-08-07: on an RB press this wrapper's scrollWidth transiently
+           inflates (300 -> 420) while the outgoing tab is still mounted, Steam scrolls it right
+           to reveal the incoming tab, and then the browser clamps scrollLeft back down frame by
+           frame as scrollWidth collapses — dragging the whole strip sideways and back over
+           ~350ms. scrollLeft tracked scrollWidth - clientWidth exactly on every frame. LB never
+           showed it because scrolling toward 0 is valid at any scrollWidth.
+
+           overflow:hidden does not prevent this: a hidden box is still a scroll container and
+           is still scrollable programmatically (measured: scrollLeft took 119.53 under hidden, 0
+           under clip). clip removes the scroll container outright, so there is no offset to
+           clamp. This element has no legitimate scroll range to lose — at rest it measures
+           scrollWidth == clientWidth == 300; the carousel's real horizontal scrolling happens on
+           a deeper Steam element (sw 362 / cw 188), which this rule does not touch. */
+        .bonsai-scope .bonsai-decky-tabs-root > .Panel,
+        .bonsai-scope .bonsai-decky-tabs-root > div {
+          flex: 1 1 0% !important;
+          min-height: 0 !important;
+          min-width: 0 !important;
+          display: flex !important;
+          flex-direction: column !important;
+          overflow: clip !important;
           align-self: stretch !important;
         }
 
         .bonsai-scope .bonsai-decky-tabs-root [class*="TabContentsScroll"] {
           position: relative !important;
           z-index: 1 !important;
-          flex: 1 1 auto !important;
+          flex: 1 1 0% !important;
           min-height: 0 !important;
+          max-height: 100% !important;
+          overflow-y: auto !important;
         }
 
-        /* Chip margin only — do not fix DialogButton width (stacks carousel vertically on Bazzite mount). */
-        .bonsai-scope.bonsai-qam-strip-stable .bonsai-decky-tabs-root .bonsai-tab-title-leaf {
-          margin-left: 0 !important;
-          margin-right: 0 !important;
-        }
-
-        /* Uniform tab glyph box. Icon components use an inner IconShell <span>; logo uses <img>. */
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell {
-          width: ${TAB_TITLE_TAB_CELL_PX}px !important;
-          height: ${TAB_TITLE_TAB_CELL_PX}px !important;
-          min-width: ${TAB_TITLE_TAB_CELL_PX}px !important;
-          min-height: ${TAB_TITLE_TAB_CELL_PX}px !important;
-          max-width: ${TAB_TITLE_TAB_CELL_PX}px !important;
-          max-height: ${TAB_TITLE_TAB_CELL_PX}px !important;
-          box-sizing: border-box !important;
-        }
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--main .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--main .bonsai-tab-title-icon > span,
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--main .bonsai-tab-title-icon svg {
-          width: ${TAB_TITLE_MAIN_TAB_ICON_PX}px !important;
-          height: ${TAB_TITLE_MAIN_TAB_ICON_PX}px !important;
-          min-width: ${TAB_TITLE_MAIN_TAB_ICON_PX}px !important;
-          min-height: ${TAB_TITLE_MAIN_TAB_ICON_PX}px !important;
-          max-width: ${TAB_TITLE_MAIN_TAB_ICON_PX}px !important;
-          max-height: ${TAB_TITLE_MAIN_TAB_ICON_PX}px !important;
-        }
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--main .bonsai-tab-title-icon {
-          transform: translateX(${TAB_TITLE_MAIN_ICON_SHIFT_X_PX}px) !important;
-        }
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--developer .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--developer .bonsai-tab-title-icon > span,
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--developer .bonsai-tab-title-icon svg {
-          width: ${TAB_TITLE_DEBUG_TAB_ICON_PX}px !important;
-          height: ${TAB_TITLE_DEBUG_TAB_ICON_PX}px !important;
-          min-width: ${TAB_TITLE_DEBUG_TAB_ICON_PX}px !important;
-          min-height: ${TAB_TITLE_DEBUG_TAB_ICON_PX}px !important;
-          max-width: ${TAB_TITLE_DEBUG_TAB_ICON_PX}px !important;
-          max-height: ${TAB_TITLE_DEBUG_TAB_ICON_PX}px !important;
-        }
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-icon {
-          width: ${TAB_TITLE_ICON_PX}px !important;
-          height: ${TAB_TITLE_ICON_PX}px !important;
-          min-width: ${TAB_TITLE_ICON_PX}px !important;
-          min-height: ${TAB_TITLE_ICON_PX}px !important;
-          max-width: ${TAB_TITLE_ICON_PX}px !important;
-          max-height: ${TAB_TITLE_ICON_PX}px !important;
-          box-sizing: border-box !important;
-          color: rgba(168, 182, 198, 0.62) !important;
-          opacity: 1 !important;
-        }
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-icon > span {
-          width: ${TAB_TITLE_ICON_PX}px !important;
-          height: ${TAB_TITLE_ICON_PX}px !important;
-          min-width: ${TAB_TITLE_ICON_PX}px !important;
-          min-height: ${TAB_TITLE_ICON_PX}px !important;
-          max-width: ${TAB_TITLE_ICON_PX}px !important;
-          max-height: ${TAB_TITLE_ICON_PX}px !important;
-          display: inline-flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          box-sizing: border-box !important;
-        }
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-icon svg {
-          width: ${TAB_TITLE_ICON_PX}px !important;
-          height: ${TAB_TITLE_ICON_PX}px !important;
-          max-width: ${TAB_TITLE_ICON_PX}px !important;
-          max-height: ${TAB_TITLE_ICON_PX}px !important;
-          box-sizing: border-box !important;
-        }
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-icon img {
-          width: ${TAB_TITLE_ICON_PX}px !important;
-          height: ${TAB_TITLE_ICON_PX}px !important;
-          max-width: ${TAB_TITLE_ICON_PX}px !important;
-          max-height: ${TAB_TITLE_ICON_PX}px !important;
-          object-fit: contain !important;
-          box-sizing: border-box !important;
+        /* Plan 30 (D44): Steam's tab header — LB hint, icon carousel, RB hint — is hidden; the
+           collapsing bar above the tabs root shows the tab instead. Structural and hash-free: the
+           header wrapper is the Tabs panel's first child, the only child holding our title leaves
+           and both aria-labelled hint images and not TabContentsScroll (probe_deck_tab_bar.py,
+           2026-09-02). display:none, not height:0 + visibility:hidden — measured the same day:
+           both leave Steam's hidden tab button as a D-pad stop (its nav tree is mounted
+           Focusables, not layout), but only display:none takes the leaves out of layout, so
+           useTabStripBodyOffset does not reserve their 62px (variant B reserved 67px and reclaimed
+           nothing). Fail-safe by construction: if a Steam update stops this from matching, Steam's
+           own strip reappears above our bar and nothing else breaks. Steam keeps handling LB/RB
+           with the row hidden — TAB-BAR-W1a, with and without a game running. */
+        .bonsai-scope .bonsai-decky-tabs-root > .Panel.Focusable > div:has(.bonsai-tab-title-leaf):has(img[aria-label]):not(:has([class*="TabContentsScroll"])) {
+          display: none !important;
         }
 
         /*
-          Chip sizing lives on .bonsai-tab-title-leaf only (see bonsaiTabIconTitle).
-          Prior :has(.bonsai-tab-title-shell) + width:40px matched intermediate carousel Panels (H2 depth-3),
-          collapsing the strip so only one tab column peeked through.
+          Plan 30 W6 (2026-09-02): everything that used to style Steam's tab strip here — the leaf
+          box, the icon shells and sizes, the dim and bright rings, the icon drop-shadows and the
+          [data-bonsai-active-tab] marker — was deleted. Steam's header is display:none (the rule
+          above), so none of it could paint, and workshop:audit/decky-tab-strip-classes.md had already
+          recorded the .Active-keyed ring blocks as dead since 2026-08-04. The strip's job moved to
+          TabIndicatorBar + styles/sections/tabIndicatorBar.ts. data-bonsai-active-tab stays on the
+          tabs root: nothing styles on it any more, but the on-Deck rows read it as the probe of
+          which tab is active (runs/TAB-BAR-03-*.json expect on it).
         */
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-leaf {
-          box-sizing: border-box !important;
-          width: 40px !important;
-          min-width: 40px !important;
-          max-width: 40px !important;
-          min-height: 44px !important;
-          display: inline-flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          flex-shrink: 0 !important;
-          margin-left: ${TAB_TITLE_TAB_GAP_PX}px !important;
-          margin-right: ${TAB_TITLE_TAB_GAP_PX}px !important;
-          padding: 2px !important;
-          border-radius: 12px !important;
-          outline: none !important;
-        }
-
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable:has(.bonsai-tab-title-leaf),
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton:has(.bonsai-tab-title-leaf) {
-          background: transparent !important;
-          background-color: transparent !important;
-          background-image: none !important;
-          border: none !important;
-          box-shadow: none !important;
-        }
-
-        /*
-          Current tab: very dim ring while focus is in the tab body (active strip control has no :focus-within).
-          Bright ring when the strip control or its descendants hold focus / gamepad focus.
-        */
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.Active:not(:focus-within) .bonsai-tab-title-leaf,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.Active:not(:focus-within) .bonsai-tab-title-leaf,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.active:not(:focus-within) .bonsai-tab-title-leaf {
-          box-shadow:
-            0 0 0 1px var(--bonsai-ui-tab-dim-1, rgba(82, 216, 138, 0.2)),
-            0 0 6px 1px var(--bonsai-ui-tab-dim-2, rgba(34, 100, 65, 0.12)) !important;
-        }
-
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.Active:focus-within .bonsai-tab-title-leaf,
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.Active:focus-visible .bonsai-tab-title-leaf,
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.Active.gpfocus .bonsai-tab-title-leaf,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.Active:focus-within .bonsai-tab-title-leaf,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.Active:focus-visible .bonsai-tab-title-leaf,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.active:focus-within .bonsai-tab-title-leaf,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.active:focus-visible .bonsai-tab-title-leaf,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.Active.gpfocus .bonsai-tab-title-leaf,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.active.gpfocus .bonsai-tab-title-leaf {
-          box-shadow:
-            0 0 0 2px var(--bonsai-ui-tab-bright-1, rgba(82, 216, 138, 0.95)),
-            0 0 18px 6px var(--bonsai-ui-tab-bright-2, rgba(34, 100, 65, 0.55)),
-            0 0 36px 12px var(--bonsai-ui-tab-bright-3, rgba(82, 216, 138, 0.32)) !important;
-        }
-
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.gpfocus:has(.bonsai-tab-title-leaf),
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.gpfocus:has(.bonsai-tab-title-leaf),
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.gpfocuswithin:has(.bonsai-tab-title-leaf),
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.gpfocuswithin:has(.bonsai-tab-title-leaf) {
-          border-radius: 12px !important;
-        }
-
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable:focus-visible .bonsai-tab-title-leaf,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton:focus-visible .bonsai-tab-title-leaf {
-          outline: none !important;
-        }
-
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable:focus-visible:not(.Active) .bonsai-tab-title-leaf,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton:focus-visible:not(.Active):not(.active) .bonsai-tab-title-leaf {
-          box-shadow:
-            0 0 0 2px var(--bonsai-ui-tab-focus-1, rgba(82, 216, 138, 0.92)),
-            0 0 0 5px var(--bonsai-ui-tab-focus-2, rgba(82, 216, 138, 0.18)) !important;
-        }
-
-        /* No green icon glow on non-active DialogButton tabs only. Avoid Panel.Focusable:not(.Active):
-           Deck nests a non-Active Focusable inside the active tab DialogButton, which matched and cleared the active icon glow. */
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton:not(.Active):not(.active) .bonsai-tab-title-icon {
-          filter: none !important;
-        }
-
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable:focus-visible:not(.Active) .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton:focus-visible:not(.Active):not(.active) .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.gpfocuswithin:not(.Active) .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.gpfocuswithin:not(.Active):not(.active) .bonsai-tab-title-icon {
-          color: rgba(252, 252, 252, 1) !important;
-        }
-
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.Active:not(:focus-within) .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.Active:not(:focus-within) .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.active:not(:focus-within) .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .Focusable.Active:not(:focus-within) .bonsai-tab-title-icon {
-          color: rgba(252, 252, 252, 1) !important;
-          filter:
-            drop-shadow(0 0 2px var(--bonsai-ui-tab-icon-ds-1, rgba(82, 216, 138, 0.22)))
-            drop-shadow(0 0 6px var(--bonsai-ui-tab-icon-ds-2, rgba(34, 100, 65, 0.16))) !important;
-        }
-
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.Active:focus-within .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.Active:focus-visible .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.Active.gpfocus .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.Active:focus-within .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.Active:focus-visible .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.active:focus-within .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.active:focus-visible .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.Active.gpfocus .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .DialogButton.active.gpfocus .bonsai-tab-title-icon {
-          filter:
-            drop-shadow(0 0 6px var(--bonsai-ui-tab-icon-ds-3, rgba(82, 216, 138, 0.95)))
-            drop-shadow(0 0 14px var(--bonsai-ui-tab-icon-ds-4, rgba(34, 100, 65, 0.62)))
-            drop-shadow(0 0 24px var(--bonsai-ui-tab-icon-ds-5, rgba(82, 216, 138, 0.45))) !important;
-        }
 
         .bonsai-scope [class*="TabContentsScroll"] {
           scroll-behavior: auto !important;

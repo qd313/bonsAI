@@ -1,0 +1,886 @@
+"""
+Title: Saved chats you can switch between
+
+Purpose: Every separate conversation you keep on the Ask screen -- the ones
+you can switch between instead of losing your place -- is stored here as one
+file per chat ("slot"), plus a small index file listing all of them so the
+switcher can show titles without opening every chat. A chat only exists here
+once main.py calls `create_slot()` or `ensure_slot()`, when you start a new
+chat or open a stored one for the first time in a session.
+
+Used for: the handful of things the screen can ask the back end to do with a
+chat -- start a new one, switch to one, rename it, delete it -- and the code
+that records each question and answer as it happens, through `append_turn()`.
+
+Solves: Keeping a bounded, disk-backed set of chats -- ten at most, two
+hundred questions-and-answers at most in each -- written so a crash mid-save
+cannot corrupt a chat, and an index kept in step with the chats it lists.
+
+Does not: Decide which chat is currently open on screen, or match an
+in-flight question back up with its answer -- that bookkeeping lives on the
+Plugin class in main.py, in memory, not here.
+
+How it works:
+ 1. Each chat is its own JSON file, named by its id and found through
+    `slot_path()`. A small index file (`index_path()`) lists every chat's id,
+    title and last-updated time, so the switcher can show a list without
+    opening ten files.
+ 2. `create_slot()` makes a new chat: it works out a title with
+    `heuristic_slot_label()` if none was given, writes the chat file with
+    `save_slot()`, then adds it to the index with `_upsert_index_row()`.
+ 3. `ensure_slot()` is what main.py actually calls when a chat may or may not
+    already exist -- it looks the id up first with `load_slot()` and only
+    creates one if that comes back empty.
+ 4. Every question and answer is added with `append_turn()`: it loads the
+    chat, cleans the new turn through `_normalize_turn()`, appends it, trims
+    down to the newest 200 turns if the limit is passed, and saves both the
+    chat file and the index.
+ 5. Both `save_slot()` and `save_index()` write to a temporary file first and
+    only swap it into place once the write has finished, so a crash or power
+    loss mid-write cannot leave a half-written chat behind.
+ 6. At ten chats, `create_slot()` refuses with `ChatLimitReached` and changes
+    nothing on disk (plan 87 F2). It used to delete the oldest chat without a
+    word. A chat is now removed only by `delete_slot()`, which the screen calls
+    after the person picked that chat and pressed Delete in the confirm box.
+
+Gotchas:
+ - A chat's title comes from the question asked, not the game it was asked
+   in -- `heuristic_slot_label()`'s own notes explain why: naming every chat
+   after the game made the chat list read as a column of near-identical
+   prefixes.
+ - A turn's game id is stored on the turn itself, not just once per chat,
+   because a chat can outlive one play session -- you can keep asking in the
+   same saved chat after closing one game and opening another.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import time
+import uuid
+from typing import Any
+
+from backend.chats.chat_summary_title import MAX_SUGGESTED_TITLE_CHARS
+from backend.ask.ollama_service import REASONING_CUT_NOTE, REASONING_TEXT_CAP_CHARS
+
+SCHEMA_VERSION = 1
+MAX_CHAT_SLOTS = 10
+MAX_TURNS_PER_SLOT = 200
+MAX_TURN_TEXT_LEN = 120_000
+MAX_LABEL_LEN = 120
+MAX_DISPLAY_TEXT_LEN = 300
+# The game's display name, kept alongside its app id so the slot row can show which game a chat
+# belongs to without a lookup. The id alone cannot be shown to a reader, and resolving it needs the
+# game to be running, which it usually is not by the time you are browsing old chats.
+MAX_APP_NAME_LEN = 48
+# The thing the backend worked out a question named (plan 54 gap 2) — a card title such as
+# "Wheatley" or "Dreadnought Twins". Longer than a game name, since a card title can run longer,
+# but still bounded: this is a display fact, not a place to smuggle a long question in.
+MAX_ASKED_ENTITY_LEN = 120
+# Plan 58 phase 1: the "From the notes" block's own material -- the notes retrieval attached to
+# a turn, kept alongside its saved transparency so reopening the chat shows the same block again.
+# Bounds below mirror what the backend already caps a card at (retrieve_knowledge_context's own
+# per-mode byte budget is a few KB at most; MAX_KB_NOTE_CARD_LEN is generous headroom on top of
+# that, not a second place deciding how long a note may be).
+MAX_KB_ATTACHED_NOTES = 8
+MAX_KB_NOTE_NAME_LEN = 200
+MAX_KB_NOTE_KIND_LEN = 40
+MAX_KB_NOTE_CARD_LEN = 6_000
+MAX_KB_NOTE_TRUST_TIER_LEN = 40
+MAX_KB_NOTE_SOURCE_HOST_LEN = 120
+MAX_KB_NOTE_SOURCE_LICENSE_LEN = 60
+MAX_KB_NOTE_GAME_TITLE_LEN = 120
+# Plan 68 step 2: the chat's own summary of its older turns, written just before it would
+# otherwise outgrow its room, and the remembered subject of its last follow-up question -- now
+# kept per chat instead of for the whole plugin. Caps here mirror the rest of this file: generous
+# enough for what the feature actually writes, tight enough that a malformed file cannot balloon.
+MAX_SUMMARY_TEXT_LEN = 2_000
+MAX_SUMMARY_TURN_ID_LEN = 64
+MAX_SUMMARY_MODEL_LEN = 120
+MAX_SUMMARY_WRITTEN_AT_LEN = 40
+MAX_SUBJECT_GAME_KEY_LEN = 200
+MAX_SUBJECT_TEXT_LEN = 200
+SLOTS_SUBDIR = "chat_slots"
+
+
+def slots_dir(settings_dir: str) -> str:
+    return os.path.join(settings_dir, SLOTS_SUBDIR)
+
+
+def index_path(settings_dir: str) -> str:
+    return os.path.join(slots_dir(settings_dir), "index.json")
+
+
+def slot_path(settings_dir: str, slot_id: str) -> str:
+    safe = _sanitize_slot_id(slot_id)
+    return os.path.join(slots_dir(settings_dir), f"{safe}.json")
+
+
+def _sanitize_slot_id(slot_id: str) -> str:
+    sid = str(slot_id or "").strip()
+    if not sid or "/" in sid or "\\" in sid or "\x00" in sid:
+        raise ValueError("Invalid slot id.")
+    return sid
+
+
+def _empty_index() -> dict[str, Any]:
+    return {"version": SCHEMA_VERSION, "slots": []}
+
+
+def _normalize_attachment_refs(raw: Any) -> list[dict[str, str]]:
+    if not isinstance(raw, list):
+        return []
+    out: list[dict[str, str]] = []
+    for item in raw[:8]:
+        if not isinstance(item, dict):
+            continue
+        path = str(item.get("path", "") or "").strip()
+        if not path:
+            continue
+        out.append(
+            {
+                "path": path[:512],
+                "name": str(item.get("name", "") or "")[:120],
+                "source": str(item.get("source", "unknown") or "unknown")[:32],
+            }
+        )
+    return out
+
+
+def _normalize_kb_attached_note(raw: Any) -> dict[str, Any] | None:
+    """One note for the "From the notes" block, sanitized. ``name`` and non-empty ``card`` are
+    both required -- a note with either missing is not something the block could ever show, so
+    it is dropped here rather than stored as a placeholder a reader has to guess the shape of."""
+    if not isinstance(raw, dict):
+        return None
+    name = str(raw.get("name") or "").strip()
+    card = str(raw.get("card") or "")
+    if not name or not card.strip():
+        return None
+    return {
+        "name": name[:MAX_KB_NOTE_NAME_LEN],
+        "kind": str(raw.get("kind") or "")[:MAX_KB_NOTE_KIND_LEN],
+        "card": card[:MAX_KB_NOTE_CARD_LEN],
+        "trust_tier": str(raw.get("trust_tier") or "")[:MAX_KB_NOTE_TRUST_TIER_LEN],
+        "source_host": str(raw.get("source_host") or "")[:MAX_KB_NOTE_SOURCE_HOST_LEN],
+        "source_license": str(raw.get("source_license") or "")[:MAX_KB_NOTE_SOURCE_LICENSE_LEN],
+        "domain": str(raw.get("domain") or "")[:20],
+        "game_title": str(raw.get("game_title") or "")[:MAX_KB_NOTE_GAME_TITLE_LEN],
+        # D112 #7 (plan 70): a protected boss note's name stays hidden on reopening a saved chat.
+        # Kept only when truly true, so every other note keeps the shape it was saved in.
+        **({"spoiler_protected": True} if raw.get("spoiler_protected") is True else {}),
+    }
+
+
+def _normalize_kb_attached_notes(raw: Any) -> list[dict[str, Any]]:
+    if not isinstance(raw, list):
+        return []
+    out: list[dict[str, Any]] = []
+    for item in raw[:MAX_KB_ATTACHED_NOTES]:
+        note = _normalize_kb_attached_note(item)
+        if note is not None:
+            out.append(note)
+    return out
+
+
+def _normalize_user_notes_attached(raw: Any) -> list[dict[str, str]]:
+    """The notes of the person's own that went into a turn (plan 92): ``id``, ``text`` and
+    ``game_title`` each, at most eight (the most an Ask reads), anything else dropped."""
+    out: list[dict[str, str]] = []
+    for item in (raw if isinstance(raw, list) else [])[:8]:
+        if isinstance(item, dict) and str(item.get("text") or "").strip():
+            out.append(
+                {
+                    "id": str(item.get("id") or "")[:40],
+                    "text": str(item["text"])[:200],
+                    "game_title": str(item.get("game_title") or "")[:120],
+                }
+            )
+    return out
+
+
+def _normalize_turn_transparency(raw: Any) -> dict[str, Any] | None:
+    """Sanitize the trimmed snapshot ``transparency_snapshot_for_chat_slot`` hands us.
+
+    Only ``context_chips`` is load-bearing here — it is what
+    ``SessionContextStrip.tsx`` filters archived turns on (``t.transparency && chipsFromSnapshot(...)
+    .length > 0``). A turn with no chips is treated the same as no snapshot at all, so a slot
+    round-tripped through disk cannot resurrect an empty placeholder as a countable turn.
+
+    ``kb_attached_notes`` (plan 58 phase 1) rides here too, kept even on a turn whose own chips
+    list is empty for every OTHER reason but not for this one — in practice a turn with a note
+    attached always carries a kb chip as well (build_context_chips_manifest adds one whenever
+    kb_attached), so the two are not expected to disagree; if they ever do, the chip gate above
+    still wins and the whole transparency object is dropped, notes included.
+
+    ``user_notes_attached`` and ``user_notes_off_count`` (plan 92) are kept when the snapshot
+    carries them -- the Ask flow always does -- and left off a turn saved before they existed.
+    """
+    if not isinstance(raw, dict):
+        return None
+    chips = raw.get("context_chips")
+    if not isinstance(chips, list) or not chips:
+        return None
+    out = {
+        "route": str(raw.get("route") or ""),
+        "success": bool(raw.get("success")),
+        "context_chips": chips,
+        "overflow_skips": list(raw.get("overflow_skips") or []),
+        "kb_attached_notes": _normalize_kb_attached_notes(raw.get("kb_attached_notes")),
+    }
+    if "user_notes_attached" in raw:
+        out["user_notes_attached"] = _normalize_user_notes_attached(raw["user_notes_attached"])
+        out["user_notes_off_count"] = max(0, int(raw.get("user_notes_off_count") or 0))
+    return out
+
+
+def _normalize_turn_reasoning(raw: Any) -> dict[str, Any] | None:
+    """Sanitize a turn's saved reasoning (plan 57): the model's thinking, its whole seconds and
+    a token estimate. Returns ``None`` on a turn with no thinking, so ``_normalize_turn`` leaves
+    the ``reasoning`` key off entirely rather than writing an empty placeholder -- the same rule
+    ``_normalize_turn_transparency`` already follows for an empty chip list.
+
+    ``text`` arrives already capped by ``ollama_service.cap_reasoning_text`` (end kept, one-line
+    cut note); the length check here is a safety net against a malformed slot file, not a second
+    place that decides what gets cut.
+    """
+    if not isinstance(raw, dict):
+        return None
+    text = str(raw.get("text") or "")
+    if not text.strip():
+        return None
+    def _num(value: Any, default: Any) -> Any:
+        return int(value) if isinstance(value, (int, float)) and not isinstance(value, bool) else default
+
+    max_len = REASONING_TEXT_CAP_CHARS + len(REASONING_CUT_NOTE)
+    return {
+        "text": text[:max_len],
+        "seconds": _num(raw.get("seconds"), None),
+        "tokens": _num(raw.get("tokens"), 0),
+    }
+
+
+def _normalize_summary(raw: Any) -> dict[str, Any] | None:
+    """Sanitize a chat's own summary of its older turns (plan 68 step 2).
+
+    ``text`` is the only field that has to be there for a summary to mean anything -- a summary
+    with no words is not a summary. The rest are clamped rather than required: a bad or missing
+    ``covers_through_turn_id`` just means "covers nothing on the next read" once the id is compared
+    against the chat's actual turns (that comparison is not this function's job), not a reason to
+    throw the whole summary away.
+    """
+    if not isinstance(raw, dict):
+        return None
+    text = str(raw.get("text") or "")
+    if not text.strip():
+        return None
+
+    def _clamped_int(value: Any) -> int:
+        try:
+            return max(0, int(value))
+        except (TypeError, ValueError):
+            return 0
+
+    def _clamped_seconds(value: Any) -> float:
+        try:
+            return max(0.0, float(value))
+        except (TypeError, ValueError):
+            return 0.0
+
+    summary = {
+        "text": text[:MAX_SUMMARY_TEXT_LEN],
+        "covers_through_turn_id": str(raw.get("covers_through_turn_id") or "").strip()[
+            :MAX_SUMMARY_TURN_ID_LEN
+        ],
+        "turns_covered": _clamped_int(raw.get("turns_covered")),
+        "oldest_turns_unread": _clamped_int(raw.get("oldest_turns_unread")),
+        "hidden_notes_left_out": _clamped_int(raw.get("hidden_notes_left_out")),
+        "written_at": str(raw.get("written_at") or "")[:MAX_SUMMARY_WRITTEN_AT_LEN],
+        "seconds": _clamped_seconds(raw.get("seconds")),
+        "model": str(raw.get("model") or "")[:MAX_SUMMARY_MODEL_LEN],
+    }
+    # Plan 79: the fresher chat title the summary call suggested, waiting for a yes or a no on the
+    # summary card. Only present while an offer is open -- "absent, not empty", like ``reasoning``.
+    suggested = " ".join(str(raw.get("suggested_title") or "").split())[:MAX_SUGGESTED_TITLE_CHARS]
+    if suggested:
+        summary["suggested_title"] = suggested
+    return summary
+
+
+def _normalize_subject(raw: Any) -> dict[str, Any] | None:
+    """Sanitize a chat's own remembered follow-up subject (plan 68 step 2) -- the same
+    ``{game_key, subject}`` pair ``kb_followup_memory`` keeps today, now stored per chat. Both
+    parts are required: a game with no remembered subject, or a subject with no game to attach it
+    to, is not something a reader could ever use, so it is dropped here rather than kept half-full.
+    """
+    if not isinstance(raw, dict):
+        return None
+    game_key = str(raw.get("game_key") or "").strip()
+    subject = str(raw.get("subject") or "").strip()
+    if not game_key or not subject:
+        return None
+    return {
+        "game_key": game_key[:MAX_SUBJECT_GAME_KEY_LEN],
+        "subject": subject[:MAX_SUBJECT_TEXT_LEN],
+    }
+
+
+def _normalize_turn(raw: Any) -> dict[str, Any] | None:
+    """Clean one saved chat turn read from disk or sent by the screen, or drop it.
+
+    Returns ``None`` for anything that is not a dict, has a role other than user or assistant, or
+    has no text. Otherwise returns a fresh dict holding only the known fields, each capped to its
+    length limit, with a new id and creation time filled in when the input has none. The marks
+    that only some turns carry (thinking, chat summary, how a turn ended) are added only when
+    present, so an older turn reads back exactly as it was saved.
+    """
+    if not isinstance(raw, dict):
+        return None
+    role = str(raw.get("role", "") or "").strip().lower()
+    if role not in ("user", "assistant"):
+        return None
+    text = str(raw.get("text", "") or "")
+    if not text.strip():
+        return None
+    turn_id = str(raw.get("id", "") or "").strip() or str(uuid.uuid4())
+    rid = raw.get("request_id")
+    request_id = int(rid) if isinstance(rid, (int, float)) and not isinstance(rid, bool) else None
+    turn: dict[str, Any] = {
+        "id": turn_id[:64],
+        "role": role,
+        "text": text[:MAX_TURN_TEXT_LEN],
+        "request_id": request_id,
+        # Which game was running when this turn happened. Per-turn and not per-slot because a
+        # slot outlives a play session: the player can close one game, open another, and keep
+        # asking in the same saved chat. Reading the slot's ``origin_app_id`` for every turn
+        # would relabel the older answers with the newer game.
+        #
+        # Turns saved before this field existed round-trip as "" — a load-bearing empty string,
+        # not a bug. ``turnsToCollapsedTurns`` in TS falls back to the slot's ``origin_app_id``
+        # for those, which is right in the ordinary one-chat-one-game case and no worse than the
+        # "" the frontend used to hardcode in every other case.
+        "app_id": str(raw.get("app_id", "") or "").strip()[:32],
+        # Display name of the game running when this turn happened, alongside ``app_id`` above —
+        # needed for a title reachable only by name (an emulator shortcut with no Steam AppID,
+        # plan 54 gap 1). Same "" round-trip for turns saved before this field existed.
+        "app_name": str(raw.get("app_name", "") or "").strip()[:MAX_APP_NAME_LEN],
+        # The thing the backend worked out this question named (plan 54 gap 2). Only ever set on
+        # the assistant turn — the backend does not know it until the question has been run. ""
+        # round-trips the same way for a turn with nothing named and one saved before this field
+        # existed; the two are indistinguishable and that is fine, both re-fence by default.
+        "asked_entity": str(raw.get("asked_entity", "") or "").strip()[:MAX_ASKED_ENTITY_LEN],
+        # Whether the person said spoilers were okay for this answer (plan 77, CONST-SPOIL-CONSENT-01).
+        # Only ever True on an assistant turn the back end answered with consent in force; a chat
+        # reloaded the moment a reply lands reads it back so the answer does not re-cover itself.
+        # False for every turn saved before this field existed, which re-fences by default.
+        "spoiler_consent": raw.get("spoiler_consent") is True,
+        # What the user saw as their question, when it differs from ``text`` (the composed prompt
+        # actually sent to the model — e.g. a branch pick sends "[Strategy follow-up] I'm at: …"
+        # while the header shows "I'm at: …"). Display only: anything that reasons about the turn
+        # (spoiler unwrap, follow-up context) keeps reading ``text``. "" means they are the same,
+        # which is also what every turn saved before this field existed reports.
+        "display_text": str(raw.get("display_text", "") or "").strip()[:MAX_DISPLAY_TEXT_LEN],
+        "attachment_refs": _normalize_attachment_refs(raw.get("attachment_refs")),
+        "transparency": _normalize_turn_transparency(raw.get("transparency")),
+        "created_at": int(raw.get("created_at") or time.time()),
+    }
+    # Plan 57: only ever set on a turn that actually thought -- absent on every older turn and on
+    # a turn made with thinking Off, not a key holding ``None``.
+    reasoning = _normalize_turn_reasoning(raw.get("reasoning"))
+    if reasoning is not None:
+        turn["reasoning"] = reasoning
+    # Plan 68 step 2: whether this answer summed the chat up first, so the screen can draw the
+    # note or the warning line straight off the saved turn. Only ever set on an assistant turn,
+    # and only to one of these two exact words -- absent otherwise, the same "absent, not empty"
+    # rule ``reasoning`` follows above, never "" and never a stored ``None``.
+    chat_summary = raw.get("chat_summary")
+    if role == "assistant" and chat_summary in ("written", "failed"):
+        turn["chat_summary"] = chat_summary
+    # How an answer that was not a finished one ended: "stopped" (the text is what had arrived) or
+    # "failed" (the text is the error message). Lets a chat reopened later tell such a turn from a
+    # real answer, so it does not get live Helpful buttons. Absent on a finished answer, on a user
+    # turn and on every older turn -- the same "absent, not empty" rule as the marks above.
+    outcome = raw.get("outcome")
+    if role == "assistant" and outcome in ("stopped", "failed"):
+        turn["outcome"] = outcome
+    return turn
+
+
+def _title_looks_typed(raw: dict[str, Any], label: str, turns: list[dict[str, Any]]) -> bool:
+    """For a chat file saved before ``label_by_hand`` existed: was this title typed by the person?
+
+    The plugin names a chat after its first question (``heuristic_slot_label``), or after the game
+    when there is no question yet, or leaves "New chat". A title that is none of those can only
+    have come from the rename box, so it counts as typed and is never second-guessed. When the
+    first question has since been trimmed away (the 200-turn cap) the name cannot be rebuilt and
+    the title counts as typed -- the safe side: no offer is made on a guess.
+    """
+    first_user = next((t for t in turns if t.get("role") == "user"), None)
+    app_name = str(raw.get("origin_app_name", "") or "").strip()[:MAX_APP_NAME_LEN]
+    own_names = {"New chat", heuristic_slot_label("", app_name)}
+    if first_user is not None:
+        own_names.add(heuristic_slot_label(first_user.get("text", ""), app_name))
+        if first_user.get("display_text"):
+            own_names.add(heuristic_slot_label(first_user["display_text"], app_name))
+    return label not in own_names
+
+
+def sanitize_slot(raw: Any) -> dict[str, Any] | None:
+    if not isinstance(raw, dict):
+        return None
+    sid = str(raw.get("id", "") or "").strip()
+    if not sid:
+        return None
+    turns_raw = raw.get("turns")
+    turns: list[dict[str, Any]] = []
+    if isinstance(turns_raw, list):
+        for t in turns_raw[:MAX_TURNS_PER_SLOT]:
+            norm = _normalize_turn(t)
+            if norm is not None:
+                turns.append(norm)
+    label = str(raw.get("label", "") or "").strip()[:MAX_LABEL_LEN] or "New chat"
+    return {
+        "id": sid,
+        "label": label,
+        "created_at": int(raw.get("created_at") or time.time()),
+        "updated_at": int(raw.get("updated_at") or time.time()),
+        "origin_app_id": str(raw.get("origin_app_id", "") or "").strip()[:32],
+        "origin_app_name": str(raw.get("origin_app_name", "") or "").strip()[:MAX_APP_NAME_LEN],
+        # Plan 79: True once the person typed this title themselves (the rename box). A typed title
+        # is never second-guessed by the summary. A chat saved before the flag existed has no such
+        # key: it counts as typed unless its title is one the plugin would have given it itself.
+        "label_by_hand": (
+            raw["label_by_hand"] is True
+            if "label_by_hand" in raw
+            else _title_looks_typed(raw, label, turns)
+        ),
+        # The title the person last answered Keep to, so the same suggestion is not offered again.
+        "declined_title": " ".join(str(raw.get("declined_title") or "").split())[:MAX_SUGGESTED_TITLE_CHARS],
+        # Plan 68 step 2: the chat's own summary of its older turns, and its remembered follow-up
+        # subject. Always present as a key, ``None`` when there is none yet -- the same "always a
+        # key, sometimes null" shape ``_normalize_turn_transparency`` gives a turn, not the
+        # "absent, not null" shape ``reasoning`` gets, because every slot file already has a fixed
+        # set of top-level keys and an old file without these two simply loads with both null.
+        "summary": _normalize_summary(raw.get("summary")),
+        "subject": _normalize_subject(raw.get("subject")),
+        "turns": turns,
+    }
+
+
+def heuristic_slot_label(first_question: str, app_name: str = "") -> str:
+    """Name a slot after what was ASKED, not after where it was asked.
+
+    The label used to be f"{app_name}: {question}". In the slot row that reads as a column of
+    identical prefixes — every chat opened while the same game is running begins with the same
+    twenty-odd characters, and the part that actually distinguishes them is pushed past the
+    ellipsis. Reported by the maintainer on 2026-08-30 looking at a row of "Deep Rock Galactic:
+    Survivor: …" entries; the row window is ~167px, so the game name alone could consume it.
+
+    The game is not lost: it is stored per slot as `origin_app_id`, shown by the context line, and
+    carried on every turn. Falling back to the game name only when there is no question keeps a
+    slot created before its first Ask from being nameless.
+    """
+    q = str(first_question or "").strip()
+    name = str(app_name or "").strip()
+    if q:
+        return (q[: MAX_LABEL_LEN - 1] + "…") if len(q) > MAX_LABEL_LEN else q
+    if name:
+        return name[:MAX_LABEL_LEN]
+    return "New chat"
+
+
+def load_index(settings_dir: str, logger: Any = None) -> dict[str, Any]:
+    path = index_path(settings_dir)
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if not isinstance(data, dict):
+            return _empty_index()
+        slots = data.get("slots")
+        if not isinstance(slots, list):
+            return _empty_index()
+        cleaned: list[dict[str, Any]] = []
+        for row in slots[:MAX_CHAT_SLOTS]:
+            if not isinstance(row, dict):
+                continue
+            sid = str(row.get("id", "") or "").strip()
+            if not sid:
+                continue
+            cleaned.append(
+                {
+                    "id": sid,
+                    "label": str(row.get("label", "") or "New chat")[:MAX_LABEL_LEN],
+                    "created_at": int(row.get("created_at") or 0),
+                    "updated_at": int(row.get("updated_at") or 0),
+                    "origin_app_id": str(row.get("origin_app_id", "") or "").strip()[:32],
+                    "origin_app_name": str(row.get("origin_app_name", "") or "").strip()[
+                        :MAX_APP_NAME_LEN
+                    ],
+                    "turn_count": int(row.get("turn_count") or 0),
+                }
+            )
+        return {"version": SCHEMA_VERSION, "slots": cleaned}
+    except FileNotFoundError:
+        return _empty_index()
+    except Exception as exc:
+        if logger is not None:
+            logger.warning("load_chat_slots_index: failed %s: %s", path, exc)
+        return _empty_index()
+
+
+def save_index(settings_dir: str, index: dict[str, Any], logger: Any = None) -> None:
+    path = index_path(settings_dir)
+    os.makedirs(slots_dir(settings_dir), exist_ok=True)
+    payload = {"version": SCHEMA_VERSION, "slots": list(index.get("slots") or [])[:MAX_CHAT_SLOTS]}
+    tmp = f"{path}.tmp"
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(payload, f, indent=2, sort_keys=True)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, path)
+    except OSError as exc:
+        if logger is not None:
+            logger.exception("save_chat_slots_index: failed %s", path)
+        raise RuntimeError(f"Failed to save chat slots index: {exc}") from exc
+
+
+def load_slot(settings_dir: str, slot_id: str, logger: Any = None) -> dict[str, Any] | None:
+    path = slot_path(settings_dir, slot_id)
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return sanitize_slot(data)
+    except FileNotFoundError:
+        return None
+    except Exception as exc:
+        if logger is not None:
+            logger.warning("load_chat_slot: failed %s: %s", path, exc)
+        return None
+
+
+def save_slot(settings_dir: str, slot: dict[str, Any], logger: Any = None) -> dict[str, Any]:
+    sanitized = sanitize_slot(slot)
+    if sanitized is None:
+        raise ValueError("Invalid slot payload.")
+    path = slot_path(settings_dir, sanitized["id"])
+    os.makedirs(slots_dir(settings_dir), exist_ok=True)
+    tmp = f"{path}.tmp"
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(sanitized, f, indent=2, sort_keys=True)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, path)
+        return sanitized
+    except OSError as exc:
+        if logger is not None:
+            logger.exception("save_chat_slot: failed %s", path)
+        raise RuntimeError(f"Failed to save chat slot: {exc}") from exc
+
+
+def _upsert_index_row(index: dict[str, Any], slot: dict[str, Any]) -> dict[str, Any]:
+    rows = [r for r in (index.get("slots") or []) if isinstance(r, dict)]
+    rows = [r for r in rows if str(r.get("id", "")) != slot["id"]]
+    rows.append(
+        {
+            "id": slot["id"],
+            "label": slot["label"],
+            "created_at": slot["created_at"],
+            "updated_at": slot["updated_at"],
+            "origin_app_id": slot.get("origin_app_id", ""),
+            "origin_app_name": slot.get("origin_app_name", ""),
+            "turn_count": len(slot.get("turns") or []),
+        }
+    )
+    rows.sort(key=lambda r: int(r.get("updated_at") or 0), reverse=True)
+    return {"version": SCHEMA_VERSION, "slots": rows[:MAX_CHAT_SLOTS]}
+
+
+class ChatLimitReached(Exception):
+    """Ten chats are saved already. Raised instead of making room: only the person, by picking a
+    chat and pressing Delete, may remove one."""
+
+
+def create_slot(
+    settings_dir: str,
+    *,
+    label: str = "",
+    origin_app_id: str = "",
+    first_question: str = "",
+    app_name: str = "",
+    slot_id: str | None = None,
+    logger: Any = None,
+) -> dict[str, Any]:
+    index = load_index(settings_dir, logger)
+    if len(list(index.get("slots") or [])) >= MAX_CHAT_SLOTS:
+        raise ChatLimitReached(f"{MAX_CHAT_SLOTS} chats are saved already")
+    now = int(time.time())
+    sid = str(slot_id or "").strip() or str(uuid.uuid4())
+    resolved_label = (label or "").strip() or heuristic_slot_label(first_question, app_name)
+    slot = {
+        "id": sid,
+        "label": resolved_label[:MAX_LABEL_LEN],
+        "created_at": now,
+        "updated_at": now,
+        "origin_app_id": str(origin_app_id or "").strip()[:32],
+        # Already passed in for the label heuristic; kept now rather than discarded, because the
+        # slot row shows the game above the title and nothing else records the NAME.
+        "origin_app_name": str(app_name or "").strip()[:MAX_APP_NAME_LEN],
+        # Always written, so a new chat never goes through the guess made for chats saved before the
+        # flag existed. Only the rename box sets it (``update_slot_label``).
+        "label_by_hand": False,
+        "turns": [],
+    }
+    save_slot(settings_dir, slot, logger)
+    index = _upsert_index_row(index, slot)
+    save_index(settings_dir, index, logger)
+    return slot
+
+
+def ensure_slot(
+    settings_dir: str,
+    slot_id: str,
+    *,
+    origin_app_id: str = "",
+    first_question: str = "",
+    app_name: str = "",
+    logger: Any = None,
+) -> dict[str, Any] | None:
+    """The chat with this id, made if it does not exist. ``None`` when it does not exist and ten
+    chats are saved already: nothing is made and nothing is deleted. The screen makes the chat
+    before it asks (and only through its picker at ten), so this is a safety net, not a path."""
+    sid = _sanitize_slot_id(slot_id)
+    existing = load_slot(settings_dir, sid, logger)
+    if existing is not None:
+        return existing
+    try:
+        return create_slot(
+            settings_dir,
+            slot_id=sid,
+            origin_app_id=origin_app_id,
+            first_question=first_question,
+            app_name=app_name,
+            logger=logger,
+        )
+    except ChatLimitReached:
+        if logger is not None:
+            logger.warning("ensure_slot: %s chats are saved; not making a chat for %s", MAX_CHAT_SLOTS, sid)
+        return None
+
+
+def list_slot_summaries(settings_dir: str, logger: Any = None) -> list[dict[str, Any]]:
+    index = load_index(settings_dir, logger)
+    rows = list(index.get("slots") or [])
+    rows.sort(key=lambda r: int(r.get("updated_at") or 0), reverse=True)
+    return rows
+
+
+def delete_slot(settings_dir: str, slot_id: str, logger: Any = None) -> bool:
+    sid = _sanitize_slot_id(slot_id)
+    try:
+        os.remove(slot_path(settings_dir, sid))
+        file_removed = True
+    except FileNotFoundError:
+        # The list is read from the index, so a chat whose file is already gone must still lose
+        # its row here, or it stays in the list with no way to remove it.
+        file_removed = False
+    index = load_index(settings_dir, logger)
+    all_rows = index.get("slots") or []
+    rows = [r for r in all_rows if str(r.get("id", "")) != sid]
+    if not file_removed and len(rows) == len(all_rows):
+        return False
+    save_index(settings_dir, {"version": SCHEMA_VERSION, "slots": rows}, logger)
+    return True
+
+
+def append_turn(
+    settings_dir: str,
+    slot_id: str,
+    *,
+    role: str,
+    text: str,
+    request_id: int | None = None,
+    attachment_refs: list[dict[str, str]] | None = None,
+    transparency: dict[str, Any] | None = None,
+    app_id: str = "",
+    app_name: str = "",
+    asked_entity: str = "",
+    spoiler_consent: bool = False,
+    display_text: str = "",
+    reasoning: dict[str, Any] | None = None,
+    chat_summary: str = "",
+    outcome: str = "",
+    label: str | None = None,
+    logger: Any = None,
+) -> dict[str, Any] | None:
+    slot = load_slot(settings_dir, slot_id, logger)
+    if slot is None:
+        return None
+    turn = _normalize_turn(
+        {
+            "id": str(uuid.uuid4()),
+            "role": role,
+            "text": text,
+            "request_id": request_id,
+            "attachment_refs": attachment_refs or [],
+            "transparency": transparency,
+            "app_id": app_id,
+            "app_name": app_name,
+            "asked_entity": asked_entity,
+            "spoiler_consent": spoiler_consent,
+            "display_text": display_text,
+            "reasoning": reasoning,
+            "chat_summary": chat_summary,
+            "outcome": outcome,
+            "created_at": int(time.time()),
+        }
+    )
+    if turn is None:
+        return None
+    turns = list(slot.get("turns") or [])
+    turns.append(turn)
+    slot["turns"] = turns[-MAX_TURNS_PER_SLOT:]
+    slot["updated_at"] = int(time.time())
+    if label:
+        slot["label"] = str(label)[:MAX_LABEL_LEN]
+    elif role == "user" and len(turns) == 1 and slot.get("label") in ("", "New chat"):
+        slot["label"] = heuristic_slot_label(text)
+    saved = save_slot(settings_dir, slot, logger)
+    index = load_index(settings_dir, logger)
+    index = _upsert_index_row(index, saved)
+    save_index(settings_dir, index, logger)
+    return saved
+
+
+def _without_title_offer(slot: dict[str, Any]) -> None:
+    """Close the open title offer on ``slot``'s summary, if there is one (it has been answered)."""
+    summary = slot.get("summary")
+    if isinstance(summary, dict) and "suggested_title" in summary:
+        slot["summary"] = {k: v for k, v in summary.items() if k != "suggested_title"}
+
+
+def update_slot_label(
+    settings_dir: str, slot_id: str, label: str, logger: Any = None, *, by_hand: bool = True
+) -> dict[str, Any] | None:
+    """Rename a chat. ``by_hand`` (the rename box, the default) marks the title as typed by the
+    person, so the summary never offers another one; saying yes to a suggested title passes False,
+    and the chat stays open to a fresher suggestion later. Either way the open offer is answered."""
+    slot = load_slot(settings_dir, slot_id, logger)
+    if slot is None:
+        return None
+    slot["label"] = str(label or "").strip()[:MAX_LABEL_LEN] or slot.get("label", "New chat")
+    if by_hand:
+        slot["label_by_hand"] = True
+    _without_title_offer(slot)
+    slot["updated_at"] = int(time.time())
+    saved = save_slot(settings_dir, slot, logger)
+    index = load_index(settings_dir, logger)
+    index = _upsert_index_row(index, saved)
+    save_index(settings_dir, index, logger)
+    return saved
+
+
+def decline_title_offer(settings_dir: str, slot_id: str, logger: Any = None) -> dict[str, Any] | None:
+    """Keep: close the open title offer and remember the suggestion so it is not offered again.
+    Changes nothing else -- not the title, ``updated_at`` or the index. ``None``: no such chat."""
+    slot = load_slot(settings_dir, slot_id, logger)
+    if slot is None:
+        return None
+    summary = slot.get("summary")
+    if isinstance(summary, dict) and summary.get("suggested_title"):
+        slot["declined_title"] = summary["suggested_title"]
+    _without_title_offer(slot)
+    return save_slot(settings_dir, slot, logger)
+
+
+def _summary_for_screen(slot: dict[str, Any]) -> Any:
+    """The summary as the screen gets it: a typed title never carries an offer, even one saved
+    before the person renamed the chat."""
+    summary = slot.get("summary")
+    if slot.get("label_by_hand") and isinstance(summary, dict) and "suggested_title" in summary:
+        return {k: v for k, v in summary.items() if k != "suggested_title"}
+    return summary
+
+
+def slot_to_rpc_payload(slot: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "id": slot.get("id", ""),
+        "label": slot.get("label", ""),
+        "created_at": slot.get("created_at"),
+        "updated_at": slot.get("updated_at"),
+        "origin_app_id": slot.get("origin_app_id", ""),
+        "origin_app_name": slot.get("origin_app_name", ""),
+        # Plan 68 step 2: the chat's own summary of its older turns, so the Session tab's card can
+        # draw straight from the loaded chat. ``subject`` deliberately stays off this payload --
+        # it is the same in-process-only bookkeeping ``kb_followup_memory`` already keeps, never
+        # shown to a reader, now just stored per chat instead of for the whole plugin.
+        "summary": _summary_for_screen(slot),
+        "label_by_hand": slot.get("label_by_hand") is True,
+        "turns": slot.get("turns") or [],
+    }
+
+
+def _summary_with_open_offer_only(slot: dict[str, Any], summary: dict[str, Any] | None) -> Any:
+    """``summary`` without a title offer that should not be made, judged on the chat as it is now
+    (a rename can land while a summary is being written): a typed title is never second-guessed,
+    the title the person already said Keep to is not offered twice, and the chat's own title is
+    not offered back to it."""
+    if not isinstance(summary, dict) or "suggested_title" not in summary:
+        return summary
+    offered = str(summary.get("suggested_title") or "")
+    drop = (
+        slot.get("label_by_hand") is True
+        or offered.casefold() == str(slot.get("declined_title") or "").casefold()
+        or offered.casefold() == str(slot.get("label") or "").casefold()
+    )
+    return {k: v for k, v in summary.items() if k != "suggested_title"} if drop else summary
+
+
+def save_slot_summary(
+    settings_dir: str, slot_id: str, summary: dict[str, Any] | None, logger: Any = None
+) -> dict[str, Any] | None:
+    """Set a chat's own summary of its older turns and save it. ``None`` returned unchanged means
+    the chat does not exist -- this never creates one, the same rule ``update_slot_label`` follows.
+
+    Deliberately does not touch ``updated_at`` or the index row (contrast ``update_slot_label``,
+    which does): writing a summary is bookkeeping the plugin does on the chat's behalf, not
+    something the person did to it, and must not reorder the chat switcher or refresh a chat's
+    place in it the way an actual rename does. In the ordinary case a real turn is appended around
+    the same time anyway (that already updates the index), so this only matters for the "Sum up
+    this chat" button pressed on an otherwise-idle chat, and there it is on purpose: the button is
+    maintenance, not a new thing said in the chat.
+    """
+    slot = load_slot(settings_dir, slot_id, logger)
+    if slot is None:
+        return None
+    slot["summary"] = _summary_with_open_offer_only(slot, summary)
+    return save_slot(settings_dir, slot, logger)
+
+
+def save_slot_subject(
+    settings_dir: str, slot_id: str, subject: dict[str, Any] | None, logger: Any = None
+) -> dict[str, Any] | None:
+    """Set a chat's own remembered follow-up subject and save it. Same rules as
+    ``save_slot_summary`` above: never creates a chat, never touches ``updated_at`` or the index.
+    """
+    slot = load_slot(settings_dir, slot_id, logger)
+    if slot is None:
+        return None
+    slot["subject"] = subject
+    return save_slot(settings_dir, slot, logger)
+
+
+def wipe_all_slots(settings_dir: str, logger: Any = None) -> None:
+    sdir = slots_dir(settings_dir)
+    if os.path.isdir(sdir):
+        for name in os.listdir(sdir):
+            fp = os.path.join(sdir, name)
+            try:
+                if os.path.isfile(fp):
+                    os.remove(fp)
+            except OSError as exc:
+                if logger is not None:
+                    logger.warning("wipe_all_slots: could not remove %s: %s", fp, exc)
+    save_index(settings_dir, _empty_index(), logger)

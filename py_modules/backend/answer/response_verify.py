@@ -1,0 +1,578 @@
+"""Title: Ollama response verifier
+
+Purpose: Rule-based post-check for hallucination-prone patterns in Ollama replies.
+Used for: Optional verify pass after chat completes when game context is missing or JSON promised.
+Solves: Invented AppID warnings and lightweight secondary model verify without mutating text.
+Does not: Block or rewrite replies automatically — returns warnings for transparency/UI only.
+The one exception is the spoiler cover and the follow-up-menu check below, which do change the
+text on purpose.
+
+How it works: The file holds three separate jobs, each a set of plain functions.
+  1. Checking a finished reply. `verify_ollama_response()` looks for made-up game ids and an
+     unkept JSON promise; `run_verifier_second_pass()` optionally asks a second model a yes/no
+     question; `maybe_append_verifier_notice()` adds a short note when either one complained.
+  2. Dropping a copied example menu. `drop_branch_menu_copying_the_worked_example()` throws
+     away a follow-up menu that still carries the wording of the prompt's own example. It
+     lives in branch_menu_example_guard.py and is imported here.
+  3. Covering spoilers as the reply is typed. `build_live_spoiler_cover()` is called once per
+     turn and hands back two functions. One is `cover_named_spoilers()`, which cuts the reply
+     into fenced and unfenced pieces, splits the unfenced text into sentences and wraps each
+     sentence that names a protected thing in a spoiler fence. The other is
+     `cover_thinking_text()`, which does the same for the model's thinking, but swaps the
+     sentence for a short placeholder because thinking is shown as plain text. While a reply is
+     still arriving, a last sentence that might be growing into a protected name is held back
+     instead of shown.
+"""
+
+from __future__ import annotations
+
+import json
+import re
+import urllib.error
+import urllib.request
+from typing import Any, Callable, NamedTuple, Optional, Sequence
+
+from backend.ollama.ollama_reply_limits import read_json_capped
+# Moved to its own file to keep this one a manageable size; imported back so callers and tests
+# that reach it through this module keep working unchanged.
+from backend.strategy.branch_menu_example_guard import (  # noqa: F401
+    drop_branch_menu_copying_the_worked_example,
+)
+from backend.spoilers.strategy_spoiler_policy import (
+    boss_like_card_names,
+    move_midline_fence_openers_to_line_start,
+    partial_fence_tail_match,
+    protected_spoiler_names,
+    spoiler_cover_required,
+)
+
+
+class LiveSpoilerCover(NamedTuple):
+    """The pair of live-cover functions ``build_live_spoiler_cover`` hands back for one turn --
+    ``answer`` for the markdown-rendered reply, ``thinking`` for the plain-text thinking line."""
+
+    answer: Callable[[str, bool], str]
+    thinking: Callable[[Optional[str], bool], Optional[str]]
+
+
+_MAX_VERIFY_EXCERPT_CHARS = 1500
+_VERIFY_NUM_PREDICT = 64
+
+# Steam AppIDs are numeric; flag invented IDs when no game context was provided.
+_INVENTED_APPID_RE = re.compile(
+    r"\b(?:app\s*id|appid)\s*[:#]?\s*(\d{4,8})\b",
+    re.IGNORECASE,
+)
+
+
+def verify_ollama_response(
+    *,
+    response_text: str,
+    app_id: str,
+    app_name: str,
+    promised_json: bool = False,
+) -> dict[str, Any]:
+    """Lightweight rules pass; returns warnings without mutating the reply."""
+    text = response_text or ""
+    warnings: list[str] = []
+    has_game = bool((app_id or "").strip()) or bool((app_name or "").strip())
+
+    if not has_game:
+        for match in _INVENTED_APPID_RE.finditer(text):
+            warnings.append(
+                f"mentions AppID {match.group(1)} but no active game context was attached"
+            )
+
+    if promised_json and "```json" not in text and '"tdp_watts"' not in text:
+        warnings.append("reply promised JSON tuning block but none was found")
+
+    if re.search(r"\bI am (?:certain|sure) (?:this is|that is)\b", text, re.IGNORECASE) and not has_game:
+        warnings.append("high-confidence game claim without game context")
+
+    return {
+        "passed": len(warnings) == 0,
+        "warnings": warnings,
+    }
+
+
+def _parse_yes_no_verdict(raw: str) -> Optional[bool]:
+    """Return True/False when the verifier reply is clearly YES/NO; else None."""
+    s = (raw or "").strip().upper()
+    if not s:
+        return None
+    first = s.split()[0] if s.split() else s
+    if first.startswith("YES"):
+        return False
+    if first.startswith("NO"):
+        return True
+    return None
+
+
+def run_verifier_second_pass(
+    *,
+    chat_url: str,
+    model_name: str,
+    response_text: str,
+    has_game: bool,
+    request_timeout_seconds: int = 30,
+    logger: Any = None,
+) -> dict[str, Any]:
+    """Ask a user-configured Ollama model whether the reply looks unsupported (YES/NO)."""
+    model = (model_name or "").strip()
+    if not model:
+        return {"ran": False, "skipped": "no_model"}
+    excerpt = (response_text or "")[:_MAX_VERIFY_EXCERPT_CHARS]
+    game_line = (
+        "Active game context was attached."
+        if has_game
+        else "No active game context was attached."
+    )
+    system = (
+        "You verify assistant replies for unsupported claims. "
+        "Reply with exactly one word: YES if the assistant reply may contain "
+        "invented game facts (e.g. AppID, store IDs, or specific game behavior) "
+        "not supported by the context, otherwise NO. No other text."
+    )
+    user = f"{game_line}\n\nAssistant reply excerpt:\n{excerpt}"
+    body = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": system},
+            {"role": "user", "content": user},
+        ],
+        "stream": False,
+        "options": {"num_predict": _VERIFY_NUM_PREDICT, "temperature": 0},
+    }
+    payload = json.dumps(body).encode("utf-8")
+    req = urllib.request.Request(
+        chat_url,
+        data=payload,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    timeout = max(10, min(int(request_timeout_seconds or 30), 120))
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            data = read_json_capped(resp, what="second-pass check reply", logger=logger, errors="replace")
+    except urllib.error.HTTPError as exc:
+        if logger:
+            logger.info(
+                "verifier_second_pass: HTTP %s model=%s",
+                exc.code,
+                model,
+            )
+        return {"ran": True, "passed": True, "error": f"http_{exc.code}", "model": model}
+    except Exception as exc:  # noqa: BLE001
+        if logger:
+            logger.info("verifier_second_pass: failed model=%s err=%s", model, exc)
+        return {"ran": True, "passed": True, "error": "request_failed", "model": model}
+
+    msg = data.get("message") if isinstance(data.get("message"), dict) else {}
+    content = str(msg.get("content") or "")
+    verdict = _parse_yes_no_verdict(content)
+    if verdict is None:
+        if logger:
+            logger.info("verifier_second_pass: unclear verdict model=%s", model)
+        return {"ran": True, "passed": True, "unclear": True, "model": model}
+    passed = verdict is True
+    if logger:
+        logger.info("verifier_second_pass: model=%s passed=%s", model, passed)
+    return {"ran": True, "passed": passed, "model": model, "verdict": "NO" if passed else "YES"}
+
+
+# Plan 70 helper A (D112 #7, the spoiler safety net). The prompt already tells the model to
+# keep spoilery detail behind ```bonsai-spoiler``` fences on a turn that needs it
+# (strategy_spoiler_policy.py); nothing ever checked whether it did, and a question that
+# describes a boss without naming it ("the boss past the crystal spike area" in Hollow Knight)
+# came back with the boss named -- and its fake death spoiled -- in plain text (measured on the
+# Deck, 83 reads during streaming, never covered). This is that check: find every sentence that
+# names something the caller says is protected, and fence it, leaving anything already fenced
+# (a real cover, a doubled block from the bug plan 68's 6843f8e1 found, the strategy-branches
+# menu) completely alone.
+_PROTECTED_NAME_RE_CACHE: dict[str, "re.Pattern[str]"] = {}
+
+
+def _protected_name_pattern(name: str) -> "re.Pattern[str]":
+    pat = _PROTECTED_NAME_RE_CACHE.get(name)
+    if pat is None:
+        pat = re.compile(rf"(?<![a-z0-9]){re.escape(name.lower())}s?(?![a-z0-9])")
+        _PROTECTED_NAME_RE_CACHE[name] = pat
+    return pat
+
+
+def _unit_mentions_protected_name(unit: str, names: Sequence[str]) -> bool:
+    low = unit.lower()
+    return any(_protected_name_pattern(n).search(low) for n in names)
+
+
+# Fences are read the way the panel reads them (src/features/answer/markdown/markdownFenceReader.ts, ``stepFence``):
+# a line starting with three or more backticks OR tildes opens one; only a line holding nothing
+# but the same mark, at least as long as the opener, closes it (quote marks and indent in front
+# of a closer are ignored); every other line, another kind of marker included, is the block's own
+# text. A block with no closer runs to the end of the reply. Until 2026-09-29 this knew only
+# three-backtick blocks, so a ``~~~`` hidden block was never seen as a block. An opener is only
+# recognised at the very start of a line (up to three spaces of indent, as the markdown standard
+# has it) and only once its line has ended -- a line still being typed is held back separately.
+_FENCE_OPENER_LINE_RE = re.compile(r"^ {0,3}(`{3,}|~{3,})([^\n]*)$")
+# A line that starts with ``` or ~~~ and has not reached its newline yet -- see cover_named_spoilers.
+_UNFINISHED_FENCE_LINE_RE = re.compile(r"(?:(?<=\n)|^)(?:```|~~~)[^\n]*$")
+# A tilde opener still being typed: one or two tildes alone on the line so far, or a whole
+# ``~~~`` with whatever follows. Not "~30 FPS": a line that merely starts with a tilde is prose.
+_PARTIAL_TILDE_TAIL_RE = re.compile(r"(?:(?<=\n)|^)(?:~{1,2}|~{3,}[^\n]*)$")
+
+
+def _fence_opener(line: str) -> "tuple[str, int, str] | None":
+    """(mark, length, info text) when ``line`` opens a fence, else None."""
+    m = _FENCE_OPENER_LINE_RE.match(line)
+    if not m:
+        return None
+    run = m.group(1)
+    return run[0], len(run), m.group(2).strip()
+
+
+def _fence_closes(line: str, mark: str, length: int) -> bool:
+    """True when ``line`` closes a fence opened with ``length`` of ``mark``."""
+    t = line.lstrip(" \t\r\n>").rstrip()
+    return len(t) >= length and t.strip(mark) == ""
+
+
+def _fence_chunk_is_closed(fence_chunk: str) -> bool:
+    """True when a ("fence", chunk) piece reached its own closer -- i.e. it is not still being
+    written."""
+    lines = fence_chunk.split("\n")
+    opener = _fence_opener(lines[0])
+    if opener is None or len(lines) < 2:
+        return False
+    return _fence_closes(lines[-1], opener[0], opener[1])
+
+
+def _fence_opener_is_spoiler(fence_chunk: str) -> bool:
+    """True when a fence chunk's own opener line reads ``bonsai-spoiler`` -- the same test the
+    screen's own live parser uses, so this only ever holds back a spoiler fence's body, never an
+    ordinary code sample or the ```bonsai-strategy-branches``` menu."""
+    opener = _fence_opener(fence_chunk.split("\n", 1)[0])
+    return opener is not None and opener[2].lower().startswith("bonsai-spoiler")
+
+
+def _split_fenced_segments(text: str) -> list[tuple[str, str]]:
+    """Split ``text`` into ("text", chunk) / ("fence", chunk) pieces that concatenate back to
+    ``text`` exactly.
+
+    A fence -- closed, or (mid-stream) still open with no closer yet -- is opaque from here on:
+    the sentence-covering below never looks inside one, so a sentence already covered, a doubled
+    ```bonsai-spoiler``` block, a ``~~~`` block and the ```bonsai-strategy-branches``` menu are all
+    left completely alone, wherever they already are in the reply. A closed fence's chunk ends at
+    its closing marker, so the line break after it starts the next text piece.
+    """
+    segments: list[tuple[str, str]] = []
+    n = len(text)
+    pos = 0
+    seg_start = 0
+    open_fence: "tuple[str, int] | None" = None
+    while pos < n:
+        nl = text.find("\n", pos)
+        end = n if nl < 0 else nl
+        line = text[pos:end]
+        if open_fence is None:
+            opener = _fence_opener(line) if nl >= 0 else None
+            if opener is not None:
+                if pos > seg_start:
+                    segments.append(("text", text[seg_start:pos]))
+                seg_start = pos
+                open_fence = (opener[0], opener[1])
+        elif _fence_closes(line, open_fence[0], open_fence[1]):
+            segments.append(("fence", text[seg_start:end]))
+            seg_start = end
+            open_fence = None
+        pos = end + 1
+    if seg_start < n:
+        segments.append(("fence" if open_fence is not None else "text", text[seg_start:]))
+    return segments
+
+
+# Sentences are found one line at a time first -- a bulleted tactic list rarely ends a line in
+# a full stop -- then each line is split further on a sentence-ending mark followed by
+# whitespace. Every piece keeps its own trailing whitespace, so joining them back together
+# reproduces the original text exactly.
+_SENTENCE_TAIL_RE = re.compile(r"(?<=[.!?])(\s+)")
+
+
+def _split_sentence_units(text: str) -> list[str]:
+    units: list[str] = []
+    for line in text.splitlines(keepends=True):
+        parts = _SENTENCE_TAIL_RE.split(line)
+        i = 0
+        while i < len(parts):
+            piece = parts[i]
+            if i + 1 < len(parts):
+                piece += parts[i + 1]
+                i += 2
+            else:
+                i += 1
+            if piece:
+                units.append(piece)
+    return units
+
+
+def _cover_sentences_in_text(text: str, names: Sequence[str]) -> str:
+    """Wrap each contiguous run of protected sentences in one ```bonsai-spoiler``` fence.
+
+    Consecutive protected sentences share a single fence rather than one each -- two fences
+    back to back, wrapping the same reply, is exactly the doubled-block shape plan 68 found and
+    filed as a bug; this is what keeps this checker from ever producing that shape itself.
+    """
+    units = _split_sentence_units(text)
+    out: list[str] = []
+    buffer: list[str] = []
+
+    def _flush() -> None:
+        if not buffer:
+            return
+        body = "".join(buffer).strip()
+        buffer.clear()
+        if not body:
+            return
+        out.append(f"\n```bonsai-spoiler\n{body}\n```\n")
+
+    for unit in units:
+        if _unit_mentions_protected_name(unit, names):
+            buffer.append(unit)
+        else:
+            _flush()
+            out.append(unit)
+    _flush()
+    return "".join(out)
+
+
+_WORD_START_RE = re.compile(r"\b\w")
+
+
+def _could_be_growing_into_a_protected_name(unit: str, names: Sequence[str]) -> bool:
+    """True when the still-being-typed tail of ``unit`` could still turn into a protected name
+    once more characters arrive -- "Soul Ma" does not yet match ``_unit_mentions_protected_name``
+    against "Soul Master", so without this check it would show on screen, uncovered, for exactly
+    as long as it takes the rest of the word to arrive.
+
+    Tries every word-boundary-starting suffix of ``unit`` (not just its last single word, so a
+    name's *second* word forming -- "Soul Ma" against "Soul Master" -- is caught too) against
+    being a prefix of a protected name; a suffix already as long as the full name is skipped,
+    since a real match there would already have been caught above.
+    """
+    low = re.sub(r"\s+", " ", unit.strip().lower())
+    if not low:
+        return False
+    for name in names:
+        name_low = re.sub(r"\s+", " ", (name or "").strip().lower())
+        if not name_low:
+            continue
+        for wm in _WORD_START_RE.finditer(low):
+            suffix = low[wm.start() :]
+            if len(suffix) >= len(name_low):
+                continue
+            if name_low.startswith(suffix):
+                return True
+    return False
+
+
+def _trailing_unit_is_terminated(unit: str) -> bool:
+    return bool(re.search(r"[.!?]\s*$", unit)) or unit.endswith("\n")
+
+
+def cover_named_spoilers(
+    response_text: str,
+    protected_names: Sequence[str],
+    *,
+    hold_back_incomplete_trailing: bool = False,
+) -> str:
+    """Wrap the whole sentence(s) naming a protected thing in a ```bonsai-spoiler``` fence.
+
+    "Protected" is decided entirely by the caller (normally
+    ``strategy_spoiler_policy.protected_spoiler_names``) -- this function only finds every
+    sentence naming one of ``protected_names`` and fences it. Anything already inside a fence
+    (a real cover, a doubled block, the branch menu) is left completely alone: a fence is never
+    split, never looked inside, never re-wrapped -- so running this twice over the same text
+    changes nothing the second time.
+
+    ``hold_back_incomplete_trailing`` is set only by the live streaming path
+    (``ollama_ask_service.py``'s ``_on_delta``), where the reply so far can end mid-sentence and
+    a protected name can be forming one word at a time. A sentence that already contains the
+    full name is covered immediately, exactly as for the finished reply; a trailing sentence
+    that is *not yet* sentence-terminated, and whose last word(s) could still grow into a
+    protected name, is held back from the return value entirely -- chosen over showing it bare,
+    because there is no way to un-show a name that already flashed up. The next flush either
+    finishes it (covered) or the words diverged (shown plain, nothing was ever hidden for it).
+    An ordinary trailing word with no such risk ("Continuing…", a bullet with no full stop yet)
+    is never held back. The same holding-back applies to a fence marker itself, both a half-typed
+    opener ("```bon", never shown raw) and a fully-opened ```bonsai-spoiler``` fence with no
+    closing ``` yet (its body held back entirely rather than shown while it forms) -- measured
+    on the Deck (SPOILER-COVER-01): a name inside one of these read plain for 4.7 s before the
+    finished-reply cover caught up.
+    """
+    if not response_text or not protected_names:
+        return response_text
+    names = [n.strip() for n in protected_names if (n or "").strip()]
+    if not names:
+        return response_text
+    response_text = move_midline_fence_openers_to_line_start(response_text)
+    segments = _split_fenced_segments(response_text)
+    if not segments:
+        return response_text
+    hold_back_len = 0
+    drop_open_spoiler_fence = False
+    if hold_back_incomplete_trailing:
+        last_kind, last_chunk = segments[-1]
+        if last_kind == "fence":
+            if not _fence_chunk_is_closed(last_chunk) and _fence_opener_is_spoiler(last_chunk):
+                drop_open_spoiler_fence = True
+        else:
+            # A one-line block ("```bonsai-spoiler text ```") whose closing backticks are still
+            # arriving is neither a fence yet (no newline after it) nor a half-typed opener (it
+            # already holds a backtick past the opener), so it used to be wrapped in a second
+            # fence. Every ``` starts its own line by now, so hold back any unfinished one.
+            partial = (
+                partial_fence_tail_match(last_chunk)
+                or _PARTIAL_TILDE_TAIL_RE.search(last_chunk)
+                or _UNFINISHED_FENCE_LINE_RE.search(last_chunk)
+            )
+            if partial:
+                hold_back_len = len(last_chunk) - partial.start()
+            else:
+                trailing_units = _split_sentence_units(last_chunk)
+                if trailing_units:
+                    last_unit = trailing_units[-1]
+                    if (
+                        not _trailing_unit_is_terminated(last_unit)
+                        and not _unit_mentions_protected_name(last_unit, names)
+                        and _could_be_growing_into_a_protected_name(last_unit, names)
+                    ):
+                        hold_back_len = len(last_unit)
+    out: list[str] = []
+    last_index = len(segments) - 1
+    for i, (kind, chunk) in enumerate(segments):
+        if kind == "fence":
+            if drop_open_spoiler_fence and i == last_index:
+                # Keep only the opener's own line -- the screen's own "Spoiler hidden until
+                # complete…" chip still has enough to draw from -- and hold back every
+                # character of the still-forming body itself.
+                opener_end = chunk.find("\n")
+                out.append(chunk[: opener_end + 1] if opener_end != -1 else "")
+                continue
+            out.append(chunk)
+            continue
+        text = chunk
+        if hold_back_len and i == last_index:
+            text = chunk[: len(chunk) - hold_back_len]
+        out.append(_cover_sentences_in_text(text, names))
+    return "".join(out)
+
+
+# The model's thinking is drawn as plain text, never markdown (reasoningDisplay.ts's own words:
+# "drawn as ordinary text") -- a ```bonsai-spoiler``` fence would not hide anything there, only
+# add backtick noise, and the model's own thinking sometimes quotes that exact fence syntax back
+# at itself (it is reading its own instructions). Strip any ``` run, with or without a language
+# tag, on sight.
+_RAW_FENCE_MARKER_RE = re.compile(r"```[a-zA-Z0-9_-]*")
+
+_THINKING_REDACTION = "[hidden]"
+
+
+def cover_thinking_text(
+    text: str,
+    protected_names: Sequence[str],
+    *,
+    hold_back_incomplete_trailing: bool = False,
+) -> str:
+    """D112 #7 in the model's own thinking, not just its answer.
+
+    Measured on the Deck (THINKING-SPOILER-01): the live thinking line and the saved reasoning
+    shown in the fold afterwards both named a protected boss/enemy in plain words in 4 of 6
+    tries, plus raw ```bonsai-spoiler``` marker text twice. Sentence-finding and the
+    still-forming-name holdback are shared with ``cover_named_spoilers`` above; the only
+    difference is what happens to a sentence that names a protected thing -- there is no
+    markdown fence to hide it behind here, so it is replaced with a short placeholder instead of
+    wrapped.
+    """
+    if not text:
+        return text
+    text = _RAW_FENCE_MARKER_RE.sub("", text)
+    if not protected_names:
+        return text
+    names = [n.strip() for n in protected_names if (n or "").strip()]
+    if not names:
+        return text
+    units = _split_sentence_units(text)
+    if not units:
+        return text
+    hold_back_len = 0
+    if hold_back_incomplete_trailing:
+        last_unit = units[-1]
+        if (
+            not _trailing_unit_is_terminated(last_unit)
+            and not _unit_mentions_protected_name(last_unit, names)
+            and _could_be_growing_into_a_protected_name(last_unit, names)
+        ):
+            hold_back_len = len(last_unit)
+    out: list[str] = []
+    last_index = len(units) - 1
+    for i, unit in enumerate(units):
+        if hold_back_len and i == last_index:
+            continue
+        if _unit_mentions_protected_name(unit, names):
+            stripped = unit.rstrip()
+            trailing_ws = unit[len(stripped) :]
+            out.append(f"{_THINKING_REDACTION}{trailing_ws}" if stripped else unit)
+        else:
+            out.append(unit)
+    return "".join(out)
+
+
+def build_live_spoiler_cover(
+    *,
+    consent: bool,
+    strategy_domain: bool,
+    app_id: str = "",
+    app_name: str = "",
+    title_profile: str = "",
+    question: str,
+    system_content: str,
+) -> LiveSpoilerCover:
+    """One call, at turn setup, folding the whole D112 #7 policy lookup (was a cover promised
+    this turn, and on which names) plus the two coverers themselves behind a pair of functions
+    the caller runs every flushed chunk through -- so ``ollama_ask_service.py``'s own `_on_delta`
+    needs only this call plus one line per flush for the answer and one for the thinking, not
+    the policy lookup inlined there too.
+    """
+    cover_needed = spoiler_cover_required(
+        consent,
+        strategy_domain=strategy_domain,
+        app_id=app_id,
+        app_name=app_name,
+        title_profile=title_profile,
+    )
+    names = protected_spoiler_names(question, boss_like_card_names(system_content)) if cover_needed else []
+
+    def _answer(text: str, done: bool) -> str:
+        if not cover_needed or not text:
+            return text
+        return cover_named_spoilers(text, names, hold_back_incomplete_trailing=not done)
+
+    def _thinking(text: Optional[str], done: bool) -> Optional[str]:
+        if text is None or not cover_needed or not text:
+            return text
+        return cover_thinking_text(text, names, hold_back_incomplete_trailing=not done)
+
+    return LiveSpoilerCover(answer=_answer, thinking=_thinking)
+
+
+def maybe_append_verifier_notice(response_text: str, verify_result: dict[str, Any]) -> str:
+    """Append a short user-visible notice when rules flagged issues (no PII in notice)."""
+    if verify_result.get("passed"):
+        return response_text
+    warnings = verify_result.get("warnings") or []
+    if not warnings:
+        return response_text
+    tail = (
+        "\n\n—\n*bonsAI note: this reply may need double-checking "
+        f"({len(warnings)} signal{'s' if len(warnings) != 1 else ''}).*"
+    )
+    return (response_text or "").rstrip() + tail

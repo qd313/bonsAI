@@ -1,0 +1,986 @@
+"""Title: Finding, taking, and preparing screenshots
+
+Purpose: This is what handles every screenshot in the plugin: finding the
+ones Steam already saved or the plugin took earlier, taking a new one of
+whatever game is running when you press the screenshot button, and shrinking
+a screenshot down before it is sent to the AI along with your question.
+
+Used for: The screenshot picker on the Ask screen, the in-plugin "take a
+screenshot" button, and every question asked with an image attached --
+`prepare_attachment_images()` is what turns an attached file into the image
+data the AI's vision model expects.
+
+Solves: SteamOS hides a running game's screenshots behind Steam's own
+capture flow, which a background plugin process cannot simply call. This
+file finds another way in -- several fallbacks tried in order, because which
+one works varies by SteamOS version and how the game is running. It also
+resizes and compresses an attached image before sending it, so a
+full-resolution screenshot does not blow past what the AI will accept, or
+make a question take far longer to send.
+
+Does not: Draw the screenshot browser on screen -- see
+MainTabScreenshotBrowser. This file only finds, takes and prepares the files.
+
+How it works:
+
+Finding existing screenshots:
+ 1. `resolve_recent_screenshot_paths()` looks in Steam's own per-game
+    screenshot folders; `resolve_plugin_capture_paths()` looks in the
+    plugin's own capture folder for screenshots taken through the plugin
+    itself rather than through Steam.
+ 2. `merge_recent_screenshot_paths()` combines the two lists, newest first,
+    and drops a plugin capture that is really just a copy of one Steam
+    already has (matched by its timestamp), so the same screenshot does not
+    show up twice.
+ 3. `lookup_steam_app_name()` and `lookup_screenshot_vdf_metadata()` read
+    Steam's own bookkeeping files to attach a game name and caption to a
+    screenshot for display.
+
+Taking a new screenshot, through `take_steam_game_screenshot()`:
+ 1. `try_qam_closed_compositor_capture()` is tried first: a handful of
+    command names and flag spellings (`build_capture_command_candidates()`)
+    covering different SteamOS versions, retried a few times while the Quick
+    Access Menu is still closing, since a capture taken too early can catch
+    the menu itself in the shot.
+ 2. If none of those commands exist, `try_gamescope_atom_screenshot()` asks
+    the game's own display compositor for a screenshot a different way: it
+    sets a marker on the display that gamescope watches for, then waits for
+    gamescope to write the image out on its own.
+    `_discover_x11_sessions()` first finds which display and login session
+    to send that marker to, since the plugin runs outside the normal desktop
+    session and cannot simply assume one.
+ 3. Once a capture file exists, `_finalize_steam_capture_file()` shrinks it
+    to a compact JPEG when it is unusually large or carries transparency
+    Steam's own listing does not expect
+    (`_compress_capture_to_jpeg()`).
+
+Preparing an attached image for the AI, through `prepare_attachment_images()`
+calling `prepare_image_attachment()` for each file:
+ 1. The file is checked to exist, be a supported image type, and not be too
+    large, before anything is opened.
+ 2. `encode_image_with_pillow()` resizes it to fit the attachment quality
+    setting (Low, Mid or Max) and re-encodes it as JPEG, shrinking a
+    full-resolution screenshot down to something reasonable to send.
+ 3. Pillow is not on the Deck. When it is missing (or it cannot read this
+    particular file), `encode_image_with_ffmpeg()` does the same job with
+    `ffmpeg`, which is already on the Deck: it scales the picture down to
+    the same Low/Mid/Max longest-side limit and re-encodes it as a compact
+    JPEG. Every picture goes through
+    this shrink, even a small file: a Deck screenshot is 1920 by 1080
+    pixels whatever its size in kilobytes, and the AI's picture reader
+    runs the graphics chip out of memory on that many pixels. The shrink
+    never enlarges a picture already inside the longest-side limit.
+ 4. If neither can shrink the picture (`ffmpeg` missing, or the shrink
+    itself fails or times out), the picture is refused with a message a
+    person understands, instead of sending the full-size file and risking
+    the crash this file exists to prevent.
+
+Gotchas:
+ - Screenshot capture never uses kmsgrab -- the code comment on
+   `try_qam_closed_compositor_capture()` explains it produces huge raw dumps
+   that break the plugin's own previews, so it is deliberately left out of
+   every fallback tried here.
+ - The X11 marker fallback always writes to the same fixed file,
+   /tmp/gamescope.png, since that is where gamescope itself writes it; this
+   file then copies that to wherever the caller actually wants the
+   screenshot saved.
+"""
+
+from __future__ import annotations
+
+import base64
+import glob
+import io
+import logging
+import mimetypes
+import os
+import re
+import shutil
+import subprocess
+import tempfile
+import time
+from typing import Optional
+
+try:
+    import pwd  # Unix only; absent on a Windows stand-in Deck
+except ImportError:  # pragma: no cover
+    pwd = None
+
+SUPPORTED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
+MAX_ATTACHMENT_FILE_BYTES = 40 * 1024 * 1024
+MAX_ATTACHMENT_INLINE_BYTES = 15 * 1024 * 1024
+
+# Longest-side pixel limit and ffmpeg JPEG quality (mjpeg's own scale: 2 is best, 31 is worst)
+# for each attachment preset, kept close to what encode_image_with_pillow() targets for the
+# same preset so Low/Mid/Max mean the same thing whether or not Pillow is installed.
+FFMPEG_ATTACHMENT_PRESETS = {
+    "low": (800, 6),
+    "mid": (1080, 4),
+    "max": (16384, 2),
+}
+
+logger = logging.getLogger("bonsai")
+
+
+def resolve_recent_screenshot_paths(app_id: str = "", limit: int = 5) -> list:
+    """Resolve recent screenshot paths across common Steam userdata roots."""
+    app_filter = str(app_id or "").strip()
+    safe_limit = max(1, min(48, int(limit)))
+    home = os.path.expanduser("~")
+    roots = [
+        os.path.join(home, ".local", "share", "Steam", "userdata"),
+        os.path.join(home, ".steam", "steam", "userdata"),
+    ]
+    app_patterns: list = []
+    global_patterns: list = []
+    for root in roots:
+        if app_filter:
+            app_patterns.extend(
+                [
+                    os.path.join(root, "*", "760", "remote", app_filter, "screenshots", "*.png"),
+                    os.path.join(root, "*", "760", "remote", app_filter, "screenshots", "*.jpg"),
+                    os.path.join(root, "*", "760", "remote", app_filter, "screenshots", "*.jpeg"),
+                    os.path.join(root, "*", "760", "remote", app_filter, "screenshots", "*.webp"),
+                ]
+            )
+        global_patterns.extend(
+            [
+                os.path.join(root, "*", "760", "remote", "*", "screenshots", "*.png"),
+                os.path.join(root, "*", "760", "remote", "*", "screenshots", "*.jpg"),
+                os.path.join(root, "*", "760", "remote", "*", "screenshots", "*.jpeg"),
+                os.path.join(root, "*", "760", "remote", "*", "screenshots", "*.webp"),
+            ]
+        )
+
+    app_files: list = []
+    for pattern in app_patterns:
+        app_files.extend(glob.glob(pattern))
+    app_files = [path for path in set(app_files) if os.path.isfile(path)]
+    app_files.sort(key=lambda p: os.path.getmtime(p), reverse=True)
+
+    global_files: list = []
+    for pattern in global_patterns:
+        global_files.extend(glob.glob(pattern))
+    global_files = [path for path in set(global_files) if os.path.isfile(path)]
+    global_files.sort(key=lambda p: os.path.getmtime(p), reverse=True)
+
+    ordered: list = []
+    seen: set = set()
+    for path in app_files + global_files:
+        canonical = os.path.realpath(path)
+        dedupe_key = canonical
+        try:
+            st = os.stat(canonical)
+            dedupe_key = f"{st.st_dev}:{st.st_ino}"
+        except OSError:
+            dedupe_key = canonical
+        if dedupe_key in seen:
+            continue
+        seen.add(dedupe_key)
+        ordered.append(path)
+        if len(ordered) >= safe_limit:
+            break
+    return ordered
+
+
+def resolve_plugin_capture_paths(runtime_dir: str, limit: int = 12) -> list:
+    """Recent in-plugin captures written under ``<runtime>/captures``."""
+    safe_limit = max(1, min(48, int(limit)))
+    captures_dir = os.path.join(str(runtime_dir or "").strip(), "captures")
+    if not captures_dir or not os.path.isdir(captures_dir):
+        return []
+    files: list = []
+    for pattern in ("*.png", "*.jpg", "*.jpeg", "*.webp"):
+        files.extend(glob.glob(os.path.join(captures_dir, pattern)))
+    files = [path for path in set(files) if os.path.isfile(path)]
+    files.sort(key=lambda path: os.path.getmtime(path), reverse=True)
+    return files[:safe_limit]
+
+
+def _list_steam_userdata_dirs() -> list[str]:
+    """Return Steam userdata account directories (numeric folder names)."""
+    home = os.path.expanduser("~")
+    roots = [
+        os.path.join(home, ".local", "share", "Steam", "userdata"),
+        os.path.join(home, ".steam", "steam", "userdata"),
+    ]
+    user_dirs: list[str] = []
+    seen: set[str] = set()
+    for root in roots:
+        if not os.path.isdir(root):
+            continue
+        for entry in glob.glob(os.path.join(root, "*")):
+            if not os.path.isdir(entry):
+                continue
+            name = os.path.basename(entry)
+            if not name.isdigit():
+                continue
+            canonical = os.path.realpath(entry)
+            if canonical in seen:
+                continue
+            seen.add(canonical)
+            user_dirs.append(entry)
+    return user_dirs
+
+
+def resolve_steam_screenshot_output_dir(app_id: str = "") -> Optional[str]:
+    """Resolve (and create) the per-app Steam screenshots directory for new captures."""
+    candidate = str(app_id or "").strip()
+    if not candidate.isdigit():
+        candidate = ""
+    user_dirs = _list_steam_userdata_dirs()
+    if not user_dirs:
+        return None
+
+    def shots_dir(uid_root: str, app: str) -> str:
+        return os.path.join(uid_root, "760", "remote", app, "screenshots")
+
+    if candidate:
+        for uid_root in user_dirs:
+            remote_root = os.path.join(uid_root, "760", "remote")
+            if not os.path.isdir(remote_root):
+                continue
+            path = shots_dir(uid_root, candidate)
+            try:
+                os.makedirs(path, exist_ok=True)
+                return path
+            except OSError:
+                continue
+
+    best_app = ""
+    best_mtime = 0.0
+    for uid_root in user_dirs:
+        remote_root = os.path.join(uid_root, "760", "remote")
+        if not os.path.isdir(remote_root):
+            continue
+        for app_entry in glob.glob(os.path.join(remote_root, "*")):
+            if not os.path.isdir(app_entry):
+                continue
+            app_num = os.path.basename(app_entry)
+            if not app_num.isdigit():
+                continue
+            try:
+                mtime = os.path.getmtime(app_entry)
+            except OSError:
+                mtime = 0.0
+            if mtime > best_mtime:
+                best_mtime = mtime
+                best_app = app_num
+
+    if best_app:
+        for uid_root in user_dirs:
+            remote_app = os.path.join(uid_root, "760", "remote", best_app)
+            if os.path.isdir(remote_app):
+                path = shots_dir(uid_root, best_app)
+                os.makedirs(path, exist_ok=True)
+                return path
+
+    fallback_app = candidate or "0"
+    for uid_root in user_dirs:
+        path = shots_dir(uid_root, fallback_app)
+        try:
+            os.makedirs(path, exist_ok=True)
+            return path
+        except OSError:
+            continue
+    return None
+
+
+def _capture_timestamp_key(path: str) -> str:
+    match = re.search(r"(\d{8}-\d{6})", os.path.basename(path))
+    return match.group(1) if match else ""
+
+
+def _remove_capture_file(path: str) -> None:
+    try:
+        if path and os.path.isfile(path):
+            os.remove(path)
+    except OSError:
+        pass
+
+
+def _compress_capture_to_jpeg(path: str, clean_env: Optional[dict] = None) -> str:
+    """Convert a capture file to compact RGB JPEG (gamescope atom PNGs are often 2MB+ RGBA)."""
+    src = str(path or "").strip()
+    if not src or not os.path.isfile(src):
+        return src
+    if os.path.splitext(src)[1].lower() == ".jpg":
+        return src
+    jpg_path = f"{os.path.splitext(src)[0]}.jpg"
+    ffmpeg = shutil.which("ffmpeg")
+    env = dict(clean_env or os.environ)
+    if ffmpeg:
+        try:
+            result = subprocess.run(
+                [ffmpeg, "-loglevel", "error", "-y", "-i", src, "-frames:v", "1", "-q:v", "3", jpg_path],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                env=env,
+                timeout=30,
+            )
+            if result.returncode == 0 and os.path.isfile(jpg_path) and os.path.getsize(jpg_path) > 0:
+                _remove_capture_file(src)
+                return jpg_path
+        except Exception:
+            pass
+    try:
+        from PIL import Image  # type: ignore
+
+        with Image.open(src) as image:
+            image.load()
+            rgb = image.convert("RGB")
+        rgb.save(jpg_path, format="JPEG", quality=88, optimize=True)
+        _remove_capture_file(src)
+        return jpg_path
+    except Exception:
+        return src
+
+
+def _finalize_steam_capture_file(path: str, clean_env: Optional[dict] = None) -> str:
+    """Normalize gamescope compositor captures for Steam library listing and UI previews."""
+    src = str(path or "").strip()
+    if not src or not os.path.isfile(src):
+        return src
+    try:
+        size_before = os.path.getsize(src)
+    except OSError:
+        return src
+    needs_jpeg = size_before > 500_000
+    if not needs_jpeg:
+        try:
+            from PIL import Image  # type: ignore
+
+            with Image.open(src) as image:
+                image.load()
+                needs_jpeg = image.mode in ("RGBA", "LA", "P")
+        except Exception:
+            needs_jpeg = True
+    if needs_jpeg:
+        return _compress_capture_to_jpeg(src, clean_env)
+    return src
+
+
+def try_qam_closed_compositor_capture(
+    output_path: str,
+    clean_env: dict,
+    max_attempts: int = 3,
+) -> dict:
+    """
+    Capture via gamescope compositor after QAM closes. Never uses kmsgrab (DRM dumps are huge and
+    break in-plugin previews). Retries atom capture when the compositor is still settling.
+    """
+    errors: list[str] = []
+    for attempt in range(max(1, max_attempts)):
+        if attempt > 0:
+            time.sleep(0.45)
+        _remove_capture_file(output_path)
+
+        for command in build_capture_command_candidates(output_path, True):
+            executable = command[0]
+            if executable.startswith("/") and not os.path.isfile(executable):
+                continue
+            if not executable.startswith("/") and shutil.which(executable) is None:
+                continue
+            try:
+                result = subprocess.run(
+                    command,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    env=clean_env,
+                    timeout=8,
+                )
+                if result.returncode == 0 and os.path.isfile(output_path) and os.path.getsize(output_path) > 0:
+                    return _capture_success_item(output_path, "gamescope-screenshot")
+                stderr = result.stderr.decode("utf-8", errors="replace").strip()
+                errors.append(f"{' '.join(command)} -> {stderr or f'rc={result.returncode}'}")
+            except Exception as exc:  # noqa: BLE001
+                errors.append(f"{' '.join(command)} -> {exc}")
+
+        atom_modes = (False, True) if attempt == 0 else (True,)
+        for include_overlay in atom_modes:
+            _remove_capture_file(output_path)
+            atom_result = try_gamescope_atom_screenshot(output_path, include_overlay, clean_env)
+            if atom_result.get("success") and isinstance(atom_result.get("item"), dict):
+                item = dict(atom_result["item"])
+                item["capture_method"] = "gamescope-atom-base" if not include_overlay else "gamescope-atom"
+                return {"success": True, "item": item}
+            atom_error = str(atom_result.get("error", "")).strip()
+            if atom_error:
+                errors.append(atom_error)
+
+    _remove_capture_file(output_path)
+    error_text = "Compositor screenshot did not produce an image."
+    if errors:
+        error_text = f"{error_text} Attempts: {' | '.join(errors[:4])}"
+    return {"success": False, "error": error_text}
+
+
+def take_steam_game_screenshot(
+    app_id: str,
+    clean_env: dict,
+    qam_settle_seconds: float = 1.0,
+) -> dict:
+    """
+    Capture the running game into Steam's per-app screenshots folder.
+    Caller should close QAM after starting this RPC; ``qam_settle_seconds`` allows the compositor to settle.
+    """
+    if qam_settle_seconds > 0:
+        time.sleep(qam_settle_seconds)
+    shots_dir = resolve_steam_screenshot_output_dir(app_id)
+    if not shots_dir:
+        return {
+            "success": False,
+            "error": (
+                "Could not find a Steam screenshots folder. Start a game first, "
+                "or use Steam's screenshot button."
+            ),
+        }
+    resolved_app_id = extract_app_id_from_screenshot_path(os.path.join(shots_dir, "x.png"))
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    output_path = os.path.join(shots_dir, f"{timestamp}.png")
+
+    gs_result = try_qam_closed_compositor_capture(output_path, clean_env)
+    if gs_result.get("success") and isinstance(gs_result.get("item"), dict):
+        item = dict(gs_result["item"])
+        raw_path = str(item.get("path", output_path))
+        final_path = _finalize_steam_capture_file(raw_path, clean_env=clean_env)
+        if not os.path.isfile(final_path):
+            _remove_capture_file(raw_path)
+            return {"success": False, "error": "Capture file could not be finalized."}
+        item["path"] = final_path
+        item["name"] = os.path.basename(final_path)
+        item["source"] = "steam_recent"
+        item["app_id"] = resolved_app_id
+        try:
+            item["size_bytes"] = os.path.getsize(final_path)
+        except OSError:
+            item["size_bytes"] = 0
+        return {"success": True, "item": item}
+
+    gs_error = str(gs_result.get("error", "")).strip()
+    error_text = "Could not capture a game screenshot."
+    if gs_error:
+        error_text = f"{error_text} {gs_error}"
+    return {"success": False, "error": error_text[:500]}
+
+
+def merge_recent_screenshot_paths(
+    steam_paths: list,
+    plugin_paths: list,
+    limit: int = 24,
+) -> list:
+    """Merge Steam and plugin capture paths, newest first."""
+    safe_limit = max(1, min(48, int(limit)))
+    combined: list[str] = []
+    seen: set[str] = set()
+    for path in list(steam_paths) + list(plugin_paths):
+        try:
+            canonical = os.path.realpath(path)
+        except OSError:
+            canonical = path
+        if canonical in seen:
+            continue
+        seen.add(canonical)
+        combined.append(path)
+
+    def _mtime(p: str) -> float:
+        try:
+            return os.path.getmtime(p)
+        except OSError:
+            return 0.0
+
+    combined.sort(key=_mtime, reverse=True)
+    steam_timestamps: set[str] = set()
+    for path in combined:
+        normalized = path.replace("\\", "/")
+        if "/760/remote/" in normalized and "/screenshots/" in normalized:
+            ts = _capture_timestamp_key(path)
+            if ts:
+                steam_timestamps.add(ts)
+    filtered: list[str] = []
+    seen: set[str] = set()
+    for path in combined:
+        normalized = path.replace("\\", "/")
+        ts = _capture_timestamp_key(path)
+        if ts and "/captures/" in normalized and ts in steam_timestamps:
+            continue
+        if ts and os.path.basename(path).startswith("bonsai-game-") and ts in steam_timestamps:
+            continue
+        try:
+            canonical = os.path.realpath(path)
+        except OSError:
+            canonical = path
+        if canonical in seen:
+            continue
+        seen.add(canonical)
+        filtered.append(path)
+        if len(filtered) >= safe_limit:
+            break
+    return filtered
+
+
+def lookup_steam_app_name(app_id: str) -> str:
+    """Resolve app names from local Steam appmanifest metadata."""
+    candidate = str(app_id or "").strip()
+    if not candidate.isdigit():
+        return ""
+    home = os.path.expanduser("~")
+    manifest_paths = [
+        os.path.join(home, ".local", "share", "Steam", "steamapps", f"appmanifest_{candidate}.acf"),
+        os.path.join(home, ".steam", "steam", "steamapps", f"appmanifest_{candidate}.acf"),
+    ]
+    for manifest in manifest_paths:
+        if not os.path.isfile(manifest):
+            continue
+        try:
+            with open(manifest, "r", encoding="utf-8", errors="ignore") as fp:
+                raw = fp.read()
+            match = re.search(r'"name"\s+"([^"]+)"', raw)
+            if match:
+                return match.group(1).strip()
+        except OSError:
+            continue
+    return ""
+
+
+def lookup_screenshot_vdf_metadata(screenshot_path: str) -> dict:
+    """Extract caption and shortcut hints from screenshots.vdf near a screenshot filename."""
+    marker = f"{os.sep}760{os.sep}remote{os.sep}"
+    if marker not in screenshot_path:
+        return {"caption": "", "shortcut_name": ""}
+    base = screenshot_path.split(marker, 1)[0]
+    vdf_path = os.path.join(base, "760", "screenshots.vdf")
+    filename = os.path.basename(screenshot_path)
+    if not os.path.isfile(vdf_path) or not filename:
+        return {"caption": "", "shortcut_name": ""}
+    try:
+        with open(vdf_path, "r", encoding="utf-8", errors="ignore") as fp:
+            raw = fp.read()
+        idx = raw.find(filename)
+        if idx < 0:
+            return {"caption": "", "shortcut_name": ""}
+        window = raw[max(0, idx - 2200) : idx + 2200]
+        caption_match = re.search(r'"caption"\s+"([^"]*)"', window, flags=re.IGNORECASE)
+        shortcut_match = re.search(r'"shortcutname"\s+"([^"]*)"', window, flags=re.IGNORECASE)
+        return {
+            "caption": (caption_match.group(1).strip() if caption_match else ""),
+            "shortcut_name": (shortcut_match.group(1).strip() if shortcut_match else ""),
+        }
+    except OSError:
+        return {"caption": "", "shortcut_name": ""}
+
+
+def extract_app_id_from_screenshot_path(path: str) -> str:
+    """Extract the app id segment from Steam screenshot path patterns."""
+    marker = f"{os.sep}760{os.sep}remote{os.sep}"
+    if marker not in path:
+        return ""
+    tail = path.split(marker, 1)[1]
+    return tail.split(os.sep, 1)[0].strip()
+
+
+def build_screenshot_preview_data_uri(path: str, max_dimension: int = 220) -> Optional[str]:
+    """Generate a compact preview data URI from screenshot files for UI thumbnails."""
+    ext = os.path.splitext(path)[1].lower()
+    if ext not in SUPPORTED_IMAGE_EXTENSIONS:
+        return None
+    try:
+        from PIL import Image  # type: ignore
+
+        with Image.open(path) as image:
+            image.load()
+            width, height = image.size
+            longest_edge = max(width, height)
+            if longest_edge > max_dimension:
+                ratio = max_dimension / float(longest_edge)
+                image = image.resize(
+                    (max(1, int(width * ratio)), max(1, int(height * ratio))),
+                    Image.LANCZOS,
+                )
+            if image.mode not in ("RGB", "L"):
+                image = image.convert("RGB")
+            elif image.mode == "L":
+                image = image.convert("RGB")
+            output = io.BytesIO()
+            image.save(output, format="JPEG", quality=62, optimize=True)
+            encoded = base64.b64encode(output.getvalue()).decode("ascii")
+            return f"data:image/jpeg;base64,{encoded}"
+    except Exception:
+        try:
+            file_size = os.path.getsize(path)
+            with open(path, "rb") as f:
+                raw = f.read()
+            if file_size > 8_000_000:
+                return None
+            mime_type = mimetypes.guess_type(path)[0] or "image/png"
+            encoded = base64.b64encode(raw).decode("ascii")
+            return f"data:{mime_type};base64,{encoded}"
+        except OSError:
+            return None
+
+
+def build_capture_command_candidates(output_path: str, include_overlay: bool) -> list:
+    """Build candidate screenshot commands to maximize compatibility across SteamOS variants."""
+    candidates = [
+        ["gamescope-screenshot", "--file", output_path],
+        ["gamescope-screenshot", "-o", output_path],
+        ["gamescope-screenshot", output_path],
+        ["/usr/bin/gamescope-screenshot", "--file", output_path],
+        ["/usr/bin/gamescope-screenshot", "-o", output_path],
+        ["/usr/bin/gamescope-screenshot", output_path],
+    ]
+    if not include_overlay:
+        # Prefer focused/base capture only — do not fall back to full-frame commands that include QAM.
+        return [cmd + ["--focused"] for cmd in candidates]
+    return candidates
+
+
+def gamescope_atom_screenshot_value(include_overlay: bool) -> str:
+    """
+    Gamescope X11 atom payload for GAMESCOPECTRL_REQUEST_SCREENSHOT.
+    Protocol enum (gamescope-control.xml): 1=base_plane_only, 2=all_real_layers,
+    3=full_composition, 4=screen_buffer.
+    """
+    return "3" if include_overlay else "1"
+
+
+def _capture_success_item(output_path: str, method: str = "capture") -> dict:
+    return {
+        "success": True,
+        "item": {
+            "path": output_path,
+            "name": os.path.basename(output_path),
+            "mtime": os.path.getmtime(output_path),
+            "source": "capture",
+            "app_id": "",
+            "capture_method": method,
+        },
+    }
+
+
+def _discover_x11_sessions(target_user: str = "deck") -> list[tuple[str, str]]:
+    """Return (DISPLAY, XAUTHORITY) pairs from running Deck/gamescope processes."""
+    sessions: list[tuple[str, str]] = []
+    seen: set[str] = set()
+    try:
+        uid = pwd.getpwnam(target_user).pw_uid if pwd is not None else 1000
+    except KeyError:
+        uid = 1000
+
+    pids: set[int] = set()
+    for proc_name in ("gamescope", "gamescope-wl", "steam", "steamwebhelper"):
+        try:
+            result = subprocess.run(
+                ["pgrep", "-x", proc_name],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=2,
+            )
+            for token in result.stdout.decode("utf-8", errors="replace").split():
+                if token.isdigit():
+                    pids.add(int(token))
+        except Exception:
+            continue
+    try:
+        result = subprocess.run(
+            ["pgrep", "-u", str(uid)],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=2,
+        )
+        for token in result.stdout.decode("utf-8", errors="replace").split()[:50]:
+            if token.isdigit():
+                pids.add(int(token))
+    except Exception:
+        pass
+
+    for pid in pids:
+        environ_path = f"/proc/{pid}/environ"
+        try:
+            with open(environ_path, "rb") as fp:
+                chunks = fp.read().split(b"\0")
+        except OSError:
+            continue
+        env: dict[str, str] = {}
+        for chunk in chunks:
+            if b"=" not in chunk:
+                continue
+            key, value = chunk.split(b"=", 1)
+            env[key.decode("utf-8", errors="replace")] = value.decode("utf-8", errors="replace")
+        display = env.get("DISPLAY", "").strip()
+        if not display:
+            continue
+        xauthority = env.get("XAUTHORITY", "").strip()
+        dedupe = f"{display}|{xauthority}"
+        if dedupe in seen:
+            continue
+        seen.add(dedupe)
+        sessions.append((display, xauthority))
+
+    for display in (":0", ":1", ":2"):
+        dedupe = f"{display}|"
+        if dedupe in seen:
+            continue
+        seen.add(dedupe)
+        sessions.append((display, ""))
+    return sessions
+
+
+def try_gamescope_atom_screenshot(output_path: str, include_overlay: bool, clean_env: dict) -> dict:
+    """
+    Trigger Gamescope's composited screenshot via X11 atom when ``gamescope-screenshot`` is absent.
+    Output lands in ``/tmp/gamescope.png``; copy to ``output_path`` on success.
+    """
+    if shutil.which("xprop") is None:
+        return {"success": False, "error": "xprop unavailable for gamescope atom capture."}
+
+    gs_out = "/tmp/gamescope.png"
+    atom_value = gamescope_atom_screenshot_value(include_overlay)
+    errors: list[str] = []
+    request_epoch = int(time.time())
+    min_png_bytes = 50_000
+
+    for display, xauthority in _discover_x11_sessions():
+        try:
+            if os.path.isfile(gs_out):
+                os.remove(gs_out)
+        except OSError:
+            pass
+
+        cmd = [
+            "xprop",
+            "-root",
+            "-f",
+            "GAMESCOPECTRL_REQUEST_SCREENSHOT",
+            "32c",
+            "-set",
+            "GAMESCOPECTRL_REQUEST_SCREENSHOT",
+            atom_value,
+        ]
+        env = dict(clean_env)
+        env["DISPLAY"] = display
+        if xauthority:
+            env["XAUTHORITY"] = xauthority
+        try:
+            result = subprocess.run(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                env=env,
+                timeout=6,
+            )
+            if result.returncode != 0:
+                stderr = result.stderr.decode("utf-8", errors="replace").strip()
+                errors.append(f"xprop {display} -> {stderr or f'rc={result.returncode}'}")
+                continue
+        except Exception as exc:  # noqa: BLE001
+            errors.append(f"xprop {display} -> {exc}")
+            continue
+
+        for _ in range(20):
+            if os.path.isfile(gs_out) and os.path.getsize(gs_out) >= min_png_bytes:
+                try:
+                    mtime = int(os.path.getmtime(gs_out))
+                except OSError:
+                    mtime = 0
+                if mtime >= request_epoch:
+                    shutil.copy2(gs_out, output_path)
+                    return _capture_success_item(output_path, "gamescope-atom")
+            time.sleep(0.25)
+        errors.append(f"xprop {display} -> /tmp/gamescope.png not produced or stale")
+
+    error_text = "Gamescope atom screenshot did not produce an image."
+    if errors:
+        error_text = f"{error_text} Attempts: {' | '.join(errors[:3])}"
+    return {"success": False, "error": error_text}
+
+
+def encode_image_with_pillow(
+    path: str, attachment_preset: str
+) -> tuple[Optional[str], Optional[str], list]:
+    """Resize and encode images with Pillow using Low / Mid / Max attachment preset."""
+    warnings: list = []
+    if attachment_preset not in ("low", "mid", "max"):
+        attachment_preset = "low"
+    try:
+        from PIL import Image  # type: ignore
+    except Exception:
+        return None, None, ["Pillow is unavailable; sent original image bytes."]
+
+    try:
+        with Image.open(path) as image:
+            image.load()
+            width, height = image.size
+            longest_edge = max(width, height)
+            if attachment_preset == "low":
+                max_dim = 800
+                quality = 62
+            elif attachment_preset == "mid":
+                max_dim = 1080
+                quality = 75
+            else:
+                max_dim = 16384
+                quality = 94
+
+            if attachment_preset == "mid" and longest_edge > 1080:
+                ratio = 1080 / float(longest_edge)
+                resized = image.resize((max(1, int(width * ratio)), max(1, int(height * ratio))), Image.LANCZOS)
+            elif attachment_preset == "mid":
+                resized = image.copy()
+            elif longest_edge > max_dim:
+                ratio = max_dim / float(longest_edge)
+                resized = image.resize((max(1, int(width * ratio)), max(1, int(height * ratio))), Image.LANCZOS)
+            else:
+                resized = image.copy()
+            if resized.mode not in ("RGB", "L"):
+                resized = resized.convert("RGB")
+            elif resized.mode == "L":
+                resized = resized.convert("RGB")
+
+            output = io.BytesIO()
+            resized.save(output, format="JPEG", quality=quality, optimize=True)
+            data = output.getvalue()
+            return base64.b64encode(data).decode("ascii"), "image/jpeg", warnings
+    except Exception as exc:  # noqa: BLE001 — corrupt/huge images must not crash Ask RPC
+        return None, None, [f"Pillow could not process image: {exc}"]
+
+
+def _env_without_loader_libraries() -> dict:
+    """This process's environment minus the library overrides the plugin loader sets, the same
+    rule the Ollama and power helpers apply to the programs they start."""
+    return {
+        k: v
+        for k, v in os.environ.items()
+        if k not in ("LD_LIBRARY_PATH", "LD_PRELOAD", "ORIG_LD_LIBRARY_PATH")
+    }
+
+
+def encode_image_with_ffmpeg(
+    path: str, attachment_preset: str
+) -> tuple[Optional[str], Optional[str], list]:
+    """Resize and encode an image with ffmpeg -- already on the Deck -- when Pillow cannot.
+
+    Scales to the same Low / Mid / Max longest-side limit encode_image_with_pillow() uses, so
+    the presets mean the same thing whether or not Pillow is installed. Every picture is
+    shrunk, whatever its size in bytes: file size says nothing about pixel count (a flat 1920 by
+    1080 screenshot is a few hundred KB and still crashed the AI's picture reader). The scale
+    filter never enlarges, so a picture already inside the limit keeps its own size.
+    """
+    warnings: list = []
+    if attachment_preset not in FFMPEG_ATTACHMENT_PRESETS:
+        attachment_preset = "low"
+
+    ffmpeg = shutil.which("ffmpeg")
+    if not ffmpeg:
+        return None, None, ["ffmpeg is not installed; could not shrink the image."]
+
+    max_dim, qscale = FFMPEG_ATTACHMENT_PRESETS[attachment_preset]
+    fd, out_path = tempfile.mkstemp(suffix=".jpg")
+    os.close(fd)
+    _remove_capture_file(out_path)
+    try:
+        result = subprocess.run(
+            [
+                ffmpeg,
+                "-loglevel", "error",
+                "-y",
+                "-i", path,
+                "-frames:v", "1",
+                "-vf",
+                f"scale='min({max_dim},iw)':'min({max_dim},ih)':force_original_aspect_ratio=decrease",
+                "-q:v", str(qscale),
+                out_path,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=20,
+            # Without the plugin loader's library path: through it ffmpeg loaded the loader's older
+            # libstdc++ and failed to start on the Deck (2026-10-22), so no picture could be shrunk.
+            env=_env_without_loader_libraries(),
+        )
+        if result.returncode != 0 or not os.path.isfile(out_path) or os.path.getsize(out_path) == 0:
+            stderr = result.stderr.decode("utf-8", errors="replace").strip()
+            detail = stderr or f"exit code {result.returncode}"
+            return None, None, [f"ffmpeg could not shrink the image: {detail}"]
+        with open(out_path, "rb") as f:
+            data = f.read()
+        return base64.b64encode(data).decode("ascii"), "image/jpeg", warnings
+    except subprocess.TimeoutExpired:
+        return None, None, ["ffmpeg timed out while shrinking the image."]
+    except Exception as exc:  # noqa: BLE001 — a bad image must not crash Ask RPC
+        return None, None, [f"ffmpeg could not shrink the image: {exc}"]
+    finally:
+        _remove_capture_file(out_path)
+
+
+def _pillow_installed() -> bool:
+    try:
+        import PIL  # type: ignore  # noqa: F401
+    except Exception:
+        return False
+    return True
+
+
+def prepare_image_attachment(attachment: dict, attachment_preset: str) -> dict:
+    """Validate, transform, and encode one image attachment for Ollama multimodal requests.
+
+    Pillow is tried first when it is installed. Where it is not (the Deck), or where it cannot
+    read this particular file, ffmpeg shrinks the picture instead. If neither can shrink it --
+    ffmpeg missing, the shrink itself failing or timing out -- the attachment is refused with a
+    plain message rather than sending the full-size file (the crash this file exists to prevent).
+    """
+    path = str(attachment.get("path", "") or "").strip()
+    if not path:
+        return {"ok": False, "error": "Attachment path is empty."}
+    if not os.path.isfile(path):
+        return {"ok": False, "error": f"Attachment file not found: {path}"}
+    ext = os.path.splitext(path)[1].lower()
+    if ext not in SUPPORTED_IMAGE_EXTENSIONS:
+        return {"ok": False, "error": f"Unsupported image type '{ext}'."}
+    file_size = os.path.getsize(path)
+    if file_size > MAX_ATTACHMENT_FILE_BYTES:
+        return {"ok": False, "error": f"Image is too large ({file_size} bytes)."}
+
+    encoded: Optional[str] = None
+    mime_type: Optional[str] = None
+    warnings: list = []
+
+    if _pillow_installed():
+        encoded, mime_type, pillow_warnings = encode_image_with_pillow(path, attachment_preset)
+        warnings.extend(pillow_warnings)
+
+    if encoded is None:
+        encoded, mime_type, ffmpeg_warnings = encode_image_with_ffmpeg(path, attachment_preset)
+        warnings.extend(ffmpeg_warnings)
+
+    if encoded is None:
+        logger.info(
+            "prepare_image_attachment: could not shrink %s: %s", path, "; ".join(warnings)
+        )
+        return {
+            "ok": False,
+            "error": "This picture is too big to send and could not be made smaller.",
+        }
+
+    return {
+        "ok": True,
+        "image_b64": encoded,
+        "mime_type": mime_type or "image/jpeg",
+        "name": str(attachment.get("name", "") or os.path.basename(path)),
+        "warnings": warnings,
+    }
+
+
+def prepare_attachment_images(attachments: list, attachment_preset: str) -> tuple[list, list, list]:
+    """Prepare a batch of attachments and return successful images, warnings, and errors."""
+    prepared_images: list = []
+    warnings: list = []
+    errors: list = []
+    for attachment in attachments:
+        prepared = prepare_image_attachment(attachment, attachment_preset)
+        if prepared.get("ok"):
+            prepared_images.append(prepared)
+            warnings.extend(prepared.get("warnings", []))
+        else:
+            errors.append(str(prepared.get("error", "Failed to prepare attachment.")))
+    return prepared_images, warnings, errors

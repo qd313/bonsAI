@@ -1,0 +1,124 @@
+/**
+ * Title: Preset chip decode text maths
+ *
+ * Purpose: The pure, timing-free core of the decode animation's letter-by-letter reveal — the
+ * churn glyph pool, the per-slot animation state shape, and the function that composes what a
+ * label should show right now from a lock boundary and a churn buffer.
+ *
+ * Used for: MainTabPresetDecodeSlots (the decode-mode chip row) in
+ * src/features/preset-carousel/MainTabPresetAnimatedChips.tsx, which owns the rAF loop and the timers; this
+ * file only computes strings and durations, never a timer or a DOM write.
+ *
+ * Solves: Keeps the "what does the label show at revealedCount N" question testable on its own
+ * (see composeDecodeText's tests), separately from the animation-frame plumbing that drives it.
+ *
+ * Does not: Read or write the DOM, schedule anything, or know about React. `composeDecodeText` and
+ * `composeDecodeParts` are plain functions of their four arguments.
+ */
+import type { PresetPrompt } from "./presets";
+import { presetHoldMs, presetTurnMs } from "./presetRowLayout";
+
+/** Milliseconds between locked characters in decode mode (must feel close to live answer streaming). */
+export const PRESET_DECODE_CHAR_MS = 42;
+
+/**
+ * How long a settled decode chip stays before the next reveal begins. The reveal itself takes part
+ * of the turn that fade styles spend fading in, so the hold is the rest: a decode chip turns over at
+ * the same pace as a fading one, but never holds less than the common hold (a long label still gets
+ * its full scroll).
+ */
+export function decodeHoldMs(text: string, chipCount: number): number {
+  return Math.max(presetHoldMs(text, chipCount), presetTurnMs(text, chipCount) - text.length * PRESET_DECODE_CHAR_MS);
+}
+/**
+ * How often the still-churning glyphs reshuffle, ms. Throttled well below frame rate on purpose:
+ * the reveal loop runs one shared `requestAnimationFrame` per tick across the slots, but only
+ * writes to the DOM on this cadence (or on a lock advance / caret blink) so a churning chip does
+ * not repaint every 16ms frame on Deck hardware.
+ */
+export const PRESET_DECODE_CHURN_REFRESH_MS = 55;
+/** Caret blink period, ms. */
+export const PRESET_DECODE_CARET_BLINK_MS = 450;
+/**
+ * Block caret glyph, drawn at the lock boundary rather than as a separate CSS ::after. It sits in
+ * its own span (see composeDecodeParts) so it can take the accent colour while the letters keep
+ * theirs.
+ */
+export const PRESET_DECODE_CARET_CHAR = "▋";
+
+/**
+ * Churn glyph pool for the still-scrambling tail: printable ASCII plus half-width katakana
+ * (U+FF66-U+FF9D). Both render half-width. Full-width CJK would not — the chip label reserves
+ * its width from frame 0 at the prompt's final character count, so a double-width churn glyph
+ * would push a long prompt into the ellipsis mid-animation and undo the whole point of the rewrite.
+ */
+const PRESET_DECODE_GLYPH_POOL: string = (() => {
+  let pool = "";
+  for (let code = 0x21; code <= 0x7e; code += 1) pool += String.fromCharCode(code);
+  for (let code = 0xff66; code <= 0xff9d; code += 1) pool += String.fromCharCode(code);
+  return pool;
+})();
+
+function randomDecodeGlyph(): string {
+  return PRESET_DECODE_GLYPH_POOL[Math.floor(Math.random() * PRESET_DECODE_GLYPH_POOL.length)]!;
+}
+
+export function makeDecodeChurn(length: number): string[] {
+  return Array.from({ length }, randomDecodeGlyph);
+}
+
+/**
+ * Composes what the label should show right now: locked (real) characters up to `revealedCount`,
+ * then a boundary position that alternates between the caret glyph and the churning glyph beneath
+ * it (never an *extra* character — that would grow the string past the reserved width), then the
+ * rest of the still-churning tail. Once `revealedCount` reaches the prompt length the caller
+ * should just render `text` directly; this always returns a string of exactly `text.length`.
+ */
+export function composeDecodeText(
+  text: string,
+  revealedCount: number,
+  churn: readonly string[],
+  caretOn: boolean,
+): string {
+  const parts = composeDecodeParts(text, revealedCount, churn, caretOn);
+  return parts.locked + parts.caret + parts.tail;
+}
+
+/**
+ * The same label, cut where the colour changes: the locked real letters, the caret (empty while
+ * it blinks off), and everything after it. The caret used to be a character inside one string with
+ * the letters, so it could only ever be drawn in their colour -- pale, not the accent green (row
+ * PRESET-STREAM-ANIM-01, failed on the Deck 2026-09-26). While the caret is off, the churn glyph
+ * under it belongs to the tail, so it keeps the letters' colour too.
+ */
+export type DecodeTextParts = { locked: string; caret: string; tail: string };
+
+export function composeDecodeParts(
+  text: string,
+  revealedCount: number,
+  churn: readonly string[],
+  caretOn: boolean,
+): DecodeTextParts {
+  if (revealedCount >= text.length) return { locked: text, caret: "", tail: "" };
+  const locked = text.slice(0, revealedCount);
+  const rest = churn.slice(revealedCount + 1).join("");
+  if (caretOn) return { locked, caret: PRESET_DECODE_CARET_CHAR, tail: rest };
+  return { locked, caret: "", tail: (churn[revealedCount] ?? " ") + rest };
+}
+
+/** Per-slot decode animation state, owned by the reveal effect's closure — never React state, so a
+ *  lock advance or churn refresh never triggers a re-render. See `MainTabPresetDecodeSlots`. */
+export type DecodeSlotAnim = {
+  prompt: PresetPrompt;
+  /** `performance.now()` when this prompt's reveal began. */
+  startAt: number;
+  churn: string[];
+  /** Avoids redundant DOM writes: skip repainting when neither the lock boundary, a churn
+   *  refresh, nor the caret blink changed anything since the last tick. */
+  lastRevealedCount: number;
+  resolved: boolean;
+  /** Valid once `resolved`: when to start the next prompt's reveal. */
+  holdEndAt: number;
+  /** The end of the settled label's own scroll (`Date.now()` clock) that `holdEndAt` was last set from; null until it reports. */
+  endsAt: number | null;
+};

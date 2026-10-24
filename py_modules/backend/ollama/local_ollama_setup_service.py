@@ -1,0 +1,1087 @@
+"""Title: Installing the local AI on the Deck
+
+Purpose: This file is what actually runs when a person taps Install or Update on the Ollama
+tab. It downloads and installs Ollama (the program that runs the local AI) if it is not there
+yet, gets it running and ready to accept downloads, then pulls down the model files for whichever
+starter pack or single model the person picked — streaming progress back the whole time so the
+tab is never just sitting frozen. It also holds the smaller jobs around that: checking whether
+Ollama is reachable at all, listing what is already downloaded, removing a model, and trying to
+wake a stopped local Ollama back up before giving up on a connection test.
+
+Used for: The Ollama tab's Install and Update buttons, and the background checks that keep the
+tab's "is it ready" status accurate.
+
+Solves: All of the shell commands and install steps needed to get a working local AI onto the
+Deck live in one file, instead of scattered through the main plugin file.
+
+Does not: Answer a question or build a chat prompt — this file only ever gets the AI installed
+and running; asking it something is a different file's job (see ollama_service and
+ollama_ask_service).
+
+How it works:
+
+    Install / Update, in stages:
+
+    check -> install -> service -> pull -> complete
+                |            |         |
+                |            |         +- one model at a time, streaming
+                |            |            progress; a failure here is turned
+                |            |            into one plain-language sentence
+                |            |            by `_format_ollama_pull_failure()`
+                |            |
+                |            +- make sure `ollama serve` is actually
+                |               listening, and that its key files exist,
+                |               starting it by hand if needed
+                |
+                +- is the normal install location writable?
+                   no -> install into the person's own home folder instead
+
+1. `run_local_setup()` is the function behind both Install and Update. It works out what to do
+   from the chosen profile (a starter pack, a single model, or "update everything already
+   installed"), and reports its stage as it goes so the tab can show real progress instead of a
+   spinner with no detail.
+2. It first makes sure the `ollama` program itself is present, installing it with
+   `_install_or_update_ollama_binary()` if not — which normally runs Ollama's own official
+   installer via `run_official_linux_install()`, but on the Deck's locked-down system folders
+   falls back to `run_tarball_user_local_install()`, unpacking Ollama into the person's own home
+   folder instead. `_prefer_user_prefix_ollama_install_linux()` is what checks, ahead of time,
+   whether the normal location can even be written to, so this never wastes time trying the
+   locked path first.
+3. Next it makes sure the local Ollama server is actually listening
+   (`ensure_ollama_server_listening_before_pull()`) and that its key files exist
+   (`ensure_ollama_cli_home_ready()`). Both matter because the Deck's install does not register
+   as an always-on system service the way a desktop Linux install would, so this starts `ollama
+   serve` by hand and waits for it whenever it finds it not already running.
+4. It then works out which model tags the chosen profile needs, and downloads each one in turn
+   with `run_ollama_pull()`, which streams the AI download's own progress lines back to the tab
+   as they arrive. If a pull fails, `_format_ollama_pull_failure()` cleans up the raw output —
+   Ollama's progress display redraws the same line over and over with a spinner, which is noise
+   for a person reading it — and puts the one useful sentence first.
+   After an Update replaced the program file, the Ollama that is already running is still the OLD
+   one until it is restarted, so the "restart" stage (`restart_server_onto_new_binary()`, in
+   ollama_server_restart.py) stops it and starts it again, and the run ends by writing the
+   version now answering and one plain result sentence into the status for the tab to show.
+5. Cancelling is checked constantly throughout every stage, and anything that goes wrong, or gets
+   cancelled, is caught by one wrapping try/except and turned into a plain status a person can
+   read on the tab, rather than an unhandled error.
+
+Gotchas: The normal system install locations on the Deck cannot be written to, and the Deck's
+Ollama does not run as an always-on background service the ordinary way — both of those are
+worked around here rather than being edge cases, so a fair amount of this file exists purely to
+compensate for the Deck being a locked-down, non-desktop Linux system underneath.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import os
+import re
+import shutil
+import signal
+import subprocess
+import sys
+import time
+import urllib.request
+from pathlib import Path
+from typing import Any, Callable, Optional
+
+from backend.ollama.ollama_routing import (
+    TIER2_MULTIMODAL_PULL_FALLBACK_TAG,
+    TIER2_MULTIMODAL_PULL_TAGS,
+    setup_recommended_pull_tags,
+)
+from backend.ollama.ollama_reply_limits import read_json_capped
+from backend.ollama.ollama_urls import normalize_ollama_base
+from backend.ollama.local_setup_progress_text import progress_text_from_line
+from backend.ollama.starter_set_extras import apply_starter_outcome, run_starter_downloads
+from backend.ollama.ollama_server_restart import (
+    ServeControl,
+    record_result,
+    restart_server_onto_new_binary,
+    try_restart_ollama_user_service,
+)
+
+OLLAMA_OFFICIAL_INSTALL_SH = "https://ollama.com/install.sh"
+DEFAULT_BASE = normalize_ollama_base("127.0.0.1:11434")[2]
+MAX_LOG_TAIL_LINES = 120
+_ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]|\x1b\].*?\x07")
+
+
+def strip_ansi_escape_sequences(text: str) -> str:
+    return _ANSI_ESCAPE_RE.sub("", text or "")
+
+
+_LD_STRIP_KEYS = frozenset(
+    (
+        # Decky/Python may inherit Steam runtime paths → wrong libreadline for /usr/bin/bash
+        # (e.g. "undefined symbol: rl_trim_arg_from_keyseq").
+        # For ``ollama`` we re-inject ~/.local/lib/ollama only (see `_env_for_ollama_cli`).
+        "LD_LIBRARY_PATH",
+        "LD_PRELOAD",
+        "ORIG_LD_LIBRARY_PATH",
+    ),
+)
+
+_OLLAMA_SERVE_PROC: Optional[subprocess.Popen] = None
+_OLLAMA_SERVE_STARTED_BY_SETUP = False
+
+
+def _env_for_host_system_tools() -> dict[str, str]:
+    """Child env without loader overrides so distro bash, systemd, and Ollama use OS libs."""
+    return {k: v for k, v in os.environ.items() if isinstance(v, str) and k not in _LD_STRIP_KEYS}
+
+
+def _ollama_bundle_lib_dir(ollama_bin: str) -> Optional[Path]:
+    """Tarball layout: ``~/.local/bin/ollama`` + ``~/.local/lib/ollama`` (bundled GGML/CUDA bits)."""
+    try:
+        p = Path(ollama_bin).resolve()
+        cand = p.parent.parent / "lib" / "ollama"
+        if cand.is_dir():
+            return cand
+    except Exception:
+        pass
+    return None
+
+
+def _is_steam_deck_hardware() -> bool:
+    """True on Valve handheld product IDs (LCD Jupiter, OLED Galileo, …)."""
+    try:
+        product = Path("/sys/devices/virtual/dmi/id/product_name").read_text().strip()
+    except OSError:
+        return False
+    return product in ("Jupiter", "Galileo")
+
+
+# How many models Ollama keeps loaded at once, for both ways bonsAI starts it: the
+# start-with-the-Deck service (ollama_local_autostart_service.py) and the plugin starting
+# it directly (below). Two lets the answering model and the note-searching model stay
+# loaded together, which turns a ~700ms swap on every question into ~24ms (measured
+# runs/plan48-R6-deck-model-eviction.json). The two paths used to disagree -- the service
+# wrote 2, the direct start 1 -- so the same Deck behaved differently depending on how
+# Ollama had been started. Read live on the Deck 2026-09-23: the service's copy runs with 2.
+OLLAMA_MAX_LOADED_MODELS_DEFAULT = "2"
+
+
+def _linux_ollama_gpu_env_defaults() -> dict[str, str]:
+    """Best-effort GPU env for Steam Deck / AMD Linux when the user has not set overrides."""
+    if not sys.platform.startswith("linux"):
+        return {}
+    out: dict[str, str] = {}
+    if os.environ.get("OLLAMA_VULKAN") is None:
+        out["OLLAMA_VULKAN"] = "1"
+    # The Deck's APU is an *integrated* GPU; Ollama (>=0.12) discovers it via Vulkan
+    # ("RADV VANGOGH") but DROPS it by default ("dropping integrated GPU; to enable, set
+    # OLLAMA_IGPU_ENABLE=1") and falls back to CPU. Without this, inference runs on CPU
+    # (~180s for a short reply on Deck). Required for any GPU offload on Deck-class iGPUs.
+    if os.environ.get("OLLAMA_IGPU_ENABLE") is None and _is_steam_deck_hardware():
+        out["OLLAMA_IGPU_ENABLE"] = "1"
+    # Gemma4 + Vulkan flash-attn can garble on AMD iGPU; prefer stable output on Deck-class hardware.
+    if os.environ.get("OLLAMA_FLASH_ATTENTION") is None and _is_steam_deck_hardware():
+        out["OLLAMA_FLASH_ATTENTION"] = "0"
+    if os.environ.get("HSA_OVERRIDE_GFX_VERSION") is None and _is_steam_deck_hardware():
+        # Van Gogh / Galileo report gfx1033; bundled ROCm accepts gfx1030 override (ollama#3243).
+        out["HSA_OVERRIDE_GFX_VERSION"] = "gfx1030"
+    if os.environ.get("OLLAMA_NUM_PARALLEL") is None:
+        out["OLLAMA_NUM_PARALLEL"] = "1"
+    if os.environ.get("OLLAMA_MAX_LOADED_MODELS") is None:
+        out["OLLAMA_MAX_LOADED_MODELS"] = OLLAMA_MAX_LOADED_MODELS_DEFAULT
+    return out
+
+
+def _env_for_ollama_cli(ollama_bin: str) -> dict[str, str]:
+    """Host env stripped of Steam ``LD_*`` pollution, plus Ollama's lib dir prepended."""
+    env = dict(_env_for_host_system_tools())
+    env.update(_linux_ollama_gpu_env_defaults())
+    lib = _ollama_bundle_lib_dir(ollama_bin)
+    if lib is not None:
+        prev = env.get("LD_LIBRARY_PATH", "")
+        env["LD_LIBRARY_PATH"] = str(lib) if not prev else f"{lib}:{prev}"
+    return env
+
+
+def terminate_setup_started_ollama_serve() -> None:
+    """Stop ``ollama serve`` subprocess we spawned for setup (Deck cancel / teardown)."""
+    global _OLLAMA_SERVE_PROC, _OLLAMA_SERVE_STARTED_BY_SETUP
+    proc = _OLLAMA_SERVE_PROC
+    started = _OLLAMA_SERVE_STARTED_BY_SETUP
+    _OLLAMA_SERVE_PROC = None
+    _OLLAMA_SERVE_STARTED_BY_SETUP = False
+    if not started or proc is None:
+        return
+    try:
+        proc.terminate()
+        proc.wait(timeout=10)
+    except Exception:
+        try:
+            proc.kill()
+        except Exception:
+            pass
+
+
+def ensure_ollama_server_listening_before_pull(
+    shell_log: Callable[[str], None],
+    ollama_bin: str,
+    cancelled: Callable[[], bool],
+    *,
+    max_listen_probe_iterations: int = 90,
+    force_fresh_serve: bool = False,
+    extra_env: Optional[dict[str, str]] = None,
+) -> bool:
+    """
+    ``ollama pull`` requires the HTTP API. User-prefix tarball installs do not register systemd;
+    start ``ollama serve`` in the background when port 11434 is down.
+
+    When ``force_fresh_serve`` is True, stop any existing listener and spawn a new user ``serve``
+    (needed after Clear all data when the API still answers but ``~/.ollama/id_ed25519`` is gone).
+    """
+    global _OLLAMA_SERVE_PROC, _OLLAMA_SERVE_STARTED_BY_SETUP
+    if not force_fresh_serve and probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=2.5):
+        return True
+
+    if force_fresh_serve:
+        shell_log(
+            "[bonsAI] Forcing a fresh user ``ollama serve`` so ~/.ollama keys can be created …"
+        )
+        env = _env_for_host_system_tools()
+        _stop_local_ollama_listener(env)
+        terminate_setup_started_ollama_serve()
+        time.sleep(0.5)
+
+    shell_log("[bonsAI] No Ollama server on localhost:11434 — starting ``ollama serve`` (needed for pulls) …")
+    env = {**_env_for_ollama_cli(ollama_bin), **(extra_env or {})}
+    try:
+        _OLLAMA_SERVE_PROC = subprocess.Popen(
+            [ollama_bin, "serve"],
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            env=env,
+            start_new_session=True,
+        )
+        _OLLAMA_SERVE_STARTED_BY_SETUP = True
+    except Exception as exc:
+        shell_log(f"[bonsAI] Could not start ollama serve: {exc}")
+        return False
+
+    for i in range(max_listen_probe_iterations):
+        if cancelled():
+            terminate_setup_started_ollama_serve()
+            return False
+        proc = _OLLAMA_SERVE_PROC
+        if proc is not None and proc.poll() is not None:
+            shell_log(f"[bonsAI] ollama serve exited early (code {proc.returncode}). Check disk and drivers.")
+            terminate_setup_started_ollama_serve()
+            return False
+        if probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=1.5):
+            shell_log("[bonsAI] Ollama API is reachable on localhost:11434.")
+            return True
+        time.sleep(0.5)
+
+    shell_log("[bonsAI] Ollama server did not become ready in time. Try ``ollama serve`` from Konsole.")
+    terminate_setup_started_ollama_serve()
+    return False
+
+
+def _serve_control(shell_log: Callable[[str], None], ollama_bin: str) -> ServeControl:
+    """What ollama_server_restart.py needs from this file to replace a running server."""
+    return ServeControl(
+        start=lambda env: ensure_ollama_server_listening_before_pull(
+            shell_log, ollama_bin, lambda: False, extra_env=env
+        ),
+        stop_own=terminate_setup_started_ollama_serve,
+        own_pid=lambda: (
+            _OLLAMA_SERVE_PROC.pid
+            if _OLLAMA_SERVE_STARTED_BY_SETUP and _OLLAMA_SERVE_PROC is not None and _OLLAMA_SERVE_PROC.poll() is None
+            else None
+        ),
+        cli_env=_env_for_ollama_cli(ollama_bin),
+    )
+
+
+def _ollama_state_home_dir() -> Path:
+    return Path.home() / ".ollama"
+
+
+def local_ollama_cli_home_ready() -> bool:
+    """True when ``~/.ollama/id_ed25519`` exists (CLI pulls and local setup are viable)."""
+    return (_ollama_state_home_dir() / "id_ed25519").is_file()
+
+
+def _stop_local_ollama_listener(env: dict[str, str]) -> None:
+    """Stop user systemd unit and any setup-spawned ``ollama serve`` (best-effort)."""
+    terminate_setup_started_ollama_serve()
+    try:
+        subprocess.run(
+            ["systemctl", "--user", "stop", "ollama"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+            env=env,
+        )
+    except Exception:
+        pass
+    try:
+        subprocess.run(
+            ["pkill", "-x", "ollama"],
+            capture_output=True,
+            text=True,
+            timeout=15,
+            check=False,
+            env=env,
+        )
+    except Exception:
+        pass
+
+
+def ensure_ollama_cli_home_ready(
+    shell_log: Callable[[str], None],
+    ollama_bin: str,
+    cancelled: Callable[[], bool],
+) -> bool:
+    """
+    ``ollama pull`` needs ``~/.ollama/id_ed25519``. After a plugin data clear the API may still
+    respond while the home dir was removed — restart serve so keys are recreated.
+    """
+    key = _ollama_state_home_dir() / "id_ed25519"
+    if key.is_file():
+        return True
+    if cancelled():
+        return False
+
+    shell_log("[bonsAI] Ollama config home is missing keys — reinitializing ~/.ollama …")
+    env = _env_for_host_system_tools()
+    _stop_local_ollama_listener(env)
+    terminate_setup_started_ollama_serve()
+    _ollama_state_home_dir().mkdir(parents=True, exist_ok=True)
+
+    if not ensure_ollama_server_listening_before_pull(
+        shell_log,
+        ollama_bin,
+        cancelled,
+        force_fresh_serve=True,
+    ):
+        return False
+
+    for _ in range(40):
+        if cancelled():
+            return False
+        if key.is_file():
+            shell_log("[bonsAI] Ollama home reinitialized.")
+            return True
+        time.sleep(0.5)
+
+    if not key.is_file():
+        try:
+            subprocess.run(
+                [ollama_bin, "list"],
+                capture_output=True,
+                text=True,
+                timeout=60,
+                check=False,
+                env=_env_for_ollama_cli(ollama_bin),
+            )
+        except Exception as exc:
+            shell_log(f"[bonsAI] ollama list warm-up note: {exc}")
+
+    if key.is_file():
+        shell_log("[bonsAI] Ollama home reinitialized.")
+        return True
+
+    shell_log("[bonsAI] Could not create Ollama keys under ~/.ollama — try ``ollama serve`` in Konsole.")
+    return False
+
+
+def recover_loopback_ollama_listening(
+    shell_log: Callable[[str], None],
+    *,
+    max_listen_probe_iterations: int = 40,
+) -> bool:
+    """
+    Best-effort start of localhost Ollama (systemd user unit, then ``ollama serve``) before a probe retry.
+
+    Intended for Connection Test failures on **127.0.0.1** / localhost only — not LAN hosts.
+  Skips auto-start when ``~/.ollama`` was removed (e.g. after Clear all data) so Test connection
+  does not resurrect a half-installed daemon.
+    """
+    if not local_ollama_cli_home_ready():
+        shell_log(
+            "[bonsAI] Ollama home is not initialized (~/.ollama/id_ed25519 missing) — "
+            "skipping auto-start. Tap Install Ollama first."
+        )
+        return False
+    if probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=2.5):
+        return True
+    try_restart_ollama_user_service(shell_log)
+    time.sleep(1.0)
+    if probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=2.5):
+        return True
+
+    _prepend_home_local_bin_to_environ(shell_log)
+    ollama_bin = resolve_ollama_executable()
+    if not ollama_bin:
+        shell_log("[bonsAI] ``ollama`` not found on PATH — use Starter setup to install.")
+        return False
+
+    return ensure_ollama_server_listening_before_pull(
+        shell_log,
+        ollama_bin,
+        lambda: False,
+        max_listen_probe_iterations=max_listen_probe_iterations,
+    )
+
+
+def _bash_exe() -> str:
+    """Prefer distro ``/usr/bin/bash`` so we do not pick a shim from a mutated ``PATH``."""
+    if sys.platform.startswith("win"):
+        return "bash"
+    if os.access("/usr/bin/bash", os.X_OK):
+        return "/usr/bin/bash"
+    found = shutil.which("bash")
+    return found if found else "bash"
+
+
+def _append_log(lines: list[str], msg: str) -> None:
+    for part in msg.splitlines() or ["(empty line)"]:
+        lines.append(part)
+        if len(lines) > MAX_LOG_TAIL_LINES:
+            del lines[:-MAX_LOG_TAIL_LINES]
+
+
+def probe_ollama_http_ok(base_http: str, timeout_seconds: float = 2.5) -> bool:
+    """Return True when Ollama responds on ``/api/version``."""
+    url = f"{base_http}/api/version"
+    try:
+        req = urllib.request.Request(url, method="GET")
+        with urllib.request.urlopen(req, timeout=timeout_seconds) as resp:
+            return 200 <= (resp.status or 0) < 300
+    except Exception:
+        return False
+
+
+def list_installed_ollama_tags(base_http: str, timeout_seconds: float = 5.0) -> list[str]:
+    """Return model tag names from ``GET {base}/api/tags`` (empty on error)."""
+    url = f"{base_http}/api/tags"
+    try:
+        req = urllib.request.Request(url, method="GET")
+        with urllib.request.urlopen(req, timeout=timeout_seconds) as resp:
+            data = read_json_capped(resp, what="/api/tags reply")
+        models = data.get("models") if isinstance(data, dict) else None
+        if not isinstance(models, list):
+            return []
+        tags: list[str] = []
+        for m in models:
+            if isinstance(m, dict):
+                name = str(m.get("name") or "").strip()
+                if name:
+                    tags.append(name)
+        return tags
+    except Exception:
+        return []
+
+
+def list_installed_ollama_tag_sizes(base_http: str, timeout_seconds: float = 5.0) -> dict[str, int]:
+    """Return {tag: size_bytes} from ``GET {base}/api/tags`` (empty on error).
+
+    Ollama's own /api/tags already reports each installed model's real size on disk -- the size
+    the AI models screen's header and its "remove this model" box both need. A model outside the
+    curated catalog (nomic-embed-text, the meaning-search model that plan 70's own knowledge base
+    installs) has no entry in the bundled catalog to fall back on, and registry.ollama.ai does not
+    answer for it either, so asking there left its size unknown ("?", and undercounted in the
+    header total -- workshop:test-evidence/plan70-ROUTING-MERGE-SIZE-01.json). This is the same
+    request list_installed_ollama_tags already makes; a sibling function rather than changing
+    that one's return shape, since many callers already depend on it returning a plain list of
+    names.
+    """
+    url = f"{base_http}/api/tags"
+    try:
+        req = urllib.request.Request(url, method="GET")
+        with urllib.request.urlopen(req, timeout=timeout_seconds) as resp:
+            data = read_json_capped(resp, what="/api/tags reply")
+        models = data.get("models") if isinstance(data, dict) else None
+        if not isinstance(models, list):
+            return {}
+        sizes: dict[str, int] = {}
+        for m in models:
+            if not isinstance(m, dict):
+                continue
+            name = str(m.get("name") or "").strip()
+            size = m.get("size")
+            if name and isinstance(size, int) and size > 0:
+                sizes[name] = size
+        return sizes
+    except Exception:
+        return {}
+
+
+from backend.ollama.ollama_connectivity import is_loopback_ollama_host as _is_loopback_ollama_host
+
+
+def is_loopback_ollama_host(host: str) -> bool:
+    """True when ``host`` identifies the local Ollama machine (loopback or ``localhost`` hostname)."""
+    return _is_loopback_ollama_host(host)
+
+
+def resolve_tier2_multimodal_pull_tags() -> list[str]:
+    """Prefer ``gemma4:e2b-it-qat``; fall back to ``gemma4:e2b`` when registry has no QAT manifest."""
+    from backend.ollama.ollama_catalog_service import partition_pull_tags_by_registry
+
+    primary = list(TIER2_MULTIMODAL_PULL_TAGS)
+    ok, _bad = partition_pull_tags_by_registry(primary)
+    if ok:
+        return ok
+    fallback = [TIER2_MULTIMODAL_PULL_FALLBACK_TAG]
+    ok_fb, _ = partition_pull_tags_by_registry(fallback)
+    return ok_fb if ok_fb else fallback
+
+
+def tier1_foss_recommended_pull_tags(profile: str) -> list[str]:
+    """Deprecated alias — use ``setup_recommended_pull_tags``."""
+    return setup_recommended_pull_tags(profile)
+
+
+# The path to the ``ollama`` program: the PATH, then ~/.local/bin and the other usual folders, then the
+# program a running server started from (ollama_locate.py). Decky's own PATH lacks ~/.local/bin.
+from backend.ollama.ollama_locate import find_ollama_executable as resolve_ollama_executable  # noqa: E402
+
+
+def _prefer_user_prefix_ollama_install_linux() -> bool:
+    """SteamOS/immutable-root systems keep ``/usr`` and ``/usr/local`` read-only → official ``install.sh`` cannot work."""
+    if sys.platform.startswith("win"):
+        return False
+    probe = Path("/usr/local/lib/.bonsai_write_probe_rm_ok")
+    try:
+        probe.write_text("")
+        probe.unlink(missing_ok=True)
+        return False
+    except OSError:
+        return True
+
+
+def _ollama_linux_download_stem() -> str:
+    u = shutil.which("uname")
+    mach = ""
+    try:
+        r = subprocess.run([u or "uname", "-m"], capture_output=True, text=True, timeout=5)
+        mach = (r.stdout or "").strip()
+    except Exception:
+        mach = ""
+    if mach in ("x86_64", "amd64"):
+        return "ollama-linux-amd64"
+    if mach in ("aarch64", "arm64"):
+        return "ollama-linux-arm64"
+    raise RuntimeError(f"Unsupported Linux machine type for Ollama: {mach or 'unknown'}.")
+
+
+def _prepend_home_local_bin_to_environ(shell_log: Callable[[str], None]) -> None:
+    lb = Path.home() / ".local" / "bin"
+    lbs = str(lb)
+    paths = os.environ.get("PATH", "")
+    paths_split = paths.split(":") if paths else []
+    if lbs not in paths_split:
+        os.environ["PATH"] = lbs + (":" + paths if paths else "")
+        shell_log(f"[bonsAI] Prepended ~/.local/bin to PATH ({lbs}).")
+
+
+def run_tarball_user_local_install(shell_log: Callable[[str], None]) -> tuple[bool, str]:
+    """Download official Ollama tarball into ``~/.local`` (writable) when ``/usr`` is immutable."""
+    child_env = _env_for_host_system_tools()
+    home = Path.home()
+    dst = home / ".local"
+    lb = dst / "bin"
+    lb.mkdir(parents=True, exist_ok=True)
+    stem = _ollama_linux_download_stem()
+    base = "https://ollama.com/download"
+    zst_url = f"{base}/{stem}.tar.zst"
+    tgz_url = f"{base}/{stem}.tgz"
+    bash_w = _bash_exe()
+    have_zstd = shutil.which("zstd") is not None
+    shell_log(f"[bonsAI] Immutable /usr — installing Ollama user prefix under {dst} …")
+    if have_zstd:
+        inner = f'set -e; mkdir -p "{lb}" && curl -fsSL "{zst_url}" | zstd -d | tar -xf - -C "{dst}"'
+    else:
+        inner = f'set -e; mkdir -p "{lb}" && curl -fsSL "{tgz_url}" | tar -xzf - -C "{dst}"'
+        shell_log("[bonsAI] zstd not found; using .tgz fallback (slower/larger download).")
+
+    cmd = [bash_w, "-lc", inner]
+    try:
+        completed = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=600,
+            check=False,
+            env=child_env,
+        )
+        stderr = completed.stderr.strip() if completed.stderr else ""
+        stdout = completed.stdout.strip() if completed.stdout else ""
+        ox = lb / "ollama"
+        if ox.is_file():
+            try:
+                os.chmod(str(ox), 0o755)
+            except OSError:
+                pass
+        if stdout:
+            shell_log(stdout)
+        if stderr:
+            shell_log(stderr)
+        if completed.returncode != 0:
+            return False, stderr or stdout or "user-prefix tarball install exited non-zero"
+        if not ox.is_file():
+            return False, f"No ollama binary at {ox} after extract."
+        return True, ""
+    except subprocess.TimeoutExpired:
+        return False, "Ollama download/extract timed out (try Desktop Konsole on good Wi‑Fi)."
+    except Exception as exc:
+        return False, str(exc)
+
+
+def run_official_linux_install(shell_log: Callable[[str], None]) -> tuple[bool, str]:
+    """Install Ollama via official ``install.sh``. Returns (ok, stderr_or_message)."""
+    if _prefer_user_prefix_ollama_install_linux():
+        ok, err = run_tarball_user_local_install(shell_log)
+        if ok:
+            _prepend_home_local_bin_to_environ(shell_log)
+        return ok, err
+
+    euid = getattr(os, "geteuid", lambda: -1)()
+    sudo_nopass_rc: int | None = None
+    if hasattr(os, "getuid") and os.name != "nt":
+        try:
+            r = subprocess.run(
+                ["sudo", "-n", "/usr/bin/true"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+                env=_env_for_host_system_tools(),
+                check=False,
+            )
+            sudo_nopass_rc = r.returncode
+        except Exception:
+            sudo_nopass_rc = -1
+    bash_w = _bash_exe()
+    inner = f'curl -fsSL "{OLLAMA_OFFICIAL_INSTALL_SH}" | sh'
+    child_env = _env_for_host_system_tools()
+    use_sudo_nopass = (
+        os.name != "nt"
+        and euid != 0
+        and sudo_nopass_rc == 0
+        and shutil.which("sudo") is not None
+    )
+    if use_sudo_nopass:
+        cmd = ["sudo", "-n", bash_w, "-lc", inner]
+        shell_log(f"[bonsAI] Running install with sudo -n → {OLLAMA_OFFICIAL_INSTALL_SH}")
+    else:
+        cmd = [bash_w, "-lc", inner]
+        shell_log(f"[bonsAI] Running: curl ... | sh  ({OLLAMA_OFFICIAL_INSTALL_SH})")
+        if sudo_nopass_rc is not None and sudo_nopass_rc != 0:
+            shell_log("[bonsAI] Hint: sudo -n unavailable; install needs root — may fail unless you use Desktop Konsole.")
+    try:
+        completed = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=600,
+            check=False,
+            env=child_env,
+        )
+        stdout = completed.stdout.strip() if completed.stdout else ""
+        stderr = completed.stderr.strip() if completed.stderr else ""
+        if stdout:
+            shell_log(stdout)
+        if stderr:
+            shell_log(stderr)
+        if completed.returncode != 0:
+            return False, stderr or stdout or "install script exited non-zero"
+        _prepend_home_local_bin_to_environ(shell_log)
+        return True, ""
+    except subprocess.TimeoutExpired:
+        return False, "Installation timed out (try installing Ollama from Desktop Konsole)."
+    except Exception as exc:
+        return False, str(exc)
+
+
+"""Braille spinner frames Ollama draws while it works. Ordinary characters, so the ANSI strip
+leaves them; a failure after ten redraws otherwise repeats one word ten times."""
+_SPINNER_FRAME_RE = re.compile(r"[⠀-⣿]+")
+_REPEATED_BLANKS_RE = re.compile(r"\s{2,}")
+"""A phrase repeated back to back, which is what a redraw looks like once the spinner frame
+between the copies is gone. Ollama redraws with a carriage return rather than a newline, so the
+repeats sit inside one line and splitting on lines does not see them. Bounded to 38 characters so
+the backtracking stays cheap on the 480-character tail this is used on."""
+_REPEATED_PHRASE_RE = re.compile(r"(?<!\S)(\S.{1,38}?\S)(?:\s+\1)+(?!\S)")
+
+
+def _format_ollama_pull_failure(tag: str, code: int, tail_lines: list[str]) -> str:
+    """Human-readable pull failure: what to do about it first, the raw output after.
+
+    The order matters now, and it did not before. Until the pull picker grew a field for typing
+    any model name, every pull came from a curated list, so a tag that does not exist was nearly
+    unreachable and almost nobody saw this line. Measured on the Deck 2026-09-05 (PULL-CUSTOM-02):
+    a made-up name produced a message opening with ``ollama pull ... failed with exit code 1. Last
+    output: pulling manifest ⠋ pulling manifest ⠙ pulling manifest ⠹ ...`` and ending with the one
+    sentence a person can act on. Spinner frames first, the answer last.
+
+    So the advice leads, the command's own words follow, and the spinner frames are dropped —
+    they are animation, repeated once per redraw, and carry nothing.
+    """
+    # Ollama animates progress by redrawing the same line with a different spinner frame, so the
+    # tail is mostly the same words over and over. Strip the frames (ordinary characters, so the
+    # ANSI strip leaves them) and then drop consecutive repeats, which is what a redraw is.
+    cleaned: list[str] = []
+    for raw_line in strip_ansi_escape_sequences("\n".join(tail_lines)).splitlines():
+        line = _REPEATED_BLANKS_RE.sub(" ", _SPINNER_FRAME_RE.sub("", raw_line)).strip()
+        if line and (not cleaned or cleaned[-1] != line):
+            cleaned.append(line)
+    tail_text = _REPEATED_PHRASE_RE.sub(r"\1", " ".join(cleaned))
+    tail_snip = tail_text[-480:] if tail_text else ""
+
+    low = tail_text.casefold()
+    advice = ""
+    if "id_ed25519" in low and "no such file" in low:
+        advice = (
+            "Ollama’s ~/.ollama folder is missing keys (often after Clear all data). "
+            "Tap Install Ollama on the Ollama tab, or run ``ollama serve`` once in Konsole."
+        )
+    elif "manifest" in low and ("not exist" in low or "does not exist" in low):
+        advice = f"Tag «{tag}» is not on the Ollama library — try gemma4:e2b-it-qat or qwen3.5:4b."
+
+    detail = f"ollama pull {tag} failed with exit code {code}"
+    if tail_snip:
+        detail += f". Last output: {tail_snip}"
+    return f"{advice} {detail}" if advice else detail
+
+
+def run_ollama_pull(
+    ollama_bin: str,
+    tag: str,
+    shell_log: Callable[[str], None],
+    cancelled: Callable[[], bool],
+) -> tuple[bool, str]:
+    """Run ``ollama pull <tag>`` (blocking); fail-fast if return code non-zero."""
+    shell_log(f"[bonsAI] ollama pull {tag}")
+    if cancelled():
+        return False, "Cancelled."
+    if not ensure_ollama_cli_home_ready(shell_log, ollama_bin, cancelled):
+        return (
+            False,
+            "Ollama home is missing (~/.ollama/id_ed25519). Tap Install Ollama on the Ollama tab.",
+        )
+    tail_lines: list[str] = []
+    try:
+        proc = subprocess.Popen(
+            [ollama_bin, "pull", tag],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+            env=_env_for_ollama_cli(ollama_bin),
+        )
+        assert proc.stdout is not None
+        for line in proc.stdout:
+            if cancelled():
+                proc.send_signal(signal.SIGTERM)
+                try:
+                    proc.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    proc.kill()
+                return False, "Cancelled."
+            line = line.rstrip("\n")
+            if line:
+                shell_log(line)
+                tail_lines.append(line)
+        code = proc.wait()
+        if code != 0:
+            return False, _format_ollama_pull_failure(tag, code, tail_lines)
+        return True, ""
+    except Exception as exc:
+        return False, str(exc)
+
+
+async def _install_or_update_ollama_binary(
+    *,
+    state: dict[str, Any],
+    log: Callable[[str], None],
+    cancelled: Callable[[], bool],
+    force_reinstall: bool,
+) -> str:
+    """Ensure ``ollama`` CLI exists; when ``force_reinstall``, always re-run the official installer."""
+    if cancelled():
+        raise RuntimeError("Cancelled.")
+
+    ollama_bin = resolve_ollama_executable()
+    if ollama_bin and not force_reinstall:
+        return ollama_bin
+
+    state["stage"] = "install"
+    if force_reinstall and ollama_bin:
+        log("[bonsAI] Re-running official Ollama installer to update the binary…")
+    else:
+        log("[bonsAI] ollama not found on PATH; running official installer…")
+
+    ok, err = await asyncio.to_thread(lambda: run_official_linux_install(log))
+    if not ok:
+        raise RuntimeError(
+            "Could not install Ollama automatically. "
+            "Open Desktop mode → Konsole — on immutable SteamOS use the user install from README if needed:\n"
+            f'curl -fsSL "{OLLAMA_OFFICIAL_INSTALL_SH}" | sh\n'
+            "Then switch back here and retry. "
+            + (f" Details: {err}" if err else "")
+        )
+
+    _prepend_home_local_bin_to_environ(log)
+    ollama_bin = resolve_ollama_executable()
+    if not ollama_bin:
+        raise RuntimeError(
+            "Installation finished but ``ollama`` was not found on PATH. Try opening a new shell or reboot."
+        )
+    return ollama_bin
+
+
+async def run_local_setup(
+    *,
+    profile: str,
+    state: dict[str, Any],
+    logger: Any,
+    cancel_event: asyncio.Event,
+    on_stage: Optional[Callable[[str, dict[str, Any]], Any]] = None,
+    on_verbose_line: Optional[Callable[[str], None]] = None,
+    speech_download: Optional[Callable[[Callable[[str], None], Callable[[str], None], Any], dict[str, str]]] = None,
+    microphone_enabled: bool = False,
+) -> None:
+    """Populate ``state`` while installing / pulling models. Plain dict for JSON-RPC compatibility.
+
+    For the "tier1_essentials" profile (the starter set) a model already installed is not downloaded again,
+    a download that fails does not stop the others, and ``speech_download`` (the voice engine's own path,
+    handed in by the RPC) fetches the speech models after the Ollama ones. The run then ends "failed" with a
+    sentence naming each piece that did not download; see starter_set_extras.py.
+    """
+
+    prof = (profile or "").strip()
+    last_stage_emitted = ""
+
+    async def emit_stage(stage: str, extra: Optional[dict[str, Any]] = None) -> None:
+        nonlocal last_stage_emitted
+        st = (stage or "").strip()
+        if not st or st == last_stage_emitted or on_stage is None:
+            return
+        last_stage_emitted = st
+        fields = {"profile": prof, **(extra or {})}
+        maybe = on_stage(st, fields)
+        if asyncio.iscoroutine(maybe):
+            await maybe
+
+    def log(msg: str) -> None:
+        _append_log(list(state.setdefault("log_tail", [])), msg)
+        if progress := progress_text_from_line(msg):
+            state["progress_text"] = progress
+        if on_verbose_line is not None:
+            try:
+                on_verbose_line(msg)
+            except Exception:
+                pass
+        try:
+            logger.info("local_ollama_setup: %s", msg[:500])
+        except Exception:
+            pass
+
+    def cancelled() -> bool:
+        return cancel_event.is_set()
+
+    try:
+        state.setdefault("phase", "running")
+        state["stage"] = "check"
+        state["done"] = False
+        state["error"] = ""
+        state["profile"] = profile
+        await emit_stage("check")
+        is_update_installed = prof == "update_installed"
+        is_custom = prof == "custom"
+        if is_custom:
+            tags = [str(t).strip() for t in (state.get("pull_tags") or []) if str(t).strip()]
+            if not tags:
+                raise RuntimeError("Custom pull profile requires pull_tags.")
+        elif is_update_installed:
+            tags = []
+        else:
+            tags = setup_recommended_pull_tags(prof)
+            if prof == "tier2_multimodal":
+                tags = resolve_tier2_multimodal_pull_tags()
+            if not tags:
+                raise RuntimeError(f"Unknown pull profile: {profile!r}.")
+        state["pull_tags"] = list(tags)
+        state["total_pull_steps"] = len(tags)
+        models_dir = os.environ.get("OLLAMA_MODELS") or str(Path.home() / ".ollama" / "models")
+        log("[bonsAI] Local Ollama setup started.")
+        log(f"[bonsAI] Model blobs store: {models_dir} (override with OLLAMA_MODELS).")
+        if is_update_installed:
+            log("[bonsAI] Profile 'update_installed': refresh Ollama binary, then re-pull each locally installed tag.")
+        elif is_custom:
+            log(f"[bonsAI] Profile 'custom': {len(tags)} selected pull(s).")
+        else:
+            log(f"[bonsAI] Profile {profile!r}: {len(tags)} pull step(s); output streams below when the CLI prints lines.")
+
+        if sys.platform.startswith("win"):
+            raise RuntimeError("Local Ollama setup runs on SteamOS/Linux only.")
+
+        if is_custom:
+            _prepend_home_local_bin_to_environ(log)
+            ollama_bin = resolve_ollama_executable()
+            if not ollama_bin:
+                raise RuntimeError(
+                    "``ollama`` not found on PATH. Use Local Ollama setup or install from Desktop Konsole first."
+                )
+        else:
+            ollama_bin = await _install_or_update_ollama_binary(
+                state=state,
+                log=log,
+                cancelled=cancelled,
+                force_reinstall=is_update_installed,
+            )
+        installed_now = state.get("stage") == "install"
+        await emit_stage(state.get("stage", "install"))
+
+        # The new program file does nothing until the server that is already running is replaced
+        # (Deck 2026-10-09: file 0.40.2, server still 0.34.1 after three days).
+        restart_info: dict[str, Any] = {}
+        if installed_now and probe_ollama_http_ok(DEFAULT_BASE):
+            state["stage"] = "restart"
+            await emit_stage("restart")
+            restart_info = await asyncio.to_thread(lambda: restart_server_onto_new_binary(log, ollama_bin, _serve_control(log, ollama_bin)))
+
+        state["stage"] = "service"
+        await emit_stage("service")
+        if not probe_ollama_http_ok(DEFAULT_BASE):
+            log("[bonsAI] Ollama not responding on localhost:11434; trying user systemd unit…")
+            await asyncio.to_thread(lambda: try_restart_ollama_user_service(log))
+            await asyncio.sleep(1.0)
+
+        ok_listen = await asyncio.to_thread(lambda: ensure_ollama_server_listening_before_pull(log, ollama_bin, cancelled))
+        if not ok_listen:
+            raise RuntimeError(
+                "Ollama server is not running on localhost:11434 — ``ollama pull`` needs the API. "
+                "Opening Desktop Konsole and running ``ollama serve`` once fixes this."
+            )
+
+        ok_home = await asyncio.to_thread(lambda: ensure_ollama_cli_home_ready(log, ollama_bin, cancelled))
+        if not ok_home:
+            raise RuntimeError(
+                "Ollama home directory could not be initialized (~/.ollama/id_ed25519 missing). "
+                "Tap Install Ollama on the Ollama tab or run ``ollama serve`` once in Konsole."
+            )
+
+        if is_update_installed:
+            tags = await asyncio.to_thread(lambda: list_installed_ollama_tags(DEFAULT_BASE))
+            state["pull_tags"] = list(tags)
+            state["total_pull_steps"] = len(tags)
+            if not tags:
+                log(
+                    "[bonsAI] No models installed locally — nothing to update. "
+                    "Use Browse models (or the starter set there) to install one first."
+                )
+                state["stage"] = "complete"
+                state["phase"] = "done"
+                state["done"] = True
+                state["current_tag"] = ""
+                record_result(state, prof, [], restart_info, ollama_bin, _env_for_ollama_cli(ollama_bin))
+                log("[bonsAI] Local Ollama update finished (binary refresh only).")
+                await emit_stage("complete")
+                return
+
+            log(f"[bonsAI] Re-pulling {len(tags)} installed tag(s) for updates…")
+
+        state["stage"] = "pull"
+        await emit_stage("pull", {"pull_steps": len(tags)})
+        # The starter set pulls its own way (starter_set_extras.py); every other profile stops at the first failure.
+        starter = (await run_starter_downloads(
+            state, tags, lambda: list_installed_ollama_tags(DEFAULT_BASE),
+            lambda t: run_ollama_pull(ollama_bin, t, log, cancelled), log, cancelled, speech_download, cancel_event)
+            if prof == "tier1_essentials" else None)
+        for i, tag in enumerate(tags if starter is None else []):
+            if cancelled():
+                raise RuntimeError("Cancelled.")
+            state["pull_step"] = i + 1
+            state["current_tag"] = tag
+            state["progress_text"] = ""
+            ok, err = await asyncio.to_thread(lambda t=tag: run_ollama_pull(ollama_bin, t, log, cancelled))
+            if cancelled():
+                raise RuntimeError("Cancelled.")
+            if not ok:
+                raise RuntimeError(err or f"Failed to pull {tag}")
+
+        state["stage"] = "complete"
+        state["phase"] = "done"
+        state["done"] = True
+        state["current_tag"] = ""
+        record_result(state, prof, starter["pulled"] if starter else tags, restart_info, ollama_bin, _env_for_ollama_cli(ollama_bin))
+        if starter:
+            apply_starter_outcome(state, starter, microphone_enabled)
+        log("[bonsAI] Local Ollama setup finished." if state["phase"] == "done" else f"[bonsAI] Setup finished with a problem: {state['error']}")
+        await emit_stage(state["stage"], {"error": state["error"][:200]} if state["phase"] == "failed" else None)
+
+    except Exception as exc:
+        msg = str(exc)
+        log(f"[bonsAI] Setup stopped: {msg}")
+        is_cancelled = cancel_event.is_set()
+        state["phase"] = "cancelled" if is_cancelled else "failed"
+        state["error"] = msg
+        state["done"] = True
+        await emit_stage("failed" if not is_cancelled else "cancelled", {"error": msg[:200]})
+        if not is_cancelled:
+            try:
+                logger.exception("local_ollama_setup failed")
+            except Exception:
+                pass
+    finally:
+        if cancel_event.is_set():
+            terminate_setup_started_ollama_serve()
+
+
+def run_ollama_rm(ollama_bin: str, tag: str) -> tuple[bool, str]:
+    """Run ``ollama rm <tag>`` (argv form, no shell)."""
+    try:
+        proc = subprocess.run(
+            [ollama_bin, "rm", tag],
+            capture_output=True,
+            text=True,
+            timeout=120,
+            env=_env_for_ollama_cli(ollama_bin),
+            check=False,
+        )
+        if proc.returncode != 0:
+            err = (proc.stderr or proc.stdout or "").strip()
+            return False, err or f"ollama rm failed with exit code {proc.returncode}"
+        return True, ""
+    except Exception as exc:
+        return False, str(exc)
+
+
+async def run_ollama_rm_async(tag: str) -> tuple[bool, str]:
+    """Resolve ollama binary and remove one tag."""
+    _prepend_home_local_bin_to_environ(lambda _m: None)
+    ollama_bin = resolve_ollama_executable()
+    if not ollama_bin:
+        return False, "ollama_not_found"
+    return await asyncio.to_thread(run_ollama_rm, ollama_bin, tag)
+
+
+def new_local_ollama_setup_state() -> dict[str, Any]:
+    """Fresh status dict returned from ``get_local_ollama_setup_status`` when idle."""
+    return {
+        "phase": "idle",
+        "stage": "",
+        "profile": "",
+        "pull_tags": [],
+        "pull_step": 0,
+        "total_pull_steps": 0,
+        "current_tag": "",
+        "log_tail": [],
+        "error": "",
+        "result_line": "",
+        "progress_text": "",
+        "ollama_version": "",
+        "needs_device_restart": False,
+        "done": True,
+        "accepted": False,
+        "cancel_requested": False,
+    }

@@ -1,0 +1,86 @@
+/**
+ * Title: Answer copy text builder
+ * Purpose: Build the text a reply's Copy action puts on the clipboard.
+ * Used for: ReplyCopyButton, wired through buildReplyActionsElement.
+ * Solves: Copying internal display tags, or the body of a spoiler fence the user has not
+ *   revealed on screen, instead of the answer the user actually reads.
+ * Does not: Render markdown to plain prose — copies the same source text
+ *   MainTabBonsaiAiMarkdownChunk renders, minus internal tags and hidden spoiler bodies, plus a
+ *   blank line wherever the screen cut one long paragraph into separate blocks.
+ */
+import { expandOneLineSpoilerFences } from "../../spoilers/expandOneLineSpoilerFences";
+import { mayHoldFence, replaceSpoilerFences } from "../markdown/markdownFenceReader";
+import { splitResponseIntoChunks } from "../markdown/splitResponseIntoChunks";
+import { stripAssistantDisplayTags } from "../markdown/stripAssistantDisplayTags";
+import { unwrapAskedEntitySpoilerFences, type UnwrapSpoilerOpts } from "../../spoilers/unwrapAskedEntitySpoilerFences";
+
+/** Shown in place of a fence the UI still renders masked — never leak unrevealed spoiler text. */
+export const SPOILER_HIDDEN_COPY_PLACEHOLDER = "[Spoiler hidden — reveal it on screen to copy]";
+
+export type BuildAnswerCopyTextArgs = {
+  /** Raw turn body, same string passed to buildAnswerBubbleElement. */
+  body: string;
+  /** Whether Settings has spoiler masking on. When off, every fence renders inline — see
+   *  MainTabBonsaiAiMarkdownChunk's `code:` renderer, which is what this mirrors. */
+  spoilerMaskingEnabled?: boolean;
+  askQuestion?: string;
+  appId?: string | null;
+  /** Active game's display name — for a title reachable only by name (plan 54 gap 1). */
+  appName?: string | null;
+  /** The thing the backend worked out the question named (plan 54 gap 2). */
+  askedEntity?: string | null;
+  spoilerConsentEffective?: boolean;
+  /** This turn's protected names (D112 #7): a cover naming one is never opened. */
+  protectedNames?: readonly string[] | null;
+};
+
+/**
+ * The text a Copy press puts on the clipboard: internal display tags stripped, spoiler fences
+ * unwrapped wherever the render would also unwrap them (same rule, same function, as the bubble),
+ * and any spoiler fence still masked replaced with a placeholder rather than copied verbatim.
+ */
+export function buildAnswerCopyText(args: BuildAnswerCopyTextArgs): string {
+  const {
+    body,
+    spoilerMaskingEnabled = true,
+    askQuestion = "",
+    appId = null,
+    appName = null,
+    askedEntity = null,
+    spoilerConsentEffective = false,
+    protectedNames = null,
+  } = args;
+
+  let text = expandOneLineSpoilerFences(stripAssistantDisplayTags(body || ""));
+
+  /*
+   * One long paragraph with no line break and no fence is cut by the screen into pieces of about
+   * 300 letters at sentence ends, each drawn as its own block (splitResponseIntoChunks'
+   * length-only path). Copy gives the same breaks the reader sees, not one run-on block
+   * (plan72-Z-FREEPLAY.json, finding 13). Only this shape: every other answer keeps its own
+   * breaks, and with no fence there is nothing for the spoiler steps below to change.
+   */
+  if (!text.includes("\n") && !mayHoldFence(text)) {
+    return splitResponseIntoChunks(text).join("\n\n");
+  }
+
+  const opts: UnwrapSpoilerOpts = {
+    question: askQuestion,
+    appId,
+    appName,
+    askedEntity,
+    spoilerConsentEffective,
+    protectedNames,
+  };
+  text = unwrapAskedEntitySpoilerFences(text, opts);
+
+  /*
+   * Hidden blocks are found the way the panel finds them (markdownFenceReader), so a ~~~ block, a
+   * longer fence, a block with a blank line inside, and one whose closer is glued onto a sentence
+   * are all covered. With masking off every block renders inline as plain prose, so copy does too;
+   * otherwise whatever the unwrap above left behind is still a masked, collapsed block on screen.
+   */
+  text = replaceSpoilerFences(text, spoilerMaskingEnabled ? SPOILER_HIDDEN_COPY_PLACEHOLDER : null);
+
+  return text.trim();
+}

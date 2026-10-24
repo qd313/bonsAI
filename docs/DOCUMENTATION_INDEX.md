@@ -1,20 +1,40 @@
 # bonsAI documentation index
 
-Short guide to markdown under `docs/`. Repo root **[README.md](../README.md)** stays the primary install entry; **[CHANGELOG.md](../CHANGELOG.md)** is release history.
+Short guide to markdown under `docs/`. Repo root **[README.md](../README.md)** stays the primary install entry; **[CLAUDE.md](../CLAUDE.md)** orients agents on the codebase; **[CHANGELOG.md](../CHANGELOG.md)** is release history.
 
 | Doc | Audience | What it is |
 |-----|----------|------------|
-| [mcp-setup.md](mcp-setup.md) | Contributors / agents | **MCP servers** — bonsai knowledge + Decky Plugin Studio ops |
-| [development.md](development.md) | Contributors | Deck-first setup, build/deploy, BPM test loop, architecture, change-risk hotspots |
+| [mcp-setup.md](mcp-setup.md) | Contributors / agents | MCP servers — bonsai knowledge + Decky Plugin Studio |
+| [development.md](development.md) | Contributors | Deck-first setup, build/deploy, architecture, hotspots |
 | [troubleshooting.md](troubleshooting.md) | Power users | GPU, network, vision, permissions, QAM, deploy edge cases |
-| [roadmap.md](roadmap.md) | Planning / contributors | In progress, planned backlog, and completed shipped work |
-| [testing.md](testing.md) | QA / contributors | Regression gates, device QA runbook (Tier 0–4), shipped-feature coverage, Test Results log |
-| [security-audit-report.md](security-audit-report.md) | Maintainers | RPC/log/UI disclosure review and status |
-| [archive/refactor/refactor-specialist-sweep-2026.md](archive/refactor/refactor-specialist-sweep-2026.md) | Contributors | 2026 LOC reduction sweep report |
-| [archive/refactor/refactor-specialist-sweep.md](archive/refactor/refactor-specialist-sweep.md) | Contributors | Historical doc/script reorg + unified-input refactor |
+| [roadmap.md](roadmap.md) | Planning | Active index — Bugs, Features, Verify and Done for v0.6.0. Entries are kept short on purpose |
+| [roadmap-kb.md](roadmap-kb.md) | Planning | The knowledge-base part of the roadmap — bugs, Deck checks owed, plans (long notes: [roadmap-kb-details.md](roadmap-kb-details.md)) |
+| [roadmap-shelved.md](roadmap-shelved.md) | Planning | Parked work and watched sightings |
+| [roadmap-details.md](roadmap-details.md) | Planning | Long-form notes for **open** roadmap items — steps, measurements, ruled-out leads |
+| [audit/maintainer-decisions-locked.md](audit/maintainer-decisions-locked.md) | Planning / refactor | Locked D1–D15 decisions, execution order, cleanup candidates |
+| [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md) | Planning | Fixed-bug writeups (full detail) |
+| [testing.md](testing.md) | QA / contributors | Testing hub + slim coverage |
+| [testing-automated.md](testing-automated.md) | Agents / CI | Commands runnable without a human on Deck |
+| [testing-manual.md](testing-manual.md) | Maintainers | On-Deck smokes and Tier 0–4 runbook |
+| [knowledge-base.md](knowledge-base.md) | Maintainers | Offline RAG / corpus phases |
+| [code-clarity.md](code-clarity.md) | Contributors / agents | Module header convention and its exclusions |
+| [design-language.md](design-language.md) | Contributors / agents | **Read before adding UI.** Eight layout rules, each earned by a specific bug — starting with using every pixel of the 300px QAM column |
+| [design-tokens.md](design-tokens.md) | Contributors / agents | Palette, surfaces, focus rings, type scale, layout constants |
+| [major-redesign.md](archive/major-redesign.md) | Planning / maintainers | Named chat slots v2 — mockup spec, decisions R1–R5, phased path |
+| [glossary.md](glossary.md) | Everyone | Terms used in file headers and maintainer docs |
+| [rag-retrieval-quality-remediation-implementation-plan.md](../../bonsAI-workshop/archive/rag-retrieval-quality-remediation-implementation-plan.md) | Maintainers | **Active** RAG hybrid-retrieval fix plan (PR1/PR2) |
+| [planning/](planning/) | Maintainers / agents | Planning prompts ([roadmap-planning-questions.md](archive/roadmap-planning-questions.md)), answers (Q1–Q13), [web-permission-discovery.md](planning/web-permission-discovery.md) |
+| [audit/](audit/) | Contributors / agents | Refactor recon — read before re-deriving anything |
+| [archive/reports/](../../bonsAI-workshop/archive/reports) | Maintainers | Security / FOSS review snapshots |
+| [archive/](archive/) | — | Historical research, plans, completed features, old testing dumps |
+
+The archived RAG *analysis* lives at
+[archive/rag-retrieval-quality-remediation-plan.md](../../bonsAI-workshop/archive/rag-retrieval-quality-remediation-plan.md).
+Its name differs from the active implementation plan by one word — implement from
+the file listed in the table above, not that one.
 
 ## MCP knowledge (agents)
 
-Policies, workflows, and specialist personas live in [`packages/bonsai-mcp/knowledge/`](../packages/bonsai-mcp/knowledge/). IDE agents should call **`bonsai.session.bootstrap`** at session start. See [mcp-setup.md](mcp-setup.md).
+Policies, workflows, and specialist personas live in [`packages/bonsai-mcp/knowledge/`](../packages/bonsai-mcp/knowledge/). Call **`bonsai.session.bootstrap`** at session start. See [mcp-setup.md](mcp-setup.md).
 
-**Start here:** install → [README.md](../README.md); first-time contributor setup → [development.md](development.md); agent MCP → [mcp-setup.md](mcp-setup.md); on-Deck QA → [testing.md#device-qa-runbook](testing.md#device-qa-runbook); planning → [roadmap.md](roadmap.md).
+**Start here:** install → [README.md](../README.md); contributor setup → [development.md](development.md); agent MCP → [mcp-setup.md](mcp-setup.md); on-Deck QA → [testing-manual.md](testing-manual.md); planning → [roadmap.md](roadmap.md) and [planning/](planning/) answers.

@@ -3,32 +3,42 @@ import { defaultSettingsFixture, idleBackgroundStatusFixture } from "./rpcFixtur
 
 export type RpcHandler = (...args: unknown[]) => unknown | Promise<unknown>;
 
-/** Frontend RPC methods invoked from `src/` (keep in sync with grep / main.py). */
+/**
+ * Frontend RPC methods invoked from `src/`.
+ *
+ * **Hand-maintained, and nothing verifies it.** `assertAllFrontendRpcMethodsRegistered`
+ * only checks list → handler; it never checks call-site → list or list → `main.py`,
+ * so this can silently drift from both. Adding a name here is not what makes a test
+ * pass — adding the *handler* below is. Keep it in sync by grepping `src/` for
+ * `callDeckyWithTimeout(` and `call<` when you add an RPC.
+ */
 export const FRONTEND_RPC_METHODS = [
   "load_settings",
   "save_settings",
   "clear_plugin_data",
   "start_background_game_ai",
+  "get_session_rag_chip_candidates",
   "get_background_game_ai_status",
   "abort_background_game_ai",
   "test_ollama_connection",
   "discover_mdns_ollama_hosts",
   "fetch_ollama_catalog_metadata",
-  "fetch_pull_model_catalog",
   "pull_ollama_models",
   "delete_ollama_model",
   "start_local_ollama_setup",
   "get_local_ollama_setup_status",
   "cancel_local_ollama_setup",
+  "apply_ollama_local_autostart",
+  "get_ollama_local_autostart_status",
   "get_deck_ip",
   "append_app_log",
   "append_desktop_debug_note",
   "append_desktop_chat_event",
   "read_host_clipboard_text",
+  "write_host_clipboard_text",
   "get_input_transparency",
   "save_ask_feedback",
   "list_recent_screenshots",
-  "capture_screenshot",
   "take_steam_screenshot",
   "start_voice_transcription",
   "stop_voice_transcription",
@@ -38,12 +48,26 @@ export const FRONTEND_RPC_METHODS = [
   "get_voice_install_status",
   "get_intent_packs",
   "set_intent_pack_enabled",
+  "set_kids_lock_state",
   "export_intent_pack",
   "import_intent_pack",
   "remove_intent_pack",
+  "get_reply_language_snapshot",
   "get_strategy_checklist_session",
   "save_strategy_checklist_session",
   "clear_strategy_checklist_session",
+  "get_rag_corpus_status",
+  "start_rag_corpus_download",
+  "cancel_rag_corpus_download",
+  "update_rag_corpus",
+  "remove_rag_corpus",
+  "get_rag_corpus_glossary",
+  "list_chat_slots",
+  "get_chat_slot",
+  "create_chat_slot",
+  "delete_chat_slot",
+  "rename_chat_slot",
+  "sum_up_chat_slot",
 ] as const;
 
 export type FrontendRpcMethod = (typeof FRONTEND_RPC_METHODS)[number];
@@ -93,6 +117,7 @@ function defaultHandlers(): Record<string, RpcHandler> {
     },
     clear_plugin_data: () => ({ ok: true }),
     get_background_game_ai_status: () => idleBackgroundStatusFixture(),
+    get_session_rag_chip_candidates: () => ({ ok: false, reason: "kb_off", candidates: [] }),
     start_background_game_ai: () => ({ accepted: true, status: "pending" as const }),
     abort_background_game_ai: () => ({ ok: true }),
     test_ollama_connection: () => ({ reachable: true, version: "0.5.0", models: ["qwen2.5:1.5b"] }),
@@ -101,48 +126,30 @@ function defaultHandlers(): Record<string, RpcHandler> {
     get_local_ollama_setup_status: () => ({ phase: "idle", stage: "", profile: "", done: true }),
     start_local_ollama_setup: () => ({ accepted: true }),
     cancel_local_ollama_setup: () => ({ cancel_requested: true }),
+    apply_ollama_local_autostart: () => ({ ok: true, changed: true, message: "Started now." }),
+    get_ollama_local_autostart_status: () => ({
+      installed: false,
+      enabled: false,
+      running: false,
+      reason: "The local AI isn't installed on this Deck yet.",
+    }),
     append_app_log: () => ({ success: true }),
     append_desktop_debug_note: () => ({ success: true }),
     append_desktop_chat_event: () => ({ success: true }),
     read_host_clipboard_text: () => ({ ok: true, text: "" }),
+    write_host_clipboard_text: () => ({ success: true }),
     get_input_transparency: () => ({ ok: true }),
+    get_reply_language_snapshot: () => ({
+      override: settings.reply_language ?? "follow_system",
+      steam_client_language: "english",
+      effective: "english",
+      display_name: "English",
+    }),
     save_ask_feedback: () => ({ ok: true }),
     fetch_ollama_catalog_metadata: () => ({ tags: {} }),
-    fetch_pull_model_catalog: () => ({
-      source: "live",
-      updated_at: "2026-06-11",
-      fetched_at: Math.floor(Date.now() / 1000),
-      entries: [
-        {
-          tag: "qwen3:2b",
-          params: "2B",
-          sizeGb: 1.6,
-          releasedYm: "2025-04",
-          license: "Apache 2.0",
-          licenseClass: "foss",
-          group: "smallest",
-          tags: ["chat", "strategy"],
-          rating: 5,
-          blurb: "Lightweight Qwen 3 reasoning — good speed/strategy balance on Deck.",
-        },
-      ],
-      removed_tags: [],
-      overrides: {},
-    }),
     pull_ollama_models: () => ({ accepted: true }),
     delete_ollama_model: () => ({ ok: true }),
     list_recent_screenshots: () => ({ success: true, items: [] }),
-    capture_screenshot: () => ({
-      success: true,
-      item: {
-        path: "/tmp/bonsai-capture-preview.png",
-        name: "bonsai-capture-preview.png",
-        mtime: Date.now() / 1000,
-        source: "capture",
-        app_id: "",
-        size_bytes: 1024,
-      },
-    }),
     take_steam_screenshot: () => ({
       success: true,
       item: {
@@ -186,6 +193,10 @@ function defaultHandlers(): Record<string, RpcHandler> {
       fixture.summaries = fixture.summaries.map((s) => (s.id === packId ? { ...s, enabled } : s));
       return { ok: true, ...fixture };
     },
+    set_kids_lock_state: (...args: unknown[]) => ({
+      ok: true,
+      kids_lock_active: args[0] === true,
+    }),
     export_intent_pack: () => ({
       ok: true,
       json: JSON.stringify(intentPacksFixture().packs[0], null, 2),
@@ -207,6 +218,53 @@ function defaultHandlers(): Record<string, RpcHandler> {
     get_strategy_checklist_session: () => null,
     save_strategy_checklist_session: () => ({ ok: true }),
     clear_strategy_checklist_session: () => ({ ok: true }),
+    // Knowledge base. The real `get_rag_corpus_status` spreads the backend's
+    // download state over the installed/version fields, so a test that wants a
+    // running or cancelled download overrides this whole object.
+    get_rag_corpus_status: () => ragCorpusStatusFixture(),
+    start_rag_corpus_download: () => ({ accepted: true, install_path: "~/.bonsai/rag" }),
+    cancel_rag_corpus_download: () => ({ cancel_requested: true }),
+    update_rag_corpus: () => ({ ok: true }),
+    remove_rag_corpus: () => ({ ok: true }),
+    // The running game's tap-to-define words: none, as with no library installed.
+    get_rag_corpus_glossary: () => ({ ok: true, installed: false, game_title: "", terms: [], reason: "" }),
+    list_chat_slots: () => ({ slots: [] }),
+    get_chat_slot: () => ({ ok: false, error: "Slot not found" }),
+    create_chat_slot: () => ({
+      ok: true,
+      slot: {
+        id: "slot-test-1",
+        label: "New chat",
+        created_at: 0,
+        updated_at: 0,
+        turns: [],
+      },
+    }),
+    delete_chat_slot: () => ({ ok: true }),
+    sum_up_chat_slot: () => ({ accepted: false, status: "nothing_to_do" }),
+    rename_chat_slot: () => ({
+      ok: true,
+      slot: { id: "slot-test-1", label: "Renamed", created_at: 0, updated_at: 0, turns: [] },
+    }),
+  };
+}
+
+export function ragCorpusStatusFixture(overrides: Record<string, unknown> = {}) {
+  return {
+    phase: "idle",
+    stage: "",
+    done: true,
+    installed: false,
+    corpus_path: "",
+    corpus_version: "",
+    use_local_knowledge_base: false,
+    embeddings_populated: false,
+    embed_model_available: true,
+    storage_options: {
+      internal: { id: "internal", label: "Internal storage", install_path: "~/.bonsai/rag", free_bytes: 64 * 1024 ** 3 },
+      sd_card: null,
+    },
+    ...overrides,
   };
 }
 

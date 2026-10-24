@@ -1,29 +1,12 @@
 """Abort must release the background Ask busy gate so users can submit again immediately."""
 
 import asyncio
-import sys
-import types
 import unittest
 from unittest.mock import patch
 
-if "fcntl" not in sys.modules:
-    _fcntl = types.ModuleType("fcntl")
-    _fcntl.LOCK_EX = 2
-    _fcntl.LOCK_NB = 4
-    _fcntl.LOCK_UN = 8
-    _fcntl.flock = lambda *_a, **_k: False
-    sys.modules["fcntl"] = _fcntl
+from backend_module_stubs import install_fcntl_and_decky_stubs
 
-if "decky" not in sys.modules:
-    _decky = types.ModuleType("decky")
-    _decky.DECKY_PLUGIN_SETTINGS_DIR = "/tmp"
-    _decky.logger = types.SimpleNamespace(
-        info=lambda *a, **k: None,
-        warning=lambda *a, **k: None,
-        error=lambda *a, **k: None,
-        exception=lambda *a, **k: None,
-    )
-    sys.modules["decky"] = _decky
+install_fcntl_and_decky_stubs()
 
 from main import Plugin  # noqa: E402
 
@@ -96,6 +79,128 @@ class AbortBusyGateTests(unittest.IsolatedAsyncioTestCase):
                     await self.plugin._background_task
                 except asyncio.CancelledError:
                     pass
+
+    async def test_abort_preserves_partial_in_cancelled_response(self) -> None:
+        request_id = 42
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": request_id,
+            "question": "slow",
+            "app_id": "",
+            "app_context": "none",
+            "success": None,
+            "response": "Thinking...",
+            "applied": None,
+            "elapsed_seconds": 0,
+            "error": None,
+            "started_at": 0.0,
+            "completed_at": None,
+            "strategy_guide_branches": None,
+            "model_policy_disclosure": None,
+            "preset_carousel_inject": None,
+            "partial_response": None,
+            "streaming": True,
+            "thinking_summary": None,
+        }
+        self.plugin._reset_partial_stream_snapshot(request_id)
+        self.plugin._update_partial_response(request_id, "Partial answer so far", False)
+
+        await self.plugin.abort_background_game_ai()
+
+        self.assertEqual(self.plugin._background_state.get("status"), "cancelled")
+        self.assertEqual(self.plugin._background_state.get("response"), "Partial answer so far")
+
+    async def test_executor_terminal_write_also_keeps_the_partial(self) -> None:
+        """
+        The other half of the Stop race.
+
+        ``abort_background_game_ai`` and ``_run_background_request`` both write the cancelled
+        terminal state under ``_background_lock``. When the executor wins, it used to write the
+        transport message and drop the drafted text, so whether the user kept their answer depended
+        on lock ordering.
+        """
+        request_id = 7
+        self.plugin._background_request_seq = request_id
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": request_id,
+            "question": "slow",
+            "app_id": "",
+            "app_context": "none",
+            "success": None,
+            "response": "Thinking...",
+            "applied": None,
+            "elapsed_seconds": 0,
+            "error": None,
+            "started_at": 0.0,
+            "completed_at": None,
+            "strategy_guide_branches": None,
+            "model_policy_disclosure": None,
+            "preset_carousel_inject": None,
+            "partial_response": None,
+            "streaming": True,
+            "thinking_summary": None,
+        }
+        self.plugin._reset_partial_stream_snapshot(request_id)
+        self.plugin._update_partial_response(request_id, "Half an answer", False)
+
+        async def _fake_execute(*_args, **_kwargs):
+            return {
+                "success": False,
+                "response": "Request stopped (connection closed).",
+                "cancelled": True,
+            }
+
+        with patch.object(Plugin, "_execute_game_ai_request", _fake_execute):
+            await self.plugin._run_background_request(request_id, "slow", "1.2.3.4", "", "")
+
+        self.assertEqual(self.plugin._background_state.get("status"), "cancelled")
+        self.assertEqual(self.plugin._background_state.get("response"), "Half an answer")
+
+    async def test_an_ordinary_asks_pending_and_completed_status_both_say_kind_ask(self) -> None:
+        """Plan 68 step 4: every existing Ask must keep reading "ask" once the button's own
+        "sum_up" jobs start sharing this same state shape -- proven both at accept (pending) and
+        once `_run_background_request`'s terminal write has spread the pending state through."""
+        from backend.ask.background_request_state import pending_background_state
+
+        request_id = 71
+        pending = pending_background_state(
+            request_id=request_id,
+            question="how do I beat this boss",
+            app_id="",
+            app_context="none",
+            started_at=0.0,
+        )
+        self.assertEqual(pending["kind"], "ask")
+        self.plugin._background_state = pending
+        self.plugin._reset_partial_stream_snapshot(request_id)
+
+        async def _fake_execute(*_args, **_kwargs):
+            return {"success": True, "response": "done", "elapsed_seconds": 0.01}
+
+        with patch.object(Plugin, "_execute_game_ai_request", _fake_execute):
+            await self.plugin._run_background_request(
+                request_id, "how do I beat this boss", "127.0.0.1:11434", "", ""
+            )
+
+        self.assertEqual(self.plugin._background_state.get("status"), "completed")
+        self.assertEqual(self.plugin._background_state.get("kind"), "ask")
+
+    async def test_cancelled_text_falls_back_when_only_markup_debris_arrived(self) -> None:
+        """Stop on the first frame must not show a stray bracket as the answer."""
+        request_id = 9
+        self.plugin._reset_partial_stream_snapshot(request_id)
+        self.plugin._update_partial_response(request_id, "<", False)
+
+        self.assertEqual(
+            self.plugin._cancelled_response_text(request_id, "Request cancelled."),
+            "Request cancelled.",
+        )
+        # A snapshot for a different request must never leak into this one.
+        self.assertEqual(
+            self.plugin._cancelled_response_text(request_id + 1, "Request cancelled."),
+            "Request cancelled.",
+        )
 
 
 if __name__ == "__main__":

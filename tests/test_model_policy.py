@@ -2,9 +2,10 @@
 
 import unittest
 
-from backend.services.model_policy import (
+from backend.ollama.model_policy import (
     classify_ollama_model_name,
     empty_filter_user_message,
+    KEPT_IN_TIER_1_PENDING_CALL,
     filter_model_list,
     reconcile_model_policy_tier,
 )
@@ -18,11 +19,115 @@ class ModelPolicyTests(unittest.TestCase):
 
     def test_classify_llama_gemma_open_weight(self):
         self.assertEqual(classify_ollama_model_name("llama3:latest"), "open_weight")
-        self.assertEqual(classify_ollama_model_name("gemma4:2b"), "open_weight")
+        self.assertEqual(classify_ollama_model_name("gemma3:2b"), "open_weight")
         self.assertEqual(classify_ollama_model_name("llama3.2-vision:latest"), "open_weight")
 
     def test_classify_internvl_open_weight(self):
         self.assertEqual(classify_ollama_model_name("internvl3.5:38b"), "open_weight")
+
+    def test_classify_gemma4_foss(self):
+        """Sept 2026 licence-list catch-up (workshop:planning/41-deck-model-survey.md, D73):
+        Gemma 4 moved to Apache 2.0 in April 2026, so only this generation reads as
+        open-source -- gemma, gemma2 and gemma3 stay open-weight above."""
+        self.assertEqual(classify_ollama_model_name("gemma4:e2b-it-qat"), "foss")
+        self.assertEqual(classify_ollama_model_name("gemma4:e4b-it-qat"), "foss")
+        self.assertEqual(classify_ollama_model_name("gemma4:12b-it-qat"), "foss")
+        self.assertEqual(classify_ollama_model_name("gemma4:latest"), "foss")
+
+    def test_classify_granite_foss(self):
+        self.assertEqual(classify_ollama_model_name("granite4.2:8b"), "foss")
+        self.assertEqual(classify_ollama_model_name("granite4.2:3b"), "foss")
+
+    def test_classify_lfm_and_liquid_open_weight(self):
+        self.assertEqual(classify_ollama_model_name("lfm2.5:8b"), "open_weight")
+        self.assertEqual(classify_ollama_model_name("liquid:8b"), "open_weight")
+
+    def test_classify_gpt_oss_is_open_source(self):
+        """Licence labels pass (plan 77): gpt-oss is Apache 2.0 at every size (Ollama page and
+        the openai/gpt-oss-20b card, read 2026-09-29), so it belongs in Tier 1, not Tier 3."""
+        self.assertEqual(classify_ollama_model_name("gpt-oss:20b"), "foss")
+        self.assertEqual(classify_ollama_model_name("gpt-oss:120b"), "foss")
+        self.assertEqual(classify_ollama_model_name("gpt-oss"), "foss")
+
+    def test_classify_vicuna_and_orca_mini_are_open_weight(self):
+        """Vicuna is Llama 1/2 licensed; orca-mini is CC BY-NC-SA (original) or Llama 2 (v3)."""
+        for tag in ("vicuna", "vicuna:13b", "orca-mini", "orca-mini:3b", "orca-mini:70b"):
+            self.assertEqual(classify_ollama_model_name(tag), "open_weight", tag)
+
+    def test_classify_size_specific_qwen_licences(self):
+        """Only some Qwen sizes carry Qwen's own licence; the rest stay Apache 2.0."""
+        for tag in ("qwen2.5:72b", "qwen2.5:72b-instruct-q4_K_M", "qwen2.5-coder:3b",
+                    "qwen2.5vl:72b", "qwen2:72b"):
+            self.assertEqual(classify_ollama_model_name(tag), "open_weight", tag)
+        for tag in ("qwen2.5:7b", "qwen2.5:32b", "qwen2.5:latest", "qwen2.5-coder:7b",
+                    "qwen2.5-coder:32b", "qwen2.5vl:7b", "qwen2.5vl:32b", "qwen2:7b",
+                    "qwen3:4b", "qwen3-vl:latest", "qwen3.5:9b"):
+            self.assertEqual(classify_ollama_model_name(tag), "foss", tag)
+
+    def test_classify_whole_older_qwen_family_is_open_weight(self):
+        """The first Qwen (1.5) generation was released under the Tongyi Qianwen licences."""
+        for tag in ("qwen:0.5b", "qwen:7b", "qwen:72b", "qwen:latest"):
+            self.assertEqual(classify_ollama_model_name(tag), "open_weight", tag)
+
+    def test_classify_llava_by_base_model(self):
+        """llava:7b and :34b ship Apache 2.0 (Mistral / Yi based); :13b is Llama 2 licensed;
+        llava-llama3 is a Llama 3 fine-tune."""
+        self.assertEqual(classify_ollama_model_name("llava:7b"), "foss")
+        self.assertEqual(classify_ollama_model_name("llava:latest"), "foss")
+        self.assertEqual(classify_ollama_model_name("llava:34b"), "foss")
+        self.assertEqual(classify_ollama_model_name("llava:13b"), "open_weight")
+        self.assertEqual(classify_ollama_model_name("llava-llama3"), "open_weight")
+        self.assertEqual(classify_ollama_model_name("llava-phi3"), "foss")
+
+    def test_no_research_only_qwen_size_is_kept_in_tier_1_any_more(self):
+        """Plan 93, the maintainer's calls of 2026-10-13: qwen2.5:3b (the second text fallback) left
+        Tier 1 like qwen2.5vl:3b. Qwen's own card gives the 3B size the Qwen Research licence, so
+        "Open source only" neither offers nor tries it; its 7B and 32B sizes stay open source."""
+        self.assertEqual(KEPT_IN_TIER_1_PENDING_CALL, frozenset())
+        self.assertEqual(classify_ollama_model_name("qwen2.5:3b"), "open_weight")
+        self.assertEqual(classify_ollama_model_name("qwen2.5:3b-instruct-q4_K_M"), "open_weight")
+        self.assertEqual(classify_ollama_model_name("qwen2.5:7b"), "foss")
+        self.assertEqual(filter_model_list(["qwen2.5:3b", "qwen2.5:7b"], "open_source_only", False), ["qwen2.5:7b"])
+
+    def test_qwen25vl_3b_is_classed_by_its_licence_not_kept_in_tier_1(self):
+        """Plan 93: qwen2.5vl:3b is research-only, so it is not offered under "Open source only"
+        (2026-10-13). Its larger sibling sizes keep their own classes."""
+        self.assertEqual(classify_ollama_model_name("qwen2.5vl:3b"), "open_weight")
+        self.assertEqual(classify_ollama_model_name("qwen2.5vl:3b-q4_K_M"), "open_weight")
+        self.assertEqual(filter_model_list(["qwen2.5vl:3b", "qwen3.5:4b"], "open_source_only", False), ["qwen3.5:4b"])
+        self.assertEqual(
+            filter_model_list(["qwen2.5vl:3b", "qwen3.5:4b"], "open_weight", False), ["qwen2.5vl:3b", "qwen3.5:4b"]
+        )
+
+    def test_the_text_chain_under_open_source_only_is_the_gemma_4_models(self):
+        """With both Qwen Research 3B models out, the shipped text chain under "Open source only" is
+        gemma4:e2b-it-qat, gemma4:e2b and gemma4:latest (qwen3.5:4b is tried too when it is installed)."""
+        from backend.ollama.ollama_routing import select_ollama_models
+
+        text = filter_model_list(select_ollama_models(False, "speed"), "open_source_only", False)
+        self.assertEqual(text, ["gemma4:e2b-it-qat", "gemma4:e2b", "gemma4:latest"])
+
+    def test_picture_questions_still_have_open_source_vision_models_without_qwen25vl(self):
+        """qwen2.5vl:3b was not the only picture model open to "Open source only": Gemma 4,
+        qwen3.5:4b and llava:7b are all open-source-class and read pictures."""
+        from backend.ollama.ollama_routing import select_ollama_models
+
+        vision = filter_model_list(select_ollama_models(True, "speed"), "open_source_only", False)
+        self.assertNotIn("qwen2.5vl:3b", vision)
+        self.assertEqual(vision[:2], ["gemma4:e2b-it-qat", "qwen3.5:4b"])
+        self.assertIn("llava:7b", vision)
+
+    def test_filter_tier1_drops_size_limited_and_legacy_models(self):
+        models = ["qwen2.5:72b", "qwen2.5-coder:3b", "vicuna:latest", "orca-mini:latest",
+                  "llava:13b", "qwen3:4b", "gpt-oss:20b"]
+        self.assertEqual(
+            filter_model_list(models, "open_source_only", False), ["qwen3:4b", "gpt-oss:20b"]
+        )
+        self.assertEqual(filter_model_list(models, "open_weight", False), models)
+
+    def test_classify_unknown_tag_unchanged(self):
+        self.assertEqual(classify_ollama_model_name("mystery-model:7b"), "unknown")
+        self.assertEqual(classify_ollama_model_name(""), "unknown")
 
     def test_filter_tier1_drops_llama(self):
         models = ["llama3:latest", "qwen2.5:latest"]

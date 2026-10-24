@@ -1,9 +1,12 @@
 import type { BackgroundRequestStatus } from "../types/backgroundAsk";
-import { normalizeSettings, type BonsaiSettings } from "../utils/settingsAndResponse";
-
+import { type BonsaiSettings } from "../features/settings/bonsaiSettingsSchema";
+import { normalizeSettings } from "../features/settings/bonsaiSettingsNormalizers";
 /** Default settings payload aligned with backend `load_settings` / `normalize_settings`. */
 export function defaultSettingsFixture(): BonsaiSettings {
-  return normalizeSettings({});
+  // "Run AI on this Deck" starts on in a fresh install (plan 93). The many screen tests built on this
+  // fixture were written for the old start (off), so it is kept off here; a test of the real fresh
+  // default calls normalizeSettings({}) itself.
+  return { ...normalizeSettings({}), ollama_local_on_deck: false };
 }
 
 export function idleBackgroundStatusFixture(): BackgroundRequestStatus {

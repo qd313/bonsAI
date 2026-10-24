@@ -1,0 +1,1052 @@
+/**
+ * Title: Knowledge base section
+ *
+ * Purpose: The "Knowledge base (offline)" panel on the Ollama tab. A
+ * toggle turns on grounding Strategy and troubleshooting answers with a
+ * downloaded set of offline strategy cards; below it, a status line and a
+ * button that reads Download, Update, or Downloading… depending on what is
+ * already installed, next to Cancel (while a download runs) or Remove
+ * (once something is installed). Starting a fresh download first opens a
+ * small picker for internal storage or an SD card.
+ *
+ * Used for: OllamaTab, directly below the connection section.
+ *
+ * Solves: One place for every knowledge-base action — download, update,
+ * cancel, remove, and picking where it lives on disk — with its own D-pad
+ * path in and out.
+ *
+ * Does not: Actually use the knowledge base when answering a question —
+ * that is knowledge_base_service on the Python side. This file only
+ * installs, updates, and removes the corpus on disk.
+ *
+ * How it works:
+ *
+ *     ┌─ Knowledge base (offline) ────────────────────┐
+ *     │ [ Use local knowledge base ]  toggle            │
+ *     │ status: Installed vX / Not installed             │
+ *     │   (+ nomic-embed-text hint/button when needed)   │
+ *     │ [ Download / Update ]   [ Cancel / Remove ]      │  <- two-button row
+ *     └────────────────────────────────────────────────────┘
+ *
+ * 1. refreshStatus() polls the backend for corpus status once on mount and
+ *    whenever ragCorpusVersion changes, then again every 1.5 seconds while
+ *    a download is running, stopping itself once the backend reports
+ *    done, failed, or cancelled. With vectors installed and nothing
+ *    running, it also re-reads every 10 seconds so the nomic hint follows
+ *    a model removed or added outside this screen.
+ * 2. Toggling "Use local knowledge base" only flips the setting — it does
+ *    not start a download by itself.
+ * 3. Pressing the primary button calls openStoragePicker() when nothing is
+ *    installed yet (choose internal storage or an SD card, then
+ *    startDownload()), or runUpdate() once a corpus is already installed.
+ * 4. The second button slot is whichever of three things fits the current
+ *    state: Cancel (cancelDownload()) while a download runs, Remove
+ *    (confirmRemove(), which asks first) once something is installed, or
+ *    nothing at all otherwise — deliberately, so the row always has at
+ *    least one focusable stop while a download is in progress.
+ * 5. An optional nomic-embed-text hint appears once the corpus is
+ *    installed and vectorized but the embedding model is not yet on the
+ *    Ask host; pullNomicEmbed() only offers a one-press fix when Ask is
+ *    routed to this Deck's own Ollama, since the pull command always
+ *    targets this Deck.
+ * 6. A fresh install (never an Update) that lands with the embed model
+ *    still missing on this Deck's own Ollama is asked about once, with a
+ *    confirm box (Download / Cancel) — never a silent gap, and
+ *    never on its own. Skipped the same way the standing hint is when Ask
+ *    is routed elsewhere.
+ *
+ * Gotchas:
+ * - The version shown prefers whatever the status poll just reported over
+ *   the version this component mounted with, because nothing re-reads
+ *   settings.json into the frontend after an update finishes — the
+ *   ragCorpusVersion prop alone would go stale the moment Update succeeds.
+ * - A cancelled download still leaves the backend's error field set (it is
+ *   just the text of the exception that unwound the transfer), so a
+ *   cancellation gets its own neutral message instead of showing red as if
+ *   something failed.
+ * - Down from the toggle has to check whether the nomic hint's button is
+ *   showing before falling through to the action row — otherwise the
+ *   D-pad would skip straight over that button to Download/Update.
+ */
+import { isHttpsOllamaAddress } from "../ai-connection/ollamaAddress";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Button, Focusable, PanelSection, PanelSectionRow, showModal } from "@decky/ui";
+import { toaster } from "@decky/api";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../shared/deckyCall";
+import { tryMoveUpWithPanelScroll } from "../../shared/dpad/settingsPanelScroll";
+import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
+import { useHandRingOnGone } from "../../shared/dpad/useHandRingOnGone";
+import { rememberReturnWhileBoxOpens } from "../downloads/rememberReturnWhileBoxOpens";
+import {
+  addKbDownloadListener,
+  kbDownloadLikelyInFlight,
+  resetKbDownloadMarkerForTests,
+  setKbDownloadMarker,
+} from "./kbDownloadMarker";
+import {
+  addKbLibraryListener,
+  announceKbLibraryChange,
+  expectKbInstall,
+  noteKbStatusRead,
+  resetKbLibrarySignalForTests,
+} from "./kbLibrarySignal";
+import { confirmDownload } from "../downloads/downloadNotice";
+import { KNOWLEDGE_LIBRARY_NOTICES, MEANING_SEARCH_MODEL_NOTICE } from "../downloads/downloadSites";
+import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../../styles/settingsGlassButton";
+import { TwoButtonConfirmModal } from "../../shared/TwoButtonConfirmModal";
+import { KnowledgeBaseButtonLabel } from "./KnowledgeBaseButtonLabel";
+import { RagCorpusStoragePickerModal, type RagStorageOption } from "./RagCorpusStoragePickerModal";
+import { DownloadArrowIcon, RefreshArrowIcon, TrashBinIcon } from "../../shared/icons/icons";
+import {
+  clearModalReturnFocus,
+  registerModalReturnFocusOwner,
+  rememberModalReturnFocus,
+} from "../../shared/dpad/modalReturnFocusRegistry";
+import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
+import { textPx } from "../../styles/textPx";
+import { DenseSwitchRow } from "../folded-tabs/DenseRow";
+import { OLLAMA_ROW_HELP } from "../ai-connection/ollamaTabFolds";
+
+type RagCorpusStatus = {
+  phase?: string;
+  stage?: string;
+  progress_pct?: number;
+  bytes_downloaded?: number;
+  bytes_total?: number;
+  error?: string;
+  done?: boolean;
+  installed?: boolean;
+  corpus_path?: string;
+  corpus_version?: string;
+  /** Games and sections in the installed file; absent when the file could not be read. */
+  game_count?: number;
+  section_count?: number;
+  use_local_knowledge_base?: boolean;
+  embeddings_populated?: boolean;
+  embed_model_available?: boolean;
+  log_tail?: string[];
+  storage_options?: {
+    internal?: RagStorageOption;
+    sd_card?: RagStorageOption | null;
+  };
+};
+
+type RagUpdateResult = {
+  ok?: boolean;
+  updated?: boolean;
+  outcome?: string;
+  version?: string;
+  remote_version?: string;
+  error?: string;
+  reason?: string;
+};
+
+/**
+ * What the last Update press found, shown in the row's own status text. "downloading" is
+ * only drawn while the download runs; the Installed line carries the new version after.
+ */
+type UpdateNote = { kind: "checking" | "current" | "downloading" | "error"; text: string };
+
+type Props = {
+  useLocalKnowledgeBase: boolean;
+  setUseLocalKnowledgeBase: (v: boolean) => void;
+  ragCorpusVersion: string;
+  ollamaIp: string;
+  /**
+   * Whether Ask routes to the Deck's own Ollama. `pull_ollama_models` always pulls to this
+   * Deck and takes no host, so the Pull button can only fix the missing model when the
+   * embed host *is* the Deck. Routing to a LAN box makes the button a no-op on the wrong
+   * machine, so we explain instead of offering it.
+   */
+  ollamaLocalOnDeck: boolean;
+  onBeforeDeckyModal: () => void;
+  onCompleteDeckyModalClose: (close: () => void) => void;
+  toggleHostRef?: React.RefObject<HTMLDivElement | null>;
+  downloadBtnRef?: React.RefObject<HTMLButtonElement | null>;
+  removeBtnRef?: React.RefObject<HTMLButtonElement | null>;
+  /**
+   * Cancel shares the action row's second slot with Remove and only exists while a
+   * download runs. The parent needs its own handle because both other buttons are
+   * disabled then, so a ref to either one focuses nothing.
+   */
+  cancelBtnRef?: React.RefObject<HTMLButtonElement | null>;
+  /** Up from the switch: in the folded Ollama tab, the section's own line (plan 91). */
+  onMoveUpToConnection?: () => boolean;
+  /**
+   * Not used any more (plan 93 lane B10): it rode on the action row's Decky Buttons, which never pass move
+   * handlers on, so Steam's own Down has always done this hop. Kept so the tab that hands it in still compiles.
+   */
+  onMoveDownFromRemove?: () => boolean;
+};
+
+const KB_UNAVAILABLE_SESSION_KEY = "bonsai_kb_unavailable_warned";
+const KB_FAILURE_TOAST_KEY = "bonsai_kb_failure_toast";
+const KB_NOMIC_HINT_SESSION_KEY = "bonsai_kb_nomic_hint_warned";
+/**
+ * How long the screen waits for Update's check. The back end tries 2 mirrors
+ * (MANIFEST_MIRROR_COUNT) for up to 60 s each (MANIFEST_FETCH_TIMEOUT_S, in
+ * rag_corpus_download_service.py) = 120 s worst case; this adds 30 s of margin.
+ * tests/test_rag_update_deadline.py fails if the two drift apart.
+ */
+const RAG_UPDATE_RPC_TIMEOUT_MS = 150_000;
+/** Shared row height so Update (long label) and Remove match on Deck (stretch alone fails on Decky Button). */
+const KB_ACTION_ROW_MIN_HEIGHT = 44;
+
+/*
+ * A download outlives the component that started it. Closing the storage picker is a Decky modal
+ * close, which remounts the tab's content: `downloadBusy`, and the poll it drives, died with the old
+ * instance while the download ran on, and the new instance's one mount-time status read came before
+ * the download finished. Measured on the Deck (workshop:test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json):
+ * the section read "Not installed" for 37 s and more after the library was installed and saved, and
+ * only a second modal (another remount) brought it back. This marker lives at module scope so a
+ * remounted section picks the poll back up; it clears when a poll sees the download end.
+ */
+// (Now in kbDownloadMarker.ts, which also tells copies that mounted before the download started.)
+
+/**
+ * Set the instant a fresh install (never an Update — that starts already installed) is
+ * accepted; consumed the first time that download's completion is seen, whichever
+ * component instance is mounted then. Module scope for the same reason
+ * the download marker is: picking a storage location closes a Decky modal, which
+ * remounts this section, so a component-local ref would forget the download was ever
+ * a fresh install and the ask would never fire.
+ */
+let kbInstallNomicOfferPending = false;
+
+/*
+ * The meaning-search model's pull outlives this section for the same reason a download does: the
+ * offer's Download closes a Decky modal, which remounts the section. The new copy read "missing"
+ * once on mount and never looked again, so the hint stayed on the open tab for over a minute after
+ * the model landed (workshop:test-evidence/plan70-R5.json). Module scope lets a remounted copy keep
+ * polling; cleared when a poll sees the model, or after the window so a failed pull cannot poll
+ * forever.
+ */
+let kbNomicPullStartedAtMs: number | null = null;
+const KB_NOMIC_PULL_RESUME_WINDOW_MS = 15 * 60 * 1000;
+
+/*
+ * How often an open, idle section re-reads status. The meaning-search model can be removed (or
+ * added) outside this screen -- a shell `ollama rm`, another tool -- and a status read only on
+ * open left the hint missing until the tab was reopened (plan70-KB-UPDATE-HINT.json). The back
+ * end remembers "is the model there" for up to 30 s, so the hint shows within about 40 s.
+ */
+export const KB_STATUS_IDLE_RECHECK_MS = 10 * 1000;
+
+function kbNomicPullLikelyInFlight(): boolean {
+  return kbNomicPullStartedAtMs != null && Date.now() - kbNomicPullStartedAtMs < KB_NOMIC_PULL_RESUME_WINDOW_MS;
+}
+
+/** Test seam: forget any in-flight marker between tests. */
+export function resetKbDownloadInFlightForTests(): void {
+  resetKbDownloadMarkerForTests();
+  resetKbLibrarySignalForTests();
+  kbInstallNomicOfferPending = false;
+  kbNomicPullStartedAtMs = null;
+}
+
+const deckNav = (handlers: Record<string, () => boolean | void>) =>
+  handlers as unknown as Record<string, unknown>;
+
+/**
+ * The whole panel. See "How it works" above for the flow.
+ *
+ * In: whether the knowledge base is on and a setter for it, the corpus
+ * version the caller last knew about, the Ollama host address and whether
+ * it is this Deck's own local Ollama, callbacks for nested-modal focus
+ * handoff, and a handful of optional refs/Up-Down callbacks so neighbouring
+ * sections can hand the D-pad in and out cleanly.
+ * Out: the panel section described above.
+ *
+ * What can go wrong: every backend call here (download, update, cancel,
+ * remove, the nomic pull) is wrapped so a failure shows a toast and clears
+ * its own busy flag rather than leaving a button stuck disabled forever.
+ */
+export const KnowledgeBaseSection: React.FC<Props> = ({
+  useLocalKnowledgeBase,
+  setUseLocalKnowledgeBase,
+  ragCorpusVersion,
+  ollamaIp,
+  ollamaLocalOnDeck,
+  onBeforeDeckyModal,
+  onCompleteDeckyModalClose,
+  toggleHostRef,
+  downloadBtnRef: downloadBtnRefProp,
+  removeBtnRef: removeBtnRefProp,
+  cancelBtnRef: cancelBtnRefProp,
+  onMoveUpToConnection,
+}) => {
+  const [status, setStatus] = useState<RagCorpusStatus | null>(null);
+  const [downloadBusy, setDownloadBusy] = useState(kbDownloadLikelyInFlight);
+  const [cancelBusy, setCancelBusy] = useState(false);
+  const [updateNote, setUpdateNote] = useState<UpdateNote | null>(null);
+  const [nomicPullBusy, setNomicPullBusy] = useState(kbNomicPullLikelyInFlight);
+  /** Set once a pull is accepted (by this copy or one before a remount); polls status until the model shows up. */
+  const [nomicPullStarted, setNomicPullStarted] = useState(kbNomicPullLikelyInFlight);
+  const primaryBtnRefLocal = useRef<HTMLButtonElement | null>(null);
+  const removeBtnRef = useRef<HTMLButtonElement | null>(null);
+  const cancelBtnRef = useRef<HTMLButtonElement | null>(null);
+  const nomicBtnRef = useRef<HTMLButtonElement | null>(null);
+  /** Steam's nav node for the Download/Update row: the one approved way to move the ring into it. */
+  const actionRowNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
+  const toggleHostRefLocal = useRef<HTMLDivElement | null>(null);
+  const toggleHost = toggleHostRef ?? toggleHostRefLocal;
+
+  const focusPrimaryBtn = useCallback(() => {
+    if (downloadBtnRefProp?.current) focusInTabBody(downloadBtnRefProp.current);
+    if (primaryBtnRefLocal.current) focusInTabBody(primaryBtnRefLocal.current);
+    return true;
+  }, [downloadBtnRefProp]);
+
+  const focusCancelBtn = useCallback((): boolean => {
+    if (cancelBtnRef.current) focusInTabBody(cancelBtnRef.current);
+    return Boolean(cancelBtnRef.current);
+  }, []);
+
+  const focusNomicBtn = useCallback((): boolean => {
+    if (nomicBtnRef.current) focusInTabBody(nomicBtnRef.current);
+    return Boolean(nomicBtnRef.current);
+  }, []);
+
+  /**
+   * The meaning-search Pull button vanishes once the model lands, with the ring on it when the player
+   * has not moved, and nothing held the ring afterwards (roadmap-details.md, Flow L10 findings). The
+   * ring goes to the button below it: Steam's own transfer into the action row first, then that
+   * button's own focus if the transfer did not land it.
+   */
+  const nomicHostRef = useHandRingOnGone(() => {
+    try {
+      actionRowNavRef.current?.TakeFocus?.(true);
+    } catch {
+      /* the check below decides */
+    }
+    // Steam may stamp its ring on the wrapper around the button rather than the button itself.
+    const primary = primaryBtnRefLocal.current;
+    if (!elementHasGamepadFocus(primary?.closest<HTMLElement>(".bonsai-settings-focus-btn-host") ?? primary)) {
+      focusPrimaryBtn();
+    }
+  });
+
+  /**
+   * Down from the toggle: while a download runs the primary button is disabled and
+   * Remove is not rendered, so Cancel is the only stop the row has.
+   */
+  const focusActionRow = useCallback((): boolean => {
+    if (downloadBusy && focusCancelBtn()) return true;
+    return focusPrimaryBtn();
+  }, [downloadBusy, focusCancelBtn, focusPrimaryBtn]);
+
+  /** Down from the toggle: the nomic pull button sits between it and the action row
+   * whenever the hint is showing, so it must be offered focus first. */
+  const focusBelowToggle = useCallback(
+    (showNomic: boolean): boolean => {
+      if (showNomic && focusNomicBtn()) return true;
+      return focusActionRow();
+    },
+    [focusActionRow, focusNomicBtn],
+  );
+
+  const handleMoveUpFromToggle = useCallback((): boolean => {
+    return onMoveUpToConnection?.() || tryMoveUpWithPanelScroll(toggleHost.current);
+  }, [onMoveUpToConnection, toggleHost]);
+
+  const refreshStatus = useCallback(async () => {
+    try {
+      const st = await callDeckyWithTimeout<
+        [{ pc_ip: string }],
+        RagCorpusStatus
+      >(
+        "get_rag_corpus_status",
+        [{ pc_ip: ollamaIp.trim() }],
+        DECKY_RPC_TIMEOUT_MS,
+      );
+      setStatus(st);
+      noteKbStatusRead(st);
+      // A download already running on the back end (started before a remount) still gets polled.
+      if (st?.phase === "running" && !st.done) setDownloadBusy(true);
+      if (
+        useLocalKnowledgeBase &&
+        st &&
+        !st.installed &&
+        !sessionStorage.getItem(KB_UNAVAILABLE_SESSION_KEY)
+      ) {
+        sessionStorage.setItem(KB_UNAVAILABLE_SESSION_KEY, "1");
+        toaster.toast({
+          title: "Knowledge base unavailable",
+          body: "Strategy cards are off until you download the corpus or turn off Use local knowledge base.",
+          duration: 6000,
+        });
+      }
+      if (
+        useLocalKnowledgeBase &&
+        st?.installed &&
+        st.embeddings_populated &&
+        st.embed_model_available === false &&
+        !sessionStorage.getItem(KB_NOMIC_HINT_SESSION_KEY)
+      ) {
+        sessionStorage.setItem(KB_NOMIC_HINT_SESSION_KEY, "1");
+        toaster.toast({
+          title: "Keyword + meaning search",
+          body: "Pull nomic-embed-text below for better strategy retrieval.",
+          duration: 8000,
+        });
+      }
+      return st;
+    } catch {
+      setStatus(null);
+      return null;
+    }
+  }, [useLocalKnowledgeBase, ollamaIp]);
+
+  useEffect(() => {
+    void refreshStatus();
+  }, [refreshStatus, ragCorpusVersion]);
+
+  /*
+   * The library was removed or put back (here, or by the copy of this section that pressed the button before
+   * a box closed and rebuilt the tab): the switch follows what the back end saved, off after Remove and on
+   * after an install. The setter and the status read are kept in a ref so the listener is added once per mount.
+   */
+  const whenLibraryChangesRef = useRef<(on: boolean) => void>(() => {});
+  whenLibraryChangesRef.current = (on) => {
+    setUseLocalKnowledgeBase(on);
+    if (!on) {
+      setUpdateNote(null);
+      void refreshStatus();
+    }
+  };
+  useEffect(() => addKbLibraryListener((change) => whenLibraryChangesRef.current(change.installed)), []);
+
+  useEffect(() => {
+    const onDownloadChange = (running: boolean) => {
+      setDownloadBusy(running);
+      if (running) void refreshStatus();
+    };
+    return addKbDownloadListener(onDownloadChange);
+  }, [refreshStatus]);
+
+  useEffect(() => {
+    if (!downloadBusy) return;
+    const id = window.setInterval(() => {
+      void callDeckyWithTimeout<[{ pc_ip: string }], RagCorpusStatus>(
+        "get_rag_corpus_status",
+        [{ pc_ip: ollamaIp.trim() }],
+        DECKY_RPC_TIMEOUT_MS,
+      )
+        .then((st) => {
+          setStatus(st);
+          noteKbStatusRead(st);
+          if (st?.phase === "failed" && (st.error ?? "").trim()) {
+            const errKey = `${st.error}|${st.stage ?? ""}`;
+            if (sessionStorage.getItem(KB_FAILURE_TOAST_KEY) !== errKey) {
+              sessionStorage.setItem(KB_FAILURE_TOAST_KEY, errKey);
+              toaster.toast({
+                title: "Knowledge base download failed",
+                body: st.error,
+                duration: 12000,
+              });
+            }
+          }
+          if (st?.done || st?.phase === "failed" || st?.phase === "done" || st?.phase === "cancelled") {
+            setKbDownloadMarker(null);
+            setDownloadBusy(false);
+            void refreshStatus();
+          }
+        })
+        .catch(() => setDownloadBusy(false));
+    }, 1500);
+    return () => window.clearInterval(id);
+  }, [downloadBusy, refreshStatus, ollamaIp]);
+
+  /**
+   * The download ending is what clears Cancel's own pending state, however it ended, and
+   * an Update's "downloading" note with it (a later fresh download must not reuse it).
+   */
+  useEffect(() => {
+    if (downloadBusy) return;
+    setCancelBusy(false);
+    setUpdateNote((n) => (n?.kind === "downloading" ? null : n));
+  }, [downloadBusy]);
+
+  /**
+   * A pull happens in the setup service, which reports nothing back here. Poll the status
+   * that already knows the answer -- `embed_model_available` flips true once the model is
+   * on the Ask host -- so the button stops saying "Pulling…" on its own rather than
+   * stranding the user at a disabled control with no end state.
+   */
+  useEffect(() => {
+    if (!nomicPullStarted) return;
+    const id = window.setInterval(() => {
+      void refreshStatus().then((st) => {
+        if (st?.embed_model_available === true || !kbNomicPullLikelyInFlight()) {
+          kbNomicPullStartedAtMs = null;
+          setNomicPullStarted(false);
+          setNomicPullBusy(false);
+        }
+      });
+    }, 4000);
+    return () => window.clearInterval(id);
+  }, [nomicPullStarted, refreshStatus]);
+
+  /*
+   * While the tab sits open with nothing running, re-read status now and then, so a hint that
+   * starts to apply (the meaning-search model removed outside this screen) shows without
+   * leaving the tab. Only when the hint could matter at all: knowledge base on, installed, with
+   * baked vectors. A download or a pull already polls faster on its own.
+   */
+  const idleRecheckApplies =
+    useLocalKnowledgeBase && status?.installed === true && status.embeddings_populated === true;
+  useEffect(() => {
+    if (!idleRecheckApplies || downloadBusy || nomicPullStarted) return;
+    const id = window.setInterval(() => void refreshStatus(), KB_STATUS_IDLE_RECHECK_MS);
+    return () => window.clearInterval(id);
+  }, [idleRecheckApplies, downloadBusy, nomicPullStarted, refreshStatus]);
+
+  const startDownload = async (installPath: string, storage: string) => {
+    if (!(await confirmDownload(KNOWLEDGE_LIBRARY_NOTICES))) return;
+    setKbDownloadMarker(Date.now());
+    expectKbInstall();
+    setDownloadBusy(true);
+    try {
+      const out = await callDeckyWithTimeout<
+        [{ install_path: string; storage: string }],
+        { accepted?: boolean; reason?: string }
+      >("start_rag_corpus_download", [{ install_path: installPath, storage }], 15000);
+      if (!out?.accepted) {
+        setKbDownloadMarker(null);
+        setDownloadBusy(false);
+        toaster.toast({
+          title: "Download not started",
+          body: out?.reason ?? "Could not start knowledge base download.",
+          duration: 8000,
+        });
+        return;
+      }
+      toaster.toast({
+        title: "Downloading knowledge base",
+        body: "Offline strategy corpus — small download, should finish quickly.",
+        duration: 6000,
+      });
+      // Only a fresh install (this branch) offers the meaning-search model once it
+      // lands; an Update starts already installed and never sets this.
+      kbInstallNomicOfferPending = true;
+    } catch (e: unknown) {
+      setKbDownloadMarker(null);
+      setDownloadBusy(false);
+      const msg = formatDeckyRpcError(e);
+      toaster.toast({ title: "Download failed", body: msg, duration: 8000 });
+    }
+  };
+
+  /**
+   * Explicit, user-pressed pull — never automatic. pull_ollama_models only pulls onto
+   * this Deck's own local Ollama (gated server-side on "Ollama on this Deck"); a LAN/PC
+   * Ollama host can't be pulled onto remotely, so that case surfaces as a plain rejection
+   * reason rather than a client-side pre-check duplicating the server's gate.
+   */
+  const pullNomicEmbed = () => {
+    if (nomicPullBusy) return;
+    // Cancel / B return to this button; Download to the library's own button (this one turns into
+    // a disabled "Starting..." and cannot take the ring).
+    void rememberReturnWhileBoxOpens(
+      "kb-nomic-pull",
+      () => confirmDownload([MEANING_SEARCH_MODEL_NOTICE]),
+      "kb-download",
+    ).then((go) => {
+      if (go) startNomicPull();
+    });
+  };
+
+  const startNomicPull = () => {
+    setNomicPullBusy(true);
+    void callDeckyWithTimeout<[string[]], { accepted?: boolean; reason?: string }>(
+      "pull_ollama_models",
+      [["nomic-embed-text"]],
+      DECKY_RPC_TIMEOUT_MS,
+    )
+      .then((out) => {
+        if (out?.accepted) {
+          // Leave the button disabled and reading "Pulling…". The pull runs in the model
+          // setup service, not here, so resolving this RPC only means it was accepted --
+          // clearing busy now made the button snap back to "Pull nomic-embed-text" a
+          // moment after pressing it, which reads as "nothing happened". The poll below
+          // clears it for real: once the model lands, embed_model_available flips true
+          // and the whole hint unmounts.
+          kbNomicPullStartedAtMs = Date.now();
+          setNomicPullStarted(true);
+          toaster.toast({
+            title: "Pulling nomic-embed-text",
+            body: "Watch progress in Ollama → Where AI runs.",
+            duration: 6000,
+          });
+          return;
+        }
+        setNomicPullBusy(false);
+        toaster.toast({
+          title: "Pull not started",
+          body: out?.reason ?? "Setup busy, or Ollama isn't running on this Deck.",
+          duration: 8000,
+        });
+      })
+      .catch((e) => {
+        setNomicPullBusy(false);
+        toaster.toast({ title: "Pull failed", body: formatDeckyRpcError(e), duration: 8000 });
+      });
+  };
+
+  /**
+   * A fresh install that finishes with the meaning-search model still missing on this
+   * Deck's own Ollama gets asked once, right here — never a silent gap. Reuses the same
+   * pull call and status poll as the standing hint's own button, so a failed pull shows
+   * the same message either way. Skipped when Ask is routed to another computer's own
+   * Ollama: `pull_ollama_models` only ever pulls onto this Deck, so offering it there
+   * would install the model on the wrong machine — the standing hint's own wording for
+   * that case already explains it, and stays exactly as it was.
+   */
+  useEffect(() => {
+    if (downloadBusy) return;
+    if (!kbInstallNomicOfferPending) return;
+    kbInstallNomicOfferPending = false;
+    if (!status?.installed) return;
+    if (!ollamaLocalOnDeck) return;
+    if (status.embeddings_populated !== true) return;
+    if (status.embed_model_available !== false) return;
+    // The offer is the download notice itself (plan72-F-DL): the site, the size, the permission
+    // question while downloads are off, and the ring on Cancel rather than on Download.
+    void confirmDownload([MEANING_SEARCH_MODEL_NOTICE], {
+      always: true,
+      title: `Also download the meaning-search model (${MEANING_SEARCH_MODEL_NOTICE.size})?`,
+      body: "Better note matching for your questions.",
+      actionLabel: "Download",
+    }).then((go) => {
+      if (go) startNomicPull();
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- startNomicPull is a fresh
+    // closure every render; including it would fire this effect on every render instead
+    // of only when downloadBusy/status change, which is what actually decides the ask.
+  }, [downloadBusy, status, ollamaLocalOnDeck, onBeforeDeckyModal, onCompleteDeckyModalClose]);
+
+  /**
+   * Asks the backend to set its cancel event. The download does not stop here — the
+   * poll above sees `phase: "cancelled"` a beat later and clears `downloadBusy`, which
+   * is also what returns this button to Remove (or to nothing, if nothing is installed).
+   */
+  const cancelDownload = () => {
+    if (cancelBusy) return;
+    setCancelBusy(true);
+    void callDeckyWithTimeout<[], { cancel_requested?: boolean }>(
+      "cancel_rag_corpus_download",
+      [],
+      DECKY_RPC_TIMEOUT_MS,
+    )
+      .then(() => {
+        toaster.toast({
+          title: "Cancelling download",
+          body: "Stopping the knowledge base download. Partial files are discarded.",
+          duration: 5000,
+        });
+      })
+      .catch((e) => {
+        setCancelBusy(false);
+        toaster.toast({ title: "Cancel failed", body: formatDeckyRpcError(e), duration: 8000 });
+      });
+  };
+
+  const openStoragePicker = () => {
+    // B or "Not now" rebuilds the tab and the ring would land on the tab bar
+    // (plan74-P74-SAFE-FIRST-PICKER.json); the shell hands it back to this button instead.
+    rememberModalReturnFocus("kb-download");
+    onBeforeDeckyModal();
+    const internal = status?.storage_options?.internal ?? { install_path: "~/.bonsai/rag" };
+    const sdCard = status?.storage_options?.sd_card;
+    const handle = showModal(
+      <RagCorpusStoragePickerModal
+        internal={internal}
+        sdCard={sdCard}
+        onPick={(installPath, storage) => {
+          // A download starts (its own notice may open next): nothing to hand the ring back to.
+          clearModalReturnFocus();
+          onCompleteDeckyModalClose(() => handle.Close());
+          void startDownload(installPath, storage);
+        }}
+        onClose={() => onCompleteDeckyModalClose(() => handle.Close())}
+      />,
+    );
+  };
+
+  /**
+   * Update says what it did in the row's status text: "Checking…" while the manifest is
+   * fetched, then up to date (with the version), a newer version downloading (the progress
+   * line below takes over), or a plain error. On the Deck two presses showed nothing at all
+   * (plan70-R5.json). A press while a check is already running is ignored rather than
+   * disabling the button, so focus never lands on a dead control.
+   */
+  const runUpdate = () => {
+    if (updateNote?.kind === "checking") return;
+    // Checking for a newer library already reaches the library's sites.
+    // The notice's box rebuilds the tab on close; the ring returns to this button, not the tab bar.
+    void rememberReturnWhileBoxOpens("kb-download", () => confirmDownload(KNOWLEDGE_LIBRARY_NOTICES)).then((go) => {
+      if (go) startUpdate();
+    });
+  };
+
+  const startUpdate = () => {
+    setUpdateNote({ kind: "checking", text: "Checking for a newer version…" });
+    void callDeckyWithTimeout<[], RagUpdateResult>("update_rag_corpus", [], RAG_UPDATE_RPC_TIMEOUT_MS)
+      .then((out) => {
+        if (!out?.ok) {
+          const err = out?.error ?? out?.reason ?? "Unknown error";
+          const text =
+            out?.outcome === "check_failed" ? `Could not check for updates: ${err}` : `Update failed: ${err}`;
+          setUpdateNote({ kind: "error", text });
+          toaster.toast({ title: "Update failed", body: err, duration: 8000 });
+          return;
+        }
+        if (out.outcome === "installed_newer" && out.version && out.remote_version) {
+          setUpdateNote({
+            kind: "current",
+            text: `You have ${out.version}; the published library is ${out.remote_version}. Nothing to do.`,
+          });
+          return;
+        }
+        if (out.updated === false) {
+          setUpdateNote({
+            kind: "current",
+            text: out.version ? `Already up to date (version ${out.version}).` : "Already up to date.",
+          });
+          return;
+        }
+        setUpdateNote({
+          kind: "downloading",
+          text: out.version ? `Newer version ${out.version} found — downloading…` : "Newer version found — downloading…",
+        });
+        setKbDownloadMarker(Date.now());
+        expectKbInstall();
+        setDownloadBusy(true);
+      })
+      .catch((e) => {
+        const err = formatDeckyRpcError(e);
+        if (err.startsWith("RPC timeout after")) {
+          // Only the screen gave up; the back end may still be checking or downloading, so
+          // "failed" would be untrue. Re-read status so a download it started shows up.
+          setUpdateNote({
+            kind: "current",
+            text: "Still checking — the network is slow. Press Update again in a minute to see the result.",
+          });
+          void refreshStatus();
+          return;
+        }
+        setUpdateNote({ kind: "error", text: `Update failed: ${err}` });
+        toaster.toast({ title: "Update failed", body: err, duration: 8000 });
+      });
+  };
+
+  const confirmRemove = () => {
+    rememberModalReturnFocus("kb-remove");
+    onBeforeDeckyModal();
+    const handle = showModal(
+      <TwoButtonConfirmModal
+        title="Remove knowledge base?"
+        body={
+          <div className="bonsai-prose" style={{ fontSize: textPx(12), lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
+            Deletes the offline knowledge base from disk. Answers won&apos;t use its game notes until you download it
+            again.
+          </div>
+        }
+        /*
+         * Two buttons, Remove on the left and Cancel on the right where the ring starts. On the Deck this box
+         * once opened with the ring on "Remove" and one A deleted the whole library (six runs,
+         * plan74-P74-SAFE-FIRST-PICKER.json, t75-*-Q6); then it was Not now / Remove / Cancel
+         * (Steam adds a Cancel to its own box), now just Remove / Cancel (plan 93, order swapped plan 96). B is Cancel.
+         */
+        actionLabel="Remove"
+        onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
+        onAction={() => {
+          // The Remove button is about to go; the ring goes to the button that stays in its row.
+          rememberModalReturnFocus("kb-download");
+          onCompleteDeckyModalClose(() => handle.Close());
+          void callDeckyWithTimeout<[], { ok?: boolean }>("remove_rag_corpus", [], DECKY_RPC_TIMEOUT_MS)
+            .then(() => {
+              // This copy may be gone (the box closing rebuilt the tab): tell whichever copy is on screen.
+              announceKbLibraryChange({ installed: false });
+              toaster.toast({ title: "Knowledge base removed", body: "Corpus deleted from disk.", duration: 3000 });
+            })
+            .catch((e) =>
+              toaster.toast({ title: "Remove failed", body: formatDeckyRpcError(e), duration: 5000 }),
+            );
+        }}
+      />,
+    );
+  };
+
+  const installed = status?.installed === true;
+  /**
+   * Prefer the version the backend just reported over the one this component was mounted
+   * with. `ragCorpusVersion` is plugin-settings state: an Update writes the new version to
+   * settings.json on the backend, but nothing re-reads settings into the frontend, so that
+   * prop keeps its mount-time value and the label reads as though the Update did nothing.
+   * `status.corpus_version` comes from the poll that already runs while a download is busy.
+   */
+  const displayedVersion = (status?.corpus_version ?? "").trim() || ragCorpusVersion;
+  const progress =
+    downloadBusy && status?.bytes_total
+      ? `${status.progress_pct ?? 0}% (${Math.round((status.bytes_downloaded ?? 0) / (1024 * 1024))} / ${Math.round(
+          (status.bytes_total ?? 0) / (1024 * 1024),
+        )} MB)`
+      : null;
+  const showNomicHint =
+    useLocalKnowledgeBase &&
+    installed &&
+    status?.embeddings_populated === true &&
+    status?.embed_model_available === false;
+  /**
+   * Only offer the button when pressing it could actually help. `pull_ollama_models`
+   * pulls to this Deck and takes no host, so when Ask routes to a LAN box the button
+   * would install the model on the wrong machine and the hint would never clear.
+   */
+  const showNomicPullBtn = showNomicHint && ollamaLocalOnDeck;
+
+  const onPrimaryClick = installed ? runUpdate : openStoragePicker;
+  /**
+   * A cancelled download still sets `error` on the backend state — it is the text of
+   * the exception that unwound the transfer. Showing that in red reads as a failure the
+   * user did not cause, so a cancel gets its own neutral line instead.
+   */
+  const wasCancelled = status?.phase === "cancelled";
+  const errorText = wasCancelled ? "" : (status?.error ?? "").trim();
+
+  return (
+    <PanelSection>
+      {/* Folded (plan 91 § 2b): the switch is one line; its longer text shows in the tab's help strip. */}
+      <PanelSectionRow>
+        <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+          <DenseSwitchRow
+            label="Use local knowledge base"
+            help={OLLAMA_ROW_HELP.useKnowledgeBase}
+            hostRef={toggleHost}
+            checked={useLocalKnowledgeBase}
+            onChange={(checked) => setUseLocalKnowledgeBase(checked)}
+            nav={deckNav({
+              onMoveUp: () => handleMoveUpFromToggle(),
+              onMoveDown: () => focusBelowToggle(showNomicPullBtn),
+            })}
+          />
+        </div>
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: textPx(11), color: "#9fb7d5", lineHeight: 1.4 }}>
+          {installed ? (
+            <>
+              <span style={{ color: "#7dcea0", fontWeight: 600 }}>Installed</span>
+              {displayedVersion ? ` — version ${displayedVersion}` : null}
+              {typeof status?.game_count === "number" && status.game_count > 0
+                ? `${displayedVersion ? "," : " —"} ${status.game_count} ${status.game_count === 1 ? "game" : "games"}`
+                : null}
+              {status?.corpus_path ? (
+                <span style={{ display: "block", marginTop: 4, color: "#8fa0b4" }}>{status.corpus_path}</span>
+              ) : null}
+            </>
+          ) : (
+            <>
+              <span style={{ color: "#ffd299" }}>Not installed — download to enable grounded strategy help.</span>
+            </>
+          )}
+          {showNomicHint ? (
+            <div style={{ marginTop: 6 }}>
+              <span style={{ display: "block", color: "#ffd299" }}>
+                {showNomicPullBtn ? (
+                  <>
+                    Install <strong>nomic-embed-text</strong> in Ollama for Keyword + meaning search.
+                  </>
+                ) : isHttpsOllamaAddress(ollamaIp) ? (
+                  <>
+                    Use an http:// Ollama address on the Ollama tab, then install{" "}
+                    <strong>nomic-embed-text</strong> there for Keyword + meaning search.
+                  </>
+                ) : (
+                  <>
+                    Install <strong>nomic-embed-text</strong> on {ollamaIp || "the Ollama host"} for
+                    Keyword + meaning search — Ask runs there, so it needs the model. Pulling here
+                    would only install it on this Deck.
+                  </>
+                )}
+              </span>
+              {showNomicPullBtn ? (
+              <div ref={nomicHostRef} className="bonsai-settings-focus-btn-host" style={{ marginTop: 6, maxWidth: 220 }}>
+                <Focusable
+                  onOKButton={pullNomicEmbed}
+                  style={{ width: "100%", display: "flex", alignItems: "stretch" }}
+                >
+                  <Button
+                    ref={(el) => {
+                      nomicBtnRef.current = el as HTMLButtonElement | null;
+                      registerModalReturnFocusOwner("kb-nomic-pull", el as HTMLElement | null);
+                    }}
+                    className="bonsai-settings-focus-btn"
+                    onClick={pullNomicEmbed}
+                    disabled={nomicPullBusy}
+                    style={{
+                      ...SETTINGS_GLASS_BTN,
+                      width: "100%",
+                      minHeight: KB_ACTION_ROW_MIN_HEIGHT,
+                      height: KB_ACTION_ROW_MIN_HEIGHT,
+                      boxSizing: "border-box",
+                      fontSize: textPx(11),
+                    }}
+                  >
+                    {nomicPullStarted
+                      ? "Pulling… (Ollama → Where AI runs)"
+                      : nomicPullBusy
+                        ? "Starting…"
+                        : `Pull nomic-embed-text · ${MEANING_SEARCH_MODEL_NOTICE.size}`}
+                  </Button>
+                </Focusable>
+              </div>
+              ) : null}
+            </div>
+          ) : null}
+          {updateNote && (updateNote.kind !== "downloading" || downloadBusy) ? (
+            <span
+              style={{ display: "block", marginTop: 6, color: updateNote.kind === "error" ? "#ff9b9b" : "#9fb7d5" }}
+            >
+              {updateNote.text}
+            </span>
+          ) : null}
+          {progress ? <span style={{ display: "block", marginTop: 6 }}>{progress}</span> : null}
+          {wasCancelled && !downloadBusy ? (
+            <span style={{ display: "block", marginTop: 6, color: "#9fb7d5" }}>
+              Download cancelled. Nothing was installed — start it again whenever you like.
+            </span>
+          ) : null}
+          {errorText ? (
+            <span style={{ display: "block", marginTop: 6, color: "#ff9b9b" }}>{errorText}</span>
+          ) : null}
+        </div>
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <Focusable
+          flow-children="horizontal"
+          className="bonsai-settings-bleed"
+          style={{ display: "flex", flexDirection: "row", alignItems: "stretch", gap: 8, width: "100%" }}
+          {...({ navRef: actionRowNavRef } as Record<string, unknown>)}
+        >
+          {/* Pattern C: pair is one horizontal row — Up/Down both exit vertically; Left/Right stay in-row. */}
+          <div
+            className="bonsai-settings-focus-btn-host"
+            style={{ flex: "1.6 1 0", minWidth: 0, display: "flex", alignItems: "stretch" }}
+          >
+            <Focusable onOKButton={onPrimaryClick} style={{ width: "100%", display: "flex", alignItems: "stretch" }}>
+              <Button
+                ref={(el) => {
+                  const btn = el as HTMLButtonElement | null;
+                  if (downloadBtnRefProp) downloadBtnRefProp.current = btn;
+                  primaryBtnRefLocal.current = btn;
+                  registerModalReturnFocusOwner("kb-download", btn);
+                }}
+                className="bonsai-settings-focus-btn"
+                onClick={onPrimaryClick}
+                disabled={downloadBusy}
+                style={{
+                  ...SETTINGS_GLASS_BTN,
+                  width: "100%",
+                  minHeight: KB_ACTION_ROW_MIN_HEIGHT,
+                  height: KB_ACTION_ROW_MIN_HEIGHT,
+                  boxSizing: "border-box",
+                  /* The words wrap to a second line at Large instead of being cut (plan 93, M10): two lines of the
+                     largest step fit the fixed 44 by design (KnowledgeBaseButtonLabel.tsx), so the row keeps its height. */
+                  padding: "4px 10px",
+                  whiteSpace: "normal",
+                  overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <KnowledgeBaseButtonLabel icon={installed ? <RefreshArrowIcon size={16} /> : <DownloadArrowIcon size={16} />}>
+                  {downloadBusy ? "Downloading…" : installed ? "Update knowledge base" : "Download knowledge base"}
+                </KnowledgeBaseButtonLabel>
+              </Button>
+            </Focusable>
+          </div>
+          {/*
+            Second slot, one of three states. While a download runs it is Cancel, and that
+            matters for more than the feature: the primary button is disabled then, so
+            without Cancel the whole row has no focusable stop and the D-pad cannot enter
+            it at all.
+          */}
+          {downloadBusy ? (
+            <div
+              className="bonsai-settings-focus-btn-host"
+              style={{ flex: "0.9 1 0", minWidth: 72, display: "flex", alignItems: "stretch" }}
+            >
+              <Focusable onOKButton={cancelDownload} style={{ width: "100%", display: "flex", alignItems: "stretch" }}>
+                <Button
+                  ref={(el) => {
+                    const btn = el as HTMLButtonElement | null;
+                    cancelBtnRef.current = btn;
+                    if (cancelBtnRefProp) {
+                      cancelBtnRefProp.current = btn;
+                    }
+                  }}
+                  className="bonsai-settings-focus-btn"
+                  onClick={cancelDownload}
+                  disabled={cancelBusy}
+                  style={{
+                    ...SETTINGS_GLASS_BTN_DANGER,
+                    flex: "1 1 auto",
+                    width: "100%",
+                    minHeight: KB_ACTION_ROW_MIN_HEIGHT,
+                    height: KB_ACTION_ROW_MIN_HEIGHT,
+                    boxSizing: "border-box",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {cancelBusy ? "Cancelling…" : "Cancel"}
+                </Button>
+              </Focusable>
+            </div>
+          ) : installed ? (
+            <div
+              className="bonsai-settings-focus-btn-host"
+              style={{ flex: "0.9 1 0", minWidth: 72, display: "flex", alignItems: "stretch" }}
+            >
+              <Focusable onOKButton={confirmRemove} style={{ width: "100%", display: "flex", alignItems: "stretch" }}>
+                <Button
+                  ref={(el) => {
+                    const btn = el as HTMLButtonElement | null;
+                    removeBtnRef.current = btn;
+                    registerModalReturnFocusOwner("kb-remove", btn);
+                    if (removeBtnRefProp) {
+                      removeBtnRefProp.current = btn;
+                    }
+                  }}
+                  className="bonsai-settings-focus-btn"
+                  onClick={confirmRemove}
+                  disabled={downloadBusy}
+                  style={{
+                    ...SETTINGS_GLASS_BTN_DANGER,
+                    flex: "1 1 auto",
+                    width: "100%",
+                    minHeight: KB_ACTION_ROW_MIN_HEIGHT,
+                    height: KB_ACTION_ROW_MIN_HEIGHT,
+                    boxSizing: "border-box",
+                    /* Side padding 6, not 12: the word, its icon and gap must fit the 93-wide box at Large. */
+                    padding: "4px 6px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <KnowledgeBaseButtonLabel icon={<TrashBinIcon size={16} />} oneWord>
+                    Remove
+                  </KnowledgeBaseButtonLabel>
+                </Button>
+              </Focusable>
+            </div>
+          ) : null}
+        </Focusable>
+      </PanelSectionRow>
+    </PanelSection>
+  );
+};

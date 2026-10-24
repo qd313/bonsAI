@@ -1,0 +1,448 @@
+<title>Question Bubble Cues</title>
+<style>
+  :root {
+    --ground: #0e131a;
+    --card: #151b24;
+    --line: rgba(255,255,255,0.08);
+    --ink: #e8eef5;
+    --muted: #8fa8c4;
+    --dim: #6b7c90;
+    --cyan: #9ce7ff;
+    --amber: #f2cf84;
+  }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Motiva Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 64px; }
+  h1 { font-size: 22px; font-weight: 700; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .sub { font-size: 13px; line-height: 1.55; color: var(--muted); margin: 0 0 4px; max-width: 68ch; }
+  .note {
+    font-size: 12px; line-height: 1.6; color: var(--dim);
+    border-left: 2px solid rgba(156,231,255,0.35);
+    padding: 8px 0 8px 12px; margin: 18px 0 26px; max-width: 74ch;
+  }
+  .note b { color: var(--muted); font-weight: 600; }
+  h2 {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--cyan); margin: 34px 0 14px; padding-bottom: 7px;
+    border-bottom: 1px solid var(--line);
+  }
+  .grid { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+
+  /* ---- one mockup card ---- */
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px; width: 332px; box-sizing: border-box;
+  }
+  .card h3 { font-size: 13px; font-weight: 700; margin: 0 0 4px; color: var(--ink); }
+  .card .cap { font-size: 11.5px; line-height: 1.5; color: var(--muted); margin: 0 0 12px; min-height: 52px; }
+  .tag {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 2px 6px; border-radius: 3px; margin-bottom: 7px;
+  }
+  .tag--now { background: rgba(242,207,132,0.14); color: var(--amber); border: 1px solid rgba(242,207,132,0.3); }
+  .tag--fix { background: rgba(46,135,83,0.18); color: #7fd8a4; border: 1px solid rgba(46,135,83,0.45); }
+  .tag--opt { background: rgba(156,231,255,0.1); color: var(--cyan); border: 1px solid rgba(156,231,255,0.28); }
+
+  /* ================= THE REAL PLUGIN VALUES =================
+     Everything below is copied from src/styles/sections/section-6.ts
+     and gamepadAndPullModels.ts. The 300px stage is the real column. */
+  .stage {
+    width: 300px; box-sizing: border-box;
+    background: linear-gradient(180deg, rgba(10,14,20,0.96), rgba(8,11,16,0.96));
+    border-radius: 6px; padding: 12px 0; overflow: hidden;
+  }
+  .transcript {
+    display: flex; flex-direction: column; align-items: stretch;
+    gap: 8px; min-width: 0; width: 100%; box-sizing: border-box;
+    padding: 0 6px 0 4px;
+  }
+  .slot {
+    display: flex; flex-direction: column; align-items: stretch;
+    gap: 6px; min-width: 0; width: 100%; box-sizing: border-box;
+  }
+  .qbubble {
+    display: block; width: fit-content;
+    max-width: min(88%, 280px);
+    min-width: 0; margin-left: auto; margin-right: 0; align-self: flex-end;
+    box-sizing: border-box; text-align: right;
+    padding: 6px 10px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(180deg, rgba(22,34,48,0.78) 0%, rgba(14,22,34,0.82) 100%);
+    color: #8fa8c4;
+    position: relative;
+  }
+  .qbubble--live {
+    border: 1px solid rgba(100,145,205,0.48);
+    background: linear-gradient(180deg, rgba(32,52,78,0.8) 0%, rgba(20,34,54,0.85) 100%);
+    color: #dce6f2;
+  }
+  .qbubble--expanded {
+    border: 1px solid rgba(120,155,198,0.42);
+    background: linear-gradient(180deg, rgba(36,52,72,0.82) 0%, rgba(24,36,52,0.85) 100%);
+    color: #e8eef4;
+  }
+  .qtitle {
+    display: block; font-size: 11px; font-weight: 600; line-height: 1.3;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  /* the fix: wrapped, capped at five lines */
+  .qtitle--full {
+    white-space: normal; overflow: hidden; text-overflow: clip;
+    overflow-wrap: anywhere;
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 5;
+  }
+  .abubble {
+    border-radius: 10px;
+    border: 1px solid rgba(46,135,83,0.48);
+    background:
+      linear-gradient(0deg, rgba(130,183,152,0.11), rgba(130,183,152,0.11)),
+      linear-gradient(180deg, rgba(46,135,83,0.12) 0%, rgba(18,52,34,0.55) 100%);
+    color: #d4dde6;
+  }
+  .abubble-inner { padding: 8px 10px; box-sizing: border-box; font-size: 12px; line-height: 1.4; }
+  .abubble-inner p { margin: 0 0 7px; }
+  .abubble-inner p:last-child { margin-bottom: 0; }
+  /* the mask already in the stylesheet, unused today */
+  .faded {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+  }
+  /* the same idea, pulled back so only the fifth line fades on a short block */
+  .faded--q {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%);
+  }
+  /* the plugin's white ring */
+  .ring {
+    outline: 2px solid rgba(255,255,255,0.9);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.92), 0 0 0 5px rgba(255,255,255,0.2);
+  }
+
+  /* ================= THE FOUR CUES =================
+     Each only paints while the ring is on the bubble. */
+
+  /* A — the right edge softens instead of ending in three dots */
+  .cue-a.ring .qtitle {
+    text-overflow: clip;
+    -webkit-mask-image: linear-gradient(to right, #000 0%, #000 72%, transparent 100%);
+    mask-image: linear-gradient(to right, #000 0%, #000 72%, transparent 100%);
+  }
+
+  /* B — a small chevron slides in on the left */
+  .cue-b { display: flex; align-items: center; gap: 0; }
+  .cue-b .chev {
+    width: 0; opacity: 0; overflow: hidden; flex: none;
+    font-size: 9px; line-height: 1; color: rgba(143,168,196,0.75);
+    transition: width 140ms ease, opacity 140ms ease, margin 140ms ease;
+  }
+  .cue-b.ring .chev { width: 9px; opacity: 1; margin-right: 5px; }
+  .cue-b .qtitle { min-width: 0; }
+
+  /* C — the three dots brighten and breathe */
+  .cue-c .dots { color: rgba(143,168,196,0.55); }
+  .cue-c.ring .dots { color: #e8eef4; animation: breathe 1900ms ease-in-out infinite; }
+  @keyframes breathe { 0%,100% { opacity: 0.55; } 50% { opacity: 1; } }
+
+  /* D — a hairline appears under the text */
+  .cue-d .qtitle { border-bottom: 1px solid transparent; padding-bottom: 1px; }
+  .cue-d.ring .qtitle { border-bottom-color: rgba(156,231,255,0.5); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cue-b .chev { transition: none; }
+    .cue-c.ring .dots { animation: none; opacity: 1; }
+  }
+
+  /* ---- corrected A+C: the dots live OUTSIDE the faded text ---- */
+  .cue-ac { display: flex; align-items: baseline; justify-content: flex-end; }
+  .cue-ac .qtitle { min-width: 0; flex: 0 1 auto; }
+  .cue-ac .dots { flex: none; display: none; margin-left: 2px; color: rgba(143,168,196,0.55); font-size: 11px; font-weight: 600; }
+  .cue-ac.ring .qtitle {
+    text-overflow: clip;
+    -webkit-mask-image: linear-gradient(to right, #000 0%, #000 62%, transparent 100%);
+    mask-image: linear-gradient(to right, #000 0%, #000 62%, transparent 100%);
+  }
+  .cue-ac.ring .dots { display: inline; color: #e8eef4; animation: breathe 1900ms ease-in-out infinite; }
+
+  /* ---- A+D: different real estate, so neither erases the other ---- */
+  .cue-ad .qtitle { border-bottom: 1px solid transparent; padding-bottom: 1px; }
+  .cue-ad.ring .qtitle {
+    text-overflow: clip;
+    border-bottom-color: rgba(156,231,255,0.5);
+    -webkit-mask-image: linear-gradient(to right, #000 0%, #000 72%, transparent 100%);
+    mask-image: linear-gradient(to right, #000 0%, #000 72%, transparent 100%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cue-ac.ring .dots { animation: none; opacity: 1; }
+  }
+
+  .legend { font-size: 11.5px; line-height: 1.65; color: var(--muted); margin-top: 8px; }
+  .legend li { margin-bottom: 5px; }
+  .swatchrow { display: flex; gap: 16px; flex-wrap: wrap; font-size: 11.5px; color: var(--dim); margin-top: 10px; }
+
+  @media (prefers-color-scheme: light) {
+    /* the plugin only ever renders dark; keep the page dark so the mockups read true */
+  }
+</style>
+
+<div class="wrap">
+
+  <h1>The question bubble: what it does now, and four cues</h1>
+  <p class="sub">
+    Every bubble below is drawn with the plugin's own values — the same 300 pixel column, the same
+    colours, the same one-line rule. The text is cut by the real rule, not cut by hand, so where a
+    sentence stops is where it would actually stop on the Deck.
+  </p>
+
+  <div class="note">
+    <b>Two things are guesses, not measurements.</b> The dark ground behind the column stands in for
+    Steam's own panel, which I have not measured. And the white ring is the plugin's ring — the question
+    bubble switches its own outline off today and is not on the list of things that get that ring, so
+    what it really shows when focused needs one look on the Deck before we pick a cue.
+  </div>
+
+  <h2>Where we are, and where question 1 and 2 land us</h2>
+  <div class="grid">
+
+    <div class="card">
+      <span class="tag tag--now">Now</span>
+      <h3>The turn you just asked</h3>
+      <p class="cap">The question stops after about seven words. Same cut whether the turn is open or
+        an hour old. This is the bug.</p>
+      <div class="stage">
+        <div class="transcript">
+          <div class="slot">
+            <div class="qbubble qbubble--live"><span class="qtitle">How do I beat the Wallmaster ambush in Ravenholm without wasting all my shotgun shells?</span></div>
+            <div class="abubble"><div class="abubble-inner">
+              <p>Stay on the upper walkway and let Father Grigori's traps do the work — the sawblade rack
+              by the second gate resets on its own.</p>
+              <p>Save the shells for the fast zombies in the courtyard.</p>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag--fix">Fixed</span>
+      <h3>Open turn, whole question</h3>
+      <p class="cap">The question wraps over as many lines as it needs. Closing the turn puts it back to
+        one line. No new button, no new stop.</p>
+      <div class="stage">
+        <div class="transcript">
+          <div class="slot">
+            <div class="qbubble qbubble--live"><span class="qtitle qtitle--full">How do I beat the Wallmaster ambush in Ravenholm without wasting all my shotgun shells?</span></div>
+            <div class="abubble"><div class="abubble-inner">
+              <p>Stay on the upper walkway and let Father Grigori's traps do the work — the sawblade rack
+              by the second gate resets on its own.</p>
+              <p>Save the shells for the fast zombies in the courtyard.</p>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag--fix">Fixed</span>
+      <h3>The five-line cap</h3>
+      <p class="cap">A very long question stops at five lines. The last line fades out so it reads as
+        "there is more". Same idea as the fade already sitting in the stylesheet, pulled back — the
+        one in there starts halfway down and would wash out three of the five lines.</p>
+      <div class="stage">
+        <div class="transcript">
+          <div class="slot">
+            <div class="qbubble qbubble--live"><span class="qtitle qtitle--full faded--q">I'm stuck on the Nova Prospekt turret defence and I keep losing the second doorway — I've tried moving both turrets to the left corridor and stacking them behind the crates but the soldiers flank from the vent above and knock them over before Alyx finishes the console. Is there a placement that actually holds, and does the difficulty change how many waves come through?</span></div>
+            <div class="abubble"><div class="abubble-inner">
+              <p>Put one turret facing the vent drop, not the doorway. The flank is what topples the pair.</p>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <h2>Question 3 and 4 — four cues, each shown with the ring on an earlier, closed turn</h2>
+  <p class="sub" style="margin-bottom:16px">
+    Each card shows the same closed turn twice: ring off, then ring on. The cue only ever paints in the
+    second one. Look at the pair, not the single bubble.
+  </p>
+
+  <div class="grid">
+
+    <div class="card">
+      <span class="tag tag--opt">Cue A</span>
+      <h3>The edge softens</h3>
+      <p class="cap">The hard three dots are replaced by the text simply fading out at the edge. This is
+        your idea from question 4, turned sideways for a one-line bubble. Quietest of the four.</p>
+      <div class="stage">
+        <div class="transcript">
+          <div class="slot">
+            <div class="qbubble cue-a"><span class="qtitle">How do I beat the Wallmaster ambush in Ravenholm without wasting shells?</span></div>
+          </div>
+          <div class="slot">
+            <div class="qbubble cue-a ring"><span class="qtitle">How do I beat the Wallmaster ambush in Ravenholm without wasting shells?</span></div>
+          </div>
+        </div>
+      </div>
+      <ul class="legend">
+        <li>Nothing new appears, so nothing shifts sideways.</li>
+        <li>Matches the fade the answer bubble already uses.</li>
+        <li>Risk: a soft edge can read as a rendering glitch rather than a promise.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <span class="tag tag--opt">Cue B</span>
+      <h3>A small arrow</h3>
+      <p class="cap">A nine-pixel chevron slides in on the left of the bubble. The most obvious of the
+        four — it says "press A" almost in words.</p>
+      <div class="stage">
+        <div class="transcript">
+          <div class="slot">
+            <div class="qbubble cue-b"><span class="chev">▾</span><span class="qtitle">How do I beat the Wallmaster ambush in Ravenholm without wasting shells?</span></div>
+          </div>
+          <div class="slot">
+            <div class="qbubble cue-b ring"><span class="chev">▾</span><span class="qtitle">How do I beat the Wallmaster ambush in Ravenholm without wasting shells?</span></div>
+          </div>
+        </div>
+      </div>
+      <ul class="legend">
+        <li>Clearest meaning: an arrow pointing down means it opens downward.</li>
+        <li>Costs nine pixels of a 300 pixel column, and only while focused.</li>
+        <li>Risk: it is the least quiet, and the bubble shifts as it appears.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <span class="tag tag--opt">Cue C</span>
+      <h3>The dots wake up</h3>
+      <p class="cap">The three dots already at the end go from muted to full brightness and breathe
+        slowly. Nothing is added or moved — the mark that means "cut short" just becomes alive.</p>
+      <div class="stage">
+        <div class="transcript">
+          <div class="slot">
+            <div class="qbubble cue-c"><span class="qtitle">How do I beat the Wallmaster ambush in Ravenhol<span class="dots">…</span></span></div>
+          </div>
+          <div class="slot">
+            <div class="qbubble cue-c ring"><span class="qtitle">How do I beat the Wallmaster ambush in Ravenhol<span class="dots">…</span></span></div>
+          </div>
+        </div>
+      </div>
+      <ul class="legend">
+        <li>No layout change at all, so nothing can shift.</li>
+        <li>Reuses a mark the user already reads as "there is more".</li>
+        <li>Risk: needs the dots to be our own text, not the browser's automatic ones — a small build cost.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <span class="tag tag--opt">Cue D</span>
+      <h3>A hairline underneath</h3>
+      <p class="cap">A one-pixel line in the plugin's light blue appears under the text. Reads as
+        "this one is a link you can open".</p>
+      <div class="stage">
+        <div class="transcript">
+          <div class="slot">
+            <div class="qbubble cue-d"><span class="qtitle">How do I beat the Wallmaster ambush in Ravenholm without wasting shells?</span></div>
+          </div>
+          <div class="slot">
+            <div class="qbubble cue-d ring"><span class="qtitle">How do I beat the Wallmaster ambush in Ravenholm without wasting shells?</span></div>
+          </div>
+        </div>
+      </div>
+      <ul class="legend">
+        <li>Very cheap to build, and it cannot move anything.</li>
+        <li>Risk: the glossary words in a reply are already underlined, so this borrows a meaning that is taken.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <h2>If you want two of them — corrected</h2>
+  <p class="sub" style="margin-bottom:16px">
+    The first version of this section was wrong, and it is left in below so you can see why. A and C
+    both live in the same few pixels at the right-hand edge of the bubble. The fade goes fully
+    see-through at exactly that edge, so it rubs the dots out. You were looking at A on its own.
+  </p>
+
+  <div class="grid">
+
+    <div class="card">
+      <span class="tag tag--now">Wrong</span>
+      <h3>What I sent you</h3>
+      <p class="cap">The fade and the dots stacked on the same spot. The dots are still in there — they
+        are just underneath the see-through part, so nothing of them survives.</p>
+      <div class="stage">
+        <div class="transcript">
+          <div class="slot">
+            <div class="qbubble cue-a cue-c"><span class="qtitle">How do I beat the Wallmaster ambush in Ravenhol<span class="dots">&hellip;</span></span></div>
+          </div>
+          <div class="slot">
+            <div class="qbubble cue-a cue-c ring"><span class="qtitle">How do I beat the Wallmaster ambush in Ravenhol<span class="dots">&hellip;</span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag--fix">Fixed</span>
+      <h3>A and C, made to work</h3>
+      <p class="cap">The dots are moved out of the fading part and sit just past it. The sentence
+        dissolves, then three bright dots follow it. Both cues are now visible at once.</p>
+      <div class="stage">
+        <div class="transcript">
+          <div class="slot">
+            <div class="qbubble cue-ac"><span class="qtitle">How do I beat the Wallmaster ambush in Ravenholm</span><span class="dots">&hellip;</span></div>
+          </div>
+          <div class="slot">
+            <div class="qbubble cue-ac ring"><span class="qtitle">How do I beat the Wallmaster ambush in Ravenholm</span><span class="dots">&hellip;</span></div>
+          </div>
+        </div>
+      </div>
+      <ul class="legend">
+        <li>Costs the same problem as the arrow: the dots appear on focus, so the text nudges left a
+          few pixels.</li>
+        <li>Keeping the dots there all the time removes the nudge, but then a resting bubble ends in
+          dots that never do anything.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <span class="tag tag--opt">Cleanest pair</span>
+      <h3>A and D</h3>
+      <p class="cap">The fade is at the right edge; the hairline is along the bottom. They never touch,
+        so neither can erase the other, and nothing appears or moves.</p>
+      <div class="stage">
+        <div class="transcript">
+          <div class="slot">
+            <div class="qbubble cue-ad"><span class="qtitle">How do I beat the Wallmaster ambush in Ravenholm without wasting shells?</span></div>
+          </div>
+          <div class="slot">
+            <div class="qbubble cue-ad ring"><span class="qtitle">How do I beat the Wallmaster ambush in Ravenholm without wasting shells?</span></div>
+          </div>
+        </div>
+      </div>
+      <ul class="legend">
+        <li>Nothing shifts by a pixel, because nothing is added.</li>
+        <li>Still borrows the underline that glossary words in a reply already use.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <h2>One thing worth knowing</h2>
+  <p class="sub">
+    The question is cut twice today, not once. The code chops it at sixty letters, and then the one-line
+    rule chops it again at whatever fits in the bubble — about forty-eight letters at this size. The
+    second cut almost always wins, so the sixty-letter chop is invisible. Both go away for the open
+    turn; only the one-line rule needs to stay for closed ones.
+  </p>
+
+</div>

@@ -34,3 +34,37 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---------------------------------------------------------------------------
+
+Third-party code in the download
+
+The screen code (dist/index.js) bundles open-source packages from npm. Their names,
+versions, licences and full licence texts are in dist/THIRD-PARTY-LICENSES.txt, which is
+written at every build and ships in the plugin download.
+
+---------------------------------------------------------------------------
+
+The bonsAI logo
+
+The bonsAI logo (src/assets/icons/bonsai-logo.svg, whose outline is also copied into
+src/shared/icons/bonsaiLogoPath.ts, and shipped in the download as
+dist/assets/bonsai-logo-*.svg) is the maintainer's own work.
+
+---------------------------------------------------------------------------
+
+Game notes and the knowledge library — separate licence
+
+The bonsAI *plugin* (this package / release zip) is Apache-2.0 and ships **no**
+knowledge-base content: no game notes, no `corpus.db`, no compressed corpus chunk, no
+`corpus-manifest.json`, and no corpus `ATTRIBUTIONS.md`.
+
+The optional offline knowledge library is a **separate download** (Hugging Face primary,
+GitHub Releases mirror), installed at runtime under the user's knowledge-base path. The
+published library as a whole is shared under **CC BY-SA 4.0**. Notes that adapt fan-wiki
+material keep their source link and licence (CC BY-SA 4.0, 3.0 or 2.5, or CC BY 4.0),
+recorded per note as `source_license`; the library's `ATTRIBUTIONS.md` lists every source.
+
+The game notes this library is built from are in this repository under data/kb/. They
+are not Apache-2.0: see data/kb/NOTICE.md for which wiki each comes from, its licence,
+and the terms for that folder (CC BY-SA 4.0 as a whole).

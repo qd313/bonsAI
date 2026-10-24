@@ -1,0 +1,536 @@
+"""Title: Installing AI models onto the Deck itself
+
+Purpose: When the AI runs on the Deck rather than a PC, something has to install Ollama
+there in the first place, pull the starter set of models, let a person pull more by
+name, delete one, and price a model's download before it starts. This file is that: the
+Deck-side installer and every RPC around pulling, deleting and pricing models. Each
+stays a method of the same name on the plugin class in main.py; the method's body is
+now a one-line hand-off to the function here.
+
+Used for: start_local_ollama_setup, get_local_ollama_setup_status,
+cancel_local_ollama_setup, pull_ollama_models, delete_ollama_model,
+fetch_ollama_catalog_metadata. merge_pulled_tags_into_routing_orders is
+no longer an RPC: the custom-pull runner calls it when a download finishes.
+
+Solves: Keeps the Deck-side install/pull/delete machinery -- the one-at-a-time lock, the
+background task, the try-order bookkeeping -- out of main.py.
+
+How it works:
+1. Every RPC here first checks that the AI runs on this Deck (`_require_local_ollama_on_deck`);
+   with the AI on a PC they refuse, because pulling and removing act on the Deck's own Ollama.
+2. A pull runs in one background task with one lock; progress is read back through
+   get_local_ollama_setup_status, and a finished pull merges its tags into the saved try orders.
+   A setup that ends "done" also starts one background warm-up of the model Ask will pick
+   (`warm_after_setup`), so the first question after an install is not the one that loads it.
+3. Removing a model runs `ollama rm`, then takes the name out of both saved try orders unless a
+   saved PC still has the same model (`ollama_pc_models.ask_known_pcs`); a known PC that does not answer keeps it.
+4. Reading the Deck's installed models (fetch_ollama_catalog_metadata) also drops saved try-order
+   names that neither the Deck nor a saved PC holds any more. Both this and the removal are also
+   handed the PC address the screen holds (`pc_ip`), because the box runs one right after the other.
+
+Does not: Cover the two small autostart-toggle RPCs (apply_ollama_local_autostart,
+get_ollama_local_autostart_status) -- those stay on the Plugin class itself because a
+test patches the names main.py imports them under, and moving them would only be a
+cosmetic win. Does not run `ollama pull`/`ollama rm` itself, or talk to the registry --
+`local_ollama_setup_service.py` and `ollama_catalog_service.py` do that.
+"""
+
+import asyncio
+import os
+import time
+from typing import Any
+
+from backend.core.async_background_job import (
+    make_local_ollama_setup_hooks,
+    new_asyncio_cancel_event,
+)
+from backend.ollama.local_ollama_setup_service import (
+    DEFAULT_BASE,
+    list_installed_ollama_tag_sizes,
+    list_installed_ollama_tags,
+    new_local_ollama_setup_state,
+    run_local_setup,
+    run_ollama_rm_async,
+)
+from backend.ollama.ollama_catalog_service import (
+    fetch_catalog_metadata,
+    is_valid_ollama_pull_tag,
+    normalize_ollama_pull_tags,
+)
+from backend.ollama.ollama_preload_service import warm_after_setup
+from backend.ollama.ollama_routing import (
+    is_embedding_only_tag,
+    is_valid_setup_pull_profile,
+    is_vision_capable_tag,
+    merge_pulled_tag,
+    remove_tag_from_routing_orders,
+)
+from backend.ollama.ollama_pc_models import ask_known_pcs
+from backend.ollama.ollama_try_order_prune import prune_saved_orders_to_installed
+from backend.ollama import ollama_pull_resume_service as pull_resume
+from backend.knowledge.ollama_embed_service import forget_embed_availability_after_pull
+from backend.ollama.starter_speech_models import download_speech_models
+from backend.core.capabilities import capability_enabled, downloads_off_refusal
+
+import decky
+
+logger = decky.logger
+
+
+async def start_local_ollama_setup(self, data: Any = None):
+    """Install/start Ollama on this Linux host and pull Tier-1 FOSS tags (runs in background)."""
+    prof = ""
+    if isinstance(data, dict):
+        prof = str(data.get("profile", data.get("Profile", "")) or "").strip()
+    elif isinstance(data, str):
+        prof = data.strip()
+    settings = await self.load_settings()
+    if not settings.get("ollama_local_on_deck"):
+        out = {
+            "accepted": False,
+            "reason": "Enable «Ollama on this Deck» in Ollama → Where AI runs first.",
+        }
+        await self._maybe_app_log(
+            "local_setup.start",
+            "setup rejected",
+            fields={"profile": prof, "accepted": False, "reason": "local_off"},
+        )
+        return out
+    if not is_valid_setup_pull_profile(prof):
+        out = {
+            "accepted": False,
+            "reason": 'Invalid profile: use "tier1_essentials", "tier2_multimodal", or "update_installed".',
+        }
+        await self._maybe_app_log(
+            "local_setup.start",
+            "setup rejected",
+            fields={"profile": prof, "accepted": False, "reason": "invalid_profile"},
+        )
+        return out
+    if not capability_enabled(settings, "internet_downloads"):
+        await self._maybe_app_log(
+            "local_setup.start",
+            "setup rejected",
+            fields={"profile": prof, "accepted": False, "reason": "downloads_off"},
+        )
+        return downloads_off_refusal()
+
+    async with self._local_ollama_setup_lock:
+        existing = self._local_ollama_setup_task
+        if existing is not None and not existing.done():
+            out = {"accepted": False, "reason": "Setup already running."}
+            await self._maybe_app_log(
+                "local_setup.start",
+                "setup rejected",
+                fields={"profile": prof, "accepted": False, "reason": "busy"},
+            )
+            return out
+
+        self._local_ollama_cancel_event = new_asyncio_cancel_event()
+        new_st = new_local_ollama_setup_state()
+        new_st.update(
+            {
+                "phase": "running",
+                "done": False,
+                "error": "",
+                "accepted": True,
+                "profile": prof,
+            }
+        )
+        self._local_ollama_setup_state = new_st
+
+        setup_loop = asyncio.get_running_loop()
+        on_stage, on_verbose_line = make_local_ollama_setup_hooks(self, setup_loop)
+
+        # The starter set also downloads the speech models, through the voice engine's own download. That
+        # is a file download, not listening, so it goes ahead with the microphone permission off; the
+        # run's closing sentence says the microphone is still off.
+        starter_kwargs: dict[str, Any] = {}
+        if prof == "tier1_essentials":
+            plugin_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+            starter_kwargs = {
+                "speech_download": lambda log, progress, cancel: download_speech_models(
+                    plugin_root, decky.DECKY_PLUGIN_SETTINGS_DIR, log, progress, cancel
+                ),
+                "microphone_enabled": capability_enabled(settings, "microphone_access"),
+            }
+
+        async def runner() -> None:
+            assert self._local_ollama_cancel_event is not None
+            try:
+                await run_local_setup(
+                    profile=prof,
+                    state=self._local_ollama_setup_state,
+                    logger=logger,
+                    cancel_event=self._local_ollama_cancel_event,
+                    on_stage=on_stage,
+                    on_verbose_line=on_verbose_line,
+                    **starter_kwargs,
+                )
+                # Plan 96 F2: "done" is already on screen. Now load the model Ask will pick, in the
+                # background, so the first question does not pay a two-minute cold load. Fresh
+                # settings: the run may have changed the try order. Never raises, never waits.
+                try:
+                    warm_after_setup(self._local_ollama_setup_state, await self.load_settings(), logger, DEFAULT_BASE)
+                except Exception:
+                    pass
+            finally:
+                # Ended (done, failed or cancelled): forget it. A plugin reload ends it too, and
+                # keeps the note, so the download starts again on load.
+                pull_resume.clear_note_unless_unloading(decky.DECKY_PLUGIN_SETTINGS_DIR)
+
+        pull_resume.write_note(decky.DECKY_PLUGIN_SETTINGS_DIR, profile=prof, tags=[])
+        self._local_ollama_setup_task = asyncio.create_task(runner())
+
+    await self._maybe_app_log(
+        "local_setup.start",
+        "setup accepted",
+        fields={"profile": prof, "accepted": True},
+    )
+    return {"accepted": True}
+
+
+async def get_local_ollama_setup_status(self):
+    """Return last status for the local Ollama installer (plain JSON dict)."""
+    return dict(self._local_ollama_setup_state)
+
+
+async def cancel_local_ollama_setup(self):
+    """Request cancellation of an in-progress setup (best-effort)."""
+    ce = getattr(self, "_local_ollama_cancel_event", None)
+    if isinstance(ce, asyncio.Event):
+        ce.set()
+    # A download the person cancelled must never come back on its own after a reload.
+    pull_resume.clear_note(decky.DECKY_PLUGIN_SETTINGS_DIR)
+    return {"cancel_requested": True}
+
+
+async def _require_local_ollama_on_deck(self) -> tuple[bool, dict[str, Any] | None]:
+    settings = await self.load_settings()
+    if not settings.get("ollama_local_on_deck"):
+        return False, {
+            "accepted": False,
+            "ok": False,
+            "reason": "Enable «Ollama on this Deck» in Ollama → Where AI runs first.",
+            "error": "local_off",
+        }
+    return True, None
+
+
+async def _internet_downloads_allowed(self) -> bool:
+    """The Internet downloads permission (capabilities.py); off also while the kids lock is on."""
+    return capability_enabled(await self.load_settings(), "internet_downloads")
+
+
+async def _start_custom_ollama_pull(self, pull_tags: list[str]) -> dict[str, Any]:
+    """Start downloading AI models onto the Deck itself.
+
+    In: the list of model names the person picked. Out: a small dictionary
+    saying whether the download was started, or why it was not.
+
+    "Accepted" means started, not finished. Downloads are gigabytes and take
+    many minutes, so this answers immediately and the screen watches the
+    progress separately. The steps:
+
+     1. Refuse unless running the AI on this Deck is switched on, since
+        there is nowhere to put the models otherwise.
+     2. Tidy the names, and refuse if nothing usable is left.
+     3. Ask Ollama's library which of the names really exist. If none do,
+        refuse and name a couple that would have worked -- a typed model
+        name is the usual reason to be here.
+     4. Only one download at a time: refuse as busy if one is running.
+     5. Start it in the background and answer straight away.
+
+    What can go wrong: if only SOME of the names are real, the bad ones are
+    dropped, a note is written to the log, and the rest download anyway. The
+    person is not told, so someone who mistypes one name of several gets a
+    successful-looking download that quietly skips it.
+    """
+    ok_gate, gate_out = await _require_local_ollama_on_deck(self)
+    if not ok_gate:
+        return gate_out or {"accepted": False, "reason": "local_off"}
+    # Before the registry name check below, which already reaches registry.ollama.ai.
+    if not await _internet_downloads_allowed(self):
+        return downloads_off_refusal()
+
+    tags = normalize_ollama_pull_tags(pull_tags)
+    if not tags:
+        return {"accepted": False, "reason": "No valid model tags to pull."}
+
+    from backend.ollama.ollama_catalog_service import partition_pull_tags_by_registry
+
+    registry_ok, registry_bad = await asyncio.to_thread(partition_pull_tags_by_registry, tags)
+    if registry_bad and not registry_ok:
+        bad_list = ", ".join(registry_bad[:6])
+        return {
+            "accepted": False,
+            "reason": (
+                f"Tag(s) not on Ollama library: {bad_list}. "
+                "Try gemma4:e2b-it-qat or qwen3.5:4b."
+            ),
+            "error": "invalid_registry_tag",
+            "invalid_tags": registry_bad,
+        }
+    if registry_bad:
+        await self._maybe_app_log(
+            "local_setup.start",
+            "skipped invalid registry tags",
+            fields={"invalid_tags": registry_bad[:12]},
+        )
+    tags = registry_ok
+
+    async with self._local_ollama_setup_lock:
+        existing = self._local_ollama_setup_task
+        if existing is not None and not existing.done():
+            return {"accepted": False, "reason": "Setup already running.", "error": "busy"}
+
+        self._local_ollama_cancel_event = new_asyncio_cancel_event()
+        new_st = new_local_ollama_setup_state()
+        new_st.update(
+            {
+                "phase": "running",
+                "done": False,
+                "error": "",
+                "accepted": True,
+                "profile": "custom",
+                "pull_tags": list(tags),
+                "total_pull_steps": len(tags),
+            }
+        )
+        self._local_ollama_setup_state = new_st
+
+        setup_loop = asyncio.get_running_loop()
+        on_stage, on_verbose_line = make_local_ollama_setup_hooks(self, setup_loop)
+
+        async def runner() -> None:
+            assert self._local_ollama_cancel_event is not None
+            try:
+                await run_local_setup(
+                    profile="custom",
+                    state=self._local_ollama_setup_state,
+                    logger=logger,
+                    cancel_event=self._local_ollama_cancel_event,
+                    on_stage=on_stage,
+                    on_verbose_line=on_verbose_line,
+                )
+                # Join the saved try order here, not from the screen: the screen only saw the
+                # finish while the Settings panel stayed open, so a closed menu skipped it.
+                if (self._local_ollama_setup_state or {}).get("phase") == "done":
+                    await merge_pulled_tags_into_routing_orders(self, tags)
+            finally:
+                # A pull of the meaning-search model must be seen at once, not after the
+                # 30 s "is it installed" memory runs out (plan70-R5.json).
+                forget_embed_availability_after_pull(tags)
+                pull_resume.clear_note_unless_unloading(decky.DECKY_PLUGIN_SETTINGS_DIR)
+
+        pull_resume.write_note(decky.DECKY_PLUGIN_SETTINGS_DIR, profile="custom", tags=tags)
+        self._local_ollama_setup_task = asyncio.create_task(runner())
+
+    await self._maybe_app_log(
+        "local_setup.start",
+        "custom pull accepted",
+        fields={"profile": "custom", "accepted": True, "tag_count": len(tags)},
+    )
+    return {"accepted": True, "pull_tags": tags}
+
+
+async def pull_ollama_models(self, tags: Any = None):
+    """Pull one or more Ollama tags on this Deck (background, reuses setup service)."""
+    raw = tags if isinstance(tags, list) else []
+    return await _start_custom_ollama_pull(self, raw)
+
+
+async def merge_pulled_tags_into_routing_orders(self, tags: Any = None):
+    """Append newly pulled tags to the user's saved text/vision try orders."""
+    pulled = normalize_ollama_pull_tags(tags if isinstance(tags, list) else [])
+    if not pulled:
+        return {"ok": False, "error": "no_tags", "merged": []}
+
+    current = await self.load_settings()
+    high_vram = current.get("model_allow_high_vram_fallbacks") is True
+    saved_text = current.get("text_model_routing_order")
+    saved_vision = current.get("vision_model_routing_order")
+    text_order = list(saved_text) if isinstance(saved_text, list) else []
+    vision_order = list(saved_vision) if isinstance(saved_vision, list) else []
+
+    # An empty saved list means the user never set a try order, so
+    # resolve_routing_order() derives one from installed models
+    # (ollama_routing.py:366-370) and a just-pulled tag is already in it.
+    # Writing a one-tag list here would replace that derived chain instead of
+    # extending it, so empty orders are left alone.
+    merged: list[str] = []
+    for tag in pulled:
+        # The knowledge base's note-search pull comes through here too; it cannot answer, so it
+        # joins neither answer order (merge_pulled_tag would also refuse it).
+        if is_embedding_only_tag(tag):
+            continue
+        changed = False
+        if text_order:
+            text_order = merge_pulled_tag(text_order, tag, high_vram)
+            changed = True
+        if vision_order and is_vision_capable_tag(tag):
+            vision_order = merge_pulled_tag(vision_order, tag, high_vram)
+            changed = True
+        if changed:
+            merged.append(tag)
+
+    if not merged:
+        reason = "defaults_in_use" if not text_order and not vision_order else "no_matching_order"
+        return {
+            "ok": True,
+            "merged": [],
+            "reason": reason,
+            "text_model_routing_order": text_order,
+            "vision_model_routing_order": vision_order,
+        }
+
+    saved = await self.save_settings(
+        {
+            "text_model_routing_order": text_order,
+            "vision_model_routing_order": vision_order,
+        }
+    )
+    await self._maybe_app_log(
+        "local_setup.routing_merge",
+        "pulled tags merged into routing order",
+        fields={"merged": ",".join(merged)},
+    )
+    return {
+        "ok": True,
+        "merged": merged,
+        "error": "",
+        "text_model_routing_order": saved.get("text_model_routing_order", []),
+        "vision_model_routing_order": saved.get("vision_model_routing_order", []),
+    }
+
+
+async def delete_ollama_model(self, tag: str = "", pc_ip: str = ""):
+    """Remove one installed Ollama model via ``ollama rm`` (argv form).
+
+    ``pc_ip`` (optional) is the PC address the screen last used; it is asked next to the saved hosts.
+    """
+    ok_gate, gate_out = await _require_local_ollama_on_deck(self)
+    if not ok_gate:
+        return gate_out or {"ok": False, "error": "local_off"}
+
+    t = (tag or "").strip()
+    if not is_valid_ollama_pull_tag(t):
+        return {"ok": False, "error": "invalid_tag"}
+
+    st = dict(getattr(self, "_local_ollama_setup_state", {}) or {})
+    if st.get("phase") == "running" and not st.get("done", True):
+        return {"ok": False, "error": "busy"}
+
+    active = getattr(self, "_active_ollama_chat_model", None)
+    if isinstance(active, str) and active.strip() and active.strip() == t:
+        return {"ok": False, "error": "in_use", "removed": ""}
+
+    ok_rm, err = await run_ollama_rm_async(t)
+    if not ok_rm:
+        safe_err = (err or "delete_failed")[:160]
+        await self._maybe_app_log(
+            "local_setup.delete",
+            "ollama rm failed",
+            fields={"ok": False, "error": safe_err},
+        )
+        return {"ok": False, "error": safe_err, "removed": ""}
+
+    await self._maybe_app_log(
+        "local_setup.delete",
+        "ollama rm succeeded",
+        fields={"ok": True},
+    )
+    # Removing the meaning-search model must be seen at once too, not after the 30 s "is it
+    # installed" memory runs out (otherwise the note-search hint took up to 40 s to appear).
+    forget_embed_availability_after_pull([t])
+    # A removed model also leaves the saved try orders. remove_tag_from_routing_orders was
+    # written for this and never called: on the Deck (plan 64 flow H) qwen2.5:1.5b was removed
+    # through its row and the saved text order still read ['qwen2.5:1.5b'], so Ask's first
+    # choice was a model no longer there. Only the two order keys are written. The order is one list
+    # for whichever computer answers, so a name a saved PC still has stays in it (roadmap Bugs).
+    current = await self.load_settings()
+    cleaned = remove_tag_from_routing_orders(current, t)
+    if cleaned != current:  # the name is in an order: ask the saved PCs before it goes
+        pc_names, pc_silent = await ask_known_pcs(current, [str(pc_ip or "")])
+        # A known PC that did not answer might hold the name: nothing proves otherwise, so it stays.
+        cleaned = current if pc_silent else remove_tag_from_routing_orders(current, t, pc_names)
+        kept = cleaned == current
+        await self._maybe_app_log(
+            "local_setup.routing_remove",
+            "removed model was in the saved try order",
+            fields={
+                "kept_for_pc": t if kept else "",
+                "dropped": "" if kept else t,
+                "pc_address_sent": bool(str(pc_ip or "").strip()),
+                "pc_unreachable": pc_silent,
+            },
+        )
+    order_patch = {
+        key: cleaned[key]
+        for key in ("text_model_routing_order", "vision_model_routing_order")
+        if cleaned.get(key) != current.get(key)
+    }
+    if order_patch:
+        await self.save_settings(order_patch)
+    return {"ok": True, "removed": t, "error": ""}
+
+
+async def _prune_saved_orders_to_installed(self, pc_ip: str = "") -> None:
+    """Drop saved try-order entries for models no longer on this Deck's own Ollama (see the helper)."""
+    # The reader is looked up by name at call time, so a test that replaces it here still works.
+    await prune_saved_orders_to_installed(self, lambda base: list_installed_ollama_tags(base), pc_ip)
+
+
+async def fetch_ollama_catalog_metadata(self, tags: Any = None, pc_ip: str = ""):
+    """A tag already installed gets its real size from this Deck's own Ollama; registry.ollama.ai
+    is only asked about a tag that is not installed yet.
+
+    A tag outside the curated catalog (nomic-embed-text, the meaning-search model plan 70's own
+    knowledge base installs) has no bundled size to fall back on, and the registry does not
+    answer for it either -- so asking there left it with no size at all: "?" in the models list,
+    and undercounted in the header's own total (workshop:test-evidence/plan70-ROUTING-MERGE-SIZE-01.json).
+    Ollama's own ``GET /api/tags`` already reports the real size of everything installed.
+    """
+    ok_gate, gate_out = await _require_local_ollama_on_deck(self)
+    if not ok_gate:
+        return {**(gate_out or {}), "source": "offline", "tags": {}}
+
+    await _prune_saved_orders_to_installed(self, pc_ip)
+
+    raw = tags if isinstance(tags, list) else []
+    normalized = normalize_ollama_pull_tags(raw)
+    # While Internet downloads is off the Deck's own Ollama still answers for installed tags;
+    # registry.ollama.ai is not asked about the rest.
+    may_ask_registry = await _internet_downloads_allowed(self)
+
+    def _fetch() -> dict[str, Any]:
+        installed_sizes = list_installed_ollama_tag_sizes(DEFAULT_BASE)
+        local_tags: dict[str, Any] = {}
+        remaining: list[str] = []
+        for tag in normalized:
+            size_bytes = installed_sizes.get(tag)
+            if isinstance(size_bytes, int) and size_bytes > 0:
+                local_tags[tag] = {"size_bytes": size_bytes, "exists": True}
+            else:
+                remaining.append(tag)
+
+        if not remaining or not may_ask_registry:
+            return {
+                "source": "live" if local_tags else "offline",
+                "error": "",
+                "tags": local_tags,
+                "fetched_at": int(time.time()) if local_tags else None,
+            }
+
+        registry_out = fetch_catalog_metadata(remaining)
+        merged_tags = {**(registry_out.get("tags") or {}), **local_tags}
+        source = "live" if (local_tags or registry_out.get("source") == "live") else registry_out.get(
+            "source", "offline"
+        )
+        return {**registry_out, "tags": merged_tags, "source": source}
+
+    try:
+        out = await asyncio.wait_for(asyncio.to_thread(_fetch), timeout=10.0)
+    except Exception:
+        out = {"source": "offline", "error": "fetch_failed", "tags": {}, "fetched_at": None}
+    return out

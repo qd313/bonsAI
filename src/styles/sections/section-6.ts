@@ -1,6 +1,109 @@
-import { BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX } from "../../features/unified-input/constants";
-import { uiScalePx } from "./uiScalePx";
+/**
+ * Title: Chat bubbles, the bottom dock, and the saved-chats strip
+ *
+ * Purpose: This file started as one thing — the frosted-glass look shared
+ * by panels across the plugin — and grew into the largest single piece of
+ * styling in the plugin as the conversation screen grew around it. It now
+ * covers most of what a person actually looks at while reading a
+ * conversation: the question and answer bubbles, the row of saved chats
+ * above them, and the Ask bar pinned to the bottom of the screen.
+ *
+ *     ┌─ tab strip ──────────────────────────────┐
+ *     ├───────────────────────────────────────────┤
+ *     │            you: a question          [bubble, right-aligned]
+ *     │  [bubble] the AI's answer, in sections     │
+ *     │           [retry] [copy] [Show details]    │
+ *     ├─ bottom dock, pinned in place ─────────────┤
+ *     │  [suggestion chips]                        │
+ *     │  Ask something...              [ Ask ]     │
+ *     └─────────────────────────────────────────────┘
+ *
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
+ *
+ * Does not: Style the tab strip above the chat (section-1.ts)
+ * or the plugin's own tab bar (tabIndicatorBarStyles.ts).
+ *
+ * Split note (plan 65): answer text formatting (paragraphs, lists, code
+ * blocks) now lives in answerMarkdownFormatting.ts, the question bubble
+ * (with its Retry icon) lives in questionBubble.ts, the answer bubble
+ * (streaming look, Copy icon, D-pad stops) lives in answerBubble.ts,
+ * all called from here. (The saved-chats row's styles were deleted in
+ * plan 84: chats are now picked from the menu under the chat's name.) The rating choices under an answer
+ * (Helpful, Not really and the five reasons) are in replyRatingChoices.ts
+ * (plan 79), also called from here.
+ *
+ * How it works: roughly top to bottom of the file —
+ * 1. The shared frosted-glass look (blurred, semi-transparent background)
+ *    used by several panels, plus the Ask box's pulsing border while
+ *    waiting on an answer.
+ * 2. How answer text itself is formatted — paragraphs, lists, quotes,
+ *    links, and code blocks.
+ * 3. The question and answer bubbles in the conversation: their shape,
+ *    their small corner icons (retry on a question, copy on an answer),
+ *    and the streaming look (a pulsing border and blinking cursor) while
+ *    an answer is still arriving.
+ * 4. The buttons below an answer (retry, copy, and so on) and the "Show
+ *    details" divider line.
+ * 5. The bottom dock: the suggestion chips and Ask bar, pinned to the
+ *    bottom of the screen no matter how long the conversation above them
+ *    grows, with a soft fade hinting that more text is scrollable above.
+ * 6. The row of saved chats above the conversation: its bumper pills, the
+ *    current chat's name, faint "ghost" previews of the chats on either
+ *    side, and the small dots marking every chat plus the one that
+ *    creates a new one.
+ */
+import { BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX, BONSAI_CHAT_TRANSCRIPT_TO_SAVE_GAP_PX, UNIFIED_TEXT_FONT_PX } from "../../shared/constants";
+import { buildAnswerMarkdownFormattingSection } from "../../features/answer/markdown/answerMarkdownFormatting";
+import { buildQuestionBubbleSection } from "../../features/answer/transcript/questionBubble";
+import { buildAnswerBubbleSection } from "../../features/answer/bubble/answerBubble";
+import { buildChatDetailsTextSection } from "../../features/answer/details/chatDetailsText";
+import { buildReplyRatingChoicesSection } from "../../features/answer/reply-actions/replyRatingChoices";
+import { textPx } from "../textPx";
 
+/**
+ * In: nothing — every value here is a fixed string or read from a CSS
+ * variable that some other part of the plugin sets.
+ * Out: a block of CSS text — the largest one this plugin builds.
+ * Can go wrong: this function itself cannot fail, but several rules
+ * inside it exist only to win a specificity fight with another rule
+ * elsewhere in the stylesheet (each one says so in its own comment) — a
+ * change to the order sections are combined in, in bonsaiScopeStylesheet.ts,
+ * could quietly flip one of those fights.
+ *
+ * 1. The shared glass-panel background and border, plus the pulsing glow
+ *    the Ask box gets while a question is mid-flight.
+ * 2. Formatting for the text inside an answer: paragraphs, lists, quotes,
+ *    links, inline code, and fenced code blocks.
+ * 3. The question bubble: right-aligned, its own background, and the
+ *    small Retry icon tucked into its bottom-left corner — positioned by
+ *    hand rather than reserving space in the layout, so a short question
+ *    is not left with an empty gap beside it.
+ * 4. The answer bubble: its glass background, the pulsing border and
+ *    blinking-cursor look while text is still streaming in, and the
+ *    dashed "waiting on a code block to finish" chip.
+ * 5. The Copy icon tucked into an answer's bottom-right corner, drawn as
+ *    a sibling of the bubble rather than nested inside it (explained
+ *    inline — nesting it caused the D-pad to bounce between the icon and
+ *    the last line of text), plus the trick that keeps the answer's very
+ *    last line of text from running underneath it.
+ * 6. Each answer section's own D-pad outline, used when stepping through
+ *    a long answer piece by piece.
+ * 7. The row of buttons under an answer (retry, copy feedback, and so
+ *    on) and the "Show details" hairline divider.
+ * 8. The Main tab's bottom dock — the suggestion chips and Ask bar,
+ *    pinned to the bottom of the screen by sticky positioning rather
+ *    than simple bottom alignment, so a long conversation cannot push
+ *    them off screen; plus the soft fade above it and two Deck-only
+ *    spacing fixes noted inline.
+ * 9. The "N earlier" pill that stands in for archived older turns, and
+ *    the empty-conversation placeholder shown on a brand new chat.
+ * 10. The row of saved chats above the conversation: the bumper pills,
+ *     the current chat's name (including the marquee scroll for a name
+ *     too long to fit), faint "ghost" previews of neighboring chats, the
+ *     delete button, and the small dots marking every chat's position
+ *     plus which ones are mid-answer or hold an unread reply.
+ */
 export function buildSection6Section(): string {
   return `
 /* ==========================================================================
@@ -33,6 +136,15 @@ export function buildSection6Section(): string {
         .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--capturing.bonsai-glass-panel {
           animation: bonsai-ask-input-breathe 3.4s ease-in-out infinite;
         }
+        /* While the answer's text is arriving, the glow holds steady -- the look reduced motion
+           gets -- and breathes again for the next question's thinking. Measured on the Deck,
+           2026-09-25: this breathing and the answer bubble's pulse cost the panel about 5 frames a
+           second while an answer streamed in, and nothing while the model was only thinking. */
+        .bonsai-scope .bonsai-main-tab-dock--answer-arriving .bonsai-unified-input-host.bonsai-unified-input--asking.bonsai-glass-panel {
+          animation: none;
+          border-color: var(--bonsai-ask-breathe-high, var(--bonsai-ask-mode-accent, #4ade80)) !important;
+          box-shadow: 0 0 0 1px var(--bonsai-ask-glow-high, rgba(74, 222, 128, 0.2));
+        }
         @media (prefers-reduced-motion: reduce) {
           .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--asking.bonsai-glass-panel,
           .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--capturing.bonsai-glass-panel {
@@ -42,10 +154,18 @@ export function buildSection6Section(): string {
           }
         }
 
+        /* Plan 60, board B, 2026-09-17: the chip should read as a pressable thing, not a flat
+           label. A gradient (lighter at the top, darker at the bottom) plus a hairline on the top
+           edge and a soft shadow underneath give it the "raised button" cue the flat 22 percent
+           fill never had. The help chip and the agent chip below keep their own background and
+           border for their own colour, but neither sets box-shadow, so this rule's hairline and
+           shadow still reach them (D110, item 5) — they sit level with the other chips. */
         .bonsai-scope .bonsai-preset-glass {
-          background: rgba(18, 26, 34, 0.22) !important;
-          border: 1px solid rgba(255, 255, 255, 0.07) !important;
-          box-shadow: none !important;
+          background: linear-gradient(180deg, rgba(56, 70, 84, 0.5) 0%, rgba(16, 22, 30, 0.55) 100%) !important;
+          border: 1px solid rgba(255, 255, 255, 0.10) !important;
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.10),
+            0 2px 3px rgba(0, 0, 0, 0.4) !important;
         }
 
         .bonsai-scope button.bonsai-preset-help-chip.bonsai-preset-glass {
@@ -58,100 +178,32 @@ export function buildSection6Section(): string {
           color: #dff5ea !important;
         }
 
+        /* The agent chip keeps its own orange ring and glow, and gains the raised look with them
+           (D110, item 5). The hairline and drop shadow from the rule above are written out again
+           here because box-shadow replaces the whole list rather than adding to it. */
         .bonsai-scope button.bonsai-preset-glass.bonsai-pyro-inject-chip {
           border: 2px solid rgba(255, 107, 53, 0.92) !important;
           box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.10),
             0 0 0 1px rgba(160, 45, 28, 0.5),
-            0 0 12px rgba(255, 85, 40, 0.38) !important;
+            0 0 12px rgba(255, 85, 40, 0.38),
+            0 2px 3px rgba(0, 0, 0, 0.4) !important;
           background: rgba(38, 22, 18, 0.38) !important;
           color: #f0ddd6 !important;
         }
 
+        /* Font size must match the real field's own text (UNIFIED_TEXT_FONT_PX, section-5.ts) --
+           roadmap: "The blinking cursor in the question box does not line up with the placeholder
+           text". This span used to hard-code 10px while the caret beside it inherits the overlay's
+           12px, so the placeholder was measurably smaller than the caret it sits next to and the
+           two could never line up. */
         .bonsai-scope .bonsai-unified-input-strategy-placeholder {
           font-style: italic;
-          font-size: 10px;
-          opacity: 0.4;
+          font-size: ${textPx(UNIFIED_TEXT_FONT_PX)};
+          opacity: 0.45;
         }
 
-        .bonsai-scope .bonsai-ai-response-stack {
-          display: flex;
-          flex-direction: column;
-          background: rgba(18, 26, 34, 0.28) !important;
-          border: 1px solid rgba(255, 255, 255, 0.08) !important;
-          color: #dadde3;
-          border-radius: 4px;
-          overflow: hidden;
-        }
-
-        .bonsai-scope .bonsai-ai-response-stack .bonsai-ai-response-chunk {
-          background: transparent !important;
-          border: none !important;
-          border-radius: 0;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .bonsai-scope .bonsai-ai-response-stack .bonsai-ai-response-chunk:last-child {
-          border-bottom: none;
-        }
-
-        .bonsai-scope .bonsai-ai-response-chunk {
-          background: rgba(18, 26, 34, 0.28) !important;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #dadde3;
-          padding: 8px;
-          white-space: normal;
-          word-break: break-word;
-          overflow-wrap: anywhere;
-          font-size: 12px;
-          line-height: 1.4;
-        }
-        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-p {
-          margin: 0 0 0.5em 0;
-        }
-        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-p:last-child {
-          margin-bottom: 0;
-        }
-        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-ul,
-        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-ol {
-          margin: 0.35em 0 0.5em 1.1em;
-          padding: 0;
-        }
-        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-li {
-          margin: 0.2em 0;
-        }
-        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-blockquote {
-          margin: 0.4em 0;
-          padding-left: 0.6em;
-          border-left: 2px solid rgba(255, 255, 255, 0.2);
-        }
-        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-a {
-          color: #7eb8ff;
-          text-decoration: underline;
-        }
-        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-inline-code {
-          font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
-          background: rgba(0, 0, 0, 0.28);
-          padding: 0.05em 0.3em;
-          border-radius: 3px;
-          font-size: 0.95em;
-        }
-        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-fenced-pre {
-          margin: 0.5em 0;
-          padding: 8px 10px;
-          white-space: pre-wrap;
-          word-break: break-word;
-          overflow-x: auto;
-          border-radius: 6px;
-          background: rgba(0, 0, 0, 0.4);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-fenced-code {
-          font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
-          font-size: 11px;
-          line-height: 1.35;
-          display: block;
-        }
-
+${buildAnswerMarkdownFormattingSection()}
         /*
           Main-tab AIM-style transcript: column shell + bubbles. Overrides broad PanelSectionRow
           child width where needed so player bubbles stay right-aligned (fit-content) without QAM bleed.
@@ -161,7 +213,7 @@ export function buildSection6Section(): string {
           max-width: 100% !important;
           min-width: 0 !important;
           box-sizing: border-box !important;
-          margin-top: ${uiScalePx(BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX)} !important;
+          margin-top: ${BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX}px !important;
         }
         .bonsai-scope .bonsai-chat-status-line {
           margin-top: 8px !important;
@@ -187,226 +239,9 @@ export function buildSection6Section(): string {
           width: 100% !important;
           box-sizing: border-box !important;
         }
-        .bonsai-scope .bonsai-chat-turn-row-header {
-          display: block !important;
-          width: fit-content !important;
-          max-width: min(88%, 280px) !important;
-          min-width: 0 !important;
-          margin-left: auto !important;
-          margin-right: 0 !important;
-          align-self: flex-end !important;
-          box-sizing: border-box !important;
-          text-align: right !important;
-          padding: 6px 10px !important;
-          border-radius: 8px !important;
-          cursor: pointer !important;
-          outline: none !important;
-          border: 1px solid rgba(255, 255, 255, 0.08) !important;
-          background: linear-gradient(
-            180deg,
-            rgba(22, 34, 48, 0.78) 0%,
-            rgba(14, 22, 34, 0.82) 100%
-          ) !important;
-          color: #8fa8c4 !important;
-        }
-        .bonsai-scope .bonsai-chat-turn-row-header--live {
-          border: 1px solid rgba(100, 145, 205, 0.48) !important;
-          background: linear-gradient(
-            180deg,
-            rgba(32, 52, 78, 0.8) 0%,
-            rgba(20, 34, 54, 0.85) 100%
-          ) !important;
-          color: #dce6f2 !important;
-        }
-        .bonsai-scope .bonsai-chat-turn-row-header--expanded {
-          border: 1px solid rgba(120, 155, 198, 0.42) !important;
-          background: linear-gradient(
-            180deg,
-            rgba(36, 52, 72, 0.82) 0%,
-            rgba(24, 36, 52, 0.85) 100%
-          ) !important;
-          color: #e8eef4 !important;
-        }
-        .bonsai-scope .bonsai-chat-turn-row-title {
-          display: block !important;
-          font-size: 11px !important;
-          font-weight: 600 !important;
-          line-height: 1.3 !important;
-          white-space: nowrap !important;
-          overflow: hidden !important;
-          text-overflow: ellipsis !important;
-        }
-        .bonsai-scope .bonsai-chat-turn-row--expanded .bonsai-chat-ai-bubble {
-          margin-bottom: 8px !important;
-        }
-        .bonsai-scope .bonsai-chat-turn-slot {
-          display: flex !important;
-          flex-direction: column !important;
-          align-items: stretch !important;
-          gap: 6px !important;
-          min-width: 0 !important;
-          width: 100% !important;
-          box-sizing: border-box !important;
-        }
-        .bonsai-scope .bonsai-chat-ai-bubble.Panel.Focusable,
-        .bonsai-scope .bonsai-chat-ai-bubble.Panel.Focusable > div {
-          font-size: 12px !important;
-          line-height: 1.4 !important;
-        }
-        .bonsai-scope .bonsai-ai-response-plain-stream {
-          white-space: pre-wrap !important;
-          word-break: break-word !important;
-          overflow-wrap: anywhere !important;
-          font-size: 12px !important;
-          line-height: 1.4 !important;
-          color: inherit !important;
-        }
-        .bonsai-scope .bonsai-chat-ai-bubble .bonsai-ai-response-chunk--in-bubble {
-          font-size: 12px !important;
-          line-height: 1.4 !important;
-        }
-        .bonsai-scope .bonsai-chat-ai-bubble-inner {
-          padding: 8px 10px !important;
-          box-sizing: border-box !important;
-        }
-        .bonsai-scope .bonsai-chat-ai-bubble .bonsai-ai-response-stack--in-bubble,
-        .bonsai-scope .bonsai-chat-ai-bubble .bonsai-ai-response-chunk--in-bubble {
-          background: transparent !important;
-          border: none !important;
-          border-bottom: none !important;
-          border-radius: 0 !important;
-          box-shadow: none !important;
-          outline: none !important;
-          backdrop-filter: none !important;
-          -webkit-backdrop-filter: none !important;
-          padding: 0 !important;
-          margin: 0 !important;
-        }
-        .bonsai-scope .bonsai-spoiler-reveal-target {
-          background: #0a0a0a !important;
-          border-color: rgba(80, 80, 80, 0.55) !important;
-          user-select: none !important;
-        }
-        .bonsai-scope .bonsai-spoiler-reveal-target > div:first-child {
-          color: rgba(160, 160, 160, 0.85) !important;
-        }
-        .bonsai-scope .bonsai-chat-next-message-row {
-          align-items: flex-end !important;
-        }
-        .bonsai-scope button.bonsai-chat-user-bubble {
-          display: block !important;
-          width: fit-content !important;
-          max-width: min(88%, 260px) !important;
-          min-width: 0 !important;
-          margin-left: auto !important;
-          margin-right: 0 !important;
-          align-self: flex-end !important;
-          box-sizing: border-box !important;
-          text-align: right !important;
-          white-space: pre-wrap !important;
-          word-break: break-word !important;
-          overflow-wrap: anywhere !important;
-          font-size: 12px !important;
-          line-height: 1.4 !important;
-          padding: 8px 10px !important;
-          border-radius: 10px !important;
-          cursor: pointer !important;
-          outline: none !important;
-          appearance: none !important;
-          -webkit-appearance: none !important;
-          color: #dce6f2 !important;
-          border: 1px solid rgba(90, 130, 185, 0.42) !important;
-          background: linear-gradient(
-            180deg,
-            rgba(28, 44, 68, 0.72) 0%,
-            rgba(18, 30, 48, 0.78) 100%
-          ) !important;
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
-        }
-        .bonsai-scope button.bonsai-chat-user-bubble--history {
-          font-size: 10px !important;
-          font-weight: 600 !important;
-          line-height: 1.25 !important;
-          padding: 5px 8px !important;
-          border-radius: 8px !important;
-          max-width: min(100%, 200px) !important;
-          border: 1px solid rgba(255, 255, 255, 0.08) !important;
-          background: linear-gradient(
-            180deg,
-            rgba(22, 34, 48, 0.78) 0%,
-            rgba(14, 22, 34, 0.82) 100%
-          ) !important;
-          color: #8fa8c4 !important;
-        }
-        .bonsai-scope button.bonsai-chat-user-bubble--history.bonsai-chat-user-bubble--selected {
-          border: 1px solid rgba(120, 155, 198, 0.42) !important;
-          background: linear-gradient(
-            180deg,
-            rgba(36, 52, 72, 0.82) 0%,
-            rgba(24, 36, 52, 0.85) 100%
-          ) !important;
-          color: #e8eef4 !important;
-        }
-        .bonsai-scope button.bonsai-chat-user-bubble--latest {
-          border: 1px solid rgba(100, 145, 205, 0.48) !important;
-          background: linear-gradient(
-            180deg,
-            rgba(32, 52, 78, 0.8) 0%,
-            rgba(20, 34, 54, 0.85) 100%
-          ) !important;
-          box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.06),
-            0 0 0 1px rgba(70, 120, 175, 0.1) !important;
-        }
-        .bonsai-scope .bonsai-chat-user-bubble-inner--faded {
-          -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 52%, transparent 100%) !important;
-          mask-image: linear-gradient(to bottom, #000 0%, #000 52%, transparent 100%) !important;
-        }
-        .bonsai-scope .bonsai-chat-ai-bubble.bonsai-glass-panel {
-          border-radius: 10px !important;
-          border: 1px solid var(--bonsai-chat-ai-bubble-border, rgba(46, 135, 83, 0.48)) !important;
-          background: linear-gradient(
-            180deg,
-            var(--bonsai-chat-ai-bubble-bg-top, rgba(46, 135, 83, 0.12)) 0%,
-            var(--bonsai-chat-ai-bubble-bg-bottom, rgba(18, 52, 34, 0.55)) 100%
-          ) !important;
-          color: var(--bonsai-chat-ai-bubble-text, #d4dde6) !important;
-          overflow: hidden !important;
-        }
-        .bonsai-scope .bonsai-chat-ai-bubble .bonsai-ai-response-stack {
-          background: transparent !important;
-          border: none !important;
-          width: 100% !important;
-          max-width: 100% !important;
-        }
-        .bonsai-scope .bonsai-chat-ai-bubble-inner--faded {
-          -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%) !important;
-          mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%) !important;
-        }
-        .bonsai-scope .bonsai-chat-ai-bubble--stream-preview.bonsai-glass-panel {
-          border-color: var(--bonsai-stream-preview-border, rgba(56, 189, 248, 0.55)) !important;
-          animation: bonsai-stream-preview-pulse 1.2s ease-in-out infinite;
-        }
-        @keyframes bonsai-stream-preview-pulse {
-          0%, 100% {
-            box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.12);
-          }
-          50% {
-            box-shadow: 0 0 8px 1px rgba(56, 189, 248, 0.32);
-          }
-        }
-        .bonsai-scope [data-bonsai-stream-preview="true"] .bonsai-ai-response-chunk::after {
-          content: "▋";
-          display: inline;
-          margin-left: 2px;
-          opacity: 0.85;
-          animation: bonsai-stream-caret-blink 0.9s step-end infinite;
-        }
-        @keyframes bonsai-stream-caret-blink {
-          50% {
-            opacity: 0.15;
-          }
-        }
+${buildQuestionBubbleSection()}
+${buildAnswerBubbleSection()}
+${buildChatDetailsTextSection()}
         .bonsai-scope button.bonsai-chat-next-message {
           display: block !important;
           width: fit-content !important;
@@ -415,7 +250,7 @@ export function buildSection6Section(): string {
           align-self: flex-end !important;
           padding: 6px 12px !important;
           border-radius: 10px !important;
-          font-size: 11px !important;
+          font-size: ${textPx(11)} !important;
           font-weight: 600 !important;
           cursor: pointer !important;
           border: 1px solid rgba(110, 150, 200, 0.38) !important;
@@ -436,7 +271,7 @@ export function buildSection6Section(): string {
           min-height: 32px !important;
           padding: 6px 12px !important;
           border-radius: 8px !important;
-          font-size: 12px !important;
+          font-size: ${textPx(12)} !important;
           font-weight: 600 !important;
           cursor: pointer !important;
           border: 1px solid rgba(110, 150, 200, 0.38) !important;
@@ -473,7 +308,11 @@ export function buildSection6Section(): string {
         }
         .bonsai-scope .bonsai-chat-reply-actions {
           margin-top: 10px !important;
-          max-width: min(88%, 100%) !important;
+          /* 92%, matching the answer bubble above it and the question bubble above that, so the
+             details line below shares their left and right edge instead of sitting 4% inside them
+             (design-language.md rule 3). Was 88%; the buttons are fit-content and left-aligned, so
+             only the full-width line and the chip row's wrap point notice. */
+          max-width: min(92%, 100%) !important;
           display: flex !important;
           flex-direction: column !important;
           align-items: flex-start !important;
@@ -487,6 +326,7 @@ export function buildSection6Section(): string {
           gap: 8px !important;
           width: 100% !important;
         }
+${buildReplyRatingChoicesSection()}
         .bonsai-scope .bonsai-chat-reply-actions-row--utility {
           flex-wrap: nowrap !important;
         }
@@ -494,6 +334,121 @@ export function buildSection6Section(): string {
           flex: 0 1 auto !important;
           white-space: nowrap !important;
           max-width: none !important;
+        }
+        /*
+         * Show details, as a line across the reply rather than a button in the row (D76).
+         *
+         * Same shape as the collapsed-history row above: a label centred on a hairline. The
+         * difference is a rule on both sides. The hairline stays a raw 1px — hairlines are
+         * never scaled (design-tokens.md).
+         */
+        .bonsai-scope .bonsai-chat-details-divider {
+          display: flex !important;
+          flex-direction: row !important;
+          align-items: center !important;
+          gap: 8px !important;
+          width: 100% !important;
+          box-sizing: border-box !important;
+          margin: 4px 0 2px !important;
+          cursor: pointer !important;
+          outline: none !important;
+        }
+        .bonsai-scope .bonsai-chat-details-divider-rule {
+          flex: 1;
+          height: 1px;
+          background: rgba(255, 255, 255, 0.09);
+        }
+        .bonsai-scope .bonsai-chat-details-divider-label {
+          font-size: ${textPx(10)};
+          font-weight: 600;
+          letter-spacing: 0.04em;
+          color: #9fb7d5;
+          white-space: nowrap;
+          padding: 0 2px;
+        }
+        /*
+         * Brightens when the D-pad ring is on it. Keyed off Steam's own focus class as well as
+         * :focus-within, the way the Ask row's Clear button is — on the Deck you arrive here with
+         * the D-pad, never a pointer, and :focus alone does not fire.
+         */
+        .bonsai-scope .bonsai-chat-details-divider.gpfocus .bonsai-chat-details-divider-label,
+        .bonsai-scope .bonsai-chat-details-divider:focus-within .bonsai-chat-details-divider-label {
+          color: #e8eef5;
+        }
+        .bonsai-scope .bonsai-chat-details-divider.gpfocus .bonsai-chat-details-divider-rule,
+        .bonsai-scope .bonsai-chat-details-divider:focus-within .bonsai-chat-details-divider-rule {
+          background: rgba(255, 255, 255, 0.28);
+        }
+        /* The standard white ring, never the character colour (design-tokens.md). */
+        .bonsai-scope .bonsai-chat-details-divider.gpfocus,
+        .bonsai-scope .bonsai-chat-details-divider:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.9) !important;
+          outline-offset: 2px !important;
+          border-radius: 4px !important;
+        }
+        .bonsai-scope .bonsai-chat-details-divider--disabled {
+          opacity: 0.45 !important;
+          cursor: default !important;
+        }
+        /*
+         * The model's own thinking while it works, where the stock waiting phrase used to be.
+         *
+         * Ordinary wrapping text, line breaks kept (the maintainer's call, 2026-09-24: "let it
+         * display the thinking normally"; it was three one-line sentences cut with an ellipsis).
+         * Small, dim and italic -- the maintainer's calls the same night: "dimmer, italics,
+         * smaller font", then "even smaller thinking font", then tighter line spacing, then "go
+         * from like 8 lines to 6 lines and see how it is". Six 9px lines at 1.15 take 62px, where
+         * six lines of the old 12px text took 101px. The newest line sits at the bottom: flex-end
+         * pushes older lines up and out of the top as the model writes, instead of pushing the
+         * newest down behind the question box -- the visible chat above it is small on the
+         * built-in screen. The height is exactly six lines plus the padding, so no half line ever
+         * shows at the top. The block goes the moment the answer starts.
+         *
+         * The left rule stays a raw 2px. It is a hairline, and hairlines are never scaled
+         * (design-tokens.md).
+         */
+        .bonsai-scope .bonsai-chat-reasoning-live {
+          display: flex !important;
+          flex-direction: column !important;
+          justify-content: flex-end !important;
+          width: 100% !important;
+          box-sizing: border-box !important;
+          max-height: calc(6 * 1.15em + 4px) !important;
+          overflow: hidden !important;
+          padding: 2px 4px 2px 8px !important;
+          border-left: 2px solid rgba(159, 183, 213, 0.4) !important;
+          margin-bottom: 8px !important;
+          min-width: 0 !important;
+          font-size: ${textPx(9)} !important;
+          font-style: italic !important;
+          line-height: 1.15 !important;
+          color: rgba(180, 198, 217, 0.6) !important;
+          white-space: pre-wrap !important;
+          overflow-wrap: anywhere !important;
+        }
+        /*
+         * The whole thinking, once the fold row above it has been opened. The answer chunk's own
+         * dark surface, so it reads as a quieter neighbour of the answer rather than a second
+         * answer. Line breaks are kept as the model wrote them, and nothing inside is masked.
+         */
+        .bonsai-scope .bonsai-chat-reasoning-block {
+          width: 100% !important;
+          box-sizing: border-box !important;
+          background: rgba(18, 26, 34, 0.28) !important;
+          border: 1px solid rgba(255, 255, 255, 0.08) !important;
+          border-radius: 6px !important;
+          padding: 8px !important;
+          margin-bottom: 6px !important;
+          font-size: ${textPx(11)} !important;
+          line-height: 1.4 !important;
+          color: #9fb7d5 !important;
+          white-space: pre-wrap !important;
+          overflow-wrap: anywhere !important;
+        }
+        .bonsai-scope .bonsai-save-chat-desktop-row {
+          margin-top: ${BONSAI_CHAT_TRANSCRIPT_TO_SAVE_GAP_PX}px !important;
+          width: 100% !important;
+          box-sizing: border-box !important;
         }
         @keyframes bonsai-thinking-spin {
           from { transform: rotate(0deg); }
@@ -503,17 +458,329 @@ export function buildSection6Section(): string {
           animation: bonsai-thinking-spin 0.9s linear infinite !important;
           transform-origin: center center !important;
         }
-        .bonsai-scope .bonsai-context-footnote {
-          margin-top: 4px !important;
-        }
         .bonsai-scope .bonsai-chat-feedback-row__label {
-          font-size: 11px !important;
+          font-size: ${textPx(11)} !important;
           color: #9fb7d5 !important;
           line-height: 1.35 !important;
         }
         .bonsai-scope .bonsai-chat-feedback-row--rated {
           color: #8fa6bd !important;
           font-style: italic !important;
+        }
+        /*
+          Main tab bottom dock. The column stretches to the scroll viewport's bottom edge
+          (min-height measured by useMainTabColumnFill — the offset to the viewport crosses
+          hashed Steam wrappers, so it cannot be a CSS constant) and the dock's margin-top: auto
+          pins presets + Ask bar to the bottom. With a long transcript the column
+          outgrows the min-height and the dock scrolls in flow, exactly as before.
+        */
+        .bonsai-scope .bonsai-main-tab-column {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          max-width: 100%;
+          min-width: 0;
+          box-sizing: border-box;
+          min-height: var(--bonsai-main-column-min-height, auto);
+        }
+        /*
+          Sticky, not merely bottom-aligned. margin-top: auto parks the dock at the bottom while
+          the transcript is short, but a long one simply pushed it past the fold — measured
+          2026-08-30 with a single answer on screen, scrollHeight 957 against a 667 viewport, so
+          the Ask bar and the context line were both off screen. Sticking it to the scrollport's
+          bottom edge keeps the input reachable no matter how long the thread grows, which is what
+          the mocks draw.
+
+          It needs its own surface because nothing above it is opaque: the scroll container, the
+          scope and the QAM pane all compute to rgba(0,0,0,0) and the panel's colour comes from
+          Steam's chrome further up, so without this the transcript would scroll through the dock.
+        */
+        .bonsai-scope .bonsai-main-tab-dock {
+          display: flex;
+          flex-direction: column;
+          margin-top: auto;
+          position: sticky;
+          bottom: 0;
+          z-index: 2;
+          width: 100%;
+          max-width: 100%;
+          min-width: 0;
+          box-sizing: border-box;
+          background: rgba(18, 26, 34, 0.92);
+          -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        /*
+          A short fade above the dock, so a reply that continues below it visibly passes UNDER the
+          chips instead of being sliced off at a hard edge. The dock covers 245px of a 616px pane
+          (measured 2026-08-30), which is a large share of the reading area to hide behind an edge
+          that looks like the end of the text. The fade says "there is more, keep scrolling"
+          without costing a row. The real cure is a shorter dock - see the vertical-space lane.
+
+          Absolute against the dock, which is positioned (sticky), and bottom: 100% puts it just
+          above the dock's own top edge rather than over its first row.
+        */
+        .bonsai-scope .bonsai-main-tab-dock::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 100%;
+          height: 18px;
+          pointer-events: none;
+          background: linear-gradient(180deg, rgba(18, 26, 34, 0) 0%, rgba(18, 26, 34, 0.85) 100%);
+        }
+
+        /*
+          Steam's scroll container carries padding-bottom: 40px (measured on device 2026-08-30).
+          Sticky pins to a scrollport's CONTENT box, not its padding box, so bottom: 0 parked the
+          dock 40px short of the panel's bottom edge - leaving exactly the dead strip at the bottom
+          that the dock was added to remove. Zeroing it costs no height (box-sizing is border-box,
+          and the element's height is pinned by --bonsai-tab-body-height either way); the 40px moves
+          from padding into the content box, so the transcript gets it.
+
+          Scoped by :has to the one tab that deliberately owns its bottom edge. Every other tab
+          keeps Steam's breathing room, because nothing has measured what removing it does there.
+          Lifting it panel-wide belongs to the vertical-space goal as its own measured change, not
+          as a side effect of this one.
+        */
+        .bonsai-scope .bonsai-decky-tabs-root [class*="TabContentsScroll"]:has(.bonsai-main-tab-dock) {
+          padding-bottom: 0 !important;
+        }
+        /*
+          Decky's PanelSection reserves 24px under itself. On a slot whose content overflows this
+          is invisible - the dock is sticky and pins to the scrollport edge regardless. On the [+]
+          slot, whose transcript is one line of placeholder, nothing overflows, so the dock sits at
+          its flow position and that 24px showed as dead space under the context line: a gap that
+          appeared on the new-chat screen and on no other. Measured on device 2026-08-30, 24px.
+          Same treatment and same scope as the padding above - Main only, by way of the dock.
+        */
+        .bonsai-scope .bonsai-decky-tabs-root [class*="TabContentsScroll"] div:has(> .bonsai-main-tab-column) {
+          margin-bottom: 0 !important;
+        }
+
+        /* Collapsed history: one "N earlier" pill standing in for the older archived turns. */
+        .bonsai-scope .bonsai-chat-earlier-pill-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          opacity: 0.55;
+          margin: 2px 0 6px;
+        }
+        .bonsai-scope .bonsai-chat-earlier-pill {
+          font-size: ${textPx(10)};
+          font-weight: 600;
+          letter-spacing: 0.04em;
+          color: rgba(200, 214, 230, 0.85);
+          padding: 3px 10px;
+          border-radius: 999px;
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          background: rgba(18, 26, 34, 0.5);
+          white-space: nowrap;
+        }
+        .bonsai-scope .bonsai-chat-earlier-rule {
+          flex: 1;
+          height: 1px;
+          background: rgba(255, 255, 255, 0.09);
+        }
+        /* A day line under an opened "N earlier" ("Yesterday · 30"): the same line, a little brighter
+           (opacity .9, the drawing's grouped rows), with a chevron at the right end that shows
+           whether the day is open. The opened "N earlier" line carries the chevron too. */
+        .bonsai-scope .bonsai-chat-earlier-day-row {
+          opacity: 0.9;
+        }
+        .bonsai-scope .bonsai-chat-earlier-chev {
+          font-size: ${textPx(13)};
+          line-height: 1;
+          color: #8fa8c4;
+        }
+
+        /* Empty slot / create-position preview, directly under the slot row. */
+        .bonsai-scope .bonsai-chat-empty-state {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+          padding: 14px 0 6px;
+        }
+        .bonsai-scope .bonsai-chat-empty-logo {
+          width: 52px;
+          height: 52px;
+          opacity: 0.16;
+          filter: grayscale(1) brightness(1.7);
+        }
+        .bonsai-scope .bonsai-chat-empty-caption {
+          font-style: italic;
+          font-size: ${textPx(13)};
+          line-height: 1.55;
+          max-width: 210px;
+          text-align: center;
+          color: rgba(143, 168, 196, 0.5);
+        }
+
+        /*
+         * Plan 62 3c: the "This answer / Session · N" tabs at the top of the newest answer's own
+         * Show details panel. One real D-pad stop (the row itself), same as the chip ladder just
+         * below it — Left/Right pick a tab, they never become two separate Focusables.
+         *
+         * The focus ring goes on the row, in the standard white (design-tokens.md "Focus rings");
+         * which tab is selected is a separate, deliberately different cue (background fill, not a
+         * colour ring) so the two questions -- "where is the D-pad ring" and "which tab is picked"
+         * -- read as different facts, the same reasoning the chip ladder's own header comment gives
+         * for not reusing the real focus ring as its active-chip cue.
+         */
+        .bonsai-scope .bonsai-details-tabs-row {
+          outline: none;
+          border-radius: 6px;
+        }
+        .bonsai-scope .bonsai-details-tabs-row.gpfocus,
+        .bonsai-scope .bonsai-details-tabs-row:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.9) !important;
+          outline-offset: 2px !important;
+        }
+        .bonsai-scope .bonsai-details-tab {
+          flex: 1 1 0;
+          text-align: center;
+          padding: 6px 4px;
+          border-radius: 6px;
+          font-size: ${textPx(10)};
+          font-weight: 600;
+          letter-spacing: 0.03em;
+          color: #8fa8c4;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          cursor: pointer;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .bonsai-scope .bonsai-details-tab--active {
+          color: #e2e8f0;
+          background: rgba(156, 231, 255, 0.14);
+          border-color: rgba(156, 231, 255, 0.4);
+        }
+        /*
+         * Plan 68, as drawn (workshop:planning/assets/68-chat-sums-itself-up.html). *Sum up this chat*
+         * takes Clear's own quiet full-width look, moved to the top of the Session tab; greyed out
+         * it is still a D-pad stop (measured 2026-09-16), so it keeps the white ring.
+         */
+        .bonsai-scope .bonsai-sumup-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          width: 100%;
+          box-sizing: border-box;
+          padding: 8px 0;
+          border-radius: 6px;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: transparent;
+          color: #8fa8c4;
+          font-size: ${textPx(11)};
+          font-weight: 700;
+          white-space: nowrap;
+          cursor: pointer;
+          outline: none;
+        }
+        .bonsai-scope .bonsai-sumup-btn--off {
+          opacity: 0.45;
+          cursor: default;
+        }
+        .bonsai-scope .bonsai-sumup-btn.gpfocus,
+        .bonsai-scope .bonsai-sumup-btn:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.9) !important;
+          outline-offset: 2px !important;
+          box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.12);
+          color: #dce8f4;
+        }
+        .bonsai-scope .bonsai-sumup-reason {
+          font-size: ${textPx(11)};
+          line-height: 1.4;
+          color: #8fa8c4;
+          padding: 0 2px;
+        }
+        /* The summary card: the chip ladder's own panel, with its edge in the session blue. */
+        .bonsai-scope .bonsai-sumup-card {
+          box-sizing: border-box;
+          padding: 8px 10px;
+          border-radius: 8px;
+          border: 1px solid rgba(125, 211, 252, 0.3);
+          background: rgba(14, 22, 32, 0.55);
+          font-size: ${textPx(11)};
+          line-height: 1.45;
+          color: #dce8f4;
+          outline: none;
+        }
+        .bonsai-scope .bonsai-sumup-card.gpfocus,
+        .bonsai-scope .bonsai-sumup-card:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.9) !important;
+          outline-offset: 2px !important;
+        }
+        .bonsai-scope .bonsai-sumup-card-head {
+          display: flex;
+          justify-content: space-between;
+          gap: 8px;
+          font-size: ${textPx(10)};
+          font-weight: 700;
+          letter-spacing: 0.03em;
+          color: #9fb7d5;
+          margin-bottom: 6px;
+        }
+        .bonsai-scope .bonsai-sumup-card-lines {
+          margin: 0;
+          padding-left: 14px;
+        }
+        .bonsai-scope .bonsai-sumup-card-lines li {
+          margin: 0 0 3px;
+        }
+        .bonsai-scope .bonsai-sumup-card-foot {
+          margin-top: 6px;
+          padding-top: 6px;
+          border-top: 1px solid rgba(255, 255, 255, 0.07);
+          font-size: ${textPx(10)};
+          line-height: 1.4;
+          color: #8fa8c4;
+        }
+        /*
+         * The note under the answer that came right after summing up: the waiting line's muted
+         * blue, a squeeze icon in the session blue. A stop only on the newest answer.
+         */
+        .bonsai-scope .bonsai-chat-summary-note {
+          display: flex;
+          align-items: flex-start;
+          gap: 6px;
+          width: 92%;
+          box-sizing: border-box;
+          padding: 1px 2px;
+          border-radius: 4px;
+          font-size: ${textPx(11)};
+          line-height: 1.35;
+          color: #9fb7d5;
+          cursor: pointer;
+          outline: none;
+        }
+        .bonsai-scope .bonsai-chat-summary-note--older {
+          cursor: default;
+        }
+        .bonsai-scope .bonsai-chat-summary-note-icon {
+          flex: 0 0 auto;
+          margin-top: 1px;
+          color: #9ce7ff;
+          opacity: 0.8;
+        }
+        .bonsai-scope .bonsai-chat-summary-note.gpfocus,
+        .bonsai-scope .bonsai-chat-summary-note:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.9) !important;
+          outline-offset: 2px !important;
+          color: #dce8f4;
+        }
+        /* Summing up failed or ran out of time: the slow-answer line's warning yellow. */
+        .bonsai-scope .bonsai-chat-summary-warn {
+          color: #f2cf84;
+          font-size: ${textPx(12)};
+          line-height: 1.35;
+          margin: 8px 0 4px;
         }
 
         `;

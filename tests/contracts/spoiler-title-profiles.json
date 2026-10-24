@@ -1,0 +1,333 @@
+{
+  "note": "Built-in spoiler title profiles. Asserted from both languages — see tests/contracts/README.md.",
+  "low_narrative_app_ids": [
+    "2321470",
+    "550",
+    "1222670",
+    "782330",
+    "1942280"
+  ],
+  "protect_progression_app_ids": [
+    "1086940",
+    "377160",
+    "1145360",
+    "1091500",
+    "1547000",
+    "1174180",
+    "220",
+    "620",
+    "362890",
+    "367520",
+    "3240220",
+    "271590",
+    "12210",
+    "22380",
+    "1623730",
+    "489830"
+  ],
+  "cases": [
+    {
+      "name": "black mesa appid protects progression (2026-09-05 tranche)",
+      "app_id": "362890",
+      "app_name": "",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "gta v legacy build protects progression like the enhanced one",
+      "app_id": "271590",
+      "app_name": "",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "doom eternal appid is low narrative",
+      "app_id": "782330",
+      "app_name": "",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "an N64 shortcut with no appid is low narrative by name",
+      "app_id": "",
+      "app_name": "Super Mario 64",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "the doom 64 shortcut name on the Deck is low narrative",
+      "app_id": "",
+      "app_name": "Doom 64: Retribution",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "paper mario is a chapter story and protects by name",
+      "app_id": "",
+      "app_name": "Paper Mario: The Thousand-Year Door",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "new vegas protects by name when only the title is known",
+      "app_id": "",
+      "app_name": "Fallout: New Vegas",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "drg survivor appid is low narrative",
+      "app_id": "2321470",
+      "app_name": "",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "l4d2 appid is low narrative",
+      "app_id": "550",
+      "app_name": "",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "sims 4 appid is low narrative",
+      "app_id": "1222670",
+      "app_name": "",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "hades appid protects progression",
+      "app_id": "1145360",
+      "app_name": "",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "ocarina of time protects progression by name, having no AppID",
+      "app_id": "",
+      "app_name": "The Legend of Zelda: Ocarina of Time",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "rdr2 appid protects progression",
+      "app_id": "1174180",
+      "app_name": "",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "half-life 2 appid protects progression",
+      "app_id": "220",
+      "app_name": "",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "portal 2 appid protects progression",
+      "app_id": "620",
+      "app_name": "",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "unlisted appid is unknown",
+      "app_id": "9999999",
+      "app_name": "Some Unlisted Game",
+      "expected": "unknown"
+    },
+    {
+      "name": "no appid and no title is unknown",
+      "app_id": "",
+      "app_name": "",
+      "expected": "unknown"
+    },
+    {
+      "name": "appid is trimmed before lookup",
+      "app_id": "  2321470  ",
+      "app_name": "",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "state of emergency title fallback when no appid",
+      "app_id": "",
+      "app_name": "State of Emergency",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "title fallback ignores case and inner whitespace",
+      "app_id": "",
+      "app_name": "  STATE   OF   Emergency  ",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "title fallback matches inside a longer title",
+      "app_id": "",
+      "app_name": "State of Emergency 2",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "appid outranks a low-narrative title fallback",
+      "app_id": "1145360",
+      "app_name": "State of Emergency",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "a title known by name resolves without an AppID (D19)",
+      "app_id": "",
+      "app_name": "Baldur's Gate 3",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "D19 text-resolved canonical title keeps its protect profile",
+      "app_id": "",
+      "app_name": "The Legend of Zelda: Ocarina of Time",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "D19 text-resolved low-narrative title by name",
+      "app_id": "",
+      "app_name": "Deep Rock Galactic: Survivor",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "a title in neither table is still unknown",
+      "app_id": "",
+      "app_name": "Some Game We Have Never Heard Of",
+      "expected": "unknown"
+    },
+    {
+      "name": "protect wins when a name matches both tables",
+      "app_id": "",
+      "app_name": "Hades",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "the five Mario Party shortcuts are low narrative by name (58 phase 1)",
+      "app_id": "",
+      "app_name": "Mario Party 6",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "58 phase 1 lane G: donkey kong 64 is low narrative by name",
+      "app_id": "",
+      "app_name": "Donkey Kong 64",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "58 phase 1 lane G: yoshi's story is low narrative by name",
+      "app_id": "",
+      "app_name": "Yoshi's Story",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "58 phase 1 lane G: diddy kong racing is low narrative by name",
+      "app_id": "",
+      "app_name": "Diddy Kong Racing",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "58 phase 1 lane G: the 1999 smash bros shortcut is low narrative by name, like melee",
+      "app_id": "",
+      "app_name": "Super Smash Bros.",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "58 phase 1 lane G: gta iii definitive edition protects progression by name like its siblings",
+      "app_id": "",
+      "app_name": "Grand Theft Auto III - The Definitive Edition",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "plan 70 helper F: brotato appid is low narrative (2026-09-26)",
+      "app_id": "1942280",
+      "app_name": "",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "plan 70 helper F: palworld appid protects progression (2026-09-26)",
+      "app_id": "1623730",
+      "app_name": "",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "plan 70 helper F: palworld protects progression by name on a non-Steam shortcut with no appid",
+      "app_id": "",
+      "app_name": "Palworld",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "plan 70 helper G: skyrim appid protects progression",
+      "app_id": "489830",
+      "app_name": "",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "plan 70 helper G: skyrim protects progression by name, having no appid",
+      "app_id": "",
+      "app_name": "The Elder Scrolls V: Skyrim Special Edition",
+      "expected": "protect_progression"
+    }
+  ],
+  "description": "Title-name resolution widened 2026-08-18 by D19: a title recognised from the question text has no AppID to look up, so the name tables must carry the same two profiles. Before that, only 'State of Emergency' resolved by name.",
+  "question_cases": [
+    {
+      "name": "hollow knight named outright",
+      "question": "How do I beat the boss in the Soul Sanctum in Hollow Knight, quick tips please",
+      "expected": true
+    },
+    {
+      "name": "hades named in lower case",
+      "question": "how do i beat hades",
+      "expected": true
+    },
+    {
+      "name": "a story game with a number",
+      "question": "tips for the tower in Fallout 4?",
+      "expected": true
+    },
+    {
+      "name": "a no-story game named is not a story game",
+      "question": "how do I dodge enemy projectiles in deep rock survivor",
+      "expected": false
+    },
+    {
+      "name": "no game named",
+      "question": "what class should I play",
+      "expected": false
+    },
+    {
+      "name": "a title inside a longer word does not count",
+      "question": "which shades of blue suit my build",
+      "expected": false
+    },
+    {
+      "name": "empty question",
+      "question": "",
+      "expected": false
+    }
+  ],
+  "turn_cases": [
+    {
+      "name": "no-story game running, story game named: protect",
+      "app_id": "2321470",
+      "app_name": "Deep Rock Galactic: Survivor",
+      "question": "How do I beat the boss in the Soul Sanctum in Hollow Knight?",
+      "expected": "protect_progression"
+    },
+    {
+      "name": "no-story game running, its own question: stays low narrative",
+      "app_id": "2321470",
+      "app_name": "Deep Rock Galactic: Survivor",
+      "question": "how do I dodge enemy projectiles",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "nothing running, story game named: unknown here (already conservative; the named game is looked up elsewhere)",
+      "app_id": "",
+      "app_name": "",
+      "question": "how do i beat hades",
+      "expected": "unknown"
+    },
+    {
+      "name": "nothing running, nothing named: unknown",
+      "app_id": "",
+      "app_name": "",
+      "question": "what class should I play",
+      "expected": "unknown"
+    },
+    {
+      "name": "story game running, no-story game named: stays protect",
+      "app_id": "1145360",
+      "app_name": "Hades",
+      "question": "how do I dodge in deep rock survivor",
+      "expected": "protect_progression"
+    }
+  ]
+}

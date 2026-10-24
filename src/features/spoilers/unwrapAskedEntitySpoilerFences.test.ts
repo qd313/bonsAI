@@ -1,0 +1,294 @@
+import { describe, expect, it } from "vitest";
+import {
+  extractAskedBeatEntity,
+  shouldUnwrapSpoilerFence,
+  unwrapAskedEntitySpoilerFences,
+} from "./unwrapAskedEntitySpoilerFences";
+
+describe("unwrapAskedEntitySpoilerFences", () => {
+  it("extracts Glyphid Dreadnought from beat phrasing", () => {
+    expect(extractAskedBeatEntity("How do I beat Glyphid Dreadnought?")).toBe(
+      "Glyphid Dreadnought"
+    );
+  });
+
+  it("unwraps fence that contains the asked entity", () => {
+    const q = "How do I beat Glyphid Dreadnought?";
+    const raw = [
+      "Here is the plan.",
+      "",
+      "```bonsai-spoiler",
+      "Focus fire Glyphid Dreadnought weak points while kiting.",
+      "```",
+      "",
+      "Pick a branch below.",
+    ].join("\n");
+    const out = unwrapAskedEntitySpoilerFences(raw, q);
+    expect(out).not.toContain("```bonsai-spoiler");
+    expect(out).toContain("Focus fire Glyphid Dreadnought weak points while kiting.");
+  });
+
+  it("keeps unrelated spoiler fences when AppID is narrative", () => {
+    const q = "How do I beat Glyphid Dreadnought?";
+    const raw = [
+      "```bonsai-spoiler",
+      "The true ending is that the dwarf retires.",
+      "```",
+    ].join("\n");
+    expect(unwrapAskedEntitySpoilerFences(raw, { question: q, appId: "1174180" })).toContain(
+      "```bonsai-spoiler"
+    );
+  });
+
+  it("unwraps all fences for known low-spoiler-risk AppIDs", () => {
+    const raw = [
+      "```bonsai-spoiler",
+      "Dodge the charge and focus the crystal.",
+      "```",
+    ].join("\n");
+    const out = unwrapAskedEntitySpoilerFences(raw, { appId: "2321470" });
+    expect(out).not.toContain("```bonsai-spoiler");
+    expect(out).toContain("Dodge the charge and focus the crystal.");
+  });
+
+  it("unwraps all fences when spoiler consent is effective", () => {
+    const raw = [
+      "```bonsai-spoiler",
+      "The true ending is that the dwarf retires.",
+      "```",
+    ].join("\n");
+    const out = unwrapAskedEntitySpoilerFences(raw, {
+      question: "Where should I go?",
+      appId: "1174180",
+      spoilerConsentEffective: true,
+    });
+    expect(out).not.toContain("```bonsai-spoiler");
+    expect(out).toContain("The true ending is that the dwarf retires.");
+  });
+
+  it("unwraps all fences for L4D2 low-narrative AppID", () => {
+    const raw = [
+      "```bonsai-spoiler",
+      "Hold the choke point and watch the rear.",
+      "```",
+    ].join("\n");
+    const out = unwrapAskedEntitySpoilerFences(raw, { appId: "550" });
+    expect(out).not.toContain("```bonsai-spoiler");
+    expect(out).toContain("Hold the choke point and watch the rear.");
+  });
+
+  // Gap 1 (plan 54): the screen only ever checked the AppID for a low-narrative title, so an
+  // emulator shortcut with no AppID — reachable only by name — kept its boxes shut even though
+  // the prompt was told to relax for it.
+  it("unwraps all fences for a name-only low-narrative title (no AppID)", () => {
+    const raw = [
+      "```bonsai-spoiler",
+      "Circle-strafe the boss and pop the weak point when it opens.",
+      "```",
+    ].join("\n");
+    const out = unwrapAskedEntitySpoilerFences(raw, {
+      appId: "",
+      appName: "Doom 64: Retribution",
+    });
+    expect(out).not.toContain("```bonsai-spoiler");
+    expect(out).toContain("Circle-strafe the boss and pop the weak point when it opens.");
+  });
+
+  it("keeps fences shut for a name-only story title (no AppID) with no entity named", () => {
+    const raw = [
+      "```bonsai-spoiler",
+      "The Courier's true allegiance is revealed at the dam.",
+      "```",
+    ].join("\n");
+    const out = unwrapAskedEntitySpoilerFences(raw, {
+      question: "What should I do next?",
+      appId: "",
+      appName: "Fallout: New Vegas",
+    });
+    expect(out).toContain("```bonsai-spoiler");
+  });
+
+  // Gap 2 (plan 54): the backend recognises far more ways of naming a boss than the local regex
+  // here does ("wheatley fight" names the boss first — the local patterns only read
+  // "beat/defeat/kill/fight/survive X" and "tips for X"). When the backend already worked out the
+  // named thing, it must win outright so the screen never disagrees with the prompt it was sent.
+  it("unwraps a fence mentioning the backend's named entity even when the local regex cannot read the question", () => {
+    expect(extractAskedBeatEntity("wheatley fight")).toBe("");
+    const raw = [
+      "```bonsai-spoiler",
+      "Wheatley starts lying the moment you reach the surface.",
+      "```",
+    ].join("\n");
+    const out = unwrapAskedEntitySpoilerFences(raw, {
+      question: "wheatley fight",
+      askedEntity: "Wheatley",
+    });
+    expect(out).not.toContain("```bonsai-spoiler");
+    expect(out).toContain("Wheatley starts lying the moment you reach the surface.");
+  });
+
+  it("leaves a fence shut that does not mention the backend's named entity", () => {
+    const raw = [
+      "```bonsai-spoiler",
+      "The other core reveals its own twist much later.",
+      "```",
+    ].join("\n");
+    const out = unwrapAskedEntitySpoilerFences(raw, {
+      question: "wheatley fight",
+      askedEntity: "Wheatley",
+    });
+    expect(out).toContain("```bonsai-spoiler");
+  });
+});
+
+describe("shouldUnwrapSpoilerFence", () => {
+  it("qualifies on consent regardless of fence text", () => {
+    expect(
+      shouldUnwrapSpoilerFence("```bonsai-spoiler\nThe true ending", {
+        spoilerConsentEffective: true,
+      })
+    ).toBe(true);
+  });
+
+  it("qualifies on a low-narrative AppID regardless of fence text", () => {
+    expect(
+      shouldUnwrapSpoilerFence("```bonsai-spoiler\nDodge the charge", { appId: "2321470" })
+    ).toBe(true);
+  });
+
+  it("qualifies when the fence mentions the asked entity", () => {
+    expect(
+      shouldUnwrapSpoilerFence(
+        "```bonsai-spoiler\nFocus fire Glyphid Dreadnought weak points",
+        { question: "How do I beat Glyphid Dreadnought?" }
+      )
+    ).toBe(true);
+  });
+
+  it("does not qualify on a narrative title with no entity named", () => {
+    expect(
+      shouldUnwrapSpoilerFence("```bonsai-spoiler\nThe true ending is that the dwarf retires", {
+        question: "Where should I go?",
+        appId: "1174180",
+      })
+    ).toBe(false);
+  });
+
+  // Gap 1 (plan 54): the mid-stream gate must agree with the closed-fence unwrap above, or a
+  // fence that opens once finished would still show the "hidden until complete" chip while it
+  // streams in.
+  it("qualifies a name-only low-narrative title with no AppID", () => {
+    expect(
+      shouldUnwrapSpoilerFence("```bonsai-spoiler\nCircle-strafe the boss", {
+        appId: "",
+        appName: "Doom 64: Retribution",
+      })
+    ).toBe(true);
+  });
+
+  // Gap 2 (plan 54): the mid-stream gate must use the backend's named entity too, or a name-first
+  // question would stream with the "hidden until complete" chip and then snap open once finished.
+  it("qualifies on the backend's named entity when the local regex cannot read the question", () => {
+    expect(
+      shouldUnwrapSpoilerFence("```bonsai-spoiler\nWheatley starts lying immediately", {
+        question: "wheatley fight",
+        askedEntity: "Wheatley",
+      })
+    ).toBe(true);
+  });
+});
+
+/*
+ * Plan 70 (D112 #7): the screen's own un-hide could open a cover the back end made on purpose.
+ * The question only DESCRIBED the boss, the local reading of it ("spell casting boss at the top
+ * of the sanctum") shares enough words with a cover that restates the description, and the cover
+ * came off with the boss's name inside it.
+ */
+describe("a cover naming a protected boss the person never typed", () => {
+  const question = "in hollow knight how do I beat the spell casting boss at the top of the sanctum";
+  const cover = [
+    "```bonsai-spoiler",
+    "The spell casting boss at the top of the Soul Sanctum is the Soul Master.",
+    "```",
+  ].join("\n");
+
+  it("was opened by word overlap before this fix (the leak this guards)", () => {
+    expect(unwrapAskedEntitySpoilerFences(cover, { question })).not.toContain("```bonsai-spoiler");
+  });
+
+  it("stays shut once the turn's protected names are known", () => {
+    const opts = { question, protectedNames: ["Soul Master", "Soul Tyrant"] };
+    expect(unwrapAskedEntitySpoilerFences(cover, opts)).toContain("```bonsai-spoiler");
+    expect(shouldUnwrapSpoilerFence(cover, opts)).toBe(false);
+  });
+
+  it("stays shut mid-stream too, whatever case the name arrives in", () => {
+    expect(
+      shouldUnwrapSpoilerFence("```bonsai-spoiler\nThe spell casting boss at the top is the SOUL MASTER", {
+        question,
+        protectedNames: ["Soul Master"],
+      })
+    ).toBe(false);
+  });
+
+  it("still opens a cover that names only what the person typed", () => {
+    const named = "```bonsai-spoiler\nSoul Master teleports between attacks.\n```";
+    const out = unwrapAskedEntitySpoilerFences(named, {
+      question: "how do I beat soul master",
+      askedEntity: "Soul Master",
+      protectedNames: ["Soul Tyrant"],
+    });
+    expect(out).not.toContain("```bonsai-spoiler");
+  });
+
+  it("ignores a back-end 'asked about' name the question never contained", () => {
+    const out = unwrapAskedEntitySpoilerFences(
+      "```bonsai-spoiler\nSoul Master teleports between attacks.\n```",
+      { question: "how do I beat the mage boss", askedEntity: "Soul Master" }
+    );
+    expect(out).toContain("```bonsai-spoiler");
+  });
+
+  it("does not reopen a word that only contains the name (Soul Mastery)", () => {
+    const out = unwrapAskedEntitySpoilerFences(
+      "```bonsai-spoiler\nThe spell casting boss rewards Soul Mastery at the top of the sanctum.\n```",
+      { question, protectedNames: ["Soul Master"] }
+    );
+    expect(out).not.toContain("```bonsai-spoiler");
+  });
+
+  it("keeps covers shut when a no-story game runs but the question names a story game", () => {
+    // Plan 77 helper J: Deep Rock Galactic Survivor running, a Hollow Knight question. The
+    // running game's "no story" pass must not open Hollow Knight's covers.
+    const raw = [
+      "```bonsai-spoiler",
+      "The Soul Master falls after his second teleport.",
+      "```",
+    ].join("\n");
+    const question =
+      "How do I beat the boss in the Soul Sanctum in Hollow Knight, quick tips please";
+    const opts = { question, appId: "2321470", appName: "Deep Rock Galactic: Survivor" };
+    expect(unwrapAskedEntitySpoilerFences(raw, opts)).toContain("```bonsai-spoiler");
+    expect(shouldUnwrapSpoilerFence(raw, opts)).toBe(false);
+  });
+
+  it("still opens every cover on a question about the running no-story game", () => {
+    const raw = ["```bonsai-spoiler", "Dodge the charge.", "```"].join("\n");
+    const opts = {
+      question: "how do I dodge enemy projectiles in deep rock survivor",
+      appId: "2321470",
+      appName: "Deep Rock Galactic: Survivor",
+    };
+    expect(unwrapAskedEntitySpoilerFences(raw, opts)).not.toContain("```bonsai-spoiler");
+  });
+
+  it("explicit consent still opens the cover of a story game named while a no-story game runs", () => {
+    const raw = ["```bonsai-spoiler", "The Soul Master falls.", "```"].join("\n");
+    const opts = {
+      question: "Hollow Knight soul sanctum boss, spoilers are okay",
+      appId: "2321470",
+      spoilerConsentEffective: true,
+    };
+    expect(unwrapAskedEntitySpoilerFences(raw, opts)).not.toContain("```bonsai-spoiler");
+  });
+});

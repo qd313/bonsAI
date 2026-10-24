@@ -18,8 +18,10 @@ RECORD_METHOD="failed"
 RESOLVED_MODE="unknown"
 PLUGIN_UI="no"
 RECORD_SECONDS=15
+RECORD_QUALITY="compressed"
 RUN_EPOCH=$(date +%s)
-MIN_RECORD_BYTES=524288
+# compressed VP8 clips can be small on quiet UI; full MJPEG is large.
+MIN_RECORD_BYTES=100000
 
 bonsai_common_init
 
@@ -32,6 +34,7 @@ Record Steam Deck UI for bonsAI / Decky debugging (composited QAM + plugin UI re
 Options:
   --mode MODE         auto | game | desktop (default: auto)
   --seconds N         Recording duration in seconds (default: 15)
+  --quality MODE      compressed (default, VP8) | full (MJPEG / high bitrate)
   --out PATH          Output video path (default: /tmp/deck_record.mkv or ~/Videos/...)
   --diag PATH         Diagnostic log path
   --result PATH       Machine-readable result file
@@ -45,6 +48,9 @@ Game mode:   pipewire gamescope node only (QAM + Decky + bonsAI). No kmsgrab suc
 Desktop:     wf-recorder on Plasma Wayland socket.
 
 Open QAM and bonsAI before recording in game mode.
+
+Default --quality compressed keeps clips small (VP8 ~2.5 Mbps). Use --quality full for
+near-lossless MJPEG when you need maximum visual fidelity (much larger files).
 
 On completion prints:
   ---RECORD_RESULT--- mode=... method=... bytes=... path=... seconds=... plugin_ui=expected|no
@@ -82,6 +88,12 @@ bonsai_finalize_recording() {
   local partial="$1" final="$2"
   [ -f "$partial" ] || return 1
   if validate_recording "$partial"; then
+    # Valid partial: promote it to the final path (unless already the same file).
+    # Without this move the caller deletes the partial and leaves a 0-byte final.
+    if [ "$partial" != "$final" ]; then
+      mv -f "$partial" "$final" 2>/dev/null || return 1
+      diag "finalize: promoted valid partial -> $final"
+    fi
     return 0
   fi
   if ! command -v ffmpeg >/dev/null 2>&1; then
@@ -101,56 +113,129 @@ bonsai_finalize_recording() {
   return 1
 }
 
+bonsai_pw_env_run() {
+  # pipewiresrc must talk to the deck user's PipeWire session (not root).
+  local uid rd
+  uid=$(id -u "$TARGET_USER" 2>/dev/null) || uid=1000
+  rd="/run/user/$uid"
+  if [ "$(id -u)" -eq 0 ]; then
+    sudo -u "$TARGET_USER" env XDG_RUNTIME_DIR="$rd" PATH="$PATH" "$@"
+  else
+    env XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-$rd}" "$@"
+  fi
+}
+
 bonsai_run_gst_pipewire_target() {
   local target="$1" duration="$2" partial="$3" gst_log="$4"
-  local timeout_sec
+  local timeout_sec rc quality="${RECORD_QUALITY:-compressed}"
   timeout_sec=$((duration + 8))
 
+  if ! command -v timeout >/dev/null 2>&1; then
+    diag "pipewire-gamescope: timeout command missing"
+    return 1
+  fi
+
+  # Prefer real H.264 when available. Soft fallbacks:
+  #   compressed (default) -> vp8enc (~2.5 Mbps) then low-quality jpegenc
+  #   full                 -> jpegenc q=85 then high-bitrate vp8enc
+  # Do not use on-disconnect=true — pipewiresrc expects enum none|eos|error.
   if gst-inspect-1.0 vah264enc >/dev/null 2>&1; then
-    if command -v timeout >/dev/null 2>&1; then
-      timeout --signal=INT "$timeout_sec" gst-launch-1.0 -e \
-        pipewiresrc do-timestamp=true target-object="$target" on-disconnect=true \
+    diag "pipewire-gamescope: using encoder=vah264enc quality=$quality"
+    if [ "$quality" = "full" ]; then
+      bonsai_pw_env_run timeout --signal=INT "$timeout_sec" gst-launch-1.0 -e \
+        pipewiresrc do-timestamp=true target-object="$target" \
         ! queue max-size-buffers=4 leaky=downstream \
         ! video/x-raw,format=NV12 \
         ! videoconvert ! vah264enc ! h264parse \
         ! matroskamux ! filesink location="$partial" \
         >>"$gst_log" 2>&1
-      return $?
+    else
+      bonsai_pw_env_run timeout --signal=INT "$timeout_sec" gst-launch-1.0 -e \
+        pipewiresrc do-timestamp=true target-object="$target" \
+        ! queue max-size-buffers=4 leaky=downstream \
+        ! video/x-raw,format=NV12 \
+        ! videoconvert ! vah264enc bitrate=2500 ! h264parse \
+        ! matroskamux ! filesink location="$partial" \
+        >>"$gst_log" 2>&1
     fi
+    rc=$?
   elif gst-inspect-1.0 vaapih264enc >/dev/null 2>&1; then
-    if command -v timeout >/dev/null 2>&1; then
-      timeout --signal=INT "$timeout_sec" gst-launch-1.0 -e \
-        pipewiresrc do-timestamp=true target-object="$target" on-disconnect=true \
-        ! queue ! video/x-raw,format=NV12 \
-        ! videoconvert ! vaapih264enc ! h264parse \
-        ! matroskamux ! filesink location="$partial" \
-        >>"$gst_log" 2>&1
-      return $?
-    fi
+    diag "pipewire-gamescope: using encoder=vaapih264enc quality=$quality"
+    bonsai_pw_env_run timeout --signal=INT "$timeout_sec" gst-launch-1.0 -e \
+      pipewiresrc do-timestamp=true target-object="$target" \
+      ! queue ! video/x-raw,format=NV12 \
+      ! videoconvert ! vaapih264enc ! h264parse \
+      ! matroskamux ! filesink location="$partial" \
+      >>"$gst_log" 2>&1
+    rc=$?
   elif gst-inspect-1.0 x264enc >/dev/null 2>&1; then
-    if command -v timeout >/dev/null 2>&1; then
-      timeout --signal=INT "$timeout_sec" gst-launch-1.0 -e \
-        pipewiresrc do-timestamp=true target-object="$target" on-disconnect=true \
-        ! queue ! videoconvert ! x264enc speed-preset=ultrafast tune=zerolatency ! h264parse \
+    diag "pipewire-gamescope: using encoder=x264enc quality=$quality"
+    if [ "$quality" = "full" ]; then
+      bonsai_pw_env_run timeout --signal=INT "$timeout_sec" gst-launch-1.0 -e \
+        pipewiresrc do-timestamp=true target-object="$target" \
+        ! queue ! videoconvert ! x264enc speed-preset=fast tune=zerolatency ! h264parse \
         ! matroskamux ! filesink location="$partial" \
         >>"$gst_log" 2>&1
-      return $?
+    else
+      bonsai_pw_env_run timeout --signal=INT "$timeout_sec" gst-launch-1.0 -e \
+        pipewiresrc do-timestamp=true target-object="$target" \
+        ! queue ! videoconvert ! x264enc speed-preset=ultrafast tune=zerolatency bitrate=2500 ! h264parse \
+        ! matroskamux ! filesink location="$partial" \
+        >>"$gst_log" 2>&1
     fi
+    rc=$?
+  elif [ "$quality" = "full" ] && gst-inspect-1.0 jpegenc >/dev/null 2>&1; then
+    diag "pipewire-gamescope: using encoder=jpegenc (full quality)"
+    bonsai_pw_env_run timeout --signal=INT "$timeout_sec" gst-launch-1.0 -e \
+      pipewiresrc do-timestamp=true target-object="$target" \
+      ! queue max-size-buffers=4 leaky=downstream \
+      ! videoconvert ! jpegenc quality=85 \
+      ! matroskamux ! filesink location="$partial" \
+      >>"$gst_log" 2>&1
+    rc=$?
+  elif gst-inspect-1.0 vp8enc >/dev/null 2>&1; then
+    local vp8_br=2500000
+    [ "$quality" = "full" ] && vp8_br=8000000
+    diag "pipewire-gamescope: using encoder=vp8enc quality=$quality bitrate=$vp8_br"
+    bonsai_pw_env_run timeout --signal=INT "$timeout_sec" gst-launch-1.0 -e \
+      pipewiresrc do-timestamp=true target-object="$target" \
+      ! queue max-size-buffers=4 leaky=downstream \
+      ! videoconvert ! vp8enc deadline=1 target-bitrate=$vp8_br \
+      ! matroskamux ! filesink location="$partial" \
+      >>"$gst_log" 2>&1
+    rc=$?
+  elif gst-inspect-1.0 jpegenc >/dev/null 2>&1; then
+    # Last resort when VP8 missing: lower JPEG quality for size.
+    diag "pipewire-gamescope: using encoder=jpegenc quality=40 (compressed last resort)"
+    bonsai_pw_env_run timeout --signal=INT "$timeout_sec" gst-launch-1.0 -e \
+      pipewiresrc do-timestamp=true target-object="$target" \
+      ! queue max-size-buffers=4 leaky=downstream \
+      ! videoconvert ! jpegenc quality=40 \
+      ! matroskamux ! filesink location="$partial" \
+      >>"$gst_log" 2>&1
+    rc=$?
+  else
+    return 1
   fi
-  return 1
+  return "$rc"
 }
 
 bonsai_try_pipewire_gamescope_record() {
   local duration="$1"
   local partial out_tmp gst_log node_id
   bonsai_ensure_gstreamer_pipewire || {
-    diag "pipewire-gamescope: gstreamer/pipewiresrc not available"
+    diag "pipewire-gamescope: gstreamer/pipewiresrc/encoder not available"
+    diag "pipewire-gamescope: need pipewiresrc plus vah264enc/x264enc or jpegenc/vp8enc"
+    bonsai_gst_encoder_inventory | while IFS= read -r line; do diag "  $line"; done
     return 1
   }
-  if ! bonsai_gst_has_va_h264; then
-    diag "pipewire-gamescope: no H.264 encoder found"
+  if ! bonsai_gst_has_any_encoder; then
+    diag "pipewire-gamescope: no encoder found after ensure"
+    bonsai_gst_encoder_inventory | while IFS= read -r line; do diag "  $line"; done
     return 1
   fi
+  diag "pipewire-gamescope: encoder inventory:"
+  bonsai_gst_encoder_inventory | while IFS= read -r line; do diag "  $line"; done
 
   partial="${OUT}.partial.$$"
   out_tmp="$OUT"
@@ -158,20 +243,33 @@ bonsai_try_pipewire_gamescope_record() {
   gst_log=/tmp/bonsai_record_gst.log
   : >"$gst_log"
 
-  diag "pipewire-gamescope: starting gst-launch duration=${duration}s target=gamescope"
-  bonsai_run_gst_pipewire_target "gamescope" "$duration" "$partial" "$gst_log" || true
+  # Ask for the compositor's video node by its numeric id, not by name. On SteamOS
+  # (measured 2026-09-09) target-object=gamescope connects but never delivers a
+  # frame, so the file stays header-only, while the node id records fine. pw-cli
+  # prints each node's "id N," line before its properties, so remember the last id
+  # seen and report it when the block turns out to be the gamescope video source.
+  node_id=$(bonsai_pw_env_run pw-cli ls Node 2>/dev/null | awk '
+    /^[[:space:]]*id [0-9]+,/ { if (name && vid) { print id; exit } id=$2; sub(",", "", id); name=0; vid=0 }
+    /media\.class = "Video\/Source"/ { vid=1 }
+    /node\.name = "gamescope"/ { name=1 }
+    END { if (name && vid) print id }')
+  if [ -z "$node_id" ]; then
+    node_id=$(bonsai_pw_env_run pw-cli ls Node 2>/dev/null | awk '
+      /^[[:space:]]*id [0-9]+,/ { id=$2; sub(",", "", id) }
+      /node\.name = "gamescope"/ { print id; exit }')
+  fi
+
+  if [ -n "$node_id" ]; then
+    diag "pipewire-gamescope: starting gst-launch duration=${duration}s target=node id $node_id"
+    bonsai_run_gst_pipewire_target "$node_id" "$duration" "$partial" "$gst_log" || true
+  else
+    diag "pipewire-gamescope: no gamescope video node found in pw-cli ls Node"
+  fi
 
   if [ ! -f "$partial" ] || ! validate_recording "$partial"; then
-    diag "pipewire-gamescope: target-object=gamescope failed; trying pw-cli node id"
+    diag "pipewire-gamescope: node id path failed (id=${node_id:-none}); trying target-object=gamescope by name"
     rm -f "$partial" 2>/dev/null
-    node_id=$(pw-cli ls Node 2>/dev/null | awk '/object.name = "gamescope"/{found=1} found && /id [0-9]+/{print $2; exit}')
-    if [ -z "$node_id" ]; then
-      node_id=$(pw-cli ls Node 2>/dev/null | grep -i gamescope | head -1 | sed -n 's/.*id \([0-9]*\).*/\1/p')
-    fi
-    if [ -n "$node_id" ]; then
-      diag "pipewire-gamescope: retry with node id $node_id"
-      bonsai_run_gst_pipewire_target "$node_id" "$duration" "$partial" "$gst_log" || true
-    fi
+    bonsai_run_gst_pipewire_target "gamescope" "$duration" "$partial" "$gst_log" || true
   fi
 
   if [ ! -f "$partial" ]; then
@@ -291,6 +389,10 @@ while [ $# -gt 0 ]; do
       RECORD_SECONDS="${2:-15}"
       shift 2
       ;;
+    --quality)
+      RECORD_QUALITY="${2:-compressed}"
+      shift 2
+      ;;
     --out)
       OUT="${2:-}"
       shift 2
@@ -319,6 +421,19 @@ case "$RECORD_MODE" in
     ;;
 esac
 
+case "$RECORD_QUALITY" in
+  compressed)
+    MIN_RECORD_BYTES=100000
+    ;;
+  full)
+    MIN_RECORD_BYTES=524288
+    ;;
+  *)
+    echo "Invalid --quality: $RECORD_QUALITY (use compressed|full)" >&2
+    exit 2
+    ;;
+esac
+
 if [ -z "$OUT" ]; then
   if [ -n "${BONSAI_RECORD_OUT:-}" ]; then
     OUT="$BONSAI_RECORD_OUT"
@@ -332,7 +447,7 @@ if [ -z "$OUT" ]; then
 fi
 
 : >"$DIAG"
-diag "bonsai-record start epoch=$RUN_EPOCH mode_flag=$RECORD_MODE seconds=$RECORD_SECONDS out=$OUT"
+diag "bonsai-record start epoch=$RUN_EPOCH mode_flag=$RECORD_MODE seconds=$RECORD_SECONDS quality=$RECORD_QUALITY out=$OUT"
 
 RESOLVED_MODE=$(resolve_capture_mode "$RECORD_MODE")
 diag "resolved_mode=$RESOLVED_MODE"

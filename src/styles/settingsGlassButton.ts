@@ -1,0 +1,89 @@
+/**
+ * Title: The frosted-glass button look
+ *
+ * Purpose: The style two kinds of button share across the Settings and
+ * Ollama tabs — a soft, semi-transparent gradient with a thin light border,
+ * matching SteamOS's own look for a secondary action. There is also a red
+ * variant of the same look for a destructive action. Both are plain style
+ * objects, not components: whatever button uses them still owns its own
+ * click handling.
+ *
+ * Used for: Buttons like Test connection and Browse models, and other
+ * secondary actions on those two tabs. Also home to FOCUS_RING_BTN_CLASS,
+ * the class every such button must carry so the D-pad's ring shows on it.
+ *
+ * Solves: One shared look, defined once, instead of every button that wants
+ * this style copying the same gradient and border values and drifting apart
+ * over time.
+ *
+ * Does not: Decide what a button does when pressed, or how the D-pad reaches
+ * it — a caller applies one of these two style objects to its own Button and
+ * keeps everything else about that button as it already was.
+ */
+import type React from "react";
+import { textPx } from "./textPx";
+
+/**
+ * The class that draws the plugin's white focus ring on a button while Steam
+ * has the D-pad on it (the rule is in sections/scopeBase.ts).
+ *
+ * Any Button given its own `background` needs it. Steam shows focus on its
+ * buttons by changing their fill through its `gpfocus` class, and an inline
+ * style always wins over a class rule, so a button that sets its own fill
+ * never shows Steam's cue at all: the ring goes invisible (measured on the
+ * Deck 2026-10-02, plan79-P79-M2-OLLAMA-INVISIBLE.json). It is opt-in on
+ * purpose: a catch-all ring for every button was tried and reverted on
+ * 2026-08-04 because it doubled up on controls Steam already outlines.
+ * src/styles/buttonFocusRing.test.ts fails when a new button repeats this.
+ */
+export const FOCUS_RING_BTN_CLASS = "bonsai-settings-focus-btn";
+
+/**
+ * For a Button that sits INSIDE a Focusable wrapper (the accent button, Reinstall voice engine, the
+ * voice model rows). Put it next to FOCUS_RING_BTN_CLASS on the button, and FOCUS_RING_WRAP_CLASS on
+ * the wrapper. Steam marks focus on the wrapper or on the button inside it, and the wrapper can clip
+ * a ring drawn outside the button, so both draw the same white ring INSIDE their edge. Measured on
+ * the Deck 2026-10-02 (plan79-P79-RING-WALK-TABS.json): these four showed only a thin grey frame.
+ */
+export const FOCUS_RING_INSET_CLASS = "bonsai-settings-focus-inset";
+export const FOCUS_RING_WRAP_CLASS = "bonsai-settings-focus-wrap";
+
+/**
+ * For a Steam ButtonItem row (Jump to Steam Input, Clear, Install seed knowledge base). A ButtonItem
+ * takes no className, so put this on a plain div around it: the ring then goes on the innermost part
+ * Steam marks (the row, or the button inside it), never both.
+ */
+export const FOCUS_RING_ITEM_HOST_CLASS = "bonsai-settings-item-ring-host";
+
+/**
+ * The glass button's three colours, named once so every button that wears the look reads the same value:
+ * the floating Open all button (SETTINGS_GLASS_BTN, below) and the About tab's link buttons (styles/sections/
+ * aboutTabStyles.ts, as CSS). Over the panel's dark ground the fill comes out as Steam's own button grey.
+ */
+export const SETTINGS_GLASS_BTN_BACKGROUND =
+  "linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%)";
+export const SETTINGS_GLASS_BTN_BORDER = "1px solid rgba(255,255,255,0.22)";
+export const SETTINGS_GLASS_BTN_COLOR = "#e8eef5";
+
+/** SteamOS glass row button — matches Test connection / Browse models (no tint fill). Pair with FOCUS_RING_BTN_CLASS. */
+export const SETTINGS_GLASS_BTN: React.CSSProperties = {
+  minHeight: 36,
+  minWidth: 0,
+  padding: "6px 10px",
+  fontSize: textPx(11),
+  fontWeight: 600,
+  borderRadius: 4,
+  border: SETTINGS_GLASS_BTN_BORDER,
+  background: SETTINGS_GLASS_BTN_BACKGROUND,
+  color: SETTINGS_GLASS_BTN_COLOR,
+  textAlign: "left",
+  justifyContent: "flex-start",
+};
+
+/** Compact destructive glass — red border/text only. */
+export const SETTINGS_GLASS_BTN_DANGER: React.CSSProperties = {
+  ...SETTINGS_GLASS_BTN,
+  padding: "6px 12px",
+  border: "1px solid rgba(248,113,113,0.5)",
+  color: "#fecaca",
+};

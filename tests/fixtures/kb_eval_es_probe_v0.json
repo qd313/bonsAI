@@ -1,0 +1,13 @@
+{
+  "version": "v0",
+  "description": "Spanish cross-lingual probe for KB embed bake-off — informational only; does not pick winner.",
+  "queries": [
+    {"id": "ES-C01", "query": "mi juego se cierra al usar la capa de compatibilidad", "ask_mode": "speed", "domain": "compat", "app_id": "", "expect_topic": "proton", "notes": "Spanish paraphrase proton crash"},
+    {"id": "ES-C02", "query": "pantalla negra después de suspender la steam deck", "ask_mode": "speed", "domain": "compat", "app_id": "", "expect_topic": "proton", "notes": "Spanish sleep resume"},
+    {"id": "ES-C03", "query": "auriculares de realidad virtual con problemas de usb", "ask_mode": "speed", "domain": "compat", "app_id": "", "expect_topic": "steamvr", "notes": "Spanish steamvr"},
+    {"id": "ES-C04", "query": "mover biblioteca de juegos a tarjeta sd", "ask_mode": "speed", "domain": "compat", "app_id": "", "expect_topic": "storage", "notes": "Spanish storage"},
+    {"id": "ES-C05", "query": "anti cheat bloquea multijugador en linux", "ask_mode": "speed", "domain": "compat", "app_id": "", "expect_topic": "anticheat", "notes": "Spanish anticheat"},
+    {"id": "ES-C06", "query": "reproducción remota con tartamudeo desde pc", "ask_mode": "speed", "domain": "compat", "app_id": "", "expect_topic": "streaming", "notes": "Spanish streaming"},
+    {"id": "ES-C07", "query": "actualización de steamos atascada reiniciar", "ask_mode": "speed", "domain": "compat", "app_id": "", "expect_topic": "updates", "notes": "Spanish updates"}
+  ]
+}

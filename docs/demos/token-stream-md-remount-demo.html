@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>R1 / R2 / R3 stream markdown remount demo</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #1a2332;
+    --text: #e7eef7;
+    --muted: #8aa0b8;
+    --accent: #38bdf8;
+    --warn: #fbbf24;
+    --pulse-ms: 1100ms;
+    --spin-ms: 700ms;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: ui-sans-serif, system-ui, Segoe UI, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+  }
+  h1 { font-size: 1.15rem; margin: 0 0 8px; }
+  p.lead {
+    color: var(--muted);
+    margin: 0 0 16px;
+    max-width: 70ch;
+    line-height: 1.45;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+    align-items: center;
+  }
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding: 12px;
+    background: var(--panel);
+    border: 1px solid #334155;
+    border-radius: 12px;
+  }
+  .controls h2 {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0;
+  }
+  label {
+    color: var(--muted);
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  label.stack {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-width: 160px;
+  }
+  input[type="range"] { width: 160px; }
+  input[type="text"] {
+    background: #0b1220;
+    color: var(--text);
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 6px 8px;
+    min-width: 180px;
+  }
+  button, select {
+    background: #0b1220;
+    color: var(--text);
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  button.primary {
+    background: #0ea5e9;
+    border-color: #0284c8;
+    color: #042f4a;
+    font-weight: 700;
+  }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 14px;
+  }
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 14px;
+    min-height: 280px;
+  }
+  .card h2 {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 10px;
+  }
+  #preview {
+    white-space: pre-wrap;
+    line-height: 1.5;
+    font-size: 15px;
+    border-left: 3px solid var(--accent);
+    padding-left: 12px;
+    min-height: 200px;
+  }
+  #preview.preview-pulse {
+    animation: bubblePulse var(--pulse-ms) ease-in-out infinite;
+  }
+  #preview strong { color: #fde68a; }
+  #preview em { color: #c4b5fd; }
+  #preview code {
+    display: block;
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #0b1220;
+    color: #a5f3fc;
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 13px;
+  }
+  #preview code.inline {
+    display: inline;
+    margin: 0;
+    padding: 1px 4px;
+  }
+  #preview .fence-wait {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px dashed rgba(56, 189, 248, 0.55);
+    color: var(--accent);
+  }
+  #preview .fence-wait.do-pulse {
+    animation: pulse var(--pulse-ms) ease-in-out infinite;
+  }
+  .spin {
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(56, 189, 248, 0.25);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    flex: 0 0 auto;
+  }
+  .spin.do-spin {
+    animation: spin var(--spin-ms) linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes pulse { 50% { opacity: 0.55; } }
+  @keyframes bubblePulse {
+    0%, 100% { border-left-color: var(--accent); }
+    50% { border-left-color: rgba(56, 189, 248, 0.25); }
+  }
+  .stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #243044;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat b { color: var(--accent); }
+  .note {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    margin-right: 6px;
+  }
+  .tag.r1 { background: #7f1d1d; }
+  .tag.r2 { background: #854d0e; }
+  .tag.r3 { background: #14532d; }
+  .bars { margin-top: 10px; }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 40px 1fr 48px;
+    gap: 8px;
+    align-items: center;
+    margin: 6px 0;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .bar {
+    height: 10px;
+    background: #0b1220;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .bar > i {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+  }
+  .bar.cpu > i { background: var(--warn); }
+  .hint {
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    max-width: 80ch;
+    line-height: 1.4;
+  }
+  .val { color: var(--text); font-variant-numeric: tabular-nums; min-width: 2.5ch; }
+</style>
+</head>
+<body>
+  <h1>Token-stream markdown remount demo (R1 / R2 / R3)</h1>
+  <p class="lead">
+    Teaching simulation for bonsAI <b>Token stream replies</b> discovery — not a Deck benchmark.
+    “MD remounts” and “chars parsed” are proxies for CEF cost. Open fences use pulse + spinner (F2).
+    Spoilers are not simulated here.
+  </p>
+
+  <div class="controls">
+    <h2>Stream</h2>
+    <div class="row">
+      <label>Scenario
+        <select id="scenario">
+          <option value="best">Best case — short Speed reply</option>
+          <option value="worst" selected>Worst case — long Strategy + fence</option>
+          <option value="fenceHold">Fence hold — long open code block</option>
+        </select>
+      </label>
+      <label>Mode
+        <select id="mode">
+          <option value="R1">R1 — remount full markdown every tick</option>
+          <option value="R2">R2 — freeze closed; remount live tail</option>
+          <option value="R3">R3 — remount only on safe boundaries</option>
+        </select>
+      </label>
+      <label class="stack">Speed <span><span class="val" id="speedVal">8</span> chars/s</span>
+        <input id="speed" type="range" min="2" max="60" step="1" value="8" />
+      </label>
+      <label class="stack">Hold open fence
+        <span><span class="val" id="fenceHoldVal">1.5</span>s</span>
+        <input id="fenceHoldMs" type="range" min="0" max="5000" step="100" value="1500" />
+      </label>
+      <button class="primary" id="play" type="button">Play</button>
+      <button id="reset" type="button">Reset</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <h2>Fence wait (pulse + spinner)</h2>
+    <div class="row">
+      <label><input id="showSpinner" type="checkbox" checked /> Spinner</label>
+      <label><input id="showPulse" type="checkbox" checked /> Pulse on wait chip</label>
+      <label><input id="pulseBubble" type="checkbox" /> Also pulse bubble edge</label>
+      <label class="stack">Pulse period
+        <span><span class="val" id="pulseMsVal">1100</span>ms</span>
+        <input id="pulseMs" type="range" min="400" max="2500" step="50" value="1100" />
+      </label>
+      <label class="stack">Spin period
+        <span><span class="val" id="spinMsVal">700</span>ms</span>
+        <input id="spinMs" type="range" min="250" max="2000" step="50" value="700" />
+      </label>
+      <label class="stack">Wait label
+        <input id="waitLabel" type="text" value="Code block incoming…" />
+      </label>
+      <button id="previewWait" type="button">Preview wait UI only</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>What the user sees</h2>
+      <div id="preview"></div>
+    </div>
+    <div class="card">
+      <h2>Cost counters (this run)</h2>
+      <div class="stat">Mode <b id="sMode">—</b></div>
+      <div class="stat">Target length <b id="sLen">0</b></div>
+      <div class="stat">Revealed chars <b id="sRev">0</b></div>
+      <div class="stat">MD remounts <b id="sMount">0</b></div>
+      <div class="stat">Total chars parsed <b id="sParsed">0</b></div>
+      <div class="stat">Avg chars / remount <b id="sAvg">0</b></div>
+      <div class="stat">Fence wait shown <b id="sFence">no</b></div>
+      <div class="bars">
+        <div class="bar-row"><span>Mount</span><div class="bar"><i id="barMount"></i></div><span id="barMountN">0</span></div>
+        <div class="bar-row"><span>Parse</span><div class="bar cpu"><i id="barParse"></i></div><span id="barParseN">0</span></div>
+      </div>
+      <p class="note" id="explain"></p>
+    </div>
+  </div>
+
+  <p class="hint">
+    Speed is absolute <b>chars/sec</b> (default 8). Hard-refresh the tab if controls look stale.
+    On Play, stream snaps to the opening fence line then <b>Hold open fence</b> pauses so pulse+spinner
+    stays visible; “Fence wait shown” in the counters should flip to <b>yes</b>. Use
+    <b>Preview wait UI only</b> to tweak spinner/pulse without streaming.
+  </p>
+
+<script>
+const SAMPLES = {
+  best: "**Short tip:** lower TDP a bit if fans scream.\n\nTry 10W and retest.",
+  worst: [
+    "**Long strategy answer** with *emphasis* and `inline` code.",
+    "",
+    "Paragraph two explains positioning and timing so the reply gets long.",
+    "",
+    "Paragraph three keeps going with more coaching detail for the worst case.",
+    "",
+    "```json",
+    '{"tdp_watts": 12, "note": "do not apply until terminal"}',
+    "```",
+    "",
+    "Final paragraph after the fence closes and prose continues normally."
+  ].join("\n"),
+  fenceHold: [
+    "Prose before the fence.",
+    "",
+    "```json",
+    "{",
+    '  "tdp_watts": 12,',
+    '  "gpu_clock_mhz": 1000,',
+    '  "note": "long body so wait UI stays up while characters arrive"',
+    "}",
+    "```",
+    "",
+    "Prose after the fence closes."
+  ].join("\n"),
+};
+
+const EXPLAIN = {
+  R1: "R1 re-parses the entire revealed string on almost every smooth-reveal tick. Best case stays cheap because the string is short. Worst case: remount count and chars-parsed explode as length grows.",
+  R2: "R2 freezes closed paragraphs/fences and only re-parses the live open tail each tick. Early stream ≈ R1; late stream is usually much cheaper than R1 on long replies.",
+  R3: "R3 still smooth-reveals characters, but only remounts markdown when a safe boundary lands (blank line / fence close). Few remounts; formatting can appear in steps.",
+};
+
+let raf = null;
+let state = null;
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+function applyMotionCss() {
+  const pulseMs = Number(pulseMsEl.value);
+  const spinMs = Number(spinMsEl.value);
+  document.documentElement.style.setProperty("--pulse-ms", pulseMs + "ms");
+  document.documentElement.style.setProperty("--spin-ms", spinMs + "ms");
+  pulseMsVal.textContent = String(pulseMs);
+  spinMsVal.textContent = String(spinMs);
+  speedVal.textContent = String(Number(speedEl.value) || 8);
+  fenceHoldVal.textContent = (Number(fenceHoldMsEl.value) / 1000).toFixed(1);
+}
+
+/** True when slice has an unclosed ``` fence (opening line seen, closing not yet). */
+function hasOpenFence(text) {
+  let open = false;
+  for (const line of text.split("\n")) {
+    if (line.startsWith("```")) open = !open;
+  }
+  return open;
+}
+
+/** Index of the first character of the first ``` fence opening line, or -1. */
+function firstFenceOpenIndex(full) {
+  const re = /(^|\n)(```[^\n]*)/g;
+  const m = re.exec(full);
+  if (!m) return -1;
+  return m.index + m[1].length;
+}
+
+/** Index just after the opening fence line’s newline (start of fence body), or -1. */
+function firstFenceBodyIndex(full) {
+  const openAt = firstFenceOpenIndex(full);
+  if (openAt < 0) return -1;
+  const nl = full.indexOf("\n", openAt);
+  return nl === -1 ? full.length : nl + 1;
+}
+
+function fenceWaitHtml() {
+  const spinner = showSpinnerEl.checked
+    ? `<span class="spin${showSpinnerEl.checked ? " do-spin" : ""}"></span>`
+    : "";
+  const pulseClass = showPulseEl.checked ? " do-pulse" : "";
+  const label = escapeHtml(waitLabelEl.value || "Code block incoming…");
+  return `<div class="fence-wait${pulseClass}">${spinner}${label}</div>`;
+}
+
+function syncBubblePulse(waiting) {
+  preview.classList.toggle("preview-pulse", Boolean(waiting && pulseBubbleEl.checked));
+}
+
+function splitClosedAndTail(text) {
+  const lines = text.split("\n");
+  let inFence = false;
+  let fenceStart = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].startsWith("```")) {
+      if (!inFence) {
+        inFence = true;
+        fenceStart = i;
+      } else {
+        inFence = false;
+        fenceStart = -1;
+      }
+    }
+  }
+  if (inFence && fenceStart >= 0) {
+    return {
+      closed: lines.slice(0, fenceStart).join("\n"),
+      tail: lines.slice(fenceStart).join("\n"),
+      waitingFence: true,
+    };
+  }
+  const idx = text.lastIndexOf("\n\n");
+  if (idx === -1) return { closed: "", tail: text, waitingFence: false };
+  return { closed: text.slice(0, idx), tail: text.slice(idx + 2), waitingFence: false };
+}
+
+function lastSafeBoundaryLength(full, revealedLen) {
+  const slice = full.slice(0, revealedLen);
+  const lines = slice.split("\n");
+  let inFence = false;
+  let lastCloseEnd = 0;
+  let offset = 0;
+  let best = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const lineEnd = offset + line.length + (i < lines.length - 1 ? 1 : 0);
+    if (line.startsWith("```")) {
+      if (!inFence) inFence = true;
+      else {
+        inFence = false;
+        lastCloseEnd = lineEnd;
+      }
+    }
+    offset = lineEnd;
+  }
+  if (!inFence && lastCloseEnd > best) best = lastCloseEnd;
+  if (!inFence) {
+    const para = slice.lastIndexOf("\n\n");
+    if (para >= 0) best = Math.max(best, para + 2);
+  }
+  return best;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function renderMarkdownish(text) {
+  const { closed, tail, waitingFence } = splitClosedAndTail(text);
+  const waiting = waitingFence || hasOpenFence(text);
+  const parts = [];
+  const renderInline = (s) => {
+    let t = s;
+    const stars = (t.match(/\*\*/g) || []).length;
+    if (stars % 2 === 1) t = t + "**";
+    return escapeHtml(t)
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>")
+      .replace(/`([^`]+)`/g, '<code class="inline">$1</code>');
+  };
+
+  const renderBlock = (block) => {
+    if (!block) return "";
+    if (block.startsWith("```")) {
+      const body = block.replace(/^```[^\n]*\n?/, "").replace(/\n?```$/, "");
+      return `<code>${escapeHtml(body)}</code>`;
+    }
+    return `<div>${renderInline(block).replace(/\n/g, "<br>")}</div>`;
+  };
+
+  if (closed) {
+    closed.split(/\n\n/).forEach((p) => {
+      if (p.trim()) parts.push(renderBlock(p));
+    });
+  }
+  if (waiting) {
+    parts.push(fenceWaitHtml());
+  } else if (tail) {
+    parts.push(`<div>${renderInline(tail).replace(/\n/g, "<br>")}</div>`);
+  }
+  syncBubblePulse(waiting);
+  sFence.textContent = waiting ? "yes" : "no";
+  return parts.join("");
+}
+
+function setBars(mounts, parsed, maxMount = 400, maxParsed = 200000) {
+  const m = Math.min(100, (mounts / maxMount) * 100);
+  const p = Math.min(100, (parsed / maxParsed) * 100);
+  barMount.style.width = m + "%";
+  barParse.style.width = p + "%";
+  barMountN.textContent = String(mounts);
+  barParseN.textContent =
+    parsed > 9999 ? (parsed / 1000).toFixed(1) + "k" : String(parsed);
+}
+
+function resetUI() {
+  if (raf) cancelAnimationFrame(raf);
+  raf = null;
+  state = null;
+  preview.innerHTML = "";
+  preview.classList.remove("preview-pulse");
+  sMode.textContent = "—";
+  sLen.textContent = "0";
+  sRev.textContent = "0";
+  sMount.textContent = "0";
+  sParsed.textContent = "0";
+  sAvg.textContent = "0";
+  sFence.textContent = "no";
+  setBars(0, 0);
+  explain.textContent = "";
+}
+
+function previewWaitOnly() {
+  if (raf) cancelAnimationFrame(raf);
+  raf = null;
+  state = null;
+  applyMotionCss();
+  preview.innerHTML =
+    `<div>Prose before fence.</div>${fenceWaitHtml()}`;
+  syncBubblePulse(true);
+  sFence.textContent = "yes (preview)";
+  sMode.textContent = "wait UI";
+  explain.textContent =
+    "Static fence-wait preview. Tweak spinner/pulse/label sliders — they update live.";
+}
+
+function paintSlice(st, slice) {
+  let didMount = false;
+  let parseChars = 0;
+  const waiting = hasOpenFence(slice);
+
+  if (st.mode === "R1") {
+    if (st.revealed !== st.lastMdAt) {
+      didMount = true;
+      parseChars = slice.length;
+      st.lastMdAt = st.revealed;
+    }
+    preview.innerHTML = renderMarkdownish(slice);
+  } else if (st.mode === "R2") {
+    if (st.revealed !== st.lastMdAt) {
+      const { tail } = splitClosedAndTail(slice);
+      didMount = true;
+      parseChars = Math.max(1, tail.length) + (waiting ? 8 : 0);
+      st.lastMdAt = st.revealed;
+    }
+    preview.innerHTML = renderMarkdownish(slice);
+  } else {
+    const safe = lastSafeBoundaryLength(st.full, st.revealed);
+    const plainTail = slice.slice(safe);
+    if (safe > st.r3Committed) {
+      didMount = true;
+      parseChars = safe;
+      st.r3Committed = safe;
+    }
+    const committed = st.full.slice(0, st.r3Committed);
+    if (waiting) {
+      // Don't dump raw open-fence tail as plain text — show wait chip.
+      preview.innerHTML = renderMarkdownish(committed) + fenceWaitHtml();
+      syncBubblePulse(true);
+      sFence.textContent = "yes";
+    } else {
+      preview.innerHTML =
+        renderMarkdownish(committed) +
+        (plainTail
+          ? `<div style="opacity:.85">${escapeHtml(plainTail).replace(/\n/g, "<br>")}</div>`
+          : "");
+    }
+  }
+
+  if (didMount) {
+    st.mounts += 1;
+    st.parsed += parseChars;
+  }
+  sRev.textContent = String(st.revealed);
+  sMount.textContent = String(st.mounts);
+  sParsed.textContent = String(st.parsed);
+  sAvg.textContent = st.mounts ? String(Math.round(st.parsed / st.mounts)) : "0";
+  setBars(st.mounts, st.parsed);
+}
+
+function play() {
+  resetUI();
+  applyMotionCss();
+  const full = SAMPLES[scenario.value];
+  const mode = modeEl.value;
+  sMode.textContent = mode;
+  sLen.textContent = String(full.length);
+  explain.innerHTML =
+    `<span class="tag ${mode.toLowerCase()}">${mode}</span>` + EXPLAIN[mode];
+
+  const bodyAt = firstFenceBodyIndex(full);
+
+  state = {
+    full,
+    mode,
+    revealed: 0,
+    mounts: 0,
+    parsed: 0,
+    lastMdAt: -1,
+    r3Committed: 0,
+    lastTs: null,
+    charCarry: 0,
+    fenceBodyAt: bodyAt,
+    fenceHoldUntil: null,
+    fenceHoldDone: false,
+  };
+
+  const tick = (ts) => {
+    const st = state;
+    if (!st) return;
+    applyMotionCss();
+    const prev = st.lastTs ?? ts;
+    st.lastTs = ts;
+    const dt = Math.max(0, (ts - prev) / 1000);
+    // Absolute chars/sec from slider (not a multiplier on a hidden base rate).
+    const charsPerSec = Math.max(1, Number(speedEl.value) || 8);
+
+    // Snap to end of opening ``` line so wait UI appears as soon as fence starts.
+    if (
+      st.fenceBodyAt >= 0 &&
+      st.revealed < st.fenceBodyAt &&
+      st.revealed + charsPerSec * dt >= st.fenceBodyAt
+    ) {
+      st.revealed = st.fenceBodyAt;
+      st.charCarry = 0;
+    }
+
+    const sliceNow = st.full.slice(0, st.revealed);
+    const waitingNow = hasOpenFence(sliceNow);
+
+    // Hold at the start of an open fence so pulse+spinner is visible.
+    if (waitingNow && !st.fenceHoldDone && Number(fenceHoldMsEl.value) > 0) {
+      if (st.fenceHoldUntil == null) {
+        st.fenceHoldUntil = ts + Number(fenceHoldMsEl.value);
+      }
+      if (ts >= st.fenceHoldUntil) {
+        st.fenceHoldDone = true;
+      }
+    }
+
+    const holding =
+      waitingNow &&
+      !st.fenceHoldDone &&
+      st.fenceHoldUntil != null &&
+      ts < st.fenceHoldUntil;
+
+    if (!holding && st.revealed < st.full.length) {
+      st.charCarry += charsPerSec * dt;
+      const step = Math.floor(st.charCarry);
+      if (step > 0) {
+        st.charCarry -= step;
+        let next = Math.min(st.full.length, st.revealed + step);
+        // Don't jump past fence open without stopping on the body boundary first.
+        if (
+          st.fenceBodyAt >= 0 &&
+          st.revealed < st.fenceBodyAt &&
+          next > st.fenceBodyAt
+        ) {
+          next = st.fenceBodyAt;
+          st.charCarry = 0;
+        }
+        st.revealed = next;
+      }
+    }
+
+    const slice = st.full.slice(0, st.revealed);
+    paintSlice(st, slice);
+
+    if (st.revealed < st.full.length || holding) {
+      raf = requestAnimationFrame(tick);
+    } else if (st.mode === "R3" && st.r3Committed < st.full.length) {
+      st.mounts += 1;
+      st.parsed += st.full.length;
+      st.r3Committed = st.full.length;
+      preview.innerHTML = renderMarkdownish(st.full);
+      sMount.textContent = String(st.mounts);
+      sParsed.textContent = String(st.parsed);
+      sAvg.textContent = String(Math.round(st.parsed / st.mounts));
+      setBars(st.mounts, st.parsed);
+    }
+  };
+
+  raf = requestAnimationFrame(tick);
+}
+
+const preview = $("preview");
+const scenario = $("scenario");
+const modeEl = $("mode");
+const speedEl = $("speed");
+const fenceHoldMsEl = $("fenceHoldMs");
+const showSpinnerEl = $("showSpinner");
+const showPulseEl = $("showPulse");
+const pulseBubbleEl = $("pulseBubble");
+const pulseMsEl = $("pulseMs");
+const spinMsEl = $("spinMs");
+const waitLabelEl = $("waitLabel");
+const speedVal = $("speedVal");
+const fenceHoldVal = $("fenceHoldVal");
+const pulseMsVal = $("pulseMsVal");
+const spinMsVal = $("spinMsVal");
+const sMode = $("sMode");
+const sLen = $("sLen");
+const sRev = $("sRev");
+const sMount = $("sMount");
+const sParsed = $("sParsed");
+const sAvg = $("sAvg");
+const sFence = $("sFence");
+const explain = $("explain");
+const barMount = $("barMount");
+const barParse = $("barParse");
+const barMountN = $("barMountN");
+const barParseN = $("barParseN");
+
+$("play").onclick = play;
+$("reset").onclick = resetUI;
+$("previewWait").onclick = previewWaitOnly;
+
+[
+  speedEl,
+  fenceHoldMsEl,
+  pulseMsEl,
+  spinMsEl,
+  showSpinnerEl,
+  showPulseEl,
+  pulseBubbleEl,
+  waitLabelEl,
+].forEach((el) => {
+  el.addEventListener("input", () => {
+    applyMotionCss();
+    // Live-update static wait preview if that's what's on screen
+    if (!state && sFence.textContent.startsWith("yes")) {
+      previewWaitOnly();
+    } else if (state) {
+      // refresh wait chip classes on next tick via applyMotionCss; force one paint if waiting
+      const slice = state.full.slice(0, state.revealed);
+      if (splitClosedAndTail(slice).waitingFence) {
+        // re-render current slice so checkbox changes apply immediately
+        const mode = state.mode;
+        if (mode === "R3") {
+          const committed = state.full.slice(0, state.r3Committed);
+          preview.innerHTML = renderMarkdownish(committed) + fenceWaitHtml();
+          syncBubblePulse(true);
+        } else {
+          preview.innerHTML = renderMarkdownish(slice);
+        }
+      }
+    }
+  });
+});
+
+applyMotionCss();
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+# Title: Land one helper branch
+#
+# Purpose: Bring one helper's commits onto the working branch in the shared checkout, one commit at a
+# time, and prove the result is sound before the next helper lands: regenerate the generated files, then
+# run the five gates and the wider quick check.
+#
+# Used for: every landing in a bug or feature wave (docs/agents/bug-wave-runbook.md). The one running the
+# session starts it in the background after reading the helper's change, and reads the log it writes.
+#
+# Solves: this script was rewritten in a scratch folder every night (plans 76 and 77 used the same one,
+# byte for byte). Plan 77 landed 26 changes with it, every one green on the five gates, and only at the
+# end found the wider quick check red on five things the gates never run. That check is now a step here.
+# The build is retried once, because it fails now and then on a version file another process holds for
+# a moment.
+#
+# Does not: decide whether a change should land (read the diff first), resolve a real conflict (it stops
+# and leaves the cherry-pick open), edit the roadmap or testing documents, deploy, or push.
+#
+# Usage: scripts/land_lane.sh <branch> <base-commit> <log-dir> [working-branch]
+#   <branch>          the helper's branch, e.g. refactor/p78a
+#   <base-commit>     the tip the helper's copy was cut from; base..branch is what lands
+#   <log-dir>         where land-<branch>.log is written (the session's scratch folder)
+#   [working-branch]  defaults to experimental
+# Set LAND_COAUTHOR to the model running the session, e.g. "Claude Opus 5.5 <noreply@anthropic.com>".
+# Exit codes: 1 a precondition failed, 2 a real conflict (cherry-pick left open), 3 a gate failed.
+set -u
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+BR="${1:?branch}"; BASE="${2:?base commit}"; LOGDIR="${3:?log dir}"; WORK="${4:-experimental}"
+COAUTHOR="${LAND_COAUTHOR:-Claude Opus 5.5 <noreply@anthropic.com>}"
+LOG="$LOGDIR/land-$(echo "$BR" | tr '/' '-').log"
+cd "$REPO" || exit 1
+exec > "$LOG" 2>&1
+echo "== land $BR from $BASE onto $WORK at $(date)"
+[ "$(git rev-parse --abbrev-ref HEAD)" = "$WORK" ] || { echo "NOT ON $WORK"; exit 1; }
+[ -z "$(git status --porcelain --untracked-files=no)" ] || { echo "TREE NOT CLEAN"; git status --short; exit 1; }
+git merge-base --is-ancestor "$BASE" "$BR" || { echo "BASE $BASE IS NOT AN ANCESTOR OF $BR"; exit 1; }
+
+# The one generated file still saved in the repo (src/types/rpcMethods.ts) can clash when two helpers
+# add back-end methods. The working branch's side is taken and it is regenerated below, so a clash in
+# it is never a real one. The architecture JSON files and docs/code-map.md are no longer saved in the
+# repo (they are built when a check needs them); they stay in the pattern only for a helper cut before
+# that change, whose commits still touch them. Such a clash resolves to "not saved", which is right.
+GEN='packages/bonsai-mcp/knowledge/architecture/|docs/code-map.md|src/types/rpcMethods.ts'
+for c in $(git rev-list --reverse "$BASE..$BR"); do
+  echo "-- pick $(git log --oneline -1 "$c")"
+  if ! git cherry-pick "$c"; then
+    bad=$(git diff --name-only --diff-filter=U)
+    other=$(echo "$bad" | grep -Ev "$GEN")
+    if [ -n "$other" ]; then
+      echo "REAL CONFLICT: $other"
+      echo "The cherry-pick is left open. Resolve by hand, continue it, then run this script again."
+      exit 2
+    fi
+    for f in $bad; do
+      if git cat-file -e "HEAD:$f" 2>/dev/null; then git checkout --ours -- "$f" && git add "$f"; else git rm -q -f -- "$f"; fi
+    done
+    GIT_EDITOR=true git cherry-pick --continue || { echo "CONTINUE FAILED"; exit 2; }
+  fi
+done
+
+echo "== regenerate the back-end method list (the only generated file saved in the repo)"
+node packages/bonsai-mcp/scripts/generate-architecture.mjs --types-only
+git add -- src/types/rpcMethods.ts
+if ! git diff --cached --quiet; then
+  git commit -q -m "Regenerate the back-end method list after landing $BR
+
+Co-Authored-By: $COAUTHOR" && echo "REGEN COMMITTED"
+fi
+
+echo "== gates"
+npx tsc --noEmit && echo "TSC OK" || { echo "TSC FAIL"; exit 3; }
+# One test file (the plugin root's) times out at 20 s when several helpers run their own gates at the
+# same moment; it passes alone. So a failed run is tried once more before it counts. A real failure
+# fails both times.
+test_ok=1
+npm test 2>&1 | tail -15; [ "${PIPESTATUS[0]}" -eq 0 ] || test_ok=0
+if [ "$test_ok" -eq 0 ]; then
+  echo "TESTS FAILED ONCE, retrying (a timeout under load is the usual cause; read both runs)"
+  npm test 2>&1 | tail -25; [ "${PIPESTATUS[0]}" -eq 0 ] && test_ok=1
+fi
+[ "$test_ok" -eq 1 ] && echo "TEST OK" || { echo "TEST FAIL"; exit 3; }
+npm run test:py 2>&1 | tail -8; [ "${PIPESTATUS[0]}" -eq 0 ] && echo "PY OK" || { echo "PY FAIL"; exit 3; }
+build_ok=1
+npm run build 2>&1 | tail -5; [ "${PIPESTATUS[0]}" -eq 0 ] || build_ok=0
+if [ "$build_ok" -eq 0 ]; then
+  echo "BUILD FAILED ONCE, retrying (a locked version file is the usual cause)"
+  sleep 5
+  npm run build 2>&1 | tail -12; [ "${PIPESTATUS[0]}" -eq 0 ] && build_ok=1
+fi
+[ "$build_ok" -eq 1 ] && echo "BUILD OK" || { echo "BUILD FAIL"; exit 3; }
+node scripts/check-focus-patterns.mjs 2>&1 | tail -5; [ "${PIPESTATUS[0]}" -eq 0 ] && echo "FOCUS OK" || { echo "FOCUS FAIL"; exit 3; }
+python scripts/verify.py --quick 2>&1 | tail -30; [ "${PIPESTATUS[0]}" -eq 0 ] && echo "QUICK OK" || { echo "QUICK FAIL"; exit 3; }
+git status --short | head
+echo "== LANDED $BR, tip $(git rev-parse --short HEAD) at $(date)"

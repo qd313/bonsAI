@@ -1,9 +1,8 @@
 import asyncio
 import unittest
-from unittest.mock import patch
 
-from backend.services.game_ai_request import run_game_ai_request
-from refactor_helpers import parse_tdp_recommendation
+from backend.ask.game_ai_request import run_game_ai_request
+from backend.power.tdp_intent import parse_tdp_recommendation
 
 
 _TDP_JSON_RESPONSE = (
@@ -38,12 +37,11 @@ class PyroAssholeSafetyTests(unittest.TestCase):
         self.assertEqual(rec.get("tdp_watts"), 12)
 
     def test_run_game_ai_request_skips_tdp_apply_when_pyro_asshole_mode(self):
+        """Pyro asshole mode must not surface applied TDP metadata (apply path is obsolete)."""
         settings = {
             "latency_timeouts_custom_enabled": False,
             "input_sanitizer_user_disabled": False,
-            "capabilities": {"hardware_control": True},
-            "response_verify_enabled": False,
-            "response_verify_second_pass": False,
+            "capabilities": {},
         }
         plugin = _FakePlugin(settings)
         plugin._ollama_result = {
@@ -53,19 +51,16 @@ class PyroAssholeSafetyTests(unittest.TestCase):
             "model": "test-model",
         }
 
-        with patch("backend.services.game_ai_request.apply_tdp") as mock_apply:
-            mock_apply.side_effect = AssertionError("apply_tdp must not run in pyro asshole mode")
-            result = asyncio.run(
-                run_game_ai_request(
-                    plugin,
-                    "What TDP should I use?",
-                    "127.0.0.1:11434",
-                )
+        result = asyncio.run(
+            run_game_ai_request(
+                plugin,
+                "What TDP should I use?",
+                "127.0.0.1:11434",
             )
+        )
 
         self.assertTrue(result.get("success"))
         self.assertIsNone(result.get("applied"))
-        mock_apply.assert_not_called()
 
 
 if __name__ == "__main__":

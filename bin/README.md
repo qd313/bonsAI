@@ -9,4 +9,4 @@ Build for **x86_64** (Steam Deck LCD/OLED). The plugin also checks `whisper-cli`
 
 GGUF models are **not** bundled; users download them from Settings → Voice input after enabling the microphone permission.
 
-On-device install compiles a CPU-safe `whisper-cli` from a **digest-pinned** podman image (see `WHISPER_CPP_IMAGE` in `py_modules/backend/services/voice_transcription_service.py` and [docs/voice-input-follow-up.md](../docs/voice-input-follow-up.md)).
+On-device install compiles a CPU-safe `whisper-cli` from a **digest-pinned** podman image (see `WHISPER_CPP_IMAGE` in `py_modules/backend/voice/voice_transcription_service.py` and [workshop:archive/voice-input-follow-up.md](../../bonsAI-workshop/archive/voice-input-follow-up.md)).

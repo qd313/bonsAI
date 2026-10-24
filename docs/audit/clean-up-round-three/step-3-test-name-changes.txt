@@ -1,0 +1,375 @@
+# Plan 86 step 3: test names that went and came, 8553cc99 -> fd56e160.
+# Screen names: file > full name (as baseline-test-names-screen.txt). Python names: module.Class.test_name.
+# Python 'before' was listed at 8553cc99 (2,972 names; the step 0 baseline file has 2,885).
+# Every line is named by a step 3 helper's own list, or (one line) by the ban lookup cut list's contract case.
+# GONE: 289
+src/components/DeveloperTab.folded.test.tsx > the folded Developer tab, every section closed is six one-line sections, each with its summary, and no row drawn
+src/components/DeveloperTab.folded.test.tsx > the folded Developer tab, every section open: one line per setting, the longer words on the row the Steam Web API key field is there, with its words for the strip
+src/components/DeveloperTab.foldedWalk.test.tsx > the folded Developer tab, every section closed Down from the tab bar walks the six section lines, once each, then the Open all button, and holds; Up walks every line back
+src/components/DeveloperTab.foldedWalk.test.tsx > the folded Developer tab, every section closed without a seed install the walk is the five other lines
+src/components/MainTabBonsaiAiMarkdownChunk.test.tsx > MainTabBonsaiAiMarkdownChunk DRG Survivor glossary markup does not mark up terms that only appear inside an unrevealed spoiler fence
+src/components/MainTabBonsaiAiMarkdownChunk.test.tsx > MainTabBonsaiAiMarkdownChunk DRG Survivor glossary markup leaves the same text plain for a non-DRG-Survivor turn
+src/components/MainTabBonsaiAiMarkdownChunk.test.tsx > MainTabBonsaiAiMarkdownChunk DRG Survivor glossary markup leaves the same text plain when no AppID is supplied at all
+src/components/MainTabBonsaiAiMarkdownChunk.test.tsx > MainTabBonsaiAiMarkdownChunk DRG Survivor glossary markup marks up a curated term as a tappable chip when the turn's game is DRG Survivor
+src/components/MainTabBonsaiAiMarkdownChunk.test.tsx > MainTabBonsaiAiMarkdownChunk DRG Survivor glossary markup tapping the chip twice opens the full definition with an explain-further chip
+src/components/MainTabChatTranscript.emptySlotPreview.test.tsx > the [+] create-position screen hides the last reply's ban-lookup permission row and slow-answer lines
+src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx > vac-check deny row nav registration does not register a nav holder for the deny row when the reply is not a capability deny
+src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx > vac-check deny row nav registration registers a nav holder under chat-perm-hint-deny on mount and clears it on unmount
+src/components/MainTabChatTranscript.permissionHintFocus.test.ts > focusChatPermissionHintRow falls through to the deny row once the troubleshooting hint unregisters (unmounts)
+src/components/MainTabChatTranscript.permissionHintFocus.test.ts > focusChatPermissionHintRow falls through to the deny row when the troubleshooting hint's own transfer declines
+src/components/MainTabChatTranscript.permissionHintFocus.test.ts > focusChatPermissionHintRow hands focus to the vac-check deny row's registered nav node via TakeFocus, never a plain focus()
+src/components/MainTabChatTranscript.permissionHintFocus.test.ts > focusChatPermissionHintRow prefers the troubleshooting hint over the deny action when both are registered
+src/components/MainTabChatTranscript.permissionHintFocus.test.ts > focusDownFromReplyUtilityRowOrPermHint hands off to the deny row's registered nav node when no ladder or hint is mounted in this turn
+src/components/MainTabChatTranscript.ratingRowWalk.test.tsx > Up and Down between the rating choices, the thumbs and the corner icons (plan 79, plan 84 step 3) walks the corner: the speaker, Copy, Down to Bad info, Up to Helpful -- no stop twice
+src/components/MainTabChatTranscript.readAloud.test.tsx > MainTabChatTranscript Read aloud a second press on the same speaker stops the reading it started
+src/components/MainTabChatTranscript.readAloud.test.tsx > MainTabChatTranscript Read aloud draws the speaker after the answer's bubble and not inside the row of actions under it
+src/components/MainTabChatTranscript.readAloud.test.tsx > MainTabChatTranscript Read aloud flips to Stop while speaking, and back once the backend reports done
+src/components/MainTabChatTranscript.readAloud.test.tsx > MainTabChatTranscript Read aloud starts the background reader with the answer's readable text
+src/components/MainTabChatTranscript.readAloud.test.tsx > MainTabChatTranscript Read aloud stops the reader when a new Ask starts
+src/components/MainTabChatTranscript.readAloud.test.tsx > a reading that started on its own, once the answer is drawn as history leaves an older archived turn's own line saying Read aloud
+src/components/MainTabChatTranscript.readAloud.test.tsx > a reading that started on its own, once the answer is drawn as history says Stop under the newest archived turn, not just a live one
+src/components/MainTabChatTranscript.readAloud.test.tsx > an older reply whose only action was the speaker has the speaker in its corner and no empty row of actions under it
+src/components/MainTabChatTranscript.readAloud.test.tsx > an older reply whose only action was the speaker keeps the speaker off the back end's stop placeholder
+src/components/MainTabChatTranscript.replyBlock.test.tsx > a finished reply, all three changes together keeps the speaker out of the row under the answer
+src/components/MainTabChatTranscript.replyBlock.test.tsx > a finished reply, all three changes together reads top to bottom: question, answer, Read aloud and Copy in its corners, Was this helpful?, then Show details
+src/components/MainTabChatTranscript.stoppedNotice.test.tsx > stopped turn — notice and reply actions restored on the archived turn offers no Read aloud on an empty stop: there is nothing to read
+src/components/MainTabChatTranscript.stoppedNotice.test.tsx > stopped turn — notice and reply actions restored on the archived turn still offers Read aloud on a stop that kept part of the answer
+src/components/MainTabChatTranscript.upWalk.test.tsx > Up under a finished answer visits the rows Down visits (plan 72 A-4) Read aloud, in the answer's corner, goes Up into the answer's last section, not onto a choice
+src/components/MainTabChatTranscript.upWalk.test.tsx > Up under a finished answer visits the rows Down visits (plan 72 A-4) with no choices, Read aloud still goes Up into the answer's last section
+src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx > the ban-lookup row after a chat switch is drawn again when the chat's newest saved turn is the denied reply and the live text is blank
+src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx > the ban-lookup row after a chat switch is not drawn when the chat's newest saved turn is some other answer
+src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx > the ban-lookup row after a chat switch is not drawn when the denied reply is older than a question still waiting for its answer
+src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx > the ban-lookup row after a chat switch is still not drawn on the [+] new-chat spot
+src/components/PermissionsTab.permissionRowNavRegistration.test.tsx > permissions-row-steam-web-api row nav registration registers a nav holder on mount and clears it on unmount
+src/components/PermissionsTab.test.tsx > PermissionsTab wording stays short the Steam ban lookup switch keeps its old words (the maintainer, 2026-10-14)
+src/components/SettingsDeveloperLeftoverRing.test.tsx > the last Steam buttons on the four tabs draw the white ring Apply UI scale and Reset to automatic show the ring when Steam marks them
+src/components/SettingsDeveloperWrappedRing.test.tsx > wrapped controls and the key field show one white ring Steam's focus mark on the button inside draws one solid ring, on the button
+src/components/SettingsDeveloperWrappedRing.test.tsx > wrapped controls and the key field show one white ring Steam's focus mark on the wrapper draws one solid ring, on the wrapper
+src/components/SettingsDeveloperWrappedRing.test.tsx > wrapped controls and the key field show one white ring a knowledge-base style host > Focusable > Button keeps no outline on its wrapper
+src/components/SettingsDeveloperWrappedRing.test.tsx > wrapped controls and the key field show one white ring no ring while none of them is focused
+src/components/SettingsDeveloperWrappedRing.test.tsx > wrapped controls and the key field show one white ring the Steam Web API key field draws one solid ring whichever of its parts Steam marks, and the key text is untouched
+src/components/SettingsTab.folded.test.tsx > the Settings tab with every section closed draws UI scale only while the Developer tab is on
+src/components/SettingsTab.folded.test.tsx > the Settings tab with every section open: one line per setting, longer words on the row changes the Voice replies words with the pick
+src/components/SettingsTab.folded.test.tsx > the Settings tab with every section open: one line per setting, longer words on the row names the size in use in the UI scale words
+src/components/SettingsTab.foldedWalk.test.tsx > the floating Open all button on the Settings tab Right from Voice replies puts the ring on it; A opens every section (Close all); Down holds; Up returns to Voice replies
+src/components/SettingsTab.foldedWalk.test.tsx > the folded Settings tab, every section open with the Developer tab off the walk is the same without UI scale, and with the character off it skips the picker and the accent row
+src/components/SettingsTabUiScaleHeading.test.tsx > UI scale section heading says UI scale exactly once, with the section open
+src/components/SettingsTabUiScaleHidden.test.tsx > SettingsTab UI scale section is drawn when the Developer tab is on
+src/components/SettingsTabUiScaleHidden.test.tsx > SettingsTab UI scale section is not drawn for a player without the Developer tab
+src/components/SettingsTabUiScaleSection.greyedApply.test.tsx > the UI scale section's hops to Apply declines the hop while Apply is running, though the greyed button would take the ring
+src/components/SettingsTabUiScaleSection.greyedApply.test.tsx > the UI scale section's hops to Apply goes to Apply again once it has finished
+src/components/SettingsTabUiScaleSection.greyedApply.test.tsx > the UI scale section's hops to Apply lands on Apply from the switch when Apply is not running
+src/components/SettingsTabUiScaleSection.test.ts > UI scale slider bridge D-pad handlers A toggles edit mode on the bridge and claims the press
+src/components/SettingsTabUiScaleSection.test.ts > UI scale slider bridge D-pad handlers Down prefers the reset button, and falls back to Apply only when reset cannot take it
+src/components/SettingsTabUiScaleSection.test.ts > UI scale slider bridge D-pad handlers Left steps the manual profile exactly once and claims the move
+src/components/SettingsTabUiScaleSection.test.ts > UI scale slider bridge D-pad handlers Right steps the manual profile exactly once and claims the move
+src/components/SettingsTabUiScaleSection.test.ts > UI scale slider bridge D-pad handlers Up hands the ring to the auto toggle above the bridge
+src/components/SettingsTabUiScaleSection.test.ts > UI scale slider bridge D-pad handlers wires no onButtonDown handler, so a single press cannot step the value twice
+src/components/steamWordsScaled.test.tsx > Text size reaches the words inside Steam's own controls Permissions: the title, the five switch names and the five descriptions follow Text size (16 and 12 at Normal)
+src/data/bonsaiSettingsHostileContract.test.ts > settings hostile-input contract an unknown voice reply mode falls back to off, never to reading on its own
+src/data/bonsaiSettingsHostileContract.test.ts > settings hostile-input contract api key rejects a non-string
+src/data/bonsaiSettingsHostileContract.test.ts > settings hostile-input contract voice reply mode is trimmed before matching
+src/data/presets.test.ts > suggestion chip pool offers the ban lookup in plain words, and pressing it runs the lookup (maintainer, plan 72)
+src/data/uiScaleProfile.test.ts > uiScaleProfile classifyUiScaleProfile: auto external narrow -> handheld (desktop retired)
+src/data/uiScaleProfile.test.ts > uiScaleProfile classifyUiScaleProfile: auto external wide -> couch
+src/data/uiScaleProfile.test.ts > uiScaleProfile classifyUiScaleProfile: auto internal -> handheld
+src/data/uiScaleProfile.test.ts > uiScaleProfile classifyUiScaleProfile: manual mode uses manual profile
+src/data/uiScaleProfile.test.ts > uiScaleProfile detectDisplayContext: Deck native screen is internal
+src/data/uiScaleProfile.test.ts > uiScaleProfile detectDisplayContext: narrow viewport is internal
+src/data/uiScaleProfile.test.ts > uiScaleProfile detectDisplayContext: the Deck's own panel, whichever way its size is reported
+src/data/uiScaleProfile.test.ts > uiScaleProfile detectDisplayContext: the external monitor as the device actually reports it
+src/data/uiScaleProfile.test.ts > uiScaleProfile detectDisplayContext: wide viewport on large screen is external
+src/data/uiScaleProfile.test.ts > uiScaleProfile manualUiScaleProfileAtIndex snaps to the two real stops
+src/data/uiScaleProfile.test.ts > uiScaleProfile normalizeUiScaleProfileId falls back to handheld
+src/data/uiScaleProfile.test.ts > uiScaleProfile normalizeUiScaleProfileId redirects a legacy 'desktop' save to handheld, same scale as before
+src/data/uiScaleProfile.test.ts > uiScaleProfile profileScaleMultiplier: couch > handheld
+src/features/chat-title/topStripHeightLock.test.tsx > the panel reaches the bottom of the screen with the bar in Steam's strip a UI-size Apply (a new generation) re-measures too
+src/features/folded-tabs/developerTabFolds.test.ts > the Developer tab's section list names the six sections in the drawing's order
+src/features/folded-tabs/settingsTabFolds.test.ts > the Settings tab's sections are the drawing's ten, in the drawing's order, under the drawing's names
+src/features/folded-tabs/settingsTabFolds.test.ts > the Settings tab's sections leave UI scale out while the Developer tab is off
+src/features/folded-tabs/settingsTabFolds.test.ts > the Settings tab's strip words put the UI scale line (with the size in use) before the switch's own description, as the drawing joins them
+src/features/plugin-shell/tabBodyFocusCalls.test.ts > focus calls in the plain tabs SettingsTabUiScaleSection.tsx has no plain .focus() call
+src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx > Up from a suggestion chip goes first to the ban-lookup row when it shows
+src/features/voice/useVoiceAskInput.test.ts > useVoiceAskInput askCameFromMic flag clearAskCameFromMic turns the flag back off, for a manual edit or a clear
+src/features/voice/useVoiceAskInput.test.ts > useVoiceAskInput askCameFromMic flag is false until a transcription lands
+src/features/voice/useVoiceAskInput.test.ts > useVoiceAskInput askCameFromMic flag is set once a transcription is written into the field
+src/features/voice/useVoiceAskWithReadAloud.test.tsx > a finished answer reads itself aloud on 'When I asked by voice' applies the saved setting once it has loaded, including a saved Off
+src/features/voice/useVoiceAskWithReadAloud.test.tsx > a finished answer reads itself aloud on 'When I asked by voice' does not read the answer to a question typed after a spoken one
+src/features/voice/useVoiceAskWithReadAloud.test.tsx > a finished answer reads itself aloud on 'When I asked by voice' keeps the saved read-aloud setting while the saved settings are still loading
+src/features/voice/useVoiceAskWithReadAloud.test.tsx > a finished answer reads itself aloud on 'When I asked by voice' reads the answer to a spoken question (panel open)
+src/features/voice/useVoiceAskWithReadAloud.test.tsx > a finished answer reads itself aloud on 'When I asked by voice' reads the answer to a spoken question when the panel is closed (background watcher)
+src/features/voice/useVoiceAskWithReadAloud.test.tsx > a finished answer reads itself aloud on 'When I asked by voice' still reads it when the panel is closed and opened again between question and answer
+src/hooks/useReadAloud.test.ts > an answer that starts reading itself with no press a completed status under always notifies subscribers with live
+src/hooks/useReadAloud.test.ts > an answer that starts reading itself with no press comes up already speaking on live when the backend reports a reading in progress at mount
+src/hooks/useReadAloud.test.ts > an answer that starts reading itself with no press does not notify when the start call reports it never started speaking
+src/hooks/useReadAloud.test.ts > an answer that starts reading itself with no press returns to idle once the poll it starts reports done
+src/hooks/useReadAloud.test.ts > handleAskTerminalForReadAloud a press is tied to the request of the first pending poll, so a later request does not inherit it
+src/hooks/useReadAloud.test.ts > handleAskTerminalForReadAloud does not read a typed question on voice_only
+src/hooks/useReadAloud.test.ts > handleAskTerminalForReadAloud does nothing when the setting is off
+src/hooks/useReadAloud.test.ts > handleAskTerminalForReadAloud fires once per request_id even when both completion paths see it
+src/hooks/useReadAloud.test.ts > handleAskTerminalForReadAloud never reads out a protected boss's name the question only described
+src/hooks/useReadAloud.test.ts > handleAskTerminalForReadAloud reads a completed answer aloud when the setting is always
+src/hooks/useReadAloud.test.ts > handleAskTerminalForReadAloud reads a spoken question noted at the Ask press even when no pending poll was seen first
+src/hooks/useReadAloud.test.ts > handleAskTerminalForReadAloud reads only a voice question on voice_only, using the flag remembered at Ask start
+src/hooks/useReadAloud.test.ts > questionCameFromMic is false outright when the flag was never set, no matter the text
+src/hooks/useReadAloud.test.ts > questionCameFromMic is false when the flag is set but the field text was replaced before Ask was pressed
+src/hooks/useReadAloud.test.ts > questionCameFromMic is true when the flag is set and the question asked is exactly what the mic wrote
+src/hooks/useReadAloud.test.ts > questionCameFromMic still counts as spoken across leading, trailing, or doubled-up spacing
+src/hooks/useReadAloud.test.ts > shouldReadAloudOnCompletion always reads every answer, typed or spoken
+src/hooks/useReadAloud.test.ts > shouldReadAloudOnCompletion never reads an answer that did not succeed
+src/hooks/useReadAloud.test.ts > shouldReadAloudOnCompletion never reads an answer that flattens to nothing
+src/hooks/useReadAloud.test.ts > shouldReadAloudOnCompletion off never reads on its own, whichever way the question came in
+src/hooks/useReadAloud.test.ts > shouldReadAloudOnCompletion voice_only reads only a question that came in through the mic
+src/hooks/useReadAloud.test.ts > stopReadAloudFireAndForget calls stop_voice_read_aloud without needing a caller to await it
+src/hooks/useReadAloud.test.ts > useReadAloud does nothing for empty text
+src/hooks/useReadAloud.test.ts > useReadAloud shows a toast and returns to idle when the backend reports ok: false
+src/hooks/useReadAloud.test.ts > useReadAloud starts speaking, polls status, and flips the label back to idle when done
+src/hooks/useReadAloud.test.ts > useReadAloud stop calls stop_voice_read_aloud and clears the speaking turn at once
+src/preview/replyLayoutReport.test.ts > buildReplyLayoutReport counts the newest turn's stops, not an older turn's
+src/preview/replyLayoutReport.test.ts > buildReplyLayoutReport reports nothing when no turn is on screen
+src/preview/replyLayoutReport.test.ts > buildReplyLayoutReport reports the details chips as open when the chip ladder is showing
+src/preview/replyLayoutReport.test.ts > buildReplyLayoutReport says which of the reply controls are present
+src/styles/sections/answerBubble.test.ts > Read aloud in the answer's lower-left corner -- stylesheet (plan 84 step 3) draws the icon at Copy's size and weight
+src/styles/sections/answerBubble.test.ts > Read aloud in the answer's lower-left corner -- stylesheet (plan 84 step 3) draws the slot into the bubble's bottom-left corner, the mirror of Copy's
+src/styles/sections/answerBubble.test.ts > Read aloud in the answer's lower-left corner -- stylesheet (plan 84 step 3) gives a bubble with the speaker a bottom band of 25 (see the arithmetic below)
+src/styles/sections/answerBubble.test.ts > Read aloud in the answer's lower-left corner -- stylesheet (plan 84 step 3) holds both corners back while any letter is unsettled
+src/styles/sections/answerBubble.test.ts > Read aloud in the answer's lower-left corner -- stylesheet (plan 84 step 3) puts Copy on the same strip when it follows the speaker: it pulls up 26, not 38, and the speaker gives back no height
+src/styles/sections/answerBubble.test.ts > Read aloud in the answer's lower-left corner -- stylesheet (plan 84 step 3) stands Copy's end-of-line spacer and its code-box room down while the band is there
+src/styles/sections/answerBubble.test.ts > Read aloud in the answer's lower-left corner -- stylesheet (plan 84 step 3) the bottom band holds the icon, its inset and its ring (P84-READ-01 follow-up) and for Copy when it shares the band
+src/styles/sections/answerBubble.test.ts > Read aloud in the answer's lower-left corner -- stylesheet (plan 84 step 3) the bottom band holds the icon, its inset and its ring (P84-READ-01 follow-up) band + border >= box + inset + ring + clearance, for the speaker
+src/styles/sections/answerBubble.test.ts > Read aloud in the answer's lower-left corner -- stylesheet (plan 84 step 3) the bottom band holds the icon, its inset and its ring (P84-READ-01 follow-up) keeps the ring inside the bubble: the inset is at least the ring's reach below the box
+src/styles/sections/answerBubble.test.ts > Read aloud in the answer's lower-left corner -- stylesheet (plan 84 step 3) the bottom band holds the icon, its inset and its ring (P84-READ-01 follow-up) puts the reply block back where it sat: bottom margin = bubble margin 8 + inset
+src/styles/sections/answerBubble.test.ts > Read aloud in the answer's lower-left corner -- stylesheet (plan 84 step 3) turns red while reading, and shows the white ring when the D-pad is on it
+src/styles/sections/replyRatingChoices.test.ts > the calmer rating choices (plan 79, after 2: smaller and softer) leaves the speaker's bare glyph alone: it is Copy's kind of icon in the answer's corner, not a choice
+src/styles/sections/section-4.test.ts > room under the suggestion chips (section 4 CSS) leaves no gap under the question box, the dock's last row since plan 84, at every UI size
+src/styles/sections/section-4.test.ts > room under the suggestion chips (section 4 CSS) puts the chip one row gap above the question box, at every UI size
+src/styles/sections/section-6.test.ts > Read aloud is no longer styled as a row item (section 6 CSS, plan 84 step 3) has no "Saved on this Deck" centring rule for a row the label no longer shares
+src/styles/sections/section-6.test.ts > Read aloud is no longer styled as a row item (section 6 CSS, plan 84 step 3) has no rule left that styles the speaker in the thumbs row
+src/styles/sections/section-6.test.ts > the 'What went wrong?' reason chips are tighter than the other reply buttons (plan 72 option E, calmed in plan 79) makes each reason chip 24 tall with 2 by 8 padding, scaled
+src/styles/sections/section-6.test.ts > the 'What went wrong?' reason chips are tighter than the other reply buttons (plan 72 option E, calmed in plan 79) puts 5 between the reason chips, scaled and able to beat the shared row gap
+src/utils/answerBubbleNavigation.readAloudCorner.test.tsx > a long answer read to its end, Steam scroll rule: center lands the speaker wholly between the header and the dock, as Copy does
+src/utils/answerBubbleNavigation.readAloudCorner.test.tsx > a long answer read to its end, Steam scroll rule: center walking Right to Copy and Left back lands each wholly on screen, and none is landed twice going right
+src/utils/answerBubbleNavigation.readAloudCorner.test.tsx > a long answer read to its end, Steam scroll rule: padded lands the speaker wholly between the header and the dock, as Copy does
+src/utils/answerBubbleNavigation.readAloudCorner.test.tsx > a long answer read to its end, Steam scroll rule: padded walking Right to Copy and Left back lands each wholly on screen, and none is landed twice going right
+src/utils/answerBubbleNavigation.readAloudCorner.test.tsx > a long answer read to its end, Steam scroll rule: top lands the speaker wholly between the header and the dock, as Copy does
+src/utils/answerBubbleNavigation.readAloudCorner.test.tsx > a long answer read to its end, Steam scroll rule: top walking Right to Copy and Left back lands each wholly on screen, and none is landed twice going right
+src/utils/answerBubbleNavigation.readAloudCorner.test.tsx > a long answer read to its end, Steam scroll rule: undefined lands the speaker wholly between the header and the dock, as Copy does
+src/utils/answerBubbleNavigation.readAloudCorner.test.tsx > a long answer read to its end, Steam scroll rule: undefined walking Right to Copy and Left back lands each wholly on screen, and none is landed twice going right
+src/utils/answerBubbleNavigation.readAloudCorner.test.tsx > the corner icons are lifted like Copy, not left to the answer's own walk neither the speaker nor its slot carries a class the lift leaves alone
+src/utils/answerBubbleNavigation.readAloudCorner.test.tsx > with Steam leaving the pane where it is, the plugin's own lift brings the icons clear of the dock lifts the speaker, then Copy, to just above the dock
+src/utils/answerReadableText.test.ts > buildAnswerReadableText flattens a heading, bullets and a numbered list to their words
+src/utils/answerReadableText.test.ts > buildAnswerReadableText flattens bold, italic and a link to their words
+src/utils/answerReadableText.test.ts > buildAnswerReadableText flattens inline code to its words
+src/utils/answerReadableText.test.ts > buildAnswerReadableText reads a character answer as written, with only formatting flattened
+src/utils/answerReadableText.test.ts > buildAnswerReadableText reads the spoiler body for a fence mentioning the backend's named entity
+src/utils/answerReadableText.test.ts > buildAnswerReadableText reads the spoiler body for a name-only low-narrative title with no AppID
+src/utils/answerReadableText.test.ts > buildAnswerReadableText reads the spoiler body when masking is off globally, even without consent
+src/utils/answerReadableText.test.ts > buildAnswerReadableText reads the spoiler body when the screen would unwrap it (consent given)
+src/utils/answerReadableText.test.ts > buildAnswerReadableText returns an empty string for empty or whitespace-only text
+src/utils/answerReadableText.test.ts > buildAnswerReadableText returns an empty string when the body is only internal markers
+src/utils/answerReadableText.test.ts > buildAnswerReadableText returns plain text unchanged when there is nothing to flatten
+src/utils/answerReadableText.test.ts > buildAnswerReadableText says a spoiler is hidden here for a masked spoiler fence, without the hidden text
+src/utils/answerReadableText.test.ts > buildAnswerReadableText says there is a table on screen in place of a markdown table
+src/utils/answerReadableText.test.ts > buildAnswerReadableText says there is code on screen in place of a fenced code block
+src/utils/answerReadableText.test.ts > buildAnswerReadableText strips internal bonsai-status and strategy-branch tags
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) A on the speaker calls the toggle, every press
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) Down from Read aloud goes where Down from Copy goes: Helpful, else Show details
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) Left from Copy with no speaker still returns to the answer
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) Right from the last section reaches Read aloud first, and Copy only when there is no speaker
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) Up from Read aloud goes back to the answer's last section, like Copy's Up
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) draws nothing while the answer is still arriving, or when no handler is supplied
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) draws the speaker inside a corner slot on a finished answer, icon only
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) marks the bubble so the stylesheet can keep the last line clear of the speaker
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) registers under its own reply-stop name, read-aloud-corner
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) says Stop and turns red while this answer is being read
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) sits after the bubble and before Copy, never inside the bubble
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) still draws without Copy (a speaker alone is a valid corner)
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) the speaker is no longer a stop below the answer: Down never lands on it
+src/utils/buildAnswerBubbleElement.test.tsx > Read aloud in the answer bubble's lower-left corner (plan 84 step 3) walks the bottom edge right and back: answer, Read aloud, Copy, Read aloud, answer, no stop twice going right
+src/utils/buildReplyActionsElement.test.tsx > buildReplyActionsElement no longer draws Read aloud draws no speaker beside the thumbs
+src/utils/buildReplyActionsElement.test.tsx > buildReplyActionsElement no longer draws Read aloud registers no speaker stop
+src/utils/drgGlossaryTermMatch.test.ts > isDrgSurvivorAppId does not match another game's AppID
+src/utils/drgGlossaryTermMatch.test.ts > isDrgSurvivorAppId does not match null/undefined/empty
+src/utils/drgGlossaryTermMatch.test.ts > isDrgSurvivorAppId matches the DRG Survivor AppID
+src/utils/handRingOnWhenGone.test.ts > Dismiss on the troubleshooting hint falls through to the chips when the ban-lookup row is not showing
+src/utils/handRingOnWhenGone.test.ts > Dismiss on the troubleshooting hint hands the ring to the ban-lookup row below when the hint goes away
+src/utils/liveTurnFocusGraph.test.ts > liveTurnFocusGraph focusDownFromLiveAnswerBubble no longer stops at a Read aloud line, even with the corner speaker mounted
+src/utils/localOnlyAskCommands.test.ts > questionBypassesOllamaPcIpRequirement allows vac-check without PC IP
+src/utils/localOnlyAskCommands.test.ts > questionBypassesOllamaPcIpRequirement treats the ban lookup chip's plain sentence as the same command
+src/utils/mergePullModelCatalog.test.ts > mergePullModelCatalog adds overlay-only entries
+src/utils/mergePullModelCatalog.test.ts > mergePullModelCatalog applies partial overrides on bundled entries
+src/utils/mergePullModelCatalog.test.ts > mergePullModelCatalog rejects invalid overlay entries
+src/utils/mergePullModelCatalog.test.ts > mergePullModelCatalog removes tags listed in removed_tags
+src/utils/mergePullModelCatalog.test.ts > mergePullModelCatalog returns bundled catalog when overlay is empty
+src/utils/oneLineSpoilerCopyAndReadAloud.test.ts > a hidden block written on one line, in Copy and Read aloud is never read aloud (glued to a bullet, after the safety net)
+src/utils/oneLineSpoilerCopyAndReadAloud.test.ts > a hidden block written on one line, in Copy and Read aloud is never read aloud (glued to a bullet, raw)
+src/utils/oneLineSpoilerCopyAndReadAloud.test.ts > a hidden block written on one line, in Copy and Read aloud is never read aloud (own line, after the safety net)
+src/utils/oneLineSpoilerCopyAndReadAloud.test.ts > a hidden block written on one line, in Copy and Read aloud is never read aloud (own line, raw)
+src/utils/permHintRowNav.test.ts > Down from the ban-lookup row takes the slot above the question box (the line while it holds the line, else the chips)
+src/utils/permHintRowNav.test.ts > Down from the ban-lookup row with nothing registered below leaves the move to Steam
+src/utils/permHintRowNav.test.ts > Up from a suggestion chip reaches the lowest permission row before the reply above it
+src/utils/permHintRowNav.test.ts > Up from the ban-lookup row reaches the troubleshooting hint above it when that hint is showing
+src/utils/permHintRowNav.test.ts > the troubleshooting hint row's Left and Right Down goes to the ban-lookup row under it when that row is showing
+src/utils/permHintRowNav.test.ts > the troubleshooting hint row's Left and Right Down with no ban-lookup row goes to the slot above the question box, the line while it holds the line
+src/utils/permissionDeepLink.test.ts > permissionDeepLink detects VAC-check capability-off replies
+src/utils/replyStopRegistry.test.ts > reply stop registry walks Retry, then the notes line, then Show reasoning, then Read aloud and Copy along the answer's bottom edge
+src/utils/settingsContracts.test.ts > settings contracts normalizeSettings: a settings file saved with the retired 'desktop' UI scale still loads
+src/utils/settingsContracts.test.ts > settings contracts normalizeSettings: ui scale defaults and manual profile
+src/utils/settingsContracts.test.ts > settings contracts normalizeSettings: without the Developer tab, a saved manual UI scale loads as the default
+src/utils/spoilerFenceOddShapes.test.ts > a hidden block written oddly, in Copy and Read aloud is never read aloud (a ``` block with a blank line inside)
+src/utils/spoilerFenceOddShapes.test.ts > a hidden block written oddly, in Copy and Read aloud is never read aloud (a block in a bullet)
+src/utils/spoilerFenceOddShapes.test.ts > a hidden block written oddly, in Copy and Read aloud is never read aloud (a block in a quote)
+src/utils/spoilerFenceOddShapes.test.ts > a hidden block written oddly, in Copy and Read aloud is never read aloud (a four-backtick block with a ``` line inside)
+src/utils/spoilerFenceOddShapes.test.ts > a hidden block written oddly, in Copy and Read aloud is never read aloud (a ~~~ block holding a ``` line)
+src/utils/spoilerFenceOddShapes.test.ts > a hidden block written oddly, in Copy and Read aloud is never read aloud (a ~~~ block with a blank line inside)
+src/utils/spoilerFenceOddShapes.test.ts > a hidden block written oddly, in Copy and Read aloud is never read aloud (a ~~~ block)
+src/utils/tildeCodeReadAloud.test.ts > Read aloud and a code block that is not fenced with three backticks does not turn a lone ~~~ inside a sentence into code
+src/utils/tildeCodeReadAloud.test.ts > Read aloud and a code block that is not fenced with three backticks says each of two blocks of different kinds, and keeps a hidden block hidden
+src/utils/tildeCodeReadAloud.test.ts > Read aloud and a code block that is not fenced with three backticks says there is code on screen (a four-backtick block holding a ``` line)
+src/utils/tildeCodeReadAloud.test.ts > Read aloud and a code block that is not fenced with three backticks says there is code on screen (a ~~~ block in a bullet)
+src/utils/tildeCodeReadAloud.test.ts > Read aloud and a code block that is not fenced with three backticks says there is code on screen (a ~~~ block with a blank line inside)
+src/utils/tildeCodeReadAloud.test.ts > Read aloud and a code block that is not fenced with three backticks says there is code on screen (a ~~~ block with a language)
+src/utils/tildeCodeReadAloud.test.ts > Read aloud and a code block that is not fenced with three backticks says there is code on screen (a ~~~ block)
+src/utils/tildeCodeReadAloud.test.ts > Read aloud and a code block that is not fenced with three backticks still says the phrase once for a three-backtick block
+test_capabilities.CapabilitiesTests.test_legacy_grandfather_all_true_except_steam_web_api
+test_chat_slot_ownership.ChatSlotOwnershipTests.test_vac_check_deny_reply_persists_turn_and_renames_slot
+test_internet_downloads_permission.DownloadsAllowedWhileOn.test_recommended_list_may_refresh
+test_internet_downloads_permission.DownloadsRefusedWhileOff.test_recommended_list_stays_offline
+test_ollama_prompts_drg_glossary.DrgSurvivorGlossaryPromptTests.test_glossary_clause_absent_for_other_titles
+test_ollama_prompts_drg_glossary.DrgSurvivorGlossaryPromptTests.test_glossary_clause_absent_with_no_game_context
+test_ollama_prompts_drg_glossary.DrgSurvivorGlossaryPromptTests.test_glossary_clause_present_by_name_without_matching_app_id
+test_ollama_prompts_drg_glossary.DrgSurvivorGlossaryPromptTests.test_glossary_clause_present_for_drg_survivor_app_id
+test_ollama_prompts_drg_glossary.DrgSurvivorGlossaryPromptTests.test_glossary_clause_present_in_strategy_mode_too
+test_pull_model_catalog_merge.TestPullModelCatalogMerge.test_fetch_remote_when_force
+test_pull_model_catalog_merge.TestPullModelCatalogMerge.test_fetch_uses_cache_when_fresh
+test_pull_model_catalog_merge.TestPullModelCatalogMerge.test_sanitize_overlay_accepts_valid_entry
+test_pull_model_catalog_merge.TestPullModelCatalogMerge.test_sanitize_overlay_rejects_invalid_entry
+test_settings_service.SettingsServiceTests.test_ui_scale_settings_defaults_and_sanitize
+test_steam_vac_service.SteamVacServiceTests.test_extract_bare_id
+test_steam_vac_service.SteamVacServiceTests.test_extract_profile_url
+test_steam_vac_service.SteamVacServiceTests.test_format_report_empty_rows_skipped_only
+test_steam_vac_service.SteamVacServiceTests.test_format_report_missing_row_still_readable
+test_steam_vac_service.SteamVacServiceTests.test_format_report_rows_render_without_gfm_table_syntax
+test_steam_vac_service.SteamVacServiceTests.test_get_player_bans_batches_and_cache
+test_steam_vac_service.SteamVacServiceTests.test_split_body
+test_steam_vac_service.SteamVacServiceTests.test_vanity_id_skipped
+test_steam_vac_service.VacCheckCommandsTests.test_constant_prefix
+test_steam_vac_service.VacCheckCommandsTests.test_parse_prefix_optional_slash
+test_steam_vac_service.VacCheckCommandsTests.test_response_no_key
+test_steam_vac_service.VacCheckCommandsTests.test_response_permission_off
+test_steam_vac_service.VacCheckCommandsTests.test_the_suggestion_chips_plain_sentence_runs_the_same_lookup
+test_voice_read_aloud_rpc.VoiceReadAloudRpcShapeTests.test_all_three_methods_exist_as_public_async_defs
+test_voice_read_aloud_rpc.VoiceReadAloudRpcShapeTests.test_get_voice_read_aloud_status_returns_the_shape
+test_voice_read_aloud_rpc.VoiceReadAloudRpcShapeTests.test_start_voice_read_aloud_passes_the_text_through_and_returns_the_shape
+test_voice_read_aloud_rpc.VoiceReadAloudRpcShapeTests.test_stop_voice_read_aloud_returns_the_shape
+test_voice_read_aloud_rpc.VoiceReadAloudSilencedOnClearAndUnloadTests.test_clearing_the_session_stops_any_reading
+test_voice_read_aloud_rpc.VoiceReadAloudSilencedOnClearAndUnloadTests.test_unloading_the_plugin_stops_any_reading
+test_voice_read_aloud_service.EspeakSentenceMakerTests.test_a_dash_led_sentence_is_never_read_as_an_option
+test_voice_read_aloud_service.SessionAudioPlayerTests.test_play_raises_when_no_player_binary_exists
+test_voice_read_aloud_service.SessionAudioPlayerTests.test_stop_is_safe_when_nothing_is_playing
+test_voice_read_aloud_service.SessionAudioPlayerTests.test_the_session_env_reaches_the_player_process
+test_voice_read_aloud_service.SplitIntoSentencesTests.test_collapses_runs_of_whitespace
+test_voice_read_aloud_service.SplitIntoSentencesTests.test_does_not_split_on_a_decimal
+test_voice_read_aloud_service.SplitIntoSentencesTests.test_does_not_split_on_a_single_trailing_initial
+test_voice_read_aloud_service.SplitIntoSentencesTests.test_does_not_split_on_common_abbreviations
+test_voice_read_aloud_service.SplitIntoSentencesTests.test_drops_empty_pieces
+test_voice_read_aloud_service.SplitIntoSentencesTests.test_empty_text_returns_no_sentences
+test_voice_read_aloud_service.SplitIntoSentencesTests.test_long_sentence_is_split_at_a_comma
+test_voice_read_aloud_service.SplitIntoSentencesTests.test_short_sentence_is_not_split
+test_voice_read_aloud_service.SplitIntoSentencesTests.test_splits_on_full_stops
+test_voice_read_aloud_service.SplitIntoSentencesTests.test_splits_on_line_breaks
+test_voice_read_aloud_service.SplitIntoSentencesTests.test_splits_on_question_and_exclamation_marks
+test_voice_read_aloud_service.VoiceReadAloudServiceTests.test_empty_text_is_not_read
+test_voice_read_aloud_service.VoiceReadAloudServiceTests.test_maker_failure_sets_error_state
+test_voice_read_aloud_service.VoiceReadAloudServiceTests.test_makes_the_next_sentence_while_the_current_one_plays
+test_voice_read_aloud_service.VoiceReadAloudServiceTests.test_missing_espeak_returns_ok_false_and_error_state
+test_voice_read_aloud_service.VoiceReadAloudServiceTests.test_missing_player_returns_ok_false_and_error_state
+test_voice_read_aloud_service.VoiceReadAloudServiceTests.test_player_failure_sets_error_state
+test_voice_read_aloud_service.VoiceReadAloudServiceTests.test_plays_sentences_in_order
+test_voice_read_aloud_service.VoiceReadAloudServiceTests.test_start_reports_ok_and_the_sentence_count
+test_voice_read_aloud_service.VoiceReadAloudServiceTests.test_start_while_speaking_stops_the_first_reading
+test_voice_read_aloud_service.VoiceReadAloudServiceTests.test_status_starts_idle
+test_voice_read_aloud_service.VoiceReadAloudServiceTests.test_status_transitions_idle_speaking_done
+test_voice_read_aloud_service.VoiceReadAloudServiceTests.test_stop_is_safe_when_nothing_is_playing
+test_voice_read_aloud_service.VoiceReadAloudServiceTests.test_stop_mid_reading_ends_playback_and_deletes_temp_files
+# NEW: 80
+src/components/DeveloperTab.folded.test.tsx > the folded Developer tab, every section closed is five one-line sections, each with its summary, and no row drawn
+src/components/DeveloperTab.foldedWalk.test.tsx > the folded Developer tab, every section closed Down from the tab bar walks the five section lines, once each, then the Open all button, and holds; Up walks every line back
+src/components/DeveloperTab.foldedWalk.test.tsx > the folded Developer tab, every section closed without a seed install the walk is the four other lines
+src/components/MainTabBonsaiAiMarkdownChunk.test.tsx > MainTabBonsaiAiMarkdownChunk glossary markup does not mark up terms that only appear inside an unrevealed spoiler fence
+src/components/MainTabBonsaiAiMarkdownChunk.test.tsx > MainTabBonsaiAiMarkdownChunk glossary markup leaves the same text plain for a game the library has no words for
+src/components/MainTabBonsaiAiMarkdownChunk.test.tsx > MainTabBonsaiAiMarkdownChunk glossary markup leaves the same text plain when no AppID is supplied at all
+src/components/MainTabBonsaiAiMarkdownChunk.test.tsx > MainTabBonsaiAiMarkdownChunk glossary markup marks up a curated term as a tappable chip when the library has words for the turn's game
+src/components/MainTabBonsaiAiMarkdownChunk.test.tsx > MainTabBonsaiAiMarkdownChunk glossary markup tapping the chip twice opens the full definition with an explain-further chip
+src/components/MainTabChatTranscript.emptySlotPreview.test.tsx > the [+] create-position screen hides the last reply's slow-answer lines
+src/components/MainTabChatTranscript.glossaryWords.test.tsx > glossary words asked for by the transcript asks for the words of every game drawn, once each
+src/components/MainTabChatTranscript.glossaryWords.test.tsx > glossary words asked for by the transcript leaves the same answer plain for a game whose library has no words
+src/components/MainTabChatTranscript.glossaryWords.test.tsx > glossary words asked for by the transcript underlines the library's words in an earlier answer once they arrive
+src/components/MainTabChatTranscript.replyBlock.test.tsx > a finished reply, all three changes together reads top to bottom: question, answer, Copy in its corner, Was this helpful?, then Show details
+src/components/SettingsDeveloperWrappedRing.test.tsx > wrapped controls show one white ring Steam's focus mark on the button inside draws one solid ring, on the button
+src/components/SettingsDeveloperWrappedRing.test.tsx > wrapped controls show one white ring Steam's focus mark on the wrapper draws one solid ring, on the wrapper
+src/components/SettingsDeveloperWrappedRing.test.tsx > wrapped controls show one white ring a knowledge-base style host > Focusable > Button keeps no outline on its wrapper
+src/components/SettingsDeveloperWrappedRing.test.tsx > wrapped controls show one white ring no ring while none of them is focused
+src/components/SettingsTab.foldedWalk.test.tsx > the floating Open all button on the Settings tab Right from Voice input puts the ring on it; A opens every section (Close all); Down holds; Up returns to Voice input
+src/components/SettingsTab.foldedWalk.test.tsx > the folded Settings tab, every section open with the character off the walk skips the picker and the accent row
+src/components/steamWordsScaled.test.tsx > Text size reaches the words inside Steam's own controls Permissions: the title, the four switch names and the four descriptions follow Text size (16 and 12 at Normal)
+src/features/folded-tabs/developerTabFolds.test.ts > the Developer tab's section list names the five sections in the drawing's order
+src/features/folded-tabs/settingsTabFolds.test.ts > the Settings tab's sections are the drawing's sections, in the drawing's order, under the drawing's names
+src/styles/sections/section-4.test.ts > room under the suggestion chips (section 4 CSS) leaves no gap under the question box, the dock's last row since plan 84
+src/styles/sections/section-4.test.ts > room under the suggestion chips (section 4 CSS) puts the chip one row gap above the question box
+src/styles/sections/section-6.test.ts > the 'What went wrong?' reason chips are tighter than the other reply buttons (plan 72 option E, calmed in plan 79) makes each reason chip 24 tall with 2 by 8 padding
+src/styles/sections/section-6.test.ts > the 'What went wrong?' reason chips are tighter than the other reply buttons (plan 72 option E, calmed in plan 79) puts 5 between the reason chips, able to beat the shared row gap
+src/utils/buildAnswerBubbleElement.test.tsx > Copy in the answer bubble's corner Left from Copy with no speaker still returns to the answer
+src/utils/drgGlossaryAsk.test.ts > composeDrgGlossaryExplainFurtherQuestion leaves the game out when the library gave no title
+src/utils/drgGlossaryTermMatch.test.ts > with no words finds nothing and leaves the text as one plain piece
+src/utils/glossaryStore.test.ts > glossaryStore a failed call gives no words and is asked again next time
+src/utils/glossaryStore.test.ts > glossaryStore a library that is not installed gives no words and no error
+src/utils/glossaryStore.test.ts > glossaryStore asks again after a gap with nothing on screen, in case the library changed unheard
+src/utils/glossaryStore.test.ts > glossaryStore asks for nothing when there is no game
+src/utils/glossaryStore.test.ts > glossaryStore asks the back end once per game however many answers draw
+src/utils/glossaryStore.test.ts > glossaryStore does not take a library change nobody on screen was waiting for
+src/utils/glossaryStore.test.ts > glossaryStore forgets everything when the library is removed or put in place
+src/utils/glossaryStore.test.ts > glossaryStore gives the same list object until it changes
+src/utils/glossaryStore.test.ts > glossaryStore keeps an empty answer so a game with no words costs one call
+src/utils/handRingOnWhenGone.test.ts > Dismiss on the troubleshooting hint hands the ring to the chips when the hint goes away
+src/utils/permHintRowNav.test.ts > the troubleshooting hint row's Left and Right Down goes to the slot above the question box, the line while it holds the line
+src/utils/replyStopRegistry.test.ts > reply stop registry walks Retry, then the notes line, then Show reasoning, then Copy along the answer's bottom edge
+src/utils/settingsContracts.test.ts > settings contracts normalizeSettings: a settings file saved with removed settings (voice replies, UI scale) still loads and the old keys are not carried
+src/utils/settingsContracts.test.ts > settings contracts normalizeSettings: a settings file saved with the retired Steam ban lookup key and permission still loads, and both are dropped
+test_build_rag_glossary.GlossaryBuildCorpusTests.test_the_build_is_repeatable_with_words
+test_build_rag_glossary.GlossaryBuildCorpusTests.test_the_manifest_counts_the_words
+test_build_rag_glossary.GlossaryBuildCorpusTests.test_the_words_are_not_notes_or_vectors
+test_build_rag_glossary.SeedGlossaryTermsTests.test_a_good_file_is_not_refused
+test_build_rag_glossary.SeedGlossaryTermsTests.test_a_repeated_key_or_id_stops_the_build
+test_build_rag_glossary.SeedGlossaryTermsTests.test_a_word_for_an_unknown_game_stops_the_build
+test_build_rag_glossary.SeedGlossaryTermsTests.test_alt_forms_that_are_not_a_list_of_text_stop_the_build
+test_build_rag_glossary.SeedGlossaryTermsTests.test_an_empty_peek_or_definition_stops_the_build
+test_build_rag_glossary.SeedGlossaryTermsTests.test_no_words_file_gives_an_empty_table
+test_build_rag_glossary.SeedGlossaryTermsTests.test_the_words_are_written_with_their_game
+test_build_rag_glossary.SeedGlossaryTermsTests.test_two_words_with_one_spelling_stop_the_build
+test_build_rag_glossary.ShippedGlossaryFileTests.test_the_shipped_file_builds_against_the_real_seed
+test_build_rag_glossary.ShippedGlossaryFileTests.test_the_shipped_file_holds_the_two_deep_rock_galactic_words
+test_capabilities.CapabilitiesTests.test_legacy_grandfather_all_true_except_microphone_and_downloads
+test_knowledge_base_glossary.GlossaryForGameTests.test_a_broken_library_is_logged_once_and_answered_plainly
+test_knowledge_base_glossary.GlossaryForGameTests.test_a_damaged_library_never_stops_the_ai_instructions
+test_knowledge_base_glossary.GlossaryForGameTests.test_a_game_is_found_by_name_when_no_app_id_is_given
+test_knowledge_base_glossary.GlossaryForGameTests.test_a_library_built_before_the_glossary_gives_no_words_and_no_error
+test_knowledge_base_glossary.GlossaryForGameTests.test_a_library_that_is_not_installed_gives_no_words_and_no_error
+test_knowledge_base_glossary.GlossaryForGameTests.test_an_empty_table_gives_no_words
+test_knowledge_base_glossary.GlossaryForGameTests.test_another_game_gets_no_words
+test_knowledge_base_glossary.GlossaryForGameTests.test_no_game_gets_no_words
+test_knowledge_base_glossary.GlossaryForGameTests.test_the_ai_gets_the_games_title_and_spellings
+test_knowledge_base_glossary.GlossaryForGameTests.test_the_games_words_come_back_by_app_id
+test_knowledge_base_glossary.GlossaryForGameTests.test_the_library_switch_off_gives_no_words
+test_knowledge_base_schema.GlossaryTableTests.test_apply_schema_creates_the_glossary_table_with_no_search_index_or_vectors
+test_knowledge_base_schema.GlossaryTableTests.test_apply_schema_is_harmless_on_a_library_that_has_the_glossary_table
+test_ollama_ask_service.GlossaryReachesThePromptTests.test_no_glossary_words_when_the_library_has_none
+test_ollama_ask_service.GlossaryReachesThePromptTests.test_the_glossary_words_for_the_running_game_reach_the_prompt
+test_ollama_prompts_glossary.GlossaryPromptTests.test_another_games_words_name_that_game
+test_ollama_prompts_glossary.GlossaryPromptTests.test_glossary_clause_names_the_game_and_its_words
+test_ollama_prompts_glossary.GlossaryPromptTests.test_glossary_clause_present_in_strategy_mode_too
+test_ollama_prompts_glossary.GlossaryPromptTests.test_no_glossary_clause_without_words
+test_plugin_zip_corpus_guard.PluginZipCorpusGuardTests.test_planted_glossary_terms_file_fails
+test_settings_service.SettingsServiceTests.test_a_file_saved_with_removed_settings_still_loads_and_the_old_keys_are_dropped
+test_settings_service.SettingsServiceTests.test_a_file_saved_with_the_retired_steam_key_and_permission_still_loads
+test_settings_service.SettingsServiceTests.test_loading_a_file_with_the_retired_steam_key_removes_it_from_the_file

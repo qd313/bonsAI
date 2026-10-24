@@ -7,7 +7,7 @@ import os
 import tempfile
 import unittest
 
-from backend.services import intent_pack_service as svc
+from backend.search import intent_pack_service as svc
 
 
 class IntentPackServiceTests(unittest.TestCase):

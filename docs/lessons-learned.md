@@ -1,0 +1,791 @@
+# Lessons learned
+
+Title:      Lessons learned working on bonsAI
+Purpose:    The traps this project has already fallen into, written down so the next person or
+            tool does not fall into them again. Each one cost real time or shipped a wrong
+            answer at least once. They are habits, not rules with a checker behind them —
+            nothing here is enforced by a test, which is exactly why it is written down.
+Used for:   Read once at the start of working here, alongside [AGENTS.md](../AGENTS.md).
+            Come back to the section that matches what you are about to do.
+Solves:     Until 2026-09-15 most of this lived only in one AI tool's private memory on the
+            maintainer's machine. A different tool, a fresh install, or a new contributor got
+            none of it and repeated the mistakes.
+Does not:   Cover how the code is laid out, how the two halves talk, or how to build and deploy
+            — that is all in [AGENTS.md](../AGENTS.md). Does not cover the writing style rules
+            for a file header, which are in [code-clarity.md](code-clarity.md).
+
+Each lesson says what happened, then what to do. The "what happened" is there on purpose: a rule
+with no story behind it gets argued away the first time it is inconvenient.
+
+---
+
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [1. Working in a checkout other people are also using](#1-working-in-a-checkout-other-people-are-also-using)
+- [2. Proving a change is really a change](#2-proving-a-change-is-really-a-change)
+- [3. Checking work on the Steam Deck](#3-checking-work-on-the-steam-deck)
+- [4. Briefing helpers](#4-briefing-helpers)
+- [5. Design and screen work](#5-design-and-screen-work)
+- [6. Tooling traps on this machine](#6-tooling-traps-on-this-machine)
+- [7. Documents](#7-documents)
+<!-- /toc -->
+
+## 1. Working in a checkout other people are also using
+
+**The checkout is shared.** Several chats and several people may have this same folder open at
+once. Two habits follow from that, and both were learned by losing work.
+
+**Never stage everything.** `git add -A` here sweeps another session's half-finished work into
+your commit. It has happened. Stage the paths you actually changed, by name. If you find you have
+already done it, do not reset the branch — undo the commit while keeping every file
+(`git reset --soft HEAD~1`), unstage what was not yours, and commit again with only your paths.
+
+**Never hard-reset the shared folder to back out of a test.** To see whether a lane's commit
+clashes, a session ran `git cherry-pick --no-commit` and then `git reset --hard HEAD` as its way
+out. The reset also threw away that session's own uncommitted plan log, an hour of entries (plan
+72, 2026-09-27). Back out with `git cherry-pick --abort` alone, try the pick in a repo copy instead,
+and commit a running log right after each entry rather than letting it build up.
+
+**Do not switch branches in the shared folder while others are working.** A branch switch picks up
+whatever they have uncommitted and carries it onto your branch. When you need a branch, make a
+separate copy of the repo instead — `python scripts/worktree.py create <name>` — and work there.
+
+**A copy of the repo and a branch are different things.** Deleting a copy's folder does not delete
+its commits, as long as a branch still points at them. This matters when clearing up: folders are
+cheap to remove and easy to remake, branches are the thing to be careful with. The exception is a
+copy sitting on no branch at all — remove that folder and its commits become unreachable, so check
+before removing one.
+
+**Clearing an old copy can gut the main checkout's dependencies, and it did.** Every copy's
+`node_modules` is a Windows junction pointing straight at the main repo's. `git worktree remove`
+follows those links on the way out, so removing twenty-four old copies deleted the command shims and
+part of the package store inside the *main* folder. Nothing said so at the time — the next type
+check simply failed with a message about the wrong `tsc`. Before deleting a copy: unlink every
+junction inside it first (`rmdir <path>` with no `/s` removes the link and never the target), then
+delete what is left, and count the main `node_modules` before and after as a canary. The repair is
+easy once you know — delete `node_modules` the same junction-safe way and run
+`pnpm install --frozen-lockfile` — but finding the cause is not. It happened again on 2026-09-26 to
+a session that knew all this and removed one copy with a plain `git worktree remove --force`: use
+`python scripts/worktree.py prune`, which unlinks first, and never git's own command. A lighter
+repair that worked that night, with no delete: pnpm answers "Already up to date" (even with
+`--force`) because it trusts `node_modules/.pnpm-workspace-state-v1.json`, so move that file aside
+and run `pnpm install --frozen-lockfile --offline --force`. It relinked the whole store from the
+local cache in five seconds.
+
+**Check whether a copy is in use before removing it, and check again afterwards.** Other sessions
+create their own copies while you work. One appeared partway through a clear-out, was removed, and
+the session using it simply recreated it and carried on — it now holds two dozen files of work that
+exist nowhere else. A folder that was not on your list five minutes ago is somebody's live work, not
+a leftover.
+
+**"Not on the main line" is the wrong test for a stale copy.** Comparing an old copy against the
+current code shows thousands of added lines, because its *old* version of every changed file reads
+as an addition. That flags every abandoned folder as if it held treasure. The test that actually
+answers the question: hash every file in the folder and look each hash up among every object the
+repo knows about. Anything not found is genuinely only there.
+
+**Check what a new copy is actually based on.** A helper asked to make its own copy has, in the
+past, started from a point 442 commits behind, quietly, and then reported success on work it did
+against code that no longer existed. Every brief that creates a copy must have the helper print its
+base and confirm it is current before doing anything else.
+
+**Check for other sessions' work before picking a number.** Plans and decisions are numbered in
+sequence, and two sessions running at once will both pick the same next number. Before choosing
+one, look at what is untracked as well as what is committed, and read the end of the decisions
+file. A collision means renaming a file that other documents already point at.
+
+**A worktree copy can pass a gate that the shared checkout then fails.** The refactor ratchet
+counts copy-pasted lines with `jscpd`, and inside a copy made by the copy helper both of its counts
+read zero — so a lane's own quick gate passed in its copy while the same commit then failed the
+ratchet once it reached the shared checkout. Found 2026-09-17 when a back-end lane's first commit
+landed and the tests' copy-paste count went from 2113 to 2123. The fix was a follow-up commit
+sharing the test setup; until the ratchet itself learns to find `jscpd` from inside a copy, expect
+this and read the ratchet in the shared checkout, not the copy.
+
+**A copy's own commit hook can rebuild the shared checkout instead of itself.** The hook's path is set
+absolute, so committing in a copy changed into the shared checkout, rebuilt its generated files, and
+staged those into the copy's own commit — every copy's full checks then failed one step, and once it
+even staged stale generated files into a real commit. Commit in a copy with
+`git -c core.hooksPath=.githooks commit` so the copy's own hook runs instead.
+
+**Cut a helper's own copy only when the tests pass at that exact commit.** Two helpers were cut in the
+gap between two landings that depended on each other — the first landing's commit was on the branch,
+but something it needed from a second, related commit was not there yet, so both new copies started
+on a red baseline without either helper knowing it. Their own work then looked broken when it was not;
+the real fault was already there before they began. Read the tests at the commit a copy is about to be
+cut from, not just at "the latest commit on the branch", before handing it to a helper.
+
+**A landing chain that waits for an inner script's "ALL LANDED" line starts the next landing while the outer script is still in its gates.** The inner script prints that line before the outer one has finished its own checks, so the chain began the next landing early, and two landings ran at once in the shared checkout (plan 96, 04:10 UTC: the focus branch and lane F8). Nothing was lost, only because both landings' gates ran on the same combined tree; the copy-paste guard failed there and was fixed in its own commit. Start the next landing only after the outer script has exited, and read its exit code, not a line it printed. Record: `docs/planning/96-ship-ready-bug-session.md`, the 04:30 UTC entry.
+
+---
+
+## 2. Proving a change is really a change
+
+**A fix with passing tests can still miss the bug.** One fix shipped with seven green tests and did
+not work, because every test asserted the shape the *tests* invented rather than the shape the
+system actually produces. Find the real shape by reading the code that builds it — usually the
+prompt or the payload itself — and test against that.
+
+**Break a guard on purpose before trusting it.** A type, a test, or a check that has never been
+deliberately broken may be checking nothing at all. Break it, watch it fail, then fix it, and say
+in the commit message which failure you saw. This has caught checks that were quietly passing on
+everything.
+
+**A new rule that refuses things needs its own tests fixed first.** A build rule that started
+refusing bad input broke three existing tests and turned every push red for six days before anyone
+connected the two. When you add a refusal: check both directions (it refuses the bad thing *and*
+accepts the good thing), write the skip by matching the refusal's own wording rather than a file
+name, and watch the first push after it lands.
+
+**Tools that find dead code lie in three different ways.** They miss things called from outside the
+folder they scanned; they treat a mention in a comment as a use, or ignore comments entirely,
+depending on the tool; and they do not look in the helper scripts folder at all. Both of the
+automatic removers strip comments along with the code. Before deleting anything on a tool's say-so,
+search every tracked file yourself, including the scripts.
+
+**Check the example actually proves the bug.** A bug entry cited a specific boss in a specific game
+as its example. That boss has no note in the data at all, so the device check built on it could
+never have shown anything. Before building a check around an example, confirm the example exists.
+
+**Check a brief against itself and against the data before launching it.** A brief that contradicts
+its own rules will still be carried out, and the helper will report success. One lane spent its
+whole budget on a row that could not have produced a result.
+
+**A screen-side change can turn a Python test red, and the quick gate can miss it.** Six Python
+tests read files under `src/` directly — the Ask hook's own order, settings and catalog parity,
+spoiler profiles — but the quick check only runs Python tests when a `.py` file changed. A
+frontend-only fix landed red that way (`996752c`), fixed the same night once the cause was found
+(`33814ce`): a comment in the Ask code had brackets in it that made the count miscount the hooks,
+not a real drift. Until the runner is taught to run those six tests on any `src` change too, expect
+a screen-side change to be able to turn a Python test red with no warning from `--quick`.
+
+**A screen that animates streamed text must not assume the text only grows.** A spoiler leak on the
+Deck looked like the back end sending a boss's name in plain text; replaying the real saved answers
+through the real back-end function, flush by flush, found no leak there at all (0 of 5,333 updates).
+The actual cause was the screen's own reveal: it kept whatever it had already shown and simply
+appended each new update from the old length, which is only safe if the text always grows at the
+end. The back end's own safety net does not work that way — it can rewrite a sentence already sent
+to wrap a name in a cover once the name arrives, which the reveal read as new text tacked onto the
+end, eating the cover's own opening marker in the process. Before blaming either side of a stream,
+replay the real stream against the real function on both sides; the true fault can be on the side
+that looks innocent.
+
+**Moving a helper into its own file can make the copy-paste check see a copy that was already there.**
+Splitting a file can pull a block out next to another block that already reads almost the same, and the
+count goes up even though nothing was duplicated on purpose. Share the common part instead of leaving
+both, and never just re-record the new, higher number as the baseline.
+
+**An AI reworded a wiki page in its own words picks up small invented details.** Wording a game's notes
+"in bonsAI's own words" from a source page, rather than quoting it, gave two new games' worth of notes
+nine small claims the page never made — a word like "small" added to a group size, one game's own
+naming borrowed for another's items, a location invented for something the source never places. A
+line-by-line check of every sentence against the page it was written from, done after the fact, caught
+them: one helper fixed 8 such claims, another fixed claims in 14 of 18 notes. Read every reworded
+sentence against its source page before it ships, not just for tone but for whether the page actually
+says that.
+
+**Tests reach a moved name in more ways than `patch(...)`.** `patch.object(module, ...)` and a plain
+assignment from a script (`module.NAME = ...`) both still point at the old location and miss code that
+has moved. Search for all three before trusting that every caller was found.
+
+**The plugin never upgrades an installed library on its own — only the build script adds a new column.**
+A per-game tip check read a column that a knowledge-base library built before 2026-09-26 does not have,
+because only the script that builds a fresh library adds a new column; the plugin itself never rewrites
+one already installed. Run on every single question, the check failed outright on that older library and
+emptied every answer's notes, not just the tips. Any code that reads a column added in a newer library
+format has to survive that column being absent, and a test built against a copy of the library with the
+column dropped is what actually proves it, not a test against the newest library alone.
+
+**A timing-sensitive test that fails under load can be pointing at a real bug, not just a flaky test.**
+A screen test that opens a panel and moves the ring onto its first row failed about one run in three
+whenever the machine was busy, and passed every time run alone — the same shape as another test already
+known to be flaky under load. It was not: the ring's move waited for the next animation frame and assumed
+the panel had already been drawn, which only holds when nothing else is competing for the machine. A
+probe built to force the bad order on purpose failed every time on the old code. Before writing off a
+load-only failure as noise, try to force the bad ordering on purpose; if it fails every time, the cause is
+real.
+
+---
+
+## 3. Checking work on the Steam Deck
+
+The device is the only proof for anything about focus or layout. These are the things that waste an
+evening if you do not know them.
+
+**Only one thing may drive the Deck at a time.** Other chats press buttons on the same device. The
+list of connected tools shows reads only, so it will not tell you someone else is mid-batch. Ask
+for an exclusive window, or work over a direct connection instead.
+
+**Quirks that look like failures and are not.** Opening the plugin fails the first time after a
+deploy, then works. The check that the build on the device matches the build here can never pass,
+by design. At ten saved chats, New chat asks which chat to delete (nothing goes without the Delete chat box), so a test chat on a full Deck means giving one up. The screensaver freezes
+panel animations, so a frozen panel may just be a dark screen. The activity log is switched off, so
+read the model server's own system log instead. Voice input can be tested without a microphone
+attached.
+
+**Look at the screen, not only the walk: the maintainer kept catching what every check passed.** On
+2026-10-17, while the README was filmed, they found by eye white buttons in "Where AI runs", "Test
+connection" and an About link pressed against the panel's right edge, a link too small for its words,
+a spinner that no longer turned, and a checklist drawn as on/off switches. Every one sat on a screen
+earlier sessions had walked with the rig and screenshotted, sometimes many times. The walk checks where
+the ring goes; nobody checked how the page looked. The rule now: every screen-side change runs the look
+check (row QA-LOOK-01, `scripts/probe_deck_ui_look.py`) on each tab it touches, on both screens, and a
+session looks at one screenshot per tab as a person would before calling the change done.
+
+**Assert what is visible, not what has focus.** A walk through the controls can report every step
+passing while the control it landed on is hidden behind the dock at the bottom of the screen. Check
+the control's position against where the dock starts, not just whether it has focus. And script at
+least one pass that uses the panel normally, rather than only stepping control to control.
+
+**"Covered by a corner icon" is usually the check measuring a box, not a person seeing a problem.**
+The walk check decides whether a stop is visible by sampling points across its RECTANGLE. Two
+controls are built, on purpose, so their box overlaps a floating corner icon while their words keep
+clear of it: the question row behind Retry, and the last part of an answer behind Copy. Both reserve
+the corner with a floated spacer, after two rounds of the maintainer's own feedback in September. So
+both will read as "focused but not visible" on every walk, for ever, with nothing wrong. Measured
+2026-09-21: the question's first word starts six pixels past the Retry icon's edge, and the answer's
+last line clears the Copy icon with only its line spacing touching it. Two bug entries were filed on
+this and withdrawn the same night, and the question-row entry had already been opened and closed once
+before on the same reading. Before filing anything about either of these, ask the page where the TEXT
+is -- take the element's own text range rectangles and compare those against the icon -- rather than
+trusting the percentage. Evidence: `workshop:test-evidence/plan63-CORNER-ICON-COVERAGE-01.json`.
+Fixed in the Deck tools project (`cde1c0e`), pending a Deck walk after the tool server restarts.
+
+**A question can be put to the Deck without the pinned sentences and without thumb-typing.** Proved
+end to end 2026-09-22. `scripts/deck_send_ask.py` writes an exact sentence into the Ask field through
+the real input path, reads it back, and prints VERIFIED; the Ask press stays a real controller press,
+so the path under test is still the real one. It matters because at least five checks have sat
+recorded as blocked -- MEGAERA-01, KB-FOLLOWUP-01, KB-KILLSWITCH-01's Show details half,
+KB-TRANSPARENCY-01 and KB-FLOOR-01's on-topic half -- each saying no test sentence could be sent
+because the pinned chips had stopped working and nothing may be typed by thumb. That reasoning
+skipped a path this repo already had. Before recording a check as blocked on sending a question,
+try this. Two traps its own header records: the flags must sit INSIDE the quoted remote command, or
+a multi-word question silently keeps only its first word and the script still prints VERIFIED; and an
+apostrophe cannot survive the outer quotes. Evidence:
+`workshop:test-evidence/plan63-ASK-WITHOUT-PINNED-CHIPS.json`.
+
+**Repeating a question on the Deck measures nothing.** The answer cache serves an identical question
+back word for word, no new work done. Measured 2026-09-22: the same Hollow Knight question took 27
+seconds the first time and 1 second the second, and came back exactly the same both times. Any check
+that counts how often something happens — a spoiler cover missing, a wrong note attaching — must
+either vary the wording between tries or clear the cache first, or the count is really just one
+result read back several times. Evidence `workshop:test-evidence/plan63-SPOILER-UNNAMED-BOSS.json`.
+
+**Read what the AI actually wrote, not only the screen, before building a fix on it.** On 2026-10-08 a driver saw a
+menu's JSON in a code box and reported "bare JSON with no fence"; a fix for that case was built and landed. The
+saved answer on the Deck showed the real cause in one line: the fence was spelled with an underscore. The second
+fix took twelve minutes. Have the driver copy the saved answer's last few hundred characters from the chat file
+into the evidence whenever a check is about what the AI wrote.
+
+**"Blocked" deserves one more look before it is written down.** Two checks recorded as impossible on
+this project were not: sending an exact question without the pinned chips (a script already in the
+repo did it), and comparing the screen against the log for which notes were used (the log just needed
+one more line). Both were settled in a single session once someone tried. Three more checks had been
+recorded as blocked by deploying being broken, which had actually been fixed for a full night before
+anyone re-checked the belief.
+
+**Offer to pin the questions before asking anyone to type.** Typing a sentence on the on-screen
+keyboard with thumbs, once per case, invites a typo that silently changes what is being tested.
+There is a way to pin a batch of exact questions into the panel; use it. This is a standing
+instruction from the maintainer.
+
+**The "Clear all plugin data" wipe also removes the Deck's own Ollama install and its downloaded
+models** whenever Ollama lives in the home folder, which is how "Run AI on this Deck" sets it up.
+A backup of the settings file and the saved chats cannot put those models back; they have to be
+downloaded again. A yes to "wipe the plugin data, backup first" does not obviously cover that, so
+ask for it separately, or leave the three wipe rows owed. Found 2026-09-15 by reading the wipe
+method before pressing the button.
+
+**The pretend headset bench has its own quirks.** It takes no mouse input. You can only see a panel
+by bringing the mirror window to the front. The helper that talks to it raises an error even when
+the answer is "fine". The Python side runs on the PC, with a stand-in for the answer service.
+
+**Claude Code's own automatic permission check can refuse an SSH edit of the plugin's settings
+file, even where earlier sessions edited it freely.** Hit 2026-09-23: a Deck driver's SSH write to
+the settings file was refused as "Modify Shared Resources," which stopped a device check partway
+through. Change a setting through the plugin's own screens where one exists for it; where none
+exists, stop and ask the maintainer rather than finding another way to write the file. **The same
+check also refused ordinary controller-rig button presses mid-run, on 2026-09-25** ("Modify Shared
+Resources" again) — first at 22:33, allowed again after that, then for good from 23:17, ending the
+plan 68 Deck pass early and leaving the focus sweep, the free-play sweep and a pinned-chip clean-up
+undone. Plan a device pass so the rows that matter most run first, in case a later refusal cuts it
+short, and never go looking for another way round a refusal — stop and say so instead.
+
+**When the Deck and a code reading disagree, the Deck wins.** A session read the back end,
+concluded that made-up model names were already refused with a clear message, and reverted a fix on
+that reading alone. The Deck showed otherwise: typing a made-up name still showed "Pull started,"
+not a refusal, because the real cause was a different check than the one that had been read (a
+model-registry check that could not tell "no such model" apart from "no internet"). Reading both
+ends of the code is not the same as running it. Before closing a bug on a code reading alone, run it
+on the device first.
+
+**Closing a Decky popup rebuilds the tab behind it.** Anything a component was tracking in its own
+memory, such as a knowledge-base download still in progress, is thrown away with the old copy and
+never restarted — the new tab reads status once, before the download finishes, and never again.
+Found 2026-09-23 after a first fix (checking settings a different way) still failed on the Deck; the
+real cause was the picker's close rebuilding the whole tab. Fixed in `ba0bb0d`. Evidence
+`workshop:test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json`, `workshop:test-evidence/plan64-TWO-TAPS-DOWNLOAD-try3.json`.
+
+**A component that changes what kind of element it returns rebuilds everything inside it, and
+Steam's own highlight goes with it.** An answer bubble drew itself bare while still being written,
+then got wrapped in another element once it finished — so at the exact moment an answer finished,
+the bubble changed shape underneath the D-pad ring and was rebuilt from scratch, taking the ring with
+it. A first fix that only changed how sections were tracked passed its own tests and still failed on
+the Deck, because the real cause was one layer up: the wrapping itself, not what was inside it. Fixed
+in `64b34a8`, keeping the same element shape throughout. Evidence
+`workshop:test-evidence/plan64-STREAM-WALK-REC-01-try3.json`, `workshop:test-evidence/plan64-STREAM-WALK-REC-01-try4-run2.json`.
+
+**Steam's own scroll area keeps 116 pixels clear at its own top, and a plain "scroll to the top"
+request honours that reserved space instead of ignoring it.** A fix that asked the page to scroll a
+block's header to the very top of the pane kept landing the header 116 pixels down, looking like the
+request had failed, when it was actually succeeding at the wrong target. Asking the pane directly for
+the header's own top, ignoring the reserved space, fixed it. Fixed in `d305863`. Evidence
+`workshop:test-evidence/plan64-NOTES-OPEN-SCROLL-try2-run2.json`.
+
+**A warm-up must load the model with the exact same settings the real question will ask for, or the
+model loads a second time anyway.** Warming a model at boot saved no time at all — cold and warm
+answers both took about 9.8 seconds to first words — because the warm-up asked the server for its
+default memory room (4,096 tokens) while the first real question always asks for more (16,384), so
+the server reloaded the model the moment the question arrived. Fixed by having the warm-up ask for
+the same room Ask will ask for. Fixed in `a224fb6`. Evidence
+`workshop:test-evidence/plan64-PRELOAD-01-try3-timing.json`, `workshop:test-evidence/plan64-PRELOAD-01-try4.json`.
+
+**What costs frames while an answer streams is how often and how much of the panel changes, not which
+animations are running.** Measured on the Deck 2026-09-25: the live thinking box changing 6 to 7 times a
+second cost nothing, holding 59 to 60 frames a second the whole time, while the answer's own text moving
+on every single frame held the panel near 20. Slowing the model down, and giving the chat its own
+rendering layer, both changed nothing either. Before blaming an animation for a slow panel, measure how
+often the thing actually redraws. Evidence `workshop:test-evidence/plan69-answer-frame-rate-2026-09-25.json`.
+
+**Two timers that both touch the screen, even on the same schedule, cost twice the redraws of one.** The
+streamed-answer scramble's own reshuffle timer and the text reveal's own step ran on separate clocks at
+the same rate, so each beat of new text cost two or three redraws instead of one. Moving the scramble to
+update inside the reveal's own render, instead of on a timer of its own, roughly halved the extra cost.
+Fixed in `bb8d7e5b`.
+
+**Compare frame-rate ideas inside one streaming answer, not across separate ones.** A single run's frame
+rate swings by about 5 frames a second on its own, so timing two different answers is not a fair
+comparison. Split one answer into alternating 2.5-second segments, one setting per segment, and compare
+segment to segment; that is how the plan 69 frame-rate numbers were measured. Evidence
+`workshop:test-evidence/plan69-answer-frame-rate-2026-09-25.json`.
+
+**A performance trace of the Quick Access page is really a trace of all of Steam.** Every one of Steam's
+own windows shares one rendering thread, so a CPU profile taken while the plugin panel is open also
+carries whatever else Steam's interface is doing at that same moment. Read a trace as "what Steam's
+interface did," not as "what the plugin did," and look for the plugin's own functions by name rather than
+trusting the total.
+
+**Letters and placeholder symbols of a different width force a re-wrap that keeps the whole page busy.**
+The streamed-answer scramble's first version swapped real letters for placeholder symbols wider or
+narrower than them, so the last line of a growing answer kept re-wrapping, and each re-wrap woke the
+chat's own size-watching code to re-measure the whole panel — measured on the Deck as never idle across a
+9-second sample, where the same stretch with the scramble off was idle a third of the time. Drawing each
+placeholder symbol over its real letter, which keeps its own width, instead of replacing the letter fixed
+this. Fixed in `e0fa7f6c`.
+
+**Moving the model off the graphics chip to free up frames for the panel does not pay off.** Reading a
+long prompt on the Deck's processor instead of its graphics chip took about 220 seconds instead of 13 —
+so much slower that it is not a real way to buy the panel more frames during an answer, whatever it might
+save it.
+
+**A saving measured on the PC may not show on the Deck with a game running.** Drawing an arriving answer
+piece by piece made one update several times cheaper on the PC at every answer length, and on the Deck,
+with Deep Rock Galactic: Survivor running, it made no clear difference: the game and the AI were taking
+most of the processor between them. Measure on the Deck, with the game running, before building a second
+round of the same kind of saving.
+
+**When Quick Access loses its window's focus over a running game, a plain focus() splits Steam's ring from the page.** Plan 76's
+six-reopen measurement: every reopen where the Quick Access page's `document.hasFocus()` read false split later (each D-pad press moved the
+page's focus, not Steam's ring, and A acted on the ring). Every reopen reading true never did. The reopen route did not decide it. Asking the
+panel's own window for focus back fixed 6 of 6. Before blaming Steam or a test tool for a ring that stops following the D-pad, read
+`hasFocus()` on the panel's document.
+
+**A spoiler fix is not believed until the Deck shows a cover.** Plan 77's first fix for "no covers on a Hollow Knight
+question while Deep Rock runs" passed eleven tests, landed, and changed nothing on the Deck: the covers come from the
+attached notes (they name the bosses to hide), and the running game picks the notes. The tests checked the profile,
+not the answer. For any spoiler change, the Deck check asks the real question and counts covers on screen.
+
+**Write "stop" into a walk row.** Plan 77's runbook said "no stop repeats" and the rig failed a correct walk: a press
+that only scrolls a section the ring is reading is not a stop, and a section taller than the screen can never be
+"wholly visible". Say in the row: a landing is a stop; a scroll-only press inside a section being read is expected;
+a stop taller than the band is judged by the edge it is entered from.
+
+**A Deck driver runs out of memory after about a thousand steps.** Plan 77's first driver finished its blocks near
+900,000 tokens. Give each later block to a fresh driver with a short handover note (build, keep-awake time, settings
+backup path, what the earlier driver learned), not to the same one.
+
+**Never reload the plugin on the Deck while a game is starting or running.** Twice (Deep Rock Galactic: Survivor and Half-Life 2, plan 78 block 3d and 3e) a reload during a game's start was followed by the game's window never coming to the front. Once (Black Mesa, plan 78 block 3e) a reload with the game running left Steam's interface gone until the maintainer restarted the Deck. The rule: reload first, then launch; with a game up, close and reopen Quick Access instead.
+
+**A parent's opacity never shows on a child's computed opacity.** The fade-style chips were read as
+"never fading" twice (2026-10-03, 2026-10-07): the rig sampled the chip button and its children every 100 ms and
+saw 1.00 through 32 word changes, while the wrapper box around the button was fading as designed. Before filing a
+"never changes" finding from a computed style, read the element that carries the style, or walk the ancestors too.
+The fade now sits on the button itself so the check can read it (plan 82, `8d1523d4`). Evidence
+`workshop:test-evidence/plan82-P79-LONG-CHIPS-NOGAME.json`, then `plan82-P82-FADE-ON-BUTTON.json`.
+
+**Steam's own focus ring is placed when an element takes focus and is not re-measured when that element
+moves.** A slider knob stepped with the D-pad left Steam's grey frame one step behind it, and the page's own
+rectangles said the ring element had moved with the knob: the numbers and the picture disagreed, and the picture is
+what a person sees. For anything that moves while focused, switch Steam's ring off on it (`noFocusRing`) and draw
+the plugin's own ring on the moving element (plan 82, `f6c96e43`). Evidence
+`workshop:test-evidence/plan82-M3-SLIDER-RING.json` and its screenshots, then `plan82-P82-SLIDER-RING-ON-KNOB.json`.
+
+**A "come back here" flag kept inside a component does not survive a Decky popup.** Closing the popup rebuilds
+the tab (the lesson above), so the chat row's "return the ring to Save" memory was gone by the time the ring came
+back, and it landed on Delete on the Deck while every unit test passed, because no test rebuilt the row. Keep such a
+flag outside the component (a small module-level file, taken once) and write the test so it unmounts and remounts
+between the open and the return (plan 82, `7d0a7be5`). Evidence `workshop:test-evidence/plan82-P82-CHAT-ROW-NO-NAME-STOP.json`
+and `-try2.json`.
+
+**A press inside the dock-lift's late window can throw a tall stop to its end.** The lift that clears a focused
+control from the dock runs again up to 0.9 s after the ring lands. A second D-pad press inside that window on a
+block taller than the screen let the late pass jump the pane to the block's end (modelled: 1,012 px on a 2,000 px
+block). Walk rows leave more than a second between presses, and anything that steps through its own height is
+skipped by the lift (plan 82, `1323f7a3`).
+
+**The rig's safety stop can be set from the editor, and only a person can re-arm it.** The session found it set
+from the evening before (`deck_status`: automation STOPPED, "stopped from the command in the editor") and could
+read the Deck over SSH but press nothing. Check `deck_status` first thing, and if the maintainer is about to leave,
+ask for the re-arm before anything else (2026-10-07, plan 82).
+
+**After a deploy the plugin folder on the Deck is owned by root.** A plain `sed` over SSH that worked on
+2026-10-03 was refused on 2026-10-07, so the check that lowers the answer limit could not run; the deploy tool
+itself copes (it stages with scp and moves with one sudo). Do not write `sudo` into a driver's runbook: the
+session's own safety check refuses such a brief outright, and the right fix is the maintainer's `setup-dev`, said
+plainly and early.
+
+
+**Steam moves the ring between a container's children along its declared flow, so a walk test that moves by
+geometry can pass while the Deck's press dies.** The About tab's three link buttons each sat in their own focus box
+inside a plain container; every test walked Down from GitHub to the next button, and on the Deck Down from GitHub did
+nothing (plan 92, 2026-10-12). The fix declared the block a row and the buttons a column (`flow-children`). Model the
+flow in walk tests (`steamStep` in `src/test-harness/aboutDeckyUi.tsx`), or give every stop handlers for all four
+directions so nothing depends on it, as the Search tab does. Evidence `workshop:test-evidence/plan92-P91-ABOUT-ROWS.json`,
+then `-try2.json`.
+
+**A Decky text field's ref is Steam's component, not the input, and a move handler that throws hands the press back
+to Steam.** The Search tab measured its find box through that ref; every measure threw, Steam took the press and
+stepped in its own page order, so Down from a game button went to the next game (plan 92, `19214ab6`). Measure the
+element you drew yourself, and never let a move handler throw.
+
+**A greyed Decky button still takes the ring on the Deck; the shared test stand-in says it cannot.** The models box
+asked the button whether it was disabled and the greyed licence row became a stop on the Deck while every test passed
+(plan 92, `172d013b`). Skip a greyed control because your own state says it is off; the stand-in is on the roadmap.
+
+**`deck_deploy` builds the shared checkout as it stands.** A driver deployed in the middle of a landing's checks
+(plan 92 block 4a); it worked by luck. Give the driver the exact commit, and have it check that the tip matches and
+the tree is clean before it deploys; land nothing until it reports the deploy done.
+
+**A stop placed in a pop-up drawn outside the plugin's tree takes Steam's ring, but hears no A or B, and the ring stays stuck until the plugin is reloaded.** Plan 96's first fix for "Explain further" gave the button its own D-pad stop inside the glossary box, which is drawn at the page's body, outside the plugin's panel. Down moved the ring onto it (the transfer worked), and then A, B, Up, Down, RB and the menu chord all did nothing; only a plugin reload freed it (block D, `3e29bb92`). The second fix took the stop away: A on the open word asks again, and the box says so in a hint line (`749897c5`); B then closed the box with the ring on the word. Keep every stop inside the plugin's own tree, and judge a new stop by whether A and B reach it, not by whether the ring lands. Evidence `workshop:test-evidence/plan96-P96-F6-EXPLAIN.json`, then `plan96-P96-F6-EXPLAIN-try2.json`.
+
+**A move between two stops inside one container is Steam's own, so move handlers on the container never run for it.** The mic hint put Open Permissions and Dismiss in one container, with a handler meant to hold Down still; on the Deck Down from Open Permissions still reached Dismiss (plan 96, block D, `257ed37f`). Give each button its own Focusable with all four moves, the shape the About links use. Then Down holds, Left and Right go between the two, and Up leaves for the question box (`3eed8d1d`). Evidence `workshop:test-evidence/plan96-P96-F11-HINT-RING.json`, then `plan96-P96-F11-HINT-RING-try2.json`.
+
+**A plain focus call onto a step inside an answer moves the page's focus but not Steam's ring, so anything an answer's focus chains land on needs a nav node.** The Strategy checklist's steps were reached by the chain's plain focus call; on the Deck no press ever put the ring on a step, so nothing could be ticked (plan 96, block D, `59731088`). With a nav node on each step, Down from the last paragraph landed on step 1, A ticked step 2, and the tick held after close and reopen (`68f9c1a9`). Read what Steam reports as focused, not only the page's active element. Evidence `workshop:test-evidence/plan96-P96-F4-TICK.json`, then `plan96-P96-F4-TICK-try2.json`.
+
+---
+
+## 4. Briefing helpers
+
+**Tell the helper what is allowed to stay.** Hand over a list of things a tool flagged without
+saying "keeping one because it is genuinely the clearest choice is a fine answer", and seven
+helpers will reach for a thesaurus to drive the number to zero. Say it plainly and they will
+instead report what they kept and why — which is the useful answer.
+
+**A number that counts the wrong thing will quietly win.** A size limit that counted explanations
+along with code pushed four helpers into writing worse explanations to stay under it. If a measure
+is fighting the work, the measure is wrong; correct the measure and record why, rather than letting
+it bend the work.
+
+**Give exact lines, one question, and a cap.** A review of a 27-line rule that let the helper follow
+every pointer it found cost 62 tool calls and about 130,000 tokens. The same review with exact line
+ranges and one question costs a fraction of that.
+
+**Script the checkable part first.** A script costs nothing per run. Hand the helper only what a
+script cannot answer.
+
+**A screen file split by moving only top-level pieces stops near 10% smaller.** What gets a file
+meaningfully smaller is lifting a whole block of hooks out into its own hook, called from the same
+spot, with the hook-order proof run after every step.
+
+**Helpers fix their own slips in a later commit, which leaves the earlier commit failing the checks on
+its own.** At landing, fold the fix into the commit it belongs to so every commit on the branch passes
+its own checks by itself.
+
+**A scheduled check every 20 minutes can restart an unattended session after a usage-limit stop.** Once
+it does, each helper that died mid-work comes back with one short message and keeps its context, the
+same as a manual resume.
+
+**Five helpers at once, each in its own copy, while the session drives the Deck.** The shape that
+worked on 2026-09-15 (plan 55), written down because the maintainer asked for it to be kept. (The cap
+is seven since 2026-09-28; see AGENTS.md.) The one
+running the session writes no code itself. It makes each helper its own copy of the repo from the tip
+with the copy script, writes one brief per helper — the tip hash and the base check, the files it
+owns, one fix per commit, the five gates, the focus law, and the override that the copy's packages
+folder is a link so the helper must not run an install — and starts up to five in the background. While
+they work, the session uses the Deck, which would otherwise sit idle: the measurement that no helper
+can be given until a cause is named, and the test rows that do not depend on the fixes in flight. A
+read-only lookup helper compiles the test rows the pass needs into one scratch file, so the session
+does not read tens of thousands of words of testing documents itself. A bookkeeping helper does every
+roadmap, testing and changelog edit from a list of results the session hands it; it never invents a
+device result. When a helper finishes, the session reads its diff, lands its commits one at a time
+with the gates after each from a small script in the scratch folder, in the background, and starts
+the next helper in the freed slot so five stay busy. A helper that finds its fix needs a file outside
+its list stops and says so; a follow-up helper owning those files is cut from the new tip only after
+the first one's commits have landed, so the two cannot clash. Two things to know: the usage limit
+kills every running helper at once, mid-work, but their copies keep their commits and edits, and each
+can be resumed after the reset with one short message that keeps its context — cheaper than starting
+over; and while landings run in the shared checkout, tell the bookkeeper to finish its edits and
+report the file list rather than commit, so the two do not fight over the index.
+
+**A runbook step that cannot be met as written splits careful helpers from resourceful ones.** Three helpers
+found a route round it and two stopped. Write the route into the step (plan 75: queue the model before switching the
+policy).
+
+**Helpers in parallel copies share the system temp folder.** Two picked the same script name, and one ran the other's
+script inside the other's copy. Tell each helper to keep its scratch files in a folder of its own.
+
+**"Do not run pnpm install. Go straight to the baseline gates." was read as "skip the baseline".** Several helpers
+skipped the before-you-start gates. Say "run the baseline gates now, without an install".
+
+**A D-pad walk test that does not model Steam's own scroll-into-view can pass while the Deck loops.** Plan 76 lane 3's first round passed
+every test and the review, then looped on the Deck between a cover and its section, because Steam re-scrolled the page after each focus and put
+the cover back on screen. Brief every walking fix to model that scroll (`src/test-harness/deckAnswerWalk.ts` now does, three ways) and to test a
+bounded walk with no stop visited twice.
+
+**The five gates are not the whole check: land with `python scripts/verify.py --quick` too.** Plan 77 landed 26 changes,
+every one green on the five gates, and only at the end found `verify.py --quick` red on five things the gates never
+run: missing "how it works" headers, two files past their growth limits, four more files over 400 lines, and
+testing.md past its size ceiling. A clean-up round was needed before anyone could push. Put the quick check in the
+landing script, and in every helper's gate list.
+
+**How a night this size went (plan 87, 2026-10-09/10, the maintainer asked for this to be written down).** One
+session on Opus ran about 40 helpers over the night (23 code changes landed, five of them second or third rounds), at most 9 editing at once, beside one Deck driver and one
+stand-in driver, plus a bookkeeper six times; it wrote no code itself. What the PC bore: with nine helpers each
+running only its own tests, the quick check took 213 s at the worst moment (23 s idle) and two test files timed out
+once under load; landings were never slowed past about four minutes. Twice a landing's commit hook could not write a
+generated file (`test-inventory.json`) because Windows held it for a moment: continuing the pick again worked both
+times, and running `land_lane.sh` with the branch tip as its base runs only the gates afterwards.
+- **Haiku helpers paid for themselves on mechanical fixes:** four Haiku-high lanes (the small-caps label, the
+  publish script flag, a doubled heading, a held Left on the notes card) each landed first time with no Sonnet
+  step-in. The one Haiku reader (Explore type) could not write a file and put its list in its report instead; it
+  matched the plan's paraphrased check names by content and caught one that was wrong ("two-chip" was "one-chip").
+- **The stand-in earned its keep in one place:** it is the only machine that can be wiped, and the wipe found a real
+  fresh-install bug the Deck could never have shown (the help chip unreachable by the D-pad), then proved the fix and
+  closed the quick-start check there. Elsewhere it cost more than it saved: presses land about 10 s late, the
+  screenshot tool does not work on Windows, and a 30-press sweep took ten minutes.
+- **Budget reads:** at go 18 % of the five-hour window and 27 % of the week; 26 % / 28 % at 23:45; 8 % / 32 % after the
+  reset at 00:20; 25 % / 34 % at 01:07; 49 % / 37 % at 02:35; 67 % / 39 % at 04:12, with the last Deck block done. The 60 % weekly line was never near.
+- **What would change the runbook:**
+  - A helper wrote one file into the shared checkout instead of its copy, which stopped a landing. The rules file now
+    says "only absolute paths inside your copy" in so many words; repeat it in every brief.
+  - The bookkeeper works in a copy of its own and is landed like a helper, so it never fights the landing script's
+    clean-tree check. The bookkeeper agent type was not loaded in this session: a general helper with the bookkeeper
+    file as its instructions did the same job.
+  - Give every game block the line "unload the Deck's AI first": a game plus the loaded model left 1,971 MB, and
+    unloading it freed 6.7 GB (plan 81 knew this; the first runbook tonight did not say it).
+  - The send-question script writes into the first text box on the panel: on the Ollama tab that is the PC address.
+    Main tab only.
+  - A fix that replaced `focus()` on the page's element prototype was refused at review: that page is Steam's shared
+    Quick Access page. The same fix through one shared helper the tabs call passed review and the Deck.
+  - Two layout lanes failed on the Deck twice each and went up one model step with the numbers in hand, as the
+    routing table says; the measurement each time came from a page-side logger read 1.8 s after each press, because
+    the sweep's immediate reads catch Steam's glide half way.
+  - Phone notifications were switched off in the app, so none reached the maintainer; check that before a night run.
+
+**How plan 89 went (2026-10-11/12, one Opus chat, about fifteen helpers, a Deck night).** Four lessons from it:
+- **Finished helpers can leave test runs alive for hours.** About 110 node processes were still running at 23:00 and slowed the PC. End them after each helper finishes, before blaming load.
+- **A landing waiting script must match the landing script's exact end lines.** "TESTS FAILED ONCE" contains "FAIL", so a script looking for the word "FAIL" read a good landing as a failed one.
+- **A Deck driver must never print the settings file's values.** The file holds the Steam Web API key. Print key names only.
+- **The desktop app cannot restart a project's tool server mid-session,** so rig fixes landed at night are proven in the next session, not the same night.
+
+
+**The 20-minute scheduled check did not wake the session overnight** (plan 92, 2026-10-12, between 03:00 and 07:34):
+the chat sat idle with a usage pause over and nothing running until the maintainer wrote "Continue", about two and a
+half hours lost. Do not count on it alone: before a planned pause, leave a background job running (a timed `sleep`
+that ends when the pause should) so its finishing wakes the chat.
+
+**Haiku for mechanical work fails when the checks run long.** Plan 92's four-item cleanup ended its turn four times
+while its own checks ran in the background and committed nothing, even after being told to run them in the foreground;
+Sonnet medium did it in one go (plan 33 § 4d). Plan 89's H2 showed the same habit. Give Haiku only jobs whose checks
+finish in a few minutes, or use Sonnet medium.
+
+**Six helpers at once, two of them Opus high, cost about 8 points of the week in under two hours** (plan 92) and took
+the five-hour window from 8 to 75 percent. A plan of more than ten helpers will reach the 80 percent weekly line in one
+night unless it starts with the week well under half; plan the clean stopping point as the likely end.
+
+**Many helpers each running the full test set at once starve the PC** (plan 92's second night, 2026-10-12; the
+maintainer's theory, and the numbers bear it out). The full screen test set takes about 75 seconds on a quiet PC. With
+seven or eight helpers each running it before every commit (each run starts about 20 workers, one per core), one run
+took over an hour, five runs froze with one worker spinning and the rest idle, and free memory fell to 1.4 GB of 32.
+The worst moment was the start: every brief said "run all the checks first", so seven helpers ran the heaviest job in
+the same minute. What fixed it, and what to do from the start next time:
+- **Helpers run only the tests for what they touched** (by file name), plus the typecheck, the build and the focus
+  check; **the full sets run once, at landing**, one landing at a time. Switched to this at 13:33; the screen tests at
+  landing went from over an hour back to two or three minutes.
+- **No "run everything first" step in each helper.** One baseline on the shared checkout at the tip covers them all.
+- **Stagger the starts** by a few minutes, and **cap the workers** a helper's test run may use, so overlapping runs
+  share the PC instead of each taking all of it.
+- **List and end leftover test runs** whenever a helper finishes: one from the morning's cleanup helper had been
+  running for five and a half hours.
+- A stuck run is one worker spinning with the rest idle: stop it and re-run; the same full set then passed in 75
+  seconds, so it was memory, not a broken test.
+
+**A helper that skips the quick check can push the unused-exports count over its best.** Twice on the second night a
+second-round fix exported a number only its own file used, and the landing's quick check failed after the commits were
+already on `experimental`. When helpers run light gates, have them run the unused-exports count (`knip`) before they
+commit, or un-export at landing before the push.
+
+**The quick check is not a light gate for a helper** (plan 93, 2026-10-14). Twelve helpers each ran
+`verify.py --quick` before a commit; its `vitest related` step runs every test that imports a changed file, which for a
+central file (the settings normalizers, the folded rows, the storage keys) is hundreds of files on every core. The PC
+reached about 190 test processes, 23 GB and 3 GB free; runs sat for 20 minutes and two landings failed on timeouts.
+Ending the six oldest runs freed 11 GB at once. Helpers now run: the typecheck, their own test files by name with
+`--maxWorkers=2`, the header, ratchet and growth checks, the Python set only if a `.py` changed, the build and the focus
+check. The quick check and the full sets run once, at landing.
+
+**A landing's commit hook can stop on a generated file Windows holds for a moment** ("UNKNOWN: unknown error, open
+...architecture/hotspots.json"). Twice on plan 93 the pick was left open with every conflict resolved; `git cherry-pick
+--continue` again finished it, and `land_lane.sh` with the picked commit as its base ran the rest. Read `.git/CHERRY_PICK_HEAD`
+before anything else.
+
+**A brief whose rule and pass check disagree gets built to the stricter one** (plan 92 lane M2: the rule said "hold only
+past a row and a half", the Deck check said "within half a row"; the helper built the check, which left dead presses).
+Read the brief's rule against its own check before sending it.
+
+---
+
+## 5. Design and screen work
+
+**The drawing is the design.** [major-redesign.md](archive/major-redesign.md) is the agreed look. Work built
+from a written description instead of the drawing has been wrong before — "one line" was built as a
+single chip when the drawing clearly showed three side by side.
+
+**They want to see it, not read about it.** When there is a choice between screen layouts, draw the
+options at true size from the real code and show them side by side. A written list of options is not
+what was asked for, and has been sent back.
+
+**Check that two effects survive each other.** Two visual effects applied to the same edge can
+cancel out. Render the pair and look at it before recommending it.
+
+**There is no design system here.** Tools that expect one will find nothing. The agreed values live
+in [design-tokens.md](design-tokens.md) and the rules in
+[design-language.md](design-language.md).
+
+**A height set as a percentage of the screen is not one fixed number.** The Deck's own screen and an
+external monitor are different heights, so the same percentage in the stylesheet turns into a
+different number of pixels on each, and a measurement taken on one screen proves nothing about the
+other. Found 2026-09-20 in the AI models list: 48 per cent of screen height came out as 400 pixels on
+a 1080p monitor and about 300 pixels on the Deck's own screen — the maintainer's own count and an
+earlier drawing were both right, they were just looking at two different screens.
+
+**Keep the page's own styles out of a drawing.** A mockup page that draws the Deck inside cards also
+styles those cards, and one ordinary rule for the card's paragraphs reached the answer text inside every
+drawing: it was drawn at about 15 points instead of the Deck's 12. The heights were right, so nothing
+looked broken, but every "words you can see" count was low for seven rounds of decisions (today read 50,
+really about 62). Found 2026-10-08 (plan 84) only because one drawing outside a card disagreed with the
+same drawing inside one. Give the drawing a style boundary of its own, and check one drawn row of text
+against the real screenshot before trusting a count.
+
+**Anything drawn into another element's space needs its arithmetic as a test.** Plan 84 moved Read aloud into
+the answer's corner with a 20-point band under the text, and every test passed; on the Deck the speaker's box
+reached 3 points into the last line and its ring covered a letter, because the box was 20 tall and sat 4 points
+up (2026-10-08). The fix stated the rule as arithmetic (band at least box + inset + ring + clearance) and the
+test read every number back out of the stylesheet. jsdom has no layout, so the arithmetic is the closest a test
+gets; the Deck measures the rest.
+
+**Never stretch a 1-pixel element to draw a line.** The green line under the current tab was a 1-point element
+scaled 80 times by `scaleX`. Its box in the page measured the right width, but the screen rounds the 1 point to one
+whole pixel before scaling it, and on the Deck a point is 1.28 pixels, so the painted line stopped a fifth short of
+the name (2026-10-22). The DOM cannot see this: only a screenshot can. Draw the element at about its final size and
+scale it a little, or set its width.
+
+**Steam's plain button turns solid white under the ring.** `Button` (Steam's `DialogButton`) has no fill of its own,
+so Steam's focus rule paints it white with dark words. A box whose ring starts on Cancel therefore opens with a white
+block beside a grey one. Any button that should keep the plugin's colours needs its own fill (the glass look) and the
+ring class, and a popup needs the ring rule in the popup stylesheet, since the plugin's own box's stylesheet does not
+reach it.
+
+---
+
+## 6. Tooling traps on this machine
+
+**Write scripts to a file and run them.** Inline scripts typed into the shell mangle backslashes
+and quotes. Write the script to a temporary folder, run it from there.
+
+**A heredoc can turn an escape into a real NUL byte.** A small Python edit script written through a
+Bash heredoc carried a doubled backslash meant for a six-character escape in the TypeScript source;
+the heredoc collapsed it and wrote one real NUL byte into the file instead. Git then treated the
+file as binary, stopped normalising its line endings, and the change showed up as a whole-file diff
+instead of a few lines — that is how it was caught. Nothing in the gates catches a NUL byte on its
+own. After any scripted edit, count NUL bytes in the file and check that `git ls-files --eol` still
+reads `i/lf`. One more trap in the same family: `git checkout <hash> -- .` stages whatever it
+writes, so fixing a file on disk afterwards still leaves the bad version sitting in the index until
+it is re-added.
+
+**Normalise line endings before an exact-match edit.** Files here can carry Windows line endings,
+and an exact-match edit or a "did my change survive" check will fail for that reason alone and
+nothing else. Two helpers once failed their checks over this with nothing wrong in their work.
+
+**Clear a Python module's compiled cache after proving a test guard by flipping a value back.**
+Changing a value, running the check, then changing it back within the same second and the same
+file size can leave the broken version's compiled copy in use, since nothing tells Python the
+source changed. The next test run then fails for no reason that shows in the diff. Hit
+2026-09-23. After flipping a value back to prove a guard, delete that module's `__pycache__`
+before trusting the next run.
+
+**Working folder carries over between shell calls.** Changing folder in one call leaves the next
+call somewhere unexpected. Start every command from the repo path spelled out in full.
+
+**A scheduled check restarting a stopped session is not something to count on.** A 20-minute scheduled
+prompt had once been seen bringing a session back after it hit its usage limit. On the night of
+2026-09-26 it did not: the session hit its usage limit twice, and both times it sat there until the
+maintainer's own message woke it back up, not the schedule. Send a message to resume unattended work
+rather than assuming the schedule will do it.
+
+**A tool that seems to hang for hours overnight is more likely the PC asleep.** In the VS Code extension
+the desktop goes to sleep during a long unattended session, and everything freezes until it wakes; on
+2026-09-27 a Deck wait set to stop after 90 seconds looked hung for almost four hours for exactly that
+reason. Start the keep-awake at the start of a long session (see AGENTS.md, "Long sessions: keep this PC
+awake") before blaming the tool.
+
+**The worktree helper's prune never sees a lane landed by cherry-pick or squash.** Its "merged" test asks
+whether the copy's branch tip is an ancestor of the main branch, and landing sessions never merge a lane
+that way, so on 2026-10-06 it offered to remove 3 of 142 copies. Patch matching (`git cherry`) is no
+better here: the commit hook regenerated the architecture snapshot (until plan 86) and the build stamp on every landing,
+so the landed patch differs from the lane's. What told them apart was the commit title: a leftover
+commit whose title is in the main branch's log has landed. That cleared 127 copies and kept 15 with real
+work. When judging whether a copy is dirty, ignore the build stamp, the code map, the architecture
+snapshot and the `.scratch/` folder, which every lane leaves behind. Remove copies only through the
+helper's own link-stripping steps (section 1 says why).
+
+---
+
+## 7. Documents
+
+**Never resolve a conflict in the roadmap or the testing document by taking one whole side.** Both
+files gain rows from every landing, so choosing "mine" or "theirs" silently drops someone's work.
+Merge row by row, and afterwards read the open sections against the finished one to make sure
+nothing was lost or double-listed.
+
+**Keep the roadmap's shape.** It runs Bugs, Features, Verify, then Done for v0.6.0; the knowledge base lives in its own file (`docs/roadmap-kb.md`) and parked work in another (`docs/roadmap-shelved.md`). Entries
+are edited where they sit — never struck through. Something parked keeps its entry, tagged and
+dimmed, rather than being deleted.
+
+**A check's result is written in up to four places; close it in all of them.** The roadmap's Done
+list, its archive files, the testing.md table and the tick boxes in testing-manual.md each carry
+the same status. On 2026-09-23 the ban lookup's four checks passed and were closed on the roadmap and
+in testing.md, but their boxes stayed empty. On 2026-09-16 the settings card went to Done naming
+rows 01 through 07, because a decision said "nothing about the card is owed", while rows 06 and 07
+had never run. Closing an open *question* is not closing the *checks*. Search every document for the
+row's ID before calling it closed. `scripts/closed_rows_check.py` (run by `verify.py`) now fails a
+change that closes a row in one place and leaves it open in another. Replayed over September's 271
+bookkeeping commits, it catches both misses.
+
+**Write the questions for the maintainer into a file, not into chat.** Chat gets lost. There is a
+decisions file for exactly this, and it holds the reasoning as well as the answer.
+
+**Everything written for the maintainer is in plain language.** This is the most-repeated request in
+the project's history — it has been asked for five separate times. The full rule is at the top of
+[AGENTS.md](../AGENTS.md). The place it slips most is a status update full of measurements: say what
+changed for a person using the plugin, then give the number.

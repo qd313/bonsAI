@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+# Rewrite and stage src/types/rpcMethods.ts on every commit (fast). It is the only generated file
+# still saved in the repo: the type check needs it in a fresh clone, and it changes only when a
+# back-end method is added or removed. The architecture JSON maps and docs/code-map.md are not
+# saved any more; the tool server and the checks build them when needed.
+# Enable once per clone: pnpm run mcp:install-hooks
+set -e
+cd "$(dirname "$0")/.."
+node packages/bonsai-mcp/scripts/sync-architecture-for-commit.mjs

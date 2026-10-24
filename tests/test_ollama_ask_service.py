@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import asyncio
 import sys
+import threading
 import types
 import unittest
+from contextlib import ExitStack
 from typing import Any
 from unittest.mock import patch
 
@@ -18,38 +21,39 @@ if "decky" not in sys.modules:
     )
     sys.modules["decky"] = _decky
 
-if "pwd" not in sys.modules:
-    _pwd = types.ModuleType("pwd")
-    _pwd.getpwuid = lambda _uid: types.SimpleNamespace(pw_dir="/tmp")
-    sys.modules["pwd"] = _pwd
+from backend_module_stubs import install_pwd_stub
 
-from backend.services.ollama_ask_service import run_ask_ollama
+install_pwd_stub()
+
+from backend.characters.ai_character_service import build_roleplay_system_suffix_meta  # noqa: E402
+from backend.ask.ollama_ask_service import run_ask_ollama  # noqa: E402
 
 
 class _FakePlugin:
     DEFAULT_REQUEST_TIMEOUT_SECONDS = 180
 
-    def __init__(self) -> None:
+    def __init__(self, active_request_id: Any = None) -> None:
         self._background_state: dict[str, Any] = {"request_id": None, "status": "idle"}
+        self._fake_active_request_id = active_request_id
+        self.published_phases: list[str] = []
         self._active_ollama_chat_pc_ip = None
         self._active_ollama_chat_model = None
         self._active_ollama_chat_http_response = None
         self._chat_resp_ready_evt = None
+        self.app_log_calls: list[tuple[tuple[Any, ...], dict[str, Any]]] = []
         self._settings = {
             "model_policy_tier": "open_source_only",
             "model_policy_non_foss_unlocked": False,
             "model_allow_high_vram_fallbacks": False,
             "screenshot_attachment_preset": "low",
             "ai_character_enabled": False,
-            "bonsai_token_streaming_enabled": False,
             "ollama_keep_alive": "",
+            # The real Ask path only reaches run_ask_ollama with pictures once this is on.
+            "capabilities": {"media_library_access": True},
         }
 
-    def _ensure_background_state(self) -> None:
-        pass
-
-    def _active_request_id(self) -> None:
-        return None
+    def _active_request_id(self) -> Any:
+        return self._fake_active_request_id
 
     def _build_ollama_chat_url(self, pc_ip: str) -> str:
         return f"http://{pc_ip}/api/chat"
@@ -65,16 +69,46 @@ class _FakePlugin:
         return "system prompt"
 
     async def _maybe_app_log(self, *args: Any, **kwargs: Any) -> None:
+        # Records the call so a test can check it happened (and with what fields) without
+        # re-testing the real gating logic (`Plugin._desktop_app_log_level_allows` in main.py,
+        # not reachable from here) -- that gate is what actually decides verbose-on-or-off.
+        self.app_log_calls.append((args, kwargs))
         return None
 
     def _abort_ollama_chat_check(self) -> bool:
         return False
 
-    def _publish_thinking_phase_key(self, *args: Any, **kwargs: Any) -> None:
-        return None
+    def _publish_thinking_phase_key(self, _request_id: Any, phase: Any, **_kwargs: Any) -> None:
+        self.published_phases.append(str(phase))
 
     def _update_partial_response(self, *args: Any, **kwargs: Any) -> None:
         return None
+
+    def _publish_spoiler_consent(self, request_id: Any, consent: Any) -> None:
+        return None
+
+
+class _SpoilerFakePlugin(_FakePlugin):
+    """Adds a real-shaped attached-note header to the prompt (so ``kb_card_names`` finds a
+    protected name) and records every ``_update_partial_response`` call, so a test can read
+    back exactly what the live snapshot would have shown at each flush."""
+
+    def __init__(self, active_request_id: Any = None, *, kb_block: str = "") -> None:
+        super().__init__(active_request_id=active_request_id)
+        self._kb_block = kb_block
+        self.partial_updates: list[tuple[Any, ...]] = []
+        # One entry per call, the `reasoning_partial` kwarg only -- kept separate from
+        # `partial_updates` (positional args only) so existing tests reading that list by
+        # position are untouched.
+        self.reasoning_partials: list[Any] = []
+
+    def _build_system_prompt(self, *args: Any, **kwargs: Any) -> str:
+        base = super()._build_system_prompt(*args, **kwargs)
+        return f"{base}\n{self._kb_block}" if self._kb_block else base
+
+    def _update_partial_response(self, *args: Any, **kwargs: Any) -> None:
+        self.partial_updates.append(args)
+        self.reasoning_partials.append(kwargs.get("reasoning_partial"))
 
 
 class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
@@ -93,7 +127,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             **kwargs: Any,
         ) -> dict[str, Any]:
             call_models.append(model_name)
-            if model_name == "qwen2.5vl:3b":
+            if model_name == "gemma4:e2b-it-qat":
                 return {
                     "success": False,
                     "status": 404,
@@ -110,19 +144,19 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             patch(
-                "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5vl:3b", "qwen2.5:3b"],
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["gemma4:e2b-it-qat", "gemma4:e2b"],
             ),
             patch(
-                "backend.services.ollama_ask_service.probe_ollama_http_ok",
+                "backend.ask.ollama_ask_service.probe_ollama_http_ok",
                 return_value=True,
             ),
             patch(
-                "backend.services.screenshot_media.prepare_attachment_images",
+                "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
-                "backend.services.ollama_ask_service.post_ollama_chat",
+                "backend.ask.ollama_ask_service.post_ollama_chat",
                 side_effect=fake_post_ollama_chat,
             ),
         ):
@@ -136,12 +170,1005 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             )
 
         self.assertTrue(out.get("success"))
-        self.assertEqual(out.get("model"), "qwen2.5:3b")
-        self.assertEqual(call_models, ["qwen2.5vl:3b", "qwen2.5:3b"])
+        # The two Qwen Research 3B models are not offered under the default "Open source only" policy
+        # (plan 93), so the first model tried, and missing, is now the starter model.
+        self.assertEqual(out.get("model"), "gemma4:e2b")
+        self.assertEqual(call_models, ["gemma4:e2b-it-qat", "gemma4:e2b"])
         diag = out.get("ask_diagnostics") or {}
-        self.assertEqual(diag.get("model_succeeded"), "qwen2.5:3b")
+        self.assertEqual(diag.get("model_succeeded"), "gemma4:e2b")
         self.assertEqual(diag.get("routing_strategy"), "installed_in_policy_chain")
+
+    async def _ask_with_installed(self, installed: list[str], **settings: Any) -> dict[str, Any]:
+        plugin = _FakePlugin()
+        plugin._settings.update(settings)
+        with (
+            patch("backend.ask.ollama_ask_service.list_installed_ollama_tags", return_value=installed),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.media.screenshot_media.prepare_attachment_images", return_value=([], [], [])),
+        ):
+            return await run_ask_ollama(
+                plugin, "hello", "127.0.0.1:11434", "", "", request_timeout_seconds=30,
+            )
+
+    async def test_no_ollama_and_an_empty_try_order_says_the_ai_is_not_set_up(self) -> None:
+        """P96-F1: a Deck with no Ollama used to be told to change its Model policy tier."""
+        out = await self._ask_with_installed([], text_model_routing_order=[])
+        self.assertFalse(out.get("success"))
+        text = str(out.get("response"))
+        self.assertTrue(text.startswith("The AI is not set up on this Deck yet."), text)
+        self.assertIn("Ollama tab", text)
+        self.assertNotIn("policy tier", text.lower())
+        self.assertNotIn("Tier 1", text)
+
+    async def test_no_ollama_with_a_saved_try_order_says_the_same(self) -> None:
+        """A saved order names a permitted model, but nothing is installed: still "not set up"."""
+        out = await self._ask_with_installed([], text_model_routing_order=["gemma4:e2b"])
+        self.assertFalse(out.get("success"))
+        self.assertTrue(str(out.get("response")).startswith("The AI is not set up on this Deck yet."))
+
+    async def test_models_installed_but_none_in_the_list_keeps_its_own_message(self) -> None:
+        out = await self._ask_with_installed(["nomic-embed-text"], text_model_routing_order=["gemma4:e2b"])
+        self.assertFalse(out.get("success"))
+        self.assertNotIn("not set up on this Deck", str(out.get("response")))
+
+    def test_the_screens_prefix_matches_the_message_the_back_end_sends(self) -> None:
+        """The "Open the Ollama tab" row finds the answer by this opening; the two must not drift."""
+        import re
+        from pathlib import Path
+        from backend.ollama.ollama_routing import AI_NOT_SET_UP_MESSAGE_START
+        ts = (Path(__file__).resolve().parent.parent / "src" / "features" / "answer" / "transcript"
+              / "noAiSetUpNotice.ts").read_text(encoding="utf-8")
+        found = re.search(r'NO_AI_SET_UP_MESSAGE_START\s*=\s*"([^"]+)"', ts)
+        self.assertIsNotNone(found)
+        self.assertEqual(found.group(1), AI_NOT_SET_UP_MESSAGE_START)
+
+    async def test_connecting_model_publishes_before_the_first_attempt(self) -> None:
+        """The cold-model wait is the longest silent stretch of an Ask; it must say something.
+
+        model_retry stays reserved for attempts after the first, so a single-attempt Ask reports
+        connecting once and never claims to be retrying.
+        """
+        plugin = _FakePlugin(active_request_id=4)
+
+        def fake_post_ollama_chat(*_args: Any, **_kwargs: Any) -> dict[str, Any]:
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen3:4b",
+                "response": "ok",
+                "assistant_raw": "ok",
+            }
+
+        with (
+            patch(
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen3:4b"],
+            ),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch(
+                "backend.media.screenshot_media.prepare_attachment_images",
+                return_value=([], [], []),
+            ),
+            patch(
+                "backend.ask.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            ),
+        ):
+            await run_ask_ollama(plugin, "hello", "127.0.0.1:11434", "", "", request_timeout_seconds=30)
+
+        self.assertEqual(plugin.published_phases, ["connecting_model"])
+
+    async def test_the_ai_character_is_rolled_once_per_ask(self) -> None:
+        """ai_character_random defaults on and calls random.choice.
+
+        This function used to resolve it twice -- once for the screenshot_prep blurb's tone and
+        once for the reply's actual voice -- so a random character could put a deadpan status line
+        in front of a witty answer. Nothing else catches this: both calls succeed, and the two
+        results only differ some of the time.
+        """
+        plugin = _FakePlugin(active_request_id=8)
+        plugin._settings["ai_character_enabled"] = True
+        plugin._settings["ai_character_random"] = True
+
+        def fake_post_ollama_chat(*_args: Any, **_kwargs: Any) -> dict[str, Any]:
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen3:4b",
+                "response": "ok",
+                "assistant_raw": "ok",
+            }
+
+        with (
+            patch(
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen3:4b"],
+            ),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch(
+                "backend.media.screenshot_media.prepare_attachment_images",
+                return_value=([], [], []),
+            ),
+            patch(
+                "backend.ask.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            ),
+            patch(
+                "backend.ask.ollama_ask_service.build_roleplay_system_suffix_meta",
+                wraps=build_roleplay_system_suffix_meta,
+            ) as spy,
+        ):
+            await run_ask_ollama(
+                plugin,
+                "hello",
+                "127.0.0.1:11434",
+                "",
+                "",
+                attachments=[{"path": "/home/deck/shot.png", "name": "shot.png"}],
+                request_timeout_seconds=30,
+            )
+
+        self.assertEqual(spy.call_count, 1)
+
+    async def test_attachment_counts_never_reach_the_reply_but_reach_the_verbose_log(self) -> None:
+        """D104: the reply must never carry the old ``[AttachDebug: ...]`` line.
+
+        The counts still go out through ``_maybe_app_log(level="verbose", ...)`` -- the same
+        gate an already-verbose-only line above it uses -- so a person only sees them if they
+        turned verbose logging on; nobody sees them in the answer itself, ever.
+        """
+        plugin = _FakePlugin(active_request_id=9)
+
+        def fake_post_ollama_chat(*_args: Any, **_kwargs: Any) -> dict[str, Any]:
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen3:4b",
+                "response": "Here is the answer.",
+                "assistant_raw": "Here is the answer.",
+            }
+
+        with (
+            patch(
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen3:4b"],
+            ),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch(
+                "backend.media.screenshot_media.prepare_attachment_images",
+                return_value=([{"image_b64": "abc"}], [], ["one image too large"]),
+            ),
+            patch(
+                "backend.ask.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            ),
+        ):
+            out = await run_ask_ollama(
+                plugin,
+                "what is in this screenshot",
+                "127.0.0.1:11434",
+                "",
+                "",
+                attachments=[{"path": "/home/deck/shot.png", "name": "shot.png"}],
+                request_timeout_seconds=30,
+            )
+
+        self.assertNotIn("AttachDebug", str(out.get("response") or ""))
+        verbose_calls = [
+            (args, kwargs)
+            for args, kwargs in plugin.app_log_calls
+            if kwargs.get("level") == "verbose" and args[:1] == ("ask.attach",)
+        ]
+        self.assertEqual(len(verbose_calls), 1)
+        fields = verbose_calls[0][1].get("fields") or {}
+        self.assertEqual(fields.get("requested"), 1)
+        self.assertEqual(fields.get("prepared"), 1)
+        self.assertEqual(fields.get("errors"), 1)
+
+    async def test_no_attachment_counts_logged_when_nothing_was_attached(self) -> None:
+        plugin = _FakePlugin(active_request_id=10)
+
+        def fake_post_ollama_chat(*_args: Any, **_kwargs: Any) -> dict[str, Any]:
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen3:4b",
+                "response": "ok",
+                "assistant_raw": "ok",
+            }
+
+        with (
+            patch(
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen3:4b"],
+            ),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch(
+                "backend.media.screenshot_media.prepare_attachment_images",
+                return_value=([], [], []),
+            ),
+            patch(
+                "backend.ask.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            ),
+        ):
+            await run_ask_ollama(plugin, "hello", "127.0.0.1:11434", "", "", request_timeout_seconds=30)
+
+        attach_calls = [
+            (args, kwargs) for args, kwargs in plugin.app_log_calls if args[:1] == ("ask.attach",)
+        ]
+        self.assertEqual(attach_calls, [])
+
+    async def test_first_token_retires_the_connecting_line(self) -> None:
+        """Reported on device: "Model's warming up…" stayed up for the whole generation.
+
+        It is not only static by then, it is false — the model is writing. Published once, not
+        per delta, and skipped when the model supplied its own status tag.
+        """
+        plugin = _FakePlugin(active_request_id=6)
+
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta("", False, None)
+                on_delta("Here", False, None)
+                on_delta("Here is the", False, None)
+                on_delta("Here is the answer.", True, None)
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen3:4b",
+                "response": "Here is the answer.",
+                "assistant_raw": "Here is the answer.",
+            }
+
+        with (
+            patch(
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen3:4b"],
+            ),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch(
+                "backend.media.screenshot_media.prepare_attachment_images",
+                return_value=([], [], []),
+            ),
+            patch(
+                "backend.ask.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            ),
+        ):
+            await run_ask_ollama(
+                plugin,
+                "hello",
+                "127.0.0.1:11434",
+                "",
+                "",
+                request_timeout_seconds=30,
+                # The delta callback only exists for a background Ask, which is the only path
+                # that passes this. Without it there is no stream to react to.
+                token_stream_request_id=6,
+            )
+
+        self.assertEqual(plugin.published_phases, ["connecting_model", "generating"])
+
+    async def test_a_model_status_tag_wins_over_the_generating_phase(self) -> None:
+        plugin = _FakePlugin(active_request_id=7)
+
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta("Here", False, "Reading your screenshot")
+                on_delta("Here is the answer.", True, "Reading your screenshot")
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen3:4b",
+                "response": "Here is the answer.",
+                "assistant_raw": "Here is the answer.",
+            }
+
+        with (
+            patch(
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen3:4b"],
+            ),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch(
+                "backend.media.screenshot_media.prepare_attachment_images",
+                return_value=([], [], []),
+            ),
+            patch(
+                "backend.ask.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            ),
+        ):
+            await run_ask_ollama(
+                plugin,
+                "hello",
+                "127.0.0.1:11434",
+                "",
+                "",
+                request_timeout_seconds=30,
+                token_stream_request_id=7,
+            )
+
+        self.assertEqual(plugin.published_phases, ["connecting_model"])
+
+    async def test_second_model_attempt_reports_retry_not_connecting(self) -> None:
+        plugin = _FakePlugin(active_request_id=5)
+
+        def fake_post_ollama_chat(
+            _url: str, model_name: str, *_args: Any, **_kwargs: Any
+        ) -> dict[str, Any]:
+            if model_name == "gemma4:e2b-it-qat":
+                return {
+                    "success": False,
+                    "status": 404,
+                    "body": '{"error":"model not found"}',
+                    "response": "model missing",
+                }
+            return {
+                "success": True,
+                "status": 200,
+                "model": model_name,
+                "response": "ok",
+                "assistant_raw": "ok",
+            }
+
+        with (
+            patch(
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["gemma4:e2b-it-qat", "gemma4:e2b"],
+            ),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch(
+                "backend.media.screenshot_media.prepare_attachment_images",
+                return_value=([], [], []),
+            ),
+            patch(
+                "backend.ask.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            ),
+        ):
+            await run_ask_ollama(plugin, "hello", "127.0.0.1:11434", "", "", request_timeout_seconds=30)
+
+        self.assertEqual(plugin.published_phases, ["connecting_model", "model_retry"])
+
+
+class SpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
+    """D112 #7, the spoiler safety net -- the live half: the partial-stream snapshot the screen
+    reads while an answer arrives must never show a protected name uncovered, including while it
+    is still being typed one word at a time.
+    """
+
+    def _patched(self, fake_post_ollama_chat) -> ExitStack:
+        stack = ExitStack()
+        stack.enter_context(
+            patch(
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen3:4b"],
+            )
+        )
+        stack.enter_context(
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True)
+        )
+        stack.enter_context(
+            patch(
+                "backend.media.screenshot_media.prepare_attachment_images",
+                return_value=([], [], []),
+            )
+        )
+        stack.enter_context(
+            patch(
+                "backend.ask.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            )
+        )
+        return stack
+
+    async def test_a_forming_name_is_held_back_then_covered_once_it_completes(self) -> None:
+        """"Soul Ma" (not yet the full name) must never reach the snapshot bare; once the word
+        finishes ("Soul Master"), the sentence naming it is covered, not shown plain."""
+        plugin = _SpoilerFakePlugin(
+            active_request_id=8, kb_block="[Hollow Knight / boss: Soul Master]"
+        )
+
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta("The next boss is Soul Ma", False, None)
+                on_delta("The next boss is Soul Master and he", False, None)
+                on_delta(
+                    "The next boss is Soul Master and he fakes death.", True, None
+                )
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen3:4b",
+                "response": "The next boss is Soul Master and he fakes death.",
+                "assistant_raw": "The next boss is Soul Master and he fakes death.",
+            }
+
+        with self._patched(fake_post_ollama_chat):
+            await run_ask_ollama(
+                plugin,
+                "the boss past the crystal spike area",
+                "127.0.0.1:11434",
+                "367520",
+                "Hollow Knight",
+                request_timeout_seconds=30,
+                token_stream_request_id=8,
+                ask_mode="strategy",
+                strategy_title_profile="protect_progression",
+            )
+
+        texts = [call[1] for call in plugin.partial_updates]
+        self.assertEqual(texts[0], "", "a growing name must be held back, not shown bare")
+        self.assertIn("```bonsai-spoiler", texts[1])
+        self.assertIn("```bonsai-spoiler", texts[2])
+        # Nothing was silently dropped -- the name is still there, just behind the fence.
+        self.assertIn("Soul Master", texts[2])
+
+    async def test_no_protected_names_leaves_the_stream_untouched(self) -> None:
+        plugin = _SpoilerFakePlugin(active_request_id=9, kb_block="")
+
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta("General advice for", False, None)
+                on_delta("General advice for this fight.", True, None)
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen3:4b",
+                "response": "General advice for this fight.",
+                "assistant_raw": "General advice for this fight.",
+            }
+
+        with self._patched(fake_post_ollama_chat):
+            await run_ask_ollama(
+                plugin,
+                "what class should I play",
+                "127.0.0.1:11434",
+                "367520",
+                "Hollow Knight",
+                request_timeout_seconds=30,
+                token_stream_request_id=9,
+                ask_mode="strategy",
+                strategy_title_profile="protect_progression",
+            )
+
+        texts = [call[1] for call in plugin.partial_updates]
+        self.assertEqual(texts, ["General advice for", "General advice for this fight."])
+
+    async def test_a_low_narrative_title_never_covers_or_holds_back(self) -> None:
+        plugin = _SpoilerFakePlugin(
+            active_request_id=10, kb_block="[Deep Rock Galactic: Survivor / boss: The Hive]"
+        )
+
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta("The next boss is The Hi", False, None)
+                on_delta("The next boss is The Hive.", True, None)
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen3:4b",
+                "response": "The next boss is The Hive.",
+                "assistant_raw": "The next boss is The Hive.",
+            }
+
+        with self._patched(fake_post_ollama_chat):
+            await run_ask_ollama(
+                plugin,
+                "what is the final boss like",
+                "127.0.0.1:11434",
+                "2321470",
+                "Deep Rock Galactic: Survivor",
+                request_timeout_seconds=30,
+                token_stream_request_id=10,
+                ask_mode="strategy",
+                strategy_title_profile="low_narrative",
+            )
+
+        texts = [call[1] for call in plugin.partial_updates]
+        self.assertEqual(texts, ["The next boss is The Hi", "The next boss is The Hive."])
+
+
+class _ConsentOrderFakePlugin(_FakePlugin):
+    """Records, in one list, when the consent is published and when each partial is written."""
+
+    def __init__(self, active_request_id: Any = None) -> None:
+        super().__init__(active_request_id=active_request_id)
+        self.events: list[tuple[Any, ...]] = []
+
+    def _publish_spoiler_consent(self, request_id: Any, consent: Any) -> None:
+        self.events.append(("consent", request_id, consent))
+
+    def _update_partial_response(self, *args: Any, **kwargs: Any) -> None:
+        self.events.append(("partial", args[1]))
+
+
+class SpoilerConsentPublishedBeforeTheFirstPartialTests(unittest.IsolatedAsyncioTestCase):
+    """Plan 81 helper S: the screen can only show a hidden block as plain text from the first
+    streamed word if the turn's consent reaches the live poll before the first partial."""
+
+    async def _ask(self, plugin: "_ConsentOrderFakePlugin", rid: int, *, consent: bool, guidance: bool) -> None:
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta("Plan.", False, None)
+                on_delta("Plan. Done.", True, None)
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen3:4b",
+                "response": "Plan. Done.",
+                "assistant_raw": "Plan. Done.",
+            }
+
+        # The same patched model call the cover-streaming tests above use.
+        with SpoilerCoverStreamingTests._patched(self, fake_post_ollama_chat):
+            await run_ask_ollama(
+                plugin,
+                "Give me a plan for the next area, spoilers are okay.",
+                "127.0.0.1:11434",
+                "367520",
+                "Hollow Knight",
+                request_timeout_seconds=30,
+                token_stream_request_id=rid,
+                ask_mode="strategy",
+                strategy_spoiler_consent=consent,
+                strategy_domain_guidance=guidance,
+            )
+
+    async def test_consent_reaches_the_poll_before_the_first_partial(self) -> None:
+        plugin = _ConsentOrderFakePlugin(active_request_id=13)
+        await self._ask(plugin, 13, consent=True, guidance=True)
+        kinds = [e[0] for e in plugin.events]
+        self.assertEqual(plugin.events[0], ("consent", 13, True))
+        self.assertLess(kinds.index("consent"), kinds.index("partial"))
+
+    async def test_no_consent_publishes_false(self) -> None:
+        plugin = _ConsentOrderFakePlugin(active_request_id=14)
+        await self._ask(plugin, 14, consent=False, guidance=True)
+        self.assertEqual(plugin.events[0], ("consent", 14, False))
+
+    async def test_consent_without_strategy_guidance_is_not_effective(self) -> None:
+        """The same value the finished result reports: consent only counts for a Strategy-style ask."""
+        plugin = _ConsentOrderFakePlugin(active_request_id=15)
+        await self._ask(plugin, 15, consent=True, guidance=False)
+        self.assertEqual(plugin.events[0], ("consent", 15, False))
+
+
+class ThinkingSpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
+    """D112 #7 leak fix: THINKING-SPOILER-01, measured live on the Deck 2026-09-26. The live
+    thinking line named a protected boss in plain words in 4 of 6 tries. The thinking text
+    below is the literal capture from the session's scratchpad L1-2-HK-C.jsonl (t=5849
+    through t=9167 of L1-2-HK-named.jsonl's own run, trimmed to the sentence that matters).
+    """
+
+    def _patched(self, fake_post_ollama_chat) -> ExitStack:
+        stack = ExitStack()
+        stack.enter_context(
+            patch(
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen3:4b"],
+            )
+        )
+        stack.enter_context(
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True)
+        )
+        stack.enter_context(
+            patch(
+                "backend.media.screenshot_media.prepare_attachment_images",
+                return_value=([], [], []),
+            )
+        )
+        stack.enter_context(
+            patch(
+                "backend.ask.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            )
+        )
+        return stack
+
+    async def test_a_real_captured_thinking_line_never_reaches_the_snapshot_bare(self) -> None:
+        plugin = _SpoilerFakePlugin(
+            active_request_id=11, kb_block="[Hollow Knight / boss: Soul Master]"
+        )
+        # Verbatim from L1-2-HK-C.jsonl t=9268 (trimmed to the sentence naming the boss).
+        thinking_line = (
+            'The context is clearly Hollow Knight, and the specific boss described matches '
+            'the "Soul Master" from the local knowledge base.'
+        )
+
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta("", False, None, reasoning_partial=thinking_line, reasoning_seconds=4)
+                on_delta(
+                    "Here is the answer.", True, None,
+                    reasoning_partial=thinking_line, reasoning_seconds=6,
+                )
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen3:4b",
+                "response": "Here is the answer.",
+                "assistant_raw": "Here is the answer.",
+            }
+
+        with self._patched(fake_post_ollama_chat):
+            await run_ask_ollama(
+                plugin,
+                "the boss past the crystal spike area",
+                "127.0.0.1:11434",
+                "367520",
+                "Hollow Knight",
+                request_timeout_seconds=30,
+                token_stream_request_id=11,
+                ask_mode="strategy",
+                strategy_title_profile="protect_progression",
+            )
+
+        for reasoning in plugin.reasoning_partials:
+            self.assertNotIn("Soul Master", reasoning or "")
+
+    async def test_no_protected_names_leaves_the_thinking_line_untouched(self) -> None:
+        plugin = _SpoilerFakePlugin(active_request_id=12, kb_block="")
+        thinking_line = "The user wants general performance tips."
+
+        def fake_post_ollama_chat(*_args: Any, **kwargs: Any) -> dict[str, Any]:
+            on_delta = kwargs.get("on_delta")
+            if callable(on_delta):
+                on_delta(
+                    "Here is the answer.", True, None,
+                    reasoning_partial=thinking_line, reasoning_seconds=2,
+                )
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen3:4b",
+                "response": "Here is the answer.",
+                "assistant_raw": "Here is the answer.",
+            }
+
+        with self._patched(fake_post_ollama_chat):
+            await run_ask_ollama(
+                plugin,
+                "what class should I play",
+                "127.0.0.1:11434",
+                "367520",
+                "Hollow Knight",
+                request_timeout_seconds=30,
+                token_stream_request_id=12,
+                ask_mode="strategy",
+                strategy_title_profile="protect_progression",
+            )
+
+        self.assertEqual(plugin.reasoning_partials, [thinking_line])
 
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ChatMemoryReachesTheModelTests(unittest.IsolatedAsyncioTestCase):
+    """Plan 63: a chat now carries what it has already covered into the next question.
+
+    Before this, a chat kept 200 questions and answers on disk and almost none of it ever reached
+    the model: a new question carried the subject of a very recent Strategy or Expert answer and
+    nothing else, so a follow-up meant repeating yourself.
+    """
+
+    async def _ask_with_chat(self, chat_turns):
+        from backend.ollama.token_accounting_service import reset_token_accounting
+
+        reset_token_accounting()
+        self.addCleanup(reset_token_accounting)
+        plugin = _FakePlugin(active_request_id=1)
+        sent: dict[str, Any] = {}
+
+        def _fake_post(url, model_name, messages, *a, **k):
+            sent["system"] = messages[0]["content"]
+            sent["user"] = messages[-1]["content"]
+            return {"success": True, "status": 200, "model": model_name, "response": "ok",
+                    "assistant_raw": "ok"}
+
+        with (
+            patch("backend.ask.ollama_ask_service.list_installed_ollama_tags",
+                  return_value=["qwen3:4b"]),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.media.screenshot_media.prepare_attachment_images",
+                  return_value=([], [], [])),
+            patch("backend.ask.ollama_ask_service.post_ollama_chat", side_effect=_fake_post),
+        ):
+            await run_ask_ollama(
+                plugin, "and what about the boots?", "127.0.0.1:11434", "", "",
+                request_timeout_seconds=30, chat_turns=chat_turns,
+            )
+        return sent
+
+    async def test_what_the_chat_already_covered_is_sent_with_the_next_question(self):
+        sent = await self._ask_with_chat([
+            {"role": "user", "text": "how do i beat morpha"},
+            {"role": "assistant", "text": "Use the Longshot to pull the nucleus out of the water."},
+        ])
+        self.assertIn("how do i beat morpha", sent["system"])
+        self.assertIn("Longshot", sent["system"])
+
+    async def test_a_chat_with_nothing_in_it_adds_nothing_at_all(self):
+        """An Ask outside a saved chat, or the very first question in one, must send exactly what
+        it sent before this existed."""
+        sent = await self._ask_with_chat([])
+        self.assertEqual(sent["system"], "system prompt")
+
+    async def test_a_spoiler_from_an_earlier_answer_is_not_handed_back_to_the_model(self):
+        """The worst thing this feature could do. An answer that fenced something off did so
+        because the person had not asked to know it."""
+        sent = await self._ask_with_chat([
+            {"role": "user", "text": "how do i beat morpha"},
+            {"role": "assistant", "text":
+             "Use the Longshot.\n```bonsai-spoiler\nDark Link waits in the Water Temple.\n```"},
+        ])
+        self.assertIn("Longshot", sent["system"])
+        self.assertNotIn("Dark Link", sent["system"])
+        self.assertNotIn("bonsai-spoiler", sent["system"])
+
+    async def test_the_memory_sits_behind_everything_that_does_not_change(self):
+        """The server skips re-reading the front of a question when it has not changed, and this
+        block changes on every turn. Anything that changes every turn has to sit behind what does
+        not, or it spoils that saving for all of it."""
+        sent = await self._ask_with_chat([
+            {"role": "user", "text": "how do i beat morpha"},
+            {"role": "assistant", "text": "Use the Longshot."},
+        ])
+        self.assertTrue(sent["system"].startswith("system prompt"))
+
+
+class GlossaryReachesThePromptTests(unittest.IsolatedAsyncioTestCase):
+    """Plan 86 step 3: the running game's tap-to-define words are read from the knowledge library
+    and handed to the prompt builder, so the AI is told about them only when there are some."""
+
+    async def _words_handed_to_the_prompt(self, found: tuple[str, list[str]]) -> dict[str, Any]:
+        handed: dict[str, Any] = {}
+
+        def _record(_plugin: Any, *_args: Any, **kwargs: Any) -> str:
+            handed.update(kwargs)
+            return "system prompt"
+
+        with (
+            patch.object(_FakePlugin, "_build_system_prompt", _record),
+            patch("backend.ask.ollama_ask_service.glossary_for_prompt", return_value=found),
+        ):
+            await ChatMemoryReachesTheModelTests._ask_with_chat(self, [])
+        return handed
+
+    async def test_the_glossary_words_for_the_running_game_reach_the_prompt(self) -> None:
+        handed = await self._words_handed_to_the_prompt(
+            ("Deep Rock Galactic: Survivor", ["kiting", "overclock"])
+        )
+        self.assertEqual(handed["glossary_game_title"], "Deep Rock Galactic: Survivor")
+        self.assertEqual(handed["glossary_terms"], ["kiting", "overclock"])
+
+    async def test_no_glossary_words_when_the_library_has_none(self) -> None:
+        handed = await self._words_handed_to_the_prompt(("", []))
+        self.assertEqual(handed["glossary_game_title"], "")
+        self.assertEqual(handed["glossary_terms"], [])
+
+
+class ChatSummaryWiringTests(unittest.IsolatedAsyncioTestCase):
+    """Plan 68 step 3: run_ask_ollama sums a chat up first when it has outgrown its room, before
+    building the question's own memory. Uses a real chat-slot file on disk (a temp dir) so a
+    written summary's save, and a failed one's non-save, are proven against the real store rather
+    than a mock of it.
+    """
+
+    def setUp(self) -> None:
+        import tempfile
+
+        from backend.chats.chat_slot_service import append_turn, create_slot, load_slot
+        from backend.ollama.token_accounting_service import reset_token_accounting
+
+        reset_token_accounting()
+        self.addCleanup(reset_token_accounting)
+        self._append_turn = append_turn
+        self._load_slot = load_slot
+        self.tmp = tempfile.mkdtemp()
+        slot = create_slot(self.tmp, first_question="q0", app_name="Half-Life 2")
+        self.slot_id = slot["id"]
+
+    def _grow_chat(self, n: int) -> None:
+        """``n`` question/answer pairs, long enough that a tiny fallback room cannot hold them
+        all -- reliably "outgrown" however the test environment's own network unreachability
+        happens to resolve the fallback window."""
+        for i in range(n):
+            self._append_turn(self.tmp, self.slot_id, role="user", text=f"question {i}")
+            self._append_turn(
+                self.tmp, self.slot_id, role="assistant", text=f"answer number {i} " * 30
+            )
+
+    def _chat(self) -> dict:
+        slot = self._load_slot(self.tmp, self.slot_id)
+        return {"id": slot["id"], "turns": slot["turns"], "summary": slot.get("summary")}
+
+    def _plugin(self) -> "_FakePlugin":
+        plugin = _FakePlugin(active_request_id=1)
+        plugin._chat_slots_settings_dir = lambda: self.tmp
+        plugin._chat_slots_store_lock = asyncio.Lock()
+        plugin._abort_current_ollama_chat = threading.Event()
+        plugin._abort_ollama_chat_check = lambda: plugin._abort_current_ollama_chat.is_set()
+        return plugin
+
+    async def _run(self, plugin, chat, *, summary_stream_result):
+        answer_calls: list[str] = []
+
+        def _fake_post(url, model_name, messages, *a, **k):
+            answer_calls.append(model_name)
+            return {
+                "success": True, "status": 200, "model": model_name,
+                "response": "the answer", "assistant_raw": "the answer",
+            }
+
+        with (
+            patch("backend.ask.ollama_ask_service.list_installed_ollama_tags",
+                  return_value=["qwen3:4b"]),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.media.screenshot_media.prepare_attachment_images",
+                  return_value=([], [], [])),
+            patch("backend.ask.ollama_ask_service.post_ollama_chat", side_effect=_fake_post),
+            patch("backend.chats.chat_summary_service._stream_ollama_chat_once",
+                  return_value=summary_stream_result) as summary_mock,
+        ):
+            out = await run_ask_ollama(
+                plugin, "and what about that", "127.0.0.1:11434", "", "Half-Life 2",
+                request_timeout_seconds=30, chat=chat,
+            )
+        return out, answer_calls, summary_mock
+
+    async def test_an_outgrown_chat_sums_up_first_and_saves_the_summary(self):
+        self._grow_chat(80)
+        out, answer_calls, summary_mock = await self._run(
+            self._plugin(), self._chat(),
+            summary_stream_result={
+                "success": True, "visible_raw": "Notes about Half-Life 2.",
+                "assistant_raw": "Notes about Half-Life 2.",
+            },
+        )
+        self.assertEqual(summary_mock.call_count, 1)
+        self.assertEqual(len(answer_calls), 1)
+        self.assertEqual(out.get("chat_summary"), "written")
+        saved = self._load_slot(self.tmp, self.slot_id)
+        self.assertIsNotNone(saved.get("summary"))
+        self.assertEqual(saved["summary"]["text"], "Notes about Half-Life 2.")
+
+    async def test_a_chat_that_fits_calls_the_model_once_and_saves_nothing(self):
+        self._grow_chat(1)  # one short exchange -- nowhere near outgrowing any real room
+        plugin = self._plugin()
+        out, answer_calls, summary_mock = await self._run(
+            plugin, self._chat(), summary_stream_result={"success": True, "visible_raw": "x"},
+        )
+        self.assertEqual(summary_mock.call_count, 0)
+        self.assertEqual(len(answer_calls), 1)
+        self.assertEqual(out.get("chat_summary"), "")
+        self.assertNotIn("summing_up", plugin.published_phases)
+        saved = self._load_slot(self.tmp, self.slot_id)
+        self.assertIsNone(saved.get("summary"))
+
+    async def test_a_failed_summary_still_answers_with_todays_memory(self):
+        self._grow_chat(80)
+        plugin = self._plugin()
+        out, answer_calls, summary_mock = await self._run(
+            plugin, self._chat(),
+            summary_stream_result={"success": False, "response": "model error"},
+        )
+        self.assertEqual(summary_mock.call_count, 1)
+        self.assertEqual(len(answer_calls), 1)
+        self.assertEqual(out.get("chat_summary"), "failed")
+        self.assertEqual(out.get("response"), "the answer")  # unchanged -- no warning appended
+        self.assertIn("summing_up", plugin.published_phases)
+        saved = self._load_slot(self.tmp, self.slot_id)
+        self.assertIsNone(saved.get("summary"))
+
+    async def test_a_stopped_summary_makes_no_answer_call_and_saves_nothing(self):
+        self._grow_chat(80)
+        out, answer_calls, summary_mock = await self._run(
+            self._plugin(), self._chat(),
+            summary_stream_result={
+                "success": False, "response": "Request stopped (connection closed).",
+                "cancelled": True,
+            },
+        )
+        self.assertEqual(summary_mock.call_count, 1)
+        self.assertEqual(len(answer_calls), 0)
+        self.assertTrue(out.get("cancelled"))
+        self.assertFalse(out.get("success"))
+        saved = self._load_slot(self.tmp, self.slot_id)
+        self.assertIsNone(saved.get("summary"))
+
+
+class _QuestionCapturingFakePlugin(_FakePlugin):
+    """Adds a record of the `question` kwarg every `_publish_thinking_phase_key` call actually
+    carried, on top of the shared fake's phase-name-only record."""
+
+    def __init__(self, active_request_id: Any = None) -> None:
+        super().__init__(active_request_id=active_request_id)
+        self.published_questions: list[str] = []
+
+    def _publish_thinking_phase_key(self, _request_id: Any, phase: Any, **kwargs: Any) -> None:
+        super()._publish_thinking_phase_key(_request_id, phase, **kwargs)
+        self.published_questions.append(str(kwargs.get("question") or ""))
+
+
+class QuestionForDisplayNeverLeaksTheModelBoundTextTests(unittest.IsolatedAsyncioTestCase):
+    """Plan 70 helper K regression: from the third question in a chat, the live "Model's warming
+    up for…" line quoted game_ai_request.py's own reminder text ahead of a bare follow-up
+    (workshop:test-evidence/plan70-QA-FREE-PLAY-01.json), because every phase-key publish here read
+    ``question`` -- what actually reaches the model -- rather than the person's own words.
+    ``question_for_display``, when a caller gives one, is what every phase-key publish and the
+    live spoiler cover now read instead; ``question`` itself is untouched, since the model still
+    has to see the reminder.
+    """
+
+    @staticmethod
+    def _patched(fake_post_ollama_chat):
+        return (
+            patch(
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen3:4b"],
+            ),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch(
+                "backend.media.screenshot_media.prepare_attachment_images",
+                return_value=([], [], []),
+            ),
+            patch(
+                "backend.ask.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            ),
+        )
+
+    @staticmethod
+    def _fake_post_ollama_chat(*_args: Any, **_kwargs: Any) -> dict[str, Any]:
+        return {
+            "success": True, "status": 200, "model": "qwen3:4b",
+            "response": "ok", "assistant_raw": "ok",
+        }
+
+    async def test_connecting_model_quotes_the_display_question_not_the_model_bound_one(self) -> None:
+        plugin = _QuestionCapturingFakePlugin(active_request_id=4)
+        reminder_laden_question = (
+            'FOLLOW-UP CONTEXT (a system reminder, not something the user typed): the previous '
+            'question in this chat was "how do i beat the glyphid dreadnought", and the answer '
+            'given was: "Kite it and target the plates." This new question carries on from that.\n'
+            "what about its second phase"
+        )
+        p1, p2, p3, p4 = self._patched(self._fake_post_ollama_chat)
+        with p1, p2, p3, p4:
+            await run_ask_ollama(
+                plugin,
+                reminder_laden_question,
+                "127.0.0.1:11434",
+                "",
+                "",
+                request_timeout_seconds=30,
+                question_for_display="what about its second phase",
+            )
+
+        self.assertEqual(plugin.published_phases, ["connecting_model"])
+        self.assertEqual(plugin.published_questions, ["what about its second phase"])
+        self.assertNotIn("FOLLOW-UP CONTEXT", plugin.published_questions[0])
+
+    async def test_with_no_question_for_display_it_falls_back_to_question(self) -> None:
+        """A caller that predates this parameter (an older test, a script) still gets exactly
+        today's behaviour -- the fallback exists so nothing else had to change to pick this up."""
+        plugin = _QuestionCapturingFakePlugin(active_request_id=5)
+        p1, p2, p3, p4 = self._patched(self._fake_post_ollama_chat)
+        with p1, p2, p3, p4:
+            await run_ask_ollama(
+                plugin, "hello", "127.0.0.1:11434", "", "", request_timeout_seconds=30,
+            )
+
+        self.assertEqual(plugin.published_questions, ["hello"])

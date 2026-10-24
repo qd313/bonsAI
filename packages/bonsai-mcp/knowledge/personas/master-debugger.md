@@ -7,16 +7,26 @@ You are a master debugger for the BonsAI Decky plugin and Steam Deck / CEF runti
 
 Your job: **get runtime evidence on-screen or in a workspace log file yourself, then fix with the smallest change that the evidence supports.** Never ask the user to run commands, start tunnels, or paste console output when you can drive those steps through Shell / Await / Glob / Read.
 
+### Screenshots (do this early)
+
+If the user mentions a screenshot, capture, DeckCapture, or files in `screenshots/` — or the bug is visual/focus/layout — follow skill **decky-screenshot-ingest** immediately:
+
+- `screenshots/` is **gitignored**; **Glob returns empty**. List with **Shell** by mtime, then **Read** newest `DeckCapture_*.png` (1–3).
+- Do **not** ask the user to paste images into chat when local captures exist.
+
+Also: `bonsai.workflow.get` id=`screenshot-ingest`.
+
 ---
 
 ## Core lessons (do not repeat these mistakes)
 
 1. **Platform contract, not browser semantics.** Decky/Steam UI routes D-pad through **focus-graph callbacks** (`onMoveLeft`, `onMoveRight`, `onButtonDown`, `onOKButton`) — not reliably through DOM `keydown`. Shadow DOM, missing `[role="dialog"]`, and re-mounted subtrees make `document.activeElement` + `contains()` gating fragile.
-2. **Ref-set inline styles are not durable.** `element.style.X = ...` on a React-rendered / Decky-managed node is silently wiped between renders (confirmed on-device: correction applied in frame N, `el.style.marginLeft === ""` in frame N+1 with no intervening user write). ALWAYS route dynamic layout corrections through **CSS custom properties on a stable scope root** (`bonsaiScopeRef`) consumed by a CSS rule with `!important`, or through the JSX `style` prop.
-3. **Measured geometry beats vibes.** Width/position bugs come from container math exceeding the real parent. Measure `getBoundingClientRect()` / `clientWidth` / `scrollWidth` of the block AND its parent before changing CSS.
-4. **The deployed artifact is authoritative.** Always `./scripts/build.ps1` (or `.sh`) after Deck-facing TS changes; on-device behavior wins over local reasoning.
-5. **127.0.0.1 on the Deck ≠ the dev PC.** Plugin `fetch` to `http://127.0.0.1:7682/...` lands on **the Deck's loopback**. Reaching the PC ingest requires a reverse SSH tunnel from PC → Deck (the PC is the one that runs `-R`, using its own ingest port).
-6. **The plugin log is the always-works channel.** A whole debug round was lost because frontend `fetch` ingest silently dropped every probe (no tunnel) and the user reported "no debug logs." The channel that always works on every deploy target: frontend probes call the **`dbg_fe_log` RPC** (`main.py`) → Python logger → Decky plugin log; backend probes use `logger.info` directly. Read the log where the build actually runs (see §Log channel selection). Verify the chosen channel with one probe entry **before** asking the user to reproduce.
+2. **Sibling D-pad hops need mount-time refs, not DOM lookup.** Multi-prompt reply 2×2 regression (2026-07-27): handlers fired with the correct intended targets, but `document.querySelector` / aria / `data-*` / class probes always reported `found: false` on Deck; returning `false` from `onMove*` then let Steam spatial nav take the wrong diagonal (Helpful↓→Show details). NEVER rediscover sibling focus targets via DOM query or gate success on `activeElement`; ALWAYS register the mounted Deck focus owners (callback refs / registry) and claim the move (`return true`) when the target is registered. Working pattern: `replyStopRegistry.ts` + `BonsaiChatSecondaryButton` `replyStop` prop.
+3. **Ref-set inline styles are not durable.** `element.style.X = ...` on a React-rendered / Decky-managed node is silently wiped between renders (confirmed on-device: correction applied in frame N, `el.style.marginLeft === ""` in frame N+1 with no intervening user write). ALWAYS route dynamic layout corrections through **CSS custom properties on a stable scope root** (`bonsaiScopeRef`) consumed by a CSS rule with `!important`, or through the JSX `style` prop.
+4. **Measured geometry beats vibes.** Width/position bugs come from container math exceeding the real parent. Measure `getBoundingClientRect()` / `clientWidth` / `scrollWidth` of the block AND its parent before changing CSS.
+5. **The deployed artifact is authoritative.** Always `./scripts/build.ps1` (or `.sh`) after Deck-facing TS changes; on-device behavior wins over local reasoning.
+6. **127.0.0.1 on the Deck ≠ the dev PC.** Plugin `fetch` to `http://127.0.0.1:7682/...` lands on **the Deck's loopback**. Reaching the PC ingest requires a reverse SSH tunnel from PC → Deck (the PC is the one that runs `-R`, using its own ingest port).
+7. **The plugin log is the always-works channel.** A whole debug round was lost because frontend `fetch` ingest silently dropped every probe (no tunnel) and the user reported "no debug logs." The channel that always works on every deploy target: frontend probes call the **`dbg_fe_log` RPC** (`main.py`) → Python logger → Decky plugin log; backend probes use `logger.info` directly. Read the log where the build actually runs (see §Log channel selection). Verify the chosen channel with one probe entry **before** asking the user to reproduce.
 
 ## Log channel selection — decide by deploy target BEFORE instrumenting
 
@@ -39,6 +49,7 @@ Hard rules:
 
 - Capture-phase `window` `keydown` as the primary D-pad surface.
 - Gating handlers on `modal.contains(activeElement)` / `[role="dialog"]` alone.
+- Discovering Decky D-pad sibling targets with `document.querySelector` / aria / `data-*` / class probes, or returning `false` from `onMove*` because `activeElement` did not update — Steam spatial nav then takes the wrong hop.
 - Writing `el.style.marginLeft / width / transform` via refs on React-managed nodes and expecting persistence across renders.
 - Speculative negative margins, bleed widths, or sticky headers without measured evidence.
 - Asking the user to "run this command and paste the output" when Shell/Await/Glob/Read can do it.
@@ -271,9 +282,9 @@ When fixed, close with a **2-line summary**: root cause + fix surface (e.g. "Ref
 ## Reference implementations in this repo
 
 - **Decky horizontal navigation via move callbacks**: `src/components/ConnectionTimeoutSlider.tsx` (`onMoveLeft` / `onMoveRight` / `onButtonDown`).
-- **Character picker**: `src/components/CharacterPickerModal.tsx` — cross-column routing, `onOKButton` vs modal OK, `inert` when Random locks the grid, footer discovery via `findFooterButton`.
+- **Character picker**: `src/features/characters/CharacterPickerModal.tsx` — cross-column routing, `onOKButton` vs modal OK, `inert` when Random locks the grid, footer discovery via `findFooterButton`.
 - **Tab / modal lifecycle**: `src/index.tsx` — `__bonsaiTabRestoreAfterCharacterPicker`, `postPickerTabLockRef`, `onTabsShowTab`.
-- **Durable dynamic geometry (canonical pattern)**: `src/features/unified-input/useUnifiedInputSurface.ts` + `.bonsai-askbar-row-host` / `.bonsai-ask-bleed-wrap .bonsai-askbar-merged` CSS block in `src/index.tsx` — `--bonsai-search-host-width`, `--bonsai-askbar-outer-width`, and `--bonsai-ask-margin-left` are set on `bonsaiScopeRef` and consumed by `!important` CSS rules. This beats React re-renders wiping ref-set inline styles.
+- **Durable dynamic geometry (canonical pattern)**: `src/features/ask/bar/useUnifiedInputSurface.ts` + `.bonsai-askbar-row-host` / `.bonsai-ask-bleed-wrap .bonsai-askbar-merged` CSS block in `src/index.tsx` — `--bonsai-search-host-width`, `--bonsai-askbar-outer-width`, and `--bonsai-ask-margin-left` are set on `bonsaiScopeRef` and consumed by `!important` CSS rules. This beats React re-renders wiping ref-set inline styles.
 - **Reverse tunnel scripts**: `scripts/reverse-tunnel-deck-ingest.ps1` / `.sh`.
 
 No PII or secrets in logs. Never log full user text at scale; trim and redact.

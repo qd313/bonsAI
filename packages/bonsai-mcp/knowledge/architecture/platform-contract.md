@@ -34,6 +34,6 @@ Plugin `fetch` to `http://127.0.0.1:7682` on the Deck requires a reverse tunnel 
 
 - `src/index.tsx` — plugin shell, scoped CSS
 - `src/styles/bonsaiScopeStylesheet.ts` — durable scoped CSS
-- `src/features/unified-input/` — ask bar layout
+- `src/features/ask/bar/` — ask bar layout
 - `main.py` — Decky RPC entrypoint
-- `py_modules/backend/services/` — backend services
+- `py_modules/backend/<package>/` — the back end, one package per area

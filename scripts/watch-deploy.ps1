@@ -24,6 +24,12 @@ function Invoke-Deploy {
     } else {
         & $DeployScript[0]
     }
+    # build.ps1 / build.sh signal a failed or unverified deploy with a non-zero exit code,
+    # not an exception. Without this the watch loop would swallow it and keep going as if
+    # the Deck were up to date - the same false pass the deploy hardening exists to remove.
+    if ($LASTEXITCODE -ne 0) {
+        throw "Deploy failed (exit code $LASTEXITCODE) - the Deck is not running this build."
+    }
 }
 
 function Schedule-Deploy {
@@ -41,7 +47,9 @@ if ($Local) { Write-Host "  deploy target: local (bash build.sh deploy --local)"
 else { Write-Host "  deploy target: remote Deck (.env)" -ForegroundColor Cyan }
 
 if (!(Test-Path "$RepoRoot\dist\index.js")) {
-    Write-Host "No dist/index.js — running one-shot build..." -ForegroundColor Cyan
+    # ASCII only: this file has no BOM, so Windows PowerShell 5.1 decodes it as CP1252 and a
+    # UTF-8 em-dash inside a double-quoted string becomes a smart quote that ends the string.
+    Write-Host "No dist/index.js - running one-shot build..." -ForegroundColor Cyan
     pnpm run build
     Invoke-Deploy
 }

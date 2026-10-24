@@ -1,0 +1,24 @@
+"""Title: Load scripts/kb/build_rag_db.py as a module for tests
+
+Purpose: scripts/kb/build_rag_db.py (wherever it sits under scripts/) is outside the normal import path
+(it is not part of py_modules/backend), so a test that wants to call its real functions has to load it
+by file path instead of a plain import. Several test files need exactly this; the path is found by name
+through tests/script_loader.py.
+Used for: tests/test_build_rag_compat_app_id.py, tests/test_build_rag_starting_out_validator.py
+and tests/test_build_rag_attributions.py, and any future test that needs the real builder.
+Solves: three test files each carried their own byte-for-byte copy of this loader (a
+back-end-test duplication scripts/ratchet.py's duplicate_lines_be_tests counts).
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+from script_loader import load_script
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+
+def load_build_rag_db():
+    """Load and execute scripts/kb/build_rag_db.py as a fresh module, and return it."""
+    return load_script("build_rag_db")

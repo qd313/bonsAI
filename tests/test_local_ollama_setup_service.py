@@ -2,18 +2,37 @@
 
 from __future__ import annotations
 
+import json
 import os
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 from unittest.mock import patch
 
-from backend.services.local_ollama_setup_service import (
+# So this file also runs on its own on Windows (matches scripts/run_python_tests.py, which puts
+# the repo root and py_modules on sys.path the same way Decky Loader does), not only after
+# unittest discover has already loaded another file that put them there first.
+REPO_ROOT = Path(__file__).resolve().parent.parent
+for _path in (str(REPO_ROOT), str(REPO_ROOT / "py_modules")):
+    if _path not in sys.path:
+        sys.path.insert(0, _path)
+
+from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub  # noqa: E402
+
+install_fcntl_and_decky_stubs()
+install_pwd_stub()
+
+from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
+
+from backend.ollama import ollama_local_setup_rpc as setup_rpc  # noqa: E402
+from backend.ollama.local_ollama_setup_service import (  # noqa: E402
     _bash_exe,
     _env_for_host_system_tools,
     _env_for_ollama_cli,
     ensure_ollama_cli_home_ready,
+    list_installed_ollama_tag_sizes,
     list_installed_ollama_tags,
 )
 
@@ -61,6 +80,39 @@ class LocalOllamaSetupServiceTests(unittest.TestCase):
             tags = list_installed_ollama_tags("http://127.0.0.1:11434")
         self.assertEqual(tags, ["qwen2.5:1.5b", "llava:7b"])
 
+    def test_list_installed_ollama_tag_sizes_parses_the_real_shape(self):
+        # workshop:test-evidence/plan70-ROUTING-MERGE-SIZE-01.json: nomic-embed-text (the meaning-
+        # search model, installed outside the curated catalog) showed "?" for its size and the
+        # header undercounted the total, because the only size lookup asked registry.ollama.ai,
+        # which does not answer for this tag. Ollama's own /api/tags already reports a `size` in
+        # bytes for every installed model -- this reads that instead. Real /api/tags response
+        # shape (trimmed to the fields this reads).
+        payload = (
+            b'{"models":['
+            b'{"name":"nomic-embed-text:latest","model":"nomic-embed-text:latest",'
+            b'"size":274302450,"digest":"0a109f422b47","modified_at":"2026-09-20T10:00:00Z"},'
+            b'{"name":"gemma4:e2b-it-qat","model":"gemma4:e2b-it-qat","size":3208128000}'
+            b']}'
+        )
+        with patch("urllib.request.urlopen") as mock_open:
+            mock_open.return_value.__enter__.return_value.read.return_value = payload
+            sizes = list_installed_ollama_tag_sizes("http://127.0.0.1:11434")
+        self.assertEqual(
+            sizes, {"nomic-embed-text:latest": 274302450, "gemma4:e2b-it-qat": 3208128000}
+        )
+
+    def test_list_installed_ollama_tag_sizes_skips_a_missing_or_zero_size(self):
+        payload = b'{"models":[{"name":"no-size-field"},{"name":"zero-size","size":0}]}'
+        with patch("urllib.request.urlopen") as mock_open:
+            mock_open.return_value.__enter__.return_value.read.return_value = payload
+            sizes = list_installed_ollama_tag_sizes("http://127.0.0.1:11434")
+        self.assertEqual(sizes, {})
+
+    def test_list_installed_ollama_tag_sizes_empty_on_error(self):
+        with patch("urllib.request.urlopen", side_effect=OSError("no route to host")):
+            sizes = list_installed_ollama_tag_sizes("http://127.0.0.1:11434")
+        self.assertEqual(sizes, {})
+
     def test_ensure_ollama_cli_home_ready_forces_fresh_serve_when_key_missing(self):
         with tempfile.TemporaryDirectory() as td:
             home = Path(td)
@@ -79,18 +131,18 @@ class LocalOllamaSetupServiceTests(unittest.TestCase):
                 return True
 
             with (
-                patch("backend.services.local_ollama_setup_service.Path.home", return_value=home),
+                patch("backend.ollama.local_ollama_setup_service.Path.home", return_value=home),
                 patch(
-                    "backend.services.local_ollama_setup_service.probe_ollama_http_ok",
+                    "backend.ollama.local_ollama_setup_service.probe_ollama_http_ok",
                     return_value=True,
                 ),
                 patch(
-                    "backend.services.local_ollama_setup_service.ensure_ollama_server_listening_before_pull",
+                    "backend.ollama.local_ollama_setup_service.ensure_ollama_server_listening_before_pull",
                     side_effect=listen_side_effect,
                 ) as mock_listen,
-                patch("backend.services.local_ollama_setup_service._stop_local_ollama_listener"),
-                patch("backend.services.local_ollama_setup_service.terminate_setup_started_ollama_serve"),
-                patch("backend.services.local_ollama_setup_service.time.sleep", side_effect=lambda _s: poll.__setitem__("n", poll["n"] + 1)),
+                patch("backend.ollama.local_ollama_setup_service._stop_local_ollama_listener"),
+                patch("backend.ollama.local_ollama_setup_service.terminate_setup_started_ollama_serve"),
+                patch("backend.ollama.local_ollama_setup_service.time.sleep", side_effect=lambda _s: poll.__setitem__("n", poll["n"] + 1)),
             ):
                 ok = ensure_ollama_cli_home_ready(log, str(ollama_bin), lambda: False)
 
@@ -98,6 +150,108 @@ class LocalOllamaSetupServiceTests(unittest.TestCase):
             mock_listen.assert_called_once()
             self.assertTrue(mock_listen.call_args.kwargs.get("force_fresh_serve"))
             self.assertTrue(key.is_file())
+
+    def test_both_start_paths_keep_the_same_number_of_models_loaded(self):
+        """The plugin starting Ollama itself used to allow 1 loaded model while the
+        start-with-the-Deck service allowed 2, so the same Deck swapped models on every
+        question or not depending on how Ollama had been started. Both now come from one value."""
+        from backend.ollama import local_ollama_setup_service as setup
+        from backend.ollama.ollama_local_autostart_service import _AUTOSTART_ENV
+
+        with patch.dict("os.environ", {}, clear=True), patch.object(setup.sys, "platform", "linux"):
+            direct = setup._linux_ollama_gpu_env_defaults()
+        self.assertEqual(direct["OLLAMA_MAX_LOADED_MODELS"], "2")
+        self.assertEqual(direct["OLLAMA_MAX_LOADED_MODELS"], _AUTOSTART_ENV["OLLAMA_MAX_LOADED_MODELS"])
+
+    def test_a_models_limit_the_user_set_is_left_alone(self):
+        from backend.ollama import local_ollama_setup_service as setup
+
+        with patch.dict("os.environ", {"OLLAMA_MAX_LOADED_MODELS": "3"}, clear=True), patch.object(
+            setup.sys, "platform", "linux"
+        ):
+            direct = setup._linux_ollama_gpu_env_defaults()
+        self.assertNotIn("OLLAMA_MAX_LOADED_MODELS", direct)
+
+
+class _InlineThread:
+    """Stands in for ``threading.Thread``: ``start()`` runs the target right there."""
+
+    def __init__(self, target=None, args=(), kwargs=None, daemon=None, name=None) -> None:
+        self._target, self._args, self._kwargs = target, args, kwargs or {}
+
+    def start(self) -> None:
+        self._target(*self._args, **self._kwargs)
+
+
+class _Reply:
+    def __init__(self, payload: bytes) -> None:
+        self._payload = payload
+
+    def read(self, _n: int = -1) -> bytes:
+        return self._payload
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_exc) -> bool:
+        return False
+
+
+class AFinishedSetupWarmsTheModelOnce(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase):
+    """Plan 96 F2, at the level the person feels it: the starter set finishes, and the model Ask
+    will use is loaded in the background, so the first question is not the one that pays for it.
+    (Deck, plan 94 block 4: first word 95 to 120 s after the press, on a fresh install.)"""
+
+    STARTER_TAGS = json.dumps(
+        {"models": [{"name": "gemma4:e2b-it-qat", "details": {"parameter_size": "4.6B"}}]}
+    ).encode("utf-8")
+
+    async def asyncSetUp(self) -> None:
+        self.start_plugin_with_settings_file()
+        for target, kwargs in (
+            ("backend.ollama.ollama_preload_service.threading.Thread", {"new": _InlineThread}),
+            ("backend.ollama.ollama_preload_service.choose_window_tokens", {"return_value": 16384}),
+        ):
+            started = patch(target, **kwargs)
+            started.start()
+            self.addCleanup(started.stop)
+
+    async def _run_setup(self, ending: str, *, on_deck: bool = True):
+        self._write_settings(
+            {"ollama_local_on_deck": on_deck, "capabilities": {"internet_downloads": True}}
+        )
+
+        async def fake_setup(**kwargs) -> None:
+            kwargs["state"].update({"phase": ending, "done": True})
+
+        with (
+            patch.object(setup_rpc, "run_local_setup", side_effect=fake_setup),
+            patch("backend.ollama.ollama_preload_service.urllib.request.urlopen") as urlopen,
+        ):
+            urlopen.side_effect = [_Reply(self.STARTER_TAGS), _Reply(b"{}")]
+            out = await self.plugin.start_local_ollama_setup({"profile": "tier1_essentials"})
+            if out["accepted"]:
+                await self.plugin._local_ollama_setup_task
+        return urlopen
+
+    async def test_the_starter_set_finishing_loads_the_starter_model_once_with_the_ask_room(self):
+        urlopen = await self._run_setup("done")
+        self.assertEqual(urlopen.call_count, 2)  # the model list, then one warm request
+        warm = urlopen.call_args_list[1].args[0]
+        self.assertTrue(warm.full_url.endswith("/api/generate"))
+        sent = json.loads(warm.data.decode("utf-8"))
+        self.assertEqual(sent["model"], "gemma4:e2b-it-qat")  # 4.6B: over the old 3B boot cap
+        self.assertEqual(sent["options"], {"num_ctx": 16384})
+
+    async def test_a_failed_or_cancelled_setup_loads_nothing(self):
+        for ending in ("failed", "cancelled"):
+            urlopen = await self._run_setup(ending)
+            urlopen.assert_not_called()
+
+    async def test_with_the_ai_on_a_pc_nothing_is_loaded(self):
+        # The install refuses to start at all when the AI runs on a PC; nothing may load either way.
+        urlopen = await self._run_setup("done", on_deck=False)
+        urlopen.assert_not_called()
 
 
 if __name__ == "__main__":

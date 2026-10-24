@@ -5,11 +5,67 @@ This document is the advanced/power-user guide for bonsAI.
 For first-time setup, use `README.md` first (simple self-hosted install flow, Ollama setup, and starter model pulls).
 For contributor workflows, use [development.md](development.md) (Windows/Bazzite build and deploy paths).
 
-Roadmap and future features: [roadmap.md](roadmap.md). Steam Input search/jump and deep-link feasibility notes: [archive/research/steam-input-research.md](archive/research/steam-input-research.md). Opt-in character voice preset planning: [archive/research/voice-character-catalog.md](archive/research/voice-character-catalog.md).
+Roadmap and future features: [roadmap.md](roadmap.md). Steam Input search/jump and deep-link feasibility notes: [archive/research/steam-input-research.md](../../bonsAI-workshop/archive/research/steam-input-research.md). Opt-in character voice preset planning: [archive/research/voice-character-catalog.md](../../bonsAI-workshop/archive/research/voice-character-catalog.md).
 
 This file tracks resolved issues, hardware-specific overrides, and architectural constraints for the bonsAI (Backend Ollama Node for Steam A.I.) project.
 
 ---
+
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [1. Core Hardware & Performance](#1-core-hardware--performance)
+  - [ISSUE: AI Responses are Slow (CPU Inference)](#issue-ai-responses-are-slow-cpu-inference)
+- [1a. Permissions tab (blocked actions)](#1a-permissions-tab-blocked-actions)
+  - [Permissions grayed out (Kids master lock)](#permissions-grayed-out-kids-master-lock)
+  - [Knowledge base (offline strategy cards)](#knowledge-base-offline-strategy-cards)
+  - [Voice input (speech-to-text)](#voice-input-speech-to-text)
+  - [Deck essentials models (Tier 1 / Tier 2)](#deck-essentials-models-tier-1--tier-2)
+  - [Model licenses and the tiers](#model-licenses-and-the-tiers)
+  - [Model try order (text + vision)](#model-try-order-text--vision)
+  - [Ollama HTTP 404 with Gemma / open-weight models (Tier 2)](#ollama-http-404-with-gemma--open-weight-models-tier-2)
+  - [AI voice & personality (character tone)](#ai-voice--personality-character-tone)
+- [1b. Uninstall vs “Clear all data” (Settings)](#1b-uninstall-vs-clear-all-data-settings)
+- [Input sanitizer (Ask lane)](#input-sanitizer-ask-lane)
+  - [“Sanitizer blocked my prompt”](#sanitizer-blocked-my-prompt)
+  - [“I disabled sanitization by mistake”](#i-disabled-sanitization-by-mistake)
+- [Verbose Ask logging (Desktop notes)](#verbose-ask-logging-desktop-notes)
+- [1b. AI character (roleplay tone)](#1b-ai-character-roleplay-tone)
+- [1c. Latency warning vs backend timeout (Settings)](#1c-latency-warning-vs-backend-timeout-settings)
+- [1d. Reply style (Caveman / Balanced / Detailed)](#1d-reply-style-caveman--balanced--detailed)
+- [1e. Reply language (About tab)](#1e-reply-language-about-tab)
+- [1b. Desktop logs (`bonsAI_logs`)](#1b-desktop-logs-bonsai_logs)
+  - [Folder rename (existing users)](#folder-rename-existing-users)
+  - [Saving from Game Mode](#saving-from-game-mode)
+  - [ISSUE: Save failed or permission error](#issue-save-failed-or-permission-error)
+- [2. Network & Communication (The Bridge)](#2-network--communication-the-bridge)
+  - [ERROR: `TypeError: Failed to fetch`](#error-typeerror-failed-to-fetch)
+  - [ERROR: `Connection Refused` or `Timeout`](#error-connection-refused-or-timeout)
+  - [Find Ollama on LAN (mDNS — optional)](#find-ollama-on-lan-mdns--optional)
+  - [On-device Ollama (localhost — **Test** vs cold boot)](#on-device-ollama-localhost--test-vs-cold-boot)
+  - [Proton logs on troubleshooting Asks](#proton-logs-on-troubleshooting-asks)
+- [2.5 Screenshot Vision Setup (V1)](#25-screenshot-vision-setup-v1)
+  - [Required model capability](#required-model-capability)
+  - [Configure screenshot attachment quality](#configure-screenshot-attachment-quality)
+  - [Screenshot sources in V1](#screenshot-sources-in-v1)
+  - [Common failures and fixes](#common-failures-and-fixes)
+- [3. Build & Deploy (`scripts/build.ps1` / `scripts/setup-dev.ps1`)](#3-build--deploy-scriptsbuildps1--scriptssetup-devps1)
+  - [ERROR: `sudo: a password is required` or build hangs at "Overwriting system files"](#error-sudo-a-password-is-required-or-build-hangs-at-overwriting-system-files)
+- [4. QAM / QAMP Reflection Strategy](#4-qam--qamp-reflection-strategy)
+  - [What is guaranteed today (safe default)](#what-is-guaranteed-today-safe-default)
+  - [Known architectural constraint](#known-architectural-constraint)
+  - [Experimental path (disabled by default)](#experimental-path-disabled-by-default)
+  - [Validation checklist for every QAMP-related change](#validation-checklist-for-every-qamp-related-change)
+- [5. bonsai shortcut setup](#5-bonsai-shortcut-setup)
+  - [Pro tip: global quick-launch (Steam Input macro)](#pro-tip-global-quick-launch-steam-input-macro)
+- [Token streaming — live markdown (experimental, Developer tab)](#token-streaming--live-markdown-experimental-developer-tab)
+- [Steam Input jump (Phase 1, Developer tab)](#steam-input-jump-phase-1-developer-tab)
+- [Search intent packs (offline JSON)](#search-intent-packs-offline-json)
+  - [What they do (backend still present)](#what-they-do-backend-still-present)
+  - [Pack JSON shape (schema_version 1)](#pack-json-shape-schema_version-1)
+- [Decky Plugin Studio (dev tooling)](#decky-plugin-studio-dev-tooling)
+- [GitHub Actions: `validate-mcp` fails on push](#github-actions-validate-mcp-fails-on-push)
+<!-- /toc -->
 
 ## 1. Core Hardware & Performance
 
@@ -69,13 +125,81 @@ If Windows still falls back to CPU after FIX A:
 
 ## 1a. Permissions tab (blocked actions)
 
-**Feature:** The **Permissions** tab (lock icon) controls high-impact actions: saving notes to Desktop, applying TDP/GPU suggestions from the model, attaching Steam screenshots to asks, **voice input (microphone)**, opening external links from About, and the Developer tab Steam Input jump.
+**Feature:** The **Permissions** tab (lock icon) opens with: "Everything here starts off until you turn it on. AI questions to a PC on your home network are not blocked by these switches." Its switches cover: saving notes to Desktop, attaching Steam screenshots and auto-attaching Proton/game logs on troubleshooting Asks (**Read game & screenshot context**), and **voice input (microphone)**. Docs, GitHub, and Steam settings / Steam Input jumps always open when you tap them — no permission toggle. TDP/GPU clock suggestions from Ask are **read-only** (apply them yourself in Steam Performance if you choose).
 
 **Symptom:** Toasts like “Permission required” or backend errors mentioning Permissions when you try those actions.
 
 **Fix:** Open the **Permissions** tab and set the relevant scope to **ON**. Ollama requests to your PC on the LAN are not gated by these toggles.
 
-**Note:** If you upgraded from an older `settings.json` that had no `capabilities` block, the plugin enables most scopes until you save settings from the Permissions tab (grandfather behavior). **Voice input (microphone)** and **Steam ban lookup** stay **off** until you enable them explicitly.
+**Troubleshooting hint:** If an Ask looks like Proton/compat troubleshooting and **Read game & screenshot context** is off, Main shows a dismissible hint suggesting you enable it. The plugin never auto-enables that permission.
+
+**Note:** If you upgraded from an older `settings.json` that had no `capabilities` block, the plugin enables most scopes until you save settings from the Permissions tab (grandfather behavior). **Voice input (microphone)** stays **off** until you enable them explicitly. Legacy **Open web links** / **Adjust power limits** toggles are ignored (removed).
+
+### Permissions grayed out (Kids master lock)
+
+**Symptom:** Every Permissions switch is off and grayed out; a yellow **Parental controls active** banner explains why.
+
+**Cause:** Steam reports that parental controls are **locked** on the signed-in account (Family View or Steam Families). bonsAI forces high-impact permissions off for that session — file writes, screenshots/game logs, microphone. Ask with local/LAN Ollama and the offline knowledge base still work.
+
+**Fix:** Unlock parental controls in **Steam** (not in bonsAI). There is no bonsAI PIN. When Steam reports unlocked, the switches return to your saved settings by themselves.
+
+**Cannot promise:** bonsAI does **not** filter what the AI says; this is a guardrail, not a security boundary; if Steam does not report locked (or the probe fails), permissions stay as you set them.
+
+### Knowledge base (offline strategy cards)
+
+Optional on-Deck corpus for Strategy and troubleshooting Asks. Full architecture: [knowledge-base.md](knowledge-base.md).
+
+1. **Ollama** tab → **Knowledge base (offline)** → **Download knowledge base** — choose **Internal storage** or **SD card** when a microSD is inserted (~5 GB; no Ask text uploaded).
+2. Wait for download to finish (stay on Wi‑Fi). **Installed** indicator shows version and path.
+3. Enable **Use local knowledge base** (default on after successful install).
+4. **Update knowledge** checks manifest and re-downloads when a newer version exists.
+5. **Remove knowledge base** deletes the corpus directory and turns the toggle off.
+
+When the knowledge base is enabled and installed, Main-tab preset chips may occasionally show game-specific tips (boss/compat curtailed from the offline corpus) mixed with static suggestions.
+
+**Better search:** Optional Ollama model `nomic-embed-text` enables **Keyword + meaning** retrieval for **Strategy** tips. Without it, **Keyword search** still works. The plugin may show a soft install hint — it will **not** auto-pull the embed model or block Asks. Show details may label the path as **Keyword + meaning**, **Keyword search**, **Keyword search (embed unavailable)**, or **Keyword search (hybrid disabled)**.
+
+**Show details says "Keyword search (embed unavailable)" and `nomic-embed-text` is installed.**
+Your corpus predates schema v3 (remediation PR1, 2026-08-05). v3 embeds documents with a task
+prefix; a v2 corpus baked bare text with the *same* model at the *same* dimension, so nothing
+in the file distinguishes them and only the manifest's `embedding_variant` can. Searching one
+with the other's queries returns plausible-looking nonsense, so the plugin refuses and falls
+back to keyword rather than degrading silently. **There is no migration — rebuild:**
+
+```bash
+python scripts/kb/build_rag_db.py --seed --out build/knowledge-base
+```
+
+then reinstall via Developer tab → **Install seed knowledge base**. Retrieval keeps working in
+keyword mode throughout; only the hybrid half is off. Confirm the fix by checking the manifest
+reports `"schema_version": 3` and `"embedding_variant": "nomic-prefixed-v1"`.
+
+**Show details says "Keyword search (hybrid disabled)".** That is a setting, not a fault — the
+Developer-tab hybrid kill-switch is off. Deliberately worded differently from *embed
+unavailable* so it does not send you looking for a broken Ollama install. Turn it back on
+under Developer → **Knowledge base** → *Hybrid retrieval (meaning search)*. Cards
+still attach while it is off; only the meaning half of the ranking stops. The switch is
+checked **before** the corpus-format gate, so an off switch reports itself even on a corpus
+that could not have run hybrid anyway.
+
+**Troubleshooting tips now attach to plain-English Asks (2026-08-06).** Until this change, the
+shared tip sheet was only searched when your question contained the literal word **deck** or
+**proton** — so questions about SD card storage, Steam Input, anti-cheat, streaming, VR, Wine
+or emulation attached nothing, even though tips for all of those shipped. An Ask now reaches
+the tip sheet when it *names a topic the corpus covers*, however you phrase it. Strategy Asks
+are unaffected: they still route by running game and Ask mode. If a troubleshooting Ask still
+attaches nothing, the tips exist but nothing scored above the relevance floor — try naming the
+component ("SD card", "controller layout", "remote play") rather than only the symptom.
+
+**Troubleshooting hybrid (Phase 3 — shipped 2026-07-29):** The same hybrid path runs on **troubleshooting** Asks over the shared `compat_patterns` tip sheet (~124 maintainer tips in the Dev-tab seed). Show details adds **Source: shared troubleshooting tips** when compat tips attach. Rebuild the seed corpus after pulling (`python scripts/kb/build_rag_db.py --seed --out build/knowledge-base`) and reinstall via Developer tab. See [knowledge-base.md](knowledge-base.md) § Phasing.
+
+**SD card:** When a microSD is mounted under `/run/media/deck/…`, the download picker offers **Download to SD card** (install path `{mount}/.bonsai/rag`). Internal default remains `~/.bonsai/rag`.
+
+**Download fails / manifest error:** The plugin fetches `corpus-manifest.json` from Hugging Face (primary) and a GitHub Releases mirror. If both are unreachable (401/404), download stops with a manifest error — the maintainer must publish the corpus and manifest first (`scripts/kb/build_rag_db.py`). For local QA without network, use Developer tab **Install seed knowledge base** (or `install_rag_corpus_local` RPC) with a built `build/knowledge-base` folder.
+
+**Clear all plugin data** (Settings) also removes the installed corpus when `rag_corpus_path` is set.
+
+**Unavailable:** If the toggle is on but no corpus is installed, you get a once-per-session toast; retrieval is skipped gracefully.
 
 ### Voice input (speech-to-text)
 
@@ -84,7 +208,7 @@ If Windows still falls back to CPU after FIX A:
 **Fix:**
 
 1. **Permissions** tab → enable **Voice input (microphone)**.
-2. **Settings → Voice input** → choose **tiny.en** (fastest on Deck) or **base.en** → **Install voice engine** (pulls whisper-cli via podman on SteamOS, then downloads the GGUF model).
+2. **Settings → Voice input** → keep **base.en** (the default, more accurate) or pick **tiny.en** (lighter, less accurate) → **Install voice engine** (pulls whisper-cli via podman on SteamOS, then downloads the GGUF model).
 3. If install fails, ensure **podman** is available (`which podman`) or place **`bin/whisper-cli`** in the plugin manually. See [`bin/README.md`](../bin/README.md).
 
 **Symptom:** Install fails with `libwhisper.so.1` / `podman cp` “no such file or directory” under `/app/build/src/…`.
@@ -103,17 +227,35 @@ If Windows still falls back to CPU after FIX A:
 
 **Cause (fixed 2026-07-07):** Voice RMS gate was too high for Gaming Mode mic levels (~150–250 RMS vs 350 threshold), so whisper never ran despite successful capture. Threshold lowered; filler hallucination filter unchanged.
 
+**Symptom:** After I press Stop the mic button turns amber and the words in the box change a little.
+
+**Cause:** This is on purpose. While you talk, bonsAI shows a quick rough preview. When you press Stop (or Ask) it reads the whole recording once more and swaps in that tidier text. With no game running the wait is about two seconds; with a game running it is about four or five seconds, and a longer recording takes longer. A recording also stops by itself after two minutes.
+
+**Fix:** Nothing to fix. Wait for the amber to clear; pressing the mic button during the wait does nothing. If you type in the box or press the X during the wait, the tidier text is dropped so it never overwrites you.
+
 **Symptom:** Interim text is slow or stalls.
 
-**Fix:** Use **tiny.en**; **base.en** needs more CPU on the Deck APU. Close heavy games while transcribing. Audio is processed in RAM only — nothing is uploaded or saved to disk.
+**Fix:** The preview is lighter on purpose while a game runs (it updates every few seconds so the game keeps its speed); with no game running it updates as fast as the Deck can read your voice; the text after Stop is the one to trust. Close heavy games while transcribing. If it is still too slow, switch to **tiny.en**, which is lighter on the Deck but less accurate (it can repeat words). Audio is processed in RAM only — nothing is uploaded or saved to disk.
 
-**Latency (2026-07-07):** Tier 1 tuning (shorter decode interval/window, faster UI poll, 4 threads) — see [voice-input-follow-up.md](voice-input-follow-up.md). If still too slow, planned **session daemon** (roadmap).
+**Latency (2026-07-07):** Tier 1 tuning shortens decode interval/window, speeds UI poll, and uses 4 whisper threads (more CPU while mic is active). Changed 2026-10-11 (plan 88): the live preview now re-reads the recording so far (a block of at most 28 seconds) and rests as long as each read took, and Stop reads the whole recording once.
 
-**Maintainers — podman image:** Install pins `WHISPER_CPP_IMAGE` by **digest** (not `:main`). Bump procedure: [voice-input-follow-up.md](voice-input-follow-up.md#bumping-the-digest-maintainers).
+**Session daemon (2026-07-17):** Mic sessions prefer a local `whisper-server` (`127.0.0.1:18765`) so the model loads once per recording. Re-run **Install voice engine** if you upgraded from an older build (incremental server install when CLI is already CPU-safe). If the server fails health checks, voice falls back to one-shot `whisper-cli` automatically.
+
+**Symptom:** Interim text still slow after update.
+
+**Fix:** Confirm `~/homebrew/settings/bonsAI/voice_bin/whisper-server` exists (reinstall voice engine). Close heavy games while transcribing; if it is still slow, switch to the lighter **tiny.en**.
+
+**Symptom:** Orphan `whisper-server` after crash (rare).
+
+**Fix:** Stop/restart the plugin, or delete `voice_bin/whisper-server.pid` and kill the stale PID. **Clear all data** or revoking the mic permission also force-stops the server.
+
+**Maintainers — podman image:** Install pins `WHISPER_CPP_IMAGE` by **digest** (not `:main`). To bump: pull a whisper.cpp image on Deck/Linux → `podman inspect … --format '{{.Digest}}'` → update `WHISPER_CPP_IMAGE` in `voice_transcription_service.py` → delete `~/homebrew/settings/bonsAI/voice_bin/` (or reinstall voice engine) → confirm mic → interim text. Do **not** copy prebuilt binaries from the image without a Deck CPU-safe compile + inference smoke. Full maintainer notes: [archive/voice-input-follow-up.md](../../bonsAI-workshop/archive/voice-input-follow-up.md).
+
+**Triage if voice breaks again:** (1) Permissions → mic on; (2) Settings → Voice input ready / Install voice engine; (3) red mic no text → logs / SIGILL → reinstall CPU-safe build; low RMS → speak closer; (4) install fail → podman / digest / compile timeout.
 
 ---
 
-**Symptom:** On the **Ollama** tab, **Open AI models…** does not switch policy tiers (e.g. Tier 1 → Tier 2) with the controller, the choice reverts after **Done**, or **Browse & pull** showed **Enable Tier 2** but the bottom row still says Tier 1.
+**Symptom:** On the **Ollama** tab, **Manage AI models…** does not switch policy tiers (e.g. Tier 1 → Tier 2) with the controller, the choice reverts after **Done**, or **Browse & pull** showed **Enable Tier 2** but the bottom row still says Tier 1.
 
 **Cause (fixed 2026-05-19):** Tier buttons only handled mouse `onClick`, not Steam **A/OK** (`onOKButton`). Immediate save on each highlight also raced Decky remount + debounced settings save.
 
@@ -123,13 +265,50 @@ If Windows still falls back to CPU after FIX A:
 
 ### Deck essentials models (Tier 1 / Tier 2)
 
-**Default Tier 1 pull:** `qwen2.5vl:3b` — one FOSS multimodal model for chat, screenshots, OCR, and Strategy mode. In bonsAI → **Ollama** → **Install Tier 1 essentials** (or `ollama pull qwen2.5vl:3b`).
+**Default starter set:** `gemma4:e2b-it-qat` (text and pictures, Apache 2.0, Tier 1), the note-search model `nomic-embed-text`, and the speech models `tiny.en` and `base.en`, about 4.5 GB in all. In bonsAI → **Ollama** → **Install the starter set** (or `ollama pull gemma4:e2b-it-qat`). What is already installed is skipped. `qwen2.5vl:3b` and `qwen2.5:3b` are not open source (Qwen's research-only license); see [Model licenses and the tiers](#model-licenses-and-the-tiers).
 
-**Optional Tier 2 one-model multimodal:** `gemma4:e2b-it-qat` (falls back to `gemma4:e2b` if the QAT tag is unavailable on the registry). Use **Install Tier 2 one-model multimodal** under **Ollama → Where AI runs**; bonsAI switches Model policy to Tier 2 (open-weight) and shows license disclosure before pull.
+**Optional Gemma 4 install (all-in-one model):** `gemma4:e2b-it-qat` (falls back to `gemma4:e2b` if the QAT tag is unavailable on the registry). Gemma 4 is Apache 2.0, so the model itself counts as Tier 1; only Gemma 3 and older are Tier 2. The button also switches Model policy to Tier 2. Use **Install Gemma 4 (all-in-one model)** under **Ollama → Where AI runs**; bonsAI switches Model policy to Tier 2 (open-weight) and shows license disclosure before pull.
 
 **Browse models** defaults to **Essentials only** (two preset rows). Turn the filter off to see more models; stretch/specialist rows are for power users.
 
-**Clear all data:** **Settings → Advanced → Clear all data** wipes settings (including permissions), voice STT assets, feedback log, runtime cache, all `bonsai:*` browser keys, and `~/.bonsai/cache`. When **Ollama on this Deck** was enabled **or** a local Ollama home (`~/.ollama`) / user-prefix install exists, it also removes local model blobs and the user-prefix Ollama binary under `~/.local`. LAN-hosted Ollama on another PC is not touched.
+**Clear all data:** **Settings → Advanced → Clear all data** wipes settings (including permissions), voice STT assets, feedback log, runtime cache, all `bonsai:*` browser keys, `~/.bonsai/cache`, and **`~/.bonsai/proton_experiment_journal.json`**. When **Ollama on this Deck** was enabled **or** a local Ollama home (`~/.ollama`) / user-prefix install exists, it also removes local model blobs and the user-prefix Ollama binary under `~/.local`. LAN-hosted Ollama on another PC is not touched.
+
+### Model licenses and the tiers
+
+Each model was checked on 2026-09-29 against its Ollama page (`ollama.com/library/<name>`) and its maker's model card on Hugging Face. bonsAI sorts models by family name and, where the license depends on size, by the size in the tag. This is a guide, not legal advice.
+
+| Model | License | Tier |
+|---|---|---|
+| Qwen 3, Qwen 3.5, Qwen 3-VL, Qwen 2.5 (0.5b, 1.5b, 7b, 14b, 32b), Qwen 2.5 coder (all but 3b), Qwen 2.5 VL 7b and 32b, Qwen 2 (all but 72b) | Apache 2.0 | 1 |
+| Qwen 2.5 VL 3b, Qwen 2.5 3b | Qwen Research on Qwen's cards (Ollama's qwen2.5vl page lists Apache 2.0) | 2 (not open source; since 2026-10-14) |
+| Qwen 2.5 72b, Qwen 2.5 VL 72b, Qwen 2.5 coder 3b, Qwen 2 72b | Qwen's own licenses | 2 |
+| Qwen 1.5 (`qwen`) | Tongyi Qianwen licenses | 2 |
+| Gemma 4 | Apache 2.0 | 1 |
+| Gemma, Gemma 2, Gemma 3 | Gemma Terms of Use | 2 |
+| Granite | Apache 2.0 | 1 |
+| gpt-oss | Apache 2.0 | 1 |
+| Phi, Phi 3, TinyLlama, OpenChat | MIT or Apache 2.0 | 1 |
+| llava 7b, 34b | Apache 2.0 (Mistral or Yi based) | 1 |
+| llava 13b, llava-llama3 | Llama 2 / Llama 3 license | 2 |
+| llava-phi3 | No license stated on Ollama or the maker's card; its base, Phi 3, is MIT | 1, unconfirmed |
+| Vicuna, orca-mini | Llama 1 / Llama 2 license, or CC BY-NC-SA | 2 |
+| Llama 2, 3, 3.2 (and vision) | Meta's Llama licenses | 2 |
+| Mistral, Mixtral, Yi, InternVL, InternLM | Apache 2.0 for the versions checked, but these families have other licenses at other sizes | 2 (kept cautious) |
+| DeepSeek R1 | MIT (DeepSeek Coder has its own DeepSeek license) | 2 (kept cautious) |
+| LFM (Liquid) | LFM Open License v1.0 | 2 |
+| Nous Hermes, Dolphin | Follow the base model: Apache 2.0 or a Llama license | 2 |
+| SOLAR | CC BY-NC 4.0 (non-commercial) | 2 |
+| Moondream, MiniCPM | Apache 2.0 / MiniCPM license | 3 (not in the family table) |
+
+### Model try order (text + vision)
+
+**Feature:** **Ollama** tab → **AI models…** opens the AI models box. Its **Text / Pictures** switch picks which order you are looking at, and each installed model's row shows its place with small up and down buttons. A change is saved at once (Cancel does not undo it); **Reset order** goes back to automatic. Order is user-owned (max 16 tags); empty saved lists fall back to shipped essentials ∩ installed. A model hidden by a Filters choice keeps its place; one quiet line says how many. With the AI on a PC the places belong to the PC's installed models: they are listed in an **On the PC** group below the Deck's rows (Pull and Remove still act on this Deck only), and the license and Ask-mode filters apply to that group too. **Reset order** asks first. With **Allow high-VRAM models in routing** off, a big model keeps its place but is marked **Skipped: too big**, because Ask passes over it.
+
+**High-VRAM:** **Allow high-VRAM models in routing** (AI models hub → **Advanced**) controls whether large tags are *tried* at Ask time. When off, heavy models keep their place in the order but are skipped at Ask time. When on, newly pulled large models are inserted at the **top**; already-installed heavy models keep their saved position.
+
+**Pull/delete:** Successful model pulls append the tag to both lists (bottom, or top when high-VRAM rules apply). Deleting a model in bonsAI removes the tag from saved orders.
+
+**Host fallback:** After your ordered tries fail, bonsAI may append up to five tier-filtered installed tags (deprioritized tail).
 
 ### Ollama HTTP 404 with Gemma / open-weight models (Tier 2)
 
@@ -137,13 +316,13 @@ If Windows still falls back to CPU after FIX A:
 
 **Cause:** Ollama requires an **exact tag** match. Tags like `gemma4:4b` are **not** on the public library. Use **`gemma4:e2b-it-qat`**, **`gemma4:e2b`**, or **`gemma4:latest`** (= E4B on Ollama).
 
-**Fix:** Pull via **Install Tier 2 one-model multimodal** or an exact catalog tag. Enable **Tier 2** model policy so routing can use open-weight tags.
+**Fix:** Pull via **Install Gemma 4 (all-in-one model)** or an exact catalog tag. Gemma 4 tags work under Tier 1; Gemma 3 and older need **Tier 2** model policy.
 
 **Checks:**
 
 1. List installed tags: `curl -s http://127.0.0.1:11434/api/tags` (or your PC IP).
-2. Confirm `qwen2.5vl:3b` (Tier 1) or your Tier 2 Gemma tag is listed.
-3. Tier 1 policy only allows FOSS tags — use Tier 2 for Gemma.
+2. Confirm `gemma4:e2b-it-qat` (Tier 1) or your Tier 2 Gemma tag is listed.
+3. Tier 1 policy only allows open-source (Apache 2.0 or MIT) tags. Gemma 4 counts; Gemma 3 and older need Tier 2.
 
 ---
 
@@ -159,7 +338,7 @@ If Windows still falls back to CPU after FIX A:
 
 **Cause (fixed 2026-05-19):** Character instructions were prepended *before* the long bonsAI identity block; later lines (“answer directly, concisely, in English”) overrode voice. Build now **appends** character voice + a short end-of-system reminder.
 
-**Plan for stronger model honesty:** [plans/post-p0-feature-backlog.md](plans/post-p0-feature-backlog.md) (model truth section).
+**Plan for stronger model honesty:** [archive/plans/post-p0-feature-backlog.md](../../bonsAI-workshop/archive/plans/post-p0-feature-backlog.md) (model truth section).
 
 ---
 
@@ -172,22 +351,26 @@ If Windows still falls back to CPU after FIX A:
 | `~/homebrew/settings/bonsAI/` | `settings.json` (permissions, Ollama routing, keys), intent packs, voice STT assets, feedback log |
 | `~/homebrew/data/bonsAI/` | Runtime cache (e.g. screenshot captures) |
 | `~/homebrew/logs/bonsAI/` | Plugin log files |
-| Browser `bonsai:*` keys | Ollama host draft, disclaimer dismissals, unified-input persistence (CEF localStorage) |
-| `~/Desktop/bonsAI_logs/` | Optional Desktop notes (not removed by Clear all data) |
-| `~/.bonsai/cache/` | Pull-model catalog overlay |
+| Browser `bonsai:*` keys | Ollama host draft, disclaimer and first-run popup dismissals, unified-input persistence (CEF localStorage) |
+| `~/Desktop/bonsAI_logs/` | Optional Desktop notes, app activity, verbose Ask traces (not removed by Clear all data) |
+| `~/.bonsai/cache/` | Left over from older versions (a downloaded model list); safe to delete |
+| `~/.bonsai/proton_experiment_journal.json` | Leftover Proton experiment journal (obsolete UI; safe to delete; Clear all removes it) |
 
-**Settings → Advanced** (bottom of the tab): **Clear cache…** only clears the **current session** in RAM (Ask thread, attachments, etc.) and does **not** touch `settings.json`.
+**Settings → Advanced** (bottom of the tab): **Clear cache…** only clears the **current session** in RAM (Main transcript, attachments, etc.) and does **not** delete `settings.json` or on-disk logs.
 
 **Clear all data…** resets bonsAI to a **new-install** state on the device:
 
 - Wipes the full `~/homebrew/settings/bonsAI/` directory (settings, permissions, voice models/bin, feedback log, intent packs, checklist session) and rewrites defaults
 - Clears `~/homebrew/data/bonsAI/` and log files under `~/homebrew/logs/bonsAI/`
 - Clears all `bonsai:*` browser storage keys
-- Removes `~/.bonsai/cache/` (catalog overlay)
+- Removes `~/.bonsai/cache/` (left over from older versions)
+- Removes `~/.bonsai/proton_experiment_journal.json` (legacy Proton experiment timeline)
 - When **Ollama on this Deck** was enabled: also removes local model blobs (`~/.ollama`), user-prefix Ollama under `~/.local`
-- Shows beta disclaimer and permission prompts again
+- Shows the beta disclaimer, the "Where should the AI run?" popup and permission prompts again
 
 It does **not** delete markdown or log files under `~/Desktop/bonsAI_logs/`.
+
+**Leftover named-chat folders (harmless):** If you used an older build with named chat slots, `~/homebrew/settings/bonsAI/chat_threads/` and `~/Desktop/bonsAI_chats/` may still exist on disk. Current builds ignore them; delete manually if you want the space back.
 
 **Full removal checklist** (uninstall + no leftover data):
 
@@ -240,7 +423,7 @@ It does **not** delete markdown or log files under `~/Desktop/bonsAI_logs/`.
 
 ## 1c. Latency warning vs backend timeout (Settings)
 
-**Defaults (when “Custom timeouts” is off):** slow-reply warning at **30s**, hard abort at **45s** (2026-05-19; previously 360s). Enable **Developer → Custom timeouts** for your own warning/timeout pair.
+**Defaults (when “Custom timeouts” is off):** slow-reply warning at **60 seconds**, hard abort at **3 minutes** (checked against the code on 2026-10-22). Enable **Developer → Custom timeouts** for your own warning/timeout pair.
 
 **Where:** **Ollama** tab, under **Where AI runs**, **Latency warning and backend timeout**.
 
@@ -250,6 +433,31 @@ It does **not** delete markdown or log files under `~/Desktop/bonsAI_logs/`.
 
 ---
 
+## 1d. Reply style (Caveman / Balanced / Detailed)
+
+**Feature:** **Ollama** tab → **Reply style** — three-stop slider for global Ask prose coaching. **Balanced** (default) matches pre-ship behavior (no extra system-prompt block). **Caveman** uses terse “smart caveman” prose (drop articles/filler; keep technical accuracy; replaces former **Short**). **Detailed** prefers paragraphs with rationale (~500-word soft cap on visible prose). Does not change Ask mode (Speed / Strategy / Expert) or model routing. Shown in **Input handling (last Ask)** as `Reply style: …`.
+
+**Notes:**
+- Required `<bonsai-status>` opening line keeps its own short length rules; verbosity applies to the visible answer body after that tag.
+- When **AI characters** is on, Caveman coaching is skipped so character voice wins.
+- Existing installs that had **Short** selected migrate to **Caveman** on settings load.
+
+---
+
+## 1e. Reply language (About tab)
+
+**Symptom:** Ask replies are in the wrong language, or mix English with your Steam client language.
+
+**Default:** bonsAI reads the Steam **client** preferred language from `config/config.vdf` (`Language` key) when **Reply language** is **Follow system**.
+
+**Fix:**
+
+1. Open **About** → **Reply language** and pick **Always English** or a specific language override.
+2. Retry the Ask (v1 does not auto-regenerate a wrong-language reply).
+3. Expect partial English in plugin UI labels and preset chips — only Ask replies and the bounded translated status/toast strings follow the selected language.
+
+**Note:** Strategy mode keeps JSON fence names and `id` keys in English; only player-facing `label` / `question` / `title` strings should localize.
+
 ## 1b. Desktop logs (`bonsAI_logs`)
 
 ### Folder rename (existing users)
@@ -258,7 +466,7 @@ All Desktop writes now land in **`~/Desktop/bonsAI_logs/`** (was `BonsAI_notes`)
 ### Saving from Game Mode
 **Feature:** After a successful **Ask**, use **Save to Desktop note…** on the main tab. You choose the file name (without `.md`); the plugin appends an entry under `~/Desktop/bonsAI_logs/` on the **Steam Deck user** (not the remote Ollama PC). Each run adds a new timestamped **Question** / **Response** block; existing files are not replaced.
 
-**Optional — daily chat log:** In **Settings**, enable **Auto-save chat to Desktop notes** (default off). With **Filesystem writes** enabled in **Permissions**, each **Ask** and each **AI reply** append to `~/Desktop/bonsAI_logs/bonsai-chat-YYYY-MM-DD.md` (UTC calendar day). Ask lines include paths for any screenshot you attached for that prompt.
+**Optional — daily chat log:** In **Developer** (Settings → show Developer tab), enable **Auto-save chat to Desktop notes** (default off). With **Filesystem writes** enabled in **Permissions**, each **Ask** and each **AI reply** append to `~/Desktop/bonsAI_logs/bonsai-chat-YYYY-MM-DD.md` (UTC calendar day). Ask lines include paths for any screenshot you attached for that prompt.
 
 **Optional — app activity log:** Settings → Advanced → **App activity logging to Desktop** (`desktop_app_log_level`, default **Off**). With **Filesystem writes** on:
 - **Default** — one-line summary events (plugin load/unload, connection test, Ask start/complete, settings key changes without secret values) in `~/Desktop/bonsAI_logs/bonsai-app-YYYY-MM-DD.log`.
@@ -286,7 +494,7 @@ All Desktop writes now land in **`~/Desktop/bonsAI_logs/`** (was `BonsAI_notes`)
 **Fixes:**
 1. **Host listening:** On the machine running Ollama, set `OLLAMA_HOST=0.0.0.0` (or use the Ollama app’s **Listen / expose on network** option when the platform provides it) so the Deck can reach TCP **11434**. Restart Ollama after changing this.
 2. **Firewall:** Open Windows Defender Firewall -> Inbound Rules -> New Rule -> Port -> **TCP 11434** -> Allow.
-3. **Verify via SSH:** Run this from the Cursor terminal while connected to the Deck:
+3. **Verify via SSH:** Run this from a terminal while connected to the Deck:
    ```bash
    curl -sS -m 5 http://[PC_IP]:11434/api/tags
    ```
@@ -320,15 +528,23 @@ Then `sudo systemctl restart avahi-daemon` and ensure `OLLAMA_HOST=0.0.0.0` and 
 
 **Why:** Full boot can leave the **`ollama`** user service idle until first use — nothing is listening on **11434** until the daemon (`ollama serve` / systemd unit) accepts traffic.
 
-**What bonsAI does (v0.3.0+):** With **Test** targeting loopback (**Ollama on this Deck on**, or **`127.0.0.1` / localhost** typed as the host), an initial failed probe triggers a best‑effort **wake** (**`systemctl --user try-restart` / start `ollama`**, then **`ollama serve`** if needed — same primitives as Starter setup under `py_modules/backend/services/local_ollama_setup_service.py`) and **retests once**. Prefer waiting a minute after boot before assuming Ollama is broken.
+**What bonsAI does (v0.3.0+):** With **Test** targeting loopback (**Ollama on this Deck on**, or **`127.0.0.1` / localhost** typed as the host), an initial failed probe triggers a best‑effort **wake** (**`systemctl --user try-restart` / start `ollama`**, then **`ollama serve`** if needed — same primitives as Starter setup under `py_modules/backend/ollama/local_ollama_setup_service.py`) and **retests once**. Prefer waiting a minute after boot before assuming Ollama is broken.
 
-**Keeping Ollama and models current:** With **Ollama on this Deck** enabled, **Ollama → Update AI & models** (or **Install Ollama** when not connected yet) re-runs the official installer (binary refresh), then **`ollama pull`** each tag already installed locally — downloads only when upstream weights changed. That flow also refreshes the **Pull Models living catalog** (bonsAI-recommended overlay from GitHub; cached under `~/.bonsai/cache`). In **Browse models…**, tap **↻** to refresh installed tags, catalog recommendations, and live sizes.
+**Keeping Ollama and models current:** With **Ollama on this Deck** enabled, opening the **Ollama** tab quietly probes the local host so **Update AI & models** appears when Ollama is reachable (no need to tap **Test connection** first). **Update AI & models** (or **Install Ollama** when not reachable yet) re-runs the official installer (binary refresh), then **`ollama pull`** each tag already installed locally — downloads only when upstream weights changed. In **Browse models…**, tap **↻** to refresh installed tags and live sizes.
+
+**Text/vision try order:** **AI models… →** the **Text / Pictures** switch asks the computer that answers for its installed tags when the box opens (this Deck's own list, or one connection test to the PC). If there is no PC address, the PC cannot be reached, or nothing that can answer is installed, the box says so where the places would be. Up and down save at once; there is no Done step for the order.
 
 **Symptom:** `ollama pull` fails with `open /home/deck/.ollama/id_ed25519: no such file or directory` (often after **Clear all data**).
 
 **Fix:** Tap **Install Ollama** on the Ollama tab (reinitializes `~/.ollama`), or run `ollama serve` once in Konsole before pulling again.
 
-**Network (user-initiated only):** Catalog refresh may contact `raw.githubusercontent.com` (overlay JSON) and `registry.ollama.ai` (manifest sizes), same trust class as existing size lookup — no background sync.
+**Network (user-initiated only):** The size refresh may contact `registry.ollama.ai` (manifest sizes) — no background sync. The plugin does not download a model list from GitHub.
+
+### Proton logs on troubleshooting Asks
+
+- When **Permissions → Read game & screenshot context** is on, troubleshooting-style Asks with a numeric AppID **auto-attach** bounded `steam-<appid>.log` / compatdata excerpts (no separate Settings toggle).
+- The old **Proton experiment journal** Settings editor / inject path is obsolete (backend files may remain for later review). Leftover `~/.bonsai/proton_experiment_journal.json` is harmless; **Clear all data** still removes it.
+- **Main tab context chips** — after an Ask, **Show details** opens the inline chip ladder (wrap row when ≤6 chips); D-pad **Down** from **Retry** / **Show details** focuses the ladder; **Left/Right** cycles chips; **Developer details** is the last chip. Older turns link to the **Session context** strip at the bottom.
 
 **Local toggle and saved LAN IP:** While **Ollama on this Deck** is **on**, Ask uses `127.0.0.1:11434` but does **not** overwrite the saved **OLLAMA IP ADDRESS** field in browser storage. Toggling local **off** should restore your LAN PC host instead of leaving `127.0.0.1:11434` in the field after local-mode Asks.
 
@@ -344,6 +560,7 @@ Then `sudo systemctl restart avahi-daemon` and ensure `OLLAMA_HOST=0.0.0.0` and 
 - Open bonsAI `Settings` tab.
 - Set **Attachment quality (vision)** to **Low**, **Mid**, or **Max** (JPEG resize/compression before send; **Low** is smallest payload, **Max** is highest quality).
 - Legacy `settings.json` values that used numeric max dimensions are migrated on load.
+- Every attached picture is shrunk before it is sent, even a small file: a Deck screenshot is 1920 by 1080 pixels whatever its size in kilobytes, and sending it untouched can crash the AI's picture reader.
 
 ### Screenshot sources in V1
 - `Attach` opens a fullscreen screenshot browser with thumbnail previews.
@@ -353,6 +570,7 @@ Then `sudo systemctl restart avahi-daemon` and ensure `OLLAMA_HOST=0.0.0.0` and 
 
 ### Common failures and fixes
 - **Attachment too large:** lower attachment quality to **Low** in Settings (or install Pillow for resize/compression).
+- **"The picture was too big for the AI to read":** the AI closed its answer with nothing while reading your picture. Set **Attachment quality (vision)** to **Low** in Settings, or attach a smaller screenshot.
 - **Image preprocessing fallback warning:** install Pillow in plugin runtime if you need guaranteed resize/compression behavior on very large captures.
 - **Model rejects image input:** switch to an Ollama vision-capable model.
 
@@ -378,34 +596,6 @@ Then `sudo systemctl restart avahi-daemon` and ensure `OLLAMA_HOST=0.0.0.0` and 
 - Always validate with `sudo visudo -cf <file>` before installing.
 - Always use `sudo -n` in automated scripts so a misconfigured rule fails fast instead of hanging.
 - Always use `user:group` syntax for `chown`, never space-separated.
-
----
-
-## 3b. UI scale / QAM layout
-
-**Settings → UI scale** adapts bonsAI to handheld, desk monitor, or TV viewing distance.
-
-### Automatic mode (default)
-
-- **Adjust UI automatically** uses QAM viewport width and internal vs external display heuristics.
-- Docked **TV** outputs with a wide QAM column classify as **Couch**; narrower external outputs classify as **Desktop**.
-
-### Manual override
-
-- Turn off **Adjust UI automatically** to reveal the snap slider (**Handheld · Desktop · Couch**).
-- Tap **Apply UI scale** — changes are not live while dragging.
-- **Reset to automatic** re-enables auto classification.
-
-### Steam global UI Scale
-
-bonsAI does not read Steam's **Settings → Accessibility → UI Scale** programmatically. If text looks too large or small, check **both** Steam UI Scale and bonsAI's profile. Changing Steam's setting may shift QAM geometry; close and reopen QAM or tap **Apply** after adjusting.
-
-### Horizontal spill or clipped ask bar
-
-1. Confirm **Apply UI scale** was tapped after manual changes.
-2. Try **Reset to automatic** on the output you use most.
-3. If docked to TV but classified as Desktop (or vice versa), use manual **Couch** / **Desktop** snap + Apply.
-4. Capture a screenshot to `screenshots/` for maintainer calibration of `EXTERNAL_COUCH_VIEWPORT_MIN_PX` in `src/data/uiScaleProfile.ts`.
 
 ---
 
@@ -437,7 +627,7 @@ bonsAI does not read Steam's **Settings → Accessibility → UI Scale** program
 
 Because Decky Loader acts as a secure container for plugins, we cannot force a custom QAM tile for BonsAI. On standard SteamOS or a Bazzite Gamescope session, you can use a native **Steam Input** chord macro to open BonsAI from almost anywhere (in-game or the Home screen) with one combination after setup.
 
-**Short path in the main README:** [README.md](../README.md) (section *Open bonsAI quickly*). This section is the full recipe, delay ladder, and maintainer checks. For default plugin-shell smoke, see [testing.md](testing.md#regression-gates) §3 (Plugin shell), including the optional **Guide-chord / macro** row.
+**Short path in the main README:** [README.md](../README.md) (section *Open bonsAI quickly*). This section is the full recipe for **power users**. The Guide-chord macro is **not** a casual-user priority (archived from the product roadmap). Optional smoke: [testing-manual.md](testing-manual.md) Tier 3.
 
 **In-app help (no Ollama):** In the main tab Ask field, send exactly `bonsai:shortcut-setup-deck` or `bonsai:shortcut-setup-stadia` (optional leading `/`, trim + casefold) for a **fixed** reply, **Open Controller settings** when Permissions allow, and a pointer here. bonsAI **cannot** auto-create the chord; you still build the macro in **Controller → Guide Button Chord Layout**.
 
@@ -488,7 +678,7 @@ Hold **Steam** and press your chord button (e.g. **R4**). You should see QAM ope
 
 #### Verification checklist (maintainers / release QA)
 
-Run with a build that also satisfies [testing.md](testing.md#regression-gates) §3 *Plugin shell* when you touch QAM, Decky, or first paint.
+Run with a build that also satisfies [testing-manual.md](testing-manual.md) Tier 0 when you touch QAM, Decky, or first paint.
 
 - [ ] Chord triggers from the **Home** shell and with a **game focused** (at least one title).
 - [ ] QAM opens reliably; the rail moves until **Decky** is selected, then **Decky** opens.
@@ -496,6 +686,31 @@ Run with a build that also satisfies [testing.md](testing.md#regression-gates) �
 - [ ] Re-run after SteamOS or Steam **Big Picture** updates if macro behavior regresses.
 
 **Last verified (optional):** *Record SteamOS / Steam client build when a maintainer runs the checklist on hardware; update after major client updates.*
+
+---
+
+## Token streaming — live markdown (experimental, Developer tab)
+
+Enable **Settings → Data → Show Developer tab** → **Token streaming (experimental)**.
+
+While an Ask is pending, the Main tab can show **progressive markdown** in one live bubble (not plain text). This is **opt-in** and defaults **off**.
+
+**Behavior (v1):**
+
+- **Strategy spoilers:** Incomplete `bonsai-spoiler` fences show a **masked placeholder** only — spoiler body never appears until the fence closes.
+- **Code fences:** Open `` ``` `` blocks show a **pulse + spinner** (2s period) until the closing fence arrives; body then reveals faster than normal prose (~3× smooth reveal).
+- **Stop:** Partial text is **kept** on screen (including wait chip if a fence was still open).
+- **Done:** Reply snaps to full text in the stream bubble, then switches to the normal chunked terminal layout (handoff policy may change in a future release).
+
+**Symptom:** Stream looks like plain text or never shows formatting.
+
+**Checks:**
+
+1. Confirm **Token streaming (experimental)** is on in **Developer** (not only Show Developer tab).
+2. Rebuild/deploy after code changes — stream UI is frontend-only (`buildAnswerBubbleElement.tsx`, `streamMarkdownPrepare.ts`).
+3. For Strategy asks, expect spoiler **mask** mid-stream — that is intentional (no leak), not a missing stream.
+
+**QA:** [testing.md](testing.md) § Token streaming (STREAM-01…10).
 
 ---
 
@@ -511,20 +726,21 @@ Phase 1 is the **completed** scope for this feature; full search + catalog (Phas
 
 1. **MainRunningApp:** The jump uses `Router.MainRunningApp` from Decky. A title should be running or focused in a way Steam reports to the client. If you are only on the Steam shell with no game, start or focus a game and retry.
 2. **steam:// behavior:** Phase 1 uses `steam://controllerconfig/<appId>` via `SteamClient.URL.ExecuteSteamURL` (same family as Settings search `steam://open/settings/...`). If nothing happens, confirm Steam handled other `steam://` links from bonsAI recently; restart Steam if the client URL dispatcher is stuck.
-3. **After a Steam update:** Big Picture routes and `steam://` targets can change. Follow the smoke-test and changelog discipline in [archive/research/steam-input-research.md](archive/research/steam-input-research.md) and update `src/data/steam-input-lexicon.ts` if needed.
+3. **After a Steam update:** Big Picture routes and `steam://` targets can change. Follow the smoke-test and changelog discipline in [archive/research/steam-input-research.md](../../bonsAI-workshop/archive/research/steam-input-research.md) and update `src/features/developer/steam-input-lexicon.ts` if needed.
 4. **Wrong tab inside controller UI:** Sub-tabs may be local React state without distinct URLs. Use breadcrumb hints in the lexicon entry and optional `primaryPathTemplate` once you have verified paths from CEF sniffing.
 
 ---
 
 ## Search intent packs (offline JSON)
 
-**Settings → Search intent packs** manages offline alias packs for the main-tab unified search field (Steam / QAM settings navigation — not Ask model prompts).
+**Settings UI for Import/Export packs is obsolete.** Bundled **Deck basics** aliases may still quietly improve main-tab unified search ranking (Steam / QAM settings navigation — not Ask model prompts). A later review will decide keep / quiet / Developer revival — ranking itself was not rewritten in the cleanup.
 
-### What they do
+### What they do (backend still present)
 
 - Map short terms (e.g. `wifi`, `tdp`) to canonical settings paths such as `Settings > Internet > Enable Wi-Fi`.
 - Ship with a bundled **Deck basics** pack (`data/intent-packs/deck-basics.json` in the repo).
-- User packs are edited as JSON on a PC, copied to the Deck clipboard, then imported with an explicit confirm step.
+- Persisted as `intent_packs.json` under Decky plugin settings (not inside `settings.json`).
+- **Clear all plugin data** resets packs to bundled defaults.
 
 ### Pack JSON shape (schema_version 1)
 
@@ -546,20 +762,39 @@ Phase 1 is the **completed** scope for this feature; full search + catalog (Phas
 }
 ```
 
-- **`target`** must exactly match a path from the shipped settings catalog (`src/data/settingsDatabase.ts` / `data/settings-search-targets.json`). Unknown targets are rejected on import.
+- **`target`** must exactly match a path from the shipped settings catalog (`src/features/search-tab/settingsDatabase.ts` / `data/settings-search-targets.json`).
 - **`aliases` / `synonyms`:** direct match when the search text contains the term (min 2 characters).
 - **`expansions`:** weaker match tier (surfaced after native and alias/synonym hits).
-- **Merge:** importing a pack with the same `id` merges entries; alias/synonym terms already owned by another target are skipped and listed in the confirm dialog.
 
-### Storage
+There is no in-plugin Import/Export UI anymore; maintainers who need custom packs can edit `intent_packs.json` on device for experiments until the later review.
 
-- Persisted as `intent_packs.json` under Decky plugin settings (not inside `settings.json`).
-- **Clear all plugin data** resets packs to bundled defaults.
+---
 
-### Example workflow
+## Decky Plugin Studio (dev tooling)
 
-1. Export **Deck basics** from Settings to see the format.
-2. Edit on PC; copy JSON to clipboard.
-3. **Import from clipboard** on the Deck → review summary → confirm.
-4. On the **Main** tab, type `wifi` — unified search should list Wi-Fi settings even if the literal path text does not contain `wifi`.
+bonsAI uses [Decky Plugin Studio](https://github.com/qd313/decky-plugin-studio) for in-IDE preview, deploy, tunnel, and capture. That project is the **source of truth** — see [mcp-setup.md § Decky Plugin Studio](mcp-setup.md#decky-plugin-studio-source-of-truth).
+
+**When something is wrong with DPS** (broken MCP tool, bad capture, pack/skill drift, missing feature):
+
+1. Note it in the **DPS findings log** in [mcp-setup.md](mcp-setup.md) (and here if it is a recurring troubleshooting tip).
+2. Open or update an issue/PR on [qd313/decky-plugin-studio](https://github.com/qd313/decky-plugin-studio).
+3. Do not permanently patch DPS behavior only inside bonsAI; sync the real fix upstream, then bump the VSIX / `mcp.json` pin.
+
+## GitHub Actions: `validate-mcp` fails on push
+
+Workflow [`.github/workflows/validate-mcp.yml`](../.github/workflows/validate-mcp.yml) regenerates `packages/bonsai-mcp/knowledge/architecture/*.json` and fails when the committed snapshots are stale (common after `main.py` / `src/` RPC or layout changes).
+
+```bash
+pnpm run mcp:generate
+pnpm run mcp:validate
+git add packages/bonsai-mcp/knowledge/architecture/
+```
+
+Commit those JSON files with the code that changed them, then push. Prefer enabling local hooks so this is automatic:
+
+```bash
+pnpm run mcp:install-hooks
+```
+
+(`pre-commit` regenerates and stages architecture JSON; `pre-push` blocks stale pushes. See [mcp-setup.md](mcp-setup.md).)
 

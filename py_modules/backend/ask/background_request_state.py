@@ -1,0 +1,212 @@
+"""Title: The shape of "how is my Ask coming along"
+
+Purpose: An Ask that is still thinking runs in the background while the screen checks
+back roughly once a second asking "done yet?". This file is every shape that check can be
+answered with: brand new and idle, just accepted and about to start, finished because a
+quick built-in command answered it directly, and the small in-progress snapshot -- the
+partial reply and the "thinking..." line -- that gets filled in while the AI is still
+replying.
+Used for: Every place the plugin's front-door file starts, finishes, or resets the status
+of a background Ask.
+Solves: Without one shared definition, each of those places would build this status by
+hand, and it is easy for two hand-built copies to end up with slightly different fields --
+one missing something the screen's polling code expects to find.
+Does not: Hold the lock that guards this status, the task handle for the AI call itself,
+or decide how a new snapshot gets merged into the status already published -- those stay
+with the plugin's own class.
+"""
+
+from typing import Any, Optional
+
+# Sentinel for "do not add this key at all", distinct from an explicit None value.
+# `shortcut_setup` is absent from most states and the frontend distinguishes absent from null.
+OMIT = object()
+
+
+def new_background_state() -> dict[str, Any]:
+    """The idle default. Every other state in this module carries exactly these keys."""
+    return {
+        "status": "idle",
+        "request_id": None,
+        "question": "",
+        "app_id": "",
+        # Display name of the running game, alongside "app_id" — needed for a title reachable
+        # only by name (an emulator shortcut with no Steam AppID, plan 54 gap 1).
+        "app_name": "",
+        "app_context": "none",
+        "success": None,
+        "response": "",
+        "applied": None,
+        "elapsed_seconds": 0,
+        "error": None,
+        "started_at": None,
+        "completed_at": None,
+        "strategy_guide_branches": None,
+        "model_policy_disclosure": None,
+        "preset_carousel_inject": None,
+        "partial_response": None,
+        "streaming": False,
+        "thinking_summary": None,
+        "thinking_unsupported": False,
+        "model": None,
+        # Plan 57: the model's own thinking. `reasoning_partial`/`reasoning_seconds` are read
+        # while an answer is pending (live, newest 600 characters); `reasoning_text` (capped at
+        # 6,000 characters) and `reasoning_tokens` (an estimate) join `reasoning_seconds` once the
+        # answer is done. All stay at their "nothing to show" default on a turn with no thinking
+        # -- thinking Off, or a model that cannot think.
+        "reasoning_partial": None,
+        "reasoning_seconds": None,
+        "reasoning_text": "",
+        "reasoning_tokens": 0,
+        # Which named chat slot this request belongs to, so a poll can tell whether the
+        # tokens it is about to paint are the slot the user is currently looking at.
+        # It rides the state dict rather than being looked up per poll, because
+        # `_chat_slot_by_request` is popped at terminal — before the frontend polls it.
+        "chat_slot_id": None,
+        # Plan 58 phase 1: the notes the search actually attached to this turn, in each note's
+        # own words -- filled in by game_ai_request.py from what retrieval found, never from
+        # anything the model wrote. Empty on every turn with nothing attached. Defaulted here so
+        # a poll response always carries the key, matching the live snapshot's own field below.
+        "kb_attached_notes": [],
+        # Plan 68 step 4: which kind of background request this is -- an ordinary Ask, or the
+        # Session tab's own *Sum up this chat* button running as a job of its own through the
+        # same one-at-a-time slot. "ask" by default so every existing pending and terminal state
+        # keeps saying so without every one of their call sites having to name it. The button's
+        # own accept path is the only place that ever passes "sum_up" -- see chat_sum_up_job.py.
+        "kind": "ask",
+        # The mode the question was asked in ("speed" / "strategy" / "expert"), set when the Ask
+        # is admitted and carried unchanged onto the finished state. The screen reads it to know
+        # what the answer is -- a Strategy answer gets its checklist, and a refine chip sends its
+        # follow-up in the same mode -- even when the panel was shut and reopened in between, when
+        # nothing on the screen remembers which mode it pressed Ask in. "" when no mode applies
+        # (a keyword command answered without asking the model).
+        "ask_mode": "",
+        # Plan 92 lane N2: the offer to keep the question as a note, ``{"text", "app_id", "game_title"}``,
+        # or None. Worked out before the AI answers and filled in on the finished state; the screen draws
+        # the "Keep this as a note?" card from it. Never saved into the chat file.
+        "note_offer": None,
+    }
+
+
+def pending_background_state(
+    *,
+    request_id: int,
+    question: str,
+    app_id: str,
+    app_context: str,
+    started_at: float,
+    response: str = "Thinking...",
+    chat_slot_id: Optional[str] = None,
+    app_name: str = "",
+    kind: str = "ask",
+    ask_mode: str = "",
+) -> dict[str, Any]:
+    """State published when an Ask -- or, since plan 68 step 4, the *Sum up this chat* button
+    running as a job of its own -- is admitted and a background task is about to run."""
+    state = new_background_state()
+    state.update(
+        {
+            "status": "pending",
+            "request_id": request_id,
+            "question": question,
+            "app_id": app_id,
+            "app_name": app_name,
+            "app_context": app_context,
+            "response": response,
+            "started_at": started_at,
+            "chat_slot_id": chat_slot_id,
+            "kind": kind,
+            "ask_mode": ask_mode,
+        }
+    )
+    return state
+
+
+def completed_local_command_state(
+    *,
+    request_id: int,
+    question: str,
+    app_id: str,
+    app_context: str,
+    response: str,
+    now: float,
+    shortcut_setup: Any = OMIT,
+    app_name: str = "",
+    chat_slot_id: Optional[str] = None,
+    note_offer: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
+    """Terminal state for a local keyword branch (sanitizer / shortcut / note).
+
+    These never spawn a background task, so they publish `completed` directly. `started_at` and
+    `completed_at` are both `now` because no work was awaited. `chat_slot_id` names the chat it
+    answered, as an ordinary Ask's state does: without it the screen's status read on a Quick
+    Access reopen painted this reply into whichever chat was open.
+    """
+    state = new_background_state()
+    state.update(
+        {
+            "status": "completed",
+            "request_id": request_id,
+            "question": question,
+            "app_id": app_id,
+            "app_name": app_name,
+            "app_context": app_context,
+            "success": True,
+            "response": response,
+            "elapsed_seconds": 0.0,
+            "started_at": now,
+            "completed_at": now,
+            "chat_slot_id": chat_slot_id or None,
+            "note_offer": note_offer,
+        }
+    )
+    if shortcut_setup is not OMIT:
+        state["shortcut_setup"] = shortcut_setup
+    return state
+
+
+def new_partial_stream_snapshot(request_id: Optional[int]) -> dict[str, Any]:
+    """Per-request streaming scratch state, written from the executor thread under a lock.
+
+    `request_id=None` is the cleared form — it matches no live request, so
+    `_merge_partial_into_background_status` will not graft it onto any status.
+    """
+    return {
+        "request_id": request_id,
+        "partial_response": None,
+        # Plan 54 gap 2: the named thing, published before the model call so the streaming
+        # bubble can open its spoiler box from the first word instead of waiting for completion.
+        "asked_entity": "",
+        # Plan 81 helper S: whether this Ask has spoiler consent, published once it is decided
+        # (before the model call) so the streaming bubble can show every hidden block as plain
+        # text from the first word. The finished status carries the same fact at completion.
+        "spoiler_consent": False,
+        "thinking_summary": None,
+        # When thinking_summary last *changed*, not when it was last written. Repeated identical
+        # publishes must not reset it, because this is what tells the read path how long one line
+        # has been sitting on screen unchanged.
+        "thinking_summary_monotonic": 0.0,
+        # Stashed at accept so the read path can escalate a stale line in the right voice without
+        # loading settings on every poll.
+        "thinking_tone": "witty",
+        "streaming": False,
+        "last_flush_monotonic": 0.0,
+        # Plan 57: the model's own thinking, live. `reasoning_partial` is the newest 600
+        # characters of it so far (null before the first thinking chunk); `reasoning_seconds` is
+        # whole seconds since that first chunk, frozen the moment the first answer chunk arrives
+        # so it stops changing once the fold appears. Both stay null on a turn with no thinking.
+        "reasoning_partial": None,
+        "reasoning_seconds": None,
+        # Plan 58 phase 1: same idea as `asked_entity` above -- published before the model call
+        # runs so the "From the notes" block can render on the live streaming bubble from the
+        # first word, not only once the reply finishes. See game_ai_request.py's note on why the
+        # write happens directly on this snapshot rather than through a named Plugin method, and
+        # on the one line still needed in main.py's own merge step to carry this into a poll.
+        "kb_attached_notes": [],
+        # Plan 68 step 4: which phase key last published `thinking_summary`, stashed alongside it
+        # so the status poll can single out "summing_up" (which counts up on its own and is never
+        # escalated) without re-parsing the line's own text. `None` until the first phase key
+        # publish; any later phase key publish overwrites it, which is what makes today's lines
+        # come back once the summary is done.
+        "thinking_phase_key": None,
+    }

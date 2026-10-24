@@ -1,6 +1,70 @@
-import { BONSAI_PLUGIN_SIDE_PAD_PX } from "../../features/unified-input/constants";
-import { uiScalePx } from "./uiScalePx";
+/**
+ * Title: Root scope, QAM host, and Settings-tab spacing
+ *
+ * Purpose: Styles the plugin's outermost box — the `.bonsai-scope` element
+ * every other rule in the stylesheet lives inside — plus Decky's own
+ * wrapper around it, so the plugin's column fills the Quick Access Menu
+ * instead of being crushed down to the height of the tab strip. The rest
+ * of the file is a handful of Settings-tab specific fixes: the connection
+ * row, wrapping blocks of help text ("prose"), full-width rows, and the
+ * focus ring drawn around a Settings button when the D-pad lands on it.
+ *
+ *     ┌─ Quick Access Menu ────────────────────┐
+ *     │ ┌─ .bonsai-scope (this file) ─────────┐ │
+ *     │ │  [Ask] [Chats] [Settings] ...        │ │  <- tab strip, section-2
+ *     │ │  ───────────────────────────────     │ │
+ *     │ │  tab body fills the rest of the box  │ │
+ *     │ │  instead of shrinking to the strip's │ │
+ *     │ │  own height                          │ │
+ *     │ └──────────────────────────────────────┘ │
+ *     └─────────────────────────────────────────┘
+ *
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts — first, before every other numbered section,
+ * so later sections can rely on the box shape this one sets up.
+ *
+ * Does not: Style the tab strip itself (section-2.ts) or the general
+ * width resets for the scroll area underneath (section-3.ts).
+ */
+import { BONSAI_PLUGIN_SIDE_PAD_PX } from "../../shared/constants";
+import { TEXT_SCALE_ROOT_CSS, textPx } from "../textPx";
 
+/**
+ * In: nothing — every value here is a fixed string or read from a CSS
+ * variable that some other part of the plugin sets.
+ * Out: a block of CSS text.
+ * Can go wrong: this function itself cannot fail — it always returns the
+ * same fixed string.
+ *
+ * 1. `.bonsai-scope` itself: full width, a top-to-bottom flex column that
+ *    stretches to fill the space Decky gives it, no side padding, and
+ *    hidden overflow so content cannot spill out sideways.
+ * 2. `.bonsai-scope.bonsai-qam-height-locked`: forces an explicit height
+ *    from a shared size variable. Needed because a plain inline height set
+ *    on the scope gets wiped out every time React re-renders it.
+ * 3. `.decky-qam-scope:has(> .bonsai-scope)`: stretches Decky's own
+ *    wrapper around the plugin, because on some Deck setups touching the
+ *    menu can collapse that wrapper down to the height of the tab strip;
+ *    also strips its side padding, which would otherwise inset every row.
+ * 4. The Settings connection row and its host input: kept from growing
+ *    wider than the row that contains them.
+ * 5. `.bonsai-tab-panel-shell--tight`: clips sideways overflow, but only
+ *    on tabs other than Main, so Main's own edge-to-edge layout is left
+ *    alone.
+ * 6. `.bonsai-settings-bleed`: pulls a row out to the left and right by
+ *    negative margins, then pads it back in by the same amount, so its
+ *    content lines up flush with a panel section's title instead of
+ *    sitting indented from it.
+ * 7. `.bonsai-settings-section-stack`: the gap between stacked blocks in
+ *    Settings, and their text size (which follows the Text size setting).
+ * 8. `.bonsai-prose-host` / `.bonsai-prose`: makes blocks of wrapped text
+ *    (such as help text) actually wrap on the Deck's browser engine,
+ *    which does not always inherit ordinary wrap settings on its own.
+ * 9. The Settings focus-button rules: shrinks the focusable wrapper around
+ *    a button down to the size of the button itself, draws a visible ring
+ *    around it once the D-pad or keyboard lands on it, and turns off the
+ *    default ring on the outer wrapper so only one ring ever shows.
+ */
 export function buildScopebaseSection(): string {
   return `
 /* ==========================================================================
@@ -15,6 +79,10 @@ export function buildScopebaseSection(): string {
           max-width: 100%;
           min-width: 0;
           box-sizing: border-box;
+          /* Explicit 0: rows must reach the QAM edges, and an inherited inset here would shift
+             every full-bleed row at once (the "no longer span QAM width" bug). */
+          padding-left: 0;
+          padding-right: 0;
           /* Fill QAM column height so Decky Tabs body is not crushed into the ~80px strip row. */
           display: flex;
           flex-direction: column;
@@ -22,6 +90,17 @@ export function buildScopebaseSection(): string {
           min-height: 0;
           align-self: stretch;
           overflow: hidden;
+        }
+${TEXT_SCALE_ROOT_CSS}
+        /* Durable QAM height lock (inline height on scope is wiped by React/Decky re-renders). */
+        .bonsai-scope.bonsai-qam-height-locked {
+          height: var(--bonsai-qam-lock-height) !important;
+          min-height: var(--bonsai-qam-lock-height) !important;
+          max-height: var(--bonsai-qam-lock-height) !important;
+          display: flex !important;
+          flex-direction: column !important;
+          overflow: hidden !important;
+          box-sizing: border-box !important;
         }
 
         /*
@@ -36,6 +115,10 @@ export function buildScopebaseSection(): string {
           align-self: stretch !important;
           width: 100% !important;
           box-sizing: border-box !important;
+          /* Decky's wrapper is the last ancestor bonsAI can name, and any horizontal padding it
+             carries insets every row at once. Scoped by :has so no other plugin's panel changes. */
+          padding-left: 0 !important;
+          padding-right: 0 !important;
         }
         .bonsai-scope .bonsai-settings-connection-row {
           min-width: 0;
@@ -60,17 +143,17 @@ export function buildScopebaseSection(): string {
           box-sizing: border-box;
           width: 100%;
           max-width: 100%;
-          margin-left: calc(-1 * (${uiScalePx(BONSAI_PLUGIN_SIDE_PAD_PX)}));
-          margin-right: calc(-1 * (${uiScalePx(BONSAI_PLUGIN_SIDE_PAD_PX)}));
-          padding-left: ${uiScalePx(BONSAI_PLUGIN_SIDE_PAD_PX)};
-          padding-right: ${uiScalePx(BONSAI_PLUGIN_SIDE_PAD_PX)};
+          margin-left: calc(-1 * (${BONSAI_PLUGIN_SIDE_PAD_PX}px));
+          margin-right: calc(-1 * (${BONSAI_PLUGIN_SIDE_PAD_PX}px));
+          padding-left: ${BONSAI_PLUGIN_SIDE_PAD_PX}px;
+          padding-right: ${BONSAI_PLUGIN_SIDE_PAD_PX}px;
         }
 
         .bonsai-scope .bonsai-settings-section-stack {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
-          font-size: ${uiScalePx(14)} !important;
+          font-size: ${textPx(14)} !important;
           line-height: 1.4 !important;
         }
 
@@ -94,7 +177,7 @@ export function buildScopebaseSection(): string {
           overflow-wrap: anywhere !important;
           word-wrap: break-word !important;
           word-break: break-word !important;
-          font-size: ${uiScalePx(12)} !important;
+          font-size: ${textPx(12)} !important;
           line-height: 1.4 !important;
         }
 
@@ -117,10 +200,33 @@ export function buildScopebaseSection(): string {
           outline-offset: 2px !important;
           box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45) !important;
         }
-        .bonsai-scope .bonsai-settings-focus-btn-host > .Panel.Focusable.gpfocus,
-        .bonsai-scope .bonsai-settings-focus-btn-host > .Panel.Focusable:focus-visible {
+        /*
+          A Button inside a Focusable wrapper (accent intensity, Reinstall voice engine, the voice
+          model rows). Steam put only a thin grey frame on these
+          (Deck 2026-10-02, plan79-P79-RING-WALK-TABS.json) because the ring rule above only knew a
+          bare Button, and a ring drawn outside a button inside a wrapper can be clipped. Steam
+          marks focus on the wrapper OR on the button inside it, so each draws the same white ring
+          inside its own edge; only one of the two ever carries gpfocus, so it is never doubled.
+          The older "no ring on the wrapper" rule below still applies to every other host (the
+          knowledge-base buttons), but skips these wrappers, where the wrapper IS the ring.
+        */
+        .bonsai-scope button.bonsai-settings-focus-btn.bonsai-settings-focus-inset.gpfocus,
+        .bonsai-scope button.bonsai-settings-focus-btn.bonsai-settings-focus-inset:focus-visible,
+        .bonsai-scope .bonsai-settings-focus-wrap.bonsai-settings-focus-wrap.gpfocus {
+          outline: 2px solid rgba(255, 255, 255, 0.88) !important;
+          outline-offset: -2px !important;
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45) !important;
+        }
+        .bonsai-scope .bonsai-settings-focus-btn-host > .Panel.Focusable:not(.bonsai-settings-focus-wrap).gpfocus,
+        .bonsai-scope .bonsai-settings-focus-btn-host > .Panel.Focusable:not(.bonsai-settings-focus-wrap):focus-visible {
           outline: none !important;
           box-shadow: none !important;
+        }
+        /* A Steam button row (ButtonItem: Jump to Steam Input, Clear, Install seed knowledge base...)
+           has no class hook of its own, so it sits in a host and gets the same ring by the same rule. */
+        .bonsai-scope .bonsai-settings-item-ring-host .gpfocus:not(:has(.gpfocus)) {
+          outline: 2px solid rgba(255, 255, 255, 0.88) !important;
+          outline-offset: -2px !important;
         }
 
         `;

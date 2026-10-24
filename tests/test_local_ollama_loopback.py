@@ -2,7 +2,7 @@
 
 import unittest
 
-from backend.services.local_ollama_setup_service import is_loopback_ollama_host
+from backend.ollama.local_ollama_setup_service import is_loopback_ollama_host
 
 
 class LocalLoopbackHostTests(unittest.TestCase):

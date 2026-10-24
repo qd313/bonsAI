@@ -2,7 +2,128 @@
 
 All notable changes to this project are documented in this file.
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [\[Unreleased\]](#unreleased)
+- [\[0.6.0\] - 2026-10-23](#060---2026-10-23)
+  - [What it does](#what-it-does)
+  - [What is different from 0.4.9](#what-is-different-from-049)
+  - [Known problems](#known-problems)
+  - [Installing over 0.4.9](#installing-over-049)
+  - [The full list](#the-full-list)
+- [\[0.5.0\] - 2026-07-15](#050---2026-07-15)
+  - [Added](#added)
+  - [Changed](#changed)
+- [\[0.4.9\] - 2026-07-08](#049---2026-07-08)
+  - [Fixed](#fixed)
+  - [Changed](#changed-1)
+- [\[0.4.8\] - 2026-07-07](#048---2026-07-07)
+  - [Added](#added-1)
+  - [Fixed](#fixed-1)
+  - [Changed](#changed-2)
+- [\[0.4.7\] - 2026-07-07](#047---2026-07-07)
+  - [Added](#added-2)
+  - [Fixed](#fixed-2)
+  - [Changed](#changed-3)
+- [\[0.4.6\] - 2026-07-06](#046---2026-07-06)
+  - [Fixed](#fixed-3)
+  - [Changed](#changed-4)
+- [\[0.4.5\] - 2026-07-06](#045---2026-07-06)
+  - [Added](#added-3)
+  - [Changed](#changed-5)
+  - [Fixed](#fixed-4)
+- [\[0.4.4\] - 2026-06-27](#044---2026-06-27)
+  - [Added](#added-4)
+  - [Changed](#changed-6)
+  - [Fixed](#fixed-5)
+- [\[0.4.3\] - 2026-06-26](#043---2026-06-26)
+  - [Added](#added-5)
+  - [Changed](#changed-7)
+- [\[0.4.2\] - 2026-06-21](#042---2026-06-21)
+  - [Added](#added-6)
+  - [Changed](#changed-8)
+- [\[0.4.1\] - 2026-06-15](#041---2026-06-15)
+  - [Added](#added-7)
+  - [Changed](#changed-9)
+- [\[0.4.0\] - 2026-06-14](#040---2026-06-14)
+  - [Added](#added-8)
+  - [Changed](#changed-10)
+  - [Fixed](#fixed-6)
+- [\[0.3.0\] - 2026-04-30](#030---2026-04-30)
+  - [Changed](#changed-11)
+- [\[0.2.1\] - 2026-04-28](#021---2026-04-28)
+  - [Changed](#changed-12)
+  - [Docs](#docs)
+- [\[Unreleased\] - 2026-04-19](#unreleased---2026-04-19)
+  - [Added](#added-9)
+  - [Changed](#changed-13)
+  - [Fixed](#fixed-7)
+  - [Docs](#docs-1)
+<!-- /toc -->
+
 ## [Unreleased]
+
+## [0.6.0] - 2026-10-23
+
+bonsAI is an AI chat that lives in the Steam Deck's Quick Access Menu. It talks to Ollama, running on the Deck itself or on a PC on the same network, so you can ask about the game you are playing without leaving it. bonsAI is free and open source. It runs on your own hardware, your privacy stays yours. No paid API, no data centers.
+
+### What it does
+
+- **Ask about the game you're playing.** bonsAI knows which game is running, so you can ask about a boss, a level or a puzzle.
+- **Notes from the game's wiki.** Answers can use notes from community wikis, 38 games so far, and it works offline.
+- **The knowledge library.** The notes from game wikis are downloaded once, after you say yes, and then used offline.
+- **Your own notes.** Tell bonsAI what matters to you and it remembers.
+- **Spoilers stay hidden until you ask.** In Strategy mode, anything that looks like a spoiler is covered.
+- **"Where are you at?"** Strategy can ask where you are in the game, then gives you a checklist of steps.
+- **Ask about a screenshot.** Take a screenshot and ask what is on screen, like a puzzle, a menu or an error message.
+- **Search your chats, settings and notes.** A Search tab to the left of Main finds things without any AI.
+- **Close the menu, keep playing.** Close the menu while an answer is being written, and a popup tells you when it is ready.
+- **Saved chats.** Keep up to ten chats and flip between them with the triggers.
+- **Talk instead of typing.** Press the mic button and talk. Your speech becomes text on the Deck itself.
+- **See how it answered.** Show details under any answer shows which model wrote it and which notes it used.
+- **A first-run popup.** The first time you open bonsAI, it asks where the AI should run: on the Deck or on a PC.
+
+### What is different from 0.4.9
+
+- A new tab bar.
+- Saved chats: ten of them, with "Sum up this chat".
+- The Search tab.
+- Your own notes.
+- A thinking fold that shows how the AI worked toward an answer, and a decode effect while the answer is written.
+- An Internet downloads permission. It is off on a fresh install, so nothing downloads without a yes from you.
+- Gone: reading answers aloud.
+- Gone: the Steam ban lookup.
+- Gone: the recommended-models list refreshing itself from the internet.
+
+### Known problems
+
+- Rarely, the D-pad may stop moving in the panel. Close and reopen the Quick Access Menu. If that does not help, reload the plugin from Decky's settings. Restarting the Deck always clears it.
+- On the Settings tab, after opening several sections and walking with the D-pad, the ring can skip a control (for example Terse mode). Closing and reopening the menu puts it right.
+- Rarely, after you touch the screen, a faded second copy of the tab bar shows over the suggestion chips for a moment. The plugin hides it again by itself.
+- The kids lock (Steam's parental controls turning bonsAI's high-impact permissions off) has not yet been checked on a child account.
+- The first answer after installing the AI on the Deck takes a minute or two while the model loads. The panel says so.
+- With a game running, the panel can update more slowly while an answer arrives, and very long answers can dip further. With the AI on a PC it stays smooth in our tests.
+- Answers come from a small AI model on your Deck or PC. They can be wrong, can repeat wording from an earlier answer, and questions that aren't about a game can pick up game notes.
+- Once, with a game running and the AI on the Deck itself, Steam's screen stopped responding a few minutes after an answer; restarting the Deck cleared it.
+
+### Installing over 0.4.9
+
+0.6.0 was not tested as an upgrade from 0.4.9. If anything looks off after installing over the old version, open Settings, press Clear all data, and set up again. Your settings from 0.4.9 are read and carried over where they still exist, but the Steam key is deleted, because the ban lookup it was for is gone.
+
+### The full list
+
+Every change since 0.4.9, session by session, is in [the detailed list](https://github.com/qd313/bonsAI/blob/main/docs/changelog-0.6.0-full.md).
+
+To see the code changes themselves, open the [compare view from v0.4.9 to v0.6.0](https://github.com/qd313/bonsAI/compare/v0.4.9...v0.6.0).
+
+## [0.5.0] - 2026-07-15
+
+### Added
+- **Token streaming — live markdown (experimental):** Developer **Token streaming** toggle now renders progressive markdown in one live bubble (R2 closed/tail split), spoiler-safe incomplete fences, code-fence wait chip (2s pulse/spinner), ~3× fence reveal burst, T3 settle→terminal handoff. Stop keeps partial reply.
+
+### Changed
+- **Strategy streaming:** Strategy asks with spoiler masking now stream with masked open spoilers (S1) instead of suppressing the preview entirely.
 
 ## [0.4.9] - 2026-07-08
 
@@ -100,7 +221,7 @@ All notable changes to this project are documented in this file.
 - **bonsai-mcp knowledge server:** In-repo IDE-agnostic MCP (`packages/bonsai-mcp/`) for policies, workflows, specialist personas, doc search, and generated RPC/architecture index. Cursor bootstrap via `.cursor/mcp.json` and `sessionStart` hook. CI: `validate-mcp.yml`.
 
 ### Changed
-- **Documentation consolidation:** Active docs are now `README.md`, `docs/development.md`, `docs/troubleshooting.md`, `docs/roadmap.md`, and `docs/testing.md` (merged PR gates, device QA runbook, prompt testing, and failures). Historical research, plans, sweeps, and the full completed-feature checklist moved to `docs/archive/`. Removed stale root `TODO.md`.
+- **Documentation consolidation:** Active docs are now `README.md`, `docs/development.md`, `docs/troubleshooting.md`, `docs/roadmap.md`, and `docs/testing.md` (merged PR gates, device QA runbook, prompt testing, and failures). Historical research, plans, sweeps, and the full completed-feature checklist moved to `workshop:archive/`. Removed stale root `TODO.md`.
 - **Agent/bootstrap lean-out:** `.cursorrules`, subagent stubs, and skills now point at MCP; canonical knowledge in `packages/bonsai-mcp/knowledge/`.
 
 ## [0.4.1] - 2026-06-15
@@ -177,7 +298,7 @@ All notable changes to this project are documented in this file.
 - **Desktop Mode Debug Note Save (V1):** After a successful ask, **Save to Desktop note…** opens a consent dialog and writes append-only markdown to `~/Desktop/BonsAI_notes/<name>.md` (UTC timestamps, question + answer). Backend: `append_desktop_debug_note`, `backend/services/desktop_note_service.py`. UI: `DesktopNoteSaveModal`, `MainTab`, `src/index.tsx`.
 - **Search Surface Glass Pass:** Unified search `TextField` and ask bar use a shared glass surface (`rgba` ~25% fill, `backdrop-filter` blur, light border); attach/mic/stop/clear icons render at 50% opacity; input height follows wrapped text (min/max clamp); AI response chunks use the same glass family instead of near-black fills (`src/index.tsx`).
 - **Built on Ollama** About tab link to upstream `https://github.com/ollama/ollama` (`OLLAMA_UPSTREAM_REPO_URL`, `AboutTab`).
-- Phase 1 experimental **Steam Input jump** (Debug tab): per-game `steam://controllerconfig/{appId}` via `SteamClient.URL.ExecuteSteamURL`, `Navigation.CloseSideMenus`, and a versioned lexicon in `src/data/steam-input-lexicon.ts` with CEF route-discovery and update-discipline notes in `docs/archive/research/steam-input-research.md`.
+- Phase 1 experimental **Steam Input jump** (Debug tab): per-game `steam://controllerconfig/{appId}` via `SteamClient.URL.ExecuteSteamURL`, `Navigation.CloseSideMenus`, and a versioned lexicon in `src/data/steam-input-lexicon.ts` with CEF route-discovery and update-discipline notes in `workshop:archive/research/steam-input-research.md`.
 - Background prompt completion flow so requests can finish while QAM is closed and recover state on reopen (marked complete in `docs/roadmap.md`; verification matrix in `docs/testing.md` under `Background Prompt Completion (V1)`).
 - Local/dev workflow support and deployment-oriented setup scripting for Linux and Bazzite-focused environments.
 - Expanded prompt test coverage and strategy-mode ideation notes for upcoming tuning work.
@@ -185,7 +306,7 @@ All notable changes to this project are documented in this file.
 - Added baseline service/data tests: `tests/test_settings_service.py`, `tests/test_ollama_service.py`, `src/data/presets.test.ts`, and `src/data/steam-input-lexicon.test.ts`.
 
 ### Changed
-- **Preset chip refresh (advice-first):** [src/data/presets.ts](src/data/presets.ts) `PRESET_PROMPTS` rephrased so battery / TDP / performance chips ask questions (e.g. "Optimize for battery life" → "How can I optimize for battery life?"), letting bonsAI advise first and apply only when the user asks during chat. Action wording kept only for strong shipped surfaces (Steam Input jump → `Open Steam Input config`; vision V1 → `Describe what you see in this screenshot`). Dropped `Reduce fan noise` and `Best thermal settings for long play sessions` because the fan's job is cooling and bonsAI cannot meaningfully change Deck thermals without trading performance. Added bonsAI-feature chips: `Diagnose a slow Ollama response`, `What does my model policy tier mean?`, `Which Ollama model fits my Deck setup?`, `Why is my Deck running hot?`. Eight `beta: true` chips preview roadmap items: quiet fan profile (QAMP), Proton log analysis, Steam Input layout analysis, `Which Ollama models do I need for bonsAI?`, `How do I use strategy mode?`, spoiler-safe tips, `VAC bans on opponents?`, and restored `Suggest mods or tweaks for this game`. Maintainer approved 2026-04-24 as freeze-week-compatible content tuning; no logic, schema, RPC, or runtime change. See [docs/archive/red-blue-fight-2026-04-21.md](docs/archive/red-blue-fight-2026-04-21.md) § _Content tuning approvals_.
+- **Preset chip refresh (advice-first):** [src/data/presets.ts](src/data/presets.ts) `PRESET_PROMPTS` rephrased so battery / TDP / performance chips ask questions (e.g. "Optimize for battery life" → "How can I optimize for battery life?"), letting bonsAI advise first and apply only when the user asks during chat. Action wording kept only for strong shipped surfaces (Steam Input jump → `Open Steam Input config`; vision V1 → `Describe what you see in this screenshot`). Dropped `Reduce fan noise` and `Best thermal settings for long play sessions` because the fan's job is cooling and bonsAI cannot meaningfully change Deck thermals without trading performance. Added bonsAI-feature chips: `Diagnose a slow Ollama response`, `What does my model policy tier mean?`, `Which Ollama model fits my Deck setup?`, `Why is my Deck running hot?`. Eight `beta: true` chips preview roadmap items: quiet fan profile (QAMP), Proton log analysis, Steam Input layout analysis, `Which Ollama models do I need for bonsAI?`, `How do I use strategy mode?`, spoiler-safe tips, `VAC bans on opponents?`, and restored `Suggest mods or tweaks for this game`. Maintainer approved 2026-04-24 as freeze-week-compatible content tuning; no logic, schema, RPC, or runtime change. See [workshop:archive/red-blue-fight-2026-04-21.md](../bonsAI-workshop/archive/red-blue-fight-2026-04-21.md) § _Content tuning approvals_.
 - **AI character avatars (higher resolution):** Roleplay avatars render from a unified 16×16 cell SVG grid: each preset’s 8×8 art is pixel-doubled (`expand8To16`), with hand-tuned 16×16 overrides for the full catalog cast (GTA V leads, TF2 mercs + graphic-novel Announcer bonsai tree, Random/Custom dice and custom tile, Portal/BG3/Fallout/Zelda/RDR/Cyberpunk/Hades/Other busts). `src/components/characterPlaceholderEmoticonGrids.ts`, `src/components/CharacterRoleplayEmoticon.tsx`.
 - **Settings (Connection):** Hard timeout uses one Steam `SliderField` in `ConnectionTimeoutSlider.tsx` (10s steps, max 300s), while soft warning remains visible as a readout and is auto-reconciled to stay before timeout. Ordering is enforced when loading settings via `reconcileLatencyWarningAndTimeout` in `src/utils/settingsAndResponse.ts` and matching logic in `backend/services/settings_service.py`.
 - **Refactor (unified input / main tab):** `UNIFIED_*` / Ask label color and `splitResponseIntoChunks` live under `src/features/unified-input/constants.ts` and `src/utils/splitResponseIntoChunks.ts`; Deck layout measurement and refs are in `useUnifiedInputSurface`; the main tab body is `src/components/MainTab.tsx` (behavior parity; `src/index.tsx` composes hooks + tabs).
@@ -218,7 +339,7 @@ All notable changes to this project are documented in this file.
 ### Docs
 - Documented **Input handling transparency** (main tab + verbose Desktop trace) in `README.md`, `docs/troubleshooting.md`, `docs/roadmap.md`, `docs/development.md`, and this changelog.
 - Documented **Input sanitizer lane** in `README.md`, `docs/testing.md`, `docs/troubleshooting.md`, `docs/roadmap.md`, and `docs/development.md` (field names).
-- Documented **Character Voice Roleplay Mode** in `docs/roadmap.md`, `docs/archive/research/voice-character-catalog.md`, `docs/testing.md`, `docs/troubleshooting.md`, and this changelog.
+- Documented **Character Voice Roleplay Mode** in `docs/roadmap.md`, `workshop:archive/research/voice-character-catalog.md`, `docs/testing.md`, `docs/troubleshooting.md`, and this changelog.
 - Documented single hard-timeout slider + visible soft-warning readout in `docs/troubleshooting.md` and this changelog.
 - Documented **Preset carousel (Phase 1)** in `docs/roadmap.md`, `docs/testing.md`, `docs/development.md`, and this changelog.
 
@@ -226,11 +347,11 @@ All notable changes to this project are documented in this file.
 - Documented **Capability Permission Center** in `docs/roadmap.md` (Completed + Implemented Baseline + candidate status), `docs/troubleshooting.md` (permissions section), and `docs/foss-advocate-report.md`.
 - Marked **Search Surface Glass Pass** complete in `docs/roadmap.md` (Completed + Implemented Baseline); noted glass tokens and layout in `docs/development.md`.
 - Marked **Built on Ollama Link (About Tab)** complete in `docs/roadmap.md` (Completed + Implemented Baseline).
-- Marked **Steam Input Jump Phase 1** complete in `docs/roadmap.md` and noted Phase 2+ (search + full catalog) as deferred; aligned `docs/archive/research/steam-input-research.md` and `docs/testing.md` status language.
-- Expanded `docs/archive/research/steam-input-research.md` with CEF debugging steps, History API console snippet, verified-route log template, and Steam client update smoke-test discipline.
+- Marked **Steam Input Jump Phase 1** complete in `docs/roadmap.md` and noted Phase 2+ (search + full catalog) as deferred; aligned `workshop:archive/research/steam-input-research.md` and `docs/testing.md` status language.
+- Expanded `workshop:archive/research/steam-input-research.md` with CEF debugging steps, History API console snippet, verified-route log template, and Steam client update smoke-test discipline.
 - Expanded troubleshooting guidance in `docs/troubleshooting.md`.
 - Updated prompt testing notes in `docs/testing.md`.
 - Refined project rules and planning notes in `.cursorrules`.
 
-- **Documentation refresh:** README recommended multimodal models (`llava` default, library link); expanded developer doc map table; network troubleshooting TODOs replaced with numbered steps (Ollama listen address, `ollama pull`); roadmap cross-links to troubleshooting and prompt-testing; `docs/development.md` adds `characterUiAccent`, ask-mode pointers, and release doc checklist; `docs/archive/refactor/refactor-specialist-sweep.md` historical banner; `docs/security-audit-report.md` line refs and Open status re-verified (2026-04-19); `docs/foss-advocate-report.md` dependency and license snapshot.
+- **Documentation refresh:** README recommended multimodal models (`llava` default, library link); expanded developer doc map table; network troubleshooting TODOs replaced with numbered steps (Ollama listen address, `ollama pull`); roadmap cross-links to troubleshooting and prompt-testing; `docs/development.md` adds `characterUiAccent`, ask-mode pointers, and release doc checklist; `workshop:archive/refactor/refactor-specialist-sweep.md` historical banner; `docs/security-audit-report.md` line refs and Open status re-verified (2026-04-19); `docs/foss-advocate-report.md` dependency and license snapshot.
 

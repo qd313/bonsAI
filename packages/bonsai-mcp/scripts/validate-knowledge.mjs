@@ -1,6 +1,16 @@
 #!/usr/bin/env node
 /**
- * Validate knowledge/ frontmatter and optional generated-file freshness.
+ * Validate knowledge/ frontmatter and that src/types/rpcMethods.ts is fresh.
+ *
+ * rpcMethods.ts is the only generated file saved in the repo (the type check needs it in a
+ * fresh clone). The architecture JSON maps are no longer saved; the tool server and the
+ * checks build them when they need them, so there is nothing to compare for those.
+ *
+ * Freshness check runs when:
+ *   - `--check-generated` is passed (default for `pnpm run mcp:validate`), or
+ *   - `CI=true` (GitHub Actions / other CI)
+ *
+ * Skip with `--skip-generated-check` when you only need frontmatter validation.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -10,7 +20,10 @@ import { execSync } from "node:child_process";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..", "..", "..");
 const KNOWLEDGE = path.join(__dirname, "..", "knowledge");
-const checkGenerated = process.argv.includes("--check-generated");
+const skipGenerated = process.argv.includes("--skip-generated-check");
+const checkGenerated =
+  !skipGenerated &&
+  (process.argv.includes("--check-generated") || process.env.CI === "true");
 
 let errors = 0;
 
@@ -50,32 +63,41 @@ for (const sub of ["policies", "workflows", "personas"]) {
   }
 }
 
-const archDir = path.join(KNOWLEDGE, "architecture");
-const requiredJson = ["rpc-map.json", "module-map.json", "test-inventory.json", "preview-tiers.json", "env-vars.json"];
-for (const name of requiredJson) {
-  const p = path.join(archDir, name);
-  if (!fs.existsSync(p)) {
-    fail(`Missing generated file: ${p} — run pnpm run mcp:generate`);
-  }
-}
-
+// The one saved generated file: rewrite it from main.py and compare with the last commit.
+// Compare to HEAD (not the index): staged-but-uncommitted output must still fail, matching
+// what CI checks after a clean checkout.
+const GENERATED_TYPES = "src/types/rpcMethods.ts";
 if (checkGenerated) {
   try {
-    execSync("node scripts/generate-architecture.mjs", {
+    execSync("node scripts/generate-architecture.mjs --types-only", {
       cwd: path.join(REPO_ROOT, "packages", "bonsai-mcp"),
       stdio: "pipe",
     });
-    for (const name of requiredJson) {
-      const diff = execSync(`git diff --name-only -- "${path.join("packages/bonsai-mcp/knowledge/architecture", name)}"`, {
+  } catch (e) {
+    const detail = e instanceof Error ? e.message : String(e);
+    fail(`Failed to regenerate ${GENERATED_TYPES}: ${detail}`);
+  }
+
+  if (errors === 0) {
+    try {
+      const diff = execSync(`git diff HEAD --name-only -- "${GENERATED_TYPES}"`, {
         cwd: REPO_ROOT,
         encoding: "utf8",
       }).trim();
       if (diff) {
-        fail(`Stale ${name} — run pnpm run mcp:generate and commit`);
+        fail(
+          `Stale ${GENERATED_TYPES} (it no longer matches main.py) — run: node packages/bonsai-mcp/scripts/generate-architecture.mjs --types-only && git add ${GENERATED_TYPES}`,
+        );
+      }
+    } catch (e) {
+      const detail = e instanceof Error ? e.message : String(e);
+      // Outside a git work tree (e.g. some CI unpack paths), skip freshness.
+      if (/not a git repository/i.test(detail)) {
+        console.warn("validate-knowledge: skip freshness check (not a git repository)");
+      } else {
+        fail(`${GENERATED_TYPES} freshness check failed: ${detail}`);
       }
     }
-  } catch (e) {
-    // git may not be available or not a git repo — skip stale check
   }
 }
 

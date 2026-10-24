@@ -22,13 +22,12 @@ Policy (always applied): `bonsai://policy/decky-ui-focus` — especially **New c
 
 | Reference | What it demonstrates |
 |-----------|----------------------|
-| `src/components/SettingsTabUiScaleSection.tsx` | Toggle → slider bridge → Reset → Apply; cross-section hooks to screenshot row |
-| `src/components/SettingsTab.tsx` | `focusScreenshotQualityRow`, `focusUiScaleApplyButton`, `applyButtonRef` |
-| `src/components/OllamaTab.tsx` | `focusOllamaKeepAliveThumb`, `focusLatencyWarningThumb`, `onMoveDownFromThumb` |
-| `src/components/PullModelsModal.tsx` | Horizontal chip row + vertical exits via `Button` `onMove*` spreads |
-| `src/components/CharacterPickerModal.tsx` | `ToggleField` `onMoveDown` / `onMoveRight` to list and footer |
+| `src/features/settings/SettingsTab.tsx` | The folded Settings tab: section lines, `takeFoldLine`, `foldLineBelow` |
+| `src/features/ai-connection/OllamaTab.tsx` | `focusOllamaKeepAliveThumb`, `focusLatencyWarningThumb`, `onMoveDownFromThumb` |
+| `src/features/models/pull-box/PullModelsModal.tsx` | Horizontal chip row + vertical exits via `Button` `onMove*` spreads |
+| `src/features/characters/CharacterPickerModal.tsx` | `ToggleField` `onMoveDown` / `onMoveRight` to list and footer |
 
-**Helpers:** `focusInHost(host)` — query `[tabindex], button` inside a wrapper ref; `getFocusableWithin` in `src/utils/focusNavigation.ts`.
+**Helpers:** `focusInHost(host)` — query `[tabindex], button` inside a wrapper ref; `getFocusableWithin` in `src/shared/dpad/focusNavigation.ts`.
 
 ## Pattern B — Slider / composite widget (document-flow bridge)
 
@@ -41,13 +40,54 @@ Policy (always applied): `bonsai://policy/decky-ui-focus` — especially **New c
 3. Handles **horizontal** nav on the **bridge** (same focus owner): `onMoveLeft`, `onMoveRight`, `onButtonDown` → step state
 4. Drives thumb **visuals** via `thumbFocusedExternal` / `thumbEditingExternal` on `DeckFocusSlider`
 
-Canonical: `SettingsTabUiScaleSection.tsx` (`bonsai-ui-scale-slider-focus-bridge`).
-
 **Alternative (no bridge):** parent-only refs + programmatic focus to thumb when the thumb is a proven focus peer (e.g. `OllamaTab` → `focusOllamaKeepAliveThumb` from connection timeout `onMoveDownFromThumb`). Still wire the **section** graph explicitly.
 
 ## Pattern C — Horizontal button groups
 
 Wrap chips/buttons in `Focusable flow-children="horizontal"` and spread `onMoveLeft` / `onMoveRight` / `onMoveDown` on each `Button`. See screenshot quality row in `SettingsTab.tsx`.
+
+## Pattern D — Explicit column hops (2×2 / non-DOM-order vertical)
+
+When two horizontal rows must preserve **columns** under D-pad (Helpful↔Retry, Not really↔Show details), Decky default spatial nav and `document.querySelector`-based `.focus()` both fail on Deck.
+
+**Required:**
+
+1. Register each cell’s Deck focus owner at mount (`ref` → registry), e.g. `replyStopRegistry.ts` + `BonsaiChatSecondaryButton` `replyStop` prop
+2. Wire `onMoveUp` / `onMoveDown` on each cell to focus the **registered** sibling owner
+3. Return **`true`** when the target is registered (claim the move) — returning `false` re-enters Steam spatial nav and produces diagonals
+
+Canonical: `src/features/answer/reply-actions/buildReplyActionsElement.tsx`, `src/shared/dpad/replyStopRegistry.ts`. On-Deck QA: **MICRO-05**.
+
+## Pattern E — Stops outside bonsAI's own container (plan 84)
+
+Since plan 84, two of the stops a person walks through are not in bonsAI's box at all: the **tab bar** (in the
+strip at the very top of the menu) and the **chat's name** (in Decky's title bar, beside Decky's back arrow).
+Decky draws both in a React tree of its own. Details, every route and the Deck measurements:
+[docs/focus-graph.md](../../../../docs/focus-graph.md), the sections "The tab bar, T3", "The chat's name and the
+chats menu", "The tab bar in Steam's strip, and Decky's bar per tab" and "The ask box's strip".
+
+**Rules that follow from it:**
+
+1. **Every move between the strip or the name and bonsAI's content goes through the nav registry's take
+   functions** (a registered node's `TakeFocus`), never a plain `focus()`: Steam moves the ring across
+   containers only by its own transfer. The name reads and changes the open chat through a small shared store
+   (`chatTitleStore.ts`), because it cannot reach the main screen's state.
+2. **Steam does not find the strip from below by itself** (plan 84 test B), so its Up, Down and Left/Right routes
+   are set by hand. Up on the bar holds; Down on the chat tab goes to the name, on other tabs to the tab body;
+   Up and Down on the name go to the bar and to the chat's first stop.
+3. **A hidden back arrow is still in Steam's D-pad path** (plan 84 test C). On other tabs the arrow is hidden and
+   the name is not drawn; no move of ours leads onto the arrow, and a landing on it anyway is caught and handed to
+   the tab bar, the way Steam's hidden tab buttons already are.
+4. **A box opened from the chats menu** (Rename, Delete, Save to Desktop) **returns the ring to the chat's name**
+   when it closes, not to Decky's back arrow: one A on the arrow would close bonsAI.
+5. **The ask box's strip and the answer's corners are ordinary siblings inside bonsAI's box:** the strip is one
+   row (paperclip, mode, mic or Stop, X, small ASK; the game tag is a label, not a stop) whose hops between
+   neighbours are in-row `focus()` calls, and whose Up and Down are explicit; Copy
+   (lower-right) is its own navigation container, so Right and Left between it and the answer use the
+   registry's take, never a bare `focus()`.
+
+**Test it:** a D-pad walk with Steam's scroll-into-view modelled (`src/test-harness/deckAnswerWalk.ts`) and no stop
+visited twice. On the Deck: P84-RING-01 (the ring never lands on a hidden control).
 
 ## Anti-patterns (caused multi-prompt regressions)
 
@@ -57,6 +97,19 @@ Wrap chips/buttons in `Focusable flow-children="horizontal"` and spread `onMoveL
 | Spread `onMoveDown` on `ToggleField` without bridge | Decky native graph jumps to next `Button` |
 | Bridge `Focusable` without `onMoveLeft`/`onMoveRight`/`onButtonDown` | Vertical works; Left/Right dead |
 | Programmatic `.focus()` to thumb while bridge owns focus | Highlight on thumb; D-pad still on bridge |
+| `querySelector` / aria / `data-*` / class to find sibling for `onMove*` | `found: false` on Deck; Steam spatial nav steals hop (wrong diagonal) |
+| Cross-column fallback when primary target “misses” | Helpful↓ lands on Show details “successfully” |
+| Gate `onMove*` success on `document.activeElement` | Focus attempted but handler returns `false`; spatial nav overwrites |
+| A route-specific flag pre-opens a sub-panel and moves the ring into it before anything was pressed | Ring lands one press from an unintended change (`OllamaModelsHubModal`'s old `initialFiltersOpen` shortcut for the "policy" route: 3 of 3 tries, plan70-RING-ON-FILTER-2c1.json) |
+| `onMoveDown` on a container's own last stop unconditionally returns `true` | Down dead-ends there forever; Steam never carries the ring on to the next real container even though it is visible (`PullModelsModal`'s Filters-panel "Close filters" button, plan70-HUB-EDGE-01.json) — return `false` instead, same as the model list's own last row just above it in the same file |
+| The element holding the ring is destroyed and replaced by a twin (a parent swapped for one under a new key) with nothing handing the ring over | No element holds the ring; the stream follow then finds no ring and slides the view away (the live question's Retry at the answer's finish, 3 of 4 tries, plan70-QA-FREE-PLAY-01.json). Record the stop the ring was on while the old one shows, and once it is gone hand the ring to the same stop of the twin: its nav node's `TakeFocus` first, then an in-container `focus()` (`useLiveTurnHeaderRingRestore.ts`, `focusAnswerChunkAtIndex`) |
+| A stop that changes on a timer is keyed by its content (`key={text}`), or turned non-focusable (fading out) while it holds the ring | Each swap destroys or disowns the stop under the ring and nothing takes it: fade and static suggestion chips, about 7.6 s after the ring landed (plan70-PRESET-ONE-LINE-03.json). Key the stop by its position and change only its words (decode mode's shape); hold anything that would take it out of the graph until the ring has left it (`MainTabPresetAnimatedChips.tsx`, `usePresetRowNav().chipHasRing`) |
+| A row of two buttons relies on `flow-children="horizontal"` alone for Left/Right, and the stops around it hop straight over it | The second button is visible but unreachable (the troubleshooting hint's Dismiss: Right from Open Permissions did nothing twice, plan70-PERMS-CLEAN-05-06.json); Up from the chips skipped the hint (plan70-SMOKE-C.json). Claim Left/Right on the row and move between its buttons with an in-container `focus()`; add each newly mounted row to every neighbour's Up/Down chain, lowest first (`troubleshootHintRowNavHandlers`, the chips' `exitUp`) |
+| A button's own press removes it (Helpful becomes the words "Saved on this Deck") and nothing takes the ring | The ring vanishes; the next press starts from nowhere (Down/Left found nothing, B the tab bar; plan70-F4-THUMBS-UP.json, 3 of 3). In the press handler, note whether the ring was on the button; once it has been replaced and nothing holds the ring, hand it to a neighbour in the same row: the row's nav node `TakeFocus`, then the neighbour (`pressThenHandRingOn` in `handRingOnWhenGone.ts`, used by Helpful in `buildReplyActionsElement.tsx` and by the troubleshooting hint's Dismiss, which removes the whole hint: the ring goes to the next row down, plan70-L5-PERMS-CLEAN-06.json) |
+| A press opens content below the ring's control and nothing scrolls it into view | The content opens behind the bottom dock and only the control's label changes, which reads as a dead press (Show details: tab row at y 617 under a dock at 600, plan70-F4-SHOW-DETAILS.json). Once, a frame after it opens, scroll just enough to clear the dock, never pushing the ring's control or the content's own top off the pane (`revealBelowKeeping` in `chatPanelScroll.ts`, called from `buildDetailsPanelElement.tsx`) |
+| A lone button in a plain `div` row between two registered containers | Nothing can hand the ring to it by Steam's transfer, so neighbours' explicit Up/Down chains step over it ("Save chat to Desktop", skipped by Up from the chips, plan70-SMOKE-C.json). Wrap it in its own `Focusable` with a registered `navRef` and put it first in the chain of the stop below it (`SaveChatToDesktopRow.tsx`, id `save-chat-desktop`) |
+| A state change that draws a control, then a ring move onto it scheduled for the next animation frame (`requestAnimationFrame`) | When the frame comes before the redraw (a busy machine, or a press Steam delivers outside React's batching), the target does not exist yet, the move finds nothing and nothing retries: the ring lands nowhere (the Filters panel, PullModelsModal.filtersPanel.test.tsx flaking about one run in three, plan 70). Keep the move until the commit that state change produces and run it in a layout effect right after (`focusAfterRedraw` in `usePullModelCatalogRefresh.ts`) |
+| An explicit hop onto a row that can sit behind the bottom dock, or a row's Up that claims the press with a hop that may not move the ring | The ring lands on a control nobody can see and Up from it does nothing ("Save chat to Desktop" over a running game: 0% then 33% visible, Up dead, 3 times, plan70-R-R3-try2.json). Hop onto such a row only while it is inside the pane and above the dock, else go on to the next row up; from it, claim only Steam's own transfers and leave anything else to Steam (`saveChatRowNav.ts`, `upFromSaveChat`) |
 
 ## Ship checklist
 

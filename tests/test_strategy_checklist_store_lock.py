@@ -3,30 +3,13 @@
 import asyncio
 import json
 import os
-import sys
 import tempfile
-import types
 import unittest
 from unittest.mock import patch
 
-if "fcntl" not in sys.modules:
-    _fcntl = types.ModuleType("fcntl")
-    _fcntl.LOCK_EX = 2
-    _fcntl.LOCK_NB = 4
-    _fcntl.LOCK_UN = 8
-    _fcntl.flock = lambda *_a, **_k: False
-    sys.modules["fcntl"] = _fcntl
+from backend_module_stubs import install_fcntl_and_decky_stubs
 
-if "decky" not in sys.modules:
-    _decky = types.ModuleType("decky")
-    _decky.DECKY_PLUGIN_SETTINGS_DIR = "/tmp"
-    _decky.logger = types.SimpleNamespace(
-        info=lambda *a, **k: None,
-        warning=lambda *a, **k: None,
-        error=lambda *a, **k: None,
-        exception=lambda *a, **k: None,
-    )
-    sys.modules["decky"] = _decky
+install_fcntl_and_decky_stubs()
 
 from main import Plugin  # noqa: E402
 
@@ -79,6 +62,32 @@ class StrategyChecklistStoreLockTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn("730", buckets)
         self.assertEqual(buckets["570"]["title"], "Dota plan")
         self.assertEqual(buckets["730"]["title"], "CS plan")
+
+    async def test_clearing_with_no_game_leaves_the_lists_kept_for_games(self) -> None:
+        """Leaving Strategy mode with no game running used to empty the whole file (plan 96, F4)."""
+        await self.plugin.save_strategy_checklist_session(_checklist_payload("570", "Dota plan"))
+        await self.plugin.save_strategy_checklist_session(_checklist_payload("", "No game plan"))
+
+        await self.plugin.clear_strategy_checklist_session("")
+
+        path = os.path.join(self.settings_dir, "strategy_checklist_session.json")
+        with open(path, encoding="utf-8") as f:
+            buckets = json.load(f).get("by_app_id") or {}
+        self.assertIn("570", buckets)
+        self.assertEqual(buckets["570"]["checked_ids"], ["1"])
+        self.assertNotIn("__none__", buckets)
+
+    async def test_clearing_one_game_leaves_the_no_game_list(self) -> None:
+        await self.plugin.save_strategy_checklist_session(_checklist_payload("570", "Dota plan"))
+        await self.plugin.save_strategy_checklist_session(_checklist_payload("", "No game plan"))
+
+        await self.plugin.clear_strategy_checklist_session("570")
+
+        path = os.path.join(self.settings_dir, "strategy_checklist_session.json")
+        with open(path, encoding="utf-8") as f:
+            buckets = json.load(f).get("by_app_id") or {}
+        self.assertNotIn("570", buckets)
+        self.assertEqual(buckets["__none__"]["title"], "No game plan")
 
 
 if __name__ == "__main__":

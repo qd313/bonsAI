@@ -1,0 +1,145 @@
+{
+  "version": "v0",
+  "description": "SUPERSEDED 2026-08-22 (D23): all 15 rows were folded into kb_eval_v2.json as V2-PARA-*, all assigned split=tune. This file is kept for provenance only — the bake-off does not read it and adding rows here has no effect on any score. Add new paraphrase rows to kb_eval_v2.json instead. Original description: English paraphrase eval for KB embed bake-off — same intents as kb_eval_v0 with different wording. ALL cases are `tune` for the same reason as kb_eval_v0: a paraphrase of a card-derived query is still card-derived.",
+  "default_split": "tune",
+  "queries": [
+    {
+      "id": "PARA-C01",
+      "query": "linux game keeps closing right after launch compatibility layer",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "proton",
+      "notes": "paraphrase EVAL-C01"
+    },
+    {
+      "id": "PARA-C02",
+      "query": "after suspend handheld display stays black when launching windows title",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "proton",
+      "notes": "paraphrase EVAL-C02"
+    },
+    {
+      "id": "PARA-C03",
+      "query": "vr headset connection quality usb port warning",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "steamvr",
+      "notes": "paraphrase EVAL-C03"
+    },
+    {
+      "id": "PARA-C04",
+      "query": "upscaling sharpness handheld display scaling layer",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "gamescope",
+      "notes": "paraphrase EVAL-C04"
+    },
+    {
+      "id": "PARA-C05",
+      "query": "multiplayer won't start blocked by kernel anti cheat",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "anticheat",
+      "notes": "paraphrase EVAL-C05"
+    },
+    {
+      "id": "PARA-C06",
+      "query": "streaming from desktop to handheld has frame drops",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "streaming",
+      "notes": "paraphrase EVAL-C06"
+    },
+    {
+      "id": "PARA-C07",
+      "query": "relocate installed titles to microsd storage",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "storage",
+      "notes": "paraphrase EVAL-C07"
+    },
+    {
+      "id": "PARA-C08",
+      "query": "motion aiming controller profile night city shooter",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "steam_input",
+      "notes": "paraphrase EVAL-C08"
+    },
+    {
+      "id": "PARA-S01",
+      "query": "where to shoot the big glyphid boss survivor mode",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "2321470",
+      "expect_section": "Glyphid Dreadnought",
+      "notes": "paraphrase EVAL-S01"
+    },
+    {
+      "id": "PARA-S02",
+      "query": "gohma eye weak point n64 dungeon",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "",
+      "expect_section": "Queen Gohma",
+      "notes": "paraphrase EVAL-S02",
+      "shortcut": "ocarina of time"
+    },
+    {
+      "id": "PARA-S03",
+      "query": "surviving the special infected tank horde mode",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "550",
+      "expect_section": "Tank",
+      "notes": "paraphrase EVAL-S03"
+    },
+    {
+      "id": "PARA-S04",
+      "query": "illithid encounter tactics act one",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "1086940",
+      "expect_section": "Mind Flayer",
+      "notes": "paraphrase EVAL-S04"
+    },
+    {
+      "id": "PARA-S07",
+      "query": "first boss underworld roguelike",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "1145360",
+      "expect_section": "Megaera",
+      "notes": "paraphrase EVAL-S07"
+    },
+    {
+      "id": "PARA-S08",
+      "query": "final arasaka tower cyborg fight",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "1091500",
+      "expect_section": "Adam Smasher",
+      "notes": "paraphrase EVAL-S08"
+    },
+    {
+      "id": "PARA-S12",
+      "query": "invisible floor dungeon zelda n64",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "",
+      "expect_section": "Shadow Temple invisible floors",
+      "notes": "paraphrase EVAL-S12",
+      "shortcut": "ocarina of time"
+    }
+  ],
+  "status": "superseded"
+}

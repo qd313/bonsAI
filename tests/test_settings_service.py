@@ -3,8 +3,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from backend.services.settings_service import (
+from backend.settings.settings_service import (
+    _clamped_whole_number,
     load_settings,
+    sanitize_preset_chip_animation,
     sanitize_settings,
     save_settings,
 )
@@ -20,30 +22,37 @@ class _Logger:
         return None
 
 
+def _sanitize_with_defaults(data):
+    """``sanitize_settings`` with the same plain defaults and limits, for tests that only vary ``data``."""
+    return sanitize_settings(
+        data=data,
+        default_latency_warning_seconds=15,
+        default_request_timeout_seconds=120,
+        min_latency_warning_seconds=5,
+        max_latency_warning_seconds=300,
+        min_request_timeout_seconds=10,
+        max_request_timeout_seconds=300,
+        valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+        default_persistence_mode="no_persist",
+        valid_ask_modes={"speed", "strategy", "expert"},
+        default_ask_mode="speed",
+    )
+
+
 class SettingsServiceTests(unittest.TestCase):
     """Service-level tests for settings normalization and persistence round-trip behavior."""
 
     def test_sanitize_settings_clamps_and_defaults(self):
         """Verify sanitization clamps numbers and falls back for invalid enum-like values."""
-        sanitized = sanitize_settings(
-            data={
+        sanitized = _sanitize_with_defaults(
+            {
                 "latency_warning_seconds": 500,
                 "request_timeout_seconds": "5",
                 "unified_input_persistence_mode": "invalid",
                 "screenshot_max_dimension": "1920",
                 "desktop_debug_note_auto_save": "yes",
                 "ask_mode": "bogus",
-            },
-            default_latency_warning_seconds=15,
-            default_request_timeout_seconds=120,
-            min_latency_warning_seconds=5,
-            max_latency_warning_seconds=300,
-            min_request_timeout_seconds=10,
-            max_request_timeout_seconds=300,
-            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
-            default_persistence_mode="no_persist",
-            valid_ask_modes={"speed", "strategy", "expert"},
-            default_ask_mode="speed",
+            }
         )
         self.assertEqual(sanitized["latency_warning_seconds"], 295)
         self.assertEqual(sanitized["request_timeout_seconds"], 300)
@@ -53,11 +62,7 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(sanitized["latency_timeouts_custom_enabled"])
         self.assertFalse(sanitized["desktop_debug_note_auto_save"])
         self.assertFalse(sanitized["desktop_ask_verbose_logging"])
-        self.assertFalse(sanitized["attach_proton_logs_when_troubleshooting"])
         self.assertFalse(sanitized["capabilities"]["filesystem_write"])
-        self.assertFalse(sanitized["capabilities"]["hardware_control"])
-        self.assertFalse(sanitized["capabilities"]["steam_web_api"])
-        self.assertEqual(sanitized["steam_web_api_key"], "")
         self.assertFalse(sanitized["ai_character_enabled"])
         self.assertTrue(sanitized["ai_character_random"])
         self.assertEqual(sanitized["ai_character_preset_id"], "")
@@ -67,55 +72,21 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(sanitized["input_sanitizer_user_disabled"])
         self.assertEqual(sanitized["ask_mode"], "speed")
         self.assertEqual(sanitized["ollama_keep_alive"], "5m")
+        self.assertEqual(sanitized["reply_verbosity"], "balanced")
+        self.assertEqual(sanitized["reply_language"], "follow_system")
         self.assertFalse(sanitized["show_developer_tab"])
         self.assertEqual(sanitized["model_policy_tier"], "open_source_only")
         self.assertFalse(sanitized["model_policy_non_foss_unlocked"])
         self.assertFalse(sanitized["model_allow_high_vram_fallbacks"])
-        self.assertFalse(sanitized["ollama_local_on_deck"])
+        self.assertTrue(sanitized["ollama_local_on_deck"])
+        self.assertFalse(sanitized["ollama_local_autostart"])
         self.assertTrue(sanitized["strategy_spoiler_masking_enabled"])
         self.assertFalse(sanitized["strategy_spoiler_auto_reveal_after_consent"])
-        self.assertFalse(sanitized["bonsai_token_streaming_enabled"])
-
-    def test_bonsai_token_streaming_enabled_opt_in(self):
-        kwargs = dict(
-            default_latency_warning_seconds=15,
-            default_request_timeout_seconds=120,
-            min_latency_warning_seconds=5,
-            max_latency_warning_seconds=300,
-            min_request_timeout_seconds=10,
-            max_request_timeout_seconds=300,
-            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
-            default_persistence_mode="no_persist",
-            valid_ask_modes={"speed", "strategy", "expert"},
-            default_ask_mode="speed",
-        )
-        self.assertTrue(
-            sanitize_settings(data={"bonsai_token_streaming_enabled": True}, **kwargs)[
-                "bonsai_token_streaming_enabled"
-            ]
-        )
-        self.assertFalse(
-            sanitize_settings(data={"bonsai_token_streaming_enabled": False}, **kwargs)[
-                "bonsai_token_streaming_enabled"
-            ]
-        )
 
     def test_show_developer_tab_migrates_legacy_show_debug_tab(self):
         """Legacy show_debug_tab enables Developer tab on read."""
-        kwargs = dict(
-            default_latency_warning_seconds=15,
-            default_request_timeout_seconds=120,
-            min_latency_warning_seconds=5,
-            max_latency_warning_seconds=300,
-            min_request_timeout_seconds=10,
-            max_request_timeout_seconds=300,
-            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
-            default_persistence_mode="no_persist",
-            valid_ask_modes={"speed", "strategy", "expert"},
-            default_ask_mode="speed",
-        )
-        self.assertTrue(sanitize_settings(data={"show_debug_tab": True}, **kwargs)["show_developer_tab"])
-        self.assertFalse(sanitize_settings(data={"show_debug_tab": False}, **kwargs)["show_developer_tab"])
+        self.assertTrue(_sanitize_with_defaults({"show_debug_tab": True})["show_developer_tab"])
+        self.assertFalse(_sanitize_with_defaults({"show_debug_tab": False})["show_developer_tab"])
 
     def test_sanitize_model_policy_non_foss_requires_ack(self):
         """non_foss tier without unlock is downgraded to open_weight."""
@@ -169,6 +140,94 @@ class SettingsServiceTests(unittest.TestCase):
         )
         self.assertEqual(bad["ollama_keep_alive"], "5m")
 
+    def test_sanitize_reply_verbosity_accepts_known_levels(self):
+        good = sanitize_settings(
+            data={"reply_verbosity": "detailed"},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_ask_modes={"speed", "strategy", "expert"},
+            default_ask_mode="speed",
+        )
+        self.assertEqual(good["reply_verbosity"], "detailed")
+        caveman = sanitize_settings(
+            data={"reply_verbosity": "caveman"},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_ask_modes={"speed", "strategy", "expert"},
+            default_ask_mode="speed",
+        )
+        self.assertEqual(caveman["reply_verbosity"], "caveman")
+        legacy_short = sanitize_settings(
+            data={"reply_verbosity": "short"},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_ask_modes={"speed", "strategy", "expert"},
+            default_ask_mode="speed",
+        )
+        self.assertEqual(legacy_short["reply_verbosity"], "caveman")
+        bad = sanitize_settings(
+            data={"reply_verbosity": "verbose"},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_ask_modes={"speed", "strategy", "expert"},
+            default_ask_mode="speed",
+        )
+        self.assertEqual(bad["reply_verbosity"], "balanced")
+
+    def test_sanitize_reply_language_accepts_override_values(self):
+        good = sanitize_settings(
+            data={"reply_language": "japanese"},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_ask_modes={"speed", "strategy", "expert"},
+            default_ask_mode="speed",
+        )
+        self.assertEqual(good["reply_language"], "japanese")
+        bad = sanitize_settings(
+            data={"reply_language": "klingon"},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_ask_modes={"speed", "strategy", "expert"},
+            default_ask_mode="speed",
+        )
+        self.assertEqual(bad["reply_language"], "follow_system")
+
     def test_sanitize_ask_mode_accepts_speed_strategy_expert(self):
         """Ask mode persists only the three known inference modes."""
         for mode in ("speed", "strategy", "expert"):
@@ -203,6 +262,39 @@ class SettingsServiceTests(unittest.TestCase):
             default_ask_mode="speed",
         )
         self.assertEqual(sanitized["ask_mode"], "expert")
+
+    def test_sanitize_ask_think_effort_defaults_off_and_rejects_unknown(self):
+        """Thinking is opt-in: an unrecognised or absent effort must never resolve to on."""
+
+        def _sanitized(data):
+            return sanitize_settings(
+                data=data,
+                default_latency_warning_seconds=15,
+                default_request_timeout_seconds=120,
+                min_latency_warning_seconds=5,
+                max_latency_warning_seconds=300,
+                min_request_timeout_seconds=10,
+                max_request_timeout_seconds=300,
+                valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+                default_persistence_mode="persist_all",
+                valid_ask_modes={"speed", "strategy", "expert"},
+                default_ask_mode="speed",
+            )
+
+        self.assertEqual(_sanitized({})["ask_think_effort"], "off")
+        for level in ("low", "medium", "high", "off"):
+            self.assertEqual(_sanitized({"ask_think_effort": level})["ask_think_effort"], level)
+        self.assertEqual(_sanitized({"ask_think_effort": " high "})["ask_think_effort"], "high")
+        for bad in ("HIGH", "maximum", "", None, True, 3):
+            self.assertEqual(_sanitized({"ask_think_effort": bad})["ask_think_effort"], "off")
+
+    def test_sanitize_preset_chip_animation_accepts_decode(self):
+        self.assertEqual(sanitize_preset_chip_animation("decode", True), "decode")
+
+    def test_sanitize_preset_chip_animation_migrates_legacy_stream_to_decode(self):
+        """`stream` was retired by the chip-decode rewrite; it must not fall through to `fade`."""
+        self.assertEqual(sanitize_preset_chip_animation("stream", True), "decode")
+        self.assertEqual(sanitize_preset_chip_animation("stream", False), "decode")
 
     def test_sanitize_preset_chip_fade_animation_enabled_false_only_for_literal_false(self):
         """Preset chip fades stay enabled unless JSON false is stored."""
@@ -355,8 +447,8 @@ class SettingsServiceTests(unittest.TestCase):
         )
         self.assertFalse(garbled["input_sanitizer_user_disabled"])
 
-    def test_sanitize_ollama_local_on_deck_default_off_explicit_true_enables(self):
-        """Omitted key defaults off (LAN routing); literal JSON ``true`` enables local Ollama."""
+    def test_sanitize_ollama_local_on_deck_default_on_saved_off_stays_off(self):
+        """Omitted key defaults on (plan 93, fresh install); a saved ``false`` stays off."""
         base_kwargs = dict(
             default_latency_warning_seconds=15,
             default_request_timeout_seconds=120,
@@ -370,7 +462,7 @@ class SettingsServiceTests(unittest.TestCase):
             default_ask_mode="speed",
         )
         missing = sanitize_settings(data={}, **base_kwargs)
-        self.assertFalse(missing["ollama_local_on_deck"])
+        self.assertTrue(missing["ollama_local_on_deck"])
 
         explicit_false = sanitize_settings(data={"ollama_local_on_deck": False}, **base_kwargs)
         self.assertFalse(explicit_false["ollama_local_on_deck"])
@@ -378,7 +470,85 @@ class SettingsServiceTests(unittest.TestCase):
         on = sanitize_settings(data={"ollama_local_on_deck": True}, **base_kwargs)
         self.assertTrue(on["ollama_local_on_deck"])
         garbled = sanitize_settings(data={"ollama_local_on_deck": "yes"}, **base_kwargs)
-        self.assertFalse(garbled["ollama_local_on_deck"])
+        self.assertTrue(garbled["ollama_local_on_deck"])
+
+    def test_saved_settings_file_with_run_ai_off_stays_off_and_missing_key_loads_on(self):
+        """An existing install's saved ``false`` survives a load; a file without the key gets the new default."""
+        logger = _Logger()
+
+        sanitize_fn = _sanitize_with_defaults
+
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_path = Path(tmp) / "settings.json"
+            settings_path.write_text('{"ollama_local_on_deck": false}', encoding="utf-8")
+            self.assertFalse(load_settings(str(settings_path), sanitize_fn, logger)["ollama_local_on_deck"])
+            settings_path.write_text('{"latency_warning_seconds": 30}', encoding="utf-8")
+            self.assertTrue(load_settings(str(settings_path), sanitize_fn, logger)["ollama_local_on_deck"])
+            self.assertTrue(load_settings(str(Path(tmp) / "none.json"), sanitize_fn, logger)["ollama_local_on_deck"])
+
+    def test_sanitize_ollama_local_autostart_default_off_explicit_true_enables(self):
+        """Omitted key defaults off (no startup entry); literal JSON ``true`` enables it."""
+        base_kwargs = dict(
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_ask_modes={"speed", "strategy", "expert"},
+            default_ask_mode="speed",
+        )
+        missing = sanitize_settings(data={}, **base_kwargs)
+        self.assertFalse(missing["ollama_local_autostart"])
+
+        explicit_false = sanitize_settings(data={"ollama_local_autostart": False}, **base_kwargs)
+        self.assertFalse(explicit_false["ollama_local_autostart"])
+
+        on = sanitize_settings(data={"ollama_local_autostart": True}, **base_kwargs)
+        self.assertTrue(on["ollama_local_autostart"])
+        garbled = sanitize_settings(data={"ollama_local_autostart": "yes"}, **base_kwargs)
+        self.assertFalse(garbled["ollama_local_autostart"])
+
+    def test_the_old_terse_switch_saved_on_lands_the_slider_on_its_terse_stop(self):
+        """Terse is the first stop of the Reply style slider now (plan 93). A saved terse_mode true
+        puts the slider on it, over whatever style was saved, and the old key is gone from the result."""
+        moved = _sanitize_with_defaults({"terse_mode": True, "reply_verbosity": "detailed"})
+        self.assertEqual(moved["reply_verbosity"], "terse")
+        self.assertNotIn("terse_mode", moved)
+        self.assertEqual(_sanitize_with_defaults({"terse_mode": True})["reply_verbosity"], "terse")
+
+    def test_the_old_terse_switch_saved_off_or_garbled_leaves_the_slider_alone(self):
+        for old in (False, "yes", "true", 1, None, [], {}):
+            kept = _sanitize_with_defaults({"terse_mode": old, "reply_verbosity": "caveman"})
+            self.assertEqual(kept["reply_verbosity"], "caveman", repr(old))
+        self.assertEqual(_sanitize_with_defaults({})["reply_verbosity"], "balanced")
+
+    def test_terse_is_a_known_reply_style_and_an_unknown_one_still_falls_back(self):
+        self.assertEqual(_sanitize_with_defaults({"reply_verbosity": "terse"})["reply_verbosity"], "terse")
+        self.assertEqual(_sanitize_with_defaults({"reply_verbosity": " Terse "})["reply_verbosity"], "balanced")
+        self.assertEqual(_sanitize_with_defaults({"reply_verbosity": "terser"})["reply_verbosity"], "balanced")
+
+    def test_saving_after_the_mapping_never_writes_the_old_key_again(self):
+        """Once: the first save after the upgrade writes reply_verbosity "terse" and no terse_mode;
+        moving the slider off Terse afterwards stays off (the old true cannot pull it back)."""
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "settings.json"
+            path.write_text(json.dumps({"terse_mode": True, "reply_verbosity": "balanced"}), encoding="utf-8")
+            logger = _Logger()
+            current = load_settings(str(path), _sanitize_with_defaults, logger)
+            self.assertEqual(current["reply_verbosity"], "terse")
+            first = save_settings(str(path), tmp, {}, current, _sanitize_with_defaults, logger)
+            self.assertEqual(first["reply_verbosity"], "terse")
+            on_disk = json.loads(path.read_text(encoding="utf-8"))
+            self.assertNotIn("terse_mode", on_disk)
+            self.assertEqual(on_disk["reply_verbosity"], "terse")
+            current = load_settings(str(path), _sanitize_with_defaults, logger)
+            save_settings(str(path), tmp, {"reply_verbosity": "balanced"}, current, _sanitize_with_defaults, logger)
+            again = load_settings(str(path), _sanitize_with_defaults, logger)
+            self.assertEqual(again["reply_verbosity"], "balanced")
+            self.assertNotIn("terse_mode", json.loads(path.read_text(encoding="utf-8")))
 
     def test_load_settings_grandfathers_capabilities_when_block_missing(self):
         """Legacy settings files without a capabilities object get known scopes enabled except Steam Web API."""
@@ -407,11 +577,52 @@ class SettingsServiceTests(unittest.TestCase):
             self.assertEqual(loaded["latency_warning_seconds"], 30)
             caps = loaded["capabilities"]
             self.assertTrue(caps["filesystem_write"])
-            self.assertTrue(caps["hardware_control"])
             self.assertTrue(caps["media_library_access"])
-            self.assertTrue(caps["external_navigation"])
-            self.assertFalse(caps["steam_web_api"])
             self.assertFalse(caps["microphone_access"])
+
+    @staticmethod
+    def _write_file_with_retired_steam_settings(settings_path: Path) -> None:
+        settings_path.write_text(
+            json.dumps(
+                {
+                    "steam_web_api_key": "not-a-real-value",
+                    "capabilities": {"steam_web_api": True, "filesystem_write": True},
+                    "latency_warning_seconds": 30,
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    def test_a_file_saved_with_the_retired_steam_key_and_permission_still_loads(self):
+        """The Steam ban lookup was removed (plan 86): an older file that still holds its key and
+        permission loads with no error, both are ignored, and every other value is intact."""
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_path = Path(tmp) / "settings.json"
+            self._write_file_with_retired_steam_settings(settings_path)
+            loaded = load_settings(str(settings_path), _sanitize_with_defaults, _Logger())
+            self.assertNotIn("steam_web_api_key", loaded)
+            self.assertNotIn("steam_web_api", loaded["capabilities"])
+            self.assertTrue(loaded["capabilities"]["filesystem_write"])
+            self.assertEqual(loaded["latency_warning_seconds"], 30)
+
+    def test_loading_a_file_with_the_retired_steam_key_removes_it_from_the_file(self):
+        """The one-time scrub: the saved key and permission are gone from settings.json straight
+        after the first load, without waiting for a later save, and nothing else in the file changes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_path = Path(tmp) / "settings.json"
+            self._write_file_with_retired_steam_settings(settings_path)
+            load_settings(str(settings_path), _sanitize_with_defaults, _Logger())
+            on_disk = json.loads(settings_path.read_text(encoding="utf-8"))
+            self.assertNotIn("steam_web_api_key", on_disk)
+            self.assertEqual(on_disk["capabilities"], {"filesystem_write": True})
+            self.assertEqual(on_disk["latency_warning_seconds"], 30)
+            self.assertFalse(settings_path.with_suffix(".json.tmp").exists())
+
+            # An old file with no permissions block keeps its old-file defaults after the scrub.
+            settings_path.write_text(json.dumps({"steam_web_api_key": "not-a-real-value"}), encoding="utf-8")
+            loaded = load_settings(str(settings_path), _sanitize_with_defaults, _Logger())
+            self.assertTrue(loaded["capabilities"]["filesystem_write"])
+            self.assertEqual(json.loads(settings_path.read_text(encoding="utf-8")), {})
 
     def test_load_save_settings_round_trip(self):
         """Ensure load/save helpers persist sanitized values and reload them consistently."""
@@ -460,34 +671,78 @@ class SettingsServiceTests(unittest.TestCase):
             self.assertIn("capabilities", loaded)
             self.assertFalse(settings_path.with_suffix(".json.tmp").exists())
 
-    def test_ui_scale_settings_defaults_and_sanitize(self):
+    def test_a_file_saved_with_removed_settings_still_loads_and_the_old_keys_are_dropped(self):
+        """A settings file written before a setting was removed still loads: no error, the old value is ignored and never written back."""
         logger = _Logger()
+        removed_keys = ("voice_reply_mode", "ui_scale_auto_enabled", "ui_scale_manual_profile")
+        old_file = {
+            "voice_reply_mode": "always",
+            "ui_scale_auto_enabled": False,
+            "ui_scale_manual_profile": "couch",
+            "latency_warning_seconds": 20,
+        }
 
+        sanitized = _sanitize_with_defaults(dict(old_file))
+        self.assertEqual(sanitized["latency_warning_seconds"], 20)
+        for key in removed_keys:
+            self.assertNotIn(key, sanitized)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_dir = Path(tmp)
+            settings_path = settings_dir / "settings.json"
+            settings_path.write_text(json.dumps(old_file), encoding="utf-8")
+
+            loaded = load_settings(str(settings_path), _sanitize_with_defaults, logger)
+            self.assertEqual(loaded["latency_warning_seconds"], 20)
+            for key in removed_keys:
+                self.assertNotIn(key, loaded)
+
+            persisted = save_settings(
+                path=str(settings_path),
+                settings_dir=str(settings_dir),
+                incoming={"latency_warning_seconds": 30},
+                current=loaded,
+                sanitize_func=_sanitize_with_defaults,
+                logger=logger,
+            )
+            self.assertEqual(persisted["latency_warning_seconds"], 30)
+            on_disk = json.loads(settings_path.read_text(encoding="utf-8"))
+            reloaded = load_settings(str(settings_path), _sanitize_with_defaults, logger)
+            for key in removed_keys:
+                self.assertNotIn(key, persisted)
+                self.assertNotIn(key, on_disk)
+                self.assertNotIn(key, reloaded)
+
+    def test_knowledge_base_settings_defaults(self):
         def sanitize_fn(data):
             return sanitize_settings(
                 data=data,
-                default_latency_warning_seconds=15,
-                default_request_timeout_seconds=120,
+                default_latency_warning_seconds=60,
+                default_request_timeout_seconds=180,
                 min_latency_warning_seconds=5,
                 max_latency_warning_seconds=300,
                 min_request_timeout_seconds=10,
-                max_request_timeout_seconds=300,
+                max_request_timeout_seconds=600,
                 valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
-                default_persistence_mode="persist_all",
+                default_persistence_mode="no_persist",
                 valid_ask_modes={"speed", "strategy", "expert"},
                 default_ask_mode="speed",
             )
 
         baseline = sanitize_fn({})
-        self.assertTrue(baseline["ui_scale_auto_enabled"])
-        self.assertEqual(baseline["ui_scale_manual_profile"], "handheld")
-
-        manual = sanitize_fn(
-            {"ui_scale_auto_enabled": False, "ui_scale_manual_profile": "couch", "bogus": 1}
+        self.assertFalse(baseline["use_local_knowledge_base"])
+        self.assertEqual(baseline["rag_corpus_path"], "")
+        self.assertEqual(baseline["rag_corpus_version"], "")
+        enabled = sanitize_fn(
+            {
+                "use_local_knowledge_base": True,
+                "rag_corpus_path": "/home/deck/.bonsai/rag",
+                "rag_corpus_version": "2026.07.12",
+            }
         )
-        self.assertFalse(manual["ui_scale_auto_enabled"])
-        self.assertEqual(manual["ui_scale_manual_profile"], "couch")
-        self.assertEqual(sanitize_fn({"ui_scale_manual_profile": "invalid"})["ui_scale_manual_profile"], "handheld")
+        self.assertTrue(enabled["use_local_knowledge_base"])
+        self.assertEqual(enabled["rag_corpus_path"], "/home/deck/.bonsai/rag")
+        self.assertEqual(enabled["rag_corpus_version"], "2026.07.12")
 
     def test_save_settings_uses_atomic_replace(self):
         """Writes go through a temp file so a crash mid-write cannot truncate settings.json."""
@@ -524,6 +779,105 @@ class SettingsServiceTests(unittest.TestCase):
             self.assertFalse(settings_path.with_suffix(".json.tmp").exists())
             loaded = load_settings(str(settings_path), sanitize_fn, logger)
             self.assertEqual(loaded["latency_warning_seconds"], 42)
+
+
+class ClampedWholeNumberFieldKindTests(unittest.TestCase):
+    """Direct tests of `_clamped_whole_number`, the field kind behind `stream_scramble_settle_ms`."""
+
+    def setUp(self) -> None:
+        self.coerce = _clamped_whole_number(default=400, minimum=100, maximum=1000)
+
+    def test_a_value_in_range_passes_through(self):
+        self.assertEqual(self.coerce(500), 500)
+
+    def test_a_value_below_the_minimum_clamps_up(self):
+        self.assertEqual(self.coerce(1), 100)
+
+    def test_a_value_above_the_maximum_clamps_down(self):
+        self.assertEqual(self.coerce(999999), 1000)
+
+    def test_a_non_whole_number_is_cut_to_its_whole_part(self):
+        self.assertEqual(self.coerce(400.9), 400)
+        self.assertEqual(self.coerce(100.1), 100)
+
+    def test_a_bool_is_not_treated_as_an_int_even_though_it_is_one_in_python(self):
+        self.assertEqual(self.coerce(True), 400)
+        self.assertEqual(self.coerce(False), 400)
+
+    def test_a_string_gives_the_default(self):
+        self.assertEqual(self.coerce("400"), 400)
+
+    def test_none_gives_the_default(self):
+        self.assertEqual(self.coerce(None), 400)
+
+    def test_a_list_gives_the_default(self):
+        self.assertEqual(self.coerce([400]), 400)
+
+    def test_nan_gives_the_default(self):
+        self.assertEqual(self.coerce(float("nan")), 400)
+
+    def test_infinity_gives_the_default(self):
+        self.assertEqual(self.coerce(float("inf")), 400)
+        self.assertEqual(self.coerce(float("-inf")), 400)
+
+
+class RememberWhatITypedSwitchTests(unittest.TestCase):
+    """"Remember what I typed" is one on/off switch: All is on, None is off, a saved Search is off."""
+
+    @staticmethod
+    def _sanitize(data):
+        return _sanitize_with_defaults(data)
+
+    def test_all_three_saved_names_still_load(self):
+        for saved, shown in (
+            ("persist_all", "persist_all"),
+            ("no_persist", "no_persist"),
+            ("persist_search_only", "no_persist"),
+        ):
+            with self.subTest(saved=saved):
+                loaded = self._sanitize({"unified_input_persistence_mode": saved})
+                self.assertEqual(loaded["unified_input_persistence_mode"], shown)
+
+    def test_an_older_file_with_search_loads_as_off_and_the_next_save_writes_off(self):
+        logger = _Logger()
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_path = Path(tmp) / "settings.json"
+            settings_path.write_text(
+                json.dumps({"unified_input_persistence_mode": "persist_search_only"}),
+                encoding="utf-8",
+            )
+            loaded = load_settings(str(settings_path), self._sanitize, logger)
+            self.assertEqual(loaded["unified_input_persistence_mode"], "no_persist")
+            # Loading alone leaves the file as it was, so a downgrade before any save still sees it.
+            on_disk = json.loads(settings_path.read_text(encoding="utf-8"))
+            self.assertEqual(on_disk["unified_input_persistence_mode"], "persist_search_only")
+            save_settings(
+                path=str(settings_path),
+                settings_dir=tmp,
+                incoming={"latency_warning_seconds": 60},
+                current=loaded,
+                sanitize_func=self._sanitize,
+                logger=logger,
+            )
+            on_disk = json.loads(settings_path.read_text(encoding="utf-8"))
+            self.assertEqual(on_disk["unified_input_persistence_mode"], "no_persist")
+
+    def test_the_switch_value_survives_a_save_and_a_reload(self):
+        logger = _Logger()
+        for value in ("persist_all", "no_persist"):
+            with self.subTest(value=value), tempfile.TemporaryDirectory() as tmp:
+                settings_path = Path(tmp) / "settings.json"
+                baseline = load_settings(str(settings_path), self._sanitize, logger)
+                save_settings(
+                    path=str(settings_path),
+                    settings_dir=tmp,
+                    incoming={"unified_input_persistence_mode": value},
+                    current=baseline,
+                    sanitize_func=self._sanitize,
+                    logger=logger,
+                )
+                reloaded = load_settings(str(settings_path), self._sanitize, logger)
+                self.assertEqual(reloaded["unified_input_persistence_mode"], value)
 
 
 if __name__ == "__main__":

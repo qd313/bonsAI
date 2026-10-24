@@ -108,7 +108,7 @@ deck_remote_parse_record_result() {
   REC_PLUGIN_UI="no"
   if [ -f "$file" ]; then
     local line
-    line=$(grep '---RECORD_RESULT---' "$file" | tail -1)
+    line=$(grep -e '---RECORD_RESULT---' "$file" | tail -1)
     if [ -n "$line" ]; then
       REC_MODE=$(echo "$line" | sed -n 's/.*mode=\([^ ]*\).*/\1/p')
       REC_METHOD=$(echo "$line" | sed -n 's/.*method=\([^ ]*\).*/\1/p')
@@ -121,6 +121,7 @@ deck_remote_parse_record_result() {
 }
 
 deck_remote_record_ok() {
+  local min_bytes="${2:-100000}"
   deck_remote_parse_record_result "$1"
   if [ "$REC_PLUGIN_UI" = "no" ]; then
     return 1
@@ -132,6 +133,6 @@ deck_remote_record_ok() {
     pipewire-gamescope|wf-recorder) ;;
     *) return 1 ;;
   esac
-  [ "${REC_BYTES:-0}" -ge 524288 ] || return 1
+  [ "${REC_BYTES:-0}" -ge "$min_bytes" ] || return 1
   return 0
 }

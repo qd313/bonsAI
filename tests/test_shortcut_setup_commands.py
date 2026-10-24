@@ -2,7 +2,7 @@
 
 import unittest
 
-from backend.services.shortcut_setup_commands import (
+from backend.commands.shortcut_setup_commands import (
     COMMAND_SHORTCUT_DECK,
     COMMAND_SHORTCUT_STADIA,
     classify_shortcut_setup_command,

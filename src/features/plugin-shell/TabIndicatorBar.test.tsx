@@ -1,0 +1,494 @@
+/**
+ * Title: The tab bar: T3, its presses and taps, the rule that hides Steam's header, and no ghost
+ * Purpose: Pin what the bar shows for a given tab list and current tab (plan 84's T3: LB, the tabs
+ *          before, the current tab's icon and name, the tabs after, RB), what each press and tap
+ *          does, that LB and RB light only with the ring on the bar, that Steam's own header is
+ *          hidden by a rule scoped to our own markup with no build-hashed class in it, and that
+ *          nothing of the bar can ever be left drawn over the chip row (plan 84 step 4).
+ * Used for: plan 30 W3 (workshop:archive/30-collapsing-tab-bar.md § 5); plan 84 step 4, rows
+ *           P84-TABS-01, P84-TABS-02, the LB/RB half of P84-HINTS-01, and TAB-BAR-GHOST-01.
+ *           Where things sit on the 300-point bar is TabIndicatorBar.layout.test.tsx.
+ * Solves: The ways this can rot silently — a hiding selector that quietly grows a Steam hash and
+ *         stops matching after a client update (workshop:audit/decky-tab-strip-classes.md is the prior
+ *         art for that failure), and the faded ghost of the old drop-down strip, left over the chip
+ *         row after touching the screen because its fade could freeze while a game ran.
+ * Does not: Measure heights or where the ring lands on the Deck; jsdom has no layout and no gamepad.
+ *           Computed styles here come from the real scope stylesheet through jsdom's own cascade,
+ *           which follows source order only (no specificity, no !important).
+ */
+import { fireEvent, render } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import React from "react";
+
+import { TabIndicatorBar } from "./TabIndicatorBar";
+import { shoulderSwitchFromPress } from "../../shared/dpad/shoulderSwitch";
+import { ALL_BONSAI_TAB_IDS, BONSAI_TAB_SHORT_NAMES, type BonsaiTabId } from "./tabTitles";
+import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
+import { buildTabBarRules } from "./tabIndicatorBarStyles";
+
+const hoisted = vi.hoisted(() => ({
+  focusableProps: [] as Array<Record<string, unknown>>,
+}));
+
+/*
+ * A local override of the global `@decky/ui` mock (src/test-harness/setup.ts), the technique
+ * ContextChipLadder.test.tsx uses: wraps the stub `Focusable` so the props Steam reads (onMoveLeft,
+ * onButtonDown and the rest, which the stub strips before the DOM) can be called the way Steam
+ * calls them on the Deck.
+ */
+vi.mock("@decky/ui", async () => {
+  const stubs = await import("../../test-harness/fakeDeckyUi");
+  const RealFocusable = stubs.Focusable;
+  const CapturingFocusable = React.forwardRef<HTMLDivElement, Record<string, unknown>>(
+    function CapturingFocusable(props, ref) {
+      hoisted.focusableProps.push(props);
+      return <RealFocusable {...props} ref={ref} />;
+    },
+  );
+  return { ...stubs, Focusable: CapturingFocusable };
+});
+
+/** The props Steam would read off the bar's own Focusable, from its latest render. */
+function barProps(): Record<string, (...args: unknown[]) => unknown> {
+  const matches = hoisted.focusableProps.filter((p) => p.className === "bonsai-tab-bar");
+  return matches[matches.length - 1] as Record<string, (...args: unknown[]) => unknown>;
+}
+
+/** The shape `deckButtonId` reads: a GamepadEvent with `detail.button`. LB = 5, RB = 6. */
+const press = (button: number) => ({ detail: { button } });
+
+/** Seven tabs with the Developer tab on, six without: Search is the first tab since plan 92. */
+const SEVEN = ALL_BONSAI_TAB_IDS;
+const SIX: readonly BonsaiTabId[] = SEVEN.filter((id) => id !== "developer");
+
+/** The bar with its two callbacks stubbed; tests that care pass their own. */
+function bar(props: Partial<React.ComponentProps<typeof TabIndicatorBar>> = {}) {
+  return (
+    <TabIndicatorBar
+      tabIds={SEVEN}
+      currentTab="main"
+      selectTab={vi.fn()}
+      exitDown={() => true}
+      {...props}
+    />
+  );
+}
+
+/** `[selector, declarations]` for every rule in a stylesheet, comments stripped. */
+function rulesOf(css: string): Array<[string, string]> {
+  const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, "");
+  const out: Array<[string, string]> = [];
+  const re = /([^{}]+)\{([^{}]*)\}/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(withoutComments)) !== null) {
+    out.push([m[1].trim(), m[2].trim()]);
+  }
+  return out;
+}
+
+/** A Steam CSS-module hash: a long alphanumeric run mixing cases and digits, e.g. _3IBLc81yyL08OJ7rfKtF00. */
+function hasHashedToken(selector: string): boolean {
+  const runs = selector.match(/[A-Za-z0-9]{10,}/g) ?? [];
+  return runs.some((run) => /\d/.test(run) && /[a-z]/.test(run) && /[A-Z]/.test(run));
+}
+
+/** Mounts the real scope stylesheet so computed styles are the ones the Deck would draw. */
+function withScopeStylesheet() {
+  let style: HTMLStyleElement;
+  let scope: HTMLDivElement;
+  beforeEach(() => {
+    style = document.createElement("style");
+    style.textContent = buildBonsaiScopeStylesheet();
+    document.head.appendChild(style);
+    scope = document.createElement("div");
+    scope.className = "bonsai-scope";
+    document.body.appendChild(scope);
+  });
+  afterEach(() => {
+    style.remove();
+    scope.remove();
+  });
+  return () => scope.appendChild(document.createElement("div"));
+}
+
+/** The tabs the bar draws, left to right, as [tab id, whether it is the current tab]. */
+const drawnOrder = (container: HTMLElement): Array<[string, boolean]> =>
+  Array.from(container.querySelectorAll<HTMLElement>(".bonsai-tab-bar__tabs > *")).map((el) =>
+    el.classList.contains("bonsai-tab-bar__current")
+      ? [(container.querySelector(".bonsai-tab-bar") as HTMLElement).getAttribute("data-bonsai-tab-bar-tab") ?? "", true]
+      : [el.getAttribute("data-bonsai-tab") ?? "", false],
+  );
+
+describe("the tab bar as T3 (plan 84 step 4)", () => {
+  const host = withScopeStylesheet();
+
+  it("is one row of three columns in order: LB, the tabs in their fixed order, RB", () => {
+    const { container } = render(bar({ currentTab: "settings" }), { container: host() });
+    const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;
+    // The 2-point line under the current tab (plan 97 G1) is positioned by hand and takes no column.
+    const columns = Array.from(root.children)
+      .filter((el) => el.className !== "bonsai-tab-bar__marker")
+      .map((el) => el.className);
+    expect(columns).toEqual([
+      "bonsai-tab-bar__shoulder bonsai-tab-bar__shoulder--l",
+      "bonsai-tab-bar__tabs",
+      "bonsai-tab-bar__shoulder bonsai-tab-bar__shoulder--r",
+    ]);
+    const cs = getComputedStyle(root);
+    expect(cs.display).toBe("grid");
+    expect(cs.gridTemplateColumns).toBe("auto minmax(0, 1fr) auto");
+    // The tabs spread from LB's side to RB's, so the first one is flush after LB and the last flush before RB.
+    const tabs = getComputedStyle(container.querySelector(".bonsai-tab-bar__tabs") as HTMLElement);
+    expect(tabs.display).toBe("flex");
+    expect(tabs.justifyContent).toBe("space-between");
+    expect(tabs.flexWrap).not.toBe("wrap");
+  });
+
+  it("names the current tab in the middle, after its icon, and follows currentTab", () => {
+    const { container, rerender } = render(bar({ currentTab: "settings" }), { container: host() });
+    const current = container.querySelector(".bonsai-tab-bar__current") as HTMLElement;
+    expect(current.querySelector(".bonsai-tab-bar__current-icon svg")).not.toBeNull();
+    expect(current.querySelector(".bonsai-tab-bar__name")?.textContent).toBe("Settings");
+    expect(current.firstElementChild?.className).toBe("bonsai-tab-bar__current-icon");
+    expect(getComputedStyle(container.querySelector(".bonsai-tab-bar__name") as HTMLElement).textTransform).toBe("uppercase");
+    rerender(bar({ currentTab: "about" }));
+    expect(container.querySelector(".bonsai-tab-bar__name")?.textContent).toBe("About");
+    expect(container.querySelector(".bonsai-tab-bar")?.getAttribute("data-bonsai-tab-bar-tab")).toBe("about");
+  });
+
+  it.each([
+    ["six", SIX],
+    ["seven", SEVEN],
+  ] as const)("at %s tabs, every current tab draws all the tabs left to right in the strip's own order, the current one at its own place (plan 87 F4)", (_n, ids) => {
+    for (const [index, current] of ids.entries()) {
+      const { container, unmount } = render(bar({ tabIds: ids, currentTab: current }), { container: host() });
+      const drawn = drawnOrder(container);
+      // The icons left of the current one are exactly the tabs before it, the icons right of it the tabs after it.
+      expect(
+        drawn.map(([id]) => id),
+        `${current}: the order drawn`,
+      ).toEqual([...ids]);
+      expect(drawn.findIndex(([, isCurrent]) => isCurrent), `${current}: where the current tab sits`).toBe(index);
+      expect(drawn.filter(([, isCurrent]) => isCurrent)).toHaveLength(1);
+      // Search is the first thing after LB and About the last before RB, whichever tab is showing.
+      expect(drawn[0][0]).toBe("search");
+      expect(drawn[drawn.length - 1][0]).toBe("about");
+      for (const peek of Array.from(container.querySelectorAll(".bonsai-tab-bar__peek"))) {
+        expect(peek.querySelector("svg")).not.toBeNull();
+        expect(peek.getAttribute("aria-label")).toBe(BONSAI_TAB_SHORT_NAMES[peek.getAttribute("data-bonsai-tab") as BonsaiTabId]);
+      }
+      unmount();
+    }
+  });
+
+  it("does not wrap round: on Search nothing is drawn before it, on About nothing after it; on Main only Search is before it", () => {
+    const search = render(bar({ currentTab: "search" }), { container: host() });
+    expect(search.container.querySelector(".bonsai-tab-bar__tabs")!.firstElementChild!.className).toBe("bonsai-tab-bar__current");
+    expect(search.container.querySelector(".bonsai-tab-bar__name")?.textContent).toBe("Search");
+    search.unmount();
+    const main = render(bar({ currentTab: "main" }), { container: host() });
+    const mainSides = Array.from(main.container.querySelector(".bonsai-tab-bar__tabs")!.children);
+    expect(mainSides[0]!.getAttribute("data-bonsai-tab")).toBe("search");
+    expect(mainSides[1]!.className).toBe("bonsai-tab-bar__current");
+    main.unmount();
+    const about = render(bar({ currentTab: "about" }), { container: host() });
+    expect(about.container.querySelector(".bonsai-tab-bar__tabs")!.lastElementChild!.className).toBe("bonsai-tab-bar__current");
+  });
+
+  it("lights nothing and names nothing for a tab that is not mounted, so a stale id never claims a tab", () => {
+    const { container } = render(bar({ tabIds: SIX, currentTab: "developer" }), { container: host() });
+    expect(container.querySelector(".bonsai-tab-bar__name")?.textContent).toBe("");
+    expect(container.querySelector(".bonsai-tab-bar__current-icon")).toBeNull();
+    expect(container.querySelectorAll(".bonsai-tab-bar__peek")).toHaveLength(0);
+  });
+
+  it("dims LB and RB while the ring is elsewhere and lights them at full strength while it is on the bar", () => {
+    const { container } = render(bar(), { container: host() });
+    const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;
+    const marks = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-tab-bar__shoulder"));
+    expect(marks.map((el) => el.textContent)).toEqual(["LB", "RB"]);
+    for (const mark of marks) expect(getComputedStyle(mark).opacity).toBe("0.32");
+    // Plain browser focus is not Steam's ring: it lights nothing. (Decky stamps a tabindex on what it
+    // navigates; plan 78 measured the bar holding browser focus with no Steam ring anywhere.)
+    root.setAttribute("tabindex", "0");
+    root.focus();
+    expect(document.activeElement).toBe(root);
+    for (const mark of marks) expect(getComputedStyle(mark).opacity).toBe("0.32");
+    root.classList.add("gpfocus");
+    for (const mark of marks) {
+      expect(getComputedStyle(mark).opacity).toBe("1");
+      expect(getComputedStyle(mark).color).toBe("rgb(238, 243, 248)");
+    }
+    root.classList.remove("gpfocus");
+    for (const mark of marks) expect(getComputedStyle(mark).opacity).toBe("0.32");
+  });
+
+  it("wears the white inset ring and a faint fill on the whole bar only while Steam's ring is on it", () => {
+    const { container } = render(bar(), { container: host() });
+    const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;
+    expect(getComputedStyle(root).boxShadow).not.toMatch(/inset/);
+    root.setAttribute("tabindex", "0");
+    root.focus();
+    expect(getComputedStyle(root).boxShadow).not.toMatch(/inset/);
+    root.classList.add("gpfocus");
+    expect(getComputedStyle(root).boxShadow).toMatch(/inset 0 0 0 2px rgba\(255, 255, 255, 0\.85\)/);
+    expect(getComputedStyle(root).backgroundColor).toBe("rgba(255, 255, 255, 0.06)");
+  });
+});
+
+describe("the folded tabs' floating button steps tabs through the bar (Deck, 2026-10-12)", () => {
+  it("the bar registers its stepping: LB and RB from the button go to the neighbours, as a shoulder switch", () => {
+    const selectTab = vi.fn();
+    const shown = render(bar({ selectTab, currentTab: "main" }));
+    expect(shoulderSwitchFromPress(press(5))).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("search", { fromShoulder: true });
+    expect(shoulderSwitchFromPress(press(6))).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("ollama", { fromShoulder: true });
+    shown.unmount();
+    expect(shoulderSwitchFromPress(press(5))).toBe(false);
+  });
+});
+
+describe("the tab bar's presses and taps (plan 84 step 4)", () => {
+  it("Left and LB step back one tab and wrap from the first to the last; Right and RB step on and wrap back", () => {
+    const selectTab = vi.fn();
+    const first = render(bar({ selectTab, currentTab: "search" }));
+    expect(barProps().onMoveLeft()).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("about");
+    expect(barProps().onButtonDown(press(5))).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("about");
+    first.unmount();
+    render(bar({ selectTab, currentTab: "about" }));
+    expect(barProps().onMoveRight()).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("search");
+    expect(barProps().onButtonDown(press(6))).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("search");
+  });
+
+  it("Left from Main lands on Search, and Right from Search on Main (plan 92)", () => {
+    const selectTab = vi.fn();
+    const main = render(bar({ selectTab, currentTab: "main" }));
+    expect(barProps().onMoveLeft()).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("search");
+    expect(barProps().onButtonDown(press(5))).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("search");
+    main.unmount();
+    render(bar({ selectTab, currentTab: "search" }));
+    expect(barProps().onMoveRight()).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("main");
+  });
+
+  it("Down hands the ring to the tab body through exitDown; Up is left to Steam", () => {
+    const exitDown = vi.fn(() => true);
+    render(bar({ exitDown }));
+    expect(barProps().onMoveDown()).toBe(true);
+    expect(exitDown).toHaveBeenCalledTimes(1);
+    expect(barProps().onMoveUp()).toBe(false);
+  });
+
+  it("is one stop for the D-pad: its taps are plain elements, none of them a focus stop of its own", () => {
+    hoisted.focusableProps.length = 0;
+    const { container } = render(bar());
+    expect(barProps().focusable).toBe(true);
+    expect(hoisted.focusableProps.filter((p) => p.className !== "bonsai-tab-bar")).toHaveLength(0);
+    for (const el of Array.from(container.querySelectorAll(".bonsai-tab-bar *"))) {
+      expect(el.hasAttribute("tabindex")).toBe(false);
+    }
+  });
+
+  it("a tap on LB steps back one tab and a tap on RB steps on one, wrapping at both ends", () => {
+    const selectTab = vi.fn();
+    const first = render(bar({ selectTab, currentTab: "search" }));
+    fireEvent.click(first.container.querySelector(".bonsai-tab-bar__shoulder--l") as HTMLElement);
+    expect(selectTab).toHaveBeenLastCalledWith("about");
+    first.unmount();
+    const last = render(bar({ selectTab, currentTab: "about" }));
+    fireEvent.click(last.container.querySelector(".bonsai-tab-bar__shoulder--r") as HTMLElement);
+    expect(selectTab).toHaveBeenLastCalledWith("search");
+  });
+
+  it("a tap on a side icon opens that tab", () => {
+    for (const ids of [SIX, SEVEN]) {
+      const selectTab = vi.fn();
+      const { container, unmount } = render(bar({ tabIds: ids, selectTab, currentTab: "settings" }));
+      const peeks = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-tab-bar__peek"));
+      expect(peeks).toHaveLength(ids.length - 1);
+      for (const peek of peeks) {
+        fireEvent.click(peek);
+        expect(selectTab).toHaveBeenLastCalledWith(peek.getAttribute("data-bonsai-tab"));
+      }
+      unmount();
+    }
+  });
+
+  it("a tap on the current tab's name does nothing", () => {
+    const selectTab = vi.fn();
+    const { container } = render(bar({ selectTab, currentTab: "settings" }));
+    fireEvent.click(container.querySelector(".bonsai-tab-bar__current") as HTMLElement);
+    expect(selectTab).not.toHaveBeenCalled();
+  });
+});
+
+describe("the rule that hides Steam's tab header", () => {
+  const rules = rulesOf(buildBonsaiScopeStylesheet());
+  const hiding = rules.filter(
+    ([selector, decls]) => selector.includes(".bonsai-tab-title-leaf") && /display:\s*none/.test(decls),
+  );
+
+  it("exists exactly once", () => {
+    expect(hiding).toHaveLength(1);
+  });
+
+  it("is scoped under the tabs root and addresses Steam's row by our own markup, never by a hash", () => {
+    const [selector] = hiding[0];
+    expect(selector.startsWith(".bonsai-scope .bonsai-decky-tabs-root")).toBe(true);
+    expect(selector).toContain(":has(.bonsai-tab-title-leaf)");
+    expect(hasHashedToken(selector)).toBe(false);
+  });
+
+  it("keeps the bar 20px with an !important height, because section 3 sets every Panel.Focusable to height: auto", () => {
+    const heightRule = rules.find(([selector]) => selector === ".bonsai-scope .bonsai-tab-bar.Panel.Focusable");
+    expect(heightRule).toBeDefined();
+    expect(heightRule?.[1]).toMatch(/height:\s*20px\s*!important/);
+    const reset = rules.find(([selector, decls]) => selector === ".bonsai-scope .Panel.Focusable" && /height:\s*auto\s*!important/.test(decls));
+    expect(reset).toBeDefined();
+  });
+
+  it("builds the same bar rules for bonsAI's title view in Decky's bar, under that view's own root (plan 84 step 6)", () => {
+    const inScope = rulesOf(buildTabBarRules(".bonsai-scope"));
+    const inTitle = rulesOf(buildTabBarRules(".bonsai-chat-title"));
+    expect(inTitle.length).toBeGreaterThan(10);
+    expect(inTitle.every(([selector]) => selector.split(",").every((one) => one.trim().startsWith(".bonsai-chat-title ")))).toBe(true);
+    expect(inTitle.map(([selector, decls]) => [selector.split(".bonsai-chat-title").join(".bonsai-scope"), decls])).toEqual(inScope);
+    /* Every bar rule of bonsAI's own stylesheet is one of them. */
+    const scopeSheet = rulesOf(buildBonsaiScopeStylesheet());
+    for (const rule of inScope) expect(scopeSheet).toContainEqual(rule);
+  });
+
+  it("declares the 4px reserve in the stylesheet so a tabs-root remount cannot lose it", () => {
+    const reserveRule = rules.find(([selector]) => selector === ".bonsai-scope:has(.bonsai-tab-bar) .bonsai-decky-tabs-root");
+    expect(reserveRule).toBeDefined();
+    expect(reserveRule?.[1]).toMatch(/--bonsai-tab-strip-reserve:\s*4px/);
+  });
+});
+
+/*
+  The open bug "A faded ghost of the tab bar is left drawn over the chip row after touching the
+  screen" (TAB-BAR-GHOST-01). The ghost was the drop-down strip: an absolutely placed layer that
+  hung 46 points below the bar, over the chip row, opened by the ring or by a tap and closed by a CSS
+  fade that could freeze part-way while a game ran. Plan 84 step 4 deletes the strip. These tests are
+  the ones that would have caught it, and they hold for any future part of the bar too: whatever
+  the ring and a finger have done, the bar draws exactly what it drew at rest, nothing inside it can
+  be drawn outside its own 20 points, and nothing in it fades.
+*/
+describe("nothing of the tab bar can be left drawn over the chip row (plan 84 step 4, TAB-BAR-GHOST-01)", () => {
+  let style: HTMLStyleElement;
+  let scope: HTMLDivElement;
+
+  beforeEach(() => {
+    style = document.createElement("style");
+    style.textContent = buildBonsaiScopeStylesheet();
+    document.head.appendChild(style);
+    scope = document.createElement("div");
+    scope.className = "bonsai-scope";
+    document.body.appendChild(scope);
+  });
+
+  afterEach(() => {
+    style.remove();
+    scope.remove();
+  });
+
+  /** Everything a person or Steam can do to the bar: the ring arriving and leaving, and taps on and off it. */
+  type Step = "ring-on" | "ring-off" | "tap-bar" | "tap-each-part" | "tap-elsewhere";
+  const SEQUENCES: Step[][] = [
+    ["ring-on", "ring-off"],
+    ["tap-bar"],
+    ["tap-bar", "tap-elsewhere"],
+    ["tap-each-part"],
+    ["ring-on", "tap-bar", "ring-off", "tap-elsewhere"],
+    ["tap-bar", "ring-on", "tap-each-part", "ring-off"],
+  ];
+
+  function run(root: HTMLElement, step: Step) {
+    switch (step) {
+      case "ring-on":
+        // What Steam does when its ring lands: DOM focus plus its own marker class.
+        root.classList.add("gpfocus");
+        fireEvent.focus(root);
+        return;
+      case "ring-off":
+        root.classList.remove("gpfocus");
+        fireEvent.blur(root);
+        return;
+      case "tap-bar":
+        fireEvent.pointerDown(root);
+        fireEvent.click(root);
+        return;
+      case "tap-each-part":
+        for (const el of Array.from(root.querySelectorAll<HTMLElement>("*"))) {
+          fireEvent.pointerDown(el);
+          fireEvent.click(el);
+        }
+        return;
+      case "tap-elsewhere":
+        fireEvent.pointerDown(document.body);
+        fireEvent.click(document.body);
+        return;
+    }
+  }
+
+  /** The bar's markup with Steam's own marker taken out, so only what the plugin draws is compared. */
+  const drawn = (root: HTMLElement) => {
+    const copy = root.cloneNode(true) as HTMLElement;
+    copy.classList.remove("gpfocus");
+    return copy.outerHTML;
+  };
+
+  it.each(SEQUENCES.map((s) => [s.join(", "), s] as const))(
+    "after %s, the bar draws exactly what it drew at rest, with no strip anywhere",
+    (_label, sequence) => {
+      for (const tabIds of [SEVEN, SIX]) {
+        const host = scope.appendChild(document.createElement("div"));
+        const { container, unmount } = render(bar({ tabIds, currentTab: "settings" }), { container: host });
+        const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;
+        const atRest = drawn(root);
+        for (const step of sequence) {
+          run(root, step);
+          expect(container.querySelector('[class*="strip"]')).toBeNull();
+          expect(drawn(root)).toBe(atRest);
+        }
+        unmount();
+      }
+    },
+  );
+
+  it("clips everything inside it to its own 20 points, and lifts nothing inside it out of the row", () => {
+    const { container } = render(bar(), { container: scope });
+    const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;
+    for (const step of ["ring-on", "tap-bar"] as const) {
+      run(root, step);
+      expect(getComputedStyle(root).overflow).toBe("hidden");
+      for (const el of Array.from(root.querySelectorAll<HTMLElement>("*"))) {
+        // The one exception is the line under the current tab (plan 97 G1): absolute inside this clipped bar, 2 points high.
+        if (el.classList.contains("bonsai-tab-bar__marker")) continue;
+        expect(["absolute", "fixed", "sticky"]).not.toContain(getComputedStyle(el).position);
+      }
+    }
+  });
+
+  it("fades nothing: no part of the bar has a transition or an animation that could freeze part-way, bar the line's glide", () => {
+    const { container } = render(bar(), { container: scope });
+    const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;
+    run(root, "ring-on");
+    for (const el of [root, ...Array.from(root.querySelectorAll<HTMLElement>("*"))]) {
+      const cs = getComputedStyle(el);
+      // The line under the current tab glides by a transform transition (plan 97 G1); the bar clips it, it moves
+      // nothing else and fades nothing, so it cannot leave a ghost over the row below.
+      const isMarker = el.classList.contains("bonsai-tab-bar__marker");
+      expect(cs.transition === "" || /^none\b/.test(cs.transition) || (isMarker && /^transform\b/.test(cs.transition))).toBe(true);
+      expect(cs.animation === "" || /^none\b/.test(cs.animation)).toBe(true);
+    }
+  });
+});

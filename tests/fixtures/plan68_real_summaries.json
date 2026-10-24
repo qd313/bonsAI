@@ -1,0 +1,40 @@
+{
+  "_source": "docs/test-evidence/plan68-GATE-01.json, the v3-wording runs (the instruction plan 68 ships with) plus one Spanish run for the language test (level-v2-es, an earlier wording -- no v3 Spanish run exists). Real model output, not invented text (lessons-learned.md section 2).",
+  "runs": [
+    {
+      "case": "wheatley-full",
+      "condition": "cold-level-v3",
+      "lang": "english",
+      "hidden_notes_left_out": 2,
+      "text": "Game: Half-Life 2, Black Mesa, Hollow Knight, Hades, Deep Rock Galactic, Survival Games.\nPlayer is asking for tips on various games and mechanics.\nPlayer is stuck on general strategy/boss fights in many games.\nPlayer asked for specific tips on Wheatley, pickaxe, boss fights (Megaera, Bone Hydra, Gonarch, Broken Vessel), and environmental hazards (electrified water).\nPlayer asked for walkthroughs of Half-Life 2 chapters and general survival/resource management tips.\nPlayer asked about game settings, controller issues, and storage management."
+    },
+    {
+      "case": "wheatley-full",
+      "condition": "level-v3",
+      "lang": "english",
+      "hidden_notes_left_out": 2,
+      "text": "Game: Half-Life 2, Hollow Knight, Black Mesa, Hades, Deep Rock Galactic, Survival Games.\nFinished: None explicitly stated, general tips provided for many.\nStuck on: No specific current sticking point mentioned.\nHelp with: Wheatley fight strategy, pickaxe function, boss tactics (Megaera, Broken Vessel, Bone Hydra, Gonarch), environmental hazards (electrified water), general survival/exploration advice."
+    },
+    {
+      "case": "parry-full",
+      "condition": "level-v3",
+      "lang": "english",
+      "hidden_notes_left_out": 0,
+      "text": "Game: Deep Rock Galactic Survivor.\nPlayer is asking for advice on weapon upgrades for Driller, Scout, Gunner, and Engineer.\nPlayer is asking for tips on parrying in action games.\nPlayer is asking about Chaos boon in Hades.\nPlayer is asking about general early weapon upgrades for Driller, Scout, Gunner, and Engineer.\nPlayer is asking about spending Nitra for Scout, Gunner, and Engineer.\nPlayer is asking for general gameplay rundowns for Gunner, Engineer, Driller, and Scout.\nPlayer is asking for advice on skipping early weapon upgrades."
+    },
+    {
+      "case": "wheatley-typical",
+      "condition": "level-v3",
+      "lang": "english",
+      "hidden_notes_left_out": 0,
+      "text": "Game: Half-Life 2, Hollow Knight, Black Mesa, Hades, Deep Rock Galactic.\nPlayer is asking for tips on various games and specific boss fights/mechanics.\nPlayer asked for tips on teleporting sorcerer in Hollow Knight, electrified water in Black Mesa, Megara in Hades, and armored bug boss survival.\nPlayer asked for tips on exploring maps, managing food/water in deserts, and Ravenholm with low ammo.\nPlayer asked about shotgun and crowbar uses in Half-Life 2.\nPlayer asked about the main menu in Deep Rock Galactic."
+    },
+    {
+      "case": "parry-full",
+      "condition": "level-v2-es",
+      "lang": "spanish",
+      "hidden_notes_left_out": 0,
+      "text": "El juego es Deep Rock Galactic Survivor.\nEl jugador está en la fase de práctica y consulta de estrategias.\nNo hay nada terminado en la conversación.\nEl jugador no está atascado en un punto específico.\nSe ha consultado sobre el parry en juegos de acción.\nSe ha consultado sobre el boon de Caos en Hades.\nSe han dado consejos sobre mejoras de armas tempranas para Driller, Scout, Gunner y Engineer.\nSe ha explicado cómo usar Nitra para Scout, Gunner y Engineer.\nSe han proporcionado guías de juego detalladas para Driller, Scout, Gunner y Engineer."
+    }
+  ]
+}

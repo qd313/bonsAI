@@ -1,0 +1,671 @@
+[
+  {
+    "name": "log level is trimmed before matching",
+    "input": {
+      "desktop_app_log_level": " verbose "
+    },
+    "expected": {
+      "desktop_app_log_level": "verbose"
+    }
+  },
+  {
+    "name": "log level stays case-sensitive",
+    "input": {
+      "desktop_app_log_level": "VERBOSE"
+    },
+    "expected": {
+      "desktop_app_log_level": "off"
+    }
+  },
+  {
+    "name": "think effort is trimmed before matching",
+    "input": {
+      "ask_think_effort": " high "
+    },
+    "expected": {
+      "ask_think_effort": "high"
+    }
+  },
+  {
+    "name": "think effort stays case-sensitive",
+    "input": {
+      "ask_think_effort": "HIGH"
+    },
+    "expected": {
+      "ask_think_effort": "off"
+    }
+  },
+  {
+    "name": "unknown think effort falls back to off, never to thinking on",
+    "input": {
+      "ask_think_effort": "maximum"
+    },
+    "expected": {
+      "ask_think_effort": "off"
+    }
+  },
+  {
+    "name": "tab resume mode is trimmed before matching",
+    "input": {
+      "tab_resume_mode": " always_main "
+    },
+    "expected": {
+      "tab_resume_mode": "always_main"
+    }
+  },
+  {
+    "name": "unknown tab resume mode falls back to resume, not to a disabled state",
+    "input": {
+      "tab_resume_mode": "off"
+    },
+    "expected": {
+      "tab_resume_mode": "resume"
+    }
+  },
+  {
+    "name": "corpus path rejects traversal",
+    "input": {
+      "rag_corpus_path": "../../etc/passwd"
+    },
+    "expected": {
+      "rag_corpus_path": ""
+    }
+  },
+  {
+    "name": "corpus path rejects backslash traversal",
+    "input": {
+      "rag_corpus_path": "a\\..\\b"
+    },
+    "expected": {
+      "rag_corpus_path": ""
+    }
+  },
+  {
+    "name": "corpus path keeps an absolute path",
+    "input": {
+      "rag_corpus_path": "  /home/deck/kb  "
+    },
+    "expected": {
+      "rag_corpus_path": "/home/deck/kb"
+    }
+  },
+  {
+    "name": "corpus version accepts an unquoted number",
+    "input": {
+      "rag_corpus_version": 123
+    },
+    "expected": {
+      "rag_corpus_version": "123"
+    }
+  },
+  {
+    "name": "corpus version is trimmed",
+    "input": {
+      "rag_corpus_version": "  2026.08.03  "
+    },
+    "expected": {
+      "rag_corpus_version": "2026.08.03"
+    }
+  },
+  {
+    "name": "legacy fade flag follows the live animation field",
+    "input": {
+      "preset_chip_animation": "carousel"
+    },
+    "expected": {
+      "preset_chip_animation": "carousel",
+      "preset_chip_fade_animation_enabled": false
+    }
+  },
+  {
+    "name": "legacy fade flag false migrates to static",
+    "input": {
+      "preset_chip_fade_animation_enabled": false
+    },
+    "expected": {
+      "preset_chip_animation": "static",
+      "preset_chip_fade_animation_enabled": false
+    }
+  },
+  {
+    "name": "legacy stream animation value migrates to decode",
+    "input": {
+      "preset_chip_animation": "stream"
+    },
+    "expected": {
+      "preset_chip_animation": "decode",
+      "preset_chip_fade_animation_enabled": false
+    }
+  },
+  {
+    "name": "ask mode migrates deep to expert",
+    "input": {
+      "ask_mode": "deep"
+    },
+    "expected": {
+      "ask_mode": "expert"
+    }
+  },
+  {
+    "name": "screenshot dimension migrates to a preset",
+    "input": {
+      "screenshot_max_dimension": 1920
+    },
+    "expected": {
+      "screenshot_attachment_preset": "mid"
+    }
+  },
+  {
+    "name": "legacy debug tab flag shows the developer tab",
+    "input": {
+      "show_debug_tab": true
+    },
+    "expected": {
+      "show_developer_tab": true
+    }
+  },
+  {
+    "name": "named hosts are trimmed and rejected when blank",
+    "input": {
+      "named_ollama_hosts": [
+        {
+          "label": "  L  ",
+          "host": "  h  "
+        },
+        {
+          "label": "",
+          "host": "x"
+        }
+      ]
+    },
+    "expected": {
+      "named_ollama_hosts": [
+        {
+          "label": "L",
+          "host": "h"
+        }
+      ]
+    }
+  },
+  {
+    "name": "routing order dedupes and trims",
+    "input": {
+      "text_model_routing_order": [
+        "llama3",
+        "llama3",
+        "  qwen  "
+      ]
+    },
+    "expected": {
+      "text_model_routing_order": [
+        "llama3",
+        "qwen"
+      ]
+    }
+  },
+  {
+    "name": "capabilities accept only true",
+    "input": {
+      "capabilities": {
+        "filesystem_write": "yes"
+      }
+    },
+    "expected": {
+      "capabilities": {
+        "filesystem_write": false,
+        "media_library_access": false,
+        "steam_logs_read": false,
+        "microphone_access": false,
+        "internet_downloads": false
+      }
+    }
+  },
+  {
+    "name": "latency warning is pulled below the timeout",
+    "input": {
+      "latency_warning_seconds": 500,
+      "request_timeout_seconds": 5
+    },
+    "expected": {
+      "latency_warning_seconds": 300,
+      "request_timeout_seconds": 310
+    }
+  },
+  {
+    "name": "spoiler masking stays on unless explicitly false",
+    "input": {
+      "strategy_spoiler_masking_enabled": "no"
+    },
+    "expected": {
+      "strategy_spoiler_masking_enabled": true
+    }
+  },
+  {
+    "name": "knowledge base needs an explicit true",
+    "input": {
+      "use_local_knowledge_base": "yes"
+    },
+    "expected": {
+      "use_local_knowledge_base": false
+    }
+  },
+  {
+    "name": "hybrid retrieval stays on unless explicitly false",
+    "input": {
+      "rag_hybrid_retrieval_enabled": "off"
+    },
+    "expected": {
+      "rag_hybrid_retrieval_enabled": true
+    }
+  },
+  {
+    "name": "hybrid retrieval honours an explicit false",
+    "input": {
+      "rag_hybrid_retrieval_enabled": false
+    },
+    "expected": {
+      "rag_hybrid_retrieval_enabled": false
+    }
+  },
+  {
+    "name": "frozen test chips: a non-list is discarded",
+    "input": {
+      "dev_frozen_test_chips": "how do i beat the boss"
+    },
+    "expected": {
+      "dev_frozen_test_chips": []
+    }
+  },
+  {
+    "name": "frozen test chips: entries are trimmed, blanks and non-strings dropped, order kept",
+    "input": {
+      "dev_frozen_test_chips": [
+        "  what is red sugar for  ",
+        "",
+        7,
+        null,
+        "how do i beat the twins"
+      ]
+    },
+    "expected": {
+      "dev_frozen_test_chips": [
+        "what is red sugar for",
+        "how do i beat the twins"
+      ]
+    }
+  },
+  {
+    "name": "frozen test chips: duplicates are dropped, first position wins",
+    "input": {
+      "dev_frozen_test_chips": [
+        "a",
+        "b",
+        "a"
+      ]
+    },
+    "expected": {
+      "dev_frozen_test_chips": [
+        "a",
+        "b"
+      ]
+    }
+  },
+  {
+    "name": "frozen test chips: capped at twelve",
+    "input": {
+      "dev_frozen_test_chips": [
+        "q0",
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10",
+        "q11",
+        "q12",
+        "q13",
+        "q14",
+        "q15",
+        "q16",
+        "q17",
+        "q18",
+        "q19"
+      ]
+    },
+    "expected": {
+      "dev_frozen_test_chips": [
+        "q0",
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10",
+        "q11"
+      ]
+    }
+  },
+  {
+    "name": "a setting the code no longer knows about does not reset the rest",
+    "input": {
+      "a_setting_that_no_longer_exists": true,
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose"
+    },
+    "expected": {
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose"
+    }
+  },
+  {
+    "name": "a settings file still carrying the deleted streaming switch loads quietly and leaves the rest alone",
+    "input": {
+      "bonsai_token_streaming_enabled": true,
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "ollama_local_on_deck": true
+    },
+    "expected": {
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "ollama_local_on_deck": true
+    }
+  },
+  {
+    "name": "an old settings file predating the boot preload switch loads it off and leaves everything else untouched",
+    "input": {
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    },
+    "expected": {
+      "dev_preload_ask_model": false,
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    }
+  },
+  {
+    "name": "an old settings file predating the one-chip switch loads two chips and leaves everything else untouched",
+    "input": {
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    },
+    "expected": {
+      "preset_single_chip": false,
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    }
+  },
+  {
+    "name": "an old settings file predating the startup-entry switch loads it off and leaves everything else untouched",
+    "input": {
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    },
+    "expected": {
+      "ollama_local_autostart": false,
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    }
+  },
+  {
+    "name": "the startup-entry switch needs an explicit true, a truthy string does not enable it",
+    "input": {
+      "ollama_local_autostart": "yes"
+    },
+    "expected": {
+      "ollama_local_autostart": false
+    }
+  },
+  {
+    "name": "an old settings file predating the Terse stop keeps its reply style and has no terse_mode key",
+    "input": {
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    },
+    "expected": {
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    }
+  },
+  {
+    "name": "the old Terse switch saved on lands the slider on its Terse stop, over whatever style was saved",
+    "input": {
+      "terse_mode": true,
+      "reply_verbosity": "detailed"
+    },
+    "expected": {
+      "reply_verbosity": "terse"
+    }
+  },
+  {
+    "name": "the old Terse switch saved off leaves the slider where it was",
+    "input": {
+      "terse_mode": false,
+      "reply_verbosity": "detailed"
+    },
+    "expected": {
+      "reply_verbosity": "detailed"
+    }
+  },
+  {
+    "name": "the old Terse switch needs an explicit true, a truthy string does not move the slider",
+    "input": {
+      "terse_mode": "yes",
+      "reply_verbosity": "caveman"
+    },
+    "expected": {
+      "reply_verbosity": "caveman"
+    }
+  },
+  {
+    "name": "the Terse stop saved on the slider stays on it",
+    "input": {
+      "reply_verbosity": "terse"
+    },
+    "expected": {
+      "reply_verbosity": "terse"
+    }
+  },
+  {
+    "name": "an unknown reply style still falls back to balanced, not to Terse",
+    "input": {
+      "reply_verbosity": "terse-ish"
+    },
+    "expected": {
+      "reply_verbosity": "balanced"
+    }
+  },
+  {
+    "name": "an unknown chat text size falls back to normal, never to a size nobody picked",
+    "input": {
+      "chat_text_size": "huge"
+    },
+    "expected": {
+      "chat_text_size": "normal"
+    }
+  },
+  {
+    "name": "a chat text size is trimmed before matching",
+    "input": {
+      "chat_text_size": " large "
+    },
+    "expected": {
+      "chat_text_size": "large"
+    }
+  },
+  {
+    "name": "an old settings file with no chat text size reads as normal",
+    "input": {},
+    "expected": {
+      "chat_text_size": "normal"
+    }
+  },
+  {
+    "name": "scramble style is trimmed before matching",
+    "input": {
+      "stream_scramble_style": " chip "
+    },
+    "expected": {
+      "stream_scramble_style": "chip"
+    }
+  },
+  {
+    "name": "scramble style stays case-sensitive",
+    "input": {
+      "stream_scramble_style": "CHIP"
+    },
+    "expected": {
+      "stream_scramble_style": "settle"
+    }
+  },
+  {
+    "name": "an unknown scramble style falls back to settle",
+    "input": {
+      "stream_scramble_style": "bounce"
+    },
+    "expected": {
+      "stream_scramble_style": "settle"
+    }
+  },
+  {
+    "name": "an unknown scramble colour falls back to green",
+    "input": {
+      "stream_scramble_color": "purple"
+    },
+    "expected": {
+      "stream_scramble_color": "green"
+    }
+  },
+  {
+    "name": "scramble colour stays case-sensitive",
+    "input": {
+      "stream_scramble_color": "SAME"
+    },
+    "expected": {
+      "stream_scramble_color": "green"
+    }
+  },
+  {
+    "name": "scramble settle time clamps below the minimum",
+    "input": {
+      "stream_scramble_settle_ms": 1
+    },
+    "expected": {
+      "stream_scramble_settle_ms": 100
+    }
+  },
+  {
+    "name": "scramble settle time clamps above the maximum",
+    "input": {
+      "stream_scramble_settle_ms": 999999
+    },
+    "expected": {
+      "stream_scramble_settle_ms": 1000
+    }
+  },
+  {
+    "name": "a non-whole scramble settle time is cut down to its whole part",
+    "input": {
+      "stream_scramble_settle_ms": 450.9
+    },
+    "expected": {
+      "stream_scramble_settle_ms": 450
+    }
+  },
+  {
+    "name": "a string scramble settle time gives the default",
+    "input": {
+      "stream_scramble_settle_ms": "400"
+    },
+    "expected": {
+      "stream_scramble_settle_ms": 400
+    }
+  },
+  {
+    "name": "a bool scramble settle time gives the default, not true's numeric value",
+    "input": {
+      "stream_scramble_settle_ms": true
+    },
+    "expected": {
+      "stream_scramble_settle_ms": 400
+    }
+  },
+  {
+    "name": "a null scramble settle time gives the default",
+    "input": {
+      "stream_scramble_settle_ms": null
+    },
+    "expected": {
+      "stream_scramble_settle_ms": 400
+    }
+  },
+  {
+    "name": "an old settings file predating the streaming scramble loads all four settings at their defaults and leaves everything else untouched",
+    "input": {
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    },
+    "expected": {
+      "stream_scramble_enabled": false,
+      "stream_scramble_style": "settle",
+      "stream_scramble_color": "green",
+      "stream_scramble_settle_ms": 400,
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    }
+  },
+  {
+    "name": "a saved Remember-what-I-typed of Search loads as off",
+    "input": {
+      "unified_input_persistence_mode": "persist_search_only"
+    },
+    "expected": {
+      "unified_input_persistence_mode": "no_persist"
+    }
+  },
+  {
+    "name": "a saved Remember-what-I-typed of All stays on",
+    "input": {
+      "unified_input_persistence_mode": "persist_all"
+    },
+    "expected": {
+      "unified_input_persistence_mode": "persist_all"
+    }
+  },
+  {
+    "name": "a saved Remember-what-I-typed of None stays off",
+    "input": {
+      "unified_input_persistence_mode": "no_persist"
+    },
+    "expected": {
+      "unified_input_persistence_mode": "no_persist"
+    }
+  },
+  {
+    "name": "an unknown Remember-what-I-typed value is off",
+    "input": {
+      "unified_input_persistence_mode": "persist_everything"
+    },
+    "expected": {
+      "unified_input_persistence_mode": "no_persist"
+    }
+  }
+]

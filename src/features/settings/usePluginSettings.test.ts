@@ -1,0 +1,633 @@
+import { act, renderHook, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { call } from "@decky/api";
+import { usePluginSettings } from "./usePluginSettings";
+import { defaultSettingsFixture } from "../../test-harness/rpcFixtures";
+import { dispatchFakeRpc, getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
+import { normalizeSettings } from "./bonsaiSettingsNormalizers";
+import { DEFAULT_LATENCY_WARNING_SECONDS } from "./bonsaiSettingsSchema";
+import { peekDeveloperTabShown, resetDeveloperTabSignalForTests } from "./developerTabSignal";
+describe("usePluginSettings", () => {
+  beforeEach(() => {
+    resetFakeDeckyRpc();
+    vi.mocked(call).mockImplementation((method: string, ...args: unknown[]) =>
+      dispatchFakeRpc(method, args) as ReturnType<typeof call>
+    );
+  });
+
+  it("publishes the Developer tab setting for controls no prop reaches (plan 72, Find LAN)", async () => {
+    resetDeveloperTabSignalForTests();
+    const custom = defaultSettingsFixture();
+    custom.show_developer_tab = true;
+    setRpcHandler("load_settings", () => custom);
+
+    const { result } = renderHook(() => usePluginSettings());
+
+    await waitFor(() => expect(peekDeveloperTabShown()).toBe(true));
+    act(() => result.current.setShowDeveloperTab(false));
+    expect(peekDeveloperTabShown()).toBe(false);
+  });
+
+  describe("first run (a start with no settings file)", () => {
+    it("says nothing is known until the back end has answered, then passes on a true", async () => {
+      setRpcHandler("get_settings_first_run", () => ({ first_run: true }));
+      const { result } = renderHook(() => usePluginSettings());
+      expect(result.current.settingsFirstRun).toBeNull();
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      expect(result.current.settingsFirstRun).toBe(true);
+    });
+
+    it("passes on false when the back end says a settings file was there", async () => {
+      setRpcHandler("get_settings_first_run", () => ({ first_run: false }));
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      expect(result.current.settingsFirstRun).toBe(false);
+    });
+
+    it("counts a failed or odd answer as not a first run, so a broken call never wipes anyone's flags", async () => {
+      setRpcHandler("get_settings_first_run", () => {
+        throw new Error("backend unavailable");
+      });
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      expect(result.current.settingsFirstRun).toBe(false);
+    });
+
+    it("never turns the screen's settings loaded before the first-run answer is in", async () => {
+      let answer: (v: { first_run: boolean }) => void = () => {};
+      setRpcHandler("get_settings_first_run", () => new Promise((resolve) => (answer = resolve)));
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(getRpcCallLog().some((c) => c.method === "load_settings")).toBe(true));
+      await act(async () => {
+        await Promise.resolve();
+      });
+      expect(result.current.settingsLoaded).toBe(false);
+      await act(async () => answer({ first_run: true }));
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      expect(result.current.settingsFirstRun).toBe(true);
+    });
+  });
+
+  it("a fresh install, with nothing saved, opens with Run AI on this Deck switched on", async () => {
+    setRpcHandler("load_settings", () => normalizeSettings({}));
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    expect(result.current.ollamaLocalOnDeck).toBe(true);
+  });
+
+  it("an install that saved Run AI on this Deck as off keeps it off", async () => {
+    setRpcHandler("load_settings", () => normalizeSettings({ ollama_local_on_deck: false }));
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    expect(result.current.ollamaLocalOnDeck).toBe(false);
+  });
+
+  it("loads settings on mount via load_settings RPC", async () => {
+    const custom = defaultSettingsFixture();
+    custom.latency_warning_seconds = 55;
+    setRpcHandler("load_settings", () => custom);
+
+    const { result } = renderHook(() => usePluginSettings());
+
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    expect(result.current.latencyWarningSeconds).toBe(55);
+    expect(getRpcCallLog().some((c) => c.method === "load_settings")).toBe(true);
+  });
+
+  it("debounces save_settings after state change", async () => {
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+
+    const savesBefore = getRpcCallLog().filter((c) => c.method === "save_settings").length;
+
+    act(() => {
+      result.current.setLatencyWarningSeconds(99);
+    });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 450));
+    });
+    expect(getRpcCallLog().filter((c) => c.method === "save_settings").length).toBeGreaterThan(savesBefore);
+  });
+
+  it("falls back to defaults when load_settings fails", async () => {
+    setRpcHandler("load_settings", async () => {
+      throw new Error("disk read failed");
+    });
+
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    expect(result.current.latencyWarningSeconds).toBe(DEFAULT_LATENCY_WARNING_SECONDS);
+  });
+
+  it("does not save_settings after load_settings fails", async () => {
+    setRpcHandler("load_settings", async () => {
+      throw new Error("disk read failed");
+    });
+
+    renderHook(() => usePluginSettings());
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 500));
+    });
+    expect(getRpcCallLog().filter((c) => c.method === "save_settings")).toHaveLength(0);
+  });
+
+  it("pauseDebouncedSettingsSave cancels a pending debounced save", async () => {
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 500));
+    });
+    const savesBefore = getRpcCallLog().filter((c) => c.method === "save_settings").length;
+
+    act(() => {
+      result.current.setLatencyWarningSeconds(77);
+    });
+    await act(async () => {
+      await result.current.pauseDebouncedSettingsSave();
+    });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 450));
+    });
+
+    const newSaves = getRpcCallLog().filter((c) => c.method === "save_settings").slice(savesBefore);
+    const latencies = newSaves.map(
+      (entry) => (entry.args[0] as { latency_warning_seconds?: number }).latency_warning_seconds
+    );
+    expect(latencies).not.toContain(77);
+  });
+
+  /*
+   * D18, option A, locked 2026-08-27: a failed read shows defaults — all of them, no exceptions.
+   *
+   * This used to read the hook's own source text and compare which `setXxx(...)` calls appeared
+   * in `hydrateFromSettings` versus the failed-load reset -- catching drift between six
+   * hand-written copies of the same ~48-field list. That shape is gone (D14): both paths now
+   * build one complete `BonsaiSettingsSnapshotInput` from `SETTINGS_FIELD_BACKEND_KEY` and call
+   * `setSettings` with it in a single line, so a field missing from one and not the other fails
+   * to *compile* (the table is typed `Record<keyof BonsaiSettingsSnapshotInput, ...>`), not just
+   * to test. This test checks the *behavior* the old one stood in for instead: a load failure
+   * must show the exact same values loading a genuinely empty settings object would show, for
+   * every field, not a mix of some fields defaulted and others stuck on whatever they last held.
+   */
+  it("a failed load shows the exact same values as loading a genuinely empty settings object, for every field", async () => {
+    const settingsValuesOnly = (hookResult: Record<string, unknown>) => {
+      const out: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(hookResult)) {
+        if (typeof value === "function") continue; // the ~48 setSomething functions
+        if (key === "settingsLoaded") continue;
+        out[key] = value;
+      }
+      return out;
+    };
+
+    setRpcHandler("load_settings", () => ({}));
+    const { result: emptyLoadResult } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(emptyLoadResult.current.settingsLoaded).toBe(true));
+
+    setRpcHandler("load_settings", async () => {
+      throw new Error("disk read failed");
+    });
+    const { result: failedLoadResult } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(failedLoadResult.current.settingsLoaded).toBe(true));
+
+    const emptyLoadValues = settingsValuesOnly(emptyLoadResult.current);
+    const failedLoadValues = settingsValuesOnly(failedLoadResult.current);
+    // Not vacuous: there really are ~48 fields being compared, not an empty object matching itself.
+    expect(Object.keys(failedLoadValues).length).toBeGreaterThan(30);
+    expect(failedLoadValues).toEqual(emptyLoadValues);
+  });
+
+  /*
+   * Bug 2 (roadmap "A new setting can quietly stop working in one place"): a setting missing from
+   * `SETTINGS_FIELD_BACKEND_KEY` in usePluginSettings.ts no longer builds (TypeScript requires
+   * every key of `BonsaiSettingsSnapshotInput`), but this test catches it independently at
+   * runtime too -- deliberately not reusing that same table, so a mistake in the table itself
+   * cannot hide from both checks at once. It walks every key the wire shape (`BonsaiSettings`)
+   * declares, converts snake_case to camelCase with a plain regex, and confirms the hook's
+   * returned object actually has a value there after loading a fully custom settings object. A
+   * field the table forgets shows up as `undefined` here, not as a coincidental default.
+   */
+  it("every setting the backend can save shows up as a value on the hook's returned object", async () => {
+    const custom = defaultSettingsFixture();
+    // Distinctive, obviously-non-default markers for a few fields so a missing table entry shows
+    // up as `undefined` rather than coincidentally matching whatever the default already is.
+    custom.dev_frozen_test_chips = ["marker question one", "marker question two", "marker question three"];
+    custom.reply_language = "german";
+    custom.text_model_routing_order = ["qwen2.5:7b"];
+
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+
+    act(() => {
+      result.current.hydrateFromSettings(custom);
+    });
+
+    const wireKeys = Object.keys(custom);
+    // Not vacuous: there really are ~48 fields on the wire shape being walked here.
+    expect(wireKeys.length).toBeGreaterThan(30);
+    for (const wireKey of wireKeys) {
+      const camelKey = wireKey.replace(/_([a-z0-9])/g, (_match, c: string) => c.toUpperCase());
+      expect(
+        (result.current as Record<string, unknown>)[camelKey],
+        `expected a defined value for "${camelKey}" (from wire field "${wireKey}")`
+      ).not.toBeUndefined();
+    }
+    expect(result.current.devFrozenTestChips).toEqual([
+      "marker question one",
+      "marker question two",
+      "marker question three",
+    ]);
+  });
+
+  it("flushSettingsSnapshotNow persists the latest hydrated snapshot", async () => {
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+
+    let saved: { latency_warning_seconds?: number } | undefined;
+    await act(async () => {
+      result.current.hydrateFromSettings({
+        ...defaultSettingsFixture(),
+        latency_warning_seconds: 60,
+      });
+      saved = await result.current.flushSettingsSnapshotNow();
+    });
+
+    expect(saved?.latency_warning_seconds).toBe(60);
+  });
+
+  /*
+   * The pinned QA test chips bug (roadmap "The pinned test sentences stop showing after the
+   * first question"): the automatic background save used to send every one of the ~48 settings
+   * on every change, not just the one that changed. That is harmless when the plugin's own save
+   * is the only writer, but it is not: a QA batch written straight to settings.json, a corpus
+   * download finishing in the background, or the sanitizer keyword command's own save can all
+   * change a field on disk that this tab never touched. The very next autosave -- triggered by
+   * changing one unrelated setting -- then sent the plugin's stale belief about every other field
+   * and silently reverted that outside change. Sending only the fields that actually changed
+   * fixes this: an untouched field is simply absent from the payload, so the backend's own
+   * merge-with-fresh-disk-read (`save_settings` in main.py) leaves it alone.
+   */
+  it("the automatic background save sends only the field that changed, not the whole settings object", async () => {
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+
+    act(() => {
+      result.current.setLatencyWarningSeconds(99);
+    });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 450));
+    });
+
+    const saveCalls = getRpcCallLog().filter((c) => c.method === "save_settings");
+    expect(saveCalls.length).toBeGreaterThan(0);
+    const lastPayload = saveCalls[saveCalls.length - 1].args[0] as Record<string, unknown>;
+    expect(lastPayload).toEqual({ latency_warning_seconds: 99 });
+  });
+
+  it("a field the rig hand-edits on disk survives the next unrelated autosave", async () => {
+    // A stand-in for settings.json being hand-edited underneath the running plugin -- the way a
+    // pinned QA batch is staged, since no test sentence may be typed by thumb on the Deck. The
+    // fake backend behaves like the real one: every save merges the incoming payload over a
+    // fresh read of "disk", never over what the frontend last believed.
+    let disk: Record<string, unknown> = { ...defaultSettingsFixture(), dev_frozen_test_chips: ["pinned question one", "pinned question two", "pinned question three"] };
+    setRpcHandler("load_settings", () => disk);
+    setRpcHandler("save_settings", (...args: unknown[]) => {
+      const payload = (args[0] as Record<string, unknown>) ?? {};
+      disk = { ...disk, ...payload };
+      return disk;
+    });
+
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    expect(result.current.devFrozenTestChips).toEqual([
+      "pinned question one",
+      "pinned question two",
+      "pinned question three",
+    ]);
+
+    // Someone edits settings.json directly again, behind the running plugin's back, exactly the
+    // way the rig stages a fresh QA batch without a reload.
+    disk = { ...disk, dev_frozen_test_chips: ["a brand new pinned question"] };
+
+    // Something unrelated changes in the UI -- standing in for whatever a sent question touches.
+    act(() => {
+      result.current.setLatencyWarningSeconds(101);
+    });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 450));
+    });
+
+    expect(disk.dev_frozen_test_chips).toEqual(["a brand new pinned question"]);
+  });
+
+  /*
+   * Measured on the Deck (workshop:test-evidence/plan64-ROUTING-MERGE-01-top.json): a knowledge base
+   * download finished in the background and the back end saved its new SD-card location; then
+   * Done on the AI models screen sent the screen's whole settings copy, which still held the old
+   * internal location, and wrote it back over the new one. The tab then offered to download the
+   * library again. A popup's save now carries only what changed on screen plus its own patch.
+   */
+  it("a popup's save leaves a knowledge base location the back end wrote alone", async () => {
+    let disk: Record<string, unknown> = {
+      ...defaultSettingsFixture(),
+      rag_corpus_path: "/home/deck/.bonsai/rag",
+      rag_corpus_version: "2026.09.18",
+    };
+    setRpcHandler("load_settings", () => disk);
+    setRpcHandler("save_settings", (...args: unknown[]) => {
+      const payload = (args[0] as Record<string, unknown>) ?? {};
+      disk = { ...disk, ...payload };
+      return disk;
+    });
+
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+
+    // The download finishes behind the screen's back and the back end saves the new location.
+    disk = { ...disk, rag_corpus_path: "/run/media/deck/sd/.bonsai/rag" };
+
+    // One unsaved change on screen, then the AI models screen's Done with its own patch.
+    act(() => {
+      result.current.setLatencyWarningSeconds(77);
+    });
+    let payload: Record<string, unknown> = {};
+    await act(async () => {
+      await result.current.pauseDebouncedSettingsSave();
+      payload = result.current.buildChangedSettingsPayload({ model_allow_high_vram_fallbacks: true }) as Record<
+        string,
+        unknown
+      >;
+      result.current.hydrateFromSettings((await call("save_settings", payload)) as never);
+    });
+
+    expect(payload).toEqual({ latency_warning_seconds: 77, model_allow_high_vram_fallbacks: true });
+    expect(disk.rag_corpus_path).toBe("/run/media/deck/sd/.bonsai/rag");
+    expect(result.current.ragCorpusPath).toBe("/run/media/deck/sd/.bonsai/rag");
+  });
+
+  it("persistChangedSettingsNow saves a change at once, so closing the panel before the debounce does not lose it", async () => {
+    // Deck 2026-09-30: 'Run AI on this Deck' turned on -> a notice box opened and closed Quick
+    // Access within the 400 ms wait, the panel unmounted, and the change never reached disk.
+    const { result, unmount } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    const saves = () => getRpcCallLog().filter((c) => c.method === "save_settings");
+    const before = saves().length;
+
+    act(() => {
+      result.current.setOllamaLocalOnDeck(true);
+    });
+    await act(async () => {
+      await result.current.persistChangedSettingsNow();
+    });
+    unmount();
+
+    const sent = saves().slice(before);
+    expect(sent).toHaveLength(1);
+    expect(sent[0].args[0]).toEqual({ ollama_local_on_deck: true });
+
+    await new Promise((r) => setTimeout(r, 450));
+    expect(saves().slice(before)).toHaveLength(1);
+  });
+
+  it("persistChangedSettingsNow sends nothing when nothing changed", async () => {
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    const before = getRpcCallLog().filter((c) => c.method === "save_settings").length;
+    await act(async () => {
+      await result.current.persistChangedSettingsNow();
+    });
+    expect(getRpcCallLog().filter((c) => c.method === "save_settings").length).toBe(before);
+  });
+
+  /*
+   * Plan 78, entry C. A setting changed less than 400 ms before Quick Access closes used to be
+   * lost: closing cancels the waiting timer. Whatever is waiting now saves when the panel's page is
+   * hidden or the screen unmounts, and only the keys that changed.
+   */
+  describe("a change waiting for its 400 ms save when the panel closes", () => {
+    const saves = () => getRpcCallLog().filter((c) => c.method === "save_settings");
+    const hidePanelPage = () => {
+      Object.defineProperty(document, "visibilityState", { configurable: true, get: () => "hidden" });
+      document.dispatchEvent(new Event("visibilitychange"));
+    };
+    const showPanelPage = () => {
+      Object.defineProperty(document, "visibilityState", { configurable: true, get: () => "visible" });
+      document.dispatchEvent(new Event("visibilitychange"));
+    };
+    let disk: Record<string, unknown>;
+
+    beforeEach(() => {
+      disk = defaultSettingsFixture() as unknown as Record<string, unknown>;
+      setRpcHandler("load_settings", () => disk);
+      setRpcHandler("save_settings", (...args: unknown[]) => {
+        disk = { ...disk, ...((args[0] as Record<string, unknown>) ?? {}) };
+        return disk;
+      });
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+      showPanelPage();
+    });
+
+    it("saves the changed key when the page is hidden 100 ms after the change", async () => {
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+      vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+      expect(saves().length).toBe(before); // the 400 ms wait is still running
+      await act(async () => {
+        hidePanelPage();
+        await vi.advanceTimersByTimeAsync(0);
+      });
+
+      const sent = saves().slice(before);
+      expect(sent).toHaveLength(1);
+      expect(sent[0].args[0]).toEqual({ show_onscreen_debug_hud: true });
+      expect(disk.show_onscreen_debug_hud).toBe(true);
+
+      // The cancelled wait must not save a second time.
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(600);
+      });
+      expect(saves().slice(before)).toHaveLength(1);
+    });
+
+    it("never writes a stale whole copy: a key the back end changed on its own is left alone", async () => {
+      disk = { ...disk, rag_corpus_path: "/home/deck/.bonsai/rag" };
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+      vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+
+      // A download finishes behind the screen's back and the back end saves the new place.
+      disk = { ...disk, rag_corpus_path: "/run/media/deck/sd/.bonsai/rag" };
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+        hidePanelPage();
+        await vi.advanceTimersByTimeAsync(0);
+      });
+
+      const sent = saves().slice(before);
+      expect(sent).toHaveLength(1);
+      expect(Object.keys(sent[0].args[0] as object)).toEqual(["show_onscreen_debug_hud"]);
+      expect(disk.rag_corpus_path).toBe("/run/media/deck/sd/.bonsai/rag");
+    });
+
+    it("saves the changed key when the screen unmounts 100 ms after the change", async () => {
+      const { result, unmount } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+      vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+      unmount();
+      await vi.advanceTimersByTimeAsync(600);
+
+      const sent = saves().slice(before);
+      expect(sent).toHaveLength(1);
+      expect(sent[0].args[0]).toEqual({ show_onscreen_debug_hud: true });
+    });
+
+    it("hiding then unmounting saves once, and hiding with nothing waiting saves nothing", async () => {
+      const { result, unmount } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+
+      await act(async () => {
+        hidePanelPage();
+      });
+      expect(saves().length).toBe(before);
+
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await act(async () => {
+        hidePanelPage();
+      });
+      unmount();
+      await new Promise((r) => setTimeout(r, 50));
+      expect(saves().slice(before)).toHaveLength(1);
+    });
+
+    it("saves nothing on close when the first read of the settings failed", async () => {
+      setRpcHandler("load_settings", async () => {
+        throw new Error("disk read failed");
+      });
+      const { result, unmount } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await act(async () => {
+        hidePanelPage();
+      });
+      unmount();
+      await new Promise((r) => setTimeout(r, 50));
+      expect(saves()).toHaveLength(0);
+    });
+  });
+
+  /*
+   * Plan 78 round 2 (Deck 2026-10-01, P78-ORDER-PRUNE): the screen loaded with an empty try order,
+   * the models screen then saved its own order straight to disk, and the back end pruned it. One
+   * unrelated switch changed later wrote the screen's OLD empty order back over the newer one.
+   * Cause: a save's response refreshed the "last confirmed disk state" without telling the screen,
+   * so the next save saw the old on-screen value as a change the person had made.
+   */
+  describe("a key the person did not change is never sent, whoever changed it on disk", () => {
+    const saves = () => getRpcCallLog().filter((c) => c.method === "save_settings");
+    const settle = () => act(async () => { await new Promise((r) => setTimeout(r, 450)); });
+    let disk: Record<string, unknown>;
+
+    beforeEach(() => {
+      disk = { ...defaultSettingsFixture(), text_model_routing_order: [] } as Record<string, unknown>;
+      setRpcHandler("load_settings", () => disk);
+      setRpcHandler("save_settings", (...args: unknown[]) => {
+        disk = { ...disk, ...((args[0] as Record<string, unknown>) ?? {}) };
+        return disk;
+      });
+    });
+
+    it("the Deck sequence: the models screen saves a new try order, then two unrelated changes", async () => {
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+
+      // The models screen's own save (a direct call, no hook state or baseline touched), then the
+      // back end prunes the order behind the screen's back.
+      await act(async () => {
+        await call("save_settings", { text_model_routing_order: ["gemma4:e2b-it-qat", "qwen2.5:1.5b"] });
+      });
+      disk = { ...disk, text_model_routing_order: ["gemma4:e2b-it-qat"] };
+
+      // One unrelated change and its save: the response brings the new order into the baseline.
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await settle();
+      // The next unrelated change must not carry the order along.
+      act(() => result.current.setPresetSingleChip(false));
+      await settle();
+
+      const sent = saves().slice(before + 1);
+      expect(sent.length).toBeGreaterThan(0);
+      for (const c of sent) expect(Object.keys(c.args[0] as object)).not.toContain("text_model_routing_order");
+      expect(disk.text_model_routing_order).toEqual(["gemma4:e2b-it-qat"]);
+      // And the screen itself follows the disk for a key the person never touched.
+      expect(result.current.textModelRoutingOrder).toEqual(["gemma4:e2b-it-qat"]);
+    });
+
+    it("the same for a key only the back end changed (the knowledge base location)", async () => {
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+
+      disk = { ...disk, rag_corpus_path: "/run/media/deck/sd/.bonsai/rag" };
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await settle();
+      act(() => result.current.setPresetSingleChip(false));
+      await settle();
+
+      for (const c of saves().slice(before)) expect(Object.keys(c.args[0] as object)).not.toContain("rag_corpus_path");
+      expect(disk.rag_corpus_path).toBe("/run/media/deck/sd/.bonsai/rag");
+      expect(result.current.ragCorpusPath).toBe("/run/media/deck/sd/.bonsai/rag");
+    });
+
+    it("a key the person did change still wins over a newer value on disk", async () => {
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+
+      disk = { ...disk, text_model_routing_order: ["from-the-back-end"] };
+      act(() => {
+        result.current.setShowOnscreenDebugHud(true);
+        result.current.setTextModelRoutingOrder(["chosen-on-this-screen"]);
+      });
+      await settle();
+      expect(disk.text_model_routing_order).toEqual(["chosen-on-this-screen"]);
+      expect(result.current.textModelRoutingOrder).toEqual(["chosen-on-this-screen"]);
+    });
+
+    it("the quick-close save follows the same rule", async () => {
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      const before = saves().length;
+
+      disk = { ...disk, text_model_routing_order: ["pruned-by-back-end"] };
+      act(() => result.current.setShowOnscreenDebugHud(true));
+      await act(async () => {
+        await result.current.persistChangedSettingsNow();
+      });
+      act(() => result.current.setPresetSingleChip(false));
+      await act(async () => {
+        await result.current.persistChangedSettingsNow();
+      });
+
+      for (const c of saves().slice(before)) expect(Object.keys(c.args[0] as object)).not.toContain("text_model_routing_order");
+      expect(disk.text_model_routing_order).toEqual(["pruned-by-back-end"]);
+    });
+  });
+});

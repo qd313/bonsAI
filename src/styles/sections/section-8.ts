@@ -1,10 +1,48 @@
+/**
+ * Title: The icon row under the Ask box, and its dropdown menus
+ *
+ * Purpose: Styles the strip of icons along the bottom of the question box
+ * (attach, the game tag, Ask mode, the mic, the X and the small Ask button
+ * at its right end since plan 84), the two dropdown menus that open from
+ * that strip (choosing an Ask mode, and choosing what to attach), and the
+ * small Ask button itself — including the brighter look it gets once there
+ * is something to send, and the dimmed one while an answer is being written.
+ *
+ *     ┌─ Ask box ──────────────────────────────────────┐
+ *     │  What should I upgrade first?                   │
+ *     ├──────────────────────────────────────────────────┤
+ *     │  [📎] (game)      [mode ▾] [mic] [x] [Ask →]    │  <- this file
+ *     └────────┬───────────────────────────────────────┘
+ *              ▼
+ *         ┌─────────────┐
+ *         │ Ask mode menu│  <- this file, opens upward from the row
+ *         └─────────────┘
+ *
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
+ *
+ * Does not: Style the typing field above the icon row — see section-5.ts
+ * for that.
+ */
 import {
   ASK_LABEL_COLOR,
   ASK_LABEL_READY_COLOR,
   ASK_READY_STATE_TRANSITION_MS,
-  UNIFIED_INPUT_ICON_STRIP_PAD_X_PX,
-} from "../../features/unified-input/constants";
+  UNIFIED_INPUT_CORNER_RING_ROOM_PX,
+} from "../../shared/constants";
+import { textPx } from "../textPx";
 
+/**
+ * In: nothing.
+ * Out: a block of CSS text.
+ * Can go wrong: nothing — this always returns the same fixed string, but
+ * the comments inside it explain two Deck-only quirks worth knowing before
+ * touching it: the CSS engine here predates support for the `:has()`
+ * selector, so a menu's open/closed state is toggled by a plain class
+ * instead; and stacking order (`z-index`) has to be set by hand in a
+ * couple of spots so an open dropdown paints above the Ask row rather than
+ * being hidden behind it.
+ */
 export function buildSection8Section(): string {
   return `
 /* ==========================================================================
@@ -14,8 +52,8 @@ export function buildSection8Section(): string {
         .bonsai-scope .bonsai-unified-input-host { border-radius: 8px; overflow: hidden; }
         /*
          * While the ask-mode dropdown is open: overflow visible for the menu, and raise stacking.
-         * The ASK row is a later PanelSectionRow, so it paints on top of this host by default;
-         * the menu extends over the ASK bar and looked like a vertical fade (ASK ::before gradient on top of rows).
+         * Later rows in the dock paint on top of this host by default (the big ASK row did, until
+         * plan 84 folded it into the strip), and the menu extends over them.
          */
         .bonsai-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open,
         .bonsai-scope .bonsai-unified-input-host.bonsai-attach-menu-open {
@@ -47,11 +85,6 @@ export function buildSection8Section(): string {
         }
         .bonsai-scope.bonsai-ask-menu-open-scope [class*="TabContentsScroll"] > div {
           overflow: visible !important;
-        }
-        /* Ask row sits below the input host — keep it under the open menu stack. */
-        .bonsai-scope.bonsai-ask-menu-open-scope .bonsai-askbar-row-host {
-          z-index: 0 !important;
-          position: relative !important;
         }
         /* Anything after the input host in the tab flow must paint under the open menu. */
         .bonsai-scope.bonsai-ask-menu-open-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open,
@@ -168,10 +201,12 @@ export function buildSection8Section(): string {
           align-self: stretch !important;
         }
 
-        /* Bottom icon strip: hug left/right corners (independent of ai-character text indent). */
+        /* Bottom icon strip: hug left/right corners (independent of ai-character text indent), with
+           room on both sides and underneath for the focus ring the question box would clip. */
         .bonsai-scope .bonsai-unified-input-bottom-actions {
-          padding-left: ${UNIFIED_INPUT_ICON_STRIP_PAD_X_PX}px !important;
-          padding-right: ${UNIFIED_INPUT_ICON_STRIP_PAD_X_PX}px !important;
+          padding-left: ${UNIFIED_INPUT_CORNER_RING_ROOM_PX}px !important;
+          padding-right: ${UNIFIED_INPUT_CORNER_RING_ROOM_PX}px !important;
+          padding-bottom: ${UNIFIED_INPUT_CORNER_RING_ROOM_PX}px !important;
           box-sizing: border-box !important;
         }
 
@@ -179,19 +214,20 @@ export function buildSection8Section(): string {
          * Must include .bonsai-unified-input-host — the section-8 column reset on
          * .bonsai-unified-input-host .Panel.Focusable:not(.bonsai-ask-mode-menu-list):not(.bonsai-attach-menu-list) has higher
          * specificity than .bonsai-unified-input-bottom-actions alone and was stacking paperclip /
-         * mode / mic vertically (see DeckCapture_20260611_201557). */
+         * mode / mic vertically (see DeckCapture_20260611_201557). Items sit on the row's centre line,
+         * as the plan 84 drawing's strip does, so the game tag's words line up with the icons. */
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions > .Panel.Focusable,
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions > .Panel.Focusable.bonsai-unified-input-actions-row {
           width: 100% !important; min-height: 100% !important;
           flex-direction: row !important; justify-content: flex-start !important;
-          align-items: flex-end !important; flex-wrap: nowrap !important;
+          align-items: center !important; flex-wrap: nowrap !important;
         }
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-unified-input-actions-left.Panel.Focusable {
           width: auto !important;
           min-width: 0 !important;
           flex: 0 0 auto !important;
           flex-direction: row !important;
-          align-items: flex-end !important;
+          align-items: center !important;
           justify-content: flex-start !important;
         }
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-unified-input-actions-right.Panel.Focusable {
@@ -200,7 +236,7 @@ export function buildSection8Section(): string {
           flex: 0 0 auto !important;
           margin-left: auto !important;
           flex-direction: row !important;
-          align-items: flex-end !important;
+          align-items: center !important;
           justify-content: flex-end !important;
         }
 
@@ -284,62 +320,66 @@ export function buildSection8Section(): string {
           opacity: 0.5 !important;
           transition: opacity ${ASK_READY_STATE_TRANSITION_MS}ms ease !important;
         }
-        .bonsai-scope .bonsai-askbar-merged .bonsai-askbar-corner-icon svg { opacity: 1; }
-
-        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary.DialogButton,
-        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary {
-          color: ${ASK_LABEL_COLOR} !important;
-          transition: color ${ASK_READY_STATE_TRANSITION_MS}ms ease !important;
-        }
-        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary span { color: inherit !important; }
-
         /*
-          Ask bar idle ↔ ready: crossfade a ::before overlay (opacity) so the lift animates smoothly; base glass stays
-          from .bonsai-glass-panel (background gradients do not interpolate reliably in all engines).
+          The small Ask button at the strip's right end (plan 84, AskStripSendButtons.tsx), drawn the way
+          the plan's drawing draws it (.d-askpill in docs/planning/assets/84-vertical-room.html): a
+          22-point pill with a faint fill and edge, the word in small capitals and a send arrow. Five
+          classes deep on purpose: the strip's button reset above squares off every other strip button
+          and strips its padding, and section 7 clears every Ask-bar target's background.
         */
-        .bonsai-scope .bonsai-askbar-merged {
-          position: relative;
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-askbar-target.bonsai-ask-pill {
+          position: relative !important;
+          height: 22px !important;
+          min-height: 22px !important;
+          /* Never narrower than its own word and arrow: the Deck measured the content 5 px wider than the
+             pill (56 in 51; letter-spacing after the last letter), plan 96 F25 (plan96-P96-F25-ASK-PILL.json). */
+          min-width: max-content !important;
+          padding: 0 8px !important;
+          margin: 0 0 0 3px !important;
+          border: 1px solid rgba(255, 255, 255, 0.18) !important;
+          border-radius: 4px !important;
+          background: rgba(255, 255, 255, 0.1) !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 3px !important;
+          box-sizing: border-box !important;
+          font-size: ${textPx(12)} !important;
+          font-weight: 800 !important;
+          font-variant: small-caps !important;
+          letter-spacing: 0.04em !important;
+          line-height: 1 !important;
+          color: ${ASK_LABEL_COLOR} !important;
           transition:
-            box-shadow ${ASK_READY_STATE_TRANSITION_MS}ms ease,
-            border-color ${ASK_READY_STATE_TRANSITION_MS}ms ease;
+            color ${ASK_READY_STATE_TRANSITION_MS}ms ease,
+            background-color ${ASK_READY_STATE_TRANSITION_MS}ms ease,
+            opacity ${ASK_READY_STATE_TRANSITION_MS}ms ease !important;
         }
-        .bonsai-scope .bonsai-askbar-merged::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          border-radius: inherit;
-          pointer-events: none;
-          z-index: 0;
-          opacity: 0;
-          transition: opacity ${ASK_READY_STATE_TRANSITION_MS}ms ease;
-          background: linear-gradient(180deg, rgba(42, 58, 76, 0.52) 0%, rgba(22, 34, 46, 0.46) 100%);
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-askbar-target.bonsai-ask-pill > span {
+          color: inherit !important;
         }
-        .bonsai-scope .bonsai-askbar-merged--ready::before {
-          opacity: 1;
+        /* Words in the box: the brighter, ready look the big Ask button had. */
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-askbar-target.bonsai-ask-pill.bonsai-ask-primary--ready {
+          color: ${ASK_LABEL_READY_COLOR} !important;
+          background: rgba(255, 255, 255, 0.14) !important;
         }
-        .bonsai-scope .bonsai-askbar-merged > * {
-          position: relative;
-          z-index: 1;
+        /* While an answer is being written it rests: dimmed, as drawn, and it cannot be pressed (disabled). */
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-askbar-target.bonsai-ask-pill.bonsai-ask-pill--resting {
+          opacity: 0.38 !important;
         }
-
-        /* Ask “ready” — border / outer ring (transitions on .bonsai-askbar-merged above) */
-        .bonsai-scope .bonsai-askbar-merged.bonsai-askbar-merged--ready.bonsai-glass-panel {
-          border-color: rgba(255, 255, 255, 0.11) !important;
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
-        }
-        .bonsai-scope .bonsai-askbar-merged.bonsai-askbar-merged--ready:focus-within {
-          border-color: rgba(255, 255, 255, 0.14) !important;
-          box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
-        }
-        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary--ready.DialogButton,
-        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary--ready { color: ${ASK_LABEL_READY_COLOR} !important; }
-        .bonsai-scope .bonsai-askbar-merged--ready .bonsai-askbar-corner-icon { opacity: 0.62 !important; }
-
-        /* Focus and Hover Effects */
-        .bonsai-scope .bonsai-askbar-merged:focus-within {
-          border-color: rgba(255, 255, 255, 0.12) !important;
-          box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+        /*
+          Room for a thumb past the drawn pill: the tap area reaches a few points further on every side,
+          into the strip's ring room, so the target is about 31 by 61 points while the pill stays as drawn.
+          A ::before, because the mode button already shows Decky's button leaves that one free.
+        */
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-askbar-target.bonsai-ask-pill::before {
+          content: "" !important;
+          position: absolute !important;
+          top: -4px !important;
+          right: -5px !important;
+          bottom: -5px !important;
+          left: -4px !important;
+          background: transparent !important;
         }
         .bonsai-scope .bonsai-askbar-target { transition: background-color 120ms ease, box-shadow 120ms ease; border: none !important; }
         .bonsai-scope .bonsai-askbar-target:focus-visible {

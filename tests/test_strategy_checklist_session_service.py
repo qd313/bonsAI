@@ -3,7 +3,7 @@ import os
 import tempfile
 import unittest
 
-from backend.services.strategy_checklist_session_service import (
+from backend.strategy.strategy_checklist_session_service import (
     clear_session_entry,
     get_session_entry,
     load_session_store,

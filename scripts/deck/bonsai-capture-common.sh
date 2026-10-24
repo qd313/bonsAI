@@ -258,16 +258,47 @@ bonsai_ensure_wfrecorder() {
   command -v wf-recorder >/dev/null 2>&1
 }
 
-bonsai_ensure_gstreamer_pipewire() {
-  if command -v gst-launch-1.0 >/dev/null 2>&1 && \
-     gst-inspect-1.0 pipewiresrc >/dev/null 2>&1; then
-    return 0
-  fi
-  if sudo pacman -Sy --needed --noconfirm gstreamer gst-plugin-pipewire gst-plugins-good ffmpeg \
-      >>/tmp/bonsai_gst_install.log 2>&1; then
-    command -v gst-launch-1.0 >/dev/null 2>&1 && gst-inspect-1.0 pipewiresrc >/dev/null 2>&1
-    return $?
-  fi
+# Core PipeWire capture stack. Prefer H.264 (gst-plugins-ugly / gst-plugin-va); fall back to
+# jpegenc/vp8enc from gst-plugins-good when SteamOS pacman keyring blocks ugly/va installs.
+BONSAI_GST_PKGS="gstreamer gst-plugin-pipewire gst-plugins-good gst-plugins-ugly gst-plugin-va ffmpeg"
+
+bonsai_gst_has_va_h264() {
+  gst-inspect-1.0 vah264enc >/dev/null 2>&1 || \
+    gst-inspect-1.0 vaapih264enc >/dev/null 2>&1 || \
+    gst-inspect-1.0 x264enc >/dev/null 2>&1
+}
+
+bonsai_gst_has_soft_encoder() {
+  gst-inspect-1.0 jpegenc >/dev/null 2>&1 || \
+    gst-inspect-1.0 vp8enc >/dev/null 2>&1
+}
+
+bonsai_gst_has_any_encoder() {
+  bonsai_gst_has_va_h264 || bonsai_gst_has_soft_encoder
+}
+
+bonsai_gst_encoder_inventory() {
+  local e
+  for e in vah264enc vaapih264enc x264enc jpegenc vp8enc; do
+    if gst-inspect-1.0 "$e" >/dev/null 2>&1; then
+      echo "$e=yes"
+    else
+      echo "$e=no"
+    fi
+  done
+}
+
+bonsai_gst_pipewire_ready() {
+  command -v gst-launch-1.0 >/dev/null 2>&1 && \
+    gst-inspect-1.0 pipewiresrc >/dev/null 2>&1
+}
+
+bonsai_gst_stack_ready() {
+  bonsai_gst_pipewire_ready && bonsai_gst_has_any_encoder
+}
+
+bonsai_try_install_gst_h264_pkgs() {
+  # Best-effort only. SteamOS often fails here (readonly / pacman-key not writable).
   case "$BONSAI_ALLOW_STEAMOS_RW" in
     0|false|FALSE|no|NO) return 1 ;;
   esac
@@ -277,14 +308,38 @@ bonsai_ensure_gstreamer_pipewire() {
   if ! sudo steamos-readonly disable >>/tmp/bonsai_gst_install.log 2>&1; then
     return 1
   fi
-  sudo pacman -Sy --needed --noconfirm gstreamer gst-plugin-pipewire gst-plugins-good ffmpeg \
+  sudo pacman-key --init >>/tmp/bonsai_gst_install.log 2>&1 || true
+  sudo pacman-key --populate archlinux >>/tmp/bonsai_gst_install.log 2>&1 || true
+  sudo pacman-key --populate holo >>/tmp/bonsai_gst_install.log 2>&1 || true
+  sudo pacman -Sy --needed --noconfirm $BONSAI_GST_PKGS \
     >>/tmp/bonsai_gst_install.log 2>&1 || true
   sudo steamos-readonly enable >>/tmp/bonsai_gst_install.log 2>&1 || true
-  command -v gst-launch-1.0 >/dev/null 2>&1 && gst-inspect-1.0 pipewiresrc >/dev/null 2>&1
+  bonsai_gst_has_va_h264
 }
 
-bonsai_gst_has_va_h264() {
-  gst-inspect-1.0 vah264enc >/dev/null 2>&1 || \
-    gst-inspect-1.0 vaapih264enc >/dev/null 2>&1 || \
-    gst-inspect-1.0 x264enc >/dev/null 2>&1
+bonsai_ensure_gstreamer_pipewire() {
+  if bonsai_gst_pipewire_ready && bonsai_gst_has_any_encoder; then
+    if ! bonsai_gst_has_va_h264; then
+      bonsai_diag "gst ensure: using soft encoder (jpegenc/vp8enc); H.264 pkgs not installed"
+      bonsai_gst_encoder_inventory | while IFS= read -r line; do bonsai_diag "  $line"; done
+    fi
+    return 0
+  fi
+  bonsai_diag "gst ensure: missing pipewire stack or any encoder; inventory before install:"
+  bonsai_gst_encoder_inventory | while IFS= read -r line; do bonsai_diag "  $line"; done
+  if sudo pacman -Sy --needed --noconfirm $BONSAI_GST_PKGS \
+      >>/tmp/bonsai_gst_install.log 2>&1; then
+    if bonsai_gst_stack_ready; then
+      return 0
+    fi
+  fi
+  if bonsai_try_install_gst_h264_pkgs && bonsai_gst_stack_ready; then
+    return 0
+  fi
+  if bonsai_gst_stack_ready; then
+    return 0
+  fi
+  bonsai_diag "gst ensure: still missing after install; inventory:"
+  bonsai_gst_encoder_inventory | while IFS= read -r line; do bonsai_diag "  $line"; done
+  return 1
 }

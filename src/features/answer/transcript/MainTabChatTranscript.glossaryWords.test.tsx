@@ -1,0 +1,192 @@
+/**
+ * Title: Glossary words are asked for when a question appears
+ * Purpose: Pin that the transcript asks the knowledge library for the tap-to-define words of every game
+ *          it draws (the running one and each earlier turn's), once each, before any answer streams in,
+ *          and that an earlier answer then shows the words underlined.
+ * Used for: MainTabChatTranscript's glossary effect, glossaryStore and the reply renderer together.
+ * Solves: The words are no longer built in. The first words to arrive redraw an answer's paragraphs, and a
+ *         redraw during the reveal closes an opened spoiler cover, so the ask must start with the question.
+ * Does not: Check the back end's answer (tests/test_knowledge_base_glossary.py does).
+ */
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { act, render } from "@testing-library/react";
+
+import { MainTabChatTranscript } from "./MainTabChatTranscript";
+import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
+import type { AskThreadCollapsedTurn } from "../../../types/bonsaiUi";
+import { callDeckyWithTimeout } from "../../../shared/deckyCall";
+import { TEST_GLOSSARY_APP_ID, TEST_GLOSSARY_TERMS, clearGlossary } from "../../../test-harness/glossaryTestTerms";
+
+vi.mock("@decky/ui", async () => import("../../../test-harness/fakeDeckyUi"));
+vi.mock("../../../shared/deckyCall", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../../shared/deckyCall")>()),
+  callDeckyWithTimeout: vi.fn(),
+}));
+
+const rpc = vi.mocked(callDeckyWithTimeout);
+
+function baseProps(overrides: Partial<MainTabChatTranscriptProps>): MainTabChatTranscriptProps {
+  return {
+    fullBleedRowStyle: {},
+    isAsking: false,
+    selectedAttachment: null,
+    ollamaContext: {} as MainTabChatTranscriptProps["ollamaContext"],
+    unifiedInput: "",
+    showSlowWarning: false,
+    latencyWarningSeconds: 30,
+    ollamaResponse: "",
+    elapsedSeconds: null,
+    lastApplied: null,
+    canSaveDesktopNote: false,
+    onOpenDesktopNoteSave: () => {},
+    askMode: "speed",
+    askThreadCollapsed: [],
+    expandedTurnKey: "live",
+    askThreadDisplayQuestion: "",
+    lastExchange: null,
+    ...overrides,
+  };
+}
+
+const answerWithAWord = (appId: string, id: string): AskThreadCollapsedTurn => ({
+  id,
+  question: "how do I stay alive",
+  answer: "Mining is not a side activity, so a run spent only kiting ends underpowered.",
+  appId,
+});
+
+const glossaryCalls = () => rpc.mock.calls.filter(([method]) => method === "get_rag_corpus_glossary");
+
+beforeEach(() => {
+  clearGlossary();
+  rpc.mockReset();
+  rpc.mockResolvedValue({
+    ok: true,
+    installed: true,
+    game_title: "Deep Rock Galactic: Survivor",
+    terms: TEST_GLOSSARY_TERMS.map((t) => ({ id: t.id, term: t.term, alt_forms: t.altForms, peek: t.peek, full: t.full })),
+    reason: "",
+  });
+});
+
+afterEach(() => {
+  clearGlossary();
+});
+
+describe("glossary words asked for by the transcript", () => {
+  it("asks for the words of every game drawn, once each", async () => {
+    const turns = [
+      answerWithAWord(TEST_GLOSSARY_APP_ID, "t1"),
+      answerWithAWord(TEST_GLOSSARY_APP_ID, "t2"),
+      answerWithAWord("570", "t3"),
+    ];
+    const props = baseProps({
+      askThreadCollapsed: turns,
+      expandedTurnKey: "t1",
+      ollamaContext: { app_id: "1145360" } as MainTabChatTranscriptProps["ollamaContext"],
+    });
+    const { rerender } = render(<MainTabChatTranscript {...props} />);
+    await act(async () => {});
+    rerender(<MainTabChatTranscript {...props} />);
+    await act(async () => {});
+    expect(glossaryCalls().map(([, args]) => (args as string[])[0]).sort()).toEqual(["1145360", "2321470", "570"]);
+  });
+
+  it("underlines the library's words in an earlier answer once they arrive", async () => {
+    const turn = answerWithAWord(TEST_GLOSSARY_APP_ID, "t1");
+    const { container } = render(
+      <MainTabChatTranscript {...baseProps({ askThreadCollapsed: [turn], expandedTurnKey: "t1" })} />
+    );
+    await act(async () => {});
+    expect(container.querySelector(".bonsai-drg-glossary-term")?.textContent).toBe("kiting");
+  });
+
+  it("leaves the same answer plain for a game whose library has no words", async () => {
+    rpc.mockResolvedValue({ ok: true, installed: true, game_title: "Dota 2", terms: [], reason: "" });
+    const turn = answerWithAWord("570", "t1");
+    const { container } = render(
+      <MainTabChatTranscript {...baseProps({ askThreadCollapsed: [turn], expandedTurnKey: "t1" })} />
+    );
+    await act(async () => {});
+    expect(container.textContent).toContain("kiting");
+    expect(container.querySelector(".bonsai-drg-glossary-term")).toBeNull();
+  });
+});
+
+describe("glossary words for a game that is named, not running (plan 97 L5)", () => {
+  const namedTurn = (id: string, question: string): AskThreadCollapsedTurn => ({
+    id,
+    question,
+    answer: "Mining is not a side activity, so a run spent only kiting ends underpowered.",
+  });
+
+  it("underlines the words in the answer to a question naming the game while nothing runs", async () => {
+    const turn = namedTurn("t1", "What does kiting mean in Deep Rock Galactic: Survivor and when should I overclock?");
+    const { container } = render(
+      <MainTabChatTranscript {...baseProps({ askThreadCollapsed: [turn], expandedTurnKey: "t1" })} />
+    );
+    await act(async () => {});
+    expect(container.querySelector(".bonsai-drg-glossary-term")?.textContent).toBe("kiting");
+  });
+
+  it("asks the back end with the question and the chat's earlier questions, once", async () => {
+    const turns = [
+      namedTurn("t1", "Tell me about Deep Rock Galactic: Survivor"),
+      namedTurn("t2", "and what is an overclock?"),
+    ];
+    const props = baseProps({ askThreadCollapsed: turns, expandedTurnKey: "t2" });
+    const { rerender } = render(<MainTabChatTranscript {...props} />);
+    await act(async () => {});
+    rerender(<MainTabChatTranscript {...props} />);
+    await act(async () => {});
+    const calls = glossaryCalls().map(([, args]) => args as unknown[]);
+    expect(calls).toHaveLength(2);
+    expect(calls[0]).toEqual(["", "Tell me about Deep Rock Galactic: Survivor", []]);
+    expect(calls[1]).toEqual([
+      "",
+      "and what is an overclock?",
+      [{ text: "Tell me about Deep Rock Galactic: Survivor", app_name: "" }],
+    ]);
+  });
+
+  it("underlines the words in the answer being written, from the question just asked", async () => {
+    rpc.mockImplementation(async (_method, args) => {
+      const [, question] = args as [string, string];
+      return question.includes("Deep Rock")
+        ? {
+            ok: true,
+            installed: true,
+            game_title: "Deep Rock Galactic: Survivor",
+            terms: TEST_GLOSSARY_TERMS.map((t) => ({ id: t.id, term: t.term, alt_forms: t.altForms, peek: t.peek, full: t.full })),
+            reason: "",
+          }
+        : { ok: true, installed: true, game_title: "", terms: [], reason: "" };
+    });
+    const props = baseProps({
+      isAsking: false,
+      askThreadDisplayQuestion: "What does kiting mean in Deep Rock Galactic: Survivor?",
+      ollamaResponse: "A run spent only kiting ends underpowered.",
+    });
+    const { container } = render(<MainTabChatTranscript {...props} />);
+    await act(async () => {});
+    expect(container.querySelector(".bonsai-drg-glossary-term")?.textContent).toBe("kiting");
+  });
+
+  it("leaves a question that names no game plain when the back end finds no words", async () => {
+    rpc.mockResolvedValue({ ok: true, installed: true, game_title: "", terms: [], reason: "" });
+    const turn = namedTurn("t1", "how do I make my battery last longer when I am kiting");
+    const { container } = render(
+      <MainTabChatTranscript {...baseProps({ askThreadCollapsed: [turn], expandedTurnKey: "t1" })} />
+    );
+    await act(async () => {});
+    expect(container.textContent).toContain("kiting");
+    expect(container.querySelector(".bonsai-drg-glossary-term")).toBeNull();
+  });
+
+  it("still asks by the running game's id, and only that, when a game runs", async () => {
+    const turn = { ...namedTurn("t1", "What does kiting mean in Deep Rock Galactic: Survivor?"), appId: TEST_GLOSSARY_APP_ID };
+    render(<MainTabChatTranscript {...baseProps({ askThreadCollapsed: [turn], expandedTurnKey: "t1" })} />);
+    await act(async () => {});
+    expect(glossaryCalls().map(([, args]) => args)).toEqual([[TEST_GLOSSARY_APP_ID]]);
+  });
+});

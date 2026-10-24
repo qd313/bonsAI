@@ -1,0 +1,354 @@
+/**
+ * Title: An answer's text, scrambling into place as it streams
+ *
+ * Purpose: Draws one section of an answer the way the markdown renderer always has, except that,
+ * with the Developer tab's Scramble animation switch on, the newest letters churn through symbols
+ * for a moment before settling into the real ones -- the decode chips' look, on the live answer
+ * (plan 69 step 3, the maintainer's mockup). With the switch off, under reduced motion, or for any
+ * section with nothing to scramble, it renders exactly what the bubble rendered before.
+ *
+ * Used for: buildAnswerBubbleElement.tsx, for the live tail of a streaming answer and for every
+ * other section, streaming or finished (a finished section only scrambles while the stream's last
+ * letters are still settling, for at most 0.6 s after the end).
+ *
+ * Solves: The scramble must not cost the panel frames (plan 69, D119: not worse than today). So:
+ *   - everything it changes moves on the answer's beat (streamBeat.ts), about 9 times a second, and
+ *     in the same frame as the reveal's text: the reveal's render for a beat also settles, hands the
+ *     markdown its catch-up and reshuffles the symbols. Each frame the answer changes in is a frame
+ *     the Deck has to redraw while the model holds the graphics chip;
+ *   - the churning letters live in one small span at the end of the settled text, written straight
+ *     to the page, never through React -- the decode chips' own trick;
+ *   - one timer, for the beats the reveal does not bring (a pause in the text, and the finish).
+ *
+ * Does not: Decide when an answer streams or ends -- it is told. Scramble code boxes, hidden
+ * spoilers, the waiting chips or the thinking lines: those never reach it as the live tail. Hold
+ * the Copy button back itself -- the stylesheet hides it while this component's slot exists
+ * (answerBubble.ts), so it appears when the last letter settles.
+ *
+ * How it works:
+ * 1. While streaming, every letter's arrival is timed when a render first shows it. The settle
+ *    point moves forward per the chosen style (streamScrambleMath.ts); letters before it are real.
+ * 2. The span holds the letters the markdown has not been handed yet, each invisible with a symbol
+ *    drawn over it, so the line never re-wraps as symbols change. The symbols reshuffle once per
+ *    beat. A letter that settles stays there until the markdown draws it, in the same frame.
+ * 3. A remount in the middle of an answer (the Quick Access Menu closed and reopened) shows what
+ *    was already on screen as plain text; only letters that arrive after it scramble.
+ * 4. When the stream ends -- this section stops streaming, or is thrown away while it still was --
+ *    the settle point is handed to liveScrambleMemo with the time. Whichever finished section holds
+ *    it settles everything from there to its end, on that one clock, all real within 0.6 s, even
+ *    across the chat's reload that redraws the answer as a saved turn moments later.
+ * 5. Stop: a stopped answer's sections ignore the handed-over settle point, so every letter is
+ *    real at once.
+ */
+import { memo, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  MainTabBonsaiAiMarkdownChunk,
+  type MainTabBonsaiAiMarkdownChunkProps,
+} from "../markdown/MainTabBonsaiAiMarkdownChunk";
+import { StreamMarkdownPieces } from "./StreamMarkdownPieces";
+import { prefersReducedMotion } from "../../preset-carousel/presetChipShared";
+import { StreamScrambleContext } from "./streamScrambleContext";
+import {
+  SCRAMBLE_CHAR_MS,
+  SCRAMBLE_CHURN_MS,
+  finishProbeAt,
+  lettersSettledInFinish,
+  locateSettlePoint,
+  settledMarkdownWithSlot,
+  settlePointAfterMoment,
+  settlePointChipPace,
+  settlePointFixedTail,
+} from "./streamScrambleMath";
+import { freshCells, syncChurnCells, type ChurnCells } from "./churnCells";
+import { beginFinish, continuesShownAnswer, pendingFinish, rememberLiveText } from "./liveScrambleMemo";
+
+export type ScrambledAnswerTextProps = Omit<MainTabBonsaiAiMarkdownChunkProps, "source" | "scrambleSlotRef"> & {
+  /** Exactly what this section renders with no scramble -- today's source, unchanged. */
+  plain: string;
+  /** The section's raw text: the live tail before inline closers are added, or a finished section. */
+  raw: string;
+  /** True for the live tail of an answer still arriving; false for any other section. */
+  streaming: boolean;
+};
+
+/**
+ * A finished section settling from `start` to its end, on the clock the stream's end started.
+ * `handed` is how far the markdown has been handed the settled text (null: only up to `start`).
+ */
+type Finish = { start: number; startedAt: number; handed?: number };
+
+/**
+ * How late the reveal's next beat may be before the timer takes that beat itself. Loose enough that
+ * a beat delayed a little by a busy page still comes from the reveal, in the reveal's frame.
+ */
+const BEAT_SLACK_MS = 20;
+
+function commonPrefixLength(a: string, b: string): number {
+  const n = Math.min(a.length, b.length);
+  let i = 0;
+  while (i < n && a.charCodeAt(i) === b.charCodeAt(i)) i += 1;
+  return i;
+}
+
+/*
+ * In: one section's plain source, its raw text and whether it is the live tail, plus the markdown
+ * chunk's own props; the four scramble settings and the stopped flag come from the context.
+ * Out: the markdown chunk -- with a scramble slot in it while letters are unsettled, plain
+ * otherwise. Memoised like the chunk itself: the bubble is rebuilt on every reveal beat, and a
+ * section whose props did not change has nothing to redo.
+ * What can go wrong: the span's letters are written outside React, so every render has to repaint
+ * them (the last layout effect) or the markdown and the span would show the same letters twice.
+ */
+export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: ScrambledAnswerTextProps) {
+  const { plain, raw, streaming, ...markdownProps } = props;
+  const scramble = useContext(StreamScrambleContext);
+  const on = scramble.enabled && !prefersReducedMotion();
+
+  /* Streaming: how far the markdown has been handed the settled text (null = plain). Set on the
+     first render already, so a streaming section never shows one frame of plain text first. */
+  const [markdownSettled, setMarkdownSettled] = useState<number | null>(() =>
+    on && streaming ? (continuesShownAnswer(raw) ? raw.length : 0) : null
+  );
+  /* Finished: the stretch still settling, or null when this section is plain. */
+  const [finish, setFinish] = useState<Finish | null>(null);
+
+  const rawRef = useRef(raw);
+  const arrivalsRef = useRef<number[]>([]);
+  const settledRef = useRef(0);
+  const creditRef = useRef(0);
+  const lastTickRef = useRef(0);
+  const markdownSettledRef = useRef<number | null>(null);
+  const finishRef = useRef<Finish | null>(null);
+  const timerRef = useRef<number | null>(null);
+  const timerBeatRef = useRef<() => void>(() => {});
+  const reshufflePendingRef = useRef(false);
+  const churnNodeRef = useRef<HTMLSpanElement | null>(null);
+  const cellsRef = useRef<ChurnCells>(freshCells());
+  const settingsRef = useRef(scramble);
+  const onRef = useRef(on);
+  const wasStreamingRef = useRef(false);
+
+  settingsRef.current = scramble;
+  onRef.current = on;
+  markdownSettledRef.current = markdownSettled;
+  finishRef.current = finish;
+
+  /**
+   * Writes the span: every letter the markdown has not been handed yet, each under its symbol
+   * (syncChurnCells). `reshuffle` draws new symbols (the timer's tick); a render, which can come
+   * every frame, only adds and removes letters. A letter that is due to settle stays in the span,
+   * laid out as the markdown will lay it out, until the markdown draws it: settled text written
+   * into the span as bare text was laid out as raw lines (an empty line for a paragraph break, no
+   * bullet or margin for a list item) and the answer grew, then fell back when the markdown
+   * caught up (Deck, 2026-10-22: +48 px, then back over half a second).
+   */
+  const paint = useCallback((reshuffle: boolean) => {
+    const churn = churnNodeRef.current;
+    if (!churn) return;
+    const text = rawRef.current;
+    const f = finishRef.current;
+    const from = f ? f.handed ?? f.start : markdownSettledRef.current ?? text.length;
+    syncChurnCells(churn, cellsRef.current, text, from, reshuffle);
+    const className = `bonsai-stream-scramble-churn bonsai-stream-scramble-churn--${settingsRef.current.color}`;
+    if (churn.className !== className) churn.className = className;
+  }, []);
+
+  /** The span the markdown renderer made for the slot mark; it is rebuilt whenever the slot moves. */
+  const slotRefCallback = useCallback(
+    (el: HTMLSpanElement | null) => {
+      if (!el) {
+        churnNodeRef.current = null;
+        return;
+      }
+      const churn = el.ownerDocument.createElement("span");
+      el.replaceChildren(churn);
+      churnNodeRef.current = churn;
+      cellsRef.current = freshCells();
+      paint(false);
+    },
+    [paint]
+  );
+
+  const stopTimer = useCallback(() => {
+    if (timerRef.current != null) {
+      window.clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
+  /** The timer takes the next beat itself after `delay`, unless a render takes it first. */
+  const armTimer = useCallback((delay: number) => {
+    if (timerRef.current != null) window.clearTimeout(timerRef.current);
+    timerRef.current = window.setTimeout(() => timerBeatRef.current(), delay);
+  }, []);
+
+  /**
+   * One beat: settle what is due and reshuffle the symbols. When the markdown has to catch up, the
+   * reshuffle waits for that render's paint (the last layout effect), so the new symbols and the
+   * new markdown land in the same frame. Returns whether another beat is needed.
+   */
+  const tick = useCallback((): boolean => {
+    if (!onRef.current) return false;
+    const now = performance.now();
+    const f = finishRef.current;
+    if (f) {
+      const total = rawRef.current.length - f.start;
+      /* Ends on the last beat before the finish is due, not the first one after it, so the last
+         letters are never late: a beat can be a whole reshuffle apart from the due time. */
+      if (lettersSettledInFinish(total, now + SCRAMBLE_CHURN_MS - f.startedAt) >= total) {
+        setFinish(null);
+        return false;
+      }
+      /* Settle what is due by handing it to the markdown; the reshuffle waits for that render. */
+      const due = f.start + lettersSettledInFinish(total, now - f.startedAt);
+      if (due !== (f.handed ?? f.start)) {
+        reshufflePendingRef.current = true;
+        setFinish({ ...f, handed: due });
+      } else {
+        paint(true);
+      }
+      return true;
+    }
+    const text = rawRef.current;
+    const settings = settingsRef.current;
+    let point = settledRef.current;
+    if (settings.style === "chip") {
+      const step = settlePointChipPace(text, point, creditRef.current + (now - lastTickRef.current) / SCRAMBLE_CHAR_MS);
+      point = step.point;
+      creditRef.current = step.credit;
+    } else if (settings.style === "tail") {
+      point = Math.max(point, settlePointFixedTail(text));
+    } else {
+      point = settlePointAfterMoment(arrivalsRef.current, point, now, settings.settleMs);
+    }
+    lastTickRef.current = now;
+    settledRef.current = Math.min(point, text.length);
+    const handed = markdownSettledRef.current;
+    if (handed !== settledRef.current) {
+      reshufflePendingRef.current = true;
+      setMarkdownSettled(settledRef.current);
+    } else {
+      paint(true);
+    }
+    return settledRef.current < text.length || handed !== settledRef.current;
+  }, [paint]);
+
+  timerBeatRef.current = () => {
+    timerRef.current = null;
+    if (tick()) armTimer(SCRAMBLE_CHURN_MS);
+  };
+
+  /** The stream has ended for this section: hand the settle point over to the finish. */
+  const handOverFinish = useCallback(() => {
+    beginFinish(finishProbeAt(rawRef.current, settledRef.current), performance.now());
+  }, []);
+
+  /* Streaming: time each newly shown letter, and take this beat in the reveal's own frame. */
+  useLayoutEffect(() => {
+    if (!streaming) return;
+    if (!on) {
+      /* Switched off (or reduced motion) mid-answer: switching back on starts from what is shown. */
+      wasStreamingRef.current = false;
+      stopTimer();
+      return;
+    }
+    const now = performance.now();
+    const previous = rawRef.current;
+    if (!wasStreamingRef.current) {
+      /* First streaming render of this section: plain if it continues an answer already on screen. */
+      arrivalsRef.current = new Array<number>(raw.length).fill(now);
+      settledRef.current = continuesShownAnswer(raw) ? raw.length : 0;
+      creditRef.current = 0;
+      lastTickRef.current = now;
+      cellsRef.current = freshCells();
+      setMarkdownSettled(settledRef.current);
+    } else if (raw.startsWith(previous)) {
+      for (let i = previous.length; i < raw.length; i += 1) arrivalsRef.current.push(now);
+    } else {
+      /* Rewritten rather than grown (rare -- a display tag finished and was taken out): letters up
+         to where the two agree keep their timing; the rest counts as new. */
+      const same = commonPrefixLength(previous, raw);
+      arrivalsRef.current.length = same;
+      for (let i = same; i < raw.length; i += 1) arrivalsRef.current.push(now);
+      settledRef.current = Math.min(settledRef.current, same);
+      cellsRef.current = freshCells();
+      if ((markdownSettledRef.current ?? 0) > settledRef.current) setMarkdownSettled(settledRef.current);
+    }
+    wasStreamingRef.current = true;
+    rawRef.current = raw;
+    rememberLiveText(raw);
+    /* This render is the reveal's beat. The timer only takes a beat the reveal is late for. */
+    if (tick()) armTimer(SCRAMBLE_CHURN_MS + BEAT_SLACK_MS);
+    else stopTimer();
+  }, [on, streaming, raw, tick, armTimer, stopTimer]);
+
+  /* The streaming stopped on this same section: hand over, then let the finished branch take it. */
+  useLayoutEffect(() => {
+    if (streaming || !wasStreamingRef.current) return;
+    wasStreamingRef.current = false;
+    stopTimer();
+    if (onRef.current) handOverFinish();
+    setMarkdownSettled(null);
+  }, [streaming, stopTimer, handOverFinish]);
+
+  /* Finished: settle what the stream left unsettled, if this section holds the settle point. */
+  useLayoutEffect(() => {
+    if (streaming) return;
+    rawRef.current = raw;
+    const pending = on && !scramble.stopped ? pendingFinish(performance.now()) : null;
+    const start = pending ? locateSettlePoint(raw, pending) : -1;
+    if (!pending || start < 0 || start >= raw.length) {
+      if (finishRef.current) {
+        stopTimer();
+        setFinish(null);
+      }
+      return;
+    }
+    const current = finishRef.current;
+    if (!current || current.start !== start || current.startedAt !== pending.startedAt) {
+      cellsRef.current = freshCells();
+      setFinish({ start, startedAt: pending.startedAt });
+    }
+    if (timerRef.current == null) armTimer(SCRAMBLE_CHURN_MS);
+  }, [streaming, raw, on, scramble.stopped, armTimer, stopTimer]);
+
+  /* Every render: the span's letters follow the text and the markdown's new catch-up point, with the
+     reshuffle a beat left for this render. */
+  useLayoutEffect(() => {
+    paint(reshufflePendingRef.current);
+    reshufflePendingRef.current = false;
+  });
+
+  /* Thrown away while still streaming (the answer ended, or the panel closed): hand over too. */
+  useEffect(
+    () => () => {
+      stopTimer();
+      if (wasStreamingRef.current && onRef.current) handOverFinish();
+    },
+    [stopTimer, handOverFinish]
+  );
+
+  if (on && streaming && markdownSettled != null) {
+    /* Piece by piece: the slot mark ends the text, so only the last piece is parsed per beat. */
+    return (
+      <StreamMarkdownPieces
+        {...markdownProps}
+        source={settledMarkdownWithSlot(raw, markdownSettled)}
+        scrambleSlotRef={slotRefCallback}
+      />
+    );
+  }
+  if (on && !streaming && finish) {
+    return (
+      <MainTabBonsaiAiMarkdownChunk
+        {...markdownProps}
+        source={settledMarkdownWithSlot(raw, finish.handed ?? finish.start)}
+        scrambleSlotRef={slotRefCallback}
+      />
+    );
+  }
+  /* A live tail with no scramble: piece by piece, so an update parses only its growing end
+     (plan 70: the whole answer re-parsed on every update, and the panel slowed as it grew). */
+  if (streaming) return <StreamMarkdownPieces {...markdownProps} source={plain} />;
+  return <MainTabBonsaiAiMarkdownChunk {...markdownProps} source={plain} />;
+});

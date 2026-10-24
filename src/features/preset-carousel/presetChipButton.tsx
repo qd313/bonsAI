@@ -1,0 +1,330 @@
+/**
+ * Title: Preset chip button
+ *
+ * Purpose: The chip button itself, shared by fade, static and carousel mode (decode mode draws
+ * its own button around the same badges and scrolling text — see DecodePresetChipButton in
+ * MainTabPresetAnimatedChips.tsx): the scrolling prompt text, the pinned Test/Tip badges before
+ * it, the [beta] tag, and the click handler that fills the Ask box.
+ *
+ * Used for: MainTabPresetAnimatedChipsInner and MainTabPresetSidewaysCarousel, both in
+ * src/features/preset-carousel/MainTabPresetAnimatedChips.tsx.
+ *
+ * Solves: One badge-drawing function (PresetChipLeadingBadges) shared by every label so the "is
+ * this chip pinned/note-sourced" check and "does its badge draw" check cannot drift apart again —
+ * see the comment on PresetChipLeadingBadges for the bug that happened when decode mode kept its
+ * own copy.
+ *
+ * Does not: Decide the D-pad wiring or the focus container — see presetRowFocusNav in the same
+ * folder.
+ */
+import React, { useLayoutEffect, useRef, useState } from "react";
+import { Button } from "@decky/ui";
+import type { AskModeId } from "../ask/bar/askMode";
+import type { PresetPrompt } from "./presets";
+import {
+  PRESET_CHIP_HEIGHT_PX,
+  PRESET_MARQUEE_FADE_LENGTH,
+  presetScrollPlan,
+} from "./presetRowLayout";
+import type { ChipScrollListener } from "./presetChipStay";
+import type { SlotFade } from "./presetChipShared";
+import { joinPresetWithRunningGame } from "./joinPresetWithRunningGame";
+import { textPx } from "../../styles/textPx";
+
+/** The six legs of a long chip's time line (presetScrollPlan): wait, scroll, stand, snap back, scroll, stand. */
+type ScrollLeg = "waiting" | "crawl1" | "read1" | "back" | "crawl2" | "read2";
+
+/**
+ * The words of a chip, scrolled sideways when they are too long for it. The chip's own scroll rather
+ * than Steam's Marquee, because the Marquee has no stop at the end: its scroll cannot be told to stand
+ * still for a moment once the last words are in view, and that is what the maintainer asked for
+ * (2026-10-02). The overflow is still decided on the live element, never from a predicted width: the
+ * words' width and the room are read off the two elements after they are laid out (and again when the
+ * room changes), as the roadmap's marquee item insists.
+ *
+ * The time line is presetScrollPlan (presetRowLayout.ts), the same one the chip's stay time reads.
+ * The chip shows its words twice before it changes (plan 96 F22): they wait at the left edge, scroll
+ * to the end at the set speed, stand a second, jump back to the start in a moment, scroll to the end
+ * again, and then stay where they are. Nothing moves after the second pass, so the last stand lasts
+ * for as long as the chip stays; the row replaces the chip when it is over (below). Each leg is one
+ * transform transition started by one timer, so the render stays cheap: no per-frame work. Words
+ * that fit are left alone, so the chip can centre them. `data-scroll-phase` says where the line has
+ * got to (fits, waiting, scrolling, end or back) and `data-scroll-pass` which pass it is on (1 or 2;
+ * the jump back counts to the second), so the second end, the one the chip leaves after, can be told
+ * from the first.
+ *
+ * The line is also told to the row (`onScrollPlan`, presetChipStay.ts) the moment it starts: the row
+ * replaces the chip at the end of this line, one stand after the second pass, rather than guessing
+ * from the length of the words.
+ */
+function PresetChipScrollText({ text, onScrollPlan }: { text: string; onScrollPlan?: ChipScrollListener }) {
+  const reportRef = useRef(onScrollPlan);
+  reportRef.current = onScrollPlan;
+  const roomRef = useRef<HTMLSpanElement>(null);
+  const wordsRef = useRef<HTMLSpanElement>(null);
+  // null until the words and the room have been measured, so the row is not told anything early.
+  const [overflowPx, setOverflowPx] = useState<number | null>(null);
+  const [leg, setLeg] = useState<ScrollLeg>("waiting");
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const room = roomRef.current;
+      const words = wordsRef.current;
+      if (!room || !words || room.clientWidth <= 0) return setOverflowPx(0);
+      setOverflowPx(Math.max(0, Math.ceil(words.scrollWidth - room.clientWidth)));
+    };
+    measure();
+    if (typeof ResizeObserver === "undefined" || !roomRef.current) return;
+    const watcher = new ResizeObserver(measure);
+    watcher.observe(roomRef.current);
+    return () => watcher.disconnect();
+  }, [text]);
+
+  const plan = presetScrollPlan(overflowPx ?? 0);
+  const delayMs = plan?.delayMs;
+  const endMs = plan?.endMs;
+  const backAtMs = plan?.backAtMs;
+  const secondStartMs = plan?.secondStartMs;
+  const secondEndMs = plan?.secondEndMs;
+  const stayMs = plan?.stayMs;
+  useLayoutEffect(() => {
+    setLeg("waiting");
+    if (overflowPx === null) return;
+    if (
+      delayMs === undefined ||
+      endMs === undefined ||
+      backAtMs === undefined ||
+      secondStartMs === undefined ||
+      secondEndMs === undefined ||
+      stayMs === undefined
+    ) {
+      reportRef.current?.(text, null); // measured, and the words fit
+      return;
+    }
+    reportRef.current?.(text, { startedAt: Date.now(), stayMs });
+    const timers = (
+      [
+        ["crawl1", delayMs],
+        ["read1", endMs],
+        ["back", backAtMs],
+        ["crawl2", secondStartMs],
+        ["read2", secondEndMs],
+      ] as const
+    ).map(([next, at]) => window.setTimeout(() => setLeg(next), at));
+    return () => {
+      timers.forEach((t) => window.clearTimeout(t));
+      reportRef.current?.(text, null);
+    };
+  }, [overflowPx === null, delayMs, endMs, backAtMs, secondStartMs, secondEndMs, stayMs, text]);
+
+  const shown = !plan
+    ? "fits"
+    : leg === "waiting"
+      ? "waiting"
+      : leg === "back"
+        ? "back"
+        : leg === "crawl1" || leg === "crawl2"
+          ? "scrolling"
+          : "end";
+  const pass = leg === "waiting" || leg === "crawl1" || leg === "read1" ? "1" : "2";
+  // Steam's marquee faded the words at the edges; the same fade here, on the side the words leave.
+  const fade = PRESET_MARQUEE_FADE_LENGTH;
+  const mask =
+    shown === "fits"
+      ? undefined
+      : shown === "waiting"
+        ? `linear-gradient(to right, #000 calc(100% - ${fade}px), transparent)`
+        : shown === "scrolling" || shown === "back"
+          ? `linear-gradient(to right, transparent, #000 ${fade}px, #000 calc(100% - ${fade}px), transparent)`
+          : `linear-gradient(to right, transparent, #000 ${fade}px)`;
+  const atEndSide = shown === "scrolling" || shown === "end";
+  const transition =
+    shown === "scrolling"
+      ? `transform ${plan!.crawlMs}ms linear`
+      : shown === "back"
+        ? `transform ${plan!.snapBackMs}ms ease-out`
+        : "none";
+  return (
+    <span
+      ref={roomRef}
+      className="bonsai-preset-chip-text bonsai-preset-chip-text--marquee"
+      style={mask ? { WebkitMaskImage: mask, maskImage: mask } : undefined}
+    >
+      <span
+        ref={wordsRef}
+        className="bonsai-preset-chip-text-run"
+        data-scroll-phase={shown}
+        data-scroll-pass={plan ? pass : undefined}
+        style={{
+          transform: atEndSide ? `translateX(-${overflowPx ?? 0}px)` : "translateX(0px)",
+          transition,
+        }}
+      >
+        {text}
+      </span>
+    </span>
+  );
+}
+
+/**
+ * The prompt text. A prompt longer than its chip scrolls its words sideways twice (PresetChipScrollText),
+ * stands still at the end each time, and the chip leaves after the second. Under reduced motion the label is cut off
+ * with an ellipsis instead and nothing moves.
+ */
+export function PresetChipText({
+  text,
+  scroll,
+  onScrollPlan,
+}: {
+  text: string;
+  scroll: boolean;
+  onScrollPlan?: ChipScrollListener;
+}) {
+  if (!scroll) return <span className="bonsai-preset-chip-text">{text}</span>;
+  return <PresetChipScrollText key={text} text={text} onScrollPlan={onScrollPlan} />;
+}
+
+/**
+ * The Test and Tip badges, pinned before the prompt text -- shared by every animation mode's
+ * label so the two checks that decide "is this chip pinned/note-sourced" and "does its badge
+ * draw" can never drift apart again. Decode mode used to build its own label from scratch
+ * (DecodePresetChipButton) and carried the Test badge over but not this one: a real, note-sourced
+ * chip's `ragTip` flag was true, yet nothing in decode's JSX ever read it, so the dot never drew
+ * even though the chip's words really did come from the game's own notes (CHIP-BUTTON-09, found
+ * on the Deck with Half-Life 2 running, 2026-09-18). Both label components now render this same
+ * function instead of their own copy of the badge markup.
+ */
+export function PresetChipLeadingBadges({ p }: { p: PresetPrompt }) {
+  return (
+    <>
+      {p.testChip ? (
+        <span
+          className="bonsai-preset-chip-test-badge"
+          style={{
+            marginRight: 6,
+            fontSize: textPx(9),
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
+            fontWeight: 700,
+            // Deliberately not the accent colour the Tip badge uses. A frozen batch is a QA
+            // state, and it has to be obvious at a glance that the carousel is not showing what
+            // the plugin would have chosen.
+            color: "#f0b232",
+          }}
+        >
+          Test
+        </span>
+      ) : null}
+      {p.ragTip ? (
+        <span
+          className="bonsai-preset-chip-tip-badge"
+          aria-label="Tip"
+          title="Tip"
+          style={{
+            width: 7,
+            height: 7,
+            borderRadius: 2,
+            background: "var(--bonsai-ui-accent-badge, rgba(46, 135, 83, 0.8))",
+            marginRight: 6,
+            flex: "0 0 auto",
+            display: "inline-block",
+          }}
+        />
+      ) : null}
+    </>
+  );
+}
+
+/**
+ * Badges stay pinned at the left of the chip and only the prompt text scrolls: the Tip badge exists
+ * to be seen at a glance (Phase 4 track 1), and a badge that scrolled away would defeat that.
+ */
+function PresetChipLabel({
+  p,
+  scroll,
+  onScrollPlan,
+}: {
+  p: PresetPrompt;
+  scroll: boolean;
+  onScrollPlan?: ChipScrollListener;
+}) {
+  return (
+    <span className="bonsai-preset-chip-label">
+      <PresetChipLeadingBadges p={p} />
+      <PresetChipText text={p.text} scroll={scroll} onScrollPlan={onScrollPlan} />
+      {p.beta ? (
+        <span
+          style={{
+            marginLeft: 6,
+            fontSize: textPx(10),
+            fontStyle: "italic",
+            color: "var(--bonsai-ui-accent-toned, #5b9e7e)",
+            fontWeight: 600,
+          }}
+        >
+          [beta]
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
+export function PresetChipButton(props: {
+  preset: PresetPrompt;
+  setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
+  onPreferAskMode?: (mode: AskModeId) => void;
+  scroll: boolean;
+  dimmed?: boolean;
+  /**
+   * Fade and static styles: the button's own opacity and how long it takes to get there. The fade
+   * sits on the button, not on a box around it, so a reader of the button sees it fall before the
+   * words change (plan82-P79-LONG-CHIPS-NOGAME.json read the button and saw 1.00 throughout).
+   */
+  fade?: SlotFade;
+  focusable?: boolean;
+  buttonRef?: (el: HTMLElement | null) => void;
+  navHandlers?: Record<string, unknown>;
+  /** The chip row just claimed a Left/Right press without moving anywhere -- ran out of chips. */
+  blockedEdge?: boolean;
+  /** Told the long chip's scroll time line, so the row can replace it one pause after it ends. */
+  onScrollPlan?: ChipScrollListener;
+}) {
+  const {
+    preset: p,
+    setUnifiedInput,
+    onPreferAskMode,
+    scroll,
+    dimmed,
+    fade,
+    focusable = true,
+    buttonRef,
+    navHandlers,
+    blockedEdge,
+    onScrollPlan,
+  } = props;
+  return (
+    <Button
+      className={"bonsai-preset-glass" + (blockedEdge ? " bonsai-preset-chip-blocked-edge" : "")}
+      ref={buttonRef}
+      {...(navHandlers ?? {})}
+      focusable={focusable}
+      onClick={() => {
+        setUnifiedInput(joinPresetWithRunningGame(p.text));
+        if (p.preferAskMode && onPreferAskMode) {
+          onPreferAskMode(p.preferAskMode);
+        }
+      }}
+      style={{
+        width: "100%",
+        minHeight: PRESET_CHIP_HEIGHT_PX,
+        fontSize: textPx(11),
+        color: dimmed ? "#8fa3b8" : "#c4d3e2",
+        opacity: fade ? fade.opacity : dimmed ? 0.55 : 1,
+        transform: dimmed ? "scale(0.96)" : "scale(1)",
+        transition: `opacity ${fade ? `${fade.transitionMs}ms ease-in-out` : "420ms ease"}, transform 420ms ease, color 420ms ease`,
+      }}
+    >
+      <PresetChipLabel p={p} scroll={scroll} onScrollPlan={onScrollPlan} />
+    </Button>
+  );
+}

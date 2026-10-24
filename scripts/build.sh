@@ -57,7 +57,6 @@ if [[ "$COMMAND" != "release" && "$COMMAND" != "-h" && "$COMMAND" != "--help" ]]
     : "${DECK_PORT:=22}"
     : "${DECK_USER:=deck}"
     : "${DECK_DIR:=/home/deck}"
-    : "${PC_IP:?PC_IP is not set in .env}"
     : "${PLUGIN_NAME:=bonsAI}"
     SSH_DEST="${DECK_USER}@${DECK_IP}"
     SSH_OPTS="-p ${DECK_PORT}"
@@ -89,15 +88,6 @@ do_install() {
     fi
 }
 
-do_generate_config() {
-    bold "Generating src/config.ts..."
-    cat > src/config.ts <<CONF
-export const HostIp = '${DECK_IP}';
-export const PcIp = '${PC_IP}';
-CONF
-    green "  src/config.ts written (HostIp=${DECK_IP}, PcIp=${PC_IP})"
-}
-
 do_build() {
     bold "Building plugin frontend..."
     pnpm run build
@@ -108,7 +98,6 @@ do_full_build() {
     ensure_pnpm
     ensure_node
     do_install
-    do_generate_config
     do_build
 }
 
@@ -187,7 +176,7 @@ deploy_remote() {
               sudo chmod -R 755 ${PLUGIN_DIR}"
 
     bold "Copying files..."
-    deck_scp package.json plugin.json main.py refactor_helpers.py "${SSH_DEST}:${PLUGIN_DIR}/"
+    deck_scp package.json plugin.json main.py "${SSH_DEST}:${PLUGIN_DIR}/"
     deck_scp -r py_modules "${SSH_DEST}:${PLUGIN_DIR}/"
     if [[ -d data ]]; then
         deck_scp -r data "${SSH_DEST}:${PLUGIN_DIR}/"
@@ -216,7 +205,7 @@ deploy_local() {
     sudo chown -R "$(whoami)" "$LOCAL_PLUGIN_DIR"
 
     bold "Copying files..."
-    cp package.json plugin.json main.py refactor_helpers.py "$LOCAL_PLUGIN_DIR/"
+    cp package.json plugin.json main.py "$LOCAL_PLUGIN_DIR/"
     cp -r py_modules "$LOCAL_PLUGIN_DIR/"
     if [[ -d data ]]; then
         cp -r data "$LOCAL_PLUGIN_DIR/"
@@ -241,6 +230,9 @@ do_release() {
         echo "Run ./scripts/setup-dev.sh to install it."
         exit 1
     fi
+
+    bold "Staging NOTICE and runtime data into defaults/..."
+    python3 "$REPO_ROOT/scripts/stage_zip_extras.py" || exit 1
 
     bold "Building plugin zip with Decky CLI..."
     sudo "$CLI_BIN" plugin build "$REPO_ROOT"

@@ -1,0 +1,359 @@
+/**
+ * Title: The Session tab, inside a turn's own Show details panel
+ *
+ * Purpose: What the AI carries from this chat, in one tab: at the top, *Sum up this chat* and the
+ * summary the AI remembers in place of the chat's older turns (plan 68); below it, the list of
+ * every turn that attached anything extra to what was actually sent to the AI — a screenshot, a log
+ * excerpt, a memory note — with the active row's own chips. The tab lives in the newest answer's
+ * Show details panel as "Session · N" (plan 62 3c); older answers keep the plain single-tab panel,
+ * so it never repeats down the chat.
+ *
+ * Used for: MainTabChatTranscript's `buildDetailsPanelElement`, mounted only while the "Session"
+ * tab is the one showing, on the newest turn only.
+ *
+ * Solves: One place to see and manage what the AI knows about this conversation, and to audit what
+ * context reached it, without scrolling back up and rereading each answer.
+ *
+ * Does not: Build the "what was actually sent" snapshot, write a summary, or fetch either from the
+ * back end. It is handed built snapshots and the open chat's summary state, and only draws them.
+ * Does not decide when it is showing at all — that is `detailsTab === "session"`, owned by the
+ * caller.
+ *
+ * Gotchas:
+ * - No header, no open/closed state of its own: Show details itself is what opens and closes this
+ *   content, so this body is either fully mounted or not there at all.
+ * - Stepping Up off the row list's first row is wired by hand to the summary card or the button
+ *   above it, and Up off the chip ladder to this body's own last row — see `focusLastSessionTabRow`
+ *   for why an unscoped query is safe here (at most one of these bodies is ever mounted at a time).
+ * - B closes the WHOLE Show details panel via `onRequestClose`, not just this body — see its own
+ *   `onCancelButton` comment for why that has to be `onCancelButton`, not `onButtonDown`.
+ * - Nothing here opens a Decky modal any more (Clear's confirm box went with Clear), so this body
+ *   no longer needs the before/after-modal hooks that keep the expanded turn across a remount.
+ *
+ * How it works:
+ * 1. `computeSessionContextRows()` builds the row list once: every archived turn with at least one
+ *    chip, plus the still-live turn when it has chips of its own and is not the same turn as the
+ *    newest archived row (`liveIsNewestArchived` inside it) — de-duped because after a completed
+ *    Ask the live turn and its own freshly-archived copy would otherwise count as two rows for one
+ *    real turn.
+ * 2. Always draws the Sum up section first, even with no rows: the tab shows whenever the chat has
+ *    a question in it (plan 68 § 2 item 6).
+ * 3. Works out which row is active — an outside `highlightTurnId` if it points at a real row,
+ *    otherwise whichever row was last tapped — and falls back to the newest row.
+ * 4. Draws every row, wires the first row's own Up to the section above, then the active row's
+ *    chips via the shared ladder, whose Down off the last chip leaves the panel through
+ *    `onMoveDownPastTab` (what sits below Show details in the chat, else the dock).
+ */
+import { useState } from "react";
+import { Focusable } from "@decky/ui";
+import type { AskThreadCollapsedTurn } from "../../../types/bonsaiUi";
+import type { ChatSlotTurnTransparency, TransparencySnapshot } from "../../../types/inputTransparency";
+import { ContextChipLadder } from "./ContextChipLadder";
+import { chipsFromSnapshot, type CreditsView } from "./contextChipsFromSnapshot";
+import {
+  isOkDeckButtonEvent,
+  isDeckDirectionDownEvent,
+  isDeckDirectionUpEvent,
+} from "../../../shared/dpad/focusNavigation";
+import { focusRowElement } from "../../../shared/dpad/focusPerTurnRow";
+import { focusDeckOwner } from "../../../shared/dpad/liveTurnFocusGraph";
+import { getUiDocument } from "../../../shared/dpad/uiDocument";
+import { SessionSumUpSection, focusLastSumUpStop } from "../../chats/sum-up/SessionSumUpSection";
+import type { ChatSumUpState } from "../../chats/sum-up/chatSumUpModel";
+import { textPx } from "../../../styles/textPx";
+
+export type SessionContextTurn = {
+  id: string;
+  label: string;
+  /** Full trimmed question text, used only to detect the live/archived duplicate below — not displayed. */
+  question: string;
+  snapshot: TransparencySnapshot | ChatSlotTurnTransparency | null;
+};
+
+/**
+ * The row list a Session tab (or the standalone strip) actually shows: every archived turn with at
+ * least one chip, plus the still-live turn when it has chips of its own and is not the same turn as
+ * the newest archived row.
+ *
+ * Pulled out of the component body so `SessionContextTabBody` (the Session tab's own content, folded
+ * into Show details) and `SessionContextStrip` (kept standalone below the transcript for now) share
+ * one de-dup rule instead of two copies quietly drifting apart. See `liveIsNewestArchived` below for
+ * why the de-dup is needed at all: after a completed Ask, `liveTurn` stays populated at the same
+ * moment the slot reload archives the identical turn, and there is no shared id between the two, so
+ * question text is the only identity signal both sides carry.
+ */
+export function computeSessionContextRows(
+  liveTurn: SessionContextTurn | null | undefined,
+  archivedTurns: AskThreadCollapsedTurn[] | undefined
+): SessionContextTurn[] {
+  const archivedWithChips = (archivedTurns ?? []).filter(
+    (t) => t.transparency && chipsFromSnapshot(t.transparency).length > 0
+  );
+  /*
+   * The words the person saw, not the ones the model was sent: a branch pick is saved as
+   * "[Strategy follow-up] I'm at: ..." with the friendly "I'm at: ..." beside it, and the header,
+   * the waiting line and the "This answer" tab already show the friendly one.
+   */
+  const archivedRows: SessionContextTurn[] = archivedWithChips.map((t) => {
+    const shown = (t.questionDisplay || t.question).trim();
+    return {
+      id: t.id,
+      label: shown.slice(0, 48) || t.id,
+      question: shown,
+      snapshot: t.transparency ?? null,
+    };
+  });
+
+  const newestArchivedRow = archivedRows[archivedRows.length - 1];
+  /* The live copy carries the friendly words on the live path and the raw ones after a chat is
+     reopened from disk, so either counts as the same turn. */
+  const newestArchivedRaw = archivedWithChips[archivedWithChips.length - 1]?.question.trim();
+  const liveIsNewestArchived =
+    Boolean(liveTurn) &&
+    Boolean(newestArchivedRow) &&
+    (liveTurn!.id === newestArchivedRow!.id ||
+      liveTurn!.question === newestArchivedRow!.question ||
+      liveTurn!.question === newestArchivedRaw);
+
+  return [
+    ...archivedRows,
+    ...(liveTurn && !liveIsNewestArchived && chipsFromSnapshot(liveTurn.snapshot).length > 0
+      ? [liveTurn]
+      : []),
+  ];
+}
+
+export type SessionContextTabBodyProps = {
+  liveTurn?: SessionContextTurn | null;
+  archivedTurns?: AskThreadCollapsedTurn[];
+  highlightTurnId?: string | null;
+  onHighlightClear?: () => void;
+  /** D-pad Up off the top of this body (the Sum up button) -> the "This answer / Session · N" tabs row above it. */
+  onMoveUpFromTop?: () => boolean;
+  /**
+   * B anywhere inside this body. Plan 62 3c: "B anywhere inside closes the panel" — the whole Show
+   * details panel, not the local re-collapse `ContextChipLadder` does on its own B press (see the
+   * `onExpandChange` wiring below). The caller is expected to close the panel AND move Steam's ring
+   * back onto the (still-mounted) Show details / Hide details line in one step, the same way
+   * `focusKbNotesBlock`'s callers do when the block they focused is about to unmount.
+   */
+  onRequestClose?: () => void;
+  /**
+   * D-pad Down off the last stop in this tab -- the last chip of the ladder, or, in a chat with no
+   * rows, Sum up or the summary card under it: on to whatever sits below Show details, through
+   * Steam's own transfer. False lets Steam's own navigation carry the press. Absent: the press is
+   * consumed, as it was before plan 72.
+   */
+  onMoveDownPastTab?: () => boolean;
+  /** Plan 68: the open chat's summary and the Sum up button's job, from the back end. */
+  sumUp?: ChatSumUpState | null;
+  /** Plan 68: an answer is being written, so the button is greyed out and says so. */
+  answerInFlight?: boolean;
+  /** How a row's credit line treats a spoiler, asked by that row's own turn id
+   *  (buildDetailsPanelElement.tsx passes the same function its own ladder uses). */
+  creditsViewFor?: (
+    turnKey: string,
+    snapshot: TransparencySnapshot | ChatSlotTurnTransparency | null | undefined
+  ) => CreditsView;
+};
+
+/**
+ * The Session tab's own content, folded into a turn's Show details panel (plan 62 3c) rather than a
+ * standalone box of its own. Top to bottom (plan 68, as drawn): *Sum up this chat* with its reason
+ * line and the summary card (SessionSumUpSection.tsx), then the row list and the active row's chip
+ * ladder, exactly as before. Clear and its confirm box are gone: summing up keeps a chat's memory
+ * where Clear could only throw it away, and nothing is deleted, so there is nothing to confirm.
+ *
+ * In: the same live/archived turn data `SessionContextStrip` takes, the open chat's summary state,
+ * whether an answer is being written, an escape for D-pad Up off the top, and a request-close
+ * callback for B.
+ * Out: always the button (plan 68 § 2 item 6: the tab shows whenever the chat has a question),
+ * then the row list and the active row's chips when any turn attached something extra.
+ *
+ * What can go wrong: only one turn is ever "the newest answer" and therefore ever mounts this body
+ * at a time (the caller gates on that), so — like `focusAnyContextChipLadder` in liveTurnFocusGraph.ts
+ * — a plain, unscoped query for this body's own row class to find "the last row" is safe, and so is
+ * one module-level slot for its first row. `bonsai-details-session-row` is a class of this
+ * component's own so `focusLastSessionContextRow` (liveTurnFocusGraph.ts, the old standalone
+ * strip's) can never match it.
+ */
+export function SessionContextTabBody({
+  liveTurn = null,
+  archivedTurns = [],
+  highlightTurnId = null,
+  onHighlightClear,
+  onMoveUpFromTop,
+  onRequestClose,
+  onMoveDownPastTab,
+  sumUp = null,
+  answerInFlight = false,
+  creditsViewFor,
+}: SessionContextTabBodyProps) {
+  const [activeId, setActiveId] = useState<string>("live");
+
+  const rows = computeSessionContextRows(liveTurn, archivedTurns);
+
+  const effectiveActive =
+    highlightTurnId && rows.some((r) => r.id === highlightTurnId) ? highlightTurnId : activeId;
+  const activeRow = rows.find((r) => r.id === effectiveActive) ?? rows[rows.length - 1];
+
+  /* Up off the first row goes to the summary card or the button above it, then the tabs row. */
+  const upFromFirstRow = () => focusLastSumUpStop() || (onMoveUpFromTop?.() ?? false);
+  /*
+   * Down off the last row goes to the active row's chips, by the chips' own registered root, and is
+   * consumed either way. Left to Steam's own guess it jumped over the chips to "Save chat to Desktop"
+   * outside the tab, with the chips on screen right there (measured on the Deck 2026-09-26,
+   * plan68-FOCUS-SWEEP-p2: chips at 250-548, dock top 600). The chips' root is one of our own bare
+   * rows, so it is focused the same measured way the "This answer" tab's chips are
+   * (buildDetailsPanelElement.tsx, focusChipLadderRow), never by a page search.
+   */
+  const downFromLastRow = () => (sessionLadderEl ? focusRowElement(sessionLadderEl) : false) || true;
+  /*
+   * Down off the Sum up section: the first row when there is one (consumed either way, as before).
+   * With no rows, Sum up or its card is the tab's last stop, and swallowing Down there was the same
+   * trap as the ladder's last chip (plan 72), so it leaves by the same route.
+   */
+  const downPastSumUp = () =>
+    rows.length > 0
+      ? focusDeckOwner(firstSessionRowEl) || true
+      : onMoveDownPastTab?.() ?? true;
+
+  return (
+    <Focusable
+      className="bonsai-details-session-body"
+      style={{
+        marginTop: 8,
+        width: "100%",
+        maxWidth: "100%",
+        minWidth: 0,
+        boxSizing: "border-box",
+        display: "flex",
+        flexDirection: "column",
+        gap: 6,
+      }}
+      /*
+       * B closes the whole panel via `onRequestClose`, not a local collapse — `onCancelButton` +
+       * `preventDefault`, not `onButtonDown` checking the button code: measured on device
+       * 2026-08-28 (GlossaryTermChip.tsx, buildReasoningFoldElement.tsx) that `onButtonDown`
+       * does receive B, but returning `true` does NOT stop Steam also backing the ring out of the
+       * panel — only `onCancelButton` genuinely consumes the press. Safe to attach
+       * unconditionally: this body only exists while the Session tab is showing, so there is no
+       * "nothing to close" state of this same node where B ought to fall through instead.
+       */
+      {...({
+        onCancelButton: (e: unknown) => {
+          onRequestClose?.();
+          (e as { preventDefault?: () => void })?.preventDefault?.();
+        },
+      } as Record<string, unknown>)}
+    >
+      <SessionSumUpSection
+        state={sumUp}
+        answerInFlight={answerInFlight}
+        onMoveUpFromButton={() => onMoveUpFromTop?.() ?? false}
+        onMoveDownPastSection={downPastSumUp}
+      />
+      {rows.map((row, index) => {
+        const isFirst = index === 0;
+        const isLast = index === rows.length - 1;
+        return (
+        <Focusable
+          key={row.id}
+          className="bonsai-details-session-row"
+          ref={
+            index === 0
+              ? (el: HTMLElement | null) => {
+                  firstSessionRowEl = el;
+                }
+              : undefined
+          }
+          onActivate={() => {
+            setActiveId(row.id);
+            onHighlightClear?.();
+          }}
+          onButtonDown={(evt) => {
+            if (!isOkDeckButtonEvent(evt)) return false;
+            setActiveId(row.id);
+            onHighlightClear?.();
+            return true;
+          }}
+          {...(isFirst || isLast
+            ? ({
+                ...(isFirst ? { onMoveUp: upFromFirstRow } : {}),
+                ...(isLast ? { onMoveDown: downFromLastRow } : {}),
+                onButtonDown: (evt: unknown) => {
+                  if (isOkDeckButtonEvent(evt)) {
+                    setActiveId(row.id);
+                    onHighlightClear?.();
+                    return true;
+                  }
+                  if (isFirst && isDeckDirectionUpEvent(evt)) return upFromFirstRow();
+                  if (isLast && isDeckDirectionDownEvent(evt)) return downFromLastRow();
+                  return false;
+                },
+              } as Record<string, unknown>)
+            : {})}
+          style={{
+            padding: "6px 8px",
+            borderRadius: 6,
+            border:
+              row.id === effectiveActive
+                ? "1px solid rgba(125, 211, 252, 0.55)"
+                : "1px solid rgba(255,255,255,0.08)",
+            background: row.id === effectiveActive ? "rgba(56,189,248,0.12)" : "transparent",
+            fontSize: textPx(11),
+            color: "#dce8f4",
+          }}
+        >
+          {row.label}
+        </Focusable>
+        );
+      })}
+      {activeRow?.snapshot ? (
+        <ContextChipLadder
+          snapshot={activeRow.snapshot}
+          collapsedHint={false}
+          creditsView={creditsViewFor?.(activeRow.id, activeRow.snapshot)}
+          rootRef={(el) => {
+            sessionLadderEl = el;
+          }}
+          onMoveUpFromLadder={() => focusLastSessionTabRow() || upFromFirstRow()}
+          /*
+           * The ladder is the last thing in the tab now that Clear is gone. Down past it used to
+           * stay put (plan 68 § 6: Steam's own guess once threw the ring into the dock), and that
+           * was a trap: on the Deck, seven Downs and a Right left the ring on "Chip 6 of 6" with
+           * the question box unreachable except by B (plan 70 flow L6; plan 72 free play,
+           * plan72-Z-FREEPLAY.json finding 1). It now leaves the panel by name.
+           */
+          onMoveDownFromLadder={() => onMoveDownPastTab?.() ?? true}
+          /*
+           * B on the ladder itself swallows the press to re-collapse just the ladder locally
+           * (ContextChipLadder's own onButtonDown) — without this, that local collapse would run
+           * INSTEAD of closing the whole panel, leaving the row list open behind a "tap for
+           * details" hint rather than actually leaving Show details the way B is supposed to here.
+           */
+          onExpandChange={(expanded) => {
+            if (!expanded) onRequestClose?.();
+          }}
+        />
+      ) : null}
+    </Focusable>
+  );
+}
+
+/** This body's first turn row, for Down off the Sum up section — a ref, never a page search. */
+let firstSessionRowEl: HTMLElement | null = null;
+
+/** The active row's chips, for Down off the last row — the chips' own root, registered. */
+let sessionLadderEl: HTMLElement | null = null;
+
+/**
+ * The last row inside THIS body specifically — see the component doc above for why an unscoped
+ * query is safe here (at most one `SessionContextTabBody` is ever mounted at a time) and why it
+ * cannot reuse `focusLastSessionContextRow` (liveTurnFocusGraph.ts), which looks for the
+ * standalone strip's own, differently-named row class.
+ */
+function focusLastSessionTabRow(): boolean {
+  const rows = getUiDocument().querySelectorAll<HTMLElement>(".bonsai-details-session-row");
+  return focusDeckOwner(rows.length ? rows[rows.length - 1] : null);
+}

@@ -1,0 +1,235 @@
+{
+  "version": "v0",
+  "description": "Maintainer labeled eval set for KB Phase 3 (compat hybrid + 11-title strategy seed). ALL cases are `tune`: they were written alongside the cards they match, so they cannot serve as a ship gate (R1 in docs/rag-retrieval-quality-remediation-implementation-plan.md). The holdout split is written blind in PR2 stage 6c.",
+  "default_split": "tune",
+  "queries": [
+    {
+      "id": "EVAL-C01",
+      "query": "why is my game crashing proton issue",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "proton",
+      "notes": "compat hybrid or keyword FTS"
+    },
+    {
+      "id": "EVAL-C02",
+      "query": "deck sleep resume proton game black screen",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "proton",
+      "notes": "compat tips"
+    },
+    {
+      "id": "EVAL-C03",
+      "query": "steamvr usb bandwidth headset",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "steamvr",
+      "notes": "compat tips"
+    },
+    {
+      "id": "EVAL-C04",
+      "query": "gamescope FSR deck resolution",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "gamescope",
+      "notes": "compat tips"
+    },
+    {
+      "id": "EVAL-C05",
+      "query": "anti-cheat multiplayer blocked linux deck",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "anticheat",
+      "notes": "compat tips"
+    },
+    {
+      "id": "EVAL-C06",
+      "query": "remote play stutter from pc to deck",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "streaming",
+      "notes": "compat tips"
+    },
+    {
+      "id": "EVAL-C07",
+      "query": "move steam library to sd card",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "storage",
+      "notes": "compat tips"
+    },
+    {
+      "id": "EVAL-C08",
+      "query": "gyro aim steam input cyberpunk",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "steam_input",
+      "notes": "compat tips"
+    },
+    {
+      "id": "EVAL-C09",
+      "query": "emudeck pcsx2 settings deck",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "emudeck",
+      "notes": "compat tips"
+    },
+    {
+      "id": "EVAL-C10",
+      "query": "steamos update stuck reboot",
+      "ask_mode": "speed",
+      "domain": "compat",
+      "app_id": "",
+      "expect_topic": "updates",
+      "notes": "compat tips"
+    },
+    {
+      "id": "EVAL-S01",
+      "query": "Glyphid Dreadnought weak point",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "2321470",
+      "expect_section": "Glyphid Dreadnought",
+      "notes": "DRG Survivor regression"
+    },
+    {
+      "id": "EVAL-S02",
+      "query": "Queen Gohma boss weak point",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "",
+      "expect_section": "Queen Gohma",
+      "notes": "OoT/SoH alias path",
+      "shortcut": "ocarina of time"
+    },
+    {
+      "id": "EVAL-S03",
+      "query": "how to beat Tank l4d2",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "550",
+      "expect_section": "Tank",
+      "notes": "L4D2 seed"
+    },
+    {
+      "id": "EVAL-S04",
+      "query": "Mind Flayer boss bg3",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "1086940",
+      "expect_section": "Mind Flayer",
+      "notes": "BG3 seed"
+    },
+    {
+      "id": "EVAL-S05",
+      "query": "Deathclaw fallout 4 fight",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "377160",
+      "expect_section": "Deathclaw",
+      "notes": "FO4 seed"
+    },
+    {
+      "id": "EVAL-S06",
+      "query": "State of Emergency downtown pcsx2",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "",
+      "shortcut": "state of emergency",
+      "expect_section": "Downtown",
+      "notes": "Non-Steam alias"
+    },
+    {
+      "id": "EVAL-S07",
+      "query": "Megaera fight hades",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "1145360",
+      "expect_section": "Megaera",
+      "notes": "Hades seed"
+    },
+    {
+      "id": "EVAL-S08",
+      "query": "Adam Smasher cyberpunk",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "1091500",
+      "expect_section": "Adam Smasher",
+      "notes": "Cyberpunk seed"
+    },
+    {
+      "id": "EVAL-S09",
+      "query": "Big Smoke chase gta san andreas",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "1547000",
+      "expect_section": "Big Smoke",
+      "notes": "GTA SA DE seed"
+    },
+    {
+      "id": "EVAL-S10",
+      "query": "sims 4 starter lot build",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "1222670",
+      "expect_section": "Starter Lot",
+      "notes": "Sims 4 seed"
+    },
+    {
+      "id": "EVAL-S11",
+      "query": "bear fight rdr2 dead eye",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "1174180",
+      "expect_section": "Bear",
+      "notes": "RDR2 seed"
+    },
+    {
+      "id": "EVAL-S12",
+      "query": "Shadow Temple invisible floor oot",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "",
+      "expect_section": "Shadow Temple invisible floors",
+      "notes": "OoT dungeon",
+      "shortcut": "ocarina of time"
+    },
+    {
+      "id": "EVAL-S13",
+      "query": "Hollow Bough drg survivor",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "2321470",
+      "expect_section": "Hollow Bough",
+      "notes": "DRG area card"
+    },
+    {
+      "id": "EVAL-S14",
+      "query": "Valentine honor missions rdr2",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "1174180",
+      "expect_section": "Valentine",
+      "notes": "RDR2 area"
+    },
+    {
+      "id": "EVAL-S15",
+      "query": "All Foods Plant stealth cyberpunk",
+      "ask_mode": "strategy",
+      "domain": "strategy",
+      "app_id": "1091500",
+      "expect_section": "All Foods Plant",
+      "notes": "Cyberpunk area"
+    }
+  ]
+}

@@ -7,26 +7,36 @@ import unittest
 from unittest.mock import Mock, patch
 from types import SimpleNamespace
 
-from backend.services.voice_transcription_service import (
+from backend.voice.voice_transcription_service import (
     DEFAULT_VOICE_STT_MODEL,
     VoiceTranscriptionSession,
     _link_versioned_sonames,
     _parse_whisper_stdout,
     _pcm_rms,
-    _pcm_to_wav_bytes,
     _runtime_dir_usable,
-    _sanitize_whisper_transcript,
     _whisper_decode_usable,
-    merge_sliding_window_transcript,
-    resolve_whisper_cli,
     sanitize_voice_stt_model,
+)
+from backend.voice.voice_whisper_runtime import (
+    _pcm_to_wav_bytes,
+    _sanitize_whisper_transcript,
+    resolve_whisper_cli,
     voice_whisper_cli_path,
     whisper_binary_usable,
 )
 
 
 class VoiceTranscriptionServiceTests(unittest.TestCase):
-    def test_sanitize_voice_stt_model_defaults_tiny(self):
+    def test_fresh_settings_choose_base_en_for_voice_input(self):
+        # 2026-10-10: tiny.en repeats words and stops early with a real voice; base.en does not.
+        from backend.settings.settings_service import sanitize_settings
+        from test_settings_contract import PLUGIN_SANITIZE_ARGS
+
+        self.assertEqual(DEFAULT_VOICE_STT_MODEL, "base.en")
+        self.assertEqual(sanitize_settings({}, **PLUGIN_SANITIZE_ARGS)["voice_stt_model"], "base.en")
+        self.assertEqual(sanitize_voice_stt_model(None), "base.en")
+
+    def test_sanitize_voice_stt_model_falls_back_to_default(self):
         self.assertEqual(sanitize_voice_stt_model(None), DEFAULT_VOICE_STT_MODEL)
         self.assertEqual(sanitize_voice_stt_model("base.en"), "base.en")
         self.assertEqual(sanitize_voice_stt_model("large"), DEFAULT_VOICE_STT_MODEL)
@@ -75,7 +85,7 @@ class VoiceTranscriptionServiceTests(unittest.TestCase):
 
     def test_voice_binary_ready_requires_cpu_safe_marker_without_model(self):
         with tempfile.TemporaryDirectory() as plugin_root, tempfile.TemporaryDirectory() as settings_dir:
-            from backend.services.voice_transcription_service import (
+            from backend.voice.voice_transcription_service import (
                 _voice_bin_mark_cpu_safe,
                 _voice_binary_ready_for_inference,
                 voice_bin_dir,
@@ -84,65 +94,17 @@ class VoiceTranscriptionServiceTests(unittest.TestCase):
             dest = voice_whisper_cli_path(plugin_root, settings_dir)
             os.makedirs(os.path.dirname(dest), exist_ok=True)
             with patch(
-                "backend.services.voice_transcription_service.whisper_binary_usable",
+                "backend.voice.voice_transcription_service.whisper_binary_usable",
                 return_value=dest,
             ):
                 self.assertIsNone(_voice_binary_ready_for_inference(plugin_root, settings_dir))
                 _voice_bin_mark_cpu_safe(voice_bin_dir(plugin_root, settings_dir))
                 self.assertEqual(_voice_binary_ready_for_inference(plugin_root, settings_dir), dest)
 
-    @unittest.skipIf(os.name == "nt", "symlinks require elevated privileges on Windows")
-    def test_copy_whisper_libs_from_container_uses_build_bin(self):
-        from backend.services.voice_transcription_service import (
-            _copy_whisper_libs_from_container,
-            _missing_required_sonames,
-        )
-
-        with tempfile.TemporaryDirectory() as bin_dir:
-            bin_dir_path = bin_dir
-
-            def fake_run(cmd, *args, **kwargs):
-                if cmd[0:3] == ["podman", "cp", f"cid:/app/build/bin/."]:
-                    for name in (
-                        "libwhisper.so.1.9.1",
-                        "libggml.so.0.9.0",
-                        "libggml-base.so.0.9.0",
-                        "libggml-cpu.so.0.9.0",
-                    ):
-                        with open(os.path.join(bin_dir_path, name), "wb") as f:
-                            f.write(b"\x7fELF")
-                    return Mock(returncode=0, stdout="", stderr="")
-                return Mock(returncode=1, stdout="", stderr="missing")
-
-            with patch("backend.services.voice_transcription_service.subprocess.run", side_effect=fake_run):
-                _copy_whisper_libs_from_container("podman", "cid", bin_dir_path, {})
-            _link_versioned_sonames(bin_dir_path)
-            self.assertEqual(_missing_required_sonames(bin_dir_path), [])
-
     @unittest.skipUnless(sys.platform.startswith("linux"), "linux session paths only")
     def test_runtime_dir_usable_false_for_missing(self):
         self.assertFalse(_runtime_dir_usable(""))
         self.assertFalse(_runtime_dir_usable("/nonexistent/path"))
-
-    def test_merge_sliding_window_extends_partial(self):
-        fin, partial = merge_sliding_window_transcript("", "hello", "hello world")
-        self.assertEqual(fin, "")
-        self.assertEqual(partial, "hello world")
-
-    def test_merge_sliding_window_commits_on_overlap_shift(self):
-        fin, partial = merge_sliding_window_transcript("", "hello world", "world how are")
-        self.assertEqual(fin, "hello")
-        self.assertEqual(partial, "world how are")
-
-    def test_merge_sliding_window_commits_on_no_overlap(self):
-        fin, partial = merge_sliding_window_transcript("ask", "foo bar", "baz qux")
-        self.assertEqual(fin, "ask foo bar")
-        self.assertEqual(partial, "baz qux")
-
-    def test_merge_sliding_window_ignores_shorter_regression(self):
-        fin, partial = merge_sliding_window_transcript("", "hello world", "hello")
-        self.assertEqual(fin, "")
-        self.assertEqual(partial, "hello world")
 
     def test_parse_whisper_stdout_strips_timestamp_line(self):
         raw = "[00:00:00.000 --> 00:00:02.000]   Testing one, two, three."
@@ -181,41 +143,13 @@ class VoiceTranscriptionServiceTests(unittest.TestCase):
     def test_whisper_decode_usable_accepts_real_phrase_on_quiet_window(self):
         self.assertTrue(_whisper_decode_usable("Hello, this is a test", 200.0))
 
-    def test_merge_drops_isolated_you_when_speech_shifts(self):
-        fin, partial = merge_sliding_window_transcript("", "you", "Hello, this is a test")
-        self.assertEqual(fin, "")
-        self.assertEqual(partial, "Hello, this is a test")
-
     def test_whisper_decode_usable_rejects_quiet_yes(self):
         self.assertFalse(_whisper_decode_usable("Yes.", 400.0))
 
     def test_whisper_decode_usable_rejects_quiet_test(self):
         self.assertFalse(_whisper_decode_usable("Test.", 518.0))
 
-    def test_merge_drops_test_fragment_before_testing(self):
-        fin, partial = merge_sliding_window_transcript("", "Test.", "Testing one, two, three.")
-        self.assertEqual(fin, "")
-        self.assertEqual(partial, "Testing one, two, three.")
-
-    def test_merge_dedupes_after_silence_commit(self):
-        fin, partial = merge_sliding_window_transcript(
-            "Testing one, two, three.",
-            "",
-            "Testing one, two, three, four.",
-        )
-        self.assertEqual(fin, "Testing one, two, three.")
-        self.assertEqual(partial, "four.")
-
-    def test_merge_normalized_overlap_ignores_punctuation(self):
-        fin, partial = merge_sliding_window_transcript(
-            "",
-            "Testing, one two, three.",
-            "three, four.",
-        )
-        self.assertEqual(fin, "Testing, one two,")
-        self.assertEqual(partial, "three, four.")
-
-    def test_pcm_buffer_survives_concurrent_append_and_window(self):
+    def test_recording_buffer_survives_concurrent_append_and_read(self):
         session = VoiceTranscriptionSession("/tmp", "/tmp", DEFAULT_VOICE_STT_MODEL, SimpleNamespace())
         chunk = struct.pack("<256h", *([100] * 256))
         stop = threading.Event()
@@ -232,8 +166,8 @@ class VoiceTranscriptionServiceTests(unittest.TestCase):
         t.start()
         try:
             for _ in range(500):
-                session._window_pcm(1.0)
-                session._drop_pcm_before(0.25)
+                session._pcm_from(0)
+                session._pcm_from(0, 4096)
         finally:
             stop.set()
             t.join(timeout=2.0)

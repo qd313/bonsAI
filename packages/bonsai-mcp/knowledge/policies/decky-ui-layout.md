@@ -16,4 +16,4 @@ description: Measure-before-CSS layout debugging rules
 Reference implementations:
 
 - `src/components/ConnectionTimeoutSlider.tsx` — horizontal navigation via move callbacks
-- `src/features/unified-input/useUnifiedInputSurface.ts` — canonical durable geometry pattern
+- `src/features/ask/bar/useUnifiedInputSurface.ts` — canonical durable geometry pattern

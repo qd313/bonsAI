@@ -1,281 +1,214 @@
+/**
+ * Title: Plugin root
+ *
+ * Purpose: The file Decky loads to build bonsAI's whole panel — the one a
+ * person opens from the Quick Access Menu. `definePlugin()` at the very
+ * bottom hands Decky the plugin's name, icon, and its whole React tree;
+ * everything above that builds the tree. `Content` is that tree: it wires
+ * together every setting and every tab — Main, Ollama, Settings,
+ * Permissions, Developer, About — and the many hooks each one needs, then
+ * draws the tab strip and whichever tab is open.
+ *
+ *     Decky Quick Access Menu
+ *          │ opens the panel
+ *          ▼
+ *     definePlugin()  ──►  { content: <Root/> }
+ *          │
+ *          ▼
+ *     <Root>  (an error boundary — a crash in one tab does not take the
+ *              whole panel down silently)
+ *          │
+ *          ▼
+ *     <Content>
+ *          │
+ *          ├─ usePluginSettings() and friends: load settings, watch for
+ *          │    changes, and save them back
+ *          ├─ useBonsaiAskOrchestration(): the whole Ask flow — see its own
+ *          │    header for how a question travels from press to answer
+ *          ├─ useChatSlots(), useIntentPacks(), useKidsLock(), and a dozen
+ *          │    more: one hook per self-contained piece of behavior
+ *          │
+ *          ▼
+ *     one useXxxTabPayload() per tab, each turning the state above into the
+ *     exact props that tab's components need
+ *          │
+ *          ▼
+ *     <Tabs> draws the tab strip and whichever tab's props are on screen
+ *
+ * Used for: mounted once by Decky when the panel opens.
+ *
+ * Solves: One composition root, so the plugin's actual behavior — settings,
+ * the Ask flow, chat slots, and the rest — lives in hooks and feature files
+ * instead of being written inline in the file Decky happens to load first.
+ *
+ * Does not: Run the Ask flow itself — useBonsaiAskOrchestration does that,
+ * and this file only wires its returned state into the Main tab's props.
+ * Does not talk to the backend for anything routine either; the handful of
+ * direct calls left here (clearing all plugin data, for instance) are the
+ * ones too one-off to belong in any more specific hook. See main.py for the
+ * backend side of everything this file wires up.
+ *
+ * Split note (plan 65): the empty starting snapshot moved to
+ * features/plugin-shell/initialSessionSnapshot.ts; the two "clear the session" /
+ * "clear everything" actions moved to features/plugin-shell/useSessionResetActions.tsx; the
+ * post-remount session restore moved to
+ * features/plugin-shell/useSessionRestoreAfterRemount.ts; the chat-slot activity refs moved to
+ * features/plugin-shell/useChatSlotActivityState.ts; the accent and Text size scope style moved to
+ * features/plugin-shell/useBonsaiScopeStyle.ts; voice input plus its Ask glue moved to
+ * features/voice/useVoiceAskWithReadAloud.ts; the two Developer-tab actions moved to
+ * features/plugin-shell/useDeveloperToolActions.ts; the slow-warning timer and the unified-input
+ * persistence effects moved to features/plugin-shell/useUnifiedInputBehaviors.ts; the two
+ * leave-the-panel navigation actions (and the SteamUrlApi type) moved to
+ * features/plugin-shell/useExternalNavigationActions.ts; the desktop-log prefs, captured
+ * frontend errors, and the tab-open log line moved to
+ * features/plugin-shell/useAppLogPrefsAndCapturedErrors.ts; the two small settings-driven guard
+ * effects moved to features/plugin-shell/useTabAndModeGuardEffects.ts.
+ *
+ * How it works:
+ * 1. Load every hook Content depends on: settings, the one-time disclaimer
+ *    and local-AI warning pop-ups, kids-lock, chat slots, intent
+ *    packs, voice input, and, centrally, useBonsaiAskOrchestration for the
+ *    whole Ask flow.
+ * 2. Track the handful of pieces of state that belong to Content itself
+ *    rather than to any one hook: which tab is open, which chat slot is
+ *    currently generating an answer, and a few refs used to survive a
+ *    re-render or a remount without losing track of an in-flight question.
+ * 3. Wire up session survival: a function that takes a copy of the whole
+ *    screen, detailed enough to rebuild it, for when the panel closes and
+ *    reopens mid-question — and, the deliberate opposite of that,
+ *    resetPluginSession and onClearAllPluginData, the two ways a session can
+ *    be thrown away on purpose.
+ * 4. Build one useXxxTabPayload() call per tab — useSearchTabPayload,
+ *    useMainTabPayload, useSettingsTabPayload, useOllamaTabPayload,
+ *    usePermissionsTabPayload, useDeveloperTabPayload, useAboutTabPayload — each one turning the state
+ *    gathered above into exactly the props that tab's own components need.
+ * 5. Assemble deckyTabs, the list Steam's own Tabs component draws from, and
+ *    render the tab strip above it.
+ * 6. definePlugin(), at the very end, is the actual handoff to Decky: the
+ *    plugin's name, its title (ChatTitleView: the chat's name on the Main
+ *    tab, plan 84) and icon, and content: <Root />.
+ *
+ * Gotchas:
+ * - The order these hooks are declared in matters. Several are declared
+ *   after another one specifically because they need a value or a setter
+ *   that earlier hook produced — useChatSlots, for instance, needs the Ask
+ *   flow's own thread setters. Reordering risks a hook reading a ref that
+ *   has not been filled in yet.
+ * - Several refs exist purely so a stable callback can read a later render's
+ *   value without changing identity itself on every render. Passing a
+ *   freshly created function directly instead of going through a ref was
+ *   measured, in one case documented inline, to re-arm an effect on every
+ *   render and produce an update loop.
+ */
 import React, { useCallback, useState, useMemo, useEffect, useLayoutEffect, useRef } from "react";
-import { definePlugin, toaster, call } from "@decky/api";
-import { Navigation, Router, showModal, Tabs } from "@decky/ui";
+import { definePlugin, useQuickAccessVisible } from "@decky/api";
+import { Tabs } from "@decky/ui";
 
-import { PLUGIN_VERSION } from "./pluginVersion";
+import { buildInitialSessionSnapshot } from "./features/plugin-shell/initialSessionSnapshot";
+import { DEFAULT_LATENCY_WARNING_SECONDS } from "./features/settings/bonsaiSettingsSchema";
+import { setFrozenTestChips } from "./features/preset-carousel/presets";
+import { BonsaiPluginShell } from "./features/plugin-shell/BonsaiPluginShell";
+import { BonsaiDebugOverlay } from "./features/developer/BonsaiDebugOverlay";
+import { activeOllamaRoutingTag } from "./features/models/activeOllamaRoutingTag";
+import { appendAppDesktopLogWithPrefs } from "./features/developer/appDesktopLog";
 import {
-  DEFAULT_LATENCY_WARNING_SECONDS,
-  OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP,
-  normalizeAiCharacterCustomText,
-  normalizeAiCharacterPresetId,
-  toBonsaiSettingsPayload,
-  type BonsaiSettings,
-} from "./utils/settingsAndResponse";
-import { AboutTab } from "./components/AboutTab";
-import { BonsaiPluginShell } from "./components/BonsaiPluginShell";
-import { BonsaiDebugOverlay } from "./components/BonsaiDebugOverlay";
-import { CharacterPickerModal } from "./components/CharacterPickerModal";
-import { DesktopNoteSaveModal } from "./components/DesktopNoteSaveModal";
-import { DeveloperTab, type DeveloperConnectionStatus } from "./components/DeveloperTab";
-import { MainTab } from "./components/MainTab";
-import { PluginHelpModal } from "./components/PluginHelpModal";
-import { OllamaModelsHubModal, type OllamaModelsHubSection } from "./components/OllamaModelsHubModal";
-import { OllamaTab } from "./components/OllamaTab";
-import { PermissionsTab } from "./components/PermissionsTab";
-import { SettingsTab } from "./components/SettingsTab";
-import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
-import { jumpToSteamInputEntry } from "./utils/steamInputJump";
-import {
-  formatAiCharacterSelectionLine,
-  resolveMainTabAvatarBadgeLetter,
-  resolveMainTabAvatarPresetId,
-} from "./data/characterCatalog";
-import { buildBonsaiScopeAccentInlineStyle, resolveUiAccentFromCharacterSettings } from "./data/characterUiAccent";
-import { appendAppDesktopLogWithPrefs } from "./utils/appDesktopLog";
-import {
-  acknowledgePluginDataClearHandled,
-  clearBonsaiSessionSurvival,
-  consumeBonsaiSessionAfterRemount,
-  finalizeSessionRestoreAfterRemount,
   getPluginDataClearedGeneration,
-  markPluginDataCleared,
-  patchPendingSessionSettingsSnapshot,
-  patchPendingSessionSurvival,
   peekBonsaiSessionPendingRestore,
-  shouldIgnoreRestoredSettingsSnapshot,
   type BonsaiSessionSurvivalSnapshot,
-} from "./utils/bonsaiSessionSurvival";
-import { clearBonsaiBrowserStorage } from "./utils/clearBonsaiBrowserStorage";
-import { bonsaiDebugLog } from "./utils/bonsaiDebugIngest";
-import { persistOllamaIpIfRoutingToLan as persistOllamaIpIfRoutingToLanUtil } from "./utils/persistOllamaIp";
-import { clearOllamaTabLocalSurvival } from "./utils/ollamaTabLocalSurvival";
-import { clearSettingsTabLocalSurvival } from "./utils/settingsTabLocalSurvival";
-import { shouldClearUnifiedInputForPersistenceMode } from "./utils/unifiedInputPersistenceMode";
-import { getRandomPresets } from "./data/presets";
+} from "./features/plugin-shell/bonsaiSessionSurvival";
+import { consumePendingFocusMainTab, useReplySurfaceVisibility } from "./features/answer/notices/bonsaiReplySurface";
 import {
-  AboutTabTitleIcon,
-  BonsaiTreeTabIcon,
   BonsaiSvgIcon,
-  BugIcon,
-  GearIcon,
-  LockIcon,
-  OllamaTabIcon,
-} from "./components/icons";
-import { MODEL_POLICY_README_URL, type ModelPolicyTierId } from "./data/modelPolicy";
-import {
-  ASK_LABEL_COLOR_50,
-  BONSAI_FOREST_GREEN,
-  TAB_TITLE_DEBUG_TAB_ICON_PX,
-  TAB_TITLE_ICON_PX,
-  TAB_TITLE_MAIN_TAB_ICON_PX,
-} from "./features/unified-input/constants";
-import { useUnifiedInputSurface } from "./features/unified-input/useUnifiedInputSurface";
-import { useUiScaleProfile } from "./hooks/useUiScaleProfile";
-import { useQamPanelHeightGuard } from "./hooks/useQamPanelHeightGuard";
-import { useTabStripBodyOffset } from "./hooks/useTabStripBodyOffset";
-import { UiScaleProvider } from "./context/UiScaleContext";
-import { publishUiScaleScopeStyle } from "./utils/uiScaleScopeBridge";
-import { normalizeUiScaleProfileId, type UiScaleProfileId } from "./data/uiScaleProfile";
-import { formatDeckyRpcError } from "./utils/deckyCall";
-import { usePluginSettings } from "./hooks/usePluginSettings";
-import { useIntentPacks } from "./hooks/useIntentPacks";
-import { useScreenshotBrowser } from "./hooks/useScreenshotBrowser";
-import { useSteamSettingsSearch } from "./hooks/useSteamSettingsSearch";
-import { useBonsaiPluginShell } from "./hooks/useBonsaiPluginShell";
-import { useVoiceTranscription } from "./hooks/useVoiceTranscription";
-import { useBonsaiAskOrchestration } from "./hooks/useBonsaiAskOrchestration";
-import { useDisclaimerAndLocalRuntimeGates } from "./hooks/useDisclaimerAndLocalRuntimeGates";
-import { useCapturedFrontendErrors } from "./hooks/useCapturedFrontendErrors";
-import { getSteamSettingsUrl, isQamSetting } from "./data/steamSettingsNavigation";
-import { registerPreviewTestHooks, isDeckyPreviewRuntime } from "./preview/previewTestHooks";
-import {
-  GITHUB_ISSUES_URL,
-  IP_DEFAULT,
-  IP_STORAGE_KEY,
-  OLLAMA_UPSTREAM_REPO_URL,
-  PLUGIN_HELP_DISMISSED_STORAGE_KEY,
-  UNIFIED_INPUT_STORAGE_KEY,
-} from "./data/storageKeys";
+} from "./shared/icons/icons";
+import { useUnifiedInputSurface } from "./features/ask/bar/useUnifiedInputSurface";
+import { PluginErrorBoundary } from "./features/plugin-shell/PluginErrorBoundary";
+import { DECKY_TAB_TITLES, type BonsaiTabId } from "./features/plugin-shell/tabTitles";
+import { TabIndicatorBar } from "./features/plugin-shell/TabIndicatorBar";
+import { HiddenTabHeaderTrap } from "./features/plugin-shell/useHiddenTabHeaderTrap";
+import { SteamTabRowGuard } from "./features/plugin-shell/useSteamTabRowGuard";
+import { TabBodyFocusRoot } from "./features/plugin-shell/TabBodyFocusRoot";
+import { takeNavFocus } from "./shared/dpad/navFocusRegistry";
+import { loadSavedSearchQuery, persistSearchQuery, saveIp } from "./features/plugin-shell/pluginStorage";
+import { saveSettingsNowOrPatch } from "./features/ai-connection/first-run/saveSettingsNowOrPatch";
+import { useOllamaConnectionState } from "./features/ai-connection/useOllamaConnectionState";
+import { useDeveloperTabPayload } from "./features/plugin-shell/tabs/useDeveloperTabPayload";
+import { useAboutTabPayload } from "./features/plugin-shell/tabs/useAboutTabPayload";
+import { useSearchTabPayload } from "./features/plugin-shell/tabs/useSearchTabPayload";
+import { usePermissionsTabPayload } from "./features/plugin-shell/tabs/usePermissionsTabPayload";
+import { useSettingsTabPayload } from "./features/plugin-shell/tabs/useSettingsTabPayload";
+import { useOllamaTabPayload } from "./features/plugin-shell/tabs/useOllamaTabPayload";
+import { useMainTabPayload } from "./features/plugin-shell/tabs/useMainTabPayload";
+import { useQamPanelHeightGuard } from "./features/plugin-shell/useQamPanelHeightGuard";
+import { useQamPanelSideBleed } from "./features/plugin-shell/useQamPanelSideBleed";
+import { useTabStripBodyOffset } from "./features/plugin-shell/useTabStripBodyOffset";
+import { usePluginSettings } from "./features/settings/usePluginSettings";
+import type { StreamScrambleSettings } from "./features/answer/stream/streamScrambleContext";
+import { useReplyLanguage } from "./shared/i18n/useReplyLanguage";
+import { useIntentPacks } from "./features/search-tab/useIntentPacks";
+import { useScreenshotBrowser } from "./features/media/useScreenshotBrowser";
+import { useSteamSettingsSearch } from "./features/search-tab/useSteamSettingsSearch";
+import { useBonsaiPluginShell } from "./features/plugin-shell/useBonsaiPluginShell";
+import { usePermissionJump } from "./features/permissions/usePermissionJump";
+import { effectiveCapabilities, useKidsLock } from "./features/permissions/useKidsLock";
+import { useDownloadPermissionBridge } from "./features/downloads/downloadNotice";
+import { useVoiceAskWithReadAloud } from "./features/voice/useVoiceAskWithReadAloud";
+import { useDeveloperToolActions } from "./features/developer/useDeveloperToolActions";
+import { useSlowResponseWarningTimer, useUnifiedInputPersistence } from "./features/ask/bar/useUnifiedInputBehaviors";
+import { useOllamaModelsHubModal } from "./features/models/useOllamaModelsHubModal";
+import { useCharacterPickerModal } from "./features/characters/useCharacterPickerModal";
+import { desktopNoteExchangeFor, useDesktopNoteSaveModal } from "./features/user-notes/useDesktopNoteSaveModal";
+import { usePluginHelpModal } from "./features/about/usePluginHelpModal";
+import { useBonsaiAskOrchestration } from "./features/ask/flow/useBonsaiAskOrchestration";
+import { useChatSlots } from "./features/chats/slots/useChatSlots";
+import { useDisclaimerAndLocalRuntimeGates } from "./features/plugin-shell/useDisclaimerAndLocalRuntimeGates";
+import { useSessionResetActions } from "./features/settings/useSessionResetActions";
+import { useSessionRestoreAfterRemount } from "./features/plugin-shell/useSessionRestoreAfterRemount";
+import { useChatSlotActivityState } from "./features/chats/slots/useChatSlotActivityState";
+import { useBonsaiScopeStyle } from "./features/plugin-shell/useBonsaiScopeStyle";
+import { withTextScale } from "./shared/text-size/chatTextSize";
+import { usePublishTextScale } from "./shared/text-size/usePublishTextScale";
+import { useExternalNavigationActions } from "./features/plugin-shell/useExternalNavigationActions";
+import { useAppLogPrefsAndCapturedErrors } from "./features/developer/useAppLogPrefsAndCapturedErrors";
+import { useTabAndModeGuardEffects } from "./features/plugin-shell/useTabAndModeGuardEffects";
+import { ChatTitleView } from "./features/chats/title/ChatTitleView";
+import { setChatTitleLitColor } from "./features/chats/title/chatTitleStore";
+import { tabBarExitDownFor, useTopStripTabBar } from "./features/chats/title/useTopStripTabBar";
 
-/**
- * Preserves “plugin help chip dismissed” across Decky remounting `Content` when `showModal`
- * opens/closes (same lifecycle issue as tab restore in `useBonsaiPluginShell`).
- */
-let __bonsaiPluginHelpDismissed = false;
-
-/**
- * This boundary protects the plugin UI from render-time failures so Decky can keep the panel alive.
- * It captures component errors, logs diagnostics, and shows a recoverable fallback with reset controls.
- */
-class ErrorBoundary extends React.Component<any, { error: any; info?: any }> {
-  /** Initialize boundary state with no captured error. */
-  constructor(props: any) {
-    super(props);
-    this.state = { error: null };
-  }
-
-  /** Capture runtime render errors and persist debug details for the fallback panel. */
-  componentDidCatch(error: any, info: any) {
-    this.setState({ error, info });
-    try {
-      console.error("React render error", error, info);
-    } catch (e) {}
-  }
-
-  /** Render either the fallback UI or the child tree based on current boundary state. */
-  render() {
-    if (this.state.error) {
-      return (
-        <div style={{ padding: 16, color: "white" }}>
-          <div style={{ fontWeight: 700, marginBottom: 6 }}>Plugin error</div>
-          <div style={{ color: "tomato", whiteSpace: "pre-wrap" }}>{String(this.state.error)}</div>
-          <pre style={{ color: "gray", whiteSpace: "pre-wrap" }}>{this.state.info?.componentStack ?? ""}</pre>
-        </div>
-      );
-    }
-    return this.props.children;
-  }
-}
-
-type SteamUrlApi = {
-  ExecuteSteamURL(url: string): void;
-};
-
-type AppendDesktopNoteResult = {
-  success: boolean;
-  path?: string;
-  error?: string;
-};
-
-// Load persisted unified input text based on the selected persistence mode.
-function loadSavedSearchQuery(): string {
-  if (typeof window === "undefined") return "";
-  try {
-    return window.localStorage.getItem(UNIFIED_INPUT_STORAGE_KEY) ?? "";
-  } catch {
-    return "";
-  }
-}
-
-// Persist or clear unified input text according to current persistence preference.
-function persistSearchQuery(unifiedInputText: string): void {
-  if (typeof window === "undefined") return;
-  try {
-    if (unifiedInputText) {
-      window.localStorage.setItem(UNIFIED_INPUT_STORAGE_KEY, unifiedInputText);
-    } else {
-      window.localStorage.removeItem(UNIFIED_INPUT_STORAGE_KEY);
-    }
-  } catch {}
-}
-
-// Load saved Ollama host/IP for convenience between plugin sessions.
-function loadSavedIp(): string {
-  if (typeof window === "undefined") return IP_DEFAULT;
-  try {
-    return window.localStorage.getItem(IP_STORAGE_KEY) || IP_DEFAULT;
-  } catch { return IP_DEFAULT; }
-}
-
-// Persist Ollama host/IP updates from the connection field.
-function saveIp(ip: string): void {
-  if (typeof window === "undefined") return;
-  try { window.localStorage.setItem(IP_STORAGE_KEY, ip); } catch {}
-}
-
-const GITHUB_REPO_URL = GITHUB_ISSUES_URL.replace(/\/issues$/, "");
-
-function pluginHelpDismissedFromStorage(): boolean {
-  try {
-    return window.localStorage.getItem(PLUGIN_HELP_DISMISSED_STORAGE_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function markPluginHelpDismissedPersist(): void {
-  try {
-    window.localStorage.setItem(PLUGIN_HELP_DISMISSED_STORAGE_KEY, "1");
-  } catch {
-    /* ignore */
-  }
-}
-
-function bonsaiTabIconTitle(
-  classSuffix: "main" | "ollama" | "settings" | "permissions" | "developer" | "about",
-  children: React.ReactNode,
-): React.ReactElement {
-  return (
-    <div className="bonsai-tab-title-leaf">
-      <div className={`bonsai-tab-title-shell bonsai-tab-title-shell--${classSuffix}`}>
-        <span className={`bonsai-tab-title-icon bonsai-tab-title-icon--${classSuffix}`}>{children}</span>
-      </div>
-    </div>
-  );
-}
-
-const FULL_BLEED_ROW_STYLE: React.CSSProperties = {
-  width: "100%",
-  marginLeft: 0,
-  marginRight: 0,
-  boxSizing: "border-box",
-};
-
-const PRESET_BUTTON_SURFACE: React.CSSProperties = {
-  border: "1px solid rgba(255,255,255,0.1)",
-  background: "rgba(255,255,255,0.03)",
-  color: "#93a3b0",
-};
-
-const DECKY_TAB_TITLES = {
-  main: bonsaiTabIconTitle("main", <BonsaiTreeTabIcon size={TAB_TITLE_MAIN_TAB_ICON_PX} />),
-  ollama: bonsaiTabIconTitle("ollama", <OllamaTabIcon size={TAB_TITLE_ICON_PX} />),
-  settings: bonsaiTabIconTitle("settings", <GearIcon size={TAB_TITLE_ICON_PX} />),
-  permissions: bonsaiTabIconTitle("permissions", <LockIcon size={TAB_TITLE_ICON_PX} />),
-  developer: bonsaiTabIconTitle("developer", <BugIcon size={TAB_TITLE_DEBUG_TAB_ICON_PX} />),
-  about: bonsaiTabIconTitle("about", <AboutTabTitleIcon size={TAB_TITLE_ICON_PX} />),
-} as const;
-
-/**
- * Primary plugin shell: tabs plus Ask/settings wiring. Heavy logic lives in hooks under `src/hooks/`
- * (`usePluginSettings`, `useBackgroundGameAi`, `useDisclaimerAndLocalRuntimeGates`, `useBonsaiAskOrchestration`,
- * `useCapturedFrontendErrors`) and feature modules under `src/features/` so this file stays a composer.
+/*
+ * In: nothing — no props. Every value Content needs, it reads from settings,
+ * from Router.MainRunningApp, or from its own hooks.
+ * Out: the whole panel's JSX, as drawn in the file header above.
+ * What can go wrong: heavy logic lives in the hooks under src/hooks/
+ * (`usePluginSettings`, `useBackgroundGameAi`, `useDisclaimerAndLocalRuntimeGates`,
+ * `useBonsaiAskOrchestration`, `useCapturedFrontendErrors`) and the feature
+ * modules under src/features/, on purpose, so a fault in one of them is a
+ * fault in a small, separately readable file rather than in this one — and
+ * Root wraps this whole component in an error boundary, so a fault that does
+ * happen here shows a recoverable error instead of a blank panel.
+ *
+ * See the file header's How it works for the full step order; in short:
+ * 1. Load every hook this component depends on.
+ * 2. Track the state that belongs to Content itself.
+ * 3. Wire up session survival, and the two ways to deliberately throw one
+ *    away.
+ * 4. Build one useXxxTabPayload() call per tab.
+ * 5. Assemble the tab list and render the tab strip.
+ * 6. (Outside this function) definePlugin() hands the finished tree to
+ *    Decky.
  */
 const Content: React.FC = () => {
-  const sessionSnapshotRef = useRef<() => BonsaiSessionSurvivalSnapshot>(() => {
-    return {
-      currentTab: "main",
-      unifiedInput: "",
-      selectedIndex: -1,
-      navigationMessage: "",
-      selectedAttachment: null,
-      isScreenshotBrowserOpen: false,
-      mediaError: "",
-      recentScreenshots: [],
-      isLoadingRecentScreenshots: false,
-      pluginHelpDismissed: false,
-      ollamaIp: IP_DEFAULT,
-      settingsSnapshot: {},
-      ollamaResponse: "",
-      ollamaContext: { app_context: "inactive", app_id: "" },
-      lastExchange: null,
-      askThreadCollapsed: [],
-      askThreadDisplayQuestion: "",
-      expandedTurnKey: "live",
-      suggestedPrompts: [],
-      lastTransparency: null,
-      modelPolicyDisclosure: null,
-      strategyGuideBranches: null,
-      strategyChecklist: null,
-      elapsedSeconds: null,
-      lastApplied: null,
-      shortcutSetupVariant: null,
-      presetCarouselInject: null,
-      showSlowWarning: false,
-      lastRequestId: null,
-      thinkingSummary: null,
-    } as unknown as BonsaiSessionSurvivalSnapshot;
-  });
+  const sessionSnapshotRef = useRef<() => BonsaiSessionSurvivalSnapshot>(buildInitialSessionSnapshot);
+
+  const {
+    activeSlotIdRef,
+    generatingSlotId,
+    onGeneratingSlotChange,
+    isSlotGenerating,
+    unreadSlotIds,
+    setUnreadSlotIds,
+    reloadSlotTranscriptRef,
+    ensureActiveSlotForAskRef,
+  } = useChatSlotActivityState();
 
   const {
     currentTab,
@@ -285,14 +218,23 @@ const Content: React.FC = () => {
     onCompleteDeckyModalClose,
     captureSessionBeforeModal,
     onTabsShowTab,
+    selectTab,
   } = useBonsaiPluginShell({
     getSessionSnapshot: () => sessionSnapshotRef.current(),
   });
 
+  const quickAccessVisible = useQuickAccessVisible();
+
+  useReplySurfaceVisibility(quickAccessVisible && currentTab === "main");
+
+  useLayoutEffect(() => {
+    if (consumePendingFocusMainTab()) {
+      setCurrentTab("main");
+    }
+  }, [setCurrentTab]);
+
   const pendingSessionRestoreFinalizeRef = useRef(false);
   const pluginDataClearSeenRef = useRef(getPluginDataClearedGeneration());
-  const [lastConnectionStatus, setLastConnectionStatus] = useState<DeveloperConnectionStatus | null>(null);
-  const [ollamaTabResetKey, setOllamaTabResetKey] = useState(0);
 
   // --- Unified input/search state ---
   const [unifiedInput, setUnifiedInput] = useState(() => {
@@ -300,7 +242,6 @@ const Content: React.FC = () => {
     if (snap?.unifiedInput != null) return snap.unifiedInput;
     return loadSavedSearchQuery();
   });
-  const [selectedIndex, setSelectedIndex] = useState(() => peekBonsaiSessionPendingRestore()?.selectedIndex ?? -1);
   const [isUnifiedInputFocused, setIsUnifiedInputFocused] = useState(false);
   const [navigationMessage, setNavigationMessage] = useState(
     () => peekBonsaiSessionPendingRestore()?.navigationMessage ?? ""
@@ -313,28 +254,19 @@ const Content: React.FC = () => {
     askBarHostRef,
     unifiedInputSurfacePx,
     usesNativeMultilineField,
-    remeasureUnifiedInputSurface,
   } = useUnifiedInputSurface(currentTab, unifiedInput);
 
-  // --- Connection / misc shell state (Ask + poll state: ``useBonsaiAskOrchestration``) ---
-  const [ollamaIp, setOllamaIp] = useState(
-    () => peekBonsaiSessionPendingRestore()?.ollamaIp ?? loadSavedIp()
-  );
-  const [pluginHelpDismissed, setPluginHelpDismissed] = useState(() => {
-    const snap = peekBonsaiSessionPendingRestore();
-    if (snap?.pluginHelpDismissed != null) {
-      __bonsaiPluginHelpDismissed = snap.pluginHelpDismissed;
-      return snap.pluginHelpDismissed;
-    }
-    if (pluginHelpDismissedFromStorage()) {
-      __bonsaiPluginHelpDismissed = true;
-      return true;
-    }
-    return __bonsaiPluginHelpDismissed;
+  const {
+    pluginHelpDismissed,
+    openPluginHelpModal,
+    restorePluginHelpDismissed,
+    resetPluginHelpDismissed,
+  } = usePluginHelpModal({
+    currentTab,
+    captureSessionBeforeModal,
+    finalizeShowModalAndRestoreActiveTab,
+    returnTabRef: characterPickerReturnTabRef,
   });
-  useEffect(() => {
-    __bonsaiPluginHelpDismissed = pluginHelpDismissed;
-  }, [pluginHelpDismissed]);
 
   const attachActionHostRef = useRef<HTMLDivElement>(null);
 
@@ -343,12 +275,11 @@ const Content: React.FC = () => {
     requestTimeoutSeconds,
     latencyTimeoutsCustomEnabled,
     unifiedInputPersistenceMode,
+    chatTextSize,
+    setChatTextSize,
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
-    attachProtonLogsWhenTroubleshooting,
-    thinkingStatusTinyModelEnabled,
-    inputSanitizerUserDisabled,
     capabilities,
     setCapabilities,
     aiCharacterEnabled,
@@ -370,16 +301,20 @@ const Content: React.FC = () => {
     setDesktopAskVerboseLogging,
     desktopAppLogLevel,
     setDesktopAppLogLevel,
-    setAttachProtonLogsWhenTroubleshooting,
-    setThinkingStatusTinyModelEnabled,
-    presetChipFadeAnimationEnabled,
     presetChipAnimation,
     setPresetChipAnimation,
-    setPresetChipFadeAnimationEnabled,
+    presetSingleChip,
+    setPresetSingleChip,
     askMode,
     setAskMode,
     ollamaKeepAlive,
     setOllamaKeepAlive,
+    replyVerbosity,
+    setReplyVerbosity,
+    askThinkEffort,
+    setAskThinkEffort,
+    replyLanguage,
+    setReplyLanguage,
     showDeveloperTab,
     setShowDeveloperTab,
     modelPolicyTier,
@@ -388,35 +323,76 @@ const Content: React.FC = () => {
     setModelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
     setModelAllowHighVramFallbacks,
+    textModelRoutingOrder,
+    visionModelRoutingOrder,
     ollamaLocalOnDeck,
     setOllamaLocalOnDeck,
+    ollamaLocalAutostart,
+    setOllamaLocalAutostart,
     strategySpoilerMaskingEnabled,
     setStrategySpoilerMaskingEnabled,
-    steamWebApiKey,
-    setSteamWebApiKey,
-    bonsaiTokenStreamingEnabled,
-    setBonsaiTokenStreamingEnabled,
+    strategySpoilerAutoRevealAfterConsent,
     showOnscreenDebugHud,
+    devForceSessionRagChips,
+    devPreloadAskModel,
+    devFrozenTestChips,
     setShowOnscreenDebugHud,
-    responseVerifyEnabled,
-    setResponseVerifyEnabled,
-    responseVerifySecondPass,
-    setResponseVerifySecondPass,
-    responseVerifyModel,
-    setResponseVerifyModel,
+    setDevForceSessionRagChips,
+    setDevPreloadAskModel,
+    setDevFrozenTestChips,
+    tabResumeMode,
+    setTabResumeMode,
     namedOllamaHosts,
     setNamedOllamaHosts,
     voiceSttModel,
     setVoiceSttModel,
-    uiScaleAutoEnabled,
-    setUiScaleAutoEnabled,
-    uiScaleManualProfile,
-    setUiScaleManualProfile,
+    useLocalKnowledgeBase,
+    setUseLocalKnowledgeBase,
+    ragHybridRetrievalEnabled,
+    setRagHybridRetrievalEnabled,
+    ragCorpusVersion,
+    streamScrambleEnabled,
+    setStreamScrambleEnabled,
+    streamScrambleStyle,
+    setStreamScrambleStyle,
+    streamScrambleColor,
+    setStreamScrambleColor,
+    streamScrambleSettleMs,
+    setStreamScrambleSettleMs,
     settingsLoaded,
+    settingsFirstRun,
     hydrateFromSettings,
     pauseDebouncedSettingsSave,
+    buildChangedSettingsPayload,
+    persistChangedSettingsNow,
     syncSettingsFromDisk,
+    settingsSnapshot,
   } = usePluginSettings();
+
+  // Frozen QA chips live in a module-level register in `presets.ts` because the sampler is called
+  // from several places that have no access to settings. Syncing it here keeps settings the single
+  // source of truth: change the list on disk (or clear it in the Developer tab) and the carousel
+  // follows on the next render, with no rebuild.
+  useEffect(() => {
+    setFrozenTestChips(devFrozenTestChips);
+  }, [devFrozenTestChips]);
+
+  const kidsLockActive = useKidsLock();
+  const gatedCapabilities = useMemo(
+    () => effectiveCapabilities(capabilities, kidsLockActive),
+    [capabilities, kidsLockActive]
+  );
+  // The notice before every download reads the permission, and turns it on, through this.
+  useDownloadPermissionBridge({
+    enabled: gatedCapabilities.internet_downloads,
+    kidsLockActive,
+    capabilities,
+    setCapabilities,
+    onBeforeDeckyModal: captureSessionBeforeModal,
+    onCompleteDeckyModalClose: finalizeShowModalAndRestoreActiveTab,
+  });
+
+  const { effectiveLang, steamClientLanguageLabel, t: uiT } = useReplyLanguage(replyLanguage);
 
   const isAskingRef = useRef(false);
   const {
@@ -436,83 +412,36 @@ const Content: React.FC = () => {
     restoreScreenshotBrowserSnapshot,
   } = useScreenshotBrowser({
     getIsAsking: () => isAskingRef.current,
-    mediaLibraryAccess: capabilities.media_library_access,
-    filesystemWrite: capabilities.filesystem_write,
-  });
-
-  const [uiScaleApplyToken, setUiScaleApplyToken] = useState(0);
-  const uiScale = useUiScaleProfile({
-    scopeRef: bonsaiScopeRef,
-    autoEnabled: uiScaleAutoEnabled,
-    manualProfile: uiScaleManualProfile,
-    settingsLoaded,
-    applyToken: uiScaleApplyToken,
-    onRemeasure: remeasureUnifiedInputSurface,
+    mediaLibraryAccess: gatedCapabilities.media_library_access,
+    filesystemWrite: gatedCapabilities.filesystem_write,
   });
 
   useQamPanelHeightGuard(bonsaiScopeRef);
+  useQamPanelSideBleed(bonsaiScopeRef);
   useTabStripBodyOffset(bonsaiScopeRef);
 
   const intentPacks = useIntentPacks();
 
-  const { filteredSettings, onSettingClick } = useSteamSettingsSearch({
-    unifiedInput,
-    intentPackIndex: intentPacks.index,
-    setSelectedIndex,
-    setNavigationMessage,
+  const { onSettingClick } = useSteamSettingsSearch({ setNavigationMessage });
+
+  const { appLogPrefs, capturedErrors, setCapturedErrors } = useAppLogPrefsAndCapturedErrors({
+    desktopAppLogLevel,
+    filesystemWrite: gatedCapabilities.filesystem_write,
+    currentTab,
+    settingsLoaded,
   });
 
-  const [voiceRecording, setVoiceRecording] = useState(false);
-
-  const onVoiceError = useCallback((e: unknown) => {
-    setVoiceRecording(false);
-    toaster.toast({
-      title: "Voice input error",
-      body: formatDeckyRpcError(e),
-      duration: 5000,
-    });
-  }, []);
-
+  // --- Connection / host state (Ask + poll state: ``useBonsaiAskOrchestration``) ---
   const {
-    startVoiceTranscription,
-    stopVoiceTranscription,
-    invalidateVoice,
-  } = useVoiceTranscription(setUnifiedInput, onVoiceError);
-
-  useEffect(() => {
-    if (!capabilities.microphone_access && voiceRecording) {
-      void stopVoiceTranscription();
-      invalidateVoice();
-      setVoiceRecording(false);
-    }
-  }, [capabilities.microphone_access, voiceRecording, stopVoiceTranscription, invalidateVoice]);
-
-  const appLogPrefs = useMemo(
-    () => ({
-      desktopAppLogLevel,
-      capabilities: { filesystem_write: capabilities.filesystem_write },
-    }),
-    [desktopAppLogLevel, capabilities.filesystem_write]
-  );
-  const [capturedErrors, setCapturedErrors] = useCapturedFrontendErrors(appLogPrefs);
-
-  useEffect(() => {
-    if (!settingsLoaded) return;
-    if (currentTab !== "developer" && currentTab !== "settings") return;
-    appendAppDesktopLogWithPrefs(appLogPrefs, "verbose", "ui.tab", `opened ${currentTab} tab`);
-  }, [currentTab, settingsLoaded, appLogPrefs]);
-
-  const effectiveOllamaPcIp = useMemo(
-    () => (ollamaLocalOnDeck ? OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP : ollamaIp.trim()),
-    [ollamaLocalOnDeck, ollamaIp]
-  );
-
-  const persistOllamaIpIfRoutingToLan = useCallback(
-    (ip: string) => {
-      persistOllamaIpIfRoutingToLanUtil(ollamaLocalOnDeck, saveIp, ip);
-    },
-    [ollamaLocalOnDeck]
-  );
+    ollamaIp,
+    setOllamaIp,
+    effectiveOllamaPcIp,
+    persistOllamaIpIfRoutingToLan,
+    lastConnectionStatus,
+    setLastConnectionStatus,
+    ollamaTabResetKey,
+    resetOllamaTab,
+  } = useOllamaConnectionState({ ollamaLocalOnDeck });
 
   const {
     ollamaResponse,
@@ -529,28 +458,43 @@ const Content: React.FC = () => {
     elapsedSeconds,
     lastTransparency,
     thinkingSummary,
+    liveReasoning,
+    kbAttachedNotes,
     lastRequestId,
     askThreadCollapsed,
     expandedTurnKey,
     onTurnActivate,
     askThreadDisplayQuestion,
     isAsking,
+    askStopped,
+    isForeignPendingAsk,
     isStreamingPreview,
+    isStreamSettling,
     streamDisplayText,
     lastApplied,
     clearUnifiedInput,
     onCancelAsk,
     onAskOllama,
     onRetryLastResponse,
+    onReplyFeedback,
+    onReplyMicroAction,
+    liveReplyFeedbackRating,
+    liveReplyChipUsed,
+    liveReplyChipError,
     onStrategyBranchPick,
     onStrategyChecklistToggle,
     resetAskSessionSlice,
+    resetLiveAskPresentation,
+    restoreLastExchangeFromSavedChat,
     setStrategyGuideBranches,
-    setSuggestedPrompts,
+    reseedSuggestedPrompts,
     restoreSessionSnapshot,
+    setAskThreadCollapsed,
+    setAskThreadDisplayQuestion,
+    setExpandedTurnKey,
   } = useBonsaiAskOrchestration({
     desktopDebugNoteAutoSave,
-    filesystemWrite: capabilities.filesystem_write,
+    filesystemWrite: gatedCapabilities.filesystem_write,
     strategySpoilerMaskingEnabled,
     askMode,
     unifiedInput,
@@ -562,10 +506,8 @@ const Content: React.FC = () => {
     syncSettingsFromDisk,
     unifiedInputFieldLayerRef,
     unifiedInputHostRef,
-    setSelectedIndex,
     setNavigationMessage,
     saveIp: persistOllamaIpIfRoutingToLan,
-    persistSearchQuery,
     onExternalFailure: (source, message, detail) => {
       appendAppDesktopLogWithPrefs(appLogPrefs, "verbose", "external.failure", message, {
         source,
@@ -574,217 +516,122 @@ const Content: React.FC = () => {
     },
     aiCharacterEnabled,
     aiCharacterPresetId,
+    useLocalKnowledgeBase,
+    settingsLoaded,
+    devForceSessionRagChips,
+    activeSlotIdRef,
+    ensureActiveSlotForAsk: (question) =>
+      ensureActiveSlotForAskRef.current?.(question) ?? Promise.resolve(null),
+    onSlotTurnsChanged: () => {
+      void reloadSlotTranscriptRef.current?.();
+    },
+    onGeneratingSlotChange,
+    onSlotAnswerFinished: (slotId) => {
+      setUnreadSlotIds((prev) => {
+        if (prev.has(slotId)) return prev;
+        const next = new Set(prev);
+        next.add(slotId);
+        return next;
+      });
+    },
   });
+
+  const chatSlots = useChatSlots({
+    activeSlotIdRef,
+    initialActiveSlotId: activeSlotIdRef.current,
+    setAskThreadCollapsed,
+    setAskThreadDisplayQuestion,
+    setExpandedTurnKey,
+    resetLiveAskPresentation,
+    restoreLastExchange: restoreLastExchangeFromSavedChat,
+    isSlotGenerating,
+    ollamaPcIp: effectiveOllamaPcIp,
+  });
+  reloadSlotTranscriptRef.current = chatSlots.reloadActiveSlotTranscript;
+  ensureActiveSlotForAskRef.current = chatSlots.ensureActiveSlotForAsk;
+
+  useEffect(() => {
+    void chatSlots.refreshSummaries();
+  }, [chatSlots.refreshSummaries]);
+
+  /* Arriving at a slot is what marks it read. */
+  useEffect(() => {
+    const id = chatSlots.activeSlotId;
+    if (!id) return;
+    setUnreadSlotIds((prev) => {
+      if (!prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  }, [chatSlots.activeSlotId]);
 
   isAskingRef.current = isAsking;
 
-  useLayoutEffect(() => {
-    if (shouldIgnoreRestoredSettingsSnapshot(pluginDataClearSeenRef.current)) {
-      clearBonsaiSessionSurvival();
-      return;
-    }
-    const survived = consumeBonsaiSessionAfterRemount();
-    bonsaiDebugLog("index.tsx:consume", survived ? "restored snapshot" : "no snapshot", "H1", {
-      tab: survived?.currentTab,
-      inputLen: survived?.unifiedInput?.length ?? 0,
-      hasExchange: !!survived?.lastExchange,
-    });
-    if (!survived) return;
-    if (survived.currentTab) setCurrentTab(survived.currentTab);
-    setUnifiedInput(survived.unifiedInput);
-    setSelectedIndex(survived.selectedIndex);
-    setNavigationMessage(survived.navigationMessage);
-    restoreScreenshotBrowserSnapshot({
-      selectedAttachment: survived.selectedAttachment,
-      isScreenshotBrowserOpen: survived.isScreenshotBrowserOpen,
-      mediaError: survived.mediaError,
-      recentScreenshots: survived.recentScreenshots,
-      isLoadingRecentScreenshots: survived.isLoadingRecentScreenshots,
-    });
-    setPluginHelpDismissed(survived.pluginHelpDismissed);
-    __bonsaiPluginHelpDismissed = survived.pluginHelpDismissed;
-    setOllamaIp(survived.ollamaIp);
-    hydrateFromSettings(toBonsaiSettingsPayload(survived.settingsSnapshot));
-    restoreSessionSnapshot(survived);
-    pendingSessionRestoreFinalizeRef.current = true;
-  }, [restoreSessionSnapshot, hydrateFromSettings]);
-
-  useEffect(() => {
-    if (!pendingSessionRestoreFinalizeRef.current) return;
-    pendingSessionRestoreFinalizeRef.current = false;
-    finalizeSessionRestoreAfterRemount();
-    bonsaiDebugLog("index.tsx:finalizeRestore", "cleared pending snapshot", "H1", {});
-  }, []);
+  useSessionRestoreAfterRemount({
+    pluginDataClearSeenRef,
+    pendingSessionRestoreFinalizeRef,
+    activeSlotIdRef,
+    chatSlots,
+    setCurrentTab,
+    setUnifiedInput,
+    setNavigationMessage,
+    restoreScreenshotBrowserSnapshot,
+    restorePluginHelpDismissed,
+    setOllamaIp,
+    hydrateFromSettings,
+    restoreSessionSnapshot,
+  });
 
   const effectiveLatencyWarningSeconds = useMemo(
     () => (latencyTimeoutsCustomEnabled ? latencyWarningSeconds : DEFAULT_LATENCY_WARNING_SECONDS),
     [latencyTimeoutsCustomEnabled, latencyWarningSeconds]
   );
 
-  const uiAccent = useMemo(
-    () =>
-      resolveUiAccentFromCharacterSettings({
-        ai_character_enabled: aiCharacterEnabled,
-        ai_character_random: aiCharacterRandom,
-        ai_character_preset_id: aiCharacterPresetId,
-        ai_character_custom_text: aiCharacterCustomText,
-      }),
-    [aiCharacterEnabled, aiCharacterRandom, aiCharacterPresetId, aiCharacterCustomText]
-  );
-  const bonsaiScopeAccentStyle = useMemo(() => buildBonsaiScopeAccentInlineStyle(uiAccent), [uiAccent]);
-  const bonsaiScopeStyle = useMemo(
-    () => ({ ...bonsaiScopeAccentStyle, ...uiScale.scopeStyle }),
-    [bonsaiScopeAccentStyle, uiScale.scopeStyle],
-  );
+  /* The Text size step, in its own variable: every font size reads it. It goes into the style handed to
+     useBonsaiScopeStyle, which publishes the merged style for popups, so a popup's words follow the
+     setting too. */
+  const textScaleStyle = useMemo(() => withTextScale({}, chatTextSize), [chatTextSize]);
+  const bonsaiScopeStyle = useBonsaiScopeStyle({
+    aiCharacterEnabled,
+    aiCharacterRandom,
+    aiCharacterPresetId,
+    aiCharacterCustomText,
+    textScaleStyle,
+  });
+  /* The chat's name in Decky's bar is drawn outside this box (plan 84 step 5): it learns the
+     character's lit colour (the tab bar's own) through its store, not through props; the tab showing
+     goes the same way, with the tab bar's data (useTopStripTabBar, below). */
+  const tabLitColor = (bonsaiScopeStyle as Record<string, unknown>)["--bonsai-ui-tab-lit"];
+  useEffect(() => setChatTitleLitColor(typeof tabLitColor === "string" ? tabLitColor : null), [tabLitColor]);
+  /* The same goes for the Text size step: Decky's bar draws the chat's name and the tab bar outside the box,
+     and plain popups sit in Steam's shared page (usePublishTextScale.ts). */
+  usePublishTextScale(chatTextSize);
 
-  useEffect(() => {
-    publishUiScaleScopeStyle(bonsaiScopeStyle);
-  }, [bonsaiScopeStyle]);
+  useTabAndModeGuardEffects({
+    settingsLoaded,
+    showDeveloperTab,
+    currentTab,
+    setCurrentTab,
+    askMode,
+    setStrategyGuideBranches,
+  });
 
-  useEffect(() => {
-    if (!settingsLoaded) return;
-    if (!showDeveloperTab && currentTab === "developer") {
-      setCurrentTab("main");
-      toaster.toast({ title: "Developer tab hidden", body: "Switched to Main.", duration: 2800 });
-    }
-  }, [showDeveloperTab, currentTab, settingsLoaded]);
-
-  useEffect(() => {
-    if (askMode !== "strategy") {
-      setStrategyGuideBranches(null);
-    }
-  }, [askMode, setStrategyGuideBranches]);
-
-  const goToPermissionsTab = useCallback(() => {
-    setCurrentTab("permissions");
-  }, []);
+  const { jumpToPermission, returnFromPermissionJump, permissionJumpReturnTab } = usePermissionJump({
+    currentTab,
+    setCurrentTab,
+  });
 
   const goToOllamaTab = useCallback(() => {
     setCurrentTab("ollama");
   }, []);
 
-  const captureThinkingPullModalSession = useCallback(() => {
-    captureSessionBeforeModal();
-    characterPickerReturnTabRef.current = "ollama";
-    patchPendingSessionSurvival({ currentTab: "ollama" });
-  }, [captureSessionBeforeModal, characterPickerReturnTabRef]);
-
-  const settingsSnapshotForSave = useMemo(
-    () => ({
-      latencyWarningSeconds,
-      requestTimeoutSeconds,
-      latencyTimeoutsCustomEnabled,
-      unifiedInputPersistenceMode,
-      screenshotAttachmentPreset,
-      desktopDebugNoteAutoSave,
-      desktopAskVerboseLogging,
-      desktopAppLogLevel,
-      attachProtonLogsWhenTroubleshooting,
-      thinkingStatusTinyModelEnabled,
-      presetChipFadeAnimationEnabled,
-      presetChipAnimation,
-      inputSanitizerUserDisabled,
-      capabilities,
-      aiCharacterEnabled,
-      aiCharacterRandom,
-      aiCharacterPresetId,
-      aiCharacterCustomText,
-      aiCharacterAccentIntensity,
-      askMode,
-      ollamaKeepAlive,
-      showDeveloperTab,
-      modelPolicyTier,
-      modelPolicyNonFossUnlocked,
-      modelAllowHighVramFallbacks,
-      ollamaLocalOnDeck,
-      strategySpoilerMaskingEnabled,
-      steamWebApiKey,
-      bonsaiTokenStreamingEnabled,
-      showOnscreenDebugHud,
-      responseVerifyEnabled,
-      responseVerifySecondPass,
-      responseVerifyModel,
-      namedOllamaHosts,
-      voiceSttModel,
-      uiScaleAutoEnabled,
-      uiScaleManualProfile,
-    }),
-    [
-      latencyWarningSeconds,
-      requestTimeoutSeconds,
-      latencyTimeoutsCustomEnabled,
-      unifiedInputPersistenceMode,
-      screenshotAttachmentPreset,
-      desktopDebugNoteAutoSave,
-      desktopAskVerboseLogging,
-      desktopAppLogLevel,
-      attachProtonLogsWhenTroubleshooting,
-      thinkingStatusTinyModelEnabled,
-      presetChipFadeAnimationEnabled,
-      presetChipAnimation,
-      inputSanitizerUserDisabled,
-      capabilities,
-      aiCharacterEnabled,
-      aiCharacterRandom,
-      aiCharacterPresetId,
-      aiCharacterCustomText,
-      aiCharacterAccentIntensity,
-      askMode,
-      ollamaKeepAlive,
-      showDeveloperTab,
-      modelPolicyTier,
-      modelPolicyNonFossUnlocked,
-      modelAllowHighVramFallbacks,
-      ollamaLocalOnDeck,
-      strategySpoilerMaskingEnabled,
-      steamWebApiKey,
-      bonsaiTokenStreamingEnabled,
-      showOnscreenDebugHud,
-      responseVerifyEnabled,
-      responseVerifySecondPass,
-      responseVerifyModel,
-      namedOllamaHosts,
-      voiceSttModel,
-      uiScaleAutoEnabled,
-      uiScaleManualProfile,
-    ]
-  );
-
-  const onApplyUiScale = useCallback(
-    async (autoEnabled: boolean, manualProfile: UiScaleProfileId) => {
-      const normalized = normalizeUiScaleProfileId(manualProfile);
-      setUiScaleAutoEnabled(autoEnabled);
-      setUiScaleManualProfile(normalized);
-      await pauseDebouncedSettingsSave();
-      const saved = await call<[BonsaiSettings], BonsaiSettings>(
-        "save_settings",
-        toBonsaiSettingsPayload(settingsSnapshotForSave, {
-          ui_scale_auto_enabled: autoEnabled,
-          ui_scale_manual_profile: normalized,
-        }),
-      );
-      hydrateFromSettings(saved);
-      setUiScaleApplyToken((t) => t + 1);
-      toaster.toast({ title: "UI scale applied", body: "Plugin layout updated.", duration: 2800 });
-    },
-    [
-      hydrateFromSettings,
-      pauseDebouncedSettingsSave,
-      settingsSnapshotForSave,
-      setUiScaleAutoEnabled,
-      setUiScaleManualProfile,
-    ],
-  );
-
-  const buildSettingsPayload = useCallback(
-    (patch?: Partial<BonsaiSettings>) => toBonsaiSettingsPayload(settingsSnapshotForSave, patch),
-    [settingsSnapshotForSave]
-  );
+  /* Changed fields plus the patch, never a full copy: see buildChangedSettingsPayload. */
+  const buildSettingsPayload = buildChangedSettingsPayload;
 
   sessionSnapshotRef.current = () => ({
     currentTab,
     unifiedInput,
-    selectedIndex,
     navigationMessage,
     selectedAttachment,
     isScreenshotBrowserOpen,
@@ -793,7 +640,7 @@ const Content: React.FC = () => {
     isLoadingRecentScreenshots,
     pluginHelpDismissed,
     ollamaIp,
-    settingsSnapshot: settingsSnapshotForSave,
+    settingsSnapshot,
     ollamaResponse,
     ollamaContext,
     lastExchange,
@@ -812,6 +659,8 @@ const Content: React.FC = () => {
     showSlowWarning,
     lastRequestId,
     thinkingSummary,
+    liveReasoning,
+    activeSlotId: chatSlots.activeSlotId,
   });
 
   const {
@@ -821,919 +670,459 @@ const Content: React.FC = () => {
   } = useDisclaimerAndLocalRuntimeGates(settingsLoaded, ollamaLocalOnDeck, {
     onBeforeDeckyModal: captureSessionBeforeModal,
     onCompleteDeckyModalClose,
+    saveSettingsNow: (patch) => saveSettingsNowOrPatch(patch, persistChangedSettingsNow, buildSettingsPayload),
+    whereAiRuns: {
+      ollamaLocalAutostart,
+      ollamaIp,
+      setOllamaLocalOnDeck,
+      setOllamaLocalAutostart,
+      setOllamaIp,
+      persistOllamaIp: saveIp,
+    },
+    firstRun: settingsFirstRun,
+    onFirstRunFlagsCleared: resetPluginHelpDismissed,
   });
 
-  useEffect(() => {
-    if (!isDeckyPreviewRuntime()) return;
-    registerPreviewTestHooks({
-      getState: () => ({
-        currentTab,
-        unifiedInput,
-        askMode,
-        isAsking,
-        ollamaResponseLen: ollamaResponse.length,
-        hasLastExchange: !!lastExchange,
-        capabilities,
-      }),
-      setGame: (title: string, appId?: string) => {
-        const app = { display_name: title, appid: Number(appId) || 0 };
-        (Router as { setMainRunningApp?: (a: typeof app | null) => void }).setMainRunningApp?.(app);
-      },
-      triggerAsk: async (text: string) => {
-        setUnifiedInput(text);
-        await onAskOllama(text);
-      },
-      attachScreenshot: (base64: string, name = "preview.png") => {
-        setSelectedAttachment({
-          path: name,
-          name,
-          source: "picker",
-          preview_data_uri: base64.startsWith("data:") ? base64 : `data:image/png;base64,${base64}`,
-        });
-      },
-      getTransparencyJson: () => lastTransparency,
-      getSysfsWrites: async () => {
-        try {
-          const res = (await call("get_input_transparency")) as { sysfs_writes?: unknown };
-          return res?.sysfs_writes ?? [];
-        } catch {
-          return [];
-        }
-      },
-      setTab: (tabId: string) => setCurrentTab(tabId),
-      resetDisclaimer: () => {
-        try {
-          window.localStorage.removeItem("bonsai:disclaimer-accepted");
-        } catch {
-          /* ignore */
-        }
-        showDisclaimerModalAgain();
-      },
-    });
-  }, [
-    currentTab,
-    unifiedInput,
-    askMode,
+  const { openModelPolicyReadme, onOpenControllerSettingsForShortcut } = useExternalNavigationActions();
+
+  // --- Ask bar timers and persistence ---
+  useSlowResponseWarningTimer({
     isAsking,
-    ollamaResponse,
-    lastExchange,
-    capabilities,
-    lastTransparency,
-    onAskOllama,
+    isStreamingPreview,
+    effectiveLatencyWarningSeconds,
+    setShowSlowWarning,
+  });
+
+  useUnifiedInputPersistence({
+    unifiedInput,
+    unifiedInputPersistenceMode,
     setUnifiedInput,
+  });
+
+
+  const { resetPluginSession, onClearAllPluginData } = useSessionResetActions({
+    chatSlots,
+    resetAskSessionSlice,
+    reseedSuggestedPrompts,
+    uiT,
+    setUnifiedInput,
+    setNavigationMessage,
     setSelectedAttachment,
-    setCurrentTab,
-    showDisclaimerModalAgain,
-  ]);
-
-  const openModelPolicyReadme = useCallback(() => {
-    if (!capabilities.external_navigation) {
-      toaster.toast({
-        title: "Permission required",
-        body: "Enable External and Steam navigation in the Permissions tab.",
-        duration: 4500,
-      });
-      goToPermissionsTab();
-      return;
-    }
-    try {
-      Navigation.NavigateToExternalWeb(MODEL_POLICY_README_URL);
-    } catch {
-      toaster.toast({ title: "README", body: MODEL_POLICY_README_URL, duration: 4000 });
-    }
-  }, [capabilities.external_navigation, goToPermissionsTab]);
-
-  const onOpenControllerSettingsForShortcut = useCallback(() => {
-    if (!capabilities.external_navigation) {
-      toaster.toast({
-        title: "Permission required",
-        body: "Enable External and Steam navigation in the Permissions tab to open Controller settings from bonsAI.",
-        duration: 4500,
-      });
-      goToPermissionsTab();
-      return;
-    }
-    try {
-      const steamUrlApi = SteamClient.URL as unknown as SteamUrlApi;
-      steamUrlApi.ExecuteSteamURL(getSteamSettingsUrl("Settings > Controller"));
-      toaster.toast({ title: "Opening settings", body: "Controller", duration: 2000 });
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      toaster.toast({ title: "Navigation failed", body: message, duration: 3000 });
-    }
-  }, [capabilities.external_navigation, goToPermissionsTab]);
-
-  // --- Slow-response warning timer (suppress once token streaming begins) ---
-  useEffect(() => {
-    if (!isAsking) {
-      setShowSlowWarning(false);
-      return;
-    }
-    if (isStreamingPreview) {
-      setShowSlowWarning(false);
-      return;
-    }
-    const timer = setTimeout(() => setShowSlowWarning(true), effectiveLatencyWarningSeconds * 1000);
-    return () => clearTimeout(timer);
-  }, [isAsking, isStreamingPreview, effectiveLatencyWarningSeconds]);
-
-  useEffect(() => {
-    if (unifiedInputPersistenceMode === "persist_all") {
-      persistSearchQuery(unifiedInput);
-      return;
-    }
-    if (unifiedInputPersistenceMode === "persist_search_only") {
-      if (filteredSettings.length > 0) {
-        persistSearchQuery(unifiedInput);
-      } else {
-        persistSearchQuery("");
-      }
-      return;
-    }
-    persistSearchQuery("");
-  }, [unifiedInput, unifiedInputPersistenceMode, filteredSettings.length]);
-
-  const unifiedInputPersistenceModePrevRef = useRef<typeof unifiedInputPersistenceMode | null>(null);
-  useEffect(() => {
-    const prev = unifiedInputPersistenceModePrevRef.current;
-    unifiedInputPersistenceModePrevRef.current = unifiedInputPersistenceMode;
-    if (shouldClearUnifiedInputForPersistenceMode(prev, unifiedInputPersistenceMode)) {
-      setUnifiedInput("");
-    }
-  }, [unifiedInputPersistenceMode]);
-
-
-  const resetPluginSession = useCallback(() => {
-    resetAskSessionSlice();
-    persistSearchQuery("");
-    setUnifiedInput("");
-    setSelectedIndex(-1);
-    setNavigationMessage("");
-    setSelectedAttachment(null);
-    setSuggestedPrompts(getRandomPresets(3));
-    toaster.toast({
-      title: "Session cleared",
-      body: "Unified search, reply, thread, checklist, transparency, and attachments were reset.",
-      duration: 3800,
-    });
-  }, [resetAskSessionSlice, setSuggestedPrompts]);
-
-  const onClearAllPluginData = useCallback(async () => {
-    try {
-      markPluginDataCleared();
-      clearSettingsTabLocalSurvival();
-      clearOllamaTabLocalSurvival();
-      setLastConnectionStatus(null);
-      setOllamaTabResetKey((k) => k + 1);
-      await pauseDebouncedSettingsSave();
-      await call<[], BonsaiSettings>("clear_plugin_data");
-      clearBonsaiBrowserStorage();
-      await syncSettingsFromDisk();
-      acknowledgePluginDataClearHandled();
-      setOllamaIp(IP_DEFAULT);
-      __bonsaiPluginHelpDismissed = false;
-      localRuntimeBetaPromptIssuedRef.current = false;
-      ollamaLocalOnDeckPrevRef.current = null;
-      setPluginHelpDismissed(false);
-      setSuggestedPrompts(getRandomPresets(3));
-      resetPluginSession();
-      await intentPacks.refresh();
-      showDisclaimerModalAgain();
-      toaster.toast({
-        title: "Plugin data cleared",
-        body: "Settings and local plugin storage were reset. Re-enter your Ollama host and permissions as needed.",
-        duration: 4500,
-      });
-    } catch (e: unknown) {
-      toaster.toast({
-        title: "Clear failed",
-        body: formatDeckyRpcError(e),
-        duration: 5000,
-      });
-    }
-  }, [
-    syncSettingsFromDisk,
+    setLastConnectionStatus,
+    resetOllamaTab,
     pauseDebouncedSettingsSave,
-    resetPluginSession,
+    syncSettingsFromDisk,
+    setOllamaIp,
+    localRuntimeBetaPromptIssuedRef,
+    ollamaLocalOnDeckPrevRef,
+    resetPluginHelpDismissed,
+    intentPacks,
     showDisclaimerModalAgain,
-    intentPacks.refresh,
-  ]);
+  });
 
-  const onMicInput = useCallback(() => {
-    if (isAsking) return;
-    if (voiceRecording) {
-      setVoiceRecording(false);
-      void stopVoiceTranscription();
-      return;
-    }
-    if (!capabilities.microphone_access) {
-      toaster.toast({
-        title: "Permission required",
-        body: "Enable Voice input (microphone) in the Permissions tab to use speech-to-text.",
-        duration: 4500,
-      });
-      goToPermissionsTab();
-      return;
-    }
-    void startVoiceTranscription(unifiedInput)
-      .then(() => setVoiceRecording(true))
-      .catch((e: unknown) => {
-        setVoiceRecording(false);
-        toaster.toast({
-          title: "Voice input unavailable",
-          body: e instanceof Error ? e.message : formatDeckyRpcError(e),
-          duration: 5500,
-        });
-      });
-  }, [
-    isAsking,
+  const {
     voiceRecording,
-    capabilities.microphone_access,
-    goToPermissionsTab,
-    startVoiceTranscription,
-    stopVoiceTranscription,
+    voiceStarting,
+    voiceFinishing,
+    onMicInput,
+    micPermissionDenied,
+    dismissMicPermissionDeny,
+    onAskOllamaWithReadAloud,
+  } = useVoiceAskWithReadAloud({
+    setUnifiedInput,
     unifiedInput,
-  ]);
+    microphoneAccess: gatedCapabilities.microphone_access,
+    isAsking,
+    uiT,
+    onAskOllama,
+  });
 
   const showSearchClearButton = Boolean(unifiedInput.trim());
 
-  const openPluginHelpModal = useCallback(() => {
-    captureSessionBeforeModal();
-    markPluginHelpDismissedPersist();
-    __bonsaiPluginHelpDismissed = true;
-    setPluginHelpDismissed(true);
-    characterPickerReturnTabRef.current = currentTab;
-    const handle = showModal(
-      <PluginHelpModal onClose={() => finalizeShowModalAndRestoreActiveTab(() => handle.Close())} />
-    );
-  }, [currentTab, captureSessionBeforeModal, finalizeShowModalAndRestoreActiveTab]);
-
-  const openDesktopNoteSaveModal = useCallback(() => {
-    if (!capabilities.filesystem_write) {
-      toaster.toast({
-        title: "Permission required",
-        body: "Enable Filesystem writes in the Permissions tab to save notes to Desktop.",
-        duration: 4500,
-      });
-      goToPermissionsTab();
-      return;
-    }
-    if (!lastExchange) {
-      return;
-    }
-    const ex = lastExchange;
-    characterPickerReturnTabRef.current = currentTab;
-    const handle = showModal(
-      <DesktopNoteSaveModal
-        strDescriptionPrefix={
-          "This appends to a file on your Steam Deck Desktop (not the PC running Ollama).\n\n" +
-          "Folder: Desktop/bonsAI_logs/\n" +
-          "Existing notes are never replaced; new entries are appended with a timestamp.\n\n" +
-          "Proceed only if you want this question and answer saved there."
-        }
-        defaultStem="bonsai-debug"
-        onCancel={() => finalizeShowModalAndRestoreActiveTab(() => handle.Close())}
-        onConfirm={async (stem) => {
-          if (!stem) {
-            toaster.toast({ title: "Note name required", body: "Enter a name for the note file.", duration: 3200 });
-            return;
-          }
-          try {
-            const result = await call<[{ stem: string; question: string; response: string }], AppendDesktopNoteResult>(
-              "append_desktop_debug_note",
-              { stem, question: ex.question, response: ex.answer }
-            );
-            if (result.success) {
-              toaster.toast({ title: "Note saved", body: result.path ?? "Saved.", duration: 3800 });
-              finalizeShowModalAndRestoreActiveTab(() => handle.Close());
-            } else {
-              toaster.toast({ title: "Save failed", body: result.error ?? "Unknown error.", duration: 5000 });
-            }
-          } catch (e: unknown) {
-            toaster.toast({ title: "Save failed", body: formatDeckyRpcError(e), duration: 5000 });
-          }
-        }}
-      />
-    );
-  }, [lastExchange, capabilities.filesystem_write, goToPermissionsTab, currentTab, finalizeShowModalAndRestoreActiveTab]);
-
-  const openCharacterPickerModal = useCallback(() => {
-    captureSessionBeforeModal();
-    const handle = showModal(
-      <CharacterPickerModal
-        initialDraft={{
-          random: aiCharacterRandom,
-          presetId: aiCharacterPresetId,
-          customText: aiCharacterCustomText,
-        }}
-        onCancel={() => {
-          finalizeShowModalAndRestoreActiveTab(() => handle.Close());
-        }}
-        onOK={async (next) => {
-          const pid = normalizeAiCharacterPresetId(next.presetId);
-          const ctxt = normalizeAiCharacterCustomText(next.customText);
-          setAiCharacterRandom(next.random);
-          setAiCharacterPresetId(pid);
-          setAiCharacterCustomText(ctxt);
-          try {
-            const saved = await call<[BonsaiSettings], BonsaiSettings>(
-              "save_settings",
-              buildSettingsPayload({
-                ai_character_random: next.random,
-                ai_character_preset_id: pid,
-                ai_character_custom_text: ctxt,
-              })
-            );
-            hydrateFromSettings(saved);
-            finalizeShowModalAndRestoreActiveTab(() => handle.Close());
-          } catch (err: unknown) {
-            console.error("save_settings failed (character picker OK)", err);
-            toaster.toast({
-              title: "Character not saved",
-              body: formatDeckyRpcError(err),
-              duration: 5000,
-            });
-          }
-        }}
-      />
-    );
-  }, [
+  const openDesktopNoteSaveModal = useDesktopNoteSaveModal({
+    filesystemWrite: gatedCapabilities.filesystem_write,
+    lastExchange,
+    loadedTurns: askThreadCollapsed,
+    jumpToPermission,
     currentTab,
+    finalizeShowModalAndRestoreActiveTab,
+    returnTabRef: characterPickerReturnTabRef,
+  });
+
+  const openCharacterPickerModal = useCharacterPickerModal({
     aiCharacterRandom,
     aiCharacterPresetId,
     aiCharacterCustomText,
-    aiCharacterAccentIntensity,
-    aiCharacterEnabled,
-    latencyWarningSeconds,
-    requestTimeoutSeconds,
-    latencyTimeoutsCustomEnabled,
-    unifiedInputPersistenceMode,
-    screenshotAttachmentPreset,
-    desktopDebugNoteAutoSave,
-    desktopAskVerboseLogging,
-    desktopAppLogLevel,
-    attachProtonLogsWhenTroubleshooting,
-    presetChipFadeAnimationEnabled,
-    inputSanitizerUserDisabled,
-    capabilities,
     setAiCharacterRandom,
     setAiCharacterPresetId,
     setAiCharacterCustomText,
     buildSettingsPayload,
     hydrateFromSettings,
+    captureSessionBeforeModal,
     finalizeShowModalAndRestoreActiveTab,
-    askMode,
-    ollamaKeepAlive,
-    showDeveloperTab,
+  });
+
+  const tryOrderHost = useMemo(
+    () => ({ ollamaLocalOnDeck, ollamaIp, textModelRoutingOrder, visionModelRoutingOrder, modelAllowHighVramFallbacks }),
+    [ollamaLocalOnDeck, ollamaIp, textModelRoutingOrder, visionModelRoutingOrder, modelAllowHighVramFallbacks],
+  );
+  const { openOllamaModelsHub, onApplyTier2MultimodalPolicy } = useOllamaModelsHubModal({
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
-    ollamaLocalOnDeck,
-    strategySpoilerMaskingEnabled,
-  ]);
-
-  const onCommitOllamaModelsHub = useCallback(
-    async (patch: {
-      modelPolicyTier: ModelPolicyTierId;
-      modelPolicyNonFossUnlocked: boolean;
-      modelAllowHighVramFallbacks: boolean;
-    }) => {
-      if (patch.modelPolicyTier === "non_foss" && !patch.modelPolicyNonFossUnlocked) {
-        toaster.toast({
-          title: "Unlock required",
-          body: "Turn on Tier 3 unlock under Advanced before Any installed model.",
-          duration: 5000,
-        });
-        goToOllamaTab();
-        return;
-      }
-      setModelPolicyTier(patch.modelPolicyTier);
-      setModelPolicyNonFossUnlocked(patch.modelPolicyNonFossUnlocked);
-      setModelAllowHighVramFallbacks(patch.modelAllowHighVramFallbacks);
-      await pauseDebouncedSettingsSave();
-      const saved = await call<[BonsaiSettings], BonsaiSettings>(
-        "save_settings",
-        buildSettingsPayload({
-          model_policy_tier: patch.modelPolicyTier,
-          model_policy_non_foss_unlocked: patch.modelPolicyNonFossUnlocked,
-          model_allow_high_vram_fallbacks: patch.modelAllowHighVramFallbacks,
-        })
-      );
-      hydrateFromSettings(saved);
-      patchPendingSessionSettingsSnapshot({
-        modelPolicyTier: patch.modelPolicyTier,
-        modelPolicyNonFossUnlocked: patch.modelPolicyNonFossUnlocked,
-        modelAllowHighVramFallbacks: patch.modelAllowHighVramFallbacks,
-      });
-    },
-    [buildSettingsPayload, hydrateFromSettings, setModelPolicyTier, setModelPolicyNonFossUnlocked, setModelAllowHighVramFallbacks, goToOllamaTab, pauseDebouncedSettingsSave]
-  );
-
-  const onApplyTier2MultimodalPolicy = useCallback(async () => {
-    await pauseDebouncedSettingsSave();
-    setModelPolicyTier("open_weight");
-    const saved = await call<[BonsaiSettings], BonsaiSettings>(
-      "save_settings",
-      buildSettingsPayload({ model_policy_tier: "open_weight" })
-    );
-    hydrateFromSettings(saved);
-    patchPendingSessionSettingsSnapshot({ modelPolicyTier: "open_weight" });
-  }, [buildSettingsPayload, hydrateFromSettings, setModelPolicyTier, pauseDebouncedSettingsSave]);
-
-  const openOllamaModelsHub = useCallback(
-    (opts?: { initialSection?: OllamaModelsHubSection }) => {
-      captureSessionBeforeModal();
-      const handle = showModal(
-        <OllamaModelsHubModal
-          initialSection={opts?.initialSection}
-          activeRoutingTag={modelPolicyDisclosure?.model ?? null}
-          modelPolicyTier={modelPolicyTier}
-          modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
-          modelAllowHighVramFallbacks={modelAllowHighVramFallbacks}
-          onCommitOllamaModelsHub={onCommitOllamaModelsHub}
-          onReadModelPolicy={openModelPolicyReadme}
-          onApplyTier2MultimodalPolicy={onApplyTier2MultimodalPolicy}
-          onBeforeNestedDeckyModal={captureSessionBeforeModal}
-          onCompleteNestedDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
-          onClose={() => {
-            finalizeShowModalAndRestoreActiveTab(() => handle.Close());
-          }}
-        />
-      );
-    },
-    [
-      captureSessionBeforeModal,
-      finalizeShowModalAndRestoreActiveTab,
-      modelPolicyDisclosure?.model,
-      modelPolicyTier,
-      modelPolicyNonFossUnlocked,
-      modelAllowHighVramFallbacks,
-      onCommitOllamaModelsHub,
-      openModelPolicyReadme,
-      onApplyTier2MultimodalPolicy,
-    ]
-  );
-
-  const fullBleedRowStyle = FULL_BLEED_ROW_STYLE;
-  const presetButtonSurface = PRESET_BUTTON_SURFACE;
-  const mainTabAiCharacterPad = aiCharacterEnabled;
-  const mainTabAvatarPresetId = aiCharacterEnabled
-    ? resolveMainTabAvatarPresetId({
-        enabled: aiCharacterEnabled,
-        random: aiCharacterRandom,
-        presetId: aiCharacterPresetId,
-        customText: aiCharacterCustomText,
-      })
-    : null;
-
-  const mainTabAvatarBadgeLetter = resolveMainTabAvatarBadgeLetter({
-    enabled: aiCharacterEnabled,
-    random: aiCharacterRandom,
-    presetId: aiCharacterPresetId,
-    customText: aiCharacterCustomText,
+    setModelPolicyTier,
+    setModelPolicyNonFossUnlocked,
+    setModelAllowHighVramFallbacks,
+    activeRoutingTag: activeOllamaRoutingTag(isAsking, modelPolicyDisclosure),
+    tryOrderHost,
+    buildSettingsPayload,
+    hydrateFromSettings,
+    pauseDebouncedSettingsSave,
+    goToOllamaTab,
+    openModelPolicyReadme,
+    captureSessionBeforeModal,
+    finalizeShowModalAndRestoreActiveTab,
   });
-
-  const aiCharacterDebugLineForMainTab =
-    typeof window !== "undefined" &&
-    (window as unknown as { __BONSAI_DEBUG_AI_CHARACTER__?: boolean }).__BONSAI_DEBUG_AI_CHARACTER__
-      ? [
-          `avatar=${mainTabAvatarPresetId ?? "null"}`,
-          `presetId="${aiCharacterPresetId}"`,
-          `random=${String(aiCharacterRandom)}`,
-          `line=${formatAiCharacterSelectionLine({
-            random: aiCharacterRandom,
-            presetId: aiCharacterPresetId,
-            customText: aiCharacterCustomText,
-          })}`,
-          `accent=${aiCharacterAccentIntensity}`,
-        ].join(" | ")
-      : null;
 
   // =====================================================================
   // TAB CONTENT
   // =====================================================================
 
-  const mainTab = useMemo(
-    () => (
-    <MainTab
-      key="bonsai-main-tab"
-      fullBleedRowStyle={fullBleedRowStyle}
-      presetButtonSurface={presetButtonSurface}
-      suggestedPrompts={suggestedPrompts}
-      showPluginHelpChip={!pluginHelpDismissed}
-      onOpenPluginHelp={openPluginHelpModal}
-      presetChipFadeAnimationEnabled={presetChipFadeAnimationEnabled}
-      presetChipAnimation={presetChipAnimation}
-      onRetryLastResponse={onRetryLastResponse}
-      setUnifiedInput={setUnifiedInput}
-      unifiedInputHostRef={unifiedInputHostRef as React.Ref<HTMLDivElement>}
-      unifiedInputFieldLayerRef={unifiedInputFieldLayerRef as React.Ref<HTMLDivElement>}
-      unifiedInputMeasureRef={unifiedInputMeasureRef as React.Ref<HTMLDivElement>}
-      attachActionHostRef={attachActionHostRef as React.Ref<HTMLDivElement>}
-      askBarHostRef={askBarHostRef as React.Ref<HTMLDivElement>}
-      screenshotBrowserHostRef={screenshotBrowserHostRef as React.Ref<HTMLDivElement>}
-      unifiedInputSurfacePx={unifiedInputSurfacePx}
-      unifiedInput={unifiedInput}
-      usesNativeMultilineField={usesNativeMultilineField}
-      setIsUnifiedInputFocused={setIsUnifiedInputFocused}
-      isUnifiedInputFocused={isUnifiedInputFocused}
-      setSelectedIndex={setSelectedIndex}
-      filteredSettings={filteredSettings}
-      selectedIndex={selectedIndex}
-      onSettingClick={onSettingClick}
-      isAsking={isAsking}
-      ollamaIp={effectiveOllamaPcIp}
-      onAskOllama={onAskOllama}
-      onOpenScreenshotBrowser={onOpenScreenshotBrowser}
-      onTakeScreenshot={onTakeScreenshot}
-      onCancelAsk={onCancelAsk}
-      onMicInput={onMicInput}
-      voiceRecording={voiceRecording}
-      selectedAttachment={selectedAttachment}
-      setSelectedAttachment={setSelectedAttachment}
-      clearUnifiedInput={clearUnifiedInput}
-      showSearchClearButton={showSearchClearButton}
-      isScreenshotBrowserOpen={isScreenshotBrowserOpen}
-      onCloseScreenshotBrowser={onCloseScreenshotBrowser}
-      loadRecentScreenshots={loadRecentScreenshots}
-      mediaError={mediaError}
-      isCapturingScreenshot={isCapturingScreenshot}
-      recentScreenshots={recentScreenshots}
-      isLoadingRecentScreenshots={isLoadingRecentScreenshots}
-      onSelectRecentScreenshot={onSelectRecentScreenshot}
-      navigationMessage={navigationMessage}
-      isQamSetting={isQamSetting}
-      showSlowWarning={showSlowWarning}
-      latencyWarningSeconds={effectiveLatencyWarningSeconds}
-      ollamaResponse={ollamaResponse}
-      elapsedSeconds={elapsedSeconds}
-      lastApplied={lastApplied}
-      ollamaContext={ollamaContext}
-      canSaveDesktopNote={Boolean(lastExchange)}
-      onOpenDesktopNoteSave={openDesktopNoteSaveModal}
-      mediaLibraryEnabled={capabilities.media_library_access}
-      desktopNoteSaveEnabled={capabilities.filesystem_write}
-      aiCharacterPadClass={mainTabAiCharacterPad}
-      aiCharacterAvatarPresetId={mainTabAvatarPresetId}
-      aiCharacterAvatarBadgeLetter={mainTabAvatarBadgeLetter}
-      onOpenCharacterPicker={aiCharacterEnabled ? openCharacterPickerModal : undefined}
-      aiCharacterDebugLine={aiCharacterDebugLineForMainTab}
-      transparencySnapshot={lastTransparency}
-      onRunOriginalAsk={(text) => {
-        setUnifiedInput(text);
-        if (unifiedInputPersistenceMode === "persist_all") {
-          persistSearchQuery(text);
-        }
-      }}
-      askMode={askMode}
-      onAskModeChange={setAskMode}
-      strategyGuideBranches={strategyGuideBranches}
-      strategyChecklist={strategyChecklist}
-      onStrategyChecklistToggle={onStrategyChecklistToggle}
-      onStrategyBranchPick={onStrategyBranchPick}
-      onPresetPreferAskMode={setAskMode}
-      askThreadCollapsed={askThreadCollapsed}
-      askThreadDisplayQuestion={askThreadDisplayQuestion}
-      expandedTurnKey={expandedTurnKey}
-      onTurnActivate={onTurnActivate}
-      modelPolicyDisclosure={modelPolicyDisclosure}
-      onOpenModelPolicyReadme={openModelPolicyReadme}
-      shortcutSetupVariant={shortcutSetupVariant}
-      onOpenControllerSettings={onOpenControllerSettingsForShortcut}
-      strategySpoilerMaskingEnabled={strategySpoilerMaskingEnabled}
-      presetCarouselInject={presetCarouselInject}
-      isStreamingPreview={isStreamingPreview}
-      streamDisplayText={streamDisplayText}
-      thinkingSummary={thinkingSummary}
-      desktopAskVerboseLogging={desktopAskVerboseLogging}
-      lastRequestId={lastRequestId}
-      lastExchange={lastExchange}
-    />
-  ),
-    [
-      fullBleedRowStyle,
-      presetButtonSurface,
-      suggestedPrompts,
-      pluginHelpDismissed,
-      presetChipFadeAnimationEnabled,
-      presetChipAnimation,
-      unifiedInput,
-      unifiedInputSurfacePx,
-      usesNativeMultilineField,
-      isUnifiedInputFocused,
-      filteredSettings,
-      selectedIndex,
-      isAsking,
-      effectiveOllamaPcIp,
-      selectedAttachment,
-      showSearchClearButton,
-      isScreenshotBrowserOpen,
-      mediaError,
-      isCapturingScreenshot,
-      recentScreenshots,
-      isLoadingRecentScreenshots,
-      navigationMessage,
-      showSlowWarning,
-      effectiveLatencyWarningSeconds,
-      ollamaResponse,
-      elapsedSeconds,
-      lastApplied,
-      ollamaContext,
-      lastExchange,
-      aiCharacterEnabled,
-      mainTabAvatarPresetId,
-      mainTabAvatarBadgeLetter,
-      aiCharacterDebugLineForMainTab,
-      lastTransparency,
-      askMode,
-      strategyGuideBranches,
-      strategyChecklist,
-      askThreadCollapsed,
-      askThreadDisplayQuestion,
-      expandedTurnKey,
-      modelPolicyDisclosure,
-      shortcutSetupVariant,
-      strategySpoilerMaskingEnabled,
-      presetCarouselInject,
-      onRetryLastResponse,
-      voiceRecording,
-      onMicInput,
-      onOpenScreenshotBrowser,
-      onTakeScreenshot,
-    ]
+  /*
+   * Grouped into one value and one change function, rather than the four settings and four
+   * setters travelling separately, so the Main tab and the Developer tab below each cost this
+   * screen one thing to hand down instead of four -- see streamScrambleContext.ts for why that
+   * count matters here.
+   */
+  const streamScramble: StreamScrambleSettings = useMemo(
+    () => ({
+      enabled: streamScrambleEnabled,
+      style: streamScrambleStyle,
+      color: streamScrambleColor,
+      settleMs: streamScrambleSettleMs,
+    }),
+    [streamScrambleEnabled, streamScrambleStyle, streamScrambleColor, streamScrambleSettleMs],
+  );
+  const onStreamScrambleChange = useCallback(
+    (patch: Partial<StreamScrambleSettings>) => {
+      if (patch.enabled !== undefined) setStreamScrambleEnabled(patch.enabled);
+      if (patch.style !== undefined) setStreamScrambleStyle(patch.style);
+      if (patch.color !== undefined) setStreamScrambleColor(patch.color);
+      if (patch.settleMs !== undefined) setStreamScrambleSettleMs(patch.settleMs);
+    },
+    [setStreamScrambleEnabled, setStreamScrambleStyle, setStreamScrambleColor, setStreamScrambleSettleMs],
   );
 
-  const settingsTab = useMemo(
-    () => (
-    <SettingsTab
-      screenshotAttachmentPreset={screenshotAttachmentPreset}
-      setScreenshotAttachmentPreset={setScreenshotAttachmentPreset}
-      unifiedInputPersistenceMode={unifiedInputPersistenceMode}
-      setUnifiedInputPersistenceMode={setUnifiedInputPersistenceMode}
-      aiCharacterEnabled={aiCharacterEnabled}
-      setAiCharacterEnabled={setAiCharacterEnabled}
-      aiCharacterRandom={aiCharacterRandom}
-      aiCharacterPresetId={aiCharacterPresetId}
-      aiCharacterCustomText={aiCharacterCustomText}
-      aiCharacterAccentIntensity={aiCharacterAccentIntensity}
-      setAiCharacterAccentIntensity={setAiCharacterAccentIntensity}
-      showDeveloperTab={showDeveloperTab}
-      setShowDeveloperTab={setShowDeveloperTab}
-      strategySpoilerMaskingEnabled={strategySpoilerMaskingEnabled}
-      setStrategySpoilerMaskingEnabled={setStrategySpoilerMaskingEnabled}
-      voiceSttModel={voiceSttModel}
-      setVoiceSttModel={setVoiceSttModel}
-      microphoneAccessEnabled={capabilities.microphone_access}
-      uiScaleAutoEnabled={uiScaleAutoEnabled}
-      uiScaleManualProfile={uiScaleManualProfile}
-      appliedUiScaleProfileId={uiScale.appliedProfileId}
-      onApplyUiScale={onApplyUiScale}
-      onOpenCharacterPicker={openCharacterPickerModal}
-      onBeforeDeckyModal={captureSessionBeforeModal}
-      onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
-      onResetSession={resetPluginSession}
-      onClearAllPluginData={onClearAllPluginData}
-      intentPackSummaries={intentPacks.summaries}
-      intentPacksLoading={intentPacks.loading}
-      intentPacksError={intentPacks.error}
-      onIntentPackEnabledChange={intentPacks.setPackEnabled}
-      onIntentPackExport={intentPacks.exportPack}
-      onIntentPackImport={intentPacks.importPack}
-      onIntentPackRemove={intentPacks.removePack}
-    />
-  ),
-    [
-      screenshotAttachmentPreset,
-      unifiedInputPersistenceMode,
-      aiCharacterEnabled,
-      aiCharacterRandom,
-      aiCharacterPresetId,
-      aiCharacterCustomText,
-      aiCharacterAccentIntensity,
-      showDeveloperTab,
-      strategySpoilerMaskingEnabled,
-      voiceSttModel,
-      uiScaleAutoEnabled,
-      uiScaleManualProfile,
-      uiScale.appliedProfileId,
-      onApplyUiScale,
-      capabilities.microphone_access,
-      intentPacks.summaries,
-      intentPacks.loading,
-      intentPacks.error,
-      intentPacks.setPackEnabled,
-      intentPacks.exportPack,
-      intentPacks.importPack,
-      intentPacks.removePack,
-    ]
+  const mainTab = useMainTabPayload({
+    suggestedPrompts,
+    showPluginHelpChip: !pluginHelpDismissed,
+    useLocalKnowledgeBase,
+    onOpenPluginHelp: openPluginHelpModal,
+    presetChipAnimation,
+    presetSingleChip,
+    streamScramble,
+    onRetryLastResponse,
+    liveReplyFeedbackRating,
+    onReplyFeedback,
+    onReplyMicroAction,
+    liveReplyChipUsed,
+    liveReplyChipError,
+    setUnifiedInput,
+    unifiedInputHostRef: unifiedInputHostRef as React.Ref<HTMLDivElement>,
+    unifiedInputFieldLayerRef: unifiedInputFieldLayerRef as React.Ref<HTMLDivElement>,
+    unifiedInputMeasureRef: unifiedInputMeasureRef as React.Ref<HTMLDivElement>,
+    attachActionHostRef: attachActionHostRef as React.Ref<HTMLDivElement>,
+    askBarHostRef: askBarHostRef as React.Ref<HTMLDivElement>,
+    screenshotBrowserHostRef: screenshotBrowserHostRef as React.Ref<HTMLDivElement>,
+    unifiedInputSurfacePx,
+    unifiedInput,
+    usesNativeMultilineField,
+    setIsUnifiedInputFocused,
+    isUnifiedInputFocused,
+    isAsking,
+    ollamaIp: effectiveOllamaPcIp,
+    onAskOllama: onAskOllamaWithReadAloud,
+    onOpenScreenshotBrowser,
+    onTakeScreenshot,
+    onCancelAsk,
+    onMicInput,
+    voiceRecording,
+    /* The mic button is amber while the voice server starts and while Stop reads the recording once more. */
+    voiceBusy: voiceStarting ? "starting" : voiceFinishing ? "finishing" : null,
+    selectedAttachment,
+    setSelectedAttachment,
+    clearUnifiedInput,
+    showSearchClearButton,
+    isScreenshotBrowserOpen,
+    onCloseScreenshotBrowser,
+    loadRecentScreenshots,
+    mediaError,
+    isCapturingScreenshot,
+    recentScreenshots,
+    isLoadingRecentScreenshots,
+    onSelectRecentScreenshot,
+    navigationMessage,
+    showSlowWarning,
+    latencyWarningSeconds: effectiveLatencyWarningSeconds,
+    ollamaResponse,
+    elapsedSeconds,
+    lastApplied,
+    ollamaContext,
+    canSaveDesktopNote: desktopNoteExchangeFor(lastExchange, askThreadCollapsed) !== null,
+    onOpenDesktopNoteSave: openDesktopNoteSaveModal,
+    mediaLibraryEnabled: gatedCapabilities.media_library_access,
+    gameContextReadEnabled: gatedCapabilities.media_library_access && gatedCapabilities.steam_logs_read,
+    onNavigateToPermissions: jumpToPermission,
+    onNavigateToOllama: goToOllamaTab,
+    micPermissionDenied,
+    onDismissMicPermissionDeny: dismissMicPermissionDeny,
+    desktopNoteSaveEnabled: gatedCapabilities.filesystem_write,
+    aiCharacterEnabled,
+    aiCharacterRandom,
+    aiCharacterPresetId,
+    aiCharacterCustomText,
+    aiCharacterAccentIntensity,
+    openCharacterPickerModal,
+    transparencySnapshot: lastTransparency,
+    onRunOriginalAsk: (text) => {
+      setUnifiedInput(text);
+      if (unifiedInputPersistenceMode === "persist_all") {
+        persistSearchQuery(text);
+      }
+    },
+    askMode,
+    onAskModeChange: setAskMode,
+    strategyGuideBranches,
+    strategyChecklist,
+    onStrategyChecklistToggle,
+    onStrategyBranchPick,
+    onPresetPreferAskMode: setAskMode,
+    askThreadCollapsed,
+    askThreadDisplayQuestion,
+    expandedTurnKey,
+    onTurnActivate,
+    modelPolicyDisclosure,
+    onOpenModelPolicyReadme: openModelPolicyReadme,
+    shortcutSetupVariant,
+    onOpenControllerSettings: onOpenControllerSettingsForShortcut,
+    strategySpoilerMaskingEnabled,
+    strategySpoilerAutoRevealAfterConsent,
+    presetCarouselInject,
+    isStreamingPreview: isStreamingPreview || isStreamSettling,
+    streamDisplayText,
+    askStopped,
+    isForeignPendingAsk,
+    /* The waiting phrase, the model's own thinking, and (plan 58 phase 1) the "From the notes"
+       block's own material all travel together while the live turn still streams — see
+       LiveThinkingSnapshot. */
+    liveThinking: { summary: thinkingSummary, reasoning: liveReasoning, kbAttachedNotes },
+    desktopAskVerboseLogging,
+    lastRequestId,
+    lastExchange,
+    chatSlotSummaries: chatSlots.summaries,
+    activeChatSlotId: chatSlots.activeSlotId,
+    onChatSlotCreate: chatSlots.createSlot,
+    onChatSlotSelect: chatSlots.selectSlot,
+    onChatSlotRename: chatSlots.renameSlot,
+    onChatSlotDelete: chatSlots.deleteSlot,
+    onBeforeNestedDeckyModal: captureSessionBeforeModal,
+    onCompleteNestedDeckyModalClose: finalizeShowModalAndRestoreActiveTab,
+    generatingSlotId,
+    unreadSlotIds,
+  });
+
+
+  // One prop for the Settings tab, not a value and a setter: the hand-down to the tabs is counted.
+  const chatTextSizeSetting = useMemo(
+    () => ({ value: chatTextSize, set: setChatTextSize }),
+    [chatTextSize, setChatTextSize],
   );
 
-  const ollamaTab = useMemo(
-    () => (
-      <OllamaTab
-        key={`ollama-tab-${ollamaTabResetKey}`}
-        ollamaIp={ollamaIp}
-        onOllamaIpChange={setOllamaIp}
-        onPersistOllamaIp={saveIp}
-        ollamaLocalOnDeck={ollamaLocalOnDeck}
-        setOllamaLocalOnDeck={setOllamaLocalOnDeck}
-        onLastConnectionStatus={setLastConnectionStatus}
-        lastConnectionStatus={lastConnectionStatus}
-        namedOllamaHosts={namedOllamaHosts}
-        setNamedOllamaHosts={setNamedOllamaHosts}
-        onBeforeDeckyModal={captureSessionBeforeModal}
-        onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
-        onOpenOllamaModelsHub={openOllamaModelsHub}
-        responseVerifyEnabled={responseVerifyEnabled}
-        setResponseVerifyEnabled={setResponseVerifyEnabled}
-        responseVerifySecondPass={responseVerifySecondPass}
-        setResponseVerifySecondPass={setResponseVerifySecondPass}
-        responseVerifyModel={responseVerifyModel}
-        setResponseVerifyModel={setResponseVerifyModel}
-        latencyWarningSeconds={latencyWarningSeconds}
-        requestTimeoutSeconds={requestTimeoutSeconds}
-        latencyTimeoutsCustomEnabled={latencyTimeoutsCustomEnabled}
-        setLatencyTimeoutsCustomEnabled={setLatencyTimeoutsCustomEnabled}
-        setLatencyWarningSeconds={setLatencyWarningSeconds}
-        setRequestTimeoutSeconds={setRequestTimeoutSeconds}
-        ollamaKeepAlive={ollamaKeepAlive}
-        setOllamaKeepAlive={setOllamaKeepAlive}
-        modelPolicyTier={modelPolicyTier}
-        onApplyTier2MultimodalPolicy={onApplyTier2MultimodalPolicy}
-      />
-    ),
-    [
-      ollamaIp,
-      ollamaLocalOnDeck,
-      ollamaTabResetKey,
-      lastConnectionStatus,
-      namedOllamaHosts,
-      responseVerifyEnabled,
-      responseVerifySecondPass,
-      responseVerifyModel,
-      latencyWarningSeconds,
-      requestTimeoutSeconds,
-      latencyTimeoutsCustomEnabled,
-      ollamaKeepAlive,
-      modelPolicyTier,
-      onApplyTier2MultimodalPolicy,
-      captureSessionBeforeModal,
-      finalizeShowModalAndRestoreActiveTab,
-      openOllamaModelsHub,
-    ]
-  );
+  const settingsTab = useSettingsTabPayload({
+    screenshotAttachmentPreset,
+    setScreenshotAttachmentPreset,
+    unifiedInputPersistenceMode,
+    setUnifiedInputPersistenceMode,
+    chatTextSizeSetting,
+    aiCharacterEnabled,
+    setAiCharacterEnabled,
+    aiCharacterRandom,
+    aiCharacterPresetId,
+    aiCharacterCustomText,
+    aiCharacterAccentIntensity,
+    setAiCharacterAccentIntensity,
+    showDeveloperTab,
+    setShowDeveloperTab,
+    strategySpoilerMaskingEnabled,
+    setStrategySpoilerMaskingEnabled,
+    voiceSttModel,
+    setVoiceSttModel,
+    microphoneAccessEnabled: gatedCapabilities.microphone_access,
+    onJumpToPermission: jumpToPermission,
+    onOpenCharacterPicker: openCharacterPickerModal,
+    onBeforeDeckyModal: captureSessionBeforeModal,
+    onCompleteDeckyModalClose: finalizeShowModalAndRestoreActiveTab,
+    onResetSession: resetPluginSession,
+    onClearAllPluginData,
+    presetSingleChip,
+    setPresetSingleChip,
+  });
 
-  /** Persist immediately: Decky can unmount `Content` when the disclaimer modal closes, which drops in-memory state and cancels the debounced save. */
-  const onConfirmEnableHardwareControl = useCallback(() => {
-    setCapabilities((prev) => {
-      const next = { ...prev, hardware_control: true };
-      void call<[BonsaiSettings], BonsaiSettings>("save_settings", buildSettingsPayload({ capabilities: next }))
-        .then((saved) => hydrateFromSettings(saved))
-        .catch((err) => {
-          console.error("save_settings failed (hardware control confirm)", err);
-        });
-      return next;
-    });
-  }, [buildSettingsPayload, hydrateFromSettings, setCapabilities]);
+  const ollamaTab = useOllamaTabPayload({
+    ollamaTabResetKey,
+    ollamaIp,
+    effectiveOllamaPcIp,
+    onOllamaIpChange: setOllamaIp,
+    ollamaLocalOnDeck,
+    setOllamaLocalOnDeck,
+    ollamaLocalAutostart,
+    setOllamaLocalAutostart,
+    onLastConnectionStatus: setLastConnectionStatus,
+    namedOllamaHosts,
+    setNamedOllamaHosts,
+    onBeforeDeckyModal: captureSessionBeforeModal,
+    onCompleteDeckyModalClose: finalizeShowModalAndRestoreActiveTab,
+    onOpenOllamaModelsHub: openOllamaModelsHub,
+    latencyWarningSeconds,
+    requestTimeoutSeconds,
+    latencyTimeoutsCustomEnabled,
+    setLatencyTimeoutsCustomEnabled,
+    setLatencyWarningSeconds,
+    setRequestTimeoutSeconds,
+    ollamaKeepAlive,
+    setOllamaKeepAlive,
+    replyVerbosity,
+    setReplyVerbosity,
+    askThinkEffort,
+    setAskThinkEffort,
+    modelPolicyTier,
+    onApplyTier2MultimodalPolicy,
+    useLocalKnowledgeBase,
+    setUseLocalKnowledgeBase,
+    ragCorpusVersion,
+  });
 
-  const permissionsTab = useMemo(
-    () => (
-      <PermissionsTab
-        capabilities={capabilities}
-        setCapabilities={setCapabilities}
-        onConfirmEnableHardwareControl={onConfirmEnableHardwareControl}
-        onBeforeDeckyModal={captureSessionBeforeModal}
-        onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
-      />
-    ),
-    [
-      capabilities,
-      onConfirmEnableHardwareControl,
-      captureSessionBeforeModal,
-      finalizeShowModalAndRestoreActiveTab,
-    ]
-  );
+  const permissionsTab = usePermissionsTabPayload({
+    capabilities,
+    setCapabilities,
+    permissionJumpReturnTab,
+    onReturnFromPermissionJump: returnFromPermissionJump,
+    kidsLockActive,
+  });
 
-  const onSteamInputPhase1Jump = useCallback(() => {
-    if (!capabilities.external_navigation) {
-      toaster.toast({
-        title: "Permission required",
-        body: "Enable External and Steam navigation in the Permissions tab for Steam Input jump.",
-        duration: 4500,
-      });
-      goToPermissionsTab();
-      return;
-    }
-    const entry = getSteamInputLexiconEntry("phase1_per_game_controller_config");
-    if (!entry) {
-      toaster.toast({ title: "Steam Input", body: "Lexicon entry missing.", duration: 3500 });
-      return;
-    }
-    const result = jumpToSteamInputEntry(entry);
-    if (result.ok) {
-      toaster.toast({
-        title: "Steam Input jump",
-        body: `${result.confidenceLabel}: ${result.method} → ${result.detail}`,
-        duration: 4000,
-      });
-    } else {
-      const hint = entry.breadcrumb.length ? ` ${entry.breadcrumb[0]}` : "";
-      toaster.toast({ title: "Steam Input jump", body: `${result.reason}${hint}`, duration: 6000 });
-    }
-  }, [capabilities.external_navigation, goToPermissionsTab]);
+  const { onSteamInputPhase1Jump, installSeedKnowledgeBase } = useDeveloperToolActions({
+    syncSettingsFromDisk,
+  });
 
-  const developerTab = useMemo(
-    () => (
-      <DeveloperTab
-      capturedErrors={capturedErrors}
-      onClearErrors={() => setCapturedErrors([])}
-      onSteamInputPhase1Jump={onSteamInputPhase1Jump}
-      lastConnectionStatus={lastConnectionStatus}
-      desktopDebugNoteAutoSave={desktopDebugNoteAutoSave}
-      setDesktopDebugNoteAutoSave={setDesktopDebugNoteAutoSave}
-      desktopAskVerboseLogging={desktopAskVerboseLogging}
-      setDesktopAskVerboseLogging={setDesktopAskVerboseLogging}
-      desktopAppLogLevel={desktopAppLogLevel}
-      setDesktopAppLogLevel={setDesktopAppLogLevel}
-      filesystemWrite={capabilities.filesystem_write}
-      attachProtonLogsWhenTroubleshooting={attachProtonLogsWhenTroubleshooting}
-      setAttachProtonLogsWhenTroubleshooting={setAttachProtonLogsWhenTroubleshooting}
-      presetChipFadeAnimationEnabled={presetChipFadeAnimationEnabled}
-      setPresetChipFadeAnimationEnabled={setPresetChipFadeAnimationEnabled}
-      presetChipAnimation={presetChipAnimation}
-      setPresetChipAnimation={setPresetChipAnimation}
-      steamWebApiKey={steamWebApiKey}
-      setSteamWebApiKey={setSteamWebApiKey}
-      bonsaiTokenStreamingEnabled={bonsaiTokenStreamingEnabled}
-      setBonsaiTokenStreamingEnabled={setBonsaiTokenStreamingEnabled}
-      thinkingStatusTinyModelEnabled={thinkingStatusTinyModelEnabled}
-      setThinkingStatusTinyModelEnabled={setThinkingStatusTinyModelEnabled}
-      showOnscreenDebugHud={showOnscreenDebugHud}
-      setShowOnscreenDebugHud={setShowOnscreenDebugHud}
-      ollamaLocalOnDeck={ollamaLocalOnDeck}
-      onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
-      onBeforeThinkingPullModal={captureThinkingPullModalSession}
-      />
-    ),
-    [
-      capturedErrors,
-      onSteamInputPhase1Jump,
-      lastConnectionStatus,
-      desktopDebugNoteAutoSave,
-      desktopAskVerboseLogging,
-      desktopAppLogLevel,
-      capabilities.filesystem_write,
-      attachProtonLogsWhenTroubleshooting,
-      thinkingStatusTinyModelEnabled,
-      presetChipFadeAnimationEnabled,
-      presetChipAnimation,
-      steamWebApiKey,
-      bonsaiTokenStreamingEnabled,
-      showOnscreenDebugHud,
-      ollamaLocalOnDeck,
-      captureThinkingPullModalSession,
-      finalizeShowModalAndRestoreActiveTab,
-    ]
-  );
+  const developerTab = useDeveloperTabPayload({
+    capturedErrors,
+    setCapturedErrors,
+    onSteamInputPhase1Jump,
+    lastConnectionStatus,
+    desktopDebugNoteAutoSave,
+    setDesktopDebugNoteAutoSave,
+    desktopAskVerboseLogging,
+    setDesktopAskVerboseLogging,
+    desktopAppLogLevel,
+    setDesktopAppLogLevel,
+    filesystemWrite: gatedCapabilities.filesystem_write,
+    onJumpToPermission: jumpToPermission,
+    presetChipAnimation,
+    setPresetChipAnimation,
+    showOnscreenDebugHud,
+    setShowOnscreenDebugHud,
+    devForceSessionRagChips,
+    setDevForceSessionRagChips,
+    devPreloadAskModel,
+    setDevPreloadAskModel,
+    devFrozenTestChips,
+    setDevFrozenTestChips,
+    ragHybridRetrievalEnabled,
+    setRagHybridRetrievalEnabled,
+    tabResumeMode,
+    setTabResumeMode,
+    installSeedKnowledgeBase,
+    showDeveloperTab,
+    streamScramble,
+    onStreamScrambleChange,
+  });
 
-  const aboutTab = useMemo(
-    () => (
-      <AboutTab
-        githubRepoUrl={GITHUB_REPO_URL}
-        ollamaRepoUrl={OLLAMA_UPSTREAM_REPO_URL}
-        githubIssuesUrl={GITHUB_ISSUES_URL}
-        allowExternalNavigation={capabilities.external_navigation}
-        onNavigateToPermissions={goToPermissionsTab}
-      />
-    ),
-    [capabilities.external_navigation, goToPermissionsTab]
-  );
+  const aboutTab = useAboutTabPayload({
+    replyLanguage,
+    onReplyLanguageChange: setReplyLanguage,
+    onReplyLanguageMenuOpened: captureSessionBeforeModal,
+    effectiveLang,
+    steamClientLanguageLabel,
+    t: uiT,
+  });
+
+  const searchTab = useSearchTabPayload({
+    active: currentTab === "search",
+    isAsking,
+    intentPackIndex: intentPacks.index,
+    onSettingClick,
+    currentTab,
+    selectTab,
+    selectSlot: chatSlots.selectSlot,
+  });
 
   const deckyTabs = useMemo(
     () => {
       const rows: Array<{ id: string; title: React.ReactElement; content: React.ReactNode }> = [
+        // Search is the first tab, left of Main (plan 92, D129 call 3).
+        {
+          id: "search",
+          title: DECKY_TAB_TITLES.search,
+          content: (
+            <TabBodyFocusRoot id="search">
+              <div
+                className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight"
+                data-bonsai-tab-panel="search"
+              >
+                {searchTab}
+              </div>
+            </TabBodyFocusRoot>
+          ),
+        },
         {
           id: "main",
           title: DECKY_TAB_TITLES.main,
-          content: mainTab,
+          // `display: contents` rather than the panel shell the other tabs use. Main lays out
+          // with `bonsai-full-bleed-row` and negative margins, and the `--tight` modifier sets
+          // `overflow-x: hidden` (styles/sections/scopeBase.ts), which would clip it. A
+          // contents box generates no box at all, so this is queryable with provably zero
+          // layout effect — it exists only so `snapshotDom` can scope to this panel.
+          content: (
+            <div data-bonsai-tab-panel="main" style={{ display: "contents" }}>
+              {mainTab}
+            </div>
+          ),
         },
+        // Every body but Main sits in a TabBodyFocusRoot so the tab bar can hand the
+        // ring down into it and the body can hand it back up (plan 30 W4). Main hands the ring to
+        // the chat's own first stop (tabBarExitDown below), and the top of the chat hands it back.
         {
           id: "ollama",
           title: DECKY_TAB_TITLES.ollama,
-          content: ollamaTab,
+          content: <TabBodyFocusRoot id="ollama">{ollamaTab}</TabBodyFocusRoot>,
         },
         {
           id: "settings",
           title: DECKY_TAB_TITLES.settings,
-          content: settingsTab,
+          content: <TabBodyFocusRoot id="settings">{settingsTab}</TabBodyFocusRoot>,
         },
         {
           id: "permissions",
           title: DECKY_TAB_TITLES.permissions,
           content: (
-            <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack">
-              {permissionsTab}
-            </div>
+            <TabBodyFocusRoot id="permissions">
+              <div
+                className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack"
+                data-bonsai-tab-panel="permissions"
+              >
+                {permissionsTab}
+              </div>
+            </TabBodyFocusRoot>
           ),
         },
       ];
@@ -1741,86 +1130,116 @@ const Content: React.FC = () => {
         rows.push({
           id: "developer",
           title: DECKY_TAB_TITLES.developer,
-          content: developerTab,
+          content: <TabBodyFocusRoot id="developer">{developerTab}</TabBodyFocusRoot>,
         });
       }
       rows.push({
         id: "about",
         title: DECKY_TAB_TITLES.about,
-        content: <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight">{aboutTab}</div>,
+        content: (
+          <TabBodyFocusRoot id="about">
+            <div
+              className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight"
+              data-bonsai-tab-panel="about"
+            >
+              {aboutTab}
+            </div>
+          </TabBodyFocusRoot>
+        ),
       });
       return rows;
     },
-    [showDeveloperTab, mainTab, ollamaTab, settingsTab, permissionsTab, developerTab, aboutTab]
+    [showDeveloperTab, searchTab, mainTab, ollamaTab, settingsTab, permissionsTab, developerTab, aboutTab]
   );
+  /** The bar's dash count follows the mounted tabs — six without Developer, seven with. */
+  const tabBarIds = useMemo(() => deckyTabs.map((row) => row.id as BonsaiTabId), [deckyTabs]);
+  /**
+   * Down from the tab bar (plan 30 W4). On Main, the chat's first stop, or the question box
+   * when the chat is empty (plan 84 step 5: the saved-chats row that used to sit there is gone; the Main
+   * tab's own action, through the chat title store). Every other body is wrapped in a TabBodyFocusRoot.
+   * False when the target is not registered, and the bar lets Steam decide (the hidden-header trap
+   * covers that landing).
+   */
+  const tabBarExitDown = useCallback(() => tabBarExitDownFor(currentTab), [currentTab]);
+  /**
+   * The tab bar in Steam's strip at the top of the panel, drawn by the title view in Decky's bar (plan 84
+   * step 6): true once Decky's bar has been reshaped for it. Until then, and whenever Decky's bar is not
+   * the shape that needs, the bar is drawn here in bonsAI's box as before.
+   */
+  const barInStrip = useTopStripTabBar({
+    tab: currentTab,
+    tabIds: tabBarIds,
+    selectTab,
+    exitDown: tabBarExitDown,
+  });
+  /**
+   * B inside a tab body. Steam's `Tabs` would focus its own header — hidden now, so that is the
+   * ghost stop — unless `cancelSkipTabHeader` is set, in which case the press reaches this handler on
+   * the page's outer Focusable (read from Steam's source 2026-09-02, plan 30 § 8). The bar takes the
+   * ring and the press is consumed the way DrgGlossaryTermChip consumes B; if the bar is not
+   * registered the press is left alone and Steam backs out of the panel as it always could.
+   */
+  const onCancelFromTabHeader = useCallback((evt: unknown) => {
+    if (takeNavFocus("tab-bar")) {
+      (evt as { preventDefault?: () => void } | undefined)?.preventDefault?.();
+    }
+  }, []);
 
   return (
     <BonsaiPluginShell scopeRef={bonsaiScopeRef} scopeStyle={bonsaiScopeStyle}>
-      <UiScaleProvider
-        value={{
-          profileId: uiScale.appliedProfileId,
-          scopeStyle: uiScale.scopeStyle,
-          generation: uiScale.generation,
-          requestApply: () => setUiScaleApplyToken((t) => t + 1),
-        }}
-      >
-        <BonsaiDebugOverlay enabled={showOnscreenDebugHud} />
-        <div key={`bonsai-tabs-gen-${uiScale.generation}`} className="bonsai-decky-tabs-root">
+      <BonsaiDebugOverlay enabled={showOnscreenDebugHud} />
+      {/*
+        data-bonsai-active-tab drives the persistent active-tab marker in section-1.ts.
+        Measured on device 2026-08-04: SteamOS does not put `.Active` on these tab buttons, it
+        uses a build-hashed class, so the marker cannot be keyed on Steam's own classes. This
+        attribute is the only thing that changes on a tab switch — DECKY_TAB_TITLES stays
+        referentially identical, so the strip itself does not re-render.
+      */}
+      {/*
+        The tab bar (plan 30) and the tabs root share one fragment, and the bar comes before the
+        root so the scope's flex column puts it on top; Steam's own header inside the root is hidden
+        by section-1.ts.
+      */}
+      <React.Fragment>
+        {barInStrip ? null : (
+          <TabIndicatorBar
+            tabIds={tabBarIds}
+            currentTab={currentTab}
+            selectTab={selectTab}
+            exitDown={tabBarExitDown}
+          />
+        )}
+        <HiddenTabHeaderTrap />
+        <SteamTabRowGuard />
+        <div className="bonsai-decky-tabs-root" data-bonsai-active-tab={currentTab}>
           <Tabs
             activeTab={currentTab}
             onShowTab={onTabsShowTab}
             tabs={deckyTabs}
-            {...({ autoFocusContents: false } as Record<string, unknown>)}
+            {...({
+              autoFocusContents: false,
+              cancelSkipTabHeader: true,
+              onCancelFromTabHeader,
+            } as Record<string, unknown>)}
           />
         </div>
-      </UiScaleProvider>
+      </React.Fragment>
     </BonsaiPluginShell>
   );
 };
 
 // Mount the content tree inside an error boundary to keep plugin recovery user-accessible.
 const Root: React.FC = () => (
-  <ErrorBoundary>
+  <PluginErrorBoundary>
     <Content />
-  </ErrorBoundary>
+  </PluginErrorBoundary>
 );
 
 export default definePlugin(() => {
   return {
     name: "bonsAI",
-    titleView: (
-      <span
-        title={`bonsAI v${PLUGIN_VERSION}`}
-        style={{
-          fontVariant: "small-caps",
-          fontWeight: 600,
-          letterSpacing: "0.06em",
-          color: "rgba(236, 240, 245, 0.96)",
-          WebkitTextStroke: `1.25px ${BONSAI_FOREST_GREEN}`,
-          paintOrder: "stroke fill",
-        }}
-      >
-        bonsAI
-        <sub
-          style={{
-            fontVariant: "normal",
-            fontSize: "0.46em",
-            fontWeight: 600,
-            letterSpacing: "0.04em",
-            color: ASK_LABEL_COLOR_50,
-            marginLeft: "0.38em",
-            lineHeight: 1,
-            verticalAlign: "baseline",
-            position: "relative",
-            bottom: "-0.2em",
-            WebkitTextStroke: "0 transparent",
-            paintOrder: "normal",
-          }}
-        >
-          v{PLUGIN_VERSION}
-        </sub>
-      </span>
-    ),
+    /* The chat's name on the Main tab, the bonsAI wordmark elsewhere (plan 84 step 5). */
+    titleView: <ChatTitleView />,
     content: <Root />,
     icon: (
       <span style={{ display: "inline-flex", transform: "translateX(-5px)" }}>

@@ -1,0 +1,1661 @@
+[
+  {
+    "pattern_id": 1,
+    "topic": "proton",
+    "platforms": [
+      "deck",
+      "linux"
+    ],
+    "card": "Verify Proton Experimental or game-forced version in game Properties > Compatibility. Clear shader cache under ~/.steam/steam/steamapps/shadercache/<appid>.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 2,
+    "topic": "proton",
+    "platforms": [
+      "deck",
+      "linux"
+    ],
+    "card": "Try fullscreen vs borderless windowed; some titles hitch only in one mode on Deck.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 3,
+    "topic": "proton",
+    "platforms": [
+      "deck",
+      "linux"
+    ],
+    "card": "Check ProtonDB for launch options and community fixes before forcing a Proton version.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 4,
+    "topic": "proton",
+    "platforms": [
+      "deck",
+      "linux"
+    ],
+    "card": "After SteamOS update, re-test with Proton Experimental; stale compat data can break until shader regen.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 5,
+    "topic": "proton",
+    "platforms": [
+      "windows"
+    ],
+    "card": "On Windows Steam, Proton is not used; troubleshooting is native DirectX/Vulkan driver issues.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 6,
+    "topic": "proton",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Deck sleep with Proton games: if resume fails, exit to Gaming Mode home and relaunch.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 7,
+    "topic": "proton",
+    "platforms": [
+      "deck",
+      "linux"
+    ],
+    "card": "Winetricks/dotnet installs are last resort; prefer official Proton or game-specific fixes.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 8,
+    "topic": "proton",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Force Proton 8.x or Experimental from game Properties when default fails after title update.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 9,
+    "topic": "proton",
+    "platforms": [
+      "deck",
+      "linux"
+    ],
+    "card": "If audio crackles under Proton, try gamescope -e or disable RT audio in game settings.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 10,
+    "topic": "proton",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Proton log: PROTON_LOG=1 %command% captures useful launch traces to ~/steam-*.log.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 11,
+    "topic": "proton",
+    "platforms": [
+      "steamvr"
+    ],
+    "card": "VR under Proton on Deck is limited; prefer native Linux VR builds or host PC streaming.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 12,
+    "topic": "deck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Verify AC adapter wattage; weak USB-C hubs can throttle charge and TDP during play.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 13,
+    "topic": "deck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "After long sessions, check fan noise and surface temp; pause and lower TDP if throttling.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 14,
+    "topic": "deck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "MicroSD for library: use A2-rated cards; slow SD increases load times.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 15,
+    "topic": "deck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Desktop Mode vs Gaming Mode: some fixes only apply in Desktop Mode.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 16,
+    "topic": "deck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Reboot clears stuck GPU/audio states after failed game exit or suspend bugs.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 17,
+    "topic": "deck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Factory reset is last resort; backup ~/.steam and compatdata paths first.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 18,
+    "topic": "deck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Steam Deck verified badge is guidance; check ProtonDB for edge cases.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 19,
+    "topic": "deck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "USB-C dock display issues: try direct cable, update dock firmware.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 20,
+    "topic": "deck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Bluetooth audio latency: prefer wired for rhythm and competitive games.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 21,
+    "topic": "deck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Battery health: avoid 100% storage for weeks; occasional full cycle helps reporting.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 22,
+    "topic": "steam_machine",
+    "platforms": [
+      "steam_machine",
+      "linux"
+    ],
+    "card": "Steam Machine uses SteamOS; same Proton and gamescope paths as Deck.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 23,
+    "topic": "bpm",
+    "platforms": [
+      "deck",
+      "linux"
+    ],
+    "card": "Big Picture Mode is default on Deck; Desktop Mode for Konsole and file fixes.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 24,
+    "topic": "bpm",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Return to Gaming Mode from Desktop via desktop icon or steam command in Konsole.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 25,
+    "topic": "desktop_mode",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Desktop Mode file manager can delete shader cache and compatdata when games corrupt.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 26,
+    "topic": "gaming_mode",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Gaming Mode QAM is safe for TDP and brightness without leaving the game.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 27,
+    "topic": "steam_machine",
+    "platforms": [
+      "linux"
+    ],
+    "card": "Steam Machine class hardware: verify AMDGPU and Mesa match SteamOS channel.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 28,
+    "topic": "bpm",
+    "platforms": [
+      "deck"
+    ],
+    "card": "BPM keyboard: Steam + X opens on-screen keyboard in Gaming Mode.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 29,
+    "topic": "desktop_mode",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Switching modes mid-game can lose fullscreen focus; exit game first.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 30,
+    "topic": "wine",
+    "platforms": [
+      "linux"
+    ],
+    "card": "Non-Steam games via Wine/Proton need added as Non-Steam shortcuts with forced Proton.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 31,
+    "topic": "wine",
+    "platforms": [
+      "linux"
+    ],
+    "card": "Wine prefix corruption: delete compatdata folder only after backing up saves.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 32,
+    "topic": "wine",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Heroic/Lutris titles are outside Steam compatdata; paths differ from Steam library.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 33,
+    "topic": "wine",
+    "platforms": [
+      "linux"
+    ],
+    "card": "32-bit Wine deps on Linux: use Proton bottle instead of raw Wine when possible.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 34,
+    "topic": "wine",
+    "platforms": [
+      "windows"
+    ],
+    "card": "Wine does not run on Windows; use native builds or VMs.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 35,
+    "topic": "wine",
+    "platforms": [
+      "linux"
+    ],
+    "card": "DXVK/VKD3D versions ship with Proton; avoid random DLL overrides without logs.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 36,
+    "topic": "windows_steam",
+    "platforms": [
+      "windows"
+    ],
+    "card": "Verify game files integrity from Steam client before driver reinstalls.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 37,
+    "topic": "windows_steam",
+    "platforms": [
+      "windows"
+    ],
+    "card": "Clear download cache: Steam Settings > Downloads > Clear Download Cache.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 38,
+    "topic": "windows_steam",
+    "platforms": [
+      "windows"
+    ],
+    "card": "Launch options apply per game; -dx11 / -dx12 / -fullscreen flags are common.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 39,
+    "topic": "windows_steam",
+    "platforms": [
+      "windows"
+    ],
+    "card": "Steam client beta vs stable: switch channel if social UI breaks after update.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 40,
+    "topic": "windows_steam",
+    "platforms": [
+      "windows"
+    ],
+    "card": "Windows Game Mode and Game Bar can conflict; test with overlays off.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 41,
+    "topic": "windows_steam",
+    "platforms": [
+      "windows"
+    ],
+    "card": "Antivirus scanning Steam library causes stutter; exclude library path cautiously.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 42,
+    "topic": "steamvr",
+    "platforms": [
+      "steamvr",
+      "windows"
+    ],
+    "card": "SteamVR requires HMD drivers; reboot HMD after GPU driver updates.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 43,
+    "topic": "steamvr",
+    "platforms": [
+      "steamvr"
+    ],
+    "card": "Room setup drift: redo standing calibration and check base station angles.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 44,
+    "topic": "steamvr",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Deck as SteamVR host is not supported; stream from PC or use standalone HMD.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 45,
+    "topic": "steamvr",
+    "platforms": [
+      "steamvr"
+    ],
+    "card": "Mirror vs headset-only display: wrong choice can black-screen the desktop.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 46,
+    "topic": "steamvr",
+    "platforms": [
+      "steamvr"
+    ],
+    "card": "USB bandwidth: VR headsets need direct motherboard USB3 ports.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 47,
+    "topic": "steamvr",
+    "platforms": [
+      "steamvr"
+    ],
+    "card": "OpenXR vs SteamVR runtime toggle per game in Properties or launcher.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 48,
+    "topic": "steamvr",
+    "platforms": [
+      "steamvr"
+    ],
+    "card": "Controller binding conflicts: reset to default in SteamVR Input settings.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 49,
+    "topic": "steamvr",
+    "platforms": [
+      "steamvr"
+    ],
+    "card": "Wireless VR: Wi-Fi 6 and line-of-sight reduce encode stutter.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 50,
+    "topic": "gamescope",
+    "platforms": [
+      "deck",
+      "linux"
+    ],
+    "card": "Gamescope wraps the game process; resolution and FSR flags apply at launch.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 51,
+    "topic": "gamescope",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Deck native resolution vs scaled: lower internal res + FSR can stabilize FPS.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 52,
+    "topic": "gamescope",
+    "platforms": [
+      "deck"
+    ],
+    "card": "gamescope -W/-H set output size; mismatched aspect causes letterboxing.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 53,
+    "topic": "gamescope",
+    "platforms": [
+      "linux"
+    ],
+    "card": "Nested gamescope in Desktop Mode can fail; prefer Gaming Mode launch.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 54,
+    "topic": "gamescope",
+    "platforms": [
+      "deck"
+    ],
+    "card": "HDR titles may need experimental SteamOS builds with gamescope.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 55,
+    "topic": "gamescope",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Frame limiter in gamescope can reduce fan noise when uncapped spikes occur.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 56,
+    "topic": "gamescope",
+    "platforms": [
+      "deck"
+    ],
+    "card": "If game ignores resolution, set in-game resolution to match gamescope target.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 57,
+    "topic": "gamescope",
+    "platforms": [
+      "linux"
+    ],
+    "card": "MangoHud + gamescope: wrap game inside gamescope first.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 58,
+    "topic": "anticheat",
+    "platforms": [
+      "deck",
+      "linux"
+    ],
+    "card": "Kernel anti-cheat needs developer Proton enablement; check ProtonDB status.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 59,
+    "topic": "anticheat",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Easy Anti-Cheat offline modes may work when online blocked on Linux.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 60,
+    "topic": "anticheat",
+    "platforms": [
+      "windows"
+    ],
+    "card": "On Windows, repair anti-cheat service via game launcher or reinstall.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 61,
+    "topic": "anticheat",
+    "platforms": [
+      "deck",
+      "linux"
+    ],
+    "card": "Secure boot rarely affects Deck; focus on Proton anti-cheat flags.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 62,
+    "topic": "anticheat",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Faceit/Vanguard class AC: often no Linux support; use Windows PC.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 63,
+    "topic": "anticheat",
+    "platforms": [
+      "deck",
+      "linux"
+    ],
+    "card": "After AC update, verify patch notes for Linux experimental support.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 64,
+    "topic": "anticheat",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Multiplayer blocked on Deck is often AC policy, not TDP misconfig.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 65,
+    "topic": "anticheat",
+    "platforms": [
+      "linux"
+    ],
+    "card": "Proton BattlEye runtime: Steam may prompt install once per title.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 66,
+    "topic": "streaming",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Remote Play from PC: host encoding load matters; lower host resolution if client stutters.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 67,
+    "topic": "streaming",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Remote Play Together uses host PC; Deck as guest needs stable LAN Wi-Fi.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 68,
+    "topic": "streaming",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Moonlight/Sunshine: tune bitrate to 20-50 Mbps on local LAN.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 69,
+    "topic": "streaming",
+    "platforms": [
+      "windows"
+    ],
+    "card": "Host-side fixes first: GPU encoder driver, HEVC support, firewall.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 70,
+    "topic": "streaming",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Deck as client: disable client upscale if bandwidth limited.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 71,
+    "topic": "streaming",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Audio chop on stream: try wired LAN or 5 GHz Wi-Fi.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 72,
+    "topic": "streaming",
+    "platforms": [
+      "steamvr"
+    ],
+    "card": "VR streaming doubles encode cost; reduce supersampling on host.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 73,
+    "topic": "streaming",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Sleep host PC during stream drops session; wake host before reconnect.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 74,
+    "topic": "storage",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Move library to SD: Steam Settings > Storage; move per game.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 75,
+    "topic": "storage",
+    "platforms": [
+      "deck"
+    ],
+    "card": "compatdata on SD moves with game if selected; shaders may need regen.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 76,
+    "topic": "storage",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Internal storage full: uninstall large shaders and unused games first.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 77,
+    "topic": "storage",
+    "platforms": [
+      "linux"
+    ],
+    "card": "ext4 on SD: SteamOS formats SD; do not reformat to NTFS for library.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 78,
+    "topic": "storage",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Repair library folder permissions if games fail to update after SD remount.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 79,
+    "topic": "storage",
+    "platforms": [
+      "windows"
+    ],
+    "card": "NTFS library on Windows: avoid compressing Steam folder.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 80,
+    "topic": "storage",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Cloud save sync fails when storage full; free space before blaming network.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 81,
+    "topic": "storage",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Backup ~/.steam/steam/userdata before storage migrations.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 82,
+    "topic": "updates",
+    "platforms": [
+      "deck"
+    ],
+    "card": "SteamOS update stuck: reboot and retry; recovery image if boot loop.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 83,
+    "topic": "updates",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Game update mid-download: clear cache and verify files if manifest corrupt.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 84,
+    "topic": "updates",
+    "platforms": [
+      "windows"
+    ],
+    "card": "Windows Update + GPU driver same week: reboot twice before blaming games.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 85,
+    "topic": "updates",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Steam client update can reset per-game Proton choice; re-check Compatibility.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 86,
+    "topic": "updates",
+    "platforms": [
+      "linux"
+    ],
+    "card": "Mesa/AMD driver in SteamOS: system updates ship GPU stack.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 87,
+    "topic": "updates",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Rollback SteamOS only via recovery; not per-game.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 88,
+    "topic": "steam_input",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Per-game controller config: gear icon in library > Controller Options.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 89,
+    "topic": "steam_input",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Gyro aim: enable in controller config > Gyro > Always On for shooters.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 90,
+    "topic": "steam_input",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Desktop layout vs Gamepad layout: wrong template breaks controls.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 91,
+    "topic": "steam_input",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Steam Input vs native gamepad: force Steam Input on or off explicitly.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 92,
+    "topic": "steam_input",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Back paddle L4/R4: map in Controller Settings > Edit Layout.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 93,
+    "topic": "steam_input",
+    "platforms": [
+      "windows"
+    ],
+    "card": "Steam Input on Windows requires Steam client in background.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 94,
+    "topic": "steam_input",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Multiplayer layouts: check Steam Input community configs.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 95,
+    "topic": "steam_input",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Keyboard mouse on Deck: Desktop Mode or Touchscreen in layout editor.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 96,
+    "topic": "steam_input",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Cyberpunk and FPS: community gyro templates need sensitivity tweak.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 97,
+    "topic": "steam_input",
+    "platforms": [
+      "steamvr"
+    ],
+    "card": "SteamVR controllers use separate binding UI from flat Steam Input.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 98,
+    "topic": "controller",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Bluetooth pairing: hold Steam + X, use Bluetooth in Gaming Mode.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 99,
+    "topic": "controller",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Wired USB controller preferred for lowest latency.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 100,
+    "topic": "gyro",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Calibrate gyro on flat surface before enabling gyro aim.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 101,
+    "topic": "controller",
+    "platforms": [
+      "deck"
+    ],
+    "card": "PS5 DualSense on Deck: works via Bluetooth; adaptive triggers not supported.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 102,
+    "topic": "controller",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Xbox controller firmware updates require Windows PC or mobile app.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 103,
+    "topic": "controller",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Stick drift: increase deadzone in Steam Input or clean hardware.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 104,
+    "topic": "gyro",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Gyro jitter when walking: lower sensitivity or disable on foot sections.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 105,
+    "topic": "controller",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Multiple controllers: player order follows connection order.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 106,
+    "topic": "controller",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Check the battery first; a controller that seems broken is often just empty.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 107,
+    "topic": "controller",
+    "platforms": [
+      "deck"
+    ],
+    "card": "If a controller stops responding mid-game, disconnect and reconnect it before restarting the game.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 108,
+    "topic": "controller",
+    "platforms": [
+      "deck"
+    ],
+    "card": "If it connects but no buttons do anything, forget the device and pair it again.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 109,
+    "topic": "controller",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Weak or missing vibration usually means it connected as a generic device, not through Steam Input.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 110,
+    "topic": "steam_frame",
+    "platforms": [
+      "frame"
+    ],
+    "card": "Steam Frame with bonsAI: run bonsAI on a Steam Deck on the same home network. There is no bonsAI inside the headset.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 111,
+    "topic": "steam_frame",
+    "platforms": [
+      "frame"
+    ],
+    "card": "Point bonsAI at the PC that streams your Frame games: the PC address followed by :11434. On that PC, Ollama must accept connections from other devices and port 11434 must pass the firewall.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 112,
+    "topic": "steam_frame",
+    "platforms": [
+      "frame"
+    ],
+    "card": "The PC streaming your game is the best place to run the model. Same machine, no extra hop.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 113,
+    "topic": "steam_frame",
+    "platforms": [
+      "frame"
+    ],
+    "card": "Frame comfort: reduce locomotion intensity; a seated playspace reduces nausea.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 114,
+    "topic": "steam_frame",
+    "platforms": [
+      "frame"
+    ],
+    "card": "VR framerate misses feel worse than flat-screen ones. Prefer a lower refresh rate that holds over a higher one that stutters.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 115,
+    "topic": "steam_frame",
+    "platforms": [
+      "frame"
+    ],
+    "card": "Screenshots taken while streaming save on the host PC, not on the Deck running bonsAI.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 116,
+    "topic": "steam_frame",
+    "platforms": [
+      "frame"
+    ],
+    "card": "If a flat game opens on the wrong display, check the display or output target before changing graphics settings.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 117,
+    "topic": "fex",
+    "platforms": [
+      "linux"
+    ],
+    "card": "FEX-Emu on ARM Linux: experimental x86 emulation; not AMD Deck path.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 118,
+    "topic": "fex",
+    "platforms": [
+      "linux"
+    ],
+    "card": "FEX vs Proton: Proton is primary on Steam Deck AMD.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 119,
+    "topic": "network",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Steam offline mode: go online once to validate licenses before offline trip.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 120,
+    "topic": "network",
+    "platforms": [
+      "deck"
+    ],
+    "card": "DNS issues on hotel Wi-Fi: try manual DNS in Desktop Mode network settings.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 121,
+    "topic": "emudeck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "EmuDeck paths: ROMs and emulator configs live outside Steam.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 122,
+    "topic": "emudeck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "PCSX2 via EmuDeck: per-game settings in EmuDeck menu.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 123,
+    "topic": "linux",
+    "platforms": [
+      "linux"
+    ],
+    "card": "Flatpak Steam vs native: Deck uses system Steam; do not mix library paths.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 124,
+    "topic": "shader",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Shader pre-cache missing: first launch stutters until cache builds.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 125,
+    "topic": "crash",
+    "platforms": [
+      "deck"
+    ],
+    "card": "On the Deck a crash drops you back to the game library, not to a desktop -- there is no desktop to check.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 126,
+    "topic": "crash",
+    "platforms": [
+      "deck",
+      "linux"
+    ],
+    "card": "Disable Steam overlay and third-party overlays when crashes happen at launch.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 127,
+    "topic": "crash",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Try forcing a different Proton version, or Proton Experimental, from the game's Properties > Compatibility tab.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 128,
+    "topic": "crash",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Clear the shader cache under ~/.steam/steam/steamapps/shadercache/<appid> and let it rebuild.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 129,
+    "topic": "crash",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Verify the game's files from the Steam library; a broken download is a common crash cause.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 130,
+    "topic": "crash",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Check free storage space -- a nearly full drive can crash a game at launch or while saving.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 131,
+    "topic": "crash",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Update both the game and SteamOS before digging further; a version mismatch is a frequent cause.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 132,
+    "topic": "crash",
+    "platforms": [
+      "deck"
+    ],
+    "card": "A real kernel panic (not just a game crash) is rare on Deck -- note the SteamOS version and last game if it happens.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 133,
+    "topic": "crash",
+    "platforms": [
+      "deck"
+    ],
+    "card": "If only one game crashes and everything else runs fine, the game is the more likely cause.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 134,
+    "topic": "performance",
+    "platforms": [
+      "deck"
+    ],
+    "card": "TDP cap in QAM affects CPU/GPU together; lowering reduces heat.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 135,
+    "topic": "performance",
+    "platforms": [
+      "deck"
+    ],
+    "card": "30 FPS cap can stabilize frame pacing vs uncapped stutter.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 136,
+    "topic": "performance",
+    "platforms": [
+      "deck"
+    ],
+    "card": "If the game stutters, lower the resolution or turn on FSR before changing anything else.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 137,
+    "topic": "performance",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Cap the frame rate to what the game can hold steady -- a lower steady rate beats an uneven higher one.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 138,
+    "topic": "performance",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Lower the TDP limit in Quick Settings if the Deck feels hot or the fan is loud.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 139,
+    "topic": "performance",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Plug in the charger during demanding games; the Deck slows itself down on low battery.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 140,
+    "topic": "performance",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Turn off motion blur and other post-processing effects; some games run noticeably smoother without them.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 141,
+    "topic": "performance",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Verify the game's files if performance suddenly got worse right after an update.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 142,
+    "topic": "performance",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Give the game a minute after launch -- shaders compiling for the first time cause stutter that goes away.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 143,
+    "topic": "performance",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Close other apps and background downloads before a demanding game to free up memory.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 144,
+    "topic": "audio",
+    "platforms": [
+      "deck"
+    ],
+    "card": "No audio after suspend: toggle volume, switch output in Quick Settings.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 145,
+    "topic": "audio",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Check the output device in Quick Settings -- the Deck can switch to a disconnected Bluetooth device.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 146,
+    "topic": "audio",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Re-pair Bluetooth headphones if the audio crackles or cuts in and out.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 147,
+    "topic": "audio",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Use a wired connection for rhythm or competitive games; Bluetooth audio adds a small delay.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 148,
+    "topic": "audio",
+    "platforms": [
+      "deck"
+    ],
+    "card": "If there is no sound at all, check the in-game audio settings too, not just the Deck's.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 149,
+    "topic": "audio",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Restart the game if sound stops mid-session; it is usually the game's audio, not the hardware.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 150,
+    "topic": "audio",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Try a different USB-C dock or cable if audio through a dock cuts out or hums.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 151,
+    "topic": "audio",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Update the game if audio broke right after a patch; a fix is usually already out.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 152,
+    "topic": "display",
+    "platforms": [
+      "deck"
+    ],
+    "card": "External monitor blank: try HDMI direct, 1080p60, disable overscan.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 153,
+    "topic": "display",
+    "platforms": [
+      "deck"
+    ],
+    "card": "If the screen looks torn while moving the camera, turn on V-Sync in the game's display settings.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 154,
+    "topic": "display",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Set an external display to 1080p60 first -- higher settings can show a blank screen until confirmed working.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 155,
+    "topic": "display",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Use a direct HDMI cable instead of an adapter chain if an external monitor shows nothing.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 156,
+    "topic": "display",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Lower the in-game resolution if the picture looks blurry on the built-in screen.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 157,
+    "topic": "display",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Turn off HDR in the game if colors look washed out or too dark on the built-in screen.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 158,
+    "topic": "display",
+    "platforms": [
+      "deck"
+    ],
+    "card": "If the picture stutters rather than tears, that is a performance problem, not a display one.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 159,
+    "topic": "display",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Restart the game after changing display settings; some games only apply them on the next launch.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 160,
+    "topic": "proton",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Launch option moshortcut://\"F4SE\" (Properties > Launch Options) starts the game through F4SE via Mod Organizer 2. Confirmed on the maintainer's own Deck, 2026-08-21.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer",
+    "app_id": "377160"
+  },
+  {
+    "pattern_id": 161,
+    "topic": "proton",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Launch option %command% -dx12 (Properties > Launch Options) runs on the maintainer's own Deck. What it fixes is unconfirmed -- a launch option they use, not a documented fix for a specific symptom.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer",
+    "app_id": "1547000"
+  },
+  {
+    "pattern_id": 162,
+    "topic": "display",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: the Render Scale slider also blurs menu/HUD text -- no separate UI-scale option. Below ~90% text gets hard to read; raise Render Scale rather than blame the screen.",
+    "source_url": "https://steamcommunity.com/app/2321470/discussions/2/6292161380818836463/",
+    "source_license": "bonsAI-maintainer",
+    "app_id": "2321470"
+  },
+  {
+    "pattern_id": 163,
+    "topic": "emudeck",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: Ship of Harkinian's enhancements menu (framerate, resolution, saves, textures) has no gamepad-only way in -- map a trackpad as a mouse first, or it stays unreachable.",
+    "source_url": "https://steamdeckhq.com/tips-and-guides/how-to-set-up-zelda-ocarina-of-time-pc-port-on-steam-deck/",
+    "source_license": "bonsAI-maintainer",
+    "app_id": "emudeck-oot-n64"
+  },
+  {
+    "pattern_id": 164,
+    "topic": "gyro",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: gyro in Ship of Harkinian reads as a joystick axis, not mouse-look. Pick the control scheme matching a joystick-style gyro, or camera gyro won't respond.",
+    "source_url": "https://steamdeckhq.com/tips-and-guides/how-to-set-up-zelda-ocarina-of-time-pc-port-on-steam-deck/",
+    "source_license": "bonsAI-maintainer",
+    "app_id": "emudeck-oot-n64"
+  }
+]

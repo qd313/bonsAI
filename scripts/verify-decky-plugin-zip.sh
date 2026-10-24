@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Verify a Decky distributable zip contains the same runtime layout as dev deploy
-# (main.py, py_modules/backend/, refactor_helpers.py, dist/index.js, manifests).
+# (main.py, py_modules/backend/, dist/index.js, manifests), the data files the back end reads,
+# and every licence file the download owes: LICENSE, NOTICE and the third-party licences file.
+# Refuses a program dropped into bin/ (it would ship without its notice) and the game notes.
 set -euo pipefail
 
 usage() {
@@ -41,20 +43,29 @@ need_file main.py
 need_file plugin.json
 need_file package.json
 need_file dist/index.js
-need_file refactor_helpers.py
+
+# Licences the download must carry (scripts/stage_zip_extras.py stages NOTICE; npm run build
+# writes the third-party file).
+need_file LICENSE
+need_file NOTICE
+need_file dist/THIRD-PARTY-LICENSES.txt
+
+# Data the back end reads from the plugin folder (staged by scripts/stage_zip_extras.py).
+need_file data/settings-search-targets.json
+need_file data/intent-packs/deck-basics.json
 
 for spot in \
-    py_modules/backend/services/ollama_service.py \
-    py_modules/backend/services/settings_service.py \
+    py_modules/backend/ask/ollama_service.py \
+    py_modules/backend/settings/settings_service.py \
     py_modules/backend/__init__.py; do
     need_file "$spot"
 done
 
 shopt -s nullglob
-py_services=( "$ROOT"/py_modules/backend/services/*.py )
+py_backend_files=( "$ROOT"/py_modules/backend/*/*.py )
 shopt -u nullglob
-if [[ ${#py_services[@]} -lt 3 ]]; then
-    echo "verify-decky-plugin-zip: expected multiple py_modules/backend/services/*.py, found ${#py_services[@]}" >&2
+if [[ ${#py_backend_files[@]} -lt 3 ]]; then
+    echo "verify-decky-plugin-zip: expected multiple py_modules/backend/*/*.py (any package folder), found ${#py_backend_files[@]}" >&2
     exit 1
 fi
 
@@ -63,5 +74,20 @@ if [[ ${#MISSING[@]} -gt 0 ]]; then
     printf '  %s\n' "${MISSING[@]}" >&2
     exit 1
 fi
+
+# bin/README.md invites dropping in a prebuilt voice program; one packed by accident would
+# ship with no licence notice. Only the note itself may be in bin/.
+if [[ -d "$ROOT/bin" ]]; then
+    mapfile -t bin_extra < <(cd "$ROOT" && find bin -type f ! -path bin/README.md | sort)
+    if [[ ${#bin_extra[@]} -gt 0 ]]; then
+        echo "verify-decky-plugin-zip: bin/ may hold only README.md; found:" >&2
+        printf '  %s\n' "${bin_extra[@]}" >&2
+        exit 1
+    fi
+fi
+
+# ATTR-4.2 — Apache-2.0 plugin zip must not bundle the separately licensed KB corpus.
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+python3 "$REPO_ROOT/scripts/plugin_zip_corpus_guard.py" --dir "$ROOT" || exit 1
 
 echo "verify-decky-plugin-zip: OK ($ROOT)"

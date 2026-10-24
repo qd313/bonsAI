@@ -1,932 +1,354 @@
 # bonsAI testing
 
-**Purpose:** PR regression gates, Deck QA run order, shipped-feature coverage, Test Results, and failure retries.
+> **Trimmed 2026-09-24 (plan 65).** More finished rows moved to
+> [archive/testing-closed-2026.md](archive/testing-closed-2026.md); a few still-open rows had their
+> older, superseded history moved to [archive/testing-row-history-2026.md](archive/testing-row-history-2026.md),
+> each with a link back on its live row. A second pass moved more. 149,062 to 100,414 bytes —
+> still short of the 60 KB goal; what is left is mostly steps and the newest result on each row,
+> which a person running the check actually needs, not leftover history.
 
-Related: [roadmap.md](roadmap.md) (planning), [development.md](development.md) (build/deploy), [troubleshooting.md](troubleshooting.md) (setup). Evidence artifacts: [test-evidence/](test-evidence/).
+**Purpose:** Where to test, what to run, and how coverage is tracked — without dumping every historical checkbox into one file.
 
----
+| Doc | Audience | Contents |
+|-----|----------|----------|
+| **This file** | Everyone | Overview, PR gates summary, coverage index, Verify pointer |
+| [testing-automated.md](testing-automated.md) | Agents / CI | Commands that can run without a human on the Deck |
+| [testing-manual.md](testing-manual.md) | Maintainers | On-Deck smokes, Tier 0–4 runbook, Deck-only checklists |
+| [test-evidence/](../../bonsAI-workshop/test-evidence) | CI / agents | Evidence files from Deck runs (the preview suite that wrote the older ones was removed 2026-10-16, plan 86 step 3) — see [retention](#evidence-retention) |
+| [archive/testing-closed-2026.md](archive/testing-closed-2026.md) | Everyone | Closed rows moved out of the coverage table below |
+| [archive/testing-row-history-2026.md](archive/testing-row-history-2026.md) | Everyone | Older, superseded history moved out of still-open rows below |
 
-## Regression gates
+Related: [roadmap.md](roadmap.md) ([Bugs](roadmap.md#bugs), [Verify](roadmap.md#verify), [Features](roadmap.md#features), [Done](roadmap.md#done-for-v060)), [development.md](development.md) (build/deploy), [troubleshooting.md](troubleshooting.md).
 
-# Regression matrix and device smoke (standing gate)
+### QA-EVIDENCE-GAP-01 — twelve checks whose evidence was never saved
 
-**Purpose:** Default checklist for **every PR** and **every Deck-facing change** before merge or release. Manual Deck work runs from **[testing.md](testing.md#device-qa-runbook)** (Tier 0–1 first). Scenario detail and coverage index: **[testing.md](testing.md#shipped-feature-coverage)**. Hotspots: **[development.md](development.md#change-risk-hotspots)**.
+**Found 2026-09-13 during the clean-up. These rows read as proven and nothing backs them.**
 
-**Contract:** Run **§1** always. Add **§2** rows that match touched paths. Run **§3** when `src/`, `main.py`, `plugin.json`, or Deck RPC contracts change (per [.cursor/rules/docs-on-ship.mdc](../.cursor/rules/docs-on-ship.mdc)).
+Twelve checks cite a saved Deck recording by name. None of those twelve recordings exists, and
+checking the project's whole history shows none ever did — they were not lost, they were never
+written. That means twelve results were recorded as passing on the strength of a file nobody can
+open. Whether the checks really passed is unknown.
 
----
+**Update 2026-09-28: every one of the twelve has now been re-run, or has a note saying why it could not be.** Each row in the table below carries its own real evidence file or its own closing note. A few still read blocked or owed there (W1-R1 update, the wave-three Deck evening, the follow-up memory re-run, the spoiler check on a real game), and those stay unknown until they are run. The rest is kept as first written. Each row carries an
+inline flag where it makes the claim.
 
-### 1. Automated gates (every change set)
+| Check | Where the row lives | Re-run status |
+|---|---|---|
+| CONTEXT-LADDER-03, case A (the strip trap) | closed testing rows | **Re-run 2026-09-18, PASS with real evidence:** with the Session context strip open and details closed, Down into the strip and Up out again did not trap — the ring climbed back to the button row. Evidence `workshop:test-evidence/plan61-CONTEXT-LADDER-03-caseA.json`. |
+| CONTEXT-LADDER-03, case B (details open) | closed testing rows, fixed-bugs archive | **Re-run 2026-09-18 on a real model reply:** the ladder and follow-up menu skip is confirmed. With Show details open, Down from Hide details lands on the new "From the notes" row, then the Session context strip, never on either menu button; Up from the strip skips both the notes row and the menu, landing straight back on Hide details. Evidence `workshop:test-evidence/plan61-CONTEXT-LADDER-03-caseB.json`. |
+| FOCUS-GRAPH-DEV-KB-01 | this file | **Re-run 2026-09-18, PASS with real evidence** — see the row below. |
+| FOCUS-GRAPH-DEV-RAG-01 | this file | **Re-run 2026-09-16, now PASS with evidence** — see the row above |
+| MICRO-04-VERIFY, after the fix | this file | **Re-run 2026-09-16** — the old layout is gone; see the row above |
+| MICRO-04-VERIFY, left column | this file | **Re-run 2026-09-16** — same as above |
+| SPOILER-REVEAL reachability | closed testing rows, fixed-bugs archive | **Tried again 2026-09-18, blocked:** neither God of War nor Hollow Knight is on the Deck's Recent Games row, the only list the launch tool can search, so neither would start and no reply was ever on screen to check. Someone needs to play one of them once by hand first. Evidence `workshop:test-evidence/plan61-SPOILER-REVEAL-reachability-retry.json`. **Tried again 2026-09-23 with Hollow Knight running, still owed, for a different reason:** the game launched and the question was asked, but the name-withheld-boss bug (roadmap Bugs) means no spoiler cover ever appeared to reveal — there is nothing hidden to reach. This row stays open until a reply comes back covered at all. Evidence `workshop:test-evidence/plan64-SPOILER-REVEAL-reachability.json`. **PASS (Deck) 2026-09-26 (plan 70, flow L1), closed:** with a covered answer on screen, the cover was reached one D-pad press at a time going both up and down, stayed 100% visible throughout, and A opened it to the hidden sentence. Evidence `workshop:test-evidence/plan70-SPOILER-REVEAL-reach.json`. |
+| W1-R1 update | wave one session write-up | **Not run on purpose 2026-09-18** — pressing Update knowledge base would replace the 2026.09.18 library under test with the older published one, so it stays owed until the maintainer publishes. Evidence `workshop:test-evidence/plan61-W1-R1-update.json`. **Published 2026-09-23:** the 2026.09.18 library now serves from both Hugging Face and the GitHub release, read back to confirm. Pressing the Update button itself is still owed — scheduled in plan 64's flow E. **Pressed 2026-09-23 (flow E), PASS:** the button read version 2026.09.18 and reached the public manifest — it could only say "Version 2026.09.18 is the latest" after reading it — though nothing needed downloading since the Deck already had that version. The proof that a fresh download really comes from the public host came from the two-taps row below instead: removing the library and downloading it again pulled `corpus.db.zlib` from huggingface.co. Both once-owed pieces are done. Evidence `workshop:test-evidence/plan64-W1-R1.json`, `workshop:test-evidence/plan64-TWO-TAPS-DOWNLOAD.json`. |
+| Follow-up memory re-run, 12 Sept | closed testing rows | **Tried again 2026-09-18 with Hades running, blocked:** the same Ask-box freeze written up on the roadmap's three-star focus entry stopped every question in this batch from being sent, so nothing was checked. Evidence `workshop:test-evidence/plan61-wave-three-hades.json`. **Settled 2026-09-23 — see KB-FOLLOWUP-01 above, PASS with Hades running.** |
+| Model eviction on the Deck | this file | **Re-read on the Deck 2026-09-18, real evidence:** the chat model was in memory before a question, gone from memory partway through answering it, and back once the answer finished — caught happening on this Deck, as set up today. See row **KB-SPEED-02** below. Evidence `workshop:test-evidence/plan61-KB-SPEED-02-model-eviction.json`. Closed. |
+| Start-with-the-Deck check, 12 Sept | closed testing rows | **Re-run 2026-09-18, PASS with real evidence:** the switch was found on with a real start-at-login entry already there; turning it off removed the entry, and turning it back on brought the entry back, with the running AI left alone the whole time. Left switched on, as it was found. Evidence `workshop:test-evidence/plan61-KB-AUTOSTART-01.json`. |
+| The wave-three Deck evening, 12 Sept | closed testing rows, roadmap, this file | **Tried in pieces 2026-09-18:** the corrected Black Mesa water-note sentence still could not be asked — Black Mesa is not on the Deck's Recent Games row so it could not be launched, and Sifu (used for the coverage rows below) is not the same game the sentence needs; the Hades half of the batch was also blocked by the Ask-box freeze (the three-star focus entry). Still owed. Evidence `workshop:test-evidence/plan61-KB-COVERAGE-negative-blackmesa.json`, `workshop:test-evidence/plan61-wave-three-hades.json`. **Both halves now run, 2026-09-23:** the Black Mesa water question was asked with the game running (see the roadmap's electrified-water bug, unchanged by the game running) and the Hades follow-up passed (see KB-FOLLOWUP-01 above). |
 
-Run from repo root (Windows or Linux shell as appropriate):
+Why it matters beyond these twelve: the retention rule below says a recording cited by any
+write-up is never deleted, because deleting a cited recording turns a link into a lie. That rule
+protects recordings that exist. It cannot protect against a row citing one that was never written
+in the first place, which is what happened here. A check that writes the row before the recording
+lands leaves exactly this trace.
 
-| Step | Command | When |
-|------|---------|------|
-| Typecheck | `pnpm exec tsc --noEmit` | Any TS change or dependency bump |
-| Frontend unit tests | `pnpm test` | Any `src/` change (includes Vitest headless Decky harness under `src/test-harness/`) |
-| Backend unit tests | `pnpm run test:py` | Any `main.py`, `py_modules/backend/`, `refactor_helpers.py`, or `tests/` change |
-| Bundle | `pnpm run build` | Any `src/` or build config change |
-| Preview suite | `pnpm run test:preview:tier -- --tier=<batch> --write` | Tier QA batches; requires **Decky: Open Preview** for C/D buckets; evidence → `docs/test-evidence/` |
-| Deck deploy build | `.\scripts\build.ps1` or `./scripts/build.sh` | Any `src/`, `main.py`, `plugin.json`, or Deck-facing asset change |
-| Plugin zip CI | Run **Build plugin zip** in Actions (or `bash scripts/verify-decky-plugin-zip.sh` on a local `out/*.zip`) | Changes to [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) or [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh) |
+### Evidence retention
 
-If a step does not apply (e.g. docs-only), state **N/A** in the PR description and still run the steps that do apply.
+**Removed 2026-10-16 (plan 86 step 3, `ebd791d0`, `044bedc3`, `ca436256`):** the preview suite and its script no longer exist; a copy is in `workshop:held-back/preview-tool/`. What follows is the record of how its evidence was kept.
 
----
+`scripts/run-preview-suite.mjs` prunes its own output. It keeps the **3 newest run
+folders per batch** and deletes older ones after each evidence run, with two
+exemptions: a run **cited by any `docs/**/*.md`** is never deleted, because
+evidence is linked by path from the archived QA docs and deleting a cited run
+turns a link into a lie; and the run the current invocation just wrote is never
+deleted, in case a future-dated folder sorts above it. The rule lives in the
+script rather than in this file on purpose — a retention rule that depends on
+someone remembering is not a mechanism.
 
-### 2. PR-scoped matrix (add focused checks)
+**Reading a `batch-summary.json`: check `ranThisInvocation`.** The run folder is
+keyed by date + commit only, so a `--filter` re-run on the same day and commit
+writes into the folder an earlier full run already made. Summaries are merged per
+scenario id, and `carriedFromEarlierRun` / `ranThisInvocation` say how much of the
+row set this invocation actually produced. **Two summaries written before that fix
+(2026-08-05) under-report and cannot be trusted for a total:**
+`tier2/2026-05-26-9e20a82` says 1 result with 8 case directories beside it — the
+archived failures doc independently records that batch as *tier2 (8/8)* — and
+`tier2Deep/2026-06-09-a9237e4` says 1 with 11. In both, the per-case
+`manifest.json` files are correct; only the batch roll-up is wrong.
 
-Use the **Touched area** column to extend §1; prefer the narrowest tests first.
+**Pruned 2026-08-05 (step 10, D4).** Three runs, all unreferenced and all
+carrying no signal: `hookSmoke/2026-05-26-9e20a82` and
+`hookSmoke/2026-06-09-a9237e4`, which both failed with
+`Error: IPC timeout for callTestHook` — the preview harness being unavailable
+headlessly, not a product defect, so **`HOOK-smoke-setTab` has never produced a
+real result in this tree** — and `deckOnly/2026-06-09-9e20a82`, whose three cases
+all skipped as deck-only. Recoverable with
+`git show <commit>^:docs/test-evidence/...`. Everything else was kept: the link
+audit found **10 of 13 runs referenced and 0 broken links**, so the earlier
+"96% unreferenced" reading in [audit/06-doc-triage.md](../../bonsAI-workshop/archive/06-doc-triage.md) was
+an artifact of searching only this file and not the archive.
 
-| Touched area | Extra automated focus | Manual / runbook tier |
-|--------------|----------------------|------------------------|
-| `backend/services/settings_service.py`, `settingsAndResponse.ts`, Settings UI | `tests/test_settings_service.py`, `src/utils/settingsAndResponse.test.ts` | Tier 0 **SMOKE-A** + setting persist spot-check |
-| `main.py` background Ask / abort / settings save locks | `tests/test_background_abort_busy.py`, `tests/test_settings_save_lock.py`, `tests/test_intent_pack_store_lock.py`, `tests/test_strategy_checklist_store_lock.py` | Tier 1 **SMOKE-H** Stop then new Ask |
-| `backend/services/intent_pack_service.py` | `tests/test_intent_pack_service.py` (corrupt/oversized preserve) | Tier 0 Settings → intent packs |
-| `backend/services/voice_transcription_service.py` | `tests/test_voice_transcription_service.py` (`test_pcm_buffer_survives_concurrent_append_and_window`) | Tier 2 voice STT |
-| `backend/services/ollama_service.py`, `refactor_helpers.py` | `tests/test_ollama_service.py`, `tests/test_refactor_helpers.py` | Tier 1 one Ask per changed mode ([testing.md](testing.md#shipped-feature-coverage)) |
-| `backend/services/desktop_note_service.py` | `tests/test_desktop_note_service.py` | Tier 2 desktop notes block |
-| `backend/services/ai_character_service.py`, character UI | `tests/test_ai_character_service.py`, `tests/test_pyro_asshole_safety.py`, catalog/accent tests under `src/data/` | Tier 2 character / Pyro ([testing.md](testing.md#shipped-feature-coverage) PYRO-EGG) |
-| `backend/services/capabilities.py`, Permissions UI | `tests/test_capabilities.py` | Tier 0 **SMOKE-C** |
-| `src/components/MainTab.tsx`, unified input | `pnpm test` (utils/data) | Tier 0 **SMOKE-A** |
-| `src/index.tsx` tabs, CSS, RPC wiring | Full §1 + §3 | Tier 0 **SMOKE-A** |
-| `ollama_mdns_discovery_service.py`, Connection **Find LAN** | `tests/test_ollama_mdns_discovery_service.py` | Tier 2 mDNS block; N/A without publish |
+### Preview-suite evidence invalidated 2026-08-08
 
----
+**Some recorded preview PASSes tested nothing.** Five independent defects were
+found in the harness; each is verified, and none of them failed loudly. Stated
+here before the repairs land so the fixes read as scheduled repair rather than
+newly-discovered breakage. Plan: [planning/01-qa-automation-plan.md](../../bonsAI-workshop/archive/01-qa-automation-plan.md).
 
-### 3. Device smoke (Deck-facing PRs)
+| # | Defect | Evidence |
+|---|--------|----------|
+| **D1** | **DOM snapshots truncate at 8 KB and never reach rendered markup.** `BonsaiPluginShell` makes a ~110 KB `<style>` block the first child of `.bonsai-scope`, so the snapshot is all CSS. | `test-evidence/tier0/2026-05-26-9e20a82/SMOKE-A-golden-path/dom-final.html` is exactly **8183 bytes**, contains **zero** `</style>`, and ends mid-declaration at `background-color: transparent !i` |
+| **D2** | **`previewHook` / `callTestHook` has never worked in this tree.** | `test-evidence/tier3UI/2026-06-09-a9237e4/batch-summary.json` — **0 passed, 8 failed**, every one `Error: IPC timeout for callTestHook` |
+| **D3** | **`focusPath`'s no-op value is byte-identical to its success value**, so an assert over it cannot fail. When the focus log is empty, DPS synthesizes `focusPath` from the inputs that were *requested* — and a real log entry for a `Down` press is also the string `onMove(Down)`. | Every stored `focus-path.json` is `["onMove(Down)","onMove(Down)"]`; `active-element.txt` reads `document.body`, so focus never landed on a plugin element. Mechanism confirmed against DPS source 2026-08-08 — see [planning/02-dps-upstream-findings.md](../../bonsAI-workshop/planning/02-dps-upstream-findings.md) § P1-2 |
+| **D4** | **`final.png` is a placeholder, not a screenshot.** | Byte-identical within each batch (11202 B tier0, 10220 B elsewhere): a flat dark rectangle reading `Decky preview snapshot` / `505x599` |
+| **D5** | **`assertStep` fails open** — six independent `if` blocks with no `default`, so an unknown or misspelled assert type silently passes. | `scripts/run-preview-suite.mjs`, contrast `runStep` which correctly throws. A full audit found **zero** unknown types in the 49 scenarios today, so no recorded result changes because of D5 alone |
 
-Run after **`scripts/build.ps1`** or **`scripts/build.sh`** succeeds. Use **[testing.md](testing.md#device-qa-runbook)** — do not duplicate the full matrix here.
+**What is invalid, and what still stands** — surgical, because a blanket
+invalidation would be as dishonest as leaving it:
 
-### Required: Runbook Tier 0 (~15 min, BPM)
-
-Complete **SMOKE-A → SMOKE-C → SMOKE-F** and check off runbook + linked [testing.md](testing.md#shipped-feature-coverage) rows. State **Pass / Partial / Fail / N/A** in the PR.
-
-| Smoke | When N/A |
-|-------|----------|
-| **SMOKE-A** Golden path | Never for Deck-facing UI/RPC changes |
-| **SMOKE-C** Permission gate | Never when Permissions or gated actions touched |
-| **SMOKE-F** Deterministic commands | Docs-only with no sanitizer/shortcut/VAC path changes |
-
-### Add Tier 1 when touching Ask / TDP / strategy / game context
-
-| Smoke | Trigger |
+| Class | Verdict |
 |-------|---------|
-| **SMOKE-B** TDP apply 8W | TDP, hardware permission, QAMP banner, `apply_tdp` |
-| **SMOKE-E** Strategy one-shot | Strategy mode, spoilers, `ask_mode: strategy` |
-| **SMOKE-H** Background reopen | Background Ask / pending restore |
-| **SMOKE-D / G** | Preset or vision changes — spot-check if already Verified |
+| Every `domContains` / `domContainsAny` / `domNotContains`, and the one `focusPathIncludes` | **Invalid** — they matched CSS text, or echoed their own input |
+| Every `rpcResult` / `hookResult` assert | **Valid** — coarse, but real |
+| Every `shellVitest` / `shellPytest` step | **Valid** — they shell out to the actual suites |
+| The 8 `tier3UI` scenarios and `HOOK-smoke-setTab` | **Already recorded FAIL.** Nothing to demote; stop citing them as coverage |
+| Every stored `final.png` | **Invalid as evidence** |
 
-Full Tier 2–4 blocks (VAC matrix, Proton logs, QAMP reboot, clean install): see runbook; required before **release tag**, not every PR.
+**Computed from the scenario JSON, not eyeballed.** Twelve scenarios contain a
+DOM or focus assert. Nine of those are `tier3UI` / `hookSmoke` and already record
+FAIL. Of the three remaining, **two carry an archived PASS resting on nothing but
+invalid asserts** — `SMOKE-A-golden-path` (tier0, 2 DOM asserts, no other check)
+and `VISION-V1-spot-dom` (tier2, 1 DOM assert, no other check). Both are marked
+`†` in [archive/testing-results-2026.md](archive/testing-results-2026.md).
+`THINKING-01-pending-phases` and `FEEDBACK-01-reply-action-chrome` also assert on
+DOM but have no archived PASS row, so there is nothing to withdraw.
 
----
+Note that **`SMOKE-G` (vision attach) is not demoted** — its Verified status comes
+from the April 2026 on-Deck vision sweep, not from `VISION-V1-spot-dom`. Only the
+preview row is withdrawn.
 
-### 4. Prompt-testing and coverage
+Everything else stands on its RPC and shell assertions, including the three
+SMOKE-F scenarios and the TDP / VAC / mDNS / desktop sets. **No evidence is
+deleted** — the retention rule above protects doc-cited runs, and deleting a
+cited run turns a link into a lie.
 
-Qualitative scenarios, **Shipped feature coverage** table, and Test Results log: **[testing.md](testing.md#shipped-feature-coverage)**.  
-Execution order: **[testing.md](testing.md#device-qa-runbook)**.
-
-After prompt/routing changes, add or update scenario rows and run the matching runbook tier.
-
----
-
-### 5. Release / clean install proof (Runbook Tier 4)
-
-**Purpose:** Prove a **new user** can succeed using only **[README.md](../README.md)** plus **[development.md](development.md) → Release (plugin zip)** for where the `.zip` comes from—no unstated maintainer shortcuts.
-
-**Prep:** Start from a target where **Ollama is not installed yet** on the path you are testing (**PC on LAN** or **Deck**). Decky Loader is installed.
-
-**Steps (checklist):**
-
-1. Install Ollama per README **Detailed setup** / **Quick start** (official installer or install script on the Ollama host).
-2. Obtain the plugin `.zip`: **GitHub Release** asset and/or **Actions** artifact from workflow **Build plugin zip** (see [development.md](development.md)).
-3. Install the zip in Decky (developer / local ZIP path; wording varies by Loader version).
-4. In bonsAI **Settings**, set the Ollama base URL; pull at least one text model (README **Quick start**, step 4).
-5. Send one **text** Ask and confirm a normal reply (no import/traceback errors).
-
-**Log (append a row after each full pass):**
-
-| Date | Git SHA or tag | Workflow run ID (if CI zip) | Result | SteamOS / Decky | Ollama host (PC LAN / Deck) | Notes |
-|------|----------------|-------------------------------|--------|-----------------|-----------------------------|-------|
-| *(example)* | | | Pass / Partial / Fail | | | |
+D1–D4 are Decky Plugin Studio behaviour, not ours; per [mcp-setup.md](mcp-setup.md)
+§ DPS findings log they are recorded there and go upstream rather than being
+forked here.
 
 ---
 
----
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
 
-## Device QA runbook
+  - [QA-EVIDENCE-GAP-01 — twelve checks whose evidence was never saved](#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved)
+  - [Evidence retention](#evidence-retention)
+  - [Preview-suite evidence invalidated 2026-08-08](#preview-suite-evidence-invalidated-2026-08-08)
+- [Quick start](#quick-start)
+- [PR contract (summary)](#pr-contract-summary)
+- [Shipped feature coverage (slim)](#shipped-feature-coverage-slim)
+- [Verify (from roadmap)](#verify-from-roadmap)
+- [New focusable controls](#new-focusable-controls)
+<!-- /toc -->
 
-# bonsAI device QA runbook
+## Quick start
 
-**Purpose:** What to run on Steam Deck **next**, in priority order. Quick wins first; heavy setup last.
+**Every change set (automated):** see [testing-automated.md](testing-automated.md) § Gates.
 
+```bash
+pnpm exec tsc --noEmit
+pnpm test                  # when src/ touched
+pnpm run test:py           # when Python / tests/ touched
+pnpm run build             # when src/ or build config touched
+```
 
-Record **build id / git SHA** and **SteamOS** in [testing.md](testing.md#shipped-feature-coverage) when marking Pass / Partial / Fail.
+**Deck-facing PRs:** after `scripts/build.ps1` / `build.sh`, run [testing-manual.md](testing-manual.md) **Tier 0** (SMOKE-A → C → F). Add Tier 1 when Ask / TDP / strategy / game context change.
 
----
+**Release:** Tier 0–2 + clean-install proof in [testing-manual.md](testing-manual.md) § Tier 4.
 
-## Tags
-
-| Tag | Meaning |
-|-----|---------|
-| **P0–P3** | Importance — P0 = core product; P3 = polish / easter eggs |
-| **S0–S3** | Setup cost — S0 = BPM + Ollama up; S3 = reboot / clean install / multi-game |
-| **Tier 0–4** | Run order — complete lower tiers before higher unless PR-scoped |
-
----
-
-## New focusable controls (mandatory before ship)
-
-Any new Settings/QAM toggle, button, slider, chip row, or modal footer control **must** pass this on-Deck checklist and add a coverage row below. Policy: MCP `bonsai://policy/decky-ui-focus` § **New controls & settings rows**. Patterns: `bonsai://architecture/focus-graph-patterns`.
-
-- [ ] **FOCUS-GRAPH-01** Listed every focus stop in the section parent (order documented in PR or `focus-graph-patterns.md`)
-- [ ] **FOCUS-GRAPH-02** D-pad **Up/Down** reaches each stop; no skips (e.g. toggle must not jump over slider to Reset)
-- [ ] **FOCUS-GRAPH-03** Sliders / horizontal groups: **Left/Right** (or A + edit mode) changes value on the **focus owner** (bridge `Focusable` if using `DeckFocusSlider`)
-- [ ] **FOCUS-GRAPH-04** Cross-section links wired (parent refs + `onMoveDown`/`onMoveUp` to adjacent `PanelSection` rows)
-- [ ] **FOCUS-GRAPH-05** Row added to **Shipped feature coverage** + scenario checkbox (template: **UI-SCALE-05**)
-
-Reference implementations: `SettingsTabUiScaleSection.tsx`, `OllamaTab.tsx`, `SettingsTab.tsx`, `PullModelsModal.tsx`.
-
----
-
-## Cross-cutting smokes
-
-One smoke run can check off many coverage rows. After each smoke, update [testing.md](testing.md#shipped-feature-coverage) **Shipped feature coverage** and linked scenario checkboxes.
-
-| ID | Name | Tier | Setup | Importance | Covers (feature IDs) |
-|----|------|------|-------|------------|----------------------|
-| **SMOKE-A** | Golden path | 0 | S0, BPM | P0 | Plugin shell, tabs, Connection Ask, D-pad chunks, transparency opens, presets visible |
-| **SMOKE-C** | Permission gate | 0 | S0 | P0 | Capability center — blocked-action toast pattern |
-| **SMOKE-F** | Deterministic commands | 0 | S0, no model | P2 | Input sanitizer commands, shortcut-setup-deck, vac-check capability-off |
-| **SMOKE-B** | TDP apply 8W | 1 | S1, game + Hardware on | P0 | TDP JSON, sysfs, game context, QAMP banner, permissions hardware |
-| **SMOKE-E** | Strategy one-shot | 1 | S1 | P1 | Mode selector, strategy placeholder, spoiler tap-to-reveal, Spoilers OK |
-| **SMOKE-D** | Frozen carousel triple | 1 | S1, optional flag | P0 | Presets, game-name append, troubleshooting prompts — **verified** (see coverage) |
-| **SMOKE-G** | Vision attach once | 1 | S1, Media on | P1 | Attach browser, multimodal Ask — **verified** (vision sweep 2026-04) |
-| **SMOKE-H** | Background Ask reopen | 1 | S1 | P1 | Close QAM while pending → reopen restores Thinking… or final reply |
-
-**Tier 0 order (~15 min):** SMOKE-A → SMOKE-C → SMOKE-F  
-**Tier 1 order (~20 min):** SMOKE-B → SMOKE-E → confirm SMOKE-D / SMOKE-G if not already marked → SMOKE-H
+**The Deck goes to sleep in the middle of a test run, and it does not fail cleanly.** A run is mostly
+waiting — an answer takes tens of seconds, a game takes a minute to launch — and the device dozes off
+during that. Presses then land on a sleeping machine and are lost, reads come back empty or stale, and
+the session spends its next few steps working out that the Deck went to sleep rather than that the
+thing under test broke. Until the tooling can hold it awake, ask a throwaway question before timing
+anything, and treat an empty read as "check whether it is asleep" before treating it as a finding.
+A pair of tools to turn the sleep timeouts off for a run and put them back afterwards was asked for on
+2026-09-07 and is on the Decky Plugin Studio roadmap under *Hold the Deck awake for a test run, then
+put the setting back*.
 
 ---
 
-## Tier 0 — Quick wins (S0)
+## PR contract (summary)
 
-Run in BPM (Desktop → Big Picture → QAM → bonsAI). Ollama reachable; default permissions OK unless smoke says otherwise.
+| When | Do |
+|------|----|
+| Always (if applicable) | Automated gates in [testing-automated.md](testing-automated.md) |
+| Touched paths match matrix | Extra unit/preview rows in that doc § PR-scoped matrix |
+| `src/`, `main.py`, `plugin.json`, Deck RPC | Tier 0 device smokes ([testing-manual.md](testing-manual.md)) |
+| New focusable Settings/QAM control | FOCUS-GRAPH-01…05 + coverage row ([testing-manual.md](testing-manual.md) § Focus graph) |
+| Docs-only | State **N/A** for Deck smokes; still run applicable automated steps |
 
-### SMOKE-A — Golden path (P0)
-
-- [ ] Open plugin from QAM; no crash on first paint.
-- [ ] LB/RB cycles **Main → Ollama → Settings → Permissions → (Developer if enabled) → About**.
-- [ ] **Ollama → Where AI runs → Test** — success or stable unreachable message (no traceback).
-- [ ] Main tab: type a short question; **Ask**; reply appears in focusable chunks.
-- [ ] D-pad down through chunks; last chunk readable.
-- [ ] Expand **Input handling (last Ask)** — raw input, model name, system/user snapshot present.
-- [ ] Three preset chips visible on Main.
-
-**Links:** [testing.md](testing.md#shipped-feature-coverage) → Tier 0 scenarios; coverage rows `CORE-ASK`, `CORE-UI`, `CONN-TEST`, `TRANSPARENCY`.
-
-### SMOKE-C — Permission gate (P0)
-
-- [ ] **Permissions:** turn **Hardware control** (or another) **off**.
-- [ ] Trigger blocked action (e.g. Ask that would apply TDP, or attach screenshot if Media off).
-- [ ] Toast directs to Permissions; no crash.
-- [ ] Turn capability back **on** before Tier 1.
-
-**Links:** coverage `PERMS-GATE`.
-
-### SMOKE-F — Deterministic commands (P2)
-
-No Ollama call for these paths.
-
-- [ ] Ask exactly `bonsai:disable-sanitize` → confirmation; **Input handling** shows no Ollama text.
-- [ ] Ask exactly `bonsai:enable-sanitize` → confirmation.
-- [ ] Ask exactly `bonsai:shortcut-setup-deck` → Guide/QAM/Decky copy; no model call.
-- [ ] Ask `bonsai:vac-check 76561198000000000` with **Steam Web API** off → capability message only; no network.
-
-**Links:** [testing.md](testing.md#shipped-feature-coverage) → Tier 0 deterministic; coverage `SANITIZER`, `SHORTCUT-KW`, `VAC-01`.
+Full policy: MCP `bonsai://policy/documentation` / [AGENTS.md](../AGENTS.md).
 
 ---
 
-## Tier 1 — Core shipped (S1)
+## Shipped feature coverage (slim)
 
-Requires a **game running** for some steps (Track B — Gaming Mode or BPM with game focused). Enable **Permissions → Hardware control** for TDP apply.
+One smoke often covers many features. Status: **Verified** / **Partial** / **Open** / **N/A**. Update when a smoke or release pass lands. Detail checklists: [testing-manual.md](testing-manual.md).
+Rows whose Status is Verified, Passed, Fixed, Retired, Closed, Accepted or Shipped moved out to keep this table short: [archive/testing-closed-2026.md](archive/testing-closed-2026.md).
+Some still-open rows below had grown long with dated, superseded history (earlier attempts, fixes since landed). That history moved out whole to [archive/testing-closed-2026.md § History moved out of open rows](archive/testing-closed-2026.md#history-moved-out-of-open-rows-2026-09-21); each row here keeps only its current status, its evidence paths, and a link back.
 
-### SMOKE-B — TDP apply 8W (P0)
+| Area | Covered by | Status | Notes |
+|------|------------|--------|-------|
+| Collapsing tab bar (plan 30); open tab strip redesign (plan 59); changed by plan 84 | TAB-BAR-01…11, TAB-STRIP-2A-01…07 in [testing-manual.md](testing-manual.md); unit: `TabIndicatorBar.test.tsx`, `tabBarNav.test.ts`, `useHiddenTabHeaderTrap.test.tsx`, `tabTitles.test.tsx`, `characterUiAccent.test.ts`, `icons.bonsaiGeometry.test.tsx` | Partial | **Plan 84 (2026-10-09, step 4) removed the drop-down strip** and moved the bar into the empty strip at the top of the menu. TAB-BAR-08 and TAB-STRIP-2A-03 and -07 are replaced by plan 84; the new bar's rows are P84-TABS-01 (passed) and P84-TABS-02 (touch check FAILED by hand 2026-10-18) in [testing-manual.md § PLAN-84](testing-manual.md#plan-84--more-room-for-the-answer-plan-84). **TAB-BAR-GHOST-01** stays open: the touch check FAILED by hand 2026-10-18 (a second strip drawn over the chat; the session reads it as Steam's own bumper hint, unproven; picture `workshop:test-evidence/plan96-HAND-ghost-tab-bar.png`). **TAB-BAR:** rows 01–06, 09 (three of the original four openers, plus the Clear cache confirmation as a fourth, which passed 2026-10-01, `workshop:test-evidence/plan78-TAB-BAR-09.json`), 10 and 11 passed on-Deck with evidence under `workshop:test-evidence/TAB-BAR-*`; the desktop-note opener of 09 needs the *Save files to Desktop* permission on. **TAB-STRIP-2A** (plan 59): rows 01, 02, 04, 05 and 06 passed on the Deck 2026-09-18. History: [archive/testing-row-history-2026.md § TAB-BAR-01](archive/testing-row-history-2026.md#tab-bar-01); this row as it read before plan 84, with the test counts: [§ TAB-BAR-01-BEFORE-PLAN-84](archive/testing-row-history-2026.md#tab-bar-01-before-plan-84). |
+| More room for the answer (plan 84): tab bar in the top strip, chat name in Decky's bar, folded ask area, Read aloud in the corner | P84-HEIGHT-01 … P84-RING-01 in [testing-manual.md § PLAN-84](testing-manual.md#plan-84--more-room-for-the-answer-plan-84) | Partial | **14 of 15 rows passed on the Deck's own screen 2026-10-08/09**, P84-NAME-03 and P84-MENU-01 only in part (the answer has 295 points, was 204): `workshop:test-evidence/plan84-STEP1-DECK-TESTS.json`, `plan84-STEPS2-3-DECK.json`, `plan84-STEPS4-5-7-DECK.json`, `plan84-STEP6-DECK.json`. **Owed:** the TV run of every row; P84-TABS-02 (a person must touch the bar with a game running); P84-NAME-03's reduced-motion half; P84-MENU-01's actions' own effects and dots; QA-FREE-PLAY-01 on the new layout. |
+| Permissions gate | SMOKE-C | **Partial — the Deck half passed 2026-09-23 and was re-confirmed 2026-09-26 (`workshop:test-evidence/plan70-SMOKE-C.json`); the preview scenario itself has not been re-run** | **Deck 2026-09-05:** the permissions half of this scenario was driven by hand on the device instead — deny surface, *Open Permissions*, the matching toggle, and back (PERM-JUMP-01, all steps). The preview scenario itself is still stale: it asserts the capability key `hardware_control`, removed 2026-07-30. **Demoted from Partial 2026-08-08.** Two reasons. The preview PASS rested on DOM asserts (D1), and separately the scenario's one `rpcResult` assert expects the capability key `hardware_control`, **removed 2026-07-30** — tier0 has not run since, so SMOKE-C will fail on the next run. Fixed in the scenario JSON; recovers with an end-to-end capability gate test through `class Plugin`, which does not exist yet (`tests/test_capabilities.py` is service-level only). **Blocked 2026-09-03 on the *Open Permissions* button not being a D-pad stop; fixed at the desk 2026-09-04, Deck check owed** — see the PERM-JUMP-01 row below. History: [archive/testing-row-history-2026.md § SMOKE-C](archive/testing-row-history-2026.md#smoke-c). **PASS (Deck) 2026-09-23, fixed in `af53b7d`:** the ring reaches the right toggle and stays there, with at most a brief flicker through Back to Main on the way — see the PERM-JUMP-01 row for the timed detail. **Re-confirmed (Deck) 2026-09-26 (plan 70, flow 2d.2):** a blocked `bonsai:vac-check` was denied at once, no model call; "Open Permissions" landed on the right switch 2 of 2 tries (once from the deny row, once from the troubleshooting hint). **Row reworded on "Back":** the page has no bare "Back to …" control; the way back is its own "Back to Main" button, which returns cleanly with the ring on "Open Permissions" — a plain B press only moves the ring to the tab bar, it does not return on its own. Evidence `workshop:test-evidence/plan70-SMOKE-C.json`. |
+| Reply style (Caveman / Balanced / Detailed) | REPLY-VERB-01 | **Done — passed (Deck) 2026-09-30, one sub-check not run** | Evidence `workshop:test-evidence/plan70-REPLY-VERB-01.json`, `workshop:test-evidence/plan77-REPLY-VERB-01.json`. Full row, word for word: [archive/testing-closed-2026.md § Moved from testing.md 2026-09-30 (size trim)](archive/testing-closed-2026.md#moved-from-testingmd-2026-09-30-size-trim). |
+| Kids master lock (Steam parental) | KIDS-LOCK-01, KIDS-LOCK-02, KIDS-FOCUS-01, KIDS-REGRESS-01 | Open | **Re-confirmed 2026-09-17:** no lock banner, all four switches on and reachable (`workshop:test-evidence/plan57-QA-KIDS-REGRESS-01.json`). **Shipped 2026-08-09.** `steamParental.ts`, `useKidsLock.ts`, `set_kids_lock_state` RPC, `capability_enabled` session flag, Permissions banner + disabled toggles. Unit: `steamParental.test.ts`, `useKidsLock.test.ts`, `PermissionsTab.test.tsx`, `tests/test_capabilities.py`. History: [archive/testing-row-history-2026.md § KIDS-LOCK-01](archive/testing-row-history-2026.md#kids-lock-01). **On-Deck:** **KIDS-LOCK-01** Family View locked on spare adult → banner, toggles grey/off, privileged actions deny; unlock restores prior values. **KIDS-LOCK-02** Steam Families child account (may stay Open). **KIDS-FOCUS-01** D-pad Permissions while locked (banner Focusable; no dead end). **KIDS-REGRESS-01** Deck with no parental controls identical to pre-ship. Live CEF Stage 0 still owed in [08](../../bonsAI-workshop/archive/08-kids-master-lock-feasibility.md) spike results. **2026-10-18:** the maintainer's hand check 5 was SKIPPED ("I'm going to have to create a new profile with a child account", [checks page](https://claude.ai/artifact/FTe9Lr1sS2Kfrj8nBTVrhi)); every on-Deck item above stays owed. |
+| Permissions cleanup batch (web links always-on; troubleshoot hint) | PERMS-CLEAN-02, 05, 06 | **PERMS-CLEAN-05 and 06 done — passed (Deck) 2026-09-26** | **Narrowed from 01…06 on 2026-08-08 — not demoted, scoped.** Only three of the six are provable by a preview scenario, and only in the positive direction. **05** (About links present with all five capabilities off) and **06** (troubleshooting hint appears, then is gone after Dismiss) assert visible copy, so they cannot false-pass; **02** is checkable only as copy-staleness. **01 / 03 / 04 struck as unprovable** — each was written as "this UI is gone", i.e. a `domNotContains`, and the strings they name do not exist anywhere in the tree, so the assert passes whether or not the code is right. That is true even after D1 is fixed. Those three need an on-Deck look or a source-level test, not a preview row. Remaining on-Deck: About links, Steam Input jump, troubleshooting Ask with game-context on/off + dismiss hint, no power-limits toggle, no Response verification section. **PERMS-CLEAN-05 PASS (Deck) 2026-09-26 (plan 70, flow 2d.3):** with all five capabilities switched off, the About tab still showed GitHub, "Built on Ollama!", "Bugs & Feature Requests" and "Support my Steam Sale habit" — none gated. Evidence `workshop:test-evidence/plan70-PERMS-CLEAN-05-06.json` (+ screenshot). **PERMS-CLEAN-06 FAILED (Deck) 2026-09-26:** with all four permission switches off, a troubleshooting question showed the hint with its "Open Permissions" and "Dismiss" buttons, but Dismiss could not be reached by D-pad — Right from "Open Permissions" did nothing, tried twice, and Up/Down from elsewhere skip the hint row entirely; only Down from Show details reaches "Open Permissions" itself. Evidence `workshop:test-evidence/plan70-PERMS-CLEAN-05-06.json` (+ screenshot `-hint-dismiss-unreachable.png`). **Fixed 2026-09-26 (helper F2, commit `59d3d1c0`):** the hint row now claims Left/Right itself and moves between "Open Permissions" and "Dismiss" (holding still at either end); Down from the hint reaches the ban-lookup row when it shows; Up from the ban-lookup row and from the suggestion chip now stop on the permission rows before the reply. Noted, not yet fixed: "Save chat to Desktop" is probably still skipped by Up from the chips. **Deck re-check owed:** the same setup — reach Dismiss with Right from "Open Permissions", and confirm Up from the ban-lookup row and the chip both stop on the permission rows first. **PERMS-CLEAN-06 PASS (Deck) 2026-09-26 (plan 70, flow L5):** walking Up from the question box reached the suggestion chip, then the ban-lookup row's "Open Permissions", then the hint's own "Open Permissions", then Right to "Dismiss" and back — every stop fully visible; A on Dismiss removed the hint. Evidence `workshop:test-evidence/plan70-L5-PERMS-CLEAN-06.json` (+ screenshot). Its tick box is in [archive/testing-manual-closed-2026.md](archive/testing-manual-closed-2026.md). |
+| Deterministic commands / shortcut keywords | SMOKE-F | Partial | **2026-10-16:** the ban lookup command `bonsai:vac-check` was removed in plan 86 step 3 (`357e5b55`); it now answers like an ordinary question (row P86-BAN-GONE-01). **Re-confirmed (before that) (Deck rig) 2026-09-17:** all four built-in commands answered at once with the same fixed wording. Evidence `workshop:test-evidence/plan57-QA-SMOKE-F.json`. |
+| Strategy mode + spoilers (spot) | SMOKE-E | Partial | Deeper spoiler/checklist → Tier 2 |
+| Strategy spoiler false positives (named-entity display) | STRAT-SPOIL-DRG-01 | Partial | The fix now lets the game's own screen name (not just its Steam ID) and the model's own read of which boss was named settle whether a reply should stay behind a spoiler fence, including while the reply is still streaming in. **STRAT-SPOIL-TEXT-01 and STRAT-SPOIL-FIRST-01 passed on the Deck**, and **DRG-01b passed on the Deck 2026-09-23** (boss tactics came back plain with the knowledge base off). **Still owed:** STRAT-SPOIL-NAME-01, blocked because Doom 64 (and the other emulated titles it could use) keeps falling off the Recent Games list, in [testing-manual.md](testing-manual.md). Earlier fixes and device runs, including the *twins*/*exploders* investigation and the mid-stream mask fix: [archive/testing-closed-2026.md § History moved out of open rows](archive/testing-closed-2026.md#history-moved-out-of-open-rows-2026-09-21), under STRAT-SPOIL-DRG-01. Recon and locked decisions: [04-strategy-spoiler-false-positive.md](../../bonsAI-workshop/archive/04-strategy-spoiler-false-positive.md). |
+| Spoiler constitution — title profiles + named entity | CONST-SPOIL-01 | Partial | **Automated 2026-08-07.** `test_spoiler_title_profiles.py`, `test_ollama_service.py` (Hades protect without entity; `kb_entity_match` does not title-relax; DRG/L4D2 low-narrative), `unwrapAskedEntitySpoilerFences.test.ts`. **On-Deck:** DRG `2321470` unnamed boss ask → open tactics; Hades `1145360` unnamed → fences stay; Hades + *"How do I beat Megaera?"* → Megaera plain, other bosses still fenced; OoT unnamed → conservative. **DRG half PASS (Deck) 2026-09-26 (plan 70, flow L5), with Deep Rock Galactic: Survivor running:** "what is the big armored bug boss and how do I beat it" named "the Glyphid Dreadnought" in plain text with open tactics, no cover, across 131 reads. Evidence `workshop:test-evidence/plan70-L5-FLOW3-DRG.json`. **Hades half tried 2026-09-26 (plan 70, flow L5), unclear:** with Hades running, naming Megaera by name answered plainly as expected, but the separate unnamed "who is the first boss" question answered wrongly ("The first boss in Hades is Nyx") and repeated "Megaera" in plain text — not counted as a leak, since the person had typed that name themselves earlier in the same chat. Show details read "Spoiler risk: med" on both; whether "med" is the right protect band for Hades is for the maintainer to judge. Evidence `workshop:test-evidence/plan70-L5-FLOW3-HADES.json`. [spoiler-constitution.md](planning/spoiler-constitution.md) |
+| Rows that passed on the Deck with nothing owed, moved out 2026-10-08 (plan 83 docs sweep, size trim) | W2-R7, GAME-LIGHT-02, P77-SPOILER-OTHER-GAME, P77-GLUED-SPOILER, P78-DECODE-LONG | **Done — passed (Deck); each row's own date is in the archived row** | Each row, word for word, with its evidence files: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-08 (plan 83 docs sweep, size trim)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-08-plan-83-docs-sweep-size-trim). |
+| Rows that passed on the Deck with nothing owed, moved out 2026-10-10 (plan 87 docs sweep, size trim) | P81-CONTINUE-ONE-MARK, P81-SMOKE-FINAL, P81-SMOKE-FINAL-2, P81-WALK-READS-WORDS, P78-REOPEN-CHECKLIST, P82-CHAT-ROW-NO-NAME-STOP | **Done — passed (Deck); each row's own date is in the archived row** | Each row, word for word, with its evidence files: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-10 (plan 87 docs sweep, size trim)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-10-plan-87-docs-sweep-size-trim). P81-CONTINUE-ONE-MARK passed on the Deck 2026-10-10, evidence `workshop:test-evidence/plan87-P81-CONTINUE-ONE-MARK.json`. |
+| Spoiler constitution — Speed + strategy KB inject | CONST-SPOIL-SPEED-01 | **Done — passed (Deck) 2026-10-01, by the session's ruling** | **Automated 2026-08-07.** `test_ollama_service.py` `test_build_system_prompt_speed_strategy_domain_injects_compact_constitution`. **On-Deck:** Speed mode, KB on, strategy cards attach on a protect title → reply policy follows constitution (no wholesale boss-name drop without entity/consent); Show details chip still inherent protect band on Hades. **2026-09-30 (plan 77) Hades, Speed mode, UNCLEAR:** the reply followed the rules (no boss named, no cover, no plot detail), but the "protect band" chip did not show in Show details. The chip was not seen that time. Evidence `workshop:test-evidence/plan77-HADES-UNNAMED-01.json`. **2026-10-01 (plan 78, Deck block 3d, build `9feef02e`), PASSED by the session's ruling:** Hades running, Speed mode, two questions. On both the "Spoiler risk: med" chip was among the chips (every chip read to "Chip 7 of 7") and neither reply named a boss. The first question attached one note and the second none (the search found no match for that wording); that does not change the verdict. A new bug came out of the first answer, filed under Bugs and row P78-BARE-SPOILER-MARK below. Evidence `workshop:test-evidence/plan78-CONST-SPOIL-SPEED-01.json`. |
+| Rows that were marked Done, closed, retired or superseded, moved out 2026-10-18 (plan 96 docs sweep, size trim) | THINKING-SLOW-01, QA-FROZEN-CHIPS-01, W3-R2, ROUTING-MERGE-SIZE-01, CLEAR-CACHE-01, CHIP-COLOR-BYEYE-01, CHIP-UNDERLINE-BYEYE-01, T75-LAND-L3-MIC-STARTS-AND-STOPS, P77-MODEL-CLEANUP, P78-BORROWED-RUNNING-GAME, P87-F2B-NO-OPEN-CHAT | **Done, closed, retired or superseded, each as the archived row says; moved out** | Each row, word for word, with its status and evidence files: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-18 (plan 96 docs sweep, size trim)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-18-plan-96-docs-sweep-size-trim). |
+| Thinking blurb emoji upright (italic prose only) | THINKING-EMOJI-01 | Partial | **Automated 2026-08-07 (Wave 1 A).** `splitThinkingBlurbItalicSegments.test.ts` (5 tests) — emoji graphemes upright, prose italic. **On-Deck PASS 2026-09-17:** the emoji sits upright in its own spot beside the tilted sentence. Evidence `workshop:test-evidence/plan57-QA-THINKING-EMOJI-01.json`. Detail: [wave1.md](../../bonsAI-workshop/archive/wave1.md) |
+| The warm-up skips quietly when memory is tight | PRELOAD-02 | Open | **Unit 2026-09-05.** The silent-failure paths are covered in `tests/test_ollama_preload.py`: an unreachable host, no eligible model, and the host declining are all no-ops that never raise. **On-Deck, not yet run:** with a game running and memory under pressure, turn the switch on and restart the loader. Nothing on screen may mention the warm-up — no error, no toast, no stuck status line — and the first question must be no slower than with the switch off. |
+| Ask-bar avatar uses prop-emblem art | AVATAR-PROP-01 | Open | **Automated 2026-08-26.** `CharacterRoleplayEmoticon.test.tsx` (9) — the picker's default art is unchanged, the Ask bar's `art="prop"` path draws the emblem, the rendered box is byte-identical between the two styles at the same size, the corner badge markup matches exactly, and every instance gets its own gradient id with no colons (a shared id makes one disc paint with another character's tint). **The swap was designed to change no geometry**: a true-size mock measured both variants at a 50.0 × 276.8px text row, an 18 × 18 slot and a 119.2px card. **On-Deck:** with AI character on, open the QAM and confirm the Ask-bar corner shows the character's object — Heavy a sandvich, Medic a red cross, Nick Valentine a fedora — and **that nothing else on the row moved**: placeholder still starts in the same place, row the same height, badge letter the same size in the same corner. Then switch characters in the picker and confirm the corner follows, and select **Random** and confirm a crate with a `?` badge rather than the old bare `?`. **The picker itself is deliberately still on the old pixel grids** pending [D33](audit/maintainer-decisions-locked.md) — a picker still showing hooded blobs is correct, not a regression. Detail: [25-ai-character-avatars-handoff.md](../../bonsAI-workshop/archive/25-ai-character-avatars-handoff.md) |
+| Global document realm sweep (8 sites) | DOC-SWEEP-01 | **Partial — 4 of 7 boxes ticked (Deck) 2026-10-01; three boxes open: the blur moment on the first Ask, the carousel pause (it passed under PRESET-ONE-LINE-03 but its own box is not ticked) and the very-first-Ask run cold** | **Automated 2026-08-07 (Wave 4 H).** `focusNavigation.test.ts` (`getFocusableWithin`), `uiDocument.test.ts`, `BonsaiPluginShell.test.tsx` (3). **On-Deck per site:** Ask blur before submit; attachment preview L/R; preset carousel pauses while chip focused; About GitHub Up → language dropdown; settings Up at scroll top → tab strip; transcript expand scroll-into-view. **Run the blur and attachment checks on the first Ask after a fresh open** — the document was learned only from answer-time registries until the shell seeding landed the same day, so these paths behaved differently before and after the first reply. **PASS (Deck) 2026-09-26 (plan 70, flow 2b.5), light re-check:** first Ask after a fresh reload sent correctly (the exact blur moment itself is unreachable by the allowed D-pad route — not observable, not a fail); the carousel-pause check passed under decode style separately (see PRESET-ONE-LINE-03); About → GitHub Up reached the language dropdown; Settings and Ollama Up at the top returned to their own tab strip; expanding a collapsed history turn kept its header in view. **PASS (Deck) 2026-10-01 (plan 78, block 3a, build `c8d6b094`), the attachment row:** with a recent screenshot attached, Right from the preview reached "Remove attachment" and Left came back to the preview, both fully visible, 2 of 2 presses moved focus. Two notes: the attach icon is reached with Left from the question box and then Down (Up and Down from the box or the Ask button skip the attachment bar), not the route this row first described; and after the screenshot picker closes, no control holds the highlight until the next press (on the roadmap watch list). The blur moment on the very first Ask was not reachable by the allowed route, noted again, not retried. Evidence `workshop:test-evidence/plan78-DOC-SWEEP-01.json`. **Still owed:** the very-first-Ask requirement run cold (this pass's first Ask was after a reload, not a first-ever open), and the blur moment itself. Evidence `workshop:test-evidence/plan70-DOC-SWEEP-01.json`, saved walk `workshop:checks/plan70-DOC-SWEEP-01-settings-top-up.json`. Detail: [wave4.md](../../bonsAI-workshop/archive/wave4.md) |
+| Suggestion chips as real buttons | CHIP-BUTTON-01…09 | **Partial (Deck) 2026-09-18 — 02, 03, 04, 05, 06 (one chip), 08 pass by measurement; 09 passed in full (Deck): the dot 2026-09-26, the dot staying put on a scrolling label 2026-10-02; 01 passed by the maintainer's eye 2026-10-22, 05 by eye still owed; 07 passed in all three styles (decode 2026-09-26; fade and static 2026-10-02); the help chip's focused look passed on the Deck 2026-10-22 (P97-HR-HELP-CHIP-RING), the agent chip and the maintainer's eye still owed (row 06 stays open)** | Built under plan 60 and checked on the Deck 2026-09-17 (build `b3c0d52`, merge of seven commits; `python scripts/verify.py --full` passed in 81s, `npx tsc --noEmit` clean, 160 test files / 1460 tests green). History: [archive/testing-row-history-2026.md § CHIP-BUTTON-01-09](archive/testing-row-history-2026.md#chip-button-01-09). **Row 09 failed on the Deck 2026-09-18:** with Half-Life 2 running and the knowledge base on, real note-based tips showed in the chip but the Tip dot never appeared before the label — filed as its own bug, see testing-manual.md's CHIP-BUTTON-09 row. **Row 09 fixed 2026-09-21 (plan 63, commit `895cf0a`):** two copies of the same markup had drifted apart; one piece of code now draws both badges. Deck recheck owed: with a covered game running and the knowledge base on, set the chip animation to the scrambling one and confirm the dot shows. **Tried 2026-09-23, COULD NOT RUN:** the Developer tab's pinned test chips were switched on, so no note chip was ever mixed in to check the dot on — needs the pins cleared first. Evidence `workshop:test-evidence/plan64-CHIP-BUTTON-09.json`. **Row 09's dot PASS (Deck) 2026-09-26 (plan 70, flow L6):** with Half-Life 2 running, the Tip chip's small square dot showed on every one of 9 reads, before the label, in the character's colour. The "stays put while a long label scrolls" half is still owed: the only Tip label offered was short and never scrolled. Evidence `workshop:test-evidence/plan70-L6-CHIP-BUTTON-09.json`. **Still owed:** rows 01 and 05 need the maintainer's own look at the screenshots to say whether the new look and the spacing read right; row 07 passed in the decode style on the Deck 2026-09-26 with reduced motion on (`workshop:test-evidence/plan70-L5-FLOW5-REDUCED-MOTION.json`), and its fade and static styles passed 2026-10-02 (`workshop:test-evidence/plan79-CHIP-BUTTON-07.json`); and the help and agent chips still need a look by eye. [Plan 60](../../bonsAI-workshop/archive/60-chip-button-restyle.md) · evidence `workshop:test-evidence/plan60-QA-chip-button.json`, `workshop:test-evidence/plan60-measure-before.json`. **Rows 07 and 09 tried again 2026-10-01 (plan 78, Deck block 3e), COULD NOT RUN:** Half-Life 2's window never came to the front after the plugin was reloaded during its start; no chip was read. Row 09 stays owed. Evidence `workshop:test-evidence/plan78-CHIP-BUTTON-07.json`, `workshop:test-evidence/plan78-CHIP-BUTTON-09.json`. **Row 07 PASSED (Deck) 2026-10-02 (plan 79, build `f0a4f2c4`), fade and static styles, Reduce Motion on in Steam:** the edge cue lasted 271 and 270 ms (fade) and 286 and 289 ms (static), 2 of 2 presses each, with no colour ramp, full colour at the first read, the chip box moved 0 px and the ring stayed. Evidence `workshop:test-evidence/plan79-CHIP-BUTTON-07.json`. **Row 09 scrolling half PASSED (Deck) 2026-10-02:** "PASS - dot moved 0.00 px against 200 px of label movement on 842 reads". Both halves passed, row 09 closed; older "owed" lines above are superseded. Evidence `workshop:test-evidence/plan79-CHIP-BUTTON-09.json`. **The maintainer's eye, 2026-10-22 (the checks page):** CHIP-BUTTON-01 ("raised like buttons") PASS, closed; the soft blue fill PASS (row P79-CHIP-SOFT-FILL); the help and agent chips FAILED with the note "make sure the focus ring works on the How to use bonsAI chip", so CHIP-BUTTON-06 stays open and a Bugs entry was filed (plan 97 block A, P97-A-HELP-CHIP-RING); the short chip's centring and the chip pace: no verdict, still open. CHIP-BUTTON-05 was not part of that answer and stays owed by eye. Older "owed" lines above about rows 01 and the soft fill are superseded. **Plan 97 block B, 2026-10-22 (build `73738058`):** on the Deck the help chip held focus but nothing on it changed (no outline, shadow or border change) (`workshop:test-evidence/plan97-P97-B-HELP-CHIP-RING.json`). Fixed in `3a855179`; row P97-HR-HELP-CHIP-RING owes the Deck run (block E9), and CHIP-BUTTON-06 stays open until it passes. **Plan 97 block E9, 2026-10-22 (build `15565346`):** the help chip's focused background carries the blue `rgba(56, 189, 248, 0.2)` layer and keeps its green border; unfocused it is the plain green bar (`workshop:test-evidence/plan97-P97-HR-HELP-CHIP-RING.json`, row archived). This supersedes the line above that says row P97-HR-HELP-CHIP-RING owes the Deck run. CHIP-BUTTON-06 stays open for the agent chip and the maintainer's own eye. |
+| Knowledge base retrieve (keyword + hybrid) | KB-SMOKE-02/04 | **Re-opened** | Was Verified on the seed KB, Deck Jul 2026. **Re-opened 2026-08-05 by remediation PR1**, which changed the ranking, the query text and the corpus format — the earlier evidence describes behaviour that no longer exists. Re-run after `python scripts/kb/build_rag_db.py --seed` and a redeploy |
+| Phase 4 chip guarantee and Tip badge | PHASE4-CHIPS-01 | **Partial (Deck); the game's own chip promise PASSED (Deck) 2026-10-01 through rows P78-TIP-CHIP and P78-CHIP-PACE; the fresh look at the widest labels is still owed** | The carousel now always shows at least one of the running game's own chips, badges them **Tip**, and falls back to shared or static chips for a game the corpus does not cover — all confirmed on the Deck. **Still failing:** a long chip label runs past the right edge of the chip column instead of being cut off with an ellipsis, because the label cannot truncate in its current styling; measured on the Deck 2026-08-29 at 379.8px inside a 300px column, filed as a bug on the roadmap. Owed: a fresh look at the widest labels once a Deck is free again, since the corpus has grown since the last measurement. Earlier attempts and full measurements: [archive/testing-closed-2026.md § History moved out of open rows](archive/testing-closed-2026.md#history-moved-out-of-open-rows-2026-09-21), under PHASE4-CHIPS-01. **Its Half-Life 2 recheck FAILED (Deck) 2026-09-26 (plan 70, flow L6):** watched about 420 seconds across three panel-open sessions and a 150-second wait; the game's own "How do I beat Strider?" Tip chip showed for only about 17 of those seconds, right after the panel opened each time, then did not come back — so "at least one of the running game's own chips always shows" did not hold. Labels themselves all fit their chip with no overflow. The maintainer's one-chip setting was on, which leaves only one slot for the guarantee to use and may explain the result; not re-tried with more chips on screen. Evidence `workshop:test-evidence/plan70-L6-PHASE4-CHIPS-01.json`. **2026-09-30 (plan 78 helper F, `092517c1`, `5e3e0f7e`):** cause found: three of the four chip styles dealt the game's chips only once, when the panel opened, and with one chip showing the promised game chip was put in a spot that is off screen. Fixed. **2026-10-01 (Deck, build `57586da0`):** the failing half is now covered and passed by rows **P78-TIP-CHIP** and **P78-CHIP-PACE**: the game's own chips were 0.53 to 0.55 of all shown in all four styles, and with two chips two general chips were never on screen together. Evidence `workshop:test-evidence/plan78-P78-TIP-CHIP-try2.json`, `workshop:test-evidence/plan78-P78-CHIP-PACE-try2.json`. |
+| Every corpus title has cards | KB-COVERAGE-ALL-01 | Open | **Steps:** with the seed corpus installed and KB on, launch each of the thirteen titles in turn and confirm the coverage chip reports sections rather than **"KB: none for this game"**. Spot-check one Ask per title and confirm the cards attached belong to the running game — the corpus is now 133 sections across 13 titles, so a cross-game leak has far more room to hide than it did at 39. **Then the alias path:** with no game running, ask something naming a title (*"hl2 ravenholm"*, *"drg survivor what class"*) and confirm the right game's cards attach and no other game's do. Backed by `test_every_corpus_title_has_a_spoiler_profile`, `test_every_label_names_a_card_that_exists`, and the profile contract fixture. History: [archive/testing-row-history-2026.md § KB-COVERAGE-ALL-01](archive/testing-row-history-2026.md#kb-coverage-all-01). **Partly covered on-Deck 2026-08-22:** the alias path at the end of this row passes (see the D19 row); the thirteen-title coverage-chip sweep still needs the device, and the corpus is now **133** sections across 13 titles, not 119. |
+| Three new games answer questions | KB-NEWGAMES-01 | **Partial — Brotato half passed (Deck) 2026-09-30; Palworld and Skyrim UNCLEAR (Deck) 2026-10-01, still owed** | Plan 70 (helpers F and G): Brotato, Palworld and Skyrim added to the library, 12, 12 and 15 notes. **Setup:** the new library installed. **Do:** launch Brotato, ask about the shop or wave 20 bosses; launch Palworld, ask about catching a Pal or a Tower fight; ask about Skyrim (not installed on this Deck, so name-only). **Pass when:** each game's own notes attach, and Palworld's Tower-fight and Skyrim's story questions open behind a spoiler box while Brotato's never do. Flow R. Brotato: 3 of its own notes attached, no cover, in plain text. Palworld could not run (its tile on the Recent Games row carries no app id the launcher can match); the Skyrim name-only question was not run. Evidence `workshop:test-evidence/plan77-KB-NEWGAMES-01.json`. **2026-10-01 (plan 78, Deck block 3c, build `24cbbd6b`, no game running), UNCLEAR for both Palworld and Skyrim:** four questions, two per game. The right game's notes were attached every time (Palworld: Towers and Faction Leaders, Technology points and the tech tree, The five kinds of boss fights, Starting out; Skyrim: Alduin, Daedric artifacts, Dragon Priests, Dragon Priest Masks, Starting out), but the AI wrote no hidden block any time (0 covers in 165, 203, 197 and 209 reads; no hidden block in any saved turn). Ruling for the Skyrim answers: the player named Alduin and asked for his story, so an answer that says in plain text who he is ("the World-Eater", the main bad guy of the main quest) is not a spoiler leak; no bug is opened. Evidence `workshop:test-evidence/plan78-KB-NEWGAMES-01.json`. |
+| A too-new library refuses instead of half-working | KB-FORMAT-REFUSE-01 | **Built 2026-09-26, Deck check owed** | Plan 70 (helper E): the library format bumped 3 → 4. **Setup:** an older build of the plugin (or a way to fake an older format check). **Do:** try installing the new library. **Pass when:** the install refuses before downloading, with a plain message asking to update the plugin, rather than downloading and half-working. Flow R. |
+| The overnight test slice's first real run | OVERNIGHT-RUN-01 | **Partial (Deck) 2026-09-26 — the command itself passes, the walks' half does not yet** | Plan 70 (helper N): `node scripts/deck_overnight_run.mjs` keeps the Deck awake, installs the newest build, replays every saved walk under `workshop:checks/` one at a time, runs this PC's own quick check, and writes one plain-words report of what matched, what differed, what could not run and why. **PASS (Deck) 2026-09-26, 20:03, 76 seconds, unattended, nothing needed a human mid-run:** the Deck stayed awake, the newest build deployed, all 30 saved walks replayed, `python scripts/verify.py --quick` passed, and the report wrote itself correctly against what actually happened. **FAIL, the walks themselves:** all 30 showed differences, because the deploy leaves the plugin's own panel closed and the run neither reopens it nor puts each walk back on the screen it starts from — so every walk is comparing against a screen it was never meant to run from. This says nothing yet about whether the walks themselves still match the build. Next: open the plugin after deploying and start each walk from its own starting screen (the walk file says which), then put it on a schedule. Evidence `workshop:test-evidence/overnight-2026-09-26-200443.md` (+ `.json`). |
+| Plainly-worded problems reach the tips | W2-R4 | **Partial (Deck) 2026-09-07** | **Setup:** nothing running. Pinned Batch R4, nine chips — eight problem sentences plus one control. **Do:** ask each in Speed mode. **Pass when:** the eight attach a tip on the right subject and *"thank you very much"* attaches nothing. [Plan 47](../../bonsAI-workshop/archive/47-kb-wave-two-session.md) § 8, row W2-R4. **Ran 2026-09-07:** all eight problem sentences reached a tip and the control attached nothing, but one of the eight — the question about the TV picture being in the wrong spot — got a tip about Big Picture Mode versus Desktop Mode, which does not answer it. Evidence `workshop:test-evidence/plan47-R4-problems-reach-tips.json`. **Ran again 2026-09-26 (plan 70), same result:** 7 of 8 problem sentences reached a tip on their own subject and the control attached nothing; the TV "menus in the wrong spot" sentence again got the same off-subject Big Picture Mode tip as on 2026-09-07, word for word. Evidence `workshop:test-evidence/plan70-W2-R4.json`. |
+| The two bug fixes | W2-R6 | **Failed (Deck) 2026-09-07, both halves** | **Setup:** Speed mode, Deep Rock Galactic: Survivor running, voice on. Pinned Batch R6, three chips. **Do:** ask all three, then exit the game and read the line under the question box. **Pass when:** no reply carries a code-like line, and the line under the box stops naming the game within a few seconds of exiting. [Plan 47](../../bonsAI-workshop/archive/47-kb-wave-two-session.md) § 8, row W2-R6. **Game-naming half, ran 2026-09-07:** Hades was exited with the panel open, and the line under the question box still named it straight after, 31 seconds later, about four minutes later, and after closing and reopening the Quick Access Menu. **The opposite failure was measured the same evening:** with the panel already open, Deep Rock Galactic: Survivor was launched and the line read *no active game detected* for 48 seconds and through a close and reopen of the menu, while Steam's own list had the game running throughout. Restarting the plugin corrected the line at once, both times — so the panel reads this once at start-up and never listens for a change. **Stray-computer-text half, ran later the same evening and failed:** two of the three questions were asked with the game running and the panel recognising it; both replies ended in a code box holding nothing but the raw power line, `{"tdp_watts": 7, "gpu_clock_mhz": null}` and `{"tdp_watts": 13, "gpu_clock_mhz": null}`, read out of the page. The cleanup that was meant to remove that line deliberately leaves anything in a code box alone, and the plugin's own instruction asks the model to put the block in a code box — so the one shape the plugin asks for is the one it cannot clean. Evidence `workshop:test-evidence/plan47-R6-bug-fixes.json`, `workshop:test-evidence/plan47-R6-stray-computer-text.json`. |
+| What the Deck is holding in memory around one question (moved out 2026-10-18, plan 96 Deck block F docs sweep, size trim) | KB-SPEED-02 | **Answered (Deck) 2026-09-18; closed with a pass on 2026-09-26 (plan 70)** | The row's own result is in the archived row. Full row, word for word: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-18 (plan 96 Deck block F docs sweep, size trim)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-18-plan-96-deck-block-f-docs-sweep-size-trim). |
+| KB download Cancel (step 9) | KB-CANCEL-01 | **Shelved (D113)** | **Attempted on-Deck 2026-08-16 and abandoned: there is no cancel window.** The published corpus is 758502 bytes, so on a healthy LAN the whole download-decompress-install cycle takes **~0.9 s** — the Deck log shows `Downloading…` at 23:32:37.711 and `Knowledge base installed` at 23:32:38.610. Nothing in the plugin log recorded a cancel on any of the three downloads that session; the row cannot be exercised by hand at this corpus size. History: [archive/testing-row-history-2026.md § KB-CANCEL-01](archive/testing-row-history-2026.md#kb-cancel-01). **To actually test this, the download has to be slowed:** throttle the Deck's link (`tc qdisc`), point `rag_corpus_path` fetching at a stalled local host, or add a dev-only delay. Until then the six frontend tests are the only coverage and the focus half is unproven. Cancel takes the action row's **second slot** while a download runs, so the row is Download/Update + Cancel, and reverts to Download/Update + Remove when it ends. **The focus half is the part unit tests cannot judge, and it is why this is more than a feature:** while downloading, the primary button is `disabled` and Remove is not rendered, so before this change the row had **no focusable control at all** — the D-pad could not enter it. **On-Deck steps:** start a download (Ollama → Knowledge base → Update, or a first Download), then (1) D-pad **Down** from *Use local knowledge base* must land on **Cancel**, (2) D-pad **Up** from *Reply verbosity* must land on **Cancel** rather than passing through to the toggle, (3) **A** on Cancel shows *Cancelling…* and a second press must do nothing, (4) within a few seconds the row returns to Download/Update + Remove and the status line reads *Download cancelled* in grey — **not** the backend's raw exception text in red, (5) starting a new download after a cancel works. 6 frontend tests cover the RPC call, the double-press guard, the slot swap and the cancelled-vs-failed status text; all three mutation checks turn them red. **Shelved 2026-09-19 (D113):** the download finishes in about a second, so there is no window to press Cancel in; the check moves to the shelved list ([roadmap-shelved.md](roadmap-shelved.md)) until a throttle or a slower test copy exists. |
+| Reply micro-actions / D-pad graph | MICRO-01…05 | Partial — new shape passed (Deck) 2026-09-26 | Bug: Strategy live-turn skips. History: [archive/testing-row-history-2026.md § MICRO-01-05](archive/testing-row-history-2026.md#micro-01-05). **Reworded 2026-09-20: that shape is gone again.** Read aloud is no longer its own stop below Not really — a small speaker now sits at the right-hand end of the Helpful / Not really row itself, reached with Left/Right along that row, and Down from that row goes straight to Show details. **PASS (Deck) 2026-09-26 (plan 70, flow 2b.7), new shape:** walked Helpful → Right → Not really → Right → the speaker → Left → Not really → Left → Helpful, all fully visible; Down from Helpful reached Show details, Up came back. Side finding: Up from Helpful skips the branch picker between the answer and this row — see the Down/Up mirror bug on the roadmap. Saved walk; evidence `workshop:test-evidence/plan70-MICRO-reply-actions.json`. **Still open:** MICRO-01/02/03/05 under the old numbering, and the *branches* half of MICRO-04. **Corrected 2026-08-26:** an earlier note here called that half "unreachable rather than broken" without checking. It is neither — instrumentation added the same day shows the prompt *does* request the fence (`branch fence requested in prompt=True`) and `gemma4:e2b-it-qat` *does not emit it* (`branch_marker=False`) on two Strategy first turns with no game running. So it is model non-compliance, and it is now one log line to check rather than a guess. See the branch-picker entry in [roadmap.md](roadmap.md) for the full chain and the scope of the claim. |
+| Character voice / Pyro | CHAR-VOICE, PYRO-EGG | Open | Tier 2 |
+| Voice STT | VOICE-01…07 | Open | Tier 2; see troubleshooting § Voice. **2026-08-03: voice was completely broken since `742db60` (2026-07-17)** — `VoiceTranscriptionSession.status()` had been deleted signature-only, leaving its body as unreachable code, so every start raised `AttributeError`. Fixed with two mutation-checked guards (`test_voice_session_status.py`, `test_no_unreachable_code.py`) and verified on the deployed plugin. **A live recording round-trip on-Deck is still unverified** — that is VOICE-01. Deferring this tier is what let a total outage sit for two and a half weeks |
+| Voice diagnosis note | — | — | Plugin-side RPC exceptions appear in `sudo journalctl -u plugin_loader`, **not** in `homebrew/logs/bonsAI/*.log` — the loader catches them before the plugin's own logger runs. Check the journal first when a UI action reports a Python error with nothing in the plugin log |
+| Ollama keep-alive slider gpfocus ring | OLLAMA-KEEPALIVE-FOCUS-01 | **FAILED (Deck) 2026-09-26** | Keep models loaded thumb: white ring vertically centered on dot (1px regression). **FAILED (Deck) 2026-09-26 (plan 70, flow L2):** measured 3.5 css px (4.5 screen px) between the ring's middle and the dot's middle, where a pass needs under 1 px; the ring also reaches about 17 px past the slider card's right edge. ★ layout, not fixed this wave. Evidence `workshop:test-evidence/plan70-OLLAMA-KEEPALIVE-FOCUS-01.json` (+ `.png`). |
+| Soft `num_predict` + thinking budget (C1) | SOFT-PREDICT-01…05 | **Partial — 01 passed (Deck) 2026-09-04, 03 passed 2026-09-06, 04 passed 2026-09-30 (`workshop:test-evidence/plan77-SOFT-PREDICT-04.json`); 05 (a real thinking model) still owed** | **Shipped 2026-08-10.** Caps Speed 800 / Expert 1200 / Strategy 1600; soft auto-continue on `done_reason=length` (max 2) with ephemeral **`Continuing…`** stripped from the final reply; C1 `resolve_ask_token_budgets` keeps `think: false` until Thinking effort control. History: [archive/testing-row-history-2026.md § SOFT-PREDICT-01-05](archive/testing-row-history-2026.md#soft-predict-01-05). Unit: `tests/test_ollama_ask_budgets.py` (7 cases incl. `medium` effort and `None` fallback), soft-continue cases in `tests/test_ollama_service.py` (cancel-mid-continue, strategy-fence stitch boundary, `ask_budgets` contract), throttle/shrink cases in `tests/test_background_partial_state.py`, `src/features/ask/flow/stripSoftContinueCue.test.ts`. **Automated, then confirmed on the Deck:** **01** stitch + cue-absent-from-response, **03** cancel republishes cue-free text, **04** fence stays hidden across the stitch boundary — all pinned by the unit tests above, and all three passed on the Deck (dates in the status and below). **Verified (fully automated):** **02** empty continue stops quietly. **Still Open — needs a real thinking model on-Deck:** **05** thinking model with default off still returns visible text (no empty-reply regression). Reply verbosity remains prompt-only. Detail: [16-soft-num-predict-thinking-budget.md](../../bonsAI-workshop/archive/16-soft-num-predict-thinking-budget.md) **Deck 2026-09-04:** SOFT-PREDICT-01 PASS (a 10,707-character reply, the `Continuing` cue caught mid-stream, absent from the finished text and from the saved history after a tab round-trip). **Deck 2026-09-06: SOFT-PREDICT-03 PASS.** Asked for a very long weapons guide, pressed *Stop generation* while it was still arriving: the turn kept the half answer and shows **Stopped — partial answer kept.** *Helpful* and *Not really* are present and greyed (`bonsai-chat-secondary-btn Disabled`), *Retry*, *Show details* and *Copy* live — which is the corrected 2026-09-05 behaviour. Backend stopped cleanly: `abort_background_game_ai: stop requested` then the model unloaded. Screenshot `screenshots/round35-stopped-notice-and-greyed-buttons.png`. The greyed buttons still take a dead D-pad press — the separate greyed-button bug, second sighting. **2026-09-30 (plan 77):** SOFT-PREDICT-04 PASSED on a test build with the limit at 300: two soft continues, clean text at every read. Evidence `workshop:test-evidence/plan77-SOFT-PREDICT-04.json`. A text-loss bug found in the same run is on the roadmap. |
+| Thinking effort control (Phase 1) | THINK-EFFORT-01…05, EXPERT-CAP-01 | **Partial — every sub-check has a passing result by 2026-09-30 (04 and 05 in September, 03 and EXPERT-CAP-01 on 2026-09-30, `workshop:test-evidence/plan77-THINK-EFFORT-03.json`, `workshop:test-evidence/plan77-EXPERT-CAP-01.json`); still owed: the toast half of 03, and capturing a refusing model's real error text** | THINK-EFFORT-05 PASS 2026-09-03 (D-pad row, plan 31). **Shipped 2026-08-15.** Ollama tab → **Thinking**: Off / Brief / Balanced / Deep, default **Off**. `think: true` for every on level (named levels are gpt-oss-only; qwen3 / deepseek-r1 reject a string — **D21**, superseding doc 16), with effort carried by the reserved budget 256 / 512 / 1024 added to `num_predict`. A model rejecting `think` gets one silent retry with thinking off, is remembered for the plugin session, and toasts once per model. History: [archive/testing-row-history-2026.md § THINK-EFFORT-01-05](archive/testing-row-history-2026.md#think-effort-01-05). Unit: `tests/test_ollama_ask_budgets.py` (11 cases), `tests/test_ollama_service.py` (think wire, fallback, known-bad-model skip, unrelated-400 non-retry), `tests/test_settings_service.py`, `useBonsaiAskOrchestration.test.ts` (warn-once-per-model), both settings contracts. **Verified (fully automated):** **01** Off still sends `think: false`; **02** levels send `think: true` with the budget added; **03** a refusing model still answers, once per session. **Needed a Deck (04, 05 and EXPERT-CAP-01 have since passed, see the notes below):** **THINK-EFFORT-04** real thinking model per level (**and capture the actual 400 body from a non-thinking model to tighten `_is_thinking_unsupported_error`, whose matcher is deliberately loose because the wording is not a stable API**); **THINK-EFFORT-05** D-pad the new row; **EXPERT-CAP-01** Expert Asks now visibly longer before a soft continue. Detail: [16-soft-num-predict-thinking-budget.md](../../bonsAI-workshop/archive/16-soft-num-predict-thinking-budget.md), [D21](audit/maintainer-decisions-locked.md) **Deck 2026-09-04:** THINK-EFFORT-04 PASS with `qwen3.5:4b` (already installed, reports the `thinking` capability, so no model pull was needed) — Deep thinking, 212s, Show details read `Routed qwen3.5:4b`; all four segments of the Thinking row took the ring by Left/Right. **EXPERT-CAP-01 tried 2026-09-26 (plan 70), inconclusive:** an Expert answer about Fallout 4's weapon classes stopped on its own at 326 words, well under the ~800-word mark this row is about, so the longer cap was never actually reached — passes by the row's own written rule (finished without a "continue" cue) but proves nothing about the cap itself. Still owed: a question long enough to reach it. Side finding: the answer invented a "Magic" weapon class Fallout 4 does not have. Evidence `workshop:test-evidence/plan70-EXPERT-CAP-01.json`. **2026-09-30 (plan 77):** THINK-EFFORT-03 PASSED (a model that does not think got one silent retry with thinking off and answered; the toast half was not checked; `workshop:test-evidence/plan77-THINK-EFFORT-03.json`). EXPERT-CAP-01 PASSED both halves (Expert 1200 against Speed 800; two soft continues; `workshop:test-evidence/plan77-EXPERT-CAP-01.json`, `workshop:test-evidence/plan77-EXPERT-CAP-01-continue.json`). **2026-10-01 (plan 78, block 3a):** the reasoning display's Thinking chip (REASONING-05 in the manual) passed on the Deck, evidence `workshop:test-evidence/plan78-REASONING-05.json`; it does not change this row's status. |
+| Token streaming (experimental) | STREAM-01…11 | Partial | Several preview PASS; Strategy spoiler stream open. **2026-08-07 — Phase A (P1–P5) and Phase B (multi-stop + follow) both landed**, see [05-token-streaming-review.md §§ 3.1–3.2](../../bonsAI-workshop/archive/05-token-streaming-review.md). Needs on-Deck: **STREAM-04** (rewritten — Stop now *keeps* the draft and shows a Stopped notice; the old expectation of a cancel literal is gone), **STREAM-09** (rewritten below for multi-stop), **re-run STREAM-01/02** because P2/P3 both changed the flag-off path, and watch first-paint latency on STREAM-02 (P3 leaves the poll at 1200ms until the first token). New **STREAM-11** below. **Noted 2026-09-16:** the "Developer → Token streaming" precondition every row in this family names is stale — that toggle is gone from the Developer tab, and streaming was on for every question asked during the 2026-09-16 Deck pass, so it can no longer be turned off to compare against. |
+| Reply language (About override) | LANG-01…03 | Partial — LANG-01 and LANG-02 passed, LANG-03 partial (Deck) 2026-10-01 | **LANG-01** regression fixed Jul 2026 — closed dropdown shows **Follow system** on load (`selectedOption` = option `.data`). **PASS (Deck) 2026-09-26 (plan 70, flow 2d.4):** with the setting still at its default ("follow system", nothing chosen), the About tab read "Language: Follow system" and the closed dropdown showed the same, with no press on it. Evidence `workshop:test-evidence/plan70-LANG-01.json`. **LANG-02 PASS (Deck) 2026-10-01 (plan 78, block 3a, build `c8d6b094`):** on the About tab, Down visits the Language dropdown, GitHub, Built on Ollama!, Bugs & Feature Requests and Support my Steam Sale habit, in that order, with nothing skipped; 5 of 5 Down presses and 5 of 5 Up presses moved focus, every stop fully visible; the one dead press was the one past the end. The beta disclaimer is plain text and never a stop, and two links sit between GitHub and the Support block, so that is the order this row expects. Evidence `workshop:test-evidence/plan78-LANG-02.json`. **LANG-03 PARTIAL (Deck) 2026-10-01 (same block):** with the reply language set to Japanese, the Speed reply was 99.2 percent kana or kanji (395 of 398 letters): passed. The Strategy choice labels came out in English on two tries (on the first the whole reply was English; on the second the reply body was Japanese, 89.1 percent); the menu showed on both, and no raw fence or JSON was on screen. The language setting was put back to Follow system. Evidence `workshop:test-evidence/plan78-LANG-03.json`. **Still owed:** a Strategy menu with Japanese choice labels (LANG-03). **2026-10-18 (plan 96 hand check 1, the maintainer, the Deck's own screen): the About reply-language pick FAILED by hand:** it "just flips back to Follow system" ([checks page](https://claude.ai/artifact/FTe9Lr1sS2Kfrj8nBTVrhi), check 1); a Bugs entry holds it. |
+| RPC timeout wrapper (behavior change) | RPC-TIMEOUT-01 | Partial — everyday half passed (Deck) 2026-09-26 | 2026-08-02: bounded RPCs moved to `callDeckyWithTimeout` (15s). Verify on-Deck that settings save/load, Ask submit, background status/abort, intent packs, strategy checklist, screenshots and voice status all still succeed normally — and that the 4 deliberately unbounded calls (`clear_plugin_data`, `install_rag_corpus_local`, `start`/`stop_voice_transcription`) still complete on slow paths (multi-GB model teardown, corpus copy, long recording) without a spurious timeout. **PASS (Deck) 2026-09-26 (plan 70, flows L3 + 2d), everyday half:** across the whole block, 7 settings changes saved and read back within 2 seconds every time, 13 questions were asked and all answered (8-35 seconds each, none hung), Show details opened at once 3 times, a 177 KB screenshot attached and was described correctly, and Stop cut an answer off cleanly with "Stopped — partial answer kept." Evidence `workshop:test-evidence/plan70-RPC-TIMEOUT-01.json`. **Still owed:** the 4 deliberately unbounded calls on their own slow paths. |
+| Plan 72 Deck rows that passed (2026-09-27 and 2026-09-28): 16 rows, size trim | PLAN72-F-UP, PLAN72-F-SCROLL, PLAN72-F-GAP, PLAN72-F-RING, PLAN72-F-CHIPS, PLAN72-F-STRAT, PLAN72-F-WORDS, F3-THINK, F3-BUBBLE, F3-DL, F3-TIP, F3-HOLD, F3-KEEP, F5-KBCHIP, F4-RINGHOLD, F4-LADDER | **Done — passed (Deck) 2026-09-27 and 2026-09-28, moved out** | Each row word for word, with its evidence file: [archive/testing-closed-2026.md § Moved from testing.md 2026-09-30 (size trim, second pass)](archive/testing-closed-2026.md#moved-from-testingmd-2026-09-30-size-trim-second-pass). |
+| Down leaves an empty Session tab | F4-EMPTY | Open — owed | Plan 72 (`84049cfa`). Unit-tested; no chat with an empty Session tab to try it on, `workshop:test-evidence/plan72-F4-EMPTY.json`. **Blocked 2026-09-28 (plan 76), still owed:** a typed command's reply still gets its own Session-tab row, so no empty tab can be made without editing a chat file. Evidence `workshop:test-evidence/plan76-F4-EMPTY.json`. **2026-09-30 (plan 77) UNCLEAR:** a null transparency removes Show details altogether, so the runbook's file edit shape was wrong; the check needs a transparency object that is present but has no rows and no chips. Still owed. Evidence `workshop:test-evidence/plan77-F4-EMPTY.json`. |
+| After Sum up, the ring moves onto the summary card | F6-SUMUP | **FAILED (Deck) 2026-09-27; accepted as is for 0.6.0 (the maintainer's call, 2026-09-27)** | Plan 72 (`c603925d`). The ring did not take the card. Evidence `workshop:test-evidence/plan72-F6-SUMUP.json`. Two more tries failed the same way (`workshop:test-evidence/plan72-F7-SUMUP.json`, `workshop:test-evidence/plan72-F8-SUMUP.json`): Steam keeps the ring on the greyed "Sum up again". The card shows itself and one Down reaches it; named in the release notes. After the release: finish the hand-off or take the tries out of the code (roadmap Bugs, "The chat summary card appears behind the dock"). |
+| Streaming follows the newest text | STREAM-FOLLOW-01 | **Partial — D-pad half passed (Deck) 2026-09-04; the touch-drag half still owed to the maintainer** | B4 changed this from pin-only to follow-plus-pin, and both halves need a look because they share one scroll listener. With streaming on and a long answer arriving: (1) sitting at the bottom, new text must stay on screen without any input; (2) scrolling up mid-answer (**touch and D-pad, separately**) must hold position — the next partial must not yank you back down; (3) scrolling back to the bottom must resume the follow; (4) D-pad specifically: walking down through the sections pins, and walking to the bottom resumes — no fight with STREAM-09's stay-put rule. Worth watching for **overshoot**: the follow targets the end of the transcript, not the bottom of the panel, so the session context strip and Save chat should *not* be dragged into view. History: [archive/testing-row-history-2026.md § STREAM-FOLLOW-01](archive/testing-row-history-2026.md#stream-follow-01). **The D-pad half passed on the Deck 2026-09-04:** the scroll position tracked the growing answer, holding a constant distance above the true bottom (the sticky Ask bar). The touch-drag half needs a finger and stays on the maintainer's own checklist. The roadmap entry closed on the D-pad half and moved to [archive/roadmap-completed.md](archive/roadmap-completed.md); this row stays open for the touch half. **Status corrected 2026-09-26:** it read Verified while its own notes kept the touch half owed; now Partial, nothing re-run. |
+| With a game running, the panel keeps at least 30 frames a second while an answer arrives | GAME-LIGHT-01 | **Passed (Deck) 2026-10-02 in a live run with the game on a level-up menu; a run mid-fight still owed** | Plan 70 (helper S, `75c32ace`, `a0584bd2`, `f52e6822`, `49622e21`). **Pass when:** with a game running, the answer-phase median (2.5 s slices, three answers) is at least 30, the thinking phase at least 35, processor load recorded. Before: answer about 11, thinking 34–36 (`workshop:test-evidence/plan70-FPS-baseline.json`). **Flow L9:** answer medians 30.5 / 31.4 / 26.0, pooled 30.2; thinking about 57; each answer sank to 21–28 past about 1,200 letters (`workshop:test-evidence/plan70-FPS-after.json`). **Flow L10, after round two:** pooled 36.0 with the decode effect off, 30–33 with it kept, still dipping into the 20s late in long answers (`workshop:test-evidence/plan70-FPS-pieces.json`). The pooled median passes; not yet at least 30 throughout. **2026-09-29 (plan 76, block 3):** one answer with the game on its title screen, panel median 84.5 while it arrived (thinking 90); title screen only, one answer, no mission, so this row stays Partial. Evidence `workshop:test-evidence/plan76-SCR-10-try2.json`. **2026-10-02 live run: PASS** ("answer median 68.8 and 69.6 (limit 30) and thinking median 83.15 and 83.4 (limit 35). Caveat: game was stopped on a level-up pick, not mid-fight."); a real fight still owed. Evidence `workshop:test-evidence/plan79-SCR-10-MISSION.json`. |
+| Long answers hold their frame rate to the end | STREAM-PIECES-01 | **Partial (Deck) 2026-09-27; 2026-10-02 run UNCLEAR, answers too short** | Plan 70 (helper S, `521a090a`, `7ead9b06`, `453635d9`): an arriving answer is drawn piece by piece. **Pass when:** with a game running, a 2,000-plus-letter answer holds at least 30 from start to end, with no drop past about 1,200 letters; nothing running stays at least 58 (decode off) and 50 (decode on); formatting looks the same. **Flow L10:** medians 28.2 / 37.4 / 40.6, pooled 36.0, 12 of 40 slices under 30; no clear gain over drawing the answer whole on the Deck, where the game and the AI take most of the processor; nothing running 58.2 off, 36.9 on; formatting within 2 px — PASS. Next: a Deck processor profile mid-answer. Evidence `workshop:test-evidence/plan70-FPS-pieces.json`. **2026-10-02 live run: UNCLEAR** ("neither answer reached 2,000 letters (1,700 and 1,635), so the rule cannot be applied as written"); still owed: an answer of 2,000 letters or more. Evidence `workshop:test-evidence/plan79-SCR-10-MISSION.json`. |
+| Streamed answers arrive as the model writes, plus the optional scramble (plan 69) | FIX-01, FIX-02, FIX-03, DEV-01, SCR-01…SCR-10 | Partial (SCR-01 and SCR-03 passed on the maintainer's eye 2026-10-22; SCR-09's smoothness not marked; SCR-10 real fight still owed) | **Built 2026-09-24/25**, [plan 69](../../bonsAI-workshop/planning/69-streamed-answers-scramble.md). Step 1: the plugin now passes on the model's words as they arrive instead of waiting for a full 4 KB (`341841d3`). Step 2: a new *Animations* section on the Developer tab with a *Scramble animation* switch, off by default (`bc6ab55c`, `c38ead49`). Step 3: with the switch on, a live answer's newest letters churn through placeholder symbols before settling (`d1ab2929`, `e0fa7f6c`). **DEV-01 PASS:** the D-pad walks the Animations section down and up with the switch off and on, and stays on the switch as the two extra rows appear and disappear. **SCR-04 PASS:** stopping mid-answer turned 18 scrambling letters real in the same frame and showed "Stopped — partial answer kept." **SCR-06 PASS:** at the end of an answer every letter was real 597 ms after it finished, and Copy appeared once the chat reloaded. **SCR-08 PASS:** the D-pad ring stayed on a live scrambling answer's section through the finish and the reload, fully in view. **SCR-02 superseded:** the original strict "no worse than today" check failed on the first drawing; it is replaced by the frame-rate fix below, which measures far better than before. **FIX-01, FIX-02, FIX-03 — PASS (Deck) 2026-09-26 (plan 70, flow L5), with Deep Rock Galactic: Survivor running:** two answers measured for how the text arrived, scramble on and off; no pause over a second and a half either way, and the biggest single jump was 103 characters. Both answers finished sooner than the plan's own 60-second target (19 and 34 seconds), so the row is proven on shorter answers than asked for. Evidence `workshop:test-evidence/plan70-L5-FLOW3-DRG.json`. **SCR-03 (panel frame rate with a game running) — UNCLEAR:** while the same two answers wrote, the panel drew 10–17 frames a second with the scramble on and 13–20 with it off (idle after each answer: 60 both ways) — far under the 45 floor either way, so this reads as the game itself competing for frames rather than the scramble animation; the maintainer's call. Evidence `workshop:test-evidence/plan70-L5-FLOW3-DRG.json`. **SCR-01 (the look) — owed to the maintainer:** watch three answers with the switch on across its styles and colours and say yes or no. **SCR-05 (close and reopen mid-answer) — PASS (Deck) 2026-09-26, second try:** a first try was refused once by the controller rig itself ("controller bridge is not available"), nothing tested that time; on the second try, closing the panel with about three lines on screen and reopening about 8 seconds later showed the same answer still streaming, readable, no frozen scrambled letters, and it finished normally with its branch menu — the reopened screen's text matched the saved chat word for word. Evidence `workshop:test-evidence/plan70-SCR-05.json`. **SCR-07 (reduced motion) — PASS (Deck) 2026-09-26 (plan 70, flow L5):** with reduced motion turned on, two live answers (23 and 159 reads) never showed a single scrambling letter — words appeared plainly every time, scramble switch left on. Evidence `workshop:test-evidence/plan70-L5-FLOW5-REDUCED-MOTION.json`. **SCR-09** Panel frame rate while an answer streams, scramble off (the default), after `bb8d7e5b` + `aae5add6` — **PASS, 56–58 frames a second** against the maintainer's floor of 45, no game running. Evidence `workshop:test-evidence/plan69-answer-frame-rate-2026-09-25.json`. **SCR-10** same, scramble on — **44–50, about 47 on average** (two of the six 2.5-second windows read 44.8 and 43.6); at or a little under the floor, left for the maintainer to judge rather than marked pass or fail. **SCR-10, with a game running — UNCLEAR:** see SCR-03 above; the numbers are the same measurement, both scramble settings well under the floor with Deep Rock Galactic: Survivor running. **Earlier SCR-10 tries with a game running (2026-09-28 blocked; 2026-09-29 passed on the title screen only; 2026-10-01 could not run)** moved to [archive/testing-row-history-2026.md § SCR-FIX-DEV-01-10](archive/testing-row-history-2026.md#scr-fix-dev-01-10); the 2026-10-02 live run below is the newest. **2026-10-02 live run: SCR-10 PASS** ("answer-phase median 68.8 and 69.6 on the two answers"); **SCR-03 UNCLEAR** ("game 45 fps idle, 43 to 44 while answering ... on a level-up menu ... The maintainer judges"); still owed: SCR-01 and SCR-03. Evidence `workshop:test-evidence/plan79-SCR-10-MISSION.json`. **SCR-10, 2026-10-11 (plan 89 Deck block 5, build `9b4d0503`, Deep Rock Galactic: Survivor, answer from this PC's AI): UNCLEAR for a real fight.** The panel drew a median of about 60 frames a second while the answer wrote (lowest slice 54.9), but the game paused itself on a level-up screen about 40 s into the run, so it was not full fight load. A real fight stays owed; the look is the maintainer's. Evidence `workshop:test-evidence/plan89-SCR-10-FIGHT.json`. **2026-10-22, the maintainer's eye (the checks page): SCR-01 (the look) PASS; SCR-03 (the frame-rate verdict: 43 to 44 frames a second with a game running, accepted with the scramble switch off by default) PASS.** The older "owed to the maintainer" and UNCLEAR lines for SCR-01 and SCR-03 above are superseded. The maintainer did not mark SCR-09's smoothness, and SCR-10 still wants a real fight. **2026-10-22 (plan 97 block B, build `73738058`, Deep Rock Galactic: Survivor): SCR-10 in a real fight COULD NOT RUN:** one A at the game's title screen opened its save-slot screen (three saved games, each with a delete button) and the runbook stops there; no frame rate was sampled (`workshop:test-evidence/plan97-SCR-10.json`). The real fight stays owed. |
+| ~~`main.py` extractions — original plan~~ | | | 2026-08-03: background-state shape, Ollama health probe, cancel-and-await, and Stop transport moved out of `main.py` (2865 → 2743). **Automated side is the strongest of any refactor step so far** — 60 new tests where these paths had almost none, every file mutation-checked, 486 Python tests green. **Not deployed.** Three things the unit tests cannot reach, in priority order: (1) **Stop** during a real streaming answer — press it mid-reply and confirm the reply stops promptly and the partial text is kept, since item 5 moved the handle-close that unblocks the worker read; (2) **plugin unload** — `sudo systemctl restart plugin_loader` and confirm `bonsAI plugin unloaded!` then `bonsAI plugin loaded!` with no traceback, since item 4 changed both teardown paths; (3) **Connection test** against a reachable host and an unreachable one, plus the on-Deck local runtime, since item 2 moved all three HTTP calls. `workshop:scripts/probe_deck_rpc_surface.py` covers the admission and abort RPCs but uses an unreachable port, so it never exercises a successful probe |
+| Character picker avatars at the locked size | CHAR-AVATAR-26-01 | **Partial (Deck)** | **D33 locked at 26px 2026-08-27 (option C) and implemented the same day.** The picker was five hardcoded sizes (22 on the OK preview, 24 on both character grids, 26 on Random and Custom) and still drew the *old* pixel-grid faces; it now draws the prop-emblem artwork at one size, `PICKER_AVATAR_PX` in `CharacterPickerModal.tsx`. 26 is the design's badge line — in-disc at 26 and above, beside the disc below — so every avatar is on the same side of it. **Measured on device 2026-08-27** (bundle hash-verified, picker open on the Deck): **34 avatars, all `width=26`, all on the `0 0 32 32` emblem viewBox** — no pixel grids left. Character rows measure **38px, unchanged**, so no fewer characters fit per screen; avatar boxes 26×26, badges 14×14, **nothing clipped** by its row. Capture: `screenshots/DeckCapture_20260827_192047_game.png`. **Still owed — the judgement call, which is the maintainer's:** whether the props read clearly at 26 (the art was reviewed at 44), and whether the OK button's slightly taller row is acceptable. The maintainer said they may pick a different size after seeing it. **Regression direction:** the art style is an opt-in prop that falls back to the old pixel grids, so a new avatar call site that forgets `art="prop"` renders something plausible and wrong — two tests in `CharacterPickerModal.test.tsx` assert one size and one art style across the whole modal, both confirmed red without the change |
+| Clean install / release zip | Tier 4 | **Pass: first row PASSED on the Deck 2026-10-17 (plan 94, build `e9b50cc8`, from this PC's deploy); the re-run from the release zip PASSED 2026-10-23 (plan 99, build `a024825b`, all fourteen rows)** | Done before the tag. Evidence `workshop:test-evidence/plan99-P99-TIER4-INSTALL-URL.json`, `workshop:test-evidence/plan99-P99-TIER4-INSTALL-OLLAMA.json`, `workshop:test-evidence/plan99-P99-TIER4-FIRST-ANSWER.json`, `workshop:test-evidence/plan99-P99-TIER4-KB.json`, `workshop:test-evidence/plan99-P99-TIER4-LOG.json` (the other nine rows are named in testing-manual.md Tier 4), and earlier `workshop:test-evidence/plan94-P94-INSTALL-OLLAMA.json`, `workshop:test-evidence/plan94-P94-STARTER-SET.json`, `workshop:test-evidence/plan94-P94-SPEED.json` |
+| Windows deploy prune + verify | DEPLOY-VERIFY-01…03 | Partial | 2026-08-03 (**D8**): `scripts/build.ps1` wipes the Deck plugin dir before copy, exit-code checks every `ssh`/`scp`, and SHA-256 compares every shipped code file after upload. **The count is computed, not fixed** — `$VerifyPaths` is 4 named files plus every `py_modules/**/*.py` outside `__pycache__`, which is **57** as of 2026-08-08 (this row previously said 52, the value at the time D8 landed; do not treat it as a target). **01 Verified** — two deploys 2026-08-03 (00:47, 00:51), both `Verified 52 files on the Deck.` + exit 0 + `bonsAI plugin loaded!` + zero `Traceback`/`ERROR`. **03 Verified** — planted `STALE_SENTINEL.py` and `py_modules/backend/stale_dir/ghost.py` on the Deck, deployed, both files and the directory gone. (Do **not** use `refactor_helpers.py` as the witness — it was hand-deleted on-device 2026-08-02, so its absence proves nothing.) **02 Verified 2026-08-03** — happened for real rather than staged: a deploy attempted while the Deck had gone to sleep failed at the first `ssh` (exit 255) and the script printed *"Creating remote temp directory failed (exit code 255). Deploy aborted - the Deck may be asleep or unreachable."* with exit 1. Pre-D8 that same run would have attempted every `scp`, ignored all of them, and printed *Deployment complete!*. The `STALE` branch of the hash compare remains simulation-tested only. **Re-run with output redirected** (`.\scripts\build.ps1 2>&1 \| ...`) if the script's error handling is ever touched — a `$ErrorActionPreference = "Stop"` regression made a `pnpm` deprecation warning fatal under redirection and was caught only that way |
+| The AI models hub passes the D-pad between its groups at the edges | HUB-EDGE-01 | **Filters-closed half done — passed (Deck) 2026-09-26; filters-open half superseded by HUB-EDGE-02** | **Measured 2026-09-16 (plan 56 block 0).** Up from the first tier choice lands back on the Policy button; Down from the last advanced switch reaches the README button, then Done. Both edges already hand the highlight to the next group. `workshop:test-evidence/plan56-M-hub-edges.json`, `workshop:test-evidence/plan56-M-hub-edges-policy.json`, `workshop:test-evidence/plan56-M-hub-edges-advanced.json`. **Note added 2026-09-20:** the Policy button this row measured is gone — Policy is now the Licence group inside the Filters panel (see **MODELS-FILTERS-01** below). **Rewritten and re-measured on the Deck 2026-09-26 (plan 70, flow L2), two halves.** **Filters closed — PASS:** walking Down then Up through the whole AI models screen reached Done and came back to the top, every stop visible, nothing skipped. Saved walk `workshop:checks/plan70-HUB-EDGE-01-filters-closed.json`. Closed. **Filters open — FAILED:** walking Down through the filter choices stalled on "Close filters" and never reached Done or the model list below, though Done is visible on screen the whole time. Evidence `workshop:test-evidence/plan70-HUB-EDGE-01.json` (+ screenshot `plan70-HUB-EDGE-01-panel-folded-after-up.png`). **Fixed 2026-09-26 (helper I, `6355eb9a`):** "Close filters" now hands the Down press back instead of claiming it forever. The re-check continues as row **HUB-EDGE-02** below; "Any installed model" never being a stop is by design (greyed out until Tier 3 unlocks), not part of the re-check. |
+| A code file over 800 lines cannot grow bigger without a written reason | GROWTH-LIMIT-01 | **Automated, passing** | New 2026-09-24 (plan 65). `scripts/growth_limit.py` reads the sizes recorded in `scripts/growth_limits.json` and runs as part of the quick checks (`python scripts/verify.py --quick`). **Proved by breaking it four ways:** growing a listed file past its recorded size fails the check; shrinking one passes; adding only comments to one passes; an unlisted file crossing 800 lines of code fails. Raising a recorded limit can no longer happen by accident — the `--record` step that used to also raise a limit silently now refuses to, and raising one on purpose needs its own step with a written reason. 15 unit tests: `tests/test_growth_limit.py`. |
+| Plan 65 trim and split — the plugin still works after fourteen code files and four documents were split | plan 65 Deck check | **Partial (Deck) 2026-09-24** | Run on build `cabda5dd`, 03:32–04:02, the Deck's own screen. **PASS:** deploy; the load log; a free-use pass; the chip row's Up/Down and its screenshots; the reply row's copy, read-aloud and thumbs-up buttons; voice; the AI models screen and its download window; Where the AI runs; Settings end to end. **COULD NOT RUN:** the chip row's Left/Right — the setting in use that night showed only one chip, so there was nothing to move to. **UNCLEAR:** the saved-walk replay — every saved walk on file was recorded against an older build, so 0 walks compared (see **GROWTH-LIMIT-01**'s neighbour on the roadmap, a new bug about the replay tool itself); the opening highlight — stayed inside bonsAI both times tried, but landed on a different spot each time; saved chats — Right does not switch chats, that row uses the shoulder buttons instead. **FAIL, a real bug, not caused this session:** with a reply's details open, Up from "Save chat to Desktop" skips the chip ladder and the tabs row and lands on the notes block instead, every time; with details closed, Up skips the choice buttons too — filed as a roadmap bug, along with two more found the same night (a thumbs-up not holding the ring, and Manage AI models opening with the ring already on a filter). **FAIL, a real regression from this session's own work, found and fixed the same night:** every line the plugin tries to write to the Desktop activity log failed, because a moved call had turned a call through the class into a call through the instance and one helper function is written without `self`. Fixed at `b56de863`, with a new test that fails the same way first. **Re-checked on the fixed build, `b56de863`, 04:07: PASS** — since the redeploy, the loader's log shows 0 "append_app_log … failed" lines and 0 tracebacks, and both Settings opens tried wrote a line to the Desktop activity log. Evidence: 29 files under `workshop:test-evidence/plan65-*` (including the re-check, `plan65-DEPLOY-try2.json` and `plan65-FINAL-LOG-try2.json`), 5 saved walks under `workshop:checks/plan65-*`. |
+| Plan 74's other nineteen Deck checks (2026-09-28) | P74-*, DETAILS-LADDER-01 | **Done — passed (Deck) 2026-09-28, moved out** | All passed, three by the session's ruling. Each row, with its evidence file: [archive/testing-closed-2026.md § Plan 74](archive/testing-closed-2026.md#plan-74-2026-09-28). |
+| Rows that passed on the Deck with nothing owed, moved out 2026-10-01 (size trim) | STRATEGY-PLACEHOLDER-01, CHIP-ROTATION-01, D-PAD-SCROLL-01/02, PLAN72-F-STOP, F6-ROTATE, READ-ALOUD-06, T75-LAND-L1-PICKER-ANSWER-MODELS, T75-LAND-L2-OLD-ORDER-CLEANED, T75-FEATURE-F2-HARD-LINES, P77-FREE-SLOT, P77-OLLAMA-TIDY, P77-SPEECH-PINNED | **Done — passed (Deck); each row's own date is in the archived row** | Each row, word for word, with its evidence files: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-01 (plan 78 docs sweep 9, size trim)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-01-plan-78-docs-sweep-9-size-trim). |
+| Rows that passed on the Deck with nothing owed, one-line pointers folded together 2026-10-01 | P77-SPY-TAG, THINKING-LIVE-01, PRESET-GAME-01, CHAT-HEADER-CAPTION-01, SMOKE-H, KB-FLOOR-01, KB-NOTIP-FLOOR-01, KB-NOCLOSE-TEXT-01, KB-FOLLOWUP-BOSS-01, KB-FOLLOWUP-QUOTE-01, KB-KILLSWITCH-01, KB-ATTRIB-01, STARTING-OUT-01, KB-TIP-PERGAME-01, KB-NOMIC-OFFER-01, SPOILER-RISK-CHIP-01, SUMUP-12, ROUTING-01…02, OLLAMA-FOCUS-01…03, KB-FOCUS-01, OLLAMA-TAB-AFTER-RELOAD-02, PRELOAD-RM-01, ROUTING-MERGE-SIZE-02, SCREENSHOT-SHRINK-01, STOP-KEEPS-MODEL-01, STOP-PARTIAL-01, PLAN72-F-ROW, PLAN72-F-DOTS, PLAN72-F-HIDDEN, PULL-TRY-ORDER-01, SPOILER-CREDITS-01, GAME-LIGHT-03, ASK-CARET-01, CHAR-PICKER-RING-01, REPLY-DOWN-01, CMD-REPLY-TITLE-01, HUB-EDGE-02, RING-ON-FILTER-2c2, SETTINGS-CARD-06, SETTINGS-CARD-07, P76-CHOICES-DRIFT, P76-TRAP-FIX, P77-TRAP-LONG, P77-BANROW-SWITCH, P77-HELPFUL-STOPPED, P77-POPUP-VIDEO, P77-OLLAMA-SIZE-LIMITS, P77-TILDE-SAFETY-NET, P77-RUN-AI-SAVES, P77-INSTALL-WORDING, P77-STRATEGY-DECK-ITSELF | **Done — passed (Deck); each row's own date is in the archived row** | Each row, word for word, with its evidence files: [archive/testing-closed-2026.md § Moved from testing.md 2026-09-30 (size trim)](archive/testing-closed-2026.md#moved-from-testingmd-2026-09-30-size-trim). |
+| Rows that passed on the Deck with nothing owed, one-line pointers folded together 2026-10-01 | ASK-CARET-CHAR-01, KB-ROUTER-01, W2-R8, CHAT-DELETE-MISSING-01, REPLY-STOPS-MIRROR-01, MODELS-FILTERS-01, SPY-REVEAL-01, PULL-FIRST-TICK-01, P77-LICENCE-FILTER, P77-HTTPS-REFUSED, P77-LIBRARY-CHECKSUMS, P76-WALK-COVERS (re-run) | **Done — passed (Deck); each row's own date is in the archived row** | Each row, word for word, with its evidence files: [archive/testing-closed-2026.md § Moved from testing.md 2026-09-30 (size trim, second pass)](archive/testing-closed-2026.md#moved-from-testingmd-2026-09-30-size-trim-second-pass). |
+| Plan 76 Deck block 2a: five rows passed (2026-09-28) | P76-NEWCHAT-NO-PERM-ROW, P76-HELPFUL-AFTER-SWITCH, P76-CANCELLED-NO-COPY, P76-SPOILER-REGRESSION, T75-FEATURE-F1-REAL-POPUP | **Done — passed (Deck) 2026-09-28, moved out** | Build `c71f1d8b`. Each row, with its evidence file: [archive/testing-closed-2026.md § Plan 76](archive/testing-closed-2026.md#plan-76-2026-09-28). |
+| Plan 76 Deck block 2b: eleven rows passed (2026-09-28/29) | P76-REMOVE-KB-SAFE-FIRST, P76-KB-BOX-RING-RETURN, P76-TIER2-MODEL-SAFE-FIRST, P76-AI-MODELS-CANCEL-RING, P76-INSTALL-OPTIONS-RING, P76-NOMIC-REMOVE-HINT, P76-COVER-STAYS-OPEN, P76-WALK-GLOSSARY, P76-PULL-RESUME, P76-OTHER-GAME-NOTES, P76-TIER2-INSTALL-WORDING | **Done — passed (Deck) 2026-09-29, moved out** | Build `ab56e2a2`. Each row, with its evidence file: [archive/testing-closed-2026.md § Plan 76, block 2b](archive/testing-closed-2026.md#plan-76-deck-block-2b-2026-09-29). Still owed inside them: the "80 px a press" half of P76-WALK-GLOSSARY. The per-model "Enable Tier 2 for this model?" box is closed as not reachable by design (lane 2's answer, 2026-09-29). |
+| Plan 76 Deck block 2c: four rows passed (2026-09-29) | P76-ACCENT-RING, P76-KB-NOTICE-RING, KB-FOLLOWUP-QUOTE-02, P76-CONTEXT-REOPEN | **Done — passed (Deck) 2026-09-29, moved out** | Build `ab56e2a2`. Each row, with its evidence file: [archive/testing-closed-2026.md § Plan 76, block 2c](archive/testing-closed-2026.md#plan-76-deck-block-2c-2026-09-29). P76-TIER2-INSTALL-WORDING, already closed above, also has its own evidence file now. |
+| Plan 76 Deck block 3: four rows passed (2026-09-29) | P76-WALK-COVERS, P76-REMOVE-MODEL-SAFE-FIRST, P76-LICENCE-CANCEL, P76-KB-STATUS-REINSTALL | **Done — passed (Deck) 2026-09-29, moved out** | Build `4af8e7a1`. P76-WALK-COVERS and P76-KB-STATUS-REINSTALL passed by the session's ruling (one clause each noted). Each row, with its evidence file: [archive/testing-closed-2026.md § Plan 76, block 3](archive/testing-closed-2026.md#plan-76-deck-block-3-2026-09-29). |
+| Buttons refused by the kids lock leave no stale "return the ring" note | P77-OLLAMA-NOBOX-NOTE | **Open — box half passed (Deck) 2026-09-29; the parental-lock half still owed (the maintainer's checks page)** | Plan 77 (`11033561`, tip `7c8ac206`). Kids lock on: press "Update AI & models" and the Tier 1 and Tier 2 install buttons (each refused at once, no box), then open and close an unrelated box on the Ollama tab. Pass: the ring does not jump to any of the three. Lock off: the box opens and B returns the ring to "Update AI & models" or "Install options…". **2026-09-29 (block 2):** box half PASSED (Update, Tier 1 and Tier 2 boxes open on "Not now", B returns the ring). The parental-lock half **still owed** (the maintainer's check 5 was skipped 2026-10-18: a child account is needed first): needs Steam Family View with a PIN, on the maintainer's checks page; the no-box half rests on unit tests. Evidence `workshop:test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`. |
+| Rows closed with nothing owed, moved out 2026-10-12 (plan 92 docs sweep, size trim) | P77-CUT-MENU-TEXT, P79-TRAP-DOWN-BUBBLE, P81-MOVE-KEEPS-OTHER-NAMES, P81-UP-NO-SLIVER, P81-REMOVE-KEEPS-PC-SILENT, P81-FOLLOWUP-TOPIC, P81-PC-CLEANUP-NO-OLLAMA, P89-KEEPALIVE-GAME, P89-RIG-STEAM-BUTTON-TOOLS | **Closed — each row's own result, date and evidence file are in the archived row** | Each row, word for word: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-12 (plan 92 docs sweep, size trim)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-12-plan-92-docs-sweep-size-trim). Seven were closed on the maintainer's calls of 2026-10-11 (D128 calls 5, 6 and 7), P89-KEEPALIVE-GAME passed on the Deck 2026-10-11, and P89-RIG-STEAM-BUTTON-TOOLS passed on the Deck 2026-10-12 (evidence `workshop:test-evidence/plan92-P89-RIG-STEAM-BUTTON-TOOLS.json`). |
+| Rows closed with nothing owed, moved out 2026-10-12 (plan 92 docs sweep, second night) | CHAT-SLOTS-V2-01…06, CHAT-SLOTS-V3-01…10, P77-TILDE-READALOUD, P78-ORDER-PRUNE, P78-SETTING-QUICK-CLOSE, P78-DOWN-SHORT-SECTION, P78-TIP-CHIP, P78-RING-REOPEN-READ2, P78-BRANCH-ONCE, P78-BORROWED-WORDING, P79-CHAT-ROW-BUTTONS, P79-GAME-CHIPS-TEN, P79-M10-CARD-CHIP-GAP, P79-M3-DETAILS-RING, P79-M8-EARLIER-RETRY, P79-M9-MODELS-BOX, P79-OLLAMA-WALK, P79-UNDEFINED-COVER, P79-X-AFTER-STOP, P79-QUESTION-BOX-RING, P79-EARLIER-BY-DAY, P78-SUMUP-WORDING, P79-FRESHER-TITLE, P81-CLEAR-ALL-STAYS, P81-RING-WALK-SETTINGS-DEV, P81-CHOICE-GETS-CHECKLIST, P81-TAB-SWITCH-RING, P81-PC-CLEANUP, CONST-SPOIL-CONSENT-01, P79-MODELS-TRY-ORDER, P81-UP-TALL-SECTION, P81-TOOLTIP-CLEAR-OF-WORD, P81-LIFT-6PX, P81-TIP-BY-MEANING, P81-M-L-SUMUP, P81-KB-NOTES-FIRST, P81-OPEN-RING, P81-SPOILER-WORDING-COUNT (with its side-by-side count, called P81-SPOILER-WORDING-AB in the plan), P81-REMOVE-KEEPS-PC-PLACE | **Closed — each row's own result, date and evidence file are in the archived row** | Each row, word for word: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-12 (plan 92 docs sweep, second night)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-12-plan-92-docs-sweep-second-night). Every one was marked Done and passed on the Deck between 2026-09-04 and 2026-10-03. |
+| A ring is drawn on reopening Quick Access over a game (diagnostic) | P77-RING-REOPEN-DIAG | **Done — diagnostic run (Deck) 2026-09-30; the bug stays open** | Build `ec557922`. Game launched with no plugin reload: the ring was absent on 6 of 6 reopens at about 1 s; after a plugin reload it was present 6 of 6; the page had the focus both times. The first D-pad press brought ring and focus back. Not chased before the release. Evidence `workshop:test-evidence/plan77-P77-RING-REOPEN-DIAG.json`. |
+| Chips stay for the right time, and the two spots never change together | P78-CHIP-PACE | **Done — passed (Deck) 2026-10-01; the maintainer's own look at the pace and their pick from the preview page are still owed** | Plan 78 helper F (`5e3e0f7e`). (1) One chip: 8 to 10.5 chips a minute. (2) Two chips: about 11 to 12 a minute across both, and no two changes within 2.5 seconds of each other. (3) No chip changes while the highlight ring is on it. The maintainer's own look at the pace and their pick from the preview page: closed "as they are" on 2026-10-22 (plan 99 § 2 call 12). Unit tests: the pace, spacing and label-room tests, and the seven-minute run in each style. **2026-10-01 (Deck, build `57586da0`):** one chip: 9.53 chips a minute (asked 8 to 10.5). Two chips: 11.16 a minute across both, and the closest two changes were 2.49 s apart (the runbook asked for none within 2.3 s; the 2.5 s above is met to within the 0.1 s the watcher could read). A chip under the highlight ring did not change in 42.5 s. Evidence `workshop:test-evidence/plan78-P78-CHIP-PACE-try2.json`. |
+| Rows that passed on the Deck with nothing owed, moved out 2026-10-17 (plan 94 docs sweep) | P78-HELP-CHIP-DISMISS | **Done: passed (Deck) 2026-10-17 (plan 94 block 1b, build `e9b50cc8`, the Deck's own screen); the Got-it half was not run** | Opening the quick start from the help chip removed it, two ordinary chips took the row and stayed after close and reopen. Evidence `workshop:test-evidence/plan94-P94-HELP-CHIP-try2.json`. The row, word for word: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-17 (plan 94 docs sweep)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-17-plan-94-docs-sweep). |
+| Up and Down between the rating choices and the speaker | P79-M7-RATING-ROW | **Done — passed (Deck) 2026-10-02; the look PASSED on the maintainer's eye 2026-10-22 (the checks page)** | Plan 79. Evidence `workshop:test-evidence/plan79-P79-M7-RATING-ROW-AFTER.json`. Full row, word for word: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-02 (plan 79 docs sweep 5)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-02-plan-79-docs-sweep-5). |
+| Browse models offers an "Install the starter set" button that asks first | P79-STARTER-SET-BUTTON | **Partial (Deck) 2026-10-02 — button and box pass; saying yes and the first-install offer owed** | Plan 79 (`d9c00827`, `745e3bad`). **Do:** Ollama tab, Browse models, walk to the button, A, then B. **Pass when:** the button sits on the top row, the ask-first box opens with the ring on Not now, B closes it and nothing downloads. **Passed (Deck) 2026-10-02 (build `d810328b`):** all of that; the model list was unchanged and no pull was running. **Still owed:** pressing yes (a 3 to 4 GiB download) and the offer after a first Install Ollama (unit tests only). Evidence `workshop:test-evidence/plan79-P79-STARTER-SET-BUTTON.json`. |
+| "Remember what I typed" is one on/off switch | P79-REMEMBER-TYPED-SWITCH | **Done — passed (Deck) 2026-10-02, by the session's ruling on the ring; two small parts still owed** | Plan 79. Evidence `workshop:test-evidence/plan79-P79-REMEMBER-TYPED-SWITCH.json`. Full row, word for word: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-02 (plan 79 docs sweep 5)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-02-plan-79-docs-sweep-5). |
+| Three microphone rows closed by the maintainer's real-microphone hand check, moved out 2026-10-18 (plan 96 hand checks) | P79-DOUBLED-WORDS, P89-MIC-TINY, P88-VOICE-STOP-THEN-MIC | **Done — passed by hand 2026-10-18 (the maintainer, real microphone; checks page check 4 and `workshop:test-evidence/plan96-HAND-real-mic.png`)** | Each row, word for word, with its older status: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-18 (plan 96 hand checks, the real microphone)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-18-plan-96-hand-checks-the-real-microphone). |
+| A button pressed under an answer keeps that answer's game | P79-BUTTON-KEEPS-GAME | **Done — passed (Deck) 2026-10-02; two points are the maintainer's to judge** | Plan 79. Evidence `workshop:test-evidence/plan79-P79-BUTTON-KEEPS-GAME.json`. Full row, word for word: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-02 (plan 79 docs sweep 5)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-02-plan-79-docs-sweep-5). |
+| The chip under the D-pad ring gets a soft blue fill, no bottom bar | P79-CHIP-SOFT-FILL | **Done — passed (Deck) 2026-10-02 on what was measured; the look PASSED on the maintainer's eye 2026-10-22 (the checks page)** | Plan 79. Evidence `workshop:test-evidence/plan79-P79-CHIP-SOFT-FILL.json`. Full row, word for word: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-02 (plan 79 docs sweep 5)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-02-plan-79-docs-sweep-5). |
+| The Show details line takes the chip's place while an answer is read | P79-SHOW-DETAILS-SLOT | **Done — closed 2026-10-22 (every step passed on the Deck or was closed as cannot be done on 2026-10-18)** | Plan 79. Evidence `workshop:test-evidence/plan79-P79-DETAILS-SLOT.json`, `workshop:test-evidence/plan83-P79-SHOW-DETAILS-SLOT-S6.json`. Full row, word for word: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-22 (plan 97 docs sweep 1)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-22-plan-97-docs-sweep-1). |
+| Plan 79 Deck rows that passed with nothing owed, moved out 2026-10-03 (plan 81 paperwork 2) | P79-KB-BUTTON-ICONS, P79-SETTINGS-LIST-RING, P79-POWER-NUMBERS, P79-CLEAR-BOXES-SAFE, P79-BIG-MODEL-BOX-SAFE, P79-DAY-LINE-RING, P79-UP-MIRRORS-DOWN-NEWEST-CLOSED, P79-UP-MIRRORS-DOWN-SPOILER, P79-UP-MIRRORS-DOWN-WORDS, P79-UP-LANDING-VISIBLE, P79-HINT-DISMISS-SLOT, P79-SMOKE-FINAL, P79-RESTORE, P79-RESTORE-try2, P79-BLOCK4B-DEPLOY, P79-BLOCK3B-DEPLOY, P79-BLOCK4-DEPLOY | **Done — passed (Deck); each row's own date is in the archived row** | P79-POWER-NUMBERS, P79-SETTINGS-LIST-RING, P79-HINT-DISMISS-SLOT and P79-KB-BUTTON-ICONS passed 2026-10-03 (plan 81, build `afd2f444`). Each row, word for word, with its evidence files: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-03 (plan 81 paperwork 2)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-03-plan-81-paperwork-2). |
+| A stopped answer cut off inside a hidden block is saved without the bare opening mark | P81-STOP-IN-HIDDEN-BLOCK | **Tests only — could not be made on the Deck (UNCLEAR twice 2026-10-03)** | Plan 81 (`e891bdc4`, test `tests/test_stopped_answer_cut_in_hidden_block.py`). **Do:** Strategy mode, ask a story question so the answer holds a hidden block, press Stop while the AI is writing inside it, then close and reopen the panel. **Pass when:** the saved answer shows no empty code box and no stray opening mark, and the block's words stay covered or are dropped, never shown. **Tried twice (Deck) 2026-10-03 (plan 81, Deck block 4a, build `7e963807`), UNCLEAR:** in both tries the answer finished before Stop could be pressed (the chip "Spoiler hidden until complete" showed for about 2 s, shorter than one step of the rig), so nothing was stopped and the pass line was not tested; both finished Hollow Knight answers drew the cover and ended in plain words. Tests only for the stopped-answer case. A prepared answer could not make this case: Stop needs an answer slower than the hidden block. Side effect: in the second try an A press landed on Voice input as the answer finished and started a recording (about 6 s, stopped with A; nothing was transcribed). Evidence `workshop:test-evidence/plan81-P81-STOP-IN-HIDDEN-BLOCK.json`. |
+| A half-typed hidden-block mark at the very end of a finished answer is dropped | P81-HALF-MARK-AT-END | **Tests only — hard to make happen** | Plan 81 (`6c708a78`, test `tests/test_soft_continue_spoiler_join.py`, two cases that fail without the fix). It needs the length limit to fall while the AI is typing the mark, with no further piece allowed; a prepared answer could not make this case, because the half mark needs the length limit to fall inside the mark; the test runs three cut pieces whose last ends on the half mark through the real answer call, the real cover and the real chat save. If it ever shows on the Deck, the finished answer ends on an empty code block. |
+| Steam's screen after an answer with a game running, the AI loaded and about 2.3 GB free | P81-FREEZE-AFTER-ANSWER | **Measured (Deck) 2026-10-03 — no freeze in two runs; the roadmap entry stays open** | Plan 81 (build `7e963807`). **Do:** with the Deck's own AI already loaded and Deep Rock Galactic: Survivor running, ask one question, keep hands off for 12 minutes and log memory and the biggest processes every 5 s; a second run with a page watcher reading every 200 ms. **Seen (Deck) 2026-10-03:** run A (about 2.5 GB free before the question, lowest 2.3 GB) and run B with the watcher (lowest 2.1 GB): no freeze, Steam answered every read for 12 minutes. Only Steam's own page process grew (556 to 705 MB, peak 972 MB); the game and the AI stayed flat. The watcher ran at full speed for only about 5.5 of the 12 minutes because the panel closed itself and the page was throttled. **Not shown:** what the original freeze needed (it started from about 2.0 GB free). Evidence `workshop:test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`; [audit note](../../bonsAI-workshop/audit/plan81-freeze-after-answer.md). |
+| A plugin reload under a running game: can a player reach it, and does Steam survive it | P81-RELOAD-LOOK | **Measured (Deck) 2026-10-03 — no route for a player; no freeze in two developer reloads** | Plan 81 (build `7e963807`, Deep Rock Galactic: Survivor running). **Seen (Deck) 2026-10-03:** Decky's plugin list has no reload control, and its settings page showed empty with a game running (both tries; B returned to the game), so a player has no route that was found; with no game running that page was not tried. The rig's own reload with the AI unloaded (9 GB free): no freeze, the game stayed in front, but the Decky tab was missing for about 1 min 40 s until Quick Access was closed and reopened. With the AI loaded (2.4 to 3.4 GB free): no freeze, the game stayed in front, the plugin back in about 45 s. Evidence `workshop:test-evidence/plan81-P81-RELOAD-LOOK.json`. |
+| The Main tab walk after plan 82's changes, with and without a game | P82-MAIN-WALK | **Passed (Deck) 2026-10-07 on order and coverage; UNCLEAR on four partly visible landings (the chat row at 67%, chips cut by the sliding strip's edges)** | Plan 82 (build `efd4258b`). **Do:** test chat open on the Main tab; with no game, then with a game running (the Deck's AI unloaded first), 30 Down then 30 Up through the walk check with the visibility requirement off, and read every stop. **Pass when:** Down covers the tab bar, chat row, the "N earlier" pill, the question, the reasoning line, the answer sections, the rating button, Show details, the source line, a chip, the question box, the mode button and Ask; Up mirrors; no stop is visited twice; every landing is inside the pane. **Seen (Deck 2026-10-07, plan 82, Deck block 4):** no game: 60 of 60 steps; all those stops in that order, Up mirrors Down, no stop twice (apart from the two end stops where the ring stops moving: Ask going down, the plugin header's back arrow going up), every landing inside the pane. Four landings read partly visible: the chat row twice (67%), one chip at 67% and one chip at 33%. The chip row is a sliding strip that cuts a chip's words at its edges (the screenshot shows it). With Deep Rock Galactic: Survivor running (the Deck's AI unloaded first, 7,146 MB free before the launch, 1,255 MB free with the game up): the same result and the same four partial landings (the chip was "Tip" at 33%); nothing was asked with the game running; the game was exited cleanly. Whether a chip cut by the sliding strip counts as not visible is the maintainer's call (plan 82, question 7). Evidence `workshop:test-evidence/plan82-P82-MAIN-WALK-NOGAME.json`, `workshop:test-evidence/plan82-P82-MAIN-WALK-GAME.json`, raw runs `workshop:test-evidence/plan82-P82-MAIN-WALK-NOGAME-run.json`, `workshop:test-evidence/plan82-P82-MAIN-WALK-GAME-run.json`, screenshot `workshop:test-evidence/plan82-P82-MAIN-WALK-NOGAME-chip.png`; the rig's own copies are under `runs/` (not in git). |
+| The Terse mode switch sits under the Reply style slider, off by default, with its help line; the D-pad reaches it and A turns it on and off | P83-J4-TERSE-TOGGLE | **Passed (Deck) 2026-10-08, build `0d3af3de`, for the switch only; the answers are still owed** | Plan 83 (`9f007be6`, `d25df219`, `87a4dd78`, `2e8aa942`, `e082e7a8`; tests `src/features/ai-connection/OllamaTab.terseMode.test.tsx`, `tests/test_terse_mode_prompt.py`). Seen: the switch under the slider, off, whole help line; the D-pad walks slider, switch, Thinking row and back; A toggles it and the settings file follows. Nothing was asked of the AI. **Still owed:** TERSE-01 (it ran 2026-10-08, see the row below), the stacked buttons, the "I'm at" menu follow-up wording and the growing "Earlier I asked" question (roadmap Features). Evidence `workshop:test-evidence/plan83-P83-J4-TERSE-TOGGLE.json`. |
+| Terse mode: ten questions with a game running, answers within three lines and a menu of choice buttons under each | P83N-TERSE-01 (runs 1 to 3: P83N-TERSE-01, P83N-TERSE-01-AFTER-FIX, P83N-TERSE-01-FIX2) | **Run three times (Deck) 2026-10-08; length passed in 2 of 3 runs, buttons passed in the last run; not marked passed, the length result is the maintainer's call** | Plan 83 overnight, Deep Rock Galactic: Survivor running, Speed, Terse on. **Pass when:** at least 8 of 10 answers within three lines, no menu code on screen, buttons under at least 8 of 10. **Run 1 (build `0d3af3de`):** 10 of 10 within three lines; buttons on 4 of 10; three menus shown as raw text. **Run 2 (`2ccf4075`):** 9 of 10 within three lines; buttons on 1 of 10; nine menus shown in a code box; the new bare-JSON reader never fired. **Cause found from the saved chat:** in both runs the AI spelled the menu's code-block name with an underscore (`bonsai-strategy_branches`), which the plugin did not read; run 1's note that the menu had no code block was wrong. **Run 3 (`21f62344`, reads either spelling):** buttons on **10 of 10** and no raw menu text: PASS; **7 of 10** within three lines: FAIL (8 needed; the misses ran 4 lines). Across the runs 26 of 30 answers fit. Also seen: the AI often repeats a menu from an earlier answer (roadmap Features, Terse mode). Evidence `workshop:test-evidence/plan83-P83N-TERSE-01.json`, `P83N-TERSE-01-AFTER-FIX.json`, `P83N-TERSE-01-FIX2.json` (+ screenshots). |
+| The plan 87 and plan 89 Deck-passed summary rows, moved out 2026-10-18 (plan 96 docs sweep, size trim) | the IDs of each summary row are listed in the archive | **Done, passed (Deck) 2026-10-10 and 2026-10-11; each row's own result and evidence file are in the section they point to** | The seven summary rows, word for word (each still points to its own archived rows): [archive/testing-closed-2026.md § Moved from testing.md 2026-10-18 (plan 96 docs sweep, size trim)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-18-plan-96-docs-sweep-size-trim). |
+| Settings and Developer walked with the D-pad: the page moves only near the edge, never jumps at the end; Left and Right on Text size do not move the page | P89-TAB-WALK | **Passed (Deck) 2026-10-11 on the session's ruling for Developer Down (plan 89 Deck block 3b, build `9b4d0503`, the monitor; evidence `workshop:test-evidence/plan89-P89-TAB-WALK.json`). Still owed: the maintainer's look on the Deck's own screen** | Plan 89 (`4cd82df5`, `9b4d0503`; tests `src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx`, describe "the page turns only near the edge (plan 89, M1)"). **Do:** walk Settings and Developer down and up one press at a time, then Left, Right, Right, Left on Text size. **Pass when:** the page moves on no more than one press in three, no single move is larger than half the pane (370 px), no jump on the last press, Text size Left and Right move the page 0 px, every stop is visible, and there is no creep between 0.2 s and 1.8 s. **Seen 2026-10-11:** Settings Down 4 of 14 presses moved the page and Up 4 of 14: PASS. Developer Down 6 of 16 (the evidence file marks it FAIL, one over the line) and Up 7 of 16. The session ruled Developer counted as working as designed, and the maintainer's call 20 ([D128](audit/maintainer-decisions-locked.md#d128--locked-2026-10-11-raised-2026-10-11--plan-89-the-bug-list-and-the-verify-list-as-close-to-empty-as-they-can-get-the-fifteen-calls)) says the page moving on every second press is fine: its page is 1,875 px longer than the window, so steps under half a screen need at least 6 moves. Largest move 363 px against 370; no jump at the end; Text size 0 px each and it ended on Small; 58 of 58 stops visible; no creep. The first Left from Small went to the LB hint (closed as working as intended, the maintainer's call 21, [D128](audit/maintainer-decisions-locked.md#d128--locked-2026-10-11-raised-2026-10-11--plan-89-the-bug-list-and-the-verify-list-as-close-to-empty-as-they-can-get-the-fifteen-calls)). Before the fix: `workshop:test-evidence/plan89-M1-TAB-WALK.json`. **Seen on the Deck's own screen 2026-10-14 (plan 93 Deck block C part 1; evidence `workshop:test-evidence/plan93-P89-TAB-WALK-OWN-SCREEN-SETTINGS.json`, `-DEVELOPER.json`):** 26 presses each way on both tabs; the largest move was 138 px against a limit of 227; no jump at the end; no creep; Text size Left and Right moved the page 0 px (Settings). The section lines read 92 percent visible (the rig's known false alarm; the files mark visibility UNCLEAR). **Still owed: the maintainer's word** on whether this closes the row (plan 93 question 14b). |
+| A dictation on tiny.en does not end with a stray word nobody said | P89-MIC-NO-STRAY-WORD | **Passed (Deck) 2026-10-11 (plan 89 Deck block 3c, build `f5e4dc12`, the monitor; evidence `workshop:test-evidence/plan89-P89-MIC-NO-STRAY-WORD.json`)** | Plan 89 (`47cd7354`; the final read stops 0.5 s after the last loud moment; tests `tests/test_voice_trailing_silence.py`, 11). **Do:** tiny.en, a recorded sentence played into the pretend microphone, a pause, then Stop. **Pass when:** the final text is the sentence and nothing is added after it. **Seen before the fix (2026-10-11, row P89-MIC-TINY):** both final texts ended with " you". **Seen after:** a 15 s sentence with 5.4 s of silence before Stop ended with "fight.", and a 21 s sentence with 7.8 s of silence ended with "easier?", with nothing added. Only two pauses were tried, both longer than the 4 s asked for; a shorter pause was not tried. The real voice is the maintainer's. |
+| Opening the plugin with the rig right after a plugin reload works on the first try | P89-RIG-OPEN-AFTER-RELOAD | **Failed (Deck) 2026-10-22 (plan 97 block D, build `15565346`): 1 of 3 on the stricter second set; fixed twice in the rig's repo, stays open, the rig's own** | Roadmap Bugs, "Opening the plugin with the test rig failed twice after a plugin reload". **Do:** reload the plugin, then open it with the rig's open-plugin tool, three times. **Pass when:** the first try works each time. **Seen 2026-10-12:** the first try after a reload failed in all 3 rounds (0 of 3): round 1 on the connection to Steam's debugger, rounds 2 and 3 because the Quick Access pane did not appear; the next try always worked (round 1 needed a third). Evidence `workshop:test-evidence/plan92-P89-RIG-OPEN-AFTER-RELOAD.json`. **Second failure 2026-10-22:** the first try failed in 2 of the 2 counted rounds (round 1 not counted, the tool's connection closed); waiting 90 s did not bring the plugin's tab back, closing and reopening the menu did. The rig now does that itself when the tab is missing (rig main `43afc0b`; loads only in a chat started after about 02:30). **Pass when (second try):** the first call opens the plugin in 3 of 3. Evidence `workshop:test-evidence/plan97-P89-RIG-OPEN-AFTER-RELOAD.json`. **Third failure 2026-10-22 (block D1):** a first set read 3 of 3 (the new steps that reopen the menu and wait for the plugin's tab worked once, about 25 s) but a later read found the menu shut (`workshop:test-evidence/plan97-P89-RIG-OPEN-AFTER-RELOAD-try2.json`, the file itself says PASS); a second set with a read after each call opened the plugin in 1 of 3, two failing 1 s after the reload with a debugger connection reset (`workshop:test-evidence/plan97-P89-RIG-OPEN-AFTER-RELOAD-try3.json`, FAIL). |
+| Rows that passed on the Deck with nothing owed, moved out 2026-10-14 (plan 93 docs sweep 3, size trim) | P90-SEARCH-SETTINGS, P90-SEARCH-KB, P92-ASK-SMOKE-N1, P91-ABOUT-LINKS, P91-MODELS-COLUMN-FILTERS, P91-MODELS-DONE-KEEPS, P91-MODELS-WIDTH, P91-FOLD-NAMES, P90-NOTE-LINE, P90-NOTE-COMMAND, P90-SEARCH-B, P91-FOLD-SETTINGS, P91-FOLD-DEVELOPER, P92-ABOUT-AFTER | **Done: passed (Deck) 2026-10-12 and 2026-10-14 (plan 92 and plan 93 Deck blocks, builds `649daecc` to `74e6167c` and `f4215cf1`); each row's own result and evidence file are in the archived row** | Each row, with its evidence file: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-14 (plan 93 docs sweep 3, size trim)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-14-plan-93-docs-sweep-3-size-trim). Moved word for word to keep this file under its size ceiling. |
+| Rows that passed on the Deck with nothing owed, moved out 2026-10-14 (plan 93 docs sweep 4) | P93-M4-ANSWER-FINISH-after, P93-O4-OLDER-DOWN, P93-B12-MODELS-WALK, P93-O1-OPEN-ALL, P93-B13-TERSE-SLIDER, P93-B15-HELP-LINE, P93-M10-TEXT-SIZE-after, P93-B9-WORDS, P93-K1-KB-SWITCH | **Done: passed (Deck) 2026-10-14 (plan 93 Deck blocks D1 to D4, builds `0ef34f82`, `8ff99a0a`, `5537e84c`, the Deck's own screen); each row's own result and evidence file are in the archived row. Rows with a part still owed (P93-M9-CONFIRM-BOXES-after, P93-B10-CANCEL, P93-B11-SEARCH-RING, P93-O4-WHILE-WRITING) keep a short row below** | Each row, with its evidence file: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-14 (plan 93 docs sweep 4)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-14-plan-93-docs-sweep-4). The four rows with a part owed are archived too, in full, with their short rows kept here. |
+| Rows that passed on the Deck with nothing owed, moved out 2026-10-14 (plan 93 docs sweep 3) | P93-M12-ASK-HINTS-after, P93-B8-DELETE-LAST, P93-O4-DOCK, P93-O4-MIRROR, P93-ASK-STRIP-GREYED-after | **Done: passed (Deck) 2026-10-14 (plan 93 Deck block D1, build `0ef34f82`, the Deck's own screen); each row's own result and evidence file are in the archived row. P93-O4-DOCK and P93-O4-MIRROR carry the caveats written there** | Each row, with its evidence file: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-14 (plan 93 docs sweep 3)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-14-plan-93-docs-sweep-3). The rows under the mirror's caveat are P93-O4-OLDER-DOWN (owed, below) and the free-play sweep QA-FREE-PLAY-01 (testing-manual.md, which stays open). |
+| A kept or dismissed note offer does not come back when only the screen side reloads | P93-B6-NOTE-OFFER | **COULD NOT RUN (Deck) 2026-10-22: proven by its tests only; on the maintainer's list** | Plan 93 (`0e619d7c`). **Do:** answer a question that offers a note, keep or dismiss the offer, reload only the screen side, look at the last answer. **Pass when:** the offer does not show again. **Seen (Deck) 2026-10-22 (plan 97 block C, build `73738058`):** reloading only the Quick Access page left it blank and only a plugin reload brought the panel back, so the screen-only case could not be read; after a plugin reload (which restarts the back end too) the card did not come back and the handled mark stayed in the browser's storage, which fits the fix but is not the screen-only case (`workshop:test-evidence/plan97-P93-B6-NOTE-OFFER.json`). Do not use that route again. |
+| The saved Search tab walk is re-saved for the current chips and word counts | P93-B11-SEARCH-RING | **Passed (Deck) 2026-10-14; still owed: the saved walk re-saved** | Plan 93. Down from the game chips reaches the search box and the words, and five rounds of word, game note, B keep the ring on a stop (`workshop:test-evidence/plan93-P93-B11-SEARCH-RING-try2.json`). **Do:** walk the Search tab from the tab bar and save the walk again; the saved one expects a Hollow Knight chip and other word counts. Full row: [archive/testing-closed-2026.md](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-14-plan-93-docs-sweep-4). |
+| A fresh install starts with Run AI on this Deck on, with the beta notice once | P93-B1-WIPE-DEFAULT | **Passed on the stand-in (this PC), the plan's machine for a wipe, 2026-10-14** | Plan 93 (`5397a614`, `33a50b8e`). **Do:** on the stand-in, Clear all plugin data, then open the plugin twice. **Pass when:** the first open shows Run AI on this Deck on and the Local runtime (beta) notice; the second open shows no notice. **Replaced 2026-10-18 (plan 96 N1):** the Local runtime (beta) notice was replaced by the first-run popup "Where should the AI run?", so a first open now shows the Beta Notice and then the popup (row P96-N1-FIRST-RUN-POPUP); this pass of 2026-10-14 stands for the old notice, which no longer shows. **Seen 2026-10-14 (plan 93 block S1, build `7888115e`):** Run AI on this Deck read off before Clear all plugin data and on after it, with no press of mine; evidence `workshop:test-evidence/plan93-P93-B1-WIPE-DEFAULT-standin.json`. |
+| Four confirm boxes the rig could not open: Reset try order, the two Enable Tier 2 boxes, the Large model box and the download box each show two buttons, ring on Cancel, B returns the ring to the opener | P93-M9-CONFIRM-BOXES-after | **Passed in part (Deck) 2026-10-14; still owed: those four boxes** | Plan 93 (`714adcbb` to `e8bb1c1a`). Clear cache, Clear all plugin data, Remove knowledge base and Remove a model passed (`workshop:test-evidence/plan93-P93-M9-CONFIRM-BOXES-after.json`, `-after-try2.json`). **Do:** open each of the four from its control with A and never press the action. They need a setting the rig must not change (the try order off automatic, the policy on open source only, a large model row, a pull). **Pass when:** each shows exactly two buttons, the ring starts on Cancel, Right reaches the action, B closes, the ring is back on the opener. Full row: [archive/testing-closed-2026.md](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-14-plan-93-docs-sweep-4). |
+| Six rows closed on the Deck 2026-10-22 (plan 97 block C), moved out | P96-F8-EXPERT, P93-B10-CANCEL, P96-F2-COLD-START, P96-F9-VOICE-REFRESH, P96-F10-CANCEL, P96-F13-INSTALL-WORDS | **Done — passed (Deck) 2026-10-22 (plan 97 block C, build `73738058`); P96-F13-INSTALL-WORDS by the row's own pass sentence (the session's ruling)** | Each row word for word, with its closing result and evidence file: [archive/testing-closed-2026.md — Moved from testing.md 2026-10-22 (plan 97 docs sweep 3, closed rows)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-22-plan-97-docs-sweep-3-closed-rows). |
+| A first install names the starter model gemma4:e2b-it-qat, not qwen2.5vl | P93-B3-FIRST-RUN | **Passed on the stand-in (this PC), the plan's machine for a wipe, 2026-10-14** | Plan 93 (`9fdc1902`, `bbd5de86`, `e88cac6d`). **Do:** on the stand-in, Clear all plugin data, open the plugin, switch on Run AI on this Deck and press Install Ollama. **Pass when:** the box and the download name gemma4:e2b-it-qat, the note-search model nomic-embed-text and the speech models tiny.en and base.en (about 4.5 GiB in all), and no qwen2.5vl is pulled. The Deck's own data is never wiped by a session. Roadmap Verify, "qwen2.5vl should not be the model downloaded first". **Seen 2026-10-14 (plan 93 block S1, build `7888115e`, Steam offline):** the first-run notice was 36 words with one button; the Local runtime (beta) notice came once at 39 words, no model named, and did not return after close and reopen (the notice was replaced by the first-run popup on 2026-10-18, plan 96 N1); the starter-set box (reached from the AI models screen, because the Ollama tab read "Update AI & models" on this stand-in) named gemma4:e2b-it-qat, nomic-embed-text, tiny.en and base.en, about 4.5 GiB, never qwen2.5vl, Cancel first, and was cancelled with nothing installed. One Up from the question box reached the "How to use bonsAI" chip. Evidence `workshop:test-evidence/plan93-P93-B3-FIRST-RUN-standin.json`. |
+| "Install the starter set" brings the speech models and skips what is already there | P93-B3-STARTER-DECK | **Done — closed 2026-10-22 (button half passed on the Deck 2026-10-17; installer half by design since plan 96's call 2)** | Plan 93. Evidence `workshop:test-evidence/plan94-P94-STARTER-SET.json`, `workshop:test-evidence/plan94-P94-INSTALL-OLLAMA.json`, `workshop:test-evidence/plan93-P93-B3-STARTER-DECK-D3.json`. Full row, word for word: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-22 (plan 97 docs sweep 1)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-22-plan-97-docs-sweep-1). |
+| While an answer writes, the notes block is fully visible and Down from above reaches its finished sections | P93-O4-WHILE-WRITING | **Passed in part (Deck) 2026-10-14 (plan 93 Deck block D3, build `8ff99a0a`; evidence `workshop:test-evidence/plan93-P93-O4-WHILE-WRITING-D3.json`). Still owed: the notes block's visibility and a full Down walk while it writes** | Plan 93 (`cca413bb`). **Passed:** Up from the question box gave the chip row, the "From the notes" block, the last section, then the first section, never Retry; a ring left on section 2 stayed on it, the page unmoved (scrollTop 307.3), through the finish. **UNCLEAR:** the notes block's box overlaps the chip row by about 20 px (its words were not measured); the Down walk while writing reached section 2 in one try (no notes block on that route) and in the other the answer had finished first (answers finish 13 to 20 s after the first section draws). Full row: [archive/testing-closed-2026.md](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-14-plan-93-docs-sweep-4). |
+| With one note on for the running game and one for another game, the app log for the next Ask says 1 note went in, and Show details shows a "Your notes" chip naming it | P90-NOTE-READ | **Passed in part (Deck) 2026-10-12 (plan 92 second night, build `74e6167c`, the Deck's own screen; evidence `workshop:test-evidence/plan92-P90-NOTE-READ.json`). Still owed: the other-game half (a note for a different game is not read), which that run did not include** | Plan 90 lane N1. **Pass when:** the app log says 1 note went in, the chip names it, and the saved chat carries the record; for the other game the log says none. The case with no notes passed (row P92-ASK-SMOKE-N1). **Seen:** with one kept note on for Hollow Knight, the question "How do I get to the City of Tears in Hollow Knight" logged `user_notes=1 off=0 game=Hollow Knight` (the turn before the note existed logged `user_notes=0`), and Show details listed the chip "Your notes (1)" with the body "I am doing a Steel Soul run." The same turn answers row P90-NOTE-LINE. |
+| Folded Ollama tab: under one screen with every section closed and 1.5 screens with the first open; the walk stops once per control | P91-FOLD-OLLAMA | **Passed (Deck) 2026-10-12 (plan 92 Deck block 4b, build `649daecc`, the monitor; the half that was owed passed on the Deck's own screen in plan 92's second night, build `74e6167c`, row P92-FOLD-SWITCH, evidence `workshop:test-evidence/plan92-P92-FOLD-SWITCH.json`)** | Plan 91 lane T0 (plan 92 Deck block 4). **Pass when:** every section closed, the tab top to bottom is under one visible screen (under 430 points on the Deck's own screen); with the first section open, under 1.5 screens; a Down walk with every section open stops once per control, and each landing moves the pane by no more than a third of it. **Seen on the monitor:** all closed, 314 points in a 741 pane (0.42 of a screen); first section open, 642 (0.87); every section open, 18 stops, one per control, none twice, largest pane move 237 against a third of 741 = 247; every stop wholly visible by eye (the rig read 93 percent on two section lines, judged an edge artifact). **Seen on the Deck's own screen (P92-FOLD-SWITCH step 1):** all five sections closed, scrollHeight 430 and clientHeight 430, so the closed tab is exactly the visible height and needs no scrolling (the evidence's own words: "not under 430 but cannot be smaller than the visible height"; it was 706 as found). **Counted as passed (the session owner's call):** the "under 430" half passes at 430 of 430 visible, because the closed tab cannot be shorter than what is drawn in it. |
+| Main tab: Y opens the Search tab with the ring on the find box; Y on another tab does nothing | P90-SEARCH-Y | **Passed (Deck) 2026-10-12 (plan 92 second night, build `f4215cf1`, the Deck's own screen; evidence `workshop:test-evidence/plan92-P90-SEARCH-Y.json`). Still owed: Y with Steam's on-screen keyboard open on the question box, which is the maintainer's hand check** | Plan 90 lane N3b. **Seen:** Y with the ring on the question box on Main went to Search with the ring on the find box ("Search for a word"); Y on the Ollama tab changed nothing. The keyboard is never opened on the question box in a driver session, so that case was not run. |
+| Rows that passed on the Deck with nothing owed, moved out 2026-10-11 (plan 88 docs sweep) | VOICE-BASE-DEFAULT-01, P88-VOICE-WHOLE-ENGINE, P88-VOICE-WHOLE-NOGAME, P88-VOICE-WHOLE-GAME, P88-VOICE-ASK-WHILE-TALKING, P88-VOICE-TINY, P88-DECK-RESTORED, P88B-VOICE-PACE-NOGAME, P88B-VOICE-PACE-GAME | **Done — passed (Deck) 2026-10-11 (P88-VOICE-TINY is a report row with no pass or fail of its own); each row's own result and evidence file are in the archived row** | Each row, with its evidence files: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-11 (plan 88 docs sweep)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-11-plan-88-docs-sweep). The two P88B rows (build `4c58623e`, the same-day follow-up) were written straight into that section. |
+| Rows of removed features, retired 2026-10-16 (plan 86 step 3) | UI-SCALE-01…05, TTS-FEAS-02, TTS-FEAS-05, READ-ALOUD-02, READ-ALOUD-05, NOTES-BLOCK-07 (the last in testing-manual.md) | **Retired: the feature was removed in plan 86 step 3 (UI scale `4c8e726c`, `aa021567`, `435dfac3`; Read aloud `8bcf0160`, `181c30ef`)** | Each row, word for word, with its old status: [archive/testing-closed-2026.md § Retired 2026-10-16](archive/testing-closed-2026.md#retired-2026-10-16-plan-86-step-3-rows-of-removed-features). |
+| Plan 86 step 3 Deck block: sizes before and after, the three tabs, the models box, the answer corner, voice input, the glossary words, the free-play sweep, the removed settings keys | P86-SIZES-01, P86-TABS-01, P86-MODELS-BOX-01, P86-ANSWER-01, P86-VOICE-01, P86-GLOSSARY-01, P86-FREEPLAY-01, P86-KEYS-01 | **Done — passed (Deck's own screen) 2026-10-16, build `cf724c9f`, moved out** | Each row with its evidence files: [archive/testing-closed-2026.md § Plan 86 step 3 Deck block](archive/testing-closed-2026.md#plan-86-step-3-deck-block-first-half-2026-10-16) (first half) and [second half](archive/testing-closed-2026.md#plan-86-step-3-deck-block-second-half-2026-10-16). |
+| The ban lookup is gone: no key field, no Permissions switch, the command is an ordinary question | P86-BAN-GONE-01 | **Partial (Deck's own screen) 2026-10-16: the command, the switches and the hint row passed; the chip half is owed** | Plan 86 step 3 (`357e5b55`). Permissions: four switches, each off and on, kept after reopening (`workshop:test-evidence/plan86-B2-PERMISSIONS.json`); Developer: five sections (`workshop:test-evidence/plan86-B1-DEVELOPER.json`); `bonsai:vac-check` gave an ordinary reply with no ban report and no toast (`workshop:test-evidence/plan86-B3-VAC-COMMAND.json`); the hint row's Dismiss, chips and Up (`workshop:test-evidence/plan86-B3-PERMISSION-HINT.json`). **Owed:** the chip half: seven chips were seen, none about bans, and chips are not drawn while an answer shows. Down from Open Permissions landing on Dismiss is a separate finding (roadmap Bugs). |
+| With no AI installed, a question says the AI is not set up and offers a way to the Ollama tab | P96-F1-NO-AI | **Passed (Deck) 2026-10-18, build `f7413dbc`; the button's light look was fixed after (`bba825e5`), so QA-LOOK-01 owes one run on Main** | Plan 96 F1 (`5d28ee99`, `79034995`, then `ace86686`). **Pass when:** the message names the real cause (no word "tier") and its button lands on the Ollama tab's first control. **Result:** block D (build `a29f9eb0`): the answer read "The AI is not set up on this Deck yet. ..." with no "tier", but no "Open the Ollama tab" control was drawn (`workshop:test-evidence/plan96-P96-F1-NO-AI.json`). After the second fix: the answer, a button "Open the Ollama tab" under it (one stop, Show details, sits between Copy and the button), and A lands on the Ollama tab with the ring on its "AI models" line (`workshop:test-evidence/plan96-P96-F1-NO-AI-try2.json`). |
+| Seven plan 96 rows that passed on the Deck with nothing owed, moved out 2026-10-22 (plan 97 docs sweep 3, size trim) | P96-F3-THINKING, P96-F6-EXPLAIN, P96-F11-HINT-RING, P96-F14-SUM-UP, P96-F18-PILLS, P96-F25-ASK-PILL, P96-FINDLAN-try2 | **Done — passed (Deck) 2026-10-18; each row's own build, result and evidence file are in the archived row** | Each row, word for word: [archive/testing-closed-2026.md — Moved from testing.md 2026-10-22 (plan 97 docs sweep 3)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-22-plan-97-docs-sweep-3). |
+| Nine plan 96 rows that passed on the Deck with nothing owed, moved out 2026-10-22 (plan 97 second sweep, size trim) | P96-F4-TICK, P96-F20-CHECKLIST-NOTE, P96-F15-KB-COUNT, P96-F16-ABOUT-LINKS, P96-F23-HOST-BUTTONS, P96-F26-BARE-ADDRESS, P96-F24-SPINNER, P96-N2-SEARCH-OWN, P96-CANCEL-RIGHT | **Done — passed (Deck) 2026-10-18; each row's own build, result and evidence file are in the archived row** | Each row, word for word: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-22 (plan 97 docs sweep 2)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-22-plan-97-docs-sweep-2). |
+| The Strategy checklist shows checkboxes, not switches | P96-F19-CHECKBOXES | **Passed (Deck) 2026-10-18, builds `a29f9eb0` and `f7413dbc`** | Plan 96 F19 (`8c38690a`, `4a22a85e`). **Pass when:** the steps are checkboxes, A ticks and unticks, Up and Down walk the steps as before, a ticked step looks done. Then the README chat re-shoots the "Where are you at?" clip and the end of the long Main-tab video (still owed to that chat). **Result:** six steps drawn as square tick boxes, each with the checkbox role (`workshop:test-evidence/plan96-P96-F19-CHECKBOXES.json`); after the second fix A ticked a step (check mark, one struck-through text node), and Up and Down walked the steps (`workshop:test-evidence/plan96-P96-F4-TICK-try2.json`). |
+| The screenshot picker can be used with the controller | P96-F5-PICKER | **Picker half passed (Deck) 2026-10-18, build `a29f9eb0`, and by touch by hand the same day; the picture-answer half FAILED on the controller route and by hand (a Bugs entry)** | Plan 96 F5 (`e3b221b6`). **Pass when:** the ring lands on the newest picture, A attaches it, B closes the picker only and the ring goes to the question box (not the paperclip); one picture question is answered. By touch: the maintainer's check 3 on the checks page: **passed by hand 2026-10-18**, the attach by touch works and the question was sent with the picture; the answer FAILED the same way (see below; picture `workshop:test-evidence/plan96-HAND-screenshot-by-touch.png`). **Result:** the ring landed on the newest picture, Down, Up, Left and Right stayed inside the grid, B closed the grid only with the ring on the question box, and A on the newest picture attached it (a row with a Remove button). Asked about the attached picture, the AI answered "incomplete stream" and no answer, twice with two different questions (`workshop:test-evidence/plan96-P96-F5-PICKER.json`). **By hand 2026-10-18 (the maintainer, by touch):** "Ollama returned an incomplete stream for model 'gemma4:e2b-it-qat' (no completion marker and no assistant text)" again; the attach is fine, the model's answer fails (`workshop:test-evidence/plan96-HAND-screenshot-by-touch.png`). **Picture-answer half: fixed 2026-10-22 (plan 97 L1); row P97-L1-PICTURE-ANSWER owes the Deck run.** |
+| Chips are 26 px tall with 11 px words and change more slowly | P96-F22-CHIP-PACE-SIZE | **Size half passed (Deck) 2026-10-18, build `a29f9eb0`; the pace is the maintainer's eye** | Plan 96 F22 (`8685acbe`, `345c8cc7`, `d4c6bf2f`). **Pass when:** a chip stays at least 9 s in the two-chip row and 6 s in the one-chip row, a long chip's text scrolls to its end before it changes, no text is clipped. Measured first: `workshop:test-evidence/plan96-P96-F22-CHIP-MEASURE.json`. **Result (Deck on the Small text size):** chips 26 px tall in both rows; the words read 9.9 px because Small scales the 11 px style (11 px is the Normal figure; not tried at Normal). One-chip row: 8 to 10 s between changes, words readable 7 to 8 s. Two-chip row: gaps between changes of 4.0 to 12 s, 8 of 13 under 9 s, typical 6.0 s; the session reads the short gaps as the two spots alternating. Every long chip scrolled to its end before it changed (`workshop:test-evidence/plan96-P96-F22-CHIP-PACE-SIZE.json`). **Maintainer's call:** should the two-chip row change no more often than once every 6 s? |
+| A Decky wipe shows the first-run screens again | P96-N3-FRESH-START | **Passed (Deck) 2026-10-18, build `a29f9eb0`; the help chip half was UNCLEAR there** | Plan 96 N3 (`4675448d`, `b0be6b97`). **Pass when:** with the plugin's settings file removed over SSH and the plugin reloaded, the beta notice and the help chip show again; a plain reload with a settings file shows nothing. **Result:** with the file removed and the plugin reloaded, the Beta Notice came back (and, on that build, the old Local runtime notice too, since the popup landed later); with the file put back (same md5) nothing showed. The help chip: Main showed two ordinary chips after the fresh start, so that half was UNCLEAR (`workshop:test-evidence/plan96-P96-N3-FRESH-START.json`); in block E's two first runs the help chip "How to use bonsAI" showed on Main (`workshop:test-evidence/plan96-P96-N1-FIRST-RUN-POPUP.json`). |
+| A new player is asked where the AI should run, right after the Beta Notice | P96-N1-FIRST-RUN-POPUP | **Passed (Deck) 2026-10-18, build `f7413dbc`, as a first run with the settings file removed; the true Clear-all-data run is release day's** | Plan 96 N1 (`6ac70ced`, `2b0f1436`, `5da13f81`). **Pass when:** a first run shows the Beta Notice, then the popup with the ring on Not now, then Main with the help chip; every popup button is a stop; Install Ollama opens the download box; Test connection works with a PC address; Not now leaves everything as it was and the Ollama tab still offers the same section; the old Local runtime notice never shows. **Result:** all seven steps matched: the Beta Notice, the popup with the ring on Not now, 12 of 12 presses moving, a switch saved within 2 s, the download box over the popup with the ring back on the action button, Not now with nothing returning, and no old Local runtime notice. Notes: "Start the AI with the Deck" is off on a fresh first run; after a failed download try the left button reads "Close" instead of "Not now"; after Not now the ring lands on the question box (`workshop:test-evidence/plan96-P96-N1-FIRST-RUN-POPUP.json`). **Wording by eye, still owed:** no verdict yet on 2026-10-18 (the maintainer could not find the pictures; they have been sent). Pictures `workshop:test-evidence/plan96-P96-N1-FIRST-RUN-POPUP.png` (the popup), `plan94-P94-FIRST-RUN-try2-1.png` (the Beta Notice), `plan94-P94-HELP-CHIP-try2-open.png` (the Using bonsAI box), `plan94-P94-CLEAR-ALL-RUN-box.png`. |
+| A long chip shows its whole text twice before it changes | P96-F22-CHIP-TWICE | **Passed (Deck) 2026-10-18, build `24f5c300`** | Plan 96 F22 (`57829f6c`), the maintainer's ask 2026-10-18. **Pass when:** a long chip's words scroll to the end, stop about a second, jump back, scroll to the end again, stop, then the chip changes; a short chip holds as before. **Result (the Deck's own screen, no game):** seven overflowing chips each did exactly that (stand 0.9 to 1.0 s, jump back 0.4 to 0.5 s); a chip whose words fit stayed 10.7 s without scrolling (only one was timed whole). With one chip showing, all seven fit, so no scrolling could be read; each stayed 7.0 to 7.7 s, within the one-chip pace of 6 to 12 s (the evidence file marks this UNCLEAR: the runbook gave no one-chip time). The setting is back off. Whether the row should change less often stays the maintainer's eye (row P96-F22-CHIP-PACE-SIZE) (`workshop:test-evidence/plan96-P96-F22-CHIP-TWICE.json`). |
+| Find LAN shows for everyone, beside the PC address | P96-FINDLAN | **Passed (Deck) 2026-10-18: the popup half on build `24f5c300`, the tab half on the second try (row P96-FINDLAN-try2, build `73738058`)** | Plan 96 (`46e24b39`), the maintainer's call 2026-10-18. **Pass when:** with the Developer tab and Run AI on this Deck off, Find LAN sits beside the PC address field; A starts a search that lists any Ollama found or says none was found; the first-run popup shows it beside the address too. **Result (the Deck's own screen):** in the popup, Find LAN is on the address field's own row, directly beside it. On the Ollama tab it sits beside Test connection on the row under the field. A on Find LAN opened a Search / Cancel box first; after Search, in three runs, nothing showed for 15 s (no "...", no list, no "none found", no toast) and the whole panel was rebuilt. Down from the PC address field skipped Test connection and Find LAN every time. The evidence file marks the two tab items UNCLEAR (the runbook may predate the box); the session's ruling is that they failed (`workshop:test-evidence/plan96-P96-FINDLAN.json`). **Second try 2026-10-18 (block G):** the tab half passed after the findlan2 lane's three commits; see P96-FINDLAN-try2 (`workshop:test-evidence/plan96-P96-FINDLAN-try2.json`). |
+| No stray stars on a bold line with a hidden block | P97-L3-SPOILER-BOLD | **Unclear (Deck) 2026-10-22, build `15565346`: neither answer had a hidden block inside a bold line; the fix rests on its tests** | Plan 97 L3 (`20737081`). **Pass when:** in Strategy mode, two differently worded questions about a story game with nothing running show no literal `**` in the drawn text, the heading bold and the cover whole. UNCLEAR if neither answer has a hidden block inside a bold line. Block E2. Failed before: `workshop:test-evidence/plan93-P93-O3-SPOILER-CUT-D3.json`. **Result (block E2):** a Hollow Knight steps list and a Celeste steps list, no literal `**` in the drawn text, six and four bold titles drawn; the first answer's cover stood on its own after the list, the second drew none. Two tries used, no third (`workshop:test-evidence/plan97-P97-L3-SPOILER-BOLD.json`). |
+| Rows that passed on the Deck 2026-10-22 (plan 97 blocks G and H), moved out 2026-10-22 (plan 97 fifth sweep) | P97-L4-ANSWER-DIPS (with P97-L4-ANSWER-DIPS-try3), P97-L14-SECTIONS-try2 (with its third run) | **Done: passed (Deck) 2026-10-22 (builds `acbaeb72`; the earlier answer-height tries failed and are in the archived row); each row's own result and evidence file are in the archived row** | Each row, word for word, with a closing status: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-22 (plan 97 fifth sweep, closed rows)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-22-plan-97-fifth-sweep-closed-rows). |
+| Update knowledge base does not offer an older library | P97-L9-KB-UPDATE | **Partly passed (Deck) 2026-10-22, build `15565346`: nothing downloads and both versions are logged; the "newer than published" wording is still owed** | Plan 97 L9 (`b8c002cd`). **Pass when:** with a newer library installed than the published one, Update downloads nothing (file dates unchanged), the line says "You have ...; the published library is ... Nothing to do.", the status is unchanged and the plugin log names both versions. Block D4. **Result (block D4):** the line read "Already up to date (version 2026.10.17)." in under 2 s, the status stayed Installed, file dates were unchanged and the log said "installed=2026.10.17 newest=2026.10.17 outcome=up_to_date". The "You have ...; the published library is ... Nothing to do." wording could not show: the published library now equals the installed one. It needs a published library older than the Deck's (`workshop:test-evidence/plan97-P97-L9-KB-UPDATE.json`). |
+| Rows that passed on the Deck 2026-10-22 (plan 97 blocks D, E and F), moved out 2026-10-22 (plan 97 fourth sweep) | P97-L6-ABOUT-BUILD, QA-LOOK-01 (About, plan 97 L8), P97-L2-LANGUAGE-PICK, P97-L16-FINDLAN-UP, P97-L12-EXPLAIN-RING, P97-L5-GLOSSARY-NAMED, P97-HR-HELP-CHIP-RING, P97-L11-PC-PACE, P97-L1-PICTURE-ANSWER, P97-L13-LARGE-TEXT, P97-X2-SAMPLER, P89-RIG-SNAPSHOT, P97-L14-SECTIONS | **Done: passed (Deck) 2026-10-22 (builds `15565346` and `e3fe246f0440`); each row's own result and evidence file are in the archived row** | Each row, word for word, with a closing status: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-22 (plan 97 fourth sweep, closed rows)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-22-plan-97-fourth-sweep-closed-rows). Two readings are the session's own: P97-L1-PICTURE-ANSWER (the 410 KB picture was slow, the evidence file says UNCLEAR) and P97-L13-LARGE-TEXT (Normal read FAIL by measurement, pass by eye). |
+| Rename chat hands the name field to Steam when the box opens | P97-L10-RENAME-KEYBOARD | **Passed with the rig (Deck) 2026-10-22, build `15565346`; the maintainer's own controller is still owed (P97-L10-RENAME-KEYBOARD-HAND)** | Plan 97 L10 (`1a7491ce`). **Pass when:** the ring is on the name field on open, one A on the field shows Steam's keyboard, and Save renames the chat. The rig already passed before the fix (`workshop:test-evidence/plan97-A-RENAME-RIG.json`): this row shows only that nothing broke. The maintainer's own controller is the proof: **P97-L10-RENAME-KEYBOARD-HAND** in [testing-manual.md](testing-manual.md). Block D8. **Result (block D8):** the ring was on the name field when the box opened; one A on the field showed Steam's keyboard within 2 s (not before); a typed letter landed (the field read testg); B closed the keyboard; Save renamed the chat; the same route back named it test again (`workshop:test-evidence/plan97-P97-L10-RENAME-KEYBOARD.json`). |
+| A Decky button's own Left handler | P97-E-DECKY-BUTTON | **Measured twice 2026-10-22 (plan 97 blocks A and E), undecided** | Left from the Ask strip's Clear button landed on Voice input 3 of 3, which is both the handler's target and the control just left of it, so it cannot tell the two apart (`workshop:test-evidence/plan97-A-DECKY-BUTTON.json`). **Do:** while an answer streams (Stop replaces the mic), press Left from Clear and record where the ring lands and the boxes to its left. Block E6. **Block E (build `15565346`):** while an answer streams, Left from Clear landed on Stop generation, and idle on Voice input; both are the same 20 px box directly to its left (x 236), so the handler's target and Steam's own neighbour are the same control again (`workshop:test-evidence/plan97-P97-E-DECKY-BUTTON.json`). |
+| Steam's own tab row stays hidden, and the watcher logs the page if it ever shows | P97-L15-GHOST | **Passed on the pop-up route (Deck) 2026-10-22, build `15565346`; the maintainer's touch check is still owed (TAB-BAR-GHOST-01)** | Plan 97 L15 (`f969378d`). **Do:** with a game running (never reload the plugin with it up), open the "Delete chat?" box and press B, three times (or the help chip once, if it shows); read Steam's row at 0.3, 1, 3 and 10 s and take a screenshot at 1 s; then over SSH search the plugin log for `tabBar.steamRowShown` and copy every line; then LB and RB both ways. **Pass when:** the row reads hidden at every read, no second strip is in any screenshot, LB and RB still switch tabs, and the number of log lines is recorded (none is expected; any line is evidence). Block E10. The cause is settled by the maintainer's touch check (TAB-BAR-GHOST-01). Never seen in plan 97 (`workshop:test-evidence/plan97-A-GHOST-NOGAME.json`, `plan97-P97-B-GHOST-1.json` to `-3.json`). **Result (block E10, Deep Rock Galactic: Survivor running, plugin not reloaded):** three "Delete chat?" rounds with B; Steam's row display none at all 4 reads of every round (about 0.65, 1.2, 5.3 and 10.2 s), one tab bar, no second strip in the three screenshots, LB and RB each switched tabs, and 0 `tabBar.steamRowShown` lines in the plugin log files and the journal since 09:40 (`workshop:test-evidence/plan97-P97-L15-GHOST.json`). The help chip route was not run. |
+| Rows that passed on the Deck 2026-10-22 (plan 97 block I), moved out 2026-10-22 (plan 97 sixth sweep) | P97-L14-FREEZE, P97-L14-FREEZE-try3, P97-L14-FREEZE-try4 (with the fifth try and its control) | **Done: passed (Deck) 2026-10-22 on the fifth try (build `334dcb91`): 27 of 27 presses moved with the page without focus, control 18 of 18; the earlier tries failed or were unclear and are in the archived rows** | Each row, word for word, with a closing status: [archive/testing-closed-2026.md § Moved from testing.md 2026-10-22 (plan 97 sixth sweep, closed rows)](archive/testing-closed-2026.md#moved-from-testingmd-2026-10-22-plan-97-sixth-sweep-closed-rows). |
+| Left and Right on the game's chip row while the page has lost focus | P97-L14-FREEZE-CHIPS | **Owed (Deck), a follow-up, not a blocker** | Plan 97 L14 (`89ee807e`). Never tested in the lost-focus state: with focus present Left and Right each moved exactly one chip, 3 of 3 each (`workshop:test-evidence/plan97-P97-L14-SECTIONS-try2.json`); the fifth try had no chip row (`workshop:test-evidence/plan97-P97-L14-FREEZE-try5.json`). **Do:** with a game up and the page reading `document.hasFocus()` false, ask a short question so the chips show, then press Left and Right on the chip row three times each and read focus after every press. **Pass when:** every press moves the ring one chip. |
 
-- [ ] With game running: Ask `Set my TDP to 8 watts`.
-- [ ] Response includes `[Applied: TDP: 8W]` (or equivalent banner).
-- [ ] QAM re-open guidance in transcript (**Note** about Performance tab).
-- [ ] **Input handling** shows TDP route / JSON parse path.
-
-**Links:** Test Results #3–4; coverage `TDP-APPLY`, `QAMP-BANNER`; [testing.md](testing.md#shipped-feature-coverage) → QAMP on-Deck (first two rows).
-
-### SMOKE-E — Strategy one-shot (P1)
-
-- [ ] Main tab mode → **Strategy**; placeholder changes to strategy copy.
-- [ ] Ask `How do I beat this level` (no spoilers permission).
-- [ ] Reply uses tap-to-reveal spoiler blocks where applicable.
-- [ ] Enable **Spoilers OK for this Ask**; follow-up allows fuller guidance.
-
-**Links:** coverage `STRATEGY-CORE`, `STRATEGY-SPOILER`; [testing.md](testing.md#shipped-feature-coverage) → Tier 2 Strategy depth (partial — expand in Tier 2).
-
-### SMOKE-D — Frozen carousel triple (P0) — verified
-
-Optional: set `TEMP_PRESET_CAROUSEL_FROZEN` in [`src/data/presets.ts`](../src/data/presets.ts). Three chips: crashing / stuttering / Proton. **Already verified** — spot-check only if presets change.
-
-**Links:** coverage `PRESETS-CAROUSEL`, `TROUBLESHOOT-3`.
-
-### SMOKE-G — Vision attach once (P1) — verified
-
-Attach one screenshot + one Ask. **Already verified** (vision sweep 2026-04) — spot-check if attach/RPC changes.
-
-**Links:** coverage `VISION-V1`.
-
-### SMOKE-H — Background Ask reopen (P1)
-
-- [ ] Start a slow Ask; close QAM before completion; reopen → **Thinking…** or restored pending state.
-- [ ] Repeat: close QAM; reopen after completion → full reply restored.
-
-**Links:** coverage `BG-ASK-V1`; [testing.md](testing.md#shipped-feature-coverage) → Appendix Tier 4 background matrix for full lifecycle.
-
-### Tier 1 extras (single Ask each)
-
-- [ ] **Session restore:** close and reopen plugin — last Q&A still visible (`PERSIST-QA`, P0).
-- [ ] **Mode Speed vs Expert:** one Ask each; model disclosure or routing differs (`MODE-SELECTOR`, P1).
-- [ ] **What game am I playing?** with game focused — names title (`GAME-CTX`, P0).
-
----
-
-## Tier 2 — Opt-in features (S2)
-
-Run when touching related code or before a release candidate.
-
-| Block | Setup | Importance | Detail in testing.md |
-|-------|-------|------------|----------------------------|
-| **VAC full matrix** | Steam Web API key + permission | P2 | VAC-01 … VAC-06 |
-| **Proton log attach** | `PROTON_LOG=1`, game, log read permission | P2 | PROTON-LOG-01 … 03 |
-| **Token streaming** | Developer tab + flag | P2 | STREAM-01 … 05 |
-| **Strategy depth** | Strategy mode + screenshots optional | P1 | Strategy spoiler, checklist, cheat gating, regression subset |
-| **Character voice** | AI character on, one preset Ask | P2 | CHAR-VOICE |
-| **Pyro easter egg** | Pyro or Random → Pyro; Balanced + Nightmare spot | P3 | PYRO-EGG |
-| **Beta presets** | Main tab chips with `[beta]` tag | P3 | BETA-PRESET |
-| **mDNS Find LAN** | Avahi/Bonjour on Ollama host | P2 | MDNS-FIND |
-| **Desktop notes** | Filesystem permission on | P2 | DESKTOP-NOTES |
-| **Model policy** | Change tier; confirm disclosure on reply | P1 | MODEL-POLICY |
-
----
-
-## Tier 3 — Heavy manual (S3)
-
-Defer until Tier 0–2 pass or release window.
-
-| Block | Why heavy | Detail |
-|-------|-----------|--------|
-| **QAMP on-Deck matrix** | Per-game profile, QAM reopen, Steam restart, reboot | [testing.md](testing.md#shipped-feature-coverage) → QAMP on-Deck |
-| **TDP boundary clamps** | Multiple watt asks with verification | TDP-15W, TDP-3W, TDP-1W, TDP-20W, GPU-800 |
-| **Background Ask full lifecycle** | Timeout, error, busy guard, session boundary | Appendix Tier 4 |
-| **Multi-game matrix** | Title-specific behavior | Games to test with |
-| **Guide-chord macro** | User-specific QAM rail depth | [troubleshooting.md](troubleshooting.md) §5 |
-| **Preset carousel timing (ms)** | Cosmetic animation | Appendix Tier 3 cosmetic |
-
----
-
-## Tier 4 — Release gate (S3)
-
-| Block | When |
-|-------|------|
-| **Clean install proof** | Before tagging a release — [testing.md](testing.md#regression-gates) §5 |
-| **Environment matrix** | Record Decky / SteamOS / Ollama in [testing.md](testing.md#shipped-feature-coverage) before Tier 1+ runs |
-
----
-
-## Progress tracker
-
-Update after each maintainer pass:
-
-| Tier | Status | Last run (date / SHA) | Notes |
-|------|--------|------------------------|-------|
-| 0 | Pass | 2026-05-26 / 9e20a82 | preview 5/5 PASS; [evidence](test-evidence/tier0/2026-05-26-9e20a82) |
-| 1 | Pass | 2026-05-26 / 9e20a82 | preview 3/3 PASS; [evidence](test-evidence/tier1Core/2026-05-26-9e20a82) |
-| 2 | Partial | 2026-06-09 / 9e20a82 | preview 7/11 PASS; [evidence](test-evidence/tier2Deep/2026-06-09-9e20a82) |
-| 3 | Open | 2026-06-09 / a9237e4 | preview 0/0 PASS; [evidence](test-evidence/deckOnly/2026-06-09-a9237e4) |
-| 4 | Deferred | | Clean install |
-
-**Roadmap target:** Tier **0–1** complete for routine PRs; Tier **2+** ongoing before release.
-
----
-
----
-
-# bonsAI prompt testing tracker
-
-
-This file holds the **shipped-feature coverage index**, **Test Results log**, and **detailed scenario checkboxes** linked from the runbook.
-
-Related planning (not yet implemented): [roadmap.md](roadmap.md) **Planned** section. Research notes: [archive/research/steam-input-research.md](archive/research/steam-input-research.md), [archive/research/voice-character-catalog.md](archive/research/voice-character-catalog.md).
-
----
-
-## Evidence rules (check-offs)
-
-Mark `- [x]` when:
-
-1. **On-device PASS** recorded in Test Results (with build / date when known), or  
-2. **Documented verified sweep** — e.g. vision V1 manual run (2026-04), QAMP banner unit tests (2026-04-26), frozen-carousel troubleshooting pass.
-
-Historical **FAIL** rows live in [testing.md](testing.md#failures-and-retries). Standardize on `- [x]` / `- [ ]` only.
-
-Preview-suite runs with `--write` upsert Test Results (PASS only) and the failures doc (FAIL), deduped by scenario ID. Artifacts: [test-evidence/](test-evidence/). Consolidate duplicate rows manually if needed after debug iterations; RPC/log dumps are redacted before commit.
-
----
-
-## Status legend
-
-| Status | Meaning |
-|--------|---------|
-| **PASS** | Correct answer and action (if any) applied |
-| **FAIL** | Wrong answer, hallucination, or action not applied |
-| **PARTIAL** | Correct idea; formatting/parsing blocked full success |
-| **PENDING** | Reserved for next on-device run |
-
-Coverage table: **Verified** / **Partial** / **Open** / **N/A (unit-only)**.
+**Evidence snapshots (keep):** [tier0/2026-05-26](../../bonsAI-workshop/test-evidence/tier0/2026-05-26-9e20a82), [tier1Core](../../bonsAI-workshop/test-evidence/tier1Core/2026-05-26-9e20a82), [tier2Deep/2026-06-09](../../bonsAI-workshop/test-evidence/tier2Deep/2026-06-09-a9237e4). Historical PASS narration: [archive/testing-results-2026.md](archive/testing-results-2026.md). Orphan evidence folders may be pruned later when nothing links them.
 
 ---
 
-## Shipped feature coverage
+## Verify (from roadmap)
 
-Maps [roadmap.md](roadmap.md) **Completed** summary and [archive/roadmap-completed.md](archive/roadmap-completed.md) detail to test IDs. Update **Status** when runbook smokes or scenario rows pass.
+These are **not** missing features — deferred maintainer testing. The Steam ban lookup (VAC) was removed in plan 86 step 3 (`357e5b55`), so its entry is gone from the roadmap. The `[QA]` **Deferred
+manual QA** entry that used to sit beside it closed 2026-09-18 once its last owed check passed on the Deck —
+see [Done](archive/roadmap-completed.md#deferred-manual-qa-closed-2026-09-18) for the full record:
 
-### Release and first-run
+1. Device QA Tier 0–1: A, F, E and H all pass, and all three Tier 1 extras now pass too (a Q&A that survives a
+   reopen, one Ask each in Speed and Expert, and "What game am I playing?" with a game focused, the last of
+   the three, passed 2026-09-18). C was blocked by the Open Permissions jump bug until that bug was fixed
+   (`af53b7d`) and proven on the Deck 2026-09-23 (archive/roadmap-bugs-fixed.md); C itself was re-run and
+   passed on the Deck 2026-09-26 (plan 70, flow 2d.2; `workshop:test-evidence/plan70-SMOKE-C.json`). SMOKE-B retired 2026-09-03 (D57 #6)
+2. VAC-02…06 on-device — passed 2026-09-23 (see [Done](archive/roadmap-completed.md#vac-check-bonsaivac-check-on-device-qa-closed-2026-09-23-flow-h)); the whole ban lookup was then removed in plan 86 step 3 (`357e5b55`), so nothing more is owed.
+3. Broader prompt-testing pass
 
-| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
-|------------|-----------------|------------|--------|----------|
-| BETA-MODAL | Beta disclaimer modal | SMOKE-A | Open | First paint |
-| PRESETS-CAROUSEL | Suggested AI prompts + carousel | SMOKE-A, SMOKE-D | Partial | `PRESET_PROMPTS` baseline shipped; troubleshooting triple verified; string expansion incremental |
-| PROMPT-TEST-MVP | Prompt-testing MVP (this doc) | — | Partial | Matrices shipped; Tier 0–1 open |
-| SANITIZER | Input sanitizer lane | SMOKE-F | Partial | [SMOKE-F-disable-sanitize](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-disable-sanitize/manifest.json); [preview 2026-05-26](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-disable-sanitize/manifest.json) |
-| TRANSPARENCY | Input handling transparency panel | SMOKE-A | Partial | Expand panel in golden path (on-Deck); [preview 2026-05-26](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-A-golden-path/manifest.json) |
+The QAMP verification matrix was withdrawn 2026-09-02 for the same reason as SMOKE-B (no TDP apply to test).
 
-### Connection, routing, diagnostics
-
-| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
-|------------|-----------------|------------|--------|----------|
-| CONN-TEST | Deck/PC connection + Test Ollama | SMOKE-A | Open | |
-| CONN-TIMEOUT | Latency/timeout warnings + sliders | SMOKE-A | Open | Slow Ask optional |
-| KEEP-ALIVE | Ollama keep_alive presets | — | Open | Settings persist |
-| LOCAL-RUNTIME | Local Ollama on Deck default-off + onboarding | — | Open | Tier 2 |
-| MDNS-FIND | LAN mDNS Find LAN | — | Open | Tier 2; needs Avahi; [preview 2026-05-26](test-evidence/tier2/2026-05-26-9e20a82/MDNS-FIND-rpc/manifest.json) |
-| NAMED-HOSTS | Named Ollama hosts (quick switch) | — | Open | Ollama tab; up to 4 labeled LAN URLs |
-| MAINT-HARNESS | Vitest Deck harness, watch-deploy | N/A (unit-only) | N/A | CI; [preGate](test-evidence/preGate/2026-05-26-9e20a82/batch-summary.json); [preview 2026-05-26](test-evidence/preGate/2026-05-26-9e20a82/UNIT-A-vitest-gates/manifest.json) |
-| OLLAMA-UPDATE | Update Ollama & Models on Deck | — | Open | Tier 2 |
-
-### Tabs, icons, unified ask
-
-| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
-|------------|-----------------|------------|--------|----------|
-| CORE-UI | Iconography, tabs, unified input | SMOKE-A | Partial | [SMOKE-A](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-A-golden-path/manifest.json); [preview 2026-05-26](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-A-golden-path/manifest.json) |
-| QAM-BAZZITE-LAYOUT | Bazzite gamescope QAM tab strip / mount layout | QAM-BAZZITE-01 | Verified | On-Deck Bazzite 2026-07-08; `useQamPanelHeightGuard`, `useTabStripBodyOffset` |
-| REFACTOR-4DEF | Phase 4d–4f MainTab/index/styles split | SMOKE-A | Open | Unit/build gates pass; on-Deck regression via golden path |
-| REFACTOR-PHASE3 | Phase 3 backend extraction (`ollama_ask_service`, locks) | test_ollama_ask_service, test_background_abort_busy | Open | `pnpm run test:py`; on-Deck golden path |
-| CRITICAL-REG | Critical regression fixes (settings RMW, abort gate, PCM, stores) | test_background_abort_busy, test_settings_save_lock, test_intent_pack_store_lock, test_strategy_checklist_store_lock | Open | Tier 1 **SMOKE-H** Stop then new Ask |
-| PERSIST-QA | Persist last Q&A on reopen | Tier 1 extra | Open | |
-| UNIFIED-INPUT | Unified search + ask | SMOKE-A | Open | |
-| PRESET-FADE-OPT | Preset chip fade opt-out | — | Open | Tier 3 cosmetic |
-| CAROUSEL-SLIDE | Carousel slide + history (2026-05-20) | — | Open | Tier 3 cosmetic |
-| GEMMA-PULL | Gemma pull models + routing | GEMMA-PULL-01 | Open | Tier 2 pull confirm when policy is Tier 1 |
-| MODE-SELECTOR | Speed / Strategy / Expert | SMOKE-E, Tier 1 | Open | Persisted id `expert` |
-| VOICE-STT | Whisper voice Ask (local STT) | VOICE-01…06 | Open | Permissions + Settings model download; on-Deck mic required |
-| STRATEGY-CORE | Strategy Guide prompt path | SMOKE-E | Open | |
-| STRATEGY-SPOILER | Strategy spoiler policy + consent | SMOKE-E, STRAT-01…05 | Partial | Unit green 2026-04-30; [preview 2026-05-26](test-evidence/tier1Core/2026-05-26-9e20a82/SMOKE-E-strategy-mode/manifest.json) |
-| STRATEGY-CHECKLIST | Strategy checklist (follow-up, persisted per game) | Tier 2 § Strategy depth | Open | Unit + preview; on-Deck: check/uncheck, QAM reopen |
-| DEBUG-TAB | Developer tab opt-in | SMOKE-A | Open | Tab strip when enabled |
-| INTENT-PACKS | Offline intent packs (import/export) | SMOKE-A | Open | Settings → Search intent packs |
-| SETTINGS-TRIM | Settings tab trim | SMOKE-A | Open | |
-| UI-SCALE | UI scale profiles (auto + manual snap) | UI-SCALE-01…05 | Open | Settings → Apply; on-Deck display matrix |
-| RESET-SESSION | Reset session cache | — | Open | Tier 2 |
-| DATA-CLEAR | Clear all plugin data (settings + permissions wipe) | DATA-CLEAR-01 | Open | Regression: modal survival must not restore old settings |
-| RETRY-PROMPT | Retry same prompt (regenerate) | FEEDBACK-01 | Open | `BonsaiChatReplyActions.tsx`; on-Deck |
-| ASK-FEEDBACK | Per-turn local feedback (thumbs) | FEEDBACK-01 | Open | `save_ask_feedback` RPC; on-Deck |
-
-### AI-assisted power and UX
-
-| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
-|------------|-----------------|------------|--------|----------|
-| TDP-APPLY | TDP automation via AI JSON | SMOKE-B, Test #3–4, 6 | Verified | On-Deck PASS rows; [UNIT-B](test-evidence/preGate/2026-05-26-9e20a82/UNIT-B-pytest-sandbox-tdp/manifest.json); [preview 2026-05-26](test-evidence/preGate/2026-05-26-9e20a82/UNIT-B-pytest-sandbox-tdp/manifest.json) |
-| QAMP-BANNER | QAMP Phase 1 banner (safe default) | SMOKE-B, QAMP-CODE | Verified | Vitest 2026-04-26; on-Deck → Tier 3; [preview 2026-05-26](test-evidence/tier1Core/2026-05-26-9e20a82/SMOKE-B-tdp-8w-sandbox/manifest.json) |
-| QAMP-ONDECK | QAMP manual (profile/reboot) | QAMP-DECK-01…05 | Open | Tier 3 |
-| D-PAD-CHUNKS | D-pad response scrolling | SMOKE-A | Partial | [SMOKE-A focus path](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-A-golden-path/manifest.json); [preview 2026-05-26](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-A-golden-path/manifest.json) |
-| BG-ASK-V1 | Background prompt completion V1 | SMOKE-H, BG-* | Partial | SMOKE-H Tier 1; full matrix Tier 4; [preview 2026-05-26](test-evidence/tier1Core/2026-05-26-9e20a82/BG-ASK-reopen-status/manifest.json) |
-| THINKING-PHASE | Thinking phase copy polish (mid-Ask woven status) | THINKING-01, THINKING-02 | Open | `tests/test_bonsai_stream_tags.py`; on-Deck proton/TDP/screenshot paths |
-| THINKING-SARCASM | Always-sarcastic thinking blurb + visible during stream | THINKING-01, THINKING-03 | Open | `tests/test_bonsai_stream_tags.py`, `src/utils/composeThinkingBlurb.test.ts`; on-Deck streaming QA |
-| SYS-PROMPT-LAYERS | System prompt layer order | SMOKE-A transparency | Partial | `tests/test_ollama_service.py` only |
-
-### Steam Input
-
-| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
-|------------|-----------------|------------|--------|----------|
-| STEAM-JUMP | Debug Steam Input jump Phase 1 | — | Open | Tier 2 optional; [preview 2026-05-26](test-evidence/tier2/2026-05-26-9e20a82/STEAM-JUMP-shim/manifest.json) |
-| QUICK-LAUNCH-DOC | Guide-chord macro documentation | — | Open | Tier 3; [troubleshooting.md](troubleshooting.md) §5 |
-| SHORTCUT-KW | Shortcut setup keywords | SMOKE-F | Partial | [SMOKE-F-shortcut-deck](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-shortcut-deck/manifest.json); [preview 2026-05-26](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-shortcut-deck/manifest.json) |
-| VAC-01…06 | VAC / ban lookup Phase 1 | SMOKE-F, VAC-* | Partial | [VAC-01](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-vac-capability-off/manifest.json); full matrix → Tier 2 |
-
-### About and polish
-
-| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
-|------------|-----------------|------------|--------|----------|
-| ABOUT-OLLAMA | Built on Ollama link | — | Open | Tier 3 |
-| GLASS-UI | Search surface glass pass | SMOKE-A | Open | |
-
-### Desktop notes
-
-| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
-|------------|-----------------|------------|--------|----------|
-| APP-LOG | App activity logging to Desktop | — | Open | Tier 2 |
-| DESKTOP-NOTES | Save to Desktop note V1 | — | Open | Tier 2; [preview 2026-05-26](test-evidence/tier2/2026-05-26-9e20a82/DESKTOP-NOTES-rpc/manifest.json) |
-| DESKTOP-AUTOSAVE | Daily chat auto-save V2 | — | Open | Tier 2 |
-
-### Permissions and capabilities
-
-| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
-|------------|-----------------|------------|--------|----------|
-| PERMS-GATE | Capability Permission Center | SMOKE-C | Partial | [SMOKE-C](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-C-perms-gate/manifest.json); on-Deck toast → runbook; [preview 2026-05-26](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-C-perms-gate/manifest.json) |
-| PROTON-LOG | Proton log attachment | PROTON-LOG-01…03 | Open | Tier 2; needs PROTON_LOG |
-| MODEL-POLICY | Model policy tiers + disclosure | — | Open | Tier 2; [preview 2026-05-26](test-evidence/tier2/2026-05-26-9e20a82/MODEL-POLICY-load/manifest.json) |
-
-### Character voice
-
-| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
-|------------|-----------------|------------|--------|----------|
-| CHAR-VOICE | Character roleplay mode | — | Open | Tier 2; [preview 2026-05-26](test-evidence/tier2/2026-05-26-9e20a82/CHAR-VOICE-load-settings/manifest.json) |
-| CHAR-ACCENT | Accent intensity levels | — | Open | Tier 2–3 |
-| CHAR-SUGGEST | Running-game character suggestions | — | Open | Tier 2 |
-| CHAR-RANDOM | Random “?” avatar | — | Open | Tier 3 |
-| CHAR-ACCENT-UI | Character-derived UI accent theme | — | Open | Tier 3 |
-| PYRO-EGG | Pyro talent-manager easter egg | — | Open | Tier 2–3 |
-
-### Vision (baseline index)
-
-| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
-|------------|-----------------|------------|--------|----------|
-| VISION-V1 | Global screenshots and vision V1 | SMOKE-G | Verified | Vision sweep 2026-04; rows below; [preview 2026-05-26](test-evidence/tier2/2026-05-26-9e20a82/VISION-V1-spot-dom/manifest.json) |
-
-### Other shipped baseline
-
-| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
-|------------|-----------------|------------|--------|----------|
-| CORE-ASK | Ask pipeline / Ollama routing | SMOKE-A | Open | |
-| GAME-CTX | Running game context | SMOKE-B, game-name Ask | Partial | Test #6; [preview 2026-05-26](test-evidence/tier1Core/2026-05-26-9e20a82/SMOKE-B-tdp-8w-sandbox/manifest.json) |
-| TROUBLESHOOT-3 | Frozen carousel troubleshooting triple | SMOKE-D | Verified | [x] prompts below |
-| LINUX-OLLAMA | Linux Ollama compatibility | CONN-TEST | Open | |
-| ZIP-CI | Plugin release zip CI | N/A | N/A | CI + Tier 4 clean install |
+See [roadmap.md](roadmap.md) and [testing-manual.md](testing-manual.md).
 
 ---
 
-## Test Results
+## New focusable controls
 
-On-Deck and preview-suite **PASS** rows only. FAIL / retry queue: [testing.md](testing.md#failures-and-retries).
-
-| # | Build / date | Game | Prompt | Expected | Model | Status | Notes |
-|---|--------------|------|--------|----------|-------|--------|-------|
-| 1 | — | None | "What is the capital of Michigan?" | Lansing (concise) | gemma3:latest | PASS | |
-| 3 | — | L4D2 | "Set my TDP to 8 watts" | JSON 8W, sysfs write | llama3:latest | PASS | → SMOKE-B |
-| 4 | — | L4D2 | "Set my TDP to 6 watts" | JSON 6W, sysfs write | llama3:latest | PASS | journalctl confirmed |
-| 6 | — | *(session title)* | "Recommended TDP for this game?" | JSON 3–15W clamp | *record* | PASS | → TDP-REC |
-| 7 | 2026-05-26 / 9e20a82 | preview | UNIT-A-vitest-gates | MAINT-HARNESS | preview-suite | PASS | [manifest](test-evidence/preGate/2026-05-26-9e20a82/UNIT-A-vitest-gates/manifest.json) |
-| 8 | 2026-05-26 / 9e20a82 | preview | UNIT-B-pytest-sandbox-tdp | TDP-APPLY | preview-suite | PASS | [manifest](test-evidence/preGate/2026-05-26-9e20a82/UNIT-B-pytest-sandbox-tdp/manifest.json) |
-| 9 | 2026-05-26 / 9e20a82 | preview | SMOKE-A-golden-path | SMOKE-A, CORE-UI, CORE-ASK, CONN-TEST, TRANSP… | preview-suite | PASS | [manifest](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-A-golden-path/manifest.json) |
-| 10 | 2026-05-26 / 9e20a82 | preview | SMOKE-C-perms-gate | SMOKE-C, PERMS-GATE | preview-suite | PASS | [manifest](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-C-perms-gate/manifest.json) |
-| 11 | 2026-05-26 / 9e20a82 | preview | SMOKE-F-disable-sanitize | SMOKE-F, SANITIZER | preview-suite | PASS | [manifest](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-disable-sanitize/manifest.json) |
-| 12 | 2026-05-26 / 9e20a82 | preview | SMOKE-F-shortcut-deck | SMOKE-F, SHORTCUT-KW | preview-suite | PASS | [manifest](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-shortcut-deck/manifest.json) |
-| 13 | 2026-05-26 / 9e20a82 | preview | SMOKE-F-vac-capability-off | SMOKE-F, VAC-01 | preview-suite | PASS | [manifest](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-vac-capability-off/manifest.json) |
-| 14 | 2026-05-26 / 9e20a82 | preview | SMOKE-B-tdp-8w-sandbox | SMOKE-B, TDP-APPLY, QAMP-BANNER, GAME-CTX | preview-suite | PASS | [manifest](test-evidence/tier1Core/2026-05-26-9e20a82/SMOKE-B-tdp-8w-sandbox/manifest.json) |
-| 15 | 2026-05-26 / 9e20a82 | preview | SMOKE-E-strategy-mode | SMOKE-E, STRATEGY-CORE, STRATEGY-SPOILER, MOD… | preview-suite | PASS | [manifest](test-evidence/tier1Core/2026-05-26-9e20a82/SMOKE-E-strategy-mode/manifest.json) |
-| 16 | 2026-05-26 / 9e20a82 | preview | BG-ASK-reopen-status | SMOKE-H, BG-ASK-V1 | preview-suite | PASS | [manifest](test-evidence/tier1Core/2026-05-26-9e20a82/BG-ASK-reopen-status/manifest.json) |
-| 17 | 2026-05-26 / 9e20a82 | preview | TDP-15W-clamp | TDP-15W | preview-suite | PASS | [manifest](test-evidence/tier1Boundaries/2026-05-26-9e20a82/TDP-15W-clamp/manifest.json) |
-| 18 | 2026-05-26 / 9e20a82 | preview | TDP-3W-clamp | TDP-3W | preview-suite | PASS | [manifest](test-evidence/tier1Boundaries/2026-05-26-9e20a82/TDP-3W-clamp/manifest.json) |
-| 19 | 2026-05-26 / 9e20a82 | preview | TDP-1W-clamp-to-3 | TDP-1W | preview-suite | PASS | [manifest](test-evidence/tier1Boundaries/2026-05-26-9e20a82/TDP-1W-clamp-to-3/manifest.json) |
-| 20 | 2026-05-26 / 9e20a82 | preview | TDP-20W-clamp-to-15 | TDP-20W | preview-suite | PASS | [manifest](test-evidence/tier1Boundaries/2026-05-26-9e20a82/TDP-20W-clamp-to-15/manifest.json) |
-| 21 | 2026-05-26 / 9e20a82 | preview | GPU-800-advisory | GPU-800 | preview-suite | PASS | [manifest](test-evidence/tier1Boundaries/2026-05-26-9e20a82/GPU-800-advisory/manifest.json) |
-| 22 | 2026-05-26 / 9e20a82 | preview | STREAM-01-flag-off | STREAM-01 | preview-suite | PASS | [manifest](test-evidence/tier2/2026-05-26-9e20a82/STREAM-01-flag-off/manifest.json) |
-| 23 | 2026-05-26 / 9e20a82 | preview | MDNS-FIND-rpc | MDNS-FIND | preview-suite | PASS | [manifest](test-evidence/tier2/2026-05-26-9e20a82/MDNS-FIND-rpc/manifest.json) |
-| 24 | 2026-05-26 / 9e20a82 | preview | MODEL-POLICY-load | MODEL-POLICY | preview-suite | PASS | [manifest](test-evidence/tier2/2026-05-26-9e20a82/MODEL-POLICY-load/manifest.json) |
-| 25 | 2026-05-26 / 9e20a82 | preview | CHAR-VOICE-load-settings | CHAR-VOICE | preview-suite | PASS | [manifest](test-evidence/tier2/2026-05-26-9e20a82/CHAR-VOICE-load-settings/manifest.json) |
-| 26 | 2026-05-26 / 9e20a82 | preview | VAC-02-empty-key | VAC-02 | preview-suite | PASS | [manifest](test-evidence/tier2/2026-05-26-9e20a82/VAC-02-empty-key/manifest.json) |
-| 27 | 2026-05-26 / 9e20a82 | preview | DESKTOP-NOTES-rpc | DESKTOP-NOTES | preview-suite | PASS | [manifest](test-evidence/tier2/2026-05-26-9e20a82/DESKTOP-NOTES-rpc/manifest.json) |
-| 28 | 2026-05-26 / 9e20a82 | preview | STEAM-JUMP-shim | STEAM-JUMP | preview-suite | PASS | [manifest](test-evidence/tier2/2026-05-26-9e20a82/STEAM-JUMP-shim/manifest.json) |
-| 29 | 2026-05-26 / 9e20a82 | preview | VISION-V1-spot-dom | VISION-V1, SMOKE-G | preview-suite | PASS | [manifest](test-evidence/tier2/2026-05-26-9e20a82/VISION-V1-spot-dom/manifest.json) |
-| 30 | 2026-06-09 / a9237e4 | preview | STREAM-02-flag-on-speed | STREAM-02 | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/STREAM-02-flag-on-speed/manifest.json) |
-| 31 | 2026-06-09 / a9237e4 | preview | STREAM-03-strategy-spoiler | STREAM-03, STRATEGY-SPOILER | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/STREAM-03-strategy-spoiler/manifest.json) |
-| 32 | 2026-06-09 / a9237e4 | preview | STREAM-04-stop-mid-stream | STREAM-04 | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/STREAM-04-stop-mid-stream/manifest.json) |
-| 33 | 2026-06-09 / a9237e4 | preview | STREAM-05-transparency-terminal | STREAM-05, TRANSPARENCY | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/STREAM-05-transparency-terminal/manifest.json) |
-| 34 | 2026-06-09 / a9237e4 | preview | VAC-03-valid-key-steamid | VAC-03 | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/VAC-03-valid-key-steamid/manifest.json) |
-| 35 | 2026-06-09 / a9237e4 | preview | VAC-04-profile-url | VAC-04 | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/VAC-04-profile-url/manifest.json) |
-| 36 | 2026-06-09 / a9237e4 | preview | VAC-05-vanity-url | VAC-05 | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/VAC-05-vanity-url/manifest.json) |
-| 37 | 2026-06-09 / a9237e4 | preview | VAC-06-perm-off-after-key | VAC-06 | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/VAC-06-perm-off-after-key/manifest.json) |
-| 38 | 2026-06-09 / a9237e4 | preview | TDP-boundary-clamps-assert | TDP-1W, TDP-20W | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/TDP-boundary-clamps-assert/manifest.json) |
-| 39 | 2026-06-09 / a9237e4 | preview | SMOKE-B-apply-with-perms | SMOKE-B, TDP-APPLY | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/SMOKE-B-apply-with-perms/manifest.json) |
-| 40 | 2026-06-09 / a9237e4 | preview | BG-ASK-lifecycle | BG-ASK-V1, SMOKE-H | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/BG-ASK-lifecycle/manifest.json) |
-
-**Tier 0 preview batch (5/5):** [test-evidence/tier0/2026-05-26-9e20a82/](test-evidence/tier0/2026-05-26-9e20a82/) · **preGate (2/2):** [batch-summary](test-evidence/preGate/2026-05-26-9e20a82/batch-summary.json) · **tier1Core (3/3):** [batch-summary](test-evidence/tier1Core/2026-05-26-9e20a82/batch-summary.json) · **tier1Boundaries (5/5):** [batch-summary](test-evidence/tier1Boundaries/2026-05-26-9e20a82/batch-summary.json) · **tier2 (8/8):** [batch-summary](test-evidence/tier2/2026-05-26-9e20a82/batch-summary.json) · **deckOnly (3 skipped):** [batch-summary](test-evidence/deckOnly/2026-05-26-9e20a82/batch-summary.json)
----
-
-## Tier 0 scenarios (S0)
-
-Linked from [testing.md](testing.md#device-qa-runbook) **Tier 0**. Prefer smokes over individual rows.
-
-### Deterministic commands (SMOKE-F)
-
-- [x] `bonsai:disable-sanitize` / `bonsai:enable-sanitize` — whole message; confirmation; no Ollama text in transparency
-- [x] `bonsai:shortcut-setup-deck` — Guide chord, QAM, Decky; points to [troubleshooting.md](troubleshooting.md) §5
-- [ ] `bonsai:shortcut-setup-stadia` — spare button / Stadia layout (not R4-only)
-- [ ] Shortcut: **Open Controller settings** with External/Steam on → `steam://open/settings/controller`
-- [ ] Shortcut: permissions off → toast to enable navigation
-- [x] `bonsai:vac-check` with **Steam Web API** off → capability message only (**VAC-01**)
-
-### Token streaming (Tier 2 — Developer tab)
-
-Requires **Settings → Data → Show Developer tab** → **Token streaming (experimental)**.
-
-- [x] **STREAM-01** Flag off: **Thinking…** until full reply; normal chunks after
-- [x] **STREAM-02** Flag on, Speed/Expert: single preview bubble; terminal split + banners
-- [x] **STREAM-03** Flag on, Strategy + spoiler masking, no Spoilers OK: no unmasked mid-stream flash
-- [x] **STREAM-04** Stop mid-stream: cancelled copy; no stale overwrite
-- [x] **STREAM-05** Transparency populates only after terminal
-- [ ] **STREAM-06** Smooth reveal: pending stream polls without text regression (preview RPC)
-- [ ] **THINKING-01** Pending: `thinking_summary` line visible (sarcastic/playful copy even without Character Voice); no placeholder AI bubble before partial; opener woven via `compose_thinking_blurb`
-- [ ] **THINKING-02** Mid-Ask prep phases (Proton logs, TDP read, screenshot prep, model retry): `thinking_summary` keeps question snippet + game — no generic downgrade to e.g. **Building context…** alone
-- [ ] **THINKING-03** During token streaming: italic thinking line stays visible above preview bubble; updates from `<bonsai-status>` or elapsed fallback (not hidden when `streaming=true`)
-- [ ] **FEEDBACK-01** Reply-action chrome: `.bonsai-chat-secondary-btn` on feedback/retry/details
-
----
-
-## Tier 1 scenarios (S1)
-
-### TDP / performance
-
-- [x] **TDP-REC** "Recommended TDP for this game?" (game running, JSON) — Test Results #6
-- [x] "What's the efficiency sweet spot for this game?" — verified prior pass
-- [x] "What are the best settings for 60fps?" — verified prior pass
-- [x] **GPU-ADV** "What GPU clock should I use?" (advisory only; no sysfs GPU write) — verified
-- [x] **GPU-800** "Set GPU clock to 800 MHz" — JSON `gpu_clock_mhz`; backend logs, no write
-- [x] **TDP-15W** "Set TDP to 15 watts" — clamp at 15W
-- [x] **TDP-3W** "Set TDP to 3 watts" — clamp at 3W
-- [x] **TDP-1W** "Set TDP to 1 watt" — clamp to 3W
-- [x] **TDP-20W** "Set TDP to 20 watts" — clamp to 15W
-- [ ] "Lower my TDP by 2 watts" — relative adjustment (may not parse)
-
-### Battery / thermal / compatibility
-
-- [x] "Optimize for battery life" (game running, low TDP JSON) — verified (supersedes Test #5 fail)
-- [x] "Balance FPS and battery" / `How do I balance FPS and battery?`
-- [ ] "Set TDP to minimum for menu/idle" / `What TDP should I use for menus and idle?`
-- [x] "Best settings for 30fps with max battery"
-- [x] "Optimize for battery life" (no game — general advice, no JSON)
-- [x] "Reduce fan noise" / thermal long-session prompts — verified
-- [x] General compatibility prompts ("What settings…", "known issues", "how well on Deck") — verified
-
-### Troubleshooting / Proton
-
-- [x] **TROUBLESHOOT-3** Frozen carousel: crashing / stuttering / Proton — verified (SMOKE-D)
-- [ ] "Game won't launch, what should I check?"
-
-#### Proton log attachment (Tier 2)
-
-- [ ] **PROTON-LOG-01** Toggle + permission on, `steam-<appid>.log` present → transparency excerpt
-- [ ] **PROTON-LOG-02** Toggle on, log read off → Ask completes; skip noted
-- [ ] **PROTON-LOG-03** Heuristic ask, no log files → warning; answer still returns
-
-### Controls and edge cases
-
-- [ ] "Recommended controller layout?" (game running)
-- [ ] "How to reduce input lag?"
-- [ ] "What game am I playing?" (game running)
-- [x] "What is my current TDP?" — read path + sysfs grounding (unit + prior pass)
-- [ ] Non-English input → English reply
-- [ ] Very long prompt stress test
-- [x] Empty-ish "hi" / "help"
-- [ ] TDP optimization ask with **no** game — generic advice only
-
-**System prompt layers:** spot-check via SMOKE-A transparency; unit tests in `tests/test_ollama_service.py`.
-
----
-
-## QAMP verification (Phase 1)
-
-### Code / automated (verified 2026-04-26)
-
-- [x] TDP write banner includes applied wattage
-- [x] Transcript includes re-open QAM Performance guidance
-- [x] **Note** about stale sliders on successful apply
-- [x] GPU MHz recommendation labeled not sysfs-applied
-
-### On-Deck manual (Tier 3 — record build + SteamOS)
-
-- [ ] **QAMP-DECK-01** Per-game profile ON: TDP apply + guidance
-- [ ] **QAMP-DECK-02** Per-game profile OFF: same
-- [ ] **QAMP-DECK-03** Close/reopen QAM Performance: cap reflects write
-- [ ] **QAMP-DECK-04** After Steam restart: OS default (not plugin regression)
-- [ ] **QAMP-DECK-05** After full reboot: same
-
----
-
-## Tier 2 — Bazzite gamescope QAM layout
-
-Bazzite Game Mode only (gamescope session). Steam Deck regression: **SMOKE-A** tab strip still horizontal on open.
-
-- [x] **QAM-BAZZITE-01** Open bonsAI from QAM on first paint — full-width panel (not thin left strip); LB/RB icons horizontal; tab body below strip without overlap; pointer hover does not crush layout
-
----
-
-## Tier 2 — UI scale profiles
-
-Deck-only (multi-output: handheld, docked monitor, TV). Unit: `src/data/uiScaleProfile.test.ts`.
-
-- [ ] **UI-SCALE-01** Handheld (internal): auto profile Handheld; no horizontal QAM spill on ask bar / chips
-- [ ] **UI-SCALE-02** Docked desk monitor (24″–27″): auto Desktop; layout matches handheld recipe
-- [ ] **UI-SCALE-03** Docked TV (~65″ @ couch distance): auto Couch; larger type/spacing; no spill
-- [ ] **UI-SCALE-04** Manual snap + **Apply UI scale** persists across QAM close; Pull Models modal matches scale
-- [ ] **UI-SCALE-05** D-pad: auto toggle ↕ manual slider ↕ Reset ↕ Apply ↕ screenshot quality row; slider left/right snaps Handheld · Desktop · Couch
-
----
-
-## Tier 2 — Voice input (local STT)
-
-Deck-only (mic + PipeWire capture). Preview harness stubs RPCs but cannot validate real audio.
-
-- [ ] **VOICE-01** Permissions off → mic redirects to Permissions tab; no `start_voice_transcription` capture
-- [ ] **VOICE-02** Permissions on + model downloaded → interim text streams into Ask field while speaking
-- [ ] **VOICE-03** Stop mic (red stop) finalizes transcript; Ask can be submitted normally
-- [ ] **VOICE-04** Revoke microphone permission mid-recording → capture stops immediately
-- [ ] **VOICE-05** Install voice engine on SteamOS (podman) succeeds — compiles CPU-safe whisper-cli (pinned digest, no SIGILL on Deck); engine + model show ready
-- [ ] **VOICE-06** Tier 1 latency — interim text appears within ~2 s of speaking in Gaming Mode QAM (Tier 1 constants 2026-07-07); no extra CPU stutter vs prior build
-
-Maintainer: digest bump + Tier 2 options — [voice-input-follow-up.md](voice-input-follow-up.md).
-
-## Tier 2 — Open-weight pull (Tier 1 policy)
-
-- [ ] **GEMMA-PULL-01** Model policy **Tier 1** → Ollama → **Open AI models…** → **Browse & pull** → queue an open-weight tag (e.g. `gemma4:e2b-it-qat`) → confirm **Enable Tier 2** modal → pull proceeds → bottom **Open AI models…** row shows **Also try open-weight models** (Tier 2), not Tier 1
-
----
-
-## Tier 2 — Clear all plugin data
-
-Regression for settings/permissions surviving in-app clear (fixed 2026-07-06: modal survival + stale `save_settings` after reset).
-
-- [ ] **DATA-CLEAR-01** Enable 3+ permissions, set Ollama LAN host, dismiss disclaimer → **Settings → Advanced → Clear all data…** → success toast → close/reopen QAM → all permissions off, disclaimer returns, Ollama host default; `~/homebrew/settings/bonsAI/settings.json` has `capabilities` all `false`
-- [ ] **DATA-CLEAR-02** After local Ollama + models installed → **Clear all data** → `~/.ollama` removed; Ollama tab shows **Install Ollama** until reinstalled; first install may take up to ~5 minutes (hint text under button)
-
-## Tier 2 — Tiny-model thinking blurbs
-
-- [ ] **THINK-TINY-01** Developer → enable **Tiny-model thinking blurbs** without `qwen2.5:1.5b` → confirm pull modal → no spurious **Developer tab hidden** toast → lands on **Ollama** tab (not Main) with pull toast
-
-## Tier 2 — Strategy depth
-
-Run after **SMOKE-E**. Unit coverage green 2026-04-30.
-
-### Core mode UX
-
-- [x] **STRAT-01** "How do I beat this level" beta preset visible
-- [ ] Strategy preset switches mode to Strategy Guide
-- [ ] Strategy placeholder copy
-- [ ] Follow-ups stay strategy-relevant
-
-### Spoiler policy
-
-- [ ] **STRAT-SPOIL-01** First answer: no-spoilers-by-default disclosure
-- [ ] **STRAT-SPOIL-02** Without permission: no direct puzzle/boss spoilers
-- [ ] **STRAT-SPOIL-03** With permission: unrestricted guidance OK
-- [ ] **STRAT-SPOIL-04** Tap-to-reveal blocks default
-- [ ] **STRAT-SPOIL-05** Settings spoiler masking toggle behavior
-
-### Vision + strategy
-
-- [ ] Strategy without screenshot: notes limited context
-- [ ] Strategy with screenshot: scene-aware guidance
-- [ ] Inline visual aid renders or degrades gracefully
-
-### Steam Input coaching / checklist / cheat
-
-- [ ] Headshots / control-specific Deck advice
-- [ ] Checklist check/uncheck + follow-up progress (Strategy follow-up turn; `bonsai-strategy-checklist` fence)
-- [ ] Checklist persists after QAM close / plugin reload (same game AppID)
-- [ ] Reset session cache clears checklist
-- [ ] Cheat / Fast Pass gating only when user asks to rush
-
-### Strategy regression subset
-
-- [ ] Beat level (no screenshot, no spoiler OK)
-- [ ] Beat level + screenshot
-- [ ] "Spoilers are okay, give me exact steps"
-- [ ] "I can't hit headshots in this game"
-- [ ] Checklist iteration prompt
-- [ ] "Fastest cheese" cheat gating
-
----
-
-## VAC / Steam ban lookup (`bonsai:vac-check`) — Tier 2
-
-- [x] **VAC-01** Capability off — SMOKE-F; no outbound request
-- [x] **VAC-02** Capability on, empty key
-- [x] **VAC-03** Valid key + known SteamID; route `vac_check`
-- [x] **VAC-04** Profile URL token
-- [x] **VAC-05** Vanity `/id/…` unsupported note
-- [x] **VAC-06** Permission off after key saved — no network
-
----
-
-## Vision V1 (verified 2026-04)
-
-Spot-check only if attach/RPC changes. **SMOKE-G**.
-
-- [x] Fullscreen screenshot browser + thumbnails
-- [x] App-priority ordering + global fallback
-- [x] Select attaches; Back/Escape; controller navigation
-- [x] Attach / Ask / Mic|Stop control row
-- [x] Remove attachment → text-only next Ask
-- [x] Quality Low / Mid / Max settings persist
-- [x] Quality sweep on device (Low → Mid → Max)
-- [x] Manual Deck staged run completed
-
----
-
-## Appendix — Tier 3 cosmetic (P3)
-
-### Preset and follow-up UX
-
-- [ ] Three random presets on load
-- [ ] Fade mode: stagger, offsets (~750/1300/1700 ms), fade in/out timing, length hold
-- [ ] Carousel mode: slide, D-pad history, post-Ask re-seed
-- [ ] Preset tap appends " for [game]" when game running
-- [ ] Follow-up category detection (battery / performance / troubleshooting / controls)
-
-### Beta preset behavior
-
-- [ ] `[beta]` tag visual only (not in submitted text)
-- [ ] Beta preset prompts give reasonable generic advice
-- [ ] Beta category detection + follow-ups
-
----
-
-## Appendix — Tier 4 heavy (S3)
-
-### Background prompt completion (V1)
-
-**Tier 1 smoke:** SMOKE-H (reopen pending / complete). Full matrix below.
-
-#### Lifecycle
-
-- [ ] Close QAM while pending → reopen → Thinking…
-- [ ] Close QAM after complete → reopen → final reply
-- [ ] Foreground flow unchanged
-- [ ] Multiple reopens → single result
-
-#### Busy / timeout / cancel
-
-- [ ] Second Ask blocked while pending
-- [ ] Timeout + error restore on reopen
-- [ ] Stop/Clear semantics
-
-#### Apply parity
-
-- [ ] TDP JSON applies after background complete
-- [ ] Session crash/reboot does **not** restore (expected V1)
-
-#### Regression subset
-
-- [ ] Slow / elapsed warnings; follow-up presets; input persistence; PC IP unchanged
-
-### Games to test with
-
-- [ ] Left 4 Dead 2
-- [ ] Elden Ring
-- [ ] Lightweight indie
-- [ ] Demanding AAA
-- [ ] Native Linux title
-- [ ] Non-Steam / emulator shortcut
-
----
-
-## Environment matrix
-
-Validate on **Stable** Decky + **Stable** SteamOS when possible. Re-test PASS after channel changes.
-
-| Component | Channel | Notes |
-|-----------|---------|-------|
-| Decky Loader | Stable (Release) | |
-| SteamOS | Stable | Beta/Preview may change sysfs / QAM |
-
-### Current test environment
-
-Record before Tier 1+ runs:
-
-- [ ] Decky Loader version: ___
-- [ ] Decky channel: Stable / Pre-release
-- [ ] SteamOS version: ___
-- [ ] SteamOS channel: Stable / Beta / Preview
-- [ ] Ollama version: ___
-- [ ] Model(s) installed: ___
-
----
-
-## Optional deep dives (release notes)
-
-Historical **suggested checks** from shipped features — run when touching that area; not required for Tier 0–1.
-
-### Input sanitizer (2026-04-16)
-
-Magic phrases `bonsai:disable-sanitize` / `bonsai:enable-sanitize`; re-enable before comparative model runs.
-
-### Character accent intensity (2026-04-16)
-
-Same preset at subtle vs unleashed; JSON/TDP unchanged.
-
-### Strategy + TDP layout (2026-04-18)
-
-Pure puzzle Strategy ask → no hardware JSON in system prompt; mixed performance ask → contract returns.
-
-### Character voice + Pyro (2026-04-15)
-
-Picker, Random, custom line; Pyro Balanced vs Nightmare — no TDP apply on Nightmare asshole tier.
-
-### Global screenshots (2026-04-13)
-
-See **Vision V1** verified section.
-
-### Frozen preset carousel (maintainers)
-
-Set `TEMP_PRESET_CAROUSEL_FROZEN` in [`src/data/presets.ts`](../src/data/presets.ts) for repeatable chips:
-
-1. `Why is my game crashing?`
-2. `How do I fix stuttering?`
-3. `Help me troubleshoot a Proton issue`
-
-Turn **off** before release builds. `vitest` asserts frozen triple when flag on.
-
----
-
----
-
-## Failures and retries
-
-# bonsAI prompt testing — failures & retries
-
-Open FAIL rows, superseded preview attempts, and optional on-Deck retests. **PASS** results live in [testing.md](testing.md#shipped-feature-coverage).
-
-**Retry:** `pnpm run test:preview:tier -- --tier=<batch> --filter=<id> --evidence --write`
-
----
-
-## On-Deck FAIL (historical)
-
-| # | Build / date | Game | Prompt | Expected | Model | Status | Notes |
-|---|--------------|------|--------|----------|-------|--------|-------|
-| 2 | — | Elden Ring | "What TDP should I use?" | 8–12W + JSON | llama3:latest | FAIL | Pre–system-prompt fix; **optional retest** |
-| 5 | — | L4D2 | "Optimize for battery life" | Low TDP JSON | llama3:latest | FAIL | Pre–game context; superseded by Tier 1 with-game pass — retest optional |
-
----
-
-## Preview FAIL log
-
-Runner `--write` upserts here on FAIL (deduped by scenario ID). Superseded rows from 2026-05-26 debug iterations are summarized below; per-attempt artifacts remain under [test-evidence/](test-evidence/).
-
-### Superseded tier0 attempts (2026-05-26 / 9e20a82)
-
-Sidecar / assertion tuning before final **5/5 PASS**. Evidence folders may contain both fail and pass manifests from the same date folder.
-
-| Scenario | Attempts | Root cause (final) | Resolution |
-|----------|----------|-------------------|------------|
-| SMOKE-A-golden-path | 6+ | `domContains "bonsAI"`; IPC `callTestHook` timeout | Dismiss modal via focus; assert shell selectors |
-| SMOKE-C-perms-gate | 5+ | Sidecar `fetch failed`; DOM `"Permissions"`; `callTestHook` timeout | RPC `load_settings` + `hardware_control` assert |
-| SMOKE-F-disable-sanitize | 4+ | Sidecar down; RPC `"sanitizer"` vs `"sanitiz"` | Sidecar path fix; substring assert |
-| SMOKE-F-shortcut-deck | 3+ | Sidecar `fetch failed` | Sidecar auto-start / manual start |
-| SMOKE-F-vac-capability-off | 4+ | Sidecar down; assert `"capability"` vs message text | Assert `"Steam Web API is off"` |
-| VISION-V1-spot-dom | 1 | `domContains "Ask"` — label not in preview DOM | Assert `bonsai-decky-tabs-root` / askbar classes |
-
-**Final PASS batch:** [test-evidence/tier0/2026-05-26-9e20a82/](test-evidence/tier0/2026-05-26-9e20a82/) · **tier2 (8/8):** [test-evidence/tier2/2026-05-26-9e20a82/](test-evidence/tier2/2026-05-26-9e20a82/)
-
----
-
-## Preview FAIL table (auto-updated)
-
-<!-- preview-fail-results:start -->
-| 2026-06-09 / a9237e4 | tier3UI | UI-A-beta-modal | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-beta-modal/manifest.json) — Error: IPC timeout for callTestHook |
-| 2026-06-09 / a9237e4 | tier3UI | UI-A-tab-tour | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-tab-tour/manifest.json) — Error: IPC timeout for callTestHook |
-| 2026-06-09 / a9237e4 | tier3UI | UI-A-settings-conn | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-settings-conn/manifest.json) — Error: IPC timeout for callTestHook |
-| 2026-06-09 / a9237e4 | tier3UI | UI-A-permissions-ui | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-permissions-ui/manifest.json) — Error: IPC timeout for callTestHook |
-| 2026-06-09 / a9237e4 | tier3UI | UI-A-mode-menu | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-mode-menu/manifest.json) — Error: IPC timeout for callTestHook |
-| 2026-06-09 / a9237e4 | tier3UI | UI-A-transparency-expand | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-transparency-expand/manifest.json) — Error: IPC timeout for callTestHook |
-| 2026-06-09 / a9237e4 | tier3UI | UI-A-debug-tab | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-debug-tab/manifest.json) — Error: IPC timeout for callTestHook |
-| 2026-06-09 / a9237e4 | tier3UI | UI-A-presets-visible | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-presets-visible/manifest.json) — Error: IPC timeout for callTestHook |
-<!-- preview-fail-results:end -->
-
----
-
----
-
-## Revision log
-
-| Date | Change |
-|------|--------|
-| 2026-06-21 | Consolidated regression-and-smoke, device-qa-runbook, prompt-testing, prompt-testing-failures into testing.md |
-| 2026-05-26 | FAIL rows split; preview --write dedupe |
-| 2026-05-24 | Refactor: coverage matrix, tier-linked scenarios, runbook split |
+Before shipping any new Settings/QAM control, complete the focus-graph checklist in [testing-manual.md](testing-manual.md) and add a coverage note above. Policy: `bonsai://policy/decky-ui-focus`.

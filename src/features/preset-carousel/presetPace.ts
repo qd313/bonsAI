@@ -1,0 +1,62 @@
+/**
+ * Title: Preset chip pace
+ * Purpose: The numbers that set how long a suggestion chip stays and how it fades, for one chip
+ *          showing and for two. They are the maintainer's to tune: after looking at the pace on the
+ *          Deck, change a number here and nothing else.
+ * Used for: presetRowLayout (hold and turn lengths), the fade, plain, decode and sliding chip styles
+ *           in MainTabPresetAnimatedChips and presetDecodeSlots.
+ * Solves: One chip draws the eye, even more so when it fades in, so it needs far less still time than
+ *         two chips side by side, which are busier and more to read. Before plan 78 the hold was
+ *         300 ms a letter, 8 to 32 s, with a 2 s fade out, whatever the chip count (about 15 s a turn
+ *         for a typical label: two chips a minute with one chip showing, "useless to show off the
+ *         features"). Plan 78 made that about 7 s with one chip, 11 s with two; plan 96 (maintainer: "change too fast") slowed it to a 6 to 12 s hold with one chip and 9 to 18 s with two.
+ * Does not: Decide which chip comes next (nextChipRule) or how long a long label needs to scroll
+ *           (presetRowLayout, which makes the hold at least one full scroll).
+ */
+
+export type PresetPace = {
+  /** Still time per letter of the label, before the limits below. */
+  msPerChar: number;
+  /** The least a chip stays fully shown, before fading out. */
+  minHoldMs: number;
+  /** The most the length-scaled hold gives (a long label's scroll can still hold it longer). */
+  maxHoldMs: number;
+  /** Fade in. Kept at 1.2 s for both: it is what draws the eye. */
+  fadeInMs: number;
+  fadeOutMs: number;
+};
+
+/** One chip across the whole column. */
+const ONE_CHIP_PACE: PresetPace = {
+  msPerChar: 160,
+  minHoldMs: 6_000,
+  maxHoldMs: 12_000,
+  fadeInMs: 1_200,
+  fadeOutMs: 1_200,
+};
+
+/** Two chips side by side. */
+const TWO_CHIP_PACE: PresetPace = {
+  msPerChar: 240,
+  minHoldMs: 9_000,
+  maxHoldMs: 18_000,
+  fadeInMs: 1_200,
+  fadeOutMs: 1_500,
+};
+
+/**
+ * With two chips, two spots never change within this long of each other: a swap and its fades finish
+ * (1.5 s out and 1.2 s in, 2.7 s) before the other spot's begins.
+ */
+export const TWO_SPOT_MIN_GAP_MS = 3_000;
+
+/**
+ * Two long chips whose scrolls end close together: each leaves one pause after its own words stop, so
+ * they only keep this far apart (instead of TWO_SPOT_MIN_GAP_MS), which holds the later one back by
+ * under half a second rather than by up to 2.5 s.
+ */
+export const TWO_LONG_CHIP_MIN_GAP_MS = 350;
+
+export function presetPace(chipCount: number): PresetPace {
+  return chipCount <= 1 ? ONE_CHIP_PACE : TWO_CHIP_PACE;
+}

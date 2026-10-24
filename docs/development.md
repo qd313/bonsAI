@@ -1,7 +1,39 @@
 
 # bonsAI Development Guide
 
-This guide is for contributors building and deploying bonsAI from source. **Primary target:** one Steam Deck runs everything — Cursor, the git repo, Ollama, Decky, and bonsAI on the same machine. A separate PC on the LAN still works; see [Other-machine LAN workflow](#other-machine-lan-workflow).
+This guide is for contributors building and deploying bonsAI from source. **Primary target:** one Steam Deck runs everything — the git repo, Ollama, Decky, and bonsAI on the same machine. A separate PC on the LAN still works; see [Other-machine LAN workflow](#other-machine-lan-workflow).
+
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [What you'll have when done](#what-youll-have-when-done)
+- [Prerequisites (Steam Deck, Desktop Mode)](#prerequisites-steam-deck-desktop-mode)
+- [Clone the repo](#clone-the-repo)
+- [Agent / IDE MCP setup](#agent--ide-mcp-setup)
+- [One-time developer setup](#one-time-developer-setup)
+- [Install Ollama on the Deck](#install-ollama-on-the-deck)
+- [Build and deploy (same Deck)](#build-and-deploy-same-deck)
+  - [Maintainer dev loop](#maintainer-dev-loop)
+  - [Headless Decky harness (Vitest)](#headless-decky-harness-vitest)
+- [Test bonsAI after deploy (two tracks)](#test-bonsai-after-deploy-two-tracks)
+  - [Track A — Fast loop (recommended; stay in Desktop Mode)](#track-a--fast-loop-recommended-stay-in-desktop-mode)
+  - [Track B — Full validation (Gaming Mode)](#track-b--full-validation-gaming-mode)
+  - [Troubleshooting (both tracks)](#troubleshooting-both-tracks)
+- [First Ask](#first-ask)
+- [Architecture at a glance](#architecture-at-a-glance)
+  - [Frontend (`src/`)](#frontend-src)
+  - [Backend (`main.py` + `py_modules/backend//`)](#backend-mainpy--py_modulesbackend)
+  - [Deep-dive pointers (preserved for agents and contributors)](#deep-dive-pointers-preserved-for-agents-and-contributors)
+- [Toolchain](#toolchain)
+- [Other-machine LAN workflow](#other-machine-lan-workflow)
+- [Release (plugin zip)](#release-plugin-zip)
+- [Change-risk hotspots](#change-risk-hotspots)
+  - [Line counts (approximate, 2026-07-05)](#line-counts-approximate-2026-07-05)
+  - [Prioritized hotspots (edit order vs risk)](#prioritized-hotspots-edit-order-vs-risk)
+  - [Ordered refactor queue (after Settings is calm)](#ordered-refactor-queue-after-settings-is-calm)
+- [Documentation maintenance (releases)](#documentation-maintenance-releases)
+- [Docs and references](#docs-and-references)
+<!-- /toc -->
 
 ## What you'll have when done
 
@@ -21,21 +53,22 @@ This guide is for contributors building and deploying bonsAI from source. **Prim
 
 4. Install **[Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** if it is not already on the Deck (Stable channel is a good default).
 
-## Install Cursor and clone the repo
-
-Install Cursor on the Deck (Flatpak or AppImage from [cursor.com](https://cursor.com)). Then:
+## Clone the repo
 
 ```bash
 cd ~
-git clone https://github.com/cantcurecancer/bonsAI.git
+git clone https://github.com/qd313/bonsAI.git
 cd bonsAI
 ```
 
-Open the `~/bonsAI` folder in Cursor.
+Open the `~/bonsAI` folder in your editor of choice, and read [AGENTS.md](../AGENTS.md) for how
+agents work in this repo.
 
 ## Agent / IDE MCP setup
 
-IDE agents use the in-repo **bonsai-mcp** knowledge server plus **Decky Plugin Studio** for deploy/preview. See [mcp-setup.md](mcp-setup.md) and [AGENTS.md](../AGENTS.md).
+IDE agents use the in-repo **bonsai-mcp** knowledge server plus **Decky Plugin Studio** for deploy/preview. See [mcp-setup.md](mcp-setup.md) and [AGENTS.md](../AGENTS.md). DPS itself lives in [qd313/decky-plugin-studio](https://github.com/qd313/decky-plugin-studio) — document issues and sync any DPS-related changes there (see mcp-setup § Decky Plugin Studio).
+
+**Maintainer architecture docs:** [archive/voice-input-follow-up.md](../../bonsAI-workshop/archive/voice-input-follow-up.md) (Whisper STT), [knowledge-base.md](knowledge-base.md) (offline RAG). **Code clarity:** [code-clarity.md](code-clarity.md) (file headers, Ask path map), [glossary.md](glossary.md) (acronyms).
 
 ```bash
 pnpm run mcp:install
@@ -74,7 +107,7 @@ On **Windows** (remote deploy to a Deck on the LAN), use `.\scripts\setup-dev.ps
 ./scripts/setup-ollama.sh
 ```
 
-This installs Ollama and pulls the Tier 1 essentials model (`qwen2.5vl:3b`). For preset tags aligned with bonsAI routing, see `TIER1_ESSENTIALS_PULL_TAGS` in [`refactor_helpers.py`](../refactor_helpers.py).
+This installs Ollama and pulls the Tier 1 essentials model (`qwen2.5vl:3b`). For preset tags aligned with bonsAI routing, see `TIER1_ESSENTIALS_PULL_TAGS` in [`py_modules/backend/ollama/ollama_routing.py`](../py_modules/backend/ollama/ollama_routing.py).
 
 Verify:
 
@@ -83,9 +116,9 @@ curl -s http://127.0.0.1:11434/api/tags
 ollama run qwen2.5:1.5b "Hello from bonsAI"
 ```
 
-**In-app model management:** With **Ollama on this Deck** enabled, open **Ollama → Browse models…** (or the AI models hub) to open the Pull Models picker — bundled catalog merged with a **living overlay** from `data/pull-model-catalog-overlay.json` (fetched on **Update AI & models** completion and when you tap **↻** in the picker). Live registry sizes when online (offline fallback), multi-select pull, and per-row delete. Progress appears in the Local Ollama setup log on the Ollama tab.
+**In-app model management:** With **Ollama on this Deck** enabled, open **Ollama → Browse models…** (or the AI models hub) to open the Pull Models picker — the bundled catalog. Live registry sizes when online (offline fallback), multi-select pull, and per-row delete. Progress appears in the Local Ollama setup log on the Ollama tab.
 
-**Maintainers — add a recommended model without a plugin release:** Edit [`data/pull-model-catalog-overlay.json`](../data/pull-model-catalog-overlay.json) (`entries`, `removed_tags`, `overrides`). Ship to `main`; Decks pick it up on the next forced catalog refresh. Ask routing chains in `refactor_helpers.py` still require a plugin release until explicitly updated.
+**Maintainers — add a recommended model:** it needs a plugin release (the bundled catalog and the Ask routing chains in `backend/ollama/ollama_routing.py`). The plugin no longer downloads a model list from GitHub.
 
 ## Build and deploy (same Deck)
 
@@ -95,8 +128,8 @@ ollama run qwen2.5:1.5b "Hello from bonsAI"
 
 What this does:
 
-- `pnpm install` (when needed) → `pnpm run build` → writes dev `src/config.ts` from `.env`
-- Copies `main.py`, `refactor_helpers.py`, `py_modules/`, and `dist/` into `~/homebrew/plugins/bonsAI/`
+- `pnpm install` (when needed) → `pnpm run build`
+- Copies `main.py`, `py_modules/`, and `dist/` into `~/homebrew/plugins/bonsAI/`
 - Restarts `plugin_loader` via `sudo systemctl`
 
 **Modes** (all from repo root):
@@ -113,11 +146,11 @@ What this does:
 
 Windows equivalent: `.\scripts\build.ps1` (remote deploy only; loads `.env`). Watch deploy: `.\scripts\watch-deploy.ps1`.
 
-### Maintainer dev loop (Cursor)
+### Maintainer dev loop
 
-- Skill: [`.cursor/skills/bonsai-deck-dev-loop/SKILL.md`](../.cursor/skills/bonsai-deck-dev-loop/SKILL.md) — build/deploy, BPM vs Gaming Mode, screenshots, optional log tunnel.
-- Screenshots: [`.cursor/skills/decky-screenshot-ingest/SKILL.md`](../.cursor/skills/decky-screenshot-ingest/SKILL.md).
-- Visibility workflow: [spikes/cursor-deck-visibility.md](spikes/cursor-deck-visibility.md).
+- Workflow: `bonsai.workflow.get` id=`deck-dev-loop` — build/deploy, BPM vs Gaming Mode, screenshots, optional log tunnel.
+- Screenshots: `bonsai.workflow.get` id=`screenshot-ingest`.
+- Visibility workflow (historical): [archive/spikes/cursor-deck-visibility.md](../../bonsAI-workshop/archive/spikes/cursor-deck-visibility.md).
 
 ### Headless Decky harness (Vitest)
 
@@ -125,7 +158,7 @@ Frontend tests use a fake `@decky/api` registry under `src/test-harness/` (jsdom
 
 ## Test bonsAI after deploy (two tracks)
 
-Decky injects into Steam's **gamepadui** layer — the same React/CEF surface as **Gaming Mode** and **Big Picture Mode (BPM)**. The classic Desktop Steam window does **not** load QAM or Decky. See [archive/research/steam-input-research.md](archive/research/steam-input-research.md) § "Game Mode / Big Picture".
+Decky injects into Steam's **gamepadui** layer — the same React/CEF surface as **Gaming Mode** and **Big Picture Mode (BPM)**. The classic Desktop Steam window does **not** load QAM or Decky. See [archive/research/steam-input-research.md](../../bonsAI-workshop/archive/research/steam-input-research.md) § "Game Mode / Big Picture".
 
 ### Track A — Fast loop (recommended; stay in Desktop Mode)
 
@@ -134,17 +167,17 @@ Use this for daily UI, Settings, Permissions, Ask flow, Ollama RPC, and QAM focu
 1. After `./scripts/build.sh local`, if Steam was already running, **fully exit Steam and relaunch** (or use Decky **Reload** in QAM after the first open) so the new bundle loads.
 2. Open Steam in Desktop Mode → **Steam menu → View → Big Picture Mode** (or the BPM icon, top-right).
 3. Press **`...` (Quick Access)** on the controller (or click the QAM glyph) → **Decky plug icon** → **bonsAI**.
-4. Exit BPM via **Exit Big Picture** or `Alt+Tab` back to Konsole/Cursor — no Gaming Mode switch required.
+4. Exit BPM via **Exit Big Picture** or `Alt+Tab` back to Konsole — no Gaming Mode switch required.
 
 **Iterating:** run `pnpm run watch` in Konsole, then **Reload** the plugin in Decky QAM for a near-HMR loop.
 
-**Screenshots for Cursor (BPM / QAM UI):** After reproducing UI in BPM (or with BPM still running in the background), Alt+Tab to Cursor and run:
+**Screenshots (BPM / QAM UI):** After reproducing UI in BPM (or with BPM still running in the background), Alt+Tab back to the desktop and run:
 
 ```bash
 ./scripts/screenshot-deck.sh
 ```
 
-With `DECK_IP=127.0.0.1` in `.env` (recommended for same-machine Deck), or `steamdeck.local` while running on the Deck, the script captures **locally** (no SSH). Saves `screenshots/DeckCapture_<timestamp>.png` for agents using the [decky-screenshot-ingest](../.cursor/skills/decky-screenshot-ingest/SKILL.md) skill. Keep Steam/BPM running for composited QAM captures; fully quitting Steam may fall back to KMS grab (game plane only). If a run hangs on `deck@steamdeck.local's password:`, press Ctrl+C and retry (auto-local should apply) or run `./scripts/screenshot-deck.sh --local`. Windows remote deploy: `.\scripts\screenshot-deck.ps1`.
+With `DECK_IP=127.0.0.1` in `.env` (recommended for same-machine Deck), or `steamdeck.local` while running on the Deck, the script captures **locally** (no SSH). Saves `screenshots/DeckCapture_<timestamp>.png` for agents using the `bonsai.workflow.get` id=`screenshot-ingest` workflow. Keep Steam/BPM running for composited QAM captures; fully quitting Steam may fall back to KMS grab (game plane only). If a run hangs on `deck@steamdeck.local's password:`, press Ctrl+C and retry (auto-local should apply) or run `./scripts/screenshot-deck.sh --local`. Windows remote deploy: `.\scripts\screenshot-deck.ps1`.
 
 **What BPM proves:** Main tab UI, Settings, Permissions, Ask flow, backend RPC, D-pad focus in QAM overlays.
 
@@ -191,32 +224,35 @@ flowchart LR
   RPC --> Vision[screenshot_media]
   RPC --> Desktop[desktop_note_service]
   RPC --> TDP[tdp_service]
-  Shared[refactor_helpers.py + model_policy] --- RPC
+  Shared[ollama_routing + model_policy] --- RPC
   Shared --- OllamaSvc
 ```
 
-**Request path (Ask):** User types in `MainTab` → `useBonsaiAskOrchestration` → `deckyCall` → `main.py` RPC → `input_sanitizer_service` → `ollama_service` (model selection via `refactor_helpers.select_ollama_models`) → HTTP to Ollama → response chunks back to the UI.
+**Request path (Ask):** User types in `MainTab` → `useBonsaiAskOrchestration` → `deckyCall` → `main.py` RPC → `input_sanitizer_service` → `ollama_service` (model selection via `ollama_routing.select_ollama_models`) → HTTP to Ollama → response chunks back to the UI.
 
 ### Frontend (`src/`)
 
 | Path | Role |
 | ---- | ---- |
 | [`index.tsx`](../src/index.tsx) | Decky plugin shell, tab routing, `.bonsai-scope` glass styles |
-| [`components/`](../src/components/) | Tabs: `MainTab`, `OllamaTab`, `SettingsTab`, `PermissionsTab`, `DeveloperTab`, `AboutTab`, modals; region components (`MainTabUnifiedAskBar`, etc.) |
-| [`hooks/`](../src/hooks/) | `usePluginSettings`, `useBonsaiAskOrchestration`, `useScreenshotBrowser`, `useBonsaiPluginShell`, disclaimer/runtime gates |
-| [`data/`](../src/data/) | Presets, character catalog, model policy, settings schema/normalizers, intent packs, storage keys |
-| [`utils/`](../src/utils/) | `deckyCall`, settings payload, focus navigation, chunk splitting |
-| [`features/unified-input/`](../src/features/unified-input/) | Ask bar measurement and layout constants |
+| [`features/<feature>/`](../src/features/) | One folder per feature, tests beside the code (since plan 86 step 4, 2026-10-17): `answer/` (transcript, bubble, markdown, stream, reasoning, reply-actions, details, notices), `ask/` (`bar/`, `flow/`), `chats/` (`slots/`, `title/`, `sum-up/`), `models/`, `ai-connection/`, `settings/`, `search-tab/`, `knowledge-library/`, `developer/`, `user-notes/`, `characters/`, `permissions/`, `spoilers/`, `about/`, `voice/`, `glossary/`, `strategy/`, `main-tab/`, `preset-carousel/`, `plugin-shell/`, `folded-tabs/`, `media/`, `downloads/`, `power/` |
+| [`shared/`](../src/shared/) | Used by several features: the D-pad helpers (`dpad/`), the Decky call wrapper, icons, small utilities |
+| [`test-harness/`](../src/test-harness/) | Test setup, the Decky stand-in, and `repoPaths.ts`, which finds a source file by name |
 | [`styles/bonsaiScopeStylesheet.ts`](../src/styles/bonsaiScopeStylesheet.ts) | Composes scoped CSS from `styles/sections/*.ts` |
 
 Build output: [`dist/index.js`](../dist/index.js) (referenced by [`plugin.json`](../plugin.json)).
 
-### Backend (`main.py` + `py_modules/backend/services/`)
+### Backend (`main.py` + `py_modules/backend/<package>/`)
+
+Since plan 86 step 4 (2026-10-17) the back end is one package per area under `py_modules/backend/`: `ask`, `answer`,
+`chats`, `ollama`, `knowledge`, `search`, `notes`, `voice`, `media`, `settings`, `commands`, `prompts`, `spoilers`,
+`strategy`, `characters`, `power` and `core` (constants, capabilities, shared helpers). Imports read
+`from backend.<package>.<module> import ...`.
 
 | Module | Role |
 | ------ | ---- |
 | [`main.py`](../main.py) | Decky RPC entrypoint; thin wrappers to services |
-| [`refactor_helpers.py`](../refactor_helpers.py) | Re-export shim → `py_modules/backend/ollama_routing.py`, `ollama_urls.py`, `tdp_intent.py` |
+| [`backend/ollama/ollama_routing.py`](../py_modules/backend/ollama/ollama_routing.py) | Model try-order, mode chains, pull-tag catalogs |
 | `input_sanitizer_service.py` | Ask sanitization lane and magic-phrase commands |
 | `settings_service.py` | Load/save/normalize `settings.json` |
 | `ollama_service.py` + `ollama_prompts.py` | Prompt assembly and Ollama HTTP transport |
@@ -230,11 +266,9 @@ Build output: [`dist/index.js`](../dist/index.js) (referenced by [`plugin.json`]
 | `screenshot_media.py` | Vision attachment capture and encoding |
 | `local_ollama_setup_service.py` | In-plugin Ollama install/pull helpers |
 | `ollama_catalog_service.py` | Pull Models tag validation + registry.ollama.ai metadata fetch |
-| `pull_model_catalog_service.py` | Living Pull Models overlay fetch + `~/.bonsai/cache` |
 | `tdp_service.py` | TDP/sysfs read/write |
 | `desktop_note_service.py` | Desktop note and verbose Ask trace append |
 | `capabilities.py` | Permission capability checks |
-| `steam_vac_service.py` / `vac_check_commands.py` | Steam ban lookup |
 | `shortcut_setup_commands.py` | Guide-chord setup guidance |
 | `plugin_data_reset.py` | Reset plugin persisted data |
 | `strategy_guide_parse.py` | Strategy-mode response parsing |
@@ -244,12 +278,12 @@ Decky loads `py_modules` on `sys.path`; keep the `backend` package name for impo
 
 ### Deep-dive pointers (preserved for agents and contributors)
 
-- **Unified input refactor (complete):** [archive/refactor/refactor-specialist-sweep.md § Unified input refactor](archive/refactor/refactor-specialist-sweep.md#unified-input-refactor-completed) — [`useUnifiedInputSurface.ts`](../src/features/unified-input/useUnifiedInputSurface.ts), [`MainTab.tsx`](../src/components/MainTab.tsx).
-- **AI character roleplay:** [`characterCatalog.ts`](../src/data/characterCatalog.ts), [`CharacterPickerModal.tsx`](../src/components/CharacterPickerModal.tsx), [`ai_character_service.py`](../py_modules/backend/services/ai_character_service.py).
-- **Input sanitizer:** [`inputSanitizerCommands.ts`](../src/data/inputSanitizerCommands.ts) (must match Python); `input_sanitizer_user_disabled` in settings.
+- **Unified input refactor (complete):** [archive/refactor/refactor-specialist-sweep.md § Unified input refactor](../../bonsAI-workshop/archive/refactor/refactor-specialist-sweep.md#unified-input-refactor-completed) — [`useUnifiedInputSurface.ts`](../src/features/ask/bar/useUnifiedInputSurface.ts), [`MainTab.tsx`](../src/features/main-tab/MainTab.tsx).
+- **AI character roleplay:** [`characterCatalog.ts`](../src/features/characters/characterCatalog.ts), [`CharacterPickerModal.tsx`](../src/features/characters/CharacterPickerModal.tsx), [`ai_character_service.py`](../py_modules/backend/characters/ai_character_service.py).
+- **Input sanitizer:** [`inputSanitizerCommands.ts`](../src/features/ask/flow/inputSanitizerCommands.ts) (must match Python); `input_sanitizer_user_disabled` in settings.
 - **Input transparency:** RPC `get_input_transparency`; optional Desktop trace via `desktop_note_service.py`.
-- **Ask modes:** `ask_mode` (`speed` \| `strategy` \| `expert`); legacy `"deep"` migrates on load; chains in `refactor_helpers.select_ollama_models`.
-- **Model policy tiers:** [`modelPolicy.ts`](../src/data/modelPolicy.ts), [`model_policy.py`](../py_modules/backend/services/model_policy.py).
+- **Ask modes:** `ask_mode` (`speed` \| `strategy` \| `expert`); legacy `"deep"` migrates on load; chains in `backend/ollama_routing.select_ollama_models`.
+- **Model policy tiers:** [`modelPolicy.ts`](../src/features/models/modelPolicy.ts), [`model_policy.py`](../py_modules/backend/ollama/model_policy.py).
 
 ## Toolchain
 
@@ -298,8 +332,6 @@ Then edit CHANGELOG bullets and commit to **`main`**. CI builds the zip and publ
 
 **CI:** [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) — triggers on **`main`** pushes that change **`plugin.json`**, **`v*` tags**, and **workflow_dispatch**. Artifact: `bonsai-plugin-*`; verified by [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh).
 
-**Cursor / Bugbot branch hygiene:** Repo rules cannot block the Cursor GitHub App from pushing `cursor/*` branches. After merging investigation fixes locally, turn off **Autofix** and delete or disable the daily critical-bug **Automation** in the [Bugbot dashboard](https://cursor.com/dashboard/bugbot) (see [.cursor/BUGBOT.md](../.cursor/BUGBOT.md)). Close duplicate draft PRs and delete stale `cursor/*` remote branches.
-
 **Local release:**
 
 ```bash
@@ -310,9 +342,9 @@ Output under **`out/*.zip`**.
 
 ## Change-risk hotspots
 
-Prioritize refactors and reviews by **change risk** — large surfaces, branching logic, and **how much automated test signal** exists before edits. Use alongside [roadmap.md](roadmap.md) (**[In Progress](roadmap.md#in-progress)**, **[Planned](roadmap.md#planned)**).
+Prioritize refactors and reviews by **change risk** — large surfaces, branching logic, and **how much automated test signal** exists before edits. Use alongside [roadmap.md](roadmap.md) (**[Bugs](roadmap.md#bugs)**, **[Backlog](roadmap.md#features)**).
 
-**How to use:** Before a non-trivial edit, find the row for the file you touch; run the listed tests plus `pnpm test`, `pnpm run test:py`, and `pnpm run build` (and `scripts/build.ps1` / `scripts/build.sh` when Deck UI or RPC changes). Full standing gate + Deck smoke: [testing.md](testing.md#regression-gates). After **Settings** is acceptably calm (see **Completed** in [roadmap.md](roadmap.md)), pull the **next extraction** items from the bottom queue — one slice per PR.
+**How to use:** Before a non-trivial edit, find the row for the file you touch; run the listed tests plus `pnpm test`, `pnpm run test:py`, and `pnpm run build` (and `scripts/build.ps1` / `scripts/build.sh` when Deck UI or RPC changes). Full standing gate: [testing-automated.md](testing-automated.md). Deck smoke: [testing-manual.md](testing-manual.md). After **Settings** is acceptably calm (see **Completed** in [roadmap.md](roadmap.md)), pull the **next extraction** items from the bottom queue — one slice per PR.
 
 ### Line counts (approximate, 2026-07-05)
 
@@ -320,38 +352,37 @@ Prioritize refactors and reviews by **change risk** — large surfaces, branchin
 |------:|------|------|
 | ~2450 | [`main.py`](../main.py) | Decky RPC entrypoints; orchestration delegates to services |
 | ~1800 | [`src/index.tsx`](../src/index.tsx) | Plugin root: tabs, hooks, modal/survival wiring |
-| ~170 | [`src/components/MainTab.tsx`](../src/components/MainTab.tsx) | Main tab orchestrator (regions in `MainTab*.tsx`) |
+| ~170 | [`src/features/main-tab/MainTab.tsx`](../src/features/main-tab/MainTab.tsx) | Main tab orchestrator (regions in `MainTab*.tsx`) |
 | ~35 | [`src/styles/bonsaiScopeStylesheet.ts`](../src/styles/bonsaiScopeStylesheet.ts) | Composes section CSS from `styles/sections/` |
-| ~450 | [`src/components/SettingsTabConnectionTimeoutSlider.tsx`](../src/components/SettingsTabConnectionTimeoutSlider.tsx) | Connection timeout / warning slider (Ollama tab) |
-| ~360 | [`py_modules/backend/services/ollama_ask_service.py`](../py_modules/backend/services/ollama_ask_service.py) | Ask model routing + streaming |
-| ~576 | [`py_modules/backend/services/ollama_service.py`](../py_modules/backend/services/ollama_service.py) | Ollama HTTP transport |
-| ~406 | [`backend/services/settings_service.py`](../py_modules/backend/services/settings_service.py) | Load/save/merge `settings.json` |
-| ~360 | [`refactor_helpers.py`](../refactor_helpers.py) | Re-export shim for model selection helpers |
+| ~450 | [`src/features/ai-connection/SettingsTabConnectionTimeoutSlider.tsx`](../src/features/ai-connection/SettingsTabConnectionTimeoutSlider.tsx) | Connection timeout / warning slider (Ollama tab) |
+| ~360 | [`py_modules/backend/ask/ollama_ask_service.py`](../py_modules/backend/ask/ollama_ask_service.py) | Ask model routing + streaming |
+| ~576 | [`py_modules/backend/ask/ollama_service.py`](../py_modules/backend/ask/ollama_service.py) | Ollama HTTP transport |
+| ~406 | [`backend/settings/settings_service.py`](../py_modules/backend/settings/settings_service.py) | Load/save/merge `settings.json` |
 
 ### Prioritized hotspots (edit order vs risk)
 
 | Priority | Hotspot | Why it hurts change | Automated test signal | Suggested next extraction / mitigation |
 |----------|---------|---------------------|------------------------|----------------------------------------|
-| 1 | `src/index.tsx` | Single file mixes layout, CSS, RPC, tab assembly, and **large Settings JSX**; any edit can ripple focus/CSS/RPC. | **Low** for the file as a whole — Vitest covers [`src/utils/*.test.ts`](../src/utils/settingsAndResponse.test.ts), [`src/data/*.test.ts`](../src/data/), not the root component tree. | **After Settings UX trim:** extract **Settings** subtree to e.g. `src/components/SettingsTabPanel.tsx` (props in, no new persistence keys); then consider smaller hooks for repeated RPC patterns. |
-| 2 | `main.py` | Many RPC branches; easy to break one handler while fixing another; logging/error shapes affect UI. | **Partial** — services are unit-tested; `main.py` itself has **no** dedicated `test_main.py`; regressions surface in integration/manual. | Prefer **new logic in services** with tests; keep `main.py` thin wrappers; when touching errors, align with [security-audit-report.md](security-audit-report.md) (user-safe messages). |
-| 3 | `src/components/MainTab.tsx` | Long controller-first UI; focus graph and measurement logic intertwined. | **Partial** — unified-input phases extracted helpers; Vitest on data/utils, not full MainTab mount. | Further extractions only when needed; follow [archive/refactor/refactor-specialist-sweep.md § Unified input](archive/refactor/refactor-specialist-sweep.md#unified-input-refactor-completed); for **new** controls use [focus-graph-patterns](../packages/bonsai-mcp/knowledge/architecture/focus-graph-patterns.md); always device-check D-pad + overlay after edits. |
-| 4 | `backend/services/ollama_service.py` | Prompt and transport changes affect every Ask; HTTP error paths touch disclosure. | **Good** — [`tests/test_ollama_service.py`](../tests/test_ollama_service.py). | Keep behavioral changes paired with test updates; redact user-facing error bodies per security audit. |
-| 5 | `backend/services/settings_service.py` | Schema merge bugs affect entire plugin. | **Good** — [`tests/test_settings_service.py`](../tests/test_settings_service.py). | Add tests for any new keys; avoid silent defaults that bypass capability gating. |
-| 6 | `backend/services/desktop_note_service.py` | Filesystem paths and consent boundaries. | **Good** — [`tests/test_desktop_note_service.py`](../tests/test_desktop_note_service.py). | Keep path logic in service; gate in `main.py` + capabilities. |
-| 7 | `refactor_helpers.py` | Model routing / TDP parse shared across Ask paths. | **Good** — [`tests/test_refactor_helpers.py`](../tests/test_refactor_helpers.py). | Extend tests when adding branches; avoid duplicating policy in `main.py`. |
-| 8 | `src/components/CharacterPickerModal.tsx` | Async + catalog + focus; easy Deck regressions. | **Partial** — catalog parity / accent tests in Python; TS [`characterCatalog.test.ts`](../src/data/characterCatalog.test.ts), [`runningGameCharacterSuggestions.test.ts`](../src/utils/runningGameCharacterSuggestions.test.ts). | Extract pure suggestion sorting/filtering only with tests; UI changes need device smoke. |
+| 1 | `src/index.tsx` | Single file mixes layout, CSS, RPC, tab assembly, and **large Settings JSX**; any edit can ripple focus/CSS/RPC. | **Smoke + wiring** since 2026-08-02 — [`src/index.test.tsx`](../src/index.test.tsx) mounts the real tree and checks the Decky contract, settings wiring and tab set; it does **not** cover focus order or layout. | **After Settings UX trim:** extract **Settings** subtree to e.g. `src/components/SettingsTabPanel.tsx` (props in, no new persistence keys); then consider smaller hooks for repeated RPC patterns. |
+| 2 | `main.py` | Many RPC branches; easy to break one handler while fixing another; logging/error shapes affect UI. | **Partial** — services are unit-tested; `main.py` itself has **no** dedicated `test_main.py`; regressions surface in integration/manual. | Prefer **new logic in services** with tests; keep `main.py` thin wrappers; when touching errors, align with [archive/reports/security-audit-report.md](../../bonsAI-workshop/archive/reports/security-audit-report.md) (user-safe messages). |
+| 3 | `src/features/main-tab/MainTab.tsx` | Long controller-first UI; focus graph and measurement logic intertwined. | **Partial** — unified-input phases extracted helpers; Vitest on data/utils, not full MainTab mount. | Further extractions only when needed; follow [archive/refactor/refactor-specialist-sweep.md § Unified input](../../bonsAI-workshop/archive/refactor/refactor-specialist-sweep.md#unified-input-refactor-completed); for **new** controls use [focus-graph-patterns](../packages/bonsai-mcp/knowledge/architecture/focus-graph-patterns.md); always device-check D-pad + overlay after edits. |
+| 4 | `backend/ask/ollama_service.py` | Prompt and transport changes affect every Ask; HTTP error paths touch disclosure. | **Good** — [`tests/test_ollama_service.py`](../tests/test_ollama_service.py). | Keep behavioral changes paired with test updates; redact user-facing error bodies per security audit. |
+| 5 | `backend/settings/settings_service.py` | Schema merge bugs affect entire plugin. | **Good** — [`tests/test_settings_service.py`](../tests/test_settings_service.py). | Add tests for any new keys; avoid silent defaults that bypass capability gating. |
+| 6 | `backend/notes/desktop_note_service.py` | Filesystem paths and consent boundaries. | **Good** — [`tests/test_desktop_note_service.py`](../tests/test_desktop_note_service.py). | Keep path logic in service; gate in `main.py` + capabilities. |
+| 7 | `backend/ollama/ollama_routing.py` + `backend/power/tdp_intent.py` | Model routing / TDP parse shared across Ask paths. | **Good** — [`tests/test_backend_helpers.py`](../tests/test_backend_helpers.py). | Extend tests when adding branches; avoid duplicating policy in `main.py`. |
+| 8 | `src/features/characters/CharacterPickerModal.tsx` | Async + catalog + focus; easy Deck regressions. | **Partial** — catalog parity / accent tests in Python; TS [`characterCatalog.test.ts`](../src/features/characters/characterCatalog.test.ts), [`runningGameCharacterSuggestions.test.ts`](../src/features/characters/runningGameCharacterSuggestions.test.ts). | Extract pure suggestion sorting/filtering only with tests; UI changes need device smoke. |
 | 9 | Other services (`ai_character`, `input_sanitizer`, `capabilities`, `model_policy`, `strategy_guide_parse`, `tdp_service`) | Smaller files but security/behavior sensitive. | **Good** per matching `tests/test_*.py`. | Edit with corresponding test file open. |
 
 ### Ordered refactor queue (after Settings is calm)
 
 1. **Settings** — UX trim in place, then **`SettingsTabPanel` (or equivalent)** extracted from [`src/index.tsx`](../src/index.tsx); add Vitest only for new pure helpers.
-2. **`main.py`** — Move new/changed RPC logic into `backend/services/` with tests; reduce duplicate error formatting.
+2. **`main.py`** — Move new/changed RPC logic into the matching `backend/<package>/` with tests; reduce duplicate error formatting.
 3. **MainTab** — Only targeted extractions with device proof (focus, overlay, scroll).
 4. **CharacterPickerModal** — Pure TS helpers first; UI second.
 
 ## Documentation maintenance (releases)
 
-When you mark a feature **complete**, update the same change set (see [`.cursorrules`](../.cursorrules)):
+When you mark a feature **complete**, update the same change set (see [AGENTS.md § Before marking work done](../AGENTS.md#before-marking-work-done)):
 
 - [roadmap.md](roadmap.md)
 - [testing.md](testing.md) — when behavior is user-visible (coverage, runbook, scenarios)

@@ -1,0 +1,71 @@
+/**
+ * Title: The three model policy tiers
+ *
+ * Purpose: bonsAI limits which AI models it will fall back to, controlled by
+ * a three-step tier picker: Tier 1 "Open source only" (the safe default),
+ * Tier 2 "Also try open-weight models", and Tier 3 "Any installed model"
+ * (locked behind an extra confirmation). This file holds the three tier ids,
+ * their on-screen labels, and the paragraph shown under a reply explaining
+ * what kind of model answered it and what that license class means.
+ *
+ * Used for: the tier panel in Permissions, and the small disclosure line
+ * shown under a reply when the model that answered was not Tier 1.
+ *
+ * Solves: the tier panel, the short intro text shown on two different tabs,
+ * and the disclosure line under a reply all need to agree on what the three
+ * tiers are called and what each one promises — this is the one place that
+ * wording is written.
+ *
+ * Does not: decide which license class a given Ollama tag actually belongs
+ * to. That classification (foss / open_weight / non_foss / unknown) is
+ * worked out on the computer or Deck running the AI, in
+ * `py_modules/backend/ollama/model_policy.py`; this file only turns
+ * whichever class comes back into words for the screen.
+ */
+const GITHUB_REPO_BASE = "https://github.com/qd313/bonsAI";
+
+/**
+ * The user guide's "AI models and licences" section on GitHub. The README rewrite for 0.6.0 moved the
+ * model policy table there; the README no longer has a "Model policy tiers" heading.
+ */
+export const MODEL_POLICY_README_URL = `${GITHUB_REPO_BASE}/blob/main/docs/guide.md#ai-models-and-licences`;
+
+export type ModelSourceClass = "foss" | "open_weight" | "non_foss" | "unknown";
+
+export type ModelPolicyTierId = "open_source_only" | "open_weight" | "non_foss";
+
+export type ModelPolicyDisclosurePayload = {
+  model: string;
+  source_class: ModelSourceClass;
+  read_more_anchor: string;
+};
+
+export const MODEL_POLICY_TIER_IDS: readonly ModelPolicyTierId[] = [
+  "open_source_only",
+  "open_weight",
+  "non_foss",
+];
+
+export const DEFAULT_MODEL_POLICY_TIER: ModelPolicyTierId = "open_source_only";
+
+export function normalizeModelPolicyTier(value: unknown): ModelPolicyTierId {
+  if (value === "open_source_only" || value === "open_weight" || value === "non_foss") {
+    return value;
+  }
+  return DEFAULT_MODEL_POLICY_TIER;
+}
+
+export function normalizeModelPolicyNonFossUnlocked(value: unknown): boolean {
+  return value === true;
+}
+
+/** Plain-language tier labels for Ollama tab / AI models hub. */
+export const MODEL_POLICY_TIER_LABELS_PLAIN: Record<ModelPolicyTierId, string> = {
+  open_source_only: "Open source only (recommended)",
+  open_weight: "Also try open-weight models",
+  non_foss: "Any installed model",
+};
+
+/** Short Settings helper: what changes vs staying on Tier 1. */
+export const MODEL_POLICY_SETTINGS_INTRO =
+  "Tier 1 (default) only uses models with an open-source license (Apache 2.0 or MIT). Tier 2 adds open-weight models, whose license is the maker's own; Tier 3 can include other and unrecognised models when unlocked. Only changes which models the plugin tries—your host still decides what is installed.";

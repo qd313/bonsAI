@@ -5,7 +5,8 @@ from the knowledge-base roadmap and its long notes as filed at tip `b48241a8`, t
 report, the lessons file, the bug-wave runbook, plan 70 (the last knowledge-base wave with a Deck test wave) and plan 97
 (the last bug sweep). Plain language on purpose: this file is for the maintainer first.
 
-**Status: PLANNED, ready for go; nothing started.** The maintainer answered the calls in § 2 on 2026-10-22 at about
+**Status: RUNNING since 2026-10-24, about 16:45** (go from the maintainer after the 0.6.0 release; an Opus 5.5
+extra-high chat in VS Code; the progress log is § 12). The maintainer answered the calls in § 2 on 2026-10-22 at about
 21:15: the defaults on all fourteen. They become decision D135 (135 was free; D134 was the last), written by the
 bookkeeper in the session's first sweep. The briefs, the helper rules and the first Deck runbook are written (see the
 files below), so the session can start helpers and the Deck in its first half hour.
@@ -396,6 +397,25 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   one (the Nintendo titles, State of Emergency) could not have words at all until lane A0 lets a row name the library's
   own id; and lane H changes no prompt text, so the prompt file has one lane (B) and no collision. Files uncommitted;
   the session commits them first (§ 4, step 0).
+- **2026-10-24, about 16:45: go.** The maintainer said "implement plan 98, on experimental" in a new Opus 5.5
+  extra-high chat (VS Code, so `keep_awake.py --hours 10` runs). Call 2 was settled by events: 0.6.0 was merged to main
+  (`3036ba9c`) and released earlier the same day, so this wave runs after it. Tip `344d42e3` (only documents changed
+  since the release commit). The merge chat was messaged to coordinate; the message expired unread (that chat runs in
+  a different permission mode), so the session checks for other chats' commits before every landing. `deck_status`:
+  lease free, stop switch off. Usage figures not read (the maintainer was not asked yet; the cost hook is
+  uncalibrated). Baseline `verify.py --full` on the tip: PASS in 253 s. Library built on this PC in 14 s: 414 notes,
+  164 tips, all with meaning vectors, 2 glossary words; copied into every lane's copy.
+- **Briefs checked against the code at go; four corrections went into the task texts:** (1) the attached-notes entry
+  already has a `kind` field ("tip" or the note's type), so lanes C and D add only `section_id` and `demoted`; (2) note
+  ids and tip ids overlap (162 numbers in both), so the thumbs-down store keys by "note:<id>" / "tip:<id>" and the
+  method takes `kind`; (3) the glossary lanes' source lists sit in the folder the builder reads, so lane A0 skips
+  `*.sources.json`; (4) line numbers drifted in several briefs. Also: the Deck had a clean install from the 0.6.0 zip on
+  2026-10-23 (plan 99), so the old test chat, the Strategy mode and the seed folder are probably gone; block K0's task
+  says to start a new empty chat if "test" is missing, never to use another. Lane D builds against an injected
+  function and gets the real plugin call as one last commit after C lands (the generated method list only accepts
+  names that exist in the back end).
+- **16:55 to 17:20: started** Deck block K0 (driver), the bookkeeper's first sweep (D135, call 11's two rows), and
+  wave 1: C, A0, B, D, H, G1, G2, G3, I, F.
 
 ## 13. Report
 

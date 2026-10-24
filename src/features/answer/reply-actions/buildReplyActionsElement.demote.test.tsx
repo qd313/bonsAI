@@ -35,6 +35,7 @@ import type { DemoteNoteFn } from "./kbDemoteRows";
 import { resetRememberedReplyDemoteForTests, useReplyDemote } from "./useReplyDemote";
 import type { KbAttachedNote } from "../../../types/inputTransparency";
 import { REPLY_STOP_ORDER, registerReplyStop, setReplyStopUnavailable } from "../../../shared/dpad/replyStopRegistry";
+import { focusDownFromLiveAnswerBubble, queryTurnSlot } from "../../../shared/dpad/liveTurnFocusGraph";
 import type { LastExchangeSnapshot } from "../../../types/backgroundAsk";
 
 const TURN = "turn-1";
@@ -91,6 +92,7 @@ function Row(props: { notes: KbAttachedNote[]; demoteNote: DemoteNoteFn }): Reac
     showFeedback: true,
     onToggleTransparency: () => {},
     onChip: (id) => void fb.onReplyMicroAction(id),
+    chipUsed: fb.liveReplyChipUsed,
     onMoveDownFromUtility: () => false,
     demote: { ...demote.actions, state: demote.state, notes: props.notes },
   });
@@ -508,5 +510,32 @@ describe("when the call fails or times out, the ring goes back onto the reason t
     expect(m.holder.querySelector(".bonsai-kb-demote-error")?.textContent).toMatch(/^Could not mark the note: /);
     expect(m.ring()).toBe("Outdated");
     expect(m.visible(document.activeElement)).toBe(true);
+  });
+});
+
+describe("Down from the answer's end reaches the three new reasons after one of the five was used", () => {
+  it.each(RULES)("one of the five used (they grey out): Down from the answer lands on Wrong tip (Steam rule %s, top margin %s)", async (rule, margin) => {
+    const m = mount(rule, margin, [NOTE()]);
+    act(() => putSteamRingOn(m.holder.querySelector<HTMLElement>("[aria-label='Mark reply not helpful']")!));
+    await m.pressA();
+    act(() => putSteamRingOn(m.holder.querySelector<HTMLElement>("[aria-label='Too long']")!));
+    await m.pressA();
+    expect(m.holder.querySelector("[aria-label='Bad info']")?.getAttribute("aria-disabled")).toBe("true");
+    m.a.land(m.a.stops[1]!);
+    act(() => void focusDownFromLiveAnswerBubble(queryTurnSlot(TURN)));
+    m.a.settle();
+    expect(m.ring()).toBe("Wrong tip");
+    expect(m.visible(document.activeElement)).toBe(true);
+  });
+
+  it("while an ask runs, Wrong tip is no landing either", async () => {
+    const m = mount(undefined, false, [NOTE()]);
+    act(() => putSteamRingOn(m.holder.querySelector<HTMLElement>("[aria-label='Mark reply not helpful']")!));
+    await m.pressA();
+    setReplyStopUnavailable("reason-chips", true);
+    setReplyStopUnavailable("demote-reasons", true);
+    m.a.land(m.a.stops[1]!);
+    act(() => void focusDownFromLiveAnswerBubble(queryTurnSlot(TURN)));
+    expect(m.ring()).not.toBe("Wrong tip");
   });
 });

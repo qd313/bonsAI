@@ -55,7 +55,9 @@ export type ReplyStopId =
   | "note-keep"
   | "note-for"
   /** The first "What went wrong?" choice, the landing for a Down that leaves the answer's corner. */
-  | "reason-chips";
+  | "reason-chips"
+  /** Plan 98: Wrong tip, the first of the three "the note was wrong" reasons, under the five. */
+  | "demote-reasons";
 
 /**
  * Reading order down the reply, top to bottom.
@@ -64,6 +66,10 @@ export type ReplyStopId =
  * the question bubble above the answer, `copy` an icon in the answer bubble's bottom-right corner,
  * `helpful` and `not-really` the two buttons under it, and `show-details` the line below them.
  * `reason-chips` is the first "What went wrong?" choice, which only exists once a reply is rated down.
+ * `demote-reasons` (plan 98) is Wrong tip, the first of the three reasons drawn under the five when the
+ * answer used a note. It stands in for `reason-chips` (STAND_INS below): once one of the five was used they
+ * grey out and `reason-chips` is unavailable, but Wrong tip still can be pressed, so a Down from the answer's
+ * end lands there rather than skipping the three.
  * The order below is the order a person walks them, which is what the "which stop has focus?"
  * lookups want; it is not a claim about layout.
  *
@@ -90,6 +96,7 @@ export const REPLY_STOP_ORDER: readonly ReplyStopId[] = [
   "helpful",
   "not-really",
   "reason-chips",
+  "demote-reasons",
   "note-keep",
   "note-for",
   "show-details",
@@ -97,6 +104,12 @@ export const REPLY_STOP_ORDER: readonly ReplyStopId[] = [
 
 const stops = new Map<ReplyStopId, HTMLElement>();
 const unavailableStops = new Set<ReplyStopId>();
+
+/**
+ * A stop tried when the one asked for is missing or unavailable, so every chain that lands on the first
+ * reason (the answer's end, its corner icons, the summed-up note) reaches Wrong tip once the five are spent.
+ */
+const STAND_INS: Partial<Record<ReplyStopId, ReplyStopId>> = { "reason-chips": "demote-reasons" };
 
 type SteamNavHolder = { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null | undefined };
 const stopNavs = new Map<ReplyStopId, SteamNavHolder>();
@@ -165,6 +178,13 @@ function ensureFocusable(el: HTMLElement): void {
  * success either way.
  */
 export function focusRegisteredReplyStop(id: ReplyStopId): boolean {
+  if (focusOwnReplyStop(id)) return true;
+  const standIn = STAND_INS[id];
+  return standIn ? focusOwnReplyStop(standIn) : false;
+}
+
+/** The stop itself, with no stand-in. */
+function focusOwnReplyStop(id: ReplyStopId): boolean {
   if (unavailableStops.has(id)) return false;
   const el = stops.get(id);
   if (!el) return false;

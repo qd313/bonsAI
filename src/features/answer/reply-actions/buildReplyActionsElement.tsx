@@ -398,6 +398,8 @@ export function buildReplyActionsElement(
   /* The first choice is a landing for a Down from the answer's corner icons only while it can be
      pressed; spent or disabled choices are skipped like the greyed thumbs. */
   setReplyStopUnavailable("reason-chips", showReasonRows ? chipsInactive : askInFlight);
+  /* Wrong tip stays a landing after one of the five was used (they grey out, it does not); only an ask stops it. */
+  setReplyStopUnavailable("demote-reasons", askInFlight);
 
   const liveSlot = () => queryLiveTurnSlot();
   /*

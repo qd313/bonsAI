@@ -194,7 +194,7 @@ function landOn(nav: NavHolder | undefined, el: HTMLElement | null | undefined):
 function focusReason(replyKey: string, index: number): boolean {
   const parts = partsFor(replyKey);
   const i = Math.min(Math.max(index, 0), DEMOTE_REASONS.length - 1);
-  return landOn(parts.reasonNavs[i], parts.reasons[i]);
+  return landOn(i === 0 ? replyStopNavRef("demote-reasons") : parts.reasonNavs[i], parts.reasons[i]);
 }
 
 /**
@@ -454,7 +454,8 @@ export function renderDemoteRows(a: DemoteRowsArgs): React.ReactElement {
             key: reason.id,
             className: "bonsai-kb-demote-chip",
             label: reason.label,
-            nav: parts.reasonNavs[i]!,
+            /* Wrong tip's node is its registry stop's own, so a chain landing on it takes Steam's transfer. */
+            nav: i === 0 ? replyStopNavRef("demote-reasons") : parts.reasonNavs[i]!,
             moves: {
               up: () => a.upFromReason(i),
               down: a.downOut,
@@ -465,6 +466,7 @@ export function renderDemoteRows(a: DemoteRowsArgs): React.ReactElement {
             disabled,
             elRef: (el) => {
               parts.reasons[i] = el;
+              if (i === 0) registerReplyStop("demote-reasons", el);
             },
             children: reason.label,
           }),

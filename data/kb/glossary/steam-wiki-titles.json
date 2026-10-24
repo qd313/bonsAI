@@ -299,5 +299,312 @@
     "alt_forms": [],
     "peek": "The werewolf form: hits harder and moves faster, but no gear or spells.",
     "full_text": "As a werewolf, Beast Form can be triggered once per day for a limited window. In that form you hit far harder and move faster, and gain immunity to disease, but lose the passive bonus from resting and cannot use equipment, spells or shouts until you change back. Feeding on a fresh humanoid corpse while transformed extends the time left in Beast Form and restores health."
+  },
+  {
+    "term_id": 1029,
+    "app_id": "362890",
+    "term_key": "hev-suit",
+    "term": "HEV suit",
+    "alt_forms": [],
+    "peek": "The orange suit you change into; its charge shows on the HUD.",
+    "full_text": "You change into the orange HEV suit in the locker room before the day's work. The suit's own charge, shown on the HUD next to health, does not come back on its own; you top it up at a wall-mounted suit charger."
+  },
+  {
+    "term_id": 1030,
+    "app_id": "362890",
+    "term_key": "suit-charger",
+    "term": "Suit charger",
+    "alt_forms": [
+      "suit chargers"
+    ],
+    "peek": "An orange wall unit that tops up the HEV suit; each holds a limited reserve.",
+    "full_text": "A suit charger is an orange wall-mounted unit with a black charging cord and the HEV logo, kept separate from the white health chargers with the red cross. Each charger holds a limited reserve that does not refill once spent. When a charger's screen goes dark, it is done for good."
+  },
+  {
+    "term_id": 1031,
+    "app_id": "362890",
+    "term_key": "tau-cannon",
+    "term": "Tau Cannon",
+    "alt_forms": [
+      "tau cannons",
+      "gauss gun"
+    ],
+    "peek": "A particle-beam gun that never reloads and can charge a shot through enemies.",
+    "full_text": "The Tau Cannon, or gauss gun, is a particle beam that draws straight from the suit's uranium reserve, shared with the Gluon Gun, so it never reloads. Tap-fire sends fast yellow beams that chew through unarmoured targets. Hold the alternate fire to charge a white-hot shot that punches through several enemies or a wall and explodes on the far side."
+  },
+  {
+    "term_id": 1032,
+    "app_id": "362890",
+    "term_key": "gauss-jump",
+    "term": "Gauss jump",
+    "alt_forms": [],
+    "peek": "Firing the Tau Cannon's charged shot straight down to throw yourself upward.",
+    "full_text": "Fire the Tau Cannon's charged shot straight down and the recoil throws you upward. This is the gauss jump, which reaches ledges nothing else does."
+  },
+  {
+    "term_id": 1033,
+    "app_id": "362890",
+    "term_key": "gluon-gun",
+    "term": "Gluon Gun",
+    "alt_forms": [],
+    "peek": "The last weapon in the game: a continuous energy stream that drinks the uranium reserve.",
+    "full_text": "The Gluon Gun pours out a continuous spiral of energy that destroys most things in seconds, and goes straight through bulletproof armour, which makes it the one gun that genuinely hurts a Gargantua. It shares the uranium reserve with the Tau Cannon and drinks it fast, so it is not a room-clearing tool. It does not work underwater."
+  },
+  {
+    "term_id": 1034,
+    "app_id": "362890",
+    "term_key": "hivehand",
+    "term": "Hivehand",
+    "alt_forms": [],
+    "peek": "A living alien rifle that grows its own hornet ammo.",
+    "full_text": "The Hivehand is the living alien rifle the Alien Grunts carry, though you cannot take one from a body. It grows its own ammo, eight hornets loaded at a time and replaced within seconds, and the primary-fire hornets home in on living targets around corners. Hornets ignore anything inorganic."
+  },
+  {
+    "term_id": 1035,
+    "app_id": "362890",
+    "term_key": "long-jump-module",
+    "term": "Long Jump Module",
+    "alt_forms": [
+      "long jump"
+    ],
+    "peek": "A suit upgrade for Xen's gaps: crouch then jump for a long leap.",
+    "full_text": "The Long Jump Module is handed to you at the end of Lambda Core, and it is the only way across Xen's floating islands. Crouch and then jump in quick succession and the suit launches you a long way forward. Take a couple of practice jumps on solid ground before the first real gap."
+  },
+  {
+    "term_id": 1036,
+    "app_id": "362890",
+    "term_key": "hecu-marines",
+    "term": "HECU Marines",
+    "alt_forms": [
+      "hecu"
+    ],
+    "peek": "Soldiers sent in to clean the facility out; they fight in squads.",
+    "full_text": "The HECU Marines are the soldiers sent in to clean the facility out, including anyone who saw what happened. They fight in squads, keep in touch by radio and throw grenades to flush you out of cover. Where they have dug in they add laser tripmines, sentry guns and manned emplacements."
+  },
+  {
+    "term_id": 1037,
+    "app_id": "362890",
+    "term_key": "houndeye",
+    "term": "Houndeye",
+    "alt_forms": [
+      "houndeyes"
+    ],
+    "peek": "A three-legged, one-eyed enemy in packs that charge a sonic shockwave.",
+    "full_text": "A Houndeye is three-legged with one big compound eye, and always in a pack of up to four. Together they charge a sonic shockwave that hurts you and smashes crates and glass, and the damage rises with the size of the pack. Kill the leader and the rest lose the ability to charge the wave."
+  },
+  {
+    "term_id": 1038,
+    "app_id": "362890",
+    "term_key": "gargantua",
+    "term": "Gargantua",
+    "alt_forms": [],
+    "peek": "A six-metre armoured enemy immune to ordinary bullets.",
+    "full_text": "A Gargantua is six metres of blue armour with one glowing eye, immune to ordinary bullets and a little faster than you on foot. It cooks anything close with the flame jets in its hands. You are not meant to shoot it down; if you must, only explosives and energy weapons hurt it: rockets, satchel charges, the Gluon Gun."
+  },
+  {
+    "term_id": 1039,
+    "app_id": "367520",
+    "term_key": "geo",
+    "term": "Geo",
+    "alt_forms": [],
+    "peek": "What you spend and carry; it stays in your Shade when you die.",
+    "full_text": "When your shell breaks you respawn at the last bench, and all your Geo stays behind in a Shade at or just before the room you died in. Die again before reaching it and a new Shade replaces the old one, Geo and all, so a big purse is a reason to go back first. The first nail upgrade costs Geo alone."
+  },
+  {
+    "term_id": 1040,
+    "app_id": "367520",
+    "term_key": "shade",
+    "term": "Shade",
+    "alt_forms": [],
+    "peek": "What waits where you died, holding your Geo, until you beat it.",
+    "full_text": "When you die, your Shade waits where you fell, holding your Geo, and your soul meter is cracked to two thirds until you deal with it. Walk back and an off-key music-box tune tells you it is near; it floats at you, swings a nail and casts whichever spells you have learned, and it dies after a handful of hits, returning the Geo and mending the meter."
+  },
+  {
+    "term_id": 1041,
+    "app_id": "367520",
+    "term_key": "charm",
+    "term": "Charm",
+    "alt_forms": [
+      "charms"
+    ],
+    "peek": "Equippable build items that cost notches; swap them only on a bench.",
+    "full_text": "Charms are the build system: each takes a set number of notches, and you can only swap charms while sitting on a bench. Forty-five exist, though five are upgrades that replace another. Soul Catcher gives more healing fuel per hit, and Quick Focus makes healing a third faster."
+  },
+  {
+    "term_id": 1042,
+    "app_id": "367520",
+    "term_key": "notch",
+    "term": "Notch",
+    "alt_forms": [
+      "notches"
+    ],
+    "peek": "Charm slots; each charm takes a set number of them.",
+    "full_text": "Each charm takes a set number of notches; you start with three notches and can find eight more. If a charm needs more notches than you have left you can force it in and go overcharmed."
+  },
+  {
+    "term_id": 1043,
+    "app_id": "367520",
+    "term_key": "overcharmed",
+    "term": "Overcharmed",
+    "alt_forms": [],
+    "peek": "Forcing in a charm with too few notches left, so every hit you take does double damage.",
+    "full_text": "If a charm needs more notches than you have left you can force it in and go overcharmed. Every hit you take then does double damage, which is fine for platforming and a bad idea in a boss room."
+  },
+  {
+    "term_id": 1044,
+    "app_id": "367520",
+    "term_key": "soul",
+    "term": "Soul",
+    "alt_forms": [
+      "soul meter"
+    ],
+    "peek": "A meter filled by nail hits, spent on healing or spells.",
+    "full_text": "Every nail hit on an enemy adds soul to the round meter on the left, up to ninety-nine. Hold Focus to turn thirty-three soul into one mask of health; it takes over a second, you stand still for it, and a hit cancels it. Tap the cast button instead and the same soul fuels spells."
+  },
+  {
+    "term_id": 1045,
+    "app_id": "367520",
+    "term_key": "pale-ore",
+    "term": "Pale Ore",
+    "alt_forms": [],
+    "peek": "Ore that pays for the later nail upgrades.",
+    "full_text": "The nail is reforged four times in the City of Tears, from 5 damage up to 21. The first upgrade costs Geo alone, and the next three need one, two and three Pale Ore on top, six Ore in all. The Ore is scattered across the kingdom behind bosses, grubs and hidden rooms."
+  },
+  {
+    "term_id": 1046,
+    "app_id": "367520",
+    "term_key": "mothwing-cloak",
+    "term": "Mothwing Cloak",
+    "alt_forms": [],
+    "peek": "A short dash with a brief cooldown, found in Greenpath.",
+    "full_text": "The Mothwing Cloak is a short dash with a brief cooldown. It is the prize for the fight at the Lake of Unn end of Greenpath, and the early platforming and enemies in Greenpath put the dash to use. The Shade Cloak from the Abyss later upgrades the dash to pass through enemies, their attacks and the black Shade Gates."
+  },
+  {
+    "term_id": 1047,
+    "app_id": "367520",
+    "term_key": "crystal-heart",
+    "term": "Crystal Heart",
+    "alt_forms": [],
+    "peek": "A charged horizontal flight from the ground or a wall.",
+    "full_text": "The Crystal Heart is a charged horizontal flight from the ground or a wall. It is found in the mines of Crystal Peak. It is needed to cross the gap far west in the Ancient Basin."
+  },
+  {
+    "term_id": 1048,
+    "app_id": "367520",
+    "term_key": "bench",
+    "term": "Bench",
+    "alt_forms": [
+      "benches"
+    ],
+    "peek": "Where you rest to save, restore your masks, and swap charms.",
+    "full_text": "Benches are everything: they save, restore your masks, and are the only place charms can be swapped. The map of an area only fills in as you rest at benches once you own a quill. When you die you respawn at the last bench."
+  },
+  {
+    "term_id": 1049,
+    "app_id": "782330",
+    "term_key": "glory-kill",
+    "term": "Glory kill",
+    "alt_forms": [
+      "glory kills"
+    ],
+    "peek": "Finishing a flashing weak enemy for health.",
+    "full_text": "Shoot a weak enemy until it flashes, then glory kill it for health. That is one part of the combat loop, alongside the chainsaw for ammo and the flame belch for armour. When an arch-vile is alive, skip the executions until it is dead, because it summons while you are locked into the animation."
+  },
+  {
+    "term_id": 1050,
+    "app_id": "782330",
+    "term_key": "flame-belch",
+    "term": "Flame belch",
+    "alt_forms": [],
+    "peek": "Burns a group so that kills while they burn give armour.",
+    "full_text": "Flame belch a group and kill them burning for armour. It runs on a twenty-five second cooldown. The flame belch, ice bomb and ballista are collected at the Fortress between missions."
+  },
+  {
+    "term_id": 1051,
+    "app_id": "782330",
+    "term_key": "fodder",
+    "term": "Fodder",
+    "alt_forms": [
+      "fodder demon",
+      "fodder demons"
+    ],
+    "peek": "Weak demons you chainsaw for a shower of ammo.",
+    "full_text": "Chainsaw a fodder demon for a shower of ammo; the chainsaw has three fuel units, one always refilling on its own every twenty seconds, and fodder costs one, so it is never off the table. The super shotgun can take several fodder demons in one shot."
+  },
+  {
+    "term_id": 1052,
+    "app_id": "782330",
+    "term_key": "super-heavy",
+    "term": "Super heavy",
+    "alt_forms": [
+      "super heavies"
+    ],
+    "peek": "Demons the chainsaw cannot be used on at all.",
+    "full_text": "Heavy demons cost all three chainsaw fuel units, and the super heavies cannot be sawed at all. An arch-vile counts as super heavy, so no chainsaw. The Crucible is best saved for the super heavies in the last arenas."
+  },
+  {
+    "term_id": 1053,
+    "app_id": "782330",
+    "term_key": "meathook",
+    "term": "Meathook",
+    "alt_forms": [
+      "meat hook"
+    ],
+    "peek": "A hook under the super shotgun that yanks you toward a demon.",
+    "full_text": "The meathook under the super shotgun's barrel is the movement tool: fire it into a demon and it yanks you to them for the blast, or across the arena for the escape. Small enemies are held in place when hooked; big ones are not, and may hit you on the way in, so be ready to jump off."
+  },
+  {
+    "term_id": 1054,
+    "app_id": "782330",
+    "term_key": "crucible",
+    "term": "Crucible",
+    "alt_forms": [
+      "the crucible"
+    ],
+    "peek": "A sword that kills most demons in one swing but holds only three charges.",
+    "full_text": "The Crucible is a sword that kills any demon in one swing without a stagger, marauders excepted, who must be stunned first. It holds three charges, refilled only at fixed spots in the level, and one swing spends one charge whether it lands on a tyrant or an imp. Each kill returns health."
+  },
+  {
+    "term_id": 1055,
+    "app_id": "782330",
+    "term_key": "blood-punch",
+    "term": "Blood punch",
+    "alt_forms": [
+      "blood punches"
+    ],
+    "peek": "A punch with limited charges that kills a pinky from any side.",
+    "full_text": "The pinky is armoured in front and bare at the tail, and a blood punch kills it from any side. Spend the Crucible and blood punch charges on summoned demons for health."
+  },
+  {
+    "term_id": 1056,
+    "app_id": "782330",
+    "term_key": "slayer-gate",
+    "term": "Slayer Gate",
+    "alt_forms": [
+      "slayer gates",
+      "slayer key"
+    ],
+    "peek": "A locked gate to an optional, harder arena opened with a Slayer Key.",
+    "full_text": "The purple gore nests behind locked Slayer Gates are optional arenas harder than anything around them; each opens with a Slayer Key hidden nearby. Clearing one pays three weapon points and an Empyrean Key. All six keys unlock the Unmaykr in the Fortress, a rapid three-orb gun that shares the BFG's ammo."
+  },
+  {
+    "term_id": 1057,
+    "app_id": "782330",
+    "term_key": "monkey-bars",
+    "term": "Monkey bars",
+    "alt_forms": [],
+    "peek": "Horizontal bars you grab mid-air and swing along to cross gaps.",
+    "full_text": "Monkey bars are horizontal bars the Slayer grabs mid-air and swings along, first taught in Cultist Base. Approach at a run and jump toward the bar rather than at it, because grabbing happens automatically once you are close enough in the air. If a section has more than one bar in a row, commit to the whole chain rather than pausing between them."
+  },
+  {
+    "term_id": 1058,
+    "app_id": "782330",
+    "term_key": "arch-vile",
+    "term": "Arch-vile",
+    "alt_forms": [
+      "arch-viles"
+    ],
+    "peek": "A demon that buffs everything in the arena and summons more demons.",
+    "full_text": "An arch-vile is a walking buff totem: while it lives everything in the arena hits harder and moves faster, glowing red, and it summons more demons. It summons while you are locked into a glory kill or chainsaw animation, because you cannot interrupt it then. Find it first, skip the executions until it is dead, and put your heaviest ordnance into it."
   }
 ]

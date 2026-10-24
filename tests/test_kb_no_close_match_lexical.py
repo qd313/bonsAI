@@ -210,6 +210,53 @@ class TheDeckQuestionsGetTheLineTests(unittest.TestCase):
         )
 
 
+class EverydayEndingsDoNotHideTheNamedThingTests(unittest.TestCase):
+    GRIMTHAK_NOTES = ("Glyphid Dreadnought", "Dreadnought Twins", "Mactera")
+
+    def test_grimthak_with_each_ending_still_gets_the_line(self):
+        # Measured 2026-10-24: "in this run" lifts the keyword score to 2.88 ("run" is in the
+        # Mining note), and before this only "in this game" was cut, so nothing was named.
+        for ending in (" in this run", " here", " right now", " in this level",
+                       " in this mission", " please", " at the start", "?",
+                       " in this run please", " here?"):
+            with self.subTest(ending=ending):
+                self.assertTrue(
+                    _named_turn(
+                        "How do I defeat the boss named Grimthak" + ending, DRG,
+                        self.GRIMTHAK_NOTES, keyword=2.8786, meaning=0.70,
+                    )
+                )
+
+    def test_a_three_word_name_and_an_ending_still_gets_the_line(self):
+        # "qqqq zzzz wwww in this run" with Hades running: keyword 2.21 on "run".
+        self.assertTrue(
+            _named_turn(
+                "qqqq zzzz wwww in this run please", "Hades",
+                ("Mirror of Night", "Boons and duo boons"), keyword=2.2149, meaning=0.60,
+            )
+        )
+
+    def test_a_right_note_with_an_ending_stays_quiet(self):
+        for ending in (" first", " early on", " in this run please", " fast"):
+            with self.subTest(ending=ending):
+                self.assertFalse(
+                    _named_turn(
+                        "how do i beat the glyphid dreadnought" + ending, DRG,
+                        ("Glyphid Dreadnought",), keyword=9.1, meaning=0.78,
+                    )
+                )
+
+    def test_a_long_ending_that_is_not_on_the_list_is_left_to_the_scores(self):
+        # "in co-op with my friends" is not cut, so the name is not at the end, nothing is named,
+        # and the scores decide (keyword support, meaning over 0.65: no line). Known limit.
+        self.assertFalse(
+            _named_turn(
+                "How do I defeat the boss named Grimthak in co-op with my friends", DRG,
+                self.GRIMTHAK_NOTES, keyword=2.8786, meaning=0.70,
+            )
+        )
+
+
 class RightNotesStayQuietTests(unittest.TestCase):
     def test_glyphid_dreadnought_with_the_game_running(self):
         self.assertFalse(

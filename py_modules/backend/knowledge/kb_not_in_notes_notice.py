@@ -335,7 +335,8 @@ def _word_stems(words: set[str]) -> set[str]:
 # note often shares none of its words -- measured, the plain "no word of the question in any
 # note" rule warned on 19 right-note asks of that shape. A named thing is the object of an asking
 # verb, or what follows "called"/"named", one to three words long, at the end of the question
-# once a trailing "in this game" / "in <game>" is cut.
+# once the trailing phrases below are cut; or, failing that, a whole question of three words or
+# fewer ("qqqq zzzz wwww", "gunner or scout"), which can only be a name.
 _ASKING_VERBS = (
     "beat|defeat|kill|buy|tame|find|unlock|get|catch|craft|build|ride|recruit|romance|marry"
 )
@@ -346,21 +347,43 @@ _NAMED_THING_RES = (
     ),
 )
 
+# Endings cut off the question, over and over ("in this run please" goes in two passes), before
+# the named thing is looked for; "in <game>" is added per turn. The first eight are how players
+# end a question (the session's list, 2026-10-24: with one of them left on, "How do I beat the
+# boss named Grimthak in this run" named nothing and the scores alone decided); the last five
+# are the endings the fixture's right-note questions actually use (tests/fixtures/
+# kb_eval_v2.json: "first" 7 times, "early" 5, "fast" 2, "early on" 2, "again" 1). Measured with
+# scripts/measure_kb_thin_match.py --line-gate: all 80 ending variants of the device sentences
+# and the 2026-10-24 Deck questions warn (72 with this line, 8 attach nothing and get "Not in my
+# notes"), and no right-note ask gains the line. The three-word bare name is what catches
+# "qqqq zzzz wwww in this run".
+_TRAILING_PHRASES = (
+    "in this game", "in this run", "in this level", "in this mission", "here", "right now",
+    "please", "at the start", "early on", "early", "first", "fast", "again",
+)
+
 
 def _question_subject_words(question: str, kb_game_name: str) -> set[str]:
     """The words of the thing the question names (see `_NAMED_THING_RES`), minus filler, the
     game's own name and the generic advice words; empty when it names nothing."""
-    text = re.sub(r"[^a-z0-9' -]+", " ", (question or "").lower()).strip()
+    text = " ".join(re.findall(r"[a-z0-9']+", (question or "").lower()))
     game = " ".join(re.findall(r"[a-z0-9']+", (kb_game_name or "").lower()))
-    for tail in ("in this game", f"in {game}" if game else ""):
-        if tail and text.endswith(" " + tail):
-            text = text[: -len(tail)].strip()
+    tails = _TRAILING_PHRASES + ((f"in {game}",) if game else ())
+    trimmed = True
+    while trimmed:  # "in this run please" goes in two passes
+        trimmed = False
+        for tail in tails:
+            if text.endswith(" " + tail):
+                text = text[: -len(tail)].strip()
+                trimmed = True
     thing = ""
     for pattern in _NAMED_THING_RES:
         match = pattern.search(text)
         if match:
             thing = match.group(1)
             break
+    if not thing and 0 < len(text.split()) <= 3:
+        thing = text
     return {
         word
         for word in _content_words(thing) - _content_words(kb_game_name)
@@ -587,8 +610,8 @@ def kb_attach_log_line(
     the rules or cards, so "attached" there means real notes. The footers are a separate verdict:
     "No close match" is added to a reply whose attached notes were a weak match, so a log that
     says notes were attached and an answer that ends "No close match" do not contradict each
-    other (the 2026-10-08 Deck report). Whether the answer then used a note is decided on the
-    screen, and a used note takes that line off the shown answer (kbCloseMatchLineAgrees.ts).
+    other (the 2026-10-08 Deck report). The screen shows the line as written; it no longer takes
+    it off an answer that used a note (plan 98 lane D removed that rule).
     """
     if kb_transparency.get("kb_attached"):
         names = [str(n.get("name") or "") for n in kb_attached_notes if isinstance(n, dict)]

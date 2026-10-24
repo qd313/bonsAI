@@ -42,11 +42,15 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 - ★ `[KB]` **A notes card ("From bonsAI's own note") was drawn under an answer with the knowledge library switch OFF** — **ACCEPTED, by design: the maintainer's call 2026-10-18 ("That's fine"); found 2026-10-18 (plan 96 block M, Deck).**
   A stopped answer with "Use local knowledge base" off (the settings file read false) still had a card reading "Weapon choice, From bonsAI's own note" under it; another try with the same switch off drew no card. Is that meant? The maintainer's call: that is fine (by design). Evidence `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-2.json` (the try with no card: `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-1.json`).
+- ★ `[KB]` **A thank-you or a junk phrase is treated as a follow-up to the previous question** — **OPEN, found 2026-10-24 (plan 98 block K0, Deck).**
+  A short question with "it" and no subject counts as a follow-up, so "thank you very much" answered the previous question again (the earlier house question) instead of a short reply, and the "what time is it" reading is muddied the same way. A clean re-run in a fresh chat is owed. Evidence `workshop:test-evidence/plan98-P98-JUNK-PHRASES.json`.
 - ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **ACCEPTED, 2026-09-28.** The
   maintainer chose this on 2026-09-05 to save about a second per Speed question
   ([D62](audit/maintainer-decisions-archive.md#d62--locked-2026-09-05-raised-2026-09-05--the-second-bug-fixing-session-four-calls-before-go)
   item 2). A stray word match can attach a wrong tip. A fix would run the meaning search only when the word hits are thin;
   that needs a cut-off picked and measured. [Detail](roadmap-kb-details.md#speed-mode-tip-gap)
+- ★ `[KB]` **Yoshi's Story's "Starting out" note contradicts itself about its levels** — **OPEN, found 2026-10-24 (plan 98 lane G3).**
+  The note (section 376 in `data/kb/strategy_seed.json`) says "24 levels split across four worlds of six pages" and also "only six levels are played in any one run". The real game has six worlds of four levels. Lane G3 kept those numbers out of the glossary words. The note needs correcting, then a library rebuild.
 - ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back
   2026-09-06 (D81).** "The game drops me back to the library" reaches no crash tip, because the tip search needs a topic
   word. The held fix (a meaning search) attached wrong tips, six measured. The tips were rewritten and a "none of these
@@ -64,7 +68,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 - ★★ `[KB]` **Unrelated questions can still get a game card stapled on** — **ACCEPTED 2026-08-27.** With a game running,
   "thank you very much" still attached a card on the Deck on 2026-08-23. Raising the word floor costs real matches and the
   model mostly ignores a card that does not fit. Later floors (2026-09) may have cured some phrases.
-  **Deck 2026-10-24 (plan 98 block K0, release build `f0b72dae7b65`, Deep Rock Galactic: Survivor running, Strategy mode), MEASURED:** "thank you very much" attached no notes (the AI answered the earlier question again, as a follow-up, and the "Not in my notes" line showed). "what time is it" attached Gold, Red Sugar and Nitra, drew no block and no line, and the AI said it has no clock. The second phrase still pulls notes. The reading is muddied, because short questions with "it" are treated as follow-ups to the previous question (see the new entry below); a clean re-run in a fresh chat is owed. Evidence `workshop:test-evidence/plan98-P98-JUNK-PHRASES.json`.
+  **Deck 2026-10-24 (plan 98 block K0, release build `f0b72dae7b65`, Deep Rock Galactic: Survivor running, Strategy mode), MEASURED:** "thank you very much" attached no notes (the AI answered the earlier question again, as a follow-up, and the "Not in my notes" line showed). "what time is it" attached Gold, Red Sugar and Nitra, drew no block and no line, and the AI said it has no clock. The second phrase still pulls notes. The reading is muddied, because short questions with "it" are treated as follow-ups to the previous question (see the new entry at the top of this list); a clean re-run in a fresh chat is owed. Evidence `workshop:test-evidence/plan98-P98-JUNK-PHRASES.json`.
   [D28](audit/maintainer-decisions-archive.md#d28--ordinary-phrases-attach-game-cards-how-hard-should-the-floor-be) ·
   [Detail](roadmap-kb-details.md#ordinary-phrases-attach-game-cards)
 - ★★★★ `[KB]` **What ships loses to its own meaning half on questions nobody tuned against** — **ACCEPTED, decided
@@ -74,6 +78,9 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 ## Deck check owed
 
+- ★★ `[KB]` **Glossary words for every game** — **VERIFY, built and landed 2026-10-24 (plan 98 lanes A0, G1, G2, G3). Was OPEN, filed 2026-10-16 (plan 86 step 3).**
+  The library builder now reads word files from `data/kb/glossary/` and lets a word name its game by the library's own id, so the Nintendo titles and State of Emergency can have words. 341 new words across the other 37 games (114 Steam wiki titles, 90 own-words and GTA titles, 137 Nintendo titles), plus 7 more for Deep Rock Galactic: Survivor. Every sentence restates that game's own notes; the session spot-checked one in ten against its note.
+  **Deck check owed:** row **P98-GLOSSARY-02** in [testing.md](testing.md) (plan 98 block K1). It reaches players only after the maintainer publishes the library. [Design](audit/clean-up-round-three/glossary-move.md)
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY, landed
   2026-09-15, unit-tested.** A game known only by name now opens its box, and naming the boss up front keeps the answer in
   plain text. Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01, 2026-09-18), knowledge base off (DRG-01b, 2026-09-23) and library absent (DRG-01c, 2026-10-03; the AI wrote no hidden block, so a cover was not tested directly).
@@ -91,8 +98,6 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 - ★ `[KB]` **Retire the Developer tab's "Install seed knowledge base" button** — **OPEN, an idea from the maintainer
   2026-10-02.** It was a stand-in from before the library was published, and its text still says the public download "is
   not live yet". Several Deck focus walks use it as the first stop on the tab, so check those first.
-- ★★ `[KB]` **Glossary words for every game** — **OPEN, filed 2026-10-16 (plan 86 step 3).**
-  The underlined words ("kiting", "overclock" for Deep Rock Galactic: Survivor) now come from the knowledge library's new `glossary_terms` table (`447fc2af`, `cf724c9f`). Words for other games need only new rows in `data/kb/glossary_terms.json` and a library rebuild, no code. The builder refuses a row for a game the library does not hold. [Design](audit/clean-up-round-three/glossary-move.md)
 - ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **OPEN, counted 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`).** Of the labelled questions, 4 (3 tuning rows and 1 held-back row) get nothing from the word search. The combined search still finds the right note in its first three for 3 of those 4 (missed: V2-PARA-S04). The 36 newer blind rows did not grow the slice (1 of 214 blind rows). Four questions is still too few to gate a regression; whether to write more is the owner's call. No code needed.
   [Detail](roadmap-kb-details.md#eval-fixture-cannot-see-a-recall-failure)
 - ★★★ `[KB]` **Card style pass** — **OPEN, measure first, added 2026-09-05.** Rewrite the prose cards as labelled short

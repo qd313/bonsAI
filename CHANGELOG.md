@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+  - [Added](#added)
 - [\[0.6.0\] - 2026-10-23](#060---2026-10-23)
   - [What it does](#what-it-does)
   - [What is different from 0.4.9](#what-is-different-from-049)
@@ -13,41 +14,41 @@ All notable changes to this project are documented in this file.
   - [Installing over 0.4.9](#installing-over-049)
   - [The full list](#the-full-list)
 - [\[0.5.0\] - 2026-07-15](#050---2026-07-15)
-  - [Added](#added)
+  - [Added](#added-1)
   - [Changed](#changed)
 - [\[0.4.9\] - 2026-07-08](#049---2026-07-08)
   - [Fixed](#fixed)
   - [Changed](#changed-1)
 - [\[0.4.8\] - 2026-07-07](#048---2026-07-07)
-  - [Added](#added-1)
+  - [Added](#added-2)
   - [Fixed](#fixed-1)
   - [Changed](#changed-2)
 - [\[0.4.7\] - 2026-07-07](#047---2026-07-07)
-  - [Added](#added-2)
+  - [Added](#added-3)
   - [Fixed](#fixed-2)
   - [Changed](#changed-3)
 - [\[0.4.6\] - 2026-07-06](#046---2026-07-06)
   - [Fixed](#fixed-3)
   - [Changed](#changed-4)
 - [\[0.4.5\] - 2026-07-06](#045---2026-07-06)
-  - [Added](#added-3)
+  - [Added](#added-4)
   - [Changed](#changed-5)
   - [Fixed](#fixed-4)
 - [\[0.4.4\] - 2026-06-27](#044---2026-06-27)
-  - [Added](#added-4)
+  - [Added](#added-5)
   - [Changed](#changed-6)
   - [Fixed](#fixed-5)
 - [\[0.4.3\] - 2026-06-26](#043---2026-06-26)
-  - [Added](#added-5)
+  - [Added](#added-6)
   - [Changed](#changed-7)
 - [\[0.4.2\] - 2026-06-21](#042---2026-06-21)
-  - [Added](#added-6)
+  - [Added](#added-7)
   - [Changed](#changed-8)
 - [\[0.4.1\] - 2026-06-15](#041---2026-06-15)
-  - [Added](#added-7)
+  - [Added](#added-8)
   - [Changed](#changed-9)
 - [\[0.4.0\] - 2026-06-14](#040---2026-06-14)
-  - [Added](#added-8)
+  - [Added](#added-9)
   - [Changed](#changed-10)
   - [Fixed](#fixed-6)
 - [\[0.3.0\] - 2026-04-30](#030---2026-04-30)
@@ -56,13 +57,17 @@ All notable changes to this project are documented in this file.
   - [Changed](#changed-12)
   - [Docs](#docs)
 - [\[Unreleased\] - 2026-04-19](#unreleased---2026-04-19)
-  - [Added](#added-9)
+  - [Added](#added-10)
   - [Changed](#changed-13)
   - [Fixed](#fixed-7)
   - [Docs](#docs-1)
 <!-- /toc -->
 
 ## [Unreleased]
+
+### Added
+
+- **Tap-to-define words for every game in the library.** Underlined words in answers now exist for all of the library's games, not just a few. They arrive with the next library update.
 
 ## [0.6.0] - 2026-10-23
 

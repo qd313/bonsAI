@@ -322,5 +322,95 @@
     "alt_forms": ["+15s pickup"],
     "peek": "Pickups around the level that each add 15 seconds to the round.",
     "full_text": "A round runs on a timer, and pickups scattered around the level add +15 seconds each. Knowing when to break off and go for time, instead of staying in a fight, is the other thing new players get wrong."
+  },
+  {
+    "term_id": 2400,
+    "app_id": "1547000",
+    "term_key": "muscle",
+    "term": "Muscle",
+    "alt_forms": [],
+    "peek": "A stat built at the gym or by running, cycling and swimming.",
+    "full_text": "Muscle is built at a gym or by running, cycling and swimming; fourteen seconds on the treadmill or bike is one percent, and a weights rep is one percent. It raises melee damage, respect and sex appeal, but at 100% it works against sex appeal and some girlfriends will not talk to you."
+  },
+  {
+    "term_id": 2401,
+    "app_id": "1547000",
+    "term_key": "stamina",
+    "term": "Stamina",
+    "alt_forms": [],
+    "peek": "Endurance for sprinting, swimming and cycling.",
+    "full_text": "Stamina is endurance for sprinting, swimming and cycling, and with low stamina you stop running almost immediately. It goes up with the activity itself, and finishing the Burglary side missions, ten thousand dollars of stolen goods, grants unlimited stamina regardless of the stat."
+  },
+  {
+    "term_id": 2402,
+    "app_id": "1547000",
+    "term_key": "fat",
+    "term": "Fat",
+    "alt_forms": [],
+    "peek": "A stat that goes up with food and down with exercise.",
+    "full_text": "Fat goes up with food, including meals on dates, and down with exercise or with not eating. Overweight slows you down and costs health, jumping and speed, but zero fat is worse, because once there is nothing left to burn you start losing muscle and after that health."
+  },
+  {
+    "term_id": 2403,
+    "app_id": "1547000",
+    "term_key": "respect",
+    "term": "Respect",
+    "alt_forms": [],
+    "peek": "A stat that sets how many gang members you can recruit.",
+    "full_text": "Respect sets how many gang members you can recruit, from one up to seven. It comes from missions, killing rival gang members and police, taking territory and spraying over tags, and it falls if you wear the wrong colours at home, kill your own, or lose turf."
+  },
+  {
+    "term_id": 2404,
+    "app_id": "1547000",
+    "term_key": "weapon-skill",
+    "term": "Weapon skill",
+    "alt_forms": ["Weapon skills"],
+    "peek": "A level for each weapon type: Poor, then Gangster, then Hitman.",
+    "full_text": "Each weapon type levels separately by hitting people and vehicles: Poor, then Gangster, then Hitman. Higher skill means better accuracy, more range, faster strafing and fire rate, and the ability to move while shooting, while thrown weapons, melee, rifles and heavy weapons have no skill meter at all."
+  },
+  {
+    "term_id": 2405,
+    "app_id": "1547000",
+    "term_key": "gang-territory",
+    "term": "Gang territory",
+    "alt_forms": ["Gang territories"],
+    "peek": "Streets you take from rival gangs, which then pay you money.",
+    "full_text": "Gang territory opens up after the mission Doberman, and goes away for a stretch in the middle of the story before coming back. Holding turf pays: money accumulates and is collected outside the Johnson house on Grove Street, respect goes up, and rival gang members stop spawning in the streets you own."
+  },
+  {
+    "term_id": 2406,
+    "app_id": "1547000",
+    "term_key": "lung-capacity",
+    "term": "Lung capacity",
+    "alt_forms": [],
+    "peek": "How long you last underwater.",
+    "full_text": "Lung capacity is how long you last underwater, and it grows with time spent under. Collecting oysters is the fast way to raise it, and if the oxygen meter empties you lose health quickly."
+  },
+  {
+    "term_id": 2407,
+    "app_id": "1547000",
+    "term_key": "oysters",
+    "term": "Oysters",
+    "alt_forms": ["Oyster"],
+    "peek": "Fifty collectibles along shorelines, under bridges and in pools.",
+    "full_text": "There are fifty oysters, along shorelines, under bridges and in pools, and collecting them is the fast way to raise lung capacity. All fifty, with expensive clothes and a good car, also offset the sex appeal lost to maxed muscle."
+  },
+  {
+    "term_id": 2408,
+    "app_id": "1547000",
+    "term_key": "horseshoes",
+    "term": "Horseshoes",
+    "alt_forms": ["Horseshoe"],
+    "peek": "Fifty collectibles around Las Venturas, all needed for 100% completion.",
+    "full_text": "There are fifty horseshoes around Las Venturas, and all fifty are required for 100% completion. Each one is a hundred dollars and twenty points of luck, a stat that starts at zero and only ever goes up; the full set maxes it at 1,000."
+  },
+  {
+    "term_id": 2409,
+    "app_id": "1547000",
+    "term_key": "sex-appeal",
+    "term": "Sex appeal",
+    "alt_forms": [],
+    "peek": "A stat that decides whether girlfriends will talk to you.",
+    "full_text": "Sex appeal decides whether girlfriends will talk to you at all, and all fifty oysters covers most of that. Muscle at 100% works against it."
   }
 ]

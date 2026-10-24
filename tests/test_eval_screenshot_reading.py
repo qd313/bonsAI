@@ -9,6 +9,7 @@ Solves: A reader that marks a wrong answer right would make every figure of the 
 Does not: Start Ollama, open a picture or touch the Deck.
 """
 
+import asyncio
 import json
 import sys
 import tempfile
@@ -85,6 +86,12 @@ class ScreenshotReplyReaderTests(_ScriptCase):
         v = self.read("This is Deep Rock Galactic, on the title screen.")
         self.assertFalse(v.game)
         self.assertEqual(v.other_games, ["Deep Rock Galactic"])
+
+    def test_the_short_form_of_the_right_game_after_its_full_name_is_not_a_second_game(self):
+        # Seen in the first real run: "the title Deep Rock Galactic Survivor ... likely the game Deep Rock Galactic".
+        v = self.read("The title says Deep Rock Galactic Survivor, so this is likely Deep Rock Galactic. Title screen.")
+        self.assertTrue(v.game)
+        self.assertEqual(v.other_games, [])
 
     def test_an_alias_and_punctuation_still_count(self):
         v = self.read("**DRG Survivor** - the title screen.")
@@ -220,6 +227,106 @@ class ScreenshotLabelsTests(_ScriptCase):
             self.assertIsNone(self.mod.resolve_picture(by_name, [Path(a)]))
             absolute = _pic(self.mod, file="elsewhere.png", path=str(Path(b) / "shot.png"))
             self.assertEqual(self.mod.resolve_picture(absolute, [Path(a)]), Path(b) / "shot.png")
+
+
+class _FakePlugin:
+    """Just the two hooks the real ask path calls on the plugin that this eval watches."""
+
+    def __init__(self):
+        self.partial_calls = []
+
+    def _update_partial_response(self, request_id, text, done, thinking_summary=None, **kwargs):
+        self.partial_calls.append((request_id, text, done))
+
+
+class ScreenshotAskTests(_ScriptCase):
+    def _fake_ask(self, calls, reply="This is the title screen of Deep Rock Galactic: Survivor.", success=True,
+                  stream=True, answered_by="gemma4:e2b-it-qat"):
+        async def fake(plugin, question, pc_ip, app_id="", app_name="", attachments=None, ask_mode="speed",
+                       spoiler_consent=False, token_stream_request_id=None, **kwargs):
+            calls.append(dict(question=question, app_id=app_id, app_name=app_name, attachments=attachments,
+                              ask_mode=ask_mode, rid=token_stream_request_id))
+            await asyncio.sleep(0.05)
+            if stream and success:
+                plugin._update_partial_response(token_stream_request_id, reply, False)
+            await asyncio.sleep(0.3)
+            if hasattr(plugin, "_persist_input_transparency"):
+                await plugin._persist_input_transparency({"ask_diagnostics": {"model_succeeded": answered_by}})
+            return {"success": success, "response": reply if success else "The AI is not set up."}
+        return fake
+
+    def _ask(self, arm, pic=None, **fake_kwargs):
+        calls = []
+        pic = pic or _pic(self.mod)
+        plugin = _FakePlugin()
+        run = asyncio.run(self.mod.ask_picture(
+            plugin, pic, Path("C:/pics/a.png"), arm, question="Q?", ollama_base="http://x", sample=2,
+            model="gemma4:e2b-it-qat", other_games=OTHERS, run_game_ai_request=self._fake_ask(calls, **fake_kwargs),
+        ))
+        return run, calls, plugin
+
+    def test_the_picture_goes_with_the_question_and_the_game_only_in_the_known_way_of_asking(self):
+        _, known_calls, _ = self._ask("known")
+        _, unknown_calls, _ = self._ask("unknown")
+        k, u = known_calls[0], unknown_calls[0]
+        self.assertEqual(k["attachments"][0]["path"], str(Path("C:/pics/a.png")))
+        self.assertEqual((k["app_id"], k["app_name"]), ("2321470", "Deep Rock Galactic: Survivor"))
+        self.assertEqual(u["attachments"][0]["path"], k["attachments"][0]["path"])
+        self.assertEqual((u["app_id"], u["app_name"]), ("", ""))
+        self.assertEqual(k["question"], "Q?")
+        self.assertIsInstance(k["rid"], int)  # streaming on, so the first word can be timed
+
+    def test_the_first_word_time_is_when_the_first_answer_text_arrived(self):
+        run, _, plugin = self._ask("known")
+        self.assertIsNotNone(run.first_word_s)
+        self.assertLess(run.first_word_s, run.total_s)
+        self.assertGreater(run.first_word_s, 0.0)
+        self.assertEqual(plugin.partial_calls[0][1], run.reply)  # the real hook still got the text
+
+    def test_a_reply_that_never_streamed_has_no_first_word_time(self):
+        run, _, _ = self._ask("known", stream=False)
+        self.assertIsNone(run.first_word_s)
+
+    def test_the_reply_is_read_and_the_answering_model_is_recorded(self):
+        run, _, _ = self._ask("known", answered_by="llava:7b")
+        self.assertTrue(run.verdict.game)
+        self.assertTrue(run.verdict.area)
+        self.assertEqual(run.model, "llava:7b")
+        self.assertEqual((run.arm, run.sample, run.picture_id), ("known", 2, "p1"))
+
+    def test_a_failed_ask_is_a_run_with_no_reply_and_nothing_right(self):
+        run, _, _ = self._ask("known", success=False)
+        self.assertFalse(run.success)
+        self.assertFalse(run.verdict.game)
+        self.assertEqual(run.reply, "")
+
+    def test_the_hook_on_the_plugin_is_put_back_after_the_ask(self):
+        calls = []
+        plugin = _FakePlugin()
+        before = plugin._update_partial_response
+        asyncio.run(self.mod.ask_picture(
+            plugin, _pic(self.mod), Path("a.png"), "known", question="Q?", ollama_base="http://x", sample=1,
+            model="m", other_games=OTHERS, run_game_ai_request=self._fake_ask(calls)))
+        self.assertEqual(plugin._update_partial_response, before)
+
+    def test_the_settings_let_the_picture_through_and_send_it_to_the_chosen_model(self):
+        s = self.mod.picture_settings({"text_model_routing_order": ["x"], "capabilities": {}}, "gemma4:e4b-it-qat")
+        self.assertIs(s["capabilities"]["media_library_access"], True)
+        self.assertEqual(s["vision_model_routing_order"], ["gemma4:e4b-it-qat"])
+        self.assertEqual(s["text_model_routing_order"], ["gemma4:e4b-it-qat"])
+
+    def test_the_report_warns_when_another_model_answered(self):
+        run, _, _ = self._ask("known", answered_by="llava:7b")
+        text = self.mod.format_report({"model": "gemma4:e2b-it-qat", "samples": 1, "pictures": 1}, [run])
+        self.assertIn("answered by another model", text)
+        self.assertIn("llava:7b", text)
+
+    def test_the_other_games_list_holds_the_library_titles_and_the_labelled_games(self):
+        pics = self.mod.load_pictures(LABELS, None)
+        names = self.mod.other_game_names(pics)
+        self.assertIn("Deep Rock Galactic", names)  # the part before the colon, so the base game counts as another game
+        self.assertIn("Hades", names)  # a title from the library
+        self.assertIn("Vampire Survivors", names)  # a look-alike added by hand
 
 
 if __name__ == "__main__":

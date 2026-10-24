@@ -100,6 +100,7 @@ describe("the Settings tab with every section open: one line per setting, longer
     expect(helpOf(container, "Text size")).toBe(SETTINGS_ROW_HELP.textSize);
     expect(helpOf(container, "Remember what I typed")).toBe(SETTINGS_ROW_HELP.remember);
     expect(helpOf(container, "Hide spoilers until I tap")).toBe(SETTINGS_ROW_HELP.spoilers);
+    expect(helpOf(container, "How much to hide")).toBe(SETTINGS_ROW_HELP.spoilerTier);
     expect(helpOf(container, "Show one chip instead of two")).toBe(SETTINGS_ROW_HELP.chips);
     expect(helpOf(container, "STT model")).toBe(SETTINGS_ROW_HELP.voiceInput);
     expect(helpOf(container, "AI voice & personality")).toBe(SETTINGS_ROW_HELP.character);
@@ -115,6 +116,7 @@ describe("the Settings tab with every section open: one line per setting, longer
       SETTINGS_ROW_HELP.textSize,
       SETTINGS_ROW_HELP.remember,
       SETTINGS_ROW_HELP.spoilers,
+      SETTINGS_ROW_HELP.spoilerTier,
       SETTINGS_ROW_HELP.chips,
       SETTINGS_ROW_HELP.voiceInput,
       SETTINGS_ROW_HELP.character,
@@ -160,7 +162,6 @@ describe("the Settings tab's moves out of a section", () => {
       ["Screenshot quality", "screenshot"],
       ["Text size", "textsize"],
       ["Remember what I typed", "remember"],
-      ["Hide spoilers until I tap", "spoilers"],
       ["Show one chip instead of two", "chips"],
     ];
     for (const [label, id] of rows) {
@@ -173,6 +174,20 @@ describe("the Settings tab's moves out of a section", () => {
       const next = ids[ids.indexOf(id as (typeof ids)[number]) + 1];
       expect(steamRingHolder()?.getAttribute("data-bonsai-fold-line"), `${label} Down`).toBe(next);
     }
+  });
+
+  it("Story spoilers has two rows: the switch hands Up to the line and nothing else, the tier row hands Down to the next line and nothing else", () => {
+    const { container } = render(<SettingsTab {...props()} />);
+    const toggle = rowFor(container, "Hide spoilers until I tap")!.querySelector('[data-decky-ui="ToggleField"]') as SteamEl;
+    const tier = container.querySelector<SteamEl>('[data-bonsai-spoiler-tier-row="true"]')!;
+    expect(Object.keys(nav(toggle)).filter((k) => nav(toggle)[k])).toEqual(["onMoveUp"]);
+    expect(Object.keys(nav(tier)).filter((k) => nav(tier)[k])).toEqual(["onMoveDown"]);
+    act(() => putSteamRingOn(toggle));
+    act(() => void nav(toggle).onMoveUp?.());
+    expect(steamRingHolder()?.getAttribute("data-bonsai-fold-line")).toBe("spoilers");
+    act(() => putSteamRingOn(tier.querySelector("button")));
+    act(() => void nav(tier).onMoveDown?.());
+    expect(steamRingHolder()?.getAttribute("data-bonsai-fold-line")).toBe("chips");
   });
 
   it("Down from the last section's last control (the Clear buttons) goes on to the floating Open all button (plan 93)", () => {

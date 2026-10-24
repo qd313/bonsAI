@@ -47,6 +47,7 @@ function buildProps(shell: ReturnType<typeof useBonsaiPluginShell>, clearAll: ()
     unifiedInputPersistenceMode: "persist_all",
     setUnifiedInputPersistenceMode: () => {},
     chatTextSizeSetting: { value: "normal", set: () => {} },
+    spoilerTierSetting: { value: "default", set: () => {} },
     aiCharacterEnabled: false,
     setAiCharacterEnabled: () => {},
     aiCharacterRandom: false,

@@ -2,7 +2,7 @@
  * Title: Settings tab
  *
  * Purpose: The Settings tab — screenshot quality, text size, whether the Ask bar remembers
- * what you typed, story spoiler masking, how many suggestion chips show,
+ * what you typed, story spoiler masking and how much a Strategy answer hides, how many suggestion chips show,
  * voice input settings, the AI's voice & personality
  * picker, whether the Developer tab is visible, and two buttons for
  * clearing cached data or wiping everything back to a fresh install.
@@ -31,7 +31,10 @@
  *     │                           its own file, see           │
  *     │                           SettingsTabChatTextSizeRow  │
  *     │ Remember what I typed  <- one on/off switch           │
- *     │ Story spoilers         <- hide-until-tap toggle       │
+ *     │ Story spoilers         <- hide-until-tap toggle, and  │
+ *     │                           the Hide more / Default /   │
+ *     │                           Hide less row, its own file,│
+ *     │                           SettingsTabSpoilerTierRow   │
  *     │ Suggestion chips       <- one chip vs two toggle      │
  *     │ Voice input            <- its own file, see           │
  *     │                           VoiceInputSettingsSection   │
@@ -63,6 +66,7 @@ import { VoiceInputSettingsSection } from "../voice/VoiceInputSettingsSection";
 import type { BonsaiCapabilityKey } from "../permissions/permissionDeepLink";
 import { SettingsTabChatTextSizeRow, type ChatTextSizeSetting } from "./SettingsTabChatTextSizeRow";
 import { SettingsTabChoiceRow } from "./SettingsTabChoiceRow";
+import { SettingsTabSpoilerTierRow, type SpoilerTierSetting } from "./SettingsTabSpoilerTierRow";
 import { SettingsTabCharacterSection } from "../characters/SettingsTabCharacterSection";
 import { SettingsTabDataSection } from "./SettingsTabDataSection";
 import { useSettingsTabFocus } from "./useSettingsTabFocus";
@@ -89,6 +93,9 @@ export type SettingsTabProps = {
 
   /** How big the words are, everywhere in the plugin: small, normal or large (plan 87 call 3, plan 89). */
   chatTextSizeSetting: ChatTextSizeSetting;
+
+  /** How much a Strategy answer hides: Hide more, Default or Hide less (plan 98, D50). */
+  spoilerTierSetting: SpoilerTierSetting;
 
   aiCharacterEnabled: boolean;
   setAiCharacterEnabled: (v: boolean) => void;
@@ -140,6 +147,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   unifiedInputPersistenceMode,
   setUnifiedInputPersistenceMode,
   chatTextSizeSetting,
+  spoilerTierSetting,
   aiCharacterEnabled,
   setAiCharacterEnabled,
   aiCharacterRandom,
@@ -169,6 +177,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
     chatTextSize: chatTextSizeSetting.value,
     rememberTyped: unifiedInputPersistenceMode === "persist_all",
     spoilerMasking: strategySpoilerMaskingEnabled,
+    spoilerTier: spoilerTierSetting.value,
     singleChip: presetSingleChip,
     voiceSttModel,
     aiCharacterEnabled,
@@ -246,9 +255,10 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 help={SETTINGS_ROW_HELP.spoilers}
                 checked={strategySpoilerMaskingEnabled}
                 onChange={(checked) => setStrategySpoilerMaskingEnabled(checked)}
-                nav={both("spoilers")}
+                nav={{ onMoveUp: up("spoilers") }}
               />
             </PanelSectionRow>
+            <SettingsTabSpoilerTierRow setting={spoilerTierSetting} nav={{ onMoveDown: down("spoilers") }} />
           </PanelSection>,
         )}
 

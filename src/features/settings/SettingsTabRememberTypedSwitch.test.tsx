@@ -24,6 +24,7 @@ function buildProps(overrides: Partial<SettingsTabProps> = {}): SettingsTabProps
     unifiedInputPersistenceMode: "no_persist",
     setUnifiedInputPersistenceMode: () => {},
     chatTextSizeSetting: { value: "normal", set: () => {} },
+    spoilerTierSetting: { value: "default", set: () => {} },
     aiCharacterEnabled: false,
     setAiCharacterEnabled: () => {},
     aiCharacterRandom: false,

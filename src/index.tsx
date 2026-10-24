@@ -277,6 +277,8 @@ const Content: React.FC = () => {
     unifiedInputPersistenceMode,
     chatTextSize,
     setChatTextSize,
+    spoilerTier,
+    setSpoilerTier,
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
@@ -938,12 +940,18 @@ const Content: React.FC = () => {
     [chatTextSize, setChatTextSize],
   );
 
+  const spoilerTierSetting = useMemo(
+    () => ({ value: spoilerTier, set: setSpoilerTier }),
+    [spoilerTier, setSpoilerTier],
+  );
+
   const settingsTab = useSettingsTabPayload({
     screenshotAttachmentPreset,
     setScreenshotAttachmentPreset,
     unifiedInputPersistenceMode,
     setUnifiedInputPersistenceMode,
     chatTextSizeSetting,
+    spoilerTierSetting,
     aiCharacterEnabled,
     setAiCharacterEnabled,
     aiCharacterRandom,

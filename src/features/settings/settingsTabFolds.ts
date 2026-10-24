@@ -24,6 +24,7 @@ import {
 import type {
   ChatTextSize,
   ScreenshotAttachmentPreset,
+  SpoilerTier,
   VoiceSttModelId,
 } from "./bonsaiSettingsSchema";
 import { summarizeSection } from "../folded-tabs/sectionSummary";
@@ -61,6 +62,13 @@ export const CHAT_TEXT_SIZE_LABEL: Record<ChatTextSize, string> = {
   large: "Large",
 };
 
+/** The spoiler tier row's three buttons (plan 98): the pick that hides the most first. */
+export const SPOILER_TIER_LABEL: Record<SpoilerTier, string> = {
+  strict: "Hide more",
+  default: "Default",
+  open: "Hide less",
+};
+
 /** The speech-to-text models' short names, as the drawing has them, and their full words (the buttons' labels for a screen reader). */
 export const VOICE_STT_MODEL_SHORT_LABEL: Record<VoiceSttModelId, string> = {
   "tiny.en": "tiny.en · faster",
@@ -78,6 +86,8 @@ export const SETTINGS_ROW_HELP = {
     "How big the words are, everywhere in bonsAI: the tabs, the chat, the chips, the question box and Settings. Rows keep their height, so a long chat name is cut off sooner on Large.",
   remember: "On puts back what you typed in the question box when you reopen the plugin. Off clears it each time.",
   spoilers: "Strategy mode masks spoiler sections until you choose to reveal them.",
+  spoilerTier:
+    "How much a Strategy answer keeps hidden. Hide more also covers bosses, endings and chapters, in every game. Default covers story twists and endings, as it always has. Hide less covers nothing. Naming a boss in your question always shows that one.",
   chips:
     "The suggestion row above the question box shows one chip with the whole column, so its label reads more before it needs to scroll. Off shows two chips side by side — the default.",
   voiceInput:
@@ -97,6 +107,7 @@ export interface SettingsFoldValues {
   chatTextSize: ChatTextSize;
   rememberTyped: boolean;
   spoilerMasking: boolean;
+  spoilerTier: SpoilerTier;
   singleChip: boolean;
   voiceSttModel: VoiceSttModelId;
   aiCharacterEnabled: boolean;
@@ -112,6 +123,7 @@ export function settingsSectionSummaries(v: SettingsFoldValues): Record<Settings
     textsize: summarizeSection("Text size", [{ kind: "choice", label: "Text size", value: CHAT_TEXT_SIZE_LABEL[v.chatTextSize] }]),
     remember: summarizeSection("Remember what I typed", [{ kind: "switch", label: "Remember what I typed", on: v.rememberTyped }]),
     spoilers: summarizeSection("Story spoilers (Strategy mode)", [
+      { kind: "choice", label: "How much to hide", value: SPOILER_TIER_LABEL[v.spoilerTier] },
       { kind: "switch", label: "Hide spoilers until I tap", on: v.spoilerMasking },
     ]),
     chips: summarizeSection("Suggestion chips", [{ kind: "switch", label: "Show one chip instead of two", on: v.singleChip }]),

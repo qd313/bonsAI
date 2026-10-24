@@ -105,6 +105,38 @@ Remember what I typed (toggle)
   on): none twice, the three in order between Screenshot quality and Remember what I typed, only Up and Down on
   the row. jsdom has no spatial walk, so the Deck walk (Down through the whole tab, then Up) is the real check.
 
+### The Story spoilers tier row (plan 98, lane B)
+
+A second row in the Settings tab's Story spoilers section: Hide more / Default / Hide less
+(`SettingsTabSpoilerTierRow.tsx`, the row label "How much to hide"), drawn under the "Hide spoilers until I tap"
+switch. It is Text size's shape: one `Focusable` with `flow-children="horizontal"` holding three plain buttons.
+
+```
+Story spoilers (Strategy mode)        <- the section's line
+   | Down                                ^ Up (the switch's onMoveUp)
+Hide spoilers until I tap (toggle)
+   | Down (Steam's own)                  ^ Up (Steam's own)
+How much to hide:  [Hide more]  [Default]  [Hide less]     Left / Right move along the three
+   | Down (the row's onMoveDown)         ^ Up (Steam's own, to the switch)
+Suggestion chips                      <- the next section's line
+```
+
+- **Stops:** the switch, then the three buttons. The container is not a stop.
+- **Moves:** the section has two rows, so only its two ends carry a handler, the way the Data section's switch and
+  Clear pair do: the switch has `onMoveUp` (to the section's line) and the tier row has `onMoveDown` (to the next
+  line). The one step between the two rows, in both directions, is Steam's own along the column's flow. Left and
+  Right are Steam's own too: the row and its buttons carry no `onMoveLeft` / `onMoveRight`.
+- **Known rough edge:** Up from the next line into this open section lands on the last stop (Hide less), not on
+  Hide more, because `useSettingsTabFocus.ts` enters a section by its last stop from below (only the single-row
+  Screenshot and Text size sections enter on their first button).
+- **A** saves the pick; the saved one is drawn with the lighter fill and `aria-pressed`. Nothing reloads.
+- **Driver handles:** `[data-bonsai-spoiler-tier-row="true"]`; the buttons' names are "Set spoiler tier to Hide more" /
+  "... Default" / "... Hide less"; the row's strip words are `data-bonsai-help-label="How much to hide"`.
+- **Tests:** `SettingsTab.spoilerTierWalk.test.tsx` (stops in order, none twice, the two end handlers, nothing for
+  Left or Right), `SettingsTab.folded.test.tsx` (the two ends) and `SettingsTab.foldedWalk.test.tsx` (the bounded
+  Down and Up walks under Steam's three scroll rules, with the row in them). jsdom has no spatial walk, so the Deck
+  walk (Down into the section, Left and Right along the three, Down out) is the real check.
+
 ### The two-button confirm box (plan 96, 2026-10-18)
 
 Every "are you sure?" box (Clear cache, Clear all data, Delete chat, the download notice, Remove knowledge base,
@@ -1386,7 +1418,8 @@ tab bar
 - **Class names and attributes a Deck driver can find:** the lines `.bonsai-fold-line`
   (`[data-bonsai-fold-line="screenshot|textsize|remember|spoilers|chips|voiceinput|character|data"]`,
   `[data-open]`); the rows `.bonsai-dense-row` (`[data-bonsai-help-label="<row name>"]`, `[data-bonsai-help]`
-  its strip words); the Text size row `[data-bonsai-chat-text-size-row="true"]`; the picker
+  its strip words); the Text size row `[data-bonsai-chat-text-size-row="true"]`; the spoiler tier row
+  `[data-bonsai-spoiler-tier-row="true"]`; the picker
   `button.bonsai-ai-character-picker-open`; the accent control `button.bonsai-accent-intensity-trigger`; the Clear
   pair `.bonsai-settings-cache-row`; the button `[data-bonsai-fold-all="settings"]`; the strip
   `[data-bonsai-help-strip="settings"]`.

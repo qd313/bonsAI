@@ -23,12 +23,17 @@ import {
 const DRAWING_STATE = join(process.cwd(), "docs", "demos", "mockup-board-2", "src", "42-tabs-data.js");
 const drawn = readFileSync(DRAWING_STATE, "utf8");
 
-/** The state the drawing's Settings tab is in: Save memory, Normal, remember off, spoilers on, chip off, base.en, character on, Developer on. */
+/**
+ * The state the drawing's Settings tab is in: Save memory, Normal, remember off, spoilers on, chip off, base.en, character on,
+ * Developer on. The drawing is older than the spoiler tier row (plan 98), so the tier is Default here and the Story spoilers
+ * summary is the one place this test reads past the drawing.
+ */
 const DRAWN: SettingsFoldValues = {
   screenshotAttachmentPreset: "low",
   chatTextSize: "normal",
   rememberTyped: false,
   spoilerMasking: true,
+  spoilerTier: "default",
   singleChip: false,
   voiceSttModel: "base.en",
   aiCharacterEnabled: true,
@@ -63,7 +68,7 @@ describe("the Settings tab's summaries, by the drawing's rule", () => {
       screenshot: "Save memory",
       textsize: "Normal",
       remember: "off",
-      spoilers: "Hide spoilers until I tap on",
+      spoilers: "How much to hide: Default · Hide spoilers until I tap on",
       chips: "Show one chip instead of two off",
       voiceinput: "STT model: base.en",
       character: "on",
@@ -77,6 +82,7 @@ describe("the Settings tab's summaries, by the drawing's rule", () => {
       chatTextSize: "large",
       rememberTyped: true,
       spoilerMasking: false,
+      spoilerTier: "open",
       singleChip: true,
       voiceSttModel: "tiny.en",
       aiCharacterEnabled: false,
@@ -86,7 +92,7 @@ describe("the Settings tab's summaries, by the drawing's rule", () => {
       screenshot: "Best detail",
       textsize: "Large",
       remember: "on",
-      spoilers: "Hide spoilers until I tap off",
+      spoilers: "How much to hide: Hide less · Hide spoilers until I tap off",
       chips: "Show one chip instead of two on",
       voiceinput: "STT model: tiny.en",
       character: "off",

@@ -21,6 +21,7 @@ export function settingsProps(): SettingsTabProps {
     unifiedInputPersistenceMode: "persist_all",
     setUnifiedInputPersistenceMode: () => {},
     chatTextSizeSetting: { value: "normal", set: () => {} },
+    spoilerTierSetting: { value: "default", set: () => {} },
     aiCharacterEnabled: true,
     setAiCharacterEnabled: () => {},
     aiCharacterRandom: false,

@@ -918,5 +918,270 @@
     ],
     "peek": "The guaranteed reward for beating an Elite wave's unique enemy.",
     "full_text": "Beating the unique enemy in an Elite wave always drops a Legendary-tier loot crate, which is guaranteed to contain a Legendary item rather than leaving it to chance like a normal crate. Picking it up also restores a set chunk of health on the spot."
+  },
+  {
+    "term_id": 1089,
+    "app_id": "1623730",
+    "term_key": "pal-sphere",
+    "term": "Pal Sphere",
+    "alt_forms": [
+      "pal spheres"
+    ],
+    "peek": "The item you throw at a weakened wild Pal to try to catch it.",
+    "full_text": "The Pal Sphere is the basic, earliest tool for catching wild Pals, thrown at a target to attempt a capture rather than guaranteeing one. The odds depend on the sphere's own capture power, how much health the target Pal has left, and situational bonuses such as landing the throw from behind. Its capture power is comparatively low, so tougher targets call for a higher-tier sphere."
+  },
+  {
+    "term_id": 1090,
+    "app_id": "1623730",
+    "term_key": "palbox",
+    "term": "Palbox",
+    "alt_forms": [],
+    "peek": "The base's anchor; it sets where you can build and put Pals to work.",
+    "full_text": "A base is anchored by a Palbox, whose placement sets both the base's location and the area where structures can be built and Pals put to work. Losing the Palbox destroys everything the base is built around, so protecting it matters as much as growing it."
+  },
+  {
+    "term_id": 1091,
+    "app_id": "1623730",
+    "term_key": "work-suitability",
+    "term": "Work Suitability",
+    "alt_forms": [],
+    "peek": "How well a Pal fits a job at your base.",
+    "full_text": "Every job at a base, from crafting to cooking to construction, carries its own workload value. Pairing tasks with Pals whose Work Suitability fits the job gets things done faster than assigning whichever Pal is nearby."
+  },
+  {
+    "term_id": 1092,
+    "app_id": "1623730",
+    "term_key": "breeding-farm",
+    "term": "Breeding Farm",
+    "alt_forms": [
+      "breeding farms"
+    ],
+    "peek": "A structure where two Pals of opposite genders produce a Pal Egg.",
+    "full_text": "Breeding lets two Pals of opposite genders produce a Pal Egg at a Breeding Farm, a structure unlocked at level nineteen that also requires clearing a specific story boss fight before it can actually be built. Once a male and female Pal are placed inside and a cake is left in the farm's chest, they begin breeding on their own, and keep going as long as cake remains."
+  },
+  {
+    "term_id": 1093,
+    "app_id": "1623730",
+    "term_key": "breeding-rank",
+    "term": "Breeding Rank",
+    "alt_forms": [],
+    "peek": "A hidden rarity tier; a lower number means a rarer, more powerful Pal.",
+    "full_text": "Which species hatches is decided by each parent's hidden Breeding Rank, a rarity tier where a lower number means a rarer, more powerful Pal. The game averages the two parents' ranks and picks the closest eligible species, so the resulting rank always falls between the two parents' own ranks."
+  },
+  {
+    "term_id": 1094,
+    "app_id": "1623730",
+    "term_key": "technology-points",
+    "term": "Technology Points",
+    "alt_forms": [
+      "technology point",
+      "ancient technology points"
+    ],
+    "peek": "Two point pools that unlock blueprints on the tech tree.",
+    "full_text": "Unlocking new blueprints runs through two separate point pools, ordinary Technology Points and Ancient Technology Points, spent on a shared tech tree. Technology Points mostly come from leveling up and from switching on new Fast Travel points. Ancient Technology Points come from defeating an Alpha Pal for the first time or beating a Tower's boss."
+  },
+  {
+    "term_id": 1095,
+    "app_id": "1623730",
+    "term_key": "alpha-pal",
+    "term": "Alpha Pal",
+    "alt_forms": [
+      "alpha pals"
+    ],
+    "peek": "A larger, tougher version of an ordinary Pal that acts as a roaming boss.",
+    "full_text": "Alpha Pals are simply larger, tougher versions of regular Pals scattered across the map, either standing in a fixed overworld spot or waiting at the end of a Dungeon. An Alpha hands out roughly ten times the experience when defeated, takes noticeably reduced damage from every source, and is generally harder to capture. It always drops Ancient Civilization Parts on top of its usual loot."
+  },
+  {
+    "term_id": 1096,
+    "app_id": "1623730",
+    "term_key": "predator-pal",
+    "term": "Predator Pal",
+    "alt_forms": [
+      "predator pals"
+    ],
+    "peek": "An overpowered Pal variant seen only in scripted encounters; it cannot be captured.",
+    "full_text": "Predator Pals are overpowered variants of ordinary Pals that appear only in their own scripted encounters and cannot be captured. They are one of five distinct kinds of toughest fights, alongside Alpha Pals, Bounty Targets, Faction Leaders and Raid Bosses."
+  },
+  {
+    "term_id": 1097,
+    "app_id": "1623730",
+    "term_key": "raid-boss",
+    "term": "Raid Boss",
+    "alt_forms": [
+      "raid bosses"
+    ],
+    "peek": "The toughest fight: a powerful Pal summoned at your own base.",
+    "full_text": "Raid Bosses are the toughest tier of fight: a powerful Pal summoned at the player's own base. They demand real preparation and base defenses to survive."
+  },
+  {
+    "term_id": 1098,
+    "app_id": "1623730",
+    "term_key": "faction-leader",
+    "term": "Faction Leader",
+    "alt_forms": [
+      "faction leaders"
+    ],
+    "peek": "A leader of a hostile faction, fought one on one inside a Tower.",
+    "full_text": "Faction Leaders command hostile factions and are fought one on one inside a dedicated Tower. A Tower fight is a timed encounter: entering starts a five-minute clock, and running out of time before the boss falls gets the player killed and ejected. Up to four players can enter a Tower together."
+  },
+  {
+    "term_id": 1099,
+    "app_id": "220",
+    "term_key": "gravity-gun",
+    "term": "Gravity Gun",
+    "alt_forms": [],
+    "peek": "Secondary fire pulls and holds, primary fire punts.",
+    "full_text": "The Gravity Gun's secondary fire pulls and holds, and its primary fire punts. Explosive barrels hit hardest, sawblades cut zombies apart, and a held radiator works as a shield you can walk behind. It will not lift most enemies, but manhacks and scanners are fair game, and thrown grenades can go back where they came from."
+  },
+  {
+    "term_id": 1100,
+    "app_id": "220",
+    "term_key": "antlion",
+    "term": "Antlion",
+    "alt_forms": [
+      "antlions"
+    ],
+    "peek": "Blind hunters that track vibration; rocks are safe, sand is not.",
+    "full_text": "Antlions are blind and hunt vibration, so on the coast the rocks are safe and the sand is not. Step off and they come up."
+  },
+  {
+    "term_id": 1101,
+    "app_id": "220",
+    "term_key": "pheropod",
+    "term": "Pheropod",
+    "alt_forms": [
+      "bugbait"
+    ],
+    "peek": "An item that makes antlions read you as a guard and swarm what you mark.",
+    "full_text": "Once you have the pheropod from the Antlion Guard the antlions reverse: throw it and they read you as a guard and swarm whatever you marked. After the Antlion Guard you keep the pheropod and use antlions to break the Combine bunkers guarding the road to Nova Prospekt."
+  },
+  {
+    "term_id": 1102,
+    "app_id": "220",
+    "term_key": "combine-soldier",
+    "term": "Combine soldier",
+    "alt_forms": [
+      "combine soldiers"
+    ],
+    "peek": "Squad-based enemies that flank you while others lay down covering fire.",
+    "full_text": "Combine soldiers move in squads of four to six and will flank you while the rest lay down covering fire, so holding one angle gets you surrounded. A grenade breaks them out of cover and into the open, and you can throw theirs back. Kill the shotgun one first and keep your distance from the rest; up close they club you."
+  },
+  {
+    "term_id": 1103,
+    "app_id": "220",
+    "term_key": "rpg",
+    "term": "RPG",
+    "alt_forms": [
+      "rocket-propelled grenade launcher"
+    ],
+    "peek": "A launcher whose rockets you steer with its laser.",
+    "full_text": "The RPG carries three rockets, and every one is steerable: hold the laser where you want it and the rocket follows, even turning right around after a miss. A gunship shoots rockets out of the air, so loop yours around behind it instead of flying it in straight."
+  },
+  {
+    "term_id": 1104,
+    "app_id": "220",
+    "term_key": "sandtraps",
+    "term": "Sandtraps",
+    "alt_forms": [],
+    "peek": "The coastal chapter that teaches the sand.",
+    "full_text": "Sandtraps is the coastal chapter that teaches the sand. You go rock to rock on the way out. After the Antlion Guard you keep the pheropod and use antlions to break the Combine bunkers guarding the road to Nova Prospekt."
+  },
+  {
+    "term_id": 1105,
+    "app_id": "220",
+    "term_key": "ravenholm",
+    "term": "Ravenholm",
+    "alt_forms": [],
+    "peek": "A town where ammo is scarce and you fight with its traps.",
+    "full_text": "Ammo is scarce in Ravenholm on purpose, so fight with the town instead of your guns. Levers drop car traps and reset them; waist-high blade traps shred zombies while you duck under; propane spray ignites from a single shot. Poison zombies switch traps off, so deal with those first. Loose blades are gravity gun ammunition."
+  },
+  {
+    "term_id": 1106,
+    "app_id": "620",
+    "term_key": "gel",
+    "term": "Gel",
+    "alt_forms": [
+      "gels"
+    ],
+    "peek": "Three paints: blue bounces, orange removes friction, white lets you portal.",
+    "full_text": "Gels are three paints, all useless on glass. Blue bounces you higher the further you fell. Orange removes friction so you keep whatever speed you arrive with. White lets you portal a surface that refused portals before, but it will not stick to cubes or turrets, and the cleansing spray strips it."
+  },
+  {
+    "term_id": 1107,
+    "app_id": "620",
+    "term_key": "repulsion-gel",
+    "term": "Repulsion Gel",
+    "alt_forms": [
+      "blue gel"
+    ],
+    "peek": "The blue gel: bounce height scales with how far you dropped.",
+    "full_text": "Repulsion Gel is the blue one. Bounce height scales with how far you dropped, so gain height by falling onto it from somewhere higher, not by jumping. Two coated surfaces facing each other let you climb by bouncing between them."
+  },
+  {
+    "term_id": 1108,
+    "app_id": "620",
+    "term_key": "aerial-faith-plate",
+    "term": "Aerial Faith Plate",
+    "alt_forms": [
+      "aerial faith plates"
+    ],
+    "peek": "Launches you to a fixed destination, keeping the speed you arrive with.",
+    "full_text": "The Aerial Faith Plate launches to a fixed destination, but it keeps the speed you arrive with, so run or fall into one to travel further than it looks. It throws objects as well as you, and its arc can be fed through a portal."
+  },
+  {
+    "term_id": 1109,
+    "app_id": "620",
+    "term_key": "hard-light-bridge",
+    "term": "Hard Light Bridge",
+    "alt_forms": [
+      "hard light bridges"
+    ],
+    "peek": "Solid light that runs until something blocks it.",
+    "full_text": "A Hard Light Bridge is solid light that runs until something blocks it. Put a portal in its path to move the whole bridge somewhere else; it leaves the portal square-on, so centre the portal on the beam. It is also cover: a turret cannot see through it, let alone shoot."
+  },
+  {
+    "term_id": 1110,
+    "app_id": "620",
+    "term_key": "excursion-funnel",
+    "term": "Excursion Funnel",
+    "alt_forms": [
+      "excursion funnels"
+    ],
+    "peek": "A beam of weightless travel that passes through portals.",
+    "full_text": "An Excursion Funnel gives weightless travel along the beam. If it is carrying you the wrong way, look for the button that reverses it before assuming the route is shut. It passes through portals, so it can cross the whole chamber, and it ferries gel and cubes as well as you."
+  },
+  {
+    "term_id": 1111,
+    "app_id": "620",
+    "term_key": "thermal-discouragement-beam",
+    "term": "Thermal Discouragement Beam",
+    "alt_forms": [
+      "thermal discouragement beams"
+    ],
+    "peek": "The laser that feeds receptacles and relays; the exit usually needs it.",
+    "full_text": "The Thermal Discouragement Beam is a laser that exists to feed receptacles and relays; the exit usually will not open until it reaches one. It goes straight through glass. Held on a turret, it cooks it."
+  },
+  {
+    "term_id": 1112,
+    "app_id": "620",
+    "term_key": "redirection-cube",
+    "term": "Redirection cube",
+    "alt_forms": [
+      "redirection cubes"
+    ],
+    "peek": "A cube that aims the laser freely.",
+    "full_text": "A redirection cube aims the laser freely, while portals send it only along fixed directions. The laser exists to feed receptacles and relays."
+  },
+  {
+    "term_id": 1113,
+    "app_id": "620",
+    "term_key": "ping",
+    "term": "Ping",
+    "alt_forms": [
+      "pinging",
+      "pings"
+    ],
+    "peek": "A co-op way to point at a spot or count down a timed jump.",
+    "full_text": "In co-op you ping to point at a spot or to count down a timed jump; it carries without voice chat. Two players with two guns make four portals, and a portal one of you places links with the other's. Dying costs nothing but seconds."
   }
 ]

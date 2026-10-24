@@ -180,6 +180,276 @@
     "full_text": "The shield grab is the standard punish: press attack while shielding. It skips the delay of dropping the shield and catches an opponent stuck in the end of their move."
   },
   {
+    "term_id": 3150,
+    "game_id": 26,
+    "term_key": "dice-block",
+    "term": "Dice Block",
+    "alt_forms": ["dice blocks"],
+    "peek": "The 1-10 block each player rolls on their turn to decide how far to move.",
+    "full_text": "Each player rolls a 1-10 Dice Block on their turn and moves that many spaces. Blue spaces give 3 coins and Red spaces cost 3."
+  },
+  {
+    "term_id": 3151,
+    "game_id": 26,
+    "term_key": "star-space",
+    "term": "Star Space",
+    "alt_forms": ["star spaces"],
+    "peek": "Where you can buy a Star for 20 coins.",
+    "full_text": "Passing the Star Space lets you buy a Star for 20 coins if you have enough. Its location shifts to a new random spot each time someone buys one."
+  },
+  {
+    "term_id": 3152,
+    "game_id": 26,
+    "term_key": "happening-space",
+    "term": "Happening Space",
+    "alt_forms": ["happening spaces"],
+    "peek": "A space with a board-specific event when you land on it.",
+    "full_text": "A Happening Space triggers an event that depends on the board: on DK's Jungle Adventure it sets a boulder rolling, and on Wario's Battle Canyon it swaps the direction every cannon fires. Landing on the most of them also earns one of the three Bonus Stars."
+  },
+  {
+    "term_id": 3153,
+    "game_id": 26,
+    "term_key": "bonus-stars",
+    "term": "Bonus Stars",
+    "alt_forms": ["bonus star"],
+    "peek": "Three prizes at the end for minigame coins, coins held and Happening Spaces.",
+    "full_text": "At the end of a game three Bonus Stars go out for the most coins won in minigames, the most coins held, and the most Happening Spaces landed on. A player who never bought a Star can still win outright by leading in all three."
+  },
+  {
+    "term_id": 3154,
+    "game_id": 26,
+    "term_key": "mushroom-shop",
+    "term": "Mushroom Shop",
+    "alt_forms": [],
+    "peek": "A shop that sells one-time boosts, not carried items.",
+    "full_text": "Mario Party's Mushroom Shop sells one-time boosts rather than carried items, such as the Plus Block, Minus Block, Speed Block, Slow Block, Warp Block and Event Block. They are bought between games rather than found on the board, so they change your next game rather than the one in progress."
+  },
+  {
+    "term_id": 3155,
+    "game_id": 26,
+    "term_key": "warp-block",
+    "term": "Warp Block",
+    "alt_forms": ["warp blocks"],
+    "peek": "A Mushroom Shop block that swaps your position with another player.",
+    "full_text": "A Warp Block swaps your position with another player outright. It is one of the one-time boosts the Mushroom Shop sells, which only take effect in the following game."
+  },
+  {
+    "term_id": 3156,
+    "game_id": 26,
+    "term_key": "flower-lottery",
+    "term": "Flower Lottery",
+    "alt_forms": ["goomba's flower lottery"],
+    "peek": "Peach's Birthday Cake's seed game that points you to the Star or to a bogus item.",
+    "full_text": "In Goomba's Flower Lottery you pay 10 coins to plant a red, blue, yellow, or green seed. The flower that grows either has a Toad face, which points you toward the Star, or a Bowser face, which sends you to buy one of Bowser's bogus items for 20 coins instead."
+  },
+  {
+    "term_id": 3157,
+    "game_id": 26,
+    "term_key": "strawberry-seed",
+    "term": "Strawberry Seed",
+    "alt_forms": ["strawberry seeds"],
+    "peek": "A 30-coin seed that grows into a Piranha Plant that steals Stars.",
+    "full_text": "Landing on a Happening Space on Peach's Birthday Cake lets you plant a pricier 30-coin Strawberry Seed that grows into a Piranha Plant. If another player holding Stars later lands on that same Happening Space, the plant steals a Star from them and hands it to whoever planted it."
+  },
+  {
+    "term_id": 3158,
+    "game_id": 26,
+    "term_key": "engine-room",
+    "term": "Luigi's Engine Room",
+    "alt_forms": ["engine room"],
+    "peek": "A board of red and blue doors that block or open different paths.",
+    "full_text": "Luigi's Engine Room is built around a network of red and blue doors that block or open different paths. They switch automatically at the start of every turn, whenever someone lands on certain Happening Spaces, or when a player pays 20 coins to have a robot flip them early."
+  },
+  {
+    "term_id": 3159,
+    "game_id": 26,
+    "term_key": "rainbow-castle",
+    "term": "Mario's Rainbow Castle",
+    "alt_forms": ["rainbow castle"],
+    "peek": "A sky board where the tower sometimes shows Bowser instead of the Star.",
+    "full_text": "Mario's Rainbow Castle is a sky board where the Star always sits on the main tower, but every time someone buys a Star the tower rotates to reveal Bowser instead. He charges 40 coins for a worthless Ztar that wastes coins without affecting anyone's Star count, and any player on a Happening Space can spin the tower early."
+  },
+  {
+    "term_id": 3200,
+    "game_id": 27,
+    "term_key": "item-shop",
+    "term": "Item Shop",
+    "alt_forms": ["item shops"],
+    "peek": "Where you buy items in Mario Party 2; the stock changes as the game goes on.",
+    "full_text": "Mario Party 2 introduced buyable items, sold at Item Shops that change their stock as the game goes on. Only one item can be carried at a time."
+  },
+  {
+    "term_id": 3201,
+    "game_id": 27,
+    "term_key": "dueling-glove",
+    "term": "Dueling Glove",
+    "alt_forms": ["dueling gloves"],
+    "peek": "An item that lets you challenge another player to a coin duel.",
+    "full_text": "A Dueling Glove costs 15 coins and summons a Goomba to referee a coin duel against an opponent of your choice. The Duel Mini-Game is triggered by using the glove rather than by a space."
+  },
+  {
+    "term_id": 3202,
+    "game_id": 27,
+    "term_key": "battle-space",
+    "term": "Battle Space",
+    "alt_forms": ["battle spaces"],
+    "peek": "A space that starts a Battle Mini-Game over a pot of coins.",
+    "full_text": "Landing on a Battle Space summons Goomba, who collects a pot of 10 to 50 coins from every player and starts a Battle Mini-Game. First place takes 70% of the pot and second takes the rest, leaving third and fourth with nothing."
+  },
+  {
+    "term_id": 3203,
+    "game_id": 27,
+    "term_key": "item-mini-game",
+    "term": "Item Mini-Game",
+    "alt_forms": ["item mini-games", "item minigame", "item minigames"],
+    "peek": "A single-player minigame from an Item Space that hands out an item on a win.",
+    "full_text": "Item Spaces trigger single-player Item Mini-Games that hand out an item on a win, but only if it is not the last turn and you do not already hold one. Rarer items like the Boo Bell and Bowser Suit only come from them."
+  },
+  {
+    "term_id": 3204,
+    "game_id": 27,
+    "term_key": "duel-mini-game",
+    "term": "Duel Mini-Game",
+    "alt_forms": ["duel mini-games", "duel minigame", "duel minigames"],
+    "peek": "A coin-wager minigame started with a Dueling Glove, not by a space.",
+    "full_text": "Duel Mini-Games are triggered by using a Dueling Glove rather than by a space. They let a player challenge a specific opponent for a coin wager the two of them agree on beforehand."
+  },
+  {
+    "term_id": 3205,
+    "game_id": 27,
+    "term_key": "bank-space",
+    "term": "Bank Space",
+    "alt_forms": ["bank spaces"],
+    "peek": "A space where you can deposit coins for another player to collect.",
+    "full_text": "A Bank Space lets you deposit coins for another player to potentially collect if they land on it before you pass again. On Bowser Land, passing a bank space instead gives you five coins that add to a running loan, and landing on it later means paying the full loan back."
+  },
+  {
+    "term_id": 3206,
+    "game_id": 27,
+    "term_key": "skeleton-key",
+    "term": "Skeleton Key",
+    "alt_forms": ["skeleton keys"],
+    "peek": "An item that auto-opens locked gates you would otherwise be stuck behind.",
+    "full_text": "A Skeleton Key auto-opens locked gates you would otherwise be stuck behind. It is one of the buyable items sold at the Item Shops."
+  },
+  {
+    "term_id": 3207,
+    "game_id": 27,
+    "term_key": "boo-bell",
+    "term": "Boo Bell",
+    "alt_forms": ["boo bells"],
+    "peek": "A rare item that steals coins or a Star for a price.",
+    "full_text": "A Boo Bell steals coins or a Star for a price. Rarer items like it only come from Item Mini-Games."
+  },
+  {
+    "term_id": 3208,
+    "game_id": 27,
+    "term_key": "bowser-suit",
+    "term": "Bowser Suit",
+    "alt_forms": ["bowser suits"],
+    "peek": "A rare item that lets you disguise as Bowser and rob 20 coins.",
+    "full_text": "A Bowser Suit lets you disguise as Bowser and rob 20 coins from anyone you pass. Wearing one also means the Baby Bowser shop on Bowser Land gives you a rare item for free instead of forcing you to buy at a markup."
+  },
+  {
+    "term_id": 3209,
+    "game_id": 27,
+    "term_key": "bowser-parade",
+    "term": "Bowser Parade",
+    "alt_forms": [],
+    "peek": "A Bowser Land hazard that starts every five turns and sweeps players back.",
+    "full_text": "The Bowser Parade starts every five turns and costs two coins per space to anyone caught in its path before sweeping them back to the start. Players can redirect the parade's route by paying a Baby Bowser to flip arrow tiles."
+  },
+  {
+    "term_id": 3250,
+    "game_id": 28,
+    "term_key": "duel-mode",
+    "term": "Duel Mode",
+    "alt_forms": [],
+    "peek": "A mode played on its own boards where two players fight with partners.",
+    "full_text": "Duel Mode is played on its own set of boards, where two characters fight using partner characters instead of collecting Stars. Story Mode uses the same Duel Boards."
+  },
+  {
+    "term_id": 3251,
+    "game_id": 28,
+    "term_key": "duel-boards",
+    "term": "Duel Boards",
+    "alt_forms": ["duel board"],
+    "peek": "Boards where two players fight using partner characters, not Stars.",
+    "full_text": "Mario Party 3's Duel Boards pit two players against each other using partner characters instead of racing for Stars. Each side starts with five heart segments and one partner, and partners attack automatically when a player passes or lands on the opponent's space."
+  },
+  {
+    "term_id": 3252,
+    "game_id": 28,
+    "term_key": "action-time",
+    "term": "Action Time",
+    "alt_forms": [],
+    "peek": "A board event where a well-timed button press gets you past a hazard.",
+    "full_text": "Action Time is a board event where a well-timed button press saves you. On Chilly Waters it lets you jump a rolling snowball, and on Spiny Desert it gets you safely past a path guarded by two cacti, where missing it bounces you off in a random direction."
+  },
+  {
+    "term_id": 3253,
+    "game_id": 28,
+    "term_key": "lucky-roulette",
+    "term": "Lucky Roulette",
+    "alt_forms": [],
+    "peek": "A slowed-down partner wheel you get every third lap on a Duel Board.",
+    "full_text": "On a Duel Board each side gains a new partner, chosen semi-randomly, whenever they pass their own start space. Every third lap that draw is a Lucky Roulette, which slows the wheel down."
+  },
+  {
+    "term_id": 3254,
+    "game_id": 28,
+    "term_key": "millennium-star",
+    "term": "Millennium Star",
+    "alt_forms": ["millennium stars"],
+    "peek": "Spiny Desert's two Stars on the board: one real, one a mirage.",
+    "full_text": "Spiny Desert has two Millennium Stars on the board at once, one real and one a mirage. There is no way to tell them apart until you pass one and it either sells a Star for 20 coins or simply vanishes."
+  },
+  {
+    "term_id": 3255,
+    "game_id": 28,
+    "term_key": "reverse-mushroom",
+    "term": "Reverse Mushroom",
+    "alt_forms": ["reverse mushrooms"],
+    "peek": "A Baby Bowser item that forces a chosen player's next move backward.",
+    "full_text": "The Reverse Mushroom forces a chosen player's next move to go backward. Baby Bowser sells it, as one of the disruptive items in Party mode."
+  },
+  {
+    "term_id": 3256,
+    "game_id": 28,
+    "term_key": "poison-mushroom",
+    "term": "Poison Mushroom",
+    "alt_forms": ["poison mushrooms"],
+    "peek": "A Baby Bowser item that limits the target's next roll to one through three.",
+    "full_text": "The Poison Mushroom limits the target's next roll to one through three. Baby Bowser sells it, as one of the disruptive items in Party mode."
+  },
+  {
+    "term_id": 3257,
+    "game_id": 28,
+    "term_key": "barter-box",
+    "term": "Barter Box",
+    "alt_forms": ["barter boxes"],
+    "peek": "A rare item that swaps items with an opponent.",
+    "full_text": "A Barter Box swaps items with an opponent. It is a rare item that only turns up through Item Spaces, Hidden Blocks, or a purchased Item Bag rather than a normal shop visit."
+  },
+  {
+    "term_id": 3258,
+    "game_id": 28,
+    "term_key": "koopa-kard",
+    "term": "Koopa Kard",
+    "alt_forms": ["koopa kards"],
+    "peek": "A rare item that claims an entire bank's savings on the spot.",
+    "full_text": "A Koopa Kard claims an entire bank's savings on the spot. It is a rare item that only turns up through Item Spaces, Hidden Blocks, or a purchased Item Bag rather than a normal shop visit."
+  },
+  {
+    "term_id": 3259,
+    "game_id": 28,
+    "term_key": "star-stamps",
+    "term": "Star Stamps",
+    "alt_forms": ["star stamp"],
+    "peek": "The seven stamps Story Mode works toward.",
+    "full_text": "Story Mode is a single-player campaign that alternates between normal board games and duels on the way to a set of seven Star Stamps. The duels are played on the Duel Boards."
+  },
+  {
     "term_id": 3400,
     "game_id": 22,
     "term_key": "rocket-start",

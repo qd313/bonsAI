@@ -25,6 +25,11 @@
  *     unticked step — there is no way to tell at that point that it is meant to be the same step.
  *   - A checklist with fewer than two usable steps, or no usable title, is rejected outright
  *     (`normalizeStrategyChecklist` returns `null`) rather than shown half-built.
+ *   - The route look (plan 98, H): a step further on than the person has got is drawn covered, the
+ *     way a spoiler is, until they tick the step before it or press A on it. Which steps are covered
+ *     is worked out here (`strategyRouteCoveredIds`); the steps a person uncovered by hand are kept
+ *     by `strategyChecklistPersistence.ts`, in the plugin's browser storage, not in the back end's
+ *     saved list (the saved list holds only the ticks).
  */
 import type { StrategyChecklistPayload, StrategyChecklistState } from "../../types/bonsaiUi";
 
@@ -120,4 +125,36 @@ export function strategyChecklistToSavePayload(state: StrategyChecklistState) {
     app_id: state.appId ?? "",
     app_name: state.appName ?? "",
   };
+}
+
+/** A list shorter than this draws every step open: with two steps there is nothing worth keeping back. */
+const STRATEGY_ROUTE_MIN_STEPS_FOR_COVERS = 3;
+
+/**
+ * The steps drawn covered on the route. A step is open when it is the first, is ticked, follows a ticked
+ * step, or was uncovered by hand (`revealedIds`); every other step is covered. A list shorter than
+ * `STRATEGY_ROUTE_MIN_STEPS_FOR_COVERS` has no covers.
+ */
+export function strategyRouteCoveredIds(
+  checklist: Pick<StrategyChecklistState, "items" | "checkedIds">,
+  revealedIds: readonly string[],
+): Set<string> {
+  const covered = new Set<string>();
+  if (checklist.items.length < STRATEGY_ROUTE_MIN_STEPS_FOR_COVERS) return covered;
+  const ticked = new Set(checklist.checkedIds);
+  const revealed = new Set(revealedIds);
+  checklist.items.forEach((item, idx) => {
+    const before = idx > 0 ? checklist.items[idx - 1] : undefined;
+    const open = idx === 0 || ticked.has(item.id) || (before != null && ticked.has(before.id)) || revealed.has(item.id);
+    if (!open) covered.add(item.id);
+  });
+  return covered;
+}
+
+/**
+ * Which list a hand-uncovered step belongs to: the game, the title and every step's words. A new
+ * Strategy question writes a new list, so its steps start covered again even when the game is the same.
+ */
+export function strategyRouteRevealKey(checklist: Pick<StrategyChecklistState, "title" | "items" | "appId">): string {
+  return JSON.stringify([checklist.appId ?? "", checklist.title, checklist.items.map((it) => `${it.id}=${it.label}`)]);
 }

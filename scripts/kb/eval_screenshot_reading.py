@@ -61,7 +61,7 @@ ARMS = ("known", "unknown")
 # list and is only scored when the picture brings its own.
 SCENE_WORDS: dict[str, tuple[str, ...]] = {
     "title": ("title screen", "title menu", "start screen", "title page", "splash screen", "press any key", "title"),
-    "menu": ("main menu", "menu screen", "game menu", "start menu", "home menu", "the menu"),
+    "menu": ("menu", "user interface", "buttons"),
     "play": ("gameplay", "in game", "in the middle of", "combat", "battle", "fighting", "level", "stage", "arena"),
     "pause": ("pause menu", "pause screen", "paused", "pause"),
     "loading": ("loading screen", "loading"),
@@ -70,11 +70,16 @@ SCENE_WORDS: dict[str, tuple[str, ...]] = {
 # Plain ways a reply says it does not know. Written with apostrophes left out, like `_norm` writes the reply.
 UNKNOWN_PHRASES = (
     "i dont know", "i do not know", "dont know", "cant tell", "cannot tell", "cant identify", "cannot identify",
-    "cant determine", "cannot determine", "unable to identify", "unable to determine", "unable to tell",
-    "not able to tell", "not able to identify", "not sure", "im not certain", "i am not certain",
+    "cant determine", "cannot determine", "cant name", "cannot name", "cant say", "cannot say",
+    "cant definitively", "cannot definitively", "unable to", "not able to", "not sure", "not certain",
     "no way to tell", "dont recognize", "do not recognize", "dont recognise", "do not recognise",
-    "isnt clear", "is not clear", "unclear which", "unclear what game",
+    "isnt clear", "is not clear", "unclear",
 )
+# A "did not know" sentence is about the GAME. One that is about a boss or enemy does not count (a title screen
+# has none, so nearly every reply says so), and neither does one about the scene ("title screen").
+_BOSS_WORDS = ("boss", "bosses", "enemy", "enemies")
+_SCENE_PHRASES = ("title screen", "title menu", "loading screen", "main menu", "pause menu")
+_SHORT_REPLY_WORDS = 6
 
 # Another game's name only counts against a reply when it is at least this long: a very short name is too
 # likely to be an everyday word.
@@ -191,6 +196,28 @@ class Verdict:
     other_games: list[str]  # other games the reply named, so a person can spot a false alarm
 
 
+def _said_unknown(reply: str) -> bool:
+    """True when some sentence says the AI could not tell WHICH GAME this is (or is a short "I don't know").
+
+    Sentence by sentence, because "This is Deep Rock Galactic. I cannot name any boss." is a right game and
+    an honest "no boss here", not a reply that did not know. A sentence needs one of UNKNOWN_PHRASES, no
+    boss or enemy word, and either the word "game" (or "title" not in "title screen") or to be only a few
+    words long.
+    """
+    for sentence in re.split(r"(?<=[.!?])\s+|\n+", reply or ""):
+        s = _norm(sentence)
+        if not s.strip() or not any(_has_phrase(s, p) for p in UNKNOWN_PHRASES):
+            continue
+        if any(_has_phrase(s, w) for w in _BOSS_WORDS):
+            continue
+        about_game = s
+        for scene in _SCENE_PHRASES:
+            about_game = _blank_phrase(about_game, scene)
+        if _has_phrase(about_game, "game") or _has_phrase(about_game, "title") or len(s.split()) <= _SHORT_REPLY_WORDS:
+            return True
+    return False
+
+
 def scene_words_for(pic: Picture) -> tuple[str, ...]:
     return tuple(pic.scene_words) if pic.scene_words else SCENE_WORDS.get(pic.scene, ())
 
@@ -221,7 +248,9 @@ def read_reply(reply: str, pic: Picture, other_games: list[str]) -> Verdict:
     ]
 
     words = scene_words_for(pic)
-    area: Optional[bool] = None if not words else any(_has_phrase(text, w) for w in words)
+    # A pause menu is not the main menu: its words are blanked before the menu words are looked for.
+    scene_text = _blank_phrase(text, "pause menu") if pic.scene == "menu" and not pic.scene_words else text
+    area: Optional[bool] = None if not words else any(_has_phrase(scene_text, w) for w in words)
 
     boss: Optional[bool] = None
     if pic.boss:
@@ -231,7 +260,7 @@ def read_reply(reply: str, pic: Picture, other_games: list[str]) -> Verdict:
         game=named_own and not named_others,
         area=area,
         boss=boss,
-        said_unknown=any(_has_phrase(text, p) for p in UNKNOWN_PHRASES),
+        said_unknown=_said_unknown(reply),
         other_games=named_others,
     )
 

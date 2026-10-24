@@ -77,6 +77,25 @@ class ScreenshotReplyReaderTests(_ScriptCase):
         self.assertFalse(v.game)
         self.assertTrue(v.area)
 
+    def test_not_knowing_the_boss_is_not_not_knowing_the_game(self):
+        # Seen in the first real run: every title-screen reply said it could not name a boss, and each one
+        # was marked "did not know" even though it had just named the game.
+        v = self.read("This is Deep Rock Galactic: Survivor. I cannot identify any specific boss or enemy on screen.")
+        self.assertFalse(v.said_unknown)
+        self.assertTrue(v.game)
+
+    def test_cannot_name_the_game_with_certainty_is_did_not_know(self):
+        v = self.read("The image shows a rocky place. I cannot definitively name the game with confidence. "
+                      "Regarding bosses, I cannot name any.")
+        self.assertTrue(v.said_unknown)
+
+    def test_not_being_sure_of_the_scene_is_not_not_knowing_the_game(self):
+        v = self.read("This is Deep Rock Galactic: Survivor. I cannot tell whether this is a title screen.")
+        self.assertFalse(v.said_unknown)
+
+    def test_a_bare_i_dont_know_is_did_not_know(self):
+        self.assertTrue(self.read("I don't know.").said_unknown)
+
     def test_a_reply_naming_two_games_is_not_a_right_game(self):
         v = self.read("It could be Deep Rock Galactic: Survivor, or maybe Vampire Survivors, on the title screen.")
         self.assertFalse(v.game)
@@ -105,6 +124,15 @@ class ScreenshotReplyReaderTests(_ScriptCase):
     def test_a_menu_picture_needs_menu_words(self):
         v = self.read("The main menu of Deep Rock Galactic: Survivor.", scene="menu")
         self.assertTrue(v.area)
+
+    def test_a_menu_picture_accepts_the_menu_by_its_buttons_but_not_a_pause_menu(self):
+        # Seen in the first real run: replies on the main menu named its PLAY / UPGRADES buttons and its
+        # user interface without ever saying "main menu".
+        ok = self.read("Deep Rock Galactic: Survivor. I can see the game's user interface with PLAY buttons.",
+                       scene="menu")
+        self.assertTrue(ok.area)
+        paused = self.read("Deep Rock Galactic: Survivor, on the pause menu.", scene="menu")
+        self.assertFalse(paused.area)
 
     def test_scene_words_on_the_picture_replace_the_default_list(self):
         v = self.read("A gloomy cavern.", scene="other", scene_words=["cavern"])

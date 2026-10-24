@@ -502,5 +502,95 @@
     "alt_forms": ["Ammunation"],
     "peek": "The shop that sells body armour in five tiers and has a shooting range.",
     "full_text": "Body armour comes in five tiers from Ammu-Nation, each a fifth stronger than the last, and once you buy a heavier one the lighter ones vanish from the shelf. Its shooting range gives three percent shooting skill per gold medal."
+  },
+  {
+    "term_id": 2600,
+    "app_id": "12210",
+    "term_key": "search-circle",
+    "term": "Search circle",
+    "alt_forms": [],
+    "peek": "The flashing circle on the radar where the police are looking for you.",
+    "full_text": "When you are wanted, a flashing circle sits on the radar: that is where the police are looking, and every cop inside it is a flashing icon. Get outside the circle without being seen and stay quiet for a few seconds and the stars fade, but get spotted leaving and the circle re-centres on you."
+  },
+  {
+    "term_id": 2601,
+    "app_id": "12210",
+    "term_key": "pay-n-spray",
+    "term": "Pay 'n' Spray",
+    "alt_forms": ["Pay n Spray", "Pay and Spray"],
+    "peek": "A garage that clears your wanted level if you enter unseen.",
+    "full_text": "Pay 'n' Spray clears your wanted level if you enter it unseen in a car that fits. Any bed clears the wanted level too."
+  },
+  {
+    "term_id": 2602,
+    "app_id": "12210",
+    "term_key": "residents-parking",
+    "term": "Residents Parking",
+    "alt_forms": ["Residents Parking bay", "Residents Parking bays"],
+    "peek": "Yellow street bays outside each safehouse that hold two vehicles.",
+    "full_text": "There are no garages in GTA IV: the yellow Residents Parking bays on the street outside each safehouse hold two vehicles. Anything damaged there repairs itself when you leave the area or reload."
+  },
+  {
+    "term_id": 2603,
+    "app_id": "12210",
+    "term_key": "safehouse",
+    "term": "Safehouse",
+    "alt_forms": ["Safehouses"],
+    "peek": "Your base: walk to the bed and sleep to save.",
+    "full_text": "You save by walking to the bed in a safehouse and choosing to sleep, which also clears any wanted level. The yellow Residents Parking bays on the street outside each safehouse hold your vehicles."
+  },
+  {
+    "term_id": 2604,
+    "app_id": "12210",
+    "term_key": "like-rating",
+    "term": "Like rating",
+    "alt_forms": ["Like ratings"],
+    "peek": "How much a friend likes you; you raise it by taking them out.",
+    "full_text": "Each friend has a like rating you raise by taking them out: bowling, darts, pool, eating, drinking, shows, the strip club. At seventy-five percent they phone to offer a favour, while being late to a date or declining their calls costs points."
+  },
+  {
+    "term_id": 2605,
+    "app_id": "12210",
+    "term_key": "most-wanted",
+    "term": "Most Wanted",
+    "alt_forms": ["Most-wanted"],
+    "peek": "Side jobs picked from the computer in a stationary police car.",
+    "full_text": "Sit in a stationary police car and the computer lists ten most-wanted criminals for the region. There are thirty in all across Algonquin, the Broker-Dukes-Bohan side, and Alderney, in any order you like."
+  },
+  {
+    "term_id": 2606,
+    "app_id": "12210",
+    "term_key": "flying-rats",
+    "term": "Flying rats",
+    "alt_forms": ["Pigeons"],
+    "peek": "Two hundred hidden pigeons; getting them all spawns a helicopter.",
+    "full_text": "The flying rats are two hundred pigeons hidden around Liberty City and Alderney, glowing red and cooing so you can find them at night. Shoot, burn, blow up or run over every one and the Annihilator attack helicopter spawns on the MeTV building."
+  },
+  {
+    "term_id": 2607,
+    "app_id": "12210",
+    "term_key": "stunt-jumps",
+    "term": "Stunt jumps",
+    "alt_forms": ["Stunt jump"],
+    "peek": "Fifty jumps, all needed for completion.",
+    "full_text": "There are fifty stunt jumps, and unlike the pigeons all fifty are needed for completion. The game tells you after each landing: Stunt jump completed, or Not good enough."
+  },
+  {
+    "term_id": 2608,
+    "app_id": "12210",
+    "term_key": "trip-skip",
+    "term": "Trip skip",
+    "alt_forms": ["Trip-skip"],
+    "peek": "A taxi option that jumps straight to your destination for double the fare.",
+    "full_text": "Once taxi rides unlock after Bull in a China Shop, you can choose the trip-skip option on the in-car terminal and the game cuts straight to arriving, at double the fare. The same terminal has a hurry option if you would rather watch the drive and get there sooner."
+  },
+  {
+    "term_id": 2609,
+    "app_id": "12210",
+    "term_key": "dating-sites",
+    "term": "Dating sites",
+    "alt_forms": ["Dating site"],
+    "peek": "The websites where three of the girlfriends are found.",
+    "full_text": "Two girlfriends come from the story and three from the dating sites, which open after the mission Out of the Closet. Reply to a profile, wait for her email, and the first date decides whether she gives you her number."
   }
 ]

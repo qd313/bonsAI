@@ -29,6 +29,7 @@
 - [Flow L7 findings](#flow-l7-findings)
 - [The note's own words under the reply](#the-notes-own-words-under-the-reply)
 - [Plan 97 notes moved from the knowledge base roadmap (2026-10-22)](#plan-97-notes-moved-from-the-knowledge-base-roadmap-2026-10-22)
+- [Plan 98 notes moved from the knowledge base roadmap (2026-10-24)](#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -511,3 +512,83 @@ Older notes, word for word (moved here 2026-10-14, plan 93 docs sweep).
 - ★★ `[KB]` **The knowledge library update treats any different version as newer, and installs onto the Deck's own drive without asking where** — **OPEN, found 2026-10-16 (plan 86 step 3 Deck block).**
   It offered 2026.09.26 as an update over the seed's 2026.10.16. The library had been on the SD card; the update put the same files, byte for byte, on the Deck's own drive. The maintainer said to leave it there tonight. Evidence `workshop:test-evidence/plan86-B6-RESTORE.json`.
   **2026-10-17 (plan 94 block 3, Deck, build `e9b50cc8`):** the first download now asks where to put the library (Not now / Internal storage / SD card) before the download box. The "different version offered as newer" half was not tested (a fresh install has no older version). Evidence `workshop:test-evidence/plan94-P94-KB-DOWNLOAD.json`.
+
+## Plan 98 notes moved from the knowledge base roadmap (2026-10-24)
+
+Moved word for word by the plan 98 docs sweep 3 to keep the roadmap under its size limit.
+
+**The knowledge library update: Deck readings 2026-10-22 and 2026-10-24:**
+
+**Deck 2026-10-22 (plan 97 block D4, build `15565346`): PASS for the first half, UNCLEAR for the wording.** Nothing downloaded (file dates unchanged), the status stayed "Installed" and the plugin log named both versions (installed 2026.10.17, newest 2026.10.17). The "newer than published" line could not appear: the maintainer has published the library since, so it now equals the installed one and the line read "Already up to date (version 2026.10.17)." That wording needs a published library older than the Deck's (`workshop:test-evidence/plan97-P97-L9-KB-UPDATE.json`). Row **P97-L9-KB-UPDATE** stays open for it. **2026-10-24 (plan 98 block K0): could not run** again: the clean install left no test library on the Deck, and the installed and published libraries are both 2026.10.17. It runs after the first deploy of plan 98's night (`workshop:test-evidence/plan98-P97-L9-KB-UPDATE.json`). Evidence of the failure `workshop:test-evidence/plan86-B6-RESTORE.json`. Older notes: [roadmap-kb-details.md](roadmap-kb-details.md#plan-97-notes-moved-from-the-knowledge-base-roadmap-2026-10-22).
+
+**The note's own words: plan 97 block B reading:**
+
+**2026-10-22 (plan 97 block B, build `73738058`, Deep Rock Galactic: Survivor running, Strategy mode):** NOTES-BLOCK-04's line half FAILED on the second of two questions (the first passed): see the new Bugs entry. NOTES-BLOCK-LADDER was UNCLEAR again (retired by the maintainer's call afterwards, see above): a "Soul Master" block ("From the Hollow Knight wiki") opens to one paragraph with no chip ladder, and Left and Right do nothing (`workshop:test-evidence/plan97-NOTES-BLOCK-LADDER.json`). The two 2026-10-14 notes, word for word: [roadmap-kb-details.md](roadmap-kb-details.md#the-notes-own-words-under-the-reply).
+
+**Unrelated questions: the 2026-10-24 reading:**
+
+**Deck 2026-10-24 (plan 98 block K0, release build `f0b72dae7b65`, Deep Rock Galactic: Survivor running, Strategy mode), MEASURED:** "thank you very much" attached no notes (the AI answered the earlier question again, as a follow-up, and the "Not in my notes" line showed). "what time is it" attached Gold, Red Sugar and Nitra, drew no block and no line, and the AI said it has no clock. The second phrase still pulls notes. The reading is muddied, because short questions with "it" are treated as follow-ups to the previous question (see the new entry at the top of this list); a clean re-run in a fresh chat is owed. Evidence `workshop:test-evidence/plan98-P98-JUNK-PHRASES.json`.
+
+**The plainly-worded Deck problems: the second opinion's word list:**
+
+**Second opinion 2026-10-24 (plan 98 consult 2): fix the wording in two places, not a cut-off.** Five tips need more of the plain words people use: the crash tip ("a crash drops you back to the game library": add "home screen", "closes on its own", "quits", "shuts off"); the storage-full tip ("not enough space", "no space left", "can't install"); the crashes-at-launch tip ("won't open", "won't start", "nothing happens when I launch"); the blank-screen display tip ("black screen", "goes black", and the built-in screen too); the find-the-PC tips ("can't find my PC", "my computer is not in the list", "same network"). The router's topic words need the same plain words. Two problems have no tip at all: sound going to the TV instead of plugged-in headphones, and menus out of place on a TV. The 24 test sentences have no recorded right tip, so expected tips must be written into the test fixture before any gate.
+
+**STRAT-SPOIL-NAME-01: why it could not run:**
+
+**Still owed:** STRAT-SPOIL-NAME-01 could not run five times, last 2026-10-24 (plan 98 block K0): Doom 64: Retribution, Pikmin 2 and Super Mario 64 are on the Recent Games row now, but they are non-Steam shortcuts and the rig's launch tool cannot recognise their tiles (logged in [mcp-setup.md](mcp-setup.md)). A hand launch by the maintainer, left running, would let the rig run the rest; it is on the checks page. Evidence `workshop:test-evidence/plan98-STRAT-SPOIL-NAME-01.json`.
+
+**A card named after a category: the 2026-10-24 measurement:**
+
+**Measured 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`):** on 279 strategy questions with a recorded right note, a category note came first in 3 (about 1 in 100). Only one of them (V2-S-RDR2-06, "how to get a better horse early": Horse breeds first, Horse bonding second) fits this entry; the other two name the category themselves. D41 stays your call, with this figure for it.
+
+**Troubleshooting symptom entry: the second half of its text:**
+
+fit" floor now exists, and the held fix was re-measured with it on 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`): today 8 of 24 plain problem sentences reach a tip (6 right, 1 half, 1 wrong). With the held meaning-search branch (hand-ported, it no longer applies to today's files) all 24 reach a tip, but only 13 are right, 3 half and 8 wrong. So it stays held: it would trade "no tip" for a wrong tip on a third of the questions. Overlaps the entry of the same subject in
+
+**The eval cannot yet prove the meaning search rescues many questions:**
+
+- ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **OPEN, counted 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`).** Of the labelled questions, 4 (3 tuning rows and 1 held-back row) get nothing from the word search. The combined search still finds the right note in its first three for 3 of those 4 (missed: V2-PARA-S04). The 36 newer blind rows did not grow the slice (1 of 214 blind rows). Four questions is still too few to gate a regression; whether to write more is the owner's call. No code needed.
+
+**A notes card with the switch off: the original text:**
+
+A stopped answer with "Use local knowledge base" off (the settings file read false) still had a card reading "Weapon choice, From bonsAI's own note" under it; another try with the same switch off drew no card. Is that meant? The maintainer's call: that is fine (by design). Evidence `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-2.json` (the try with no card: `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-1.json`).
+
+**The note's own words under the reply: the status paragraph:**
+
+Most rows passed on the Deck and are closed: 01, 02, 03, 05, 06 and TEN-GAMES-01; 04's "no block" half passed 2026-10-03 (`workshop:test-evidence/plan81-NOTES-BLOCK-04.json`) and again with a game running 2026-10-14. **Still owed:** 04's "Not in my notes" line half (in Strategy or Expert). **NOTES-BLOCK-LADDER was retired by the maintainer's call 2026-10-22 (plan 98 call 11, D135): notes blocks carry no chip ladder by design now; last reading `workshop:test-evidence/plan97-NOTES-BLOCK-LADDER.json`.** (NOTES-BLOCK-07 was retired 2026-10-16: it checked Read aloud, removed in plan 86 step 3). Rows in [testing-manual.md](testing-manual.md). Older notes, word for word: [roadmap-kb-details.md](roadmap-kb-details.md#the-notes-own-words-under-the-reply).
+
+**Glossary words: the spot-check line (kept in the entry's first version), word for word:**
+
+Every sentence restates that game's own notes; the session spot-checked one in ten against its note.
+
+**Glossary words: the count by kind, word for word:**
+
+(114 Steam wiki titles, 90 own-words and GTA titles, 137 Nintendo titles)
+
+**The knowledge library update: what the fix does, word for word:**
+
+Update now reads both versions as dates. When the published library is older, nothing downloads, the plugin log names both versions, and the row says "You have 2026.10.17; the published library is 2026.09.26. Nothing to do." If either version does not read as a date, the old behaviour stays. The where-to-put-it half was fixed in plan 94: the first download asks (Not now / Internal storage / SD card) (`workshop:test-evidence/plan94-P94-KB-DOWNLOAD.json`).
+
+**Wrong-subject notes: the known limits, word for word:**
+
+**Known limits:** a long ending not on the list ("in co-op with my friends") is left to the scores; a British spelling ("armoured") can miss a note's "armor"; a junk phrase ("what time is it") names nothing, so it is untouched.
+
+**Spoiler tiers: the report file names, word for word:**
+
+Reports `workshop:archive/research/kb-answer-eval-2026-10-24-p98b-default.md`, `-strict.md`, `-open.md`, `-tip.md`.
+
+**RAG Phase 7: the D112 link, word for word:**
+
+(design C, [D112](audit/maintainer-decisions-locked.md#d112--locked-2026-09-25-raised-2026-09-25--plan-70-knowledge-base-wave-four-with-an-automated-deck-test-wave-the-twelve-calls-before-go) item 8)
+
+**Screenshot reading: the thin-set paragraph, word for word:**
+
+The set is thin: most games stop at a save-slot screen the rig was told never to touch, and Steam's performance overlay is on every picture. A bigger set with play scenes needs the maintainer's hand. **Step 2** (run each picture model the Deck offers, then fix where it fails) is still open. Report `workshop:archive/research/screenshot-reading-2026-10-24.md`.
+
+**Screenshot reading: the first figures, word for word:**
+
+First figures: 8 Deck pictures (Deep Rock Galactic: Survivor, Brotato, Hades, Half-Life 2, Black Mesa, God of War; mostly title and menu screens, one play scene), the Deck's own model `gemma4:e2b-it-qat`, 3 tries each. With the game handed over it named the game 75 times in 100 and the area 42; with nothing handed over, 17 and 29. No picture had a boss. It often invents ("a combat scene" on a title screen), guesses Zelda: Ocarina of Time for pictures it does not know, and ignored the handed-over game name on 4 of 9 God of War asks.
+
+**The one-second wait on every question (the top-of-file paragraph), word for word:**
+
+**The one-second wait on every question is explained.** The Deck holds one model in memory at a time, so the answering model and the note-search model push each other out. With the limit raised to two, a search after an answer dropped from 732 to 24 thousandths of a second (2026-09-12, `workshop:test-evidence/plan48-R6-deck-model-eviction.json`). The maintainer's Deck runs with two models kept loaded since 2026-09-23 (`workshop:test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`); the drift from August to September is still open. Two models beside a running game was measured 2026-09-26 and the safety check stays unbuilt: [detail](roadmap-details.md#cost-to-a-running-game-second-sighting).

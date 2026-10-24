@@ -109,6 +109,22 @@ class KbChoiceLogLineTests(unittest.TestCase):
         )
         self.assertTrue(line.endswith("demoted=-"))
 
+    def test_carries_the_keyword_and_meaning_scores(self):
+        # Plan 98 lane L: a Deck reading of "How do I buy a house in this game" could not say why
+        # no "No close match" line showed, because this line printed no scores.
+        result = _two_notes()
+        result.top_card_keyword_score = 3.57851
+        result.best_meaning = 0.603002
+        line = kb_choice_log_line(result, kb_domain="strategy", kb_survived=True, starved=False)
+        self.assertIn("method=hybrid keyword=3.58 meaning=0.6030 attached=2", line)
+        self.assertTrue(line.endswith("demoted=-"))
+
+    def test_says_meaning_dash_when_the_meaning_half_did_not_run(self):
+        result = _two_notes()
+        result.best_meaning = None
+        line = kb_choice_log_line(result, kb_domain="strategy", kb_survived=True, starved=False)
+        self.assertIn("keyword=0.00 meaning=- ", line)
+
     def test_is_one_line(self):
         line = kb_choice_log_line(
             _two_notes(), kb_domain="strategy", kb_survived=True, starved=False

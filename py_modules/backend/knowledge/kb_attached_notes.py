@@ -278,10 +278,16 @@ def kb_choice_log_line(
         for e in (kb_result.attached_ids or [])
         if kb_survived and e.get("demoted") is True
     ]
+    # The two scores the "No close match" line reads (plan 98 lane L), so a Deck reading can say
+    # why it did or did not show: the winning card's keyword score, and the best meaning score
+    # ("-" when the meaning half did not run, which is not the same as a low score).
+    meaning = kb_result.best_meaning
     parts = [
         f"{prefix} domain={kb_domain or 'none'}",
         f"route={kb_result.notes or '-'}",
         f"method={kb_result.retrieval_method or '-'}",
+        f"keyword={float(kb_result.top_card_keyword_score or 0.0):.2f}",
+        f"meaning={'-' if meaning is None else format(float(meaning), '.4f')}",
         attached_part,
         dropped,
         f"demoted={','.join(lowered) if lowered else '-'}",

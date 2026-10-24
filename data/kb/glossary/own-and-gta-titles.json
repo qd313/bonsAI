@@ -250,5 +250,77 @@
     "alt_forms": ["Tonic"],
     "peek": "Items that refill a bar, and the gold-labelled ones also fortify the core.",
     "full_text": "Tonics refill the bar of health, stamina or Dead Eye, and the gold-labelled ones also fortify the core so it drains more slowly for a while. Carry a few tonics and a few provisions before a long ride or a fight."
+  },
+  {
+    "term_id": 2300,
+    "game_id": 6,
+    "term_key": "kaos-mode",
+    "term": "Kaos mode",
+    "alt_forms": ["Kaos"],
+    "peek": "A score-attack mode against a clock, in one zone at a time.",
+    "full_text": "Kaos is score attack against a clock in one zone at a time. You extend the time by hitting the objectives that pop up mid-riot rather than by surviving."
+  },
+  {
+    "term_id": 2301,
+    "game_id": 6,
+    "term_key": "revolution-mode",
+    "term": "Revolution mode",
+    "alt_forms": [],
+    "peek": "The story mode, a chain of missions per zone.",
+    "full_text": "Revolution is the story, a chain of missions per zone with objectives handed out by the resistance. It is where characters and zones unlock, and a run through it is what opens up Kaos rather than the other way round."
+  },
+  {
+    "term_id": 2302,
+    "game_id": 6,
+    "term_key": "chaos",
+    "term": "Chaos",
+    "alt_forms": [],
+    "peek": "What Kaos mode scores you on: damage, crowds and destruction.",
+    "full_text": "Kaos mode scores you on chaos, and new players almost always cause too little of it. Damage, crowds and destruction are the point, not something that happens on the way to an objective."
+  },
+  {
+    "term_id": 2303,
+    "game_id": 6,
+    "term_key": "corporation",
+    "term": "Corporation",
+    "alt_forms": ["Corporation troops"],
+    "peek": "Troops who shoot from range and arrive in groups.",
+    "full_text": "Corporation troops shoot from range and arrive in groups, so open ground kills you. Fight along the shopfronts and stalls where you can break line of sight, and use thrown objects and the crowd as cover."
+  },
+  {
+    "term_id": 2304,
+    "game_id": 6,
+    "term_key": "rocket-enemies",
+    "term": "Rocket enemies",
+    "alt_forms": ["Rocket enemy", "Late-round rocket enemies"],
+    "peek": "Late-round enemies with rocket launchers, the usual end of a strong run.",
+    "full_text": "Late in a round, enemies start showing up with rocket launchers. They are the most dangerous thing on screen and the usual reason a strong run ends, so treat one as the priority target the moment it appears."
+  },
+  {
+    "term_id": 2305,
+    "game_id": 6,
+    "term_key": "rocket-launcher",
+    "term": "Rocket launcher",
+    "alt_forms": ["Rocket launchers"],
+    "peek": "High damage, and the easiest weapon in the game to hurt yourself with.",
+    "full_text": "The rocket launcher does high damage and is the easiest weapon in the game to hurt yourself with. It is best used at range, into a crowd you are not standing in, because fired at close quarters it will take your own health down."
+  },
+  {
+    "term_id": 2306,
+    "game_id": 6,
+    "term_key": "grenade-launcher",
+    "term": "Grenade launcher",
+    "alt_forms": ["Grenade launchers"],
+    "peek": "The most forgiving heavy weapon to use on a controller.",
+    "full_text": "The grenade launcher is the most forgiving of the heavy weapons to actually use on a controller. It is a good default when you want damage without fighting the aiming."
+  },
+  {
+    "term_id": 2307,
+    "game_id": 6,
+    "term_key": "time-pickups",
+    "term": "+15s pickups",
+    "alt_forms": ["+15s pickup"],
+    "peek": "Pickups around the level that each add 15 seconds to the round.",
+    "full_text": "A round runs on a timer, and pickups scattered around the level add +15 seconds each. Knowing when to break off and go for time, instead of staying in a fight, is the other thing new players get wrong."
   }
 ]

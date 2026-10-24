@@ -332,6 +332,9 @@ Log, one row per consult: time, the question in one line, the answer in one line
 
 | Time | Question | Answer | What changed | Cost |
 |---|---|---|---|---|
+| 2026-10-24 17:35 | 1: why a made-up or off-subject question still gets notes and sometimes no warning, and the one fix | Two causes. The back end trusts any shared keyword when a game runs ("buy" matched "Buys"), so the line is skipped; fix: show the line whenever none of the question's own subject words is in any attached note. The screen deletes the line when the answer echoes a note (the Bone Hydra case); fix: stop deleting it. "No block" is not a safety signal | Lane L built the back-end rule (measurement first); the screen deletion went to lane D's second round; the Deck pass condition became "the line shown and visible" | about 165,000 tokens, 16 min |
+| 2026-10-24 17:45 | 3: lanes D and H against the focus rules before landing | Land both as is. D: three rough edges for before the release (a skip after an older reason was used, partial "All of them" failures, the ring after a failed call), none on the Deck check's path; check the live turn's notes carry their ids. H: the missing scroll-modelled walk is not a real risk (no handler runs between steps) | D's wiring brief gained the ids test and the failed-call ring hand-over; the other two went to the roadmap | about 146,000 tokens, 9 min |
+| 2026-10-24 18:00 | 2: build a "none of these fit" cut-off for plainly-worded Deck problems? | No. Two cut-offs were already on and let 8 of 24 wrong tips through; the scores to tune a third were never saved; the wrong tips are short generic ones that outscore the right tip. A wording job, in two places: five named tips, and the router's topic words. Two problems have no tip at all | Nothing built; the five tips, the router words and the two missing tips go to the roadmap for the maintainer | about 104,000 tokens, 5 min |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -416,6 +419,29 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   names that exist in the back end).
 - **16:55 to 17:20: started** Deck block K0 (driver), the bookkeeper's first sweep (D135, call 11's two rows), and
   wave 1: C, A0, B, D, H, G1, G2, G3, I, F.
+- **17:07 to 17:56: landed** the bookkeeper's sweep 1 (`e45deaad`), A0 (`a0359c0f`, then its glossary test fix
+  `dd416f37`), G1 (`de47b105`), G3 (`b434ea02`), G2 (`4e9aadb8`, with a one-line fix: "Smoke alarm" was listed as
+  another name for the fire extinguisher), C (`e794a790`, then `d02228b1` sharing a copied test setup), I
+  (`1219b07c`). Spot-checks: 14 Nintendo words, 11 Steam-title words, 9 own-words/GTA words read against their notes,
+  all faithful. Two landings stopped on tests: the shipped-glossary test counted only the main file (fixed by A0);
+  the G3 landing's Python run failed once under load and passed on a clean re-run. C's fixture gate: 568 of 568 fixture
+  questions attach exactly what they attached before, every attached note now carries its id. One trap: the landing
+  log prints a test's stand-in "gh release upload" lines; checked, nothing was published (the real release assets are
+  still dated 2026-10-17).
+- **Block K0 (17:00 to 17:20), 0.6.0 release build:** both smoke checks PASS; the four readings and the junk phrases
+  MEASURED (the made-up bosses now show the line; the house question and the made-up Hades boss do not); the search
+  budget 839 / 52 / 47 ms; the widest-chip row UNCLEAR (chips hidden in a long chat); the "newer library" wording and
+  the Nintendo-games spoiler row COULD NOT RUN (no test library yet; the rig cannot launch a non-Steam shortcut). The
+  clean install had left no "test" chat: the driver made one (saved id `fc3c35c7`).
+- **Block K2 (17:25 to 17:45), the game pictures:** 12 kept, 8 distinct (the title and menu are one screen in four
+  games); most games stop at a save-slot screen the runbook forbids, so only God of War gave a play scene; Steam's
+  performance overlay is on every picture. Lane I's run on them (Deck's model, 3 tries, 48 asks): with the game handed
+  over it named the game 75 times in 100 and the area 42; with nothing handed over 17 and 29; it often invents (a
+  "combat scene" on a title screen) and guesses Zelda for unknown pictures.
+- **Lane F's four measurements (17:04 to 17:20):** the keyword-blind slice is still 4 questions (3 rescued by the
+  combined search); troubleshooting reach 8 of 24 today, 24 of 24 with the held branch but 8 of those wrong (held
+  branch stays held); the Ali G voice keeps fewer facts (67.8% against 74.6%) and never contradicts a note; a category
+  note outranks the right one in about 1 question in 100.
 
 ## 13. Report
 

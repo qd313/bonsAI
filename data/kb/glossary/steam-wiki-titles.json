@@ -606,5 +606,317 @@
     ],
     "peek": "A demon that buffs everything in the arena and summons more demons.",
     "full_text": "An arch-vile is a walking buff totem: while it lives everything in the arena hits harder and moves faster, glowing red, and it summons more demons. It summons while you are locked into a glory kill or chainsaw animation, because you cannot interrupt it then. Find it first, skip the executions until it is dead, and put your heaviest ordnance into it."
+  },
+  {
+    "term_id": 1059,
+    "app_id": "1091500",
+    "term_key": "sandevistan",
+    "term": "Sandevistan",
+    "alt_forms": [],
+    "peek": "An operating system that slows time on demand.",
+    "full_text": "The Sandevistan is an operating system rather than one more implant, and it is built around blades. It slows time on demand, and some variants add crit chance and crit damage on top. Mods extend the duration or shorten the cooldown."
+  },
+  {
+    "term_id": 1060,
+    "app_id": "1091500",
+    "term_key": "berserk",
+    "term": "Berserk",
+    "alt_forms": [],
+    "peek": "The melee operating system that cuts damage taken while it runs.",
+    "full_text": "Berserk is the other operating system, and the melee one that does not care about time. While it runs it cuts damage taken and will not let your health fall below a quarter. Afterwards every enemy you put down returns a quarter of your maximum health."
+  },
+  {
+    "term_id": 1061,
+    "app_id": "1091500",
+    "term_key": "kerenzikov",
+    "term": "Kerenzikov",
+    "alt_forms": [],
+    "peek": "Lets you fire while sliding, dodging or dashing, and slows time when aiming.",
+    "full_text": "Kerenzikov lets you fire while sliding, dodging or dashing, and aiming during any of those slows time for a couple of seconds. It has its own cooldown, so treat it as a repositioning tool rather than something to lean on."
+  },
+  {
+    "term_id": 1062,
+    "app_id": "1091500",
+    "term_key": "street-cred",
+    "term": "Street Cred",
+    "alt_forms": [],
+    "peek": "A track separate from character level, paid out by fixers for gigs.",
+    "full_text": "Street Cred is a separate track from your character level, paid out by fixers for gigs, and how you finish a job changes the payout. It buys a permanent vendor discount up to 15% and unlocks better cars on the Autofixer. The good gear starts appearing around Street Cred 40, and it caps at 50."
+  },
+  {
+    "term_id": 1063,
+    "app_id": "1091500",
+    "term_key": "lifepath",
+    "term": "Lifepath",
+    "alt_forms": [
+      "life path"
+    ],
+    "peek": "Nomad, Streetkid or Corpo; it changes your opening chapter.",
+    "full_text": "Your lifepath is Nomad, Streetkid or Corpo. It changes the opening chapter, one unique side job, and dialogue options that keep turning up later on. Pick the opening you want to play rather than the one that sounds strongest."
+  },
+  {
+    "term_id": 1064,
+    "app_id": "1091500",
+    "term_key": "cyberpsycho",
+    "term": "Cyberpsycho",
+    "alt_forms": [
+      "cyberpsychos",
+      "cyberpsychosis"
+    ],
+    "peek": "Someone who took on more chrome than they could carry.",
+    "full_text": "Cyberpsychosis is what happens when someone takes on more chrome than they can carry: they stop identifying with people and start seeing them as weak and inferior. A cyberpsycho has the strength and speed all that hardware buys and no regard for their own life or anyone else's. There is no talking one down."
+  },
+  {
+    "term_id": 1065,
+    "app_id": "1091500",
+    "term_key": "ripperdoc",
+    "term": "Ripperdoc",
+    "alt_forms": [
+      "ripperdocs"
+    ],
+    "peek": "A technician who installs cyberware.",
+    "full_text": "Ripperdocs are the technicians who install cyberware, somewhere between a surgeon, a techie and a tattoo artist. Most operate legally; some will fit illegal military-grade hardware for the right price. Corporate rippers are free and spotless."
+  },
+  {
+    "term_id": 1066,
+    "app_id": "1091500",
+    "term_key": "quickhack",
+    "term": "Quickhack",
+    "alt_forms": [
+      "quickhacks"
+    ],
+    "peek": "A program fired from your cyberdeck at enemies or devices.",
+    "full_text": "Quickhacks are programs you install in a cyberdeck and fire at enemies or devices. Each costs RAM, takes an upload time before it lands, and runs for a set duration. Combat hacks do damage, control hacks disable, covert hacks keep you undetected and cost the least, and ultimates are the strongest and the most expensive."
+  },
+  {
+    "term_id": 1067,
+    "app_id": "1091500",
+    "term_key": "iconic-weapon",
+    "term": "Iconic weapon",
+    "alt_forms": [
+      "iconic weapons"
+    ],
+    "peek": "A unique named weapon with an effect no other weapon has.",
+    "full_text": "Iconic weapons are the unique named weapons, usually tied to a character or a quest rather than found in a shop. Each has an effect no other weapon has, and each can be upgraded to keep pace with your level instead of being outgrown."
+  },
+  {
+    "term_id": 1068,
+    "app_id": "1091500",
+    "term_key": "technical-ability",
+    "term": "Technical Ability",
+    "alt_forms": [],
+    "peek": "One of the five key attributes; it opens crafting and good cyberware.",
+    "full_text": "Technical Ability is one of the five key attributes set at character creation, alongside Body, Cool, Intelligence and Reflexes. It quietly helps every build, because it opens crafting and the cyberware you actually want."
+  },
+  {
+    "term_id": 1069,
+    "app_id": "22380",
+    "term_key": "hardcore-mode",
+    "term": "Hardcore mode",
+    "alt_forms": [],
+    "peek": "An optional survival mode: you must eat, drink and sleep, and ammo has weight.",
+    "full_text": "Hardcore mode can be switched on from the options at any time, and off again the same way; finishing the game with it on earns the achievement. Stimpaks and RadAway heal over time instead of instantly, ammunition has weight, and companions can die for good. You also drink, eat and sleep, and thirst climbs fastest."
+  },
+  {
+    "term_id": 1070,
+    "app_id": "22380",
+    "term_key": "damage-threshold",
+    "term": "Damage Threshold",
+    "alt_forms": [
+      "damage thresholds"
+    ],
+    "peek": "A flat amount subtracted from every hit, instead of a percentage.",
+    "full_text": "New Vegas grades armor by Damage Threshold (DT), a flat amount subtracted from every hit, rather than the percentage-based system other Fallout games use. A lighter suit with real DT can outlast a bulkier one that has none. Check an item's DT and weight in the Pip-Boy rather than judging by how heavy or armoured it looks."
+  },
+  {
+    "term_id": 1071,
+    "app_id": "22380",
+    "term_key": "tag-skill",
+    "term": "Tag skill",
+    "alt_forms": [
+      "tag skills",
+      "tagged skills"
+    ],
+    "peek": "One of three skills you pick at the start for fifteen points each.",
+    "full_text": "You choose three tag skills for fifteen points each. The gun or two you are handed at the start is based on the skills you tagged."
+  },
+  {
+    "term_id": 1072,
+    "app_id": "22380",
+    "term_key": "skill-book",
+    "term": "Skill book",
+    "alt_forms": [
+      "skill books"
+    ],
+    "peek": "A book worth three permanent skill points, or four with Comprehension.",
+    "full_text": "Skill books are three permanent points each, four with Comprehension, and there are about fifty-two of them. Magazines are ten points for a minute, doubled and tripled by the matching perks, and merchants sell them, so carry a few for a hard check."
+  },
+  {
+    "term_id": 1073,
+    "app_id": "22380",
+    "term_key": "infamy",
+    "term": "Infamy",
+    "alt_forms": [],
+    "peek": "One of the two tallies a faction keeps; killing one of theirs in the open costs thirty.",
+    "full_text": "Every town and faction keeps two separate tallies, fame and infamy, and your title with them comes from the pair. Being caught stealing costs two infamy; killing one of theirs in the open costs thirty. Wearing a faction's armour turns your standing with them neutral while it is on."
+  },
+  {
+    "term_id": 1074,
+    "app_id": "22380",
+    "term_key": "hit-squad",
+    "term": "Hit squad",
+    "alt_forms": [
+      "hit squads"
+    ],
+    "peek": "Assassins who walk across the map to find you after you fall to Shunned.",
+    "full_text": "Fall to Shunned with the Legion and squads of four assassins start walking across the map to find you. Anger the NCR too and Ranger squads join them."
+  },
+  {
+    "term_id": 1075,
+    "app_id": "22380",
+    "term_key": "cazador",
+    "term": "Cazador",
+    "alt_forms": [
+      "cazadores"
+    ],
+    "peek": "Giant orange wasps in swarms; their poison sting hurts.",
+    "full_text": "Cazadores are giant orange wasps in swarms of four or more, flying fast and erratic, and their sting does more raw damage than a giant radscorpion's and three times the poison, for longer. You will not sneak past them. Cripple a wing in V.A.T.S. and one drops out of the air and slows to a crawl."
+  },
+  {
+    "term_id": 1076,
+    "app_id": "22380",
+    "term_key": "night-stalker",
+    "term": "Night stalker",
+    "alt_forms": [
+      "night stalkers"
+    ],
+    "peek": "Coyote bodies with rattlesnake heads, common at night and in caves.",
+    "full_text": "Night stalkers are coyote bodies with rattlesnake heads, made in a lab and now everywhere at night and in caves. They leap and bite with venom weaker than a cazador's, but it stacks if several land, so treat the poison. They rattle and hiss when close, which is your warning."
+  },
+  {
+    "term_id": 1077,
+    "app_id": "22380",
+    "term_key": "companion-wheel",
+    "term": "Companion wheel",
+    "alt_forms": [],
+    "peek": "How you order your companions about.",
+    "full_text": "You can bring one person and one of the two non-humans at once, ordered through the companion wheel. Your companions cannot use antivenom, so heal them with stimpaks from the companion wheel."
+  },
+  {
+    "term_id": 1078,
+    "app_id": "22380",
+    "term_key": "snow-globe",
+    "term": "Snow globe",
+    "alt_forms": [
+      "snow globes"
+    ],
+    "peek": "Seven are hidden in the base game, each worth two thousand caps.",
+    "full_text": "Seven snow globes are hidden in the base game and each is worth two thousand caps at the Lucky 38, where they go on a display stand. Finding all seven is the achievement, and selling them is optional."
+  },
+  {
+    "term_id": 1079,
+    "app_id": "1942280",
+    "term_key": "materials",
+    "term": "Materials",
+    "alt_forms": [],
+    "peek": "The green blobs enemies drop; they count as both gold and experience.",
+    "full_text": "The green blobs enemies drop in Brotato are called materials, and picking one up hands over both the gold spent in the shop and the experience used to level up at the same time. Anything left uncollected when a wave ends is bagged automatically, and the bag's value is paid out a little at a time on later waves. Only fifty material blobs can exist on the ground at once."
+  },
+  {
+    "term_id": 1080,
+    "app_id": "1942280",
+    "term_key": "danger-level",
+    "term": "Danger level",
+    "alt_forms": [
+      "danger levels"
+    ],
+    "peek": "Brotato's difficulty slider, from Danger 0 up to Danger 5.",
+    "full_text": "Danger level is Brotato's difficulty slider, running from Danger 0 up to Danger 5, and each step keeps every increase from the levels below it. Raising it introduces tougher enemy types earlier, and from Danger 2 onward it also starts adding Elite and Horde waves into the run. Some unlockable characters are only reachable by clearing a run at a specific danger level."
+  },
+  {
+    "term_id": 1081,
+    "app_id": "1942280",
+    "term_key": "elite-wave",
+    "term": "Elite wave",
+    "alt_forms": [
+      "elite waves"
+    ],
+    "peek": "A wave with one tough unique enemy that drops a Legendary item.",
+    "full_text": "From Danger 2 upward, a run includes one or more Elite or Horde waves layered on top of the normal wave. Elite waves add one tough, unique enemy that will not repeat within the same run; killing it drops a guaranteed Legendary item and heals a chunk of health on pickup."
+  },
+  {
+    "term_id": 1082,
+    "app_id": "1942280",
+    "term_key": "horde-wave",
+    "term": "Horde wave",
+    "alt_forms": [
+      "horde waves"
+    ],
+    "peek": "A wave that throws extra enemies at you, worth less material each.",
+    "full_text": "Horde waves simply throw extra enemies at you, worth less material each but more in total. They appear from Danger 2 upward, layered on top of the normal wave. Danger 4 and 5 runs see three of these harder waves instead of one."
+  },
+  {
+    "term_id": 1083,
+    "app_id": "1942280",
+    "term_key": "reroll",
+    "term": "Reroll",
+    "alt_forms": [
+      "rerolls",
+      "rerolling"
+    ],
+    "peek": "Paying to refresh the shop; the fee climbs with each reroll.",
+    "full_text": "Between waves the shop can be rerolled for a fee that climbs with the wave number and with every reroll already spent that shop. Buying all four items on offer earns a free reroll. Any item can be locked to keep it in the shop at its current price."
+  },
+  {
+    "term_id": 1084,
+    "app_id": "1942280",
+    "term_key": "item-tags",
+    "term": "Item tags",
+    "alt_forms": [
+      "item tag"
+    ],
+    "peek": "Groups items by stat or playstyle; a character's tags weight the shop.",
+    "full_text": "Items are grouped by the stat or playstyle they support, such as melee damage or max health. Most characters favor a set of item tags, which weights the random shop toward items that suit how that character is meant to be played, rather than forcing any specific build."
+  },
+  {
+    "term_id": 1085,
+    "app_id": "1942280",
+    "term_key": "buffer",
+    "term": "Buffer",
+    "alt_forms": [],
+    "peek": "An enemy that runs away and boosts every other enemy while alive.",
+    "full_text": "A Buffer runs away from the player rather than closing in, and while alive it boosts every other enemy's health, damage and speed substantially, with buffed enemies outlined in red. Killing it quickly removes a much bigger problem than its health bar suggests."
+  },
+  {
+    "term_id": 1086,
+    "app_id": "1942280",
+    "term_key": "healer",
+    "term": "Healer",
+    "alt_forms": [],
+    "peek": "An enemy that wanders the crowd restoring health to nearby enemies.",
+    "full_text": "A Healer wanders among the crowd, restoring health to nearby enemies in an amount that climbs a little with every wave. It is not very tough on its own, so killing it quickly removes a much bigger problem than its health bar suggests, especially once a wave gets crowded."
+  },
+  {
+    "term_id": 1087,
+    "app_id": "1942280",
+    "term_key": "spitter",
+    "term": "Spitter",
+    "alt_forms": [
+      "spitters"
+    ],
+    "peek": "A weak early enemy that keeps its distance and fires projectiles.",
+    "full_text": "Spitters keep their distance and fire projectiles, retreating if the player gets too close. They are one of the weak, common enemy types of the first waves. They gain a flat amount of extra health and damage every wave they remain in play."
+  },
+  {
+    "term_id": 1088,
+    "app_id": "1942280",
+    "term_key": "legendary-loot-crate",
+    "term": "Legendary loot crate",
+    "alt_forms": [
+      "loot crate",
+      "loot crates"
+    ],
+    "peek": "The guaranteed reward for beating an Elite wave's unique enemy.",
+    "full_text": "Beating the unique enemy in an Elite wave always drops a Legendary-tier loot crate, which is guaranteed to contain a Legendary item rather than leaving it to chance like a normal crate. Picking it up also restores a set chunk of health on the spot."
   }
 ]

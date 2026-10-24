@@ -158,7 +158,7 @@
     "term_key": "pact-of-punishment",
     "term": "Pact of Punishment",
     "alt_forms": [],
-    "peek": "The menu that unlocks optional extra difficulty, called Heat.",
+    "peek": "Unlocks after one full clear, and brings the optional difficulty called Heat.",
     "full_text": "The Pact of Punishment unlocks once you have beaten the game once. Heat, the optional difficulty you add yourself, comes with it."
   },
   {
@@ -536,7 +536,7 @@
     "term_key": "safehouse",
     "term": "Safehouse",
     "alt_forms": ["Safehouses"],
-    "peek": "Your base: walk to the bed and sleep to save.",
+    "peek": "Where you save, by walking to the bed and choosing to sleep.",
     "full_text": "You save by walking to the bed in a safehouse and choosing to sleep, which also clears any wanted level. The yellow Residents Parking bays on the street outside each safehouse hold your vehicles."
   },
   {

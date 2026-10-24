@@ -1,0 +1,303 @@
+[
+  {
+    "term_id": 1000,
+    "app_id": "550",
+    "term_key": "smoker",
+    "term": "Smoker",
+    "alt_forms": [
+      "smokers"
+    ],
+    "peek": "An infected whose tongue pulls a survivor toward him.",
+    "full_text": "The cough and the drifting green trails say a Smoker has spawned, and its tongue shows where it is. While it is dragging someone it stands still and takes extra damage in campaign, so one headshot ends it. If the tongue pulls the victim against an obstacle it starts choking them, so cut it fast."
+  },
+  {
+    "term_id": 1001,
+    "app_id": "550",
+    "term_key": "hunter",
+    "term": "Hunter",
+    "alt_forms": [
+      "hunters"
+    ],
+    "peek": "An infected that pounces on whoever is on their own.",
+    "full_text": "A Hunter goes for whoever is on their own, and a long pounce does damage before the clawing starts. There is about a second to shove it out of the air. A pounce does not end on its own, so a teammate has to shove it off."
+  },
+  {
+    "term_id": 1002,
+    "app_id": "550",
+    "term_key": "jockey",
+    "term": "Jockey",
+    "alt_forms": [
+      "jockeys"
+    ],
+    "peek": "An infected that rides a survivor and steers them into trouble.",
+    "full_text": "The Jockey's laugh is the warning. Step backwards as it jumps and it sails past, then shove and kill it. Its damage is slow; the danger is where it steers you, which is into a witch, into acid, into a tank you were not ready for, or off a ledge."
+  },
+  {
+    "term_id": 1003,
+    "app_id": "550",
+    "term_key": "boomer",
+    "term": "Boomer",
+    "alt_forms": [
+      "boomers"
+    ],
+    "peek": "An infected whose vomit sends a horde at you.",
+    "full_text": "A Boomer's vomit is not damage, it is a horde sent to you, and killing it at close range coats you anyway because it bursts. Shove first, then shoot. Being biled makes you glow to both teams."
+  },
+  {
+    "term_id": 1004,
+    "app_id": "550",
+    "term_key": "spitter",
+    "term": "Spitter",
+    "alt_forms": [
+      "spitters"
+    ],
+    "peek": "An infected whose acid puddle burns worse the longer it sits.",
+    "full_text": "The Spitter's green puddle burns worse the longer it has been down, and one spit can take most of a survivor's health. Moving out of it is always right, even onto worse ground, including when you are picking someone up."
+  },
+  {
+    "term_id": 1005,
+    "app_id": "550",
+    "term_key": "charger",
+    "term": "Charger",
+    "alt_forms": [
+      "chargers"
+    ],
+    "peek": "An infected that cannot steer once it commits to a charge.",
+    "full_text": "Shoving does nothing to a Charger; only explosives stumble it. Once it commits to the charge it cannot steer, so step aside and let it hit a wall. Near water, a ledge, or a bunched-up team it flings everybody."
+  },
+  {
+    "term_id": 1006,
+    "app_id": "550",
+    "term_key": "director",
+    "term": "Director",
+    "alt_forms": [],
+    "peek": "The system behind the spawns; nothing about them is fixed.",
+    "full_text": "Nothing about the spawns is fixed, and the Director decides them. Hordes of ten to thirty commons come at you every one to four minutes, from behind or off to the side, while tanks and witches only appear at threat spots the map author placed. After a heavy fight it goes quiet for roughly thirty to forty-five seconds, and that pause is the healing window."
+  },
+  {
+    "term_id": 1007,
+    "app_id": "550",
+    "term_key": "bile-bomb",
+    "term": "Bile bomb",
+    "alt_forms": [
+      "bile bombs"
+    ],
+    "peek": "A thrown jar that pulls the horde to where it lands.",
+    "full_text": "A bile bomb is crowd control, not a weapon. Wherever the jar lands pulls the horde for about twenty seconds, and any infected caught in it gets attacked by its own side. Throw it well away from the team before starting a crescendo, or to buy a route past a tank."
+  },
+  {
+    "term_id": 1008,
+    "app_id": "550",
+    "term_key": "realism",
+    "term": "Realism",
+    "alt_forms": [],
+    "peek": "A switch that removes teammate outlines and item glow on any difficulty.",
+    "full_text": "Realism is a separate switch that works on any difficulty. It means no outlines around your teammates, no item glow, no rescue closets, and commons shrug off body shots, so it is headshots, melee, or the magnum. Learn a map with Realism off first."
+  },
+  {
+    "term_id": 1009,
+    "app_id": "377160",
+    "term_key": "special",
+    "term": "SPECIAL",
+    "alt_forms": [
+      "s.p.e.c.i.a.l."
+    ],
+    "peek": "Your core attributes; they decide which perks you can take.",
+    "full_text": "You start with one in everything and 21 to spend, so 28 in total, which is much less than earlier Fallouts. Bobbleheads and magazines raise attributes, and each level-up lets you put the point into a SPECIAL stat instead of a perk. Your SPECIAL values are what decide which perks you can take at all."
+  },
+  {
+    "term_id": 1010,
+    "app_id": "377160",
+    "term_key": "perk",
+    "term": "Perk",
+    "alt_forms": [
+      "perks"
+    ],
+    "peek": "What a level-up point buys; the perk chart replaced skills.",
+    "full_text": "The perk chart replaced skills. Every level gives one point, and it buys either a rank of a perk or a rank of the SPECIAL attribute that unlocks deeper perks in that column. Magazines scattered around the world grant extra perks that cost no points at all."
+  },
+  {
+    "term_id": 1011,
+    "app_id": "377160",
+    "term_key": "vats",
+    "term": "V.A.T.S.",
+    "alt_forms": [],
+    "peek": "A targeting mode that slows time so you can call shots, for action points.",
+    "full_text": "V.A.T.S. is a targeting system that lets you pause into a slowed-down view to line up called shots at an enemy's head, legs or weapon, in exchange for action points. Using it spends AP, which drains a power armor's fusion core faster."
+  },
+  {
+    "term_id": 1012,
+    "app_id": "377160",
+    "term_key": "fusion-core",
+    "term": "Fusion core",
+    "alt_forms": [
+      "fusion cores"
+    ],
+    "peek": "The core that runs power armor and drains as it is worn.",
+    "full_text": "Power armor runs on a fusion core that drains with time, and faster with anything that spends AP, such as sprinting or V.A.T.S. When it empties you can still walk, but you are over-encumbered and lose V.A.T.S. and steady aim."
+  },
+  {
+    "term_id": 1013,
+    "app_id": "377160",
+    "term_key": "stimpak",
+    "term": "Stimpak",
+    "alt_forms": [
+      "stimpaks"
+    ],
+    "peek": "A healing item that restores a share of your health and repairs crippled limbs.",
+    "full_text": "A stimpak heals a share of your health rather than a flat amount, and repairs crippled limbs. The Medic perk is what makes them worth carrying, taking the heal from 30% up to 100% across its ranks. In Survival mode a stimpak takes fifty seconds to work instead of five, and it starts having weight."
+  },
+  {
+    "term_id": 1014,
+    "app_id": "377160",
+    "term_key": "legendary-enemy",
+    "term": "Legendary enemy",
+    "alt_forms": [
+      "legendary enemies"
+    ],
+    "peek": "A starred enemy that heals itself fully at about half health.",
+    "full_text": "A legendary enemy has a star beside its name and is otherwise an ordinary creature with a much deeper health bar. At around half health it heals itself completely and gains a new ability, so the fight is roughly twice as long as it first looks. Each one drops a weapon or armour piece carrying a random legendary effect."
+  },
+  {
+    "term_id": 1015,
+    "app_id": "377160",
+    "term_key": "feral-ghoul",
+    "term": "Feral ghoul",
+    "alt_forms": [
+      "feral ghouls"
+    ],
+    "peek": "Fast irradiated former humans that rarely travel alone.",
+    "full_text": "Feral ghouls are irradiated former humans, fast, and they almost never travel alone. The head is the reliable weakness, and taking a leg off one stops it attacking altogether. They lie among rubble playing dead and climb out of ductwork and windows, so a room that looks clear often is not."
+  },
+  {
+    "term_id": 1016,
+    "app_id": "377160",
+    "term_key": "junk",
+    "term": "Junk",
+    "alt_forms": [],
+    "peek": "Items you scrap at a crafting table into crafting components.",
+    "full_text": "Almost nothing needs a schematic; the recipes are known by default. What you need is components, which come from scrapping junk at a crafting table, from scrapping world objects such as trees and cars inside a settlement you own, or from merchants. Early on it is worth grabbing every piece of junk you can carry, not just weapons and armor."
+  },
+  {
+    "term_id": 1017,
+    "app_id": "377160",
+    "term_key": "pip-boy",
+    "term": "Pip-Boy",
+    "alt_forms": [],
+    "peek": "The hub for your maps, stats and inventory.",
+    "full_text": "Fallout 4 begins with your character's Pip-Boy as the hub for maps, stats and inventory. Perks gained from magazines are listed separately on it."
+  },
+  {
+    "term_id": 1018,
+    "app_id": "377160",
+    "term_key": "settlement-happiness",
+    "term": "Settlement happiness",
+    "alt_forms": [],
+    "peek": "Whether a settlement's food, water, beds and defense needs are met.",
+    "full_text": "Happiness is just whether needs are met: food, water, beds and defense each have to be at least the number of settlers. Power is not part of it, though better machines need it. Higher happiness makes settlers more productive."
+  },
+  {
+    "term_id": 1019,
+    "app_id": "489830",
+    "term_key": "standing-stone",
+    "term": "Standing Stone",
+    "alt_forms": [
+      "standing stones"
+    ],
+    "peek": "A landmark that grants a bonus while active; only one works at a time.",
+    "full_text": "Standing Stones are wilderness landmarks, thirteen in total, that grant a passive ability or buff once activated, and only one stone's effect is active at a time. The three most commonly found first are the Guardian Stones (Mage, Thief and Warrior), beside the road to Riverwood. You can change which stone is active at any time by activating a different one."
+  },
+  {
+    "term_id": 1020,
+    "app_id": "489830",
+    "term_key": "dragon-shout",
+    "term": "Dragon Shout",
+    "alt_forms": [
+      "dragon shouts",
+      "thu'um"
+    ],
+    "peek": "A three-word dragon phrase that costs no mana, only a cooldown.",
+    "full_text": "Dragon Shouts, called the Thu'um or the Voice, are three-word dragon phrases that unlock powerful effects and, unlike ordinary magic, cost no mana or stat to use, only a cooldown between casts. Tapping the shout button briefly uses only its first learned word; holding the button charges it further, unlocking a longer, stronger version once the second and third words are known."
+  },
+  {
+    "term_id": 1021,
+    "app_id": "489830",
+    "term_key": "word-wall",
+    "term": "Word wall",
+    "alt_forms": [
+      "word walls"
+    ],
+    "peek": "Where a dragon's soul is spent to unlock a word of a shout.",
+    "full_text": "Killing a dragon lets you absorb its soul, which is spent to unlock a word of power at a word wall already found. Word walls carrying shouts are scattered through dragon lairs and dungeons, and the main quest and a few faction quests also point toward specific ones directly."
+  },
+  {
+    "term_id": 1022,
+    "app_id": "489830",
+    "term_key": "draugr",
+    "term": "Draugr",
+    "alt_forms": [],
+    "peek": "Reanimated Nordic warriors sealed in barrows and tombs.",
+    "full_text": "Draugr are reanimated Nordic warriors, most of whom once served the Dragon Priests, now sealed inside the barrows and tombs scattered across Skyrim. Most are immune to poison and take reduced frost damage, so a mage leaning on flame and shock spells fares better than one relying on frost. Many sleep in wall alcoves until disturbed and are briefly unable to act while climbing out to fight."
+  },
+  {
+    "term_id": 1023,
+    "app_id": "489830",
+    "term_key": "falmer",
+    "term": "Falmer",
+    "alt_forms": [],
+    "peek": "Blind, feral creatures of the Dwemer ruins that hunt by sound.",
+    "full_text": "Falmer were once the Snow Elves, and are now disfigured, feral creatures found living deep in Dwemer ruins. Every Falmer is completely blind and hunts by sound instead, so moving quietly or attacking from range takes real advantage of that blindness. They coat their weapons in a chaurus- or spider-venom poison that deals a burst of damage on hit."
+  },
+  {
+    "term_id": 1024,
+    "app_id": "489830",
+    "term_key": "daedric-artifact",
+    "term": "Daedric Artifact",
+    "alt_forms": [
+      "daedric artifacts"
+    ],
+    "peek": "A unique item given through a quest from one of the Daedric Princes.",
+    "full_text": "Daedric Artifacts are scattered through Skyrim, each a unique item tied to a quest given directly by one of the Daedric Princes rather than through an ordinary quest-giver NPC. None of these Daedric quests count as an ordinary side quest, and several can be permanently failed rather than just abandoned."
+  },
+  {
+    "term_id": 1025,
+    "app_id": "489830",
+    "term_key": "dragon-priest-mask",
+    "term": "Dragon Priest Mask",
+    "alt_forms": [
+      "dragon priest masks"
+    ],
+    "peek": "Unique enchanted headgear won from a Dragon Priest.",
+    "full_text": "Dragon Priest Masks are unique enchanted headgear worn by the Dragon Priests met as high-level guardian bosses inside Nordic ruins, and each mask is a one-of-a-kind reward for defeating the priest wearing it. Masks replace a helmet slot and carry a fixed enchantment rather than a random one."
+  },
+  {
+    "term_id": 1026,
+    "app_id": "489830",
+    "term_key": "enchanting",
+    "term": "Enchanting",
+    "alt_forms": [
+      "enchantment",
+      "enchantments"
+    ],
+    "peek": "A skill that binds a magical effect to a weapon, armor piece or jewelry.",
+    "full_text": "Enchanting lets a character bind a magical effect to a weapon, armor piece or piece of jewelry. Raising the Enchanting skill increases both how many charges a newly enchanted item holds and how strong its enchantment can be. Learning a new enchantment usually means disenchanting an existing enchanted item first to study its effect."
+  },
+  {
+    "term_id": 1027,
+    "app_id": "489830",
+    "term_key": "tempering",
+    "term": "Tempering",
+    "alt_forms": [],
+    "peek": "Improving existing gear with Smithing, back to or past its original quality.",
+    "full_text": "Smithing lets a character forge new weapons and armor from raw ore and hides, and separately temper existing gear to sharpen or polish it back to, or past, its original quality. A higher Smithing skill unlocks bigger improvements. A weapon or armor piece carrying an enchantment needs the Arcane Blacksmith perk before it can be tempered at all."
+  },
+  {
+    "term_id": 1028,
+    "app_id": "489830",
+    "term_key": "beast-form",
+    "term": "Beast Form",
+    "alt_forms": [],
+    "peek": "The werewolf form: hits harder and moves faster, but no gear or spells.",
+    "full_text": "As a werewolf, Beast Form can be triggered once per day for a limited window. In that form you hit far harder and move faster, and gain immunity to disease, but lose the passive bonus from resting and cannot use equipment, spells or shouts until you change back. Feeding on a fresh humanoid corpse while transformed extends the time left in Beast Form and restores health."
+  }
+]

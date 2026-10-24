@@ -673,5 +673,86 @@
     "alt_forms": [],
     "peek": "A special weapon that sets off explosives you have already planted.",
     "full_text": "The detonator rounds out the special weapon category, for triggering explosives already planted. Which weapons are on hand at any moment depends entirely on what has been found or bought."
+  },
+  {
+    "term_id": 2800,
+    "app_id": "1222670",
+    "term_key": "moodlet",
+    "term": "Moodlet",
+    "alt_forms": ["Moodlets"],
+    "peek": "A small mood effect that adds up with others into one emotion.",
+    "full_text": "Moodlets add up into one emotion, and the emotion changes what your Sim can do and how fast they learn. Sad usually comes from a moodlet with a timer, such as a death, a rejection or an uncomfortable house, and it overrides better moods until it expires."
+  },
+  {
+    "term_id": 2801,
+    "app_id": "1222670",
+    "term_key": "emotions",
+    "term": "Emotions",
+    "alt_forms": ["Emotion"],
+    "peek": "The mood your Sim is in, which changes what they can do and learn.",
+    "full_text": "Focused speeds up logic and programming, Inspired speeds up creative skills, and Confident unlocks bolder social options. Decorated rooms, showers, tea and thinking at a chess board are the reliable ways to choose the mood you want before starting work."
+  },
+  {
+    "term_id": 2802,
+    "app_id": "1222670",
+    "term_key": "daily-task",
+    "term": "Daily task",
+    "alt_forms": ["Daily tasks"],
+    "peek": "A job duty to finish each day for steady income and promotions.",
+    "full_text": "Complete daily tasks for steady income before expanding the house. A promotion also needs the daily task done, along with the listed skill levels, good work performance and a decent mood on the way out the door."
+  },
+  {
+    "term_id": 2803,
+    "app_id": "1222670",
+    "term_key": "promotion",
+    "term": "Promotion",
+    "alt_forms": ["Promotions"],
+    "peek": "A career step that wants skills, the daily task, performance and a good mood.",
+    "full_text": "A promotion wants four things at once: the listed skill levels, the daily task done, good work performance, and a decent mood on the way out the door. The career panel lists exactly which skills and how high, and sending a Sim to work in the right emotion is usually the missing piece."
+  },
+  {
+    "term_id": 2804,
+    "app_id": "1222670",
+    "term_key": "starter-lot",
+    "term": "Starter lot",
+    "alt_forms": ["Starter home"],
+    "peek": "The first plot of land, where a small starter home is built first.",
+    "full_text": "Build a small starter home first. Career goals unlock skills, and on the Deck you should lower the sim speed in crowded lots."
+  },
+  {
+    "term_id": 2805,
+    "app_id": "1222670",
+    "term_key": "fire-extinguisher",
+    "term": "Fire extinguisher",
+    "alt_forms": ["Fire extinguishers", "Smoke alarm"],
+    "peek": "There are no firefighters, so keep one in the kitchen with a smoke alarm.",
+    "full_text": "There are no firefighters to call in The Sims 4, so keep a fire extinguisher and a smoke alarm in the kitchen. When something catches, direct a Sim to extinguish it rather than waiting, because panicking Sims will not act on their own."
+  },
+  {
+    "term_id": 2806,
+    "app_id": "1222670",
+    "term_key": "moveobjects",
+    "term": "bb.moveobjects",
+    "alt_forms": ["moveobjects", "bb.moveobjects on"],
+    "peek": "A cheat that lets objects be placed anywhere, ignoring the grid.",
+    "full_text": "Open the cheat console with Ctrl+Shift+C, enter testingcheats true, then bb.moveobjects on. Objects will then place anywhere, ignoring the grid and each other, and Alt while dragging frees the rotation. Things placed this way can end up unusable by Sims, so it is a decorating tool first."
+  },
+  {
+    "term_id": 2807,
+    "app_id": "1222670",
+    "term_key": "cheat-console",
+    "term": "Cheat console",
+    "alt_forms": ["testingcheats", "testingcheats true"],
+    "peek": "A text box opened with Ctrl+Shift+C for typing cheats.",
+    "full_text": "Open the cheat console with Ctrl+Shift+C and enter testingcheats true. After that, one command the notes cover is bb.moveobjects on, which lets objects place anywhere."
+  },
+  {
+    "term_id": 2808,
+    "app_id": "1222670",
+    "term_key": "self-employed",
+    "term": "Self-employed",
+    "alt_forms": ["Self-employed earners"],
+    "peek": "Painting and writing: money made without a career job.",
+    "full_text": "Painting and writing are the classic self-employed earners because they only need one skill and one object, and both scale hard with level. Gardening is slower to start and larger later."
   }
 ]

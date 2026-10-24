@@ -754,5 +754,68 @@
     "alt_forms": ["Self-employed earners"],
     "peek": "Painting and writing, the classic self-employed earners.",
     "full_text": "Painting and writing are the classic self-employed earners because they only need one skill and one object, and both scale hard with level. Gardening is slower to start and larger later."
+  },
+  {
+    "term_id": 2900,
+    "app_id": "1086940",
+    "term_key": "long-rest",
+    "term": "Long rest",
+    "alt_forms": ["Long rests"],
+    "peek": "A rest that restores spells and health and moves companion stories on.",
+    "full_text": "A long rest costs camp supplies and restores spells, health and most abilities. It is also what advances companion scenes and personal quests, so hoarding rests means missing story, not saving resources."
+  },
+  {
+    "term_id": 2901,
+    "app_id": "1086940",
+    "term_key": "inspiration",
+    "term": "Inspiration",
+    "alt_forms": [],
+    "peek": "A reroll you earn by acting in line with a character's background.",
+    "full_text": "Each character has background goals, and doing something that matches one grants Inspiration. You can hold a few at a time, and spending one rerolls a failed ability check, including in dialogue after you have seen the failure."
+  },
+  {
+    "term_id": 2902,
+    "app_id": "1086940",
+    "term_key": "dialogue-check",
+    "term": "Dialogue check",
+    "alt_forms": ["Dialogue checks"],
+    "peek": "A roll in conversation: ability modifier plus proficiency plus a d20.",
+    "full_text": "A check is your ability modifier plus proficiency plus a d20, so the fix is usually who is talking rather than luck. Let the high-Charisma character lead conversations."
+  },
+  {
+    "term_id": 2903,
+    "app_id": "1086940",
+    "term_key": "guidance",
+    "term": "Guidance",
+    "alt_forms": [],
+    "peek": "A cantrip that adds a d4 to a check and can be cast beforehand.",
+    "full_text": "Guidance is a cantrip that adds a d4 to a check, and it can be cast beforehand. Inspiration rerolls a failure outright."
+  },
+  {
+    "term_id": 2904,
+    "app_id": "1086940",
+    "term_key": "sneak-attack",
+    "term": "Sneak Attack",
+    "alt_forms": ["Sneak attacks"],
+    "peek": "An attack that needs advantage or an ally next to the target.",
+    "full_text": "Sneak Attack needs advantage, or an ally already next to the target; without one of those it is a normal, weak attack. Hide as a bonus action, attack from stealth, and let a melee companion engage first."
+  },
+  {
+    "term_id": 2905,
+    "app_id": "1086940",
+    "term_key": "camp-supplies",
+    "term": "Camp supplies",
+    "alt_forms": [],
+    "peek": "What a long rest costs; they are plentiful.",
+    "full_text": "A long rest costs camp supplies. Supplies are plentiful, and food you pick up counts."
+  },
+  {
+    "term_id": 2906,
+    "app_id": "1086940",
+    "term_key": "companion-approval",
+    "term": "Companion approval",
+    "alt_forms": [],
+    "peek": "How companions react to what you do and say in front of them.",
+    "full_text": "Companions react to what you do and say in front of them, not to gifts. Approval gates their personal quests and any romance, and low approval can end with them leaving."
   }
 ]

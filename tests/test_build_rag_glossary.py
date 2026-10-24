@@ -225,7 +225,10 @@ class ShippedGlossaryFileTests(unittest.TestCase):
         try:
             build_rag_db.apply_schema(conn)
             build_rag_db.seed_sample_corpus(conn)
-            self.assertEqual(conn.execute("SELECT COUNT(*) FROM glossary_terms").fetchone()[0], 2)
+            built = conn.execute("SELECT COUNT(*) FROM glossary_terms").fetchone()[0]
+            # The folder files under data/kb/glossary/ ship too, so count the merged list.
+            self.assertEqual(built, len(build_rag_db.load_glossary_rows()))
+            self.assertGreaterEqual(built, 2)
         finally:
             conn.close()
 

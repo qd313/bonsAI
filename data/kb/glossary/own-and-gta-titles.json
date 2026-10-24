@@ -592,5 +592,86 @@
     "alt_forms": ["Dating site"],
     "peek": "The websites where three of the girlfriends are found.",
     "full_text": "Two girlfriends come from the story and three from the dating sites, which open after the mission Out of the Closet. Reply to a profile, wait for her email, and the first date decides whether she gives you her number."
+  },
+  {
+    "term_id": 2700,
+    "app_id": "1546970",
+    "term_key": "payphone-missions",
+    "term": "Payphone missions",
+    "alt_forms": ["Payphone mission"],
+    "peek": "Seventeen missions that are handed out over payphones.",
+    "full_text": "Seventeen of the game's missions are handed out over payphones instead of face to face. Finishing a story mission is also how new payphone jobs open up, so phones that look unavailable early on are usually just waiting on progress elsewhere."
+  },
+  {
+    "term_id": 2701,
+    "app_id": "1546970",
+    "term_key": "off-road-checkpoint-courses",
+    "term": "Off-road checkpoint courses",
+    "alt_forms": ["Off-road checkpoint", "Checkpoint courses"],
+    "peek": "Four side courses of gates to drive through against the clock.",
+    "full_text": "There are four off-road checkpoint courses. They task you with driving through a set number of gates scattered around a park, beach or car park before time runs out, purely against the clock."
+  },
+  {
+    "term_id": 2702,
+    "app_id": "1546970",
+    "term_key": "remote-control-missions",
+    "term": "Remote-control missions",
+    "alt_forms": ["Remote-control mission", "RC missions"],
+    "peek": "Four missions where you steer a toy car and smash a set number of one model.",
+    "full_text": "There are four missions where you steer a remote-control car instead of walking around. Each asks you to total as many of one specific car model as you can find before time runs out."
+  },
+  {
+    "term_id": 2703,
+    "app_id": "1546970",
+    "term_key": "pay-n-spray",
+    "term": "Pay 'n' Spray",
+    "alt_forms": ["Pay n Spray", "Pay and Spray"],
+    "peek": "A garage that changes your car's colour and clears the wanted meter.",
+    "full_text": "Driving into a Pay 'n' Spray changes your car's colour and clears the wanted meter. Finishing whatever mission you are on, or paying off a passing police bribe pickup, also clears it."
+  },
+  {
+    "term_id": 2704,
+    "app_id": "1546970",
+    "term_key": "police-bribe",
+    "term": "Police bribe",
+    "alt_forms": ["Bribe pickup", "Police bribe pickup"],
+    "peek": "A pickup that clears the wanted meter when you pay it off.",
+    "full_text": "A police bribe pickup is one of the ways the wanted meter clears on its own, by paying it off as it passes. The others are driving into a Pay 'n' Spray and simply finishing whatever mission you are on."
+  },
+  {
+    "term_id": 2705,
+    "app_id": "1546970",
+    "term_key": "busted",
+    "term": "Busted",
+    "alt_forms": [],
+    "peek": "What you get when the police catch you: a fine and lost weapons.",
+    "full_text": "Getting caught ends with a busted screen. Any mission in progress fails, some cash is taken as a fine, and your weapons are confiscated."
+  },
+  {
+    "term_id": 2706,
+    "app_id": "1546970",
+    "term_key": "wanted-level",
+    "term": "Wanted level",
+    "alt_forms": ["Wanted meter"],
+    "peek": "Police attention on a six-star scale.",
+    "full_text": "The wanted meter runs on a six-star scale. It rises from shooting, running down pedestrians, ramming police cars, or so much as aiming a gun near an officer, and a single star already brings a chase."
+  },
+  {
+    "term_id": 2707,
+    "app_id": "1546970",
+    "term_key": "vehicle-side-jobs",
+    "term": "Vehicle side jobs",
+    "alt_forms": ["Vehicle-based side jobs"],
+    "peek": "Taxi, firefighter and paramedic work that runs apart from the story.",
+    "full_text": "Vehicle-based side jobs include ferrying fares as a taxi driver, putting out fires as a firefighter, and answering emergencies as a paramedic. They run independently of the story and reward completing enough of them with a lasting bonus."
+  },
+  {
+    "term_id": 2708,
+    "app_id": "1546970",
+    "term_key": "detonator",
+    "term": "Detonator",
+    "alt_forms": [],
+    "peek": "A special weapon that sets off explosives you have already planted.",
+    "full_text": "The detonator rounds out the special weapon category, for triggering explosives already planted. Which weapons are on hand at any moment depends entirely on what has been found or bought."
   }
 ]

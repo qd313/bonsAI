@@ -716,7 +716,7 @@
     "term_key": "starter-lot",
     "term": "Starter lot",
     "alt_forms": ["Starter home"],
-    "peek": "The first plot of land, where a small starter home is built first.",
+    "peek": "Where a small starter home is built first.",
     "full_text": "Build a small starter home first. Career goals unlock skills, and on the Deck you should lower the sim speed in crowded lots."
   },
   {
@@ -743,7 +743,7 @@
     "term_key": "cheat-console",
     "term": "Cheat console",
     "alt_forms": ["testingcheats", "testingcheats true"],
-    "peek": "A text box opened with Ctrl+Shift+C for typing cheats.",
+    "peek": "Opened with Ctrl+Shift+C; type testingcheats true first.",
     "full_text": "Open the cheat console with Ctrl+Shift+C and enter testingcheats true. After that, one command the notes cover is bb.moveobjects on, which lets objects place anywhere."
   },
   {
@@ -752,7 +752,7 @@
     "term_key": "self-employed",
     "term": "Self-employed",
     "alt_forms": ["Self-employed earners"],
-    "peek": "Painting and writing: money made without a career job.",
+    "peek": "Painting and writing, the classic self-employed earners.",
     "full_text": "Painting and writing are the classic self-employed earners because they only need one skill and one object, and both scale hard with level. Gardening is slower to start and larger later."
   }
 ]

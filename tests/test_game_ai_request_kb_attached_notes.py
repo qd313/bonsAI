@@ -827,6 +827,17 @@ class AttachedIdsReachTheEntriesTests(unittest.TestCase):
         )
         self.assertEqual([(n["name"], n["section_id"]) for n in notes], [("Ancient Basin", 12)])
 
+    def test_an_id_marked_lowered_reaches_the_entry_as_demoted(self):
+        note = _card(section_id=21, name="Broken Vessel")
+        text_block, _trust, sources = _format_block(
+            [note], fallback_text=None, domain="strategy", max_bytes=6_144
+        )
+        ids = [{"section_id": 21, "name": "Broken Vessel", "kind": "note", "demoted": True}]
+        notes = _parse_kb_attached_notes(
+            text_block, kb_domain="strategy", sources=sources, attached_ids=ids
+        )
+        self.assertEqual((notes[0]["section_id"], notes[0]["demoted"]), (21, True))
+
     def test_with_no_ids_given_every_entry_reads_unknown_and_not_demoted(self):
         notes, _sources = _round_trip([_card(section_id=5)])
         self.assertEqual(notes[0]["section_id"], 0)
@@ -848,7 +859,7 @@ class AttachedIdsReachTheEntriesTests(unittest.TestCase):
             [tip], fallback_text=None, domain="compat", max_bytes=6_144
         )
         self.assertEqual(_attached_ids_for([tip], sources),
-                         [{"section_id": 3, "name": "Proton log tip", "kind": "tip"}])
+                         [{"section_id": 3, "name": "Proton log tip", "kind": "tip", "demoted": False}])
 
     @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     @patch("backend.ask.game_ai_request.should_retrieve_knowledge")

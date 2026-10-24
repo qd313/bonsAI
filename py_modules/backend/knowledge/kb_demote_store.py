@@ -153,8 +153,41 @@ def downs_for(ids: Iterable[tuple[str, int]]) -> dict[tuple[str, int], int]:
     return {pair: held[pair] for pair in ids if pair in held}
 
 
-def has_any_downs() -> bool:
-    return bool(_downs_map(store_path()))
+def card_key(card: Any) -> tuple[str, int]:
+    """(kind, number) for a retrieval card: a shared troubleshooting tip is a "tip", everything
+    else a "note". The two number lines overlap, so the pair is the identity, never the number."""
+    return ("tip" if getattr(card, "section_type", "") == "tip" else "note", int(card.section_id))
+
+
+def apply_demotes(cards: list[Any], top_k: Optional[int] = None) -> list[Any]:
+    """The ranking rule, applied to a candidate list whose order is final.
+
+    A card with three or more marks is dropped first, so the next candidate takes its place. Of
+    what is left, the first ``top_k`` cards (all of them when ``top_k`` is None) are the ones
+    that would attach: a card with one or two marks inside that window moves behind every
+    unmarked card of the window, keeping its own place among the marked ones. It does not slide
+    past the window, so a lowered note still attaches, last, instead of being quietly cut by a
+    long tail of weak candidates. Called before the budget cut, which trims from the end, so the
+    lowered note is also the first to go when room is short.
+
+    With nothing marked this returns ``cards`` itself, untouched, after one file-time check --
+    the same list, the same order.
+    """
+    held = _downs_map(store_path())
+    if not held or not cards:
+        return cards
+    kept = [card for card in cards if held.get(card_key(card), 0) < EXCLUDE_AT_DOWNS]
+    window = kept if top_k is None else kept[: max(top_k, 0)]
+    tail = [] if top_k is None else kept[max(top_k, 0) :]
+    clean = [card for card in window if not held.get(card_key(card), 0)]
+    lowered = [card for card in window if held.get(card_key(card), 0)]
+    return clean + lowered + tail
+
+
+def spare_candidates() -> int:
+    """How many extra keyword candidates a search should fetch so a dropped or lowered card has
+    a replacement behind it: 0 when nothing is marked (nothing changes), else a few."""
+    return min(len(_downs_map(store_path())), 10)
 
 
 def _write_document(path: str, document: dict[str, Any]) -> None:

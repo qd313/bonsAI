@@ -313,6 +313,57 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     finally:
       conn.close()
 
+  def test_a_thumbs_down_moves_a_note_last_then_out_then_back(self):
+    """Plan 98 lane C, at the level the Deck's check looks at: Deep Rock Galactic: Survivor, a
+    Glyphid Dreadnought question. With nothing marked the notes attach as they always did; one
+    down puts the first note last among the attached (and tags it lowered); three leave it out
+    and the next candidate takes its place; undo puts it all back."""
+    import tempfile
+    from backend.knowledge import kb_demote_store
+
+    settings = {"use_local_knowledge_base": True, "rag_corpus_path": str(SEED_DB.parent)}
+
+    def attach():
+      with mock.patch(
+        "backend.knowledge.knowledge_base_service.nomic_embed_available", return_value=False
+      ):
+        return retrieve_knowledge_context(
+          settings,
+          ask_mode="strategy",
+          question="how do i beat the glyphid dreadnought",
+          app_id="2321470",
+          app_name="Deep Rock Galactic: Survivor",
+          domain="strategy",
+          pc_ip="",
+        )
+
+    with tempfile.TemporaryDirectory() as folder, mock.patch.object(
+      kb_demote_store, "_settings_dir", return_value=folder
+    ):
+      kb_demote_store.forget_cache()
+      plain = attach()
+      before = [e["section_id"] for e in plain.attached_ids]
+      self.assertGreaterEqual(len(before), 2)
+      self.assertFalse(any(e["demoted"] for e in plain.attached_ids))
+      first = before[0]
+
+      kb_demote_store.record_demote(first, "note", "wrong_tip")
+      one = attach()
+      self.assertEqual(one.attached_ids[-1]["section_id"], first)
+      self.assertTrue(one.attached_ids[-1]["demoted"])
+      self.assertEqual([e["section_id"] for e in one.attached_ids[:-1]], before[1:])
+
+      kb_demote_store.record_demote(first, "note", "outdated")
+      kb_demote_store.record_demote(first, "note", "wrong_edition")
+      three = attach()
+      after = [e["section_id"] for e in three.attached_ids]
+      self.assertNotIn(first, after)
+      self.assertEqual(len(after), len(before))
+      self.assertNotIn("[Deep Rock Galactic: Survivor / boss: Glyphid Dreadnought]", three.text_block)
+      for _ in range(3):
+        kb_demote_store.record_demote(first, "note", "wrong_tip", undo=True)
+      self.assertEqual([e["section_id"] for e in attach().attached_ids], before)
+
   def test_a_tip_turn_lists_its_tips_by_pattern_id(self):
     settings = {
       "use_local_knowledge_base": True,

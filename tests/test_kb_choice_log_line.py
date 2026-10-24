@@ -90,6 +90,25 @@ class KbChoiceLogLineTests(unittest.TestCase):
         line = kb_choice_log_line(None, kb_domain="", kb_survived=False, starved=False)
         self.assertIn("not searched", line)
 
+    def test_names_the_attached_notes_the_person_ranked_lower(self):
+        """Plan 98 lane C: the always-on line says which attached notes carry a thumbs-down, as
+        kind:number, so a tester can read why a note sits last."""
+        result = _two_notes()
+        result.attached_ids = [
+            {"section_id": 12, "name": "Broken Vessel", "kind": "note", "demoted": False},
+            {"section_id": 12, "name": "Ancient Basin", "kind": "tip", "demoted": True},
+        ]
+        line = kb_choice_log_line(result, kb_domain="strategy", kb_survived=True, starved=False)
+        self.assertIn("demoted=tip:12", line)
+        starved = kb_choice_log_line(result, kb_domain="strategy", kb_survived=False, starved=True)
+        self.assertIn("demoted=-", starved)
+
+    def test_says_demoted_dash_when_nothing_attached_is_lowered(self):
+        line = kb_choice_log_line(
+            _two_notes(), kb_domain="strategy", kb_survived=True, starved=False
+        )
+        self.assertTrue(line.endswith("demoted=-"))
+
     def test_is_one_line(self):
         line = kb_choice_log_line(
             _two_notes(), kb_domain="strategy", kb_survived=True, starved=False

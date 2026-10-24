@@ -133,6 +133,7 @@ from backend.knowledge.compat_topic_router import (
 from backend.prompts.ollama_prompts import question_matches_troubleshooting_log_context
 from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
 
+from backend.knowledge import kb_demote_store
 from backend.knowledge.knowledge_base_cards import (
     KnowledgeCard,
     _BLOCK_SENTINEL,
@@ -480,14 +481,33 @@ def _attached_ids_for(cards: list[KnowledgeCard], sources: list[dict[str, str]])
     """The id, name and kind of each card that reached the block. `_format_block` keeps a prefix
     of ``cards`` (it stops at the first card that does not fit), so the kept cards are the first
     ``len(sources)``."""
+    kept = cards[: len(sources)]
+    marks = kb_demote_store.downs_for([kb_demote_store.card_key(card) for card in kept])
     return [
         {
             "section_id": int(card.section_id),
             "name": card.name,
-            "kind": "tip" if card.section_type == "tip" else "note",
+            "kind": kb_demote_store.card_key(card)[0],
+            "demoted": kb_demote_store.card_key(card) in marks,
         }
-        for card in cards[: len(sources)]
+        for card in kept
     ]
+
+
+def _merge_preferred_first_demoted(
+    cards: list[KnowledgeCard],
+    topic_cards: list[KnowledgeCard],
+    preferred_ids: set[int],
+    *,
+    top_k: int,
+) -> list[KnowledgeCard]:
+    """`_merge_preferred_first` (the keyword-only order), then the thumbs-down rule, then the
+    cut to ``top_k`` -- so a left-out card is replaced by the next one in line. Nothing marked:
+    exactly what `_merge_preferred_first` alone gave."""
+    merged = _merge_preferred_first(
+        cards, topic_cards, preferred_ids, top_k=max(top_k, len(cards) + len(topic_cards))
+    )
+    return kb_demote_store.apply_demotes(merged, top_k)[:top_k]
 
 
 def _budget_for_mode(ask_mode: str) -> tuple[int, int]:
@@ -835,7 +855,10 @@ def _fuse_cards_by_rrf(
         order = sorted(range(len(pool)), key=lambda i: (demoted[i], -scores[i], i))
     else:
         order = sorted(range(len(pool)), key=lambda i: (-scores[i], i))
-    return [pool[i] for i in order[:top_k]]
+    # Plan 98 lane C: the person's thumbs-downs apply to the final order and only then does the
+    # cut to ``top_k`` happen, so a card left out for three downs is replaced by the next one and
+    # a card with one or two goes last among the ``top_k`` that would attach.
+    return kb_demote_store.apply_demotes([pool[i] for i in order], top_k)[:top_k]
 
 
 def retrieve_knowledge_context(
@@ -970,7 +993,9 @@ def retrieve_knowledge_context(
                 and nomic_embed_available(pc_ip, model=DEFAULT_EMBEDDING_MODEL)
             )
             t_fts = time.perf_counter()
-            fts_k = HYBRID_FTS_SHORTLIST_K if nomic_ready else top_k
+            fts_k = (
+                HYBRID_FTS_SHORTLIST_K if nomic_ready else top_k + kb_demote_store.spare_candidates()
+            )
             # Plan 70, helper P (2026-09-26): a general tip search only ever returns a shared
             # tip (app_id NULL) or the resolved game's own -- see
             # _compat_app_id_filter_clause's docstring for the wrong-game tip this closes.
@@ -1027,7 +1052,9 @@ def retrieve_knowledge_context(
                 and nomic_embed_available(pc_ip, model=DEFAULT_EMBEDDING_MODEL)
             )
             t_fts = time.perf_counter()
-            fts_k = HYBRID_FTS_SHORTLIST_K if nomic_ready else top_k
+            fts_k = (
+                HYBRID_FTS_SHORTLIST_K if nomic_ready else top_k + kb_demote_store.spare_candidates()
+            )
             # Only ever search within the resolved game. An unscoped search returns the best
             # keyword match in the whole corpus, which for an uncovered game means another
             # game's cards -- "how do I beat the tank" while playing something unrelated
@@ -1183,10 +1210,10 @@ def retrieve_knowledge_context(
                 retrieval_method = "hybrid"
             except (OllamaEmbedError, EmbeddingDimensionMismatch, IndexError, ValueError):
                 embed_ms = round(max(query_embedding.elapsed_ms, (time.perf_counter() - t_embed) * 1000), 2)
-                cards = _merge_preferred_first(cards, topic_cards, preferred_ids, top_k=top_k)
+                cards = _merge_preferred_first_demoted(cards, topic_cards, preferred_ids, top_k=top_k)
                 retrieval_method = "keyword_embed_unavailable"
         else:
-            cards = _merge_preferred_first(cards, topic_cards, preferred_ids, top_k=top_k)
+            cards = _merge_preferred_first_demoted(cards, topic_cards, preferred_ids, top_k=top_k)
 
         # D17 routes every Ask made while a covered game runs, not just Strategy-mode ones.
         # The genre fallback is a generic card with no relation to the question, which is a
@@ -1216,7 +1243,7 @@ def retrieve_knowledge_context(
             ) or _compat_tip_card_by_pattern_id(conn, forced_tip_id)
             if forced_card is not None:
                 cards = [forced_card] + [c for c in cards if c.section_id != forced_tip_id]
-                cards = cards[:top_k]
+                cards = kb_demote_store.apply_demotes(cards, top_k)[:top_k]
 
         if domain == "compat":
             cards = _label_own_game_tips(conn, cards)

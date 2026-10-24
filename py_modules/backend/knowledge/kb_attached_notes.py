@@ -73,8 +73,9 @@ def _kb_note_source_host(url: str) -> str:
 
 def _match_attached_id(
     ids: list[dict[str, Any]], used: set[int], position: int, name: str, kind: str
-) -> int:
-    """The library id of the parsed note at ``position``, or 0 when none can be told apart.
+) -> tuple[int, bool]:
+    """The library id, and whether the person ranked it lower, of the parsed note at
+    ``position``; (0, False) when none can be told apart.
 
     Matched by name and by tip-or-note, with the position only breaking a tie, because a
     follow-up turn can drop a runner-up note from the text and slide everything after it up.
@@ -90,8 +91,8 @@ def _match_attached_id(
         entry = ids[i]
         if entry.get("name") == name and entry.get("kind") == wanted:
             used.add(i)
-            return int(entry.get("section_id") or 0)
-    return 0
+            return int(entry.get("section_id") or 0), entry.get("demoted") is True
+    return 0, False
 
 
 def _parse_kb_attached_notes(
@@ -112,7 +113,7 @@ def _parse_kb_attached_notes(
 
     ``attached_ids`` (retrieval's `KnowledgeRetrievalResult.attached_ids`) gives each entry its
     `section_id`; with none given an entry reads 0, "unknown". Every entry also carries
-    `demoted`, False until the demote store says otherwise (kb_demote_store.py).
+    `demoted`, True when the demote store (kb_demote_store.py) holds a mark for that note or tip.
 
     ``sources`` is still used, just for what it is good for: matching a parsed card back to its
     credited URL and licence when it has one, by the same title string `_format_block` builds
@@ -171,6 +172,7 @@ def _parse_kb_attached_notes(
             game_title = m.group("game_title")
             title_key = f"{game_title} — {name}" if game_title else ""
         src = by_title.get(title_key, {})
+        section_id, demoted = _match_attached_id(ids, used_ids, len(notes), name, kind)
         notes.append(
             {
                 "name": name,
@@ -181,8 +183,8 @@ def _parse_kb_attached_notes(
                 "source_license": str(src.get("license") or ""),
                 "domain": domain,
                 "game_title": game_title,
-                "section_id": _match_attached_id(ids, used_ids, len(notes), name, kind),
-                "demoted": False,
+                "section_id": section_id,
+                "demoted": demoted,
             }
         )
     return notes
@@ -270,12 +272,19 @@ def kb_choice_log_line(
         dropped = f"dropped_for_room={omitted.group(1)} more"
     else:
         dropped = "dropped_for_room=0"
+    # The attached notes the person has ranked lower (plan 98 lane C), "kind:number" each.
+    lowered = [
+        f"{e.get('kind')}:{e.get('section_id')}"
+        for e in (kb_result.attached_ids or [])
+        if kb_survived and e.get("demoted") is True
+    ]
     parts = [
         f"{prefix} domain={kb_domain or 'none'}",
         f"route={kb_result.notes or '-'}",
         f"method={kb_result.retrieval_method or '-'}",
         attached_part,
         dropped,
+        f"demoted={','.join(lowered) if lowered else '-'}",
     ]
     if kb_result.unavailable_reason:
         parts.append(f"unavailable={kb_result.unavailable_reason}")

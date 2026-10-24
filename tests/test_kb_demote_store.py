@@ -17,6 +17,11 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
 from backend.knowledge import kb_demote_store as store  # noqa: E402
+from backend.knowledge.knowledge_base_service import (  # noqa: E402
+    KnowledgeCard,
+    _fuse_cards_by_rrf,
+    _merge_preferred_first_demoted,
+)
 
 
 class _StoreCase(unittest.TestCase):
@@ -169,6 +174,123 @@ class DamagedFileTests(_StoreCase):
             json.dump({"version": 9, "notes": {"note:1": {"downs": 3}}}, fh)
         self.assertEqual(store.downs_for([("note", 1)]), {})
         self.assertEqual(self.read_file()["version"], 9)
+
+
+def _card(section_id, name, section_type="boss"):
+    return KnowledgeCard(
+        section_id, 0 if section_type == "tip" else 2, "Deep Rock Galactic: Survivor", section_type,
+        name, f"card {name}", "", "", None, None, "fallback_no_source",
+    )
+
+
+class RankingRuleTests(_StoreCase):
+    """The rule on a final candidate list: one or two marks go behind every unmarked card,
+    three or more are left out."""
+
+    def setUp(self):
+        super().setUp()
+        self.cards = [_card(1, "A"), _card(2, "B"), _card(3, "C"), _card(4, "D")]
+
+    def names(self, cards):
+        return [c.name for c in cards]
+
+    def test_with_nothing_marked_the_very_same_list_comes_back(self):
+        self.assertIs(store.apply_demotes(self.cards), self.cards)
+
+    def test_one_down_sends_a_card_behind_every_unmarked_one(self):
+        store.record_demote(1, "note", "wrong_tip")
+        self.assertEqual(self.names(store.apply_demotes(self.cards)), ["B", "C", "D", "A"])
+
+    def test_marked_cards_keep_their_own_order_among_themselves(self):
+        store.record_demote(2, "note", "wrong_tip")
+        store.record_demote(1, "note", "outdated")
+        store.record_demote(1, "note", "outdated")
+        self.assertEqual(self.names(store.apply_demotes(self.cards)), ["C", "D", "A", "B"])
+
+    def test_three_downs_leave_the_card_out(self):
+        for reason in ("wrong_tip", "outdated", "wrong_edition"):
+            store.record_demote(1, "note", reason)
+        self.assertEqual(self.names(store.apply_demotes(self.cards)), ["B", "C", "D"])
+
+    def test_the_window_is_the_first_top_k_after_the_left_out_cards_go(self):
+        for reason in ("wrong_tip", "outdated", "wrong_edition"):
+            store.record_demote(1, "note", reason)
+        store.record_demote(2, "note", "wrong_tip")
+        # A is gone; the first two of B C D E are B and C; B is marked so it drops behind C only.
+        cards = self.cards + [_card(5, "E")]
+        self.assertEqual(self.names(store.apply_demotes(cards, 2)), ["C", "B", "D", "E"])
+
+    def test_undo_puts_the_order_back(self):
+        store.record_demote(1, "note", "wrong_tip")
+        store.record_demote(1, "note", "wrong_tip", undo=True)
+        self.assertEqual(self.names(store.apply_demotes(self.cards)), ["A", "B", "C", "D"])
+
+    def test_a_down_on_a_tip_leaves_the_note_with_the_same_number_alone(self):
+        cards = [_card(7, "A note", "boss"), _card(7, "A tip", "tip")]
+        store.record_demote(7, "tip", "wrong_tip")
+        self.assertEqual(self.names(store.apply_demotes(cards)), ["A note", "A tip"])
+        store.record_demote(7, "note", "wrong_tip")
+        store.record_demote(7, "note", "wrong_tip")
+        store.record_demote(7, "note", "wrong_tip")
+        self.assertEqual(self.names(store.apply_demotes(cards)), ["A tip"])
+
+    def test_spare_candidates_is_zero_until_something_is_marked(self):
+        self.assertEqual(store.spare_candidates(), 0)
+        store.record_demote(1, "note", "wrong_tip")
+        self.assertGreater(store.spare_candidates(), 0)
+
+
+class RuleInsideTheRealOrderingTests(_StoreCase):
+    """The rule where it is called: the fusion of the two orderings and the keyword-only order."""
+
+    def setUp(self):
+        super().setUp()
+        self.cards = [_card(1, "A"), _card(2, "B"), _card(3, "C"), _card(4, "D")]
+
+    def fused(self, top_k):
+        return [c.name for c in _fuse_cards_by_rrf(self.cards, [1.0, 0.0], {}, top_k=top_k)]
+
+    def merged(self, top_k, topic=(), preferred=()):
+        return [
+            c.name
+            for c in _merge_preferred_first_demoted(
+                self.cards, list(topic), set(preferred), top_k=top_k
+            )
+        ]
+
+    def test_empty_store_changes_neither_order(self):
+        self.assertEqual(self.fused(2), ["A", "B"])
+        self.assertEqual(self.merged(2), ["A", "B"])
+
+    def test_a_marked_first_card_comes_last_in_both_orders(self):
+        store.record_demote(1, "note", "wrong_tip")
+        self.assertEqual(self.fused(4), ["B", "C", "D", "A"])
+        self.assertEqual(self.merged(4), ["B", "C", "D", "A"])
+
+    def test_three_downs_hand_the_place_to_the_next_candidate(self):
+        for reason in ("wrong_tip", "wrong_tip", "outdated"):
+            store.record_demote(1, "note", reason)
+        self.assertEqual(self.fused(2), ["B", "C"])
+        self.assertEqual(self.merged(2), ["B", "C"])
+
+    def test_a_marked_card_goes_last_among_those_that_attach_not_off_the_end(self):
+        """The long tail of weak candidates must not swallow a lowered note: with room for two,
+        a marked first card still attaches, last. (The Deck check: "last among the attached".)"""
+        store.record_demote(1, "note", "wrong_tip")
+        self.assertEqual(self.fused(2), ["B", "A"])
+        self.assertEqual(self.merged(2), ["B", "A"])
+
+    def test_undo_restores_both_orders(self):
+        store.record_demote(1, "note", "wrong_tip")
+        store.record_demote(1, "note", "wrong_tip", undo=True)
+        self.assertEqual(self.fused(3), ["A", "B", "C"])
+        self.assertEqual(self.merged(3), ["A", "B", "C"])
+
+    def test_the_keyword_only_order_looks_past_a_cut_card_into_the_topic_tips(self):
+        tip = _card(9, "Topic tip", "tip")
+        for reason in ("wrong_tip", "wrong_tip", "outdated"):
+            store.record_demote(2, "note", reason)
+        self.assertEqual(self.merged(3, topic=[tip], preferred=[9]), ["Topic tip", "A", "C"])
 
 
 if __name__ == "__main__":

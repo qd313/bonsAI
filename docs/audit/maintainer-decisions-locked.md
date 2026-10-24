@@ -2409,6 +2409,25 @@ Asked by the planning chat for [plan 97](../../../bonsAI-workshop/planning/97-bu
 9. **Standing rules while away:** a fix that fails on the Deck twice moves up one model tier without asking; a new one- or two-star bug gets one helper round of about an hour; anything blocked gets the safest choice at once and is raised in the chat and the plan at that moment (the maintainer checks in remotely and is not relying on phone notifications), so they can approve the best fix rather than the cautious one.
 10. **The one running the session is Opus 5.5 at high** (the routing table says extra-high for whoever lands; the maintainer chose high for this session).
 
+### D135 — LOCKED 2026-10-22 (raised 2026-10-22) — Plan 98, the knowledge-base feature wave with a Deck test wave: the fourteen calls
+
+Asked by the planning chat for [plan 98](../planning/98-kb-feature-wave-and-deck-test-wave.md) (its section 2), answered the same day. Number 135 was reserved by the planning chat; D136 (plan 99) was written after it.
+
+1. **Scope.** As listed in the plan: the glossary words for every game, the spoiler tiers setting, the thumbs-down demote in the drawn option, the route look for the strategy checklist, the screenshot scoring set (step 1 only), the four owed measurements, the wrong-subject-notes family with a second opinion first, and every owed knowledge-base Deck row the rig can reach. "Suggest as a tip", new notes for the four thin games, the online and versus content, the catalog phase, the screenshot improvements (step 2) and the card style pass stay out.
+2. **Order.** Settled by events: 0.6.0 was merged to main and released on 2026-10-24, before this wave started. The maintainer said go the same day ("Let's implement plan 98", on `experimental`).
+3. **The wrong-subject notes bug.** In, with the stronger model's second opinion naming the cause and the one fix shape first. Hard rule: on the 287 fixture questions with a known right note, no right note may be lost and the "No close match" line may not appear on any of them.
+4. **The "Install seed knowledge base" button.** Kept this session, with its stale "not live yet" text changed to "Install the library built with this plugin (for testing)". It is retired in a later session, once a replacement route exists.
+5. **Spoiler tiers.** Three tiers as in D50, as a three-way choice row in Settings under Story spoilers, named "Hide more", "Default" and "Hide less". Naming a boss still unlocks it in every tier.
+6. **Thumbs-down.** Both as recommended: three new reasons (Wrong tip, Outdated, Wrong edition), "Which note was it?" when two or three notes were used, three downs to exclude a note, an Undo on the confirmation line, and a "ranked lower by you" tag in Show details.
+7. **The route look.** Every checklist with three or more steps gets it.
+8. **The screenshot set.** Yes: about an hour of Deck time, 20 to 30 pictures from the games on the Recent Games row, scored on the PC with the Deck's own picture model. Numbers only; nothing in the answer changes.
+9. **The answer test with the character voice on.** The preset is Ali G (`alig_ali_g`), the maintainer's own pick for the same measurement on 2026-09-06 (D80, item 2), instead of the first in the list.
+10. **Second opinions.** At most five consults of the stronger model.
+11. **Two Deck rows closed by a call.** Both as recommended. The notes block's chip-ladder row is retired, because notes blocks carry no chip ladder by design now. The Palworld and Skyrim spoiler-box half of the new-games row closes as proven by its tests only, because the AI wrote no hidden block in two tries each.
+12. **Push and publish.** Left to the maintainer. The session pushes nothing; the maintainer says "push" when back, and runs the library publish after reading the glossary sample in the report.
+13. **Standing rules while away.** Kept from plan 97: a fix that fails on the Deck twice moves up one model tier without asking; a new one- or two-star bug gets one helper round of about an hour; anything blocked gets the safest choice at once and is raised in the chat and in the plan at that moment; never push, publish, merge to main, switch branches in the shared folder, type a PIN or password, or reload the plugin with a game running.
+14. **Budget line.** Kept: no new helper past 75 percent of the five-hour window or 80 percent of the week (D128). The usage figures were not read at go (the maintainer was not asked yet); the 75 and 80 percent lines stand.
+
 ### D136 — LOCKED 2026-10-22 (raised 2026-10-22) — Plan 99, the 0.6.0 release: the thirteen calls
 
 Asked by the planning chat for [plan 99](../planning/99-merge-to-main-and-the-0-6-0-release.md) (its section 2), answered the same day: the maintainer took every lean. Number 136 because the plan 98 chat reserved 135.

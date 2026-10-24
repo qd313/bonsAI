@@ -35,6 +35,15 @@ const STOP_SELECTOR = "[tabindex], button, input";
 /** Sections that are one row of buttons: the ring enters on the first button from above and from below. */
 const FIRST_BUTTON_BOTH_WAYS: ReadonlySet<SettingsSectionId> = new Set(["screenshot", "textsize"]);
 
+/**
+ * Sections whose last row is a row of buttons: coming up from the line below, the ring enters on that row's first
+ * button (the way the single-row sections enter on theirs), not on the far end of the row. The value is the row's
+ * own marker, read inside the section body only.
+ */
+const FIRST_BUTTON_OF_LAST_ROW: Readonly<Partial<Record<SettingsSectionId, string>>> = {
+  spoilers: '[data-bonsai-spoiler-tier-row="true"]',
+};
+
 /** The stops inside `host`, top to bottom: the innermost matches only. */
 function stopsIn(host: HTMLElement): HTMLElement[] {
   // focus-patterns-allow: element-scoped query on the section body's own ref, the sanctioned pattern (useOllamaTabFocus.ts).
@@ -43,10 +52,14 @@ function stopsIn(host: HTMLElement): HTMLElement[] {
   return all.filter((el) => !el.querySelector(STOP_SELECTOR));
 }
 
-function focusStop(host: HTMLElement | null | undefined, last: boolean): boolean {
+function focusStop(host: HTMLElement | null | undefined, last: boolean, lastRow?: string): boolean {
   if (!host) return false;
   const stops = stopsIn(host);
-  const target = last ? stops[stops.length - 1] : stops[0];
+  // A section ending in a row of buttons enters on that row's first button from below.
+  // focus-patterns-allow: element-scoped query on the section body's own ref, the sanctioned pattern (useOllamaTabFocus.ts).
+  const row = lastRow && last ? host.querySelector<HTMLElement>(lastRow) : null;
+  const inRow = row ? stops.filter((el) => row.contains(el)) : [];
+  const target = inRow.length ? inRow[0] : last ? stops[stops.length - 1] : stops[0];
   if (!target) return false;
   return plainHop(target, last ? "settings-line-up-into-section" : "settings-line-down", () => focusInTabBody(target));
 }
@@ -74,7 +87,7 @@ export function useSettingsTabFocus() {
       settingsSectionIds().map((id) => ({
         id,
         enterFromTop: () => focusStop(hosts.current.get(id), false),
-        enterFromBottom: () => focusStop(hosts.current.get(id), !FIRST_BUTTON_BOTH_WAYS.has(id)),
+        enterFromBottom: () => focusStop(hosts.current.get(id), !FIRST_BUTTON_BOTH_WAYS.has(id), FIRST_BUTTON_OF_LAST_ROW[id]),
       })),
     [],
   );

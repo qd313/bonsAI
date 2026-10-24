@@ -84,4 +84,35 @@ describe("Settings tab walk with the spoiler tier row", () => {
     act(() => void toggle.__nav?.onMoveUp?.());
     expect(steamRingHolder()?.getAttribute("data-bonsai-fold-line")).toBe("spoilers");
   });
+
+  it("Up from the next line into the open section lands on Hide more, the row's first button, as Down from its line lands on the switch", () => {
+    const { container } = render(<SettingsTab {...settingsProps()} />);
+    const line = (id: string) => container.querySelector<SteamEl>(`[data-bonsai-fold-line="${id}"]`)!;
+    act(() => putSteamRingOn(line("chips")));
+    act(() => void line("chips").__nav?.onMoveUp?.());
+    expect(document.activeElement?.getAttribute("aria-label")).toBe("Set spoiler tier to Hide more");
+    expect(document.activeElement?.closest('[data-bonsai-spoiler-tier-row="true"]')).not.toBeNull();
+
+    act(() => putSteamRingOn(line("spoilers")));
+    act(() => void line("spoilers").__nav?.onMoveDown?.());
+    expect(document.activeElement?.getAttribute("aria-label")).toBe("Hide spoilers until I tap");
+  });
+
+  it("a round trip, Up into the section, Left and Right along the row's own stops, Down out, lands on no stop twice", () => {
+    const { container } = render(<SettingsTab {...settingsProps()} />);
+    const line = (id: string) => container.querySelector<SteamEl>(`[data-bonsai-fold-line="${id}"]`)!;
+    const landed: Element[] = [];
+    act(() => putSteamRingOn(line("chips")));
+    act(() => void line("chips").__nav?.onMoveUp?.());
+    landed.push(document.activeElement!);
+    const row = container.querySelector<SteamEl>('[data-bonsai-spoiler-tier-row="true"]')!;
+    const buttons = Array.from(row.querySelectorAll<HTMLElement>("button"));
+    expect(landed[0]).toBe(buttons[0]);
+    /* Right is Steam's own step along the row: the next stop in drawing order. */
+    landed.push(buttons[1]!, buttons[2]!);
+    act(() => putSteamRingOn(buttons[2]!));
+    act(() => void row.__nav?.onMoveDown?.());
+    expect(steamRingHolder()?.getAttribute("data-bonsai-fold-line")).toBe("chips");
+    expect(new Set(landed).size).toBe(landed.length);
+  });
 });

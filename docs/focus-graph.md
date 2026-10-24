@@ -126,15 +126,18 @@ Suggestion chips                      <- the next section's line
   Clear pair do: the switch has `onMoveUp` (to the section's line) and the tier row has `onMoveDown` (to the next
   line). The one step between the two rows, in both directions, is Steam's own along the column's flow. Left and
   Right are Steam's own too: the row and its buttons carry no `onMoveLeft` / `onMoveRight`.
-- **Known rough edge:** Up from the next line into this open section lands on the last stop (Hide less), not on
-  Hide more, because `useSettingsTabFocus.ts` enters a section by its last stop from below (only the single-row
-  Screenshot and Text size sections enter on their first button).
+- **Entering the section:** Down from its line lands on the switch (the first stop). Up from the next line lands on
+  Hide more, the tier row's first button, not on the far end of the row: `useSettingsTabFocus.ts` enters most
+  sections by their last stop from below, so this one has a marker entry (`FIRST_BUTTON_OF_LAST_ROW`) that picks
+  the first stop inside the row. Screenshot quality and Text size, being one row each, already enter on their
+  first button.
 - **A** saves the pick; the saved one is drawn with the lighter fill and `aria-pressed`. Nothing reloads.
 - **Driver handles:** `[data-bonsai-spoiler-tier-row="true"]`; the buttons' names are "Set spoiler tier to Hide more" /
   "... Default" / "... Hide less"; the row's strip words are `data-bonsai-help-label="How much to hide"`.
 - **Tests:** `SettingsTab.spoilerTierWalk.test.tsx` (stops in order, none twice, the two end handlers, nothing for
   Left or Right), `SettingsTab.folded.test.tsx` (the two ends) and `SettingsTab.foldedWalk.test.tsx` (the bounded
-  Down and Up walks under Steam's three scroll rules, with the row in them). jsdom has no spatial walk, so the Deck
+  Down and Up walks under Steam's three scroll rules, with the row in them). The walk test also covers Up into the
+  section (lands on Hide more), Down out of it, and a round trip with no stop twice. jsdom has no spatial walk, so the Deck
   walk (Down into the section, Left and Right along the three, Down out) is the real check.
 
 ### The two-button confirm box (plan 96, 2026-10-18)

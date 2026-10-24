@@ -52,6 +52,8 @@ const ROUTE = {
 } as const;
 const DOT_PX = 12;
 const DOT_TOP_PX = 2;
+/** The check inside a ticked dot: the dot is a fixed 12 px, so its mark stays fixed too, like an icon. */
+const ROUTE_DOT_CHECK_PX = 8;
 /** The step's own frame: 1 px border and 4 px / 8 px padding; the line runs from under one dot to the next. */
 const STEP_PAD_TOP = 4;
 const STEP_PAD_LEFT = 8;
@@ -69,7 +71,7 @@ const DOT_BASE: CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
-  fontSize: 8,
+  fontSize: ROUTE_DOT_CHECK_PX,
   fontWeight: 700,
   lineHeight: 1,
   color: ROUTE.hollow,

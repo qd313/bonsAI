@@ -133,7 +133,6 @@ import {
 } from "../../../shared/constants";
 import { buildLiveReasoningSteps, buildReasoningFold } from "../reasoning/buildReasoningFoldElement";
 import { getUiDocument, uiGamepadFocusElement } from "../../../shared/dpad/uiDocument";
-import { answerWithoutContradictedCloseMatchLine as closeMatchAgrees } from "../../knowledge-library/kbCloseMatchLineAgrees";
 import {
   buildKbNotesBlockElement,
   kbAttachedNotesFrom,
@@ -189,7 +188,7 @@ import type {
   StrategyChecklistState,
 } from "../../../types/bonsaiUi";
 import { ThinkingSpinnerIcon } from "../../../shared/icons/icons";
-import type { KbAttachedNote, TransparencySnapshot } from "../../../types/inputTransparency";
+import type { TransparencySnapshot } from "../../../types/inputTransparency";
 import { useStreamScrollPin } from "../stream/useStreamScrollPin";
 import { turnPiece, useLiveTurnTwin } from "./useLiveTurnTwin";
 import type { AskModeId } from "../../ask/bar/askMode";
@@ -869,12 +868,12 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     streaming: boolean,
     answerKey: string,
     facts: TurnSpoilerFacts,
-    /* The turn's attached notes: the "No close match" line comes off an answer that used one. */
-    notes: KbAttachedNote[] = [],
     /* Where this turn's tap-to-define words are kept; its game's id when one ran (see glossaryKeyForTurn). */
     glossaryKey = "") =>
     buildAnswerBubbleElement({
-      body: streaming ? body : closeMatchAgrees(body, facts.askQuestion, notes),
+      /* The answer as saved, footers included: the "No close match" line shows even beside a notes block
+         (plan 98 consult 1; the back end now adds it only when the question names a thing no note mentions). */
+      body,
       streaming,
       spoilerMaskingEnabled: strategySpoilerMaskingEnabled,
       spoilerDefaultExpanded:
@@ -900,7 +899,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       getAnswerCopyText:
         !streaming && body.trim() && !isStopNoticeResponse(body)
           ? () =>
-              buildAnswerCopyText({ body: closeMatchAgrees(body, facts.askQuestion, notes), spoilerMaskingEnabled: strategySpoilerMaskingEnabled, ...facts })
+              buildAnswerCopyText({ body, spoilerMaskingEnabled: strategySpoilerMaskingEnabled, ...facts })
           : undefined,
       /* Under an answer still writing: the notes block, an open details panel, then the dock (plan 93). The
          same chain as the reply row's Down past it, which is not drawn until the answer finishes. */
@@ -1245,7 +1244,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 turnPiece("summary-warning", buildChatSummaryWarningElement(turn.chatSummary)),
                 turnPiece("notes-read", buildNotesReadLine(turn.id, archivedTransparencyFor(turn, turnIndex))),
                 turnPiece("fold", renderReasoningFold(turn.id, turn.reasoning)),
-                turnPiece("bubble", renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex), kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)), turnGlossaryKeys[turnIndex])),
+                turnPiece("bubble", renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex), turnGlossaryKeys[turnIndex])),
                 turnPiece("summary-note", buildChatSummaryNoteElement({
                   turnKey: turn.id,
                   chatSummary: turn.chatSummary,
@@ -1499,7 +1498,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   isStreamingPreview,
                   "live",
                   liveSpoilerFacts,
-                  liveKbNotes,
                   liveGlossaryKey
                 )
               : null),

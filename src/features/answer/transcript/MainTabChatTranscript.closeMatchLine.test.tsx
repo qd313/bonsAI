@@ -1,13 +1,15 @@
 /**
- * Title: The "No close match" line and the "From the notes" block agree
- * Purpose: Pin the screen-level promise behind the 2026-10-08 Deck report ("No close match in my
- *          notes" under an answer whose log said notes were attached): under one answer the
- *          "No close match" line and the gold notes block are never both on screen. A note the
- *          answer used means the line is false and is left off; no note used means the line
- *          stays and no block shows. Every case is a real saved turn from the fixtures file the
- *          notes-block rule is tested on (question, answer and attached notes word for word), so
- *          the shape is the one the back end actually emits.
- * Used for: MainTabChatTranscript.tsx and kbCloseMatchLineAgrees.ts.
+ * Title: The "No close match" line is never taken off the screen
+ * Purpose: Pin that an answer the back end saved with its "No close match in my notes" line shows
+ *          that line, even when the answer's words echo an attached note and the gold notes block
+ *          shows under it (plan 98, consult 1). The screen used to delete the line in that case
+ *          (plan 87 K1), which hid the warning exactly when the AI had built an answer on a wrong
+ *          note (the made-up "Bone Hydra" in Hades). The back end now adds the line only when the
+ *          question names a thing no attached note mentions (plan 98 lane L), and a block and the
+ *          line on the same reply is allowed (the maintainer's call, 2026-09-07). Every case is a
+ *          real saved turn from the fixtures file the notes-block rule is tested on (question,
+ *          answer and attached notes word for word), so the shape is the one the back end emits.
+ * Used for: MainTabChatTranscript.tsx.
  * Does not: Decide whether the back end should add the line (that is kb_not_in_notes_notice.py)
  *           or judge an answer. It renders the transcript the way the Deck does and reads what is
  *           on the page.
@@ -86,21 +88,21 @@ function screenOf(turn: AskThreadCollapsedTurn) {
   };
 }
 
-describe("the line and the notes block never share an answer", () => {
-  it("answer used a note (shotgun answered from the Gravity Gun note): block shows, line is left off", () => {
+describe("a saved answer shows its No close match line, whatever the notes block shows", () => {
+  it("answer echoes an attached note (shotgun answered from the Gravity Gun note): block and line both show", () => {
     const c = fixture("the shotgun question");
     expect(c.answer).toContain(LINE); // the saved answer really carries the footer
     const screen = screenOf(archivedTurn(c.question, c.answer, c.notes));
     expect(screen.hasBlock).toBe(true);
-    expect(screen.hasLine).toBe(false);
+    expect(screen.hasLine).toBe(true);
   });
 
-  it("answer named the boss the question only described (Broken Vessel): block shows, line is left off", () => {
+  it("answer named the boss the question only described (Broken Vessel): block and line both show", () => {
     const c = fixture("the boss past the crystal spike area");
     expect(c.answer).toContain(LINE);
     const screen = screenOf(archivedTurn(c.question, c.answer, c.notes));
     expect(screen.hasBlock).toBe(true);
-    expect(screen.hasLine).toBe(false);
+    expect(screen.hasLine).toBe(true);
   });
 
   it("notes attached but none used (the 2026-10-08 Deck case): line stays, no block", () => {
@@ -131,7 +133,7 @@ describe("the line and the notes block never share an answer", () => {
   });
 });
 
-describe("the newest answer (the live slot) follows the same rule", () => {
+describe("the newest answer (the live slot) shows the line the same way", () => {
   function liveScreen(question: string, answer: string, notes: Partial<KbAttachedNote>[]) {
     const { container } = render(
       <MainTabChatTranscript
@@ -151,9 +153,9 @@ describe("the newest answer (the live slot) follows the same rule", () => {
     };
   }
 
-  it("leaves the line off a finished answer that used a note, and the block shows", () => {
+  it("keeps the line on a finished answer that echoes a note, and the block shows too", () => {
     const c = fixture("the shotgun question");
-    expect(liveScreen(c.question, c.answer, c.notes)).toEqual({ hasLine: false, hasBlock: true });
+    expect(liveScreen(c.question, c.answer, c.notes)).toEqual({ hasLine: true, hasBlock: true });
   });
 
   it("keeps the line on a finished answer that used none, and no block shows", () => {

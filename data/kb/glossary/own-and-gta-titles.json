@@ -817,5 +817,68 @@
     "alt_forms": [],
     "peek": "How companions react to what you do and say in front of them.",
     "full_text": "Companions react to what you do and say in front of them, not to gifts. Approval gates their personal quests and any romance, and low approval can end with them leaving."
+  },
+  {
+    "term_id": 2950,
+    "app_id": "2321470",
+    "term_key": "nitra",
+    "term": "Nitra",
+    "alt_forms": [],
+    "peek": "The resource that pays for weapons rather than for your dwarf.",
+    "full_text": "Nitra buys weapon upgrade cards at the between-stage shop and rerolls the artifact choice from the Supply Pod. With no nitra a weapon stays underleveled however much gold you mined, so keep mining it for whichever weapon carries the run."
+  },
+  {
+    "term_id": 2951,
+    "app_id": "2321470",
+    "term_key": "red-sugar",
+    "term": "Red Sugar",
+    "alt_forms": [],
+    "peek": "Glowing red crystals in the cave walls, mined for an instant heal.",
+    "full_text": "Red Sugar is the glowing red crystals in the cave walls, mined for an instant heal. It is the only healing during a stage apart from the gold heal at the shop between stages, and it cannot be banked."
+  },
+  {
+    "term_id": 2952,
+    "app_id": "2321470",
+    "term_key": "gold",
+    "term": "Gold",
+    "alt_forms": [],
+    "peek": "The general currency, mined from the walls and dropped by lootbugs.",
+    "full_text": "Gold is the general currency, mined from the walls and dropped by lootbugs. It buys player stat upgrades between stages, rerolls shop stock and level-up cards, and pays for a fifty percent heal. There is no shop after the final stage, so gold still in hand by then only buys rerolls."
+  },
+  {
+    "term_id": 2953,
+    "app_id": "2321470",
+    "term_key": "exploder",
+    "term": "Exploder",
+    "alt_forms": ["Exploders"],
+    "peek": "Large orange glyphids that walk into you and detonate in a wide blast.",
+    "full_text": "Exploders are fragile, and their blasts chain, so one popped early clears the group behind it. Weapons fire themselves, so keep your distance and the blast lands in the swarm instead."
+  },
+  {
+    "term_id": 2954,
+    "app_id": "2321470",
+    "term_key": "praetorian",
+    "term": "Praetorian",
+    "alt_forms": ["Praetorians"],
+    "peek": "A large melee glyphid with far more health than anything else in the wave.",
+    "full_text": "A Praetorian is slow enough to kite indefinitely while the rest of the swarm is cleared. It digs through terrain to reach you, so rock is not a wall, and it is worth picking the exit lane before it arrives."
+  },
+  {
+    "term_id": 2955,
+    "app_id": "2321470",
+    "term_key": "acid-spitter",
+    "term": "Acid Spitter",
+    "alt_forms": ["Acid Spitters", "Spitters"],
+    "peek": "Ranged glyphids that fire purple acid and back away instead of closing in.",
+    "full_text": "Acid Spitters hold a medium distance, fire purple acid and back away instead of closing in. They are fragile and retreat rather than fight, so walking at them is what kills them, and orbiting a swarm only drags you through their fire."
+  },
+  {
+    "term_id": 2956,
+    "app_id": "2321470",
+    "term_key": "mactera",
+    "term": "Mactera",
+    "alt_forms": [],
+    "peek": "Flying enemies that cross walls, vines and voids as if the terrain were not there.",
+    "full_text": "The common Mactera drift rather than hunt and can be walked around, but the elites chase you. Mining a pocket does nothing against them, so no dug corridor is safe while Mactera are up."
   }
 ]

@@ -397,16 +397,22 @@ STARTING_OUT_KIND = "starting_out"
 _STARTING_OUT_NAME_PREFIX = "Starting out in"
 
 
-def mistyped_starting_out_rows(sections: list[dict]) -> list[str]:
+def _row_name_with_file(row: dict, origin: str | None) -> str:
+    name = str(row.get("name") or f"section {row.get('section_id')}")
+    return name if origin in (None, SEED_LABEL) else f"{name} [{origin}]"
+
+
+def mistyped_starting_out_rows(sections: list[dict], origins: list[str] | None = None) -> list[str]:
     """Names of rows called "Starting out in ..." that are not typed ``starting_out`` (D65).
 
     Helpers writing a new game's notes may still file these as `mechanic` (the kind
     `starting_out` replaces) while this lands elsewhere -- this check catches any left that
     way before the corpus builds, so a re-typing pass is never skipped by accident.
     """
+    labels = origins or [None] * len(sections)
     return sorted(
-        str(s.get("name") or f"section {s.get('section_id')}")
-        for s in sections
+        _row_name_with_file(s, o)
+        for s, o in zip(sections, labels)
         if str(s.get("name") or "").startswith(_STARTING_OUT_NAME_PREFIX)
         and str(s.get("section_type") or "") != STARTING_OUT_KIND
     )
@@ -571,13 +577,61 @@ def _seed_glossary_terms(conn: sqlite3.Connection) -> int:
     return len(rows)
 
 
+SEED_LABEL = "strategy_seed.json"
+_NOTES_LISTS = ("games", "aliases", "sections")
+
+
+def _merged_strategy_data(path: Path) -> tuple[dict, dict[str, list[str]]]:
+    """The seed plus every data/kb/notes/*.json file, and where each merged row came from.
+
+    A notes file is an object with optional ``games``, ``aliases`` and ``sections`` lists, added
+    after the seed's own. The second value maps each list name to one file label per row.
+    """
+    data = _load_json(path)
+    origins = {name: [SEED_LABEL] * len(data.get(name) or []) for name in _NOTES_LISTS}
+    for note_path in _folder_json_files(KB_DATA_DIR / "notes"):
+        label = f"notes/{note_path.name}"
+        extra = _load_json(note_path)
+        if not isinstance(extra, dict):
+            raise SystemExit(f"{label}: the file must be an object with games, aliases and sections lists")
+        for name in _NOTES_LISTS:
+            rows = extra.get(name) or []
+            if not isinstance(rows, list):
+                raise SystemExit(f"{label}: {name} must be a list")
+            data[name] = [*(data.get(name) or []), *rows]
+            origins[name] += [label] * len(rows)
+    return data, origins
+
+
+def load_strategy_seed() -> dict:
+    """The merged strategy seed (seed file, then data/kb/notes/), the way the build reads it."""
+    path = KB_DATA_DIR / SEED_LABEL
+    return _merged_strategy_data(path)[0] if path.is_file() else {}
+
+
+def _repeated_id_problems(rows: list[dict], origins: list[str], field: str, what: str) -> list[str]:
+    seen: dict[Any, str] = {}
+    problems: list[str] = []
+    for row, origin in zip(rows, origins):
+        key = row.get(field)
+        if key in seen:
+            problems.append(f"{what} {field} {key} is in {seen[key]} and again in {origin}")
+        seen.setdefault(key, origin)
+    return problems
+
+
 def _seed_strategy_corpus(conn: sqlite3.Connection) -> None:
-    path = KB_DATA_DIR / "strategy_seed.json"
+    path = KB_DATA_DIR / SEED_LABEL
     if not path.is_file():
         seed_sample_corpus_legacy(conn)
         return
-    data = _load_json(path)
+    data, origins = _merged_strategy_data(path)
     games = data.get("games") or []
+    repeats = _repeated_id_problems(games, origins["games"], "game_id", "game") + _repeated_id_problems(
+        data.get("sections") or [], origins["sections"], "section_id", "section"
+    )
+    if repeats:
+        raise SystemExit(f"{SEED_LABEL}: " + "; ".join(repeats))
     conn.executemany(
         "INSERT INTO games(game_id, app_id, igdb_id, canonical_title, edition, platform, genres) "
         "VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -607,8 +661,8 @@ def _seed_strategy_corpus(conn: sqlite3.Connection) -> None:
     # date on every rebuild, which is exactly the staleness the reader needs to see -- and it
     # would make the corpus unreproducible, since the bytes would change on every build.
     undated = sorted(
-        str(s.get("name") or f"section {s.get('section_id')}")
-        for s in sections
+        _row_name_with_file(s, o)
+        for s, o in zip(sections, origins["sections"])
         if str(s.get("source_url") or "").strip() and not str(s.get("crawled_at") or "").strip()
     )
     if undated:
@@ -616,7 +670,7 @@ def _seed_strategy_corpus(conn: sqlite3.Connection) -> None:
             "strategy_seed.json: these rows cite a source_url but no crawled_at, so their "
             "capture date cannot be attributed: " + ", ".join(undated)
         )
-    mistyped = mistyped_starting_out_rows(sections)
+    mistyped = mistyped_starting_out_rows(sections, origins["sections"])
     if mistyped:
         raise SystemExit(
             "strategy_seed.json: these rows are named \"Starting out in ...\" but are not "

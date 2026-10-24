@@ -178,5 +178,112 @@ class GlossaryGameIdTests(_FolderBase):
         self.assertEqual(len(self._seed().execute("SELECT * FROM glossary_terms").fetchall()), 2)
 
 
+def _note(section_id: int, game_id: int = 1, **overrides) -> dict:
+    row = {
+        "section_id": section_id,
+        "game_id": game_id,
+        "section_type": "boss",
+        "name": f"Extra {section_id}",
+        "card": f"Extra card {section_id}.",
+        "source_url": "",
+        "source_license": "bonsAI-maintainer",
+    }
+    row.update(overrides)
+    return row
+
+
+class NotesFolderTests(_FolderBase):
+    def _refused(self, payload: dict, rel: str = "notes/a.json") -> str:
+        self._write(rel, payload)
+        with self.assertRaises(SystemExit) as ctx:
+            self._seed()
+        return str(ctx.exception)
+
+    def test_a_notes_file_adds_its_sections_games_and_aliases(self):
+        self._write(
+            "notes/a.json",
+            {
+                "games": [{"game_id": 9, "app_id": "777", "canonical_title": "New", "platform": "PC"}],
+                "aliases": [{"alias": "newgame", "game_id": 9}],
+                "sections": [_note(10, game_id=9)],
+            },
+        )
+        conn = self._seed()
+        self.assertEqual(conn.execute("SELECT name, game_id FROM sections WHERE section_id = 10").fetchall(), [("Extra 10", 9)])
+        self.assertEqual(conn.execute("SELECT game_id FROM aliases WHERE alias_normalized = 'newgame'").fetchall(), [(9,)])
+        self.assertEqual(conn.execute("SELECT COUNT(*) FROM sections").fetchone()[0], 3)
+
+    def test_a_missing_notes_folder_changes_nothing(self):
+        self.assertEqual(self._seed().execute("SELECT COUNT(*) FROM sections").fetchone()[0], 2)
+
+    def test_a_sources_file_in_notes_is_skipped(self):
+        self._write("notes/a.json", {"sections": [_note(10)]})
+        self._write("notes/a.sources.json", ["not", "an", "object"])
+        self.assertEqual(self._seed().execute("SELECT COUNT(*) FROM sections").fetchone()[0], 3)
+
+    def test_a_repeated_section_id_names_both_files(self):
+        message = self._refused({"sections": [_note(1)]})
+        self.assertIn("section_id 1", message)
+        self.assertIn("strategy_seed.json", message)
+        self.assertIn("notes/a.json", message)
+
+    def test_a_cited_source_without_a_capture_date_names_the_file(self):
+        message = self._refused({"sections": [_note(10, source_url="https://example.org/x")]})
+        self.assertIn("crawled_at", message)
+        self.assertIn("Extra 10 [notes/a.json]", message)
+
+    def test_a_mistyped_starting_out_row_names_the_file(self):
+        message = self._refused({"sections": [_note(10, name="Starting out in Foo", section_type="mechanic")]})
+        self.assertIn("Starting out in Foo [notes/a.json]", message)
+
+    def test_a_notes_file_that_is_not_an_object_names_itself(self):
+        self.assertIn("notes/a.json", self._refused([1, 2]))
+
+    def test_a_good_notes_file_with_dated_source_is_not_refused(self):
+        self._write(
+            "notes/a.json",
+            {"sections": [_note(10, source_url="https://example.org/x", crawled_at="2026-01-01")]},
+        )
+        self._seed()
+
+    def test_the_shared_loader_returns_the_merged_seed(self):
+        self._write("notes/a.json", {"sections": [_note(10)]})
+        self.assertEqual([s["section_id"] for s in build_rag_db.load_strategy_seed()["sections"]], [1, 2, 10])
+
+
+class MergedBuildTests(_FolderBase):
+    def setUp(self):
+        super().setUp()
+        self._orig_tags = build_rag_db._list_installed_ollama_tags
+        self._orig_embed = build_rag_db._embed_texts_build
+        build_rag_db._list_installed_ollama_tags = lambda *a, **k: [build_rag_db.DEFAULT_EMBEDDING_MODEL]
+        dim = build_rag_db.DEFAULT_EMBEDDING_DIM
+        build_rag_db._embed_texts_build = lambda base_http, texts, *, model, timeout_s: [[0.0] * dim for _ in texts]
+        extra = _word(1, game_id=7)
+        del extra["app_id"]
+        self._write("glossary/a.json", [extra])
+        self._write("notes/a.json", {"sections": [_note(10, game_id=7)]})
+
+    def tearDown(self):
+        build_rag_db._list_installed_ollama_tags = self._orig_tags
+        build_rag_db._embed_texts_build = self._orig_embed
+        super().tearDown()
+
+    def test_the_library_holds_the_extra_word_and_note(self):
+        out = Path(self._tmp.name) / "out"
+        build_rag_db.build_corpus(out, seed=True)
+        conn = sqlite3.connect(str(out / "corpus.db"))
+        try:
+            self.assertEqual(conn.execute("SELECT game_id, term_key FROM glossary_terms").fetchall(), [(7, "word1")])
+            self.assertEqual(conn.execute("SELECT game_id FROM sections WHERE section_id = 10").fetchall(), [(7,)])
+        finally:
+            conn.close()
+
+    def test_the_same_merged_build_twice_is_byte_identical(self):
+        first = build_rag_db.build_corpus(Path(self._tmp.name) / "out1", seed=True)
+        second = build_rag_db.build_corpus(Path(self._tmp.name) / "out2", seed=True)
+        self.assertEqual(first["db_sha256"], second["db_sha256"])
+
+
 if __name__ == "__main__":
     unittest.main()

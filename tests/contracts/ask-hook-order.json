@@ -1,5 +1,5 @@
 {
-  "_note": "The order the Ask hook's hooks run in, with each extracted sub-hook spliced in where it is called. React matches hooks by position, so this order must not change when a block is lifted into a hook of its own. Recorded 2026-09-14, updated 2026-09-15, updated 2026-09-17 for the new kbAttachedNotes useState (plan 58 phase 1, right after liveReasoning), updated 2026-09-28 for the ref and callback that give a chat opened from disk its newest answer back as the last exchange (plan 76 lane 4; the ref is first and the callback last in useAskSessionSnapshotActions; the hooks after them only shift down, and every render runs the same list). Asserted by tests/test_ask_hook_order.py.",
+  "_note": "The order the Ask hook's hooks run in, with each extracted sub-hook spliced in where it is called. React matches hooks by position, so this order must not change when a block is lifted into a hook of its own. Recorded 2026-09-14, updated 2026-09-15, updated 2026-09-17 for the new kbAttachedNotes useState (plan 58 phase 1, right after liveReasoning), updated 2026-09-28 for the ref and callback that give a chat opened from disk its newest answer back as the last exchange (plan 76 lane 4; the ref is first and the callback last in useAskSessionSnapshotActions; the hooks after them only shift down, and every render runs the same list), updated 2026-10-24 for the thumbs-down rows' state in useReplyFeedbackChips (plan 98 lane D: a useState and two useRefs after liveReplyChipError; the hooks after them only shift down). Asserted by tests/test_ask_hook_order.py.",
   "recorded": "2026-09-17",
   "extracted_sub_hooks": [
     {
@@ -31,7 +31,7 @@
       "file": "src/features/ask/flow/useAskSessionSnapshotActions.ts"
     }
   ],
-  "count": 82,
+  "count": 93,
   "order": [
     "{ strategyChecklist, setStrategyChecklist, strategyChecklistRef, hydrateStrategyChecklistFromDisk, trackedRunningAppId, }:useStrategyChecklistSession",
     "[ollamaResponse, setOllamaResponse]:useState",
@@ -106,8 +106,13 @@
     "[liveReplyFeedbackRating, setLiveReplyFeedbackRating]:useState",
     "[liveReplyChipUsed, setLiveReplyChipUsed]:useState",
     "[liveReplyChipError, setLiveReplyChipError]:useState",
+    "[liveReplyDemote, setLiveReplyDemote]:useState",
+    "replyKeyNow:useRef",
+    "demoteNow:useRef",
     "resetReplyFeedback:useCallback",
     "(not assigned):useEffect",
+    "showDemote:useCallback",
+    "confirmDemote:useCallback",
     "onReplyFeedback:useCallback",
     "onReplyMicroAction:useCallback",
     "clearUnifiedInput:useCallback",

@@ -1,0 +1,200 @@
+[
+  {
+    "term_id": 3400,
+    "game_id": 22,
+    "term_key": "rocket-start",
+    "term": "rocket start",
+    "alt_forms": ["rocket starts"],
+    "peek": "Hold the gas as the lights change from red to blue.",
+    "full_text": "Hold the gas as the lights change from red to blue for a rocket start. Too early and you spin your tyres and leave slower than everyone."
+  },
+  {
+    "term_id": 3401,
+    "game_id": 22,
+    "term_key": "mini-turbo",
+    "term": "Mini-Turbo",
+    "alt_forms": ["mini turbo", "mini-turbos", "mini turbos"],
+    "peek": "A speed boost charged by wiggling the stick while drifting.",
+    "full_text": "Hop and hold to drift, then wiggle the stick side to side while sliding: the smoke goes white, yellow, then orange, and letting go on orange gives a mini-turbo. Later Mario Kart games make this time-based instead, so the wiggling motion is deliberate here."
+  },
+  {
+    "term_id": 3402,
+    "game_id": 22,
+    "term_key": "spiny-shell",
+    "term": "Spiny Shell",
+    "alt_forms": ["spiny shells", "blue spiny shell"],
+    "peek": "A blue shell for fourth place or lower that homes on the leader.",
+    "full_text": "The blue Spiny Shell only comes to fourth place or lower. It runs along the ground with a siren, homes on the leader, flips anyone in its path, and can be held behind your kart to block other shells before you fire it."
+  },
+  {
+    "term_id": 3403,
+    "game_id": 22,
+    "term_key": "fake-item-box",
+    "term": "Fake Item Box",
+    "alt_forms": ["fake item boxes"],
+    "peek": "An upside-down question mark that launches whoever hits it.",
+    "full_text": "Fake Item Boxes belong to first and second place. They look like an upside-down question mark, launch whoever hits them, and block incoming shells."
+  },
+  {
+    "term_id": 3404,
+    "game_id": 22,
+    "term_key": "extra-mode",
+    "term": "Extra mode",
+    "alt_forms": ["extra class"],
+    "peek": "The reward for gold in all four cups at 150cc, with every course mirrored.",
+    "full_text": "Extra mode is the reward for earning gold in all four cups at 150cc, and it flips every course horizontally, so a corner that used to bend right now bends left. The title screen changes once it is unlocked, which is the easiest way to check you earned it."
+  },
+  {
+    "term_id": 3405,
+    "game_id": 22,
+    "term_key": "rubber-banding",
+    "term": "rubber-banding",
+    "alt_forms": ["rubber banding", "rubberbanding"],
+    "peek": "A handicap that lets computer racers recover from hits and catch back up.",
+    "full_text": "The computer racers in 150cc and Extra lean harder on rubber-banding than in the easier classes. Expect one or two of them to receive a large handicap that lets them recover from being hit and catch back up quickly, so a comfortable lead near the finish line is not as safe as it looks."
+  },
+  {
+    "term_id": 3406,
+    "game_id": 22,
+    "term_key": "bomb-kart",
+    "term": "Bomb Kart",
+    "alt_forms": ["bomb karts"],
+    "peek": "What you become in Battle Mode after losing all three balloons.",
+    "full_text": "Losing all three balloons in Battle Mode turns you into a small, remote-controlled Bomb Kart that can still be attacked and stunned by other players' items. If it collides with anyone it explodes and you are out for good."
+  },
+  {
+    "term_id": 3407,
+    "game_id": 22,
+    "term_key": "staff-ghost",
+    "term": "staff ghost",
+    "alt_forms": ["staff ghosts"],
+    "peek": "A pre-made time set by the developers on three of the courses.",
+    "full_text": "Three of the eight courses carry a staff ghost set by the developers, each raced by the character the course is themed around. They are the only pre-made times in the game; the other five courses have no staff record to chase."
+  },
+  {
+    "term_id": 3550,
+    "game_id": 21,
+    "term_key": "triple-jump",
+    "term": "triple jump",
+    "alt_forms": ["triple jumps"],
+    "peek": "The move you get by running and jumping three times.",
+    "full_text": "To triple jump, run and jump three times. It is one of the moves the game is built around, and the red Wing Cap lets you start flying from a triple jump or a cannon shot."
+  },
+  {
+    "term_id": 3551,
+    "game_id": 21,
+    "term_key": "long-jump",
+    "term": "long jump",
+    "alt_forms": ["long jumps"],
+    "peek": "Run, then crouch and jump.",
+    "full_text": "To long jump, run, then crouch and jump. It is one of the moves the game is built around, along with the triple jump, the wall kick, the backflip and the side flip."
+  },
+  {
+    "term_id": 3552,
+    "game_id": 21,
+    "term_key": "wall-kick",
+    "term": "wall kick",
+    "alt_forms": ["wall kicks"],
+    "peek": "Jump into a wall and jump again.",
+    "full_text": "To wall kick, jump into a wall and jump again. It is one of the moves the game is built around, along with the triple jump, the long jump, the backflip and the side flip."
+  },
+  {
+    "term_id": 3553,
+    "game_id": 21,
+    "term_key": "ground-pound",
+    "term": "ground pound",
+    "alt_forms": ["ground-pound", "ground-pounds", "ground pounds"],
+    "peek": "Press crouch while in the air.",
+    "full_text": "To ground-pound, press crouch in the air. It is how you hurt the Whomp King: ground-pound his back three times while he is down."
+  },
+  {
+    "term_id": 3554,
+    "game_id": 21,
+    "term_key": "power-meter",
+    "term": "power meter",
+    "alt_forms": ["power meters"],
+    "peek": "Mario's health, shown as an eight-wedge meter.",
+    "full_text": "Health is the eight-wedge power meter, refilled by coins, spinning hearts, or surfacing in water. A hit from Eyerok costs three wedges."
+  },
+  {
+    "term_id": 3555,
+    "game_id": 21,
+    "term_key": "wing-cap",
+    "term": "Wing Cap",
+    "alt_forms": [],
+    "peek": "A red cap that lets you fly.",
+    "full_text": "The red Wing Cap lets you fly from a triple jump or a cannon shot, slowly losing height. Like every cap, it only appears in courses once its switch has been hit, and it lasts sixty seconds."
+  },
+  {
+    "term_id": 3556,
+    "game_id": 21,
+    "term_key": "metal-cap",
+    "term": "Metal Cap",
+    "alt_forms": [],
+    "peek": "A green cap that makes you invulnerable and very heavy.",
+    "full_text": "The green Metal Cap makes you invulnerable and very heavy: you sink and walk along the bottom, never need to breathe, and cannot swim. A metal Mario cannot be knocked back, so wearing it before a Bully fight in Lethal Lava Land removes the fall risk."
+  },
+  {
+    "term_id": 3557,
+    "game_id": 21,
+    "term_key": "vanish-cap",
+    "term": "Vanish Cap",
+    "alt_forms": [],
+    "peek": "A blue cap that turns you into a ghost for a short time.",
+    "full_text": "The blue Vanish Cap makes you a ghost for a short time, walking through enemies and metal fences. Dire, Dire Docks is the one place you can wear metal and vanish at once."
+  },
+  {
+    "term_id": 3700,
+    "game_id": 17,
+    "term_key": "nightmare-imp",
+    "term": "nightmare imp",
+    "alt_forms": ["nightmare imps"],
+    "peek": "A fast, half-invisible imp that is new to Doom 64.",
+    "full_text": "The nightmare imp is a translucent blue-purple imp, twice as fast as the ordinary kind, and it throws purple fireballs that fly twice as fast too. It is still an imp in health, so the shotgun handles it; the danger is the pack and the speed, not the toughness."
+  },
+  {
+    "term_id": 3701,
+    "game_id": 17,
+    "term_key": "unmaker",
+    "term": "Unmaker",
+    "alt_forms": [],
+    "peek": "The one new gun in Doom 64, a demonic laser that eats cells.",
+    "full_text": "The Unmaker is the one new gun in Doom 64, a demonic laser that eats cells. It is found first in the secret level Outpost Omega, and on its own it is a slower, stronger plasma gun."
+  },
+  {
+    "term_id": 3702,
+    "game_id": 17,
+    "term_key": "demon-keys",
+    "term": "Demon Keys",
+    "alt_forms": ["demon key"],
+    "peek": "Three hidden keys that power up the Unmaker.",
+    "full_text": "There are three Demon Keys, one hidden on each of the secret levels Outpost Omega, The Lair and In The Void. Each one powers up the Unmaker (faster firing, then a second beam, then a third), and the keys also disable the three monster teleporters in the final level."
+  },
+  {
+    "term_id": 3703,
+    "game_id": 17,
+    "term_key": "keycard",
+    "term": "keycard",
+    "alt_forms": ["keycards", "key card", "skull key", "skull keys"],
+    "peek": "A coloured key that opens every door of its colour on a level.",
+    "full_text": "A locked door will not open until you are carrying a keycard or skull key of the matching colour, and once picked up a key opens every door of that colour on the level. Keys are lost the moment you leave a level, so there is no point carrying one forward."
+  },
+  {
+    "term_id": 3704,
+    "game_id": 17,
+    "term_key": "secret-level",
+    "term": "secret level",
+    "alt_forms": ["secret levels"],
+    "peek": "Hidden levels that hold the game's real reward.",
+    "full_text": "Doom 64 has four secret levels, and they hide the game's real reward. Three of them, Outpost Omega, The Lair and In The Void, each hide a Demon Key that powers up the Unmaker."
+  },
+  {
+    "term_id": 3705,
+    "game_id": 17,
+    "term_key": "lost-levels",
+    "term": "Lost Levels",
+    "alt_forms": ["the lost levels"],
+    "peek": "The 2020 re-release's extra episode, played after the ending.",
+    "full_text": "The Lost Levels is the 2020 re-release's extra episode: six levels that start you stranded with no weapons on a distant base and end in Final Judgement, plus one separate fun level. It opens when you beat the final boss, or by finishing the secret level Hectic and using the Features menu's level select."
+  }
+]

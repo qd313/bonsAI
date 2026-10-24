@@ -194,3 +194,46 @@ describe("the calmer rating choices (plan 79, after 2: smaller and softer)", () 
     }
   });
 });
+
+describe("the plan 98 rows: Wrong tip, Outdated, Wrong edition, and the marked line", () => {
+  function mountDemote() {
+    document.body.innerHTML = `
+      <div class="bonsai-scope">
+        <div class="bonsai-chat-reply-actions">
+          <div class="bonsai-chat-reply-actions-row bonsai-chat-reply-actions-row--chips bonsai-kb-demote-row">
+            <div class="bonsai-kb-demote-chip" id="chip">Wrong tip</div>
+          </div>
+          <div class="bonsai-kb-demote-done"><span>Marked not helpful</span><div class="bonsai-kb-demote-undo" id="undo">Undo</div></div>
+          <div class="bonsai-kb-demote-noted" id="noted">Noted</div>
+        </div>
+      </div>`;
+    const get = (id: string) => document.getElementById(id)!;
+    return { chip: get("chip"), undo: get("undo"), noted: get("noted") };
+  }
+
+  it("draws each new reason like the five beside it: 24 tall, 11 px words at medium weight, the soft fill", () => {
+    const { chip } = mountDemote();
+    expect(settled(chip, "min-height")).toBe("24px");
+    expect(settled(chip, "font-size")).toBe("11px");
+    expect(settled(chip, "font-weight")).toBe("500");
+    expect(settled(chip, "padding")).toBe("2px 8px");
+    expect(settled(chip, "border")).toBe("1px solid rgba(110, 150, 200, 0.2)");
+    expect(settled(chip, "color")).toBe("#b4c6dc");
+  });
+
+  it("Undo is small underlined blue words and the noted line is gold, as drawn", () => {
+    const { undo, noted } = mountDemote();
+    expect(settled(undo, "font-size")).toBe("10.5px");
+    expect(settled(undo, "color")).toBe("#9fb7d5");
+    expect(settled(undo, "text-decoration")).toBe("underline");
+    expect(settled(noted, "color")).toBe("#e0b672");
+  });
+
+  it("the ring shows on a new reason and on Undo", () => {
+    const { chip, undo } = mountDemote();
+    for (const el of [chip, undo]) {
+      el.classList.add("gpfocus");
+      expect(settled(el, "outline")).toBe("2px solid rgba(255, 255, 255, 0.9)");
+    }
+  });
+});

@@ -13,6 +13,8 @@
  *     │   (only once Not really is picked)  │
  *     │   [chip] [chip]                     │  <- bad info / wrong game
  *     │   [chip] [chip] [chip]              │  <- spoiled / too long / short
+ *     │   [chip] [chip] [chip]              │  <- wrong tip / outdated / wrong edition,
+ *     │                                     │     only when the answer used a note (kbDemoteRows.tsx)
  *     │   (chip error text, if a chip failed)│
  *     │  ──────── Show details ↓ ───        │
  *     └───────────────────────────────────────┘
@@ -110,6 +112,13 @@ import { findScrollablePanel, revealBelowKeepingAsItSettles } from "../../../sha
 import { syncDetailsLine } from "../details/detailsSlotStore";
 import { NoteOfferCard } from "../../user-notes/NoteOfferCard";
 import { textPx } from "../../../styles/textPx";
+import {
+  demotableNotes,
+  focusDemoteFromAbove,
+  focusDemoteFromBelow,
+  renderDemoteRows,
+  type ReplyDemoteView,
+} from "./kbDemoteRows";
 
 /* Option E, the maintainer's pick (plan 72): two short-worded chips on top, three below. */
 const CHIP_ROW_REFINE: ReplyMicroActionId[] = ["bad_information", "misidentified_game"];
@@ -145,6 +154,11 @@ export type BuildReplyActionsElementArgs = {
   onMoveDownFromThumbs?: () => boolean;
   /** D-pad Down from utility row (Retry / Show details) → context hint / session strip. */
   onMoveDownFromUtility?: () => boolean;
+  /**
+   * Plan 98: the notes this answer used and the "the note was wrong" rows' state and presses. With a note
+   * that can be marked, Not really adds Wrong tip, Outdated and Wrong edition after the five reasons.
+   */
+  demote?: ReplyDemoteView;
 };
 
 /**
@@ -331,9 +345,17 @@ export function buildReplyActionsElement(
     onMoveUpFromReply,
     onMoveUpFromChips,
     onMoveDownFromUtility,
+    demote,
   } = args;
 
   const showChipRows = Boolean(onChip) && rating === "down";
+  /*
+   * Plan 98: the three "the note was wrong" reasons, on an answer that used one note the back end gave an
+   * id. Once one is picked, the reasons give way to "Marked not helpful" and Undo (kbDemoteRows.tsx).
+   */
+  const demoteNotes = showChipRows && demote ? demotableNotes(demote.notes) : [];
+  const demoteOn = demoteNotes.length === 1;
+  const showReasonRows = showChipRows && (!demoteOn || demote!.state.phase === "reasons");
   /* Helpful / Not really render only pre-rating or once rated down (a "rated up" reply shows the
      "Saved on this Deck" label instead) — same condition the row has always used. */
   const showThumbs = showFeedback && (rating === null || rating === "down");
@@ -374,7 +396,7 @@ export function buildReplyActionsElement(
   setReplyStopUnavailable("not-really", thumbsDisabled);
   /* The first choice is a landing for a Down from the answer's corner icons only while it can be
      pressed; spent or disabled choices are skipped like the greyed thumbs. */
-  setReplyStopUnavailable("reason-chips", chipsInactive);
+  setReplyStopUnavailable("reason-chips", showReasonRows ? chipsInactive : askInFlight);
 
   const liveSlot = () => queryLiveTurnSlot();
   /*
@@ -442,6 +464,8 @@ export function buildReplyActionsElement(
    */
   const downFromThumbsRow = () => {
     if (!showChipRows) return downFromThumbs();
+    /* The reasons gave way to the marked line: its Undo is the next stop down. */
+    if (!showReasonRows) return focusDemoteFromAbove(replyKey);
     if (elementHasGamepadFocus(getReplyStop("helpful"))) return focusChipInRow(refineRow, 0);
     if (elementHasGamepadFocus(getReplyStop("not-really"))) return focusChipInRow(refineRow, 1);
     return false;
@@ -594,7 +618,9 @@ export function buildReplyActionsElement(
    */
   const upFromRetry = () => {
     const slot = turnSlot();
-    /* The reason chips sit directly above this line: the bottom row, its first chip (plan 72 A-4). */
+    /* The reason chips sit directly above this line: the bottom row, its first chip (plan 72 A-4); the
+       "the note was wrong" row or its Undo when they show (plan 98). */
+    if (demoteOn && focusDemoteFromBelow(replyKey)) return true;
     if (showChipRows && (focusChipInRow(lengthRow, 0) || focusChipInRow(refineRow, 0))) return true;
     if (focusReplyHelpful(slot)) return true;
     /* No live Helpful to land on (greyed and skipped — replyStopRegistry — or no thumbs row at
@@ -635,6 +661,13 @@ export function buildReplyActionsElement(
   };
   const upFromLengthRow = () =>
     focusChipInRow(refineRow, ringChipIndex(lengthRow)) || upFromRefineRow();
+  /* Down from the second row: the "the note was wrong" reason in the same column, when they show (plan 98). */
+  const downFromLengthRow = () =>
+    (demoteOn && focusDemoteFromAbove(replyKey, ringChipIndex(lengthRow))) || focusRegisteredReplyStop("note-keep");
+  /* Out of the plan 98 rows: Up from Undo meets Not really (greyed) above it; Down is the note card, else Show details. */
+  const upFromDemoteRows = () =>
+    (showThumbs && focusThumbEvenIfGreyed("not-really", thumbsRowNav)) || focusReplyHelpful(turnSlot()) || moveUpFromReply();
+  const downFromDemoteRows = () => focusRegisteredReplyStop("note-keep") || downPastNoteCard();
 
   if (!showFeedback && !showDetailsDivider && !showChipRows && rating === null) {
     return null;
@@ -702,10 +735,10 @@ export function buildReplyActionsElement(
           </Focusable>
         </>
       ) : null}
-      {showChipRows ? (
+      {showReasonRows ? (
         <span className="bonsai-chat-feedback-row__label">What went wrong?</span>
       ) : null}
-      {showChipRows
+      {showReasonRows
         ? renderChipRow(CHIP_ROW_REFINE, {
             chipsDisabled: chipsInactive,
             onChip,
@@ -715,15 +748,28 @@ export function buildReplyActionsElement(
             firstChipStop: "reason-chips",
           })
         : null}
-      {showChipRows
+      {showReasonRows
         ? renderChipRow(CHIP_ROW_LENGTH, {
             chipsDisabled: chipsInactive,
             onChip,
             rowClassName: "bonsai-chat-reply-actions-row bonsai-chat-reply-actions-row--chips",
             parts: lengthRow,
             onMoveUp: upFromLengthRow,
-            onMoveDown: () => focusRegisteredReplyStop("note-keep"),
-            rowRef: revealChipsWhenTheyAppear,
+            onMoveDown: downFromLengthRow,
+            /* The last row drawn is the one scrolled out from behind the dock. */
+            rowRef: demoteOn ? undefined : revealChipsWhenTheyAppear,
+          })
+        : null}
+      {demoteOn
+        ? renderDemoteRows({
+            replyKey,
+            view: demote!,
+            notes: demoteNotes,
+            disabled: askInFlight,
+            upFromReason: (column) => focusChipInRow(lengthRow, column) || upFromLengthRow(),
+            upOut: upFromDemoteRows,
+            downOut: downFromDemoteRows,
+            reasonsRowRef: revealChipsWhenTheyAppear,
           })
         : null}
       {chipError ? (

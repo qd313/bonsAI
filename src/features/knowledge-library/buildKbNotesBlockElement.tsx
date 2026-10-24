@@ -78,8 +78,11 @@ function kbNoteSourcePhrase(note: KbAttachedNote): string {
  * source phrase already reads "From the shared Deck tips" right next to it, so a "Deck tip" name
  * would just repeat that word twice in one line; the topic word at least tells two different
  * tips apart at a glance when more than one is attached.
+ *
+ * Also the name the "Not really" rows use for a note (kbDemoteRows.tsx, plan 98), so a protected
+ * boss note keeps its neutral title there too.
  */
-function kbNoteDisplayName(note: KbAttachedNote, open = false): string {
+export function kbNoteDisplayName(note: KbAttachedNote, open = false): string {
   if (note.spoiler_protected && !open) return kbNoteNeutralTitle(note);
   const raw = note.name.trim();
   if (!raw) return "Note";

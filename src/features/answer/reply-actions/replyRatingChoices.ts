@@ -64,5 +64,57 @@ export function buildReplyRatingChoicesSection(): string {
         .bonsai-scope .bonsai-chat-reply-actions-row--chips + .bonsai-chat-reply-actions-row--chips {
           margin-top: calc(5px - 8px) !important;
         }
+        /*
+         * Plan 98: Wrong tip, Outdated, Wrong edition and Undo. Each is a Steam stop of its own (a Focusable,
+         * not a button: kbDemoteRows.tsx says why), drawn to match the reasons beside it, ring included.
+         */
+        .bonsai-scope .bonsai-chat-reply-actions .bonsai-kb-demote-chip {
+          display: inline-flex;
+          align-items: center;
+          box-sizing: border-box;
+          min-height: 24px;
+          padding: 2px 8px;
+          border-radius: 6px;
+          font-size: ${textPx(11)};
+          font-weight: 500;
+          line-height: 1.2;
+          border: 1px solid rgba(110, 150, 200, 0.2);
+          background: linear-gradient(180deg, rgba(26, 42, 62, 0.4) 0%, rgba(18, 28, 42, 0.45) 100%);
+          color: #b4c6dc;
+          cursor: pointer;
+          outline: none;
+        }
+        .bonsai-scope .bonsai-chat-reply-actions .bonsai-kb-demote-chip--disabled {
+          opacity: 0.45;
+          cursor: default;
+        }
+        /* "Marked not helpful" on the left, Undo on the right (the drawing's frame 3). */
+        .bonsai-scope .bonsai-chat-reply-actions .bonsai-kb-demote-done {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 8px;
+        }
+        .bonsai-scope .bonsai-chat-reply-actions .bonsai-kb-demote-undo {
+          padding: 1px 4px;
+          border-radius: 4px;
+          font-size: ${textPx(10.5)};
+          color: #9fb7d5;
+          text-decoration: underline;
+          cursor: pointer;
+          outline: none;
+        }
+        .bonsai-scope .bonsai-chat-reply-actions .bonsai-kb-demote-noted {
+          font-size: ${textPx(11)};
+          line-height: 1.35;
+          color: #e0b672;
+        }
+        .bonsai-scope .bonsai-chat-reply-actions .bonsai-kb-demote-chip.gpfocus,
+        .bonsai-scope .bonsai-chat-reply-actions .bonsai-kb-demote-chip:focus-visible,
+        .bonsai-scope .bonsai-chat-reply-actions .bonsai-kb-demote-undo.gpfocus,
+        .bonsai-scope .bonsai-chat-reply-actions .bonsai-kb-demote-undo:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.9) !important;
+          outline-offset: 2px !important;
+        }
 `;
 }

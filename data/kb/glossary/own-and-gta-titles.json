@@ -412,5 +412,95 @@
     "alt_forms": [],
     "peek": "A stat that decides whether girlfriends will talk to you.",
     "full_text": "Sex appeal decides whether girlfriends will talk to you at all, and all fifty oysters covers most of that. Muscle at 100% works against it."
+  },
+  {
+    "term_id": 2500,
+    "app_id": "3240220",
+    "term_key": "special-ability",
+    "term": "Special ability",
+    "alt_forms": ["Special abilities"],
+    "peek": "Each protagonist's power, shown on the small yellow meter under the radar.",
+    "full_text": "Each of the three protagonists has a special ability on the small yellow meter under the radar. Michael slows time in gunfights and Franklin slows time while driving. The skill behind each bar grows with use, and growing the bar grows the time you get."
+  },
+  {
+    "term_id": 2501,
+    "app_id": "3240220",
+    "term_key": "area-kill",
+    "term": "Area Kill",
+    "alt_forms": [],
+    "peek": "Michael's bullet time for shootouts.",
+    "full_text": "Area Kill is Michael's bullet time for shootouts. It lasts thirty seconds once the ability bar is maxed."
+  },
+  {
+    "term_id": 2502,
+    "app_id": "3240220",
+    "term_key": "driving-focus",
+    "term": "Driving Focus",
+    "alt_forms": [],
+    "peek": "Franklin's power: the world slows while he is in a land vehicle.",
+    "full_text": "Driving Focus slows the world while Franklin is in any land vehicle, tank included, and makes gaps and slides easy. It starts at a third of its final length, and the skill behind it climbs while he drifts, threads near misses at speed, drives into oncoming traffic, or holds ninety percent of a car's top speed."
+  },
+  {
+    "term_id": 2503,
+    "app_id": "3240220",
+    "term_key": "character-wheel",
+    "term": "Character wheel",
+    "alt_forms": [],
+    "peek": "The wheel you use in free roam to switch between the three protagonists.",
+    "full_text": "In free roam you can switch between the protagonists any time from the character wheel. The number under each face is how many missions that person has waiting, and you cannot switch while you have a wanted level."
+  },
+  {
+    "term_id": 2504,
+    "app_id": "3240220",
+    "term_key": "bawsaq",
+    "term": "BAWSAQ",
+    "alt_forms": [],
+    "peek": "One of the two stock exchanges, the one that needs a Social Club connection.",
+    "full_text": "The BAWSAQ is one of two stock exchanges in the single-player game, and it needs a Social Club connection. The other, the LCN, works offline."
+  },
+  {
+    "term_id": 2505,
+    "app_id": "3240220",
+    "term_key": "lcn",
+    "term": "LCN",
+    "alt_forms": [],
+    "peek": "One of the two stock exchanges, the one that works offline.",
+    "full_text": "The LCN is a stock exchange that works offline and reacts to what happens in the story. The other exchange, the BAWSAQ, needs a Social Club connection."
+  },
+  {
+    "term_id": 2506,
+    "app_id": "3240220",
+    "term_key": "stock-market",
+    "term": "Stock market",
+    "alt_forms": [],
+    "peek": "The real money in the single-player game.",
+    "full_text": "The real money in the single-player game is the stock market. Five assassination missions for Franklin each swing a named company, so buy that stock before the hit, wait while the market ticks every thirty seconds, and sell at the top, often eighty percent up."
+  },
+  {
+    "term_id": 2507,
+    "app_id": "3240220",
+    "term_key": "los-santos-customs",
+    "term": "Los Santos Customs",
+    "alt_forms": [],
+    "peek": "The shop that sells five performance upgrades per vehicle.",
+    "full_text": "Los Santos Customs sells five performance categories per vehicle: engine, brakes, transmission, turbo and armour, plus cosmetic changes that do not affect handling. For a car you drive around rather than race, armour and brakes are the upgrades that pay off first, and storing the car in an owned garage is what keeps the upgrades between sessions."
+  },
+  {
+    "term_id": 2508,
+    "app_id": "3240220",
+    "term_key": "random-events",
+    "term": "Random events",
+    "alt_forms": ["Random event"],
+    "peek": "Dots on the map: light blue is friendly, red is hostile.",
+    "full_text": "Random events appear as dots on the map: light blue is friendly, red is hostile, and flashing lets you choose a side. There are fifty-seven of them, sixty in the enhanced version, and fourteen count for completion."
+  },
+  {
+    "term_id": 2509,
+    "app_id": "3240220",
+    "term_key": "ammu-nation",
+    "term": "Ammu-Nation",
+    "alt_forms": ["Ammunation"],
+    "peek": "The shop that sells body armour in five tiers and has a shooting range.",
+    "full_text": "Body armour comes in five tiers from Ammu-Nation, each a fifth stronger than the last, and once you buy a heavier one the lighter ones vanish from the shelf. Its shooting range gives three percent shooting skill per gold medal."
   }
 ]

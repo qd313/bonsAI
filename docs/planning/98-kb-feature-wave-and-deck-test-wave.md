@@ -442,6 +442,24 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   combined search); troubleshooting reach 8 of 24 today, 24 of 24 with the held branch but 8 of those wrong (held
   branch stays held); the Ali G voice keeps fewer facts (67.8% against 74.6%) and never contradicts a note; a category
   note outranks the right one in about 1 question in 100.
+- **18:00 to 19:01: landed** H (`038ec7e5`, after a round to match the drawn route look and `50f8abdc` exempting the
+  fixed-size check glyph from the Text size scan), D's three screen commits (`346126d1`) and their hook-order record
+  (`f9180100`), B (`74f3ad90`, after a focus-entry fix; `e60a0e4b` sharing a copied test setup), L (`287538e1`, then
+  round 2 `afa28bd5` for everyday endings such as "in this run"), E (`343b83ea`, `57f8a544` for the mock-up board's
+  copy of the words, which two tests pin), D round 2 (`abeb64ec`: the real plugin call, the ring after a failed mark,
+  the skip after an older reason, partial "All of them" failures, and the screen no longer deleting the "No close
+  match" line), and the bookkeeper's sweep 2 (`913b58cf`). I's round 2 added the K2 pictures (`1219b07c`). Landing
+  trouble, all fixed the same hour: two copy-paste ratchet rises (+4, +7; a helper's copy cannot see jscpd, so the
+  session measured the clones and handed back line ranges), one repo-wide font-size scan, one hook-order record, two
+  tests pinning the Developer tab's words to the mock-up board, and three Python steps that failed only under load
+  (passed alone each time; the landing log keeps too little of the Python output to name the test).
+- **L's gate:** 496 fixture questions that get their right note: none gained the line; the four plan 47 device
+  sentences, tonight's four and 80 everyday-ending versions all warn; C's fixture dump byte-identical before and after.
+  The rule reads the thing a question names at its end ("called Zorblax", "buy a house"); a question that describes
+  instead of naming stays with the scores, because the broad rule warned on 19 good questions.
+- **19:05: deployed** `913b58cf` with `build.ps1` (155 files verified; dist `9a9b23f5320d`; the seed library
+  2026.10.24 holds 351 tap-to-define words across all 38 games). Block K1 started (every feature tonight, plus the
+  warning's Deck check).
 
 ## 13. Report
 

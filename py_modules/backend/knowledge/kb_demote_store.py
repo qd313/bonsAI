@@ -208,9 +208,9 @@ def record_demote(section_id: Any, kind: Any, reason: Any, undo: bool = False) -
     """
     if isinstance(section_id, bool) or not isinstance(section_id, int) or section_id <= 0:
         return {"ok": False, "error": "Invalid section_id."}
-    if kind not in VALID_KINDS:
+    if not isinstance(kind, str) or kind not in VALID_KINDS:
         return {"ok": False, "error": "Invalid kind."}
-    if reason not in VALID_REASONS:
+    if not isinstance(reason, str) or reason not in VALID_REASONS:
         return {"ok": False, "error": "Invalid reason."}
     path = store_path()
     if not path:

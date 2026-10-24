@@ -1199,6 +1199,12 @@ class Plugin:
         """Tap-to-define words the knowledge library holds for a turn's game (answer screen)."""
         return await rag_corpus_rpc.get_rag_corpus_glossary(self, app_id, question, earlier)
 
+    async def demote_rag_corpus_note(
+        self, section_id: int = 0, kind: str = "", reason: str = "", undo: bool = False
+    ):
+        """Rank a note or shared tip lower after a thumbs-down, or take the mark back (undo)."""
+        return await rag_corpus_rpc.demote_rag_corpus_note(self, section_id, kind, reason, undo)
+
     # --- Ollama model pull and catalog RPC ---
 
     async def pull_ollama_models(self, tags: Any = None):

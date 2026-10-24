@@ -4,13 +4,13 @@ Purpose: The offline knowledge base is a folder of notes downloaded once and kep
 disk. This file is the screen's eight calls for that: check its status, start the
 download, cancel one in progress, check for and pull an update, remove it, install one
 from a local folder for testing, pull the preset-chip suggestions it can offer for
-the game you're playing, and read that game's tap-to-define words. Each stays a
-method of the same name on the plugin class in main.py; the method's body is now a
-one-line hand-off to the function here.
+the game you're playing, read that game's tap-to-define words, and rank a note lower
+(or take that back) after a thumbs-down. Each stays a method of the same name on the
+plugin class in main.py; the method's body is now a one-line hand-off to the function here.
 
 Used for: get_rag_corpus_status, start_rag_corpus_download, cancel_rag_corpus_download,
 update_rag_corpus, remove_rag_corpus, install_rag_corpus_local,
-get_session_rag_chip_candidates, get_rag_corpus_glossary.
+get_session_rag_chip_candidates, get_rag_corpus_glossary, demote_rag_corpus_note.
 
 Solves: Keeps the knowledge-base panel's own RPC bodies -- the background-download
 task, its cancel flag, and the chip-candidate lookup -- out of main.py.
@@ -33,6 +33,7 @@ from backend.knowledge.knowledge_base_schema import (
     resolve_corpus_db_path,
     sanitize_corpus_install_dir,
 )
+from backend.knowledge.kb_demote_store import record_demote
 from backend.knowledge.knowledge_base_glossary import (  # noqa: F401 -- main.py reaches it here
     get_rag_corpus_glossary,
 )
@@ -55,6 +56,18 @@ from backend.knowledge.rag_corpus_status import build_rag_corpus_status
 import decky
 
 logger = decky.logger
+
+
+async def demote_rag_corpus_note(
+    self, section_id: Any = 0, kind: Any = "", reason: Any = "", undo: Any = False
+):
+    """Rank one note or shared tip lower after a thumbs-down, or take the newest mark back.
+
+    ``kind`` is "note" or "tip" (their numbers overlap, so both travel); ``reason`` is one of
+    wrong_tip, outdated, wrong_edition. Answers ``{ok, downs, excluded}`` -- how many marks it
+    holds now and whether that is enough to leave it out of answers. Never raises.
+    """
+    return await asyncio.to_thread(record_demote, section_id, kind, reason, undo is True)
 
 
 async def get_rag_corpus_status(self, data: Any = None):

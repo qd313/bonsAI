@@ -57,6 +57,12 @@ class SaveAskFeedbackRpcTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(result.get("ok"))
         self.assertEqual(self._last_line()["chip_id"], "unfenced_spoiler")
 
+    async def test_accepts_the_three_note_reason_chip_ids(self) -> None:
+        for chip in ("wrong_tip", "outdated", "wrong_edition"):
+            result = await self.plugin.save_ask_feedback("down", 1, 5, True, chip)
+            self.assertTrue(result.get("ok"), chip)
+            self.assertEqual(self._last_line()["chip_id"], chip)
+
     async def test_plain_thumbs_down_without_a_chip_still_works(self) -> None:
         result = await self.plugin.save_ask_feedback("down", 1, 5, True, "")
         self.assertTrue(result.get("ok"))

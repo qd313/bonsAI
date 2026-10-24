@@ -293,5 +293,61 @@ class RuleInsideTheRealOrderingTests(_StoreCase):
         self.assertEqual(self.merged(3, topic=[tip], preferred=[9]), ["Topic tip", "A", "C"])
 
 
+class PluginMethodTests(unittest.IsolatedAsyncioTestCase):
+    """The call the screen makes, through the real Plugin class and the real settings folder
+    lookup: `demote_rag_corpus_note(section_id, kind, reason, undo)` answers {ok, downs, excluded}
+    and the mark is then in the file the next question reads."""
+
+    async def asyncSetUp(self):
+        import decky
+
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self._before = getattr(decky, "DECKY_PLUGIN_SETTINGS_DIR", None)
+        decky.DECKY_PLUGIN_SETTINGS_DIR = self._tmp.name
+        self.addCleanup(setattr, decky, "DECKY_PLUGIN_SETTINGS_DIR", self._before)
+        store.forget_cache()
+        from main import Plugin
+
+        self.plugin = Plugin()
+
+    async def test_a_mark_through_the_plugin_reaches_the_file_and_the_ranking(self):
+        result = await self.plugin.demote_rag_corpus_note(123, "note", "wrong_tip")
+        self.assertEqual(result, {"ok": True, "downs": 1, "excluded": False})
+        self.assertEqual(store.downs_for([("note", 123)]), {("note", 123): 1})
+        with open(os.path.join(self._tmp.name, "rag_demote.json"), encoding="utf-8") as fh:
+            self.assertEqual(list(json.load(fh)["notes"]), ["note:123"])
+
+    async def test_undo_through_the_plugin_takes_the_newest_mark_back(self):
+        await self.plugin.demote_rag_corpus_note(5, "tip", "outdated")
+        await self.plugin.demote_rag_corpus_note(5, "tip", "outdated")
+        result = await self.plugin.demote_rag_corpus_note(5, "tip", "outdated", True)
+        self.assertEqual(result, {"ok": True, "downs": 1, "excluded": False})
+
+    async def test_three_marks_say_excluded(self):
+        for _ in range(2):
+            await self.plugin.demote_rag_corpus_note(8, "note", "wrong_edition")
+        result = await self.plugin.demote_rag_corpus_note(8, "note", "wrong_edition")
+        self.assertEqual(result, {"ok": True, "downs": 3, "excluded": True})
+
+    async def test_hostile_arguments_answer_not_ok_and_write_nothing(self):
+        for args in (
+            (None, "note", "wrong_tip"),
+            ("12", "note", "wrong_tip"),
+            (12, None, "wrong_tip"),
+            (12, "note", {"x": 1}),
+            (12, "boss", "wrong_tip"),
+            (12, "note", "bad_information"),
+        ):
+            result = await self.plugin.demote_rag_corpus_note(*args)
+            self.assertFalse(result["ok"], args)
+        self.assertFalse(os.path.exists(os.path.join(self._tmp.name, "rag_demote.json")))
+
+    async def test_undo_only_counts_when_it_is_really_true(self):
+        await self.plugin.demote_rag_corpus_note(5, "tip", "outdated")
+        result = await self.plugin.demote_rag_corpus_note(5, "tip", "outdated", "false")
+        self.assertEqual(result["downs"], 2)
+
+
 if __name__ == "__main__":
     unittest.main()

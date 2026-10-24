@@ -2,7 +2,8 @@
 
 Purpose: After an Ask finishes, you can rate the reply thumbs up or thumbs down, and on
 a thumbs-down pick a short reason -- wrong information, too long, too short, guessed the
-wrong game, or an unmarked spoiler. This file writes that rating to a small local file, one
+wrong game, or an unmarked spoiler (and, when a note was used, wrong tip, outdated or wrong
+edition). This file writes that rating to a small local file, one
 line per rating, so it can be looked at later.
 Used for: The thumbs up / thumbs down buttons under a reply on the main screen.
 Solves: Keeping this rating entirely on the Deck -- nothing about it is sent anywhere --
@@ -31,6 +32,10 @@ _VALID_CHIP_IDS = frozenset(
         "too_short",
         "misidentified_game",
         "unfenced_spoiler",
+        # Plan 98 lane C: the three reasons "Not really" adds on an answer that used a note.
+        "wrong_tip",
+        "outdated",
+        "wrong_edition",
     }
 )
 

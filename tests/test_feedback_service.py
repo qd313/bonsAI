@@ -37,6 +37,17 @@ class FeedbackServiceTests(unittest.TestCase):
             line = open(path, encoding="utf-8").read().strip()
             self.assertIn('"chip_id":"unfenced_spoiler"', line)
 
+    def test_append_the_three_note_reasons(self):
+        """Plan 98 lane C: the three reasons Not really adds when a note was used."""
+        for chip in ("wrong_tip", "outdated", "wrong_edition"):
+            with tempfile.TemporaryDirectory() as tmp:
+                result = append_ask_feedback(
+                    tmp, request_id=3, rating="down", question_len=9, success=True, chip_id=chip
+                )
+                self.assertTrue(result.get("ok"), chip)
+                line = open(feedback_log_path(tmp), encoding="utf-8").read().strip()
+                self.assertIn(f'"chip_id":"{chip}"', line)
+
     def test_rejects_invalid_chip_id(self):
         with tempfile.TemporaryDirectory() as tmp:
             result = append_ask_feedback(

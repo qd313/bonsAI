@@ -180,6 +180,87 @@
     "full_text": "The shield grab is the standard punish: press attack while shielding. It skips the delay of dropping the shield and catches an opponent stuck in the end of their move."
   },
   {
+    "term_id": 3100,
+    "game_id": 34,
+    "term_key": "damage-percentage",
+    "term": "damage percentage",
+    "alt_forms": ["damage percent"],
+    "peek": "Every hit adds to it, and the higher it is, the further hits send you.",
+    "full_text": "Every hit adds to a fighter's damage percentage, and the more damage a fighter is carrying, the further a solid hit sends them flying. A match is not about draining a health bar."
+  },
+  {
+    "term_id": 3101,
+    "game_id": 34,
+    "term_key": "blast-lines",
+    "term": "blast lines",
+    "alt_forms": ["blast line"],
+    "peek": "The stage edges: launch a fighter past them for a knockout.",
+    "full_text": "A knockout in Super Smash Bros. happens when a fighter is launched past the edges of the stage, called the blast lines, rather than when a health bar reaches zero. The higher a fighter's damage percentage climbs, the less force it takes to send them that far."
+  },
+  {
+    "term_id": 3102,
+    "game_id": 34,
+    "term_key": "stock-match",
+    "term": "Stock match",
+    "alt_forms": ["stock matches"],
+    "peek": "A match where each fighter has a set number of lives.",
+    "full_text": "In a Stock match, each fighter has a set number of lives, and being knocked out costs one of them. Running out ends your part in the match."
+  },
+  {
+    "term_id": 3103,
+    "game_id": 34,
+    "term_key": "time-match",
+    "term": "Time match",
+    "alt_forms": ["time matches"],
+    "peek": "A match scored on knockouts landed within a time limit.",
+    "full_text": "A Time match is scored on how many knockouts you land within a limit. A knockout adds a point for whoever landed the hit and takes one away from whoever was launched, with the highest score winning once time runs out."
+  },
+  {
+    "term_id": 3104,
+    "game_id": 34,
+    "term_key": "revival-platform",
+    "term": "revival platform",
+    "alt_forms": ["revival platforms"],
+    "peek": "Where a knocked-out fighter reappears to keep fighting.",
+    "full_text": "A knocked-out fighter reappears on a revival platform to keep fighting. In a Stock match, being knocked out costs one of your set lives."
+  },
+  {
+    "term_id": 3105,
+    "game_id": 34,
+    "term_key": "1p-game",
+    "term": "1P Game",
+    "alt_forms": [],
+    "peek": "The only single-player mode, a fixed run that is the same every time.",
+    "full_text": "The 1P Game is the only single-player mode in Super Smash Bros., and it is a fixed run: every stage, opponent and order stays the same on every playthrough. Clearing a stage banks points toward a final score, and most fights carry their own bonus objectives for extra points."
+  },
+  {
+    "term_id": 3106,
+    "game_id": 34,
+    "term_key": "bonus-stage",
+    "term": "bonus stage",
+    "alt_forms": ["bonus stages"],
+    "peek": "An optional timed challenge after every third fight in the 1P Game.",
+    "full_text": "There are three optional bonus stages in the 1P Game, one after every third fight. They swap combat for a timed challenge like smashing targets or stepping on marked platforms."
+  },
+  {
+    "term_id": 3107,
+    "game_id": 34,
+    "term_key": "quick-attack",
+    "term": "Quick Attack",
+    "alt_forms": [],
+    "peek": "Pikachu's recovery move, which can be aimed in almost any direction.",
+    "full_text": "Pikachu's light weight is offset by an unusually strong recovery move, Quick Attack. It can be aimed in almost any direction and used twice per airborne trip back to the stage."
+  },
+  {
+    "term_id": 3108,
+    "game_id": 34,
+    "term_key": "fire-fox",
+    "term": "Fire Fox",
+    "alt_forms": [],
+    "peek": "Fox's main way back to the stage, a predictable straight-line dash.",
+    "full_text": "Fire Fox is Fox's main way back to the stage. It travels in a straight, predictable line and needs a moment to charge before it fires, which makes him one of the easier fighters in the game to knock away from the stage for good."
+  },
+  {
     "term_id": 3150,
     "game_id": 26,
     "term_key": "dice-block",
@@ -952,6 +1033,150 @@
     "alt_forms": [],
     "peek": "A blue cap that turns you into a ghost for a short time.",
     "full_text": "The blue Vanish Cap makes you a ghost for a short time, walking through enemies and metal fences. Dire, Dire Docks is the one place you can wear metal and vanish at once."
+  },
+  {
+    "term_id": 3600,
+    "game_id": 33,
+    "term_key": "golden-balloon",
+    "term": "Golden Balloon",
+    "alt_forms": ["golden balloons"],
+    "peek": "The key collectible; each world needs a minimum number to open.",
+    "full_text": "Golden Balloons are Diddy Kong Racing's key collectible, working like Power Stars in Super Mario 64: each world and its tracks need a minimum number before they open up. There are 47 in total, most handed out by Taj, with a handful more hidden around Timber's Island."
+  },
+  {
+    "term_id": 3601,
+    "game_id": 33,
+    "term_key": "silver-coin-challenge",
+    "term": "Silver Coin Challenge",
+    "alt_forms": ["silver coin challenges"],
+    "peek": "A per-track challenge that earns a Golden Balloon.",
+    "full_text": "Clearing a track's Silver Coin Challenge is one way to earn a Golden Balloon from Taj. Each of the first four worlds' boss races is also raced a second time after finishing that world's Silver Coin Challenge."
+  },
+  {
+    "term_id": 3602,
+    "game_id": 33,
+    "term_key": "zipper",
+    "term": "zipper",
+    "alt_forms": ["zippers"],
+    "peek": "A speed pad built into the track, one design per vehicle type.",
+    "full_text": "Zippers built into the tracks give an instant burst of speed, one design for each vehicle type. Letting go of the accelerator just before hitting one makes the boost even stronger."
+  },
+  {
+    "term_id": 3603,
+    "game_id": 33,
+    "term_key": "weapon-balloon",
+    "term": "Weapon Balloon",
+    "alt_forms": ["weapon balloons"],
+    "peek": "A balloon that hands out an item; its colour decides which.",
+    "full_text": "Weapon Balloons hand out an item the moment they pop, and the colour of the balloon decides which one. Popping several balloons of the same colour in a row upgrades that item through as many as three strength levels."
+  },
+  {
+    "term_id": 3604,
+    "game_id": 33,
+    "term_key": "wizpig-amulet",
+    "term": "Wizpig amulet",
+    "alt_forms": ["amulet piece", "amulet pieces"],
+    "peek": "The amulet whose four pieces come from the world boss races.",
+    "full_text": "Each of the first four worlds' boss races is run once to earn a piece of the Wizpig amulet. Wizpig's First Strike happens once all four amulet pieces are collected."
+  },
+  {
+    "term_id": 3605,
+    "game_id": 33,
+    "term_key": "timbers-island",
+    "term": "Timber's Island",
+    "alt_forms": [],
+    "peek": "The hub island you explore in Adventure Mode.",
+    "full_text": "In Adventure Mode you explore Timber's Island as a hub, finding Golden Balloons that open access to five worlds. You can change vehicles at any time by talking to Taj, found in the middle of the island hub."
+  },
+  {
+    "term_id": 3606,
+    "game_id": 33,
+    "term_key": "vehicle-challenge",
+    "term": "vehicle challenge",
+    "alt_forms": ["vehicle challenges"],
+    "peek": "One of Taj's three challenges, which can earn a Golden Balloon.",
+    "full_text": "Taj hands out Golden Balloons for winning a standard race, clearing a track's Silver Coin Challenge, or beating him in one of his three vehicle challenges. You can change vehicles at any time by talking to him."
+  },
+  {
+    "term_id": 3650,
+    "game_id": 32,
+    "term_key": "smile-meter",
+    "term": "Smile Meter",
+    "alt_forms": [],
+    "peek": "Yoshi's health, shown as a flower whose petals fall as you take damage.",
+    "full_text": "Yoshi's health is shown as a flower called the Smile Meter in the corner of the screen. Its petals fall as a Yoshi takes damage and its face turns sad as it empties out."
+  },
+  {
+    "term_id": 3651,
+    "game_id": 32,
+    "term_key": "lucky-fruit",
+    "term": "Lucky Fruit",
+    "alt_forms": [],
+    "peek": "A random fruit each playthrough that fully heals whichever Yoshi eats it.",
+    "full_text": "Each playthrough picks one random Lucky Fruit that fully heals whichever Yoshi eats it, whatever colour it is. Every Yoshi also has a favourite colour of fruit that heals more of the Smile Meter than an off-colour one."
+  },
+  {
+    "term_id": 3652,
+    "game_id": 32,
+    "term_key": "yoshis-mood",
+    "term": "Yoshi's Mood",
+    "alt_forms": [],
+    "peek": "The running score of hearts tallied at the end of a level.",
+    "full_text": "Hearts add up into a running score called Yoshi's Mood, tallied at the end of a level from fruit eaten, enemies beaten, coins collected, Special Hearts, melons, and the Baby Yoshis still with you. Most fruit earns one heart, doubling to two if you stomp or peg a matching-colour enemy with an egg."
+  },
+  {
+    "term_id": 3653,
+    "game_id": 32,
+    "term_key": "special-heart",
+    "term": "Special Heart",
+    "alt_forms": ["special hearts"],
+    "peek": "A heart whose count decides which page unlocks next.",
+    "full_text": "Special Hearts are tallied into Yoshi's Mood at the end of a level. From the second world onward, the game decides which page unlocks next based on how many Special Hearts were collected in the level just finished."
+  },
+  {
+    "term_id": 3654,
+    "game_id": 32,
+    "term_key": "flutter-jump",
+    "term": "flutter-jump",
+    "alt_forms": ["flutter jump", "flutter jumps", "flutter-jumps"],
+    "peek": "A floaty jump you get by holding the jump button.",
+    "full_text": "Holding the jump button turns Yoshi's jump into a floaty flutter-jump. A tongue swallow turns whatever you lick into an egg, which you throw by aiming and releasing."
+  },
+  {
+    "term_id": 3655,
+    "game_id": 32,
+    "term_key": "white-shy-guy",
+    "term": "White Shy Guy",
+    "alt_forms": ["white shy guys"],
+    "peek": "Carry one to the end of a level to bring back a lost Yoshi.",
+    "full_text": "If your Yoshi is hit too many times it is carried off by Baby Bowser's Toadies. A White Shy Guy carried to the level's end brings a lost Yoshi back."
+  },
+  {
+    "term_id": 3656,
+    "game_id": 32,
+    "term_key": "story-mode",
+    "term": "Story Mode",
+    "alt_forms": [],
+    "peek": "The main mode, where each level's result picks the next page.",
+    "full_text": "In Story Mode, finishing a level jumps straight to the next world rather than offering the other pages from the world just left. The first world lets you freely pick which of its four levels to start on, but from the second world onward the game decides which page unlocks next."
+  },
+  {
+    "term_id": 3657,
+    "game_id": 32,
+    "term_key": "giant-egg",
+    "term": "Giant Egg",
+    "alt_forms": ["giant eggs"],
+    "peek": "A hidden egg that unlocks a Black or White Yoshi.",
+    "full_text": "A Black Yoshi comes from a black-spotted Giant Egg hidden in the Bone Dragon Pit or Torrential Maze, and a White Yoshi from a white Giant Egg in The Tall Tower or Poochy and Nippy. Both throw eggs with a bigger explosion than the others, but neither is available outside Story Mode."
+  },
+  {
+    "term_id": 3658,
+    "game_id": 32,
+    "term_key": "egg-block",
+    "term": "Egg Block",
+    "alt_forms": ["egg blocks"],
+    "peek": "Where you refill your eggs.",
+    "full_text": "In Magma Castle, if your eggs run out partway through the slug fight, leave the room to refill from a nearby Egg Block. A defeated slug does not respawn, so returning is the way to finish the other one."
   },
   {
     "term_id": 3700,

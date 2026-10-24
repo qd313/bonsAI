@@ -171,7 +171,14 @@ def _without_timings(value):
     return value
 
 
-class StoryGameNamedWhileANoStoryGameRunsTests(unittest.TestCase):
+class SmallLibraryAskSetup:
+    """Mixin for a TestCase that runs the real ask path against the small library above.
+
+    ``setUp`` builds the library in a temp folder and the settings that point the plugin at it;
+    ``tearDown`` forgets the follow-up memory, closes the library and removes the folder. Shared
+    with tests/test_spoiler_tier.py so the two do not each carry a copy.
+    """
+
     def setUp(self):
         self._dir = Path(tempfile.mkdtemp(prefix="p78a-library-"))
         _build_library(self._dir)
@@ -190,6 +197,8 @@ class StoryGameNamedWhileANoStoryGameRunsTests(unittest.TestCase):
         close_connection(str(self._dir / CORPUS_DB_FILENAME))
         shutil.rmtree(self._dir, ignore_errors=True)
 
+
+class StoryGameNamedWhileANoStoryGameRunsTests(SmallLibraryAskSetup, unittest.TestCase):
     def _ask(self, question, *, app_id, app_name, reply, spoiler_consent=False, ask_mode="strategy"):
         plugin = _FakePlugin(self.settings)
         plugin.reply = reply

@@ -18,8 +18,6 @@ read what a person would see: the finished reply, with or without a cover.
 import asyncio
 import json
 import re
-import shutil
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -30,8 +28,6 @@ install_pwd_stub()
 
 from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.knowledge import kb_followup_memory  # noqa: E402
-from backend.knowledge.knowledge_base_cards import close_connection  # noqa: E402
-from backend.knowledge.knowledge_base_schema import CORPUS_DB_FILENAME  # noqa: E402
 from backend.spoilers.spoiler_risk_service import (  # noqa: E402
     compute_heuristic_spoiler_risk_score,
     compute_spoiler_risk_band,
@@ -60,8 +56,8 @@ from test_game_ai_request_story_game_named import (  # noqa: E402
     _DRG_APP_NAME,
     _HK_QUESTION,
     _HK_REPLY,
+    SmallLibraryAskSetup,
     _FakePlugin,
-    _build_library,
 )
 
 GOLDEN = json.loads(
@@ -242,26 +238,8 @@ class RiskChipTests(unittest.TestCase):
         self.assertIn("Title profile: protect_progression", plain)
 
 
-class AskPathTests(unittest.TestCase):
+class AskPathTests(SmallLibraryAskSetup, unittest.TestCase):
     """The real ask path against a small real library: what the finished reply looks like."""
-
-    def setUp(self):
-        self._dir = Path(tempfile.mkdtemp(prefix="p98b-library-"))
-        _build_library(self._dir)
-        self.settings = {
-            "latency_timeouts_custom_enabled": False,
-            "input_sanitizer_user_disabled": False,
-            "capabilities": {},
-            "use_local_knowledge_base": True,
-            "rag_corpus_path": str(self._dir),
-            "rag_hybrid_retrieval_enabled": False,
-        }
-        kb_followup_memory.forget()
-
-    def tearDown(self):
-        kb_followup_memory.forget()
-        close_connection(str(self._dir / CORPUS_DB_FILENAME))
-        shutil.rmtree(self._dir, ignore_errors=True)
 
     def _ask(self, question, *, tier, app_id="", app_name="", reply):
         settings = dict(self.settings)

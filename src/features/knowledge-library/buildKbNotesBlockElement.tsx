@@ -15,6 +15,10 @@
  * (game_ai_request.py's `_publish_kb_attached_notes_live` for the live case, `get_input_transparency`
  * once a reply finishes). Does not track the single reasoning-fold-style toggle state itself —
  * MainTabChatTranscript keeps `kbNotesOpenByTurn` and passes this file's `open`/`onToggle`.
+ *
+ * Plan 98: a note the person marked as wrong under an earlier answer (Not really, then Wrong tip,
+ * Outdated or Wrong edition) carries "↓ ranked lower by you" after its name in the open block, so a
+ * later answer that still used it says why it may sit lower. The back end sets `demoted` on it.
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
@@ -132,6 +136,38 @@ function renderKbNoteCardLine(line: string, key: React.Key): React.ReactElement 
       <b style={{ color: "#dcc493", fontWeight: 700 }}>{m[1]}:</b>
       {m[2] ? ` ${m[2]}` : ""}
     </div>
+  );
+}
+
+/** The back end's flag for a note the person marked as wrong (plan 98 lane C); read here until the shared type has it. */
+type KbNoteMaybeDemoted = KbAttachedNote & { demoted?: boolean };
+
+/**
+ * "↓ ranked lower by you", the drawing's gold tag (plan 98, option C frame 4), after a marked note's name in
+ * the open block. Plain words, not a stop: the block's header is the one stop.
+ */
+function kbNoteDemotedTag(note: KbNoteMaybeDemoted): React.ReactElement | null {
+  if (note.demoted !== true) return null;
+  return (
+    <span
+      className="bonsai-kb-note-demoted-tag"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 4,
+        flex: "0 0 auto",
+        marginLeft: 6,
+        padding: "1px 6px",
+        borderRadius: 5,
+        border: "1px solid rgba(224, 182, 114, 0.35)",
+        background: "rgba(224, 182, 114, 0.12)",
+        color: "#e0b672",
+        fontSize: textPx(10),
+        fontWeight: 400,
+      }}
+    >
+      ↓ ranked lower by you
+    </span>
   );
 }
 
@@ -388,6 +424,8 @@ export function buildKbNotesBlockElement(args: {
             >
               {kbNoteDisplayName(notes[0], open)}
             </b>
+            {/* One note has no title of its own in the open body, so its tag rides on the header's name. */}
+            {open && notes.length === 1 ? kbNoteDemotedTag(notes[0]) : null}
             {extra > 0 ? (
               <span style={{ color: "#a8916a", flex: "0 0 auto" }}>{`(+${extra} more)`}</span>
             ) : null}
@@ -421,6 +459,7 @@ export function buildKbNotesBlockElement(args: {
               {notes.length > 1 ? (
                 <div style={{ fontWeight: 700, color: "#dcc493", marginBottom: 3 }}>
                   {kbNoteDisplayName(note, true)} · {kbNoteSourcePhrase(note)}
+                  {kbNoteDemotedTag(note)}
                 </div>
               ) : null}
               {note.card.split("\n").map((line, li) => renderKbNoteCardLine(line, li))}

@@ -56,6 +56,61 @@
       "source_license": "CC-BY-4.0",
       "source_version": "193070",
       "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1305,
+      "game_id": 12,
+      "section_type": "item",
+      "name": "Weighted Storage Cube",
+      "card": "Summary: The plain test cube. In Portal 2 it has a blue ring in the centre, and it can turn yellow when placed on a Super Button.\nUses: Cubes are used to press buttons, disable turrets or redirect lasers. The Companion Cube works the same way.\nTips: A Discouragement Redirection Cube also works as a Weighted Storage Cube, so it can hold down a Super Button too.",
+      "source_url": "https://theportalwiki.com/wiki/Cubes",
+      "source_license": "CC-BY-4.0",
+      "source_version": "191371",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1306,
+      "game_id": 12,
+      "section_type": "item",
+      "name": "Discouragement Redirection Cube",
+      "card": "Summary: A cube with a round glass lens on every side. One lens is more curved than the others, and the beam leaves through it when it enters through any other side.\nUses: It focuses a Thermal Discouragement Beam and redirects it through its lens. Like all cubes it can hold down buttons.\nTips: In co-op, when you aim the beam at a receptacle and it gets close enough, it auto-aims into the centre of the receptacle, which makes aiming slightly easier.",
+      "source_url": "https://theportalwiki.com/wiki/Discouragement_Redirection_Cube",
+      "source_license": "CC-BY-4.0",
+      "source_version": "169917",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1307,
+      "game_id": 12,
+      "section_type": "item",
+      "name": "Propulsion Gel",
+      "card": "Summary: The bright orange gel. It cuts friction on a surface and adds speed, so you and cubes slide around and are moved more easily.\nUses: Best on long, straight stretches, where it lets you build speed to jump large gaps or move quickly past (or through) things like Crushers. Used with Repulsion Gel it carries you a long way where portals cannot be used.\nTips: Crouching slows you down while you are on it. It can go on nearly any surface, and you can put it somewhere else with carefully placed portals.",
+      "source_url": "https://theportalwiki.com/wiki/Propulsion_Gel",
+      "source_license": "CC-BY-4.0",
+      "source_version": "193076",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1308,
+      "game_id": 12,
+      "section_type": "item",
+      "name": "Conversion Gel",
+      "card": "Summary: The white gel that lets you place portals on surfaces that normally refuse them.\nUses: Paint a surface with it, then put a portal on it. If the gel is washed off later, a portal already placed stays where it is.\nTips: A surface that is not flat or not big enough for a portal stays closed to portals even with the gel on it, so a gel-covered cube is not a portal surface.",
+      "source_url": "https://theportalwiki.com/wiki/Conversion_Gel",
+      "source_license": "CC-BY-4.0",
+      "source_version": "185601",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1309,
+      "game_id": 12,
+      "section_type": "item",
+      "name": "Cleansing Gel",
+      "card": "Summary: A gel that looks like plain water. It washes other gels off surfaces and off anything they coated.\nUses: It is destroyed the moment it touches anything and has no other gameplay effect, so it does nothing to a surface that has no other gel on it.\nTips: A surface or object takes on only the gel that coated it last. Gel cannot be put on glass, and it passes through grating without painting it.",
+      "source_url": "https://theportalwiki.com/wiki/Gels",
+      "source_license": "CC-BY-4.0",
+      "source_version": "191504",
+      "crawled_at": "2026-10-25"
     }
   ]
 }

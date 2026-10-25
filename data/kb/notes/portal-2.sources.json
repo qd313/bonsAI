@@ -100,5 +100,95 @@
         "Discouragement Redirection Cubes cannot redirect any of the beams in the laser field."
       ]
     }
+  },
+  "1305": {
+    "name": "Weighted Storage Cube",
+    "page": "Cubes",
+    "page_url": "https://theportalwiki.com/wiki/Cubes",
+    "revision": "191371",
+    "lines": {
+      "Summary": [
+        "The Weighted Storage Cube was first introduced in Portal, and remains prevalent in Portal 2.",
+        "In Portal 2 however, the cube is given a blue ring in the center instead of a blue cross, and can turn yellow when placed upon a Super Button."
+      ],
+      "Uses": [
+        "They are commonly used to press Buttons, disable Turrets, or redirect Lasers.",
+        "The Cube functions in the same way as a Weighted Storage Cube"
+      ],
+      "Tips": [
+        "the cube has a second use as a Weighted Storage Cube, as it can be used to activate the Heavy-Duty Super Button."
+      ]
+    }
+  },
+  "1306": {
+    "name": "Discouragement Redirection Cube",
+    "page": "Discouragement Redirection Cube",
+    "page_url": "https://theportalwiki.com/wiki/Discouragement_Redirection_Cube",
+    "revision": "169917",
+    "lines": {
+      "Summary": [
+        "Each side of the Redirection Cube has a large, round piece of glass in the center. One of the glass sides is more curved than the others, being the lens that the Thermal Discouragement Beam is focused out of when coming into contact with any of the other sides."
+      ],
+      "Uses": [
+        "Like all cubes, they can be used to hold down buttons. They also have the unique ability to focus a Thermal Discouragement Beam and redirect it through their lens."
+      ],
+      "Tips": [
+        "In co-op mode, when redirecting a beam into receptacles, the beam will auto-aim into the center of the receptacle when the beam is close enough, making beam redirection slightly easier."
+      ]
+    }
+  },
+  "1307": {
+    "name": "Propulsion Gel",
+    "page": "Propulsion Gel",
+    "page_url": "https://theportalwiki.com/wiki/Propulsion_Gel",
+    "revision": "193076",
+    "lines": {
+      "Summary": [
+        "Propulsion Gel is a bright orange substance that greatly reduces the friction of objects moving across the surface to which it is applied. Propulsion Gel also increases velocity, as objects covered in Propulsion Gel also have their friction reduced, causing them to slide around and be moved more easily."
+      ],
+      "Uses": [
+        "The Gel is most useful when applied to long, straight areas, as it allows the player to reach a considerable velocity, thereby allowing the player to jump over large gaps or move quickly past (or through) objects such as Crushers.",
+        "Used in combination with Repulsion Gel, the player can travel a considerable distance, which is vital in situations in which Portals cannot be used."
+      ],
+      "Tips": [
+        "Crouching will slow the character down while on Propulsion Gel",
+        "Propulsion Gel can be applied to virtually any surface, and can be placed in different locations through the use of carefully-placed portals."
+      ]
+    }
+  },
+  "1308": {
+    "name": "Conversion Gel",
+    "page": "Conversion Gel",
+    "page_url": "https://theportalwiki.com/wiki/Conversion_Gel",
+    "revision": "185601",
+    "lines": {
+      "Summary": [
+        "Conversion Gel is a white gel that enables any surface to have portals placed on them, even if they are not normally portal-conductive."
+      ],
+      "Uses": [
+        "If it is washed off, the portal will sit unchanged where the gel used to be"
+      ],
+      "Tips": [
+        "Surfaces that are not flat or big enough to fit a portal will not be portal-conductive even when coated in Conversion Gel. This means that Conversion Gel-covered Weighted Storage Cubes will not function as a portal-able surface."
+      ]
+    }
+  },
+  "1309": {
+    "name": "Cleansing Gel",
+    "page": "Gels",
+    "page_url": "https://theportalwiki.com/wiki/Gels",
+    "revision": "191504",
+    "lines": {
+      "Summary": [
+        "This gel may appear to be regular water with an ability to wash away other types of gels off of surfaces and any objects that have been coated."
+      ],
+      "Uses": [
+        "It is destroyed upon touching anything. It has no special properties in regard of the gameplay, and as such, does not affect any surfaces other than ones covered in other gels."
+      ],
+      "Tips": [
+        "A surface or object can take on the properties of only the gel that coated it last.",
+        "Gel cannot be applied to transparent surfaces (such as glass), and will pass through grating (also without painting it)."
+      ]
+    }
   }
 }

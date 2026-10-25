@@ -49,13 +49,18 @@ class PlainWordsInTipsTests(unittest.TestCase):
                 with self.subTest(row="V2-W2-SYM-" + row, tip=tip_id, phrase=phrase):
                     self.assertIn(phrase, card)
 
-    def test_the_built_in_screen_is_named_beside_the_external_one(self):
-        """A black screen tip that only talks about an external monitor misses the Deck's own."""
-        for tip_id in (152, 154):
-            card = BY_ID[tip_id]["card"].lower()
-            with self.subTest(tip=tip_id):
-                self.assertIn("black", card)
-        self.assertIn("built-in", BY_ID[152]["card"].lower())
+    def test_the_black_screen_tip_names_the_built_in_screen_beside_the_external_one(self):
+        """A black screen tip that only talks about an external monitor misses the Deck's own.
+
+        Only tip 152 carries the black-screen words. Tip 154 (set an external display to 1080p60)
+        stays as it was: with "black screen" in it too, it out-ranked 152 for a black screen on
+        the Deck's own display (row V2-W2-SYM-06), and its advice does not apply there.
+        """
+        card = BY_ID[152]["card"].lower()
+        for phrase in ("black screen", "built-in screen"):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, card)
+        self.assertNotIn("black", BY_ID[154]["card"].lower())
 
     def test_two_new_tips_are_marked_researched_unconfirmed_and_filed_after_the_last(self):
         self.assertEqual(max(BY_ID), 166)
@@ -235,6 +240,65 @@ class MeasuringScriptNamesTheRightTipTests(unittest.TestCase):
                 "reach_a_wrong_tip": 2,
             },
         )
+
+
+class BlindSentencesReachTheRightTipTests(unittest.TestCase):
+    """The Deck's level: the sentence typed, the first tip the reply carries.
+
+    Builds the real library from the repo's data (as the service tests do) and asks each blind
+    sentence the way the Ask does with nothing running and a quick answer: it must carry the tip the
+    fixture names. Skips where the library cannot be built (no embedding model on this machine).
+
+    This is the check that caught two ranking slips the wording tests could not: a longer storage
+    tip lost "storage full cant install anything else" to the cloud-save tip, and a black-screen
+    line added to the external-display tip beat the built-in-screen tip for row 06.
+    """
+
+    # Rows that reached the right tip at the end of plan 100 lane T, plus the four that already did.
+    # The rest (03, 04, 07, 08, 09, 10, 16, 18, 19, 20, 22) reach another tip on the right subject,
+    # or none, and are left to the table the measuring script prints.
+    MUST_REACH_THE_RIGHT_TIP = ("01", "02", "05", "06", "11", "12", "13", "14", "15", "17", "21", "23", "24")
+
+    @classmethod
+    def setUpClass(cls):
+        from corpus_build_support import run_seed_build_or_skip
+        from script_loader import load_script
+
+        cls.script = load_script("measure_kb_floor_holdout")
+        cls.out_dir = REPO_ROOT / "build" / "knowledge-base-plainwords-test"
+        cls.out_dir.mkdir(parents=True, exist_ok=True)
+        run_seed_build_or_skip(REPO_ROOT, cls.out_dir)
+        cls.settings = {
+            "use_local_knowledge_base": True,
+            "rag_hybrid_retrieval_enabled": True,
+            "rag_corpus_path": str(cls.out_dir),
+        }
+
+    def test_each_sentence_carries_the_tip_the_fixture_names(self):
+        from backend.knowledge import knowledge_base_service as kb
+
+        conn = kb._get_connection(kb.resolve_corpus_db_path(self.settings))
+        try:
+            for number in self.MUST_REACH_THE_RIGHT_TIP:
+                row = SYM_ROWS["V2-W2-SYM-" + number]
+                with self.subTest(row=row["id"], sentence=row["query"]):
+                    ids: list = []
+                    self.script.attached(
+                        self.settings, row["query"], mode="speed", app_id="", app_name="",
+                        pc_ip="", conn=conn, ids_out=ids,
+                    )
+                    self.assertTrue(ids, "no tip attached")
+                    self.assertEqual(ids[0], row["expect_pattern_id"])
+        finally:
+            kb.close_connection(kb.resolve_corpus_db_path(self.settings))
+
+    def test_a_boss_question_attaches_no_tip(self):
+        for question in ("how do I beat the boss", "what should I build first", "thank you very much"):
+            with self.subTest(question=question):
+                names, _domain = self.script.attached(
+                    self.settings, question, mode="speed", app_id="", app_name="", pc_ip="",
+                )
+                self.assertEqual(names, [])
 
 
 if __name__ == "__main__":

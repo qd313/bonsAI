@@ -768,7 +768,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "Internal storage full -- not enough space, no space left, or you can't add a new game: uninstall large shaders and unused games first.",
+    "card": "Internal storage full -- not enough space, no space left, can't add a new game or anything else: uninstall large shaders and unused games first.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },
@@ -1549,7 +1549,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "Set an external display to 1080p60 first -- higher settings can show a blank screen or a black screen until confirmed working.",
+    "card": "Set an external display to 1080p60 first -- higher settings can show a blank screen until confirmed working.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },

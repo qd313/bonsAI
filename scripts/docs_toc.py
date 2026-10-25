@@ -22,6 +22,8 @@ How it works:
     3. `build_toc()` writes one list line per `##` and `###` heading between `TOC_START` and
        `TOC_END`. `apply_toc()` replaces the block if the markers exist, otherwise inserts it
        just before the first `##` heading, so a document's opening lines stay first.
+    4. A document in `INLINE_DOCS` gets one wrapping line of `##` links instead of a list, so
+       the README's front page reaches its first section sooner.
 
 Gotchas:
   - The list goes before the first `##`, never above the title or a document's opening text:
@@ -67,6 +69,12 @@ DOCS = [
     "docs/code-clarity.md",
 ]
 
+# Documents whose contents are one line of `##` links joined by dots: the README's list took 16
+# lines above its first section (the maintainer asked for a tighter one, 2026-10-25).
+INLINE_DOCS = {"README.md"}
+INLINE_TITLE = "**Contents:**"
+INLINE_SEPARATOR = " · "
+
 _HEADING_RE = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
 _FENCE_RE = re.compile(r"^\s*(```|~~~)")
 _LINK_RE = re.compile(r"!?\[([^\]]*)\]\([^)]*\)")
@@ -109,9 +117,10 @@ def headings(lines: list[str]) -> list[tuple[int, str]]:
     return found
 
 
-def build_toc(lines: list[str]) -> list[str]:
+def build_toc(lines: list[str], inline: bool = False) -> list[str]:
     seen: dict[str, int] = {}
     entries = []
+    links = []
     for level, text in headings(lines):
         base = slug(text)
         count = seen.get(base, 0)
@@ -122,15 +131,19 @@ def build_toc(lines: list[str]) -> list[str]:
             indent = "  " * (level - 2)
             label = plain_text(text).replace("[", "\\[").replace("]", "\\]")
             entries.append(f"{indent}- [{label}](#{anchor})")
+            if level == 2:
+                links.append(f"[{label}](#{anchor})")
     if not entries:
         return []
+    if inline:
+        return [TOC_START, f"{INLINE_TITLE} " + INLINE_SEPARATOR.join(links), TOC_END]
     return [TOC_START, TOC_TITLE, "", *entries, TOC_END]
 
 
-def apply_toc(text: str) -> str:
+def apply_toc(text: str, inline: bool = False) -> str:
     """The document with its contents list written or refreshed. Unchanged if it has no `##`."""
     lines = text.split("\n")
-    toc = build_toc(lines)
+    toc = build_toc(lines, inline)
     if TOC_START in (line.strip() for line in lines):
         start = next(i for i, line in enumerate(lines) if line.strip() == TOC_START)
         end = next(i for i in range(start, len(lines)) if lines[i].strip() == TOC_END)
@@ -163,7 +176,7 @@ def main(argv: list[str] | None = None) -> int:
         original = path.read_text(encoding="utf-8")
         newline = "\r\n" if "\r\n" in original else "\n"
         text = original.replace("\r\n", "\n")
-        updated = apply_toc(text)
+        updated = apply_toc(text, inline=Path(rel).as_posix() in INLINE_DOCS)
         if updated == text:
             continue
         if args.check:

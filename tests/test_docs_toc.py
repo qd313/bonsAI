@@ -70,6 +70,15 @@ class DocsTocTests(unittest.TestCase):
     def test_document_without_sections_is_untouched(self):
         self.assertEqual(docs_toc.apply_toc("# Only a title\n\nText.\n"), "# Only a title\n\nText.\n")
 
+    def test_inline_style_is_one_line_of_sections(self):
+        out = docs_toc.apply_toc(DOC, inline=True)
+        block = out.split(docs_toc.TOC_START)[1].split(docs_toc.TOC_END)[0].strip()
+        self.assertEqual(
+            block, "**Contents:** [Getting started](#getting-started) · [Steps](#steps) · [Steps](#steps-1)"
+        )
+        self.assertEqual(docs_toc.apply_toc(out, inline=True), out)
+        self.assertIn("README.md", docs_toc.INLINE_DOCS)
+
     def test_every_listed_doc_exists(self):
         for rel in docs_toc.DOCS:
             self.assertTrue((ROOT / rel).exists(), rel)

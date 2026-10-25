@@ -378,6 +378,7 @@ Log, one row per consult: time, the question in one line, the answer in one line
 
 | Time | Question | Answer | What changed | Cost |
 |---|---|---|---|---|
+| 2026-10-25 21:55 to 22:13 UTC | Consult 1: do the fourteen briefs match the code at `a734d950`? | Ten hold with small word fixes (T, P, W, Y, N1 to N4, X, Q); F, R, U and V need corrections first; J has one wrong cause (Copy is the bubble's corner icon, not a reply-row button) | F: a junk phrase also skips the library search and never updates the remembered subject. R: the state type file added; Clear cache has no screen-side reset, so the test and the Deck check close and reopen the panel first. V: the Copy path's own unwrap added; the carrier files named; a hand-down count may trip. W: the exact two-registry shape written in; the Story spoilers index row retargeted. T: tips 110 and 111 are Steam Frame tips, left alone; new tip ids 165 and 166. N: "sixteen" cards is 101. U and J: the hand-kept fake plugin file added to both. J's button goes in the reply row as its own stop (the session's call). | about 189k tokens, 18 min |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -466,6 +467,10 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   thumbs-down pictures exist in the workshop, so L0.4 is skipped. Block L0 and advisor consult 1 started at once.
 - **22:00 UTC: K0 landed** as `6d25f6b1` (the top paragraph, the three reworded entries, the two rows to Done, D137
   written; "KB visual maps" set to PARTIAL). Code lanes wait for the window reset and consult 1.
+
+- **22:13 UTC: consult 1 back.** Ten briefs hold, four need corrections (F, R, V, W get them in their task text), one wrong
+  cause in J (the Copy button is the bubble's corner icon, so "Suggest as a tip" goes in the reply row as its own stop
+  instead; settled when J is cut after V lands). All corrections are in § 7's row. Wave 1 starts at the window reset.
 
 ## 13. Report
 

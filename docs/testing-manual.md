@@ -16,6 +16,14 @@ hold, or a matter of taste — lives as a tickable page:
 Sessions add to it rather than leaving such a finding in a chat. The rows it names stay the authority;
 the page is the maintainer's view of them.
 
+**Every check on that page carries its own evidence (the maintainer's rule, 2026-10-25).** The maintainer
+judges from the page and does not go back and forth to the Deck. So each check shows its pictures on the page,
+side by side: what was asked for (the mock-up, the earlier look, the screenshot from their report) beside what
+the Deck shows now, with a short list of what differs. Something that moves gets a short recording. A check
+with no picture yet says so and why, and the session takes it as soon as the Deck is free. Only what truly needs
+the maintainer's hands (a finger on the glass, a PIN) stays a hand check, and it still shows a picture of what
+they should see. The page opens on the newest round, with older rounds kept for the record in its side menu.
+
 Historical full checklist (pre–2026-07-30 split): [archive/testing-full-pre-2026-07-30.md](archive/testing-full-pre-2026-07-30.md).
 
 ---

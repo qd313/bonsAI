@@ -304,7 +304,8 @@ On-Deck: reply credit → **KB-ATTRIB-01**; published corpus file beside DB → 
 
 **Status:** **Shipped 2026-08-14** — the locks below were implemented, not deferred. Both channels
 are live: HF dataset `qd313/bonsai-knowledge-base` (primary) and GitHub release `knowledge-base-v1`
-(mirror). Publish path is `scripts/kb/publish_corpus.py --push-hf --push-github`. It shipped ahead of a
+(mirror). Publish path is `scripts/kb/publish_corpus.py --build-dir <the build> --hf-clone-dir ../bonsai-knowledge-base --push-hf --push-github`
+(both folders are required; the build comes from `build_rag_db.py --seed --out <the build>`). It shipped ahead of a
 formal Phase 5 exit: the 13-title / 117-section corpus came out of the remediation PR2 seed
 deepening rather than a separate Phase 5 pass.
 

@@ -108,6 +108,11 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
     every block with a handover note in the scratch folder: the build on the Deck, when the keep-awake
     runs out, where the settings backup is, the test chat's name, every setting you changed and whether
     it is back, and anything the next driver should know about the Deck's quirks tonight.
+17. **A picture for every look.** Any check whose result is a look, a wording, a layout or where the ring
+    lands saves a screenshot of that moment beside its evidence file, even when the runbook forgets to ask;
+    a press sequence or an animation gets a short recording. The maintainer judges these from the checks
+    page, with the pictures side by side, and does not go to the Deck to see them (their rule, 2026-10-25).
+    On 2026-10-24 the thumbs-down flow passed with no picture saved, so its look could not go on the page.
 
 ## Tools
 

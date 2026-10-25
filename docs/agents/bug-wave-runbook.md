@@ -127,4 +127,5 @@ and every Deck block, and is committed, so a look from a phone shows where thing
 
 `python scripts/verify.py --quick` passes. The report leads with what the maintainer must do next, then what was
 fixed and proven, what failed and why, what was found, and what is left. The maintainer's checks page is brought
-up to date. The plan gets its results, and anything learned that would change this page changes this page.
+up to date, each check with its pictures side by side on the page ([testing-manual.md](../testing-manual.md),
+"Every check on that page carries its own evidence"). The plan gets its results, and anything learned that would change this page changes this page.

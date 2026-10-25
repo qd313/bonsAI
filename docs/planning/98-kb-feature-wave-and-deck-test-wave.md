@@ -474,8 +474,10 @@ is on `experimental` on this PC, nothing pushed, nothing published.
    fifteen minutes; four calls, each with a safe choice taken.
 2. **Say "push"** when you have read this. About 80 commits on `experimental`.
 3. **Publish the library** after a glance at the word sample below:
-   `python scripts/kb/publish_corpus.py --push-hf --push-github`. Until then only your Deck had the new words, and only
-   during tonight's test (block KR put the published library back).
+   `python scripts/kb/publish_corpus.py --build-dir build/knowledge-base-2026-10-25 --hf-clone-dir ../bonsai-knowledge-base --push-hf --push-github`
+   (corrected 2026-10-25: the first version left out the build folder and the Hugging Face copy, and the script
+   refused it; that build, version 2026.10.25 with 351 words, passed the script's own check the same day). Until then
+   only your Deck had the new words, and only during tonight's test (block KR put the published library back).
 4. **Tell the next session the two usage figures** at its start; the cost limiter cannot read them and was never
    calibrated tonight.
 

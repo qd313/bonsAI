@@ -1,8 +1,9 @@
 # Plan 100, Deck block L0: the smoke pass with Show details, plan 98's owed looks, and the owed rows
 
 For a fresh deck-driver helper, at minute zero of the session, on the build already on the Deck (no deploy). Read the
-newest plan 98 handover in the workshop's `planning/assets/` folder first (`98-handover-KS.md` if block KS ran, else
-`98-handover-KR.md`): the last known state of the Deck, the test chat, the settings backup. The rules of your helper
+newest plan 98 handover in the workshop's `planning/assets/` folder first (`98-handover-KS.md`; block KS ran on
+2026-10-25): the last known state of the Deck, the test chat, the settings backup, and whether KS.4 (the thumbs-down
+pictures) was done. The rules of your helper
 file apply in full. Evidence files go to `C:\Users\still\Documents\bonsAI-workshop\test-evidence\plan100-<ROW>.json`
 (never overwrite; `-try2` if the name exists), screenshots beside them with the same stem. **Save a screenshot of every
 look this runbook names**; the maintainer judges them from the checks page and will not go to the Deck to see them.
@@ -33,12 +34,15 @@ check is about what the AI wrote (key names only from any settings file; never i
    1920 x 1080). Record it in every evidence file as `screen`.
 4. The build on the Deck: `sha256sum ~/homebrew/plugins/bonsAI/dist/index.js | cut -c1-12`. Block L0 runs on it.
 5. Back up the settings: `tar -czf /home/deck/p100-settings-backup.tgz -C ~/homebrew/settings bonsAI` (print the size).
+   If you take a `deck_snapshotSettings` snapshot instead, you must end the block with `deck_restoreSettings`: a snapshot
+   puts itself back when its time runs out, even after you are gone (the lesson of 2026-10-25). Never leave one running.
 6. **The library's state, before anything changes it:** `rag_corpus_version` and `rag_corpus_path`, the library's file
    dates (`ls -l --time-style=full-iso <path>/`), the seed folder's version
    (`python3 -c "import json;print(json.load(open('/home/deck/homebrew/settings/bonsAI/seed-knowledge-base/corpus-manifest.json'))['version'])"`),
    and the published version
    (`curl -sL https://huggingface.co/datasets/qd313/bonsai-knowledge-base/resolve/main/corpus-manifest.json | python3 -c "import json,sys;print(json.load(sys.stdin)['version'])"`).
-   Write all four into the handover: block LR puts the library back exactly here.
+   The published version should read 2026.10.25 (published on 2026-10-25). Write all four into the handover: block LR
+   puts the library back exactly here.
 7. Ollama's state: `curl -s 127.0.0.1:11434/api/tags` (names and sizes only), `curl -s 127.0.0.1:11434/api/ps`,
    `free -m`, `df -h /home`. The model list at the end must match.
 8. The games on the Recent Games row (read the row's tiles): name them; Doom 64: Retribution and Deep Rock Galactic:
@@ -48,6 +52,10 @@ check is about what the AI wrote (key names only from any settings file; never i
    and never use another.
 10. Read `ask_mode` and `spoiler_tier` (expect default). The mode chip reads Strategy for every question below unless a
     check says otherwise; read it before each question. The parental lock must be off.
+11. **The test chat is long** (over 40 questions). On 2026-10-25 a question in it first spent 68 seconds summing the
+    chat up and then showed "Couldn't sum up the chat this time, so this answer only knows the newest turns" (a new bug
+    on the roadmap, not yet looked into). If you see that line, record it in the evidence as a sighting with the time
+    it took, and carry on; the answer itself is still a valid read. Allow up to 3 minutes for an answer in that chat.
 
 ## L0.1: the knowledge-base smoke pass, with Show details this time (row KB-SMOKE-02/04, the Show details half)
 
@@ -58,35 +66,16 @@ Show details (read focus) → A → the notes chip: it names at least one note, 
 attach line names the same note(s); no "No close match" line. B back out. Record the block's title, the notes named in
 Show details and in the attach line, and that they agree.
 
-## L0.2: each glossary word underlined once (row P98-GLOSSARY-FIRST-01, plan 98 block KS.2)
+## L0.2 and L0.3: already done on 2026-10-25 (rows P98-GLOSSARY-FIRST-01 and P98-SPOILER-FOCUS-01)
 
-Nothing running, Strategy mode. Ask exactly: `In Hollow Knight, what does the Mothwing Cloak do and how do charms work`
-(the 2026-10-24 question; a cached answer coming back word for word is fine and makes the comparison exact).
-1. When the answer has finished, screenshot it with the start of the answer in view (`-answer.png`). Read the answer's
-   text and every underlined word (the glossary chips): list each chip's word in order.
-2. Press Down from the question box, one press at a time, reading focus after each, until focus leaves the answer. List
-   every stop. Screenshot the first chip with the ring on it (`-ring.png`).
-3. **Pass when** no word is underlined twice in the answer (count "charm" and "charms" as one word), and the Down walk
-   stops only on underlined words that are actually drawn. The 2026-10-24 answer had 11 underlines for 5 words; write
-   the count you see. If the AI writes a different answer with no repeated library word, ask once more with different
-   wording (`Hollow Knight: explain charms, notches and the bench`); after two tries without a repeat, UNCLEAR with what
-   it wrote.
-
-## L0.3: the spoiler row's ring (row P98-SPOILER-FOCUS-01, plan 98 block KS.3)
-
-Settings tab → Story spoilers → open the section. Do not change the setting.
-1. Ring on "Hide spoilers until I tap": screenshot (`-switch.png`).
-2. Down once. Read focus and the focused element's box against the visible area. Screenshot (`-down.png`).
-   **Pass when** focus is on **Default** and a ring is visible on it.
-3. Left once: focus on Hide more, ring visible, screenshot (`-left.png`). Right twice: Hide less, ring visible,
-   screenshot (`-right.png`). Left once (back to Default).
-4. Down once: focus leaves to Suggestion chips. Up once: **pass when** focus lands on Default again, screenshot
-   (`-up.png`).
-5. A on Default (already the picked value), then read `spoiler_tier`: still `default`.
+Both passed on the Deck in plan 98's block KS on 2026-10-25 (7 underlines for 7 words, none twice; the spoiler row's
+ring after a second fix). Nothing to run here; the numbering is kept so the handover reads the same. If the handover says
+either did not pass on the build now on the Deck, stop and ask the session before running anything.
 
 ## L0.4: the thumbs-down pictures (row P98-DEMOTE-01-pictures, plan 98 block KS.4)
 
-Nothing running, Strategy mode. Ask: `In Deep Rock Galactic Survivor, how do I beat the glyphid dreadnought`.
+**Only if the KS handover does not list these pictures as taken**; otherwise record "done 2026-10-25" and skip to
+L0.5. Nothing running, Strategy mode. Ask: `In Deep Rock Galactic Survivor, how do I beat the glyphid dreadnought`.
 1. When the answer is done, walk to "Not really" (read focus) → A. Screenshot the reason choices (`-reasons.png`).
 2. Walk to "Wrong tip" → A. If "Which note was it?" appears, screenshot it (`-which.png`), then pick the first note.
 3. Screenshot the result: "Marked not helpful", Undo, and the gold line naming the note (`-marked.png`).

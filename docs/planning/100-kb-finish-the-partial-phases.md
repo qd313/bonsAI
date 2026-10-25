@@ -133,8 +133,9 @@ Once the build reaches their Deck (and, for the notes, once you publish the libr
 - **Yoshi's Story's "Starting out" note stops contradicting itself** (six worlds of four levels).
 - **Baldur's Gate 3, GTA San Andreas, The Sims 4 and Portal 2 get enemy and item notes**, so "how do I deal with X" has
   a note to stand on for those games too, and their chips get variety.
-- **The owed Deck looks are done:** each glossary word underlined once, the spoiler row's ring, the thumbs-down
-  pictures, the hidden box on a game known only by name, the stale saved walks re-saved.
+- **The owed Deck looks are done:** the thumbs-down pictures (if plan 98's block KS did not take them), the hidden box
+  on a game known only by name, the stale saved walks re-saved, the Show details half of the smoke pass. (Two more were
+  done on 2026-10-25 before this plan ran: each glossary word underlined once, and the spoiler row's ring.)
 
 **How much better shape the knowledge base is in afterwards.** Counted from the roadmap at tip `a03dd48`:
 
@@ -143,7 +144,7 @@ Once the build reaches their Deck (and, for the notes, once you publish the libr
 | Open bugs (not accepted) | 15 | 2 to 6 (the four that need a second AI measurement may close or stay, on the numbers; call 5 is one) |
 | Half-done ("PARTIAL") entries | 4 (Phases 4, 5, 7; the screenshot measurement) | 1 (the screenshot measurement, with step 2's first piece built) |
 | Five-star features built | 0 | 1 ("Suggest as a tip") |
-| Deck checks owed on knowledge-base rows | 2 | 0 to 2 (the maintainer's own eye checks on the checks page) |
+| Deck checks owed on knowledge-base rows | 1 (the hidden box on a game known only by name; two more passed on 2026-10-25) | 0 to 2 (the maintainer's own eye checks on the checks page) |
 | AI measurements owed | 3 | 0 |
 | Games with enemy and item notes | 25 of 38 | 29 of 38 |
 
@@ -350,7 +351,7 @@ plugin with a game running.**
 
 | Block | When | What | Needs |
 |---|---|---|---|
-| L0 | Minute zero, the build already on the Deck, no deploy | Setup. **The knowledge-base smoke pass** (plan 98's runbook K0, re-runnable), this time with Show details opened and its notes chip read (the half KB-SMOKE-02/04 still owes). **Plan 98's block KS, owed since 2026-10-25:** each glossary word underlined once (P98-GLOSSARY-FIRST-01), the spoiler row's ring (P98-SPOILER-FOCUS-01), the thumbs-down pictures. **The junk phrases in a fresh chat** (P98-JUNK-PHRASES-try2) with the game running. **The hidden spoiler box on a game known only by name** (STRAT-SPOIL-NAME-01) if Doom 64 is on Recent Games. **The four stale saved walks re-saved** from their own start state (P98-K1-REPLAYS), named one by one. **Two route questions**, differently worded, read for an "If you want to cheat" section (call 5's count). | Deep Rock Galactic: Survivor; the Deck's AI; Doom 64 launched by hand |
+| L0 | Minute zero, the build already on the Deck, no deploy | Setup. **The knowledge-base smoke pass** (plan 98's runbook K0, re-runnable), this time with Show details opened and its notes chip read (the half KB-SMOKE-02/04 still owes). **Plan 98's thumbs-down pictures** (KS.4) if block KS did not take them. **The junk phrases in a fresh chat** (P98-JUNK-PHRASES-try2) with the game running. **The hidden spoiler box on a game known only by name** (STRAT-SPOIL-NAME-01) if Doom 64 is on Recent Games. **The four stale saved walks re-saved** from their own start state (P98-K1-REPLAYS), named one by one. **Two route questions**, differently worded, read for an "If you want to cheat" section (call 5's count). | Deep Rock Galactic: Survivor; the Deck's AI; Doom 64 launched by hand |
 | L1 | After the wave 1 landings and one deploy with the test library | One check per landed fix: P100-TIPS-01, P100-NEEDS-01, P100-THANKS-01, P100-ROUTE-SAVE-01, P100-HIDE-MORE-SCREEN-01, P100-SEARCH-TIER-01, P100-YOSHI-01; the look check on each screen touched (QA-LOOK-01); the free-play sweep with and without a game. | the new build |
 | L2 | After the wave 2 landings | P100-LOWERED-01, P100-SUGGEST-01, P100-FOUR-GAMES-01; second rounds. | the new build |
 | LR | The end, final build | The knowledge-base smoke pass again; every saved knowledge-base walk replayed by name; **put the library back:** Remove, then Download from the published site to the place the settings named at L0, the version read back; settings restored key by key; pinned test chips cleared; the game closed; the Deck's models as at L0. | — |
@@ -387,8 +388,9 @@ Log, one row per consult: time, the question in one line, the answer in one line
   Clear cache (the entry says they are forgotten); "thank you very much" is not caught by the "it" rule at all (the
   entry says it is); the Knowledge base section is in the Ollama tab (the entry proposes a Settings row). The
   bookkeeper's pre-go audit fixes the words; the fixes in § 5 are built against the code, not the entries.
-- **The "Where things stand" paragraph is three weeks stale**: it names the 2026.09.26 library; 2026.10.17 is published
-  and a 2026.10.25 build with 351 words waits for your publish command (plan 98 § 13.1).
+- **The "Where things stand" paragraph is a month stale**: it names the 2026.09.26 library; you published 2026.10.25
+  (351 tap-to-define words, 414 notes, 164 tips) on 2026-10-25 and both channels read back byte for byte. The
+  bookkeeper's pre-go audit rewrites the paragraph.
 - **Fable orchestrates at your choice.** The routing table puts an Opus 5.5 extra-high chat in this seat and Fable only
   where five- and six-star decisions are planned; this plan has one five-star item, so the planning half fits and the
   landing half is above the table.
@@ -396,7 +398,14 @@ Log, one row per consult: time, the question in one line, the answer in one line
 - **The new library needs your publish.** Four games' notes and the Yoshi fix reach other people's Decks only after the
   publish command runs from your hands; the 2026-10-25 build with the glossary words is still waiting for it too.
 - **Baldur's Gate 3's wiki is NonCommercial** and cannot feed notes; its lane may write fewer notes than the others.
-- **Plan 98's block KS is still owed** (three Deck looks, runbook written 2026-10-25); it is folded into block L0.
+- **Plan 98's block KS ran on 2026-10-25:** each glossary word underlined once and the spoiler row's ring both passed
+  (the ring needed a second fix: a switch's edge moves must sit on a wrapper, now a lesson). Both rows wait only for a
+  docs sweep to Done; the bookkeeper's pre-go audit does it. Whether KS took the thumbs-down pictures is read from its
+  handover; block L0 takes them if not.
+- **A new chat bug from block KS:** in the test chat, now over 40 questions long, a Strategy question first spent 68
+  seconds summing the chat up and then gave up ("Couldn't sum up the chat this time"). Not a knowledge-base bug, but
+  every Deck block asks in that chat; the runbook says to record the line as a sighting and carry on, and lane M takes
+  it if a cause shows up.
 - **The usage-limit restart is not reliable.** If the limit hits while you are away, a "Continue" restarts the session.
 - **Haiku runs on W and Y are logged** in plan 33 § 4d, as the trial requires; a miss that needs Sonnet counts against it.
 
@@ -437,6 +446,11 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   53 percent and two and a half days to its reset, this wave is likely to spend a large share of what is left; read the
   counter before each wave and start no helper past 80 percent (call 14). Do not start lanes in the last minutes before
   the five-hour window resets.
+- **2026-10-25, later:** five commits from the maintainer's PC reached `experimental` while this chat planned: the
+  library 2026.10.25 published and read back from both channels; block KS run, with the first-mention underlines and the
+  spoiler row's ring passed on the Deck (the ring after a second fix, now a lesson about Steam's switch and a wrapper); a
+  new chat bug (the summing-up of a long chat gave up); a lesson on settings snapshots that restore themselves. The plan,
+  the K0 and W briefs, the helper rules and runbook L0 were corrected for them and the plan commits were put on top.
   Findings while planning: the cloud container has no Deck, no Ollama, no workshop, and the wikis are refused by its
   network rule, so it can only plan; the screen-side packages installed and the type check, the bundle and the Python
   suite (3,029 tests, 70 seconds) all passed there, so the tip is green. Six Haiku lookups mapped every lane's files

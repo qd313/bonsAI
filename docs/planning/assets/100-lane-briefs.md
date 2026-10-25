@@ -19,10 +19,17 @@ building the brief's mistake.
 one commit; move nothing between sections; invent no result.
 
 **Fix, each named in your report:**
-1. The "Where things stand" paragraph of `docs/roadmap-kb.md`: the library on the Deck and on both download sites is
-   2026.10.17 (38 games, 414 notes, 164 Deck tips, two tap-to-define words), published and checked on a clean install
-   2026-10-23; a 2026.10.25 build with 351 tap-to-define words across all 38 games waits for the maintainer's publish
-   (plan 98 § 13.1, item 3). Keep the search and answer figures and their dates as they are.
+1. The "Where things stand" paragraph of `docs/roadmap-kb.md`: the library on both download sites is 2026.10.25 (38
+   games, 414 notes, 164 Deck tips, 351 tap-to-define words across all 38 games), published by the maintainer on
+   2026-10-25 and read back from both channels byte for byte (`docs/knowledge-base.md`, the releases table); the Deck's
+   own copy is whatever block L0 reads (the session gives you the version). Keep the search and answer figures and their
+   dates as they are.
+1b. Two rows that passed on the Deck on 2026-10-25 and say "to move to Done in the next docs sweep": the glossary
+   first-mention entry in `docs/roadmap-kb.md` (row P98-GLOSSARY-FIRST-01, evidence
+   `workshop:test-evidence/plan98-P98-GLOSSARY-FIRST-01.json`) and the spoiler row's ring entry in `docs/roadmap.md`
+   (row P98-SPOILER-FOCUS-01, evidence `workshop:test-evidence/plan98-P98-SPOILER-FOCUS-01-try2.json`). Move each to
+   its Done list as one line, the full entry to the matching archive file, and close the row everywhere it reads open
+   (`git grep -n` the row id across `docs/`); confirm both evidence files exist in the workshop first.
 2. The Bugs entry "Route look: the shown steps are forgotten when the cache is cleared": the code reading says Clear
    cache and leaving Strategy clear the ticks and leave the revealed steps in the panel's browser storage, so a route
    can come back with later steps open and nothing ticked; only Clear all data removes them. Reword the symptom to that;
@@ -39,8 +46,9 @@ one commit; move nothing between sections; invent no result.
    the fourteen calls", then plan 100 § 2 word for word with "the defaults on all fourteen" and the usage figures given
    (53 percent of the five-hour window and 53 percent of the week on 2026-10-25). Check 137 is free first.
 
-**Files owned:** `docs/roadmap-kb.md`, `docs/roadmap-kb-details.md`, `docs/audit/maintainer-decisions-locked.md`. End
-with `python scripts/docs_toc.py` if a heading changed, then `python scripts/verify.py --quick`. Commit when told.
+**Files owned:** `docs/roadmap-kb.md`, `docs/roadmap-kb-details.md`, `docs/roadmap.md` and `docs/testing.md` (item 1b
+only), the two archive files item 1b moves entries into, `docs/audit/maintainer-decisions-locked.md`. End with
+`python scripts/docs_toc.py` if a heading changed, then `python scripts/verify.py --quick`. Commit when told.
 
 ---
 
@@ -267,7 +275,9 @@ line. A test pins that fallback: `SearchTab.bonsaiJump.test.tsx` 151 to 157.
 
 **Build, one commit.** An index entry "How much to hide" (row "spoiler-tier", section "spoilers", search words: hide
 more, hide less, spoiler tier, how much to hide); the tier row registers its row holder the way Text size does at line
-60, pointing at the Default button; the test at 151 to 157 now expects the ring on the Default button for both "Story
+60, pointing at the Default button (read `SettingsTab.tsx` around the Story spoilers section first: on 2026-10-25 the
+switch above the row had its Up and Down moved onto a wrapper, commit `6c80feba`, so the lines above have shifted and
+the row's own entry stop is now reached by that wrapper's Down); the test at 151 to 157 now expects the ring on the Default button for both "Story
 spoilers" and "How much to hide"; `bonsaiSettingsIndex.test.ts` gains the new entry.
 
 **Files owned:** `bonsaiSettingsIndex.ts`, `SettingsTabSpoilerTierRow.tsx`, `SearchTab.bonsaiJump.test.tsx`,

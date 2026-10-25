@@ -60,6 +60,9 @@ they still apply; the lines marked "new" are this plan's.
     only through the registry's transfer, never a page search, never a `tabindex` of -1, never a plain `focus()` across
     containers. A walk is tested with Steam's own scroll modelled (`src/test-harness/deckAnswerWalk.ts`) and with a
     bounded walk in which no stop is visited twice. Every stop must hear A and B, not only take the ring.
+    A move handler on Steam's own switch cannot claim the press: Steam's step still runs after it, so a switch's edge
+    moves go on a Focusable wrapper around it (the lesson of 2026-10-25, plan 98 block KS; `DenseSwitchRow`'s
+    `navOnWrapper` is the shape) (new).
 19. **A settings change** follows the Text size setting's every appearance, in both languages (`git grep -n
     chat_text_size` and `chatTextSize`), one row per language in the simple-field tables, and runs the read-back test
     and the two contract tests (fresh install, hostile inputs). No lane in this plan adds a setting; lane V reads one.

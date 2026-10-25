@@ -24,9 +24,10 @@
  * next line; the switch above carries Up to the section's line (see docs/focus-graph.md, "The Story spoilers tier
  * row").
  */
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 
-import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
+import { registerNavFocus, unregisterNavFocus } from "../../shared/dpad/navFocusRegistry";
+import { bonsaiSettingRowNav } from "../search-tab/bonsaiSettingRowNav";
 import { SPOILER_TIER_OPTIONS, type SpoilerTier } from "./bonsaiSettingsSchema";
 import { SETTINGS_ROW_HELP, SPOILER_TIER_LABEL } from "./settingsTabFolds";
 import { SettingsTabChoiceRow } from "./SettingsTabChoiceRow";
@@ -50,12 +51,15 @@ export const SettingsTabSpoilerTierRow: React.FC<SettingsTabSpoilerTierRowProps>
   setting: { value: spoilerTier, set: setSpoilerTier },
   nav,
 }) => {
-  /* Steam fills this in: Default's wrapper, as a place the ring can be sent to (Down from the switch). */
-  const defaultNav = useRef<NavRefHolder["current"]>(null);
+  /*
+   * Steam fills this in: Default's wrapper, as a place the ring can be sent to. The one holder is kept under the row's
+   * name for the Search tab's jump (the index row "spoiler-tier") and under the switch's Down target's name.
+   */
+  const defaultNav = bonsaiSettingRowNav("spoiler-tier");
   useEffect(() => {
     registerNavFocus("spoiler-tier-default", defaultNav);
     return () => unregisterNavFocus("spoiler-tier-default", defaultNav);
-  }, []);
+  }, [defaultNav]);
   return (
     <SettingsTabChoiceRow
       label="How much to hide"

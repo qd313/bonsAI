@@ -3,8 +3,8 @@
  * Purpose: Walk the whole jump with the real tabs on the shell's own tab switch (which closes every folded
  *          section): type a word in the real Search tab, press A on the bonsAI row, and see the real Settings tab
  *          drawn with that setting's section open and Steam's ring on the setting: on its row for Text size, Voice
- *          input and Clear cache / Clear all data, on its section's line for Story spoilers (that row does not
- *          register a nav node); the real Permissions tab with the ring on the switch; and B bringing the Search
+ *          input and Clear cache / Clear all data, on the Default button of the tier row for Story spoilers and
+ *          How much to hide; the real Permissions tab with the ring on the switch; and B bringing the Search
  *          tab back with the word in the box and the ring on the same result row.
  * Used for: SearchTab.tsx, bonsaiSettingJump.ts, useSearchShortcut.ts, SettingsTab.tsx and its section files,
  *           VoiceInputSettingsSection.tsx, PermissionsTab.tsx.
@@ -148,12 +148,16 @@ describe("A on a bonsAI setting, with the real tabs", () => {
     await waitFor(() => expect(ringIn(".bonsai-settings-cache-row")).not.toBeNull(), { timeout: 3000 });
   });
 
-  it("Story spoilers: its section open, the ring on the section's line, since that row takes no ring of its own", async () => {
-    await searchFor("spoiler");
-    pressA("Story spoilers, bonsAI Settings > Story spoilers (Strategy mode)");
+  it.each([
+    ["spoiler", "Story spoilers"],
+    ["how much", "How much to hide"],
+  ])("%s finds %s: its section open, the ring on the Default button of the tier row", async (word, label) => {
+    await searchFor(word);
+    pressA(`${label}, bonsAI Settings > Story spoilers (Strategy mode)`);
     await waitFor(() => expect(lineOpen("spoilers")).toBe("true"));
-    await waitFor(() => expect(steamRingHolder()?.getAttribute("data-bonsai-fold-line")).toBe("spoilers"), { timeout: 3000 });
-    /* The switch row is drawn, under the line, so the person sees the setting. */
+    await waitFor(() => expect(ringIn("[data-bonsai-spoiler-tier-row]")).not.toBeNull(), { timeout: 3000 });
+    expect(steamRingHolder()?.textContent).toBe("Default");
+    /* The switch row is drawn, above the tier row, so the person sees the setting. */
     expect(document.querySelector('[data-bonsai-help-label="Hide spoilers until I tap"]')).not.toBeNull();
   });
 

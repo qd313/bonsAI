@@ -76,8 +76,9 @@ describe("matching a typed word", () => {
     expect(labels("VOICE")).toContain("Voice input");
   });
 
-  it("finds Story spoilers for spoiler", () => {
-    expect(labels("spoiler")).toEqual(["Story spoilers"]);
+  it("finds Story spoilers and How much to hide for spoiler", () => {
+    expect(labels("spoiler")).toEqual(["Story spoilers", "How much to hide"]);
+    expect(labels("how much")).toEqual(["How much to hide"]);
   });
 
   it("finds Text size for 'text size' and for text, size and font", () => {

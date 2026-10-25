@@ -79,7 +79,7 @@ describe("a word that is one of bonsAI's own settings", () => {
     const { container } = await searchFor("spoiler");
     /* A kept note mentions spoilers too (the fixture's), so it is listed as well; the bonsAI row is the only one in its group. */
     expect(groupIds(container)).toEqual(["notes", "bonsai"]);
-    expect(rowTitles(container, "bonsai")).toEqual(["Story spoilers"]);
+    expect(rowTitles(container, "bonsai")).toEqual(["Story spoilers", "How much to hide"]);
   });
 
   it("lists Text size for text size", async () => {

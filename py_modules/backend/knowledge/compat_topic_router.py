@@ -161,7 +161,20 @@ _TOPIC_RULES: dict[str, tuple[tuple[str, ...], ...]] = {
         ("out of space",),
         ("disk space",),
         ("move", "library"),
-        ("storage",),
+        # "storage" alone is not enough: Portal 2's Weighted Storage Cube is a storage question
+        # to this list and a puzzle question to the player. It needs a second word that says the
+        # drive is the subject. ("free", "left", "drive" and "sd" are prefixes, as _term_matches allows.)
+        ("storage", "full"),
+        ("storage", "space"),
+        ("storage", "free"),
+        ("storage", "left"),
+        ("storage", "drive"),
+        ("storage", "card"),
+        ("storage", "sd"),
+        ("storage", "microsd"),
+        ("storage", "install"),
+        ("storage", "gb"),
+        ("storage", "out of"),
         # Plan 100 lane T: how people say "the drive is full" without the word "storage". Each
         # needs a second word -- "not enough space" alone is also what a full backpack says.
         # ("isnt enough space",) is the spelling _normalize makes of "isn't enough space".

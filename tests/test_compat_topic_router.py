@@ -442,6 +442,39 @@ class PlainProblemWordsRouteTests(unittest.TestCase):
                 )
                 self.assertEqual(gate, (True, "compat"))
 
+    def test_the_word_storage_alone_is_not_a_full_drive(self):
+        """Portal 2's Weighted Storage Cube is not the Deck's storage.
+
+        The single word "storage" used to route, so these two strategy questions were answered
+        with a storage-full tip. It now needs a second word that says the drive is the subject.
+        """
+        for question in (
+            "What is the weighted storage cube used for?",
+            "storage cube button",
+            "where do I find the storage cube in chamber 4",
+        ):
+            with self.subTest(question=question):
+                self.assertNotIn("storage", match_compat_corpus_topics(question))
+                self.assertFalse(question_targets_compat_corpus(question))
+                self.assertFalse(question_targets_compat_corpus(question, game_in_context=False))
+
+    def test_storage_with_a_word_about_the_drive_still_routes(self):
+        for question in (
+            "storage full cant install anything else",
+            "my internal storage is full",
+            "how much free storage do I need",
+            "storage space is running out",
+            "no storage left on the deck",
+            "can I put the storage on an sd card",
+            "storage drive is almost full",
+            "storage microsd keeps unmounting",
+            "not enough storage to install a 40 gb game",
+            "I am out of storage",
+        ):
+            with self.subTest(question=question):
+                self.assertIn("storage", match_compat_corpus_topics(question))
+                self.assertTrue(question_targets_compat_corpus(question))
+
     def test_questions_that_are_not_problems_still_do_not_route(self):
         for question in (
             "how do I beat the boss",

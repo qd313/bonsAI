@@ -42,6 +42,9 @@ beforeEach(() => {
 
 const STOP = 'button:not([disabled]), [data-decky-ui="ToggleField"]';
 const SWITCH = '[data-decky-ui="ToggleField"][aria-label="Hide spoilers until I tap"]';
+/** The Focusable around the switch that holds its Up and Down (a ToggleField's own handler cannot claim a press). */
+const switchMoves = (container: HTMLElement) =>
+  container.querySelector(SWITCH)!.closest<SteamEl>('[data-bonsai-switch-moves="true"]')!;
 const nameOf = (el: HTMLElement) => el.getAttribute("aria-label") ?? el.getAttribute("label") ?? el.textContent ?? "";
 const handlersOf = (el: Element | null) => {
   const nav = (el as SteamEl | null)?.__nav ?? {};
@@ -73,7 +76,10 @@ describe("Settings tab walk with the spoiler tier row", () => {
       expect(handlersOf(button)).toEqual([]);
       expect(button.hasAttribute("disabled")).toBe(false);
     }
-    expect(handlersOf(container.querySelector(SWITCH))).toEqual(["onMoveUp", "onMoveDown"]);
+    // On the Deck (2026-10-25) a Down handler on the ToggleField itself was overruled by Steam's own move, which
+    // landed on Hide more; the moves live on a wrapper whose answer Steam honours, and the switch carries none.
+    expect(handlersOf(container.querySelector(SWITCH))).toEqual([]);
+    expect(handlersOf(switchMoves(container))).toEqual(["onMoveUp", "onMoveDown"]);
     for (const wrapper of Array.from(row.querySelectorAll<SteamEl>('[data-decky-ui="Focusable"]'))) {
       expect(handlersOf(wrapper)).toEqual(["onOKButton"]);
     }
@@ -88,7 +94,7 @@ describe("Settings tab walk with the spoiler tier row", () => {
 
     const toggle = container.querySelector<SteamEl>(SWITCH)!;
     act(() => putSteamRingOn(toggle));
-    act(() => void toggle.__nav?.onMoveUp?.());
+    act(() => void switchMoves(container).__nav?.onMoveUp?.());
     expect(steamRingHolder()?.getAttribute("data-bonsai-fold-line")).toBe("spoilers");
   });
 
@@ -109,7 +115,7 @@ describe("Settings tab walk with the spoiler tier row", () => {
     const { container } = render(<SettingsTab {...settingsProps()} />);
     const toggle = container.querySelector<SteamEl>(SWITCH)!;
     act(() => putSteamRingOn(toggle));
-    act(() => void toggle.__nav?.onMoveDown?.());
+    act(() => void switchMoves(container).__nav?.onMoveDown?.());
     const holder = steamRingHolder();
     expect(holder?.getAttribute("aria-label")).toBe("Set spoiler tier to Default");
     expect(holder?.tagName).toBe("BUTTON");

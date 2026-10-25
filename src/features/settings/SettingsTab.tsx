@@ -257,6 +257,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 checked={strategySpoilerMaskingEnabled}
                 onChange={(checked) => setStrategySpoilerMaskingEnabled(checked)}
                 nav={{ onMoveUp: up("spoilers"), onMoveDown: () => takeNavFocus("spoiler-tier-default") }}
+                navOnWrapper
               />
             </PanelSectionRow>
             <SettingsTabSpoilerTierRow setting={spoilerTierSetting} nav={{ onMoveDown: down("spoilers") }} />

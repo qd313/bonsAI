@@ -115,9 +115,9 @@ Default one can be a place Steam's ring is sent to.
 
 ```
 Story spoilers (Strategy mode)        <- the section's line
-   | Down                                ^ Up (the switch's onMoveUp)
+   | Down                                ^ Up (the switch wrapper's onMoveUp)
 Hide spoilers until I tap (toggle)
-   | Down (the switch's onMoveDown: Steam's transfer onto Default)
+   | Down (the switch wrapper's onMoveDown: Steam's transfer onto Default)
 How much to hide:  [Hide more]  [Default]  [Hide less]     Left / Right move along the three
    | Down (the row's onMoveDown)         ^ Up (Steam's own, to the switch)
 Suggestion chips                      <- the next section's line
@@ -125,9 +125,12 @@ Suggestion chips                      <- the next section's line
 
 - **Stops:** the switch, then the three buttons. The wrappers and the row's container are not stops.
 - **The row is always entered on Default, the middle button** (the maintainer's call on the Deck, 2026-10-25), from
-  both sides. Down from the switch: the switch carries `onMoveDown`, which is `takeNavFocus("spoiler-tier-default")`,
-  Steam's own transfer onto Default's wrapper (the row registers it; a plain `focus()` across the two rows would move
-  only the page's focus). Up from the next line: `useSettingsTabFocus.ts` has an entry (`ENTRY_BUTTON_OF_LAST_ROW`)
+  both sides. Down from the switch: the switch's wrapper carries `onMoveDown`, which is
+  `takeNavFocus("spoiler-tier-default")`, Steam's own transfer onto Default's wrapper (the row registers it; a plain
+  `focus()` across the two rows would move only the page's focus). **The Up and Down handlers sit on a `Focusable`
+  around the switch (`DenseSwitchRow`'s `navOnWrapper`), never on the `ToggleField` itself:** on the Deck
+  (2026-10-25, build `87a21fa1`) a Down handler on the `ToggleField` sent the ring to Default and Steam's own move
+  then ran anyway and landed on Hide more; a wrapper's handler claims the press. Up from the next line: `useSettingsTabFocus.ts` has an entry (`ENTRY_BUTTON_OF_LAST_ROW`)
   that picks the button marked `data-bonsai-choice-entry`, which is Default. Before this, Steam's own step from the
   switch picked Hide more, and the ring was not seen on any of the three on the Deck.
 - **Moves:** the switch has `onMoveUp` (to the section's line) and `onMoveDown` (onto Default); the tier row has

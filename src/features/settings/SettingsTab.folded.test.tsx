@@ -179,11 +179,14 @@ describe("the Settings tab's moves out of a section", () => {
   it("Story spoilers has two rows: the switch hands Up to the line and Down to Default, the tier row hands Down to the next line and nothing else", () => {
     const { container } = render(<SettingsTab {...props()} />);
     const toggle = rowFor(container, "Hide spoilers until I tap")!.querySelector('[data-decky-ui="ToggleField"]') as SteamEl;
+    // The moves sit on the Focusable around the switch: Steam overrules a ToggleField's own Down handler (Deck 2026-10-25).
+    const moves = toggle.closest('[data-bonsai-switch-moves="true"]') as SteamEl;
     const tier = container.querySelector<SteamEl>('[data-bonsai-spoiler-tier-row="true"]')!;
-    expect(Object.keys(nav(toggle)).filter((k) => nav(toggle)[k])).toEqual(["onMoveUp", "onMoveDown"]);
+    expect(Object.keys(nav(toggle)).filter((k) => nav(toggle)[k])).toEqual([]);
+    expect(Object.keys(nav(moves)).filter((k) => nav(moves)[k])).toEqual(["onMoveUp", "onMoveDown"]);
     expect(Object.keys(nav(tier)).filter((k) => nav(tier)[k])).toEqual(["onMoveDown"]);
     act(() => putSteamRingOn(toggle));
-    act(() => void nav(toggle).onMoveUp?.());
+    act(() => void nav(moves).onMoveUp?.());
     expect(steamRingHolder()?.getAttribute("data-bonsai-fold-line")).toBe("spoilers");
     act(() => putSteamRingOn(tier.querySelector("button")));
     act(() => void nav(tier).onMoveDown?.());

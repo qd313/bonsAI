@@ -469,6 +469,13 @@ to Steam.** The Search tab measured its find box through that ref; every measure
 stepped in its own page order, so Down from a game button went to the next game (plan 92, `19214ab6`). Measure the
 element you drew yourself, and never let a move handler throw.
 
+**A move handler on Steam's switch (`ToggleField`) cannot claim the press: Steam's own move still runs after it.**
+The Story spoilers switch's Down handler sent the ring to Default; on the Deck Steam then made its own step anyway and
+the ring landed on Hide more, while every test, which calls the handler and stops, passed (plan 98, 2026-10-25, first
+fix `830485d7`). Up from the same switch looked fine only because Steam's own Up went to the same place. Put a
+switch's edge moves on a `Focusable` around it (`DenseSwitchRow`'s `navOnWrapper`, the first-run popup's shape); a
+wrapper's handler is honoured. Evidence `workshop:test-evidence/plan98-P98-SPOILER-FOCUS-01.json`.
+
 **A greyed Decky button still takes the ring on the Deck; the shared test stand-in says it cannot.** The models box
 asked the button whether it was disabled and the greyed licence row became a stop on the Deck while every test passed
 (plan 92, `172d013b`). Skip a greyed control because your own state says it is off; the stand-in is on the roadmap.

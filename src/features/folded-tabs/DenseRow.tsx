@@ -19,7 +19,7 @@
  * row. Does not draw the strip (TabHelpStrip) or decide where the text shows.
  */
 import React from "react";
-import { ToggleField } from "@decky/ui";
+import { Focusable, ToggleField } from "@decky/ui";
 
 import { scaledSteamWords } from "../../shared/text-size/scaledSteamWords";
 import { helpAttributes } from "./useHelpStrip";
@@ -53,6 +53,13 @@ export type DenseSwitchRowProps = {
   disabled?: boolean;
   /** Steam move handlers for the row (onMoveUp, onMoveDown), passed to the ToggleField. */
   nav?: Record<string, unknown>;
+  /**
+   * Put `nav` on a Focusable around the switch instead of on the ToggleField. Steam does not take a ToggleField's
+   * own handler as having claimed the press: its own move still runs after it, so a handler that sends the ring
+   * somewhere Steam's step would not go is overruled (Down from the Story spoilers switch landed on Hide more, not
+   * Default, on the Deck 2026-10-25). A wrapper's handlers are honoured, the shape the first-run popup's switches use.
+   */
+  navOnWrapper?: boolean;
   hostRef?: React.Ref<HTMLDivElement>;
   /** A live status line under the switch (not help text), e.g. "Set up and answering questions." */
   children?: React.ReactNode;
@@ -69,12 +76,28 @@ export function DenseSwitchRow({
   onChange,
   disabled,
   nav,
+  navOnWrapper,
   hostRef,
   children,
 }: DenseSwitchRowProps): React.ReactElement {
+  const toggle = (
+    <ToggleField
+      label={scaledSteamWords(label, 16)}
+      checked={checked}
+      disabled={disabled}
+      onChange={onChange}
+      {...(navOnWrapper ? {} : (nav ?? {}))}
+    />
+  );
   return (
     <DenseRow kind="switch" label={label} help={help} hostRef={hostRef}>
-      <ToggleField label={scaledSteamWords(label, 16)} checked={checked} disabled={disabled} onChange={onChange} {...(nav ?? {})} />
+      {navOnWrapper ? (
+        <Focusable data-bonsai-switch-moves="true" {...(nav ?? {})}>
+          {toggle}
+        </Focusable>
+      ) : (
+        toggle
+      )}
       {children}
     </DenseRow>
   );

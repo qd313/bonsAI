@@ -472,6 +472,15 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   cause in J (the Copy button is the bubble's corner icon, so "Suggest as a tip" goes in the reply row as its own stop
   instead; settled when J is cut after V lands). All corrections are in § 7's row. Wave 1 starts at the window reset.
 
+- **22:14 UTC: Deck block L0 done** (handover [assets/100-handover-L0.md](assets/100-handover-L0.md)). Setup PASS; the
+  smoke pass with Show details PASS (the third note reads "Boss note (spoiler)" on screen and "False Knight" in the log: a
+  hidden-name label, recorded); the four stale walks re-saved and replayed PASS; the junk phrases FAIL twice as expected
+  before lane F ("thank you very much" got 93 words of boss advice, "what time is it" attached three notes); the route
+  questions: 0 cheat sections in 2, but **neither route question drew a step list** (both answers were one paragraph; a
+  sighting for lane P's Deck check and lane M); the chip row showed one chip only ("How to use bonsAI", text fits).
+  **Doom 64 was not on Recent Games**, so the hidden-box row could not run (sixth time): the maintainer's hand launch is
+  still needed. The Deck is left on Speed, no game, keep-awake until 05:55 UTC, settings backup on the Deck.
+
 ## 13. Report
 
 Not yet written.

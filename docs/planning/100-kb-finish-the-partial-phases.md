@@ -459,6 +459,14 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   suite (3,029 tests, 70 seconds) all passed there, so the tip is green. Six Haiku lookups mapped every lane's files
   and found the three roadmap-versus-code mismatches in § 8. The fourteen calls in § 2 are open.
 
+- **2026-10-25, 21:50 UTC, the session on the maintainer's PC (Fable 5.1 high): go.** Tip `a734d950`, tree clean, D137
+  free. Usage at go: 54 percent of the five-hour window (resets 22:19 UTC) and 54 percent of the week. Deck: no live
+  lease, rig armed. The full check passed on the tip (255 s). Today's published library build (2026.10.25, every meaning
+  vector) was copied into `build/knowledge-base` and into all thirteen wave 1 copies; no rebuild needed. Plan 98's
+  thumbs-down pictures exist in the workshop, so L0.4 is skipped. Block L0 and advisor consult 1 started at once.
+- **22:00 UTC: K0 landed** as `6d25f6b1` (the top paragraph, the three reworded entries, the two rows to Done, D137
+  written; "KB visual maps" set to PARTIAL). Code lanes wait for the window reset and consult 1.
+
 ## 13. Report
 
 Not yet written.

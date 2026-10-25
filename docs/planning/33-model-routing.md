@@ -183,6 +183,12 @@ Verdict after ten rows: keep it if two or fewer misses; drop it and strike this 
 | 2026-10-22 | Plan 99 planning (Haiku 5.5 high) | Lessons and the filming recipe | Yes; one stale conflict flagged, correctly | No |
 | 2026-10-22 | Plan 99 planning (Sonnet 5.5 medium) | Release mechanics and the version bump | Yes; found the two release-robot traps | No |
 | 2026-10-22 | Plan 99 planning (Sonnet 5.5 medium) | Owed items across plans 73, 94, 96, 97 | Yes | No |
+| 2026-10-25 | Plan 100 planning (Haiku 5.5, six read-only lookups in parallel, about 110,000 to 145,000 tokens each) | The follow-up rule and its callers | Yes; it corrected the roadmap (the "it" rule never sees "thank you very much"); the planning chat re-read the cited lines before writing the brief | No |
+| 2026-10-25 | Plan 100 planning (Haiku 5.5) | The route look's saved steps, the ticks, Clear cache and Clear all data | Yes; it corrected the roadmap (Clear cache keeps the revealed steps) | No |
+| 2026-10-25 | Plan 100 planning (Haiku 5.5) | The spoiler tier on the screen side and the Settings search index | Yes; one line left unknown (which names the back end protects under Hide more), said so | No |
+| 2026-10-25 | Plan 100 planning (Haiku 5.5) | The thumbs-down store, methods, tag and the Knowledge base section's place | Yes; it corrected the premise (the section is in the Ollama tab, not Settings) | No |
+| 2026-10-25 | Plan 100 planning (Haiku 5.5) | The tip sheet's fields and ids, the router's word lists, the 24 blind sentences | Yes, grep-confirmed by the planning chat (fields, ids 76/110/111/125/126/154, the fixture rows) | No |
+| 2026-10-25 | Plan 100 planning (Haiku 5.5) | The screenshot prompt and ask path; the pieces "Suggest as a tip" needs | Yes, the issue link and the section fields grep-confirmed; one constant left unread, said so | No |
 
 ### 4b. The lane model trial: Sonnet high, Opus low, Opus medium (proposed 2026-09-26, the maintainer's idea)
 

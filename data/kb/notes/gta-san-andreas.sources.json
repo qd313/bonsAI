@@ -266,6 +266,283 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1105,
+      "name": "Heat-Seeking Rocket Launcher",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Heat-Seeking_Rocket_Launcher",
+      "main_revision": "2007852",
+      "lines": [
+        {
+          "line": "Summary: A shoulder-fired homing launcher. It picks the nearest target itself: the marker is green on a vehicle and turns red after 3 to 5 seconds, which means the missile is locked on.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Heat-Seeking_Rocket_Launcher",
+              "revision": "2007852",
+              "quoted": [
+                "The Heat-Seeking Rocket Launcher, sometimes referred as Lock on Missile, is a man-portable infrared homing surface-to-air missile in Grand Theft Auto: San Andreas.",
+                "the Heat-Seeking Rocket Launcher automatically selects the nearest available target. When pointed at a vehicle, the marker is green. After waiting for 3–5 seconds, it turns red and the missile is locked on."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It is useful for taking out air vehicles such as Police Mavericks, and the missile flies much faster at aircraft. It can destroy any vehicle instantly.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Heat-Seeking_Rocket_Launcher",
+              "revision": "2007852",
+              "quoted": [
+                "making it useful for taking out air vehicles, such as Police Mavericks. The missile's flight speed is significantly increased when the target is an aircraft.",
+                "this type of Heat-Seeking rocket can destroy any vehicle instantly."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Fired with no target, the rocket explodes after 100 to 200 meters, and you cannot sprint, jump or crouch while holding it. It lies at Easter Bay Airport in San Fierro, at Mike Toreno's ranch after Vertical Bird, beside an abandoned house in Aldea Malvada, and on a parking lot roof near Pilson Intersection in Las Venturas.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Heat-Seeking_Rocket_Launcher",
+              "revision": "2007852",
+              "quoted": [
+                "If shot launched without finding a target, after 100–200 meters, the rocket explodes.",
+                "As it is a heavy weapon, the player is unable to sprint, jump or crouch when holding the weapon.",
+                "Easter Bay Airport, San Fierro – Between the fuel canisters at northeast",
+                "Tierra Robada – Inside Mike Toreno's ranch upon completion of Vertical Bird.",
+                "Aldea Malvada, Tierra Robada - Beside an abandoned house",
+                "Pilson Intersection, Las Venturas – On the northeast corner of the roof of a parking lot southwest of the intersection"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1106,
+      "name": "Wanted level one and two stars (police)",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+      "main_revision": "2082835",
+      "lines": [
+        {
+          "line": "Summary: One star brings an officer on foot, one or two police cars and, in towns, HPV1000 motorbikes. Two stars brings three officers on foot and, on water, Predator boats.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "One officer on foot",
+                "1-2 police cars (including the Ranger for the countryside)",
+                "1-2 HPV1000 bikes with motor officers (only in urban areas)",
+                "Three officers on foot",
+                "1-2 Predator boats (on water)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: At one star only one officer at a time chases you, with a nightstick, and the police eventually lose interest and the star fades on its own, unless you are in a police vehicle.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "At a one-star wanted level, one officer at a time will pursue and attack the player with a nightstick.",
+                "At this level, the police will eventually lose interest and the player will eventually lose the wanted star on its own, except if they are using a police vehicle."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: From two stars officers shoot even if you are unarmed or holding a melee weapon, and police cars may appear at intersections to block you. Being busted fails any mission, strips your weapons and costs $100 at one star or $200 at two.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "Officers that spawn during this wanted level onwards will now shoot to attack, even if the player has a melee weapon or is unarmed.",
+                "starting with this wanted level, while driving through cities, police cars may spawn at certain intersections, attempting to intercept or block in the player's vehicle.",
+                "any mission the player was on will count as failed, and the player is transported to the nearest police station, stripped of all weapons and a small amount of money, ranging from $100 to $1,500.",
+                "It results in a $100 fine if they player gets arrested",
+                "It results in a $200 fine if the player gets busted."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1107,
+      "name": "Wanted level three and four stars (SWAT, Police Maverick)",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+      "main_revision": "2082835",
+      "lines": [
+        {
+          "line": "Summary: At three stars a Police Maverick helicopter arrives and drops SWAT members armed with Micro SMGs, and police occasionally set up armed roadblocks. At four stars SWAT chase in Enforcer vans and a News Chopper joins the Maverick.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "A Police Maverick is called in to provide air support and drop SWAT members armed with Micro SMGs.",
+                "occasionally set up armed roadblocks on main roads",
+                "At a four-star wanted level, the pursuing Police Maverick is joined by a News Chopper. SWAT teams will give chase in Enforcer vans alongside the regular police cars."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Danger: Four-star roadblocks are made of the heavier Enforcer vans, which are harder to ram through. Shooting down the News Chopper only gets it replaced by another Police Maverick, so two police helicopters chase you.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "Roadblocks now consist of these heavier and larger SWAT vans, making them more difficult to ram through.",
+                "If the News Chopper is shot down by the player, it will get replaced by another Police Maverick and the player is now pursued by two police helicopters. This increases the danger."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: From three stars police motorcycles give way to cars and officers start to appear on the sidewalks when you are on foot. Entering a region or city you have not unlocked gives four stars at once. Being busted costs $400 at three stars or $600 at four.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "Police motorcycles are supplanted (replaced) by police cars at this wanted level",
+                "Police officers will also begin to spawn on the sidewalks when the player is on foot.",
+                "This wanted level is automatically triggered when the player enters a region or city that they have not unlocked.",
+                "It results in a $400 fine if the player gets busted.",
+                "It results in a $600 fine if the player gets busted."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1108,
+      "name": "Wanted level five stars (FBI)",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+      "main_revision": "2082835",
+      "lines": [
+        {
+          "line": "Summary: At five stars the FBI takes over most of the chase: eight officers on foot (regular, SWAT and FBI), three FBI Ranchers or police cars, Predator boats on water, one or two Police Mavericks, and two Hydra jets if you are in the air.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "Eight officers on foot (regular, SWAT and FBI)",
+                "Three FBI Ranchers or police cars",
+                "Three Predator boats (on water)",
+                "1-2 Police Mavericks",
+                "Two Hydra jets (air and Vortex pursuit)",
+                "the local police are supplanted (replaced) by FBI agents which takes over a majority of the chase."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Their Rancher roadblocks are relatively easier to ram through, but the agents can make short work of your vehicle and drive very aggressively, which makes it easy to crash and lose control.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "The roadblocks now consist of FBI Ranchers. Though these are relatively easier to ram through, the FBI agents can make short work of the player's vehicle.",
+                "The agents also drive very aggressively while they pursuit the player's vehicle, making it easy to crash and lose control."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The agents carry fast-firing SMGs. Entering or flying over Area 69 or Easter Basin Naval Station gives five stars at once, but the areas around them only give four stars before they are unlocked. Being busted costs $900.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "The FBI agents are armed with SMGs, which have a high fire rate.",
+                "This level is automatically triggered by entering or flying over a restricted area, which includes Area 69 in Bone County, and Easter Basin Naval Station in San Fierro.",
+                "If the player instead enters the areas surrounding these landmarks before they are unlocked, they will only get four stars.",
+                "It results in a $900 fine if the player gets busted."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1109,
+      "name": "Wanted level six stars (army)",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+      "main_revision": "2082835",
+      "lines": [
+        {
+          "line": "Summary: At six stars Military soldiers with M4s chase you in Barracks OL trucks and Rhino tanks, alongside officers, Predator boats on water, Police Mavericks, and three Hydra jets if you are in the air.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "the player is pursued by the Military soldiers armed with M4s and driving Barracks OL trucks and Rhino tanks.",
+                "Ten officers on foot (regular, SWAT & soldiers)",
+                "Three Predator boats (on water)",
+                "1-2 Police Mavericks",
+                "Three Hydra jets (air and Vortex pursuit)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Danger: The soldiers have very high precision and fire rate, the tanks may try to crush you, and the roadblocks are Barracks OL trucks with troops, which are very hard to ram through. That makes it nearly impossible to survive for long on foot.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "The soldiers have a very high precision and fire rate with their weapons. Also, the tanks may sometimes decide to crush the player. This makes it nearly impossible to survive for a long time on foot.",
+                "The roadblocks now consist of Barracks OL trucks and troops, making it very hard to ram through."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The tanks only chase and never fire their cannons. A car that hits a tank is only set on fire, not blown up at once, which gives you a chance to get out and keep escaping.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "the tanks are only used to pursuit and they never fire their cannons.",
+                "If the player's car hits a tank, it will only be lighted up on fire but not immediately explode, which allows for a chance to exit and continue escaping."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Six stars is not handed out instantly without cheats, which makes it very hard to reach; the level opens up after Yay Ka-Boom-Boom and in practice can be reached after Learning to Fly. Being busted costs $1,500.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "The six-star wanted level becomes available after C.R.A.S.H. allows access to Las Venturas with the completion of Yay Ka-Boom-Boom. In practice, it is attainable after completing Learning to Fly.",
+                "This wanted level is not instantly obtained in the game without cheats. This makes it very hard for players to achieve this wanted level.",
+                "It results in a $1,500 fine if the player gets busted."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

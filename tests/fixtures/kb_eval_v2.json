@@ -6258,7 +6258,9 @@
       "skill_level": "beginner",
       "input_style": "terse",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "crash",
+      "expect_pattern_id": 125
     },
     {
       "id": "V2-W2-SYM-02",
@@ -6273,7 +6275,9 @@
       "skill_level": "familiar",
       "input_style": "voice",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "crash",
+      "expect_pattern_id": 125
     },
     {
       "id": "V2-W2-SYM-03",
@@ -6288,7 +6292,9 @@
       "skill_level": "beginner",
       "input_style": "terse",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "crash",
+      "expect_pattern_id": 126
     },
     {
       "id": "V2-W2-SYM-04",
@@ -6303,7 +6309,9 @@
       "skill_level": "beginner",
       "input_style": "voice",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "crash",
+      "expect_pattern_id": 126
     },
     {
       "id": "V2-W2-SYM-05",
@@ -6318,7 +6326,9 @@
       "skill_level": "beginner",
       "input_style": "terse",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "display",
+      "expect_pattern_id": 152
     },
     {
       "id": "V2-W2-SYM-06",
@@ -6333,7 +6343,9 @@
       "skill_level": "power_user",
       "input_style": "voice",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "display",
+      "expect_pattern_id": 152
     },
     {
       "id": "V2-W2-SYM-07",
@@ -6348,7 +6360,9 @@
       "skill_level": "familiar",
       "input_style": "terse",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "performance",
+      "expect_pattern_id": 136
     },
     {
       "id": "V2-W2-SYM-08",
@@ -6363,7 +6377,9 @@
       "skill_level": "beginner",
       "input_style": "voice",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "performance",
+      "expect_pattern_id": 136
     },
     {
       "id": "V2-W2-SYM-09",
@@ -6378,7 +6394,9 @@
       "skill_level": "beginner",
       "input_style": "terse",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "controller",
+      "expect_pattern_id": 107
     },
     {
       "id": "V2-W2-SYM-10",
@@ -6393,7 +6411,9 @@
       "skill_level": "familiar",
       "input_style": "voice",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "controller",
+      "expect_pattern_id": 107
     },
     {
       "id": "V2-W2-SYM-11",
@@ -6408,7 +6428,9 @@
       "skill_level": "beginner",
       "input_style": "terse",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "audio",
+      "expect_pattern_id": 148
     },
     {
       "id": "V2-W2-SYM-12",
@@ -6423,7 +6445,9 @@
       "skill_level": "familiar",
       "input_style": "voice",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "audio",
+      "expect_pattern_id": 165
     },
     {
       "id": "V2-W2-SYM-13",
@@ -6438,7 +6462,9 @@
       "skill_level": "beginner",
       "input_style": "terse",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "storage",
+      "expect_pattern_id": 76
     },
     {
       "id": "V2-W2-SYM-14",
@@ -6453,7 +6479,9 @@
       "skill_level": "beginner",
       "input_style": "voice",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "storage",
+      "expect_pattern_id": 76
     },
     {
       "id": "V2-W2-SYM-15",
@@ -6468,7 +6496,9 @@
       "skill_level": "familiar",
       "input_style": "terse",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "display",
+      "expect_pattern_id": 153
     },
     {
       "id": "V2-W2-SYM-16",
@@ -6483,7 +6513,9 @@
       "skill_level": "power_user",
       "input_style": "voice",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "display",
+      "expect_pattern_id": 153
     },
     {
       "id": "V2-W2-SYM-17",
@@ -6498,7 +6530,9 @@
       "skill_level": "beginner",
       "input_style": "terse",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "performance",
+      "expect_pattern_id": 138
     },
     {
       "id": "V2-W2-SYM-18",
@@ -6513,7 +6547,9 @@
       "skill_level": "familiar",
       "input_style": "voice",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "performance",
+      "expect_pattern_id": 138
     },
     {
       "id": "V2-W2-SYM-19",
@@ -6527,8 +6563,10 @@
       "withheld_card_terms": [],
       "skill_level": "familiar",
       "input_style": "terse",
-      "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules. Plan 100: no Deck tip answers this yet (tips 110 and 111 are Steam Frame tips), so expect_topic and expect_pattern_id stay empty until one is written.",
+      "expect_section": "",
+      "expect_topic": "",
+      "expect_pattern_id": ""
     },
     {
       "id": "V2-W2-SYM-20",
@@ -6542,8 +6580,10 @@
       "withheld_card_terms": [],
       "skill_level": "power_user",
       "input_style": "voice",
-      "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules. Plan 100: no Deck tip answers this yet (tips 110 and 111 are Steam Frame tips), so expect_topic and expect_pattern_id stay empty until one is written.",
+      "expect_section": "",
+      "expect_topic": "",
+      "expect_pattern_id": ""
     },
     {
       "id": "V2-W2-SYM-21",
@@ -6558,7 +6598,9 @@
       "skill_level": "beginner",
       "input_style": "terse",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "updates",
+      "expect_pattern_id": 82
     },
     {
       "id": "V2-W2-SYM-22",
@@ -6573,7 +6615,9 @@
       "skill_level": "familiar",
       "input_style": "voice",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "updates",
+      "expect_pattern_id": 82
     },
     {
       "id": "V2-W2-SYM-23",
@@ -6588,7 +6632,9 @@
       "skill_level": "familiar",
       "input_style": "terse",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "display",
+      "expect_pattern_id": 166
     },
     {
       "id": "V2-W2-SYM-24",
@@ -6603,7 +6649,9 @@
       "skill_level": "power_user",
       "input_style": "voice",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules.",
-      "expect_section": ""
+      "expect_section": "",
+      "expect_topic": "display",
+      "expect_pattern_id": 166
     },
     {
       "id": "V2-P1-DK64-01",

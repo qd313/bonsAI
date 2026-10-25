@@ -87,5 +87,46 @@ class PlainWordsInTipsTests(unittest.TestCase):
         )
 
 
+
+FIXTURE = json.loads((REPO_ROOT / "tests" / "fixtures" / "kb_eval_v2.json").read_text(encoding="utf-8"))
+SYM_ROWS = {q["id"]: q for q in FIXTURE["queries"] if q["id"].startswith("V2-W2-SYM-")}
+# No Deck tip answers "can't find my PC" yet (110 and 111 are Steam Frame tips).
+ROWS_WITH_NO_TIP = {"V2-W2-SYM-19", "V2-W2-SYM-20"}
+
+
+class BlindSentenceRowsNameTheirTipTests(unittest.TestCase):
+    """The 24 rows used to record no right tip, so "reach a tip" could not say "the right one"."""
+
+    def test_there_are_twenty_four_rows(self):
+        self.assertEqual(sorted(SYM_ROWS), ["V2-W2-SYM-%02d" % n for n in range(1, 25)])
+
+    def test_each_row_names_a_tip_that_exists_and_its_topic(self):
+        for rid, row in SYM_ROWS.items():
+            with self.subTest(row=rid):
+                self.assertIn("expect_pattern_id", row)
+                self.assertIn("expect_topic", row)
+                if rid in ROWS_WITH_NO_TIP:
+                    self.assertEqual(row["expect_pattern_id"], "")
+                    self.assertEqual(row["expect_topic"], "")
+                    continue
+                self.assertIn(row["expect_pattern_id"], BY_ID)
+                self.assertEqual(BY_ID[row["expect_pattern_id"]]["topic"], row["expect_topic"])
+
+    def test_the_tv_rows_point_at_the_two_new_tips(self):
+        self.assertEqual(SYM_ROWS["V2-W2-SYM-12"]["expect_pattern_id"], 165)
+        self.assertEqual(SYM_ROWS["V2-W2-SYM-23"]["expect_pattern_id"], 166)
+        self.assertEqual(SYM_ROWS["V2-W2-SYM-24"]["expect_pattern_id"], 166)
+
+    def test_the_rows_that_have_a_plain_words_check_point_at_that_tip(self):
+        for row, (tip_id, _phrases) in PLAIN_WORDS.items():
+            with self.subTest(row=row):
+                self.assertEqual(SYM_ROWS["V2-W2-SYM-" + row]["expect_pattern_id"], tip_id)
+
+    def test_the_sentences_themselves_are_unchanged(self):
+        """The rows were written blind; only the answer columns were added."""
+        self.assertEqual(SYM_ROWS["V2-W2-SYM-05"]["query"], "screen goes black when i open it")
+        self.assertEqual(SYM_ROWS["V2-W2-SYM-19"]["query"], "cant find my pc on the network")
+
+
 if __name__ == "__main__":
     unittest.main()

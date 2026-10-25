@@ -9021,7 +9021,7 @@
       "skill_level": "beginner",
       "input_style": "natural",
       "note": "Written blind 2026-10-25 from the note's name only (plan 100 lane Q)",
-      "expect_section": "Wanted level one and two stars"
+      "expect_section": "Wanted level one and two stars (police)"
     },
     {
       "id": "V2-P100-GTASA-14",
@@ -9036,7 +9036,7 @@
       "skill_level": "intermediate",
       "input_style": "terse",
       "note": "Written blind 2026-10-25 from the note's name only (plan 100 lane Q)",
-      "expect_section": "Wanted level one and two stars"
+      "expect_section": "Wanted level one and two stars (police)"
     },
     {
       "id": "V2-P100-GTASA-15",
@@ -9051,7 +9051,7 @@
       "skill_level": "beginner",
       "input_style": "natural",
       "note": "Written blind 2026-10-25 from the note's name only (plan 100 lane Q)",
-      "expect_section": "Wanted level three and four stars"
+      "expect_section": "Wanted level three and four stars (SWAT, Police Maverick)"
     },
     {
       "id": "V2-P100-GTASA-16",
@@ -9066,7 +9066,7 @@
       "skill_level": "intermediate",
       "input_style": "terse",
       "note": "Written blind 2026-10-25 from the note's name only (plan 100 lane Q)",
-      "expect_section": "Wanted level three and four stars"
+      "expect_section": "Wanted level three and four stars (SWAT, Police Maverick)"
     },
     {
       "id": "V2-P100-GTASA-17",
@@ -9081,7 +9081,7 @@
       "skill_level": "beginner",
       "input_style": "natural",
       "note": "Written blind 2026-10-25 from the note's name only (plan 100 lane Q)",
-      "expect_section": "Wanted level five stars"
+      "expect_section": "Wanted level five stars (FBI)"
     },
     {
       "id": "V2-P100-GTASA-18",
@@ -9096,7 +9096,7 @@
       "skill_level": "intermediate",
       "input_style": "terse",
       "note": "Written blind 2026-10-25 from the note's name only (plan 100 lane Q)",
-      "expect_section": "Wanted level five stars"
+      "expect_section": "Wanted level five stars (FBI)"
     },
     {
       "id": "V2-P100-GTASA-19",
@@ -9111,7 +9111,7 @@
       "skill_level": "beginner",
       "input_style": "natural",
       "note": "Written blind 2026-10-25 from the note's name only (plan 100 lane Q)",
-      "expect_section": "Wanted level six stars"
+      "expect_section": "Wanted level six stars (army)"
     },
     {
       "id": "V2-P100-GTASA-20",
@@ -9126,7 +9126,7 @@
       "skill_level": "intermediate",
       "input_style": "terse",
       "note": "Written blind 2026-10-25 from the note's name only (plan 100 lane Q)",
-      "expect_section": "Wanted level six stars"
+      "expect_section": "Wanted level six stars (army)"
     },
     {
       "id": "V2-P100-GTASA-21",
@@ -9141,7 +9141,7 @@
       "skill_level": "beginner",
       "input_style": "natural",
       "note": "Written blind 2026-10-25 from the note's name only (plan 100 lane Q)",
-      "expect_section": "Enemy Hydra jets"
+      "expect_section": "Enemy Hydra jets (wanted level)"
     },
     {
       "id": "V2-P100-GTASA-22",
@@ -9156,7 +9156,7 @@
       "skill_level": "intermediate",
       "input_style": "terse",
       "note": "Written blind 2026-10-25 from the note's name only (plan 100 lane Q)",
-      "expect_section": "Enemy Hydra jets"
+      "expect_section": "Enemy Hydra jets (wanted level)"
     },
     {
       "id": "V2-P100-GTASA-23",

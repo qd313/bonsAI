@@ -128,5 +128,114 @@ class BlindSentenceRowsNameTheirTipTests(unittest.TestCase):
         self.assertEqual(SYM_ROWS["V2-W2-SYM-19"]["query"], "cant find my pc on the network")
 
 
+
+class MeasuringScriptNamesTheRightTipTests(unittest.TestCase):
+    """scripts/measure_kb_floor_holdout.py now says which tip the first answer carried.
+
+    The level the Deck check looks at: a question's reply carries a tip, and the table says whether
+    that tip is the right one. The helpers are tested on the text block the real card writer emits,
+    not on a block the test makes up.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        from script_loader import load_script
+
+        cls.script = load_script("measure_kb_floor_holdout")
+
+    def _library_with(self, ids):
+        import sqlite3
+
+        conn = sqlite3.connect(":memory:")
+        conn.row_factory = sqlite3.Row
+        conn.execute(
+            "CREATE TABLE compat_patterns (pattern_id INTEGER PRIMARY KEY, topic TEXT, card TEXT, "
+            "source_url TEXT, source_license TEXT)"
+        )
+        for tip_id in ids:
+            conn.execute(
+                "INSERT INTO compat_patterns VALUES (?, ?, ?, ?, ?)",
+                (tip_id, BY_ID[tip_id]["topic"], BY_ID[tip_id]["card"], "", "bonsAI-maintainer"),
+            )
+        return conn
+
+    def test_the_tip_numbers_are_read_back_from_the_text_block_in_order(self):
+        from backend.knowledge.knowledge_base_cards import _compat_row_to_card, _card_lines
+
+        conn = self._library_with([125, 126, 76])
+        cards = [_compat_row_to_card(r) for r in conn.execute("SELECT * FROM compat_patterns WHERE pattern_id IN (76, 125)")]
+        cards.sort(key=lambda c: c.section_id, reverse=True)  # 125 first, then 76
+        block = "\n".join(["--- start ---"] + [_card_lines(c, domain="compat") for c in cards] + ["\n--- End ---"])
+        self.assertEqual(self.script.tip_ids_in_order(conn, block), [125, 76])
+        self.assertEqual(self.script.tip_ids_in_order(conn, ""), [])
+
+    def test_a_tip_whose_text_starts_another_is_not_mistaken_for_it(self):
+        import sqlite3
+
+        conn = sqlite3.connect(":memory:")
+        conn.execute("CREATE TABLE compat_patterns (pattern_id INTEGER PRIMARY KEY, topic TEXT, card TEXT)")
+        conn.execute("INSERT INTO compat_patterns VALUES (1, 'audio', 'Check the output.')")
+        conn.execute("INSERT INTO compat_patterns VALUES (2, 'audio', 'Check the output. Then the game.')")
+        block = "--- start ---\n\n[Tip: audio] (trust: x)\nCheck the output. Then the game.\n\n--- End ---"
+        self.assertEqual(self.script.tip_ids_in_order(conn, block), [2])
+
+    def test_verdicts(self):
+        v = self.script.tip_verdict
+        self.assertEqual(v(125, 125), "right")
+        self.assertEqual(v(125, 126), "wrong")
+        self.assertEqual(v(125, None), "nothing")
+        self.assertEqual(v("", None), "nothing (none fits)")
+        self.assertEqual(v("", 120), "wrong (none fits)")
+        self.assertEqual(v(None, 120), "wrong (none fits)")
+        # Another tip from the same subject is counted apart, not as a plain miss.
+        self.assertEqual(v(125, 126, "crash", "crash"), "right topic")
+        self.assertEqual(v(125, 120, "crash", "network"), "wrong")
+
+    def test_the_table_has_a_row_per_sentence_and_a_before_column(self):
+        now = [
+            {"id": "V2-W2-SYM-05", "query": "screen goes black when i open it", "first_tip_id": 152,
+             "attached": ["display"], "expect_pattern_id": 152},
+            {"id": "V2-W2-SYM-19", "query": "cant find my pc on the network", "first_tip_id": None,
+             "attached": [], "expect_pattern_id": ""},
+        ]
+        before = [
+            {"id": "V2-W2-SYM-05", "query": "screen goes black when i open it", "first_tip_id": None,
+             "attached": [], "expect_pattern_id": 152},
+            {"id": "V2-W2-SYM-19", "query": "cant find my pc on the network", "first_tip_id": None,
+             "attached": [], "expect_pattern_id": ""},
+        ]
+        lines = self.script.blind_table_lines(now, before)
+        text = "\n".join(lines)
+        self.assertEqual(len(lines), 3)  # header and two sentences
+        self.assertIn("152", lines[1])
+        self.assertIn("right", lines[1])
+        self.assertIn("nothing", lines[1])  # before: nothing
+        self.assertIn("nothing (none fits)", lines[2])
+        self.assertIn("before", lines[0])
+        self.assertNotIn("before", "\n".join(self.script.blind_table_lines(now, None)))
+        self.assertIn("screen goes black", text)
+
+    def test_the_blind_summary_counts_the_right_tip_not_just_any_tip(self):
+        rows = [
+            {"first_tip_id": 125, "expect_pattern_id": 125, "attached": ["crash"]},
+            {"first_tip_id": 126, "expect_pattern_id": 125, "attached": ["crash"]},
+            {"first_tip_id": 120, "expect_pattern_id": "", "attached": ["network"]},
+            {"first_tip_id": None, "expect_pattern_id": 76, "attached": []},
+            {"first_tip_id": 142, "expect_pattern_id": 136, "expect_topic": "performance", "attached": ["performance"]},
+        ]
+        s = self.script.blind_summary(rows)
+        self.assertEqual(
+            s,
+            {
+                "total": 5,
+                "reach_a_tip": 4,
+                "name_a_right_tip": 4,
+                "reach_the_right_tip": 1,
+                "reach_the_right_topic_only": 1,
+                "reach_a_wrong_tip": 2,
+            },
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -4,7 +4,9 @@
 Purpose: Judge the "none of these fit" floor on the rows the lane that built it was not allowed
          to see -- the 41 held-back troubleshooting rows of tests/fixtures/kb_eval_v2.json, the
          24 blind problem sentences inside them, a set of junk phrases, and the four device
-         sentences that caught the notes hole on 2026-09-07.
+         sentences that caught the notes hole on 2026-09-07. Since plan 100 it also says which
+         TIP each of the 24 sentences reached (the tip's number, read back from the reply's text)
+         and whether that is the right one, with a before and after table.
 Used for: Plan 48 section 7, the tips and notes table the retire-or-keep and ship-or-stop calls
           are written from. Run by the one running the session, never by a lane -- reading these
           rows is what the lane's blindness rule forbids.
@@ -19,6 +21,7 @@ Run on the maintainer PC with Ollama up and a built corpus:
     python scripts/kb/build_rag_db.py --seed --out ./build/knowledge-base
     python scripts/measure_kb_floor_holdout.py
     python scripts/measure_kb_floor_holdout.py --json runs/plan48-floor-after.json --label after
+    python scripts/measure_kb_floor_holdout.py --compare runs/before.json   # adds a "before" column
 """
 from __future__ import annotations
 
@@ -36,6 +39,90 @@ from backend.knowledge import knowledge_base_service as kb  # noqa: E402
 
 FIXTURE = os.path.join(ROOT, "tests", "fixtures", "kb_eval_v2.json")
 CARD_HEADER_RE = re.compile(r"^\[.*\(trust: [^)]+\)\s*$", re.M)
+
+
+def tip_ids_in_order(conn, text_block: str) -> list[int]:
+    """The numbers of the tips whose text is in a reply's knowledge block, first one first.
+
+    A tip's header names only its topic ("[Tip: crash]"), never its number, so the number is read
+    back by finding each tip's exact text between two line breaks (the writer puts one before and
+    one after every card), which also stops a tip whose text starts another's from matching it.
+    """
+    if not text_block:
+        return []
+    found: list[tuple[int, int]] = []
+    for pattern_id, card in conn.execute("SELECT pattern_id, card FROM compat_patterns"):
+        pos = text_block.find("\n" + str(card) + "\n")
+        if pos >= 0:
+            found.append((pos, int(pattern_id)))
+    return [pid for _pos, pid in sorted(found)]
+
+
+def tip_verdict(expect_id, first_id, expect_topic="", first_topic="") -> str:
+    """right / right topic / wrong / nothing for a row that names its right tip; "(none fits)" for
+    one that cannot (no tip answers it yet, so attaching any tip is wrong and attaching none is
+    correct). "right topic" is a different tip from the same subject: often a fair answer (several
+    performance tips fit "the game stutters"), but not the one recorded, so it is counted apart."""
+    has_right_tip = expect_id not in ("", None)
+    if not has_right_tip:
+        return "wrong (none fits)" if first_id is not None else "nothing (none fits)"
+    if first_id is None:
+        return "nothing"
+    if int(first_id) == int(expect_id):
+        return "right"
+    return "right topic" if expect_topic and expect_topic == first_topic else "wrong"
+
+
+def _row_verdict(row: dict, first_id=None, use_row_first: bool = True) -> str:
+    topics = row.get("attached") or []
+    first = row.get("first_tip_id") if use_row_first else first_id
+    return tip_verdict(row.get("expect_pattern_id"), first, row.get("expect_topic") or "", topics[0] if topics else "")
+
+
+def blind_summary(rows: list[dict]) -> dict:
+    """How many of the blind sentences reach a tip, the right tip, and a wrong one."""
+    verdicts = [_row_verdict(r) for r in rows]
+    return {
+        "total": len(rows),
+        "reach_a_tip": sum(1 for r in rows if r.get("attached")),
+        "name_a_right_tip": sum(1 for r in rows if r.get("expect_pattern_id") not in ("", None)),
+        "reach_the_right_tip": sum(1 for v in verdicts if v == "right"),
+        "reach_the_right_topic_only": sum(1 for v in verdicts if v == "right topic"),
+        "reach_a_wrong_tip": sum(1 for v in verdicts if v.startswith("wrong")),
+    }
+
+
+def _first_tip_text(row: dict) -> str:
+    topics = row.get("attached") or []
+    tip_id = row.get("first_tip_id")
+    if not topics:
+        return "-"
+    return ("%s %s" % (tip_id, topics[0])) if tip_id is not None else str(topics[0])
+
+
+def blind_table_lines(rows: list[dict], before_rows: list[dict] | None = None) -> list[str]:
+    """One line per blind sentence: the first tip it reached and whether that is the right one.
+
+    With ``before_rows`` (the rows of an earlier run's JSON) a second column shows the same for
+    that run, matched by row id and judged against the row's current right tip.
+    """
+    before = {r["id"]: r for r in (before_rows or [])}
+    head = "%-3s %-48s %-30s" % ("row", "sentence", "now: first tip, verdict")
+    if before_rows is not None:
+        head += " %s" % "before: first tip, verdict"
+    lines = [head]
+    for r in rows:
+        now = "%s, %s" % (_first_tip_text(r), _row_verdict(r))
+        line = "%-3s %-48s %-30s" % (str(r["id"])[-2:], str(r["query"])[:48], now)
+        if before_rows is not None:
+            b = before.get(r["id"])
+            if b is None:
+                line += " -"
+            else:
+                bv = _row_verdict({**r, "attached": b.get("attached")}, b.get("first_tip_id"), use_row_first=False) if "first_tip_id" in b else "?"
+                line += " %s, %s" % (_first_tip_text(b), bv)
+        lines.append(line)
+    return lines
 
 # Phrases that should attach nothing. The first six are the set the 2026-08-28 second-signal
 # audit measured; the rest were written 2026-09-07 because only two of those six reach the
@@ -118,8 +205,12 @@ def print_comparison(before_path: str, after_rows: list[dict]) -> None:
 
 
 def attached(settings: dict, question: str, *, mode: str, app_id: str, app_name: str,
-             pc_ip: str) -> tuple[list[str], str]:
-    """Card names this question attaches, and the domain it routed to."""
+             pc_ip: str, conn=None, ids_out: list | None = None) -> tuple[list[str], str]:
+    """Card names this question attaches, and the domain it routed to.
+
+    Given ``conn`` and ``ids_out``, the numbers of the tips it attached (first first) are put in
+    ``ids_out`` too.
+    """
     text_title = ""
     if not app_id.strip() and not app_name.strip():
         text_title = kb.resolve_title_from_question(settings, question)
@@ -148,6 +239,8 @@ def attached(settings: dict, question: str, *, mode: str, app_id: str, app_name:
         re.sub(r"^\[.*: (.*?)\].*$", r"\1", h.strip())
         for h in CARD_HEADER_RE.findall(res.text_block or "")
     ]
+    if ids_out is not None and conn is not None:
+        ids_out.extend(tip_ids_in_order(conn, res.text_block or ""))
     return names, str(domain or "")
 
 
@@ -180,17 +273,21 @@ def main() -> int:
 
     detail: list[dict] = []
     right = wrong = nothing = 0
-    # Only 17 of the 41 held-back troubleshooting rows carry an `expect_topic`, and NONE of the
-    # 24 blind problem sentences do -- they were written by someone who had not seen the tips, so
-    # nobody ever recorded which tip they ought to reach. Scoring those against an empty topic
-    # would mark every attachment "wrong" and report a made-up 0-out-of-24. They are counted
-    # separately, on the only thing that is actually known about them: whether anything attached.
+    # Until plan 100 only 17 of the 41 held-back troubleshooting rows carried an `expect_topic`
+    # and NONE of the 24 blind problem sentences did -- they were written by someone who had not
+    # seen the tips, so nobody had recorded which tip they ought to reach. Scoring those against
+    # an empty topic would have marked every attachment "wrong" and reported a made-up 0-out-of-24.
+    # Plan 100 lane T recorded the right tip (`expect_pattern_id`) and topic for 22 of the 24; the
+    # other two (finding the PC on the network) have no tip that fits and stay unscored. A row
+    # with no expected topic is still counted separately, on whether anything attached.
     unscored_attached = unscored_nothing = 0
 
     for row in holdout_tips:
+        tip_ids: list[int] = []
         names, domain = attached(
             settings, row["query"], mode="speed",
             app_id=str(row.get("app_id") or ""), app_name="", pc_ip=args.pc_ip,
+            conn=conn, ids_out=tip_ids,
         )
         want = topic_of_row(row)
         if not want:
@@ -215,6 +312,8 @@ def main() -> int:
             "id": row["id"], "kind": "holdout-tip", "query": row["query"],
             "expect_topic": want or None, "attached": names, "verdict": verdict,
             "blind": str(row.get("id", "")).startswith("V2-W2-SYM-"),
+            "tip_ids": tip_ids, "first_tip_id": tip_ids[0] if tip_ids else None,
+            "expect_pattern_id": row.get("expect_pattern_id", ""),
         })
 
     # The 175 held-back STRATEGY rows. These are what judge a floor on the note path, and they
@@ -278,9 +377,9 @@ def main() -> int:
             "verdict": "wrong" if names else "nothing", "blind": False,
         })
 
-    blind_reaching = sum(
-        1 for d in detail if d["kind"] == "holdout-tip" and d["blind"] and d["attached"]
-    )
+    blind_rows = [d for d in detail if d["kind"] == "holdout-tip" and d["blind"]]
+    blind_reaching = sum(1 for d in blind_rows if d["attached"])
+    blind_stats = blind_summary(blind_rows)
     scored = right + wrong + nothing
 
     label = (" [%s]" % args.label) if args.label else ""
@@ -295,9 +394,19 @@ def main() -> int:
     print("    attached nothing         : %d" % unscored_nothing)
     print()
     print("Of those, the 24 blind problem sentences")
-    print("  reach a tip          : %d of %d" % (blind_reaching, len(blind)))
-    print("  (none of them record which tip is right, so whether it FITS is a human read --")
-    print("   the per-row detail in the JSON is what to read)")
+    print("  reach a tip          : %d of %d" % (blind_stats["reach_a_tip"], blind_stats["total"]))
+    print("  reach the right tip  : %d of %d (the rows that name a right tip)" % (
+        blind_stats["reach_the_right_tip"], blind_stats["name_a_right_tip"]))
+    print("  right topic, another tip : %d (a fair answer, but not the one recorded)" % blind_stats["reach_the_right_topic_only"])
+    print("  reach a wrong tip    : %d (counting the rows no tip answers yet)" % blind_stats["reach_a_wrong_tip"])
+    print()
+    before_rows = None
+    if args.compare:
+        with open(args.compare, encoding="utf-8") as fh:
+            before_doc = json.load(fh)
+        before_rows = [r for r in before_doc.get("rows", before_doc) if r.get("blind")]
+    for line in blind_table_lines(blind_rows, before_rows):
+        print("  " + line)
     print()
     print("Junk phrases that should attach nothing")
     print("  attached something   : %d of %d" % (junk_attached, len(JUNK)))
@@ -331,7 +440,11 @@ def main() -> int:
                     "right": right, "wrong": wrong, "nothing": nothing,
                     "unscored_attached": unscored_attached,
                     "unscored_nothing": unscored_nothing,
-                    "blind_reaching": blind_reaching, "blind_total": len(blind),
+                    "blind_reaching": blind_reaching, "blind_total": len(blind_rows),
+                    "blind_reach_the_right_tip": blind_stats["reach_the_right_tip"],
+                    "blind_name_a_right_tip": blind_stats["name_a_right_tip"],
+                    "blind_reach_the_right_topic_only": blind_stats["reach_the_right_topic_only"],
+                    "blind_reach_a_wrong_tip": blind_stats["reach_a_wrong_tip"],
                     "junk_attached": junk_attached, "junk_total": len(JUNK),
                     "device_attached": device_attached, "device_total": len(DEVICE_SENTENCES),
                 },

@@ -4,17 +4,18 @@
  *          Outdated and Wrong edition appear when the answer used a note that carries the library's id, both on a
  *          finished answer read from its saved snapshot and on the live answer read from the poll's notes, and
  *          they stay away when the note carries no id (a chat saved before plan 98). A tag shows in the open notes
- *          block for a note the back end says is marked.
+ *          block for a note the back end says is marked, and for a note marked on this answer until Undo (plan 100).
  * Used for: MainTabChatTranscript.tsx, useReplyDemote.ts, buildReplyActionsElement.tsx, kbDemoteRows.tsx.
  * Does not: Walk the D-pad (buildReplyActionsElement.demote.test.tsx does) or check the back end's ids.
  */
-import { describe, expect, it, vi } from "vitest";
-import { render } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { act, fireEvent, render } from "@testing-library/react";
 
 import { MainTabChatTranscript } from "./MainTabChatTranscript";
 import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
 import type { AskThreadCollapsedTurn } from "../../../types/bonsaiUi";
 import type { KbAttachedNote } from "../../../types/inputTransparency";
+import { resetRememberedReplyDemoteForTests } from "../reply-actions/useReplyDemote";
 
 vi.mock("@decky/ui", async () => import("../../../test-harness/fakeDeckyUi"));
 
@@ -100,5 +101,25 @@ describe("the transcript offers the three reasons for the notes the answer used"
   it("not on an answer whose notes carry no id (saved before plan 98), live or saved", () => {
     expect(reasons(savedAnswer([note({ section_id: undefined })]))).toEqual([]);
     expect(reasons(liveAnswer([note({ section_id: 0 })]))).toEqual([]);
+  });
+});
+
+describe("the open notes block's tag follows a mark made on this answer (plan 100)", () => {
+  afterEach(() => resetRememberedReplyDemoteForTests());
+
+  const tags = (c: HTMLElement) => c.querySelectorAll(".bonsai-kb-note-demoted-tag").length;
+  const byText = (c: HTMLElement, text: string) =>
+    [...c.querySelectorAll<HTMLElement>("button, [role=button], .bonsai-kb-demote-chip")].find(
+      (e) => e.textContent?.trim() === text,
+    );
+
+  it("Wrong tip tags the note at once; Undo on the same answer takes the tag away", async () => {
+    const c = savedAnswer([note()]);
+    await act(async () => fireEvent.click(c.querySelector<HTMLElement>(".bonsai-kb-notes-block")!));
+    expect(tags(c)).toBe(0);
+    await act(async () => fireEvent.click(byText(c, "Wrong tip")!));
+    expect(tags(c)).toBe(1);
+    await act(async () => fireEvent.click(c.querySelector<HTMLElement>(".bonsai-kb-demote-undo")!));
+    expect(tags(c)).toBe(0);
   });
 });

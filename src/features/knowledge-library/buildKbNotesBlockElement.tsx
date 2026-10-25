@@ -139,12 +139,21 @@ function renderKbNoteCardLine(line: string, key: React.Key): React.ReactElement 
   );
 }
 
+/** Tip ids and note ids overlap, so a note is named by its kind and its number together (as kbDemoteRows.tsx does). */
+function sameDemotedNote(a: KbAttachedNote, b: KbAttachedNote): boolean {
+  return (a.kind === "tip") === (b.kind === "tip") && typeof a.section_id === "number" && a.section_id === b.section_id;
+}
+
 /**
  * "↓ ranked lower by you", the drawing's gold tag (plan 98, option C frame 4), after a marked note's name in
  * the open block. Plain words, not a stop: the block's header is the one stop.
+ *
+ * Drawn when the saved flag says the note held a mark when the answer was built, or when the note was marked
+ * on this very answer (`markedNow`, plan 100). The saved flag is fixed at build time, so a mark made here
+ * never reaches it, and Undo here takes back only a mark made here: an earlier mark keeps the tag.
  */
-function kbNoteDemotedTag(note: KbAttachedNote): React.ReactElement | null {
-  if (note.demoted !== true) return null;
+function kbNoteDemotedTag(note: KbAttachedNote, markedNow?: readonly KbAttachedNote[]): React.ReactElement | null {
+  if (note.demoted !== true && !markedNow?.some((m) => sameDemotedNote(m, note))) return null;
   return (
     <span
       className="bonsai-kb-note-demoted-tag"
@@ -339,8 +348,14 @@ export function buildKbNotesBlockElement(args: {
    * panel open leaves B to Steam.
    */
   onCancel?: () => void;
+  /**
+   * The notes marked on this answer under its reply row right now (the thumbs-down rows' "done" state), so
+   * the tag shows at once after a mark and goes at once on Undo (plan 100). Absent on an answer whose rows
+   * are not shown, so an older answer never borrows the newest one's mark.
+   */
+  markedNow?: readonly KbAttachedNote[];
 }): React.ReactElement | null {
-  const { turnKey, notes, open, onToggle, onMoveUp, onMoveDown, headerRef, onCancel } = args;
+  const { turnKey, notes, open, onToggle, onMoveUp, onMoveDown, headerRef, onCancel, markedNow } = args;
   if (!notes.length) return null;
   const headerLabel = kbNotesHeaderLabel(notes, open);
   const extra = notes.length - 1;
@@ -422,7 +437,7 @@ export function buildKbNotesBlockElement(args: {
               {kbNoteDisplayName(notes[0], open)}
             </b>
             {/* One note has no title of its own in the open body, so its tag rides on the header's name. */}
-            {open && notes.length === 1 ? kbNoteDemotedTag(notes[0]) : null}
+            {open && notes.length === 1 ? kbNoteDemotedTag(notes[0], markedNow) : null}
             {extra > 0 ? (
               <span style={{ color: "#a8916a", flex: "0 0 auto" }}>{`(+${extra} more)`}</span>
             ) : null}
@@ -456,7 +471,7 @@ export function buildKbNotesBlockElement(args: {
               {notes.length > 1 ? (
                 <div style={{ fontWeight: 700, color: "#dcc493", marginBottom: 3 }}>
                   {kbNoteDisplayName(note, true)} · {kbNoteSourcePhrase(note)}
-                  {kbNoteDemotedTag(note)}
+                  {kbNoteDemotedTag(note, markedNow)}
                 </div>
               ) : null}
               {note.card.split("\n").map((line, li) => renderKbNoteCardLine(line, li))}

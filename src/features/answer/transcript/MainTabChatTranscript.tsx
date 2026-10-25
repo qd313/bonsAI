@@ -420,6 +420,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
 
   /* Plan 98: the newest answer's "the note was wrong" rows (Wrong tip, Outdated, Wrong edition), handed to its reply row. */
   const replyDemote = useReplyDemote({ lastExchange, lastRequestId: props.lastRequestId ?? null });
+  /* The notes marked under the newest answer right now: its notes block tags them at once and drops the tag on Undo. */
+  const markedNow = replyDemote.state.phase === "done" ? replyDemote.state.picked : undefined;
   const [sessionHighlightTurnId, setSessionHighlightTurnId] = useState<string | null>(null);
   const [transparencyDetailsOpen, setTransparencyDetailsOpen] = useState(false);
   /**
@@ -1338,6 +1340,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                       turnPiece("kb-notes", buildKbNotesBlockElement({
                         turnKey: turn.id,
                         notes: kbNotesHere,
+                        markedNow: showFeedbackHere ? markedNow : undefined,
                         open: isKbNotesOpen(turn.id),
                         onToggle: () => toggleKbNotesOpen(turn.id),
                         onMoveUp: () =>
@@ -1554,6 +1557,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   return buildKbNotesBlockElement({
                     turnKey: "live",
                     notes: liveKbNotesShown,
+                    markedNow,
                     open: isKbNotesOpen("live"),
                     onToggle: () => toggleKbNotesOpen("live"),
                     /* While the answer writes there is no Show details yet: its last section is next (plan 93). */

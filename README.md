@@ -58,8 +58,7 @@ Ask about a boss, a level or a puzzle, by typing or with a suggestion chip. Pick
 for a quick reply, **Strategy** for coaching, **Expert** for the most detail. Switch on **Thinking**
 to watch the steps.
 
-<!-- VIDEO: upload recordings/readme-cuts/ask-about-your-game-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
-<img src="assets/readme/ask-about-your-game.png" alt="A new chat, the three modes, a question about the level, the thinking steps, the answer streaming in, Show reasoning, a kept note and a branch pick" width="560">
+https://github.com/user-attachments/assets/4362ec0e-81c2-4f33-8aee-d6235e1850ae
 
 </details>
 
@@ -83,8 +82,7 @@ and you can open the note under the answer.
 Say something like "no spoilers for later biomes" and a card offers to keep it, for this game or
 every game. Later answers say **Read 1 of your notes**; press it to see, switch off or remove a note.
 
-<!-- VIDEO: upload recordings/readme-cuts/your-notes-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
-<img src="assets/readme/your-notes.png" alt="Keeping a note from a question, a later answer that read it, then the Your notes box" width="560">
+https://github.com/user-attachments/assets/29bc4144-c81b-44eb-aaff-c51d0f2c2ce0
 
 </details>
 
@@ -117,8 +115,7 @@ Press the paperclip and pick **Close menu & take screenshot**. Reopen the menu, 
 again and pick **Attach recent screenshot**. This needs a model that can see pictures; the starter
 model can.
 
-<!-- VIDEO: upload recordings/readme-cuts/ask-about-a-screenshot-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
-<img src="assets/readme/ask-about-a-screenshot.png" alt="Taking a screenshot from the paperclip menu and asking what is on screen" width="560">
+https://github.com/user-attachments/assets/77b1c3d5-3eb8-400e-ae54-60f9aa8fd74e
 
 </details>
 
@@ -128,8 +125,7 @@ model can.
 
 The Search tab sits left of Main. Type "brightness" and jump straight to that Steam setting.
 
-<!-- VIDEO: upload recordings/readme-cuts/search-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
-<img src="assets/readme/search.png" alt="The Search tab: brightness finds a chat and the Steam settings, and opens one" width="560">
+https://github.com/user-attachments/assets/1893bbff-c925-4961-b892-8089ad5fd1b4
 
 </details>
 
@@ -140,8 +136,7 @@ The Search tab sits left of Main. Type "brightness" and jump straight to that St
 The answer keeps going in the background. The **Reply ready** popup shows its first lines, and the
 full answer waits in the chat.
 
-<!-- VIDEO: upload recordings/readme-cuts/reply-ready-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
-<img src="assets/readme/reply-ready.png" alt="Closing the menu while bonsAI answers, then the Reply ready popup arriving" width="560">
+https://github.com/user-attachments/assets/dddd7b9c-7ac2-4901-bf5c-46dc0c87f031
 
 </details>
 
@@ -152,8 +147,7 @@ full answer waits in the chat.
 At ten, **New chat** asks which one to delete first. Long chats are summed up so the older part
 isn't forgotten.
 
-<!-- VIDEO: upload recordings/readme-cuts/saved-chats-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
-<img src="assets/readme/saved-chats.png" alt="Flipping between saved chats, then New chat asking which chat to delete" width="560">
+https://github.com/user-attachments/assets/70d1236e-968c-49a6-8af8-8eb7d65caa85
 
 </details>
 

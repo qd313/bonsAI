@@ -26,11 +26,11 @@ BY_ID = {int(t["pattern_id"]): t for t in TIPS}
 # Tip 76 does not say "install" on purpose: with that word a storage tip becomes a plain keyword hit for
 # "installs on the memory card", which test_topic_recall_reaches_tips_that_share_no_word_with_the_question
 # (tests/test_knowledge_base_service.py) pins as not happening.
-# Rows 03 and 04 ("wont even open", "nothing happens when I launch") belong to tip 126; that tip is
-# pinned word for word by tests/test_knowledge_base_service.py, so it is not reworded here.
 PLAIN_WORDS = {
     "01": (125, ("home screen", "quits")),
     "02": (125, ("shuts itself off", "home screen")),
+    "03": (126, ("won't even open", "won't start")),
+    "04": (126, ("nothing happens", "launch")),
     "05": (152, ("goes black", "black screen")),
     "06": (152, ("turns black", "screen")),
     "12": (165, ("tv speakers", "headphones")),
@@ -77,7 +77,7 @@ class PlainWordsInTipsTests(unittest.TestCase):
                 self.assertNotIn("app_id", tip, "a shared tip, not one game's own")
 
     def test_every_reworded_tip_stays_short(self):
-        for tip_id in (76, 125, 152, 154, 165, 166):
+        for tip_id in (76, 125, 126, 152, 154, 165, 166):
             with self.subTest(tip=tip_id):
                 self.assertLessEqual(len(BY_ID[tip_id]["card"]), 200)
 
@@ -255,9 +255,9 @@ class BlindSentencesReachTheRightTipTests(unittest.TestCase):
     """
 
     # Rows that reached the right tip at the end of plan 100 lane T, plus the four that already did.
-    # The rest (03, 04, 07, 08, 09, 10, 16, 18, 19, 20, 22) reach another tip on the right subject,
+    # The rest (07, 08, 09, 10, 16, 18, 19, 20, 22) reach another tip on the right subject,
     # or none, and are left to the table the measuring script prints.
-    MUST_REACH_THE_RIGHT_TIP = ("01", "02", "05", "06", "11", "12", "13", "14", "15", "17", "21", "23", "24")
+    MUST_REACH_THE_RIGHT_TIP = ("01", "02", "03", "04", "05", "06", "11", "12", "13", "14", "15", "17", "21", "23", "24")
 
     @classmethod
     def setUpClass(cls):

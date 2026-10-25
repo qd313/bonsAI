@@ -1269,7 +1269,7 @@
       "deck",
       "linux"
     ],
-    "card": "Disable Steam overlay and third-party overlays when crashes happen at launch.",
+    "card": "Disable Steam overlay and third-party overlays when crashes happen at launch, or when a game won't even open, won't start, or nothing happens when you launch it.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },

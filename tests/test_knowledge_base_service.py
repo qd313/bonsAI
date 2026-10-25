@@ -3164,7 +3164,10 @@ class CompatPatternsTipContentTests(unittest.TestCase):
 
     def test_overlay_crash_tip_moved_out_of_proton(self):
         """This tip is about a crash, not about Proton, and used to sit under the wrong topic."""
-        overlay_text = "Disable Steam overlay and third-party overlays when crashes happen at launch."
+        overlay_text = (
+            "Disable Steam overlay and third-party overlays when crashes happen at launch, or when a game "
+            "won't even open, won't start, or nothing happens when you launch it."
+        )
         proton_cards = [row["card"] for row in self.patterns if row["topic"] == "proton"]
         crash_cards = [row["card"] for row in self.patterns if row["topic"] == "crash"]
         self.assertNotIn(overlay_text, proton_cards)

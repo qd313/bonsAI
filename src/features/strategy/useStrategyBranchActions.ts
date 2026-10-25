@@ -51,7 +51,8 @@ export type UseStrategyBranchActionsArgs = {
 
 export interface StrategyBranchActions {
   onStrategyBranchPick: (opt: { id: string; label: string }) => void;
-  onStrategyChecklistToggle: (itemId: string, checked: boolean) => void;
+  /** `how` "reveal" shows a covered route step (saved beside the ticks) and ticks nothing. */
+  onStrategyChecklistToggle: (itemId: string, checked: boolean, how?: "reveal") => void;
 }
 
 /**
@@ -135,9 +136,16 @@ export function useStrategyBranchActions(a: UseStrategyBranchActionsArgs): Strat
     ],
   );
 
-  const onStrategyChecklistToggle = useCallback((itemId: string, checked: boolean) => {
+  const onStrategyChecklistToggle = useCallback((itemId: string, checked: boolean, how?: "reveal") => {
     setStrategyChecklist((prev) => {
       if (!prev) return prev;
+      if (how === "reveal") {
+        const shown = prev.revealedIds ?? [];
+        if (shown.includes(itemId)) return prev;
+        const withShown: StrategyChecklistState = { ...prev, revealedIds: [...shown, itemId] };
+        scheduleStrategyChecklistSessionSave(withShown);
+        return withShown;
+      }
       const set = new Set(prev.checkedIds);
       if (checked) set.add(itemId);
       else set.delete(itemId);

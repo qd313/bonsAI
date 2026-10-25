@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
   mergeStrategyChecklistState,
   normalizeStrategyChecklist,
+  normalizeStrategyChecklistStateFromSession,
   splitStrategyStepNeeds,
+  strategyChecklistToSavePayload,
   strategyRouteCoveredIds,
   strategyRouteRevealKey,
 } from "./strategyChecklist";
@@ -99,5 +101,37 @@ describe("a step's own 'Needs:' words", () => {
   it("leaves the words whole when nothing comes before or after 'Needs:'", () => {
     expect(splitStrategyStepNeeds("Needs: a key")).toEqual({ text: "Needs: a key", needs: null });
     expect(splitStrategyStepNeeds("Get there. Needs:")).toEqual({ text: "Get there. Needs:", needs: null });
+  });
+});
+
+describe("the route's hand-shown steps travel with the checklist state (plan 100, lane R)", () => {
+  const FIVE = [1, 2, 3, 4, 5].map((n) => ({ id: String(n), label: `Step number ${n}` }));
+  const saved = (extra: Record<string, unknown>) => ({ app_id: "367520", title: "To the first boss", items: FIVE, ...extra });
+
+  it("a load whose entry has a revealed list gives it back on the state", () => {
+    expect(normalizeStrategyChecklistStateFromSession(saved({ checked_ids: ["1"], revealed: ["3"] }))?.revealedIds).toEqual(["3"]);
+  });
+
+  it("a load whose entry has no revealed list gives none, so every later step is covered", () => {
+    const state = normalizeStrategyChecklistStateFromSession(saved({ checked_ids: [] }))!;
+    expect(state.revealedIds ?? []).toEqual([]);
+    expect([...strategyRouteCoveredIds(state, state.revealedIds ?? [])].sort()).toEqual(["2", "3", "4", "5"]);
+  });
+
+  it("a load keeps only real step ids, once each", () => {
+    expect(normalizeStrategyChecklistStateFromSession(saved({ revealed: ["3", "3", "99", 7] }))?.revealedIds).toEqual(["3"]);
+  });
+
+  it("the save payload carries the shown steps beside the ticks", () => {
+    const state = { title: "T", items: FIVE, checkedIds: ["1"], revealedIds: ["3"], appId: "367520" };
+    expect(strategyChecklistToSavePayload(state)).toMatchObject({ checked_ids: ["1"], revealed: ["3"] });
+    expect(strategyChecklistToSavePayload({ ...state, revealedIds: undefined }).revealed).toEqual([]);
+  });
+
+  it("a revised list keeps a shown step only when the step still has the same words", () => {
+    const prev = { title: "T", items: FIVE, checkedIds: [], revealedIds: ["3", "4"] };
+    const incoming = { title: "T", items: FIVE.map((it) => (it.id === "4" ? { ...it, label: "Something else" } : it)) };
+    expect(mergeStrategyChecklistState(prev, incoming).revealedIds).toEqual(["3"]);
+    expect(mergeStrategyChecklistState(null, incoming).revealedIds).toEqual([]);
   });
 });

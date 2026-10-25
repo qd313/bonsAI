@@ -75,6 +75,8 @@ export type StrategyChecklistPayload = {
 
 export type StrategyChecklistState = StrategyChecklistPayload & {
   checkedIds: string[];
+  /** Steps the player opened by hand on the route look; saved with the ticks. Missing means none. */
+  revealedIds?: string[];
   appId?: string;
   appName?: string;
 };

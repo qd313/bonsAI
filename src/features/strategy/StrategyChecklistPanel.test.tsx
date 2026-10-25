@@ -178,8 +178,9 @@ describe("the note under the checklist title names only real actions (plan 96, F
  * Plan 98, H: the route look, as the maintainer's pick draws it (the mock-up board's tab 5, option C:
  * 45b-maps-r2.js "route", 48b-round2.css .m5-*). A five-step list draws step 1 open and steps 2 to 5 covered
  * on one line of dots; the first covered step reads "A shows this step", the later ones "Covered". A on the
- * first covered step shows it without ticking it, A on a later one does nothing; the shown step stays shown
- * when the panel is drawn again; ticking a step opens the next. Every covered step is still the same Decky
+ * first covered step asks for it to be shown without ticking it, A on a later one does nothing; a shown step
+ * is drawn open from the checklist's own `revealedIds` (saved with the ticks, plan 100 R); ticking a step opens
+ * the next. Every covered step is still the same Decky
  * Button in its own wrapper with its own nav node, so the D-pad walk is the walk it was.
  */
 describe("the checklist drawn as a route (plan 98, H)", () => {
@@ -207,7 +208,6 @@ describe("the checklist drawn as a route (plan 98, H)", () => {
 
   afterEach(() => {
     resetStrategyChecklistNavForTests();
-    window.localStorage.clear();
   });
 
   it("draws step 1 open and steps 2 to 5 covered: a bold Step N, 'A shows this step' on the first, 'Covered' after", () => {
@@ -266,11 +266,15 @@ describe("the checklist drawn as a route (plan 98, H)", () => {
     expect(stops()[3].textContent).toBe("Step 4Covered");
   });
 
-  it("A on a covered step shows it and does not tick it in the same press", () => {
-    const { stops, kinds, onToggle } = drawRoute();
+  it("A on a covered step asks to show it and does not tick it in the same press", () => {
+    const { stops, kinds, onToggle, rerender } = drawRoute();
     const second = stops()[1];
     act(() => void fireEvent.click(second));
-    expect(onToggle).not.toHaveBeenCalled();
+    // The panel keeps nothing itself: it asks, and the checklist state (saved with the ticks) answers.
+    expect(onToggle).toHaveBeenCalledTimes(1);
+    expect(onToggle).toHaveBeenCalledWith("2", false, "reveal");
+    expect(kinds()).toEqual(["open", "covered", "covered", "covered", "covered"]);
+    rerender(<StrategyChecklistPanel checklist={{ ...ROUTE, revealedIds: ["2"] }} onToggle={onToggle} />);
     expect(kinds()).toEqual(["open", "open", "covered", "covered", "covered"]);
     // The same button stays under Steam's ring: the step was redrawn in place, not replaced.
     expect(stops()[1]).toBe(second);
@@ -278,28 +282,18 @@ describe("the checklist drawn as a route (plan 98, H)", () => {
     expect(second.getAttribute("role")).toBe("checkbox");
     // The next A on the now-open step ticks it, as any open step does.
     act(() => void fireEvent.click(second));
-    expect(onToggle).toHaveBeenCalledWith("2", true);
+    expect(onToggle).toHaveBeenLastCalledWith("2", true);
   });
 
-  it("a shown step stays shown when the panel is drawn again (close and reopen)", () => {
-    const first = drawRoute();
-    act(() => void fireEvent.click(first.stops()[1]));
-    expect(first.kinds()).toEqual(["open", "open", "covered", "covered", "covered"]);
-    first.unmount();
-    const again = drawRoute();
-    expect(again.kinds()).toEqual(["open", "open", "covered", "covered", "covered"]);
+  it("a checklist that carries a shown step draws it open on a fresh draw (close and reopen)", () => {
+    const again = drawRoute({ ...ROUTE, checkedIds: ["1"], revealedIds: ["3"] });
+    expect(again.kinds()).toEqual(["open", "open", "open", "covered", "covered"]);
     // The next covered step is now the one A shows.
-    expect(again.stops()[2].textContent).toBe("Step 3A shows this step");
+    expect(again.stops()[3].textContent).toBe("Step 4A shows this step");
   });
 
-  it("a new list starts covered again, and the old list keeps what was shown on it", () => {
-    const { rerender, stops, kinds, onToggle } = drawRoute();
-    act(() => void fireEvent.click(stops()[1]));
-    const next = { ...ROUTE, title: "To Greenpath" };
-    rerender(<StrategyChecklistPanel checklist={next} onToggle={onToggle} />);
-    expect(kinds()).toEqual(["open", "covered", "covered", "covered", "covered"]);
-    rerender(<StrategyChecklistPanel checklist={ROUTE} onToggle={onToggle} />);
-    expect(kinds()).toEqual(["open", "open", "covered", "covered", "covered"]);
+  it("a checklist with no shown steps draws every later step covered", () => {
+    expect(drawRoute({ ...ROUTE, checkedIds: [] }).kinds()).toEqual(["open", "covered", "covered", "covered", "covered"]);
   });
 
   it("ticking step 1 opens step 2 and leaves 3 to 5 covered", () => {
@@ -366,7 +360,6 @@ describe("the checklist drawn as a route (plan 98, H)", () => {
 describe("the 'what you need' line under a route step (plan 98, H)", () => {
   afterEach(() => {
     resetStrategyChecklistNavForTests();
-    window.localStorage.clear();
   });
 
   const NEEDS: StrategyChecklistState = {

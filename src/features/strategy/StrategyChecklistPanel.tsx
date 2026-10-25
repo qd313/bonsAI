@@ -15,11 +15,11 @@
  * and does nothing else; A on a later covered step does nothing; A on an open step ticks it as before. Every
  * step is the same Button in the same wrapper with the same nav node, redrawn in place when shown, so the
  * D-pad walk and Steam's ring are what they were. Which steps are covered: strategyChecklist.ts; the steps
- * shown by hand are kept by strategyChecklistPersistence.ts. An open step whose own words carry
+ * shown by hand are the checklist's own revealedIds, saved with the ticks. An open step whose own words carry
  * "Needs: ..." draws that as the small second line; no other step does.
  * Does not: Parse strategy branches from model output — see strategyChecklist utils and backend parser.
  */
-import { useCallback, useEffect, useState, type CSSProperties } from "react";
+import { useEffect, type CSSProperties } from "react";
 import { Button, Focusable } from "@decky/ui";
 
 import type { StrategyChecklistState } from "../../types/bonsaiUi";
@@ -27,12 +27,15 @@ import { deckNavHandlers } from "../../shared/dpad/liveTurnFocusGraph";
 import { setStrategyChecklistStepCount, strategyChecklistStepNav } from "../../shared/dpad/strategyChecklistNav";
 import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/textPx";
-import { splitStrategyStepNeeds, strategyRouteCoveredIds, strategyRouteRevealKey } from "./strategyChecklist";
-import { loadStrategyRouteRevealed, saveStrategyRouteRevealed } from "./strategyChecklistPersistence";
+import { splitStrategyStepNeeds, strategyRouteCoveredIds } from "./strategyChecklist";
 
 type Props = {
   checklist: StrategyChecklistState;
-  onToggle: (itemId: string, checked: boolean) => void;
+  /**
+   * A press on an open step ticks it. A press on the first covered step asks for it to be shown with
+   * `how` "reveal" (nothing is ticked); the state that holds the checklist saves that beside the ticks.
+   */
+  onToggle: (itemId: string, checked: boolean, how?: "reveal") => void;
   onMoveUpFromFirst?: () => boolean;
   onMoveDownFromLast?: () => boolean;
 };
@@ -95,27 +98,6 @@ const ROUTE_LINE: CSSProperties = {
   pointerEvents: "none",
 };
 
-/** The steps shown by hand on this list, kept between draws of the panel; and the A that shows one. */
-function useRouteReveals(checklist: StrategyChecklistState) {
-  const listKey = strategyRouteRevealKey(checklist);
-  const [kept, setKept] = useState(() => ({ listKey, ids: loadStrategyRouteRevealed(listKey) }));
-  // A new list (a new question) reads its own kept steps once, never the last list's.
-  let ids = kept.ids;
-  if (kept.listKey !== listKey) {
-    ids = loadStrategyRouteRevealed(listKey);
-    setKept({ listKey, ids });
-  }
-  const reveal = useCallback(
-    (itemId: string) => {
-      const next = ids.includes(itemId) ? ids : [...ids, itemId];
-      saveStrategyRouteRevealed(listKey, next);
-      setKept({ listKey, ids: next });
-    },
-    [ids, listKey],
-  );
-  return { revealedIds: ids, reveal };
-}
-
 /** The panel: the checklist's title, a one-line note, then one row per step, later steps covered. */
 export function StrategyChecklistPanel({
   checklist,
@@ -125,8 +107,8 @@ export function StrategyChecklistPanel({
 }: Props) {
   // How many steps are drawn, so the answer's chains can take the first or the last (strategyChecklistNav.ts).
   const stepCount = checklist.items.length;
-  const { revealedIds, reveal } = useRouteReveals(checklist);
-  const covered = strategyRouteCoveredIds(checklist, revealedIds);
+  // The steps shown by hand come with the checklist (saved beside the ticks), so a reopen draws them open.
+  const covered = strategyRouteCoveredIds(checklist, checklist.revealedIds ?? []);
   // Only the first covered step can be shown with A, as in the drawing; the later ones read "Covered".
   const nextToShow = checklist.items.find((it) => covered.has(it.id))?.id;
   useEffect(() => {
@@ -167,7 +149,7 @@ export function StrategyChecklistPanel({
         const small = isCovered ? (isNextToShow ? "A shows this step" : "Covered") : words.needs ? `Needs: ${words.needs}` : null;
         const onPress = () => {
           if (!isCovered) onToggle(item.id, !checked);
-          else if (isNextToShow) reveal(item.id);
+          else if (isNextToShow) onToggle(item.id, false, "reveal");
         };
         /*
          * Up from the first step and Down from the last: the same handlers the switches carried. They sit

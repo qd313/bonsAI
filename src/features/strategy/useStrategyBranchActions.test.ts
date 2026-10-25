@@ -7,11 +7,13 @@
  * Used for: useStrategyBranchActions.ts.
  * Does not: Cover the "Enter your own" branch beyond its own box text, or the checklist toggle.
  */
-import { renderHook } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { act, renderHook } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useStrategyBranchActions, type UseStrategyBranchActionsArgs } from "./useStrategyBranchActions";
 import { CUSTOM_RESOLUTION_INPUT_PREFIX } from "./strategyGuideFollowup";
+import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
+import type { StrategyChecklistState } from "../../types/bonsaiUi";
 
 function setup() {
   const setUnifiedInput = vi.fn();
@@ -50,5 +52,70 @@ describe("a branch pick", () => {
     t.pick({ id: "d", label: "Enter your own" });
     expect(t.setUnifiedInput).toHaveBeenCalledWith(CUSTOM_RESOLUTION_INPUT_PREFIX);
     expect(t.onAskOllama).not.toHaveBeenCalled();
+  });
+});
+
+describe("a checklist toggle (plan 100, lane R)", () => {
+  const ROUTE: StrategyChecklistState = {
+    title: "To the False Knight",
+    appId: "367520",
+    items: [1, 2, 3, 4, 5].map((n) => ({ id: String(n), label: `Step ${n}` })),
+    checkedIds: [],
+  };
+
+  beforeEach(() => {
+    resetFakeDeckyRpc();
+    setRpcHandler("save_strategy_checklist_session", () => ({ ok: true }));
+  });
+
+  /** Runs the toggle against a real piece of state, the way the Ask hook holds it. */
+  function toggleOn(start: StrategyChecklistState) {
+    let now: StrategyChecklistState | null = start;
+    const setStrategyChecklist = vi.fn((update: unknown) => {
+      now = typeof update === "function" ? (update as (p: StrategyChecklistState | null) => StrategyChecklistState | null)(now) : (update as StrategyChecklistState | null);
+    });
+    const args = {
+      lastExchange: null,
+      setStrategyGuideBranches: vi.fn(),
+      setStrategyChecklist,
+      setUnifiedInput: vi.fn(),
+      unifiedInputFieldLayerRef: { current: null },
+      unifiedInputHostRef: { current: null },
+      lastFlushedExchangeQuestionRef: { current: "" },
+      pendingArchiveTurnRef: { current: null },
+      lastStrategyAskQuestionRef: { current: "" },
+      onAskOllama: vi.fn(async () => {}),
+    } as UseStrategyBranchActionsArgs;
+    const { result } = renderHook(() => useStrategyBranchActions(args));
+    return { toggle: result.current.onStrategyChecklistToggle, state: () => now };
+  }
+
+  async function lastSavedPayload() {
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 400));
+    });
+    const saves = getRpcCallLog().filter((c) => c.method === "save_strategy_checklist_session");
+    return saves[saves.length - 1]?.args[0] as Record<string, unknown> | undefined;
+  }
+
+  it("showing a covered step puts it in the saved checklist beside the ticks, and ticks nothing", async () => {
+    const t = toggleOn({ ...ROUTE, checkedIds: ["1"] });
+    act(() => t.toggle("3", false, "reveal"));
+    expect(t.state()?.checkedIds).toEqual(["1"]);
+    expect(t.state()?.revealedIds).toEqual(["3"]);
+    expect(await lastSavedPayload()).toMatchObject({ checked_ids: ["1"], revealed: ["3"] });
+  });
+
+  it("a tick made after a step was shown keeps the shown step in the save", async () => {
+    const t = toggleOn({ ...ROUTE, revealedIds: ["3"] });
+    act(() => t.toggle("1", true));
+    expect(await lastSavedPayload()).toMatchObject({ checked_ids: ["1"], revealed: ["3"] });
+  });
+
+  it("showing a step that is already shown changes and saves nothing", async () => {
+    const t = toggleOn({ ...ROUTE, revealedIds: ["3"] });
+    act(() => t.toggle("3", false, "reveal"));
+    expect(t.state()?.revealedIds).toEqual(["3"]);
+    expect(await lastSavedPayload()).toBeUndefined();
   });
 });

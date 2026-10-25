@@ -27,9 +27,8 @@
  *     (`normalizeStrategyChecklist` returns `null`) rather than shown half-built.
  *   - The route look (plan 98, H): a step further on than the person has got is drawn covered (a
  *     hatched dot and "Step N") until they tick the step before it or show it with A. Which steps are covered
- *     is worked out here (`strategyRouteCoveredIds`); the steps a person uncovered by hand are kept
- *     by `strategyChecklistPersistence.ts`, in the plugin's browser storage, not in the back end's
- *     saved list (the saved list holds only the ticks).
+ *     is worked out here (`strategyRouteCoveredIds`); the steps a person uncovered by hand are the
+ *     state's `revealedIds`, saved in the back end with the ticks (plan 100, R) so Clear cache takes both.
  */
 import type { StrategyChecklistPayload, StrategyChecklistState } from "../../types/bonsaiUi";
 
@@ -67,9 +66,19 @@ export function normalizeStrategyChecklistStateFromSession(raw: unknown): Strate
       if (id && valid.has(id) && !checkedIds.includes(id)) checkedIds.push(id);
     }
   }
+  const revealedRaw = o.revealed ?? o.revealedIds;
+  const revealedIds: string[] = [];
+  if (Array.isArray(revealedRaw)) {
+    const valid = new Set(base.items.map((it) => it.id));
+    for (const x of revealedRaw) {
+      const id = String(x ?? "").trim();
+      if (id && valid.has(id) && !revealedIds.includes(id)) revealedIds.push(id);
+    }
+  }
   return {
     ...base,
     checkedIds,
+    revealedIds,
     appId: typeof o.app_id === "string" ? o.app_id : typeof o.appId === "string" ? o.appId : undefined,
     appName:
       typeof o.app_name === "string" ? o.app_name : typeof o.appName === "string" ? o.appName : undefined,
@@ -98,9 +107,16 @@ export function mergeStrategyChecklistState(
       }
     }
   }
+  // A shown step stays shown only while it keeps its id and its words; a new question writes new words.
+  const prevWords = new Map((prev?.items ?? []).map((it) => [it.id, it.label.trim().toLowerCase()]));
+  const prevRevealed = new Set(prev?.revealedIds ?? []);
+  const revealedIds = incoming.items
+    .filter((it) => prevRevealed.has(it.id) && prevWords.get(it.id) === it.label.trim().toLowerCase())
+    .map((it) => it.id);
   return {
     ...incoming,
     checkedIds,
+    revealedIds,
     appId: ctx?.appId ?? prev?.appId,
     appName: ctx?.appName ?? prev?.appName,
   };
@@ -122,6 +138,7 @@ export function strategyChecklistToSavePayload(state: StrategyChecklistState) {
     title: state.title,
     items: state.items,
     checked_ids: state.checkedIds,
+    revealed: state.revealedIds ?? [],
     app_id: state.appId ?? "",
     app_name: state.appName ?? "",
   };

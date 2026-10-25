@@ -14,7 +14,8 @@
  * never the lists kept for games; and the first-question rule the checklist note on screen names
  * (plan 96, F20): a new Strategy question clears the ticks, pressing a choice button does not.
  */
-import { renderHook, act } from "@testing-library/react";
+import { createElement } from "react";
+import { render, renderHook, act, fireEvent } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Router } from "@decky/ui";
 import {
@@ -22,11 +23,12 @@ import {
   type UseBonsaiAskOrchestrationArgs,
 } from "../ask/flow/useBonsaiAskOrchestration";
 import { useStrategyChecklistSession } from "./useStrategyChecklistSession";
+import { StrategyChecklistPanel } from "./StrategyChecklistPanel";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 import { idleBackgroundStatusFixture } from "../../test-harness/rpcFixtures";
 import type { BackgroundRequestStatus } from "../../types/backgroundAsk";
 
-type SavedEntry = { title: string; items: { id: string; label: string }[]; checked_ids: string[] };
+type SavedEntry = { title: string; items: { id: string; label: string }[]; checked_ids: string[]; revealed?: string[] };
 
 const CHECKLIST = {
   title: "Managing Heat and Weapon Choice",
@@ -48,7 +50,7 @@ function installFakeFile(initial: Record<string, SavedEntry> = {}, diskReadDelay
   });
   setRpcHandler("save_strategy_checklist_session", (payload: unknown) => {
     const p = payload as { app_id?: string } & SavedEntry;
-    file[key(p.app_id)] = { title: p.title, items: p.items, checked_ids: p.checked_ids };
+    file[key(p.app_id)] = { title: p.title, items: p.items, checked_ids: p.checked_ids, revealed: p.revealed };
     return { ok: true };
   });
   setRpcHandler("clear_strategy_checklist_session", (appId: unknown) => {
@@ -59,7 +61,7 @@ function installFakeFile(initial: Record<string, SavedEntry> = {}, diskReadDelay
   return file;
 }
 
-function finishedStatus(appId: string, appName: string): BackgroundRequestStatus {
+function finishedStatus(appId: string, appName: string, checklist = CHECKLIST): BackgroundRequestStatus {
   return {
     ...idleBackgroundStatusFixture(),
     status: "completed",
@@ -70,7 +72,7 @@ function finishedStatus(appId: string, appName: string): BackgroundRequestStatus
     app_id: appId,
     app_context: appId ? "active" : "none",
     app_name: appName,
-    strategy_checklist: CHECKLIST,
+    strategy_checklist: checklist,
     ask_mode: "strategy",
   };
 }
@@ -226,5 +228,111 @@ describe("what clears the ticks when a question is asked (plan 96, F20)", () => 
 
   it("a press on a choice button does not", async () => {
     expect(await ask("[Strategy follow-up] I'm at: Dealing with the first boss's mechanics.")).toHaveLength(0);
+  });
+});
+
+/*
+ * Plan 100, lane R: the steps a player opened by hand on the route travel with the ticks. These mount the
+ * real Ask hook and draw the real panel from its state, the way Quick Access does, press A on the steps,
+ * close the panel and open it again, and read what is drawn (open or covered, ticked or not) and what the
+ * saved file holds. Clear cache is modelled the way the back end does it: the game's whole entry goes, the
+ * ticks and the shown steps together, and the player opens the panel again.
+ */
+describe("the route's shown steps travel with the ticks (plan 100, lane R)", () => {
+  const originalMainRunningApp = Router.MainRunningApp;
+  const APP = "367520";
+  const ROUTE5 = {
+    title: "To the False Knight",
+    items: [1, 2, 3, 4, 5].map((n) => ({ id: String(n), label: `Step number ${n}` })),
+  };
+
+  beforeEach(() => {
+    resetFakeDeckyRpc();
+    (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp = {
+      appid: Number(APP),
+      display_name: "Hollow Knight",
+    } as unknown as typeof Router.MainRunningApp;
+  });
+  afterEach(() => {
+    (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp = originalMainRunningApp;
+  });
+
+  function Quick() {
+    const ask = useBonsaiAskOrchestration(makeArgs());
+    return ask.strategyChecklist
+      ? createElement(StrategyChecklistPanel, {
+          checklist: ask.strategyChecklist,
+          onToggle: ask.onStrategyChecklistToggle,
+        })
+      : null;
+  }
+
+  /** Opens Quick Access: a fresh mount of the hook and the panel it draws. */
+  async function open() {
+    const view = render(createElement(Quick));
+    await wait(600);
+    const stops = () => Array.from(view.container.querySelectorAll<HTMLElement>(".bonsai-strategy-checklist-step"));
+    return {
+      ...view,
+      stops,
+      kinds: () => stops().map((s) => s.getAttribute("data-route-stop")),
+      ticked: () => stops().map((s) => s.getAttribute("aria-checked") === "true"),
+      press: (n: number) => act(() => void fireEvent.click(stops()[n - 1])),
+    };
+  }
+
+  function route5Answer() {
+    setRpcHandler("get_background_game_ai_status", () => finishedStatus(APP, "Hollow Knight", ROUTE5));
+  }
+
+  it("tick step 1 and show step 3: both are saved, and a reopened panel draws 1 ticked and 3 open", async () => {
+    const file = installFakeFile({}, 80);
+    route5Answer();
+    const first = await open();
+    expect(first.kinds()).toEqual(["open", "covered", "covered", "covered", "covered"]);
+    first.press(1);
+    expect(first.kinds()).toEqual(["open", "open", "covered", "covered", "covered"]);
+    first.press(3);
+    expect(first.kinds()).toEqual(["open", "open", "open", "covered", "covered"]);
+    await wait(450);
+    expect(file[APP]?.checked_ids).toEqual(["1"]);
+    expect(file[APP]?.revealed).toEqual(["3"]);
+    first.unmount();
+
+    const again = await open();
+    expect(again.kinds()).toEqual(["open", "open", "open", "covered", "covered"]);
+    expect(again.ticked()).toEqual([true, false, false, false, false]);
+  });
+
+  it("after Clear cache and a reopen, 1 is unticked and 3 is covered again", async () => {
+    const file = installFakeFile({}, 80);
+    route5Answer();
+    const first = await open();
+    first.press(1);
+    first.press(3);
+    await wait(450);
+    expect(file[APP]?.revealed).toEqual(["3"]);
+    first.unmount();
+
+    // Clear cache: the back end drops the game's whole entry, the ticks and the shown steps together.
+    delete file[APP];
+
+    const again = await open();
+    expect(again.kinds()).toEqual(["open", "covered", "covered", "covered", "covered"]);
+    expect(again.ticked()).toEqual([false, false, false, false, false]);
+  });
+
+  it("a saved entry with no revealed list draws every later step covered", async () => {
+    installFakeFile({ [APP]: { ...ROUTE5, checked_ids: [] } }, 80);
+    route5Answer();
+    const view = await open();
+    expect(view.kinds()).toEqual(["open", "covered", "covered", "covered", "covered"]);
+  });
+
+  it("a saved entry with a shown step draws it open", async () => {
+    installFakeFile({ [APP]: { ...ROUTE5, checked_ids: [], revealed: ["2"] } }, 80);
+    route5Answer();
+    const view = await open();
+    expect(view.kinds()).toEqual(["open", "open", "covered", "covered", "covered"]);
   });
 });

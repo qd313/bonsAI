@@ -108,8 +108,8 @@ re-checks the tail of the decisions file at go.
     without asking; a new one- or two-star bug gets one helper round of about an hour; anything blocked gets the safest
     choice at once and is raised in the chat and in § 12 at that moment; never push, publish, merge to main, switch
     branches in the shared folder, type a PIN or password, reload the plugin with a game running. *Default: kept.*
-14. **Budget line and usage figures:** no new helper past 75 percent of the five-hour window or 80 percent of the week
-    (D128). Read both counters at go and say them; the cost hook cannot read them. *Default: kept; counters read.*
+14. **Budget line and usage figures:** no new helper past 75 percent of the five-hour window or 90 percent of the week
+    (D128, the weekly line raised from 80 to 90 by the maintainer on 2026-10-25, for this session and going forward). Read both counters at go and say them; the cost hook cannot read them. *Default: kept; counters read.*
 
 ## 3. What a player notices after this session
 
@@ -444,13 +444,16 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   (resets Wednesday morning). The helper rules, the briefs (K0, T, P, F, R, V, W, Y, N1 to N4, X, U, J, Q, the M
   template) and Deck runbook L0 were written and pushed with the plan. Budget note for the session: with the week at
   53 percent and two and a half days to its reset, this wave is likely to spend a large share of what is left; read the
-  counter before each wave and start no helper past 80 percent (call 14). Do not start lanes in the last minutes before
+  counter before each wave and start no helper past 90 percent (call 14, raised from 80 by the maintainer). Do not start lanes in the last minutes before
   the five-hour window resets.
 - **2026-10-25, later:** five commits from the maintainer's PC reached `experimental` while this chat planned: the
   library 2026.10.25 published and read back from both channels; block KS run, with the first-mention underlines and the
   spoiler row's ring passed on the Deck (the ring after a second fix, now a lesson about Steam's switch and a wrapper); a
   new chat bug (the summing-up of a long chat gave up); a lesson on settings snapshots that restore themselves. The plan,
   the K0 and W briefs, the helper rules and runbook L0 were corrected for them and the plan commits were put on top.
+- **2026-10-25, later still: the maintainer raised the weekly budget line from 80 to 90 percent**, for this session and
+  going forward (call 14 amended; the five-hour line stays 75). Written into AGENTS.md, the bug-wave runbook and the
+  D128 entry the same evening.
   Findings while planning: the cloud container has no Deck, no Ollama, no workshop, and the wikis are refused by its
   network rule, so it can only plan; the screen-side packages installed and the type check, the bundle and the Python
   suite (3,029 tests, 70 seconds) all passed there, so the tip is green. Six Haiku lookups mapped every lane's files

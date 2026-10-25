@@ -118,8 +118,8 @@ and every Deck block, and is committed, so a look from a phone shows where thing
 - A question for the maintainer goes in the plan's questions list, with the safest choice taken meanwhile. A
   phone notification only when something is truly blocked.
 - The usage limit stops every helper at once. Each keeps its work and resumes with one short message.
-- Start no new helpers past 80 percent of the weekly limit or 75 percent of the five-hour window (the maintainer's
-  call 2026-10-11, D128). Read the usage figure before every new batch.
+- Start no new helpers past 90 percent of the weekly limit or 75 percent of the five-hour window (the maintainer's
+  call 2026-10-11, D128; the weekly line raised from 80 to 90 on 2026-10-25). Read the usage figure before every new batch.
 - Never: push, merge to main, switch branches in the shared folder, stage everything, type a PIN or password,
   press anything on the Deck outside a written check.
 

@@ -768,7 +768,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "Internal storage full: uninstall large shaders and unused games first.",
+    "card": "Internal storage full -- not enough space, no space left, or you can't install a new game: uninstall large shaders and unused games first.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },
@@ -1258,7 +1258,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "On the Deck a crash drops you back to the game library, not to a desktop -- there is no desktop to check.",
+    "card": "On the Deck a crash (the game closes on its own, quits or shuts itself off) drops you back to the game library, the home screen -- not to a desktop. There is no desktop to check.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },
@@ -1529,7 +1529,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "External monitor blank: try HDMI direct, 1080p60, disable overscan.",
+    "card": "Black screen or blank screen (it goes black, turns black): on an external monitor try HDMI direct, 1080p60, disable overscan. On the built-in screen it may be a crash at launch -- try the crash tips.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },
@@ -1549,7 +1549,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "Set an external display to 1080p60 first -- higher settings can show a blank screen until confirmed working.",
+    "card": "Set an external display to 1080p60 first -- higher settings can show a blank screen or a black screen until confirmed working.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },
@@ -1657,5 +1657,25 @@
     "source_url": "https://steamdeckhq.com/tips-and-guides/how-to-set-up-zelda-ocarina-of-time-pc-port-on-steam-deck/",
     "source_license": "bonsAI-maintainer",
     "app_id": "emudeck-oot-n64"
+  },
+  {
+    "pattern_id": 165,
+    "topic": "audio",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: sound coming out of the TV speakers instead of the headphones plugged into the Deck -- check the output device in Quick Settings and pick the headphones.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 166,
+    "topic": "display",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: if the menus sit off the edge of the TV (television) or in the wrong spot, try the external-screen settings -- direct HDMI, 1080p60, overscan off.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
   }
 ]

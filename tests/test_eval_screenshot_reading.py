@@ -291,7 +291,9 @@ class ScreenshotAskTests(_ScriptCase):
                        spoiler_consent=False, token_stream_request_id=None, **kwargs):
             calls.append(dict(question=question, app_id=app_id, app_name=app_name, attachments=attachments,
                               ask_mode=ask_mode, rid=token_stream_request_id))
-            await asyncio.sleep(0.05)
+            # Well clear of 0.05: the first-word time is rounded to 0.1 s, and Windows' timer can wake a sleep a few
+            # milliseconds early, so 0.05 sometimes measured 0.049 and rounded to 0.0 (failed twice on 2026-10-25).
+            await asyncio.sleep(0.15)
             if stream and success:
                 plugin._update_partial_response(token_stream_request_id, reply, False)
             await asyncio.sleep(0.3)

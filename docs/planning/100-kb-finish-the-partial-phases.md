@@ -521,6 +521,18 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   "No close match" line already shows on all four. The numbers say: no new floor. The bookkeeper writes these into the
   four "measure first" entries at the next sweep.
 
+- **22:56 UTC: landed** Y (`551ca270`), R (three commits, tip `0152f6fa`), V (two commits, tip `eab4f33e`); W landing.
+  **Lane N4 done** (fourteen Portal 2 notes). Two things in its brief were wrong: the wiki's api address needs `/w/`
+  (`https://theportalwiki.com/w/api.php`), and the wiki rate-limited every page render after a few requests, so the lane
+  read the same revisions' text through the wiki's normal query call with a small stand-in script that writes the same
+  provenance header; the sidecar names page and revision as usual. **Lane Q done** (102 blind questions, two per note, in
+  one commit; a second commit widens the fixture's label test to read the four games' notes files, which it read only
+  from the seed before, so every new question would have been a "phantom" even after the notes landed). **Wave 2 cut at
+  22:57 UTC** from `eab4f33e`: U (Opus medium; stops after its back-end half for consult 2) and J (Sonnet high; the
+  button in the reply row as its own stop; its plugin-method commit waits for U). Consult 2 asked at the same time.
+  Runbook L1 written: [assets/100-runbook-block-L1.md](assets/100-runbook-block-L1.md) (the "Needs" check presses a
+  branch button first; the test library goes in through the Developer tab after the deploy).
+
 ## 13. Report
 
 Not yet written.

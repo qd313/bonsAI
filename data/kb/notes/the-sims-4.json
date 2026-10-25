@@ -56,6 +56,61 @@
       "source_license": "CC-BY-SA",
       "source_version": "1254748",
       "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1205,
+      "game_id": 10,
+      "section_type": "enemy",
+      "name": "Grim Reaper",
+      "card": "Summary: He appears from a cloud of smoke when a Sim dies, reaps the soul and leaves an urn or gravestone, and cannot normally be killed.\nWeak points: Living Sims on the lot can plead: a fine or happy Sim pleads, a confident Sim demands (40 percent), a flirty Sim seduces (10 percent), a sad Sim wails (30 percent), and an angry Sim's yelling is always rejected.\nTips: A death flower is the only sure way to save a Sim, and children plead better than any other age. Mischief skill 5 or more can also try Toy with Death using a voodoo doll.",
+      "source_url": "https://sims.fandom.com/wiki/Grim_Reaper",
+      "source_license": "CC-BY-SA",
+      "source_version": "1253090",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1206,
+      "game_id": 10,
+      "section_type": "item",
+      "name": "Smoke alarm",
+      "card": "Summary: The Alertz Smoke Alarm is a 1x1 electronics object for Build mode that costs §75 and alerts Sims and the fire department when there is a fire.\nUses: As of patch 95 firefighters come to the lot automatically when an alarm detects a fire, and with a Fire Prevention System Utility Panel on the lot it also sets off sprinklers.\nTips: Alarms on the same floor all go off whatever room they are in, but an alarm placed upstairs does not react to a fire.",
+      "source_url": "https://sims.fandom.com/wiki/Smoke_detector",
+      "source_license": "CC-BY-SA",
+      "source_version": "1170897",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1207,
+      "game_id": 10,
+      "section_type": "item",
+      "name": "Fire sprinkler panel",
+      "card": "Summary: A panel you can buy and place anywhere on the lot, to put out fires with sprinklers.\nUses: When a fire breaks out a sprinkler appears above the flames and puts it out, and with a Fire Prevention System Utility Panel on the lot smoke alarms also trigger sprinklers.\nTips: The sprinkler only appears if there is a ceiling above the fire, and it leaves no puddles.",
+      "source_url": "https://sims.fandom.com/wiki/Fire",
+      "source_license": "CC-BY-SA",
+      "source_version": "1237114",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1208,
+      "game_id": 10,
+      "section_type": "item",
+      "name": "Stove",
+      "card": "Summary: Stoves are Build mode appliances rated for Food Quality, Power Efficiency and Reliability, for example The YumCooker (§400: 3, 2, 3) and The Schmapple Oven (§13,000: 10, 10, Unbreakable).\nUses: The chef stations from Dine Out are the only stoves that cook experimental food, and a caterer hired for §800 cooks for four hours.\nTips: A cheap stove with a low-skill cook starts fires, and so does a pizza oven or waffle maker with a low or medium-skill cook; in Discover University a stove on a university housing lot stops students moving in.",
+      "source_url": "https://sims.fandom.com/wiki/Stove",
+      "source_license": "CC-BY-SA",
+      "source_version": "1237444",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1209,
+      "game_id": 10,
+      "section_type": "item",
+      "name": "Chess table",
+      "card": "Summary: A Build mode game table with Fun 5 that adds to the Logic skill; the five listed tables cost from §450 (The Chessmaster) to §1,000 (Grand Plans Chess Table).\nUses: Chess builds the logic skill in older Sims and the mental skill in children, and a game with a partner also meets the social need.\nTips: It needs chairs at both ends, and Sims can knock pieces off the table.",
+      "source_url": "https://sims.fandom.com/wiki/Chess_table",
+      "source_license": "CC-BY-SA",
+      "source_version": "1254977",
+      "crawled_at": "2026-10-25"
     }
   ]
 }

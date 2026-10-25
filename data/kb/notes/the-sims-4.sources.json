@@ -432,6 +432,411 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1205,
+      "name": "Grim Reaper",
+      "pages": [
+        {
+          "page": "Grim Reaper",
+          "url": "https://sims.fandom.com/wiki/Grim_Reaper",
+          "revision": 1253090
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "He appears from a cloud of smoke when a Sim dies, reaps the soul and leaves an urn or gravestone, and cannot normally be killed.",
+          "drawn_from": [
+            {
+              "page": "Grim Reaper",
+              "revision": 1253090,
+              "excerpt": "When a Sim dies, the Grim Reaper will appear from a cloud of smoke. He will consult his tablet before reaping the soul and replacing the body with an urn or gravestone."
+            },
+            {
+              "page": "Grim Reaper",
+              "revision": 1253090,
+              "excerpt": "Under normal circumstances, the Grim Reaper himself cannot die."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "Living Sims on the lot can plead: a fine or happy Sim pleads, a confident Sim demands (40 percent), a flirty Sim seduces (10 percent), a sad Sim wails (30 percent), and an angry Sim's yelling is always rejected.",
+          "drawn_from": [
+            {
+              "page": "Grim Reaper",
+              "revision": 1253090,
+              "excerpt": "Any living Sims on the lot can attempt to plead with the Grim Reaper"
+            },
+            {
+              "page": "Grim Reaper",
+              "revision": 1253090,
+              "excerpt": "Sims who are fine or happy can normally plead for the Sim's life when the Grim Reaper appears."
+            },
+            {
+              "page": "Grim Reaper",
+              "revision": 1253090,
+              "excerpt": "Sims who are confident can demand the Grim Reaper to spare the Sim's life, with a 40% success chance. This increases to 50% if the pleading Sim is very confident."
+            },
+            {
+              "page": "Grim Reaper",
+              "revision": 1253090,
+              "excerpt": "Sims who are flirty can seduce the Grim Reaper to spare the Sim's life, with a 10% success chance (Increases to 20% success chance if the pleading Sim is very flirty)."
+            },
+            {
+              "page": "Grim Reaper",
+              "revision": 1253090,
+              "excerpt": "Sims who are sad can wail about the dying Sim's demise. There is a 30% chance this plea will work"
+            },
+            {
+              "page": "Grim Reaper",
+              "revision": 1253090,
+              "excerpt": "Sims who are angry can yell at death, which will always be rejected."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A death flower is the only sure way to save a Sim, and children plead better than any other age. Mischief skill 5 or more can also try Toy with Death using a voodoo doll.",
+          "drawn_from": [
+            {
+              "page": "Grim Reaper",
+              "revision": 1253090,
+              "excerpt": "Sims can give the Grim Reaper a death flower. This is the only way to guarantee saving a dying Sim's life"
+            },
+            {
+              "page": "Grim Reaper",
+              "revision": 1253090,
+              "excerpt": "Child Sims have a better success rate at pleading than any other age."
+            },
+            {
+              "page": "Grim Reaper",
+              "revision": 1253090,
+              "excerpt": "Sims with level 5 or more in mischief skill can \"Toy with Death\" using a voodoo doll."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1206,
+      "name": "Smoke alarm",
+      "pages": [
+        {
+          "page": "Smoke detector",
+          "url": "https://sims.fandom.com/wiki/Smoke_detector",
+          "revision": 1170897
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "The Alertz Smoke Alarm is a 1x1 electronics object for Build mode that costs §75 and alerts Sims and the fire department when there is a fire.",
+          "drawn_from": [
+            {
+              "page": "Smoke detector",
+              "revision": 1170897,
+              "excerpt": "Alertz Smoke Alarm"
+            },
+            {
+              "page": "Smoke detector",
+              "revision": 1170897,
+              "excerpt": "Build mode"
+            },
+            {
+              "page": "Smoke detector",
+              "revision": 1170897,
+              "excerpt": "§75"
+            },
+            {
+              "page": "Smoke detector",
+              "revision": 1170897,
+              "excerpt": "1x1, wall"
+            },
+            {
+              "page": "Smoke detector",
+              "revision": 1170897,
+              "excerpt": "It alerts Sims and the Fire Department when there is a fire in the house."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "As of patch 95 firefighters come to the lot automatically when an alarm detects a fire, and with a Fire Prevention System Utility Panel on the lot it also sets off sprinklers.",
+          "drawn_from": [
+            {
+              "page": "Smoke detector",
+              "revision": 1170897,
+              "excerpt": "As of patch 95, firefighter NPCs have been added and will automatically come to the lot when a smoke alarm detects a fire. If the Fire Prevention System Utility Panel is present on the lot, smoke alarms will trigger sprinklers to appear over the fire and extinguish it."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Alarms on the same floor all go off whatever room they are in, but an alarm placed upstairs does not react to a fire.",
+          "drawn_from": [
+            {
+              "page": "Smoke detector",
+              "revision": 1170897,
+              "excerpt": "all fire alarms on the same floor regardless if separated by rooms will activate immediately after a fire has started. Fire alarms that have been placed upstairs, however, will not react to a fire."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1207,
+      "name": "Fire sprinkler panel",
+      "pages": [
+        {
+          "page": "Fire",
+          "url": "https://sims.fandom.com/wiki/Fire",
+          "revision": 1237114
+        },
+        {
+          "page": "Smoke detector",
+          "url": "https://sims.fandom.com/wiki/Smoke_detector",
+          "revision": 1170897
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A panel you can buy and place anywhere on the lot, to put out fires with sprinklers.",
+          "drawn_from": [
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "players can purchase a fire sprinkler panel which can be placed anywhere on the lot."
+            },
+            {
+              "page": "Smoke detector",
+              "revision": 1170897,
+              "excerpt": "If the Fire Prevention System Utility Panel is present on the lot"
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "When a fire breaks out a sprinkler appears above the flames and puts it out, and with a Fire Prevention System Utility Panel on the lot smoke alarms also trigger sprinklers.",
+          "drawn_from": [
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "When a fire breaks out, a sprinkler automatically appears above the flames and extinguishes the fire."
+            },
+            {
+              "page": "Smoke detector",
+              "revision": 1170897,
+              "excerpt": "smoke alarms will trigger sprinklers to appear over the fire and extinguish it."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "The sprinkler only appears if there is a ceiling above the fire, and it leaves no puddles.",
+          "drawn_from": [
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "The sprinkler only appears if there is a ceiling above the fire, and does not leave puddles behind."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1208,
+      "name": "Stove",
+      "pages": [
+        {
+          "page": "Stove",
+          "url": "https://sims.fandom.com/wiki/Stove",
+          "revision": 1237444
+        },
+        {
+          "page": "Fire",
+          "url": "https://sims.fandom.com/wiki/Fire",
+          "revision": 1237114
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "Stoves are Build mode appliances rated for Food Quality, Power Efficiency and Reliability, for example The YumCooker (§400: 3, 2, 3) and The Schmapple Oven (§13,000: 10, 10, Unbreakable).",
+          "drawn_from": [
+            {
+              "page": "Stove",
+              "revision": 1237444,
+              "excerpt": "!! Food Quality !! Power Efficiency !! Reliability"
+            },
+            {
+              "page": "Stove",
+              "revision": 1237444,
+              "excerpt": "Here comes the YumCooker! || 3 || 2 || 3"
+            },
+            {
+              "page": "Stove",
+              "revision": 1237444,
+              "excerpt": "|| The Schmapple Oven || §13,000"
+            },
+            {
+              "page": "Stove",
+              "revision": 1237444,
+              "excerpt": "It's Ovens to the Power of You. || 10 || 10 || Unbreakable"
+            },
+            {
+              "page": "Stove",
+              "revision": 1237444,
+              "excerpt": "The Sims 4 || Buyability || Build mode || Object type(s) || Appliance"
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "The chef stations from Dine Out are the only stoves that cook experimental food, and a caterer hired for §800 cooks for four hours.",
+          "drawn_from": [
+            {
+              "page": "Stove",
+              "revision": 1237444,
+              "excerpt": "However, the chef stations introduced in The Sims 4: Dine Out are much larger, at 3x2 and 3x3, respectively. Chef stations are also the only stoves that Sims can use to cook experimental food."
+            },
+            {
+              "page": "Stove",
+              "revision": 1237444,
+              "excerpt": "A household can hire a caterer for §800 to cook for them, and they will work for four hours before leaving."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A cheap stove with a low-skill cook starts fires, and so does a pizza oven or waffle maker with a low or medium-skill cook; in Discover University a stove on a university housing lot stops students moving in.",
+          "drawn_from": [
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "Cooking on a cheap stove with a Sim that has a low cooking skill."
+            },
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "Using a pizza oven or waffle maker with a Sim that has a low or medium cooking skill."
+            },
+            {
+              "page": "Stove",
+              "revision": 1237444,
+              "excerpt": "stoves are forbidden from being placed on university housing lots; placing a stove on such a lot will prevent students from moving into that particular lot."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1209,
+      "name": "Chess table",
+      "pages": [
+        {
+          "page": "Chess table",
+          "url": "https://sims.fandom.com/wiki/Chess_table",
+          "revision": 1254977
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A Build mode game table with Fun 5 that adds to the Logic skill; the five listed tables cost from §450 (The Chessmaster) to §1,000 (Grand Plans Chess Table).",
+          "drawn_from": [
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "|| The Chessmaster"
+            },
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Price in game || §450"
+            },
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Chess under the Stars Patio Table"
+            },
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Price in game || §570"
+            },
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Price in game || §750"
+            },
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Price in game || §1,000"
+            },
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Fun: 5 + Logic Skill"
+            },
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Price in game || §635"
+            },
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Hand Carved Chess Table"
+            },
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Grand Plans Chess Table"
+            },
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Battle of Wits"
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Chess builds the logic skill in older Sims and the mental skill in children, and a game with a partner also meets the social need.",
+          "drawn_from": [
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Playing chess builds the mental skill in children and the logic skill in older Sims."
+            },
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Sims can play alone or with a partner, and will socialize when doing the latter. It also provides fun, and since two Sims can play, it can fulfill social needs as well."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "It needs chairs at both ends, and Sims can knock pieces off the table.",
+          "drawn_from": [
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Chess tables require two chairs on both ends in order for them to be used."
+            },
+            {
+              "page": "Chess table",
+              "revision": 1254977,
+              "excerpt": "Sims can also knock pieces off the table."
+            }
+          ]
+        }
+      ]
     }
   ]
 }

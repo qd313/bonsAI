@@ -58,6 +58,8 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
 
 ## Bugs
 
+- ★ `[chat]` **A long chat's summing-up gave up after 68 seconds ("Couldn't sum up the chat this time")** — **OPEN, found 2026-10-25 by the Deck driver (plan 98 block KS); not looked into.**
+  In the test chat (over 40 questions), a Strategy question about Hollow Knight showed "Couldn't sum up the chat this time, so this answer only knows the newest turns" before the answer; the summing-up ran about 68 seconds first. Cause unknown; a model still loading is one guess, unchecked. The answer itself was fine. Evidence `workshop:test-evidence/plan98-P98-GLOSSARY-FIRST-01.json` (side_effect) and its `-answer.png`.
 - ★ `[docs]` **A rule in AGENTS.md about Steam's focus transfer does not match the code (the starter set's size wording was settled: leave as it is)** — **PARTIAL, one half open; found 2026-10-16 (plan 86 step 2, D133 call 12 [D133](audit/maintainer-decisions-locked.md#d133--locked-2026-10-16-raised-2026-10-16--plan-86-step-2-approve-the-cut-lists-and-the-folder-map-and-twelve-smaller-calls)).**
   The size-wording half is closed: **"leave as it is" (the maintainer's call of 2026-10-22, plan 99 § 2 call 12)**, so "about 4.6 GB" and "about 4.5 GiB" both stay. **Still open:** AGENTS.md says Steam's focus transfer is called directly only inside the shared helper, but 17 screen files call it: fix the sentence or the code. No player change either way.
 - ★ `[docs]` `[first-run]` **The quick-start box ("Using bonsAI") leads with the home-PC story and never mentions the Install Ollama button** — **OPEN, found 2026-10-23 (plan 99 clean install).**

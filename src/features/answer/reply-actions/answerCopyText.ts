@@ -13,6 +13,7 @@ import { mayHoldFence, replaceSpoilerFences } from "../markdown/markdownFenceRea
 import { splitResponseIntoChunks } from "../markdown/splitResponseIntoChunks";
 import { stripAssistantDisplayTags } from "../markdown/stripAssistantDisplayTags";
 import { unwrapAskedEntitySpoilerFences, type UnwrapSpoilerOpts } from "../../spoilers/unwrapAskedEntitySpoilerFences";
+import type { SpoilerTier } from "../../settings/bonsaiSettingsSchema";
 
 /** Shown in place of a fence the UI still renders masked — never leak unrevealed spoiler text. */
 export const SPOILER_HIDDEN_COPY_PLACEHOLDER = "[Spoiler hidden — reveal it on screen to copy]";
@@ -32,6 +33,8 @@ export type BuildAnswerCopyTextArgs = {
   spoilerConsentEffective?: boolean;
   /** This turn's protected names (D112 #7): a cover naming one is never opened. */
   protectedNames?: readonly string[] | null;
+  /** Settings -> "How much to hide": Copy follows the screen, so a cover Hide more keeps shut is not copied open. */
+  spoilerTier?: SpoilerTier | null;
 };
 
 /**
@@ -49,6 +52,7 @@ export function buildAnswerCopyText(args: BuildAnswerCopyTextArgs): string {
     askedEntity = null,
     spoilerConsentEffective = false,
     protectedNames = null,
+    spoilerTier = null,
   } = args;
 
   let text = expandOneLineSpoilerFences(stripAssistantDisplayTags(body || ""));
@@ -71,6 +75,7 @@ export function buildAnswerCopyText(args: BuildAnswerCopyTextArgs): string {
     askedEntity,
     spoilerConsentEffective,
     protectedNames,
+    spoilerTier,
   };
   text = unwrapAskedEntitySpoilerFences(text, opts);
 

@@ -219,6 +219,7 @@ import {
   drgGlossaryExplainFurtherThreadDisplay,
 } from "../../glossary/glossaryAsk";
 import { protectedNamesFromNotes, type TurnSpoilerFacts } from "../../spoilers/unwrapAskedEntitySpoilerFences";
+import type { SpoilerTier } from "../../settings/bonsaiSettingsSchema";
 import { useEarlierTurnsPill } from "./useEarlierTurnsPill";
 import { buildEarlierList } from "./buildEarlierList";
 import { useTitleOverflow } from "./useTitleOverflow";
@@ -269,6 +270,8 @@ export type MainTabChatTranscriptProps = {
   shortcutSetupVariant?: "deck" | "stadia" | null;
   onOpenControllerSettings?: () => void;
   strategySpoilerMaskingEnabled?: boolean;
+  /** Settings -> "How much to hide"; read by the spoiler un-hide of every answer drawn here (plan 100 lane V). */
+  spoilerTier?: SpoilerTier | null;
   strategySpoilerAutoRevealAfterConsent?: boolean;
   isStreamingPreview?: boolean;
   streamDisplayText?: string;
@@ -392,6 +395,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     shortcutSetupVariant = null,
     onOpenControllerSettings,
     strategySpoilerMaskingEnabled = true,
+    spoilerTier = null,
     strategySpoilerAutoRevealAfterConsent = false,
     isStreamingPreview = false,
     streamDisplayText = "",
@@ -491,6 +495,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     askQuestion: turn.question, appId: turn.appId ?? null, appName: turn.appName ?? null,
     askedEntity: turn.askedEntity ?? null, spoilerConsentEffective: turn.spoilerConsentEffective === true,
     protectedNames: protectedNamesFromNotes(kbAttachedNotesFrom(archivedTransparencyFor(turn, index))),
+    spoilerTier,
   });
 
   /* The stock waiting phrase. Unchanged behaviour; it just arrives in the same parcel now. */
@@ -519,6 +524,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       ? ollamaContext?.spoiler_consent === true
       : lastExchange?.spoilerConsentEffective === true,
     protectedNames: protectedNamesFromNotes(liveKbNotes),
+    spoilerTier,
   };
   /* The live turn's notes as its block shows them: the ones the answer used, judged on what has arrived (see the
      block below). The reply row's "the note was wrong" reasons offer the same notes (plan 98). */

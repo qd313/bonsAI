@@ -908,6 +908,7 @@ const Content: React.FC = () => {
     shortcutSetupVariant,
     onOpenControllerSettings: onOpenControllerSettingsForShortcut,
     strategySpoilerMaskingEnabled,
+    spoilerTier,
     strategySpoilerAutoRevealAfterConsent,
     presetCarouselInject,
     isStreamingPreview: isStreamingPreview || isStreamSettling,

@@ -95,6 +95,7 @@ import {
   shouldUnwrapSpoilerFence,
   unwrapAskedEntitySpoilerFences,
 } from "../../spoilers/unwrapAskedEntitySpoilerFences";
+import type { SpoilerTier } from "../../settings/bonsaiSettingsSchema";
 
 export type BuildAnswerBubbleElementArgs = {
   body: string;
@@ -115,6 +116,8 @@ export type BuildAnswerBubbleElementArgs = {
   spoilerConsentEffective?: boolean;
   /** This turn's protected names (D112 #7): a cover naming one is never opened. */
   protectedNames?: readonly string[] | null;
+  /** Settings -> "How much to hide": under "strict" a no-story game's covers no longer open on their own. */
+  spoilerTier?: SpoilerTier | null;
   /** DRG Survivor glossary "explain further" chip — starts a new Ask turn about the tapped term. */
   onDrgGlossaryExplainFurther?: (term: DrgGlossaryTerm) => void;
   /**
@@ -237,6 +240,7 @@ export function buildAnswerBubbleElement(
     askedEntity = null,
     spoilerConsentEffective = false,
     protectedNames = null,
+    spoilerTier = null,
     onDrgGlossaryExplainFurther,
     getAnswerCopyText,
     onMoveDownWhileWriting,
@@ -251,6 +255,7 @@ export function buildAnswerBubbleElement(
     askedEntity,
     spoilerConsentEffective,
     protectedNames,
+    spoilerTier,
   };
   let displayBody = expandOneLineSpoilerFences(stripAssistantDisplayTags(body));
   if (spoilerUnwrapEligible) {

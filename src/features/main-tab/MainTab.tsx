@@ -35,6 +35,7 @@ import type {
 } from "../../types/bonsaiUi";
 import type { TransparencySnapshot } from "../../types/inputTransparency";
 import type { AskModeId } from "../ask/bar/askMode";
+import type { SpoilerTier } from "../settings/bonsaiSettingsSchema";
 import type { ModelPolicyDisclosurePayload } from "../models/modelPolicy";
 import type { AskThreadExpandedTurnKey } from "../../types/bonsaiUi";
 import type { LastExchangeSnapshot, LiveThinkingSnapshot } from "../../types/backgroundAsk";
@@ -148,6 +149,8 @@ export type MainTabProps = {
   shortcutSetupVariant?: "deck" | "stadia" | null;
   onOpenControllerSettings?: () => void;
   strategySpoilerMaskingEnabled?: boolean;
+  /** Settings -> "How much to hide"; handed on to the transcript (plan 100 lane V). */
+  spoilerTier?: SpoilerTier | null;
   strategySpoilerAutoRevealAfterConsent?: boolean;
   presetCarouselInject?: { text: string } | null;
   isStreamingPreview?: boolean;

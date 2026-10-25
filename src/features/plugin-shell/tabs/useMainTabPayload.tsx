@@ -229,6 +229,7 @@ export function useMainTabPayload({
     shortcutSetupVariant,
     onOpenControllerSettings,
     strategySpoilerMaskingEnabled,
+    spoilerTier,
     strategySpoilerAutoRevealAfterConsent,
     presetCarouselInject,
     isStreamingPreview,
@@ -347,6 +348,7 @@ export function useMainTabPayload({
         shortcutSetupVariant={shortcutSetupVariant}
         onOpenControllerSettings={onOpenControllerSettings}
         strategySpoilerMaskingEnabled={strategySpoilerMaskingEnabled}
+        spoilerTier={spoilerTier}
         strategySpoilerAutoRevealAfterConsent={strategySpoilerAutoRevealAfterConsent}
         presetCarouselInject={presetCarouselInject}
         isStreamingPreview={isStreamingPreview}
@@ -430,6 +432,7 @@ export function useMainTabPayload({
       modelPolicyDisclosure,
       shortcutSetupVariant,
       strategySpoilerMaskingEnabled,
+      spoilerTier,
       presetCarouselInject,
       onRetryLastResponse,
       onReplyFeedback,

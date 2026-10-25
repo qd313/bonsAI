@@ -16,6 +16,8 @@
  *     │   [chip] [chip] [chip]              │  <- wrong tip / outdated / wrong edition,
  *     │                                     │     only when the answer used a note (kbDemoteRows.tsx)
  *     │   (chip error text, if a chip failed)│
+ *     │   [Suggest as a tip]                │  <- plan 100: under any finished answer, rated or not
+ *     │   Saved <file>. To send it in: <link>│  <- the one line it leaves, once pressed
  *     │  ──────── Show details ↓ ───        │
  *     └───────────────────────────────────────┘
  *
@@ -119,6 +121,8 @@ import {
   renderDemoteRows,
   type ReplyDemoteView,
 } from "./kbDemoteRows";
+import { renderSuggestTipRow } from "./suggestTipRow";
+import type { ReplySuggestTipView } from "./useReplySuggestTip";
 
 /* Option E, the maintainer's pick (plan 72): two short-worded chips on top, three below. */
 const CHIP_ROW_REFINE: ReplyMicroActionId[] = ["bad_information", "misidentified_game"];
@@ -159,6 +163,11 @@ export type BuildReplyActionsElementArgs = {
    * that can be marked, Not really adds Wrong tip, Outdated and Wrong edition after the five reasons.
    */
   demote?: ReplyDemoteView;
+  /**
+   * Plan 100: the "Suggest as a tip" button's state and press. With it, a finished answer that has text (and is not a
+   * half-written one after Stop) gets the button between the note card and the Show details line, rated or not.
+   */
+  suggestTip?: ReplySuggestTipView;
 };
 
 /**
@@ -346,6 +355,7 @@ export function buildReplyActionsElement(
     onMoveUpFromChips,
     onMoveDownFromUtility,
     demote,
+    suggestTip,
   } = args;
 
   const showChipRows = Boolean(onChip) && rating === "down";
@@ -400,6 +410,9 @@ export function buildReplyActionsElement(
   setReplyStopUnavailable("reason-chips", showReasonRows ? chipsInactive : askInFlight);
   /* Wrong tip stays a landing after one of the five was used (they grey out, it does not); only an ask stops it. */
   setReplyStopUnavailable("demote-reasons", askInFlight);
+  /* Plan 100: "Suggest as a tip" is a landing on a finished answer with text, rated or not; an ask greys it like the thumbs. */
+  const showSuggestTip = Boolean(suggestTip) && showFeedback && !ratingUnavailable;
+  setReplyStopUnavailable("suggest-tip", !showSuggestTip || askInFlight);
 
   const liveSlot = () => queryLiveTurnSlot();
   /*
@@ -575,11 +588,14 @@ export function buildReplyActionsElement(
    * Below the thumbs sits the Show details line — the button row that used to be here, and the
    * separate Read aloud line below it, are both gone.
    */
-  /* Down off the note card (plan 92), or off the rating row when no card is on offer: Show details, then what follows it. */
-  const downPastNoteCard = () => {
+  /* Down to the Show details line, then what follows it. */
+  const downToDetails = () => {
     if (showDetailsDivider && focusReplyShowDetails(liveSlot())) return true;
     return downFromDivider();
   };
+  /* Down off the note card (plan 92), or off the rating row when no card is on offer: "Suggest as a tip" (plan 100)
+     when it shows, then Show details and what follows it. */
+  const downPastNoteCard = () => focusRegisteredReplyStop("suggest-tip") || downToDetails();
   const downFromThumbs = () => {
     if (showChipRows) return false;
     if (focusRegisteredReplyStop("note-keep")) return true;
@@ -635,9 +651,11 @@ export function buildReplyActionsElement(
     return focusLastAnswerChunk(replyKey);
   };
 
-  /* Up from Show details: the note card's last stop when one is on offer (plan 92), else straight to the
+  /* Up from "Suggest as a tip" (plan 100): the note card's last stop when one is on offer (plan 92), else straight to the
      thumbs row above it (the separate Read aloud line this used to check for first is gone — see upFromRetry). */
-  const upFromDivider = () => focusRegisteredReplyStop("note-for") || upFromRetry();
+  const upFromSuggestTip = () => focusRegisteredReplyStop("note-for") || upFromRetry();
+  /* Up from Show details: "Suggest as a tip" when it shows, else where Up from it would go. */
+  const upFromDivider = () => focusRegisteredReplyStop("suggest-tip") || upFromSuggestTip();
 
   /*
    * The two "What went wrong?" rows (plan 72 A-4). Measured on the Deck
@@ -790,6 +808,9 @@ export function buildReplyActionsElement(
       {showFeedback && replyKey !== "live" ? (
         <NoteOfferCard replyKey={replyKey} onMoveUpOut={upFromRetry} onMoveDownOut={downPastNoteCard} />
       ) : null}
+      {showSuggestTip
+        ? renderSuggestTipRow({ view: suggestTip!, disabled: askInFlight, up: upFromSuggestTip, down: downToDetails })
+        : null}
       {showDetailsDivider ? (
         /*
          * Show details is a line across the reply, not a button in the row above (D76).

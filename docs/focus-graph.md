@@ -1444,3 +1444,38 @@ tab bar
   the strip, the button's exits). Device checks (block B): the
   closed tab under 1.5 screens; a Down walk with every section open with no dead press and no stop twice; the
   strip on three rows; Text size's Left and Right move the page 0 points.
+
+
+### "Suggest as a tip" under a finished answer (plan 100, lane J)
+
+_Code: `src/features/answer/reply-actions/` (`suggestTipRow.tsx`, `useReplySuggestTip.ts`); mounted by
+`buildReplyActionsElement.tsx`; the stop is `suggest-tip` in `replyStopRegistry.ts`._
+
+One button, `BonsaiChatSecondaryButton` like Helpful, in the reply row, after the rating row, its choices and the note
+card and before the Show details line. It is drawn under a finished answer that has text (not a half-written one after
+Stop), and it **stays after a rating**: Helpful's thumbs give way to "Saved on this Deck", the button does not.
+Pressing it writes a file to the Desktop notes folder and draws one line under the button: "Saved <file>. To send it in:
+<link>", or the back end's refusal, which names the Permissions tab when "Save files to Desktop" is off.
+
+```
+the rating row / its choices / the note card's "For" line     <- Down from any of them lands here
+   | Down                                      ^ Up (the "For" line when a card is on offer, else the choices,
+[ Suggest as a tip ]                                Helpful, the branch picker, the summed-up note, the last section)
+   | Down                                      ^ Up                      Left and Right hold still
+the Show details line, as before
+```
+
+- **One stop in its own Steam Focusable** (`replyStopNavRef("suggest-tip")`), the moves on that Focusable and not on the
+  button, A as the button's own press (a tap is the same click), B left to Steam. It sits inside the plugin's reply row,
+  so A and B reach it (the glossary box's stop outside the tree heard neither, plan 96).
+- **Reaching it from outside the row is the registry's stand-in, not a new line in every chain.** `suggest-tip` stands in
+  for `note-keep` (`STAND_INS`), so the chains that already go "the note card's Keep, else Show details" (the answer's
+  Down, the corner icons' Down, the summed-up note's Down, `focusDownFromLiveAnswerBubble`) land on the button when no
+  card is on offer, without those files changing. Inside the row, `downPastNoteCard` and `upFromDivider` name it.
+- **After A on Helpful** the ring is handed down as before (`rateKeepingRing`), and now lands on the button.
+- **While a new question is asked** the button is greyed and the stop is skipped, as the thumbs are.
+- **Pinned by** `buildReplyActionsElement.suggestTip.test.tsx` (present only under a finished answer, A sends and the
+  line is drawn, the refusal is drawn, it stays after a rating, the stop is the plugin's own) and
+  `buildReplyActionsElement.suggestTipWalk.test.tsx` (Helpful, Not really, the button, Show details and back; the
+  choices down to it; after Helpful; Down out of the answer; under every Steam scroll rule, no stop twice, every landing
+  on screen and inside the reply row). Device row: P100-SUGGEST-01 (block L2).

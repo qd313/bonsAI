@@ -57,7 +57,9 @@ export type ReplyStopId =
   /** The first "What went wrong?" choice, the landing for a Down that leaves the answer's corner. */
   | "reason-chips"
   /** Plan 98: Wrong tip, the first of the three "the note was wrong" reasons, under the five. */
-  | "demote-reasons";
+  | "demote-reasons"
+  /** Plan 100: "Suggest as a tip", the button under a finished answer, after the note card and before Show details. */
+  | "suggest-tip";
 
 /**
  * Reading order down the reply, top to bottom.
@@ -81,6 +83,10 @@ export type ReplyStopId =
  * rating row and its reason chips and above Show details; both exist on the newest answer only, and only
  * while a note is on offer.
  *
+ * `suggest-tip` (plan 100) is the "Suggest as a tip" button, the last stop before Show details: after the thumbs and
+ * their choices and the note card, on a finished answer with text, whether or not it was rated. It stands in for
+ * `note-keep` (STAND_INS below), so every chain that goes down past the note card reaches it before Show details.
+ *
  * `show-reasoning` is the one stop that is NOT below the answer: it is the Show reasoning line
  * between the question and the answer, on a turn whose model thought first (plan 57). It sits
  * between `retry` and `copy` because that is where a person meets it walking down — Retry is on
@@ -99,6 +105,7 @@ export const REPLY_STOP_ORDER: readonly ReplyStopId[] = [
   "demote-reasons",
   "note-keep",
   "note-for",
+  "suggest-tip",
   "show-details",
 ];
 
@@ -109,7 +116,11 @@ const unavailableStops = new Set<ReplyStopId>();
  * A stop tried when the one asked for is missing or unavailable, so every chain that lands on the first
  * reason (the answer's end, its corner icons, the summed-up note) reaches Wrong tip once the five are spent.
  */
-const STAND_INS: Partial<Record<ReplyStopId, ReplyStopId>> = { "reason-chips": "demote-reasons" };
+const STAND_INS: Partial<Record<ReplyStopId, ReplyStopId>> = {
+  "reason-chips": "demote-reasons",
+  /* Plan 100: with no note card on offer, a Down that asked for the card's Keep lands on "Suggest as a tip", the next stop. */
+  "note-keep": "suggest-tip",
+};
 
 type SteamNavHolder = { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null | undefined };
 const stopNavs = new Map<ReplyStopId, SteamNavHolder>();

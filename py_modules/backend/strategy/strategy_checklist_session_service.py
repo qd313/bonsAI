@@ -15,6 +15,9 @@ of a longer guide they had already done.
 Does not: come up with the checklist items in the first place -- that is the
 AI model's job, done elsewhere. This file only remembers which of the items
 it was given have been ticked.
+The steps a person uncovered by hand on a route (plan 100, lane R) are kept in the same entry under
+`revealed`, beside `checked_ids`, so a route comes back with the same steps open as ticked, and clearing a game's
+entry takes both away together.
 Gotchas: only the 32 most recently updated games are kept; once a 33rd game
 gets a checklist, the oldest saved one is silently dropped to make room. A
 checklist with fewer than two items is never saved at all -- it is treated
@@ -92,12 +95,14 @@ def sanitize_session_entry(raw: Any) -> dict[str, Any] | None:
         return None
     valid_ids = {it["id"] for it in items}
     checked_ids = _normalize_checked_ids(raw.get("checked_ids"), valid_ids)
+    revealed = _normalize_checked_ids(raw.get("revealed"), valid_ids)
     app_name = str(raw.get("app_name", "") or "").strip()[:80]
     return {
         "app_name": app_name,
         "title": title[:MAX_TITLE_LEN],
         "items": items,
         "checked_ids": checked_ids,
+        "revealed": revealed,
         "updated_at": int(raw.get("updated_at") or time.time()),
     }
 
@@ -165,6 +170,7 @@ def upsert_session_entry(
     title: str,
     items: list[dict[str, str]],
     checked_ids: list[str] | None = None,
+    revealed: list[str] | None = None,
 ) -> dict[str, Any]:
     base = sanitize_session_store(store)
     bucket = _normalize_app_id(app_id)
@@ -173,11 +179,13 @@ def upsert_session_entry(
         return base
     valid_ids = {it["id"] for it in norm_items}
     checked = _normalize_checked_ids(checked_ids or [], valid_ids)
+    shown = _normalize_checked_ids(revealed or [], valid_ids)
     entry = {
         "app_name": str(app_name or "").strip()[:80],
         "title": str(title or "").strip()[:MAX_TITLE_LEN],
         "items": norm_items,
         "checked_ids": checked,
+        "revealed": shown,
         "updated_at": int(time.time()),
     }
     by_app = dict(base.get("by_app_id") or {})
@@ -224,11 +232,13 @@ def rpc_entry_to_store_payload(payload: dict[str, Any]) -> dict[str, Any] | None
         return None
     valid_ids = {it["id"] for it in norm_items}
     checked = _normalize_checked_ids(payload.get("checked_ids") or payload.get("checkedIds"), valid_ids)
+    revealed = _normalize_checked_ids(payload.get("revealed") or payload.get("revealedIds"), valid_ids)
     return {
         "app_name": str(payload.get("app_name") or payload.get("appName") or "").strip()[:80],
         "title": title[:MAX_TITLE_LEN],
         "items": norm_items,
         "checked_ids": checked,
+        "revealed": revealed,
         "updated_at": int(time.time()),
     }
 

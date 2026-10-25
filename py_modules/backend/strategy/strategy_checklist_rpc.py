@@ -46,12 +46,13 @@ async def get_strategy_checklist_session(self, app_id: str = ""):
         "title": entry.get("title", ""),
         "items": entry.get("items") or [],
         "checked_ids": entry.get("checked_ids") or [],
+        "revealed": entry.get("revealed") or [],
         "updated_at": entry.get("updated_at"),
     }
 
 
 async def save_strategy_checklist_session(self, payload: Any = None):
-    """Persist checklist + checked state for one game bucket."""
+    """Persist checklist + checked state + hand-uncovered route steps for one game bucket."""
     if not isinstance(payload, dict):
         return {"ok": False, "error": "Invalid payload"}
     app_id = str(payload.get("app_id") or payload.get("appId") or "").strip()
@@ -69,6 +70,7 @@ async def save_strategy_checklist_session(self, payload: Any = None):
             title=frag["title"],
             items=frag["items"],
             checked_ids=frag.get("checked_ids"),
+            revealed=frag.get("revealed"),
         )
         save_session_store(
             self._strategy_checklist_session_path(),

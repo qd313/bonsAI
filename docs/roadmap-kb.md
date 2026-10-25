@@ -11,8 +11,11 @@ Same house rules as the roadmap (five lines an entry, stars ascending in each li
 
 Architecture: [knowledge-base.md](knowledge-base.md). The agreed answer-quality work: [plan 30](planning/30-kb-answer-quality-plan.md).
 
-**Where things stand (2026-10-03).** The library on the Deck and on both download sites is 2026.09.26: 38 games, 414
-notes, 164 Deck tips (published 2026-09-27, checked on the Deck, its copy matching byte for byte). Search puts the right
+**Where things stand (2026-10-25).** The library on both download sites is 2026.10.25: 38 games, 414 notes, 164 Deck tips
+and 351 tap-to-define words across all 38 games. The maintainer published it on 2026-10-25 and both channels were read back
+byte for byte ([the releases table](knowledge-base.md)). The Deck's own copy is 2026.10.25 as well, installed and read back on
+2026-10-25 (`workshop:test-evidence/plan98-P98-KS-LIBRARY.json` and `workshop:test-evidence/plan98-P98-KS-RESTORE.json`).
+Search puts the right
 note in the top three 85.3 times in a hundred on questions nobody tuned against, measured 2026-09-18 on the older library.
 The Deck's own model keeps the note's facts 79.5 times in a hundred with the answer-first shape that shipped (2026-09-07). Do not compare either with figures from before wave
 three: both checks had faults. [Wave three's report](../../bonsAI-workshop/archive/48-kb-wave-three-session.md). More detail:
@@ -44,7 +47,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 - ★ `[KB]` **measure: on a made-up question, three weak notes attach with a keyword score of 0.00 every time** — **OPEN, found 2026-10-24 (plan 98 consult 5).**
   Should a question with no keyword support attach nothing? A measurement against the right-note questions comes first; no right note may be lost. Evidence `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04.json`.
 - ★ `[KB]` **A thank-you or a junk phrase is treated as a follow-up to the previous question** — **OPEN, found 2026-10-24 (plan 98 block K0, Deck).**
-  A short question with "it" and no subject counts as a follow-up, so "thank you very much" answered the previous question again (the earlier house question) instead of a short reply, and the "what time is it" reading is muddied the same way. A clean re-run in a fresh chat is owed. Evidence `workshop:test-evidence/plan98-P98-JUNK-PHRASES.json`.
+  On Strategy and Expert turns, the previous question and answer are handed to the AI whenever the new question names no boss or enemy, with no check. "thank you very much" has no "it", so it never reaches the "it" rule; it answered the previous question again (the earlier house question) instead of a short reply. "what time is it" does pass the "it" rule. A clean re-run in a fresh chat is owed. Evidence `workshop:test-evidence/plan98-P98-JUNK-PHRASES.json`.
 - ★ `[KB]` **A "where am I stuck" answer for Hollow Knight added an "If you want to cheat" section** — **OPEN, found 2026-10-24 (plan 98 Deck block K3).**
   The route answer suggested emulator and fast-travel exploits. Odd advice from the AI, seen once. Evidence `workshop:test-evidence/plan98-P98-ROUTE-01-try2.json`.
 - ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **ACCEPTED, 2026-09-28.** The
@@ -53,7 +56,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   item 2). A stray word match can attach a wrong tip. A fix would run the meaning search only when the word hits are thin;
   that needs a cut-off picked and measured. [Detail](roadmap-kb-details.md#speed-mode-tip-gap)
 - ★ `[KB]` **Route look: the shown steps are forgotten when the cache is cleared** — **OPEN, found 2026-10-24 (plan 98 lane H).**
-  The steps already shown are kept in the panel's browser storage, not beside the ticks in the back end's per-game save. Clear cache and leaving Strategy forget them; Clear all data does too.
+  The steps already shown are kept in the panel's browser storage, not beside the ticks in the back end's per-game save. Clear cache and leaving Strategy clear the ticks and leave the revealed steps in that storage, so a route can come back with later steps open and nothing ticked; only Clear all data removes them. Proposed fix: save them beside the ticks.
 - ★ `[KB]` **Route look: no "Needs: …" part is written for steps that need an item or ability** — **OPEN, found 2026-10-24 (plan 98 lane H).**
   The screen already draws a "Needs" part when a step has one; the AI is never asked to add it. Ask it to, for a step that needs an item or ability first.
 - ★ `[KB]` **Story spoilers: the Search tab's entry lands on the section line, not on the new row** — **OPEN, found 2026-10-24 (plan 98 lane B).**
@@ -68,13 +71,11 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   The note (section 376 in `data/kb/strategy_seed.json`) says "24 levels split across four worlds of six pages" and also "only six levels are played in any one run". The real game has six worlds of four levels. Lane G3 kept those numbers out of the glossary words. The note needs correcting, then a library rebuild.
 - ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back
   2026-09-06 (D81).** "The game drops me back to the library" reaches no crash tip, because the tip search needs a topic
-  word. The held fix (a meaning search) attached wrong tips, six measured. The tips were rewritten and a "none of these
-  fit" floor now exists. Re-measured 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`): today 8 of 24 plain problem sentences reach a tip; the held branch reaches all 24 but gets only 13 right, so it stays held. Overlaps the entry of the same subject in
-  Next. [Detail](roadmap-kb-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips)
+  word. The held fix (a meaning search) attached wrong tips, six measured; it stays held (re-measured 2026-10-24: 8 of 24 plain sentences reach a tip today, the held branch reaches all 24 but only 13 right). Older notes: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
   **Second opinion 2026-10-24 (plan 98 consult 2):** no score cut-off is worth building (two are already on). The fix is wording, written up in the Next entry "A troubleshooting question mostly never reaches the tips".
-- ★★ `[KB]` **Unrelated questions can still get a game card stapled on** — **ACCEPTED 2026-08-27.** With a game running,
-  "thank you very much" still attached a card on the Deck on 2026-08-23. Raising the word floor costs real matches and the
-  model mostly ignores a card that does not fit. Later floors (2026-09) may have cured some phrases.
+  [Detail](roadmap-kb-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips)
+- ★★ `[KB]` **Unrelated questions can still get a game card stapled on** — **ACCEPTED 2026-08-27.** Raising the word floor costs real matches and the
+  model mostly ignores a card that does not fit. Earlier sightings (2026-08-23, 2026-09): [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
   **Deck 2026-10-24 (plan 98 block K0), MEASURED:** "thank you very much" attached no notes; "what time is it" still attached three. A clean re-run in a fresh chat is owed (`workshop:test-evidence/plan98-P98-JUNK-PHRASES.json`). Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
   [D28](audit/maintainer-decisions-archive.md#d28--ordinary-phrases-attach-game-cards-how-hard-should-the-floor-be) ·
   [Detail](roadmap-kb-details.md#ordinary-phrases-attach-game-cards)
@@ -83,7 +84,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 - ★★ `[KB]` `[QA]` **Screenshot reading ignores the game name it was handed** — **OPEN, found 2026-10-24 (plan 98 lane I).**
   On God of War's play and pause pictures the Deck's AI ignored the handed-over game name in 4 of 9 asks. See the screenshot entry in Next.
 - ★★ `[KB]` **Thumbs-down: Undo shows only on the newest answer, so an older mark has no way back** — **OPEN, found 2026-10-24 (plan 98 Deck block K1).**
-  Once another question is asked, an earlier answer shows no rating row and no Undo. Three marks leave a note out of the answers for good, with nothing on screen to see or clear it. A place to see and clear lowered notes is needed (Show details' tag, or a Settings row). Evidence `workshop:test-evidence/plan98-P98-DEMOTE-01.json`.
+  Once another question is asked, an earlier answer shows no rating row and no Undo. Three marks leave a note out of the answers for good, with nothing on screen to see or clear it. A place to see and clear lowered notes is needed: a row in the Knowledge base section, which sits in the Ollama tab beside Remove. Evidence `workshop:test-evidence/plan98-P98-DEMOTE-01.json`.
 - ★★★★ `[KB]` **What ships loses to its own meaning half on questions nobody tuned against** — **ACCEPTED, decided
   2026-09-06.** Leaning the search toward meaning finds the right note first a little more often, but it would bury a new
   note with no meaning index yet. That reason is gone since 2026-09-07 (every note is now guaranteed an index), but two
@@ -91,9 +92,6 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 ## Deck check owed
 
-- ★ `[KB]` **Too many underlined words in one answer: each glossary word is now underlined only the first time** — **PASSED on the Deck 2026-10-25 (block KS, build `87a21fa1`; landed `c938e643`); to move to Done in the next docs sweep. Asked for by the maintainer 2026-10-25 (the checks page: "Only show the underline on the first instance of the keyword").**
-  A Hollow Knight answer underlined 11 words; it now underlines 5 (Mothwing Cloak, Charms, notches, bench, Geo), counting "charm" and "charms" as one word, across every section of the answer and while it streams. Words inside a spoiler block count on their own. Proven by 9 tests.
-  Deck (row **P98-GLOSSARY-FIRST-01**): the same question gave a new answer with 7 underlines for 7 words, none twice ("notches" underlined once of three); Down visits the question, the answer, then the 7, all fully visible. Evidence `workshop:test-evidence/plan98-P98-GLOSSARY-FIRST-01.json` and its pictures. Saved walks over answers that repeat a library word may now have fewer stops.
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY, landed
   2026-09-15, unit-tested.** A game known only by name now opens its box, and naming the boss up front keeps the answer in
   plain text. Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01, 2026-09-18), knowledge base off (DRG-01b, 2026-09-23) and library absent (DRG-01c, 2026-10-03; the AI wrote no hidden block, so a cover was not tested directly).
@@ -112,15 +110,14 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   helpful or whether the model admitted not knowing. Add questions no card can answer, scored for an honest "I don't
   know", and a monthly read of ten replies by a person. **Sighting 2026-09-26:** a plain tip ("raise Render Scale") became
   advice that contradicts itself. [Detail](roadmap-kb-details.md#flow-l7-findings)
-- ★★★ `[KB]` **KB visual maps** — **OPEN; two shapes picked on the mock-up board 2026-10-10.** Nothing draws anything in a reply today.
+- ★★★ `[KB]` **KB visual maps** — **PARTIAL; two shapes picked on the mock-up board 2026-10-10, the route built 2026-10-24.** Nothing draws anything in a reply today.
   **A route, one step at a time:** built 2026-10-24 as the look of the strategy checklist (see the route-look entry in Deck check owed above). Still to come: a "Needs: …" part on steps that need an item or ability (see Bugs).
   **Your screenshot, marked**: up to three numbered marks (hit, avoid, dodge), each saying whether the Deck's AI is sure; an unsure mark is dashed. A scoring test first: a stronger model scores, out of ten, what the Deck's models mark, and helps teach them.
   Not chosen as drawn: a fuller boss card, a whole-kingdom map. An area map must look real; maps taken from the game or a wiki need a licence check first.
   [Mock-up board, tab 5](https://claude.ai/artifact/XyZfUSPGRZdm2P3mTGV9tR) · [notes](demos/mockup-board/README.md) · [Detail](roadmap-kb-details.md#kb-visual-maps)
 - ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.** Nine of ten
   ordinary problem sentences ("my game keeps crashing") reached nothing when measured 2026-09-07, because the word "crash"
-  alone is too weak to route a question. The tip cut-off and a false word match were fixed 2026-09-26, and the "no tip for
-  this" line was retired 2026-09-27. Remeasured 2026-10-24 (plan 98 lane F): 8 of 24 plain sentences reach a tip, 6 of them right; the held meaning-search branch reaches all 24 but gets only 13 right (see the symptom entry in Bugs). (D81, D85)
+  alone is too weak to route a question. Remeasured 2026-10-24 (plan 98 lane F): 8 of 24 plain sentences reach a tip, 6 of them right (see the symptom entry in Bugs). (D81, D85) Older notes: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
   **Second opinion 2026-10-24 (plan 98 consult 2): fix the wording in two places (five tips and the router's topic words), not a cut-off.** Two problems have no tip at all (sound to the TV instead of headphones; menus out of place on a TV), and the 24 test sentences need their right tips written into the fixture before any gate. The word lists: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
   [Detail](roadmap-kb-details.md#a-troubleshooting-question-mostly-never-reaches-the-tips)
 - ★★★★ `[KB]` **KB online / versus strategy content** — **OPEN, discovery locked 2026-08-09.** Multiplayer questions

@@ -1834,3 +1834,11 @@ Knowledge-base feature entries that passed on the Deck 2026-10-24, copied from [
   A checklist of three or more steps is drawn as a line of dots: the next step open, later steps covered ("Step N", "A shows this step" on the first covered, "Covered" after). A shows the next one; ticks are kept as before.
   **Deck check owed:** row **P98-ROUTE-01** in [testing.md](../testing.md). [Detail](../roadmap-kb-details.md#kb-visual-maps)
   **Closed 2026-10-24 (plan 98 Deck blocks K1 and K3, build `913b58cf`, the Deck's own screen):** **DONE 2026-10-24, passed on the Deck (row P98-ROUTE-01, second try; saved walk `workshop:checks/P98-ROUTE-01.json`).** Through the choice flow, a 5-step checklist was drawn as dots. Down walked each step once and left; A on the first covered step showed it with no tick; A on a later covered step did nothing; A ticked an open step; close and reopen kept both. The first try returned prose for two route questions and was UNCLEAR. Evidence `workshop:test-evidence/plan98-P98-ROUTE-01-try2.json` and `workshop:test-evidence/plan98-P98-ROUTE-01.json`.
+
+## Closed 2026-10-25 (plan 100 pre-go audit, Deck block KS)
+
+Knowledge-base feature entry that passed on the Deck 2026-10-25, copied from [roadmap-kb.md](../roadmap-kb.md) with the closing result added.
+
+- ★ `[KB]` **Too many underlined words in one answer: each glossary word is now underlined only the first time** — **DONE 2026-10-25, passed on the Deck (block KS, build `87a21fa1`; landed `c938e643`). Asked for by the maintainer 2026-10-25 (the checks page: "Only show the underline on the first instance of the keyword").**
+  A Hollow Knight answer underlined 11 words; it now underlines 5 (Mothwing Cloak, Charms, notches, bench, Geo), counting "charm" and "charms" as one word, across every section of the answer and while it streams. Words inside a spoiler block count on their own. Proven by 9 tests.
+  Deck (row **P98-GLOSSARY-FIRST-01**): the same question gave a new answer with 7 underlines for 7 words, none twice ("notches" underlined once of three); Down visits the question, the answer, then the 7, all fully visible. Evidence `workshop:test-evidence/plan98-P98-GLOSSARY-FIRST-01.json` and its pictures. Saved walks over answers that repeat a library word may now have fewer stops.

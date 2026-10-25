@@ -4044,3 +4044,11 @@ Knowledge-base bug entries that passed on the Deck 2026-10-24, copied from [road
 - ★★ `[KB]` **With a made-up subject, the "No close match" line was sometimes skipped when weak notes were attached (row NOTES-BLOCK-04, the line half)** — **VERIFY, same fix as the entry above. Failed on the Deck 2026-10-22 (plan 97 block B), passed 2026-10-24.**
   The new rule looks at the question's own subject, not at how close the weak notes are. Owed on the Deck with freshly worded questions: **P98-NOTES-BLOCK-04**. Older notes: [Detail](../roadmap-kb-details.md#wrong-subject-notes)
   **Closed 2026-10-24 (plan 98 Deck blocks K1 and K3, build `913b58cf`, the Deck's own screen):** **DONE 2026-10-24, passed on the Deck, same fix and same evidence as the entry above (row P98-NOTES-BLOCK-04).** All three made-up questions showed the "No close match" line, with nothing running and with the game running. Evidence `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04.json` and `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04-game.json`.
+
+## Closed 2026-10-25 (plan 100 pre-go audit, Deck block KS)
+
+Bug entry that passed on the Deck 2026-10-25, copied from [roadmap.md](../roadmap.md) with the closing result added.
+
+- ★★ `[focus]` **Down from the spoiler switch lands on "Hide more", and no ring shows on the three buttons** — **DONE 2026-10-25, passed on the Deck (second fix `6c80feba`; the first, `830485d7`, fixed the ring but Steam overruled its Down). Was found 2026-10-25 by the maintainer on the Deck (their note and two screenshots on the checks page).**
+  Settings → Story spoilers: Down from "Hide spoilers until I tap" landed on Hide more instead of Default, and none of the three buttons showed the ring. Now Down from the switch and Up from the line below both land on Default, and each button draws the plugin's white ring.
+  Deck (row **P98-SPOILER-FOCUS-01**): block KS found the ring fixed but Down still on Hide more; after the second fix (the switch's moves on a wrapper) one Down lands on Default with a white ring, Left and Right reach the other two ringed, Up from Suggestion chips lands on Default, A keeps the tier. Evidence `workshop:test-evidence/plan98-P98-SPOILER-FOCUS-01.json` and `-try2.json` with their pictures.

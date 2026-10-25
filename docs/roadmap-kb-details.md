@@ -30,6 +30,7 @@
 - [The note's own words under the reply](#the-notes-own-words-under-the-reply)
 - [Plan 97 notes moved from the knowledge base roadmap (2026-10-22)](#plan-97-notes-moved-from-the-knowledge-base-roadmap-2026-10-22)
 - [Plan 98 notes moved from the knowledge base roadmap (2026-10-24)](#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+- [Plan 100 notes moved from the knowledge base roadmap (2026-10-25)](#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -592,3 +593,19 @@ First figures: 8 Deck pictures (Deep Rock Galactic: Survivor, Brotato, Hades, Ha
 **The one-second wait on every question (the top-of-file paragraph), word for word:**
 
 **The one-second wait on every question is explained.** The Deck holds one model in memory at a time, so the answering model and the note-search model push each other out. With the limit raised to two, a search after an answer dropped from 732 to 24 thousandths of a second (2026-09-12, `workshop:test-evidence/plan48-R6-deck-model-eviction.json`). The maintainer's Deck runs with two models kept loaded since 2026-09-23 (`workshop:test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`); the drift from August to September is still open. Two models beside a running game was measured 2026-09-26 and the safety check stays unbuilt: [detail](roadmap-details.md#cost-to-a-running-game-second-sighting).
+
+## Plan 100 notes moved from the knowledge base roadmap (2026-10-25)
+
+Moved word for word by the plan 100 pre-go audit, so each roadmap entry stays at five lines.
+
+**The symptom question: the 2026-10-24 re-measure:**
+
+Re-measured 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`): today 8 of 24 plain problem sentences reach a tip; the held branch reaches all 24 but gets only 13 right, so it stays held. The tips were rewritten and a "none of these fit" floor now exists. Overlaps the entry of the same subject in Next.
+
+**Unrelated questions: the older sightings:**
+
+With a game running, "thank you very much" still attached a card on the Deck on 2026-08-23. Later floors (2026-09) may have cured some phrases.
+
+**A troubleshooting question mostly never reaches the tips: the 2026-09 fixes:**
+
+The tip cut-off and a false word match were fixed 2026-09-26, and the "no tip for this" line was retired 2026-09-27.

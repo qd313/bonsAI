@@ -168,14 +168,6 @@ export function strategyRouteCoveredIds(
   return covered;
 }
 
-/**
- * Which list a hand-uncovered step belongs to: the game, the title and every step's words. A new
- * Strategy question writes a new list, so its steps start covered again even when the game is the same.
- */
-export function strategyRouteRevealKey(checklist: Pick<StrategyChecklistState, "title" | "items" | "appId">): string {
-  return JSON.stringify([checklist.appId ?? "", checklist.title, checklist.items.map((it) => `${it.id}=${it.label}`)]);
-}
-
 /** "Needs:" with the separators the model writes before it ("Step. Needs: x", "Step (needs: x)", "Step — Needs: x"). */
 const STEP_NEEDS_RE = /^(.*?)[\s(\u2013\u2014;,-]*\bneeds:\s*(.*?)[\s).]*$/i;
 

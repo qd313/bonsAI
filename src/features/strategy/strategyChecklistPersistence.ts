@@ -21,10 +21,9 @@
  * `clearStrategyChecklistSession()` cancels a pending timer outright rather than letting a stale
  * save land afterward.
  *
- * The steps a person uncovered by hand on the route (plan 98, H) are kept apart from the ticks, in the
- * plugin's browser storage under one `bonsai:` key, so they survive the panel closing and reopening and
- * Clear all data wipes them with every other plugin key. Only the newest `STRATEGY_ROUTE_REVEALED_MAX_LISTS`
- * lists are kept.
+ * The steps a person uncovered by hand on the route (plan 100, R) travel with the ticks: the state's
+ * `revealedIds` go out in the same save (`strategyChecklistToSavePayload`) and come back in the same load, so
+ * clearing a game's saved list takes both away. Nothing about the route is kept in browser storage.
  */
 import { callDeckyWithTimeout } from "../../shared/deckyCall";
 
@@ -69,38 +68,4 @@ export async function loadStrategyChecklistSession(appId: string): Promise<Strat
   if (!raw || typeof raw !== "object") return null;
   const { normalizeStrategyChecklistStateFromSession } = await import("./strategyChecklist");
   return normalizeStrategyChecklistStateFromSession(raw);
-}
-
-export const STRATEGY_ROUTE_REVEALED_STORAGE_KEY = "bonsai:strategy-route-revealed";
-const STRATEGY_ROUTE_REVEALED_MAX_LISTS = 20;
-
-type RevealedEntry = [listKey: string, ids: string[]];
-
-function readRevealedEntries(): RevealedEntry[] {
-  try {
-    const parsed: unknown = JSON.parse(window.localStorage.getItem(STRATEGY_ROUTE_REVEALED_STORAGE_KEY) ?? "[]");
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter(
-      (e): e is RevealedEntry =>
-        Array.isArray(e) && typeof e[0] === "string" && Array.isArray(e[1]) && e[1].every((x) => typeof x === "string"),
-    );
-  } catch {
-    return [];
-  }
-}
-
-/** The steps uncovered by hand on one list (`strategyRouteRevealKey`); empty when none or storage is unreadable. */
-export function loadStrategyRouteRevealed(listKey: string): string[] {
-  return readRevealedEntries().find(([k]) => k === listKey)?.[1] ?? [];
-}
-
-/** Keep the steps uncovered by hand on one list; that list becomes the newest, the oldest past the cap goes. */
-export function saveStrategyRouteRevealed(listKey: string, ids: readonly string[]): void {
-  const rest = readRevealedEntries().filter(([k]) => k !== listKey);
-  const next: RevealedEntry[] = [...rest, [listKey, [...ids]] as RevealedEntry].slice(-STRATEGY_ROUTE_REVEALED_MAX_LISTS);
-  try {
-    window.localStorage.setItem(STRATEGY_ROUTE_REVEALED_STORAGE_KEY, JSON.stringify(next));
-  } catch {
-    /* storage unavailable: the step stays uncovered until the panel is drawn again */
-  }
 }

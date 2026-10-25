@@ -297,6 +297,8 @@ describe("the route's shown steps travel with the ticks (plan 100, lane R)", () 
     await wait(450);
     expect(file[APP]?.checked_ids).toEqual(["1"]);
     expect(file[APP]?.revealed).toEqual(["3"]);
+    // Nothing about the route is kept in the browser any more: the saved file is the only copy.
+    expect(Object.keys(window.localStorage).filter((k) => k.includes("strategy"))).toEqual([]);
     first.unmount();
 
     const again = await open();

@@ -6,7 +6,6 @@ import {
   splitStrategyStepNeeds,
   strategyChecklistToSavePayload,
   strategyRouteCoveredIds,
-  strategyRouteRevealKey,
 } from "./strategyChecklist";
 
 describe("strategyChecklist", () => {
@@ -65,14 +64,6 @@ describe("which route steps are covered", () => {
   it("a list shorter than three steps has no covers", () => {
     expect(covered([], [], FIVE.slice(0, 2))).toEqual([]);
     expect(covered([], [], FIVE.slice(0, 3))).toEqual(["2", "3"]);
-  });
-
-  it("names a list by its game, title and steps, so a new list starts covered again", () => {
-    const a = strategyRouteRevealKey({ title: "To the first boss", items: FIVE, appId: "367520" });
-    expect(strategyRouteRevealKey({ title: "To the first boss", items: FIVE, appId: "367520" })).toBe(a);
-    expect(strategyRouteRevealKey({ title: "To the second boss", items: FIVE, appId: "367520" })).not.toBe(a);
-    expect(strategyRouteRevealKey({ title: "To the first boss", items: FIVE.slice(1), appId: "367520" })).not.toBe(a);
-    expect(strategyRouteRevealKey({ title: "To the first boss", items: FIVE, appId: "1" })).not.toBe(a);
   });
 });
 

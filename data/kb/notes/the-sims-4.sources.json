@@ -837,6 +837,366 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1210,
+      "name": "Computer",
+      "pages": [
+        {
+          "page": "Computer",
+          "url": "https://sims.fandom.com/wiki/Computer",
+          "revision": 1254173
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "Desktops and laptops need a desk, dining table or island counter with a matching chair or barstool, tablets need no furniture, and laptops and tablets can be carried in the inventory.",
+          "drawn_from": [
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "Unlike the former two types of computers, tablets don't require a desk or table to be used."
+            },
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "Desktops and laptops can be placed on desks, dining tables and island counters."
+            },
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "To use a computer placed on a desk or a dining table, a desk chair or a dining chair should be slotted in front of it. Likewise, to use a computer on an island counter, a barstool must be slotted in front of it."
+            },
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "Laptops and tablets are portable, so Sims can put them in their inventories and take them anywhere."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Games (fun, Video Gaming skill), writing, programming, job search, moving the household and adopting a child (§1000); browsing gives moodlets: Art inspired, Simpedia focused, funny videos playful.",
+          "drawn_from": [
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "Play Game || Raises fun, depending on computer model."
+            },
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "Write || Refines the writing skill, write a book."
+            },
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "Program || Refine Programming Skill, Hack, Mod a Game, or Make a Program for money."
+            },
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "Career/Find a Job || Lists all available careers"
+            },
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "Household/Move Household || Moves the entire family to another lot."
+            },
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "Household/Adopt || Adds a newborn, infant, toddler, or child to the household. Costs §1000."
+            },
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "Web/Browse Art || Grants inspired moodlet."
+            },
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "Web/Browse Simpedia || Grants focused moodlet."
+            },
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "Web/Watch Funny Videos on Sim.tv || Grants playful moodlet."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "ECC RAM (Handiness 8) makes it break less often, a better video card (Handiness 9) raises gaming fun faster, and since patch 88 it can be locked like a door.",
+          "drawn_from": [
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "ECC RAM || Reduces the rate at which the computer breaks || Handiness level 8"
+            },
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "Better video card || Increases fun at a faster rate when playing a video game || Handiness level 9"
+            },
+            {
+              "page": "Computer",
+              "revision": 1254173,
+              "excerpt": "As of patch 88, computers have a locking/unlocking interface similar to doors to prevent certain Sims from using them."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1211,
+      "name": "Shower",
+      "pages": [
+        {
+          "page": "Shower",
+          "url": "https://sims.fandom.com/wiki/Shower",
+          "revision": 1237448
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "Showers can be upgraded, and the kind of shower sets the mood: brisk for energized, steamy for flirty, thoughtful for inspired.",
+          "drawn_from": [
+            {
+              "page": "Shower",
+              "revision": 1237448,
+              "excerpt": "Showers in The Sims 4 function similarly to those in The Sims 3 in that they can be upgraded to improve their stats."
+            },
+            {
+              "page": "Shower",
+              "revision": 1237448,
+              "excerpt": "Brisk shower to become energized. - Steamy shower to become flirty. - Thoughtful shower to become inspired."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "A cold shower taken when angry or flirty puts the Sim back to their earlier emotion.",
+          "drawn_from": [
+            {
+              "page": "Shower",
+              "revision": 1237448,
+              "excerpt": "Sims can also take a cold shower when angry or flirty, which will revert their emotion back to the one they previously had."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A cheap shower can leave a Sim uncomfortable, and the open showers from Discover University, Snowy Escape and Lovestruck allow more compact bathrooms.",
+          "drawn_from": [
+            {
+              "page": "Shower",
+              "revision": 1237448,
+              "excerpt": "Sims that use a cheap shower may become uncomfortable."
+            },
+            {
+              "page": "Shower",
+              "revision": 1237448,
+              "excerpt": "the open showers from Discover University, Snowy Escape and Lovestruck do not block access to anything placed around them, and Sims will walk right through them, allowing for more compact bathrooms."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1212,
+      "name": "Staircase",
+      "pages": [
+        {
+          "page": "Staircase",
+          "url": "https://sims.fandom.com/wiki/Staircase",
+          "revision": 1225020
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A staircase's length follows the wall height (or the foundation it sits on) and it can be pulled sideways as long as the lot, but there are no spiral staircases.",
+          "drawn_from": [
+            {
+              "page": "Staircase",
+              "revision": 1225020,
+              "excerpt": "In The Sims 4, the length of a staircase is based on the height of a building's walls (or the height of a foundation, if it is attached to one)."
+            },
+            {
+              "page": "Staircase",
+              "revision": 1225020,
+              "excerpt": "Staircases can also be pushed and pulled sideways to be as long as the lot itself."
+            },
+            {
+              "page": "Staircase",
+              "revision": 1225020,
+              "excerpt": "The Sims 4 doesn't currently have spiral staircases."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "A widget bends a stair into L, T or U shapes (patch 84), with at least four steps between landings, and the ladder (patch 95) is a one-tile alternative for indoors or outdoors.",
+          "drawn_from": [
+            {
+              "page": "Staircase",
+              "revision": 1225020,
+              "excerpt": "Patch 84 added the ability to configure staircase shapes allowing them to bend in directions."
+            },
+            {
+              "page": "Staircase",
+              "revision": 1225020,
+              "excerpt": "allowing for the creation of L-shaped, T-shaped, and U-shaped staircases. There is a minimum of four steps between landings"
+            },
+            {
+              "page": "Staircase",
+              "revision": 1225020,
+              "excerpt": "Patch 95 added a ladder to the base game as a space-saving alternative to stairs. It takes up a single tile of space, and can be placed both indoors and outdoors."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Patch 193 added flared ends and a choice of railing side and length, and elevators appear in the Build mode catalog only on penthouse lots.",
+          "drawn_from": [
+            {
+              "page": "Staircase",
+              "revision": 1225020,
+              "excerpt": "Patch 193 added the ability to configure stairs to have flared ends, choose which side to put railings on, and adjust the length of the railings."
+            },
+            {
+              "page": "Staircase",
+              "revision": 1225020,
+              "excerpt": "The Sims 4: City Living, The Sims 4: Discover University, and The Sims 4: Lovestruck also add elevators, but they can only be accessed in the build mode catalog on penthouse lots."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1213,
+      "name": "Foundation",
+      "pages": [
+        {
+          "page": "Foundation",
+          "url": "https://sims.fandom.com/wiki/Foundation",
+          "revision": 1051821
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "There is no foundation tool: select a room and drag the arrow at its center up or down, to any height, even sunk into the ground.",
+          "drawn_from": [
+            {
+              "page": "Foundation",
+              "revision": 1051821,
+              "excerpt": "There is no longer a dedicated foundation tool; foundations are now created by selecting a room, and dragging the arrow that appears in its center up or down. Foundations can be adjusted to any height, and even sunken into the ground."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Platforms (patch 103) raise or lower a room's floor apart from the foundation for split levels, and a one-step difference can be walked while a bigger gap needs a ladder or stairs.",
+          "drawn_from": [
+            {
+              "page": "Foundation",
+              "revision": 1051821,
+              "excerpt": "Patch 103 added the ability to create split-level foundations using platforms."
+            },
+            {
+              "page": "Foundation",
+              "revision": 1051821,
+              "excerpt": "Platforms that differ in height by only one \"step\" can be walked across as-is, but any greater difference requires a ladder or stairs."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A sunken foundation distorts the terrain, buildings with different foundation heights need at least one tile of space between them, and a stilted foundation (patch 81) allows building over water.",
+          "drawn_from": [
+            {
+              "page": "Foundation",
+              "revision": 1051821,
+              "excerpt": "However, a sunken foundation will distort the terrain to accommodate it."
+            },
+            {
+              "page": "Foundation",
+              "revision": 1051821,
+              "excerpt": "buildings can now have differing foundation heights, but there must be at least one tile of space between them."
+            },
+            {
+              "page": "Foundation",
+              "revision": 1051821,
+              "excerpt": "Patch 81 introduced a stilted foundation that allows for construction over water."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1214,
+      "name": "Roof",
+      "pages": [
+        {
+          "page": "Roof",
+          "url": "https://sims.fandom.com/wiki/Roof",
+          "revision": 1237491
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "Auto-roofing is gone: roofs are pushed and pulled to the size and shape you want, from gabled, half gable, hipped and half hipped styles with diagonal versions.",
+          "drawn_from": [
+            {
+              "page": "Roof",
+              "revision": 1237491,
+              "excerpt": "Auto-roofing has been removed, and instead roofs can now be pushed and pulled to the size and shape the player wants it to be. The base game has gabled, half gable, hipped, and half hipped roof styles, along with their diagonal versions."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Pushing and pulling can make domed, pagoda, awning and gambrel shapes, and patches 57 and 68 added pentagonal, hexagonal, octagonal and round roofs and six glass roofs.",
+          "drawn_from": [
+            {
+              "page": "Roof",
+              "revision": 1237491,
+              "excerpt": "With the push and pull mechanic, roofs can also be shaped into different styles such as domed, pagoda, awning, and gambrel."
+            },
+            {
+              "page": "Roof",
+              "revision": 1237491,
+              "excerpt": "Pentagonal, hexagonal, octagonal, and round roofs were added in Patch 57"
+            },
+            {
+              "page": "Roof",
+              "revision": 1237491,
+              "excerpt": "Patch 68 also added six different glass roofs."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Eco Lifestyle roofs have solar panels that generate electricity in daylight, and with Seasons a roof keeps rain, snow and harsh temperatures out.",
+          "drawn_from": [
+            {
+              "page": "Roof",
+              "revision": 1237491,
+              "excerpt": "The Sims 4: Eco Lifestyle adds roof styles with built-in solar panels that generate electricity during daylight hours."
+            },
+            {
+              "page": "Roof",
+              "revision": 1237491,
+              "excerpt": "In The Sims 4: Seasons, roofs help keep rain, snow and harsh temperatures out of buildings as well as covered outdoor areas"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

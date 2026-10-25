@@ -1,0 +1,271 @@
+{
+  "game_id": 9,
+  "game": "Grand Theft Auto: San Andreas",
+  "read_on": "2026-10-25",
+  "sections": [
+    {
+      "section_id": 1100,
+      "name": "Body Armor",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Body_Armor",
+      "main_revision": "2083689",
+      "lines": [
+        {
+          "line": "Summary: A blue-vest pickup that pads your health against gunfire, explosions and fire; in San Andreas it is shown as a bar rather than as hit points.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Body_Armor",
+              "revision": "2083689",
+              "quoted": [
+                "Body Armor is a pickup and gear featured in the Grand Theft Auto series that serves primarily to protect the player's health from specific forms of damage, most notably gunfire.",
+                "In most cases, body armor in the games is illustrated as a protective blue vest.",
+                "extending the player's resilience to damage from gunfire, explosions and fire",
+                "The armor hit points stayed the same until Grand Theft Auto: San Andreas, where the armor is now a bar instead of hit points."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Armor works as padding on top of your health, but in San Andreas it gives no protection from falls.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Body_Armor",
+              "revision": "2083689",
+              "quoted": [
+                "The body armor's primary function is to serve as padding for the player health",
+                "the armor in GTA San Andreas and GTA Vice City Stories is an exception, providing no protection to the player from falls"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Where to get it: Ammu-Nation sells it for 200 once the mission Doberman is done, it also lies as a pickup in set places, and climbing into a police or SWAT Enforcer van gives you some.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Body_Armor",
+              "revision": "2083689",
+              "quoted": [
+                "Ammu-Nation (3D Universe, GTA Chinatown Wars, GTA V, GTA Online)",
+                "200 (GTA Vice City & GTA San Andreas)",
+                "Doberman (GTA San Andreas)",
+                "In addition to spawning in specific locales, body armor can also be purchased at stores that sell weapons, such as Ammu-Nation, as well as entering the Police/SWAT Enforcer trucks."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1101,
+      "name": "Health pickups",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Health",
+      "main_revision": "2063152",
+      "lines": [
+        {
+          "line": "Summary: A spinning heart pickup that fills your health to its maximum; in San Andreas they turn up during gang wars and in most missions with a lot of gun fights.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Health",
+              "revision": "2063152",
+              "quoted": [
+                "Health pickups scattered around the map can restore the player's health to the maximum level.",
+                "health pickups are generally shaped as rotating health icon with the symbol of a heart",
+                "In Grand Theft Auto: San Andreas, health pickups appear in San Andreas during gang warfare and in most missions involving a lot of gun fights.",
+                "Health is replenished to maximum"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Other ways to heal in San Andreas: eat food, step into an Ambulance for up to 20% or a Hotdog van for up to 40%, or save the game at a save point.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Health",
+              "revision": "2063152",
+              "quoted": [
+                "Health can be also replenished by up to 20% when entering Ambulances or 40% when entering the Hotdog van in Grand Theft Auto: San Andreas.",
+                "by eating food (in GTA Vice City, GTA San Andreas, GTA IV and its episodes, GTA V and GTA Online)",
+                "by visiting a save point to save the game (in all 3D Universe titles, save for GTA III and Grand Theft Auto Advance"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Your maximum health can be raised by paramedic side missions and by exercising: sprinting, swimming or going to a gym. If your health runs out you are wasted, taken to the nearest hospital, charged a fee and stripped of your weapons, and any mission in progress fails.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Health",
+              "revision": "2063152",
+              "quoted": [
+                "Health is replenished to maximum, which is a variable scale that can be increased by performing paramedic side missions and exercising (sprinting, swimming, or visiting a gym).",
+                "When the player's health is completely depleted, the protagonist is considered \"wasted\", and is then transported to the nearest hospital, after which a fee for healthcare will be assessed, and all weapons will be confiscated in the 2D and 3D Universes. Any mission that may have been in progress at the time is considered as failed."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1102,
+      "name": "Safehouses and save points",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Save_Points_in_GTA_San_Andreas",
+      "main_revision": "2086140",
+      "lines": [
+        {
+          "line": "Summary: Outside a mission you save by collecting the floppy diskette pickup at an available safehouse; saving also restores your full health and skips six in-game hours. The Johnson House is the save point you start with.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Save_Points_in_GTA_San_Andreas",
+              "revision": "2086140",
+              "quoted": [
+                "In order to save the progress while not in a mission, the player is required to collect a \"floppy diskette\" save pickup at any available safehouse",
+                "Saving the game also restores the player's full health and skips time in 6 in-game hours.",
+                "The Johnson House is provided to the player as the default save point at the start of the game"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Safehouses can have a garage for up to four vehicles, a wardrobe for the clothes you have bought, rewards for collectibles, and some pay a daily asset income.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Save_Points_in_GTA_San_Andreas",
+              "revision": "2086140",
+              "quoted": [
+                "Garage: A maximum of four vehicles can be stored in any of the garages.",
+                "Wardrobe: All clothing items purchased from clothing stores will be available at the player's wardrobe",
+                "Collectible Rewards: Items rewarded from collecting specific types of collectibles will be available at certain safehouses.",
+                "Daily Asset Income: Certain safehouses are tied to a specific mission strand which, when completed, will render the safehouse as an asset-type property, with a pickup generating a specific amount of money to be collected daily."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: To buy one, collect the green house pickup and press the Action button; a blue house pickup is not unlocked yet. If a car will not fit, park a car in the garage door's way so it cannot close, then park the one you want inside. All 37 save points are needed for 100% completion and cost $879,000 in total.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Save_Points_in_GTA_San_Andreas",
+              "revision": "2086140",
+              "quoted": [
+                "In order to purchase a safehouse, the player must collect the green house pickup and press the Action button.",
+                "Blue house pickups indicates safehouses or assets that are yet to be unlocked for purchase.",
+                "The player can park a car in the door's way to prevent it from closing and then parking the desired vehicle in the garage.",
+                "Obtaining all 37 save points is a requirement for achieving 100% completion (contributing 15% of the total), costing a total of $879,000."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1103,
+      "name": "Police bribes",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Police_Bribes",
+      "main_revision": "2079729",
+      "lines": [
+        {
+          "line": "Summary: A spinning star-shaped police badge pickup; each one you collect takes one star off your wanted level.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Police_Bribes",
+              "revision": "2079729",
+              "quoted": [
+                "A police bribe is a pickup in the Grand Theft Auto series intended to eliminate the player's wanted level.",
+                "the bribe appears as a rotating, star-shaped police badge pickup that will reduce the player's wanted level by one star when picked up"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Other ways to lose a wanted level in San Andreas: change clothes at a safehouse or clothing shop, respray at a Pay 'n' Spray, modify a car at a Mod Garage, start the Freight Train Challenge or a vehicle school lesson, buy a plane ticket to another city, or finish a mission.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "Wanted levels are removed by:",
+                "Collecting police bribes.",
+                "Changing clothes at any safehouse or clothing shop.",
+                "Respraying a vehicle at a Pay 'n' Spray.",
+                "Modifying a vehicle at Mod Garages.",
+                "Starting the Freight Train Challenge.",
+                "Starting a vehicle school lesson.",
+                "Going to an airport and buying a plane ticket to another city.",
+                "Completing a mission."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Bribes are scarce, so it helps to memorise where they lie; some sit at a slight height and need a jump in a vehicle. Higher-level police already chasing you, such as the military, SWAT or the FBI, keep coming after a bribe, though no new law enforcement vehicles appear. The exception is the Police Maverick, which gives up at three stars and drops you to two.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Police_Bribes",
+              "revision": "2079729",
+              "quoted": [
+                "its scarcity makes the tactic more difficult unless the player memorizes their locations",
+                "Some require performing a jump in an automobile to reach, as they are positioned at a slight altitude, being inaccessible on-foot.",
+                "any higher-level police presence (Military, SWAT or FBI for example) in the area prior to obtaining the bribe will continue to pursue the player (assuming a wanted level is still in place), but no more law enforcement vehicles appear.",
+                "The one exception is the Police Maverick, which will disengage from pursuit of a player with a three-star wanted level upon obtaining a police bribe (reducing their wanted level to two stars)."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1104,
+      "name": "Jetpack",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Jetpack",
+      "main_revision": "2076108",
+      "lines": [
+        {
+          "line": "Summary: A one-person jetpack that lies on the ground like a weapon pickup and switches on the moment you walk into it; it is dropped when you press the vehicle exit button.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Jetpack",
+              "revision": "2076108",
+              "quoted": [
+                "The Jetpack is a special vehicle in Grand Theft Auto: San Andreas.",
+                "it spawns like a weapon pickup when not in use, it is activated instantly when the player walks into it, and is dropped when the vehicle exit button is pressed.",
+                "Capacity",
+                "1 (operator)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It makes you invulnerable to falling, crashing into walls or moving vehicles, and landing on a moving helicopter. Only one-handed weapons work while you fly it: Pistol, Tec-9, Micro SMG and Sawn-off Shotgun.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Jetpack",
+              "revision": "2076108",
+              "quoted": [
+                "it also makes the player invulnerable to falling, crashing into walls or moving vehicles, landing on top of a moving helicopter and other dangers.",
+                "Only the 'one-handed' weapons can be used while the Jetpack is in use, namely Pistol, Tec-9, Micro SMG and Sawn-off Shotgun."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: After the mission Green Goo it waits at Verdant Meadows Airfield beside the asset collectible, and it is a great choice for collecting horseshoes around Las Venturas. It has a much lower altitude limit than aircraft and is not ideal for scaling taller buildings.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Jetpack",
+              "revision": "2076108",
+              "quoted": [
+                "After the said mission, the Jetpack will be unlocked and will spawn at the Verdant Meadows Airfield, beside the asset collectible.",
+                "The Jetpack is a great choice for collecting Horseshoes in the Las Venturas area.",
+                "The Jetpack has a much lower altitude limit than the other aircraft vehicles, and it is not ideal for scaling taller buildings"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

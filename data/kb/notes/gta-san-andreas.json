@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 1100,
+      "game_id": 9,
+      "section_type": "item",
+      "name": "Body Armor",
+      "card": "Summary: A blue-vest pickup that pads your health against gunfire, explosions and fire; in San Andreas it is shown as a bar rather than as hit points.\nUses: Armor works as padding on top of your health, but in San Andreas it gives no protection from falls.\nWhere to get it: Ammu-Nation sells it for 200 once the mission Doberman is done, it also lies as a pickup in set places, and climbing into a police or SWAT Enforcer van gives you some.",
+      "source_url": "https://gta.fandom.com/wiki/Body_Armor",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2083689",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1101,
+      "game_id": 9,
+      "section_type": "item",
+      "name": "Health pickups",
+      "card": "Summary: A spinning heart pickup that fills your health to its maximum; in San Andreas they turn up during gang wars and in most missions with a lot of gun fights.\nUses: Other ways to heal in San Andreas: eat food, step into an Ambulance for up to 20% or a Hotdog van for up to 40%, or save the game at a save point.\nTips: Your maximum health can be raised by paramedic side missions and by exercising: sprinting, swimming or going to a gym. If your health runs out you are wasted, taken to the nearest hospital, charged a fee and stripped of your weapons, and any mission in progress fails.",
+      "source_url": "https://gta.fandom.com/wiki/Health",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2063152",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1102,
+      "game_id": 9,
+      "section_type": "item",
+      "name": "Safehouses and save points",
+      "card": "Summary: Outside a mission you save by collecting the floppy diskette pickup at an available safehouse; saving also restores your full health and skips six in-game hours. The Johnson House is the save point you start with.\nUses: Safehouses can have a garage for up to four vehicles, a wardrobe for the clothes you have bought, rewards for collectibles, and some pay a daily asset income.\nTips: To buy one, collect the green house pickup and press the Action button; a blue house pickup is not unlocked yet. If a car will not fit, park a car in the garage door's way so it cannot close, then park the one you want inside. All 37 save points are needed for 100% completion and cost $879,000 in total.",
+      "source_url": "https://gta.fandom.com/wiki/Save_Points_in_GTA_San_Andreas",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2086140",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1103,
+      "game_id": 9,
+      "section_type": "item",
+      "name": "Police bribes",
+      "card": "Summary: A spinning star-shaped police badge pickup; each one you collect takes one star off your wanted level.\nUses: Other ways to lose a wanted level in San Andreas: change clothes at a safehouse or clothing shop, respray at a Pay 'n' Spray, modify a car at a Mod Garage, start the Freight Train Challenge or a vehicle school lesson, buy a plane ticket to another city, or finish a mission.\nTips: Bribes are scarce, so it helps to memorise where they lie; some sit at a slight height and need a jump in a vehicle. Higher-level police already chasing you, such as the military, SWAT or the FBI, keep coming after a bribe, though no new law enforcement vehicles appear. The exception is the Police Maverick, which gives up at three stars and drops you to two.",
+      "source_url": "https://gta.fandom.com/wiki/Police_Bribes",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2079729",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1104,
+      "game_id": 9,
+      "section_type": "item",
+      "name": "Jetpack",
+      "card": "Summary: A one-person jetpack that lies on the ground like a weapon pickup and switches on the moment you walk into it; it is dropped when you press the vehicle exit button.\nUses: It makes you invulnerable to falling, crashing into walls or moving vehicles, and landing on a moving helicopter. Only one-handed weapons work while you fly it: Pistol, Tec-9, Micro SMG and Sawn-off Shotgun.\nTips: After the mission Green Goo it waits at Verdant Meadows Airfield beside the asset collectible, and it is a great choice for collecting horseshoes around Las Venturas. It has a much lower altitude limit than aircraft and is not ideal for scaling taller buildings.",
+      "source_url": "https://gta.fandom.com/wiki/Jetpack",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2076108",
+      "crawled_at": "2026-10-25"
+    }
+  ]
+}

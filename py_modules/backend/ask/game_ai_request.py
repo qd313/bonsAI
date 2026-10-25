@@ -514,6 +514,15 @@ async def run_game_ai_request(
             app_name=app_name,
             text_resolved_title=text_resolved_title,
         )
+        # Plan 100 lane F: a thank-you or an off-topic question ("thank you very much", "what
+        # time is it") is not about the game. It searches no notes, carries no remembered subject
+        # and no previous answer, and leaves the remembered subject exactly as it was, so the
+        # next real follow-up still means the boss asked about before.
+        question_is_courtesy_or_junk = kb_followup_memory.is_courtesy_or_junk_phrase(
+            question_for_retrieval
+        )
+        if question_is_courtesy_or_junk:
+            should_kb = False
 
         # Follow-up memory, step one. A bare follow-up ("what about her second phase") carries
         # none of the previous turn into the search on its own -- there is no argument that
@@ -522,7 +531,7 @@ async def run_game_ai_request(
         # only ever changes the words handed to the search below -- question_for_model, and so
         # what the person and the model see, is untouched.
         kb_ask_mode = (ask_mode or "speed").strip().lower()
-        kb_memory_eligible = kb_ask_mode in ("strategy", "expert")
+        kb_memory_eligible = kb_ask_mode in ("strategy", "expert") and not question_is_courtesy_or_junk
         question_for_kb_search = question_for_retrieval
         # D98: the model still answered about a different, better-matching note even once the
         # right one was ranked first, so the exact turn this augments the search words on is

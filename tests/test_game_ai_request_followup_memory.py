@@ -44,6 +44,7 @@ class _FakePlugin:
         self._settings = settings
         self._ollama_result: dict = {}
         self.ask_ollama_calls: list = []
+        self.ask_ollama_questions: list = []
 
     async def load_settings(self):
         return self._settings
@@ -53,6 +54,7 @@ class _FakePlugin:
 
     async def ask_ollama(self, *args, **kwargs):
         self.ask_ollama_calls.append(kwargs)
+        self.ask_ollama_questions.append(args[0] if args else "")
         return self._ollama_result
 
     async def _persist_input_transparency(self, payload):
@@ -125,6 +127,16 @@ class FollowupMemoryRealCorpusTests(unittest.TestCase):
         _run(plugin, "what about its second phase")
 
         self.assertNotEqual(self._attached_names(plugin)[0], "Glyphid Dreadnought")
+
+    def test_a_thank_you_after_a_boss_question_attaches_nothing_from_the_real_library(self):
+        plugin = _FakePlugin(self._real_settings())
+        plugin._ollama_result = _ok_result()
+
+        _run(plugin, "how do i beat the glyphid dreadnought")
+        _run(plugin, "thank you very much")
+
+        self.assertEqual(self._attached_names(plugin), [])
+        self.assertEqual(plugin.ask_ollama_calls[-1]["followup_subject"], "")
 
     def test_a_fresh_named_question_is_untouched_by_a_stale_memory(self):
         plugin = _FakePlugin(self._real_settings())
@@ -373,6 +385,86 @@ class FollowupMemoryPromptSubjectWiringTests(unittest.TestCase):
         self.assertEqual(kwargs["followup_subject"], "Glyphid Dreadnought")
         self.assertEqual(kwargs["strategy_spoiler_asked_entity"], "")
         self.assertFalse(kwargs["strategy_spoiler_consent"])
+
+
+class FollowupJunkPhraseWiringTests(unittest.TestCase):
+    """Plan 100 lane F (Deck check P100-THANKS-01): after a boss question, a thank-you or an
+    off-topic question carries nothing from the boss turn -- no library search, no remembered
+    subject, no previous answer -- and the boss is still remembered for the next real follow-up.
+    The same three turns the Deck block L0 ran in Deep Rock Galactic: Survivor.
+    """
+
+    def setUp(self):
+        kb_followup_memory.forget()
+
+    def tearDown(self):
+        kb_followup_memory.forget()
+
+    _settings = FollowupMemoryPromptSubjectWiringTests._settings
+
+    def _praetorian_result(self) -> KnowledgeRetrievalResult:
+        return KnowledgeRetrievalResult(
+            attached=True,
+            text_block=(
+                f"[{_DRG_APP_NAME} / boss: Praetorian]\n"
+                "Shoot the glowing legs, then back away from its slam."
+            ),
+            sources=[],
+        )
+
+    def _boss_turn(self, mock_retrieve):
+        mock_retrieve.return_value = self._praetorian_result()
+        plugin = _FakePlugin(self._settings())
+        plugin._ollama_result = {
+            "success": True,
+            "response": "Shoot the glowing legs of the Praetorian first.",
+            "model": "test-model",
+        }
+        _run(plugin, "how do i beat the praetorian")
+        mock_retrieve.reset_mock()
+        return plugin
+
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    def test_a_thank_you_or_the_time_after_a_boss_turn_carries_nothing_and_searches_nothing(
+        self, mock_retrieve
+    ):
+        for phrase in ("thank you very much", "what time is it"):
+            with self.subTest(phrase=phrase):
+                kb_followup_memory.forget()
+                plugin = self._boss_turn(mock_retrieve)
+
+                _run(plugin, phrase)
+
+                mock_retrieve.assert_not_called()
+                call = plugin.ask_ollama_calls[-1]
+                self.assertEqual(call["followup_subject"], "")
+                self.assertFalse(call.get("proton_log_attachment"))
+                self.assertEqual(plugin.ask_ollama_questions[-1], phrase)
+
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    def test_the_boss_is_still_remembered_after_two_junk_turns(self, mock_retrieve):
+        plugin = self._boss_turn(mock_retrieve)
+        _run(plugin, "thank you very much")
+        # A junk turn that did attach a note must not overwrite the boss either.
+        mock_retrieve.return_value = KnowledgeRetrievalResult(
+            attached=True,
+            text_block=f"[{_DRG_APP_NAME} / boss: Exploder]\nPop it from range.",
+            sources=[],
+        )
+        _run(plugin, "what time is it")
+        mock_retrieve.reset_mock()
+        mock_retrieve.return_value = self._praetorian_result()
+
+        _run(plugin, "how do i beat it")
+
+        searched = mock_retrieve.call_args.kwargs["question"]
+        self.assertIn("Praetorian", searched)
+        call = plugin.ask_ollama_calls[-1]
+        self.assertEqual(call["followup_subject"], "Praetorian")
+        # The previous question and answer sent along are the boss turn's, not the thank-you's.
+        first_arg = plugin.ask_ollama_questions[-1]
+        self.assertIn("how do i beat the praetorian", first_arg.lower())
+        self.assertNotIn("thank you very much", first_arg.lower())
 
 
 if __name__ == "__main__":

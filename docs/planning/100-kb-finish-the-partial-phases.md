@@ -379,6 +379,7 @@ Log, one row per consult: time, the question in one line, the answer in one line
 | Time | Question | Answer | What changed | Cost |
 |---|---|---|---|---|
 | 2026-10-25 21:55 to 22:13 UTC | Consult 1: do the fourteen briefs match the code at `a734d950`? | Ten hold with small word fixes (T, P, W, Y, N1 to N4, X, Q); F, R, U and V need corrections first; J has one wrong cause (Copy is the bubble's corner icon, not a reply-row button) | F: a junk phrase also skips the library search and never updates the remembered subject. R: the state type file added; Clear cache has no screen-side reset, so the test and the Deck check close and reopen the panel first. V: the Copy path's own unwrap added; the carrier files named; a hand-down count may trip. W: the exact two-registry shape written in; the Story spoilers index row retargeted. T: tips 110 and 111 are Steam Frame tips, left alone; new tip ids 165 and 166. N: "sixteen" cards is 101. U and J: the hand-kept fake plugin file added to both. J's button goes in the reply row as its own stop (the session's call). | about 189k tokens, 18 min |
+| 2026-10-25 22:58 to 23:08 UTC | Consult 2: the one shape for the "Lowered notes" row and the live-state tag, and the tests that fail without them | The row is one more copy of the Update/Remove shape (a horizontal container, words and one A-only button, no move handlers, no B handler) under the action row, found by Steam's own column flow and skipped when absent; the Reply style line's Up hop checks the Clear button first; the confirm box reuses Remove's pattern and re-arms its return to Remove (or Download) because the Clear row vanishes. The tag reads the demote hook's existing "marked on this answer" state: tag = saved flag true OR in this answer's picked; no undone set (the brief's rule would hide a tag when an earlier mark remains). The walk harness for the Ollama tab is foldedTabWalk, not the answer-pane one. | Lane U's task text for commits 3 and 4 rewritten to this shape; three files granted beyond its list (the Up hop, its threading, the modal return id). The brief's "beside Remove" read as under the row, never a third slot; its tag rule dropped. | about 158k tokens, 10 min |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -540,6 +541,12 @@ Not yet written.
 ## 14. Subagent reports and follow-ups
 
 The advisor (Fable max, § 7): every consult logged above. The security reviewer: reads lane J's diff before it lands,
-recorded here. The FOSS reviewer: reads the four note lanes' sidecars for licence (ShareAlike sources are fine; GFDL
+recorded here. **2026-10-25 23:10 to 23:14 UTC, lane J's three commits read:** the write, the link and the content are
+sound; nothing blocks landing. The file name comes only from the game's name and the clock; the folder is a constant
+checked before and after links are followed; the file is opened create-only so it never overwrites; the link is one
+constant address plus a URL-encoded title. One ★ finding: a lone surrogate half in the text would leave a 0-byte file
+behind (a one-line fix, handed to the lane). The plugin method, not yet written, is the only permission guard once
+wired; its required shape (the permission check first, home from the plugin's own setting, five string arguments only)
+was handed to the lane and the session reads that commit against it before landing. About 78k tokens, 3 min. The FOSS reviewer: reads the four note lanes' sidecars for licence (ShareAlike sources are fine; GFDL
 and NonCommercial are not), recorded here. Focus and layout: lane U carries the advisor's read before landing (consult
 3) and its Deck row is the gate.

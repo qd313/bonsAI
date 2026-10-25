@@ -545,6 +545,28 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   built on this PC: 465 notes, 166 tips, every vector; lane X's second half started on it in a fresh copy. **Deploy for
   block L1 started 23:34 UTC.**
 
+- **23:40 to 00:05 UTC: the Deck path is blocked, and a real find.** The L1 driver started here had no rig tools (the two
+  project servers vanished from this chat at about 22:00 UTC and are not listed even as failed); a Deck session cannot be
+  started from Remote Control, so the maintainer was asked to type a message from the desktop app, reconnect the servers,
+  or open a new chat ("Run plan 100 Deck block L1"; runbook L1 carries every fact that chat needs). Q's label fix landed
+  (`b6292ca6`) and the label test passes; the Python suite then showed one more failure: the router's false-positive test,
+  because the bare word "storage" routed the two blind Weighted Storage Cube questions (Portal 2) to the storage-full tip,
+  exactly the wrong-tip attach the second opinion called worse than none. Lane T replaced the bare rule with pairs
+  (`1f11d3a8`; zero of the 706 fixture questions changed their routing); landing, then U.
+- **00:10 UTC: lane X, second half (items 6 and 7), on the landed tip's library (465 notes).** **Search:** the right note is
+  in the first three 90.8 times in a hundred (88.1 before) on the held-back questions; the 102 new blind questions: 100
+  of 102 found in the first three (86 first); the two misses are a Baldur's Gate 3 and a Sims 4 question. Five old
+  questions dropped out of the first three (the Portal 2 gels, the BG3 class, an audio tip, two GTA rows): the new notes
+  crowd the old ones on the same subject. **Tips:** 17 of 24 reach a tip (8), 15 of 22 reach the right one (5), none a
+  wrong one. **The answer test** on first turns: contradictions down (96.3 clean against 88.9), menus up a point, but
+  **facts kept fell from 76.3 to 67.2 in a hundred**; six questions went from 3 of 3 to 0 of 3, one (the Portal 2 gels)
+  lost its card to the three new gel notes. The "Needs" clause is not in those prompts (first turns only; the two-turn
+  pairs drew no checklist at all in 48 turns), so the drop is the library's, not the prompt's; it needs a read, and the
+  maintainer's call. **The picture line did not help:** with the game handed over the AI named it 58 and 50 times in a
+  hundred over two runs (75 on 2026-10-24); the God of War asks named another game 4 and 6 times in 9 (4 before); two
+  runs differ by up to 21 points, so the noise is large, but nothing improved. The screenshot entry stays PARTIAL with
+  these numbers; the "measure first" entries get the first-half numbers.
+
 ## 13. Report
 
 Not yet written.

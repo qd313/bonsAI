@@ -1,0 +1,217 @@
+{
+  "game_id": 4,
+  "licence": "CC-BY-SA-4.0 (Wikipedia, read 2026-10-25 through scripts/kb/fetch_wiki_live_pages.py)",
+  "sections": [
+    {
+      "section_id": 1000,
+      "name": "Owlbear",
+      "page": "Owlbear",
+      "revision": "1376133251",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A cross between a bear and an owl that hugs like a bear and attacks with its beak; Baldur's Gate 3 lists owlbears among its Forgotten Realms monsters.",
+          "from": [
+            {
+              "page": "Owlbear",
+              "revision": "1376133251",
+              "quote": "An owlbear is depicted as a cross between a bear and an owl, which \"hugs\" like a bear and attacks with its beak."
+            },
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "The game features monsters from the Forgotten Realms, including owlbears, gnolls, and mind flayers."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "The tabletop books describe owlbears as carnivorous and famed for aggression and ferocity. They live in mated pairs in caves and hunt any creature bigger than a mouse.",
+          "from": [
+            {
+              "page": "Owlbear",
+              "revision": "1376133251",
+              "quote": "owlbears are carnivorous creatures, famed for their aggression and ferocity; they live in mated pairs in caves and hunt any creature bigger than a mouse."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1001,
+      "name": "Githyanki Warriors",
+      "page": "Githyanki",
+      "revision": "1365291468",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A race of warriors, almost always evil, who attack the mind flayer ship at the start of the game riding red dragons.",
+          "from": [
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "the ship comes under attack from githyanki warriors riding red dragons"
+            },
+            {
+              "page": "Githyanki",
+              "revision": "1365291468",
+              "quote": "Alignment || Almost always any evil"
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "They are after a companion's prism. Tabletop lore calls them ancient enemies of the githzerai, and says they began as the slave army that rose against the mind flayers.",
+          "from": [
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "a device that is sought after by the githyanki"
+            },
+            {
+              "page": "Githyanki",
+              "revision": "1365291468",
+              "quote": "They are cousins and ancient enemies to the githzerai."
+            },
+            {
+              "page": "Githyanki",
+              "revision": "1365291468",
+              "quote": "The illithid empire was shattered by the slave rebellion"
+            },
+            {
+              "page": "Githyanki",
+              "revision": "1365291468",
+              "quote": "Having won the war, Gith continued to treat her people (who would become known as the githyanki"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1002,
+      "name": "Minthara",
+      "page": "Minthara",
+      "revision": "1366636360",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A drow paladin who leads a band of goblins and other creatures for the game's antagonist in the first act and clashes with the Emerald Grove refugee settlement.",
+          "from": [
+            {
+              "page": "Minthara",
+              "revision": "1366636360",
+              "quote": "Race || Drow"
+            },
+            {
+              "page": "Minthara",
+              "revision": "1366636360",
+              "quote": "Class || Paladin"
+            },
+            {
+              "page": "Minthara",
+              "revision": "1366636360",
+              "quote": "she leads a band of goblins and other creatures in service of the game's antagonist"
+            },
+            {
+              "page": "Minthara",
+              "revision": "1366636360",
+              "quote": "This brings her into conflict with a refugee settlement called the Emerald Grove"
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Your choices are to help her raid the grove, to oppose and kill her and her goblins, or to avoid the raid and keep her alive by knocking her out with non-lethal damage while killing her commanders, or by ignoring her.",
+          "from": [
+            {
+              "page": "Minthara",
+              "revision": "1366636360",
+              "quote": "the player may either help her raid it or oppose and kill her and her goblins"
+            },
+            {
+              "page": "Minthara",
+              "revision": "1366636360",
+              "quote": "the player may avoid the raid entirely and keep her alive by either knocking her out with non-lethal damage while killing her commanders or ignoring her entirely"
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Avoiding the raid means the grove is slaughtered off-screen; siding with her or keeping her alive lets her reach act two, where she can be rescued and become a full companion.",
+          "from": [
+            {
+              "page": "Minthara",
+              "revision": "1366636360",
+              "quote": "though this option will cause the grove to be slaughtered off-screen"
+            },
+            {
+              "page": "Minthara",
+              "revision": "1366636360",
+              "quote": "Any of these options will allow her to proceed to the game's second act."
+            },
+            {
+              "page": "Minthara",
+              "revision": "1366636360",
+              "quote": "If the player sides with her"
+            },
+            {
+              "page": "Minthara",
+              "revision": "1366636360",
+              "quote": "The player can rescue her, after which she will become a full companion"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1003,
+      "name": "Goblin Horde",
+      "page": "Goblin (Dungeons & Dragons)",
+      "revision": "1376133633",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A common, fairly weak race of evil humanoid monsters in the tabletop game; in the first act a goblin horde that worships a cult of the Absolute faces the druids and tiefling refugees of the Emerald Grove.",
+          "from": [
+            {
+              "page": "Goblin (Dungeons & Dragons)",
+              "revision": "1376133633",
+              "quote": "goblins are a common and fairly weak race of evil humanoid monsters"
+            },
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "local druids and tiefling refugees face off against the goblin horde that worships a cult of the \"Absolute\""
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "The first-edition tabletop monster book describes goblins as a tribal society in dismal surroundings, and low-level characters often face them. The first act's locations include a goblin camp, and Minthara leads a band of goblins in that act.",
+          "from": [
+            {
+              "page": "Goblin (Dungeons & Dragons)",
+              "revision": "1376133633",
+              "quote": "it is described as having a tribal society and dwelling in dismal surroundings"
+            },
+            {
+              "page": "Goblin (Dungeons & Dragons)",
+              "revision": "1376133633",
+              "quote": "Goblins are non-human monsters that low-level player characters often face in combat."
+            },
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "Players have access to several locations, including a druids' grove, goblin camp, and a monastery"
+            },
+            {
+              "page": "Minthara",
+              "revision": "1366636360",
+              "quote": "she leads a band of goblins and other creatures in service of the game's antagonist"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 1000,
+      "game_id": 4,
+      "section_type": "enemy",
+      "name": "Owlbear",
+      "card": "Summary: A cross between a bear and an owl that hugs like a bear and attacks with its beak; Baldur's Gate 3 lists owlbears among its Forgotten Realms monsters.\nTips: The tabletop books describe owlbears as carnivorous and famed for aggression and ferocity. They live in mated pairs in caves and hunt any creature bigger than a mouse.",
+      "source_url": "https://en.wikipedia.org/wiki/Owlbear",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "1376133251",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1001,
+      "game_id": 4,
+      "section_type": "enemy",
+      "name": "Githyanki Warriors",
+      "card": "Summary: A race of warriors, almost always evil, who attack the mind flayer ship at the start of the game riding red dragons.\nTips: They are after a companion's prism. Tabletop lore calls them ancient enemies of the githzerai, and says they began as the slave army that rose against the mind flayers.",
+      "source_url": "https://en.wikipedia.org/wiki/Githyanki",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "1365291468",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1002,
+      "game_id": 4,
+      "section_type": "boss",
+      "name": "Minthara",
+      "card": "Summary: A drow paladin who leads a band of goblins and other creatures for the game's antagonist in the first act and clashes with the Emerald Grove refugee settlement.\nTips: Your choices are to help her raid the grove, to oppose and kill her and her goblins, or to avoid the raid and keep her alive by knocking her out with non-lethal damage while killing her commanders, or by ignoring her.\nTips: Avoiding the raid means the grove is slaughtered off-screen; siding with her or keeping her alive lets her reach act two, where she can be rescued and become a full companion.",
+      "source_url": "https://en.wikipedia.org/wiki/Minthara",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "1366636360",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1003,
+      "game_id": 4,
+      "section_type": "enemy",
+      "name": "Goblin Horde",
+      "card": "Summary: A common, fairly weak race of evil humanoid monsters in the tabletop game; in the first act a goblin horde that worships a cult of the Absolute faces the druids and tiefling refugees of the Emerald Grove.\nTips: The first-edition tabletop monster book describes goblins as a tribal society in dismal surroundings, and low-level characters often face them. The first act's locations include a goblin camp, and Minthara leads a band of goblins in that act.",
+      "source_url": "https://en.wikipedia.org/wiki/Goblin_(Dungeons_%26_Dragons)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "1376133633",
+      "crawled_at": "2026-10-25"
+    }
+  ]
+}

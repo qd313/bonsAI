@@ -6,7 +6,11 @@ the work runs in a new chat on the maintainer's PC. Sources: the knowledge-base 
 helpers (each checked against the roadmap; three mismatches found, § 8). Plain language on purpose: this file is for
 the maintainer first.
 
-**Status: DRAFT, waiting for the maintainer's calls in § 2.** Nothing started; nothing on the Deck touched.
+**Status: READY for "Run plan 100" on the maintainer's PC.** The maintainer answered the calls in § 2 on 2026-10-25
+("plan the plan as listed": the defaults on all fourteen; usage at 53 percent of the five-hour window, which resets
+within the hour, and 53 percent of the week, which resets Wednesday morning). They become decision D137, written by the
+bookkeeper in its pre-go audit. The helper rules, the briefs and Deck runbook L0 are written (the files below).
+Nothing started; nothing on the Deck touched.
 
 **Who runs it:** a **new** Claude Code chat on the maintainer's PC, **Fable 5.1 at high**, orchestrates and lands (the
 maintainer's choice; the routing table would put Opus 5.5 extra-high here). **Sonnet 5.5 high** lanes build everything
@@ -24,9 +28,11 @@ lane starts and after the last one lands. Never alongside another chat that is d
 (the last knowledge-base wave; its briefs and runbooks are the shape to copy); [plan 28](28-phase5-corpus-depth.md)
 for the four thin games.
 
-**Files for this plan:** the helper rules `assets/100-helper-rules.md`, the briefs `assets/100-lane-briefs.md` and the
-first Deck runbook `assets/100-runbook-block-L0.md` are written by this planning chat once the calls in § 2 are
-answered (the scope decides which briefs exist); the session writes one runbook per later block. Evidence files:
+**Files for this plan (written 2026-10-25):** the helper rules [assets/100-helper-rules.md](assets/100-helper-rules.md)
+(plan 98's rules plus four new lines), the briefs [assets/100-lane-briefs.md](assets/100-lane-briefs.md) (one per lane,
+with the file and line facts from the lookups), the first Deck runbook
+[assets/100-runbook-block-L0.md](assets/100-runbook-block-L0.md) (the smoke pass with Show details, plan 98's owed
+looks, the owed rows); the session writes one runbook per later block. Evidence files:
 `plan100-<ROW>.json` in the workshop's `test-evidence` folder. Handovers: `assets/100-handover-<block>.md`.
 
 ---
@@ -39,11 +45,12 @@ half-done phases that have nothing left to build by your call, take the seven AI
 every owed knowledge-base Deck check the rig can run while the helpers build, with the roadmap audited before go,
 current at every step, and audited again at the end.
 
-## 2. The maintainer's calls (open)
+## 2. The maintainer's calls (answered 2026-10-25: the defaults on all fourteen; D137)
 
-Each question with the recommendation and the default in brackets. Say the number and your answer; "defaults" takes
-every default. They become decision **D137** (D136 was the last; the session re-checks the tail of the decisions file at
-go).
+The questions as they were put, each with the recommendation and the default in brackets. The maintainer took every
+default ("plan the plan as listed"), so the default is the call. Call 12 was settled the same evening: pushes were
+allowed for the planning chat, and the plan files were pushed to `experimental`. D136 was the last decision; the session
+re-checks the tail of the decisions file at go.
 
 1. **Scope.** In: the troubleshooting tips wording (T), the two prompt lines (P), courtesy phrases are not follow-ups
    (F), the route look's revealed steps saved with the ticks (R), Hide more applied on the screen side (V), the Search
@@ -144,7 +151,7 @@ Once the build reaches their Deck (and, for the notes, once you publish the libr
 
 **The maintainer, about fifteen minutes, on the PC:**
 
-1. Answer § 2 (by number, or "defaults"), and call 12 so the plan files reach `experimental`.
+1. The calls are answered (§ 2). Pull `experimental`: the plan and its three asset files are on it.
 2. **Which chat holds the Deck.** No other chat may be driving it; the session reads the Deck's state at go.
 3. **The Deck** (call 10): Doom 64: Retribution started once by hand and left on Recent Games; Deep Rock Galactic:
    Survivor on Recent Games; the Deck's own AI with its usual model; the stop switch re-armed; the test chat "test" there.
@@ -423,6 +430,13 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
 ## 12. Progress log and questions
 
 - **2026-10-25, cloud planning chat:** plan written, then rewritten once the maintainer said the work runs on the PC.
+  **About 21:00: the maintainer answered:** "plan the plan as listed" (the defaults on all fourteen), pushes allowed
+  for the planning chat, usage 53 percent of the five-hour window (resets within the hour) and 53 percent of the week
+  (resets Wednesday morning). The helper rules, the briefs (K0, T, P, F, R, V, W, Y, N1 to N4, X, U, J, Q, the M
+  template) and Deck runbook L0 were written and pushed with the plan. Budget note for the session: with the week at
+  53 percent and two and a half days to its reset, this wave is likely to spend a large share of what is left; read the
+  counter before each wave and start no helper past 80 percent (call 14). Do not start lanes in the last minutes before
+  the five-hour window resets.
   Findings while planning: the cloud container has no Deck, no Ollama, no workshop, and the wikis are refused by its
   network rule, so it can only plan; the screen-side packages installed and the type check, the bundle and the Python
   suite (3,029 tests, 70 seconds) all passed there, so the tip is green. Six Haiku lookups mapped every lane's files

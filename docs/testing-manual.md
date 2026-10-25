@@ -591,6 +591,7 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
     launch tool needs to reach the full Library grid. Evidence `workshop:test-evidence/plan61-STRAT-SPOIL-NAME-01.json`.
     **2026-09-30 (plan 77): could not run** — none of the listed games is on Recent Games. Evidence `workshop:test-evidence/plan77-STRAT-SPOIL-NAME-01.json`.
     **2026-10-24 (plan 98 block K0, release build `f0b72dae7b65`): could not run again.** Doom 64: Retribution, Pikmin 2 and Super Mario 64 are on the Recent Games row now, but they are non-Steam shortcuts and the rig's launch tool cannot recognise their tiles. A hand launch by the maintainer, left running, would let the rig run the rest. Evidence `workshop:test-evidence/plan98-STRAT-SPOIL-NAME-01.json`.
+    **2026-10-25 (plan 100 block L0, build `2e8d78cd3774`): could not run, the sixth time.** Doom 64: Retribution was not on the Recent Games row, and the launch tool cannot match a non-Steam shortcut (one real try; nothing was launched). Still owed: it needs the maintainer's hand launch. Evidence `workshop:test-evidence/plan100-STRAT-SPOIL-NAME-01.json`.
   - [ ] *(extra credit, does not block)* **DRG-01e** Streaming off → plain text; **DRG-01f** `[Strategy
     follow-up]` turn → plain text — **DRG-01f PASS (Deck) 2026-09-26 (plan 70, flow L5), with Deep Rock
     Galactic: Survivor running:** picking "A. Just starting the campaign" under a boss-tactics answer, the

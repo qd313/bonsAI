@@ -57,6 +57,10 @@ export type SettingsTabChoiceRowProps<T extends string> = {
   entry?: { id: T; navRef: { current: unknown } };
 };
 
+/**
+ * One line of choice buttons. Without `entry` the buttons sit straight inside the row's one Focusable; with it,
+ * each button gets its own Focusable so Steam's ring can be sent to the entry button (see Gotchas above).
+ */
 export function SettingsTabChoiceRow<T extends string>({
   label,
   help,

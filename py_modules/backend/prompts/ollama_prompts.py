@@ -652,6 +652,8 @@ def build_system_prompt(
             "```bonsai-strategy-checklist\n"
             '{"title":"…","items":[{"id":"1","label":"…"},{"id":"2","label":"…"}]}\n'
             "```\n"
+            'A step that needs an item, ability or unlock ends with ". Needs: <that thing>" '
+            '(shape only, e.g. "Open the vault. Needs: the Brass Key"); a step that needs nothing has no such words.\n'
             "The visible coaching text above the checklist should already explain the steps; the JSON title must match that beat.\n"
             f"{format_strategy_checklist_state_block(strategy_checklist_state)}"
             "End your reply with a clearly marked section using this exact markdown heading on its own line:\n"

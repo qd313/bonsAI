@@ -47,7 +47,7 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Evidence `workshop:test-evidence/plan77-QA-FREE-PLAY-01.json`.
   Unshelves when: a new sighting.
 
-- ★ `[focus]` `[watching]` **After a tab switch onto About or Search, Steam puts the ring inside the tab, not on the tab bar** — seen on the Deck's own screen 2026-10-12 (plan 92 second night, blocks B and C), recorded as a quirk, not yet judged a bug. On About the ring started on the Reply language dropdown (one Up reached the bar); on Search the Up presses of P90-SEARCH-B started from "Clear the search" right after the switch. A tab's walk is not affected. Seen again on Main and Permissions after an LB or RB switch (the ring on a chip, and on a toggle); the session owner's call is that this is Steam's normal behaviour for any shoulder switch, not a fault. Evidence `workshop:test-evidence/plan92-P92-ABOUT-AFTER.json`, `workshop:test-evidence/plan92-P90-SEARCH-B.json`, `workshop:test-evidence/plan92-P92-FOLD-SWITCH-try2.json`.
+- ★ `[focus]` `[watching]` **After a tab switch onto About or Search, Steam puts the ring inside the tab, not on the tab bar** — seen on the Deck's own screen 2026-10-12 (plan 92), recorded as a quirk, not judged a bug; the session owner's call is that it is Steam's normal behaviour for a shoulder switch. Word for word: [Detail](roadmap-details.md#plan-98-sweep-4-notes-moved-from-the-shelved-roadmap-2026-10-24).
   Unshelves when: a new sighting, or the maintainer wants the ring on the bar after every switch.
 
 - ★ `[focus]` `[watching]` **In the AI models box, the first Left on Advanced right after the box opened did nothing** — seen once, 2026-10-12 (plan 92 second night, build `b8d9575f`); every later Left from Advanced worked. Possibly the first press after the box opens is lost. Evidence `workshop:test-evidence/plan92-P92-MODELS-BESIDE-try2.json`.
@@ -85,6 +85,10 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 
 - ★ `[focus]` `[watching]` **With details open, Down from "N earlier" jumps straight to the notes block** — seen once,
   2026-09-26. Not reproduced: it visited every stop in order. Evidence `workshop:test-evidence/plan76-P76-M-NEARLIER-DETAILS.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[KB]` `[watching]` **Four 180-second stalls with a game running (plan 98 block K1), not seen again in block K3** — seen 2026-10-24, four asks in a row gave no answer within 180 seconds.
+  Block K1's chat held many error turns. In block K3 the AI was two to three times slower with the game on its title screen but always finished (reading in the knowledge-base doc). Watch for it. Evidence `workshop:test-evidence/plan98-P98-GAME-ANSWER-TIME.json`.
   Unshelves when: a new sighting.
 
 - ★ `[KB]` `[watching]` **A note titled "Steam_frame (From the shared Deck tips)" came with a Zhukov overclocks question and looks off-topic** — seen once,

@@ -634,6 +634,8 @@ as a stand-in and nothing more: a real Deck reading of "how long from pressing A
 word landing on screen, with a game running" is still owed, and the probe's `--reply-ms` prints
 its verdict once someone times one by hand.
 
+**Measured with a game running 2026-10-24 (plan 98 Deck block K3, build `913b58cf`, the Deck's own screen and AI, Deep Rock Galactic: Survivor on its title screen, graphics chip at 99 percent).** The AI is two to three times slower but finishes. A direct model call took about 21 seconds against 10 with nothing running. A plugin Strategy question gave its first word after 24.5 seconds against 13.1, and the whole answer took about 41 seconds; six asks with the game running all finished, between 38 and 101 seconds (the longest included a 50-second chat summary run first). The AI wrote about 6 tokens a second against 14. The slowdown follows the game taking the graphics chip, not a slower plugin path. Block K1's four 180-second stalls with the game running did not happen again (`workshop:test-evidence/plan98-P98-GAME-ANSWER-TIME.json`).
+
 ## Related docs
 
 - [archive/research/rag-sources-research.md](../../bonsAI-workshop/archive/research/rag-sources-research.md) — source research (superseded for runtime by this doc)

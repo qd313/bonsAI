@@ -483,6 +483,8 @@ the tree is clean before it deploys; land nothing until it reports the deploy do
 
 **A plain focus call onto a step inside an answer moves the page's focus but not Steam's ring, so anything an answer's focus chains land on needs a nav node.** The Strategy checklist's steps were reached by the chain's plain focus call; on the Deck no press ever put the ring on a step, so nothing could be ticked (plan 96, block D, `59731088`). With a nav node on each step, Down from the last paragraph landed on step 1, A ticked step 2, and the tick held after close and reopen (`68f9c1a9`). Read what Steam reports as focused, not only the page's active element. Evidence `workshop:test-evidence/plan96-P96-F4-TICK.json`, then `plan96-P96-F4-TICK-try2.json`.
 
+**A saved Deck walk is tied to the build and the start state it was saved from, and a replay call must always name its walks.** In plan 98 block K1 all four walks that were replayed stopped at their first step, because they were saved on older builds from screens the Deck was not on (a different game's answer, folded sections, the ring on another row); none showed a real fault. After a feature lands, re-save the walks it touches from their own start state, or every replay reads "stale". And a `deck_replayChecks` call with no names replays every saved walk (100 walks, about 25 minutes of presses, one setting changed) (2026-10-24, `workshop:test-evidence/plan98-P98-K1-REPLAYS.json`).
+
 ---
 
 ## 4. Briefing helpers

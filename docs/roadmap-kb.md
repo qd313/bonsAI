@@ -39,6 +39,8 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   A stopped answer with "Use local knowledge base" off still drew a notes card once, and not on another try. The maintainer's call: that is fine (by design). Evidence `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-2.json`.
 - ★ `[KB]` **A thank-you or a junk phrase is treated as a follow-up to the previous question** — **OPEN, found 2026-10-24 (plan 98 block K0, Deck).**
   A short question with "it" and no subject counts as a follow-up, so "thank you very much" answered the previous question again (the earlier house question) instead of a short reply, and the "what time is it" reading is muddied the same way. A clean re-run in a fresh chat is owed. Evidence `workshop:test-evidence/plan98-P98-JUNK-PHRASES.json`.
+- ★ `[KB]` **A "where am I stuck" answer for Hollow Knight added an "If you want to cheat" section** — **OPEN, found 2026-10-24 (plan 98 Deck block K3).**
+  The route answer suggested emulator and fast-travel exploits. Odd advice from the AI, seen once. Evidence `workshop:test-evidence/plan98-P98-ROUTE-01-try2.json`.
 - ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **ACCEPTED, 2026-09-28.** The
   maintainer chose this on 2026-09-05 to save about a second per Speed question
   ([D62](audit/maintainer-decisions-archive.md#d62--locked-2026-09-05-raised-2026-09-05--the-second-bug-fixing-session-four-calls-before-go)
@@ -54,6 +56,8 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   One run (`workshop:archive/research/kb-answer-eval-2026-10-24-p98b-open.md`); not investigated.
 - ★ `[KB]` **Thumbs-down: "ranked lower by you" stays on an answer already saved after Undo** — **OPEN, found 2026-10-24 (plan 98 lane D).**
   Show details' tag is as of the ask, so an Undo does not clear it on an answer already saved.
+- ★ `[KB]` **Thumbs-down: after Undo with a game running, Down stopped on the notes block** — **OPEN, found 2026-10-24 (plan 98 Deck block K3).**
+  The page had lost the window's focus (the lost-focus family from plan 97), so Down did nothing. Closing and reopening Quick Access cleared it but emptied the question box. Evidence `workshop:test-evidence/plan98-P98-DEMOTE-01-game.json`.
 - ★ `[KB]` **Yoshi's Story's "Starting out" note contradicts itself about its levels** — **OPEN, found 2026-10-24 (plan 98 lane G3).**
   The note (section 376 in `data/kb/strategy_seed.json`) says "24 levels split across four worlds of six pages" and also "only six levels are played in any one run". The real game has six worlds of four levels. Lane G3 kept those numbers out of the glossary words. The note needs correcting, then a library rebuild.
 - ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back
@@ -72,6 +76,8 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   On screen, covers on a no-story game are opened unless they name a protected note, so the tier is not on the screen side.
 - ★★ `[KB]` `[QA]` **Screenshot reading ignores the game name it was handed** — **OPEN, found 2026-10-24 (plan 98 lane I).**
   On God of War's play and pause pictures the Deck's AI ignored the handed-over game name in 4 of 9 asks. See the screenshot entry in Next.
+- ★★ `[KB]` **Thumbs-down: Undo shows only on the newest answer, so an older mark has no way back** — **OPEN, found 2026-10-24 (plan 98 Deck block K1).**
+  Once another question is asked, an earlier answer shows no rating row and no Undo. Three marks leave a note out of the answers for good, with nothing on screen to see or clear it. A place to see and clear lowered notes is needed (Show details' tag, or a Settings row). Evidence `workshop:test-evidence/plan98-P98-DEMOTE-01.json`.
 - ★★★★ `[KB]` **What ships loses to its own meaning half on questions nobody tuned against** — **ACCEPTED, decided
   2026-09-06.** Leaning the search toward meaning finds the right note first a little more often, but it would bury a new
   note with no meaning index yet. That reason is gone since 2026-09-07 (every note is now guaranteed an index), but two
@@ -79,37 +85,11 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 ## Deck check owed
 
-- ★ `[KB]` **The Developer tab's test-library button no longer says the public download is not live** — **VERIFY, fixed 2026-10-24 (plan 98 lane E, `343b83ea`, `57f8a544`). Was the "Retire the Install seed knowledge base button" idea (2026-10-02).**
-  The hint now reads "Installs the library built with this plugin, for testing. Players download the library from the Ollama tab." The label is unchanged, and the button stays: it is the library's only test route. **Deck check owed:** row **P98-SEED-HINT** in [testing.md](testing.md).
-- ★★ `[KB]` **Glossary words for every game** — **VERIFY, built and landed 2026-10-24 (plan 98 lanes A0, G1, G2, G3). Was OPEN, filed 2026-10-16 (plan 86 step 3).**
-  The library builder now reads word files from `data/kb/glossary/` and lets a word name its game by the library's own id, so the Nintendo titles and State of Emergency can have words. 341 new words across the other 37 games.
-  **Deck check owed:** row **P98-GLOSSARY-02** in [testing.md](testing.md) (plan 98 block K1). It reaches players only after the maintainer publishes the library. [Design](audit/clean-up-round-three/glossary-move.md)
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY, landed
   2026-09-15, unit-tested.** A game known only by name now opens its box, and naming the boss up front keeps the answer in
   plain text. Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01, 2026-09-18), knowledge base off (DRG-01b, 2026-09-23) and library absent (DRG-01c, 2026-10-03; the AI wrote no hidden block, so a cover was not tested directly).
   **Still owed:** STRAT-SPOIL-NAME-01 could not run five times, last 2026-10-24: the three non-Steam games cannot be launched by the rig, so the maintainer's hand launch is needed (on the checks page). Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
   Evidence `workshop:test-evidence/plan79-STRAT-SPOIL-NAME-01.json`. [Detail](roadmap-kb-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions)
-- ★★ `[KB]` **The knowledge library update treats any different version as newer, and installs onto the Deck's own drive without asking where** — **VERIFY, fixed 2026-10-22 (plan 97 L9, `b8c002cd`). Was OPEN, found 2026-10-16 (plan 86 step 3 Deck block).**
-  Update now reads both versions as dates; an older published library downloads nothing and the row says "Nothing to do." The where-to-put-it half was fixed in plan 94 (`workshop:test-evidence/plan94-P94-KB-DOWNLOAD.json`). Full wording: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
-  **Deck 2026-10-22 and 2026-10-24: the first half PASSED; the "older than published" wording could not be shown.** Row **P97-L9-KB-UPDATE** stays open: it needs a published library older than the Deck's. Readings, word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
-- ★★ `[KB]` **The note's own words under the reply** — **VERIFY, fixed and re-run 2026-09-19 and 2026-09-26.** Most
-  Rows 01, 02, 03, 05, 06 and TEN-GAMES-01 are closed; 04's "no block" half passed. **Still owed:** 04's "Not in my notes" line half (in Strategy or Expert), now row **P98-NOTES-BLOCK-04** in [testing.md](testing.md). NOTES-BLOCK-LADDER was retired by the maintainer's call 2026-10-22 (D135). Rows in [testing-manual.md](testing-manual.md). Older notes, word for word: [roadmap-kb-details.md](roadmap-kb-details.md#the-notes-own-words-under-the-reply) and [here](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
-  **2026-10-22 (plan 97 block B):** the line half failed on the second question; the chip ladder was retired. Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
-- ★★ `[KB]` **Questions with no real answer in the notes can get notes about the wrong subject (Portal 2 house buying, a Hades boss that does not exist)** — **VERIFY, fixed and landed 2026-10-24 (plan 98 lane L, `ea61047d` to `287538e1` and its second round; lane D, `1c88ecc3`). Was OPEN, found 2026-09-07, seen again 2026-09-26, 2026-10-14 and 2026-10-24.**
-  The "No close match" line now shows whenever the thing a question names ("the boss called Grimthak", "buy a house") is in none of the attached notes, even with a game running and a common word matched. Everyday endings ("in this run", "here", "please", a question mark) are trimmed first, and the screen no longer deletes the line when the answer echoes a note. The plugin log line now carries the keyword and meaning scores.
-  **Measured on this PC (answer test, not the Deck):** of 496 fixture questions that get their right note, none gained the line; the four plan 47 device sentences, the four Deck questions of 2026-10-24 and 80 ending versions of them all warn. Known limits: a long ending not on the list, a British spelling that misses a note's American one, and a junk phrase that names nothing. Which ones: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
-  **Deck check owed:** row **P98-NOTES-BLOCK-04** in [testing.md](testing.md); it also covers the line half of **NOTES-BLOCK-04** in [testing-manual.md](testing-manual.md). Older notes and the K0 readings: [Detail](roadmap-kb-details.md#wrong-subject-notes)
-- ★★ `[KB]` **With a made-up subject, the "No close match" line was sometimes skipped when weak notes were attached (row NOTES-BLOCK-04, the line half)** — **VERIFY, same fix as the entry above. Failed on the Deck 2026-10-22 (plan 97 block B), passed 2026-10-24.**
-  The new rule looks at the question's own subject, not at how close the weak notes are. Owed on the Deck with freshly worded questions: **P98-NOTES-BLOCK-04**. Older notes: [Detail](roadmap-kb-details.md#wrong-subject-notes)
-- ★★★ `[KB]` **A thumbs-down that stops a wrong note coming back** — **VERIFY, built and landed 2026-10-24 (plan 98 lanes C and D; D112 item 8, option C). Was inside RAG Phase 7.**
-  "Not really" now adds Wrong tip, Outdated and Wrong edition when the answer used a note. With two or three notes it asks "Which note was it?". The note ranks last next time, and after three marks it stops coming back. Undo takes the mark back. Show details tags a lowered note "ranked lower by you". With nothing marked, all 568 fixture questions attach exactly what they did before.
-  **Deck check owed:** row **P98-DEMOTE-01** in [testing.md](testing.md). [Detail](roadmap-kb-details.md#rag-phase-7-community-tip-contribution-rag-phase-8)
-- ★★★ `[KB]` **Story spoilers: a "How much to hide" setting with tiers** — **VERIFY, built and landed 2026-10-24 (plan 98 lane B; [D50](audit/maintainer-decisions-archive.md#d50--locked-2026-09-01--spoiler-tiers-confirmed)). Was OPEN, tiers confirmed 2026-09-01.**
-  Settings, under Story spoilers: a "How much to hide" row, Hide more / Default / Hide less. Hide more also covers bosses, endings and chapters in every game; Hide less covers nothing; Default is today's rule, byte for byte; naming a boss still unlocks it.
-  **Measured on this PC (answer test, 189 answers per tier):** fences on 29% of answers under Default, 23% under Hide more, 0% under Hide less; Super Mario 64's unnamed boss row fenced 0 of 3 under Default and 3 of 3 under Hide more. Reports `workshop:archive/research/kb-answer-eval-2026-10-24-p98b-*.md` (default, strict, open, tip). **Deck check owed:** row **P98-SPOILER-TIER** in [testing.md](testing.md). [Detail](roadmap-kb-details.md#spoiler-coverage-should-be-a-setting-with-tiers)
-- ★★★ `[KB]` **The route look for the strategy checklist** — **VERIFY, built and landed 2026-10-24 (plan 98 lane H; mock-up board tab 5, option C). Was part of KB visual maps.**
-  A checklist of three or more steps is drawn as a line of dots: the next step open, later steps covered ("Step N", "A shows this step" on the first covered, "Covered" after). A shows the next one; ticks are kept as before.
-  **Deck check owed:** row **P98-ROUTE-01** in [testing.md](testing.md). [Detail](roadmap-kb-details.md#kb-visual-maps)
 
 ## Next
 

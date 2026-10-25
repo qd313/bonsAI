@@ -1,0 +1,104 @@
+{
+  "1300": {
+    "name": "Sentry Turret",
+    "page": "Sentry Turret",
+    "page_url": "https://theportalwiki.com/wiki/Sentry_Turret",
+    "revision": "193100",
+    "lines": {
+      "Summary": [
+        "Sentry Turrets are tripod robots",
+        "The Aperture Sentry Turret has a single red eye, sleek appearance, and predominately white color scheme",
+        "Moving into their angle of sight however, will cause Turrets to deploy their guns shortly after greeting Chell or Atlas or P-body before opening fire. They will continue to fire until the target is dead or moves out of sight."
+      ],
+      "Weak points": [
+        "The most common method is knocking them over, causing them to flail and fire wildly before deactivating. This can be done by picking them up and dropping them, or using any object to tip them over.",
+        "direct a Thermal Discouragement Beam onto it (usually via a portal and/or Weighted Pivot Cube), causing it to heat up and explode",
+        "the lasers or fizzler can be used to completely destroy them",
+        "Another is to cover it in Repulsion Gel causing it to bounce with increasing force until it either disables in midair, falls into the path of a Thermal Discouragement Beam or falls away into goo or a bottomless pit. Propulsion Gel makes a Turret quite slippery, making knocking it over easier"
+      ],
+      "Tips": [
+        "Sentry Turrets can be easily spotted by the visible laser beam emitted from their eye at all times",
+        "Portal 2 Sentry Turrets will not attempt to shoot at enemies if glass is between them, although will still track the enemy with the laser pointer (They will, however, shoot at the player when 2 panes are between them and the player in some circumstances). A Hard Light Bridge will prevent the Turret from even detecting the enemy, making it go to sleep."
+      ]
+    }
+  },
+  "1301": {
+    "name": "Defective Turret",
+    "page": "Defective Turret",
+    "page_url": "https://theportalwiki.com/wiki/Defective_Turret",
+    "revision": "185504",
+    "lines": {
+      "Summary": [
+        "Defective Turrets, also called \"Crap Turrets\" by Wheatley, are damaged, ammo-less, unfinished, or faultily assembled Sentry Turrets.",
+        "They are harmless to Chell",
+        "They lack the outer white shell of normal turrets, and their insides are visible.",
+        "They also seem to be out of bullets, as when they fire, only a clicking sound is made. After a while, they bizarrely catch on fire and explode."
+      ],
+      "Weak points": [
+        "their laser guide is off or broken",
+        "They are harmless to Chell"
+      ],
+      "Tips": [
+        "The turrets appearing in Course 5 of Cooperative Testing Initiative look like defective turrets but work and speak properly."
+      ]
+    }
+  },
+  "1302": {
+    "name": "Crusher",
+    "page": "Crusher",
+    "page_url": "https://theportalwiki.com/wiki/Crusher",
+    "revision": "188619",
+    "lines": {
+      "Summary": [
+        "Crushers appear as large grey panels with a number of steel spikes firmly attached to them.",
+        "If a test subject makes contact with a Crusher, they will be forced into the nearest hard surface and killed instantly."
+      ],
+      "Weak points": [
+        "When active, a loud crunching noise is emitted in order to warn the player that they are approaching a Crusher, thereby allowing the player to avoid them."
+      ],
+      "Tips": [
+        "Crushers become more frequent during the final parts of the game",
+        "also appear frequently in Cooperative Testing Initiative",
+        "In Co-op mode, if the player comes in contact with a Crusher while floating in an Excursion Funnel, the damage caused will be periodic until the player moves away or dies."
+      ]
+    }
+  },
+  "1303": {
+    "name": "Goo",
+    "page": "Goo",
+    "page_url": "https://theportalwiki.com/wiki/Goo",
+    "revision": "191434",
+    "lines": {
+      "Summary": [
+        "is a common environmental hazard in both Portal and Portal 2",
+        "the goo appears to be mainly brown",
+        "Any contact with the goo will result in continuous damage that will eventually result in killing Chell, P-body, Atlas, Bendy or whoever you are playing as within a few seconds upon contact."
+      ],
+      "Weak points": [
+        "Goo is usually present within testing chambers in order to provide a penalty for failure, and to ensure that test subjects are precise with their movements and positioning of their portals."
+      ],
+      "Tips": [
+        "Almost all objects that have fallen into the goo are irretrievable, with the only exception being radios because they are light enough to float on it.",
+        "a replacement may be issued immediately if the first one was dropped into the goo (unless the dropper is activated by a button, in which case you may have to press the button again)"
+      ]
+    }
+  },
+  "1304": {
+    "name": "Laser Field",
+    "page": "Laser Field",
+    "page_url": "https://theportalwiki.com/wiki/Laser_Field",
+    "revision": "193070",
+    "lines": {
+      "Summary": [
+        "Laser Fields are as its name implies, deadly lasers emitting from the same type of device housing the Fizzlers.",
+        "test subjects in contact with it will die instantly"
+      ],
+      "Weak points": [
+        "The Laser fields serve as the opposite of the Material Emancipation Grills - any objects can be carried through the beams but test subjects in contact with it will die instantly."
+      ],
+      "Tips": [
+        "Discouragement Redirection Cubes cannot redirect any of the beams in the laser field."
+      ]
+    }
+  }
+}

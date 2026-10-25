@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 1300,
+      "game_id": 12,
+      "section_type": "enemy",
+      "name": "Sentry Turret",
+      "card": "Summary: The standard turret: a white tripod robot with one red eye that deploys its guns and opens fire once you step into its view, and keeps firing until you are dead or out of sight.\nWeak points: Knock it over - pick it up and drop it, or tip it with any object - and it flails, fires wildly, then switches off. A Thermal Discouragement Beam makes it heat up and explode, and a Material Emancipation Grill destroys it. Repulsion Gel makes it bounce until it disables or falls away, and Propulsion Gel makes it slippery, so it is easier to knock over.\nTips: Its red laser beam is always visible, so you can see where it is looking. In Portal 2 it does not shoot at you through glass, though it still tracks you with the beam (with two panes between you it sometimes still shoots), and a Hard Light Bridge stops it detecting you at all.",
+      "source_url": "https://theportalwiki.com/wiki/Sentry_Turret",
+      "source_license": "CC-BY-4.0",
+      "source_version": "193100",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1301,
+      "game_id": 12,
+      "section_type": "enemy",
+      "name": "Defective Turret",
+      "card": "Summary: A turret with no white casing, so its insides show. It is harmless to Chell: it has no bullets and only clicks, and after a while it catches fire and explodes.\nWeak points: It is harmless to Chell, and its laser guide is off or broken.\nTips: In co-op course 5 the turrets look like defective ones but work and speak properly, so treat those as normal turrets.",
+      "source_url": "https://theportalwiki.com/wiki/Defective_Turret",
+      "source_license": "CC-BY-4.0",
+      "source_version": "185504",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1302,
+      "game_id": 12,
+      "section_type": "enemy",
+      "name": "Crusher",
+      "card": "Summary: A large grey panel covered in steel spikes. If you touch one you are forced into the nearest hard surface and killed instantly.\nWeak points: A loud crunching noise plays while one is active, warning you that you are close so you can keep away.\nTips: Crushers become more frequent in the final parts of the game and appear often in co-op. In co-op, touching one while floating in an Excursion Funnel hurts you again and again until you move away or die.",
+      "source_url": "https://theportalwiki.com/wiki/Crusher",
+      "source_license": "CC-BY-4.0",
+      "source_version": "188619",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1303,
+      "game_id": 12,
+      "section_type": "enemy",
+      "name": "Goo",
+      "card": "Summary: The brown liquid hazard in test chambers. Any contact does continuous damage that kills you within a few seconds.\nWeak points: It is only a penalty for a slip: it is there to make you precise with your movement and your portals.\nTips: Almost everything that falls in is lost; only radios float. If a cube you need falls in, a replacement may be issued at once, but if a button works the dropper you may have to press the button again.",
+      "source_url": "https://theportalwiki.com/wiki/Goo",
+      "source_license": "CC-BY-4.0",
+      "source_version": "191434",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1304,
+      "game_id": 12,
+      "section_type": "enemy",
+      "name": "Laser Field",
+      "card": "Summary: Deadly lasers from the same kind of device housing as a Material Emancipation Grill. Anyone in contact with the beams dies instantly.\nWeak points: It is the opposite of a Material Emancipation Grill: any object can be carried through the beams, but you cannot.\nTips: A Discouragement Redirection Cube cannot redirect any of the field's beams.",
+      "source_url": "https://theportalwiki.com/wiki/Laser_Field",
+      "source_license": "CC-BY-4.0",
+      "source_version": "193070",
+      "crawled_at": "2026-10-25"
+    }
+  ]
+}

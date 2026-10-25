@@ -481,6 +481,15 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   **Doom 64 was not on Recent Games**, so the hidden-box row could not run (sixth time): the maintainer's hand launch is
   still needed. The Deck is left on Speed, no game, keep-awake until 05:55 UTC, settings backup on the Deck.
 
+- **22:30 UTC: wave 1 started** (T, P, F, R at 22:21; V, W, Y, X at 22:25; N1 to N4 at 22:29), each with its brief plus
+  consult 1's corrections. Usage at the start: 71 percent of the old five-hour window at its reset, 57 percent of the week.
+- **22:32 UTC: lane P explains the route sighting.** A question typed fresh in Strategy mode gets the branch-menu
+  instruction, never the step-list one; the step list (and so the "Needs" line) is asked for only on a follow-up, which a
+  branch button sends. So block L0's two plain-paragraph route answers are by design, not a bug, and the "Needs" Deck
+  check must press a branch button first; block L1's runbook will say so. Also: the golden fixture fingerprints the whole
+  Strategy follow-up prompt, so a deliberate prompt change updates that one hash (the spoiler paragraph stays byte for
+  byte); lane P was told to go.
+
 ## 13. Report
 
 Not yet written.

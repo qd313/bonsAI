@@ -25,6 +25,20 @@ one line saying which notes reached the model and which footer line was added. *
 `~/homebrew/settings/bonsAI/chats/`. Key names only from any settings file, except `rag_corpus_version`,
 `rag_corpus_path`, `spoiler_tier` and `ask_mode`.
 
+**Facts for the 2026-10-25 run (written by the session at 23:45 UTC, for whichever chat drives the Deck):** the wave 1
+build was deployed at 23:34 UTC with `scripts/build.ps1` (155 files verified); the build hash on the Deck must read
+`7f58de4a2853`. The seed library on the Deck is the night's test library (465 notes, 166 tips, the four games' new notes,
+the Yoshi fix, the reworded tips) and carries the SAME version string as the published one, 2026.10.25, so the install
+is confirmed by size and date, not version: the installed `corpus.db` was 3,145,728 bytes (Oct 25 15:29) before; the
+seed's is 3,424,256 bytes (Oct 25 19:34); after the install `ls -l /home/deck/.bonsai/rag/` shows the larger file with a
+fresh date. The Deck as L0 left it: the plugin open on Main in the test chat (the long one that starts with the Mantis
+Lords question; no chat is literally named "test"), the mode chip on Speed, no game running, keep-awake until 05:55 UTC
+(renew it anyway), the settings backup at `/home/deck/p100-settings-backup.tgz`, three saved chats (the test chat, the
+Deep Rock chat with four questions, a third), "Show Developer tab" off. Doom 64: Retribution is not on Recent Games and
+is not needed here. The deploy restarted the plugin, so the first open may fail once. The session's own chat lost the
+rig's tools at about 22:00 UTC, so this block runs from another chat; that chat commits nothing and writes its handover
+to `C:\Users\still\Documents\bonsAI-workshop\planning\assets\100-handover-L1.md`.
+
 ## L1.0: setup (row P100-L1-SETUP)
 
 1. `deck_status`: the stop switch off, no other chat's lease. `deck_holdAwake` 480 min; `expiresAt` into the evidence.

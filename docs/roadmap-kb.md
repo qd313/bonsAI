@@ -37,6 +37,12 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 - ★ `[KB]` **A notes card ("From bonsAI's own note") was drawn under an answer with the knowledge library switch OFF** — **ACCEPTED, by design: the maintainer's call 2026-10-18 ("That's fine"); found 2026-10-18 (plan 96 block M, Deck).**
   A stopped answer with "Use local knowledge base" off still drew a notes card once, and not on another try. The maintainer's call: that is fine (by design). Evidence `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-2.json`.
+- ★★ `[KB]` **Story spoilers: Hide more drew fewer spoiler covers than Default on the PC answer test** — **OPEN, found 2026-10-24 (plan 98 consult 5).**
+  23 covers in 100 answers against 29, and twice it missed a Hades story cover that Default kept 3 of 3. One run, not yet understood. Evidence `workshop:archive/research/kb-answer-eval-2026-10-24-p98b-strict.md` against `workshop:archive/research/kb-answer-eval-2026-10-24-p98b-default.md`.
+- ★★ `[KB]` **ui: in a second checklist answer, the route's steps were drawn but the D-pad could not reach them** — **OPEN, found 2026-10-24 (plan 98 Deck block KR).**
+  The ring went to the tab bar. One sighting, with a muddled setup (the answer came from an old branch button). Evidence `workshop:test-evidence/plan98-P98-KR-REPLAYS.json` (the P98-ROUTE-01 line).
+- ★ `[KB]` **measure: on a made-up question, three weak notes attach with a keyword score of 0.00 every time** — **OPEN, found 2026-10-24 (plan 98 consult 5).**
+  Should a question with no keyword support attach nothing? A measurement against the right-note questions comes first; no right note may be lost. Evidence `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04.json`.
 - ★ `[KB]` **A thank-you or a junk phrase is treated as a follow-up to the previous question** — **OPEN, found 2026-10-24 (plan 98 block K0, Deck).**
   A short question with "it" and no subject counts as a follow-up, so "thank you very much" answered the previous question again (the earlier house question) instead of a short reply, and the "what time is it" reading is muddied the same way. A clean re-run in a fresh chat is owed. Evidence `workshop:test-evidence/plan98-P98-JUNK-PHRASES.json`.
 - ★ `[KB]` **A "where am I stuck" answer for Hollow Knight added an "If you want to cheat" section** — **OPEN, found 2026-10-24 (plan 98 Deck block K3).**
@@ -56,8 +62,8 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   One run (`workshop:archive/research/kb-answer-eval-2026-10-24-p98b-open.md`); not investigated.
 - ★ `[KB]` **Thumbs-down: "ranked lower by you" stays on an answer already saved after Undo** — **OPEN, found 2026-10-24 (plan 98 lane D).**
   Show details' tag is as of the ask, so an Undo does not clear it on an answer already saved.
-- ★ `[KB]` **Thumbs-down: after Undo with a game running, Down stopped on the notes block** — **OPEN, found 2026-10-24 (plan 98 Deck block K3).**
-  The page had lost the window's focus (the lost-focus family from plan 97), so Down did nothing. Closing and reopening Quick Access cleared it but emptied the question box. Evidence `workshop:test-evidence/plan98-P98-DEMOTE-01-game.json`.
+- ★★ `[KB]` **Thumbs-down: after Undo with a game running, Down stopped on the notes block** — **OPEN, found 2026-10-24 (plan 98 Deck block K3).**
+  The page had lost the window's focus (the lost-focus family from plan 97), so Down did nothing. Closing and reopening Quick Access cleared it but emptied the question box. Same lost-focus family as plan 97's freeze; the only cure, closing and reopening Quick Access, emptied the question box. Evidence `workshop:test-evidence/plan98-P98-DEMOTE-01-game.json`.
 - ★ `[KB]` **Yoshi's Story's "Starting out" note contradicts itself about its levels** — **OPEN, found 2026-10-24 (plan 98 lane G3).**
   The note (section 376 in `data/kb/strategy_seed.json`) says "24 levels split across four worlds of six pages" and also "only six levels are played in any one run". The real game has six worlds of four levels. Lane G3 kept those numbers out of the glossary words. The note needs correcting, then a library rebuild.
 - ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back

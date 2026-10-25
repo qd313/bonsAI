@@ -233,6 +233,62 @@ class LooksLikeFollowupTests(unittest.TestCase):
         self.assertFalse(kb_followup_memory.looks_like_followup(""))
 
 
+class CourtesyOrJunkPhraseTests(unittest.TestCase):
+    """Plan 100 lane F: a thank-you or an off-topic question is never a follow-up, and is
+    recognised as such so the request can leave the remembered subject out."""
+
+    JUNK_PHRASES = (
+        "please repeat that",
+        "thank you very much",
+        "what time is it",
+        "ok thanks",
+        "never mind",
+        "what did you say",
+        "hello there",
+        "that is great",
+        "sounds good to me",
+        "thanks",
+        "Thank you!",
+        "okay",
+        "bye",
+        "hi",
+        "what's the weather like today?",
+        "what is the date",
+        "what day is it today",
+    )
+
+    def test_the_junk_phrases_are_recognised(self):
+        for phrase in self.JUNK_PHRASES:
+            with self.subTest(phrase=phrase):
+                self.assertTrue(kb_followup_memory.is_courtesy_or_junk_phrase(phrase))
+
+    def test_the_junk_phrases_are_not_followups(self):
+        # "that is great" and "please repeat that" lean on "that"; "what time is it" leans on
+        # "it". All three used to read as follow-ups.
+        for phrase in self.JUNK_PHRASES:
+            with self.subTest(phrase=phrase):
+                self.assertFalse(kb_followup_memory.looks_like_followup(phrase))
+
+    def test_real_followups_are_not_junk_and_still_follow_up(self):
+        for phrase in ("how do i beat it", "what about the second phase", "and its weak points"):
+            with self.subTest(phrase=phrase):
+                self.assertFalse(kb_followup_memory.is_courtesy_or_junk_phrase(phrase))
+                self.assertTrue(kb_followup_memory.looks_like_followup(phrase))
+
+    def test_a_question_with_a_game_word_is_not_junk(self):
+        for phrase in (
+            "thanks, now how do i beat the dreadnought",
+            "ok so what is the best build",
+            "what time is the boss fight",
+            "hi what is the best weapon",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertFalse(kb_followup_memory.is_courtesy_or_junk_phrase(phrase))
+
+    def test_blank_is_not_junk(self):
+        self.assertFalse(kb_followup_memory.is_courtesy_or_junk_phrase(""))
+
+
 class AugmentSearchWordsTests(unittest.TestCase):
     def test_adds_the_remembered_subject_to_a_followup_question(self):
         out = kb_followup_memory.augment_search_words(

@@ -45,6 +45,30 @@ _FOLLOWUP_LEAN_WORDS = frozenset({"it", "its", "it's", "that", "him", "her", "th
 # before rather than spelling out a new question.
 _FOLLOWUP_MAX_WORDS = 8
 
+# Plan 100 lane F: a thank-you, a greeting or an everyday non-game question is never a follow-up,
+# even when it happens to hold a lean word ("that is great", "what time is it"). Matched as whole
+# phrases, with an everyday ending trimmed first ("thank you very much" is "thank you").
+_COURTESY_PHRASES = (
+    "thanks", "thank you", "thank u", "thx", "ty", "ok", "okay", "alright", "cool", "nice",
+    "great", "got it", "hello", "hi", "hey", "bye", "goodbye", "see you", "never mind",
+    "nevermind", "sounds good", "that is great", "that is good", "that is cool",
+    "that is awesome", "what did you say", "please repeat that", "repeat that",
+)
+_COURTESY_ENDINGS = (
+    "very much", "so much", "a lot", "a bunch", "to me", "for that", "for the help",
+    "for your help", "there", "everyone", "again", "please", "mate", "friend", "buddy", "bro",
+    "man",
+)
+_JUNK_QUESTION_PATTERNS = tuple(
+    re.compile(p) for p in (
+        r"what is the (current )?(time|date|day|weather)( like)?"
+        r"( today| now| right now| outside)*",
+        r"what (time|day|date) is it( today| now| right now)*",
+        r"what is today( is)? (date|day)",
+        r"how is the weather( today| outside| right now)*",
+    )
+)
+
 _lock = threading.Lock()
 
 
@@ -120,6 +144,49 @@ def _normalize_game_key(*, app_id: str, app_name: str, text_resolved_title: str)
     return ""
 
 
+def _plain_words(question: str) -> list[str]:
+    """Lower-case words with every mark removed and "'s" read as "is", so "What's the time?" is
+    "what is the time"."""
+    text = str(question or "").lower().replace("’", "'").replace("'s ", " is ")
+    text = re.sub(r"'s$", " is", text)
+    return re.sub(r"[^a-z0-9]+", " ", text).split()
+
+
+def is_courtesy_or_junk_phrase(question: str) -> bool:
+    """True for a thank-you, a greeting, "never mind", "please repeat that" and the like, or an
+    everyday question about the time, the date or the weather -- nothing about the game.
+
+    Whole phrase only: "thanks, now how do I beat the dreadnought" holds a game word and is not
+    one. Callers use this to keep the remembered subject, the previous answer and the library
+    search out of such a turn (plan 100 lane F).
+    """
+    words = _plain_words(question)
+    if not words:
+        return False
+    if any(p.fullmatch(" ".join(words)) for p in _JUNK_QUESTION_PATTERNS):
+        return True
+    trimmed = True
+    while trimmed and words:
+        trimmed = False
+        for ending in _COURTESY_ENDINGS:
+            parts = ending.split()
+            if len(words) > len(parts) and words[-len(parts):] == parts:
+                words = words[:-len(parts)]
+                trimmed = True
+                break
+    phrases = {tuple(p.split()) for p in _COURTESY_PHRASES}
+    longest = max(len(p) for p in phrases)
+    i = 0
+    while i < len(words):
+        for size in range(min(longest, len(words) - i), 0, -1):
+            if tuple(words[i:i + size]) in phrases:
+                i += size
+                break
+        else:
+            return False
+    return True
+
+
 def looks_like_followup(question: str) -> bool:
     """True when the question reads as riding on the previous turn rather than naming its own.
 
@@ -129,6 +196,8 @@ def looks_like_followup(question: str) -> bool:
     """
     text = re.sub(r"\s+", " ", (question or "").strip().lower())
     if not text:
+        return False
+    if is_courtesy_or_junk_phrase(text):
         return False
     if any(text.startswith(prefix) for prefix in _FOLLOWUP_START_PHRASES):
         return True

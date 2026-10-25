@@ -14,12 +14,19 @@
  * in through `nav`.
  *
  * Does not: Decide the options, the words or which section the row sits in; the caller does.
+ *
+ * Gotchas: A row that must be entered on one button other than its first (the spoiler tier row enters on Default)
+ * passes `entry`. Steam's ring can only be sent to a nav node, and a Decky Button does not give one, so each
+ * button then sits in its own `Focusable` (the voice model row's shape, VoiceInputSettingsSection.tsx), and the
+ * wrapper of the entry button hands its node out through `entry.navRef`. The wrapper and its button both draw
+ * the plugin's white ring inside their edge (FOCUS_RING_WRAP_CLASS, FOCUS_RING_INSET_CLASS), so whichever of the
+ * two Steam marks, a ring shows. Rows that pass no `entry` are unchanged.
  */
 import React from "react";
 import { Button, Focusable, PanelSectionRow } from "@decky/ui";
 
 import { DenseRow } from "../folded-tabs/DenseRow";
-import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
+import { FOCUS_RING_BTN_CLASS, FOCUS_RING_INSET_CLASS, FOCUS_RING_WRAP_CLASS } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/textPx";
 
 export type SettingsChoiceOption<T extends string> = {
@@ -43,6 +50,11 @@ export type SettingsTabChoiceRowProps<T extends string> = {
   /** Extra attributes for the row's Focusable (a test or driver hook). */
   rowProps?: Record<string, string>;
   hostRef?: React.Ref<HTMLDivElement>;
+  /**
+   * The button the ring enters this row on, and the holder Steam fills with its nav node (see Gotchas above).
+   * Its button carries `data-bonsai-choice-entry="true"`, which the tab's Up-into-the-section entry looks for.
+   */
+  entry?: { id: T; navRef: { current: unknown } };
 };
 
 export function SettingsTabChoiceRow<T extends string>({
@@ -54,6 +66,7 @@ export function SettingsTabChoiceRow<T extends string>({
   nav,
   rowProps,
   hostRef,
+  entry,
 }: SettingsTabChoiceRowProps<T>): React.ReactElement {
   return (
     <PanelSectionRow>
@@ -67,10 +80,11 @@ export function SettingsTabChoiceRow<T extends string>({
           >
             {options.map((option) => {
               const active = option.id === value;
-              return (
+              const isEntry = entry !== undefined && option.id === entry.id;
+              const button = (
                 <Button
-                  className={FOCUS_RING_BTN_CLASS}
-                  key={option.id}
+                  className={entry ? `${FOCUS_RING_BTN_CLASS} ${FOCUS_RING_INSET_CLASS}` : FOCUS_RING_BTN_CLASS}
+                  key={entry ? undefined : option.id}
                   onClick={() => onPick(option.id)}
                   style={{
                     flex: 1,
@@ -89,9 +103,22 @@ export function SettingsTabChoiceRow<T extends string>({
                   }}
                   aria-label={option.ariaLabel ?? option.label}
                   aria-pressed={active}
+                  {...(isEntry ? { "data-bonsai-choice-entry": "true" } : {})}
                 >
                   {option.label}
                 </Button>
+              );
+              if (!entry) return button;
+              return (
+                <Focusable
+                  key={option.id}
+                  className={FOCUS_RING_WRAP_CLASS}
+                  style={{ flex: 1, minWidth: 0, display: "flex" }}
+                  onOKButton={() => onPick(option.id)}
+                  {...(isEntry ? ({ navRef: entry.navRef } as Record<string, unknown>) : {})}
+                >
+                  {button}
+                </Focusable>
               );
             })}
           </Focusable>

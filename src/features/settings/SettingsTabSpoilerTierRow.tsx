@@ -16,13 +16,17 @@
  * Does not: Decide what the AI hides. The saved value reaches the prompt in the back end
  * (backend/spoilers/spoiler_title_profiles.py, apply_spoiler_tier).
  *
- * Focus: one `Focusable` with `flow-children="horizontal"` holding three buttons (SettingsTabChoiceRow). Left
- * and Right are Steam's own and move the ring along the three. The row carries only Down, handed in by the tab, to
- * leave the section for the next line; the switch above carries Up to the section's line, and the one step between
- * the two rows is Steam's own (see docs/focus-graph.md, "The Story spoilers tier row").
+ * Focus: one `Focusable` with `flow-children="horizontal"` holding three buttons (SettingsTabChoiceRow), each in a
+ * `Focusable` of its own. Left and Right are Steam's own and move the ring along the three. The row is always
+ * entered on Default, the middle button: the switch above sends the ring there by Steam's own transfer (this row
+ * registers Default's nav node as "spoiler-tier-default"), and the tab's Up from the next line looks for the button
+ * marked `data-bonsai-choice-entry`. The row carries only Down, handed in by the tab, to leave the section for the
+ * next line; the switch above carries Up to the section's line (see docs/focus-graph.md, "The Story spoilers tier
+ * row").
  */
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
+import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
 import { SPOILER_TIER_OPTIONS, type SpoilerTier } from "./bonsaiSettingsSchema";
 import { SETTINGS_ROW_HELP, SPOILER_TIER_LABEL } from "./settingsTabFolds";
 import { SettingsTabChoiceRow } from "./SettingsTabChoiceRow";
@@ -45,18 +49,27 @@ export type SettingsTabSpoilerTierRowProps = {
 export const SettingsTabSpoilerTierRow: React.FC<SettingsTabSpoilerTierRowProps> = ({
   setting: { value: spoilerTier, set: setSpoilerTier },
   nav,
-}) => (
-  <SettingsTabChoiceRow
-    label="How much to hide"
-    help={SETTINGS_ROW_HELP.spoilerTier}
-    options={SPOILER_TIER_OPTIONS.map((tier) => ({
-      id: tier,
-      label: SPOILER_TIER_LABEL[tier],
-      ariaLabel: `Set spoiler tier to ${SPOILER_TIER_LABEL[tier]}`,
-    }))}
-    value={spoilerTier}
-    onPick={setSpoilerTier}
-    nav={nav}
-    rowProps={{ "data-bonsai-spoiler-tier-row": "true" }}
-  />
-);
+}) => {
+  /* Steam fills this in: Default's wrapper, as a place the ring can be sent to (Down from the switch). */
+  const defaultNav = useRef<NavRefHolder["current"]>(null);
+  useEffect(() => {
+    registerNavFocus("spoiler-tier-default", defaultNav);
+    return () => unregisterNavFocus("spoiler-tier-default", defaultNav);
+  }, []);
+  return (
+    <SettingsTabChoiceRow
+      label="How much to hide"
+      help={SETTINGS_ROW_HELP.spoilerTier}
+      options={SPOILER_TIER_OPTIONS.map((tier) => ({
+        id: tier,
+        label: SPOILER_TIER_LABEL[tier],
+        ariaLabel: `Set spoiler tier to ${SPOILER_TIER_LABEL[tier]}`,
+      }))}
+      value={spoilerTier}
+      onPick={setSpoilerTier}
+      nav={nav}
+      rowProps={{ "data-bonsai-spoiler-tier-row": "true" }}
+      entry={{ id: "default", navRef: defaultNav }}
+    />
+  );
+};

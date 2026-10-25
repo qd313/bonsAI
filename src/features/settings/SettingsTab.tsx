@@ -72,6 +72,7 @@ import { SettingsTabDataSection } from "./SettingsTabDataSection";
 import { useSettingsTabFocus } from "./useSettingsTabFocus";
 import type { VoiceSttModelId } from "./bonsaiSettingsSchema";
 import { chainIds, FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../folded-tabs/FoldedSection";
+import { takeNavFocus } from "../../shared/dpad/navFocusRegistry";
 import { FoldAllButton } from "../folded-tabs/FoldAllButton";
 import { TabHelpStrip } from "../folded-tabs/TabHelpStrip";
 import { DenseSwitchRow } from "../folded-tabs/DenseRow";
@@ -255,7 +256,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 help={SETTINGS_ROW_HELP.spoilers}
                 checked={strategySpoilerMaskingEnabled}
                 onChange={(checked) => setStrategySpoilerMaskingEnabled(checked)}
-                nav={{ onMoveUp: up("spoilers") }}
+                nav={{ onMoveUp: up("spoilers"), onMoveDown: () => takeNavFocus("spoiler-tier-default") }}
               />
             </PanelSectionRow>
             <SettingsTabSpoilerTierRow setting={spoilerTierSetting} nav={{ onMoveDown: down("spoilers") }} />

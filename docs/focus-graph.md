@@ -105,40 +105,49 @@ Remember what I typed (toggle)
   on): none twice, the three in order between Screenshot quality and Remember what I typed, only Up and Down on
   the row. jsdom has no spatial walk, so the Deck walk (Down through the whole tab, then Up) is the real check.
 
-### The Story spoilers tier row (plan 98, lane B)
+### The Story spoilers tier row (plan 98, lane B; entry on Default 2026-10-25)
 
 A second row in the Settings tab's Story spoilers section: Hide more / Default / Hide less
 (`SettingsTabSpoilerTierRow.tsx`, the row label "How much to hide"), drawn under the "Hide spoilers until I tap"
-switch. It is Text size's shape: one `Focusable` with `flow-children="horizontal"` holding three plain buttons.
+switch. It is Text size's shape (`SettingsTabChoiceRow.tsx`): one `Focusable` with `flow-children="horizontal"`
+holding the three buttons, but each button sits in a `Focusable` of its own (the voice model row's shape), so the
+Default one can be a place Steam's ring is sent to.
 
 ```
 Story spoilers (Strategy mode)        <- the section's line
    | Down                                ^ Up (the switch's onMoveUp)
 Hide spoilers until I tap (toggle)
-   | Down (Steam's own)                  ^ Up (Steam's own)
+   | Down (the switch's onMoveDown: Steam's transfer onto Default)
 How much to hide:  [Hide more]  [Default]  [Hide less]     Left / Right move along the three
    | Down (the row's onMoveDown)         ^ Up (Steam's own, to the switch)
 Suggestion chips                      <- the next section's line
 ```
 
-- **Stops:** the switch, then the three buttons. The container is not a stop.
-- **Moves:** the section has two rows, so only its two ends carry a handler, the way the Data section's switch and
-  Clear pair do: the switch has `onMoveUp` (to the section's line) and the tier row has `onMoveDown` (to the next
-  line). The one step between the two rows, in both directions, is Steam's own along the column's flow. Left and
-  Right are Steam's own too: the row and its buttons carry no `onMoveLeft` / `onMoveRight`.
-- **Entering the section:** Down from its line lands on the switch (the first stop). Up from the next line lands on
-  Hide more, the tier row's first button, not on the far end of the row: `useSettingsTabFocus.ts` enters most
-  sections by their last stop from below, so this one has a marker entry (`FIRST_BUTTON_OF_LAST_ROW`) that picks
-  the first stop inside the row. Screenshot quality and Text size, being one row each, already enter on their
-  first button.
+- **Stops:** the switch, then the three buttons. The wrappers and the row's container are not stops.
+- **The row is always entered on Default, the middle button** (the maintainer's call on the Deck, 2026-10-25), from
+  both sides. Down from the switch: the switch carries `onMoveDown`, which is `takeNavFocus("spoiler-tier-default")`,
+  Steam's own transfer onto Default's wrapper (the row registers it; a plain `focus()` across the two rows would move
+  only the page's focus). Up from the next line: `useSettingsTabFocus.ts` has an entry (`ENTRY_BUTTON_OF_LAST_ROW`)
+  that picks the button marked `data-bonsai-choice-entry`, which is Default. Before this, Steam's own step from the
+  switch picked Hide more, and the ring was not seen on any of the three on the Deck.
+- **Moves:** the switch has `onMoveUp` (to the section's line) and `onMoveDown` (onto Default); the tier row has
+  `onMoveDown` (to the next line). Up from any of the three is Steam's own, to the switch. Left and Right are Steam's
+  own too: the row, the wrappers and the buttons carry no `onMoveLeft` / `onMoveRight`. The wrappers carry only
+  `onOKButton` (a press saves the pick, as in the voice model row).
+- **The ring:** every button wears `bonsai-settings-focus-btn` and `bonsai-settings-focus-inset`, its wrapper
+  `bonsai-settings-focus-wrap`, so whichever of the two Steam marks, a white ring is drawn inside the button's edge
+  (the voice model row's fix, plan 79). The other choice rows (Screenshot quality, Text size) have no wrappers and
+  keep the outside ring; their ring was measured on the Deck (plan 81), so the shared button was not the cause.
 - **A** saves the pick; the saved one is drawn with the lighter fill and `aria-pressed`. Nothing reloads.
 - **Driver handles:** `[data-bonsai-spoiler-tier-row="true"]`; the buttons' names are "Set spoiler tier to Hide more" /
-  "... Default" / "... Hide less"; the row's strip words are `data-bonsai-help-label="How much to hide"`.
-- **Tests:** `SettingsTab.spoilerTierWalk.test.tsx` (stops in order, none twice, the two end handlers, nothing for
-  Left or Right), `SettingsTab.folded.test.tsx` (the two ends) and `SettingsTab.foldedWalk.test.tsx` (the bounded
-  Down and Up walks under Steam's three scroll rules, with the row in them). The walk test also covers Up into the
-  section (lands on Hide more), Down out of it, and a round trip with no stop twice. jsdom has no spatial walk, so the Deck
-  walk (Down into the section, Left and Right along the three, Down out) is the real check.
+  "... Default" / "... Hide less"; the entry button is `[data-bonsai-choice-entry="true"]`; the row's strip words are
+  `data-bonsai-help-label="How much to hide"`.
+- **Tests:** `SettingsTab.spoilerTierWalk.test.tsx` (stops in order, none twice, the handlers, Down from the switch
+  and Up from the next line both land on Default, the landing button wears the ring class the stylesheet draws),
+  `SettingsTab.folded.test.tsx` (the ends) and `SettingsTab.foldedWalk.test.tsx` (the bounded Down and Up walks under
+  Steam's three scroll rules, with Default as the row's stop). jsdom has no spatial walk and no pixels, so the Deck
+  walk (Down into the section lands on Default with a visible ring, Left and Right along the three, Down out, Up from
+  the next line back onto Default) is the real check.
 
 ### The two-button confirm box (plan 96, 2026-10-18)
 

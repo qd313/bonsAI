@@ -176,11 +176,11 @@ describe("the Settings tab's moves out of a section", () => {
     }
   });
 
-  it("Story spoilers has two rows: the switch hands Up to the line and nothing else, the tier row hands Down to the next line and nothing else", () => {
+  it("Story spoilers has two rows: the switch hands Up to the line and Down to Default, the tier row hands Down to the next line and nothing else", () => {
     const { container } = render(<SettingsTab {...props()} />);
     const toggle = rowFor(container, "Hide spoilers until I tap")!.querySelector('[data-decky-ui="ToggleField"]') as SteamEl;
     const tier = container.querySelector<SteamEl>('[data-bonsai-spoiler-tier-row="true"]')!;
-    expect(Object.keys(nav(toggle)).filter((k) => nav(toggle)[k])).toEqual(["onMoveUp"]);
+    expect(Object.keys(nav(toggle)).filter((k) => nav(toggle)[k])).toEqual(["onMoveUp", "onMoveDown"]);
     expect(Object.keys(nav(tier)).filter((k) => nav(tier)[k])).toEqual(["onMoveDown"]);
     act(() => putSteamRingOn(toggle));
     act(() => void nav(toggle).onMoveUp?.());

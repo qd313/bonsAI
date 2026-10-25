@@ -104,6 +104,9 @@ export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-
    *  ring here, and Steam's transfer onto a container lands on its first stop, GitHub. Without it Steam's own step
    *  from the language dropdown, which sits on the right of its row, would pick the QR code beside the buttons. */
   | "about-links"
+  /** The Default button of the Settings tab's "How much to hide" row (SettingsTabSpoilerTierRow.tsx): Down from the
+   *  "Hide spoilers until I tap" switch hands the ring here, so the row is always entered on its middle button. */
+  | "spoiler-tier-default"
   /** A folded tab's section lines and its floating Open all button (plan 91 § 2b, src/features/folded-tabs). */
   | `fold-line:${string}` | `fold-all:${string}`;
 

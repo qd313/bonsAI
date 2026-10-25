@@ -119,7 +119,7 @@ describe("the folded Settings tab, every section open", () => {
     "Remember what I typed",
     /^Story spoilers/,
     "Hide spoilers until I tap",
-    "Set spoiler tier to Hide more",
+    "Set spoiler tier to Default",
     /^Suggestion chips/,
     "Show one chip instead of two",
     /^Voice input/,

@@ -20,7 +20,7 @@
  *
  * Gotchas: A control is "the innermost thing Steam navigates": a Focusable wrapped around a button is not
  * a stop of its own, the button inside it is. The three single-row choice sections enter on their first
- * button from either side, so Up from the line below does not land on the far end of the row.
+ * button from either side, so Up from the line below does not land on the far end of the row; the spoiler tier row enters on its Default button.
  */
 import { useCallback, useMemo, useRef } from "react";
 
@@ -36,12 +36,12 @@ const STOP_SELECTOR = "[tabindex], button, input";
 const FIRST_BUTTON_BOTH_WAYS: ReadonlySet<SettingsSectionId> = new Set(["screenshot", "textsize"]);
 
 /**
- * Sections whose last row is a row of buttons: coming up from the line below, the ring enters on that row's first
- * button (the way the single-row sections enter on theirs), not on the far end of the row. The value is the row's
- * own marker, read inside the section body only.
+ * Sections whose last row is a row of buttons with a button it is always entered on: coming up from the line below,
+ * the ring enters on that button (Default, in the spoiler tier row), not on the far end of the row. The value is the
+ * entry button's own marker, read inside the section body only.
  */
-const FIRST_BUTTON_OF_LAST_ROW: Readonly<Partial<Record<SettingsSectionId, string>>> = {
-  spoilers: '[data-bonsai-spoiler-tier-row="true"]',
+const ENTRY_BUTTON_OF_LAST_ROW: Readonly<Partial<Record<SettingsSectionId, string>>> = {
+  spoilers: '[data-bonsai-spoiler-tier-row="true"] [data-bonsai-choice-entry="true"]',
 };
 
 /** The stops inside `host`, top to bottom: the innermost matches only. */
@@ -52,14 +52,13 @@ function stopsIn(host: HTMLElement): HTMLElement[] {
   return all.filter((el) => !el.querySelector(STOP_SELECTOR));
 }
 
-function focusStop(host: HTMLElement | null | undefined, last: boolean, lastRow?: string): boolean {
+function focusStop(host: HTMLElement | null | undefined, last: boolean, entryOfLastRow?: string): boolean {
   if (!host) return false;
   const stops = stopsIn(host);
-  // A section ending in a row of buttons enters on that row's first button from below.
+  // A section ending in a row of buttons enters on that row's entry button from below.
   // focus-patterns-allow: element-scoped query on the section body's own ref, the sanctioned pattern (useOllamaTabFocus.ts).
-  const row = lastRow && last ? host.querySelector<HTMLElement>(lastRow) : null;
-  const inRow = row ? stops.filter((el) => row.contains(el)) : [];
-  const target = inRow.length ? inRow[0] : last ? stops[stops.length - 1] : stops[0];
+  const entry = entryOfLastRow && last ? host.querySelector<HTMLElement>(entryOfLastRow) : null;
+  const target = entry && stops.includes(entry) ? entry : last ? stops[stops.length - 1] : stops[0];
   if (!target) return false;
   return plainHop(target, last ? "settings-line-up-into-section" : "settings-line-down", () => focusInTabBody(target));
 }
@@ -87,7 +86,7 @@ export function useSettingsTabFocus() {
       settingsSectionIds().map((id) => ({
         id,
         enterFromTop: () => focusStop(hosts.current.get(id), false),
-        enterFromBottom: () => focusStop(hosts.current.get(id), !FIRST_BUTTON_BOTH_WAYS.has(id), FIRST_BUTTON_OF_LAST_ROW[id]),
+        enterFromBottom: () => focusStop(hosts.current.get(id), !FIRST_BUTTON_BOTH_WAYS.has(id), ENTRY_BUTTON_OF_LAST_ROW[id]),
       })),
     [],
   );

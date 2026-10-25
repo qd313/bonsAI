@@ -292,3 +292,57 @@ describe("a cover naming a protected boss the person never typed", () => {
     expect(unwrapAskedEntitySpoilerFences(raw, opts)).not.toContain("```bonsai-spoiler");
   });
 });
+
+/* Plan 100 lane V: "How much to hide" set to Hide more ("strict") must reach the screen. The back end already
+   asks the AI for covers on a no-story game under it; the screen used to open every one of them anyway. */
+describe("the 'How much to hide' tier on a game with no story", () => {
+  const raw = ["```bonsai-spoiler", "Skip the last turn by cutting the corner at the ramp.", "```"].join("\n");
+  const mk64 = {
+    question: "in Mario Kart 64 what is the best shortcut on the last track",
+    appId: "",
+    appName: "Mario Kart 64",
+  };
+  const shut = (out: string) => out.includes("```bonsai-spoiler");
+
+  it("opens the cover under Default and Hide less, exactly as before", () => {
+    for (const spoilerTier of [undefined, null, "default", "open"] as const) {
+      expect(shut(unwrapAskedEntitySpoilerFences(raw, { ...mk64, spoilerTier }))).toBe(false);
+      expect(shouldUnwrapSpoilerFence(raw, { ...mk64, spoilerTier })).toBe(true);
+    }
+  });
+
+  it("keeps the cover shut under Hide more", () => {
+    expect(shut(unwrapAskedEntitySpoilerFences(raw, { ...mk64, spoilerTier: "strict" }))).toBe(true);
+    expect(shouldUnwrapSpoilerFence(raw, { ...mk64, spoilerTier: "strict" })).toBe(false);
+  });
+
+  it("keeps it shut under Hide more for a no-story game found by its Steam id too", () => {
+    const opts = { question: "how do I dodge", appId: "2321470", appName: "Deep Rock Galactic: Survivor" };
+    expect(shut(unwrapAskedEntitySpoilerFences(raw, { ...opts, spoilerTier: "strict" }))).toBe(true);
+    expect(shut(unwrapAskedEntitySpoilerFences(raw, { ...opts, spoilerTier: "default" }))).toBe(false);
+  });
+
+  it("still opens a cover that names the thing the question asked about, under all three", () => {
+    const named = "```bonsai-spoiler\nThe Glyphid Dreadnought falls to weak-point fire.\n```";
+    for (const spoilerTier of ["strict", "default", "open"] as const) {
+      const opts = { question: "How do I beat Glyphid Dreadnought?", appName: "Mario Kart 64", spoilerTier };
+      expect(shut(unwrapAskedEntitySpoilerFences(named, opts))).toBe(false);
+      expect(shouldUnwrapSpoilerFence(named, opts)).toBe(true);
+    }
+  });
+
+  it("still opens every cover when the person said spoilers are fine, even under Hide more", () => {
+    const opts = { ...mk64, spoilerConsentEffective: true, spoilerTier: "strict" as const };
+    expect(shut(unwrapAskedEntitySpoilerFences(raw, opts))).toBe(false);
+    expect(shouldUnwrapSpoilerFence(raw, opts)).toBe(true);
+  });
+
+  it("never opens a cover naming a protected note, under all three", () => {
+    const protectedRaw = "```bonsai-spoiler\nThe Soul Master teleports twice.\n```";
+    for (const spoilerTier of ["strict", "default", "open"] as const) {
+      const opts = { ...mk64, protectedNames: ["Soul Master"], spoilerTier };
+      expect(shut(unwrapAskedEntitySpoilerFences(protectedRaw, opts))).toBe(true);
+      expect(shouldUnwrapSpoilerFence(protectedRaw, opts)).toBe(false);
+    }
+  });
+});

@@ -8,6 +8,7 @@
 
 import { turnProfileIsLowNarrative } from "./spoilerTitleProfiles";
 import type { KbAttachedNote } from "../../types/inputTransparency";
+import type { SpoilerTier } from "../settings/bonsaiSettingsSchema";
 
 const SPOILER_FENCE_RE = /```bonsai-spoiler\s*\n([\s\S]*?)```/gi;
 
@@ -62,6 +63,14 @@ export type UnwrapSpoilerOpts = {
    * (`protectedNamesFromNotes`). A cover naming one is never opened by the asked-about rules.
    */
   protectedNames?: readonly string[] | null;
+  /**
+   * Settings -> "How much to hide" (plan 100 lane V). Under "strict" (Hide more) a game on the
+   * no-story list no longer opens every cover on its own, which is what the back end already
+   * assumes when it asks for those covers. Everything else -- "default", "open", missing --
+   * behaves as it always did. A cover naming what the question asked about, consent, and the
+   * protected-note rule are not touched by it.
+   */
+  spoilerTier?: SpoilerTier | null;
 };
 
 /** One turn's facts every spoiler un-hide reads, in the answer builders' own field names. */
@@ -72,6 +81,7 @@ export type TurnSpoilerFacts = {
   askedEntity: string | null;
   spoilerConsentEffective: boolean;
   protectedNames: string[];
+  spoilerTier?: SpoilerTier | null;
 };
 
 /** The protected names of one turn, from its attached notes' own marks (see buildKbNotesBlockElement). */
@@ -111,6 +121,15 @@ function askedEntityFor(opts: UnwrapSpoilerOpts): string {
 }
 
 /**
+ * Whether the "this game has no story, open every cover" rule applies to this turn: the game is on
+ * the no-story list, and the person has not asked for Hide more.
+ */
+function noStoryRuleOpensEverything(opts: UnwrapSpoilerOpts): boolean {
+  if (opts.spoilerTier === "strict") return false;
+  return turnProfileIsLowNarrative(String(opts.appId || "").trim(), opts.appName || "", opts.question);
+}
+
+/**
  * True when a single ```bonsai-spoiler fence (opener + body, closed or still open) should
  * render as plain prose for this turn: the user consented, the title profile is
  * low-narrative (routine boss/tactics), or the fence mentions the asked beat entity.
@@ -120,11 +139,9 @@ function askedEntityFor(opts: UnwrapSpoilerOpts): string {
 export function shouldUnwrapSpoilerFence(fenceText: string, opts: UnwrapSpoilerOpts): boolean {
   /* Never, whatever else holds: this cover names a protected thing the person did not type. */
   if ((opts.protectedNames ?? []).some((name) => namesInText(fenceText, name))) return false;
-  const appId = String(opts.appId || "").trim();
-  const appName = opts.appName || "";
   const consent = opts.spoilerConsentEffective === true;
   if (consent) return true;
-  if (turnProfileIsLowNarrative(appId, appName, opts.question)) return true;
+  if (noStoryRuleOpensEverything(opts)) return true;
   const entity = askedEntityFor(opts);
   if (!entity) return false;
   return entityMentioned(fenceText, entity);
@@ -142,10 +159,8 @@ export function unwrapAskedEntitySpoilerFences(
 ): string {
   const opts: UnwrapSpoilerOpts =
     typeof questionOrOpts === "string" ? { question: questionOrOpts } : questionOrOpts;
-  const appId = String(opts.appId || "").trim();
-  const appName = opts.appName || "";
   const consent = opts.spoilerConsentEffective === true;
-  const lowNarrativeTitle = turnProfileIsLowNarrative(appId, appName, opts.question);
+  const lowNarrativeTitle = noStoryRuleOpensEverything(opts);
   const entity = askedEntityFor(opts);
   if (!text) return text;
   if (!consent && !lowNarrativeTitle && !entity) return text;

@@ -293,6 +293,84 @@ class RuleInsideTheRealOrderingTests(_StoreCase):
         self.assertEqual(self.merged(3, topic=[tip], preferred=[9]), ["Topic tip", "A", "C"])
 
 
+class ListAndClearTests(_StoreCase):
+    """The "Lowered notes: N . Clear" row in the Knowledge base section reads every mark and can
+    wipe them all; before plan 100 nothing could, so three marks left a note out for good."""
+
+    def test_nothing_marked_lists_nothing(self):
+        self.assertEqual(store.list_demotes(), [])
+
+    def test_every_marked_note_and_tip_is_listed_with_its_marks(self):
+        store.record_demote(7, "note", "wrong_tip")
+        store.record_demote(7, "note", "outdated")
+        store.record_demote(7, "tip", "wrong_edition")
+        listed = {(e["kind"], e["id"]): e for e in store.list_demotes()}
+        self.assertEqual(set(listed), {("note", 7), ("tip", 7)})
+        self.assertEqual(listed[("note", 7)]["downs"], 2)
+        self.assertEqual(listed[("note", 7)]["reasons"], ["wrong_tip", "outdated"])
+        self.assertEqual(listed[("tip", 7)]["downs"], 1)
+        self.assertTrue(listed[("tip", 7)]["updated"])
+
+    def test_an_undone_mark_is_not_listed(self):
+        store.record_demote(3, "note", "wrong_tip")
+        store.record_demote(3, "note", "wrong_tip", undo=True)
+        self.assertEqual(store.list_demotes(), [])
+
+    def test_hostile_entries_are_left_out_of_the_list(self):
+        with open(self.path(), "w", encoding="utf-8") as fh:
+            json.dump(
+                {
+                    "version": 1,
+                    "notes": {
+                        "note:1": {"downs": "two"},
+                        "boss:2": {"downs": 1},
+                        "note:3": "nope",
+                        "note:4": {"downs": 1, "reasons": ["wrong_tip", "made_up", 5], "updated": 9},
+                    },
+                },
+                fh,
+            )
+        self.assertEqual(
+            store.list_demotes(),
+            [{"kind": "note", "id": 4, "downs": 1, "reasons": ["wrong_tip"], "updated": ""}],
+        )
+
+    def test_clear_empties_the_file_and_says_how_many(self):
+        store.record_demote(1, "note", "wrong_tip")
+        store.record_demote(2, "tip", "outdated")
+        self.assertEqual(store.clear_demotes(), {"ok": True, "cleared": 2})
+        self.assertEqual(self.read_file(), {"version": 1, "notes": {}})
+        self.assertEqual(store.list_demotes(), [])
+
+    def test_a_note_left_out_after_three_marks_comes_back_after_clear(self):
+        cards = [_card(1, "A"), _card(2, "B")]
+        for reason in ("wrong_tip", "outdated", "wrong_edition"):
+            store.record_demote(1, "note", reason)
+        self.assertEqual([c.name for c in store.apply_demotes(cards)], ["B"])
+        store.clear_demotes()
+        self.assertEqual([c.name for c in store.apply_demotes(cards)], ["A", "B"])
+
+    def test_clear_with_nothing_stored_is_a_quiet_zero_and_writes_nothing(self):
+        self.assertEqual(store.clear_demotes(), {"ok": True, "cleared": 0})
+        self.assertFalse(os.path.exists(self.path()))
+
+    def test_clear_replaces_a_damaged_file_with_an_empty_one(self):
+        with open(self.path(), "w", encoding="utf-8") as fh:
+            fh.write("{not json")
+        self.assertEqual(store.clear_demotes(), {"ok": True, "cleared": 0})
+        self.assertEqual(self.read_file(), {"version": 1, "notes": {}})
+
+    def test_clear_in_an_unwritable_folder_answers_not_ok(self):
+        blocker = os.path.join(self.dir, "afile")
+        with open(blocker, "w") as fh:
+            fh.write("x")
+        inside = os.path.join(blocker, "inside")
+        with mock.patch.object(store, "_settings_dir", return_value=inside):
+            with mock.patch.object(store.os.path, "exists", return_value=True):
+                result = store.clear_demotes()
+        self.assertFalse(result["ok"])
+
+
 class PluginMethodTests(unittest.IsolatedAsyncioTestCase):
     """The call the screen makes, through the real Plugin class and the real settings folder
     lookup: `demote_rag_corpus_note(section_id, kind, reason, undo)` answers {ok, downs, excluded}

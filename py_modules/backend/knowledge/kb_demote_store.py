@@ -3,11 +3,14 @@
 Purpose: Remembers, in one small file beside the settings, which knowledge-base notes and shared
 tips the person marked "wrong tip", "outdated" or "wrong edition" under an answer. One entry per
 note or tip: how many times, why, and when. Reads it fast (cached until the file changes), adds
-or takes back one mark, and says how many marks a note or tip holds.
+or takes back one mark, says how many marks a note or tip holds, lists every mark, and clears
+them all at once.
 
 Used for: The ranking rule in knowledge_base_service.py (a marked note comes behind unmarked
 ones; a note with three marks is left out), the "Show details" tag for a lowered note
-(kb_attached_notes.py), and the plugin method that records or undoes a mark (rag_corpus_rpc.py).
+(kb_attached_notes.py), the plugin methods that record, undo, list and clear marks
+(rag_corpus_rpc.py), and through them the "Lowered notes: N" row with its Clear button in the
+Knowledge base section.
 
 Solves: A note that was wrong for a question came back next time all the same, because nothing
 remembered the thumbs-down. The numbers a note and a tip carry overlap (162 are in both lists), so
@@ -245,3 +248,62 @@ def record_demote(section_id: Any, kind: Any, reason: Any, undo: bool = False) -
     except (OSError, ValueError, TypeError) as exc:
         return {"ok": False, "error": str(exc)}
     return {"ok": True, "downs": downs, "excluded": downs >= EXCLUDE_AT_DOWNS}
+
+
+def list_demotes() -> list[dict[str, Any]]:
+    """Every note and tip that holds a mark: ``[{kind, id, downs, reasons, updated}]``, newest
+    first. Read fresh from the file (not the ranking cache), so the Knowledge base section's
+    "Lowered notes" count is what the file says now. Hostile entries are left out, exactly as the
+    ranking leaves them out; a damaged or missing file lists nothing."""
+    path = store_path()
+    if not path:
+        return []
+    with _lock:
+        document = _read_document(path)
+    return _listed_entries(document)
+
+
+def _listed_entries(document: dict[str, Any]) -> list[dict[str, Any]]:
+    listed: list[dict[str, Any]] = []
+    for raw_key, entry in document["notes"].items():
+        parsed = _parse_entry_key(raw_key)
+        if parsed is None or not isinstance(entry, dict):
+            continue
+        downs = _clean_downs(entry.get("downs"))
+        if not downs:
+            continue
+        raw_reasons = entry.get("reasons")
+        reasons = [r for r in raw_reasons if r in VALID_REASONS] if isinstance(raw_reasons, list) else []
+        updated = entry.get("updated")
+        listed.append(
+            {
+                "kind": parsed[0],
+                "id": parsed[1],
+                "downs": downs,
+                "reasons": reasons,
+                "updated": updated if isinstance(updated, str) else "",
+            }
+        )
+    listed.sort(key=lambda item: item["updated"], reverse=True)
+    return listed
+
+
+def clear_demotes() -> dict[str, Any]:
+    """Take back every mark at once: the file becomes an empty document and the ranking cache is
+    dropped, so the next question ranks every note as if nothing was ever marked. Answers
+    ``{ok, cleared}`` with how many notes and tips held a mark. With no file there is nothing to
+    clear and nothing is written; a write that fails answers ``{"ok": False, "error": ...}``."""
+    path = store_path()
+    if not path:
+        return {"ok": False, "error": "No settings folder."}
+    if not os.path.exists(path):
+        return {"ok": True, "cleared": 0}
+    try:
+        with _lock:
+            cleared = len(_listed_entries(_read_document(path)))
+            _write_document(path, {"version": STORE_VERSION, "notes": {}})
+            _cache["key"] = None
+            _cache["downs"] = {}
+    except (OSError, ValueError, TypeError) as exc:
+        return {"ok": False, "error": str(exc)}
+    return {"ok": True, "cleared": cleared}

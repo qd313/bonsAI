@@ -4618,11 +4618,11 @@
       "game_id": 32,
       "section_type": "mechanic",
       "name": "Picking story pages and levels in Yoshi's Story",
-      "card": "Story Mode holds 24 levels split across four worlds of six pages, but only six levels are played in any one run: finishing a level jumps straight to the next world rather than offering the other three pages from the world just left. The first world lets you freely pick which of its four levels to start on, but from the second world onward the game itself decides which page unlocks next, based on how many Special Hearts were collected in the level just finished. That is why replaying what looks like the same page can lead somewhere different: it is really the previous level's Special Heart count choosing the next one, not the page itself.",
+      "card": "Story Mode holds 24 levels split across six worlds (pages) of four levels each, but only six levels are played in any one run: finishing a level jumps straight to the next world rather than offering the other three levels from the world just left. The first world lets you freely pick which of its four levels to start on, but from the second world onward the game itself decides which page unlocks next, based on how many Special Hearts were collected in the level just finished. That is why replaying what looks like the same page can lead somewhere different: it is really the previous level's Special Heart count choosing the next one, not the page itself.",
       "source_url": "https://www.mariowiki.com/Yoshi%27s_Story",
       "source_license": "CC-BY-SA-4.0",
       "source_version": null,
-      "crawled_at": "2026-09-18"
+      "crawled_at": "2026-10-25"
     },
     {
       "section_id": 377,

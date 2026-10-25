@@ -70,6 +70,9 @@ def _clean_text(raw: Any, limit: int) -> str:
     """Plain text with control characters out and runs of blank lines squeezed; newlines kept."""
     text = "" if raw is None else str(raw)[:limit]
     text = _CONTROL_RE.sub("", text.replace("\r\n", "\n").replace("\r", "\n"))
+    # A lone surrogate half ("\ud800") is valid in a Python string but cannot be written as UTF-8: the file would be
+    # created and then the write would fail, leaving an empty file. Drop it here, once, for every text that gets in.
+    text = text.encode("utf-8", "ignore").decode("utf-8")
     text = re.sub(r"[ \t]+\n", "\n", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()

@@ -1205,6 +1205,12 @@ class Plugin:
         """Rank a note or shared tip lower after a thumbs-down, or take the mark back (undo)."""
         return await rag_corpus_rpc.demote_rag_corpus_note(self, section_id, kind, reason, undo)
 
+    async def suggest_rag_corpus_tip(
+        self, question: str = "", answer: str = "", app_id: str = "", app_name: str = "", kind: str = ""
+    ):
+        """Save a good answer as a proposed library note on the Desktop; answers {ok, file, issue_url, error}."""
+        return await rag_corpus_rpc.suggest_rag_corpus_tip(self, question, answer, app_id, app_name, kind)
+
     async def list_rag_corpus_demotes(self):
         """Every note and tip ranked lower by a thumbs-down (the "Lowered notes: N" row)."""
         return await rag_corpus_rpc.list_rag_corpus_demotes(self)

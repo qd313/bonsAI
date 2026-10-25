@@ -53,6 +53,7 @@ from backend.knowledge.rag_corpus_download_service import (
 )
 from backend.knowledge.rag_corpus_local_install import install_rag_corpus_from_local_dir
 from backend.knowledge.rag_corpus_status import build_rag_corpus_status
+from backend.notes.kb_tip_suggestion_service import suggest_tip_sync
 
 import decky
 
@@ -69,6 +70,32 @@ async def demote_rag_corpus_note(
     holds now and whether that is enough to leave it out of answers. Never raises.
     """
     return await asyncio.to_thread(record_demote, section_id, kind, reason, undo is True)
+
+
+_SUGGEST_TIP_REFUSAL = "Filesystem writes are disabled. Enable them in the Permissions tab."
+
+
+async def suggest_rag_corpus_tip(
+    self, question: Any = "", answer: Any = "", app_id: Any = "", app_name: Any = "", kind: Any = ""
+):
+    """Save a good answer as a proposed library note under Desktop/bonsAI_logs/suggested-tips.
+
+    The only guard between a caller and a file write, so it goes in this order: the "Save files to Desktop"
+    permission first (before the home folder or any argument is read), then the home folder from the plugin's
+    own setting, then the five named arguments turned into text. No folder, path or time ever comes from the
+    caller; a sixth argument is a TypeError. Answers ``{ok, file, issue_url, error}`` with the file's bare name.
+    """
+    settings = await self.load_settings()
+    if not capability_enabled(settings, "filesystem_write"):
+        await self._maybe_app_log(
+            "capability.denied",
+            "filesystem_write denied for suggest_rag_corpus_tip",
+            level="verbose",
+        )
+        return {"ok": False, "file": "", "issue_url": "", "error": _SUGGEST_TIP_REFUSAL}
+    home = getattr(decky, "DECKY_USER_HOME", None) or decky.HOME
+    text = ["" if v is None else str(v) for v in (question, answer, app_id, app_name, kind)]
+    return await asyncio.to_thread(suggest_tip_sync, home, *text)
 
 
 async def list_rag_corpus_demotes(self):

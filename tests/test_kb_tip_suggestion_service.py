@@ -67,6 +67,12 @@ class RecordTests(unittest.TestCase):
         self.assertIn("Dash now.", rec["card"])
         self.assertNotRegex(rec["card"], r"[\x00-\x08\x0b-\x1f]")
 
+    def test_a_lone_surrogate_half_is_dropped_so_it_can_never_reach_the_writer(self):
+        rec = build_tip_record("Why \ud800 this?", "Dash \udfff now.", "", "Hollow \ud800 Knight", "mechanic", NOW)
+        for value in (rec["name"], rec["card"]):
+            value.encode("utf-8")  # raises on a lone half
+        self.assertIn("Dash  now.", rec["card"])
+
     def test_the_app_id_is_kept_only_when_it_is_digits(self):
         self.assertIn("367520", build_tip_record(QUESTION, ANSWER, "367520", "G", "mechanic", NOW)["card"])
         self.assertNotIn("evil", build_tip_record(QUESTION, ANSWER, "evil/../x", "G", "mechanic", NOW)["card"])
@@ -164,6 +170,16 @@ class WriteTests(unittest.TestCase):
         self.assertRegex(parts.query, r"^title=[A-Za-z0-9%._~-]+$")
         self.assertNotIn("SECRET", url)
         self.assertNotIn(" ", url)
+
+    def test_a_lone_surrogate_half_in_the_question_or_answer_still_writes_a_whole_json_file(self):
+        with tempfile.TemporaryDirectory() as home:
+            res = suggest_tip_sync(home, "Why \ud800 this?", "Dash \ud800 now.", "1", "Hollow Knight", "mechanic", NOW)
+            self.assertTrue(res["ok"], res)
+            path = os.path.join(_tip_dir(home), res["file"])
+            self.assertGreater(os.path.getsize(path), 0)
+            with open(path, encoding="utf-8") as f:
+                self.assertEqual(json.load(f)["section_type"], "mechanic")
+            self.assertEqual(os.listdir(_tip_dir(home)), [res["file"]])
 
     def test_the_default_utc_clock_is_used_when_no_time_is_given(self):
         with tempfile.TemporaryDirectory() as home:

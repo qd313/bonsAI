@@ -22,21 +22,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { LastExchangeSnapshot } from "../../../types/backgroundAsk";
 import { formatDeckyRpcError } from "../../../shared/deckyCall";
+import { suggestRagCorpusTip, type SuggestTipRequest, type SuggestTipResult } from "../../knowledge-library/suggestTipApi";
 import { buildAnswerCopyText } from "./answerCopyText";
-
-/** What a press sends: the player's question, the answer as Copy gives it, the game, and the kind of note. */
-export type SuggestTipRequest = {
-  question: string;
-  answer: string;
-  appId: string;
-  appName: string;
-  kind: string;
-};
-
-/** What the plugin answers: the file's name and the link, or the words to show. */
-export type SuggestTipResult =
-  | { ok: true; file: string; issueUrl: string }
-  | { ok: false; error: string };
 
 /** The plugin call, handed in so a test can stand in for it. */
 export type SuggestTipFn = (req: SuggestTipRequest) => Promise<SuggestTipResult>;
@@ -58,8 +45,8 @@ export type UseReplySuggestTipArgs = {
   /** The game the answer was asked against, when there is one. */
   appId?: string | null;
   appName?: string | null;
-  /** The plugin call. */
-  suggest: SuggestTipFn;
+  /** The plugin call; the real one unless a test hands in a stand-in. */
+  suggest?: SuggestTipFn;
 };
 
 const REMEMBERED_LIMIT = 64;
@@ -104,7 +91,8 @@ export function suggestTipLine(state: SuggestTipState): string | null {
  * nothing throws into a press. A press while saving, or after saving, sends nothing.
  */
 export function useReplySuggestTip(a: UseReplySuggestTipArgs): ReplySuggestTipView {
-  const { lastExchange, suggest } = a;
+  const { lastExchange } = a;
+  const suggest = a.suggest ?? suggestRagCorpusTip;
   const replyKey = answerKey(lastExchange);
   const [state, setState] = useState<SuggestTipState>(() => recall(replyKey));
   /* The answer on screen and its line, for a call that answers after the person has moved on. */

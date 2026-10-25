@@ -18,10 +18,11 @@ import {
   suggestTipLine,
   useReplySuggestTip,
   type SuggestTipFn,
-  type SuggestTipRequest,
 } from "./useReplySuggestTip";
+import type { SuggestTipRequest } from "../../knowledge-library/suggestTipApi";
 import { SPOILER_HIDDEN_COPY_PLACEHOLDER } from "./answerCopyText";
 import type { LastExchangeSnapshot } from "../../../types/backgroundAsk";
+import { getRpcCallLog } from "../../../test-harness/fakeDeckyRpc";
 
 const REPLY: LastExchangeSnapshot = {
   question: "how do i beat the mantis lords",
@@ -128,6 +129,21 @@ describe("Suggest as a tip", () => {
     await h.settle();
     expect(calls[0]!.answer).not.toContain("reactor core");
     expect(calls[0]!.answer).toContain(SPOILER_HIDDEN_COPY_PLACEHOLDER);
+  });
+
+  it("with no stand-in it makes the real plugin call: question, answer, app id, game name, kind", async () => {
+    const view = renderHook(() => useReplySuggestTip({ lastExchange: REPLY, appId: "367520", appName: "Hollow Knight" }));
+    act(() => view.result.current.onSuggest());
+    await act(async () => void (await new Promise((r) => setTimeout(r, 0))));
+    const sent = getRpcCallLog().filter((c) => c.method === "suggest_rag_corpus_tip").map((c) => c.args);
+    expect(sent).toEqual([[
+      "How do I beat the Mantis Lords?",
+      "Stay near the middle and dash through the first lunge.",
+      "367520",
+      "Hollow Knight",
+      "mechanic",
+    ]]);
+    expect(view.result.current.state.phase).toBe("saved");
   });
 
   it("an answer with no text sends nothing and says so", async () => {

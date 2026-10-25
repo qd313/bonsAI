@@ -63,6 +63,7 @@ export const FRONTEND_RPC_METHODS = [
   "remove_rag_corpus",
   "get_rag_corpus_glossary",
   "demote_rag_corpus_note",
+  "suggest_rag_corpus_tip",
   "list_rag_corpus_demotes",
   "clear_rag_corpus_demotes",
   "list_chat_slots",
@@ -233,6 +234,13 @@ function defaultHandlers(): Record<string, RpcHandler> {
     get_rag_corpus_glossary: () => ({ ok: true, installed: false, game_title: "", terms: [], reason: "" }),
     // Plan 98: a note ranked lower from under an answer: kept, one mark, not yet left out.
     demote_rag_corpus_note: () => ({ ok: true, downs: 1, excluded: false }),
+    // Plan 100: "Suggest as a tip" saved a file and built the link to send it in.
+    suggest_rag_corpus_tip: () => ({
+      ok: true,
+      file: "hollow-knight-20261025-153012.json",
+      issue_url: "https://github.com/qd313/bonsAI/issues/new?title=Suggested%20tip%3A%20test",
+      error: "",
+    }),
     // Plan 100: nothing ranked lower yet, so the "Lowered notes" row stays hidden by default.
     list_rag_corpus_demotes: () => ({ ok: true, count: 0, notes: [] }),
     clear_rag_corpus_demotes: () => ({ ok: true, cleared: 0 }),

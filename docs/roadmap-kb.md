@@ -21,8 +21,7 @@ The Deck's own model keeps the note's facts 79.5 times in a hundred with the ans
 three: both checks had faults. [Wave three's report](../../bonsAI-workshop/archive/48-kb-wave-three-session.md). More detail:
 [blind questions](roadmap-kb-details.md#blind-questions-done), [the three new games](roadmap-kb-details.md#three-new-games-and-their-notes).
 
-**Still short:** getting to the troubleshooting tips. Of 24 fresh plain sentences, 6 reached a tip before the tip rewrite
-and 8 after (still 8 when measured again 2026-10-24).
+**Still short:** getting to the troubleshooting tips, though better since 2026-10-25. Of 24 fresh plain sentences, 8 reached a tip before the wording fix and 17 reach one now, none a wrong one (measured on the PC; the Deck check P100-TIPS-01 is owed).
 
 **The one-second wait on every question is explained:** the Deck holds one model at a time, so the answering and note-search models push each other out; with the limit at two, a search after an answer dropped from 732 to 24 thousandths of a second. The maintainer's Deck keeps two loaded since 2026-09-23. Full text and evidence: [detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24).
 
@@ -46,8 +45,6 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   The ring went to the tab bar. One sighting, with a muddled setup (the answer came from an old branch button). Evidence `workshop:test-evidence/plan98-P98-KR-REPLAYS.json` (the P98-ROUTE-01 line).
 - ★ `[KB]` **measure: on a made-up question, three weak notes attach with a keyword score of 0.00 every time** — **OPEN, found 2026-10-24 (plan 98 consult 5).**
   Should a question with no keyword support attach nothing? A measurement against the right-note questions comes first; no right note may be lost. Evidence `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04.json`.
-- ★ `[KB]` **A thank-you or a junk phrase is treated as a follow-up to the previous question** — **OPEN, found 2026-10-24 (plan 98 block K0, Deck).**
-  On Strategy and Expert turns, the previous question and answer are handed to the AI whenever the new question names no boss or enemy, with no check. "thank you very much" has no "it", so it never reaches the "it" rule; it answered the previous question again (the earlier house question) instead of a short reply. "what time is it" does pass the "it" rule. **Fresh-chat re-run 2026-10-25 (plan 100 block L0, Deep Rock Galactic: Survivor running): FAILED on two of three halves.** "thank you very much" attached no notes but still answered with 93 words of boss advice, plus a "Not in my notes" line. "what time is it" attached three notes (Praetorian, Classes, Mining and the run timer), drew a notes block, said it had no clock, then gave the boss advice. "how do I beat it" was correctly about the Praetorian. The fix is owed (plan 100 lane F). Evidence `workshop:test-evidence/plan98-P98-JUNK-PHRASES.json` and `workshop:test-evidence/plan100-P98-JUNK-PHRASES-try2.json`.
 - ★ `[KB]` **A "where am I stuck" answer for Hollow Knight added an "If you want to cheat" section** — **OPEN, found 2026-10-24 (plan 98 Deck block K3).**
   The route answer suggested emulator and fast-travel exploits. Odd advice from the AI, seen once. **Counted 2026-10-25 (plan 100 block L0): 0 cheat sections in 2 route questions** (plan 100 call 5, D137, chose to add no prompt line for it). **Same run: both route questions (Strategy, Hollow Knight named, nothing running) drew no step list at all, only one plain paragraph each** (no numbered steps, no "Needs" lines). Evidence `workshop:test-evidence/plan98-P98-ROUTE-01-try2.json`, `workshop:test-evidence/plan100-P100-ROUTE-CHEAT-COUNT.json`.
 - ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **ACCEPTED, 2026-09-28.** The
@@ -55,32 +52,21 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   ([D62](audit/maintainer-decisions-archive.md#d62--locked-2026-09-05-raised-2026-09-05--the-second-bug-fixing-session-four-calls-before-go)
   item 2). A stray word match can attach a wrong tip. A fix would run the meaning search only when the word hits are thin;
   that needs a cut-off picked and measured. [Detail](roadmap-kb-details.md#speed-mode-tip-gap)
-- ★ `[KB]` **Route look: the shown steps are forgotten when the cache is cleared** — **OPEN, found 2026-10-24 (plan 98 lane H).**
-  The steps already shown are kept in the panel's browser storage, not beside the ticks in the back end's per-game save. Clear cache and leaving Strategy clear the ticks and leave the revealed steps in that storage, so a route can come back with later steps open and nothing ticked; only Clear all data removes them. Proposed fix: save them beside the ticks.
-- ★ `[KB]` **Route look: no "Needs: …" part is written for steps that need an item or ability** — **OPEN, found 2026-10-24 (plan 98 lane H).**
-  The screen already draws a "Needs" part when a step has one; the AI is never asked to add it. Ask it to, for a step that needs an item or ability first.
-- ★ `[KB]` **Story spoilers: the Search tab's entry lands on the section line, not on the new row** — **OPEN, found 2026-10-24 (plan 98 lane B).**
-  Searching for "Story spoilers" opens the section but not the "How much to hide" row.
 - ★ `[KB]` **Story spoilers: under Hide less the answer test's no-contradiction rate read 90.7%, against 100%** — **OPEN, found 2026-10-24 (plan 98 lane B).**
   One run (`workshop:archive/research/kb-answer-eval-2026-10-24-p98b-open.md`); not investigated.
 - ★ `[KB]` **Thumbs-down: "ranked lower by you" stays on an answer already saved after Undo** — **OPEN, found 2026-10-24 (plan 98 lane D).**
   Show details' tag is as of the ask, so an Undo does not clear it on an answer already saved.
+- ★ `[KB]` **The Sims 4 library holds two fire notes that disagree** — **OPEN, found 2026-10-25 (plan 100 lane N3).**
+  The older note "Fires" (section 112 in `data/kb/strategy_seed.json`) says there are no firefighters. The Sims wiki says they were added in a patch and come when a smoke alarm sees the fire, and the new Fire note (1200) follows the wiki. The old note needs correcting, then a library rebuild.
+- ★ `[KB]` `[QA]` **The note-model test script writes its JSON report even when told not to** — **OPEN, found 2026-10-25 (plan 100).**
+  `scripts/kb/eval_kb_embed_models.py` always writes its JSON report into the workshop (around line 1870); the no-report flag only skips the text report. It overwrote a workshop file on 2026-10-25. Fix: honour the flag for the JSON file too.
 - ★★ `[KB]` **Thumbs-down: after Undo with a game running, Down stopped on the notes block** — **OPEN, found 2026-10-24 (plan 98 Deck block K3).**
   The page had lost the window's focus (the lost-focus family from plan 97), so Down did nothing. Closing and reopening Quick Access cleared it but emptied the question box. Same lost-focus family as plan 97's freeze; the only cure, closing and reopening Quick Access, emptied the question box. Evidence `workshop:test-evidence/plan98-P98-DEMOTE-01-game.json`.
-- ★ `[KB]` **Yoshi's Story's "Starting out" note contradicts itself about its levels** — **OPEN, found 2026-10-24 (plan 98 lane G3).**
-  The note (section 376 in `data/kb/strategy_seed.json`) says "24 levels split across four worlds of six pages" and also "only six levels are played in any one run". The real game has six worlds of four levels. Lane G3 kept those numbers out of the glossary words. The note needs correcting, then a library rebuild.
-- ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back
-  2026-09-06 (D81).** "The game drops me back to the library" reaches no crash tip, because the tip search needs a topic
-  word. The held fix (a meaning search) attached wrong tips, six measured; it stays held (re-measured 2026-10-24: 8 of 24 plain sentences reach a tip today, the held branch reaches all 24 but only 13 right). Older notes: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
-  **Second opinion 2026-10-24 (plan 98 consult 2):** no score cut-off is worth building (two are already on). The fix is wording, written up in the Next entry "A troubleshooting question mostly never reaches the tips".
-  [Detail](roadmap-kb-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips)
 - ★★ `[KB]` **Unrelated questions can still get a game card stapled on** — **ACCEPTED 2026-08-27.** Raising the word floor costs real matches and the
   model mostly ignores a card that does not fit. Earlier sightings (2026-08-23, 2026-09): [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
-  **Deck 2026-10-24 (plan 98 block K0), MEASURED:** "thank you very much" attached no notes; "what time is it" still attached three. A fresh-chat re-run 2026-10-25 (plan 100 block L0) still attached three notes for "what time is it" (`workshop:test-evidence/plan100-P98-JUNK-PHRASES-try2.json`); see the Bugs entry on junk phrases. Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  **Deck 2026-10-24 (plan 98 block K0), MEASURED:** "thank you very much" attached no notes; "what time is it" still attached three. A fresh-chat re-run 2026-10-25 (plan 100 block L0) still attached three notes for "what time is it" (`workshop:test-evidence/plan100-P98-JUNK-PHRASES-try2.json`); see the Deck check owed entry on junk phrases. Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
   [D28](audit/maintainer-decisions-archive.md#d28--ordinary-phrases-attach-game-cards-how-hard-should-the-floor-be) ·
   [Detail](roadmap-kb-details.md#ordinary-phrases-attach-game-cards)
-- ★★ `[KB]` **Story spoilers: under Hide more, a cover with no boss name in it still opens on a game with no story profile** — **OPEN, found 2026-10-24 (plan 98 lane B).**
-  On screen, covers on a no-story game are opened unless they name a protected note, so the tier is not on the screen side.
 - ★★ `[KB]` `[QA]` **Screenshot reading ignores the game name it was handed** — **OPEN, found 2026-10-24 (plan 98 lane I).**
   On God of War's play and pause pictures the Deck's AI ignored the handed-over game name in 4 of 9 asks. See the screenshot entry in Next.
 - ★★ `[KB]` **Thumbs-down: Undo shows only on the newest answer, so an older mark has no way back** — **OPEN, found 2026-10-24 (plan 98 Deck block K1).**
@@ -92,11 +78,38 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 ## Deck check owed
 
+- ★ `[KB]` **A thank-you or a junk phrase is treated as a follow-up to the previous question** — **VERIFY, landed 2026-10-25 (plan 100 lane F, `811fb977`, `426af298`), unit-tested.**
+  A thank-you, a greeting or a question about the time, date or weather now gets a short reply of its own: no notes searched, no earlier answer carried forward, and the remembered boss kept for the next real follow-up. Before the fix the Deck failed two of three halves (2026-10-25, block L0; `workshop:test-evidence/plan100-P98-JUNK-PHRASES-try2.json`).
+  **Still owed:** P100-THANKS-01 (block L1): no Deck result yet. Earlier text: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+- ★ `[KB]` **Baldur's Gate 3's seven notes: the maintainer's read** — **VERIFY, landed 2026-10-25 (plan 100 lanes N1 to N4), owed to your eye.**
+  Seven notes from Wikipedia only (its own wiki is NonCommercial): Owlbear, Githyanki Warriors, Minthara, Goblin Horde, Explosive Barrel, Potions, Weapon Poison. Five of the seven are tabletop lore with no fight advice; you read them in the chat on 2026-10-25 and chose to land them (D137 session). Your read of the notes themselves is still owed.
+  Library check: P100-FOUR-GAMES-01 (block L2), see the Phase 5 entry in Next.
+- ★ `[KB]` **Route look: no "Needs: …" part is written for steps that need an item or ability** — **VERIFY, landed 2026-10-25 (plan 100 lane P, `e5ba73bd`), unit-tested.**
+  The checklist instruction now asks for ". Needs: <the thing>" on a step that needs an item, ability or unlock, in the shape the panel already draws.
+  **Still owed:** P100-NEEDS-01 (block L1): no Deck result yet. The step list is drawn only after a branch button is pressed (a fresh question gets the branch menu by design), so the check presses a branch first.
+- ★ `[KB]` **Route look: the shown steps are forgotten when the cache is cleared** — **VERIFY, landed 2026-10-25 (plan 100 lane R, tip `0152f6fa`), unit-tested.**
+  The steps a person opened by hand now travel in the same per-game save as the ticks, load back with them and clear with them; the browser-storage copy is gone.
+  **Still owed:** P100-ROUTE-SAVE-01 (block L1): no Deck result yet.
+- ★ `[KB]` **Story spoilers: the Search tab's entry lands on the section line, not on the new row** — **VERIFY, landed 2026-10-25 (plan 100 lane W, `34a707f9`, Haiku 5.5 high, on trial), unit-tested.**
+  Searching "spoilers" or "how much" now lands the ring on the Default button of the "How much to hide" row.
+  **Still owed:** P100-SEARCH-TIER-01 (block L1): no Deck result yet.
+- ★ `[KB]` **Yoshi's Story's "Starting out" note contradicted itself about its levels** — **VERIFY, landed 2026-10-25 (plan 100 lane Y, `551ca270`).**
+  The first sentence of section 376 now says six worlds (pages) of four levels each, from the Mario wiki page re-read on 2026-10-25.
+  **Still owed:** P100-YOSHI-01 (block L1, with the test library installed): no Deck result yet.
+- ★★ `[KB]` **Story spoilers: under Hide more, a cover with no boss name in it still opens on a game with no story profile** — **VERIFY, landed 2026-10-25 (plan 100 lane V, tip `eab4f33e`), unit-tested.**
+  The "How much to hide" setting now reaches the screen's cover rule. Under Hide more, a cover on a game with no story stays shut, on screen and in Copy; Default and Hide less are unchanged.
+  **Still owed:** P100-HIDE-MORE-SCREEN-01 (block L1): no Deck result yet.
+- ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED (D81) for the meaning search; the wording fix landed 2026-10-25 (plan 100 lane T).**
+  "The game drops me back to the library" reached no crash tip. The held meaning search stays held. The wording fix is the entry below; the numbers are there. Row P100-TIPS-01 (block L1) is owed.
+  Older text: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY, landed
   2026-09-15, unit-tested.** A game known only by name now opens its box, and naming the boss up front keeps the answer in
   plain text. Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01, 2026-09-18), knowledge base off (DRG-01b, 2026-09-23) and library absent (DRG-01c, 2026-10-03; the AI wrote no hidden block, so a cover was not tested directly).
   **Still owed:** STRAT-SPOIL-NAME-01 could not run six times, last 2026-10-25 (plan 100 block L0: Doom 64: Retribution was not on the Recent Games row, and the launch tool cannot match a non-Steam shortcut; `workshop:test-evidence/plan100-STRAT-SPOIL-NAME-01.json`): it needs the maintainer's hand launch (on the checks page). Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
   Evidence `workshop:test-evidence/plan79-STRAT-SPOIL-NAME-01.json`. [Detail](roadmap-kb-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions)
+- ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **VERIFY, landed 2026-10-25 (plan 100 lane T, seven commits, tip `ae8c59b6`), measured on this PC.**
+  Five tips now carry the plain words people type, and two new tips (165: sound to the TV instead of headphones; 166: menus out of place on a TV, both "Researched, unconfirmed") fill the gaps. Of the 24 plain sentences, 17 now reach a tip (8 before) and 15 of the 22 that have a right tip reach it (5 before); none reaches a wrong tip. No "can't find my PC" tip exists (tips 110 and 111 are Steam Frame tips), so two sentences stay unlabelled; the lane's proposed text is in plan 100's report.
+  **Still owed:** P100-TIPS-01 (block L1), and your read of the two new tips and ten of the plain-word edits (the checks page). Earlier text: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
 
 ## Next
 
@@ -111,15 +124,10 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   know", and a monthly read of ten replies by a person. **Sighting 2026-09-26:** a plain tip ("raise Render Scale") became
   advice that contradicts itself. [Detail](roadmap-kb-details.md#flow-l7-findings)
 - ★★★ `[KB]` **KB visual maps** — **PARTIAL; two shapes picked on the mock-up board 2026-10-10, the route built 2026-10-24.** Nothing draws anything in a reply today.
-  **A route, one step at a time:** built 2026-10-24 as the look of the strategy checklist (see the route-look entry in Deck check owed above). Still to come: a "Needs: …" part on steps that need an item or ability (see Bugs).
+  **A route, one step at a time:** built 2026-10-24 as the look of the strategy checklist (see the route-look entry in Deck check owed above). The "Needs: …" part on steps that need an item or ability landed 2026-10-25 and is owed a Deck check (see Deck check owed).
   **Your screenshot, marked**: up to three numbered marks (hit, avoid, dodge), each saying whether the Deck's AI is sure; an unsure mark is dashed. A scoring test first: a stronger model scores, out of ten, what the Deck's models mark, and helps teach them.
   Not chosen as drawn: a fuller boss card, a whole-kingdom map. An area map must look real; maps taken from the game or a wiki need a licence check first.
   [Mock-up board, tab 5](https://claude.ai/artifact/XyZfUSPGRZdm2P3mTGV9tR) · [notes](demos/mockup-board/README.md) · [Detail](roadmap-kb-details.md#kb-visual-maps)
-- ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.** Nine of ten
-  ordinary problem sentences ("my game keeps crashing") reached nothing when measured 2026-09-07, because the word "crash"
-  alone is too weak to route a question. Remeasured 2026-10-24 (plan 98 lane F): 8 of 24 plain sentences reach a tip, 6 of them right (see the symptom entry in Bugs). (D81, D85) Older notes: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
-  **Second opinion 2026-10-24 (plan 98 consult 2): fix the wording in two places (five tips and the router's topic words), not a cut-off.** Two problems have no tip at all (sound to the TV instead of headphones; menus out of place on a TV), and the 24 test sentences need their right tips written into the fixture before any gate. The word lists: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
-  [Detail](roadmap-kb-details.md#a-troubleshooting-question-mostly-never-reaches-the-tips)
 - ★★★★ `[KB]` **KB online / versus strategy content** — **OPEN, discovery locked 2026-08-09.** Multiplayer questions
   (roles, callouts, co-op) get nothing specific today. Plan: new card kinds, Left 4 Dead 2 first, then Counter-Strike 2,
   from archive dumps only. Two to three weeks. [Plan](planning/17-kb-online-versus-strategy-content.md) ·
@@ -127,6 +135,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 - ★★★★ `[KB]` `[QA]` **Measure how well the AI reads a screenshot: which game, which area, which boss** — **PARTIAL, added 2026-09-25. Step 1 done 2026-10-24 (plan 98 lane I, `6e46b9fc` to `1219b07c`): a labelled picture set and a scoring script.**
   First figures (8 Deck pictures, the Deck's own model `gemma4:e2b-it-qat`, 3 tries each): with the game handed over it named the game 75 times in 100 and the area 42; with nothing handed over, 17 and 29. No picture had a boss. It often invents and guesses Zelda: Ocarina of Time for pictures it does not know. Full text: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
   The set is thin (most games stop at a save-slot screen the rig must not touch; Steam's overlay is on every picture); a bigger set with play scenes needs the maintainer's hand. **Step 2** (each picture model the Deck offers, then fix where it fails) is still open. Report `workshop:archive/research/screenshot-reading-2026-10-24.md`. Full text: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  **2026-10-25 (plan 100 lane P, `55771b7a`):** the picture rules now say the running game named to the AI is the game in the picture, and never to name another. Measurement owed: P100-PICTURE-HINT (lane X item 7, the scoring script on the 8 pictures).
   [Detail](roadmap-kb-details.md#measure-how-well-the-ai-reads-a-screenshot)
 - ★★★★ `[KB]` **RAG Phase 4: extended retrieval** — **PARTIAL.** Chips that show the library exists and the labelled enemy
   and item cards shipped ([D67](audit/maintainer-decisions-archive.md#d67--locked-2026-09-05--structured-cards-accept-prose)).
@@ -134,8 +143,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   P78-CHIP-PACE). Still owed: the look at the widest chip labels (PHASE4-CHIPS-01; UNCLEAR again 2026-10-24; measured 2026-10-25 with nothing running: only "How to use bonsAI" showed, 300 by 26 px, text fits, no game chips; the maintainer judges the three pictures, see its testing row). The maintainer's own look at the
   pace is closed: "as they are", 2026-10-22 (plan 99 § 2 call 12). [Detail](roadmap-kb-details.md#rag-phase-4-extended-retrieval)
 - ★★★★ `[KB]` **RAG Phase 5: depth on the thirteen titles** — **PARTIAL.** The thirteen original titles went from 133 to
-  164 notes. Four still have no enemy or item notes: Baldur's Gate 3, GTA San Andreas, The Sims 4 and Portal 2 (counted
-  2026-10-03). Next: 40 to 60 enemy and item notes in batches, with a quality read from you after the first.
+  164 notes. The four that had none now have enemy and item notes (plan 100, 2026-10-25): Baldur's Gate 3 7, GTA San Andreas 15, The Sims 4 15, Portal 2 14, so 29 of 38 games have them. A fresh blind search test (102 questions, two per new note, from the names only) is in the fixture; how many are found in the first three is owed (plan 100 lane X, item 6). Stays PARTIAL until the Deck row P100-FOUR-GAMES-01 (block L2) and your read of the Baldur's Gate 3 notes (see Deck check owed).
   [Plan](planning/28-phase5-corpus-depth.md)
 - ★★★★ `[KB]` **RAG Phase 7: retrieval infrastructure** — **PARTIAL.** What still matters: add-on packs before a large catalog, a screenshot feeding the search.
   **The thumbs-down that stops a wrong note coming back was built 2026-10-24** (design C, D112 item 8): see its entry in Deck check owed. [Detail](roadmap-kb-details.md#rag-phase-7-community-tip-contribution-rag-phase-8)

@@ -609,3 +609,51 @@ With a game running, "thank you very much" still attached a card on the Deck on 
 **A troubleshooting question mostly never reaches the tips: the 2026-09 fixes:**
 
 The tip cut-off and a false word match were fixed 2026-09-26, and the "no tip for this" line was retired 2026-09-27.
+
+**Moved word for word by the plan 100 wave 1 docs sweep (2026-10-25), when these entries went to Deck check owed:**
+
+**A thank-you or a junk phrase: the entry before the fix:**
+
+- ★ `[KB]` **A thank-you or a junk phrase is treated as a follow-up to the previous question** — **OPEN, found 2026-10-24 (plan 98 block K0, Deck).**
+  On Strategy and Expert turns, the previous question and answer are handed to the AI whenever the new question names no boss or enemy, with no check. "thank you very much" has no "it", so it never reaches the "it" rule; it answered the previous question again (the earlier house question) instead of a short reply. "what time is it" does pass the "it" rule. **Fresh-chat re-run 2026-10-25 (plan 100 block L0, Deep Rock Galactic: Survivor running): FAILED on two of three halves.** "thank you very much" attached no notes but still answered with 93 words of boss advice, plus a "Not in my notes" line. "what time is it" attached three notes (Praetorian, Classes, Mining and the run timer), drew a notes block, said it had no clock, then gave the boss advice. "how do I beat it" was correctly about the Praetorian. The fix is owed (plan 100 lane F). Evidence `workshop:test-evidence/plan98-P98-JUNK-PHRASES.json` and `workshop:test-evidence/plan100-P98-JUNK-PHRASES-try2.json`.
+
+**Route look, forgotten steps: the entry before the fix:**
+
+- ★ `[KB]` **Route look: the shown steps are forgotten when the cache is cleared** — **OPEN, found 2026-10-24 (plan 98 lane H).**
+  The steps already shown are kept in the panel's browser storage, not beside the ticks in the back end's per-game save. Clear cache and leaving Strategy clear the ticks and leave the revealed steps in that storage, so a route can come back with later steps open and nothing ticked; only Clear all data removes them. Proposed fix: save them beside the ticks.
+
+**Route look, "Needs": the entry before the fix:**
+
+- ★ `[KB]` **Route look: no "Needs: …" part is written for steps that need an item or ability** — **OPEN, found 2026-10-24 (plan 98 lane H).**
+  The screen already draws a "Needs" part when a step has one; the AI is never asked to add it. Ask it to, for a step that needs an item or ability first.
+
+**Search tab, the section line: the entry before the fix:**
+
+- ★ `[KB]` **Story spoilers: the Search tab's entry lands on the section line, not on the new row** — **OPEN, found 2026-10-24 (plan 98 lane B).**
+  Searching for "Story spoilers" opens the section but not the "How much to hide" row.
+
+**Yoshi's Story note: the entry before the fix:**
+
+- ★ `[KB]` **Yoshi's Story's "Starting out" note contradicts itself about its levels** — **OPEN, found 2026-10-24 (plan 98 lane G3).**
+  The note (section 376 in `data/kb/strategy_seed.json`) says "24 levels split across four worlds of six pages" and also "only six levels are played in any one run". The real game has six worlds of four levels. Lane G3 kept those numbers out of the glossary words. The note needs correcting, then a library rebuild.
+
+**Hide more on screen: the entry before the fix:**
+
+- ★★ `[KB]` **Story spoilers: under Hide more, a cover with no boss name in it still opens on a game with no story profile** — **OPEN, found 2026-10-24 (plan 98 lane B).**
+  On screen, covers on a no-story game are opened unless they name a protected note, so the tier is not on the screen side.
+
+**The symptom question: the entry before the wording fix:**
+
+- ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back
+  2026-09-06 (D81).** "The game drops me back to the library" reaches no crash tip, because the tip search needs a topic
+  word. The held fix (a meaning search) attached wrong tips, six measured; it stays held (re-measured 2026-10-24: 8 of 24 plain sentences reach a tip today, the held branch reaches all 24 but only 13 right). Older notes: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  **Second opinion 2026-10-24 (plan 98 consult 2):** no score cut-off is worth building (two are already on). The fix is wording, written up in the Next entry "A troubleshooting question mostly never reaches the tips".
+  [Detail](roadmap-kb-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips)
+
+**A troubleshooting question mostly never reaches the tips: the entry before the wording fix:**
+
+- ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.** Nine of ten
+  ordinary problem sentences ("my game keeps crashing") reached nothing when measured 2026-09-07, because the word "crash"
+  alone is too weak to route a question. Remeasured 2026-10-24 (plan 98 lane F): 8 of 24 plain sentences reach a tip, 6 of them right (see the symptom entry in Bugs). (D81, D85) Older notes: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  **Second opinion 2026-10-24 (plan 98 consult 2): fix the wording in two places (five tips and the router's topic words), not a cut-off.** Two problems have no tip at all (sound to the TV instead of headphones; menus out of place on a TV), and the 24 test sentences need their right tips written into the fixture before any gate. The word lists: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  [Detail](roadmap-kb-details.md#a-troubleshooting-question-mostly-never-reaches-the-tips)

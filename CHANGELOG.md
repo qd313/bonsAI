@@ -73,6 +73,12 @@ All notable changes to this project are documented in this file.
 - **A route look for the strategy checklist.** A checklist of three or more steps is drawn as a line of dots: the next step open, later steps covered, and A shows the next one.
 - **A warning when the notes are about something else.** The "No close match" line now shows whenever the thing a question names is in none of the attached notes, even with a game running, and it no longer vanishes when the answer echoes a note.
 - **The test-library button's hint is right.** It now says it installs the library built with this plugin, for testing, and that players download the library from the Ollama tab.
+- **A thank-you or a greeting no longer repeats the last answer.** "Thank you", "hello" and questions about the time, date or weather now get a short reply of their own, with no notes searched, and the boss you were asking about is kept for your next real follow-up.
+- **Route steps can say what they need.** A step that needs an item, an ability or an unlock now ends with "Needs: ...", in the shape the panel already draws. The steps you opened by hand are now saved with your ticks and cleared with them.
+- **Hide more keeps covers shut on games with no story.** The "How much to hide" setting now reaches the screen, and searching "spoilers" or "how much" in the Search tab lands on that row.
+- **Plain problem sentences reach the troubleshooting tips.** Five tips use the words people type, two new tips cover sound going to the TV and menus out of place on a TV, and "game won't open" reaches the launch tip. On the PC test, 17 of 24 plain sentences now reach a tip, up from 8.
+- **A screenshot taken while a game runs is read as that game.** The picture rules now say the running game named to the AI is the game in the picture.
+- **Fixes in the library:** Yoshi's Story's levels read six worlds of four. Baldur's Gate 3, GTA San Andreas, The Sims 4 and Portal 2 gain enemy and item notes (51 in all). They arrive with the next library update.
 
 ## [0.6.0] - 2026-10-23
 

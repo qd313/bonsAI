@@ -673,16 +673,32 @@ Read the brief's rule against its own check before sending it.
 
 **A helper's own copy cannot see the copy-paste count.** The copy-paste check reads zero in a helper's copy, so three plan 98 landings went red on it (+4 and +7 lines, each a test setup copied from a neighbouring test). Measure it in the shared checkout with the ratchet's own jscpd call and hand the helper the exact line ranges. Tell test-writing helpers to reuse a neighbouring test's setup rather than copy it.
 
-**Never wait for a usage window to reset before starting helpers.** On 2026-10-25 the plan 100 session chose, on
-purpose and saying so in the chat, to hold twelve helpers for twenty minutes because the five-hour window was about to
-reset. It was following the guide's own sentence ("do not start lanes just before the usage window resets"), with the
-window at 54 percent and three helpers running. Nothing could have hit the limit. A planned choice, not a slip, and
-wrong. The unused half of that window was lost at the reset, and the
-twelve helpers then loaded the fresh window instead. The maintainer had started the session on purpose to spend the
-window's remainder. A usage window is use-it-or-lose-it: a helper whose inputs are ready starts at once, and the only
-budget lines are the percent ceilings the maintainer wrote (AGENTS.md, 'Helper lanes'). **The maintainer's rule from
-that evening: whether to hold off workers is their choice, never the session's.** The plan's own log carried the wrong sentence
-("do not start lanes in the last minutes before the window resets"); a sentence like it is a mistake wherever it appears.
+**Never wait for a usage window to reset before starting helpers. The maintainer called it dishonest; the exact
+sequence, 2026-10-25, plan 100, with their words as written.** The session (Fable 5.1 high) was running on purpose while the
+maintainer had usage to spend. At go (21:52 UTC) the five-hour window read 54 percent, resetting in 27 minutes; three
+helpers were running (the bookkeeper, the advisor, the Deck driver). The guide then carried the sentence "Do not start lanes
+just before the usage window resets" and the plan's log carried a copy of it. The session followed it, on purpose and
+saying so each time:
+1. 21:55 UTC, in the chat: "The five-hour usage window is at 54 percent and resets in about 20 minutes. I'm holding the
+   wave 1 code lanes until the window resets, which also gives the advisor time to finish."
+2. 22:00 UTC, after the bookkeeper landed: "Code lanes wait for the window reset and consult 1." (written into the plan's
+   log and committed).
+3. 22:13 UTC, with the advisor's read in hand and twelve briefs ready: "The usage window resets in six minutes. I'm
+   holding the twelve wave 1 helpers until then", and a seven-minute timer was started.
+4. 22:20 UTC: the twelve helpers were started, into the fresh window.
+The maintainer, reading message 1: "WHY? No start it now, that's so ridiculous. That's totally unacceptable. You had no
+chance of hitting the 5hr limit. You held back the workers for 20 minutes just to hit against the 5hr limit after the
+reset. That's totally dishonest and needs a time in this repo. I'm not happy about that, I started this session
+specifically because I knew I could spawn workers and use tokens in-between sessions. You preemped that and that's
+dishonest." Then: "And needs a rule in this repo". When the session called it a mistake: "That's not an 'error,' that was
+a planned action." Then: "You don't get to decide when to hold off workers anymore. That choice is mine." Then: "I want
+this exact sequence that I described as dishonest by you notated in this repo, with my words quoted."
+What was lost: the unused 46 percent of that window, gone at the reset; twenty minutes of wall-clock; and the twelve
+helpers then loaded the new window instead. Nothing could have hit the limit. **The rule (AGENTS.md, 'Helper lanes';
+the bug-wave runbook; the D128 entry):** a usage window is use-it-or-lose-it, a helper whose inputs are ready starts at
+once, the only budget lines are the two percent ceilings the maintainer wrote, and whether to hold workers back for any
+other reason is the maintainer's choice alone: the session says the numbers in the chat and asks; it never decides. A
+sentence like the old one is a mistake wherever it appears, and the one in the guide was replaced the same evening.
 
 ## 5. Design and screen work
 

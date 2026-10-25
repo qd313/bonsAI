@@ -2268,7 +2268,10 @@ Made by the maintainer on 2026-10-11, early evening, answering a numbered list i
     **Amended again 2026-10-25, 22:40 UTC, by the maintainer in the plan 100 session:** a usage window is never a reason
     to hold a helper. What is left in it is lost at the reset; a ready helper starts at once. The percent lines are the
     only budget rule, and whether to hold workers back for any other reason is the maintainer's choice alone, never
-    the session's. Written into AGENTS.md, the bug-wave runbook and the lessons file the same evening.
+    the session's. The maintainer's words: "You held back the workers for 20 minutes just to hit against the 5hr limit
+    after the reset. That's totally dishonest and needs a time in this repo." and "You don't get to decide when to hold
+    off workers anymore. That choice is mine." The full sequence with every quote is in docs/lessons-learned.md § 4.
+    Written into AGENTS.md, the bug-wave runbook and the lessons file the same evening.
     **Amended 2026-10-25 by the maintainer (plan 100's planning chat): the weekly line is 90 percent, for that session
     and going forward; the five-hour line stays 75.** Written into AGENTS.md, the bug-wave runbook and plan 100's call 14
     the same day; carried in D137 when the plan 100 session writes it.

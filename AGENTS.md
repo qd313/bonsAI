@@ -366,13 +366,10 @@ Rules that go with it:
   miss that needed Sonnet to finish counts against it. Not for judgment fixes, features or bookkeeping:
   plan 83 found it falls short there.
 - **Helper lanes:** at most fifteen for feature or bug work (D128, 2026-10-11),
-  at most three for a refactor, because refactor lanes overlap on files. **During plan 86:** 30 reading, 15
-  editing, each owning its files ([helpers](docs/agents/clean-up-helpers.md)). Each brief carries the check on what its copy is based on, which
+  at most three for a refactor, because refactor lanes overlap on files. Each brief carries the check on what its copy is based on, which
   files it owns, one change per commit, and the gates to run. **Lanes hand back code, tests and a
-  short report only** — they never edit the roadmap, the testing documents or the changelog. **Never hold a
-  helper for a usage-window reset:** what is left in the window is lost at the reset, so a helper whose inputs are
-  ready starts at once. **Whether to hold a helper back is the maintainer's choice alone, never the session's**
-  (the maintainer, 2026-10-25). Start no new helpers past 90 percent of the weekly limit or 75
+  short report only** — they never edit the roadmap, the testing documents or the changelog. **A ready helper starts at
+  once; holding one back is the maintainer's choice alone, never the session's** (2026-10-25). Start no new helpers past 90 percent of the weekly limit or 75
   percent of the five-hour window (D128). **The whole procedure for a bug wave** (briefs,
   landing, the Deck in blocks, paperwork, running unattended) is written down in
   [docs/agents/bug-wave-runbook.md](docs/agents/bug-wave-runbook.md); land with `scripts/land_lane.sh`.

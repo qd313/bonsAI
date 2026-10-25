@@ -491,6 +491,16 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   Strategy follow-up prompt, so a deliberate prompt change updates that one hash (the spoiler paragraph stays byte for
   byte); lane P was told to go.
 
+- **22:37 UTC: the budget rule committed** (`bcb6cdbd`, the maintainer's call: a ready helper starts at once; holding
+  workers back is the maintainer's choice alone). **Landed:** F (`811fb977`, `426af298`), P (`e1c58a3d`, `ed612062`; the
+  Strategy follow-up fingerprint updated on purpose). **Done in their copies, landing in turn:** Y, R (three commits), V
+  (two), W (Haiku, one commit after one message), N1 (seven Baldur's Gate 3 notes: Wikipedia has no fight advice, so five
+  are lore; **the maintainer read them in the chat and chose to land all seven, with a Verify entry in the knowledge-base
+  roadmap for their own read**), N2 (fifteen GTA San Andreas notes, body armor included). Still building: T, N3, N4; X is
+  on its Hide more answer run (its first two numbers: 8 of 24 sentences reach a tip, 7 right by hand; search 88.1 in a
+  hundred in the first three on the held-back questions). Lane F's note: the chat history itself may still carry the
+  boss advice into a thank-you reply; the Deck check decides.
+
 ## 13. Report
 
 Not yet written.

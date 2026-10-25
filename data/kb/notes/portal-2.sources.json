@@ -190,5 +190,87 @@
         "Gel cannot be applied to transparent surfaces (such as glass), and will pass through grating (also without painting it)."
       ]
     }
+  },
+  "1310": {
+    "name": "Portal Gun",
+    "page": "Handheld Portal Device",
+    "page_url": "https://theportalwiki.com/wiki/Handheld_Portal_Device",
+    "revision": "193075",
+    "lines": {
+      "Summary": [
+        "is the experimental tool designed to place two portals that objects can pass through.",
+        "This is the primary tool players are equipped with to complete Test Chambers.",
+        "If a portal of the other color is already placed, these two portals will be linked.",
+        "The Handheld Portal Device also has the ability to pick up and manipulate objects directly in front of it"
+      ],
+      "Uses": [
+        "The Handheld Portal Device is designed to create and place portals on immobile surfaces, or surfaces covered with Conversion Gel that are big enough for the Portals to be opened.",
+        "If a portal of the same color is already placed, it will be closed and the new one will be used instead, limiting the player to the use of only two portals at a time. Nothing will happen if a portal is shot at an enemy or other object."
+      ],
+      "Tips": [
+        "The glass chamber and a light on the top of the device will glow with the color of the previously placed portal.",
+        "The Portal Device in Portal 2 also lacks the ability to slightly launch/drop objects using the primary and secondary fire keys respectively."
+      ]
+    }
+  },
+  "1311": {
+    "name": "Material Emancipation Grill",
+    "page": "Material Emancipation Grill",
+    "page_url": "https://theportalwiki.com/wiki/Material_Emancipation_Grill",
+    "revision": "188569",
+    "lines": {
+      "Summary": [
+        "Emancipation Grills disintegrate unauthorized Aperture Science equipment and block any portal that passes through, while allowing the player and the Handheld Portal Device to pass without issue.",
+        "Emancipation Grills appear more solid in nature compared to Portal. They are light blue in coloring and have a shimmering water-like appearance.",
+        "(also known as Emancipation Grills or Fizzlers)"
+      ],
+      "Uses": [
+        "vaporize any unauthorized equipment that passes through it - for instance, the Aperture Science Weighted Storage Cube",
+        "When a Sentry Turret passes through the grill, it emits a long",
+        "Portals also cannot pass through the Grill.",
+        "The Emancipation Grill also causes the Handheld Portal Device to shake, signaling that it has \"rebooted\", and that any portals that have been placed have now been removed."
+      ],
+      "Tips": [
+        "The Emancipation Grill will glow brightly in Portal 2 as objects approach it to warn the player that it will vaporize the object once they come into contact."
+      ]
+    }
+  },
+  "1312": {
+    "name": "Portal-able surfaces",
+    "page": "Surfaces",
+    "page_url": "https://theportalwiki.com/wiki/Surfaces",
+    "revision": "182535",
+    "lines": {
+      "Summary": [
+        "a portal can be placed upon any light-colored flat surface, whereas an uneven or dark surface cannot be used in this way."
+      ],
+      "Uses": [
+        "the portal-able surfaces in the test chambers",
+        "tend to be white in appearance",
+        "They've been changed from a bronze-like color to black with grey lines"
+      ],
+      "Tips": [
+        "Glass, despite being a flat surface in-game, automatically repels both Portals and Gels.",
+        "In Portal 2, the only way to overcome some puzzles that lack portal-conductive surfaces is through the use of Gels."
+      ]
+    }
+  },
+  "1313": {
+    "name": "Frankenturret",
+    "page": "Turrets",
+    "page_url": "https://theportalwiki.com/wiki/Turrets",
+    "revision": "192928",
+    "lines": {
+      "Summary": [
+        "Frankenturrets are bizarre Sentry Turret-Weighted Storage Cube hybrids in the single-player campaign of Portal 2.",
+        "Frankenturrets do not speak, and instead emit incomprehensible chirping sounds."
+      ],
+      "Uses": [
+        "They are harmless, their the only difference from normal cubes being that Frankenturrets will hop around aimlessly when not placed on a button."
+      ],
+      "Tips": [
+        "When picked up by Chell, they retract their legs inside the cube. If they fall over on their sides or upside down, they will wave their legs, trying to get up."
+      ]
+    }
   }
 }

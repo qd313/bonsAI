@@ -111,6 +111,50 @@
       "source_license": "CC-BY-4.0",
       "source_version": "191504",
       "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1310,
+      "game_id": 12,
+      "section_type": "item",
+      "name": "Portal Gun",
+      "card": "Summary: The Handheld Portal Device, the main tool you are equipped with to complete test chambers. It places two linked portals, and it also picks up and holds objects in front of it.\nUses: It places portals on immobile surfaces, or on surfaces covered with Conversion Gel that are big enough. Only two portals exist at once: a new portal of a colour you already have closes the old one. Shooting at an enemy or an object does nothing.\nTips: The glass chamber and a light on top glow with the colour of the portal you placed last. In Portal 2 it can no longer slightly launch or drop a held object with the fire buttons.",
+      "source_url": "https://theportalwiki.com/wiki/Handheld_Portal_Device",
+      "source_license": "CC-BY-4.0",
+      "source_version": "193075",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1311,
+      "game_id": 12,
+      "section_type": "item",
+      "name": "Material Emancipation Grill",
+      "card": "Summary: A shimmering light-blue field, also called a fizzler. It vaporizes unauthorized equipment that passes through it and lets you and the Portal Gun through.\nUses: It destroys cubes and turrets sent through it, and no portal can pass through it. It also resets your Portal Gun: any portals you placed are removed.\nTips: In Portal 2 the grill glows brightly as an object nears it, warning that it will vaporize the object on contact.",
+      "source_url": "https://theportalwiki.com/wiki/Material_Emancipation_Grill",
+      "source_license": "CC-BY-4.0",
+      "source_version": "188569",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1312,
+      "game_id": 12,
+      "section_type": "mechanic",
+      "name": "Portal-able surfaces",
+      "card": "Summary: A portal goes only on a light-coloured, flat surface. An uneven or dark surface cannot hold one.\nUses: In Portal 2 the surfaces that take a portal tend to be white panels, and the ones that refuse them are black with grey lines.\nTips: Glass, though flat, repels both portals and gel. In Portal 2, gel is the only way past some puzzles that have no surface that takes a portal.",
+      "source_url": "https://theportalwiki.com/wiki/Surfaces",
+      "source_license": "CC-BY-4.0",
+      "source_version": "182535",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1313,
+      "game_id": 12,
+      "section_type": "item",
+      "name": "Frankenturret",
+      "card": "Summary: A hybrid of a Sentry Turret and a Weighted Storage Cube, with legs. It does not speak; it makes odd chirping sounds.\nUses: It is harmless and works like a cube. The only difference is that it hops around aimlessly when it is not placed on a button.\nTips: Pick it up and it pulls its legs into the cube. If it falls on its side or upside down it waves its legs, trying to get up.",
+      "source_url": "https://theportalwiki.com/wiki/Turrets",
+      "source_license": "CC-BY-4.0",
+      "source_version": "192928",
+      "crawled_at": "2026-10-25"
     }
   ]
 }

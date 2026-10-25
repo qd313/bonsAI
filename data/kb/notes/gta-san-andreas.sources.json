@@ -543,6 +543,262 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1110,
+      "name": "Enemy Hydra jets (wanted level)",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Hydra",
+      "main_revision": "2070353",
+      "lines": [
+        {
+          "line": "Summary: From four stars, if you are in an aircraft or a Vortex, two Hydra jets chase you and try to shoot you down with heat-seeking missiles.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Hydra",
+              "revision": "2070353",
+              "quoted": [
+                "Once the player attains a four star wanted level or higher and is in an aircraft or in a Vortex, two Hydras will pursue and try to shoot down the player."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "enemy Hydra planes will chase the player and attempt to shoot them down using heat-seeking missiles."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: They tend to fly in lazy circles and do not use flares, so they often crash into buildings when they fly over cities.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Hydra",
+              "revision": "2070353",
+              "quoted": [
+                "The enemy Hydras should be no match, as they have a penchant for flying in lazy circles and not deploying flares, and as a result they will easily crash into buildings when flying in cities."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Flying a commercial AT-400 or a cargo Andromada brings none. If you fly a Hydra yourself, dropping its white flares can steer their missiles away, but a flare dropped too early or too late may not work.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Hydra",
+              "revision": "2070353",
+              "quoted": [
+                "flying an AT-400 or an Andromada will not spawn any Hydra in the sky.",
+                "The Hydra can deploy white flares that will deviate incoming heat-seeking missiles from enemy Hydras at high wanted levels",
+                "Deviating the flares is not always guaranteed to work, as dropping one too early or too late may render it ineffective."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_San_Andreas",
+              "revision": "2082835",
+              "quoted": [
+                "The only exception to this is the AT-400, which is a commercial plane, and the Andromada, a cargo plane."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1111,
+      "name": "Ballas",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+      "main_revision": "2070195",
+      "lines": [
+        {
+          "line": "Summary: The largest and most powerful gang in Los Santos and Grove Street's bitter rival. Their colour is purple, and they come in four sets: Front Yard, Rollin' Heights, Kilo Tray and Temple Drive.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+              "revision": "2070195",
+              "quoted": [
+                "The Ballas are the largest and most powerful black/Afro-American street gang in Los Santos and have a bitter rivalry with the Grove Street Families.",
+                "The Ballas come in four sets – Front Yard Ballas, Rollin' Heights Ballas, Kilo Tray Ballas and the Temple Drive Ballas.",
+                "their gang color being purple"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weapons: They are usually unarmed or carry Micro SMGs and 9mm pistols, but in a gang war with them they have AK47s, SMGs, shotguns, 9mm pistols, Micro SMGs and baseball bats, and in some missions Tec-9s.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+              "revision": "2070195",
+              "quoted": [
+                "They are either unarmed or carry Micro SMGs and 9mm pistols, but when in gang wars with them, they have AK47s, SMGs, shotguns, 9mm pistols, Micro SMGs, and baseball bats. In some missions, they are equipped with Tec-9s."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Killing three of their members on foot in an area you want to take starts a gang war, the area flashes red on the radar, and they attack in three waves. Stock up on health, armor and ammo first, watch the radar to see where they come from, and shoot from long distances or rooftops if you can.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+              "revision": "2070195",
+              "quoted": [
+                "One must enter an area that they wish to control, and kill every opposition member in sight.",
+                "Killing three members on foot will provoke a gang war, and the area under attack will flash red on the radar. The opposition attack in three waves to defend their land.",
+                "Keep a close eye on the radar, and watch where the attackers are coming from.",
+                "having a plentiful supply of health and armor, as well as plenty of ammo for weapons before starting the war is recommended. If possible, shoot from long distances or from rooftops."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1112,
+      "name": "Los Santos Vagos",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+      "main_revision": "2070195",
+      "lines": [
+        {
+          "line": "Summary: A large, powerful Mexican gang in the far north and east of Los Santos (Las Colinas, East Beach and Los Flores) who wear yellow bandanas and are known to attack in large numbers.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+              "revision": "2070195",
+              "quoted": [
+                "The Vagos are a large and powerful Mexican Los Santos street gang that sport yellow bandanas, and occupy a majority of the far north and east areas of Los Santos, namely Las Colinas, East Beach, and Los Flores.",
+                "They are known to attack in large numbers."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weapons: They are unarmed or carry 9mm pistols; in a gang war they also have Micro SMGs, SMGs, AK47s, shotguns and baseball bats, and in some missions Tec-9s and M4s.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+              "revision": "2070195",
+              "quoted": [
+                "They are either unarmed or carry 9mm pistols. During a gang war, they are also equipped with Micro SMGs, SMGs, AK47s, shotguns, and baseball bats. In some missions, they are also equipped with Tec-9s and M4s."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They are sworn enemies of the Varrios Los Aztecas and also enemies of Grove Street and the Ballas. A gang war against them comes in three waves, so have health, armor and ammo ready first.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+              "revision": "2070195",
+              "quoted": [
+                "They are sworn enemies of the Varrios Los Aztecas, but are also enemies with the Grove Street Families and Ballas.",
+                "The opposition attack in three waves to defend their land.",
+                "having a plentiful supply of health and armor, as well as plenty of ammo for weapons before starting the war is recommended."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1113,
+      "name": "Varrios Los Aztecas",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+      "main_revision": "2070195",
+      "lines": [
+        {
+          "line": "Summary: A small-time Mexican gang based in El Corona, Little Mexico and Unity Station, recognised by turquoise bandanas.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+              "revision": "2070195",
+              "quoted": [
+                "The Varrios Los Aztecas are a small-time Latin/Mexican Los Santos street gang based in the barrios of El Corona and Little Mexico in addition to Unity Station",
+                "distinctly recognized by their turquoise bandanas"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weapons: They are unarmed or carry 9mm pistols and Micro SMGs.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+              "revision": "2070195",
+              "quoted": [
+                "They are either unarmed or carry 9mm pistols and Micro SMGs."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Cesar Vialpando, a gang veteran, is a friend of CJ, but the gang is hostile and may attack CJ and his gang unprovoked. The San Fierro Rifa also wear turquoise bandanas, so do not mix the two up: the gangs are violent rivals.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+              "revision": "2070195",
+              "quoted": [
+                "Gang veterans include Cesar Vialpando, Jose, Sunny, Gal and Hazer.",
+                "Despite the fact that Cesar, a high ranking member (who may also be the leader), is a friend of the protagonist, this gang will be hostile towards the player and may attack CJ and his gang unprovoked.",
+                "They can also be identified by their turquoise bandanas, much like the Varrios Los Aztecas (but not to be confused with them, as they have a strong violent rivalry)."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1114,
+      "name": "San Fierro Rifa",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+      "main_revision": "2070195",
+      "lines": [
+        {
+          "line": "Summary: A Mexican/Hispanic San Fierro gang that holds Garcia, Doherty, King's and Battery Point and is led by T-Bone Mendez.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+              "revision": "2070195",
+              "quoted": [
+                "The San Fierro Rifa are a Mexican/Hispanic San Fierro street gang that controls the areas of Garcia, Doherty, King's, and Battery Point.",
+                "T-Bone Mendez is the leader of the Rifa."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Danger: The least harmful gang in the game: they are unarmed or carry just 9mm pistols, and they are known for running away from CJ when they feel threatened.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+              "revision": "2070195",
+              "quoted": [
+                "They are either unarmed or carry just 9mm pistols",
+                "They are the least harmful gang in the game.",
+                "They're known for running away from CJ when they are feeling threatened"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They will often ask CJ about his gangbanging status, and if you answer positively they will attack. They wear turquoise bandanas like the Varrios Los Aztecas but are strong rivals of them.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_San_Andreas",
+              "revision": "2070195",
+              "quoted": [
+                "will often question CJ about his gangbanging status. If the player chooses to respond positively, they will attack.",
+                "They can also be identified by their turquoise bandanas, much like the Varrios Los Aztecas (but not to be confused with them, as they have a strong violent rivalry)."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

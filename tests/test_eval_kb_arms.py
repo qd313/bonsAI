@@ -32,6 +32,24 @@ def _load_eval_module():
     return load_script("eval_kb_embed_models", register=True)
 
 
+def _all_card_sections():
+    """Every section the library builder merges: the seed's, then each data/kb/notes/*.json's.
+
+    The builder reads the notes folder as well as the seed since plan 98, so a label may
+    name a card from either. Source sidecars (*.sources.json) are not notes and are skipped.
+    """
+    kb_dir = REPO_ROOT / "data" / "kb"
+    seed = json.loads((kb_dir / "strategy_seed.json").read_text(encoding="utf-8"))
+    sections = list(seed["sections"])
+    notes_dir = kb_dir / "notes"
+    if notes_dir.is_dir():
+        for path in sorted(notes_dir.glob("*.json")):
+            if path.name.endswith(".sources.json"):
+                continue
+            sections.extend(json.loads(path.read_text(encoding="utf-8")).get("sections", []))
+    return sections
+
+
 class EvalArmsTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -224,10 +242,7 @@ class EvalArmsTests(unittest.TestCase):
         data = json.loads(
             (REPO_ROOT / "tests" / "fixtures" / "kb_eval_v2.json").read_text(encoding="utf-8")
         )
-        seed = json.loads(
-            (REPO_ROOT / "data" / "kb" / "strategy_seed.json").read_text(encoding="utf-8")
-        )
-        card_names = {s["name"] for s in seed["sections"]}
+        card_names = {s["name"] for s in _all_card_sections()}
         phantom = []
         for row in data["queries"]:
             raw = row.get("expect_section")
@@ -247,7 +262,7 @@ class EvalArmsTests(unittest.TestCase):
         seed = json.loads(
             (REPO_ROOT / "data" / "kb" / "strategy_seed.json").read_text(encoding="utf-8")
         )
-        carded = {s["game_id"] for s in seed["sections"]}
+        carded = {s["game_id"] for s in _all_card_sections()}
         uncarded = [g["canonical_title"] for g in seed["games"] if g["game_id"] not in carded]
         if uncarded:
             self.assertEqual(

@@ -534,6 +534,17 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   Runbook L1 written: [assets/100-runbook-block-L1.md](assets/100-runbook-block-L1.md) (the "Needs" check presses a
   branch button first; the test library goes in through the Developer tab after the deploy).
 
+- **23:30 UTC: the wave 1 chain landed** T (tip `ae8c59b6`), N1 (`5e4af55d`), N2 (`dd4df3d1`), N3 (`06b8abd0`), N4
+  (`ace6314f`) and Q's two commits; Q's landing then failed the label test on ten GTA rows whose names had lost their
+  bracketed part (the session's slip in passing the names on); Q fixed the ten in its copy (`b39818a8`), landing after
+  the deploy. **The bookkeeper's wave 1 sweep** landed as `0e2b9b54`: seven entries to Deck check owed naming their rows,
+  the Baldur's Gate 3 Verify entry for the maintainer's read, two new Bugs entries (the two Sims 4 fire notes that
+  disagree; the eval script that always writes its JSON), nine testing rows, six changelog lines. **Lane U done** (four
+  commits); consult 3a read the diff: land it; Remove is never a Down landing (Right from Update only), which the L2 walk
+  must say; the focus-graph record needs the new chain (bookkeeper, wave 2 sweep). **The library with the new notes**
+  built on this PC: 465 notes, 166 tips, every vector; lane X's second half started on it in a fresh copy. **Deploy for
+  block L1 started 23:34 UTC.**
+
 ## 13. Report
 
 Not yet written.

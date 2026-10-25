@@ -287,6 +287,10 @@ class CompatTopicRouterTests(unittest.TestCase):
         what limits the rest. The two that were bought are V2-W2-SYM-08 (stutter) and
         V2-W2-SYM-15 (a torn picture).
 
+        **Plan 100 lane T then added plain words on purpose** (the second opinion of 2026-10-24
+        asked for words, not a cut-off): the counts asserted below are after that work, and the
+        class PlainProblemWordsRouteTests pins each word added. V2-BLIND-H55 was left alone.
+
         The clearest single case is V2-BLIND-H55, *"the game drops me back to the library
         a few minutes in"*. That is the exact crash symptom the wave-two tips were
         rewritten to describe, and the question still does not route, because the rule
@@ -308,24 +312,46 @@ class CompatTopicRouterTests(unittest.TestCase):
             [
                 "V2-BLIND-H19",
                 "V2-BLIND-H55",
-                # The wave-two blind batch. Sixteen of its twenty-four rows miss; the eight
-                # that reach are SYM-08, -11, -13, -15, -17, -18, -21 and -24.
+                # The wave-two blind batch, with a game running. Thirteen of its twenty-four rows
+                # reach (plan 100 lane T added the plain words for black screens, no-space
+                # messages, sound on the TV and menus on a TV: SYM-05, -06, -12, -14 and -23 now
+                # reach, on top of -08, -11, -13, -15, -17, -18, -21 and -24). The four crash
+                # sentences (SYM-01 to -04) reach only with nothing running; see below.
                 "V2-W2-SYM-01",
                 "V2-W2-SYM-02",
                 "V2-W2-SYM-03",
                 "V2-W2-SYM-04",
-                "V2-W2-SYM-05",
-                "V2-W2-SYM-06",
                 "V2-W2-SYM-07",
                 "V2-W2-SYM-09",
                 "V2-W2-SYM-10",
-                "V2-W2-SYM-12",
-                "V2-W2-SYM-14",
                 "V2-W2-SYM-16",
                 "V2-W2-SYM-19",
                 "V2-W2-SYM-20",
                 "V2-W2-SYM-22",
-                "V2-W2-SYM-23",
+            ],
+        )
+
+        # With nothing running -- the Deck check -- the weak "crash" topic routes alone, so the
+        # four crash sentences reach too: seventeen of the twenty-four. The seven that miss are
+        # choppy/laggy (-07), buttons (-09, -10), the picture ripping (-16), finding the PC
+        # (-19, -20; no Deck tip exists for it) and an update that sits there (-22).
+        missed_with_nothing_running = [
+            q["id"]
+            for q in holdout
+            if not question_targets_compat_corpus(q["query"], game_in_context=False)
+        ]
+        self.assertEqual(
+            missed_with_nothing_running,
+            [
+                "V2-BLIND-H19",
+                "V2-BLIND-H55",
+                "V2-W2-SYM-07",
+                "V2-W2-SYM-09",
+                "V2-W2-SYM-10",
+                "V2-W2-SYM-16",
+                "V2-W2-SYM-19",
+                "V2-W2-SYM-20",
+                "V2-W2-SYM-22",
             ],
         )
 
@@ -340,6 +366,109 @@ class CompatTopicRouterTests(unittest.TestCase):
             q["id"] for q in strategy if question_targets_compat_corpus(q["query"])
         ]
         self.assertEqual(false_positives, [])
+
+
+class PlainProblemWordsRouteTests(unittest.TestCase):
+    """Plan 100 lane T: the plain words people type for the five problems the tip sheet covers.
+
+    Of 24 plain problem sentences written blind on 2026-09-07, 8 reached any tip. The rules wanted
+    "crash", "blank", "storage" -- jargon -- where people say "closes on its own", "goes black",
+    "no space left". Each case below is one rule added for that, written in other words than the
+    blind sentences so no blind row is spent. Words only: no floor and no cut-off moved.
+    """
+
+    # topic -> questions that must reach it. Crash cases are asked with nothing running, the way
+    # the weak "crash" topic is allowed to route alone (see question_targets_compat_corpus).
+    CASES = {
+        "crash": (
+            "my game keeps quitting on me",
+            "the game quits and I am back at the home screen",
+            "game keeps quiting",
+            "my game closes on its own",
+            "the game is closing by itself",
+            "the game just shut itself off",
+            "my game shuts off in the middle of playing",
+            "the game shut off again",
+            "something dumps me back at the home screen",
+            "my game wont open",
+            "the game wont even start",
+            "the game doesnt open anymore",
+            "the game will not start",
+            "nothing happens when i launch the game",
+        ),
+        "storage": (
+            "not enough space left to install a new game",
+            "there isnt enough space for another game",
+            "no space left on it for a new game",
+            "it says no space left when i install",
+            "i cant install anything because of space",
+        ),
+        "display": (
+            "the screen goes black when the game opens",
+            "my screen turns black",
+            "the screen went black",
+            "the screen stays black",
+            "the screen turns completely black",
+            "the menus sit off the edge on the tv",
+            "tv menus are hard to read",
+            "the menus are in the wrong spot on the television",
+            "the tv cuts off the edge of the picture",
+            "the television is cutting off the edge of the menus",
+        ),
+        "audio": (
+            "sound comes out of the tv speakers",
+            "my headphones are plugged in but it plays on the speakers instead of headphones",
+            "the sound is coming out of the tv",
+        ),
+    }
+
+    def test_each_plain_phrase_reaches_its_topic_with_nothing_running(self):
+        for topic, questions in self.CASES.items():
+            for question in questions:
+                with self.subTest(topic=topic, question=question):
+                    self.assertIn(topic, match_compat_corpus_topics(question))
+                    self.assertTrue(question_targets_compat_corpus(question, game_in_context=False))
+
+    def test_a_game_closing_on_its_own_reaches_the_tips_at_the_gate_with_nothing_running(self):
+        """The Deck's level: the Ask gate routes it to the tip sheet, not the strategy notes."""
+        for question in (
+            "game keeps closing on its own",
+            "it says there is no space left",
+            "the screen goes black when I open it",
+        ):
+            with self.subTest(question=question):
+                gate = should_retrieve_knowledge(
+                    use_local_knowledge_base=True, ask_mode="speed", question=question, app_id="", app_name=""
+                )
+                self.assertEqual(gate, (True, "compat"))
+
+    def test_questions_that_are_not_problems_still_do_not_route(self):
+        for question in (
+            "how do I beat the boss",
+            "what should I build first",
+            "thank you very much",
+            "I do not have enough space in my backpack for the sword",
+            "the pause menu has an option for the sound of the sword",
+        ):
+            with self.subTest(question=question):
+                self.assertFalse(question_targets_compat_corpus(question))
+                self.assertFalse(question_targets_compat_corpus(question, game_in_context=False))
+
+    def test_a_crash_phrase_stays_weak_with_a_game_running(self):
+        """Closing on its own or quitting is only a troubleshooting sentence with no game open."""
+        for question in (
+            "my game keeps quitting on me",
+            "the game wont even start",
+            "the gate closes on its own after ten seconds so run through",
+        ):
+            with self.subTest(question=question):
+                self.assertFalse(question_targets_compat_corpus(question, game_in_context=True))
+
+    def test_finding_a_pc_on_the_network_is_not_routed_because_no_tip_answers_it(self):
+        """Tips 110 and 111 are about the Steam Frame. A Deck that cannot find its PC has no tip
+        today, and routing the sentence would hand it the hotel Wi-Fi tip. Add the words with the
+        tip, not before it (see the lane T report for the proposed tip)."""
+        self.assertNotIn("network", match_compat_corpus_topics("cant find my pc on the network"))
 
 
 if __name__ == "__main__":

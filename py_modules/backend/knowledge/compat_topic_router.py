@@ -162,6 +162,20 @@ _TOPIC_RULES: dict[str, tuple[tuple[str, ...], ...]] = {
         ("disk space",),
         ("move", "library"),
         ("storage",),
+        # Plan 100 lane T: how people say "the drive is full" without the word "storage". Each
+        # needs a second word -- "not enough space" alone is also what a full backpack says.
+        # ("isnt enough space",) is the spelling _normalize makes of "isn't enough space".
+        ("not enough space", "install"),
+        ("not enough space", "game"),
+        ("isnt enough space", "game"),
+        ("no space left", "install"),
+        ("no space left", "game"),
+        ("cant install", "space"),
+        # What the error message itself says, which has no "game" or "install" in it.
+        ("says", "enough space"),
+        ("says", "no space left"),
+        ("message", "enough space"),
+        ("message", "no space left"),
     ),
     "streaming": (
         ("remote play",),
@@ -192,6 +206,9 @@ _TOPIC_RULES: dict[str, tuple[tuple[str, ...], ...]] = {
         ("wifi", "cannot see"),
         ("wifi", "cant see"),
         ("wifi", "cant find"),
+        # Plan 100 lane T: no rule for "cant find my pc" / "same network". The tips that answer
+        # it (110 and 111) are about the Steam Frame, not a Deck finding its PC, so a rule would
+        # hand the question the hotel Wi-Fi tip. Add the words in the same commit as a tip for it.
     ),
     "updates": (
         ("steamos update",),
@@ -241,6 +258,11 @@ _TOPIC_RULES: dict[str, tuple[tuple[str, ...], ...]] = {
         ("audio", "output device"),
         ("audio", "crackl"),
         ("headphones", "not"),
+        # Plan 100 lane T: sound on the wrong output. "tv speakers" is not an ordinary phrase in a
+        # strategy question; "instead of" needs "headphones" beside it.
+        ("tv speakers",),
+        ("headphones", "instead of"),
+        ("sound", "out of the tv"),
     ),
     "display": (
         ("refresh rate",),
@@ -254,6 +276,20 @@ _TOPIC_RULES: dict[str, tuple[tuple[str, ...], ...]] = {
         # a stem with it so needs its own entry. Paired with "screen" -- "torn" alone shows
         # up in plenty of sentences that have nothing to do with a display.
         ("screen", "torn"),
+        # Plan 100 lane T: a black screen in the words people use. "black screen" itself stays
+        # a crash word (weak, below); these name the screen going black and need "screen" beside
+        # them so "goes black" alone (a fade, a death) does not route.
+        ("screen", "goes black"),
+        ("screen", "turns black"),
+        ("screen", "went black"),
+        ("screen", "stays black"),
+        ("screen", "completely black"),
+        # Menus on a TV. "television", "menus" already routes to bpm; the display tips cover
+        # overscan and the picture's edge, so the same sentence reaches both topics.
+        ("tv", "menus"),
+        ("television", "menus"),
+        ("tv", "off the edge"),
+        ("television", "off the edge"),
     ),
     "performance": (
         ("frame limit",),
@@ -280,6 +316,29 @@ _TOPIC_RULES: dict[str, tuple[tuple[str, ...], ...]] = {
         ("closes itself",),
         ("shuts itself",),
         ("black screen",),
+        # Plan 100 lane T: a game that ends on its own, said the way people say it. Weak like
+        # "crash": it routes alone only with no game running or named. "game" pairs the words
+        # that would otherwise fit a door or a timer ("closes on its own"). "quit" is spelled out
+        # as quits/quitting/quiting because the bare stem also starts "quite". "shut off" and
+        # "shuts off" are different strings for _term_matches, so both are listed.
+        ("clos", "on its own"),
+        ("clos", "by itself"),
+        ("shut itself",),
+        ("game", "shuts off"),
+        ("game", "shut off"),
+        ("game", "quits"),
+        ("game", "quitting"),
+        ("game", "quiting"),
+        ("me back", "home screen"),
+        ("game", "wont open"),
+        ("game", "wont even open"),
+        ("game", "wont start"),
+        ("game", "wont even start"),
+        ("game", "doesnt open"),
+        ("game", "doesnt start"),
+        ("game", "will not open"),
+        ("game", "will not start"),
+        ("nothing happens", "launch"),
     ),
     "deck": (
         ("steam deck",),

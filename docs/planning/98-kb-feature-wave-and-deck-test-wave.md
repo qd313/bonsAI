@@ -334,6 +334,7 @@ Log, one row per consult: time, the question in one line, the answer in one line
 |---|---|---|---|---|
 | 2026-10-24 17:35 | 1: why a made-up or off-subject question still gets notes and sometimes no warning, and the one fix | Two causes. The back end trusts any shared keyword when a game runs ("buy" matched "Buys"), so the line is skipped; fix: show the line whenever none of the question's own subject words is in any attached note. The screen deletes the line when the answer echoes a note (the Bone Hydra case); fix: stop deleting it. "No block" is not a safety signal | Lane L built the back-end rule (measurement first); the screen deletion went to lane D's second round; the Deck pass condition became "the line shown and visible" | about 165,000 tokens, 16 min |
 | 2026-10-24 17:45 | 3: lanes D and H against the focus rules before landing | Land both as is. D: three rough edges for before the release (a skip after an older reason was used, partial "All of them" failures, the ring after a failed call), none on the Deck check's path; check the live turn's notes carry their ids. H: the missing scroll-modelled walk is not a real risk (no handler runs between steps) | D's wiring brief gained the ids test and the failed-call ring hand-over; the other two went to the roadmap | about 146,000 tokens, 9 min |
+| 2026-10-24 21:00 | 5: the report (§ 13) against the evidence | Sound at row level; eight sentences overstated (the warning is not a cure, two thumbs-down halves seen only in tests, Hide more drew fewer covers than Default on the PC test); three closures need a sentence; two Deck sightings and five smaller items missing from 13.5 | § 13 corrected sentence by sentence; the roadmap additions went to the bookkeeper's sweep 5 | about 151,000 tokens, 10 min |
 | 2026-10-24 18:00 | 2: build a "none of these fit" cut-off for plainly-worded Deck problems? | No. Two cut-offs were already on and let 8 of 24 wrong tips through; the scores to tune a third were never saved; the wrong tips are short generic ones that outscore the right tip. A wording job, in two places: five named tips, and the router's topic words. Two problems have no tip at all | Nothing built; the five tips, the router words and the two missing tips go to the roadmap for the maintainer | about 104,000 tokens, 5 min |
 
 ## 8. Things to bring to the maintainer's attention
@@ -463,7 +464,192 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
 
 ## 13. Report
 
-Written at the end, in the shape § 11 names.
+Written 2026-10-24, about 20:50, by the Opus 5.5 extra-high chat that ran the session (go at 16:45). Everything below
+is on `experimental` on this PC, nothing pushed, nothing published.
+
+### 13.1 What the maintainer does next
+
+1. **The checks page** ([Checks Only You Can Do](https://claude.ai/code/artifact/3e5ec678-b219-439d-b952-139d75ff2db4),
+   the new "Saturday 24 October (plan 98)" group at the top): five looks and touches on the Deck's own screen, about
+   fifteen minutes; four calls, each with a safe choice taken.
+2. **Say "push"** when you have read this. About 80 commits on `experimental`.
+3. **Publish the library** after a glance at the word sample below:
+   `python scripts/kb/publish_corpus.py --push-hf --push-github`. Until then only your Deck had the new words, and only
+   during tonight's test (block KR put the published library back).
+4. **Tell the next session the two usage figures** at its start; the cost limiter cannot read them and was never
+   calibrated tonight.
+
+The word sample (six of the 349 new words; 351 with the two Deep Rock Galactic: Survivor already had; each restates its
+own note): **Charm** (Hollow Knight) "Equippable build items that cost
+notches; swap them only on a bench." **Flame belch** (DOOM Eternal) "Burns a group so that kills while they burn give
+armour." **Boons** (Hades) "Powers given by the gods that last for one run." **Nitra** (Deep Rock Galactic: Survivor)
+"The resource that pays for weapons rather than for your dwarf." **nectar** (Pikmin 2) "A drink that flowers a Pikmin
+so it runs and carries faster." **triple jump** (Super Mario 64) "The move you get by running and jumping three times."
+
+### 13.2 What a player notices (once the build and the library reach them)
+
+- **Underlined words in every game**, not only Deep Rock Galactic: Survivor: 351 words across all 38 games, the Nintendo
+  titles included (they have no Steam id, which used to rule them out). Proven on the Deck in Hollow Knight (11 words in
+  one answer) and Super Mario 64.
+- **Settings → Story spoilers → "How much to hide": Hide more, Default, Hide less.** Default is today's rule, byte for
+  byte. Hide more covered Super Mario 64's unnamed boss 3 times of 3 instead of 0; but in the same PC test it drew
+  fewer covers than Default overall (23 in 100 answers against 29) and twice missed a Hades story cover that Default
+  kept: one run, not yet understood (on the roadmap). On the Deck, Hide more covered on the second wording tried;
+  Hide less drew none, but that answer named no boss, so it proves little.
+- **Not really can say a note was wrong** (Wrong tip, Outdated, Wrong edition); that note goes last next time (seen on
+  the Deck, with and without a game). The "Which note was it?" list and the note dropping out after three marks are
+  proven by their tests only. Undo works, but only under the newest answer (see 13.5).
+- **A Strategy checklist is drawn as a route**: dots on a line, the next step open, later steps covered until you
+  reach them.
+- **"No close match in my notes" now shows** when a question names something the notes do not have (a made-up boss, a
+  house to buy), with or without a game running, and the screen no longer deletes it when the answer echoes a note.
+  This is a warning, not a cure: the weak notes still attach and still reach the AI, and tonight it still wrote an
+  answer for a Hades boss that does not exist (behind a spoiler cover); what changed is that the warning now shows
+  under it instead of being hidden.
+- **"Update knowledge base" with a newer test library** says "You have 2026.10.24; the published library is
+  2026.10.17. Nothing to do." and downloads nothing.
+- The Developer tab's test-library button no longer says the public download "is not live yet".
+
+### 13.3 The numbers
+
+- **Built:** 12 lanes (A0, G1 to G3, B, C, D, H, I, F, L, E) and about a dozen follow-up rounds, 80 commits, 101 code
+  and test files (11,088 lines added).
+- **Deck:** 5 blocks (K0, K2, K1, K3, KR), 42 evidence files. Passed: both knowledge-base smoke checks and a third on
+  the final build (Show details itself was not opened in any of them, so that half of the smoke row stays open); the
+  newer-library wording; the button hint; the words in two games; the spoiler row (walks, saves, Hide more covered on
+  the second wording; the Hide less half proves little); the thumbs-down with and without a game (the mark, the store
+  file and the new order both times; the "ranked lower by you" tag seen only with nothing running); Undo on the same
+  answer; the route look (one clean pass, walk saved); the "No close match" line visible on all seven made-up
+  questions with and without a game; the look check on both screens touched. Not proven on the Deck: the "Which note
+  was it?" list and the drop after three marks (by their tests only); the route walk saved tonight could not be
+  replayed in block KR (the newest answer had no checklist); four old saved walks are stale.
+- **Measured on this PC:** the warning rule over 496 questions that get their right note: none gained the line; every
+  device sentence and 80 everyday-ending versions of them warn. The thumbs-down with nothing marked: 568 of 568 fixture
+  questions attach exactly what they did before. The Ali G voice keeps fewer facts (67.8% against 74.6%) and never
+  contradicts a note. Plain-words troubleshooting: 8 of 24 reach a tip today; the held branch would reach all 24, with
+  13 right, 3 half right and 8 wrong.
+  A category note outranks the right note in about 1 question in 100. Screenshots (8 pictures, the Deck's model): with
+  the game handed over it named the game 75 times in 100 and the place 42; with nothing handed over 17 and 29.
+- **On the Deck with Deep Rock Galactic: Survivor running:** answers take about 40 s instead of 15, and 100 s once
+  when the chat summed itself up first (the game holds the graphics chip at 99%; measured with the game at its title
+  screen, not in play). Earlier the same evening, on the same build, four asks in a row got no answer within 3 minutes;
+  that did not repeat and is not explained. The note search is 0.05 s warm, 0.84 s cold.
+- **Second opinions:** four of five (§ 7): the wrong-notes cause, the two screen lanes before landing, the
+  troubleshooting cut-off (not built), and this report against the evidence.
+
+### 13.4 The code work, by area
+
+(File paths here on purpose: this part is the developer's record the maintainer asked for.)
+
+**The library builder** (`scripts/kb/build_rag_db.py`, lane A0, Sonnet medium). It now reads every `*.json` under
+`data/kb/glossary/` and `data/kb/notes/` after the main files, skips `*.sources.json` (the content lanes' note of where
+each word came from), names the file on any refusal, and lets a word name its game by the library's own `game_id`, so
+games with no Steam id can have words. Repeat checks key on the resolved game, so an `app_id` row and a `game_id` row
+for one game still collide. Two shared loaders (`load_glossary_rows`, `load_strategy_seed`) are there for the other
+scripts that still read the main files directly (listed on the roadmap). *Popped up:* an old test pinned the shipped
+glossary at exactly 2 words and went red the moment the first word file landed; fixed to count the merged list.
+
+**The words** (`data/kb/glossary/steam-wiki-titles.json`, `own-and-gta-titles.json`, `nintendo-titles.json`, each with a
+`.sources.json`; lanes G1 to G3, Sonnet high). Every peek and full text restates the game's own notes; the session read
+34 of them against their notes (one in ten), all faithful. *Popped up:* "Smoke alarm" listed as another name for the
+fire extinguisher (removed); a Yoshi's Story note that contradicts itself about its levels (on the roadmap).
+
+**The thumbs-down** (lanes C, Sonnet high, and D, Opus medium, two rounds). Back end:
+`py_modules/backend/knowledge/kb_demote_store.py` (new; `rag_demote.json` in the settings folder, keyed "note:<id>" or
+"tip:<id>" because note and tip numbers overlap), `apply_demotes` called where each ranked list is final in
+`knowledge_base_service.py`, the ids carried into every attached-note entry (`kb_attached_notes.py`, the live snapshot,
+the saved chat in `chats/chat_slot_service.py`), the method `demote_rag_corpus_note` (`main.py`, `rag_corpus_rpc.py`),
+three new reasons in `answer/feedback_service.py`. Screen: `src/features/answer/reply-actions/kbDemoteRows.tsx` and
+`useReplyDemote.ts` (new), `buildReplyActionsElement.tsx`, `replyRatingChoices.ts`, the tag in
+`knowledge-library/buildKbNotesBlockElement.tsx`, the wiring in `answer/transcript/MainTabChatTranscript.tsx`, the
+screen-side call in `knowledge-library/demoteNoteApi.ts`, a stop in `shared/dpad/replyStopRegistry.ts`. *Popped up:*
+the brief would have added a second `kind` field (one already existed) and keyed the store by number alone (a "wrong
+tip" would have lowered an unrelated note); both caught before go. The screen had to be built against a stand-in call
+because the generated method list only accepts names that exist in the back end; the real call came in round 2, with
+three rough edges the second opinion found (the ring after a failed mark, a skip once an older reason was used, partial
+"All of them" failures).
+
+**The spoiler setting** (lane B, Sonnet high, read by the session). `settings/settings_service.py` (`spoiler_tier`), the
+two schema files, `usePluginSettings.ts`, the row `features/settings/SettingsTabSpoilerTierRow.tsx`, its focus entry in
+`useSettingsTabFocus.ts`. The tier rides on the turn's existing title profile (`spoilers/spoiler_title_profiles.py`,
+`apply_spoiler_tier`, one call in `ask/game_ai_request.py`), so the prompt, the cover safety net and the risk chip all
+follow it with no new argument through the ask path; the new wording is in `spoilers/spoiler_tier_wording.py`. Default
+is proven byte for byte against fingerprints of the old text (`tests/fixtures/spoiler_default_tier_golden.json`).
+*Popped up:* Up into the section first landed on the last choice (fixed); a copied test setup pushed the copy-paste
+count up (shared).
+
+**The route look** (lane H, Opus medium, two rounds). `features/strategy/strategyChecklist.ts` (which steps are covered),
+`strategyChecklistPersistence.ts` (shown steps kept in the panel's browser storage), `StrategyChecklistPanel.tsx`.
+*Popped up:* the brief described a spoiler-style cover box; the maintainer's pick on the mock-up board draws dots on a
+line, so round 2 built the drawing (the memory rule "check the mock-up before building" held). A repo-wide check
+requires every font size to follow Text size; the check mark inside a 12-pixel dot is exempt on purpose.
+
+**The "No close match" warning** (lane L, Opus medium, two rounds; and lane D's round 2 on the screen).
+`knowledge/kb_not_in_notes_notice.py`: the line now shows when the thing a question names (the words after "called",
+"named", or "beat / buy / find ... the") appears in none of the attached notes, with everyday endings ("in this run",
+"here", "please") trimmed first and words matched the way the keyword search matches them. The broad version the
+second opinion proposed (any missing word) warned on 19 good questions and was narrowed. The attach log line now prints
+the two match scores. The screen rule that deleted the line (`kbCloseMatchLineAgrees.ts`) is gone.
+
+**Smaller pieces.** The screenshot scoring script (`scripts/kb/eval_screenshot_reading.py`, labels in
+`tests/fixtures/screenshot_eval_v0.json`, lane I); a measuring mode in `scripts/measure_kb_thin_match.py` (lane L); a
+`--spoiler-tier` switch in `scripts/kb/eval_kb_answers.py`; the button hint in `features/developer/developerTabFolds.ts`
+and the mock-up board's copy of it (lane E, Haiku high on trial, right first time).
+
+**What popped up in landing, and how it was handled.** Three copy-paste count rises (a helper's own copy cannot see that
+count; the session measured each clone and handed back the lines); a hook-order record the screen rows changed; two
+tests that pin the Developer tab's words to the mock-up board; and the landing's Python step failing under load five
+times, passing alone every time (the landing script keeps too little of that output to name the test; on the
+roadmap). One landing log printed a test's stand-in "gh release upload" lines; checked, nothing was published.
+
+**What the maintainer could have done differently.** Reading the usage figures into the go message would have let the
+cost limiter work. Starting Doom 64 by hand (a shortcut the rig cannot launch) would have let the Nintendo spoiler
+check run. And the screenshot set needed a person in play: the rig's rule never to touch a save screen stopped six of
+seven games at a menu.
+
+### 13.5 What failed or is left, and why
+
+- **Undo only under the newest answer** (★★, a call on the checks page): after three marks a note never comes back and
+  nothing on screen undoes it.
+- **The "Which note was it?" list and the drop after three marks** never came up on the Deck; proven by their tests
+  only. The "ranked lower by you" tag was seen only with nothing running.
+- **After Undo with a game running, the D-pad went dead** on the notes block until Quick Access was closed and
+  reopened, which emptied the question box: the same lost-focus family as plan 97's freeze, one sighting.
+- **In a second checklist answer the route's steps could not be reached by the D-pad** (block KR, one sighting, a
+  muddled setup); the saved route walk could not be replayed.
+- **Hide more drew fewer covers than Default** on the PC answer test (23 in 100 against 29) and twice missed a Hades
+  story cover Default kept; one run, not understood.
+- **The wrong notes still attach** on a made-up question (keyword score 0.00, three notes every time); the fix tonight
+  is the warning, not fewer notes. Whether a zero-score question should attach nothing is a measurement for later.
+- **"What time is it"** with a game running still attached three notes (block K0); a clean re-run in a fresh chat is owed.
+- **The route answer once added an "If you want to cheat" section** suggesting emulator and fast-travel exploits.
+- **Four saved Deck walks are stale** and need re-saving on this build; a replay must always name its walks (one driver
+  replayed all 100 for 25 minutes by leaving the names out; one setting changed and was put back).
+- **The four 3-minute stalls with a game running** in block K1 did not happen again in K3; watched.
+- **Screenshot reading:** the AI ignored the handed-over game on God of War's play and pause pictures; the set is thin.
+- **Plain-words troubleshooting:** no code fix worth building; five tips need plainer words, the router the same words,
+  and two problems have no tip at all (a call).
+- **The Nintendo-game spoiler check** is still owed (the rig cannot launch a shortcut).
+- **Hide more on screen:** a cover with no boss name in a no-story game still opens (the tier is not on the screen side).
+- **Out of scope as planned:** "Suggest as a tip", new notes for the four thin games, the screenshot improvements
+  (step 2).
+- **On the Deck now:** tonight's build; the published library 2026.10.17; settings as block K0 found them, except that
+  the spoiler key now exists (on Default) and the test-library folder from the deploy stays; the test chat stays.
+
+### 13.6 A plain developer guide to what was built
+
+- **Adding words for a game:** put rows in a new file under `data/kb/glossary/` (term, other forms, a one-line peek, a
+  short full text, the game by `app_id` or `game_id`), with a `.sources.json` naming the note each word came from. The
+  builder refuses a repeat or an unknown game and names the file. Rebuild, then publish.
+- **Adding notes without touching the seed file:** a file under `data/kb/notes/` with `games`, `aliases` and
+  `sections` lists; the same checks as the seed run on it.
+- **The thumbs-down path:** the screen sends `demote_rag_corpus_note(id, "note"|"tip", reason, undo)`; the store counts
+  marks; retrieval moves a marked card last inside the cards that would attach anyway and drops it at three; every
+  attached-note entry carries `section_id` and `demoted` so the screen can tag it.
+- **The spoiler tier:** one setting, read once per turn, which swaps the title profile; everything downstream that
+  reads the profile follows it. To add a tier, add a profile value and its wording; Default must stay byte for byte.
+- **The warning:** `should_show_no_close_match_notice_for_turn` decides; `scripts/measure_kb_thin_match.py --line-gate`
+  is the gate any change to it must pass (no right-note question may gain the line).
 
 ## 14. Subagent reports and follow-ups
 

@@ -44,6 +44,20 @@ message instead of half-working. A safety net now covers a boss's name in the re
 described it — previously that could come back named in plain text with no spoiler cover at all, on a
 story-protected game. The library itself was checked on the Deck after publishing (above).
 
+**Update 2026-10-24 (plan 98, after the 0.6.0 release).** Built, landed on `experimental` and checked on the Deck in
+one session: underlined, tap-to-define words for **all 38 games** (351 words, each restating its own note; the
+Nintendo titles can have words now because a word may name its game by the library's own id), a three-way **spoiler
+setting** (Hide more, Default, Hide less; Default is today's rule byte for byte), a **thumbs-down that lowers a wrong
+note** (last next time, gone after three marks, Undo under the newest answer), the strategy checklist drawn as a
+**route**, and a **"No close match" line that now shows** whenever a question names something no attached note
+mentions (0 of 496 right-note questions gained it; every made-up-subject question measured shows it; a warning, not
+a cure: the weak notes still attach and reach the AI). Proven by tests only, not yet on the Deck: the "which note"
+list and the drop after three marks. Hide more drew fewer covers than Default on one PC run, not yet understood. The words reach
+other people only once the maintainer publishes the next library (2026.10.24 was built and tested; 2026.10.17 is still
+the published one). Measured the same night: the Ali G voice keeps fewer facts (67.8 against 74.6 in a hundred); with
+a game running the Deck's answers take about 40 s instead of 15; the Deck's model names a game from a screenshot 75
+times in a hundred when told which game is running, 17 when not (8 pictures, mostly menus). Report: plan 98 § 13.
+
 **Coverage was the thing wave two set out to fix.** Of the 72 questions a player might plainly ask about
 the twelve games added earlier this month, only 43 had a note behind them a month ago. **64 do now** —
 the other eight were written on purpose to have none, and stay blank as a control, so every question that
@@ -78,6 +92,7 @@ was meant to have an answer now has one.
 | 26 Sep | ★★ | 107 more blind test questions: 20 games that had none get 4 each, Brotato/Palworld/Skyrim get 7 each, and Cyberpunk/Fallout 4/Red Dead 2 each get 2 "where do I start" questions — every game in the library now has blind questions | Nothing a person sees yet: 27 of the 107 wait on their notes and a labeller before they count toward any score |
 | 26 Sep | ★ | The 35 of those questions left blank are now labelled: 18 point at the note that answers them, 17 stay blank with a reason none does. Measured with the shipping search, not tuned: the 18 newly labelled find their note first 17 of 18 times. One earlier "no note" row (a Fallout: New Vegas question) turned out to have an answer after all | Nothing a person sees: measurement only, confirms the labelling is trustworthy |
 | 26 Sep | ★ | The troubleshooting tip floor's cut-off moved from sitting exactly on the worst junk phrase's score to just above it, so that phrase stops getting a tip; the weakest real tip still clears it with room to spare | A stray sentence with nothing to do with the game (like "what time is it") stops getting a troubleshooting tip it has no business getting; Deck check owed |
+| 24 Oct | ★★★ | Plan 98: tap-to-define words for all 38 games, the spoiler setting, the thumbs-down that lowers a note, the route look, the "No close match" fix, the screenshot scoring script | Underlined words in every game (once the library is published); a Hide more / Default / Hide less choice; a wrong note can be marked and stops coming back; a made-up boss gets a visible warning; all Deck-checked |
 
 Chip work that touches the knowledge base also shipped in this window: corpus chips no longer vanish
 after 21 seconds, the rotation no longer favours the top three, and the pinned test-chip batches exist

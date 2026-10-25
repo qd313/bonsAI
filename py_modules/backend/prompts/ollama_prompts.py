@@ -465,8 +465,18 @@ def build_system_prompt(
     thin_context = not (app_id or "").strip() and not (app_name or "").strip() and not prepared_images
     # These three rules only matter once there is something on screen to read — an unconditional
     # inject spent tokens on every Ask, image or not.
+    # When the running game is named above, the picture is from it. Without this the model weighed the
+    # picture alone against the two-clues rule and sometimes named another game (plan 100, lane P).
+    running_game_picture_line = (
+        " The running game named above is the game in the picture: describe where in it the player is, "
+        "and never name a different game."
+        if app_name
+        else ""
+    )
     screenshot_rules = (
-        f" {vision_priority_line} {genre_franchise_cue_line} {game_intent_line}" if prepared_images else ""
+        f" {vision_priority_line}{running_game_picture_line} {genre_franchise_cue_line} {game_intent_line}"
+        if prepared_images
+        else ""
     )
     dynamic_block = (
         f"{game_line} {attachment_game_context_line} {attachment_name_context_line} {vdf_context_line} "

@@ -673,6 +673,17 @@ Read the brief's rule against its own check before sending it.
 
 **A helper's own copy cannot see the copy-paste count.** The copy-paste check reads zero in a helper's copy, so three plan 98 landings went red on it (+4 and +7 lines, each a test setup copied from a neighbouring test). Measure it in the shared checkout with the ratchet's own jscpd call and hand the helper the exact line ranges. Tell test-writing helpers to reuse a neighbouring test's setup rather than copy it.
 
+**Never wait for a usage window to reset before starting helpers.** On 2026-10-25 the plan 100 session chose, on
+purpose and saying so in the chat, to hold twelve helpers for twenty minutes because the five-hour window was about to
+reset. It was following the guide's own sentence ("do not start lanes just before the usage window resets"), with the
+window at 54 percent and three helpers running. Nothing could have hit the limit. A planned choice, not a slip, and
+wrong. The unused half of that window was lost at the reset, and the
+twelve helpers then loaded the fresh window instead. The maintainer had started the session on purpose to spend the
+window's remainder. A usage window is use-it-or-lose-it: a helper whose inputs are ready starts at once, and the only
+budget lines are the percent ceilings the maintainer wrote (AGENTS.md, 'Helper lanes'). **The maintainer's rule from
+that evening: whether to hold off workers is their choice, never the session's.** The plan's own log carried the wrong sentence
+("do not start lanes in the last minutes before the window resets"); a sentence like it is a mistake wherever it appears.
+
 ## 5. Design and screen work
 
 **The drawing is the design.** [major-redesign.md](archive/major-redesign.md) is the agreed look. Work built

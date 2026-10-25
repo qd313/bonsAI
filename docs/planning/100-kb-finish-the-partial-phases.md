@@ -445,8 +445,9 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   (resets Wednesday morning). The helper rules, the briefs (K0, T, P, F, R, V, W, Y, N1 to N4, X, U, J, Q, the M
   template) and Deck runbook L0 were written and pushed with the plan. Budget note for the session: with the week at
   53 percent and two and a half days to its reset, this wave is likely to spend a large share of what is left; read the
-  counter before each wave and start no helper past 90 percent (call 14, raised from 80 by the maintainer). Do not start lanes in the last minutes before
-  the five-hour window resets.
+  counter before each wave and start no helper past 90 percent (call 14, raised from 80 by the maintainer). ~~Do not start lanes in the last minutes before
+  the five-hour window resets.~~ **Wrong. The session followed it on purpose and it cost twenty minutes (22:00 to 22:20 UTC):** what is left in a window
+  is lost at its reset, so a ready helper always starts at once (the maintainer, 22:40 UTC; now a rule in AGENTS.md).
 - **2026-10-25, later:** five commits from the maintainer's PC reached `experimental` while this chat planned: the
   library 2026.10.25 published and read back from both channels; block KS run, with the first-mention underlines and the
   spoiler row's ring passed on the Deck (the ring after a second fix, now a lesson about Steam's switch and a wrapper); a

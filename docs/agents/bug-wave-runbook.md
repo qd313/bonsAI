@@ -120,6 +120,10 @@ and every Deck block, and is committed, so a look from a phone shows where thing
 - The usage limit stops every helper at once. Each keeps its work and resumes with one short message.
 - Start no new helpers past 90 percent of the weekly limit or 75 percent of the five-hour window (the maintainer's
   call 2026-10-11, D128; the weekly line raised from 80 to 90 on 2026-10-25). Read the usage figure before every new batch.
+- **Never hold a helper for a usage-window reset.** What is left in the five-hour window is lost at the reset; a
+  wait only moves the cost into the next window. A helper whose inputs are ready starts at once (the maintainer,
+  2026-10-25, after plan 100 held twelve helpers for twenty minutes). **Holding a helper back for any reason other
+  than the two percent lines is the maintainer's choice alone: the session asks in the chat and does not decide.**
 - Never: push, merge to main, switch branches in the shared folder, stage everything, type a PIN or password,
   press anything on the Deck outside a written check.
 

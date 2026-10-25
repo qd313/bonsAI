@@ -2265,6 +2265,10 @@ Made by the maintainer on 2026-10-11, early evening, answering a numbered list i
     past 75 percent of the five-hour window.
 18. **For future sessions, the weekly line is 80 percent** (was 60): start no new helpers past 80 percent of the weekly
     limit or 75 percent of the five-hour window. Written into AGENTS.md and the bug-wave runbook.
+    **Amended again 2026-10-25, 22:40 UTC, by the maintainer in the plan 100 session:** a usage window is never a reason
+    to hold a helper. What is left in it is lost at the reset; a ready helper starts at once. The percent lines are the
+    only budget rule, and whether to hold workers back for any other reason is the maintainer's choice alone, never
+    the session's. Written into AGENTS.md, the bug-wave runbook and the lessons file the same evening.
     **Amended 2026-10-25 by the maintainer (plan 100's planning chat): the weekly line is 90 percent, for that session
     and going forward; the five-hour line stays 75.** Written into AGENTS.md, the bug-wave runbook and plan 100's call 14
     the same day; carried in D137 when the plan 100 session writes it.

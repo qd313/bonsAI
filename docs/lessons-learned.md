@@ -476,6 +476,13 @@ fix `830485d7`). Up from the same switch looked fine only because Steam's own Up
 switch's edge moves on a `Focusable` around it (`DenseSwitchRow`'s `navOnWrapper`, the first-run popup's shape); a
 wrapper's handler is honoured. Evidence `workshop:test-evidence/plan98-P98-SPOILER-FOCUS-01.json`.
 
+**A settings snapshot puts itself back when its time runs out, even after the driver has gone.** `deck_snapshotSettings`
+restores automatically at the end of its `ttlMinutes`. On 2026-10-25 a driver, worried its first snapshot would undo
+the day's work, replaced it with a fresh one set to 480 minutes and finished: any setting the maintainer changed that
+evening would have been put back at midnight. A driver ends every block with `deck_restoreSettings` (or never takes a
+snapshot for a check that changes no setting); to drop a hold without changing anything, take a fresh snapshot with
+`replace` and restore it at once.
+
 **A greyed Decky button still takes the ring on the Deck; the shared test stand-in says it cannot.** The models box
 asked the button whether it was disabled and the greyed licence row became a stop on the Deck while every test passed
 (plan 92, `172d013b`). Skip a greyed control because your own state says it is off; the stand-in is on the roadmap.

@@ -478,6 +478,8 @@ is on `experimental` on this PC, nothing pushed, nothing published.
    (corrected 2026-10-25: the first version left out the build folder and the Hugging Face copy, and the script
    refused it; that build, version 2026.10.25 with 351 words, passed the script's own check the same day). Until then
    only your Deck had the new words, and only during tonight's test (block KR put the published library back).
+   **Done 2026-10-25:** the maintainer published 2026.10.25; both channels were read back over the wire and matched
+   the build byte for byte.
 4. **Tell the next session the two usage figures** at its start; the cost limiter cannot read them and was never
    calibrated tonight.
 

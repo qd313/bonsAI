@@ -315,10 +315,11 @@ deepening rather than a separate Phase 5 pass.
 | **Point release, 2026-08-16** | **`2026.08.16`** | **`34bff336…`** | **758502** | First reproducible artifact; supersedes the above on both channels |
 | **Point release, 2026-09-06** | **`2026.09.06`** | **`f3d9a608…`** | **1267645** | 266 notes across 25 games, 124 tips. Twelve games added. Both channels read back over the wire and matched. |
 | **Point release, 2026-09-07** | **`2026.09.07`** | **`0b4dae3e…`** | **1460254** | 293 notes across 25 games, 156 tips, schema 3, 1.39 MB to download (2,289,664 bytes uncompressed). Every note and every tip has its meaning index — none missing. Both channels read back over the wire and matched. |
+| **Point release, 2026-10-25** | **`2026.10.25`** | **`431aae6d…`** | **1962561** | Plan 98: 351 glossary words across 38 games (only Deep Rock Galactic: Survivor had any before), 414 notes, 164 tips, schema 4, 1.87 MB to download (3,145,728 bytes uncompressed). Every note and tip has its meaning index. Published by the maintainer; both channels read back over the wire the same day and matched the build byte for byte. |
 
-**The table above has gaps.** Two releases that did go out are not listed — `2026.08.22` (133 notes) and
-`2026.09.01`, the one that was on the maintainer's Deck before today. Nobody wrote them down at the time. Do not read
-the table as a complete history until those two are recovered from the release channels.
+**The table above has gaps.** Releases that did go out but are not listed: `2026.08.22` (133 notes), `2026.09.01`,
+and, from the Hugging Face copy's own history, `2026.09.18`, `2026.09.26` and `2026.10.17`. Nobody wrote them down at
+the time. Do not read the table as a complete history until those are recovered from the release channels.
 
 **About the 2026-09-06 release.** Twelve games gained notes: Hollow Knight and DOOM Eternal 13 each, Black Mesa and
 Fallout: New Vegas 11, Pikmin 2 10, Grand Theft Auto V and Super Smash Bros. Melee 9, Grand Theft Auto IV 8, Paper

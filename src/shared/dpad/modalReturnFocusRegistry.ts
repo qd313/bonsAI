@@ -63,6 +63,8 @@ export type ModalReturnFocusId =
   | "kb-remove"
   /** The library's "Pull nomic-embed-text" button, for its download notice's box (plan 76 lane 2). */
   | "kb-nomic-pull"
+  /** The library's "Lowered notes" row's Clear button, for its "Clear lowered notes?" box (plan 100). */
+  | "kb-lowered-clear"
   | "chat-slot-rename"
   /** The tab bar (plan 30): where a picker's return lands when its opener is gone. */
   | "tab-bar"

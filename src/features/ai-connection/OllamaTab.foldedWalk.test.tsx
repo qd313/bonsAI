@@ -40,6 +40,7 @@ import { paintedFrom, worstFoldAllCover } from "../../test-harness/foldAllCover"
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 import type { SteamFocusScroll } from "../../test-harness/tabBodyWalk";
 import type { ReplyVerbosityId } from "../settings/replyVerbosity";
+import { ragCorpusStatusFixture, resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 
 const DECK_PANE = 430;
 const MONITOR_PANE = 741;
@@ -295,3 +296,78 @@ describe("the floating Open all button on the Ollama tab", () => {
 });
 
 export {};
+
+/*
+ * Plan 100 lane U: the Knowledge base section's "Lowered notes: N" row and its Clear button sit under the Update /
+ * Remove row when the person has ranked notes lower. Clear is one more stop in Steam's own column flow (Remove is
+ * Right of Update, so a Down walk passes Update only), and Up from the Reply style line comes back through Clear
+ * first (useOllamaTabFocus.ts's hop checks it before the Update / Remove row).
+ */
+describe("the Knowledge base section with lowered notes (plan 100)", () => {
+  const flush = () => act(async () => {
+    await new Promise((r) => setTimeout(r, 0));
+  });
+  const kbStops = (landings: FoldedLanding[]) =>
+    names(landings).filter((n) => /Use local knowledge base|Update knowledge base|Remove|Clear|^Reply style/.test(n));
+
+  beforeEach(() => {
+    resetFakeDeckyRpc();
+    setRpcHandler("get_rag_corpus_status", () => ragCorpusStatusFixture({ installed: true, corpus_version: "1.0.0" }));
+  });
+  afterEach(() => resetFakeDeckyRpc());
+
+  for (const steam of RULES) {
+    it(`Steam's rule "${steam}": Down walks Update, Clear, then Reply style; Up from Reply style lands on Clear first; no stop twice`, async () => {
+      setRpcHandler("list_rag_corpus_demotes", () => ({
+        ok: true,
+        count: 2,
+        notes: [
+          { kind: "note", id: 41, downs: 1, reasons: ["wrong_tip"], updated: "" },
+          { kind: "tip", id: 7, downs: 1, reasons: ["outdated"], updated: "" },
+        ],
+      }));
+      toggleSection(OLLAMA_FOLD_TAB, SECTION_IDS, "kb");
+      const w = walk(DECK_PANE, steam);
+      await flush();
+      const down = [w.enter(), ...w.walk("down")];
+      expect(repeats(down), names(down).join(" | ")).toBe(0);
+      expect(kbStops(down)).toEqual([
+        "Use local knowledge base",
+        "Update knowledge base",
+        "Clear",
+        expect.stringMatching(/^Reply style/),
+      ]);
+      checkLandings(down, DECK_PANE, `${steam} down`);
+      const up = w.walk("up");
+      expect(repeats(up), names(up).join(" | ")).toBe(0);
+      expect(kbStops(up)).toEqual([
+        expect.stringMatching(/^Reply style/),
+        "Clear",
+        "Update knowledge base",
+        "Use local knowledge base",
+      ]);
+      checkLandings(up, DECK_PANE, `${steam} up`);
+      w.unmount();
+    });
+  }
+
+  it("with nothing lowered there is no Clear stop: the walk is the one it was", async () => {
+    toggleSection(OLLAMA_FOLD_TAB, SECTION_IDS, "kb");
+    const w = walk(DECK_PANE, "centerIfHidden");
+    await flush();
+    const down = [w.enter(), ...w.walk("down")];
+    expect(repeats(down)).toBe(0);
+    expect(kbStops(down)).toEqual([
+      "Use local knowledge base",
+      "Update knowledge base",
+      expect.stringMatching(/^Reply style/),
+    ]);
+    const up = w.walk("up");
+    expect(kbStops(up)).toEqual([
+      expect.stringMatching(/^Reply style/),
+      "Update knowledge base",
+      "Use local knowledge base",
+    ]);
+    w.unmount();
+  });
+});

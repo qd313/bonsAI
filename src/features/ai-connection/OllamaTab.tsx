@@ -187,6 +187,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
     kbDownloadBtnRef,
     kbRemoveBtnRef,
     kbCancelBtnRef,
+    kbLoweredClearBtnRef,
     connectionTestBtnRef,
     replyVerbosityThumbHostRef,
     whereBodyRef,
@@ -272,6 +273,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
             downloadBtnRef={kbDownloadBtnRef}
             removeBtnRef={kbRemoveBtnRef}
             cancelBtnRef={kbCancelBtnRef}
+            loweredClearBtnRef={kbLoweredClearBtnRef}
             onMoveUpToConnection={() => takeFoldLine(OLLAMA_FOLD_TAB, "kb")}
             onMoveDownFromRemove={() => foldLineBelow(OLLAMA_FOLD_TAB, chain, "kb")}
           />,

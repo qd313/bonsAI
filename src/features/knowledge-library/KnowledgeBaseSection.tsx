@@ -7,7 +7,9 @@
  * button that reads Download, Update, or Downloading… depending on what is
  * already installed, next to Cancel (while a download runs) or Remove
  * (once something is installed). Starting a fresh download first opens a
- * small picker for internal storage or an SD card.
+ * small picker for internal storage or an SD card. Under them, only while
+ * the person has ranked notes lower with a thumbs-down, a "Lowered notes: N"
+ * row with a Clear button that takes every mark back.
  *
  * Used for: OllamaTab, directly below the connection section.
  *
@@ -26,6 +28,7 @@
  *     │ status: Installed vX / Not installed             │
  *     │   (+ nomic-embed-text hint/button when needed)   │
  *     │ [ Download / Update ]   [ Cancel / Remove ]      │  <- two-button row
+ *     │ Lowered notes: N                     [ Clear ]   │  <- only when N > 0
  *     └────────────────────────────────────────────────────┘
  *
  * 1. refreshStatus() polls the backend for corpus status once on mount and
@@ -54,6 +57,11 @@
  *    confirm box (Download / Cancel) — never a silent gap, and
  *    never on its own. Skipped the same way the standing hint is when Ask
  *    is routed elsewhere.
+ * 7. refreshStatus() also reads how many notes and tips hold a thumbs-down
+ *    mark (plan 100). The row and its Clear box live in KbLoweredNotesRow.tsx:
+ *    Clear asks first, then empties the marks; the row goes, and every copy
+ *    of this section on screen re-reads the count, because the box closing
+ *    rebuilds the tab.
  *
  * Gotchas:
  * - The version shown prefers whatever the status poll just reported over
@@ -106,6 +114,8 @@ import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
 import { textPx } from "../../styles/textPx";
 import { DenseSwitchRow } from "../folded-tabs/DenseRow";
 import { OLLAMA_ROW_HELP } from "../ai-connection/ollamaTabFolds";
+import { countLoweredNotes } from "./demoteNoteApi";
+import { KbLoweredNotesRow, onLoweredNotesCleared, openClearLoweredNotesBox } from "./KbLoweredNotesRow";
 
 type RagCorpusStatus = {
   phase?: string;
@@ -170,6 +180,8 @@ type Props = {
    * disabled then, so a ref to either one focuses nothing.
    */
   cancelBtnRef?: React.RefObject<HTMLButtonElement | null>;
+  /** The "Lowered notes" row's Clear button, for Up from the Reply style line (only while the row shows). */
+  loweredClearBtnRef?: React.RefObject<HTMLButtonElement | null>;
   /** Up from the switch: in the folded Ollama tab, the section's own line (plan 91). */
   onMoveUpToConnection?: () => boolean;
   /**
@@ -273,6 +285,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   downloadBtnRef: downloadBtnRefProp,
   removeBtnRef: removeBtnRefProp,
   cancelBtnRef: cancelBtnRefProp,
+  loweredClearBtnRef,
   onMoveUpToConnection,
 }) => {
   const [status, setStatus] = useState<RagCorpusStatus | null>(null);
@@ -280,6 +293,8 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   const [cancelBusy, setCancelBusy] = useState(false);
   const [updateNote, setUpdateNote] = useState<UpdateNote | null>(null);
   const [nomicPullBusy, setNomicPullBusy] = useState(kbNomicPullLikelyInFlight);
+  /** How many notes and tips hold a thumbs-down mark; the "Lowered notes" row shows only above 0. */
+  const [loweredCount, setLoweredCount] = useState(0);
   /** Set once a pull is accepted (by this copy or one before a remount); polls status until the model shows up. */
   const [nomicPullStarted, setNomicPullStarted] = useState(kbNomicPullLikelyInFlight);
   const primaryBtnRefLocal = useRef<HTMLButtonElement | null>(null);
@@ -349,7 +364,13 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     return onMoveUpToConnection?.() || tryMoveUpWithPanelScroll(toggleHost.current);
   }, [onMoveUpToConnection, toggleHost]);
 
+  const readLoweredCount = useCallback(() => {
+    void countLoweredNotes().then((n) => setLoweredCount(n ?? 0));
+  }, []);
+  useEffect(() => onLoweredNotesCleared(readLoweredCount), [readLoweredCount]);
+
   const refreshStatus = useCallback(async () => {
+    readLoweredCount();
     try {
       const st = await callDeckyWithTimeout<
         [{ pc_ip: string }],
@@ -395,7 +416,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
       setStatus(null);
       return null;
     }
-  }, [useLocalKnowledgeBase, ollamaIp]);
+  }, [useLocalKnowledgeBase, ollamaIp, readLoweredCount]);
 
   useEffect(() => {
     void refreshStatus();
@@ -778,6 +799,16 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     );
   };
 
+  /** Take back every thumbs-down mark, after the same two-button box Remove uses (KbLoweredNotesRow.tsx). */
+  const confirmClearLowered = () =>
+    openClearLoweredNotesBox({
+      count: loweredCount,
+      installed: status?.installed === true,
+      onBeforeDeckyModal,
+      onCompleteDeckyModalClose,
+      onCleared: () => setLoweredCount(0),
+    });
+
   const installed = status?.installed === true;
   /**
    * Prefer the version the backend just reported over the one this component was mounted
@@ -1047,6 +1078,11 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
           ) : null}
         </Focusable>
       </PanelSectionRow>
+      {/* Its own row under the Update / Remove one (that row is fixed 44 high with two slots), drawn whenever a note
+          is lowered, the library installed or not: the marks live in their own file. */}
+      {loweredCount > 0 ? (
+        <KbLoweredNotesRow count={loweredCount} onClear={confirmClearLowered} btnRef={loweredClearBtnRef} />
+      ) : null}
     </PanelSection>
   );
 };

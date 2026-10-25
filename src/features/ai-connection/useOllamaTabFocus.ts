@@ -60,6 +60,7 @@ export function useOllamaTabFocus() {
   const kbDownloadBtnRef = useRef<HTMLButtonElement>(null);
   const kbRemoveBtnRef = useRef<HTMLButtonElement>(null);
   const kbCancelBtnRef = useRef<HTMLButtonElement>(null);
+  const kbLoweredClearBtnRef = useRef<HTMLButtonElement>(null);
   const connectionTestBtnRef = useRef<HTMLButtonElement>(null);
   const replyVerbosityThumbHostRef = useRef<HTMLDivElement>(null);
   const thinkingEffortHostRef = useRef<HTMLDivElement | null>(null);
@@ -104,6 +105,8 @@ export function useOllamaTabFocus() {
   const focusKbUpFromReplyVerbosity = useCallback((): boolean => {
     // Cancel is checked first because it only exists while a download runs, and during
     // one both of the buttons below it are disabled — focusing either would be a no-op.
+    // The "Lowered notes" row's Clear sits under that row, nearest the Reply style line, so it comes first.
+    if (kbLoweredClearBtnRef.current) return hopInTabBody(kbLoweredClearBtnRef.current);
     if (kbCancelBtnRef.current) return hopInTabBody(kbCancelBtnRef.current);
     if (kbDownloadBtnRef.current) return hopInTabBody(kbDownloadBtnRef.current);
     if (kbRemoveBtnRef.current) return hopInTabBody(kbRemoveBtnRef.current);
@@ -166,6 +169,7 @@ export function useOllamaTabFocus() {
     kbDownloadBtnRef,
     kbRemoveBtnRef,
     kbCancelBtnRef,
+    kbLoweredClearBtnRef,
     connectionTestBtnRef,
     replyVerbosityThumbHostRef,
     whereBodyRef,

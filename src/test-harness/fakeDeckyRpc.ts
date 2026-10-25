@@ -63,6 +63,8 @@ export const FRONTEND_RPC_METHODS = [
   "remove_rag_corpus",
   "get_rag_corpus_glossary",
   "demote_rag_corpus_note",
+  "list_rag_corpus_demotes",
+  "clear_rag_corpus_demotes",
   "list_chat_slots",
   "get_chat_slot",
   "create_chat_slot",
@@ -231,6 +233,9 @@ function defaultHandlers(): Record<string, RpcHandler> {
     get_rag_corpus_glossary: () => ({ ok: true, installed: false, game_title: "", terms: [], reason: "" }),
     // Plan 98: a note ranked lower from under an answer: kept, one mark, not yet left out.
     demote_rag_corpus_note: () => ({ ok: true, downs: 1, excluded: false }),
+    // Plan 100: nothing ranked lower yet, so the "Lowered notes" row stays hidden by default.
+    list_rag_corpus_demotes: () => ({ ok: true, count: 0, notes: [] }),
+    clear_rag_corpus_demotes: () => ({ ok: true, cleared: 0 }),
     list_chat_slots: () => ({ slots: [] }),
     get_chat_slot: () => ({ ok: false, error: "Slot not found" }),
     create_chat_slot: () => ({

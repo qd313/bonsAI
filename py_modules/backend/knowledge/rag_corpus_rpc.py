@@ -1,16 +1,17 @@
 """Title: The knowledge base's own download, update and remove buttons
 
 Purpose: The offline knowledge base is a folder of notes downloaded once and kept on
-disk. This file is the screen's eight calls for that: check its status, start the
+disk. This file is the screen's calls for that: check its status, start the
 download, cancel one in progress, check for and pull an update, remove it, install one
 from a local folder for testing, pull the preset-chip suggestions it can offer for
-the game you're playing, read that game's tap-to-define words, and rank a note lower
-(or take that back) after a thumbs-down. Each stays a method of the same name on the
+the game you're playing, read that game's tap-to-define words, rank a note lower
+(or take that back) after a thumbs-down, and list or clear every such mark. Each stays a method of the same name on the
 plugin class in main.py; the method's body is now a one-line hand-off to the function here.
 
 Used for: get_rag_corpus_status, start_rag_corpus_download, cancel_rag_corpus_download,
 update_rag_corpus, remove_rag_corpus, install_rag_corpus_local,
-get_session_rag_chip_candidates, get_rag_corpus_glossary, demote_rag_corpus_note.
+get_session_rag_chip_candidates, get_rag_corpus_glossary, demote_rag_corpus_note,
+list_rag_corpus_demotes, clear_rag_corpus_demotes.
 
 Solves: Keeps the knowledge-base panel's own RPC bodies -- the background-download
 task, its cancel flag, and the chip-candidate lookup -- out of main.py.
@@ -33,7 +34,7 @@ from backend.knowledge.knowledge_base_schema import (
     resolve_corpus_db_path,
     sanitize_corpus_install_dir,
 )
-from backend.knowledge.kb_demote_store import record_demote
+from backend.knowledge.kb_demote_store import clear_demotes, list_demotes, record_demote
 from backend.knowledge.knowledge_base_glossary import (  # noqa: F401 -- main.py reaches it here
     get_rag_corpus_glossary,
 )
@@ -68,6 +69,21 @@ async def demote_rag_corpus_note(
     holds now and whether that is enough to leave it out of answers. Never raises.
     """
     return await asyncio.to_thread(record_demote, section_id, kind, reason, undo is True)
+
+
+async def list_rag_corpus_demotes(self):
+    """Every note and tip ranked lower by a thumbs-down, for the Knowledge base section's
+    "Lowered notes: N" row. Answers ``{ok, count, notes}``; ``notes`` holds ``{kind, id, downs,
+    reasons, updated}`` per entry, newest first. Never raises."""
+    notes = await asyncio.to_thread(list_demotes)
+    return {"ok": True, "count": len(notes), "notes": notes}
+
+
+async def clear_rag_corpus_demotes(self):
+    """Take back every thumbs-down mark at once (the row's Clear, after its confirm box), so
+    every note ranks as if never marked. Answers ``{ok, cleared}`` with how many notes and tips
+    held a mark, or ``{ok: False, error}`` when the file could not be written. Never raises."""
+    return await asyncio.to_thread(clear_demotes)
 
 
 async def get_rag_corpus_status(self, data: Any = None):

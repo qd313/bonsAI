@@ -1205,6 +1205,14 @@ class Plugin:
         """Rank a note or shared tip lower after a thumbs-down, or take the mark back (undo)."""
         return await rag_corpus_rpc.demote_rag_corpus_note(self, section_id, kind, reason, undo)
 
+    async def list_rag_corpus_demotes(self):
+        """Every note and tip ranked lower by a thumbs-down (the "Lowered notes: N" row)."""
+        return await rag_corpus_rpc.list_rag_corpus_demotes(self)
+
+    async def clear_rag_corpus_demotes(self):
+        """Take back every thumbs-down mark at once (the row's Clear); answers how many."""
+        return await rag_corpus_rpc.clear_rag_corpus_demotes(self)
+
     # --- Ollama model pull and catalog RPC ---
 
     async def pull_ollama_models(self, tags: Any = None):

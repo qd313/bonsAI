@@ -421,6 +421,31 @@ class PluginMethodTests(unittest.IsolatedAsyncioTestCase):
             self.assertFalse(result["ok"], args)
         self.assertFalse(os.path.exists(os.path.join(self._tmp.name, "rag_demote.json")))
 
+    async def test_list_through_the_plugin_names_every_mark_and_counts_them(self):
+        await self.plugin.demote_rag_corpus_note(5, "tip", "outdated")
+        await self.plugin.demote_rag_corpus_note(9, "note", "wrong_tip")
+        await self.plugin.demote_rag_corpus_note(9, "note", "wrong_edition")
+        result = await self.plugin.list_rag_corpus_demotes()
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["count"], 2)
+        listed = {(e["kind"], e["id"]): e["downs"] for e in result["notes"]}
+        self.assertEqual(listed, {("tip", 5): 1, ("note", 9): 2})
+
+    async def test_list_with_nothing_marked_is_an_empty_count(self):
+        self.assertEqual(
+            await self.plugin.list_rag_corpus_demotes(), {"ok": True, "count": 0, "notes": []}
+        )
+
+    async def test_clear_through_the_plugin_empties_the_file_and_says_how_many(self):
+        await self.plugin.demote_rag_corpus_note(5, "tip", "outdated")
+        await self.plugin.demote_rag_corpus_note(9, "note", "wrong_tip")
+        result = await self.plugin.clear_rag_corpus_demotes()
+        self.assertEqual(result, {"ok": True, "cleared": 2})
+        with open(os.path.join(self._tmp.name, "rag_demote.json"), encoding="utf-8") as fh:
+            self.assertEqual(json.load(fh), {"version": 1, "notes": {}})
+        self.assertEqual((await self.plugin.list_rag_corpus_demotes())["count"], 0)
+        self.assertEqual(store.downs_for([("note", 9), ("tip", 5)]), {})
+
     async def test_undo_only_counts_when_it_is_really_true(self):
         await self.plugin.demote_rag_corpus_note(5, "tip", "outdated")
         result = await self.plugin.demote_rag_corpus_note(5, "tip", "outdated", "false")

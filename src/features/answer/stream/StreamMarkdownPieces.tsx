@@ -17,6 +17,7 @@ import {
   MainTabBonsaiAiMarkdownChunk,
   type MainTabBonsaiAiMarkdownChunkProps,
 } from "../markdown/MainTabBonsaiAiMarkdownChunk";
+import { appendGlossaryBefore } from "../../glossary/glossaryFirstUse";
 import { SPLIT_LIVE_ANSWER_INTO_PIECES, splitStreamMarkdownPieces } from "./streamMarkdownSplit";
 import { readDeckSwitch } from "./lighterWhileGameRuns";
 
@@ -44,18 +45,27 @@ export function StreamMarkdownPieces(props: MainTabBonsaiAiMarkdownChunkProps) {
   }
   const pieces = splitStreamMarkdownPieces(source);
   const last = pieces.length - 1;
+  /* Each piece is told the text before it, so a glossary word underlined in an earlier piece is plain
+     in a later one (glossaryFirstUse.ts). Earlier pieces' text never changes, so it is the same
+     string every beat and the settled pieces still skip. */
+  let before = props.glossaryBefore;
   return (
     <>
-      {pieces.map((piece, i) => (
-        // By position: a piece's place never changes, and only the last one's text does.
-        <MainTabBonsaiAiMarkdownChunk
-          key={i}
-          {...rest}
-          onDrgGlossaryExplainFurther={stableExplainFurther}
-          source={piece}
-          scrambleSlotRef={i === last ? scrambleSlotRef : undefined}
-        />
-      ))}
+      {pieces.map((piece, i) => {
+        const glossaryBefore = before;
+        before = appendGlossaryBefore(before, piece);
+        return (
+          // By position: a piece's place never changes, and only the last one's text does.
+          <MainTabBonsaiAiMarkdownChunk
+            key={i}
+            {...rest}
+            onDrgGlossaryExplainFurther={stableExplainFurther}
+            source={piece}
+            glossaryBefore={glossaryBefore}
+            scrambleSlotRef={i === last ? scrambleSlotRef : undefined}
+          />
+        );
+      })}
     </>
   );
 }

@@ -36,9 +36,13 @@
  *    open/closed state.
  * 4. Where the library has glossary words for the current game
  *    (glossaryStore, asked for by MainTabChatTranscript before the answer
- *    streams in), ordinary text passes through linkifyDrgGlossaryNode(),
- *    which finds a term already parsed (or one level into bold or italic
- *    text) and wraps it in a tappable DrgGlossaryTermChip.
+ *    streams in), a parse step (rehypeGlossaryFirstUse, glossaryFirstUse.ts)
+ *    marks each word's FIRST mention in the whole answer (text straight in a
+ *    paragraph or list item, or one level into bold or italic), and the span
+ *    renderer draws that mark as a tappable DrgGlossaryTermChip. Later
+ *    mentions stay plain; the pieces before this one are passed in as
+ *    `glossaryBefore`. Chosen over a counter in the draw code because the
+ *    text is the same every time and the draw order is not.
  *
  * Gotchas:
  * - Revealing or hiding a spoiler unmounts the Focusable the D-pad ring was
@@ -51,15 +55,19 @@
  *   not stop Steam's own back-out, so a bare press there could not make B
  *   re-hide the spoiler instead of leaving the whole reply.
  */
-import type { Components } from "react-markdown";
+import type { Components, Options } from "react-markdown";
 import type { ReactNode } from "react";
-import { Fragment, cloneElement, isValidElement, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { isValidElement, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Focusable } from "@decky/ui";
 
 import { focusSpoilerFence, registerSpoilerFence } from "../../../shared/dpad/spoilerFenceRegistry";
 import { isOkDeckButtonEvent } from "../../../shared/dpad/focusNavigation";
-import { splitTextForDrgGlossaryTerms } from "../../glossary/glossaryTermMatch";
+import {
+  GLOSSARY_HIT_CLASS,
+  rehypeGlossaryFirstUse,
+  usedGlossaryIds,
+} from "../../glossary/glossaryFirstUse";
 import { DrgGlossaryTermChip } from "../../glossary/GlossaryTermChip";
 import { useGlossaryTerms, type DrgGlossaryTerm } from "../../glossary/glossaryStore";
 import { SCRAMBLE_SLOT_MARK } from "../stream/streamScrambleMath";
@@ -131,6 +139,12 @@ export type MainTabBonsaiAiMarkdownChunkProps = {
    * the churning letters into that span itself; React never touches its contents.
    */
   scrambleSlotRef?: (el: HTMLSpanElement | null) => void;
+  /**
+   * The text of the answer's pieces drawn before this one, joined by GLOSSARY_BEFORE_SEPARATOR
+   * (glossaryFirstUse.ts): a glossary word they already underlined is plain here. One string so the
+   * memo below still compares by value; empty or missing for the first piece.
+   */
+  glossaryBefore?: string;
 };
 
 type MdArgs = {
@@ -142,6 +156,15 @@ type MdArgs = {
   onDrgGlossaryExplainFurther?: (term: DrgGlossaryTerm) => void;
   scrambleSlotRef?: (el: HTMLSpanElement | null) => void;
 };
+
+/** What react-markdown takes for its parse steps. */
+type RehypePlugins = NonNullable<Options["rehypePlugins"]>;
+
+/**
+ * What a spoiler block starts with: no glossary word used yet. A block is parsed on its own and what
+ * it underlines is not counted for the text around it -- see glossaryFirstUse.ts, "Does not".
+ */
+const NOTHING_USED: ReadonlySet<string> = new Set();
 
 /** The class the slot mark's span carries in the tree, so the `span` renderer can tell it apart. */
 const SCRAMBLE_SLOT_CLASS = "bonsai-stream-scramble-slot";
@@ -183,53 +206,6 @@ function rehypeScrambleSlot() {
 const SCRAMBLE_SLOT_PLUGINS = [rehypeScrambleSlot];
 
 /**
- * Wrap the game's glossary terms inside already-parsed markdown children with a tappable
- * chip. Recurses one level into `strong`/`em` (bold/italic prose can still carry the term); any other
- * element (links, inline code, nested block content) is left alone rather than reached into.
- */
-function linkifyDrgGlossaryNode(
-  node: ReactNode,
-  glossaryTerms: readonly DrgGlossaryTerm[],
-  onExplainFurther: ((term: DrgGlossaryTerm) => void) | undefined,
-  depth = 0
-): ReactNode {
-  if (typeof node === "string") {
-    const segments = splitTextForDrgGlossaryTerms(node, glossaryTerms);
-    if (segments.length === 1 && segments[0].kind === "text") return node;
-    return segments.map((seg, i) =>
-      seg.kind === "text" ? (
-        <Fragment key={i}>{seg.value}</Fragment>
-      ) : (
-        <DrgGlossaryTermChip
-          key={i}
-          term={seg.term}
-          matchedText={seg.value}
-          onExplainFurther={onExplainFurther}
-        />
-      )
-    );
-  }
-  if (Array.isArray(node)) {
-    return node.map((child, i) => (
-      <Fragment key={i}>{linkifyDrgGlossaryNode(child, glossaryTerms, onExplainFurther, depth)}</Fragment>
-    ));
-  }
-  if (
-    depth < 1 &&
-    isValidElement(node) &&
-    (node.type === "strong" || node.type === "em")
-  ) {
-    const elProps = node.props as { children?: ReactNode };
-    return cloneElement(
-      node,
-      undefined,
-      linkifyDrgGlossaryNode(elProps.children, glossaryTerms, onExplainFurther, depth + 1)
-    );
-  }
-  return node;
-}
-
-/**
  * The words inside a hidden block, without the line break the reader adds at the end. A block with
  * nothing in it (an answer cut off right after the opening mark, or a block closed at once) reaches
  * the draw step with no children at all, and String() of that is the word "undefined", which an
@@ -264,8 +240,6 @@ function buildMdComponents(args: MdArgs): Components {
     scrambleSlotRef,
   } = args;
   const drgGlossaryEnabled = glossaryTerms.length > 0;
-  const linkify = (children: ReactNode): ReactNode =>
-    drgGlossaryEnabled ? linkifyDrgGlossaryNode(children, glossaryTerms, onDrgGlossaryExplainFurther) : children;
 
   const base: Components = {
     /*
@@ -278,7 +252,7 @@ function buildMdComponents(args: MdArgs): Components {
      */
     p: ({ children }) => {
       const Tag = drgGlossaryEnabled ? "div" : "p";
-      return <Tag className="bonsai-md-p">{linkify(children)}</Tag>;
+      return <Tag className="bonsai-md-p">{children}</Tag>;
     },
     /*
      * Never draw a real <img>: Steam's browser would fetch whatever web address an answer or a
@@ -291,7 +265,7 @@ function buildMdComponents(args: MdArgs): Components {
     },
     ul: ({ children }) => <ul className="bonsai-md-ul">{children}</ul>,
     ol: ({ children }) => <ol className="bonsai-md-ol">{children}</ol>,
-    li: ({ children }) => <li className="bonsai-md-li">{linkify(children)}</li>,
+    li: ({ children }) => <li className="bonsai-md-li">{children}</li>,
     pre: ({ children }) => {
       /*
        * react-markdown wraps every fenced code block's `code` output in `pre` regardless of what
@@ -336,6 +310,7 @@ function buildMdComponents(args: MdArgs): Components {
         if (!raw.trim()) return null;
         return (
           <ReactMarkdown
+            rehypePlugins={[rehypeGlossaryFirstUse(glossaryTerms, NOTHING_USED)]}
             components={buildMdComponents({
               spoilerMaskingEnabled: false,
               spoilerDefaultExpanded: true,
@@ -355,6 +330,7 @@ function buildMdComponents(args: MdArgs): Components {
           <BonsaiSpoilerFence
             body={raw}
             defaultExpanded={spoilerDefaultExpanded}
+            innerPlugins={[rehypeGlossaryFirstUse(glossaryTerms, NOTHING_USED)]}
             innerComponents={buildMdComponents({
               spoilerMaskingEnabled,
               spoilerDefaultExpanded,
@@ -391,15 +367,30 @@ function buildMdComponents(args: MdArgs): Components {
     strong: ({ children }) => <strong className="bonsai-md-strong">{children}</strong>,
     em: ({ children }) => <em className="bonsai-md-em">{children}</em>,
   };
-  if (scrambleSlotRef) {
-    /* Markdown never makes a span of its own here (raw HTML is off), so while the scramble runs
-       the only span is its slot; it renders empty and the scramble fills it (see scrambleSlotRef). */
-    base.span = ({ className, children }) =>
-      typeof className === "string" && className.includes(SCRAMBLE_SLOT_CLASS) ? (
+  /* The first-mention step (glossaryFirstUse.ts) leaves a span per underlined word; draw it as the chip.
+     Markdown never makes a span of its own here (raw HTML is off), so the only other span is the
+     scramble's slot, which renders empty and the scramble fills (see scrambleSlotRef). */
+  const termsById = new Map(glossaryTerms.map((t) => [t.id, t]));
+  if (scrambleSlotRef || drgGlossaryEnabled) {
+    base.span = (props) => {
+      const { className, children } = props;
+      const hitId = (props as { "data-glossary-id"?: string })["data-glossary-id"];
+      const term = typeof className === "string" && className.includes(GLOSSARY_HIT_CLASS) && hitId ? termsById.get(hitId) : undefined;
+      if (term) {
+        return (
+          <DrgGlossaryTermChip
+            term={term}
+            matchedText={typeof children === "string" ? children : String(children ?? "")}
+            onExplainFurther={onDrgGlossaryExplainFurther}
+          />
+        );
+      }
+      return scrambleSlotRef && typeof className === "string" && className.includes(SCRAMBLE_SLOT_CLASS) ? (
         <span className="bonsai-stream-scramble" ref={scrambleSlotRef} />
       ) : (
         <span className={className}>{children}</span>
       );
+    };
   }
 
   return base;
@@ -438,8 +429,10 @@ function BonsaiSpoilerFence(props: {
   body: string;
   defaultExpanded: boolean;
   innerComponents: Components;
+  /** Parse steps for the revealed text (the glossary's first-mention step), see NOTHING_USED. */
+  innerPlugins: RehypePlugins;
 }) {
-  const { body, defaultExpanded, innerComponents } = props;
+  const { body, defaultExpanded, innerComponents, innerPlugins } = props;
   const [open, setOpen] = useState(defaultExpanded);
   // Stable per-mount id so this fence can be registered and de-registered without a DOM lookup.
   const fenceIdRef = useRef<string>("");
@@ -621,7 +614,9 @@ function BonsaiSpoilerFence(props: {
           Spoiler — tap to hide
         </button>
       </Focusable>
-      <ReactMarkdown components={innerComponents}>{body}</ReactMarkdown>
+      <ReactMarkdown components={innerComponents} rehypePlugins={innerPlugins}>
+        {body}
+      </ReactMarkdown>
     </div>
   );
 }
@@ -671,11 +666,25 @@ export const MainTabBonsaiAiMarkdownChunk = memo(function MainTabBonsaiAiMarkdow
     [masking, defaultEx, glossaryTerms, hasExplainFurther, onDrgGlossaryExplainFurther, scrambleSlotRef]
   );
 
+  /*
+   * Words the pieces before this one already underlined, worked out from their text. Kept across
+   * the many redraws of a growing last piece: it changes only when the earlier text or the word
+   * list does, so the earlier pieces are not read again on every beat of the stream.
+   */
+  const alreadyUsed = useMemo(
+    () => usedGlossaryIds(props.glossaryBefore ?? "", glossaryTerms),
+    [props.glossaryBefore, glossaryTerms]
+  );
+  const rehypePlugins = useMemo(
+    () => [
+      ...(scrambleSlotRef ? SCRAMBLE_SLOT_PLUGINS : []),
+      ...(glossaryTerms.length > 0 ? [rehypeGlossaryFirstUse(glossaryTerms, alreadyUsed)] : []),
+    ],
+    [scrambleSlotRef, glossaryTerms, alreadyUsed]
+  );
+
   return (
-    <ReactMarkdown
-      components={components}
-      rehypePlugins={scrambleSlotRef ? SCRAMBLE_SLOT_PLUGINS : undefined}
-    >
+    <ReactMarkdown components={components} rehypePlugins={rehypePlugins}>
       {props.source}
     </ReactMarkdown>
   );

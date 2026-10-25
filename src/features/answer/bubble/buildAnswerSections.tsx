@@ -22,6 +22,7 @@ import React, { memo, useCallback, useRef } from "react";
 import { Focusable } from "@decky/ui";
 import { ScrambledAnswerText } from "../stream/ScrambledAnswerText";
 import type { DrgGlossaryTerm } from "../../glossary/glossaryStore";
+import { appendGlossaryBefore } from "../../glossary/glossaryFirstUse";
 import { StreamFenceWaitChip } from "../stream/StreamFenceWaitChip";
 import { registerAnswerStop } from "../../../shared/dpad/answerStopRegistry";
 import { registerRowNav } from "../../../shared/dpad/focusPerTurnRow";
@@ -75,6 +76,8 @@ type AnswerSectionProps = {
   spoilerDefaultExpanded: boolean;
   appId?: string | null;
   onDrgGlossaryExplainFurther?: (term: DrgGlossaryTerm) => void;
+  /** The text of the sections before this one: their glossary words are plain here (glossaryFirstUse.ts). */
+  glossaryBefore?: string;
 };
 
 /** True when two section bodies draw the same thing, so a closed section's fresh body object is no change. */
@@ -119,6 +122,7 @@ const AnswerSection = memo(
             spoilerDefaultExpanded={p.spoilerDefaultExpanded}
             appId={p.appId}
             onDrgGlossaryExplainFurther={p.onDrgGlossaryExplainFurther}
+            glossaryBefore={p.glossaryBefore}
           />
         )}
       </Focusable>
@@ -132,6 +136,7 @@ const AnswerSection = memo(
     a.spoilerDefaultExpanded === b.spoilerDefaultExpanded &&
     a.appId === b.appId &&
     a.onDrgGlossaryExplainFurther === b.onDrgGlossaryExplainFurther &&
+    a.glossaryBefore === b.glossaryBefore &&
     sameBody(a.body, b.body)
 );
 
@@ -182,17 +187,24 @@ export type AnswerSectionsArgs = {
 export function buildAnswerSections(a: AnswerSectionsArgs): React.ReactNode[] {
   const shared = stableHandlers(a.answerKey, a.nav);
   const lastNav = a.lastNav ? stableHandlers(`${a.answerKey}#last`, a.lastNav) : shared;
-  return a.bodies.map((body, i) => (
-    <AnswerSection
-      key={`stop-${i}`}
-      answerKey={a.answerKey}
-      index={i}
-      body={body}
-      nav={i === a.bodies.length - 1 ? lastNav : shared}
-      spoilerMaskingEnabled={a.spoilerMaskingEnabled}
-      spoilerDefaultExpanded={a.spoilerDefaultExpanded}
-      appId={a.appId}
-      onDrgGlossaryExplainFurther={a.onDrgGlossaryExplainFurther}
-    />
-  ));
+  /* Each section is told the text of the sections before it (a waiting chip has none). */
+  let before: string | undefined;
+  return a.bodies.map((body, i) => {
+    const glossaryBefore = before;
+    if (body.kind === "text") before = appendGlossaryBefore(before, body.text);
+    return (
+      <AnswerSection
+        key={`stop-${i}`}
+        answerKey={a.answerKey}
+        index={i}
+        body={body}
+        nav={i === a.bodies.length - 1 ? lastNav : shared}
+        spoilerMaskingEnabled={a.spoilerMaskingEnabled}
+        spoilerDefaultExpanded={a.spoilerDefaultExpanded}
+        appId={a.appId}
+        onDrgGlossaryExplainFurther={a.onDrgGlossaryExplainFurther}
+        glossaryBefore={glossaryBefore}
+      />
+    );
+  });
 }

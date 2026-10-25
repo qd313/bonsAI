@@ -501,6 +501,26 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   hundred in the first three on the held-back questions). Lane F's note: the chat history itself may still carry the
   boss advice into a thank-you reply; the Deck check decides.
 
+- **23:00 UTC: lane T done** (six commits, one more asked for tip 126 and the one test line that pins it): of the 24
+  blind problem sentences, 17 reach a tip (8 before) and 13 reach the right one (5 before); nothing that was right went
+  wrong. Two sentences in the new tips go beyond the tips they were built from ("pick the headphones"; "try the crash
+  tips"): on the maintainer's read list. No "can't find my PC" tip exists; the lane's proposed text is in its report.
+  The lane overwrote one eval report file in the workshop and restored it from the p100 copy (the script writes its JSON
+  even with the no-report flag: a one-star bug for lane M). **Lane N3 done** (fifteen Sims 4 notes; licence set to 3.0
+  by hand because the fetcher prints it bare). Found: seed note 112 ("Fires") says there are no firefighters in The
+  Sims 4; the wiki says they were added in a patch and come when a smoke alarm sees the fire; the two fire notes now
+  disagree (lane M).
+- **23:00 UTC: lane X, first half (items 1 to 5), all on this PC's model, reports in the workshop's research folder.**
+  Search: the right note is in the first three 88.1 times in a hundred on the held-back questions (the blend that
+  ships; meaning-only 89.0, keyword 81.8). Tips before T: 8 of 24 reach a tip, 7 right by hand. **Hide more against
+  Default, second run:** 20.6 against 23.8 covers per 100 answers (23 against 29 on 2026-10-24); the two Hades story
+  rows drew their cover the same under both (3 of 3 and 2 of 3), so Hide more missed no story cover Default kept this
+  time; contradictions 92.6 against 88.9 percent clean. **Hide less, second run:** 94.4 percent clean (90.7 before).
+  **The zero-score made-up question:** a floor at "no keyword support" clears Zorblax and Grimthak but loses 3 right
+  notes; the house and the Bone Hydra questions score about 3.6 to 3.8 and a floor there loses 19 right notes; the
+  "No close match" line already shows on all four. The numbers say: no new floor. The bookkeeper writes these into the
+  four "measure first" entries at the next sweep.
+
 ## 13. Report
 
 Not yet written.

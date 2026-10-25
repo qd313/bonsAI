@@ -9,7 +9,7 @@
       "name": "Fire",
       "card": "Summary: Fires damage furniture and kill a Sim who catches fire and is not put out before the \"I'm on Fire!\" moodlet expires.\nWeak points: A smoke alarm brings firefighters on its own, a fire sprinkler panel puts the fire out, and a teen or older Sim can be sent to extinguish it, though a panicking Sim may ignore the order.\nTips: Cooking accidents are the most common cause, such as a low-skill cook on a cheap stove, and decorations or objects too close to a stove, lit fireplace or campfire can start one. Nothing can be built, bought or saved while one burns.",
       "source_url": "https://sims.fandom.com/wiki/Fire",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1237114",
       "crawled_at": "2026-10-25"
     },
@@ -20,7 +20,7 @@
       "name": "Cowplant",
       "card": "Summary: A plant grown from a rare berry that lures Sims with a slice of cake when hungry and kills a Sim who grabs the cake while still Drained from being eaten once.\nWeak points: Feed it meat while its tongue and cake are showing; a Sim it eats the first time is spat out with a two-day Drained moodlet, so only a second grab then is deadly.\nTips: An unfed Cowplant dies 12 in-game hours after its cake shows, but the count pauses while your Sim is away from the lot, and after patch 174 a dead one can be revived for §100. Milking one that has devoured a Sim gives Essence of Life, which adds days to a Sim's life.",
       "source_url": "https://sims.fandom.com/wiki/Laganaphyllis_simnovorii",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1245745",
       "crawled_at": "2026-10-25"
     },
@@ -31,7 +31,7 @@
       "name": "Burglar",
       "card": "Summary: Robin Banks (or Fia Acosta with Royalty & Legacy) sneaks onto a residential lot to steal objects, even when a Sim is awake, with a violin-like sting on arrival.\nWeak points: A Sim can fight the burglar (a win keeps them away for a few days), call the police or talk it out, and a burglar alarm by the front door scares one off and calls the police; an upgraded alarm also zaps them.\nTips: Cats, dogs, Agnes Crumplebottom and Bonehilda fight burglars on their own, but locked doors are no defence because locks can be ignored during a burglary.",
       "source_url": "https://sims.fandom.com/wiki/Burglar",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1247113",
       "crawled_at": "2026-10-25"
     },
@@ -42,7 +42,7 @@
       "name": "Drowning",
       "card": "Summary: A Sim who cannot get out of the water keeps swimming until the energy or hunger need runs out, and then drowns.\nWeak points: Sims usually leave the water on their own, and in The Sims 4 they can climb out of a pool without a ladder, so a drowning needs the pool blocked in by walls or objects.\nTips: In Get Famous a Sim who falls into the Luminary's Exotic Water Garden while the pond is full of hungry fish can drown. Vampires, mermaids, infants and toddlers cannot drown.",
       "source_url": "https://sims.fandom.com/wiki/Drowning",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1238742",
       "crawled_at": "2026-10-25"
     },
@@ -53,7 +53,7 @@
       "name": "Meteorite shower",
       "card": "Summary: Using a telescope can bring a meteorite shower: the Sim gets a scared moodlet for twenty in-game minutes and is killed if not inside a building when it ends.\nWeak points: Guide the scared Sim into a building before the moodlet ends; Servos cannot die this way.\nTips: A telescope shows the sky by day and the stars or moon at night, and can be kept in a Sim's inventory. The Chased by Death trait from Life & Death raises the risk.",
       "source_url": "https://sims.fandom.com/wiki/Telescope",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1254748",
       "crawled_at": "2026-10-25"
     },
@@ -64,7 +64,7 @@
       "name": "Grim Reaper",
       "card": "Summary: He appears from a cloud of smoke when a Sim dies, reaps the soul and leaves an urn or gravestone, and cannot normally be killed.\nWeak points: Living Sims on the lot can plead: a fine or happy Sim pleads, a confident Sim demands (40 percent), a flirty Sim seduces (10 percent), a sad Sim wails (30 percent), and an angry Sim's yelling is always rejected.\nTips: A death flower is the only sure way to save a Sim, and children plead better than any other age. Mischief skill 5 or more can also try Toy with Death using a voodoo doll.",
       "source_url": "https://sims.fandom.com/wiki/Grim_Reaper",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1253090",
       "crawled_at": "2026-10-25"
     },
@@ -75,7 +75,7 @@
       "name": "Smoke alarm",
       "card": "Summary: The Alertz Smoke Alarm is a 1x1 electronics object for Build mode that costs §75 and alerts Sims and the fire department when there is a fire.\nUses: As of patch 95 firefighters come to the lot automatically when an alarm detects a fire, and with a Fire Prevention System Utility Panel on the lot it also sets off sprinklers.\nTips: Alarms on the same floor all go off whatever room they are in, but an alarm placed upstairs does not react to a fire.",
       "source_url": "https://sims.fandom.com/wiki/Smoke_detector",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1170897",
       "crawled_at": "2026-10-25"
     },
@@ -86,7 +86,7 @@
       "name": "Fire sprinkler panel",
       "card": "Summary: A panel you can buy and place anywhere on the lot, to put out fires with sprinklers.\nUses: When a fire breaks out a sprinkler appears above the flames and puts it out, and with a Fire Prevention System Utility Panel on the lot smoke alarms also trigger sprinklers.\nTips: The sprinkler only appears if there is a ceiling above the fire, and it leaves no puddles.",
       "source_url": "https://sims.fandom.com/wiki/Fire",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1237114",
       "crawled_at": "2026-10-25"
     },
@@ -97,7 +97,7 @@
       "name": "Stove",
       "card": "Summary: Stoves are Build mode appliances rated for Food Quality, Power Efficiency and Reliability, for example The YumCooker (§400: 3, 2, 3) and The Schmapple Oven (§13,000: 10, 10, Unbreakable).\nUses: The chef stations from Dine Out are the only stoves that cook experimental food, and a caterer hired for §800 cooks for four hours.\nTips: A cheap stove with a low-skill cook starts fires, and so does a pizza oven or waffle maker with a low or medium-skill cook; in Discover University a stove on a university housing lot stops students moving in.",
       "source_url": "https://sims.fandom.com/wiki/Stove",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1237444",
       "crawled_at": "2026-10-25"
     },
@@ -108,7 +108,7 @@
       "name": "Chess table",
       "card": "Summary: A Build mode game table with Fun 5 that adds to the Logic skill; the five listed tables cost from §450 (The Chessmaster) to §1,000 (Grand Plans Chess Table).\nUses: Chess builds the logic skill in older Sims and the mental skill in children, and a game with a partner also meets the social need.\nTips: It needs chairs at both ends, and Sims can knock pieces off the table.",
       "source_url": "https://sims.fandom.com/wiki/Chess_table",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1254977",
       "crawled_at": "2026-10-25"
     },
@@ -119,7 +119,7 @@
       "name": "Computer",
       "card": "Summary: Desktops and laptops need a desk, dining table or island counter with a matching chair or barstool, tablets need no furniture, and laptops and tablets can be carried in the inventory.\nUses: Games (fun, Video Gaming skill), writing, programming, job search, moving the household and adopting a child (§1000); browsing gives moodlets: Art inspired, Simpedia focused, funny videos playful.\nTips: ECC RAM (Handiness 8) makes it break less often, a better video card (Handiness 9) raises gaming fun faster, and since patch 88 it can be locked like a door.",
       "source_url": "https://sims.fandom.com/wiki/Computer",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1254173",
       "crawled_at": "2026-10-25"
     },
@@ -130,7 +130,7 @@
       "name": "Shower",
       "card": "Summary: Showers can be upgraded, and the kind of shower sets the mood: brisk for energized, steamy for flirty, thoughtful for inspired.\nUses: A cold shower taken when angry or flirty puts the Sim back to their earlier emotion.\nTips: A cheap shower can leave a Sim uncomfortable, and the open showers from Discover University, Snowy Escape and Lovestruck allow more compact bathrooms.",
       "source_url": "https://sims.fandom.com/wiki/Shower",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1237448",
       "crawled_at": "2026-10-25"
     },
@@ -141,7 +141,7 @@
       "name": "Staircase",
       "card": "Summary: A staircase's length follows the wall height (or the foundation it sits on) and it can be pulled sideways as long as the lot, but there are no spiral staircases.\nUses: A widget bends a stair into L, T or U shapes (patch 84), with at least four steps between landings, and the ladder (patch 95) is a one-tile alternative for indoors or outdoors.\nTips: Patch 193 added flared ends and a choice of railing side and length, and elevators appear in the Build mode catalog only on penthouse lots.",
       "source_url": "https://sims.fandom.com/wiki/Staircase",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1225020",
       "crawled_at": "2026-10-25"
     },
@@ -152,7 +152,7 @@
       "name": "Foundation",
       "card": "Summary: There is no foundation tool: select a room and drag the arrow at its center up or down, to any height, even sunk into the ground.\nUses: Platforms (patch 103) raise or lower a room's floor apart from the foundation for split levels, and a one-step difference can be walked while a bigger gap needs a ladder or stairs.\nTips: A sunken foundation distorts the terrain, buildings with different foundation heights need at least one tile of space between them, and a stilted foundation (patch 81) allows building over water.",
       "source_url": "https://sims.fandom.com/wiki/Foundation",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1051821",
       "crawled_at": "2026-10-25"
     },
@@ -163,7 +163,7 @@
       "name": "Roof",
       "card": "Summary: Auto-roofing is gone: roofs are pushed and pulled to the size and shape you want, from gabled, half gable, hipped and half hipped styles with diagonal versions.\nUses: Pushing and pulling can make domed, pagoda, awning and gambrel shapes, and patches 57 and 68 added pentagonal, hexagonal, octagonal and round roofs and six glass roofs.\nTips: Eco Lifestyle roofs have solar panels that generate electricity in daylight, and with Seasons a roof keeps rain, snow and harsh temperatures out.",
       "source_url": "https://sims.fandom.com/wiki/Roof",
-      "source_license": "CC-BY-SA",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": "1237491",
       "crawled_at": "2026-10-25"
     }

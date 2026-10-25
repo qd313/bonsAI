@@ -19,7 +19,7 @@ const word = (id: string, term: string, altForms: string[]): DrgGlossaryTerm => 
   gameTitle: "Hollow Knight",
 });
 
-export const HK_TERMS: DrgGlossaryTerm[] = [
+const HK_TERMS: DrgGlossaryTerm[] = [
   word("mothwing-cloak", "Mothwing Cloak", []),
   word("charms", "charms", ["charm"]),
   word("notches", "notches", ["notch"]),

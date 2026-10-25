@@ -768,7 +768,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "Internal storage full -- not enough space, no space left, or you can't install a new game: uninstall large shaders and unused games first.",
+    "card": "Internal storage full -- not enough space, no space left, or you can't add a new game: uninstall large shaders and unused games first.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },

@@ -23,6 +23,9 @@ BY_ID = {int(t["pattern_id"]): t for t in TIPS}
 
 # sentence row (the number after V2-W2-SYM-) -> (tip it should reach, plain words that tip must say).
 # Every phrase is one a person typed in one of the 24 sentences, or the nearest everyday form of it.
+# Tip 76 does not say "install" on purpose: with that word a storage tip becomes a plain keyword hit for
+# "installs on the memory card", which test_topic_recall_reaches_tips_that_share_no_word_with_the_question
+# (tests/test_knowledge_base_service.py) pins as not happening.
 # Rows 03 and 04 ("wont even open", "nothing happens when I launch") belong to tip 126; that tip is
 # pinned word for word by tests/test_knowledge_base_service.py, so it is not reworded here.
 PLAIN_WORDS = {
@@ -31,7 +34,7 @@ PLAIN_WORDS = {
     "05": (152, ("goes black", "black screen")),
     "06": (152, ("turns black", "screen")),
     "12": (165, ("tv speakers", "headphones")),
-    "13": (76, ("storage full", "can't install")),
+    "13": (76, ("storage full", "can't add a new game")),
     "14": (76, ("not enough space", "no space left")),
     "23": (166, ("tv", "menus")),
     "24": (166, ("television", "menus", "wrong spot")),

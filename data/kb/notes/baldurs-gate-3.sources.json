@@ -212,6 +212,144 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1004,
+      "name": "Explosive Barrel",
+      "page": "Baldur's Gate 3",
+      "revision": "1381526328",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A barrel that counts as an item you can store in your camp stash and as an environmental element you can exploit in combat.",
+          "from": [
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "Environmental elements like explosive barrels can be exploited"
+            },
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "Items, like explosive barrels, can be sent to a camp stash and retrieved later."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Environmental elements like explosive barrels can be exploited in combat.",
+          "from": [
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "Environmental elements like explosive barrels can be exploited"
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Items like explosive barrels can be sent to your camp stash and retrieved later.",
+          "from": [
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "Items, like explosive barrels, can be sent to a camp stash and retrieved later."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1005,
+      "name": "Potions",
+      "page": "Baldur's Gate 3",
+      "revision": "1381526328",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "Drinkable items, including health potions and one that lets you talk to animals.",
+          "from": [
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "Using a spell or potion, players can speak to any encountered animal"
+            },
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "as if they are a health potion"
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Drinking a potion consumes a bonus action; attacking with a sword or casting a spell consumes an action.",
+          "from": [
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "Major instructions to a character, like attacking with a sword or casting a spell, consume an action. Smaller commands, like jumping or drinking a potion, consume a bonus action."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Actions, bonus actions and movement are separate turn resources, so a potion does not cost you your attack or spell.",
+          "from": [
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "The primary resources are actions, bonus actions, and movement."
+            },
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "Major instructions to a character, like attacking with a sword or casting a spell, consume an action. Smaller commands, like jumping or drinking a potion, consume a bonus action."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1006,
+      "name": "Weapon Poison",
+      "page": "Baldur's Gate 3",
+      "revision": "1381526328",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "Poison that weapons can be dipped in, one of the combat options the game lists beside exploiting explosive barrels.",
+          "from": [
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "Environmental elements like explosive barrels can be exploited, and weapons can be dipped in poison."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Weapons can be dipped in poison.",
+          "from": [
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "weapons can be dipped in poison"
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A Polygon reviewer called it unintuitive that weapons are dipped in poison by interacting with the poison as if it were a health potion, rather than through the \"dip weapon\" function.",
+          "from": [
+            {
+              "page": "Baldur's Gate 3",
+              "revision": "1381526328",
+              "quote": "citing how weapons are dipped in poison by interacting with them as if they are a health potion instead of the \"dip weapon\" function"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

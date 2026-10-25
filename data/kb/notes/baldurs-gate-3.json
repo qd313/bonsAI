@@ -45,6 +45,39 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "1376133633",
       "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1004,
+      "game_id": 4,
+      "section_type": "item",
+      "name": "Explosive Barrel",
+      "card": "Summary: A barrel that counts as an item you can store in your camp stash and as an environmental element you can exploit in combat.\nUses: Environmental elements like explosive barrels can be exploited in combat.\nTips: Items like explosive barrels can be sent to your camp stash and retrieved later.",
+      "source_url": "https://en.wikipedia.org/wiki/Baldur%27s_Gate_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "1381526328",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1005,
+      "game_id": 4,
+      "section_type": "item",
+      "name": "Potions",
+      "card": "Summary: Drinkable items, including health potions and one that lets you talk to animals.\nUses: Drinking a potion consumes a bonus action; attacking with a sword or casting a spell consumes an action.\nTips: Actions, bonus actions and movement are separate turn resources, so a potion does not cost you your attack or spell.",
+      "source_url": "https://en.wikipedia.org/wiki/Baldur%27s_Gate_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "1381526328",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1006,
+      "game_id": 4,
+      "section_type": "item",
+      "name": "Weapon Poison",
+      "card": "Summary: Poison that weapons can be dipped in, one of the combat options the game lists beside exploiting explosive barrels.\nUses: Weapons can be dipped in poison.\nTips: A Polygon reviewer called it unintuitive that weapons are dipped in poison by interacting with the poison as if it were a health potion, rather than through the \"dip weapon\" function.",
+      "source_url": "https://en.wikipedia.org/wiki/Baldur%27s_Gate_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "1381526328",
+      "crawled_at": "2026-10-25"
     }
   ]
 }

@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 1200,
+      "game_id": 10,
+      "section_type": "enemy",
+      "name": "Fire",
+      "card": "Summary: Fires damage furniture and kill a Sim who catches fire and is not put out before the \"I'm on Fire!\" moodlet expires.\nWeak points: A smoke alarm brings firefighters on its own, a fire sprinkler panel puts the fire out, and a teen or older Sim can be sent to extinguish it, though a panicking Sim may ignore the order.\nTips: Cooking accidents are the most common cause, such as a low-skill cook on a cheap stove, and decorations or objects too close to a stove, lit fireplace or campfire can start one. Nothing can be built, bought or saved while one burns.",
+      "source_url": "https://sims.fandom.com/wiki/Fire",
+      "source_license": "CC-BY-SA",
+      "source_version": "1237114",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1201,
+      "game_id": 10,
+      "section_type": "enemy",
+      "name": "Cowplant",
+      "card": "Summary: A plant grown from a rare berry that lures Sims with a slice of cake when hungry and kills a Sim who grabs the cake while still Drained from being eaten once.\nWeak points: Feed it meat while its tongue and cake are showing; a Sim it eats the first time is spat out with a two-day Drained moodlet, so only a second grab then is deadly.\nTips: An unfed Cowplant dies 12 in-game hours after its cake shows, but the count pauses while your Sim is away from the lot, and after patch 174 a dead one can be revived for §100. Milking one that has devoured a Sim gives Essence of Life, which adds days to a Sim's life.",
+      "source_url": "https://sims.fandom.com/wiki/Laganaphyllis_simnovorii",
+      "source_license": "CC-BY-SA",
+      "source_version": "1245745",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1202,
+      "game_id": 10,
+      "section_type": "enemy",
+      "name": "Burglar",
+      "card": "Summary: Robin Banks (or Fia Acosta with Royalty & Legacy) sneaks onto a residential lot to steal objects, even when a Sim is awake, with a violin-like sting on arrival.\nWeak points: A Sim can fight the burglar (a win keeps them away for a few days), call the police or talk it out, and a burglar alarm by the front door scares one off and calls the police; an upgraded alarm also zaps them.\nTips: Cats, dogs, Agnes Crumplebottom and Bonehilda fight burglars on their own, but locked doors are no defence because locks can be ignored during a burglary.",
+      "source_url": "https://sims.fandom.com/wiki/Burglar",
+      "source_license": "CC-BY-SA",
+      "source_version": "1247113",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1203,
+      "game_id": 10,
+      "section_type": "enemy",
+      "name": "Drowning",
+      "card": "Summary: A Sim who cannot get out of the water keeps swimming until the energy or hunger need runs out, and then drowns.\nWeak points: Sims usually leave the water on their own, and in The Sims 4 they can climb out of a pool without a ladder, so a drowning needs the pool blocked in by walls or objects.\nTips: In Get Famous a Sim who falls into the Luminary's Exotic Water Garden while the pond is full of hungry fish can drown. Vampires, mermaids, infants and toddlers cannot drown.",
+      "source_url": "https://sims.fandom.com/wiki/Drowning",
+      "source_license": "CC-BY-SA",
+      "source_version": "1238742",
+      "crawled_at": "2026-10-25"
+    },
+    {
+      "section_id": 1204,
+      "game_id": 10,
+      "section_type": "enemy",
+      "name": "Meteorite shower",
+      "card": "Summary: Using a telescope can bring a meteorite shower: the Sim gets a scared moodlet for twenty in-game minutes and is killed if not inside a building when it ends.\nWeak points: Guide the scared Sim into a building before the moodlet ends; Servos cannot die this way.\nTips: A telescope shows the sky by day and the stars or moon at night, and can be kept in a Sim's inventory. The Chased by Death trait from Life & Death raises the risk.",
+      "source_url": "https://sims.fandom.com/wiki/Telescope",
+      "source_license": "CC-BY-SA",
+      "source_version": "1254748",
+      "crawled_at": "2026-10-25"
+    }
+  ]
+}

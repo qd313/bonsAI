@@ -1,0 +1,437 @@
+{
+  "wiki": "The Sims Wiki (https://sims.fandom.com/api.php)",
+  "licence_printed_by_fetcher": "CC-BY-SA https://www.fandom.com/licensing",
+  "read_on": "2026-10-25",
+  "sections": [
+    {
+      "section_id": 1200,
+      "name": "Fire",
+      "pages": [
+        {
+          "page": "Fire",
+          "url": "https://sims.fandom.com/wiki/Fire",
+          "revision": 1237114
+        },
+        {
+          "page": "Smoke detector",
+          "url": "https://sims.fandom.com/wiki/Smoke_detector",
+          "revision": 1170897
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "Fires damage furniture and kill a Sim who catches fire and is not put out before the \"I'm on Fire!\" moodlet expires.",
+          "drawn_from": [
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "Fires can break out in Sims' homes, damaging furniture and other objects and potentially killing Sims."
+            },
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "Sims who catch on fire receive a tense \"I'm on Fire!\" moodlet. If the Sim is not extinguished before the moodlet expires, they will die."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "A smoke alarm brings firefighters on its own, a fire sprinkler panel puts the fire out, and a teen or older Sim can be sent to extinguish it, though a panicking Sim may ignore the order.",
+          "drawn_from": [
+            {
+              "page": "Smoke detector",
+              "revision": 1170897,
+              "excerpt": "firefighter NPCs have been added and will automatically come to the lot when a smoke alarm detects a fire"
+            },
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "players can purchase a fire sprinkler panel which can be placed anywhere on the lot. When a fire breaks out, a sprinkler automatically appears above the flames and extinguishes the fire."
+            },
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "Teen Sims and older can be directed to extinguish fires themselves, although panicking Sims may ignore commands or fail to properly extinguish the flames."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Cooking accidents are the most common cause, such as a low-skill cook on a cheap stove, and decorations or objects too close to a stove, lit fireplace or campfire can start one. Nothing can be built, bought or saved while one burns.",
+          "drawn_from": [
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "The most common cause of fires are cooking accidents."
+            },
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "Cooking on a cheap stove with a Sim that has a low cooking skill."
+            },
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "Cooking or grilling with ceiling or wall decorations placed too close to the stove."
+            },
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "Placing a Sim or objects too close to a lit fireplace."
+            },
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "Placing objects too close to a lit campfire."
+            },
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "During a fire, Build and Buy mode are unavailable"
+            },
+            {
+              "page": "Fire",
+              "revision": 1237114,
+              "excerpt": "In The Sims 2, The Sims 4, and The Sims 3 for console, players cannot save the game during a fire."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1201,
+      "name": "Cowplant",
+      "pages": [
+        {
+          "page": "Laganaphyllis simnovorii",
+          "url": "https://sims.fandom.com/wiki/Laganaphyllis_simnovorii",
+          "revision": 1245745
+        },
+        {
+          "page": "Death",
+          "url": "https://sims.fandom.com/wiki/Death",
+          "revision": 1246562
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A plant grown from a rare berry that lures Sims with a slice of cake when hungry and kills a Sim who grabs the cake while still Drained from being eaten once.",
+          "drawn_from": [
+            {
+              "page": "Laganaphyllis simnovorii",
+              "revision": 1245745,
+              "excerpt": "the Cowplant is now obtained by collecting a rare berry, which can be planted in a garden, eaten, or sold for §900."
+            },
+            {
+              "page": "Laganaphyllis simnovorii",
+              "revision": 1245745,
+              "excerpt": "When a Sim is eaten for the first time, the Cowplant will spit them out, and they will receive the Drained moodlet"
+            },
+            {
+              "page": "Laganaphyllis simnovorii",
+              "revision": 1245745,
+              "excerpt": "If a Sim with this moodlet attempts to eat the cake, the Cowplant will devour them."
+            },
+            {
+              "page": "Death",
+              "revision": 1246562,
+              "excerpt": "If a Cowplant is not fed for a period of time, it will pull out a slice of cake to lure Sims in."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "Feed it meat while its tongue and cake are showing; a Sim it eats the first time is spat out with a two-day Drained moodlet, so only a second grab then is deadly.",
+          "drawn_from": [
+            {
+              "page": "Laganaphyllis simnovorii",
+              "revision": 1245745,
+              "excerpt": "Sims feed the Cowplant meat"
+            },
+            {
+              "page": "Laganaphyllis simnovorii",
+              "revision": 1245745,
+              "excerpt": "A Cowplant can only be fed when its tongue sticks out and the cake is visible."
+            },
+            {
+              "page": "Laganaphyllis simnovorii",
+              "revision": 1245745,
+              "excerpt": "This negative moodlet will last two days."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "An unfed Cowplant dies 12 in-game hours after its cake shows, but the count pauses while your Sim is away from the lot, and after patch 174 a dead one can be revived for §100. Milking one that has devoured a Sim gives Essence of Life, which adds days to a Sim's life.",
+          "drawn_from": [
+            {
+              "page": "Laganaphyllis simnovorii",
+              "revision": 1245745,
+              "excerpt": "Twelve in-game hours after a Cowplant shows its cake tongue, and is not fed, it will die."
+            },
+            {
+              "page": "Laganaphyllis simnovorii",
+              "revision": 1245745,
+              "excerpt": "After patch 174 Cowplants can be revived for §100 after this stage."
+            },
+            {
+              "page": "Laganaphyllis simnovorii",
+              "revision": 1245745,
+              "excerpt": "Any time the controlled Sim is not at the same lot as the Cowplant, the lot is 'paused,' meaning the plant will not die from starvation until the controlled Sim returns to the lot."
+            },
+            {
+              "page": "Laganaphyllis simnovorii",
+              "revision": 1245745,
+              "excerpt": "Milking a Cowplant yields a drink called \"Essence of Life\", which adds extra days to the Sim's life and instantly makes them happy."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1202,
+      "name": "Burglar",
+      "pages": [
+        {
+          "page": "Burglar",
+          "url": "https://sims.fandom.com/wiki/Burglar",
+          "revision": 1247113
+        },
+        {
+          "page": "Door",
+          "url": "https://sims.fandom.com/wiki/Door",
+          "revision": 1196138
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "Robin Banks (or Fia Acosta with Royalty & Legacy) sneaks onto a residential lot to steal objects, even when a Sim is awake, with a violin-like sting on arrival.",
+          "drawn_from": [
+            {
+              "page": "Burglar",
+              "revision": 1247113,
+              "excerpt": "The default burglar is Robin Banks. She will sneak onto the lot and will steal objects using a large brown sack."
+            },
+            {
+              "page": "Burglar",
+              "revision": 1247113,
+              "excerpt": "Unlike previous games, burglars can appear even if there is a Sim awake on the lot. A violin-like sting is played upon the burglar's arrival."
+            },
+            {
+              "page": "Burglar",
+              "revision": 1247113,
+              "excerpt": "In The Sims 4: Royalty & Legacy, another pre-made NPC burglar was added, Fia Acosta."
+            },
+            {
+              "page": "Burglar",
+              "revision": 1247113,
+              "excerpt": "Burglaries can occur on all residential lot types, including residential rentals."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "A Sim can fight the burglar (a win keeps them away for a few days), call the police or talk it out, and a burglar alarm by the front door scares one off and calls the police; an upgraded alarm also zaps them.",
+          "drawn_from": [
+            {
+              "page": "Burglar",
+              "revision": 1247113,
+              "excerpt": "Sims can fight the burglar: succeeding will prevent the burglar from reappearing for a few days."
+            },
+            {
+              "page": "Burglar",
+              "revision": 1247113,
+              "excerpt": "Sims can call the police, who will deal with the burglar."
+            },
+            {
+              "page": "Burglar",
+              "revision": 1247113,
+              "excerpt": "Sims can confront the burglar themselves to talk it out."
+            },
+            {
+              "page": "Burglar",
+              "revision": 1247113,
+              "excerpt": "Sims can have burglar alarms placed by the front door to scare off burglars and call the police. An upgraded alarm can also zap the burglar."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Cats, dogs, Agnes Crumplebottom and Bonehilda fight burglars on their own, but locked doors are no defence because locks can be ignored during a burglary.",
+          "drawn_from": [
+            {
+              "page": "Burglar",
+              "revision": 1247113,
+              "excerpt": "Cats and dogs will automatically defend houses against burglars."
+            },
+            {
+              "page": "Burglar",
+              "revision": 1247113,
+              "excerpt": "Some NPCs such as Agnes Crumplebottom and Bonehilda will automatically fight burglars."
+            },
+            {
+              "page": "Door",
+              "revision": 1196138,
+              "excerpt": "While door locking settings are usually honored, in some circumstances they may be completely ignored, such as a burglary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1203,
+      "name": "Drowning",
+      "pages": [
+        {
+          "page": "Drowning",
+          "url": "https://sims.fandom.com/wiki/Drowning",
+          "revision": 1238742
+        },
+        {
+          "page": "Death",
+          "url": "https://sims.fandom.com/wiki/Death",
+          "revision": 1246562
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A Sim who cannot get out of the water keeps swimming until the energy or hunger need runs out, and then drowns.",
+          "drawn_from": [
+            {
+              "page": "Drowning",
+              "revision": 1238742,
+              "excerpt": "If a Sim cannot get out of the water, they will continue swimming until their energy or hunger motive is depleted, resulting in death."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "Sims usually leave the water on their own, and in The Sims 4 they can climb out of a pool without a ladder, so a drowning needs the pool blocked in by walls or objects.",
+          "drawn_from": [
+            {
+              "page": "Drowning",
+              "revision": 1238742,
+              "excerpt": "Sims will usually attempt to leave the water on their own if an exit is available."
+            },
+            {
+              "page": "Drowning",
+              "revision": 1238742,
+              "excerpt": "In The Sims 3 and The Sims 4, Sims are able to climb out of the pool without a ladder. As a result, players who wish to prevent a Sim from getting out of a pool must block the pool with walls or other objects."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "In Get Famous a Sim who falls into the Luminary's Exotic Water Garden while the pond is full of hungry fish can drown. Vampires, mermaids, infants and toddlers cannot drown.",
+          "drawn_from": [
+            {
+              "page": "Drowning",
+              "revision": 1238742,
+              "excerpt": "In The Sims 4: Get Famous, Sims can also die by drowning in the Luminary's Exotic Water Garden if they jump or fall into it while the pond is full of hungry fish."
+            },
+            {
+              "page": "Death",
+              "revision": 1246562,
+              "excerpt": "Vampires and skeletons (only in pools) cannot die this way due to not having an energy need."
+            },
+            {
+              "page": "Death",
+              "revision": 1246562,
+              "excerpt": "Mermaids cannot drown regardless."
+            },
+            {
+              "page": "Death",
+              "revision": 1246562,
+              "excerpt": "Infants and toddlers cannot die this way as they cannot swim."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1204,
+      "name": "Meteorite shower",
+      "pages": [
+        {
+          "page": "Telescope",
+          "url": "https://sims.fandom.com/wiki/Telescope",
+          "revision": 1254748
+        },
+        {
+          "page": "Death",
+          "url": "https://sims.fandom.com/wiki/Death",
+          "revision": 1246562
+        },
+        {
+          "page": "Chased by death",
+          "url": "https://sims.fandom.com/wiki/Chased_by_death",
+          "revision": 1254817
+        }
+      ],
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "Using a telescope can bring a meteorite shower: the Sim gets a scared moodlet for twenty in-game minutes and is killed if not inside a building when it ends.",
+          "drawn_from": [
+            {
+              "page": "Telescope",
+              "revision": 1254748,
+              "excerpt": "Using a telescope carries the risk of dying from a meteorite shower. The Sim will get a scared moodlet that lasts for twenty in-game minutes, and if they're not guided inside a building before it expires, a meteorite will fall on them and kill them."
+            },
+            {
+              "page": "Death",
+              "revision": 1246562,
+              "excerpt": "Sims have a random chance of getting a scared moodlet while using a telescope"
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "Guide the scared Sim into a building before the moodlet ends; Servos cannot die this way.",
+          "drawn_from": [
+            {
+              "page": "Telescope",
+              "revision": 1254748,
+              "excerpt": "if they're not guided inside a building before it expires, a meteorite will fall on them and kill them."
+            },
+            {
+              "page": "Death",
+              "revision": 1246562,
+              "excerpt": "Servos cannot die this way."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A telescope shows the sky by day and the stars or moon at night, and can be kept in a Sim's inventory. The Chased by Death trait from Life & Death raises the risk.",
+          "drawn_from": [
+            {
+              "page": "Telescope",
+              "revision": 1254748,
+              "excerpt": "Sims can observe the sky during the day, and the stars or the moon during nighttime."
+            },
+            {
+              "page": "Telescope",
+              "revision": 1254748,
+              "excerpt": "Telescopes can be stored in a Sim's inventory."
+            },
+            {
+              "page": "Chased by death",
+              "revision": 1254817,
+              "excerpt": "Chased by Death is a unique lifestyle trait available in The Sims 4: Life & Death."
+            },
+            {
+              "page": "Chased by death",
+              "revision": 1254817,
+              "excerpt": "Sims with this trait are more susceptible to certain dangerous situations and have an increased risk of dying. The trait modifies hidden trackers associated with poisoning, electrocution, meteorites"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

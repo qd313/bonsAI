@@ -91,6 +91,9 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 ## Deck check owed
 
+- ★ `[KB]` **Too many underlined words in one answer: each glossary word is now underlined only the first time** — **VERIFY, landed 2026-10-25 (`c938e643`). Asked for by the maintainer 2026-10-25 (the checks page: "Only show the underline on the first instance of the keyword").**
+  A Hollow Knight answer underlined 11 words; it now underlines 5 (Mothwing Cloak, Charms, notches, bench, Geo), counting "charm" and "charms" as one word, across every section of the answer and while it streams. Words inside a spoiler block count on their own. Proven by 9 tests.
+  Owes row **P98-GLOSSARY-FIRST-01** on the Deck: 5 underlines in that answer, and Down walks only those 5. Saved walks over answers that repeat a library word may now have fewer stops.
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY, landed
   2026-09-15, unit-tested.** A game known only by name now opens its box, and naming the boss up front keeps the answer in
   plain text. Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01, 2026-09-18), knowledge base off (DRG-01b, 2026-09-23) and library absent (DRG-01c, 2026-10-03; the AI wrote no hidden block, so a cover was not tested directly).

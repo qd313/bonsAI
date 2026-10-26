@@ -258,9 +258,11 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     expect(document.activeElement).toBe(stops[stops.length - 1]);
   });
 
-  it("Show details goes Up onto the bottom row of reason chips, first chip", () => {
+  it("Show details goes Up onto Suggest as a tip (plan 100), and that onto the bottom row of reason chips, first chip", () => {
     const { container } = renderTurn();
     focusOn(byLabel(container, "Show details"));
+    expect(press("onMoveUp")).toBe(true);
+    expect(document.activeElement).toBe(byLabel(container, "Suggest as a tip"));
     expect(press("onMoveUp")).toBe(true);
     expect(document.activeElement).toBe(byText(container, "Spoiled it"));
   });
@@ -297,7 +299,7 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
      choice button). */
   it("with no reason chips and no thumbs row, Show details goes Up onto the last choice", () => {
     const { container } = renderTurn({ liveReplyFeedbackRating: "up" });
-    focusOn(byLabel(container, "Show details"));
+    focusOn(byLabel(container, "Suggest as a tip"));
     expect(press("onMoveUp")).toBe(true);
     expect(document.activeElement?.textContent).toBe(`B. ${BRANCHES.options[1]!.label}`);
   });
@@ -326,6 +328,7 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
       if (document.activeElement?.classList.contains("bonsai-answer-stop")) break;
     }
     expect(seen).toEqual([
+      "Suggest as a tip",
       "Spoiled it",
       "Bad info",
       "Mark reply helpful",

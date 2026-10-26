@@ -168,6 +168,7 @@ import { isPendingPlaceholderResponse, isStopNoticeResponse } from "../../ask/fl
 import { BonsaiChatSecondaryButton } from "../reply-actions/BonsaiChatSecondaryButton";
 import { buildReplyActionsElement } from "../reply-actions/buildReplyActionsElement";
 import { useReplyDemote } from "../reply-actions/useReplyDemote";
+import { useReplySuggestTip } from "../reply-actions/useReplySuggestTip";
 import { archivedTurnTransparency } from "../details/archivedTurnTransparency";
 import { buildAnswerBubbleElement } from "../bubble/buildAnswerBubbleElement";
 import { buildNotesReadLine } from "../../user-notes/NotesReadLine";
@@ -422,6 +423,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   const replyDemote = useReplyDemote({ lastExchange, lastRequestId: props.lastRequestId ?? null });
   /* The notes marked under the newest answer right now: its notes block tags them at once and drops the tag on Undo. */
   const markedNow = replyDemote.state.phase === "done" ? replyDemote.state.picked : undefined;
+  /* Plan 100: the newest answer's "Suggest as a tip" button, handed to its reply row (the row shows it only under a finished answer). */
+  const replySuggestTip = useReplySuggestTip({ lastExchange, appId: ollamaContext?.app_id, appName: ollamaContext?.app_name });
   const [sessionHighlightTurnId, setSessionHighlightTurnId] = useState<string | null>(null);
   const [transparencyDetailsOpen, setTransparencyDetailsOpen] = useState(false);
   /**
@@ -1326,6 +1329,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     demote: showFeedbackHere
                       ? { ...replyDemote.actions, state: replyDemote.state, notes: kbNotesHere }
                       : undefined,
+                    suggestTip: showFeedbackHere ? replySuggestTip : undefined,
                     /* Down must reach this turn's own ladder, then the "From the notes" block when
                        one is attached, then the details panel's own tabs row when the panel is open,
                        then whatever came after this row before any of them existed. */
@@ -1531,6 +1535,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   onChip: onReplyMicroAction,
                   askInFlight: isAsking,
                   demote: { ...replyDemote.actions, state: replyDemote.state, notes: liveKbNotesShown },
+                  suggestTip: replySuggestTip,
                   onMoveDownFromUtility: () =>
                     focusKbNotesBlock("live") ||
                     focusDetailsTabsRow("live") ||

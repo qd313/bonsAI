@@ -137,7 +137,7 @@ describe("the note card in the transcript", () => {
     expect(renderTranscript([turn("t1", 0)]).container.querySelector("[data-bonsai-note-card]")).toBeNull();
   });
 
-  it("walks Down the real turn from the question: line, answer, Helpful, Keep, For, Show details, each once", () => {
+  it("walks Down the real turn from the question: line, answer, Helpful, Keep, For, Suggest as a tip, Show details, each once", () => {
     receiveStatusOffer({ note_offer: OFFER, request_id: 1, chat_slot_id: "" });
     const { container } = renderTranscript([turn("t1", 1)]);
     const names: string[] = [];
@@ -174,8 +174,8 @@ describe("the note card in the transcript", () => {
       putSteamRingOn(helpful);
     });
     const rest: string[] = [];
-    for (let i = 0; i < 4 && press(); i += 1) rest.push(nameNow());
-    expect(rest.slice(0, 3)).toEqual(["Keep this note", "For", "Show details"]);
-    expect(new Set(rest.slice(0, 3)).size).toBe(3);
+    for (let i = 0; i < 5 && press(); i += 1) rest.push(nameNow());
+    expect(rest.slice(0, 4)).toEqual(["Keep this note", "For", "Suggest as a tip", "Show details"]);
+    expect(new Set(rest.slice(0, 4)).size).toBe(4);
   });
 });

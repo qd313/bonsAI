@@ -196,6 +196,7 @@ const STOP_LABELS = [
   "Spoiled it",
   "Too long",
   "Too short",
+  "Suggest as a tip",
   "Show details",
 ];
 
@@ -281,12 +282,12 @@ describe("Up and Down between the rating choices, the thumbs and the corner icon
     const up: string[] = [];
     focusOn(byLabel(container, "Show details"));
     up.push(where());
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 7; i++) {
       if (!press("onMoveUp")) break;
       up.push(where());
       if (where() === "Mark reply helpful") break;
     }
-    expect(up).toEqual(["Show details", "Spoiled it", "Bad info", "Mark reply helpful"]);
+    expect(up).toEqual(["Show details", "Suggest as a tip", "Spoiled it", "Bad info", "Mark reply helpful"]);
     expect(new Set(up).size).toBe(up.length);
 
     /* Down: Helpful's own hop to Bad info, then Steam's own two steps (the Deck's table: Bad info
@@ -297,10 +298,12 @@ describe("Up and Down between the rating choices, the thumbs and the corner icon
     expect(press("onMoveDown")).toBe(false);
     focusOn(byLabel(container, "Spoiled it"));
     down.push(where());
-    expect(press("onMoveDown")).toBe(false);
-    focusOn(byLabel(container, "Show details"));
+    /* Plan 100: Down from the last choice row is the row's own, and lands on Suggest as a tip, then Show details. */
+    expect(press("onMoveDown")).toBe(true);
     down.push(where());
-    expect(down).toEqual(["Mark reply helpful", "Bad info", "Spoiled it", "Show details"]);
+    expect(press("onMoveDown")).toBe(true);
+    down.push(where());
+    expect(down).toEqual(["Mark reply helpful", "Bad info", "Spoiled it", "Suggest as a tip", "Show details"]);
     expect(new Set(down).size).toBe(down.length);
   });
 
@@ -319,11 +322,15 @@ describe("Up and Down between the rating choices, the thumbs and the corner icon
     expect(where()).toBe("Bad info");
   });
 
-  it("with the choices not showing, the routes are today's: Down from Helpful goes to Show details", () => {
+  it("with the choices not showing, Down from Helpful goes to Suggest as a tip (plan 100), then Show details, and back", () => {
     const { container } = renderTurn({ liveReplyFeedbackRating: null });
     focusOn(byLabel(container, "Mark reply helpful"));
     expect(press("onMoveDown")).toBe(true);
+    expect(where()).toBe("Suggest as a tip");
+    expect(press("onMoveDown")).toBe(true);
     expect(where()).toBe("Show details");
+    expect(press("onMoveUp")).toBe(true);
+    expect(where()).toBe("Suggest as a tip");
     expect(press("onMoveUp")).toBe(true);
     expect(where()).toBe("Mark reply helpful");
   });

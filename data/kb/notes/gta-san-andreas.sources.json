@@ -1,4 +1,7 @@
 {
+  "wiki": "GTA Wiki (https://gta.fandom.com/api.php)",
+  "licence_printed_by_fetcher": "CC-BY-SA https://www.fandom.com/licensing",
+  "licence_stored": "CC-BY-SA-3.0 (the fetcher prints no version; 3.0 follows Fandom's licensing page and this repo's data/kb/NOTICE.md, which lists the GTA Wiki as CC-BY-SA-3.0)",
   "game_id": 9,
   "game": "Grand Theft Auto: San Andreas",
   "read_on": "2026-10-25",
@@ -258,7 +261,8 @@
               "page": "https://gta.fandom.com/wiki/Jetpack",
               "revision": "2076108",
               "quoted": [
-                "After the said mission, the Jetpack will be unlocked and will spawn at the Verdant Meadows Airfield, beside the asset collectible.",
+                "CJ later uses it to attack a military train in the mission Green Goo. After the said mission, the Jetpack will be unlocked and will spawn at the Verdant Meadows Airfield, beside the asset collectible.",
+                "At Verdant Meadows Airfield following the completion of Green Goo.",
                 "The Jetpack is a great choice for collecting Horseshoes in the Las Venturas area.",
                 "The Jetpack has a much lower altitude limit than the other aircraft vehicles, and it is not ideal for scaling taller buildings"
               ]

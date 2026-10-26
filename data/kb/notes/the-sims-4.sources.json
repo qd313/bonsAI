@@ -185,7 +185,7 @@
             {
               "page": "Laganaphyllis simnovorii",
               "revision": 1245745,
-              "excerpt": "Milking a Cowplant yields a drink called \"Essence of Life\", which adds extra days to the Sim's life and instantly makes them happy."
+              "excerpt": "As in previous games, a Cowplant that has successfully devoured a Sim can be milked. Milking a Cowplant yields a drink called \"Essence of Life\", which adds extra days to the Sim's life and instantly makes them happy."
             }
           ]
         }
@@ -543,17 +543,7 @@
             {
               "page": "Smoke detector",
               "revision": 1170897,
-              "excerpt": "Build mode"
-            },
-            {
-              "page": "Smoke detector",
-              "revision": 1170897,
-              "excerpt": "§75"
-            },
-            {
-              "page": "Smoke detector",
-              "revision": 1170897,
-              "excerpt": "1x1, wall"
+              "excerpt": "Game || The Sims 4 || Buyability || Build mode || Price in game || §75 || Object type(s) || Electronics || Size || 1x1, wall"
             },
             {
               "page": "Smoke detector",
@@ -671,6 +661,11 @@
               "page": "Stove",
               "revision": 1237444,
               "excerpt": "!! Food Quality !! Power Efficiency !! Reliability"
+            },
+            {
+              "page": "Stove",
+              "revision": 1237444,
+              "excerpt": "|| The YumCooker || §400"
             },
             {
               "page": "Stove",
@@ -883,7 +878,7 @@
             {
               "page": "Computer",
               "revision": 1254173,
-              "excerpt": "Play Game || Raises fun, depending on computer model."
+              "excerpt": "Play Game || Raises fun, depending on computer model. || Depends on Sim's Video Gaming skill."
             },
             {
               "page": "Computer",

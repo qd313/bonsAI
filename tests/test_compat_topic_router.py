@@ -491,6 +491,8 @@ class PlainProblemWordsRouteTests(unittest.TestCase):
         for question in (
             "the gate closes on its own after ten seconds so run through",
             "the gate shut itself behind me and now I cannot get out",
+            "nothing happens when I launch the rocket",
+            "nothing happens when I launch it",
             "something dumps me back at the home screen",
         ):
             with self.subTest(question=question):
@@ -504,7 +506,7 @@ class PlainProblemWordsRouteTests(unittest.TestCase):
         for question in (
             "my game keeps closing on its own",
             "the game wont even open",
-            "nothing happens when I launch it",
+            "when I try to launch the game nothing happens at all",
             "the game keeps quitting on me",
             "the game just shut itself off",
             "my game shuts off in the middle of playing",

@@ -90,9 +90,9 @@ _CRASH_SENTENCE_RULES: tuple[tuple[str, ...], ...] = (
     ("game", "doesnt start"),
     ("game", "will not open"),
     ("game", "will not start"),
-    # The one without the word "game": what a person types after the game was named earlier in
-    # the chat. "launch" is the Deck's word for starting a title.
-    ("nothing happens", "launch"),
+    # "launch" is the Deck's word for starting a title, but a strategy question launches rockets
+    # and grenades too, so this one needs "game" beside it. Without "game" it stays weak below.
+    ("game", "nothing happens", "launch"),
 )
 
 # topic -> rules. Each rule is a tuple of terms that must **all** appear; any rule matching
@@ -368,6 +368,7 @@ _TOPIC_RULES: dict[str, tuple[tuple[str, ...], ...]] = {
         ("clos", "by itself"),
         ("shut itself",),
         ("me back", "home screen"),
+        ("nothing happens", "launch"),
         *_CRASH_SENTENCE_RULES,
     ),
     "deck": (

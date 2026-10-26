@@ -36,6 +36,8 @@ The wikis the notes come from, and their licences:
 | Super Mario Wiki | www.mariowiki.com | CC-BY-SA-4.0 |
 | Pikipedia | www.pikminwiki.com | CC-BY-SA-4.0 |
 | SmashWiki | www.ssbwiki.com | CC-BY-SA-4.0 |
+| The Sims Wiki | sims.fandom.com | CC-BY-SA-3.0 |
+| Wikipedia | en.wikipedia.org | CC-BY-SA-4.0 |
 
 What each licence name means, with a link to its plain-language summary:
 

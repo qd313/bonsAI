@@ -276,8 +276,8 @@ answer sections 0..n-1            (Up/Down walk them, unchanged)
 
 - **Between the answer and Copy:** every move is Steam's own transfer onto the target slot's nav node (`TakeFocus`)
   followed by the registry focus, never a bare `focus()` across containers.
-- **The reply-actions row** under the answer holds Helpful / Not really and Show details. After Helpful (both thumbs
-  swap for "Saved on this Deck") the ring goes down to Show details.
+- **The reply-actions row** under the answer holds Helpful / Not really, "Suggest as a tip" and Show details. After Helpful (both thumbs
+  swap for "Saved on this Deck") the ring lands on "Suggest as a tip", then Show details.
 - **Scroll:** the slot is an ordinary step in the turn's flow, so Steam scrolls it into view (P84-READ-01 checks the
   ring is fully visible on an answer longer than the screen).
 
@@ -1204,6 +1204,13 @@ tab bar
   sits below it). Run AI on this Deck, the knowledge base switch, the Reply style knob, Custom timeouts and the AI
   models button hand Up to their own line; Thinking and Keep models loaded hand Down to the next line by hand,
   and Test connection and the knowledge base's buttons get there by the column's flow.
+- **The "Lowered notes: N" row (plan 100, lane U)** sits under the knowledge base's Update / Remove row, as its own row with
+  a Clear button. It is drawn only while the count is above 0 and has no move handlers (a Focusable hearing A around a
+  Decky Button, like Remove), so Down is Steam's column flow: switch, Update, Clear, then the next line. Up from the Reply
+  style line lands on Clear first, then Cancel, Download, Remove, whichever is on screen. Remove is reached by Right from
+  Update, never by Down. Clear opens a two-button box with the ring on Cancel; its Clear sends the ring to Remove (Download
+  when the library is gone). Code: `KbLoweredNotesRow.tsx`, `useOllamaTabFocus.ts`. Pinned by `OllamaTab.foldedWalk.test.tsx`.
+  Device row: P100-LOWERED-01 (block L2).
 - **Right from any line** puts the ring on the floating button. **On the button:** A opens every section (it then
   reads "⊟ Close all") or closes them all, and the ring stays on the button; Up, Down, Left and B put the ring back
   on the line it came from; Right holds still. The line it came from is the section the ring last landed in, kept
@@ -1472,6 +1479,7 @@ the Show details line, as before
   for `note-keep` (`STAND_INS`), so the chains that already go "the note card's Keep, else Show details" (the answer's
   Down, the corner icons' Down, the summed-up note's Down, `focusDownFromLiveAnswerBubble`) land on the button when no
   card is on offer, without those files changing. Inside the row, `downPastNoteCard` and `upFromDivider` name it.
+  Every Down that meant "the note card, else Show details" now lands on the button, and Up from Show details lands on it first.
 - **After A on Helpful** the ring is handed down as before (`rateKeepingRing`), and now lands on the button.
 - **While a new question is asked** the button is greyed and the stop is skipped, as the thumbs are.
 - **Pinned by** `buildReplyActionsElement.suggestTip.test.tsx` (present only under a finished answer, A sends and the

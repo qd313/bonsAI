@@ -79,6 +79,9 @@ All notable changes to this project are documented in this file.
 - **Plain problem sentences reach the troubleshooting tips.** Five tips use the words people type, two new tips cover sound going to the TV and menus out of place on a TV, and "game won't open" reaches the launch tip. On the PC test, 17 of 24 plain sentences now reach a tip, up from 8.
 - **A screenshot taken while a game runs is read as that game.** The picture rules now say the running game named to the AI is the game in the picture.
 - **Fixes in the library:** Yoshi's Story's levels read six worlds of four. Baldur's Gate 3, GTA San Andreas, The Sims 4 and Portal 2 gain enemy and item notes (51 in all). They arrive with the next library update.
+- **A thumbs-down you can take back later.** After "Not really" then "Wrong tip", Show details shows "ranked lower by you" at once and Undo takes it away. The Knowledge base section (Ollama tab) shows "Lowered notes: N" with a Clear button when N is above 0; Clear asks first.
+- **Suggest as a tip.** A button under a finished answer saves a note file to your Desktop and shows a link for sending it in. With "Save files to Desktop" off it points you to the Permissions tab.
+- **A question about a "storage" item is no longer handed the storage-full tip.** The bare word "storage" does not route a question to the storage tips; it needs words like full, space or free beside it.
 
 ## [0.6.0] - 2026-10-23
 

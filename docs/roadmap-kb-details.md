@@ -657,3 +657,76 @@ The tip cut-off and a false word match were fixed 2026-09-26, and the "no tip fo
   alone is too weak to route a question. Remeasured 2026-10-24 (plan 98 lane F): 8 of 24 plain sentences reach a tip, 6 of them right (see the symptom entry in Bugs). (D81, D85) Older notes: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
   **Second opinion 2026-10-24 (plan 98 consult 2): fix the wording in two places (five tips and the router's topic words), not a cut-off.** Two problems have no tip at all (sound to the TV instead of headphones; menus out of place on a TV), and the 24 test sentences need their right tips written into the fixture before any gate. The word lists: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
   [Detail](roadmap-kb-details.md#a-troubleshooting-question-mostly-never-reaches-the-tips)
+
+**Moved word for word by the plan 100 wave 2 docs sweep (2026-10-25), when these entries went to Deck check owed:**
+
+**Thumbs-down follow-ups and Suggest as a tip: the entries before the fix:**
+
+- ★★ `[KB]` **Thumbs-down: Undo shows only on the newest answer, so an older mark has no way back** — **OPEN, found 2026-10-24 (plan 98 Deck block K1).**
+  Once another question is asked, an earlier answer shows no rating row and no Undo. Three marks leave a note out of the answers for good, with nothing on screen to see or clear it. A place to see and clear lowered notes is needed: a row in the Knowledge base section, which sits in the Ollama tab beside Remove. Evidence `workshop:test-evidence/plan98-P98-DEMOTE-01.json`.
+
+- ★ `[KB]` **Thumbs-down: "ranked lower by you" stays on an answer already saved after Undo** — **OPEN, found 2026-10-24 (plan 98 lane D).**
+  Show details' tag is as of the ask, so an Undo does not clear it on an answer already saved.
+
+- ★★★★★ `[KB]` **Community tip contribution** — **OPEN, unblocked.** A reader turns a good reply into a proposed note
+  with one press. **Suggest as a tip** writes a valid card to the Desktop plus a GitHub attach link. Three to five days.
+  [Detail](roadmap-kb-details.md#rag-phase-7-community-tip-contribution-rag-phase-8)
+
+**Longer text moved by the plan 100 wave 2 docs sweep (2026-10-25) to keep the knowledge-base roadmap under its size limit:**
+
+**RAG Phase 5 entry (full text before the 2026-10-25 trim):**
+
+164 notes. The four that had none now have enemy and item notes (plan 100, 2026-10-25): Baldur's Gate 3 7, GTA San Andreas 15, The Sims 4 15, Portal 2 14, so 29 of 38 games have them. **Measured 2026-10-25 (plan 100 lane X):** of 102 blind questions for the new notes, 100 find their note in the first three (86 in first place). But the new notes crowd the old: search overall reads 90.8 in a hundred in the first three on the held-back questions (88.1 before), and five older questions dropped out of the first three. On first turns, facts kept fell from 76.3 to 67.2 in a hundred, and contradictions read 96.3 clean against 88.9. This needs your read before it is called more than PARTIAL: see the new entry in Bugs. Also waits on P100-FOUR-GAMES-01 (block L2) and your read of the Baldur's Gate 3 notes.
+
+**Hide more against Default (full text before the 2026-10-25 trim):**
+
+First run: 23 covers in 100 answers against 29, and twice it missed a Hades story cover that Default kept 3 of 3. **Second run: 20.6 against 23.8.** The two Hades story rows drew their cover the same under both (3 of 3 and 2 of 3), and Hide more missed no story cover that Default kept. Contradictions: 92.6 clean against 88.9. Evidence `workshop:archive/research/kb-answer-eval-2026-10-25-p100-strict.md` against `workshop:archive/research/kb-answer-eval-2026-10-25-p100-default.md`; first run `workshop:archive/research/kb-answer-eval-2026-10-24-p98b-strict.md`.
+
+**The new notes crowd the old ones (full text before the 2026-10-25 trim):**
+
+The five: the Portal 2 gels, the BG3 class, an audio tip and two GTA rows. The Portal 2 gels question lost its card to the three new gel notes; six questions went from 3 of 3 to 0 of 3. Facts kept 76.3 down to 67.2 in a hundred. Search: `workshop:archive/research/kb-embed-bakeoff-2026-10-25-p100-before-arms.md` against `workshop:archive/research/kb-embed-bakeoff-2026-10-25-p100-after-arms.md`. Answers: `workshop:archive/research/kb-answer-eval-2026-10-25-p100-default.md` against `workshop:archive/research/kb-answer-eval-2026-10-25-p100-needs.md`.
+
+**Zero-score made-up question (full text before the 2026-10-25 trim):**
+
+Should a question with no keyword support attach nothing? A floor at no keyword support clears the two made-up bosses (Zorblax, Grimthak) but loses 3 right notes. The house and Bone Hydra questions score 3.6 to 3.8, and a floor there loses 19 right notes. The "No close match" line already shows on all four. **The numbers say no new floor.** Evidence `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04.json`; floor runs `workshop:archive/research/kb-floor-holdout-2026-10-25-p100-before.json` and `...-after.json`.
+
+**Screenshot entry note (full text before the 2026-10-25 trim):**
+
+**2026-10-25 (plan 100 lane P, `55771b7a`), measured:** the picture rules now say the running game named to the AI is the game in the picture. The line did not help: with the game handed over the AI named it 58 and 50 times in a hundred over two runs (75 on 2026-10-24); the God of War asks named another game 4 and 6 times in 9 (4 before). Two runs differ by up to 21 points. Still PARTIAL; the step is measured, no gain. Report `workshop:archive/research/screenshot-reading-2026-10-25-p100-after.md`.
+
+**Hollow Knight cheat section (full text before the 2026-10-25 trim):**
+
+The route answer suggested emulator and fast-travel exploits. Odd advice from the AI, seen once. **Counted 2026-10-25 (plan 100 block L0): 0 cheat sections in 2 route questions** (plan 100 call 5, D137, chose to add no prompt line for it). **Same run: both route questions (Strategy, Hollow Knight named, nothing running) drew no step list at all, only one plain paragraph each** (no numbered steps, no "Needs" lines). Evidence `workshop:test-evidence/plan98-P98-ROUTE-01-try2.json`, `workshop:test-evidence/plan100-P100-ROUTE-CHEAT-COUNT.json`.
+
+**Troubleshooting tips entry (full text before the 2026-10-25 trim):**
+
+Five tips now carry the plain words people type, and two new tips (165: sound to the TV instead of headphones; 166: menus out of place on a TV, both "Researched, unconfirmed") fill the gaps. Of the 24 plain sentences, 17 now reach a tip (8 before) and 15 of the 22 that have a right tip reach it (5 before); none reaches a wrong tip. No "can't find my PC" tip exists (tips 110 and 111 are Steam Frame tips), so two sentences stay unlabelled; the lane's proposed text is in plan 100's report.
+
+**RAG Phase 4 entry; the 2026-10-25 measure (removed words):** (PHASE4-CHIPS-01; UNCLEAR again 2026-10-24; measured 2026-10-25 with nothing running: only "How to use bonsAI" showed, 300 by 26 px, text fits, no game chips; the maintainer judges the three pictures, see its testing row)
+
+**One-second wait paragraph; the timing (removed words):** ; with the limit at two, a search after an answer dropped from 732 to 24 thousandths of a second. The maintainer
+
+**Suggest as a tip entry; the review note (removed words):** The security reviewer read the diff (sound; one ★ finding fixed before landing).
+
+**Undo-only-on-newest entry; the old sighting (removed words):** The old sighting: `workshop:test-evidence/plan98-P98-DEMOTE-01.json`.
+
+**RAG Phase 5 entry; wording (removed words):** , but the new notes crowd the old ones and facts kept fell from 76.3 to 67.2 (see the Bugs entry). Needs your read before it is called more than PARTIAL.
+
+**Troubleshooting tips entry; unlabelled sentences (removed words):** Two sentences stay unlabelled (no "can't find my PC" tip exists).
+
+**Hollow Knight cheat entry; no step list (removed words):** Both route questions also drew no step list, only one plain paragraph each.
+
+**Removed words, plan 100 wave 2 sweep:** "A fresh-chat re-run 2026-10-25 (plan 100 block L0) still attached three notes for "what time is it" (`workshop:test-evidence/plan100-P98-JUNK-PHRASES-try2.json`); see the Deck check owed entry on junk phrases." and "(Doom 64: the launch tool cannot match a non-Steam shortcut; `workshop:test-evidence/plan100-STRAT-SPOIL-NAME-01.json`)".
+
+**Removed words, plan 100 wave 2 sweep:** "Earlier sightings (2026-08-23, 2026-09): [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)" "(measured on the PC; the Deck check P100-TIPS-01 is owed)" "The maintainer's Deck keeps two loaded since 2026-09-23. Full text and evidence:" 
+
+**Removed words, plan 100 wave 2 sweep (wording only):** "Clear asks first, then the file of marks is emptied and the notes come back on later questions." "**Known and not fixed:** an older answer's saved tag stays until a new question is asked. **Still owed:**" "Wave three's report](../../bonsAI-workshop/archive/48-kb-wave-three-session.md). More detail:" "Seven notes from Wikipedia only (its own wiki is NonCommercial): Owlbear" 
+
+**Removed words, plan 100 wave 2 sweep (hidden spoiler entry; the dates):** "Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01, 2026-09-18), knowledge base off (DRG-01b, 2026-09-23) and library absent (DRG-01c, 2026-10-03; the AI wrote no hidden block, so a cover was not tested directly)." "Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  Evidence `workshop:test-evidence/plan79" 
+
+**Removed words, plan 100 wave 2 sweep (RAG Phase 4 entry):** "The maintainer's own look at the
+  pace is closed: "as they are", 2026-10-22 (plan 99 § 2 call 12)." "A running game's own tip passed on the Deck 2026-09-26. The chip promise passed on the Deck 2026-10-01 (P78-TIP-CHIP,
+  P78-CHIP-PACE)." 
+
+**Removed words, plan 100 wave 2 sweep (small trims):** "Two runs of the same setup differ by a few points." "Odd advice from the AI, seen once." "(plan 100 call 5, D137, chose to add no prompt line for it)" 

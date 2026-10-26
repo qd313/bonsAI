@@ -56,9 +56,12 @@ Nothing running, Strategy, the test chat. "Hollow Knight: how do I open the way 
    `cat` it: five fields (section_id, game_id, section_type, name, card), the card starting "Suggested by a player on
    2026-10-…:", no source fields, valid JSON. Record the file name and the link's address (the GitHub new-issue address
    with a title).
-3. Permissions tab → "Save files to Desktop" → off (read it). Main, the same answer (or a new short question): A on
-   "Suggest as a tip": **the line says the write is disabled and names the Permissions tab** (screenshot `-refused.png`);
-   over SSH no new file. Then Permissions → "Save files to Desktop" → on again (read it).
+3. Permissions tab → "Save files to Desktop" → off (read it). Main, **a NEW short question** ("Hollow Knight: where is
+   the first bench"): after a good save the button on the earlier answer is inert by design, so the refusal shows only
+   on a fresh answer. When it finishes: **A on Helpful first, then read focus: it must be on "Suggest as a tip"** (not on
+   nothing, not on Show details; this is the one route the lane changed). Then A on "Suggest as a tip": **the line says
+   the write is disabled and names the Permissions tab** (screenshot `-refused.png`); over SSH no new file. Then
+   Permissions → "Save files to Desktop" → on again (read it).
 4. The look check on Main with the saved line showing (`probe_deck_ui_look.py`): nothing against the right edge or cut off.
 
 ## L2.3: the four games' notes (row P100-FOUR-GAMES-01, lanes N1 to N4)
@@ -72,6 +75,10 @@ The night's library installed (L2.0 step 3). Nothing running, Strategy, the test
 4. "Baldurs Gate 3 how do I handle Minthara": the attach line names the Minthara note; the answer must not reach the
    grove's outcome unless the cover rule hides it; record the answer's last 600 characters for the maintainer's read.
 **Pass when** 1 and 2 attach their notes; 3 and 4 are MEASURED for the maintainer.
+
+**Saved walks:** any saved walk whose route passes Down through the rating row or Up from Show details now meets one
+more stop (the button). A replay that differs only by that stop is re-saved from its own start state, not called a
+failure; say which walks that touched.
 
 ## L2.4: second rounds
 

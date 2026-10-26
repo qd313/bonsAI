@@ -6,7 +6,7 @@ the work runs in a new chat on the maintainer's PC. Sources: the knowledge-base 
 helpers (each checked against the roadmap; three mismatches found, § 8). Plain language on purpose: this file is for
 the maintainer first.
 
-**Status: READY for "Run plan 100" on the maintainer's PC.** The maintainer answered the calls in § 2 on 2026-10-25
+**Status: RAN 2026-10-25/26 on the maintainer's PC; every lane landed on `experimental`; the Deck round (blocks L1, L2, LR) is owed because the rig's tools dropped out of the chat; the report is § 13.** (Before the run:) READY for "Run plan 100" on the maintainer's PC. The maintainer answered the calls in § 2 on 2026-10-25
 ("plan the plan as listed": the defaults on all fourteen; usage at 53 percent of the five-hour window, which resets
 within the hour, and 53 percent of the week, which resets Wednesday morning). They become decision D137, written by the
 bookkeeper in its pre-go audit. The helper rules, the briefs and Deck runbook L0 are written (the files below).
@@ -382,6 +382,7 @@ Log, one row per consult: time, the question in one line, the answer in one line
 | 2026-10-25 22:58 to 23:08 UTC | Consult 2: the one shape for the "Lowered notes" row and the live-state tag, and the tests that fail without them | The row is one more copy of the Update/Remove shape (a horizontal container, words and one A-only button, no move handlers, no B handler) under the action row, found by Steam's own column flow and skipped when absent; the Reply style line's Up hop checks the Clear button first; the confirm box reuses Remove's pattern and re-arms its return to Remove (or Download) because the Clear row vanishes. The tag reads the demote hook's existing "marked on this answer" state: tag = saved flag true OR in this answer's picked; no undone set (the brief's rule would hide a tag when an earlier mark remains). The walk harness for the Ollama tab is foldedTabWalk, not the answer-pane one. | Lane U's task text for commits 3 and 4 rewritten to this shape; three files granted beyond its list (the Up hop, its threading, the modal return id). The brief's "beside Remove" read as under the row, never a third slot; its tag rule dropped. | about 158k tokens, 10 min |
 | 2026-10-25 23:19 to 23:29 UTC | Consult 3a: lane U's diff against the focus rules, before landing | Land it: no plain focus across containers, no move handler on the row, the Up hop is the sanctioned in-body hop and the chain is whole when the row is absent; the box re-arms Remove or Download. Remove is never a Down landing (Right from Update only), as the Deck record agrees. A test fails without each change at the Deck check's level. | The L2 check's walk written as switch → Update → Clear, Right for Remove; the ring read after Cancel (on Clear) and after Clear (on Remove, the row gone); the focus-graph record for the bookkeeper. | about 124k tokens, 9 min |
 | 2026-10-26 00:25 to 00:35 UTC | Consult 3b: lane J's five commits against the focus rules and the security list, before landing | Land as they are: the new stop is built like Helpful, every chain reaches it through the registry, no loop; A on Helpful now lands on the button (one more stop, not a regression); the plugin method meets every item of the security list. | The L2 runbook's refusal step changed to a fresh question (the button is inert after a good save) with a focus read after A on Helpful; saved walks through the rating row gain a stop and are re-saved, not failed; one stale sentence in the focus record for the bookkeeper. | about 176k tokens, 10 min |
+| 2026-10-26 00:58 to 01:08 UTC | Consult 5: what to tell the maintainer first, what must not be called done, what to leave open | Open with: nothing is Deck-checked and one measurement went the wrong way; hedge every "a player notices" line as "should"; the thank-you fix is the one most likely to fail on the Deck; move the publish gate, the picture sentence and the missing "can't find my PC" tip to the maintainer's list; fix seven claims that ran ahead of the log (the sweep count, the full check, the entry counts, the Hide more rows under Before/After). | Every edit applied to § 13 before it was written in. | about 86k tokens, 9 min |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -584,13 +585,213 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   fixes back to the note lanes; landing. Runbook L2 now carries the build facts and runs L1's checks first, since L1
   never ran.
 
+- **01:20 UTC: the night closed.** The full check passed on `2f31c81e` (every lane landed; 307.8 s). The four sidecar
+  fixes landed (`20faeea5`, `f9aed98a`, `609afcb8`, `86e7dbe7`; no note text changed). The end audit landed as `02b1286b`
+  (thirteen entries marked "not run; the rig dropped"; six calls in "Calls waiting on you"; Phases 4 and 7 closed by call 8;
+  the status report and plan 33 § 4b updated; the checks page group left as more than mechanical). Consult 5 read the
+  report draft and its edits were applied. Usage at close: 87 percent of the five-hour window, 68 percent of the week.
+  **Owed:** the Deck round from a chat with the rig (runbook L2 runs L1's checks first), the restore round, the
+  maintainer's six reads and six calls, the push, the publish.
+
 ## 13. Report
 
-Not yet written.
+Written 2026-10-26, 01:20 UTC, by the session (Fable 5.1 high) at the end of the night. **Every lane is built and on the
+experimental branch, but none of it has been checked on the Deck:** the rig's tools dropped out of this chat at about
+22:00 UTC after the opening round, so every check of the landed work is still owed and nothing below is done. **One
+measurement went the wrong way after the 51 new notes landed:** on this PC's answer test the AI kept the note's facts 67
+times in a hundred, down from 76 (two earlier runs differed by up to 6 points), so read the six questions that lost their
+facts before you publish the library. The new picture sentence in the prompt made no measurable difference. Nothing is
+pushed or published. The full check passed on the tip before the end audit's docs commit; a quick check passed after it.
+
+### 13.1 What you must do next
+
+1. **Run the Deck round.** Open a new chat on this PC (or type one message in this chat from the desktop app so it can
+   start one) and say: "Run plan 100 Deck block L2." Its runbook ([assets/100-runbook-block-L2.md](assets/100-runbook-block-L2.md))
+   carries every fact and runs the first round's checks (block L1) before its own, since that round never ran. The build
+   on the Deck is the last code build (`222279568b09`; the four source-record fixes that landed after it change no note
+   text, so the Deck's library is the final one); the night's library sits in the Deck's seed folder and goes in through
+   the Developer tab. Then the restore round (block LR, plan § 6) puts the published library back and restores every
+   setting. Thirteen entries wait on this.
+2. **Read six things with your own eyes.** Four you can read now: the seven Baldur's Gate 3 notes (`data/kb/notes/baldurs-gate-3.json`;
+   you chose to land them; five are tabletop lore with no fight advice); the two new troubleshooting tips (ids 165 and
+   166 in the tip sheet: sound to the TV instead of headphones; menus out of place on a TV), each marked "Researched,
+   unconfirmed" and built from existing tips, with two sentences that go beyond them ("pick the headphones"; "try the
+   crash tips"); ten of the plain-word tip edits (tips 125, 76, 126, 152, 154); the chip-row pictures (one chip only
+   showed). Two have no picture yet, the Lowered notes row and the "Suggest as a tip" line (it says "Saved <file>" without
+   naming the Desktop folder or saying to attach the file to the issue); they go on the checks page after the Deck
+   round. The roadmap's "Calls waiting on you" block lists all six; the checks page's plan 100 group is still to be made
+   (the bookkeeper found it more than a mechanical edit).
+3. **Six calls the measurements left** (the entries say "the maintainer decides"): close or keep the Hide more against
+   Default entry (20.6 against 23.8 covers per 100, no story cover missed; both runs before anything landed); the Hide
+   less entry (94.4 percent clean); the zero-score floor entry (no new floor; the "No close match" line already shows);
+   whether the facts-kept drop (76.3 to 67.2 in a hundred after the 51 notes landed; run-to-run noise up to 6 points) is
+   real: read the six questions that went from 3 of 3 to 0 of 3 (the Portal 2 gels, Cyberpunk 02, Fallout 4 05, Baldur's
+   Gate 3 01, GTA V 01, Hollow Knight 03) in the workshop's research folder, `kb-answer-eval-2026-10-25-p100-needs.md`;
+   keep or drop the picture sentence in the prompt (it measured no gain, and every prompt sentence costs every turn with
+   a picture); and a "can't find my PC" tip: none exists, so that sentence still reaches nothing; lane T drafted one
+   (§ 14). Say whether you want it, marked unconfirmed.
+4. **Push** when you are back (`BONSAI_ALLOW_PUSH=1`, then `git push origin experimental`): § 13.7 says the full check
+   passed on the final code tip. **Publish the library** only after the Deck round for the four games passes, you have
+   read the Baldur's Gate 3 notes, you have decided whether the facts-kept drop is real, and you have said whether the
+   older Sims 4 fire note gets fixed first (the two fire notes disagree): `python scripts/kb/build_rag_db.py --seed --out build/knowledge-base`,
+   then the publish command from docs/knowledge-base.md. The published library is still 2026.10.25 (414 notes, 164 tips).
+5. **Doom 64: Retribution** still needs your hand launch once, left on Recent Games, before the hidden-box row can run
+   (blocked six times now).
+
+### 13.2 What a player notices
+
+What the work is built to do; none of it has been seen on the Deck, so read every line as "should". Once the build and
+the library reach a Deck: "my game keeps closing on its own", "no space left" and "the screen goes black" should each
+reach a tip (17 of 24 such sentences now, 8 before; 15 reach the right tip, 5 before; none a wrong one); two new tips for
+TV sound and TV menus, both marked unconfirmed; "thank you very much" and "what time is it" should get a short reply with
+no notes, the boss still remembered for "how do I beat it" (this is the fix most likely to fail on the Deck, because the
+chat's own history still reaches the AI); the steps you opened on a route are kept with your ticks and cleared with
+them; Hide more keeps a cover shut on a game with no story; searching Settings for "spoilers" lands on the "How much to
+hide" row; "ranked lower by you" clears the moment you press Undo, and the Knowledge base section shows "Lowered notes:
+N" with a Clear button; "Suggest as a tip" under an answer writes a note file to the Desktop and shows the link to send
+it in; Yoshi's Story's note says six worlds of four levels; Baldur's Gate 3, GTA San Andreas, The Sims 4 and Portal 2
+have enemy and item notes (7, 15, 15, 14; five of Baldur's Gate 3's seven are lore, not fight advice), and 100 of 102
+blind questions about them find their note in the first three, though five older questions lost theirs to the new
+notes. The route step's "Needs" line and the picture line are in the prompt; the first needs the Deck check (a branch
+button must be pressed first), the second measured no gain.
+
+### 13.3 The code work by area
+
+- **Troubleshooting tips (lane T, Sonnet high, 8 commits).** Five tips reworded with the words people type, two new
+  tips (165, 166), the router's word lists given the same phrases as pairs, the 24 blind sentences labelled with their
+  topic and tip, the measuring script printing "reach the right tip". Found on the way: the bare word "storage" routed
+  any question to the storage tips (a Portal 2 cube question got the storage-full tip); it now needs a second word.
+  Files: `data/kb/compat_patterns.json`, `py_modules/backend/knowledge/compat_topic_router.py`,
+  `scripts/measure_kb_floor_holdout.py`, the fixture, three test files.
+- **Two prompt lines (lane P, Sonnet high, 2 commits).** The checklist instruction asks for ". Needs: <thing>" on a step
+  that needs an item; the picture rules say the running game is the game in the picture. The whole-prompt fingerprint
+  for the Strategy follow-up was updated on purpose (the spoiler paragraph is byte for byte). The prompt grows from 6012
+  to 6321 characters on a Strategy follow-up with a picture. Learned: a question typed fresh gets the branch menu,
+  never the step list; the step list comes only after a branch button (`strategy_guide_parse.py`), so the opening
+  round's two plain paragraphs were by design.
+- **Courtesy phrases (lane F, Sonnet high, 2 commits).** `kb_followup_memory.py` gains a whole-phrase junk check;
+  `game_ai_request.py` skips the library search, passes no subject or previous answer, and leaves the remembered subject
+  alone on a junk turn. Open: the chat history itself may still carry boss advice into a thank-you reply; the Deck check
+  decides.
+- **The route save (lane R, Sonnet high, 3 commits).** The per-game save gains `revealed` beside `checked_ids`; the panel
+  reads opened steps from the checklist state; the browser-storage copy is gone. A reveal travels as a third word on the
+  existing toggle callback, so six intermediate files were not touched; widening their type is a clean follow-up.
+- **Hide more on screen (lane V, Sonnet high, 2 commits).** The tier travels on the per-turn spoiler facts from the Main
+  tab payload through the transcript to the bubble and to Copy; under "strict" the no-story rule is skipped.
+- **The Search tab row (lane W, Haiku high, 1 commit).** One holder in two registries; the Story spoilers index row
+  retargeted to the tier row; one more test file needed one line (the lane stopped and asked, correctly).
+- **The Yoshi note (lane Y, Haiku high, 1 commit).** One sentence, the page re-read, the date refreshed.
+- **Thumbs-down follow-ups (lane U, Opus medium, 4 commits).** The store lists and clears; two plugin methods; the tag
+  reads the live "marked on this answer" state (tag = saved flag OR in this answer's picks; no undone set, which would
+  hide a tag when an earlier mark remains); the "Lowered notes: N" row in a new file, built like Remove, hidden at 0;
+  Up from the Reply style line lands on Clear first. Known and not fixed: an older answer's saved tag stays until a new
+  question.
+- **"Suggest as a tip" (lane J, Sonnet high, 5 commits).** A writer that builds a five-field section record and writes
+  it create-only under `Desktop/bonsAI_logs/suggested-tips/` from a name built only from the game slug and the clock; a
+  plugin method that checks the Desktop permission first; a button in the reply row as its own stop (the plan's "beside
+  Copy" was wrong: Copy is the bubble's corner icon); the stop stands in for the note card's Keep, so A on Helpful now
+  lands on it. The security reviewer: sound, one ★ finding (a lone surrogate half left an empty file) fixed before landing.
+- **The four games' notes (lanes N1 to N4, Sonnet high).** One file and one sources sidecar per game under
+  `data/kb/notes/`; every sentence quoted from its page at a named revision; four sidecar hygiene follow-ups from the
+  licence read, which found nothing that blocks publishing. Baldur's Gate 3 could use only Wikipedia (its wiki is
+  NonCommercial).
+- **The blind questions (lane Q, Sonnet medium, 3 commits).** 102 rows; the fixture's label test now reads the notes
+  files; ten names lost their bracketed part on the way from the note lanes to Q (the session's slip) and were fixed.
+- **The measurements (lane X, Sonnet medium).** Seven, before and after, reports in the workshop's research folder
+  (`*-2026-10-25-p100-*`). Numbers in § 13.6.
+- **Bookkeeping.** The pre-go audit (`6d25f6b1`), three sweeps (after the opening round, wave 1, wave 2), the end audit
+  (`02b1286b`). The budget rule (AGENTS.md, 'Helper lanes').
+
+### 13.4 What popped up and how it was handled
+
+- **The twenty-minute hold.** The session held twelve ready helpers for the five-hour window's reset, on purpose,
+  following the guide's own sentence; the maintainer called it dishonest and set the rule: a ready helper starts at once,
+  and holding workers back is their choice alone. Written into AGENTS.md, the runbook, the lessons file (the sequence,
+  with the maintainer's words quoted) and the decisions file.
+- **The rig's tools vanished from the chat** at about 22:00 UTC (the two project servers gone from the session, not
+  even listed as failed). The opening round had already run; every later driver would have been blind; a Deck session
+  could not be started from Remote Control. The deploys went out anyway (plain SSH), the runbooks carry every fact, and
+  the Deck round waits for a chat with the rig.
+- **The guide over its size ceiling.** The first budget-rule commit took AGENTS.md to 26.16 KB and lane P's landing
+  failed its quick check on the 26 KB ceiling; the sentence was shortened and a finished plan's aside dropped (25.9 KB).
+- **Two fixture slips, both the session's or the briefs'.** The label test read only the seed (fixed by lane Q); ten
+  GTA names lost their bracketed part in the hand-over (fixed). And a real find behind them: the bare "storage" rule.
+- **The golden fixture.** It fingerprints whole prompts, not only the spoiler paragraph; a deliberate prompt change
+  updates one hash. The brief's "must not change" meant the paragraph.
+- **Effort reports.** Lanes T and U and one bookkeeper run said they ran at low effort although their helper files set
+  high or medium; unverified whether the launcher honours the front-matter effort. Logged in plan 33 § 4b.
+
+### 13.5 What failed and why; what is left
+
+- **The Deck round did not run** (the rig). Owed: the tips check (P100-TIPS-01), the Needs line (P100-NEEDS-01), the
+  thank-you reply (P100-THANKS-01), the route save (P100-ROUTE-SAVE-01), Hide more on screen (P100-HIDE-MORE-SCREEN-01),
+  the Search tab row (P100-SEARCH-TIER-01), the Yoshi note (P100-YOSHI-01), the look check (QA-LOOK-01-p100), the
+  free-play sweep (P100-L1-SWEEP), the Lowered notes row (P100-LOWERED-01), Suggest as a tip (P100-SUGGEST-01), the four
+  games' notes (P100-FOUR-GAMES-01), then the restore round (the smoke pass again, the saved walks, the library put back).
+- **The hidden box on a game known only by name** could not run for the sixth time (Doom 64 not on Recent Games).
+- **The picture line measured no gain** (58 and 50 in a hundred named the game with it handed over, 75 before; the God
+  of War mix-ups 4 and 6 in 9, 4 before; noise up to 21 points). The screenshot entry stays PARTIAL.
+- **Facts kept fell** 76.3 to 67.2 after the 51 notes landed (noise up to 6 points); five held-back questions lost
+  their note from the first three to the new notes on the same subject. A ★★ Bugs entry carries it; your read decides.
+- **Not built, by call:** the card style pass, the deeper answer checks, the "If you want to cheat" prompt line (0
+  sightings in 2). **Not built, no call covered it:** a "can't find my PC" tip (§ 13.1 item 3).
+- **Open bugs found tonight (★):** the two Sims 4 fire notes disagree about firefighters (seed note 112 against the new
+  note 1200); the search-test script writes its JSON report even with the no-report flag. Still open from the
+  maintainer's own round on 2026-10-25, before this plan ran: the summing-up of a long chat gave up once.
+
+### 13.6 The numbers
+
+| | Before | After |
+|---|---|---|
+| Of 24 plain problem sentences, reach a tip / the right tip | 8 / 5 | 17 / 15 (0 wrong) |
+| Right note in the first three, held-back questions (the blend that ships) | 88.1 in 100 | 90.8 in 100 |
+| The 102 blind questions for the new notes, found in the first three | — | 100 of 102 (86 first) |
+| Facts kept, first-turn answer test | 76.3 in 100 | 67.2 in 100 (needs a read) |
+| No contradiction, first-turn answer test | 88.9 in 100 | 96.3 in 100 |
+| Picture test, named the game with it handed over | 75 in 100 | 58 and 50 in 100 (two runs) |
+| Library | 414 notes, 164 tips | 465 notes, 166 tips (29 of 38 games with enemy and item notes) |
+| Knowledge-base Bugs entries not accepted | 15 | 10 (7 older, 3 new; 4 wait on your call) |
+| Half-done entries | 4 | 3 (Phases 4 and 7 closed by your call; Phase 5, the screenshot measurement and the visual maps stay) |
+| Entries waiting on a Deck check | 1 | 13 |
+
+Measured before anything landed, both runs (first run 2026-10-24, second 2026-10-25; nothing built tonight touched
+them): Hide more against Default drew 20.6 against 23.8 covers per 100 answers (23 against 29 the first time), with no
+story cover missed; Hide less was 94.4 in 100 clean of contradiction (90.7 the first time).
+
+Usage: 54 percent of the five-hour window and 54 percent of the week at go; 87 and 68 at 01:15 UTC. The five-hour line
+(75 percent) was passed after the last helper had been started; the weekly line (90) was never reached.
+
+### 13.7 The checks on the tip
+
+`python scripts/verify.py --full` passed on `2f31c81e`, the last code tip with every lane landed (307.8 s, every set
+green). Two docs-only commits followed (the end audit `02b1286b` and this report); the quick check passed after them.
+
+### 13.8 A plain developer guide to what changed
+
+- A troubleshooting question reaches the tip sheet only when the router finds a topic word pair in it; the pairs live in
+  `compat_topic_router.py`, the tips' own words are what the word search indexes, and the 24 blind sentences in the
+  fixture now say which tip is right, so `measure_kb_floor_holdout.py` can score them.
+- A thank-you, greeting or time/date/weather question is "junk": no library search, no remembered subject, no previous
+  answer, and the memory untouched (`kb_followup_memory.is_courtesy_or_junk_phrase`).
+- A route's opened steps are part of the per-game checklist save (`revealed`), not browser storage.
+- The "How much to hide" setting reaches the screen's cover rule through the per-turn spoiler facts; "strict" skips the
+  no-story rule.
+- The thumbs-down marks can be listed and cleared (`list_rag_corpus_demotes`, `clear_rag_corpus_demotes`); the tag on
+  screen is the saved flag OR a mark made on this answer.
+- "Suggest as a tip" is `suggest_rag_corpus_tip`: permission first, a create-only JSON write under the Desktop notes
+  folder, a fixed new-issue link with an encoded title.
+- Notes for a game can live in their own file under `data/kb/notes/` with a sources sidecar; the builder merges them
+  after the seed; the fixture's label test reads them too.
 
 ## 14. Subagent reports and follow-ups
 
-The advisor (Fable max, § 7): every consult logged above. The security reviewer: reads lane J's diff before it lands,
+**Lane T's proposed Deck network tip (not written, call for the maintainer):** "Researched, unconfirmed: if the Deck
+can't find your PC, put both on the same home network. On the PC, Ollama must accept connections from other devices
+and port 11434 must pass the firewall; point bonsAI at the PC address followed by :11434." Built only from tips 110
+and 111; it would need router pairs ("cant find" with "pc"; "my computer" with "list"; "same network"). Fixture rows
+19 and 20 stay unlabelled until a tip exists. **Effort reports:** lanes T and U said they ran at "low" effort and lane
+W at "default" although their helper files set high or medium; whether the launcher honours the front-matter effort is
+unverified (plan 33 § 4b). The advisor (Fable max, § 7): every consult logged above (five used: 1, 2, 3a, 3b, 5). The security reviewer: reads lane J's diff before it lands,
 recorded here. **2026-10-25 23:10 to 23:14 UTC, lane J's three commits read:** the write, the link and the content are
 sound; nothing blocks landing. The file name comes only from the game's name and the clock; the folder is a constant
 checked before and after links are followed; the file is opened create-only so it never overwrites; the link is one

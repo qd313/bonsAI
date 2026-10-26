@@ -501,6 +501,17 @@ the tree is clean before it deploys; land nothing until it reports the deploy do
 
 ---
 
+**Check the rig's servers are in the chat before starting a Deck block, and keep the Deck facts in the runbook.** On
+2026-10-25 (plan 100) the two project servers (the rig and the repo helper) disconnected from the session at about
+22:00 UTC and vanished from its server list, not even marked failed. Block L0 had already run; a driver started for
+block L1 an hour later had no `deck_*` tools and could run nothing (it stopped correctly). A separate session for the
+Deck could not be started because the maintainer was on Remote Control ("you can start a session only on a message typed
+in the desktop app"). What worked: the deploys still went out (plain SSH needs no rig), and every fact the Deck chat
+needs (build hash, how to confirm the library's install by size and date, the Deck's state, the handover path in the
+workshop) went into the runbook file in the repo, so a fresh chat could run the block from the file alone. Before a
+Deck block, read the session's server list; if the two are missing, say in one line what unblocks it and do not
+start a driver.
+
 ## 4. Briefing helpers
 
 **Tell the helper what is allowed to stay.** Hand over a list of things a tool flagged without

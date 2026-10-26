@@ -82,6 +82,9 @@ All notable changes to this project are documented in this file.
 - **A thumbs-down you can take back later.** After "Not really" then "Wrong tip", Show details shows "ranked lower by you" at once and Undo takes it away. The Knowledge base section (Ollama tab) shows "Lowered notes: N" with a Clear button when N is above 0; Clear asks first.
 - **Suggest as a tip.** A button under a finished answer saves a note file to your Desktop and shows a link for sending it in. With "Save files to Desktop" off it points you to the Permissions tab.
 - **A question about a "storage" item is no longer handed the storage-full tip.** The bare word "storage" does not route a question to the storage tips; it needs words like full, space or free beside it.
+- **A game that closes or will not open now reaches the crash tip even in a chat about a game.** "My game keeps closing on its own", "the game wont even open" and "when I try to launch the game nothing happens" bring up the crash tip; the bare words "crash" and "black screen" work as before.
+- **A thank-you or an off-topic question gets one short friendly line.** After a boss question, "thanks a lot for that" or "what is the date today" no longer repeats the boss advice, shows no menu and adds no "Not in my notes" line; your next real follow-up still knows the boss.
+- **"GTA San Andreas" finds the San Andreas notes.** Typing "GTA San Andreas", "San Andreas", "GTA SA" or "Grand Theft Auto San Andreas" brings up its notes, such as Body Armor, even in a chat about another game. It arrives with the next library update.
 
 ## [0.6.0] - 2026-10-23
 

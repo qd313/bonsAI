@@ -31,6 +31,7 @@
 - [Plan 97 notes moved from the knowledge base roadmap (2026-10-22)](#plan-97-notes-moved-from-the-knowledge-base-roadmap-2026-10-22)
 - [Plan 98 notes moved from the knowledge base roadmap (2026-10-24)](#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
 - [Plan 100 notes moved from the knowledge base roadmap (2026-10-25)](#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+- [Plan 100 follow-up note moved from the knowledge-base roadmap 2026-10-26](#plan-100-follow-up-note-moved-from-the-knowledge-base-roadmap-2026-10-26)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -777,3 +778,7 @@ Five tips now carry the plain words people type, and two new tips (165: sound to
 **Unrelated questions entry, the words before the K9 trim:** "thank you very much" attached no notes; "what time is it" still attached three. A fresh-chat re-run 2026-10-25 still attached three for "what time is it"; see the junk-phrase entry in Deck check owed. Word for word:
 
 **Two Bugs entries, the words before the K9 trim:** "Same lost-focus family as plan 97's freeze; the only cure, closing and reopening Quick Access, emptied the question box." and "(the answer came from an old branch button)".
+
+## Plan 100 follow-up note moved from the knowledge-base roadmap 2026-10-26
+
+**2026-10-25 (lane T follow-up, `5943260b`):** the bare word "storage" no longer routes a question to the storage tips; it needs full, space, free, left, drive, card, sd, microsd, install, gb or "out of" beside it. Found when two blind Portal 2 questions about the Weighted Storage Cube were handed the storage-full tip.

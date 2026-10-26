@@ -64,6 +64,37 @@ from __future__ import annotations
 
 import re
 
+# Plan 100 lane T2 (Deck bug P100-TIPS-01): sentences that say the GAME closes, quits or will
+# not open. Unlike the bare word "crash" (a car crashes, a boss crashes into you) these cannot
+# be a strategy question, so they route to the crash tips even when a game is in context -- the
+# chat's own game counts as one, which is why "my game keeps closing on its own" in a chat about
+# Hollow Knight used to get three Hollow Knight notes and no tip. They are still listed under the
+# "crash" topic below (retrieval prefers that topic's tips); question_targets_compat_corpus reads
+# this tuple to let them through the weak-topic gate. "quit" is spelled out as quits/quitting/
+# quiting because the bare stem also starts "quite". "shut off" and "shuts off" are different
+# strings for _term_matches, so both are listed.
+_CRASH_SENTENCE_RULES: tuple[tuple[str, ...], ...] = (
+    ("game", "clos", "on its own"),
+    ("game", "clos", "by itself"),
+    ("game", "shut itself"),
+    ("game", "shuts off"),
+    ("game", "shut off"),
+    ("game", "quits"),
+    ("game", "quitting"),
+    ("game", "quiting"),
+    ("game", "wont open"),
+    ("game", "wont even open"),
+    ("game", "wont start"),
+    ("game", "wont even start"),
+    ("game", "doesnt open"),
+    ("game", "doesnt start"),
+    ("game", "will not open"),
+    ("game", "will not start"),
+    # The one without the word "game": what a person types after the game was named earlier in
+    # the chat. "launch" is the Deck's word for starting a title.
+    ("nothing happens", "launch"),
+)
+
 # topic -> rules. Each rule is a tuple of terms that must **all** appear; any rule matching
 # claims the topic. Single-term rules are reserved for words that mean nothing else in a
 # gaming question ("gamescope", "steamvr"); everything ambiguous needs a second term, so
@@ -330,28 +361,14 @@ _TOPIC_RULES: dict[str, tuple[tuple[str, ...], ...]] = {
         ("shuts itself",),
         ("black screen",),
         # Plan 100 lane T: a game that ends on its own, said the way people say it. Weak like
-        # "crash": it routes alone only with no game running or named. "game" pairs the words
-        # that would otherwise fit a door or a timer ("closes on its own"). "quit" is spelled out
-        # as quits/quitting/quiting because the bare stem also starts "quite". "shut off" and
-        # "shuts off" are different strings for _term_matches, so both are listed.
+        # "crash": these route alone only with no game running or named. "game" pairs the words
+        # that would otherwise fit a door or a timer ("closes on its own"). The rules that already
+        # name the game are in _CRASH_SENTENCE_RULES below and route even with a game in context.
         ("clos", "on its own"),
         ("clos", "by itself"),
         ("shut itself",),
-        ("game", "shuts off"),
-        ("game", "shut off"),
-        ("game", "quits"),
-        ("game", "quitting"),
-        ("game", "quiting"),
         ("me back", "home screen"),
-        ("game", "wont open"),
-        ("game", "wont even open"),
-        ("game", "wont start"),
-        ("game", "wont even start"),
-        ("game", "doesnt open"),
-        ("game", "doesnt start"),
-        ("game", "will not open"),
-        ("game", "will not start"),
-        ("nothing happens", "launch"),
+        *_CRASH_SENTENCE_RULES,
     ),
     "deck": (
         ("steam deck",),
@@ -449,9 +466,15 @@ def question_targets_compat_corpus(question: str, *, game_in_context: bool = Tru
     When it is False, "crash" and "linux" are treated as strong enough to route alone --
     "my game keeps crashing" with nothing running is a plain troubleshooting sentence, not a
     boss fight. "deck" stays weak either way; see ``_STRONG_WITHOUT_GAME_TOPICS``.
+    The sentence-shaped crash rules (``_CRASH_SENTENCE_RULES``: "the game wont open", "my game
+    keeps closing on its own") route in both cases.
     """
     weak_topics = _WEAK_TOPICS if game_in_context else (_WEAK_TOPICS - _STRONG_WITHOUT_GAME_TOPICS)
-    return any(topic not in weak_topics for topic in match_compat_corpus_topics(question))
+    if any(topic not in weak_topics for topic in match_compat_corpus_topics(question)):
+        return True
+    # A sentence that says the game closes or will not open routes with a game in context too.
+    haystack = _normalize(question)
+    return any(_rule_matches(haystack, rule) for rule in _CRASH_SENTENCE_RULES)
 
 
 def known_compat_topics() -> frozenset[str]:

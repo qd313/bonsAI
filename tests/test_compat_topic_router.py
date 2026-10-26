@@ -312,15 +312,11 @@ class CompatTopicRouterTests(unittest.TestCase):
             [
                 "V2-BLIND-H19",
                 "V2-BLIND-H55",
-                # The wave-two blind batch, with a game running. Thirteen of its twenty-four rows
+                # The wave-two blind batch, with a game running. Seventeen of its twenty-four rows
                 # reach (plan 100 lane T added the plain words for black screens, no-space
                 # messages, sound on the TV and menus on a TV: SYM-05, -06, -12, -14 and -23 now
-                # reach, on top of -08, -11, -13, -15, -17, -18, -21 and -24). The four crash
-                # sentences (SYM-01 to -04) reach only with nothing running; see below.
-                "V2-W2-SYM-01",
-                "V2-W2-SYM-02",
-                "V2-W2-SYM-03",
-                "V2-W2-SYM-04",
+                # reach, on top of -08, -11, -13, -15, -17, -18, -21 and -24; lane M1 then made the
+                # four crash sentences, SYM-01 to -04, route with a game in context too).
                 "V2-W2-SYM-07",
                 "V2-W2-SYM-09",
                 "V2-W2-SYM-10",
@@ -331,8 +327,9 @@ class CompatTopicRouterTests(unittest.TestCase):
             ],
         )
 
-        # With nothing running -- the Deck check -- the weak "crash" topic routes alone, so the
-        # four crash sentences reach too: seventeen of the twenty-four. The seven that miss are
+        # With nothing running -- the Deck check -- the weak "crash" topic routes alone, and the
+        # four crash sentences now reach with a game running as well, so both modes read seventeen
+        # of the twenty-four. The seven that miss are
         # choppy/laggy (-07), buttons (-09, -10), the picture ripping (-16), finding the PC
         # (-19, -20; no Deck tip exists for it) and an update that sits there (-22).
         missed_with_nothing_running = [
@@ -488,11 +485,59 @@ class PlainProblemWordsRouteTests(unittest.TestCase):
                 self.assertFalse(question_targets_compat_corpus(question, game_in_context=False))
 
     def test_a_crash_phrase_stays_weak_with_a_game_running(self):
-        """Closing on its own or quitting is only a troubleshooting sentence with no game open."""
+        """Without the word "game" beside it, closing on its own is still scenery (a gate, a timer).
+        The sentences that name the game closing or not opening route either way: see
+        test_a_game_that_closes_or_wont_open_reaches_the_tips_even_with_a_game_in_context."""
         for question in (
-            "my game keeps quitting on me",
-            "the game wont even start",
             "the gate closes on its own after ten seconds so run through",
+            "the gate shut itself behind me and now I cannot get out",
+            "something dumps me back at the home screen",
+        ):
+            with self.subTest(question=question):
+                self.assertFalse(question_targets_compat_corpus(question, game_in_context=True))
+
+    def test_a_game_that_closes_or_wont_open_reaches_the_tips_even_with_a_game_in_context(self):
+        """Deck bug P100-TIPS-01: in a chat about Hollow Knight, "my game keeps closing on its own"
+        got three Hollow Knight notes and no crash tip, because the chat's own game counted as a
+        game named. A sentence that says the game closes, quits or will not open cannot be a
+        strategy question, so it routes whether or not a game is in context."""
+        for question in (
+            "my game keeps closing on its own",
+            "the game wont even open",
+            "nothing happens when I launch it",
+            "the game keeps quitting on me",
+            "the game just shut itself off",
+            "my game shuts off in the middle of playing",
+            "the game will not start",
+        ):
+            with self.subTest(question=question):
+                self.assertIn("crash", match_compat_corpus_topics(question))
+                self.assertTrue(question_targets_compat_corpus(question, game_in_context=True))
+                self.assertTrue(question_targets_compat_corpus(question, game_in_context=False))
+
+    def test_the_gate_sends_a_closing_game_to_the_tips_in_a_chat_about_a_game(self):
+        """The Deck's level: Hollow Knight is the chat's game, nothing is running, and the Ask
+        gate must say "compat" (it said "strategy" and the log read "using the chat's own game")."""
+        for question in ("my game keeps closing on its own", "the game wont even open"):
+            with self.subTest(question=question):
+                for kwargs in (
+                    {"text_resolved_title": "Hollow Knight"},
+                    {"app_id": "367520", "app_name": "Hollow Knight"},
+                ):
+                    gate = should_retrieve_knowledge(
+                        use_local_knowledge_base=True,
+                        ask_mode="speed",
+                        question=question,
+                        **{"app_id": "", "app_name": "", **kwargs},
+                    )
+                    self.assertEqual(gate, (True, "compat"))
+
+    def test_strategy_sentences_with_the_bare_crash_word_stay_weak_with_a_game_in_context(self):
+        for question in (
+            "crashed into the wall on the last lap",
+            "my run keeps crashing out at the boss",
+            "the boss crashes into me and I die",
+            "the black screen of death boss fight",
         ):
             with self.subTest(question=question):
                 self.assertFalse(question_targets_compat_corpus(question, game_in_context=True))

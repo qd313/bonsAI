@@ -305,6 +305,17 @@ FOLLOWUP_SUBJECT_NOTE_TEMPLATE = (
 )
 
 
+# Plan 100 lane M2: what a thank-you, a greeting or an off-topic question ("what is the date today")
+# is told instead of the Strategy or Expert orders. Without it the model answered from the chat's
+# boss advice and wrote a fresh branch menu under it (Deck check P100-THANKS-01).
+COURTESY_TURN_REPLY_BLOCK = (
+    "\n\nSHORT REPLY ONLY: this message is a thank-you, a greeting or a question that is not "
+    "about the game. Reply in one friendly sentence of under 25 words. Give no game advice, do not "
+    "repeat anything said earlier, and offer no menu or choices. If you cannot know the answer "
+    "(the time, the date), say so in a few words.\n"
+)
+
+
 def _glossary_clause(game_title: str = "", terms: Sequence[str] = ()) -> str:
     """Tell the model a game's jargon is tap-to-define, so it can use the words without derailing to explain them.
 
@@ -347,6 +358,7 @@ def build_system_prompt(
     user_notes_block: str = "",
     glossary_game_title: str = "",
     glossary_terms: Sequence[str] = (),
+    courtesy_turn: bool = False,
 ) -> str:
     """Build the system message used for Ollama requests from game and attachment context.
 
@@ -376,6 +388,10 @@ def build_system_prompt(
     constant's comment for why the wording and position are fixed, and for the partial-fix numbers
     (D98). A no-op when blank, or when ``early_context_suffix`` never attached a knowledge-base
     block at all.
+
+    ``courtesy_turn`` (plan 100 lane M2): a thank-you, a greeting or an off-topic question. The
+    prompt is the game line, identity, status line and glossary, then ``COURTESY_TURN_REPLY_BLOCK``
+    and the reply language -- none of the Strategy, Expert or Speed orders, the notes or the menu.
 
     ``reply_verbosity``: the Reply style slider's stop. On its Terse stop (plan 93) the length block
     of the other stops is replaced by the three-line rule and the branch-menu requirement
@@ -496,6 +512,11 @@ def build_system_prompt(
         )
     )
     glossary_block = _glossary_clause(glossary_game_title, glossary_terms)
+    if courtesy_turn:
+        return (
+            dynamic_block + general_block + glossary_block + COURTESY_TURN_REPLY_BLOCK
+            + build_reply_language_block(reply_language)
+        )
     strategy_domain = strategy_domain_guidance or ask_mode == "strategy"
     strategy_kb_relaxed = strategy_domain and _strategy_kb_spoiler_clause_suppressed(
         app_id=app_id,

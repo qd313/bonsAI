@@ -2137,6 +2137,7 @@ class Plugin:
         user_notes_block: str = "",
         glossary_game_title: str = "",
         glossary_terms: Sequence[str] = (),
+        courtesy_turn: bool = False,
     ) -> str:
         """Build the system prompt using plugin-local metadata lookups and attachment context."""
         proton = (proton_log_attachment or "").strip()
@@ -2163,6 +2164,7 @@ class Plugin:
             user_notes_block=user_notes_block,
             glossary_game_title=glossary_game_title,
             glossary_terms=glossary_terms,
+            courtesy_turn=courtesy_turn,
         )
         return append_deck_tdp_sysfs_grounding(
             base,
@@ -2199,6 +2201,7 @@ class Plugin:
         chat: Optional[dict] = None,
         question_for_display: str = "",
         user_notes_block: str = "",
+        courtesy_turn: bool = False,
     ):
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         return await run_ask_ollama(
@@ -2228,6 +2231,7 @@ class Plugin:
             chat=chat,
             question_for_display=question_for_display,
             user_notes_block=user_notes_block,
+            courtesy_turn=courtesy_turn,
         )
 
     def chat_for_request(self, request_id: Any) -> dict:

@@ -42,6 +42,7 @@ def append_kb_notes_footers(
     text_resolved_title: str,
     question_for_kb_search: str,
     kb_attached_notes: list[dict[str, Any]],
+    courtesy_turn: bool = False,
 ) -> str:
     """``response_text`` with whichever of the two notes footers this turn earns appended.
 
@@ -50,8 +51,12 @@ def append_kb_notes_footers(
     routed to the tip sheet instead (kb_domain == "compat"), and nothing there matched either.
     The line would be true but misleading -- the search never looked in the notes this turn. Nor
     on a turn whose note or tip was found but cut for room (kb_notes, plan 74 lane 5): the notes
-    did not come up empty there.
+    did not come up empty there. Nor on a thank-you or an off-topic turn (``courtesy_turn``, plan 100
+    lane M2): the notes were never searched, so "not in my notes" would be a claim about a search
+    nobody ran, and the reply is returned exactly as the model wrote it.
     """
+    if courtesy_turn:
+        return response_text
     tip_sheet_came_back_empty = tip_sheet_turn_came_back_empty(
         kb_attached=bool(kb_transparency.get("kb_attached")),
         kb_domain=str(kb_transparency.get("kb_domain") or ""),

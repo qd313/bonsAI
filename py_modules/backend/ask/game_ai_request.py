@@ -518,11 +518,8 @@ async def run_game_ai_request(
         # time is it") is not about the game. It searches no notes, carries no remembered subject
         # and no previous answer, and leaves the remembered subject exactly as it was, so the
         # next real follow-up still means the boss asked about before.
-        question_is_courtesy_or_junk = kb_followup_memory.is_courtesy_or_junk_phrase(
-            question_for_retrieval
-        )
-        if question_is_courtesy_or_junk:
-            should_kb = False
+        question_is_courtesy_or_junk = kb_followup_memory.is_courtesy_or_junk_phrase(question_for_retrieval)
+        should_kb = should_kb and not question_is_courtesy_or_junk
 
         # Follow-up memory, step one. A bare follow-up ("what about her second phase") carries
         # none of the previous turn into the search on its own -- there is no argument that
@@ -868,7 +865,9 @@ async def run_game_ai_request(
             pc_ip,
             app_id,
             app_name,
-            chat=request_chat,
+            # Plan 100 lane M2: a thank-you or off-topic turn is sent no earlier turns, so the AI has
+            # no boss advice to repeat; the saved chat is untouched.
+            chat={} if question_is_courtesy_or_junk else request_chat,
             request_timeout_seconds=request_timeout_seconds,
             attachments=atts,
             ask_mode=ask_mode,
@@ -893,6 +892,7 @@ async def run_game_ai_request(
             strategy_checklist_state=strategy_checklist_state,
             preferred_model=preferred_model,
             user_notes_block=user_notes.block,
+            courtesy_turn=question_is_courtesy_or_junk,
         )
         elapsed = round(time.time() - start, 1)
         base_response_text = str(ollama_result.get("response", "") or "No response text.")
@@ -1016,6 +1016,7 @@ async def run_game_ai_request(
                 text_resolved_title=text_resolved_title,
                 question_for_kb_search=question_for_kb_search,
                 kb_attached_notes=kb_attached_notes,
+                courtesy_turn=question_is_courtesy_or_junk,
             )
 
             # D112 #7, the spoiler safety net. Run last, after the honesty footers above, so a

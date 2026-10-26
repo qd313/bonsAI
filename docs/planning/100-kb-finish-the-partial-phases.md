@@ -593,6 +593,28 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   **Owed:** the Deck round from a chat with the rig (runbook L2 runs L1's checks first), the restore round, the
   maintainer's six reads and six calls, the push, the publish.
 
+- **2026-10-26, 01:09 to 01:50 UTC: the Deck round ran** in its own session on this PC (the maintainer typed from the
+  desktop app so it could start), on build `222279568b09` with the night's library installed; stopped by the usage limit
+  before the restore. Handover: [assets/100-handover-L2.md](assets/100-handover-L2.md). **PASS:** the Search tab row, the
+  Yoshi note (six worlds quoted), the lowered-notes row and tag (the tag shows on the opened note card; Clear emptied the
+  file), "Suggest as a tip" (the file written, the refusal line; the saved line sits behind the dock until the ring moves
+  down), the route save across a close and reopen, the Portal 2 turret note, the look check, the sweep (no repeat, no lost
+  ring; the answer bubble's stop is 96 percent visible behind the dock chip). **FAIL:** the tips check, one of three: "my
+  game keeps closing on its own" in the Hollow Knight test chat got three Hollow Knight notes and no tip (the log: "no game
+  running or named -- using the chat's own game Hollow Knight"; the closing-on-its-own words are weak like "crash" and the
+  chat's own game counts as named); storage and black-screen reached their tips. The thank-you check: "thanks a lot for
+  that" and "what is the date today" searched no notes (the fix held there) but the AI wrote 52 and 65 words repeating the
+  earlier advice, because the chat's own history still reaches it (lane F's flagged risk); "how do I kill them" was about
+  the acid spitters. The four games: Portal 2 PASS; GTA FAIL twice ("in GTA San Andreas what does body armor do" went to
+  the chat's own game Portal 2; "Grand Theft Auto San Andreas: how does body armor work" logged "names a game the library
+  does not know (grand theft auto)" and searched nothing; the library knows game 9 as "Grand Theft Auto: San Andreas - The
+  Definitive Edition"); Sims 4 MEASURED (the new Fire note came, with the older "Fires" note first, and the smoke alarm
+  note did not); Baldur's Gate 3 MEASURED. **UNCLEAR:** the "Needs" line (two tries, no step carried one; the AI wrote
+  "Acquire Mothwing Cloak dash ability" with no "Needs:"); Hide more on screen (Mario Kart 64 drew no cover in four tries
+  under either setting; the tests stand for it); the route save after Clear cache (the file's entry was gone, but Clear
+  cache also wiped the open view and routes are not kept in a saved chat, so the "covered again" half could not be seen).
+  **Not restored:** the mode chip (Strategy), the Developer tab switch (on), the night's library still installed.
+
 ## 13. Report
 
 Written 2026-10-26, 01:20 UTC, by the session (Fable 5.1 high) at the end of the night. **Every lane is built and on the

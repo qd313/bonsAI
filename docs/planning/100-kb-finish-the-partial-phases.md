@@ -6,7 +6,7 @@ the work runs in a new chat on the maintainer's PC. Sources: the knowledge-base 
 helpers (each checked against the roadmap; three mismatches found, § 8). Plain language on purpose: this file is for
 the maintainer first.
 
-**Status: RAN 2026-10-25/26 on the maintainer's PC; every lane landed on `experimental`; the Deck round (blocks L1, L2, LR) is owed because the rig's tools dropped out of the chat; the report is § 13.** (Before the run:) READY for "Run plan 100" on the maintainer's PC. The maintainer answered the calls in § 2 on 2026-10-25
+**Status: DONE 2026-10-26, on the maintainer's PC; every lane landed on `experimental`, the Deck round and the retry round run and the Deck restored; owed: the push, the publish, the maintainer's reads and calls (§ 13.1); the report is § 13.** (Before the run:) READY for "Run plan 100" on the maintainer's PC. The maintainer answered the calls in § 2 on 2026-10-25
 ("plan the plan as listed": the defaults on all fourteen; usage at 53 percent of the five-hour window, which resets
 within the hour, and 53 percent of the week, which resets Wednesday morning). They become decision D137, written by the
 bookkeeper in its pre-go audit. The helper rules, the briefs and Deck runbook L0 are written (the files below).
@@ -632,11 +632,33 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   typed name, so no code change) are built; M2 (a junk turn gets no history, a one-sentence instruction, no footer) is
   building. Then one deploy with the rebuilt library and a three-question retry round.
 
+- **2026-10-26, 03:40 to 04:30 UTC: the three fixes landed, deployed and passed on the Deck; the night closed.** The
+  session's own chat restarted at 03:43 (the earlier process ended with lane M1's landing script mid-run; its two commits
+  were on the branch, the Python suite then passed whole, 3,288 tests). Landed: M3 (`b48e4baf`), M1 (`bee559fa`,
+  `4397e870`), M2 (`58961a50`, `0f7532a8`); the bookkeeper moved the three entries to Deck check owed (`ca6c6960`). One
+  deploy at 03:53 UTC (the Python side and the rebuilt seed library with six GTA aliases; the frontend bundle unchanged,
+  hash still `222279568b09`). **The retry round, 03:50 to 04:07 UTC, in the Deck session: all three PASS**: the crash
+  sentence reached the crash tips in a chat about a game; "thanks a lot" gave "You are welcome." (4 words), "what is the
+  date today" gave "I cannot tell you the date today." (8 words), no notes block, no footer, and "how do I kill them"
+  was about the Exploders; "in GTA San Andreas what does body armor do" in the Hollow Knight chat attached the Body
+  Armor note by the typed name. **Restored again** (the published library 2026.10.25 back, Speed, the Developer tab
+  hidden, "Save files to Desktop" off, the models unloaded, the keep-awake released; one slip: a stray A turned the "Use
+  local knowledge base" switch off and it was turned back on at once). The final sweep landed as `46411790`: the four
+  entries to Done (whole, to the completed archive, with their retry evidence); the knowledge-base roadmap back to
+  21.8 KB. **The full check passed on the final code tip `0f7532a8`** (275.3 s, every set green). Usage at close: 32
+  percent of a fresh five-hour window, 74 percent of the week (the 90 line never reached). **Owed to the maintainer:**
+  the push; the publish (after the Baldur's Gate 3 read and the facts-kept call); the six reads and six calls in the
+  roadmap's "Calls waiting on you" block; the checks page's plan 100 group; the Doom 64 hand launch for the hidden-box
+  row; the two unclear rows (the "Needs" line, Hide more on screen) with a question that produces their case; the saved
+  walks through the rating row re-saved for the new stop.
+
 ## 13. Report
 
-Written 2026-10-26, 01:20 UTC, by the session (Fable 5.1 high) at the end of the night. **Every lane is built and on the
-experimental branch, but none of it has been checked on the Deck:** the rig's tools dropped out of this chat at about
-22:00 UTC after the opening round, so every check of the landed work is still owed and nothing below is done. **One
+Written 2026-10-26, 01:20 UTC, by the session (Fable 5.1 high); updated 04:30 UTC after the Deck and retry rounds.
+**Every lane is built and on the experimental branch, and the Deck round has run** (in a second chat, since the rig's
+tools dropped out of this one at about 22:00 UTC): six of the night's fixes passed on the Deck, three failed, were fixed
+again the same night and passed their retry round; two were unclear (the "Needs" line and Hide more on screen, both
+for your call). The Deck is restored to how you left it, with the published library back. § 13.9 has the Deck results. **One
 measurement went the wrong way after the 51 new notes landed:** on this PC's answer test the AI kept the note's facts 67
 times in a hundred, down from 76 (two earlier runs differed by up to 6 points), so read the six questions that lost their
 facts before you publish the library. The new picture sentence in the prompt made no measurable difference. Nothing is
@@ -644,13 +666,11 @@ pushed or published. The full check passed on the tip before the end audit's doc
 
 ### 13.1 What you must do next
 
-1. **Run the Deck round.** Open a new chat on this PC (or type one message in this chat from the desktop app so it can
-   start one) and say: "Run plan 100 Deck block L2." Its runbook ([assets/100-runbook-block-L2.md](assets/100-runbook-block-L2.md))
-   carries every fact and runs the first round's checks (block L1) before its own, since that round never ran. The build
-   on the Deck is the last code build (`222279568b09`; the four source-record fixes that landed after it change no note
-   text, so the Deck's library is the final one); the night's library sits in the Deck's seed folder and goes in through
-   the Developer tab. Then the restore round (block LR, plan § 6) puts the published library back and restores every
-   setting. Thirteen entries wait on this.
+1. **No Deck work is owed** except two unclear rows that need a different question to produce their case (the
+   "Needs" line, Hide more on screen) and the hidden-box row that needs your Doom 64 hand launch. Done tonight: the
+   opening round, the main round (every wave 1 and wave 2 check), the retry round for the three fixes, and the restore.
+   The Deck's library is the published 2026.10.25 again; the night's library (465 notes, 166 tips, with the GTA names)
+   is built on this PC and ready for your publish.
 2. **Read six things with your own eyes.** Four you can read now: the seven Baldur's Gate 3 notes (`data/kb/notes/baldurs-gate-3.json`;
    you chose to land them; five are tabletop lore with no fight advice); the two new troubleshooting tips (ids 165 and
    166 in the tip sheet: sound to the TV instead of headphones; menus out of place on a TV), each marked "Researched,
@@ -762,11 +782,10 @@ button must be pressed first), the second measured no gain.
 
 ### 13.5 What failed and why; what is left
 
-- **The Deck round did not run** (the rig). Owed: the tips check (P100-TIPS-01), the Needs line (P100-NEEDS-01), the
-  thank-you reply (P100-THANKS-01), the route save (P100-ROUTE-SAVE-01), Hide more on screen (P100-HIDE-MORE-SCREEN-01),
-  the Search tab row (P100-SEARCH-TIER-01), the Yoshi note (P100-YOSHI-01), the look check (QA-LOOK-01-p100), the
-  free-play sweep (P100-L1-SWEEP), the Lowered notes row (P100-LOWERED-01), Suggest as a tip (P100-SUGGEST-01), the four
-  games' notes (P100-FOUR-GAMES-01), then the restore round (the smoke pass again, the saved walks, the library put back).
+- **The Deck round ran** on 2026-10-26 (§ 13.9), with the retry round and the restore. Still unclear after it: the Needs
+  line (P100-NEEDS-01) and Hide more on screen (P100-HIDE-MORE-SCREEN-01); both need a question that produces their case.
+  Not run tonight: the smoke pass again and the saved-walk replays that the restore round (plan § 6) listed; the saved
+  walks through the rating row gain one stop ("Suggest as a tip") and need re-saving.
 - **The hidden box on a game known only by name** could not run for the sixth time (Doom 64 not on Recent Games).
 - **The picture line measured no gain** (58 and 50 in a hundred named the game with it handed over, 75 before; the God
   of War mix-ups 4 and 6 in 9, 4 before; noise up to 21 points). The screenshot entry stays PARTIAL.
@@ -791,7 +810,7 @@ button must be pressed first), the second measured no gain.
 | Library | 414 notes, 164 tips | 465 notes, 166 tips (29 of 38 games with enemy and item notes) |
 | Knowledge-base Bugs entries not accepted | 15 | 10 (7 older, 3 new; 4 wait on your call) |
 | Half-done entries | 4 | 3 (Phases 4 and 7 closed by your call; Phase 5, the screenshot measurement and the visual maps stay) |
-| Entries waiting on a Deck check | 1 | 13 |
+| Entries waiting on a Deck check | 1 | 2 unclear (the Needs line, Hide more on screen) plus the hidden-box row (Doom 64) |
 
 Measured before anything landed, both runs (first run 2026-10-24, second 2026-10-25; nothing built tonight touched
 them): Hide more against Default drew 20.6 against 23.8 covers per 100 answers (23 against 29 the first time), with no
@@ -802,8 +821,48 @@ Usage: 54 percent of the five-hour window and 54 percent of the week at go; 87 a
 
 ### 13.7 The checks on the tip
 
-`python scripts/verify.py --full` passed on `2f31c81e`, the last code tip with every lane landed (307.8 s, every set
-green). Two docs-only commits followed (the end audit `02b1286b` and this report); the quick check passed after them.
+`python scripts/verify.py --full` passed on `2f31c81e` (every wave 1 and wave 2 lane landed; 307.8 s) and again on the
+final code tip `0f7532a8` with the three retry fixes landed (275.3 s); the quick check passed after the docs commits that
+followed each.
+
+### 13.9 The Deck round (2026-10-26, 01:09 to 04:07 UTC, in its own chat)
+
+**Passed:** the Search tab row (the ring on Default); the Yoshi note (six worlds quoted); the lowered-notes row and the
+tag (the tag shows on the opened note card, Undo takes it away, the row read 2, Clear emptied the file; the "Which
+note was it?" step does not appear when one note is attached); "Suggest as a tip" (the file written with its five
+fields, the refusal line named the Permissions tab; the saved line sits behind the dock until the ring moves down);
+the route save across a close and reopen (step 1 ticked, step 3 open; after Clear cache the file's entry was gone,
+but Clear cache also wipes the open view and routes are not kept in a saved chat, so the "covered again" half could
+not be seen); the Portal 2 turret note; the look check; the free-play sweep (no stop twice, no lost ring; the answer
+bubble's stop sits 96 percent visible behind the dock chip).
+
+**Failed, fixed again the same night, and passed the retry round (03:50 to 04:07 UTC):** "my game keeps closing on its
+own" in the Hollow Knight chat got Hollow Knight notes and no tip, because the closing-on-its-own words were weak like
+"crash" and the chat's own game counts as a game named; in a fresh chat the same sentence reached the crash tip. Fix:
+the sentence-shaped crash rules (the game closes, quits, won't open, nothing happens when I launch the game) route even
+with a game in context; four fixture sentences now route with a game running, nothing else moved. Retry: the crash tip
+in the Hollow Knight chat. "Thanks a lot for that" and "what is the date today" searched no notes (that half held) but
+the AI wrote 52 and 65 words repeating the boss advice from the chat's history, with a "Not in my notes" line under it.
+Fix: a thank-you or off-topic turn is sent no earlier turns and one instruction to reply in a short friendly sentence;
+no footer line. Retry: "You are welcome." (4 words) and "I cannot tell you the date today." (8 words), no block, no
+footer, and the next follow-up still about the Exploders. "In GTA San Andreas what does body armor do" went to the
+chat's own game, and "Grand Theft Auto San Andreas…" found no game: the library knew the game only as "Grand Theft
+Auto: San Andreas - The Definitive Edition" with two aliases. Fix: four everyday aliases in its notes file (gta san
+andreas, gta sa, san andreas, grand theft auto san andreas); the matcher already prefers a typed name over the chat's
+game, so no code changed. Retry: the Body Armor note attached in the Hollow Knight chat.
+
+**Unclear:** the "Needs" line (two tries, no step carried one; the AI wrote "Acquire Mothwing Cloak dash ability"
+with no "Needs:"; your call whether the clause stays); Hide more on screen (Mario Kart 64 drew no cover in four tries
+under either setting; the fix stands on its tests; the next try needs a question that draws a cover). Measured for
+your eye: the Sims 4 fire question drew the older "Fires" note first and the new Fire note third, no smoke alarm
+note; the Baldur's Gate 3 Minthara answer's tail is in its evidence file.
+
+**Restored:** mode chip Speed, the Developer tab hidden, "Save files to Desktop" off (it was found off), the published
+library 2026.10.25 back (after Remove the screen showed a black frame with a logo for about 90 seconds, then the
+Download button), the spoiler row Default, no pinned chips, the models as before and unloaded, no game, the keep-awake
+released; one slip during the second restore, a stray A turned the "Use local knowledge base" switch off and it was
+turned back on at once. Left for you: the suggested-tip file on the Desktop, the settings backup on the Deck, three
+extra saved chats from the retries (six in all).
 
 ### 13.8 A plain developer guide to what changed
 

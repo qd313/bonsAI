@@ -58,6 +58,26 @@ the published one). Measured the same night: the Ali G voice keeps fewer facts (
 a game running the Deck's answers take about 40 s instead of 15; the Deck's model names a game from a screenshot 75
 times in a hundred when told which game is running, 17 when not (8 pictures, mostly menus). Report: plan 98 § 13.
 
+**Update 2026-10-26 (plan 100).** Built and landed on `experimental` in one night. A troubleshooting question in plain
+words ("my game closes on its own") now finds its tip far more often: five tips were reworded with the words people
+type, two new tips were added (sound going to the TV instead of headphones, menus out of place on a TV), and the word
+list that sends a question to the tips was widened. Of 24 plain sentences, 17 now reach a tip (8 before) and 15 of the
+22 that have a right tip reach it (5 before); none reaches a wrong one. Two lines were added to the instructions the AI
+reads (the picture rules, and the route steps asking for a "Needs" part). A thank-you or a question about the time no
+longer carries the last answer forward. The route's revealed steps are saved with the ticks. "Hide more" now reaches the
+screen's cover rule, the Search tab lands on the "How much to hide" row, Yoshi's Story's note no longer contradicts
+itself, and a "Lowered notes" row in the Ollama tab shows and clears every thumbs-down mark. A "Suggest as a tip" button
+under a finished answer saves a proposed note to the Desktop. The library on this PC grew to 465 notes and 166 tips:
+51 new enemy and item notes for Baldur's Gate 3, GTA San Andreas, The Sims 4 and Portal 2, so 29 of 38 games have
+them, with 102 blind questions written by someone else to test them. Not published yet; the published library is still
+2026.10.25 with 414 notes and 164 tips. Measured on this PC: search puts the right note in the first three 90.8 times in a hundred
+on the held-back questions; 100 of the 102 new questions find their note in the first three. But the new notes crowd the old ones:
+five held-back questions lost their note, and facts kept fell from 76.3 to 67.2 in a hundred. Two earlier runs
+differed by up to 6 points, so the drop needs a read before it is believed. Hide more drew 20.6 covers in a hundred
+against 23.8 for Default and missed no story cover. The line that tells the AI which game a picture shows
+did not help (58 and 50 times in a hundred over two runs, against 75 before). **No Deck check of the new work has run:** the one Deck block that ran (L0) only measured the old state. The controller rig's tools dropped out of the session and blocks L1 and L2 could not run. A written runbook waits for the
+next session. Report: plan 100.
+
 **Coverage was the thing wave two set out to fix.** Of the 72 questions a player might plainly ask about
 the twelve games added earlier this month, only 43 had a note behind them a month ago. **64 do now** —
 the other eight were written on purpose to have none, and stay blank as a control, so every question that

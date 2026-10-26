@@ -334,6 +334,11 @@ Parked work and watched sightings: [roadmap-shelved.md](roadmap-shelved.md).
 Everything closed since v0.6.0 shipped (2026-10-24), one line each, newest first. When this section grows past the
 size limit, its older blocks move to an archive file the way the v0.6.0 ones did.
 
+**Closed 2026-10-26 (plan 100 call 8, D137: Phases 4 and 7 closed by the maintainer's call):**
+
+- ★★★★ `[KB]` **RAG Phase 4: extended retrieval** — **DONE 2026-10-26, closed by the maintainer's call (plan 100 call 8, D137).** The chip promise and the labelled enemy and item cards shipped; the look at the widest chip labels stays the maintainer's eye check on the checks page (row PHASE4-CHIPS-01, MEASURED 2026-10-25: one chip showed; evidence `workshop:test-evidence/plan100-P100-PHASE4-CHIPS-01.json`). Full entry: [archive](archive/roadmap-completed.md#closed-2026-10-26-plan-100-call-8-d137-phases-4-and-7).
+- ★★★★ `[KB]` **RAG Phase 7: retrieval infrastructure** — **DONE 2026-10-26, closed by the maintainer's call (plan 100 call 8, D137).** Its two leftovers moved, not dropped: add-on packs to the catalog phase (Phase 8) and a screenshot feeding the search to the screenshot entry, both in [roadmap-kb.md](roadmap-kb.md). Full entry: [archive](archive/roadmap-completed.md#closed-2026-10-26-plan-100-call-8-d137-phases-4-and-7).
+
 **Closed 2026-10-25 (plan 100 pre-go audit, Deck block KS):**
 
 - ★ `[KB]` **Too many underlined words in one answer: each glossary word is now underlined only the first time** — **DONE 2026-10-25, passed on the Deck (row P98-GLOSSARY-FIRST-01, build `87a21fa1`; evidence `workshop:test-evidence/plan98-P98-GLOSSARY-FIRST-01.json`).** A new Hollow Knight answer underlined 7 words, none twice. Full entry: [archive](archive/roadmap-completed.md#closed-2026-10-25-plan-100-pre-go-audit-deck-block-ks).

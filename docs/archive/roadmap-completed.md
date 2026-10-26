@@ -1842,3 +1842,16 @@ Knowledge-base feature entry that passed on the Deck 2026-10-25, copied from [ro
 - ★ `[KB]` **Too many underlined words in one answer: each glossary word is now underlined only the first time** — **DONE 2026-10-25, passed on the Deck (block KS, build `87a21fa1`; landed `c938e643`). Asked for by the maintainer 2026-10-25 (the checks page: "Only show the underline on the first instance of the keyword").**
   A Hollow Knight answer underlined 11 words; it now underlines 5 (Mothwing Cloak, Charms, notches, bench, Geo), counting "charm" and "charms" as one word, across every section of the answer and while it streams. Words inside a spoiler block count on their own. Proven by 9 tests.
   Deck (row **P98-GLOSSARY-FIRST-01**): the same question gave a new answer with 7 underlines for 7 words, none twice ("notches" underlined once of three); Down visits the question, the answer, then the 7, all fully visible. Evidence `workshop:test-evidence/plan98-P98-GLOSSARY-FIRST-01.json` and its pictures. Saved walks over answers that repeat a library word may now have fewer stops.
+
+## Closed 2026-10-26 (plan 100 call 8, D137: Phases 4 and 7)
+
+Two knowledge-base phase entries closed by the maintainer's call, copied from [roadmap-kb.md](../roadmap-kb.md) as they stood, with the closing noted. Nothing was deleted.
+
+- ★★★★ `[KB]` **RAG Phase 4: extended retrieval** — **PARTIAL.** Chips that show the library exists and the labelled enemy
+  and item cards shipped ([D67](../audit/maintainer-decisions-archive.md#d67--locked-2026-09-05--structured-cards-accept-prose)).
+  A running game's own tip and the chip promise passed on the Deck (P78-TIP-CHIP, P78-CHIP-PACE). Still owed: the look at the widest chip labels (PHASE4-CHIPS-01; UNCLEAR again 2026-10-24; measured 2026-10-25, the maintainer judges the pictures: see its testing row). The pace look is closed (plan 99 call 12). [Detail](../roadmap-kb-details.md#rag-phase-4-extended-retrieval)
+  **Closed 2026-10-26 by call 8 (D137):** Phase 4 has nothing left to build. Its last item, the look at the widest chip labels, is the maintainer's eye check on the checks page (row PHASE4-CHIPS-01, MEASURED 2026-10-25: one chip showed, "How to use bonsAI", text fits; evidence `workshop:test-evidence/plan100-P100-PHASE4-CHIPS-01.json` and its three pictures).
+
+- ★★★★ `[KB]` **RAG Phase 7: retrieval infrastructure** — **PARTIAL.** What still matters: add-on packs before a large catalog, a screenshot feeding the search.
+  **The thumbs-down that stops a wrong note coming back was built 2026-10-24** (design C, D112 item 8): see its entry in Deck check owed. [Detail](../roadmap-kb-details.md#rag-phase-7-community-tip-contribution-rag-phase-8)
+  **Closed 2026-10-26 by call 8 (D137):** the two leftovers moved, not dropped. Add-on packs now sit in the Phase 8 entry; a screenshot feeding the search sits in the screenshot-reading entry (both in [roadmap-kb.md](../roadmap-kb.md)).

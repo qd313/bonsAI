@@ -730,3 +730,50 @@ Five tips now carry the plain words people type, and two new tips (165: sound to
   P78-CHIP-PACE)." 
 
 **Removed words, plan 100 wave 2 sweep (small trims):** "Two runs of the same setup differ by a few points." "Odd advice from the AI, seen once." "(plan 100 call 5, D137, chose to add no prompt line for it)" 
+
+**Moved word for word by the plan 100 K9 audit (2026-10-26), to keep the knowledge-base roadmap under its size limit:**
+
+**The five calls added to "Calls waiting on you" (full wording):**
+
+- **Hide more draws fewer spoiler covers than Default: close or keep?** — **OPEN, raised 2026-10-25 (plan 100 lane X).**
+  Measured twice: 20.6 covers in a hundred answers against 23.8 for Default, and Hide more missed no story cover that Default kept. Close it as measured, or keep it open? See the Bugs entry "Hide more drew fewer spoiler covers".
+- **Hide less read 94.4 percent clean on the second run: close or keep?** — **OPEN, raised 2026-10-25 (plan 100 lane X).**
+  First run 90.7, second 94.4 (51 of 54). See the Bugs entry "under Hide less".
+- **A made-up question attaches three weak notes with a score of 0.00: add a floor?** — **OPEN, raised 2026-10-25 (plan 100 lane X).**
+  The numbers say no new floor: it clears the two made-up bosses but loses real notes, and "No close match" already shows. Close it as "the No close match line is the answer", or keep it? See the Bugs entry "three weak notes attach".
+- **Facts kept fell from 76.3 to 67.2 in a hundred: read the six questions** — **OPEN, raised 2026-10-25 (plan 100 lane X).**
+  It fell after the four games' notes landed. Two earlier runs on the old library differed by up to 6 points, so the signal is weak. Six questions went from 3 of 3 to 0 of 3; read them and decide. See the Bugs entry "The new notes crowd the old ones".
+
+**Screenshot entry, the two lines before the K9 trim:**
+
+  First figures (8 Deck pictures, the Deck's own model `gemma4:e2b-it-qat`, 3 tries each): with the game handed over it named the game 75 times in 100 and the area 42; with nothing handed over, 17 and 29. No picture had a boss. It often invents and guesses Zelda: Ocarina of Time for pictures it does not know. Full text: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  The set is thin (most games stop at a save-slot screen the rig must not touch; Steam's overlay is on every picture); a bigger set with play scenes needs the maintainer's hand. **Step 2** (each picture model the Deck offers, then fix where it fails) is still open. Report `workshop:archive/research/screenshot-reading-2026-10-24.md`. Full text: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+
+**Zero-score made-up question, the words before the K9 trim:** A floor at no keyword support clears the two made-up bosses (Zorblax, Grimthak) but loses 3 right notes; the house and Bone Hydra questions score 3.6 to 3.8 and a floor there loses 19. The "No close match" line already shows on all four. **The numbers say no new floor.**
+
+**Hide more against Default, the words before the K9 trim:** The two Hades story rows drew their cover the same under both (3 of 3 and 2 of 3); Hide more missed no story cover that Default kept. Contradictions: 92.6 clean against 88.9.
+
+**Screenshot entry, lane P note, the words before the K9 trim:** With the game handed over the AI named it 58 and 50 times in a hundred over two runs (75 on 2026-10-24); the God of War asks named another game 4 and 6 times in 9 (4 before). Two runs differ by up to 21 points. Still PARTIAL.
+
+**RAG Phase 5 entry, the words before the K9 trim:** Baldur's Gate 3 7, GTA San Andreas 15, The Sims 4 15, Portal 2 14, so 29 of 38 games have them. **Measured 2026-10-25:** 100 of 102 blind questions for the new notes find their note in the first three (86 first), but the new notes crowd the old ones (see the Bugs entry), which needs your read before this is more than PARTIAL. Also waits on P100-FOUR-GAMES-01 (block L2; not run on 2026-10-25; the rig dropped; runbook written) and your read of the Baldur's Gate 3 notes.
+
+**The new notes crowd the old ones, the words before the K9 trim:** The five: the Portal 2 gels, the BG3 class, an audio tip and two GTA rows. The Portal 2 gels question lost its card to the three new gel notes. Facts kept
+
+**Where things stand, evidence list, the words before the K9 trim:** (`workshop:test-evidence/plan98-P98-KS-LIBRARY.json`, `workshop:test-evidence/plan98-P98-KS-RESTORE.json`)
+
+**Still short line, the words before the K9 trim:** Of 24 fresh plain sentences, 8 reached a tip before the wording fix and 17 reach one now, none a wrong one (measured on the PC; Deck check owed).
+
+**KB visual maps, the words before the K9 trim:** Not chosen as drawn: a fuller boss card, a whole-kingdom map. An area map must look real; maps taken from the game or a wiki need a licence check first.
+
+**The category-card call (D41), the words before the K9 trim:** Kept open on
+  purpose; the first step is to measure the shipping search question by question, so it is not yet a call to answer.
+
+**Your eye on plan 100's wording, the words before the K9 trim:** The seven Baldur's Gate 3 notes, the two new tips (165 and 166), ten plain-word tip edits, and the wording of the "Suggest as a tip" line. On your checks page, group "plan 100".
+
+**Phase 8 moved line, the words before the K9 trim:** **Moved here from Phase 7 (plan 100 call 8, 2026-10-26):** add-on packs come before a large catalog.
+
+**Screenshot moved line, the words before the K9 trim:** **Moved here from Phase 7 (plan 100 call 8, 2026-10-26):** a screenshot feeding the search (the picture's guess goes into the note search) is not built.
+
+**Unrelated questions entry, the words before the K9 trim:** "thank you very much" attached no notes; "what time is it" still attached three. A fresh-chat re-run 2026-10-25 still attached three for "what time is it"; see the junk-phrase entry in Deck check owed. Word for word:
+
+**Two Bugs entries, the words before the K9 trim:** "Same lost-focus family as plan 97's freeze; the only cure, closing and reopening Quick Access, emptied the question box." and "(the answer came from an old branch button)".

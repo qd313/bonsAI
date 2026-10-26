@@ -1,6 +1,11 @@
 {
   "games": [],
-  "aliases": [],
+  "aliases": [
+    {"alias": "gta san andreas", "game_id": 9},
+    {"alias": "gta sa", "game_id": 9},
+    {"alias": "san andreas", "game_id": 9},
+    {"alias": "grand theft auto san andreas", "game_id": 9}
+  ],
   "sections": [
     {
       "section_id": 1100,

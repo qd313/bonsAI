@@ -615,6 +615,23 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   cache also wiped the open view and routes are not kept in a saved chat, so the "covered again" half could not be seen).
   **Not restored:** the mode chip (Strategy), the Developer tab switch (on), the night's library still installed.
 
+- **2026-10-26, 03:20 to 03:31 UTC: two retries and the restore round** in the Deck session (handover
+  [assets/100-handover-LR.md](assets/100-handover-LR.md)). **"my game keeps closing on its own" in a fresh chat: PASS**, the
+  crash tip attached (so the chat's own game was the cause, as lane M1 found). **GTA body armor in a fresh chat: FAIL**,
+  "question chose nothing"; the Deck's library held only two aliases for the game ("gta san andreas definitive", "gta sa
+  de"), which is exactly what lane M3 adds to. **Restored:** mode chip Speed; Developer tab switch off; the published
+  library 2026.10.25 back at /home/deck/.bonsai/rag (Remove, then Download; after Remove the screen showed a black frame
+  with a logo for about 90 s, then the Download button); the spoiler row Default; no pinned chips; the models as at L0 and
+  unloaded; no game; the keep-awake released. Left for the maintainer: the suggested-tip file on the Desktop, the settings
+  backup, two new saved chats from the retries (five in all), and "Save files to Desktop" found off at the block's start
+  and left on (being switched back off). **The bookkeeper's Deck-round sweep** landed as `bce30982`: six rows to Done
+  with their evidence, three fails filed as Bugs (two new ★★ entries, the thank-you entry reworded ★), the two unclears
+  kept; the testing document crossed its size line and nine closed rows moved to the archive. **Fix lanes:** M1 (the
+  sentence-shaped crash rules route even with a game in context; four fixture sentences now route with a game running,
+  nothing else moved) and M3 (four everyday aliases for GTA San Andreas in its notes file; the matcher already prefers a
+  typed name, so no code change) are built; M2 (a junk turn gets no history, a one-sentence instruction, no footer) is
+  building. Then one deploy with the rebuilt library and a three-question retry round.
+
 ## 13. Report
 
 Written 2026-10-26, 01:20 UTC, by the session (Fable 5.1 high) at the end of the night. **Every lane is built and on the

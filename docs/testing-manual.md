@@ -124,6 +124,8 @@ screenshotted many times.
 
 **2026-10-24 (plan 98 Deck block K1, build `913b58cf`, the Deck's own screen): PASS, no findings on either screen.** Settings with Story spoilers open and Main with the "What went wrong?" reason rows showing both returned an empty findings list, and the two screenshots show no cut-off or overlap. In the Main shot the lower reason chips are partly behind the Show details line and the box, which the run took to be the page scrolling while the ring sits on a chip. Choosing "Wrong game or topic" filled the question box with a rewrite prompt ("Prompt updated") instead of showing a "Marked not helpful" line; the prompt was not sent. Evidence `workshop:test-evidence/plan98-QA-LOOK-01.json` and the screenshots `plan98-QA-LOOK-01-settings.png` and `plan98-QA-LOOK-01-main.png`.
 
+**2026-10-26 (plan 100 Deck block L1, build dist `222279568b09`, library 2026.10.26, the Deck's own screen): MEASURED, no findings.** Main with a route answer and its step list, Settings with Story spoilers open (the tier row) and Search with the "spoilers" result list each returned an empty findings list; nothing pressed against the right edge, cut off or overlapping was seen in the pictures. The maintainer judges the pictures. Evidence `workshop:test-evidence/plan100-QA-LOOK-01-p100.json` (row QA-LOOK-01-p100 in testing.md).
+
 ## Standing row: the free-play sweep
 
 **QA-FREE-PLAY-01** — run after ANY change to the Main tab's layout, scrolling, focus graph, or
@@ -172,6 +174,8 @@ Saved walk `workshop:checks/plan70-L4-QA-FREE-PLAY-01.json`. Evidence
 every stop was visible or one of the two known corner-icon alarms, except one: after a Down press that scrolls past a spoiler cover, the ring sits
 on the section's box with 67% of it, cover included, under the tab header. Filed as a small bug on the roadmap. Not done: a second carousel
 position, the whole-chat walk, the touch half (needs a person). The row stays open. Evidence `workshop:test-evidence/plan76-QA-FREE-PLAY-01-try2.json`.
+
+**2026-10-26 (plan 100 Deck block L1, build dist `222279568b09`, library 2026.10.26, the Deck's own screen): the sweep on Main PASSED for no stop twice and no lost ring, nothing running and with Deep Rock Galactic: Survivor running.** Nothing running: 38 stop records over 20 stops; with the game: 15 stops on the Up leg; no cycle in either. The sweep tool sends only directions, so whether each stop hears A or B was not tested. The answer bubble's stop is 96 percent visible behind the dock chip (the known overlap). Evidence `workshop:test-evidence/plan100-P100-L1-SWEEP.json` (row P100-L1-SWEEP in testing.md).
 
 **2026-10-18 (plan 96 block F, build `24f5c300`, the Deck's own screen, no game): the sweep on Main PASSED.** Two walks: 24 presses (11 down, 13 up) over 21 stops on 12 controls, and 13 presses down over 12 stops; no cycle, no dead press, no stop focused but not visible. The reply text is an unnamed stop in both walks, as in earlier blocks. The row stays open for its other halves, as written above. Evidence `workshop:test-evidence/plan96-P96-F-FREEPLAY.json`, saved walk `workshop:checks/P96-F-FREEPLAY-main.json`.
 

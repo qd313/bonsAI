@@ -1,276 +1,798 @@
 {
-  "1300": {
-    "name": "Sentry Turret",
-    "page": "Sentry Turret",
-    "page_url": "https://theportalwiki.com/wiki/Sentry_Turret",
-    "revision": "193100",
-    "lines": {
-      "Summary": [
-        "Sentry Turrets are tripod robots",
-        "The Aperture Sentry Turret has a single red eye, sleek appearance, and predominately white color scheme",
-        "Moving into their angle of sight however, will cause Turrets to deploy their guns shortly after greeting Chell or Atlas or P-body before opening fire. They will continue to fire until the target is dead or moves out of sight."
-      ],
-      "Weak points": [
-        "The most common method is knocking them over, causing them to flail and fire wildly before deactivating. This can be done by picking them up and dropping them, or using any object to tip them over.",
-        "direct a Thermal Discouragement Beam onto it (usually via a portal and/or Weighted Pivot Cube), causing it to heat up and explode",
-        "the lasers or fizzler can be used to completely destroy them",
-        "Another is to cover it in Repulsion Gel causing it to bounce with increasing force until it either disables in midair, falls into the path of a Thermal Discouragement Beam or falls away into goo or a bottomless pit. Propulsion Gel makes a Turret quite slippery, making knocking it over easier"
-      ],
-      "Tips": [
-        "Sentry Turrets can be easily spotted by the visible laser beam emitted from their eye at all times",
-        "Portal 2 Sentry Turrets will not attempt to shoot at enemies if glass is between them, although will still track the enemy with the laser pointer (They will, however, shoot at the player when 2 panes are between them and the player in some circumstances). A Hard Light Bridge will prevent the Turret from even detecting the enemy, making it go to sleep."
+  "game_id": 12,
+  "game": "Portal 2",
+  "wiki": "The Portal Wiki (https://theportalwiki.com/w/api.php)",
+  "licence_printed_by_fetcher": "Portal Wiki (MediaWiki 1.45.6) licence: Attribution 4.0 International (CC BY 4.0) https://creativecommons.org/licenses/by/4.0/",
+  "licence_stored": "CC-BY-4.0",
+  "read_on": "2026-10-25",
+  "how_read": "The page text came through the wiki's own query call (action=query, prop=revisions, rvprop=content) at the revisions named below, not through the fetcher's page-render call, which the wiki refused with HTTP 429 all session. Each quote is the page's wikitext with link and spoiler markup removed. Script: .scratch/n4_fetch_wikitext.py (not committed).",
+  "sections": [
+    {
+      "section_id": 1300,
+      "name": "Sentry Turret",
+      "kind": "enemy",
+      "page": "Sentry Turret",
+      "page_url": "https://theportalwiki.com/wiki/Sentry_Turret",
+      "revision": "193100",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "The standard turret: a white tripod robot with one red eye that deploys its guns and opens fire once you step into its view, and keeps firing until you are dead or out of sight.",
+          "from": [
+            {
+              "page": "Sentry Turret",
+              "revision": "193100",
+              "quote": "Sentry Turrets are tripod robots"
+            },
+            {
+              "page": "Sentry Turret",
+              "revision": "193100",
+              "quote": "The Aperture Sentry Turret has a single red eye, sleek appearance, and predominately white color scheme"
+            },
+            {
+              "page": "Sentry Turret",
+              "revision": "193100",
+              "quote": "Moving into their angle of sight however, will cause Turrets to deploy their guns shortly after greeting Chell or Atlas or P-body before opening fire. They will continue to fire until the target is dead or moves out of sight."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "Knock it over - pick it up and drop it, or tip it with any object - and it flails, fires wildly, then switches off. A Thermal Discouragement Beam makes it heat up and explode, and a Material Emancipation Grill destroys it. Repulsion Gel makes it bounce until it disables or falls away, and Propulsion Gel makes it slippery, so it is easier to knock over.",
+          "from": [
+            {
+              "page": "Sentry Turret",
+              "revision": "193100",
+              "quote": "The most common method is knocking them over, causing them to flail and fire wildly before deactivating. This can be done by picking them up and dropping them, or using any object to tip them over."
+            },
+            {
+              "page": "Sentry Turret",
+              "revision": "193100",
+              "quote": "direct a Thermal Discouragement Beam onto it (usually via a portal and/or Weighted Pivot Cube), causing it to heat up and explode"
+            },
+            {
+              "page": "Sentry Turret",
+              "revision": "193100",
+              "quote": "the lasers or fizzler can be used to completely destroy them"
+            },
+            {
+              "page": "Sentry Turret",
+              "revision": "193100",
+              "quote": "Another is to cover it in Repulsion Gel causing it to bounce with increasing force until it either disables in midair, falls into the path of a Thermal Discouragement Beam or falls away into goo or a bottomless pit. Propulsion Gel makes a Turret quite slippery, making knocking it over easier"
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Its red laser beam is always visible, so you can see where it is looking. In Portal 2 it does not shoot at you through glass, though it still tracks you with the beam (with two panes between you it sometimes still shoots), and a Hard Light Bridge stops it detecting you at all.",
+          "from": [
+            {
+              "page": "Sentry Turret",
+              "revision": "193100",
+              "quote": "Sentry Turrets can be easily spotted by the visible laser beam emitted from their eye at all times"
+            },
+            {
+              "page": "Sentry Turret",
+              "revision": "193100",
+              "quote": "Portal 2 Sentry Turrets will not attempt to shoot at enemies if glass is between them, although will still track the enemy with the laser pointer (They will, however, shoot at the player when 2 panes are between them and the player in some circumstances). A Hard Light Bridge will prevent the Turret from even detecting the enemy, making it go to sleep."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1301,
+      "name": "Defective Turret",
+      "kind": "enemy",
+      "page": "Defective Turret",
+      "page_url": "https://theportalwiki.com/wiki/Defective_Turret",
+      "revision": "185504",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A turret with no white casing, so its insides show. It is harmless to Chell: it has no bullets and only clicks, and after a while it catches fire and explodes.",
+          "from": [
+            {
+              "page": "Defective Turret",
+              "revision": "185504",
+              "quote": "Defective Turrets, also called \"Crap Turrets\" by Wheatley, are damaged, ammo-less, unfinished, or faultily assembled Sentry Turrets."
+            },
+            {
+              "page": "Defective Turret",
+              "revision": "185504",
+              "quote": "They are harmless to Chell"
+            },
+            {
+              "page": "Defective Turret",
+              "revision": "185504",
+              "quote": "They lack the outer white shell of normal turrets, and their insides are visible."
+            },
+            {
+              "page": "Defective Turret",
+              "revision": "185504",
+              "quote": "They also seem to be out of bullets, as when they fire, only a clicking sound is made. After a while, they bizarrely catch on fire and explode."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "It is harmless to Chell, and its laser guide is off or broken.",
+          "from": [
+            {
+              "page": "Defective Turret",
+              "revision": "185504",
+              "quote": "their laser guide is off or broken"
+            },
+            {
+              "page": "Defective Turret",
+              "revision": "185504",
+              "quote": "They are harmless to Chell"
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "In co-op course 5 the turrets look like defective ones but work and speak properly, so treat those as normal turrets.",
+          "from": [
+            {
+              "page": "Defective Turret",
+              "revision": "185504",
+              "quote": "The turrets appearing in Course 5 of Cooperative Testing Initiative look like defective turrets but work and speak properly."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1302,
+      "name": "Crusher",
+      "kind": "enemy",
+      "page": "Crusher",
+      "page_url": "https://theportalwiki.com/wiki/Crusher",
+      "revision": "188619",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A large grey panel covered in steel spikes. If you touch one you are forced into the nearest hard surface and killed instantly.",
+          "from": [
+            {
+              "page": "Crusher",
+              "revision": "188619",
+              "quote": "Crushers appear as large grey panels with a number of steel spikes firmly attached to them."
+            },
+            {
+              "page": "Crusher",
+              "revision": "188619",
+              "quote": "If a test subject makes contact with a Crusher, they will be forced into the nearest hard surface and killed instantly."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "A loud crunching noise plays while one is active, warning you that you are close so you can keep away.",
+          "from": [
+            {
+              "page": "Crusher",
+              "revision": "188619",
+              "quote": "When active, a loud crunching noise is emitted in order to warn the player that they are approaching a Crusher, thereby allowing the player to avoid them."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Crushers become more frequent in the final parts of the game and appear often in co-op. In co-op, touching one while floating in an Excursion Funnel hurts you again and again until you move away or die.",
+          "from": [
+            {
+              "page": "Crusher",
+              "revision": "188619",
+              "quote": "Crushers become more frequent during the final parts of the game"
+            },
+            {
+              "page": "Crusher",
+              "revision": "188619",
+              "quote": "also appear frequently in Cooperative Testing Initiative"
+            },
+            {
+              "page": "Crusher",
+              "revision": "188619",
+              "quote": "In Co-op mode, if the player comes in contact with a Crusher while floating in an Excursion Funnel, the damage caused will be periodic until the player moves away or dies."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1303,
+      "name": "Goo",
+      "kind": "enemy",
+      "page": "Goo",
+      "page_url": "https://theportalwiki.com/wiki/Goo",
+      "revision": "191434",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "The brown liquid hazard in test chambers. Any contact does continuous damage that kills you within a few seconds.",
+          "from": [
+            {
+              "page": "Goo",
+              "revision": "191434",
+              "quote": "is a common environmental hazard in both Portal and Portal 2"
+            },
+            {
+              "page": "Goo",
+              "revision": "191434",
+              "quote": "the goo appears to be mainly brown"
+            },
+            {
+              "page": "Goo",
+              "revision": "191434",
+              "quote": "Any contact with the goo will result in continuous damage that will eventually result in killing Chell, P-body, Atlas, Bendy or whoever you are playing as within a few seconds upon contact."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "It is only a penalty for a slip: it is there to make you precise with your movement and your portals.",
+          "from": [
+            {
+              "page": "Goo",
+              "revision": "191434",
+              "quote": "Goo is usually present within testing chambers in order to provide a penalty for failure, and to ensure that test subjects are precise with their movements and positioning of their portals."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Almost everything that falls in is lost; only radios float. If a cube you need falls in, a replacement may be issued at once, but if a button works the dropper you may have to press the button again.",
+          "from": [
+            {
+              "page": "Goo",
+              "revision": "191434",
+              "quote": "Almost all objects that have fallen into the goo are irretrievable, with the only exception being radios because they are light enough to float on it."
+            },
+            {
+              "page": "Goo",
+              "revision": "191434",
+              "quote": "a replacement may be issued immediately if the first one was dropped into the goo (unless the dropper is activated by a button, in which case you may have to press the button again)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1304,
+      "name": "Laser Field",
+      "kind": "enemy",
+      "page": "Laser Field",
+      "page_url": "https://theportalwiki.com/wiki/Laser_Field",
+      "revision": "193070",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "Deadly lasers from the same kind of device housing as a Material Emancipation Grill. Anyone in contact with the beams dies instantly.",
+          "from": [
+            {
+              "page": "Laser Field",
+              "revision": "193070",
+              "quote": "Laser Fields are as its name implies, deadly lasers emitting from the same type of device housing the Fizzlers."
+            },
+            {
+              "page": "Laser Field",
+              "revision": "193070",
+              "quote": "test subjects in contact with it will die instantly"
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "It is the opposite of a Material Emancipation Grill: any object can be carried through the beams, but you cannot.",
+          "from": [
+            {
+              "page": "Laser Field",
+              "revision": "193070",
+              "quote": "The Laser fields serve as the opposite of the Material Emancipation Grills - any objects can be carried through the beams but test subjects in contact with it will die instantly."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A Discouragement Redirection Cube cannot redirect any of the field's beams.",
+          "from": [
+            {
+              "page": "Laser Field",
+              "revision": "193070",
+              "quote": "Discouragement Redirection Cubes cannot redirect any of the beams in the laser field."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1305,
+      "name": "Weighted Storage Cube",
+      "kind": "item",
+      "page": "Cubes",
+      "page_url": "https://theportalwiki.com/wiki/Cubes",
+      "revision": "191371",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "The plain test cube. In Portal 2 it has a blue ring in the centre, and it can turn yellow when placed on a Super Button.",
+          "from": [
+            {
+              "page": "Cubes",
+              "revision": "191371",
+              "quote": "The Weighted Storage Cube was first introduced in Portal, and remains prevalent in Portal 2."
+            },
+            {
+              "page": "Cubes",
+              "revision": "191371",
+              "quote": "In Portal 2 however, the cube is given a blue ring in the center instead of a blue cross, and can turn yellow when placed upon a Super Button."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Cubes are used to press buttons, disable turrets or redirect lasers. The Companion Cube works the same way.",
+          "from": [
+            {
+              "page": "Cubes",
+              "revision": "191371",
+              "quote": "Cubes are common testing elements throughout the Portal series. They are commonly used to press Buttons, disable Turrets, or redirect Lasers."
+            },
+            {
+              "page": "Cubes",
+              "revision": "191371",
+              "quote": "The Weighted Companion Cube was first introduced in Portal, and remains prevalent in Portal 2. Similar to the Weighted Storage Cube, the Companion Cube possesses a different design in Portal 2. The Cube functions in the same way as a Weighted Storage Cube, being differentiated to encourage test subjects to feel attached to the Cube."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A Discouragement Redirection Cube also works as a Weighted Storage Cube, so it can hold down a Super Button too.",
+          "from": [
+            {
+              "page": "Cubes",
+              "revision": "191371",
+              "quote": "The Discouragement Redirection Cube was introduced in Portal 2. Its main purpose is to redirect the Thermal Discouragement Beam to other places or through portals if necessary. However, the cube has a second use as a Weighted Storage Cube, as it can be used to activate the Heavy-Duty Super Button."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1306,
+      "name": "Discouragement Redirection Cube",
+      "kind": "item",
+      "page": "Discouragement Redirection Cube",
+      "page_url": "https://theportalwiki.com/wiki/Discouragement_Redirection_Cube",
+      "revision": "169917",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A cube with a round glass lens on every side. One lens is more curved than the others, and the beam leaves through it when it enters through any other side.",
+          "from": [
+            {
+              "page": "Discouragement Redirection Cube",
+              "revision": "169917",
+              "quote": "Each side of the Redirection Cube has a large, round piece of glass in the center. One of the glass sides is more curved than the others, being the lens that the Thermal Discouragement Beam is focused out of when coming into contact with any of the other sides."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "It focuses a Thermal Discouragement Beam and redirects it through its lens. Like all cubes it can hold down buttons.",
+          "from": [
+            {
+              "page": "Discouragement Redirection Cube",
+              "revision": "169917",
+              "quote": "Like all cubes, they can be used to hold down buttons. They also have the unique ability to focus a Thermal Discouragement Beam and redirect it through their lens."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "In co-op, when you aim the beam at a receptacle and it gets close enough, it auto-aims into the centre of the receptacle, which makes aiming slightly easier.",
+          "from": [
+            {
+              "page": "Discouragement Redirection Cube",
+              "revision": "169917",
+              "quote": "In co-op mode, when redirecting a beam into receptacles, the beam will auto-aim into the center of the receptacle when the beam is close enough, making beam redirection slightly easier."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1307,
+      "name": "Propulsion Gel",
+      "kind": "item",
+      "page": "Propulsion Gel",
+      "page_url": "https://theportalwiki.com/wiki/Propulsion_Gel",
+      "revision": "193076",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "The bright orange gel. It cuts friction on a surface and adds speed, so you and cubes slide around and are moved more easily.",
+          "from": [
+            {
+              "page": "Propulsion Gel",
+              "revision": "193076",
+              "quote": "Propulsion Gel is a bright orange substance that greatly reduces the friction of objects moving across the surface to which it is applied. Propulsion Gel also increases velocity, as objects covered in Propulsion Gel also have their friction reduced, causing them to slide around and be moved more easily."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Best on long, straight stretches, where it lets you build speed to jump large gaps or move quickly past (or through) things like Crushers. Used with Repulsion Gel it carries you a long way where portals cannot be used.",
+          "from": [
+            {
+              "page": "Propulsion Gel",
+              "revision": "193076",
+              "quote": "The Gel is most useful when applied to long, straight areas, as it allows the player to reach a considerable velocity, thereby allowing the player to jump over large gaps or move quickly past (or through) objects such as Crushers."
+            },
+            {
+              "page": "Propulsion Gel",
+              "revision": "193076",
+              "quote": "Used in combination with Repulsion Gel, the player can travel a considerable distance, which is vital in situations in which Portals cannot be used."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Crouching slows you down while you are on it. It can go on nearly any surface, and you can put it somewhere else with carefully placed portals.",
+          "from": [
+            {
+              "page": "Propulsion Gel",
+              "revision": "193076",
+              "quote": "Crouching will slow the character down while on Propulsion Gel"
+            },
+            {
+              "page": "Propulsion Gel",
+              "revision": "193076",
+              "quote": "Propulsion Gel can be applied to virtually any surface, and can be placed in different locations through the use of carefully-placed portals."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1308,
+      "name": "Conversion Gel",
+      "kind": "item",
+      "page": "Conversion Gel",
+      "page_url": "https://theportalwiki.com/wiki/Conversion_Gel",
+      "revision": "185601",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "The white gel that lets you place portals on surfaces that normally refuse them.",
+          "from": [
+            {
+              "page": "Conversion Gel",
+              "revision": "185601",
+              "quote": "Conversion Gel is a white gel that enables any surface to have portals placed on them, even if they are not normally portal-conductive."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Paint a surface with it, then put a portal on it. If the gel is washed off later, a portal already placed stays where it is.",
+          "from": [
+            {
+              "page": "Conversion Gel",
+              "revision": "185601",
+              "quote": "If it is washed off, the portal will sit unchanged where the gel used to be"
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A surface that is not flat or not big enough for a portal stays closed to portals even with the gel on it, so a gel-covered cube is not a portal surface.",
+          "from": [
+            {
+              "page": "Conversion Gel",
+              "revision": "185601",
+              "quote": "Surfaces that are not flat or big enough to fit a portal will not be portal-conductive even when coated in Conversion Gel. This means that Conversion Gel-covered Weighted Storage Cubes will not function as a portal-able surface."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1309,
+      "name": "Cleansing Gel",
+      "kind": "item",
+      "page": "Gels",
+      "page_url": "https://theportalwiki.com/wiki/Gels",
+      "revision": "191504",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A gel that looks like plain water. It washes other gels off surfaces and off anything they coated.",
+          "from": [
+            {
+              "page": "Gels",
+              "revision": "191504",
+              "quote": "This gel may appear to be regular water with an ability to wash away other types of gels off of surfaces and any objects that have been coated."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "It is destroyed the moment it touches anything and has no other gameplay effect, so it does nothing to a surface that has no other gel on it.",
+          "from": [
+            {
+              "page": "Gels",
+              "revision": "191504",
+              "quote": "It is destroyed upon touching anything. It has no special properties in regard of the gameplay, and as such, does not affect any surfaces other than ones covered in other gels."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A surface or object takes on only the gel that coated it last. Gel cannot be put on glass, and it passes through grating without painting it.",
+          "from": [
+            {
+              "page": "Gels",
+              "revision": "191504",
+              "quote": "A surface or object can take on the properties of only the gel that coated it last."
+            },
+            {
+              "page": "Gels",
+              "revision": "191504",
+              "quote": "Gel cannot be applied to transparent surfaces (such as glass), and will pass through grating (also without painting it)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1310,
+      "name": "Portal Gun",
+      "kind": "item",
+      "page": "Handheld Portal Device",
+      "page_url": "https://theportalwiki.com/wiki/Handheld_Portal_Device",
+      "revision": "193075",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "The Handheld Portal Device, the main tool you are equipped with to complete test chambers. It places two linked portals, and it also picks up and holds objects in front of it.",
+          "from": [
+            {
+              "page": "Handheld Portal Device",
+              "revision": "193075",
+              "quote": "is the experimental tool designed to place two portals that objects can pass through."
+            },
+            {
+              "page": "Handheld Portal Device",
+              "revision": "193075",
+              "quote": "This is the primary tool players are equipped with to complete Test Chambers."
+            },
+            {
+              "page": "Handheld Portal Device",
+              "revision": "193075",
+              "quote": "If a portal of the other color is already placed, these two portals will be linked."
+            },
+            {
+              "page": "Handheld Portal Device",
+              "revision": "193075",
+              "quote": "The Handheld Portal Device also has the ability to pick up and manipulate objects directly in front of it"
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "It places portals on immobile surfaces, or on surfaces covered with Conversion Gel that are big enough. Only two portals exist at once: a new portal of a colour you already have closes the old one. Shooting at an enemy or an object does nothing.",
+          "from": [
+            {
+              "page": "Handheld Portal Device",
+              "revision": "193075",
+              "quote": "The Handheld Portal Device is designed to create and place portals on immobile surfaces, or surfaces covered with Conversion Gel that are big enough for the Portals to be opened."
+            },
+            {
+              "page": "Handheld Portal Device",
+              "revision": "193075",
+              "quote": "If a portal of the same color is already placed, it will be closed and the new one will be used instead, limiting the player to the use of only two portals at a time. Nothing will happen if a portal is shot at an enemy or other object."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "The glass chamber and a light on top glow with the colour of the portal you placed last. In Portal 2 it can no longer slightly launch or drop a held object with the fire buttons.",
+          "from": [
+            {
+              "page": "Handheld Portal Device",
+              "revision": "193075",
+              "quote": "The glass chamber and a light on the top of the device will glow with the color of the previously placed portal."
+            },
+            {
+              "page": "Handheld Portal Device",
+              "revision": "193075",
+              "quote": "The Portal Device in Portal 2 also lacks the ability to slightly launch/drop objects using the primary and secondary fire keys respectively."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1311,
+      "name": "Material Emancipation Grill",
+      "kind": "item",
+      "page": "Material Emancipation Grill",
+      "page_url": "https://theportalwiki.com/wiki/Material_Emancipation_Grill",
+      "revision": "188569",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A shimmering light-blue field, also called a fizzler. It vaporizes unauthorized equipment that passes through it and lets you and the Portal Gun through.",
+          "from": [
+            {
+              "page": "Material Emancipation Grill",
+              "revision": "188569",
+              "quote": "Emancipation Grills disintegrate unauthorized Aperture Science equipment and block any portal that passes through, while allowing the player and the Handheld Portal Device to pass without issue."
+            },
+            {
+              "page": "Material Emancipation Grill",
+              "revision": "188569",
+              "quote": "Emancipation Grills appear more solid in nature compared to Portal. They are light blue in coloring and have a shimmering water-like appearance."
+            },
+            {
+              "page": "Material Emancipation Grill",
+              "revision": "188569",
+              "quote": "(also known as Emancipation Grills or Fizzlers)"
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "It destroys cubes and turrets sent through it, and no portal can pass through it. It also resets your Portal Gun: any portals you placed are removed.",
+          "from": [
+            {
+              "page": "Material Emancipation Grill",
+              "revision": "188569",
+              "quote": "The primary function of the Emancipation Grill is to vaporize unauthorized Aperture Science equipment that passes through it while allowing test subjects and the Handheld Portal Device to pass through."
+            },
+            {
+              "page": "Material Emancipation Grill",
+              "revision": "188569",
+              "quote": "This Aperture Science Material Emancipation Grill will vaporize any unauthorized equipment that passes through it - for instance, the Aperture Science Weighted Storage Cube."
+            },
+            {
+              "page": "Material Emancipation Grill",
+              "revision": "188569",
+              "quote": "When a Sentry Turret passes through the grill, it emits a long \"owowowowowowowow\" sound as it disintegrates."
+            },
+            {
+              "page": "Material Emancipation Grill",
+              "revision": "188569",
+              "quote": "Portals also cannot pass through the Grill."
+            },
+            {
+              "page": "Material Emancipation Grill",
+              "revision": "188569",
+              "quote": "The Emancipation Grill also causes the Handheld Portal Device to shake, signaling that it has \"rebooted\", and that any portals that have been placed have now been removed."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "In Portal 2 the grill glows brightly as an object nears it, warning that it will vaporize the object on contact.",
+          "from": [
+            {
+              "page": "Material Emancipation Grill",
+              "revision": "188569",
+              "quote": "The Emancipation Grill will glow brightly in Portal 2 as objects approach it to warn the player that it will vaporize the object once they come into contact."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1312,
+      "name": "Portal-able surfaces",
+      "kind": "mechanic",
+      "page": "Surfaces",
+      "page_url": "https://theportalwiki.com/wiki/Surfaces",
+      "revision": "182535",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A portal goes only on a light-coloured, flat surface. An uneven or dark surface cannot hold one.",
+          "from": [
+            {
+              "page": "Surfaces",
+              "revision": "182535",
+              "quote": "a portal can be placed upon any light-colored flat surface, whereas an uneven or dark surface cannot be used in this way."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "In Portal 2 the surfaces that take a portal tend to be white panels, and the ones that refuse them are black with grey lines.",
+          "from": [
+            {
+              "page": "Surfaces",
+              "revision": "182535",
+              "quote": "the portal-able surfaces in the test chambers"
+            },
+            {
+              "page": "Surfaces",
+              "revision": "182535",
+              "quote": "tend to be white in appearance"
+            },
+            {
+              "page": "Surfaces",
+              "revision": "182535",
+              "quote": "They've been changed from a bronze-like color to black with grey lines"
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Glass, though flat, repels both portals and gel. In Portal 2, gel is the only way past some puzzles that have no surface that takes a portal.",
+          "from": [
+            {
+              "page": "Surfaces",
+              "revision": "182535",
+              "quote": "Glass, despite being a flat surface in-game, automatically repels both Portals and Gels."
+            },
+            {
+              "page": "Surfaces",
+              "revision": "182535",
+              "quote": "In Portal 2, the only way to overcome some puzzles that lack portal-conductive surfaces is through the use of Gels."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1313,
+      "name": "Frankenturret",
+      "kind": "item",
+      "page": "Turrets",
+      "page_url": "https://theportalwiki.com/wiki/Turrets",
+      "revision": "192928",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A hybrid of a Sentry Turret and a Weighted Storage Cube, with legs. It does not speak; it makes odd chirping sounds.",
+          "from": [
+            {
+              "page": "Turrets",
+              "revision": "192928",
+              "quote": "Frankenturrets are bizarre Sentry Turret-Weighted Storage Cube hybrids in the single-player campaign of Portal 2."
+            },
+            {
+              "page": "Turrets",
+              "revision": "192928",
+              "quote": "Frankenturrets do not speak, and instead emit incomprehensible chirping sounds."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "It is harmless and works like a cube. The only difference is that it hops around aimlessly when it is not placed on a button.",
+          "from": [
+            {
+              "page": "Turrets",
+              "revision": "192928",
+              "quote": "They are harmless, their the only difference from normal cubes being that Frankenturrets will hop around aimlessly when not placed on a button."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Pick it up and it pulls its legs into the cube. If it falls on its side or upside down it waves its legs, trying to get up.",
+          "from": [
+            {
+              "page": "Turrets",
+              "revision": "192928",
+              "quote": "When picked up by Chell, they retract their legs inside the cube. If they fall over on their sides or upside down, they will wave their legs, trying to get up."
+            }
+          ]
+        }
       ]
     }
-  },
-  "1301": {
-    "name": "Defective Turret",
-    "page": "Defective Turret",
-    "page_url": "https://theportalwiki.com/wiki/Defective_Turret",
-    "revision": "185504",
-    "lines": {
-      "Summary": [
-        "Defective Turrets, also called \"Crap Turrets\" by Wheatley, are damaged, ammo-less, unfinished, or faultily assembled Sentry Turrets.",
-        "They are harmless to Chell",
-        "They lack the outer white shell of normal turrets, and their insides are visible.",
-        "They also seem to be out of bullets, as when they fire, only a clicking sound is made. After a while, they bizarrely catch on fire and explode."
-      ],
-      "Weak points": [
-        "their laser guide is off or broken",
-        "They are harmless to Chell"
-      ],
-      "Tips": [
-        "The turrets appearing in Course 5 of Cooperative Testing Initiative look like defective turrets but work and speak properly."
-      ]
-    }
-  },
-  "1302": {
-    "name": "Crusher",
-    "page": "Crusher",
-    "page_url": "https://theportalwiki.com/wiki/Crusher",
-    "revision": "188619",
-    "lines": {
-      "Summary": [
-        "Crushers appear as large grey panels with a number of steel spikes firmly attached to them.",
-        "If a test subject makes contact with a Crusher, they will be forced into the nearest hard surface and killed instantly."
-      ],
-      "Weak points": [
-        "When active, a loud crunching noise is emitted in order to warn the player that they are approaching a Crusher, thereby allowing the player to avoid them."
-      ],
-      "Tips": [
-        "Crushers become more frequent during the final parts of the game",
-        "also appear frequently in Cooperative Testing Initiative",
-        "In Co-op mode, if the player comes in contact with a Crusher while floating in an Excursion Funnel, the damage caused will be periodic until the player moves away or dies."
-      ]
-    }
-  },
-  "1303": {
-    "name": "Goo",
-    "page": "Goo",
-    "page_url": "https://theportalwiki.com/wiki/Goo",
-    "revision": "191434",
-    "lines": {
-      "Summary": [
-        "is a common environmental hazard in both Portal and Portal 2",
-        "the goo appears to be mainly brown",
-        "Any contact with the goo will result in continuous damage that will eventually result in killing Chell, P-body, Atlas, Bendy or whoever you are playing as within a few seconds upon contact."
-      ],
-      "Weak points": [
-        "Goo is usually present within testing chambers in order to provide a penalty for failure, and to ensure that test subjects are precise with their movements and positioning of their portals."
-      ],
-      "Tips": [
-        "Almost all objects that have fallen into the goo are irretrievable, with the only exception being radios because they are light enough to float on it.",
-        "a replacement may be issued immediately if the first one was dropped into the goo (unless the dropper is activated by a button, in which case you may have to press the button again)"
-      ]
-    }
-  },
-  "1304": {
-    "name": "Laser Field",
-    "page": "Laser Field",
-    "page_url": "https://theportalwiki.com/wiki/Laser_Field",
-    "revision": "193070",
-    "lines": {
-      "Summary": [
-        "Laser Fields are as its name implies, deadly lasers emitting from the same type of device housing the Fizzlers.",
-        "test subjects in contact with it will die instantly"
-      ],
-      "Weak points": [
-        "The Laser fields serve as the opposite of the Material Emancipation Grills - any objects can be carried through the beams but test subjects in contact with it will die instantly."
-      ],
-      "Tips": [
-        "Discouragement Redirection Cubes cannot redirect any of the beams in the laser field."
-      ]
-    }
-  },
-  "1305": {
-    "name": "Weighted Storage Cube",
-    "page": "Cubes",
-    "page_url": "https://theportalwiki.com/wiki/Cubes",
-    "revision": "191371",
-    "lines": {
-      "Summary": [
-        "The Weighted Storage Cube was first introduced in Portal, and remains prevalent in Portal 2.",
-        "In Portal 2 however, the cube is given a blue ring in the center instead of a blue cross, and can turn yellow when placed upon a Super Button."
-      ],
-      "Uses": [
-        "They are commonly used to press Buttons, disable Turrets, or redirect Lasers.",
-        "The Cube functions in the same way as a Weighted Storage Cube"
-      ],
-      "Tips": [
-        "the cube has a second use as a Weighted Storage Cube, as it can be used to activate the Heavy-Duty Super Button."
-      ]
-    }
-  },
-  "1306": {
-    "name": "Discouragement Redirection Cube",
-    "page": "Discouragement Redirection Cube",
-    "page_url": "https://theportalwiki.com/wiki/Discouragement_Redirection_Cube",
-    "revision": "169917",
-    "lines": {
-      "Summary": [
-        "Each side of the Redirection Cube has a large, round piece of glass in the center. One of the glass sides is more curved than the others, being the lens that the Thermal Discouragement Beam is focused out of when coming into contact with any of the other sides."
-      ],
-      "Uses": [
-        "Like all cubes, they can be used to hold down buttons. They also have the unique ability to focus a Thermal Discouragement Beam and redirect it through their lens."
-      ],
-      "Tips": [
-        "In co-op mode, when redirecting a beam into receptacles, the beam will auto-aim into the center of the receptacle when the beam is close enough, making beam redirection slightly easier."
-      ]
-    }
-  },
-  "1307": {
-    "name": "Propulsion Gel",
-    "page": "Propulsion Gel",
-    "page_url": "https://theportalwiki.com/wiki/Propulsion_Gel",
-    "revision": "193076",
-    "lines": {
-      "Summary": [
-        "Propulsion Gel is a bright orange substance that greatly reduces the friction of objects moving across the surface to which it is applied. Propulsion Gel also increases velocity, as objects covered in Propulsion Gel also have their friction reduced, causing them to slide around and be moved more easily."
-      ],
-      "Uses": [
-        "The Gel is most useful when applied to long, straight areas, as it allows the player to reach a considerable velocity, thereby allowing the player to jump over large gaps or move quickly past (or through) objects such as Crushers.",
-        "Used in combination with Repulsion Gel, the player can travel a considerable distance, which is vital in situations in which Portals cannot be used."
-      ],
-      "Tips": [
-        "Crouching will slow the character down while on Propulsion Gel",
-        "Propulsion Gel can be applied to virtually any surface, and can be placed in different locations through the use of carefully-placed portals."
-      ]
-    }
-  },
-  "1308": {
-    "name": "Conversion Gel",
-    "page": "Conversion Gel",
-    "page_url": "https://theportalwiki.com/wiki/Conversion_Gel",
-    "revision": "185601",
-    "lines": {
-      "Summary": [
-        "Conversion Gel is a white gel that enables any surface to have portals placed on them, even if they are not normally portal-conductive."
-      ],
-      "Uses": [
-        "If it is washed off, the portal will sit unchanged where the gel used to be"
-      ],
-      "Tips": [
-        "Surfaces that are not flat or big enough to fit a portal will not be portal-conductive even when coated in Conversion Gel. This means that Conversion Gel-covered Weighted Storage Cubes will not function as a portal-able surface."
-      ]
-    }
-  },
-  "1309": {
-    "name": "Cleansing Gel",
-    "page": "Gels",
-    "page_url": "https://theportalwiki.com/wiki/Gels",
-    "revision": "191504",
-    "lines": {
-      "Summary": [
-        "This gel may appear to be regular water with an ability to wash away other types of gels off of surfaces and any objects that have been coated."
-      ],
-      "Uses": [
-        "It is destroyed upon touching anything. It has no special properties in regard of the gameplay, and as such, does not affect any surfaces other than ones covered in other gels."
-      ],
-      "Tips": [
-        "A surface or object can take on the properties of only the gel that coated it last.",
-        "Gel cannot be applied to transparent surfaces (such as glass), and will pass through grating (also without painting it)."
-      ]
-    }
-  },
-  "1310": {
-    "name": "Portal Gun",
-    "page": "Handheld Portal Device",
-    "page_url": "https://theportalwiki.com/wiki/Handheld_Portal_Device",
-    "revision": "193075",
-    "lines": {
-      "Summary": [
-        "is the experimental tool designed to place two portals that objects can pass through.",
-        "This is the primary tool players are equipped with to complete Test Chambers.",
-        "If a portal of the other color is already placed, these two portals will be linked.",
-        "The Handheld Portal Device also has the ability to pick up and manipulate objects directly in front of it"
-      ],
-      "Uses": [
-        "The Handheld Portal Device is designed to create and place portals on immobile surfaces, or surfaces covered with Conversion Gel that are big enough for the Portals to be opened.",
-        "If a portal of the same color is already placed, it will be closed and the new one will be used instead, limiting the player to the use of only two portals at a time. Nothing will happen if a portal is shot at an enemy or other object."
-      ],
-      "Tips": [
-        "The glass chamber and a light on the top of the device will glow with the color of the previously placed portal.",
-        "The Portal Device in Portal 2 also lacks the ability to slightly launch/drop objects using the primary and secondary fire keys respectively."
-      ]
-    }
-  },
-  "1311": {
-    "name": "Material Emancipation Grill",
-    "page": "Material Emancipation Grill",
-    "page_url": "https://theportalwiki.com/wiki/Material_Emancipation_Grill",
-    "revision": "188569",
-    "lines": {
-      "Summary": [
-        "Emancipation Grills disintegrate unauthorized Aperture Science equipment and block any portal that passes through, while allowing the player and the Handheld Portal Device to pass without issue.",
-        "Emancipation Grills appear more solid in nature compared to Portal. They are light blue in coloring and have a shimmering water-like appearance.",
-        "(also known as Emancipation Grills or Fizzlers)"
-      ],
-      "Uses": [
-        "vaporize any unauthorized equipment that passes through it - for instance, the Aperture Science Weighted Storage Cube",
-        "When a Sentry Turret passes through the grill, it emits a long",
-        "Portals also cannot pass through the Grill.",
-        "The Emancipation Grill also causes the Handheld Portal Device to shake, signaling that it has \"rebooted\", and that any portals that have been placed have now been removed."
-      ],
-      "Tips": [
-        "The Emancipation Grill will glow brightly in Portal 2 as objects approach it to warn the player that it will vaporize the object once they come into contact."
-      ]
-    }
-  },
-  "1312": {
-    "name": "Portal-able surfaces",
-    "page": "Surfaces",
-    "page_url": "https://theportalwiki.com/wiki/Surfaces",
-    "revision": "182535",
-    "lines": {
-      "Summary": [
-        "a portal can be placed upon any light-colored flat surface, whereas an uneven or dark surface cannot be used in this way."
-      ],
-      "Uses": [
-        "the portal-able surfaces in the test chambers",
-        "tend to be white in appearance",
-        "They've been changed from a bronze-like color to black with grey lines"
-      ],
-      "Tips": [
-        "Glass, despite being a flat surface in-game, automatically repels both Portals and Gels.",
-        "In Portal 2, the only way to overcome some puzzles that lack portal-conductive surfaces is through the use of Gels."
-      ]
-    }
-  },
-  "1313": {
-    "name": "Frankenturret",
-    "page": "Turrets",
-    "page_url": "https://theportalwiki.com/wiki/Turrets",
-    "revision": "192928",
-    "lines": {
-      "Summary": [
-        "Frankenturrets are bizarre Sentry Turret-Weighted Storage Cube hybrids in the single-player campaign of Portal 2.",
-        "Frankenturrets do not speak, and instead emit incomprehensible chirping sounds."
-      ],
-      "Uses": [
-        "They are harmless, their the only difference from normal cubes being that Frankenturrets will hop around aimlessly when not placed on a button."
-      ],
-      "Tips": [
-        "When picked up by Chell, they retract their legs inside the cube. If they fall over on their sides or upside down, they will wave their legs, trying to get up."
-      ]
-    }
-  }
+  ]
 }

@@ -574,6 +574,16 @@ renewed by every driver; the 20-minute wake check plus a background sleep job be
   on `experimental`; the bookkeeper's wave 2 sweep next, then the deploy for block L2. Runbook L2 corrected per consult 3b
   (a fresh question for the refusal half; a focus read after A on Helpful; saved walks through the rating row gain a stop).
 
+- **00:29 UTC: the wave 2 build deployed** (156 files verified; hash `222279568b09`; the seed library's version string
+  rolled to 2026.10.26 with the date). **The bookkeeper's wave 2 sweep** landed as `fd1d0ba6` (the two lane U entries and
+  "Suggest as a tip" to Deck check owed; the storage rule noted; the measurements written into the four "measure first"
+  entries as "the maintainer decides"; a new ★★ Bugs entry for the new notes crowding the old; the focus-graph record
+  updated; the knowledge-base roadmap trimmed back under its 25 KB ceiling by moving text to its details file). The
+  bookkeeper's caution: two earlier runs on the old library differed by up to 6 points on facts kept, so the 9-point
+  drop is a weak signal until the six questions are read. **The FOSS reviewer's read** (§ 14) sent four small sidecar
+  fixes back to the note lanes; landing. Runbook L2 now carries the build facts and runs L1's checks first, since L1
+  never ran.
+
 ## 13. Report
 
 Not yet written.
@@ -587,6 +597,14 @@ checked before and after links are followed; the file is opened create-only so i
 constant address plus a URL-encoded title. One ★ finding: a lone surrogate half in the text would leave a 0-byte file
 behind (a one-line fix, handed to the lane). The plugin method, not yet written, is the only permission guard once
 wired; its required shape (the permission check first, home from the plugin's own setting, five string arguments only)
-was handed to the lane and the session reads that commit against it before landing. About 78k tokens, 3 min. The FOSS reviewer: reads the four note lanes' sidecars for licence (ShareAlike sources are fine; GFDL
+was handed to the lane and the session reads that commit against it before landing. About 78k tokens, 3 min. **The plugin method landed as written** (`0705a8a5`; the session and consult 3b read it against the list: every item
+holds). **The FOSS reviewer, 2026-10-26 00:30 to 00:35 UTC, read the four note files and their sidecars:** nothing blocks
+publishing; every section carries its four source fields with a versioned licence the library may carry (Wikipedia CC
+BY-SA 4.0; the GTA and Sims wikis CC BY-SA 3.0, which the repo's licensing plan, NOTICE.md and D20 already settle for
+Fandom's bare line; the Portal wiki CC BY 4.0); no address points at Baldur's Gate 3's NonCommercial wiki. Four small
+findings, handed back to the four lanes the same night: the Portal 2 sidecar lacked the licence line and the card lines
+(★★, because that lane read the pages with its own script); the GTA sidecar lacked the licence header (★); eleven
+quotes across the four sidecars stop one clause short of the words the card uses (★); NOTICE.md lacks rows for
+Wikipedia and the Sims wiki (★). About 125k tokens, 4 min. The FOSS reviewer: reads the four note lanes' sidecars for licence (ShareAlike sources are fine; GFDL
 and NonCommercial are not), recorded here. Focus and layout: lane U carries the advisor's read before landing (consult
 3) and its Deck row is the gate.

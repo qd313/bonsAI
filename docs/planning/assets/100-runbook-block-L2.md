@@ -10,6 +10,19 @@ your press, or if anything asks for a password. Questions, page reads, the log's
 [the L1 runbook](100-runbook-block-L1.md)'s opening. The test chat is the long Mantis Lords chat unless the L1 handover
 says otherwise. **Before every question, read the chat's name.**
 
+**Facts for the 2026-10-26 run (written by the session at 00:35 UTC):** the wave 2 build (every lane of plan 100) was
+deployed at 00:29 UTC with `scripts/build.ps1` (156 files verified); the build hash on the Deck must read
+`222279568b09`. The seed library on the Deck is the night's final library and its version string is now
+**2026.10.26** (the build date), so after "Install seed knowledge base" `rag_corpus_version` reads 2026.10.26; its
+`corpus.db` is 3,424,256 bytes dated Oct 25 20:29 Deck time. **Block L1 did not run** (the rig's tools dropped out of the
+session's chat), so this block runs L1's checks too, as L1's runbook lists them, before its own: install the library
+(L1.0 step 4), then L1.1 to L1.9, then L2.1 to L2.3, all on this one build. The Deck as L0 left it: the plugin open on
+Main in the test chat (the long Mantis Lords chat; no chat is literally named "test"), the mode chip on Speed, no game
+running, keep-awake until 05:55 UTC (renew it), the settings backup at `/home/deck/p100-settings-backup.tgz`, three
+saved chats, "Show Developer tab" off. The deploy restarted the plugin twice tonight, so the first open may fail once.
+The driving chat commits nothing and writes its handover to
+`C:\Users\still\Documents\bonsAI-workshop\planning\assets\100-handover-L2.md`.
+
 ## L2.0: setup (row P100-L2-SETUP)
 
 1. `deck_status` (the stop switch off, no other chat's lease); `deck_holdAwake` 480 min; `expiresAt` into the evidence.

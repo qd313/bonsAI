@@ -1,6 +1,6 @@
 # 101 — Deep mod AI hints: the refreshed plan
 
-**Status: DRAFT, 2026-10-27. Planning only; nothing is built. Round 1 answered (§ 3); round 2 open (§ 5).**
+**Status: DRAFT, 2026-10-27. Planning only; nothing is built. Rounds 1 and 2 answered (§§ 3, 5); round 3 open (§ 7).**
 
 Written by a cloud planning chat (Fable 5.1) on `experimental`, from the August study
 ([workshop plan 12](../../../bonsAI-workshop/planning/12-deep-mod-ai-hints-feasibility.md), 2026-08-04), the
@@ -102,42 +102,104 @@ What matters for the look, in order of weight:
   manager (where its home is, which file lists the mods). Manager home paths come from general knowledge until
   read on a real machine; the Cyberpunk recipe can be written from the shared folder and checked on the PC today.
 
-## 5. Round 2: what a player sees (open)
+## 5. Round 2, what a player sees: answered 2026-10-27
 
-1. **Where the mod information shows.** (a) Only to the AI, plus one line under Show details naming what was
-   read. (b) Also a small chip on the answer ("133 mods seen"). (c) Also a **Mods screen**: opened from a button
-   beside the running game's name, listing manager, frameworks and versions, counts by kind, the load order, and
-   the mod names in groups, with a Refresh button; the list is too long for a 300-pixel column, so it is its own
-   screen like the AI models screen. *Recommendation: (a) and (c) for v1; the chip later.*
-2. **When the look runs.** (a) On the first question about the running game, in any mode, then cached for the
-   session. (b) Every time the panel opens with a game running. (c) Only on the Mods screen's button.
-   *Recommendation: (a), with the screen's Refresh button as the manual way; never on game start by itself.*
-3. **How much the AI gets.** The Deck's model reads only the first part of a long prompt (the Proton log
-   excerpt is capped at 4 KB for that reason), so 133 names will not fit. (a) A summary only: manager, frameworks
-   and versions, counts, the load order, loader-log errors. (b) The summary plus **the mods whose names appear in
-   the question** (and their settings when a settings file is known). (c) The full list, cut at the budget.
-   *Recommendation: (b).*
-4. **Loader logs.** On a troubleshooting question, also read the tails of the mod loaders' own logs (where a mod
-   that failed to load is named), inside the same budget as the Proton logs. *Recommendation: yes.*
-5. **The game's own settings file** (graphics, crowd density, upscaling), read-only, for games with a recipe.
-   It is what made the CyberFixed audit work. *Recommendation: yes, under the same permission switch.*
-6. **The words bonsAI uses**, locked: "seen" for what it read; "no mod files found in the places bonsAI checks",
-   never "you have no mods"; bonsAI never changes a mod, a setting or a load order; no anti-cheat workarounds, no
-   ban predictions; when the manager is unknown, ask which one before giving path steps. *Recommendation: lock.*
-7. **Strategy mode shape** (your call 6): the AI is told which gameplay-changing mods are present and asked to
-   give the unmodded answer first, then say where a present mod changes it. *Recommendation: yes.*
-8. **One preset chip** when mods were found: "What mods do I have, and could any be causing trouble?"
-   *Recommendation: yes, one.*
-9. **Checking the Windows layout without a Windows bonsAI:** a small command on the PC that runs the same look
-   on a game folder and prints the summary, used by the lanes and by you. *Recommendation: yes.*
-10. **The Deck port of the Cyberpunk setup.** Vortex's hard links make the game folder self-contained, so copying
-    the whole game folder to the Deck (or its SD card) carries every mod; the game settings file goes into the
-    prefix by hand. Is there room (the game is large), and is copying the folder acceptable, rather than running
-    Vortex under Proton on the Deck? *Recommendation: copy the folder.*
+1. **Where it shows:** to the AI, one line under Show details, **and a Mods screen** (manager, frameworks and
+   versions, counts by kind, the load order, the mod names in groups, a Refresh button), its own screen like the AI
+   models screen. The chip on the answer comes later.
+2. **When the look runs:** on the first question about the running game, in any mode, then cached for the
+   session; the Mods screen's Refresh is the manual way; never on game start by itself.
+3. **How much the AI gets:** the summary plus the mods whose names appear in the question, with their settings
+   when known. The maintainer asked two things more: what the options are to **give this feature more room**,
+   and whether to keep it to **Strategy and Expert only, or add a Troubleshooting mode**. Answered in § 6.
+4. **Loader logs:** yes, inside the same budget as the Proton logs.
+5. **The game's own settings file:** yes, read-only, under the same switch.
+6. **The words bonsAI uses:** locked as written in the question.
+7. **Strategy mode:** the AI is told the gameplay-changing mods present, gives the unmodded answer first, then
+   says where a present mod changes it.
+8. **One preset chip** when mods were found: yes.
+9. **A PC command** that runs the same look on a game folder and prints the summary: yes.
+10. **The Deck port:** copy the game folder; whatever makes the most sense.
 
-Round 3 (the lanes and what runs in parallel) follows once round 2 is answered.
+## 6. The AI's reading room, and whether a new mode is needed (checked in the code 2026-10-27)
 
-## 6. What comes next
+**There is more room than the study knew.** Since September the plugin asks the Deck's AI for a reading window
+of 16,384 tokens (about 65,000 characters), four times the server's default the study assumed. Measured on the
+Deck: it cost 0.6 GB of memory and nothing in speed, with a game running. A typical question today carries about
+2,000 to 2,600 tokens of prompt and up to 1,600 tokens of reply. So roughly 11,000 tokens (about 45,000
+characters) sit free on every question. The caps that limit attached material were set under the old 4,096
+assumption: the Proton log excerpt is still cut at 4 KB, and its own comment still says 4,096.
 
-The plan body: what a player notices, what bonsAI will and will not do, the recipes, the lanes (files, not
-features), the Deck and PC checks, the roadmap re-shape, and the maintainer's calls as decision D138.
+**What this plan proposes for the room:**
+- A **mod block of up to 6 KB**: the summary (manager, frameworks and versions, counts, the load order), the
+  loader-log errors, then the mods the question names with their settings, in that order, cut at the budget.
+- The **Proton excerpt raised to 8 KB**, which the September decision already allowed (it said 6 to 8 KB).
+- **One shared ceiling of 24 KB** for logs, mods and cards together, far under the room, with the block order
+  mods, logs, cards so a mod question keeps its mods when something has to go.
+- The window-fit check that already runs before every question stays the guard: one token too many loses about
+  half of everything sent (measured), so the ceiling is kept well clear of the window.
+- **A bigger window (32,768, about 1.2 GB) is possible** and would be its own measured Developer experiment, as
+  the September decision asked; this feature does not need it.
+
+**No new mode.** The room is not the reason to add one, and a mode is not cheap: two back-end tables, eight
+screen files, the mode menu, the guide, the per-mode model chains and their tests, about three stars, and it
+splits the three-mode story people know. **Recommendation:** the mod block goes on any mode once the look has run
+and the question is about the running game. **Speed** gets the short summary only (its reply budget is 800
+tokens and the guide promises a short answer); **Expert and Strategy** get the summary plus the named mods and
+their settings. If, after the Deck check, Speed answers to troubleshooting questions feel too thin, a
+Troubleshooting mode becomes its own roadmap entry with this plan's measurements behind it.
+
+## 7. Round 3: the lanes, and what runs at the same time (open)
+
+**The rule for parallel lanes is files, not features.** The one thing that lets eight lanes start on the same
+minute is a **contract written into the plan before go**: the shape of the look's result (manager, frameworks,
+counts, load order, mods by kind, settings, logs, warnings), the name of the function that finds a game's folder,
+and the name of the plugin method the screen calls. Every lane builds against the contract with a fake until the
+real piece lands.
+
+| Lane | What | Model | Owns (area) | Waits for |
+|---|---|---|---|---|
+| K0 | The bookkeeper: the roadmap entry re-shaped, decision D138 written from §§ 3, 5, 7 | Sonnet medium | the roadmap, the decisions file | nothing; lands first |
+| S | The snapshot script: lists a game folder and a manager's home (names, sizes, dates; never file contents, never saves) for the maintainer to run on the PC and the Deck; the listings go to the private workshop as evidence | Sonnet medium | a new script under `scripts/mods/` | nothing; the maintainer runs it before wave 1 ends |
+| A | Finding the game: Steam's library list and the game's manifest on SteamOS and Windows; the allowlist (the real path must sit under a library root; never through the prefix's drive link) | Sonnet high | new `py_modules/backend/mods/steam_library.py`, tests with fake folders | nothing |
+| B | The permission switch "Read game install folders": back end key, off for everyone, Kids lock, the Permissions row, deep link, search index, the two contract files, tests | Sonnet high | the permission files on both sides (the list in § 2 of the August study is stale; the real list is the 18 files the last switch touched) | nothing |
+| C | The recipes and the reader: Cyberpunk first (from § 4), then BepInEx, SMAPI, Bethesda, Workshop; each says where mods live, the load-order file, the loader logs, the settings file, per platform; the reader applies one to a folder with depth, count, byte and time budgets | Sonnet high | new `py_modules/backend/mods/mod_recipes.py`, `mod_look.py`, tests | nothing (builds on A's contract with a fake) |
+| D | The manager list readers: Vortex's deployment manifest, Mod Organizer 2's modlist, r2modman's mods list, the Workshop file | Sonnet high | new `py_modules/backend/mods/manager_lists.py`, fixtures, tests | nothing |
+| E | The block for the AI and the Show details chip: the summary, the question-matched mods, the budget (§ 6); the chip in the back end's chips list | Sonnet high | new `py_modules/backend/mods/mod_context_block.py`; `transparency_service.py` (this lane alone) | nothing |
+| F1 | The words: mod vocabulary in the phrase gate, the mod rules line, the Strategy-mode rule, the "which manager?" rule | Sonnet high | `ask_topic_instructions.py`, `ollama_prompts.py` (this lane alone), tests | nothing |
+| G | Knowledge cards: a "mods" topic of 12 to 15 cards in own words marked "Researched, unconfirmed", the router's topic words, the drift test | Sonnet high | `data/kb/compat_patterns.json`, `compat_topic_router.py`, tests | nothing |
+| H | The Mods screen and its door: the screen, the entry in the paperclip menu, the plugin method that returns the look, Refresh, the D-pad routes | Opus medium; the advisor before landing | new screen files, `MainTabAttachMenuPopover.tsx`, new `mods_rpc.py`, `main.py` (one method) | nothing (builds on the contract with a fake) |
+| F2 | The wiring: the look runs once per game and is cached, stacked with logs and cards under the shared ceiling, the "reading mods" progress phase, the Proton cap raised | Sonnet high | `game_ai_request.py`, the stacking function, `bonsai_stream_tags.py`, `proton_troubleshooting_logs.py` | A, C, D, E landed |
+| J | The preset chip when mods were found, and the hidden mod chips reviewed | Sonnet medium | `presets.ts`, tests | H landed |
+| P | The PC command: runs the look on a folder and prints the summary | Sonnet medium | new `scripts/mods/look_game_folder.py` | C, D, E landed |
+| M | Fixtures from the real listings (the PC's Cyberpunk folder, the Deck's after the port) replacing the fake ones | Sonnet medium | the test fixture folder | S run by the maintainer |
+| L | Docs: the "bonsAI will not claim" list in the README, the Permissions section of troubleshooting, the guide | bookkeeper | the three docs | everything landed |
+
+Wave 1: K0, S, A, B, C, D, E, F1, G, H at once (ten lanes). Wave 2: F2, J, P, M. Then the Deck.
+
+**The questions:**
+
+1. **Contract first:** the plan fixes the look's result shape, the finder's name and the plugin method's name
+   before go, so ten lanes start on the same minute. *Recommendation: yes.*
+2. **Where the Mods screen opens from.** (a) An entry in the paperclip menu beside "Attach recent screenshot":
+   "Mods seen: 133 · open". (b) A row in the Settings or Ollama tab. (c) The game tag in the question box's
+   strip, made pressable (plan 84 made it a label on purpose). *Recommendation: (a).*
+3. **A new back-end area** `backend/mods/`, one folder per area as the clean-up laid out. *Recommendation: yes.*
+4. **Who runs it:** a new chat on your PC, since the Deck and the PC's Cyberpunk folder are there. Fable 5.1 high
+   orchestrates and lands (your plan 100 choice) or Opus 5.5 extra-high (the routing table). Sonnet high lanes,
+   Opus medium for the Mods screen, the advisor at max for at most five consults. *Recommendation: as plan 100.*
+5. **The snapshot first:** you run lane S's script on the PC's Cyberpunk folder and on Vortex's own home folder
+   (names, sizes and dates only; no file contents; no saves); the listing goes to the private workshop, nowhere
+   else (mod names can be adult). The lanes build their fixtures from it. *Recommendation: yes, before wave 1 ends.*
+6. **One night or two:** wave 1 and wave 2 one evening, the Deck after you have copied Cyberpunk over, the second
+   evening. *Recommendation: two evenings.*
+7. **The roadmap shape:** one six-star entry with this plan's phases, or the study's split into four entries.
+   *Recommendation: one entry; the split was for a "talk only" future that is not the one chosen.*
+8. **The reading room (§ 6):** the 6 KB mod block, the 8 KB Proton excerpt, the 24 KB shared ceiling, and no new
+   mode. *Recommendation: as written.*
+
+## 8. What comes next
+
+Once round 3 is answered: the plan body in full (what a player notices, what bonsAI will and will not do, the
+contract, the recipes, the lanes with their briefs, the Deck and PC checks, the roadmap re-shape), the helper rules,
+the briefs and the Deck runbook as asset files, and the maintainer's calls as decision D138.

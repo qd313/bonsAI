@@ -1,6 +1,13 @@
 # 101 — Deep mod AI hints: the refreshed plan
 
-**Status: DRAFT, 2026-10-27. Planning only; nothing is built. Rounds 1 and 2 answered (§§ 3, 5); round 3 open (§ 7).**
+**Status: DRAFT, paused 2026-10-27 at round 3. Planning only; nothing is built.** Rounds 1 and 2 are answered and
+written up as decision D138, ready for the bookkeeper to append to the decisions file at go
+([assets/101-decision-d138.md](assets/101-decision-d138.md); §§ 3 and 5 here say the same); the reading-room
+proposal (§ 6) and the lanes (§ 7) are still open.
+
+**Where to pick up.** Answer the eight questions in § 7 (by number; "defaults" takes every recommendation). Then the
+planning chat writes the full plan: the contract, what bonsAI will and will not do, the recipes, the lanes with their
+briefs, the helper rules, the Deck runbook, and D138's open calls closed. Nothing is started before that.
 
 Written by a cloud planning chat (Fable 5.1) on `experimental`, from the August study
 ([workshop plan 12](../../../bonsAI-workshop/planning/12-deep-mod-ai-hints-feasibility.md), 2026-08-04), the

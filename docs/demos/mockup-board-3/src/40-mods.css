@@ -1,0 +1,103 @@
+<style>
+/* ---------- the mods board: the paperclip menu, the Mods sheet and popup, the Search tab pieces ----------
+   Sizes and colours from the plugin's code (design-tokens.md: the inline popover idiom, the dense rows the
+   density board picked) and the first board's Search tab drawing (49-search.css). */
+
+/* the paperclip menu: opens upward above the question box's strip; 13 px small-caps rows */
+.m-menu { position: absolute; left: 6px; bottom: 34px; width: 214px; z-index: 30; background: rgb(28,36,44); border: 1px solid rgba(255,255,255,.10); border-radius: 6px; padding: 4px; box-shadow: 0 10px 24px rgba(0,0,0,.55); display: flex; flex-direction: column; }
+.m-mrow { display: block; width: 100%; text-align: left; background: none; border: 0; border-radius: 4px; padding: 8px 10px; font-size: 13px; font-variant: small-caps; text-transform: lowercase; letter-spacing: 0.03em; line-height: 1.5; font-weight: 500; color: #a8b4c4; }
+.m-mrow.new { color: #e8eef5; }
+.qam .m-mrow[data-stop].ring { outline: 2px solid rgba(255,255,255,.85); outline-offset: -2px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.55); background: rgb(40,50,62); font-weight: 700; }
+.qam .m-clip[data-stop].ring { outline: 2px solid #fff; outline-offset: 2px; box-shadow: none; color: #fff; }
+
+/* the Mods sheet, drawn inside a tab (as the Search tab's game-note sheet is) */
+.s-sheet { position: absolute; inset: 0; z-index: 10; background: #121a23; display: flex; flex-direction: column; padding-bottom: 22px; }
+.m-head { padding: 8px 10px 4px; flex: none; }
+.m-title { font-size: 13px; font-weight: 700; color: #eef1f4; }
+.m-sub { font-size: 10px; color: #8b929a; }
+.m-scroll { flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; padding-bottom: 110px; position: relative; }
+.m-scroll::-webkit-scrollbar { display: none; }
+.m-strip { bottom: 22px; }
+.m-row .m-v { max-width: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #9fb7d5; }
+.m-item .k-l { font-size: 12px; }
+.m-never { color: #8b929a; padding-top: 8px; }
+.m-foot { margin-top: 6px; }
+.m-fold .k-fs { flex: none; max-width: 40%; }
+.m-fold .k-ft { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: none; letter-spacing: 0; font-size: 12.5px; }
+
+/* the Search tab pieces, from the first board's tab 8 */
+.s-tabpage { padding: 0 0 8px; }
+.s-tabtitle { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--q-ink-2); padding: 4px 8px 6px; }
+.s-games { display: flex; gap: 4px; padding: 0 6px 6px; }
+.s-game { flex: 0 1 auto; min-width: 0; height: 22px; padding: 0 7px; border-radius: 11px; border: 1px solid rgba(255,255,255,.14); background: none; color: var(--q-ink-2); font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.s-game.on { background: rgba(250,204,21,.12); border-color: rgba(250,204,21,.5); color: var(--q-gold); }
+.s-find { display: flex; flex-direction: column; gap: 5px; padding: 0 6px; }
+.s-box { display: flex; align-items: center; gap: 6px; min-height: 30px; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); color: var(--q-ink); font-size: 12px; text-align: left; width: 100%; }
+.s-mag { width: 13px; height: 13px; flex: none; color: var(--q-cyan); display: inline-flex; }
+.s-mag svg { width: 13px; height: 13px; display: block; }
+.s-ph { color: rgba(168,180,196,.6); font-style: italic; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.s-words { display: flex; gap: 5px; }
+.s-word { flex: 1 1 0; min-width: 0; height: 24px; padding: 0 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #dce8f4; font-size: 10.5px; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden; }
+.qam .s-word[data-stop].ring, .qam .s-game[data-stop].ring { outline-offset: 1px; }
+.s-hint { font-size: 10px; line-height: 1.35; color: var(--q-ink-3); padding: 2px; }
+.s-group { display: flex; align-items: center; gap: 5px; font-size: 9.5px; font-weight: 700; letter-spacing: 0.04em; color: var(--q-ink-2); padding: 4px 2px 0; text-transform: uppercase; }
+.s-group small { margin-left: auto; font-weight: 600; color: var(--q-ink-3); }
+.s-gi { width: 11px; height: 11px; display: inline-flex; flex: none; }
+.s-gi svg { width: 11px; height: 11px; display: block; }
+.m-sgroup { padding: 8px 8px 3px; }
+.m-srow { display: flex; align-items: center; gap: 7px; width: calc(100% - 12px); margin: 0 6px 6px; background: rgba(10,15,21,.5); border: 1px solid rgba(156,231,255,.3); border-radius: 6px; padding: 6px 8px; color: var(--q-ink); text-align: left; font-size: 11px; line-height: 1.3; }
+.m-srow .grow { flex: 1; min-width: 0; }
+.m-srow b { color: #eef1f4; }
+.m-srow small { display: block; font-size: 9px; color: var(--q-ink-3); }
+.m-srow .k-fc { color: var(--q-cyan); font-size: 11px; }
+.s2-notes { padding: 2px 6px 0; }
+.note-row { display: flex; align-items: center; gap: 7px; width: 100%; background: rgba(10,15,21,.5); border: 1px solid rgba(255,255,255,.08); border-radius: 6px; padding: 6px 8px; color: var(--q-ink-3); text-align: left; font-size: 11px; line-height: 1.3; margin-bottom: 4px; }
+.note-row.on { color: var(--q-ink); border-color: rgba(156,231,255,.3); }
+.note-row .grow { flex: 1; min-width: 0; }
+.note-row small { display: block; font-size: 9px; color: var(--q-ink-3); }
+.note-row:not(.on) .ico.pin { color: var(--q-ink-3); }
+.s-yhint { display: inline-flex; align-items: center; gap: 6px; margin: 0 6px 8px; padding: 3px 9px 3px 4px; border-radius: 999px; border: 1px solid rgba(255,255,255,.12); background: rgba(18,26,34,.5); color: var(--q-ink-2); font-size: 10px; font-weight: 600; width: fit-content; }
+.s-yhint b { display: inline-flex; width: 15px; height: 15px; border-radius: 50%; align-items: center; justify-content: center; background: #c99a06; color: #fff; font-size: 9px; }
+
+/* the full-screen popup (option A), the frame the first board drew the AI models box in */
+.dscreen { width: 853px; height: 533px; position: relative; overflow: hidden; background: #0b0f14; font-family: var(--q-font); color: var(--q-body); box-shadow: 0 8px 30px rgba(0,0,0,.45); }
+.dscreen * { box-sizing: border-box; }
+.dscreen button { font-family: var(--q-font); cursor: pointer; }
+.ds-bg { position: absolute; inset: 0; background: radial-gradient(60% 50% at 20% 30%, #3a2a1c, transparent), radial-gradient(50% 40% at 80% 70%, #1c2f44, transparent), #10151c; filter: blur(2px); }
+.ds-top { position: absolute; top: 0; left: 0; right: 0; height: 36px; display: flex; justify-content: flex-end; gap: 22px; align-items: center; padding: 0 24px; font-size: 14px; color: #fff; z-index: 2; background: linear-gradient(#000a, transparent); }
+.ds-bottom { position: absolute; bottom: 0; left: 0; right: 0; height: 40px; display: flex; gap: 22px; align-items: center; justify-content: flex-end; padding: 0 24px; background: #0b0d10; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: #fff; z-index: 2; }
+.ds-bottom .menu { margin-right: auto; }
+.ds-bottom b { display: inline-flex; width: 18px; height: 18px; border-radius: 50%; align-items: center; justify-content: center; margin-right: 6px; font-size: 11px; }
+.ds-bottom b.a { background: #2b8a3e; } .ds-bottom b.b { background: #c0392b; }
+.mbox { position: absolute; left: 98px; top: 65px; width: 658px; height: 418px; background: #0e141b; border: 1px solid #2a323c; display: flex; flex-direction: column; padding: 14px 20px 12px; z-index: 3; font-size: 11px; }
+.m-ptitle { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; flex: none; }
+.m-ptitle h5 { margin: 0; font-size: 20px; font-weight: 700; color: #fff; }
+.m-ptitle span { font-size: 11px; color: var(--q-ink-2); white-space: nowrap; }
+.m-split { flex: 1; min-height: 0; display: flex; gap: 14px; }
+.m-left { width: 292px; flex: none; display: flex; flex-direction: column; }
+.mbox .m-row .k-l { flex: none; white-space: nowrap; }
+.mbox .m-row .m-v { flex: 1; max-width: none; text-align: right; }
+.m-right { flex: 1; min-width: 0; overflow-y: auto; scrollbar-width: none; padding-bottom: 64px; position: relative; }
+.m-right::-webkit-scrollbar { display: none; }
+.m-pstrip { position: absolute; left: 20px; right: 20px; bottom: 58px; }
+.mbox .m-foot { margin: 8px 0 0; flex: none; }
+.mbox .k-btn { height: 34px; font-size: 13px; }
+.dscreen [data-stop].ring { outline: 2px solid #fff; outline-offset: 2px; box-shadow: 0 0 6px 2px rgba(255,255,255,.2); }
+.dscreen .k-row[data-stop].ring, .dscreen .k-fold[data-stop].ring { outline: none; box-shadow: none; background: #32373d; color: #fff; }
+.dscreen .k-btn[data-stop].ring { outline: none; box-shadow: none; background: #fff; color: #0e141b; }
+.dscreen .q-toast { bottom: 48px; left: 110px; right: 110px; }
+
+/* the new Permissions row (option D): the confirm box sits in the middle at its own height, as the plugin's boxes do */
+.m-cmodal { align-items: center; padding: 30px 14px 40px; }
+.m-cmodal .q-sheet { flex: none; }
+.m-cmodal .q-sheet-body { flex: none; }
+.m-newtag { font-style: normal; font-size: 9px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #52d88a; margin-left: 6px; vertical-align: middle; }
+.m-cbody { font-size: 12px; line-height: 1.4; color: #d4dde6; padding: 4px 12px 8px; }
+
+/* the brief's three columns on the board page */
+.m-brief { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px 24px; }
+.m-brief h3 { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 13px; color: var(--ink-3); margin: 0 0 4px; }
+.m-brief ul { margin: 0; padding-left: 18px; color: var(--ink-2); }
+.m-brief li { margin: 0 0 5px; }
+.m-brief b { color: var(--ink); }
+</style>

@@ -1,13 +1,15 @@
 # 101 — Deep mod AI hints: the refreshed plan
 
-**Status: DRAFT, paused 2026-10-27 at round 3. Planning only; nothing is built.** Rounds 1 and 2 are answered and
-written up as decision D138, ready for the bookkeeper to append to the decisions file at go
-([assets/101-decision-d138.md](assets/101-decision-d138.md); §§ 3 and 5 here say the same); the reading-room
-proposal (§ 6) and the lanes (§ 7) are still open.
+**Status: DRAFT, paused 2026-10-27 at the Mods screen pick. Planning only; nothing is built.** Rounds 1 and 2 are
+answered (§§ 3, 5) and written up as decision D138 for the bookkeeper to append at go
+([assets/101-decision-d138.md](assets/101-decision-d138.md)); round 3 is answered but for two things (§ 7a): the
+Mods screen, which waits on the mock-up board, and the reading-room numbers (§ 6), which the maintainer is not sure of
+yet.
 
-**Where to pick up.** Answer the eight questions in § 7 (by number; "defaults" takes every recommendation). Then the
-planning chat writes the full plan: the contract, what bonsAI will and will not do, the recipes, the lanes with their
-briefs, the helper rules, the Deck runbook, and D138's open calls closed. Nothing is started before that.
+**Where to pick up.** Open the mock-up board (§ 7b), play with the four panels, press Like or Not this and comment.
+Then the planning chat reads the picks, writes the pick into § 7a and D138, and writes the full plan: the contract,
+what bonsAI will and will not do, the recipes, the lanes with their briefs, the helper rules, the Deck runbook.
+Nothing is started before that.
 
 Written by a cloud planning chat (Fable 5.1) on `experimental`, from the August study
 ([workshop plan 12](../../../bonsAI-workshop/planning/12-deep-mod-ai-hints-feasibility.md), 2026-08-04), the
@@ -205,8 +207,45 @@ Wave 1: K0, S, A, B, C, D, E, F1, G, H at once (ten lanes). Wave 2: F2, J, P, M.
 8. **The reading room (§ 6):** the 6 KB mod block, the 8 KB Proton excerpt, the 24 KB shared ceiling, and no new
    mode. *Recommendation: as written.*
 
+## 7a. Round 3: answered 2026-10-27, two things open
+
+1. **Contract first:** yes.
+2. **Where the Mods screen opens from:** open. The maintainer asked what the screen will look like and what it will
+   control, thought the Search and notes area might be the place, and asked for mock-ups. Drawn: § 7b.
+3. **A new back-end area** for mods: yes.
+4. **Who runs it:** as plan 100 (a new chat on the PC, Fable 5.1 high orchestrates and lands; Sonnet high lanes; Opus
+   medium for the Mods screen; the advisor at max for at most five consults).
+5. **The snapshot first:** yes.
+6. **One evening or two:** one evening.
+7. **The roadmap shape:** one entry.
+8. **The reading room (§ 6):** not sure yet. Stays open; the full plan carries § 6's numbers as the default and the Deck
+   session measures the prompt with the mod block on, so the maintainer can call it on a number.
+
+## 7b. The Mods screen: the mock-up board (round 1, drawn 2026-10-27)
+
+**The board (private to the maintainer):** https://claude.ai/artifact/7XcZLtdYhEdvDpXS8bsYfG, its parts in
+[docs/demos/mockup-board-3](../demos/mockup-board-3/README.md). Open it in a web browser signed in to claude.ai, not
+in the Claude app's own panel, or the picks do not reach the chat. Four panels at the Deck's real size, in Steam's own
+font, filled with the maintainer's Cyberpunk setup (the adult mod names left out):
+
+- **A.** A third entry in the paperclip menu, "Mods seen: 133 · open", opening a full-screen Steam popup like the AI
+  models screen: what bonsAI saw on the left, the groups on the right, Ask about my mods · Refresh · Done below.
+- **B.** The maintainer's idea: a "Mods seen · 133" row on the Search tab, under the find box in the game's section,
+  opening a sheet inside the tab the way a game note opens; B closes it.
+- **C.** Both doors into B's sheet: the paperclip entry while playing, the Search tab row while browsing.
+- **D.** The permission switch "Read game install folders" on the Permissions tab, with its confirm box, drawn to be
+  read; it goes with every option.
+
+**What the screen shows, in every option:** what bonsAI saw (the manager and its profile, the frameworks with
+versions, the game's version and where it is, whether the loaders' last start had errors, the game's own graphics
+settings), then the mods in folded groups (the load order, script mods, loader plugins, archives, scripts and tweaks,
+the whole list the manager wrote), each one line with its count; the ringed row's longer text in the strip at the
+bottom. **What it controls:** Refresh, Ask about my mods, and opening or closing a group. Nothing else. **What it
+never does:** install, remove, enable, disable or update a mod; edit a setting or a load order; say "you have no mods";
+read a Nexus, Thunderstore or Workshop account; send anything online.
+
 ## 8. What comes next
 
-Once round 3 is answered: the plan body in full (what a player notices, what bonsAI will and will not do, the
+Once the Mods screen is picked: the plan body in full (what a player notices, what bonsAI will and will not do, the
 contract, the recipes, the lanes with their briefs, the Deck and PC checks, the roadmap re-shape), the helper rules,
 the briefs and the Deck runbook as asset files, and the maintainer's calls as decision D138.

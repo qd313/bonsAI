@@ -66,3 +66,12 @@ consults); the folder-listing snapshot first, yes (names, sizes and dates only, 
 evening; one roadmap entry. **Still open:** the reading-room numbers (plan 101 § 6: a 6 KB mod block, the Proton
 excerpt raised to 8 KB, a 24 KB shared ceiling, no new Ask mode), which the maintainer is not sure of yet, and the
 four small calls of plan 101 § 7c.
+
+**Round 4 (the maintainer's notes, 2026-10-27, late; plan 101 § 7d):** the door is **a mods icon on the game tag in
+the question box's strip, pressable, jumping to the Mods section of the Search tab** (so the tag becomes a focus stop,
+and the look runs when bonsAI sees the game running, not on the first question); the game's number comes from the
+running game, else the game the question names, else the last game that ran, with installed games on the Search tab's
+game row; mod knowledge in the knowledge base is new scope (LOOT's masterlists are CC0; Nexus never copied), with a
+research lane before go; non-Steam launchers are a follow-on; the reading-room numbers are a verify-with-the-maintainer
+gate before any cap changes; never an anti-cheat workaround or a ban prediction. **Still open:** round 4's five
+questions (plan 101 § 7d, the end), among them how bonsAI runs on the maintainer's Windows machine.

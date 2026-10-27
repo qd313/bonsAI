@@ -1,13 +1,12 @@
 # 101 — Deep mod AI hints: the refreshed plan
 
-**Status: DRAFT, 2026-10-27: the Mods screen is picked (B, § 7a); the full plan body is next. Planning only; nothing
-is built.** Rounds 1 and 2 are answered (§§ 3, 5) and written up as decision D138 for the bookkeeper to append at go
-([assets/101-decision-d138.md](assets/101-decision-d138.md)); round 3 is answered (§ 7a) but for the reading-room
-numbers (§ 6) and the four small calls in § 7c.
+**Status: DRAFT, 2026-10-27 late: round 4 in (§ 7d); five questions open (§ 7d, the end). Planning only; nothing is
+built.** Rounds 1 to 3 are answered (§§ 3, 5, 7a); the Mods screen is picked (B plus a door on the game tag, § 7d);
+decision D138 is written up for the bookkeeper to append at go ([assets/101-decision-d138.md](assets/101-decision-d138.md)).
 
-**Where to pick up.** Answer § 7c's calls (by number; "defaults" takes every recommendation) and § 6's numbers, or
-leave them to a measurement. Then the planning chat writes the full plan: the contract, what bonsAI will and will not
-do, the recipes, the lanes with their briefs, the helper rules, the Deck runbook. Nothing is started before that.
+**Where to pick up.** Answer the five questions at the end of § 7d (by number; "defaults" takes every
+recommendation). Then the planning chat writes the full plan: the contract, what bonsAI will and will not do, the
+recipes, the lanes with their briefs, the helper rules, the Deck runbook. Nothing is started before that.
 
 Written by a cloud planning chat (Fable 5.1) on `experimental`, from the August study
 ([workshop plan 12](../../../bonsAI-workshop/planning/12-deep-mod-ai-hints-feasibility.md), 2026-08-04), the
@@ -266,8 +265,76 @@ read a Nexus, Thunderstore or Workshop account; send anything online.
    6 KB, 8 KB and 24 KB as the default, and lane F2 measures the prompt with the mod block on, on the Deck's model,
    so you call it on a number in the report rather than now.*
 
+## 7d. Round 4: the maintainer's notes of 2026-10-27, late, and what they change
+
+1. **The door: a mods icon on the game tag.** The maintainer: "a mods icon on the bottom of the text area where it
+   shows the game. When mods are detected, the icon will show; users can tap that game title text or D-pad to it and
+   press it to jump right to the mods section in the Search tab." **Recorded as the pick:** B's Search tab row and
+   sheet, plus this door. Two consequences. (a) The game tag in the question box's strip becomes a focus stop (plan 84
+   made it a label on purpose); it joins the strip's row with the paperclip, the microphone and Ask, so Left and Right
+   reach it; it needs a focus-graph entry and a Deck row. (b) **The look has to run when bonsAI sees the game running,**
+   in the background, once per game per session, or the icon cannot show. Round 2's "never on game start by itself"
+   changes to that. The cost is a few small file reads per game per session.
+2. **Call 1 of § 7c, in plain words, and now moot.** The worry was: the Search tab row only has something to show
+   after bonsAI has looked at the game's folders, and the look used to wait for your first question. With the look
+   running as soon as the game is seen (point 1), the row is filled by the time anyone opens the Search tab. It reads
+   "Mods: not checked yet" only while the switch is off, and nothing at all for a game bonsAI cannot find.
+3. **Call 2 of § 7c revised, from the maintainer's catch:** a game that crashes at launch is not running, so "running
+   game only" fails exactly when it matters most. The look is keyed by the game's Steam number, which can come from
+   three places: **the running game; the game the question names** (the title resolver already does this for the
+   knowledge base, and the finder reads every installed game's name from Steam's own manifests, so a name becomes a
+   number without the game running); **the last game that ran this session** (new: the back end remembers it; today
+   it remembers nothing). The Search tab's game row gains the installed games, so a game's mods can be opened without
+   running it. *Default: running game, else the game the question names, else the last game that ran; the answer says
+   which it used.*
+4. **Mod knowledge in the knowledge base** (the maintainer: load it with what is known about Cyberpunk's and Fallout
+   4's mods, so "what's wrong with my load order" and compatibility questions can be answered offline). Checked
+   2026-10-27: **LOOT's masterlists** (the load-order tool the Bethesda modding community uses) are published under
+   CC0, free to use with no conditions. The Fallout 4 one holds several hundred plugin entries with which plugin must
+   load after which, what each requires, what it is incompatible with, warnings ("X is incompatible with Y, but both
+   are present"), and which versions are "dirty". Matched against the plugins the look found, that answers "what's
+   wrong with my load order" for Fallout 4, Skyrim and the other Bethesda games, offline. For Cyberpunk the community
+   modding wiki is the likely source; this session's network could not reach it, so its licence is unchecked. Nexus
+   Mods pages are the authors' own text with no open licence: never copied; mod names and versions are read from the
+   user's own folder only. Thunderstore has mod metadata with dependencies, per package licence, but reading it live
+   needs the unbuilt Web permission. **This is new scope, about two to three stars:** a read-only research lane before
+   go (the sources per game, their licences, what can be taken and in what shape), then content lanes for Cyberpunk
+   and Fallout 4 mod cards, and a load-order check that matches the found plugins against LOOT's rules on the device
+   (a few hundred KB per game in the knowledge library). *Recommendation: the research lane in v1 before go; the cards
+   and the check as a second wave right after, unless the research says they are quick.*
+5. **Non-Steam launchers (Heroic, Lutris, GOG, Epic): not impossible.** Each launcher keeps its own list of installed
+   games and their folders (Heroic in its settings folder, Lutris in its own small database), so a launcher adapter
+   would find the game folder the way the Steam finder does; on the Deck such a game runs as a Steam shortcut with a
+   made-up number, so the name is the key. About two stars per launcher, after the Steam one works. *Recommendation:
+   out of v1, on the roadmap as the follow-on, and the finder built so a launcher can be added without touching the
+   recipes.*
+6. **Windows.** The maintainer: "we have bonsAI running on Windows, it's on this Win11 machine." The repo's record
+   holds the second way to run at "not yet" and knows only the September stand-in test, so the planning chat needs to
+   know how it runs there (the September stand-in for Decky, a SteamOS virtual machine, something else). If the Python
+   side runs on Windows, the look's Windows layout is tested with the real back end on the Cyberpunk folder, not only
+   with the PC command, and the Windows recipe becomes "seen", not "suspected".
+7. **The reading-room numbers (§ 6): a verify gate.** The maintainer: "make sure it's marked as something that needs
+   to be verified with me before implementation." So: lane F2 measures real prompts with the mod block on before it
+   changes any cap, reports the numbers in the chat, and **waits for the maintainer's word** before the caps change.
+8. **Anti-cheat and online play.** Agreed: never a workaround, never a ban prediction. How the community handles it,
+   for the knowledge card: games with anti-cheat (Easy Anti-Cheat, BattlEye, and some with VAC) usually refuse to start
+   with altered files or ban the account, so people mod single-player games, use the game's own mod support (the
+   Workshop, an official mod menu), or mod online only where the game allows it (server-side mods, allowed cosmetics).
+   The safe rule of thumb: no mods in a game with anti-cheat unless the game's own mod system supports them. When a
+   question mixes mods and online play, bonsAI says that, points at the game's own rules, and stops.
+
+**The five questions of round 4:**
+
+1. **The game-tag door and the look on game detection** (points 1 and 2): as written? *Default: yes.*
+2. **Where the game's number comes from** (point 3): running game, else the game the question names, else the last
+   game that ran; installed games on the Search tab's game row. *Default: yes.*
+3. **Mod knowledge** (point 4): the research lane before go in v1, the cards and the load-order check as a second wave
+   right after? Or all of it in v1? *Default: research in v1, the rest right after.*
+4. **Launchers** (point 5): out of v1, designed for? *Default: yes.*
+5. **How does bonsAI run on your Windows machine** (point 6)? *No default: say in a line.*
+
 ## 8. What comes next
 
-Once § 7c is answered: the plan body in full (what a player notices, what bonsAI will and will not do, the
+Once round 4's five questions are answered: the plan body in full (what a player notices, what bonsAI will and will not do, the
 contract, the recipes, the lanes with their briefs, the Deck and PC checks, the roadmap re-shape), the helper rules,
 the briefs and the Deck runbook as asset files, and the maintainer's calls as decision D138.

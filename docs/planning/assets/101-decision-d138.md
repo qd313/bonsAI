@@ -57,9 +57,12 @@ away and picks up there. Nothing is built; nothing starts before the full plan i
    maintainer, since bonsAI does not run on Windows yet.
 10. The Deck port: copy the game folder.
 
-**Still open (round 3, plan 101 § 7, eight calls):** contract first so ten lanes start at once; where the Mods
-screen opens from (the paperclip menu recommended); a new back-end area for mods; who runs it and on which model
-(a new chat on the PC, Fable 5.1 high as plan 100, recommended); the folder-listing snapshot the maintainer runs
-first (names, sizes, dates only; to the private workshop); one evening or two; one roadmap entry or the study's
-split; and the reading-room numbers (a 6 KB mod block, the Proton excerpt raised to 8 KB, a 24 KB shared ceiling,
-no new Ask mode).
+**Round 3, the lanes (answered 2026-10-27; two things open):** contract first, yes; the Mods screen opens from
+**a Mods row on the Search tab, as a sheet inside the tab** (option B of the mock-up board, liked with D on
+2026-10-27; A and C unmarked), with the permission switch "Read game install folders" and its confirm box as drawn
+(D); a new back-end area for mods, yes; the work runs as plan 100 did (a new chat on the PC, Fable 5.1 high
+orchestrates and lands, Sonnet high lanes, Opus medium for the Mods screen, the advisor at max for at most five
+consults); the folder-listing snapshot first, yes (names, sizes and dates only, to the private workshop); one
+evening; one roadmap entry. **Still open:** the reading-room numbers (plan 101 § 6: a 6 KB mod block, the Proton
+excerpt raised to 8 KB, a 24 KB shared ceiling, no new Ask mode), which the maintainer is not sure of yet, and the
+four small calls of plan 101 § 7c.

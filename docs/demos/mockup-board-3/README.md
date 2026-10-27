@@ -17,10 +17,9 @@ reload.
 
 | Tab | Roadmap item | Stars | Status |
 |---|---|---|---|
-| 1 | Deep mod AI hints: the Mods screen | ★★★★★★ | **Round 1 drawn 2026-10-27, waiting for the maintainer's picks.** A: a door in the paperclip menu, a full-screen popup. B: a Mods row on the Search tab (the maintainer's idea), a sheet inside the tab. C: both doors, one sheet. D: the permission switch and its confirm box, drawn to be read, not picked against the others |
+| 1 | Deep mod AI hints: the Mods screen | ★★★★★★ | **Round 1 drawn 2026-10-27; picked the same day: B**, a Mods row on the Search tab (the maintainer's idea) opening a sheet inside the tab. D (the permission switch and its confirm box) read and liked. A (a door in the paperclip menu, a full-screen popup) and C (both doors) unmarked; no comments |
 
-**Next step:** the maintainer picks on the page; the planning chat reads the picks, writes the pick into plan 101
-(round 3, question 2) and decision D138, and redraws if a second round is asked for.
+**Next step:** none on the board. The pick is in plan 101 § 7a; a second round is drawn only if the maintainer asks.
 
 ## What the drawings are filled with
 

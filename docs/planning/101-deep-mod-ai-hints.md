@@ -1,15 +1,13 @@
 # 101 — Deep mod AI hints: the refreshed plan
 
-**Status: DRAFT, paused 2026-10-27 at the Mods screen pick. Planning only; nothing is built.** Rounds 1 and 2 are
-answered (§§ 3, 5) and written up as decision D138 for the bookkeeper to append at go
-([assets/101-decision-d138.md](assets/101-decision-d138.md)); round 3 is answered but for two things (§ 7a): the
-Mods screen, which waits on the mock-up board, and the reading-room numbers (§ 6), which the maintainer is not sure of
-yet.
+**Status: DRAFT, 2026-10-27: the Mods screen is picked (B, § 7a); the full plan body is next. Planning only; nothing
+is built.** Rounds 1 and 2 are answered (§§ 3, 5) and written up as decision D138 for the bookkeeper to append at go
+([assets/101-decision-d138.md](assets/101-decision-d138.md)); round 3 is answered (§ 7a) but for the reading-room
+numbers (§ 6) and the four small calls in § 7c.
 
-**Where to pick up.** Open the mock-up board (§ 7b), play with the four panels, press Like or Not this and comment.
-Then the planning chat reads the picks, writes the pick into § 7a and D138, and writes the full plan: the contract,
-what bonsAI will and will not do, the recipes, the lanes with their briefs, the helper rules, the Deck runbook.
-Nothing is started before that.
+**Where to pick up.** Answer § 7c's calls (by number; "defaults" takes every recommendation) and § 6's numbers, or
+leave them to a measurement. Then the planning chat writes the full plan: the contract, what bonsAI will and will not
+do, the recipes, the lanes with their briefs, the helper rules, the Deck runbook. Nothing is started before that.
 
 Written by a cloud planning chat (Fable 5.1) on `experimental`, from the August study
 ([workshop plan 12](../../../bonsAI-workshop/planning/12-deep-mod-ai-hints-feasibility.md), 2026-08-04), the
@@ -210,8 +208,11 @@ Wave 1: K0, S, A, B, C, D, E, F1, G, H at once (ten lanes). Wave 2: F2, J, P, M.
 ## 7a. Round 3: answered 2026-10-27, two things open
 
 1. **Contract first:** yes.
-2. **Where the Mods screen opens from:** open. The maintainer asked what the screen will look like and what it will
-   control, thought the Search and notes area might be the place, and asked for mock-ups. Drawn: § 7b.
+2. **Where the Mods screen opens from:** **B, a Mods row on the Search tab, opening a sheet inside the tab.** The
+   maintainer asked what the screen will look like and what it will control, thought the Search and notes area might
+   be the place, and asked for mock-ups (§ 7b); on the board, 2026-10-27, they liked B and D, left A and C unmarked,
+   and wrote no comments. So: no new door on the Main tab's paperclip menu in v1, and the screen is drawn inside the
+   Search tab, the way a game note opens there.
 3. **A new back-end area** for mods: yes.
 4. **Who runs it:** as plan 100 (a new chat on the PC, Fable 5.1 high orchestrates and lands; Sonnet high lanes; Opus
    medium for the Mods screen; the advisor at max for at most five consults).
@@ -236,6 +237,8 @@ font, filled with the maintainer's Cyberpunk setup (the adult mod names left out
 - **D.** The permission switch "Read game install folders" on the Permissions tab, with its confirm box, drawn to be
   read; it goes with every option.
 
+**Picked 2026-10-27: B.** D was read and liked; A and C unmarked; no comments.
+
 **What the screen shows, in every option:** what bonsAI saw (the manager and its profile, the frameworks with
 versions, the game's version and where it is, whether the loaders' last start had errors, the game's own graphics
 settings), then the mods in folded groups (the load order, script mods, loader plugins, archives, scripts and tweaks,
@@ -244,8 +247,27 @@ bottom. **What it controls:** Refresh, Ask about my mods, and opening or closing
 never does:** install, remove, enable, disable or update a mod; edit a setting or a load order; say "you have no mods";
 read a Nexus, Thunderstore or Workshop account; send anything online.
 
+## 7c. Four small calls before the full plan (open)
+
+1. **The Mods row before the look has run.** The look runs on the first question about the running game (round 2),
+   so on the Search tab the row would be empty until then. *Recommendation: the row reads "Mods: not checked yet" and A
+   on it runs the look, so the Search tab is a second way to start it; Refresh on the sheet is the third.*
+2. **The row is for the running game only in v1.** The Search tab's game row lists games by name from your chats,
+   and the look needs a game's Steam number and folder, which only a running game gives for certain.
+   *Recommendation: running game only; a later version can look up a picked game by name.*
+3. **Which recipes ship in v1, and how an unchecked one is marked.** Cyberpunk is checked on your PC and, after the
+   port, on the Deck. The manager list readers (Vortex, Mod Organizer 2, r2modman) and the Workshop count work for any
+   game. The other game recipes (BepInEx for Unity games, SMAPI for Stardew Valley, Bethesda games with SKSE or F4SE)
+   come from general knowledge until someone has one on a real machine; the compat cards say Fallout 4 runs through
+   Mod Organizer 2 and F4SE on your Deck, so that is a second real one if it is still there. *Recommendation: ship
+   all of them, and the look says "suspected" for anything found by an unchecked recipe and "seen" only for a
+   checked one; the plan lists which is which.*
+4. **The reading-room numbers (§ 6, round 3 question 8), still not sure.** *Recommendation: the full plan carries the
+   6 KB, 8 KB and 24 KB as the default, and lane F2 measures the prompt with the mod block on, on the Deck's model,
+   so you call it on a number in the report rather than now.*
+
 ## 8. What comes next
 
-Once the Mods screen is picked: the plan body in full (what a player notices, what bonsAI will and will not do, the
+Once § 7c is answered: the plan body in full (what a player notices, what bonsAI will and will not do, the
 contract, the recipes, the lanes with their briefs, the Deck and PC checks, the roadmap re-shape), the helper rules,
 the briefs and the Deck runbook as asset files, and the maintainer's calls as decision D138.

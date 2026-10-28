@@ -75,3 +75,11 @@ game row; mod knowledge in the knowledge base is new scope (LOOT's masterlists a
 research lane before go; non-Steam launchers are a follow-on; the reading-room numbers are a verify-with-the-maintainer
 gate before any cap changes; never an anti-cheat workaround or a ban prediction. **Still open:** round 4's five
 questions (plan 101 § 7d, the end), among them how bonsAI runs on the maintainer's Windows machine.
+
+**Round 4 answered 2026-10-28:** the icon sits in the question box's bottom strip on the Main tab beside the game's
+name and nowhere else; the game's number comes from the running game, else the game the question names, else the last
+game that ran, with installed games on the Search tab's game row; the mod knowledge is its own roadmap entry (★★★,
+added 2026-10-28) with plan 101's research lane first; the launchers are their own roadmap entries (★★ each, added
+2026-10-28) **and plan 101 builds and tests them**; bonsAI runs on the maintainer's Windows 11 PC inside Steam's Big
+Picture Mode, so the Windows side is tested with the real plugin. **Still open at go:** the reading-room numbers (plan
+101 § 15, a verify gate: measured first, confirmed by the maintainer before any cap changes).

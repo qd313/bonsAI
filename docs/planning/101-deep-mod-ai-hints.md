@@ -1,12 +1,19 @@
 # 101 — Deep mod AI hints: the refreshed plan
 
-**Status: DRAFT, 2026-10-27 late: round 4 in (§ 7d); five questions open (§ 7d, the end). Planning only; nothing is
-built.** Rounds 1 to 3 are answered (§§ 3, 5, 7a); the Mods screen is picked (B plus a door on the game tag, § 7d);
-decision D138 is written up for the bookkeeper to append at go ([assets/101-decision-d138.md](assets/101-decision-d138.md)).
+**Status: READY for the maintainer's read, 2026-10-28. Planning only; nothing is built.** Rounds 1 to 4 are
+answered (§§ 3, 5, 7a, 7d); the plan body is §§ 8 to 17; the helper rules, the lane briefs and the first check block
+are the asset files named below; decision D138 is written up for the bookkeeper to append at go
+([assets/101-decision-d138.md](assets/101-decision-d138.md)). Three roadmap entries were added on 2026-10-28 at the
+maintainer's ask (mod knowledge in the knowledge base, ★★★; the Heroic, Lutris and Windows launchers, ★★ each).
 
-**Where to pick up.** Answer the five questions at the end of § 7d (by number; "defaults" takes every
-recommendation). Then the planning chat writes the full plan: the contract, what bonsAI will and will not do, the
-recipes, the lanes with their briefs, the helper rules, the Deck runbook. Nothing is started before that.
+**Where to pick up.** Read §§ 8 to 15 and say "Run plan 101" in a new chat on the PC (§ 13), or send corrections
+here first. One number is still a gate: the reading room (§ 15), measured before any cap changes and confirmed by
+you.
+
+**Files for this plan (written 2026-10-28):** the helper rules [assets/101-helper-rules.md](assets/101-helper-rules.md),
+the briefs [assets/101-lane-briefs.md](assets/101-lane-briefs.md) (one per lane), the first check block
+[assets/101-runbook-block-M0.md](assets/101-runbook-block-M0.md) (the Deck and the PC); the session writes one runbook
+per later block. Evidence files: `plan101-<ROW>.json` in the workshop's `test-evidence` folder.
 
 Written by a cloud planning chat (Fable 5.1) on `experimental`, from the August study
 ([workshop plan 12](../../../bonsAI-workshop/planning/12-deep-mod-ai-hints-feasibility.md), 2026-08-04), the
@@ -323,7 +330,15 @@ read a Nexus, Thunderstore or Workshop account; send anything online.
    The safe rule of thumb: no mods in a game with anti-cheat unless the game's own mod system supports them. When a
    question mixes mods and online play, bonsAI says that, points at the game's own rules, and stops.
 
-**The five questions of round 4:**
+**Round 4 answered 2026-10-28:** 1, yes, with one correction of the chat's wording: the icon sits in the question
+box's bottom strip on the Main tab, beside the game's name, and nowhere else ("on top of" in the chat meant "in
+addition to" the Search tab row, not a place). 2, yes. 3, research now; the knowledge-base work is its own roadmap
+entry (★★★, added 2026-10-28). 4, the launchers are their own roadmap entries (★★ each, added 2026-10-28) **and this
+plan builds and tests them** beside the Steam look. 5, **bonsAI runs on the maintainer's Windows 11 PC inside Steam's
+Big Picture Mode**, with Decky Loader; so the Windows side is tested with the real plugin on the real Cyberpunk folder,
+and the Windows recipe is "seen", not "suspected". The repo's documents had not recorded this; § 11 and § 14 do now.
+
+**The five questions of round 4, as they were put:**
 
 1. **The game-tag door and the look on game detection** (points 1 and 2): as written? *Default: yes.*
 2. **Where the game's number comes from** (point 3): running game, else the game the question names, else the last
@@ -333,8 +348,289 @@ read a Nexus, Thunderstore or Workshop account; send anything online.
 4. **Launchers** (point 5): out of v1, designed for? *Default: yes.*
 5. **How does bonsAI run on your Windows machine** (point 6)? *No default: say in a line.*
 
-## 8. What comes next
+## 8. One sentence
 
-Once round 4's five questions are answered: the plan body in full (what a player notices, what bonsAI will and will not do, the
-contract, the recipes, the lanes with their briefs, the Deck and PC checks, the roadmap re-shape), the helper rules,
-the briefs and the Deck runbook as asset files, and the maintainer's calls as decision D138.
+Give bonsAI a careful, read-only look at a game's mods on the Deck and on the PC (the manager's own list, the frameworks
+and their versions, the load order, the loaders' logs, the game's own settings), show it on a Mods sheet on the Search
+tab and as a small icon beside the game's name, hand the AI a short summary plus the mods a question names, teach the AI
+the words and the rules for mods (vanilla first, back up first, never a mod change, never an anti-cheat workaround), and
+give the knowledge base its first "mods" cards, with every lane cut by files so fourteen can start on the same minute.
+
+## 9. What a player notices, and what bonsAI will and will not do
+
+**What a player notices.**
+
+1. A new switch on the Permissions tab, **Read game install folders**, off until they turn it on, with a plain confirm
+   box (mock-up D). The Kids lock forces it off.
+2. With the switch on and a game running, a small **mods icon** appears beside the game's name in the question box's
+   bottom strip on the Main tab once bonsAI has seen mod files for that game. The name becomes pressable: a tap, or the
+   D-pad to it and A, jumps to the Mods sheet on the Search tab.
+3. On the **Search tab**, under the find box, a row for the running game: "Mods seen · 133 · Vortex · 5 frameworks".
+   A opens the **Mods sheet** inside the tab (mock-up B): what bonsAI saw (manager, frameworks and versions, game version
+   and where it is, the loaders' last start, the game's own graphics settings), then the mods in folded groups, one
+   line each with its count; the ringed row's longer text in the strip at the bottom; **Refresh** and **Ask about my
+   mods** at the end; B closes. The game row gains the installed games, so a game that is not running can be opened
+   too.
+4. **Answers know the mods.** "Why does my frame rate drop in Kabuki?" is answered from the crowd and reactivity mods
+   and the crowd setting, not from shadows. "What mods do I have?" lists what was seen. "It crashes since I added a
+   mod" reads the end of the loaders' logs for a mod that failed to load and gives mod-aware steps: which manager, the
+   newest mod first, back up saves before anything. In Strategy mode the unmodded answer comes first, then where a
+   present mod changes it. Under **Show details**, one chip says what was read.
+5. **One preset chip** when mods were seen: "What mods do I have, and could any be causing trouble?"
+6. General modding questions ("how do I set up Vortex on the Deck?", "where do Stardew mods go?") get answers from
+   about fifteen new knowledge cards, offline, with the SteamOS and Windows differences.
+7. On the **Windows PC**, the same, inside Big Picture Mode: the look reads Steam's library list, finds the game on
+   its own drive, reads Vortex's list and the game's settings file under the Windows app-data folder.
+
+**What bonsAI will not do, written into the words it uses, the README and the troubleshooting page.**
+
+- Never install, remove, enable, disable or update a mod; never edit a setting, a load order or a launch option.
+- Never say "you have no mods". When it finds nothing it says where it looked ("no mod files found in the places
+  bonsAI checks"). "Seen" only for what a checked recipe read; "suspected" for anything an unchecked recipe found.
+- Never read a Nexus, Thunderstore or Workshop account, and never fetch anything online for this. Workshop items are
+  a count, not names, until the Web permission exists.
+- Never say two mods are compatible, or a mod works with a game version; it says to check the mod's own page. The
+  load-order rules for Bethesda games come later, from the knowledge base (the ★★★ entry), not from guessing.
+- Never help bypass, spoof or disable anti-cheat, and never predict a ban. When a question mixes mods and online play
+  it says what the community does (single-player, the game's own mod support, or only where the game allows it) and
+  points at the game's rules.
+- Never read a file it was not given a recipe or a list for, never follow the prefix's drive link, never read more
+  than the budgets allow (§ 11), never read saves.
+- Non-Steam games through Heroic and Lutris are looked up through those launchers' own lists; a game bonsAI cannot
+  find through Steam or a launcher is simply not found, and it says so.
+
+## 10. The contract: what every lane builds against
+
+Written here so lanes start together with a fake and land against the real thing. A lane that needs to change the
+contract stops and says so; the session changes it here first.
+
+**10a. The look's result** (one object, JSON on the wire, the same on both sides):
+
+```
+{
+  "ok": true,                      // false with "error" when the switch is off, no game, or the folder is not found
+  "error": "",                     // "permission_off" | "no_game" | "not_found" | "not_a_steam_game" | "budget"
+  "game": { "app_id": "1091500", "name": "Cyberpunk 2077", "folder": "<absolute path>",
+            "platform": "steamos" | "windows", "library": "<library root>",
+            "found_by": "steam" | "heroic" | "lutris" | "gog_galaxy" | "epic",
+            "source": "running" | "named" | "last_ran" | "picked" },
+  "checked_at": "<iso time>", "confidence": "seen" | "suspected", "recipe": "cyberpunk2077" | "generic",
+  "manager": { "kind": "vortex" | "mo2" | "r2modman" | "workshop" | "none" | "unknown",
+               "profile": "", "list_file": "<absolute path or empty>", "mod_count": 133 },
+  "frameworks": [ { "name": "CET", "version": "1.37.1", "where": "<relative path>" } ],
+  "load_order": [ { "position": 1, "name": "NCPD Prevention Police Enhancement", "version": "2.7" } ],
+  "groups": [ { "kind": "script_mods", "label": "Script mods", "count": 19,
+                "items": [ { "name": "AppearanceMenuMod", "version": "", "source": "<mod the file came from>" } ] } ],
+  "settings": { "file": "<absolute path or empty>", "values": { "CrowdDensity": "Medium" } },
+  "loader_logs": [ { "name": "CET", "file": "<absolute path>", "errors": 0, "tail": [ "<last lines>" ] } ],
+  "warnings": [ "<budget stops, unreadable roots, unchecked recipe>" ]
+}
+```
+
+Rules: `items` are cut at 400 per group and the whole result at 256 KB; `tail` holds at most 40 lines per log, read
+only on a troubleshooting question or on Refresh; every path is absolute and under a root the finder allowed; nothing
+in it is ever written back.
+
+**10b. Names.** Back end, all in the new area `py_modules/backend/mods/`:
+
+| Name | File | Does |
+|---|---|---|
+| `find_game_folder(app_id, *, home, platform)` | `steam_library.py` | Steam's library list and the game's manifest; returns the folder, the library root and the name, or None |
+| `list_installed_games(*, home, platform)` | `steam_library.py` | every installed Steam game's number and name, from the manifests |
+| `find_launcher_game(name, *, home, platform)` | `launchers.py` | the same for Heroic, Lutris, and on Windows GOG Galaxy and Epic, by name |
+| `path_allowed_for_mod_read(candidate, roots)` | `steam_library.py` | the allowlist: the real path sits under an allowed root; never through `pfx/dosdevices` |
+| `look_at_game_mods(app_id, *, want_logs=False)` | `mod_look.py` | applies the recipe and the manager readers with the budgets; returns 10a |
+| `cached_game_mods_look(app_id)` / `remember_game_seen(app_id)` / `last_game_seen()` | `mod_look.py` | the per-session cache and the last game that ran |
+| `read_vortex_manifest`, `read_mo2_modlist`, `read_r2modman_mods`, `read_workshop_acf` | `manager_lists.py` | the four list readers, pure functions on text |
+| `RECIPES`, `recipe_for(app_id, name)` | `mod_recipes.py` | the recipes as data (§ 11) |
+| `build_mod_context_block(look, question, *, budget_bytes)` | `mod_context_block.py` | the block for the AI (§ 15) |
+| `build_mods_transparency(look, attached)` | `transparency_service.py` (lane E) | the Show details chip |
+
+Plugin methods on `main.py`, each a one-line hand-off to `mods_rpc.py` (the name carries `game_mods` so the generated
+map files them together): `get_game_mods_look(app_id: str, refresh: bool = False)`, `list_game_mods_targets()` (the
+running game, the last game that ran, the installed games), `note_game_mods_seen(app_id: str)` (the screen's game
+sync calls it when the running game changes; it starts the look in the background and remembers the game).
+
+Screen side, a new folder `src/features/mods/`: `modsLookStore.ts` (the last result per game, `useModsLook(appId)`),
+`useModsLookSync.ts` (called from the game sync hook: on a game change, `note_game_mods_seen` then `get_game_mods_look`),
+`ModsSheet.tsx` and `ModsRow.tsx` (the Search tab pieces), `modsIcon.tsx` (the icon for the game tag). The capability
+key is `game_install_read`; its Permissions row id is `game_install_read`; its toggle label is "Read game install
+folders".
+
+## 11. The recipes, and where things live
+
+A **recipe** says, for one game, where mods live, which loader files prove a framework and carry its version, the
+load-order file, the loader logs, and the game's own settings file, per platform. A **manager reader** says where a
+manager keeps its list. A **launcher adapter** says where a launcher keeps its list of games. All three are data plus
+small readers; the look composes them. Every path below not marked *seen* comes from general knowledge and is marked
+**suspected** until lane S's listing from a real machine confirms it, at which point the plan's log says so and the
+recipe flips to *seen*.
+
+**Platforms.** SteamOS: Steam under `~/.local/share/Steam` or `~/.steam/steam`, more libraries from
+`steamapps/libraryfolders.vdf` (an SD card is `/run/media/...`), a Windows game's app-data inside the prefix at
+`steamapps/compatdata/<id>/pfx/drive_c/users/steamuser/AppData/...` (a fixed path; never a walk; never through
+`pfx/dosdevices`). Windows: Steam under `C:\Program Files (x86)\Steam`, more libraries from the same file (the
+maintainer's is `E:\SteamLibrary`), app-data under `%LOCALAPPDATA%` and `%APPDATA%`.
+
+**Game recipes in v1.**
+
+| Recipe | Status | What it reads |
+|---|---|---|
+| Cyberpunk 2077 (1091500) | **seen** on the maintainer's PC (§ 4); the Deck after the port | script mods under `bin/x64/plugins/cyber_engine_tweaks/mods/<mod>/`; loader plugins under `red4ext/plugins/`; compiled scripts `r6/scripts/`; tweaks `r6/tweaks/`; archives `archive/pc/mod/`; REDmods under `mods/`; the load order under `V2077/Load Order/*.json`; frameworks and versions from the loaders' own files and logs (CET's and RED4ext's logs in their folders); mod settings `red4ext/plugins/mod_settings/user.ini`; the game's settings `CD Projekt Red/Cyberpunk 2077/UserSettings.json` under local app-data (Windows) or the prefix (SteamOS) |
+| Bethesda games (Skyrim SE 489830, Fallout 4 377160, Starfield, the others) | suspected; Fallout 4 on the maintainer's Deck through Mod Organizer 2 and F4SE is the check if it is still installed | `Data/*.esp`, `.esm` and `.esl` names; the script extender's loader and `Data/<SE>/Plugins/*.dll`; `plugins.txt` and `loadorder.txt` under the game's local app-data; the game's ini under Documents/My Games |
+| Unity games with BepInEx (Lethal Company, Valheim, R.E.P.O., others) | suspected | `BepInEx/{core,plugins,config}`, `BepInEx/LogOutput.log` (proves the loader ran, carries its version), `winhttp.dll` or `run_bepinex.sh` |
+| Stardew Valley (413150) with SMAPI | suspected | `Mods/<mod>/manifest.json` (name, version, unique id), the SMAPI binary, `ErrorLogs/SMAPI-latest.txt` |
+| Any game with Workshop items | suspected (the file's exact keys unread) | `steamapps/workshop/appworkshop_<id>.acf`: a count and the item numbers, no names |
+| Generic (no recipe) | always | the manager readers only, then "no mod files found in the places bonsAI checks" |
+
+**Manager readers in v1.** Vortex: the deployment manifest in the game's mod target folder (seen: in the game root for
+Cyberpunk; 1,163 files from 133 mods, each file's source mod with its Nexus number and version in the name); Vortex's
+own home `%APPDATA%\Vortex` on Windows, and inside a prefix on SteamOS (suspected). Mod Organizer 2: `profiles/<p>/modlist.txt`
+(plain text, `+name` enabled, `-name` disabled, newest first) next to `ModOrganizer.ini`; on SteamOS usually inside a
+prefix (suspected). r2modman and Thunderstore Mod Manager: `<config>/r2modmanPlus-local/<Game>/profiles/<p>/mods.yml`
+(`~/.config` on SteamOS, `%APPDATA%` on Windows; suspected). The Workshop file above.
+
+**Launcher adapters in v1** (their own roadmap entries, ★★ each). Heroic: its own list of installed games and folders
+under its settings folder (`~/.config/heroic/` or the Flatpak one `~/.var/app/com.heroicgameslauncher.hgl/config/heroic/`
+on SteamOS; `%APPDATA%\heroic\` on Windows; the GOG and Epic lists are separate files; suspected). Lutris: its game
+database `pga.db` under `~/.local/share/lutris/` (or the Flatpak one), one row per game with its folder (suspected). On
+Windows, GOG Galaxy (`C:\ProgramData\GOG.com\Galaxy\storage\galaxy-2.0.db`) and the Epic Games Launcher (one `.item`
+file per game under `C:\ProgramData\Epic\EpicGamesLauncher\Data\Manifests\`), attempted only if the maintainer's PC has
+one. On the Deck a launcher's game runs as a Steam shortcut with a made-up number, so the name is the key: the look
+matches the running shortcut's name against the launcher's list.
+
+**Budgets, in the reader.** Depth 3 under the game folder, 2,000 directory entries, 512 KB of text read, 1.5 seconds
+of wall clock, then stop with a warning; binaries are never opened, only listed; the dosdevices link is never followed;
+every path is checked against the allowlist before it is opened; the look runs off the event loop as the Proton log
+reader does.
+
+## 12. The lanes: what runs at the same time
+
+**The rule for parallel lanes is files, not features.** Two lanes never own the same file. Everything not named as a
+wait runs at the same time, up to fourteen helpers at once (D128's cap is fifteen), started a few minutes apart; each
+runs only its own tests at two workers; the full checks run once per landing, in the shared checkout.
+
+| Lane | What | Stars, tag | Model | Owns (files) | Waits for |
+|---|---|---|---|---|---|
+| K0 | The bookkeeper's pre-go audit: D138 appended, the roadmap entry's status, the testing rows for every check in § 14 | ★ docs | Sonnet 5.5 medium | `docs/roadmap.md`, `docs/roadmap-kb.md`, `docs/testing.md`, `docs/audit/maintainer-decisions-locked.md` | nothing; lands first |
+| R | Research, read-only: the mod-knowledge sources per game (LOOT's masterlists, the Cyberpunk wiki, Thunderstore, the SMAPI and BepInEx docs), each with its licence, what can be taken and in what shape; a report to the workshop; the roadmap-kb entry's next step | ★★ `[KB]` | Sonnet 5.5 high | nothing in the repo; a report file in the workshop's `planning/assets` | nothing; the maintainer reads the report |
+| S | The snapshot script and its run: lists a game folder, a manager's home and a launcher's game list (names, sizes, dates; never contents, never saves) to a JSON for the workshop; the maintainer runs it on the PC (Cyberpunk, Vortex's home) and on the Deck (after the port; Fallout 4 and its Mod Organizer 2 if there) | ★ `[platform]` | Sonnet 5.5 medium | new `scripts/mods/snapshot_mod_folders.py`, its test | nothing; the maintainer runs it during wave 1 |
+| A | Finding the game: `steam_library.py` for both platforms, the installed-games list, the allowlist; fake folders for both layouts in the tests | ★★★ `[platform]` | Sonnet 5.5 high | new `py_modules/backend/mods/steam_library.py`, `tests/test_mods_steam_library.py` | nothing |
+| A2 | The launcher adapters: `launchers.py` for Heroic, Lutris, GOG Galaxy and Epic, on fake files; the running shortcut's name as the key | ★★ `[platform]` | Sonnet 5.5 high | new `py_modules/backend/mods/launchers.py`, `tests/test_mods_launchers.py` | nothing (A's contract, with a fake) |
+| B | The permission switch, both sides: the key, off for everyone, the Kids lock, the Permissions row and its confirm box, the deep link, the search index, the two contract files, the geometry table, tests | ★★ `[perms]` | Sonnet 5.5 high | every file the last switch touched (`git grep -l internet_downloads`, 45 files), none of the files other lanes own | nothing |
+| C | The recipes and the reader: `mod_recipes.py` (§ 11 as data), `mod_look.py` (the budgets, the dosdevices rule, the cache, the last game, the result of 10a); Cyberpunk from § 4 first, the others from § 11 | ★★★★ `[platform]` | Sonnet 5.5 high | new `py_modules/backend/mods/mod_recipes.py`, `mod_look.py`, `tests/test_mods_look.py` | nothing (A's contract, with a fake) |
+| D | The four manager readers, pure functions on text, with fixtures (a cut-down Vortex manifest shaped like the maintainer's, a modlist, a mods.yml, a Workshop file) | ★★★ `[platform]` | Sonnet 5.5 high | new `py_modules/backend/mods/manager_lists.py`, `tests/fixtures/mods/`, `tests/test_mods_manager_lists.py` | nothing |
+| E | The block for the AI and the chip: `mod_context_block.py` (the summary, the question-matched mods with their settings, the budget, "seen"/"suspected" wording), the chip in the back end's chips list | ★★★ `[KB]` | Sonnet 5.5 high | new `py_modules/backend/mods/mod_context_block.py`, `py_modules/backend/answer/transparency_service.py` (this lane alone), tests | nothing |
+| F1 | The words: mod vocabulary in the phrase gate (word boundaries: "mod" must not match "model"; the model-policy gate keeps winning), the mod rules line, the Strategy rule, the anti-cheat rule, "which manager?" | ★★ `[ask]` | Sonnet 5.5 high | `py_modules/backend/prompts/ask_topic_instructions.py`, `ollama_prompts.py` (this lane alone), their tests | nothing |
+| G | Knowledge cards: a "mods" topic of about fifteen cards in own words marked "Researched, unconfirmed" (what each loader and manager is and where it puts things, SteamOS versus Windows, the prefix, back up first, anti-cheat and online play), the router's words, the drift test | ★★ `[KB]` | Sonnet 5.5 high | `data/kb/compat_patterns.json`, `py_modules/backend/knowledge/compat_topic_router.py`, their tests | nothing |
+| F3 | The screen's trigger and store: on a game change the sync hook notes the game and fetches the look; the store; the plugin methods and `mods_rpc.py`; `main.py`'s three methods | ★★ `[platform]` | Sonnet 5.5 high | new `src/features/mods/modsLookStore.ts`, `useModsLookSync.ts`, `src/features/ask/flow/useOllamaGameContextSync.ts`, new `py_modules/backend/mods/mods_rpc.py`, `main.py` (three methods), tests | nothing (the contract, with a fake back end) |
+| H | The Mods row and sheet on the Search tab (mock-up B): the row under the find box, the sheet in the tab, the folded groups, the strip, Refresh and Ask about my mods, the installed games in the game row, the D-pad routes written by hand as the tab's others are | ★★★★ `[ui]` | Opus 5.5 medium; the advisor before landing | new `src/features/mods/ModsSheet.tsx`, `ModsRow.tsx`, `src/features/search-tab/SearchTab.tsx`, `SearchGameRow.tsx`, `searchNav.ts`, `useSearchNav.ts`, `searchTabStore.ts`, `searchTabStyles.ts`, tests; `docs/focus-graph.md` (the Search tab section) | nothing (the store, with a fake); lands before H2 |
+| H2 | The game-tag door: the icon beside the name when mods were seen, the tag a stop in the strip's row (Left and Right with the paperclip, the microphone and Ask), A jumps to the Search tab with the sheet open | ★★★ `[ui]` `[focus]` | Opus 5.5 medium; the advisor before landing; up a tier after two Deck failures with the measurement | `src/features/ask/bar/AskStripGameTag.tsx`, `MainTabUnifiedAskBar.tsx`, `useMainTabAskBarFocus.ts`, new `src/features/mods/modsIcon.tsx`, tests; `docs/focus-graph.md` (the strip section) | H landed (the jump needs the sheet) |
+| F2 | The wiring in the Ask: the look's block stacked with the logs and the cards under one ceiling, the "reading mods" progress phase, the loader-log tails on a troubleshooting question, the game's number from the running game, the question's title or the last game; **the caps only after the gate (§ 15)** | ★★★ `[ask]` | Sonnet 5.5 high | `py_modules/backend/ask/game_ai_request.py`, `py_modules/backend/knowledge/knowledge_base_chips.py` (the stacking function), `py_modules/backend/answer/bonsai_stream_tags.py`, `py_modules/backend/ask/proton_troubleshooting_logs.py`, tests | A, C, D, E landed |
+| J | The preset chip when mods were seen; the hidden mod chips reviewed | ★ `[chips]` | Sonnet 5.5 medium | `src/features/preset-carousel/presets.ts`, tests | F3 landed |
+| P | The PC command: runs the look on a named folder and prints the summary (for the lanes and for a quick check on any machine) | ★ `[platform]` | Sonnet 5.5 medium | new `scripts/mods/look_game_folder.py` | C, D landed |
+| M | Fixtures from the real listings (the PC's Cyberpunk folder and Vortex home; the Deck's after the port; a launcher's list if any) replacing the made-up ones; the recipes flipped to "seen" where the listing confirms them | ★★ `[platform]` | Sonnet 5.5 medium | `tests/fixtures/mods/`, `mod_recipes.py` (the status field only), tests | S run by the maintainer; C, D landed |
+| L | Docs: the "bonsAI will not claim" list in the README, the Permissions section of troubleshooting, the guide's Search tab and Main tab lines | ★ docs | the bookkeeper | the three docs | everything landed |
+| N | Bugs found during the night with a known cause | ★ to ★★ | Sonnet 5.5 high or medium | as found | as found |
+
+**Wave 1** (fourteen at once): K0, R, S, A, A2, B, C, D, E, F1, G, F3, H, then H2 as soon as H lands. **Wave 2:** F2, J,
+P, M. Then the checks (§ 14), then L.
+
+**Where lanes would collide, and how the order avoids it.** Only E touches the transparency file; only F1 the prompt
+files; only F2 the Ask request, the stacking function, the stream tags and the Proton reader; only B the permission
+files; only H the Search tab files and only H2 the strip files; F3 alone touches the game sync hook and `main.py`
+(three methods in one commit; K0 and L never touch code). A, A2, C, D, E each own a new file in the new area, with
+`__init__.py` written by A in its first commit and never edited again. The knowledge-card lane G owns the cards file
+and the router, as plan 100's lane T did.
+
+**Bugs bumped above Sonnet, and why.** H adds a sheet and a row with their own stops inside the hand-written Search
+tab navigation; H2 turns a label into a stop in the strip's row. Both are the kind plan 98 and plan 100 gave to Opus
+medium with the advisor's read before landing; the Deck row is the gate, and a lane that fails on the Deck twice
+moves up one tier with the measurement in hand.
+
+## 13. Before go
+
+**The maintainer, about twenty minutes, on the PC:**
+
+1. Read §§ 8 to 15; send corrections here, or say "Run plan 101" in a new chat on the PC.
+2. **Cyberpunk on the Deck:** copy the game folder from the PC to the Deck or its SD card (Vortex's hard links make the
+   folder self-contained), and the game's settings file into the prefix; start it once so the prefix exists. Note the
+   library root it landed in.
+3. **Which chat holds the Deck.** No other chat may be driving it.
+4. **This PC:** bonsAI in Big Picture Mode as it runs today; Ollama running. Say how a new build reaches the PC's
+   Decky (the session records it in the log, since the repo does not say).
+5. **The usage screen:** read both counters and say them.
+6. **Open a new Fable 5.1 high chat in the desktop app, in the repo folder, on `experimental`,** and say: "Run plan 101."
+
+**The session's first acts (the first thirty minutes), in this order:**
+
+0. `git pull origin experimental`; if this plan and its asset files are not at the tip, stop and say so.
+1. `git status` (other chats' uncommitted files are theirs: never stage them), the tip hash, the tail of the decisions
+   file (this plan's entry is D138; if taken, the next number, said here), `deck_status`. Start the keep-awake script
+   unless in the desktop app.
+2. The baseline: `python scripts/verify.py --full` on the tip, once, in the shared checkout.
+3. Cut the wave 1 copies (`python scripts/worktree.py create p101-<lane> --base experimental`), confirm each sits at the
+   tip, and start the wave 1 helpers two to three minutes apart (§ 12), each with the rules file plus its brief, the
+   tip hash and its copy's path. Start K0 first and land it first. **A ready helper starts at once; holding one back is
+   the maintainer's choice alone** (AGENTS.md).
+4. Hand the maintainer lane S's script as soon as it lands, for the PC run; the Deck run waits for the port.
+5. Ask the advisor consult 1 (the briefs read for contradictions) while wave 1 builds.
+
+## 14. The checks: the Deck in blocks, the PC in Big Picture Mode
+
+Every check is a row in `docs/testing.md` (K0 writes them, status open) with an evidence file `plan101-<ROW>.json`. The
+Deck blocks run through the controller rig by the `deck-driver` helper; the PC block is the maintainer's hands in Big
+Picture Mode with the session reading the plugin's log, since the rig does not reach the PC.
+
+| Block | When | What | Needs |
+|---|---|---|---|
+| M0 | Minute zero, the build already on the Deck | The quick-start smoke pass; the Permissions tab as it is today (the row count before B lands); the Search tab's rows today; the question box's strip today (the game tag is not a stop: P101-STRIP-TODAY) | Cyberpunk copied over and started once |
+| M1 | After the wave 1 landings and one deploy | P101-PERM-01 the switch and its confirm box, off by default, the Kids lock; P101-ICON-01 the icon appears beside the game's name once the look ran with Cyberpunk running, and never with the switch off; P101-TAG-STOP-01 the tag is a stop: Left and Right along the strip, A opens the sheet, B returns to the Main tab with the ring on the tag; P101-SHEET-01 the Mods sheet's rows and groups, the strip's text, Refresh, Ask about my mods fills the box; P101-ROW-01 the Search tab row for the running game and the installed games in the game row; the look check on each screen touched (QA-LOOK-01); the free-play sweep | the new build |
+| M2 | After the wave 2 landings | P101-ANSWER-01 "Why does the frame rate drop in Kabuki market?" names the crowd mods and the crowd setting (Expert); P101-ANSWER-02 "What mods do I have?" lists the manager, the frameworks and the load order (Speed, short); P101-ANSWER-03 "the game crashes since I added a mod" with Cyberpunk not running reads the loaders' logs and names a manager step; P101-STRATEGY-01 a Strategy question with a gameplay mod present gives the vanilla answer first; P101-ANTICHEAT-01 a mods-and-online question gets the rule and no workaround; P101-CHIP-01 the preset chip; P101-DETAILS-01 the Show details chip; P101-NOGAME-01 a game with no recipe and no manager says where it looked; second rounds | the new build; the Deck's AI |
+| W0 (the PC) | After M1, the maintainer's hands | P101-WIN-01 the switch and the icon in Big Picture Mode on the PC; P101-WIN-02 the sheet shows Vortex, 133 mods, the five frameworks, the load order of four, the game on E:; P101-WIN-03 the Kabuki question on the PC's model; the plugin's log for the look's timing and any warning | the build on the PC's Decky |
+| MR | The retry round | every row that failed, after its fix | |
+
+The first runbook, M0, is [assets/101-runbook-block-M0.md](assets/101-runbook-block-M0.md); the session writes M1,
+M2, W0 and MR from the rows above once the builds exist, in plan 100's shape.
+
+## 15. The reading room: a verify gate, not a number
+
+The numbers in § 6 (a 6 KB mod block, the Proton excerpt raised to 8 KB, one 24 KB ceiling) are **the proposal, not the
+call**. Lane F2 builds the block and the stacking against the numbers as constants in one place, then, before changing
+any cap, measures three real prompts on the Deck's model (the Kabuki question, the crash question with the logs, a
+Strategy question) with the mod block on, and writes the sizes in tokens and the room left to the plan's log and the
+chat. **The maintainer confirms the numbers, or gives others, before the caps change.** Until then the Proton cap
+stays 4 KB and the mod block 6 KB. The window itself is not touched (16,384 stays; a bigger one is its own experiment).
+
+## 16. Standing rules, paperwork and the reports
+
+- **Standing rules while nobody is watching** (plan 100's, kept): a fix that fails on the Deck twice moves up one model
+  tier without asking; a new one- or two-star bug gets one helper round of about an hour; anything blocked gets the
+  safest choice at once and is raised in the chat and in § 17 at that moment; never push, publish, merge to main,
+  switch branches in the shared folder, type a PIN or password, reload the plugin with a game running. No new helper
+  past 75 percent of the five-hour window or 90 percent of the week (D128); read both counters at go and say them.
+- **Never a file's contents in the chat or in an evidence file beyond what the look returns;** the snapshot script
+  writes names, sizes and dates only; mod names can be adult, so listings go to the private workshop and nowhere else.
+- **Paperwork:** every landing's docs sweep by the bookkeeper (the roadmap entry, the three launcher entries, the
+  knowledge-base entry, the testing rows with their evidence, the changelog); the session spot-checks every evidence
+  file named.
+- **The report** (plan 100's § 13 shape): what a player notices; the code work by area with file paths; what popped up
+  and how it was handled; what failed and what is left; the numbers (the look's timing on the Deck and the PC, the
+  prompt sizes from § 15, the budget reads); a plain developer guide to the new area; and the maintainer's calls
+  owed (the reading-room numbers, the push, the release note).
+- **The second opinion:** the `advisor` helper at max, at most five consults, each logged in § 17: before go (the briefs
+  read for contradictions), before H and H2 land, after a Deck failure on a second try, before the morning report, and
+  one spare.
+
+## 17. Progress log and questions
+
+- **2026-10-27, cloud planning chat:** the August study checked against the code; rounds 1 to 4 answered in chat; the
+  Cyberpunk setup read from the CyberFixed folder; the mock-up board drawn, published and picked (B, with D, then the
+  game-tag door); decision D138 written up as an asset for the bookkeeper.
+- **2026-10-28, cloud planning chat:** the plan body (§§ 8 to 16), the helper rules, the briefs and check block M0
+  written; three roadmap entries added by the bookkeeper (mod knowledge ★★★; Heroic, Lutris and Windows launchers ★★);
+  the Windows fact recorded (bonsAI runs on the maintainer's PC in Big Picture Mode). Pushed to `experimental` through the
+  GitHub tool, since the push hook stays shut for this chat.
+- **Questions owed to the maintainer at go:** how a new build reaches the PC's Decky; whether Fallout 4 with Mod
+  Organizer 2 is still on the Deck; whether the PC has GOG Galaxy or the Epic Games Launcher; the reading-room numbers
+  when § 15's measurement is in.

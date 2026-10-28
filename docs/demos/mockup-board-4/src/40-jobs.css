@@ -1,0 +1,172 @@
+<style>
+/* ---------- the jobs board: a half-size Deck screen with a plugin notice, the offer and job cards in the chat,
+   the job sheet with its steps, the working line above the chips, tick-off checklists, the guided checklist sheet,
+   and two half-size Desktop Mode drawings. Sizes and colours follow the kit (design-tokens.md, the density board). */
+
+/* a half-size Deck screen (640 by 400 for 1280 by 800): Steam's page for the game, a notice bottom right */
+.j-screen { width: 640px; height: 400px; position: relative; overflow: hidden; background: #0b0f14; font-family: var(--q-font); color: #fff; box-shadow: 0 8px 30px rgba(0,0,0,.45); border-radius: 3px; flex: none; }
+.j-screen * { box-sizing: border-box; }
+.j-sc-top { position: absolute; top: 0; left: 0; right: 0; height: 22px; display: flex; justify-content: flex-end; gap: 14px; align-items: center; padding: 0 14px; font-size: 9px; z-index: 2; }
+.j-sc-hero { position: absolute; inset: 0 0 112px 0; background: radial-gradient(70% 60% at 30% 40%, #5a3a1a, transparent), radial-gradient(50% 50% at 80% 60%, #1c3a52, transparent), linear-gradient(180deg, #1a1208, #0b0f14 95%); }
+.j-sc-title { position: absolute; left: 36px; bottom: 26px; font-size: 26px; font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; color: #f3e600; text-shadow: 0 2px 8px rgba(0,0,0,.6); }
+.j-sc-row { position: absolute; left: 36px; right: 36px; bottom: 54px; display: flex; align-items: center; gap: 18px; }
+.j-sc-play { display: inline-flex; align-items: center; justify-content: center; width: 112px; height: 32px; border-radius: 2px; background: linear-gradient(180deg, #7ad15c, #3f9a2c); color: #fff; font-weight: 800; font-size: 13px; letter-spacing: 0.08em; }
+.j-sc-meta { font-size: 8.5px; line-height: 1.5; color: #b8c2cc; letter-spacing: 0.06em; }
+.j-sc-foot { position: absolute; left: 0; right: 0; bottom: 0; height: 24px; display: flex; gap: 14px; align-items: center; justify-content: flex-end; padding: 0 16px; background: #0b0d10; font-size: 8.5px; font-weight: 700; letter-spacing: 0.04em; }
+.j-sc-foot b { display: inline-flex; width: 12px; height: 12px; border-radius: 50%; align-items: center; justify-content: center; margin-right: 4px; font-size: 7px; }
+.j-sc-foot b.a { background: #2b8a3e; } .j-sc-foot b.b { background: #c0392b; }
+/* the notice, as Decky shows a plugin's: the icon, a bold title, one line under it */
+.j-notice { position: absolute; right: 14px; bottom: 34px; width: 236px; display: flex; gap: 8px; align-items: flex-start; padding: 8px 10px; border-radius: 3px; background: rgba(22,28,36,.97); border: 1px solid rgba(255,255,255,.14); box-shadow: 0 6px 18px rgba(0,0,0,.6); z-index: 3; }
+.j-nicon { flex: none; width: 22px; height: 22px; color: #52d88a; }
+.j-nicon svg { width: 100%; height: 100%; display: block; }
+.j-ntext { font-size: 9.5px; line-height: 1.3; color: #c8d2dc; min-width: 0; }
+.j-ntext b { display: block; color: #fff; font-size: 10px; margin-bottom: 1px; }
+.j-scap { position: absolute; left: 14px; bottom: 34px; font-size: 10px; color: #9fb7d5; font-style: italic; }
+
+/* the screen beside the panel */
+.j-pair { display: flex; gap: 14px; align-items: flex-start; }
+.deck-swap { display: inline-block; }
+
+/* a card in the chat with buttons: the offer, the job card; answer-shaped, in the question box's blue */
+.j-card { margin: 4px 29px 6px 5px; padding: 8px 10px 8px; border-radius: 10px; border: 1px solid rgba(156,231,255,.35); background: #13202a; font-size: 11.5px; line-height: 1.3; color: #dfe6ee; }
+.j-card.warn { border-color: rgba(242,207,132,.45); background: #2a2415; }
+.j-card.ok { border-color: rgba(82,216,138,.4); background: #14241b; }
+.j-ctitle { font-weight: 700; color: #fff; margin-bottom: 3px; font-size: 12px; }
+.j-cline { margin: 0 0 4px; color: #c4d3e2; }
+.j-cline b { color: #fff; }
+.j-cline code { font-family: var(--font-mono); font-size: 10px; color: #c9d6e3; }
+.j-cbtns { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+.j-cbtn { height: 24px; padding: 0 9px; border-radius: 2px; border: 0; background: #32373d; color: #dcdedf; font-size: 11px; white-space: nowrap; }
+.j-cbtn.primary { background: #1a9fff; color: #fff; font-weight: 700; }
+.qam .j-cbtn[data-stop].ring { outline: none; box-shadow: none; background: #fff; color: #0e141b; }
+.k2-answer code { font-family: var(--font-mono); font-size: 10px; color: #ffe9a3; }
+
+/* the job sheet: the steps tick off, Stop at the bottom, B hides it and the job carries on */
+.j-sheet { padding-bottom: 22px; }
+.j-steps { flex: 1 1 auto; overflow-y: auto; padding: 4px 0 8px; scrollbar-width: none; }
+.j-step { display: grid; grid-template-columns: 22px 1fr; gap: 1px 8px; align-items: center; padding: 7px 12px; border-bottom: 1px solid #1b2026; font-size: 12.5px; color: #8b929a; }
+.j-sdot { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #4a5563; display: grid; place-items: center; grid-row: span 2; }
+.j-sdet { grid-column: 2; font-size: 10.5px; color: #6b7c90; }
+.j-sdet:empty { display: none; }
+.j-step.run { color: #fff; }
+.j-step.run .j-sdot { border-color: #9ce7ff; border-top-color: transparent; animation: j-turn .9s linear infinite; }
+.j-step.done { color: #dcdedf; }
+.j-step.done .j-sdot { border-color: #52d88a; background: #52d88a; }
+.j-step.done .j-sdot::after { content: ""; width: 6px; height: 3px; border-left: 2px solid #0e141b; border-bottom: 2px solid #0e141b; transform: rotate(-45deg) translate(1px, -1px); }
+.j-step.done .j-sdet { color: #9fb7d5; }
+.j-step.stopped { color: #fecaca; }
+.j-step.stopped .j-sdot { border-color: #f16a5a; }
+.j-sheetfoot { flex: none; padding: 4px 0 6px; border-top: 1px solid #272c32; }
+@keyframes j-turn { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .j-step.run .j-sdot, .j-spin { animation: none !important; border-top-color: #9ce7ff !important; } }
+
+/* the working line above the chips: bonsAI carries on while you play */
+.j-work { display: flex; align-items: center; gap: 7px; height: 24px; margin: 0 0 2px; padding: 0 8px; border-radius: 4px; background: rgba(156,231,255,.08); border: 1px solid rgba(156,231,255,.25); font-size: 10.5px; color: #c8d2dc; }
+.j-work.wait { background: rgba(242,207,132,.08); border-color: rgba(242,207,132,.3); }
+.j-work.done { background: rgba(82,216,138,.08); border-color: rgba(82,216,138,.35); }
+.j-work.stopped { background: rgba(241,106,90,.08); border-color: rgba(241,106,90,.35); }
+.j-spin { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid #9ce7ff; border-top-color: transparent; animation: j-turn .9s linear infinite; flex: none; }
+.j-work.wait .j-spin { border-color: var(--q-amber); border-top-color: transparent; animation: none; }
+.j-work.done .j-spin, .j-work.stopped .j-spin { animation: none; border-color: #52d88a; background: #52d88a; }
+.j-work.stopped .j-spin { border-color: #f16a5a; background: #f16a5a; }
+.j-wtext { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.j-wbtn { height: 18px; padding: 0 7px; border-radius: 2px; border: 1px solid rgba(156,231,255,.5); background: none; color: #9ce7ff; font-size: 10px; flex: none; }
+.j-wbtn.red { border-color: rgba(248,113,113,.5); color: #fecaca; }
+.qam .j-wbtn[data-stop].ring { outline: 2px solid #fff; outline-offset: 1px; box-shadow: none; }
+
+/* a checklist you tick off: in an answer, or on a sheet */
+.j-chklist { margin: 6px 0 4px; }
+.j-chk { display: flex; align-items: flex-start; gap: 8px; width: 100%; margin: 0; padding: 5px 0; background: none; border: 0; border-bottom: 1px solid rgba(255,255,255,.08); color: #eef1f4; font-size: 11.5px; line-height: 1.3; text-align: left; }
+.j-chk .grow { flex: 1; min-width: 0; }
+.j-chk small { display: block; font-size: 10px; color: #9fb7d5; }
+.j-box { flex: none; width: 15px; height: 15px; margin-top: 1px; border-radius: 3px; border: 1.5px solid #6b7c90; display: grid; place-items: center; color: transparent; }
+.j-box svg { width: 10px; height: 10px; }
+.j-chk.done .j-box { background: #52d88a; border-color: #52d88a; color: #0e141b; }
+.j-chk.done .grow { color: #9fb7d5; text-decoration: line-through; text-decoration-color: rgba(159,183,213,.5); }
+.j-chk.done small { text-decoration: none; }
+.qam .j-chk[data-stop].ring { outline: none; box-shadow: none; background: #32373d; border-radius: 4px; color: #fff; }
+.k2-answer .j-chk { border-bottom-color: rgba(241,196,15,.18); }
+.j-abtns { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.k2-answer .j-cbtn { background: rgba(255,255,255,.12); }
+.j-sheet-chk { padding: 0 12px; }
+.j-sheet-chk .j-chk { border-bottom-color: #1b2026; font-size: 12px; }
+.j-sheet-p { font-size: 11.5px; line-height: 1.35; color: #dcdedf; padding: 6px 12px 2px; }
+.j-sheet-p b { color: #fff; }
+
+/* the guided checklist sheet: numbered dots, bonsAI can check some steps, the ringed step's text in the strip */
+.j-guide { padding-bottom: 22px; }
+.j-gsteps { flex: 1 1 auto; overflow-y: auto; padding: 2px 0 126px; scrollbar-width: none; position: relative; }
+.j-gsteps::-webkit-scrollbar { display: none; }
+.j-gstep { display: grid; grid-template-columns: 24px 1fr auto; gap: 0 8px; align-items: center; width: 100%; min-height: 36px; padding: 5px 12px; background: none; border: 0; border-bottom: 1px solid #1b2026; color: #dcdedf; font-size: 12.5px; text-align: left; line-height: 1.25; }
+.j-gnum { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #4a5563; display: grid; place-items: center; font-size: 9.5px; font-weight: 700; color: #9fb7d5; }
+.j-gstep.done .j-gnum { background: #52d88a; border-color: #52d88a; color: #0e141b; }
+.j-gstep.done .j-gl { color: #9fb7d5; }
+.j-gcan { font-size: 8.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #9fb7d5; border: 1px solid rgba(159,183,213,.4); border-radius: 3px; padding: 1px 4px; white-space: nowrap; }
+.j-gcan.yes { color: #52d88a; border-color: rgba(82,216,138,.5); }
+.qam .j-gstep[data-stop].ring { outline: none; box-shadow: none; background: #32373d; color: #fff; }
+.j-gfoot { position: absolute; left: 0; right: 0; bottom: 22px; z-index: 7; background: #121a23; padding: 4px 0 6px; border-top: 1px solid #272c32; }
+.j-guide .k-strip { bottom: 64px; }
+.j-gprog { font-size: 10px; color: #8b929a; }
+
+/* a settings row that is new */
+.j-newtag { font-style: normal; font-size: 9px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #52d88a; margin-left: 6px; vertical-align: middle; }
+
+/* the mods icon beside the game's name in the question box's strip (plan 101) */
+.j-modsico { width: 11px; height: 11px; color: #52d88a; display: inline-flex; margin-left: 2px; flex: none; }
+.j-modsico svg { width: 11px; height: 11px; display: block; }
+
+/* a half-size Desktop Mode screen: KDE's panel at the bottom, Discover on the left, a second window on the right */
+.j-desk { width: 640px; height: 400px; position: relative; overflow: hidden; border-radius: 3px; background: linear-gradient(160deg, #1a2a44, #0f1a2c 60%, #23173a); font-family: var(--q-font); color: #e8eef5; box-shadow: 0 8px 30px rgba(0,0,0,.45); flex: none; font-size: 9px; }
+.j-desk * { box-sizing: border-box; }
+.j-task { position: absolute; left: 0; right: 0; bottom: 0; height: 22px; background: rgba(20,24,30,.96); border-top: 1px solid rgba(255,255,255,.08); display: flex; align-items: center; gap: 6px; padding: 0 6px; font-size: 8.5px; z-index: 5; }
+.j-tk { height: 16px; padding: 0 7px; display: inline-flex; align-items: center; border-radius: 2px; color: #c8d2dc; background: rgba(255,255,255,.06); }
+.j-tk.logo { width: 18px; padding: 0; background: #3daee9; border-radius: 3px; }
+.j-tk.on { box-shadow: inset 0 -2px 0 #3daee9; background: rgba(255,255,255,.12); }
+.j-tclock { margin-left: auto; color: #c8d2dc; padding-right: 4px; }
+.j-win { position: absolute; top: 10px; background: #1b1e20; border: 1px solid rgba(255,255,255,.12); border-radius: 4px; box-shadow: 0 10px 28px rgba(0,0,0,.6); display: flex; flex-direction: column; overflow: hidden; }
+.j-wtitle { height: 18px; flex: none; display: flex; align-items: center; justify-content: center; gap: 8px; background: #2a2e32; font-size: 8.5px; color: #e8eef5; position: relative; }
+.j-wtitle::before { content: ""; position: absolute; left: 6px; width: 7px; height: 7px; border-radius: 50%; background: #e05c5c; box-shadow: 11px 0 0 #e0b24c, 22px 0 0 #5ccf6a; }
+.j-wtitle .j-url { font-size: 8px; color: #9fb7d5; background: rgba(0,0,0,.3); border-radius: 2px; padding: 1px 6px; }
+.j-discover { left: 10px; width: 300px; height: 356px; }
+.j-wbody { flex: 1; display: flex; min-height: 0; }
+.j-dside { width: 70px; flex: none; background: #232629; display: flex; flex-direction: column; gap: 2px; padding: 8px 6px; font-size: 8.5px; color: #c8d2dc; }
+.j-dside span { padding: 3px 6px; border-radius: 2px; }
+.j-dside span.on { background: #3daee9; color: #fff; }
+.j-dmain { flex: 1; padding: 10px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.j-dapp { display: flex; align-items: center; gap: 8px; }
+.j-dicon { width: 34px; height: 34px; border-radius: 8px; background: linear-gradient(135deg, #2e5bff, #7a2cff); flex: none; }
+.j-dapp b { display: block; font-size: 11px; color: #fff; }
+.j-dapp small { display: block; font-size: 8px; color: #9fb7d5; }
+.j-dinst { margin-left: auto; height: 18px; padding: 0 9px; display: inline-flex; align-items: center; border-radius: 2px; background: #3daee9; color: #fff; font-weight: 700; font-size: 8.5px; flex: none; }
+.j-dshot { height: 92px; border-radius: 3px; background: linear-gradient(135deg, #16213a, #2b1a44); }
+.j-dmain p { margin: 0; font-size: 8.5px; line-height: 1.4; color: #c8d2dc; }
+.j-bpm { left: 322px; width: 308px; height: 356px; background: #0b0f14; }
+.j-bpmbody { flex: 1; position: relative; min-height: 0; background: radial-gradient(70% 60% at 30% 45%, #4a2e16, transparent), #10151c; overflow: hidden; }
+.j-bpmhero { position: absolute; left: 14px; top: 110px; width: 110px; font-size: 13px; font-weight: 900; color: #f3e600; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.1; }
+.j-bpmplay { position: absolute; left: 14px; top: 150px; width: 56px; height: 16px; border-radius: 2px; background: linear-gradient(180deg, #7ad15c, #3f9a2c); font-size: 7px; font-weight: 800; display: grid; place-items: center; letter-spacing: 0.08em; }
+.j-bpmrail { position: absolute; right: 150px; top: 0; bottom: 0; width: 24px; background: #0e141b; border-right: 1px solid #070a0d; }
+.j-bpmqam { position: absolute; right: 0; top: 0; bottom: 0; width: 150px; overflow: hidden; }
+.j-bpmqam > .qam { zoom: 0.5; box-shadow: none; border-left: 0; }
+.j-ff { left: 322px; width: 308px; height: 356px; background: #1c1b22; }
+.j-ffbody { flex: 1; min-height: 0; overflow: hidden; padding: 10px; display: grid; grid-template-rows: auto 1fr auto; gap: 8px; }
+.j-whead { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; color: #fff; }
+.j-whead .j-wlogo { width: 14px; height: 14px; color: #52d88a; display: inline-flex; }
+.j-whead .j-wlogo svg { width: 100%; height: 100%; }
+.j-whead small { margin-left: auto; font-size: 8px; color: #9fb7d5; font-weight: 400; }
+.j-wsteps { display: flex; flex-direction: column; gap: 3px; min-height: 0; overflow: hidden; }
+.j-wstep { display: grid; grid-template-columns: 16px 1fr auto; gap: 6px; align-items: center; padding: 4px 6px; border-radius: 3px; background: rgba(255,255,255,.05); font-size: 9px; color: #e8eef5; }
+.j-wstep .j-gnum { width: 14px; height: 14px; font-size: 8px; }
+.j-wstep.done { color: #9fb7d5; }
+.j-wstep .j-gcan { font-size: 7px; }
+.j-wchat { display: grid; gap: 4px; }
+.j-wq { font-size: 8.5px; color: #dfe6ee; background: rgba(255,255,255,.08); border-radius: 3px; padding: 4px 6px; justify-self: end; }
+.j-wa { font-size: 8.5px; line-height: 1.35; color: #eef1f4; background: #39351b; border: 1px solid rgba(241,196,15,.42); border-radius: 4px; padding: 5px 7px; }
+.j-wbox { height: 20px; border-radius: 3px; border: 1px solid rgba(255,255,255,.14); background: #131a22; color: rgba(168,180,196,.6); font-size: 8.5px; font-style: italic; display: flex; align-items: center; padding: 0 7px; }
+.j-wbox span { margin-left: auto; color: #d6e0eb; font-style: normal; font-weight: 800; font-variant: small-caps; }
+
+/* captions on the board under a drawing */
+.j-cap { font-size: 13.5px; color: var(--ink-2); margin: 0; }
+.j-cap b { color: var(--ink); }
+.playbar .play.alt { background: var(--board-2); border: 1px solid var(--card-line); }
+.playbar .play.alt:hover { background: var(--bark); color: var(--board); }
+</style>

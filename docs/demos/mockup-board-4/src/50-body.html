@@ -1,0 +1,30 @@
+<div class="wrap">
+  <header class="masthead">
+    <div>
+      <h1><span class="sprout">bonsAI</span> jobs board · round 1</h1>
+      <p>bonsAI working on its own, in three situations you raised on 2026-10-28: a game that dies at launch, a longer job while you play (your Cyberpunk mod loadout), and help outside Game Mode (a launcher to set up). Every panel is the plugin at the Deck's real size, in Steam's own font, with the same Cyberpunk 2077 setup as the mods board (133 mods under Vortex). Play with each one like a Deck, then press <b>Like</b> or <b>Not this</b> and leave comments. Claude reads them before the next round.</p>
+    </div>
+    <div class="tools">
+      <div class="zoom" role="group" aria-label="Panel size">
+        <span>Panel size</span>
+        <button type="button" data-z="1" aria-pressed="true">1×</button>
+        <button type="button" data-z="1.5" aria-pressed="false">1.5×</button>
+        <button type="button" data-z="2" aria-pressed="false">2×</button>
+      </div>
+      <div id="save-state" data-state="starting" role="status" aria-live="polite">Connecting…</div>
+    </div>
+    <ul class="keys" aria-label="How to drive a panel">
+      <li>Click a panel to drive it</li>
+      <li><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> D-pad</li>
+      <li><kbd>Enter</kbd> A</li>
+      <li><kbd>Esc</kbd> B</li>
+      <li><kbd>Y</kbd> Y</li>
+      <li>1× is the Deck's real size in its own pixels; the game and desktop screens are half size</li>
+    </ul>
+  </header>
+  <div id="local-warn" role="alert" hidden><b>Your picks are not reaching Claude from here.</b> This view can only keep them in this window, and they are lost when the page reloads. Open the page in your web browser instead, signed in to claude.ai, using the link Claude gave you in chat.</div>
+  <nav class="tabbar" aria-label="Mock-ups">
+    <div role="tablist" id="tablist"></div>
+  </nav>
+  <main id="panels"></main>
+</div>

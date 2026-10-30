@@ -11,9 +11,9 @@ bonsAI lives in the Deck's **Quick Access Menu**, the panel the **`...`** button
 mid-game, ask how to beat a boss or why the game stutters and keep playing.
 
 <p align="center">
-  <img src="assets/readme/top-answer.png" alt="bonsAI's Main tab on a Steam Deck, answering a question about the game" width="300">
+  <img src="assets/readme/top-answer.png" alt="bonsAI's Main tab on a Steam Deck, answering how to beat a Hollow Knight boss" width="300">
   &nbsp;
-  <img src="assets/readme/top-details.png" alt="Show details under an answer: the model that wrote it and the notes it used" width="300">
+  <img src="assets/readme/top-details.png" alt="Show details under that answer: the wiki note it used and what was behind it" width="300">
 </p>
 
 <!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
@@ -46,7 +46,8 @@ tap them.
 
 ## What it does
 
-Every clip is filmed on a Steam Deck in real time, most with the AI on a PC at home.
+Every clip is filmed on a Steam Deck, most with the AI on a PC at home. Waiting is cut out and
+each cut fades to black; nothing is sped up.
 
 <dl><dd>
 
@@ -58,7 +59,7 @@ Ask about a boss, a level or a puzzle, by typing or with a suggestion chip. Pick
 for a quick reply, **Strategy** for coaching, **Expert** for the most detail. Switch on **Thinking**
 to watch the steps.
 
-https://github.com/user-attachments/assets/4362ec0e-81c2-4f33-8aee-d6235e1850ae
+<img src="assets/readme/ask-about-your-game.gif" alt="Picking Strategy, asking about a boss, the answer and its reasoning, then picking where you are and ticking a step" width="360">
 
 </details>
 
@@ -69,7 +70,7 @@ https://github.com/user-attachments/assets/4362ec0e-81c2-4f33-8aee-d6235e1850ae
 The knowledge library is a one-time download. An answer that uses a note says where it came from,
 and you can open the note under the answer.
 
-<img src="assets/readme/wiki-notes.webp" alt="A Speed answer from the AI on the Deck that uses a wiki note, then the note opening under the answer" width="360">
+<img src="assets/readme/wiki-notes.gif" alt="A Speed answer from the AI on the Deck that uses a wiki note, then the note opening under the answer" width="360">
 
 *With the AI on the Deck itself.*
 
@@ -82,7 +83,7 @@ and you can open the note under the answer.
 Say something like "no spoilers for later biomes" and a card offers to keep it, for this game or
 every game. Later answers say **Read 1 of your notes**; press it to see, switch off or remove a note.
 
-https://github.com/user-attachments/assets/29bc4144-c81b-44eb-aaff-c51d0f2c2ce0
+<img src="assets/readme/your-notes.gif" alt="Keeping a line as a note, then a later answer that read it and the list of your notes" width="640">
 
 </details>
 
@@ -93,7 +94,7 @@ https://github.com/user-attachments/assets/29bc4144-c81b-44eb-aaff-c51d0f2c2ce0
 In Strategy mode, anything that looks like a spoiler is covered; press **A** to open it. It's
 best-effort and can miss things.
 
-<img src="assets/readme/spoiler.webp" alt="A spoiler in a Strategy answer, covered until it is opened" width="360">
+<img src="assets/readme/spoiler.gif" alt="A spoiler in a Strategy answer, covered until it is opened" width="360">
 
 </details>
 
@@ -103,7 +104,7 @@ best-effort and can miss things.
 
 Tick off steps as you go. Progress is saved for each game.
 
-<img src="assets/readme/strategy-checklist.webp" alt="Picking where you are in the game, then the checklist of steps arriving" width="360">
+<img src="assets/readme/strategy-checklist.gif" alt="Picking where you are in the game, then the checklist of steps arriving" width="360">
 
 </details>
 
@@ -115,7 +116,7 @@ Press the paperclip and pick **Close menu & take screenshot**. Reopen the menu, 
 again and pick **Attach recent screenshot**. This needs a model that can see pictures; the starter
 model can.
 
-https://github.com/user-attachments/assets/77b1c3d5-3eb8-400e-ae54-60f9aa8fd74e
+<img src="assets/readme/ask-about-a-screenshot.gif" alt="Taking a screenshot from the paperclip menu, attaching it and asking what is on screen" width="640">
 
 </details>
 
@@ -125,7 +126,7 @@ https://github.com/user-attachments/assets/77b1c3d5-3eb8-400e-ae54-60f9aa8fd74e
 
 The Search tab sits left of Main. Type "brightness" and jump straight to that Steam setting.
 
-https://github.com/user-attachments/assets/1893bbff-c925-4961-b892-8089ad5fd1b4
+<img src="assets/readme/search.gif" alt="Typing brightness on the Search tab, opening a chat it found, then jumping to the Steam brightness setting" width="640">
 
 </details>
 
@@ -136,7 +137,7 @@ https://github.com/user-attachments/assets/1893bbff-c925-4961-b892-8089ad5fd1b4
 The answer keeps going in the background. The **Reply ready** popup shows its first lines, and the
 full answer waits in the chat.
 
-https://github.com/user-attachments/assets/dddd7b9c-7ac2-4901-bf5c-46dc0c87f031
+<img src="assets/readme/reply-ready.gif" alt="Asking, closing the menu, then the Reply ready popup showing the answer's first lines over the game" width="640">
 
 </details>
 
@@ -147,7 +148,7 @@ https://github.com/user-attachments/assets/dddd7b9c-7ac2-4901-bf5c-46dc0c87f031
 At ten, **New chat** asks which one to delete first. Long chats are summed up so the older part
 isn't forgotten.
 
-https://github.com/user-attachments/assets/70d1236e-968c-49a6-8af8-8eb7d65caa85
+<img src="assets/readme/saved-chats.gif" alt="Flipping between saved chats with the triggers, then New chat asking which chat to delete" width="640">
 
 </details>
 
@@ -158,7 +159,7 @@ https://github.com/user-attachments/assets/70d1236e-968c-49a6-8af8-8eb7d65caa85
 Words appear as you talk. When you stop, bonsAI tidies the text in a couple of seconds, then
 deletes the recording.
 
-<img src="assets/readme/talk.webp" alt="Pressing the mic button, the first word appearing, then the tidied text after Stop" width="360">
+<img src="assets/readme/talk.gif" alt="Pressing the mic button, the first word appearing, then the tidied text after Stop" width="360">
 
 *With a computer voice played into the Deck.*
 
@@ -171,7 +172,7 @@ deletes the recording.
 Press **Show details** under any answer. Its **Session** tab holds the chat's history and **Sum up
 this chat**.
 
-<img src="assets/readme/show-details.webp" alt="Opening Show details under an answer, then the Session tab" width="360">
+<img src="assets/readme/show-details.gif" alt="Opening Show details under an answer, then the Session tab" width="360">
 
 </details>
 
@@ -218,7 +219,7 @@ model. You install it from this page instead. It takes a few minutes.
 
 The first time bonsAI opens, two popups walk you through it:
 
-<img src="assets/readme/first-run.webp" alt="The first time bonsAI opens: the beta notice, the Where should the AI run? popup with its PC option, then Install Ollama and the box that turns on downloads for the starter models" width="600">
+<img src="assets/readme/first-run.gif" alt="The first time bonsAI opens: the beta notice, the Where should the AI run? popup with its PC option, then Install Ollama and the box that turns on downloads for the starter models" width="600">
 
 *Filmed in real time on a Steam Deck, with two pauses cut out.*
 

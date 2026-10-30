@@ -59,7 +59,7 @@ Ask about a boss, a level or a puzzle, by typing or with a suggestion chip. Pick
 for a quick reply, **Strategy** for coaching, **Expert** for the most detail. Switch on **Thinking**
 to watch the steps.
 
-<img src="assets/readme/ask-about-your-game.gif" alt="Picking Strategy, asking about a boss, the answer and its reasoning, then picking where you are and ticking a step" width="360">
+<img src="assets/readme/ask-about-your-game.gif" alt="Picking a mode, asking about a boss, the thinking steps and the answer streaming in, then keeping a note and scrolling back to the answer" width="360">
 
 </details>
 

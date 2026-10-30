@@ -3,7 +3,7 @@
  * Purpose: Pin the fix for the roadmap bug "Show details' chip ladder hides under the question box"
  *          (plan64-DETAILS-LADDER-01-try2.json: the ringed ladder read 33% to 67% visible at several
  *          steps) and the same sighting in plan 72 free play (plan72-Z-FREEPLAY.json finding 1: the
- *          ladder's bottom at 652 against a dock top of 586, 67% visible, on "Chip 6 of 6").
+ *          ladder's bottom at 652 against a dock top of 586, 67% visible, on "Behind this answer · 6 of 6").
  * Used for: ContextChipLadder.tsx, using chipLadderPlacement.ts.
  * Solves: Stepping between its chips changes what the ladder shows (the open chip's details
  *         grow or shrink underneath) with no focus event on the ladder for the dock lift to

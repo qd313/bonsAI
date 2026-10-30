@@ -348,7 +348,7 @@ export function ContextChipLadder({
           marginBottom: 6,
         }}
       >
-        Chip {drawnOrder.indexOf(safeIndex) + 1} of {chips.length}
+        Behind this answer · {drawnOrder.indexOf(safeIndex) + 1} of {chips.length}
       </div>
       <div
         className="bonsai-chip-ladder-grid"

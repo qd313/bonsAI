@@ -10,7 +10,7 @@
  * Solves: Walks the panel the way Steam does: each press calls the move handler of the element that
  *         holds focus right now, and nothing else. At every landing in the ladder the element
  *         holding focus must be one chip (so the ring's box is that chip's box), the chip the
- *         "Chip N of 7" label names, never the ladder or anything holding the open chip's panel.
+ *         "Behind this answer · N of 7" label names, never the ladder or anything holding the open chip's panel.
  *         The walk is bounded and no stop may come round twice.
  * Does not: Model Steam's scroll-into-view (deckAnswerWalk.ts): every press here is claimed by an
  *           explicit move handler, so where the panel scrolls cannot change which element takes
@@ -149,7 +149,7 @@ function ladderLandingProblems(container: HTMLElement, ring: Element | null): st
   if (ring.children.length > 0 || !LABELS.includes(ring.textContent ?? "")) {
     problems.push(`the focused chip holds more than its label: "${ring.textContent}"`);
   }
-  const counter = /Chip (\d+) of 7/.exec(ladder.textContent ?? "");
+  const counter = /Behind this answer · (\d+) of 7/.exec(ladder.textContent ?? "");
   const named = counter ? LABELS[Number(counter[1]) - 1] : undefined;
   if (named !== ring.textContent) problems.push(`label names ${named}, ring on ${ring.textContent}`);
   if (!ring.classList.contains("bonsai-chip-ladder-chip--active")) problems.push("ring chip is not the open chip");

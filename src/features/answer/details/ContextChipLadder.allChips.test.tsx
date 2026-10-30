@@ -8,7 +8,7 @@
  * Used for: ContextChipLadder.tsx.
  * Solves: "We should have all of the chips visible, not just 3 or 4." Counts what is drawn on
  *         screen after every step of a walk over nine chips (more than the old limit of six), reads
- *         each chip's own opacity, font size and weight, and checks the "Chip N of M" caption.
+ *         each chip's own opacity, font size and weight, and checks the "Behind this answer · N of M" caption.
  * Does not: Measure positions (ContextChipLadder.stillRow.test.tsx does) or prove the wrap on the
  *           Deck: jsdom has no line breaking, so "the rows do not re-wrap" is checked as "no chip's
  *           size changes and none comes or goes".
@@ -81,7 +81,7 @@ describe("Show details draws every chip, whatever the count", () => {
         `chip ${step + 1} open`,
       ).toEqual(LABELS);
       expect(container.querySelector(".bonsai-chip-ladder")!.textContent).toContain(
-        `Chip ${step + 1} of ${LABELS.length}`,
+        `Behind this answer · ${step + 1} of ${LABELS.length}`,
       );
       if (step < LABELS.length - 1) {
         act(() => {

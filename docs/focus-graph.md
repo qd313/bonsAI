@@ -709,7 +709,7 @@ Code: `ContextChipLadder.tsx` (the moves), `chipLadderGrid.ts` (`packChipRows`, 
 `useChipGridOrder.ts` (measures and packs after every draw).
 
 - **Stops.** One per chip, as since plan 79; the chip holding the ring is the open one, and its details are drawn
-  under the grid. The caption "Chip N of M" counts in drawn order.
+  under the grid. The caption "Behind this answer · N of M" counts in drawn order.
 - **Left and Right** step through the chips in drawn order, row after row: Right at a row's last chip goes to the
   next row's first chip, Left at a row's first chip to the previous row's last chip. Walking Left or Right reaches
   every chip and no press does nothing.

@@ -186,7 +186,7 @@ function walk(m: ReturnType<typeof mount>, dir: Dir, limit = 12) {
       if (stops.includes(name)) problems.push(`press ${i}: ${name} visited twice`);
       stops.push(name);
       if (!m.ladder.contains(ring)) break;
-      const caption = /Chip (\d+) of 8/.exec(m.ladder.textContent ?? "");
+      const caption = /Behind this answer · (\d+) of 8/.exec(m.ladder.textContent ?? "");
       if (!ring?.classList.contains("bonsai-chip-ladder-chip--active")) problems.push(`press ${i}: ${name} is not the open chip`);
       if (!caption) problems.push(`press ${i}: no caption`);
     }
@@ -215,7 +215,7 @@ describe("the chips are packed into rows that fit the column", () => {
     const tops = LABELS.map((l) => scene.chipBox(l).top);
     expect(new Set(tops).size).toBe(5);
     for (const l of LABELS) expect(scene.chipBox(l).right).toBeLessThanOrEqual(288);
-    expect(ladder.textContent).toContain("Chip 1 of 8");
+    expect(ladder.textContent).toContain("Behind this answer · 1 of 8");
   });
 });
 
@@ -266,7 +266,7 @@ describe("the caption counts chips in drawn order", () => {
     const m = mount();
     arriveOn(m.scene, m.ladder, LABELS[0]!);
     for (let n = 1; n <= 8; n += 1) {
-      expect(m.ladder.textContent).toContain(`Chip ${n} of 8`);
+      expect(m.ladder.textContent).toContain(`Behind this answer · ${n} of 8`);
       expect(document.activeElement?.textContent).toBe(LABELS[n - 1]);
       if (n < 8) press(m.scene, "Right");
     }

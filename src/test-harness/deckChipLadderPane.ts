@@ -23,7 +23,7 @@
 import { liftForFocus } from "../shared/dpad/useDockClearanceOnFocus";
 import { steamGlide, steamScrollIntoView, type SteamScrollRule } from "./deckAnswerWalk";
 
-/** The caption ("Chip N of M", 14.8 tall) and its 6 px margin above the grid. */
+/** The caption ("Behind this answer · N of M", 14.8 tall) and its 6 px margin above the grid. */
 const CAPTION_PX = 20.8;
 /** The gap between chips across and down, and between the grid and the details box. */
 const CHIP_GAP = 6;

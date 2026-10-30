@@ -321,7 +321,7 @@ export function SessionContextTabBody({
           /*
            * The ladder is the last thing in the tab now that Clear is gone. Down past it used to
            * stay put (plan 68 § 6: Steam's own guess once threw the ring into the dock), and that
-           * was a trap: on the Deck, seven Downs and a Right left the ring on "Chip 6 of 6" with
+           * was a trap: on the Deck, seven Downs and a Right left the ring on "Behind this answer · 6 of 6" with
            * the question box unreachable except by B (plan 70 flow L6; plan 72 free play,
            * plan72-Z-FREEPLAY.json finding 1). It now leaves the panel by name.
            */

@@ -3,7 +3,7 @@
  * Purpose: Pin the fix for the roadmap bug "In Show details' Session tab, Down from the last chip of
  *          the chip ladder does not move the ring" (plan 70 flow L6; measured again in plan 72 free
  *          play, workshop:test-evidence/plan72-Z-FREEPLAY.json finding 1: seven Downs and a Right left
- *          the ring on "Chip 6 of 6", with the question box unreachable except by B).
+ *          the ring on "Behind this answer · 6 of 6", with the question box unreachable except by B).
  * Used for: buildDetailsPanelElement.tsx and SessionContextStrip.tsx, rendered for real inside
  *           MainTabChatTranscript.
  * Solves: The ladder's last Down used to be swallowed on purpose. It now hands the ring on through
@@ -136,10 +136,10 @@ describe("the Session tab's chip ladder: Down off the last chip", () => {
     const input = navNode("unified-input");
     const { container } = renderTranscript();
     openSessionTabLadder(container);
-    expect(counter(container)).toContain("Chip 1 of 2");
+    expect(counter(container)).toContain("Behind this answer · 1 of 2");
 
     expect(press("onMoveDown")).toBe(true);
-    expect(counter(container)).toContain("Chip 2 of 2");
+    expect(counter(container)).toContain("Behind this answer · 2 of 2");
     expect(presets).not.toHaveBeenCalled();
 
     expect(press("onMoveDown")).toBe(true);
@@ -182,9 +182,9 @@ describe("the Session tab's chip ladder: Down off the last chip", () => {
     const { container } = renderTranscript();
     openSessionTabLadder(container);
     press("onMoveDown");
-    expect(counter(container)).toContain("Chip 2 of 2");
+    expect(counter(container)).toContain("Behind this answer · 2 of 2");
     expect(press("onMoveUp")).toBe(true);
-    expect(counter(container)).toContain("Chip 1 of 2");
+    expect(counter(container)).toContain("Behind this answer · 1 of 2");
     expect(press("onMoveUp")).toBe(true);
     expect(document.activeElement?.classList.contains("bonsai-details-session-row")).toBe(true);
   });

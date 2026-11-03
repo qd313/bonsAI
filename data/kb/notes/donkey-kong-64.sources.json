@@ -475,6 +475,181 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2009,
+      "name": "Crystal Coconut",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Crystal_Coconut",
+      "main_revision": "5425695",
+      "lines": [
+        {
+          "line": "Summary: A collectable that fuels each Kong's barrel ability. They are fairly common in most levels, especially where an ability is needed.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Crystal_Coconut",
+              "revision": "5425695",
+              "quoted": [
+                "Crystal Coconuts are used as fuel for each Kong's Kong Barrel ability",
+                "They are semi-common items that appear in most levels, especially in areas requiring the Kongs to use their ability."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: The coconuts become active once a Kong learns their ability at Cranky's Lab. Strong Kong makes Donkey Kong invincible and lets him cross quicksand and lava, but it ends when the coconuts run out or he uses a Bananaport Pad, and Lanky's OrangSprint burns more coconuts the longer he runs.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Crystal_Coconut",
+              "revision": "5425695",
+              "quoted": [
+                "When a Kong learns their ability from Cranky's Lab, the Crystal Coconuts become activated."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Strong_Kong",
+              "revision": "5523267",
+              "quoted": [
+                "Donkey Kong cannot be damaged in his Strong Kong form, also allowing him to move across surfaces such as quicksand and lava.",
+                "Strong Kong is powered by Crystal Coconuts, so if Donkey Kong runs out of Crystal Coconuts, the ability wears off.",
+                "Donkey Kong also loses the power if he uses a Bananaport Pad."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/OrangStand_Sprint",
+              "revision": "5367563",
+              "quoted": [
+                "The longer Lanky performs the OrangSprint, the more Crystal Coconuts he will use up."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A Kong starts able to carry 20, and each Banana Fairy you catch adds one, up to 40 with all 20 fairies. Catching every fairy also unlocks a cheat in the Mystery menu for unlimited coconuts.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Crystal_Coconut",
+              "revision": "5425695",
+              "quoted": [
+                "At first, the Kongs can only carry up to 20 Crystal Coconuts, though for each Banana Fairy captured, one more gets added to their maximum. By capturing all 20 Banana Fairies, the Kongs can carry up to 40 Crystal Coconuts",
+                "Capturing every Banana Fairy unlocks a cheat from the Mystery menu that allows for infinite Crystal Coconuts to be used"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2010,
+      "name": "Banana Medal",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Banana_Medal",
+      "main_revision": "5407342",
+      "lines": [
+        {
+          "line": "Summary: A brown medal with a banana in the middle, earned by collecting 75 bananas of your own colour in a level.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Banana_Medal",
+              "revision": "5407342",
+              "quoted": [
+                "They are brown medals with a banana spinning in their centers.",
+                "A Kong can obtain a Banana Medal by collecting 75 bananas of their corresponding color in a level."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: There are 40 in all, eight for each Kong, and having 15 lets you play Jetpac in Cranky's Lab. Every medal is needed for 101 percent.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Banana_Medal",
+              "revision": "5407342",
+              "quoted": [
+                "There is a total of 40 Banana Medals, with eight for each Kong to obtain.",
+                "If the Kongs have at least 15 Banana Medals, the Kongs can play a classic Rareware title from Cranky's Lab, Jetpac.",
+                "Every Banana Medal is required for 101% completion."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In Hideout Helm a Kong earns a medal by finishing two Bonus Barrel challenges instead. The five medals there are lost for good if you leave their rooms without collecting them, which ends any chance of 101 percent.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Banana_Medal",
+              "revision": "5407342",
+              "quoted": [
+                "In the final level, Hideout Helm, the criterion for obtaining a Banana Medal is different, as each Kong can obtain one after completing two Bonus Barrel challenges.",
+                "The five that appear, however, become permanently unobtainable if the Kongs leave the rooms without collecting them, preventing the player from achieving 101% completion."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2011,
+      "name": "Kong weapons (Funky's Store)",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Funky%27s_Store",
+      "main_revision": "5405606",
+      "lines": [
+        {
+          "line": "Summary: Each Kong buys a personal weapon from Funky Kong for three Banana Bunch Coins: the Coconut Shooter for Donkey, Peanut Popguns for Diddy, the Grape Shooter for Lanky, the Feather Bow for Tiny and the Pineapple Launcher for Chunky.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Funky%27s_Store",
+              "revision": "5405606",
+              "quoted": [
+                "Funky sells a weapon to the active Kong if they pay three Banana Bunch Coins:",
+                "Donkey Kong: Coconut Shooter",
+                "Diddy Kong: Peanut Popguns",
+                "Lanky Kong: Grape Shooter",
+                "Tiny Kong: Feather Bow",
+                "Chunky Kong: Pineapple Launcher"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: A weapon has limited ammo. Donkey's Coconut Shooter shoots Banana Balloons, hits Coconut Switches and snipes enemies from afar, and a Supply Crate gives it five coconuts. Funky's Store, in every level except Hideout Helm, refills any Kong's ammo.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Coconut_Shooter",
+              "revision": "5509544",
+              "quoted": [
+                "The Coconut Shooter has a limited supply of coconut ammo, which Donkey Kong can use to shoot Banana Balloons, hit Coconut Switches, and snipe enemies from afar.",
+                "Supply Crates (each providing five coconuts)"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Funky%27s_Store",
+              "revision": "5405606",
+              "quoted": [
+                "The Kongs can also visit Funky's Store to have their ammo supply replenished if it is below the maximum amount.",
+                "Funky's Store appears in every level except Hideout Helm."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Every weapon holds up to 50 ammo at first. Ammo Belt 1 (3 coins, from Frantic Factory) raises that to 100, Homing Ammo (5, from Fungi Forest) makes shots home in on enemies, Ammo Belt 2 (5, from Crystal Caves) raises it to 200, and the Sniper Scope (7, from Creepy Castle) lets shots go farther in first-person view.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Funky%27s_Store",
+              "revision": "5405606",
+              "quoted": [
+                "By default, every Kong's weapon only carries up to 50 ammo.",
+                "Ammo Belt 1 || 3 Banana Bunch Coins || Increases the maximum capacity of the Kongs' weapons to 100 ammo, and increases their orange capacity from 20 to 25. || Frantic Factory",
+                "Homing Ammo || 5 Banana Bunch Coins || Allows the Kongs to use homing ammo, which causes their shots to home in on enemies.",
+                "|| Fungi Forest || Ammo Belt 2 || 5 Banana Bunch Coins || Increases the maximum capacity of the Kongs' weapons to 200 ammo, and their orange capacity to 30. || Crystal Caves",
+                "Sniper Scope || 7 Banana Bunch Coins || Allows the Kongs to shoot ammo farther while in a first-person view. || Creepy Castle"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

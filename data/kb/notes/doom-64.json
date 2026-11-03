@@ -100,6 +100,39 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "552758",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1909,
+      "game_id": 17,
+      "section_type": "item",
+      "name": "Chainsaw",
+      "card": "Summary: A melee weapon that saws anything in reach, roughly a quadruple-speed fist, and it uses no ammo. The Doom 64 version has two blades and the letters U.A.C. engraved on top, and does roughly double the damage of the PC one.\nUses: Best against demons and spectres, which you can usually kill without taking damage, and fairly effective against cacodemons and imps. Its rapid fire works well on enemies that flinch easily, because it keeps them from hitting back. It is ineffective against Hell knights and other demons with powerful attacks and low pain chance.\nTips: Its reach is only 65 map units, barely more than a fist's 64, so you have to be right on top of the target. Against a pack of demons, back into a corner and saw them down one by one. In open areas with several enemies it is a liability, because it kills more slowly than a berserk fist.",
+      "source_url": "https://doomwiki.org/wiki/Chainsaw",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "582648",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1910,
+      "game_id": 17,
+      "section_type": "item",
+      "name": "BFG9000",
+      "card": "Summary: The ultimate weapon: it fires a big ball of green plasma that can destroy nearly any monster in one shot and spreads damage over a wide area. In Doom 64 it has a darker colour scheme and first turns up in MAP10: The Bleeding.\nUses: Good for clearing a room. The plasma ball explodes where it hits, and a moment later invisible rays fan out in a cone from you and hurt what they hit. Even cyberdemons, which are immune to blast damage, are hurt by those rays.\nTips: It does not fire the instant you pull the trigger: in Doom 64 there is a wait of exactly one second before the ball leaves, and the rays follow about half a second after it hits. The rays go in the direction the ball was fired even if you turn, so keep facing your target. A shot takes 40 cells, and a BFG you pick up holds 40.",
+      "source_url": "https://doomwiki.org/wiki/BFG9000",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "582641",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1911,
+      "game_id": 17,
+      "section_type": "item",
+      "name": "Megasphere",
+      "card": "Summary: A gray-brown orb that sets both your health and your armour to 200 percent; the armour is the same as blue armour. In Doom 64 it shows a helmet like the player's instead of a demonic face.\nUses: One pickup tops up both health and armour at once. It counts in the items percentage shown at the end of each level.\nTips: The first one in Doom 64 is in MAP06: Alpha Quadrant, and the game holds nine or ten of them, depending on the skill level.",
+      "source_url": "https://doomwiki.org/wiki/Megasphere",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "543189",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

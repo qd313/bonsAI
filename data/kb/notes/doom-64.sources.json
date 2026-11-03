@@ -544,6 +544,168 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1909,
+      "name": "Chainsaw",
+      "kind": "item",
+      "main_page": "https://doomwiki.org/wiki/Chainsaw",
+      "main_revision": "582648",
+      "lines": [
+        {
+          "line": "Summary: A melee weapon that saws anything in reach, roughly a quadruple-speed fist, and it uses no ammo. The Doom 64 version has two blades and the letters U.A.C. engraved on top, and does roughly double the damage of the PC one.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Chainsaw",
+              "revision": "582648",
+              "quoted": [
+                "The chainsaw mutilates enemies close enough to contact.",
+                "it is roughly a quadruple-speed fist.",
+                "The saw has two blades instead of one and the letters \"U.A.C.\" are engraved on top of the weapon. The damage inflicted by this version of the weapon is roughly doubled"
+              ]
+            },
+            {
+              "page": "https://doomwiki.org/wiki/Demon",
+              "revision": "552758",
+              "quoted": [
+                "the chainsaw does not use up any ammunition."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Best against demons and spectres, which you can usually kill without taking damage, and fairly effective against cacodemons and imps. Its rapid fire works well on enemies that flinch easily, because it keeps them from hitting back. It is ineffective against Hell knights and other demons with powerful attacks and low pain chance.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Chainsaw",
+              "revision": "582648",
+              "quoted": [
+                "It is most effective against demons and spectres, since the player can usually kill them without taking damage.",
+                "It can also be used fairly effectively against cacodemons, pain elementals, lost souls, and imps.",
+                "works well on enemies with high pain chance, minimizing damage to the player in melee situations.",
+                "It is ineffective against Hell knights and other demons with powerful attacks and low pain chance."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its reach is only 65 map units, barely more than a fist's 64, so you have to be right on top of the target. Against a pack of demons, back into a corner and saw them down one by one. In open areas with several enemies it is a liability, because it kills more slowly than a berserk fist.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Chainsaw",
+              "revision": "582648",
+              "quoted": [
+                "The chainsaw has a range of 65 map units, slightly larger than the fist's 64 units.",
+                "Expert players confronted by a pack of demons and spectres back into a corner and chainsaw them down one by one",
+                "The chainsaw's disadvantage is its slow killing speed compared to the berserk fist, which becomes a liability when facing multiple enemies in open areas."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1910,
+      "name": "BFG9000",
+      "kind": "item",
+      "main_page": "https://doomwiki.org/wiki/BFG9000",
+      "main_revision": "582641",
+      "lines": [
+        {
+          "line": "Summary: The ultimate weapon: it fires a big ball of green plasma that can destroy nearly any monster in one shot and spreads damage over a wide area. In Doom 64 it has a darker colour scheme and first turns up in MAP10: The Bleeding.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/BFG9000",
+              "revision": "582641",
+              "quoted": [
+                "it is capable of destroying nearly any player or monster with a single shot, and can disperse damage over a wide area to multiple targets simultaneously.",
+                "fires large spheres of green plasma.",
+                "in Doom 64, where it is given a new look with a darker color scheme, it is first introduced in MAP10: The Bleeding."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Good for clearing a room. The plasma ball explodes where it hits, and a moment later invisible rays fan out in a cone from you and hurt what they hit. Even cyberdemons, which are immune to blast damage, are hurt by those rays.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/BFG9000",
+              "revision": "582641",
+              "quoted": [
+                "Great for clearing the room of those unwelcome guests.",
+                "If this plasma ball hits a solid object, it explodes and randomly deals between 100 and 800 hit points of damage to the target",
+                "40 invisible tracer rays are emitted from the player in a cone-shaped volume",
+                "Even cyberdemons and spiderdemons, which are immune to blast damage, are affected by these rays.",
+                "The damage calculations are mostly the same as in Doom and Doom II"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It does not fire the instant you pull the trigger: in Doom 64 there is a wait of exactly one second before the ball leaves, and the rays follow about half a second after it hits. The rays go in the direction the ball was fired even if you turn, so keep facing your target. A shot takes 40 cells, and a BFG you pick up holds 40.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/BFG9000",
+              "revision": "582641",
+              "quoted": [
+                "the slower tic rate causes the weapon to wait exactly 1 second before firing the projectile.",
+                "The tracer spray attack upon detonation takes 14 tics to be called instead of 16, which translates to roughly 0.466 seconds.",
+                "If the player has turned around, the direction of the rays does not change",
+                "When picked up, the BFG contains 40 energy cell units",
+                "It expends 40 energy cell units per shot."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1911,
+      "name": "Megasphere",
+      "kind": "item",
+      "main_page": "https://doomwiki.org/wiki/Megasphere",
+      "main_revision": "543189",
+      "lines": [
+        {
+          "line": "Summary: A gray-brown orb that sets both your health and your armour to 200 percent; the armour is the same as blue armour. In Doom 64 it shows a helmet like the player's instead of a demonic face.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Megasphere",
+              "revision": "543189",
+              "quoted": [
+                "Picking it up maxes out both the player's health and armor to 200%. The armor given by a megasphere is equivalent to blue armor.",
+                "though in Doom 64 they display a helmet similar to the player's"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: One pickup tops up both health and armour at once. It counts in the items percentage shown at the end of each level.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Megasphere",
+              "revision": "543189",
+              "quoted": [
+                "Picking it up maxes out both the player's health and armor to 200%.",
+                "Megaspheres are included in the items percentage displayed at the end of each level."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The first one in Doom 64 is in MAP06: Alpha Quadrant, and the game holds nine or ten of them, depending on the skill level.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Megasphere",
+              "revision": "543189",
+              "quoted": [
+                "|| Doom 64 || MAP06: Alpha Quadrant || MAP06: Alpha Quadrant || MAP06: Alpha Quadrant",
+                "|| Doom 64 || 10 || 9 || 9"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

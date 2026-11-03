@@ -312,26 +312,24 @@ class CompatTopicRouterTests(unittest.TestCase):
             [
                 "V2-BLIND-H19",
                 "V2-BLIND-H55",
-                # The wave-two blind batch, with a game running. Seventeen of its twenty-four rows
+                # The wave-two blind batch, with a game running. Nineteen of its twenty-four rows
                 # reach (plan 100 lane T added the plain words for black screens, no-space
                 # messages, sound on the TV and menus on a TV: SYM-05, -06, -12, -14 and -23 now
                 # reach, on top of -08, -11, -13, -15, -17, -18, -21 and -24; lane M1 then made the
-                # four crash sentences, SYM-01 to -04, route with a game in context too).
+                # four crash sentences, SYM-01 to -04, route with a game in context too; plan 102
+                # lane H added the words for finding the PC: SYM-19 and -20 now reach).
                 "V2-W2-SYM-07",
                 "V2-W2-SYM-09",
                 "V2-W2-SYM-10",
                 "V2-W2-SYM-16",
-                "V2-W2-SYM-19",
-                "V2-W2-SYM-20",
                 "V2-W2-SYM-22",
             ],
         )
 
         # With nothing running -- the Deck check -- the weak "crash" topic routes alone, and the
-        # four crash sentences now reach with a game running as well, so both modes read seventeen
-        # of the twenty-four. The seven that miss are
-        # choppy/laggy (-07), buttons (-09, -10), the picture ripping (-16), finding the PC
-        # (-19, -20; no Deck tip exists for it) and an update that sits there (-22).
+        # four crash sentences now reach with a game running as well, so both modes read nineteen
+        # of the twenty-four. The five that miss are
+        # choppy/laggy (-07), buttons (-09, -10), the picture ripping (-16) and an update that sits there (-22).
         missed_with_nothing_running = [
             q["id"]
             for q in holdout
@@ -346,8 +344,6 @@ class CompatTopicRouterTests(unittest.TestCase):
                 "V2-W2-SYM-09",
                 "V2-W2-SYM-10",
                 "V2-W2-SYM-16",
-                "V2-W2-SYM-19",
-                "V2-W2-SYM-20",
                 "V2-W2-SYM-22",
             ],
         )
@@ -544,11 +540,34 @@ class PlainProblemWordsRouteTests(unittest.TestCase):
             with self.subTest(question=question):
                 self.assertFalse(question_targets_compat_corpus(question, game_in_context=True))
 
-    def test_finding_a_pc_on_the_network_is_not_routed_because_no_tip_answers_it(self):
-        """Tips 110 and 111 are about the Steam Frame. A Deck that cannot find its PC has no tip
-        today, and routing the sentence would hand it the hotel Wi-Fi tip. Add the words with the
-        tip, not before it (see the lane T report for the proposed tip)."""
-        self.assertNotIn("network", match_compat_corpus_topics("cant find my pc on the network"))
+    def test_finding_a_pc_on_the_network_reaches_the_network_tip_with_nothing_running_and_with_a_game(self):
+        """Plan 102 lane H: tip 167 answers a Deck that cannot find its PC, so the words route now.
+
+        The Deck check (P102-FINDPC-01): "cant find my pc on the network" with nothing running
+        reaches the network topic, and so does the same sentence in a chat about a game.
+        """
+        for question in (
+            "cant find my pc on the network",
+            "it won't show my computer in the list even though they're both connected to the same home network",
+            "the deck cannot find my computer",
+            "deck and pc on the same network but it can't find the pc",
+        ):
+            for game in (False, True):
+                with self.subTest(question=question, game_in_context=game):
+                    self.assertIn("network", match_compat_corpus_topics(question))
+                    self.assertTrue(question_targets_compat_corpus(question, game_in_context=game))
+
+    def test_the_new_network_words_do_not_catch_game_questions(self):
+        for question in (
+            "how do I beat the boss",
+            "what should I build first",
+            "thank you very much",
+            "cant find the pcsx2 bios file",
+            "where do I find the best pc build for this class",
+            "who is on the same team as me",
+        ):
+            with self.subTest(question=question):
+                self.assertNotIn("network", match_compat_corpus_topics(question))
 
 
 if __name__ == "__main__":

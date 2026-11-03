@@ -250,9 +250,19 @@ _TOPIC_RULES: dict[str, tuple[tuple[str, ...], ...]] = {
         ("wifi", "cannot see"),
         ("wifi", "cant see"),
         ("wifi", "cant find"),
-        # Plan 100 lane T: no rule for "cant find my pc" / "same network". The tips that answer
-        # it (110 and 111) are about the Steam Frame, not a Deck finding its PC, so a rule would
-        # hand the question the hotel Wi-Fi tip. Add the words in the same commit as a tip for it.
+        # Plan 102 lane H: tip 167 answers a Deck that cannot find its PC. "pc " carries a trailing
+        # space like "lan " above, so "cant find the pcsx2 bios" is not a network question.
+        ("cant find", "pc "),
+        ("cant find", "computer"),
+        ("cannot find", "pc "),
+        ("cannot find", "computer"),
+        ("my computer", "list"),
+        ("same network", "pc "),
+        ("same network", "computer"),
+        ("same network", "deck"),
+        ("same home network", "pc "),
+        ("same home network", "computer"),
+        ("same home network", "deck"),
     ),
     "updates": (
         ("steamos update",),

@@ -230,8 +230,7 @@
               "quoted": [
                 "If the Spiny Shell hits an obstacle, it is destroyed.",
                 "If the Spiny Shell strikes an invincible racer, it gets destroyed without damaging the racer.",
-                "If the leader is invisible, it simply passes through them, though it may then simply make another lap of the course and hit them afterwards.",
-                "there are two sideways Item Boxes that will always contain a Spiny Shell, no matter the player's position. One appears underneath the hot-air balloon in Luigi Raceway, and the second atop the large rock in Koopa Troopa Beach."
+                "If the leader is invisible, it simply passes through them, though it may then simply make another lap of the course and hit them afterwards."
               ]
             }
           ]
@@ -243,9 +242,6 @@
               "page": "https://www.mariowiki.com/Spiny_Shell_(blue)",
               "revision": "5535999",
               "quoted": [
-                "If the Spiny Shell hits an obstacle, it is destroyed.",
-                "If the Spiny Shell strikes an invincible racer, it gets destroyed without damaging the racer.",
-                "If the leader is invisible, it simply passes through them, though it may then simply make another lap of the course and hit them afterwards.",
                 "there are two sideways Item Boxes that will always contain a Spiny Shell, no matter the player's position. One appears underneath the hot-air balloon in Luigi Raceway, and the second atop the large rock in Koopa Troopa Beach."
               ]
             }
@@ -415,33 +411,12 @@
               "quoted": [
                 "If a racer, while using a Super Star, hits a wall or the like in such a way that their character exclaims, the Super Star's effect immediately ends."
               ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Lightning",
-              "revision": "5526797",
-              "quoted": [
-                "Lightning's effect can be avoided if a racer has a Mega Mushroom, Star, Boo, or Bullet Bill item activated when the bolt strikes"
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Spiny_Shell_(blue)",
-              "revision": "5535999",
-              "quoted": [
-                "If the Spiny Shell strikes an invincible racer, it gets destroyed without damaging the racer."
-              ]
             }
           ]
         },
         {
           "line": "Tips: A Star that is running when Lightning strikes keeps you from shrinking, and a Star destroys a Spiny Shell without hurting you.",
           "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Mario_Kart_64",
-              "revision": "5527757",
-              "quoted": [
-                "If a racer, while using a Super Star, hits a wall or the like in such a way that their character exclaims, the Super Star's effect immediately ends."
-              ]
-            },
             {
               "page": "https://www.mariowiki.com/Lightning",
               "revision": "5526797",
@@ -675,9 +650,7 @@
               "quoted": [
                 "Once racers leave the courtyard they enter a wide corridor with four Thwomps; these Thwomps will move around in the air before falling onto the track.",
                 "A pair will wait at the beginning of the corridor and then attempt to follow racers before falling and then returning to the beginning of the corridor.",
-                "the number of Thwomps in the row depends on the engine class (one for 50cc, two for 100cc, and three for 150cc), and they will always take turns falling.",
-                "enter a room with two more Thwomps; these ones are always at ground level and move from side to side.",
-                "there is an imprisoned slightly larger Thwomp tinted green with yellow teeth due to the vertex shading approximating the yellow lighting, which shakes and laughs if racers go near it."
+                "the number of Thwomps in the row depends on the engine class (one for 50cc, two for 100cc, and three for 150cc), and they will always take turns falling."
               ]
             }
           ]
@@ -689,9 +662,6 @@
               "page": "https://www.mariowiki.com/Bowser%27s_Castle_(Mario_Kart_64)",
               "revision": "5519520",
               "quoted": [
-                "Once racers leave the courtyard they enter a wide corridor with four Thwomps; these Thwomps will move around in the air before falling onto the track.",
-                "A pair will wait at the beginning of the corridor and then attempt to follow racers before falling and then returning to the beginning of the corridor.",
-                "the number of Thwomps in the row depends on the engine class (one for 50cc, two for 100cc, and three for 150cc), and they will always take turns falling.",
                 "enter a room with two more Thwomps; these ones are always at ground level and move from side to side.",
                 "there is an imprisoned slightly larger Thwomp tinted green with yellow teeth due to the vertex shading approximating the yellow lighting, which shakes and laughs if racers go near it."
               ]
@@ -720,7 +690,7 @@
           ]
         },
         {
-          "line": "Weak points: Wait for the train to pass: the booklet says to time it so the locomotive does not block you, and to stop for a moment if it is crossing in front of you. Computer racers always stop at a crossing when the train is there. You can also drive through the gap between the coaches to get past.",
+          "line": "Weak points: Do not drive into the train: judge your approach so it is not across the track when you arrive, and if it is crossing right in front of you, pause until it has gone by. Computer racers always stop at a crossing when the train is there. You can also drive through the gap between the coaches to get past.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kalimari_Desert",
@@ -740,8 +710,7 @@
               "page": "https://www.mariowiki.com/Kalimari_Desert",
               "revision": "5519514",
               "quoted": [
-                "single-player features one coal tender and five passenger cars; two-player VS mode has shorter trains, an engine, a coal tender, and a passenger car each; two-player Grand Prix and both three- and four-player VS mode have no coal tender or passenger cars.",
-                "The train track can be driven around in a loop, but it is not counted as a lap if driven the entire way around and only puts players who take it behind."
+                "single-player features one coal tender and five passenger cars; two-player VS mode has shorter trains, an engine, a coal tender, and a passenger car each; two-player Grand Prix and both three- and four-player VS mode have no coal tender or passenger cars."
               ]
             }
           ]
@@ -753,7 +722,6 @@
               "page": "https://www.mariowiki.com/Kalimari_Desert",
               "revision": "5519514",
               "quoted": [
-                "single-player features one coal tender and five passenger cars; two-player VS mode has shorter trains, an engine, a coal tender, and a passenger car each; two-player Grand Prix and both three- and four-player VS mode have no coal tender or passenger cars.",
                 "The train track can be driven around in a loop, but it is not counted as a lap if driven the entire way around and only puts players who take it behind."
               ]
             }
@@ -806,15 +774,7 @@
               "page": "https://www.mariowiki.com/Yoshi_Valley",
               "revision": "5519510",
               "quoted": [
-                "Once all the routes have converged, racers take a winding road with few railings that leads to a large circular area",
-                "Afterward, it takes a steep 270° left turn full of porcupines before a drop that merges it with route 2"
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Mario_Kart_64",
-              "revision": "5527757",
-              "quoted": [
-                "Porcupines walk from side to side, spinning out a racer who collides with them."
+                "Once all the routes have converged, racers take a winding road with few railings that leads to a large circular area"
               ]
             }
           ]
@@ -826,7 +786,6 @@
               "page": "https://www.mariowiki.com/Yoshi_Valley",
               "revision": "5519510",
               "quoted": [
-                "Once all the routes have converged, racers take a winding road with few railings that leads to a large circular area",
                 "Afterward, it takes a steep 270° left turn full of porcupines before a drop that merges it with route 2"
               ]
             },
@@ -886,8 +845,7 @@
               "page": "https://www.mariowiki.com/Rainbow_Road_(Mario_Kart_64)",
               "revision": "5523052",
               "quoted": [
-                "it has rails throughout the entire track.",
-                "It is the longest race course in Mario Kart 64, at 2,000 meters, and it requires about two minutes per lap."
+                "it has rails throughout the entire track."
               ]
             }
           ]
@@ -899,7 +857,6 @@
               "page": "https://www.mariowiki.com/Rainbow_Road_(Mario_Kart_64)",
               "revision": "5523052",
               "quoted": [
-                "it has rails throughout the entire track.",
                 "It is the longest race course in Mario Kart 64, at 2,000 meters, and it requires about two minutes per lap."
               ]
             }
@@ -952,8 +909,7 @@
               "page": "https://www.mariowiki.com/Toad%27s_Turnpike",
               "revision": "5519515",
               "quoted": [
-                "the larger vehicles go slowly through the road, sometimes blocking the player (especially where the roadway is two lanes, and vehicles often travel side-by-side, making it difficult to steer between them).",
-                "At the beginning of the right U-turn, the roadway merges into two lanes, and remains this way until racers pass the finish line."
+                "the larger vehicles go slowly through the road, sometimes blocking the player (especially where the roadway is two lanes, and vehicles often travel side-by-side, making it difficult to steer between them)."
               ]
             }
           ]
@@ -965,7 +921,6 @@
               "page": "https://www.mariowiki.com/Toad%27s_Turnpike",
               "revision": "5519515",
               "quoted": [
-                "the larger vehicles go slowly through the road, sometimes blocking the player (especially where the roadway is two lanes, and vehicles often travel side-by-side, making it difficult to steer between them).",
                 "At the beginning of the right U-turn, the roadway merges into two lanes, and remains this way until racers pass the finish line."
               ]
             }

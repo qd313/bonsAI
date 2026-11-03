@@ -321,10 +321,11 @@ many of the thirty the blend rescues. Cut after H lands.
 The pre-go audit fixes the words, in one commit, every change named: the "Where things stand" paragraph (the build on
 this PC is 465 notes and 166 tips, unpublished; the sentence "29 of 38 games now have enemy and item notes" is wrong
 by the data: every game has at least one note of the enemy or item kind, but only seven have enemy or item cards in the
-labelled short-line shape, and eleven have no enemy note and one item note at most); the ★★★★ entry "What ships loses
-to its own meaning half" (the 2026-10-25 run on the bigger library read the blend 90.8, meaning-only 89.0 and keyword
-81.8 in the first three on the held-back questions, `workshop:archive/research/kb-embed-bakeoff-2026-10-25-p100-after-arms.md`,
-so the entry's claim did not hold on that run; status stays as the maintainer left it, the words updated); the
+labelled short-line shape, and the eight games this wave covers are thin, counted from the seed); the ★★★★ entry "What
+ships loses to its own meaning half" (today's run on the bigger library: the blend 90.8, the meaning search alone 92.2,
+the word search alone 85.6 in the first three on the held-back questions,
+`workshop:archive/research/kb-embed-bakeoff-2026-11-02-arms-p102-before.md`, so the claim held; status stays as the
+maintainer left it, the words updated); the
 "Unrelated questions" entry's Deck line (the junk-phrase fix is in Done now); the calls answered by D139 (the four of
 call 3 closed with their numbers, call 4 to the shelved file); D139 appended word for word from § 2; a testing row,
 status open, for every check in § 6; every entry five lines; every link resolving. The end-of-session audit does the
@@ -408,10 +409,12 @@ Log, one row per consult: time, the question in one line, the answer in one line
   4, Portal 2) have enemy or item cards in the labelled short-line shape, and eleven games have no enemy note and one
   item note at most: the eight this wave covers plus Mario Party 1, 2, 3, 6 and 7, Yoshi's Story, Diddy Kong Racing,
   Super Smash Bros. and GTA III. The bookkeeper rewrites the sentence.
-- **The ★★★★ "loses to its meaning half" entry was re-measured by plan 100's lane X without anyone noticing.** On the
-  465-note library the shipping blend read 90.8 in the first three, meaning-only 89.0, keyword 81.8 (held-back
-  questions). The entry says "nothing has been re-measured on the bigger library"; it has, and the blend won. The
-  bookkeeper writes the numbers in; the status is yours.
+- **The ★★★★ "loses to its meaning half" entry: re-measured tonight, and the claim holds.** On the 465-note library,
+  held-back questions, the right note in the first three: the shipping blend 90.8 in a hundred, the meaning search alone
+  92.2, the word search alone 85.6 (lane X2, `kb-embed-bakeoff-2026-11-02-arms-p102-before.md`). The plan's first draft
+  said plan 100's lane X had shown the blend winning (89.0 and 81.8 for the two halves); those figures were mislabelled
+  in plan 100's report (the 81.8 is the meaning search on the compat questions). The bookkeeper writes today's numbers
+  in; the status and the decision stay yours.
 - **The Deck is unreachable from this PC right now** (`deck_status` at 2026-11-02: the Deck does not answer; Ollama
   answers; the rig's board is on COM7 and armed). Block R0 waits for the Deck to be on; the helpers do not.
 - **Fable orchestrates at your choice.** The routing table puts Opus extra-high here; this wave has nothing above four
@@ -486,6 +489,13 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   model: in five of the six cases the same notes attached before and after, three of the six swung between 0 and 3 of 3 on
   the old library across nine runs, and the test's word lists are too narrow in three places; only the Portal 2 gels case
   is a worse answer. Lane N9 started (copy at `196910fb`). Lane B's second commit (`0d836cfb`) fixes the glossary entry.
+- **23:40 UTC: lane X2's first half done** (search 80 s, tips 8 s, the answer test 6.5 min): held-back search, right note
+  in the first three, the blend 90.8, meaning alone 92.2, word alone 85.6 (so the ★★★★ "loses to its meaning half" claim
+  holds; § 8 corrected); tips 17 of 24 reach one, 15 of 22 the right one; **the answer test on the unchanged library read
+  facts kept 71.2 against 67.2 on 2026-10-25 and contradictions 94.4 against 96.3: a four-point swing with nothing
+  changed.** The model released to lanes E and G. **Lane H done** (three commits, 19 of 24 sentences reach a tip and 17 the
+  right one, none wrong; one more commit asked for: the pair must also see network, wifi, lan, list, ollama, address or
+  deck, so an in-game "computer terminal" question cannot reach the tip).
 
 ## 13. Report
 

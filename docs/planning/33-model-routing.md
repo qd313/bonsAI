@@ -189,6 +189,10 @@ Verdict after ten rows: keep it if two or fewer misses; drop it and strike this 
 | 2026-10-25 | Plan 100 planning (Haiku 5.5) | The thumbs-down store, methods, tag and the Knowledge base section's place | Yes; it corrected the premise (the section is in the Ollama tab, not Settings) | No |
 | 2026-10-25 | Plan 100 planning (Haiku 5.5) | The tip sheet's fields and ids, the router's word lists, the 24 blind sentences | Yes, grep-confirmed by the planning chat (fields, ids 76/110/111/125/126/154, the fixture rows) | No |
 | 2026-10-25 | Plan 100 planning (Haiku 5.5) | The screenshot prompt and ask path; the pieces "Suggest as a tip" needs | Yes, the issue link and the section fields grep-confirmed; one constant left unread, said so | No |
+| 2026-11-02 | Plan 102 planning (Haiku 5.5, four read-only lookups in parallel, about 100,000 to 130,000 tokens each, 15 to 25 tool calls) | The thumbs-down Undo path and the lost-focus heal's callers | Yes; it corrected the premise (nine callers, none in the reply row; the demote rows land the ring with their own helper), grep-confirmed by the session | No |
+| 2026-11-02 | Plan 102 planning (Haiku 5.5) | How the strategy checklist's steps become D-pad stops, and what a second checklist shares | Yes; found the shared step spots and the shared count, and that no test covers two checklists; the session re-read the file | No |
+| 2026-11-02 | Plan 102 planning (Haiku 5.5) | The answer test's case fields, scorer, summary rows and the n/a control row | Yes, every line re-read; it explained the n/a (one case, its field null) | No |
+| 2026-11-02 | Plan 102 planning (Haiku 5.5) | How the picture and the running game's name reach the model; the eval's known arm; the picture models | Yes; it corrected the brief's line numbers (the game line is at 410 to 415, not 394 to 399) and the picture count (11, not 8), grep-confirmed | No |
 
 ### 4b. The lane model trial: Sonnet high, Opus low, Opus medium (proposed 2026-09-26, the maintainer's idea)
 

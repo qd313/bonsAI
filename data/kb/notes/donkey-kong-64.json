@@ -34,6 +34,39 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5411217",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2003,
+      "game_id": 31,
+      "section_type": "enemy",
+      "name": "Zinger",
+      "card": "Summary: A yellow flying enemy. Some Zingers dive-bomb the Kong on sight, and others drop unripe green oranges when they notice you.\nWeak points: An orange, an instrument move or a projectile shot defeats a Zinger. The ones that drop oranges generally respawn after you beat them, and the dive-bombers do not.\nTips: They appear on DK Isles and in Jungle Japes, Angry Aztec, Gloomy Galleon, Crystal Caves and, by day only, Fungi Forest, where bats replace them at night. Frantic Factory has robotic Mechanical Zingers instead, and in Angry Aztec a beaten Zinger that falls into the sand burns up and leaves no melon slice.",
+      "source_url": "https://www.mariowiki.com/Zinger",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5516812",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2004,
+      "game_id": 31,
+      "section_type": "boss",
+      "name": "Mad Jack",
+      "card": "Summary: The boss of Frantic Factory and the third boss of the game, a giant metallic jack-in-the-box. Tiny Kong fights him on a floor of 16 glowing tiles.\nWeak points: Pound the switch on the tile that matches the tile Mad Jack stands on with a Simian Slam to electrocute him, and five hits end the fight. The other switch shocks Tiny instead and costs her half a Watermelon of health.\nTips: While he hops, glide between tiles with Pony Tail Twirl, since he cannot hop diagonally. After the fourth hit he turns invisible, so follow the sparkles he leaves as he jumps. Falling off the stage does not lose the fight: a tile on the lower floor lifts Tiny back.",
+      "source_url": "https://www.mariowiki.com/Mad_Jack",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5405526",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2005,
+      "game_id": 31,
+      "section_type": "boss",
+      "name": "Puftoss",
+      "card": "Summary: The boss of Gloomy Galleon, a huge pufferfish. Lanky Kong fights it from a small coconut-half motorboat in a pool, after 250 bananas have been fed to Scoff to open the boss door.\nWeak points: Drive the boat through all five DK stars before each one's timer runs out to bring electric poles up from the water, which shock Puftoss. A fifth hit defeats him.\nTips: The star timers start at 30 seconds and shrink to 25, 20, 15 and finally 10 in later rounds. Puftoss cannot hurt Lanky by touching him, but he spits fireballs, and in round two his water slams make shockwaves that vanish when they touch an electric pole.",
+      "source_url": "https://www.mariowiki.com/Puftoss",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5412403",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

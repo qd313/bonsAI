@@ -157,6 +157,159 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2003,
+      "name": "Zinger",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Zinger",
+      "main_revision": "5516812",
+      "lines": [
+        {
+          "line": "Summary: A yellow flying enemy. Some Zingers dive-bomb the Kong on sight, and others drop unripe green oranges when they notice you.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Zinger",
+              "revision": "5516812",
+              "quoted": [
+                "Unlike previous games, Zingers are only seen in yellow.",
+                "They dive-bomb at the active Kong on sight in DK Isles and some of the earlier levels, while other Zingers drop unripe green Oranges upon noticing them."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: An orange, an instrument move or a projectile shot defeats a Zinger. The ones that drop oranges generally respawn after you beat them, and the dive-bombers do not.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Zinger",
+              "revision": "5516812",
+              "quoted": [
+                "A Zinger can be defeated by an orange, a musical instrument move, or being shot by a projectile.",
+                "Unlike the dive-bombing Zingers, the orange-dropping ones will generally respawn after defeating them."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They appear on DK Isles and in Jungle Japes, Angry Aztec, Gloomy Galleon, Crystal Caves and, by day only, Fungi Forest, where bats replace them at night. Frantic Factory has robotic Mechanical Zingers instead, and in Angry Aztec a beaten Zinger that falls into the sand burns up and leaves no melon slice.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Zinger",
+              "revision": "5516812",
+              "quoted": [
+                "Zingers also appear in Jungle Japes, Angry Aztec, Gloomy Galleon (where one is inside of a mechanical fish), Fungi Forest during the daytime (Bats replace them at night), and Crystal Caves.",
+                "Zingers have a robotic variety named Mechanical Zingers, which appear in Frantic Factory in place of Zingers.",
+                "If a Zinger falls into the sand in Angry Aztec from being defeated, it disappears in a burst of flames without releasing any watermelon slice."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2004,
+      "name": "Mad Jack",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Mad_Jack",
+      "main_revision": "5405526",
+      "lines": [
+        {
+          "line": "Summary: The boss of Frantic Factory and the third boss of the game, a giant metallic jack-in-the-box. Tiny Kong fights him on a floor of 16 glowing tiles.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mad_Jack",
+              "revision": "5405526",
+              "quoted": [
+                "He is the boss of Frantic Factory and the third boss of the game",
+                "is a large jack-in-the-box from Donkey Kong 64.",
+                "Mad Jack is a giant metallic jack-in-the-box",
+                "Tiny Kong finds herself in a dark room with 16 glowing floor tiles"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Pound the switch on the tile that matches the tile Mad Jack stands on with a Simian Slam to electrocute him, and five hits end the fight. The other switch shocks Tiny instead and costs her half a Watermelon of health.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mad_Jack",
+              "revision": "5405526",
+              "quoted": [
+                "Tiny must attack Mad Jack by using Simian Slam on the switch on the same-colored tile as Mad Jack's. This causes the tile to electrocute Mad Jack.",
+                "by hitting the other switch, Tiny Kong is electrocuted instead, causing her to lose half of a Watermelon in health.",
+                "After being electrocuted a fifth time, the floor tile that Mad Jack is standing on collapses."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: While he hops, glide between tiles with Pony Tail Twirl, since he cannot hop diagonally. After the fourth hit he turns invisible, so follow the sparkles he leaves as he jumps. Falling off the stage does not lose the fight: a tile on the lower floor lifts Tiny back.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mad_Jack",
+              "revision": "5405526",
+              "quoted": [
+                "Tiny must glide between the floor tiles by using Pony Tail Twirl to hop between platforms. Mad Jack cannot hop diagonally.",
+                "After taking a fourth hit, Mad Jack becomes invisible and hops around on the tiles 15 times. In order to track where Mad Jack is, Tiny must watch the sparkles that trail behind him as he jumps.",
+                "If Tiny accidentally falls off the stage, she does not lose at the boss battle. Instead, a floor tile from the lower floor can return Tiny back to fighting Mad Jack."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2005,
+      "name": "Puftoss",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Puftoss",
+      "main_revision": "5412403",
+      "lines": [
+        {
+          "line": "Summary: The boss of Gloomy Galleon, a huge pufferfish. Lanky Kong fights it from a small coconut-half motorboat in a pool, after 250 bananas have been fed to Scoff to open the boss door.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Puftoss",
+              "revision": "5412403",
+              "quoted": [
+                "Puftoss, also known as Blowfish Baddie, Sea Spike, or the Pufferfish, is a massive yellowish Puftup and the boss of Gloomy Galleon in Donkey Kong 64.",
+                "Fighting Puftoss requires that 250 bananas be fed to Scoff at the Troff 'n' Scoff location in order for Troff to unlock the door that leads to the battle against Puftoss.",
+                "Lanky Kong is the Kong who is selected to fight Puftoss.",
+                "sitting inside of a small motorboat shaped like a coconut half"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Drive the boat through all five DK stars before each one's timer runs out to bring electric poles up from the water, which shock Puftoss. A fifth hit defeats him.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Puftoss",
+              "revision": "5412403",
+              "quoted": [
+                "Lanky can damage Puftoss by bringing electrical poles out from the water by driving through all five DK stars, each having a 30-second timer and resetting as he drives through each one. If done on time, the poles generate an electric current that electrocutes Puftoss, otherwise the poles go back into the water.",
+                "Puftoss is defeated after a fifth hit"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The star timers start at 30 seconds and shrink to 25, 20, 15 and finally 10 in later rounds. Puftoss cannot hurt Lanky by touching him, but he spits fireballs, and in round two his water slams make shockwaves that vanish when they touch an electric pole.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Puftoss",
+              "revision": "5412403",
+              "quoted": [
+                "each having a 30-second timer",
+                "The DK stars become increasingly smaller in round, and their corresponding timer decreases by five seconds: starting with 25, then 20, followed by 15, and lastly 10 seconds.",
+                "Puftoss cannot damage Lanky on contact.",
+                "In the second round, he shoots out four fireballs and slams the water, creating two blue shockwaves, which disappear on contact with the electric poles."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

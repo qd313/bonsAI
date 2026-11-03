@@ -605,6 +605,10 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   failure was a one-off under load and F's five commits stand. The remaining landings restarted as one job: M1, I, N7, N5,
   N6, N8, then N9, N10, N11, N12, M2, D, C, Q2. The Deck answers now and the rig's tools are back in this chat, but another
   process holds the rig's lease (a debugger probe); block R0 waits for it.
+- **09:05 EST: M1 (`cff53972`) and I (`affaead1`) landed; N7's four commits landed (`df5c3fec`) but its gates stopped on
+  the Python set a second time; the set passes every time it runs alone (3,337 tests, twice), so the landing script now
+  retries that step once, as it does the build. The chain restarts from N5. The rig's lease freed; block R0 started from
+  this chat with a deck-driver and runbook R0.
 
 ## 13. Report
 

@@ -12,7 +12,7 @@ Long notes for knowledge-base items are in [roadmap-kb-details.md](roadmap-kb-de
 ## Parked on purpose
 
 
-- ★ `[ui]` **Picking a setting from the settings card opens the right Steam settings page but does not scroll to that setting** — **shelved 2026-10-10, a limit of Steam the maintainer accepted.** A on "Enable GPU Crash Report Collection" opened Steam's System page at the top, with the toggle about 320 px below the screen edge (found 2026-10-08 on the Deck, plan 83; evidence `workshop:test-evidence/plan83-P83-J1-SETTINGS-CARD.json`). Steam's link and route calls take only a page name; the Decky libraries and the web show no way to open at, or scroll to, one setting, and a read-only probe of Steam's own page found no settings route or deep-link reader (plan 87 B6, 2026-10-09; evidence `workshop:test-evidence/plan87-B6-SETTINGS-PROBE.json`); nothing was built (the maintainer's call 9, plan 87). The maintainer's call 2026-10-10 (checks page): fine as long as it opens the right page. The wrong-page bug (A on "Enable Wi-Fi" opens System, not Internet) is separate and stays in the roadmap's Bugs.
+- ★ `[ui]` **Picking a setting from the settings card opens the right Steam settings page but does not scroll to that setting** — **shelved 2026-10-10, a limit of Steam the maintainer accepted.** Steam's links take only a page name, so A on a setting opens the right page at its top; nothing was built. Full note, word for word: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-02).
   Unshelves when: Steam offers a way to open a settings page at one setting.
 
 - ★★ `[ui]` **Glance view: the answer alone, in big text** — **shelved 2026-09-12.** From the popup, the menu would show
@@ -93,6 +93,10 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 
 - ★ `[KB]` `[watching]` **A note titled "Steam_frame (From the shared Deck tips)" came with a Zhukov overclocks question and looks off-topic** — seen once,
   2026-10-03, block 3b (plan 81). Evidence `workshop:test-evidence/plan81-P81-LIFT-6PX-game.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[KB]` `[watching]` **A "where am I stuck" answer for Hollow Knight added an "If you want to cheat" section** — seen once, 2026-10-24 (plan 98 Deck block K3); closed as a watched sighting by the maintainer, D139, 2026-11-02, after 0 in 2 route questions since (2026-10-25, plan 100 block L0).
+  The route answer suggested emulator and fast-travel exploits. Evidence `workshop:test-evidence/plan100-P100-ROUTE-CHEAT-COUNT.json`. [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
   Unshelves when: a new sighting.
 
 - ★ `[KB]` `[watching]` **With a game running, the meaning search once read about a second** — seen once, 1,070 ms on

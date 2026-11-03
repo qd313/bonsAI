@@ -1908,3 +1908,82 @@ Knowledge-base entries that passed on the Deck in plan 100's retry round (2026-1
   The 2026-10-25 follow-up (`5943260b`, the bare word "storage" no longer routes to the storage tips): [Detail](roadmap-kb-details.md#plan-100-follow-up-note-moved-from-the-knowledge-base-roadmap-2026-10-26)
   **Deck 2026-10-26, FAILED in part (row P100-TIPS-01):** "it says there is no space left" reached the storage tips and "the screen goes black when I open it" the display tips; "my game keeps closing on its own" in the Hollow Knight test chat got three Hollow Knight notes and no tip (entry "A crash sentence in a chat about a game…"); the boss question attached no tip, as it should. **Fresh-chat retry P100-TIPS-01-try2 PASSED (Deck):** the crash tip attached (evidence `workshop:test-evidence/plan100-P100-TIPS-01-try2.json`). **Retry P100-TIPS-01-try3 PASSED (Deck) 2026-10-26:** the crash sentence reached the crash tips in a chat about a game too (see the entry "A crash sentence in a chat about a game…"; evidence `workshop:test-evidence/plan100-P100-TIPS-01-try3.json`). Evidence `workshop:test-evidence/plan100-P100-TIPS-01.json`.
   **Still owed:** your read of the two new tips and ten of the plain-word edits (the checks page). Earlier text: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+
+## Closed 2026-11-02 (plan 102 pre-go audit, D139)
+
+Four knowledge-base entries closed by the maintainer's answer to plan 102 call 3 (decision D139, 2026-11-02), copied word for word from [roadmap-kb.md](../roadmap-kb.md) as they stood, with the four "Calls waiting on you" lines that asked about them. The category-card call (D41) had no Bugs entry, only its call line. Nothing was deleted.
+
+**The four calls lines:**
+
+- **Hide more draws fewer spoiler covers than Default: close or keep?** — **OPEN, raised 2026-10-25 (plan 100 lane X).**
+  Measured twice: 20.6 against 23.8 covers in a hundred, and no story cover missed. See the Bugs entry of that name.
+- **Hide less read 94.4 percent clean on the second run: close or keep?** — **OPEN, raised 2026-10-25 (plan 100 lane X).**
+  First run 90.7, second 94.4. See the Bugs entry "under Hide less".
+- **A made-up question attaches three weak notes at a score of 0.00: close as "the No close match line is the answer", or keep?** — **OPEN, raised 2026-10-25.**
+  The numbers say no new floor. See the Bugs entry "three weak notes attach".
+
+- **A card named after a category outranks the cards inside it** — **OPEN, raised 2026-08-31 (D41).** Kept open on
+  purpose.
+  **Measured 2026-10-24 (plan 98 lane F):** a category note came first in 3 of 279 questions (about 1 in 100); only one fits this entry. D41 stays your call. Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  [D41](audit/maintainer-decisions-locked.md#d41--open-raised-2026-08-31--a-card-named-after-a-category-outranks-the-cards-inside-it)
+
+**The Bugs entries:**
+
+- ★★ `[KB]` **Story spoilers: Hide more drew fewer spoiler covers than Default on the PC answer test** — **MEASURED 2026-10-25 (plan 100 lane X), the maintainer decides.**
+  First run: 23 covers in 100 answers against 29. **Second run: 20.6 against 23.8.** Hide more missed no story cover that Default kept. Contradictions: 92.6 clean against 88.9. Reports: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+
+- ★ `[KB]` **Story spoilers: under Hide less the answer test's no-contradiction rate read 90.7%, against 100%** — **MEASURED 2026-10-25 (plan 100 lane X), the maintainer decides.**
+  First run 90.7% (`workshop:archive/research/kb-answer-eval-2026-10-24-p98b-open.md`). **Second run: 94.4% clean** (51 of 54; `workshop:archive/research/kb-answer-eval-2026-10-25-p100-open.md`).
+
+- ★ `[KB]` **measure: on a made-up question, three weak notes attach with a keyword score of 0.00 every time** — **MEASURED 2026-10-25 (plan 100 lane X), the maintainer decides.**
+  A floor at no keyword support clears the two made-up bosses but loses 3 right notes; a floor high enough to clear the other two loses 19. The "No close match" line already shows on all four. **The numbers say no new floor.** Reports: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+
+**Closed 2026-11-02 by call 3 (D139):** each of the four was closed as measured. The category card (D41) stays a measured case of about 1 in 100 and no code change.
+
+## Done lines moved from roadmap.md 2026-11-02 (plan 102 pre-go audit)
+
+Two older Done blocks moved word for word out of [roadmap.md](../roadmap.md) to bring it under its size limit. Nothing was deleted.
+
+**Closed 2026-10-24 (plan 98 docs sweep 4, Deck blocks K1 and K3):**
+
+- ★ `[KB]` **The Developer tab's test-library button no longer says the public download is not live** — **DONE 2026-10-24, passed on the Deck (row P98-SEED-HINT; evidence `workshop:test-evidence/plan98-P98-SEED-HINT.json`).** The hint shows in the help strip at the bottom of the panel while the button has focus. Full entry: [archive](archive/roadmap-bugs-fixed.md#closed-2026-10-24-plan-98-docs-sweep-4-deck-blocks-k1-and-k3).
+- ★★ `[KB]` **Glossary words for every game** — **DONE 2026-10-24, both feature halves passed on the Deck (row P98-GLOSSARY-02; evidence `workshop:test-evidence/plan98-P98-GLOSSARY-02.json`).** Hollow Knight (11 underlined words) and Super Mario 64 (no Steam id) both open and close their peek. Reached players 2026-10-25: the maintainer published library 2026.10.25 (both channels read back and matched). The walk P86-GLOSSARY-WALK was re-saved and replayed with no differences 2026-10-25 (row P98-K1-REPLAYS, `workshop:test-evidence/plan100-P98-K1-REPLAYS.json`). Full entry: [archive](archive/roadmap-completed.md#closed-2026-10-24-plan-98-docs-sweep-4-deck-blocks-k1-and-k3).
+- ★★ `[KB]` **The knowledge library update treats any different version as newer, and installs onto the Deck's own drive without asking where** — **DONE 2026-10-24, passed on the Deck (row P97-L9-KB-UPDATE; evidence `workshop:test-evidence/plan98-P97-L9-KB-UPDATE-try2.json`).** With a newer library than the published one installed, Update says "Nothing to do.", changes no files and keeps the status Installed. Full entry: [archive](archive/roadmap-bugs-fixed.md#closed-2026-10-24-plan-98-docs-sweep-4-deck-blocks-k1-and-k3).
+- ★★ `[KB]` **The note's own words under the reply** — **DONE 2026-10-24; the last half (the "Not in my notes" line) passed on the Deck (row P98-NOTES-BLOCK-04).** Full entry: [archive](archive/roadmap-bugs-fixed.md#closed-2026-10-24-plan-98-docs-sweep-4-deck-blocks-k1-and-k3).
+- ★★ `[KB]` **Questions with no real answer in the notes can get notes about the wrong subject** — **DONE 2026-10-24, passed on the Deck (row P98-NOTES-BLOCK-04; evidence `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04.json` and `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04-game.json`).** The "No close match" line shows on screen for made-up subjects, with and without a game running, and not for real Glyphid Dreadnought questions. The wrong notes still attach and still reach the AI (keyword score 0.00, three notes every time on the made-up questions); what changed is the warning, which now shows. Full entry: [archive](archive/roadmap-bugs-fixed.md#closed-2026-10-24-plan-98-docs-sweep-4-deck-blocks-k1-and-k3).
+- ★★ `[KB]` **With a made-up subject, the "No close match" line was sometimes skipped (row NOTES-BLOCK-04, the line half)** — **DONE 2026-10-24, same fix and evidence as the entry above.** Full entry: [archive](archive/roadmap-bugs-fixed.md#closed-2026-10-24-plan-98-docs-sweep-4-deck-blocks-k1-and-k3).
+- ★★★ `[KB]` **A thumbs-down that stops a wrong note coming back** — **DONE 2026-10-24, passed on the Deck on the main flow (row P98-DEMOTE-01; evidence `workshop:test-evidence/plan98-P98-DEMOTE-01.json`, `workshop:test-evidence/plan98-P98-DEMOTE-01-game.json` and `workshop:test-evidence/plan98-P98-DEMOTE-01-undo.json`).** Not exercised on the Deck: the "Which note was it?" column, proven by its tests only. The note dropping out after three marks is proven by its tests only; the "ranked lower by you" tag was seen only with nothing running (`workshop:test-evidence/plan98-P98-DEMOTE-01.json`; with the game, `workshop:test-evidence/plan98-P98-DEMOTE-01-game.json`, only the order was proved). Follow-ups are in the knowledge-base Bugs. Full entry: [archive](archive/roadmap-completed.md#closed-2026-10-24-plan-98-docs-sweep-4-deck-blocks-k1-and-k3).
+- ★★★ `[KB]` **Story spoilers: a "How much to hide" setting with tiers** — **DONE 2026-10-24, passed on the Deck (row P98-SPOILER-TIER; evidence `workshop:test-evidence/plan98-P98-SPOILER-TIER.json`).** The row walks and saves; Hide more drew a cover on the second wording; Hide less drew none, but that answer named no boss, so that half proves little. Full entry: [archive](archive/roadmap-completed.md#closed-2026-10-24-plan-98-docs-sweep-4-deck-blocks-k1-and-k3).
+- ★★★ `[KB]` **The route look for the strategy checklist** — **DONE 2026-10-24, passed on the Deck (row P98-ROUTE-01, second try; evidence `workshop:test-evidence/plan98-P98-ROUTE-01-try2.json`, saved walk `workshop:checks/P98-ROUTE-01.json`).** A 5-step checklist drawn as dots; Down walks each step once; A shows the first covered step with no tick, does nothing on a later covered step and ticks an open step; close and reopen keeps both. Full entry: [archive](archive/roadmap-completed.md#closed-2026-10-24-plan-98-docs-sweep-4-deck-blocks-k1-and-k3).
+
+**Closed 2026-10-24 (plan 98 docs sweep 2):**
+
+- ★ `[KB]` **Measure answers with the character voice on** — **DONE 2026-10-24 (plan 98 lane F; evidence `workshop:archive/research/kb-answer-eval-2026-10-24-p98f-voice-off.md` and `workshop:archive/research/kb-answer-eval-2026-10-24-p98f-voice-alig.md`).** 63 questions, 3 tries each, the Deck's model name (gemma4:e2b-it-qat), the Ali G voice against no voice, the same evening. With the voice on, answers kept the note's facts 67.8 times in a hundred (74.6 with no voice) and never contradicted a note (96.3 with no voice). The follow-up menu showed when due 91.7 times in a hundred (94.4), spoiler warnings behaved the same (77.0 against 77.6), and answers clean on all three tries were 42.9 in a hundred (52.4). Full entry: [archive](archive/roadmap-completed.md#closed-2026-10-24-plan-98-docs-sweep-2-moved-from-next).
+
+---
+
+<a id="done-for-v060"></a>
+
+**Closed 2026-10-22 (plan 97 fourth sweep: Deck blocks D, E and F):**
+
+- ★ `[ui]` **The About tab shows "Version 0.5.0" and no build id** — **DONE 2026-10-22, passed on the Deck (row P97-L6-ABOUT-BUILD).** The title line read "Version 0.5.0 · build f28c5fc4676d", the first 12 characters of the new bundle's hash. `workshop:test-evidence/plan97-P97-L6-ABOUT-BUILD.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-97-fourth-sweep-closed-by-blocks-d-e-and-f-2026-10-22).
+
+- ★ `[ui]` **On the About tab the Steam-drawn "Follow system" language dropdown reads as a light button to the look check** — **DONE 2026-10-22, passed on the Deck (look check QA-LOOK-01 on About).** The look check on About reported nothing at all, the language dropdown included. `workshop:test-evidence/plan97-QA-LOOK-01-About.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-97-fourth-sweep-closed-by-blocks-d-e-and-f-2026-10-22).
+
+- ★★ `[ui]` **The About reply-language pick does not apply** — **DONE 2026-10-22, passed on the Deck (row P97-L2-LANGUAGE-PICK).** Czech picked in Steam's list showed on the button and the settings file read czech 0.6 s later; it held after a plugin reload, the next answer came in Czech, and Follow system put the file back. `workshop:test-evidence/plan97-P97-L2-LANGUAGE-PICK.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-97-fourth-sweep-closed-by-blocks-d-e-and-f-2026-10-22).
+
+- ★ `[focus]` **On the Ollama tab, Up from Find LAN can skip the PC address box and the Save row and land on the second switch** — **DONE 2026-10-22, passed on the Deck (row P97-L16-FINDLAN-UP).** Up from Find LAN landed on the PC address box 5 of 5; Up from the box reached the Save row and Down from it went back to the box. `workshop:test-evidence/plan97-P97-L16-FINDLAN-UP.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-97-fourth-sweep-closed-by-blocks-d-e-and-f-2026-10-22).
+
+- ★ `[focus]` **After A on an open glossary word sends the Explain further question, the ring is on nothing until the next press** — **DONE 2026-10-22, passed on the Deck (row P97-L12-EXPLAIN-RING).** After the second A the ring was on the question box within 1 s in all three reads; Down moved to Ask and Up moved back. `workshop:test-evidence/plan97-P97-L12-EXPLAIN-RING.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-97-fourth-sweep-closed-by-blocks-d-e-and-f-2026-10-22).
+
+- ★ `[reply]` **Maintainer's call: the glossary words are not underlined when the game is named but not running** — **DONE 2026-10-22, passed on the Deck (row P97-L5-GLOSSARY-NAMED).** With no game running, a Deep Rock Galactic: Survivor question underlined Kiting and Overclocks and A opened their box; a Hades question underlined nothing. `workshop:test-evidence/plan97-P97-L5-GLOSSARY-NAMED.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-97-fourth-sweep-closed-by-blocks-d-e-and-f-2026-10-22).
+
+- ★ `[focus]` **The ring does not show properly on the "How to use bonsAI" chip** — **DONE 2026-10-22, passed on the Deck (row P97-HR-HELP-CHIP-RING); CHIP-BUTTON-06 stays open.** With the D-pad on the help chip it has the soft blue layer and keeps its green border; without focus it is the plain green bar. `workshop:test-evidence/plan97-P97-HR-HELP-CHIP-RING.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-97-fourth-sweep-closed-by-blocks-d-e-and-f-2026-10-22).
+
+- ★ `[reply]` **Maintainer's ask: with the AI on a PC on the home network, the answer should stream in a little bit quicker** — **DONE 2026-10-22, passed on the Deck (row P97-L11-PC-PACE, second try); the recording goes to the maintainer's eye.** The PC pace averaged 57.1 frames a second against 56.1 for the Deck's pace over 13 whole windows. `workshop:test-evidence/plan97-P97-L11-PC-PACE-try2.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-97-fourth-sweep-closed-by-blocks-d-e-and-f-2026-10-22).
+
+- ★★ `[ask]` **Asking about an attached screenshot answered "incomplete stream" and no answer, twice, with the Deck's own AI (gemma4:e2b-it-qat)** — **DONE 2026-10-22, passed on the Deck on the second try (row P97-L1-PICTURE-ANSWER); the first try failed and its cause was fixed.** The picture reached the AI in all three tries and the answers named the screen; the 410 KB one took 63 s (19 s of it a chat-summary step with the model cold) and sent 84 KB, a little over the rough 60 s and 70 KB lines. `workshop:test-evidence/plan97-P97-L1-PICTURE-ANSWER-try2.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-97-fourth-sweep-closed-by-blocks-d-e-and-f-2026-10-22).
+
+- ★ `[ui]` **At the Large text size, the Remove button splits its word and a few rows are cut or touch the panel's edge** — **DONE 2026-10-22, passed on the Deck (row P97-L13-LARGE-TEXT).** At Large every arrow sat 12 px from the edge and Story spoilers showed its name on two lines with no summary; at Normal the screenshot shows no sliver either. `workshop:test-evidence/plan97-P97-L13-LARGE-TEXT.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-97-fourth-sweep-closed-by-blocks-d-e-and-f-2026-10-22).
+
+- ★ `[QA]` **The test rig's settings snapshot tool can save a damaged copy** — **DONE 2026-10-22, passed on the Deck (row P89-RIG-SNAPSHOT, second try).** Three saved copies, each equal to a fresh copy of the live settings folder; the first call set the ten-day-old earlier copy aside. Calls 2 and 3 refuse until call 1 is restored (noted in the full entry). `workshop:test-evidence/plan97-P89-RIG-SNAPSHOT-try2.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-97-fourth-sweep-closed-by-blocks-d-e-and-f-2026-10-22).

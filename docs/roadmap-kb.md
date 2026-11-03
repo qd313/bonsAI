@@ -11,10 +11,10 @@ Same house rules as the roadmap (five lines an entry, stars ascending in each li
 
 Architecture: [knowledge-base.md](knowledge-base.md). The agreed answer-quality work: [plan 30](planning/30-kb-answer-quality-plan.md).
 
-**Where things stand (2026-10-26).** The library people can download is 2026.10.25: 38 games, 414 notes, 164 Deck tips
+**Where things stand (2026-11-02).** The library people can download is 2026.10.25: 38 games, 414 notes, 164 Deck tips
 and 351 tap-to-define words; the maintainer published it on 2026-10-25 and both channels were read back byte for byte
 ([the releases table](knowledge-base.md)). The build on this PC is bigger: 465 notes and 166 tips, because plan 100 added
-51 notes for four games and two tips. It is not published yet; that waits for the maintainer. 29 of the 38 games now have enemy and item notes. The Deck's own copy is
+51 notes for four games and two tips. It is not published yet: the maintainer's publish is owed, and the download sites still serve 2026.10.25. Every one of the 38 games has at least one enemy or item note (counted 2026-11-02), but only seven have them (Deep Rock Galactic: Survivor, The Legend of Zelda: Ocarina of Time, State of Emergency, Baldur's Gate 3, Grand Theft Auto: San Andreas, The Sims 4, Portal 2) in the labelled short-line shape (Summary, Weak points, Uses, Tips lines). The eight games plan 102 writes for (lanes N5 to N12) are thin, shown as enemy notes and item notes: Grand Theft Auto V 0 and 1, Grand Theft Auto IV 0 and 1, Super Mario 64 0 and 1, Paper Mario: The Thousand-Year Door 0 and 1, Pikmin 2 1 and 1, Doom 64 1 and 1, Donkey Kong 64 0 and 2, Mario Kart 64 0 and 1. The Deck's own copy is
 2026.10.25 (`workshop:test-evidence/plan98-P98-KS-LIBRARY.json`).
 Search puts the right
 note in the top three 85.3 times in a hundred on questions nobody tuned against, measured 2026-09-18 on the older library.
@@ -28,17 +28,6 @@ three: both checks had faults. [Wave three's report](../../bonsAI-workshop/archi
 
 ## Calls waiting on you
 
-- **A card named after a category outranks the cards inside it** — **OPEN, raised 2026-08-31 (D41).** Kept open on
-  purpose.
-  **Measured 2026-10-24 (plan 98 lane F):** a category note came first in 3 of 279 questions (about 1 in 100); only one fits this entry. D41 stays your call. Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
-  [D41](audit/maintainer-decisions-locked.md#d41--open-raised-2026-08-31--a-card-named-after-a-category-outranks-the-cards-inside-it)
-
-- **Hide more draws fewer spoiler covers than Default: close or keep?** — **OPEN, raised 2026-10-25 (plan 100 lane X).**
-  Measured twice: 20.6 against 23.8 covers in a hundred, and no story cover missed. See the Bugs entry of that name.
-- **Hide less read 94.4 percent clean on the second run: close or keep?** — **OPEN, raised 2026-10-25 (plan 100 lane X).**
-  First run 90.7, second 94.4. See the Bugs entry "under Hide less".
-- **A made-up question attaches three weak notes at a score of 0.00: close as "the No close match line is the answer", or keep?** — **OPEN, raised 2026-10-25.**
-  The numbers say no new floor. See the Bugs entry "three weak notes attach".
 - **Facts kept fell from 76.3 to 67.2 in a hundred: read the six questions that went from 3 of 3 to 0 of 3, then decide** — **OPEN, raised 2026-10-25.**
   Two earlier runs on the old library differed by up to 6 points, so the signal is weak. See the Bugs entry "The new notes crowd the old ones".
 - **Your eye on plan 100's wording** — **OPEN, raised 2026-10-26.**
@@ -51,21 +40,13 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 - ★ `[KB]` **A notes card ("From bonsAI's own note") was drawn under an answer with the knowledge library switch OFF** — **ACCEPTED, by design: the maintainer's call 2026-10-18 ("That's fine"); found 2026-10-18 (plan 96 block M, Deck).**
   A stopped answer with "Use local knowledge base" off still drew a notes card once, and not on another try. The maintainer's call: that is fine (by design). Evidence `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-2.json`.
-- ★★ `[KB]` **Story spoilers: Hide more drew fewer spoiler covers than Default on the PC answer test** — **MEASURED 2026-10-25 (plan 100 lane X), the maintainer decides.**
-  First run: 23 covers in 100 answers against 29. **Second run: 20.6 against 23.8.** Hide more missed no story cover that Default kept. Contradictions: 92.6 clean against 88.9. Reports: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
 - ★★ `[KB]` **ui: in a second checklist answer, the route's steps were drawn but the D-pad could not reach them** — **OPEN, found 2026-10-24 (plan 98 Deck block KR).**
   The ring went to the tab bar. One sighting, with a muddled setup. Evidence `workshop:test-evidence/plan98-P98-KR-REPLAYS.json` (the P98-ROUTE-01 line).
-- ★ `[KB]` **measure: on a made-up question, three weak notes attach with a keyword score of 0.00 every time** — **MEASURED 2026-10-25 (plan 100 lane X), the maintainer decides.**
-  A floor at no keyword support clears the two made-up bosses but loses 3 right notes; a floor high enough to clear the other two loses 19. The "No close match" line already shows on all four. **The numbers say no new floor.** Reports: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
-- ★ `[KB]` **A "where am I stuck" answer for Hollow Knight added an "If you want to cheat" section** — **OPEN, found 2026-10-24 (plan 98 Deck block K3).**
-  The route answer suggested emulator and fast-travel exploits. Seen once. **Counted 2026-10-25 (plan 100 block L0): 0 cheat sections in 2 route questions** (D137: no prompt line added). [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
 - ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **ACCEPTED, 2026-09-28.** The
   maintainer chose this on 2026-09-05 to save about a second per Speed question
   ([D62](audit/maintainer-decisions-archive.md#d62--locked-2026-09-05-raised-2026-09-05--the-second-bug-fixing-session-four-calls-before-go)
   item 2). A stray word match can attach a wrong tip. A fix would run the meaning search only when the word hits are thin;
   that needs a cut-off picked and measured. [Detail](roadmap-kb-details.md#speed-mode-tip-gap)
-- ★ `[KB]` **Story spoilers: under Hide less the answer test's no-contradiction rate read 90.7%, against 100%** — **MEASURED 2026-10-25 (plan 100 lane X), the maintainer decides.**
-  First run 90.7% (`workshop:archive/research/kb-answer-eval-2026-10-24-p98b-open.md`). **Second run: 94.4% clean** (51 of 54; `workshop:archive/research/kb-answer-eval-2026-10-25-p100-open.md`).
 - ★ `[KB]` **The Sims 4 library holds two fire notes that disagree** — **OPEN, found 2026-10-25 (plan 100 lane N3).**
   The older note "Fires" (section 112 in `data/kb/strategy_seed.json`) says there are no firefighters. The Sims wiki says they were added in a patch and come when a smoke alarm sees the fire, and the new Fire note (1200) follows the wiki. The old note needs correcting, then a library rebuild.
   **Deck 2026-10-26 (row P100-FOUR-GAMES-01), MEASURED:** "The Sims 4: how do I stop a fire" attached the older "Fires" note first, the new Fire note third, and no smoke alarm note. Evidence `workshop:test-evidence/plan100-P100-FOUR-GAMES-01.json`.
@@ -77,7 +58,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   The page had lost the window's focus (the lost-focus family from plan 97), so Down did nothing. Closing and reopening Quick Access cleared it but emptied the question box. Same lost-focus family as plan 97's freeze. Evidence `workshop:test-evidence/plan98-P98-DEMOTE-01-game.json`.
 - ★★ `[KB]` **Unrelated questions can still get a game card stapled on** — **ACCEPTED 2026-08-27.** Raising the word floor costs real matches and the
   model mostly ignores a card that does not fit. Earlier sightings: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
-  **Deck 2026-10-24 (plan 98 block K0), MEASURED:** "what time is it" still attached three notes (re-run 2026-10-25 too); the junk-phrase entry in Deck check owed has the fix. Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  **Deck 2026-10-24 (plan 98 block K0), MEASURED:** "what time is it" still attached three notes (re-run 2026-10-25 too); the junk-phrase fix is in [Done](roadmap.md#done-after-v060) since 2026-10-26 (row P100-THANKS-01-try2, `workshop:test-evidence/plan100-P100-THANKS-01-try2.json`). Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
   [D28](audit/maintainer-decisions-archive.md#d28--ordinary-phrases-attach-game-cards-how-hard-should-the-floor-be) ·
   [Detail](roadmap-kb-details.md#ordinary-phrases-attach-game-cards)
 - ★★ `[KB]` `[QA]` **Screenshot reading ignores the game name it was handed** — **OPEN, found 2026-10-24 (plan 98 lane I).**
@@ -85,7 +66,8 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 - ★★★★ `[KB]` **What ships loses to its own meaning half on questions nobody tuned against** — **ACCEPTED, decided
   2026-09-06.** Leaning the search toward meaning finds the right note first a little more often, but it would bury a new
   note with no meaning index yet. That reason is gone since 2026-09-07 (every note is now guaranteed an index), but two
-  other objections stand, and nothing has been re-measured on the bigger library. Weights stay even. [D82](audit/maintainer-decisions-locked.md#d82--open-raised-2026-09-06--leaning-the-search-on-meaning-wins-on-the-measurements-and-breaks-three-rules-we-set-on-purpose) · [Detail](roadmap-kb-details.md#the-shipping-retrieval-arm-loses-to-the-vector-half-alone-on-rows-nobody-tuned-against)
+  other objections stand. **Re-measured 2026-11-02 (plan 102 lane X2, 465-note library, held-back questions, right note in the first three):** the shipping blend 90.8 in a hundred, the meaning search alone 92.2, the word search alone 85.6, so the claim held on the bigger library (`workshop:archive/research/kb-embed-bakeoff-2026-11-02-arms-p102-before.md`; the 2026-10-25 run, `...-p100-after-arms.md`, read the same).
+  Weights stay even. [D82](audit/maintainer-decisions-locked.md#d82--open-raised-2026-09-06--leaning-the-search-on-meaning-wins-on-the-measurements-and-breaks-three-rules-we-set-on-purpose) · [Detail](roadmap-kb-details.md#the-shipping-retrieval-arm-loses-to-the-vector-half-alone-on-rows-nobody-tuned-against)
 
 ## Deck check owed
 
@@ -136,7 +118,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   **2026-10-25 (plan 100 lane P, `55771b7a`), measured: no gain.** With the game handed over the AI named it 58 and 50 times in a hundred (75 on 2026-10-24); two runs differ by up to 21 points. Still PARTIAL. Report: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
   [Detail](roadmap-kb-details.md#measure-how-well-the-ai-reads-a-screenshot) · **From Phase 7 (call 8):** a screenshot feeding the search is not built.
 - ★★★★ `[KB]` **RAG Phase 5: depth on the thirteen titles** — **PARTIAL.** The thirteen original titles went from 133 to
-  164 notes. The four that had none now have enemy and item notes (plan 100, 2026-10-25): Baldur's Gate 3 7, GTA San Andreas 15, The Sims 4 15, Portal 2 14 (29 of 38 games have them). **Measured:** 100 of 102 blind questions find their note in the first three, but the new notes crowd the old ones (see the Bugs entry). **Deck 2026-10-26 (row P100-FOUR-GAMES-01, partly open):** Portal 2 passed (the Sentry Turret and Defective Turret notes attached). GTA failed twice, then passed after the fix (`b48e4baf`; row P100-FOUR-GAMES-01-try3, evidence `workshop:test-evidence/plan100-P100-FOUR-GAMES-01-try3.json`). The Sims 4 and Baldur's Gate 3 were measured (see their entries). Stays PARTIAL for your read of the Baldur's Gate 3 notes and the call on facts kept. [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  164 notes. The four that had none now have enemy and item notes (plan 100, 2026-10-25): Baldur's Gate 3 7, GTA San Andreas 15, The Sims 4 15, Portal 2 14 (every game has at least one enemy or item note, but only seven have them as labelled cards: see Where things stand). **Measured:** 100 of 102 blind questions find their note in the first three, but the new notes crowd the old ones (see the Bugs entry). **Deck 2026-10-26 (row P100-FOUR-GAMES-01, partly open):** Portal 2 passed (the Sentry Turret and Defective Turret notes attached). GTA failed twice, then passed after the fix (`b48e4baf`; row P100-FOUR-GAMES-01-try3, evidence `workshop:test-evidence/plan100-P100-FOUR-GAMES-01-try3.json`). The Sims 4 and Baldur's Gate 3 were measured (see their entries). Stays PARTIAL for your read of the Baldur's Gate 3 notes and the call on facts kept. [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
   [Plan](planning/28-phase5-corpus-depth.md) · [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
 - ★★★★★★ `[KB]` **RAG Phase 8: catalog corpus** — **OPEN, intent only.** The change that gets most people's games real
   notes instead of the model's memory: top 1000 Steam titles, top 100 on Deck, an emulated slice. Months of work.

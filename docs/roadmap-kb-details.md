@@ -32,6 +32,7 @@
 - [Plan 98 notes moved from the knowledge base roadmap (2026-10-24)](#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
 - [Plan 100 notes moved from the knowledge base roadmap (2026-10-25)](#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
 - [Plan 100 follow-up note moved from the knowledge-base roadmap 2026-10-26](#plan-100-follow-up-note-moved-from-the-knowledge-base-roadmap-2026-10-26)
+- [Plan 102 notes moved from the shelved roadmap (2026-11-02)](#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-02)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -782,3 +783,11 @@ Five tips now carry the plain words people type, and two new tips (165: sound to
 ## Plan 100 follow-up note moved from the knowledge-base roadmap 2026-10-26
 
 **2026-10-25 (lane T follow-up, `5943260b`):** the bare word "storage" no longer routes a question to the storage tips; it needs full, space, free, left, drive, card, sd, microsd, install, gb or "out of" beside it. Found when two blind Portal 2 questions about the Weighted Storage Cube were handed the storage-full tip.
+
+## Plan 102 notes moved from the shelved roadmap (2026-11-02)
+
+Moved word for word by the plan 102 pre-go audit to keep the shelved file under its size limit.
+
+**Picking a setting from the settings card (the entry's full text):**
+
+A on "Enable GPU Crash Report Collection" opened Steam's System page at the top, with the toggle about 320 px below the screen edge (found 2026-10-08 on the Deck, plan 83; evidence `workshop:test-evidence/plan83-P83-J1-SETTINGS-CARD.json`). Steam's link and route calls take only a page name; the Decky libraries and the web show no way to open at, or scroll to, one setting, and a read-only probe of Steam's own page found no settings route or deep-link reader (plan 87 B6, 2026-10-09; evidence `workshop:test-evidence/plan87-B6-SETTINGS-PROBE.json`); nothing was built (the maintainer's call 9, plan 87). The maintainer's call 2026-10-10 (checks page): fine as long as it opens the right page. The wrong-page bug (A on "Enable Wi-Fi" opens System, not Internet) is separate and stays in the roadmap's Bugs.

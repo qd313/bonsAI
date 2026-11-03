@@ -477,6 +477,15 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   the write step factored into a helper, two tests, a hand run that left the research folder unchanged). **Lane G's
   rewrites ready** (fifteen cards, the scratch library built, the patch in the workshop; waiting for the model). Lane X2's
   first run wrote the two dated files and renamed them `-p102-before`. Block R0's runbook committed (`196910fb`).
+- **23:20 UTC: the baseline is red at the tip, on one thing.** The full check stops at its first step, the ratchet:
+  `docs/roadmap.md` is 100.61 KB against its 100 KB ceiling. It crossed the line on 2026-10-26 in plan 100's last docs
+  sweep (`46411790`, 101,609 bytes) and grew again on 2026-10-28 (`3ac3e810`, 103,020 bytes); nobody ran the check
+  after. K0 trims it as part of its audit; every landing waits for K0; the full check runs again on K0's tip for the real
+  baseline. **Lane D's code part done** (`58f75ece`: the scoring script's shape flag, a label suffix, the God of War mix-up
+  line, nine tests; the plugin switch itself waits in its copy for the numbers). **Lane E's reading done**, waiting for the
+  model: in five of the six cases the same notes attached before and after, three of the six swung between 0 and 3 of 3 on
+  the old library across nine runs, and the test's word lists are too narrow in three places; only the Portal 2 gels case
+  is a worse answer. Lane N9 started (copy at `196910fb`). Lane B's second commit (`0d836cfb`) fixes the glossary entry.
 
 ## 13. Report
 

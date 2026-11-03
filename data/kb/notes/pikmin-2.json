@@ -47,39 +47,6 @@
       "crawled_at": "2026-11-02"
     },
     {
-      "section_id": 1804,
-      "game_id": 24,
-      "section_type": "enemy",
-      "name": "Man-at-Legs",
-      "card": "Summary: A boss in the arachnorb family with a mostly metal body and one mechanical leg, so its feet cannot be attacked. In Pikmin 2 it waits half-buried in the Subterranean Complex (sublevel 9), the Hole of Heroes (sublevel 13) and, in Challenge Mode, the Secret Testing Range (sublevel 2).\nWeak points: Aim at its body, since its feet cannot be attacked. Before it rises, Purple Pikmin can take off about a third of its health. The Pikmin 2 Player's Guide says purples can hit it only when its body sinks to its lowest point. Bitter spray freezes it in place, but a petrified Man-at-Legs takes only a quarter damage from ordinary attacks.\nTips: It takes a few seconds to pull its gun out, which is your cue to run for cover behind a wall or a chunk of terrain, and its gun cannot lead its shots: circle it smoothly, ideally without any Pikmin, and it cannot land a bullet. In Pikmin 2 the barrage is about 35 to 40 explosive rounds in three volleys, the first always 16, and it cannot be fought while it fires, so wait for the barrage to end, then rush in and throw. Using a leader as bait cuts your losses.",
-      "source_url": "https://www.pikminwiki.com/Man-at-Legs",
-      "source_license": "CC-BY-SA-4.0",
-      "source_version": "351797",
-      "crawled_at": "2026-11-02"
-    },
-    {
-      "section_id": 1805,
-      "game_id": 24,
-      "section_type": "enemy",
-      "name": "Waterwraith",
-      "card": "Summary: A see-through, watery humanoid riding two stone rollers. It crushes Pikmin and other creatures for an instant kill, wanders at random, and goes straight for active leaders and for Pikmin carrying treasure it can see. In Pikmin 2 it holds the Professional Noisemaker.\nWeak points: Until the last floor of the Submerged Castle there is virtually no way to hurt it: not bomb rocks, and not Pikmin attacks after an ultra-bitter spray. A Purple Pikmin landing on or near it turns it solid purple, and then every Pikmin can hurt it. When its health in that form is gone the rollers crumble and it runs about aimlessly, no longer a threat. In Pikmin 2 the rollers can be damaged and swarmed while it is stunned, which makes the first phase quick.\nTips: It follows the active leader, and it does not go into small corners, crevices and dead ends, which are safe places to hide. A cloud of dust trails behind it. It kills other enemies and disables traps, which you can use. Collect treasure quickly and skip the corpses; a fast enough run avoids it entirely. Ultra-bitter spray stops it coming at you, but a petrified one cannot be hurt by ordinary attacks: only a Purple Pikmin thud counts, and it does damage only once the rollers are gone. To keep it stunned, keep pelting it with Purples and whistle them back soon after they land so they are not shaken off.",
-      "source_url": "https://www.pikminwiki.com/Waterwraith",
-      "source_license": "CC-BY-SA-4.0",
-      "source_version": "356113",
-      "crawled_at": "2026-11-02"
-    },
-    {
-      "section_id": 1806,
-      "game_id": 24,
-      "section_type": "enemy",
-      "name": "Titan Dweevil",
-      "card": "Summary: The final boss, at the bottom of the last cave, the Dream Den: a huge Dweevil whose only natural attack is lashing out with its pincers, which does no damage. The danger is its four weapons, the Flare Cannon, the Shock Therapist, the Monster Pump and the Comedy Bomb.\nWeak points: Throw Pikmin at the weapons: each has 6000 health and the body has 5000, which heals 1.5 a second. A weapon whose health runs out falls off and becomes a treasure worth 1000; the boss cannot pick it up again as long as you do not leave the cave before carrying it to the pod. Once all four are gone the body loses its armor and turns tan, and Pikmin can simply be thrown at it; Purple Pikmin make that part faster.\nTips: Each colour is immune to one weapon: Red to the Flare Cannon, Yellow to the Shock Therapist, Blue to the Monster Pump and White to the Comedy Bomb. Weapons still knock leaders down even when the leader is immune. It picks its next weapon at random but favours the most damaged one, so finish a damaged weapon off instead of whittling all four. The Monster Pump reaches beyond the arena, so the page says to remove it first. The Shock Therapist is the only weapon that kills on contact: keep Pikmin in a tight group and beyond the exit geyser. Pikmin latched onto a weapon are safe until whistled off or shaken off, and a Titan Dweevil killed while petrified drops 10 random sprays.",
-      "source_url": "https://www.pikminwiki.com/Titan_Dweevil",
-      "source_license": "CC-BY-SA-4.0",
-      "source_version": "353211",
-      "crawled_at": "2026-11-02"
-    },
-    {
       "section_id": 1807,
       "game_id": 24,
       "section_type": "item",
@@ -165,6 +132,17 @@
       "source_url": "https://www.pikminwiki.com/White_Pikmin",
       "source_license": "CC-BY-SA-4.0",
       "source_version": "355847",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1815,
+      "game_id": 24,
+      "section_type": "item",
+      "name": "Red Pikmin",
+      "card": "Summary: The first Pikmin type found in every game, with sharp, pointy noses that give them 1.5 times the attack power of most types, and immune to fire. In Pikmin 2 the first Red Pikmin are five fighting a Dwarf Red Bulborb in the Valley of Repose, right next to where Olimar lands.\nUses: No task in Pikmin 2 needs Red Pikmin specifically, but until another type is found they are required by default. They are intended for the Fiery Bulblax, whose flames only they can withstand: its fire goes out if it is submerged, Purple Pikmin can hurt it with their landing, White Pikmin can be eaten by it to poison it, and in certain caves it can be lured into the abyss. They are intended for treasures guarded by a Fiery Bulblax with no water around, such as the Essence of Despair, the Frosty Bauble, the Gemstar Wife and the Insect Condo, and for carrying the Gyroid Bust through fire geysers unless the geysers are destroyed.\nTips: Their fire immunity matters less in Pikmin 2 than in other games: any Pikmin can destroy fire geysers, Fiery Blowhogs fall easily to Purple Pikmin, and Fiery Dweevils and the Titan Dweevil's flame weapon can be beaten with any type. In 2-Player Battle, player 1 gets Red Pikmin and player 2 gets Blue Pikmin with the same 1.5 times attack power.",
+      "source_url": "https://www.pikminwiki.com/Red_Pikmin",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "356475",
       "crawled_at": "2026-11-02"
     }
   ]

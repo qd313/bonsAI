@@ -1,0 +1,39 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 2000,
+      "game_id": 31,
+      "section_type": "enemy",
+      "name": "Kritter",
+      "card": "Summary: The Kremling Krew's foot soldiers. In Donkey Kong 64 they are simply called Kremlings, and they wear a sleeveless leather jacket with a skull-and-crossbones on the back.\nWeak points: They are often the weakest Kremlings despite their muscular appearance, and the Prima guide says one hit will send them on their way.\nTips: You meet them on Crocodile Isle and in every world except Fungi Forest and Creepy Castle. In Frantic Factory a red kind belches in a set order, and Lanky has to memorize it and repeat it to earn a Golden Banana.",
+      "source_url": "https://www.mariowiki.com/Kritter",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5475973",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2001,
+      "game_id": 31,
+      "section_type": "enemy",
+      "name": "Klump",
+      "card": "Summary: A pink Kremling in a yellow-orange vest that throws unripe green oranges at the active Kong and can bounce a Kong backward with its belly.\nWeak points: Klumps resist basic attacks, and a direct hit only stuns one for a while. They are truly beaten only by the shockwave attack, a thrown orange, an instrument move, or Chunky touching them in his Hunky Chunky state.\nTips: A beaten Klump salutes, falls over and leaves three oranges. You find them in every level except Frantic Factory, Creepy Castle and the DK Isles hub, and in Fungi Forest only by day, because Skeleton Kremlings take their place at night.",
+      "source_url": "https://www.mariowiki.com/Klump",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5468756",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2002,
+      "game_id": 31,
+      "section_type": "enemy",
+      "name": "Kasplat",
+      "card": "Summary: A big, muscular Kremling in a leather jacket and sunglasses that guards a blueprint. It slams the ground to send out a shockwave and can punch a Kong that comes close.\nWeak points: Kasplats are tough and often take several hits, but a Kong's shockwave attack or instrument move beats one in a single hit, and so do five oranges. Chunky can flatten one in Hunky Chunky mode, but then it drops no blueprint.\nTips: Its hair colour shows which Kong can take its blueprint (yellow Donkey, red Diddy, blue Lanky, purple Tiny, green Chunky), and the hair turns white once the blueprint is taken. Every level has five Kasplats except Hideout Helm, which has none.",
+      "source_url": "https://www.mariowiki.com/Kasplat",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5411217",
+      "crawled_at": "2026-11-02"
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "wiki": "Super Mario Wiki (https://www.mariowiki.com/api.php)",
+  "licence_printed_by_fetcher": "Attribution-ShareAlike 4.0 International https://creativecommons.org/licenses/by-sa/4.0/",
+  "licence_stored": "CC-BY-SA-4.0 (the fetcher prints the licence as Attribution-ShareAlike 4.0 International; this repo's data/kb/NOTICE.md lists the Super Mario Wiki as CC-BY-SA-4.0)",
+  "game_id": 31,
+  "game": "Donkey Kong 64",
+  "read_on": "2026-11-02",
+  "sections": [
+    {
+      "section_id": 2000,
+      "name": "Kritter",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Kritter",
+      "main_revision": "5475973",
+      "lines": [
+        {
+          "line": "Summary: The Kremling Krew's foot soldiers. In Donkey Kong 64 they are simply called Kremlings, and they wear a sleeveless leather jacket with a skull-and-crossbones on the back.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Kritter",
+              "revision": "5475973",
+              "quoted": [
+                "Kritters (known as Kremlings in Donkey Kong 64 and DK: King of Swing) are enemies introduced in Donkey Kong Country. These Kremlings act as the main footsoldiers of the Kremling Krew",
+                "Kritters wear a sleeveless leather jacket with a skull-and-crossbones on the back"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: They are often the weakest Kremlings despite their muscular appearance, and the Prima guide says one hit will send them on their way.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Kritter",
+              "revision": "5475973",
+              "quoted": [
+                "They are often the weakest Kremlings despite their muscular appearance.",
+                "Prima Official Game Guide: Don't fear these reptilian nuisances. One hit will send them on their way."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You meet them on Crocodile Isle and in every world except Fungi Forest and Creepy Castle. In Frantic Factory a red kind belches in a set order, and Lanky has to memorize it and repeat it to earn a Golden Banana.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Kritter",
+              "revision": "5475973",
+              "quoted": [
+                "They are encountered at Crocodile Isle, all worlds barring Fungi Forest and Creepy Castle",
+                "There is a red variety encountered in Frantic Factory, where they belch in a certain order for Lanky to memorize and replicate for a Golden Bananas"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2001,
+      "name": "Klump",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Klump",
+      "main_revision": "5468756",
+      "lines": [
+        {
+          "line": "Summary: A pink Kremling in a yellow-orange vest that throws unripe green oranges at the active Kong and can bounce a Kong backward with its belly.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Klump",
+              "revision": "5468756",
+              "quoted": [
+                "They are now pink and wear a yellow-orange vest over their belly",
+                "Klumps attack the active Kong by throwing unripe, green oranges at them",
+                "Klumps can also bounce the Kong backward with their belly."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Klumps resist basic attacks, and a direct hit only stuns one for a while. They are truly beaten only by the shockwave attack, a thrown orange, an instrument move, or Chunky touching them in his Hunky Chunky state.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Klump",
+              "revision": "5468756",
+              "quoted": [
+                "Klumps are among the stronger enemies, as they are resistant to basic attacks",
+                "the direct attack will only stun the Klump for a while",
+                "Klumps can only truly be defeated by the shockwave attack, throwing an orange, using a musical instrument, or if Chunky touches them while in his Hunky Chunky state."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A beaten Klump salutes, falls over and leaves three oranges. You find them in every level except Frantic Factory, Creepy Castle and the DK Isles hub, and in Fungi Forest only by day, because Skeleton Kremlings take their place at night.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Klump",
+              "revision": "5468756",
+              "quoted": [
+                "Klumps release three oranges upon defeat.",
+                "When defeated, Klump spins around, does a military salute and then falls down.",
+                "Klumps are encountered in every level except for Frantic Factory, Creepy Castle, and the DK Isles hub.",
+                "In Fungi Forest, Klumps only appear during the day time and are replaced by Skeleton Kremlings at night."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2002,
+      "name": "Kasplat",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Kasplat",
+      "main_revision": "5411217",
+      "lines": [
+        {
+          "line": "Summary: A big, muscular Kremling in a leather jacket and sunglasses that guards a blueprint. It slams the ground to send out a shockwave and can punch a Kong that comes close.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Kasplat",
+              "revision": "5411217",
+              "quoted": [
+                "They are large, muscular Kremlings",
+                "All Kasplats wear a leather jacket, sunglasses",
+                "Kasplats attack by slamming on the ground, unleashing a shockwave in the process. They can also punch the active Kong if they approach them.",
+                "They are King K. Rool's bodyguards, of whom he entrusted to guard the blueprints from Snide and the Kongs."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Kasplats are tough and often take several hits, but a Kong's shockwave attack or instrument move beats one in a single hit, and so do five oranges. Chunky can flatten one in Hunky Chunky mode, but then it drops no blueprint.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Kasplat",
+              "revision": "5411217",
+              "quoted": [
+                "Kasplats are quite resilient, often requiring players to deliver multiple hits to defeat them.",
+                "the Kongs can defeat a Kasplat in a single hit by using their shockwave attack or musical instrument move. Alternatively, five oranges can defeat one.",
+                "this does not occur if Chunky Kong flattens a Kasplat while in Hunky Chunky mode"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its hair colour shows which Kong can take its blueprint (yellow Donkey, red Diddy, blue Lanky, purple Tiny, green Chunky), and the hair turns white once the blueprint is taken. Every level has five Kasplats except Hideout Helm, which has none.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Kasplat",
+              "revision": "5411217",
+              "quoted": [
+                "Kasplats have one of five hair colors: yellow, red, blue, purple or green, corresponding respectively to Donkey, Diddy, Lanky, Tiny or Chunky Kong.",
+                "Once a Kasplat's blueprint has been collected, the Kasplat's hair turns white.",
+                "Every level has five Kasplats, except for Hideout Helm, which does not feature any Kasplats"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

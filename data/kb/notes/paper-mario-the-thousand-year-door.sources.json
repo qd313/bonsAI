@@ -119,7 +119,7 @@
           ]
         },
         {
-          "line": "Tips: Goombella's Tattle says the only way to beat one is to whack it with the other, and that running away may not be a bad idea; the one in green shoes is the younger brother.",
+          "line": "Tips: Their Tattle Log entry treats them as nearly unbeatable, names the other Iron Cleft as the only weapon, and counts running away as a fair choice; the one in green shoes is the younger brother.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Iron_Cleft",
@@ -210,6 +210,7 @@
               "revision": "5486982",
               "quoted": [
                 "It serves as the primary boss of Chapter 2.",
+                "Magnus von Grapple is activated by Lord Crump in the Great Tree",
                 "Max HP is 30, Attack is 2, and Defense is 1.",
                 "Lord Crump drives it."
               ]
@@ -274,22 +275,20 @@
       "main_revision": "5522260",
       "lines": [
         {
-          "line": "Summary: The Chapter 4 boss from the Creepy Steeple, fought three times with 40 HP each time and an attack of 4, then 4, then 6 in the Palace of Shadow.",
+          "line": "Summary: The Chapter 4 boss, fought in the Creepy Steeple, with 40 HP, 4 attack and no defense.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Doopliss",
               "revision": "5522260",
               "quoted": [
                 "is the main boss of Chapter 4.",
-                "Max HP || 40 || Attack || 4 || Defense || 0 || Location(s) || Creepy Steeple",
-                "Max HP || 40 || Attack || 4 || Defense || 0 || Location(s) || Twilight Trail, Creepy Steeple",
-                "Max HP || 40 || Attack || 6 || Defense || 0 || Location(s) || Palace of Shadow"
+                "Max HP || 40 || Attack || 4 || Defense || 0 || Location(s) || Creepy Steeple"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: In the first fight he changes into a shadowy outline of Mario once his HP drops below 20, and even if you reduce him to zero before that, he changes anyway and is left with 10 HP.",
+          "line": "Weak points: Once his HP drops below 20 he transforms and fights with different moves, and even if you reduce him to zero before that, he transforms anyway and is left with 10 HP.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Doopliss",
@@ -302,28 +301,26 @@
           ]
         },
         {
-          "line": "Tips: Goombella cannot tattle his name, which shows as five question marks, and learning it later is what lets Mario hurt him; partner badges such as HP Plus P or Power Plus P are switched off in the second fight.",
+          "line": "Tips: Goombella's Tattle cannot give him a name and shows five question marks, and it notes that he is good at transforming.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Doopliss",
               "revision": "5522260",
               "quoted": [
                 "Doopliss' name is represented by five question marks",
-                "tells him his real name, which weakens the power of his spell by making him vulnerable to Mario's attacks.",
-                "any badges that affect Mario's partners (i.e. HP Plus P or Power Plus P) are disabled during this fight"
+                "It's apparently really good at transforming itself and other things."
               ]
             }
           ]
         },
         {
-          "line": "Tips: In the Palace of Shadow rematch he hits harder: his Head Missile does 6, and he copies Mario or one of your partners and attacks as them.",
+          "line": "Tips: Before he transforms his Head Missile does 4 damage; afterwards he uses a Jump that hits twice for 2 and a Hammer swing for 4.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Doopliss",
               "revision": "5522260",
               "quoted": [
-                "In this battle, Doopliss is a bit tougher, and has the ability to transform into Mario or one of his partners, and attacking as them.",
-                "(As Himself) Head Missile (6), Transform (turns into Mario or Partner)"
+                "[As Himself] Head Missile (4), Transform (turns into Shadow Mario) [As Shadow Mario] Jump (2x2), Hammer (4)"
               ]
             }
           ]
@@ -403,7 +400,7 @@
     },
     {
       "section_id": 1706,
-      "name": "Lord Crump (Keelhaul Key fight)",
+      "name": "Lord Crump (third fight)",
       "kind": "boss",
       "main_page": "https://www.mariowiki.com/Lord_Crump",
       "main_revision": "5513572",
@@ -424,7 +421,7 @@
           ]
         },
         {
-          "line": "Weak points: Goombella says that if you take out their leader, the X-Nauts lose the focus to attack, so go for Crump first.",
+          "line": "Weak points: Go for Crump first: the Tattle Log says the X-Nauts lose their focus on attacking once their leader is down.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Lord_Crump",
@@ -436,7 +433,7 @@
           ]
         },
         {
-          "line": "Tips: He only body-slams for 3, heals after round one, and in round two summons replacements for the X-Naut platoon the turn after they fall; Goombella warns that the X-Nauts around him are a force to be reckoned with.",
+          "line": "Tips: He only body-slams for 3, heals after round one, and in round two summons replacements for the X-Naut platoon the turn after they fall; Crump himself only attacks plainly, so the X-Nauts around him are the bigger danger.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Lord_Crump",
@@ -458,7 +455,7 @@
       "main_revision": "5509839",
       "lines": [
         {
-          "line": "Summary: A huge mass of small Smorgs that attacks on top of the Excess Express in Chapter 6, with 50 HP, 5 attack and 1 defense; it is the only chapter boss besides the Shadow Queen that guards no Crystal Star.",
+          "line": "Summary: A huge mass of small Smorgs that attacks on top of the Excess Express in Chapter 6, with 50 HP, 5 attack and 1 defense; it is the only chapter boss besides the final boss that guards no Crystal Star.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Smorg",
@@ -528,6 +525,7 @@
               "revision": "5413646",
               "quoted": [
                 "It is the seventh Chapter Boss in the game, and the last boss to hold a Crystal Star.",
+                "is the improved version of Magnus von Grapple controlled by Lord Crump",
                 "Max HP is 70, Attack is 6, and Defense is 2.",
                 "Location(s) || X-Naut Fortress"
               ]
@@ -709,7 +707,7 @@
       "main_revision": "5410422",
       "lines": [
         {
-          "line": "Summary: The skeletal dragon at the bottom of the Pit of 100 Trials, with 200 HP, 8 attack and 2 defense, the most HP of any enemy; she is the strongest boss in the game, stronger even than the Shadow Queen.",
+          "line": "Summary: The skeletal dragon at the bottom of the Pit of 100 Trials, with 200 HP, 8 attack and 2 defense, the most HP of any enemy; she is the strongest boss in the game, stronger even than the final boss.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bonetail",
@@ -864,7 +862,7 @@
           ]
         },
         {
-          "line": "Uses: Super Rank teaches Goombella Multibonk, Koops Shell Shield, Flurrie Lip Lock, Yoshi Kid Mini-Egg, Vivian Fiery Jinx, Bobbery Hold Fast and Ms. Mowz Tease; Ultra Rank teaches Goombella Rally Wink (Mario gets a second turn), Koops Shell Slam, Flurrie Dodgy Fog, Yoshi Kid Stampede, Vivian Infatuate, Bobbery Bob-ombast and Ms. Mowz Smooch (heals Mario 10 HP).",
+          "line": "Uses: Super Rank teaches Goombella Multibonk, Koops Shell Shield, Flurrie Lip Lock, Yoshi Kid Mini-Egg, Bobbery Hold Fast and Ms. Mowz Tease; Ultra Rank teaches Goombella Rally Wink (Mario gets a second turn), Koops Shell Slam, Flurrie Dodgy Fog, Yoshi Kid Stampede, Bobbery Bob-ombast and Ms. Mowz Smooch (heals Mario 10 HP).",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Goombella",
@@ -896,14 +894,6 @@
               "quoted": [
                 "Mini-Egg || 3 || Throws eggs at all the enemies and, if successful, shrinks them.",
                 "Stampede || 6 || Summons a Yoshi herd to attack all enemies."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Vivian",
-              "revision": "5465682",
-              "quoted": [
-                "Fiery Jinx || 6 || Deals fire damage to all enemies, piercing defense. It also burns them. || Player presses the 5-button combo of ,,, and that appear on the screen. || Super: 5 Ultra: 5 || Super Rank",
-                "Infatuate || 4 || Blows a kiss to all enemies to confuse them if effective"
               ]
             },
             {
@@ -966,7 +956,8 @@
             }
           ]
         }
-      ]
+      ],
+      "note": "Vivian is left out of this note on purpose: she joins the party through a Chapter 4 story turn the game keeps from a player until then, so a note that lists her would spoil it. Her ranks are on her wiki page (https://www.mariowiki.com/Vivian) and are not used here."
     },
     {
       "section_id": 1714,

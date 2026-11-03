@@ -600,6 +600,11 @@ background sleep job before any pause (the scheduled check alone did not wake pl
      rest of chain 1 (`-m1`, `-i`, `-n7`, `-n5`, `-n6`, `-n8`) and chain 2. The bookkeeper's sweep brief is
      `sweep-1-brief.md` in the scratch folder. The stuck full check was ended (the bundler hung at 8 percent CPU for twenty
      minutes); run the full check again on the final tip.
+- **2026-11-03, 08:40 EST: picked back up** (the chat restarted on "continue"; the five-hour window read 17 percent, the
+  week 22). Lane F's landing had stopped on the Python set; the whole set run again on the tip passed (3,337 tests), so the
+  failure was a one-off under load and F's five commits stand. The remaining landings restarted as one job: M1, I, N7, N5,
+  N6, N8, then N9, N10, N11, N12, M2, D, C, Q2. The Deck answers now and the rig's tools are back in this chat, but another
+  process holds the rig's lease (a debugger probe); block R0 waits for it.
 
 ## 13. Report
 

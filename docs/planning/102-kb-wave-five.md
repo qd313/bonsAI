@@ -594,6 +594,12 @@ background sleep job before any pause (the scheduled check alone did not wake pl
      the final tip, the memory note. The Deck blocks R0 and R1 wait for a chat with the rig (runbooks written).
   6. The maintainer has not answered the quality read; call 2's default applied: the notes land, and a Verify entry for
      their eye is owed on every one of the eight games.
+  7. **State at the usage stop (23:50 EST):** landing chain 1 landed A (`ac224744`), B (`cfbc67d8`) and H (`943b0f86`), then
+     stopped at lane F with a gate failure after F's five commits were picked (tip `63afa366`): read
+     `land-refactor-p102-f.log` in the scratch folder for the failing gate, fix it on the tip or in F's copy, then run the
+     rest of chain 1 (`-m1`, `-i`, `-n7`, `-n5`, `-n6`, `-n8`) and chain 2. The bookkeeper's sweep brief is
+     `sweep-1-brief.md` in the scratch folder. The stuck full check was ended (the bundler hung at 8 percent CPU for twenty
+     minutes); run the full check again on the final tip.
 
 ## 13. Report
 

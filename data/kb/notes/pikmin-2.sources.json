@@ -1,0 +1,314 @@
+{
+  "wiki": "Pikipedia (https://www.pikminwiki.com/api.php)",
+  "licence_printed_by_fetcher": "Pikipedia (MediaWiki 1.43.11) licence: Attribution-ShareAlike 4.0 International https://creativecommons.org/licenses/by-sa/4.0/",
+  "licence_stored": "CC-BY-SA-4.0 (the fetcher prints the version-4.0 licence link; matches data/kb/NOTICE.md, which lists Pikipedia as CC-BY-SA-4.0)",
+  "game_id": 24,
+  "game": "Pikmin 2",
+  "read_on": "2026-11-02",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://www.pikminwiki.com/api.php --titles ... (rendered page text; every quote below is a verbatim stretch of that text once runs of whitespace are collapsed to one space; table rows are written 'cell || cell' as the fetcher prints them)",
+  "sections": [
+    {
+      "section_id": 1800,
+      "name": "Red Bulborb",
+      "kind": "enemy",
+      "main_page": "https://www.pikminwiki.com/Bulborb",
+      "main_revision": "355937",
+      "lines": [
+        {
+          "line": "Summary: The best-known enemy in the series, a big grub-dog with a red back and white spots, called the Spotty Bulborb in the first game and the Red Bulborb in Pikmin 2. It sleeps in the open by day, wakes when it is attacked or when something is carried right next to it, and then lunges at Pikmin and leaders to eat them.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Bulborb",
+              "revision": "355937",
+              "quoted": [
+                "known as the Spotty Bulborb in Pikmin and the Red Bulborb",
+                "Bulborbs are the most prominent enemies in the franchise",
+                "Bulborbs have pointed snouts, eyes on stalks, and red backs with white spots.",
+                "Bulborbs are the most commonly encountered member of the Grub-dog family of enemies.",
+                "Bulborbs are nocturnal creatures, and sleep in open locations during the day.",
+                "they won't wake up until they are attacked",
+                "An object being carried adjacent to a Bulborb can also wake up the enemy.",
+                "Once awake, they become aggressive and will run towards nearby Pikmin or leaders, lunging in an attempt to eat them."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Purple Pikmin do serious damage, especially when their landing stuns it. If a lot of Pikmin attack at once, it shakes them off and goes back to trying to eat.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Bulborb",
+              "revision": "355937",
+              "quoted": [
+                "A few Purple Pikmin can cause serious damage, especially if they stun the Red Bulborb.",
+                "If there are a lot of Pikmin attacking it at once, it will shake them off and then start trying to eat again."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: With an army of at least 30 Pikmin, keep tossing Pikmin onto its back, even if some are shaken off, rather than swarming it. If you wake it by accident, run until it turns around, then make a new pass. With a very small army, wake it and lead it far from where it sleeps; when it walks home and settles down, attacking at that moment gives a few seconds in which it cannot move or bite. In some metal-themed caves you can lead it off the edge by running around a hole in the sublevel.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Bulborb",
+              "revision": "355937",
+              "quoted": [
+                "Rather than swarming it, continuously tossing Pikmin onto its back is preferable when the army is at least 30 Pikmin strong, even if some are shaken off.",
+                "If it is accidentally awakened before being attacked by Pikmin, you should run away until it turns around, then make a new pass at it.",
+                "If the Pikmin army is very small, another strategy is to wake up the Red Bulborb and make it chase the leader until it goes far enough away from its starting location, at which point it will turn around and return to its original sleeping spot.",
+                "Once it returns there, attacking at the moment it starts sleeping can provide the player with a few crucial seconds in which the Red Bulborb is entirely immobilized and harmless.",
+                "In some metal-themed caves, Red Bulborbs can be led off of the stage by awakening it and quickly running around a hole in the sublevel, causing it to fall off."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1801,
+      "name": "Dwarf Red Bulborb",
+      "kind": "enemy",
+      "main_page": "https://www.pikminwiki.com/Dwarf_Bulborb",
+      "main_revision": "355942",
+      "lines": [
+        {
+          "line": "Summary: A small, common enemy called the Dwarf Red Bulborb in Pikmin 2. It looks like a young bulborb but is really a breadbug copying a bulborb's look. It barks and chases when it spots a leader or Pikmin, bites one Pikmin at a time and chews it slowly, and never strays far from its territory.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Dwarf_Bulborb",
+              "revision": "355942",
+              "quoted": [
+                "named the Dwarf Red Bulborb",
+                "is a small and common enemy in the Pikmin series.",
+                "they are actually a different species in the breadbug family, and mimic the appearance of Bulborbs to evade predation.",
+                "they will audibly bark and begin pursuit. Dwarf Bulborbs will never stray far from their territory.",
+                "They can only catch and eat one Pikmin at a time.",
+                "they will slowly chew their catch before swallowing"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A single Pikmin thrown onto its back kills it, and its low health means swarming works too. Killing it while it chews frees the Pikmin it caught. Purple Pikmin are exceptionally effective: they steer onto a nearby enemy when thrown, and quick throws at a group stun the whole group and likely kill most of it.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Dwarf_Bulborb",
+              "revision": "355942",
+              "quoted": [
+                "Throwing a single Pikmin onto their back will kill them instantly, and their fairly low health makes swarming a viable tactic as well.",
+                "killing the Bulborb during this process will free the Pikmin.",
+                "Purple Pikmin are exceptionally effective.",
+                "Rapidly throwing Purple Pikmin in the general vicinity of a group will stun the entire group, as well as likely kill most, if not all of them."
+              ]
+            },
+            {
+              "page": "https://www.pikminwiki.com/Purple_Pikmin",
+              "revision": "353333",
+              "quoted": [
+                "a small homing system will swerve the Pikmin's fall and make it land on a nearby enemy"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It is no threat alone; the danger is numbers, or a dwarf standing next to other enemies, so deal with the dwarfs first in a mixed fight. Purples work well on a crowd, as on the eighth sublevel of the Cavern of Chaos. In Pikmin 2 it does not call for help: the scream that wakes a nearby bulborb happens only in the first game. If you lead it past its range it gives up and walks home.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Dwarf_Bulborb",
+              "revision": "355942",
+              "quoted": [
+                "Their only true threat comes in their numbers or when they appear near other enemies, in which case they may be able to eat a Pikmin or two in the chaos of the battle. Prioritizing them first should simplify things",
+                "This is particularly handy for sublevels with huge numbers of them, such as the Cavern of Chaos's eighth sublevel.",
+                "Exclusively in the first game, pestering one for long enough will prompt it to scream for help, waking up the nearest Spotty Bulborb",
+                "If led outside of a certain range, they will stop chasing their target and return to where they started."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1802,
+      "name": "Fiery Blowhog",
+      "kind": "enemy",
+      "main_page": "https://www.pikminwiki.com/Fiery_Blowhog",
+      "main_revision": "352977",
+      "lines": [
+        {
+          "line": "Summary: A pig-like enemy that shoots fire from its red snout, found commonly in Pikmin 2. It wanders a very small patch, turns to face any leader or Pikmin it notices, and breathes a stream of fire. When Pikmin latch on, it bucks them off into the area in front of it and breathes fire there.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Fiery_Blowhog",
+              "revision": "352977",
+              "quoted": [
+                "is a pig-like enemy in Pikmin, Pikmin 2, Pikmin 3, and Pikmin 4",
+                "As the name would imply, Fiery Blowhogs shoot fire from their red snouts.",
+                "are found commonly in Pikmin 2 and Pikmin 3",
+                "Fiery Blowhogs typically wander around a very small zone aimlessly",
+                "it will rotate to face them, before spewing out a stream of fire",
+                "In the first two games, when provoked by Pikmin, Fiery Blowhogs will buck them off into an area in front of them and shoot fire."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Purple Pikmin thrown onto it do serious damage and stop it bucking Pikmin off or breathing fire. It is easier to kill in Pikmin 2, so a big group can swarm it straight away. It must breathe in before it breathes out, and it cannot turn or move from the start of that breath until the end, so its flame does not follow anyone who runs away.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Fiery_Blowhog",
+              "revision": "352977",
+              "quoted": [
+                "since they are easier to kill in Pikmin 2, a large Pikmin group can swarm it right away for the kill.",
+                "throwing Purple Pikmin on it will deal serious damage to the Blowhog, as well as rendering unable to buck the Pikmin off, or breathe fire.",
+                "it must inhale first, which creates a short delay before firing in which the attack may be avoided.",
+                "From the moment the creature begins inhaling to the moment it's done spitting fire, it will not rotate or move, meaning the spray of fire will not follow leaders or Pikmin running away."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Any Pikmin type can beat it. Pikmin clinging to it cannot be set alight and Red Pikmin ignore fire; the page warns that being bucked into water is what can kill them, so turn it away from water first. In Pikmin 2 a Blowhog may not fire when only a leader is close to it.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Red_Pikmin",
+              "revision": "356475",
+              "quoted": [
+                "Fiery Blowhog: This enemy shoots fire towards the player, but can be defeated with any Pikmin type.",
+                "Red Pikmin also exhibit an immunity to fire, in that they ignore the heat"
+              ]
+            },
+            {
+              "page": "https://www.pikminwiki.com/Fiery_Blowhog",
+              "revision": "352977",
+              "quoted": [
+                "The same strategy described above works equally well here",
+                "Pikmin that are swarming a Fiery Blowhog cannot be ignited, meaning they're safe from its attack.",
+                "they cannot be killed, unless the Fiery Blowhog bucks them into water.",
+                "unless the Fiery Blowhog bucks them into water. Make sure you make the Blowhog faces away from any water sources.",
+                "In Pikmin 2, Blowhogs may not shoot fire if only a leader is present nearby."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1803,
+      "name": "Wollywog (white)",
+      "kind": "enemy",
+      "main_page": "https://www.pikminwiki.com/Wollyhop",
+      "main_revision": "355077",
+      "lines": [
+        {
+          "line": "Summary: A large, flat, white frog found underground, called the Wollyhop on the wiki and the Wollywog in some games and regions. It is passive until a leader or Pikmin comes close, then leaps and lands on them, and the landing kills every Pikmin within a wide radius.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Wollyhop",
+              "revision": "355077",
+              "quoted": [
+                "is a frog-like enemy found in subterranean areas in Pikmin, Pikmin 2, and Pikmin 4",
+                "known as the Wollywog depending on the game and region",
+                "Wollyhops have lost most of their skin pigmentation, giving them an albino-like appearance.",
+                "the Wollyhop is also a large creature with large eyes",
+                "Generally passive, they will only attack by leaping into the air if a leader or Pikmin comes nearby.",
+                "Upon falling, a Wollyhop's attack covers a considerable radius, killing all Pikmin within it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Purple Pikmin slams do large damage and may briefly stun it. Swarming works less well in Pikmin 2 than in the first game, so throw Pikmin onto it instead of sending them all in.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Wollyhop",
+              "revision": "355077",
+              "quoted": [
+                "In Pikmin 2, making use of the Purple Pikmin's slam attack is useful, as they are capable of dealing large amounts of damage with the chance to stun it briefly.",
+                "Swarming is less effective in this game, so you should be throwing your Pikmin instead."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: When it is in the air, whistle your Pikmin off before it lands, so they do not fly off and possibly lose their maturity. Even a Wollywog killed as it is about to fall still crushes the Pikmin under it.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Wollyhop",
+              "revision": "355077",
+              "quoted": [
+                "When the Wollyhop is airborne, whistle your Pikmin off before it lands, so they don't fly off and potentially lose their maturity.",
+                "Even if a Wollyhop is defeated as it is about to fall, any Pikmin caught beneath it will still be killed."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1804,
+      "name": "Man-at-Legs",
+      "kind": "enemy",
+      "main_page": "https://www.pikminwiki.com/Man-at-Legs",
+      "main_revision": "351797",
+      "lines": [
+        {
+          "line": "Summary: A boss in the arachnorb family with a mostly metal body and one mechanical leg, so its feet cannot be attacked. In Pikmin 2 it waits half-buried in the Subterranean Complex (sublevel 9), the Hole of Heroes (sublevel 13) and, in Challenge Mode, the Secret Testing Range (sublevel 2).",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Man-at-Legs",
+              "revision": "351797",
+              "quoted": [
+                "is a member of the Arachnorb family, and first appeared as a boss in Pikmin 2",
+                "having a mostly mechanical torso sheathed in metal with four spindly legs – three of which are organic and spider-like, while the remaining one is mechanical; this makes attacking its feet impossible.",
+                "the Man-at-Legs can be found partially buried in the ground",
+                "Subterranean Complex - One can be seen on sublevel 9, holding the Stellar Orb.",
+                "Hole of Heroes - One can be seen on sublevel 13, holding the Memorable Gyro Block",
+                "Secret Testing Range - One can be seen on sublevel 2, holding The Key."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Aim at its body, since its feet cannot be attacked. Before it rises, Purple Pikmin can take off about a third of its health. The Pikmin 2 Player's Guide says purples can hit it only when its body sinks to its lowest point. Bitter spray freezes it in place, but a petrified Man-at-Legs takes only a quarter damage from ordinary attacks.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Man-at-Legs",
+              "revision": "351797",
+              "quoted": [
+                "this makes attacking its feet impossible.",
+                "In Pikmin 2, Purple Pikmin can deal large chunks of its health, likely lowering it by about 33%.",
+                "Only when the body sinks to its lowest point will you be able to hit it with purples.",
+                "bitter spray to freeze it in place"
+              ]
+            },
+            {
+              "page": "https://www.pikminwiki.com/Ultra-bitter_spray",
+              "revision": "349978",
+              "quoted": [
+                "Any enemy that becomes petrified will have its defense changed in some way, such that all Pikmin standard attacks and leader punches cause more or less damage.",
+                "Man-at-Legs || 0.25×"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It takes a few seconds to pull its gun out, which is your cue to run for cover behind a wall or a chunk of terrain, and its gun cannot lead its shots: circle it smoothly, ideally without any Pikmin, and it cannot land a bullet. In Pikmin 2 the barrage is about 35 to 40 explosive rounds in three volleys, the first always 16, and it cannot be fought while it fires, so wait for the barrage to end, then rush in and throw. Using a leader as bait cuts your losses.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Man-at-Legs",
+              "revision": "351797",
+              "quoted": [
+                "it takes a few seconds to pull out its gun before it starts attacking, providing a clear signal of when retreating should be done, and it cannot lead its shots, meaning that if one circles the Man-at-Legs smoothly enough, preferably without any Pikmin, it'll be unable to land a single bullet.",
+                "As soon as it wakes, you should quickly rush to cover behind objects like dirt walls or breakable pots, or just chunks of the terrain.",
+                "In Pikmin 2, this attack consists of about 35-40 bullets in total, almost always spread across three volleys of explosive rounds, with the first volley always consisting of 16 rounds.",
+                "Unlike in Pikmin 2, it is possible to fight the boss while it is firing.",
+                "After waiting for its attack to end, you should quickly rush towards the arachnorb and start throwing your Pikmin at it",
+                "using one of the leaders as bait for the Man-at-Legs is a good strategy to reduce potential losses"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

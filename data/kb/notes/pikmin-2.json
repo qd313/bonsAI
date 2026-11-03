@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 1800,
+      "game_id": 24,
+      "section_type": "enemy",
+      "name": "Red Bulborb",
+      "card": "Summary: The best-known enemy in the series, a big grub-dog with a red back and white spots, called the Spotty Bulborb in the first game and the Red Bulborb in Pikmin 2. It sleeps in the open by day, wakes when it is attacked or when something is carried right next to it, and then lunges at Pikmin and leaders to eat them.\nWeak points: Purple Pikmin do serious damage, especially when their landing stuns it. If a lot of Pikmin attack at once, it shakes them off and goes back to trying to eat.\nTips: With an army of at least 30 Pikmin, keep tossing Pikmin onto its back, even if some are shaken off, rather than swarming it. If you wake it by accident, run until it turns around, then make a new pass. With a very small army, wake it and lead it far from where it sleeps; when it walks home and settles down, attacking at that moment gives a few seconds in which it cannot move or bite. In some metal-themed caves you can lead it off the edge by running around a hole in the sublevel.",
+      "source_url": "https://www.pikminwiki.com/Bulborb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "355937",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1801,
+      "game_id": 24,
+      "section_type": "enemy",
+      "name": "Dwarf Red Bulborb",
+      "card": "Summary: A small, common enemy called the Dwarf Red Bulborb in Pikmin 2. It looks like a young bulborb but is really a breadbug copying a bulborb's look. It barks and chases when it spots a leader or Pikmin, bites one Pikmin at a time and chews it slowly, and never strays far from its territory.\nWeak points: A single Pikmin thrown onto its back kills it, and its low health means swarming works too. Killing it while it chews frees the Pikmin it caught. Purple Pikmin are exceptionally effective: they steer onto a nearby enemy when thrown, and quick throws at a group stun the whole group and likely kill most of it.\nTips: It is no threat alone; the danger is numbers, or a dwarf standing next to other enemies, so deal with the dwarfs first in a mixed fight. Purples work well on a crowd, as on the eighth sublevel of the Cavern of Chaos. In Pikmin 2 it does not call for help: the scream that wakes a nearby bulborb happens only in the first game. If you lead it past its range it gives up and walks home.",
+      "source_url": "https://www.pikminwiki.com/Dwarf_Bulborb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "355942",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1802,
+      "game_id": 24,
+      "section_type": "enemy",
+      "name": "Fiery Blowhog",
+      "card": "Summary: A pig-like enemy that shoots fire from its red snout, found commonly in Pikmin 2. It wanders a very small patch, turns to face any leader or Pikmin it notices, and breathes a stream of fire. When Pikmin latch on, it bucks them off into the area in front of it and breathes fire there.\nWeak points: Purple Pikmin thrown onto it do serious damage and stop it bucking Pikmin off or breathing fire. It is easier to kill in Pikmin 2, so a big group can swarm it straight away. It must breathe in before it breathes out, and it cannot turn or move from the start of that breath until the end, so its flame does not follow anyone who runs away.\nTips: Any Pikmin type can beat it. Pikmin clinging to it cannot be set alight and Red Pikmin ignore fire; the page warns that being bucked into water is what can kill them, so turn it away from water first. In Pikmin 2 a Blowhog may not fire when only a leader is close to it.",
+      "source_url": "https://www.pikminwiki.com/Fiery_Blowhog",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "352977",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1803,
+      "game_id": 24,
+      "section_type": "enemy",
+      "name": "Wollywog (white)",
+      "card": "Summary: A large, flat, white frog found underground, called the Wollyhop on the wiki and the Wollywog in some games and regions. It is passive until a leader or Pikmin comes close, then leaps and lands on them, and the landing kills every Pikmin within a wide radius.\nWeak points: Purple Pikmin slams do large damage and may briefly stun it. Swarming works less well in Pikmin 2 than in the first game, so throw Pikmin onto it instead of sending them all in.\nTips: When it is in the air, whistle your Pikmin off before it lands, so they do not fly off and possibly lose their maturity. Even a Wollywog killed as it is about to fall still crushes the Pikmin under it.",
+      "source_url": "https://www.pikminwiki.com/Wollyhop",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "355077",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1804,
+      "game_id": 24,
+      "section_type": "enemy",
+      "name": "Man-at-Legs",
+      "card": "Summary: A boss in the arachnorb family with a mostly metal body and one mechanical leg, so its feet cannot be attacked. In Pikmin 2 it waits half-buried in the Subterranean Complex (sublevel 9), the Hole of Heroes (sublevel 13) and, in Challenge Mode, the Secret Testing Range (sublevel 2).\nWeak points: Aim at its body, since its feet cannot be attacked. Before it rises, Purple Pikmin can take off about a third of its health. The Pikmin 2 Player's Guide says purples can hit it only when its body sinks to its lowest point. Bitter spray freezes it in place, but a petrified Man-at-Legs takes only a quarter damage from ordinary attacks.\nTips: It takes a few seconds to pull its gun out, which is your cue to run for cover behind a wall or a chunk of terrain, and its gun cannot lead its shots: circle it smoothly, ideally without any Pikmin, and it cannot land a bullet. In Pikmin 2 the barrage is about 35 to 40 explosive rounds in three volleys, the first always 16, and it cannot be fought while it fires, so wait for the barrage to end, then rush in and throw. Using a leader as bait cuts your losses.",
+      "source_url": "https://www.pikminwiki.com/Man-at-Legs",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "351797",
+      "crawled_at": "2026-11-02"
+    }
+  ]
+}

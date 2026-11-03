@@ -56,6 +56,61 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5537321",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1605,
+      "game_id": 21,
+      "section_type": "enemy",
+      "name": "Chuckya (Wet-Dry World, Tall, Tall Mountain and others)",
+      "card": "Summary: A large purple Bob-omb variant that slides about on a metal point and charges you when you come in range; it patrols small areas in Wet-Dry World, Tall, Tall Mountain, Rainbow Ride, the huge side of Tiny-Huge Island and Bowser in the Sky.\nWeak points: Pick it up from behind and throw it, and it explodes and releases five coins.\nTips: If it catches you it throws you in a random direction, sometimes a long way or into a pit. You can escape its grasp by pushing the Control Stick from the inside to the outside 11 times before it throws.",
+      "source_url": "https://www.mariowiki.com/Chuckya",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5524402",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1606,
+      "game_id": 21,
+      "section_type": "enemy",
+      "name": "Whomp (Whomp's Fortress)",
+      "card": "Summary: A rock slab with an angry face that patrols a small area in Whomp's Fortress and falls on you when you get near; one more waits in Bowser in the Sky.\nWeak points: Its only weak spot is its back: let it fall flat, then ground-pound it while it lies there, and it is defeated and releases five coins.\nTips: Landing on a Whomp's back releases a coin, up to five times. A trick in the original game lets you jump while it falls, pass through it and stand on its back.",
+      "source_url": "https://www.mariowiki.com/Whomp",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5536581",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1607,
+      "game_id": 21,
+      "section_type": "enemy",
+      "name": "Mr. I (Big Boo's Haunt, Lethal Lava Land, Hazy Maze Cave)",
+      "card": "Summary: A giant eyeball that turns to follow you and, if left alone, shoots small multicoloured bubbles at you; found in Big Boo's Haunt, Lethal Lava Land and Hazy Maze Cave.\nWeak points: Run around it: it shrinks a little trying to keep track of you, is defeated, and drops a blue coin.\nTips: A larger Big Mr. I waits in the attic of Big Boo's Haunt.",
+      "source_url": "https://www.mariowiki.com/Mr._I",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5529491",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1608,
+      "game_id": 21,
+      "section_type": "enemy",
+      "name": "Tox Box (Shifting Sand Land)",
+      "card": "Summary: A red metal box that rolls along set paths over a small tile maze in Shifting Sand Land, trying to flatten you.\nWeak points: It cannot be defeated in the original game. One side of each box is a square hole: stand in it as the box passes over your tile and you survive, but the hole's edges still crush you if you stand under them.\nTips: Being squashed by a side costs three wedges of health. Long-jumping into a Tox Box's face over the quicksand loses a life at once, as if you had fallen into the quicksand. The maze has a few Red Coins and the course's only cannon.",
+      "source_url": "https://www.mariowiki.com/Tox_Box",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5536591",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1609,
+      "game_id": 21,
+      "section_type": "item",
+      "name": "Power Star",
+      "card": "Summary: The collectible star that clears a mission and opens more of the castle; there are 120 in the game.\nUses: The star doors and Big Star Doors in the castle need at least the number of Power Stars shown on them, and 70 are needed to enter Bowser in the Sky. Once you hold all 120, the cannon outside the castle opens and takes you onto its roof.\nTips: Each course holds seven Power Stars, one of them the secret star for 100 coins, and fifteen stars in all are Secret Stars hidden in secret areas or held by Toads. Eight red coins in a course make a star appear over a Star Marker.\nTips: A star you already have shows as a see-through blue copy, and collecting it adds nothing to your total.",
+      "source_url": "https://www.mariowiki.com/Power_Star",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5531900",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

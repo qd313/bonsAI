@@ -326,6 +326,341 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1605,
+      "name": "Chuckya (Wet-Dry World, Tall, Tall Mountain and others)",
+      "kind": "enemy",
+      "page": "Chuckya",
+      "page_url": "https://www.mariowiki.com/Chuckya",
+      "revision": "5524402",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A large purple Bob-omb variant that slides about on a metal point and charges you when you come in range; it patrols small areas in Wet-Dry World, Tall, Tall Mountain, Rainbow Ride, the huge side of Tiny-Huge Island and Bowser in the Sky.",
+          "from": [
+            {
+              "page": "Chuckya",
+              "revision": "5524402",
+              "quote": "Chuckyas (also formatted as Chuck-Yas) are a large purple variant of Bob-omb found in Super Mario 64"
+            },
+            {
+              "page": "Chuckya",
+              "revision": "5524402",
+              "quote": "they move about by sliding across the ground on a metal point"
+            },
+            {
+              "page": "Chuckya",
+              "revision": "5524402",
+              "quote": "Chuckyas are encountered in Wet-Dry World; on Tall, Tall Mountain; in Rainbow Ride; on Tiny-Huge Island's \"huge\" portion; and in Bowser in the Sky"
+            },
+            {
+              "page": "Chuckya",
+              "revision": "5524402",
+              "quote": "When Mario is in range of a Chuckya, it charges towards him"
+            },
+            {
+              "page": "Chuckya",
+              "revision": "5524402",
+              "quote": "Chuckyas patrol small areas."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "Pick it up from behind and throw it, and it explodes and releases five coins.",
+          "from": [
+            {
+              "page": "Chuckya",
+              "revision": "5524402",
+              "quote": "To defeat a Chuckya, Mario must pick it up from behind and throw it, causing it to explode and release five coins."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "If it catches you it throws you in a random direction, sometimes a long way or into a pit. You can escape its grasp by pushing the Control Stick from the inside to the outside 11 times before it throws.",
+          "from": [
+            {
+              "page": "Chuckya",
+              "revision": "5524402",
+              "quote": "if a Chuckya catches him, it picks him up and throws him in a random direction"
+            },
+            {
+              "page": "Chuckya",
+              "revision": "5524402",
+              "quote": "Usually, Mario can be thrown down a far distance or even into a pit."
+            },
+            {
+              "page": "Chuckya",
+              "revision": "5524402",
+              "quote": "It is possible to escape from a Chuckya's grasp by pressing and/or pushing the Control Stick from the inside to the outside 11 times before the Chuckya throws Mario."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1606,
+      "name": "Whomp (Whomp's Fortress)",
+      "kind": "enemy",
+      "page": "Whomp",
+      "page_url": "https://www.mariowiki.com/Whomp",
+      "revision": "5536581",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A rock slab with an angry face that patrols a small area in Whomp's Fortress and falls on you when you get near; one more waits in Bowser in the Sky.",
+          "from": [
+            {
+              "page": "Whomp",
+              "revision": "5536581",
+              "quote": "appear in Super Mario 64 as enemies in Whomp's Fortress"
+            },
+            {
+              "page": "Whomp",
+              "revision": "5536581",
+              "quote": "with a singular Whomp appearing in Bowser in the Sky"
+            },
+            {
+              "page": "Whomp",
+              "revision": "5536581",
+              "quote": "Whomps will patrol back and forth in a small area, attempting to slam Mario into the ground for three damage when he gets near."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "Its only weak spot is its back: let it fall flat, then ground-pound it while it lies there, and it is defeated and releases five coins.",
+          "from": [
+            {
+              "page": "Whomp",
+              "revision": "5536581",
+              "quote": "They can be defeated by Mario causing them to fall over and subsequently ground-pounding on their sole weak spot, their back"
+            },
+            {
+              "page": "Whomp",
+              "revision": "5536581",
+              "quote": "Pounding the Ground on a Whomp while it lies flat will defeat it, which releases five coins."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Landing on a Whomp's back releases a coin, up to five times. A trick in the original game lets you jump while it falls, pass through it and stand on its back.",
+          "from": [
+            {
+              "page": "Whomp",
+              "revision": "5536581",
+              "quote": "Landing on the back of a Whomp will release a coin up to five times"
+            },
+            {
+              "page": "Whomp",
+              "revision": "5536581",
+              "quote": "A trick in the original version only allows Mario to pass through one and get on its back if he jumps while it falls."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1607,
+      "name": "Mr. I (Big Boo's Haunt, Lethal Lava Land, Hazy Maze Cave)",
+      "kind": "enemy",
+      "page": "Mr. I",
+      "page_url": "https://www.mariowiki.com/Mr._I",
+      "revision": "5529491",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A giant eyeball that turns to follow you and, if left alone, shoots small multicoloured bubbles at you; found in Big Boo's Haunt, Lethal Lava Land and Hazy Maze Cave.",
+          "from": [
+            {
+              "page": "Mr. I",
+              "revision": "5529491",
+              "quote": "It is a giant, usually motionless eyeball that tracks the player character by rotating."
+            },
+            {
+              "page": "Mr. I",
+              "revision": "5529491",
+              "quote": "They are found in Big Boo's Haunt, Lethal Lava Land, and the Hazy Maze Cave. They turn to face Mario, shooting small multicolored bubble projectiles at him if undisturbed."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "Run around it: it shrinks a little trying to keep track of you, is defeated, and drops a blue coin.",
+          "from": [
+            {
+              "page": "Mr. I",
+              "revision": "5529491",
+              "quote": "A Mr. I is defeated if Mario runs around it, causing the Mr. I to shrink slightly from trying to keep track and drop a Blue Coin."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A larger Big Mr. I waits in the attic of Big Boo's Haunt.",
+          "from": [
+            {
+              "page": "Mr. I",
+              "revision": "5529491",
+              "quote": "The larger Big Mr. I. can be found in the attic of Big Boo's Haunt."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1608,
+      "name": "Tox Box (Shifting Sand Land)",
+      "kind": "enemy",
+      "page": "Tox Box",
+      "page_url": "https://www.mariowiki.com/Tox_Box",
+      "revision": "5536591",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A red metal box that rolls along set paths over a small tile maze in Shifting Sand Land, trying to flatten you.",
+          "from": [
+            {
+              "page": "Tox Box",
+              "revision": "5536591",
+              "quote": "Tox Boxes are hollow metal boxes that roll along set paths."
+            },
+            {
+              "page": "Tox Box",
+              "revision": "5536591",
+              "quote": "they are enemies exclusive to Shifting Sand Land"
+            },
+            {
+              "page": "Tox Box",
+              "revision": "5536591",
+              "quote": "Tox Boxes attempt to flatten Mario by rolling over him. The path is a small maze of tiles surrounded by darker, faster-moving quicksand that sucks Mario in instantly."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "It cannot be defeated in the original game. One side of each box is a square hole: stand in it as the box passes over your tile and you survive, but the hole's edges still crush you if you stand under them.",
+          "from": [
+            {
+              "page": "Tox Box",
+              "revision": "5536591",
+              "quote": "While Tox Boxes cannot be defeated in the original Super Mario 64"
+            },
+            {
+              "page": "Tox Box",
+              "revision": "5536591",
+              "quote": "the last side is a square hole, which is for Mario to stand in as a Tox Box passes over the tile he is standing on, thus letting him survive without being crushed. However, the edges of the holed side still crush Mario if he stands under them."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Being squashed by a side costs three wedges of health. Long-jumping into a Tox Box's face over the quicksand loses a life at once, as if you had fallen into the quicksand. The maze has a few Red Coins and the course's only cannon.",
+          "from": [
+            {
+              "page": "Tox Box",
+              "revision": "5536591",
+              "quote": "If Mario gets squished by a Tox Box's side, he loses three wedges of health."
+            },
+            {
+              "page": "Tox Box",
+              "revision": "5536591",
+              "quote": "Long-jumping into the side of a Tox Box's face that is above quicksand, off the side of the track, makes Mario lose a life instantly, playing the animation as if he has just fallen into the quicksand."
+            },
+            {
+              "page": "Tox Box",
+              "revision": "5536591",
+              "quote": "The tiled maze that the Tox Boxes travel on has a few Red Coins on it, as well as the course's only cannon."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1609,
+      "name": "Power Star",
+      "kind": "item",
+      "page": "Power Star",
+      "page_url": "https://www.mariowiki.com/Power_Star",
+      "revision": "5531900",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "The collectible star that clears a mission and opens more of the castle; there are 120 in the game.",
+          "from": [
+            {
+              "page": "Power Star",
+              "revision": "5531900",
+              "quote": "can grant Mario access to more levels in-game"
+            },
+            {
+              "page": "Power Star",
+              "revision": "5531900",
+              "quote": "By obtaining a Power Star, the corresponding mission is cleared."
+            },
+            {
+              "page": "Power Star",
+              "revision": "5531900",
+              "quote": "There is a total of 120 Power Stars."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "The star doors and Big Star Doors in the castle need at least the number of Power Stars shown on them, and 70 are needed to enter Bowser in the Sky. Once you hold all 120, the cannon outside the castle opens and takes you onto its roof.",
+          "from": [
+            {
+              "page": "Power Star",
+              "revision": "5531900",
+              "quote": "The various ★ doors and Big Star Doors of the Mushroom Castle require Mario to have at least a certain number of Power Stars (which is displayed on normal doors)."
+            },
+            {
+              "page": "Power Star",
+              "revision": "5531900",
+              "quote": "A minimum of 70 Power Stars is required to access Bowser in the Sky."
+            },
+            {
+              "page": "Power Star",
+              "revision": "5531900",
+              "quote": "Once Mario collects every Power Star, the cannon outside the Mushroom Castle becomes available for use, giving access to the castle's roof."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Each course holds seven Power Stars, one of them the secret star for 100 coins, and fifteen stars in all are Secret Stars hidden in secret areas or held by Toads. Eight red coins in a course make a star appear over a Star Marker. / A star you already have shows as a see-through blue copy, and collecting it adds nothing to your total.",
+          "from": [
+            {
+              "page": "Power Star",
+              "revision": "5531900",
+              "quote": "There are seven Power Stars in each course; one is a secret Power Star that Mario can obtain from collecting 100 coins"
+            },
+            {
+              "page": "Power Star",
+              "revision": "5531900",
+              "quote": "Fifteen of them are Secret Stars, either found in secret areas or held by Toads."
+            },
+            {
+              "page": "Power Star",
+              "revision": "5531900",
+              "quote": "There are eight Red Coins in each course, and collecting all of them causes a Power Star to appear over a Star Marker."
+            },
+            {
+              "page": "Power Star",
+              "revision": "5531900",
+              "quote": "playing the level again turns the Star into a translucent version of itself"
+            },
+            {
+              "page": "Power Star",
+              "revision": "5531900",
+              "quote": "This Star can be collected, but it does not add to the player's total Star count."
+            }
+          ]
+        }
+      ]
     }
   ]
 }

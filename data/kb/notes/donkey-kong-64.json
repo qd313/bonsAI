@@ -133,6 +133,39 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5405606",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2012,
+      "game_id": 31,
+      "section_type": "item",
+      "name": "Kong instruments (Candy's Music Shop)",
+      "card": "Summary: Each Kong buys an instrument from Candy Kong for three Banana Coins: bongo drums for Donkey, a star-shaped electric guitar for Diddy, a trombone for Lanky, an alto saxophone for Tiny and a triangle for Chunky.\nUses: An instrument can be used ten times at first without a Music Pad, and Candy or Headphones can replenish its energy. The instrument move is one of the ways to defeat Klumps, Kasplats and Zingers.\nTips: Buying the first instrument raises everyone's life bar to two Watermelons. Upgrades raise the uses to 15 (5 coins, from Gloomy Galleon), 20 (7 coins, from Crystal Caves, which also adds a third Watermelon) and 25 (9 coins, from Creepy Castle). Candy's shop is missing from Jungle Japes, Fungi Forest and Hideout Helm.",
+      "source_url": "https://www.mariowiki.com/Candy%27s_Music_Shop",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5461625",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2013,
+      "game_id": 31,
+      "section_type": "item",
+      "name": "Simian Slam and Kong Switches",
+      "card": "Summary: The ground-pound move every Kong learns at Cranky's Lab. It sends out a small shockwave and is mainly used to pound Kong Switches, though it also hurts enemies.\nUses: Green Kong Switches need at least a Simian Slam, blue ones a Super Simian Slam (5 coins, from Fungi Forest) and red ones, found only in Creepy Castle, a Super Duper Simian Slam (7 coins, from Creepy Castle). Each switch shows one Kong's face, and only that Kong can set it off.\nTips: The plain Simian Slam is the only move learned for free. The Super Simian Slam replaces it, and neither upgrade does more damage to enemies than the plain slam. Blue switches start in Fungi Forest, with one exception: one sits in Gloomy Galleon's lobby on DK Isles.",
+      "source_url": "https://www.mariowiki.com/Simian_Slam",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5442151",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2014,
+      "game_id": 31,
+      "section_type": "item",
+      "name": "Cranky's Lab potions",
+      "card": "Summary: Cranky Kong's potions teach the Kongs special attacks and abilities for Banana Bunch Coins, from the free Simian Slam to Hunky Chunky. Cranky's Lab is in all the levels except Hideout Helm.\nUses: Each Kong has three abilities that cost 3, 5 and 7 coins in turn. Donkey: Baboon Blast, Strong Kong, Gorilla Grab. Diddy: Chimpy Charge, Rocketbarrel Boost, Simian Spring. Lanky: OrangStand, Baboon Balloon, OrangSprint. Tiny: Mini-Monkey, Pony Tail Twirl, Monkeyport. Chunky: Hunky Chunky, Primate Punch, Gorilla Gone.\nTips: Each Kong's first potion is on sale from a set world: Donkey's and Diddy's from Jungle Japes, Lanky's and Tiny's from Angry Aztec, Chunky's from Frantic Factory. Strong Kong is switched on by jumping into a Donkey Barrel and OrangSprint by jumping into a Lanky Barrel.",
+      "source_url": "https://www.mariowiki.com/Cranky%27s_Lab",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5410727",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

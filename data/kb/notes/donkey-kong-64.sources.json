@@ -650,6 +650,230 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2012,
+      "name": "Kong instruments (Candy's Music Shop)",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Candy%27s_Music_Shop",
+      "main_revision": "5461625",
+      "lines": [
+        {
+          "line": "Summary: Each Kong buys an instrument from Candy Kong for three Banana Coins: bongo drums for Donkey, a star-shaped electric guitar for Diddy, a trombone for Lanky, an alto saxophone for Tiny and a triangle for Chunky.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Candy%27s_Music_Shop",
+              "revision": "5461625",
+              "quoted": [
+                "Each Kong can purchase their instrument for three Banana Coins.",
+                "Donkey Kong – bongo drums (Bongo Blast)",
+                "Diddy Kong – star-shaped electric guitar (Guitar Gazump)",
+                "Lanky Kong – trombone (Trombone Tremor)",
+                "Tiny Kong – alto saxophone (Saxophone Slam)",
+                "Chunky Kong – triangle (Triangle Trample)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: An instrument can be used ten times at first without a Music Pad, and Candy or Headphones can replenish its energy. The instrument move is one of the ways to defeat Klumps, Kasplats and Zingers.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Candy%27s_Music_Shop",
+              "revision": "5461625",
+              "quoted": [
+                "By default, their instrument can be used up to ten times without a Music Pad.",
+                "the active Kong can have Candy replenish their instrument's energy, but this is also doable with Headphones."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Klump",
+              "revision": "5468756",
+              "quoted": [
+                "Klumps can only truly be defeated by the shockwave attack, throwing an orange, using a musical instrument"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Kasplat",
+              "revision": "5411217",
+              "quoted": [
+                "the Kongs can defeat a Kasplat in a single hit by using their shockwave attack or musical instrument move."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Zinger",
+              "revision": "5516812",
+              "quoted": [
+                "A Zinger can be defeated by an orange, a musical instrument move, or being shot by a projectile."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Buying the first instrument raises everyone's life bar to two Watermelons. Upgrades raise the uses to 15 (5 coins, from Gloomy Galleon), 20 (7 coins, from Crystal Caves, which also adds a third Watermelon) and 25 (9 coins, from Creepy Castle). Candy's shop is missing from Jungle Japes, Fungi Forest and Hideout Helm.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Candy%27s_Music_Shop",
+              "revision": "5461625",
+              "quoted": [
+                "After the first Kong purchases their instrument, Candy increases every Kong's life bar capacity to two Watermelons.",
+                "Starting with Gloomy Galleon, the Kongs can perform up to 15 times if they pay five Banana Coins.",
+                "Starting with Crystal Caves, the Kongs can perform up to 20 times if they pay seven Banana Coins. Candy also adds a third Watermelon to the Kongs' health bar.",
+                "Starting with Creepy Castle, the Kongs can perform up to 25 times if they pay nine Banana Coins.",
+                "Jungle Japes, Fungi Forest, and Hideout Helm are the only three worlds to not have a Candy's Music Shop."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2013,
+      "name": "Simian Slam and Kong Switches",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Simian_Slam",
+      "main_revision": "5442151",
+      "lines": [
+        {
+          "line": "Summary: The ground-pound move every Kong learns at Cranky's Lab. It sends out a small shockwave and is mainly used to pound Kong Switches, though it also hurts enemies.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Simian_Slam",
+              "revision": "5442151",
+              "quoted": [
+                "The Simian Slam (Buttus Bashium) is a move in Donkey Kong 64.",
+                "A Kong can perform it by jumping in the air and then slamming down",
+                "By landing, the Kong generates a small, surrounding green shockwave.",
+                "The move is primarily used for pounding Kong Switches, though it can also be used to attack enemies.",
+                "The three Simian Slams are the only moves at Cranky's Lab that apply to every Kong."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Green Kong Switches need at least a Simian Slam, blue ones a Super Simian Slam (5 coins, from Fungi Forest) and red ones, found only in Creepy Castle, a Super Duper Simian Slam (7 coins, from Creepy Castle). Each switch shows one Kong's face, and only that Kong can set it off.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Kong_Switch",
+              "revision": "5410803",
+              "quoted": [
+                "Each has a Kong's face displayed, with only the depicted Kong being able to activate it from a Simian Slam or a more powerful variation",
+                "Green Switches are the weakest, and at least a Simian Slam is required to activate them.",
+                "Blue Switches are stronger, and at least a Super Simian Slam can activate them.",
+                "Red Switches are the strongest, since only a Super Duper Simian Slam can activate them; this type appears only in Creepy Castle."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Simian_Slam",
+              "revision": "5442151",
+              "quoted": [
+                "Starting with Fungi Forest, the Kongs can purchase the Super Simian Slam (scientific name: Big Buttus Bashium) for five Banana Bunch Coins at Cranky's Lab.",
+                "Starting with Creepy Castle, the Kongs can purchase the Super Duper Simian Slam (scientific name: Bigga Buttus Bashium) from Cranky's Lab for seven Banana Bunch Coins."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The plain Simian Slam is the only move learned for free. The Super Simian Slam replaces it, and neither upgrade does more damage to enemies than the plain slam. Blue switches start in Fungi Forest, with one exception: one sits in Gloomy Galleon's lobby on DK Isles.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Simian_Slam",
+              "revision": "5442151",
+              "quoted": [
+                "The Simian Slam is the first move learned at Cranky's Lab and the only one that can be learned for free.",
+                "The Super Simian Slam replaces the original Simian Slam.",
+                "Both the Super Simian Slam and the Super Duper Simian Slam deal the same amount as damage to enemies as the regular Simian Slam."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Kong_Switch",
+              "revision": "5410803",
+              "quoted": [
+                "Blue Switches begin to appear once the player reaches Fungi Forest. However, one appears in Gloomy Galleon's lobby on DK Isles."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2014,
+      "name": "Cranky's Lab potions",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Cranky%27s_Lab",
+      "main_revision": "5410727",
+      "lines": [
+        {
+          "line": "Summary: Cranky Kong's potions teach the Kongs special attacks and abilities for Banana Bunch Coins, from the free Simian Slam to Hunky Chunky. Cranky's Lab is in all the levels except Hideout Helm.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Cranky%27s_Lab",
+              "revision": "5410727",
+              "quoted": [
+                "Here, the Kongs can purchase, for a certain amount of Banana Bunch Coins, special potions concocted by Cranky to learn special attacks, ranging from Simian Slam to Hunky Chunky.",
+                "It appears in all of the levels in DK Isles, except for Hideout Helm."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Each Kong has three abilities that cost 3, 5 and 7 coins in turn. Donkey: Baboon Blast, Strong Kong, Gorilla Grab. Diddy: Chimpy Charge, Rocketbarrel Boost, Simian Spring. Lanky: OrangStand, Baboon Balloon, OrangSprint. Tiny: Mini-Monkey, Pony Tail Twirl, Monkeyport. Chunky: Hunky Chunky, Primate Punch, Gorilla Gone.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Cranky%27s_Lab",
+              "revision": "5410727",
+              "quoted": [
+                "Donkey Kong",
+                "Baboon Blast (Jungle Japes): 3 Banana Bunch Coins",
+                "Strong Kong (Angry Aztec): 5 Banana Bunch Coins",
+                "Gorilla Grab (Frantic Factory): 7 Banana Bunch Coins",
+                "Chimpy Charge (Jungle Japes): 3 Banana Bunch Coins",
+                "Rocketbarrel Boost (Angry Aztec): 5 Banana Bunch Coins",
+                "Simian Spring (Frantic Factory): 7 Banana Bunch Coins",
+                "OrangStand (Angry Aztec): 3 Banana Bunch Coins",
+                "Baboon Balloon (Frantic Factory): 5 Banana Bunch Coins",
+                "OrangSprint (Crystal Caves): 7 Banana Bunch Coins",
+                "Mini-Monkey (Angry Aztec): 3 Banana Bunch Coins",
+                "Pony Tail Twirl (Frantic Factory): 5 Banana Bunch Coins",
+                "Monkeyport (Crystal Caves): 7 Banana Bunch Coins",
+                "Hunky Chunky (Frantic Factory): 3 Banana Bunch Coins",
+                "Primate Punch (Frantic Factory): 5 Banana Bunch Coins",
+                "Gorilla Gone (Crystal Caves): 7 Banana Bunch Coins"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Each Kong's first potion is on sale from a set world: Donkey's and Diddy's from Jungle Japes, Lanky's and Tiny's from Angry Aztec, Chunky's from Frantic Factory. Strong Kong is switched on by jumping into a Donkey Barrel and OrangSprint by jumping into a Lanky Barrel.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Cranky%27s_Lab",
+              "revision": "5410727",
+              "quoted": [
+                "Baboon Blast (Jungle Japes): 3 Banana Bunch Coins",
+                "Chimpy Charge (Jungle Japes): 3 Banana Bunch Coins",
+                "OrangStand (Angry Aztec): 3 Banana Bunch Coins",
+                "Mini-Monkey (Angry Aztec): 3 Banana Bunch Coins",
+                "Hunky Chunky (Frantic Factory): 3 Banana Bunch Coins"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Strong_Kong",
+              "revision": "5523267",
+              "quoted": [
+                "Donkey Kong can jump into a Donkey Barrel to activate Strong Kong."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/OrangStand_Sprint",
+              "revision": "5367563",
+              "quoted": [
+                "Lanky can activate it by jumping into a Lanky Barrel."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

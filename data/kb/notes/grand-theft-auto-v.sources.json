@@ -804,6 +804,7 @@
                 "A heavily-armored battle tank with a 1,500hp turbine engine and a 120mm cannon",
                 "The Rhino Tank is stated to weigh 60 tons",
                 "Can be purchased for $3,000,000 from Warstock Cache & Carry in single player. The Rhino Tank will spawn in the protagonist's aircraft hangar.",
+                "Can be found at Fort Zancudo. The military will use Rhinos to shoot at the player once inside the base.",
                 "These can be hijacked, but the only garage large enough to store it is an aircraft hangar. And getting one out of the base is relatively hard."
               ]
             }
@@ -867,6 +868,8 @@
               "page": "https://gta.fandom.com/wiki/Stun_Gun",
               "revision": "2079763",
               "quoted": [
+                "Fires a projectile that administers a voltage capable of temporarily stunning an assailant.",
+                "the weapon only fires a single electroshocking probe",
                 "Takes approximately 4 seconds to recharge after firing.",
                 "it is manufactured by Coil.",
                 "Acquired by Michael in the mission Monkey Business, and can be purchased afterwards from Ammu-Nation for $100."

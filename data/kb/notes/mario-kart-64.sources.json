@@ -1,0 +1,257 @@
+{
+  "wiki": "Super Mario Wiki (https://www.mariowiki.com/api.php)",
+  "licence_printed_by_fetcher": "Super Mario Wiki (MediaWiki 1.43.11) licence: Attribution-ShareAlike 4.0 International https://creativecommons.org/licenses/by-sa/4.0/",
+  "licence_stored": "CC-BY-SA-4.0",
+  "game_id": 22,
+  "game": "Mario Kart 64",
+  "read_on": "2026-11-02",
+  "how_read": "Each page was read with scripts/kb/fetch_wiki_live_pages.py (its page-render call). Each quote is the page's text as the fetcher printed it. Where a page's own sentences disagree, the note follows the section about Mario Kart 64 and the 'conflicts' list says so.",
+  "conflicts": [
+    "Fake Item Box page: its opening paragraph says Fake Item Boxes cannot block incoming Green or Red Shells, but its Mario Kart 64 section and the Red Shell page say they can block shells in this game. The note follows the Mario Kart 64 section and the Red Shell page."
+  ],
+  "sections": [
+    {
+      "section_id": 2100,
+      "name": "Banana and Banana Bunch",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Banana_Peel",
+      "main_revision": "5519696",
+      "lines": [
+        {
+          "line": "Summary: A Banana is a peel you drop on the track, and a kart that runs over it spins out. The Banana Bunch puts five Bananas in a trail behind your kart.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Kart_64",
+              "revision": "5527757",
+              "quoted": [
+                "Drops a banana peel, making a racer spin out when it is run over.",
+                "Summons five Bananas behind the racer."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: The Bunch lets you throw each Banana one by one whenever you like, and the Bananas in the trail also block incoming items from hitting you. You can drop only one banana at a time.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Banana_Bunch",
+              "revision": "5486284",
+              "quoted": [
+                "The player may throw each Banana one-by-one whenever they please, and the Bananas also block incoming items from hitting the player."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Kart_64",
+              "revision": "5527757",
+              "quoted": [
+                "The player can drop only one banana peel at a time"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Held behind your kart, a Banana guards against homing Red Shells and, less well, Green Shells.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Banana_Peel",
+              "revision": "5519696",
+              "quoted": [
+                "It can also be held behind the kart as a defensive countermeasure against homing Red Shells and, to a lesser extent, Green Shells."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2101,
+      "name": "Green Shell and Triple Green Shells",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Green_Shell",
+      "main_revision": "5532562",
+      "lines": [
+        {
+          "line": "Summary: A Green Shell is thrown in a straight line at another racer, and the racer it hits flips over several times. Triple Green Shells put three shells in a ring around your kart.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Kart_64",
+              "revision": "5527757",
+              "quoted": [
+                "A shell that can be thrown in a straight line at another racer. If it hits, the racer flips multiple times.",
+                "Summons three Green Shells into a barrier that surrounds the racer that used the item."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: A Green Shell bounces off walls a number of times until it hits a target or is destroyed, and holding the stick backwards fires it backwards. With the triple, you throw the shells one at a time or keep them as a shield against items and projectiles, and the ring can also ram other karts.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Kart_64",
+              "revision": "5527757",
+              "quoted": [
+                "Green Shells can ricochet off walls a number of times until they hit a target or are destroyed."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Green_Shell",
+              "revision": "5532562",
+              "quoted": [
+                "when the player holds the analog stick backwards, the shell now gets fired backwards instead of dropped",
+                "the shells can be used to guard against items and projectiles, as well as turning the kart into a battering ram against other karts"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Triple_Green_Shells",
+              "revision": "5516810",
+              "quoted": [
+                "The player may throw each Green Shell one-by-one whenever they please, and can also use the Green Shells to block incoming items."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The triple shells cannot be fired backwards and are slightly harder to aim because they keep rotating around the kart. Computer racers do not get Green Shells in this game.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Green_Shell",
+              "revision": "5532562",
+              "quoted": [
+                "Unlike the single Green Shell, however, these shells cannot be fired backwards and are slightly harder to aim as they are constantly rotating around the kart.",
+                "Computer-controlled opponents do not receive this item in the game"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2102,
+      "name": "Red Shell and Triple Red Shells",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Red_Shell",
+      "main_revision": "5532695",
+      "lines": [
+        {
+          "line": "Summary: A Red Shell locks on to the racer directly in front of you. Triple Red Shells put three Red Shells in a ring around your kart.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Kart_64",
+              "revision": "5527757",
+              "quoted": [
+                "Red Shells automatically lock on to the racer directly in front of the item user.",
+                "Summons three Red Shells into a barrier that surrounds the racer that used the item."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: A Red Shell can only be thrown forward, but it follows the road to hit its target, and it is destroyed if it hits a wall. With the triple, you throw the shells one at a time or keep them as a shield against incoming items.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Red_Shell",
+              "revision": "5532695",
+              "quoted": [
+                "Red Shells can be thrown only forward in this game, but they now follow the road to hit the target racer. However, Red Shells get destroyed if they hit any walls or the like."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Triple_Red_Shells",
+              "revision": "5471209",
+              "quoted": [
+                "The player may throw each Red Shell one-by-one whenever they please, and can also use the Red Shells to block incoming items."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In this game only, a Fake Item Box can block an incoming Red Shell. A Banana held behind your kart also guards against Red Shells.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Red_Shell",
+              "revision": "5532695",
+              "quoted": [
+                "In this game only, Fake Item Boxes can be used to block incoming Red Shells."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Banana_Peel",
+              "revision": "5519696",
+              "quoted": [
+                "It can also be held behind the kart as a defensive countermeasure against homing Red Shells"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2103,
+      "name": "Spiny Shell (blue)",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Spiny_Shell_(blue)",
+      "main_revision": "5535999",
+      "lines": [
+        {
+          "line": "Summary: The Spiny Shell is the rarest item. It travels along the ground with a siren sound and flings the racer in the lead into the air.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Spiny_Shell_(blue)",
+              "revision": "5535999",
+              "quoted": [
+                "It is the rarest item",
+                "Once fired, the Spiny Shell travels forward, making a siren sound",
+                "It targets the player character in the lead, flinging them into the air upon contact"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It can only be fired forward, never backwards, and it can travel over gaps and jumps. Any other racer in its way is flung into the air too. If you fire it from first place, it turns around and hits you.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Spiny_Shell_(blue)",
+              "revision": "5535999",
+              "quoted": [
+                "cannot be thrown backwards",
+                "The Spiny Shell can travel over gaps and jumps.",
+                "but this also occurs to other racers in the way",
+                "If the player character uses the Spiny Shell in first place, the item turns around to hit them."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If the shell hits an obstacle it is destroyed, and it is also destroyed without hurting a racer who is invincible. If the leader is invisible the shell passes through them, though it may make another lap of the course and hit them afterwards.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Spiny_Shell_(blue)",
+              "revision": "5535999",
+              "quoted": [
+                "If the Spiny Shell hits an obstacle, it is destroyed.",
+                "If the Spiny Shell strikes an invincible racer, it gets destroyed without damaging the racer.",
+                "If the leader is invisible, it simply passes through them, though it may then simply make another lap of the course and hit them afterwards.",
+                "there are two sideways Item Boxes that will always contain a Spiny Shell, no matter the player's position. One appears underneath the hot-air balloon in Luigi Raceway, and the second atop the large rock in Koopa Troopa Beach."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Two sideways Item Boxes, one under the hot-air balloon on Luigi Raceway and one atop the large rock on Koopa Troopa Beach, always give a Spiny Shell whatever your place.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Spiny_Shell_(blue)",
+              "revision": "5535999",
+              "quoted": [
+                "If the Spiny Shell hits an obstacle, it is destroyed.",
+                "If the Spiny Shell strikes an invincible racer, it gets destroyed without damaging the racer.",
+                "If the leader is invisible, it simply passes through them, though it may then simply make another lap of the course and hit them afterwards.",
+                "there are two sideways Item Boxes that will always contain a Spiny Shell, no matter the player's position. One appears underneath the hot-air balloon in Luigi Raceway, and the second atop the large rock in Koopa Troopa Beach."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -309,6 +309,241 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1905,
+      "name": "Pain elemental",
+      "kind": "enemy",
+      "main_page": "https://doomwiki.org/wiki/Pain_elemental",
+      "main_revision": "574468",
+      "lines": [
+        {
+          "line": "Summary: A floating monster that spits lost souls at you instead of firing a shot. In Doom 64 it is dark pink with a green eye and two mouths in place of arms, so it can spawn two lost souls at the same time, and it gives a low sinister laugh when it spots you.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Pain_elemental",
+              "revision": "574468",
+              "quoted": [
+                "Instead of shooting a standard projectile, the pain elemental periodically spews lost souls at its opponents",
+                "It is colored dark pink, has a green eye and in place of its arms are two mouths so it can now spawn two lost souls at the same time.",
+                "It gives off a low sinister laugh when it has sighted the player."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Focus on the pain elemental itself and leave its lost souls until it is dead. Fast-firing weapons such as the chaingun or the plasma gun work fairly well and usually keep the lost souls at bay. The rocket launcher is not recommended, because it may spit a lost soul while your rocket is in flight, and the blast can hurt you.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Pain_elemental",
+              "revision": "574468",
+              "quoted": [
+                "As such, it is vital to focus one's attention on the pain elemental itself as much as possible.",
+                "Fast-firing weapons such as the chainsaw, chaingun or plasma gun work fairly well and usually keep its lost souls at bay, but the rocket launcher is not recommended as the pain elemental may spit a lost soul while the rocket is en route, potentially causing blast damage to the player.",
+                "Only once it is dead is it recommended to begin killing its minions."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Do not stand at point-blank range to stop it spawning, as you could in other versions: in Doom 64 every lost soul that fails to appear, including the ones it spawns when it dies, explodes with damage like an exploding barrel, and two together are roughly a rocket hit. It only spawns lost souls while you are in its line of sight, so hit it hard, then head for cover.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Pain_elemental",
+              "revision": "574468",
+              "quoted": [
+                "Unlike other versions of the game, standing at point-blank range to prevent it from spawning lost souls is not a viable option.",
+                "Each lost soul that fails to materialize, including the ones it spawns at death, will cause a significant amount of damage comparable to an exploding barrel",
+                "getting hit by both is roughly the same as being hit by a rocket.",
+                "Pain elementals will only spawn lost souls when in line of sight of the player, or another monster who struck it. Therefore an effective tactic against the pain elemental is to deliver a strong attack, then quickly head for cover."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1906,
+      "name": "Cyberdemon",
+      "kind": "enemy",
+      "main_page": "https://doomwiki.org/wiki/Cyberdemon",
+      "main_revision": "575500",
+      "lines": [
+        {
+          "line": "Summary: A towering demon with a rocket launcher for an arm and 4000 hit points. In Doom 64 it has darker skin and is much larger than on PC, and its rockets leave smoke trails. It is rare, appearing chiefly in the secret levels or late in the game.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Cyberdemon",
+              "revision": "575500",
+              "quoted": [
+                "It attacks by firing barrages of three rockets. It has 4000 hit points and does not receive splash damage from explosions, making it fairly difficult to kill.",
+                "Data not listed is the same as for the original version."
+              ]
+            },
+            {
+              "page": "https://doomwiki.org/wiki/Doom_64_monsters",
+              "revision": "559778",
+              "quoted": [
+                "they have darker colored skin, are slightly stronger and much larger.",
+                "The cyberdemon's rockets leave smoke trails",
+                "Cyberdemons are relatively rare throughout the game, appearing chiefly in the secret levels or later in the game."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The BFG9000 is the most effective weapon against it, and the plasma gun works fairly well. The rocket launcher also works, but it is a long fight, and rockets must hit it directly because it takes no blast damage. Other weapons and melee take far longer, so avoid them.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Cyberdemon",
+              "revision": "575500",
+              "quoted": [
+                "The BFG9000 is the most effective weapon against a cyberdemon, although the plasma gun can work fairly well.",
+                "If a BFG9000 is not available, the rocket launcher is also effective",
+                "but be prepared for a long fight",
+                "the cyberdemon and the spiderdemon take only direct hit damage, and are immune to all blast damage.",
+                "Killing a cyberdemon with other weapons is significantly more difficult",
+                "It is extremely difficult to kill a cyberdemon with melee attacks"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It rarely flinches, so you cannot easily stop it attacking: circle-strafe and avoid every rocket, because one will often badly hurt you. In Doom 64 its rockets are faster and come out of the launcher itself, so they head downward at you and can burst on the floor near you, even when no wall is close. On the Watch Me Die skill level, MAP17: Watch Your Step ends with two cyberdemons and MAP24: No Escape has three.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Cyberdemon",
+              "revision": "575500",
+              "quoted": [
+                "Because a cyberdemon has a low pain chance, it is difficult to prevent it from attacking.",
+                "Circle-strafing can be used to avoid return fire while attacking. Because one rocket will often be enough to critically injure the player, it is imperative that all rockets are avoided.",
+                "its rockets are faster, with their movement speed being buffed from 700 u/s up to 900 u/s.",
+                "its rockets now have a firing offset that has them emerge from the launcher itself instead of from the middle of the monster.",
+                "this results in the rockets being fired in a downward angle towards the player when on levelled height, making splash damage a greater threat as the rockets can hit the ground and explode near the player, meaning the 64 cyberdemon does not need the aid of walls for its splash damage to be a factor.",
+                "MAP17: Watch Your Step featuring a dual cyberdemon battle at the end on the Watch Me Die difficulty, while MAP24: No Escape contains three cyberdemons on Watch Me Die"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1907,
+      "name": "Lost soul",
+      "kind": "enemy",
+      "main_page": "https://doomwiki.org/wiki/Lost_soul",
+      "main_revision": "581317",
+      "lines": [
+        {
+          "line": "Summary: A flaming flying skull that charges at you with open jaws. In Doom 64 it has black horns and an open skull with fire only on top, and it recovers from each attack much faster than on PC. It attacks viciously, which makes it one of the most dangerous enemies in Doom 64.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Lost_soul",
+              "revision": "581317",
+              "quoted": [
+                "Lost souls use themselves as weapons, charging towards the player with open jaws.",
+                "The Doom 64 variant of the lost soul sports black-colored horns, and has an opened skull with fire emerging only from its top. It is much more aggressive than its DOS counterpart, with a much faster recovery time from its attack."
+              ]
+            },
+            {
+              "page": "https://doomwiki.org/wiki/Doom_64",
+              "revision": "564149",
+              "quoted": [
+                "lost souls are weaker with less health, but attack viciously, making them one of the most dangerous enemies"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: It is weaker than on PC: a single shotgun blast can fell it. You can stop a charge by shooting it while it is attacking, and a chaingun is useful against a crowd, because a shot lost soul becomes helpless until it hits something.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Lost_soul",
+              "revision": "581317",
+              "quoted": [
+                "it is also physically weaker than its DOS counterpart and can be felled with a single shotgun blast.",
+                "The player can stop a lost soul's charge by shooting it while it is attacking.",
+                "Similarly, a chaingun can be useful against a crowd of lost souls",
+                "if shot when charging, a lost soul becomes essentially helpless until it hits something."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It is completely silent when it spots you, so the hissing breath as it launches is often the first warning. Do not use rockets on a group: a lost soul may suddenly fly at you and make a rocket blow up close enough to hurt you. They are more often found in groups than alone.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Lost_soul",
+              "revision": "581317",
+              "quoted": [
+                "Unlike all other monsters, the lost soul is completely silent when alerted",
+                "launches itself towards its target at high speed with a hissing breath sound, often the first audible warning of their presence.",
+                "Using rockets against groups of lost souls is strongly discouraged, as there is a considerable chance that a lost soul will suddenly fly towards the player, causing one of the rockets to explode close enough to cause blast damage to the foolish marine.",
+                "they are more often found in groups."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1908,
+      "name": "Demon and spectre",
+      "kind": "enemy",
+      "main_page": "https://doomwiki.org/wiki/Demon",
+      "main_revision": "552758",
+      "lines": [
+        {
+          "line": "Summary: Fast monsters that only attack up close. Doom 64's manual calls the demon the bull demon; it has black horns, small red eyes, bigger teeth and claws, and a slightly longer melee reach than on PC. The spectre is the same kind of monster, but in Doom 64 it starts as an opaque green-tinted demon and turns see-through once it spots you.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Demon",
+              "revision": "552758",
+              "quoted": [
+                "are unique in their exclusivity to melee attacks",
+                "the demon's fast speed and zig-zag motions",
+                "the manual refers to the monster as the \"bull demon\". It is given a more menacing appearance, with black horns, smaller red eyes, and accentuated teeth and claws. It also has a slightly higher melee range."
+              ]
+            },
+            {
+              "page": "https://doomwiki.org/wiki/Spectre",
+              "revision": "581664",
+              "quoted": [
+                "In Doom 64 specifically, inactive spectres are initially rendered as opaque demons with a green tint (a nod back to the nightmare spectre), becoming translucent upon detecting the player."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: They have no ranged attack, so they are no threat at long range. The super shotgun can kill a demon at close range with one blast, a shotgun used hit-and-run works too, and the chaingun is also effective. The chainsaw stops a demon attacking while you saw it, and uses no ammo.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Demon",
+              "revision": "552758",
+              "quoted": [
+                "Demons do not have a ranged attack, so they are no threat at long range.",
+                "The shotgun is quite effective if you use hit and run, blasting them at close range and retreating while reloading",
+                "can kill a demon at close range with one blast. The chaingun is also substantially effective.",
+                "the demon is unable to attack the player when being damaged with the chainsaw, and the chainsaw does not use up any ammunition."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They run fast and in a zig-zag, closing distance quickly and helping to corner you. Lure them into a tight corridor so they cannot swarm you from all directions, and use the chainsaw there. They are generally the easiest monsters to trick into attacking other enemies.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Demon",
+              "revision": "552758",
+              "quoted": [
+                "Due to its speed, the demon closes distances very quickly, often running toward the player in a zig-zag pattern, making it harder to hit, and helping corner the player.",
+                "This strategy is especially effective if the player is able to lure the demon(s) into a tight corridor, as they will be able to cut them down without having to worry about being swarmed from all directions.",
+                "are generally the easiest monster to trick into attacking other enemies."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

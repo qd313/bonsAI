@@ -56,6 +56,50 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "556851",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1905,
+      "game_id": 17,
+      "section_type": "enemy",
+      "name": "Pain elemental",
+      "card": "Summary: A floating monster that spits lost souls at you instead of firing a shot. In Doom 64 it is dark pink with a green eye and two mouths in place of arms, so it can spawn two lost souls at the same time, and it gives a low sinister laugh when it spots you.\nWeak points: Focus on the pain elemental itself and leave its lost souls until it is dead. Fast-firing weapons such as the chaingun or the plasma gun work fairly well and usually keep the lost souls at bay. The rocket launcher is not recommended, because it may spit a lost soul while your rocket is in flight, and the blast can hurt you.\nTips: Do not stand at point-blank range to stop it spawning, as you could in other versions: in Doom 64 every lost soul that fails to appear, including the ones it spawns when it dies, explodes with damage like an exploding barrel, and two together are roughly a rocket hit. It only spawns lost souls while you are in its line of sight, so hit it hard, then head for cover.",
+      "source_url": "https://doomwiki.org/wiki/Pain_elemental",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "574468",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1906,
+      "game_id": 17,
+      "section_type": "enemy",
+      "name": "Cyberdemon",
+      "card": "Summary: A towering demon with a rocket launcher for an arm and 4000 hit points. In Doom 64 it has darker skin and is much larger than on PC, and its rockets leave smoke trails. It is rare, appearing chiefly in the secret levels or late in the game.\nWeak points: The BFG9000 is the most effective weapon against it, and the plasma gun works fairly well. The rocket launcher also works, but it is a long fight, and rockets must hit it directly because it takes no blast damage. Other weapons and melee take far longer, so avoid them.\nTips: It rarely flinches, so you cannot easily stop it attacking: circle-strafe and avoid every rocket, because one will often badly hurt you. In Doom 64 its rockets are faster and come out of the launcher itself, so they head downward at you and can burst on the floor near you, even when no wall is close. On the Watch Me Die skill level, MAP17: Watch Your Step ends with two cyberdemons and MAP24: No Escape has three.",
+      "source_url": "https://doomwiki.org/wiki/Cyberdemon",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "575500",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1907,
+      "game_id": 17,
+      "section_type": "enemy",
+      "name": "Lost soul",
+      "card": "Summary: A flaming flying skull that charges at you with open jaws. In Doom 64 it has black horns and an open skull with fire only on top, and it recovers from each attack much faster than on PC. It attacks viciously, which makes it one of the most dangerous enemies in Doom 64.\nWeak points: It is weaker than on PC: a single shotgun blast can fell it. You can stop a charge by shooting it while it is attacking, and a chaingun is useful against a crowd, because a shot lost soul becomes helpless until it hits something.\nTips: It is completely silent when it spots you, so the hissing breath as it launches is often the first warning. Do not use rockets on a group: a lost soul may suddenly fly at you and make a rocket blow up close enough to hurt you. They are more often found in groups than alone.",
+      "source_url": "https://doomwiki.org/wiki/Lost_soul",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "581317",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1908,
+      "game_id": 17,
+      "section_type": "enemy",
+      "name": "Demon and spectre",
+      "card": "Summary: Fast monsters that only attack up close. Doom 64's manual calls the demon the bull demon; it has black horns, small red eyes, bigger teeth and claws, and a slightly longer melee reach than on PC. The spectre is the same kind of monster, but in Doom 64 it starts as an opaque green-tinted demon and turns see-through once it spots you.\nWeak points: They have no ranged attack, so they are no threat at long range. The super shotgun can kill a demon at close range with one blast, a shotgun used hit-and-run works too, and the chaingun is also effective. The chainsaw stops a demon attacking while you saw it, and uses no ammo.\nTips: They run fast and in a zig-zag, closing distance quickly and helping to corner you. Lure them into a tight corridor so they cannot swarm you from all directions, and use the chainsaw there. They are generally the easiest monsters to trick into attacking other enemies.",
+      "source_url": "https://doomwiki.org/wiki/Demon",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "552758",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

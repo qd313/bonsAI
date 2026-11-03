@@ -565,6 +565,201 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2109,
+      "name": "Boo",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Boo",
+      "main_revision": "5532404",
+      "lines": [
+        {
+          "line": "Summary: The Boo item makes you invisible and invincible for a short time while it steals an item from an opponent.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Boo",
+              "revision": "5532404",
+              "quoted": [
+                "When used, a Boo makes the user both invisible and invincible temporarily as it selects an opponent to steal an item from, unless the racers have no items"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: While it lasts you can pass through items, course obstacles and other racers. Computer racers use Boos too, but their Boos do not steal items.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Boo",
+              "revision": "5532404",
+              "quoted": [
+                "A player character affected by a Boo can pass any items, course obstacles, and racers by going through them.",
+                "The CPUs also use Boos, but they do not steal items."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A Boo that is already running when Lightning strikes keeps you from shrinking, but once you are shrunk you cannot use a Boo from your item window.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Lightning",
+              "revision": "5526797",
+              "quoted": [
+                "Lightning's effect can be avoided if a racer has a Mega Mushroom, Star, Boo, or Bullet Bill item activated when the bolt strikes"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Kart_64",
+              "revision": "5527757",
+              "quoted": [
+                "shrunken racers cannot use Mushrooms, Super Stars, or Boos in their Item Windows."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2110,
+      "name": "Thwomp",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Bowser%27s_Castle_(Mario_Kart_64)",
+      "main_revision": "5519520",
+      "lines": [
+        {
+          "line": "Summary: Blue stone blocks in Bowser's Castle that try to flatten racers who drive under them. Some slam down from the air, and some slide from side to side on the ground.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Thwomp",
+              "revision": "5536081",
+              "quoted": [
+                "They appear in Bowser's Castle and try to flatten any player that races beneath them.",
+                "being blue cubes that lack spikes",
+                "There are also some Thwomps that move from one side to the other, trying to bump players on the ground"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: They are obstacles in the course, not something you fight. Run into one and you spin out, but if one steps on you, you are squished flat. A Super Star makes you impervious to obstacles.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Thwomp",
+              "revision": "5536081",
+              "quoted": [
+                "Thwomps serve as obstacles in the course."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bowser%27s_Castle_(Mario_Kart_64)",
+              "revision": "5519520",
+              "quoted": [
+                "if you run into one, you will spin out. Should you be stepped by one, you'll find yourself squished flat as a pancake."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Kart_64",
+              "revision": "5527757",
+              "quoted": [
+                "Makes racers invincible, rendering them impervious to obstacles, other items, and other racers."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The first corridor after the courtyard has four Thwomps that move around in the air before falling. In the next corridor a pair wait at the start, try to follow you, then fall and return, and the row at the end takes turns falling: one Thwomp in 50cc, two in 100cc and three in 150cc.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser%27s_Castle_(Mario_Kart_64)",
+              "revision": "5519520",
+              "quoted": [
+                "Once racers leave the courtyard they enter a wide corridor with four Thwomps; these Thwomps will move around in the air before falling onto the track.",
+                "A pair will wait at the beginning of the corridor and then attempt to follow racers before falling and then returning to the beginning of the corridor.",
+                "the number of Thwomps in the row depends on the engine class (one for 50cc, two for 100cc, and three for 150cc), and they will always take turns falling.",
+                "enter a room with two more Thwomps; these ones are always at ground level and move from side to side.",
+                "there is an imprisoned slightly larger Thwomp tinted green with yellow teeth due to the vertex shading approximating the yellow lighting, which shakes and laughs if racers go near it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Two Thwomps in a later room stay at ground level and slide from side to side. The slightly larger green Thwomp locked up at the end of the first corridor shakes and laughs when you go near.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser%27s_Castle_(Mario_Kart_64)",
+              "revision": "5519520",
+              "quoted": [
+                "Once racers leave the courtyard they enter a wide corridor with four Thwomps; these Thwomps will move around in the air before falling onto the track.",
+                "A pair will wait at the beginning of the corridor and then attempt to follow racers before falling and then returning to the beginning of the corridor.",
+                "the number of Thwomps in the row depends on the engine class (one for 50cc, two for 100cc, and three for 150cc), and they will always take turns falling.",
+                "enter a room with two more Thwomps; these ones are always at ground level and move from side to side.",
+                "there is an imprisoned slightly larger Thwomp tinted green with yellow teeth due to the vertex shading approximating the yellow lighting, which shakes and laughs if racers go near it."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2111,
+      "name": "Train (Kalimari Desert)",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Kalimari_Desert",
+      "main_revision": "5519514",
+      "lines": [
+        {
+          "line": "Summary: Two trains run clockwise around Kalimari Desert all the time and cross the track. A kart that drives into a train is launched upward.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Kalimari_Desert",
+              "revision": "5519514",
+              "quoted": [
+                "There are two trains that move clockwise around the track constantly, often getting in the way of racers and launching them upward if driven into."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Wait for the train to pass: the booklet says to time it so the locomotive does not block you, and to stop for a moment if it is crossing in front of you. Computer racers always stop at a crossing when the train is there. You can also drive through the gap between the coaches to get past.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Kalimari_Desert",
+              "revision": "5519514",
+              "quoted": [
+                "The trick is to time it so that the steam locomotive that crosses the course won't block you. If the train is crossing in front of you, you should temporarily stop.",
+                "CPU drivers always stop at a train track if the train is present.",
+                "One can drive through the gap between the coaches of the train to bypass it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The train's length depends on the number of players: one coal tender and five passenger cars when you play alone, an engine, a tender and one passenger car in two-player VS, and no tender or passenger cars in two-player Grand Prix or three- and four-player VS.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Kalimari_Desert",
+              "revision": "5519514",
+              "quoted": [
+                "single-player features one coal tender and five passenger cars; two-player VS mode has shorter trains, an engine, a coal tender, and a passenger car each; two-player Grand Prix and both three- and four-player VS mode have no coal tender or passenger cars.",
+                "The train track can be driven around in a loop, but it is not counted as a lap if driven the entire way around and only puts players who take it behind."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The train track can be driven round as a loop, but going the whole way round does not count as a lap and only puts you behind.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Kalimari_Desert",
+              "revision": "5519514",
+              "quoted": [
+                "single-player features one coal tender and five passenger cars; two-player VS mode has shorter trains, an engine, a coal tender, and a passenger car each; two-player Grand Prix and both three- and four-player VS mode have no coal tender or passenger cars.",
+                "The train track can be driven around in a loop, but it is not counted as a lap if driven the entire way around and only puts players who take it behind."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

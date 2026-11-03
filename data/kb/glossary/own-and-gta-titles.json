@@ -725,8 +725,8 @@
     "term_key": "fire-extinguisher",
     "term": "Fire extinguisher",
     "alt_forms": ["Fire extinguishers"],
-    "peek": "There are no firefighters, so keep one in the kitchen with a smoke alarm.",
-    "full_text": "There are no firefighters to call in The Sims 4, so keep a fire extinguisher and a smoke alarm in the kitchen. When something catches, direct a Sim to extinguish it rather than waiting, because panicking Sims will not act on their own."
+    "peek": "Firefighters come on their own when a smoke alarm is in the room where the fire breaks out, so keep a fire extinguisher and a smoke alarm in the kitchen.",
+    "full_text": "Firefighters come on their own when a smoke alarm is in the room where the fire breaks out, so keep a fire extinguisher and a smoke alarm in the kitchen. When something catches, direct a Sim to extinguish it rather than waiting, because panicking Sims will not act on their own."
   },
   {
     "term_id": 2806,

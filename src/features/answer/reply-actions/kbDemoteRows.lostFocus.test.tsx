@@ -1,6 +1,6 @@
 /**
  * Title: Undo and the Down walk past the notes block while the panel's page has lost the browser's focus (plan 102, C)
- * Purpose: Pin the one fix plan 102 lane C makes for the side effect of P98-DEMOTE-01-game
+ * Purpose: Pin plan 102 lane C's two fixes for the side effect of P98-DEMOTE-01-game
  *          (workshop:test-evidence/plan98-P98-DEMOTE-01-game.json), at the level the Deck check looks at, where
  *          Steam's ring is. On the Deck, with a game running, the page was out of focus after Not really and Wrong
  *          tip; a Down walk from Undo reached the notes block and Down died there. The real chat screen (the
@@ -8,16 +8,17 @@
  *          details tabs) is drawn inside a page whose focus a test takes away (lostFocusPanel.tsx), and every
  *          press is made the way Steam makes it.
  * Used for: kbDemoteRows.tsx (`landOn`, which every landing on these rows goes through, asks the panel's window
- *           for its focus first), and the walk through buildReplyActionsElement.tsx, MainTabChatTranscript.tsx and
- *           the details panel.
- * Solves: Nothing on this walk asked the window for its focus before: Steam's transfers carried the ring down
- *         to the notes block, and the notes block's Down is a plain hop that moves only the page's focus while
- *         the ring stays (`focusContextChipLadder` in liveTurnFocusGraph.ts). Now the landing on Undo, or on Wrong
- *         tip after Undo, asks the window once; a window that takes the focus back lets the walk go on.
- * Does not: Prove the window takes the focus back on the Deck: the plan 97 readings saw it refuse, and with a
- *           window that refuses (lostFocusPanel's own) the notes block's Down still dies, a hop outside this
- *           fix. Does not scroll: the pane is tall enough for the whole turn; the demote walks with Steam's scroll
- *           modelled are buildReplyActionsElement.demote.test.tsx, run with the page's focus present.
+ *           for its focus first), liveTurnFocusGraph.ts (`focusDeckOwner`, the notes block's dead hop), and the walk
+ *           through buildReplyActionsElement.tsx, MainTabChatTranscript.tsx and the details panel.
+ * Solves: Nothing on this walk asked the window for its focus, and the notes block's Down ended in a plain hop
+ *         (`focusContextChipLadder`, through `focusDeckOwner`) that moved only the page's focus and claimed the
+ *         press while the ring stayed. Now the landing on Undo, or on Wrong tip after Undo, asks the window once (a
+ *         window that takes the focus back lets every hop work again), and with a window that refuses, as the
+ *         plan 97 readings saw, that hop declines and Steam's own Down moves the ring.
+ * Does not: Prove where Steam's own Down lands on the Deck: lostFocusPanel.tsx models it as the next stop drawn
+ *           below (here the details tabs). Does not scroll: the pane is tall enough for the whole turn; the demote
+ *           walks with Steam's scroll modelled are buildReplyActionsElement.demote.test.tsx, run with the page's
+ *           focus present.
  */
 import { useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -272,5 +273,13 @@ describe("P102-UNDO-FOCUS-01: Down from Undo past the notes block, Show details 
     expect(focus).toHaveBeenCalledTimes(1);
     expect(page.doc.hasFocus()).toBe(false);
     expect(page.active()?.getAttribute("aria-label")).toBe("Undo, the note ranks as before");
+  });
+
+  it("a window that refuses, the page out of focus throughout: Down from the notes block still moves the ring", async () => {
+    panelWindow(false);
+    await markWrongTip(false);
+    /* The notes block's own hops decline, so the press is Steam's: its own Down, onto the details tabs here. */
+    expect(walkDown("details tabs")).toEqual(WALK);
+    expect(page.doc.hasFocus()).toBe(false);
   });
 });

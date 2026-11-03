@@ -65,6 +65,24 @@ export function focusDeckOwner(el: HTMLElement | null | undefined): boolean {
    * query plus a plain `focus()`.
    */
   if (!panel && !target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+  /*
+   * With the panel's page out of the browser's focus, the plain focus() below moves only the page's focus and
+   * the check after it still says yes: Down from the notes block was claimed while Steam's ring stayed
+   * (plan 102, workshop:test-evidence/plan98-P98-DEMOTE-01-game.json). Then it is a `plainHop`, as in
+   * focusRowElement (focusPerTurnRow.ts): false unless the ring followed, with the page's focus put back, so
+   * the caller's next choice or Steam's own move carries the ring.
+   */
+  if (panelLacksFocus()) {
+    let threw = false;
+    const landed = plainHop(target, "deckOwner", () => {
+      try {
+        target.focus({ preventScroll: true });
+      } catch {
+        threw = true;
+      }
+    });
+    return !threw && landed && elementHasFocus(target);
+  }
   target.focus({ preventScroll: true });
   // Asked of the element's own document: the global one belongs to SharedJSContext (uiDocument.ts),
   // so the old `contains(document.activeElement)` check reported failure on every successful move.

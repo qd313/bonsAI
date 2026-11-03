@@ -10,6 +10,8 @@ Does not: Start Ollama, open a picture or touch the Deck.
 """
 
 import asyncio
+import contextlib
+import io
 import json
 import sys
 import tempfile
@@ -274,6 +276,78 @@ class ScreenshotLabelsTests(_ScriptCase):
             self.assertEqual(self.mod.resolve_picture(absolute, [Path(a)]), Path(b) / "shot.png")
 
 
+class ScreenshotPictureShapeTests(_ScriptCase):
+    """Plan 102 lane D: --picture-shape sets the plugin's own switch for the run and the report says which one."""
+
+    def _run(self, game, other_games, arm="known", picture_id="p"):
+        v = self.mod.Verdict(game=not other_games, area=True, boss=None, said_unknown=False, other_games=other_games)
+        return self.mod.Run(
+            picture_id=picture_id, arm=arm, sample=1, model="m", reply="r", verdict=v,
+            first_word_s=1.0, total_s=1.0, success=True, error="", game=game,
+        )
+
+    def test_the_three_shapes_are_named_in_the_order_the_flag_lists_them(self):
+        self.assertEqual(self.mod.PICTURE_SHAPES, ("today", "in-question", "in-question-only"))
+        self.assertEqual(self.mod.PICTURE_SHAPE_ENV, "BONSAI_PICTURE_GAME_IN_QUESTION")
+
+    def test_the_flag_sets_the_switch_and_defaults_to_todays_shape(self):
+        args = self.mod.build_parser().parse_args([])
+        self.assertEqual(args.picture_shape, "today")
+        env = {}
+        self.mod.apply_picture_shape("in-question-only", env)
+        self.assertEqual(env[self.mod.PICTURE_SHAPE_ENV], "in-question-only")
+        self.mod.apply_picture_shape("today", env)
+        self.assertEqual(env[self.mod.PICTURE_SHAPE_ENV], "today")
+
+    def test_a_label_goes_on_the_end_of_the_report_name_so_two_runs_one_day_keep_both(self):
+        self.assertEqual(self.mod.report_name("2026-11-02"), "screenshot-reading-2026-11-02.md")
+        self.assertEqual(
+            self.mod.report_name("2026-11-02", "p102-s1-run2"), "screenshot-reading-2026-11-02-p102-s1-run2.md")
+        self.assertNotEqual(self.mod.report_name("d", "run1"), self.mod.report_name("d", "run2"))
+        self.assertEqual(self.mod.build_parser().parse_args(["--label", "x"]).label, "x")
+        self.assertEqual(self.mod.build_parser().parse_args([]).label, "")
+
+    def test_a_label_cannot_carry_a_folder_or_odd_marks_into_the_name(self):
+        name = self.mod.report_name("d", "../x y/z:1")
+        self.assertEqual(name, "screenshot-reading-d-x-y-z-1.md")
+        self.assertNotIn("/", name)
+
+    def test_a_shape_the_plugin_does_not_know_is_refused_by_the_flag(self):
+        with self.assertRaises(SystemExit), contextlib.redirect_stderr(io.StringIO()):
+            self.mod.build_parser().parse_args(["--picture-shape", "sideways"])
+
+    def test_the_report_names_the_shape(self):
+        text = self.mod.format_report(
+            {"model": "m", "samples": 1, "pictures": 1, "shape": "in-question"}, [self._run("God of War", [])])
+        self.assertIn("shape: in-question", text)
+
+    def test_the_god_of_war_mix_ups_count_replies_that_named_another_game_per_way_of_asking(self):
+        runs = [
+            self._run("God of War", ["Hades"]),
+            self._run("God of War", []),
+            self._run("God of War", [], picture_id="p2"),
+            self._run("God of War", ["Hades"], arm="unknown"),
+            self._run("Hades", ["Brotato"]),  # another game's picture: not counted
+        ]
+        self.assertEqual(
+            self.mod.named_another_game(runs, "God of War"), {"known": (1, 3), "unknown": (1, 1)})
+        text = self.mod.format_report({"model": "m", "samples": 1, "pictures": 1}, runs)
+        self.assertIn("God of War", text)
+        self.assertIn("1 of 3", text)
+
+    def test_the_mix_up_line_is_left_out_when_no_such_picture_was_asked(self):
+        runs = [self._run("Hades", [])]
+        self.assertEqual(self.mod.named_another_game(runs, "God of War"), {})
+        self.assertNotIn("named another game", self.mod.format_report({"model": "m"}, runs))
+
+    def test_an_ask_records_which_game_the_picture_shows(self):
+        # ScreenshotAskTests builds the full ask; here only that the Run field exists with an empty default.
+        v = self.mod.Verdict(game=True, area=None, boss=None, said_unknown=False, other_games=[])
+        run = self.mod.Run(picture_id="p", arm="known", sample=1, model="m", reply="", verdict=v,
+                           first_word_s=None, total_s=0.0, success=True, error="")
+        self.assertEqual(run.game, "")
+
+
 class _FakePlugin:
     """Just the two hooks the real ask path calls on the plugin that this eval watches."""
 
@@ -340,6 +414,7 @@ class ScreenshotAskTests(_ScriptCase):
         self.assertTrue(run.verdict.area)
         self.assertEqual(run.model, "llava:7b")
         self.assertEqual((run.arm, run.sample, run.picture_id), ("known", 2, "p1"))
+        self.assertEqual(run.game, "Deep Rock Galactic: Survivor")
 
     def test_a_failed_ask_is_a_run_with_no_reply_and_nothing_right(self):
         run, _, _ = self._ask("known", success=False)

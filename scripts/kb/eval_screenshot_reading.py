@@ -22,6 +22,7 @@ Usage:
   python scripts/kb/eval_screenshot_reading.py                     # every labelled picture, 3 tries each
   python scripts/kb/eval_screenshot_reading.py --only drg-survivor-title-1 --samples 1
   python scripts/kb/eval_screenshot_reading.py --root C:/path/to/pictures --model gemma4:e4b-it-qat
+  python scripts/kb/eval_screenshot_reading.py --picture-shape in-question --samples 6 --arms known
 
 Needs: Ollama on this PC with the chat model (the Deck's own starter model also reads pictures), and a built
 library at --corpus (python scripts/kb/build_rag_db.py --seed --out ./build/knowledge-base).
@@ -31,6 +32,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import os
 import re
 import statistics
 import sys
@@ -56,6 +58,13 @@ SEED_FILE = ROOT / "data" / "kb" / "strategy_seed.json"
 DEFAULT_QUESTION = "What game is this and where am I? Name any boss or enemy on screen."
 SCENES = ("title", "menu", "play", "pause", "loading", "other")
 ARMS = ("known", "unknown")
+# Plan 102 lane D: where the plugin says which game a picture is from (py_modules/backend/prompts/ollama_prompts.py
+# reads this variable at each turn; a test keeps the two names the same). "today" is the old way, only in the
+# system text; the others also put the game's name at the front of the question.
+PICTURE_SHAPE_ENV = "BONSAI_PICTURE_GAME_IN_QUESTION"
+PICTURE_SHAPES = ("today", "in-question", "in-question-only")
+# The game whose pictures the "named another game" line is about (plan 98: 4 and 6 times in 9).
+MIXUP_GAME = "God of War"
 
 # Words that count as naming a scene. A picture's own `scene_words` replace its scene's list; "other" has no
 # list and is only scored when the picture brings its own.
@@ -279,6 +288,7 @@ class Run:
     total_s: float
     success: bool
     error: str
+    game: str = ""  # the game the picture shows, for the "named another game" line
 
 
 @dataclass
@@ -325,6 +335,17 @@ def summarize(runs: list[Run]) -> dict[str, Figures]:
 _ARM_TITLE = {"known": "game known (its id handed over)", "unknown": "nothing known"}
 
 
+def named_another_game(runs: list[Run], game: str = MIXUP_GAME) -> dict[str, tuple[int, int]]:
+    """Per way of asking, (replies on this game's pictures that named a different game, replies on them).
+    Left out for a way of asking with none. A failed ask names nothing, so it counts as a reply that did not."""
+    out: dict[str, tuple[int, int]] = {}
+    for arm in ARMS:
+        mine = [r for r in runs if r.arm == arm and r.game == game]
+        if mine:
+            out[arm] = (sum(1 for r in mine if r.success and r.verdict.other_games), len(mine))
+    return out
+
+
 def _cell(value: Optional[int]) -> str:
     return "n/a" if value is None else str(value)
 
@@ -336,6 +357,7 @@ def format_report(meta: dict, runs: list[Run]) -> str:
         "# Screenshot reading",
         "",
         f"Model: {meta.get('model', '?')} | pictures: {meta.get('pictures', '?')} | tries each: {meta.get('samples', '?')}"
+        + (f" | shape: {meta['shape']}" if meta.get("shape") else "")
         + (f" | {meta['note']}" if meta.get("note") else ""),
         "",
         "Out of a hundred replies, how many ...",
@@ -353,6 +375,10 @@ def format_report(meta: dict, runs: list[Run]) -> str:
         lines.append(
             f"| {_ARM_TITLE[arm]} | {f.n} | {f.game} | {_cell(f.area)} | {boss} | {f.said_unknown} | {first} | {f.failed} |"
         )
+    mixups = named_another_game(runs)
+    if mixups:
+        lines += ["", f"Replies that named another game on the {MIXUP_GAME} pictures: " + "; ".join(
+            f"{_ARM_TITLE[arm]} {hits} of {n}" for arm, (hits, n) in mixups.items())]
     answered = sorted({r.model for r in runs if r.model and r.model != meta.get("model")})
     if answered:
         lines += [
@@ -490,7 +516,7 @@ async def ask_picture(
         picture_id=pic.id, arm=arm, sample=sample, model=answered or model, reply=reply,
         verdict=read_reply(reply, pic, other_games),
         first_word_s=round(first_word[0], 1) if first_word else None, total_s=total, success=success,
-        error=error or ("" if success else str(result.get("response") or "")[:200]),
+        error=error or ("" if success else str(result.get("response") or "")[:200]), game=pic.game,
     )
 
 
@@ -516,7 +542,21 @@ def _default_roots() -> list[Path]:
         return []
 
 
-def main() -> int:
+def report_name(day: str, label: str = "") -> str:
+    """The report's file name: the date, then the label when one is given, so runs on one day do not overwrite
+    each other. Anything in the label other than letters, digits, dot, dash and underscore becomes a dash."""
+    clean = re.sub(r"[^A-Za-z0-9._-]+", "-", (label or "").strip()).strip("-.")
+    return f"screenshot-reading-{day}" + (f"-{clean}" if clean else "") + ".md"
+
+
+def apply_picture_shape(shape: str, environ: Any = None) -> None:
+    """Set the plugin's own switch for this run. The plugin reads it at every turn, so setting it here is
+    the same thing a person's environment would do; "today" is written out so a default that changes later
+    cannot change what a "today" run means."""
+    (os.environ if environ is None else environ)[PICTURE_SHAPE_ENV] = shape
+
+
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--ollama", default=DEFAULT_OLLAMA, help="Ollama base URL on this PC")
     parser.add_argument("--model", default=DEFAULT_MODEL, help="model tag; default is what the Deck loads")
@@ -531,9 +571,22 @@ def main() -> int:
     parser.add_argument("--arms", default="both", choices=("both", "known", "unknown"))
     parser.add_argument("--question", default=DEFAULT_QUESTION)
     parser.add_argument(
+        "--picture-shape", default="today", choices=PICTURE_SHAPES,
+        help="where the plugin names the running game for a picture turn: today (system text only), in-question "
+             "(also first in the question), in-question-only (first in the question, not in the system text)")
+    parser.add_argument(
+        "--label", default="",
+        help="added to the saved report's file name (screenshot-reading-<date>-<label>.md) so runs on one day "
+             "do not overwrite each other")
+    parser.add_argument(
         "--write-report", action="store_true",
         help="also save the report in the workshop's research folder (never in this repo)")
-    args = parser.parse_args()
+    return parser
+
+
+def main() -> int:
+    args = build_parser().parse_args()
+    apply_picture_shape(args.picture_shape)
     try:
         sys.stdout.reconfigure(encoding="utf-8")  # Windows console
     except Exception:
@@ -583,7 +636,8 @@ def main() -> int:
     plugin = plugin_main.Plugin()
     others = other_game_names([p for p, _ in found])
     arms = ARMS if args.arms == "both" else (args.arms,)
-    print(f"model {args.model} | {len(found)} pictures x {args.samples} tries | ways of asking: {', '.join(arms)}")
+    print(f"model {args.model} | {len(found)} pictures x {args.samples} tries | ways of asking: {', '.join(arms)} "
+          f"| shape: {args.picture_shape}")
     _load_model(args.ollama, args.model)
     runs: list[Run] = []
     t_run = time.perf_counter()
@@ -603,7 +657,7 @@ def main() -> int:
                     + (f" ERROR {run.error}" if not run.success else ""))
     minutes = round((time.perf_counter() - t_run) / 60.0, 1)
     meta = {
-        "model": args.model, "samples": args.samples, "pictures": len(found),
+        "model": args.model, "samples": args.samples, "pictures": len(found), "shape": args.picture_shape,
         "note": f"run {date.today().isoformat()}, {minutes} min, library {corpus_version}",
     }
     report = format_report(meta, runs)
@@ -613,7 +667,7 @@ def main() -> int:
         sys.path.insert(0, str(ROOT / "scripts" / "lib"))
         import workshop  # noqa: E402
 
-        out = workshop.research_dir(ROOT) / f"screenshot-reading-{date.today().isoformat()}.md"
+        out = workshop.research_dir(ROOT) / report_name(date.today().isoformat(), args.label)
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(report, encoding="utf-8")
         print(f"Wrote {out}")

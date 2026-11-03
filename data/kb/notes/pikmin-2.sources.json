@@ -200,7 +200,7 @@
       "main_revision": "355077",
       "lines": [
         {
-          "line": "Summary: A large, flat, white frog found underground, called the Wollyhop on the wiki and the Wollywog in some games and regions. It is passive until a leader or Pikmin comes close, then leaps and lands on them, and the landing kills every Pikmin within a wide radius.",
+          "line": "Summary: A large, flatter-bodied white frog found underground, called the Wollyhop on the wiki and the Wollywog in some games and regions. It is passive until a leader or Pikmin comes close, then leaps and lands on them, and the landing kills every Pikmin within a wide radius.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Wollyhop",
@@ -210,6 +210,7 @@
                 "known as the Wollywog depending on the game and region",
                 "Wollyhops have lost most of their skin pigmentation, giving them an albino-like appearance.",
                 "the Wollyhop is also a large creature with large eyes",
+                "their albino body is much more flatter",
                 "Generally passive, they will only attack by leaping into the air if a leader or Pikmin comes nearby.",
                 "Upon falling, a Wollyhop's attack covers a considerable radius, killing all Pikmin within it."
               ]
@@ -286,7 +287,7 @@
           ]
         },
         {
-          "line": "Tips: Spraying already-spicy Pikmin restarts the 40 seconds, and so does an ultra-bitter spray. Pikmin that go into an Onion or the ship lose the effect, and Pikmin that are drowning die faster. If it wears off while Pikmin are carrying something they keep the powered-up carrying speed until they deliver it or drop it, which helps with the Doomsday Apparatus. The Awakening Wood is the place to gather lots of berries. If no Pikmin could benefit, the spray cannot be used and no dose is spent.",
+          "line": "Tips: Spraying already-spicy Pikmin restarts the 40 seconds, and so does an ultra-bitter spray. Pikmin that go into an Onion or the ship lose the effect, and Pikmin that are drowning die faster. If it wears off while Pikmin are carrying something they keep the powered-up carrying speed until they deliver it or drop it, which helps with the Doomsday Apparatus. The Awakening Wood is the place to gather lots of berries.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Ultra-spicy_spray",
@@ -295,8 +296,7 @@
                 "if the player sprays an already spicy Pikmin, the duration of the spray will be reset. Interestingly, if the player uses an ultra-bitter spray on a spicy Pikmin, it will also reset its spicy mode duration.",
                 "If Pikmin enter an Onion or the Hocotate ship, or are converted into a sprout, they will lose their spicy status.",
                 "drowning Pikmin sprayed with an ultra-spicy spray will actually die more quickly than unsprayed Pikmin.",
-                "If the effects of the spray wear off while the Pikmin are carrying the object, they will continue carrying at the same speed as if they were powered up, until they deliver the object or drop it. This makes this exploit particularly useful when retrieving the Doomsday Apparatus",
-                "If neither Oatchi nor any Pikmin could benefit from a spray, it can not be used, so no spray will be deducted from the total."
+                "If the effects of the spray wear off while the Pikmin are carrying the object, they will continue carrying at the same speed as if they were powered up, until they deliver the object or drop it. This makes this exploit particularly useful when retrieving the Doomsday Apparatus"
               ]
             },
             {
@@ -423,6 +423,7 @@
                 "Most of these sources will produce a single drop of nectar most of the time, but can sometimes produce more.",
                 "Nectar weed patches",
                 "Piles of rubble",
+                "Eggs - Honeywisps",
                 "Honeywisps",
                 "Mitites",
                 "Bulborb Larvae",

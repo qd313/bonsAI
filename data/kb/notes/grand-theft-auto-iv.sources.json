@@ -537,6 +537,164 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1509,
+      "name": "Health packs and food",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Health",
+      "main_revision": "2063152",
+      "lines": [
+        {
+          "line": "Summary: Health packs shaped like medical kits lie all over Liberty City, mostly in out-of-the-way places, at hospitals and in subway stations.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Health",
+              "revision": "2063152",
+              "quoted": [
+                "In GTA IV, health pickups are shaped as medical kits.",
+                "In Grand Theft Auto IV, health packs are found all over Liberty City, generally in out-of-the-way locales, hospitals, and in subway stations."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Eating at Cluckin' Bell or Burger Shot, or buying from street vendors and vending machines, restores health by different amounts, and drinks usually restore less.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Eating",
+              "revision": "1897392",
+              "quoted": [
+                "the player can eat at fast food outlets (Cluckin' Bell and Burger Shot), as well as purchasing from street vendors and vending machines.",
+                "Food or drink replenishes health in varying degrees, with drinking usually replenishing health in smaller amounts."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Dial 911 and then 2 for an ambulance, and the paramedics restore your health for a fee of up to $950, depending on how hurt you are. Maximum health cannot be raised in GTA IV, and saving the game also refills it.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Ambulance_(HD_Universe)",
+              "revision": "2071232",
+              "quoted": [
+                "Ambulances can be obtained by dialing 911 and choosing Ambulance by dialing 2 after the initial call. If the player is injured, paramedics who respond to the player will replenish their health for a fee of up to $950, depending on their remaining health points."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Health",
+              "revision": "2063152",
+              "quoted": [
+                "Health increase is no longer possible in the HD Universe games.",
+                "or by visiting a save point to save the game (in all 3D Universe titles, save for GTA III and Grand Theft Auto Advance, and in all HD Universe titles)"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1510,
+      "name": "Underground Gun Shops",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Underground_Gun_Shops",
+      "main_revision": "2063857",
+      "lines": [
+        {
+          "line": "Summary: Three underground gun shops stand in Downtown Broker, Chinatown in Algonquin and Port Tudor in Alderney, and they open with the mission Do You Have Protection?.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Underground_Gun_Shops",
+              "revision": "2063857",
+              "quoted": [
+                "There is a total of 3 Underground Gun Shops in Liberty City. In Grand Theft Auto IV, they are accessible after completing Do You Have Protection?",
+                "Downtown, Broker, Liberty City",
+                "Chinatown, Algonquin, Liberty City",
+                "Port Tudor, Alderney"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: You walk up to a table to look at a gun; ammo costs less than the gun, and the stock grows as the story goes on. A Pistol costs $600, a Pump Shotgun or Micro SMG $1,200, and an Assault Rifle $3,500.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Underground_Gun_Shops",
+              "revision": "2063857",
+              "quoted": [
+                "To purchase weapons, the player has to walk up to the table and view them.",
+                "buying ammo for a weapon is cheaper than when buying the weapon",
+                "some weapons are unlocked inmediately after the player unlocks the first shop, but as the player progresses, more weapons will become available.",
+                "Pistol || $600",
+                "Pump Shotgun || $1,200",
+                "Micro SMG || $1,200",
+                "Assault Rifle || $3,500"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You cannot enter with a wanted level, because the door stays locked. Do not shoot the clerk: guards loitering at the entrance defend the shop, and if you kill the owner they attack with Combat Shotguns and SMGs and the shop will not sell to you for a while.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Underground_Gun_Shops",
+              "revision": "2063857",
+              "quoted": [
+                "Players cannot enter the shops if they have a wanted level; upon arriving at the door, it will be locked",
+                "Some pedestrians can be found at the entrance to the shop loitering casually, but they are actually guards who will defend the shop.",
+                "Killing the owner of one of the shops results in the aforementioned guards armed with Combat Shotguns and SMGs attacking the player. It also prevents the player from buying weapons from that shop again for a period of time"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1511,
+      "name": "Car Bomb",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Car_Bomb",
+      "main_revision": "2071122",
+      "lines": [
+        {
+          "line": "Summary: Four blocks of explosive with a phone wired to them, planted under a vehicle and set off by calling Packie and choosing Detonate.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Car_Bomb",
+              "revision": "2071122",
+              "quoted": [
+                "this time as four explosive (possibly C-4) blocks with a phone attached to it via improvised wiring.",
+                "The bombs are remote detonated through calling Packie on the cell phone and selecting Detonate."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Setting it off gives you no wanted level, which makes it a handy way to destroy Securicars.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Car_Bomb",
+              "revision": "2071122",
+              "quoted": [
+                "Using it will not award a wanted level, being a useful weapon for destroying Securicars."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You get car bombs from Packie as a friend favor, delivered to your general location, and you can place them beneath cars, buses and light vans only.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Car_Bomb",
+              "revision": "2071122",
+              "quoted": [
+                "Car bombs can be obtained through Patrick McReary as a friend special option",
+                "They will be delivered to the player's general location and the player can place the bombs beneath cars, buses and light vans only."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

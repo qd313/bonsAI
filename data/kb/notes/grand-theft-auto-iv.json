@@ -100,6 +100,39 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "2083689",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1509,
+      "game_id": 19,
+      "section_type": "item",
+      "name": "Health packs and food",
+      "card": "Summary: Health packs shaped like medical kits lie all over Liberty City, mostly in out-of-the-way places, at hospitals and in subway stations.\nUses: Eating at Cluckin' Bell or Burger Shot, or buying from street vendors and vending machines, restores health by different amounts, and drinks usually restore less.\nTips: Dial 911 and then 2 for an ambulance, and the paramedics restore your health for a fee of up to $950, depending on how hurt you are. Maximum health cannot be raised in GTA IV, and saving the game also refills it.",
+      "source_url": "https://gta.fandom.com/wiki/Health",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2063152",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1510,
+      "game_id": 19,
+      "section_type": "item",
+      "name": "Underground Gun Shops",
+      "card": "Summary: Three underground gun shops stand in Downtown Broker, Chinatown in Algonquin and Port Tudor in Alderney, and they open with the mission Do You Have Protection?.\nUses: You walk up to a table to look at a gun; ammo costs less than the gun, and the stock grows as the story goes on. A Pistol costs $600, a Pump Shotgun or Micro SMG $1,200, and an Assault Rifle $3,500.\nTips: You cannot enter with a wanted level, because the door stays locked. Do not shoot the clerk: guards loitering at the entrance defend the shop, and if you kill the owner they attack with Combat Shotguns and SMGs and the shop will not sell to you for a while.",
+      "source_url": "https://gta.fandom.com/wiki/Underground_Gun_Shops",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2063857",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1511,
+      "game_id": 19,
+      "section_type": "item",
+      "name": "Car Bomb",
+      "card": "Summary: Four blocks of explosive with a phone wired to them, planted under a vehicle and set off by calling Packie and choosing Detonate.\nUses: Setting it off gives you no wanted level, which makes it a handy way to destroy Securicars.\nTips: You get car bombs from Packie as a friend favor, delivered to your general location, and you can place them beneath cars, buses and light vans only.",
+      "source_url": "https://gta.fandom.com/wiki/Car_Bomb",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2071122",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

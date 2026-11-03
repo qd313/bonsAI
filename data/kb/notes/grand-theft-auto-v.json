@@ -56,6 +56,61 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "2083887",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1405,
+      "game_id": 18,
+      "section_type": "enemy",
+      "name": "Ballas",
+      "card": "Summary: A large African American street gang in purple who control almost all of Davis, with the cul-de-sac of Grove Street a hot spot, and a traditional rivalry with the Families.\nWeak points: Most of them stand on the sidewalks in groups of 3 to 5 and carry pistols and knives.\nTips: They usually leave you alone if you walk through their territory, but they turn hostile if you taunt them enough, fire a gun there or just stand near and stare, and then they shoot, stab or punch you; their dogs sometimes attack too.\nTips: Starting a gunfight with a gang, or killing several of its members in a row, gives you two stars.",
+      "source_url": "https://gta.fandom.com/wiki/Ballas_(HD_Universe)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2082331",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1406,
+      "game_id": 18,
+      "section_type": "enemy",
+      "name": "The Lost MC",
+      "card": "Summary: A motorcycle club whose Los Santos chapter patrols the East Vinewood area in Gang Burritos and runs a clubhouse there, with a hideout in Stab City.\nWeak points: Some ride in small groups of two or three, on Hexer, Daemon and Sovereign bikes.\nTips: After the main story you can still meet them at their East Vinewood clubhouse, Hookies in North Chumash, R L Hunter & Sons in Grapeseed and Stab City.\nTips: If they run into Trevor, they attack him on sight.",
+      "source_url": "https://gta.fandom.com/wiki/The_Lost_MC",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2084189",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1407,
+      "game_id": 18,
+      "section_type": "enemy",
+      "name": "Sharks",
+      "card": "Summary: Sharks in GTA V are fast, dangerous predators that often attack on sight. They spawn more often at night, show on the minimap as a red dot, stalk and circle you for a while before attacking, and sometimes come in pairs.\nWeak points: From a boat one shot kills a shark, so look out for them and kill them from the surface before you dive. You can also run into one with a boat or Submersible, or stab it with a knife over and over, which is extremely difficult.\nTips: A shark kills with its first bite even if you have full health and armor. If you are too deep or too far out to get back to your boat or the shore, swim into sunken plane and ship ruins, which often makes the shark swim away.\nTips: The Hammerhead Sharks added on PC, PlayStation 4 and Xbox One never attack, and if you reach the end of the map a shark is scripted to appear and kill you.",
+      "source_url": "https://gta.fandom.com/wiki/Sharks_(animal)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2079442",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1408,
+      "game_id": 18,
+      "section_type": "enemy",
+      "name": "Cougars",
+      "card": "Summary: Large wild cats found in forested and hilly areas from the Vinewood Hills to Mount Chiliad. A cougar growls loudly when it is near, then relentlessly charges, pounces and kills you instantly with a throat bite.\nWeak points: A cougar runs away if you are driving or firing a weapon and will not attack if you are on top of a vehicle. If you react quickly you can kill or knock out one by kicking it.\nTips: Trevor's special ability lets him survive a cougar attack with no damage.\nTips: In the Hunting side activity cougars spawn often and show as a red circle on the map, like deer, which often tricks you into walking right into an attack.",
+      "source_url": "https://gta.fandom.com/wiki/Cougars",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2084484",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1409,
+      "game_id": 18,
+      "section_type": "item",
+      "name": "Body Armor",
+      "card": "Summary: A protective blue vest in five tiers, all bought from Ammu-Nation: Super Light (20%) for $500, Light (40%) for $1,000, Standard (60%) for $1,500, Heavy (80%) for $2,000 and Super Heavy (100%) for $2,500.\nUses: Armor pads your health against gunfire, explosions and fire, and in GTA V it also protects you from falls and impacts again. Each tier adds another 20%.\nTips: Climbing into a Police Riot gives you armor. It shows as a blue bar next to your health bar below the radar.",
+      "source_url": "https://gta.fandom.com/wiki/Body_Armor",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2083689",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

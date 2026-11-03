@@ -12164,14 +12164,14 @@
       "domain": "strategy",
       "app_id": "",
       "shortcut": "Paper Mario: The Thousand-Year Door",
-      "query": "how do i beat lord crump at keelhaul key in paper mario ttyd",
+      "query": "how do i beat lord crump in the third fight in paper mario ttyd",
       "intent": "Beat Lord Crump.",
       "topic_hint": "",
       "withheld_card_terms": [],
       "skill_level": "beginner",
       "input_style": "natural",
       "note": "Written blind 2026-11-02 from the note's name only",
-      "expect_section": "Lord Crump (Keelhaul Key fight)"
+      "expect_section": "Lord Crump (third fight)"
     },
     {
       "id": "V2-P102-TTYD-14",
@@ -12179,14 +12179,14 @@
       "domain": "strategy",
       "app_id": "",
       "shortcut": "Paper Mario: The Thousand-Year Door",
-      "query": "ttyd lord crump keelhaul",
+      "query": "ttyd lord crump 3rd fight",
       "intent": "Beat Lord Crump.",
       "topic_hint": "",
       "withheld_card_terms": [],
       "skill_level": "familiar",
       "input_style": "terse",
       "note": "Written blind 2026-11-02 from the note's name only",
-      "expect_section": "Lord Crump (Keelhaul Key fight)"
+      "expect_section": "Lord Crump (third fight)"
     },
     {
       "id": "V2-P102-TTYD-15",

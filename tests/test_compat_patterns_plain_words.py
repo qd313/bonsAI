@@ -63,8 +63,8 @@ class PlainWordsInTipsTests(unittest.TestCase):
         self.assertNotIn("black", BY_ID[154]["card"].lower())
 
     def test_two_new_tips_are_marked_researched_unconfirmed_and_filed_after_the_last(self):
-        self.assertEqual(max(BY_ID), 166)
-        self.assertEqual(sorted(BY_ID)[-3:], [164, 165, 166])
+        self.assertEqual(max(BY_ID), 167)  # 167 is plan 102 lane H's tip
+        self.assertEqual(sorted(BY_ID)[-4:], [164, 165, 166, 167])
         expected_topic = {165: "audio", 166: "display"}
         for tip_id, topic in expected_topic.items():
             tip = BY_ID[tip_id]
@@ -91,6 +91,22 @@ class PlainWordsInTipsTests(unittest.TestCase):
             "There is no bonsAI inside the headset.",
         )
 
+
+
+class FindingThePcTipTests(unittest.TestCase):
+    """Plan 102 lane H: a Deck that cannot find its PC finally has a tip to reach."""
+
+    def test_tip_167_answers_a_deck_that_cannot_find_its_pc(self):
+        tip = BY_ID[167]
+        self.assertEqual(tip["topic"], "network")
+        self.assertEqual(tip["platforms"], ["deck"])
+        card = tip["card"].lower()
+        for phrase in ("can't find your pc", "same home network", "11434", "firewall"):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, card)
+
+    def test_tip_167_is_not_a_frame_tip(self):
+        self.assertNotIn("steam frame", BY_ID[167]["card"].lower())
 
 
 FIXTURE = json.loads((REPO_ROOT / "tests" / "fixtures" / "kb_eval_v2.json").read_text(encoding="utf-8"))

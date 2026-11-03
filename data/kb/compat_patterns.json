@@ -1677,5 +1677,15 @@
     "card": "Researched, unconfirmed: if the menus sit off the edge of the TV (television) or in the wrong spot, try the external-screen settings -- direct HDMI, 1080p60, overscan off.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 167,
+    "topic": "network",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: if the Deck can't find your PC, use the same home network. On the PC, let Ollama accept other devices and open port 11434 in the firewall; use its address:11434 in bonsAI.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
   }
 ]

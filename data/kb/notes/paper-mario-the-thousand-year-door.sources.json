@@ -417,6 +417,7 @@
               "quoted": [
                 "In this encounter, Crump uses his X-Nauts as backup.",
                 "After losing to Mario and Co for the third time",
+                "In Chapter 5, Lord Crump disguises himself as a pirate named Four-Eyes",
                 "Max HP || 60 (30 per round) || Attack || 3 || Defense || 0 || Location(s) || Keelhaul Key"
               ]
             }
@@ -465,6 +466,7 @@
               "quoted": [
                 "When the Smorgs are cornered on the top of the train, they combine into a large Smorg horde that attacks Mario and his party.",
                 "Max HP is 50, Attack is 5, and Defense is 1.",
+                "They appear in the sixth chapter of Paper Mario: The Thousand-Year Door.",
                 "It is the only chapter boss aside from the Shadow Queen that does not guard a Crystal Star."
               ]
             }
@@ -633,6 +635,417 @@
               "quoted": [
                 "After defeating Gloomtail, he coughs up the treasure chest containing the Star Stone.",
                 "guards the Star Stone, which is needed to unlock the pedestals in the Palace of Shadow Tower"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1710,
+      "name": "Grodus (Palace of Shadow boss)",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Grodus",
+      "main_revision": "5412019",
+      "lines": [
+        {
+          "line": "Summary: The head of the X-Nauts, fought in the Palace of Shadow, with 50 HP, 7 attack and 1 defense; his defense rises by 1 for every Grodus X around him.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Grodus",
+              "revision": "5412019",
+              "quoted": [
+                "is the supreme leader of the X-Nauts",
+                "Max HP is 50, Attack is 7, and Defense is 1. But...when he has Grodus Xs surrounding him, his Defense will go up by that number.",
+                "Location(s) || Palace of Shadow"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: He needs four Grodus Xs to raise a force field and destroying even one breaks it, and an attack on his scepter can stun it, which stops him attacking for a while.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Grodus",
+              "revision": "5412019",
+              "quoted": [
+                "he requires 4 Grodus Xs to create a force field to protect himself. If a single Grodus X is destroyed, the force field breaks.",
+                "His scepter is susceptible to being stunned after being attacked, preventing him from attacking for a while."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: He casts Thunderbolt (7), Flamethrower (6, burns), Ice Beam (5, freezes) and Clock Beam (stops you), the first three piercing, and he can also counterattack with Payback or turn Dodgy.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Grodus",
+              "revision": "5412019",
+              "quoted": [
+                "Thunderbolt (7, Piercing), Flamethrower (6, Piercing, Burn), Ice Beam (5, Piercing, Frozen), Clock Beam (Stop), Counterattack (Payback), Evade (Dodgy), Dud (indicated by smoke from scepter, 0)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Smoke from his scepter marks a dud move that does no damage.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Grodus",
+              "revision": "5412019",
+              "quoted": [
+                "Dud (indicated by smoke from scepter, 0)"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1711,
+      "name": "Bonetail (Pit of 100 Trials boss)",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Bonetail",
+      "main_revision": "5410422",
+      "lines": [
+        {
+          "line": "Summary: The skeletal dragon at the bottom of the Pit of 100 Trials, with 200 HP, 8 attack and 2 defense, the most HP of any enemy; she is the strongest boss in the game, stronger even than the Shadow Queen.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bonetail",
+              "revision": "5410422",
+              "quoted": [
+                "residing at the bottom of the Pit of 100 Trials.",
+                "His body's Max HP is 200, his Attack is 8, and his Defense is 2.",
+                "She is the strongest boss in the game, being stronger than the Shadow Queen",
+                "has the most HP out of any enemy."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: When her HP gets low she can recover 20 HP, at most twice, which adds up to 40 HP on top of her 200.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bonetail",
+              "revision": "5410422",
+              "quoted": [
+                "Recover (+20 HP; max twice)",
+                "His body's Max HP is 200",
+                "When his HP gets low, he'll recover...or reanimate, as the case may be."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Her breaths do 8 damage and can freeze (blue), confuse (green, pink in the Switch remake), shrink (purple) or put you to sleep (white); guarding or Shell Shield avoids all of them.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bonetail",
+              "revision": "5410422",
+              "quoted": [
+                "Dangerous Breath (8 to Mario and Partner, Piercing, Sleep (white), Confuse (green), Tiny (purple), Frozen (blue))",
+                "The color of Bonetail's confusion breath has also been changed from green to pink.",
+                "All of her breath attacks can be avoided with Shell Shield or simply guarding."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Besides the breaths and Recover she only has Stomp and Chomp for 8, with none of Gloomtail's earthquake or Megabreath, and once beaten she coughs up the Return Postage badge and cannot be fought again.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bonetail",
+              "revision": "5410422",
+              "quoted": [
+                "Bonetail does not have all of Gloomtail's attacks, like his earthquake attack or Megabreath.",
+                "Stomp (8), Chomp (8)",
+                "If Mario defeats Bonetail, she coughs up a chest containing the Return Postage badge.",
+                "Once defeated, Bonetail cannot be fought again"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1712,
+      "name": "Star Pieces",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Star_Piece_(Paper_Mario_series)",
+      "main_revision": "5321829",
+      "lines": [
+        {
+          "line": "Summary: Hidden collectibles: there are 100 Star Pieces in the game, 98 lying around the world and two given as rewards by Chef Shimi and the Excess Express waitress.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Star_Piece_(Paper_Mario_series)",
+              "revision": "5321829",
+              "quoted": [
+                "there are 100 collectible Star Pieces, among which 98 are overworld and two are owned by characters.",
+                "The last two are owned by Chef Shimi and the Excess Express waitress, respectively, and will be given to Mario for fulfilling the corresponding requests."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Trade them for badges with Dazzle in Rogueport Underground; all 100 are needed to get every badge he sells.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Star_Piece_(Paper_Mario_series)",
+              "revision": "5321829",
+              "quoted": [
+                "they are used for trading with Dazzle in Rogueport Underground.",
+                "All 100 Star Pieces are needed to get all of Dazzle's badges."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Dazzle",
+              "revision": "5414000",
+              "quoted": [
+                "Dazzle is a Star Piece collector found in the Rogueport Underground"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Dazzle's prices in Star Pieces: Attack FX Y 1, Chill Out 2, Pretty Lucky 3, Happy Flower, Happy Heart and Happy Heart P 4 each, Item Hog 5, Heart Finder and Flower Finder 6 each, Peekaboo 7, Quick Change 8, Flower Saver and Flower Saver P 10 each, Power Plus and Power Plus P 15 each.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Dazzle",
+              "revision": "5414000",
+              "quoted": [
+                "Attack FX Y || 1 || Chill Out || 2 || Pretty Lucky || 3 || Happy Flower || 4 || Happy Heart || 4 || Happy Heart P || 4 || Item Hog || 5 || Heart Finder || 6 || Flower Finder || 6 || Peekaboo || 7 || Quick Change || 8 || Flower Saver || 10 || Flower Saver P || 10 || Power Plus || 15 || Power Plus P || 15"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Merluvlee will tell you where they are for five coins and Ms. Mowz can detect them as a field ability; buried ones need the Super Boots to flip their panel, and in the GameCube game the Ultra Hammer cannot.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Star_Piece_(Paper_Mario_series)",
+              "revision": "5321829",
+              "quoted": [
+                "Merluvlee can predict the locations of the Star Pieces for five coins, and Ms. Mowz can detect them for Mario using her field ability",
+                "Some of overworld ones are underground and require Super Boots to get.",
+                "the underground panels can no longer be flipped with the Ultra Hammer."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1713,
+      "name": "Partner ranks",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Level_up",
+      "main_revision": "5512340",
+      "lines": [
+        {
+          "line": "Summary: A rank-up raises a partner's attack power and HP and teaches it a new move; there are two, Super Rank then Ultra Rank, and Merlon in Rogueport does each one for three Shine Sprites.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Level_up",
+              "revision": "5512340",
+              "quoted": [
+                "which increases their attack power and teaches them a new move, and increases their HP in Paper Mario: The Thousand-Year Door.",
+                "In Paper Mario: The Thousand-Year Door, Merlon can level up Mario's partners, for three Shine Sprites each."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Merlon",
+              "revision": "5412676",
+              "quoted": [
+                "Mario can visit Merlon to have him upgrade one of Mario's partners for three Shine Sprites. Initially, Mario's partner can be upgraded to Super Rank."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Super Rank teaches Goombella Multibonk, Koops Shell Shield, Flurrie Lip Lock, Yoshi Kid Mini-Egg, Vivian Fiery Jinx, Bobbery Hold Fast and Ms. Mowz Tease; Ultra Rank teaches Goombella Rally Wink (Mario gets a second turn), Koops Shell Slam, Flurrie Dodgy Fog, Yoshi Kid Stampede, Vivian Infatuate, Bobbery Bob-ombast and Ms. Mowz Smooch (heals Mario 10 HP).",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Goombella",
+              "revision": "5525953",
+              "quoted": [
+                "Once Goombella reaches Super Rank, she will gain the Multibonk ability",
+                "Rally Wink || 4 || Gives Mario a second turn in battle."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Koops",
+              "revision": "5530661",
+              "quoted": [
+                "Koops also learns Shell Shield at Super Rank.",
+                "Shell Slam || 6 || Attacks all ground enemies and penetrates their defense."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Flurrie",
+              "revision": "5478841",
+              "quoted": [
+                "Lip Lock || 3 || Steals enemies' HP to add to her own. Pierces Defense. || Press when the red star lights up. || Super: 4 Ultra: 6 || Super Rank",
+                "Dodgy Fog || 4 || Makes Mario dodgy for a few turns."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Yoshi_Kid",
+              "revision": "5534641",
+              "quoted": [
+                "Mini-Egg || 3 || Throws eggs at all the enemies and, if successful, shrinks them.",
+                "Stampede || 6 || Summons a Yoshi herd to attack all enemies."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Vivian",
+              "revision": "5465682",
+              "quoted": [
+                "Fiery Jinx || 6 || Deals fire damage to all enemies, piercing defense. It also burns them. || Player presses the 5-button combo of ,,, and that appear on the screen. || Super: 5 Ultra: 5 || Super Rank",
+                "Infatuate || 4 || Blows a kiss to all enemies to confuse them if effective"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bobbery",
+              "revision": "5508749",
+              "quoted": [
+                "Hold Fast || 4 || Direct-attackers that touch Bobbery get damaged in battle.",
+                "Bob-ombast || 9 || Damages all enemies in battle."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Ms._Mowz",
+              "revision": "5534630",
+              "quoted": [
+                "Tease || 3 || Makes all enemies Dizzy.",
+                "Smooch || 10 || Replenishes 10 of Mario's HP."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Bobbery has the most HP at each rank (20, 30, then 40), and Koops has the lowest once ranked up (15 at Super, 25 at Ultra).",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bobbery",
+              "revision": "5508749",
+              "quoted": [
+                "he has the highest HP total (with 20 in Initial Rank, 30 in Super Rank, and 40 in Ultra Rank)"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Koops",
+              "revision": "5530661",
+              "quoted": [
+                "he has the lowest health of all partners when upgraded, with 15 Health Points at Super Rank and 25 Health Points at Ultra Rank"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Ultra Rank needs the Up Arrow first: after you bring the Sapphire Star back to Rogueport, Merlon gives you a riddle, and the Up Arrow is in a secret room in Hooktail Castle behind a crack in the right wall of the room where you found the Black Key (Bobbery blasts it open, then hit the blue ! Block for the chest); give it to Merlon and he frees the Ultra Stone.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Merlon",
+              "revision": "5412676",
+              "quoted": [
+                "After Mario collects the Sapphire Star in Keelhaul Key and returns to Rogueport, he finds Merlon just outside his house.",
+                "Merlon asks Mario to figure out the mystery before going back into his house.",
+                "Mario must travel to Hooktail Castle in Petal Meadows and make his way to a room where he earlier uncovered a Black Key to find a crack in the rightmost wall.",
+                "Using Admiral Bobbery's ability to blast a hole in the wall, Mario discovers a secret room, where he must hit a blue ! Block to reveal a chest containing an Up Arrow.",
+                "Afterward, Mario must return to Rogueport and give the Up Arrow to Merlon, who then floats up until he crashes into the ceiling, releasing an Ultra Stone that falls to the floor."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Level_up",
+              "revision": "5512340",
+              "quoted": [
+                "To level up the partners again, Mario must first obtain the Up Arrow. After doing so, Merlon can level them up to the Ultra Rank."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1714,
+      "name": "Healing mushrooms",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Mushroom",
+      "main_revision": "5468692",
+      "lines": [
+        {
+          "line": "Summary: A Mushroom restores 5 HP, a Super Shroom 10 HP and an Ultra Shroom 50 HP, and since partners have HP now, they can heal a partner too.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mushroom",
+              "revision": "5468692",
+              "quoted": [
+                "A feel-good mushroom. Replenishes 5 HP.",
+                "mushrooms can restore a partner's HP also."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Super_Mushroom",
+              "revision": "5537614",
+              "quoted": [
+                "A feel-super mushroom. Replenishes 10 HP.",
+                "Super Mushrooms (originally referred to as Super Shrooms)"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Ultra_Mushroom",
+              "revision": "5414790",
+              "quoted": [
+                "A feel-great mushroom. Replenishes 50 HP."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: A Life Shroom (called Life Mushroom in the Switch remake) revives Mario or his partner with 10 HP when they fall, and partners use it automatically as soon as their HP runs out, so you cannot save it for Mario alone.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Life_Mushroom_(Paper_Mario_series)",
+              "revision": "5317987",
+              "quoted": [
+                "Whenever Mario (or his partner in The Thousand-Year Door) is defeated in battle, the Life Mushroom will revive the character and return ten HP to them.",
+                "partners automatically use it if their life is depleted, no matter what.",
+                "referred to as a Life Shroom prior to the Nintendo Switch remake of Paper Mario: The Thousand-Year Door"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Super Shrooms are sold at Westside Goods, the souvenir shop, Twilight Shop, Keelhaul Galleria, the Sales Stall and Northwinds Mart; Ultra Shrooms are rare, costing 200 coins at the Deepdown Depot, 67 Pianta tokens at the Pianta Parlor (80 in the Switch remake), or sometimes 120 coins from Charlieton.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Super_Mushroom",
+              "revision": "5537614",
+              "quoted": [
+                "can be bought at Westside Goods, the souvenir shop, Twilight Shop, Keelhaul Galleria, Sales Stall and Northwinds Mart"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Ultra_Mushroom",
+              "revision": "5414790",
+              "quoted": [
+                "very few places sell Ultra Mushroom (originally called Ultra Shrooms); however, they may be purchased for 200 coins each at the Deepdown Depot, the shop in Rogueport Underground, and they can also be found in the Pianta Parlor for 67 (80 in the Nintendo Switch remake) pianta tokens. Charlieton occasionally sells Ultra Mushrooms for 120 coins."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You get a Life Shroom as the shopping prize at 150 shop points, an enemy may carry one and drop it after it is beaten, and Ms. Mowz can steal it with Kiss Thief.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Life_Mushroom_(Paper_Mario_series)",
+              "revision": "5317987",
+              "quoted": [
+                "Life Mushrooms are given away as a shopping prize when the player reaches 150 shop points. They can also be carried by an enemy in battle.",
+                "it then has a high chance of being dropped after the battle is over.",
+                "Ms. Mowz can also use Kiss Thief to steal the item in battle."
               ]
             }
           ]

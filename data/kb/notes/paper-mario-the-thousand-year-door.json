@@ -111,6 +111,61 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5408189",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1710,
+      "game_id": 23,
+      "section_type": "boss",
+      "name": "Grodus (Palace of Shadow boss)",
+      "card": "Summary: The head of the X-Nauts, fought in the Palace of Shadow, with 50 HP, 7 attack and 1 defense; his defense rises by 1 for every Grodus X around him.\nWeak points: He needs four Grodus Xs to raise a force field and destroying even one breaks it, and an attack on his scepter can stun it, which stops him attacking for a while.\nTips: He casts Thunderbolt (7), Flamethrower (6, burns), Ice Beam (5, freezes) and Clock Beam (stops you), the first three piercing, and he can also counterattack with Payback or turn Dodgy.\nTips: Smoke from his scepter marks a dud move that does no damage.",
+      "source_url": "https://www.mariowiki.com/Grodus",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5412019",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1711,
+      "game_id": 23,
+      "section_type": "boss",
+      "name": "Bonetail (Pit of 100 Trials boss)",
+      "card": "Summary: The skeletal dragon at the bottom of the Pit of 100 Trials, with 200 HP, 8 attack and 2 defense, the most HP of any enemy; she is the strongest boss in the game, stronger even than the Shadow Queen.\nWeak points: When her HP gets low she can recover 20 HP, at most twice, which adds up to 40 HP on top of her 200.\nTips: Her breaths do 8 damage and can freeze (blue), confuse (green, pink in the Switch remake), shrink (purple) or put you to sleep (white); guarding or Shell Shield avoids all of them.\nTips: Besides the breaths and Recover she only has Stomp and Chomp for 8, with none of Gloomtail's earthquake or Megabreath, and once beaten she coughs up the Return Postage badge and cannot be fought again.",
+      "source_url": "https://www.mariowiki.com/Bonetail",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5410422",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1712,
+      "game_id": 23,
+      "section_type": "item",
+      "name": "Star Pieces",
+      "card": "Summary: Hidden collectibles: there are 100 Star Pieces in the game, 98 lying around the world and two given as rewards by Chef Shimi and the Excess Express waitress.\nUses: Trade them for badges with Dazzle in Rogueport Underground; all 100 are needed to get every badge he sells.\nTips: Dazzle's prices in Star Pieces: Attack FX Y 1, Chill Out 2, Pretty Lucky 3, Happy Flower, Happy Heart and Happy Heart P 4 each, Item Hog 5, Heart Finder and Flower Finder 6 each, Peekaboo 7, Quick Change 8, Flower Saver and Flower Saver P 10 each, Power Plus and Power Plus P 15 each.\nTips: Merluvlee will tell you where they are for five coins and Ms. Mowz can detect them as a field ability; buried ones need the Super Boots to flip their panel, and in the GameCube game the Ultra Hammer cannot.",
+      "source_url": "https://www.mariowiki.com/Star_Piece_(Paper_Mario_series)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5321829",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1713,
+      "game_id": 23,
+      "section_type": "item",
+      "name": "Partner ranks",
+      "card": "Summary: A rank-up raises a partner's attack power and HP and teaches it a new move; there are two, Super Rank then Ultra Rank, and Merlon in Rogueport does each one for three Shine Sprites.\nUses: Super Rank teaches Goombella Multibonk, Koops Shell Shield, Flurrie Lip Lock, Yoshi Kid Mini-Egg, Vivian Fiery Jinx, Bobbery Hold Fast and Ms. Mowz Tease; Ultra Rank teaches Goombella Rally Wink (Mario gets a second turn), Koops Shell Slam, Flurrie Dodgy Fog, Yoshi Kid Stampede, Vivian Infatuate, Bobbery Bob-ombast and Ms. Mowz Smooch (heals Mario 10 HP).\nTips: Bobbery has the most HP at each rank (20, 30, then 40), and Koops has the lowest once ranked up (15 at Super, 25 at Ultra).\nTips: Ultra Rank needs the Up Arrow first: after you bring the Sapphire Star back to Rogueport, Merlon gives you a riddle, and the Up Arrow is in a secret room in Hooktail Castle behind a crack in the right wall of the room where you found the Black Key (Bobbery blasts it open, then hit the blue ! Block for the chest); give it to Merlon and he frees the Ultra Stone.",
+      "source_url": "https://www.mariowiki.com/Level_up",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5512340",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1714,
+      "game_id": 23,
+      "section_type": "item",
+      "name": "Healing mushrooms",
+      "card": "Summary: A Mushroom restores 5 HP, a Super Shroom 10 HP and an Ultra Shroom 50 HP, and since partners have HP now, they can heal a partner too.\nUses: A Life Shroom (called Life Mushroom in the Switch remake) revives Mario or his partner with 10 HP when they fall, and partners use it automatically as soon as their HP runs out, so you cannot save it for Mario alone.\nTips: Super Shrooms are sold at Westside Goods, the souvenir shop, Twilight Shop, Keelhaul Galleria, the Sales Stall and Northwinds Mart; Ultra Shrooms are rare, costing 200 coins at the Deepdown Depot, 67 Pianta tokens at the Pianta Parlor (80 in the Switch remake), or sometimes 120 coins from Charlieton.\nTips: You get a Life Shroom as the shopping prize at 150 shop points, an enemy may carry one and drop it after it is beaten, and Ms. Mowz can steal it with Kiss Thief.",
+      "source_url": "https://www.mariowiki.com/Mushroom",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5468692",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

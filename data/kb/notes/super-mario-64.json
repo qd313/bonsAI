@@ -111,6 +111,61 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5531900",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1610,
+      "game_id": 21,
+      "section_type": "item",
+      "name": "Red Coin",
+      "card": "Summary: A red coin in Super Mario 64 is worth two yellow coins, and eight of them in one area make a Power Star appear over the nearby Star Marker.\nUses: The three cap-switch courses and the three Bowser courses each hold eight, and the two secret courses The Secret Aquarium and Wing Mario Over the Rainbow have one star each from their red coins. The Princess's Secret Slide is the only course with none.\nTips: The red coin missions by course: Bob-omb Battlefield, Find the 8 Red Coins; Whomp's Fortress, Red Coins on the Floating Isle; Jolly Roger Bay, Red Coins on the Ship Afloat; Cool, Cool Mountain, Frosty Slide for 8 Red Coins; Big Boo's Haunt, Seek the 8 Red Coins; Hazy Maze Cave, Elevate for 8 Red Coins; Lethal Lava Land, 8-Coin Puzzle with 15 Pieces; Shifting Sand Land, Free Flying for 8 Red Coins.\nTips: The rest: Dire, Dire Docks, Pole-Jumping for Red Coins; Snowman's Land, Shell Shreddin' for Red Coins; Wet-Dry World, Go to Town for Red Coins; Tall, Tall Mountain, Scary 'Shrooms, Red Coins; Tiny-Huge Island, Wiggler's Red Coins; Tick Tock Clock, Stop Time for Red Coins; Rainbow Ride, Coins Amassed in a Maze.",
+      "source_url": "https://www.mariowiki.com/Red_Coin",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5533785",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1611,
+      "game_id": 21,
+      "section_type": "item",
+      "name": "Blue Coin",
+      "card": "Summary: A darker blue coin worth five yellow coins.\nUses: Most come from ground-pounding a Blue Coin Block, and they last only a limited time: once the timer runs out they cannot be collected. Some defeated enemies drop one: Koopa Troopas, Piranha Plants, Boos, Mr. Is, Bookends, Pokeys and the Small Koopa Troopa, and a Grand Goomba gives one only if you kill it with a ground pound.\nTips: The blue coins on the slides in Cool, Cool Mountain (one) and Tall, Tall Mountain (three) start to move away from you as you get close, unlike still yellow coins.",
+      "source_url": "https://www.mariowiki.com/Blue_Coin",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5531894",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1612,
+      "game_id": 21,
+      "section_type": "item",
+      "name": "1-Up Mushroom",
+      "card": "Summary: A mushroom with a green cap and yellow spots that gives an extra life.\nUses: You find them on top of poles, in some yellow blocks, by touching butterflies that are not explosive, in a small field of flowers, and by flying through a ring of coins.\nTips: Some stand still, some move away from you and some move at you. Three sit on the roof of the castle.",
+      "source_url": "https://www.mariowiki.com/1-Up_Mushroom",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5532595",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1613,
+      "game_id": 21,
+      "section_type": "item",
+      "name": "Koopa Shell",
+      "card": "Summary: A rare green shell in Super Mario 64 that you can ride for fast travel.\nUses: Jump on it to travel fast and ram enemies, which defeats them instantly. Riding a shell lets you cross water, lava, quicksand and deadly quicksand without sinking or being hurt, and holding one underwater lets you swim faster for a short while.\nTips: Shells come from hitting some yellow blocks or from attacking a Koopa Troopa to knock it out of its shell. In the original game the blocks do not refill, but a shell stays until you ride it.\nTips: In the Nintendo 64 version of Tiny-Huge Island you can ride the shell on the wind over the Windswept Valley.",
+      "source_url": "https://www.mariowiki.com/Koopa_Shell",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5523503",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1614,
+      "game_id": 21,
+      "section_type": "item",
+      "name": "Cannon",
+      "card": "Summary: Blue cannons in ten courses and one secret stage fire you to places you cannot normally reach, but each stays covered until you find and talk to that course's Bob-omb Buddy.\nUses: Drop into the hole to climb in, aim with the targeting reticle and press the button to fire. Aim slightly higher than your target, and you take no falling damage from the shot. With a Wing Cap on, you can fly at once after the shot without a triple jump.\nTips: Cannons cannot be unlocked until the first mission is done. In Bob-omb Battlefield one cannon can never be used because it shoots water bombs.\nTips: In the Whomp's Fortress mission \"Blast Away the Wall\" you shoot yourself out of a cannon to smash the top of a nearby wall and free the star.",
+      "source_url": "https://www.mariowiki.com/Cannon",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5536638",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

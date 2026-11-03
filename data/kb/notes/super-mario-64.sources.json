@@ -661,6 +661,371 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1610,
+      "name": "Red Coin",
+      "kind": "item",
+      "page": "Red Coin",
+      "page_url": "https://www.mariowiki.com/Red_Coin",
+      "revision": "5533785",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A red coin in Super Mario 64 is worth two yellow coins, and eight of them in one area make a Power Star appear over the nearby Star Marker.",
+          "from": [
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Each of them are worth two Yellow Coins. When eight Red Coins are collected in an area, a Power Star spawns above the nearby Star Marker."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "The three cap-switch courses and the three Bowser courses each hold eight, and the two secret courses The Secret Aquarium and Wing Mario Over the Rainbow have one star each from their red coins. The Princess's Secret Slide is the only course with none.",
+          "from": [
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "all three Cap Switch courses have eight Red Coins to obtain: Tower of the Wing Cap, Cavern of the Metal Cap, and Vanish Cap Under the Moat."
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "This also goes for the Bowser courses: Bowser in the Dark World, Bowser in the Fire Sea, and Bowser in the Sky."
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "two secret courses that each have only one Power Star from obtaining Red Coins: The Secret Aquarium and Wing Mario Over the Rainbow."
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "The Princess's Secret Slide is the only course (secret or otherwise) to lack Red Coins and thus a corresponding Power Star."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "The red coin missions by course: Bob-omb Battlefield, Find the 8 Red Coins; Whomp's Fortress, Red Coins on the Floating Isle; Jolly Roger Bay, Red Coins on the Ship Afloat; Cool, Cool Mountain, Frosty Slide for 8 Red Coins; Big Boo's Haunt, Seek the 8 Red Coins; Hazy Maze Cave, Elevate for 8 Red Coins; Lethal Lava Land, 8-Coin Puzzle with 15 Pieces; Shifting Sand Land, Free Flying for 8 Red Coins. / The rest: Dire, Dire Docks, Pole-Jumping for Red Coins; Snowman's Land, Shell Shreddin' for Red Coins; Wet-Dry World, Go to Town for Red Coins; Tall, Tall Mountain, Scary 'Shrooms, Red Coins; Tiny-Huge Island, Wiggler's Red Coins; Tick Tock Clock, Stop Time for Red Coins; Rainbow Ride, Coins Amassed in a Maze.",
+          "from": [
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Bob-omb Battlefield - Find the 8 Red Coins"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Whomp's Fortress - Red Coins on the Floating Isle"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Jolly Roger Bay - Red Coins on the Ship Afloat"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Cool, Cool Mountain - Frosty Slide for 8 Red Coins"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Big Boo's Haunt - Seek the 8 Red Coins"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Hazy Maze Cave - Elevate for 8 Red Coins"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Lethal Lava Land - 8-Coin Puzzle with 15 Pieces"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Shifting Sand Land - Free Flying for 8 Red Coins"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Dire, Dire Docks - Pole-Jumping for Red Coins"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Snowman's Land - Shell Shreddin' for Red Coins"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Wet-Dry World - Go to Town for Red Coins"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Tall, Tall Mountain - Scary 'Shrooms, Red Coins"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Tiny-Huge Island - Wiggler's Red Coins"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Tick Tock Clock - Stop Time for Red Coins"
+            },
+            {
+              "page": "Red Coin",
+              "revision": "5533785",
+              "quote": "Rainbow Ride - Coins Amassed in a Maze"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1611,
+      "name": "Blue Coin",
+      "kind": "item",
+      "page": "Blue Coin",
+      "page_url": "https://www.mariowiki.com/Blue_Coin",
+      "revision": "5531894",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A darker blue coin worth five yellow coins.",
+          "from": [
+            {
+              "page": "Blue Coin",
+              "revision": "5531894",
+              "quote": "Blue Coins appear in Super Mario 64 and Super Mario 64 DS, where they are depicted with a darker blue color. Blue Coins are worth five Yellow Coins when collected"
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Most come from ground-pounding a Blue Coin Block, and they last only a limited time: once the timer runs out they cannot be collected. Some defeated enemies drop one: Koopa Troopas, Piranha Plants, Boos, Mr. Is, Bookends, Pokeys and the Small Koopa Troopa, and a Grand Goomba gives one only if you kill it with a ground pound.",
+          "from": [
+            {
+              "page": "Blue Coin",
+              "revision": "5531894",
+              "quote": "they typically appear from ground-pounding a Blue Coin Block. These Blue Coins appear for a limited time and are unobtainable once the timer expires."
+            },
+            {
+              "page": "Blue Coin",
+              "revision": "5531894",
+              "quote": "Defeating certain enemies causes a Blue Coin to appear, including Koopa Troopas, Piranha Plants, Boos, Mr. Is, Bookends, Pokeys, and the Small Koopa Troopa. Grand Goombas also give out a Blue Coin if killed using a Ground Pound."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "The blue coins on the slides in Cool, Cool Mountain (one) and Tall, Tall Mountain (three) start to move away from you as you get close, unlike still yellow coins.",
+          "from": [
+            {
+              "page": "Blue Coin",
+              "revision": "5531894",
+              "quote": "Blue Coins are also found in the slides on Cool, Cool Mountain (one is present) and Tall, Tall Mountain (three are present), where they start to move away from Mario once he gets close to them, in contrast to the stationary Yellow Coins."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1612,
+      "name": "1-Up Mushroom",
+      "kind": "item",
+      "page": "1-Up Mushroom",
+      "page_url": "https://www.mariowiki.com/1-Up_Mushroom",
+      "revision": "5532595",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A mushroom with a green cap and yellow spots that gives an extra life.",
+          "from": [
+            {
+              "page": "1-Up Mushroom",
+              "revision": "5532595",
+              "quote": "1UP Mushrooms are rendered as 2D assets depicted with green caps and yellow spots in Super Mario 64."
+            },
+            {
+              "page": "1-Up Mushroom",
+              "revision": "5532595",
+              "quote": "Grants an extra life (most appearances)"
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "You find them on top of poles, in some yellow blocks, by touching butterflies that are not explosive, in a small field of flowers, and by flying through a ring of coins.",
+          "from": [
+            {
+              "page": "1-Up Mushroom",
+              "revision": "5532595",
+              "quote": "They are acquired through a variety of methods, such as on top of poles, in some yellow blocks, from touching butterflies that are not explosive, from a small field of flowers, or from flying through a ring of coins."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Some stand still, some move away from you and some move at you. Three sit on the roof of the castle.",
+          "from": [
+            {
+              "page": "1-Up Mushroom",
+              "revision": "5532595",
+              "quote": "Depending on the 1UP Mushroom, it can be either motionless, move away from Mario, or move at him. There are also three 1UP Mushrooms on the roof of the Mushroom Castle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1613,
+      "name": "Koopa Shell",
+      "kind": "item",
+      "page": "Koopa Shell",
+      "page_url": "https://www.mariowiki.com/Koopa_Shell",
+      "revision": "5523503",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A rare green shell in Super Mario 64 that you can ride for fast travel.",
+          "from": [
+            {
+              "page": "Koopa Shell",
+              "revision": "5523503",
+              "quote": "Koopa Shells, also referred to as shiny shells (or Shiny Shells), are rare objects in Super Mario 64. They only appear in green"
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Jump on it to travel fast and ram enemies, which defeats them instantly. Riding a shell lets you cross water, lava, quicksand and deadly quicksand without sinking or being hurt, and holding one underwater lets you swim faster for a short while.",
+          "from": [
+            {
+              "page": "Koopa Shell",
+              "revision": "5523503",
+              "quote": "When Mario jumps on a Koopa Shell, he can travel at fast speed and ram into enemies to defeat them instantly. Riding a shell also allows Mario to navigate over water, lava, quicksand, and deadly quicksand without sinking or being hurt."
+            },
+            {
+              "page": "Koopa Shell",
+              "revision": "5523503",
+              "quote": "if Mario grabs a Koopa Shell while underwater, he can hold the shell in front of him and use it to swim faster in water for a short period of time."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Shells come from hitting some yellow blocks or from attacking a Koopa Troopa to knock it out of its shell. In the original game the blocks do not refill, but a shell stays until you ride it. / In the Nintendo 64 version of Tiny-Huge Island you can ride the shell on the wind over the Windswept Valley.",
+          "from": [
+            {
+              "page": "Koopa Shell",
+              "revision": "5523503",
+              "quote": "can be obtained by hitting some yellow blocks or attacking a Koopa Troopa to get it out of its shell"
+            },
+            {
+              "page": "Koopa Shell",
+              "revision": "5523503",
+              "quote": "In the original version, when the player hits the yellow blocks for Koopa Shells, the boxes do not respawn, but shells do not disappear until Mario hitches a ride on one."
+            },
+            {
+              "page": "Koopa Shell",
+              "revision": "5523503",
+              "quote": "in Tiny-Huge Island, Mario can use the shell to ride the wind over the Windswept Valley in the Nintendo 64 version"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1614,
+      "name": "Cannon",
+      "kind": "item",
+      "page": "Cannon",
+      "page_url": "https://www.mariowiki.com/Cannon",
+      "revision": "5536638",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "Blue cannons in ten courses and one secret stage fire you to places you cannot normally reach, but each stays covered until you find and talk to that course's Bob-omb Buddy.",
+          "from": [
+            {
+              "page": "Cannon",
+              "revision": "5536638",
+              "quote": "There is at least one cannon found in ten levels in these games, as well as one secret stage."
+            },
+            {
+              "page": "Cannon",
+              "revision": "5536638",
+              "quote": "The player must successfully locate and talk to the Bob-omb Buddies in each level in order to access the cannon"
+            },
+            {
+              "page": "Cannon",
+              "revision": "5536638",
+              "quote": "Until they do, the cannons remain covered by a metal hatch with a picture of a Bob-omb Buddy on it, and are inaccessible."
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Drop into the hole to climb in, aim with the targeting reticle and press the button to fire. Aim slightly higher than your target, and you take no falling damage from the shot. With a Wing Cap on, you can fly at once after the shot without a triple jump.",
+          "from": [
+            {
+              "page": "Cannon",
+              "revision": "5536638",
+              "quote": "In order to use the cannon, Mario needs to only drop down into this hole."
+            },
+            {
+              "page": "Cannon",
+              "revision": "5536638",
+              "quote": "a targeting reticle appears on the screen, allowing the player to aim the cannon where they want Mario to go"
+            },
+            {
+              "page": "Cannon",
+              "revision": "5536638",
+              "quote": "The player should aim slightly higher than the area they wish to shoot Mario to"
+            },
+            {
+              "page": "Cannon",
+              "revision": "5536638",
+              "quote": "Mario will not take falling damage if he is fired from a cannon."
+            },
+            {
+              "page": "Cannon",
+              "revision": "5536638",
+              "quote": "If the player collects a Wing Cap before entering a cannon, the player can fly around as Wing Mario immediately after being fired from the cannon, without needing to perform a Triple Jump to take off first."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Cannons cannot be unlocked until the first mission is done. In Bob-omb Battlefield one cannon can never be used because it shoots water bombs. / In the Whomp's Fortress mission \"Blast Away the Wall\" you shoot yourself out of a cannon to smash the top of a nearby wall and free the star.",
+          "from": [
+            {
+              "page": "Cannon",
+              "revision": "5536638",
+              "quote": "Cannons cannot be unlocked until after the first mission is completed."
+            },
+            {
+              "page": "Cannon",
+              "revision": "5536638",
+              "quote": "In Bob-omb Battlefield, there is a cannon controlled by a Bob-omb that Mario can never access due to the cannon shooting water bombs."
+            },
+            {
+              "page": "Cannon",
+              "revision": "5536638",
+              "quote": "Mario must shoot himself out of a cannon in order to obliterate the topmost section of a nearby wall, which releases the hidden Power Star."
+            }
+          ]
+        }
+      ]
     }
   ]
 }

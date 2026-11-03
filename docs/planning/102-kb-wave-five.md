@@ -510,6 +510,24 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   for Skyrim SE squeezed; the Cyberpunk wiki has no licence at all, its maintainer says it will not get one; Stardew's
   sources are NonCommercial or mixed; the build and publish checks do not accept CC0 yet). The model: E, G and F running
   their evals; D waits.
+- **00:45 UTC: K0 committed and landing** (`2c78d9ae`; `docs/roadmap.md` down to about 92 KB, the four calls closed, D139
+  written, 15 testing rows, the quick check green in its copy; its landing is running the shared checkout's gates). **Lane E
+  done, the finding of the night:** the facts-kept drop is mostly noise. Of the six cases, only the Portal 2 gels is a worse
+  answer (0 of 13 on today's library); two are too-narrow phrase lists (the same correct reply failed on the old library too);
+  three are noise (one went 0 of 3 then 13 of 13). Samples in a run are not independent: the same prompt gave the identical
+  reply three times, so six cases at 0 of 3 together is easy to produce with nothing changed (a measurement bug to file).
+  **The search side has one real mechanism:** after the 51 notes the word search returns up to 10 notes instead of 3, which
+  pushes the "word search missed it" credit from rank 4 to rank 11, so a one-word coincidence ("first", "will", "keep") now
+  beats a note found only by meaning; four of the five slot losses are worse for a player, one (an audio tip) is better.
+  Rebuilt from the real meaning vectors on both libraries, it reproduced every before and after list. Report
+  `workshop:archive/research/kb-crowding-read-2026-11-02-p102.md`; the proposed fixture patch beside it (two phrase lists
+  widened). The fix candidate (cap the word-search list before fusing, or move the floor) touches the retrieval service: the
+  maintainer's call. **Lane I done** (`f09987d1`: 30 meaning-only rows, every one proved to get zero word-search hits on its
+  note). **Lane N9 done** (Pikmin 2, 15 notes; three overlap seed bosses because its copy predated the corrected brief, the
+  session's slip: one more commit removes them and adds Red Pikmin; it also found three seed errors: the Waterwraith,
+  the sprays, Rock Pikmin, for lane M2). **Lane Q2:** four games' rows written (120). **The FOSS read of N5 and N7:**
+  nothing blocks publishing; seven phrases without a quote and six joined sidecar entries, fixed by the lanes (`201f3988`,
+  `73ed9864`); N6 and N8 under read. **Lane M1 done** (`355ae7a4`: the cap timings and the Wiggler's three stomps).
 
 ## 13. Report
 

@@ -496,6 +496,20 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   changed.** The model released to lanes E and G. **Lane H done** (three commits, 19 of 24 sentences reach a tip and 17 the
   right one, none wrong; one more commit asked for: the pair must also see network, wifi, lan, list, ollama, address or
   deck, so an in-game "computer terminal" question cannot reach the tip).
+- **00:05 UTC: three content lanes done, waiting for the quality read.** N7 Super Mario 64 (15 notes, `b5c0cb0c`,
+  `bbebea80`, `c6394ee6`; it found the seed's cap timings wrong: the Metal and Vanish Caps last about twenty seconds, not
+  a minute, so lane M1 (Haiku) fixes seed sections 234, 237 and 238); N5 Grand Theft Auto V (15 notes, `a08b5a2b`,
+  `cf2fe03e`, `39178113`); N6 Grand Theft Auto IV (15 notes, four commits to `4406c6d6`; it notes seed 221's "sixty
+  percent off" for the gun van disagrees with the wiki's prices, left for the session). The Super Mario 64 notes were read
+  aloud in the chat for the maintainer; the FOSS reviewer reads the N5 and N7 files. N10, N11, N12 cut at `bef4688d` and
+  started with the corrected lists. **Lane H's fourth commit** (`7d333ff6`) tightens the pair (one of network, wifi, lan,
+  list, ollama, address or deck must be beside it); 19 and 17 held. **Lane F's four commits done** (`9ef0c3c1` to
+  `ce24672a`: `expect_unknown` and `unknown_names`, eight A-UNKNOWN cases, two summary rows, the ten-reply sample switch;
+  31 tests); its measurement runs started. **Lane J done:** the mod-sources report is
+  `workshop:planning/assets/101-mod-knowledge-sources.md` (LOOT's lists are CC0 and about 20 KB for Fallout 4 and 80 KB
+  for Skyrim SE squeezed; the Cyberpunk wiki has no licence at all, its maintainer says it will not get one; Stardew's
+  sources are NonCommercial or mixed; the build and publish checks do not accept CC0 yet). The model: E, G and F running
+  their evals; D waits.
 
 ## 13. Report
 

@@ -1111,6 +1111,26 @@ class EvalKbAnswersUnknownTests(unittest.TestCase):
         for reply in (self.ZORBLAX_ADVICE, "I know it well. Dodge left, then shoot.", ""):
             self.assertFalse(self.mod.admitted_unknown(reply), reply)
 
+    def test_admitted_unknown_does_not_hear_not_knowing_the_players_own_build(self):
+        # Measured 2026-11-02 (A-UNKNOWN-08): a reply advised on a made-up weapon and then said
+        # "Since I don't know your specific build" -- not knowing the player, not the weapon.
+        for reply in (
+            "The Obsidian Lance is a solid weapon. Since I don't know your specific build or playstyle yet, I can't recommend one aspect.",
+            "I'm not sure which playstyle you prefer, so pick whatever feels good.",
+            "I don't know what you are trying to achieve with it, but upgrade it first.",
+            "I do not know if you have unlocked it yet.",
+        ):
+            self.assertFalse(self.mod.admitted_unknown(reply), reply)
+
+    def test_admitted_unknown_still_hears_not_knowing_the_thing_asked_about(self):
+        for reply in (
+            "I don't know that boss, sorry.",
+            "I don't know about a boss called Zorblax.",
+            "I'm not sure Zorblax exists in this game.",
+            "I'm not sure what Zorblax is.",
+        ):
+            self.assertTrue(self.mod.admitted_unknown(reply), reply)
+
     # --- the "answered as if it knew" matcher ---------------------------------------------------
 
     def test_invented_names_the_made_up_thing_with_advice_and_no_admission(self):

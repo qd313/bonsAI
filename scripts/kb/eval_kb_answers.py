@@ -675,8 +675,6 @@ def claim_group_hit(reply: str, alternatives: list[str]) -> bool:
 UNKNOWN_ADMISSIONS = (
     "not in my notes",
     "no close match in my notes",
-    "i dont know", "i do not know",
-    "im not sure", "i am not sure",
     "i dont have notes", "i dont have any notes", "i have no notes",
     "i dont have information", "i dont have any information", "i have no information",
     "i dont have details", "i dont have any details",
@@ -686,6 +684,12 @@ UNKNOWN_ADMISSIONS = (
     "i dont recognize", "i dont recognise",
     "doesnt exist", "does not exist", "isnt a real", "is not a real",
 )
+
+# "I don't know" and "I'm not sure" also turn up as "I don't know your build": not knowing the player,
+# not the thing asked about (measured 2026-11-02, A-UNKNOWN-08). They count only when "you" or
+# "your" does not follow within a few words.
+_HEDGE_RE = re.compile(r"\b(?:i dont know|i do not know|im not sure|i am not sure)\b(.*)")
+_HEDGE_LOOKAHEAD_WORDS = 6
 
 # A reply that merely repeats the name is not advice; this many words is the least a sentence of
 # real tactics takes.
@@ -700,7 +704,13 @@ def admitted_unknown(reply: str) -> bool:
     """True when the reply says, in the back end's own footer or in plain words, that it does not
     know. Substring match on the folded text: the phrases are long enough not to turn up by chance."""
     folded = _fold_apostrophes(reply)
-    return any(phrase in folded for phrase in UNKNOWN_ADMISSIONS)
+    if any(phrase in folded for phrase in UNKNOWN_ADMISSIONS):
+        return True
+    for m in _HEDGE_RE.finditer(folded):
+        after = re.findall(r"[a-z]+", m.group(1))[:_HEDGE_LOOKAHEAD_WORDS]
+        if "you" not in after and "your" not in after:
+            return True
+    return False
 
 
 def invented_about_unknown(reply: str, names: list[str]) -> bool:

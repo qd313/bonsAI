@@ -559,6 +559,33 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   Crump renamed "third fight", Vivian out of the partner list, two dialogue lines paraphrased). **Q2 done:** 236 rows for
   eight games in nine commits (to `cd2d9d4b`, the Lord Crump rows reworded). The full check on K0's tip started 23:24; the
   first landing chain (A, B, H, F, M1, I, N7, N5, N6, N8) starts when it passes.
+- **23:32 EST, the usage window at 95 percent (resets 03:50 EST). The maintainer's instruction: if the limit stops this
+  chat, poll the usage and pick up automatically when it resets.** A background timer ends at the reset and an hourly
+  wake-up checks the counters. **Pick-up list, for whoever resumes (this chat after "Continue", or a new one):**
+  1. The tip is `8d91a69a` plus this commit; K0 is landed (`0f799211`). The full check on that tip was running
+     (`scratchpad/verify-full-after-k0.log` in this session's scratch folder; if the folder is gone, run
+     `python scripts/verify.py --full` once).
+  2. Landing chain 1 (`land-chain-1.sh` in the scratch folder; or `scripts/land_lane.sh <branch> <base> <log dir>` by hand,
+     one at a time, back end before screen): `refactor/p102-a` (base `46475a55`), `-b` (`46475a55`), `-h` (`46475a55`),
+     `-f` (`46475a55`), `-m1` (`bef4688d`), `-i` (`190ade29`), `-n7`, `-n5`, `-n6`, `-n8` (all `46475a55`). Every branch's
+     commits were read by the session; the content files passed the FOSS read.
+  3. Landing chain 2 (`land-chain-2.sh`): `-n9` (`196910fb`), `-n10`, `-n11`, `-n12` (`bef4688d`), `-m2` (`c19ba8df`), `-d`
+     (`46475a55`, the scoring script's flags only), then `-q2` (`190ade29`; its label test needs every notes file landed).
+  4. Lane C: `5fe4c858` lands as a first half (the row stays open); its round two (`focusDeckOwner` declines through
+     `plainHop`; consult 2) was being built in `.claude/worktrees/p102-c`: read the diff against consult 2's shape, then land
+     (`46475a55`). Lane D was running its picture measurements in `p102-d`: read its report; it lands a shape only by its
+     brief's rule.
+  5. Then: the bookkeeper's sweep (the K0 helper resumed, or a fresh general helper with `.claude/agents/bookkeeper.md`),
+     from the result list in this log: every landed lane to Deck check owed naming its row; the three measurement lanes'
+     numbers into their entries (E: the crowding entry and a new ★★ measurement bug "the answer test's samples are not
+     independent"; G: the card-style entry, a tie, not supported; F: the deeper-checks entry built, 3 of 24 admissions);
+     the lessons file line about plan 76 corrected (consult 2); D139's call 2 wording corrected (the count claim); the
+     calls block; testing rows. Then the library build on the PC (`python scripts/kb/build_rag_db.py --seed --out
+     build/knowledge-base`), X2's second half (resume lane X2: items 4 to 6), the end audit (K9), plan 33 § 4b and § 4d
+     rows (Haiku: A, B, M1, M2 all right first time), the status report paragraph, the report in § 13, the full check on
+     the final tip, the memory note. The Deck blocks R0 and R1 wait for a chat with the rig (runbooks written).
+  6. The maintainer has not answered the quality read; call 2's default applied: the notes land, and a Verify entry for
+     their eye is owed on every one of the eight games.
 
 ## 13. Report
 

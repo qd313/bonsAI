@@ -80,7 +80,15 @@ if [ "$test_ok" -eq 0 ]; then
   npm test 2>&1 | tail -25; [ "${PIPESTATUS[0]}" -eq 0 ] && test_ok=1
 fi
 [ "$test_ok" -eq 1 ] && echo "TEST OK" || { echo "TEST FAIL"; exit 3; }
-npm run test:py 2>&1 | tail -8; [ "${PIPESTATUS[0]}" -eq 0 ] && echo "PY OK" || { echo "PY FAIL"; exit 3; }
+py_ok=1
+npm run test:py 2>&1 | tail -8; [ "${PIPESTATUS[0]}" -eq 0 ] || py_ok=0
+if [ "$py_ok" -eq 0 ]; then
+  # Plan 102 (2026-11-03): the set failed twice in a night right after the screen tests and passed every time on its
+  # own, so one retry; a real failure fails twice and still stops the landing.
+  echo "PY FAILED ONCE, retrying (the set has failed under load right after the screen tests and passed on its own)"
+  npm run test:py 2>&1 | tail -40; [ "${PIPESTATUS[0]}" -eq 0 ] && py_ok=1
+fi
+[ "$py_ok" -eq 1 ] && echo "PY OK" || { echo "PY FAIL"; exit 3; }
 build_ok=1
 npm run build 2>&1 | tail -5; [ "${PIPESTATUS[0]}" -eq 0 ] || build_ok=0
 if [ "$build_ok" -eq 0 ]; then

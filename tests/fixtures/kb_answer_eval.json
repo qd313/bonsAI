@@ -1749,6 +1749,126 @@
    "expect_fence": true,
    "expect_branches": true,
    "note": "D112 #7, the spoiler safety net (plan 70 helper A): the Fury is described by role and location, never named. Confirmed against data/kb/strategy_seed.json 2026-09-26 that this note exists (section_id 13)."
+  },
+  {
+   "id": "A-UNKNOWN-01",
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "ask_mode": "strategy",
+   "question": "Who is the final boss called Zorblax in this game and how do I beat it",
+   "expect_card": null,
+   "must_mention": [],
+   "must_not_say": [],
+   "expect_unknown": true,
+   "unknown_names": [
+    "Zorblax"
+   ],
+   "note": "Made-up boss in a covered game. No Deep Rock Galactic: Survivor note names Zorblax, and the game has no such boss. The same sentence is the plan 98 'No close match' line gate (scripts/measure_kb_thin_match.py). A good reply says it has nothing on it."
+  },
+  {
+   "id": "A-UNKNOWN-02",
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "ask_mode": "speed",
+   "question": "How do I defeat the boss named Grimthak in this game",
+   "expect_card": null,
+   "must_mention": [],
+   "must_not_say": [],
+   "expect_unknown": true,
+   "unknown_names": [
+    "Grimthak"
+   ],
+   "note": "Made-up boss in a covered game, asked in Speed mode, where the back end never shows its 'not in my notes' line, so only the model's own words can admit it."
+  },
+  {
+   "id": "A-UNKNOWN-03",
+   "app_id": "367520",
+   "app_name": "Hollow Knight",
+   "ask_mode": "expert",
+   "question": "What is the best way to beat the boss Quillgrave in Hollow Knight, give me the full attack pattern",
+   "expect_card": null,
+   "must_mention": [],
+   "must_not_say": [],
+   "expect_unknown": true,
+   "unknown_names": [
+    "Quillgrave"
+   ],
+   "note": "Made-up boss in a covered game (Hollow Knight has no boss called Quillgrave; no note names it). Expert mode, with a question that invites a full attack pattern to be invented."
+  },
+  {
+   "id": "A-UNKNOWN-04",
+   "app_id": "782330",
+   "app_name": "DOOM Eternal",
+   "ask_mode": "strategy",
+   "question": "how do i deal with the pain elemental in doom eternal",
+   "expect_card": null,
+   "must_mention": [],
+   "must_not_say": [],
+   "expect_unknown": true,
+   "unknown_names": [
+    "Pain Elemental"
+   ],
+   "note": "A real DOOM Eternal enemy that no note covers: the library has notes for Marauder, Cacodemon, Whiplash and Arch-vile but no section on the Pain Elemental, and no card mentions it (checked against the seed on 2026-11-02). A good reply says it has nothing on this one rather than writing tactics as if from a note."
+  },
+  {
+   "id": "A-UNKNOWN-05",
+   "app_id": "367520",
+   "app_name": "Hollow Knight",
+   "ask_mode": "speed",
+   "question": "how do i beat the Traitor Lord in hollow knight",
+   "expect_card": null,
+   "must_mention": [],
+   "must_not_say": [],
+   "expect_unknown": true,
+   "unknown_names": [
+    "Traitor Lord"
+   ],
+   "note": "A real Hollow Knight boss that no note covers: the library has boss notes for False Knight, Hornet, Mantis Lords, Soul Master, Watcher Knights and Broken Vessel but none for the Traitor Lord, and no card mentions it (checked against the seed on 2026-11-02). Speed mode, so only the model's own words can admit it."
+  },
+  {
+   "id": "A-UNKNOWN-06",
+   "app_id": "413150",
+   "app_name": "Stardew Valley",
+   "ask_mode": "speed",
+   "question": "how do I get into the Skull Cavern in Stardew Valley",
+   "expect_card": null,
+   "must_mention": [],
+   "must_not_say": [],
+   "expect_unknown": true,
+   "unknown_names": [
+    "Skull Cavern"
+   ],
+   "note": "A game the library does not cover (no Stardew Valley notes, no alias for it), in Speed mode. Strategy mode is left out of the unknown-game pair on purpose: it attaches a genre card by design."
+  },
+  {
+   "id": "A-UNKNOWN-07",
+   "app_id": "105600",
+   "app_name": "Terraria",
+   "ask_mode": "expert",
+   "question": "what is the best way to beat the Eye of Cthulhu in Terraria, give me the full run-down",
+   "expect_card": null,
+   "must_mention": [],
+   "must_not_say": [],
+   "expect_unknown": true,
+   "unknown_names": [
+    "Eye of Cthulhu"
+   ],
+   "note": "A game the library does not cover (no Terraria notes, no alias for it), in Expert mode. Strategy mode is left out on purpose: it attaches a genre card by design."
+  },
+  {
+   "id": "A-UNKNOWN-08",
+   "app_id": "1145360",
+   "app_name": "Hades",
+   "ask_mode": "strategy",
+   "question": "how good is the Obsidian Lance weapon in Hades and which aspect should I pick for it",
+   "expect_card": null,
+   "must_mention": [],
+   "must_not_say": [],
+   "expect_unknown": true,
+   "unknown_names": [
+    "Obsidian Lance"
+   ],
+   "note": "Made-up item in a covered game: Hades has six infernal arms (the library has all six) and none is called the Obsidian Lance, so no note can answer. A good reply says there is no such weapon, or that it has nothing on it."
   }
  ],
  "followup_pairs": [

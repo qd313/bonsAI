@@ -1181,5 +1181,69 @@ class EvalKbAnswersUnknownTests(unittest.TestCase):
         self.assertTrue(r.all_ok)
 
 
+class EvalKbAnswersUnknownFixtureTests(unittest.TestCase):
+    """Plan 102 lane F, commit 2: the new "no note can answer this" cases in the real fixture, and a
+    guard that they really are unanswerable -- if a later notes lane covers one of these things, the
+    case is no longer a control and this test says so."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load_eval_module()
+        cls.cases = [
+            c for c in cls.mod.load_fixture(cls.mod.DEFAULT_FIXTURE, None) if c.id.startswith("A-UNKNOWN-")
+        ]
+        kb = REPO_ROOT / "data" / "kb"
+        files = [kb / "strategy_seed.json"] + sorted(
+            p for p in (kb / "notes").glob("*.json") if not p.name.endswith(".sources.json")
+        )
+        cls.games = []
+        cls.sections = []
+        for path in files:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            cls.games += data.get("games") or []
+            cls.sections += data.get("sections") or []
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.modules.pop("eval_kb_answers", None)
+
+    def test_there_are_eight_to_ten_cases_numbered_from_one(self):
+        ids = [c.id for c in self.cases]
+        self.assertGreaterEqual(len(ids), 8)
+        self.assertLessEqual(len(ids), 10)
+        self.assertEqual(ids, [f"A-UNKNOWN-{i:02d}" for i in range(1, len(ids) + 1)])
+
+    def test_every_case_expects_an_admission_and_asks_about_the_named_thing(self):
+        for c in self.cases:
+            self.assertTrue(c.expect_unknown, c.id)
+            self.assertTrue(c.unknown_names, c.id)
+            self.assertIsNone(c.expect_card, c.id)
+            self.assertEqual((c.must_mention, c.must_not_say), ([], []), c.id)
+            self.assertTrue(c.note.strip(), c.id)
+            question = c.question.lower()
+            self.assertTrue(any(n.lower() in question for n in c.unknown_names), c.id)
+
+    def test_the_cases_cover_all_three_modes_and_the_two_thin_match_bosses(self):
+        self.assertEqual({c.ask_mode for c in self.cases}, {"speed", "strategy", "expert"})
+        drg = {n for c in self.cases if c.app_id == "2321470" for n in c.unknown_names}
+        self.assertTrue({"Zorblax", "Grimthak"} <= drg)
+
+    def test_no_note_in_the_library_names_any_of_the_things_asked_about(self):
+        text = "\n".join(f"{s.get('name', '')}\n{s.get('card', '')}" for s in self.sections).lower()
+        for c in self.cases:
+            for name in c.unknown_names:
+                self.assertNotIn(name.lower(), text, f"{c.id}: a note now mentions {name}")
+
+    def test_two_cases_ask_in_a_game_the_library_does_not_cover_in_speed_and_expert(self):
+        covered_ids = {str(g.get("app_id")) for g in self.games if g.get("app_id")}
+        titles = {str(g.get("canonical_title", "")).lower() for g in self.games}
+        uncovered = [c for c in self.cases if c.app_id not in covered_ids]
+        self.assertGreaterEqual(len(uncovered), 2)
+        # Strategy attaches a genre card by design, so an uncovered game is never the control there.
+        self.assertEqual({c.ask_mode for c in uncovered}, {"speed", "expert"})
+        for c in uncovered:
+            self.assertNotIn(c.app_name.lower(), titles, c.id)
+
+
 if __name__ == "__main__":
     unittest.main()

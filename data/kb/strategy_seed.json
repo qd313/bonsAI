@@ -2286,10 +2286,11 @@
       "game_id": 10,
       "section_type": "mechanic",
       "name": "Fires",
-      "card": "There are no firefighters to call in The Sims 4. Keep a fire extinguisher and a smoke alarm in the kitchen, and when something catches, direct a Sim to extinguish it rather than waiting — panicking Sims will not act on their own. Sims can die in a fire, so getting everyone out of the room is the safer first move.",
-      "source_url": "",
-      "source_license": "bonsAI-maintainer",
-      "source_version": null
+      "card": "Firefighters come on their own when a smoke alarm is in the room where the fire breaks out. Keep a fire extinguisher and a smoke alarm in the kitchen, and when something catches, direct a Sim to extinguish it rather than waiting — panicking Sims will not act on their own. Sims can die in a fire, so getting everyone out of the room is the safer first move.",
+      "source_url": "https://sims.fandom.com/wiki/Fire",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "1237114",
+      "crawled_at": "2026-11-02"
     },
     {
       "section_id": 113,

@@ -141,10 +141,11 @@ panel's window for the browser's focus. The heal plan 97 built is `refocusPanelW
 refocusPanelWindowIfLost -- src`); none is in the reply-actions folder. The strategy checklist's steps are the shape to
 copy: `src/shared/dpad/strategyChecklistNav.ts` line 38 asks the heal once, right before its own transfer. The Undo stop
 is built at `kbDemoteRows.tsx` lines 366 to 387 (its Down is `a.downOut`, line 468), which goes to `downFromDemoteRows`
-in `buildReplyActionsElement.tsx` lines 598 to 602: `focusRegisteredReplyStop("note-keep")` (`replyStopRegistry.ts`
-line 191) or `downPastNoteCard` (`focusRegisteredReplyStop("suggest-tip")` or `downToDetails()`). The evidence says the
-ring reached the notes block and died there, so read where that Down lands and whether its hop is a plain focus, a
-registered transfer that goes through `takeNavFocus` (healed) or one that calls the node's `TakeFocus` directly (not).
+in `buildReplyActionsElement.tsx` line 692 (wired to Undo at 793; lines 598 to 602 are `downPastNoteCard` and
+`downFromThumbs`): `focusRegisteredReplyStop("note-keep")` or `downPastNoteCard`. The registry hop
+(`replyStopRegistry.ts` line 191, then 205) calls the node's own transfer directly, so it is not healed either (consult 1
+confirmed). The evidence says the ring reached the notes block and died there, so read where that Down lands and which
+hop it is.
 
 **Build, one fix per commit, the failing test first.** Apply the one fix the evidence supports, following AGENTS.md
 "When a focus bug lands": (1) `landOn` asks `refocusPanelWindowIfLost()` once before the transfer, the checklist's
@@ -200,8 +201,9 @@ it per run with a new `--picture-shape today|in-question|in-question-only` flag:
   sentence naming the game ("This screenshot is from <game>.") before the question; the system sentence of 2026-10-25
   stays.
 - **S2 "in-question-only":** S1 with the system sentence (lines 484 to 496) left out.
-Measure on this PC, `gemma4:e2b-it-qat`, both arms, **6 tries per picture, two runs per shape** (today's shape too, as
-the baseline of the night): named the game, named the place, the God of War mix-ups, the time to the first word.
+The scoring script names its report by the date alone (line 616), so the first commit also gives it a `--label` suffix
+and every run uses a distinct label (consult 1). Measure on this PC, `gemma4:e2b-it-qat`, both arms, **6 tries per
+picture, two runs per shape** (today's shape too, as the baseline of the night): named the game, named the place, the God of War mix-ups, the time to the first word.
 Then **the model sweep** (the roadmap's step 2): today's shape, the known arm, 3 tries, on qwen3.5:4b, llava:7b,
 gemma4:e4b-it-qat and, if pulled, qwen2.5vl:3b: the same four figures per model. One eval at a time (the model is one
 process shared by other lanes tonight); say how long each run took.
@@ -436,26 +438,26 @@ id ranges.** Every lane's file holds an empty `games` list and an empty `aliases
   the wanted levels and losing them, the police response, gangs. Items: body armor, weapons and where to buy, health,
   taxis and the phone. File `grand-theft-auto-iv.json`, ids 1500 to 1599.
 - **N7, Super Mario 64** (`game_id` 21, Nintendo 64, no app id). The Super Mario Wiki, `https://www.mariowiki.com/api.php`,
-  CC BY-SA 4.0. Enemies: Big Bob-omb, Whomp King, Chain Chomp, Boo and Big Boo, Bully, Eyerok, Wiggler, Piranha Plant,
-  the Bowser fights only where the existing "Bowser: the three fights" note leaves a gap. Items: the Wing, Metal and
-  Vanish Caps, Power Stars, red and blue coins, 1-Up Mushrooms. File `super-mario-64.json`, ids 1600 to 1699.
+  CC BY-SA 4.0. Already in the seed (consult 1): King Bob-omb, Whomp King, Eyerok, Bully, Wiggler, the three caps and
+  the Bowser fights; write none of those. Gaps: Chain Chomp, Boo and Big Boo, Piranha Plant, Power Stars, red and blue
+  coins, 1-Up Mushrooms, and what the wiki's enemy and item pages add. File `super-mario-64.json`, ids 1600 to 1699.
 - **N8, Paper Mario: The Thousand-Year Door** (`game_id` 23, GameCube, no app id; a story game, the name rule). The
   Super Mario Wiki, as above. Enemies the player fights (the common ones and the bosses by chapter, Hooktail already
   has a note). Items: badges and BP, the Star Pieces and Shine Sprites, the healing items, partner upgrades. File
   `paper-mario-the-thousand-year-door.json`, ids 1700 to 1799.
 - **N9, Pikmin 2** (`game_id` 24, GameCube, no app id). The Pikmin wiki, `https://www.pikminwiki.com/api.php`, CC BY-SA
-  4.0. Enemies: Bulborb and Dwarf Bulborb, Fiery Blowhog, Wollywog, Man-at-Legs, Waterwraith, Titan Dweevil (the
-  Empress Bulblax and the Snagret have a note). Items: the ultra-spicy and ultra-bitter sprays, nectar, eggs, the
-  Pikmin types as tools. File `pikmin-2.json`, ids 1800 to 1899.
+  4.0. Already in the seed (consult 1): the Empress Bulblax and the Snagret, Man-at-Legs, Waterwraith, Titan Dweevil,
+  the sprays and nectar; write none of those. Gaps: Bulborb and Dwarf Bulborb, Fiery Blowhog, Wollywog, Beady Long
+  Legs, the Dweevils, eggs, the Pikmin types as tools. File `pikmin-2.json`, ids 1800 to 1899.
 - **N10, Doom 64** (`game_id` 17, Nintendo 64, no app id). The Doom Wiki, `https://doomwiki.org/w/api.php` (the api is
-  under `/w/`), CC BY-SA 4.0; its pages for this game carry "(Doom 64)" in the title. Enemies: Nightmare Imp, Hell
-  Knight, Baron of Hell, Mancubus, Arachnotron, Cacodemon, Pain Elemental, Cyberdemon (the Mother Demon has a note).
-  Items: the Unmaker and the three demon keys, the chainsaw, the BFG, the Megasphere. File `doom-64.json`, ids 1900
-  to 1999.
+  under `/w/`), CC BY-SA 4.0; its pages for this game carry "(Doom 64)" in the title. Already in the seed (consult 1):
+  the Mother Demon, the Nightmare Imp, the Unmaker and the demon keys; write none of those. Gaps: Hell Knight, Baron of
+  Hell, Mancubus, Arachnotron, Cacodemon, Pain Elemental, Cyberdemon, the chainsaw, the BFG, the Megasphere. File
+  `doom-64.json`, ids 1900 to 1999.
 - **N11, Donkey Kong 64** (`game_id` 31, Nintendo 64, no app id). The Super Mario Wiki, as above. Enemies: Kritter,
-  Klump, Kasplat, Zinger, the bosses (Army Dillo, Dogadon, Mad Jack, Puftoss, King Kut Out). Items: Golden Bananas,
-  banana coins, blueprints, the crystal coconuts, each Kong's weapon and instrument, the potions and moves. File
-  `donkey-kong-64.json`, ids 2000 to 2099.
+  Klump, Kasplat, Zinger, the bosses Mad Jack, Puftoss and King Kut Out (Army Dillo, Dogadon and banana coins are
+  already in the seed; write none of those, consult 1). Items: Golden Bananas, blueprints, the crystal coconuts, each
+  Kong's weapon and instrument, the potions and moves. File `donkey-kong-64.json`, ids 2000 to 2099.
 - **N12, Mario Kart 64** (`game_id` 22, Nintendo 64, no app id). The Super Mario Wiki, as above. Enemies only where a
   player would ask "how do I deal with": the Thwomps, the train on Kalimari Desert, the Yoshi Valley eggs, Boo. Items:
   Banana and the bunch, Green, Red and Blue Shells, Mushroom and Golden Mushroom, Star, Lightning, Fake Item Box,

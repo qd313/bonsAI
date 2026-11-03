@@ -398,6 +398,7 @@ Log, one row per consult: time, the question in one line, the answer in one line
 
 | Time | Question | Answer | What changed | Cost |
 |---|---|---|---|---|
+| 2026-11-02 22:58 to 23:02 UTC | Consult 1: do the fifteen wave 1 briefs match the code at `46475a55`? | Ten hold; five need corrections: K0 (count from the seed, not the brief's sentence; the bookkeeper is exempt from rules 21 and the quick-check ban), A (never run the script before the fix or with the report on: its dated file is X2's), C (the Down out of the rows is at line 692, not 598; the registry hop is not healed either), D (the scoring script names its report by the date alone: add a label), the note lanes (the subject lists repeat notes the seed has for Super Mario 64, Pikmin 2, Doom 64 and Donkey Kong 64) | Each correction sent to the running lane as a message and written into the briefs file; the N9 to N12 briefs corrected before they are cut | about 87k tokens, 4 min |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -468,6 +469,14 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   X2), the library copied into the seven that measure; all fifteen helpers started at once, with the measurement lanes
   told to hold their model runs until X2's baseline is done (one model on this PC; queued requests time out). The full
   check started on the tip in the background; advisor consult 1 started.
+- **23:10 UTC: consult 1 back** (§ 7); corrections sent. **The ratchet is red at the tip:** `docs/roadmap.md` reads 100.61 KB
+  against its 100 KB ceiling (it was 103,513 bytes at `84e0e64c`, before tonight), so every code landing waits for K0, which
+  trims it. **Lane B done** (`6ca0e0b1`: the Sims 4 note's first sentence now follows the wiki's line, "firefighters come on
+  their own when a smoke alarm is in the room where the fire breaks out", with the page cited; one more commit asked for:
+  the glossary entry that repeats the old claim, `data/kb/glossary/own-and-gta-titles.json`). **Lane A done** (`6bb6a130`:
+  the write step factored into a helper, two tests, a hand run that left the research folder unchanged). **Lane G's
+  rewrites ready** (fifteen cards, the scratch library built, the patch in the workshop; waiting for the model). Lane X2's
+  first run wrote the two dated files and renamed them `-p102-before`. Block R0's runbook committed (`196910fb`).
 
 ## 13. Report
 

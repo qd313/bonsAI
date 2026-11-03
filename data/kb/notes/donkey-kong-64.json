@@ -67,6 +67,39 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5412403",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2006,
+      "game_id": 31,
+      "section_type": "boss",
+      "name": "King Kut Out",
+      "card": "Summary: The boss of Creepy Castle and the seventh, next-to-last boss of the game: a crude cardboard cut-out of King K. Rool worked by two Kritters, fought in an arena walled by a castle rampart, in the rain.\nWeak points: Step into the Barrel Cannon that faces it and blast into it. The ninth hit destroys it and the Boss Key drops in the middle of the arena.\nTips: A shot with bad timing blasts the Kong out of the arena for good, and the next Kong comes out of the Tag Barrel (by default Tiny, then Chunky, Donkey and Diddy after Lanky). After the third hit a darker decoy follows it from the opposite wall, and blasting at the decoy throws you out. After three more hits it moves faster, so fire just as it appears in front of you; the ghosts that spawn near the cannons can be beaten to regain health.",
+      "source_url": "https://www.mariowiki.com/King_Kut_Out",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5475274",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2007,
+      "game_id": 31,
+      "section_type": "item",
+      "name": "Golden Banana",
+      "card": "Summary: Donkey Kong's own supply of bananas from his hoard, which the Kremlings steal and the Kongs have to recover. There are 200 in the seven worlds and DK Isles, plus a hidden 201st.\nUses: B. Locker keeps you out of the other worlds until you carry a minimum number of Golden Bananas, a different number for each world. Snide also pays one for every blueprint you bring him.\nTips: Each Kong has to collect five in every world by finishing their own tasks, 25 per world in all. The hidden 201st is larger and carries the Rare logo, and all 201 are needed for 101 percent and the second ending.",
+      "source_url": "https://www.mariowiki.com/Golden_Banana",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5477149",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2008,
+      "game_id": 31,
+      "section_type": "item",
+      "name": "Blueprint",
+      "card": "Summary: The design plans for the Blast-o-Matic, which the Kongs recover for Snide. There are 40 in all, five in every area except Hideout Helm, one for each Kong.\nUses: Each Kong takes their blueprints to Snide's H.Q. and gets a Golden Banana for every one. In Hideout Helm each blueprint also delays the Blast-o-Matic's countdown by a minute.\nTips: Every blueprint is guarded by a Kasplat whose hair colour matches the Kong who can take it, and the wrong Kong sees only a hologram. The Helm countdown starts at ten minutes and can reach 50 with all 40, and once you have recovered them all Snide lets you replay most of the bonus stages.",
+      "source_url": "https://www.mariowiki.com/Blueprint",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5407817",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

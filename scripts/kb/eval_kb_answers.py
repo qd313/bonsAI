@@ -53,6 +53,8 @@ Usage:
   python scripts/kb/eval_kb_answers.py --only A-DRG-01 --samples 1
   python scripts/kb/eval_kb_answers.py --label after-w4         # report suffix for a before/after pair
   python scripts/kb/eval_kb_answers.py --no-write-report        # console only
+  python scripts/kb/eval_kb_answers.py --sample-for-reading 10  # also write 10 whole replies to read
+  python scripts/kb/eval_kb_answers.py --only A-UNKNOWN-01,A-UNKNOWN-02 --samples 3  # the no-note cases
   python scripts/kb/eval_kb_answers.py --pairs --followup-shape no_subject_note --samples 3
 
 Needs: Ollama on this PC with the Deck's chat model and ``nomic-embed-text`` pulled, and a built
@@ -66,6 +68,7 @@ import itertools
 import json
 import logging
 import os
+import random
 import re
 import sys
 import time
@@ -1643,9 +1646,66 @@ def write_report(
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
+# --- the ten-reply sample for a person to read (plan 102 lane F) --------------------------------------
+#
+# The rates above say how many replies passed a check; they cannot say whether the replies read well.
+# ``--sample-for-reading N`` draws N replies at random after a run and writes each one whole, with
+# its question, mode and the notes that were attached, so the maintainer can read them once a month.
+# The seed is fixed: the same run gives the same N, and a re-read after a change draws the same
+# questions.
+
+READING_SAMPLE_SEED = 102
+
+
+def reading_sample_path(research_dir: Path, stamp: str, label: str) -> Path:
+    suffix = f"-{label}" if label else ""
+    return research_dir / f"kb-answer-sample-{stamp}{suffix}.md"
+
+
+def write_reading_sample(
+    path: Path,
+    *,
+    cases: list[Case],
+    samples: list[SampleResult],
+    n: int,
+    meta: dict[str, Any],
+) -> int:
+    """Write ``n`` randomly drawn replies (fewer when the run had fewer answers) to ``path`` and
+    return how many were written. A failed ask has no reply to read and is never drawn. The verdicts
+    of the checks are left out on purpose: the reader should judge the reply, not the score."""
+    case_by_id = {c.id: c for c in cases}
+    pool = [r for r in samples if r.success and r.reply.strip() and r.case_id in case_by_id]
+    picked = random.Random(READING_SAMPLE_SEED).sample(pool, min(n, len(pool)))
+    label = f" - {meta['label']}" if meta.get("label") else ""
+    lines = [
+        f"# Knowledge-base answers to read - {meta.get('date', '')}{label}",
+        "",
+        f"{len(picked)} replies drawn at random (fixed seed {READING_SAMPLE_SEED}) from {len(pool)} answers of the "
+        f"answer test; model `{meta.get('model', '')}`, library `{meta.get('corpus_version', '')}`. "
+        "Each reply is whole and unscored. Read for: does it answer the question, does it sound sure "
+        "where it should not, does it say what it got from a note.",
+        "",
+    ]
+    for i, r in enumerate(picked, start=1):
+        c = case_by_id[r.case_id]
+        lines += [
+            f"### {i}. {c.id} sample {r.sample} - {c.app_name}",
+            "",
+            f"**Question:** {c.question}  ",
+            f"**Mode:** {c.ask_mode}  ",
+            f"**Notes attached:** {', '.join(r.cards) or 'none'}",
+            "",
+            "> " + r.reply.strip().replace("\n", "\n> "),
+            "",
+        ]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines), encoding="utf-8")
+    return len(picked)
+
+
 # --- main ------------------------------------------------------------------------------------
 
-def main() -> int:
+def main(argv: Optional[list[str]] = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--ollama", default=DEFAULT_OLLAMA, help="Ollama base URL on this PC")
     parser.add_argument("--model", default=DEFAULT_MODEL, help="chat model tag; default is what the Deck loads")
@@ -1686,6 +1746,15 @@ def main() -> int:
         "The default writes nothing, so a run without this switch is exactly what it always was.",
     )
     parser.add_argument("--label", default="", help="suffix for the report filename, e.g. after-w4")
+    parser.add_argument(
+        "--sample-for-reading",
+        type=int,
+        default=0,
+        metavar="N",
+        help="after the run, write N replies drawn at random (fixed seed), each whole with its question, "
+        "mode and attached notes, to the workshop's research folder as kb-answer-sample-<date>[-label].md "
+        "for a person to read. 0 (the default) writes nothing. Not for --pairs.",
+    )
     parser.add_argument("--write-report", action="store_true", default=True)
     parser.add_argument("--no-write-report", action="store_false", dest="write_report")
     parser.add_argument(
@@ -1715,10 +1784,15 @@ def main() -> int:
         "names today's default explicitly (BONSAI_KB_FOLLOWUP_SEND_PREV_QA=1) rather than adding "
         "anything new. Every shape sets its variables for this process only.",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+
+    if args.sample_for_reading < 0 or (args.sample_for_reading and args.pairs):
+        print("--sample-for-reading takes a number of replies from 0 up and works on the single-question "
+              "cases, not with --pairs", file=sys.stderr)
+        return 2
 
     # Find the workshop before a long run starts, not after it has finished.
-    if args.write_report:
+    if args.write_report or args.sample_for_reading:
         try:
             workshop.research_dir(ROOT)
         except workshop.WorkshopNotFound as exc:
@@ -1933,6 +2007,22 @@ def main() -> int:
                 + (f" judge={_judge_cell(r)}" if args.judge else "")
             )
     run_minutes = round((time.perf_counter() - t_run) / 60.0, 1)
+
+    if args.sample_for_reading:
+        sample_path = reading_sample_path(workshop.research_dir(ROOT), date.today().isoformat(), args.label)
+        written = write_reading_sample(
+            sample_path,
+            cases=cases,
+            samples=samples,
+            n=args.sample_for_reading,
+            meta={
+                "date": date.today().isoformat(),
+                "label": args.label,
+                "model": args.model,
+                "corpus_version": corpus_version,
+            },
+        )
+        print(f"Wrote {sample_path} ({written} replies to read)")
 
     summary = summarize(cases, samples)
     prompt_chars = mean_prompt_chars(samples)

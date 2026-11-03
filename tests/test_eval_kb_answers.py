@@ -12,6 +12,7 @@ Does not: Run the real Ask pipeline or touch Ollama — every test here is pure 
 """
 
 import asyncio
+import io
 import json
 import os
 import sys
@@ -1313,6 +1314,81 @@ class EvalKbAnswersUnknownReportTests(unittest.TestCase):
         self.assertEqual(payload["admits_unknown"], {"hit": 1, "of": 3})
         self.assertEqual(payload["invents_unknown"], {"hit": 1, "of": 3})
         self.assertIn("facts", payload)  # the older keys are still there
+
+
+class EvalKbAnswersReadingSampleTests(unittest.TestCase):
+    """Plan 102 lane F, commit 4: ``--sample-for-reading N`` writes N replies, drawn at random with a
+    fixed seed, for the maintainer's monthly read. Stand-in cases and samples; no Ollama."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load_eval_module()
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.modules.pop("eval_kb_answers", None)
+
+    _case = EvalKbAnswersHarnessTests._case
+    _sample = EvalKbAnswersHarnessTests._sample
+
+    def _standin_run(self, n_cases=6, per_case=3):
+        cases = [
+            self._case(id=f"C{i}", app_name=f"Game {i}", question=f"question {i}", ask_mode="speed" if i % 2 else "expert")
+            for i in range(n_cases)
+        ]
+        samples = [
+            self._sample(case_id=c.id, sample=s, reply=f"reply {c.id}/{s} " + "word " * 400, cards=[f"Card {c.id}"])
+            for c in cases for s in range(1, per_case + 1)
+        ]
+        return cases, samples
+
+    def _write(self, n, cases, samples):
+        meta = {"date": "2026-11-02", "label": "t", "model": "m", "corpus_version": "v1"}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "kb-answer-sample.md"
+            self.mod.write_reading_sample(path, cases=cases, samples=samples, n=n, meta=meta)
+            return path.read_text(encoding="utf-8")
+
+    def _entries(self, text):
+        return [ln for ln in text.splitlines() if ln.startswith("### ")]
+
+    def test_the_file_holds_exactly_n_entries_each_with_question_mode_cards_and_the_whole_reply(self):
+        cases, samples = self._standin_run()
+        text = self._write(10, cases, samples)
+        self.assertEqual(len(self._entries(text)), 10)
+        self.assertIn("**Question:** question", text)
+        self.assertIn("**Mode:**", text)
+        self.assertIn("**Notes attached:** Card C", text)
+        # the whole reply, not the report's 1,800-character trim
+        self.assertIn(("word " * 400).strip(), text)
+
+    def test_the_same_run_gives_the_same_ten_every_time_and_a_different_seed_does_not(self):
+        cases, samples = self._standin_run()
+        first = self._entries(self._write(10, cases, samples))
+        self.assertEqual(first, self._entries(self._write(10, cases, samples)))
+        with patch.object(self.mod, "READING_SAMPLE_SEED", self.mod.READING_SAMPLE_SEED + 1):
+            self.assertNotEqual(first, self._entries(self._write(10, cases, samples)))
+
+    def test_asking_for_more_than_there_are_gives_every_reply_once(self):
+        cases, samples = self._standin_run(n_cases=2, per_case=2)
+        self.assertEqual(len(self._entries(self._write(10, cases, samples))), 4)
+
+    def test_a_failed_ask_is_never_drawn(self):
+        cases, samples = self._standin_run(n_cases=2, per_case=2)
+        samples[0] = self._sample(case_id="C0", sample=1, success=False, reply="")
+        self.assertEqual(len(self._entries(self._write(10, cases, samples))), 3)
+
+    def test_the_file_name_follows_the_report_names(self):
+        base = Path("research")
+        self.assertEqual(self.mod.reading_sample_path(base, "2026-11-02", "p102-unknown").name,
+                         "kb-answer-sample-2026-11-02-p102-unknown.md")
+        self.assertEqual(self.mod.reading_sample_path(base, "2026-11-02", "").name, "kb-answer-sample-2026-11-02.md")
+
+    def test_the_switch_is_refused_with_pairs_and_when_negative(self):
+        for argv in (["--pairs", "--sample-for-reading", "3"], ["--sample-for-reading", "-1"]):
+            with patch("sys.stderr", new_callable=io.StringIO) as err:
+                self.assertEqual(self.mod.main(argv), 2, argv)
+            self.assertIn("--sample-for-reading", err.getvalue())
 
 
 if __name__ == "__main__":

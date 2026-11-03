@@ -1335,6 +1335,10 @@ class Summary:
     # and produced a usable verdict. Stays "n/a" (Rate.of == 0) whenever --judge was not passed.
     judge_contradiction_agree = Rate()
     judge_facts_agree = Rate()
+    # Plan 102 lane F, over the ``expect_unknown`` cases only: how often the reply admitted it did
+    # not know, and how often it named the made-up thing with advice as if it knew.
+    admits_unknown = Rate()
+    invents_unknown = Rate()
 
     def __init__(self) -> None:
         self.facts = Rate()
@@ -1349,6 +1353,8 @@ class Summary:
         self.cases_all_pass = Rate()
         self.judge_contradiction_agree = Rate()
         self.judge_facts_agree = Rate()
+        self.admits_unknown = Rate()
+        self.invents_unknown = Rate()
 
 
 def summarize(cases: list[Case], samples: list[SampleResult]) -> Summary:
@@ -1372,6 +1378,8 @@ def summarize(cases: list[Case], samples: list[SampleResult]) -> Summary:
             s.branches_absent_when_not.add(r.branches_ok)
         s.card_attached.add(r.card_ok)
         s.attached_control.add(r.attached_ok)
+        s.admits_unknown.add(r.admitted_unknown)
+        s.invents_unknown.add(r.invented_unknown)
 
         contradiction_agree: Optional[bool] = None
         if r.judge_contradicts is not None and r.notsay_ok is not None:
@@ -1449,6 +1457,35 @@ def _case_cell(rs: list[SampleResult], attr: str) -> str:
     return f"{hit}/{of}"
 
 
+def _unknown_cell(rs: list[SampleResult]) -> str:
+    """The per-case cell for an ``expect_unknown`` case ("2/3 said so, 1/3 made it up"); a dash for
+    every other case, where neither check ran."""
+    admitted = _case_cell(rs, "admitted_unknown")
+    if admitted == "—":
+        return "—"
+    return f"{admitted} said so, {_case_cell(rs, 'invented_unknown')} made it up"
+
+
+def summary_payload(summary: Summary) -> dict[str, dict[str, int]]:
+    """Every rate of the summary as ``{"hit": n, "of": m}``, for the saved JSON."""
+    return {
+        "facts": summary.facts.__dict__,
+        "contradictions_clean": summary.contradictions_clean.__dict__,
+        "fence_no_misfire": summary.fence_no_misfire.__dict__,
+        "fence_present_when_due": summary.fence_present_when_due.__dict__,
+        "branches_when_due": summary.branches_when_due.__dict__,
+        "branches_absent_when_not": summary.branches_absent_when_not.__dict__,
+        "card_attached": summary.card_attached.__dict__,
+        "attached_control": summary.attached_control.__dict__,
+        "success": summary.success.__dict__,
+        "cases_all_pass": summary.cases_all_pass.__dict__,
+        "judge_contradiction_agree": summary.judge_contradiction_agree.__dict__,
+        "judge_facts_agree": summary.judge_facts_agree.__dict__,
+        "admits_unknown": summary.admits_unknown.__dict__,
+        "invents_unknown": summary.invents_unknown.__dict__,
+    }
+
+
 def _case_mean(rs: list[SampleResult], attr: str) -> str:
     m = _mean([float(v) for v in (getattr(r, attr) for r in rs) if v is not None])
     return "—" if m is None else str(m)
@@ -1497,6 +1534,8 @@ def write_report(
     lines.append(f"| No menu on Speed/Expert | **{summary.branches_absent_when_not.pct()}** ({summary.branches_absent_when_not.frac()}) | no stray menu outside Strategy |")
     lines.append(f"| Expected card attached | **{summary.card_attached.pct()}** ({summary.card_attached.frac()}) | retrieval, not the model: the named card was in the block |")
     lines.append(f"| Control: nothing attached | **{summary.attached_control.pct()}** ({summary.attached_control.frac()}) | uncovered-game control |")
+    lines.append(f"| Admits not knowing | **{summary.admits_unknown.pct()}** ({summary.admits_unknown.frac()}) | questions no note can answer: the reply says it does not know (the back end's footer or plain words) |")
+    lines.append(f"| Answers as if it knew | **{summary.invents_unknown.pct()}** ({summary.invents_unknown.frac()}) | the same questions: the reply names the made-up thing with advice and no admission (lower is better) |")
     lines.append(f"| Ask succeeded | **{summary.success.pct()}** ({summary.success.frac()}) | pipeline returned a reply |")
     lines.append(f"| Cases with every sample clean | **{summary.cases_all_pass.pct()}** ({summary.cases_all_pass.frac()}) | strictest view |")
     lines.append("")
@@ -1526,8 +1565,8 @@ def write_report(
         lines.append("")
     lines.append("## Per case")
     lines.append("")
-    header = "| Case | Mode | Card attached | Facts | No contradiction | Fence ok | Menu ok | Window warn | Prompt tokens | s/answer |"
-    sep = "|---|---|---|---|---|---|---|---|---|---|"
+    header = "| Case | Mode | Card attached | Facts | No contradiction | Fence ok | Menu ok | Admitted not knowing | Window warn | Prompt tokens | s/answer |"
+    sep = "|---|---|---|---|---|---|---|---|---|---|---|"
     if meta.get("judge_model"):
         header += " Judge (s1) |"
         sep += "---|"
@@ -1540,7 +1579,7 @@ def write_report(
         card = _case_cell(rs, "card_ok") if c.expect_card else (_case_cell(rs, "attached_ok") if c.expect_attached is not None else "—")
         row = (
             f"| `{c.id}` | {c.ask_mode} | {card} | {_case_cell(rs, 'mention_ok')} | {_case_cell(rs, 'notsay_ok')} | "
-            f"{_case_cell(rs, 'fence_ok')} | {_case_cell(rs, 'branches_ok')} | {_case_cell(rs, 'window_warning')} | "
+            f"{_case_cell(rs, 'fence_ok')} | {_case_cell(rs, 'branches_ok')} | {_unknown_cell(rs)} | {_case_cell(rs, 'window_warning')} | "
             f"{_case_mean(rs, 'prompt_tokens_est')} | {_mean([r.elapsed_s for r in rs])} |"
         )
         if meta.get("judge_model"):
@@ -1571,6 +1610,10 @@ def write_report(
                 reasons.append("spoiler fence " + ("present, none due" if r.fence_present else "missing, one was due"))
             if r.branches_ok is False:
                 reasons.append("branch menu " + ("present, none due" if r.branches_present else "missing"))
+            if r.admitted_unknown is False:
+                reasons.append("did not admit it did not know")
+            if r.invented_unknown:
+                reasons.append("named the made-up thing with advice, as if it knew")
             lines.append(f"- **{c.id}** sample {r.sample}: " + "; ".join(reasons))
     if not any_fail:
         lines.append("None.")
@@ -1588,7 +1631,8 @@ def write_report(
         lines.append("")
         lines.append(f"**Q:** {c.question}  ")
         lines.append(f"**Cards:** {', '.join(r.cards) or 'none'}  ")
-        lines.append(f"**Checks:** facts {_flag(r.mention_ok)} · contradiction {_flag(r.notsay_ok)} · fence {_flag(r.fence_ok)} · menu {_flag(r.branches_ok)}")
+        lines.append(f"**Checks:** facts {_flag(r.mention_ok)} · contradiction {_flag(r.notsay_ok)} · fence {_flag(r.fence_ok)} · menu {_flag(r.branches_ok)}"
+                     + ("" if r.admitted_unknown is None else f" · said it did not know {_flag(r.admitted_unknown)}"))
         lines.append("")
         body = r.reply.strip()
         if len(body) > 1800:
@@ -1884,6 +1928,7 @@ def main() -> int:
                 f"[{ci:>2}/{len(cases)}] {case.id:<12} s{si} {status} {r.elapsed_s:>6.1f}s "
                 f"cards={len(r.cards)} facts={_flag(r.mention_ok)} nosay={_flag(r.notsay_ok)} "
                 f"fence={_flag(r.fence_ok)} menu={_flag(r.branches_ok)} card={_flag(r.card_ok)}"
+                + ("" if r.admitted_unknown is None else f" said-so={_flag(r.admitted_unknown)} made-up={_flag(r.invented_unknown)}")
                 + (f" err={r.error}" if r.error else "")
                 + (f" judge={_judge_cell(r)}" if args.judge else "")
             )
@@ -1899,6 +1944,12 @@ def main() -> int:
           f"menu-when-due {summary.branches_when_due.pct()} · card-attached {summary.card_attached.pct()} · "
           f"cases-all-clean {summary.cases_all_pass.pct()} · prompt-chars {prompt_chars} · "
           f"window-warnings {warned}/{warn_of} · prompt-tokens {prompt_tokens_mean} · {run_minutes} min")
+    if summary.admits_unknown.of:
+        print(
+            f"no note can answer ({summary.admits_unknown.of} samples): admits not knowing "
+            f"{summary.admits_unknown.pct()} ({summary.admits_unknown.frac()}) · answers as if it knew "
+            f"{summary.invents_unknown.pct()} ({summary.invents_unknown.frac()})"
+        )
     if args.judge:
         judge_elapsed = mean_judge_elapsed_s(samples)
         print(
@@ -1937,20 +1988,7 @@ def main() -> int:
         json_path = JSON_DIR / f"kb-answer-eval-{stamp}{suffix}.json"
         payload = {
             "meta": meta,
-            "summary": {
-                "facts": summary.facts.__dict__,
-                "contradictions_clean": summary.contradictions_clean.__dict__,
-                "fence_no_misfire": summary.fence_no_misfire.__dict__,
-                "fence_present_when_due": summary.fence_present_when_due.__dict__,
-                "branches_when_due": summary.branches_when_due.__dict__,
-                "branches_absent_when_not": summary.branches_absent_when_not.__dict__,
-                "card_attached": summary.card_attached.__dict__,
-                "attached_control": summary.attached_control.__dict__,
-                "success": summary.success.__dict__,
-                "cases_all_pass": summary.cases_all_pass.__dict__,
-                "judge_contradiction_agree": summary.judge_contradiction_agree.__dict__,
-                "judge_facts_agree": summary.judge_facts_agree.__dict__,
-            },
+            "summary": summary_payload(summary),
             "samples": [
                 {k: v for k, v in r.__dict__.items() if k != "system_prompt"}
                 | ({"system_prompt": r.system_prompt} if r.sample == 1 else {})

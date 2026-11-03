@@ -1245,5 +1245,75 @@ class EvalKbAnswersUnknownFixtureTests(unittest.TestCase):
             self.assertNotIn(c.app_name.lower(), titles, c.id)
 
 
+class EvalKbAnswersUnknownReportTests(unittest.TestCase):
+    """Plan 102 lane F, commit 3: the two new summary rows, the per-case column and the saved JSON."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load_eval_module()
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.modules.pop("eval_kb_answers", None)
+
+    # The two minimal builders the harness tests already use.
+    _case = EvalKbAnswersHarnessTests._case
+    _sample = EvalKbAnswersHarnessTests._sample
+
+    def _run(self):
+        cases = [self._case(id="A-UNKNOWN-01", expect_unknown=True), self._case(id="A-PLAIN-01")]
+        samples = [
+            self._sample(case_id="A-UNKNOWN-01", sample=1, admitted_unknown=True, invented_unknown=False),
+            self._sample(case_id="A-UNKNOWN-01", sample=2, admitted_unknown=False, invented_unknown=True),
+            self._sample(case_id="A-UNKNOWN-01", sample=3, admitted_unknown=False, invented_unknown=False),
+            self._sample(case_id="A-PLAIN-01"),
+        ]
+        return cases, samples, self.mod.summarize(cases, samples)
+
+    def test_summarize_counts_both_rates_over_the_unknown_cases_only(self):
+        _, _, s = self._run()
+        self.assertEqual((s.admits_unknown.hit, s.admits_unknown.of), (1, 3))
+        self.assertEqual((s.invents_unknown.hit, s.invents_unknown.of), (1, 3))
+
+    def test_the_rates_read_na_when_no_case_expects_an_admission(self):
+        s = self.mod.summarize([self._case(id="c")], [self._sample(case_id="c")])
+        self.assertEqual(s.admits_unknown.pct(), "n/a")
+        self.assertEqual(s.invents_unknown.pct(), "n/a")
+
+    def _report(self):
+        cases, samples, summary = self._run()
+        meta = {"date": "2026-11-02", "label": "t", "samples_per_case": 3, "cases": 2}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "r.md"
+            self.mod.write_report(path, cases=cases, samples=samples, summary=summary, meta=meta)
+            return path.read_text(encoding="utf-8")
+
+    def test_the_summary_table_has_both_rows_after_the_control_row(self):
+        lines = self._report().splitlines()
+        control = next(i for i, ln in enumerate(lines) if ln.startswith("| Control: nothing attached"))
+        self.assertTrue(lines[control + 1].startswith("| Admits not knowing | **33.3%** (1/3)"), lines[control + 1])
+        self.assertTrue(lines[control + 2].startswith("| Answers as if it knew | **33.3%** (1/3)"), lines[control + 2])
+
+    def test_the_per_case_table_has_one_column_for_it_and_dashes_for_other_cases(self):
+        rows = {ln.split("|")[1].strip(): ln for ln in self._report().splitlines() if ln.startswith("| `A-")}
+        header = next(ln for ln in self._report().splitlines() if ln.startswith("| Case |"))
+        self.assertIn("| Admitted not knowing |", header)
+        self.assertEqual(len(header.split("|")), len(rows["`A-UNKNOWN-01`"].split("|")))
+        self.assertIn("1/3 said so, 1/3 made it up", rows["`A-UNKNOWN-01`"])
+        self.assertNotIn("said so", rows["`A-PLAIN-01`"])
+
+    def test_a_sample_that_made_something_up_is_named_under_failures(self):
+        text = self._report()
+        self.assertIn("did not admit it did not know", text)
+        self.assertIn("named the made-up thing with advice", text)
+
+    def test_the_saved_summary_carries_both_rates(self):
+        _, _, s = self._run()
+        payload = self.mod.summary_payload(s)
+        self.assertEqual(payload["admits_unknown"], {"hit": 1, "of": 3})
+        self.assertEqual(payload["invents_unknown"], {"hit": 1, "of": 3})
+        self.assertIn("facts", payload)  # the older keys are still there
+
+
 if __name__ == "__main__":
     unittest.main()

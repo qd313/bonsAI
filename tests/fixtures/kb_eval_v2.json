@@ -6565,8 +6565,8 @@
       "input_style": "terse",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules. Plan 100: no Deck tip answers this yet (tips 110 and 111 are Steam Frame tips), so expect_topic and expect_pattern_id stay empty until one is written.",
       "expect_section": "",
-      "expect_topic": "",
-      "expect_pattern_id": ""
+      "expect_topic": "network",
+      "expect_pattern_id": 167
     },
     {
       "id": "V2-W2-SYM-20",
@@ -6582,8 +6582,8 @@
       "input_style": "voice",
       "note": "Written blind 2026-09-07; the writer had not read the tip sheet or the routing rules. Plan 100: no Deck tip answers this yet (tips 110 and 111 are Steam Frame tips), so expect_topic and expect_pattern_id stay empty until one is written.",
       "expect_section": "",
-      "expect_topic": "",
-      "expect_pattern_id": ""
+      "expect_topic": "network",
+      "expect_pattern_id": 167
     },
     {
       "id": "V2-W2-SYM-21",

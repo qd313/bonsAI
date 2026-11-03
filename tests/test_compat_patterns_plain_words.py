@@ -111,8 +111,8 @@ class FindingThePcTipTests(unittest.TestCase):
 
 FIXTURE = json.loads((REPO_ROOT / "tests" / "fixtures" / "kb_eval_v2.json").read_text(encoding="utf-8"))
 SYM_ROWS = {q["id"]: q for q in FIXTURE["queries"] if q["id"].startswith("V2-W2-SYM-")}
-# No Deck tip answers "can't find my PC" yet (110 and 111 are Steam Frame tips).
-ROWS_WITH_NO_TIP = {"V2-W2-SYM-19", "V2-W2-SYM-20"}
+# Every blind sentence names its tip now: tip 167 answers the two about finding the PC.
+ROWS_WITH_NO_TIP: set = set()
 
 
 class BlindSentenceRowsNameTheirTipTests(unittest.TestCase):
@@ -137,6 +137,13 @@ class BlindSentenceRowsNameTheirTipTests(unittest.TestCase):
         self.assertEqual(SYM_ROWS["V2-W2-SYM-12"]["expect_pattern_id"], 165)
         self.assertEqual(SYM_ROWS["V2-W2-SYM-23"]["expect_pattern_id"], 166)
         self.assertEqual(SYM_ROWS["V2-W2-SYM-24"]["expect_pattern_id"], 166)
+
+    def test_the_finding_the_pc_rows_point_at_tip_167(self):
+        for number in ("19", "20"):
+            with self.subTest(row=number):
+                row = SYM_ROWS["V2-W2-SYM-" + number]
+                self.assertEqual(row["expect_pattern_id"], 167)
+                self.assertEqual(row["expect_topic"], "network")
 
     def test_the_rows_that_have_a_plain_words_check_point_at_that_tip(self):
         for row, (tip_id, _phrases) in PLAIN_WORDS.items():
@@ -270,10 +277,11 @@ class BlindSentencesReachTheRightTipTests(unittest.TestCase):
     line added to the external-display tip beat the built-in-screen tip for row 06.
     """
 
-    # Rows that reached the right tip at the end of plan 100 lane T, plus the four that already did.
-    # The rest (07, 08, 09, 10, 16, 18, 19, 20, 22) reach another tip on the right subject,
+    # Rows that reached the right tip at the end of plan 100 lane T, plus the four that already did,
+    # plus 19 and 20 (plan 102 lane H, tip 167).
+    # The rest (07, 08, 09, 10, 16, 18, 22) reach another tip on the right subject,
     # or none, and are left to the table the measuring script prints.
-    MUST_REACH_THE_RIGHT_TIP = ("01", "02", "03", "04", "05", "06", "11", "12", "13", "14", "15", "17", "21", "23", "24")
+    MUST_REACH_THE_RIGHT_TIP = ("01", "02", "03", "04", "05", "06", "11", "12", "13", "14", "15", "17", "19", "20", "21", "23", "24")
 
     @classmethod
     def setUpClass(cls):

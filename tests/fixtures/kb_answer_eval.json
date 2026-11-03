@@ -1800,15 +1800,15 @@
    "app_id": "782330",
    "app_name": "DOOM Eternal",
    "ask_mode": "strategy",
-   "question": "how do i deal with the pain elemental in doom eternal",
+   "question": "how do i deal with the prowler in doom eternal",
    "expect_card": null,
    "must_mention": [],
    "must_not_say": [],
    "expect_unknown": true,
    "unknown_names": [
-    "Pain Elemental"
+    "Prowler"
    ],
-   "note": "A real DOOM Eternal enemy that no note covers: the library has notes for Marauder, Cacodemon, Whiplash and Arch-vile but no section on the Pain Elemental, and no card mentions it (checked against the seed on 2026-11-02). A good reply says it has nothing on this one rather than writing tactics as if from a note."
+   "note": "A real DOOM Eternal enemy that no note covers: the library has DOOM Eternal notes for Marauder, Cacodemon, Whiplash and Arch-vile but none on the Prowler, and no note for any game mentions a prowler (checked against the seed and every notes file on 2026-11-03). A good reply says it has nothing on this one rather than writing tactics as if from a note. Replaced the Pain Elemental on 2026-11-03: the classic Doom 64 note now names one."
   },
   {
    "id": "A-UNKNOWN-05",

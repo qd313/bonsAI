@@ -1250,10 +1250,15 @@ class EvalKbAnswersUnknownFixtureTests(unittest.TestCase):
         self.assertTrue({"Zorblax", "Grimthak"} <= drg)
 
     def test_no_note_in_the_library_names_any_of_the_things_asked_about(self):
-        text = "\n".join(f"{s.get('name', '')}\n{s.get('card', '')}" for s in self.sections).lower()
+        titles = {g.get("game_id"): g.get("canonical_title", "?") for g in self.games}
         for c in self.cases:
             for name in c.unknown_names:
-                self.assertNotIn(name.lower(), text, f"{c.id}: a note now mentions {name}")
+                hits = [
+                    f"'{s.get('name', '')}' (section {s.get('section_id')}, {titles.get(s.get('game_id'), '?')})"
+                    for s in self.sections
+                    if name.lower() in f"{s.get('name', '')}\n{s.get('card', '')}".lower()
+                ]
+                self.assertEqual(hits, [], f"{c.id}: {name} is now named by the note {'; '.join(hits)}")
 
     def test_two_cases_ask_in_a_game_the_library_does_not_cover_in_speed_and_expert(self):
         covered_ids = {str(g.get("app_id")) for g in self.games if g.get("app_id")}

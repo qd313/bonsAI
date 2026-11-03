@@ -400,6 +400,7 @@ Log, one row per consult: time, the question in one line, the answer in one line
 | Time | Question | Answer | What changed | Cost |
 |---|---|---|---|---|
 | 2026-11-02 22:59 to 23:03 EST | Consult 1: do the fifteen wave 1 briefs match the code at `46475a55`? | Ten hold; five need corrections: K0 (count from the seed, not the brief's sentence; the bookkeeper is exempt from rules 21 and the quick-check ban), A (never run the script before the fix or with the report on: its dated file is X2's), C (the Down out of the rows is at line 692, not 598; the registry hop is not healed either), D (the scoring script names its report by the date alone: add a label), the note lanes (the subject lists repeat notes the seed has for Super Mario 64, Pikmin 2, Doom 64 and Donkey Kong 64) | Each correction sent to the running lane as a message and written into the briefs file; the N9 to N12 briefs corrected before they are cut | about 87k tokens, 4 min |
+| 2026-11-02 23:30 to 23:33 EST | Consult 2: land lane C's commit? the one fix for round two? the Deck row rewritten so it can fail? | Land `5fe4c858` as a first half, the row stays open. Round two: `focusDeckOwner` (`liveTurnFocusGraph.ts` line 30) is the last hop on this screen written the old way; make it go through `plainHop` when the panel lacks focus, as `focusRowElement` does, so every caller declines instead of claiming and Steam moves the ring; the scratch repro promoted to `liveTurnFocusGraph.lostFocus.test.tsx` plus one unit case. The Deck row: Show details open first, the page read as out of focus before the walk, four Downs, the fourth must move. Lane C's note on the lessons file holds: plan 76's six reopens all began with focus present, so the heal was never seen rescuing one. | Lane C resumed with the two files; the Deck row in runbook R1 written to this shape; a lessons fix for the bookkeeper | about 133k tokens, 2 min |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -549,6 +550,15 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   `a84c395e`). **Q2:** seven games' rows written (206). **Lane M2 started** (Haiku: the three Pikmin 2 seed errors). Usage
   74 percent of the five-hour window at 23:25 EST, 16 percent of the week: no new helper from here until the window
   resets at 03:50 EST; finished lanes are resumed for follow-ups, which is not a new start.
+- **23:45 EST: consult 2 back** (§ 7); lane C resumed for round two with `liveTurnFocusGraph.ts` and a new test file. **N12 done**
+  (Mario Kart 64, 15 notes, four commits to `fa421330`; it found seed section 243 wrong about Rainbow Road's rails, fixed by
+  M2). **M2 done** (`69b5f15b` the three Pikmin 2 seed sentences; `f97f6968` the glossary's spray sentence; `8b1898ae` section
+  243's Rainbow Road clause). **The FOSS read of N9, N10 and N11:** nothing blocks publishing; five phrases without a quote
+  and one Prima guide quote to paraphrase, all fixed by the lanes (`3fe97fff`, `4679486b`, `780a342b`); N12 and the revised
+  N8 file under read. **N8's spoiler fixes in** (`9ee5a26c`: the final boss unnamed, Doopliss kept to his first fight, Lord
+  Crump renamed "third fight", Vivian out of the partner list, two dialogue lines paraphrased). **Q2 done:** 236 rows for
+  eight games in nine commits (to `cd2d9d4b`, the Lord Crump rows reworded). The full check on K0's tip started 23:24; the
+  first landing chain (A, B, H, F, M1, I, N7, N5, N6, N8) starts when it passes.
 
 ## 13. Report
 

@@ -78,6 +78,7 @@ from backend.ask.ollama_ask_extras import (
     with_pyro_carousel_tip,
 )
 from backend.ask.ollama_service import post_ollama_chat
+from backend.prompts.ollama_prompts import picture_user_message
 from backend.ask.ollama_loading_line import arm_loading_line, thinking_phase_args
 from backend.answer.response_verify import build_live_spoiler_cover
 from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
@@ -330,9 +331,7 @@ async def run_ask_ollama(
         return {"success": False, "response": "Request stopped (connection closed).",
                 "model_policy_disclosure": None, "cancelled": True, **ollama_extras}
 
-    user_message: dict = {"role": "user", "content": question}
-    if prepared_images:
-        user_message["images"] = [image["image_b64"] for image in prepared_images]
+    user_message = picture_user_message(question, app_name, prepared_images)
     messages = [{"role": "system", "content": system_content}, user_message]
 
     # Every other field ollama_extras carries was already right -- only the prompt itself grew,

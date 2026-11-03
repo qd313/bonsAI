@@ -87,6 +87,7 @@ build_reply_followup_context_block) now lives in reply_followup_blocks.py; all a
 re-exported here.
 """
 
+import os
 import re
 from typing import Callable, Optional, Sequence
 
@@ -334,6 +335,43 @@ def _glossary_clause(game_title: str = "", terms: Sequence[str] = ()) -> str:
     )
 
 
+# Plan 102 lane D: where a screenshot turn says which game the picture is from. On a turn with a picture and
+# a running game, one plain sentence ("This screenshot is from <game>.") now goes at the front of the question
+# itself, next to the picture; before, the name reached the AI only in the system text. Measured on this PC
+# with the Deck's starter model, 11 pictures, 6 tries each, two runs: it named the right game 91 and 92 times in
+# a hundred, against 67 and 70 (and no more God of War mix-ups); it named the place less often, 29 and 30 against
+# 53 and 52. Set the variable to "today" (or "0") to turn the sentence off, or to "in-question-only" to also
+# drop the system text's own sentence about the picture (100 and 100, place 21 and 24). Read at each turn, so
+# a measuring run can set it per run (scripts/kb/eval_screenshot_reading.py --picture-shape).
+PICTURE_SHAPE_ENV = "BONSAI_PICTURE_GAME_IN_QUESTION"
+_PICTURE_SHAPE_OFF = ("today", "0", "off", "false", "no")
+
+
+def picture_game_shape() -> str:
+    """"today" when switched off, "in-question-only" when asked for, otherwise "in-question" (the default)."""
+    value = os.environ.get(PICTURE_SHAPE_ENV, "").strip().lower()
+    if value in _PICTURE_SHAPE_OFF:
+        return "today"
+    return "in-question-only" if value == "in-question-only" else "in-question"
+
+
+def question_with_picture_game(question: str, app_name: str, has_picture: bool) -> str:
+    """The question as the AI receives it: with a picture and a running game's name, and a shape that asks
+    for it, one sentence naming the game goes first."""
+    name = (app_name or "").strip()
+    if not (has_picture and name) or picture_game_shape() == "today":
+        return question
+    return f"This screenshot is from {name}.\n\n{question}"
+
+
+def picture_user_message(question: str, app_name: str, prepared_images: list) -> dict:
+    """The user's message for /api/chat: the question (see question_with_picture_game) and the pictures on it."""
+    message: dict = {"role": "user", "content": question_with_picture_game(question, app_name, bool(prepared_images))}
+    if prepared_images:
+        message["images"] = [image["image_b64"] for image in prepared_images]
+    return message
+
+
 def build_system_prompt(
     question: str,
     app_id: str,
@@ -486,7 +524,7 @@ def build_system_prompt(
     running_game_picture_line = (
         " The running game named above is the game in the picture: describe where in it the player is, "
         "and never name a different game."
-        if app_name
+        if app_name and picture_game_shape() != "in-question-only"
         else ""
     )
     screenshot_rules = (

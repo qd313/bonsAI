@@ -111,6 +111,61 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "2083689",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1410,
+      "game_id": 18,
+      "section_type": "item",
+      "name": "Health, snacks and vending machines",
+      "card": "Summary: Your health refills by itself only back to the halfway point: when it falls below 50% it recovers up to 50% if you stand still and do not walk or run.\nUses: Snacks from convenience stores heal you and are eaten as you buy them: P’s & Q’s cost $1, EgoChaser $2 and Meteorite Bar $4, and each heals a different amount. Sprunk or eCola from a vending machine costs $1.\nTips: Snacks can also be shoplifted or dropped by dead enemies and pedestrians, and vending machines are not marked on the map.\nTips: In GTA V you cannot buy food from street vendors or restaurants; the only food you can buy is snacks from convenience stores.",
+      "source_url": "https://gta.fandom.com/wiki/Health",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2063152",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1411,
+      "game_id": 18,
+      "section_type": "item",
+      "name": "Parachute",
+      "card": "Summary: A $100 parachute from Ammu-Nation, unlocked after the mission Minor Turbulence; getting into any aircraft also gives you one.\nUses: After the parachute opens you can fire handguns and single-handed submachine guns. You can open it from a falling bike, but the bike cannot be carried and falls without you.\nTips: Pull back on the movement stick to land safely: pushing forward makes you faceplant, which may injure or kill you.\nTips: The chute is vulnerable to gunfire and to nearby explosions that set it on fire, and a ripped chute detaches and sends you falling.",
+      "source_url": "https://gta.fandom.com/wiki/Parachute",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2087363",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1412,
+      "game_id": 18,
+      "section_type": "item",
+      "name": "Rhino Tank",
+      "card": "Summary: A 60-ton battle tank with a 120mm cannon. You can buy it for $3,000,000 from Warstock Cache & Carry, and it then spawns in your aircraft hangar, or you can hijack one at Fort Zancudo.\nUses: The cannon fires every 1.5 seconds, reaches 190 meters and is very effective against most targets, and the tracks crush small vehicles, which either explode or catch fire. You cannot be busted easily inside it.\nTips: Keep the cannon off close targets in tight spaces such as alleyways, because the shell can explode right beside the tank and damage it.\nTips: The gun is a solid part of the tank, so light poles, traffic lights and walls can block your aim or even get you stuck.",
+      "source_url": "https://gta.fandom.com/wiki/Rhino_(HD_Universe)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2081936",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1413,
+      "game_id": 18,
+      "section_type": "item",
+      "name": "Stun Gun",
+      "card": "Summary: A handgun by Coil that fires a probe to stun a target and takes about 4 seconds to recharge. You get it in the mission Monkey Business and can buy it afterwards at Ammu-Nation for $100.\nUses: A stunned person drops and cannot get up, and usually does not survive, although street criminals and animals sometimes get up as if nothing happened. A shot to the head drops them at once, and a person in a vehicle may fall out of it.\nTips: Its range is only slightly longer than most melee weapons. It counts as a handgun, so it works for drive-bys, but with low damage and a low fire rate; it can also shoot out the tires of vehicles that are not bulletproof, and kill people.",
+      "source_url": "https://gta.fandom.com/wiki/Stun_Gun",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2079763",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1414,
+      "game_id": 18,
+      "section_type": "item",
+      "name": "Sticky Bombs",
+      "card": "Summary: A throwable plastic explosive with a remote detonator: you throw it and then detonate it, or attach it to a vehicle and then detonate it. It costs $400 and is unlocked by the mission Friends Reunited.\nUses: They stick to any vehicle and can be set off at any time, somewhat like landmines, but in story mode they cannot stick to pedestrians. A Rhino in free roam can be destroyed with three of them.\nTips: Keep your own car out of the blast radius, because shooting a placed bomb sets it off, and so does ramming one stuck to a vertical surface.\nTips: You can have 20 placed at once, the 21st removes the first, and they never explode on their own.",
+      "source_url": "https://gta.fandom.com/wiki/Sticky_Bombs",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2076033",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

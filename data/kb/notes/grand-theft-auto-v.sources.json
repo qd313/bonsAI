@@ -638,6 +638,336 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1410,
+      "name": "Health, snacks and vending machines",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Health",
+      "main_revision": "2063152",
+      "lines": [
+        {
+          "line": "Summary: Your health refills by itself only back to the halfway point: when it falls below 50% it recovers up to 50% if you stand still and do not walk or run.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Health",
+              "revision": "2063152",
+              "quoted": [
+                "Whenever the player takes damage and health drops below 50%, then they can automatically replenish lost health up to the halfway point but this can only be done if the player's character stands still on the spot and doesn't walk or run."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Snacks from convenience stores heal you and are eaten as you buy them: P’s & Q’s cost $1, EgoChaser $2 and Meteorite Bar $4, and each heals a different amount. Sprunk or eCola from a vending machine costs $1.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Snacks",
+              "revision": "2033480",
+              "quoted": [
+                "In Grand Theft Auto V, snacks can be purchased (or shoplifted) from convenience stores around San Andreas. The player automatically consumes the item when purchasing it.",
+                "P’s & Q’s || The candy that kids and stoners love. || $1",
+                "EgoChaser || The energy bar that's all about YOU. || $2",
+                "Meteorite Bar || Dark chocolate with GOOEY core. || $4"
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Health",
+              "revision": "2063152",
+              "quoted": [
+                "Each snack replenishes health in different amounts.",
+                "health is provided in the form of drinks (Sprunk or eCola) purchased at vending machines spread throughout Los Santos and Blaine County"
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Vending_Machines",
+              "revision": "2066916",
+              "quoted": [
+                "Drinks and snacks from a vending machine cost $1 each, similar to a street vendor."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Snacks can also be shoplifted or dropped by dead enemies and pedestrians, and vending machines are not marked on the map.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Health",
+              "revision": "2063152",
+              "quoted": [
+                "snacks (such as P’s & Q’s, Meteorite, Egochaser, and eCola) which can be be purchased at convenience stores, or dropped by dead enemies/pedestrians"
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Vending_Machines",
+              "revision": "2066916",
+              "quoted": [
+                "Like vendors, vending machines are not marked on the map."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In GTA V you cannot buy food from street vendors or restaurants; the only food you can buy is snacks from convenience stores.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Eating",
+              "revision": "1897392",
+              "quoted": [
+                "the player can no longer purchase food at street vendors (all of them are unoccupied) and the once accessible restaurants from GTA IV (Burger Shot, Cluckin' Bell) are no longer able to be accessed.",
+                "The player is only able to consume snacks purchased at convenience stores"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1411,
+      "name": "Parachute",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Parachute",
+      "main_revision": "2087363",
+      "lines": [
+        {
+          "line": "Summary: A $100 parachute from Ammu-Nation, unlocked after the mission Minor Turbulence; getting into any aircraft also gives you one.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Parachute",
+              "revision": "2087363",
+              "quoted": [
+                "Ammu-Nation (GTA V & GTA Online)",
+                "$100 (TBoGT, GTA V & GTA Online)",
+                "Minor Turbulence (GTA V)",
+                "Any aircraft",
+                "Determines if the gear is awarded to the player by entering a vehicle."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: After the parachute opens you can fire handguns and single-handed submachine guns. You can open it from a falling bike, but the bike cannot be carried and falls without you.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Parachute",
+              "revision": "2087363",
+              "quoted": [
+                "The player is now able to shoot single-handed weapons after the parachute has been deployed. The weapons are the same used as the ones used in vehicles, being just handguns and single-handed submachine guns.",
+                "The player is also able to deploy the parachute while on a bike that is falling in the air. However, the bike cannot be carried with the parachute, as the player will eject from the bike and let it fall once the parachute is deployed."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Pull back on the movement stick to land safely: pushing forward makes you faceplant, which may injure or kill you.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Parachute",
+              "revision": "2087363",
+              "quoted": [
+                "it is necessary to pull back the movement stick",
+                "Landing while pushing forward on the movement stick will cause the character to faceplant, and this may lead to injury or death"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The chute is vulnerable to gunfire and to nearby explosions that set it on fire, and a ripped chute detaches and sends you falling.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Parachute",
+              "revision": "2087363",
+              "quoted": [
+                "parachutes are rather vulnerable to gunfire",
+                "until it gets \"ripped apart\" and is automatically detached.",
+                "Parachutes can also be set on fire by nearby explosions, and will eventually be destroyed as a result, sending the player falling towards the ground."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1412,
+      "name": "Rhino Tank",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Rhino_(HD_Universe)",
+      "main_revision": "2081936",
+      "lines": [
+        {
+          "line": "Summary: A 60-ton battle tank with a 120mm cannon. You can buy it for $3,000,000 from Warstock Cache & Carry, and it then spawns in your aircraft hangar, or you can hijack one at Fort Zancudo.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Rhino_(HD_Universe)",
+              "revision": "2081936",
+              "quoted": [
+                "A heavily-armored battle tank with a 1,500hp turbine engine and a 120mm cannon",
+                "The Rhino Tank is stated to weigh 60 tons",
+                "Can be purchased for $3,000,000 from Warstock Cache & Carry in single player. The Rhino Tank will spawn in the protagonist's aircraft hangar.",
+                "These can be hijacked, but the only garage large enough to store it is an aircraft hangar. And getting one out of the base is relatively hard."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: The cannon fires every 1.5 seconds, reaches 190 meters and is very effective against most targets, and the tracks crush small vehicles, which either explode or catch fire. You cannot be busted easily inside it.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Rhino_(HD_Universe)",
+              "revision": "2081936",
+              "quoted": [
+                "The Rhino Tank is stated to weigh 60 tons, which gives the vehicle the ability to crush various small-sized vehicles.",
+                "a fire rate of 1.5 seconds between shots",
+                "It fires at a range of 190 meters/623 feet",
+                "The cannon is very effective against most targets",
+                "Any vehicle struck under the track of the Rhino Tank track are severely deformed and result either in an instant explosion or being set on fire",
+                "The hatch location is still an advantage, as the player cannot be busted easily"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Keep the cannon off close targets in tight spaces such as alleyways, because the shell can explode right beside the tank and damage it.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Rhino_(HD_Universe)",
+              "revision": "2081936",
+              "quoted": [
+                "so the player has to avoid using the cannon in smaller areas (i.e. alleyways) for targets that are close to the tank",
+                "The cannon of the tank is also dangerous when its shots explode very close to the hull of the tank"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The gun is a solid part of the tank, so light poles, traffic lights and walls can block your aim or even get you stuck.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Rhino_(HD_Universe)",
+              "revision": "2081936",
+              "quoted": [
+                "the main gun is a solid component, meaning that obstacles such as light poles, traffic lights and solid structures can interfere with the aiming of the tank, even having the risk of being stuck."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1413,
+      "name": "Stun Gun",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Stun_Gun",
+      "main_revision": "2079763",
+      "lines": [
+        {
+          "line": "Summary: A handgun by Coil that fires a probe to stun a target and takes about 4 seconds to recharge. You get it in the mission Monkey Business and can buy it afterwards at Ammu-Nation for $100.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Stun_Gun",
+              "revision": "2079763",
+              "quoted": [
+                "Takes approximately 4 seconds to recharge after firing.",
+                "it is manufactured by Coil.",
+                "Acquired by Michael in the mission Monkey Business, and can be purchased afterwards from Ammu-Nation for $100."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: A stunned person drops and cannot get up, and usually does not survive, although street criminals and animals sometimes get up as if nothing happened. A shot to the head drops them at once, and a person in a vehicle may fall out of it.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Stun_Gun",
+              "revision": "2079763",
+              "quoted": [
+                "then leave them incapable of getting up, lying on the ground",
+                "Usually, Stun Gun victims do not survive; however, in some cases such as street criminals and animals, after being shocked they will get up as if nothing happened.",
+                "If one stuns someone in the head instead of the body, they immediately drop to the ground without struggling",
+                "If one fires a stun gun at someone who is in a vehicle, there is a high chance that they will fall out."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its range is only slightly longer than most melee weapons. It counts as a handgun, so it works for drive-bys, but with low damage and a low fire rate; it can also shoot out the tires of vehicles that are not bulletproof, and kill people.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Stun_Gun",
+              "revision": "2079763",
+              "quoted": [
+                "The Stun Gun has a limited effective range, being slightly longer than most melee weapons.",
+                "The Stun Gun can also be used as a Drive-By weapon (since it is classed as a handgun), though the low damage, low fire rate and short range limits its usage",
+                "it is capable of being used to shoot out non-bulletproof vehicle tires and to kill people."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1414,
+      "name": "Sticky Bombs",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Sticky_Bombs",
+      "main_revision": "2076033",
+      "lines": [
+        {
+          "line": "Summary: A throwable plastic explosive with a remote detonator: you throw it and then detonate it, or attach it to a vehicle and then detonate it. It costs $400 and is unlocked by the mission Friends Reunited.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Sticky_Bombs",
+              "revision": "2076033",
+              "quoted": [
+                "A plastic explosive charge fitted with a remote detonator. Can be thrown and then detonated or attached to a vehicle then detonated.",
+                "$400 (GTA V)",
+                "Friends Reunited (GTA V)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: They stick to any vehicle and can be set off at any time, somewhat like landmines, but in story mode they cannot stick to pedestrians. A Rhino in free roam can be destroyed with three of them.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Sticky_Bombs",
+              "revision": "2076033",
+              "quoted": [
+                "can stick to any vehicle, and can be detonated at any time (which allows them to be used somewhat like landmines)",
+                "Although they cannot stick to pedestrians in Story Mode",
+                "The Rhino (in free roam) can be destroyed with three Sticky Bombs"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Keep your own car out of the blast radius, because shooting a placed bomb sets it off, and so does ramming one stuck to a vertical surface.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Sticky_Bombs",
+              "revision": "2076033",
+              "quoted": [
+                "the player must be careful to ensure that their own car does not get caught in the blast radius",
+                "shooting them will cause them to explode. If they are placed onto a vertical surface and rammed by a car, they will detonate."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You can have 20 placed at once, the 21st removes the first, and they never explode on their own.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Sticky_Bombs",
+              "revision": "2076033",
+              "quoted": [
+                "The limit for placed bombs has been amplified to 20",
+                "first one disappears when the 21st",
+                "Unlike in TBOGT, they will not explode over time."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

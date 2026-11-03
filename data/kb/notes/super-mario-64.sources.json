@@ -1,0 +1,331 @@
+{
+  "game_id": 21,
+  "game": "Super Mario 64",
+  "wiki": "Super Mario Wiki (https://www.mariowiki.com/api.php)",
+  "licence_printed_by_fetcher": "Super Mario Wiki (MediaWiki 1.43.11) licence: Attribution-ShareAlike 4.0 International https://creativecommons.org/licenses/by-sa/4.0/",
+  "licence_stored": "CC-BY-SA-4.0",
+  "read_on": "2026-11-02",
+  "how_read": "Pages read with scripts/kb/fetch_wiki_live_pages.py (the wiki's page-render call) on the date above; the revision is the one the fetcher printed. Each quote is a sentence or part of a sentence from that page, checked by script to occur in the fetched text.",
+  "sections": [
+    {
+      "section_id": 1600,
+      "name": "Chain Chomp (Bob-omb Battlefield)",
+      "kind": "enemy",
+      "page": "Chain Chomp",
+      "page_url": "https://www.mariowiki.com/Chain_Chomp",
+      "revision": "5536195",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A giant Chain Chomp chained to a peg in Bob-omb Battlefield, close to a cell that holds the Power Star of \"Behind Chain Chomp's Gate\".",
+          "from": [
+            {
+              "page": "Chain Chomp",
+              "revision": "5536195",
+              "quote": "A giant Chain Chomp"
+            },
+            {
+              "page": "Chain Chomp",
+              "revision": "5536195",
+              "quote": "is located on Bob-omb Battlefield in Super Mario 64"
+            },
+            {
+              "page": "Chain Chomp",
+              "revision": "5536195",
+              "quote": "It is attached to a peg near a cell with the Power Star of"
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "You cannot beat it, since Chain Chomps are almost entirely invincible, but a Bob-omb or a box stuns it for a moment.",
+          "from": [
+            {
+              "page": "Chain Chomp",
+              "revision": "5536195",
+              "quote": "In Super Mario games, they are almost entirely invincible"
+            },
+            {
+              "page": "Chain Chomp",
+              "revision": "5536195",
+              "quote": "A Bob-omb, a box, or a Yoshi's egg in the remake can stun Chain Chomp briefly."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "It lunges at you when you are near and takes three wedges of health on contact. Ground-pound its post three times to free it, and it lunges into the nearby cell and clears the gate for the star.",
+          "from": [
+            {
+              "page": "Chain Chomp",
+              "revision": "5536195",
+              "quote": "The Chain Chomp lunges at Mario if he is nearby, taking away three wedges of his health on contact."
+            },
+            {
+              "page": "Chain Chomp",
+              "revision": "5536195",
+              "quote": "The Chain Chomp can be freed by ground-pounding its post three times, required for it to lunge into the cell nearby and clear"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1601,
+      "name": "Boo (courtyard and Big Boo's Haunt)",
+      "kind": "enemy",
+      "page": "Boo",
+      "page_url": "https://www.mariowiki.com/Boo",
+      "revision": "5532404",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A small ghost that follows you in the courtyard of Peach's Castle and in Big Boo's Haunt; touching one takes two wedges of health.",
+          "from": [
+            {
+              "page": "Boo",
+              "revision": "5532404",
+              "quote": "Boos (also called Baby Boos) appear in Super Mario 64"
+            },
+            {
+              "page": "Boo",
+              "revision": "5532404",
+              "quote": "Boos are encountered in the courtyard of Peach's Castle and in Big Boo's Haunt."
+            },
+            {
+              "page": "Boo",
+              "revision": "5532404",
+              "quote": "Boos take away two wedges of health on contact."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "A punch, a kick or a ground pound defeats it. When you look at one it turns partly see-through; otherwise it is solid and follows you.",
+          "from": [
+            {
+              "page": "Boo",
+              "revision": "5532404",
+              "quote": "Boos are defeated from either a punch, a kick, a Pound the Ground attack"
+            },
+            {
+              "page": "Boo",
+              "revision": "5532404",
+              "quote": "When Boos are looked at, they become partially visible, but are fully opaque otherwise and follow the player character."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Each Boo in the courtyard holds a yellow coin, and each one in Big Boo's Haunt holds a blue coin.",
+          "from": [
+            {
+              "page": "Boo",
+              "revision": "5532404",
+              "quote": "The Boos in the courtyard hold a Yellow Coin each, and those in Big Boo's Haunt each have a Blue Coin"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1602,
+      "name": "Big Boo (Big Boo's Haunt)",
+      "kind": "enemy",
+      "page": "Big Boo (character)",
+      "page_url": "https://www.mariowiki.com/Big_Boo_(character)",
+      "revision": "5499015",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "The giant ghost who owns Big Boo's Haunt and leads the Boos; he is the boss of \"Go on a Ghost Hunt\", \"Ride Big Boo's Merry-Go-Round\" and \"Big Boo's Balcony\", and a touch costs three wedges of health.",
+          "from": [
+            {
+              "page": "Big Boo (character)",
+              "revision": "5499015",
+              "quote": "acting as the Boos' leader"
+            },
+            {
+              "page": "Big Boo (character)",
+              "revision": "5499015",
+              "quote": "Big Boo makes his debut in Super Mario 64 as the owner of Big Boo's Haunt, being the boss of \"Go on a Ghost Hunt\", \"Ride Big Boo's Merry-Go-Round\", and \"Big Boo's Balcony\"."
+            },
+            {
+              "page": "Big Boo (character)",
+              "revision": "5499015",
+              "quote": "If this Boo attacks Mario, he loses three wedges of health."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "He can be hurt only while visible, by ground-pounding him from above or punching him from the side. Three hits defeat him, and he gets smaller and faster after each one.",
+          "from": [
+            {
+              "page": "Big Boo (character)",
+              "revision": "5499015",
+              "quote": "Big Boo can be attacked only when visible, so Mario has to attack this massive ghost by either ground-pounding him from above or punching him from the side. He takes three hits to defeat, becoming smaller and faster after each hit."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "In the first two missions you must defeat several nearby Boos to make him appear; in \"Big Boo's Balcony\" he is already there. Like a normal Boo he disappears when looked at and shows again when you turn away, and if you leave the area before he is beaten his health resets. / A Big Boo about twice the size of the other Boos waits in a corner of the castle courtyard, and beating it drops a birdcage that leads to Big Boo's Haunt.",
+          "from": [
+            {
+              "page": "Big Boo (character)",
+              "revision": "5499015",
+              "quote": "For the first two missions, Mario needs to defeat several nearby Boos to make him appear, though for the last one, he is automatically present"
+            },
+            {
+              "page": "Big Boo (character)",
+              "revision": "5499015",
+              "quote": "Like with the normal Boos, Big Boo disappears when looked at and becomes visible again when Mario turns away."
+            },
+            {
+              "page": "Big Boo (character)",
+              "revision": "5499015",
+              "quote": "if the player leaves the area before completely defeating Big Boo, his health resets."
+            },
+            {
+              "page": "Big Boo",
+              "revision": "5537137",
+              "quote": "In the courtyard itself, it can be found in one of the corners, appearing about twice as large as the other Boos. If Mario defeats it, it drops a birdcage"
+            },
+            {
+              "page": "Big Boo",
+              "revision": "5537137",
+              "quote": "leading to Big Boo's Haunt."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1603,
+      "name": "Piranha Plant (Whomp's Fortress)",
+      "kind": "enemy",
+      "page": "Piranha Plant",
+      "page_url": "https://www.mariowiki.com/Piranha_Plant",
+      "revision": "5536889",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A sleepy plant with green lips, found in Whomp's Fortress in the original game, that is always asleep, with a lullaby playing, until you disturb it.",
+          "from": [
+            {
+              "page": "Piranha Plant",
+              "revision": "5536889",
+              "quote": "They are depicted with green lips in the original version"
+            },
+            {
+              "page": "Piranha Plant",
+              "revision": "5536889",
+              "quote": "Piranha Plants appear only in Whomp's Fortress"
+            },
+            {
+              "page": "Piranha Plant",
+              "revision": "5536889",
+              "quote": "Piranha Plants have a sleepy nature, which is why they are always found asleep; during this, a lullaby plays."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "Walk up slowly and it stays asleep; touch it or rush at it and it wakes and bites toward you.",
+          "from": [
+            {
+              "page": "Piranha Plant",
+              "revision": "5536889",
+              "quote": "When a Piranha Plant is either touched or approached quickly by the player character, it wakes up and starts to bite in the direction of the player character, though they stay asleep if approached slowly."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A bite takes three points of health, or four if you have lost your cap. A defeated Piranha Plant leaves a blue coin.",
+          "from": [
+            {
+              "page": "Piranha Plant",
+              "revision": "5536889",
+              "quote": "Piranha Plants take away three health points if they bite the player character, or four if he is without his cap"
+            },
+            {
+              "page": "Blue Coin",
+              "revision": "5531894",
+              "quote": "Defeating certain enemies causes a Blue Coin to appear, including Koopa Troopas, Piranha Plants, Boos"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1604,
+      "name": "Bob-omb (Bob-omb Battlefield)",
+      "kind": "enemy",
+      "page": "Bob-omb",
+      "page_url": "https://www.mariowiki.com/Bob-omb",
+      "revision": "5537321",
+      "lines": [
+        {
+          "label": "Summary",
+          "text": "A common walking bomb that first appears in Bob-omb Battlefield: when it spots you it lights its fuse and rushes at you.",
+          "from": [
+            {
+              "page": "Bob-omb",
+              "revision": "5537321",
+              "quote": "Bob-ombs are common enemies in Super Mario 64 and its Nintendo DS version. They first appear on the Bob-omb Battlefield."
+            },
+            {
+              "page": "Bob-omb",
+              "revision": "5537321",
+              "quote": "When a Bob-omb spots the player, it lights its fuse and then rushes towards them from behind, attempting to damage them when it explodes."
+            }
+          ]
+        },
+        {
+          "label": "Weak points",
+          "text": "Touching one does no harm, but its explosion costs two wedges of health. Kick it, or pick it up from behind and throw it, and it explodes away from you and leaves a coin.",
+          "from": [
+            {
+              "page": "Bob-omb",
+              "revision": "5537321",
+              "quote": "Unlike in the Super Mario Bros. subseries, Bob-ombs do not harm the player upon contact. Their explosion, however, damages the player by two wedges of health."
+            },
+            {
+              "page": "Bob-omb",
+              "revision": "5537321",
+              "quote": "Bob-ombs can be defeated by being kicked or picked up from behind and thrown. This causes them to explode away from the player, leaving behind a coin."
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "Their blasts also hurt other enemies nearby, and they come back after you leave the area. / A Bob-omb working a cannon does not chase you but still explodes if picked up; the pink Bob-omb Buddies are friendly, give hints and open cannons.",
+          "from": [
+            {
+              "page": "Bob-omb",
+              "revision": "5537321",
+              "quote": "Explosions caused by the bombs can also damage other enemies within the blast."
+            },
+            {
+              "page": "Bob-omb",
+              "revision": "5537321",
+              "quote": "After the player character walks away from the area, the Bob-ombs then respawn."
+            },
+            {
+              "page": "Bob-omb",
+              "revision": "5537321",
+              "quote": "These Bob-ombs do not chase the player, but they still explode if picked up."
+            },
+            {
+              "page": "Bob-omb",
+              "revision": "5537321",
+              "quote": "Bob-omb Buddies are friendly and give the player character helpful hints. They open cannons"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

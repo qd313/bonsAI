@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 1600,
+      "game_id": 21,
+      "section_type": "enemy",
+      "name": "Chain Chomp (Bob-omb Battlefield)",
+      "card": "Summary: A giant Chain Chomp chained to a peg in Bob-omb Battlefield, close to a cell that holds the Power Star of \"Behind Chain Chomp's Gate\".\nWeak points: You cannot beat it, since Chain Chomps are almost entirely invincible, but a Bob-omb or a box stuns it for a moment.\nTips: It lunges at you when you are near and takes three wedges of health on contact. Ground-pound its post three times to free it, and it lunges into the nearby cell and clears the gate for the star.",
+      "source_url": "https://www.mariowiki.com/Chain_Chomp",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5536195",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1601,
+      "game_id": 21,
+      "section_type": "enemy",
+      "name": "Boo (courtyard and Big Boo's Haunt)",
+      "card": "Summary: A small ghost that follows you in the courtyard of Peach's Castle and in Big Boo's Haunt; touching one takes two wedges of health.\nWeak points: A punch, a kick or a ground pound defeats it. When you look at one it turns partly see-through; otherwise it is solid and follows you.\nTips: Each Boo in the courtyard holds a yellow coin, and each one in Big Boo's Haunt holds a blue coin.",
+      "source_url": "https://www.mariowiki.com/Boo",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5532404",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1602,
+      "game_id": 21,
+      "section_type": "enemy",
+      "name": "Big Boo (Big Boo's Haunt)",
+      "card": "Summary: The giant ghost who owns Big Boo's Haunt and leads the Boos; he is the boss of \"Go on a Ghost Hunt\", \"Ride Big Boo's Merry-Go-Round\" and \"Big Boo's Balcony\", and a touch costs three wedges of health.\nWeak points: He can be hurt only while visible, by ground-pounding him from above or punching him from the side. Three hits defeat him, and he gets smaller and faster after each one.\nTips: In the first two missions you must defeat several nearby Boos to make him appear; in \"Big Boo's Balcony\" he is already there. Like a normal Boo he disappears when looked at and shows again when you turn away, and if you leave the area before he is beaten his health resets.\nTips: A Big Boo about twice the size of the other Boos waits in a corner of the castle courtyard, and beating it drops a birdcage that leads to Big Boo's Haunt.",
+      "source_url": "https://www.mariowiki.com/Big_Boo_(character)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5499015",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1603,
+      "game_id": 21,
+      "section_type": "enemy",
+      "name": "Piranha Plant (Whomp's Fortress)",
+      "card": "Summary: A sleepy plant with green lips, found in Whomp's Fortress in the original game, that is always asleep, with a lullaby playing, until you disturb it.\nWeak points: Walk up slowly and it stays asleep; touch it or rush at it and it wakes and bites toward you.\nTips: A bite takes three points of health, or four if you have lost your cap. A defeated Piranha Plant leaves a blue coin.",
+      "source_url": "https://www.mariowiki.com/Piranha_Plant",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5536889",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1604,
+      "game_id": 21,
+      "section_type": "enemy",
+      "name": "Bob-omb (Bob-omb Battlefield)",
+      "card": "Summary: A common walking bomb that first appears in Bob-omb Battlefield: when it spots you it lights its fuse and rushes at you.\nWeak points: Touching one does no harm, but its explosion costs two wedges of health. Kick it, or pick it up from behind and throw it, and it explodes away from you and leaves a coin.\nTips: Their blasts also hurt other enemies nearby, and they come back after you leave the area.\nTips: A Bob-omb working a cannon does not chase you but still explodes if picked up; the pink Bob-omb Buddies are friendly, give hints and open cannons.",
+      "source_url": "https://www.mariowiki.com/Bob-omb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5537321",
+      "crawled_at": "2026-11-02"
+    }
+  ]
+}

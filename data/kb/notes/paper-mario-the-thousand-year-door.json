@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 1700,
+      "game_id": 23,
+      "section_type": "enemy",
+      "name": "Dull Bones",
+      "card": "Summary: A chartreuse skeleton Koopa that throws bones and builds more Dull Bones to help it; it has 1 HP, 2 attack and 1 defense, and turns up commonly in Hooktail Castle.\nWeak points: A Hammer swing takes one out easily, and a POW Block or Koops's Power Shell is very efficient against a crowd; unlike Dry Bones, they cannot put themselves back together once they are down.\nTips: They use Build to summon more Dull Bones, which is why Goombella says attacks that strike many at once are the most effective.\nTips: Besides Hooktail Castle they appear in the Glitz Pit, the Palace of Shadow and the Pit of 100 Trials, and they can drop a Dried Shroom, a Fright Mask or a POW Block.",
+      "source_url": "https://www.mariowiki.com/Dull_Bones",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5532428",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1701,
+      "game_id": 23,
+      "section_type": "enemy",
+      "name": "Iron Cleft",
+      "card": "Summary: A large blue Cleft made of metal; the only ones are the two Iron Adonis Twins you face in the Glitz Pit, and each has 6 HP and charges for 4 damage.\nWeak points: No attack damages them, not even moves that bypass defense or a perfectly timed Superguard; the only known way to hurt one is Yoshi's Gulp, which hits one Iron Cleft with the other.\nTips: Gulp is Yoshi Kid's move: he swallows an enemy and spits it at another enemy.\nTips: Goombella's Tattle says the only way to beat one is to whack it with the other, and that running away may not be a bad idea; the one in green shoes is the younger brother.",
+      "source_url": "https://www.mariowiki.com/Iron_Cleft",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5476379",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1702,
+      "game_id": 23,
+      "section_type": "enemy",
+      "name": "Poison Pokey",
+      "card": "Summary: A poisonous Pokey with 8 HP and 4 attack that can call in more of its kind; you meet it at Riverside Station and on floors 41 to 49 of the Pit of 100 Trials.\nWeak points: Fire works well, since they are highly susceptible to burning, and the Tattle Log says to take it out quickly.\nTips: Slam, Body Throw and Bonk do 3, 4 and 5 damage and all poison you, its Pull move brings in another Poison Pokey, and poison slowly drains your HP.\nTips: A Poison Pokey sometimes drops a Tasty Tonic when it is beaten, which cures poison, and Goombella warns that it has spines all over, so do not touch them.",
+      "source_url": "https://www.mariowiki.com/Poison_Pokey",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5412996",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1703,
+      "game_id": 23,
+      "section_type": "boss",
+      "name": "Magnus von Grapple (Chapter 2 boss)",
+      "card": "Summary: The giant X-Naut robot that Lord Crump drives as the boss of Chapter 2, in the Great Tree; it has 30 HP, 2 attack and 1 defense.\nWeak points: Its rocket fists are separate targets with 2 HP and no defense; it sends them out once its own HP reaches twenty, and Flurrie's Gale Force with a perfect action command is sure to remove them.\nTips: While the fists are out it can only jump and stomp the ground, hitting Mario and his partner for 2 piercing damage, which a floating Flurrie is not hurt by, and each fist hits for 4.\nTips: If both fists are beaten, a new pair is back by its second turn afterwards; after that it picks the stomp 60% of the time and releases the fists 40%, and any fists still out when its HP runs out are defeated at once.",
+      "source_url": "https://www.mariowiki.com/Magnus_von_Grapple",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5486982",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1704,
+      "game_id": 23,
+      "section_type": "boss",
+      "name": "Doopliss (Chapter 4 boss)",
+      "card": "Summary: The Chapter 4 boss from the Creepy Steeple, fought three times with 40 HP each time and an attack of 4, then 4, then 6 in the Palace of Shadow.\nWeak points: In the first fight he changes into a shadowy outline of Mario once his HP drops below 20, and even if you reduce him to zero before that, he changes anyway and is left with 10 HP.\nTips: Goombella cannot tattle his name, which shows as five question marks, and learning it later is what lets Mario hurt him; partner badges such as HP Plus P or Power Plus P are switched off in the second fight.\nTips: In the Palace of Shadow rematch he hits harder: his Head Missile does 6, and he copies Mario or one of your partners and attacks as them.",
+      "source_url": "https://www.mariowiki.com/Doopliss",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5522260",
+      "crawled_at": "2026-11-02"
+    }
+  ]
+}

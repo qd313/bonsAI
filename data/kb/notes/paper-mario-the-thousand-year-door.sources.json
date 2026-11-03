@@ -1,0 +1,334 @@
+{
+  "wiki": "Super Mario Wiki (https://www.mariowiki.com/api.php)",
+  "licence_printed_by_fetcher": "Attribution-ShareAlike 4.0 International https://creativecommons.org/licenses/by-sa/4.0/",
+  "licence_stored": "CC-BY-SA-4.0 (the fetcher prints Attribution-ShareAlike 4.0 International; this repo's data/kb/NOTICE.md lists the Super Mario Wiki as CC-BY-SA-4.0)",
+  "game_id": 23,
+  "game": "Paper Mario: The Thousand-Year Door",
+  "read_on": "2026-11-02",
+  "sections": [
+    {
+      "section_id": 1700,
+      "name": "Dull Bones",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Dull_Bones",
+      "main_revision": "5532428",
+      "lines": [
+        {
+          "line": "Summary: A chartreuse skeleton Koopa that throws bones and builds more Dull Bones to help it; it has 1 HP, 2 attack and 1 defense, and turns up commonly in Hooktail Castle.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Dull_Bones",
+              "revision": "5532428",
+              "quoted": [
+                "Dull Bones are a chartreuse variant of Dry Bones first seen in Paper Mario: The Thousand-Year Door.",
+                "appear commonly in Hooktail Castle",
+                "They attack by throwing bones at Mario and his partners.",
+                "A Koopa Troopa that became a skeleton.",
+                "Max HP is 1, Attack is 2, and Defense is 1.",
+                "Bone Throw (2), Build (summons Dull Bones)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A Hammer swing takes one out easily, and a POW Block or Koops's Power Shell is very efficient against a crowd; unlike Dry Bones, they cannot put themselves back together once they are down.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Dull_Bones",
+              "revision": "5532428",
+              "quoted": [
+                "they are easily taken out by simply using the Hammer.",
+                "Using a POW Block or Koops's Power Shell is also very efficient, especially when there are many Dull Bones in battle.",
+                "Unlike Dry Bones, they cannot reassemble once they are down."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They use Build to summon more Dull Bones, which is why Goombella says attacks that strike many at once are the most effective.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Dull_Bones",
+              "revision": "5532428",
+              "quoted": [
+                "Oh, and they build reinforcements, too! Attacks that can strike multiple Dull Bones at once are the most effective."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Besides Hooktail Castle they appear in the Glitz Pit, the Palace of Shadow and the Pit of 100 Trials, and they can drop a Dried Shroom, a Fright Mask or a POW Block.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Dull_Bones",
+              "revision": "5532428",
+              "quoted": [
+                "Location(s) || Hooktail Castle, Glitz Pit, Palace of Shadow, Pit of 100 Trials (Levels 1, 4-6, 9)",
+                "Dried Shroom (drop only), Fire Flower, Fright Mask (drop only), Mushroom, POW Block (drop only)"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1701,
+      "name": "Iron Cleft",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Iron_Cleft",
+      "main_revision": "5476379",
+      "lines": [
+        {
+          "line": "Summary: A large blue Cleft made of metal; the only ones are the two Iron Adonis Twins you face in the Glitz Pit, and each has 6 HP and charges for 4 damage.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Iron_Cleft",
+              "revision": "5476379",
+              "quoted": [
+                "The only known Iron Clefts are the two members of The Iron Adonis Twins team in the Glitz Pit.",
+                "They are large blue Clefts made of impenetrable metal.",
+                "Max HP is 6, Attack is 4",
+                "Charge (4, resists counter, Piercing)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: No attack damages them, not even moves that bypass defense or a perfectly timed Superguard; the only known way to hurt one is Yoshi's Gulp, which hits one Iron Cleft with the other.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Iron_Cleft",
+              "revision": "5476379",
+              "quoted": [
+                "no attacks will do any damage to them, even moves that bypass defense and if a character executes a perfectly timed Superguard.",
+                "Yoshi's Gulp provides the only known source of damaging these Iron Clefts, as it involves hitting one of the Iron Clefts with the other."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Gulp is Yoshi Kid's move: he swallows an enemy and spits it at another enemy.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Yoshi_Kid",
+              "revision": "5534641",
+              "quoted": [
+                "Swallows an enemy and spits it at another enemy."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Goombella's Tattle says the only way to beat one is to whack it with the other, and that running away may not be a bad idea; the one in green shoes is the younger brother.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Iron_Cleft",
+              "revision": "5476379",
+              "quoted": [
+                "If that's true, the only way to beat one is to whack it with the other one... Running away may not be a bad idea at this point.",
+                "Since this one is wearing green shoes, it must be the younger brother."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1702,
+      "name": "Poison Pokey",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Poison_Pokey",
+      "main_revision": "5412996",
+      "lines": [
+        {
+          "line": "Summary: A poisonous Pokey with 8 HP and 4 attack that can call in more of its kind; you meet it at Riverside Station and on floors 41 to 49 of the Pit of 100 Trials.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Poison_Pokey",
+              "revision": "5412996",
+              "quoted": [
+                "Poison Pokeys are found at the Riverside Station and in floors 41-49 of the Pit of 100 Trials.",
+                "Max HP is 8, Attack is 4, and Defense is 0.",
+                "they can summon more of them to the fight"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Fire works well, since they are highly susceptible to burning, and the Tattle Log says to take it out quickly.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Poison_Pokey",
+              "revision": "5412996",
+              "quoted": [
+                "highly susceptible to burning",
+                "Take it out quickly."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Slam, Body Throw and Bonk do 3, 4 and 5 damage and all poison you, its Pull move brings in another Poison Pokey, and poison slowly drains your HP.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Poison_Pokey",
+              "revision": "5412996",
+              "quoted": [
+                "Slam (3, Poison), Body Throw (4, Poison), Pull (summons Poison Pokey), Bonk (5, Poison)",
+                "If you get poisoned, your HP will slowly drain, so you may want to avoid that."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A Poison Pokey sometimes drops a Tasty Tonic when it is beaten, which cures poison, and Goombella warns that it has spines all over, so do not touch them.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Poison_Pokey",
+              "revision": "5412996",
+              "quoted": [
+                "they sometimes drop a Tasty Tonic when defeated so any poisoning can be cured.",
+                "they have spines all over, so DON'T touch them."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1703,
+      "name": "Magnus von Grapple (Chapter 2 boss)",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Magnus_von_Grapple",
+      "main_revision": "5486982",
+      "lines": [
+        {
+          "line": "Summary: The giant X-Naut robot that Lord Crump drives as the boss of Chapter 2, in the Great Tree; it has 30 HP, 2 attack and 1 defense.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple",
+              "revision": "5486982",
+              "quoted": [
+                "It serves as the primary boss of Chapter 2.",
+                "Max HP is 30, Attack is 2, and Defense is 1.",
+                "Lord Crump drives it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Its rocket fists are separate targets with 2 HP and no defense; it sends them out once its own HP reaches twenty, and Flurrie's Gale Force with a perfect action command is sure to remove them.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple",
+              "revision": "5486982",
+              "quoted": [
+                "After its HP reaches twenty, Magnus von Grapple uses its turn to separate its hands",
+                "Its fists have Max HP of 2, an Attack of 4, and Defense of 0.",
+                "Notably, the X-Fists are guaranteed to be removed from battle by Flurrie's Gale Force with a perfect action command."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: While the fists are out it can only jump and stomp the ground, hitting Mario and his partner for 2 piercing damage, which a floating Flurrie is not hurt by, and each fist hits for 4.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple",
+              "revision": "5486982",
+              "quoted": [
+                "dealing two points of base piercing damage to both Mario and his partner (other than Flurrie, who is unaffected due to floating above the ground)",
+                "flies into a party member in one of two possible trajectories, dealing four points of base damage."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Piercing_attack",
+              "revision": "5523517",
+              "quoted": [
+                "Piercing attacks are damage-based attacks in the Super Mario role-playing games that ignore all or almost all defensive capabilities of the opponent."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If both fists are beaten, a new pair is back by its second turn afterwards; after that it picks the stomp 60% of the time and releases the fists 40%, and any fists still out when its HP runs out are defeated at once.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple",
+              "revision": "5486982",
+              "quoted": [
+                "a new pair returns to Magnus von Grapple's arms at the beginning of its second turn afterwards",
+                "it has, every turn until it releases them, a 60% chance to use Magnus von Punish and a 40% chance to release its X-Fists again.",
+                "Any X-Fists still present when Magnus von Grapple's HP is depleted are instantly defeated."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1704,
+      "name": "Doopliss (Chapter 4 boss)",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Doopliss",
+      "main_revision": "5522260",
+      "lines": [
+        {
+          "line": "Summary: The Chapter 4 boss from the Creepy Steeple, fought three times with 40 HP each time and an attack of 4, then 4, then 6 in the Palace of Shadow.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Doopliss",
+              "revision": "5522260",
+              "quoted": [
+                "is the main boss of Chapter 4.",
+                "Max HP || 40 || Attack || 4 || Defense || 0 || Location(s) || Creepy Steeple",
+                "Max HP || 40 || Attack || 4 || Defense || 0 || Location(s) || Twilight Trail, Creepy Steeple",
+                "Max HP || 40 || Attack || 6 || Defense || 0 || Location(s) || Palace of Shadow"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: In the first fight he changes into a shadowy outline of Mario once his HP drops below 20, and even if you reduce him to zero before that, he changes anyway and is left with 10 HP.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Doopliss",
+              "revision": "5522260",
+              "quoted": [
+                "Once Doopliss' HP drops below 20, he fights by transforming himself into a shadowy outline of Mario and attacking with his moves.",
+                "Even if Doopliss' health is reduced down to zero in the first fight before he copies Mario, his transformation in the battle still happens and Doopliss will have 10 HP"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Goombella cannot tattle his name, which shows as five question marks, and learning it later is what lets Mario hurt him; partner badges such as HP Plus P or Power Plus P are switched off in the second fight.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Doopliss",
+              "revision": "5522260",
+              "quoted": [
+                "Doopliss' name is represented by five question marks",
+                "tells him his real name, which weakens the power of his spell by making him vulnerable to Mario's attacks.",
+                "any badges that affect Mario's partners (i.e. HP Plus P or Power Plus P) are disabled during this fight"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In the Palace of Shadow rematch he hits harder: his Head Missile does 6, and he copies Mario or one of your partners and attacks as them.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Doopliss",
+              "revision": "5522260",
+              "quoted": [
+                "In this battle, Doopliss is a bit tougher, and has the ability to transform into Mario or one of his partners, and attacking as them.",
+                "(As Himself) Head Missile (6), Transform (turns into Mario or Partner)"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -460,6 +460,14 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   helper rules and the briefs written. Tip `84e0e64c`, tree clean, D139 free (D138 reserved by plan 101). Usage: 4
   percent of the five-hour window, 3 percent of the week. The Deck unreachable; Ollama up with every model lane D needs
   but one. Waiting for the maintainer's "go".
+- **2026-11-02, go.** The maintainer said "go" with every default (D139). Tip `46475a55` (the plan files committed first,
+  staged by name). Usage at go: 12 percent of the five-hour window, 8 percent of the week. **The two project tool
+  servers (the Deck rig and the docs server) dropped out of this chat at go**, so this chat cannot drive the Deck tonight;
+  the Deck also read unreachable before they dropped. Block R0's runbook is written for a second chat with the rig
+  (`assets/102-runbook-block-R0.md`). Fifteen wave 1 copies cut at `46475a55` (K0, A, B, C, D, E, F, G, H, J, N5 to N8,
+  X2), the library copied into the seven that measure; all fifteen helpers started at once, with the measurement lanes
+  told to hold their model runs until X2's baseline is done (one model on this PC; queued requests time out). The full
+  check started on the tip in the background; advisor consult 1 started.
 
 ## 13. Report
 

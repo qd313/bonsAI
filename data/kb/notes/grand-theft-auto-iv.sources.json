@@ -695,6 +695,164 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1512,
+      "name": "RPG",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/RPG_(HD_Universe)",
+      "main_revision": "2039240",
+      "lines": [
+        {
+          "line": "Summary: The most powerful weapon in the game: a direct hit destroys any target, and the blast hurts everything near it.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/RPG_(HD_Universe)",
+              "revision": "2039240",
+              "quoted": [
+                "The RPG is the most powerful weapon in the game, destroying any target with a direct hit and causing heavy casualities with splash damage."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: You aim over the shoulder, so you can strafe and shoot from behind cover; the rocket explodes by itself at its maximum range and can be deflected if its tip hits a solid surface at an angle of around 25 degrees.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/RPG_(HD_Universe)",
+              "revision": "2039240",
+              "quoted": [
+                "the player aims the launcher from the over-the-shoulder perspective, allowing them to strafe while aiming and while behind cover.",
+                "The rocket self-detonates when it reaches its maximum range.",
+                "The rocket can be deflected if the tip hits a solid structure in an angle of around 25 degrees."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The underground gun shops sell it for $15,000 plus $5,000 for each extra rocket once the mission Babysitting is done, and the easiest pickup is on a large boulder in the water north of Northwood. You do not need a direct hit on a helicopter, because the blast can make the pilot lose control and crash.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/RPG_(HD_Universe)",
+              "revision": "2039240",
+              "quoted": [
+                "The RPG can be purchased at the Underground Gun Shops for $15,000 plus $5,000 for each additional rocket.",
+                "Babysitting (GTA IV)",
+                "Northwood – Can be found on a large boulder in the water north of Northwood. This is the easiest RPG pickup in the city.",
+                "The player does not necessarily need a direct hit on the fuselage of a helicopter to destroy it as the force of a detonating rocket can cause the pilot to lose control and crash."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1513,
+      "name": "Molotov Cocktail",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Molotov_Cocktails",
+      "main_revision": "2076588",
+      "lines": [
+        {
+          "line": "Summary: A thrown bottle of Cherenkov Vodka that sets things on fire, and the only fire-based weapon you can use.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Molotov_Cocktails",
+              "revision": "2076588",
+              "quoted": [
+                "In Grand Theft Auto IV, Molotov Cocktails are made from bottles of Cherenkov Vodka.",
+                "It is the only fire-based weapon the player can use."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: One bottle sets an enemy on fire and drops him for a short time, and a second can burn him to death; armored NOOSE and FIB agents may need a third, because body armor suppresses the fire.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Molotov_Cocktails",
+              "revision": "2076588",
+              "quoted": [
+                "A single bottle can set an enemy on fire, causing them to fall to the ground for a limited time, although a second bottle can be enough to burn them to death",
+                "Armored targets like NOOSE/FIB agents may take a third one, as the body armor will suppress the fire."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Underground gun shops sell them for $500 after the mission The Master and the Molotov. From a car it is hard to use, as the bottle has to hit the target directly, but four bottles set a car ablaze and six destroy it or leave it unusable.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Molotov_Cocktails",
+              "revision": "2076588",
+              "quoted": [
+                "$500 (GTA IV, TLAD & TBoGT)",
+                "Molotov Cocktails can be purchased at the Underground Gun Shops for $500.",
+                "They can be used from cars, but it is difficult to do so as the Molotov would have to hit the target directly.",
+                "while four will set it ablaze, and six will completely destroy it or render it inoperable."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Underground_Gun_Shops",
+              "revision": "2063857",
+              "quoted": [
+                "Molotov Cocktail || $500 || - || The Master and the Molotov"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1514,
+      "name": "Grenade",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Grenades",
+      "main_revision": "2087377",
+      "lines": [
+        {
+          "line": "Summary: A thrown grenade you can drop at your feet, hold to cook before throwing, or throw back; if you hold it too long it beeps and then explodes in your hand.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Grenades",
+              "revision": "2087377",
+              "quoted": [
+                "the player can drop a live grenade to the ground, but must run for cover before it detonates.",
+                "One can also 'cook' a grenade (hold onto it while it counts down) for a short time before throwing it.",
+                "It begins beeping if it is held for too long, and if not thrown, will explode in the player's hands",
+                "it is possible to throw back grenades that have been thrown at the player."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: In GTA IV grenades are much more lethal to you than to enemies: unless one blows up very close to an enemy he will likely survive, and enemies run away from a grenade about to explode.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Grenades",
+              "revision": "2087377",
+              "quoted": [
+                "grenades are in fact much more lethal to the player than to enemies",
+                "unless a grenade explodes very close to an enemy, they will likely survive",
+                "The enemies will run away from a grenade that is about to explode"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Dropped from a moving car they beat Molotov Cocktails, because of their far larger blast, but keep driving so your own car is not caught. The underground gun shops sell them for $1,000 after the mission Deconstruction for Beginners.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Grenades",
+              "revision": "2087377",
+              "quoted": [
+                "Grenades can be dropped while driving, and are more effective for in-car use than Molotov Cocktails, due to their far superior radius of effect, however the player must take care to remain on the move",
+                "Can be purchased from the Underground Gun Shops after completing the mission Deconstruction for Beginners, for $1,000."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

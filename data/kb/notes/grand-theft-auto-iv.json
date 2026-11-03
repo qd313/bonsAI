@@ -133,6 +133,39 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "2071122",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1512,
+      "game_id": 19,
+      "section_type": "item",
+      "name": "RPG",
+      "card": "Summary: The most powerful weapon in the game: a direct hit destroys any target, and the blast hurts everything near it.\nUses: You aim over the shoulder, so you can strafe and shoot from behind cover; the rocket explodes by itself at its maximum range and can be deflected if its tip hits a solid surface at an angle of around 25 degrees.\nTips: The underground gun shops sell it for $15,000 plus $5,000 for each extra rocket once the mission Babysitting is done, and the easiest pickup is on a large boulder in the water north of Northwood. You do not need a direct hit on a helicopter, because the blast can make the pilot lose control and crash.",
+      "source_url": "https://gta.fandom.com/wiki/RPG_(HD_Universe)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2039240",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1513,
+      "game_id": 19,
+      "section_type": "item",
+      "name": "Molotov Cocktail",
+      "card": "Summary: A thrown bottle of Cherenkov Vodka that sets things on fire, and the only fire-based weapon you can use.\nUses: One bottle sets an enemy on fire and drops him for a short time, and a second can burn him to death; armored NOOSE and FIB agents may need a third, because body armor suppresses the fire.\nTips: Underground gun shops sell them for $500 after the mission The Master and the Molotov. From a car it is hard to use, as the bottle has to hit the target directly, but four bottles set a car ablaze and six destroy it or leave it unusable.",
+      "source_url": "https://gta.fandom.com/wiki/Molotov_Cocktails",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2076588",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1514,
+      "game_id": 19,
+      "section_type": "item",
+      "name": "Grenade",
+      "card": "Summary: A thrown grenade you can drop at your feet, hold to cook before throwing, or throw back; if you hold it too long it beeps and then explodes in your hand.\nUses: In GTA IV grenades are much more lethal to you than to enemies: unless one blows up very close to an enemy he will likely survive, and enemies run away from a grenade about to explode.\nTips: Dropped from a moving car they beat Molotov Cocktails, because of their far larger blast, but keep driving so your own car is not caught. The underground gun shops sell them for $1,000 after the mission Deconstruction for Beginners.",
+      "source_url": "https://gta.fandom.com/wiki/Grenades",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2087377",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

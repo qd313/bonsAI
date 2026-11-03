@@ -64,6 +64,7 @@ import {
 } from "../../../shared/dpad/focusNavigation";
 import { elementHasFocus, elementHasGamepadFocus, getUiDocument, uiGamepadFocusElement } from "../../../shared/dpad/uiDocument";
 import { pressThenHandRingOn } from "../../../shared/dpad/handRingOnWhenGone";
+import { refocusPanelWindowIfLost } from "../../../shared/dpad/navFocusRegistry";
 import { registerReplyStop, replyStopNavRef } from "../../../shared/dpad/replyStopRegistry";
 import { formatDeckyRpcError } from "../../../shared/deckyCall";
 import { kbNoteDisplayName } from "../../knowledge-library/buildKbNotesBlockElement";
@@ -182,9 +183,15 @@ function partsFor(replyKey: string): DemoteParts {
   return parts;
 }
 
-/** Steam's transfer onto the stop's own node, then a plain focus, then the check that decides. */
+/**
+ * Steam's transfer onto the stop's own node, then a plain focus, then the check that decides. First it asks the
+ * panel's window for the browser's focus when the page lost it, as `takeNavFocus` and the checklist steps do
+ * (strategyChecklistNav.ts): on the Deck the page was out of focus after Wrong tip and Undo, and a plain hop further
+ * down then died (plan98-P98-DEMOTE-01-game.json). A window that refuses changes nothing.
+ */
 function landOn(nav: NavHolder | undefined, el: HTMLElement | null | undefined): boolean {
   if (!el?.isConnected) return false;
+  refocusPanelWindowIfLost();
   try {
     nav?.current?.TakeFocus?.(true);
   } catch {

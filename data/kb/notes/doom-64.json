@@ -133,6 +133,39 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "543189",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1912,
+      "game_id": 17,
+      "section_type": "item",
+      "name": "Super shotgun",
+      "card": "Summary: The double-barrelled sawed-off shotgun: two shells per shot and 20 pellets per blast, about three times as damaging as the normal shotgun per shot. In Doom 64 it reloads much faster, in 1.53 seconds against 1.77 in Doom II, and it knocks you back a little when fired. It is one of the most essential weapons in Doom 64.\nUses: One well-aimed blast almost always kills two imps, one demon or one spectre. It lets you hold your own against tough monsters such as Hell knights, arachnotrons and mancubi, and it is often a better choice than the rocket launcher there, because shells are more plentiful than rockets and a short-range rocket blast can hurt you.\nTips: The pellets spread wide, even up and down, so it is wasteful at long range: switch to the shotgun to snipe, or to deal with a lone enemy in a maze. It uses the same shells as the shotgun.",
+      "source_url": "https://doomwiki.org/wiki/Super_shotgun",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "526406",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1913,
+      "game_id": 17,
+      "section_type": "item",
+      "name": "Plasma gun",
+      "card": "Summary: A rapid-fire gun that shoots bursts of blue plasma and shares your energy cells with the BFG9000. In Doom 64 it has a blue electric tube on top that buzzes constantly.\nUses: It is devastating against nearly any single enemy and can be considered the game's jack-of-all-trades. A continuous barrage stops an arachnotron or a mancubus in its tracks and can slow a baron of Hell to about half its normal speed and attack rate.\nTips: In Doom 64 it fires a little slower than on PC, one shot every 0.133 seconds, but there is no pause after you let go of the trigger and the shots travel faster. At long range enemies tend to move too much for a burst to hit, so fire in controlled bursts rather than holding the trigger.",
+      "source_url": "https://doomwiki.org/wiki/Plasma_gun",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "478391",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1914,
+      "game_id": 17,
+      "section_type": "item",
+      "name": "Berserk pack",
+      "card": "Summary: A dark gray medikit that raises your health to 100 percent if it was lower and makes your punches far stronger. It also fills the screen with a red haze, which lasts only three seconds in Doom 64.\nUses: It makes your punch ten times stronger, usually until the level ends or you die: enough to smash humanoids to a pulp, or sometimes kill a demon in one blow. Your current weapon switches to the fist when you pick it up, so you can end up suddenly unarmed.\nTips: The extra strength does not run out when the red haze fades, so do not stop punching because the screen has cleared. Use it hit-and-run: run up, punch, then retreat or dodge. A punch does not latch on like the chainsaw, so aim carefully.",
+      "source_url": "https://doomwiki.org/wiki/Berserk",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "577219",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

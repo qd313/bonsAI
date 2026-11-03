@@ -575,8 +575,14 @@ background sleep job before any pause (the scheduled check alone did not wake pl
      while the panel lacks focus; three new tests and the repro promoted; read by the session against consult 2's shape:
      it matches) land together in chain 2 (`46475a55`). On the Deck the fourth Down will most likely land on the suggestion
      chips, past the open details panel: a moving press, not yet the stop a person expects; Steam nodes for the details
-     tabs and the chip grid are the follow-up entry (the bookkeeper files it, ★★ focus). Lane D was running its picture
-     measurements in `p102-d`: read its report; it lands a shape only by its brief's rule.
+     tabs and the chip grid are the follow-up entry (the bookkeeper files it, ★★ focus). **Lane D is done** (`be3fe27f` on top of
+     `58f75ece`; both land in chain 2): the "in-question" shape met the landing rule and is the default. With the game
+     handed over, the AI named the right game 91 and 92 times in a hundred (67 and 70 before), no God of War mix-up in any
+     run; **but it named the place on screen about half as often (29 and 30 against 52 and 53)**, often naming the game and
+     stopping. The rule did not weigh the place; the maintainer confirms or reverts (call 5). The model sweep: qwen3.5:4b
+     and gemma4:e4b-it-qat name the game 97 times in a hundred and the place 70 and 64 with today's shape, far above the
+     Deck's starter model; qwen2.5vl:3b 100 and 36; llava:7b 97 and 6. Three of the eleven pictures live in the repo's
+     `screenshots/` folder, not the workshop's, so the scoring script needs `--root` there (its default misses them).
   5. Then: the bookkeeper's sweep (the K0 helper resumed, or a fresh general helper with `.claude/agents/bookkeeper.md`),
      from the result list in this log: every landed lane to Deck check owed naming its row; the three measurement lanes'
      numbers into their entries (E: the crowding entry and a new ★★ measurement bug "the answer test's samples are not

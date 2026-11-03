@@ -45,6 +45,61 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5535999",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2104,
+      "game_id": 22,
+      "section_type": "item",
+      "name": "Mushroom and Triple Mushrooms",
+      "card": "Summary: A Mushroom gives you a short speed boost. Triple Mushrooms give you three boosts that you use one at a time.\nUses: Ramming another racer while boosting from a Mushroom makes them spin out. The triple's effect wears off once the last Mushroom is used.\nTips: In Bowser's Castle, a Mushroom or a Star lets you drive through the grass of the first courtyard and cut off the first two turns.",
+      "source_url": "https://www.mariowiki.com/Dash_Mushroom",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5536331",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2105,
+      "game_id": 22,
+      "section_type": "item",
+      "name": "Super Mushroom (Golden Mushroom)",
+      "card": "Summary: What later games call the Golden Mushroom is the Super Mushroom here, a yellow-capped mushroom whose icon has a glow behind it.\nUses: It gives you endless speed boosts for a limited time: you can boost your speed as many times as you want while it lasts.\nTips: In the item window, look for the yellow-capped mushroom with the glow behind it.",
+      "source_url": "https://www.mariowiki.com/Golden_Dash_Mushroom",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5485845",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2106,
+      "game_id": 22,
+      "section_type": "item",
+      "name": "Super Star",
+      "card": "Summary: A Super Star makes you invincible for about ten seconds: you can drive through items, course obstacles and other racers.\nUses: You also drive about a third faster and can go off-road unhindered. A racer you hit flips over and loses the item they are holding.\nTips: If you hit a wall hard enough that your character exclaims, the Star ends at once.\nTips: A Star that is running when Lightning strikes keeps you from shrinking, and a Star destroys a Spiny Shell without hurting you.",
+      "source_url": "https://www.mariowiki.com/Super_Star",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5532618",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2107,
+      "game_id": 22,
+      "section_type": "item",
+      "name": "Lightning (Thunder Bolt)",
+      "card": "Summary: Lightning, called the Thunder Bolt in this game, shrinks every other racer, which slows them down and lets other karts flatten them.\nUses: Shrunk racers cannot use Mushrooms, Super Stars or Boos from their item windows, but they keep the items they hold. Karts that are not shrunk can ram smaller ones to flatten them, and two shrunk racers who run into each other crush each other.\nTips: A Super Star or a Boo that is already running when the bolt strikes keeps you from shrinking. While Lightning is in effect a sound like a tiny alarm plays.",
+      "source_url": "https://www.mariowiki.com/Lightning",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5526797",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2108,
+      "game_id": 22,
+      "section_type": "item",
+      "name": "Fake Item Box",
+      "card": "Summary: A trap that looks like a normal Item Box, but its question mark is upside down. A kart that hits one is blasted into the air.\nUses: Hold it behind your kart and it blocks incoming shells, as a Banana does. Unlike a Banana it cannot be tossed forward, and if you place it in midair it floats.\nTips: Look at the question mark when you drive up to a box: the fake one's is upside down.",
+      "source_url": "https://www.mariowiki.com/Fake_Item_Box",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5519411",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

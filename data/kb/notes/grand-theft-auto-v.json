@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 1400,
+      "game_id": 18,
+      "section_type": "enemy",
+      "name": "Police: LSPD, sheriff and Highway Patrol",
+      "card": "Summary: The Los Santos Police Department (LSPD) covers the city of Los Santos, its airport and its port, the Los Santos County Sheriff's Department (LSSD) covers Blaine County as well, and the San Andreas Highway Patrol (SAHP) patrols the highways on Police Bikes.\nWeak points: A gunshot to the legs kills an LSPD officer or sheriff's deputy, either at once or by blood loss. Officers are known to take cover behind or stand near a burning car that is about to explode.\nTips: The sheriff's deputies drive and fight just like the LSPD, in Sheriff Cruisers.\nTips: Highway Patrol officers shoot Pistols at you once you fire a weapon or reach two stars; those who spawned on a bike chase you on it, and those who spawned standing only chase on foot, though they may take civilian cars.",
+      "source_url": "https://gta.fandom.com/wiki/Los_Santos_Police_Department_(HD_Universe)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2081922",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1401,
+      "game_id": 18,
+      "section_type": "enemy",
+      "name": "Police at one and two stars",
+      "card": "Summary: At one star officers, soldiers and security guards chase you, and police and soldiers try to arrest you at gunpoint. At two stars police shoot to kill, drive much more aggressively to ram you off the road, and at least three police cars chase you.\nWeak points: At one star the police only hold you at gunpoint, and fighting back or running away raises it to two stars at once. Security guards and police on motorcycles open fire straight away instead of arresting you.\nTips: At two stars police cars may wait at the roadside to ambush you, or blend into traffic with their lights and sirens off until you draw near.\nTips: Police only try a vehicular arrest after a chase has lasted about a minute without you hurting any cop and you stop your vehicle.",
+      "source_url": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_V",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2083887",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1402,
+      "game_id": 18,
+      "section_type": "enemy",
+      "name": "Police at three stars",
+      "card": "Summary: At three stars police set up roadblocks of police cars and police transporters, sometimes with a spike strip laid out behind them, and a Police Maverick helicopter shadows you with NOOSE TRU officers riding on board.\nWeak points: The helicopter stays on station until every rifleman on board is killed, then returns to base, but another one replaces it in short order. At night it shines a spotlight on you so the ground units can find you.\nTips: Every officer who spawns at three stars or more wears a bulletproof vest, and officers run up to a car you have stopped in, drag you out and kill you on the spot, so keep moving.",
+      "source_url": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_V",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2083887",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1403,
+      "game_id": 18,
+      "section_type": "enemy",
+      "name": "NOOSE TRU at four and five stars",
+      "card": "Summary: At four stars NOOSE TRU teams come to kill you, three officers to a vehicle, in FIB Grangers in Los Santos or Sheriff SUVs in Blaine County, with two hanging off the sides firing at you while more shoot from Police Mavericks overhead. At five stars the streets fill with police and almost no civilian traffic.\nWeak points: They wear body armour and do not lose health quickly, but a single headshot kills them even in a helmet, and any gunshot to the legs kills them at once or by blood loss.\nTips: If you hole up in a building or behind tight cover they use tear gas to force you out, and a Police Maverick may land or rappel four officers down to you.\nTips: Shooting down a pursuing Police Maverick can itself raise you to four stars, though it may take two or more downed units.",
+      "source_url": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_V",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2083887",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1404,
+      "game_id": 18,
+      "section_type": "enemy",
+      "name": "Soldiers and Rhino tanks at Fort Zancudo",
+      "card": "Summary: The military is never called in to chase you, but near Fort Zancudo soldiers in Crusaders and Barracks join a chase and try to arrest you, and on the base itself they shoot to kill.\nWeak points: A Rhino tank takes about 3 to 4 tank shells, 5 to 6 RPG shots or 7 to 8 Grenade Launcher shots to blow up, and a hit on its rear may open the fuel tank, so that a lit fuel trail stops it after a few minutes, though its turret keeps working.\nTips: Soldiers fire a Rocket Launcher at an aircraft if it is hijacked in the base or you are flying one of them, and patrolling Rhinos may leave the base to chase you, using their cannons, if you stay too close for too long.\nTips: Entering the base gives four stars; flying over it gives two, which quickly become four if you do not move away; and firing any rocket from an aircraft gives five stars at once.",
+      "source_url": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_V",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2083887",
+      "crawled_at": "2026-11-02"
+    }
+  ]
+}

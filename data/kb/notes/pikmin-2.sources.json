@@ -625,6 +625,299 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1810,
+      "name": "Eggs (nectar eggs)",
+      "kind": "item",
+      "main_page": "https://www.pikminwiki.com/Nectar_egg",
+      "main_revision": "349843",
+      "lines": [
+        {
+          "line": "Summary: A white, semi-round object found in cave alcoves and a few places above ground. Attack it and it breaks open and releases nectar, or sometimes other things, including living creatures. In Pikmin 2 the eggs that Honeywisps hold work the same as eggs on the ground.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Nectar_egg",
+              "revision": "349843",
+              "quoted": [
+                "A nectar egg (known as an egg prior to Pikmin 3) is a white, semi-round object found in alcoves of caves, and on specific places aboveground.",
+                "They can be attacked, and when broken, they release nectar, although they can also release other things including living creatures.",
+                "The eggs held by Honeywisps in Pikmin 2 function identically to grounded eggs."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: What comes out is chosen at random at the moment the egg breaks: a single drop of nectar half the time (50 percent), two drops 35 percent, a drop of ultra-bitter spray 5 percent, a drop of ultra-spicy spray 5 percent, and a group of ten Mitites 5 percent. In story mode, if the draw is a spray you have not unlocked yet, you get a single drop of nectar instead.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Nectar_egg",
+              "revision": "349843",
+              "quoted": [
+                "In Pikmin 2, the contents of an egg are picked at random from a list, and they're only chosen on the exact moment the egg breaks, not when the egg is created",
+                "A single drop of nectar || 50%",
+                "Two drops of nectar || 35%",
+                "A drop of ultra-bitter spray || 5%",
+                "A drop of ultra-spicy spray || 5%",
+                "A group of ten Mitites || 5%",
+                "In story mode, if the game decided on a drop of spray nectar, but the player has not yet unlocked that spray, the outcome will instead be changed to a single drop of nectar."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You can break one with Pikmin, with leader punches, or with an enemy projectile such as a Gatling Groink's mortars. A Purple Pikmin thrown at it breaks it at once and defeats any Mitites inside straight away. Using a leader is also recommended, because a thrown Pikmin that is called back may drink the nectar and waste it.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Nectar_egg",
+              "revision": "349843",
+              "quoted": [
+                "To destroy an egg, it must be attacked with Pikmin, punched at a few times with a leader, or destroyed by an enemy projectile, like a Gatling Groink's mortars.",
+                "For Pikmin 2, it is advisable to throw a Purple Pikmin onto an egg, as this will immediately break it and contained Mitites will be instantly defeated.",
+                "It is also recommended to destroy an egg with a leader, as a Pikmin thrown at the egg may drink the nectar after being called back, wasting it."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1811,
+      "name": "Blue Pikmin",
+      "kind": "item",
+      "main_page": "https://www.pikminwiki.com/Blue_Pikmin",
+      "main_revision": "354525",
+      "lines": [
+        {
+          "line": "Summary: The only permanent Pikmin type that can safely go into water; the other types flail in panic and drown. In Pikmin 2 five are found in the Awakening Wood, chasing Wolpoles beyond an electric gate that you break down with Yellow Pikmin.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Blue_Pikmin",
+              "revision": "354525",
+              "quoted": [
+                "Blue Pikmin are the only permanent Pikmin type which can safely enter water and traverse the floor underneath",
+                "will simply flail around in panic before drowning if they are immersed",
+                "In Pikmin 2, 5 Blue Pikmin are found in the Awakening Wood.",
+                "They are found chasing a few Wolpoles beyond an electric gate guarded by a Cloaking Burrow-nit at the north of the map.",
+                "Olimar and Louie break down the gate with the Yellow Pikmin"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Required: the Shower Room (its entrance is blocked by a clog underwater), the Submerged Castle (the entrance is underwater and only Blue Pikmin can enter, even with exploits), and the second half of the Valley of Repose, where Blues must destroy a white bramble gate and a clog just past the Emergence Cave; that opens the Subterranean Complex and Frontier Cavern. Only Blue Pikmin can use seesaw blocks that are underwater.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Blue_Pikmin",
+              "revision": "354525",
+              "quoted": [
+                "Blue Pikmin are required to collect these treasures or enter these caves, and there are no glitches or exploits that allow other Pikmin types to do so.",
+                "Shower Room: The entrance to the cave is blocked by a clog underwater.",
+                "Submerged Castle: Only Blue Pikmin can enter this cave, as its entrance is underwater. Even with exploits, only Blue Pikmin are allowed to enter.",
+                "to access the parts of the Valley of Repose not accessible on day 1 and 2, Blue Pikmin must be used to destroy a white bramble gate and a clog just past the Emergence Cave.",
+                "Subterranean Complex",
+                "Frontier Cavern",
+                "Air Brake: Only Blue Pikmin can use the seesaw blocks that are underwater."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In Pikmin 2 an idle Blue Pikmin that sees a Pikmin drowning nearby runs in, picks it up and throws it to shore, unless the drowning one is too far away. They can also lift a Purple Pikmin out of water. Otherwise their attack, toughness and speed are about average, and they are more likely to die than other types in Pikmin 2.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Blue_Pikmin",
+              "revision": "354525",
+              "quoted": [
+                "In the first two games, if they are idle and see a nearby Pikmin drowning in water, they will quickly run to them, pick them up, and throw them to shore. However, they will not rescue Pikmin if they are a certain distance away, so they can't always be relied on.",
+                "Blue Pikmin have largely average attack power, durability, mobility, digging speed and throw distance.",
+                "Interestingly, Blue Pikmin are more likely to die than other types in Pikmin 2"
+              ]
+            },
+            {
+              "page": "https://www.pikminwiki.com/Purple_Pikmin",
+              "revision": "353333",
+              "quoted": [
+                "Despite their weight, Blue Pikmin can grab them and chuck them out of water just fine in Pikmin 2."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1812,
+      "name": "Yellow Pikmin",
+      "kind": "item",
+      "main_page": "https://www.pikminwiki.com/Yellow_Pikmin",
+      "main_revision": "350121",
+      "lines": [
+        {
+          "line": "Summary: Pikmin with large ears that can be thrown higher than any other type, which reaches high ledges and lets them latch onto the Beady Long Legs. Pikmin 2 makes them immune to electricity. Five are found in the Perplexing Pool; White Pikmin are needed just to reach them, and a Fiery Bulblax guards the entrance to their Onion.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Yellow_Pikmin",
+              "revision": "350121",
+              "quoted": [
+                "they have large ears and can be thrown higher than other Pikmin, which is useful for collecting high-up objects, latching on to enemies like the Beady Long Legs",
+                "Pikmin 2 introduces electrical hazards, with Yellow Pikmin now being immune to them",
+                "a group of five Yellow Pikmin are found in the Perplexing Pool near the center of the map",
+                "White Pikmin are necessary just to reach them, and a Fiery Bulblax guards the entrance to their Onion."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Only Yellow Pikmin can destroy the electric gate in front of the Blue Onion, and they handle electric enemies and hazards that kill other types on contact. None of it is strictly required: no task in Pikmin 2 needs them exclusively. Their old bomb-rock carrying does not work in Pikmin 2, where bomb rocks are only a hazard.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Yellow_Pikmin",
+              "revision": "350121",
+              "quoted": [
+                "The electric gate that blocks the path to the Blue Onion can only be destroyed by Yellows.",
+                "This newfound electrical immunity makes Yellow Pikmin very helpful in dealing with electrical enemies and hazards that can instantly kill other Pikmin types, as well as tearing down electric gates.",
+                "There is no task in Pikmin 2 that requires Yellow Pikmin exclusively.",
+                "Their ability to carry bomb-rocks does not factor into this game, since bomb-rocks now only appear as a hazard for the leaders' squads and cannot be carried by any Pikmin."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They are recommended against a pair of Anode Beetles, which make a line of electricity that fatally shocks any non-Yellow Pikmin touching it; against Anode Dweevils, which shock every non-Yellow Pikmin under them after being attacked; and against the Titan Dweevil's electric weapon.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Yellow_Pikmin",
+              "revision": "350121",
+              "quoted": [
+                "Anode Beetle: Two Anode Beetles can create a line of electricity between themselves, fatally electrocuting any non-Yellow Pikmin that come in contact.",
+                "Anode Dweevil: Anode Dweevils, after being attacked themselves, produce an electric field directly below them, shocking and killing any non-Yellow Pikmin underneath.",
+                "Titan Dweevil: One weapon this boss has creates several metal balls that land in the arena and chain together a long electrical current between themselves and the weapon, instantly killing any non-Yellow Pikmin that touch the chain of sparks."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1813,
+      "name": "Purple Pikmin",
+      "kind": "item",
+      "main_page": "https://www.pikminwiki.com/Purple_Pikmin",
+      "main_revision": "353333",
+      "lines": [
+        {
+          "line": "Summary: Purple Pikmin have the strength of ten Pikmin. They are first found at a pair of Violet Candypop Buds in the Emergence Cave, where a treasure that needs 101 Pikmin to lift is waiting.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Purple_Pikmin",
+              "revision": "353333",
+              "quoted": [
+                "These Pikmin have the strength of 10 Pikmin",
+                "When Olimar and Louie venture into the Emergence Cave, they see the top half of a globe, but it requires more than 100 Pikmin to lift – it needs 101.",
+                "find a pair of Violet Candypop Buds"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Required for the Spherical Atlas, the first treasure that opens a new area and needs 101 Pikmin, and for the Geographic Projection, which is the same; for the Professional Noisemaker, which sits inside the Waterwraith; and for the Doomsday Apparatus, which needs 1000 Pikmin or 100 Purples. They are also what makes the Waterwraith vulnerable. The best place to get that many is the Subterranean Complex: on sublevel 8, use the Queen Candypop Buds first and then the Violet ones to make 15 Purples and 2 of another type.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Purple_Pikmin",
+              "revision": "353333",
+              "quoted": [
+                "Spherical Atlas: The first \"new area\" treasure in the game requires 101 Pikmin to carry, meaning some Purple Pikmin will have to be used.",
+                "Geographic Projection: Same as the Spherical Atlas.",
+                "Professional Noisemaker: The treasure is inside the Waterwraith, which requires Purple Pikmin to defeat.",
+                "Doomsday Apparatus: This treasure requires 1000 Pikmin to carry, or 100 Purple Pikmin.",
+                "Waterwraith: The creature is invulnerable, but Purple Pikmin stomps make it vulnerable to all Pikmin attacks.",
+                "The best place to get so many would be the Subterranean Complex.",
+                "until you reach the eighth one, with an exit geyser, Candypop Buds and some eggs.",
+                "Use the Queen Candypop Buds first and the Violet Candypop Buds after to produce 15 Purple Pikmin and 2 Red Pikmin, Blue Pikmin or Yellow Pikmin."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Their landing thump stuns most enemies one time in three, for five seconds, and a small homing steer puts them onto a nearby enemy, so the aim need not be exact. The thump kills Shearwigs and Dwarf Bulborbs, breaks nectar eggs at once, defeats Mitites in a wide radius, switches off fire geysers and electric wires, and counts as an attack against poison emitters and Fiery Bulblaxes. They do not panic at Mitites or at the roar of Emperor Bulblaxes, but they are slow, and slower still when carrying. Some bosses are harder to stun or cannot be stunned.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Purple_Pikmin",
+              "revision": "353333",
+              "quoted": [
+                "Most enemies have a one in three chance of being stunned, and they will stay stunned for a full five seconds.",
+                "a small homing system will swerve the Pikmin's fall and make it land on a nearby enemy",
+                "fatally injuring smaller, more fragile creatures such as Shearwigs and Dwarf Bulborbs",
+                "This strong landing destroys nectar eggs immediately, defeats Mitites in a wide radius, and can instantly deactivate fire geysers and electrical wires.",
+                "Because the \"thud\" counts as an attack, it can be used to damage poison emitters and Fiery Bulblaxes",
+                "They also do not panic when encountering Mitites or hearing the roar of Emperor Bulblaxes.",
+                "Purple Pikmin cannot move as quickly as other Pikmin types, and move even slower when carrying objects.",
+                "Some bosses are harder to stun, or may not be stunned at all"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1814,
+      "name": "White Pikmin",
+      "kind": "item",
+      "main_page": "https://www.pikminwiki.com/White_Pikmin",
+      "main_revision": "355847",
+      "lines": [
+        {
+          "line": "Summary: The smallest and fastest Pikmin: flowered ones run at least as quickly as a leader with Rush Boots. Their red eyes let them find treasure that is completely buried underground. In Pikmin 2 you make them by throwing Pikmin into the Ivory Candypop Buds on the third sublevel of the White Flower Garden.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/White_Pikmin",
+              "revision": "355847",
+              "quoted": [
+                "White Pikmin are smaller than other types of Pikmin.",
+                "They are the fastest of all Pikmin, such that, when flowered, they run at least as quickly as leaders equipped with Rush Boots.",
+                "They have red eyes that in Pikmin 2 allow them to locate treasures that are completely buried underground",
+                "Captain Olimar first finds the White Pikmin in the White Flower Garden.",
+                "On the 3rd sublevel, he runs across 3 Ivory Candypop Buds, and throws his available Pikmin into them to turn them into White Pikmin."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Needed for every fully buried treasure: no other type can do it, exploits included. They also stand through poison gas without choking, so they matter when destroying poison emitters, though other types can do it with difficulty. The page recommends them, though they are not strictly needed, against the Doodlebug, the Munge Dweevil and the Titan Dweevil's poison weapon, and for treasures behind poison-emitter gates such as the Seed of Greed, the Anti-hiccup Fungus and the Geographic Projection.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/White_Pikmin",
+              "revision": "355847",
+              "quoted": [
+                "White Pikmin are needed for the following treasures and tasks, as no other Pikmin type is up for the job, not even if exploits are used.",
+                "Any and all fully buried treasures.",
+                "White Pikmin also possess the unique ability to be able to stand through poisonous gases without choking to death, as do Bulbmin.",
+                "This makes them quite important when taking out poisonous enemies and destroying poison emitters, although other types of Pikmin might still be able to cause damage, with some difficulty.",
+                "White Pikmin are recommended for the following tasks, although they are not strictly necessary.",
+                "Doodlebug: They can occasionally shoot gas clouds that can choke non-White Pikmin",
+                "Munge Dweevil: This member of the Dweevil family can expel a poisonous compound if provoked enough, but they can be attacked with any Pikmin type.",
+                "Titan Dweevil: This boss can shoot poison clouds out of one of its weapons.",
+                "Seed of Greed: The section of the Wistful Wild with this treasure is blocked off by two gates with poison emitters",
+                "Anti-hiccup Fungus: Same as Seed of Greed.",
+                "Geographic Projection: There is a gate covered in poison emitters blocking the way to the treasure."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If an enemy eats one, it ejects poison that hurts the eater at once, often enough to kill a small enemy like a Dwarf Orange Bulborb, but the Pikmin still dies, so keep that as a last resort. Their attack power matches the standard types in Pikmin 2.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/White_Pikmin",
+              "revision": "355847",
+              "quoted": [
+                "Upon being eaten, White Pikmin eject a poisonous fluid into the eater, which poisons them. This causes instant damage, and is often enough to kill smaller enemies, like a Dwarf Orange Bulborb. With that said, this does not prevent the Pikmin's death, so it should be used as a last resort.",
+                "but match the strength of the standard types in Pikmin 2."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

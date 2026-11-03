@@ -399,7 +399,7 @@ Log, one row per consult: time, the question in one line, the answer in one line
 
 | Time | Question | Answer | What changed | Cost |
 |---|---|---|---|---|
-| 2026-11-02 22:58 to 23:02 UTC | Consult 1: do the fifteen wave 1 briefs match the code at `46475a55`? | Ten hold; five need corrections: K0 (count from the seed, not the brief's sentence; the bookkeeper is exempt from rules 21 and the quick-check ban), A (never run the script before the fix or with the report on: its dated file is X2's), C (the Down out of the rows is at line 692, not 598; the registry hop is not healed either), D (the scoring script names its report by the date alone: add a label), the note lanes (the subject lists repeat notes the seed has for Super Mario 64, Pikmin 2, Doom 64 and Donkey Kong 64) | Each correction sent to the running lane as a message and written into the briefs file; the N9 to N12 briefs corrected before they are cut | about 87k tokens, 4 min |
+| 2026-11-02 22:59 to 23:03 EST | Consult 1: do the fifteen wave 1 briefs match the code at `46475a55`? | Ten hold; five need corrections: K0 (count from the seed, not the brief's sentence; the bookkeeper is exempt from rules 21 and the quick-check ban), A (never run the script before the fix or with the report on: its dated file is X2's), C (the Down out of the rows is at line 692, not 598; the registry hop is not healed either), D (the scoring script names its report by the date alone: add a label), the note lanes (the subject lists repeat notes the seed has for Super Mario 64, Pikmin 2, Doom 64 and Donkey Kong 64) | Each correction sent to the running lane as a message and written into the briefs file; the N9 to N12 briefs corrected before they are cut | about 87k tokens, 4 min |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -472,7 +472,7 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   X2), the library copied into the seven that measure; all fifteen helpers started at once, with the measurement lanes
   told to hold their model runs until X2's baseline is done (one model on this PC; queued requests time out). The full
   check started on the tip in the background; advisor consult 1 started.
-- **23:10 UTC: consult 1 back** (§ 7); corrections sent. **The ratchet is red at the tip:** `docs/roadmap.md` reads 100.61 KB
+- **23:09 EST (the PC's clock; every time below is EST): consult 1 back** (§ 7); corrections sent. **The ratchet is red at the tip:** `docs/roadmap.md` reads 100.61 KB
   against its 100 KB ceiling (it was 103,513 bytes at `84e0e64c`, before tonight), so every code landing waits for K0, which
   trims it. **Lane B done** (`6ca0e0b1`: the Sims 4 note's first sentence now follows the wiki's line, "firefighters come on
   their own when a smoke alarm is in the room where the fire breaks out", with the page cited; one more commit asked for:
@@ -480,7 +480,7 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   the write step factored into a helper, two tests, a hand run that left the research folder unchanged). **Lane G's
   rewrites ready** (fifteen cards, the scratch library built, the patch in the workshop; waiting for the model). Lane X2's
   first run wrote the two dated files and renamed them `-p102-before`. Block R0's runbook committed (`196910fb`).
-- **23:20 UTC: the baseline is red at the tip, on one thing.** The full check stops at its first step, the ratchet:
+- **23:10 EST: the baseline is red at the tip, on one thing.** The full check stops at its first step, the ratchet:
   `docs/roadmap.md` is 100.61 KB against its 100 KB ceiling. It crossed the line on 2026-10-26 in plan 100's last docs
   sweep (`46411790`, 101,609 bytes) and grew again on 2026-10-28 (`3ac3e810`, 103,020 bytes); nobody ran the check
   after. K0 trims it as part of its audit; every landing waits for K0; the full check runs again on K0's tip for the real
@@ -489,14 +489,14 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   model: in five of the six cases the same notes attached before and after, three of the six swung between 0 and 3 of 3 on
   the old library across nine runs, and the test's word lists are too narrow in three places; only the Portal 2 gels case
   is a worse answer. Lane N9 started (copy at `196910fb`). Lane B's second commit (`0d836cfb`) fixes the glossary entry.
-- **23:40 UTC: lane X2's first half done** (search 80 s, tips 8 s, the answer test 6.5 min): held-back search, right note
+- **23:13 EST: lane X2's first half done** (search 80 s, tips 8 s, the answer test 6.5 min): held-back search, right note
   in the first three, the blend 90.8, meaning alone 92.2, word alone 85.6 (so the ★★★★ "loses to its meaning half" claim
   holds; § 8 corrected); tips 17 of 24 reach one, 15 of 22 the right one; **the answer test on the unchanged library read
   facts kept 71.2 against 67.2 on 2026-10-25 and contradictions 94.4 against 96.3: a four-point swing with nothing
   changed.** The model released to lanes E and G. **Lane H done** (three commits, 19 of 24 sentences reach a tip and 17 the
   right one, none wrong; one more commit asked for: the pair must also see network, wifi, lan, list, ollama, address or
   deck, so an in-game "computer terminal" question cannot reach the tip).
-- **00:05 UTC: three content lanes done, waiting for the quality read.** N7 Super Mario 64 (15 notes, `b5c0cb0c`,
+- **23:16 EST: three content lanes done, waiting for the quality read.** N7 Super Mario 64 (15 notes, `b5c0cb0c`,
   `bbebea80`, `c6394ee6`; it found the seed's cap timings wrong: the Metal and Vanish Caps last about twenty seconds, not
   a minute, so lane M1 (Haiku) fixes seed sections 234, 237 and 238); N5 Grand Theft Auto V (15 notes, `a08b5a2b`,
   `cf2fe03e`, `39178113`); N6 Grand Theft Auto IV (15 notes, four commits to `4406c6d6`; it notes seed 221's "sixty
@@ -510,7 +510,7 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   for Skyrim SE squeezed; the Cyberpunk wiki has no licence at all, its maintainer says it will not get one; Stardew's
   sources are NonCommercial or mixed; the build and publish checks do not accept CC0 yet). The model: E, G and F running
   their evals; D waits.
-- **00:45 UTC: K0 committed and landing** (`2c78d9ae`; `docs/roadmap.md` down to about 92 KB, the four calls closed, D139
+- **23:22 EST: K0 committed and landing** (`2c78d9ae`; `docs/roadmap.md` down to about 92 KB, the four calls closed, D139
   written, 15 testing rows, the quick check green in its copy; its landing is running the shared checkout's gates). **Lane E
   done, the finding of the night:** the facts-kept drop is mostly noise. Of the six cases, only the Portal 2 gels is a worse
   answer (0 of 13 on today's library); two are too-narrow phrase lists (the same correct reply failed on the old library too);

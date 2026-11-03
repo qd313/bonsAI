@@ -1,0 +1,316 @@
+{
+  "wiki": "GTA Wiki (https://gta.fandom.com/api.php)",
+  "licence_printed_by_fetcher": "CC-BY-SA https://www.fandom.com/licensing",
+  "licence_stored": "CC-BY-SA-3.0 (the fetcher prints no version; 3.0 follows Fandom's licensing page and this repo's data/kb/NOTICE.md, which lists the GTA Wiki as CC-BY-SA-3.0)",
+  "game_id": 19,
+  "game": "Grand Theft Auto IV",
+  "read_on": "2026-11-02",
+  "sections": [
+    {
+      "section_id": 1500,
+      "name": "Wanted level one star (police)",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+      "main_revision": "2082538",
+      "lines": [
+        {
+          "line": "Summary: One star is the only level where the police do not use their guns; they try to arrest you instead.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "This is the only level where the police will not use their firearms",
+                "Instead they will seek to arrest the player."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The search circle at one star is about two city blocks across, and police cars chase at a moderate speed and try to box you in rather than ram you.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "Police Cars will chase the player at moderate speed, trying to corral and box in rather than collide with the player's vehicle.",
+                "The search radius for one star is approximately two city blocks in size."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: One star comes from minor things such as attacking civilians, damaging a vehicle, stealing a car in sight of police or passing a toll booth without paying. On foot you can resist arrest, but that jumps you to two stars and the police start shooting; keeping a one-star level for a while also leads to two stars.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "One star is for relatively minor offences",
+                "Attacking civilians",
+                "Damaging a vehicle",
+                "Stealing a vehicle of any type in sight of any authority",
+                "Passing a toll booth without paying",
+                "The player can get arrested while on foot (only with one star) or in a stationary vehicle.",
+                "In the former case, the player can resist arrest, which will immediately spark a two-star wanted level and cause the police to start firing their guns.",
+                "Maintaining a one-star wanted level for a certain amount of time"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1501,
+      "name": "Wanted level two stars (police shotguns)",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+      "main_revision": "2082538",
+      "lines": [
+        {
+          "line": "Summary: From two stars the police use their guns, which can include pump shotguns, and in chases they try to overtake you or run you off the road.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "From two stars onwards, the police will use their firearms, which may include pump shotguns.",
+                "During chases, they will try to overtake the player or run them off-road."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Danger: More police cars arrive and fit officers in the front passenger seats step out with pump shotguns; if you crash, they use their cars to box you in.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Liberty_City_Police_Department_(HD_Universe)",
+              "revision": "2076054",
+              "quoted": [
+                "When the player reaches two stars, additional police vehicles are sent to the area, and the officers in the front passenger seats of the vehicles will step out wielding Pump Shotguns (if fit cops are spotted)."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "They will also use their cars to try and box the player in if they crash."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Two stars come from firing a gun or setting off an explosion near an officer, repeatedly punching an officer, killing many people quickly, destroying a fuel pump at a gas station or a Gruppe 6 Securicar, and resisting arrest.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "Discharging a firearm or detonating an explosive device in the vicinity of a police officer",
+                "Repeatedly punching a police officer",
+                "Killing many people in a short space of time",
+                "Destroying a fuel pump at a gas station",
+                "Destroying a Gruppe 6 Securicar",
+                "Resisting arrest"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1502,
+      "name": "Wanted level three stars (NOOSE, Police Maverick)",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+      "main_revision": "2082538",
+      "lines": [
+        {
+          "line": "Summary: Three stars bring NOOSE, who set up roadblocks on main roads and bridges and send Cruisers and Patriots (the Patriots try to ram you head-on), plus a Police Maverick overhead that shines a spotlight on you at night and fires when its officers get a clear shot.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "The NOOSE Patriotism and Immigration Authority will step in, setting up roadblocks on main roads and bridges and deploying Cruisers and Patriots to track the player down.",
+                "The NOOSE Patriots will attempt to ram the player head-on",
+                "The LCPD will also deploy a Police Maverick, which will shine a spotlight on the player at night and open fire if the police officers on board get a clear shot."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The helicopter now and then breaks off and retreats if you go underground, stay inside a large structure for a long time, or kill both riflemen on board.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "The helicopter will periodically break off from pursuit and retreat if the player goes underground, stays inside a large structure for a long time, or kills both riflemen on board."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: From three stars you can no longer board the subway, and Police Predator patrol boats are sent if you are in or near water. Three stars come from killing or wounding an officer with a gun, or from carrying on with the damage and fighting back at the police.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "From three stars onwards, the player will lose the ability to board the subway.",
+                "Police Predators are dispatched if the player is in or near water.",
+                "Killing or wounding a police officer with a firearm",
+                "Continuing to cause collateral damage (killing civilians/destroying vehicles)",
+                "Continuing to retaliate against the Police."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Police_Predator",
+              "revision": "2063379",
+              "quoted": [
+                "The Police Predator is a fast patrol boat appearing in Grand Theft Auto IV"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1503,
+      "name": "Wanted level four stars (FIB, NOOSE Tactical Response Unit)",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+      "main_revision": "2082538",
+      "lines": [
+        {
+          "line": "Summary: At four stars the FIB or the NOOSE Tactical Response Unit join in, in Enforcer armored vans or FIB Buffalo sedans with four officers each, and the search area grows to about the size of Bohan.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "At four stars, the FIB or the NOOSE Tactical Response Unit join the fray and the player will be confronted by Enforcers or FIB Buffaloes",
+                "Tactical Response Unit Officers or FIB Agents come four to a vehicle",
+                "The search area is approximately the size of Bohan."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Enforcer_(HD_Universe)",
+              "revision": "2009588",
+              "quoted": [
+                "the Enforcer is depicted as a large armored transport van"
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Federal_Investigation_Bureau",
+              "revision": "2084326",
+              "quoted": [
+                "small groups of the FIB agents will arrive in FIB Buffalo sedans to assist the LCPD"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Danger: They carry carbine rifles, some have SMGs and pump shotguns, and they wear body armor, so they take more gunfire before going down.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "armed with Carbine Rifles, although some of them carry SMGs and Pump Shotguns, and wear body armor for protection"
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Federal_Investigation_Bureau",
+              "revision": "2084326",
+              "quoted": [
+                "FIB agents are equipped with body armor, allowing them to withstand more gunfire before going down."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They can take around 30 seconds to arrive, and the FIB seems more likely to show up when you drive fast or keep switching vehicles. Four stars also come from entering the runway at Francis International Airport or the grounds of the Civilization Committee in Algonquin.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "although it may need for them to arrive a little longer than later levels (at around 30 seconds)",
+                "The FIB seems to be more likely to spawn when the player drives fast and/or constantly switches the vehicles.",
+                "Entering the runway area at Francis International Airport",
+                "Entering the grounds of the Civilization Committee in Algonquin"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1504,
+      "name": "Wanted level five and six stars (Annihilators, snipers)",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+      "main_revision": "2082538",
+      "lines": [
+        {
+          "line": "Summary: At five stars two NOOSE Annihilator helicopters replace the Police Mavericks, and in the main game every officer fires on you while chasing.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "At five stars, the Police Mavericks will leave and be replaced by two NOOSE Annihilators.",
+                "In the main game and The Lost and Damned, all Law Enforcement Officers fire upon the player while in pursuit"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Danger: Officers try the PIT maneuver to spin you out, FIB and NOOSE units come in equal numbers, and in areas with tall buildings officers with Combat Sniper rifles shoot at you.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "All Law Enforcement Officers employ more advanced driving techniques, such as the PIT Maneuver, as they try to make the player spin out of control and crash.",
+                "both forces spawning and pursuing the player in equal numbers",
+                "In areas with tall buildings, officers with Combat Sniper rifles will aim and shoot at the player when in their sights."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: An Annihilator is very vulnerable to RPGs and assault rifles, and a single rocket straight into the fuselage destroys it.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Annihilator",
+              "revision": "2079983",
+              "quoted": [
+                "it is very vulnerable to RPGs, Assault Rifles or other Annihilators",
+                "A single rocket directly to the fuselage can completely destroy the Annihilator"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: At six stars the search area is about the size of Broker and Dukes, the military is not sent, and officers with PSG-1 sniper rifles keep spawning. Surviving six stars for five minutes earns the One Man Army achievement.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+              "revision": "2082538",
+              "quoted": [
+                "At a six-star wanted level, the search area is approximately the size of the borough of Broker and Dukes.",
+                "Unlike previous Grand Theft Auto games, the Military is not deployed.",
+                "The LCPD Officers armed with PSG-1 Sniper Rifles will continue to spawn.",
+                "The player can earn two Achievements/Trophies associated with the Wanted Level",
+                "One Man Army - Survive a six-star Wanted Level for five minutes."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

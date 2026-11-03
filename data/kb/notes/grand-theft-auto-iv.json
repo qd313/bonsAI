@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 1500,
+      "game_id": 19,
+      "section_type": "enemy",
+      "name": "Wanted level one star (police)",
+      "card": "Summary: One star is the only level where the police do not use their guns; they try to arrest you instead.\nWeak points: The search circle at one star is about two city blocks across, and police cars chase at a moderate speed and try to box you in rather than ram you.\nTips: One star comes from minor things such as attacking civilians, damaging a vehicle, stealing a car in sight of police or passing a toll booth without paying. On foot you can resist arrest, but that jumps you to two stars and the police start shooting; keeping a one-star level for a while also leads to two stars.",
+      "source_url": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2082538",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1501,
+      "game_id": 19,
+      "section_type": "enemy",
+      "name": "Wanted level two stars (police shotguns)",
+      "card": "Summary: From two stars the police use their guns, which can include pump shotguns, and in chases they try to overtake you or run you off the road.\nDanger: More police cars arrive and fit officers in the front passenger seats step out with pump shotguns; if you crash, they use their cars to box you in.\nTips: Two stars come from firing a gun or setting off an explosion near an officer, repeatedly punching an officer, killing many people quickly, destroying a fuel pump at a gas station or a Gruppe 6 Securicar, and resisting arrest.",
+      "source_url": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2082538",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1502,
+      "game_id": 19,
+      "section_type": "enemy",
+      "name": "Wanted level three stars (NOOSE, Police Maverick)",
+      "card": "Summary: Three stars bring NOOSE, who set up roadblocks on main roads and bridges and send Cruisers and Patriots (the Patriots try to ram you head-on), plus a Police Maverick overhead that shines a spotlight on you at night and fires when its officers get a clear shot.\nWeak points: The helicopter now and then breaks off and retreats if you go underground, stay inside a large structure for a long time, or kill both riflemen on board.\nTips: From three stars you can no longer board the subway, and Police Predator patrol boats are sent if you are in or near water. Three stars come from killing or wounding an officer with a gun, or from carrying on with the damage and fighting back at the police.",
+      "source_url": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2082538",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1503,
+      "game_id": 19,
+      "section_type": "enemy",
+      "name": "Wanted level four stars (FIB, NOOSE Tactical Response Unit)",
+      "card": "Summary: At four stars the FIB or the NOOSE Tactical Response Unit join in, in Enforcer armored vans or FIB Buffalo sedans with four officers each, and the search area grows to about the size of Bohan.\nDanger: They carry carbine rifles, some have SMGs and pump shotguns, and they wear body armor, so they take more gunfire before going down.\nTips: They can take around 30 seconds to arrive, and the FIB seems more likely to show up when you drive fast or keep switching vehicles. Four stars also come from entering the runway at Francis International Airport or the grounds of the Civilization Committee in Algonquin.",
+      "source_url": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2082538",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1504,
+      "game_id": 19,
+      "section_type": "enemy",
+      "name": "Wanted level five and six stars (Annihilators, snipers)",
+      "card": "Summary: At five stars two NOOSE Annihilator helicopters replace the Police Mavericks, and in the main game every officer fires on you while chasing.\nDanger: Officers try the PIT maneuver to spin you out, FIB and NOOSE units come in equal numbers, and in areas with tall buildings officers with Combat Sniper rifles shoot at you.\nWeak points: An Annihilator is very vulnerable to RPGs and assault rifles, and a single rocket straight into the fuselage destroys it.\nTips: At six stars the search area is about the size of Broker and Dukes, the military is not sent, and officers with PSG-1 sniper rifles keep spawning. Surviving six stars for five minutes earns the One Man Army achievement.",
+      "source_url": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2082538",
+      "crawled_at": "2026-11-02"
+    }
+  ]
+}

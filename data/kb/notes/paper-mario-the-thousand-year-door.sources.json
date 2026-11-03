@@ -329,6 +329,315 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1705,
+      "name": "Cortez (Chapter 5 boss)",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Cortez",
+      "main_revision": "5449919",
+      "lines": [
+        {
+          "line": "Summary: The pirate skeleton who holds the Sapphire Star in Pirate's Grotto on Keelhaul Key; he has three forms of 20 HP each, 4 attack and 1 defense, and he rises again in a new form when each of the first two falls.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Cortez",
+              "revision": "5449919",
+              "quoted": [
+                "Cortez is the holder of the fifth Crystal Star, the Sapphire Star",
+                "alongside the other Chapter 5 characters",
+                "deep within Pirate's Grotto on Keelhaul Key.",
+                "In battle, Cortez has three forms.",
+                "Max HP is 20, Attack is 4, and Defense is 1.",
+                "His HP may seem low, but he's a spirit, so even when his HP hits 0, he'll come back.",
+                "Once this first form is defeated, Cortez transforms into a serpentine state",
+                "After his second form is defeated, Cortez abandons a body and returns to a simple floating head."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: In his second, serpent form, hit the bone pile twice and he opens his rib cage to show a green gem; the gem has no defense and takes 1 extra damage from every attack.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Cortez",
+              "revision": "5449919",
+              "quoted": [
+                "Attacking the pile of bones will cause Cortez to lower his upper half, and doing so twice will cause him to open his rib cage, exposing the green gem.",
+                "This gem lacks Cortez's usual 1 defense, and additionally takes 1 more damage than usual from all attacks."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In his last form the four weapons fight on their own; a strong attack that hits everything, such as a Thunder Rage or Vivian's Fiery Jinx, shuts them down for two turns, and Flurrie's Gale Force can blow them off the stage for good.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Cortez",
+              "revision": "5449919",
+              "quoted": [
+                "Using a moderately strong attack that strikes all opponents, such as a Thunder Rage item and Vivian's Fiery Jinx, can disable the weapons simultaneously.",
+                "This effect is temporary, for they reanimate themselves after two turns.",
+                "Flurrie's Gale Force, if successful (though it will not affect Cortez himself), can blow the weapons out of the stage permanently."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In the first form he swings four weapons and can hit one or both of you each turn, and the rusty hook can poison; at 10 HP or less in the last form he eats half the audience to heal, so a swift finish beats a long fight.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Cortez",
+              "revision": "5449919",
+              "quoted": [
+                "Between his ensemble of weapons, Cortez can attack either one or both heroes every turn.",
+                "a rusty hook that can cause poison",
+                "If Cortez falls to 10 HP or less, he can absorb souls of the audience to restore his HP",
+                "Cortez can only absorb souls equal to half the current audience members",
+                "it is possible to defeat Cortez with a swift assault before he gets a chance to absorb the souls of the audience."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1706,
+      "name": "Lord Crump (Keelhaul Key fight)",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Lord_Crump",
+      "main_revision": "5513572",
+      "lines": [
+        {
+          "line": "Summary: The third time you fight Lord Crump, at Keelhaul Key in Chapter 5, he brings a platoon of X-Nauts: 30 HP a round for two rounds, 3 attack and no defense.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Lord_Crump",
+              "revision": "5513572",
+              "quoted": [
+                "In this encounter, Crump uses his X-Nauts as backup.",
+                "After losing to Mario and Co for the third time",
+                "Max HP || 60 (30 per round) || Attack || 3 || Defense || 0 || Location(s) || Keelhaul Key"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Goombella says that if you take out their leader, the X-Nauts lose the focus to attack, so go for Crump first.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Lord_Crump",
+              "revision": "5513572",
+              "quoted": [
+                "If we take out their leader, though, they won't have the focus to attack. Get Crump!"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: He only body-slams for 3, heals after round one, and in round two summons replacements for the X-Naut platoon the turn after they fall; Goombella warns that the X-Nauts around him are a force to be reckoned with.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Lord_Crump",
+              "revision": "5513572",
+              "quoted": [
+                "Body Slam (3), Heal (this occurs after Round 1), Summon (In Round 2, Lord Crump will summon replacements for the X-Naut Platoon the following turn.)",
+                "those X-Nauts all around him are a force to be reckoned with."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1707,
+      "name": "Smorg (Chapter 6 boss)",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Smorg",
+      "main_revision": "5509839",
+      "lines": [
+        {
+          "line": "Summary: A huge mass of small Smorgs that attacks on top of the Excess Express in Chapter 6, with 50 HP, 5 attack and 1 defense; it is the only chapter boss besides the Shadow Queen that guards no Crystal Star.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Smorg",
+              "revision": "5509839",
+              "quoted": [
+                "When the Smorgs are cornered on the top of the train, they combine into a large Smorg horde that attacks Mario and his party.",
+                "Max HP is 50, Attack is 5, and Defense is 1.",
+                "It is the only chapter boss aside from the Shadow Queen that does not guard a Crystal Star."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Three tentacles (Smorg Miasmas) surround the body at the start, so defeat them first: in the GameCube game that drops the body's defense to 0, and in the Switch remake the body takes no damage until they are gone.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Smorg",
+              "revision": "5509839",
+              "quoted": [
+                "At the beginning of the battle, three tentacles, referred to as Smorg Miasmas, surround the main body.",
+                "Defeating the tentacles will drop the body's Defense to 0, making it easier to attack.",
+                "We won't do any damage to the main body unless we defeat the tentacles first."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The tentacles regenerate, so Goombella says to use that time to deal heavy damage.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Smorg",
+              "revision": "5509839",
+              "quoted": [
+                "The tentacles will regenerate, but use that time to deal a ton of damage, OK?"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: After it takes a lot of damage the tentacles change into a pincer claw that does 10 damage, against 5 for the Tentacle Slap.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Smorg",
+              "revision": "5509839",
+              "quoted": [
+                "After Smorg takes a significant amount of damage, the tentacles change shape into a pincer claw, which deals a large amount of damage to Mario and his partner.",
+                "Tentacle Slap (5), Pinch (10)"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1708,
+      "name": "Magnus von Grapple 2.0 (Chapter 7 boss)",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
+      "main_revision": "5413646",
+      "lines": [
+        {
+          "line": "Summary: The upgraded robot Lord Crump drives in the X-Naut Fortress at the end of Chapter 7, with 70 HP, 6 attack and 2 defense; it is the last boss that holds a Crystal Star.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
+              "revision": "5413646",
+              "quoted": [
+                "It is the seventh Chapter Boss in the game, and the last boss to hold a Crystal Star.",
+                "Max HP is 70, Attack is 6, and Defense is 2.",
+                "Location(s) || X-Naut Fortress"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Its X-Punch fists have 5 HP, 9 attack and no defense, Goombella says to take them down early, and Flurrie's Gale Force can blow them away.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
+              "revision": "5413646",
+              "quoted": [
+                "Each X-Punch has a Max HP of 5, and Attack of 9, and a Defense of 0.",
+                "Take care of those low-HP fists early on",
+                "They deal 9 damage each and can be blown away by Flurrie's Gale Force."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its main attack is a drill dive from above for 6 damage to Mario and his partner, and when its HP gets low it adds machine guns.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
+              "revision": "5413646",
+              "quoted": [
+                "Magnus Drill Attack (6 to Mario and Partner)",
+                "Its basic attack is a drill move that drops from above.",
+                "When the body's HP gets low, it'll also fire machine guns"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its Rapid Fire Cannon sucks up audience members and fires them at whoever is in front for 10 hits of 3 damage, and while the fists are flying you may be hit by the fists and the body in one turn.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
+              "revision": "5413646",
+              "quoted": [
+                "sucking up the audience, and then opening its front to fire audience members at whomever is in front, which deals 10 hits of three damage each.",
+                "When those fists are flying, you may get attacked by the fists and body in one turn"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1709,
+      "name": "Gloomtail (Palace of Shadow boss)",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Gloomtail",
+      "main_revision": "5408189",
+      "lines": [
+        {
+          "line": "Summary: Hooktail's older brother, the dragon who guards the Star Stone in the Palace of Shadow, with 80 HP, 8 attack and 2 defense; he is stronger than his sister.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Gloomtail",
+              "revision": "5408189",
+              "quoted": [
+                "being the older brother of Hooktail",
+                "He lives in the Palace of Shadow and guards the Star Stone",
+                "Max HP is 80, Attack is 8, and Defense is 2.",
+                "Gloomtail is stronger than his sister."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: He stores power with Charge Up (+8), which warns that the 16-damage Megabreath is coming, and Goombella says to use Vivian to hide from those attacks.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Gloomtail",
+              "revision": "5408189",
+              "quoted": [
+                "Charge Up (CHARGE+8; warning for Megabreath), Megabreath (16 to Mario and Partner, Piercing)",
+                "He also stores power for some attacks, so use Vivian to hide to avoid those."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: His poison breath lasts at least ten turns and he stomps or chomps whoever is in front for 8; Earthquake does 10 piercing damage but does not work on Vivian or Flurrie.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Gloomtail",
+              "revision": "5408189",
+              "quoted": [
+                "He attacks by breathing poison on Mario and his partner (taking at least ten turns to wear off), and stomping or chomping the character in front.",
+                "His earthquake move can be dangerous, but it does not work on Vivian and Flurrie.",
+                "Poison Breath (8 to Mario and Partner, Piercing, Poison), Stomp (8), Chomp (8), Earthquake (10, Piercing; useless against Flurrie and Vivian)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Beating him makes him cough up the chest holding the Star Stone, which unlocks the pedestals in the Palace of Shadow Tower.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Gloomtail",
+              "revision": "5408189",
+              "quoted": [
+                "After defeating Gloomtail, he coughs up the treasure chest containing the Star Stone.",
+                "guards the Star Stone, which is needed to unlock the pedestals in the Palace of Shadow Tower"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

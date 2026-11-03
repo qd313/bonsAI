@@ -56,6 +56,61 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5522260",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1705,
+      "game_id": 23,
+      "section_type": "boss",
+      "name": "Cortez (Chapter 5 boss)",
+      "card": "Summary: The pirate skeleton who holds the Sapphire Star in Pirate's Grotto on Keelhaul Key; he has three forms of 20 HP each, 4 attack and 1 defense, and he rises again in a new form when each of the first two falls.\nWeak points: In his second, serpent form, hit the bone pile twice and he opens his rib cage to show a green gem; the gem has no defense and takes 1 extra damage from every attack.\nTips: In his last form the four weapons fight on their own; a strong attack that hits everything, such as a Thunder Rage or Vivian's Fiery Jinx, shuts them down for two turns, and Flurrie's Gale Force can blow them off the stage for good.\nTips: In the first form he swings four weapons and can hit one or both of you each turn, and the rusty hook can poison; at 10 HP or less in the last form he eats half the audience to heal, so a swift finish beats a long fight.",
+      "source_url": "https://www.mariowiki.com/Cortez",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5449919",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1706,
+      "game_id": 23,
+      "section_type": "boss",
+      "name": "Lord Crump (Keelhaul Key fight)",
+      "card": "Summary: The third time you fight Lord Crump, at Keelhaul Key in Chapter 5, he brings a platoon of X-Nauts: 30 HP a round for two rounds, 3 attack and no defense.\nWeak points: Goombella says that if you take out their leader, the X-Nauts lose the focus to attack, so go for Crump first.\nTips: He only body-slams for 3, heals after round one, and in round two summons replacements for the X-Naut platoon the turn after they fall; Goombella warns that the X-Nauts around him are a force to be reckoned with.",
+      "source_url": "https://www.mariowiki.com/Lord_Crump",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5513572",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1707,
+      "game_id": 23,
+      "section_type": "boss",
+      "name": "Smorg (Chapter 6 boss)",
+      "card": "Summary: A huge mass of small Smorgs that attacks on top of the Excess Express in Chapter 6, with 50 HP, 5 attack and 1 defense; it is the only chapter boss besides the Shadow Queen that guards no Crystal Star.\nWeak points: Three tentacles (Smorg Miasmas) surround the body at the start, so defeat them first: in the GameCube game that drops the body's defense to 0, and in the Switch remake the body takes no damage until they are gone.\nTips: The tentacles regenerate, so Goombella says to use that time to deal heavy damage.\nTips: After it takes a lot of damage the tentacles change into a pincer claw that does 10 damage, against 5 for the Tentacle Slap.",
+      "source_url": "https://www.mariowiki.com/Smorg",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5509839",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1708,
+      "game_id": 23,
+      "section_type": "boss",
+      "name": "Magnus von Grapple 2.0 (Chapter 7 boss)",
+      "card": "Summary: The upgraded robot Lord Crump drives in the X-Naut Fortress at the end of Chapter 7, with 70 HP, 6 attack and 2 defense; it is the last boss that holds a Crystal Star.\nWeak points: Its X-Punch fists have 5 HP, 9 attack and no defense, Goombella says to take them down early, and Flurrie's Gale Force can blow them away.\nTips: Its main attack is a drill dive from above for 6 damage to Mario and his partner, and when its HP gets low it adds machine guns.\nTips: Its Rapid Fire Cannon sucks up audience members and fires them at whoever is in front for 10 hits of 3 damage, and while the fists are flying you may be hit by the fists and the body in one turn.",
+      "source_url": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5413646",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1709,
+      "game_id": 23,
+      "section_type": "boss",
+      "name": "Gloomtail (Palace of Shadow boss)",
+      "card": "Summary: Hooktail's older brother, the dragon who guards the Star Stone in the Palace of Shadow, with 80 HP, 8 attack and 2 defense; he is stronger than his sister.\nWeak points: He stores power with Charge Up (+8), which warns that the 16-damage Megabreath is coming, and Goombella says to use Vivian to hide from those attacks.\nTips: His poison breath lasts at least ten turns and he stomps or chomps whoever is in front for 8; Earthquake does 10 piercing damage but does not work on Vivian or Flurrie.\nTips: Beating him makes him cough up the chest holding the Star Stone, which unlocks the pedestals in the Palace of Shadow Tower.",
+      "source_url": "https://www.mariowiki.com/Gloomtail",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5408189",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

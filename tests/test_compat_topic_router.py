@@ -563,6 +563,8 @@ class PlainProblemWordsRouteTests(unittest.TestCase):
             "what should I build first",
             "thank you very much",
             "cant find the pcsx2 bios file",
+            "I can't find my computer terminal in the base, where is it",
+            "can't find the pc version of this quest item",
             "where do I find the best pc build for this class",
             "who is on the same team as me",
         ):

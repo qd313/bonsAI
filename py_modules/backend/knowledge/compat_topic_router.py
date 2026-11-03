@@ -252,10 +252,14 @@ _TOPIC_RULES: dict[str, tuple[tuple[str, ...], ...]] = {
         ("wifi", "cant find"),
         # Plan 102 lane H: tip 167 answers a Deck that cannot find its PC. "pc " carries a trailing
         # space like "lan " above, so "cant find the pcsx2 bios" is not a network question.
-        ("cant find", "pc "),
-        ("cant find", "computer"),
-        ("cannot find", "pc "),
-        ("cannot find", "computer"),
+        # "cant find" with pc or computer also needs a third word about the connection, or
+        # "I can't find my computer terminal in the base" (a game question) gets this tip.
+        *(
+            (find, machine, anchor)
+            for find in ("cant find", "cannot find")
+            for machine in ("pc ", "computer")
+            for anchor in ("network", "wifi", "wi-fi", "lan ", "list", "ollama", "address", "deck")
+        ),
         ("my computer", "list"),
         ("same network", "pc "),
         ("same network", "computer"),

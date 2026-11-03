@@ -571,10 +571,12 @@ background sleep job before any pause (the scheduled check alone did not wake pl
      commits were read by the session; the content files passed the FOSS read.
   3. Landing chain 2 (`land-chain-2.sh`): `-n9` (`196910fb`), `-n10`, `-n11`, `-n12` (`bef4688d`), `-m2` (`c19ba8df`), `-d`
      (`46475a55`, the scoring script's flags only), then `-q2` (`190ade29`; its label test needs every notes file landed).
-  4. Lane C: `5fe4c858` lands as a first half (the row stays open); its round two (`focusDeckOwner` declines through
-     `plainHop`; consult 2) was being built in `.claude/worktrees/p102-c`: read the diff against consult 2's shape, then land
-     (`46475a55`). Lane D was running its picture measurements in `p102-d`: read its report; it lands a shape only by its
-     brief's rule.
+  4. Lane C is done: `5fe4c858` (the first half) and `bf316b35` (round two: `focusDeckOwner` declines through `plainHop`
+     while the panel lacks focus; three new tests and the repro promoted; read by the session against consult 2's shape:
+     it matches) land together in chain 2 (`46475a55`). On the Deck the fourth Down will most likely land on the suggestion
+     chips, past the open details panel: a moving press, not yet the stop a person expects; Steam nodes for the details
+     tabs and the chip grid are the follow-up entry (the bookkeeper files it, ★★ focus). Lane D was running its picture
+     measurements in `p102-d`: read its report; it lands a shape only by its brief's rule.
   5. Then: the bookkeeper's sweep (the K0 helper resumed, or a fresh general helper with `.claude/agents/bookkeeper.md`),
      from the result list in this log: every landed lane to Deck check owed naming its row; the three measurement lanes'
      numbers into their entries (E: the crowding entry and a new ★★ measurement bug "the answer test's samples are not

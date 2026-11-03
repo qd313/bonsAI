@@ -609,6 +609,17 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   the Python set a second time; the set passes every time it runs alone (3,337 tests, twice), so the landing script now
   retries that step once, as it does the build. The chain restarts from N5. The rig's lease freed; block R0 started from
   this chat with a deck-driver and runbook R0.
+- **10:35 EST: Deck block R0 ran from this chat** (handover `workshop:planning/assets/102-handover-R0.md`; the build on the
+  Deck read `f57993dbc2b6`). Setup and the smoke pass PASS. The "Needs" line: FAIL again (two tries, ten steps, none), so
+  call 7's default applies: lane M3 (Haiku) removed the clause (`2003fc40`; the Strategy follow-up prompt 183 characters
+  shorter; lands after D). Hide more on Brotato: the cover was drawn and stayed shut (the entry's claim PASS); under Default
+  the cover did not open by itself (a new ★ sighting). The route steps: the old sighting did not reproduce (Down from the
+  answer reaches the new list's step 1), but Down from the Copy reply text icon skips the whole step list (seen three
+  times; a new ★★ ui bug). The Undo baseline, the hidden-box row and the walk re-saves could not run: at about 10:04
+  Steam tried to suspend the idle Deck, the keep-awake lock refused it, and the suspend overlay stayed over Home (the
+  maintainer's touch or the power button, or a real sleep and wake, clears it). The driver left ten saved chats. **The
+  landings:** N5 (`5b0ebf02`), N6 (`0e0de2da`), N8 (`db539690`), N9 (`6cb02fde`) landed; N10's four commits landed
+  (`50a63bd1`) and its gates stopped; read below.
 
 ## 13. Report
 

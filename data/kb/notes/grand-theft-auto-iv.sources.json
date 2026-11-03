@@ -311,6 +311,232 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1505,
+      "name": "Police Maverick",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Police_Maverick_(HD_Universe)",
+      "main_revision": "2062574",
+      "lines": [
+        {
+          "line": "Summary: The police helicopter that arrives at three stars carries a pilot and two riflemen with carbine rifles, and the riflemen shoot you on sight.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Liberty_City_Police_Department_(HD_Universe)",
+              "revision": "2076054",
+              "quoted": [
+                "The helicopters will have two LCPD riflemen equipped with Carbine Rifles (or Advanced MGs in The Ballad of Gay Tony) and an LCPD pilot on board; the riflemen will engage the suspect on sight."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Police_Maverick_(HD_Universe)",
+              "revision": "2062574",
+              "quoted": [
+                "programmed to shoot the player with Carbine Rifles"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Its cockpit is exposed, so the people up front can be shot from tall places or with assault rifles, and the lower windows may be a weak spot when it flies above them.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Police_Maverick_(HD_Universe)",
+              "revision": "2062574",
+              "quoted": [
+                "Because of the rather exposed cockpit, the front occupants may get shot from enemies in tall places or armed with assault rifles, considering the lower windows may be a weak spot for them when flying above these."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: At four stars NOOSE crew replace the officers aboard if NOOSE is sent, and from five stars an Annihilator can replace the helicopter. Shooting the pilot lets it drift down undamaged about half the time; otherwise it spins and explodes.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Police_Maverick_(HD_Universe)",
+              "revision": "2062574",
+              "quoted": [
+                "with NOOSE TRU agents replacing police officers in Mavericks at four stars (provided that the FIB does not respond)",
+                "it may be replaced by the Annihilator from higher wanted levels, from five stars and above.",
+                "Obtainable by sniping the pilot, making the helicopter slowly hover to the ground undamaged. It only works 50% of the time; the rest of the time the Police Maverick will spin rapidly around in circles, hitting the ground with fierce force and exploding."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1506,
+      "name": "Yardies",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Yardies",
+      "main_revision": "2073171",
+      "lines": [
+        {
+          "line": "Summary: A loose coalition of Jamaican gangs found mostly around Beechwood City in Broker, with a smaller presence in Schottler and Willis; their cars are painted green, black and gold.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Yardies",
+              "revision": "2073171",
+              "quoted": [
+                "They can mainly be found in the Beechwood City region, particularly the Homebrew Café, and have a smaller presence in Schottler and Willis as well.",
+                "They drive around in Voodoos and Huntleys painted in the colors of the Jamaican flag: green, black, and gold."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_IV",
+              "revision": "2087274",
+              "quoted": [
+                "The Yardies, sometimes only referred to as the Jamaicans, are a loose coalition of Jamaican posses"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weapons: They are well armed, with members on the streets carrying pistols, Micro SMGs and pump shotguns.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Yardies",
+              "revision": "2073171",
+              "quoted": [
+                "They are well-armed, with members on the streets carrying pistols, Micro Uzis and Pump Shotguns."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Before the mission Shadow they are hostile if you attack them; they welcome you on their turf, and after Shadow they defend you if a pedestrian attacks you.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Yardies",
+              "revision": "2073171",
+              "quoted": [
+                "the Yardies welcome him to their turf.",
+                "If Niko is engaged in a fight or is attacked by a pedestrian, the Yardies will defend him by all means but this will only happen after Shadow.",
+                "Before that mission, Jamaicans will be hostile if you attack them."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1507,
+      "name": "Spanish Lords",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Spanish_Lords",
+      "main_revision": "2070202",
+      "lines": [
+        {
+          "line": "Summary: A Puerto Rican street gang, one of the largest in the game, with turf in South Bohan, Fortside (at night only), Cerveza Heights, East Holland and Alderney City, wearing black and gold or red and blue.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Spanish_Lords",
+              "revision": "2070202",
+              "quoted": [
+                "They are one of the largest street gangs operating in GTA IV",
+                "having turf in South Bohan, Fortside (night time only), Cerveza Heights",
+                "East Holland and Alderney City",
+                "Spanish Lords wear black and gold, also red and blue"
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_IV",
+              "revision": "2087274",
+              "quoted": [
+                "The Spanish Lords are a Puerto Rican gang"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weapons: At night they usually carry Micro SMGs and pistols, and one whose car you hit may step out with a knife.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Spanish_Lords",
+              "revision": "2070202",
+              "quoted": [
+                "Sometimes, if you hit a car belonging to one while he's in it, the gang member will come out with a Knife.",
+                "At night they usually walk around with Micro-SMGs and Pistols in case of fights."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In Alderney City they share turf with the Korean Mob and do not fight each other; they sometimes ride in the same car, and both attack you if that car is damaged, and they turn on each other if you start a shoot-out.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Spanish_Lords",
+              "revision": "2070202",
+              "quoted": [
+                "In the Alderney City turf, since they share their turf with the Korean Mob, they don't attack each other",
+                "both will attack the player if the car is damaged.",
+                "They will however attack each other if the player provokes a shoot out"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1508,
+      "name": "Body Armor",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Body_Armor",
+      "main_revision": "2083689",
+      "lines": [
+        {
+          "line": "Summary: A blue vest shown as a blue half-circle bar beside the radar, next to the green health bar; when you aim at an armored target, a small light blue circle shows by the reticle, usually on NOOSE and FIB agents.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Body_Armor",
+              "revision": "2083689",
+              "quoted": [
+                "When equipped, the HUD will represent it as a blue half-circle bar located next to the radar, along with the green health bar.",
+                "the weapon's reticle will have a smaller, light blue circle next to the health bar, usually seen on NOOSE/FIB agents."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It pads your health against gunfire, explosions and fire, but it gives no protection from falls, being hit by a vehicle on foot, or melee attacks.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Body_Armor",
+              "revision": "2083689",
+              "quoted": [
+                "in effect extending the player's resilience to damage from gunfire, explosions and fire",
+                "It no longer offers protection to falls, collisions with vehicles on foot, or melee attacks (including hand-to-hand combat and melee weapons)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Where to get it: The underground gun shops sell it for $500 once the mission Do You Have Protection? is done, it lies about the city with a red glow, and getting into an Enforcer van gives you only about a third of the full amount.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Body_Armor",
+              "revision": "2083689",
+              "quoted": [
+                "$500 (GTA IV & GTA Chinatown Wars)",
+                "Do You Have Protection? (GTA IV)",
+                "armor can be found lying about in specific points of the city (distinguishable by its red glow)",
+                "Enforcer armored vans still provide the player some armor, but only gives the player roughly one third of the maximum amount."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Underground_Gun_Shops",
+              "revision": "2063857",
+              "quoted": [
+                "Body Armor",
+                "$500",
+                "Do You Have Protection?"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

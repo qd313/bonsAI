@@ -56,6 +56,50 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "2082538",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1505,
+      "game_id": 19,
+      "section_type": "enemy",
+      "name": "Police Maverick",
+      "card": "Summary: The police helicopter that arrives at three stars carries a pilot and two riflemen with carbine rifles, and the riflemen shoot you on sight.\nWeak points: Its cockpit is exposed, so the people up front can be shot from tall places or with assault rifles, and the lower windows may be a weak spot when it flies above them.\nTips: At four stars NOOSE crew replace the officers aboard if NOOSE is sent, and from five stars an Annihilator can replace the helicopter. Shooting the pilot lets it drift down undamaged about half the time; otherwise it spins and explodes.",
+      "source_url": "https://gta.fandom.com/wiki/Police_Maverick_(HD_Universe)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2062574",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1506,
+      "game_id": 19,
+      "section_type": "enemy",
+      "name": "Yardies",
+      "card": "Summary: A loose coalition of Jamaican gangs found mostly around Beechwood City in Broker, with a smaller presence in Schottler and Willis; their cars are painted green, black and gold.\nWeapons: They are well armed, with members on the streets carrying pistols, Micro SMGs and pump shotguns.\nTips: Before the mission Shadow they are hostile if you attack them; they welcome you on their turf, and after Shadow they defend you if a pedestrian attacks you.",
+      "source_url": "https://gta.fandom.com/wiki/Yardies",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2073171",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1507,
+      "game_id": 19,
+      "section_type": "enemy",
+      "name": "Spanish Lords",
+      "card": "Summary: A Puerto Rican street gang, one of the largest in the game, with turf in South Bohan, Fortside (at night only), Cerveza Heights, East Holland and Alderney City, wearing black and gold or red and blue.\nWeapons: At night they usually carry Micro SMGs and pistols, and one whose car you hit may step out with a knife.\nTips: In Alderney City they share turf with the Korean Mob and do not fight each other; they sometimes ride in the same car, and both attack you if that car is damaged, and they turn on each other if you start a shoot-out.",
+      "source_url": "https://gta.fandom.com/wiki/Spanish_Lords",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2070202",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1508,
+      "game_id": 19,
+      "section_type": "item",
+      "name": "Body Armor",
+      "card": "Summary: A blue vest shown as a blue half-circle bar beside the radar, next to the green health bar; when you aim at an armored target, a small light blue circle shows by the reticle, usually on NOOSE and FIB agents.\nUses: It pads your health against gunfire, explosions and fire, but it gives no protection from falls, being hit by a vehicle on foot, or melee attacks.\nWhere to get it: The underground gun shops sell it for $500 once the mission Do You Have Protection? is done, it lies about the city with a red glow, and getting into an Enforcer van gives you only about a third of the full amount.",
+      "source_url": "https://gta.fandom.com/wiki/Body_Armor",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2083689",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

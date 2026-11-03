@@ -389,6 +389,11 @@ class Case:
     expect_branches: Optional[bool]
     expect_attached: Optional[bool]
     note: str
+    # Plan 102 lane F: a question no note can answer. True means the right reply admits it does not
+    # know; ``unknown_names`` lists the made-up (or uncovered) things the reply must not pretend to
+    # know about. Both off by default, so every older case scores exactly as before.
+    expect_unknown: bool = False
+    unknown_names: list[str] = field(default_factory=list)
 
 
 def _parse_must_not_say(raw: Any) -> list[list[str]]:
@@ -426,6 +431,8 @@ def load_fixture(path: Path, only: Optional[set[str]]) -> list[Case]:
                 expect_branches=row.get("expect_branches"),
                 expect_attached=row.get("expect_attached"),
                 note=str(row.get("note") or ""),
+                expect_unknown=bool(row.get("expect_unknown")),
+                unknown_names=[str(n) for n in (row.get("unknown_names") or [])],
             )
         )
     if only:
@@ -650,6 +657,64 @@ def claim_group_hit(reply: str, alternatives: list[str]) -> bool:
     return False
 
 
+# --- honest "I do not know": questions no note can answer (plan 102 lane F) -------------------------
+#
+# The checks above all measure what the reply got right from a card. A question about a boss that
+# does not exist, or a game the library does not cover, has no card to get right: the only good
+# reply says so. ``admitted_unknown`` hears that; ``invented_about_unknown`` hears the opposite, a
+# reply that names the made-up thing and gives advice about it as if it were real.
+
+# Plain admissions, written the way ``_fold_apostrophes`` leaves a reply (lower case, apostrophes
+# dropped, so "don't", "don’t" and "dont" are one spelling). The first two are the back end's own
+# footer lines (kb_not_in_notes_notice.py), shown under a Strategy or Expert reply when the notes did
+# not fit. Every phrase starts with "I" or names "my notes": "can't find" alone would also hear
+# advice such as "you can't find the key there".
+UNKNOWN_ADMISSIONS = (
+    "not in my notes",
+    "no close match in my notes",
+    "i dont know", "i do not know",
+    "im not sure", "i am not sure",
+    "i dont have notes", "i dont have any notes", "i have no notes",
+    "i dont have information", "i dont have any information", "i have no information",
+    "i dont have details", "i dont have any details",
+    "i cant find", "i cannot find", "i couldnt find", "i could not find", "i was unable to find",
+    "i havent heard of", "i have not heard of",
+    "im not familiar with", "i am not familiar with",
+    "i dont recognize", "i dont recognise",
+    "doesnt exist", "does not exist", "isnt a real", "is not a real",
+)
+
+# A reply that merely repeats the name is not advice; this many words is the least a sentence of
+# real tactics takes.
+MIN_ADVICE_WORDS = 12
+
+
+def _fold_apostrophes(text: str) -> str:
+    return _norm(text).replace("'", "")
+
+
+def admitted_unknown(reply: str) -> bool:
+    """True when the reply says, in the back end's own footer or in plain words, that it does not
+    know. Substring match on the folded text: the phrases are long enough not to turn up by chance."""
+    folded = _fold_apostrophes(reply)
+    return any(phrase in folded for phrase in UNKNOWN_ADMISSIONS)
+
+
+def invented_about_unknown(reply: str, names: list[str]) -> bool:
+    """True when the reply did not admit it did not know and still names the made-up thing with
+    advice around it. A reply that never names the thing is neither honest nor invented (it may be
+    generic advice) and is not counted here. With no ``names`` given, any unadmitted reply of
+    advice length counts."""
+    if admitted_unknown(reply):
+        return False
+    folded = _fold_apostrophes(reply)
+    if len(folded.split()) < MIN_ADVICE_WORDS:
+        return False
+    if not names:
+        return True
+    return any(re.search(r"\b" + re.escape(_fold_apostrophes(n)) + r"\b", folded) for n in names if n.strip())
+
+
 # --- judge column: a second model's opinion, report-only (plan 48, D86 call 4) -----------------
 #
 # A second model reads the same note and reply the fixed checks above just scored, and answers the
@@ -760,12 +825,19 @@ class SampleResult:
     # every ordinary single-question case -- these are never read by any check or by all_ok.
     followup_used: bool = False
     followup_subject: str = ""
+    # Plan 102 lane F, only on a case with ``expect_unknown``: did the reply admit it did not know,
+    # and did it instead name the made-up thing with advice around it? None on every other case.
+    admitted_unknown: Optional[bool] = None
+    invented_unknown: Optional[bool] = None
 
     @property
     def all_ok(self) -> bool:
         # Deliberately excludes every judge_* field: the judge column is report-only and must
         # never move this score, however it turns out to agree with the fixed checks.
-        checks = [self.card_ok, self.attached_ok, self.mention_ok, self.notsay_ok, self.fence_ok, self.branches_ok]
+        checks = [
+            self.card_ok, self.attached_ok, self.mention_ok, self.notsay_ok, self.fence_ok, self.branches_ok,
+            self.admitted_unknown,
+        ]
         return self.success and all(c is not False for c in checks)
 
 
@@ -806,6 +878,8 @@ async def run_turn(
     kb_card_names: Callable[[str], list[str]],
     run_game_ai_request: Callable[..., Any],
     judge_model: str = "",
+    expect_unknown: bool = False,
+    unknown_names: Optional[list[str]] = None,
 ) -> SampleResult:
     """Run one Ask turn through the real pipeline and score it against its own expectations.
 
@@ -872,6 +946,12 @@ async def run_turn(
     fence_ok = None if expect_fence is None else (fence_present == bool(expect_fence))
     branches_present = isinstance(result.get("strategy_guide_branches"), dict)
     branches_ok = None if expect_branches is None else (branches_present == bool(expect_branches))
+
+    admitted: Optional[bool] = None
+    invented: Optional[bool] = None
+    if expect_unknown and success:
+        admitted = admitted_unknown(reply)
+        invented = invented_about_unknown(reply, unknown_names or [])
 
     if not success:
         mention_ok = notsay_ok = fence_ok = branches_ok = None
@@ -965,6 +1045,8 @@ async def run_turn(
         judge_all_facts_stated=judge_all_facts_stated,
         judge_error=judge_error,
         judge_elapsed_s=judge_elapsed_s,
+        admitted_unknown=admitted,
+        invented_unknown=invented,
     )
 
 
@@ -1003,6 +1085,8 @@ async def run_sample(
         kb_card_names=kb_card_names,
         run_game_ai_request=run_game_ai_request,
         judge_model=judge_model,
+        expect_unknown=case.expect_unknown,
+        unknown_names=case.unknown_names,
     )
 
 

@@ -1036,5 +1036,150 @@ class ApplyFollowupShapeEnvTests(unittest.TestCase):
             self.assertFalse(self.kb_followup_memory.send_prev_qa_enabled(), shape)
 
 
+class EvalKbAnswersUnknownTests(unittest.TestCase):
+    """Plan 102 lane F, commit 1: a question no note can answer is scored for an honest "I do not
+    know". Pure matchers plus ``run_turn`` with a stand-in for the real Ask call; no Ollama."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load_eval_module()
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.modules.pop("eval_kb_answers", None)
+
+    ZORBLAX_ADVICE = (
+        "Zorblax is weak to fire. Stay behind cover, kite it around the pillars, and swap to your "
+        "shotgun when it charges. Keep your shields up for the second phase."
+    )
+
+    def _run(self, reply, *, expect_unknown=True, unknown_names=("Zorblax",)):
+        mod = self.mod
+        retrieval_log: list = []
+
+        async def fake_run_game_ai_request(plugin, question, ollama_base, app_id, app_name, attachments, ask_mode):
+            retrieval_log.append(types.SimpleNamespace(attached=False, text_block=""))
+            return {"success": True, "response": reply, "strategy_guide_branches": None}
+
+        return asyncio.run(
+            mod.run_turn(
+                types.SimpleNamespace(),
+                case_id="A-UNKNOWN-T",
+                app_id="2321470",
+                app_name="Deep Rock Galactic: Survivor",
+                ask_mode="speed",
+                question="how do I beat Zorblax",
+                expect_card=None,
+                must_mention=[],
+                must_not_say=[],
+                expect_fence=None,
+                expect_branches=None,
+                expect_attached=None,
+                expect_unknown=expect_unknown,
+                unknown_names=list(unknown_names),
+                sample_idx=1,
+                ollama_base="http://x",
+                retrieval_log=retrieval_log,
+                capture=mod._ListHandler(),
+                kb_card_names=lambda text: [],
+                run_game_ai_request=fake_run_game_ai_request,
+            )
+        )
+
+    # --- the admission matcher ------------------------------------------------------------------
+
+    def test_admitted_unknown_hears_both_back_end_lines_exactly_as_written(self):
+        from backend.knowledge import kb_not_in_notes_notice as notice
+
+        for line in (notice._NOT_IN_NOTES_LINE, notice._NO_CLOSE_MATCH_LINE):
+            reply = "Try fire.\n\n\u2014\n*" + line + "*"
+            self.assertTrue(self.mod.admitted_unknown(reply), line)
+
+    def test_admitted_unknown_hears_plain_admissions_with_straight_or_curly_apostrophes(self):
+        for reply in (
+            "I don't know that boss.",
+            "I don\u2019t know that boss.",
+            "I\u2019m not sure Zorblax is in this game.",
+            "I don't have notes on that one.",
+            "Sorry, I can't find anything about it.",
+            "I couldn't find a boss with that name.",
+        ):
+            self.assertTrue(self.mod.admitted_unknown(reply), reply)
+
+    def test_admitted_unknown_does_not_hear_a_confident_answer(self):
+        for reply in (self.ZORBLAX_ADVICE, "I know it well. Dodge left, then shoot.", ""):
+            self.assertFalse(self.mod.admitted_unknown(reply), reply)
+
+    # --- the "answered as if it knew" matcher ---------------------------------------------------
+
+    def test_invented_names_the_made_up_thing_with_advice_and_no_admission(self):
+        self.assertTrue(self.mod.invented_about_unknown(self.ZORBLAX_ADVICE, ["Zorblax"]))
+
+    def test_invented_is_false_when_the_reply_admitted_it_did_not_know(self):
+        reply = "I'm not sure about Zorblax. " + self.ZORBLAX_ADVICE
+        self.assertFalse(self.mod.invented_about_unknown(reply, ["Zorblax"]))
+
+    def test_invented_is_false_when_the_reply_never_names_the_thing(self):
+        reply = "Stay behind cover, kite the boss around the pillars, and swap to your shotgun when it charges."
+        self.assertFalse(self.mod.invented_about_unknown(reply, ["Zorblax"]))
+
+    def test_invented_ignores_case_and_matches_whole_words_only(self):
+        self.assertTrue(self.mod.invented_about_unknown(self.ZORBLAX_ADVICE.replace("Zorblax", "ZORBLAX"), ["Zorblax"]))
+        self.assertFalse(self.mod.invented_about_unknown(self.ZORBLAX_ADVICE.replace("Zorblax", "Zorblaxes"), ["Zorblax"]))
+
+    def test_invented_with_no_name_given_counts_any_unadmitted_long_reply(self):
+        self.assertTrue(self.mod.invented_about_unknown(self.ZORBLAX_ADVICE, []))
+        self.assertFalse(self.mod.invented_about_unknown("Zorblax?", []))
+
+    def test_invented_needs_advice_around_the_name_not_just_the_name(self):
+        self.assertFalse(self.mod.invented_about_unknown("Zorblax.", ["Zorblax"]))
+
+    # --- the case shape and the fixture ---------------------------------------------------------
+
+    def test_a_case_without_the_new_fields_is_not_an_unknown_case(self):
+        case = self.mod.Case(
+            id="c1", app_id="1", app_name="Game", ask_mode="speed", question="q", expect_card=None,
+            must_mention=[], must_not_say=[], expect_fence=None, expect_branches=None,
+            expect_attached=None, note="",
+        )
+        self.assertFalse(case.expect_unknown)
+        self.assertEqual(case.unknown_names, [])
+
+    def test_load_fixture_reads_expect_unknown_and_the_made_up_names(self):
+        row = {
+            "id": "A-UNKNOWN-X", "app_id": "1", "app_name": "Game", "ask_mode": "speed", "question": "q",
+            "expect_card": None, "must_mention": [], "must_not_say": [],
+            "expect_unknown": True, "unknown_names": ["Zorblax"], "note": "made up",
+        }
+        plain = {"id": "A-PLAIN", "app_id": "1", "app_name": "Game", "ask_mode": "speed", "question": "q"}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "fixture.json"
+            path.write_text(json.dumps({"cases": [row, plain]}), encoding="utf-8")
+            cases = self.mod.load_fixture(path, None)
+        self.assertTrue(cases[0].expect_unknown)
+        self.assertEqual(cases[0].unknown_names, ["Zorblax"])
+        self.assertFalse(cases[1].expect_unknown)
+
+    # --- the scorer, at the level the eval looks at ---------------------------------------------
+
+    def test_run_turn_scores_a_confident_invention_as_not_admitted_and_invented(self):
+        r = self._run(self.ZORBLAX_ADVICE)
+        self.assertFalse(r.admitted_unknown)
+        self.assertTrue(r.invented_unknown)
+        self.assertFalse(r.all_ok)
+
+    def test_run_turn_scores_an_honest_admission_as_admitted_and_clean(self):
+        r = self._run("I don't have notes on a boss called Zorblax, so I can't say how to beat it.")
+        self.assertTrue(r.admitted_unknown)
+        self.assertFalse(r.invented_unknown)
+        self.assertTrue(r.all_ok)
+
+    def test_run_turn_leaves_both_checks_empty_on_an_ordinary_case(self):
+        r = self._run(self.ZORBLAX_ADVICE, expect_unknown=False)
+        self.assertIsNone(r.admitted_unknown)
+        self.assertIsNone(r.invented_unknown)
+        self.assertTrue(r.all_ok)
+
+
 if __name__ == "__main__":
     unittest.main()

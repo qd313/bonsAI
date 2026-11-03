@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 1900,
+      "game_id": 17,
+      "section_type": "enemy",
+      "name": "Hell knight",
+      "card": "Summary: A tough monster that throws green fireballs from a distance and claws you up close. It has 500 hit points, and in Doom 64 it is less pale than the standard Hell knight and looks more like the baron of Hell.\nWeak points: It rarely flinches, so the rocket launcher, plasma gun and super shotgun are the best answers, and the chaingun and shotgun also work at close range. Do not fight it in melee: it claws back, and the chainsaw is ineffective against it.\nTips: Its fireballs are faster than an imp's or a cacodemon's and hit hard, but from a distance you can dodge them without much trouble. In Doom 64 Hell knights and barons of Hell can hurt each other with their fireballs, so infighting between the two is possible.",
+      "source_url": "https://doomwiki.org/wiki/Hell_knight",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "552794",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1901,
+      "game_id": 17,
+      "section_type": "enemy",
+      "name": "Baron of Hell",
+      "card": "Summary: One of the toughest monsters in the game, with 1000 hit points; it claws up close and throws fireballs from a distance. In Doom 64 it is red-orange and throws red fireballs, and the green colour goes to the Hell knight instead.\nWeak points: It rarely flinches, so use the rocket launcher, plasma gun or super shotgun. The chaingun and shotgun also work if you can stay at a distance, but they take a while. Melee is risky because you can be clawed.\nTips: Its fireballs are not too hard to dodge when you have room, especially by circle-strafing, but in a confined space it is much more dangerous. In Doom 64 barons and Hell knights hurt each other with their fireballs and so can end up fighting each other.",
+      "source_url": "https://doomwiki.org/wiki/Baron_of_Hell",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "577957",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1902,
+      "game_id": 17,
+      "section_type": "enemy",
+      "name": "Mancubus",
+      "card": "Summary: A slow, wide monster with flamethrower arms that spits fireballs in bursts. In Doom 64 it is taller, wears a metal harness with a fuel pack on its back, and its fireballs are smaller and look like fiery brimstone. It first appears in MAP09: Even Simpler.\nWeak points: It is slow and a big target, so rapid-fire weapons kill it easily, and the rocket launcher is possibly the most effective weapon against it. It pauses and gives a battle cry before it fires, so even a slow weapon such as the super shotgun can stun it out of attacking.\nTips: Keep your distance: up close you may take two fireballs instead of one. Once it starts attacking it keeps firing until all three bursts are done, even if you step out of its sight, unless you hurt it mid-burst; you can use that to start monster infighting. In Doom 64 the direction of its fireballs is somewhat different from Doom II.",
+      "source_url": "https://doomwiki.org/wiki/Mancubus",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "581486",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1903,
+      "game_id": 17,
+      "section_type": "enemy",
+      "name": "Arachnotron",
+      "card": "Summary: A cybernetic brain on a big metal spider body. In Doom 64 it has two plasma guns that fire two blue bolts at once in spurts of five, and it keeps firing as long as it can see you. It first appears in MAP14: Eye of the Storm, unless you play the secret levels MAP30: The Lair and MAP32: Hectic first, which also hold some.\nWeak points: It has a medium pain chance, so rapid-fire weapons such as the chaingun work well. Do not use the chainsaw on it: its size stops the attack reliably connecting.\nTips: Its plasma bursts are among the fastest projectiles around and its high rate of fire can drain your health quickly. Keep attacking, move in broad side-to-side steps and slip out of its line of fire now and then, and you will take little damage. In monster infighting the Doom 64 version often beats even a baron of Hell, but with little health left.",
+      "source_url": "https://doomwiki.org/wiki/Arachnotron",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "581272",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 1904,
+      "game_id": 17,
+      "section_type": "enemy",
+      "name": "Cacodemon",
+      "card": "Summary: A floating monster with a big mouth that spits balls of lightning and bites. In Doom 64 it is beige-brown with a single yellow-green eye and two arms with broken chains, and it swings its arms as it flies.\nWeak points: It is slow and flinches easily, so repeating weapons such as the chaingun or the plasma gun push it away until it can barely fight back. The chainsaw can also stun it.\nTips: Its shots are fairly easy to dodge, and with enough room you can fight several at once and take little or no damage. Once alerted it can come flying out of unexpected places. On the Nintendo 64 its shots fly faster than on PC, though the cacodemon itself still moves slowly.",
+      "source_url": "https://doomwiki.org/wiki/Cacodemon",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "556851",
+      "crawled_at": "2026-11-02"
+    }
+  ]
+}

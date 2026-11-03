@@ -69,7 +69,7 @@
     "term": "ultra-spicy spray",
     "alt_forms": ["ultra spicy spray"],
     "peek": "A spray made from ten red berries that sends your Pikmin into a frenzy.",
-    "full_text": "The red ultra-spicy spray, made from ten red berries, sends your Pikmin into a frenzy, faster and stronger, and flowers them. Nectar also flowers Pikmin, on its own."
+    "full_text": "The red ultra-spicy spray, made from ten red berries, sends your Pikmin into a frenzy, faster, and sets their attack power to a fixed value that weakens Purple Pikmin. Nectar also flowers Pikmin, on its own."
   },
   {
     "term_id": 3008,

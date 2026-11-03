@@ -170,7 +170,7 @@
         },
         {
           "label": "Tips",
-          "text": "In the first two missions you must defeat several nearby Boos to make him appear; in \"Big Boo's Balcony\" he is already there. Like a normal Boo he disappears when looked at and shows again when you turn away, and if you leave the area before he is beaten his health resets. / A Big Boo about twice the size of the other Boos waits in a corner of the castle courtyard, and beating it drops a birdcage that leads to Big Boo's Haunt.",
+          "text": "In the first two missions you must defeat several nearby Boos to make him appear; in \"Big Boo's Balcony\" he is already there. Like a normal Boo he disappears when looked at and shows again when you turn away, and if you leave the area before he is beaten his health resets.",
           "from": [
             {
               "page": "Big Boo (character)",
@@ -186,7 +186,13 @@
               "page": "Big Boo (character)",
               "revision": "5499015",
               "quote": "if the player leaves the area before completely defeating Big Boo, his health resets."
-            },
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A Big Boo about twice the size of the other Boos waits in a corner of the castle courtyard, and beating it drops a birdcage that leads to Big Boo's Haunt.",
+          "from": [
             {
               "page": "Big Boo",
               "revision": "5537137",
@@ -301,7 +307,7 @@
         },
         {
           "label": "Tips",
-          "text": "Their blasts also hurt other enemies nearby, and they come back after you leave the area. / A Bob-omb working a cannon does not chase you but still explodes if picked up; the pink Bob-omb Buddies are friendly, give hints and open cannons.",
+          "text": "Their blasts also hurt other enemies nearby, and they come back after you leave the area.",
           "from": [
             {
               "page": "Bob-omb",
@@ -312,11 +318,22 @@
               "page": "Bob-omb",
               "revision": "5537321",
               "quote": "After the player character walks away from the area, the Bob-ombs then respawn."
-            },
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A Bob-omb working a cannon does not chase you but still explodes if picked up; the pink Bob-omb Buddies are friendly, give hints and open cannons.",
+          "from": [
             {
               "page": "Bob-omb",
               "revision": "5537321",
               "quote": "These Bob-ombs do not chase the player, but they still explode if picked up."
+            },
+            {
+              "page": "Bob-omb",
+              "revision": "5537321",
+              "quote": "A pink variant of Bob-omb called a Bob-omb Buddy is introduced in this game."
             },
             {
               "page": "Bob-omb",
@@ -410,7 +427,7 @@
       "lines": [
         {
           "label": "Summary",
-          "text": "A rock slab with an angry face that patrols a small area in Whomp's Fortress and falls on you when you get near; one more waits in Bowser in the Sky.",
+          "text": "A stone slab with an angry face that patrols a small area in Whomp's Fortress and falls on you when you get near; one more waits in Bowser in the Sky.",
           "from": [
             {
               "page": "Whomp",
@@ -421,6 +438,16 @@
               "page": "Whomp",
               "revision": "5536581",
               "quote": "with a singular Whomp appearing in Bowser in the Sky"
+            },
+            {
+              "page": "Whomp",
+              "revision": "5536581",
+              "quote": "They are large enemies that resemble rectangular stone slabs with snaggletoothed faces"
+            },
+            {
+              "page": "Whomp",
+              "revision": "5536581",
+              "quote": "Their faces feature permanently angry expression"
             },
             {
               "page": "Whomp",
@@ -531,6 +558,11 @@
             {
               "page": "Tox Box",
               "revision": "5536591",
+              "quote": "Tox Boxes are red, industrial, and metallic boxes with spray-painted faces in Super Mario 64"
+            },
+            {
+              "page": "Tox Box",
+              "revision": "5536591",
               "quote": "they are enemies exclusive to Shifting Sand Land"
             },
             {
@@ -631,7 +663,7 @@
         },
         {
           "label": "Tips",
-          "text": "Each course holds seven Power Stars, one of them the secret star for 100 coins, and fifteen stars in all are Secret Stars hidden in secret areas or held by Toads. Eight red coins in a course make a star appear over a Star Marker. / A star you already have shows as a see-through blue copy, and collecting it adds nothing to your total.",
+          "text": "Each course holds seven Power Stars, one of them the secret star for 100 coins, and fifteen stars in all are Secret Stars hidden in secret areas or held by Toads. Eight red coins in a course make a star appear over a Star Marker.",
           "from": [
             {
               "page": "Power Star",
@@ -647,7 +679,13 @@
               "page": "Power Star",
               "revision": "5531900",
               "quote": "There are eight Red Coins in each course, and collecting all of them causes a Power Star to appear over a Star Marker."
-            },
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "A star you already have shows as a translucent copy of itself, and collecting it adds nothing to your total.",
+          "from": [
             {
               "page": "Power Star",
               "revision": "5531900",
@@ -709,7 +747,7 @@
         },
         {
           "label": "Tips",
-          "text": "The red coin missions by course: Bob-omb Battlefield, Find the 8 Red Coins; Whomp's Fortress, Red Coins on the Floating Isle; Jolly Roger Bay, Red Coins on the Ship Afloat; Cool, Cool Mountain, Frosty Slide for 8 Red Coins; Big Boo's Haunt, Seek the 8 Red Coins; Hazy Maze Cave, Elevate for 8 Red Coins; Lethal Lava Land, 8-Coin Puzzle with 15 Pieces; Shifting Sand Land, Free Flying for 8 Red Coins. / The rest: Dire, Dire Docks, Pole-Jumping for Red Coins; Snowman's Land, Shell Shreddin' for Red Coins; Wet-Dry World, Go to Town for Red Coins; Tall, Tall Mountain, Scary 'Shrooms, Red Coins; Tiny-Huge Island, Wiggler's Red Coins; Tick Tock Clock, Stop Time for Red Coins; Rainbow Ride, Coins Amassed in a Maze.",
+          "text": "The red coin missions by course: Bob-omb Battlefield, Find the 8 Red Coins; Whomp's Fortress, Red Coins on the Floating Isle; Jolly Roger Bay, Red Coins on the Ship Afloat; Cool, Cool Mountain, Frosty Slide for 8 Red Coins; Big Boo's Haunt, Seek the 8 Red Coins; Hazy Maze Cave, Elevate for 8 Red Coins; Lethal Lava Land, 8-Coin Puzzle with 15 Pieces; Shifting Sand Land, Free Flying for 8 Red Coins.",
           "from": [
             {
               "page": "Red Coin",
@@ -750,7 +788,13 @@
               "page": "Red Coin",
               "revision": "5533785",
               "quote": "Shifting Sand Land - Free Flying for 8 Red Coins"
-            },
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "The rest: Dire, Dire Docks, Pole-Jumping for Red Coins; Snowman's Land, Shell Shreddin' for Red Coins; Wet-Dry World, Go to Town for Red Coins; Tall, Tall Mountain, Scary 'Shrooms, Red Coins; Tiny-Huge Island, Wiggler's Red Coins; Tick Tock Clock, Stop Time for Red Coins; Rainbow Ride, Coins Amassed in a Maze.",
+          "from": [
             {
               "page": "Red Coin",
               "revision": "5533785",
@@ -923,7 +967,7 @@
         },
         {
           "label": "Tips",
-          "text": "Shells come from hitting some yellow blocks or from attacking a Koopa Troopa to knock it out of its shell. In the original game the blocks do not refill, but a shell stays until you ride it. / In the Nintendo 64 version of Tiny-Huge Island you can ride the shell on the wind over the Windswept Valley.",
+          "text": "Shells come from hitting some yellow blocks or from attacking a Koopa Troopa to knock it out of its shell. In the original game the blocks do not refill, but a shell stays until you ride it.",
           "from": [
             {
               "page": "Koopa Shell",
@@ -934,7 +978,13 @@
               "page": "Koopa Shell",
               "revision": "5523503",
               "quote": "In the original version, when the player hits the yellow blocks for Koopa Shells, the boxes do not respawn, but shells do not disappear until Mario hitches a ride on one."
-            },
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "In the Nintendo 64 version of Tiny-Huge Island you can ride the shell on the wind over the Windswept Valley.",
+          "from": [
             {
               "page": "Koopa Shell",
               "revision": "5523503",
@@ -956,6 +1006,16 @@
           "label": "Summary",
           "text": "Blue cannons in ten courses and one secret stage fire you to places you cannot normally reach, but each stays covered until you find and talk to that course's Bob-omb Buddy.",
           "from": [
+            {
+              "page": "Cannon",
+              "revision": "5536638",
+              "quote": "Cannons, this time colored blue, are a vital gameplay element in Super Mario 64 and Super Mario 64 DS."
+            },
+            {
+              "page": "Cannon",
+              "revision": "5536638",
+              "quote": "the player can use it to fire Mario to previously unreachable areas"
+            },
             {
               "page": "Cannon",
               "revision": "5536638",
@@ -1006,7 +1066,7 @@
         },
         {
           "label": "Tips",
-          "text": "Cannons cannot be unlocked until the first mission is done. In Bob-omb Battlefield one cannon can never be used because it shoots water bombs. / In the Whomp's Fortress mission \"Blast Away the Wall\" you shoot yourself out of a cannon to smash the top of a nearby wall and free the star.",
+          "text": "Cannons cannot be unlocked until the first mission is done. In Bob-omb Battlefield one cannon can never be used because it shoots water bombs.",
           "from": [
             {
               "page": "Cannon",
@@ -1017,7 +1077,13 @@
               "page": "Cannon",
               "revision": "5536638",
               "quote": "In Bob-omb Battlefield, there is a cannon controlled by a Bob-omb that Mario can never access due to the cannon shooting water bombs."
-            },
+            }
+          ]
+        },
+        {
+          "label": "Tips",
+          "text": "In the Whomp's Fortress mission \"Blast Away the Wall\" you shoot yourself out of a cannon to smash the top of a nearby wall and free the star.",
+          "from": [
             {
               "page": "Cannon",
               "revision": "5536638",

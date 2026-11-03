@@ -528,6 +528,27 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   the sprays, Rock Pikmin, for lane M2). **Lane Q2:** four games' rows written (120). **The FOSS read of N5 and N7:**
   nothing blocks publishing; seven phrases without a quote and six joined sidecar entries, fixed by the lanes (`201f3988`,
   `73ed9864`); N6 and N8 under read. **Lane M1 done** (`355ae7a4`: the cap timings and the Wiggler's three stomps).
+- **23:35 EST: K0 landed** (`0f799211`, the landing script's gates and quick check green); the full check runs on the new
+  tip. **Lane G done, a tie:** prose cards kept every fact in 44 of 90 answers, labelled cards in 48 of 90 (4.4 points
+  apart), while the same library swung 18 points between its own two runs; four long starting-out cards failed every run in
+  both shapes, so the shape is not their problem. The card-style pass is not supported by this measurement. **Lane F
+  measured:** on eight questions no note can answer, the AI admitted it in 3 of 24 replies and answered as if it knew in
+  21 of 24; the three admissions were all the back end's "No close match" footer, none the model's own words. A fifth
+  commit (`441ee73e`) stops "I don't know your build" counting as an admission. The ten-reply sample for the maintainer's
+  read is `workshop:archive/research/kb-answer-sample-2026-11-02-p102-reading.md`. **Lane C (Opus) committed the brief's
+  fix** (`5fe4c858`: the rows' landing asks the window for focus first) **and showed in a test that the press that dies is
+  one hop later:** Down from the notes block with Show details open goes through a plain focus onto the details chip grid
+  (`liveTurnFocusGraph.ts`, `focusDeckOwner`), which claims the press while Steam's ring stays; the window usually refuses
+  focus, so the committed change probably does not cure the Deck. Consult 2 asked: land it; the one fix for a second round
+  (give up the press when the ring did not follow, so Steam moves it); the Deck row rewritten so it can fail. **The FOSS
+  read of N6 and N8:** nothing blocks publishing; four phrases without a quote; two lines of in-game dialogue to
+  paraphrase; and five story-spoiler risks in the Paper Mario notes (the Shadow Queen named twice, the Doopliss twist and
+  ending, Lord Crump's disguise in a note's name, Vivian in the partner list): all sent back to the lanes. N5's and N6's
+  fixes in (`201f3988`, `ec6b853d`, `535173eb`). **N9's duplicates out** (`7ddf2e76`: 13 notes, Red Pikmin added). **N10
+  done** (Doom 64, 15 notes, four commits to `9d01f6e9`). **N11 done** (Donkey Kong 64, 15 notes, five commits to
+  `a84c395e`). **Q2:** seven games' rows written (206). **Lane M2 started** (Haiku: the three Pikmin 2 seed errors). Usage
+  74 percent of the five-hour window at 23:25 EST, 16 percent of the week: no new helper from here until the window
+  resets at 03:50 EST; finished lanes are resumed for follow-ups, which is not a new start.
 
 ## 13. Report
 

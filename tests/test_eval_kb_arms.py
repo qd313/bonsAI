@@ -836,5 +836,71 @@ class EvalArmsTests(unittest.TestCase):
         self.assertIn("156", header)
 
 
+class BakeoffReportFlagTests(unittest.TestCase):
+    """--no-write-report must leave the research folder untouched, the JSON file included."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load_eval_module()
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.modules.pop("eval_kb_embed_models", None)
+
+    def _payload(self):
+        # The fields the report and the saved file read; no model is called.
+        return {
+            "date": "2026-11-02",
+            "ollama_base": "http://example.invalid",
+            "corpus_db": "corpus.db",
+            "corpus_version": "test",
+            "corpus_note_count": 0,
+            "corpus_tip_count": 0,
+            "models": [],
+            "keyword_baseline": {"top1_pct": 0, "top3_pct": 0, "fts_empty_pct": 0},
+            "english": {"bare": {}, "prompted": {}},
+            "arms": {},
+            "per_case": [],
+            "gate": {},
+            "spanish_probe": {},
+            "winner": "none",
+            "recommendation": "none",
+        }
+
+    def _save(self, research_dir, *, write_report, suffix):
+        payload = self._payload()
+        captured = io.StringIO()
+        with contextlib.redirect_stderr(captured):
+            self.mod._save_bakeoff_files(
+                payload,
+                research_dir=research_dir,
+                suffix=suffix,
+                write_report=write_report,
+                winner="none",
+                recommendation="none",
+            )
+        return payload, captured.getvalue()
+
+    def test_flag_off_writes_no_file_into_the_research_folder(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            research = Path(tmp) / "archive" / "research"
+            research.mkdir(parents=True)
+            payload, log = self._save(research, write_report=False, suffix="-arms")
+            self.assertEqual(sorted(p.name for p in research.iterdir()), [])
+            self.assertEqual(payload["json_path"], "")
+            self.assertIn("not written", log)
+
+    def test_flag_on_writes_both_the_json_and_the_markdown(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            research = Path(tmp) / "archive" / "research"
+            research.mkdir(parents=True)
+            payload, _ = self._save(research, write_report=True, suffix="-arms")
+            self.assertEqual(
+                sorted(p.name for p in research.iterdir()),
+                ["kb-embed-bakeoff-2026-11-02-arms.json", "kb-embed-bakeoff-2026-11-02-arms.md"],
+            )
+            self.assertTrue(payload["json_path"].startswith("workshop:"))
+
+
 if __name__ == "__main__":
     unittest.main()

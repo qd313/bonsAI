@@ -1689,6 +1689,38 @@ def _write_report(
     report_path.write_text("\n".join(lines), encoding="utf-8")
 
 
+def _save_bakeoff_files(
+    payload: dict[str, Any],
+    *,
+    research_dir: Path,
+    suffix: str,
+    write_report: bool,
+    winner: str,
+    recommendation: str,
+) -> None:
+    """Write the bake-off's JSON and markdown into the research folder, or write neither.
+
+    With --no-write-report nothing is written, so a hand run cannot overwrite the session's
+    dated report. The payload's json_path names the file only when that file exists.
+    """
+    if not write_report:
+        payload["json_path"] = ""
+        print(
+            "Report files not written: --no-write-report is set, so the research folder is unchanged.",
+            file=sys.stderr,
+        )
+        return
+    today = payload["date"]
+    json_path = research_dir / f"kb-embed-bakeoff-{today}{suffix}.json"
+    payload["json_path"] = "workshop:" + json_path.relative_to(research_dir.parents[1]).as_posix()
+    json_path.parent.mkdir(parents=True, exist_ok=True)
+    json_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    report_path = research_dir / f"kb-embed-bakeoff-{today}{suffix}.md"
+    _write_report(report_path, payload=payload, recommendation=recommendation, winner=winner)
+    print(f"Wrote {report_path}", file=sys.stderr)
+    print(f"Wrote {json_path}", file=sys.stderr)
+
+
 def run_bakeoff(
     *,
     ollama_base: str,
@@ -1844,7 +1876,6 @@ def run_bakeoff(
     # An arms-only run is a partial. Naming it like the full bake-off leaves a dated file in
     # the research folder that reads as the real thing and is missing the model sweep.
     suffix = "-arms" if arms_only else ""
-    json_path = research_dir / f"kb-embed-bakeoff-{today}{suffix}.json"
 
     corpus_manifest = _read_corpus_manifest(out_dir)
     payload: dict[str, Any] = {
@@ -1863,18 +1894,15 @@ def run_bakeoff(
         "spanish_probe": spanish_probe,
         "winner": winner,
         "recommendation": recommendation,
-        "json_path": "workshop:" + json_path.relative_to(research_dir.parents[1]).as_posix(),
     }
-
-    json_path.parent.mkdir(parents=True, exist_ok=True)
-    json_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-
-    if write_report:
-        report_path = research_dir / f"kb-embed-bakeoff-{today}{suffix}.md"
-        _write_report(report_path, payload=payload, recommendation=recommendation, winner=winner)
-        print(f"Wrote {report_path}", file=sys.stderr)
-
-    print(f"Wrote {json_path}", file=sys.stderr)
+    _save_bakeoff_files(
+        payload,
+        research_dir=research_dir,
+        suffix=suffix,
+        write_report=write_report,
+        winner=winner,
+        recommendation=recommendation,
+    )
     print(recommendation, file=sys.stderr)
     return payload
 

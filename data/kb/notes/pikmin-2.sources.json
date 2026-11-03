@@ -309,6 +309,322 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 1805,
+      "name": "Waterwraith",
+      "kind": "enemy",
+      "main_page": "https://www.pikminwiki.com/Waterwraith",
+      "main_revision": "356113",
+      "lines": [
+        {
+          "line": "Summary: A see-through, watery humanoid riding two stone rollers. It crushes Pikmin and other creatures for an instant kill, wanders at random, and goes straight for active leaders and for Pikmin carrying treasure it can see. In Pikmin 2 it holds the Professional Noisemaker.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Waterwraith",
+              "revision": "356113",
+              "quoted": [
+                "Its appearance is generally humanoid in shape, with the suggestion of a head, body, arms and legs, but without distinct characteristics, and with a watery, transparent body.",
+                "Its rollers are cylinders made of stone",
+                "It will crush both other enemies and Pikmin with its stone rollers for an instant kill",
+                "While active, it will wander the sublevel mostly at random, only paying particular mind to active leaders and Pikmin carrying treasure, which it will actively pursue when in sight.",
+                "It holds the Professional Noisemaker."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Until the last floor of the Submerged Castle there is virtually no way to hurt it: not bomb rocks, and not Pikmin attacks after an ultra-bitter spray. A Purple Pikmin landing on or near it turns it solid purple, and then every Pikmin can hurt it. When its health in that form is gone the rollers crumble and it runs about aimlessly, no longer a threat. In Pikmin 2 the rollers can be damaged and swarmed while it is stunned, which makes the first phase quick.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Waterwraith",
+              "revision": "356113",
+              "quoted": [
+                "before sublevel 5, there is virtually no way at all to harm it; not even Bomb Rocks or attacking with Pikmin after using an ultra-bitter spray will have any effect.",
+                "When hit with Purple Pikmin – the only Pikmin capable of damaging it",
+                "In this state, it is vulnerable to all Pikmin attacks.",
+                "the rollers crumble and the creature starts running aimlessly around the sublevel, no longer a threat to your Pikmin.",
+                "In Pikmin 2, the Waterwraith's rollers can be both damaged and swarmed when it is stunned, allowing a very speedy dispatch of the Waterwraith's first phase."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It follows the active leader, and it does not go into small corners, crevices and dead ends, which are safe places to hide. A cloud of dust trails behind it. It kills other enemies and disables traps, which you can use. Collect treasure quickly and skip the corpses; a fast enough run avoids it entirely. Ultra-bitter spray stops it coming at you, but a petrified one cannot be hurt by ordinary attacks: only a Purple Pikmin thud counts, and it does damage only once the rollers are gone. To keep it stunned, keep pelting it with Purples and whistle them back soon after they land so they are not shaken off.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Waterwraith",
+              "revision": "356113",
+              "quoted": [
+                "It follows the active leader.",
+                "The Waterwraith does not go into small corners, crevices, and dead-ends, making these places safe to hide in.",
+                "A cloud of dust is visible behind the Waterwraith, allowing you to keep better track of it.",
+                "The Waterwraith can kill other enemies and disable traps.",
+                "You should collect treasures as quickly as possible and avoid spending time to collect corpses. If you're fast enough, you can avoid facing the Waterwraith entirely.",
+                "In Pikmin 2, the Waterwraith can be petrified just as any other creature can, which is useful to stop it if it is coming towards you, but while in this state, it cannot be damaged with normal attacks",
+                "In the state without rollers, these thuds will actually cause a small amount of damage, and make it possible to kill the creature while it's petrified.",
+                "With good timing, you can keep the Waterwraith stunned by continuously pelting the creature with Purple Pikmin, all the while making sure to whistle them back to your side soon after they land to prevent from getting shaken off and knocked down."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1806,
+      "name": "Titan Dweevil",
+      "kind": "enemy",
+      "main_page": "https://www.pikminwiki.com/Titan_Dweevil",
+      "main_revision": "353211",
+      "lines": [
+        {
+          "line": "Summary: The final boss, at the bottom of the last cave, the Dream Den: a huge Dweevil whose only natural attack is lashing out with its pincers, which does no damage. The danger is its four weapons, the Flare Cannon, the Shock Therapist, the Monster Pump and the Comedy Bomb.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Titan_Dweevil",
+              "revision": "353211",
+              "quoted": [
+                "is the final boss in Pikmin 2.",
+                "At the very bottom of the last cave in the game, the Dream Den",
+                "its only natural attack is to lash out with its pincers, which does no damage and is only an attempt to get Pikmin off it; the real danger this creature has comes from the weapons it utilizes.",
+                "The Titan Dweevil has four weapons at its disposal: the Flare Cannon, the Shock Therapist, the Monster Pump, and the Comedy Bomb."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Throw Pikmin at the weapons: each has 6000 health and the body has 5000, which heals 1.5 a second. A weapon whose health runs out falls off and becomes a treasure worth 1000; the boss cannot pick it up again as long as you do not leave the cave before carrying it to the pod. Once all four are gone the body loses its armor and turns tan, and Pikmin can simply be thrown at it; Purple Pikmin make that part faster.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Titan_Dweevil",
+              "revision": "353211",
+              "quoted": [
+                "Pikmin must be thrown at a weapon, either while it is mounted on the Dweevil's hide or on its hands, to damage it.",
+                "Note that 5000 HP is the creature's health. Each weapon has 6000 HP.",
+                "5000 || 1.5 HP/s",
+                "after its health has been depleted, it will detach and cannot be picked up by the boss again, provided the player does not leave and re-enter the cave before carrying said part to the pod.",
+                "can be knocked out of the beast's possession and salvaged as a treasure, worth × 1000.",
+                "After all weapons have been broken off, it will lose its armor and turn tan",
+                "All that must be done now is throwing Pikmin at its body.",
+                "Purple Pikmin are recommended to make this portion faster."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Each colour is immune to one weapon: Red to the Flare Cannon, Yellow to the Shock Therapist, Blue to the Monster Pump and White to the Comedy Bomb. Weapons still knock leaders down even when the leader is immune. It picks its next weapon at random but favours the most damaged one, so finish a damaged weapon off instead of whittling all four. The Monster Pump reaches beyond the arena, so the page says to remove it first. The Shock Therapist is the only weapon that kills on contact: keep Pikmin in a tight group and beyond the exit geyser. Pikmin latched onto a weapon are safe until whistled off or shaken off, and a Titan Dweevil killed while petrified drops 10 random sprays.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Titan_Dweevil",
+              "revision": "353211",
+              "quoted": [
+                "The Red Pikmin are immune to this weapon.",
+                "The Yellow Pikmin are immune to this weapon.",
+                "The Blue Pikmin are immune to this weapon.",
+                "The White Pikmin are immune to this weapon.",
+                "But unlike every other attack or hazard in the game, weapons are still capable of knocking down leaders even if they are immune to the element.",
+                "When it's time to attack, the Titan Dweevil chooses a remaining weapon to use at random. It is more likely to select weapons that have taken more damage",
+                "this incentivizes finishing them off instead of whittling them all down equally.",
+                "Because of this, the player should get rid of this one first.",
+                "it's the only weapon that kills on contact with the attack",
+                "Keep the Pikmin in a tight group to avoid getting electrified.",
+                "so it is advised to keep the Pikmin beyond the geyser.",
+                "Any Pikmin latched onto any of the Titan Dweevil's weapons will be completely safe from harm until whistled or shaken off",
+                "if the Titan Dweevil is defeated when it is petrified, it will drop 10 random sprays"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1807,
+      "name": "Ultra-spicy spray",
+      "kind": "item",
+      "main_page": "https://www.pikminwiki.com/Ultra-spicy_spray",
+      "main_revision": "354789",
+      "lines": [
+        {
+          "line": "Summary: The red spray, made by gathering ten ultra-spicy berries from Burgeoning Spiderworts or from a concentrated dose of spray nectar. In Pikmin 2 it makes every Pikmin in the current leader's squad faster and quicker at its jobs for 40 seconds, however far away they are.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Ultra-spicy_spray",
+              "revision": "354789",
+              "quoted": [
+                "is a red-colored spray that is mainly concocted by gathering ten ultra-spicy berries, or obtained from concentrated doses.",
+                "Collecting ten ultra-spicy berries from Burgeoning Spiderworts.",
+                "Collecting ultra-spicy spray nectar.",
+                "Pikmin 2 and Pikmin 3: Affects all Pikmin in the current leader's squad, regardless of distance.",
+                "The effects wear off after 40 seconds in Pikmin 2."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Sprayed Pikmin run nearly as fast as flowered White Pikmin and work faster: they attack more often and tear down gates, build bridges and get up from knockdowns quicker. In Pikmin 2 the leaf, bud or flower is replaced by a flashing pink light rather than turning into a flower, and they carry as if flowered, so spraying a squad that is already all flowers is a waste. Their attack power becomes the same for every colour, so Purple Pikmin hit weaker while sprayed. A Pikmin that jumps at its target before hitting, instead of latching on, is not sped up.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Ultra-spicy_spray",
+              "revision": "354789",
+              "quoted": [
+                "in Pikmin 2 and Pikmin 3 they become nearly as fast as flowered White Pikmin",
+                "Affected Pikmin also receive a general increase in task speed, which affects their attack frequency, their efficiency when taking down gates, constructing bridges, and recovering from being knocked down.",
+                "In Pikmin 2, an affected Pikmin's leaf, bud, or flower will be replaced with a pink flashing light",
+                "In Pikmin 2, all the spray does is make the Pikmin behave as if they are flower Pikmin, meaning that spraying a group that is already all flowers is a complete waste.",
+                "Technically, any Pikmin type's attack power is changed to 10 in Pikmin 2 and Pikmin 3",
+                "This means that Purple Pikmin and Rock Pikmin experience a decrease in power",
+                "a Pikmin that is attacking without being latched on (evident by them first jumping at the target before landing a blow) will not be sped up."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Spraying already-spicy Pikmin restarts the 40 seconds, and so does an ultra-bitter spray. Pikmin that go into an Onion or the ship lose the effect, and Pikmin that are drowning die faster. If it wears off while Pikmin are carrying something they keep the powered-up carrying speed until they deliver it or drop it, which helps with the Doomsday Apparatus. The Awakening Wood is the place to gather lots of berries. If no Pikmin could benefit, the spray cannot be used and no dose is spent.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Ultra-spicy_spray",
+              "revision": "354789",
+              "quoted": [
+                "if the player sprays an already spicy Pikmin, the duration of the spray will be reset. Interestingly, if the player uses an ultra-bitter spray on a spicy Pikmin, it will also reset its spicy mode duration.",
+                "If Pikmin enter an Onion or the Hocotate ship, or are converted into a sprout, they will lose their spicy status.",
+                "drowning Pikmin sprayed with an ultra-spicy spray will actually die more quickly than unsprayed Pikmin.",
+                "If the effects of the spray wear off while the Pikmin are carrying the object, they will continue carrying at the same speed as if they were powered up, until they deliver the object or drop it. This makes this exploit particularly useful when retrieving the Doomsday Apparatus",
+                "If neither Oatchi nor any Pikmin could benefit from a spray, it can not be used, so no spray will be deducted from the total."
+              ]
+            },
+            {
+              "page": "https://www.pikminwiki.com/Titan_Dweevil",
+              "revision": "353211",
+              "quoted": [
+                "The player can gather lots of ultra-spicy spray berries in the Awakening Wood."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1808,
+      "name": "Ultra-bitter spray",
+      "kind": "item",
+      "main_page": "https://www.pikminwiki.com/Ultra-bitter_spray",
+      "main_revision": "349978",
+      "lines": [
+        {
+          "line": "Summary: The purple spray, made from ten purple Burgeoning Spiderwort berries or found as a concentrated dose. Any enemy or bomb rock in the direction of your cursor is immobilized and slowly turns to stone for about nine seconds: one second for the stone to form and eight of full encasement.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Ultra-bitter_spray",
+              "revision": "349978",
+              "quoted": [
+                "is the purple colored spray in Pikmin 2 that the player can get from ten purple Burgeoning Spiderwort berries, or by finding a concentrated dose.",
+                "Any enemy or bomb-rock in the direction of the cursor instantly becomes immobilized and slowly turns into stone.",
+                "In total, this effect lasts for nine seconds – one second for the stones to form, and eight seconds of complete encasement."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Petrifying an enemy that is eating Pikmin saves them, and a bomb rock in mid-countdown freezes, giving you time to run. The enemy shakes just before it breaks free. While it is stone, ordinary Pikmin attacks and leader punches do 1.5 times damage to most enemies, but only a quarter to bosses such as the Empress Bulblax, Man-at-Legs and Beady Long Legs, almost nothing to the Bloysters (0.03 times), and half to the Titan Dweevil, which can only be hurt when unarmed. Purple Pikmin stomps and bomb-rock damage are unchanged.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Ultra-bitter_spray",
+              "revision": "349978",
+              "quoted": [
+                "Petrifying enemies that are in the process of eating any Pikmin will make it possible to save those Pikmin from dying. Likewise, bomb-rocks that were in the middle of their countdown will freeze, allowing the leaders and Pikmin a chance of reaching safety.",
+                "Before reaching this point, the enemy begins shaking, as an indication that the petrification is wearing off.",
+                "All enemies not listed || 1.50×",
+                "Empress Bulblax || 0.25×",
+                "Man-at-Legs || 0.25×",
+                "Beady Long Legs || 0.25×",
+                "Ranging Bloyster || 0.03×",
+                "Toady Bloyster || 0.03×",
+                "Titan Dweevil || 0.50× || Can only be damaged when unarmed.",
+                "Purple Pikmin stomps and bomb-rock damage is not changed either way."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Aim before you press: with no enemy near, the dose is wasted. It is rarer than the spicy spray: fewer berry plants carry it, and you find it only after getting White Pikmin, near the Bulblax Kingdom. A petrified Bumbling Snitchbug drops the leader it was holding. An enemy killed while it is stone crumbles and leaves drops of nectar or spray, and a Titan Dweevil killed that way drops 10 random sprays.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Ultra-bitter_spray",
+              "revision": "349978",
+              "quoted": [
+                "If there are no enemies nearby, the leader will still spray it in the air, wasting one dosage.",
+                "There are fewer ultra-bitter berry carrying Burgeoning Spiderworts, which makes the spray harder to obtain in comparison to ultra-spicy sprays.",
+                "ultra-bitter spray is not found until after the acquisition of White Pikmin, near the Bulblax Kingdom.",
+                "Bumbling Snitchbugs will instantly drop whatever leader they are holding.",
+                "When an enemy is defeated while petrified, it will crumble to dust and leave behind some drops of liquid"
+              ]
+            },
+            {
+              "page": "https://www.pikminwiki.com/Titan_Dweevil",
+              "revision": "353211",
+              "quoted": [
+                "if the Titan Dweevil is defeated when it is petrified, it will drop 10 random sprays"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 1809,
+      "name": "Nectar",
+      "kind": "item",
+      "main_page": "https://www.pikminwiki.com/Nectar",
+      "main_revision": "355733",
+      "lines": [
+        {
+          "line": "Summary: A large drop of liquid that turns leaf and bud Pikmin into flowers. Any leaf or bud Pikmin that passes a drop on the ground crouches and slurps it for about two seconds, whether it was idle or sent there, and then jumps up with a flower on its head.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Nectar",
+              "revision": "355733",
+              "quoted": [
+                "is a substance that increases the maturity of Pikmin, usually to the flower stage.",
+                "It comes in the form of large drops of liquid that Pikmin can drink.",
+                "Any leaf or bud Pikmin that pass by a drop of nectar on the ground will crouch down and begin to slurp it for roughly two seconds, regardless of whether it is idle or has been directed to it. At the end of the slurp, it will jump up and the leaf or bud on its head will turn into a flower."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: In Pikmin 2 one drop can be shared by any number of Pikmin, but once the first Pikmin starts drinking, the drop shrinks until it is gone when that Pikmin finishes, so only Pikmin that start drinking in that window are flowered. The window is longer in Pikmin 2 than in the first game. The best way to flower many at once is to get them to swarm in a tight group.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Nectar",
+              "revision": "355733",
+              "quoted": [
+                "In Pikmin and Pikmin 2, a single drop of nectar can be shared by any number of Pikmin, but as soon as one Pikmin starts to drink it, the drop will shrink until it disappears when the first Pikmin is done.",
+                "This means that only Pikmin which start drinking the nectar within this time window will be flowered.",
+                "The time window is quite strict in Pikmin, but lasts longer in Pikmin 2.",
+                "The most effective way to get a large number of Pikmin drinking the same nectar drop is by swarming them in a tight group."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The wiki lists nectar weed patches, piles of rubble, eggs, Honeywisps, Mitites, Bulborb Larvae and petrified enemies among the sources; most give a single drop and sometimes more.",
+          "drawn_from": [
+            {
+              "page": "https://www.pikminwiki.com/Nectar",
+              "revision": "355733",
+              "quoted": [
+                "Most of these sources will produce a single drop of nectar most of the time, but can sometimes produce more.",
+                "Nectar weed patches",
+                "Piles of rubble",
+                "Honeywisps",
+                "Mitites",
+                "Bulborb Larvae",
+                "Petrified or frozen enemies"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

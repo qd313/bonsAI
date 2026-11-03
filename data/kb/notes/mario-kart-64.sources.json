@@ -760,6 +760,218 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2112,
+      "name": "Giant Egg (Yoshi Valley)",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Yoshi_Valley",
+      "main_revision": "5519510",
+      "lines": [
+        {
+          "line": "Summary: A giant Yoshi's egg spins around in a large circular area near the end of Yoshi Valley and flattens any racer in its path.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Kart_64",
+              "revision": "5527757",
+              "quoted": [
+                "A giant Yoshi's egg that spins around, flattening any racer in its path."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Yoshi_Valley",
+              "revision": "5519510",
+              "quoted": [
+                "leads to a large circular area with a rotating, hazardous Giant Egg."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The wiki describes no way to stop it; it is part of the course. A rope bridge leads you past the circular area and out of the valley to the finish line.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Yoshi_Valley",
+              "revision": "5519510",
+              "quoted": [
+                "A rope bridge leads them past the area and takes them out of the valley to the grassy area they began in, where they cross the finish line."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Once all the routes have joined, the winding road to the egg has few railings.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Yoshi_Valley",
+              "revision": "5519510",
+              "quoted": [
+                "Once all the routes have converged, racers take a winding road with few railings that leads to a large circular area",
+                "Afterward, it takes a steep 270° left turn full of porcupines before a drop that merges it with route 2"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Kart_64",
+              "revision": "5527757",
+              "quoted": [
+                "Porcupines walk from side to side, spinning out a racer who collides with them."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Route 5 has a steep 270 degree left turn full of porcupines, which walk from side to side and spin out any racer who hits them.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Yoshi_Valley",
+              "revision": "5519510",
+              "quoted": [
+                "Once all the routes have converged, racers take a winding road with few railings that leads to a large circular area",
+                "Afterward, it takes a steep 270° left turn full of porcupines before a drop that merges it with route 2"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Kart_64",
+              "revision": "5527757",
+              "quoted": [
+                "Porcupines walk from side to side, spinning out a racer who collides with them."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2113,
+      "name": "Chomp (Rainbow Road)",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Rainbow_Road_(Mario_Kart_64)",
+      "main_revision": "5523052",
+      "lines": [
+        {
+          "line": "Summary: Chainless Chomps are lodged in the middle of Rainbow Road, and a racer who collides with one is launched into the air.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Kart_64",
+              "revision": "5527757",
+              "quoted": [
+                "Chainless Chomps are embedded into the track, chomping around at random. If a racer collides with one, they are launched into the air."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Rainbow_Road_(Mario_Kart_64)",
+              "revision": "5523052",
+              "quoted": [
+                "several Chomps can be found lodged in the middle of the track."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The wiki describes no way to stop them; they are part of the course. They travel the course in reverse and slide in a zigzag pattern.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Rainbow_Road_(Mario_Kart_64)",
+              "revision": "5523052",
+              "quoted": [
+                "They continuously travel the course in reverse and slide in a zigzag pattern."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In this game Rainbow Road has rails along the whole track.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Rainbow_Road_(Mario_Kart_64)",
+              "revision": "5523052",
+              "quoted": [
+                "it has rails throughout the entire track.",
+                "It is the longest race course in Mario Kart 64, at 2,000 meters, and it requires about two minutes per lap."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It is the longest course in the game, 2,000 meters, and takes about two minutes a lap.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Rainbow_Road_(Mario_Kart_64)",
+              "revision": "5523052",
+              "quoted": [
+                "it has rails throughout the entire track.",
+                "It is the longest race course in Mario Kart 64, at 2,000 meters, and it requires about two minutes per lap."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2114,
+      "name": "Traffic (Toad's Turnpike)",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Toad%27s_Turnpike",
+      "main_revision": "5519515",
+      "lines": [
+        {
+          "line": "Summary: Cars, tanker trucks, box trucks and school buses drive along Toad's Turnpike, and a racer who collides with one is knocked into the air.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Toad%27s_Turnpike",
+              "revision": "5519515",
+              "quoted": [
+                "these include white cars, turquoise tanker trucks, red box trucks (which can carry three different cargo types), and yellow school buses."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Kart_64",
+              "revision": "5527757",
+              "quoted": [
+                "If a racer collides with one, they are knocked into the air."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The vehicles follow the same route as you, except in Extra, where they drive against you at the speed they have in 150cc. The engine class sets their speed: traffic is slow in 50cc and quite fast in 150cc.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Toad%27s_Turnpike",
+              "revision": "5519515",
+              "quoted": [
+                "The vehicles travel follow the same route as players, except in Extra mode, where they drive against players at the same speed as in 150cc. The engine class also affects how fast the vehicles move; traffic moves slowly in 50cc, but it is quite fast in 150cc."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The larger vehicles go slowly and can block you, especially where the road is two lanes and vehicles travel side by side, which makes it hard to steer between them.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Toad%27s_Turnpike",
+              "revision": "5519515",
+              "quoted": [
+                "the larger vehicles go slowly through the road, sometimes blocking the player (especially where the roadway is two lanes, and vehicles often travel side-by-side, making it difficult to steer between them).",
+                "At the beginning of the right U-turn, the roadway merges into two lanes, and remains this way until racers pass the finish line."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The road merges into two lanes at the start of the right U-turn and stays that way to the finish line.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Toad%27s_Turnpike",
+              "revision": "5519515",
+              "quoted": [
+                "the larger vehicles go slowly through the road, sometimes blocking the player (especially where the roadway is two lanes, and vehicles often travel side-by-side, making it difficult to steer between them).",
+                "At the beginning of the right U-turn, the roadway merges into two lanes, and remains this way until racers pass the finish line."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -133,6 +133,39 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5519514",
       "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2112,
+      "game_id": 22,
+      "section_type": "enemy",
+      "name": "Giant Egg (Yoshi Valley)",
+      "card": "Summary: A giant Yoshi's egg spins around in a large circular area near the end of Yoshi Valley and flattens any racer in its path.\nWeak points: The wiki describes no way to stop it; it is part of the course. A rope bridge leads you past the circular area and out of the valley to the finish line.\nTips: Once all the routes have joined, the winding road to the egg has few railings.\nTips: Route 5 has a steep 270 degree left turn full of porcupines, which walk from side to side and spin out any racer who hits them.",
+      "source_url": "https://www.mariowiki.com/Yoshi_Valley",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5519510",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2113,
+      "game_id": 22,
+      "section_type": "enemy",
+      "name": "Chomp (Rainbow Road)",
+      "card": "Summary: Chainless Chomps are lodged in the middle of Rainbow Road, and a racer who collides with one is launched into the air.\nWeak points: The wiki describes no way to stop them; they are part of the course. They travel the course in reverse and slide in a zigzag pattern.\nTips: In this game Rainbow Road has rails along the whole track.\nTips: It is the longest course in the game, 2,000 meters, and takes about two minutes a lap.",
+      "source_url": "https://www.mariowiki.com/Rainbow_Road_(Mario_Kart_64)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5523052",
+      "crawled_at": "2026-11-02"
+    },
+    {
+      "section_id": 2114,
+      "game_id": 22,
+      "section_type": "enemy",
+      "name": "Traffic (Toad's Turnpike)",
+      "card": "Summary: Cars, tanker trucks, box trucks and school buses drive along Toad's Turnpike, and a racer who collides with one is knocked into the air.\nWeak points: The vehicles follow the same route as you, except in Extra, where they drive against you at the speed they have in 150cc. The engine class sets their speed: traffic is slow in 50cc and quite fast in 150cc.\nTips: The larger vehicles go slowly and can block you, especially where the road is two lanes and vehicles travel side by side, which makes it hard to steer between them.\nTips: The road merges into two lanes at the start of the right U-turn and stays that way to the finish line.",
+      "source_url": "https://www.mariowiki.com/Toad%27s_Turnpike",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5519515",
+      "crawled_at": "2026-11-02"
     }
   ]
 }

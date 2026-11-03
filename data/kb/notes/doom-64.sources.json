@@ -370,12 +370,13 @@
       "main_revision": "575500",
       "lines": [
         {
-          "line": "Summary: A towering demon with a rocket launcher for an arm and 4000 hit points. In Doom 64 it has darker skin and is much larger than on PC, and its rockets leave smoke trails. It is rare, appearing chiefly in the secret levels or late in the game.",
+          "line": "Summary: A towering demon with a rocket launcher mounted on its left arm and 4000 hit points. In Doom 64 it has darker skin and is much larger than on PC, and its rockets leave smoke trails. It is rare, appearing chiefly in the secret levels or late in the game.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Cyberdemon",
               "revision": "575500",
               "quoted": [
+                "a large rocket launcher mounted on its left arm",
                 "It attacks by firing barrages of three rockets. It has 4000 hit points and does not receive splash damage from explosions, making it fairly difficult to kill.",
                 "Data not listed is the same as for the original version."
               ]
@@ -618,6 +619,7 @@
               "page": "https://doomwiki.org/wiki/BFG9000",
               "revision": "582641",
               "quoted": [
+                "The BFG9000 is the ultimate weapon to be found in Doom.",
                 "it is capable of destroying nearly any player or monster with a single shot, and can disperse damage over a wide area to multiple targets simultaneously.",
                 "fires large spheres of green plasma.",
                 "in Doom 64, where it is given a new look with a darker color scheme, it is first introduced in MAP10: The Bleeding."

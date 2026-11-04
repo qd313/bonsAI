@@ -636,4 +636,183 @@ background sleep job before any pause (the scheduled check alone did not wake pl
 
 ## 13. Report
 
-Written at the end.
+Written 2026-11-03, 20:45 EST, by the session (Fable 5.1); the second-half measurements (X2) and Deck block R1 were still
+to come when this was written and are filled in below where marked. **Every lane is built and on the experimental branch.**
+Twenty-two lanes ran: four bug fixes, the deeper answer checks, two measurements, a new tip, thirty meaning-only search
+questions, enemy and item notes for eight games with 236 blind questions, two seed-correction lanes, a prompt trim and
+the mod-sources research. Nothing is pushed or published. The Deck's block R0 ran from this chat (the rig's tools came
+back in the morning); block R1 waits for a deploy and for the stuck suspend overlay to clear.
+
+### 13.1 What you must do next
+
+1. **Clear the Deck's suspend overlay** (a touch or the power button; or let the session do a sleep and wake through the
+   rig), then block R1 can run: one check per landed fix on the night's build with the night's library installed through
+   the Developer tab. The Deck also holds ten saved chats (the driver made three test chats); delete what you do not want.
+2. **Read six things with your own eyes.** The eight games' notes, landed by call 2's default when you were away (a Verify
+   entry per game in the knowledge-base roadmap; the Super Mario 64 ones were read aloud in the chat on the night):
+   `data/kb/notes/grand-theft-auto-v.json`, `grand-theft-auto-iv.json`, `super-mario-64.json`,
+   `paper-mario-the-thousand-year-door.json`, `pikmin-2.json`, `doom-64.json`, `donkey-kong-64.json`, `mario-kart-64.json`.
+   The ten-reply sample for your monthly read: `workshop:archive/research/kb-answer-sample-2026-11-02-p102-reading.md`.
+   The new tip 167 ("can't find my PC"). The crowding read's table (`workshop:archive/research/kb-crowding-read-2026-11-02-p102.md`).
+3. **Four calls** the night left: (a) **the picture shape**: with a game running and a screenshot attached, the AI now
+   names the right game 91 and 92 times in a hundred (67 and 70 before) but names the place on screen 29 and 30 times
+   (52 and 53 before); keep it, revert it, or try the shape without the system sentence (100 and 100 on the game, 21 and
+   24 on the place); and note the sweep: qwen3.5:4b and gemma4:e4b-it-qat name the game 97 and the place 70 and 64 times
+   in a hundred with today's shape, far above the Deck's starter model. (b) **The crowding fix**: after the 51 notes the
+   word search returns up to 10 notes instead of 3, which pushes a note found only by meaning down the blend; cap the word
+   list before fusing or move the floor (it touches the retrieval service, so it lands alone with the fixture check).
+   (c) **Close the card-style entry** as not supported by the measurement (a tie inside the noise). (d) **The answer test's
+   samples are not independent** (the same prompt gives the identical reply three times): fix the test's sampling (a
+   seed or the answer cache) before any more facts-kept numbers are compared.
+4. **Push** when you are back (`BONSAI_ALLOW_PUSH=1`, then `git push origin experimental`) once § 13.7 says the full check
+   passed on the final tip. **Publish the library** after your reads: it is built on this PC as version 2026.11.04 (583
+   notes, 167 tips, every meaning vector; `build/knowledge-base`); the publish command is in docs/knowledge-base.md. The
+   download sites still serve 2026.10.25 (414 notes).
+5. **Doom 64: Retribution** still needs your hand launch for the hidden-box row (seventh miss on the night).
+
+### 13.2 What a player notices
+
+Once the build and the library reach their Deck (every line "should" until its Deck row passes): "The Sims 4: how do I
+stop a fire" gets notes that agree that firefighters come when a smoke alarm is in the room (the older note and the
+glossary entry said there were none). "I can't find my PC" reaches a tip about the home network and the port (19 of 24
+plain problem sentences now reach a tip, 17 the right one, none a wrong one). A screenshot question with a game running
+names that game far more often, and says where the player is less often (call 3a). Grand Theft Auto V, Grand Theft Auto
+IV, Super Mario 64, Paper Mario: The Thousand-Year Door, Pikmin 2, Doom 64, Donkey Kong 64 and Mario Kart 64 have 118 new
+enemy and item notes in the labelled shape (15 of 38 games have them now, 7 before). After a thumbs-down with a game
+running, Down past the notes block moves the ring instead of dying (it will most likely land on the suggestion chips,
+past the open details panel: a moving press, not yet the stop a person expects). A route's steps no longer carry a
+"Needs" line request (never drawn in three Deck tries). Super Mario 64's caps and Wiggler, Pikmin 2's Waterwraith and
+sprays, and Mario Kart 64's Rainbow Road read right.
+
+### 13.3 The code work by area
+
+- **The search-test script's report flag (lane A, Haiku high, 1 commit).** `scripts/kb/eval_kb_embed_models.py`: the two
+  report writes moved into one helper (`_save_bakeoff_files`) that writes neither file when `--no-write-report` is set and
+  says so; `tests/test_eval_kb_arms.py` gained two tests with a temporary research folder. Found on the way: the script
+  still rebuilds its own library under `build/knowledge-base-embed-bakeoff` rather than reading the one it is handed.
+- **The Sims 4 fire notes (lane B, Haiku high, 2 commits).** Seed section 112's first sentence follows the wiki's line and
+  the section now cites the page (url, licence, revision, date); the glossary entry "Fire extinguisher" in
+  `data/kb/glossary/own-and-gta-titles.json` says the same.
+- **Undo and the lost window focus (lane C, Opus 5.5 extra-high, 2 commits).** First half: the demote rows' one landing
+  helper (`landOn` in `src/features/answer/reply-actions/kbDemoteRows.tsx`) asks the panel's window for focus before
+  Steam's transfer, the checklist steps' shape. Second half, after the lane reproduced the Deck's dead press in a test:
+  `focusDeckOwner` (`src/shared/dpad/liveTurnFocusGraph.ts`) was the last hop on the screen written the old way (a plain
+  focus, then "did the page's focus move" read as success); it now goes through `plainHop` when the panel lacks focus,
+  declines unless Steam's ring followed, and puts the page's focus back, so the caller's next choice or Steam's own move
+  carries the ring. Four tests with a refusing window (`kbDemoteRows.lostFocus.test.tsx`, `liveTurnFocusGraph.lostFocus.test.tsx`).
+  Open: the details tabs row and the chip grid need their own Steam nodes for the ring to land where a person expects.
+- **The picture question (lane D, Sonnet high, 2 commits).** `py_modules/backend/prompts/ollama_prompts.py` gained a switch
+  (`BONSAI_PICTURE_GAME_IN_QUESTION`) and `picture_user_message`, which `ollama_ask_service.py` calls in one line: with a
+  picture and a running game the user message starts "This screenshot is from <game>."; on by default; the system sentence
+  of 2026-10-25 stays. `scripts/kb/eval_screenshot_reading.py` gained `--picture-shape`, `--label` and a God of War mix-up
+  line; 23 tests across two files. Three of the eleven labelled pictures live in the repo's `screenshots/` folder, so the
+  script needs `--root` there.
+- **The deeper answer checks (lane F, Sonnet high, 6 commits).** `scripts/kb/eval_kb_answers.py`: two optional case fields
+  (`expect_unknown`, `unknown_names`), two checks (admitted not knowing: the two back-end footers or a plain admission, with
+  "I don't know your build" excluded; answered as if it knew), two summary rows, a per-case column, the saved JSON, and
+  `--sample-for-reading N`; eight cases `A-UNKNOWN-01` to `-08` in `tests/fixtures/kb_answer_eval.json` (the Pain Elemental
+  case became the Prowler when the Doom 64 lane's note collided with the guard test, which now names the colliding note);
+  33 tests in `tests/test_eval_kb_answers.py`.
+- **The "can't find my PC" tip (lane H, Sonnet medium, 4 commits).** Tip 167 in `data/kb/compat_patterns.json` (196
+  characters: a test caps tips at 200); word pairs in `py_modules/backend/knowledge/compat_topic_router.py`, generated
+  from short lists, each needing one of network, wifi, lan, list, ollama, address or deck beside it so an in-game
+  "computer terminal" question cannot reach the tip; fixture rows 19 and 20 labelled; tests in three files.
+- **Thirty meaning-only questions (lane I, Sonnet medium, 1 commit)** and **236 blind questions (lane Q2, Sonnet medium, 9
+  commits)** in `tests/fixtures/kb_eval_v2.json` (936 questions now). Q2's first commit clashed with I's rows at the end of
+  the list; the session kept both in order.
+- **The eight games' notes (lanes N5 to N12, Sonnet high).** One file and one sources sidecar per game under `data/kb/notes/`,
+  118 notes, every sentence quoted from a wiki page at a named revision, every file read by the FOSS reviewer (nothing
+  blocks publishing; its small gaps, quotes behind phrases and three near-verbatim lines from a game's own text, fixed by
+  the lanes before landing; the Paper Mario file had five story-spoiler risks fixed, the Shadow Queen unnamed, Doopliss
+  kept to his first fight, Lord Crump's disguise out of a note's name, Vivian out of the partner list).
+- **Seed corrections (lanes M1 and M2, Haiku high, 4 commits).** Super Mario 64's cap timings (the Metal and Vanish Caps
+  about twenty seconds, the Wing Cap about a minute) and the Wiggler's three stomps; Pikmin 2's Waterwraith, spicy-spray
+  and Rock Pikmin sentences; the glossary's spray sentence; Mario Kart 64's Rainbow Road rails.
+- **The "Needs" clause removed (lane M3, Haiku high, 1 commit).** `ollama_prompts.py`; the Strategy follow-up prompt 183
+  characters shorter; the golden fixture's Strategy follow-up hash back to its pre-plan-100 value; the panel's own
+  drawing of a Needs line stays.
+- **Measurements, nothing landed:** lane E's crowding read and proposed fixture patch; lane G's card-style tie and its
+  rewrites patch; lane X2's before and after; lane J's mod-sources report (`workshop:planning/assets/101-mod-knowledge-sources.md`).
+- **Tooling.** `scripts/land_lane.sh`: the Python set gets one retry (it failed once under load on two landings in one
+  night and passed every time on its own).
+- **Bookkeeping.** The pre-go audit (`0f799211`: the four calls closed, D139, the roadmap trimmed from 100.6 KB to about
+  92 KB, fifteen testing rows); the sweep after the landings (its hash is in § 12); the end audit to come.
+
+### 13.4 What popped up and how it was handled
+
+- **The rig's tools dropped out of this chat at go** and the Deck was unreachable; the Deck runbooks were written for a
+  second chat. In the morning the tools came back and the Deck answered, so block R0 ran from this chat after all.
+- **The baseline was red before anything started:** the main roadmap had crossed its size ceiling in plan 100's last
+  sweep; the bookkeeper's audit trimmed it and every landing waited for that.
+- **The full check's bundler step hung** at 8 percent CPU for twenty minutes and was ended by hand; the landing's own gates
+  had proven the same tip. **The Python set failed once under load on two landings** and passed alone each time; the
+  landing script now retries it once.
+- **Lane C found the brief's fix was not the cure** and said so, reproducing the Deck's dead press in a test; the advisor
+  named the one function to change; the lane did it in a second round.
+- **Lane N9's copy was cut before the corrected brief landed** (the session's slip), so it wrote three notes on bosses the
+  seed already covers; it removed them and added Red Pikmin.
+- **The usage window hit 95 percent at 23:30** and the chat was cut off a little later; the maintainer asked for an
+  automatic pick-up; the pick-up list in § 12 and the sweep brief in the scratch folder carried the state, and the chat
+  resumed on "continue" in the morning with nothing re-planned.
+- **The Deck's idle suspend fought the keep-awake lock** and left the suspend overlay stuck over Home, blocking the last
+  three R0 rows.
+- **Every helper reported the launcher's default effort**, not its helper file's; still unverified (plan 33 § 4b).
+
+**What the maintainer could have done differently:** switch the Deck on and launch Doom 64 before go (call 9; the
+hidden-box row missed for the seventh time); answer the quality read in the first hour, or say in advance that the default
+is fine (the content landings waited an hour for nothing); delete the Deck's spare saved chats before a Deck night (ten is
+the cap, and a driver cannot make a fresh chat at ten).
+
+### 13.5 What failed and why; what is left
+
+- **Block R1 has not run** (the overlay; the deploy waits for the full check). Owed: P102-UNDO-FOCUS-01, P102-SIMS-FIRE-01,
+  P102-FINDPC-01, P102-THIN-GAMES-01, P102-PICTURE-01, the look check and the sweep; from R0: the Undo baseline, the
+  hidden-box row (Doom 64), the saved walks' re-save.
+- **The route steps' D-pad sighting did not reproduce**, but a new gap showed: Down from the Copy reply text icon skips a
+  checklist (a ★★ ui bug, filed). **Hide more on a no-story game passed**; under Default the cover did not open by
+  itself on a game named only in the question (a new ★ sighting).
+- **The AI almost never admits it does not know:** 3 of 24, all the back end's footer.
+- **The facts-kept drop after plan 100 was mostly noise** (the same library read 71.2 and 67.2 a week apart; the same
+  prompt gives the identical reply three times); one real worse answer (the Portal 2 gels) and one real search
+  mechanism (the word list grew from 3 to 10 notes).
+- **The card-style pass is not supported** (a tie inside an 18-point noise band).
+- **The meaning search alone still beats what ships** (92.2 against 90.8 in the first three on the held-back questions); the
+  ★★★★ entry's claim holds.
+
+### 13.6 The numbers
+
+| | Before | After |
+|---|---|---|
+| Of 24 plain problem sentences, reach a tip / the right tip | 17 / 15 | 19 / 17 (0 wrong) |
+| Right note in the first three, held-back questions: blend / meaning alone / word alone | 90.8 / 92.2 / 85.6 | X2's second half: pending |
+| The 236 blind questions for the eight games, found in the first three | — | pending |
+| The 30 meaning-only questions the blend rescues | 4 labelled before | pending |
+| Facts kept, first-turn answer test (same library, a week apart) | 67.2 (2026-10-25), 71.2 (2026-11-02) | pending |
+| Admits it does not know, on 8 unanswerable questions | not measured | 3 of 24 (21 answered as if it knew) |
+| Picture: named the game / the place, game handed over, the Deck's model | 67 and 70 / 52 and 53 | 91 and 92 / 29 and 30 |
+| Card style: answers with every fact, 15 prose cards against the same cards labelled | — | 44 of 90 against 48 of 90 (a tie) |
+| Library | 465 notes, 166 tips | 583 notes, 167 tips (15 of 38 games with labelled enemy and item notes) |
+| Knowledge-base Bugs entries not accepted | 11 | see the end audit |
+
+Usage: 12 percent of the five-hour window and 8 percent of the week at go (22:00 EST); 95 and 19 at the cut-off (23:30);
+17 and 22 at the morning pick-up; the figures at close in the end audit.
+
+### 13.7 The checks on the tip
+
+Every landing ran the landing script's gates and the quick check green (the Python set with one retry on two of them).
+The full check on the final code tip (`9615dc19`): pending at the time of writing; the result is in § 12.
+
+### 13.8 A plain developer guide to what changed
+
+- A screenshot turn with a running game now carries the game's name in the message beside the picture
+  (`picture_user_message` in `ollama_prompts.py`, the switch `BONSAI_PICTURE_GAME_IN_QUESTION`); the scoring script measures
+  the three shapes with `--picture-shape` and keeps every run with `--label`.
+- The answer test can score honesty: a case with `expect_unknown` true and `unknown_names` is counted as "admitted" when
+  the reply carries a footer or a plain admission, and "answered as if it knew" otherwise; `--sample-for-reading N` writes N
+  whole replies for a person.
+- A D-pad hop made by the plugin while the panel's page has lost the browser's focus must go through `plainHop`
+  (`lostFocusHop.ts`) and decline when Steam's ring did not follow; `focusDeckOwner` was the last hop that did not.
+- The find-my-PC tip is 167; the router's network pairs need a network word beside "can't find my pc".
+- Notes for a game live in `data/kb/notes/<game>.json` with a sources sidecar; eight more games have them; the blind
+  questions for them carry the game's shortcut name when the game has no Steam id.
+- The landing script retries the Python set once; the search-test script writes no report with `--no-write-report`.

@@ -833,8 +833,9 @@ the cap, and a driver cannot make a fresh chat at ten).
 | Library | 465 notes, 166 tips | 583 notes, 167 tips (15 of 38 games with labelled enemy and item notes) |
 | Knowledge-base Bugs entries not accepted | 11 | see the end audit |
 
-Usage: 12 percent of the five-hour window and 8 percent of the week at go (22:00 EST); 95 and 19 at the cut-off (23:30);
-17 and 22 at the morning pick-up; the figures at close in the end audit.
+Usage: 12 percent of the five-hour window and 8 percent of the week at go (2026-11-02, 22:00 EST); 95 and 19 at the
+cut-off (23:30); 17 and 22 at the morning pick-up; 40 and 32 at close (2026-11-03, 21:30 EST). The 75 percent line was
+passed once, at 23:25 on the first night, after the last helper had started; no new helper started past it.
 
 ### 13.7 The checks on the tip
 

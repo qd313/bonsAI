@@ -2016,3 +2016,12 @@ Knowledge-base entries closed in plan 102's sweep after the landings, copied wor
   know", and a monthly read of ten replies by a person. **Sighting 2026-09-26:** a plain tip ("raise Render Scale") became
   advice that contradicts itself. [Detail](roadmap-kb-details.md#flow-l7-findings)
   **Closed 2026-11-02 as built (plan 102 lane F, landed `9070dead`, `b2828192`, `8c40311d`, `4b1ea742`, `63afa366`, `98c3ffab`):** the answer test scores whether the AI admits it does not know and whether it answers as if it knew; eight questions no note can answer; `--sample-for-reading N` writes N whole replies for a person to read. Measured: on the eight, the AI admitted it in 3 of 24 replies (all three the back end's "No close match" footer, none its own words) and answered as if it knew in 21 of 24 (`workshop:archive/research/kb-answer-eval-2026-11-02-p102-unknown.md`). The finding is a new entry in Next.
+
+## Closed 2026-11-03 (plan 102 end audit)
+
+One knowledge-base entry closed in plan 102's end audit, copied word for word from [roadmap-kb.md](../roadmap-kb.md) as it stood, with the closing noted. Nothing was deleted.
+
+- ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **PARTIAL, counted 2026-10-24 (plan 98 lane F); thirty questions written 2026-11-02 (plan 102 lane I, `affaead1`).**
+  Only 4 labelled questions got nothing from the word search, too few to gate a regression. Lane I wrote thirty questions built to get zero word-search hits on their note, each proved against the built library. The next step is a count of how many the blend rescues (the measurement lane's second half). Figures: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  [Detail](roadmap-kb-details.md#eval-fixture-cannot-see-a-recall-failure)
+  **Closed 2026-11-03 (plan 102 lane X2, final library 2026.11.04, 583 notes):** of the thirty meaning-only questions the word search finds none in the first three, the blend 23 (9 first), the meaning search alone 28 (18 first). The gate's first reading is 23 of 30 rescued. Evidence `workshop:archive/research/kb-embed-bakeoff-2026-11-03-arms-p102-after.json`.

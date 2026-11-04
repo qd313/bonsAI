@@ -861,3 +861,29 @@ Moved word for word by plan 102's sweep after the landings, so each roadmap entr
 **Baldur's Gate 3's seven notes, the Deck line as the entry stood:**
 
   **Deck 2026-10-26, MEASURED (row P100-FOUR-GAMES-01):** "Baldurs Gate 3 how do I handle Minthara" attached the Minthara note (with Goblin Horde and Party composition). The answer names the raid and does not say how the grove ends; its tail is in `workshop:test-evidence/plan100-P100-FOUR-GAMES-01.json`. See the Phase 5 entry in Next.
+
+**What ships loses to its own meaning half, the 2026-11-02 sentence (465-note library):**
+
+Re-measured 2026-11-02 (plan 102 lane X2, 465-note library, held-back questions, right note in the first three): the shipping blend 90.8 in a hundred, the meaning search alone 92.2, the word search alone 85.6, so the claim held on the bigger library (`workshop:archive/research/kb-embed-bakeoff-2026-11-02-arms-p102-before.md`; the 2026-10-25 run, `...-p100-after-arms.md`, read the same).
+
+**The eval cannot yet prove the meaning search rescues many questions, as the entry stood before it closed:**
+
+- ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **PARTIAL, counted 2026-10-24 (plan 98 lane F); thirty questions written 2026-11-02 (plan 102 lane I, `affaead1`).**
+  Only 4 labelled questions got nothing from the word search, too few to gate a regression. Lane I wrote thirty questions built to get zero word-search hits on their note, each proved against the built library. The next step is a count of how many the blend rescues (the measurement lane's second half). Figures: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  [Detail](roadmap-kb-details.md#eval-fixture-cannot-see-a-recall-failure)
+
+**"Where things stand", the older search and answer figures, as the paragraph stood:**
+
+Search puts the right
+note in the top three 85.3 times in a hundred on questions nobody tuned against, measured 2026-09-18 on the older library.
+The Deck's own model keeps the note's facts 79.5 times in a hundred with the answer-first shape that shipped (2026-09-07). The answer test on this PC read facts kept 68.9 in a hundred on the final library (2026-11-03), 71.2 on 2026-11-02 and 67.2 on 2026-10-25, so runs differ by about four points. Do not compare either with figures from before wave
+three: both checks had faults. [Wave three's report](../../bonsAI-workshop/archive/48-kb-wave-three-session.md). More:
+[blind questions](roadmap-kb-details.md#blind-questions-done), [the three new games](roadmap-kb-details.md#three-new-games-and-their-notes).
+
+**RAG Phase 5, the Deck 2026-10-26 sentence as it stood:**
+
+**Deck 2026-10-26 (row P100-FOUR-GAMES-01):** Portal 2 passed; GTA failed twice, then passed after the fix (`b48e4baf`; row P100-FOUR-GAMES-01-try3, `workshop:test-evidence/plan100-P100-FOUR-GAMES-01-try3.json`).
+
+**Unrelated questions can still get a game card stapled on, the Deck line as the entry stood:**
+
+  **Deck 2026-10-24 (plan 98 block K0), MEASURED:** "what time is it" still attached three notes (re-run 2026-10-25 too); the junk-phrase fix is in [Done](roadmap.md#done-after-v060) since 2026-10-26 (row P100-THANKS-01-try2, `workshop:test-evidence/plan100-P100-THANKS-01-try2.json`). Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)

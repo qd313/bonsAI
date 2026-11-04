@@ -620,6 +620,15 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   maintainer's touch or the power button, or a real sleep and wake, clears it). The driver left ten saved chats. **The
   landings:** N5 (`5b0ebf02`), N6 (`0e0de2da`), N8 (`db539690`), N9 (`6cb02fde`) landed; N10's four commits landed
   (`50a63bd1`) and its gates stopped; read below.
+- **20:25 EST: every lane is on `experimental`; the code tip is `9615dc19`.** N10's gates had stopped on a real failure:
+  lane F's guard test (no note names an "unanswerable" thing) met the new Doom 64 note "Pain elemental"; F changed its
+  case to the Prowler (`8869e428`, landed `98c3ffab`; the rate for that case is the same, 0 of 3 admitted). Then N11
+  (`83f16b05`), N12 (`dc63a4f7`), M2 (`31f9dff4`), D (`d755670b`), C (`8ce44695`) landed; Q2's first commit clashed with
+  lane I's rows (both appended at the end of the search-test fixture): resolved by keeping the tip's rows and appending
+  Q2's after them, the other eight picked clean (`76f3619d`; the fixture holds 936 questions), its gates green; M3
+  (`9615dc19`). The eight games' notes on the tip: 118 (15, 15, 15, 15, 13, 15, 15, 15). Next: the bookkeeper's sweep,
+  the library build, X2's second half, the end audit, the full check, the report; the Deck block R1 after a deploy, once
+  the suspend overlay is cleared (a sleep and wake).
 
 ## 13. Report
 

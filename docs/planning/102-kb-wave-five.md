@@ -654,6 +654,12 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   note and the 23-against-28 fusion cost; the honesty entry's two runs; Phase 5's 230 of 236; the "fence present when
   due" read in the calls block; plan 33's end-of-night note: 24 lanes, 100 commits since go, 73 of them code, data, tests
   or scripts). Block R1 still running; its results come as the last sweep.
+- **21:15 EST: block R1 done** (handover `workshop:planning/assets/102-handover-R1.md`): PASS P102-R1-SETUP,
+  P102-SIMS-FIRE-01, P102-FINDPC-01, P102-THIN-GAMES-01 (8 of 8), QA-LOOK-01-p102, P102-R1-SWEEP; UNCLEAR P102-UNDO-FOCUS-01
+  (not reproducible: the page kept the window's focus in five reads); COULD NOT RUN P102-PICTURE-01 (Steam + R1 saved no
+  screenshot). Findings: a spoiler-covered answer draws no notes chip (★); God of War moved from its menu to a scene by
+  itself (a sighting). The last sweep started (copy `p102-k11`); block RR started (the published library back, settings
+  restored).
 
 ## 13. Report
 
@@ -666,9 +672,11 @@ back in the morning); block R1 waits for a deploy and for the stuck suspend over
 
 ### 13.1 What you must do next
 
-1. **Clear the Deck's suspend overlay** (a touch or the power button; or let the session do a sleep and wake through the
-   rig), then block R1 can run: one check per landed fix on the night's build with the night's library installed through
-   the Developer tab. The Deck also holds ten saved chats (the driver made three test chats); delete what you do not want.
+1. **Two Deck rows are still owed and need your hand:** the Undo check (the lost-focus state did not reproduce in five
+   tries on the night; it needs the panel to come back without the window's focus, which happens about one in three reopens
+   with a game running) and the picture check (Steam + R1 saved no screenshot for the rig; take one by hand with a game
+   running, then ask "what game is this and where am I" with it attached). The Deck also holds ten saved chats (the
+   drivers made three test chats); delete what you do not want.
 2. **Read six things with your own eyes.** The eight games' notes, landed by call 2's default when you were away (a Verify
    entry per game in the knowledge-base roadmap; the Super Mario 64 ones were read aloud in the chat on the night):
    `data/kb/notes/grand-theft-auto-v.json`, `grand-theft-auto-iv.json`, `super-mario-64.json`,
@@ -786,9 +794,12 @@ the cap, and a driver cannot make a fresh chat at ten).
 
 ### 13.5 What failed and why; what is left
 
-- **Block R1 has not run** (the overlay; the deploy waits for the full check). Owed: P102-UNDO-FOCUS-01, P102-SIMS-FIRE-01,
-  P102-FINDPC-01, P102-THIN-GAMES-01, P102-PICTURE-01, the look check and the sweep; from R0: the Undo baseline, the
-  hidden-box row (Doom 64), the saved walks' re-save.
+- **Block R1 ran** (2026-11-03, 20:45 to 21:15 EST, from this chat): the Sims fire notes, the find-my-PC tip, the eight
+  games' notes (8 of 8 attached a new note), the look check and the sweep passed on the Deck; the Undo check was not
+  reproducible (the page kept the window's focus in five reads); the picture check could not take a screenshot. Still
+  owed: those two, and from R0 the Undo baseline, the hidden-box row (Doom 64) and the saved walks' re-save. Two new
+  sightings: a spoiler-covered answer draws no notes chip; God of War left its title menu on its own during the picture
+  attempt.
 - **The route steps' D-pad sighting did not reproduce**, but a new gap showed: Down from the Copy reply text icon skips a
   checklist (a ★★ ui bug, filed). **Hide more on a no-story game passed**; under Default the cover did not open by
   itself on a game named only in the question (a new ★ sighting).

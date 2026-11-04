@@ -629,6 +629,10 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   (`9615dc19`). The eight games' notes on the tip: 118 (15, 15, 15, 15, 13, 15, 15, 15). Next: the bookkeeper's sweep,
   the library build, X2's second half, the end audit, the full check, the report; the Deck block R1 after a deploy, once
   the suspend overlay is cleared (a sleep and wake).
+- **20:35 EST: the night's library built on this PC** from the final tip: version 2026.11.04 (the build stamps the UTC
+  date), 583 notes, 167 tips, every meaning vector, 351 tap-to-define words, `corpus.db` 4,096,000 bytes; ready for the
+  maintainer's publish after their reads. The bookkeeper's sweep started (copy `p102-k9` at `75575970`); X2's second half
+  started in a copy at the tip (`p102-x3`); the full check runs on the code tip.
 
 ## 13. Report
 

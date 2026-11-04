@@ -640,6 +640,10 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   folder holds library 2026.11.04, 4,096,000 bytes). The keep-awake lock had already lapsed; a real sleep and wake through
   the rig (65 s away, back on SSH 68 s after the call; the screensaver page gone from Steam's page list afterwards) cleared
   the stuck overlay. Block R1 started with a fresh driver and runbook R1.
+- **20:50 EST: X2's second half done** (the numbers in § 13.6): on the bigger held-back set the blend and the meaning
+  search tie (92.5 and 92.4); the word search misses all thirty meaning-only questions and the blend rescues 23 of them
+  (the meaning search alone 28); the 236 blind questions: 230 found in the first three; tips 19 and 17; facts kept 68.9
+  (noise band); "fence present when due" fell 93.3 to 73.3 on 15 samples, a read owed.
 
 ## 13. Report
 
@@ -791,10 +795,10 @@ the cap, and a driver cannot make a fresh chat at ten).
 | | Before | After |
 |---|---|---|
 | Of 24 plain problem sentences, reach a tip / the right tip | 17 / 15 | 19 / 17 (0 wrong) |
-| Right note in the first three, held-back questions: blend / meaning alone / word alone | 90.8 / 92.2 / 85.6 | X2's second half: pending |
-| The 236 blind questions for the eight games, found in the first three | — | pending |
-| The 30 meaning-only questions the blend rescues | 4 labelled before | pending |
-| Facts kept, first-turn answer test (same library, a week apart) | 67.2 (2026-10-25), 71.2 (2026-11-02) | pending |
+| Right note in the first three, held-back questions: blend / meaning alone / word alone | 90.8 / 92.2 / 85.6 (360 questions) | 92.5 / 92.4 / 85.0 (628 questions, the new rows in) |
+| The 236 blind questions for the eight games, found in the first three (first place) | — | 230 (203) by the blend; one older right note slipped out |
+| The 30 meaning-only questions (the word search misses every one): found by the blend / by the meaning search alone | 4 labelled before | 23 / 28 |
+| Facts kept, first-turn answer test | 67.2 (2026-10-25), 71.2 (2026-11-02, same library) | 68.9 (the new library); no contradiction 98.1; "fence present when due" 73.3 against 93.3 (11 of 15 against 14 of 15: a read owed) |
 | Admits it does not know, on 8 unanswerable questions | not measured | 3 of 24 (21 answered as if it knew) |
 | Picture: named the game / the place, game handed over, the Deck's model | 67 and 70 / 52 and 53 | 91 and 92 / 29 and 30 |
 | Card style: answers with every fact, 15 prose cards against the same cards labelled | — | 44 of 90 against 48 of 90 (a tie) |

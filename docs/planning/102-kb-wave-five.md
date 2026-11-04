@@ -6,9 +6,13 @@ its report, plan 101's lane list, the lessons file, the bug-wave runbook, and fo
 helpers, each re-read against the code before a brief was written (§ 8 lists what they corrected). Plain language on
 purpose: this file is for the maintainer first.
 
-**Status: READY for "go".** The calls in § 2 are open; "go" alone takes every default. The helper rules and the briefs
-are written (the files below). Nothing started; nothing on the Deck touched; the Deck reads unreachable from this PC
-right now (§ 4).
+**Status: DONE 2026-11-03, 21:30 EST.** Every lane landed on `experimental` (code tip `9615dc19`, the docs sweeps and the
+end audit on top); Deck blocks R0, R1 and RR ran from this chat and the Deck is restored; the library 2026.11.04 is built
+on this PC. **Owed to the maintainer** (§ 13.1): the push; the publish after the reads (the eight games' notes, the
+ten-reply sample, tip 167); four calls (the picture shape's place drop, the crowding fix, closing the card-style entry, the
+answer test's samples); two Deck rows that need a hand (the Undo check's lost-focus state, a screenshot for the picture
+check) and the Doom 64 launch for the hidden-box row. The report is § 13. (Before the run: the calls in § 2 were open;
+"go" took every default on 2026-11-02.)
 
 **Who runs it:** this chat (Fable 5.1) orchestrates and lands. **Sonnet 5.5 high** lanes build everything that needs a
 judgment and write the notes; **Sonnet 5.5 medium** writes the test questions, runs the long measurements and does the

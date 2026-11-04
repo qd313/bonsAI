@@ -337,6 +337,11 @@ Parked work and watched sightings: [roadmap-shelved.md](roadmap-shelved.md).
 Everything closed since v0.6.0 shipped (2026-10-24), one line each, newest first. When this section grows past the
 size limit, its older blocks move to an archive file the way the v0.6.0 ones did.
 
+**Closed 2026-11-03 (plan 102 Deck block R1):**
+
+- ★ `[KB]` **The Sims 4 library holds two fire notes that disagree** — **DONE 2026-11-03, passed on the Deck (row P102-SIMS-FIRE-01; evidence `workshop:test-evidence/plan102-P102-SIMS-FIRE-01.json`).** "The Sims 4: how do I stop a fire" attached the Fire, Fires and Fire sprinkler panel notes; both notes that mention firefighters say a smoke alarm brings them, and the "Fire extinguisher" word's definition agrees. Fixed by lane B (`f81d349e`, `cfbc67d8`). Full entry: [archive](archive/roadmap-completed.md#closed-2026-11-03-plan-102-deck-block-r1).
+- ★ `[KB]` **"I can't find my PC" reached no tip** — **DONE 2026-11-03, passed on the Deck (row P102-FINDPC-01; evidence `workshop:test-evidence/plan102-P102-FINDPC-01.json`).** Tip 167 attached and the answer repeats its home-network and port advice; a Hollow Knight boss question and a Fallout 4 computer-terminal question attached no tip. Lane H (`c4d7c54a`, `82a08ad8`, `6a9e7b0a`, `943b0f86`). Full entry: [archive](archive/roadmap-completed.md#closed-2026-11-03-plan-102-deck-block-r1).
+
 **Closed 2026-11-03 (plan 102 sweep after the landings, and Deck block R0 of 2026-11-03):**
 
 - ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **DONE 2026-11-03, a PC measurement (plan 102 lane I `affaead1`, lane X2).** On thirty questions written to get no help from the word search, the word search finds none in the first three, the blend finds 23 (9 in first place) and the meaning search alone 28 (18 first). The five the blend loses are the fusion's cost, kept in the crowding entry's call. Evidence `workshop:archive/research/kb-embed-bakeoff-2026-11-03-arms-p102-after.json` (and its `.md`). Full entry: [archive](archive/roadmap-completed.md#closed-2026-11-03-plan-102-end-audit).

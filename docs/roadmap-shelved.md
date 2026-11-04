@@ -121,6 +121,9 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Evidence `workshop:test-evidence/plan81-P81-REMOVE-KEEPS-PC-PLACE-try2.json`.
   Unshelves when: a new sighting.
 
+- ★ `[platform]` `[watching]` **God of War moved from its title menu to a shrine scene on its own while only two Steam + R1 chords were pressed** — seen once, 2026-11-03 (plan 102 Deck block R1, row P102-PICTURE-01). The plugin log read "voice: stop pressed, no recording was running" near the first chord (20:58:08). Evidence `workshop:test-evidence/plan102-P102-PICTURE-01.json`.
+  Unshelves when: a new sighting.
+
 - ★ `[platform]` `[watching]` **A plugin reload while a game is running can put Steam's Home screen in front of the game** — **shelved as watched 2026-10-16 (D131 call 4).** [Full notes](archive/roadmap-trimmed-2026-10-roadmap.md#plan-93-note-shelved-reload-puts-home-in-front).
   Unshelves when: a new sighting.
 
@@ -147,7 +150,7 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Evidence `workshop:test-evidence/plan72-A7-GAME-ii.json`.
   Unshelves when: a new sighting.
 
-- ★★ `[chips]` `[ui]` `[watching]` **A chip at the edge of the sliding strip reads one third visible to the walk check** — seen on the Deck 2026-10-07 (plan 82, Deck block 4, build `efd4258b`), with and without a game. The strip cuts the chip's words at its edges, so a person sees a clipped chip. Whether that is the design (a strip that slides) or a clipped label is the maintainer's call (plan 82, question 7). Evidence `workshop:test-evidence/plan82-P82-MAIN-WALK-NOGAME.json`, `workshop:test-evidence/plan82-P82-MAIN-WALK-GAME.json`, `workshop:test-evidence/plan82-P82-MAIN-WALK-NOGAME-chip.png`.
+- ★★ `[chips]` `[ui]` `[watching]` **A chip at the edge of the sliding strip reads one third visible to the walk check** — seen on the Deck 2026-10-07 (plan 82, Deck block 4, build `efd4258b`), with and without a game. The strip cuts the chip's words at its edges, so a person sees a clipped chip. More: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-03).
   Unshelves when: the maintainer calls it a clipped label, or a new sighting of a chip cut mid-word.
 
 - ★★ `[focus]` `[watching]` **Walking Down while an answer is still arriving loses the ring** — seen once, 2026-09-27
@@ -185,7 +188,7 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **The first suggestion chip reads 33 to 67 percent visible to the probe while its words churn** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `workshop:test-evidence/plan87-P87-SMOKE-FINAL.json`.
-  **Seen again 2026-10-12 (plan 92):** on Main the first Up from the question box lands on a chip the rig reads as only partly visible: 33 percent (`workshop:test-evidence/plan92-P92-ICONS-AFTER-try2.json`), 56 and 67 percent (`workshop:test-evidence/plan92-QA-FREE-PLAY-01-baseline.json`, `plan92-QA-FREE-PLAY-01-n2.json`; "wording changes every run"). Covered by the Quick Access rail and clipped by the chip carousel, per the first file.
+  **Seen again 2026-10-12 (plan 92):** the first Up from the question box on Main lands on a chip the rig reads as 33 to 67 percent visible. More: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-03).
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **In the AI models window, B did not close it; only Done did** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `workshop:test-evidence/plan87-P87-DECK-RESTORED.json`.
@@ -204,9 +207,7 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Unshelves when: a brand-new Deck is installed, or a new sighting.
 
 - ★ `[platform]` `[watching]` **Rig and Steam quirks seen while filming** — 2026-10-22 (plan 99, build `8c23813e`), evidence `workshop:test-evidence/plan99-FILMING-SIGHTINGS.md` (section 3):
-  Closing the menu with B presses while a game runs stopped the GUIDE+A chord from opening it again until the game was relaunched (twice).
-  The highlight can stall after a Steam box (the notes view, the AI models list); not measured further.
-  The GUIDE+A chord sometimes makes Steam show a "Screenshot Taken" toast (rig only; a player presses the menu button).
+  Three quirks: B presses closing the menu stopped the GUIDE+A chord until the game was relaunched (twice); a stalled highlight after a Steam box; a "Screenshot Taken" toast from the chord (rig only). Word for word: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-03).
   Unshelves when: a new sighting.
 
 - ★ `[platform]` `[watching]` **After a deploy, opening the plugin with the rig's own call failed three times before it

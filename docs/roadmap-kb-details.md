@@ -34,6 +34,7 @@
 - [Plan 100 follow-up note moved from the knowledge-base roadmap 2026-10-26](#plan-100-follow-up-note-moved-from-the-knowledge-base-roadmap-2026-10-26)
 - [Plan 102 notes moved from the shelved roadmap (2026-11-02)](#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-02)
 - [Plan 102 notes moved from the knowledge-base roadmap (2026-11-03)](#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03)
+- [Plan 102 notes moved from the shelved roadmap (2026-11-03)](#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-03)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -887,3 +888,53 @@ three: both checks had faults. [Wave three's report](../../bonsAI-workshop/archi
 **Unrelated questions can still get a game card stapled on, the Deck line as the entry stood:**
 
   **Deck 2026-10-24 (plan 98 block K0), MEASURED:** "what time is it" still attached three notes (re-run 2026-10-25 too); the junk-phrase fix is in [Done](roadmap.md#done-after-v060) since 2026-10-26 (row P100-THANKS-01-try2, `workshop:test-evidence/plan100-P100-THANKS-01-try2.json`). Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+
+**The tips entry's find-my-PC sentence, as the entry stood before it moved to Done:**
+
+  **Plan 102 lane H (`c4d7c54a`, `82a08ad8`, `6a9e7b0a`, `943b0f86`):** a new tip 167 for a Deck that cannot find its PC; 19 of 24 plain sentences now reach a tip and 17 the right one (17 and 15 before), none a wrong one, confirmed on the final library 2026-11-03 (a count from the search-test run, no separate report file). Row P102-FINDPC-01 (block R1) is owed. Older text: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+
+## Plan 102 notes moved from the shelved roadmap (2026-11-03)
+
+Moved word for word by the plan 102 Deck block R1 sweep to keep the shelved file under its size limit.
+
+**A chip at the edge of the sliding strip, the rest of the entry's first line:**
+
+Whether that is the design (a strip that slides) or a clipped label is the maintainer's call (plan 82, question 7). Evidence `workshop:test-evidence/plan82-P82-MAIN-WALK-NOGAME.json`, `workshop:test-evidence/plan82-P82-MAIN-WALK-GAME.json`, `workshop:test-evidence/plan82-P82-MAIN-WALK-NOGAME-chip.png`.
+
+**The first suggestion chip reads 33 to 67 percent visible, the second line:**
+
+  **Seen again 2026-10-12 (plan 92):** on Main the first Up from the question box lands on a chip the rig reads as only partly visible: 33 percent (`workshop:test-evidence/plan92-P92-ICONS-AFTER-try2.json`), 56 and 67 percent (`workshop:test-evidence/plan92-QA-FREE-PLAY-01-baseline.json`, `plan92-QA-FREE-PLAY-01-n2.json`; "wording changes every run"). Covered by the Quick Access rail and clipped by the chip carousel, per the first file.
+
+**Rig and Steam quirks seen while filming, the three lines:**
+
+  Closing the menu with B presses while a game runs stopped the GUIDE+A chord from opening it again until the game was relaunched (twice).
+  The highlight can stall after a Steam box (the notes view, the AI models list); not measured further.
+  The GUIDE+A chord sometimes makes Steam show a "Screenshot Taken" toast (rig only; a player presses the menu button).
+
+**Mod knowledge, the "Found" line as the entry stood:**
+
+  **Found:** LOOT's rule lists are CC0 (free to use), about 20 KB for Fallout 4 and 80 KB for Skyrim SE squeezed, with 76 and 87 percent of their messages checkable without opening binaries. The Cyberpunk community wiki has no licence and its maintainer says it will not get one, so only own-words cards marked "Researched, unconfirmed"; Stardew Valley's sources are NonCommercial or mixed. The build and publish checks do not accept CC0 yet. Report `workshop:planning/assets/101-mod-knowledge-sources.md`.
+
+**RAG Phase 5, the older "Measured" sentences (plan 100):**
+
+**Measured:** 100 of 102 blind questions for the plan 100 games find their note in the first three, but the new notes crowd the old ones (Bugs entry).
+
+**RAG Phase 5, the game list as the entry stood:**
+
+Grand Theft Auto V, Grand Theft Auto IV, Super Mario 64, Paper Mario: The Thousand-Year Door, Doom 64, Donkey Kong 64 and Mario Kart 64 15 each and Pikmin 2 13.
+
+**Screenshot measurement, the step 2 model figures:**
+
+with today's shape and the game handed over, qwen3.5:4b named the game 97 and the place 70 times in a hundred, gemma4:e4b-it-qat 97 and 64, qwen2.5vl:3b 100 and 36, llava:7b 97 and 6, against the Deck's starter model's 67 to 70 and 52 to 53.
+
+**The crowding entry's second line before 2026-11-03:**
+
+  Mostly noise: of the six questions behind the nine-point fall in facts kept, only the Portal 2 gels is a worse answer (0 of 13 on today's library); two have too-narrow phrase lists and three are noise (the unchanged library read 71.2 against 67.2). **One real cause in the search:** after the 51 notes the word search returns up to ten notes instead of three, which pushes a note found only by meaning down the blend; four of the five lost slots are worse for a player.
+
+**The eight thin games' notes, the landing commits as the entry listed them:**
+
+118 notes in the labelled shape: Grand Theft Auto V 15 (`5b0ebf02`), Grand Theft Auto IV 15 (`0e0de2da`), Super Mario 64 15 (`df5c3fec`), Paper Mario: The Thousand-Year Door 15 (`db539690`), Pikmin 2 13 (`6cb02fde`), Doom 64 15 (`50a63bd1`), Donkey Kong 64 15 (`83f16b05`), Mario Kart 64 15 (`dc63a4f7`).
+
+**Hidden spoiler box, the Still owed line as the entry stood:**
+
+  **Still owed:** STRAT-SPOIL-NAME-01 could not run again on 2026-11-03 (plan 102 block R0: Doom 64 was not running and a stuck suspend overlay blocked the Home shelf; `workshop:test-evidence/plan102-STRAT-SPOIL-NAME-01.json`; before that 2026-10-25, `workshop:test-evidence/plan100-STRAT-SPOIL-NAME-01.json`): it needs the maintainer's hand launch (on the checks page). [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)

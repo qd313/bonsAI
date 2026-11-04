@@ -649,6 +649,11 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   the testing rows, the changelog, two lessons, the focus-graph record, plan 33's rows, the status report's paragraph; every
   roadmap file under its ceiling). The end audit starts with X2's second-half numbers; block R1's results follow it as a
   last sweep.
+- **21:00 EST: the end audit landed** (five files: the library stated as built, 583 notes and 167 tips; the meaning-half
+  entry's tie on 628 questions; the meaning-rescue entry closed to Done with 23 of 30; the crowding entry's one slipped
+  note and the 23-against-28 fusion cost; the honesty entry's two runs; Phase 5's 230 of 236; the "fence present when
+  due" read in the calls block; plan 33's end-of-night note: 24 lanes, 100 commits since go, 73 of them code, data, tests
+  or scripts). Block R1 still running; its results come as the last sweep.
 
 ## 13. Report
 

@@ -636,6 +636,10 @@ background sleep job before any pause (the scheduled check alone did not wake pl
 - **20:29 EST: the full check passed on the code tip `9615dc19`** (328 s). The deploy to the Deck started (the night's
   build and library into the seed folder); the suspend overlay is cleared by a sleep and wake through the rig once the
   deploy is done; then block R1.
+- **20:40 EST: deployed** (`scripts/build.ps1`, 156 files verified; the build hash on the Deck `9bc29b3c0500`; the seed
+  folder holds library 2026.11.04, 4,096,000 bytes). The keep-awake lock had already lapsed; a real sleep and wake through
+  the rig (65 s away, back on SSH 68 s after the call; the screensaver page gone from Steam's page list afterwards) cleared
+  the stuck overlay. Block R1 started with a fresh driver and runbook R1.
 
 ## 13. Report
 

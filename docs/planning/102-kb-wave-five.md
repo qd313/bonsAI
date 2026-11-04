@@ -633,6 +633,9 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   date), 583 notes, 167 tips, every meaning vector, 351 tap-to-define words, `corpus.db` 4,096,000 bytes; ready for the
   maintainer's publish after their reads. The bookkeeper's sweep started (copy `p102-k9` at `75575970`); X2's second half
   started in a copy at the tip (`p102-x3`); the full check runs on the code tip.
+- **20:29 EST: the full check passed on the code tip `9615dc19`** (328 s). The deploy to the Deck started (the night's
+  build and library into the seed folder); the suspend overlay is cleared by a sleep and wake through the rig once the
+  deploy is done; then block R1.
 
 ## 13. Report
 
@@ -800,7 +803,8 @@ Usage: 12 percent of the five-hour window and 8 percent of the week at go (22:00
 ### 13.7 The checks on the tip
 
 Every landing ran the landing script's gates and the quick check green (the Python set with one retry on two of them).
-The full check on the final code tip (`9615dc19`): pending at the time of writing; the result is in § 12.
+The full check passed on the final code tip `9615dc19` (2026-11-03 20:29 EST, 328 s, every set green; the only skip was
+the changed-TypeScript test subset, since the docs commits on top changed no TypeScript).
 
 ### 13.8 A plain developer guide to what changed
 

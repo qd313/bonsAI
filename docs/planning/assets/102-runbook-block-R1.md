@@ -8,15 +8,20 @@ Deck command as `ssh deck@192.168.86.52 '<command>'`) applies here word for word
 `plan102-<ROW>.json`, screenshots beside them with the same stem. The driving chat commits nothing and writes its
 handover to the workshop's `planning/assets/102-handover-R1.md`.
 
-**Facts the session fills in before this block runs** (if any is missing, stop and ask the session):
-- The deploy: the driving chat deploys the final build itself with `scripts/build.ps1` from the shared checkout at tip
-  `<tip>` (the session says which; the deploy also puts the night's library into the Deck's seed folder). The build hash
-  on the Deck must then read `<hash>` (`sha256sum ~/homebrew/plugins/bonsAI/dist/index.js | cut -c1-12`). **Never
-  deploy or reload with a game running.**
-- The night's library: version `<version>` (the build date), `corpus.db` `<bytes>` bytes, about 580 notes (465 plus the
-  eight games' new notes) and 167 tips. The published library on the Deck stays 2026.10.25 until this block installs
-  the seed; block RR puts the published one back.
-- Whether lane D landed a picture shape (then R1.6 runs; otherwise it is skipped and recorded as "not landed").
+**Facts for the run (written by the session 2026-11-03, 20:40 EST):**
+- The deploy is done: the session ran `scripts/build.ps1` from the shared checkout at tip `b85dcd70` (the code tip is
+  `9615dc19`; the commits above it are plan documents), 156 files verified, the plugin restarted. The build hash on the Deck
+  reads `9bc29b3c0500` (`sha256sum ~/homebrew/plugins/bonsAI/dist/index.js | cut -c1-12`); do not deploy again. **Never
+  reload with a game running.**
+- The night's library is in the Deck's seed folder: version `2026.11.04`, `corpus.db` 4,096,000 bytes, 583 notes and 167
+  tips, every meaning vector. The published library 2026.10.25 (3,145,728 bytes) is what is installed until R1.0 step 3
+  installs the seed; block RR puts the published one back.
+- Lane D landed a picture shape, so R1.6 runs.
+- Block R0's handover (`workshop:planning/assets/102-handover-R0.md`) left ten saved chats on the Deck, the mode chip on
+  Speed, the Developer tab hidden, both models unloaded, no game running, and a stuck suspend overlay over Home; the
+  session cleared the overlay with a sleep and wake through the rig before starting you (if Home is still covered, stop
+  and report). At ten saved chats, New chat asks which to delete: use the test chat (the long Mantis Lords chat) for
+  every check and make no new chat; where a check says a fresh chat, use the test chat and say so in the evidence.
 
 ## R1.0: setup (row P102-R1-SETUP)
 

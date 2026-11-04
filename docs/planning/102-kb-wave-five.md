@@ -660,6 +660,12 @@ background sleep job before any pause (the scheduled check alone did not wake pl
   screenshot). Findings: a spoiler-covered answer draws no notes chip (★); God of War moved from its menu to a scene by
   itself (a sighting). The last sweep started (copy `p102-k11`); block RR started (the published library back, settings
   restored).
+- **21:25 EST: block RR done, all five steps PASS** (handover `workshop:planning/assets/102-handover-RR.md`, evidence
+  `workshop:test-evidence/plan102-P102-RR-RESTORE.json`): the smoke pass once more (the Mantis Lords note, 20 s); Remove,
+  then Download: the published library 2026.10.25 back (3,145,728 bytes read back; no black frame this time); Speed, the
+  Developer tab off, the knowledge-base switch on, no pinned chips, no game, both models unloaded; ten saved chats left for
+  the maintainer. One sighting: after the smoke answer the chat pane sat at the top of the long chat and the notes block
+  was below the visible area until later moves (seen once).
 
 ## 13. Report
 
@@ -797,7 +803,8 @@ the cap, and a driver cannot make a fresh chat at ten).
 - **Block R1 ran** (2026-11-03, 20:45 to 21:15 EST, from this chat): the Sims fire notes, the find-my-PC tip, the eight
   games' notes (8 of 8 attached a new note), the look check and the sweep passed on the Deck; the Undo check was not
   reproducible (the page kept the window's focus in five reads); the picture check could not take a screenshot. Still
-  owed: those two, and from R0 the Undo baseline, the hidden-box row (Doom 64) and the saved walks' re-save. Two new
+  owed: those two, and from R0 the Undo baseline, the hidden-box row (Doom 64) and the saved walks' re-save. **The Deck is
+  restored** (block RR: the published library 2026.10.25 back, every setting as found, ten saved chats left). Two new
   sightings: a spoiler-covered answer draws no notes chip; God of War left its title menu on its own during the picture
   attempt.
 - **The route steps' D-pad sighting did not reproduce**, but a new gap showed: Down from the Copy reply text icon skips a

@@ -1487,3 +1487,17 @@ the Show details line, as before
   `buildReplyActionsElement.suggestTipWalk.test.tsx` (Helpful, Not really, the button, Show details and back; the
   choices down to it; after Helpful; Down out of the answer; under every Steam scroll rule, no stop twice, every landing
   on screen and inside the reply row). Device row: P100-SUGGEST-01 (block L2).
+
+### After a thumbs-down mark, with the panel's page out of the browser's focus (plan 102, lane C)
+
+_Code: `src/features/answer/reply-actions/kbDemoteRows.tsx` (`landOn`), `src/shared/dpad/liveTurnFocusGraph.ts`
+(`focusDeckOwner`, `focusContextChipLadder`). Landed `1d262a94` and `8ce44695`. Device row: P102-UNDO-FOCUS-01 (block R1), owed._
+
+- **The demote rows' landing asks the window for its focus first.** Every landing on the thumbs-down rows (Undo after a reason or a
+  note, a note in "Which note was it?", the reason after Undo or B) asks the panel's window for the browser's focus once before the
+  transfer, as the checklist steps do. With the page's focus present it reads two values and does nothing.
+- **Down from the notes block no longer dies when the page lacks focus.** `focusDeckOwner` goes through `plainHop` while the panel
+  lacks focus: it says false unless Steam's ring followed, puts the page's focus back and writes the usual `dpad.lostFocusHop` log line
+  (hop `deckOwner`), so the next choice in the chain or Steam's own move carries the ring. On the Main tab with Show details open the
+  chain then runs on to the suggestion chips' transfer, past the open details panel: a moving press, not yet the stop a person expects.
+  The details tabs row and the chip grid need their own Steam nodes (the Bugs entry in the knowledge-base roadmap).

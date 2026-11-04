@@ -33,6 +33,7 @@
 - [Plan 100 notes moved from the knowledge base roadmap (2026-10-25)](#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
 - [Plan 100 follow-up note moved from the knowledge-base roadmap 2026-10-26](#plan-100-follow-up-note-moved-from-the-knowledge-base-roadmap-2026-10-26)
 - [Plan 102 notes moved from the shelved roadmap (2026-11-02)](#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-02)
+- [Plan 102 notes moved from the knowledge-base roadmap (2026-11-03)](#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -791,3 +792,72 @@ Moved word for word by the plan 102 pre-go audit to keep the shelved file under 
 **Picking a setting from the settings card (the entry's full text):**
 
 A on "Enable GPU Crash Report Collection" opened Steam's System page at the top, with the toggle about 320 px below the screen edge (found 2026-10-08 on the Deck, plan 83; evidence `workshop:test-evidence/plan83-P83-J1-SETTINGS-CARD.json`). Steam's link and route calls take only a page name; the Decky libraries and the web show no way to open at, or scroll to, one setting, and a read-only probe of Steam's own page found no settings route or deep-link reader (plan 87 B6, 2026-10-09; evidence `workshop:test-evidence/plan87-B6-SETTINGS-PROBE.json`); nothing was built (the maintainer's call 9, plan 87). The maintainer's call 2026-10-10 (checks page): fine as long as it opens the right page. The wrong-page bug (A on "Enable Wi-Fi" opens System, not Internet) is separate and stays in the roadmap's Bugs.
+
+## Plan 102 notes moved from the knowledge-base roadmap (2026-11-03)
+
+Moved word for word by plan 102's sweep after the landings, so each roadmap entry stays at five lines.
+
+**The Sims 4 fire notes, as the Bugs entry stood:**
+
+- ★ `[KB]` **The Sims 4 library holds two fire notes that disagree** — **OPEN, found 2026-10-25 (plan 100 lane N3).**
+  The older note "Fires" (section 112 in `data/kb/strategy_seed.json`) says there are no firefighters. The Sims wiki says they were added in a patch and come when a smoke alarm sees the fire, and the new Fire note (1200) follows the wiki. The old note needs correcting, then a library rebuild.
+  **Deck 2026-10-26 (row P100-FOUR-GAMES-01), MEASURED:** "The Sims 4: how do I stop a fire" attached the older "Fires" note first, the new Fire note third, and no smoke alarm note. Evidence `workshop:test-evidence/plan100-P100-FOUR-GAMES-01.json`.
+
+**Thumbs-down after Undo, as the Bugs entry stood:**
+
+- ★★ `[KB]` **Thumbs-down: after Undo with a game running, Down stopped on the notes block** — **OPEN, found 2026-10-24 (plan 98 Deck block K3).**
+  The page had lost the window's focus (the lost-focus family from plan 97), so Down did nothing. Closing and reopening Quick Access cleared it but emptied the question box. Same lost-focus family as plan 97's freeze. Evidence `workshop:test-evidence/plan98-P98-DEMOTE-01-game.json`.
+
+**Screenshot reading ignores the game name, as the Bugs entry stood:**
+
+- ★★ `[KB]` `[QA]` **Screenshot reading ignores the game name it was handed** — **OPEN, found 2026-10-24 (plan 98 lane I).**
+  On God of War's play and pause pictures the Deck's AI ignored the handed-over game name in 4 of 9 asks. See the screenshot entry in Next.
+
+**The new notes crowd the old ones, as the Bugs entry stood:**
+
+- ★★ `[KB]` **The new notes crowd the old ones: five held-back questions lost their note from the first three and facts kept fell nine points after the four games' notes landed** — **MEASURED 2026-10-25 (plan 100 lane X), the maintainer decides.**
+  The five: the Portal 2 gels, the BG3 class, an audio tip and two GTA rows. Facts kept 76.3 down to 67.2 in a hundred after the four games' notes landed; run-to-run noise is up to 6 points, so the drop needs a read before it is believed. Six questions went from 3 of 3 to 0 of 3. Reports: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+
+**The eval cannot yet prove the meaning search rescues many questions, as the entry stood:**
+
+- ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **OPEN, counted 2026-10-24 (plan 98 lane F).** Only 4 labelled questions get nothing from the word search, too few to gate a regression; whether to write more is the owner's call. No code needed. Figures: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  [Detail](roadmap-kb-details.md#eval-fixture-cannot-see-a-recall-failure)
+
+**Card style pass, as the entry stood:**
+
+- ★★★ `[KB]` **Card style pass** — **OPEN, measure first, added 2026-09-05.** Rewrite the prose cards as labelled short
+  lines, the shape the labelled cards already use (how many cards are labelled needs a recount). Facts kept was 92% when
+  measured, so the ceiling is low. Do it only if the answer test shows the labelled shape scores better.
+  ([D67](audit/maintainer-decisions-archive.md#d67--locked-2026-09-05--structured-cards-accept-prose))
+
+**KB visual maps, the route line before the Needs clause was removed:**
+
+- ★★★ `[KB]` **KB visual maps** — **PARTIAL; two shapes picked on the mock-up board 2026-10-10, the route built 2026-10-24.** Nothing draws anything in a reply today.
+  **A route, one step at a time:** built 2026-10-24 as the look of the strategy checklist (see the route-look entry in Deck check owed above). The "Needs: …" part on steps that need an item or ability landed 2026-10-25 and is owed a Deck check (see Deck check owed).
+  **Your screenshot, marked**: up to three numbered marks (hit, avoid, dodge), each saying whether the Deck's AI is sure; an unsure mark is dashed. A scoring test first: a stronger model scores, out of ten, what the Deck's models mark, and helps teach them.
+  Not chosen as drawn: a fuller boss card, a whole-kingdom map.
+  [Mock-up board, tab 5](https://claude.ai/artifact/XyZfUSPGRZdm2P3mTGV9tR) · [notes](demos/mockup-board/README.md) · [Detail](roadmap-kb-details.md#kb-visual-maps)
+
+**Screenshot measurement, as the entry stood:**
+
+- ★★★★ `[KB]` `[QA]` **Measure how well the AI reads a screenshot: which game, which area, which boss** — **PARTIAL, added 2026-09-25. Step 1 done 2026-10-24 (plan 98 lane I, `6e46b9fc` to `1219b07c`): a labelled picture set and a scoring script.**
+  First figures: with the game handed over the AI named it 75 times in 100 and the area 42; with nothing handed over, 17 and 29. It often invents. Full text: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  The set is thin; a bigger one needs the maintainer's hand. **Step 2** (each picture model the Deck offers, then fix where it fails) is still open.
+  **2026-10-25 (plan 100 lane P, `55771b7a`), measured: no gain.** With the game handed over the AI named it 58 and 50 times in a hundred (75 on 2026-10-24); two runs differ by up to 21 points. Still PARTIAL. Report: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  [Detail](roadmap-kb-details.md#measure-how-well-the-ai-reads-a-screenshot) · **From Phase 7 (call 8):** a screenshot feeding the search is not built.
+
+**RAG Phase 5, as the entry stood:**
+
+- ★★★★ `[KB]` **RAG Phase 5: depth on the thirteen titles** — **PARTIAL.** The thirteen original titles went from 133 to
+  164 notes. The four that had none now have enemy and item notes (plan 100, 2026-10-25): Baldur's Gate 3 7, GTA San Andreas 15, The Sims 4 15, Portal 2 14 (every game has at least one enemy or item note, but only seven have them as labelled cards: see Where things stand). **Measured:** 100 of 102 blind questions find their note in the first three, but the new notes crowd the old ones (see the Bugs entry). **Deck 2026-10-26 (row P100-FOUR-GAMES-01, partly open):** Portal 2 passed (the Sentry Turret and Defective Turret notes attached). GTA failed twice, then passed after the fix (`b48e4baf`; row P100-FOUR-GAMES-01-try3, evidence `workshop:test-evidence/plan100-P100-FOUR-GAMES-01-try3.json`). The Sims 4 and Baldur's Gate 3 were measured (see their entries). Stays PARTIAL for your read of the Baldur's Gate 3 notes and the call on facts kept. [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  [Plan](planning/28-phase5-corpus-depth.md) · [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+
+**Left open by the content lanes (a note, no entry unless the maintainer judges otherwise):** seed note 221's "sixty percent off" for Grand Theft Auto IV's gun van disagrees with the wiki's prices (lane N6); seed 237's source link points at the Eyerok page while its Wiggler fact comes from the Wiggler page (lane N7).
+
+**Mod knowledge for modded games, as the entry stood before plan 102's sources were listed:**
+
+- ★★★ `[KB]` **Mod knowledge for modded games** — **OPEN, filed 2026-10-27 (plan 101, round 4).** Known mod problems and load-order rules for the games people mod most, so "what's wrong with my load order" and "do these two mods clash" get an offline answer that names the mods bonsAI found on the device. First source found and checked: the LOOT masterlists (the load-order tool the Bethesda modding community uses), published under CC0, with per-plugin load-after, requires, incompatible-with and warning entries for Fallout 4, Skyrim and the other Bethesda games. Cyberpunk's community modding wiki is the likely source for Cyberpunk; its licence is unchecked. Nexus Mods pages are never copied. Plan 101's research lane lists the sources and licences before any card is written; the cards and a load-order check follow as their own wave. [Plan 101](planning/101-deep-mod-ai-hints.md).
+
+**Baldur's Gate 3's seven notes, the Deck line as the entry stood:**
+
+  **Deck 2026-10-26, MEASURED (row P100-FOUR-GAMES-01):** "Baldurs Gate 3 how do I handle Minthara" attached the Minthara note (with Goblin Horde and Party composition). The answer names the raid and does not say how the grove ends; its tail is in `workshop:test-evidence/plan100-P100-FOUR-GAMES-01.json`. See the Phase 5 entry in Next.

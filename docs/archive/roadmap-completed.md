@@ -1987,3 +1987,32 @@ Two older Done blocks moved word for word out of [roadmap.md](../roadmap.md) to 
 - ★ `[ui]` **At the Large text size, the Remove button splits its word and a few rows are cut or touch the panel's edge** — **DONE 2026-10-22, passed on the Deck (row P97-L13-LARGE-TEXT).** At Large every arrow sat 12 px from the edge and Story spoilers showed its name on two lines with no summary; at Normal the screenshot shows no sliver either. `workshop:test-evidence/plan97-P97-L13-LARGE-TEXT.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-97-fourth-sweep-closed-by-blocks-d-e-and-f-2026-10-22).
 
 - ★ `[QA]` **The test rig's settings snapshot tool can save a damaged copy** — **DONE 2026-10-22, passed on the Deck (row P89-RIG-SNAPSHOT, second try).** Three saved copies, each equal to a fresh copy of the live settings folder; the first call set the ten-day-old earlier copy aside. Calls 2 and 3 refuse until call 1 is restored (noted in the full entry). `workshop:test-evidence/plan97-P89-RIG-SNAPSHOT-try2.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-97-fourth-sweep-closed-by-blocks-d-e-and-f-2026-10-22).
+
+## Closed 2026-11-03 (plan 102 sweep after the landings)
+
+Knowledge-base entries closed in plan 102's sweep after the landings, copied word for word from [roadmap-kb.md](../roadmap-kb.md) as they stood, with the closing noted. Nothing was deleted.
+
+- ★ `[KB]` `[QA]` **The note-model test script writes its JSON report even when told not to** — **OPEN, found 2026-10-25 (plan 100).**
+  `scripts/kb/eval_kb_embed_models.py` always writes its JSON report into the workshop (around line 1870); the no-report flag only skips the text report. It overwrote a workshop file on 2026-10-25. Fix: honour the flag for the JSON file too.
+  **Closed 2026-11-02 (plan 102 lane A, `ac224744`):** a PC-only fix. `--no-write-report` now keeps the JSON report out of the research folder too; the write step is its own helper, proven by `BakeoffReportFlagTests` in `tests/test_eval_kb_arms.py` (flag off: the folder stays empty; flag on: both files appear) and a hand run of `--arms-only --no-write-report` that left the folder unchanged.
+
+- ★★ `[KB]` **ui: in a second checklist answer, the route's steps were drawn but the D-pad could not reach them** — **OPEN, found 2026-10-24 (plan 98 Deck block KR).**
+  The ring went to the tab bar. One sighting, with a muddled setup. Evidence `workshop:test-evidence/plan98-P98-KR-REPLAYS.json` (the P98-ROUTE-01 line).
+  **Closed 2026-11-03 (plan 102 block R0, row P98-ROUTE-01-try3):** not reproduced with a prepared setup. Down from the answer reached step 1 of the new list and nothing landed on the tab bar. The same try found a different problem on the way back (the Bugs entry about the Copy reply text icon). Older turns collapse under "N earlier", so two lists never show at once. Evidence `workshop:test-evidence/plan102-P98-ROUTE-01-try3.json`.
+
+- ★ `[KB]` **Route look: no "Needs: …" part is written for steps that need an item or ability** — **VERIFY, landed 2026-10-25 (plan 100 lane P, `e5ba73bd`), unit-tested.**
+  The checklist instruction now asks for ". Needs: <the thing>" on a step that needs an item, ability or unlock, in the shape the panel already draws.
+  **Deck 2026-10-26, UNCLEAR (row P100-NEEDS-01):** two tries, no step carried a "Needs:" line. The first try (a branch button pressed first) drew four steps, one of them "Acquire Mothwing Cloak dash ability" with no "Needs:"; the second drew no list, so the AI did not use the shape. The maintainer decides whether the clause stays. Evidence `workshop:test-evidence/plan100-P100-NEEDS-01.json`.
+  **Measured 2026-10-25 (plan 100 lane X):** the answer test cannot count "Needs" steps (first turns only; the two-turn pairs drew no checklist in 48 turns). The Deck check, a branch button first, is the only measurement.
+  **Closed 2026-11-03 by the maintainer's call 7 (D139):** tried on the Deck in plan 100 (two tries, row P100-NEEDS-01) and plan 102 (two differently worded tries, ten steps in all, row P100-NEEDS-01-try3), never drawn once. The clause was removed in `9615dc19` (lane M3: the Strategy follow-up prompt is 183 characters shorter; the Default spoiler paragraph is untouched). Evidence `workshop:test-evidence/plan102-P100-NEEDS-01-try3.json`.
+
+- ★★ `[KB]` **Story spoilers: under Hide more, a cover with no boss name in it still opens on a game with no story profile** — **VERIFY, landed 2026-10-25 (plan 100 lane V, tip `eab4f33e`), unit-tested.**
+  The "How much to hide" setting now reaches the screen's cover rule. Under Hide more, a cover on a game with no story stays shut, on screen and in Copy; Default and Hide less are unchanged.
+  **Deck 2026-10-26, UNCLEAR (row P100-HIDE-MORE-SCREEN-01):** Mario Kart 64 drew no cover in four tries under either setting (0 covers in about 450 reads), so nothing was judged; the fix stands on its tests. The next try needs a question that draws a cover. The row is back on Default. Evidence `workshop:test-evidence/plan100-P100-HIDE-MORE-SCREEN-01.json`.
+  **Closed 2026-11-03 (plan 102 block R0, row P100-HIDE-MORE-SCREEN-01-try2), the Hide more half:** on Brotato (Strategy, no game, a fresh chat) a cover was drawn on 2 of 2 answers under Hide more and stayed shut, on screen and in the saved chat. The Default half did not pass: its cover was drawn but did not open by itself (a new Bugs entry). Evidence `workshop:test-evidence/plan102-P100-HIDE-MORE-SCREEN-01-try2.json`.
+
+- ★★★ `[KB]` **Deeper answer checks** — **OPEN, added 2026-09-05.** The answer test cannot tell whether a reply was
+  helpful or whether the model admitted not knowing. Add questions no card can answer, scored for an honest "I don't
+  know", and a monthly read of ten replies by a person. **Sighting 2026-09-26:** a plain tip ("raise Render Scale") became
+  advice that contradicts itself. [Detail](roadmap-kb-details.md#flow-l7-findings)
+  **Closed 2026-11-02 as built (plan 102 lane F, landed `9070dead`, `b2828192`, `8c40311d`, `4b1ea742`, `63afa366`, `98c3ffab`):** the answer test scores whether the AI admits it does not know and whether it answers as if it knew; eight questions no note can answer; `--sample-for-reading N` writes N whole replies for a person to read. Measured: on the eight, the AI admitted it in 3 of 24 replies (all three the back end's "No close match" footer, none its own words) and answered as if it knew in 21 of 24 (`workshop:archive/research/kb-answer-eval-2026-11-02-p102-unknown.md`). The finding is a new entry in Next.

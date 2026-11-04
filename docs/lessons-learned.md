@@ -118,6 +118,9 @@ cut from, not just at "the latest commit on the branch", before handing it to a 
 
 **A landing chain that waits for an inner script's "ALL LANDED" line starts the next landing while the outer script is still in its gates.** The inner script prints that line before the outer one has finished its own checks, so the chain began the next landing early, and two landings ran at once in the shared checkout (plan 96, 04:10 UTC: the focus branch and lane F8). Nothing was lost, only because both landings' gates ran on the same combined tree; the copy-paste guard failed there and was fixed in its own commit. Start the next landing only after the outer script has exited, and read its exit code, not a line it printed. Record: `workshop:planning/96-ship-ready-bug-session.md`, the 04:30 UTC entry.
 
+
+**On a loaded PC the Python test set can fail once, right after the screen tests, and the full check's bundler step can hang.** Plan 102 (2026-11-02 and 2026-11-03): two landings in one night stopped on the Python set right after the screen tests, and the set passed every time it ran alone (3,337 tests, twice). `scripts/land_lane.sh` now retries that step once, as it already did the build. The same night the full check's bundler step hung at 8 percent CPU for twenty minutes and had to be ended by hand; the landing's own gates had already proven the same tip. Run a failed set once more on its own before reading it as a real failure, and watch the CPU before waiting on a silent step.
+
 ---
 
 ## 2. Proving a change is really a change
@@ -396,10 +399,12 @@ most of the processor between them. Measure on the Deck, with the game running, 
 round of the same kind of saving.
 
 **When Quick Access loses its window's focus over a running game, a plain focus() splits Steam's ring from the page.** Plan 76's
-six-reopen measurement: every reopen where the Quick Access page's `document.hasFocus()` read false split later (each D-pad press moved the
-page's focus, not Steam's ring, and A acted on the ring). Every reopen reading true never did. The reopen route did not decide it. Asking the
-panel's own window for focus back fixed 6 of 6. Before blaming Steam or a test tool for a ring that stops following the D-pad, read
-`hasFocus()` on the panel's document.
+six-reopen measurement, taken before any fix: every reopen where the Quick Access page's `document.hasFocus()` read false split later
+(3 of 3), and every reopen reading true never did (3 of 3); the reopen route did not decide it. The fix run that followed (six more
+reopens, no split) proves less than it first read: all six began with the focus present, so it never saw the heal rescue the lost
+state, and its own verdict says so (`workshop:test-evidence/plan76-P76-TRAP-FIX.json`). Plan 97's readings later saw the window
+refuse to give the focus back, which is why plan 102 asks it again in the rows' landing helper. Before blaming Steam or a test tool
+for a ring that stops following the D-pad, read `hasFocus()` on the panel's document.
 
 **A spoiler fix is not believed until the Deck shows a cover.** Plan 77's first fix for "no covers on a Hollow Knight
 question while Deep Rock runs" passed eleven tests, landed, and changed nothing on the Deck: the covers come from the
@@ -511,6 +516,8 @@ needs (build hash, how to confirm the library's install by size and date, the De
 workshop) went into the runbook file in the repo, so a fresh chat could run the block from the file alone. Before a
 Deck block, read the session's server list; if the two are missing, say in one line what unblocks it and do not
 start a driver.
+
+**A keep-awake lock that refuses Steam's idle suspend can leave the suspend overlay stuck over Home.** Plan 102 block R0 (2026-11-03): at about 10:04 Steam tried to suspend the idle Deck, the rig's lock refused it, and the overlay stayed on the Home screen. L3, B and A do not clear it; the plugin panel still opens on top of it, but Home and game launches are blocked, so three rows could not run. A real sleep and wake, the maintainer's touch or the power button clears it. Two smaller traps from the same block: a walk tool called with `saveAs` wrote a file into the repo checkout (`runs\r01-walk-ask.json`, deleted), and the replay tool hashes the repo checkout's build, not the Deck's, so a replay on a different build than the checkout's reads as a mismatch.
 
 ## 4. Briefing helpers
 

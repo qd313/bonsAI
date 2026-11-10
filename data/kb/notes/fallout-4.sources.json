@@ -15,7 +15,7 @@
       "main_revision": "4694740",
       "lines": [
         {
-          "line": "Summary: A fast, flying mutant insect with a scorpion-like tail that ends in a deadly sting. You often meet them in swarms, in groups of up to five, and their erratic flying makes them formidable.",
+          "line": "Summary: Fast flying mutant insects, often met in swarms of up to five. They sting with venom and fly erratically.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Stingwing_(Fallout_4)",
@@ -23,27 +23,27 @@
               "quoted": [
                 "Stingwings appear to be large, mutated insects with extended mouthparts and a scorpion-like tail, ending in a bulbous and deadly sting.",
                 "They can often be found in swarms, and their erratic flying coupled with a venomous sting makes them formidable opponents.",
-                "They are often encountered in groups of up to five"
+                "They are often encountered in groups of up to five",
+                "It is, however, extremely fast, hits fairly hard"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: It is fragile and can be taken down in relatively few shots even at mid-level, but it is extremely fast and hits fairly hard. Its speed and erratic movement make it very hard to hit without V.A.T.S.",
+          "line": "Weak points: Use V.A.T.S.: its speed and erratic flight make it hard to hit otherwise. It is fragile, so a few shots kill it, even at mid-level.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Stingwing_(Fallout_4)",
               "revision": "4694740",
               "quoted": [
                 "Fragile but agile, the stingwing can be taken down in relatively few shots even at mid-level.",
-                "It is, however, extremely fast, hits fairly hard",
-                "which can combine to make them very hard to hit without V.A.T.S."
+                "due to their speed and erratic movements, which can combine to make them very hard to hit without V.A.T.S."
               ]
             }
           ]
         },
         {
-          "line": "Looks like: A large mutated insect with extended mouthparts and a scorpion-like tail ending in a bulbous sting. A glowing stingwing has a body that glows from absorbed radiation.",
+          "line": "Looks like: A large mutated insect whose scorpion-like tail ends in a bulb-shaped sting. Glowing stingwings light up from the radiation they absorbed.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Stingwing_(Fallout_4)",
@@ -56,16 +56,14 @@
           ]
         },
         {
-          "line": "Tips: Expect a dive-bombing attack: it circles you, rushes in to hit once, then goes back to circling, and sometimes it rushes at you in single file. Their nests are large clusters on the ground and walls that ooze bright yellow sap, and when you approach one several stingwings come out to defend it. At higher levels the stingwing chaser, the toughest kind, is fast, hits hard and attacks together with its group.",
+          "line": "Tips: It circles you, dives in for one hit, then circles again. Going near a sap-oozing nest brings out several to defend it.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Stingwing_(Fallout_4)",
               "revision": "4694740",
               "quoted": [
                 "fond of a \"dive-bombing\" tactic where it circles the player character and rushes in to hit once before returning to circling.",
-                "Another tactic the stingwing tends to use is to rush at the player character in single file.",
-                "They are known to build large clusters of nests on the ground and walls, with nests themselves oozing a bright yellow sap akin to honey from their entrances. When these nests are approached, multiple stingwings will emerge to fiercely defend them from potential threats.",
-                "Chasers can be considered as the toughest of the stingwing variants. They are fast, hit hard, and are especially dangerous when encountered in groups, as they will attack together. Once the Sole Survivor reaches higher levels, they will spawn in various areas."
+                "They are known to build large clusters of nests on the ground and walls, with nests themselves oozing a bright yellow sap akin to honey from their entrances. When these nests are approached, multiple stingwings will emerge to fiercely defend them from potential threats."
               ]
             }
           ]
@@ -80,7 +78,7 @@
       "main_revision": "4699294",
       "lines": [
         {
-          "line": "Summary: A fast, territorial burrowing rodent, found from the Red Rocket truck stop all the way to the Glowing Sea. Compared to many other enemies mole rats are generally weak, but a swarm can hide from your sight and attack from behind.",
+          "line": "Summary: Fast, territorial pests found from the Red Rocket truck stop to the Glowing Sea. They are weak next to many other enemies, but a swarm can hide and attack from behind.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mole_rat_(Fallout_4)",
@@ -93,7 +91,7 @@
           ]
         },
         {
-          "line": "Weak points: The standard mole rat has a mere 15 hit points and can be killed with a single hit from most weapons. A rabid mole rat is tougher and its bites fester, causing damage over time, but it remains a weak opponent.",
+          "line": "Weak points: Most weapons kill a standard mole rat in one hit, as it has only 15 hit points. Rabid ones are tougher and their bites hurt over time, but they are still weak.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mole_rat_(Fallout_4)",
@@ -106,7 +104,7 @@
           ]
         },
         {
-          "line": "Looks like: A bald, pink animal with large front teeth and small eyes, from the size of a house cat up to a large dog.",
+          "line": "Looks like: Pink and hairless, with big front teeth and small eyes. Their size runs from a house cat to a large dog, perhaps larger.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mole_rat_(Fallout_4)",
@@ -118,7 +116,7 @@
           ]
         },
         {
-          "line": "Tips: Mole rats in the Commonwealth tunnel to avoid you or to close in unseen, but a faint outline of their tunnel can be seen as they move. They retreat into a tunnel if you stand somewhere they cannot reach, such as on top of a car. Some are landminers with fragmentation mines strapped to their backs, and those detonate on impact and hurt anything close.",
+          "line": "Tips: They tunnel to dodge you or sneak up, but a faint tunnel outline shows their path. Landminer mole rats have fragmentation mines on their backs that explode on impact and hurt anything close.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mole_rat_(Fallout_4)",
@@ -126,7 +124,8 @@
               "quoted": [
                 "They will tunnel to avoid their enemy or close in to attack unseen, they will also retreat to a tunnel if the player character moves to an area inaccessible to them, such as on top of a car.",
                 "However, a faint outline of their tunnel can be seen as they move.",
-                "it is possible to encounter mole rats with fragmentation mines strapped to their backs. These will detonate on impact, dealing damage to anything in proximity."
+                "it is possible to encounter mole rats with fragmentation mines strapped to their backs. These will detonate on impact, dealing damage to anything in proximity.",
+                "Mole rat landminer"
               ]
             }
           ]
@@ -141,7 +140,7 @@
       "main_revision": "4699292",
       "lines": [
         {
-          "line": "Summary: A mutated mosquito that attacks in swarms, stabbing you with a needle-like proboscis and drinking your blood, then spitting the blood back at you for a large amount of radiation damage.",
+          "line": "Summary: Swarming mutated insects that feed on blood through a needle-like proboscis. They can spit the blood back at you for heavy radiation damage.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Bloodbug_(Fallout_4)",
@@ -154,7 +153,7 @@
           ]
         },
         {
-          "line": "Weak points: Damaging its blood sac makes it lose its spit ability, though the sac is restored if it is given enough time. Its proboscis cannot get through power armor, so against power armor it is left with largely ineffectual stings and its acid spit.",
+          "line": "Weak points: Damage its blood sac to take away its spit, though the sac recovers given time. Its proboscis cannot get through power armor.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Bloodbug_(Fallout_4)",
@@ -167,7 +166,7 @@
           ]
         },
         {
-          "line": "Looks like: About two feet long and muddy brown, with six long limbs, one pair of wings and a long pointed proboscis between two compound eyes. The rare red widow bloodbug has a body tinted red.",
+          "line": "Looks like: A muddy-brown insect about two feet long, with six limbs and a long proboscis between its compound eyes. The rare red widow variant is tinted red.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Bloodbug_(Fallout_4)",
@@ -176,22 +175,21 @@
                 "Bloodbugs appear to be roughly two feet in length from the head to the tip of the abdomen. Bloodbugs possess muddy brown coloration",
                 "bloodbugs possess six long double-jointed limbs, one pair of finely-veined wings and a long, pointed proboscis that extends from between two compound eyes.",
                 "Red widow bloodbug",
-                "but their bodies are tinted red."
+                "but their bodies are tinted red.",
+                "A rare variant of the bloodbug"
               ]
             }
           ]
         },
         {
-          "line": "Tips: A dead brahmin drained of blood and covered in oversized stings is a sign that bloodbugs are nearby. They cling to trees, walls and ceilings while unaware of you, so a seemingly empty room can hold a whole swarm. Once alerted they spread out and surround you, but if most of the swarm is destroyed before it reaches you the survivors will often retreat.",
+          "line": "Tips: A brahmin corpse drained of blood and covered in big stings means bloodbugs are close. They cling to ceilings and walls, so an empty-looking room may hold a swarm.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Bloodbug_(Fallout_4)",
               "revision": "4699292",
               "quoted": [
                 "Coming across the exsanguinated, gray-skinned husk of a dead brahmin whose body is covered in oversized stings is a significant indicator of knowing there are bloodbugs nearby.",
-                "clinging to trees and structures, as well as walls or the ceiling while indoors and unaware of an enemy's presence. This can result in a nasty surprise when the player character enters a seemingly empty room or subway station and suddenly finds themselves in the middle of an entire bloodbug swarm.",
-                "Once they are alerted to their victim's presence, they will spread out, surround their prey and attack from multiple directions.",
-                "should the majority of the swarm be destroyed before it reaches its prey, the survivors will often retreat."
+                "clinging to trees and structures, as well as walls or the ceiling while indoors and unaware of an enemy's presence. This can result in a nasty surprise when the player character enters a seemingly empty room or subway station and suddenly finds themselves in the middle of an entire bloodbug swarm."
               ]
             }
           ]
@@ -206,7 +204,7 @@
       "main_revision": "4367296",
       "lines": [
         {
-          "line": "Summary: A big, fast, aggressive mutated scorpion with a poisoned stinger and the ability to burrow. It can deal a large amount of physical and poison damage in only a few hits, and most are found in the Glowing Sea.",
+          "line": "Summary: Fast, aggressive mutated scorpions that can burrow, found mostly in the Glowing Sea. A few hits from their claws and tail do heavy damage.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout_4)",
@@ -214,13 +212,14 @@
               "quoted": [
                 "Radscorpions are fast runners, extremely aggressive, extraordinarily well armored and will use their powerful claws and poisoned tails to attack enemies quickly and relentlessly; capable of dealing a large amount of physical and poison damage in only a few hits.",
                 "Radscorpions are mostly found within the Glowing Sea.",
-                "the ability to burrow underground in seconds"
+                "the ability to burrow underground in seconds",
+                "They have since mutated to become much larger, faster and more venomous than ever before."
               ]
             }
           ]
         },
         {
-          "line": "Weak points: The face is its only weak spot, and a small one. Armor-piercing weapon mods and the Penetrating legendary modifier raise your damage against their reinforced exoskeletons.",
+          "line": "Weak points: Aim for the face, the only weak spot, though it is small. Armor-piercing mods and the Penetrating legendary effect do more damage through their armor.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout_4)",
@@ -233,7 +232,7 @@
           ]
         },
         {
-          "line": "Looks like: A much bigger version of the emperor scorpion, with powerful claws and a poisoned tail. Albino ones are white, deathskull ones are reddish, and glowing ones glow green.",
+          "line": "Looks like: A far larger descendant of the emperor scorpion. Albinos are white, deathskulls reddish, glowing ones green.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout_4)",
@@ -241,7 +240,6 @@
               "quoted": [
                 "They originated from the North American emperor scorpion",
                 "They have since mutated to become much larger, faster and more venomous than ever before.",
-                "powerful claws and poisoned tails",
                 "albino radscorpions have a noticeable white color",
                 "deathskull radscorpions have a noticeable reddish color",
                 "their body is seen glowing green"
@@ -250,16 +248,15 @@
           ]
         },
         {
-          "line": "Tips: Fight them from a distance if you can. If you shoot one from afar it burrows and comes up close to you, often in melee range, but standing on rocks or on metallic or wooden surfaces stops them tunnelling there. Deathskull radscorpions level with you, so they cannot be pacified, and they are among the most dangerous creatures in the Commonwealth.",
+          "line": "Tips: If shot from afar it burrows and surfaces near you, so stand on rocks, metal or wood first. Deathskull radscorpions level with you, so they cannot be pacified.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout_4)",
               "revision": "4367296",
               "quoted": [
-                "radscorpions are powerful melee fighters that should be dealt with preferably from a distance",
                 "If attacked from afar, they will immediately burrow and emerge close to the player character, often in melee range, provided the ground type can be navigated through by them, so it is possible to avoid being caught unprepared by standing on rocks, or metallic/wooden surfaces before attacking.",
                 "These types of radscorpion level with the player character, thus making them impossible to pacify.",
-                "Deathskull radscorpions are easily one of the most dangerous creatures one can encounter while exploring the Commonwealth"
+                "A rare but dangerous radscorpion, deathskull radscorpions have a noticeable reddish color."
               ]
             }
           ]
@@ -274,7 +271,7 @@
       "main_revision": "4656109",
       "lines": [
         {
-          "line": "Summary: A ferocious mutated black bear with razor-sharp claws and teeth and a nasty temperament. Wild yao guai attack nearly any other animal or person they meet, deathclaws included.",
+          "line": "Summary: A vicious mutated black bear. Wild ones go after almost anything they meet, deathclaws included.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Yao_guai_(Fallout_4)",
@@ -287,7 +284,7 @@
           ]
         },
         {
-          "line": "Weak points: A shot to the head does no extra damage, unlike with many other creatures. Stunted yao guai, which have minor malformations, are less of a threat than the other kinds.",
+          "line": "Weak points: A headshot does no extra damage on a yao guai, unlike on many creatures. Stunted ones are less dangerous than the other kinds.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Yao_guai_(Fallout_4)",
@@ -300,7 +297,7 @@
           ]
         },
         {
-          "line": "Looks like: A large mutated bear. Albino ones are much lighter in colour, rabid ones have red welts on their sides and face, and the dusky yao guai is darker with more pronounced scars.",
+          "line": "Looks like: A big mutated bear. Albinos are paler, rabid ones have red welts, and dusky ones are darker and more scarred.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Yao_guai_(Fallout_4)",
@@ -315,15 +312,13 @@
           ]
         },
         {
-          "line": "Tips: Every one of its attacks staggers you, even if you block it, so melee fighting is hard, especially with slow weapons or against a group; time your attacks or you can get stuck in the stagger while it strikes again. They appear as often by day as by night. A dusky yao guai levels with you and is immune to the Animal Friend perk, so it can be an issue at any level.",
+          "line": "Tips: Every attack staggers you, even blocked ones, so time your melee swings or it hits you again. Animal Friend does not work on a dusky yao guai, which levels with you.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Yao_guai_(Fallout_4)",
               "revision": "4656109",
               "quoted": [
                 "the staggering effect on every one of their attacks, even if the player character is quick enough to block them. For this reason, melee fighting against yao guai might be difficult, especially with slow weapons or if fighting against a group. Attacks must be properly timed, otherwise, the player character might get stuck in the stagger effect, giving yao guai enough time to strike once again.",
-                "They seem to appear as often during the daytime as they do during the night.",
-                "it can be an issue for the player character at any level.",
                 "Dusky yao guai level with the player character and are therefore immune to the Animal Friend perk."
               ]
             }
@@ -339,13 +334,12 @@
       "main_revision": "4711714",
       "lines": [
         {
-          "line": "Summary: Mutated crustaceans of the swamps, coasts and sewers that mostly come in groups and, in most kinds, have a thick shell that is hard to penetrate even with powerful ballistic weapons. They bury themselves in dirt or mud, and from a distance the rounded back of a shell looks like a large smooth rock.",
+          "line": "Summary: Mutated crustaceans of swamps, coasts and sewers, usually in groups. Most have a thick shell that even powerful ballistic weapons struggle to get through.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mirelurk_(Fallout_4)",
               "revision": "4711714",
               "quoted": [
-                "Mirelurks will bury themselves in dirt or mud, with the only visual indication that they are present is the rounded backs of their shells, which resemble large, smooth rocks from a distance.",
                 "Mirelurks are mostly found in groups and thus often utilize strength in numbers.",
                 "All mirelurks (excluding mirelurk kings and softshell mirelurks) are protected by a thick shell that is difficult to penetrate, even with powerful ballistic weapons.",
                 "Although mirelurks tend to inhabit polluted rivers, coastal waters, and sewers",
@@ -355,7 +349,7 @@
           ]
         },
         {
-          "line": "Weak points: Its face has no armor but is a small target, and a charging mirelurk often ducks its head to guard it, though the face is exposed once it is in close combat. The limbs are more vulnerable than the body, but less so than the face.",
+          "line": "Weak points: Its face has no armor but is small; a charging mirelurk covers it until close combat starts. Its limbs are softer than the body, but not as soft as the face.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mirelurk_(Fallout_4)",
@@ -367,20 +361,21 @@
           ]
         },
         {
-          "line": "Looks like: Most adult mirelurks have a shell and pincers like a horseshoe crab, and the hunter looks like a lobster.",
+          "line": "Looks like: Most adults have a shell and pincers like a horseshoe crab, while the hunter looks like a lobster. A buried one shows only its rounded shell back, like a large smooth rock.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mirelurk_(Fallout_4)",
               "revision": "4711714",
               "quoted": [
                 "Most adult mirelurk variants have shells and pincers resembling those of horseshoe crabs",
-                "The hunter variant appears to be a lobster."
+                "The hunter variant appears to be a lobster.",
+                "Mirelurks will bury themselves in dirt or mud, with the only visual indication that they are present is the rounded backs of their shells, which resemble large, smooth rocks from a distance."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Crippling one set of a mirelurk's legs greatly reduces its mobility, and crippling both sets leaves it unable to move or attack, even face to face with you. Mirelurks have no way to protect themselves against mines or any attack from below.",
+          "line": "Tips: Cripple both sets of legs on a standard mirelurk and it cannot move or attack, even up close. Mines and attacks from below are things it cannot defend against.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mirelurk_(Fallout_4)",
@@ -402,7 +397,7 @@
       "main_revision": "4726319",
       "lines": [
         {
-          "line": "Summary: Hostile gangs found all over the Commonwealth, most thickly around Boston, organised by seniority and ability within the gang. They viciously defend their turf from anything not in their gang.",
+          "line": "Summary: Hostile gangs all over the Commonwealth, especially around Boston. They guard their turf fiercely against anyone outside the gang.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Raider_(Fallout_4)",
@@ -415,7 +410,7 @@
           ]
         },
         {
-          "line": "Weak points: A common raider is the weakest of the rank-and-file raiders, with pipe guns and little health, and goes down after a few hits even from basic weapons. Raider veterans are among the toughest, with a lot of health and higher-tier weapons, and are almost never alone.",
+          "line": "Weak points: A common raider has little health and falls to a few hits from basic weapons. Veterans, among the toughest raiders, have lots of health and are rarely alone.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Raider_(Fallout_4)",
@@ -429,7 +424,7 @@
           ]
         },
         {
-          "line": "Looks like: Raider scum wear crudely made welded armor and leather armor, wasters and veterans can wear combat armor, and some scavvers wear raider power armor.",
+          "line": "Looks like: Raider scum usually wear crude welded or leather armor. Wasters and veterans can have combat armor, and scavvers are the raiders most often seen in power armor.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Raider_(Fallout_4)",
@@ -444,14 +439,13 @@
           ]
         },
         {
-          "line": "Tips: Psychos are melee-dependent, chem-using raiders that charge you and may throw grenades. Survivalists hide behind objects and blindfire around them, and take well aimed shots when they change position. Like other human enemies, raiders will not chase you into Boston Common: they say the area is deadly and retreat.",
+          "line": "Tips: Psychos use chems, charge into melee and may throw grenades. Raiders will not chase you into Boston Common; they call it deadly and retreat.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Raider_(Fallout_4)",
               "revision": "4726319",
               "quoted": [
                 "Psychos are melee-dependant chem using raiders that charge at their enemies and may throw grenades.",
-                "They will typically hide behind objects and blindfire around them. When changing hiding positions they will take well aimed shots.",
                 "Like other human enemies, raiders will refuse to chase the player character into Boston Common, making comments about the area being deadly and retreating."
               ]
             }
@@ -467,7 +461,7 @@
       "main_revision": "4713427",
       "lines": [
         {
-          "line": "Summary: The heaviest class of combat robot, and one of the rarest and most difficult robots to defeat: fast, agile, heavily armed and tough enough to take a direct hit from a mini nuke. The usual loadout is a missile launcher and a minigun.",
+          "line": "Summary: A rare combat robot of the heaviest class, usually carrying a missile launcher and a minigun. It is fast, agile and tough enough to survive a direct mini nuke.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout_4)",
@@ -481,35 +475,33 @@
           ]
         },
         {
-          "line": "Weak points: If a fight with it drags on, it cools down: it vents steam from its back and exposes two fusion cores, and those exposed cores are the best place to hit it. With the Penetrator perk you can skip the wait and aim at the cores in V.A.T.S. at once. It has no combat inhibitor, unlike other robots.",
+          "line": "Weak points: Aim for the two fusion cores it exposes when it vents steam during a long fight. With the Penetrator perk you can target them in V.A.T.S. at once.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout_4)",
               "revision": "4713427",
               "quoted": [
                 "should a sentry bot engage the player character for too long, they will eventually enter a cooldown period, blasting steam out of their back and exposing their dual fusion cores. Hitting exposed fusion cores is the best way to cause damage to them.",
-                "Players having the Penetrator perk need not wait for cooldown and can use V.A.T.S. to target and destroy the fusion cores immediately",
-                "unlike other robots it completely lacks a combat inhibitor"
+                "Players having the Penetrator perk need not wait for cooldown and can use V.A.T.S. to target and destroy the fusion cores immediately"
               ]
             }
           ]
         },
         {
-          "line": "Looks like: A bulky robot about as tall as a human in power armor and nearly twice as wide, whose torso can rotate independently of its legs. Gunner sentry bots have a faded green tint.",
+          "line": "Looks like: A bulky robot about as tall as a human in power armor and almost twice as wide. Gunner sentry bots are tinted a faded green.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout_4)",
               "revision": "4713427",
               "quoted": [
                 "(on par in height to a human wearing power armor and nearly twice as wide), appear to have a bulkier construction",
-                "a sentry bot's entire torso is capable of rotating independently of its legs",
                 "they have been reprogrammed by the Gunners and have a faded green tint"
               ]
             }
           ]
         },
         {
-          "line": "Tips: If it loses both main weapons it starts its self-destruct sequence and charges you, and it also explodes on death with the force of a mini nuke, so keep your distance. It often charges into close combat if you come too near, which makes melee weapons a poor choice. It drops at least two fusion cores when destroyed.",
+          "line": "Tips: Keep your distance: its death blast matches a mini nuke. Disarm both main weapons and it rushes you to self-destruct; it drops at least two fusion cores.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout_4)",
@@ -517,7 +509,6 @@
               "quoted": [
                 "After losing both main weapons they will initialize their self-destruct sequence and charge at the player character.",
                 "Since they explode on death with the force of a mini nuke",
-                "sentry bots often charge into close combat to deliver powerful blows with their arms if one ventures too close, thus deterring attackers from any use of melee weapons.",
                 "dropping at least two when they are destroyed"
               ]
             }
@@ -533,7 +524,7 @@
       "main_revision": "4664624",
       "lines": [
         {
-          "line": "Summary: A highly aggressive, fast robot that usually charges you to fight in melee, and most models also carry a laser in the head unit.",
+          "line": "Summary: A fast, aggressive robot that usually rushes you in melee, and most models carry a head-mounted laser.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Assaultron_(Fallout_4)",
@@ -546,21 +537,20 @@
           ]
         },
         {
-          "line": "Weak points: The head is almost always behind retractable armor plating, so headshots do reduced damage, but the plates peel back while the laser charges, so you can hit it directly; crippling the head permanently takes away the laser. Destroying its legs removes its speed advantage, but it keeps crawling, and destroying an arm or leg while it still works makes it detonate in a localized explosion akin to a mini nuke; killing it before that gives a normal death.",
+          "line": "Weak points: Shoot its head while the laser charges and its plates peel back; a crippled head loses the laser. Destroy a limb without killing it and it explodes like a mini nuke; killing it first avoids that.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Assaultron_(Fallout_4)",
               "revision": "4664624",
               "quoted": [
                 "the head is almost always covered behind a retractable layer of armor plating, allowing Assaultrons to take reduced damage from headshots. However, during the charging sequence, the plates will peel back, giving an opportunity to attack directly; if one is able to cripple the Assaultron's head, it will lose the use of its head laser permanently.",
-                "One can remove an Assaultron's speed advantage by targeting and destroying their legs. However, destroying one or both will not stop it completely as it will continue to pursue the target by crawling on the ground.",
                 "If an Assaultron suffers significant damage, such as destroying one or both of its arms or legs, while still remaining functional, the robot will activate a \"hail mary\" attack similar to a sentry bot's meltdown sequence, where the robot will detonate in a localized explosion akin to a mini nuke and just as damaging; killing the Assaultron before they set off the explosion will still result in a normal death."
               ]
             }
           ]
         },
         {
-          "line": "Looks like: A robot with claws for hands and a head unit that gradually becomes surrounded by red electric energy as the laser charges.",
+          "line": "Looks like: A claw-handed robot. Red energy gathers around its head as the laser charges.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Assaultron_(Fallout_4)",
@@ -573,7 +563,7 @@
           ]
         },
         {
-          "line": "Tips: The laser charges for around 6-7 seconds, then the robot stops in place and fires a constant blast for 2-3 seconds that can seriously injure even a high-level character who is not behind cover.",
+          "line": "Tips: Take cover while the laser charges for 6-7 seconds; it then stands still and fires for 2-3 seconds. The blast can badly hurt even a high-level character who has no cover.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Assaultron_(Fallout_4)",
@@ -594,7 +584,7 @@
       "main_revision": "4699068",
       "lines": [
         {
-          "line": "Summary: A combat robot, the combat version of the civilian Mister Handy, whose weapon varies from a 10mm submachine gun to a laser weapon or sometimes a flamer. Its 10mm submachine gun is able to shred low-level characters, and even ones in power armor, in seconds.",
+          "line": "Summary: A combat version of the civilian Mister Handy, armed with a 10mm submachine gun, laser or flamer. The submachine gun shreds low-level characters in seconds, even in power armor.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mister_Gutsy_(Fallout_4)",
@@ -608,7 +598,7 @@
           ]
         },
         {
-          "line": "Weak points: You can target its torso, right eye, middle eye, left eye, combat inhibitor, thruster and arms. Breaking an eye makes its shooting less accurate, and disabling the thruster slows it and stops it strafing. Breaking all of its arms sends it into a suicide rush at you.",
+          "line": "Weak points: Shoot out an eye to spoil its aim, or the thruster to slow it and stop its strafing. Destroying every arm sends it on a suicide rush at you.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mister_Gutsy_(Fallout_4)",
@@ -621,7 +611,7 @@
           ]
         },
         {
-          "line": "Looks like: The words \"Mister Handy\" are written on the back of its body.",
+          "line": "Looks like: Its back carries the words \"Mister Handy\".",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mister_Gutsy_(Fallout_4)",
@@ -633,16 +623,13 @@
           ]
         },
         {
-          "line": "Tips: The Killshot perk makes the right and middle eyes easier to hit in V.A.T.S., but not the left eye. A neutral Mister Gutsy turns hostile if you look at it while wearing power armor with a targeting HUD mod installed. The Lieutenant and Major Gutsy carry lasers and have bigger health pools, and the Colonel Gutsy appears once you reach level 46 or higher and levels with you.",
+          "line": "Tips: Looking at a neutral Mister Gutsy turns it hostile if your power armor has a targeting HUD mod. A Colonel Gutsy can appear from level 46 up and levels with you.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mister_Gutsy_(Fallout_4)",
               "revision": "4699068",
               "quoted": [
-                "The right and middle eye are targeted more easily with the Killshot perk in V.A.T.S., but not the left eye.",
                 "a neutral Mister Gutsy will turn hostile if looked at while the player character is wearing power armor with a targeting HUD mod installed.",
-                "it has a moderately accurate (and moderate damage) laser weapon in place of a 10mm submachine gun and a much larger Hit Point pool",
-                "now having 200 more Hit Points than its predecessor and a higher damage laser",
                 "Colonel Gutsy appears when the player character reaches level 46 or higher. These level with the player character."
               ]
             }
@@ -658,7 +645,7 @@
       "main_revision": "4711727",
       "lines": [
         {
-          "line": "Summary: The M42 nuclear catapult, a shoulder-mounted launcher that fires mini nukes in a parabolic arc.",
+          "line": "Summary: A shoulder-mounted launcher, formally the M42 nuclear catapult, that lobs mini nukes in an arc.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Fat_Man_(Fallout_4)",
@@ -672,7 +659,7 @@
           ]
         },
         {
-          "line": "Uses: A mini nuke travels about 20 yards before it hits when the launcher is held level on even terrain, so angle it upward for anything farther. With the experimental MIRV launcher mod (Gun Nut 4 and Science! 4) it launches six mini nukes in one cluster that splits apart in the air, which cuts its range drastically but adds damage and area of effect.",
+          "line": "Uses: Angle it upward for anything past about 20 yards, where a level shot lands. The MIRV mod (Gun Nut 4, Science! 4) fires six at once: more damage, much less range.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Fat_Man_(Fallout_4)",
@@ -680,24 +667,20 @@
               "quoted": [
                 "mini nukes being launched approximately 20 yards before impact when held level to the ground on even terrain, requiring it to be angled upward for any distance outside of this range.",
                 "When fitted with the MIRV launcher, it fires six mini nukes in a cluster that separates in mid-air, drastically reducing its range, but increasing its overall damage and area of effect.",
-                "An experimental modification.",
                 "Gun Nut: 4 Science!: 4"
               ]
             }
           ]
         },
         {
-          "line": "Tips: From a long way off the projectile makes a loud whistling noise, a sign to get to cover. A mini nuke is sometimes a dud and only does physical damage if it hits. The MIRV mod can detonate right at your feet, most often when you fire in a direction lower than where you stand. A Fat Man in the main stockpile area of the Federal ration stockpile respawns.",
+          "line": "Tips: A long-range shot whistles loudly, which is your cue to take cover. The MIRV mod may detonate at your feet, mostly when you aim lower than where you stand.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Fat_Man_(Fallout_4)",
               "revision": "4711727",
               "quoted": [
                 "When fired from a long enough distance, the projectile makes a loud whistling noise (similar to the cartoon noise for falling from the sky or the sound that bombs make after being dropped) which indicates one should get to cover.",
-                "There is a chance that a mini nuke fired by the Fat Man will be a dud and only cause physical damage to a target if they are hit by the dud.",
-                "When firing with the experimental MIRV modification, there is a chance that it will detonate right at one's feet, even if they are firing away from themselves. This most often happens when the player fires in a direction lower than their current position.",
-                "Federal ration stockpile - In the main stockpile area",
-                "This Fat Man also respawns."
+                "When firing with the experimental MIRV modification, there is a chance that it will detonate right at one's feet, even if they are firing away from themselves. This most often happens when the player fires in a direction lower than their current position."
               ]
             }
           ]
@@ -712,7 +695,7 @@
       "main_revision": "4714832",
       "lines": [
         {
-          "line": "Summary: A football-sized tactical nuclear warhead, made to be fired from a nuclear catapult weapon.",
+          "line": "Summary: A small tactical nuclear warhead, about the size of a football, built for nuclear catapult weapons.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mini_nuke_(Fallout_4)",
@@ -724,7 +707,7 @@
           ]
         },
         {
-          "line": "Uses: They are the ammunition for the Fat Man launcher. A variant, the Nuka-nuke, is fired by the Nuka-nuke launcher from the Nuka-World add-on.",
+          "line": "Uses: The Fat Man uses them as ammunition. The Nuka-World add-on's Nuka-nuke launcher fires a variant, the Nuka-nuke.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Fat_Man_(Fallout_4)",
@@ -743,24 +726,15 @@
           ]
         },
         {
-          "line": "Tips: Mini nukes are sometimes carried by super mutant suiciders, and they also appear as fixed loot in certain locations, respawning often when you are not playing in Survival mode. Kill a suicider without hitting its right arm and before it can detonate its mini nuke, and you can loot it from the corpse. Weapon emporiums built in settlements occasionally sell them, and rarely an ammo box holds three or four, depending on your Scrounger perk rank. In Survival mode each one weighs 12 units.",
+          "line": "Tips: A weapon emporium set up in a settlement sells them. Super mutant suiciders carry some; kill one before it detonates, sparing its right arm, to loot its nuke.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mini_nuke_(Fallout_4)",
               "revision": "4714832",
               "quoted": [
                 "They are sometimes carried by super mutant suiciders.",
-                "as fixed loot in certain locations, respawning often when not playing in Survival mode.",
                 "If it is killed without hitting its right arm and before it can detonate the held mini nuke, it can be looted off its corpse afterward.",
-                "Mini nukes can be bought from weapon emporiums built in settlements.",
-                "Mini nukes can (rarely) be found in ammo boxes. When found, they will contain either 3 or 4 mini nukes, depending on the player character's Scrounger perk rank."
-              ]
-            },
-            {
-              "page": "https://fallout.fandom.com/wiki/Fat_Man_(Fallout_4)",
-              "revision": "4711727",
-              "quoted": [
-                "In Survival mode, mini nukes weigh in at 12 units each"
+                "Mini nukes can be bought from weapon emporiums built in settlements."
               ]
             }
           ]
@@ -775,7 +749,7 @@
       "main_revision": "4686458",
       "lines": [
         {
-          "line": "Summary: A heavy weapon that shoots any junk you put in its hopper, for example desk fans, tin cans, teddy bears or Nuka-Cola bottles.",
+          "line": "Summary: A heavy weapon that fires loaded junk, such as tin cans, teddy bears or desk fans.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Junk_Jet_(Fallout_4)",
@@ -787,7 +761,7 @@
           ]
         },
         {
-          "line": "Uses: Fired items can be picked up again, so it has theoretically unlimited ammunition, though about 10% of the time an item is lost on contact with the enemy. A shot charged for about 1 second does more damage. The shots drop sharply beyond pistol range, so it is impractical at long range.",
+          "line": "Uses: Charge a shot for about 1 second for more damage, but shots drop sharply beyond pistol range. Spent junk can be picked up again, but roughly one in ten is lost on contact.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Junk_Jet_(Fallout_4)",
@@ -801,18 +775,16 @@
           ]
         },
         {
-          "line": "Tips: The loaded junk still counts against your Carry Weight, so a light item such as steel, or pre-War money, which weighs nothing, makes good ammunition. Junk is also useful for building and crafting in settlements, so the choice is which items are worth firing instead of keeping in the workshop. You find the weapon in the ArcJet Systems building, on the table in the rocket control room, which can only be entered after a quest has been started; its terminal is Advanced-locked.",
+          "line": "Tips: Find it in the ArcJet Systems building's rocket control room, which opens after you start Call to Arms. Loaded junk still adds to Carry Weight, so weightless pre-War money works well; steel is good too.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Junk_Jet_(Fallout_4)",
               "revision": "4686458",
               "quoted": [
+                "The weapon can be found inside the ArcJet Systems building, on the table in the rocket control room. Entering the rocket control room is only possible after starting Call to Arms",
                 "the contained junk still counts against Carry Weight.",
                 "One that works well is steel",
-                "an item that has zero Carry Weight such as pre-War money.",
-                "collecting junk in Fallout 4 becomes a matter of figuring out which items are worth using as ammunition for the Junk Jet over storing them in the workshop for use with building and crafting",
-                "The weapon can be found inside the ArcJet Systems building, on the table in the rocket control room. Entering the rocket control room is only possible after starting Call to Arms",
-                "Accessing the room itself requires getting past an Advanced-locked terminal"
+                "an item that has zero Carry Weight such as pre-War money."
               ]
             }
           ]
@@ -827,7 +799,7 @@
       "main_revision": "4732374",
       "lines": [
         {
-          "line": "Summary: A consumable soft drink in a clear bottle of glowing blue liquid, which gets its glow from the radioactive isotope strontium-90.",
+          "line": "Summary: A soft drink in a clear bottle of glowing blue liquid; strontium-90 makes it glow.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Nuka-Cola_Quantum_(Fallout_4)",
@@ -840,14 +812,13 @@
           ]
         },
         {
-          "line": "Uses: It gives back a lot of hit points for a drink, 40 each second for 10 seconds, and its listing shows +400 hit points, +100 action points and +5 radiation. It is non-addictive, and in Survival mode it counts as a caffeinated drink.",
+          "line": "Uses: It heals 40 hit points a second for 10 seconds, plus 100 action points, but adds 5 radiation. It is not addictive, and Survival mode treats it as caffeinated.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Nuka-Cola_Quantum_(Fallout_4)",
               "revision": "4732374",
               "quoted": [
                 "Nuka-Cola Quantum replenishes a large number of Hit Points for a drink: 40 HP per second for 10 seconds.",
-                "+400 Hit Points",
                 "+100 Action Points",
                 "+5 Radiation",
                 "Nuka-Cola Quantum in Fallout 4 is non-addictive.",
@@ -857,16 +828,12 @@
           ]
         },
         {
-          "line": "Tips: A bottle is also a crafting component, for weaponized Nuka-Cola Quantum ammo, the Nuka-nuke and the Nuka-grenade among others. Bottles respawn in areas after you pick them up. A rare Vault-Tec lunchbox (one with stickers) or a Nuka-Cola lunchbox can drop one, and raider gang tribute chests have a 25% chance of holding one.",
+          "line": "Tips: Raider gang tribute chests hold one 25% of the time. Nuka-Cola and sticker-marked Vault-Tec lunchboxes can drop one, and bottles respawn after pickup.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Nuka-Cola_Quantum_(Fallout_4)",
               "revision": "4732374",
               "quoted": [
-                "Compon. of",
-                "Weaponized Nuka-Cola Quantum ammo",
-                "Nuka-nuke",
-                "Nuka-grenade",
                 "Nuka-Cola Quantum in Fallout 4 will respawn in areas after being picked up.",
                 "It is a possible random drop when opening rare Vault-Tec lunchboxes (i.e. ones with stickers)",
                 "It is also a possible random drop when opening Nuka-Cola lunchboxes.",

@@ -182,7 +182,7 @@
           ]
         },
         {
-          "line": "Tips: A brahmin corpse drained of blood and covered in big stings means bloodbugs are close. They cling to ceilings and walls, so an empty-looking room may hold a swarm.",
+          "line": "Tips: A brahmin corpse drained of blood and covered in big stings is a strong sign bloodbugs are near. They cling to ceilings and walls, so an empty-looking room may hold a swarm.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Bloodbug_(Fallout_4)",
@@ -284,19 +284,6 @@
           ]
         },
         {
-          "line": "Weak points: A headshot does no extra damage on a yao guai, unlike on many creatures. Stunted ones are less dangerous than the other kinds.",
-          "drawn_from": [
-            {
-              "page": "https://fallout.fandom.com/wiki/Yao_guai_(Fallout_4)",
-              "revision": "4656109",
-              "quoted": [
-                "Unlike many other creatures, yao guai do not take increased damage from being shot in the head.",
-                "Not as physically imposing as normal yao guai due to minor malformations, past injuries, or arrested development. As a result, they are less of a threat compared to other variants."
-              ]
-            }
-          ]
-        },
-        {
           "line": "Looks like: A big mutated bear. Albinos are paler, rabid ones have red welts, and dusky ones are darker and more scarred.",
           "drawn_from": [
             {
@@ -312,14 +299,15 @@
           ]
         },
         {
-          "line": "Tips: Every attack staggers you, even blocked ones, so time your melee swings or it hits you again. Animal Friend does not work on a dusky yao guai, which levels with you.",
+          "line": "Tips: Every attack staggers you, even blocked ones, so time your melee swings or it hits you again. Headshots do no bonus damage, and Animal Friend fails on a dusky yao guai, which levels with you.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Yao_guai_(Fallout_4)",
               "revision": "4656109",
               "quoted": [
                 "the staggering effect on every one of their attacks, even if the player character is quick enough to block them. For this reason, melee fighting against yao guai might be difficult, especially with slow weapons or if fighting against a group. Attacks must be properly timed, otherwise, the player character might get stuck in the stagger effect, giving yao guai enough time to strike once again.",
-                "Dusky yao guai level with the player character and are therefore immune to the Animal Friend perk."
+                "Dusky yao guai level with the player character and are therefore immune to the Animal Friend perk.",
+                "Unlike many other creatures, yao guai do not take increased damage from being shot in the head."
               ]
             }
           ]
@@ -349,7 +337,7 @@
           ]
         },
         {
-          "line": "Weak points: Its face has no armor but is small; a charging mirelurk covers it until close combat starts. Its limbs are softer than the body, but not as soft as the face.",
+          "line": "Weak points: Its face has no armor but is small; a charging mirelurk often covers it until close combat starts. Its limbs are softer than the body, but not as soft as the face.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mirelurk_(Fallout_4)",
@@ -410,15 +398,13 @@
           ]
         },
         {
-          "line": "Weak points: A common raider has little health and falls to a few hits from basic weapons. Veterans, among the toughest raiders, have lots of health and are rarely alone.",
+          "line": "Weak points: A common raider has little health and falls to a few hits from basic weapons.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Raider_(Fallout_4)",
               "revision": "4726319",
               "quoted": [
-                "A common raider is the weakest of the cannon fodder found in Fallout 4. Armed with pipe guns and little health, they tend to survive only a few hits, even from basic weapons, before succumbing.",
-                "They are among the toughest raiders.",
-                "Armed with higher tier weapons such as combat rifles, assault rifles and on occasion laser weapons, these enemies are further bolstered by a high health pool and segments of combat armor. They are almost never encountered alone"
+                "A common raider is the weakest of the cannon fodder found in Fallout 4. Armed with pipe guns and little health, they tend to survive only a few hits, even from basic weapons, before succumbing."
               ]
             }
           ]
@@ -501,7 +487,7 @@
           ]
         },
         {
-          "line": "Tips: Keep your distance: its death blast matches a mini nuke. Disarm both main weapons and it rushes you to self-destruct; it drops at least two fusion cores.",
+          "line": "Tips: Its death blast matches a mini nuke, and it often charges you if you get too close. Disarm both main weapons and it rushes you to self-destruct; it drops at least two fusion cores.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout_4)",
@@ -509,7 +495,8 @@
               "quoted": [
                 "After losing both main weapons they will initialize their self-destruct sequence and charge at the player character.",
                 "Since they explode on death with the force of a mini nuke",
-                "dropping at least two when they are destroyed"
+                "dropping at least two when they are destroyed",
+                "sentry bots often charge into close combat to deliver powerful blows with their arms if one ventures too close, thus deterring attackers from any use of melee weapons."
               ]
             }
           ]
@@ -775,7 +762,7 @@
           ]
         },
         {
-          "line": "Tips: Find it in the ArcJet Systems building's rocket control room, which opens after you start Call to Arms. Loaded junk still adds to Carry Weight, so weightless pre-War money works well; steel is good too.",
+          "line": "Tips: Find it in the ArcJet Systems building's rocket control room, which opens after you start Call to Arms. Loaded junk still adds to Carry Weight; steel works well, and weightless pre-War money is another choice.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Junk_Jet_(Fallout_4)",
@@ -828,7 +815,7 @@
           ]
         },
         {
-          "line": "Tips: Raider gang tribute chests hold one 25% of the time. Nuka-Cola and sticker-marked Vault-Tec lunchboxes can drop one, and bottles respawn after pickup.",
+          "line": "Tips: Nuka-Cola and sticker-marked Vault-Tec lunchboxes can drop one, and raider gang tribute chests can hold one. Bottles respawn after pickup.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Nuka-Cola_Quantum_(Fallout_4)",

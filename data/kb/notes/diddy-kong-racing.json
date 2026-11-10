@@ -111,6 +111,50 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5186606",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3710,
+      "game_id": 33,
+      "section_type": "item",
+      "name": "Green Weapon Balloon (oil, mines and bubbles)",
+      "card": "Summary: The green Weapon Balloon gives something you drop, and it gets stronger the more green balloons you collect in a row.\nUses: One green balloon gives an oil slick, or a gas cloud if you are in a plane. Two give a land mine, which floats for planes, and three give a bubble that traps a racer who rides into it.\nTips: Being hit by the second or third green item, the mine or the bubble, makes you lose some bananas.\nTips: The bubble holds the racer who rides into it, floats up with them and pops, and it delays them for a significant time. The TOXICOFFENDER magic code turns every balloon green.",
+      "source_url": "https://www.mariowiki.com/Weapon_Balloon",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5186606",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3711,
+      "game_id": 33,
+      "section_type": "item",
+      "name": "Rainbow Weapon Balloon (magnet)",
+      "card": "Summary: The rainbow Weapon Balloon gives a magnet, and it gets stronger the more rainbow balloons you collect in a row.\nUses: One rainbow balloon gives a weak pull toward the racer in front of you, if they are in range. Two give a magnet with a stronger pull and longer range, and three give a powerful magnet that pulls opponents towards you.\nTips: In the Nintendo 64 game the weak magnet is yellow and the stronger one is red.\nTips: The OPPOSITESATTRACT magic code turns every balloon rainbow.",
+      "source_url": "https://www.mariowiki.com/Weapon_Balloon",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5186606",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3712,
+      "game_id": 33,
+      "section_type": "item",
+      "name": "Keys and the challenge levels",
+      "card": "Summary: Four keys, one hidden on a course in each of the first four worlds, each opening the door to that world's challenge level.\nUses: The keys are in Ancient Lake in Dino Domain, Snowball Valley in Snowflake Mountain, Crescent Island in Sherbet Island and Boulder Canyon in Dragon Forest. A challenge level is an arena where you play against computer racers or other players, and winning one in Adventure Mode earns a piece of the T.T. amulet.\nTips: Fire Mountain is a plane level where you carry eggs from the central lava pit to your nest and wait for them to hatch, and other players can steal eggs or fire missiles at you. The first to hatch three eggs wins. In Smokey Castle, a car level, you store bananas in a treasure chest in the middle, and the first racer with ten in it wins.\nTips: Icicle Pyramid, a car level, and Darkwater Beach, a hovercraft level, are battles where bananas are your health. When yours run out you are eliminated, and the last one standing wins.",
+      "source_url": "https://www.mariowiki.com/Diddy_Kong_Racing",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5435503",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3713,
+      "game_id": 33,
+      "section_type": "item",
+      "name": "Trophies from the Trophy Races",
+      "card": "Summary: Each world's Trophy Race runs its four tracks back to back for points, and finishing high enough earns a trophy.\nUses: First place earns a gold Wizpig trophy, second a silver Taj trophy and third a bronze T.T. trophy. You need four trophies to reach the fifth world.\nTips: A world's Trophy Race opens once you have cleared its second boss race, and its AI racers are harder than in single races.\nTips: Trophy Races can also be played from Tracks mode, where you always use each track's default vehicle.",
+      "source_url": "https://www.mariowiki.com/Diddy_Kong_Racing",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5435503",
+      "crawled_at": "2026-11-10"
     }
   ]
 }

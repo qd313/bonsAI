@@ -771,6 +771,264 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3710,
+      "name": "Green Weapon Balloon (oil, mines and bubbles)",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Weapon_Balloon",
+      "main_revision": "5186606",
+      "lines": [
+        {
+          "line": "Summary: The green Weapon Balloon gives something you drop, and it gets stronger the more green balloons you collect in a row.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Green Balloon Dropper",
+                "collecting multiple of the same color in sequence improves the item's effects by up to a total of three levels"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: One green balloon gives an oil slick, or a gas cloud if you are in a plane. Two give a land mine, which floats for planes, and three give a bubble that traps a racer who rides into it.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Dropper || An oil slick or gas cloud || A land mine or floating mine || A snare bubble which delays enemies for a significant time"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Weapon_Balloon",
+              "revision": "5186606",
+              "quoted": [
+                "An oil spill (Cars and Hovercrafts) Gas cloud (Planes)",
+                "A land mine (Cars and Hovercrafts) Floating land mine (Planes)",
+                "A bubble that traps a racer that rides into it, floats upward, and pops"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Being hit by the second or third green item, the mine or the bubble, makes you lose some bananas.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "If players get hit (by a level 1-3 red balloon or level 2-3 green balloon), they lose some bananas."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The bubble holds the racer who rides into it, floats up with them and pops, and it delays them for a significant time. The TOXICOFFENDER magic code turns every balloon green.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Weapon_Balloon",
+              "revision": "5186606",
+              "quoted": [
+                "A bubble that traps a racer that rides into it, floats upward, and pops"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "A snare bubble which delays enemies for a significant time",
+                "TOXICOFFENDER || All balloons are green"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3711,
+      "name": "Rainbow Weapon Balloon (magnet)",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Weapon_Balloon",
+      "main_revision": "5186606",
+      "lines": [
+        {
+          "line": "Summary: The rainbow Weapon Balloon gives a magnet, and it gets stronger the more rainbow balloons you collect in a row.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Rainbow Balloon Special",
+                "collecting multiple of the same color in sequence improves the item's effects by up to a total of three levels"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: One rainbow balloon gives a weak pull toward the racer in front of you, if they are in range. Two give a magnet with a stronger pull and longer range, and three give a powerful magnet that pulls opponents towards you.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Special || A weak pull toward the racer in front of the player, if in range || A magnet with a stronger pull and longer range || A powerful magnet that pulls opponents towards the player"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In the Nintendo 64 game the weak magnet is yellow and the stronger one is red.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Weapon_Balloon",
+              "revision": "5186606",
+              "quoted": [
+                "A weak, yellow magnet that pulls the user towards a nearby racer",
+                "A stronger, red magnet"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The OPPOSITESATTRACT magic code turns every balloon rainbow.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "OPPOSITESATTRACT || All balloons are rainbows"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3712,
+      "name": "Keys and the challenge levels",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+      "main_revision": "5435503",
+      "lines": [
+        {
+          "line": "Summary: Four keys, one hidden on a course in each of the first four worlds, each opening the door to that world's challenge level.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "The game features four keys. One is hidden in a race course of each world. Their purpose is to unlock the door to the Challenge level in the corresponding world's hub",
+                "Future Fun Land is the only world in the game that does not have a challenge level."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: The keys are in Ancient Lake in Dino Domain, Snowball Valley in Snowflake Mountain, Crescent Island in Sherbet Island and Boulder Canyon in Dragon Forest. A challenge level is an arena where you play against computer racers or other players, and winning one in Adventure Mode earns a piece of the T.T. amulet.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "A key appears in Ancient Lake of the Dino Domain, Snowball Valley of Snowflake Mountain, Crescent Island of Sherbet Island, and, lastly, Boulder Canyon of Dragon Forest.",
+                "where the racer can compete against CPUs or other players",
+                "in Adventure Mode, if they are won in, pieces of the T.T. amulet are rewarded"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Fire Mountain is a plane level where you carry eggs from the central lava pit to your nest and wait for them to hatch, and other players can steal eggs or fire missiles at you. The first to hatch three eggs wins. In Smokey Castle, a car level, you store bananas in a treasure chest in the middle, and the first racer with ten in it wins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "The objective of this challenge level is to obtain eggs from the central lava pit, carry them to their nest, and wait for the eggs to hatch. Other players may attempt to sabotage the effort by stealing eggs or using missiles against them. The first player who hatches three eggs wins.",
+                "The first racer who puts ten bananas in their treasure chest wins.",
+                "collect bananas and store them in large treasure chests in the central area",
+                "Fire Mountain || Plane",
+                "Smokey Castle || Car"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Icicle Pyramid, a car level, and Darkwater Beach, a hovercraft level, are battles where bananas are your health. When yours run out you are eliminated, and the last one standing wins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "The objective of this challenge level is to eliminate foes by using weapons against them. Bananas represent a drivers' health and if they run out, they are eliminated. The last player standing wins the challenge.",
+                "Icicle Pyramid || Car",
+                "Darkwater Beach || Hovercraft"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3713,
+      "name": "Trophies from the Trophy Races",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+      "main_revision": "5435503",
+      "lines": [
+        {
+          "line": "Summary: Each world's Trophy Race runs its four tracks back to back for points, and finishing high enough earns a trophy.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Trophies can be gained by placing high enough in a world's Trophy Race, racing through the world's four tracks back-to-back to accumulate the most points."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: First place earns a gold Wizpig trophy, second a silver Taj trophy and third a bronze T.T. trophy. You need four trophies to reach the fifth world.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "First place earns a golden Wizpig trophy, second place earns a silver Taj trophy, and third place earns a bronze T.T. trophy. Four trophies are needed to access Future Fun Land."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A world's Trophy Race opens once you have cleared its second boss race, and its AI racers are harder than in single races.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "In addition, Trophy Races are unlocked for each world after the second boss race has been cleared.",
+                "Trophy Races feature harder AI racers than the single races."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Trophy Races can also be played from Tracks mode, where you always use each track's default vehicle.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Trophy Races and Challenge levels are also accessible through Tracks mode; however, players always use each track's default vehicle"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

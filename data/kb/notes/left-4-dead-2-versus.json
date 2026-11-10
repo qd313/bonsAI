@@ -111,6 +111,61 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "173476",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4510,
+      "game_id": 3,
+      "section_type": "callout",
+      "name": "Dead Center versus ambush spots",
+      "card": "Summary: Charger ambush spots for the infected team on the first three chapters of Dead Center, The Hotel, The Streets and The Mall. The wiki's general rule is to hit survivors in a narrow space, a straight line or a tight clump.\nTips: The Hotel: a survivor near a window with no ledge railing can be charged to their death. The fire on the first floor, between the kitchen and the lobby, burns far harder than usual, so pinning someone there also punishes anyone who comes to revive them.\nTips: The Streets: carry a survivor far from the group. The stretch just before the gun store is long and straight, so the survivors have almost no room to dodge. When they climb the dumpster ladder, get up there and charge, which usually knocks all of them back.\nTips: The Mall: carry survivors off the higher floors. At an escalator, wait for the whole team to be on it and charge through the line the moment the first survivor reaches the end; anyone thrown clear may take fall damage.",
+      "source_url": "https://left4dead.fandom.com/wiki/The_Charger",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173623",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4511,
+      "game_id": 3,
+      "section_type": "callout",
+      "name": "Dark Carnival versus ambush spots",
+      "card": "Summary: Charger ambush spots for the infected team on the first four chapters of Dark Carnival: The Highway, The Fairgrounds, The Coaster and The Barns.\nTips: The Highway: in the motel, take a survivor from the upper walkway and drag them over the edge. Hit the straggler just before the group drops down the hill into the swamp and the victim is left stranded, and near the end of the level you can drive one back down that hill.\nTips: The Fairgrounds: once the survivors have climbed the building past Kiddie Land, the ramp behind the ladder lets you drive them back toward it, costing them time or a teammate.\nTips: The Coaster: at the start of the Tunnel of Love, as the survivors leave the safe room and climb the stairs, come at them from the far side and slam them into the wall. You can also spawn inside the safe room and charge toward the tunnel, since everyone is watching the tunnel.\nTips: The Barns: the rooftops are a good place to charge survivors off. In the long alleyway after the Crescendo Event they tend to line up, and hiding among the common infected helps.",
+      "source_url": "https://left4dead.fandom.com/wiki/The_Charger",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173623",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4512,
+      "game_id": 3,
+      "section_type": "callout",
+      "name": "Swamp Fever versus ambush spots",
+      "card": "Summary: Charger ambush spots for the infected team on the first three chapters of Swamp Fever: Plank Country, The Swamp and Shanty Town.\nTips: Plank Country: when the survivors stand on the dock before the Crescendo Event, grab or knock one into deep water, which kills the one you grabbed and any you hit. The same works as they leave the ferry on the far side, from behind a tree. On the walkways, knocking them into the swamp slows them down.\nTips: The Swamp: taking survivors into the water helps, because the water slows their team down.\nTips: Shanty Town: the water slows the survivors but not you, so use it to charge lone survivors. A few tight spots let you rush in and use the melee attack.",
+      "source_url": "https://left4dead.fandom.com/wiki/The_Charger",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173623",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4513,
+      "game_id": 3,
+      "section_type": "survival",
+      "name": "Holding out in Survival mode",
+      "card": "Summary: Survival sends wave after wave of infected at the team until everyone is dead or down. You cannot win it; the goal is to hold out for as long as you can and beat the record.\nTips: Prepare before you set off the horde: gather as many supplies as you can and pick the best spot. Put special ammo and gas cans or propane tanks somewhere safe so the team can grab them fast if a Tank comes and no Molotov is left.\nTips: Judge a spot by its entrances, the ammo and supplies near it, escape routes, high ground and how far you can see. Keep the entrances to one or two with two survivors covering each, which matters most against a Tank unless you have an escape plan.\nTips: The wiki lists set times for Tanks, the first at 0:40 and two Tanks together at 5:30 and 11:30. New hordes pause around 3:50 to 4:25, 9:00 to 9:35 and 12:00 to 12:30, when only special infected can spawn, which makes those gaps good for healing or ammo runs.",
+      "source_url": "https://left4dead.fandom.com/wiki/Survival_Mode",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "172812",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4514,
+      "game_id": 3,
+      "section_type": "realism",
+      "name": "Realism Versus",
+      "card": "Summary: Realism Versus plays like versus with the same scoring, but the survivors follow Realism rules: tougher common infected, no glows around survivors or items, and a Witch that kills in one hit.\nTips: As a survivor, never run off, because teammates cannot see you through walls. Listen for a Hunter's growl or a Smoker's cough and call it out, and use a microphone, since typing leaves you open to attack. Do not dash for special-tier weapons if the infected may be camping them.\nTips: As the infected, lone survivors are easy prey, and Tier 2 weapon spots and visible healing supplies are worth camping because survivors rush to them. Infected damage is higher, so even a short Charger life can cripple a team, and a Jockey can down anyone whatever their health because the others must first find the victim.\nTips: Infected still see survivor auras normally, but the Tank does not see the red glow around cars and other objects he can punch. A later patch took out every defibrillator and every first aid kit except the ones the survivors start each map with.",
+      "source_url": "https://left4dead.fandom.com/wiki/Realism_Versus_Mode",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "171548",
+      "crawled_at": "2026-11-10"
     }
   ]
 }

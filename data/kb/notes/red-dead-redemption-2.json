@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 2400,
+      "game_id": 11,
+      "section_type": "enemy",
+      "name": "Alligator",
+      "card": "Summary: A large reptile of Bayou Nwa in Lemoyne, also found in Bluewater Marsh and parts of Scarlett Meadows around the Kamassa River. It comes in a regular and a small size, and it clamps its jaws on your torso and swings you about, killing you almost instantly.\nWeak points: A rifle pierces its tough armoured body plates, and a single rifle shot to the head kills it. A tomahawk thrown at its head kills it instantly, and a bow shot with improved or poisoned arrows straight into the head is a good alternative.\nLooks like: Green, scaly skin, a long tail, a large gaping mouth and eyes that stick out from either side of the head.\nTips: A scoped rifle lets you kill one from farther away without getting close. Alligators cannot be skinned in water, so it is best to find and kill one lying on the shore; most of them lie still near the shores of Bayou Nwa and only attack or fight back if you come too close. Small alligators flee when you approach, and your horse gets spooked and throws you off if you ride toward a gator.",
+      "source_url": "https://reddead.fandom.com/wiki/Alligator",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "477291",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2401,
+      "game_id": 11,
+      "section_type": "enemy",
+      "name": "Boar",
+      "card": "Summary: A wild omnivore found in New Hanover, Lemoyne and West Elizabeth, with the greatest concentration throughout Lemoyne. It drops a boar pelt, tender pork loin, animal fat and a boar tusk.\nWeak points: A rifle, or a bow with poison arrows, is the easiest way to take down an animal of its size.\nTips: You can get a perfect pelt with a rifle, or with a bow using poison or regular arrows. Although it counts as a large animal, a boar can only be skinned like the massive animals such as elk and bison, so it cannot be picked up and stored on your horse.",
+      "source_url": "https://reddead.fandom.com/wiki/Boar_(RDR_2)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "477287",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2402,
+      "game_id": 11,
+      "section_type": "enemy",
+      "name": "Snake",
+      "card": "Summary: Most snakes are venomous and bite if provoked, and they are found in virtually all locations, in higher numbers along the eastern regions, especially Bluewater Marsh and Bayou Nwa. They drop stringy meat, snake skin and a snake carcass.\nWeak points: The page names none; snakes try to flee from you, and for a perfect snake skin you have to use a bow with small game arrows.\nTips: A Health Cure removes the venom from you, and horses are always spooked by snakes. Any perfect snake skin, not just a rattlesnake's, can be used to craft the Rattlesnake Vaquero Saddle from the Trapper, which the page calls arguably the best saddle in the game for all-around balance.",
+      "source_url": "https://reddead.fandom.com/wiki/Snake_(RDR_2)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "476779",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2403,
+      "game_id": 11,
+      "section_type": "enemy",
+      "name": "Lemoyne Raiders",
+      "card": "Summary: A gang that terrorizes Scarlett Meadows most of all, and the areas around Rhodes and Saint Denis, often with crimes like murder and robbery. They are regularly successful because of their manpower and ammunition.\nWeak points: The page names none; it says their strength is manpower and ammunition.\nLooks like: Every member wears a grey Confederate-military style uniform with a yellow neckerchief.\nTips: A gang of 8 to 12 mounted Raiders can storm you without warning under the rail bridge near Hill Haven Ranch, and the page says deaths in that ambush are notoriously common. Another ambush near Catfish Jacksons uses a wagon-mounted Gatling gun and then reinforcements, and with no cover it is a hard fight. Two unique hats, the Military Officer's Hat and the Military Forage Cap, can be kept from some enemies in random Raider camps.",
+      "source_url": "https://reddead.fandom.com/wiki/Lemoyne_Raiders",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "466084",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2404,
+      "game_id": 11,
+      "section_type": "enemy",
+      "name": "Murfree Brood",
+      "card": "Summary: A cruel, territorial gang that the page says is intent on controlling the local area and keeping people in terror. They do not camp in the wilderness: you usually meet them while they are looting a travellers' camp.\nWeak points: The page names none; it says they are unusually durable for human enemies, and have survived point-blank shotgun blasts and in some cases even headshots with lesser firearms.\nLooks like: They rarely wear shirts.\nTips: They frequently use Volcanic Pistols and double-barreled shotguns, which makes close combat with them very deadly. Murfrees do not carry valuables, so looting them mostly gives cigarettes, tonics and herbs, although Murfrees in scripted ambushes always carry money. Their throwing knives can be looted from them too.",
+      "source_url": "https://reddead.fandom.com/wiki/Murfree_Brood",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "464648",
+      "crawled_at": "2026-11-09"
+    }
+  ]
+}

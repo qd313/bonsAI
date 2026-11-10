@@ -1,0 +1,305 @@
+{
+  "wiki": "Red Dead Wiki (https://reddead.fandom.com/api.php)",
+  "licence_printed_by_fetcher": "Red Dead Wiki (MediaWiki 1.43.10) licence: CC-BY-SA https://www.fandom.com/licensing",
+  "licence_stored": "CC-BY-SA-3.0 (the fetcher prints CC-BY-SA with no version, linking Fandom's licensing page; the library stores Fandom wikis in the versioned form CC-BY-SA-3.0, as data/kb/NOTICE.md does for the GTA, Fallout, Left 4 Dead, Cyberpunk and Sims wikis; data/kb/NOTICE.md has no Red Dead Wiki row yet and needs one)",
+  "game_id": 11,
+  "game": "Red Dead Redemption 2",
+  "read_on": "2026-11-09",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://reddead.fandom.com/api.php --titles <pages> --out build/wiki-live/reddead (page text as rendered by the wiki, link markup removed). Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named (white space normalised; a table row is quoted as its cells in order). The Red Dead Wiki pages cover both Red Dead Redemption games; only the pages for the Red Dead Redemption 2 variants were used, and a line states a fact only where that page says it for this game. Story mission titles appear only where the page names the mission as the place an item is first given or sold.",
+  "sections": [
+    {
+      "section_id": 2400,
+      "name": "Alligator",
+      "kind": "enemy",
+      "main_page": "https://reddead.fandom.com/wiki/Alligator",
+      "main_revision": "477291",
+      "lines": [
+        {
+          "line": "Summary: A large reptile of Bayou Nwa in Lemoyne, also found in Bluewater Marsh and parts of Scarlett Meadows around the Kamassa River. It comes in a regular and a small size, and it clamps its jaws on your torso and swings you about, killing you almost instantly.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Alligator",
+              "revision": "477291",
+              "quoted": [
+                "The alligator is a large reptile endemic to Bayou Nwa in Lemoyne. They are also found in Bluewater Marsh and some parts of Scarlett Meadows (particularly around the Kamassa River). They come in two sizes - regular and small",
+                "The alligator attacks by clamping the torso of the player with their jaw and swinging them about, killing them almost instantly."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A rifle pierces its tough armoured body plates, and a single rifle shot to the head kills it. A tomahawk thrown at its head kills it instantly, and a bow shot with improved or poisoned arrows straight into the head is a good alternative.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Alligator",
+              "revision": "477291",
+              "quoted": [
+                "A rifle will pierce through an Alligator's tough, armored body plates.",
+                "alligators can be easily killed via a single shot to the head by a rifle. Throwing a Tomahawk at its head will kill it instantly.",
+                "A bow shot with improved or poisoned arrows directly in the head is also a good alternative."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Green, scaly skin, a long tail, a large gaping mouth and eyes that stick out from either side of the head.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Alligator",
+              "revision": "477291",
+              "quoted": [
+                "green, scaly skin, a long tail, a large, gaping mouth and eyes protruding from either side of the head."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A scoped rifle lets you kill one from farther away without getting close. Alligators cannot be skinned in water, so it is best to find and kill one lying on the shore; most of them lie still near the shores of Bayou Nwa and only attack or fight back if you come too close. Small alligators flee when you approach, and your horse gets spooked and throws you off if you ride toward a gator.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Alligator",
+              "revision": "477291",
+              "quoted": [
+                "A scoped rifle will allow the player to kill them from a farther distance without having to risk getting too close.",
+                "Alligators cannot be skinned in water.",
+                "It is best to find and kill an alligator lying on the shore.",
+                "most just lie still near the shores of Bayou Nwa and only attack or fight back if the player comes too close to them.",
+                "Small alligators, unlike large ones, will flee when the player approaches them.",
+                "Horses get spooked and will throw off the player if he rides towards a gator or gets too close."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2401,
+      "name": "Boar",
+      "kind": "enemy",
+      "main_page": "https://reddead.fandom.com/wiki/Boar_(RDR_2)",
+      "main_revision": "477287",
+      "lines": [
+        {
+          "line": "Summary: A wild omnivore found in New Hanover, Lemoyne and West Elizabeth, with the greatest concentration throughout Lemoyne. It drops a boar pelt, tender pork loin, animal fat and a boar tusk.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Boar_(RDR_2)",
+              "revision": "477287",
+              "quoted": [
+                "Wild Boars can be found across the states of New Hanover, Lemoyne, and West Elizabeth. They are omnivores",
+                "the greatest concentration is all throughout Lemoyne.",
+                "- Boar Pelt - Tender Pork Loin - Animal Fat - Boar Tusk"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A rifle, or a bow with poison arrows, is the easiest way to take down an animal of its size.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Boar_(RDR_2)",
+              "revision": "477287",
+              "quoted": [
+                "Using either a rifle or a Bow with Poison Arrows is the easiest way to take down an animal of this size."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You can get a perfect pelt with a rifle, or with a bow using poison or regular arrows. Although it counts as a large animal, a boar can only be skinned like the massive animals such as elk and bison, so it cannot be picked up and stored on your horse.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Boar_(RDR_2)",
+              "revision": "477287",
+              "quoted": [
+                "The player can obtain a perfect pelt using either a rifle or a Bow with Poison or regular Arrows.",
+                "Despite being classed as a large animal, boars can only be skinned akin to massive animals such as Elk and Bison, and thus cannot be picked up and stored on horseback."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2402,
+      "name": "Snake",
+      "kind": "enemy",
+      "main_page": "https://reddead.fandom.com/wiki/Snake_(RDR_2)",
+      "main_revision": "476779",
+      "lines": [
+        {
+          "line": "Summary: Most snakes are venomous and bite if provoked, and they are found in virtually all locations, in higher numbers along the eastern regions, especially Bluewater Marsh and Bayou Nwa. They drop stringy meat, snake skin and a snake carcass.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Snake_(RDR_2)",
+              "revision": "476779",
+              "quoted": [
+                "Most snakes are venomous and will bite the player if provoked.",
+                "The snake can be found in virtually all locations",
+                "Higher concentrations tend to be along the eastern regions, especially Bluewater Marsh and Bayou Nwa.",
+                "|| Stringy Meat Snake Skin Snake Carcass"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The page names none; snakes try to flee from you, and for a perfect snake skin you have to use a bow with small game arrows.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Snake_(RDR_2)",
+              "revision": "476779",
+              "quoted": [
+                "Snakes will attempt to flee from the player",
+                "To get a perfect snake skin you have to use a bow with Small Game Arrows."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A Health Cure removes the venom from you, and horses are always spooked by snakes. Any perfect snake skin, not just a rattlesnake's, can be used to craft the Rattlesnake Vaquero Saddle from the Trapper, which the page calls arguably the best saddle in the game for all-around balance.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Snake_(RDR_2)",
+              "revision": "476779",
+              "quoted": [
+                "horses will always be spooked by snakes.",
+                "A Health Cure will remove the venom from the player.",
+                "The Rattlesnake Vaquero Saddle available from the Trapper is arguably the best saddle in the game in terms of all-around balance",
+                "Despite the name, any perfect snake skin can be used to craft this saddle, not just rattlesnakes."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2403,
+      "name": "Lemoyne Raiders",
+      "kind": "enemy",
+      "main_page": "https://reddead.fandom.com/wiki/Lemoyne_Raiders",
+      "main_revision": "466084",
+      "lines": [
+        {
+          "line": "Summary: A gang that terrorizes Scarlett Meadows most of all, and the areas around Rhodes and Saint Denis, often with crimes like murder and robbery. They are regularly successful because of their manpower and ammunition.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Lemoyne_Raiders",
+              "revision": "466084",
+              "quoted": [
+                "they frequently terrorize the areas of Rhodes and the much-bigger Saint Denis. However, they particularly terrorize Scarlett Meadows",
+                "often commiting crimes like murder and robberies",
+                "They are regularly successful in their crimes due to their amount of manpower, and ammunition unlike other gangs."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The page names none; it says their strength is manpower and ammunition.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Lemoyne_Raiders",
+              "revision": "466084",
+              "quoted": [
+                "They are regularly successful in their crimes due to their amount of manpower, and ammunition unlike other gangs."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Every member wears a grey Confederate-military style uniform with a yellow neckerchief.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Lemoyne_Raiders",
+              "revision": "466084",
+              "quoted": [
+                "Everyone within the gang consistently wears grey Confederate-military styled uniforms, with yellow neckerchiefs."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A gang of 8 to 12 mounted Raiders can storm you without warning under the rail bridge near Hill Haven Ranch, and the page says deaths in that ambush are notoriously common. Another ambush near Catfish Jacksons uses a wagon-mounted Gatling gun and then reinforcements, and with no cover it is a hard fight. Two unique hats, the Military Officer's Hat and the Military Forage Cap, can be kept from some enemies in random Raider camps.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Lemoyne_Raiders",
+              "revision": "466084",
+              "quoted": [
+                "The Raiders can launch a very dangerous ambush under the rail bridge near Hill Haven Ranch. A gang of 8-12 mounted Raiders will storm the player without warning and attempt to kill them. Mortality rates for the protagonist are notoriously high in this ambush.",
+                "Another random encounter can occur when passing by Catfish Jacksons. The Raiders launch an ambush on the player with a wagon mounted Gatling Gun, while reinforcements arrive and attack the player. Due to a lack of cover, this can be a difficult fight.",
+                "The player is able to equip and keep two unique hats from select enemies in random Lemoyne Raider camps. They are the Military Officer's Hat and the Military Forage Cap"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2404,
+      "name": "Murfree Brood",
+      "kind": "enemy",
+      "main_page": "https://reddead.fandom.com/wiki/Murfree_Brood",
+      "main_revision": "464648",
+      "lines": [
+        {
+          "line": "Summary: A cruel, territorial gang that the page says is intent on controlling the local area and keeping people in terror. They do not camp in the wilderness: you usually meet them while they are looting a travellers' camp.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Murfree_Brood",
+              "revision": "464648",
+              "quoted": [
+                "The Murfree Brood are known for being unbelievably cruel and territorial",
+                "seem intent on controlling the local area and keeping the populace in terror.",
+                "Another difference is that the Murfrees don't camp in the wilderness. Instead, players usually encounter the Murfrees while they are looting a travelers' camp."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The page names none; it says they are unusually durable for human enemies, and have survived point-blank shotgun blasts and in some cases even headshots with lesser firearms.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Murfree_Brood",
+              "revision": "464648",
+              "quoted": [
+                "Murfrees are unusually durable compared to other human NPCs, being observed surviving point-blank shotgun blasts, and in some cases even headshots with lesser firearms."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: They rarely wear shirts.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Murfree_Brood",
+              "revision": "464648",
+              "quoted": [
+                "They rarely wear shirts"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They frequently use Volcanic Pistols and double-barreled shotguns, which makes close combat with them very deadly. Murfrees do not carry valuables, so looting them mostly gives cigarettes, tonics and herbs, although Murfrees in scripted ambushes always carry money. Their throwing knives can be looted from them too.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Murfree_Brood",
+              "revision": "464648",
+              "quoted": [
+                "The Murfree Brood frequently use Volcanic Pistols and Double-Barreled Shotguns, making close quarters combat with them a very deadly prospect due to the damage they deal.",
+                "the Murfrees don't carry any valuables and players mostly receive cigarettes, tonics, and herbs from looting them.",
+                "Murfrees participating in scripted ambushes against the player will always carry money, however."
+              ]
+            },
+            {
+              "page": "https://reddead.fandom.com/wiki/Throwing_Knife_(RDR_2)",
+              "revision": "476857",
+              "quoted": [
+                "Additionally, they can be found from looted Murfree Brood members."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

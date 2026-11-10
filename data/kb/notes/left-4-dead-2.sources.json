@@ -808,6 +808,174 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2212,
+      "name": "M60 machine gun",
+      "kind": "item",
+      "main_page": "https://left4dead.fandom.com/wiki/M60_Machine_Gun",
+      "main_revision": "171845",
+      "lines": [
+        {
+          "line": "Summary: A special-tier machine gun, new in Left 4 Dead 2, with a 150-round belt and no reloading. Ammo piles cannot refill it, and once the belt is empty it is dropped and you go back to your secondary weapon.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/M60_Machine_Gun",
+              "revision": "171845",
+              "quoted": [
+                "The M60 is a Special Tier weapon that was introduced in Left 4 Dead 2. It carries only 150 rounds and, after being depleted, is dropped. The Survivor will then revert to their secondary weapon, much like with the Grenade Launcher.",
+                "its low capacity is counterbalanced by it never needing to reload"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Ammo",
+              "revision": "171598",
+              "quoted": [
+                "Ammo Piles cannot refill ammunition for the Grenade Launcher or M60"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It kills a common infected in one shot wherever it hits, even on Expert Realism, and it never needs reloading. An ammo upgrade converts all the rounds left in the belt into incendiary or explosive rounds, so it makes the most of one.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/M60_Machine_Gun",
+              "revision": "171845",
+              "quoted": [
+                "Instantly kills Common Infected regardless of where it hits, even on Expert Realism.",
+                "Ammo upgrades will convert all remaining ammunition in the gun, making it the most effective gun for using incendiary or explosive rounds."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Switch to your secondary weapon against small groups to save the belt for larger ones. Its accuracy matches the AK-47's, so it is poor at long range or on the move, and special ammo on a nearly empty M60 is wasted because it only converts what is left.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/M60_Machine_Gun",
+              "revision": "171845",
+              "quoted": [
+                "When facing a small number of Infected, switch to your secondary weapon to save ammunition for larger groups.",
+                "Accuracy identical to the AK-47, meaning that it is very poor for ranged encounters especially while on the move.",
+                "Do not put the special ammo on the M60 if it is low on ammo however, as it simply swaps the M60s current ammo into the respective special ammo and will be a waste if it does not have that much ammo left."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2213,
+      "name": "Chainsaw",
+      "kind": "item",
+      "main_page": "https://left4dead.fandom.com/wiki/Chainsaw",
+      "main_revision": "168908",
+      "lines": [
+        {
+          "line": "Summary: A special melee weapon for the sidearm slot, new in Left 4 Dead 2, that does 1000 damage per second and kills a common infected in one hit anywhere on the body. Its fuel cannot be refilled and once the gauge reads empty it is useless, but it burns no fuel while idle.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Chainsaw",
+              "revision": "168908",
+              "quoted": [
+                "The Chainsaw is a special close combat weapon, introduced in Left 4 Dead 2.",
+                "Just like other melee weapons, the Chainsaw replaces the player's pistols in the side-arm slot.",
+                "clocking in at 1000 DPS",
+                "a Common Infected in just one hit anywhere on the body",
+                "the Chainsaw runs off an internal fuel tank that cannot be refilled",
+                "once the gas gauge hits E, it’s useless.",
+                "The only good news is that the Chainsaw does not use any fuel when idling."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Special infected generally die in under half a second, the Charger in a little over, and a Tank takes 3, 4, 6 or 8 seconds on Easy, Normal, Advanced and Expert. It is the only melee weapon that cuts you free from a Smoker's tongue without precise aim or timing.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Chainsaw",
+              "revision": "168908",
+              "quoted": [
+                "taking 3/4/6/8 seconds (Easy/Normal/Advanced or Versus/Expert) to kill it.",
+                "The Special Infected generally die in less than half a second against the Chainsaw, aside from the Charger, which takes just over half a second.",
+                "The Chainsaw is the only melee weapon that will allow players to cut themselves free from a Smoker's tongue",
+                "the Chainsaw does not require any particular aiming nor such precise timing"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It needs a long rev-up, so start it before a horde reaches you, and being pinned or knocked down drops it back to idle. Its noise draws nearby common infected, and its arc hurts teammates, enough to incapacitate one on Realism, so keep your distance from them. Tap the fire button against small groups to save fuel.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Chainsaw",
+              "revision": "168908",
+              "quoted": [
+                "The Chainsaw has a long deployment delay during which time it must be revved up to full operating speed.",
+                "In such cases, the Chainsaw speed drops back to idle and must be revved up again",
+                "Due to its loud noise, using the Chainsaw will attract nearby Common Infected.",
+                "Keep your distance from other Survivors when using the Chainsaw to avoid hurting them",
+                "when a hit from the Chainsaw can incapacitate a teammate.",
+                "briefly tapping the primary fire when using the Chainsaw against small groups of Common Infected is essential to get the most use out of this weapon."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2214,
+      "name": "Incendiary and explosive ammo",
+      "kind": "item",
+      "main_page": "https://left4dead.fandom.com/wiki/Ammo",
+      "main_revision": "171598",
+      "lines": [
+        {
+          "line": "Summary: Two ammo upgrades for any primary weapon in Left 4 Dead 2. They spawn at random, usually only a handful of times in a campaign, and take the first aid kit slot: you put the pile down on the ground, which takes several seconds, and each player can use it once to get one extra magazine of the special ammo.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Ammo",
+              "revision": "171598",
+              "part_of_page": "Ammunition Upgrades",
+              "quoted": [
+                "Left 4 Dead 2 features two ammunition upgrades for all primary weapons. This powerful ammo spawns randomly, usually only found a handful of times in each campaign. When picked up it occupies the First aid kit slot. To use the ammo, the player first deploys it on the ground (which takes several seconds and leaves them vulnerable to attack), after which each player can use it once to get their share of the ammo. This gives them one extra magazine loaded with the special ammunition"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Incendiary ammo sets common and special infected on fire, except CEDA worker infected and Jimmy Gibbs Junior, and kills a common infected in one hit. Explosive ammo explodes on any surface, instantly kills all common infected and stumbles any special infected except the Tank.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Ammo",
+              "revision": "171598",
+              "part_of_page": "Ammunition Upgrades",
+              "quoted": [
+                "sets all Common and Special Infected on fire, with the exception of Infected CEDA Workers and Jimmy Gibbs Junior.",
+                "Since incendiary ammunition is a one-hit kill against Common and Uncommon Infected on all difficulties",
+                "explode on hitting any surface, including Infected. This instantly kills all Common Infected (regardless of difficulty)",
+                "It can also stumble any Special Infected but the Tank."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Explosive rounds hurt you and nearby teammates at point blank, which can be devastating on Advanced and Expert, and they can set off gas cans, propane tanks, fireworks and oxygen tanks. Using one type while the other is active replaces it, because they do not stack.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Ammo",
+              "revision": "171598",
+              "part_of_page": "Ammunition Upgrades",
+              "quoted": [
+                "Shooting at targets point blank with explosive ammunition will inflict damage on yourself and nearby teammates. This can be devastating on Advanced and Expert difficulty settings",
+                "Explosive ammo makes gas cans, fireworks, propane tanks and oxygen tanks become huge hazards",
+                "if either ammo upgrade is already in effect and the other is used, the second upgrade will replace the current upgrade. The ammo upgrades do not stack."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

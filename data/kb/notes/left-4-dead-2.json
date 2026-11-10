@@ -133,6 +133,39 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "172015",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2212,
+      "game_id": 3,
+      "section_type": "item",
+      "name": "M60 machine gun",
+      "card": "Summary: A special-tier machine gun, new in Left 4 Dead 2, with a 150-round belt and no reloading. Ammo piles cannot refill it, and once the belt is empty it is dropped and you go back to your secondary weapon.\nUses: It kills a common infected in one shot wherever it hits, even on Expert Realism, and it never needs reloading. An ammo upgrade converts all the rounds left in the belt into incendiary or explosive rounds, so it makes the most of one.\nTips: Switch to your secondary weapon against small groups to save the belt for larger ones. Its accuracy matches the AK-47's, so it is poor at long range or on the move, and special ammo on a nearly empty M60 is wasted because it only converts what is left.",
+      "source_url": "https://left4dead.fandom.com/wiki/M60_Machine_Gun",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "171845",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2213,
+      "game_id": 3,
+      "section_type": "item",
+      "name": "Chainsaw",
+      "card": "Summary: A special melee weapon for the sidearm slot, new in Left 4 Dead 2, that does 1000 damage per second and kills a common infected in one hit anywhere on the body. Its fuel cannot be refilled and once the gauge reads empty it is useless, but it burns no fuel while idle.\nUses: Special infected generally die in under half a second, the Charger in a little over, and a Tank takes 3, 4, 6 or 8 seconds on Easy, Normal, Advanced and Expert. It is the only melee weapon that cuts you free from a Smoker's tongue without precise aim or timing.\nTips: It needs a long rev-up, so start it before a horde reaches you, and being pinned or knocked down drops it back to idle. Its noise draws nearby common infected, and its arc hurts teammates, enough to incapacitate one on Realism, so keep your distance from them. Tap the fire button against small groups to save fuel.",
+      "source_url": "https://left4dead.fandom.com/wiki/Chainsaw",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "168908",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2214,
+      "game_id": 3,
+      "section_type": "item",
+      "name": "Incendiary and explosive ammo",
+      "card": "Summary: Two ammo upgrades for any primary weapon in Left 4 Dead 2. They spawn at random, usually only a handful of times in a campaign, and take the first aid kit slot: you put the pile down on the ground, which takes several seconds, and each player can use it once to get one extra magazine of the special ammo.\nUses: Incendiary ammo sets common and special infected on fire, except CEDA worker infected and Jimmy Gibbs Junior, and kills a common infected in one hit. Explosive ammo explodes on any surface, instantly kills all common infected and stumbles any special infected except the Tank.\nTips: Explosive rounds hurt you and nearby teammates at point blank, which can be devastating on Advanced and Expert, and they can set off gas cans, propane tanks, fireworks and oxygen tanks. Using one type while the other is active replaces it, because they do not stack.",
+      "source_url": "https://left4dead.fandom.com/wiki/Ammo",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "171598",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

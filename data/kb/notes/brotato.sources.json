@@ -359,7 +359,7 @@
               "page": "https://brotato.wiki.spellsandguns.com/Metal_Detector",
               "revision": "8463",
               "quoted": [
-                "+5% chance to double the value of picked up materials"
+                "Metal detector gives an additive 5% per item chance for any Materials you pick up to have double the value."
               ]
             }
           ]
@@ -409,7 +409,7 @@
               "page": "https://brotato.wiki.spellsandguns.com/Recycling_Machine",
               "revision": "4583",
               "quoted": [
-                "Gain 35% more materials from recycling items"
+                "The Default is to get 25% back when recycling. Recycling Machine can increase this value by 35% for a total of 60% back."
               ]
             }
           ]
@@ -457,7 +457,6 @@
               "page": "https://brotato.wiki.spellsandguns.com/Piggy_Bank",
               "revision": "6405",
               "quoted": [
-                "+20% of your materials at the start of waves (stops working at wave 20)",
                 "The Piggy Bank give you 20% of your Materials when you exit the shop and start a new wave."
               ]
             }
@@ -667,7 +666,7 @@
               "page": "https://brotato.wiki.spellsandguns.com/Medikit",
               "revision": "6024",
               "quoted": [
-                "+10 HP Regeneration +2 HP Regeneration every 5 seconds until the end of the wave"
+                "The Medkit gives a base +10 HP Regeneration and an additional +2 HP regeneration per 5 seconds of time that has passed during a wave."
               ]
             }
           ]

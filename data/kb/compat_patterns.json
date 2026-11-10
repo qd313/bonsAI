@@ -1687,5 +1687,185 @@
     "card": "Researched, unconfirmed: if the Deck can't find your PC, use the same home network. On the PC, let Ollama accept other devices and open port 11434 in the firewall; use its address:11434 in bonsAI.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 168,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: to set up mods on the Deck, pick a mod manager such as Mod Organizer 2 or r2modman, or use the game's own Workshop or mod browser if it has one. Back up your saves first.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 169,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: Vortex links mods into the game folder when you deploy them. Mod Organizer 2 keeps mods in its own folder and shows them to the game only when you start the game through it.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 170,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: r2modman keeps mods in its own profiles, not the game folder. They load only when you press Start modded in r2modman; starting the game from Steam gives the plain game.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 171,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: Steam Workshop mods need no manager: subscribe on the game's Workshop page and Steam downloads and updates them. The game itself decides which subscribed items it loads.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 172,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: Skyrim Special Edition adds mods from its in-game Creations screen, no manager needed (not in the GOG version). Mods switch off achievements; their saves are marked [M].",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 173,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: BepInEx (Unity mods) keeps mods in BepInEx/plugins in the game folder and logs to BepInEx/LogOutput.log. Under Proton it usually needs a winhttp override in Wine's settings.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 174,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: Stardew Valley mods run through SMAPI and go in the game's Mods folder. Its log, SMAPI-latest.txt, is in ErrorLogs inside the game's app-data folder, not the install folder.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 175,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: a script extender (SKSE, F4SE) must match the game's exact version. After a patch update it first; if Skyrim crashes at start, move the files out of Data/SKSE/Plugins to test.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 176,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: Cyberpunk mods sit on frameworks: RED4ext (which Cyber Engine Tweaks, ArchiveXL, TweakXL and Codeware need) and redscript. A game update breaks mods until frameworks update.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 177,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: Cyberpunk mod files go by type: .archive in archive/pc/mod, .reds in r6/scripts, .tweak/.yaml in r6/tweaks, CET .lua mods in bin/x64/plugins/cyber_engine_tweaks.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 178,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: Cyberpunk mods on the Deck need d3dcompiler_47 and vcrun2022 (add with protontricks) and launch option WINEDLLOVERRIDES=\"winmm,version=n,b\" %command% -- recheck after updates.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 179,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: load order picks the winner when two mods change one file. Cyberpunk: .archive files alphabetically by name, first wins, then REDmods. Skyrim and Fallout use the plugin list.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 180,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: on the Deck a Windows game's AppData and Documents are inside its prefix: steamapps/compatdata/<appid>/pfx/drive_c/users/steamuser/. On Windows they are in your user profile.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 181,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: before changing mods or load order, copy the game's saves and its compatdata/<appid> folder somewhere safe. Never delete a prefix or a save as a first step.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 182,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: Heroic and Lutris games are not in Steam's compatdata; each has its own Wine prefix (Heroic: Games/Heroic/Prefixes in your home folder by default; Lutris: game options).",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 183,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: games with anti-cheat (EAC, BattlEye) can refuse altered files. Mod single-player games, use the game's own mod support, read multiplayer rules. bonsAI won't help dodge it.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 184,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: bonsAI cannot see mods a manager has not deployed or switched on, or that sit in the manager's own folder. Tell it which mods you use.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
+  },
+  {
+    "pattern_id": 185,
+    "topic": "mods",
+    "platforms": [
+      "deck"
+    ],
+    "card": "Researched, unconfirmed: if the game crashes after you add mods, turn every mod off. If it runs, turn half back on, play, and keep halving the half that breaks it until one mod is left.",
+    "source_url": "",
+    "source_license": "bonsAI-maintainer"
   }
 ]

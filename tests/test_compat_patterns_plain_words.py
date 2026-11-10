@@ -65,8 +65,8 @@ class PlainWordsInTipsTests(unittest.TestCase):
         self.assertNotIn("black", BY_ID[154]["card"].lower())
 
     def test_two_new_tips_are_marked_researched_unconfirmed_and_filed_after_the_last(self):
-        self.assertEqual(max(BY_ID), 167)  # 167 is plan 102 lane H's tip
-        self.assertEqual(sorted(BY_ID)[-4:], [164, 165, 166, 167])
+        # Tips 168 on are plan 103 lane G1's (topic mods, tests/test_compat_patterns_mods.py); 167 is plan 102 lane H's.
+        self.assertEqual([i for i in sorted(BY_ID) if 164 <= i <= 167], [164, 165, 166, 167])
         expected_topic = {165: "audio", 166: "display"}
         for tip_id, topic in expected_topic.items():
             tip = BY_ID[tip_id]

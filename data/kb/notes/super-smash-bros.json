@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 3300,
+      "game_id": 34,
+      "section_type": "item",
+      "name": "Heart Container (Heart)",
+      "card": "Summary: A healing item that lowers the damage percentage of whoever picks it up. In the first game it is called simply Heart, and it recovers all of your damage, taking you down to 0%.\nUses: It spawns above the ground and floats down slowly, so in the first game players have to fight over the spot where it will land. Once it is grabbed it keeps healing even if you are hit while it works.\nTips: The item list calls it the strongest recovery item. Taking enough of them in one match earns the Heartthrob bonus, worth 17,000 points in the first game (8,000 in the Japanese version).",
+      "source_url": "https://www.ssbwiki.com/Heart_Container",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2066620",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3301,
+      "game_id": 34,
+      "section_type": "item",
+      "name": "Maxim Tomato",
+      "card": "Summary: A red tomato with a black M on it that lowers the damage percentage of whoever picks it up. In the first game it restores a full 100% of your damage; the later games only restore 50%.\nUses: In the first game any damage you take while it is healing you is ignored. Maxim Tomatoes do not spawn on Hyrule Castle.\nTips: Taking enough Maxim Tomatoes in one match earns the Vegetarian bonus, worth 9,000 points in the first game (5,000 in the Japanese version). If every item except the Maxim Tomato is turned off, any containers that fall onto the stage will be empty.",
+      "source_url": "https://www.ssbwiki.com/Maxim_Tomato",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2062573",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3302,
+      "game_id": 34,
+      "section_type": "item",
+      "name": "Starman (Super Star)",
+      "card": "Summary: A star that bounces around the stage and makes whoever touches it invincible for ten seconds. The first game calls it the Starman; the name Super Star came in later games.\nUses: It bounces on the field and off platforms and walls in large arcs, and it can fall off the stage if nobody grabs it in time. Touching an opponent while invincible does not damage them. The fighter sparkles, and a special music theme replaces the stage music until the effect wears off.\nTips: On Planet Zebes it makes you immune to the acid, so you can walk through it, but if you fall off the stage while invincible you self-destruct because the acid will not bump you back up. In the first game it is the one item without the small triangular marker above it.",
+      "source_url": "https://www.ssbwiki.com/Super_Star",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2066650",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3303,
+      "game_id": 34,
+      "section_type": "item",
+      "name": "Beam Sword",
+      "card": "Summary: A glowing sword, often called the lightsaber, that you swing for stronger hits or throw at opponents. The game's own manual says it has the longest range of all the clobbering items when thrown.\nUses: While you hold it, your neutral attack, forward tilt, dash attack and forward smash become item swipes. In the first game they deal 12%, 18%, 16% and 25%.\nTips: Thrown, it does between 13% and 20% depending on the throw. If you are hit while holding it you may drop it: in the first game the chance is the attack's damage divided by 60, so a 6% hit gives a 10% chance.",
+      "source_url": "https://www.ssbwiki.com/Beam_Sword",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2049293",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3304,
+      "game_id": 34,
+      "section_type": "item",
+      "name": "Home-Run Bat",
+      "card": "Summary: A wooden bat that turns your forward smash into a single delayed swing that can knock an opponent out in one hit.\nUses: The swing always takes a set time and cannot be charged. In the first game it uses each fighter's normal item swing, and the wind-up differs by fighter: Link is quickest at 23 frames, while Mario, Luigi and Ness are slowest at 30.\nTips: It does most of its damage with the tip of the bat rather than the middle. It is also strong when thrown, doing around 20% damage with high knockback, and swung normally it can KO fairly early, especially with a dash attack or smash throw.",
+      "source_url": "https://www.ssbwiki.com/Home-Run_Bat",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2018945",
+      "crawled_at": "2026-11-09"
+    }
+  ]
+}

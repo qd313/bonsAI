@@ -1,0 +1,303 @@
+{
+  "wiki": "SmashWiki (https://www.ssbwiki.com/api.php)",
+  "licence_printed_by_fetcher": "SmashWiki (MediaWiki 1.43.11) licence: Attribution-ShareAlike 4.0 International https://creativecommons.org/licenses/by-sa/4.0/",
+  "licence_stored": "CC-BY-SA-4.0 (the fetcher prints 'Attribution-ShareAlike 4.0 International'; the library stores the versioned form)",
+  "game_id": 34,
+  "game": "Super Smash Bros.",
+  "read_on": "2026-11-09",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py with its page-render call asking for the page by title (this wiki answers HTTP 403 to the reader's 'oldid' form; the scratch wrapper checks that the revision the wiki rendered is the revision the reader resolved, and stops if they differ). Page text as rendered by the wiki, link markup removed. Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named (table cell markers removed, whitespace collapsed). Several SmashWiki pages cover the whole series; a line states a Super Smash Bros. (Nintendo 64) fact only where the page says so for the original game, for Smash 64, or sits on a page for a stage or fighter that exists only in the original game.",
+  "sections": [
+    {
+      "section_id": 3300,
+      "name": "Heart Container (Heart)",
+      "kind": "item",
+      "main_page": "https://www.ssbwiki.com/Heart_Container",
+      "main_revision": "2066620",
+      "lines": [
+        {
+          "line": "Summary: A healing item that lowers the damage percentage of whoever picks it up. In the first game it is called simply Heart, and it recovers all of your damage, taking you down to 0%.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Heart_Container",
+              "revision": "2066620",
+              "quoted": [
+                "known simply as Heart in the original Super Smash Bros., is an item that will reduce the damage of the character who picks it up",
+                "recovering damage all the way down to 0%"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It spawns above the ground and floats down slowly, so in the first game players have to fight over the spot where it will land. Once it is grabbed it keeps healing even if you are hit while it works.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Heart_Container",
+              "revision": "2066620",
+              "quoted": [
+                "They spawn above the ground and float down slowly, creating a delay before they land.",
+                "in the original Super Smash Bros. players must fight for the area where it will land as it falls.",
+                "(even if the player is hit during this time)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The item list calls it the strongest recovery item. Taking enough of them in one match earns the Heartthrob bonus, worth 17,000 points in the first game (8,000 in the Japanese version).",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Item",
+              "revision": "2061935",
+              "quoted": [
+                "Strongest recovery item"
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Heart_Container",
+              "revision": "2066620",
+              "quoted": [
+                "gives the player the Heartthrob bonus, worth 17,000 points in SSB (8,000 points in the Japanese version of SSB)"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3301,
+      "name": "Maxim Tomato",
+      "kind": "item",
+      "main_page": "https://www.ssbwiki.com/Maxim_Tomato",
+      "main_revision": "2062573",
+      "lines": [
+        {
+          "line": "Summary: A red tomato with a black M on it that lowers the damage percentage of whoever picks it up. In the first game it restores a full 100% of your damage; the later games only restore 50%.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Maxim_Tomato",
+              "revision": "2062573",
+              "quoted": [
+                "which reduces the damage percentage of the player who picks it up",
+                "a red tomato with a black \"M\" in the center",
+                "In Super Smash Bros., the Maxim Tomato restores 100% from a character's damage percentage.",
+                "In the Super Smash Bros. games, with the exception of the original game, Maxim Tomatoes only restore fifty percent of a player's damage"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: In the first game any damage you take while it is healing you is ignored. Maxim Tomatoes do not spawn on Hyrule Castle.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Maxim_Tomato",
+              "revision": "2062573",
+              "quoted": [
+                "In SSB, any damage the character takes is ignored while healing.",
+                "Maxim Tomatoes don't spawn on Hyrule Castle."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Taking enough Maxim Tomatoes in one match earns the Vegetarian bonus, worth 9,000 points in the first game (5,000 in the Japanese version). If every item except the Maxim Tomato is turned off, any containers that fall onto the stage will be empty.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Maxim_Tomato",
+              "revision": "2062573",
+              "quoted": [
+                "gives the player the Vegetarian bonus, worth 9,000 points in SSB (5,000 points in the Japanese version of SSB)",
+                "If all items aside from the Maxim Tomato are turned off, then any containers that fall onto the stage will be empty."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3302,
+      "name": "Starman (Super Star)",
+      "kind": "item",
+      "main_page": "https://www.ssbwiki.com/Super_Star",
+      "main_revision": "2066650",
+      "lines": [
+        {
+          "line": "Summary: A star that bounces around the stage and makes whoever touches it invincible for ten seconds. The first game calls it the Starman; the name Super Star came in later games.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Item",
+              "revision": "2061935",
+              "quoted": [
+                "makes whoever it touches invulnerable to all damage and knockback for a short time."
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Super_Star",
+              "revision": "2066650",
+              "quoted": [
+                "known as the Starman prior to the PAL release of Super Smash Bros. Brawl and the NTSC release of Super Smash Bros. 4",
+                "The player's fighter will become invincible for ten seconds"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It bounces on the field and off platforms and walls in large arcs, and it can fall off the stage if nobody grabs it in time. Touching an opponent while invincible does not damage them. The fighter sparkles, and a special music theme replaces the stage music until the effect wears off.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Super_Star",
+              "revision": "2066650",
+              "quoted": [
+                "The Super Star bounces on the field and off platforms or walls in large arcs, and can fall off the stage if not grabbed in time",
+                "but it doesn't damage the opponents when touched",
+                "bright, sparkling appearance",
+                "special music theme which completely replaces the stage music"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: On Planet Zebes it makes you immune to the acid, so you can walk through it, but if you fall off the stage while invincible you self-destruct because the acid will not bump you back up. In the first game it is the one item without the small triangular marker above it.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Planet_Zebes",
+              "revision": "2047088",
+              "quoted": [
+                "Obtaining a Starman (or any form of strong knockback resistance) grants invulnerability to the acid, allowing the player to walk through it with no obstruction.",
+                "if, while invincible, the player falls off the stage and through the acid, they will self-destruct; the acid will not \"bump\" the player back up"
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Item",
+              "revision": "2061935",
+              "quoted": [
+                "In Smash 64, items (except for Super Stars) have a small triangular indicator above them."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3303,
+      "name": "Beam Sword",
+      "kind": "item",
+      "main_page": "https://www.ssbwiki.com/Beam_Sword",
+      "main_revision": "2049293",
+      "lines": [
+        {
+          "line": "Summary: A glowing sword, often called the lightsaber, that you swing for stronger hits or throw at opponents. The game's own manual says it has the longest range of all the clobbering items when thrown.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Beam_Sword",
+              "revision": "2049293",
+              "quoted": [
+                "the Beam Sword will bolster the player's power",
+                "It is similar in appearance to a lightsaber, and is often informally referred to as the \"lightsaber\" for this reason.",
+                "it can be wielded and charged for melee attacks or can be thrown, like all other battering items.",
+                "It also has the longest range of all Clobbering Items when thrown."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: While you hold it, your neutral attack, forward tilt, dash attack and forward smash become item swipes. In the first game they deal 12%, 18%, 16% and 25%.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Item",
+              "revision": "2061935",
+              "quoted": [
+                "Battering items are wielded by characters once picked up, turning their neutral attack, forward tilt, dash attack, and forward smash into an item swipe."
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Beam_Sword",
+              "revision": "2049293",
+              "quoted": [
+                "Neutral Attack 12%",
+                "Forward Tilt 18%",
+                "Dash Attack 16%",
+                "Forward Smash 25%"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Thrown, it does between 13% and 20% depending on the throw. If you are hit while holding it you may drop it: in the first game the chance is the attack's damage divided by 60, so a 6% hit gives a 10% chance.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Beam_Sword",
+              "revision": "2049293",
+              "quoted": [
+                "Forward tilt throw 15%",
+                "Up tilt throw 16%",
+                "Down tilt throw 13%",
+                "Dash attack throw 19%",
+                "Forward smash throw 19%",
+                "Up smash throw 20%",
+                "Down smash throw 13%",
+                "Air up smash throw 20%"
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Item",
+              "revision": "2061935",
+              "quoted": [
+                "In Smash 64 and Melee, the formula is base damage / 60, so for example, an attack that deals 6% damage has a 10% chance of causing the target to drop their held item"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3304,
+      "name": "Home-Run Bat",
+      "kind": "item",
+      "main_page": "https://www.ssbwiki.com/Home-Run_Bat",
+      "main_revision": "2018945",
+      "lines": [
+        {
+          "line": "Summary: A wooden bat that turns your forward smash into a single delayed swing that can knock an opponent out in one hit.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Home-Run_Bat",
+              "revision": "2018945",
+              "quoted": [
+                "completely altering the character's forward smash. Upon performing a forward smash, the character winds up and performs a single, delayed swing that can potentially KO opponents in a single hit.",
+                "is that of a traditional wooden bat with a striped tip and a wrapped handle"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: The swing always takes a set time and cannot be charged. In the first game it uses each fighter's normal item swing, and the wind-up differs by fighter: Link is quickest at 23 frames, while Mario, Luigi and Ness are slowest at 30.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Home-Run_Bat",
+              "revision": "2018945",
+              "quoted": [
+                "The attack always takes a set amount of time and cannot be charged",
+                "In Smash 64 and Melee, characters use their standard item swinging animation",
+                "In Smash 64 and Melee, swing time varies from character to character, but is much faster overall than in later games.",
+                "SSB Mario 30 Donkey Kong 28 Link 23 Samus 26 Yoshi 27 Kirby 26 Fox 29 Pikachu 27 Luigi 30 Ness 30 Captain Falcon 28 Jigglypuff 26"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It does most of its damage with the tip of the bat rather than the middle. It is also strong when thrown, doing around 20% damage with high knockback, and swung normally it can KO fairly early, especially with a dash attack or smash throw.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Home-Run_Bat",
+              "revision": "2018945",
+              "quoted": [
+                "The Home-Run Bat deals most of its damage at the tip of the bat instead of the center",
+                "The Bat is also powerful when thrown, dealing around 20% damage and high knockback.",
+                "the Home-Run Bat is also powerful when swung or thrown normally, being capable of KOing relatively early, especially in regards to its dash attack and smash throws."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

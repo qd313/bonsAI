@@ -29,7 +29,7 @@
           ]
         },
         {
-          "line": "Weak points: The claws are the softest part, and crippling them stuns the scorpion. Armor-piercing weapons work well against it, with the Guns skill. Do not hope for a head shot bonus: it has no head or other spot that takes extra damage, which blunts V.A.T.S. and ordinary firearms.",
+          "line": "Weak points: The claws carry lighter armor than the body does, and crippling them stuns the scorpion. Armor-piercing weapons do well against it, with the Guns skill. It has no head or other spot that takes extra damage, so V.A.T.S. and firearms do somewhat worse.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout:_New_Vegas)",
@@ -43,7 +43,7 @@
           ]
         },
         {
-          "line": "Looks like: Apart from size, an ordinary scorpion with a mottled, dark blue-gray shell. The common kind runs from a large dog to small livestock in size, and the rare queen is bigger than a Corvega.",
+          "line": "Looks like: A regular scorpion in everything but size, with a blotchy, dark bluish-gray armored shell. The common kind runs from about a big dog's size up to a small farm animal's, and the rare queen is bigger than a Corvega.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout:_New_Vegas)",
@@ -102,7 +102,7 @@
           ]
         },
         {
-          "line": "Looks like: A lizard with two fins sprouting behind the head, orange-tinted eyes and five fingers and toes, anywhere from a small child's size to taller than a grown adult. Golden geckos have bright gold scales; fire geckos are mottled purple and red with spikes down the back.",
+          "line": "Looks like: A lizard with two fins behind its head, eyes with an orange tint, and fingers and toes, five of each. Size depends on the kind, from a small child's height to taller than a grown adult. Golden geckos are bright gold; fire geckos are blotchy purple and red with spikes along the back.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Gecko_(Fallout:_New_Vegas)",
@@ -162,7 +162,7 @@
           ]
         },
         {
-          "line": "Weak points: Crippling a mantis's antennae sends it into a frenzy, so it lashes out at anything within reach.",
+          "line": "Weak points: Cripple its antennae and a mantis goes into a frenzy, attacking anything near enough to reach.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Giant_mantis_(Fallout:_New_Vegas)",
@@ -174,7 +174,7 @@
           ]
         },
         {
-          "line": "Looks like: Much like a real praying mantis, only far bigger, though still smaller than a person. The young nymphs are much smaller than the adults, and some die just from being walked over. The Zion Canyon kinds are larger.",
+          "line": "Looks like: Much like a real praying mantis, only far bigger, though still smaller than a person. The young nymphs are much smaller than the adults. The Zion Canyon kinds are larger.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Giant_mantis_(Fallout:_New_Vegas)",
@@ -183,14 +183,13 @@
                 "their biological traits have remained relatively unchanged when compared with the original specimen, except for significantly increased size.",
                 "They are still much smaller than humans",
                 "They are much smaller and weaker than adult mantises.",
-                "Some nymphs can be killed simply by walking over them.",
                 "They are much larger and more dangerous than the other varieties of giant mantis that are found in the Mojave Wasteland."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Weak nymphs turn up early in the Goodsprings schoolhouse and Nevada Highway Patrol station; the adults wait later, around Spring Mt. Ranch State Park and on the road toward Jacobstown. Shooting an ootheca releases about a dozen nymphs, which then attack. Dead mantises can yield eggs and forelegs.",
+          "line": "Tips: Weak nymphs turn up early in the Goodsprings schoolhouse and Nevada Highway Patrol station; the adults wait later, around Spring Mt. Ranch State Park and on the road toward Jacobstown. A shot ootheca lets out a dozen nymphs, which come at you. Some nymphs die just from being stepped on. Dead mantises can yield eggs and forelegs.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Giant_mantis_(Fallout:_New_Vegas)",
@@ -200,6 +199,7 @@
                 "There are quite a few mantises on the way to Jacobstown and around Spring Mt. Ranch State Park.",
                 "encountered later in the game around Spring Mt. Ranch State Park or on the way to Jacobstown",
                 "Shooting a mantis ootheca will release a dozen giant mantis nymphs, which will then attack.",
+                "Some nymphs can be killed simply by walking over them.",
                 "Mantis eggs and mantis forelegs may be taken from their dead bodies."
               ]
             }
@@ -230,7 +230,7 @@
           ]
         },
         {
-          "line": "Looks like: Brutes can be told apart by helmets and rough metal armor. Nightkin have deep purplish-blue skin and wear no armor.",
+          "line": "Looks like: Brutes can be told apart by helmets and rough metal armor. Nightkin skin is a dark blue tinged with purple, and they wear no armor.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Super_mutant_(Fallout:_New_Vegas)",
@@ -244,7 +244,7 @@
           ]
         },
         {
-          "line": "Tips: Ordinary super mutants are armored to Damage Threshold 15, the same as combat armor; nightkin wear none but shrug off 30 percent of damage. Nightkin use Stealth Boys to creep up on their prey. Black Mountain is the main stronghold. Hostile ones reliably come back at Black Rock Cave, Jack Rabbit Springs and a small cave north of Ranger Station Bravo. Hostile ones often carry miniguns, light machine guns or super sledges that you can sell.",
+          "line": "Tips: Ordinary super mutants are armored to Damage Threshold 15, the same as combat armor; nightkin wear none but shrug off 30 percent of damage. Nightkin use Stealth Boys to creep up on their prey. Their main base in the Mojave is Black Mountain. Hostile ones reliably come back at Black Rock Cave, Jack Rabbit Springs and a small cave north of Ranger Station Bravo. Hostile ones often carry miniguns, light machine guns or super sledges that you can sell.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Super_mutant_(Fallout:_New_Vegas)",
@@ -300,7 +300,7 @@
           ]
         },
         {
-          "line": "Looks like: The common kind keeps only a human-like head and torso, with three long tentacle-like tongues where back spines would be. Evolved centaurs are bigger and more muscular, with thick clusters of tumors on their backs.",
+          "line": "Looks like: The common kind has only a head and chest like a person's, with three long tongues like tentacles where back spines would be. Evolved centaurs are larger and more muscled, with dense clumps of tumors on their backs.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Centaur_(Fallout:_New_Vegas)",
@@ -354,7 +354,7 @@
           ]
         },
         {
-          "line": "Weak points: They are about as hardy as a radscorpion. A hit on the horns counts as a head shot, and a critical hit blows the head apart.",
+          "line": "Weak points: They are about as hardy as a radscorpion. Hits to the horns are treated as head shots, and a critical hit blows the head apart.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Bighorner",
@@ -382,7 +382,7 @@
           ]
         },
         {
-          "line": "Tips: The compass shows them hostile, but unprovoked ones do not chase you; leave them be and they graze. Their head-butts are brutal, flinging you back or knocking you down, and they run very fast; bulls in a group keep knocking you over. Hurting one of the young turns its relatives on you, and penned calves in towns are watched by ranchers who turn hostile if you harm them. With the Animal Friend perk they never turn on you.",
+          "line": "Tips: The compass shows them hostile, but unprovoked ones do not chase you; leave them be and they graze. Their head-butts are brutal, flinging you back or knocking you down, and they run very fast; bulls in a group keep knocking you over. Hurting one of the young turns its relatives on you, and penned calves in towns are watched by ranchers who turn hostile if you harm them. Take the Animal Friend perk and they never turn on you.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Bighorner",
@@ -424,7 +424,7 @@
           ]
         },
         {
-          "line": "Weak points: A hit on the antennae counts as a critical hit and also sends the ant into a frenzy. A worker's shell is not especially hard next to a radscorpion's.",
+          "line": "Weak points: Striking an ant's antennae counts as a critical hit and sends it into a frenzy. A worker's shell is not especially hard next to a radscorpion's.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Giant_ant_(Fallout:_New_Vegas)",
@@ -491,7 +491,7 @@
           ]
         },
         {
-          "line": "Weak points: A plain feral ghoul falls to one or two head shots from a decent ranged weapon, or one solid melee or unarmed hit.",
+          "line": "Weak points: A plain feral ghoul goes down after a headshot or two from a reasonable ranged weapon, or one good melee hit, armed or unarmed.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Feral_ghoul_(Fallout:_New_Vegas)",
@@ -504,7 +504,7 @@
           ]
         },
         {
-          "line": "Looks like: Like normal ghouls but with deformed faces, skinnier, and moving oddly. The plain kind wears only tattered shorts; reavers wear what look like scraps of metal armor.",
+          "line": "Looks like: Like normal ghouls but with deformed faces, skinnier, and moving oddly. The plain kind wears only tattered shorts; reavers have scraps of metal armor on them.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Feral_ghoul_(Fallout:_New_Vegas)",
@@ -519,7 +519,7 @@
           ]
         },
         {
-          "line": "Tips: Roamers are more dangerous than the plain kind and far more common. At low levels a reaver is only slightly stronger than a roamer, and in the Mojave it no longer gives off radiation. Glowing ones turn up at higher levels where radiation is worst, with much more health and damage and a burst of radiation. Expect ferals in the Vegas sewers and around Hell's Motel, the Devil's Throat and the Nevada Highway Patrol station. The armor they wear is for show.",
+          "line": "Tips: A roamer is a bigger threat than the plain kind, and far more common, though a reaver is stronger still. At low levels a reaver is only a bit stronger than a roamer, and in the Mojave it no longer gives off radiation. Glowing ones turn up at higher levels where radiation is worst, with much more health and damage and a burst of radiation. Expect ferals in the Vegas sewers and around Hell's Motel, the Devil's Throat and the Nevada Highway Patrol station. The armor they wear is for show.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Feral_ghoul_(Fallout:_New_Vegas)",
@@ -548,7 +548,7 @@
       "main_revision": "4677325",
       "lines": [
         {
-          "line": "Summary: Heavy military robots on wheeled tripod legs, armed with a Gatling laser or minigun on one side and a missile launcher on the other. They have a lot of health, so they are hard to put down, especially at a low level.",
+          "line": "Summary: Heavy military robots on wheeled tripod legs, armed with a Gatling laser or minigun on one arm and, on the other arm, a missile launcher. They have a lot of health, so they are hard to put down, especially at a low level.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout:_New_Vegas)",
@@ -561,7 +561,7 @@
           ]
         },
         {
-          "line": "Weak points: They are open to electromagnetic pulses, so pulse grenades, pulse mines and any other EMP-producing weapon can hurt them badly. Destroying the combat inhibitor mounted on its back sends it berserk, and it then attacks everything around it.",
+          "line": "Weak points: It is a robot, so electromagnetic pulses hit it hard: pulse mines, pulse grenades and other EMP weapons can all damage it badly. Destroying the combat inhibitor on its back makes it go berserk and lash out at everything near it.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout:_New_Vegas)",
@@ -617,7 +617,7 @@
       "main_revision": "4662882",
       "lines": [
         {
-          "line": "Summary: A gang of raiders who are all chem users driven mad, working the outer New Vegas area and holding the southwestern ruins of Vegas. They fight in small war parties.",
+          "line": "Summary: A gang of raiders who are all chem users driven mad, working the outskirts of New Vegas and holding the southwestern ruins of Vegas. They fight in small war parties.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Fiends",
@@ -631,7 +631,7 @@
           ]
         },
         {
-          "line": "Looks like: Red eyes, always, from constant chem use. They wear assorted raider armor and helmets decorated with painted ruminant skulls.",
+          "line": "Looks like: Red eyes, always, from constant chem use. They wear assorted raider armor, and each helmet is distinctive, decorated with the skull of a ruminant painted for war.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Fiends",
@@ -644,7 +644,7 @@
           ]
         },
         {
-          "line": "Tips: Their melee gear includes knives and pool cues, and for guns they mostly carry silenced .22 SMGs, varmint rifles and caravan shotguns, plus an unusual number of Laser RCWs and plasma rifles. Nearly a dozen spots spawn Fiends between 0600 and 2230, and none spawn from 2230 to 0600, so night is the calmer time to cross the Vegas countryside. Everyone but the Great Khans is a target. With a Speech of 65 you can pass as a Great Khan chem seller to the guard of Vault 3, which makes the Fiends inside peaceful; those outside stay hostile.",
+          "line": "Tips: Their melee gear includes knives and pool cues, and for guns they mostly carry silenced .22 SMGs, varmint rifles and caravan shotguns, plus an unusual number of Laser RCWs and plasma rifles. Close to a dozen spots spawn Fiends from 0600 to 2230, and none spawn from 2230 to 0600, so night is the calmer time to cross the Vegas countryside. Everyone but the Great Khans is a target. With a Speech of 65 you can pass as a Great Khan chem seller to the guard of Vault 3, which makes the Fiends inside peaceful; those outside stay hostile.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Fiends",
@@ -672,14 +672,14 @@
       "main_revision": "4400301",
       "lines": [
         {
-          "line": "Summary: The basic healing injection of the Mojave: a hand-held shot that mends minor wounds on the spot.",
+          "line": "Summary: A medicine you inject to heal yourself, restoring hit points and limb condition.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Stimpak_(Fallout:_New_Vegas)",
               "revision": "4400301",
               "quoted": [
-                "A stimpak is a hand-held medication used in healing the body.",
-                "it provides immediate healing of the body's minor wounds."
+                "When the medicine is injected, it provides immediate healing of the body's minor wounds.",
+                "+30 HP and Limb Condition"
               ]
             }
           ]
@@ -729,15 +729,21 @@
       "main_revision": "4520054",
       "lines": [
         {
-          "line": "Summary: A consumable made for healing crippled limbs, and it does that job in normal play and in Hardcore mode alike.",
+          "line": "Summary: A consumable that mends crippled limbs and keeps working in Hardcore mode, where stimpaks cannot.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Doctor%27s_bag_(Fallout:_New_Vegas)",
               "revision": "4520054",
               "quoted": [
                 "A doctor's bag is a consumable item in Fallout: New Vegas.",
-                "The bag may be used to heal all limbs for a small amount",
-                "serving this purpose in both normal and hardcore modes."
+                "heal crippled limbs, serving this purpose in both normal and hardcore modes."
+              ]
+            },
+            {
+              "page": "https://fallout.fandom.com/wiki/Stimpak_(Fallout:_New_Vegas)",
+              "revision": "4400301",
+              "quoted": [
+                "stimpaks will heal over time (versus instantly) and will not heal crippled limbs."
               ]
             }
           ]
@@ -832,7 +838,7 @@
           ]
         },
         {
-          "line": "Tips: Doctors are the usual source: Doc Mitchell in Goodsprings, Dr. Ada Straus in Novac and Senior Scribe Linda Schuler in the Hidden Valley bunker. Most shops carry only one to three RadAway, if any. Vault 34's clinic safe holds both chems, and Charleston Cave has three Rad-X. Twenty doses of RadAway earns the Free Radical perk.",
+          "line": "Tips: Doctors often stock RadAway: Doc Mitchell (Goodsprings), Dr. Ada Straus (Novac) and Senior Scribe Linda Schuler (Hidden Valley bunker). Most shops hold at most three RadAway, and some hold none. Vault 34's clinic safe holds both chems, and Charleston Cave has three Rad-X. Twenty doses of RadAway earns the Free Radical perk.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/RadAway_(Fallout:_New_Vegas)",
@@ -864,13 +870,13 @@
       "main_revision": "4726428",
       "lines": [
         {
-          "line": "Summary: A camouflage gadget, worn on the wrist or as a belt pouch, that makes you almost invisible for a short while. In the Mojave, nightkin are the ones you usually see carrying them.",
+          "line": "Summary: A stealth gadget with a disc worn on the wrist or an emitter carried in a belt pouch, which makes the wearer hard to see for a short while. In the Mojave, nightkin are the ones you usually see carrying them.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Stealth_Boy_(Fallout:_New_Vegas)",
               "revision": "4726428",
               "quoted": [
-                "The result makes the wearer almost invisible to the untrained eye.",
+                "Stealth Boys offer a number of power settings allowing anything from total invisibility to partial translucency.",
                 "wrist-mounted disc and an emitter in a canvas carrying pouch worn on the belt",
                 "In the Mojave Wasteland, they are typically found in the hands of the nightkin"
               ]
@@ -896,7 +902,7 @@
           ]
         },
         {
-          "line": "Tips: Early ones: a locked safe in the Goodsprings schoolhouse (Lockpick 25), and one beside a skeleton at Jack Rabbit Springs. The REPCONN test site holds six in fixed spots, and nightkin bodies there may give more. Vikki and Vance Casino hands one over for winning 1,250 or more chips.",
+          "line": "Tips: Early ones: a locked safe in the Goodsprings schoolhouse (Lockpick 25), and one beside a skeleton at Jack Rabbit Springs. The REPCONN test site holds six in fixed spots, and nightkin bodies there may give more. Vikki and Vance Casino pays one out as a prize once you have won 1,250 chips or more.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Stealth_Boy_(Fallout:_New_Vegas)",

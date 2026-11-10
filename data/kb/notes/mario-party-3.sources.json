@@ -15,7 +15,7 @@
       "main_revision": "5532404",
       "lines": [
         {
-          "line": "Summary: A ghost that is a feature on every board and steals coins or a Star from another player; the Boo Bell item calls one up on demand, and a Boo is also a Duel Mode partner.",
+          "line": "Summary: A ghost found on every board that robs another player of coins or a Star. The Boo Bell item calls one up whenever you want, and a Boo can also serve as a Duel Mode partner.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo",
@@ -36,7 +36,7 @@
           ]
         },
         {
-          "line": "Weak points: Holding a Boo Repellant makes a Boo flee without stealing anything: the item activates by itself when Boo tries to steal coins or a Star from you. As a duel partner, a Boo that is attacked counterattacks for equal damage before disappearing, but it does not counterattack a Thwomp, and a Chain Chomp only if the Boo is directly in front.",
+          "line": "Weak points: If you hold a Boo Repellant, a Boo that tries to rob you of coins or a Star sets it off automatically and runs away empty-handed. As a duel partner, a Boo that gets attacked hits back with the same amount of damage before vanishing, but it does not strike back at a Thwomp, and strikes back at a Chain Chomp only when it stands directly in front.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo_Repellant",
@@ -62,7 +62,7 @@
           ]
         },
         {
-          "line": "Tips: On Waluigi's Island a Boo instead offers you two paths, one of them rigged to send you back to the start. A Boo summoned with the Boo Bell asks whom you want him to steal from and what to steal, and Yoshi starts a Duel Mode game with a Boo as his partner.",
+          "line": "Tips: On Waluigi's Island a Boo gives you a choice of two paths instead, though one is rigged and returns you to the start. When you ring a Boo up with the Boo Bell, he asks who the target is and what to take. In Duel Mode, Yoshi begins with a Boo as his partner.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo",
@@ -91,7 +91,7 @@
       "main_revision": "5520638",
       "lines": [
         {
-          "line": "Summary: Landing on a Bowser Space makes Bowser appear, and he usually tries to steal coins, may give you items, or may curse every player.",
+          "line": "Summary: When you land on a Bowser Space, Bowser shows up. Most often he goes after your coins, but he may also give out items or put a curse on all the players.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_3",
@@ -104,7 +104,7 @@
           ]
         },
         {
-          "line": "Weak points: In Mario Party 3 the event roulette is not random: it always stops on the event the cursor is hanging over when you press the button, so with precise timing you pick the event. A player with no coins is spared: Bowser pays 30, 40 or 50 coins depending on placement and no event happens, and no Stars are lost.",
+          "line": "Weak points: In Mario Party 3 the roulette is not left to chance. It stops on whatever event the pointer is over at the moment you press the button, so careful timing lets you choose. A player with no coins is spared: Bowser pays you instead, 30 coins, or 40 or 50 depending on where you rank, no event takes place and no Stars are lost.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser_Space",
@@ -132,7 +132,7 @@
           ]
         },
         {
-          "line": "Tips: Bowser's Curse limits every player's next move to 1 to 3 spaces, like a Poison Mushroom, and Bowser's Reverse Curse makes every player move backwards on their next turn, like a Reverse Mushroom, unless they use an item that cancels the effect. Bowser Shuffle randomly shuffles all four players' positions, and he can also hand you a Bowser Phone (rarely two) or a Bowser Suit for free.",
+          "line": "Tips: Bowser's Curse forces all four players, on their following turn, to move just 1 to 3 spaces, as a Poison Mushroom would. Bowser's Reverse Curse sends them backwards instead, as a Reverse Mushroom would. Either curse can be cancelled by an item that counters it. Bowser Shuffle mixes up where the four players stand, and he can also give you a free Bowser Phone (very rarely two) or a free Bowser Suit.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser_Space",
@@ -179,7 +179,7 @@
           ]
         },
         {
-          "line": "Weak points: His four minigames are Game Guy's Lucky 7, Game Guy's Magic Boxes, Game Guy's Roulette and Game Guy's Sweet Surprise, and they are mostly luck-based. Players can usually double their coins or lose all of them, though they can risk their money for higher multiples.",
+          "line": "Weak points: His four minigames are Game Guy's Lucky 7, Magic Boxes, Roulette and Sweet Surprise, and they depend mostly on luck. A typical result is that you double your coins or lose the lot, although you can gamble for bigger multiples.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Game_Guy_Space",
@@ -215,7 +215,7 @@
           ]
         },
         {
-          "line": "Tips: The Lucky Charm item sends a chosen player, even yourself, to a Game Guy minigame without landing on his space. You can practice in Game Guy's Room: you start with 10 coins, can bet up to 100, and aim for 1,000; winning unlocks the rare minigame Mario's Puzzle Party Pro, but the room itself opens only after Story Mode is beaten with at least eight S rankings.",
+          "line": "Tips: The Lucky Charm item sends a chosen player, even yourself, to a Game Guy minigame without landing on his space. In Game Guy's Room you can practise: you start with 10 coins, may bet up to 100, and aim to reach 1,000, and winning earns you Mario's Puzzle Party Pro, a rare minigame. The room itself only opens once Story Mode has been finished with eight or more S rankings.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Game_Guy",
@@ -244,7 +244,7 @@
       "main_revision": "5466203",
       "lines": [
         {
-          "line": "Summary: Woody's hostile counterpart on the Woody Woods board: land on one of the Happening Spaces around him and he makes you pick a fruit that costs you, either a Minus Coin Fruit (lose five coins) or a Reverse Block Fruit (roll and move backwards).",
+          "line": "Summary: Woody's unfriendly twin on the Woody Woods board. Stop on a Happening Space by Evil Woody and you must take one of two costly fruits: a Reverse Block Fruit (you roll, but move backwards) or a Minus Coin Fruit (you lose five coins).",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Evil_Woody",
@@ -295,7 +295,7 @@
           ]
         },
         {
-          "line": "Tips: Three ? Spaces surround Evil Woody. The kind Woody on the same board offers a Plus Coin Fruit (five coins) or a Plus Block Fruit (a second dice roll) instead, and if you pick neither he gives you the extra Dice Block.",
+          "line": "Tips: Three ? Spaces ring Evil Woody. The friendly Woody on the same board offers good fruits instead: a Plus Block Fruit that gives a second dice roll, or a Plus Coin Fruit worth five coins. If you choose neither, he gives you the extra Dice Block.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Evil_Woody",
@@ -330,7 +330,7 @@
       "main_revision": "5162335",
       "lines": [
         {
-          "line": "Summary: Deep Bloober Sea's sea creatures can move you around the board: a Sushi in a submarine can blast you onto the other path, a giant vacuum anglerfish can suck you in and spit you out, and a giant Blooper Baby calls its mother, whose tentacle takes you to the other side of the board.",
+          "line": "Summary: Creatures in Deep Bloober Sea can shift you across the board: a Sushi in a submarine can fire you onto the other path, a giant vacuum anglerfish can pull you in and spit you out again, and a giant Blooper Baby calls for its mother, whose tentacle carries you over to the far side.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Deep_Bloober_Sea",
@@ -344,7 +344,7 @@
           ]
         },
         {
-          "line": "Weak points: At the submarine junction three of the four buttons do nothing and one fires a torpedo that blasts you to the opposite path; the buttons do not reset until the incorrect one is chosen, and sometimes the Sushi fails to notice you at all. Against the anglerfish, tap the button to swim against the suction, or you are sucked in.",
+          "line": "Weak points: At the submarine junction you press one of four buttons: three are harmless and one sends a torpedo that knocks you onto the opposite path. The button layout stays fixed until someone presses the wrong one, and now and then the Sushi simply does not see you and lets you through. Against the anglerfish, keep tapping the button to struggle against the pull, or it swallows you.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Deep_Bloober_Sea",
@@ -372,7 +372,7 @@
           ]
         },
         {
-          "line": "Tips: The anglerfish's arrow stops pointing to the bottom, the front or the right, and a player who is sucked in lands near a Sushi, near Boo, or back at the start. Of the board's 93 spaces, 5 are Bowser Spaces and 2 are Game Guy Spaces.",
+          "line": "Tips: The anglerfish's spinning arrow settles pointing down, to the front or to the right. A player it swallows ends up close to a Sushi, close to Boo, or at the starting point. The board has 93 spaces in all, 5 of them Bowser Spaces and 2 Game Guy Spaces.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Deep_Bloober_Sea",
@@ -400,7 +400,7 @@
       "main_revision": "5402589",
       "lines": [
         {
-          "line": "Summary: An unlockable board full of traps: each time someone lands on a Happening Space on the dynamite island a number counts down from 5, and when it reaches 0 the dynamite explodes and anyone caught in the blast loses all their coins.",
+          "line": "Summary: An unlockable board full of traps. Every landing on a Happening Space on the dynamite island lowers a counter that begins at 5; at 0 the dynamite goes off, and every player caught in the blast forfeits all their coins.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Waluigi%27s_Island",
@@ -420,7 +420,7 @@
           ]
         },
         {
-          "line": "Weak points: To get off the dynamite island you jump onto the gear in the center during the Action Time: the arrow that is flashing when you land is the path you must take, and if it stops on the down arrow, or you take too long, you stay on the island. On the way to Boo there are two paths and one is booby-trapped, which sends you back to the start.",
+          "line": "Weak points: To leave the dynamite island you hit the gear at the middle of the board in the Action Time. Whichever arrow is lit as you land shows the path you have to follow; if it stops on the down arrow, or you act too slowly, you are stuck on the island. On the road to Boo there are two paths, and one is booby-trapped and returns you to the start.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Waluigi%27s_Island",
@@ -434,7 +434,7 @@
           ]
         },
         {
-          "line": "Looks like: An island of dynamite with a number in the middle of the explosives, which starts at five, and a gear in the center of the board with four flashing arrows.",
+          "line": "Looks like: An island of dynamite with a counter in the middle of the explosives that begins at five, and a gear at the board's center with four arrows that light up one after another, clockwise.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Waluigi%27s_Island",
@@ -447,7 +447,7 @@
           ]
         },
         {
-          "line": "Tips: The Happening Spaces are the dangerous ones on the dynamite island. On the island in the upper left every space changes to another type each turn, except the Bank Space, and the red pipes along the top sides all lead to the green pipe near the start.",
+          "line": "Tips: On the dynamite island the Happening Spaces are the ones to fear. On the island in the upper left every space turns into a different type each turn, apart from the Bank Space, and on the upper sides of the board the red pipes always carry you to the green pipe by the start.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Waluigi%27s_Island",
@@ -495,7 +495,7 @@
           ]
         },
         {
-          "line": "Weak points: A Boo partner hits back at a Chain Chomp's multi-attack only if the Boo is directly in front of the attacking Chain Chomp.",
+          "line": "Weak points: A Boo partner counterattacks against a Chain Chomp's multi-hit only when it stands right in front of that Chain Chomp.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_3",
@@ -507,7 +507,7 @@
           ]
         },
         {
-          "line": "Looks like: Series pages describe a Chain Chomp as a black or dark blue ball with big round eyes and a large gaping mouth of sharp teeth; the Duel Mode partner has no chain.",
+          "line": "Looks like: Chain Chomps are black or dark blue balls with large round eyes and a wide open mouth full of razor-sharp teeth; the Duel Mode partner comes without a chain.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Chain_Chomp",
@@ -521,7 +521,7 @@
           ]
         },
         {
-          "line": "Tips: No character starts with a Chain Chomp; it comes from the partner lottery. When it is powered up it grows to the size of a Shark Chomp, jumps up and body slams all opponents. A Bob-omb and a Chomp together earn a \"dangerous duo\" comment from the Millennium Star, but no attack boost.",
+          "line": "Tips: No character begins with a Chain Chomp; you win one from the partner lottery. A powered-up Chain Chomp swells to Shark Chomp size, leaps and slams down on every opponent. Pairing a Bob-omb with a Chomp makes the Millennium Star comment on the pair, but the attack is not raised.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_3",
@@ -547,7 +547,7 @@
       "main_revision": "5520638",
       "lines": [
         {
-          "line": "Summary: A Duel Mode partner with 0 attack that crushes the opponent's partners instantly but does nothing to the opposing player. Its stamina is 2 and its salary four coins.",
+          "line": "Summary: A Duel Mode partner whose attack is 0, yet it flattens any of the enemy's partners in one go and leaves the enemy player untouched. It has 2 stamina and a salary of four coins.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_3",
@@ -586,7 +586,7 @@
           ]
         },
         {
-          "line": "Looks like: A blue, cubic stone: in the first six Mario Party console games Thwomps use a more cubic version of their Super Mario 64 design.",
+          "line": "Looks like: A blue, cube-shaped block of stone with the up-to-date Thwomp face on it; the colour and the shape are the original ones.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Thwomp",
@@ -599,7 +599,7 @@
           ]
         },
         {
-          "line": "Tips: No character starts with a Thwomp, so one only arrives through the partner roulette. With two Thwomps the Millennium Star lowers their salaries by one instead of raising their attack, and the Millennium Star calls a Whomp and a Thwomp an earth shaking combination. The instruction booklet wrongly gives it an attack of 2.",
+          "line": "Tips: No character begins with a Thwomp, so one can only turn up through the partner roulette. With two Thwomps, the Millennium Star reduces their salaries by one rather than raising their attack, and it also remarks on a Whomp and Thwomp pairing. The instruction booklet states an attack of 2 by mistake.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Thwomp",
@@ -649,7 +649,7 @@
           ]
         },
         {
-          "line": "Uses: It activates by itself when Boo tries to steal coins or a Star from you while you hold it, and Boo leaves with nothing. Each can is good for one use.",
+          "line": "Uses: While you hold it, it sets itself off the moment Boo moves to take your coins or a Star, and Boo runs off with nothing. A can can be used only once.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo_Repellant",
@@ -662,7 +662,7 @@
           ]
         },
         {
-          "line": "Tips: You can throw one away at the start of your turn to make room in your inventory, which counts as using an item that turn. Other players tend to avoid wasting a Boo attempt on you, but computer players do not care and will try anyway, even for Stars.",
+          "line": "Tips: At the start of your turn you may discard one to free up space, and that counts as your item use for the turn. Other players are put off trying a Boo steal on you, so its effect often lasts a long time, but computer players ignore it and go ahead regardless, Stars included.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo_Repellant",
@@ -705,7 +705,7 @@
           ]
         },
         {
-          "line": "Uses: Using it summons Boo, who asks whom you want him to steal from and what to steal. The manual says he steals coins or a Star from another player.",
+          "line": "Uses: Using it calls up Boo, who asks you to name the victim and the loot. From the target he takes either coins or a Star.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_3",
@@ -724,7 +724,7 @@
           ]
         },
         {
-          "line": "Tips: A player holding a Boo Repellant drives Boo off without losing anything. The Boo Bell is sold in Baby Bowser's shop, the one that sells items meant to hinder opponents.",
+          "line": "Tips: Anyone carrying a Boo Repellant sends Boo away and loses nothing. Baby Bowser's shop, which mainly sells items for hindering opponents, is where the Boo Bell is sold.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo_Repellant",
@@ -759,7 +759,7 @@
       "main_revision": "5473170",
       "lines": [
         {
-          "line": "Summary: A treasure chest that steals an item from an opponent you choose. Baby Bowser's shop sells it for 10 coins, and it is Princess Peach's favorite item.",
+          "line": "Summary: A treasure chest that takes an item from an opponent of your choosing. Only Baby Bowser's shop sells it, for 10 coins, and Princess Peach likes it best of all items.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Plunder_Chest",
@@ -783,7 +783,7 @@
           ]
         },
         {
-          "line": "Uses: You pick which opponent to rob, and the item taken is chosen randomly if that player holds more than one. The stolen item cannot be used before you roll.",
+          "line": "Uses: You choose the opponent to rob; if they hold several items, which one is taken is left to chance. You cannot use the loot until after you have rolled.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_3",
@@ -802,7 +802,7 @@
           ]
         },
         {
-          "line": "Tips: The Barter Box works in a similar way, but the Plunder Chest only steals one item while the Barter Box swaps all of them. Computer-controlled Peach prioritizes it when she can get it.",
+          "line": "Tips: The Barter Box is similar, but the Plunder Chest takes just one item, whereas the Barter Box trades over all of them. When Peach is computer-controlled she goes for it ahead of other items if she can.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Barter_Box",
@@ -852,7 +852,7 @@
           ]
         },
         {
-          "line": "Uses: When used, Mushroom Jeanie appears at the Star space and moves the Star to a different location on the board, instead of taking you to it as the Magic Lamp does. The manual says she moves the Millennium Star to a new location on your command.",
+          "line": "Uses: Mushroom Jeanie appears at the Star Space when it is used and relocates the Star elsewhere on the board, rather than carrying you to it as the Magic Lamp does.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mushroom_Jeanie",
@@ -872,7 +872,7 @@
           ]
         },
         {
-          "line": "Tips: In Spiny Desert, where one Millennium Star is a mirage, she always goes to the real one. Besides Baby Bowser's shop, the Lucky Lamp can be won in an item minigame.",
+          "line": "Tips: On Spiny Desert, which has a mirage Millennium Star, she always heads for the real one. Baby Bowser's shop sells the Lucky Lamp, and an item minigame can award it too.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mushroom_Jeanie",
@@ -900,7 +900,7 @@
       "main_revision": "5520638",
       "lines": [
         {
-          "line": "Summary: Calls Bowser to give one player a Bowser event, as if they had landed on a Bowser Space. Baby Bowser's shop sells it for 10 coins.",
+          "line": "Summary: Rings Bowser up so that he runs one of his events on a player of your choice, just as if that player had stepped on a Bowser Space. It is sold at Baby Bowser's shop for 10 coins.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_3",
@@ -920,7 +920,7 @@
           ]
         },
         {
-          "line": "Uses: You choose one of your opponents, or yourself, for Bowser to run one of his events on, and you can view the board before deciding. Choosing \"Who do you think?\" lets Bowser pick a random player.",
+          "line": "Uses: You pick an opponent, or yourself, to be on the receiving end of one of Bowser's events, and you may look over the board first. There is also an option that leaves the choice to Bowser, who then picks a random player.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser_Phone",
@@ -932,7 +932,7 @@
           ]
         },
         {
-          "line": "Tips: The chosen player actually goes to meet Bowser at the same castle location as the Bowser Space. A Bowser Space can also hand you a Bowser Phone for free.",
+          "line": "Tips: The player you choose really does go to see Bowser, at the castle spot the Bowser Space uses. You can also be given a Bowser Phone free of charge by a Bowser Space.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser_Phone",
@@ -954,7 +954,7 @@
       "main_revision": "5432235",
       "lines": [
         {
-          "line": "Summary: A rare coin with Game Guy's face on one side that forces a chosen player to risk all their coins in a Game Guy minigame. No shop sells it.",
+          "line": "Summary: A rare coin bearing Game Guy's picture on one side. Using it makes a chosen player stake all their coins on a Game Guy minigame. Neither shop sells it.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Lucky_Charm",
@@ -973,7 +973,7 @@
           ]
         },
         {
-          "line": "Uses: Using it summons Game Guy, who takes all of the target's coins and starts a Game Guy minigame. The target can be another player or yourself, and the booklet says it lets you send another player to the Game Guy Room to risk all their coins.",
+          "line": "Uses: Using it calls Game Guy, who collects every one of the target's coins and starts a Game Guy minigame. The target may be another player or yourself.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_3",
@@ -992,7 +992,7 @@
           ]
         },
         {
-          "line": "Tips: You can get one from an Item Space by meeting Toad, rarely from a Hidden Block, or from an Item Bag bought at Baby Bowser's Joint.",
+          "line": "Tips: Toad can hand you one when you land on an Item Space, a hidden block rarely holds one, and so can an Item Bag bought at Baby Bowser's Joint.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Lucky_Charm",
@@ -1020,7 +1020,7 @@
       "main_revision": "5403128",
       "lines": [
         {
-          "line": "Summary: A rare item that jumps the game to exactly five turns before the end. It cannot be bought in any Item Shop.",
+          "line": "Summary: A rare item that moves the game straight to five turns from the finish. No Item Shop sells it.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Wacky_Watch",
@@ -1033,7 +1033,7 @@
           ]
         },
         {
-          "line": "Uses: Using it sets the turn number to exactly five turns before the game ends, so it can drastically shorten the game, or make it longer when used within five turns of the end.",
+          "line": "Uses: Using it sets the game to the point where five turns are left, so it can cut a game very short, or stretch it out if used when fewer than five turns remain.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Wacky_Watch",
@@ -1052,7 +1052,7 @@
           ]
         },
         {
-          "line": "Tips: You can get one by meeting Toad on an Item Space or finding it in a Hidden Block, and it is the only item in Mario Party 3 that neither an Item Shop nor an Item Bag gives you. If you use it on what would otherwise be the final turn, the rest of that turn is still played as the final turn, so the Item Shops stay closed.",
+          "line": "Tips: Toad can give you one on an Item Space, and a Hidden Block can hold one too. It is unique among this game's items in never being sold in a shop or found in an Item Bag. If you use it on what would have been the last turn, the remainder of that turn still counts as the last, so the Item Shops stay shut.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Wacky_Watch",

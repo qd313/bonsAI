@@ -20,56 +20,42 @@
       "main_revision": "477291",
       "lines": [
         {
-          "line": "Summary: A large reptile of Bayou Nwa in Lemoyne, also found in Bluewater Marsh and parts of Scarlett Meadows around the Kamassa River. It comes in a regular and a small size, and it clamps its jaws on your torso and swings you about, killing you almost instantly.",
+          "line": "Summary: A big reptile of Bayou Nwa, also in Bluewater Marsh and Scarlett Meadows near the Kamassa River. Once its jaws clamp your torso, you die within moments.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Alligator",
               "revision": "477291",
               "quoted": [
-                "The alligator is a large reptile endemic to Bayou Nwa in Lemoyne. They are also found in Bluewater Marsh and some parts of Scarlett Meadows (particularly around the Kamassa River). They come in two sizes - regular and small",
+                "The alligator is a large reptile endemic to Bayou Nwa in Lemoyne. They are also found in Bluewater Marsh and some parts of Scarlett Meadows (particularly around the Kamassa River).",
                 "The alligator attacks by clamping the torso of the player with their jaw and swinging them about, killing them almost instantly."
               ]
             }
           ]
         },
         {
-          "line": "Weak points: A rifle pierces its tough armoured body plates, and a single rifle shot to the head kills it. A tomahawk thrown at its head kills it instantly, and a bow shot with improved or poisoned arrows straight into the head is a good alternative.",
+          "line": "Weak points: A rifle shot or thrown tomahawk to the head kills it, and a scope keeps you far away. A bow with poison or improved arrows to the head also works.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Alligator",
               "revision": "477291",
               "quoted": [
-                "A rifle will pierce through an Alligator's tough, armored body plates.",
                 "alligators can be easily killed via a single shot to the head by a rifle. Throwing a Tomahawk at its head will kill it instantly.",
+                "A scoped rifle will allow the player to kill them from a farther distance without having to risk getting too close.",
                 "A bow shot with improved or poisoned arrows directly in the head is also a good alternative."
               ]
             }
           ]
         },
         {
-          "line": "Looks like: Green and scaly, with a long tail, a big open mouth and eyes sticking out at the sides of its head.",
+          "line": "Tips: Kill it on the shore, since you cannot skin an alligator in water. Most lie still there until you get close, and a horse ridden at one throws you.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Alligator",
               "revision": "477291",
               "quoted": [
-                "green, scaly skin, a long tail, a large, gaping mouth and eyes protruding from either side of the head."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: A scoped rifle lets you kill one from farther away without getting close. Alligators cannot be skinned in water, so it is best to find and kill one lying on the shore; most of them just lie still on the shores of Bayou Nwa and stay passive unless you get too close. Small alligators flee when you approach, and your horse gets spooked and throws you off if you ride toward a gator.",
-          "drawn_from": [
-            {
-              "page": "https://reddead.fandom.com/wiki/Alligator",
-              "revision": "477291",
-              "quoted": [
-                "A scoped rifle will allow the player to kill them from a farther distance without having to risk getting too close.",
                 "Alligators cannot be skinned in water.",
                 "It is best to find and kill an alligator lying on the shore.",
                 "most just lie still near the shores of Bayou Nwa and only attack or fight back if the player comes too close to them.",
-                "Small alligators, unlike large ones, will flee when the player approaches them.",
                 "Horses get spooked and will throw off the player if he rides towards a gator or gets too close."
               ]
             }
@@ -85,13 +71,13 @@
       "main_revision": "477287",
       "lines": [
         {
-          "line": "Summary: A wild omnivore found in New Hanover, Lemoyne and West Elizabeth, with the greatest concentration throughout Lemoyne. It drops a boar pelt, tender pork loin, animal fat and a boar tusk.",
+          "line": "Summary: A wild boar, most common across Lemoyne and also found in New Hanover and West Elizabeth. It drops a boar pelt, tender pork loin, animal fat and a boar tusk.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Boar_(RDR_2)",
               "revision": "477287",
               "quoted": [
-                "Wild Boars can be found across the states of New Hanover, Lemoyne, and West Elizabeth. They are omnivores",
+                "- West Elizabeth - New Hanover - Lemoyne - Guarma",
                 "the greatest concentration is all throughout Lemoyne.",
                 "- Boar Pelt - Tender Pork Loin - Animal Fat - Boar Tusk"
               ]
@@ -99,19 +85,7 @@
           ]
         },
         {
-          "line": "Weak points: A rifle, or a bow with poison arrows, is the easiest way to take down an animal of its size.",
-          "drawn_from": [
-            {
-              "page": "https://reddead.fandom.com/wiki/Boar_(RDR_2)",
-              "revision": "477287",
-              "quoted": [
-                "Using either a rifle or a Bow with Poison Arrows is the easiest way to take down an animal of this size."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: You can get a perfect pelt with a rifle, or with a bow using poison or regular arrows. Although it counts as a large animal, a boar can only be skinned like the massive animals such as elk and bison, so it cannot be picked up and stored on your horse.",
+          "line": "Tips: Both a rifle and a bow can give a perfect pelt, using poison or ordinary arrows. A boar cannot be stored on your horse, because it is skinned the way elk and bison are.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Boar_(RDR_2)",
@@ -133,7 +107,7 @@
       "main_revision": "476779",
       "lines": [
         {
-          "line": "Summary: Most snakes are venomous and bite if provoked, and they are found in virtually all locations, in higher numbers along the eastern regions, especially Bluewater Marsh and Bayou Nwa. They drop stringy meat, snake skin and a snake carcass.",
+          "line": "Summary: Snakes live nearly everywhere, most thickly in the east around Bluewater Marsh and Bayou Nwa. Most are venomous, and they drop stringy meat, snake skin and a snake carcass.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Snake_(RDR_2)",
@@ -148,17 +122,15 @@
           ]
         },
         {
-          "line": "Tips: Snakes try to flee from you, and for a perfect snake skin you have to use a bow with small game arrows. A Health Cure removes the venom from you, and horses are always spooked by snakes. Any perfect snake skin, not just a rattlesnake's, can be used to craft the Rattlesnake Vaquero Saddle from the Trapper, which the page calls arguably the best saddle in the game for all-around balance.",
+          "line": "Tips: Only a bow with small game arrows gives a perfect skin, and a Health Cure removes venom. Any perfect snake skin makes the Rattlesnake Vaquero Saddle at the Trapper.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Snake_(RDR_2)",
               "revision": "476779",
               "quoted": [
-                "Snakes will attempt to flee from the player",
                 "To get a perfect snake skin you have to use a bow with Small Game Arrows.",
-                "horses will always be spooked by snakes.",
                 "A Health Cure will remove the venom from the player.",
-                "The Rattlesnake Vaquero Saddle available from the Trapper is arguably the best saddle in the game in terms of all-around balance",
+                "The Rattlesnake Vaquero Saddle available from the Trapper",
                 "Despite the name, any perfect snake skin can be used to craft this saddle, not just rattlesnakes."
               ]
             }
@@ -174,7 +146,7 @@
       "main_revision": "466084",
       "lines": [
         {
-          "line": "Summary: A gang that terrorizes Scarlett Meadows most of all, and the areas around Rhodes and Saint Denis, often with crimes like murder and robbery. They are regularly successful because of their manpower and ammunition.",
+          "line": "Summary: A Lemoyne gang that often robs and kills, mostly around Scarlett Meadows, Rhodes and Saint Denis. Their crimes often succeed, thanks to more men and ammunition than other gangs have.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Lemoyne_Raiders",
@@ -188,7 +160,7 @@
           ]
         },
         {
-          "line": "Looks like: Every member wears a grey Confederate-military style uniform with a yellow neckerchief.",
+          "line": "Looks like: Grey uniforms in the old Confederate army style, each with a yellow neckerchief.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Lemoyne_Raiders",
@@ -200,15 +172,14 @@
           ]
         },
         {
-          "line": "Tips: A gang of 8 to 12 mounted Raiders can storm you without warning under the rail bridge near Hill Haven Ranch, and the page says deaths in that ambush are notoriously common. Another ambush near Catfish Jacksons uses a wagon-mounted Gatling gun and then reinforcements, and with no cover it is a hard fight. Two unique hats, the Military Officer's Hat and the Military Forage Cap, can be kept from some enemies in random Raider camps.",
+          "line": "Tips: Expect a deadly ambush by 8 to 12 mounted Raiders under the rail bridge near Hill Haven Ranch. Near Catfish Jacksons, a wagon with a Gatling gun and reinforcements catch you with little cover.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Lemoyne_Raiders",
               "revision": "466084",
               "quoted": [
                 "The Raiders can launch a very dangerous ambush under the rail bridge near Hill Haven Ranch. A gang of 8-12 mounted Raiders will storm the player without warning and attempt to kill them. Mortality rates for the protagonist are notoriously high in this ambush.",
-                "Another random encounter can occur when passing by Catfish Jacksons. The Raiders launch an ambush on the player with a wagon mounted Gatling Gun, while reinforcements arrive and attack the player. Due to a lack of cover, this can be a difficult fight.",
-                "The player is able to equip and keep two unique hats from select enemies in random Lemoyne Raider camps. They are the Military Officer's Hat and the Military Forage Cap"
+                "Another random encounter can occur when passing by Catfish Jacksons. The Raiders launch an ambush on the player with a wagon mounted Gatling Gun, while reinforcements arrive and attack the player. Due to a lack of cover, this can be a difficult fight."
               ]
             }
           ]
@@ -223,33 +194,21 @@
       "main_revision": "464648",
       "lines": [
         {
-          "line": "Summary: A cruel, territorial gang that the page says is intent on controlling the local area and keeping people in terror. They do not camp in the wilderness: you usually meet them while they are looting a travellers' camp.",
+          "line": "Summary: A cruel, territorial gang found around Roanoke Ridge in New Hanover. You usually meet them robbing a camp of travellers.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Murfree_Brood",
               "revision": "464648",
               "quoted": [
                 "The Murfree Brood are known for being unbelievably cruel and territorial",
-                "seem intent on controlling the local area and keeping the populace in terror.",
-                "Another difference is that the Murfrees don't camp in the wilderness. Instead, players usually encounter the Murfrees while they are looting a travelers' camp."
+                "!! Location || Roanoke Ridge, New Hanover",
+                "Instead, players usually encounter the Murfrees while they are looting a travelers' camp."
               ]
             }
           ]
         },
         {
-          "line": "Weak points: The page names none; it only says they are tougher than other human enemies, and have been seen surviving a shotgun blast fired at point-blank range.",
-          "drawn_from": [
-            {
-              "page": "https://reddead.fandom.com/wiki/Murfree_Brood",
-              "revision": "464648",
-              "quoted": [
-                "Murfrees are unusually durable compared to other human NPCs, being observed surviving point-blank shotgun blasts, and in some cases even headshots with lesser firearms."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: They rarely wear shirts.",
+          "line": "Looks like: Often shirtless.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Murfree_Brood",
@@ -261,22 +220,16 @@
           ]
         },
         {
-          "line": "Tips: They frequently use Volcanic Pistols and double-barreled shotguns, which makes close combat with them very deadly. Murfrees do not carry valuables, so looting them mostly gives cigarettes, tonics and herbs, although Murfrees in scripted ambushes always carry money. Their throwing knives can be looted from them too.",
+          "line": "Tips: Their Volcanic Pistols and double-barreled shotguns make close fights deadly, and they can survive a point-blank shotgun blast. Looting them mostly gives cigarettes, tonics and herbs, but ones in scripted ambushes always carry money.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Murfree_Brood",
               "revision": "464648",
               "quoted": [
+                "Murfrees are unusually durable compared to other human NPCs, being observed surviving point-blank shotgun blasts, and in some cases even headshots with lesser firearms.",
                 "The Murfree Brood frequently use Volcanic Pistols and Double-Barreled Shotguns, making close quarters combat with them a very deadly prospect due to the damage they deal.",
                 "the Murfrees don't carry any valuables and players mostly receive cigarettes, tonics, and herbs from looting them.",
                 "Murfrees participating in scripted ambushes against the player will always carry money, however."
-              ]
-            },
-            {
-              "page": "https://reddead.fandom.com/wiki/Throwing_Knife_(RDR_2)",
-              "revision": "476857",
-              "quoted": [
-                "Additionally, they can be found from looted Murfree Brood members."
               ]
             }
           ]
@@ -291,12 +244,13 @@
       "main_revision": "476856",
       "lines": [
         {
-          "line": "Summary: A thrown explosive with very high power but low range and low accuracy, of which you can carry up to 8. It cannot be customized.",
+          "line": "Summary: Thrown dynamite hits very hard but has low range and low accuracy. You can carry up to 8, and you cannot customize it.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Dynamite_(RDR_2)",
               "revision": "476856",
               "quoted": [
+                "!! Type || Projectiles",
                 "!! Power || Very High !! Range || Low !! Ammo Max || 8 !! Accuracy || Low",
                 "It cannot be customized."
               ]
@@ -304,31 +258,27 @@
           ]
         },
         {
-          "line": "Uses: It can clear out groups of enemies, or blow up mines, trains and safes. Light it and throw it at your target, or put it down, light it and run to a safe distance. It can also blow fish out of the water, but the fish will be of poor quality and you lose a small amount of Honor.",
+          "line": "Uses: Blowing up a train's engine leaves it inoperable, and it can kill some NPCs you normally cannot target. Fish blown out of the water are poor quality and cost you a little Honor.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Dynamite_(RDR_2)",
               "revision": "476856",
               "quoted": [
-                "It can be used to clear out groups of enemies, or effectively blow up a variety of things including mines, trains, and safes. Light and throw towards your target, or place it down before igniting and running to a safe distance.",
+                "Like the fire bottle, it can be used to kill certain NPCs who are normally unable to be targeted by the player.",
+                "Blowing up a train's engine will render it completely inoperable.",
                 "Dynamite can be used to blow Fish out of the water, thus saving time on fishing. However, not only will the fish be of poor quality, you will lose a small amount of Honor"
               ]
             }
           ]
         },
         {
-          "line": "Tips: You cannot buy it from gunsmiths, though some less-than-reputable sellers may stock it; every fence sells it after the mission \"Who the Hell is Leviticus Cornwall?\", and some missions hand it out. Shooting dynamite makes it explode, including the crates of dynamite found around the map. A Volatile Dynamite pamphlet gives a version with a wider explosion radius, more damage and the ability to ignite a fire, crafted from regular dynamite, animal fat and any type of high velocity cartridge; dynamite can also be used to craft dynamite arrows that explode on impact.",
+          "line": "Tips: Every fence sells it after \"Who the Hell is Leviticus Cornwall?\", and some missions give it out. A Volatile Dynamite pamphlet is in a chest at Hani's Bethel, and fences sell it after \"American Distillation\".",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Dynamite_(RDR_2)",
               "revision": "476856",
               "quoted": [
-                "It cannot be purchased from Gunsmith stores, but some less-than-reputable sellers may stock this item.",
                 "This projectile is available from all fences after completing \"Who the Hell is Leviticus Cornwall?\", and is given out during certain missions.",
-                "Shooting dynamite will cause it to explode. This also applies to the crates of dynamite found around the map and in missions.",
-                "An improved and more dangerous version of the regular Dynamite, with a wider explosion radius, increased damage, and the ability to ignite a fire.",
-                "This upgraded weapon can be crafted using regular Dynamite, Animal Fat, and any type of High Velocity cartridge.",
-                "It can also be used to craft dynamite arrows, which will explode upon impact.",
                 "The Pamphlet is found at Hani's Bethel, in a chest below one of the wagons near the house. It is also available from any Fence after completing \"American Distillation\"."
               ]
             }
@@ -344,13 +294,13 @@
       "main_revision": "476855",
       "lines": [
         {
-          "line": "Summary: A glass bottle of flammable spirits with a cloth wick, used as a projectile; it bursts into a big fireball on impact. It has high power, low range and low accuracy, and cannot be customized.",
+          "line": "Summary: A thrown fire bottle with high power but low range and low accuracy. It cannot be customized.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Fire_Bottle_(RDR_2)",
               "revision": "476855",
               "quoted": [
-                "A glass bottle filled with flammable spirits, and topped with a cloth fuse. This explosive projectile will cause a large fireball on impact",
+                "!! Type || Projectiles",
                 "!! Power || High !! Range || Low !! Accuracy || Low",
                 "It cannot be customized."
               ]
@@ -358,31 +308,29 @@
           ]
         },
         {
-          "line": "Uses: It is useful for setting fire to stagecoaches or forcing people and animals to retreat.",
+          "line": "Uses: Like dynamite, it can kill certain NPCs that you normally cannot target.",
           "drawn_from": [
             {
-              "page": "https://reddead.fandom.com/wiki/Fire_Bottle_(RDR_2)",
-              "revision": "476855",
+              "page": "https://reddead.fandom.com/wiki/Dynamite_(RDR_2)",
+              "revision": "476856",
               "quoted": [
-                "useful for setting fire to stagecoaches or forcing people and animals to retreat."
+                "Like the fire bottle, it can be used to kill certain NPCs who are normally unable to be targeted by the player."
               ]
             }
           ]
         },
         {
-          "line": "Tips: You can craft one by combining any type of alcoholic spirit with animal fat, or buy one from some less-than-reputable sellers. Every fence sells it after the mission \"The Fine Joys of Tobacco\", and you can get one earlier by looting enemies. Upgrading the ammo cart to max level provides two fire bottles. The Volatile Fire Bottle does more damage and has a better impact radius, and is crafted from 1 animal fat and 1 moonshine once you have its pamphlet.",
+          "line": "Tips: Every fence sells it after \"The Fine Joys of Tobacco\", and you can loot one off enemies earlier. A maxed ammo cart gives two, and the Volatile version does more damage once you find its pamphlet.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Fire_Bottle_(RDR_2)",
               "revision": "476855",
               "quoted": [
-                "This weapon can be crafted by combining any type of alcoholic spirit with Animal Fat, or purchased from some less-than-reputable sellers.",
                 "This projectile is available from all fences after completing \"The Fine Joys of Tobacco\"",
                 "The projectile can also be obtained earlier through looting enemies.",
                 "upgrading Arthur's Ammo Cart to max level will provide two Fire Bottles.",
                 "The volatile version does more damage and has a better impact radius.",
-                "A pamphlet for crafting this variation can be found in a chest at an abandoned campsite in the burned forest, just northwest of Horseshoe Overlook.",
-                "Crafting ingredients require: 1x Animal Fat and 1x Moonshine."
+                "A pamphlet for crafting this variation can be found in a chest at an abandoned campsite in the burned forest, just northwest of Horseshoe Overlook."
               ]
             }
           ]
@@ -397,31 +345,22 @@
       "main_revision": "477469",
       "lines": [
         {
-          "line": "Summary: A lightweight thrown axe with moderate power, low range and low accuracy, which can also be used as a close-range melee weapon. It cannot be customized.",
+          "line": "Summary: A thrown weapon with moderate power but low range and low accuracy. It cannot be customized.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Tomahawk_(RDR_2)",
               "revision": "477469",
               "quoted": [
-                "A basic tomahawk with a lightweight wooden shaft and thin blade.",
+                "!! Type || Projectile",
                 "!! Power || Moderate !! Range || Low !! Accuracy || Low",
-                "It cannot be customized.",
-                "or it can be used as a close-range melee weapon against enemies if needed."
+                "It cannot be customized."
               ]
             }
           ]
         },
         {
-          "line": "Uses: It is ideal for quick thrown attacks, and you can save a trip by picking it up again after throwing. Thrown at an alligator's head, it kills the animal instantly.",
+          "line": "Uses: Thrown at an alligator's head, it kills the animal instantly.",
           "drawn_from": [
-            {
-              "page": "https://reddead.fandom.com/wiki/Tomahawk_(RDR_2)",
-              "revision": "477469",
-              "quoted": [
-                "This strong and fast projectile weapon is ideal for quick thrown attacks",
-                "or save a trip by recollecting the tomahawk after throwing."
-              ]
-            },
             {
               "page": "https://reddead.fandom.com/wiki/Alligator",
               "revision": "477291",
@@ -432,15 +371,14 @@
           ]
         },
         {
-          "line": "Tips: You can buy one from some less-than-reputable sellers, and after the mission \"The First Shall Be Last\" it is available from all fences and the Trapper. Earlier, you can pick one up at Six Point Cabin before the mission \"Paying a Social Call\" while the hideout is not occupied yet, or find one on broken abandoned stagecoaches around Southern Cumberland Forest.",
+          "line": "Tips: Every fence and the Trapper sell it after \"The First Shall Be Last\". Earlier, you can take one at Six Point Cabin before \"Paying a Social Call\".",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Tomahawk_(RDR_2)",
               "revision": "477469",
               "quoted": [
-                "It can be purchased from some less-than-reputable sellers",
                 "This projectile is available from all fences and the trapper after \"The First Shall Be Last\".",
-                "Alternatively it can be obtained earlier at Six Point Cabin before the mission \"Paying a Social Call\" where the hideout would not be occupied yet or can be found on broken abandoned stagecoaches around Southern Cumberland Forest."
+                "Alternatively it can be obtained earlier at Six Point Cabin before the mission \"Paying a Social Call\" where the hideout would not be occupied yet"
               ]
             }
           ]
@@ -455,48 +393,42 @@
       "main_revision": "476857",
       "lines": [
         {
-          "line": "Summary: A small, balanced knife with moderate power, moderate accuracy and low range, thrown at enemies or used in melee. It cannot be customized.",
+          "line": "Summary: A thrown knife with moderate power and accuracy but low range. It cannot be customized.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Throwing_Knife_(RDR_2)",
               "revision": "476857",
               "quoted": [
-                "A small knife with a straight blade, designed and balanced so it can be thrown with ease.",
+                "!! Type || Projectile",
                 "!! Power || Moderate !! Range || Low !! Accuracy || Moderate",
-                "It cannot be customized.",
-                "or used as a melee weapon if required."
+                "It cannot be customized."
               ]
             }
           ]
         },
         {
-          "line": "Uses: It can silently take down enemies at range, and you can save a trip by picking it up again after throwing. Equipped and aimed at an aggressive enemy up close, it (or a variant) can start an instant melee takedown; the hunting knife cannot.",
+          "line": "Uses: Equipped and aimed at an aggressive enemy up close, it can start an instant takedown. A hunting knife cannot do that.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Throwing_Knife_(RDR_2)",
               "revision": "476857",
               "quoted": [
-                "Can be used to silently take down enemies at range",
-                "or save a trip by recollecting the knife after throwing.",
                 "Unlike the Hunting Knife, the throwing knife and its variants can trigger an instant melee takedown if the player equips it and aims at an aggressive enemy at close range."
               ]
             }
           ]
         },
         {
-          "line": "Tips: A poisoned throwing knife, crafted at a campfire from a throwing knife and Oleander Sage, guarantees certain death for an NPC once any attack with it starts, and it makes legendary animals and dangerous wild animals such as grizzly bears, cougars and panthers run away after one attack; it turns back into a regular knife once you recover it. The improved throwing knife, crafted at a campfire from a throwing knife and rare bird feathers, may guarantee an instant kill where a regular one can be survived. You get your first one in the mission \"Paying a Social Call\", and a fence or the Trapper sells them after it.",
+          "line": "Tips: \"Paying a Social Call\" gives you your first, and a fence or the Trapper sells more afterwards. A poisoned one, made at a campfire with Oleander Sage, kills any NPC and scares off dangerous animals.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Throwing_Knife_(RDR_2)",
               "revision": "476857",
               "quoted": [
+                "This projectile is provided during \"Paying a Social Call\", and can be purchased from a Fence or the Trapper after completion.",
                 "the Poison Throwing Knife, also craftable at a campfire, can be crafted with an existing throwing knife and Oleander Sage.",
                 "Equipping a poisoned throwing knife and initiating any sort of attack with an NPC regardless of health will guarantee certain death.",
-                "Legendary Animals and dangerous wild animals like grizzly bears, cougars and panthers can be dealt with using one poisoned knife attack and they will run away from the player when hit, instead of staying and fighting back.",
-                "Poisoned throwing knives turn into regular throwing knives after being recovered.",
-                "The Improved Throwing Knife can be crafted at a campfire with an existing throwing knife and rare bird feathers",
-                "NPCs can survive being hit with a regular throwing knife while improved throwing knives may guarantee an instant kill.",
-                "This projectile is provided during \"Paying a Social Call\", and can be purchased from a Fence or the Trapper after completion."
+                "Legendary Animals and dangerous wild animals like grizzly bears, cougars and panthers can be dealt with using one poisoned knife attack and they will run away from the player when hit, instead of staying and fighting back."
               ]
             }
           ]
@@ -511,7 +443,7 @@
       "main_revision": "476800",
       "lines": [
         {
-          "line": "Summary: A two-shot shotgun with high power but low range and low accuracy, made for close quarters on foot or on horseback. It can be fired with one hand or dual wielded, and unlike other shotguns it occupies a holster/handgun slot.",
+          "line": "Summary: A two-shot shotgun with high power but low range and low accuracy. Unlike other shotguns, it sits in your handgun slot.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Sawed-Off_Shotgun_(RDR_2)",
@@ -520,34 +452,31 @@
                 "!! Power || High !! Range || Low",
                 "!! Ammo Capacity || 2",
                 "!! Accuracy || Low",
-                "can be used easily with one hand or dual wielded to great effect.",
-                "this weapon is ideal for close quarter combat on foot or on horseback.",
                 "Unlike other shotguns, this one occupies a holster/handgun slot"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Two of them dual wielded are highly effective against people and animals alike. It takes regular buckshot, incendiary buckshot, slug and explosive slug.",
+          "line": "Uses: Two of them, dual wielded, work very well against people and animals alike.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Sawed-Off_Shotgun_(RDR_2)",
               "revision": "476800",
               "quoted": [
-                "Dual-wielding it with another Sawed-Off shotgun is highly effective, allowing the quick and brutal elimination of anything that stands in your way, man or beast.",
-                "This gun has an ammo capacity of two rounds and can use Regular Buckshot, Incendiary Buckshot, Slug and Explosive Slug shotgun ammo."
+                "Dual-wielding it with another Sawed-Off shotgun is highly effective, allowing the quick and brutal elimination of anything that stands in your way, man or beast."
               ]
             }
           ]
         },
         {
-          "line": "Tips: You are given one in the mission \"Enter, Pursued by a Memory\", and you can buy a second from any gunsmith for $85.",
+          "line": "Tips: Your first one comes in \"Enter, Pursued by a Memory\", and a second costs $85 at any gunsmith.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Sawed-Off_Shotgun_(RDR_2)",
               "revision": "476800",
               "quoted": [
-                "during the mission \"Enter, Pursued by a Memory\". A second one can be bought from any Gunsmith, for the price of $85."
+                "it is provided by Javier Escuella during the mission \"Enter, Pursued by a Memory\". A second one can be bought from any Gunsmith, for the price of $85."
               ]
             }
           ]
@@ -562,28 +491,28 @@
       "main_revision": "476793",
       "lines": [
         {
-          "line": "Summary: The revolver you have from the start of the game, a classic all-around sidearm with a good balance of damage, accuracy and fire rate. It holds six rounds and can be dual-wielded and used on horseback.",
+          "line": "Summary: Your starting revolver, a solid all-rounder that holds six rounds. It has moderate power and range, and high accuracy and fire rate.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Cattleman_Revolver_(RDR_2)",
               "revision": "476793",
               "quoted": [
                 "this revolver is available from the start of the game.",
-                "the Buck Cattleman is a great all-around revolver, featuring a good balance of damage, accuracy and fire rate.",
-                "this gun can also be dual-wielded and used on horseback. This gun has an ammo capacity of six rounds"
+                "The Cattleman Revolver is a good all-around weapon for most situations.",
+                "!! Power || Moderate !! Range || Moderate !! Rate of Fire || High",
+                "!! Ammo Capacity || 6",
+                "!! Accuracy || High"
               ]
             }
           ]
         },
         {
-          "line": "Uses: It suits close to medium range, and fires fast from the hip. Rifling improves its range, and a longer barrel and improved iron sights improve its accuracy. Torso hits may need three or four shots to kill a person, while a head, neck or upper-chest hit needs one.",
+          "line": "Uses: Rifling adds range, and a long barrel with better sights adds accuracy. A head, neck or upper-chest shot kills a person outright; torso shots can take three or four.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Cattleman_Revolver_(RDR_2)",
               "revision": "476793",
               "quoted": [
-                "Suited for close to medium-range combat",
-                "It has a high fire rate when fired from the hip",
                 "It can be upgraded with rifling, which improves the range, as well as a longer barrel and improved iron sights, which improve the accuracy.",
                 "It can take as many as 3-4 shots to kill an NPC if they are shot in the torso, unless they are shot in the head, in the neck or in the upper chest, in which case a single shot is enough."
               ]
@@ -591,13 +520,12 @@
           ]
         },
         {
-          "line": "Tips: It takes regular, high velocity, split point, express and explosive revolver ammo. You can buy a second one from any gunsmith or pick one up from slain NPCs. Once your Honor rank is +4 or higher, the Hero's Pearl Grip becomes purchasable at any gunsmith for this weapon only.",
+          "line": "Tips: You can buy a second at any gunsmith or take one from slain NPCs. At Honor rank +4 or higher, any gunsmith sells the Hero's Pearl Grip for this gun alone.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Cattleman_Revolver_(RDR_2)",
               "revision": "476793",
               "quoted": [
-                "can use Regular, High Velocity, Split Point, Express and Explosive revolver ammo.",
                 "The player can purchase a second model from any gunsmith, or pick one up from slain NPCs.",
                 "Once the player has an Honor rank of +4 or higher (75%+ on the Honor bar), the unique Hero's Pearl Grip will become purchasable at any Gunsmith for this weapon only."
               ]
@@ -614,7 +542,7 @@
       "main_revision": "476807",
       "lines": [
         {
-          "line": "Summary: A strong, versatile rifle with five rounds, high power, high range and very high accuracy, but a low rate of fire. It costs $180.",
+          "line": "Summary: A rifle with five rounds, high power and range, very high accuracy and a slow rate of fire. It costs $180.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Bolt_Action_Rifle_(RDR_2)",
@@ -622,35 +550,32 @@
               "quoted": [
                 "!! Power || High !! Range || High !! Rate of Fire || Low",
                 "!! Ammo Capacity || 5",
-                "!! Accuracy || Very High !! Base price || $180.00",
-                "The B.D. & Co. Bolt Action is a strong and versatile rifle, built to perform in any environment."
+                "!! Accuracy || Very High !! Base price || $180.00"
               ]
             }
           ]
         },
         {
-          "line": "Uses: It is an ideal choice for long-range combat with multiple targets, and with a scope attached it becomes a good substitute for the Carcano Rifle.",
+          "line": "Uses: Put a scope on it and it stands in well for the Carcano Rifle.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Bolt_Action_Rifle_(RDR_2)",
               "revision": "476807",
               "quoted": [
-                "making this rifle an ideal choice for long-range combat with multiple targets.",
                 "With a scope attached, this rifle becomes a good substitute for the Carcano Rifle."
               ]
             }
           ]
         },
         {
-          "line": "Tips: It takes regular, high velocity, split point, express and explosive rifle ammo. It is provided in the Chapter 3 mission \"Preaching Forgiveness as He Went\" and is then available from all gunsmiths; it can also sometimes be found on lawmen during public executions in Valentine and Saint Denis.",
+          "line": "Tips: Chapter 3's \"Preaching Forgiveness as He Went\" gives you one, and every gunsmith sells it afterwards. Killing a bounty hunter in \"The First Shall Be Last\" gets you one earlier.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Bolt_Action_Rifle_(RDR_2)",
               "revision": "476807",
               "quoted": [
-                "can use Regular, High Velocity, Split Point, Express and Explosive rifle ammo.",
                 "This rifle is provided during \"Preaching Forgiveness as He Went\" in Chapter 3. It is then available from all gunsmiths after the mission.",
-                "The rifle can sometimes be found on lawmen during public executions in Valentine and Saint Denis."
+                "The rifle can be obtained early in the Chapter 2 mission \"The First Shall Be Last\" by killing a bounty hunter."
               ]
             }
           ]
@@ -665,13 +590,13 @@
       "main_revision": "476806",
       "lines": [
         {
-          "line": "Summary: A long, scoped bolt-action sniper rifle with six rounds, high power, very high range and very high accuracy, a low rate of fire and a high reload speed. It costs $190.",
+          "line": "Summary: A sniper rifle: six rounds, high power, very high range and accuracy, quick reload, slow fire. It costs $190.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Carcano_Rifle_(RDR_2)",
               "revision": "476806",
               "quoted": [
-                "The Sireno Carcano is a long scoped bolt-action rifle that can hold several rounds at once.",
+                "!! Type || Sniper Rifle",
                 "!! Power || High !! Range || Very High !! Rate of Fire || Low !! Reload Speed || High",
                 "!! Ammo Capacity || 6",
                 "!! Accuracy || Very High !! Base price || $190.00"
@@ -680,27 +605,25 @@
           ]
         },
         {
-          "line": "Uses: Its quick reload speed makes it ideal for facing several enemies in long-distance combat.",
+          "line": "Uses: Its overall stats beat every other weapon, but it only shines when targets are far away.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Carcano_Rifle_(RDR_2)",
               "revision": "476806",
               "quoted": [
-                "When combined with the fast firing rate and quick reload speed, this makes it ideal for facing several enemies in long-distance combat."
+                "the Carcano Rifle is the best weapon in the game, both in Story Mode and Online, although it only can be used for unique scenarios where distance matters."
               ]
             }
           ]
         },
         {
-          "line": "Tips: It takes regular, high velocity, split point, express and explosive rifle ammo. It is free during two story missions, the first being \"The Delights of Van Horn\", and is then available from all gunsmiths. You must look down its scope whatever camera mode you use.",
+          "line": "Tips: It is free in \"The Delights of Van Horn\" and \"Goodbye, Dear Friend\", then every gunsmith sells it. The camera view does not matter: you always aim it down the sights.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Carcano_Rifle_(RDR_2)",
               "revision": "476806",
               "quoted": [
-                "can use Regular, High Velocity, Split Point, Express, and Explosive rifle ammo.",
-                "This rifle can be acquired for free during the missions \"The Delights of Van Horn\" and",
-                "it will also become available from all gunsmiths after completion of the latter.",
+                "This rifle can be acquired for free during the missions \"The Delights of Van Horn\" and \"Goodbye, Dear Friend\"; it will also become available from all gunsmiths after completion of the latter.",
                 "It is one of three rifles that the player must look down the sights of regardless of what camera mode you're using"
               ]
             }
@@ -716,35 +639,22 @@
       "main_revision": "476802",
       "lines": [
         {
-          "line": "Summary: The Lancaster pump-action shotgun, a close-combat gun with low range. It costs $148.",
+          "line": "Summary: The Lancaster pump-action shotgun: moderate power, low range, low accuracy, five rounds. It costs $148.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Pump-Action_Shotgun_(RDR_2)",
               "revision": "476802",
               "quoted": [
-                "The high-powered Lancaster Pump Shotgun",
-                "this gun will hold true should you find yourself confronted by wild beast or man in close combat.",
-                "!! Range || Low",
-                "!! Base price || $148.00"
+                "Lancaster Pump-action Shotgun",
+                "!! Power || Moderate !! Range || Low",
+                "!! Ammo Capacity || 5",
+                "!! Accuracy || Low !! Base price || $148.00"
               ]
             }
           ]
         },
         {
-          "line": "Uses: The page says it holds true when you are confronted by a wild beast or a man in close combat. It takes regular buckshot, incendiary buckshot, slug and explosive slug.",
-          "drawn_from": [
-            {
-              "page": "https://reddead.fandom.com/wiki/Pump-Action_Shotgun_(RDR_2)",
-              "revision": "476802",
-              "quoted": [
-                "this gun will hold true should you find yourself confronted by wild beast or man in close combat.",
-                "can use Regular Buckshots, Incendiary Buckshots, Slug and Explosive Slug shotgun ammo."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: It is available from all gunsmiths after the mission \"Pouring Forth Oil IV\", and you can also take it for free at Chez Porter from a weapon case at the top of the ladder in the master bedroom.",
+          "line": "Tips: Any gunsmith sells it after \"Pouring Forth Oil IV\". Chez Porter has a free one in a weapon case, up the ladder in the master bedroom.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Pump-Action_Shotgun_(RDR_2)",

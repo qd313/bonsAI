@@ -104,6 +104,7 @@ All notable changes to this project are documented in this file.
 - **The answer screen's D-pad follows the answer.** Down from the Copy icon reaches the first step of a checklist and Up from step 1 goes back into the answer, not onto Copy. Down from "Hide details" lands on the "This answer / Session" strip, and the details chips step one by one, even when the panel has lost focus. Checked by tests; a Deck check is owed.
 - **Suggestion chips follow your last question.** After an answer, the game's suggestion chips lead with up to four notes closest to what you just asked; the rest follow in the usual order, and a fresh open looks as before. Checked on the PC; a Deck check is owed.
 - **More fixes in the library:** Diddy Kong Racing, Yoshi's Story, Left 4 Dead 2, Hollow Knight, Fallout: New Vegas and Palworld notes now follow their wiki pages on a few points (a tram route, a doctor's bag, Predator Pals, the Charger and Smoker). They arrive with the next library update.
+- **Left 4 Dead 2: the right note comes first again.** "How to beat tank" now leads with the Tank note, and "tips for playing as the hunter in versus" brings up "Playing as the Hunter" instead of the survivors' note. Four versus notes lost "in versus" from their names. Checked on the PC; a Deck check is owed, and three smaller mix-ups remain.
 
 ### Changed
 

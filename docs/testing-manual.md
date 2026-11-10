@@ -22,7 +22,7 @@ side by side: what was asked for (the mock-up, the earlier look, the screenshot 
 the Deck shows now, with a short list of what differs. Something that moves gets a short recording. A check
 with no picture yet says so and why, and the session takes it as soon as the Deck is free. Only what truly needs
 the maintainer's hands (a finger on the glass, a PIN) stays a hand check, and it still shows a picture of what
-they should see. The page opens on the newest round, with older rounds kept for the record in its side menu.
+they should see. The page opens on the newest round, with older rounds kept for the record in its side menu. The newest round is "Plan 103 (10 Nov)", 28 items: six ten-note samples, ten picture labels, eight calls, three wording looks and one table of the Deck checks owed.
 
 Historical full checklist (pre–2026-07-30 split): [archive/testing-full-pre-2026-07-30.md](archive/testing-full-pre-2026-07-30.md).
 

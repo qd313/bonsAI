@@ -105,3 +105,7 @@ runs/
 # files in the same folder stay tracked. docs/code-map.md: python scripts/code_map.py
 packages/bonsai-mcp/knowledge/architecture/*.json
 docs/code-map.md
+
+# Scratch files of working sessions and their helpers (running notes, measuring scripts, helper reports, copies of
+# pictures on their way to the checks page). Never plugin content: pictures and evaluation reports must not enter the repo.
+.scratch/

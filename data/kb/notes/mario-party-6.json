@@ -45,6 +45,50 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5415952",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3104,
+      "game_id": 29,
+      "section_type": "enemy",
+      "name": "Evil Woody",
+      "card": "Summary: At night the tree at the top of Towering Treetop is Evil Woody instead of Woody, and the ? Space beside him rains Spiny eggs that make every player lose coins, where Woody's daytime shower gives coins.\nWeak points: Stay off the ? Space at the top of the board at night. The same space is a shower of coins for everyone by day.\nLooks like: A tree with a permanently angry face, blue with purple leaves, the opposite of Woody's colours.\nTips: Day turns into night every three turns, and a meter at the start of each turn shows how many are left, so you can time when to step onto that space.",
+      "source_url": "https://www.mariowiki.com/Evil_Woody",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5466203",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3105,
+      "game_id": 29,
+      "section_type": "enemy",
+      "name": "Whomp",
+      "card": "Summary: Two Whomps stand in the way on Mario Party 6 boards, one on Snowflake Lake and one on Faire Square, and each lets you through only for 10 coins.\nWeak points: He guards a path and asks for a toll: pay the 10 coins to get past.\nLooks like: A large rectangular stone slab with an angry face, red eyes, a mouth with five uneven teeth, simple arms and legless feet.\nTips: On Snowflake Lake the Whomp stands in front of an Orb Shop, and passing takes you to the right side of the frozen pond. On Faire Square he sits in the middle of the board, and paying lets you quickly revisit Brighton or Twila for another chance to get Stars, which can save turns.",
+      "source_url": "https://www.mariowiki.com/Whomp",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5536581",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3106,
+      "game_id": 29,
+      "section_type": "enemy",
+      "name": "Freezie",
+      "card": "Summary: At night on Snowflake Lake, large Freezies appear and block the paths to the middle of the board, and they melt when daylight comes.\nWeak points: Freezies block the paths to the middle of the board until daylight melts them, so plan to cross those paths when it is day.\nLooks like: A large figure made entirely of ice, with a puzzled expression.\nTips: Day and night change every three turns, and the pause menu shows how many turns are left before the change. At night the ? Spaces beside the frozen pond start a snowball fight where players knock coins out of each other.",
+      "source_url": "https://www.mariowiki.com/Snowflake_Lake",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5388531",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3107,
+      "game_id": 29,
+      "section_type": "enemy",
+      "name": "Shadow Star Space",
+      "card": "Summary: A space that hands you a Shadow Star, which takes away a Star, or coins if you have none. In Mario Party 6 it appears only in Castaway Bay and Clockwork Castle.\nWeak points: On Castaway Bay it is Bowser's Battle Yacht, which swaps places with DK's Riverboat whenever someone stops on the riverboat, so check which boat is at the Star Space before you land. On Clockwork Castle it moves with Bowser at night, who gives a Shadow Star to anyone he reaches or who reaches him.\nTips: The loss is 20 coins when you have no Star. On Clockwork Castle the Warp Pipes can get you away from Bowser, and he moves only after all four players have taken their turn.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_6",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5518101",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

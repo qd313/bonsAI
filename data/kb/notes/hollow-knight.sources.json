@@ -15,7 +15,7 @@
       "main_revision": "200524",
       "lines": [
         {
-          "line": "Summary: A flying enemy that turns up in many areas, from King's Pass and the Forgotten Crossroads to Greenpath and the City of Tears. It hovers in a small area, squawks, then flies at you, and it is among the earliest and simplest enemies in the game.",
+          "line": "Summary: A flying enemy that turns up in many areas, from King's Pass and the Forgotten Crossroads to Greenpath and the City of Tears. It drifts around a small stretch of air, squawks when you come into range, then flies straight at you. It is an easy enemy that shows up early.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Vengefly",
@@ -29,7 +29,7 @@
           ]
         },
         {
-          "line": "Weak points: It flies straight at you once you are in range, so you can wait where you stand and hit it as it arrives, or jump and strike downward onto it.",
+          "line": "Weak points: You can stand still and swing as it reaches you, or leap and attack downward onto it.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Vengefly",
@@ -42,7 +42,7 @@
           ]
         },
         {
-          "line": "Tips: Because it keeps coming at you, you can stay in one spot and keep swinging until it dies. Unlike most enemies, it comes back after you leave the room and return.",
+          "line": "Tips: It never stops coming for you, so you can stay put and keep attacking until it falls. Only a few enemies reappear when you leave a room and come back, and this is one of them.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Vengefly",
@@ -64,7 +64,7 @@
       "main_revision": "200497",
       "lines": [
         {
-          "line": "Summary: A hovering spitter that drifts around until you come close, then fires blobs of corrosive liquid from a distance. It usually hunts in packs, and you meet it in the Forgotten Crossroads and at the western end of the Ancient Basin's tram tunnel.",
+          "line": "Summary: A floating enemy that wanders aimlessly until you approach, then spits blobs at you from a distance. It usually comes in groups. You meet it in the Forgotten Crossroads and in the western part of the Ancient Basin's tram tunnel.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Aspid_Hunter",
@@ -78,7 +78,7 @@
           ]
         },
         {
-          "line": "Weak points: Right when it has finished spitting you get a short opening, so close in and hit it at once.",
+          "line": "Weak points: A short opening follows each spit, and the best response is to rush in close and hit it straight away.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Aspid_Hunter",
@@ -90,7 +90,7 @@
           ]
         },
         {
-          "line": "Tips: You can hear the whirring of its wings from far off, so you know one is near before you see it. A tougher version, the Primal Aspid, lives in Kingdom's Edge. Like a few other enemies, it comes back when you leave the room and return.",
+          "line": "Tips: Its wings make a whirring noise that carries a long way, so you can tell one is near before it comes into view. A stronger version, the Primal Aspid, is found in Kingdom's Edge. Leave the room and return, and it will be back, which few enemies do.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Aspid_Hunter",
@@ -113,7 +113,7 @@
       "main_revision": "199437",
       "lines": [
         {
-          "line": "Summary: A club-wielding husk that stands at its post until you come near, then rushes in. Only two exist in the Forgotten Crossroads: one just east of where you fight the False Knight, and one above the northern entrance to Crystal Peak.",
+          "line": "Summary: A husk with a club that stays where it stands until disturbed, then charges you. The Forgotten Crossroads holds only two: one just east of the False Knight's arena and one right above the north entrance to Crystal Peak.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Husk_Guard",
@@ -128,7 +128,7 @@
           ]
         },
         {
-          "line": "Weak points: Once its club has come down it is open to your nail. After its shockwave, jump the wave toward it and land one or two hits. You can also hit it once and slip out of range before the club falls, but the gap is small, and the Mothwing Cloak makes it easier.",
+          "line": "Weak points: Strike right after its club slam, which is when it can be hurt. When it sends out its shockwave, jump over the wave, move in and you can usually land one or two hits. You can also tap it once and step out of reach before the club swings down, though the timing is tight and the Mothwing Cloak helps once you have it.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Husk_Guard",
@@ -142,7 +142,7 @@
           ]
         },
         {
-          "line": "Tips: Its overhead club slam costs two masks, and its backward hop sends a shockwave left and right along the ground that widens and speeds up as it goes. The guard met before the False Knight can be hit safely from the right-hand platform. Each drops 45 Geo, a high amount this early, and both are near the Stag Station, so they are a quick source of Geo; fight the one by the False Knight's arena early, because it cannot be fought once the Crossroads changes.",
+          "line": "Tips: The club slam does two masks of damage. The backward hop throws a shockwave out to both sides along the ground, growing wider and faster as it travels. The guard you meet before the False Knight can be hit safely from the platform on the right. Each one drops 45 Geo, a lot this early, and both stand near the Stag Station, so they make an easy early source of Geo. Fight the one by the False Knight's arena soon, because it cannot be fought later in the game.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Husk_Guard",
@@ -152,7 +152,7 @@
                 "Hops backwards, creating shockwaves that travel horizontally both left and right. These increase in width and speed as they travel.",
                 "The Husk Guard met before facing False Knight can be damaged from a safe zone, by going on the platform to the right.",
                 "Husk Guards drop 45, a very high amount for an early game enemy, and can be used to farm Geo early on. Both guards are located conveniently close to the Stag Station in the Forgotten Crossroads.",
-                "the Husk Guard near the arena of the False Knight is overcome by the Infection and cannot be fought anymore."
+                "Once the Forgotten Crossroads changes to the Infected Crossroads, the Husk Guard near the arena of the False Knight is overcome by the Infection and cannot be fought anymore."
               ]
             }
           ]
@@ -167,7 +167,7 @@
       "main_revision": "200467",
       "lines": [
         {
-          "line": "Summary: A walking corpse that wields a greatnail and guards the City of Tears, where a few are found; two more stand in the east of the Royal Waterways.",
+          "line": "Summary: A walking corpse armed with a greatnail. It guards the City of Tears, where a small number are found, and two more stand in the eastern Royal Waterways.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Heavy_Sentry",
@@ -180,7 +180,7 @@
           ]
         },
         {
-          "line": "Weak points: Hit it when it charges: jump over it and strike down, or cast Vengeful Spirit or Shade Soul, because it cannot dodge them then. You can also hit it just after its ordinary overhead swing.",
+          "line": "Weak points: The best opening is during its charge: jump over it and strike downward, or cast Vengeful Spirit or Shade Soul, which it cannot avoid. A hit just after its plain overhead swing works too.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Heavy_Sentry",
@@ -194,7 +194,7 @@
           ]
         },
         {
-          "line": "Tips: It has three attacks: an overhead swing, a charge with the nail held out in front, and a hop. The hop is its answer to a jump over it: it rises, hurts on contact and swings again as it lands, so time your jump for its charge.",
+          "line": "Tips: Its three attacks are an overhead swing, a charge with its nail held out in front, and a hop. If you try to jump over it, it hops up in reply, hurting on contact and then swinging down as it lands.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Heavy_Sentry",
@@ -203,18 +203,6 @@
                 "Heavy Sentries have three attacks:",
                 "They charge at the Knight with their nail held in front of them.",
                 "When the Knight attempts jumping over them, they react by hopping in the air, dealing contact damage. As they land on the ground, they perform an Overhead Swing attack."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: A walking corpse that carries a greatnail.",
-          "drawn_from": [
-            {
-              "page": "https://hollowknight.wiki/w/Heavy_Sentry",
-              "revision": "200467",
-              "quoted": [
-                "these walking corpses wield a greatnail"
               ]
             }
           ]
@@ -229,7 +217,7 @@
       "main_revision": "195606",
       "lines": [
         {
-          "line": "Summary: A young member of the mantis tribe that clings to a wall or the ceiling to ambush you. You find it only inside Mantis Village and by its entrance.",
+          "line": "Summary: A young mantis, one of the Mantis Tribe's children, that waits on a wall or the ceiling to ambush you. It is found only in Mantis Village and at its entrance.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Mantis_Youth",
@@ -243,7 +231,7 @@
           ]
         },
         {
-          "line": "Tips: Once it engages, it hovers just beyond nail reach, winds up and lunges; the lunge covers little ground and is simple to avoid, but it floats out of range at once to wind up again. After the Mantis Lords fall, mantises stop attacking you but still hit back if you strike them. Like a few other enemies, it returns when you leave the room and come back.",
+          "line": "Tips: When it notices you, it floats just outside nail range, winds up and lunges at you. The lunge covers little distance and is simple to avoid, but it drifts out of reach again straight away to wind up another one. Leave the room and return, and it will be back, which few enemies do.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Mantis_Youth",
@@ -251,7 +239,6 @@
               "quoted": [
                 "Once engaged, it hovers around just out of range of Nail attacks before winding up and lunging towards the Knight.",
                 "Their range is short and easy to dodge, but they quickly hover out of range to charge up another attack.",
-                "Once the Mantis Lords are defeated, all Mantises become non-hostile towards the Knight, however, they still retaliate if attacked.",
                 "The Mantis Youth is one of the few enemies that respawns upon leaving and re-entering the room."
               ]
             }
@@ -267,7 +254,7 @@
       "main_revision": "200295",
       "lines": [
         {
-          "line": "Summary: A scholar of the Soul Sanctum that teleports around and throws homing soul orbs at you. You meet it east of the Soul Master's arena, and in later waves of the Trial of the Fool.",
+          "line": "Summary: A scholar from the Soul Sanctum that teleports about and shoots homing orbs at you. It is found east of the Soul Master's arena, and in the Trial of the Fool, during waves 9, 10, 11 and 17.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Soul_Twister",
@@ -281,7 +268,7 @@
           ]
         },
         {
-          "line": "Weak points: It cannot teleport straight after it fires, so dodge the orb by jumping or dashing and then rush in. Nail Arts, Great Slash for one, kill it fast, Dash Slash closes the gap, and Vengeful Spirit or Shade Soul reaches it at range because it does not teleport away from them on purpose.",
+          "line": "Weak points: It cannot teleport right after it fires, so let it shoot, dodge the orb by jumping over it or dashing, then run in and hit it. Great Slash, one of the Nail Arts, kills it quickly, and Dash Slash helps you cover the distance. Vengeful Spirit and Shade Soul also work from range, since it does not deliberately teleport away from them.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Soul_Twister",
@@ -296,7 +283,7 @@
           ]
         },
         {
-          "line": "Tips: It teleports often, so you cannot corner it; small rooms and halls give it fewer angles, which makes its orbs easier to read and gives you more openings. Running is hard, but it will not follow you through a screen transition into another room.",
+          "line": "Tips: It teleports a lot and cannot be cornered. Luring it into small rooms or narrow halls leaves it fewer angles to attack from, so its orbs are easier to predict and you land more hits. Running away is very hard because it keeps teleporting after you, but it will not follow you through a screen transition into another room.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Soul_Twister",
@@ -319,7 +306,7 @@
       "main_revision": "189292",
       "lines": [
         {
-          "line": "Summary: A hovering creature found only in Crystal Peak that usually stays out of nail reach and shoots crystals at you.",
+          "line": "Summary: A floating enemy found nowhere but Crystal Peak. It usually keeps out of melee range and shoots crystals at you.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Crystal_Hunter",
@@ -332,7 +319,7 @@
           ]
         },
         {
-          "line": "Weak points: It fires with a short delay, so it tends to miss unless you stand right under it; jump up and slash it while it prepares the next shot.",
+          "line": "Weak points: Its shots come out after a short delay, so they usually miss you unless you are right underneath it. Leap up and slash at it while it is getting its next shot ready.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Crystal_Hunter",
@@ -344,7 +331,7 @@
           ]
         },
         {
-          "line": "Tips: Its shot bursts into a clump of crystals on hitting a surface. The clump fades after a short while, a nail hit breaks it easily, and you can bounce off it with your nail. A nail strike can also deflect the shot itself, though the shot still passes through enemies.",
+          "line": "Tips: When its shot lands on a surface it bursts into a clump of crystals. The clump disappears after a short time, breaks easily with a nail hit, and can be bounced off with a nail strike. You can also knock the shot itself away with the nail, though it still passes through enemies.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Crystal_Hunter",
@@ -353,19 +340,6 @@
                 "turns into a cluster of crystals when it makes contact with a surface.",
                 "These clusters dissipate after a short period of time but can otherwise easily be broken with a Nail strike, and can be Nail-bounced on.",
                 "Their crystal shot can be deflected with a Nail strike, but the projectile still passes through enemies."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: A hovering creature with crystal growths on its body.",
-          "drawn_from": [
-            {
-              "page": "https://hollowknight.wiki/w/Crystal_Hunter",
-              "revision": "189292",
-              "quoted": [
-                "They use their crystalline growths to fire crystals at intruders.",
-                "Hovers in the air"
               ]
             }
           ]
@@ -380,7 +354,7 @@
       "main_revision": "190343",
       "lines": [
         {
-          "line": "Summary: The grown-up form of the Hopper, a big leaper that hops without stopping and shakes the ground each time it lands. You find it in the southeast of Kingdom's Edge and in the Trial of the Conqueror, and hitting the dummy at Oro's backyard sets two on you.",
+          "line": "Summary: The full-grown Hopper: a large enemy that hops nonstop, hurting you on contact and shaking the ground whenever it lands. You find it in the southeast of Kingdom's Edge and during the Trial of the Conqueror, and the dummy in Oro's backyard sets two on you when struck.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Great_Hopper",
@@ -394,7 +368,7 @@
           ]
         },
         {
-          "line": "Weak points: Stand still and step a little to the side to dodge its jumps, and you can strike it after each landing and take no damage. Howling Wraiths or Abyss Shriek can damage it while it is in the air.",
+          "line": "Weak points: Stay put and shuffle slightly sideways so each jump misses you, and each time it lands you can strike it safely. Howling Wraiths or Abyss Shriek can hit it while it is still in the air.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Great_Hopper",
@@ -407,7 +381,7 @@
           ]
         },
         {
-          "line": "Tips: Touching it hurts. Unlike a normal Hopper, it turns around to chase you.",
+          "line": "Tips: Touching it hurts. It swings round to go after you, which a regular Hopper does not do.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Great_Hopper",
@@ -415,18 +389,6 @@
               "quoted": [
                 "dealing contact damage",
                 "Unlike normal Hoppers, it changes direction to chase the Knight."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: A large hopping creature, the full-grown version of the ordinary Hopper.",
-          "drawn_from": [
-            {
-              "page": "https://hollowknight.wiki/w/Great_Hopper",
-              "revision": "190343",
-              "quoted": [
-                "The adult form of the Hopper, these large creatures"
               ]
             }
           ]
@@ -441,7 +403,7 @@
       "main_revision": "197871",
       "lines": [
         {
-          "line": "Summary: A crawling creature that rolls into a ball and launches itself at you. It lives in the Ancestral Mound, the Crystallised Mound and the Howling Cliffs, and a stronger kind, the Sharp Baldur, fights in the Colosseum of Fools.",
+          "line": "Summary: A young, crawling creature that defends itself by curling into a ball, which it rolls toward you. It lives in the Howling Cliffs, the Ancestral Mound and the Crystallised Mound; a stronger kind, the Sharp Baldur, shows up at the Colosseum of Fools.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Baldur",
@@ -454,7 +416,7 @@
           ]
         },
         {
-          "line": "Weak points: When it nears you, jump over it and strike down onto it. The Quick Slash or Heavy Blow charm lets you keep knocking it back before it touches you.",
+          "line": "Weak points: Jump over it as it closes in and strike down while you are above it. The Heavy Blow charm or the Quick Slash charm can instead keep knocking it back so it never touches you.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Baldur",
@@ -467,7 +429,7 @@
           ]
         },
         {
-          "line": "Tips: While curled up it rebounds from walls and from other Baldurs, then uncurls after a short time and turns to face you again.",
+          "line": "Tips: In its ball form it rebounds off the walls and off other Baldurs, then after a little while it opens up and turns toward you again.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Baldur",
@@ -479,14 +441,13 @@
           ]
         },
         {
-          "line": "Looks like: A crawling creature with orange eyes that curls up into a ball.",
+          "line": "Looks like: Its eyes are orange in the game.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Baldur",
               "revision": "197871",
               "quoted": [
-                "their eyes during gameplay are orange",
-                "crawling creatures who defend themselves by rolling into a ball"
+                "their eyes during gameplay are orange"
               ]
             }
           ]
@@ -501,7 +462,7 @@
       "main_revision": "200527",
       "lines": [
         {
-          "line": "Summary: A sleeping boss in a small arena in the Forgotten Crossroads, standing across the direct path to a deserted village at the bottom. She wakes when you hit her, and two more are fought together in the Trial of the Warrior.",
+          "line": "Summary: A boss that sleeps in a small arena in the Forgotten Crossroads, blocking the direct way down to an abandoned village. A hit wakes her, and the Trial of the Warrior finishes with two more of her at once.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Gruz_Mother",
@@ -515,7 +476,7 @@
           ]
         },
         {
-          "line": "Weak points: She has low health, so the simplest kill is with Vengeful Spirit: six casts or 18 hits with the Old Nail are enough.",
+          "line": "Weak points: Her health is low, and Vengeful Spirit is the easiest tool against her: six casts, or 18 strikes with the Old Nail, will finish her.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Gruz_Mother",
@@ -527,7 +488,7 @@
           ]
         },
         {
-          "line": "Tips: Her repeated slams between floor and ceiling are fast and need good timing, which the Mothwing Cloak makes easier. When she dies in the Crossroads she bursts into 7 or 8 Gruzzers that you must also kill before you can leave. In the Trial of the Warrior two come at once: kill one as fast as you can, and Howling Wraiths or Abyss Shriek works best.",
+          "line": "Tips: Her Wild Slam, in which she throws herself again and again between floor and ceiling, is fast and needs decent timing to avoid, which the Mothwing Cloak helps with. When she dies in the Crossroads she releases a swarm of 7 or 8 Gruzzers, and you must kill them all before you can leave the arena. In the Trial of the Warrior two come at once: kill one as fast as you can, and Abyss Shriek or Howling Wraiths works best.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Gruz_Mother",
@@ -552,41 +513,40 @@
       "main_revision": "188234",
       "lines": [
         {
-          "line": "Summary: A lantern holding a lumafly that lights up dark areas around you. Sly sells it in Dirtmouth for 1800 Geo.",
+          "line": "Summary: An item that helps you see in dark areas. Sly sells it in Dirtmouth for 1800 Geo.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Lumafly_Lantern",
               "revision": "188234",
               "quoted": [
-                "Can be purchased from Sly in Dirtmouth for 1800.",
+                "The Lumafly Lantern is an Item in Hollow Knight.",
                 "In dark areas, the Lumafly Lantern brightens up the area around the Knight, giving more visibility",
-                "instead of the lantern already having a lumafly when it is bought."
+                "Can be purchased from Sly in Dirtmouth for 1800."
               ]
             }
           ]
         },
         {
-          "line": "Uses: It brightens the dark area around you and lets you pay tolls at benches and doors there. It is strictly required for the toll gate between the Forgotten Crossroads and Crystal Peak, in both directions.",
+          "line": "Uses: In dark areas it also lets you pay tolls that open benches and doors.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Lumafly_Lantern",
               "revision": "188234",
               "quoted": [
-                "giving more visibility and allowing them to pay tolls to open Benches or doors.",
-                "it is strictly required in order to interact with the toll gate leading from the Forgotten Crossroads to Crystal Peak and the other way around"
+                "giving more visibility and allowing them to pay tolls to open Benches or doors."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Buy it before you try to cross between the Crossroads and Crystal Peak, since the toll gate there will not work without it. It does nothing in Fog Canyon, Fungal Wastes, Kingdom's Edge or the Hive.",
+          "line": "Tips: The toll gate between the Forgotten Crossroads and Crystal Peak cannot be used without it, in either direction, so buy it before you try to cross. It is not used in four areas: the Hive, Kingdom's Edge, Fog Canyon and Fungal Wastes.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Lumafly_Lantern",
               "revision": "188234",
               "quoted": [
-                "The Lumafly Lantern is not used in Fog Canyon, Fungal Wastes, Kingdom's Edge, and the Hive.",
-                "it is strictly required in order to interact with the toll gate leading from the Forgotten Crossroads to Crystal Peak"
+                "it is strictly required in order to interact with the toll gate leading from the Forgotten Crossroads to Crystal Peak and the other way around",
+                "The Lumafly Lantern is not used in Fog Canyon, Fungal Wastes, Kingdom's Edge, and the Hive."
               ]
             }
           ]
@@ -601,7 +561,7 @@
       "main_revision": "191248",
       "lines": [
         {
-          "line": "Summary: Items that raise your maximum SOUL. Three fragments make a Soul Vessel worth 33 SOUL, and the nine fragments in the game give three vessels, doubling your total SOUL capacity.",
+          "line": "Summary: Items that make your SOUL meter bigger. Every three fragments you gather combine into a Soul Vessel that adds 33 to your maximum. There are nine in the game, so three vessels in all, which doubles the SOUL you can hold.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Vessel_Fragment",
@@ -614,7 +574,7 @@
           ]
         },
         {
-          "line": "Uses: SOUL held in your vessels tops up your main meter by itself, after a short delay, whenever it has room. Nail hits fill the vessels at only 6 SOUL a hit, while every other source of SOUL fills them at the normal rate.",
+          "line": "Uses: SOUL kept in the vessels flows into the main meter on its own, after a short pause, whenever the main meter has space. Hitting enemies with the nail puts only 6 SOUL per hit into the vessels; any other way of getting SOUL fills them at the usual rate.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Vessel_Fragment",
@@ -628,7 +588,7 @@
           ]
         },
         {
-          "line": "Tips: Sly in Dirtmouth sells two, for 550 Geo and 900 Geo; you must have found Sly in the Forgotten Crossroads first, and the second also needs the Shopkeeper's Key. The Seer gives one for 700 Essence, and the Ancient Basin fountain gives one when you drop 3000 Geo into it.",
+          "line": "Tips: Sly in Dirtmouth sells two, for 550 Geo and 900 Geo; you must have found Sly in the Forgotten Crossroads first, and the second also needs the Shopkeeper's Key. The Seer gives one for 700 Essence, and the Ancient Basin fountain gives one when you drop 3000 Geo into it. Others lie in the world: one in Greenpath near the Queen's Gardens entrance that you cannot enter, one beside the lift in the Forgotten Crossroads once the City of Tears lift is unlocked, one near a lift above King's Station, and one in Deepnest over the tram that works.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Vessel_Fragment",
@@ -641,25 +601,12 @@
                 "Given by the Seer",
                 "Collecting 700 Essence",
                 "Found in the fountain in Ancient Basin",
-                "Dropping 3000 into the fountain"
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The rest are found in the world: one in Greenpath near the Queen's Gardens entrance that you cannot enter, one beside the lift in the Forgotten Crossroads once the City of Tears lift is unlocked, one above King's Station near a lift, one in Deepnest above the working tram, and one at the start of the Stag Nest once every Stag Station is open.",
-          "drawn_from": [
-            {
-              "page": "https://hollowknight.wiki/w/Vessel_Fragment",
-              "revision": "191248",
-              "quoted": [
+                "Dropping 3000 into the fountain",
                 "Found in Greenpath near the inaccessible Queen's Gardens entrance",
                 "Left of the lift in Forgotten Crossroads",
                 "Unlocking the lift in the City of Tears",
                 "Found above King's Station near a lift",
-                "Found in Deepnest above the working tram",
-                "Found at the beginning of the Stag Nest",
-                "Opening all Stag Stations"
+                "Found in Deepnest above the working tram"
               ]
             }
           ]
@@ -674,7 +621,7 @@
       "main_revision": "197102",
       "lines": [
         {
-          "line": "Summary: A charm that makes you focus SOUL about a third faster. Salubra sells it in the Forgotten Crossroads for 800 Geo.",
+          "line": "Summary: A charm that makes you focus SOUL about a third faster. Salubra sells it for 800 Geo, in the Forgotten Crossroads.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Quick_Focus",
@@ -687,7 +634,7 @@
           ]
         },
         {
-          "line": "Uses: It heals you faster, which makes healing mid-fight far less risky. It can let you heal where you would otherwise be interrupted, or heal twice where you could heal only once. The short start-up before a focus begins is not made faster.",
+          "line": "Uses: Healing mid-fight becomes much more forgiving. It can let you heal in spots where you would otherwise get interrupted, or heal twice where you could normally manage only one. The short start-up before a focus begins is not made any faster.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Quick_Focus",
@@ -701,7 +648,7 @@
           ]
         },
         {
-          "line": "Tips: It helps most in boss fights and arenas such as the Colosseum of Fools. It pairs with Deep Focus, which slows healing, by cancelling part of that slowdown, though the two cost 7 notches together. Stalwart Shell gives just enough time to heal while you are invincible, and Soul Catcher or Soul Eater with it make healing more frequent and safer.",
+          "line": "Tips: It is most useful in fights with a lot of combat, such as bosses and arena fights like the Colosseum of Fools. With Deep Focus, which slows focusing, it cancels part of that slowdown, though the two together cost 7 notches. With Stalwart Shell, the invincibility lasts just long enough for you to focus and heal, and pairing it with Soul Catcher or Soul Eater makes healing more frequent and safer.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Quick_Focus",
@@ -709,6 +656,7 @@
               "quoted": [
                 "Extremely useful in situations with lots of combat such as boss fights and arenas (notably the Colosseum of Fools).",
                 "Despite costing a prohibitive 7 Notches combined, Quick Focus partially cancels the Focus-speed penalty of Deep Focus",
+                "Stalwart Shell",
                 "Useful as it provides just enough time to Focus and heal during the invincibility.",
                 "Combining with Soul Catcher allows for more frequent, safer healing.",
                 "Combining with Soul Eater allows for more frequent, safer healing."
@@ -739,7 +687,7 @@
           ]
         },
         {
-          "line": "Uses: Your position is shown on the map, even in an area whose map you have not bought.",
+          "line": "Uses: The map marks where you are standing, including in areas whose map you have not bought yet.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Wayward_Compass",
@@ -751,7 +699,7 @@
           ]
         },
         {
-          "line": "Tips: It is a good pick for exploring on a first playthrough, but swap it for something combat-minded before a boss fight.",
+          "line": "Tips: It suits exploring, especially on a first playthrough. Before a boss fight, put on a charm built for combat instead.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Wayward_Compass",
@@ -772,21 +720,20 @@
       "main_revision": "198459",
       "lines": [
         {
-          "line": "Summary: An item you find inside a wrecked tram in the Failed Tramway in Deepnest. It lets you ride the trams, and it gives the Last Stag something new to say.",
+          "line": "Summary: An item found in a wrecked tram, in Deepnest's Failed Tramway. It lets you ride the trams.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Tram_Pass",
               "revision": "198459",
               "quoted": [
                 "Found in the Failed Tramway in Deepnest inside the wreck of a tram.",
-                "Allows the Knight to ride the Tram.",
-                "Obtaining the Tram Pass unlocks new dialogue with the Last Stag."
+                "Allows the Knight to ride the Tram."
               ]
             }
           ]
         },
         {
-          "line": "Uses: You only need to put it in once per tram, either in the tram's door or in a mechanism at one of its stations. Put it in a station's mechanism while no tram is waiting and that tram starts up and comes to you.",
+          "line": "Uses: Each tram needs the pass only once, put into the tram's door or into a mechanism at any of its stations. If you use a station mechanism while no tram is there, even for a tram you have not yet activated, it both switches the tram on and calls it to you.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Tram_Pass",
@@ -799,7 +746,7 @@
           ]
         },
         {
-          "line": "Tips: Five places take it: the south-east Forgotten Crossroads, north of Gruz Mother's arena (to the Resting Grounds); the north-west Resting Grounds (back to the Crossroads); the south-east Deepnest, east of the Hot Spring (to the Ancient Basin); the north-east Ancient Basin, north of Cornifer (to Deepnest and Kingdom's Edge); and the south-west Kingdom's Edge, west of the Hive (to the Ancient Basin).",
+          "line": "Tips: Five places take the pass. North of Gruz Mother's arena, in the south-east Forgotten Crossroads, it starts the tram to the Resting Grounds. In the north-west Resting Grounds it starts the tram back to the Crossroads. East of the Hot Spring, in south-east Deepnest, it starts the tram to the Ancient Basin. North of Cornifer, in the north-east Ancient Basin, it starts the tram to both Deepnest and Kingdom's Edge. And west of the Hive, in the south-west of Kingdom's Edge, it starts the tram to the Ancient Basin.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Tram_Pass",

@@ -611,6 +611,275 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 4410,
+      "name": "Heavy cannon",
+      "kind": "item",
+      "main_page": "https://doomwiki.org/wiki/Heavy_cannon",
+      "main_revision": "525663",
+      "lines": [
+        {
+          "line": "Summary: An all-purpose automatic rifle with two mods, Precision Bolt and Micro Missiles. You get it early: after the second demon fight of the Hell on Earth level.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Heavy_cannon",
+              "revision": "525663",
+              "quoted": [
+                "The heavy cannon is a multi-purpose automatic rifle",
+                "It is introduced in Hell on Earth, after the second demon encounter.",
+                "Precision Bolt",
+                "Micro Missiles"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Reliable from a medium or long distance, and two body shots are enough for most fodder. On its own it is weaker against strong enemies, so use it to back up other weapons from a distance. The Precision Bolt scope adds extra damage on weak points, enough to destroy an arachnotron's cannon or a revenant's rocket launchers. Micro Missiles give area damage without the risk to yourself that the rocket launcher carries when used up close.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Heavy_cannon",
+              "revision": "525663",
+              "quoted": [
+                "The heavy cannon is a reliable weapon at medium to long range, requiring no more than two body shots to kill most fodder monsters.",
+                "It is not as effective against stronger foes on its own, but can be used to supplement other weapons at long range.",
+                "The Precision Bolt greatly increases the weapon's accuracy and also deals extra damage to weak spots, enabling one to destroy, for example, the arachnotron's cannon or the revenant's rocket launchers.",
+                "micro missiles are best used to deal area-of-effect damage without risking the self-inflicted injury that would come with using the rocket launcher in close quarters."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: For Maykr drones the Precision Bolt is the mod to pick, because a headshot makes them drop a lot of resources. The cannon is hitscan, so a shot hits or misses the moment it is fired, which suits fast fodder at long range that the plasma rifle cannot hit. The micro missiles home in a little, and you must reload between salvos of up to six.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Heavy_cannon",
+              "revision": "525663",
+              "quoted": [
+                "Using the precision bolt is also the best mod to use to kill Maykr drones as they drop a considerable amount of resources once killed with a headshot.",
+                "The heavy cannon is hitscan, meaning whether the shot fired hits or misses is decided when it is fired.",
+                "This can be of use against faster fodder demons at long ranges, especially ones that are too fast for the plasma rifle.",
+                "allowing the firing of up to six explosive missiles which detonate on impact. The missiles have minor homing abilities. Reloading is necessary in between salvos."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4411,
+      "name": "Plasma rifle",
+      "kind": "item",
+      "main_page": "https://doomwiki.org/wiki/Plasma_rifle_(Doom_Eternal)",
+      "main_revision": "495514",
+      "lines": [
+        {
+          "line": "Summary: A rapid-fire energy rifle that shoots small, bright blue orbs of plasma. You first meet it in Exultia, after the trans-dimensional portal.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Plasma_rifle_(Doom_Eternal)",
+              "revision": "495514",
+              "quoted": [
+                "firing small bright blue compact orbs of plasma at a rapid rate.",
+                "It is first encountered in Exultia, after passing through the trans-dimensional portal."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Energy shields, like those of the shield soldier and the carcass, overload and explode under plasma fire, hurting their owner and nearby enemies. It can also switch off the body shield of a Doom hunter and chip at an armoured baron's armour. The arch-vile and the marauder use magical shields that it cannot touch.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Plasma_rifle_(Doom_Eternal)",
+              "revision": "495514",
+              "quoted": [
+                "Energy shields like the ones used by the shield soldier and carcass will overload and explode if hit by plasma rifle fire, severely damaging the shield's user and damaging other enemies nearby.",
+                "It can also disable the Doom hunter's body shield, exposing it to damage.",
+                "However, it cannot affect the magical shields used by the arch-vile and the marauder.",
+                "you can use it to chip at the armored baron's armor"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Enemies hit by several orbs in a short time burst in an energy blast, which helps against groups but can spoil a glory kill. The Microwave Beam mod locks onto an enemy and holds it still while it takes constant damage, and it is the only weapon you have that can kill a spirit, so keep it stocked against a possessed demon. Heat Blast fires a cone in front of the weapon, and you charge it up by shooting normally.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Plasma_rifle_(Doom_Eternal)",
+              "revision": "495514",
+              "quoted": [
+                "enemies that are hit by several plasma orbs within a short time will explode in a burst of energy",
+                "While helpful against clustered enemies, this effect can be inconvenient if trying to go for a glory kill.",
+                "fires a concentrated, short-ranged beam of plasma energy that locks onto and immobilizes an enemy, inflicting constant damage as long as the beam is maintained.",
+                "The Microwave Beam mod for the plasma rifle is the only weapon in the player's arsenal that can eliminate a spirit, so it is important to keep it ready and stocked up with ammo when fighting a possessed demon.",
+                "firing in a cone ahead of the gun rather than in a circle centered on the player; as before, it must be charged up by using the plasma rifle's standard fire."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4412,
+      "name": "Ice bomb",
+      "kind": "item",
+      "main_page": "https://doomwiki.org/wiki/Ice_bomb",
+      "main_revision": "517829",
+      "lines": [
+        {
+          "line": "Summary: A bomb launched from the Praetor suit's shoulder launcher that flash-freezes its target. The frozen enemy cannot move and shatters once it has taken enough damage. You pick it instead of the frag grenade with a toggle.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Ice_bomb",
+              "revision": "517829",
+              "quoted": [
+                "Fired from the shoulder-mounted launcher of the Praetor suit, the ice bomb is a projectile that douses the target in \"freezing gasses\", causing a flash freeze.",
+                "The frozen enemy is then left immobile and helpless, and shatters after enough damage has been inflicted upon them.",
+                "It is selected as an ammunition type versus the frag grenade via a toggle key or button"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Use it to hold a target while you attack it, to stop a dangerous enemy fighting back, or to escape when you are surrounded. It is strongly recommended against whiplashes, and it holds a pinky or spectre still so you can hit the weak rear. Frozen enemies cannot be glory killed.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Ice_bomb",
+              "revision": "517829",
+              "quoted": [
+                "The ice bomb can be used to hold a target in place while you attack them, keep a dangerous enemy from fighting back, or to make a quick escape when surrounded.",
+                "It is strongly recommended when fighting whiplashes due to their fast movements, and it can be used to hold a pinky or spectre in place while you attack its vulnerable rear side.",
+                "Enemies frozen by an ice bomb cannot be glory killed"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Freeze time depends on the enemy: 4 seconds for fodder, 2 for pinkies, revenants and cacodemons, 1.5 for mancubi and barons of Hell, and 1 for tyrants, with longer times once upgraded. Demons that a spirit has possessed or a screecher has buffed are immune. The cooldown is 45 seconds, or 35 with the faster cooldown suit upgrade.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Ice_bomb",
+              "revision": "517829",
+              "quoted": [
+                "|| Fodder/Ambient, except for the riot soldier || 4 || 6",
+                "|| Pinky, spectre, revenant, whiplash, cacodemon, Hell knight, dread knight, and arachnotron || 2 || 4",
+                "|| Mancubus, pain elemental, arch-vile, and baron of Hell || 1.5 || 3",
+                "|| Doom hunter (except in Doom Hunter Base) and tyrant || 1 || 2",
+                "It also has no effect on demons that are possessed by a spirit or have been buffed by a screecher",
+                "The ice bomb has a cooldown of 45 seconds, or 35 seconds with the Faster Cooldown Praetor Suit upgrade."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4413,
+      "name": "Flame belch",
+      "kind": "item",
+      "main_page": "https://doomwiki.org/wiki/Flame_belch",
+      "main_revision": "515758",
+      "lines": [
+        {
+          "line": "Summary: A brief jet of fire from the Praetor suit's shoulder launcher that sets enemies ablaze. You find it at the Fortress of Doom once Hell on Earth is done, and it is always ready on top of whichever grenade type you picked.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Flame_belch",
+              "revision": "515758",
+              "quoted": [
+                "The flame belch fires a short burst of fire",
+                "found in the Fortress of Doom after completing the Hell on Earth level.",
+                "it is always available as a separate attack in addition to the currently selected grenade type."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Burning enemies take extra damage and drop armour shards, and killing one while it burns drops a larger pile. It is the main source of armour in a fight, one part of the combat loop, next to the chainsaw and glory kills. Turn left and right as you fire to hit a group.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Flame_belch",
+              "revision": "515758",
+              "quoted": [
+                "Enemies on fire will take additional damage and drop armor shards; killing an enemy while it is on fire will produce a larger shard drop.",
+                "The flame belch is the primary source of armor during battle, making it a vital part of Doom Eternal's \"combat loop\" along with glory kills and the chainsaw.",
+                "turning left and right while firing allows the belch to hit groups of opponents."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The combat shotgun and super shotgun give more armour when they kill a burning enemy. The cooldown is 25 seconds, or 12.5 with the Quickdraw Belch upgrade. Sentinel crystals unlock three upgrades: the quicker cooldown, longer burning on the heaviest demons, and faster armour drops.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Flame_belch",
+              "revision": "515758",
+              "quoted": [
+                "The combat shotgun and super shotgun will produce more armor when killing a burning enemy.",
+                "The flame belch has a cooldown of 25 seconds, or 12.5 seconds with the Quickdraw Belch Praetor Suit upgrade.",
+                "By using Sentinel crystals, the player can unlock three upgrades for the flame belch that boost its capabilities",
+                "Heavy and Super Heavy demons stay on fire longer.",
+                "Demons drop armor at a faster rate."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4414,
+      "name": "Blood punch",
+      "kind": "item",
+      "main_page": "https://doomwiki.org/wiki/Blood_punch",
+      "main_revision": "515811",
+      "lines": [
+        {
+          "line": "Summary: A strong melee attack that you charge up with glory kills. Its shockwave also hurts foes near the one you hit. You first find it as a glowing artifact in Exultia.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Blood_punch",
+              "revision": "515811",
+              "quoted": [
+                "a devastating melee attack which can be unleashed after charging it with glory kills.",
+                "a melee attack that releases a shockwave when hitting a monster, damaging nearby foes in addition to the primary target.",
+                "The blood punch is first acquired in the form of a glowing artifact found in Exultia."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It kills pinkies and spectres instantly, or at least badly hurts them, and does big damage to tougher demons. It breaks through enemy shields, even the arch-vile's magic one, and very often hits weak points, even destroying the cyber-mancubus's armour completely.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Blood_punch",
+              "revision": "515811",
+              "quoted": [
+                "It can instantly kill (or at least severely damage) pinkies and spectres, and deal heavy damage to stronger monsters as well.",
+                "it can break through enemy shields, even magic ones like that of the arch-vile.",
+                "It has a very high chance of weak point damage, including complete destruction of the cyber-mancubus's armor."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It needs no ammo, but two glory kills give one charge and you can store only one at a time. Clearing Doom Hunter Base makes the shockwave stronger. After Sentinel Prime, one glory kill on a heavy demon fills it straight away, and after Urdak you can hold two charges. Against a group of fodder, freeze them, burn them with the flame belch, then blood punch one to refill health and armour.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Blood_punch",
+              "revision": "515811",
+              "quoted": [
+                "Although it does not require ammo, it must be charged before use by performing glory kills. Two glory kills will provide a single charge, and only one charge can be stored at a time.",
+                "Doom Hunter Base: \"The Blood Punch shockwave is now more powerful.\"",
+                "While it is not upgraded directly, the blood punch receives three automatic upgrades upon clearing the following missions:",
+                "Sentinel Prime: \"Glory kills on Heavy Demons will now instantly charge a Blood Punch.\"",
+                "there is no difference; a glory kill on a Super Heavy demon will likewise instantly charge a single blood punch.",
+                "Urdak: \"Two Blood Punch attacks can now be charged.\"",
+                "If you encounter a large number of fodder enemies in a group, freezing them, flame belching them, and then blood punching one of them is a good way to max out your health and armor"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

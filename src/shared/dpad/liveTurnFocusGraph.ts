@@ -377,7 +377,7 @@ export function focusStrategyChromeFromAbove(liveSlot: HTMLElement | null): bool
  */
 export function focusDownFromAnswerCorner(slot: HTMLElement | null): boolean {
   return (
-    focusRegisteredReplyStop("summary-note") ||
+    focusSummaryNoteWhileFocused() ||
     focusStrategyChromeFromAbove(slot) ||
     focusRegisteredReplyStop("helpful") ||
     focusRegisteredReplyStop("reason-chips") ||
@@ -396,9 +396,20 @@ export function focusDownFromAnswerCorner(slot: HTMLElement | null): boolean {
 export function focusUpFromStrategyChecklist(slot: HTMLElement | null, answerKey: string): boolean {
   return (
     focusLastStrategyBranchFromBelow(slot) ||
-    focusRegisteredReplyStop("summary-note") ||
+    focusSummaryNoteWhileFocused() ||
     focusLastAnswerChunk(answerKey)
   );
+}
+
+/**
+ * The summed-up note, passed over while the panel's page lacks the browser's focus (plan 103 F1, the second
+ * opinion's consult 4). The note has no Steam stop of its own yet (its own roadmap entry) and its landing is
+ * judged by the page's focus alone, so with that focus gone it reports "landed" while Steam's ring stays put: a
+ * dead press. Passing over it lets the chain go on to a stop Steam's transfer reaches. With the focus present it
+ * is tried exactly as before.
+ */
+function focusSummaryNoteWhileFocused(): boolean {
+  return !panelLacksFocus() && focusRegisteredReplyStop("summary-note");
 }
 
 /**

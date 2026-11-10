@@ -271,8 +271,19 @@ corner icon and Down from the summed-up note both land on it once a reply is rat
 answer sections 0..n-1            (Up/Down walk them, unchanged)
    last section:  Right -> Copy
       Copy:        Left -> last section   Up -> last section
-   Down from Copy -> the summed-up note, else Helpful, else Show details
+   Down from Copy -> the summed-up note, else the first choice button, else the checklist's step 1,
+                     else Helpful, else the first "What went wrong?" choice, else Show details
+   Up from step 1 -> the last choice button, else the summed-up note, else the last section (never Copy)
 ```
+
+- **Copy and a Strategy checklist (plan 103 F1, `focusDownFromAnswerCorner` and `focusUpFromStrategyChecklist` in
+  `liveTurnFocusGraph.ts`).** Down from Copy used to skip the choices and the steps and land on Helpful, and Up from
+  step 1 was left to Steam, which picked Copy, the nearest stop above the list (Deck, 3 of 3,
+  `workshop:test-evidence/plan103-P103-M-CHECKLIST.json`). Down from the last section already went to step 1, so
+  Copy is now off the up-and-down walk on a checklist answer and is reached by Right, as everywhere else. Down from
+  the last step is still Steam's own onto the reply row. **While the panel's page lacks the browser's focus** both
+  chains pass over the summed-up note: it has no Steam stop yet and a landing on it moved only the page's focus.
+  Device row: P103-CHECKLIST-COPY-01.
 
 - **Between the answer and Copy:** every move is Steam's own transfer onto the target slot's nav node (`TakeFocus`)
   followed by the registry focus, never a bare `focus()` across containers.

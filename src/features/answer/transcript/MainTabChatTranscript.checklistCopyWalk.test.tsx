@@ -72,8 +72,10 @@ const panel = transcriptPanelEachTest();
 /** The current test's panel page. */
 const page = () => panel.page();
 
-const STAMP = ".bonsai-answer-stop, .bonsai-chat-turn-row-body, .bonsai-chat-details-divider";
+const STAMP = ".bonsai-answer-stop, .bonsai-chat-turn-row-body, .bonsai-chat-details-divider, .bonsai-chat-summary-note";
+const NOTE = "summed-up note";
 function stopName(el: HTMLElement): string | null {
+  if (el.classList.contains("bonsai-chat-summary-note")) return NOTE;
   if (el.classList.contains("bonsai-answer-stop")) return `section ${el.getAttribute("data-bonsai-chunk-index")}`;
   if (el.classList.contains("bonsai-chat-turn-row-body")) return "question";
   if (el.classList.contains("bonsai-strategy-checklist-step")) {
@@ -145,5 +147,42 @@ describe.each([
     const up = await s.walk("onMoveUp", lastSection(s));
     expect(up).toEqual([HELPFUL, ...[...STEPS].reverse(), B, A, lastSection(s)]);
     expect(await s.walk("onMoveDown", HELPFUL)).toEqual([...up].reverse());
+  });
+});
+
+/**
+ * A chat that summed itself up: the answer is the newest saved turn, so the summed-up note is drawn under it,
+ * above the checklist (buildChatSummaryNoteElement.tsx). Every step is shown, as above.
+ */
+function summedUpChat(): MainTabChatTranscriptProps {
+  const turn = { id: "t-summed", question: QUESTION, answer: ANSWER, chatSummary: "written" as const };
+  return { ...props({ ollamaResponse: "", askThreadDisplayQuestion: "", expandedTurnKey: turn.id }), askThreadCollapsed: [turn] };
+}
+
+describe("P103-CHECKLIST-COPY-01 under a summed-up note (the second opinion's fix-up)", () => {
+  /* The note has no Steam stop yet: with the page's focus gone a landing on it moved only the page's focus. */
+  it("with the page's focus gone, Up from step 1 lands on the last section and Down from Copy on step 1", async () => {
+    const s = draw(summedUpChat());
+    expect(s.stops().map(s.nameOf)).toContain(NOTE);
+    s.put(STEP_1);
+    page().setFocused(false);
+    expect(await s.press("onMoveUp")).toBe("claimed");
+    expect(s.nameOf(page().ring())).toBe(lastSection(s));
+
+    page().setFocused(true);
+    s.put(COPY);
+    page().setFocused(false);
+    expect(await s.press("onMoveDown")).toBe("claimed");
+    expect(s.nameOf(page().ring())).toBe(STEP_1);
+  });
+
+  it("with the page's focus, both still go by the note: Down from Copy and Up from step 1 land on it", async () => {
+    const s = draw(summedUpChat());
+    s.put(COPY);
+    await s.press("onMoveDown");
+    expect(s.nameOf(page().ring())).toBe(NOTE);
+    s.put(STEP_1);
+    await s.press("onMoveUp");
+    expect(s.nameOf(page().ring())).toBe(NOTE);
   });
 });

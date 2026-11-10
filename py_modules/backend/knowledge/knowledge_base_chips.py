@@ -447,13 +447,32 @@ def suggest_chip_candidates(
     app_id: str,
     app_name: str,
     shortcut_name: str = "",
-    last_question: Optional[LastQuestion] = None,
 ) -> SessionRagChipCandidatesResult:
     """Return curtailed preset-chip prompts from the offline KB for the running game.
 
+    The game's own chips are ordered by the question ``remember_last_question`` kept for this game, if
+    one is still fresh (see ``_chip_candidates_for``); without one, the order is what it always was.
+    The call shape is frozen (tests/test_seam_contracts.py), so the question never comes in here.
+    """
+    return _chip_candidates_for(
+        settings, app_id=app_id, app_name=app_name, shortcut_name=shortcut_name
+    )
+
+
+def _chip_candidates_for(
+    settings: dict,
+    *,
+    app_id: str,
+    app_name: str,
+    shortcut_name: str = "",
+    last_question: Optional[LastQuestion] = None,
+) -> SessionRagChipCandidatesResult:
+    """``suggest_chip_candidates`` with the question given directly (tests and measurements).
+
     ``last_question``, when given, orders the game's own chips by how close each note is to it (see
-    ``_closest_first``). When not given, the question ``remember_last_question`` kept for this game
-    (if still fresh) is used instead; with neither, the order is the same as it was before this existed.
+    ``_closest_first``) and wins over a kept one. When not given, the question
+    ``remember_last_question`` kept for this game (if still fresh) is used; with neither, the order
+    is the same as it was before this existed.
     """
     if settings.get("use_local_knowledge_base") is not True:
         return SessionRagChipCandidatesResult(ok=False, reason="kb_off")

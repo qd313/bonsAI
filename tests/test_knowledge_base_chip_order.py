@@ -92,10 +92,19 @@ class ChipOrderTests(unittest.TestCase):
         with mock.patch.object(chips, "resolve_corpus_db_path", return_value=db), mock.patch.object(
             chips, "_resolve_game_id", return_value=(game_id, "exact")
         ):
-            kwargs = {"last_question": chips.LastQuestion(*question)} if question else {}
-            result = chips.suggest_chip_candidates(
-                {"use_local_knowledge_base": True}, app_id="1", app_name="Test Game", **kwargs
-            )
+            # A question handed in goes through the inner function (the public one has a frozen shape
+            # and only ever uses a kept question); everything else goes through the public one.
+            if question:
+                result = chips._chip_candidates_for(
+                    {"use_local_knowledge_base": True},
+                    app_id="1",
+                    app_name="Test Game",
+                    last_question=chips.LastQuestion(*question),
+                )
+            else:
+                result = chips.suggest_chip_candidates(
+                    {"use_local_knowledge_base": True}, app_id="1", app_name="Test Game"
+                )
         self.assertTrue(result.ok)
         self._last_result = result
         return [c.text for c in result.candidates if c.domain == "strategy"]
@@ -235,6 +244,17 @@ class ChipOrderTests(unittest.TestCase):
         # The same library asked again, nothing remembered any more: today's order.
         again = self._chips_for(cards)
         self.assertNotEqual(again[0], "How do I use Item4?")
+
+    def test_the_public_call_keeps_its_frozen_shape_and_still_orders_by_a_kept_question(self):
+        import inspect
+
+        self.assertEqual(
+            list(inspect.signature(chips.suggest_chip_candidates).parameters),
+            ["settings", "app_id", "app_name", "shortcut_name"],
+        )
+        cards = _a_big_game()
+        cards[14] = ("item", "Item4", TOWARD)
+        self.assertEqual(self._chips_for(cards, remembered=("q", TOWARD))[0], "How do I use Item4?")
 
     def test_a_remembered_question_goes_stale(self):
         chips.remember_last_question(1, "q", TOWARD, now=1000.0)

@@ -131,6 +131,9 @@ _LOW_NARRATIVE_TITLES = (
     "donkey kong 64",
     "yoshi's story",
     "diddy kong racing",
+    # Plan 103 S1: Brotato is on the id list above, but with nothing running a turn has no id, so its
+    # name is the only handle (tests/contracts/spoiler-title-profiles.json names every id-list game).
+    "brotato",
 )
 
 _PROTECT_PROGRESSION_TITLES = (

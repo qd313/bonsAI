@@ -28,6 +28,7 @@ const CONTRACT_PATH = resolve(repoRoot(), "tests", "contracts", "spoiler-title-p
 const contract = JSON.parse(readFileSync(CONTRACT_PATH, "utf-8")) as {
   low_narrative_app_ids: string[];
   protect_progression_app_ids: string[];
+  app_id_names: Record<string, string>;
   cases: { name: string; app_id: string; app_name: string; expected: string }[];
   question_cases: { name: string; question: string; expected: boolean }[];
   turn_cases: { name: string; app_id: string; app_name: string; question: string; expected: string }[];
@@ -42,6 +43,17 @@ describe("spoiler title profiles contract", () => {
     expect([...PROTECT_PROGRESSION_APP_IDS].sort()).toEqual(
       [...contract.protect_progression_app_ids].sort()
     );
+  });
+
+  it("every game on an AppID list also has its name in the contract", () => {
+    const ids = [...contract.low_narrative_app_ids, ...contract.protect_progression_app_ids];
+    expect(Object.keys(contract.app_id_names).sort()).toEqual([...ids].sort());
+  });
+
+  /* Plan 103 S1: with nothing running a turn has no AppID, so a game on the id list that is missing from the
+     name lists (Brotato was) kept its covers shut and never got the relaxed wording. */
+  it.each(Object.entries(contract.app_id_names))("the name of AppID %s ('%s') resolves to the same profile as its id", (id, name) => {
+    expect(resolveTitleSpoilerProfile("", name)).toBe(resolveTitleSpoilerProfile(id, ""));
   });
 
   it("no AppID carries two profiles", () => {

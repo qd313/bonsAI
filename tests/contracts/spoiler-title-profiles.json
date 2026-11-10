@@ -25,6 +25,29 @@
     "1623730",
     "489830"
   ],
+  "app_id_names": {
+    "2321470": "Deep Rock Galactic: Survivor",
+    "550": "Left 4 Dead 2",
+    "1222670": "The Sims 4",
+    "782330": "DOOM Eternal",
+    "1942280": "Brotato",
+    "1086940": "Baldur's Gate 3",
+    "377160": "Fallout 4",
+    "1145360": "Hades",
+    "1091500": "Cyberpunk 2077",
+    "1547000": "Grand Theft Auto: San Andreas - The Definitive Edition",
+    "1174180": "Red Dead Redemption 2",
+    "220": "Half-Life 2",
+    "620": "Portal 2",
+    "362890": "Black Mesa",
+    "367520": "Hollow Knight",
+    "3240220": "Grand Theft Auto V Enhanced",
+    "271590": "Grand Theft Auto V Legacy",
+    "12210": "Grand Theft Auto IV: The Complete Edition",
+    "22380": "Fallout: New Vegas",
+    "1623730": "Palworld",
+    "489830": "The Elder Scrolls V: Skyrim Special Edition"
+  },
   "cases": [
     {
       "name": "black mesa appid protects progression (2026-09-05 tranche)",

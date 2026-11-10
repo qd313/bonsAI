@@ -41,6 +41,20 @@ class SpoilerTitleProfilesContractTests(unittest.TestCase):
             "PROTECT_PROGRESSION_APP_IDS drifted from tests/contracts/spoiler-title-profiles.json",
         )
 
+    def test_every_game_on_an_app_id_list_also_has_its_name_in_the_contract(self):
+        ids = list(CONTRACT["low_narrative_app_ids"]) + list(CONTRACT["protect_progression_app_ids"])
+        self.assertEqual(sorted(CONTRACT["app_id_names"]), sorted(ids))
+
+    def test_the_name_of_every_listed_game_resolves_to_its_ids_profile(self):
+        """With nothing running a turn has no AppID: a game on the id list that is missing from the
+        name lists (Brotato was) kept its covers shut and never got the relaxed wording."""
+        for app_id, name in CONTRACT["app_id_names"].items():
+            with self.subTest(app_id=app_id, name=name):
+                self.assertEqual(
+                    resolve_title_spoiler_profile("", name),
+                    resolve_title_spoiler_profile(app_id, ""),
+                )
+
     def test_no_app_id_carries_two_profiles(self):
         overlap = set(LOW_NARRATIVE_APP_IDS) & set(PROTECT_PROGRESSION_APP_IDS)
         self.assertEqual(overlap, set())

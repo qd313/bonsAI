@@ -548,7 +548,7 @@
           ]
         },
         {
-          "line": "Weak points: On Castaway Bay the Shadow Star comes from Bowser on his Battle Yacht. Landing on a ? Space on a pole marked with a Star Space symbol swaps the two boats, so look at where each boat sits before you land.",
+          "line": "Weak points: On Castaway Bay the Shadow Star comes from Bowser on his Battle Yacht. Landing on a ? Space on a pole marked with a Star Space symbol swaps the two boats.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Castaway_Bay",
@@ -574,7 +574,8 @@
               "page": "https://www.mariowiki.com/Clockwork_Castle",
               "revision": "5447804",
               "quoted": [
-                "DK transforms to Bowser. He grants players that get to him or if he gets to them first with a Shadow Star that takes away a Star or 20 coins if they do not have a Star."
+                "DK transforms to Bowser. He grants players that get to him or if he gets to them first with a Shadow Star that takes away a Star or 20 coins if they do not have a Star.",
+                "During the night, the following changes:"
               ]
             }
           ]
@@ -665,7 +666,6 @@
               "revision": "5533848",
               "quoted": [
                 "Moves the player directly to the Star",
-                "The effect remains the same.",
                 "he flies them to the Star Space."
               ]
             }
@@ -740,7 +740,7 @@
           ]
         },
         {
-          "line": "Uses: Use it before you cross spaces where rivals left trap Orbs. Metal beats all six of these: a Thwomp bounces off, a Tweester fizzles out, a Podoboo's fire does nothing, you kick a Bob-omb aside, a Koopa Troopa cannot carry something so heavy and quits, and a Zap Orb's Amps vanish after a failed zap.",
+          "line": "Uses: Under a Metal Mushroom Orb, a Thwomp bounces off, a Tweester fizzles out, a Podoboo's fire does nothing, you kick a Bob-omb aside, a Koopa Troopa cannot carry something so heavy and quits, and a Zap Orb's Amps vanish after a failed zap.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Thwomp_Orb",

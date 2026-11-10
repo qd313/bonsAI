@@ -294,6 +294,310 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2804,
+      "name": "Piranha Plant (Peach's Birthday Cake)",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Peach%27s_Birthday_Cake",
+      "main_revision": "5465016",
+      "lines": [
+        {
+          "line": "Summary: A trap a rival can plant on Peach's Birthday Cake from a Happening Space for 30 coins. It steals a Star from an opponent who lands on its space and gives it to the player who planted it.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Peach%27s_Birthday_Cake",
+              "revision": "5465016",
+              "quoted": [
+                "From a Happening Space, a player can pay 30 Coins to plant a Strawberry Seed"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "it will steal a Star from that player, and give it to the player that planted it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: It does nothing if you have no Stars when you land on it, it disappears once it has taken a Star, and it does nothing to the player who planted it. The booklet says it steals from the first rival to land on that space.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Peach%27s_Birthday_Cake",
+              "revision": "5465016",
+              "quoted": [
+                "though the Piranha Plant disappears after doing so and does nothing if the opponent has no Stars.",
+                "If a player lands on a space with their Piranha Plant or cannot afford to add one to an empty space, nothing occurs.",
+                "Plant \"Strawberry Seeds\" to steal Stars from the first rival to land on that space."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Piranha Plants can be placed around the board, and a player loses a Star if they land on a spot with one. Peach's Birthday Cake has 14 Happening Spaces to plant from.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Piranha_Plant",
+              "revision": "5542984",
+              "quoted": [
+                "Piranha Plants can be placed around the Peach's Birthday Cake board, with players losing a Star if they land on a spot with one."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Peach%27s_Birthday_Cake",
+              "revision": "5465016",
+              "quoted": [
+                "Happening Spaces || 14"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2805,
+      "name": "Red Space",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Mario_Party",
+      "main_revision": "5539722",
+      "lines": [
+        {
+          "line": "Summary: A red board space that takes 3 coins from whoever lands on it, or 6 in the last five turns. Every board in the game has some.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "If a player lands on this space, they lose 3 Coins. The amount of Coins lost is doubled during the Last Five Turns Event."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Red_Space",
+              "revision": "5406835",
+              "quoted": [
+                "Lose three Coins. (-6 during final 5 turns)"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
+              "revision": "5475500",
+              "quoted": [
+                "Red Spaces || 7"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Eternal_Star",
+              "revision": "5534414",
+              "quoted": [
+                "Red Spaces || 3"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A Red Space takes the same 3 coins that a Blue Space gives, and both amounts double in the Last Five Turns Event, so one Blue Space stop pays back one Red Space stop.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "Players gain three Coins from landing on this. The amount of Coins received is doubled in the Last Five Turns Event.",
+                "If a player lands on this space, they lose 3 Coins. The amount of Coins lost is doubled during the Last Five Turns Event."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: On Bowser's Magma Mountain a Happening Space turns every Blue Space into a Red Space, which makes 49 Red Spaces instead of 4.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "If the player lands on a Happening Space, Bowser's volcano will erupt, turning all Blue Spaces into Red Spaces."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bowser%27s_Magma_Mountain",
+              "revision": "5504637",
+              "quoted": [
+                "Red Spaces || 4 (49 if a Happening Space has been landed on)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Red Spaces per board: DK's Jungle Adventure 7, Yoshi's Tropical Island 3, Peach's Birthday Cake 4, Wario's Battle Canyon 7, Luigi's Engine Room 4, Mario's Rainbow Castle 5, Bowser's Magma Mountain 4 and Eternal Star 3.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
+              "revision": "5475500",
+              "quoted": [
+                "Red Spaces || 7"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Tropical_Island",
+              "revision": "5475501",
+              "quoted": [
+                "Red Spaces || 3"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Peach%27s_Birthday_Cake",
+              "revision": "5465016",
+              "quoted": [
+                "Red Spaces || 4"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Wario%27s_Battle_Canyon",
+              "revision": "5475502",
+              "quoted": [
+                "Red Spaces || 7"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Luigi%27s_Engine_Room",
+              "revision": "5475503",
+              "quoted": [
+                "Red Spaces || 4"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario%27s_Rainbow_Castle",
+              "revision": "5505144",
+              "quoted": [
+                "Red Spaces || 5"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bowser%27s_Magma_Mountain",
+              "revision": "5504637",
+              "quoted": [
+                "Red Spaces || 4 (49"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Eternal_Star",
+              "revision": "5534414",
+              "quoted": [
+                "Red Spaces || 3"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2806,
+      "name": "Rolling boulder (DK's Jungle Adventure)",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
+      "main_revision": "5475500",
+      "lines": [
+        {
+          "line": "Summary: A boulder that a Happening Space sets rolling on DK's Jungle Adventure. It sends any player in its way back toward the start.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
+              "revision": "5475500",
+              "quoted": [
+                "If a player lands on one of the nine Happening Spaces spread throughout the board, a boulder begins to roll from the north-east, then left, then down Bowser's path.",
+                "Any players in the path of the rolling boulder try to escape it, but end up back towards the start"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: It only affects players standing in its way as it rolls down Bowser's path, and a player it catches still lands on a Blue Space and gets its three coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
+              "revision": "5475500",
+              "quoted": [
+                "Any players in the path of the rolling boulder try to escape it, but end up back towards the start, landing on a Blue Space (which takes effect, granting them three Coins)."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "Landing on a Happening Space triggers a rolling boulder which, in turn, chases down any players standing in its way to the path near the start of the board."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The board has nine Happening Spaces, so the boulder can be set off often. The player in fourth place at the end of the game is chased down the board by a rolling boulder.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
+              "revision": "5475500",
+              "quoted": [
+                "If a player lands on one of the nine Happening Spaces spread throughout the board",
+                "The player in fourth place is chased down the board by a rolling boulder."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2807,
+      "name": "Pisudon (Luigi's Engine Room)",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Pisudon",
+      "main_revision": "5472623",
+      "lines": [
+        {
+          "line": "Summary: A robot on Luigi's Engine Room that will switch the board's doors for 20 coins. Two of them are on the board.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Pisudon",
+              "revision": "5472623",
+              "quoted": [
+                "Pisudon are robots from Mario Party. Two of them are found exclusively on the board Luigi's Engine Room.",
+                "for the price of 20 coins"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A Pisudon only switches the doors if the player who meets it agrees to pay, and the switch blocks access to certain paths for the other players. The doors also switch by themselves at the start of every turn and when players land on certain Happening Spaces.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Pisudon",
+              "revision": "5472623",
+              "quoted": [
+                "the Pisudon offers them the option to switch the set of doors that rise up or go down throughout the board for the price of 20 coins, blocking access of certain paths to the other players."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Luigi%27s_Engine_Room",
+              "revision": "5475503",
+              "quoted": [
+                "The doors switch at the start of every turn, when players land on certain Happening Spaces, or if a robot on the board called Pisudon is paid 20 Coins to switch them."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: One set of doors rises to block specific paths while the other set goes down to open other paths. Happening Spaces on the steam generators near the engine send steam up that propels players to a higher section.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Luigi%27s_Engine_Room",
+              "revision": "5475503",
+              "quoted": [
+                "One set rises up to block specific paths, while the other set goes down to open other paths.",
+                "Happening Spaces on steam generators near the engine make steam rise up out of the respective generator, propelling players to a higher section."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

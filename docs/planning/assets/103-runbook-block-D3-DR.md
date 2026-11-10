@@ -91,10 +91,24 @@ the session (copy its first three sentences), not a fail of this row.
 
 ## D3.3: the chips follow the last question (row P103-CHIP-ORDER-01), only if your task says the chip order landed
 
-If your task does not say it landed, write "not built this session" and go on. Otherwise, for two games (Hollow Knight
-and one of the table's Steam games): a boss question naming the game; when the answer finishes, read the suggestion
-chips' words, in order. **Pass when,** for each game, at least one of the first three chips names something from the
-same fight or area, and at least one of the game's own chips shows. Screenshot each chip row.
+If your task does not say it landed, write "not built this session" and go on.
+
+**How it works, which decides how to check it:** the chips are about the game that is RUNNING, and they follow the
+last question only when that question got a meaning search, which Speed mode never does. So this row needs a game
+running and the mode chip on Strategy. It is the one exception in this block to safety rule 3, and only on these
+terms: the game is Deep Rock Galactic: Survivor (then Hollow Knight, if it launches by its title); a typed question,
+never a picture; `free -m` read with the game running and the AI unloaded shows 4,000 MB or more available, or the
+row is skipped and said so; one question per game; the AI unloaded again right after the answer; the game exited and
+confirmed before anything else.
+
+For each of the two games: unload the AI; launch the game; 40 seconds; close and reopen Quick Access; read the chip
+row's words, in order, BEFORE asking (this is "today's order"). Ask one question about a named boss or enemy of that
+game (your own words). When the answer finishes, read the chip row's words again, in order, and the log's attach
+line. **Pass when,** for each game, the row after the answer differs from the row before, at least one of the first
+three chips names the thing asked about or something from the same fight or area, and at least one of the game's own
+chips shows. Then, in the second game only: switch the mode chip to Speed, ask one more question, and record that the
+chips do NOT follow it (expected; it is how the feature is built, and the maintainer should see it written). Put the
+mode chip back on Strategy. Screenshot each chip row, before and after.
 
 ## D3.4: the saved walks, re-saved on this build (row P103-D3-RESAVE-WALKS)
 

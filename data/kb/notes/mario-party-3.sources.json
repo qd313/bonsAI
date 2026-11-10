@@ -32,6 +32,14 @@
               "quoted": [
                 "The player who uses this item summons Boo."
               ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Boo_Bell",
+              "revision": "5443572",
+              "quoted": [
+                "Its use is to ring for Boo and ask him to steal coins or a star, depending on how much the player can afford.",
+                "Allows players to steal coins or a Star from a selected opponent"
+              ]
             }
           ]
         },
@@ -531,7 +539,15 @@
                 "Chain Chomp",
                 "None",
                 "Attacks opponent and all partners simultaneously.",
-                "Powered Up: It grows to the size of a Shark Chomp, jumps up, and then body slams all opponents."
+                "Powered Up: It grows to the size of a Shark Chomp, jumps up, and then body slams all opponents.",
+                "Partners are given to the player at random using a roulette"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Chain_Chomp",
+              "revision": "5536195",
+              "quoted": [
+                "after unlocking them from the lottery"
               ]
             }
           ]

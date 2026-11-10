@@ -723,6 +723,10 @@ sentence like the old one is a mistake wherever it appears, and the one in the g
 
 **Tell note writers to write from a fact list, not from the sentence.** Two synonym passes over the DOOM Eternal notes did not pass a second read, because the sentence shape was still the wiki's. A rewrite that began from a short list of the facts, then said them as plain advice, did pass. Hand the writer the facts to say, not the page's lines to reword.
 
+**Judge whether a quote is a game's own text by where it sits on the page, not by how it reads.** In plan 103's last re-check, three readers who judged by reading missed dozens of lines that came from a manual, a booklet, a trophy or description box, a quote block or an attribution line. Sort every quote by where it sits on its saved page.
+
+**The text that lands must be the text that was fact-checked.** A rewording pass after the checker's read needs its own read by someone who did not write it.
+
 ## 5. Design and screen work
 
 **The drawing is the design.** [major-redesign.md](archive/major-redesign.md) is the agreed look. Work built

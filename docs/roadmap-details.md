@@ -53,6 +53,7 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Plan 97 third sweep notes moved from the roadmap (2026-10-22)](#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22)
 - [Plan 97 fourth sweep notes moved from the roadmap (2026-10-22)](#plan-97-fourth-sweep-notes-moved-from-the-roadmap-2026-10-22)
 - [Plan 103 sweep K2 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k2-notes-moved-from-the-roadmap-2026-11-10)
+- [Plan 103 sweep K10 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k10-notes-moved-from-the-roadmap-2026-11-10)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -812,3 +813,11 @@ The reading row P103-M-SUMUP was not taken (the Deck was stuck).
 **Bugs: tab sections entry, the older-note pointer line, as it stood:**
 
   **Older note (2026-10-13, plan 93):** moved to [roadmap-details.md](roadmap-details.md#plan-94-notes-moved-from-the-roadmap-2026-10-17).
+
+## Plan 103 sweep K10 notes moved from the roadmap (2026-11-10)
+
+Moved word for word when the mic entry passed on the Deck and moved to Done.
+
+- ★ `[voice]` **With the mic off, the log shows "voice: stop pressed, no recording was running" lines (six in one clean-install run)** — **VERIFY, fixed 2026-11-09 (plan 103 lane B1, `f38156b2`). Was OPEN, found 2026-10-23 (plan 99 clean install).**
+  The microphone was never started and its permission was off, yet the log carried six of these lines in one run, near the deck-driver's A presses. Harmless noise. Evidence `workshop:test-evidence/plan99-P99-TIER4-LOG.json`. For 0.6.1.
+  **Fixed 2026-11-09:** the cause was the screen's clean-up when it goes away, which asked the back end to stop, not the two callers the plan named; it no longer asks when no recording ran. Owes **P103-MIC-LOG-01**: with the mic off, open and close the panel six times and look for none of the lines (six A presses would not exercise it).

@@ -34,7 +34,8 @@ How it works:
     ahead of what was said since -- and makes the one streamed call, the same one the answer
     itself uses, with thinking off and a hard overall time limit enforced by closing the
     connection out from under it if the model is still going at 120 seconds.
- 5. The reply is cleaned (any fence or status tag stripped, capped at 2,000 characters) and
+ 5. The reply is cleaned (a hidden-note fence or status tag taken out, a plain fence round the
+    notes unwrapped and kept, capped at 2,000 characters) and
     handed back as a plain dict the caller saves. Nothing is saved here.
  6. For a chat whose title the person did not type, the same request also asks whether the title
     still fits (``chat_summary_title.py``); a better title the AI suggests rides in the summary
@@ -107,7 +108,11 @@ SUMMARY_INSTRUCTION = (
 )
 
 
-_FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
+# A fenced block: an optional one-word tag (only when it ends its line), then what is inside.
+_FENCE_RE = re.compile(r"```(?:([A-Za-z][\w+.-]*)[ \t]*(?=\n))?\n?(.*?)```", re.DOTALL)
+# Tags a small model puts on a fence round its own notes. Any other tag (the plugin's own
+# ``bonsai-spoiler`` and the like) marks a hidden block, which is taken out with what is in it.
+_PLAIN_FENCE_TAGS = frozenset({"text", "txt", "plain", "plaintext", "markdown", "md"})
 _BONSAI_STATUS_TAG_RE = re.compile(r"</?bonsai-status[^>]*>", re.IGNORECASE)
 
 # Remembered per model, from the most recent real Ask's own memory plan (plan_prompt_budget's
@@ -184,11 +189,22 @@ def _summary_request_messages(
     ]
 
 
+def _unwrap_plain_fence(match: "re.Match[str]") -> str:
+    """What a fenced block leaves behind: its notes when the fence is a plain one (no tag, or a
+    tag like ``text``), nothing when it is a hidden block. A model that wraps its whole summary
+    in a plain fence used to have the summary taken out with the fence, and the call was then
+    counted as an empty reply."""
+    tag = str(match.group(1) or "").lower()
+    if tag and tag not in _PLAIN_FENCE_TAGS:
+        return ""
+    return match.group(2)
+
+
 def _clean_summary_text(raw: str) -> str:
     """Strip, drop any fence or status tag the model wrote, and cap at the length the chat file
     accepts. An empty result is the caller's cue to treat the call as failed."""
     text = str(raw or "")
-    text = _FENCE_RE.sub("", text)
+    text = _FENCE_RE.sub(_unwrap_plain_fence, text)
     text = _BONSAI_STATUS_TAG_RE.sub("", text)
     text = text.replace("```", "")
     return text.strip()[:MAX_SUMMARY_TEXT_LEN]

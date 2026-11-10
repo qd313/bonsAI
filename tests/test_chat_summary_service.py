@@ -383,6 +383,54 @@ class WriteChatSummaryTests(unittest.TestCase):
 
         self.assertEqual(outcome.status, "written")
 
+    # --- plan 103 lane B2: a reply wrapped in a code fence is a summary, not an empty one ------
+
+    _HADES_TURNS = [
+        {"id": "q0", "role": "user", "text": "how do i beat the first boss", "app_name": "Hades"},
+        {"id": "a0", "role": "assistant", "text": "Dash through the fire.", "app_name": "Hades"},
+    ]
+
+    def _run_fenced(self, mock_urlopen, reply):
+        mock_urlopen.return_value = one_line_reply(reply)
+        return self._run(self._plan_for(self._HADES_TURNS), self._HADES_TURNS)
+
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
+    def test_a_summary_the_model_wrapped_whole_in_a_plain_fence_is_kept(self, mock_urlopen):
+        """The small model sometimes puts its whole answer in a code fence. The fence stripper
+        used to take the notes out with the fence, so a good reply became "Model returned an empty
+        summary." and the player read "Couldn't sum up the chat this time"."""
+        outcome = self._run_fenced(
+            mock_urlopen, "```\nGame: Hades\nPlayer asked how to beat the first boss.\n```"
+        )
+
+        self.assertEqual(outcome.status, "written")
+        self.assertIn("Player asked how to beat the first boss.", outcome.summary["text"])
+
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
+    def test_a_text_tagged_fence_after_an_intro_keeps_every_note_line(self, mock_urlopen):
+        outcome = self._run_fenced(
+            mock_urlopen,
+            "Here are the notes:\n```text\nGame: Hades\nPlayer asked how to beat the first boss.\n```",
+        )
+
+        self.assertEqual(outcome.status, "written")
+        self.assertIn("Player asked how to beat the first boss.", outcome.summary["text"])
+        self.assertNotIn("```", outcome.summary["text"])
+
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
+    def test_a_hidden_note_fence_in_the_reply_is_still_taken_out(self, mock_urlopen):
+        """Only plain fences are unwrapped: a fence the plugin itself uses for hidden notes still
+        goes, with what is inside it, so a spoiler can never be saved into the notes."""
+        outcome = self._run_fenced(
+            mock_urlopen,
+            "Player asked how to beat the first boss.\n"
+            "```bonsai-spoiler\nThe boss is secretly the player's brother.\n```",
+        )
+
+        self.assertEqual(outcome.status, "written")
+        self.assertIn("Player asked how to beat the first boss.", outcome.summary["text"])
+        self.assertNotIn("brother", outcome.summary["text"])
+
     # --- plan 78 helper H: the finished summary reads like a note a person would write ---------
 
     @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")

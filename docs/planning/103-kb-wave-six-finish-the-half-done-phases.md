@@ -526,6 +526,7 @@ Log, one row per consult: time, the question in one line, the answer in one line
 | 2026-11-09, 19:38 to 19:57 EST | The wave A briefs against the code | Nine corrections, stop nobody | The covers helper tested its third piece through the screen itself and found it was not a bug; the starter-box helper proved the fit at the largest text size and made Down scroll; the crowding helper measured three more tables through the plugin's own search before a setting was picked; lane F1's brief gains three files, the full Down order from the Copy icon, and "notes line first, then the strip". Five of the nine the helpers had already caught themselves | about 285,000 helper tokens |
 | 2026-11-09, 20:16 to 20:23 EST | The crowding fix: a fixed place of 4, of 5, or neither | Land 5 as a partial fix; 4 is the maintainer's call | 5 lands (no measured harm; 8 more held-back questions find their note, none lose it; one of the two Deck-style questions comes back). 4 would bring both back but lets one exact word match slip from first and shows "No close match" beside a right note three times; that trade goes on the checks page with the numbers | about 64,000 helper tokens |
 | 2026-11-10, 01:16 to 01:27 and 01:43 to 01:50 EST | Lane F1's D-pad change before it lands, then one follow-up on a guard F1 added to the shared row helper | Land after two small additions, both for a page that has lost focus (pass over the summed-up note; make a chip-to-chip step carry the ring). Follow-up: land the guard as it is, in both focus states | F1 made both additions, each with a test that fails without it, and tightened its stand-in page; the line in F1's brief saying a covered notes line must be a stop was the session's mistake and was dropped; block D2 gains reads the second opinion named (first entry against re-entry into the chips, the scroll before and after, a two-row grid, the Session tab). F1 landed alone at 02:19, every check green | about 232,000 helper tokens |
+| 2026-11-10, 08:16 to 08:32 EST | The final report's draft, before it is written into the plan | Do not write it yet: nine corrections (it read as done though nothing was seen on a Deck; it did not say the three half-done entries stayed open; it left out the Deck's state and what waking it sets off; publishing the library does not ship the plugin-side fixes; two cautions before a push; only nine of 21 notes files had their fixes read by a second helper) | The report's first two sections rewritten; the new library measured against the released plugin's code (safe: same notes attach, no error; mod tips mostly need the new plugin); two checkers read the twelve files changed after their fact check and found four that needed a rewrite, so a last rewrite round started; the chip-order Deck check rewritten to run with a game open; the checks page gains calls | about 276,000 helper tokens |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -759,6 +760,32 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
      deploy and blocks D1, D2, D3, DR; then the end audit, the full check, the report and the checks page. *Waiting on
      the maintainer:* the Deck's power button (question 8); questions 3 to 7.
 
+- **The state at 09:00 EST (tip `c28a14b6`, every check green).**
+  1. *Landed since 07:05:* the bookkeeper's sweep K3 and the end audit K9 (the knowledge-base roadmap is at 22 KB of
+     25; 22 Deck test rows read "could not run: the Deck was asleep"); **lane V3**, found by the final numbers: a new
+     versus note had taken the place of the note two Left 4 Dead 2 questions need ("how to beat tank"; playing the
+     Hunter in versus). Four versus notes lost "in versus" from their names, and one narrow rule in the search puts
+     the ordinary note a plain question names ahead of a game-mode note. No row of another game moved; no Left 4 Dead
+     2 row left its first three. Left open: the Tank answer still leans on the versus note (it attaches second), and
+     Speed mode has no such rule.
+  2. *Measured:* the final numbers (lane X2; reports `p103-after`): the 586 new blind questions find their note in
+     the first three 548 times; facts kept in answers 70.6 and 71.8 percent (73.4 and 71.8 before), the gap being those
+     two Left 4 Dead 2 questions. The new library against the released plugin's own code (lane X3): it opens, no error
+     on 1,343 questions, the same right notes attach; only 8 of 36 mod questions reach a mod tip there, and a versus
+     note comes first more often (30 rows against 21).
+  3. *The second opinion's consult 6* read the report's draft and sent it back with nine corrections (§ 7). Acting
+     on one of them, two checkers read the twelve notes files that were changed after their fact check. Facts held
+     (about a dozen small corrections), but **Fallout 4, Red Dead Redemption 2 and Cyberpunk 2077 never had the "own
+     words" pass** (most lines are the wiki's sentence nearly whole), and four files still rest lines on the games'
+     own text (Melee's trophy text again; Red Dead Redemption 2's catalogue blurbs; Cyberpunk's database and scanner
+     entries; two Left 4 Dead 2 descriptions). A last rewrite round of six helpers started at 08:57; a fact check of
+     the rewritten text follows before it lands. Reports: `.scratch/p103/checker-CH4a.md`, `checker-CH4b.md`.
+  4. *The checks page* has its "Plan 103 (10 Nov)" round (28 items). It needs one more pass after the rewrite round
+     (sample texts change again; three calls to add).
+  5. *The Deck:* still not answering. *Usage at 08:55:* 61 percent of the five-hour window (resets 11:00 EST), 50
+     percent of the week, 53 percent on Fable's own counter. *Waiting on the maintainer:* a look at the Deck
+     (question 8); questions 3 to 7.
+
 **Questions for the maintainer (the safest choice is taken meanwhile):**
 
 2. **Answered 2026-11-09, 21:12 EST:** the Deck was frozen with God of War in the background and an answer half
@@ -794,32 +821,35 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
 
 **Pick-up list (kept current; a new chat can carry on from here):**
 
-- Tip: `d88a7430`, every check green. The session's own running notes, with every helper's id, every hand-out and the
+- Tip: `c28a14b6`, every check green. The session's own running notes, with every helper's id, every hand-out and the
   lists not yet acted on, are in `.scratch/p103/` in the shared checkout (not in git): `session-notes.md` first.
 - Land with `scripts/land_lane.sh <branch> <base> .scratch/p103`, one at a time (`.scratch/p103/land_queue.sh` runs
   the lines of `queue.txt` in order and logs to `chain.log`). Read the exit code. On a failed check the picked commits
-  stay on the tip: fix forward with one more commit. A helper's final report can be pulled from its transcript with
-  `.scratch/p103/last_report.py`; every helper brief of this session with `.scratch/p103/agent_prompts.py`.
-- In flight at 07:05: the bookkeeper's sweep K3 (copy `p103-k3`; its result list is `.scratch/p103/k3-results.md`),
-  to land alone when it reports; the final numbers, lane X2 (copy `p103-x2`; commits nothing; reports to the
-  workshop's research folder with `p103-after`).
+  stay on the tip: fix forward with one more commit.
+- **In flight at 09:00: the last rewrite round,** six helpers in copies `p103-rw3` (Fallout 4), `-rw4` (Red Dead
+  Redemption 2), `-rw5` (Cyberpunk 2077), `-rw6` (Melee), `-rw7` (Left 4 Dead 2 and Grand Theft Auto III, small
+  fixes), `-rw8` (twenty small fixes in Mario Party, 2, 3, 6 and Super Smash Bros.), each cut from `c28a14b6`, each
+  following `.scratch/p103/rewrite-round-2.md`. **When they report:** a fact check of every rewritten line against
+  its quotes by a helper that did not write it (the lesson of this round: the text that lands must be the text that
+  was checked), fixes, then land the six as one batch; then a short bookkeeper sweep; then the checks page's second
+  pass (the samples' text again; calls on the versus notes' cost, the picture model, and the Melee history before a
+  push; the four first-night rows that did not settle).
+- **Then the end:** `python scripts/verify.py --full` on the final tip; the report into § 13. Its text is drafted in
+  `.scratch/p103/report-top.md` (the opening, 13.1, 13.2) and `.scratch/p103/report-draft.md` (13.3 on), joined by
+  `.scratch/p103/fix_rest.py` into `report-final.md`; the second opinion's corrections are in
+  `.scratch/p103/consult-6.md`. Placeholders marked `@@...@@` are still to fill (the rewrite round's result, the tip,
+  the full check, usage).
 - Not landing: `refactor/p103-r1` and `refactor/p103-r1b` (the crowding fix, turned down twice on its numbers).
   Not written: notes for Hades (licence), Half-Life 2 and Black Mesa (their wiki read-only on three tries). Blocked on
   boss pictures: P3 and P4. Switched off: the honest "I don't know", the picture's guess.
-- The Deck: build `9bc29b3c0500` (nothing deployed yet); published library 2026.10.25; five saved chats; the mode
-  chip on Strategy. Asleep since about 01:10 EST. When it wakes: `deck_status`, check no game runs, `scripts/build.ps1`
-  from the shared checkout at a green tip with nothing landing, read the build hash
-  (`sha256sum ~/homebrew/plugins/bonsAI/dist/index.js | cut -c1-12`), then one fresh driver per block with that hash:
-  D1 (`103-runbook-block-D1.md`), D2 (`-D2.md`), D3 and then DR (`-D3-DR.md`; tell D3's driver the chip order landed).
-  One deploy serves all of them now that everything has landed.
-- The end, after the Deck or without it: the bookkeeper's end audit (K9, the same brief as K0); `python
-  scripts/verify.py --full` on the final tip; the report in § 13 in § 11's shape (the second opinion's consult 6
-  before it; three of six consults used); the checks page's "plan 103" group (the six ten-note samples, the picture
-  labels, the quick-start words, the caption, the starter box on a fresh install, the crowding trade, the honest
-  answer's Speed-mode option, the two wiki licences, P102-UNDO-FOCUS-01, and every Deck row still owed); plan 33's
-  rows; plan 37's dated paragraph.
-- Budget: read the three counters before every batch. This morning nine helpers and five landings used about 20
-  percent of a five-hour window.
+- The Deck: build `9bc29b3c0500` (nothing deployed); published library 2026.10.25; five saved chats; the mode chip on
+  Strategy. Not answering since about 01:10 EST (asleep, as far as can be told). When the maintainer says it is awake
+  and to go: `deck_status`, check no game runs, `scripts/build.ps1` from the shared checkout at a green tip with
+  nothing landing, read the build hash (`sha256sum ~/homebrew/plugins/bonsAI/dist/index.js | cut -c1-12`), then one
+  fresh driver per block with that hash: D1 (`103-runbook-block-D1.md`), D2 (`-D2.md`), D3 and then DR
+  (`-D3-DR.md`; tell D3's driver the chip order landed). A watcher on this PC (a background ping) ends when the Deck
+  answers on the network.
+- Budget: read the three counters before every batch. Six consults of six are used.
 
 ## 13. Report
 

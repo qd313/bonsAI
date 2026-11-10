@@ -643,5 +643,72 @@ class PlainProblemWordsRouteTests(unittest.TestCase):
                 self.assertNotIn("network", match_compat_corpus_topics(question))
 
 
+class ModsRoutingTests(unittest.TestCase):
+    """Plan 103 lane G1: a question about setting up or fixing mods reaches the mods tips.
+
+    The Deck check (P103-MODS-TIPS-01): with nothing running, "how do I set up mods for Skyrim on
+    my Deck" attaches a tip from the mods topic. The router decides whether the tip sheet is searched
+    at all, so this is the level that fails without the words.
+
+    No bare "mod" is a rule: it matches the start of "model" and "modern" (_term_matches checks a
+    boundary only before a term). "mod " with its trailing space is the exact word, the same trick the
+    "lan " rule uses. Weapon and armour "mods" are game items in Fallout 4, Cyberpunk and Warframe, so
+    "mods" alone never routes either; it needs a word about setting up, a manager or the Deck.
+    """
+
+    ROUTING_QUESTIONS = (
+        "how do I set up mods for Skyrim on my Deck",
+        "how do I install mods on my steam deck",
+        "where do Stardew Valley mods go",
+        "my game crashes since I added a mod",
+        "how do I use r2modman on the Deck",
+        "which mod manager should I use",
+        "what is a script extender",
+        "do I need Mod Organizer 2 or Vortex for Cyberpunk",
+        "how do I load BepInEx under Proton",
+        "what does SMAPI do",
+        "my mods stopped working after the update",
+        "what load order should my Skyrim mods be in",
+        "can I use mods in a game with anti-cheat",
+        "is there a way to add mods from the steam workshop",
+    )
+
+    NOT_ROUTING_QUESTIONS = (
+        "which weapon mods should I use on the pistol",
+        "what do the armor mods do in this game",
+        "my mod slot is full, what can I swap out",
+        "which model should I run on the Deck",
+        "the modern town questline will not start, what do I do",
+        "a modest start is fine, what should I build first",
+        "how do I beat the boss",
+        "what is the best build for this class",
+        "how do I unlock the workshop bench in the base",
+        "the vortex ability keeps missing the boss, how do I aim it",
+    )
+
+    def test_each_mods_question_reaches_the_mods_topic_with_a_game_and_without(self):
+        for question in self.ROUTING_QUESTIONS:
+            for game in (False, True):
+                with self.subTest(question=question, game_in_context=game):
+                    self.assertIn("mods", match_compat_corpus_topics(question))
+                    self.assertTrue(question_targets_compat_corpus(question, game_in_context=game))
+
+    def test_item_mods_models_and_modern_do_not_reach_the_mods_topic(self):
+        for question in self.NOT_ROUTING_QUESTIONS:
+            with self.subTest(question=question):
+                self.assertNotIn("mods", match_compat_corpus_topics(question))
+
+    def test_the_deck_check_sentence_is_a_compat_question_at_the_gate(self):
+        should_run, domain = should_retrieve_knowledge(
+            use_local_knowledge_base=True,
+            ask_mode="speed",
+            question="how do I set up mods for Skyrim on my Deck",
+            app_id="",
+            app_name="",
+        )
+        self.assertTrue(should_run)
+        self.assertEqual(domain, "compat")
+
+
 if __name__ == "__main__":
     unittest.main()

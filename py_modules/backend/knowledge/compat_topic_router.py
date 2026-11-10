@@ -136,6 +136,61 @@ _TOPIC_RULES: dict[str, tuple[tuple[str, ...], ...]] = {
         ("online", "kicks"),
         ("online", "kicked"),
     ),
+    # Plan 103 lane G1: setting up and fixing mods (the tips filed under "mods"). Three things shape
+    # these rules. (1) No bare "mod": _term_matches checks a boundary only before a term, so "mod"
+    # starts "model" and "modern". "mods" and "modding" do not start either word, and "mod " with its
+    # trailing space is the exact word (the "lan " trick, see "network"). (2) Weapon and armour "mods"
+    # are game items in Fallout 4, Cyberpunk and Warframe, so "mods" alone never routes; it needs a
+    # word that says the subject is the mod files (a manager, setting up, the Deck, a crash, a
+    # game that is known for them). (3) Tool names that mean nothing else in a game question route
+    # alone; "vortex" is also an enemy ability, so it is paired.
+    "mods": (
+        ("mod manager",),
+        ("mod organizer",),
+        ("modding",),
+        ("script extender",),
+        ("load order",),
+        ("r2modman",),
+        ("thunderstore",),
+        ("nexus mods",),
+        ("bepinex",),
+        ("smapi",),
+        ("skse",),
+        ("f4se",),
+        ("redmod",),
+        ("red4ext",),
+        ("cyber engine tweaks",),
+        ("vortex", "mods"),
+        ("vortex", "manager"),
+        ("vortex", "nexus"),
+        ("vortex", "deploy"),
+        ("vortex", "deck"),
+        ("workshop", "mods"),
+        ("mods", "deck"),
+        ("mods", "manager"),
+        ("mods", "install"),
+        ("mods", "set up"),
+        ("mods", "setup"),
+        ("mods", "skyrim"),
+        ("mods", "stardew"),
+        ("mods", "crash"),
+        ("mods", "stopped working"),
+        ("mods", "not working"),
+        ("mods", "isnt working"),
+        ("mods", "broke"),
+        ("mods", "after the update"),
+        ("mods", "after an update"),
+        ("mods", "online"),
+        ("mods", "multiplayer"),
+        ("mods", "anti-cheat"),
+        ("mods", "anticheat"),
+        ("mods", "anti cheat"),
+        # One mod, said in the singular. "mod " (trailing space) is the word itself, not "model".
+        ("mod ", "crash"),
+        ("mod ", "deck"),
+        ("mod ", "skyrim"),
+        ("mod ", "stardew"),
+    ),
     "gamescope": (
         ("gamescope",),
         ("fsr",),

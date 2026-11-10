@@ -5,7 +5,7 @@
   "game_id": 35,
   "game": "Grand Theft Auto III",
   "read_on": "2026-11-09",
-  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://gta.fandom.com/api.php --titles <pages> (page text as rendered by the wiki, link markup removed). Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named. Several GTA Wiki pages cover many games; a line states a Grand Theft Auto III fact only where the page says so for GTA III or for the 3D games as a whole (GTA III included) with no exception for GTA III. Gang pages mix games in their infoboxes, so only text that names GTA III, or the Gangs in GTA III page, is used for gang facts.",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://gta.fandom.com/api.php --titles <pages> (page text as rendered by the wiki, link markup removed). Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named. Several GTA Wiki pages cover many games; a line states a Grand Theft Auto III fact only where the page says so for GTA III or for the 3D games as a whole (GTA III included) with no exception for GTA III. The library's game entry and older notes are for the Definitive Edition, but every page read describes the original game (only the hidden packages page mentions the Definitive Edition, for an achievement); lines that state something that could differ between the two (prices, first-person aiming, pager notices, saving and health) begin \"In the original game\". Gang pages mix games in their infoboxes, so only text that names GTA III, or the Gangs in GTA III page, is used for gang facts.",
   "sections": [
     {
       "section_id": 3500,
@@ -35,7 +35,7 @@
           ]
         },
         {
-          "line": "Weak points: They are poorly armed: in Grand Theft Auto III they use only baseball bats on the street, and guns appear only in missions.",
+          "line": "Weak points: They are poorly armed and use only baseball bats (guns in missions only).",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Diablos",
@@ -184,7 +184,7 @@
           ]
         },
         {
-          "line": "Tips: Do not drive within range of their shotguns: they make quick work of vehicles. They have a fierce rivalry with the Triads.",
+          "line": "Tips: Their shotguns make quick work of vehicles in range. They have a fierce rivalry with the Triads.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Leone_Crime_Family",
@@ -225,16 +225,9 @@
           ]
         },
         {
-          "line": "Weak points: The page gives no weak point; it calls the Cartel exceptionally well armed.",
-          "drawn_from": [
-            {
-              "page": "https://gta.fandom.com/wiki/Colombian_Cartel",
-              "revision": "2082250",
-              "quoted": [
-                "The Colombian Cartel is exceptionally well armed"
-              ]
-            }
-          ]
+          "line": "Weak points: The page gives no weak point for this gang.",
+          "drawn_from": [],
+          "note": "Absence: the page gives no weak point for this gang, so this line states no page fact."
         },
         {
           "line": "Looks like: In Grand Theft Auto III members wear Hawaiian shirts, combat pants, Akruba-style hats and cowboy boots.",
@@ -296,13 +289,20 @@
           ]
         },
         {
-          "line": "Weak points: The page gives no weak point; members carry baseball bats in Grand Theft Auto III.",
+          "line": "Weak points: The page gives no weak point; in Grand Theft Auto III members carry baseball bats, and the wiki also lists a pistol and, for some missions, an Uzi.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Baseball_Bat",
               "revision": "2081043",
               "quoted": [
                 "Carried by members of the Diablos, Triads and the Uptown Yardies."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Uptown_Yardies",
+              "revision": "2086756",
+              "quoted": [
+                "- Pistol - Baseball Bat - Uzi (Uzi Rider & The Whole 9 Yardies)"
               ]
             }
           ]
@@ -348,33 +348,40 @@
       "main_revision": "2084931",
       "lines": [
         {
-          "line": "Summary: At a six-star wanted level the Army chases you with soldiers, Barracks OL trucks for pursuit and roadblocks, and Rhino tanks for pursuit.",
+          "line": "Summary: At a six-star wanted level the Army arrives, after the FBI at five stars, and the Rhino tank appears too.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Military_(3D_Universe)",
               "revision": "2084931",
               "quoted": [
-                "After the player gains a six-star wanted level in any game set in the 3D Universe, the Army will begin to chase the player. On the ground, two military vehicles are used against the player: the Barracks OL, which is used for pursuit and roadblocks, and the Rhino tank for pursuit."
+                "After the player gains a six-star wanted level in any game set in the 3D Universe, the Army will begin to chase the player."
               ]
-            }
-          ]
-        },
-        {
-          "line": "Weak points: Soldiers are always armed with M16s, but only two spawn near each Barracks OL at a roadblock, so they are less lethal than SWAT or the FBI. A Rhino shrugs off small arms fire; explosives, molotov cocktails and the flamethrower can damage it.",
-          "drawn_from": [
+            },
             {
-              "page": "https://gta.fandom.com/wiki/Military_(3D_Universe)",
-              "revision": "2084931",
+              "page": "https://gta.fandom.com/wiki/Federal_Bureau_of_Investigation",
+              "revision": "2069256",
               "quoted": [
-                "The soldiers themselves are always armed with M16s.",
-                "they are not as lethal as the SWAT or the FBI, as only two spawn near every Barracks OL seen in the corresponding roadblock."
+                "The FBI will only appear when the player's wanted level reaches five stars, before the army arrives at six stars."
               ]
             },
             {
               "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
               "revision": "2078662",
               "quoted": [
-                "The Rhino is practically invincible to small arms fire and collisions; only explosives and the gun mounted on the Police Maverick can inflict damage. Additionally, flame weapons such as the molotov cocktails and the flamethrower are able to damage the tank."
+                "the Rhino appears when the player attains a six-star wanted level."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A Rhino shrugs off small arms fire; explosives, molotov cocktails and the flamethrower can damage it, and the windshield is its one weak spot when you face a military-controlled one.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
+              "revision": "2078662",
+              "quoted": [
+                "The Rhino is practically invincible to small arms fire and collisions; only explosives and the gun mounted on the Police Maverick can inflict damage. Additionally, flame weapons such as the molotov cocktails and the flamethrower are able to damage the tank.",
+                "Only the windshield can be considered a weak spot, although this is only evident when confronting military-controlled Rhinos to hijack them."
               ]
             }
           ]
@@ -408,7 +415,7 @@
       "main_revision": "2083689",
       "lines": [
         {
-          "line": "Summary: Armor that pads your health against gunfire, explosions and fire; in Grand Theft Auto III its pickup is a shield icon, and in the 3D games it gives nearly as many hit points as your full health.",
+          "line": "Summary: Armor that pads your health against gunfire, explosions and fire; in Grand Theft Auto III its pickup is a shield icon, and it gives nearly as many hit points as your full health.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Body_Armor",
@@ -422,7 +429,7 @@
           ]
         },
         {
-          "line": "Uses: In the 3D games armor can also pad injuries from falls, collisions with vehicles on foot and even melee attacks.",
+          "line": "Uses: In Grand Theft Auto III armor can also pad injuries from falls, collisions with vehicles on foot and even melee attacks.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Body_Armor",
@@ -434,7 +441,7 @@
           ]
         },
         {
-          "line": "Tips: In Grand Theft Auto III Ammu-Nation sells it for $3,000 once the mission Last Requests is done, and entering a Police or SWAT Enforcer truck also gives some. A spot in front of every safehouse spawns one after you collect 50 hidden packages.",
+          "line": "Tips: In the original game, Ammu-Nation sells it for $3,000 once the mission Last Requests is done, and entering a Police or SWAT Enforcer truck also gives some. A spot in front of every safehouse spawns one after you collect 50 hidden packages.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Body_Armor",
@@ -442,7 +449,14 @@
               "quoted": [
                 "$3,000 (GTA III & GTA Advance)",
                 "Last Requests (GTA III)",
-                "Ammu-Nation (3D Universe, GTA Chinatown Wars, GTA V, GTA Online)",
+                "Ammu-Nation (3D Universe, GTA Chinatown Wars, GTA V, GTA Online)"
+              ],
+              "note": "The first three quotes are cells of the page's infobox table (Price, Unlocked After, Available from), joined into one sentence."
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Body_Armor",
+              "revision": "2083689",
+              "quoted": [
                 "as well as entering the Police/SWAT Enforcer trucks."
               ]
             },
@@ -492,7 +506,7 @@
           ]
         },
         {
-          "line": "Tips: If your health runs out you are wasted: you are taken to the nearest hospital, charged a fee and lose all your weapons, and any mission in progress fails. Saving the game does not restore health in Grand Theft Auto III.",
+          "line": "Tips: If your health runs out you are wasted: you are taken to the nearest hospital, charged a fee and lose all your weapons, and any mission in progress fails. In the original game, the page lists visiting a save point as a way to restore health in every 3D game except Grand Theft Auto III and Advance.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Health",
@@ -539,14 +553,14 @@
           ]
         },
         {
-          "line": "Tips: Entering a vehicle resets the speed to normal. In Grand Theft Auto III there seems to be a glitch where even the smallest drop, such as walking off a sidewalk, can cause considerable damage.",
+          "line": "Tips: Entering a vehicle resets the speed to normal. One lies in Trenton behind the large sign on top of Liberty Pharmaceuticals.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Adrenaline",
               "revision": "2083438",
               "quoted": [
                 "Strangely, entering a vehicle resets the speed to normal again.",
-                "In Grand Theft Auto III and Grand Theft Auto: Vice City, there seems to be a glitch where making the smallest of drops, such as walking off a sidewalk and onto the road, can cause some considerable damage."
+                "Trenton – Behind the large sign on top of Liberty Pharmaceuticals."
               ]
             }
           ]
@@ -561,7 +575,7 @@
       "main_revision": "2079729",
       "lines": [
         {
-          "line": "Summary: A rotating star-shaped police badge pickup that lowers your wanted level by one star; it is a cost-free alternative to respraying your car.",
+          "line": "Summary: In Grand Theft Auto III a police bribe is a rotating, star-shaped police badge pickup that lowers your wanted level by one star; the wiki describes it as a cost-free alternative to respraying your car.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Police_Bribes",
@@ -574,7 +588,7 @@
           ]
         },
         {
-          "line": "Uses: Higher-level police already chasing you (the Military, SWAT or the FBI, for example) keep pursuing, though no more law enforcement vehicles appear. The exception is the Police Maverick, which gives up at three stars and drops you to two.",
+          "line": "Uses: In Grand Theft Auto III, higher-level police already chasing you (the Military, SWAT or the FBI, for example) keep pursuing, though no more law enforcement vehicles appear. The exception is the Police Maverick, which gives up at three stars and drops you to two.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Police_Bribes",
@@ -586,13 +600,14 @@
           ]
         },
         {
-          "line": "Tips: They are scarce, so you have to memorize where they are: some lie in obvious places, some are well hidden, and some sit at a slight height that needs a jump in a car to reach.",
+          "line": "Tips: The page says bribes are scarce, so memorize where they are: some lie in obvious places and some are well hidden. In Grand Theft Auto III some sit where you need a jump in a vehicle to reach them.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Police_Bribes",
               "revision": "2079729",
               "quoted": [
-                "its scarcity makes the tactic more difficult unless the player memorizes their locations. Police bribe locations vary widely, with some showing up in obvious locations, while others are well hidden from plain view. Some require performing a jump in an automobile to reach, as they are positioned at a slight altitude"
+                "its scarcity makes the tactic more difficult unless the player memorizes their locations. Police bribe locations vary widely, with some showing up in obvious locations, while others are well hidden from plain view.",
+                "In the 3D Universe, some bribe stars are placed in positions that require the player to execute a jump with a vehicle in order to obtain them."
               ]
             }
           ]
@@ -607,7 +622,7 @@
       "main_revision": "2078130",
       "lines": [
         {
-          "line": "Summary: There are 100 hidden packages around Liberty City, each a white bale sealed with brown tape that pays $1,000, and collecting them also unlocks free weapons.",
+          "line": "Summary: There are 100 hidden packages around Liberty City, each a white bale sealed with brown tape that pays $1,000, and every tenth package adds a permanent spawn point for an item in front of the safehouses.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Hidden_Packages_in_GTA_III",
@@ -621,7 +636,7 @@
           ]
         },
         {
-          "line": "Uses: Every 10 packages add a permanent weapon spawn in front of the safehouses, announced by pager: 10 pistol, 20 Uzi, 30 grenades, 40 shotgun, 50 body armor, 60 molotov cocktails, 70 AK47, 80 sniper rifle, 90 M16, and at 100 the rocket launcher plus $1,000,000.",
+          "line": "Uses: Every 10 packages add a permanent spawn point for an item in front of the safehouses; in the original game the pager announces each one: 10 pistol, 20 Uzi, 30 grenades, 40 shotgun, 50 body armor, 60 molotov cocktails, 70 AK47, 80 sniper rifle, 90 M16, and at 100 the rocket launcher plus $1,000,000.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Hidden_Packages_in_GTA_III",
@@ -665,7 +680,7 @@
       "main_revision": "2084433",
       "lines": [
         {
-          "line": "Summary: A single-shot rocket launcher that can destroy nearly all vehicles and pedestrians; in Grand Theft Auto III Phil Cassidy's Army Surplus in Rockford, Staunton Island sells it for $25,000 after the mission Arms Shortage.",
+          "line": "Summary: A single-shot rocket launcher that can destroy nearly all vehicles and pedestrians; in the original game Phil Cassidy's Army Surplus in Rockford, Staunton Island sells it for $25,000 after the mission Arms Shortage.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Rocket_Launcher_(3D_Universe)",
@@ -714,7 +729,7 @@
       "main_revision": "2083687",
       "lines": [
         {
-          "line": "Summary: In Grand Theft Auto III the AK47 has a very high rate of fire but low damage, and Ammu-Nation in Newport sells it for $3,000 once the mission Last Requests is done.",
+          "line": "Summary: In the original game the AK47 has a very high rate of fire but low damage, and Ammu-Nation in Newport sells it for $3,000 once the mission Last Requests is done.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/AK47",
@@ -727,7 +742,7 @@
           ]
         },
         {
-          "line": "Uses: It cannot be aimed in first person. It has lower recoil than the M16, but the M16 deals far more damage, fires much faster and holds double the magazine.",
+          "line": "Uses: In the original game it cannot be aimed in first person. It has lower recoil than the M16, but the M16 deals far more damage, fires much faster and holds double the magazine.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/AK47",
@@ -774,14 +789,20 @@
           ]
         },
         {
-          "line": "Uses: Victims on foot catch fire and die if close enough to the flames, and it is one of the deadliest weapons at close range. It is one of only two weapons that can destroy a Rhino, the other being the flamethrower.",
+          "line": "Uses: Victims on foot catch fire and die if close enough to the flames. Molotov cocktails are among the flame weapons that can damage a Rhino.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Molotov_Cocktails",
               "revision": "2076588",
               "quoted": [
-                "Victims on foot will catch fire and die if close enough to the flames.",
-                "It proves to be one of the deadliest weapons for the player when used at close range. It is one of only two weapons which can destroy a Rhino, the other being a Flamethrower."
+                "Victims on foot will catch fire and die if close enough to the flames."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
+              "revision": "2078662",
+              "quoted": [
+                "flame weapons such as the molotov cocktails and the flamethrower are able to damage the tank."
               ]
             }
           ]
@@ -832,6 +853,19 @@
                 "The Rhino is practically invincible to small arms fire and collisions",
                 "any vehicle hit will either explode instantly or end up burning instead. This makes the vehicle ideal for dealing with wanted levels, as most police vehicles have a tendency to hit the player's vehicle in an attempt to block their path.",
                 "The Rhino is equipped with a cannon turret, which has devastating firepower against most vehicles."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A block-shaped vehicle with a three-axle chassis, a narrow windshield, large doors on each side and a turret on top, spawning in a worn green.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
+              "revision": "2078662",
+              "quoted": [
+                "The Rhino is depicted as a block-shaped vehicle with a truck-style, three-axle chassis, a narrow windshield and large doors on each side, along with the corresponding turret on top.",
+                "The Rhino only spawns in a worn green color"
               ]
             }
           ]

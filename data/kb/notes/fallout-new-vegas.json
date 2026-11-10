@@ -100,6 +100,61 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "4677325",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3809,
+      "game_id": 20,
+      "section_type": "enemy",
+      "name": "Fiends",
+      "card": "Summary: A gang of raiders who are all chem users driven mad, working the outer New Vegas area and holding the southwestern ruins of Vegas. They fight in small war parties.\nLooks like: Red eyes, always, from constant chem use. They wear assorted raider armor and helmets decorated with painted ruminant skulls.\nTips: Their melee gear includes knives and pool cues, and for guns they mostly carry silenced .22 SMGs, varmint rifles and caravan shotguns, plus an unusual number of Laser RCWs and plasma rifles. Nearly a dozen spots spawn Fiends between 0600 and 2230, and none spawn from 2230 to 0600, so night is the calmer time to cross the Vegas countryside. Everyone but the Great Khans is a target. With a Speech of 65 you can pass as a Great Khan chem seller to the guard of Vault 3, which makes the Fiends inside peaceful; those outside stay hostile.",
+      "source_url": "https://fallout.fandom.com/wiki/Fiends",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4662882",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3810,
+      "game_id": 20,
+      "section_type": "item",
+      "name": "Stimpaks",
+      "card": "Summary: The basic healing injection of the Mojave: a hand-held shot that mends minor wounds on the spot.\nUses: Base healing is 30 hit points and limb condition, and it grows with your Medicine skill, from 36 hit points at skill 10 to 90 at skill 100. In Hardcore mode it heals over time instead and cannot mend a crippled limb; for that you need a doctor or an item that says it heals limbs, such as Hydra or a doctor's bag.\nTips: You can craft one at a workbench from a broc flower, an empty syringe and a xander root with Science 70. Most doctors sell them, and Cliff Briscoe in Novac nearly always has some. With a good reputation among the Followers of the Apocalypse, Julie Farkas at the Old Mormon Fort hands out one free each day. Doc Mitchell's house holds three.",
+      "source_url": "https://fallout.fandom.com/wiki/Stimpak_(Fallout:_New_Vegas)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4400301",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3811,
+      "game_id": 20,
+      "section_type": "item",
+      "name": "Doctor's bags",
+      "card": "Summary: A consumable made for healing crippled limbs, and it does that job in normal play and in Hardcore mode alike.\nUses: Used plainly, it gives every limb a small boost; applied from the stats screen to one limb, it fixes far more. In Hardcore mode a doctor, Hydra, sleeping in a bed you own, or the Honest Hearts items healing poultice, daturana and weapon binding ritual will also mend crippled limbs.\nTips: You can craft one at a workbench with Medicine 40 from forceps, a medical brace, a scalpel and surgical tubing. Early ones sit in the Goodsprings gas station and in Doc Mitchell's house, and Doc Mitchell gives two more during Ghost Town Gunfight if your Medicine is 30. Viper gunslingers rarely carry one.",
+      "source_url": "https://fallout.fandom.com/wiki/Doctor%27s_bag_(Fallout:_New_Vegas)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4520054",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3812,
+      "game_id": 20,
+      "section_type": "item",
+      "name": "RadAway and Rad-X",
+      "card": "Summary: Two radiation chems that work at opposite ends: Rad-X raises your resistance before you go into a hot zone, and RadAway clears radiation after exposure. Neither is addictive.\nUses: RadAway always removes 50 rads plus your Medicine skill, from 60 at skill 10 to 150 at skill 100; in Hardcore mode it works over ten seconds. Rad-X gives resistance for four minutes, from 30 percent at skill 10 to 75 percent at skill 100. More doses lengthen the time but do not stack the strength, and resistance tops out at 85 percent, so no gear makes you immune.\nTips: Doctors are the usual source: Doc Mitchell in Goodsprings, Dr. Ada Straus in Novac and Senior Scribe Linda Schuler in the Hidden Valley bunker. Most shops carry only one to three RadAway, if any. Vault 34's clinic safe holds both chems, and Charleston Cave has three Rad-X. Twenty doses of RadAway earns the Free Radical perk.",
+      "source_url": "https://fallout.fandom.com/wiki/RadAway_(Fallout:_New_Vegas)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4716619",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3813,
+      "game_id": 20,
+      "section_type": "item",
+      "name": "Stealth Boys",
+      "card": "Summary: A camouflage gadget, worn on the wrist or as a belt pouch, that makes you almost invisible for a short while. In the Mojave, nightkin are the ones you usually see carrying them.\nUses: One gives +100 Sneak and +75 Stealth Field for two real minutes, which is one in-game hour. A second one used while the first runs adds another in-game hour to what is left. The Chemist perk, the Day Tripper perk and the Logan's Loophole trait stretch the time. The Sneak boost also helps stealth-based Speech checks, and pulse grenades do not affect the device.\nTips: Early ones: a locked safe in the Goodsprings schoolhouse (Lockpick 25), and one beside a skeleton at Jack Rabbit Springs. The REPCONN test site holds six in fixed spots, and nightkin bodies there may give more. Vikki and Vance Casino hands one over for winning 1,250 or more chips.",
+      "source_url": "https://fallout.fandom.com/wiki/Stealth_Boy_(Fallout:_New_Vegas)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4726428",
+      "crawled_at": "2026-11-10"
     }
   ]
 }

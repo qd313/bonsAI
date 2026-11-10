@@ -606,6 +606,309 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3809,
+      "name": "Fiends",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Fiends",
+      "main_revision": "4662882",
+      "lines": [
+        {
+          "line": "Summary: A gang of raiders who are all chem users driven mad, working the outer New Vegas area and holding the southwestern ruins of Vegas. They fight in small war parties.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Fiends",
+              "revision": "4662882",
+              "quoted": [
+                "The Fiends are a raider gang made up entirely of deranged chem fiends, hence their name, in the outer New Vegas area in 2281.",
+                "They control the southwestern ruins of Vegas",
+                "the Fiends split into small war parties, usually between three and four members"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Red eyes, always, from constant chem use. They wear assorted raider armor and helmets decorated with painted ruminant skulls.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Fiends",
+              "revision": "4662882",
+              "quoted": [
+                "Fiends always have red eyes, a side effect from their constant chem consumption.",
+                "They dress in various raider armors and wear distinct helmets adorned with war-painted ruminant skulls."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Their melee gear includes knives and pool cues, and for guns they mostly carry silenced .22 SMGs, varmint rifles and caravan shotguns, plus an unusual number of Laser RCWs and plasma rifles. Nearly a dozen spots spawn Fiends between 0600 and 2230, and none spawn from 2230 to 0600, so night is the calmer time to cross the Vegas countryside. Everyone but the Great Khans is a target. With a Speech of 65 you can pass as a Great Khan chem seller to the guard of Vault 3, which makes the Fiends inside peaceful; those outside stay hostile.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Fiends",
+              "revision": "4662882",
+              "quoted": [
+                "from basic melee weapons such as knives and pool cues, to an unusually large number of high-tech range weapons like Laser RCWs and plasma rifles",
+                "They are mostly found carrying basic guns like caravan shotguns, varmint rifles, and silenced .22 SMGs.",
+                "Random Encounters: There are nearly a dozen spots spawning Fiends in the time range from 0600-2230.",
+                "In the deep of the night, from 2230 to 0600 the next morning, they do not spawn, so this serves as a comparatively safe time to move around Vegas' countryside.",
+                "The Fiends attack anyone aside from the Great Khans",
+                "With a Speech check of 65, one can convince the main guard of Vault 3 that they are a Great Khan selling chems",
+                "This will make all Fiends inside Vault 3 non-hostile with the player character.",
+                "However, the Fiends outside of Vault 3 will remain hostile in normal gameplay"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3810,
+      "name": "Stimpaks",
+      "kind": "item",
+      "main_page": "https://fallout.fandom.com/wiki/Stimpak_(Fallout:_New_Vegas)",
+      "main_revision": "4400301",
+      "lines": [
+        {
+          "line": "Summary: The basic healing injection of the Mojave: a hand-held shot that mends minor wounds on the spot.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Stimpak_(Fallout:_New_Vegas)",
+              "revision": "4400301",
+              "quoted": [
+                "A stimpak is a hand-held medication used in healing the body.",
+                "it provides immediate healing of the body's minor wounds."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Base healing is 30 hit points and limb condition, and it grows with your Medicine skill, from 36 hit points at skill 10 to 90 at skill 100. In Hardcore mode it heals over time instead and cannot mend a crippled limb; for that you need a doctor or an item that says it heals limbs, such as Hydra or a doctor's bag.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Stimpak_(Fallout:_New_Vegas)",
+              "revision": "4400301",
+              "quoted": [
+                "+30 HP and Limb Condition",
+                "+36 Hit Points",
+                "+90 Hit Points",
+                "stimpaks will heal over time (versus instantly) and will not heal crippled limbs.",
+                "Limbs can only be healed by a doctor or with the use of items that specifically indicate limb healing in their information, including, but not limited to, Hydra, a doctor's bag"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You can craft one at a workbench from a broc flower, an empty syringe and a xander root with Science 70. Most doctors sell them, and Cliff Briscoe in Novac nearly always has some. With a good reputation among the Followers of the Apocalypse, Julie Farkas at the Old Mormon Fort hands out one free each day. Doc Mitchell's house holds three.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Stimpak_(Fallout:_New_Vegas)",
+              "revision": "4400301",
+              "quoted": [
+                "Broc flower (1)",
+                "Empty syringe (1)",
+                "Xander root (1)",
+                "Science: 70",
+                "In addition, most doctors sell them.",
+                "Cliff Briscoe in Novac almost always has stimpaks (as well as other aid items and skill books) in his inventory for sale.",
+                "They can be obtained free from Julie Farkas at the Old Mormon Fort once per day with a good reputation with the Followers of the Apocalypse.",
+                "Three in Doc Mitchell's house."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3811,
+      "name": "Doctor's bags",
+      "kind": "item",
+      "main_page": "https://fallout.fandom.com/wiki/Doctor%27s_bag_(Fallout:_New_Vegas)",
+      "main_revision": "4520054",
+      "lines": [
+        {
+          "line": "Summary: A consumable made for healing crippled limbs, and it does that job in normal play and in Hardcore mode alike.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Doctor%27s_bag_(Fallout:_New_Vegas)",
+              "revision": "4520054",
+              "quoted": [
+                "A doctor's bag is a consumable item in Fallout: New Vegas.",
+                "The bag may be used to heal all limbs for a small amount",
+                "serving this purpose in both normal and hardcore modes."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Used plainly, it gives every limb a small boost; applied from the stats screen to one limb, it fixes far more. In Hardcore mode a doctor, Hydra, sleeping in a bed you own, or the Honest Hearts items healing poultice, daturana and weapon binding ritual will also mend crippled limbs.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Doctor%27s_bag_(Fallout:_New_Vegas)",
+              "revision": "4520054",
+              "quoted": [
+                "The bag may be used to heal all limbs for a small amount, or through the stats screen, can be applied to a single limb for a much greater effect.",
+                "in hardcore mode, the only other ways to heal crippled limbs are to be healed by a doctor, using Hydra, sleeping in an owned bed or using the aid items healing poultice, daturana or weapon binding ritual from the Honest Hearts add-on."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You can craft one at a workbench with Medicine 40 from forceps, a medical brace, a scalpel and surgical tubing. Early ones sit in the Goodsprings gas station and in Doc Mitchell's house, and Doc Mitchell gives two more during Ghost Town Gunfight if your Medicine is 30. Viper gunslingers rarely carry one.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Doctor%27s_bag_(Fallout:_New_Vegas)",
+              "revision": "4520054",
+              "quoted": [
+                "The item can be crafted at a workbench.",
+                "Forceps (1)",
+                "Medical brace (1)",
+                "Scalpel (1)",
+                "Surgical tubing (1)",
+                "Medicine: 40",
+                "One can be found in the Goodsprings gas station in the middle of the left aisle.",
+                "There is one in Doc Mitchell's house in Goodsprings.",
+                "Two can be acquired from Doc Mitchell in the quest Ghost Town Gunfight with a Medicine skill check of 30.",
+                "Rarely found on Viper gunslingers."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3812,
+      "name": "RadAway and Rad-X",
+      "kind": "item",
+      "main_page": "https://fallout.fandom.com/wiki/RadAway_(Fallout:_New_Vegas)",
+      "main_revision": "4716619",
+      "lines": [
+        {
+          "line": "Summary: Two radiation chems that work at opposite ends: Rad-X raises your resistance before you go into a hot zone, and RadAway clears radiation after exposure. Neither is addictive.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/RadAway_(Fallout:_New_Vegas)",
+              "revision": "4716619",
+              "quoted": [
+                "While Rad-X is designed to increase the body's natural resistance to radiation, RadAway is designed to be used after exposure."
+              ]
+            },
+            {
+              "page": "https://fallout.fandom.com/wiki/Rad-X_(Fallout:_New_Vegas)",
+              "revision": "4716628",
+              "quoted": [
+                "Like stimpaks and RadAway, Rad-X is non-addictive"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: RadAway always removes 50 rads plus your Medicine skill, from 60 at skill 10 to 150 at skill 100; in Hardcore mode it works over ten seconds. Rad-X gives resistance for four minutes, from 30 percent at skill 10 to 75 percent at skill 100. More doses lengthen the time but do not stack the strength, and resistance tops out at 85 percent, so no gear makes you immune.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/RadAway_(Fallout:_New_Vegas)",
+              "revision": "4716619",
+              "quoted": [
+                "Because RadAway's base effect is exactly 50, it will always remove 50 + skill rads",
+                "-60 Radiation",
+                "-150 Radiation",
+                "-6 Radiation for 10s"
+              ]
+            },
+            {
+              "page": "https://fallout.fandom.com/wiki/Rad-X_(Fallout:_New_Vegas)",
+              "revision": "4716628",
+              "quoted": [
+                "+30 % Radiation Resistance for 4m",
+                "+75 % Radiation Resistance for 4m",
+                "Taking multiple doses of Rad-X does not increase the total radiation resistance (the effects do not stack).",
+                "Instead, the drug's active time is lengthened",
+                "Radiation Resistance caps off at 85%",
+                "No combination of Rad-X and radiation-resistant clothing will grant total immunity to radiation"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Doctors are the usual source: Doc Mitchell in Goodsprings, Dr. Ada Straus in Novac and Senior Scribe Linda Schuler in the Hidden Valley bunker. Most shops carry only one to three RadAway, if any. Vault 34's clinic safe holds both chems, and Charleston Cave has three Rad-X. Twenty doses of RadAway earns the Free Radical perk.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/RadAway_(Fallout:_New_Vegas)",
+              "revision": "4716619",
+              "quoted": [
+                "Doc Mitchell in Goodsprings, Dr. Ada Straus in Novac or Senior Scribe Linda Schuler in the Hidden Valley bunker.",
+                "most shops only have one to three in stock, if any at all, though it is often stocked by doctors.",
+                "Vault 34 has a small stockpile of RadAway and Rad-X inside an Average locked safe in the clinic.",
+                "After taking 20 doses of Rad-Away, the Free Radical perk will be gained, enhancing the effectiveness of RadAway."
+              ]
+            },
+            {
+              "page": "https://fallout.fandom.com/wiki/Rad-X_(Fallout:_New_Vegas)",
+              "revision": "4716628",
+              "quoted": [
+                "Three in Charleston Cave."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3813,
+      "name": "Stealth Boys",
+      "kind": "item",
+      "main_page": "https://fallout.fandom.com/wiki/Stealth_Boy_(Fallout:_New_Vegas)",
+      "main_revision": "4726428",
+      "lines": [
+        {
+          "line": "Summary: A camouflage gadget, worn on the wrist or as a belt pouch, that makes you almost invisible for a short while. In the Mojave, nightkin are the ones you usually see carrying them.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Stealth_Boy_(Fallout:_New_Vegas)",
+              "revision": "4726428",
+              "quoted": [
+                "The result makes the wearer almost invisible to the untrained eye.",
+                "wrist-mounted disc and an emitter in a canvas carrying pouch worn on the belt",
+                "In the Mojave Wasteland, they are typically found in the hands of the nightkin"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: One gives +100 Sneak and +75 Stealth Field for two real minutes, which is one in-game hour. A second one used while the first runs adds another in-game hour to what is left. The Chemist perk, the Day Tripper perk and the Logan's Loophole trait stretch the time. The Sneak boost also helps stealth-based Speech checks, and pulse grenades do not affect the device.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Stealth_Boy_(Fallout:_New_Vegas)",
+              "revision": "4726428",
+              "quoted": [
+                "+100 Sneak for 2 minutes",
+                "+75 Stealth Field for 2 minutes",
+                "The effect lasts for one in-game hour, or 2 real-time minutes.",
+                "adding one in-game hour to the duration remaining from the previous Stealth Boy",
+                "The Chemist, Day Tripper perks and Logan's Loophole trait also affect the Stealth Boy duration.",
+                "Stealth Boys temporarily increase the Sneak skill to 100, which affects stealth-related Speech checks.",
+                "pulse grenades do not have any effect on the Stealth Boys."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Early ones: a locked safe in the Goodsprings schoolhouse (Lockpick 25), and one beside a skeleton at Jack Rabbit Springs. The REPCONN test site holds six in fixed spots, and nightkin bodies there may give more. Vikki and Vance Casino hands one over for winning 1,250 or more chips.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Stealth_Boy_(Fallout:_New_Vegas)",
+              "revision": "4726428",
+              "quoted": [
+                "Goodsprings schoolhouse - One can be found in a locked safe (Lockpick 25).",
+                "Jack Rabbit Springs - One can be found beside a skeleton lying near an upright post visible on the hillside.",
+                "REPCONN test site - Six are in fixed locations",
+                "The various nightkin corpses outside and inside of the test site have a chance to generate a Stealth Boy as well.",
+                "Vikki and Vance Casino - One will be given as a reward for winning 1,250+ chips."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -14,6 +14,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from script_loader import load_script
 
@@ -158,6 +159,41 @@ class QuestionLoaderTests(unittest.TestCase):
         self.write_folder_file("b.json", {"status": "done", "queries": []})
         with self.assertRaises(loader.EvalFixtureError):
             self.load()
+
+
+class MeasuringScriptsReadTheFolderTests(unittest.TestCase):
+    """The two measuring scripts count a question written in a new file, as the search test does."""
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.base = Path(tmp.name)
+        (self.base / "kb_eval").mkdir()
+        old = _row("OLD-1", app_id="1145360", expect_section="Old note", split="holdout")
+        new = _row("NEW-1", app_id="620", expect_section="New note")
+        (self.base / "kb_eval_v2.json").write_text(json.dumps({"default_split": "tune", "queries": [old]}), encoding="utf-8")
+        (self.base / "kb_eval" / "new-game.json").write_text(
+            json.dumps({"default_split": "holdout", "queries": [new]}), encoding="utf-8"
+        )
+
+    def _questions_of(self, script_name):
+        script = load_script(script_name)
+        with mock.patch.object(script, "FIXTURES_DIR", str(self.base)):
+            return script, script.load_questions()
+
+    def test_the_floor_measurement_sees_the_new_files_rows_and_their_split(self):
+        _script, data = self._questions_of("measure_kb_floor_holdout")
+        self.assertEqual([q["id"] for q in data["queries"]], ["OLD-1", "NEW-1"])
+        self.assertEqual(data["queries"][1]["split"], "holdout")
+
+    def test_the_thin_match_measurement_sees_the_new_files_rows(self):
+        script = load_script("measure_kb_thin_match")
+        with mock.patch.object(script, "FIXTURES_DIR", str(self.base)):
+            asks = script._gate_asks({"620": "Portal 2"})
+        ids = {a["id"] for a in asks}
+        self.assertIn("OLD-1/running", ids)
+        self.assertIn("NEW-1/running", ids)
+        self.assertIn("NEW-1/typed", ids)
 
 
 if __name__ == "__main__":

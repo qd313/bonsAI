@@ -37,14 +37,17 @@ import json
 import os
 import re
 import sys
+from pathlib import Path
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.join(ROOT, "py_modules"))
+sys.path.insert(0, os.path.join(ROOT, "scripts", "lib"))
 
 from backend.knowledge import knowledge_base_service as kb  # noqa: E402
+import kb_eval_fixture  # noqa: E402
 
-FIXTURE = os.path.join(ROOT, "tests", "fixtures", "kb_eval_v2.json")
+FIXTURES_DIR = os.path.join(ROOT, "tests", "fixtures")
 CARD_HEADER_RE = re.compile(r"^\[.*\(trust: [^)]+\)\s*$", re.M)
 
 # The four questions that caused the line to be built, from plan 47's device evening. Every one
@@ -55,6 +58,11 @@ DEVICE_SENTENCES = [
     ("qqqq zzzz wwww", "1145360", "Hades"),
     ("how do i beat the bone hydra in hades", "1145360", "Hades"),
 ]
+
+
+def load_questions() -> dict:
+    """Every question: the main file's, then each file's in tests/fixtures/kb_eval/."""
+    return kb_eval_fixture.load_eval_fixture(Path(FIXTURES_DIR))
 
 
 def parse_args() -> argparse.Namespace:
@@ -252,10 +260,9 @@ def line_probe(settings: dict, question: str, *, app_id: str, pc_ip: str) -> dic
 
 def _gate_asks(titles: dict[str, str]) -> list[dict]:
     """The asks the line gate runs, each with its group and (for a right-note row) its note."""
-    with open(FIXTURE, encoding="utf-8") as fh:
-        rows = [q for q in json.load(fh)["queries"]
-                if q.get("domain") == "strategy" and q.get("expect_section")
-                and str(q.get("app_id") or "").strip()]
+    rows = [q for q in load_questions()["queries"]
+            if q.get("domain") == "strategy" and q.get("expect_section")
+            and str(q.get("app_id") or "").strip()]
     with open(ANSWER_FIXTURE, encoding="utf-8") as fh:
         cases = [c for c in json.load(fh)["cases"]
                  if c.get("ask_mode") == "strategy" and c.get("expect_card")]
@@ -363,8 +370,7 @@ def main() -> int:
     if args.line_gate:
         return run_line_gate(settings, args)
 
-    with open(FIXTURE, encoding="utf-8") as fh:
-        fx = json.load(fh)
+    fx = load_questions()
     default_split = fx.get("default_split")
 
     # Both splits. This script is run by the one running the session, not by a lane, and its

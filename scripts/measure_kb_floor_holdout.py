@@ -30,14 +30,17 @@ import json
 import os
 import re
 import sys
+from pathlib import Path
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.join(ROOT, "py_modules"))
+sys.path.insert(0, os.path.join(ROOT, "scripts", "lib"))
 
 from backend.knowledge import knowledge_base_service as kb  # noqa: E402
+import kb_eval_fixture  # noqa: E402
 
-FIXTURE = os.path.join(ROOT, "tests", "fixtures", "kb_eval_v2.json")
+FIXTURES_DIR = os.path.join(ROOT, "tests", "fixtures")
 CARD_HEADER_RE = re.compile(r"^\[.*\(trust: [^)]+\)\s*$", re.M)
 
 
@@ -152,6 +155,11 @@ DEVICE_SENTENCES = [
 ]
 
 
+def load_questions() -> dict:
+    """Every question: the main file's, then each file's in tests/fixtures/kb_eval/."""
+    return kb_eval_fixture.load_eval_fixture(Path(FIXTURES_DIR))
+
+
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Measure the floor on held-back rows.")
     p.add_argument("--corpus", default=os.path.join(ROOT, "build", "knowledge-base"))
@@ -261,8 +269,7 @@ def main() -> int:
         return 2
     conn = kb._get_connection(db_path)
 
-    with open(FIXTURE, encoding="utf-8") as fh:
-        fx = json.load(fh)
+    fx = load_questions()
     default_split = fx.get("default_split")
 
     holdout_tips = [

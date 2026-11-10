@@ -1103,7 +1103,7 @@
           ]
         },
         {
-          "line": "Tips: Prepare before you set off the horde: gather as many supplies as you can and pick the best spot. Put special ammo and gas cans or propane tanks somewhere safe so the team can grab them fast if a Tank comes and no Molotov is left.",
+          "line": "Tips: Prepare before you set off the horde: gather as many supplies as you can and pick the best spot. Put special ammo and gas cans or propane tanks somewhere safe so the team can grab them fast when no Molotov is left.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Survival_Mode",
@@ -1125,7 +1125,7 @@
           ]
         },
         {
-          "line": "Tips: Judge a spot by its entrances, the ammo and supplies near it, escape routes, high ground and how far you can see. Keep the entrances to one or two with two survivors covering each, which matters most against a Tank unless you have an escape plan.",
+          "line": "Tips: Judge a spot by its entrances, the ammo and supplies near it, escape routes, high ground and how far you can see. Keep the entrances down to one or two, with two survivors covering each.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Survival_Mode",
@@ -1138,14 +1138,13 @@
                 "Escape Routes:",
                 "High Ground:",
                 "Line of Sight:",
-                "Try to keep the number of entry points down to two or one, if possible, so that at least two survivors are covering each entrance.",
-                "This is the most important consideration for when you have to fight Tanks, unless you have an escape plan when the Tank comes."
+                "Try to keep the number of entry points down to two or one, if possible, so that at least two survivors are covering each entrance."
               ]
             }
           ]
         },
         {
-          "line": "Tips: The wiki lists set times for Tanks, the first at 0:40 and two Tanks together at 5:30 and 11:30. New hordes pause around 3:50 to 4:25, 9:00 to 9:35 and 12:00 to 12:30, when only special infected can spawn, which makes those gaps good for healing or ammo runs.",
+          "line": "Tips: Survival runs on a clock: the first Tank arrives at 0:40, with two together at 5:30 and 11:30. New hordes pause around 3:50 to 4:25, 9:00 to 9:35 and 12:00 to 12:30, when only special infected can spawn, which makes those gaps good for healing or ammo runs.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Survival_Mode",

@@ -1704,7 +1704,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "Researched, unconfirmed: Vortex links mods into the game folder when you deploy them. Mod Organizer 2 keeps mods in its own folder and shows them to the game only when you start the game through it.",
+    "card": "Researched, unconfirmed: Vortex links mods into the game folder when deployed. Mod Organizer 2's virtual file system shows its mods only to a game it starts, keeping them out of the game folder.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },
@@ -1714,7 +1714,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "Researched, unconfirmed: r2modman keeps mods in its own profiles, not the game folder. They load only when you press Start modded in r2modman; starting the game from Steam gives the plain game.",
+    "card": "Researched, unconfirmed: r2modman keeps mods in its own profiles. They load only when you press Start modded in r2modman; starting the game from Steam gives the plain game.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },
@@ -1734,7 +1734,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "Researched, unconfirmed: Skyrim Special Edition adds mods from its in-game Creations screen, no manager needed (not in the GOG version). Mods switch off achievements; their saves are marked [M].",
+    "card": "Researched, unconfirmed: Skyrim Special Edition adds mods from its in-game Creations screen, no manager needed (not in the GOG version); some cost Creation Credits. Mods switch off achievements.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },
@@ -1764,7 +1764,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "Researched, unconfirmed: a script extender (SKSE, F4SE) must match the game's exact version. After a patch update it first; if Skyrim crashes at start, move the files out of Data/SKSE/Plugins to test.",
+    "card": "Researched, unconfirmed: a script extender (SKSE/F4SE) must match the game version. After a patch get it from its own site (SKSE: skse.silverlock.org). Crash at start? Move Data/SKSE/Plugins files out",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },
@@ -1784,7 +1784,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "Researched, unconfirmed: Cyberpunk mod files go by type: .archive in archive/pc/mod, .reds in r6/scripts, .tweak/.yaml in r6/tweaks, CET .lua mods in bin/x64/plugins/cyber_engine_tweaks.",
+    "card": "Researched, unconfirmed: Cyberpunk mod files go by type: .archive in archive/pc/mod, .reds in r6/scripts, .tweak/.yaml in r6/tweaks, CET .lua mods in bin/x64/plugins/cyber_engine_tweaks/mods.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },
@@ -1844,7 +1844,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "Researched, unconfirmed: games with anti-cheat (EAC, BattlEye) can refuse altered files. Mod single-player games, use the game's own mod support, read multiplayer rules. bonsAI won't help dodge it.",
+    "card": "Researched, unconfirmed: anti-cheat like BattlEye can block altered files or kick you in multiplayer. Mod single-player or use the game's own mod support; check its rules. bonsAI won't help dodge it.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },
@@ -1864,7 +1864,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "Researched, unconfirmed: if the game crashes after you add mods, turn every mod off. If it runs, turn half back on, play, and keep halving the half that breaks it until one mod is left.",
+    "card": "Researched, unconfirmed: if the game crashes after you add mods, switch off half (keep core frameworks like RED4ext on), play, and halve again. Move files aside, don't delete them.",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   }

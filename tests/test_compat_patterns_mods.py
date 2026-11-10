@@ -111,9 +111,9 @@ class ModsTipsFileTests(unittest.TestCase):
         """A manager keeps mods outside the game folder (Mod Organizer 2, r2modman) or inside it (Vortex)."""
         vortex = next(t["card"] for t in MODS_TIPS if t["card"].lower().find("vortex links") >= 0)
         self.assertIn("into the game folder", vortex)
-        self.assertIn("Mod Organizer 2 keeps mods in its own folder", vortex)
+        self.assertIn("Mod Organizer 2's virtual file system", vortex)
+        self.assertIn("out of the game folder", vortex)
         r2 = next(t["card"] for t in MODS_TIPS if "r2modman keeps" in t["card"])
-        self.assertIn("not the game folder", r2)
         self.assertIn("Start modded", r2)
 
     def test_the_prefix_and_the_windows_app_data_are_both_named(self):
@@ -141,10 +141,34 @@ class ModsTipsFileTests(unittest.TestCase):
 
     def test_the_anti_cheat_tip_points_at_the_games_own_rules_and_gives_no_workaround(self):
         card = next(t["card"] for t in MODS_TIPS if "anti-cheat" in t["card"].lower()).lower()
-        for needle in ("single-player", "own mod support", "multiplayer rules", "won't help"):
+        for needle in ("single-player", "own mod support", "kick you in multiplayer", "battleye", "won't help"):
             self.assertIn(needle, card)
         for word in ("bypass", "disable the anti", "workaround", "banned", "ban "):
             self.assertNotIn(word, card)
+
+    def test_the_anti_cheat_tip_says_a_person_can_be_kicked_in_online_play(self):
+        card = next(t["card"] for t in MODS_TIPS if "anti-cheat" in t["card"].lower())
+        self.assertIn("kick you in multiplayer", card)
+        self.assertIn("block altered files", card)
+
+    def test_the_cyberpunk_script_mods_folder_is_the_mods_folder_under_cyber_engine_tweaks(self):
+        card = next(t["card"] for t in MODS_TIPS if ".reds in r6/scripts" in t["card"])
+        self.assertIn("bin/x64/plugins/cyber_engine_tweaks/mods", card)
+
+    def test_the_crash_tip_keeps_the_frameworks_on_and_moves_files_instead_of_deleting_them(self):
+        card = next(t["card"] for t in MODS_TIPS if "halve again" in t["card"])
+        self.assertIn("keep core frameworks", card)
+        self.assertIn("Move files aside, don't delete them", card)
+        self.assertNotIn("every mod off", card)
+
+    def test_the_script_extender_tip_names_the_extenders_own_site(self):
+        card = next(t["card"] for t in MODS_TIPS if "script extender" in t["card"] and "must match" in t["card"])
+        self.assertIn("skse.silverlock.org", card)
+        self.assertIn("its own site", card)
+
+    def test_the_creations_tip_says_some_items_cost_money(self):
+        card = next(t["card"] for t in MODS_TIPS if "Creations screen" in t["card"])
+        self.assertIn("some cost Creation Credits", card)
 
     def test_bonsai_says_it_cannot_see_mods_a_manager_has_not_deployed(self):
         card = next(t["card"] for t in MODS_TIPS if "bonsAI cannot see" in t["card"])

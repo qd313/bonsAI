@@ -56,6 +56,61 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5540060",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3205,
+      "game_id": 30,
+      "section_type": "item",
+      "name": "Hammer Bro Orb",
+      "card": "Summary: A yellow Thrown Orb that you set on a space as a trap. An opponent who lands on it loses ten coins to a Hammer Bro, and the coins go to you.\nUses: Place it on a Blue, Red, Character or Koopa Kid Space; it appears on every board except Pyramid Park and Bowser's Enchanted Inferno!.\nTips: It cannot affect the user, and if you land on your own Thrown Orb space you get five coins. A rival under a Metal Mushroom Orb is not harmed by traps.",
+      "source_url": "https://www.mariowiki.com/Hammer_Bro_Orb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5538855",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3206,
+      "game_id": 30,
+      "section_type": "item",
+      "name": "Piranha Plant Orb",
+      "card": "Summary: A yellow Thrown Orb trap: an opponent who lands on it is chewed up by a Piranha Plant and loses half their coins, which go to you.\nUses: Place it on a space as a trap; it costs fifteen coins at the Orb Shop and appears on every board except Pagoda Peak and Windmillville.\nTips: If a player is already standing on the space when an opponent lands on it, the Piranha Plant chews only the opponent. You get five coins if you land on your own trap.",
+      "source_url": "https://www.mariowiki.com/Piranha_Plant_Orb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5533861",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3207,
+      "game_id": 30,
+      "section_type": "item",
+      "name": "Spear Guy Orb",
+      "card": "Summary: A yellow Thrown Orb trap: an opponent who lands on it has coins stolen by a Spear Guy, as many as a Dice Block roll, and the coins go to you.\nUses: Place it on a chosen space as a trap; it appears on every board except Grand Canal and Neon Heights.\nTips: The Dice Block can roll 5, 10, 20 or 30 coins. This Orb replaces the Goomba Orb from Mario Party 6.",
+      "source_url": "https://www.mariowiki.com/Spear_Guy_Orb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5533894",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3208,
+      "game_id": 30,
+      "section_type": "item",
+      "name": "Pink Boo Orb",
+      "card": "Summary: A yellow Thrown Orb trap: an opponent who lands on it is robbed by a Pink Boo of a Star, or of 20 coins if they have no Stars, and it goes to you.\nUses: Place it on a space as a trap; it appears on every board except Pagoda Peak and Windmillville, and most shops sell it for 30 coins, or 15 on a discount.\nTips: A Pink Boo appears whenever an opponent lands on a Character Space that a Pink Boo Orb made. If you land on your own trap you get five coins.",
+      "source_url": "https://www.mariowiki.com/Pink_Boo_Orb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5533893",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3209,
+      "game_id": 30,
+      "section_type": "item",
+      "name": "Kamek Orb",
+      "card": "Summary: A yellow Thrown Orb trap: if an opponent lands on it, Kamek appears and gives you control of up to three of that opponent's Character Spaces.\nUses: Place it on a space as a trap; it costs ten coins at the Orb Shop and appears on Pagoda Peak, Pyramid Park and Windmillville.\nTips: Kamek takes over the Character Spaces the victim placed on the board, up to three in Mario Party 7. If you land on your own Thrown Orb space you get five coins.",
+      "source_url": "https://www.mariowiki.com/Kamek_Orb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5533852",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

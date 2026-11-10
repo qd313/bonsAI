@@ -656,6 +656,233 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2310,
+      "name": "Fat Man",
+      "kind": "item",
+      "main_page": "https://fallout.fandom.com/wiki/Fat_Man_(Fallout_4)",
+      "main_revision": "4711727",
+      "lines": [
+        {
+          "line": "Summary: The M42 nuclear catapult, a shoulder-mounted launcher that fires mini nukes in a parabolic arc.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Fat_Man_(Fallout_4)",
+              "revision": "4711727",
+              "quoted": [
+                "The M42 nuclear catapult, better known as the Fat Man, is a weapon in Fallout 4.",
+                "the Fat Man is a shoulder-mounted mini nuke-launcher.",
+                "The Fat Man fires in a parabolic arc"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: A mini nuke travels about 20 yards before it hits when the launcher is held level on even terrain, so angle it upward for anything farther. The experimental MIRV launcher mod, which needs Gun Nut 4 and Science! 4, fires six mini nukes in a cluster that separates in mid-air, which drastically reduces range but raises overall damage and area of effect.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Fat_Man_(Fallout_4)",
+              "revision": "4711727",
+              "quoted": [
+                "mini nukes being launched approximately 20 yards before impact when held level to the ground on even terrain, requiring it to be angled upward for any distance outside of this range.",
+                "When fitted with the MIRV launcher, it fires six mini nukes in a cluster that separates in mid-air, drastically reducing its range, but increasing its overall damage and area of effect.",
+                "An experimental modification.",
+                "Gun Nut: 4 Science!: 4"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: From a long way off the projectile makes a loud whistling noise, a sign to get to cover. A mini nuke is sometimes a dud and only does physical damage if it hits. The MIRV mod can detonate right at your feet, most often when you fire in a direction lower than where you stand. A Fat Man in the main stockpile area of the Federal ration stockpile respawns.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Fat_Man_(Fallout_4)",
+              "revision": "4711727",
+              "quoted": [
+                "When fired from a long enough distance, the projectile makes a loud whistling noise (similar to the cartoon noise for falling from the sky or the sound that bombs make after being dropped) which indicates one should get to cover.",
+                "There is a chance that a mini nuke fired by the Fat Man will be a dud and only cause physical damage to a target if they are hit by the dud.",
+                "When firing with the experimental MIRV modification, there is a chance that it will detonate right at one's feet, even if they are firing away from themselves. This most often happens when the player fires in a direction lower than their current position.",
+                "Federal ration stockpile - In the main stockpile area",
+                "This Fat Man also respawns."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2311,
+      "name": "Mini nukes",
+      "kind": "item",
+      "main_page": "https://fallout.fandom.com/wiki/Mini_nuke_(Fallout_4)",
+      "main_revision": "4714832",
+      "lines": [
+        {
+          "line": "Summary: A football-sized tactical nuclear warhead, as rare as it is powerful, made to be fired from a nuclear catapult weapon.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mini_nuke_(Fallout_4)",
+              "revision": "4714832",
+              "quoted": [
+                "The mini nuke is a football-sized tactical nuclear warhead designed for use in a nuclear catapult weapon in Fallout 4.",
+                "A small, football-sized nuclear bomb, as rare as it is powerful."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: They are the ammunition for the Fat Man launcher. A variant, the Nuka-nuke, is fired by the Nuka-nuke launcher from the Nuka-World add-on.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Fat_Man_(Fallout_4)",
+              "revision": "4711727",
+              "quoted": [
+                "the Fat Man is a shoulder-mounted mini nuke-launcher."
+              ]
+            },
+            {
+              "page": "https://fallout.fandom.com/wiki/Mini_nuke_(Fallout_4)",
+              "revision": "4714832",
+              "quoted": [
+                "Nuka-nuke, deployed by the Nuka-nuke launcher in the Nuka-World add-on."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Mini nukes are commonly found in the region, sometimes carried by super mutant suiciders, and they appear more often as fixed loot in certain locations, respawning often when you are not playing in Survival mode. Kill a suicider without hitting its right arm and before it can detonate its mini nuke, and you can loot it from the corpse. Weapon emporiums built in settlements occasionally sell them, and rarely an ammo box holds three or four, depending on your Scrounger perk rank. In Survival mode each one weighs 12 units.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mini_nuke_(Fallout_4)",
+              "revision": "4714832",
+              "quoted": [
+                "Mini nukes are commonly found in the region. They are sometimes carried by super mutant suiciders. They appear more frequently as fixed loot in certain locations, respawning often when not playing in Survival mode.",
+                "If it is killed without hitting its right arm and before it can detonate the held mini nuke, it can be looted off its corpse afterward.",
+                "Mini nukes can be bought from weapon emporiums built in settlements.",
+                "Mini nukes can (rarely) be found in ammo boxes. When found, they will contain either 3 or 4 mini nukes, depending on the player character's Scrounger perk rank."
+              ]
+            },
+            {
+              "page": "https://fallout.fandom.com/wiki/Fat_Man_(Fallout_4)",
+              "revision": "4711727",
+              "quoted": [
+                "In Survival mode, mini nukes weigh in at 12 units each"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2312,
+      "name": "Junk Jet",
+      "kind": "item",
+      "main_page": "https://fallout.fandom.com/wiki/Junk_Jet_(Fallout_4)",
+      "main_revision": "4686458",
+      "lines": [
+        {
+          "line": "Summary: A heavy weapon that fires any junk items you load into its hopper, such as desk fans, tin cans, teddy bears and Nuka-Cola bottles.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Junk_Jet_(Fallout_4)",
+              "revision": "4686458",
+              "quoted": [
+                "A heavy \"ballistic\" weapon that fires any junk items loaded into its hopper, e.g. desk fans, tin cans, teddy bears, Nuka-Cola bottles, etc."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Fired items can be picked up again, so it has theoretically unlimited ammunition, though about 10% of the time an item is lost on contact with the enemy. A shot charged for about 1 second does more damage. The shots drop sharply beyond pistol range, so it is impractical at long range.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Junk_Jet_(Fallout_4)",
+              "revision": "4686458",
+              "quoted": [
+                "fired items can be picked up after being shot, making this a ranged weapon with theoretically unlimited ammunition. In practice, however, items will (about 10% of the time) be lost upon contact with the enemy",
+                "the Junk Jet does a higher amount of damage if the shot is charged for approximately 1 second",
+                "projectiles follow a parabolic trajectory, dropping significantly beyond effective pistol range. This makes the weapon impractical for long-range fire"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The loaded junk still counts against your Carry Weight, so a light item such as steel, or pre-War money, which weighs nothing, makes good ammunition. Junk is also useful for building and crafting in settlements, so the choice is which items are worth firing instead of keeping in the workshop. You find the weapon in the ArcJet Systems building, on the table in the rocket control room, which can only be entered after starting the quest Call to Arms; its terminal is Advanced-locked.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Junk_Jet_(Fallout_4)",
+              "revision": "4686458",
+              "quoted": [
+                "the contained junk still counts against Carry Weight.",
+                "One that works well is steel",
+                "an item that has zero Carry Weight such as pre-War money.",
+                "collecting junk in Fallout 4 becomes a matter of figuring out which items are worth using as ammunition for the Junk Jet over storing them in the workshop for use with building and crafting",
+                "The weapon can be found inside the ArcJet Systems building, on the table in the rocket control room. Entering the rocket control room is only possible after starting Call to Arms",
+                "Accessing the room itself requires getting past an Advanced-locked terminal"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2313,
+      "name": "Nuka-Cola Quantum",
+      "kind": "item",
+      "main_page": "https://fallout.fandom.com/wiki/Nuka-Cola_Quantum_(Fallout_4)",
+      "main_revision": "4732374",
+      "lines": [
+        {
+          "line": "Summary: A consumable soft drink in a clear bottle of glowing blue liquid, which gets its glow from the radioactive isotope strontium-90.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Nuka-Cola_Quantum_(Fallout_4)",
+              "revision": "4732374",
+              "quoted": [
+                "Nuka-Cola Quantum is a consumable soft drink in Fallout 4.",
+                "A clear bottle with glowing blue liquid inside (achieved through the use of the radioactive isotope Strontium-90.)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It replenishes a large number of hit points for a drink, 40 per second for 10 seconds, and its listing shows +400 hit points, +100 action points and +5 radiation. It is non-addictive, and in Survival mode it counts as a caffeinated drink.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Nuka-Cola_Quantum_(Fallout_4)",
+              "revision": "4732374",
+              "quoted": [
+                "Nuka-Cola Quantum replenishes a large number of Hit Points for a drink: 40 HP per second for 10 seconds.",
+                "+400 Hit Points",
+                "+100 Action Points",
+                "+5 Radiation",
+                "Nuka-Cola Quantum in Fallout 4 is non-addictive.",
+                "In Survival mode, it counts as a caffeinated drink."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A bottle is also a crafting component, for weaponized Nuka-Cola Quantum ammo, the Nuka-nuke and the Nuka-grenade among others. Bottles respawn in areas after you pick them up. A rare Vault-Tec lunchbox (one with stickers) or a Nuka-Cola lunchbox can drop one, and raider gang tribute chests have a 25% chance of holding one.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Nuka-Cola_Quantum_(Fallout_4)",
+              "revision": "4732374",
+              "quoted": [
+                "Compon. of",
+                "Weaponized Nuka-Cola Quantum ammo",
+                "Nuka-nuke",
+                "Nuka-grenade",
+                "Nuka-Cola Quantum in Fallout 4 will respawn in areas after being picked up.",
+                "It is a possible random drop when opening rare Vault-Tec lunchboxes (i.e. ones with stickers)",
+                "It is also a possible random drop when opening Nuka-Cola lunchboxes.",
+                "Raider gang tribute chests: 25%."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -111,6 +111,50 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "4699068",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2310,
+      "game_id": 5,
+      "section_type": "item",
+      "name": "Fat Man",
+      "card": "Summary: The M42 nuclear catapult, a shoulder-mounted launcher that fires mini nukes in a parabolic arc.\nUses: A mini nuke travels about 20 yards before it hits when the launcher is held level on even terrain, so angle it upward for anything farther. The experimental MIRV launcher mod, which needs Gun Nut 4 and Science! 4, fires six mini nukes in a cluster that separates in mid-air, which drastically reduces range but raises overall damage and area of effect.\nTips: From a long way off the projectile makes a loud whistling noise, a sign to get to cover. A mini nuke is sometimes a dud and only does physical damage if it hits. The MIRV mod can detonate right at your feet, most often when you fire in a direction lower than where you stand. A Fat Man in the main stockpile area of the Federal ration stockpile respawns.",
+      "source_url": "https://fallout.fandom.com/wiki/Fat_Man_(Fallout_4)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4711727",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2311,
+      "game_id": 5,
+      "section_type": "item",
+      "name": "Mini nukes",
+      "card": "Summary: A football-sized tactical nuclear warhead, as rare as it is powerful, made to be fired from a nuclear catapult weapon.\nUses: They are the ammunition for the Fat Man launcher. A variant, the Nuka-nuke, is fired by the Nuka-nuke launcher from the Nuka-World add-on.\nTips: Mini nukes are commonly found in the region, sometimes carried by super mutant suiciders, and they appear more often as fixed loot in certain locations, respawning often when you are not playing in Survival mode. Kill a suicider without hitting its right arm and before it can detonate its mini nuke, and you can loot it from the corpse. Weapon emporiums built in settlements occasionally sell them, and rarely an ammo box holds three or four, depending on your Scrounger perk rank. In Survival mode each one weighs 12 units.",
+      "source_url": "https://fallout.fandom.com/wiki/Mini_nuke_(Fallout_4)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4714832",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2312,
+      "game_id": 5,
+      "section_type": "item",
+      "name": "Junk Jet",
+      "card": "Summary: A heavy weapon that fires any junk items you load into its hopper, such as desk fans, tin cans, teddy bears and Nuka-Cola bottles.\nUses: Fired items can be picked up again, so it has theoretically unlimited ammunition, though about 10% of the time an item is lost on contact with the enemy. A shot charged for about 1 second does more damage. The shots drop sharply beyond pistol range, so it is impractical at long range.\nTips: The loaded junk still counts against your Carry Weight, so a light item such as steel, or pre-War money, which weighs nothing, makes good ammunition. Junk is also useful for building and crafting in settlements, so the choice is which items are worth firing instead of keeping in the workshop. You find the weapon in the ArcJet Systems building, on the table in the rocket control room, which can only be entered after starting the quest Call to Arms; its terminal is Advanced-locked.",
+      "source_url": "https://fallout.fandom.com/wiki/Junk_Jet_(Fallout_4)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4686458",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2313,
+      "game_id": 5,
+      "section_type": "item",
+      "name": "Nuka-Cola Quantum",
+      "card": "Summary: A consumable soft drink in a clear bottle of glowing blue liquid, which gets its glow from the radioactive isotope strontium-90.\nUses: It replenishes a large number of hit points for a drink, 40 per second for 10 seconds, and its listing shows +400 hit points, +100 action points and +5 radiation. It is non-addictive, and in Survival mode it counts as a caffeinated drink.\nTips: A bottle is also a crafting component, for weaponized Nuka-Cola Quantum ammo, the Nuka-nuke and the Nuka-grenade among others. Bottles respawn in areas after you pick them up. A rare Vault-Tec lunchbox (one with stickers) or a Nuka-Cola lunchbox can drop one, and raider gang tribute chests have a 25% chance of holding one.",
+      "source_url": "https://fallout.fandom.com/wiki/Nuka-Cola_Quantum_(Fallout_4)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4732374",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

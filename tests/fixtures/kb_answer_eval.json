@@ -3,6 +3,7 @@
  "description": "Answer-side eval for the knowledge base (decision D45, plan 30 W1). Each case runs the real Ask pipeline (run_game_ai_request) against a local Ollama with the Deck's model tag and checks the reply without a judge model: must_mention (facts copied from the card, any-of groups), must_not_say (things the card contradicts), expect_fence (is a ```bonsai-spoiler fence present?), expect_branches (did a Strategy first turn end with the branch menu?), expect_card (the card that should attach, so a miss can be blamed on retrieval rather than on the model). Written by someone who read the cards on 2026-09-02 -- these are NOT blind retrieval rows and must never be copied into kb_eval_v2.json.",
  "notes": [
   "must_mention groups are any-of: the group passes when at least one alternative appears in the reply (case-insensitive).",
+  "case_sets names groups of case ids that --set runs together (with --samples tries each). story-beat is the five cases with expect_fence true; a test keeps the set and that flag in step.",
   "expect_fence false on low-narrative titles and on questions that name the entity (spoiler constitution rule 7). true only where the question itself asks for a story beat or ending. null = not checked.",
   "expect_branches true on Strategy first turns only. Speed and Expert never get a menu.",
   "app_id \"\" with app_name set mimics an EmuDeck shortcut; retrieval resolves the title from the name.",
@@ -10,6 +11,9 @@
   "Calibration edits after a run are allowed for must_mention synonyms only, and are dated in the case note. Never edit a case to make a failing check pass for any other reason.",
   "must_not_say is now a list of claim groups (D86/D88): each inner list is one wrong claim, written as alternative phrasings, matched the same tolerant way as must_mention, and a hit only counts when no negation word (no, not, never, isn't, no longer, without) sits within three words before the matched words. A flat list of strings (the old shape) still loads, as one implicit claim group, for one wave."
  ],
+ "case_sets": {
+  "story-beat": ["A-HADES-03", "A-CP77-03", "A-RDR2-03", "A-HK-03", "A-HADES-04"]
+ },
  "cases": [
   {
    "id": "A-DRG-01",

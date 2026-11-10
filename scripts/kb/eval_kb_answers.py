@@ -448,6 +448,25 @@ def load_fixture(path: Path, only: Optional[set[str]]) -> list[Case]:
     return cases
 
 
+def case_set_ids(path: Path, name: str) -> list[str]:
+    """The case ids of one named set in the fixture's ``case_sets`` (a name to a list of ids), e.g.
+    ``story-beat``. ``ValueError`` names the sets there are when ``name`` is not one of them."""
+    sets = json.loads(path.read_text(encoding="utf-8")).get("case_sets") or {}
+    if name not in sets:
+        known = ", ".join(sorted(sets)) or "none"
+        raise ValueError(f"unknown case set {name!r}; the fixture has: {known}")
+    return [str(i) for i in sets[name]]
+
+
+def selected_case_ids(path: Path, only: str, set_name: str) -> Optional[set[str]]:
+    """The ids ``--only`` (comma-separated) and ``--set`` ask for, together; None when neither is
+    given, which means every case."""
+    ids = {s.strip() for s in only.split(",") if s.strip()}
+    if set_name:
+        ids |= set(case_set_ids(path, set_name))
+    return ids or None
+
+
 # --- follow-up pairs: a first question, then a bare follow-up (plan 48 D98) --------------------
 #
 # The fixture's ``cases`` list is one question each, scored in isolation -- nothing before this
@@ -1881,6 +1900,14 @@ def main(argv: Optional[list[str]] = None) -> int:
         "set of draws, which is how two runs on an unchanged library give a noise band.",
     )
     parser.add_argument("--only", default="", help="comma-separated case ids")
+    parser.add_argument(
+        "--set",
+        default="",
+        metavar="NAME",
+        help="run a named set of cases from the fixture's case_sets (together with any --only ids), "
+        "with --samples tries each; story-beat is the five questions that ask for a story beat. "
+        "Not for --pairs.",
+    )
     parser.add_argument("--variant", default="baseline", choices=sorted(VARIANTS), help="prompt variant hook")
     parser.add_argument(
         "--kb-placement",
@@ -1957,6 +1984,16 @@ def main(argv: Optional[list[str]] = None) -> int:
         print("--sample-for-reading takes a number of replies from 0 up and works on the single-question "
               "cases, not with --pairs", file=sys.stderr)
         return 2
+
+    if args.set and args.pairs:
+        print("--set names cases from the fixture and does not work with --pairs", file=sys.stderr)
+        return 2
+    if args.set:
+        try:
+            case_set_ids(args.fixture, args.set)
+        except ValueError as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
 
     # Find the workshop before a long run starts, not after it has finished.
     if args.write_report or args.sample_for_reading:
@@ -2141,7 +2178,7 @@ def main(argv: Optional[list[str]] = None) -> int:
             print(f"Wrote {json_path}")
         return 0
 
-    only = {s.strip() for s in args.only.split(",") if s.strip()} or None
+    only = selected_case_ids(args.fixture, args.only, args.set)
     cases = load_fixture(args.fixture, only)
     if not cases:
         print("no cases selected", file=sys.stderr)

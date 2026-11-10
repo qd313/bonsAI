@@ -1749,5 +1749,73 @@ class EvalKbAnswersTwoHonestyCountsTests(unittest.TestCase):
         self.assertIn("answers as if it knew 33.3% (1/3)", line)
 
 
+class EvalKbAnswersCaseSetTests(unittest.TestCase):
+    """Plan 103 lane T2, commit 4: ``--set NAME`` runs a named set of cases (the fixture's
+    ``case_sets``), with ``--samples N`` tries each. The first set is the five story-beat questions."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load_eval_module()
+        cls.cases = cls.mod.load_fixture(cls.mod.DEFAULT_FIXTURE, None)
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.modules.pop("eval_kb_answers", None)
+
+    def _fixture(self, tmp, sets):
+        rows = [{"id": f"C{i}", "app_id": "1", "app_name": "Game", "ask_mode": "speed", "question": "q"} for i in range(4)]
+        path = Path(tmp) / "fixture.json"
+        path.write_text(json.dumps({"cases": rows, "case_sets": sets}), encoding="utf-8")
+        return path
+
+    def test_the_story_beat_set_is_exactly_the_cases_that_expect_a_spoiler_cover(self):
+        ids = self.mod.case_set_ids(self.mod.DEFAULT_FIXTURE, "story-beat")
+        due = [c.id for c in self.cases if c.expect_fence is True]
+        self.assertEqual(len(ids), 5)
+        self.assertEqual(sorted(ids), sorted(due))
+
+    def test_every_set_names_cases_that_exist(self):
+        raw = json.loads(self.mod.DEFAULT_FIXTURE.read_text(encoding="utf-8"))
+        known = {c.id for c in self.cases}
+        self.assertTrue(raw["case_sets"])
+        for name, ids in raw["case_sets"].items():
+            self.assertTrue(set(ids) <= known, name)
+
+    def test_selected_case_ids_is_the_set_alone_the_only_list_alone_or_both(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self._fixture(tmp, {"pair": ["C1", "C2"]})
+            pick = self.mod.selected_case_ids
+            self.assertEqual(pick(path, "", ""), None)
+            self.assertEqual(pick(path, "C0", ""), {"C0"})
+            self.assertEqual(pick(path, "", "pair"), {"C1", "C2"})
+            self.assertEqual(pick(path, "C0, C1", "pair"), {"C0", "C1", "C2"})
+
+    def test_an_unknown_set_name_is_refused_and_the_known_names_are_listed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self._fixture(tmp, {"pair": ["C1"], "trio": ["C1", "C2", "C3"]})
+            with self.assertRaises(ValueError) as caught:
+                self.mod.selected_case_ids(path, "", "nope")
+        self.assertIn("nope", str(caught.exception))
+        self.assertIn("pair, trio", str(caught.exception))
+
+    def test_a_fixture_with_no_sets_refuses_a_set_name_without_crashing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "f.json"
+            path.write_text(json.dumps({"cases": []}), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                self.mod.selected_case_ids(path, "", "story-beat")
+
+    def test_the_command_line_refuses_an_unknown_set_before_anything_runs(self):
+        with patch("sys.stderr", new_callable=io.StringIO) as err:
+            self.assertEqual(self.mod.main(["--set", "nope"]), 2)
+        self.assertIn("nope", err.getvalue())
+        self.assertIn("story-beat", err.getvalue())
+
+    def test_a_set_cannot_be_combined_with_pairs(self):
+        with patch("sys.stderr", new_callable=io.StringIO) as err:
+            self.assertEqual(self.mod.main(["--pairs", "--set", "story-beat"]), 2)
+        self.assertIn("--set", err.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()

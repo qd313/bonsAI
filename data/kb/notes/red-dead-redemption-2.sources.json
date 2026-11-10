@@ -2,6 +2,11 @@
   "wiki": "Red Dead Wiki (https://reddead.fandom.com/api.php)",
   "licence_printed_by_fetcher": "Red Dead Wiki (MediaWiki 1.43.10) licence: CC-BY-SA https://www.fandom.com/licensing",
   "licence_stored": "CC-BY-SA-3.0 (the fetcher prints CC-BY-SA with no version, linking Fandom's licensing page; the library stores Fandom wikis in the versioned form CC-BY-SA-3.0, as data/kb/NOTICE.md does for the GTA, Fallout, Left 4 Dead, Cyberpunk and Sims wikis; data/kb/NOTICE.md has no Red Dead Wiki row yet and needs one)",
+  "licence_evidence": [
+    "The wiki's own rights info (action=query&meta=siteinfo&siprop=rightsinfo, read 2026-11-09) returns the text \"CC-BY-SA\" and the link https://www.fandom.com/licensing, with no version.",
+    "Fandom's help page Help:Licensing (community.fandom.com, revision 3983537, 2025-07-02) says that, unless noted otherwise, all text on a wiki is under the Creative Commons Attribution-Share Alike License 3.0 (Unported); this is where the stored version comes from.",
+    "The wiki's own project page Red Dead Wiki:Copyrights (last edited 2009-06-28) says GFDL, but marks itself as possibly outdated and incorrect and sends readers to Fandom's licensing page; it is treated as stale, and the maintainer confirms the licence before anything is published."
+  ],
   "game_id": 11,
   "game": "Red Dead Redemption 2",
   "read_on": "2026-11-09",
@@ -42,7 +47,7 @@
           ]
         },
         {
-          "line": "Looks like: Green, scaly skin, a long tail, a large gaping mouth and eyes that stick out from either side of the head.",
+          "line": "Looks like: Green and scaly, with a long tail, a big open mouth and eyes sticking out at the sides of its head.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Alligator",
@@ -54,7 +59,7 @@
           ]
         },
         {
-          "line": "Tips: A scoped rifle lets you kill one from farther away without getting close. Alligators cannot be skinned in water, so it is best to find and kill one lying on the shore; most of them lie still near the shores of Bayou Nwa and only attack or fight back if you come too close. Small alligators flee when you approach, and your horse gets spooked and throws you off if you ride toward a gator.",
+          "line": "Tips: A scoped rifle lets you kill one from farther away without getting close. Alligators cannot be skinned in water, so it is best to find and kill one lying on the shore; most of them just lie still on the shores of Bayou Nwa and stay passive unless you get too close. Small alligators flee when you approach, and your horse gets spooked and throws you off if you ride toward a gator.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Alligator",
@@ -232,7 +237,7 @@
           ]
         },
         {
-          "line": "Weak points: The page names none; it says they are unusually durable for human enemies, and have survived point-blank shotgun blasts and in some cases even headshots with lesser firearms.",
+          "line": "Weak points: The page names none; it only says they are tougher than other human enemies, and have been seen surviving a shotgun blast fired at point-blank range.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Murfree_Brood",
@@ -339,7 +344,7 @@
       "main_revision": "476855",
       "lines": [
         {
-          "line": "Summary: A glass bottle of flammable spirits with a cloth fuse that causes a large fireball on impact. It has high power, low range and low accuracy, and it cannot be customized.",
+          "line": "Summary: A glass bottle of flammable spirits with a cloth wick, used as a projectile; it bursts into a big fireball on impact. It has high power, low range and low accuracy, and cannot be customized.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Fire_Bottle_(RDR_2)",
@@ -465,7 +470,7 @@
           ]
         },
         {
-          "line": "Uses: It can silently take down enemies at range, and you can save a trip by picking it up again after throwing. Unlike the hunting knife, a throwing knife and its variants can trigger an instant melee takedown if you equip it and aim at an aggressive enemy at close range.",
+          "line": "Uses: It can silently take down enemies at range, and you can save a trip by picking it up again after throwing. Equipped and aimed at an aggressive enemy up close, it (or a variant) can start an instant melee takedown; the hunting knife cannot.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Throwing_Knife_(RDR_2)",
@@ -523,7 +528,7 @@
           ]
         },
         {
-          "line": "Uses: Dual wielding it with a second sawed-off shotgun is highly effective for quickly eliminating anything in your way, man or beast. It takes regular buckshot, incendiary buckshot, slug and explosive slug.",
+          "line": "Uses: Two of them dual wielded are highly effective against people and animals alike. It takes regular buckshot, incendiary buckshot, slug and explosive slug.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Sawed-Off_Shotgun_(RDR_2)",
@@ -571,7 +576,7 @@
           ]
         },
         {
-          "line": "Uses: It suits close to medium range, and fires fast from the hip. Rifling improves its range, and a longer barrel and improved iron sights improve its accuracy. It can take 3 to 4 shots to kill an NPC hit in the torso, but a single shot to the head, neck or upper chest is enough.",
+          "line": "Uses: It suits close to medium range, and fires fast from the hip. Rifling improves its range, and a longer barrel and improved iron sights improve its accuracy. Torso hits may need three or four shots to kill a person, while a head, neck or upper-chest hit needs one.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Cattleman_Revolver_(RDR_2)",

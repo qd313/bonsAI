@@ -33,6 +33,7 @@ The wikis the notes come from, and their licences:
 | Left 4 Dead Wiki | left4dead.fandom.com | CC-BY-SA-3.0 |
 | Palworld Wiki | palworld.wiki.gg | CC-BY-SA-4.0 |
 | The Portal Wiki | theportalwiki.com | CC-BY-4.0 |
+| Red Dead Wiki | reddead.fandom.com | CC-BY-SA-3.0 |
 | Super Mario Wiki | www.mariowiki.com | CC-BY-SA-4.0 |
 | Pikipedia | www.pikminwiki.com | CC-BY-SA-4.0 |
 | SmashWiki | www.ssbwiki.com | CC-BY-SA-4.0 |

@@ -104,7 +104,7 @@
           ]
         },
         {
-          "line": "Weak points: Its suit makes it resistant to fire: a Molotov does not set it alight and incendiary ammo does not ignite it, though the bullets still hit, and one left idle in a fire for a long time dies from the heat. Shoot it in the head or hit it with a melee weapon.",
+          "line": "Weak points: Its suit makes it resistant to fire: a Molotov does not set it alight and incendiary ammo does not ignite it, though the bullets still hit, and one left idle in a fire for a long time dies from the heat. Shoot it or hit it with a melee weapon.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -114,7 +114,7 @@
                 "they are resistant to fire, as they do not burst into flames when in the middle of a Molotov's fire, and incendiary ammunition do not set them on fire.",
                 "If your primary weapon is loaded with incendiary ammo, it will not light them on fire, but they will still be hit from the bullet.",
                 "If idle within fire for extended periods of time, they will die due to the heat.",
-                "Shooting them in the head or damaging them with Melee Weapons is encouraged."
+                "As they are immune to fire, do not bother using Molotovs on them. Either use firearms or a melee weapon."
               ]
             }
           ]
@@ -136,15 +136,15 @@
           ]
         },
         {
-          "line": "Tips: With a free slot, grab the bile bomb from its corpse and save it. In the No Mercy hospital they supply almost all the bile in the campaign, though they seldom carry one.",
+          "line": "Tips: Its corpse sometimes holds a bile bomb you can pick up. In the No Mercy hospital they supply almost all the bile in the campaign, though they seldom carry one.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
               "revision": "173635",
               "part_of_page": "CEDA Worker Infected",
               "quoted": [
-                "If you have an empty inventory slot, look for the Bile vial on the Agent’s corpse, pick up the Bile, and use it later.",
-                "These are the only sources of Bile in the campaign (besides 3 unreliable spawns in the warehouse and one spawn right outside the sewer exit), however they carry Bile quite rarely"
+                "These are the only sources of Bile in the campaign (besides 3 unreliable spawns in the warehouse and one spawn right outside the sewer exit), however they carry Bile quite rarely",
+                "When killed, there is a chance of them dropping a Bile Bomb"
               ]
             }
           ]
@@ -174,23 +174,23 @@
           ]
         },
         {
-          "line": "Weak points: Any attack that hurts a common infected works on it. Shoving it honks its nose, and after four honks in a row the next shove kills it. If you kill one at a distance, the infected following it stop and mill about for a moment, so shoot them then.",
+          "line": "Weak points: It shares a common infected's weaknesses. Shoving it honks its nose, and after four honks in a row the next shove kills it. If you kill one at a distance, the infected following it stop and mill about for a moment, so shoot them then.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
               "revision": "173635",
               "part_of_page": "Clown Infected",
               "quoted": [
-                "Although susceptible to all attacks that damage Common Infected",
                 "A single Clown Infected's nose can be honked up to four times in succession, as any more shoves will kill the Infected.",
                 "If a Clown is killed at a distance, all Infected following him will stop, mill around swatting at the air around his corpse, then attack the Survivors shortly afterwards.",
-                "Use this moment to kill them quickly before they realize that you are there."
+                "Use this moment to kill them quickly before they realize that you are there.",
+                "They have the same general weaknesses as their common brethren, but are slightly more resistant to damage than them."
               ]
             }
           ]
         },
         {
-          "line": "Looks like: Oversized squeaky shoes and striped trousers (for example pink and blue, red and yellow, or blue and white), and a flower on its chest that sometimes squirts water.",
+          "line": "Looks like: Squeaky shoes and striped trousers (for example pink and blue, red and yellow, or blue and white), and a flower on its chest that sometimes squirts water.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -198,8 +198,8 @@
               "quoted": [
                 "Clown pants come in a variety of colors, including pink and blue, red and yellow, blue and white, pink and green and white and red",
                 "The flower on the Clown's torso occasionally squirts water.",
-                "their choice in oversized footwear",
-                "The pants have many different colored stripes"
+                "The pants have many different colored stripes",
+                "with their noisy, squeaky shoes"
               ]
             }
           ]
@@ -244,13 +244,14 @@
           ]
         },
         {
-          "line": "Weak points: Treat them like common infected, but a bit tougher: 150 health on Normal and above, 50 on Easy. They are quick, so shoot rather than flee, and swap to melee if mud blocks your view.",
+          "line": "Weak points: Treat them like common infected, but a bit tougher: 150 health on Normal and above, 50 on Easy. They sprint on all fours.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
               "revision": "173635",
               "quoted": [
-                "They have the same general weaknesses as their common brethren, but are slightly more resistant to damage than them."
+                "They have the same general weaknesses as their common brethren, but are slightly more resistant to damage than them.",
+                "Mud Men sprint on all fours low to the ground"
               ]
             },
             {
@@ -259,9 +260,7 @@
               "part_of_page": "Mud Men",
               "quoted": [
                 "150 (Normal, Advanced, Expert, Realism, Survival & Versus)",
-                "50 (Easy)",
-                "Mudmen are faster than Common Infected as they move on all fours, so fire on them instead of attempting to outrun them.",
-                "using Melee Weapons if your vision is too blurred to see your team"
+                "50 (Easy)"
               ]
             }
           ]
@@ -328,7 +327,7 @@
           ]
         },
         {
-          "line": "Weak points: Handle them like common infected, but a bit tougher: 150 health on Normal and above, 50 on Easy. They cannot hear a pipe bomb through their ear protectors, so one only helps if it lands near them.",
+          "line": "Weak points: Handle them like common infected, but a bit tougher: 150 health on Normal and above, 50 on Easy. They cannot hear a pipe bomb through their ear protectors.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -344,8 +343,7 @@
               "quoted": [
                 "150 (Normal, Advanced, Expert, Realism, Survival & Versus)",
                 "50 (Easy)",
-                "Their unique ear protectors make them unable to hear pipe bombs.",
-                "This projectile is useless unless you aim it so it lands within the vicinity of this zombie type."
+                "Their unique ear protectors make them unable to hear pipe bombs."
               ]
             }
           ]
@@ -365,7 +363,7 @@
           ]
         },
         {
-          "line": "Tips: A bile bomb that lands without hitting any infected does not draw them either: they go for the survivors instead, so aim it to hit several infected. They still react to car alarms and to a chainsaw, and they mostly react to movement they see, so you can sneak past one that is looking away.",
+          "line": "Tips: A bile bomb that lands without hitting any infected does not draw them either: they go for the survivors instead, so aim it to hit several infected. They still react to a chainsaw's noise.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -374,10 +372,7 @@
               "quoted": [
                 "If the bile bomb is thrown without hitting any Infected, they will spawn, but will instead attack the Survivors.",
                 "Use the bile bomb carefully and try to hit multiple targets with it.",
-                "They can still hear car alarms though.",
-                "they still react to the sounds of the chainsaw by going after the Survivor with it.",
-                "This means they pretty much only react to movement they see.",
-                "You can sneak past them if they’re looking the other way"
+                "they still react to the sounds of the chainsaw by going after the Survivor with it."
               ]
             }
           ]
@@ -543,7 +538,7 @@
           ]
         },
         {
-          "line": "Tips: It works worse in Left 4 Dead 2, where idle infected react slowly to it and some not at all. Throw it low, and push away infected that are already close or they attack instead of chasing it. Special infected and Worker Infected are not drawn to it, and a Witch or Tank near the blast stumbles but does not follow.",
+          "line": "Tips: It works worse in Left 4 Dead 2, where idle infected react slowly to it and some not at all. Throw it low, and push away infected that are already close or they attack instead of chasing it. Special infected and Worker Infected are not drawn to it, and a Witch or Tank near the blast can be stumbled but will not follow.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Pipe_Bomb",
@@ -652,7 +647,7 @@
           ]
         },
         {
-          "line": "Tips: You cannot carry it together with a first aid kit. Expect about one a level, and the Director often puts one nearby when a survivor is close to dying. Nobody who dies hanging from a ledge can be revived, because they fall away.",
+          "line": "Tips: You cannot carry it together with a first aid kit. Expect about one a level, and the Director often puts one nearby when a survivor is close to dying. Someone who dies by losing their grip on a ledge cannot be revived, because they fall away.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Healing_items",
@@ -661,7 +656,8 @@
               "quoted": [
                 "For game balancing purposes, Survivors cannot carry a Defibrillator and First Aid Kit at the same time.",
                 "Defibrillators don't tend to spawn often, usually one per level apart from a few exceptions. If a Survivor is on the verge of death, the Director will tend to spawn one nearby.",
-                "If someone dies from hanging (holding onto a ledge), they cannot be revived using the Defibrillator since they fall and become a ragdoll."
+                "If someone dies from hanging (holding onto a ledge), they cannot be revived using the Defibrillator since they fall and become a ragdoll.",
+                "However, if they are killed by another Survivor whilst hanging via friendly fire (rather than losing their grip and falling to their death) their body may fall into an accessible area that allows them to be defibrillated and revived."
               ]
             }
           ]
@@ -896,7 +892,7 @@
           ]
         },
         {
-          "line": "Uses: Most special infected die in under half a second, and a Charger in just over; a Tank takes 3, 4, 6 or 8 seconds on Easy, Normal, Advanced and Expert. Only the chainsaw among melee weapons can cut you loose from a Smoker's tongue, and it needs no careful aim or timing.",
+          "line": "Uses: Most special infected die in under half a second, and a Charger in just over; a Tank takes 3, 4, 6 or 8 seconds on Easy, Normal, Advanced and Expert. The chainsaw cuts you loose from a Smoker's tongue without careful aim or timing, which other melee weapons need.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Chainsaw",
@@ -905,7 +901,8 @@
                 "taking 3/4/6/8 seconds (Easy/Normal/Advanced or Versus/Expert) to kill it.",
                 "The Special Infected generally die in less than half a second against the Chainsaw, aside from the Charger, which takes just over half a second.",
                 "The Chainsaw is the only melee weapon that will allow players to cut themselves free from a Smoker's tongue",
-                "the Chainsaw does not require any particular aiming nor such precise timing"
+                "the Chainsaw does not require any particular aiming nor such precise timing",
+                "Other melee weapons can do likewise but require very precise timing and aim."
               ]
             }
           ]

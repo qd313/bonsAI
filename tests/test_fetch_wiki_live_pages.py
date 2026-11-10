@@ -231,5 +231,53 @@ class PlainPageFallbackTests(unittest.TestCase):
         self.assertEqual(opened.call_count, 3)
 
 
+class ByTitleFallbackTests(unittest.TestCase):
+    """Mario Wiki and the Smash wiki refuse a render by revision number (403) but answer one by title."""
+
+    API = "https://x.example/api.php"
+
+    def _api(self, by_title_revid=77):
+        def fake(_api, params, **_k):
+            if "oldid" in params:
+                raise fetcher.ApiRefused("HTTP 403")
+            assert params.get("page") == "Boo", params
+            return {"parse": {"revid": by_title_revid, "text": {"*": "<p>Boo is a ghost.</p>"}}}
+        return fake
+
+    def test_a_refused_by_revision_call_is_asked_again_by_title(self):
+        with mock.patch.object(fetcher, "api_get", side_effect=self._api()), mock.patch.object(
+            fetcher, "fetch_plain_html"
+        ) as plain:
+            text = fetcher.render_page(self.API, 77, "https://x.example/wiki/Boo", "Boo")
+        self.assertIn("Boo is a ghost.", text)
+        plain.assert_not_called()
+
+    def test_the_run_prints_one_plain_line_saying_it_asked_by_title(self):
+        with mock.patch.object(fetcher, "api_get", side_effect=self._api()), mock.patch("builtins.print") as shown:
+            fetcher.render_page(self.API, 77, "https://x.example/wiki/Boo", "Boo")
+        lines = [str(c.args[0]) for c in shown.call_args_list if c.args]
+        self.assertEqual(len([l for l in lines if l.startswith("[fallback]")]), 1)
+        self.assertIn("by title", lines[0])
+
+    def test_a_page_whose_revision_moved_is_refused(self):
+        with mock.patch.object(fetcher, "api_get", side_effect=self._api(by_title_revid=78)):
+            with self.assertRaises(fetcher.RevisionMoved):
+                fetcher.render_page(self.API, 77, "https://x.example/wiki/Boo", "Boo")
+
+    def test_a_moved_page_does_not_stop_the_rest_of_the_batch(self):
+        pages = {"Boo": {"title": "Boo", "url": "u", "revid": 77, "timestamp": "2026-01-01T00:00:00Z", "categories": []}}
+        info = {"sitename": "S", "generator": "g", "licence_text": "L", "licence_url": ""}
+        out = Path(REPO_ROOT) / ".scratch" / "by-title-batch"
+        argv = ["x", "--api", self.API, "--titles", "Boo", "--out", str(out), "--pause", "0"]
+        with mock.patch.object(fetcher, "site_info", return_value=info), mock.patch.object(
+            fetcher, "resolve_page", side_effect=lambda _a, t: pages[t]
+        ), mock.patch.object(fetcher, "api_get", side_effect=self._api(by_title_revid=78)), mock.patch.object(
+            fetcher.sys, "argv", argv
+        ):
+            self.assertEqual(fetcher.main(), 0)
+        manifest = fetcher.json.loads((out / "_manifest.json").read_text(encoding="utf-8"))
+        self.assertTrue(manifest["pages"][0].get("refused"))
+
+
 if __name__ == "__main__":
     unittest.main()

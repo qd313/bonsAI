@@ -170,6 +170,10 @@ class _TextExtractor(HTMLParser):
         return raw.strip() + "\n"
 
 
+class RevisionMoved(Exception):
+    """The wiki rendered a different revision than the one looked up, so the page is not used."""
+
+
 class ApiRefused(SystemExit):
     """The wiki answered 401/403: it is refusing this call, and asking again will not change that."""
 
@@ -259,16 +263,34 @@ def resolve_page(api: str, title: str) -> dict | None:
     return None
 
 
-def render_page(api: str, revid: int, page_url: str = "") -> str:
-    """Rendered text of one revision. When the wiki refuses the page-render call (Palworld's own
-    wiki answers HTTP 403) and ``page_url`` is given, the plain page of the same revision is read
-    instead -- only its article box, so the site's menus and footer stay out."""
+def _html_text(data: dict) -> str:
+    parser = _TextExtractor()
+    parser.feed(data.get("parse", {}).get("text", {}).get("*", ""))
+    return parser.text()
+
+
+def render_page(api: str, revid: int, page_url: str = "", title: str = "") -> str:
+    """Rendered text of one revision. When the wiki refuses the render call by revision number
+    (Mario Wiki and the Smash wiki answer HTTP 403) and ``title`` is given, it asks again by page
+    title and refuses the page if the wiki rendered another revision (RevisionMoved). If that is
+    refused too (Palworld's own wiki) and ``page_url`` is given, the plain page of the same
+    revision is read instead -- only its article box, so the site's menus and footer stay out."""
+    common = {"prop": "text|revid", "disableeditsection": "1", "disablelimitreport": "1"}
     try:
-        data = api_get(
-            api,
-            {"action": "parse", "oldid": str(revid), "prop": "text", "disableeditsection": "1", "disablelimitreport": "1"},
-        )
+        data = api_get(api, {"action": "parse", "oldid": str(revid), **common})
     except ApiRefused:
+        data = None
+        if title:
+            print(f"[fallback] by-revision render refused; asked by title {title!r} (revision {revid} checked)")
+            try:
+                data = api_get(api, {"action": "parse", "page": title, **common})
+            except ApiRefused:
+                pass
+        if data is not None:
+            got = data.get("parse", {}).get("revid")
+            if got != revid:
+                raise RevisionMoved(f"{title}: looked up revision {revid}, the wiki rendered {got}")
+            return _html_text(data)
         if not page_url:
             raise
         sep = "&" if "?" in page_url else "?"
@@ -281,10 +303,7 @@ def render_page(api: str, revid: int, page_url: str = "") -> str:
             parser = _TextExtractor()
             parser.feed(html)
         return parser.text()
-    html = data.get("parse", {}).get("text", {}).get("*", "")
-    parser = _TextExtractor()
-    parser.feed(html)
-    return parser.text()
+    return _html_text(data)
 
 
 def slugify(title: str) -> str:
@@ -343,7 +362,13 @@ def main() -> int:
             manifest["pages"] = [p for p in manifest["pages"] if p.get("requested") != title]
             manifest["pages"].append({"requested": title, "missing": True, "read_on": today})
             continue
-        text = render_page(args.api, int(page["revid"]), page.get("url", ""))
+        try:
+            text = render_page(args.api, int(page["revid"]), page.get("url", ""), page["title"])
+        except RevisionMoved as exc:
+            print(f"[refused] {exc}")
+            manifest["pages"] = [p for p in manifest["pages"] if p.get("requested") != title]
+            manifest["pages"].append({"requested": title, "refused": "revision moved", "read_on": today})
+            continue
         slug = slugify(page["title"])
         header = (
             f"# source: {page['url']}\n"

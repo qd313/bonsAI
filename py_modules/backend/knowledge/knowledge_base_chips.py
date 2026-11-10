@@ -10,7 +10,9 @@ records what actually survived once the knowledge block and a Proton log are
 stacked together under one byte budget.
 
 Used for: `suggest_chip_candidates()` is called once per running game to
-build the RAG chip row. `summarize_kb_coverage()` backs the "not in my
+build the RAG chip row. Given the last question's words and meaning vector
+(`LastQuestion`), it puts the game's notes closest to that question first and
+leaves today's order behind them; without one the order is unchanged. `summarize_kb_coverage()` backs the "not in my
 notes" honesty line in kb_not_in_notes_notice.py.
 `session_rag_chip_candidates_to_rpc()` is the RPC-facing serializer for the
 first.
@@ -24,7 +26,8 @@ is running" with "a game is running but the corpus has nothing for it";
 
 Does not: Run the search used for an actual Ask -- see
 knowledge_base_search.py. This file only reads how many cards a game has and
-what their names and kinds are.
+what their names and kinds are, and (for the closeness order) the vectors the
+library already holds -- it never asks a model for one.
 """
 
 from __future__ import annotations
@@ -35,7 +38,8 @@ from typing import Any, Optional
 
 from backend.knowledge.knowledge_base_cards import _get_connection, close_connection
 from backend.knowledge.knowledge_base_game_match import _resolve_game_id
-from backend.knowledge.knowledge_base_schema import resolve_corpus_db_path
+from backend.knowledge.knowledge_base_schema import resolve_corpus_db_path, unpack_embedding_vector
+from backend.spoilers.strategy_spoiler_policy import name_appears_in_text
 
 _CHIP_TEXT_MAX_LEN = 80
 
@@ -65,6 +69,35 @@ _COMPAT_CHIP_TEMPLATES: dict[str, str] = {
 
 # Generic compat chips are capped so they cannot crowd out entity-named candidates.
 _MAX_COMPAT_CHIP_CANDIDATES = 2
+
+# Ordering the game's chips by the last question (plan 103, lane C1). After an Ask the notes closest to
+# what was asked come first and today's order carries on behind them, so nothing is favoured for ever:
+# the next question moves the front of the row again.
+#
+# How many notes may come forward at most.
+_CLOSEST_FIRST = 4
+# A note comes forward only when it is clearly nearer the question than the rest of the game's notes: at
+# least this much above the game's average, and at least this close in absolute terms. Cosine on
+# normalised vectors, the same measure the search uses (see knowledge_base_search._dot_similarity).
+_CLOSE_OVER_AVERAGE = 0.07
+_CLOSE_ABSOLUTE = 0.55
+
+# Kinds the spoiler rules hold back: the Ask fences boss and enemy names the player did not say
+# (strategy_spoiler_policy._BOSS_LIKE_KINDS) and calls the rest of these high-risk
+# (spoiler_risk_service._HIGH_SPOILER_SECTION_TYPES). A chip's words show before the player asks
+# anything, so a note of these kinds that today's ten chips do not already offer may come forward only
+# when the question itself named it. A test keeps this list equal to those two.
+_HELD_BACK_KINDS = frozenset(
+    {"boss", "enemy", "dungeon", "quest", "area", "ending", "story", "puzzle", "secret"}
+)
+
+
+@dataclass(frozen=True)
+class LastQuestion:
+    """What the chips are ordered by: the question's words and its meaning vector."""
+
+    text: str
+    vector: list[float]
 
 
 @dataclass
@@ -284,6 +317,65 @@ def _list_game_sections_for_chips(
     return out
 
 
+def _closest_first(
+    conn: sqlite3.Connection,
+    game_id: int,
+    todays: list[tuple[str, str]],
+    question: LastQuestion,
+    *,
+    limit: int,
+) -> list[tuple[str, str]]:
+    """``todays`` with the notes closest to ``question`` moved to the front, or ``todays`` unchanged.
+
+    Unchanged whenever there is nothing sound to go on: a library without vectors, notes without a
+    vector, a vector of another length, or no note clearly nearer than the rest. Never a new call to a
+    model -- the vector is the one the search already made for this question.
+    """
+    if not question.vector:
+        return todays
+    try:
+        rows = conn.execute(
+            "SELECT s.section_type, s.name, v.embedding FROM sections s "
+            "JOIN section_vectors v ON v.section_id = s.section_id "
+            "WHERE s.game_id = ? AND v.embedding IS NOT NULL",
+            (game_id,),
+        ).fetchall()
+    except sqlite3.OperationalError:
+        return todays
+    scored: list[tuple[float, str, str]] = []
+    for row in rows:
+        vec = unpack_embedding_vector(bytes(row["embedding"]))
+        if len(vec) != len(question.vector):
+            return todays
+        scored.append(
+            (
+                sum(a * b for a, b in zip(question.vector, vec)),
+                str(row["section_type"] or ""),
+                str(row["name"] or ""),
+            )
+        )
+    if not scored:
+        return todays
+    bar = max(_CLOSE_ABSOLUTE, sum(s for s, _, _ in scored) / len(scored) + _CLOSE_OVER_AVERAGE)
+    offered = set(todays)
+    closest: list[tuple[str, str]] = []
+    for score, kind, name in sorted(scored, key=lambda row: -row[0]):
+        if score < bar or len(closest) >= _CLOSEST_FIRST:
+            break
+        if kind.lower() == "starting_out":
+            continue  # "how do I get started" is for a new player, not for someone mid-question
+        if (
+            kind.lower() in _HELD_BACK_KINDS
+            and (kind, name) not in offered
+            and not name_appears_in_text(question.text, name)
+        ):
+            continue
+        closest.append((kind, name))
+    if not closest:
+        return todays
+    return (closest + [pair for pair in todays if pair not in closest])[:limit]
+
+
 def _compat_chip_candidates(
     conn: sqlite3.Connection,
     *,
@@ -325,8 +417,13 @@ def suggest_chip_candidates(
     app_id: str,
     app_name: str,
     shortcut_name: str = "",
+    last_question: Optional[LastQuestion] = None,
 ) -> SessionRagChipCandidatesResult:
-    """Return curtailed preset-chip prompts from the offline KB for the running game."""
+    """Return curtailed preset-chip prompts from the offline KB for the running game.
+
+    ``last_question``, when given, orders the game's own chips by how close each note is to it (see
+    ``_closest_first``); without it the order is the same as it was before this existed.
+    """
     if settings.get("use_local_knowledge_base") is not True:
         return SessionRagChipCandidatesResult(ok=False, reason="kb_off")
 
@@ -353,7 +450,12 @@ def suggest_chip_candidates(
                 "SELECT canonical_title FROM games WHERE game_id = ?", (game_id,)
             ).fetchone()
             game_title = str(game_row["canonical_title"] or "") if game_row else ""
-            for section_type, name in _list_game_sections_for_chips(conn, game_id):
+            todays = _list_game_sections_for_chips(conn, game_id)
+            if last_question is not None:
+                todays = _closest_first(
+                    conn, game_id, todays, last_question, limit=_GAME_CHIP_POOL_SIZE
+                )
+            for section_type, name in todays:
                 text = _curtail_section_to_chip(section_type, name, game_title=game_title)
                 if not text or text in seen:
                     continue

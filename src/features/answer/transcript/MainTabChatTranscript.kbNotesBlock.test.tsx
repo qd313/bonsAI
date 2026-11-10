@@ -384,6 +384,36 @@ describe("a fenced reply", () => {
     fireEvent.click(hideButton as HTMLElement);
     expect(block(container)).toBeNull();
   });
+
+  /* Plan 103 S1 piece 3: the wait for a cover to open is one answer's own, not the whole page's. */
+  function coveredTurn(id: string, noteName: string): AskThreadCollapsedTurn {
+    return {
+      id,
+      question: `what should i know about ${noteName}`,
+      answer: `\`\`\`bonsai-spoiler\nThat's ${noteName}.\n\`\`\``,
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note({ name: noteName, source_host: "hollowknight.wiki" })],
+      },
+    };
+  }
+
+  it("keeps a second covered answer's notes hidden after a cover was opened on the first", () => {
+    const first = coveredTurn("t1", "Broken Vessel");
+    const second = coveredTurn("t2", "Soul Master");
+    const props = (expanded: string) =>
+      baseProps({ askThreadCollapsed: [first, second], expandedTurnKey: expanded, strategySpoilerMaskingEnabled: true });
+    const { container, rerender } = render(<MainTabChatTranscript {...props("t1")} />);
+    fireEvent.click(container.querySelector(".bonsai-spoiler-reveal-target button") as HTMLElement);
+    expect(block(container)?.textContent).toContain("Broken Vessel");
+
+    rerender(<MainTabChatTranscript {...props("t2")} />);
+    expect(container.querySelector(".bonsai-spoiler-reveal-target")).not.toBeNull();
+    expect(block(container)).toBeNull();
+  });
 });
 
 describe("the live turn, before the reply is done", () => {

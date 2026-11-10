@@ -545,6 +545,232 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3707,
+      "name": "Red Weapon Balloon (missiles)",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Weapon_Balloon",
+      "main_revision": "5186606",
+      "lines": [
+        {
+          "line": "Summary: The red Weapon Balloon gives missiles, and they get stronger the more red balloons you collect in a row.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Red Balloon Missiles",
+                "collecting multiple of the same color in sequence improves the item's effects by up to a total of three levels"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: One red balloon gives a missile that fires straight ahead, two give a homing missile and three give a volley of ten.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Missiles || One forward-firing missile || One homing missile || One 10x multi-shot missile"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Weapon_Balloon",
+              "revision": "5186606",
+              "quoted": [
+                "A missile",
+                "A homing missile",
+                "Ten missiles"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Red, with yellow stars printed on it; the blue and green balloons carry yellow stars as well.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Weapon_Balloon",
+              "revision": "5186606",
+              "quoted": [
+                "Most kinds of Weapon Balloons have printed stars on them.",
+                "While the red, blue and green balloons have yellow stars on them"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Being hit by a missile of any of the three levels makes you lose some bananas.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "If players get hit (by a level 1-3 red balloon or level 2-3 green balloon), they lose some bananas."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Red balloons are how you attack Bubbler, and Tricky's course has some too to help you against him.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bubbler",
+              "revision": "5504565",
+              "quoted": [
+                "Bubbler can be attacked by the player shooting missiles at him from red Weapon Balloons."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Tricky",
+              "revision": "5405970",
+              "quoted": [
+                "there are red and blue Weapon Balloons to help the player against Tricky"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3708,
+      "name": "Blue Weapon Balloon (speed boosts)",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Weapon_Balloon",
+      "main_revision": "5186606",
+      "lines": [
+        {
+          "line": "Summary: The blue Weapon Balloon gives a speed boost that grows stronger the more blue balloons you collect in a row.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Blue Balloon Speed boosts",
+                "collecting multiple of the same color in sequence improves the item's effects by up to a total of three levels"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: One blue balloon gives a small boost, two give a larger one and three give the biggest. Letting go of the accelerator button as you use it makes the boost bigger, as with Zippers.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "A small speed boost. As with the Zippers, releasing the accelerator button gives a larger boost.",
+                "A larger speed boost",
+                "The most significant speed boost"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In battle courses an item can only be upgraded once.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Weapon_Balloon",
+              "revision": "5186606",
+              "quoted": [
+                "Battle stages allow only up to the first upgrade."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The ROCKETFUEL magic code turns every balloon blue.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "ROCKETFUEL || All balloons are blue"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3709,
+      "name": "Yellow Weapon Balloon (shield)",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Weapon_Balloon",
+      "main_revision": "5186606",
+      "lines": [
+        {
+          "line": "Summary: The yellow Weapon Balloon gives a shield, and it lasts longer the more yellow balloons you collect in a row.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Yellow Balloon Shield",
+                "collecting multiple of the same color in sequence improves the item's effects by up to a total of three levels"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: The shield protects you from hits, and any opponent you run into spins out. One balloon gives a short shield, two a longer one and three the longest.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "A short-lasting shield which protects against hits. If the players run into opponents, the opponents spin out.",
+                "A longer-lasting shield which protects against hits.",
+                "A long-lasting shield."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Weapon_Balloon",
+              "revision": "5186606",
+              "quoted": [
+                "A shield that lasts even longer"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A yellow balloon with purple stars printed on it.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Weapon_Balloon",
+              "revision": "5186606",
+              "quoted": [
+                "the yellow balloon has purple stars on it"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Touching a balloon of any other colour swaps the shield for that colour's item.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Collecting a balloon of another color cancels it out and replaces it with the new item."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The BODYARMOR magic code turns every balloon yellow.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "BODYARMOR || All balloons are yellow"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

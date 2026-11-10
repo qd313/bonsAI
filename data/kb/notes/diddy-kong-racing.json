@@ -78,6 +78,39 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5413702",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3707,
+      "game_id": 33,
+      "section_type": "item",
+      "name": "Red Weapon Balloon (missiles)",
+      "card": "Summary: The red Weapon Balloon gives missiles, and they get stronger the more red balloons you collect in a row.\nUses: One red balloon gives a missile that fires straight ahead, two give a homing missile and three give a volley of ten.\nLooks like: Red, with yellow stars printed on it; the blue and green balloons carry yellow stars as well.\nTips: Being hit by a missile of any of the three levels makes you lose some bananas.\nTips: Red balloons are how you attack Bubbler, and Tricky's course has some too to help you against him.",
+      "source_url": "https://www.mariowiki.com/Weapon_Balloon",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5186606",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3708,
+      "game_id": 33,
+      "section_type": "item",
+      "name": "Blue Weapon Balloon (speed boosts)",
+      "card": "Summary: The blue Weapon Balloon gives a speed boost that grows stronger the more blue balloons you collect in a row.\nUses: One blue balloon gives a small boost, two give a larger one and three give the biggest. Letting go of the accelerator button as you use it makes the boost bigger, as with Zippers.\nTips: In battle courses an item can only be upgraded once.\nTips: The ROCKETFUEL magic code turns every balloon blue.",
+      "source_url": "https://www.mariowiki.com/Weapon_Balloon",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5186606",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3709,
+      "game_id": 33,
+      "section_type": "item",
+      "name": "Yellow Weapon Balloon (shield)",
+      "card": "Summary: The yellow Weapon Balloon gives a shield, and it lasts longer the more yellow balloons you collect in a row.\nUses: The shield protects you from hits, and any opponent you run into spins out. One balloon gives a short shield, two a longer one and three the longest.\nLooks like: A yellow balloon with purple stars printed on it.\nTips: Touching a balloon of any other colour swaps the shield for that colour's item.\nTips: The BODYARMOR magic code turns every balloon yellow.",
+      "source_url": "https://www.mariowiki.com/Weapon_Balloon",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5186606",
+      "crawled_at": "2026-11-10"
     }
   ]
 }

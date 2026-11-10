@@ -726,6 +726,39 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
      workshop's checks folder (`plan103-sample-earlier.md`, `-B`, `-C`, `-D`, `-E`, `-F`; B and C were drawn before
      the rewording pass, so read the notes files' final text beside them).
 
+- **02:45 EST: the bookkeeper's sweep K2 landed** (`127fe2f6`), then the session paused for the usage window.
+- **06:02 EST, 2026-11-10: the window reset** (1 percent of five hours, 42 percent of the week, 44 percent on Fable's
+  own counter). The Deck was still asleep. Combine OverWiki still answered "Database is read-only" (the third try), so
+  Half-Life 2 and Black Mesa stay without notes. Seven helpers started at 06:05, two more later.
+- **The state at 07:05 EST (tip `d88a7430`, every check green).**
+  1. *Landed this morning,* in five landings (one needed a fix: the chip order had added an optional setting to a
+     function whose call shape a test keeps frozen): blind test questions for the last ten games that got notes (292
+     rows, so 586 rows in 20 files); labels on six of the eight unanswered versus questions; 36 mod-tip questions;
+     corrections to thirteen sentences in older notes that their wiki pages contradict (lane M; the Molotov note left
+     alone, its pages do not clearly disagree); **the suggestion chips ordered by the last question** (lane C1: after an
+     answer the game's chips lead with up to four notes closest to it; spoiler-kind notes come forward only if the
+     question named them; the screen's rotation still picks at random after the first deal, so the closest note is
+     sure of one spot only); **the picture's own guess for the note search, switched off** (lane P2: built in both
+     rounds; only four of the 29 labelled pictures name a note and none shows a boss, too few to decide on).
+  2. *Measured (lane X1, the numbers in the middle; reports in the workshop's research folder with `p103-middle`):*
+     the library now holds 891 notes (308 new this session). On the same 628 held-back questions the right note is in
+     the first three for 572 (581 before); the thirty meaning-only questions fell from 23 to 18 while the meaning
+     search alone still finds 28: **the crowding grew with the new notes.** Of the first 294 blind questions, 281 find
+     their note in the first three. Tips unchanged. Facts kept in answers 70.1 and 68.9 percent (73.4 and 71.8
+     before), just outside the gap between runs. *The crowding fix measured again on today's library (lane R1b):*
+     still not landing. It lifts the thirty meaning-only questions to 25 and brings back 12 older questions, but it
+     loses 5 of the new ones, loses seven right notes net on the plugin's own search, and moves an exact word match
+     off first place on seven questions. Its cause: every game's "Starting out" note ranks high by meaning and gets
+     lifted past a note the word search really found. Record: `kb-crowding-fix-2026-11-10-p103-r1b.md`.
+  3. *The Deck:* still asleep; nothing deployed; no block has run since D0b. The runbooks for blocks D2, D3 and DR are
+     written (`docs/planning/assets/103-runbook-block-D2.md`, `-D3-DR.md`). A watcher on this PC ends when the Deck
+     answers on the network.
+  4. *Usage at 06:35:* 16 percent of the five-hour window (resets 11:00 EST), 44 percent of the week, 46 percent on
+     Fable's own counter.
+  5. *Running:* the bookkeeper's sweep K3 and the final numbers (lane X2). *Next:* land K3; then, if the Deck wakes,
+     deploy and blocks D1, D2, D3, DR; then the end audit, the full check, the report and the checks page. *Waiting on
+     the maintainer:* the Deck's power button (question 8); questions 3 to 7.
+
 **Questions for the maintainer (the safest choice is taken meanwhile):**
 
 2. **Answered 2026-11-09, 21:12 EST:** the Deck was frozen with God of War in the background and an answer half
@@ -740,7 +773,10 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
    *Taken meanwhile:* stored as 3.0, like the library's four other Fandom wikis, with the evidence written beside the
    notes. Confirm before anything is published, or say to drop that game's notes.
 5. **The crowding fix: the safer setting lands; the stricter one is yours to choose** (the second opinion's table in
-   § 7 has the trade).
+   § 7 has the trade). *Since then:* nothing landed (it failed its own rule on the night's numbers), and the fix was measured
+   again on 2026-11-10 on the bigger library: it still loses more than its rule allows (the state at 07:05 above
+   has the numbers). *Taken meanwhile:* the search is unchanged. The call left is whether a later session should
+   try the fix with "Starting out" notes left out of the lift.
 6. **The starter-models box:** the paragraph that explains "Turn on and download" sits last, so it is hidden until
    Down is pressed. Moving it up changes the order in every download box. *Taken meanwhile:* left where it is.
 7. **The Brotato wiki's licence** is read from its page footer (the wiki's own data gives none). The older Brotato
@@ -758,29 +794,32 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
 
 **Pick-up list (kept current; a new chat can carry on from here):**
 
-- Tip: `b1827281`, every check green. The session's own running notes, with every helper's id, every hand-out and the
+- Tip: `d88a7430`, every check green. The session's own running notes, with every helper's id, every hand-out and the
   lists not yet acted on, are in `.scratch/p103/` in the shared checkout (not in git): `session-notes.md` first.
-- Land with `scripts/land_lane.sh <branch> <base> .scratch/p103`, one at a time; several finished helpers can be
-  picked onto one branch in a copy (`.claude/worktrees/p103-land1` or `-land2`) and landed as one batch. Read the
-  script's exit code. On a failed check the picked commits stay on the tip: fix forward with one more commit. A
-  helper's final report can be pulled from its transcript with `.scratch/p103/last_report.py`.
-- In flight at 02:20: the bookkeeper's sweep K2 (copy `p103-k2`; its result list is `.scratch/p103/k2-results.md`).
-  Land it alone when it reports. A timer runs to the 06:00 EST reset.
-- Not landing: `refactor/p103-r1` (the crowding fix, turned down). Not written: notes for Hades, Half-Life 2, Black
-  Mesa.
-- Not started: Q4 second part (Melee, Grand Theft Auto III, Yoshi's Story, Diddy Kong Racing), Q5 (the last six
-  games), Q6 (the eight versus rows and the mod-tip questions); names lists come from
-  `.scratch/p103/names_for_q.py <notes files>`. X1. P2 (measure on the 29 pictures; lands off unless it clearly
-  earns on; `game_ai_request.py` has three lines of room). Lane M (the corrections list is in the K2 result list).
-  C1. X2 at the end. Blocked on pictures: P3 and P4.
+- Land with `scripts/land_lane.sh <branch> <base> .scratch/p103`, one at a time (`.scratch/p103/land_queue.sh` runs
+  the lines of `queue.txt` in order and logs to `chain.log`). Read the exit code. On a failed check the picked commits
+  stay on the tip: fix forward with one more commit. A helper's final report can be pulled from its transcript with
+  `.scratch/p103/last_report.py`; every helper brief of this session with `.scratch/p103/agent_prompts.py`.
+- In flight at 07:05: the bookkeeper's sweep K3 (copy `p103-k3`; its result list is `.scratch/p103/k3-results.md`),
+  to land alone when it reports; the final numbers, lane X2 (copy `p103-x2`; commits nothing; reports to the
+  workshop's research folder with `p103-after`).
+- Not landing: `refactor/p103-r1` and `refactor/p103-r1b` (the crowding fix, turned down twice on its numbers).
+  Not written: notes for Hades (licence), Half-Life 2 and Black Mesa (their wiki read-only on three tries). Blocked on
+  boss pictures: P3 and P4. Switched off: the honest "I don't know", the picture's guess.
 - The Deck: build `9bc29b3c0500` (nothing deployed yet); published library 2026.10.25; five saved chats; the mode
-  chip on Strategy. Asleep. When it wakes: `deck_status`, check no game runs, `scripts/build.ps1` from the shared
-  checkout at a green tip, read the build hash, then a fresh driver with the D1 runbook and that hash. Block D2's
-  runbook is still to write: the rows in the F1 brief plus the reads in `.scratch/p103/consult-4.md` and
-  `consult-4b.md`. Put-backs owed in block DR: the mode chip back to Speed, the long test chat deleted, the
-  published library back, "Show Developer tab" off.
-- Budget: read the three counters before every batch. Sixteen helpers at once used 28 percent of a window in fifteen
-  minutes; a note lane with its checker, licence read, fix round and second read costs about 12 percent in all.
+  chip on Strategy. Asleep since about 01:10 EST. When it wakes: `deck_status`, check no game runs, `scripts/build.ps1`
+  from the shared checkout at a green tip with nothing landing, read the build hash
+  (`sha256sum ~/homebrew/plugins/bonsAI/dist/index.js | cut -c1-12`), then one fresh driver per block with that hash:
+  D1 (`103-runbook-block-D1.md`), D2 (`-D2.md`), D3 and then DR (`-D3-DR.md`; tell D3's driver the chip order landed).
+  One deploy serves all of them now that everything has landed.
+- The end, after the Deck or without it: the bookkeeper's end audit (K9, the same brief as K0); `python
+  scripts/verify.py --full` on the final tip; the report in § 13 in § 11's shape (the second opinion's consult 6
+  before it; three of six consults used); the checks page's "plan 103" group (the six ten-note samples, the picture
+  labels, the quick-start words, the caption, the starter box on a fresh install, the crowding trade, the honest
+  answer's Speed-mode option, the two wiki licences, P102-UNDO-FOCUS-01, and every Deck row still owed); plan 33's
+  rows; plan 37's dated paragraph.
+- Budget: read the three counters before every batch. This morning nine helpers and five landings used about 20
+  percent of a five-hour window.
 
 ## 13. Report
 

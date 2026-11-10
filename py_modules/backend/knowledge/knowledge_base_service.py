@@ -191,6 +191,7 @@ from backend.knowledge.knowledge_base_chips import (
     _COMPAT_CHIP_TEMPLATES,
     _curtail_section_to_chip,
     kb_coverage_to_transparency,
+    remember_last_question,
     session_rag_chip_candidates_to_rpc,
     stack_context_blocks,
     suggest_chip_candidates,
@@ -1136,6 +1137,14 @@ def retrieve_knowledge_context(
             t_embed = time.perf_counter()
             try:
                 query_vector = query_embedding.get()
+                # Leave the question and its vector for the chips fetched right after the answer
+                # (plan 103, lane C1). Not for a tips turn (the chips are about the game's notes)
+                # and never a reason for a search to fail.
+                if game_id is not None and domain != "compat":
+                    try:
+                        remember_last_question(game_id, question, query_vector)
+                    except Exception:
+                        pass
                 embed_ms = query_embedding.elapsed_ms
                 t_rerank = time.perf_counter()
                 recall_cards: list[KnowledgeCard] = []

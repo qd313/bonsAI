@@ -100,6 +100,39 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "2063635",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3409,
+      "game_id": 25,
+      "section_type": "enemy",
+      "name": "Fighting Wire Frames",
+      "card": "Summary: Common enemies in Melee's 1-player modes, in male and female varieties. Generally they are weak and light fighters and are very easy to KO.\nWeak points: They cannot use special moves or charge smash attacks, and their moves are much weaker versions of Captain Falcon's and Zelda's attacks; they make up for having no recovery moves with high jumping. Their attacks lack any real physical strength, and they are slow and easy to outmaneuver.\nLooks like: A framework of pink lines in a humanoid shape, with the Super Smash Bros. logo on the face and a red heart-like object in the chest; they are larger than the characters they are modelled on.\nTips: Males always home towards your character, while females play a more passive role and rarely attack directly. In Cruel Melee all of them are extremely aggressive, extremely powerful and harder to knock off-stage, so characters cannot survive easily among them. In Adventure Mode they are fought in a low-gravity version of Battlefield, and there and in Multi-Man Melee they cannot be Star or Screen KO'd.",
+      "source_url": "https://www.ssbwiki.com/Fighting_Wire_Frames",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "1988421",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3410,
+      "game_id": 25,
+      "section_type": "boss",
+      "name": "Classic Mode's final boss",
+      "card": "Summary: The last fight of Classic Mode, fought on the Melee version of Final Destination. It has a set amount of HP that must be depleted to win, and in Melee that amount depends on the difficulty.\nWeak points: In Melee this boss loses the ability to turn around, and its movement depends entirely on the attack it is using and your position: it always returns to its starting position when it is not attacking.\nLooks like: A giant white glove; in Melee its wrist fades into nothingness instead of ending in a cuff.\nTips: Its power increases with each increment in difficulty, and the highest levels give it many attacks that can KO in one hit. Laser Nail shoots a laser beam from each fingertip; Finger Bullet fires one pair of bullets until it has taken 150% damage and three pairs after that. Power Slap buries the player, and the Vertical Throw cannot KO under normal conditions. Taking half of its HP off within the time limit brings a second boss into the fight.",
+      "source_url": "https://www.ssbwiki.com/Master_Hand_(SSBM)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "1952272",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3411,
+      "game_id": 25,
+      "section_type": "boss",
+      "name": "A hidden boss in Classic Mode",
+      "card": "Summary: A bonus boss that appears in Classic Mode's last fight, alongside the final boss. To face it you must play on Normal difficulty or higher and reduce the final boss's HP by half within a total of 5 minutes and 50 seconds since the start of the mode.\nWeak points: It starts with the same number of HP that the first boss started with, and you have only one chance to defeat it. Its Spasm attack cannot hit aerial targets, and a Finger Bomb that hits a character before it reaches the ground does only low damage with minimal knockback.\nLooks like: Its basic appearance is exactly the same as the final boss's, apart from being a left hand.\nTips: Most of its attacks are stronger variations of the final boss's, plus a few of its own. Flying Punch can star KO as low as 35%, the Forward Throw can KO at low percentages without DI, and the third poke of Tri-Poke can star KO at middle to high percentages.",
+      "source_url": "https://www.ssbwiki.com/Crazy_Hand_(SSBM)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "1902437",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

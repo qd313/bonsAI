@@ -565,6 +565,202 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3409,
+      "name": "Fighting Wire Frames",
+      "kind": "enemy",
+      "main_page": "https://www.ssbwiki.com/Fighting_Wire_Frames",
+      "main_revision": "1988421",
+      "lines": [
+        {
+          "line": "Summary: Common enemies in Melee's 1-player modes, in male and female varieties. Generally they are weak and light fighters and are very easy to KO.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Fighting_Wire_Frames",
+              "revision": "1988421",
+              "quoted": [
+                "are common enemies in various 1-player modes in Super Smash Bros. Melee.",
+                "Fighting Wire Frames come in male and female varieties",
+                "Generally, they are weak and light fighters, and are very easy to KO"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: They cannot use special moves or charge smash attacks, and their moves are much weaker versions of Captain Falcon's and Zelda's attacks; they make up for having no recovery moves with high jumping. Their attacks lack any real physical strength, and they are slow and easy to outmaneuver.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Fighting_Wire_Frames",
+              "revision": "1988421",
+              "quoted": [
+                "as to compensate their lack of recoveries due to their inability to use special moves, the Fighting Wire Frames have high jumping prowess.",
+                "They are also unable to charge smash attacks and their moves are much weaker versions of Captain Falcon and Zelda's attacks.",
+                "All Fighting Wire Frames lack the ability to use special techniques, and their attacks lack any real physical strength. Additionally, they're slow and are therefore easy to outmaneuver."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A framework of pink lines in a humanoid shape, with the Super Smash Bros. logo on the face and a red heart-like object in the chest; they are larger than the characters they are modelled on.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Fighting_Wire_Frames",
+              "revision": "1988421",
+              "quoted": [
+                "are, true to their name, a framework of pink lines in a humanoid shape",
+                "Their faces feature the Super Smash Bros. logo, and a red heart-like object can be found within their chests.",
+                "The Fighting Wire Frames are also larger than their counterparts"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Males always home towards your character, while females play a more passive role and rarely attack directly. In Cruel Melee all of them are extremely aggressive, extremely powerful and harder to knock off-stage, so characters cannot survive easily among them. In Adventure Mode they are fought in a low-gravity version of Battlefield, and there and in Multi-Man Melee they cannot be Star or Screen KO'd.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Fighting_Wire_Frames",
+              "revision": "1988421",
+              "quoted": [
+                "males always home towards the player's character, whereas the females tend to play a more passive role, rarely directly assaulting or attacking the player.",
+                "In Cruel Melee, however, all Wire Frames are extremely aggressive, and are also handicapped to be extremely powerful and harder to knock off-stage.",
+                "Characters cannot survive easily among the Wire Frames because of their amplified power and aggressive edge-guarding.",
+                "In Adventure Mode, the Fighting Wire Frames are fought in a low-gravity version of Battlefield.",
+                "In Adventure Mode and Multi-Man Melee, the Wire Frames have the property of being unable to be Star or Screen KO'd"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3410,
+      "name": "Classic Mode's final boss",
+      "kind": "boss",
+      "main_page": "https://www.ssbwiki.com/Master_Hand_(SSBM)",
+      "main_revision": "1952272",
+      "lines": [
+        {
+          "line": "Summary: The last fight of Classic Mode, fought on the Melee version of Final Destination. It has a set amount of HP that must be depleted to win, and in Melee that amount depends on the difficulty.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Master_Hand_(SSBM)",
+              "revision": "1952272",
+              "quoted": [
+                "He is the final boss of the 1-player Classic Mode, and has a set HP which must be depleted to win",
+                "He is fought on the Melee version of Final Destination.",
+                "His HP is now dependent on difficulty, instead of having 300 HP regardless of difficulty."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: In Melee this boss loses the ability to turn around, and its movement depends entirely on the attack it is using and your position: it always returns to its starting position when it is not attacking.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Master_Hand_(SSBM)",
+              "revision": "1952272",
+              "quoted": [
+                "he loses the ability to turn around",
+                "Master Hand's movement is now entirely dependent on the attack he's using and the player's position; he always returns to his starting position when not attacking."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A giant white glove; in Melee its wrist fades into nothingness instead of ending in a cuff.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Master_Hand_(SSBM)",
+              "revision": "1952272",
+              "quoted": [
+                "just because it wears a white glove doesn't mean it fights clean.",
+                "instead of appearing as a glove with a \"cuff\", Master Hand's \"wrist\" fades into nothingness."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its power increases with each increment in difficulty, and the highest levels give it many attacks that can KO in one hit. Laser Nail shoots a laser beam from each fingertip; Finger Bullet fires one pair of bullets until it has taken 150% damage and three pairs after that. Power Slap buries the player, and the Vertical Throw cannot KO under normal conditions. Taking half of its HP off within the time limit brings a second boss into the fight.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Master_Hand_(SSBM)",
+              "revision": "1952272",
+              "quoted": [
+                "In addition to this increase in HP, his power increases with each increment in difficulty, with the highest levels giving him a multitude of attacks with OHKO potential.",
+                "Master Hand shoots a laser beam from each of his fingertips.",
+                "He fires one pair if he hasn't taken 150% damage yet, and three pairs if he took 150% damage or more.",
+                "Master Hand slaps the ground. Buries the player.",
+                "High damage and knockback, but cannot KO under normal conditions.",
+                "If the player reduces Master Hand's HP by half, Crazy Hand appears"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3411,
+      "name": "A hidden boss in Classic Mode",
+      "kind": "boss",
+      "main_page": "https://www.ssbwiki.com/Crazy_Hand_(SSBM)",
+      "main_revision": "1902437",
+      "lines": [
+        {
+          "line": "Summary: A bonus boss that appears in Classic Mode's last fight, alongside the final boss. To face it you must play on Normal difficulty or higher and reduce the final boss's HP by half within a total of 5 minutes and 50 seconds since the start of the mode.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Crazy_Hand_(SSBM)",
+              "revision": "1902437",
+              "quoted": [
+                "In Classic Mode, he appears as a bonus boss fought alongside Master Hand; to fight him, one must play Classic Mode on Normal difficulty or higher, reach Master Hand, and reduce Master Hand's HP by half within a total of 5 minutes and 50 seconds since the start of the mode."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: It starts with the same number of HP that the first boss started with, and you have only one chance to defeat it. Its Spasm attack cannot hit aerial targets, and a Finger Bomb that hits a character before it reaches the ground does only low damage with minimal knockback.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Crazy_Hand_(SSBM)",
+              "revision": "1902437",
+              "quoted": [
+                "Crazy Hand starts with the same number of HP that Master Hand started with (dependent on the difficulty).",
+                "You have only one chance to defeat the Crazy Hand.",
+                "Very large hitbox and sends opponents upward, but cannot hit aerial targets.",
+                "If a bomb hits a character before it hits the ground, it does low damage with minimal knockback."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Its basic appearance is exactly the same as the final boss's, apart from being a left hand.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Crazy_Hand",
+              "revision": "2064351",
+              "quoted": [
+                "Crazy Hand's basic appearance is exactly the same as Master Hand's (apart from being a left hand)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Most of its attacks are stronger variations of the final boss's, plus a few of its own. Flying Punch can star KO as low as 35%, the Forward Throw can KO at low percentages without DI, and the third poke of Tri-Poke can star KO at middle to high percentages.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Crazy_Hand_(SSBM)",
+              "revision": "1902437",
+              "quoted": [
+                "Most of Crazy Hand's attacks are stronger variations of Master Hand's; however he also has a few unique attacks of his own.",
+                "star KOing as low as 35%.",
+                "KOing the player at low percentages without DI.",
+                "being capable of star KOing any players at middle to high percentage."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

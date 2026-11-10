@@ -53,6 +53,7 @@ from backend.knowledge.knowledge_base_service import (
     VECTOR_RECALL_MARGIN_MIN_POOL,
     VECTOR_RECALL_POOL_MARGIN,
 )
+from backend.knowledge import knowledge_base_service as kb_service
 from backend.knowledge.compat_topic_router import match_compat_corpus_topics
 from backend.knowledge.kb_not_in_notes_notice import should_show_no_close_match_notice
 from backend.knowledge.ollama_embed_service import OllamaEmbedError
@@ -2215,6 +2216,47 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     self.assertIsNotNone(result.best_meaning)
     self.assertIsNone(result.best_meaning_without_game_name)
 
+  def test_the_blend_is_told_the_question_and_which_notes_the_meaning_search_found(self):
+    """Plan 104 lane R1, at the plugin's own entry point: the crowding cap and the "Starting out"
+    rule are only as good as what retrieve_knowledge_context hands the blend. It must pass the
+    question (so a "how do i start" question can lift the starting note) and name as
+    meaning-found only the notes the vector pass added, not the ones the word search returned."""
+    settings = {"use_local_knowledge_base": True, "rag_corpus_path": str(SEED_DB.parent)}
+    game_two = _get_connection(str(SEED_DB)).execute(
+      "SELECT section_id FROM sections WHERE game_id = 2"
+    )
+    ids = [row[0] for row in game_two]
+    weak = [0.3, 0.0] + [0.0] * 766
+    vectors = dict.fromkeys(ids, weak)
+    vectors[3] = [0.9, 0.0] + [0.0] * 766  # Glyphid Dreadnought, a word hit
+    other = next(sid for sid in ids if sid != 3)
+    vectors[other] = [0.95, 0.0] + [0.0] * 766  # a note only the meaning search can have found
+    seen: dict = {}
+    real = kb_service._fuse_cards_by_rrf
+
+    def _spy(cards, query_vector, vectors_by_id, **kwargs):
+      seen.update(kwargs)
+      seen["word_ids"] = {c.section_id for c in cards}
+      return real(cards, query_vector, vectors_by_id, **kwargs)
+
+    question = "Glyphid Dreadnought weak point"
+    with _hybrid_hooked({"return_value": [[1.0, 0.0] + [0.0] * 766]}, vectors), mock.patch.object(
+      kb_service, "_fuse_cards_by_rrf", side_effect=_spy
+    ):
+      retrieve_knowledge_context(
+        settings,
+        ask_mode="strategy",
+        question=question,
+        app_id="2321470",
+        app_name="Deep Rock Galactic: Survivor",
+        domain="strategy",
+        pc_ip="127.0.0.1:11434",
+      )
+    self.assertEqual(seen["question"], question)
+    self.assertIn(3, seen["word_ids"])
+    self.assertIn(other, seen["meaning_found_ids"])
+    self.assertFalse(seen["meaning_found_ids"] & seen["word_ids"])
+
   def _retrieve_proton_compat_with_meaning_scores(self, compat_vectors):
     """Ask the seed corpus's troubleshooting tips "why is my game crashing proton issue" (five
     real tips in its keyword pool, per test_compat_hybrid_reranks_when_nomic_available) in
@@ -3224,3 +3266,231 @@ class CompatPatternsTipContentTests(unittest.TestCase):
             any(":11434" in card for card in frame_cards),
             "one tip should tell a person the port to point bonsAI at on the streaming PC",
         )
+
+
+class RrfCrowdingTests(unittest.TestCase):
+    """Plans 103 and 104, lane R1: a long word list must not crowd out a note found only by meaning.
+
+    A note the word search did not return takes a place in the word list: one past its end. With
+    ``CROWDING_CAP_ON`` a note the MEANING search found is capped at
+    MEANING_FOUND_WORD_PLACE_CEILING (5); one pulled in by a kind word or a routed topic is not,
+    and neither is a generic "Starting out in <game>" note unless the question asks how to start.
+    Without the cap, a ten-long word list put a missed note at place 11, and a stray-word hit in
+    9th place earned almost the same credit as a miss. The older blend tests use five notes or
+    fewer; these use long word lists. Each test says whether it wants the switch on (the default
+    here, so the cap's own rules are what is read) or off (``cap=False``: the blend as it was).
+    """
+
+    @staticmethod
+    def _card(section_id: int, name: str) -> KnowledgeCard:
+        return KnowledgeCard(
+            section_id, 2, "Game", "area", name, f"card {name}", "", "", None, None, "fallback"
+        )
+
+    @staticmethod
+    def _unit(similarity: float) -> list[float]:
+        """A vector whose cosine with the query [1, 0] is exactly ``similarity``."""
+        return [similarity, (1.0 - similarity * similarity) ** 0.5]
+
+    def _fuse(self, words, vectors, *, cap=True, top_k, **kwargs):
+        with mock.patch.object(kb_service, "CROWDING_CAP_ON", cap):
+            fused = _fuse_cards_by_rrf(words, [1.0, 0.0], vectors, top_k=top_k, **kwargs)
+        return [c.name for c in fused]
+
+    def _crowded_pool(self):
+        """Ten word hits, W1 first, and one note M that only the meaning search finds.
+
+        Meaning order: M, then W9 (the stray-word hit in 9th place), then W1 and the other word hits.
+        Without the cap W9 outranks M: its word credit (9th place) beats M's missed place (11th).
+        """
+        words = [self._card(i, f"W{i}") for i in range(1, 11)]
+        meaning_only = self._card(99, "M")
+        sims = {99: 0.99, 9: 0.98, 1: 0.97}
+        for i in (2, 3, 4, 5, 6, 7, 8, 10):
+            sims[i] = 0.90 - 0.01 * i
+        vectors = {sid: self._unit(s) for sid, s in sims.items()}
+        return words, meaning_only, vectors
+
+    def _order(self, words, meaning_only, vectors, *, cap=True, **kwargs):
+        return self._fuse(words, vectors, cap=cap, top_k=11, recall_cards=[meaning_only], **kwargs)
+
+    def test_the_cap_puts_a_meaning_found_note_no_further_back_than_place_five(self):
+        self.assertEqual(kb_service.MEANING_FOUND_WORD_PLACE_CEILING, 5)
+
+    def test_the_cap_ships_switched_off(self):
+        """Plan 104 lane R1 measured three versions on 2026-11-15 (the cap with the "Starting out"
+        rule; the older demotion alone; both) against a library of 917 notes. None met the
+        landing rule (no question loses its right note, "No close match" shows on no new
+        question): the cap gains 14 and loses 7 on the search test, 17 and 21 on the plugin's own
+        search. So it ships off, and the maintainer decides with the table. A change to this
+        line is a change to what a player sees: re-measure first."""
+        self.assertFalse(kb_service.CROWDING_CAP_ON)
+        self.assertFalse(kb_service.DEMOTE_STARTING_OUT_NOTES)
+
+    def test_with_the_switch_off_the_blend_is_the_old_formula_exactly(self):
+        """A bigger pool than the hand-built ones, checked against the blend as it was before this
+        work: every note the word search missed sits one past the end of the word list, whatever
+        found it. Left to the real switch (off), the order must match this reference."""
+        import random
+
+        rng = random.Random(104)
+        words = [self._card(i, f"W{i}") for i in range(1, 13)]
+        recalled = [self._card(100 + j, f"M{j}") for j in range(4)]
+        pool = words + recalled
+        vectors = {c.section_id: self._unit(rng.uniform(0.2, 0.99)) for c in pool}
+        by_similarity = sorted(
+            range(len(pool)), key=lambda i: (-vectors[pool[i].section_id][0], i)
+        )
+        scores = [0.0] * len(pool)
+        for i in range(len(pool)):
+            place = i + 1 if i < len(words) else len(words) + 1
+            scores[i] += kb_service.RRF_W_FTS / (kb_service.RRF_K + place)
+        for vec_rank, i in enumerate(by_similarity, start=1):
+            scores[i] += kb_service.RRF_W_VEC / (kb_service.RRF_K + vec_rank)
+        expected = [pool[i].name for i in sorted(range(len(pool)), key=lambda i: (-scores[i], i))]
+        with mock.patch.object(kb_service, "DEMOTE_STARTING_OUT_NOTES", False):
+            got = [
+                c.name
+                for c in _fuse_cards_by_rrf(
+                    words, [1.0, 0.0], vectors, top_k=16, recall_cards=recalled,
+                    meaning_found_ids={c.section_id for c in recalled}, question="how to get double jump",
+                )
+            ]
+        self.assertEqual(got, expected)
+
+    def test_without_the_cap_a_ninth_place_stray_word_hit_outranks_a_meaning_only_note(self):
+        words, meaning_only, vectors = self._crowded_pool()
+        order = self._order(words, meaning_only, vectors, cap=False)
+        self.assertLess(order.index("W9"), order.index("M"))
+
+    def test_with_the_switch_off_naming_the_meaning_found_notes_changes_nothing(self):
+        """Off is off: the third argument the plugin passes is read only when the switch is on."""
+        words, meaning_only, vectors = self._crowded_pool()
+        orders = [
+            self._order(words, meaning_only, vectors, cap=False, meaning_found_ids=found)
+            for found in (None, set(), {99})
+        ]
+        self.assertEqual(orders[0], orders[1])
+        self.assertEqual(orders[0], orders[2])
+
+    def test_a_meaning_only_note_outranks_a_ninth_place_stray_word_hit(self):
+        words, meaning_only, vectors = self._crowded_pool()
+        for found in (None, {99}):  # left out (the search test) and named by the plugin
+            with self.subTest(meaning_found_ids=found):
+                order = self._order(words, meaning_only, vectors, meaning_found_ids=found)
+                self.assertLess(order.index("M"), order.index("W9"))
+
+    def test_an_exact_first_place_word_match_stays_first(self):
+        # W1 is the best word hit and a strong meaning hit; M has no word credit at all.
+        words, meaning_only, vectors = self._crowded_pool()
+        vectors[1] = self._unit(0.995)
+        self.assertEqual(self._order(words, meaning_only, vectors)[0], "W1")
+
+    def test_a_word_list_of_four_or_fewer_blends_exactly_as_before(self):
+        for hits in (3, 4):
+            with self.subTest(hits=hits):
+                words = [self._card(i, f"W{i}") for i in range(1, hits + 1)]
+                meaning_only = self._card(99, "M")
+                vectors = {99: self._unit(0.99)}
+                for i in range(1, hits + 1):
+                    vectors[i] = self._unit(0.9 - 0.05 * i)
+                self.assertEqual(
+                    self._order(words, meaning_only, vectors),
+                    self._order(words, meaning_only, vectors, cap=False),
+                )
+
+    def test_the_cap_does_not_hide_a_card(self):
+        # Only the credit changes; every card is still in the pool and can still be shown.
+        words, meaning_only, vectors = self._crowded_pool()
+        order = self._order(words, meaning_only, vectors)
+        self.assertEqual(len(order), 11)
+        self.assertEqual(sorted(order), sorted([c.name for c in words] + ["M"]))
+
+    def test_a_kind_pulled_note_is_not_lifted(self):
+        """The Hydra shape: "Enemy Hydra jets" is the top word match and the top meaning match
+        (W1). A note the kind word "level" pulled in (K, marked preferred, a weak meaning match)
+        arrives in authoring order and was lifted ahead of it, taking first place."""
+        words = [self._card(i, f"W{i}") for i in range(1, 15)]
+        kind_pulled = self._card(100, "K")
+        sims = {1: 0.82, 100: 0.50}
+        for i in range(2, 15):
+            sims[i] = 0.70 - 0.01 * i
+        vectors = {sid: self._unit(s) for sid, s in sims.items()}
+        kwargs = dict(recall_cards=[kind_pulled], preferred_ids={100}, meaning_found_ids=set())
+        self.assertEqual(self._fuse(words, vectors, top_k=15, **kwargs)[0], "W1")
+        # The same card, if it were named as found by meaning, is the one the cap lifts.
+        lifted = self._fuse(
+            words, vectors, top_k=15, recall_cards=[kind_pulled], preferred_ids={100},
+            meaning_found_ids={100},
+        )
+        self.assertEqual(lifted[0], "K")
+
+    def test_a_topic_pulled_tip_is_not_lifted(self):
+        """The D22 shape: the question says "windows" outright, so three windows tips are word
+        hits (W2 to W4, behind the crash tip W1). Four tips from the routed topic (T1 to T4,
+        preferred, not word hits) must not jump the word list and push them out."""
+        words = [self._card(i, f"W{i}") for i in range(1, 31)]
+        topic_tips = [self._card(200 + j, f"T{j}") for j in range(1, 5)]
+        sims = {1: 0.90, 4: 0.85, 3: 0.84, 2: 0.83}
+        for n, i in enumerate((5, 6, 7, 8)):
+            sims[i] = 0.82 - 0.01 * n
+        for j, tip in enumerate(topic_tips):
+            sims[tip.section_id] = 0.70 - 0.01 * j
+        for i in range(9, 31):
+            sims[i] = 0.50 - 0.001 * i
+        vectors = {sid: self._unit(s) for sid, s in sims.items()}
+        order = self._fuse(
+            words, vectors, top_k=8, recall_cards=topic_tips,
+            preferred_ids={tip.section_id for tip in topic_tips}, meaning_found_ids=set(),
+        )
+        self.assertEqual(set(order[:4]), {"W1", "W2", "W3", "W4"})
+
+    def _starting_out_pool(self, starting_name: str):
+        """The Hollow Knight shape ("how to get double jump"): W1 is the exact word match, found
+        first by the word search. One more note, found only by meaning, is the best meaning match
+        of all; the word match is only the sixth best by meaning. Whether the cap lets that note
+        past W1 is the whole question, and what the note is called decides it."""
+        words = [self._card(i, f"W{i}") for i in range(1, 11)]
+        meaning_only = self._card(99, starting_name)
+        # Meaning order: the extra note, four weak word hits (W7 to W10), then W1, then the rest.
+        sims = {99: 0.99, 7: 0.98, 8: 0.97, 9: 0.96, 10: 0.95, 1: 0.94}
+        for i in range(2, 7):
+            sims[i] = 0.80 - 0.01 * i
+        return words, meaning_only, {sid: self._unit(s) for sid, s in sims.items()}
+
+    def test_an_ordinary_meaning_found_note_does_pass_the_exact_word_match(self):
+        """The control for the next two: the shape really is one the plain cap gets wrong."""
+        words, meaning_only, vectors = self._starting_out_pool("Movement abilities overview")
+        order = self._order(words, meaning_only, vectors, question="how to get double jump")
+        self.assertEqual(order[0], "Movement abilities overview")
+
+    def test_a_starting_out_note_is_not_lifted_past_an_exact_word_match(self):
+        words, meaning_only, vectors = self._starting_out_pool("Starting out in Hollow Knight")
+        order = self._order(words, meaning_only, vectors, question="how to get double jump")
+        self.assertEqual(order[0], "W1")
+
+    def test_a_starting_out_note_is_lifted_when_the_question_asks_how_to_start(self):
+        words, meaning_only, vectors = self._starting_out_pool("Starting out in Hollow Knight")
+        order = self._order(
+            words, meaning_only, vectors, question="how do i get started in hollow knight"
+        )
+        self.assertEqual(order[0], "Starting out in Hollow Knight")
+
+    def test_a_starting_out_note_keeps_its_old_place_with_the_switch_off(self):
+        words, meaning_only, vectors = self._starting_out_pool("Starting out in Hollow Knight")
+        order = self._order(
+            words, meaning_only, vectors, cap=False, question="how do i get started in hollow knight"
+        )
+        self.assertEqual(order[0], "W1")
+
+    def test_both_switches_on_the_starting_note_goes_last_and_an_ordinary_one_is_still_lifted(self):
+        words, starting, vectors = self._starting_out_pool("Starting out in Hollow Knight")
+        ordinary = self._card(98, "Movement abilities overview")
+        vectors[98] = self._unit(0.985)
+        with mock.patch.object(kb_service, "DEMOTE_STARTING_OUT_NOTES", True):
+            order = self._fuse(
+                words, vectors, top_k=12, recall_cards=[starting, ordinary],
+                question="how to get double jump",
+            )
+        self.assertEqual(order[0], "Movement abilities overview")
+        self.assertEqual(order[-1], "Starting out in Hollow Knight")

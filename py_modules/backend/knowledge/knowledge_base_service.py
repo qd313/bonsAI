@@ -729,6 +729,39 @@ RRF_K = 60
 RRF_W_FTS = 1.0
 RRF_W_VEC = 1.0
 
+# --- Crowding fix (plan 103 lane R1, third try plan 104 lane R1): a note only the meaning search found
+# --- is capped at word place 5 -- a SWITCH ----------------------------------------------------------
+#
+# The blend gives a note the word search did not return a place in the word list: one past its end.
+# With three word hits that place is 4; with ten it is 11, so a stray-word hit in 9th place earned
+# almost the same credit as a miss, and a note the question reaches only by meaning lost to it
+# (plan 102's crowding read: Respect, Lung capacity). With CROWDING_CAP_ON,
+# MEANING_FOUND_WORD_PLACE_CEILING caps that place at 5 for a note the MEANING search itself found.
+# A note pulled in by a kind word ("the boss", "this level") or by a routed topic keeps one past the
+# end: those arrive in authoring order, not by fit, and lifting them pushed the right note from
+# first to third (the Hydra jets question) and the routed-topic tips past the "windows" tips (the
+# D22 test). A generic "Starting out in <game>" note is never lifted either, unless the question
+# itself asks how to start: the meaning search ranks every game's starting note high, and lifting
+# it put it ahead of a note the word search really found (plan 103's third measurement).
+#
+# CROWDING_CAP_ON is the switch. Off, the blend is exactly what it was before this work: every
+# note the word search missed takes one past the end of the word list. The value 5 was chosen on
+# the written landing rules, not tuned on the held-back questions. A word list of four or fewer
+# is unchanged by the cap. Tests: RrfCrowdingTests.
+#
+# MEASURED 2026-11-15 (plan 104 lane R1) on the 917-note library, three versions, each against
+# the switches-off blend: (a) the cap with the "Starting out" rule, (b) DEMOTE_STARTING_OUT_NOTES
+# alone, (c) both. None met the landing rule, so the switch stays OFF and the trade goes to the
+# maintainer. (a) is the best: on the search test it brings 14 questions' right note into the
+# first three (the meaning-only thirty go from 18 to 25) and loses 7; on the plugin's own search
+# it gains 17 asks and loses 21, and "No close match" newly shows on 2. The losses are not the
+# "Starting out" notes any more: another note the meaning search finds (Early regular enemies,
+# Riot Infected, Dynamite) is lifted past a word hit that held third place. (b) and (c) also lose
+# every question whose RIGHT answer is a game's "Starting out" note, which is what demoting it
+# costs. The tables are in the workshop: kb-crowding-fix-2026-11-15-p104-r1-tables.md.
+CROWDING_CAP_ON = False
+MEANING_FOUND_WORD_PLACE_CEILING = 5
+
 # --- Rank a generic "Starting out in <game>" note below a specific one (D-plan 70, helper B,
 # bug 2, 2026-09-25) -- MEASUREMENT ONLY, off by default -----------------------------------------
 #
@@ -761,6 +794,20 @@ def _is_starting_out_card(card: KnowledgeCard) -> bool:
     return (card.name or "").strip().lower().startswith(_STARTING_OUT_NAME_PREFIX)
 
 
+def _ids_the_cap_lifts(
+    pool: list[KnowledgeCard], meaning_found_ids: set[int], question: str
+) -> set[int]:
+    """The notes CROWDING_CAP_ON may pull up to word place 5: the ones the meaning search itself
+    found, except a generic "Starting out in <game>" note when the question is not asking how to
+    start (the meaning search ranks that note high for nearly any question about the game)."""
+    asks_to_start = _question_asks_how_to_start(question)
+    return {
+        card.section_id
+        for card in pool
+        if card.section_id in meaning_found_ids and (asks_to_start or not _is_starting_out_card(card))
+    }
+
+
 def _fuse_cards_by_rrf(
     cards: list[KnowledgeCard],
     query_vector: list[float],
@@ -770,17 +817,33 @@ def _fuse_cards_by_rrf(
     top_k: int,
     recall_cards: Optional[list[KnowledgeCard]] = None,
     preferred_ids: Optional[set[int]] = None,
+    meaning_found_ids: Optional[set[int]] = None,
 ) -> list[KnowledgeCard]:
     """Reciprocal-rank fusion of the keyword ordering with the vector ordering.
 
     ``cards`` arrives in BM25 order, so a card's index is its FTS rank. Each list contributes
     ``w / (RRF_K + rank)``.
 
-    ``recall_cards`` are cards only the vector pass found (see ``_vector_recall_sections``).
-    They join the pool and take an FTS rank one past the end of the keyword list -- the same
-    one-step backfill a vectorless card takes in the vector ranking below, and equal for all of
-    them, so the vector ordering alone decides their order among themselves. Passing none
-    leaves this a pure re-rank of the keyword shortlist, which is what the compat path does.
+    ``recall_cards`` are cards the word search did not return: the ones the vector pass found
+    (see ``_vector_recall_sections``) and, from the plugin, the ones pulled in by a kind word or
+    a routed topic. They join the pool and take an FTS rank one past the end of the keyword
+    list -- the same one-step backfill a vectorless card takes in the vector ranking below, and
+    equal for all of them, so the vector ordering alone decides their order among themselves.
+    Passing none leaves this a pure re-rank of the keyword shortlist, which is what the compat
+    path does.
+
+    **With ``CROWDING_CAP_ON`` a note only the meaning search found is capped at word place 5**
+    (``MEANING_FOUND_WORD_PLACE_CEILING``); off, every such note takes one past the end of the
+    word list, as before. Without a cap, a word list of ten put such a note at place 11, almost
+    the same credit as a stray-word hit in 9th place, so the stray won. The cap holds only for ids
+    in ``meaning_found_ids`` (the plugin passes the vector pass's own cards; left out, every
+    recall card counts as meaning-found, which is what the search test passes), and never for a
+    generic "Starting out in <game>" note unless ``question`` asks how to start. Kind-pulled and
+    topic-pulled cards keep one past the end: they were not ranked on their own merit, and
+    lifting them pushed an exact top word match from first to third. The oddity this leaves,
+    kept on purpose: on a word list longer than five, a note found far down the word list now
+    counts for slightly less than a meaning-found note the word search did not find at all. A
+    word list of four or fewer is unchanged.
 
     Rank fusion replaces a cosine-only sort that appended vectorless cards *after* every
     vector-scored one, so the best keyword hit in the corpus sank below a marginal cosine
@@ -808,8 +871,9 @@ def _fuse_cards_by_rrf(
     in which case a generic note is not demoted. And at the very end, it lets a game-mode note
     (versus, callout, survival, realism) that would lead an answer the question never asked for
     give the first place to the ordinary note the question names by title -- see
-    `_lead_with_the_note_the_question_names`. Left blank, the second never happens (the eval
-    script's own copy of the blend leaves it blank, so it does not see that reordering yet).
+    `_lead_with_the_note_the_question_names`. Left blank, the second never happens. (The eval
+    script `scripts/kb/eval_kb_embed_models.py` passes the question, so it sees that reordering
+    too; only a caller that leaves it out does not.)
     """
     pool = list(cards)
     if recall_cards:
@@ -825,9 +889,28 @@ def _fuse_cards_by_rrf(
     if not pool:
         return []
 
+    # Where a note the word search did not return sits: one past the end of the word list. With
+    # CROWDING_CAP_ON, a note the meaning search itself found (not a "Starting out" note, unless
+    # the question asks how to start) sits no further back than MEANING_FOUND_WORD_PLACE_CEILING.
     fts_missing_rank = len(cards) + 1
+    lifted_ids: set[int] = set()
+    if CROWDING_CAP_ON:
+        if meaning_found_ids is None:
+            meaning_found_ids = {card.section_id for card in recall_cards or []}
+        lifted_ids = _ids_the_cap_lifts(pool, meaning_found_ids, question)
+    capped_rank = min(fts_missing_rank, MEANING_FOUND_WORD_PLACE_CEILING)
     scores = [
-        RRF_W_FTS / (RRF_K + (index + 1 if index < len(cards) else fts_missing_rank))
+        RRF_W_FTS
+        / (
+            RRF_K
+            + (
+                index + 1
+                if index < len(cards)
+                else capped_rank
+                if pool[index].section_id in lifted_ids
+                else fts_missing_rank
+            )
+        )
         for index in range(len(pool))
     ]
 
@@ -1230,6 +1313,9 @@ def retrieve_knowledge_context(
                         recall_cards=topic_cards + recall_cards,
                         preferred_ids=preferred_ids,
                         question=question,
+                        # Only the vector pass's own cards count as found by meaning; a card the
+                        # kind word or the routed topic pulled in is not lifted (plan 103 R1).
+                        meaning_found_ids={c.section_id for c in recall_cards},
                     )
                 rerank_ms = round((time.perf_counter() - t_rerank) * 1000, 2)
                 retrieval_method = "hybrid"

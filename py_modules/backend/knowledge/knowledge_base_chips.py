@@ -33,6 +33,8 @@ library already holds -- it never asks a model for one.
 from __future__ import annotations
 
 import sqlite3
+import threading
+import time
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
@@ -98,6 +100,34 @@ class LastQuestion:
 
     text: str
     vector: list[float]
+
+
+# The last question's words and vector, kept per game by whoever made the vector (the search does, for
+# every question that gets a meaning search) so the chips fetched right after the answer can use it
+# without a model call of their own. Taken once, and forgotten after ten minutes: a chip row fetched at
+# a cold open, or long after the question, must keep today's order.
+_LAST_QUESTION_TTL_S = 600.0
+_LAST_QUESTIONS: dict[int, tuple[float, LastQuestion]] = {}
+_LAST_QUESTIONS_LOCK = threading.Lock()
+
+
+def remember_last_question(
+    game_id: int, text: str, vector: list[float], *, now: Optional[float] = None
+) -> None:
+    """Keep this game's last question for the next chip request (see ``_LAST_QUESTIONS``)."""
+    stamp = time.monotonic() if now is None else now
+    with _LAST_QUESTIONS_LOCK:
+        _LAST_QUESTIONS[int(game_id)] = (stamp, LastQuestion(text=text, vector=list(vector)))
+
+
+def _take_last_question(game_id: int, *, now: Optional[float] = None) -> Optional[LastQuestion]:
+    """The game's remembered question if it is fresh, and forget it either way."""
+    stamp = time.monotonic() if now is None else now
+    with _LAST_QUESTIONS_LOCK:
+        kept = _LAST_QUESTIONS.pop(int(game_id), None)
+    if kept is None or stamp - kept[0] > _LAST_QUESTION_TTL_S:
+        return None
+    return kept[1]
 
 
 @dataclass
@@ -422,7 +452,8 @@ def suggest_chip_candidates(
     """Return curtailed preset-chip prompts from the offline KB for the running game.
 
     ``last_question``, when given, orders the game's own chips by how close each note is to it (see
-    ``_closest_first``); without it the order is the same as it was before this existed.
+    ``_closest_first``). When not given, the question ``remember_last_question`` kept for this game
+    (if still fresh) is used instead; with neither, the order is the same as it was before this existed.
     """
     if settings.get("use_local_knowledge_base") is not True:
         return SessionRagChipCandidatesResult(ok=False, reason="kb_off")
@@ -451,10 +482,9 @@ def suggest_chip_candidates(
             ).fetchone()
             game_title = str(game_row["canonical_title"] or "") if game_row else ""
             todays = _list_game_sections_for_chips(conn, game_id)
-            if last_question is not None:
-                todays = _closest_first(
-                    conn, game_id, todays, last_question, limit=_GAME_CHIP_POOL_SIZE
-                )
+            question = last_question if last_question is not None else _take_last_question(game_id)
+            if question is not None:
+                todays = _closest_first(conn, game_id, todays, question, limit=_GAME_CHIP_POOL_SIZE)
             for section_type, name in todays:
                 text = _curtail_section_to_chip(section_type, name, game_title=game_title)
                 if not text or text in seen:

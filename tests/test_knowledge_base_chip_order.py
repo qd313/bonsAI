@@ -14,6 +14,7 @@ plain numbers which note is close to the question and which is not. What the tes
 import os
 import sqlite3
 import tempfile
+import time
 import unittest
 from unittest import mock
 
@@ -76,12 +77,18 @@ def _twelve_of(kind: str, last_name: str) -> list[tuple[str, str, list[float] | 
 
 
 class ChipOrderTests(unittest.TestCase):
-    def _chips_for(self, cards, *, question=None, with_vectors=True, game_id=1) -> list[str]:
+    def setUp(self) -> None:
+        # The remembered question is process-wide; each test starts with none.
+        chips._LAST_QUESTIONS.clear()
+
+    def _chips_for(self, cards, *, question=None, remembered=None, with_vectors=True, game_id=1) -> list[str]:
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         db = os.path.join(tmp.name, "corpus.db")
         _build_db(db, cards, with_vectors=with_vectors)
         self.addCleanup(close_connection, db)
+        if remembered is not None:
+            chips.remember_last_question(1, remembered[0], remembered[1])
         with mock.patch.object(chips, "resolve_corpus_db_path", return_value=db), mock.patch.object(
             chips, "_resolve_game_id", return_value=(game_id, "exact")
         ):
@@ -219,6 +226,42 @@ class ChipOrderTests(unittest.TestCase):
         # Every chip today offers is still offered after either question, past the closest few.
         today = self._chips_for(cards)
         self.assertTrue(set(today[:6]) <= set(first) | set(second))
+
+    def test_a_remembered_question_is_used_once(self):
+        cards = _a_big_game()
+        cards[14] = ("item", "Item4", TOWARD)
+        first = self._chips_for(cards, remembered=("how do I use item four", TOWARD))
+        self.assertEqual(first[0], "How do I use Item4?")
+        # The same library asked again, nothing remembered any more: today's order.
+        again = self._chips_for(cards)
+        self.assertNotEqual(again[0], "How do I use Item4?")
+
+    def test_a_remembered_question_goes_stale(self):
+        chips.remember_last_question(1, "q", TOWARD, now=1000.0)
+        self.assertIsNone(chips._take_last_question(1, now=1000.0 + chips._LAST_QUESTION_TTL_S + 1))
+        chips.remember_last_question(1, "q", TOWARD, now=1000.0)
+        self.assertIsNotNone(chips._take_last_question(1, now=1000.0 + chips._LAST_QUESTION_TTL_S - 1))
+
+    def test_a_remembered_question_belongs_to_its_game(self):
+        chips.remember_last_question(7, "q", TOWARD)
+        self.assertIsNone(chips._take_last_question(1))
+        self.assertIsNotNone(chips._take_last_question(7))
+
+    def test_a_stale_remembered_question_keeps_todays_order(self):
+        cards = _a_big_game()
+        cards[14] = ("item", "Item4", TOWARD)
+        chips.remember_last_question(1, "q", TOWARD, now=time.monotonic() - chips._LAST_QUESTION_TTL_S - 5)
+        self.assertEqual(self._chips_for(cards), self._chips_for(cards, question=None))
+        self.assertNotEqual(self._chips_for(cards)[0], "How do I use Item4?")
+
+    def test_a_question_handed_in_wins_over_a_remembered_one(self):
+        cards = _a_big_game()
+        cards[14] = ("item", "Item4", TOWARD)
+        cards[11] = ("item", "Item1", [0.0, 0.0, 1.0])
+        got = self._chips_for(
+            cards, question=("about item one", [0.0, 0.0, 1.0]), remembered=("about item four", TOWARD)
+        )
+        self.assertEqual(got[0], "How do I use Item1?")
 
     def test_the_held_back_kinds_match_the_spoiler_rules_so_they_cannot_drift(self):
         from backend.spoilers import spoiler_risk_service, strategy_spoiler_policy

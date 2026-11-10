@@ -15,7 +15,7 @@
       "main_revision": "173635",
       "lines": [
         {
-          "line": "Summary: A riot-armoured infected found in The Parish campaign. Its front is immune to bullets and blows, so it can only be killed from behind, with fire, with explosions or with the chainsaw.",
+          "line": "Summary: A riot-armoured infected found in The Parish and Cold Stream and in the Left 4 Dead 2 versions of No Mercy and Dead Air. Its front is immune to bullets and blows, so it can only be killed from behind, with fire, with explosions or with the chainsaw.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -23,6 +23,7 @@
               "part_of_page": "Riot Infected",
               "quoted": [
                 "The Riot Infected or Riot Guard appears in The Parish campaign.",
+                "Riot Infected can be found only in The Parish & Cold Stream and in the Left 4 Dead 2 ports of No Mercy and Dead Air.",
                 "Riot Infected are immune to bullets, sharp and blunt weaponry such as frying pans if struck from the front. They can only be killed from the back this way, although incendiary and explosive attacks can still kill them as like any other Infected.",
                 "Immune to everything but the Chainsaw/Explosions/Flames on the front side."
               ]
@@ -102,7 +103,7 @@
           ]
         },
         {
-          "line": "Weak points: Fire does nothing to it: a Molotov does not light it and incendiary ammo does not ignite it, though the bullets still hit. Shoot it in the head or hit it with a melee weapon.",
+          "line": "Weak points: Its suit makes it resistant to fire: a Molotov does not set it alight and incendiary ammo does not ignite it, though the bullets still hit, and one left idle in a fire for a long time dies from the heat. Shoot it in the head or hit it with a melee weapon.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -111,6 +112,7 @@
               "quoted": [
                 "they are resistant to fire, as they do not burst into flames when in the middle of a Molotov's fire, and incendiary ammunition do not set them on fire.",
                 "If your primary weapon is loaded with incendiary ammo, it will not light them on fire, but they will still be hit from the bullet.",
+                "If idle within fire for extended periods of time, they will die due to the heat.",
                 "Shooting them in the head or damaging them with Melee Weapons is encouraged."
               ]
             }
@@ -187,7 +189,7 @@
           ]
         },
         {
-          "line": "Looks like: Oversized squeaky shoes and bright striped trousers (for example pink and blue, red and yellow, or blue and white), and a flower on its chest that sometimes squirts water.",
+          "line": "Looks like: Oversized squeaky shoes and striped trousers (for example pink and blue, red and yellow, or blue and white), and a flower on its chest that sometimes squirts water.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -202,7 +204,7 @@
           ]
         },
         {
-          "line": "Tips: A clown does not make the Director spawn more infected: it only stirs up the ones already nearby, and its pull has no effect during a horde attack. A tight group running in one line behind a clown is easier to shoot than infected arriving from different directions.",
+          "line": "Tips: A clown does not make the Director spawn more infected: it only stirs up the ones already nearby, and its pull has no effect during a horde attack. A tight group running from one direction behind a clown is easier to shoot than infected arriving from different directions.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -243,7 +245,7 @@
           ]
         },
         {
-          "line": "Weak points: They have the same weaknesses as common infected but a little more health, and they are faster because they move on all fours, so shoot them instead of trying to outrun them. If the mud blurs your view, use a melee weapon.",
+          "line": "Weak points: They have the same weaknesses as common infected but are slightly more resistant to damage, with 150 health on Normal and above (50 on Easy). They are faster because they move on all fours, so shoot them instead of trying to outrun them, and if the mud blurs your view, use a melee weapon.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -257,6 +259,8 @@
               "revision": "173635",
               "part_of_page": "Mud Men",
               "quoted": [
+                "150 (Normal, Advanced, Expert, Realism, Survival & Versus)",
+                "50 (Easy)",
                 "Mudmen are faster than Common Infected as they move on all fours, so fire on them instead of attempting to outrun them.",
                 "using Melee Weapons if your vision is too blurred to see your team"
               ]
@@ -325,7 +329,7 @@
           ]
         },
         {
-          "line": "Weak points: They have the same weaknesses as common infected but a little more health. Their ear protection makes them unable to hear pipe bombs, so a thrown pipe bomb is useless unless it lands near them.",
+          "line": "Weak points: They have the same weaknesses as common infected but are slightly more resistant to damage, with 150 health on Normal and above (50 on Easy). Their ear protection makes them unable to hear pipe bombs, so a thrown pipe bomb is useless unless it lands near them.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -339,6 +343,8 @@
               "revision": "173635",
               "part_of_page": "Worker Infected",
               "quoted": [
+                "150 (Normal, Advanced, Expert, Realism, Survival & Versus)",
+                "50 (Easy)",
                 "Their unique ear protectors make them unable to hear pipe bombs.",
                 "This projectile is useless unless you aim it so it lands within the vicinity of this zombie type."
               ]
@@ -387,7 +393,7 @@
       "main_revision": "173635",
       "lines": [
         {
-          "line": "Summary: A rare uncommon infected from The Passing, in militia gear with a Molotov, pipe bomb, pills and first aid kit strapped on. It has 1000 health, cannot be set on fire and usually runs away when shot, and killing it can drop some of those items.",
+          "line": "Summary: A rare uncommon infected found in The Passing and, since the Last Stand update, also in the Left 4 Dead campaigns No Mercy, Death Toll, Crash Course and The Last Stand. It wears militia gear with a Molotov, pipe bomb, pills and first aid kit strapped on. It has 1000 health, cannot be set on fire and usually runs away when shot, and killing it can drop some of those items.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -397,7 +403,8 @@
                 "He appears in the DLC campaign The Passing wearing militia attire including a boonie cover and three ammo belts with a strap carrying visible Molotov, Pipe bomb, Pills, and a First Aid Kit.",
                 "the Fallen Survivor is actually a \"rare\" Uncommon Infected",
                 "Immune to flames, high health, runs away if provoked in most cases, can drop First Aid/Pipe Bomb/Molotov/Pain Pills when killed.",
-                "1000"
+                "1000",
+                "Since the Last Stand Update, Fallen Survivors were added into Left 4 Dead campaigns No Mercy, Death Toll, Crash Course and The Last Stand"
               ]
             }
           ]
@@ -487,16 +494,14 @@
           ]
         },
         {
-          "line": "Tips: It only goes off when it hits the floor, not a wall or a special infected. Do not hit teammates: on Expert even a full-health survivor can die in the flames, and an incapacitated one inside the fire is hard to revive. Water does not seem to put out Molotov fire in Left 4 Dead 2, but it does put out a burning Tank or special infected.",
+          "line": "Tips: It only goes off when it hits the floor, not a wall or a special infected. Do not hit teammates: on Expert even a full-health survivor can die in the flames, and an incapacitated one inside the fire is hard to revive.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Molotov_Cocktail",
               "revision": "173159",
               "quoted": [
                 "Throwing a Molotov against a wall does not detonate it; it must hit the floor. This also applies to Special Infected; hitting one directly with a Molotov does not detonate it.",
-                "Do not hit teammates. If they are incapacitated inside a fire, it may be difficult to revive them without being incapacitated as well. On Expert difficulty, even Survivors with full health can die from the flames.",
-                "it does not seem to affect them at all in Left 4 Dead 2.",
-                "However, since water will still extinguish a burning Tank or Special Infected"
+                "Do not hit teammates. If they are incapacitated inside a fire, it may be difficult to revive them without being incapacitated as well. On Expert difficulty, even Survivors with full health can die from the flames."
               ]
             }
           ]
@@ -539,12 +544,13 @@
           ]
         },
         {
-          "line": "Tips: Throw it low to the ground, and shove away infected that are already close or they may ignore it. Special infected and worker infected are not drawn to it, and a Witch or Tank near the blast is stumbled but does not chase it.",
+          "line": "Tips: In Left 4 Dead 2 it is less effective, because passive infected seem to respond more slowly to its beeping and smoke, and sometimes not at all. Throw it low to the ground, and shove away infected that are already close or they may ignore it. Special infected and worker infected are not drawn to it, and a Witch or Tank near the blast is stumbled but does not chase it.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Pipe_Bomb",
               "revision": "172888",
               "quoted": [
+                "Pipe Bombs are less effective in Left 4 Dead 2 since passive enemies appear to respond more slowly to their beeping and smoking, as well as the lighting, and sometimes not at all.",
                 "Throw Pipe Bombs low to the ground, if possible.",
                 "If the Common Infected are too close to you or your allies, they may ignore the Pipe Bomb and attack. Push them away to disengage them so they will chase after the Pipe Bomb.",
                 "Special Infected and Uncommon Worker Infected are not attracted to Pipe Bombs.",
@@ -945,7 +951,7 @@
           ]
         },
         {
-          "line": "Uses: Incendiary ammo sets common and special infected on fire, except CEDA worker infected and Jimmy Gibbs Junior, and kills a common infected in one hit. Explosive ammo explodes on any surface, instantly kills all common infected and stumbles any special infected except the Tank.",
+          "line": "Uses: Incendiary ammo sets common and special infected on fire, but not CEDA worker infected, Jimmy Gibbs Junior or the Fallen Survivor, and it kills a common infected in one hit. Explosive ammo explodes on any surface, instantly kills all common infected and stumbles any special infected except the Tank.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Ammo",
@@ -956,6 +962,15 @@
                 "Since incendiary ammunition is a one-hit kill against Common and Uncommon Infected on all difficulties",
                 "explode on hitting any surface, including Infected. This instantly kills all Common Infected (regardless of difficulty)",
                 "It can also stumble any Special Infected but the Tank."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Fallen Survivor",
+              "quoted": [
+                "He cannot be ignited by flames.",
+                "Immune to flames, high health"
               ]
             }
           ]

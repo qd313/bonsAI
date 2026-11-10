@@ -525,6 +525,7 @@ Log, one row per consult: time, the question in one line, the answer in one line
 |---|---|---|---|---|
 | 2026-11-09, 19:38 to 19:57 EST | The wave A briefs against the code | Nine corrections, stop nobody | The covers helper tested its third piece through the screen itself and found it was not a bug; the starter-box helper proved the fit at the largest text size and made Down scroll; the crowding helper measured three more tables through the plugin's own search before a setting was picked; lane F1's brief gains three files, the full Down order from the Copy icon, and "notes line first, then the strip". Five of the nine the helpers had already caught themselves | about 285,000 helper tokens |
 | 2026-11-09, 20:16 to 20:23 EST | The crowding fix: a fixed place of 4, of 5, or neither | Land 5 as a partial fix; 4 is the maintainer's call | 5 lands (no measured harm; 8 more held-back questions find their note, none lose it; one of the two Deck-style questions comes back). 4 would bring both back but lets one exact word match slip from first and shows "No close match" beside a right note three times; that trade goes on the checks page with the numbers | about 64,000 helper tokens |
+| 2026-11-10, 01:16 to 01:27 and 01:43 to 01:50 EST | Lane F1's D-pad change before it lands, then one follow-up on a guard F1 added to the shared row helper | Land after two small additions, both for a page that has lost focus (pass over the summed-up note; make a chip-to-chip step carry the ring). Follow-up: land the guard as it is, in both focus states | F1 made both additions, each with a test that fails without it, and tightened its stand-in page; the line in F1's brief saying a covered notes line must be a stop was the session's mistake and was dropped; block D2 gains reads the second opinion named (first entry against re-entry into the chips, the scroll before and after, a two-row grid, the Session tab). F1 landed alone at 02:19, every check green | about 232,000 helper tokens |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -698,6 +699,33 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
   background timer runs to the reset; the first batch after it is F1, the rewording passes, the licence read of
   Melee and Grand Theft Auto III, the versus notes and the first note lanes.
 
+- **00:38 EST, 2026-11-10: the maintainer said to start again** with 22 minutes left in the window (84 percent).
+  Five helpers started at once (F1, the licence read of Melee and Grand Theft Auto III, the versus notes, Yoshi's
+  Story, Diddy Kong Racing); the rest at the 01:00 reset.
+- **The state at 02:20 EST (tip `b1827281`, every check green).**
+  1. *Landed since stopping point A,* in six batches (three of them needed one fix each before the checks passed):
+     notes for ten more games (Grand Theft Auto III, Melee, Yoshi's Story, Diddy Kong Racing, Fallout: New Vegas,
+     Brotato, Palworld, Skyrim, Hollow Knight, DOOM Eternal), so 20 of the 23 games; the Left 4 Dead 2 versus notes
+     (15) and the seven re-filed notes; the "own words" pass on eight notes files (Nintendo's trophy text had been
+     copied into nine Melee notes; all rewritten); 294 blind test questions for ten games; lane F1, the answer screen's
+     D-pad, after the second opinion and two additions. 33 notes files and 477 notes are on the tip.
+     *No notes this session:* Hades (licence), Half-Life 2 and Black Mesa (their wiki's database was read-only both
+     nights). *Cost measured:* with the versus notes in, 9 of the 18 labelled Left 4 Dead 2 questions find their note
+     in first place (11 before), 17 in the first three (unchanged).
+  2. *The Deck:* asleep since at least 01:10 EST; a button press through the rig did not wake it. Deploy 1 and block
+     D1 have not run. The runbook for D1 is written (`docs/planning/assets/103-runbook-block-D1.md`); it installs the
+     session's library, because the mod tips and the new notes live in the library and the Deck still holds the
+     published one. The session deploys with `scripts/build.ps1` from the shared checkout, as plan 102 did.
+  3. *Usage:* 70 percent of the five-hour window (resets 06:00 EST), 41 percent of the week, 43 percent on Fable's own
+     counter. One helper is running (the bookkeeper's sweep K2); nothing else starts before the reset.
+  4. *Next, after the reset:* test questions for the last ten games, the versus notes and the mod tips (Q4 second part,
+     Q5, Q6); the numbers in the middle (X1); the picture-search lane (P2); the corrections to older notes (lane M, a
+     list is in the K2 result list); the chips lane if a slot is free (C1); deploy 1 and block D1 as soon as the Deck
+     is awake, then deploy 2 and block D2 for F1.
+  5. *Waiting on the maintainer:* the Deck's power button; questions 3 to 8 below; six ten-note samples in the
+     workshop's checks folder (`plan103-sample-earlier.md`, `-B`, `-C`, `-D`, `-E`, `-F`; B and C were drawn before
+     the rewording pass, so read the notes files' final text beside them).
+
 **Questions for the maintainer (the safest choice is taken meanwhile):**
 
 2. **Answered 2026-11-09, 21:12 EST:** the Deck was frozen with God of War in the background and an answer half
@@ -715,6 +743,11 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
    § 7 has the trade).
 6. **The starter-models box:** the paragraph that explains "Turn on and download" sits last, so it is hidden until
    Down is pressed. Moving it up changes the order in every download box. *Taken meanwhile:* left where it is.
+7. **The Brotato wiki's licence** is read from its page footer (the wiki's own data gives none). The older Brotato
+   notes already rely on it. *Taken meanwhile:* stored as CC BY-SA 4.0. One look at a Brotato wiki page's footer
+   settles it.
+8. **The Deck is asleep** (since about 01:10 EST on 2026-11-10) and the rig cannot wake it. *Taken meanwhile:* nothing
+   deployed, block D1 not run. Press its power button and say so.
 
 1. **The Deck holds far fewer play pictures than the plan hoped.** Steam's screenshot folders on the Deck cover six
    games, and 77 of the 134 pictures are from one game (Deep Rock Galactic: Survivor). Another 281 pictures sit in
@@ -725,24 +758,29 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
 
 **Pick-up list (kept current; a new chat can carry on from here):**
 
-- Tip: `081693d2`, every check green. The session's own running notes, with every helper's id and the lists not yet
-  acted on, are in `.scratch/p103/session-notes.md` in the shared checkout (not in git).
+- Tip: `b1827281`, every check green. The session's own running notes, with every helper's id, every hand-out and the
+  lists not yet acted on, are in `.scratch/p103/` in the shared checkout (not in git): `session-notes.md` first.
 - Land with `scripts/land_lane.sh <branch> <base> .scratch/p103`, one at a time; several finished helpers can be
   picked onto one branch in a copy (`.claude/worktrees/p103-land1` or `-land2`) and landed as one batch. Read the
-  script's exit code, not a line it prints. `.scratch/p103/clones.py <base>` lists copied test lines by file.
-- In flight: nothing. Block D0b is done (handover `workshop:planning/assets/103-handover-D0b.md`); F1's task text
-  is `.scratch/p103/brief-F1-additions.md` on top of the brief. A timer runs to the 01:00 EST reset.
-- Written and checked, not landed: Melee (`refactor/p103-n25`) and Grand Theft Auto III (`refactor/p103-n26`), both
-  waiting for the licence read. Not landing: `refactor/p103-r1` (the crowding fix, turned down).
-- Owed to six landed notes files: the licence reviewer's rewording lists (in the running notes), one follow-up
-  commit per file. Owed to Grand Theft Auto III: drop the two empty "Weak points" lines (notes 3503, 3504).
-- Not started: lanes N27 to N35 (nine games), N17 and N34 again when combineoverwiki.net answers, V2, Q3 and Q4,
-  P2, F1 (after D0b), C1, X1. Blocked on pictures: P3 and P4. Run the reader from the landed tip: it now falls back
-  by itself when a wiki refuses the by-revision call.
-- The Deck: build `9bc29b3c0500` (nothing deployed yet); library 2026.10.25; five saved chats; put-backs owed at
-  the end: the mode chip back to Speed; the long test chat deleted in block DR.
-- Budget rule learned the hard way: read the three counters before every batch; ten to twelve helpers fill a
-  five-hour window in about three quarters of an hour.
+  script's exit code. On a failed check the picked commits stay on the tip: fix forward with one more commit. A
+  helper's final report can be pulled from its transcript with `.scratch/p103/last_report.py`.
+- In flight at 02:20: the bookkeeper's sweep K2 (copy `p103-k2`; its result list is `.scratch/p103/k2-results.md`).
+  Land it alone when it reports. A timer runs to the 06:00 EST reset.
+- Not landing: `refactor/p103-r1` (the crowding fix, turned down). Not written: notes for Hades, Half-Life 2, Black
+  Mesa.
+- Not started: Q4 second part (Melee, Grand Theft Auto III, Yoshi's Story, Diddy Kong Racing), Q5 (the last six
+  games), Q6 (the eight versus rows and the mod-tip questions); names lists come from
+  `.scratch/p103/names_for_q.py <notes files>`. X1. P2 (measure on the 29 pictures; lands off unless it clearly
+  earns on; `game_ai_request.py` has three lines of room). Lane M (the corrections list is in the K2 result list).
+  C1. X2 at the end. Blocked on pictures: P3 and P4.
+- The Deck: build `9bc29b3c0500` (nothing deployed yet); published library 2026.10.25; five saved chats; the mode
+  chip on Strategy. Asleep. When it wakes: `deck_status`, check no game runs, `scripts/build.ps1` from the shared
+  checkout at a green tip, read the build hash, then a fresh driver with the D1 runbook and that hash. Block D2's
+  runbook is still to write: the rows in the F1 brief plus the reads in `.scratch/p103/consult-4.md` and
+  `consult-4b.md`. Put-backs owed in block DR: the mode chip back to Speed, the long test chat deleted, the
+  published library back, "Show Developer tab" off.
+- Budget: read the three counters before every batch. Sixteen helpers at once used 28 percent of a window in fifteen
+  minutes; a note lane with its checker, licence read, fix round and second read costs about 12 percent in all.
 
 ## 13. Report
 

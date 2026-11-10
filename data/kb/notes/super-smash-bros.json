@@ -111,6 +111,61 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "2057092",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3310,
+      "game_id": 34,
+      "section_type": "boss",
+      "name": "Giant Donkey Kong",
+      "card": "Summary: A giant Donkey Kong fought on Kongo Jungle in stage 6 of the 1P Game, where two regular-sized computer partners fight alongside you.\nWeak points: He can take up to around 300% damage before he can be launched, and his hits have extra knockback, plus extra reach because of his size. That size also makes him a bigger target, and his AI can be exploited so that he walks back and forth on the top platform, though your partners jumping into him or attacking him often break that pattern.\nLooks like: Donkey Kong with a much larger body.\nTips: Keep your partners safe: neither being KO'd gives the DK Defender bonus (10,000 points, 7,000 in the Japanese version), and neither being damaged at all gives the DK Perfect bonus (50,000 points). On higher difficulties he acts more like a level 9 computer player while your partners are lower level.",
+      "source_url": "https://www.ssbwiki.com/Giant_Donkey_Kong",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2045475",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3311,
+      "game_id": 34,
+      "section_type": "enemy",
+      "name": "Fighting Polygon Team",
+      "card": "Summary: Thirty weak purple polygon copies of the twelve fighters, fought in stage 10 of the 1P Game on Duel Zone, never more than three at a time.\nWeak points: They are light and can usually be beaten in a single blow, though they get heavier and stronger on higher difficulties. They have no special moves, which hurts their recovery, and they cannot grab. They are passive, mostly walking around the platforms and very rarely attacking.\nLooks like: Blocky, shiny purple figures that mostly keep the shape of the fighter they copy.\nTips: They pick up items and normally throw a throwing item as soon as they have it. In the bonus stage Race to the Finish they are much more aggressive, chasing you and slowing you down, and you cannot defeat them there.",
+      "source_url": "https://www.ssbwiki.com/Fighting_Polygon_Team",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2064743",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3312,
+      "game_id": 34,
+      "section_type": "enemy",
+      "name": "Hyrule Castle's tornadoes (stage hazard)",
+      "card": "Summary: Four tornadoes spawn at random over Hyrule Castle, the stage where Link is the first opponent of the 1P Game, and a fighter caught in one is thrown upward.\nWeak points: You can still attack a fighter who is caught in a tornado, and hit them with an aerial when they are released, even meteor smashing them back into the tornado for more damage.\nTips: Each lasts around 10 to 20 seconds, drifts in a random direction and may suddenly speed up and home in on a fighter. Someone caught is held for about two seconds, then thrown upward, which KOs between 65% and 130% depending on weight and the tornado's position. In the 1P Game, knocking Link out with a tornado earns the Tornado Clear bonus, 3,000 points.",
+      "source_url": "https://www.ssbwiki.com/Hyrule_Castle",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2054602",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3313,
+      "game_id": 34,
+      "section_type": "enemy",
+      "name": "Planet Zebes's rising acid (stage hazard)",
+      "card": "Summary: A sea of acid rises and falls under Planet Zebes, the stage where Samus is fought in stage 8 of the 1P Game. Touching it does damage and high knockback, enough to KO a fighter whose damage is high.\nWeak points: The acid never rises high enough to reach the topmost platform. If you are knocked into it once it has risen enough, it launches you skyward, so you can use your recovery again or simply fall back onto the stage.\nTips: A Starman or any form of strong knockback resistance makes you immune to the acid, but if you fall through it while invincible you self-destruct. Knocking Samus out with the rising acid earns the Acid Clear bonus, 1,500 points (1,000 in the Japanese version).",
+      "source_url": "https://www.ssbwiki.com/Planet_Zebes",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2047088",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3314,
+      "game_id": 34,
+      "section_type": "enemy",
+      "name": "Sector Z's Arwings (stage hazard)",
+      "card": "Summary: Arwing fighters fly past on Sector Z, the stage where Fox is fought in stage 3 of the 1P Game, and fire lasers across the stage that deal large damage and knockback.\nWeak points: Stay off the Arwings. A fighter standing on one may be KO'd if it flies offscreen to the top or side, and Arwings tend to barrel roll or fly upside down, which essentially pushes you off. The Great Fox's main guns cannot be stood on and do not fire.\nTips: Knocking Fox out with an Arwing earns the ARWING Clear bonus, 4,000 points (3,000 in the Japanese version). Sector Z is the largest stage in the game.",
+      "source_url": "https://www.ssbwiki.com/Sector_Z",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2056363",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

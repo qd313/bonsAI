@@ -53,7 +53,7 @@
           ]
         },
         {
-          "line": "Tips: When both teams finish with every survivor alive, the team whose infected players did more damage is awarded a 25-point bonus to break the tie. If the scores are level but someone died, no such bonus is given. Both teams get a message each time the survivors cover another quarter of the route.",
+          "line": "Tips: A tie where every survivor reached the safe room on both sides is settled by damage: the team whose infected players did more gets 25 bonus points. That tiebreaker does not apply when someone died, even if the scores are equal. Both sides are told whenever the survivors pass another 25% of the distance.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -128,7 +128,7 @@
           ]
         },
         {
-          "line": "Tips: The Tank is a random extra, at most one per level apart from fixed spawns, and your chance of getting him rises with your score. After the sides swap, the other team usually starts with the same specials in the same places and order.",
+          "line": "Tips: The Tank is a random extra, at most one per level, and your chance of getting him rises with your score. After the sides swap, the other team usually starts with the same specials in the same places and order.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -335,7 +335,7 @@
           ]
         },
         {
-          "line": "Tips: Experienced Hunter players usually hide in a crouch close to the Witch, wait for someone to run up and attack her, and pounce just before that player can fire. If a Hunter pounces on a survivor the Witch has already downed and is attacking, the Hunter takes no damage and the survivor dies twice as quickly. The infected see a calm Witch outlined in white, and the outline shifts toward red as she gets closer to being startled.",
+          "line": "Tips: Skilled Hunters tend to wait, crouched and out of view, near the Witch; when a survivor rushes in to hit her, they leap on that survivor just before he can shoot. If a Hunter pounces on a survivor the Witch has already downed and is attacking, the Hunter takes no damage and the survivor dies twice as quickly. The infected see a calm Witch outlined in white, and the outline shifts toward red as she gets closer to being startled.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Tactics",
@@ -481,7 +481,7 @@
           ]
         },
         {
-          "line": "Tips: As the Charger, ambush rather than charging from far off, since survivors can react in time to dodge a long run. A charge can begin from a raised spot with no need to stop first. A survivor knocked sideways next to a high drop may end up hanging and incapacitated, and one knocked well past the edge may plunge to their death.",
+          "line": "Tips: As the Charger, ambush instead of charging from far off, because a long run gives survivors time to react and dodge. You can start a charge from a raised spot without stopping first. A survivor clipped sideways beside a high drop may be left hanging and incapacitated, and one sent far enough past the edge may plunge to their death.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/The_Charger",
@@ -498,7 +498,7 @@
           ]
         },
         {
-          "line": "Tips: As a survivor, do not attempt to leap away from a charge: even a small difference in height can mean severe fall damage or sudden death. Bots never try to get out of a Charger's way, so keep them clear of him. Shoving is useless against a Charger; explosives stumble him, with the grenade launcher the one exception.",
+          "line": "Tips: Survivors should not jump away from an oncoming Charger, since even a small drop in height can cause heavy fall damage or sudden death. Bots never attempt to avoid a charge, so keep them well away from him. Melee shoves have no effect, as he is immune to them; only explosives stumble him, and the grenade launcher is the one explosive that does not.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Tactics",
@@ -645,7 +645,7 @@
           ]
         },
         {
-          "line": "Tips: A Hunting Rifle or Sniper Rifle handles a Spitter easily from far away. A dead Spitter leaves a little acid puddle, and the safe move is to wait until it has vanished: walking around it or jumping over it does not work.",
+          "line": "Tips: At long range, either a Hunting Rifle or a Sniper Rifle deals with a Spitter easily. When she dies she leaves a puddle of acid, a small one; hold back until it has gone, since neither detouring around it nor jumping over it works.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Tactics",
@@ -767,13 +767,14 @@
       "main_revision": "173476",
       "lines": [
         {
-          "line": "Summary: Teamwork decides versus for the infected side, according to the wiki: a Hunter pouncing alone is shot down before he does much harm, and a Smoker's catch gets freed with little trouble.",
+          "line": "Summary: Coordinating their attacks is the most important thing for the infected side, according to the wiki: a Hunter pouncing alone is shot down before he does much harm, and a Smoker's catch gets freed with little trouble.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Tactics",
               "revision": "173476",
               "part_of_page": "Team tactics / The Infected",
               "quoted": [
+                "Coordinating Your Attacks:",
                 "This is by far the most important factor in a Left 4 Dead Versus match.",
                 "If a Hunter pounces on his own, he will just get killed before he can do any real damage.",
                 "If a Smoker tries to constrict a Survivor they will just get freed without any real effort"
@@ -782,7 +783,7 @@
           ]
         },
         {
-          "line": "Tips: A good opening is a Boomer who gets his bile onto as many survivors as he can; the Hunters then jump out from where they were waiting while the Smoker drags one survivor off. When only one survivor is covered, pounce on or grab the three who are clean.",
+          "line": "Tips: The Boomer should lead off, covering as many survivors in bile as possible. The Hunters then spring out of their hiding places and the Smoker pulls one survivor away. Should the bile land on a single survivor, go for the other three, who are clean, with pounces and the Smoker.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Tactics",
@@ -856,7 +857,7 @@
       "main_revision": "173623",
       "lines": [
         {
-          "line": "Summary: Charger ambush spots for the infected team on the first three chapters of Dead Center, The Hotel, The Streets and The Mall. The page's general advice is to hit survivors who are squeezed into a narrow spot, lined up, or bunched together.",
+          "line": "Summary: Charger ambush spots for the infected team on the first three chapters of Dead Center, The Hotel, The Streets and The Mall. Chargers do best on survivors squeezed into a narrow spot, lined up or bunched together.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/The_Charger",
@@ -1144,7 +1145,7 @@
           ]
         },
         {
-          "line": "Tips: The wiki's Survival tips say Tanks and hordes arrive at steady times in the first 12 minutes: the first Tank at 0:40, and two together at both 5:30 and 11:30. New common-infected hordes stop for roughly 3:50 to 4:25, 9:00 to 9:35 and 12:00 to 12:30; only special infected can appear then, which makes those windows good for healing or an ammo run.",
+          "line": "Tips: The wiki's Survival tips give steady times for Tanks and hordes within the first 12 minutes: the first Tank at 0:40, and two together at both 5:30 and 11:30. New common-infected hordes stop for roughly 3:50 to 4:25, 9:00 to 9:35 and 12:00 to 12:30; only special infected can appear then, which makes those windows good for healing or an ammo run.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Survival_Mode",

@@ -216,6 +216,56 @@ class SpoilerRiskServiceTests(unittest.TestCase):
         self.assertFalse(signals["is_troubleshooting"])
         self.assertEqual(compute_spoiler_risk_band(signals), "high")
 
+    def test_versus_coop_callout_survival_realism_notes_score_lower_than_an_unlisted_kind(self):
+        """Plan 17: the five versus-groundwork kinds are how-to-play notes (a role, a mode, a spot
+        to hold), not story, so each sits in the low-risk bucket with `mechanic` and `tip`. Before
+        this they were left out of both lists and scored the same as a kind nobody classified."""
+        base = dict(
+            ask_mode="strategy",
+            app_id="550",
+            question="How do I play the Smoker?",
+            game_genres="Action",
+            asked_entity="",
+        )
+        unlisted = compute_heuristic_spoiler_risk_score(
+            build_spoiler_risk_signals(
+                kb_text="\n[Left 4 Dead 2 / zzz_unlisted: Smoker]\nHold back.", **base
+            )
+        )
+        for kind in ("versus", "coop", "callout", "survival", "realism"):
+            with self.subTest(kind=kind):
+                score = compute_heuristic_spoiler_risk_score(
+                    build_spoiler_risk_signals(
+                        kb_text="\n[Left 4 Dead 2 / %s: Playing as the Smoker]\nHold back." % kind,
+                        **base,
+                    )
+                )
+                self.assertLess(score, unlisted)
+
+    def test_the_five_new_kinds_never_lower_a_score_that_a_high_risk_kind_raised(self):
+        """The other direction: a versus note must not lift the bar for a spoiler. With a boss
+        note attached too, the low-risk kind changes nothing -- the high-risk one still decides --
+        and a versus note alone never scores as high as a boss note does."""
+        base = dict(
+            ask_mode="strategy",
+            app_id="550",
+            question="How do I play the Tank?",
+            game_genres="Action",
+            asked_entity="",
+        )
+
+        def score(kb_text):
+            return compute_heuristic_spoiler_risk_score(
+                build_spoiler_risk_signals(kb_text=kb_text, **base)
+            )
+
+        boss = "\n[Left 4 Dead 2 / boss: Tank]\nWeak point."
+        for kind in ("versus", "coop", "callout", "survival", "realism"):
+            with self.subTest(kind=kind):
+                versus = "\n[Left 4 Dead 2 / %s: Playing as the Tank]\nRock aim." % kind
+                self.assertEqual(score(boss + versus), score(boss))
+                self.assertLess(score(versus), score(boss))
+
     def test_extract_kb_section_types(self):
         kb = "\n[Zelda / boss: Ganon]\nTips\n\n[Zelda / area: Temple]\nGo east."
         self.assertEqual(extract_kb_section_types_from_text(kb), ["boss", "area"])

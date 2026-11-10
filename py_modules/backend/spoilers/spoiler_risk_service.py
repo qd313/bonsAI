@@ -60,7 +60,23 @@ _HIGH_SPOILER_SECTION_TYPES = frozenset(
         "secret",
     }
 )
-_LOW_SPOILER_SECTION_TYPES = frozenset({"tip", "compat", "control", "mechanic", "starting_out"})
+# `versus`, `coop`, `callout`, `survival` and `realism` (plan 17) are how-to-play notes -- a role in
+# a mode, a spot to hold, a way to survive -- so they sit here with `mechanic` and `tip`. Never in
+# the high list above: they carry no story.
+_LOW_SPOILER_SECTION_TYPES = frozenset(
+    {
+        "tip",
+        "compat",
+        "control",
+        "mechanic",
+        "starting_out",
+        "versus",
+        "coop",
+        "callout",
+        "survival",
+        "realism",
+    }
+)
 
 
 def spoiler_risk_chip_label(band: SpoilerRiskBand) -> str:

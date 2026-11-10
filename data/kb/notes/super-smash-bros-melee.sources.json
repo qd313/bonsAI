@@ -15,16 +15,18 @@
       "main_revision": "2060174",
       "lines": [
         {
-          "line": "Summary: A close-range item from Donkey Kong: grab it and you run across the screen swinging it back and forth nonstop. It is an extremely powerful item, but you have no recovery move while you carry it.",
+          "line": "Summary: A close-range item from the Donkey Kong arcade game. Whoever grabs it runs along, swinging it from side to side without pause. It hits extremely hard, but the holder has no recovery move available.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Hammer_(item)",
               "revision": "2060174",
               "quoted": [
                 "The Hammer (ハンマー, Hammer) is a close-range item that appears in all Super Smash Bros. games.",
-                "If you grab the Hammer, you'll run across the screen swinging it back and forth nonstop.",
-                "It's an extremely powerful item, but you have no recovery move when carrying it.",
-                "The hammer comes from the arcade game Donkey Kong."
+                "The hammer comes from the arcade game Donkey Kong.",
+                "they will constantly swing the hammer back and forth",
+                "it also deals extremely high vertical knockback",
+                "you'll run across the screen",
+                "you have no recovery move when carrying it"
               ]
             }
           ]
@@ -43,14 +45,13 @@
           ]
         },
         {
-          "line": "Tips: Every now and then the mallet head falls off and the wielder ends up completely vulnerable, swinging just the handle; from Melee on there is a 12.5% chance of this as it is picked up, and the fallen Hammer Head can be picked up and thrown as a powerful item. If an opponent is swinging a Hammer, sending them off a ledge can effectively KO them, because they cannot use special moves or a midair jump unless they somehow drop the Hammer.",
+          "line": "Tips: Sometimes the mallet head falls off as the item is picked up, leaving a useless handle that is still swung for the usual time. From Melee onward the chance is 12.5%, one in eight. The head left on the ground can be grabbed and tossed as a strong item. Against a rival swinging a Hammer, knocking them off a ledge can finish them, because they can neither use special moves nor jump in midair unless they manage to drop it.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Hammer_(item)",
               "revision": "2060174",
               "quoted": [
-                "Every now and then, the mallet head will fall off, and you'll end up completely vulnerable, swinging just the handle.",
-                "Starting in Melee, there is a 12.5% chance (one out of eight) of the head of the Hammer falling off as it is picked up",
+                "Starting in Melee, there is a 12.5% chance (one out of eight) of the head of the Hammer falling off as it is picked up, after which the item becomes functionally useless, though the wielder will continue to swing the handle for as long as they would with a normal hammer.",
                 "The Hammer Head itself can be picked up and thrown as a powerful item.",
                 "As the wielder of the hammer cannot use special moves or midair jump, sending an opponent off a ledge while they swing the Hammer can effectively KO them unless they can somehow drop the Hammer."
               ]
@@ -81,28 +82,28 @@
           ]
         },
         {
-          "line": "Uses: As a battering item it bolsters your power and adds some options through throwing. The blade lengthens in direct proportion to the power of an attack, so it reaches its maximum size when swung as a smash attack, and the length changes depending on who wields it.",
+          "line": "Uses: Used as a battering item, it adds to your power and gives you extra choices because it can also be thrown. The blade grows longer the stronger the attack is, so it is longest on a smash attack. Its length also differs from one fighter to the next.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Beam_Sword",
               "revision": "2049293",
               "quoted": [
                 "the Beam Sword will bolster the player's power, as well as potentially add some options to their game via throwing.",
-                "The blade also lengthens in direct proportion to the power of an attack, so it reaches its maximum size when swung as a smash attack.",
-                "but the length changes depending on who wields it."
+                "The blade also lengthens in direct proportion to the power of an attack",
+                "the length changes depending on who wields it"
               ]
             }
           ]
         },
         {
-          "line": "Looks like: A distinctive glowing blade that is at first about the size of a short sword.",
+          "line": "Looks like: A glowing blade that begins about as long as a short sword.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Beam_Sword",
               "revision": "2049293",
               "quoted": [
-                "With its distinctive glowing blade, the Beam Sword is eye-catching and lethal.",
-                "At first, the blade is about the size of a short sword"
+                "distinctive glowing blade",
+                "the blade is about the size of a short sword"
               ]
             }
           ]
@@ -130,20 +131,21 @@
       "main_revision": "2056048",
       "lines": [
         {
-          "line": "Summary: A magic wand that holds 16 star shots and sends foes flying at a low angle when thrown. It works as an unusual combination of a battering item and a projectile item.",
+          "line": "Summary: A magic wand with room for 16 star shots; thrown at someone, it knocks them away at a low angle. It is an odd mix of a battering item and a projectile item.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Star_Rod",
               "revision": "2056048",
               "quoted": [
-                "This magic wand holds 16 star shots and sends foes flying at a low angle when thrown.",
-                "the Star Rod acts as an unusual combination of both battering and projectile items."
+                "the Star Rod acts as an unusual combination of both battering and projectile items.",
+                "holds 16 star shots",
+                "sends foes flying at a low angle when thrown"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Hit opponents up close with it, or use smash attacks or tilts to shoot long-range stars that can hit from a distance. It is most powerful when Captain Falcon or Sheik performs a smash attack while holding it.",
+          "line": "Uses: Swing it to hit opponents at close range. A smash attack or a tilt instead fires stars that hit from far away. Its strongest use is a smash attack by Captain Falcon or Sheik.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Star_Rod",
@@ -151,7 +153,8 @@
               "quoted": [
                 "As a battering item, combatants can use the Star Rod to directly hit opponents up close.",
                 "Using either smash attacks or tilts, however, cause the Star Rod to shoot out long-range stars that can hit opponents from a distance",
-                "It's most powerful when Captain Falcon or Sheik performs a Smash Attack while holding it."
+                "It's most powerful when Captain Falcon or Sheik performs a Smash Attack",
+                "Particularly powerful variants are found with the forward smashes of Captain Falcon, Marth, Sheik, Pit and Ike"
               ]
             }
           ]
@@ -211,16 +214,16 @@
           ]
         },
         {
-          "line": "Tips: In Melee you could not move while shooting it. The uncharged shots pass through opponents, so a stream can trap several enemies, but their 280 degree knockback angle makes a very weak meteor smash that is ineffective against opponents close to the stage. When it runs out of ammunition it only fires a puff of smoke, and you can throw the weapon for a little extra knockback and damage.",
+          "line": "Tips: In Melee the shooter has to stand still while firing. Uncharged shots go through opponents, so one burst can pin down several of them, but their 280 degree knockback angle gives only a feeble meteor smash that does little against anyone near the stage. Once the ammunition is gone it only puffs out smoke, though throwing it still adds a little knockback and damage.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Super_Scope",
               "revision": "2061279",
               "quoted": [
-                "In Super Smash Bros. Melee, you could not move while shooting it, but in this game, you can move and jump while blasting!",
+                "In Super Smash Bros. Melee, you could not move while shooting it",
                 "In Melee, the uncharged shots have a 280° knockback angle, resulting in a very weak meteor smash, making it ineffective against opponents close to the stage.",
                 "The uncharged shots can also pass through opponents, allowing it to trap multiple enemies",
-                "Attempting to use the Super Scope after it runs out of ammunition causes it to fire nothing but a puff of smoke — at this point, the player can throw the weapon at opponents for a little extra knockback and damage."
+                "Attempting to use the Super Scope after it runs out of ammunition causes it to fire nothing but a puff of smoke"
               ]
             }
           ]
@@ -235,15 +238,15 @@
       "main_revision": "2044738",
       "lines": [
         {
-          "line": "Summary: A long-range weapon that is fairly weak, but since it fires so fast it can easily juggle enemies.",
+          "line": "Summary: A long-range weapon that is not very strong, but it fires quickly enough to juggle foes without trouble.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Ray_Gun",
               "revision": "2044738",
               "quoted": [
                 "The Ray Gun (レイガン, Ray Gun) is a long-range weapon used in all games of the Super Smash Bros. series.",
-                "The Ray Gun is toy-like in appearance and shoots short, fat, highly reflective beams of green light.",
-                "The gun is fairly weak, but since it fires so fast, it can easily juggle enemies."
+                "The gun is fairly weak",
+                "The horizontal knockback allows it to easily juggle opponents at low percents"
               ]
             }
           ]
@@ -263,26 +266,26 @@
           ]
         },
         {
-          "line": "Looks like: Toy-like in appearance, and it shoots short, fat, highly reflective beams of green light.",
+          "line": "Looks like: Looks like a toy; its green beams are short, thick and highly reflective.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Ray_Gun",
               "revision": "2044738",
               "quoted": [
-                "The Ray Gun is toy-like in appearance and shoots short, fat, highly reflective beams of green light."
+                "toy-like in appearance",
+                "short, fat, highly reflective beams of green light"
               ]
             }
           ]
         },
         {
-          "line": "Tips: The shots can be reflected or absorbed, while the gun itself, when thrown, can only be reflected. Try dropping it with a few shots left and watch your foes waste time and energy retrieving it.",
+          "line": "Tips: Moves that reflect or absorb projectiles work on the shots, but a thrown gun can only be reflected.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Ray_Gun",
               "revision": "2044738",
               "quoted": [
-                "The shots can be reflected or absorbed, while the gun itself (when thrown) can only be reflected.",
-                "Try dropping it with a few shots left and watch your foes waste time and energy retrieving it."
+                "The shots can be reflected or absorbed, while the gun itself (when thrown) can only be reflected."
               ]
             }
           ]
@@ -318,13 +321,14 @@
           ]
         },
         {
-          "line": "Uses: After you eat a Maxim Tomato and a brief moment passes, your damage meter slowly drains the amount, whether or not you pick up another item right afterwards. Damage you take while healing is subtracted from what the tomato heals: if an attack does 10% damage, you only recover 40%. Heart Containers drift toward the ground slowly and replenish 100 percentage points of health.",
+          "line": "Uses: A Maxim Tomato does not heal at once: a moment after you eat it, the damage number starts to count down, and picking up another item in the meantime does not stop that. Damage taken while it heals comes off the amount restored, so a 10% hit leaves you with only 40% healed. A Heart Container floats down slowly and takes a full 100 percentage points off your damage.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Maxim_Tomato",
               "revision": "2062573",
               "quoted": [
-                "Once you eat one, after a brief moment, your damage meter slowly drains the appropriate amount, regardless of whether or not you pick up another item right afterwards.",
+                "after a brief moment, your damage meter slowly drains the appropriate amount",
+                "regardless of whether or not you pick up another item right afterwards",
                 "Also beginning in Melee, damage taken while healing will be subtracted from the amount healed by the tomato.",
                 "if an attack does 10% damage, the tomato will \"absorb\" it into its 50% recovery, and the user only recovers 40% damage."
               ]
@@ -333,7 +337,8 @@
               "page": "https://www.ssbwiki.com/Heart_Container",
               "revision": "2066620",
               "quoted": [
-                "Heart Containers drift toward the ground slowly and replenish 100 percentage points of health."
+                "However, it now only heals a total of 100%.",
+                "drift toward the ground slowly and replenish 100 percentage points of health"
               ]
             }
           ]
@@ -426,28 +431,28 @@
       "main_revision": "2066650",
       "lines": [
         {
-          "line": "Summary: An item from the Mario series, known as the Starman in Melee, that makes you invulnerable to all attacks for a short period of time.",
+          "line": "Summary: A Mario item, called the Starman in Melee, that shields you from every attack for a short time.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Super_Star",
               "revision": "2066650",
               "quoted": [
                 "The Super Star (スーパースター, Super Star), known as the Starman prior to the PAL release of Super Smash Bros. Brawl and the NTSC release of Super Smash Bros. 4, is an item from the Mario series.",
-                "This item makes you invulnerable to all attacks for a short period of time."
+                "The player's fighter will become invincible for ten seconds"
               ]
             }
           ]
         },
         {
-          "line": "Uses: All you need to do is touch it to power up. Melee repeats the first game's behaviour, where the fighter is invincible for ten seconds but does not damage opponents by touching them.",
+          "line": "Uses: Whoever grabs it gets ten seconds of invincibility. Melee keeps the first game's behaviour here: touching opponents does not damage them.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Super_Star",
               "revision": "2066650",
               "quoted": [
-                "but all you need to do is touch it to power up.",
                 "The Starman returns as an item, reprising its behavior from Super Smash Bros.",
-                "The player's fighter will become invincible for ten seconds, but it doesn't damage the opponents when touched."
+                "The player's fighter will become invincible for ten seconds, but it doesn't damage the opponents when touched.",
+                "The character who grabs the Star becomes INVINCIBLE!"
               ]
             }
           ]
@@ -465,15 +470,14 @@
           ]
         },
         {
-          "line": "Tips: It bounces around in large arcs and eventually tumbles out of the stage, so touch it before it falls off. In Melee its theme music lowers the stage music's volume until the stage music is extremely difficult to hear.",
+          "line": "Tips: It ricochets in big arcs over the field, off platforms and walls, and if nobody gets it soon it drops off the edge of the stage. In Melee, the star's own tune pushes the stage music down until you can barely hear it.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Super_Star",
               "revision": "2066650",
               "quoted": [
-                "The Starman bounces around and eventually tumbles out of the stage",
                 "The Super Star bounces on the field and off platforms or walls in large arcs, and can fall off the stage if not grabbed in time",
-                "Unlike in the previous game, the Starman's theme music lowers the stage music's volume to the point that it becomes extremely difficult to hear over the layered theme."
+                "Unlike in the previous game, the Starman's theme music lowers the stage music's volume to the point that it becomes extremely difficult to hear"
               ]
             }
           ]
@@ -509,23 +513,26 @@
           ]
         },
         {
-          "line": "Uses: The Super Mushroom raises your size, strength and mass, making it harder for foes to knock you off; in Melee it multiplies weight by 1.6 and the damage of direct attacks by 1.2, but gives no armor, so you still flinch from any knockback. The Poison Mushroom takes away power and mass, making you a prime target to get smashed offscreen with even a light attack.",
+          "line": "Uses: A Super Mushroom makes you bigger, stronger and heavier, so foes have a harder time launching you. In Melee it multiplies your weight by 1.6 and the damage of your direct attacks by 1.2, but it gives no armor, so any knockback still makes you flinch. A Poison Mushroom does the reverse: it makes you smaller and takes weight and attack damage away.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Super_Mushroom",
               "revision": "2063635",
               "quoted": [
-                "In Super Smash Bros. Melee, they temporarily turn your character into a giant. Not only will your size and strength increase, but so will your mass, making it harder for foes to knock you off.",
+                "Makes the fighter, and their hitboxes and hurtboxes, bigger.",
                 "Increases the fighter's weight (applies a 1.6× multiplier in Melee",
                 "Increases the base power of direct attacks (1.2× in Melee",
-                "The item does not offer any armor, however, so the fighter will still flinch from attacks that deal any amount of knockback."
+                "The item does not offer any armor, however, so the fighter will still flinch from attacks that deal any amount of knockback.",
+                "making it harder for foes to knock you off"
               ]
             },
             {
               "page": "https://www.ssbwiki.com/Poison_Mushroom",
               "revision": "2027685",
               "quoted": [
-                "With your diminished stature comes a loss of power and mass, making you a prime target to get smashed offscreen with even a light attack."
+                "The player's fighter will shrink smaller after touching it",
+                "Decreases the player's fighter's weight by a small amount",
+                "Decreases the damage dealt by direct attacks"
               ]
             }
           ]
@@ -587,7 +594,7 @@
           ]
         },
         {
-          "line": "Weak points: They cannot use special moves or charge smash attacks, and their moves are much weaker versions of Captain Falcon's and Zelda's attacks; they make up for having no recovery moves with high jumping. Their attacks lack any real physical strength, and they are slow and easy to outmaneuver.",
+          "line": "Weak points: They have no special moves, cannot charge a smash attack, and their attacks are much weaker copies of Captain Falcon's and Zelda's. With no recovery moves, they rely on jumping high. Their hits carry little real force, and they are slow, so they are easy to dodge around.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Fighting_Wire_Frames",
@@ -595,7 +602,7 @@
               "quoted": [
                 "as to compensate their lack of recoveries due to their inability to use special moves, the Fighting Wire Frames have high jumping prowess.",
                 "They are also unable to charge smash attacks and their moves are much weaker versions of Captain Falcon and Zelda's attacks.",
-                "All Fighting Wire Frames lack the ability to use special techniques, and their attacks lack any real physical strength. Additionally, they're slow and are therefore easy to outmaneuver."
+                "their attacks lack any real physical strength. Additionally, they're slow and are therefore easy to outmaneuver."
               ]
             }
           ]

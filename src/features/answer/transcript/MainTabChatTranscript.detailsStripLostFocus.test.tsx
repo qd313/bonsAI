@@ -14,13 +14,15 @@
  * Solves: With the page's focus and without it: Down from "Hide details" lands on the strip, or on the notes line
  *         and then the strip; Right on the strip shows Session and keeps the ring there; Down from the strip lands on
  *         the open chip; the walk to the chips and back visits no stop twice; B on the strip and on a chip closes
- *         the panel with the ring on "Show details".
- * Does not: Scroll (the pane holds the whole turn). Does not step between chips with the page's focus gone: a chip
- *           step is still a plain hop (reported, not changed here).
+ *         the panel with the ring on "Show details"; on chips wrapped onto two rows every step (Down between rows,
+ *         Left, Right) moves the ring and Down leaves to the suggestion chips (the second opinion's fix-up: a chip
+ *         step used to claim the press with the ring left behind). The page sends no focus events while it lacks
+ *         focus, as on the Deck (transcriptPanelWalk.tsx).
+ * Does not: Scroll (the pane holds the whole turn).
  */
 import { describe, expect, it, vi } from "vitest";
 
-import { dockChipsStop, transcriptPanelEachTest, type TranscriptWalk } from "../../../test-harness/transcriptPanelWalk";
+import { dockChipsStop, transcriptPanelEachTest, type ChipLayout, type TranscriptWalk } from "../../../test-harness/transcriptPanelWalk";
 import { chatProps } from "../../../test-harness/earlierListTestKit";
 import { registerNavFocus } from "../../../shared/dpad/navFocusRegistry";
 import { focusBottomOfNewestReply } from "../../../shared/dpad/liveTurnFocusGraph";
@@ -43,8 +45,8 @@ const NOTE: KbAttachedNote = {
   domain: "strategy",
   game_title: "Hollow Knight",
 };
-/** Three chips in the Show details grid, in this order. */
-const CHIPS = ["Game context", "Notes", "Model"].map((label, i) => ({
+/** Four chips in the Show details grid, in this order (one row, or two of two). */
+const CHIPS = ["Game context", "Notes", "Model", "Tips"].map((label, i) => ({
   label, rank: i + 1, id: `chip-${i + 1}`, attached: true, tier_class: "", body: { title: label, paths: [], bullets: [] },
 }));
 
@@ -93,8 +95,8 @@ function stopName(el: HTMLElement): string | null {
   return null;
 }
 /** Draw the screen with the dock's chips under it, open Show details, and leave the ring on "Hide details". */
-async function drawWithDetailsOpen(p: MainTabChatTranscriptProps): Promise<TranscriptWalk> {
-  const screen = panel.draw(<MainTabChatTranscript {...p} />, STAMP, stopName);
+async function drawWithDetailsOpen(p: MainTabChatTranscriptProps, chips?: ChipLayout): Promise<TranscriptWalk> {
+  const screen = panel.draw(<MainTabChatTranscript {...p} />, STAMP, stopName, chips);
   /* Drawn after the chat, so Steam's own Down from the chat's last stop would reach it, as it does the dock. */
   registerNavFocus("preset-carousel", dockChipsStop(page(), () => focusBottomOfNewestReply()).nav);
   screen.put("Show details");
@@ -175,6 +177,26 @@ describe.each([
     await s.press("onMoveDown");
     expect(s.nameOf(page().ring())).toBe("Notes");
     expect(s.nameOf(page().active())).toBe("Notes");
+  });
+
+  /* The second opinion's fix-up: a step between chips was a plain focus whose failure was ignored. */
+  it("chips on two rows: Down crosses to the second row, then leaves to the suggestion chips, and Up comes back", async () => {
+    const s = await drawWithDetailsOpen(props(ANSWER_PLAIN, []), { chipsPerRow: 2 });
+    page().setFocused(focused);
+    const down = await s.walk("onMoveDown", DOCK);
+    expect(down).toEqual([HIDE, STRIP, FIRST_CHIP, "Model", DOCK]);
+    expect(await s.walk("onMoveUp", HIDE)).toEqual([...down].reverse());
+  });
+
+  it("chips on two rows: Right and Left step chip to chip and the ring follows every step", async () => {
+    const s = await drawWithDetailsOpen(props(ANSWER_PLAIN, []), { chipsPerRow: 2 });
+    page().setFocused(focused);
+    await s.walk("onMoveDown", FIRST_CHIP);
+    for (const [key, lands] of [["onMoveRight", "Notes"], ["onMoveRight", "Model"], ["onMoveLeft", "Notes"], ["onMoveLeft", FIRST_CHIP]] as const) {
+      expect(await s.press(key), `${key} onto ${lands}`).toBe("claimed");
+      expect(s.nameOf(page().ring())).toBe(lands);
+      expect(s.nameOf(page().active())).toBe(lands);
+    }
   });
 
   it("a covered answer's caption is no stop: Down from Hide details goes straight to the strip", async () => {

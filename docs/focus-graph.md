@@ -734,7 +734,16 @@ Code: `ContextChipLadder.tsx` (the moves), `chipLadderGrid.ts` (`packChipRows`, 
   the last chip always went (`onMoveDownFromLadder`), after first scrolling the rest of a tall details box into
   view if its end is behind the dock (that press keeps the ring on the chip).
 - **Every move inside the grid** is a plain `focus()` between sibling chips in the one ladder container, the case
-  AGENTS.md allows; leaving goes through the caller's own transfer, unchanged.
+  AGENTS.md allows; leaving goes through the caller's own transfer, unchanged. **While the panel's page lacks the
+  browser's focus** (plan 103 F1) a step is Steam's transfer onto the chip's own nav node instead, and a refused
+  transfer gives the press up to Steam: the plain step used to claim the press with the ring left behind, so on two
+  rows Down from the top row moved the open chip's fill once and then nothing.
+- **Coming in from outside (plan 103 F1).** The "This answer | Session" toggle and the grid's root each have their
+  own Steam stop, registered the notes line's way (`registerRowNav`, read by `focusRowElement`), so Down from Hide
+  details or the notes line, Up from a chip, and Up from the suggestion chips reach them by Steam's transfer even
+  with the page out of focus (before, those hops failed there and the chain went on to the suggestion chips past the
+  open panel). The grid's stop is a transfer onto the **open** chip's own node, not the root's: Steam's transfer into
+  a container picks a child of its own choosing. Device row: P103-DETAILS-STRIP-01.
 - **B** closes the ladder (`onCancelButton` on each chip), unchanged. **A** does nothing on a chip, unchanged.
 - **Scroll (plan 87 call 6: the details stay readable).** When a chip opens, by a step or by the ring arriving, its
   box's end must be above the dock. If it is, nothing moves. If not, one smooth scroll of just enough
@@ -1511,4 +1520,5 @@ _Code: `src/features/answer/reply-actions/kbDemoteRows.tsx` (`landOn`), `src/sha
   lacks focus: it says false unless Steam's ring followed, puts the page's focus back and writes the usual `dpad.lostFocusHop` log line
   (hop `deckOwner`), so the next choice in the chain or Steam's own move carries the ring. On the Main tab with Show details open the
   chain then runs on to the suggestion chips' transfer, past the open details panel: a moving press, not yet the stop a person expects.
-  The details tabs row and the chip grid need their own Steam nodes (the Bugs entry in the knowledge-base roadmap).
+  Since plan 103 F1 the details tabs row and the chip grid have their own Steam nodes, so that press lands on the tabs row (§ "The
+  Show details chips grid", "Coming in from outside").

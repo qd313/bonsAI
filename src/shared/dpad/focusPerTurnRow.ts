@@ -115,6 +115,13 @@ export function focusRowElement(el: HTMLElement): boolean {
   const lost = panelLacksFocus();
   if (takeRowNav(el)) {
     if (lost) noteLostFocusHop("row", "transfer", el);
+    /*
+     * The transfer already put the page's focus on the row or inside it (the chip grid's stop lands on its open
+     * chip, plan 103 F1): leave it there. Focusing the row's own element now would pull the page's focus off the
+     * chip, and with the page out of the browser's focus no focus event follows to hand it back, so the page's
+     * focus and Steam's ring would part.
+     */
+    if (elementHasFocus(el)) return true;
   } else {
     let threw = false;
     const landed = plainHop(el, "row", () => {

@@ -62,6 +62,7 @@ import { CHIP_GAP_PX, gridMove, rowsFromBoxes, type GridDirection } from "./chip
 import { elementHasFocus } from "../../../shared/dpad/uiDocument";
 import { focusRowElement, registerRowNav } from "../../../shared/dpad/focusPerTurnRow";
 import type { NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
+import { noteLostFocusHop, panelLacksFocus } from "../../../shared/dpad/lostFocusHop";
 import { DECK_HIGHLIGHT_CYAN } from "../../../shared/constants";
 import { textPx } from "../../../styles/textPx";
 
@@ -270,8 +271,27 @@ export function ContextChipLadder({
    * A step is a plain focus() onto another chip: the chips are siblings inside this one
    * container, the case AGENTS.md ("The Steam Deck focus graph") says a plain focus() carries the
    * ring. Out of the grid the press goes to the caller, as it always did.
+   *
+   * Except while the panel's page lacks the browser's focus (plan 103 F1, the second opinion's consult 4): a plain
+   * focus() then moves only the page's focus (lostFocusHop.ts), and the step used to claim the press anyway, so on
+   * two rows Down from the top row moved the open chip's fill once and then nothing, never reaching the question
+   * box. Then the step is Steam's transfer onto the chip's own node, and a refused transfer gives the press up to
+   * Steam instead of claiming it with the ring left behind.
    */
+  const takeChipWithoutPageFocus = (idx: number): boolean => {
+    const node = chipNavs.current.get(idx)?.current;
+    if (typeof node?.TakeFocus !== "function") return false;
+    try {
+      if (node.TakeFocus(true) === false) return false;
+    } catch {
+      return false;
+    }
+    noteLostFocusHop("chip", "transfer", chipEls.current.get(idx));
+    return true;
+  };
   const stepTo = (idx: number): boolean => {
+    /* With the panel's page out of the browser's focus the step goes by Steam's transfer, or not at all. */
+    if (panelLacksFocus() && !takeChipWithoutPageFocus(idx)) return false;
     /*
      * A step changes the box drawn under the grid. The row stays exactly where it is unless the new
      * box's end would be behind the dock, or the chip is off screen; then one smooth scroll of just

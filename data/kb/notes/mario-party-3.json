@@ -56,6 +56,61 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5162335",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3005,
+      "game_id": 28,
+      "section_type": "enemy",
+      "name": "Waluigi's Island's dynamite and rigged path",
+      "card": "Summary: An unlockable board full of traps: each time someone lands on a Happening Space on the dynamite island a number counts down from 5, and when it reaches 0 the dynamite explodes and anyone caught in the blast loses all their coins.\nWeak points: To get off the dynamite island you jump onto the gear in the center during the Action Time: the arrow that is flashing when you land is the path you must take, and if it stops on the down arrow, or you take too long, you stay on the island. On the way to Boo there are two paths and one is booby-trapped, which sends you back to the start.\nLooks like: A circle of dynamite with a number in the middle of the explosives, set at five at the start, and a gear in the center of the board with four flashing arrows.\nTips: The Happening Spaces are the dangerous ones on the dynamite island. On the island in the upper left every space changes to another type each turn, except the Bank Space, and the red pipes along the top sides all lead to the green pipe near the start.",
+      "source_url": "https://www.mariowiki.com/Waluigi%27s_Island",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5402589",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3006,
+      "game_id": 28,
+      "section_type": "enemy",
+      "name": "Chain Chomp (duel partner)",
+      "card": "Summary: A chainless Chain Chomp that can be a Duel Mode partner; its attack hits the opponent and all their partners at once. Its attack is 1, its stamina 2 and its salary six coins.\nWeak points: Its attack is 1. A Boo partner hits back at a Chain Chomp's multi-attack only if the Boo is directly in front of the attacking Chain Chomp.\nLooks like: Series pages describe a Chain Chomp as a black or dark blue ball with big round eyes and a large gaping mouth of sharp teeth; the Duel Mode partner has no chain.\nTips: No character starts with a Chain Chomp; it comes from the partner lottery. When it is powered up it grows to the size of a Shark Chomp, jumps up and body slams all opponents. A Bob-omb and a Chomp together earn a \"dangerous duo\" comment from the Millennium Star, but no attack boost.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5520638",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3007,
+      "game_id": 28,
+      "section_type": "enemy",
+      "name": "Thwomp (duel partner)",
+      "card": "Summary: A Duel Mode partner with 0 attack that crushes the opponent's partners instantly but does nothing to the opposing player. Its stamina is 2 and its salary four coins.\nWeak points: It never hurts your hearts, only your partners. A Boo partner that a Thwomp defeats does not hit back as it normally would.\nLooks like: Series pages describe Thwomps as living stone blocks, usually rectangular and spiked, often with an angry face.\nTips: No character starts with a Thwomp, so one only arrives through the partner roulette. With two Thwomps the Millennium Star lowers their salaries by one instead of raising their attack, and the Millennium Star calls a Whomp and a Thwomp an earth shaking combination. The instruction booklet wrongly gives it an attack of 2.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5520638",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3008,
+      "game_id": 28,
+      "section_type": "item",
+      "name": "Boo Repellant",
+      "card": "Summary: A spray can that makes Boo flee without stealing from you. Toad sells it for 10 coins, and the manual spells it Boo Repellent.\nUses: It activates by itself when Boo tries to steal coins or a Star from you while you hold it, and Boo leaves with nothing. Each can is good for one use.\nTips: You can throw one away at the start of your turn to make room in your inventory, which counts as using an item that turn. Other players tend to avoid wasting a Boo attempt on you, but computer players do not care and will try anyway, even for Stars.",
+      "source_url": "https://www.mariowiki.com/Boo_Repellant",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5499703",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3009,
+      "game_id": 28,
+      "section_type": "item",
+      "name": "Boo Bell",
+      "card": "Summary: Rings up Boo to steal coins or a Star from an opponent. Baby Bowser sells it for 15 coins.\nUses: Using it summons Boo, who asks whom you want him to steal from and what to steal. The manual says he steals coins or a Star from another player.\nTips: A player holding a Boo Repellant drives Boo off without losing anything. The Boo Bell is sold in Baby Bowser's shop, the one that sells items meant to hinder opponents.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5520638",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

@@ -602,3 +602,271 @@ R.5 follows. No released plugin can download a library yet (0.4.9 and main have 
 Removed or rewritten lines, word for word:
 
 flow R. See [Library format bump and per-game Deck tips](#library-format-bump-and-per-game-deck-tips).
+
+## Moved from roadmap-kb-details.md 2026-11-09 (plan 103 sweep K1, size trim)
+
+The two sections below moved out word for word from [roadmap-kb-details.md](../roadmap-kb-details.md), which was over its 100 KB limit. Their links from the live documents now point here.
+
+## Plan 98 notes moved from the knowledge base roadmap (2026-10-24)
+
+Moved word for word by the plan 98 docs sweep 3 to keep the roadmap under its size limit.
+
+**The knowledge library update: Deck readings 2026-10-22 and 2026-10-24:**
+
+**Deck 2026-10-22 (plan 97 block D4, build `15565346`): PASS for the first half, UNCLEAR for the wording.** Nothing downloaded (file dates unchanged), the status stayed "Installed" and the plugin log named both versions (installed 2026.10.17, newest 2026.10.17). The "newer than published" line could not appear: the maintainer has published the library since, so it now equals the installed one and the line read "Already up to date (version 2026.10.17)." That wording needs a published library older than the Deck's (`workshop:test-evidence/plan97-P97-L9-KB-UPDATE.json`). Row **P97-L9-KB-UPDATE** stays open for it. **2026-10-24 (plan 98 block K0): could not run** again: the clean install left no test library on the Deck, and the installed and published libraries are both 2026.10.17. It runs after the first deploy of plan 98's night (`workshop:test-evidence/plan98-P97-L9-KB-UPDATE.json`). Evidence of the failure `workshop:test-evidence/plan86-B6-RESTORE.json`. Older notes: [roadmap-kb-details.md](roadmap-kb-details.md#plan-97-notes-moved-from-the-knowledge-base-roadmap-2026-10-22).
+
+**The note's own words: plan 97 block B reading:**
+
+**2026-10-22 (plan 97 block B, build `73738058`, Deep Rock Galactic: Survivor running, Strategy mode):** NOTES-BLOCK-04's line half FAILED on the second of two questions (the first passed): see the new Bugs entry. NOTES-BLOCK-LADDER was UNCLEAR again (retired by the maintainer's call afterwards, see above): a "Soul Master" block ("From the Hollow Knight wiki") opens to one paragraph with no chip ladder, and Left and Right do nothing (`workshop:test-evidence/plan97-NOTES-BLOCK-LADDER.json`). The two 2026-10-14 notes, word for word: [roadmap-kb-details.md](roadmap-kb-details.md#the-notes-own-words-under-the-reply).
+
+**Unrelated questions: the 2026-10-24 reading:**
+
+**Deck 2026-10-24 (plan 98 block K0, release build `f0b72dae7b65`, Deep Rock Galactic: Survivor running, Strategy mode), MEASURED:** "thank you very much" attached no notes (the AI answered the earlier question again, as a follow-up, and the "Not in my notes" line showed). "what time is it" attached Gold, Red Sugar and Nitra, drew no block and no line, and the AI said it has no clock. The second phrase still pulls notes. The reading is muddied, because short questions with "it" are treated as follow-ups to the previous question (see the new entry at the top of this list); a clean re-run in a fresh chat is owed. Evidence `workshop:test-evidence/plan98-P98-JUNK-PHRASES.json`.
+
+**The plainly-worded Deck problems: the second opinion's word list:**
+
+**Second opinion 2026-10-24 (plan 98 consult 2): fix the wording in two places, not a cut-off.** Five tips need more of the plain words people use: the crash tip ("a crash drops you back to the game library": add "home screen", "closes on its own", "quits", "shuts off"); the storage-full tip ("not enough space", "no space left", "can't install"); the crashes-at-launch tip ("won't open", "won't start", "nothing happens when I launch"); the blank-screen display tip ("black screen", "goes black", and the built-in screen too); the find-the-PC tips ("can't find my PC", "my computer is not in the list", "same network"). The router's topic words need the same plain words. Two problems have no tip at all: sound going to the TV instead of plugged-in headphones, and menus out of place on a TV. The 24 test sentences have no recorded right tip, so expected tips must be written into the test fixture before any gate.
+
+**STRAT-SPOIL-NAME-01: why it could not run:**
+
+**Still owed:** STRAT-SPOIL-NAME-01 could not run five times, last 2026-10-24 (plan 98 block K0): Doom 64: Retribution, Pikmin 2 and Super Mario 64 are on the Recent Games row now, but they are non-Steam shortcuts and the rig's launch tool cannot recognise their tiles (logged in [mcp-setup.md](mcp-setup.md)). A hand launch by the maintainer, left running, would let the rig run the rest; it is on the checks page. Evidence `workshop:test-evidence/plan98-STRAT-SPOIL-NAME-01.json`.
+
+**A card named after a category: the 2026-10-24 measurement:**
+
+**Measured 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`):** on 279 strategy questions with a recorded right note, a category note came first in 3 (about 1 in 100). Only one of them (V2-S-RDR2-06, "how to get a better horse early": Horse breeds first, Horse bonding second) fits this entry; the other two name the category themselves. D41 stays your call, with this figure for it.
+
+**Troubleshooting symptom entry: the second half of its text:**
+
+fit" floor now exists, and the held fix was re-measured with it on 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`): today 8 of 24 plain problem sentences reach a tip (6 right, 1 half, 1 wrong). With the held meaning-search branch (hand-ported, it no longer applies to today's files) all 24 reach a tip, but only 13 are right, 3 half and 8 wrong. So it stays held: it would trade "no tip" for a wrong tip on a third of the questions. Overlaps the entry of the same subject in
+
+**The eval cannot yet prove the meaning search rescues many questions:**
+
+- ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **OPEN, counted 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`).** Of the labelled questions, 4 (3 tuning rows and 1 held-back row) get nothing from the word search. The combined search still finds the right note in its first three for 3 of those 4 (missed: V2-PARA-S04). The 36 newer blind rows did not grow the slice (1 of 214 blind rows). Four questions is still too few to gate a regression; whether to write more is the owner's call. No code needed.
+
+**A notes card with the switch off: the original text:**
+
+A stopped answer with "Use local knowledge base" off (the settings file read false) still had a card reading "Weapon choice, From bonsAI's own note" under it; another try with the same switch off drew no card. Is that meant? The maintainer's call: that is fine (by design). Evidence `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-2.json` (the try with no card: `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-1.json`).
+
+**The note's own words under the reply: the status paragraph:**
+
+Most rows passed on the Deck and are closed: 01, 02, 03, 05, 06 and TEN-GAMES-01; 04's "no block" half passed 2026-10-03 (`workshop:test-evidence/plan81-NOTES-BLOCK-04.json`) and again with a game running 2026-10-14. **Still owed:** 04's "Not in my notes" line half (in Strategy or Expert). **NOTES-BLOCK-LADDER was retired by the maintainer's call 2026-10-22 (plan 98 call 11, D135): notes blocks carry no chip ladder by design now; last reading `workshop:test-evidence/plan97-NOTES-BLOCK-LADDER.json`.** (NOTES-BLOCK-07 was retired 2026-10-16: it checked Read aloud, removed in plan 86 step 3). Rows in [testing-manual.md](testing-manual.md). Older notes, word for word: [roadmap-kb-details.md](roadmap-kb-details.md#the-notes-own-words-under-the-reply).
+
+**Glossary words: the spot-check line (kept in the entry's first version), word for word:**
+
+Every sentence restates that game's own notes; the session spot-checked one in ten against its note.
+
+**Glossary words: the count by kind, word for word:**
+
+(114 Steam wiki titles, 90 own-words and GTA titles, 137 Nintendo titles)
+
+**The knowledge library update: what the fix does, word for word:**
+
+Update now reads both versions as dates. When the published library is older, nothing downloads, the plugin log names both versions, and the row says "You have 2026.10.17; the published library is 2026.09.26. Nothing to do." If either version does not read as a date, the old behaviour stays. The where-to-put-it half was fixed in plan 94: the first download asks (Not now / Internal storage / SD card) (`workshop:test-evidence/plan94-P94-KB-DOWNLOAD.json`).
+
+**Wrong-subject notes: the known limits, word for word:**
+
+**Known limits:** a long ending not on the list ("in co-op with my friends") is left to the scores; a British spelling ("armoured") can miss a note's "armor"; a junk phrase ("what time is it") names nothing, so it is untouched.
+
+**Spoiler tiers: the report file names, word for word:**
+
+Reports `workshop:archive/research/kb-answer-eval-2026-10-24-p98b-default.md`, `-strict.md`, `-open.md`, `-tip.md`.
+
+**RAG Phase 7: the D112 link, word for word:**
+
+(design C, [D112](audit/maintainer-decisions-locked.md#d112--locked-2026-09-25-raised-2026-09-25--plan-70-knowledge-base-wave-four-with-an-automated-deck-test-wave-the-twelve-calls-before-go) item 8)
+
+**Screenshot reading: the thin-set paragraph, word for word:**
+
+The set is thin: most games stop at a save-slot screen the rig was told never to touch, and Steam's performance overlay is on every picture. A bigger set with play scenes needs the maintainer's hand. **Step 2** (run each picture model the Deck offers, then fix where it fails) is still open. Report `workshop:archive/research/screenshot-reading-2026-10-24.md`.
+
+**Screenshot reading: the first figures, word for word:**
+
+First figures: 8 Deck pictures (Deep Rock Galactic: Survivor, Brotato, Hades, Half-Life 2, Black Mesa, God of War; mostly title and menu screens, one play scene), the Deck's own model `gemma4:e2b-it-qat`, 3 tries each. With the game handed over it named the game 75 times in 100 and the area 42; with nothing handed over, 17 and 29. No picture had a boss. It often invents ("a combat scene" on a title screen), guesses Zelda: Ocarina of Time for pictures it does not know, and ignored the handed-over game name on 4 of 9 God of War asks.
+
+**The one-second wait on every question (the top-of-file paragraph), word for word:**
+
+**The one-second wait on every question is explained.** The Deck holds one model in memory at a time, so the answering model and the note-search model push each other out. With the limit raised to two, a search after an answer dropped from 732 to 24 thousandths of a second (2026-09-12, `workshop:test-evidence/plan48-R6-deck-model-eviction.json`). The maintainer's Deck runs with two models kept loaded since 2026-09-23 (`workshop:test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`); the drift from August to September is still open. Two models beside a running game was measured 2026-09-26 and the safety check stays unbuilt: [detail](roadmap-details.md#cost-to-a-running-game-second-sighting).
+
+## Plan 100 notes moved from the knowledge base roadmap (2026-10-25)
+
+Moved word for word by the plan 100 pre-go audit, so each roadmap entry stays at five lines.
+
+**The symptom question: the 2026-10-24 re-measure:**
+
+Re-measured 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`): today 8 of 24 plain problem sentences reach a tip; the held branch reaches all 24 but gets only 13 right, so it stays held. The tips were rewritten and a "none of these fit" floor now exists. Overlaps the entry of the same subject in Next.
+
+**Unrelated questions: the older sightings:**
+
+With a game running, "thank you very much" still attached a card on the Deck on 2026-08-23. Later floors (2026-09) may have cured some phrases.
+
+**A troubleshooting question mostly never reaches the tips: the 2026-09 fixes:**
+
+The tip cut-off and a false word match were fixed 2026-09-26, and the "no tip for this" line was retired 2026-09-27.
+
+**Moved word for word by the plan 100 wave 1 docs sweep (2026-10-25), when these entries went to Deck check owed:**
+
+**A thank-you or a junk phrase: the entry before the fix:**
+
+- ★ `[KB]` **A thank-you or a junk phrase is treated as a follow-up to the previous question** — **OPEN, found 2026-10-24 (plan 98 block K0, Deck).**
+  On Strategy and Expert turns, the previous question and answer are handed to the AI whenever the new question names no boss or enemy, with no check. "thank you very much" has no "it", so it never reaches the "it" rule; it answered the previous question again (the earlier house question) instead of a short reply. "what time is it" does pass the "it" rule. **Fresh-chat re-run 2026-10-25 (plan 100 block L0, Deep Rock Galactic: Survivor running): FAILED on two of three halves.** "thank you very much" attached no notes but still answered with 93 words of boss advice, plus a "Not in my notes" line. "what time is it" attached three notes (Praetorian, Classes, Mining and the run timer), drew a notes block, said it had no clock, then gave the boss advice. "how do I beat it" was correctly about the Praetorian. The fix is owed (plan 100 lane F). Evidence `workshop:test-evidence/plan98-P98-JUNK-PHRASES.json` and `workshop:test-evidence/plan100-P98-JUNK-PHRASES-try2.json`.
+
+**Route look, forgotten steps: the entry before the fix:**
+
+- ★ `[KB]` **Route look: the shown steps are forgotten when the cache is cleared** — **OPEN, found 2026-10-24 (plan 98 lane H).**
+  The steps already shown are kept in the panel's browser storage, not beside the ticks in the back end's per-game save. Clear cache and leaving Strategy clear the ticks and leave the revealed steps in that storage, so a route can come back with later steps open and nothing ticked; only Clear all data removes them. Proposed fix: save them beside the ticks.
+
+**Route look, "Needs": the entry before the fix:**
+
+- ★ `[KB]` **Route look: no "Needs: …" part is written for steps that need an item or ability** — **OPEN, found 2026-10-24 (plan 98 lane H).**
+  The screen already draws a "Needs" part when a step has one; the AI is never asked to add it. Ask it to, for a step that needs an item or ability first.
+
+**Search tab, the section line: the entry before the fix:**
+
+- ★ `[KB]` **Story spoilers: the Search tab's entry lands on the section line, not on the new row** — **OPEN, found 2026-10-24 (plan 98 lane B).**
+  Searching for "Story spoilers" opens the section but not the "How much to hide" row.
+
+**Yoshi's Story note: the entry before the fix:**
+
+- ★ `[KB]` **Yoshi's Story's "Starting out" note contradicts itself about its levels** — **OPEN, found 2026-10-24 (plan 98 lane G3).**
+  The note (section 376 in `data/kb/strategy_seed.json`) says "24 levels split across four worlds of six pages" and also "only six levels are played in any one run". The real game has six worlds of four levels. Lane G3 kept those numbers out of the glossary words. The note needs correcting, then a library rebuild.
+
+**Hide more on screen: the entry before the fix:**
+
+- ★★ `[KB]` **Story spoilers: under Hide more, a cover with no boss name in it still opens on a game with no story profile** — **OPEN, found 2026-10-24 (plan 98 lane B).**
+  On screen, covers on a no-story game are opened unless they name a protected note, so the tier is not on the screen side.
+
+**The symptom question: the entry before the wording fix:**
+
+- ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back
+  2026-09-06 (D81).** "The game drops me back to the library" reaches no crash tip, because the tip search needs a topic
+  word. The held fix (a meaning search) attached wrong tips, six measured; it stays held (re-measured 2026-10-24: 8 of 24 plain sentences reach a tip today, the held branch reaches all 24 but only 13 right). Older notes: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  **Second opinion 2026-10-24 (plan 98 consult 2):** no score cut-off is worth building (two are already on). The fix is wording, written up in the Next entry "A troubleshooting question mostly never reaches the tips".
+  [Detail](roadmap-kb-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips)
+
+**A troubleshooting question mostly never reaches the tips: the entry before the wording fix:**
+
+- ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.** Nine of ten
+  ordinary problem sentences ("my game keeps crashing") reached nothing when measured 2026-09-07, because the word "crash"
+  alone is too weak to route a question. Remeasured 2026-10-24 (plan 98 lane F): 8 of 24 plain sentences reach a tip, 6 of them right (see the symptom entry in Bugs). (D81, D85) Older notes: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  **Second opinion 2026-10-24 (plan 98 consult 2): fix the wording in two places (five tips and the router's topic words), not a cut-off.** Two problems have no tip at all (sound to the TV instead of headphones; menus out of place on a TV), and the 24 test sentences need their right tips written into the fixture before any gate. The word lists: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  [Detail](roadmap-kb-details.md#a-troubleshooting-question-mostly-never-reaches-the-tips)
+
+**Moved word for word by the plan 100 wave 2 docs sweep (2026-10-25), when these entries went to Deck check owed:**
+
+**Thumbs-down follow-ups and Suggest as a tip: the entries before the fix:**
+
+- ★★ `[KB]` **Thumbs-down: Undo shows only on the newest answer, so an older mark has no way back** — **OPEN, found 2026-10-24 (plan 98 Deck block K1).**
+  Once another question is asked, an earlier answer shows no rating row and no Undo. Three marks leave a note out of the answers for good, with nothing on screen to see or clear it. A place to see and clear lowered notes is needed: a row in the Knowledge base section, which sits in the Ollama tab beside Remove. Evidence `workshop:test-evidence/plan98-P98-DEMOTE-01.json`.
+
+- ★ `[KB]` **Thumbs-down: "ranked lower by you" stays on an answer already saved after Undo** — **OPEN, found 2026-10-24 (plan 98 lane D).**
+  Show details' tag is as of the ask, so an Undo does not clear it on an answer already saved.
+
+- ★★★★★ `[KB]` **Community tip contribution** — **OPEN, unblocked.** A reader turns a good reply into a proposed note
+  with one press. **Suggest as a tip** writes a valid card to the Desktop plus a GitHub attach link. Three to five days.
+  [Detail](roadmap-kb-details.md#rag-phase-7-community-tip-contribution-rag-phase-8)
+
+**Longer text moved by the plan 100 wave 2 docs sweep (2026-10-25) to keep the knowledge-base roadmap under its size limit:**
+
+**RAG Phase 5 entry (full text before the 2026-10-25 trim):**
+
+164 notes. The four that had none now have enemy and item notes (plan 100, 2026-10-25): Baldur's Gate 3 7, GTA San Andreas 15, The Sims 4 15, Portal 2 14, so 29 of 38 games have them. **Measured 2026-10-25 (plan 100 lane X):** of 102 blind questions for the new notes, 100 find their note in the first three (86 in first place). But the new notes crowd the old: search overall reads 90.8 in a hundred in the first three on the held-back questions (88.1 before), and five older questions dropped out of the first three. On first turns, facts kept fell from 76.3 to 67.2 in a hundred, and contradictions read 96.3 clean against 88.9. This needs your read before it is called more than PARTIAL: see the new entry in Bugs. Also waits on P100-FOUR-GAMES-01 (block L2) and your read of the Baldur's Gate 3 notes.
+
+**Hide more against Default (full text before the 2026-10-25 trim):**
+
+First run: 23 covers in 100 answers against 29, and twice it missed a Hades story cover that Default kept 3 of 3. **Second run: 20.6 against 23.8.** The two Hades story rows drew their cover the same under both (3 of 3 and 2 of 3), and Hide more missed no story cover that Default kept. Contradictions: 92.6 clean against 88.9. Evidence `workshop:archive/research/kb-answer-eval-2026-10-25-p100-strict.md` against `workshop:archive/research/kb-answer-eval-2026-10-25-p100-default.md`; first run `workshop:archive/research/kb-answer-eval-2026-10-24-p98b-strict.md`.
+
+**The new notes crowd the old ones (full text before the 2026-10-25 trim):**
+
+The five: the Portal 2 gels, the BG3 class, an audio tip and two GTA rows. The Portal 2 gels question lost its card to the three new gel notes; six questions went from 3 of 3 to 0 of 3. Facts kept 76.3 down to 67.2 in a hundred. Search: `workshop:archive/research/kb-embed-bakeoff-2026-10-25-p100-before-arms.md` against `workshop:archive/research/kb-embed-bakeoff-2026-10-25-p100-after-arms.md`. Answers: `workshop:archive/research/kb-answer-eval-2026-10-25-p100-default.md` against `workshop:archive/research/kb-answer-eval-2026-10-25-p100-needs.md`.
+
+**Zero-score made-up question (full text before the 2026-10-25 trim):**
+
+Should a question with no keyword support attach nothing? A floor at no keyword support clears the two made-up bosses (Zorblax, Grimthak) but loses 3 right notes. The house and Bone Hydra questions score 3.6 to 3.8, and a floor there loses 19 right notes. The "No close match" line already shows on all four. **The numbers say no new floor.** Evidence `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04.json`; floor runs `workshop:archive/research/kb-floor-holdout-2026-10-25-p100-before.json` and `...-after.json`.
+
+**Screenshot entry note (full text before the 2026-10-25 trim):**
+
+**2026-10-25 (plan 100 lane P, `55771b7a`), measured:** the picture rules now say the running game named to the AI is the game in the picture. The line did not help: with the game handed over the AI named it 58 and 50 times in a hundred over two runs (75 on 2026-10-24); the God of War asks named another game 4 and 6 times in 9 (4 before). Two runs differ by up to 21 points. Still PARTIAL; the step is measured, no gain. Report `workshop:archive/research/screenshot-reading-2026-10-25-p100-after.md`.
+
+**Hollow Knight cheat section (full text before the 2026-10-25 trim):**
+
+The route answer suggested emulator and fast-travel exploits. Odd advice from the AI, seen once. **Counted 2026-10-25 (plan 100 block L0): 0 cheat sections in 2 route questions** (plan 100 call 5, D137, chose to add no prompt line for it). **Same run: both route questions (Strategy, Hollow Knight named, nothing running) drew no step list at all, only one plain paragraph each** (no numbered steps, no "Needs" lines). Evidence `workshop:test-evidence/plan98-P98-ROUTE-01-try2.json`, `workshop:test-evidence/plan100-P100-ROUTE-CHEAT-COUNT.json`.
+
+**Troubleshooting tips entry (full text before the 2026-10-25 trim):**
+
+Five tips now carry the plain words people type, and two new tips (165: sound to the TV instead of headphones; 166: menus out of place on a TV, both "Researched, unconfirmed") fill the gaps. Of the 24 plain sentences, 17 now reach a tip (8 before) and 15 of the 22 that have a right tip reach it (5 before); none reaches a wrong tip. No "can't find my PC" tip exists (tips 110 and 111 are Steam Frame tips), so two sentences stay unlabelled; the lane's proposed text is in plan 100's report.
+
+**RAG Phase 4 entry; the 2026-10-25 measure (removed words):** (PHASE4-CHIPS-01; UNCLEAR again 2026-10-24; measured 2026-10-25 with nothing running: only "How to use bonsAI" showed, 300 by 26 px, text fits, no game chips; the maintainer judges the three pictures, see its testing row)
+
+**One-second wait paragraph; the timing (removed words):** ; with the limit at two, a search after an answer dropped from 732 to 24 thousandths of a second. The maintainer
+
+**Suggest as a tip entry; the review note (removed words):** The security reviewer read the diff (sound; one ★ finding fixed before landing).
+
+**Undo-only-on-newest entry; the old sighting (removed words):** The old sighting: `workshop:test-evidence/plan98-P98-DEMOTE-01.json`.
+
+**RAG Phase 5 entry; wording (removed words):** , but the new notes crowd the old ones and facts kept fell from 76.3 to 67.2 (see the Bugs entry). Needs your read before it is called more than PARTIAL.
+
+**Troubleshooting tips entry; unlabelled sentences (removed words):** Two sentences stay unlabelled (no "can't find my PC" tip exists).
+
+**Hollow Knight cheat entry; no step list (removed words):** Both route questions also drew no step list, only one plain paragraph each.
+
+**Removed words, plan 100 wave 2 sweep:** "A fresh-chat re-run 2026-10-25 (plan 100 block L0) still attached three notes for "what time is it" (`workshop:test-evidence/plan100-P98-JUNK-PHRASES-try2.json`); see the Deck check owed entry on junk phrases." and "(Doom 64: the launch tool cannot match a non-Steam shortcut; `workshop:test-evidence/plan100-STRAT-SPOIL-NAME-01.json`)".
+
+**Removed words, plan 100 wave 2 sweep:** "Earlier sightings (2026-08-23, 2026-09): [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)" "(measured on the PC; the Deck check P100-TIPS-01 is owed)" "The maintainer's Deck keeps two loaded since 2026-09-23. Full text and evidence:" 
+
+**Removed words, plan 100 wave 2 sweep (wording only):** "Clear asks first, then the file of marks is emptied and the notes come back on later questions." "**Known and not fixed:** an older answer's saved tag stays until a new question is asked. **Still owed:**" "Wave three's report](../../bonsAI-workshop/archive/48-kb-wave-three-session.md). More detail:" "Seven notes from Wikipedia only (its own wiki is NonCommercial): Owlbear" 
+
+**Removed words, plan 100 wave 2 sweep (hidden spoiler entry; the dates):** "Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01, 2026-09-18), knowledge base off (DRG-01b, 2026-09-23) and library absent (DRG-01c, 2026-10-03; the AI wrote no hidden block, so a cover was not tested directly)." "Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  Evidence `workshop:test-evidence/plan79" 
+
+**Removed words, plan 100 wave 2 sweep (RAG Phase 4 entry):** "The maintainer's own look at the
+  pace is closed: "as they are", 2026-10-22 (plan 99 § 2 call 12)." "A running game's own tip passed on the Deck 2026-09-26. The chip promise passed on the Deck 2026-10-01 (P78-TIP-CHIP,
+  P78-CHIP-PACE)." 
+
+**Removed words, plan 100 wave 2 sweep (small trims):** "Two runs of the same setup differ by a few points." "Odd advice from the AI, seen once." "(plan 100 call 5, D137, chose to add no prompt line for it)" 
+
+**Moved word for word by the plan 100 K9 audit (2026-10-26), to keep the knowledge-base roadmap under its size limit:**
+
+**The five calls added to "Calls waiting on you" (full wording):**
+
+- **Hide more draws fewer spoiler covers than Default: close or keep?** — **OPEN, raised 2026-10-25 (plan 100 lane X).**
+  Measured twice: 20.6 covers in a hundred answers against 23.8 for Default, and Hide more missed no story cover that Default kept. Close it as measured, or keep it open? See the Bugs entry "Hide more drew fewer spoiler covers".
+- **Hide less read 94.4 percent clean on the second run: close or keep?** — **OPEN, raised 2026-10-25 (plan 100 lane X).**
+  First run 90.7, second 94.4 (51 of 54). See the Bugs entry "under Hide less".
+- **A made-up question attaches three weak notes with a score of 0.00: add a floor?** — **OPEN, raised 2026-10-25 (plan 100 lane X).**
+  The numbers say no new floor: it clears the two made-up bosses but loses real notes, and "No close match" already shows. Close it as "the No close match line is the answer", or keep it? See the Bugs entry "three weak notes attach".
+- **Facts kept fell from 76.3 to 67.2 in a hundred: read the six questions** — **OPEN, raised 2026-10-25 (plan 100 lane X).**
+  It fell after the four games' notes landed. Two earlier runs on the old library differed by up to 6 points, so the signal is weak. Six questions went from 3 of 3 to 0 of 3; read them and decide. See the Bugs entry "The new notes crowd the old ones".
+
+**Screenshot entry, the two lines before the K9 trim:**
+
+  First figures (8 Deck pictures, the Deck's own model `gemma4:e2b-it-qat`, 3 tries each): with the game handed over it named the game 75 times in 100 and the area 42; with nothing handed over, 17 and 29. No picture had a boss. It often invents and guesses Zelda: Ocarina of Time for pictures it does not know. Full text: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  The set is thin (most games stop at a save-slot screen the rig must not touch; Steam's overlay is on every picture); a bigger set with play scenes needs the maintainer's hand. **Step 2** (each picture model the Deck offers, then fix where it fails) is still open. Report `workshop:archive/research/screenshot-reading-2026-10-24.md`. Full text: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+
+**Zero-score made-up question, the words before the K9 trim:** A floor at no keyword support clears the two made-up bosses (Zorblax, Grimthak) but loses 3 right notes; the house and Bone Hydra questions score 3.6 to 3.8 and a floor there loses 19. The "No close match" line already shows on all four. **The numbers say no new floor.**
+
+**Hide more against Default, the words before the K9 trim:** The two Hades story rows drew their cover the same under both (3 of 3 and 2 of 3); Hide more missed no story cover that Default kept. Contradictions: 92.6 clean against 88.9.
+
+**Screenshot entry, lane P note, the words before the K9 trim:** With the game handed over the AI named it 58 and 50 times in a hundred over two runs (75 on 2026-10-24); the God of War asks named another game 4 and 6 times in 9 (4 before). Two runs differ by up to 21 points. Still PARTIAL.
+
+**RAG Phase 5 entry, the words before the K9 trim:** Baldur's Gate 3 7, GTA San Andreas 15, The Sims 4 15, Portal 2 14, so 29 of 38 games have them. **Measured 2026-10-25:** 100 of 102 blind questions for the new notes find their note in the first three (86 first), but the new notes crowd the old ones (see the Bugs entry), which needs your read before this is more than PARTIAL. Also waits on P100-FOUR-GAMES-01 (block L2; not run on 2026-10-25; the rig dropped; runbook written) and your read of the Baldur's Gate 3 notes.
+
+**The new notes crowd the old ones, the words before the K9 trim:** The five: the Portal 2 gels, the BG3 class, an audio tip and two GTA rows. The Portal 2 gels question lost its card to the three new gel notes. Facts kept
+
+**Where things stand, evidence list, the words before the K9 trim:** (`workshop:test-evidence/plan98-P98-KS-LIBRARY.json`, `workshop:test-evidence/plan98-P98-KS-RESTORE.json`)
+
+**Still short line, the words before the K9 trim:** Of 24 fresh plain sentences, 8 reached a tip before the wording fix and 17 reach one now, none a wrong one (measured on the PC; Deck check owed).
+
+**KB visual maps, the words before the K9 trim:** Not chosen as drawn: a fuller boss card, a whole-kingdom map. An area map must look real; maps taken from the game or a wiki need a licence check first.
+
+**The category-card call (D41), the words before the K9 trim:** Kept open on
+  purpose; the first step is to measure the shipping search question by question, so it is not yet a call to answer.
+
+**Your eye on plan 100's wording, the words before the K9 trim:** The seven Baldur's Gate 3 notes, the two new tips (165 and 166), ten plain-word tip edits, and the wording of the "Suggest as a tip" line. On your checks page, group "plan 100".
+
+**Phase 8 moved line, the words before the K9 trim:** **Moved here from Phase 7 (plan 100 call 8, 2026-10-26):** add-on packs come before a large catalog.
+
+**Screenshot moved line, the words before the K9 trim:** **Moved here from Phase 7 (plan 100 call 8, 2026-10-26):** a screenshot feeding the search (the picture's guess goes into the note search) is not built.
+
+**Unrelated questions entry, the words before the K9 trim:** "thank you very much" attached no notes; "what time is it" still attached three. A fresh-chat re-run 2026-10-25 still attached three for "what time is it"; see the junk-phrase entry in Deck check owed. Word for word:
+
+**Two Bugs entries, the words before the K9 trim:** "Same lost-focus family as plan 97's freeze; the only cure, closing and reopening Quick Access, emptied the question box." and "(the answer came from an old branch button)".

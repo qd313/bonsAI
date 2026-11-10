@@ -96,7 +96,7 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Unshelves when: a new sighting.
 
 - ★ `[KB]` `[watching]` **A "where am I stuck" answer for Hollow Knight added an "If you want to cheat" section** — seen once, 2026-10-24 (plan 98 Deck block K3); closed as a watched sighting by the maintainer, D139, 2026-11-02, after 0 in 2 route questions since (2026-10-25, plan 100 block L0).
-  The route answer suggested emulator and fast-travel exploits. Evidence `workshop:test-evidence/plan100-P100-ROUTE-CHEAT-COUNT.json`. [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  The route answer suggested emulator and fast-travel exploits. Evidence `workshop:test-evidence/plan100-P100-ROUTE-CHEAT-COUNT.json`. [Detail](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
   Unshelves when: a new sighting.
 
 - ★ `[KB]` `[watching]` **With a game running, the meaning search once read about a second** — seen once, 1,070 ms on

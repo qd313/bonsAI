@@ -68,8 +68,8 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
    answer "helpful". **The AI models screen** is the strict case: walk it one press at a time and read
    focus after each. "Remove from Deck" is one press away from a model row. Never press A on a model row
    unless the runbook says so.
-10. **Counting or repeating:** a repeated question comes back from the answer cache word for word, in
-    about a second, having tested nothing. Any check that counts must use differently worded questions,
+10. **Counting or repeating:** a repeated question comes back word for word, in
+    about a second, having tested nothing (2026-11-09, plan 103: the plugin has no answer cache; why the repeat is fast is not explained). Any check that counts must use differently worded questions,
     or clear the cache first if the runbook says how. **A check that depends on what the AI happens to
     write** (a menu cut at the length limit, a boss named in the answer) gets two differently worded
     tries. If neither produces the case, the verdict is UNCLEAR with what the AI wrote instead; do not

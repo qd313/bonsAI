@@ -1890,7 +1890,7 @@ Knowledge-base entries that passed on the Deck in plan 100's retry round (2026-1
 
 - ★ `[KB]` **A thank-you or a date question draws a long reply that repeats the earlier boss advice** — **DONE 2026-10-26, passed on the Deck on the retry (landed plan 100 lane M2, `58961a50`, `0f7532a8`), unit-tested.**
   After a boss question, "thanks a lot for that" or "what is the date today" now gets one short friendly sentence: no earlier advice, no menu, no "Not in my notes" line; the next real follow-up still knows the boss. Such a turn is sent none of the earlier turns, one short-reply order instead of the Strategy, Expert or Speed orders, and no notes footers.
-  **Deck 2026-10-26, reply half FAILED (row P100-THANKS-01):** 52 and 65 words repeating the boss advice; no notes attached. Evidence `workshop:test-evidence/plan100-P100-THANKS-01.json`. Earlier text: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  **Deck 2026-10-26, reply half FAILED (row P100-THANKS-01):** 52 and 65 words repeating the boss advice; no notes attached. Evidence `workshop:test-evidence/plan100-P100-THANKS-01.json`. Earlier text: [Detail](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
   **Deck retry 2026-10-26 (row P100-THANKS-01-try2, Deep Rock Galactic: Survivor running, a new chat):** "thanks a lot for that" drew "You are welcome." (4 words) and "what is the date today" drew "I cannot tell you the date today." (8 words); neither drew a notes block or a "Not in my notes" line. "how do I kill them" was answered about the Exploders, with three notes attached (Exploder, Acid Spitter, Dreadnought Twins). Evidence `workshop:test-evidence/plan100-P100-THANKS-01-try2.json` and its three pictures.
 
 - ★★ `[KB]` **A crash sentence in a chat about a game gets the game's notes, not the crash tip** — **DONE 2026-10-26, passed on the Deck on the retry (landed plan 100 lane M1, `bee559fa`, `4397e870`).**
@@ -1907,7 +1907,7 @@ Knowledge-base entries that passed on the Deck in plan 100's retry round (2026-1
   Five tips now carry the plain words people type, and two new tips (165: sound to the TV instead of headphones; 166: menus out of place on a TV, both "Researched, unconfirmed") fill the gaps. Of the 24 plain sentences, 17 now reach a tip (8 before) and 15 of the 22 that have a right tip reach it (5 before); none reaches a wrong tip.
   The 2026-10-25 follow-up (`5943260b`, the bare word "storage" no longer routes to the storage tips): [Detail](roadmap-kb-details.md#plan-100-follow-up-note-moved-from-the-knowledge-base-roadmap-2026-10-26)
   **Deck 2026-10-26, FAILED in part (row P100-TIPS-01):** "it says there is no space left" reached the storage tips and "the screen goes black when I open it" the display tips; "my game keeps closing on its own" in the Hollow Knight test chat got three Hollow Knight notes and no tip (entry "A crash sentence in a chat about a game…"); the boss question attached no tip, as it should. **Fresh-chat retry P100-TIPS-01-try2 PASSED (Deck):** the crash tip attached (evidence `workshop:test-evidence/plan100-P100-TIPS-01-try2.json`). **Retry P100-TIPS-01-try3 PASSED (Deck) 2026-10-26:** the crash sentence reached the crash tips in a chat about a game too (see the entry "A crash sentence in a chat about a game…"; evidence `workshop:test-evidence/plan100-P100-TIPS-01-try3.json`). Evidence `workshop:test-evidence/plan100-P100-TIPS-01.json`.
-  **Still owed:** your read of the two new tips and ten of the plain-word edits (the checks page). Earlier text: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  **Still owed:** your read of the two new tips and ten of the plain-word edits (the checks page). Earlier text: [Detail](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
 
 ## Closed 2026-11-02 (plan 102 pre-go audit, D139)
 
@@ -1924,19 +1924,19 @@ Four knowledge-base entries closed by the maintainer's answer to plan 102 call 3
 
 - **A card named after a category outranks the cards inside it** — **OPEN, raised 2026-08-31 (D41).** Kept open on
   purpose.
-  **Measured 2026-10-24 (plan 98 lane F):** a category note came first in 3 of 279 questions (about 1 in 100); only one fits this entry. D41 stays your call. Word for word: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  **Measured 2026-10-24 (plan 98 lane F):** a category note came first in 3 of 279 questions (about 1 in 100); only one fits this entry. D41 stays your call. Word for word: [Detail](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
   [D41](audit/maintainer-decisions-locked.md#d41--open-raised-2026-08-31--a-card-named-after-a-category-outranks-the-cards-inside-it)
 
 **The Bugs entries:**
 
 - ★★ `[KB]` **Story spoilers: Hide more drew fewer spoiler covers than Default on the PC answer test** — **MEASURED 2026-10-25 (plan 100 lane X), the maintainer decides.**
-  First run: 23 covers in 100 answers against 29. **Second run: 20.6 against 23.8.** Hide more missed no story cover that Default kept. Contradictions: 92.6 clean against 88.9. Reports: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  First run: 23 covers in 100 answers against 29. **Second run: 20.6 against 23.8.** Hide more missed no story cover that Default kept. Contradictions: 92.6 clean against 88.9. Reports: [Detail](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
 
 - ★ `[KB]` **Story spoilers: under Hide less the answer test's no-contradiction rate read 90.7%, against 100%** — **MEASURED 2026-10-25 (plan 100 lane X), the maintainer decides.**
   First run 90.7% (`workshop:archive/research/kb-answer-eval-2026-10-24-p98b-open.md`). **Second run: 94.4% clean** (51 of 54; `workshop:archive/research/kb-answer-eval-2026-10-25-p100-open.md`).
 
 - ★ `[KB]` **measure: on a made-up question, three weak notes attach with a keyword score of 0.00 every time** — **MEASURED 2026-10-25 (plan 100 lane X), the maintainer decides.**
-  A floor at no keyword support clears the two made-up bosses but loses 3 right notes; a floor high enough to clear the other two loses 19. The "No close match" line already shows on all four. **The numbers say no new floor.** Reports: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  A floor at no keyword support clears the two made-up bosses but loses 3 right notes; a floor high enough to clear the other two loses 19. The "No close match" line already shows on all four. **The numbers say no new floor.** Reports: [Detail](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
 
 **Closed 2026-11-02 by call 3 (D139):** each of the four was closed as measured. The category card (D41) stays a measured case of about 1 in 100 and no code change.
 
@@ -2022,7 +2022,7 @@ Knowledge-base entries closed in plan 102's sweep after the landings, copied wor
 One knowledge-base entry closed in plan 102's end audit, copied word for word from [roadmap-kb.md](../roadmap-kb.md) as it stood, with the closing noted. Nothing was deleted.
 
 - ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **PARTIAL, counted 2026-10-24 (plan 98 lane F); thirty questions written 2026-11-02 (plan 102 lane I, `affaead1`).**
-  Only 4 labelled questions got nothing from the word search, too few to gate a regression. Lane I wrote thirty questions built to get zero word-search hits on their note, each proved against the built library. The next step is a count of how many the blend rescues (the measurement lane's second half). Figures: [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+  Only 4 labelled questions got nothing from the word search, too few to gate a regression. Lane I wrote thirty questions built to get zero word-search hits on their note, each proved against the built library. The next step is a count of how many the blend rescues (the measurement lane's second half). Figures: [Detail](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
   [Detail](roadmap-kb-details.md#eval-fixture-cannot-see-a-recall-failure)
   **Closed 2026-11-03 (plan 102 lane X2, final library 2026.11.04, 583 notes):** of the thirty meaning-only questions the word search finds none in the first three, the blend 23 (9 first), the meaning search alone 28 (18 first). The gate's first reading is 23 of 30 rescued. Evidence `workshop:archive/research/kb-embed-bakeoff-2026-11-03-arms-p102-after.json`.
 
@@ -2034,7 +2034,7 @@ Two knowledge-base entries that passed on the Deck in block R1, copied word for 
   The older "Fires" note and the glossary's "Fire extinguisher" entry now follow the wiki: firefighters come on their own when a smoke alarm is in the room where the fire breaks out. Row P102-SIMS-FIRE-01 (block R1) is owed. Before: on the Deck 2026-10-26 the older note came first and the two notes disagreed, and that parent row is still owed (`workshop:test-evidence/plan100-P100-FOUR-GAMES-01.json`).
   **Closed 2026-11-03, passed on the Deck (row P102-SIMS-FIRE-01, build `9bc29b3c0500`, library 2026.11.04):** the attach line names three Sims 4 fire notes (Fire, Fires, Fire sprinkler panel); both notes that mention firefighters say a smoke alarm brings them on its own; the answer agrees and so does the glossary entry. Evidence `workshop:test-evidence/plan102-P102-SIMS-FIRE-01.json`. The parent row P100-FOUR-GAMES-01 is still owed (partial; the maintainer's read of the Baldur's Gate 3 notes).
 
-  **Plan 102 lane H (`c4d7c54a`, `82a08ad8`, `6a9e7b0a`, `943b0f86`):** a new tip 167 for a Deck that cannot find its PC; 19 of 24 plain sentences now reach a tip and 17 the right one (17 and 15 before), none a wrong one, confirmed on the final library 2026-11-03 (a count from the search-test run, no separate report file). Row P102-FINDPC-01 (block R1) is owed. Older text: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+  **Plan 102 lane H (`c4d7c54a`, `82a08ad8`, `6a9e7b0a`, `943b0f86`):** a new tip 167 for a Deck that cannot find its PC; 19 of 24 plain sentences now reach a tip and 17 the right one (17 and 15 before), none a wrong one, confirmed on the final library 2026-11-03 (a count from the search-test run, no separate report file). Row P102-FINDPC-01 (block R1) is owed. Older text: [Detail](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
   **Closed 2026-11-03, passed on the Deck (row P102-FINDPC-01):** tip 167 reached the model and the answer repeats its home-network and port 11434 advice; the Hollow Knight question attached no tip, and the Fallout 4 terminal question attached no network tip (three Fallout 4 notes, weak match). Evidence `workshop:test-evidence/plan102-P102-FINDPC-01.json`.
 
 ## Closed 2026-11-09 (plan 103 pre-go audit, D140)
@@ -2044,3 +2044,21 @@ One knowledge-base entry closed by the maintainer's answer to plan 103 call 5 (d
 - ★★★ `[KB]` **Card style pass** — **MEASURED 2026-11-02 (plan 102 lane G), a tie; the maintainer decides (Calls).**
   Fifteen prose cards rewritten as labelled short lines kept every fact in 48 of 90 answers, against 44 of 90 for the prose cards (4.4 points apart), while the same library swung 18 points between its own two runs; four long starting-out cards failed every run in both shapes. **The measurement does not support the pass.** The rewrites are kept as `workshop:archive/research/card-style-rewrites-2026-11-02-p102.patch`.
   ([D67](audit/maintainer-decisions-archive.md#d67--locked-2026-09-05--structured-cards-accept-prose))
+
+## Closed 2026-11-09 (plan 103 sweep K1)
+
+The full entries of the four items closed in plan 103's first sweep, copied word for word from [roadmap-kb.md](../roadmap-kb.md) and [roadmap.md](../roadmap.md) as they stood.
+
+- ★★ `[KB]` `[QA]` **The answer test's samples are not independent: the same prompt gave the identical reply three times, so three samples can be one** — **OPEN, found 2026-11-02 (plan 102 lane E).**
+  No seed is sent with a question, and no answer cache was found in the back end though the lessons file says one exists; plan 103 lane T2 settles it. It makes six questions at 0 of 3 together easy to produce with nothing changed. Report `workshop:archive/research/kb-crowding-read-2026-11-02-p102.md`.
+
+- ★★ `[KB]` `[ui]` **Opening a spoiler cover on one answer lets the notes line show under every answer** — **OPEN, found 2026-11-09 by reading the code (not seen on the Deck).**
+  One page-wide "a cover is open" switch decides it, so a protected note's name could show under an answer that is still covered. Plan 103 lane S1.
+
+- ★ `[QA]` **After a plugin reload the Decky tab was missing from the Quick Access rail for over 100 s** — **OPEN, found 2026-10-17 (plan 94 block 7, build `e9b50cc8`).**
+  Opening the plugin failed twice meanwhile. Related to the entry below. Evidence `workshop:test-evidence/plan94-P94-RING-STALL.json`.
+
+- ★ `[QA]` **Opening the plugin with the test rig failed twice after a plugin reload** — **OPEN, failed again 2026-10-22 (plan 97 blocks A and D); fixed twice in the rig's repo (rig main `43afc0b`), still fails on a stricter check. Found 2026-10-11 (plan 88, build `68317980`); seen again 2026-10-12 (plan 92, build `d553a5b4`).**
+  After a plugin reload with no game running, the first try to open the plugin failed in 3 of 3 rounds (round 1 on the connection to Steam's debugger, rounds 2 and 3 because the Quick Access pane did not appear); the next try always worked. Row **P89-RIG-OPEN-AFTER-RELOAD**.
+  **Deck 2026-10-22 (plan 97 block D, build `15565346`, a new chat with the rig fix loaded):** a first set read 3 of 3 (when the plugin's tab was missing, the new steps that reopen the menu and wait for the tab worked by themselves in about 25 s), but a later read found the menu shut. A second set, with a read after each call, opened the plugin in 1 of 3: two failed 1 s after the reload with a debugger connection reset. Stays open, the rig's own. Evidence `workshop:test-evidence/plan97-P89-RIG-OPEN-AFTER-RELOAD-try2.json` (first set) and `-try3.json` (second set, FAIL).
+  Every earlier note and evidence file, word for word: [roadmap-details.md](roadmap-details.md#plan-97-fourth-sweep-notes-moved-from-the-roadmap-2026-10-22).

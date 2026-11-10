@@ -92,6 +92,15 @@ All notable changes to this project are documented in this file.
 - **Notes for eight more games.** Grand Theft Auto V, Grand Theft Auto IV, Super Mario 64, Paper Mario: The Thousand-Year Door, Pikmin 2, Doom 64, Donkey Kong 64 and Mario Kart 64 gain enemy and item notes (118 in all). They arrive with the next library update.
 - **Down after Undo no longer freezes on the notes block.** After a thumbs-down with a game running, the D-pad keeps moving. On the Deck the ring will most likely land on the suggestion chips, past the open details panel, until those get their own stops.
 - **More fixes in the library:** Super Mario 64's Metal and Vanish Caps last about twenty seconds (not a minute) and the Wiggler takes three stomps; Pikmin 2's Waterwraith, spray and Rock Pikmin sentences and Mario Kart 64's Rainbow Road rails now follow the wiki. They arrive with the next library update.
+- **The starter-models box fits the Deck's screen.** On a fresh install the box's title and the line saying where Ollama downloads from now stay in view. Down and Up scroll the rest, and a "More below" line says when there is more.
+- **The quick-start box starts with running the AI on the Deck.** "Using bonsAI" no longer opens with typing in a home PC's address, and it points at the Install Ollama button.
+- **A covered answer says notes were used.** An answer hidden behind a spoiler cover now shows "Notes were used for this answer — show the spoiler to see them" until you open the cover.
+- **The notes line shows when the plugin opens a cover for you.** On a game with no story, or after you agreed to open covers, an answer whose cover opened by itself kept its notes line hidden. It now shows.
+- **Brotato's covers open with nothing running.** Naming Brotato in your question now counts as naming a game with no story, so its covers open by themselves.
+- **The chat summing-up says why it gave up.** A summary the AI wrapped in a code fence is kept instead of thrown away, and the line under your question says why summing up failed.
+- **Eighteen tips about mods.** Mod managers, loaders, folders, backups and anti-cheat: a question about setting up mods now reaches them. They arrive with the next library update.
+- **No stray mic lines in the log with the mic off.** Leaving the screen with the mic off no longer asks the back end to stop a recording that never ran.
+- **Notes for ten more games.** Left 4 Dead 2, Fallout 4, Red Dead Redemption 2, Cyberpunk 2077, Mario Party, Mario Party 2, 3, 6 and 7, and Super Smash Bros. gain enemy and item notes. They arrive with the next library update.
 
 ### Changed
 

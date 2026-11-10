@@ -274,6 +274,7 @@ seconds the first time and 1 second the second, and came back exactly the same b
 that counts how often something happens — a spoiler cover missing, a wrong note attaching — must
 either vary the wording between tries or clear the cache first, or the count is really just one
 result read back several times. Evidence `workshop:test-evidence/plan63-SPOILER-UNNAMED-BOSS.json`.
+**Correction 2026-11-09 (plan 103 lane T2):** the plugin has no answer cache (both sides were searched), and the 27-second-then-1-second repeat is not explained (possibly the model server reusing the start of the prompt), but varying the wording between tries is still the right rule.
 
 **Read what the AI actually wrote, not only the screen, before building a fix on it.** On 2026-10-08 a driver saw a
 menu's JSON in a code box and reported "bare JSON with no fence"; a fix for that case was built and landed. The

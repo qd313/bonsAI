@@ -35,7 +35,7 @@
           ]
         },
         {
-          "line": "Weak points: They are poorly armed and use only baseball bats (guns in missions only).",
+          "line": "Weak points: They are lightly armed: baseball bats only, except in missions, where they also carry guns.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Diablos",
@@ -47,7 +47,7 @@
           ]
         },
         {
-          "line": "Looks like: Members come in two kinds: a red bandana, light blue jeans and a dark blue jacket, or a blue bandana, a dark blue jacket and olive cargo pants.",
+          "line": "Looks like: Two outfits: red bandana, dark blue jacket and light blue jeans; or blue bandana, olive cargo pants and the same jacket.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Diablos",
@@ -59,7 +59,7 @@
           ]
         },
         {
-          "line": "Tips: Their gang car is the Diablo Stallion, in every game they appear in. The Uptown Yardies are their arch rivals.",
+          "line": "Tips: Diablo Stallions are their cars in every game they appear in. The Uptown Yardies are their arch rivals.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Diablos",
@@ -87,7 +87,7 @@
       "main_revision": "2082371",
       "lines": [
         {
-          "line": "Summary: A Chinese criminal gang that controls the Chinatown and Callahan Point areas of Portland.",
+          "line": "Summary: A Chinese criminal gang that holds Chinatown plus the Callahan Point area of Portland.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
@@ -99,19 +99,7 @@
           ]
         },
         {
-          "line": "Weak points: The page gives no weak point; members carry baseball bats or pistols.",
-          "drawn_from": [
-            {
-              "page": "https://gta.fandom.com/wiki/Liberty_City_Triads_(3D_Universe)",
-              "revision": "2082371",
-              "quoted": [
-                "They carry baseball bats or pistols."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: Blue boiler suits and black bandannas.",
+          "line": "Looks like: Members dress in blue boiler suits with black bandannas.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Liberty_City_Triads_(3D_Universe)",
@@ -123,8 +111,15 @@
           ]
         },
         {
-          "line": "Tips: They are enemies of the Leone Family and have a fierce rivalry with it.",
+          "line": "Tips: Expect baseball bats or pistols from members. The Leone Family are their enemies, and the rivalry is fierce.",
           "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Liberty_City_Triads_(3D_Universe)",
+              "revision": "2082371",
+              "quoted": [
+                "They carry baseball bats or pistols."
+              ]
+            },
             {
               "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
               "revision": "2020213",
@@ -145,7 +140,7 @@
       "main_revision": "2083405",
       "lines": [
         {
-          "line": "Summary: The Italian mafia of Portland, based mostly in Saint Mark's with interests in the Red Light District, Chinatown and Trenton; the wiki calls it the most dangerous gang because of its shotguns.",
+          "line": "Summary: An Italian mafia family based mainly in Saint Mark's, Portland, with a stake in Trenton, Chinatown and the Red Light District; the wiki names it the most dangerous gang, thanks to its shotguns.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
@@ -159,19 +154,7 @@
           ]
         },
         {
-          "line": "Weak points: The page gives no weak point; what to respect is their powerful shotguns, which can easily blow up a normal car in two shots.",
-          "drawn_from": [
-            {
-              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
-              "revision": "2020213",
-              "quoted": [
-                "since they have powerful shotguns, which can easily blow up a normal car in two shots."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: Henchmen wear black suits, some with sunglasses, and their gang car, the Mafia Sentinel, is gray in Grand Theft Auto III.",
+          "line": "Looks like: Their men dress in black suits and some add sunglasses; the gang car is the Mafia Sentinel, which is gray in the original game.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Leone_Crime_Family",
@@ -184,8 +167,15 @@
           ]
         },
         {
-          "line": "Tips: Their shotguns make quick work of vehicles in range. They have a fierce rivalry with the Triads.",
+          "line": "Tips: Their shotguns can blow up an ordinary car in two shots, so a vehicle within their range does not last long. They are fierce rivals of the Triads.",
           "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
+              "revision": "2020213",
+              "quoted": [
+                "since they have powerful shotguns, which can easily blow up a normal car in two shots."
+              ]
+            },
             {
               "page": "https://gta.fandom.com/wiki/Leone_Crime_Family",
               "revision": "2083405",
@@ -212,7 +202,7 @@
       "main_revision": "2082250",
       "lines": [
         {
-          "line": "Summary: A Colombian drug cartel that took parts of Staunton Island and Shoreside Vale and is heavily involved in the drugs trade.",
+          "line": "Summary: A drug cartel from Colombia that seized control of some of Shoreside Vale and Staunton Island and is deeply tied to the drug trade.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
@@ -225,12 +215,7 @@
           ]
         },
         {
-          "line": "Weak points: The page gives no weak point for this gang.",
-          "drawn_from": [],
-          "note": "Absence: the page gives no weak point for this gang, so this line states no page fact."
-        },
-        {
-          "line": "Looks like: In Grand Theft Auto III members wear Hawaiian shirts, combat pants, Akruba-style hats and cowboy boots.",
+          "line": "Looks like: Members dress in Hawaiian shirts and combat pants, with cowboy boots and Akruba-style hats, in the original game.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Colombian_Cartel",
@@ -242,7 +227,7 @@
           ]
         },
         {
-          "line": "Tips: Their gang car in Grand Theft Auto III is the Cartel Cruiser. Their main enemies are the Leone Family and the Yakuza.",
+          "line": "Tips: The Yakuza and the Leone Family are its biggest enemies. In the original game the gang drives the Cartel Cruiser.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Colombian_Cartel",
@@ -270,7 +255,7 @@
       "main_revision": "2086756",
       "lines": [
         {
-          "line": "Summary: A Jamaican gang based on Staunton Island that is found only in Newport and also deals around Liberty Campus.",
+          "line": "Summary: A mostly Jamaican gang from Staunton Island; these days you only find them in Newport, though they also seem to deal near Liberty Campus.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
@@ -289,7 +274,19 @@
           ]
         },
         {
-          "line": "Weak points: The page gives no weak point; in Grand Theft Auto III members carry baseball bats, and the wiki also lists a pistol and, for some missions, an Uzi.",
+          "line": "Looks like: Members wear a short-sleeved black hoodie with a tan vest, tan pants and brown shoes, and the gang's two member models look alike.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Uptown_Yardies",
+              "revision": "2086756",
+              "quoted": [
+                "In GTA III, Uptown Yardie members wear a black short-sleeved hoodie, tan vest and pants, and brown shoes. Both skins of the Yardies appear visually identical in this game."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Members carry baseball bats; the wiki also lists a pistol and, in some missions, an Uzi. Their Yardie Lobo lowriders are the only cars here with hydraulic suspension, and the Diablos are their rivals.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Baseball_Bat",
@@ -304,24 +301,7 @@
               "quoted": [
                 "- Pistol - Baseball Bat - Uzi (Uzi Rider & The Whole 9 Yardies)"
               ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: A black short-sleeved hoodie, tan vest and pants, and brown shoes; both kinds of member look the same.",
-          "drawn_from": [
-            {
-              "page": "https://gta.fandom.com/wiki/Uptown_Yardies",
-              "revision": "2086756",
-              "quoted": [
-                "In GTA III, Uptown Yardie members wear a black short-sleeved hoodie, tan vest and pants, and brown shoes. Both skins of the Yardies appear visually identical in this game."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Their cars are Yardie Lobo lowriders, which are unique in Grand Theft Auto III for their hydraulic suspension. The Diablos are their rivals.",
-          "drawn_from": [
+            },
             {
               "page": "https://gta.fandom.com/wiki/Uptown_Yardies",
               "revision": "2086756",
@@ -348,7 +328,7 @@
       "main_revision": "2084931",
       "lines": [
         {
-          "line": "Summary: At a six-star wanted level the Army arrives, after the FBI at five stars, and the Rhino tank appears too.",
+          "line": "Summary: The Army starts chasing you when your wanted level hits six stars, a step after the FBI at five stars, and the Rhino tank appears at that level too.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Military_(3D_Universe)",
@@ -374,7 +354,7 @@
           ]
         },
         {
-          "line": "Weak points: A Rhino shrugs off small arms fire; explosives, molotov cocktails and the flamethrower can damage it, and the windshield is its one weak spot when you face a military-controlled one.",
+          "line": "Weak points: A Rhino is nearly immune to small-arms fire. Explosives and flame weapons (molotovs, the flamethrower) hurt it, and when you fight a military one the windshield is the only soft spot.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
@@ -387,7 +367,7 @@
           ]
         },
         {
-          "line": "Tips: Soldiers drop grenades when killed in Grand Theft Auto III. Law enforcement tends not to use the Rhino's main cannon.",
+          "line": "Tips: In the original game, soldiers drop grenades when you kill them. The authorities seldom fire the cannon of the Rhino.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Grenades",
@@ -415,7 +395,7 @@
       "main_revision": "2083689",
       "lines": [
         {
-          "line": "Summary: Armor that pads your health against gunfire, explosions and fire; in Grand Theft Auto III its pickup is a shield icon, and it gives nearly as many hit points as your full health.",
+          "line": "Summary: Armor is a second layer of protection on top of your health, taking hits from gunfire, blasts and flames. In the original game it shows up as a shield icon and gives nearly as many hit points as full health.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Body_Armor",
@@ -429,7 +409,7 @@
           ]
         },
         {
-          "line": "Uses: In Grand Theft Auto III armor can also pad injuries from falls, collisions with vehicles on foot and even melee attacks.",
+          "line": "Uses: In Grand Theft Auto III, it also soaks up damage from falls, vehicle hits while you are on foot, and melee blows too.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Body_Armor",
@@ -441,7 +421,7 @@
           ]
         },
         {
-          "line": "Tips: In the original game, Ammu-Nation sells it for $3,000 once the mission Last Requests is done, and entering a Police or SWAT Enforcer truck also gives some. A spot in front of every safehouse spawns one after you collect 50 hidden packages.",
+          "line": "Tips: In the original game, it costs $3,000 at Ammu-Nation after you finish Last Requests, and getting into a Police or SWAT Enforcer truck also gives you some. Collecting 50 hidden packages puts a permanent armor pickup outside every safehouse.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Body_Armor",
@@ -480,7 +460,7 @@
       "main_revision": "2063152",
       "lines": [
         {
-          "line": "Summary: A pickup that restores your health to the maximum; in Grand Theft Auto III they lie in front of every hospital and around Liberty City, often at rest stops, parks and shopping centers.",
+          "line": "Summary: A pickup that fills your health to the maximum; in Grand Theft Auto III they are found in front of every hospital and spread around Liberty City, often in places like shopping centers, parks and rest stops.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Health",
@@ -493,7 +473,7 @@
           ]
         },
         {
-          "line": "Uses: Health is a numbered counter with a default maximum of 100%, and a prostitute's services also restore it, to a possible total of 125%.",
+          "line": "Uses: Health is shown as a number that starts out capped at 100%, and paying a prostitute can push it as high as 125%.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Health",
@@ -506,7 +486,7 @@
           ]
         },
         {
-          "line": "Tips: If your health runs out you are wasted: you are taken to the nearest hospital, charged a fee and lose all your weapons, and any mission in progress fails. In the original game, the page lists visiting a save point as a way to restore health in every 3D game except Grand Theft Auto III and Advance.",
+          "line": "Tips: When your health hits zero you are wasted: you end up at the nearest hospital, pay a fee, lose every weapon and fail any mission you were on. In the original game, saving at a save point does not restore health, unlike in most other 3D games.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Health",
@@ -528,7 +508,7 @@
       "main_revision": "2083438",
       "lines": [
         {
-          "line": "Summary: Pills scattered around Liberty City that temporarily boost your speed while slowing down time.",
+          "line": "Summary: Pills lying around Liberty City that give a short burst of speed while time seems to slow down.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Adrenaline",
@@ -541,7 +521,7 @@
           ]
         },
         {
-          "line": "Uses: While time is slowed your aiming speed stays normal, which helps in gun battles with the police or gangs, and you can jump further than normal.",
+          "line": "Uses: Your aim keeps its normal speed while everything else slows, which is handy against police and gangs, and you also jump further than usual.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Adrenaline",
@@ -553,7 +533,7 @@
           ]
         },
         {
-          "line": "Tips: Entering a vehicle resets the speed to normal. One lies in Trenton behind the large sign on top of Liberty Pharmaceuticals.",
+          "line": "Tips: Getting into a vehicle ends the speed boost. One lies in Trenton behind the big sign on the roof of Liberty Pharmaceuticals.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Adrenaline",
@@ -575,7 +555,7 @@
       "main_revision": "2079729",
       "lines": [
         {
-          "line": "Summary: In Grand Theft Auto III a police bribe is a rotating, star-shaped police badge pickup that lowers your wanted level by one star; the wiki describes it as a cost-free alternative to respraying your car.",
+          "line": "Summary: In Grand Theft Auto III each police bribe is a spinning police badge shaped like a star; picking it up drops your wanted level one star. The wiki calls it a free alternative to getting your car resprayed.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Police_Bribes",
@@ -588,7 +568,7 @@
           ]
         },
         {
-          "line": "Uses: In Grand Theft Auto III, higher-level police already chasing you (the Military, SWAT or the FBI, for example) keep pursuing, though no more law enforcement vehicles appear. The exception is the Police Maverick, which gives up at three stars and drops you to two.",
+          "line": "Uses: In Grand Theft Auto III, a bribe does not stop the stronger forces already after you, such as the Army, SWAT or the FBI, though no more of their vehicles turn up. A Police Maverick is the one exception: at three stars it breaks off, and you drop to two.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Police_Bribes",
@@ -600,7 +580,7 @@
           ]
         },
         {
-          "line": "Tips: The page says bribes are scarce, so memorize where they are: some lie in obvious places and some are well hidden. In Grand Theft Auto III some sit where you need a jump in a vehicle to reach them.",
+          "line": "Tips: Bribes are rare, so learn where they are: a few are in plain sight and others are tucked out of view. In Grand Theft Auto III, some can only be reached by jumping a vehicle.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Police_Bribes",
@@ -622,7 +602,7 @@
       "main_revision": "2078130",
       "lines": [
         {
-          "line": "Summary: There are 100 hidden packages around Liberty City, each a white bale sealed with brown tape that pays $1,000, and every tenth package adds a permanent spawn point for an item in front of the safehouses.",
+          "line": "Summary: Liberty City hides 100 packages, each a white bale tied up with brown adhesive tape that pays $1,000; every tenth one unlocks a lasting item pickup outside the safehouses.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Hidden_Packages_in_GTA_III",
@@ -636,7 +616,7 @@
           ]
         },
         {
-          "line": "Uses: Every 10 packages add a permanent spawn point for an item in front of the safehouses; in the original game the pager announces each one: 10 pistol, 20 Uzi, 30 grenades, 40 shotgun, 50 body armor, 60 molotov cocktails, 70 AK47, 80 sniper rifle, 90 M16, and at 100 the rocket launcher plus $1,000,000.",
+          "line": "Uses: In the original game a pager message announces each reward, and a pickup for that item then waits permanently outside every safehouse: 10 pistol, 20 Uzi, 30 grenades, 40 shotgun, 50 body armor, 60 molotov cocktails, 70 AK47, 80 sniper rifle, 90 M16, and at 100 the rocket launcher plus $1,000,000.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Hidden_Packages_in_GTA_III",
@@ -658,7 +638,7 @@
           ]
         },
         {
-          "line": "Tips: They must be collected on foot, not from a vehicle. Collecting all of them is required for 100% completion.",
+          "line": "Tips: Pick them up on foot; driving over one does not count. You need all of them for 100% completion.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Hidden_Packages_in_GTA_III",
@@ -680,7 +660,7 @@
       "main_revision": "2084433",
       "lines": [
         {
-          "line": "Summary: A single-shot rocket launcher that can destroy nearly all vehicles and pedestrians; in the original game Phil Cassidy's Army Surplus in Rockford, Staunton Island sells it for $25,000 after the mission Arms Shortage.",
+          "line": "Summary: A one-shot rocket launcher that can wreck almost any vehicle or pedestrian; in the original game you can buy it for $25,000 at Phil Cassidy's Army Surplus in Rockford, Staunton Island, once you have finished Arms Shortage.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Rocket_Launcher_(3D_Universe)",
@@ -694,7 +674,7 @@
           ]
         },
         {
-          "line": "Uses: It is heavy, so you are slowed to a jogging pace and cannot jump while it is equipped. The rocket always travels right where the aiming sight is placed, and it can take out pursuing police helicopters but cannot destroy a tank like the Rhino instantly.",
+          "line": "Uses: Its weight holds you to a jog and rules out jumping while it is in your hands. Rockets go exactly where you aim, and it can bring down police helicopters that chase you, but it will not finish off a tank such as the Rhino in one hit.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Rocket_Launcher_(3D_Universe)",
@@ -707,7 +687,7 @@
           ]
         },
         {
-          "line": "Tips: One spawns at every safehouse after you collect all 100 hidden packages. Another lies on the west side of the roof of the large pink house at the west end of The Homes in Cedar Grove, closest to Cochrane Dam.",
+          "line": "Tips: Gather every one of the 100 hidden packages and one appears at every safehouse. Another is in Cedar Grove, at the western end of The Homes (the stretch nearest Cochrane Dam): the big pink house there has one on its roof, along the western side.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Rocket_Launcher_(3D_Universe)",
@@ -729,7 +709,7 @@
       "main_revision": "2083687",
       "lines": [
         {
-          "line": "Summary: In the original game the AK47 has a very high rate of fire but low damage, and Ammu-Nation in Newport sells it for $3,000 once the mission Last Requests is done.",
+          "line": "Summary: In the original game the AK47 trades damage for speed: it fires very fast but hits weakly. Ammu-Nation in Newport sells it for $3,000 after you finish Last Requests.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/AK47",
@@ -742,7 +722,7 @@
           ]
         },
         {
-          "line": "Uses: In the original game it cannot be aimed in first person. It has lower recoil than the M16, but the M16 deals far more damage, fires much faster and holds double the magazine.",
+          "line": "Uses: In the original game you cannot aim it in first person, unlike the M16. Its recoil is gentler, but the M16 beats it otherwise: it does far more damage, fires faster and holds twice as many rounds.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/AK47",
@@ -754,7 +734,7 @@
           ]
         },
         {
-          "line": "Tips: One spawns at each safehouse after you collect 70 hidden packages. Another lies in Trenton on top of Liberty Pharmaceuticals behind the large sign, next to an adrenaline icon, a health icon and a body armor icon; jump from the elevated tracks to reach it.",
+          "line": "Tips: Collecting 70 hidden packages puts one at each safehouse. There is also one in Trenton, behind the big sign on the roof of Liberty Pharmaceuticals, beside adrenaline, health and armor pickups; reach it by jumping from the elevated tracks.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/AK47",
@@ -776,7 +756,7 @@
       "main_revision": "2076588",
       "lines": [
         {
-          "line": "Summary: A thrown bottle that sets vehicles and groups of pedestrians on fire; using one will normally earn a wanted level of up to three stars.",
+          "line": "Summary: A thrown bottle that can light up vehicles and any cluster of pedestrians; using one usually brings a wanted level of up to three stars.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Molotov_Cocktails",
@@ -789,7 +769,7 @@
           ]
         },
         {
-          "line": "Uses: Victims on foot catch fire and die if close enough to the flames. Molotov cocktails are among the flame weapons that can damage a Rhino.",
+          "line": "Uses: Anyone on foot who stands close to the flames burns to death. Molotovs are one of the flame weapons that can hurt a Rhino.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Molotov_Cocktails",
@@ -808,7 +788,7 @@
           ]
         },
         {
-          "line": "Tips: One or two molotovs can bring down a police helicopter in the other 3D games, but not in Grand Theft Auto III. In Grand Theft Auto III one spawns at every safehouse after 60 hidden packages, and the pickup on Liberty Campus's upper level gives 10.",
+          "line": "Tips: In the other 3D games a molotov or two will down a police helicopter, but not in Grand Theft Auto III. In Grand Theft Auto III, collecting 60 hidden packages puts one at every safehouse, and the pickup on the upper level of Liberty Campus's courtyard gives 10.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Molotov_Cocktails",
@@ -831,7 +811,7 @@
       "main_revision": "2078662",
       "lines": [
         {
-          "line": "Summary: A heavy armored tank with a cannon that appears when you reach a six-star wanted level; it rolls on wheels, not tracks.",
+          "line": "Summary: A heavy armored tank with a cannon that turns up once your wanted level reaches six stars; it runs on wheels rather than tracks.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
@@ -844,7 +824,7 @@
           ]
         },
         {
-          "line": "Uses: It is practically invincible to small arms fire and collisions, and any vehicle it hits explodes or burns, which suits dealing with wanted levels because police cars tend to ram you. Its cannon has devastating firepower against most vehicles.",
+          "line": "Uses: Small arms fire and crashes do almost nothing to it, and any vehicle it hits blows up or catches fire, which is handy against wanted levels because police cars tend to ram you. Its cannon is devastating to most vehicles.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
@@ -858,7 +838,7 @@
           ]
         },
         {
-          "line": "Looks like: A block-shaped vehicle with a three-axle chassis, a narrow windshield, large doors on each side and a turret on top, spawning in a worn green.",
+          "line": "Looks like: Boxy and truck-like, with three axles, a slim windshield, big doors along both sides and a turret on its roof; it only comes in a faded green.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
@@ -871,7 +851,7 @@
           ]
         },
         {
-          "line": "Tips: It handles badly: a wide turning radius, very low acceleration, and side doors that make it easy to be busted or pulled out by a hostile pedestrian. You can obtain one at Portland Harbor once all the emergency vehicles have been collected for Import/Export.",
+          "line": "Tips: It handles poorly: even at low speed it turns in a wide circle, and it accelerates very slowly. Its side doors also leave you open to being busted or dragged out by a hostile pedestrian. You can get one at Portland Harbor after you have collected every emergency vehicle for Import/Export.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",

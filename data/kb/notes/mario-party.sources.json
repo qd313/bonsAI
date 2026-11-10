@@ -174,7 +174,7 @@
           ]
         },
         {
-          "line": "Weak points: The only way past a Whomp is to pay 10 coins. You can instead take the road it is not watching, but then it shifts over to block the other road once you are through, leaving the first one open to the other three players.",
+          "line": "Weak points: To pass a Whomp on the road it guards, you must pay 10 coins. You can instead take the road it is not watching, but then it shifts over to block the other road once you are through, leaving the first one open to the other three players.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Whomp",
@@ -249,7 +249,7 @@
           ]
         },
         {
-          "line": "Weak points: Each Thwomp has its own separate fee, and whoever tries to cross next has to hand over at least a coin more than the player before, so following close behind someone is pricier. A player who cannot afford the toll is stuck on the island they are on.",
+          "line": "Weak points: Each Thwomp has its own separate fee, and whoever crosses next has to hand over at least a coin more than the player before. A player who cannot afford the toll is stuck on the island they are on.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Yoshi%27s_Tropical_Island",
@@ -539,13 +539,14 @@
           ]
         },
         {
-          "line": "Tips: The board has nine Happening Spaces. A rolling boulder also goes after whoever is in fourth place, running them down the board.",
+          "line": "Tips: The board has nine Happening Spaces. At the end of the game the boulder chases whoever came fourth down the board.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
               "revision": "5475500",
               "quoted": [
                 "If a player lands on one of the nine Happening Spaces spread throughout the board",
+                "At the end of the game, the winner joins all of their Stars together to form a giant one",
                 "The player in fourth place is chased down the board by a rolling boulder."
               ]
             }
@@ -581,18 +582,6 @@
               "revision": "5472623",
               "quoted": [
                 "the Pisudon offers them the option to switch the set of doors that rise up or go down throughout the board for the price of 20 coins, blocking access of certain paths to the other players."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: When it offers to switch the doors, Blue and Red, it opens with a greeting and asks whether you want them moved.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Pisudon",
-              "revision": "5472623",
-              "quoted": [
-                "“Hello. I can move the Blue Doors and the Red Doors. Do you want me to move them?”"
               ]
             }
           ]
@@ -833,20 +822,20 @@
       "main_revision": "5539722",
       "lines": [
         {
-          "line": "Summary: Two 500-coin Mushroom Shop items: one removes Koopa Troopa from a board, the other removes Boo.",
+          "line": "Summary: Two 500-coin Mushroom Shop items, one named for Koopa Troopa and one for Boo.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party",
               "revision": "5539722",
               "quoted": [
-                "No Koopa || 500 Coins || Koopa Troopa won't appear on the map, but it won't work on some maps.",
-                "No Boo || 500 Coins || Boo won't appear on the map, but it won't work on some maps."
+                "No Koopa || 500 Coins",
+                "No Boo || 500 Coins"
               ]
             }
           ]
         },
         {
-          "line": "Uses: No Koopa stops Koopa Troopa from giving you coins as you cross the starting point, and No Boo removes Boo from the board. Both are ignored on certain maps.",
+          "line": "Uses: While No Koopa is active, Koopa Troopa does not hand you the 10 coins for passing the starting point.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Koopa_Troopa",
@@ -854,33 +843,17 @@
               "quoted": [
                 "Koopa Troopa awards a player 10 coins each time they pass the starting point in Mario Party, unless the No Koopa item is active or the player is playing on Eternal Star."
               ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Boo",
-              "revision": "5532404",
-              "quoted": [
-                "they provide the player character with the option stealing either a number of coins from an opponent for free or a Star for 50 coins, on their behalf."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Mario_Party",
-              "revision": "5539722",
-              "quoted": [
-                "Koopa Troopa won't appear on the map, but it won't work on some maps.",
-                "Boo won't appear on the map, but it won't work on some maps."
-              ]
             }
           ]
         },
         {
-          "line": "Tips: The shop notes that you must first finish the Eternal Star map to get either item.",
+          "line": "Tips: You must finish the Eternal Star map before either item can be bought.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party",
               "revision": "5539722",
               "quoted": [
-                "No Koopa || 500 Coins || Koopa Troopa won't appear on the map, but it won't work on some maps. || The Eternal Star map must be completed before obtaining the item.",
-                "No Boo || 500 Coins || Boo won't appear on the map, but it won't work on some maps. || The Eternal Star map must be completed before obtaining the item."
+                "The Eternal Star map must be completed before obtaining the item."
               ]
             }
           ]
@@ -1108,14 +1081,21 @@
           ]
         },
         {
-          "line": "Uses: Gameballs (300 coins) are a bundle of balls that each hide a Mini-Game, and which one you get is not known beforehand. The Mecha Fly Guy costs 100 coins and tallies your Control Stick spins, and is meant for the Mini-Game House.",
+          "line": "Uses: Gameballs cost 300 coins and the Mecha Fly Guy costs 100. The Mecha Fly Guy belongs to the Mini-Game House.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party",
               "revision": "5539722",
               "quoted": [
-                "Gameballs || 300 Coins || This has many Gameballs with Mini-Games inside. What you get is a surprise.",
-                "Mecha Fly Guy || 100 Coins || This counts how many times you rotate the Control Stick. Use it in the Mini-Game House."
+                "Gameballs || 300 Coins",
+                "Mecha Fly Guy || 100 Coins"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Fly_Guy",
+              "revision": "5537183",
+              "quoted": [
+                "In the Mini-Game House, there is a Mecha Fly Guy that is sold in the Mushroom Shop for 100 coins."
               ]
             }
           ]

@@ -753,7 +753,7 @@
           ]
         },
         {
-          "line": "Tips: Its cooldown is 25 seconds, dropping to 12.5 once upgraded. Spend Sentinel crystals on belch upgrades to shorten it or get armour faster.",
+          "line": "Tips: Its cooldown is 25 seconds, dropping to 12.5 once upgraded. Spend Sentinel crystals on belch upgrades to shorten it.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Flame_belch",
@@ -761,7 +761,6 @@
               "quoted": [
                 "The flame belch has a cooldown of 25 seconds, or 12.5 seconds with the Quickdraw Belch Praetor Suit upgrade.",
                 "By using Sentinel crystals, the player can unlock three upgrades for the flame belch that boost its capabilities",
-                "Demons drop armor at a faster rate.",
                 "Quickdraw Belch"
               ]
             }
@@ -813,7 +812,6 @@
               "quoted": [
                 "Although it does not require ammo, it must be charged before use by performing glory kills. Two glory kills will provide a single charge, and only one charge can be stored at a time.",
                 "While it is not upgraded directly, the blood punch receives three automatic upgrades upon clearing the following missions:",
-                "Urdak: \"Two Blood Punch attacks can now be charged.\"",
                 "If you encounter a large number of fodder enemies in a group, freezing them, flame belching them, and then blood punching one of them is a good way to max out your health and armor"
               ]
             }

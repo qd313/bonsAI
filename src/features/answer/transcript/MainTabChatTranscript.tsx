@@ -536,7 +536,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   const liveKbNotesShown = kbNotesToShow(
     { question: liveQuestion, answer: isAsking ? liveResponseBody : lastExchange?.answer ?? "" },
     strategySpoilerMaskingEnabled,
-    liveKbNotes
+    liveKbNotes,
+    liveSpoilerFacts
   );
   /* The knowledge library's glossary words for each game drawn here, asked for as soon as the game is
      known (the live question, or an earlier turn) so they are already in when an answer streams in: the
@@ -1306,7 +1307,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     earlier.downBelowRow(turn, nextTurn, (id) => headerRingProps(id).headerNavRef) ||
                     focusDownFromReplyUtilityRowOrPermHint(queryTurnSlot(turn.id));
                   const kbNotesHere = kbNotesToShow(turn, strategySpoilerMaskingEnabled,
-                    kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)));
+                    kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)), archivedSpoilerFacts(turn, turnIndex));
                   const actionsEl = buildReplyActionsElement({
                     replyKey: turn.id,
                     rating: showFeedbackHere ? liveReplyFeedbackRating : null,

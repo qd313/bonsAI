@@ -401,6 +401,44 @@ describe("a fenced reply", () => {
     };
   }
 
+  /* Plan 103 S1: a fence the screen already opened by itself (a no-story game, or the person's consent) is no
+     cover: nothing is left to tap, so the notes line must not wait for a tap that can never come. */
+  it("shows the block at once when the screen opened the fence by itself (a no-story game)", () => {
+    const turn = { ...coveredTurn("t1", "Elite Boss"), question: "how do i beat the elite boss", appName: "Brotato" };
+    const { container } = render(
+      <MainTabChatTranscript {...baseProps({ askThreadCollapsed: [turn], expandedTurnKey: "t1", strategySpoilerMaskingEnabled: true })} />
+    );
+    expect(container.querySelector(".bonsai-spoiler-reveal-target")).toBeNull();
+    expect(block(container)?.textContent).toContain("Elite Boss");
+  });
+
+  it("shows the block at once when the person's consent opened the fence", () => {
+    const turn = { ...coveredTurn("t1", "Elite Boss"), spoilerConsentEffective: true };
+    const { container } = render(
+      <MainTabChatTranscript {...baseProps({ askThreadCollapsed: [turn], expandedTurnKey: "t1", strategySpoilerMaskingEnabled: true })} />
+    );
+    expect(container.querySelector(".bonsai-spoiler-reveal-target")).toBeNull();
+    expect(block(container)?.textContent).toContain("Elite Boss");
+  });
+
+  it("still waits when a protected note keeps the cover shut on a no-story game", () => {
+    const base = coveredTurn("t1", "Elite Boss");
+    const turn = {
+      ...base,
+      question: "how do i beat the elite boss",
+      appName: "Brotato",
+      transparency: {
+        ...base.transparency!,
+        kb_attached_notes: [note({ name: "Elite Boss", source_host: "hollowknight.wiki", spoiler_protected: true })],
+      },
+    };
+    const { container } = render(
+      <MainTabChatTranscript {...baseProps({ askThreadCollapsed: [turn], expandedTurnKey: "t1", strategySpoilerMaskingEnabled: true })} />
+    );
+    expect(container.querySelector(".bonsai-spoiler-reveal-target")).not.toBeNull();
+    expect(block(container)).toBeNull();
+  });
+
   it("keeps a second covered answer's notes hidden after a cover was opened on the first", () => {
     const first = coveredTurn("t1", "Broken Vessel");
     const second = coveredTurn("t2", "Soul Master");

@@ -28,6 +28,7 @@ import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "../../shared/d
 import { focusUpFromBelowContextChipLadder, queryLiveTurnSlot } from "../../shared/dpad/liveTurnFocusGraph";
 import type { ChatSlotTurnTransparency, KbAttachedNote, TransparencySnapshot } from "../../types/inputTransparency";
 import { anySpoilerFenceOpen } from "../answer/markdown/MainTabBonsaiAiMarkdownChunk";
+import { answerKeepsAShutCover, spoilerOptsFromFacts, type TurnSpoilerFacts } from "../spoilers/unwrapAskedEntitySpoilerFences";
 import { kbNotesUsedByAnswer } from "./kbNoteUsedByAnswer";
 import { BONSAI_CHAT_AI_MAX_WIDTH_CSS } from "../../shared/constants";
 import { CREDITS_SHOWN, type CreditsView } from "../answer/details/contextChipsFromSnapshot";
@@ -177,13 +178,12 @@ function kbNoteDemotedTag(note: KbAttachedNote, markedNow?: readonly KbAttachedN
   );
 }
 
-const BONSAI_SPOILER_FENCE_MARKER = "```bonsai-spoiler";
-
 /**
  * Whether this reply's own spoiler cover has to be closed before the block could safely show
  * anything — a note's own words can be exactly the spoiler-relevant fact the fence exists to
- * hide (Broken Vessel's card names the boss outright). Blocked only while the reply actually has
- * a `bonsai-spoiler` fence (masking on) AND that fence is not currently open — once the person
+ * hide (Broken Vessel's card names the boss outright). Blocked only while the reply is actually
+ * drawn with a spoiler cover (masking on, and the screen's own un-hide rules did not open the
+ * fence: `answerKeepsAShutCover`) AND no cover is currently open — once the person
  * reveals it, the block appears the same as any other reply's, in the block's own usual place
  * under the reply, alongside Show details, rather than literally inside the fence's own drawn
  * box: MainTabBonsaiAiMarkdownChunk.tsx's own spoiler cover is built and owned by a different
@@ -195,11 +195,11 @@ const BONSAI_SPOILER_FENCE_MARKER = "```bonsai-spoiler";
  */
 function kbNotesBlockedBySpoiler(
   answerText: string | null | undefined,
-  maskingEnabled: boolean | undefined
+  maskingEnabled: boolean | undefined,
+  facts: TurnSpoilerFacts
 ): boolean {
   if (maskingEnabled === false) return false;
-  const isFenced = Boolean(answerText && answerText.includes(BONSAI_SPOILER_FENCE_MARKER));
-  if (!isFenced) return false;
+  if (!answerKeepsAShutCover(answerText ?? "", true, spoilerOptsFromFacts(facts))) return false;
   return !anySpoilerFenceOpen();
 }
 
@@ -213,9 +213,10 @@ function kbNotesBlockedBySpoiler(
 export function kbNotesToShow(
   turn: { question?: string | null; answer?: string | null },
   maskingEnabled: boolean | undefined,
-  notes: KbAttachedNote[]
+  notes: KbAttachedNote[],
+  facts: TurnSpoilerFacts
 ): KbAttachedNote[] {
-  if (kbNotesBlockedBySpoiler(turn.answer, maskingEnabled)) return [];
+  if (kbNotesBlockedBySpoiler(turn.answer, maskingEnabled, facts)) return [];
   const used = kbNotesUsedByAnswer(notes, turn.answer, turn.question);
   /* Covers switched off: the person reads spoilers in plain text everywhere, names included. */
   return maskingEnabled === false ? used.map(({ spoiler_protected: _p, ...rest }) => rest) : used;

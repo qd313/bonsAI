@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  answerKeepsAShutCover,
   extractAskedBeatEntity,
   shouldUnwrapSpoilerFence,
   unwrapAskedEntitySpoilerFences,
@@ -344,5 +345,34 @@ describe("the 'How much to hide' tier on a game with no story", () => {
       expect(shut(unwrapAskedEntitySpoilerFences(protectedRaw, opts))).toBe(true);
       expect(shouldUnwrapSpoilerFence(protectedRaw, opts)).toBe(false);
     }
+  });
+});
+
+/* Plan 103 S1: the notes line waits for a cover only when the screen really draws one. */
+describe("answerKeepsAShutCover", () => {
+  const closed = "Plan.\n\n```bonsai-spoiler\nThe Soul Master teleports twice.\n```\n";
+  const streaming = "Plan.\n\n```bonsai-spoiler\nThe Soul Master tele";
+  const named = { question: "what should i do next", appName: "Hollow Knight" };
+  const noStory = { question: "what should i do next", appName: "Brotato" };
+
+  it("is false with covers switched off, or with no fence in the answer", () => {
+    expect(answerKeepsAShutCover(closed, false, named)).toBe(false);
+    expect(answerKeepsAShutCover("Just advice.", true, named)).toBe(false);
+  });
+
+  it("is true for a closed fence the rules leave shut, and for one still arriving", () => {
+    expect(answerKeepsAShutCover(closed, true, named)).toBe(true);
+    expect(answerKeepsAShutCover(streaming, true, named)).toBe(true);
+  });
+
+  it("is false when the screen opens the fence itself: a no-story game, the person's consent", () => {
+    expect(answerKeepsAShutCover(closed, true, noStory)).toBe(false);
+    expect(answerKeepsAShutCover(streaming, true, noStory)).toBe(false);
+    expect(answerKeepsAShutCover(closed, true, { ...named, spoilerConsentEffective: true })).toBe(false);
+  });
+
+  it("stays true on a no-story game under Hide more, or when a protected note is named", () => {
+    expect(answerKeepsAShutCover(closed, true, { ...noStory, spoilerTier: "strict" })).toBe(true);
+    expect(answerKeepsAShutCover(closed, true, { ...noStory, protectedNames: ["Soul Master"] })).toBe(true);
   });
 });

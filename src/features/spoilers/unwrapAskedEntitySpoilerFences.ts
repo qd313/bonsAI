@@ -7,6 +7,8 @@
  */
 
 import { turnProfileIsLowNarrative } from "./spoilerTitleProfiles";
+import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
+import { stripAssistantDisplayTags } from "../answer/markdown/stripAssistantDisplayTags";
 import type { KbAttachedNote } from "../../types/inputTransparency";
 import type { SpoilerTier } from "../settings/bonsaiSettingsSchema";
 
@@ -145,6 +147,33 @@ export function shouldUnwrapSpoilerFence(fenceText: string, opts: UnwrapSpoilerO
   const entity = askedEntityFor(opts);
   if (!entity) return false;
   return entityMentioned(fenceText, entity);
+}
+
+/** The turn's facts under the names the unwrap rules read them by. */
+export function spoilerOptsFromFacts(facts: TurnSpoilerFacts): UnwrapSpoilerOpts {
+  const { askQuestion, ...rest } = facts;
+  return { question: askQuestion, ...rest };
+}
+
+/**
+ * Whether the answer, as the screen draws it for this turn, still has a spoiler cover to tap: a
+ * fence the rules above do not open. Mirrors buildAnswerBubbleElement step for step (the same tag
+ * clean-up, the same eligibility, the same unwrap, and for a fence still arriving the same open-fence
+ * rule), so the notes line waits for a cover only when one is really drawn -- a fence the screen
+ * opened by itself (a no-story game, the person's consent) leaves nothing to tap.
+ */
+export function answerKeepsAShutCover(body: string, maskingEnabled: boolean, opts: UnwrapSpoilerOpts): boolean {
+  if (!maskingEnabled) return false;
+  const eligible =
+    opts.spoilerConsentEffective === true ||
+    Boolean((opts.question || "").trim() || opts.appId || opts.appName || opts.askedEntity);
+  let text = expandOneLineSpoilerFences(stripAssistantDisplayTags(body || ""));
+  if (eligible) text = unwrapAskedEntitySpoilerFences(text, opts);
+  if (!/```bonsai-spoiler/i.test(text)) return false;
+  /* A fence that is closed and still here is a cover; one still arriving follows the open-fence rule. */
+  if (new RegExp(SPOILER_FENCE_RE.source, "i").test(text)) return true;
+  const openAt = text.search(/```bonsai-spoiler/i);
+  return !(eligible && shouldUnwrapSpoilerFence(text.slice(openAt), opts));
 }
 
 /**

@@ -393,7 +393,7 @@
       "main_revision": "173635",
       "lines": [
         {
-          "line": "Summary: A rare uncommon infected found in The Passing and, since the Last Stand update, also in the Left 4 Dead campaigns No Mercy, Death Toll, Crash Course and The Last Stand. It wears militia gear with a Molotov, pipe bomb, pills and first aid kit strapped on. It has 1000 health, cannot be set on fire and usually runs away when shot, and killing it can drop some of those items.",
+          "line": "Summary: A rare uncommon infected found in The Passing and, since the Last Stand update, also in the Left 4 Dead campaigns No Mercy, Death Toll, Crash Course and The Last Stand. It has 1000 health, cannot be set on fire and usually runs away when shot, and killing it can drop items it carries.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -529,7 +529,7 @@
           ]
         },
         {
-          "line": "Uses: Use it to clear an open area of loosely gathered common infected, keep one for a big horde, or draw enemies away from a teammate who is incapacitated or covered in bile. Do not throw several: common infected run to the first and ignore the others.",
+          "line": "Uses: Use it to clear a space where common infected are loosely gathered, save one for a big horde, or pull enemies off a teammate who is incapacitated or covered in bile. One is enough: only the first one thrown draws them.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Pipe_Bomb",
@@ -637,7 +637,7 @@
           ]
         },
         {
-          "line": "Uses: The revived survivor comes back with 50 permanent health and no items except the secondary weapon, so they must pick their dropped gear up from the ground. It works on any survivor corpse, even one whose owner has already been rescued from a closet.",
+          "line": "Uses: A revived survivor returns with 50 permanent health, carrying only a secondary weapon, so their dropped gear has to be collected. Any survivor's body will do.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Healing_items",
@@ -938,7 +938,7 @@
       "main_revision": "171598",
       "lines": [
         {
-          "line": "Summary: Two ammo upgrades for any primary weapon in Left 4 Dead 2. They spawn at random, usually only a handful of times in a campaign, and take the first aid kit slot: you put the pile down on the ground, which takes several seconds, and each player can use it once to get one extra magazine of the special ammo.",
+          "line": "Summary: Two ammo upgrades for primary weapons in Left 4 Dead 2, incendiary and explosive, usually found only a few times in a campaign. Put one down and every player can take one extra magazine of special ammo from it.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Ammo",

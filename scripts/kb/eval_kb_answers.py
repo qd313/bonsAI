@@ -96,6 +96,7 @@ sys.path.insert(0, str(ROOT / "py_modules"))
 from backend.characters.ai_character_service import VALID_PRESET_IDS  # noqa: E402
 from backend.prompts.ollama_prompts import FOLLOWUP_SUBJECT_NOTE_TEMPLATE  # noqa: E402
 from backend.ask.ollama_service import estimate_prompt_tokens  # noqa: E402
+from backend.knowledge import kb_not_in_notes_notice  # noqa: E402
 
 # Reports are saved in the workshop repo, not in this one (scripts/lib/workshop.py says where it is).
 sys.path.insert(0, str(ROOT / "scripts" / "lib"))
@@ -715,6 +716,30 @@ def admitted_unknown(reply: str) -> bool:
     return False
 
 
+# The two lines the back end adds under a reply, in the shape it adds them (a rule, then the line in
+# italics). They are the back end speaking, not the model: ``admitted_unknown`` above hears them as an
+# admission, so a reply could "admit not knowing" without the model having said a word of it.
+BACK_END_FOOTER_LINES = (
+    kb_not_in_notes_notice._NOT_IN_NOTES_LINE,
+    kb_not_in_notes_notice._NO_CLOSE_MATCH_LINE,
+)
+
+
+def back_end_line_showed(reply: str) -> bool:
+    """True when the reply carries one of the back end's own "not in my notes" lines."""
+    folded = _fold_apostrophes(reply)
+    return any(_fold_apostrophes(line) in folded for line in BACK_END_FOOTER_LINES)
+
+
+def strip_back_end_footers(reply: str) -> str:
+    """The reply with the back end's footer lines (and the rule above each) taken off, so what is
+    left is only what the model wrote."""
+    out = reply
+    for line in BACK_END_FOOTER_LINES:
+        out = re.sub(r"(?:\n[ \t]*\u2014[ \t]*\n)?[ \t]*\*?" + re.escape(line) + r"\*?", "", out)
+    return out.rstrip()
+
+
 def invented_about_unknown(reply: str, names: list[str]) -> bool:
     """True when the reply did not admit it did not know and still names the made-up thing with
     advice around it. A reply that never names the thing is neither honest nor invented (it may be
@@ -910,6 +935,12 @@ class SampleResult:
     invented_unknown: Optional[bool] = None
     # Plan 103 lane T2: the seed this try sent to the model (see ``try_seed``).
     seed: Optional[int] = None
+    # Plan 103 lane T2, only on a case with ``expect_unknown``: ``admitted_unknown`` split in two.
+    # ``footer_showed``: the back end's own "not in my notes" line is under the reply.
+    # ``said_so_own_words``: the reply admits it with those lines taken off. ``admitted_unknown`` stays
+    # what it was (either one) so older reports and ``all_ok`` read as before.
+    footer_showed: Optional[bool] = None
+    said_so_own_words: Optional[bool] = None
 
     @property
     def all_ok(self) -> bool:
@@ -1032,9 +1063,13 @@ async def run_turn(
 
     admitted: Optional[bool] = None
     invented: Optional[bool] = None
+    footer_showed: Optional[bool] = None
+    said_so_own_words: Optional[bool] = None
     if expect_unknown and success:
         admitted = admitted_unknown(reply)
         invented = invented_about_unknown(reply, unknown_names or [])
+        footer_showed = back_end_line_showed(reply)
+        said_so_own_words = admitted_unknown(strip_back_end_footers(reply))
 
     if not success:
         mention_ok = notsay_ok = fence_ok = branches_ok = None
@@ -1131,6 +1166,8 @@ async def run_turn(
         admitted_unknown=admitted,
         invented_unknown=invented,
         seed=seed,
+        footer_showed=footer_showed,
+        said_so_own_words=said_so_own_words,
     )
 
 
@@ -1428,6 +1465,9 @@ class Summary:
     # not know, and how often it named the made-up thing with advice as if it knew.
     admits_unknown = Rate()
     invents_unknown = Rate()
+    # Plan 103 lane T2: ``admits_unknown`` split in two, over the same cases.
+    footer_showed = Rate()
+    said_so_own_words = Rate()
 
     def __init__(self) -> None:
         self.facts = Rate()
@@ -1444,6 +1484,8 @@ class Summary:
         self.judge_facts_agree = Rate()
         self.admits_unknown = Rate()
         self.invents_unknown = Rate()
+        self.footer_showed = Rate()
+        self.said_so_own_words = Rate()
 
 
 def summarize(cases: list[Case], samples: list[SampleResult]) -> Summary:
@@ -1469,6 +1511,8 @@ def summarize(cases: list[Case], samples: list[SampleResult]) -> Summary:
         s.attached_control.add(r.attached_ok)
         s.admits_unknown.add(r.admitted_unknown)
         s.invents_unknown.add(r.invented_unknown)
+        s.footer_showed.add(r.footer_showed)
+        s.said_so_own_words.add(r.said_so_own_words)
 
         contradiction_agree: Optional[bool] = None
         if r.judge_contradicts is not None and r.notsay_ok is not None:
@@ -1555,6 +1599,18 @@ def _unknown_cell(rs: list[SampleResult]) -> str:
     return f"{admitted} said so, {_case_cell(rs, 'invented_unknown')} made it up"
 
 
+def honesty_line(summary: Summary) -> str:
+    """The console line for the questions no note can answer: both honesty counts, then how often the
+    reply answered as if it knew."""
+    return (
+        f"no note can answer ({summary.admits_unknown.of} samples): "
+        f"back end's line showed {summary.footer_showed.pct()} ({summary.footer_showed.frac()}) · "
+        f"said so in its own words {summary.said_so_own_words.pct()} ({summary.said_so_own_words.frac()}) · "
+        f"admits either way {summary.admits_unknown.pct()} ({summary.admits_unknown.frac()}) · "
+        f"answers as if it knew {summary.invents_unknown.pct()} ({summary.invents_unknown.frac()})"
+    )
+
+
 def summary_payload(summary: Summary) -> dict[str, dict[str, int]]:
     """Every rate of the summary as ``{"hit": n, "of": m}``, for the saved JSON."""
     return {
@@ -1572,6 +1628,8 @@ def summary_payload(summary: Summary) -> dict[str, dict[str, int]]:
         "judge_facts_agree": summary.judge_facts_agree.__dict__,
         "admits_unknown": summary.admits_unknown.__dict__,
         "invents_unknown": summary.invents_unknown.__dict__,
+        "footer_showed": summary.footer_showed.__dict__,
+        "said_so_own_words": summary.said_so_own_words.__dict__,
     }
 
 
@@ -1638,6 +1696,8 @@ def write_report(
     lines.append(f"| Control: nothing attached | **{summary.attached_control.pct()}** ({summary.attached_control.frac()}) | uncovered-game control |")
     lines.append(f"| Admits not knowing | **{summary.admits_unknown.pct()}** ({summary.admits_unknown.frac()}) | questions no note can answer: the reply says it does not know (the back end's footer or plain words) |")
     lines.append(f"| Answers as if it knew | **{summary.invents_unknown.pct()}** ({summary.invents_unknown.frac()}) | the same questions: the reply names the made-up thing with advice and no admission (lower is better) |")
+    lines.append(f"| The back end's line showed | **{summary.footer_showed.pct()}** ({summary.footer_showed.frac()}) | the same questions: the plugin's own \"not in my notes\" line is under the reply (the plugin said it, not the AI) |")
+    lines.append(f"| The AI said so in its own words | **{summary.said_so_own_words.pct()}** ({summary.said_so_own_words.frac()}) | the same questions: the reply admits it does not know with the plugin's footer lines taken off |")
     lines.append(f"| Ask succeeded | **{summary.success.pct()}** ({summary.success.frac()}) | pipeline returned a reply |")
     lines.append(f"| Cases with every sample clean | **{summary.cases_all_pass.pct()}** ({summary.cases_all_pass.frac()}) | strictest view |")
     lines.append("")
@@ -1667,8 +1727,8 @@ def write_report(
         lines.append("")
     lines.append("## Per case")
     lines.append("")
-    header = "| Case | Mode | Card attached | Facts | No contradiction | Fence ok | Menu ok | Admitted not knowing | Window warn | Prompt tokens | s/answer |"
-    sep = "|---|---|---|---|---|---|---|---|---|---|---|"
+    header = "| Case | Mode | Card attached | Facts | No contradiction | Fence ok | Menu ok | Admitted not knowing | Back end's line | Own words | Window warn | Prompt tokens | s/answer |"
+    sep = "|---|---|---|---|---|---|---|---|---|---|---|---|---|"
     if meta.get("judge_model"):
         header += " Judge (s1) |"
         sep += "---|"
@@ -1681,7 +1741,7 @@ def write_report(
         card = _case_cell(rs, "card_ok") if c.expect_card else (_case_cell(rs, "attached_ok") if c.expect_attached is not None else "—")
         row = (
             f"| `{c.id}` | {c.ask_mode} | {card} | {_case_cell(rs, 'mention_ok')} | {_case_cell(rs, 'notsay_ok')} | "
-            f"{_case_cell(rs, 'fence_ok')} | {_case_cell(rs, 'branches_ok')} | {_unknown_cell(rs)} | {_case_cell(rs, 'window_warning')} | "
+            f"{_case_cell(rs, 'fence_ok')} | {_case_cell(rs, 'branches_ok')} | {_unknown_cell(rs)} | {_case_cell(rs, 'footer_showed')} | {_case_cell(rs, 'said_so_own_words')} | {_case_cell(rs, 'window_warning')} | "
             f"{_case_mean(rs, 'prompt_tokens_est')} | {_mean([r.elapsed_s for r in rs])} |"
         )
         if meta.get("judge_model"):
@@ -2149,11 +2209,7 @@ def main(argv: Optional[list[str]] = None) -> int:
           f"cases-all-clean {summary.cases_all_pass.pct()} · prompt-chars {prompt_chars} · "
           f"window-warnings {warned}/{warn_of} · prompt-tokens {prompt_tokens_mean} · {run_minutes} min")
     if summary.admits_unknown.of:
-        print(
-            f"no note can answer ({summary.admits_unknown.of} samples): admits not knowing "
-            f"{summary.admits_unknown.pct()} ({summary.admits_unknown.frac()}) · answers as if it knew "
-            f"{summary.invents_unknown.pct()} ({summary.invents_unknown.frac()})"
-        )
+        print(honesty_line(summary))
     if args.judge:
         judge_elapsed = mean_judge_elapsed_s(samples)
         print(

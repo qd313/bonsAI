@@ -1611,5 +1611,143 @@ class EvalKbAnswersFreshTryTests(unittest.TestCase):
         self.assertEqual(self.memory.recall(app_id="367520", app_name="Hollow Knight", text_resolved_title=""), "The Boss")
 
 
+class EvalKbAnswersTwoHonestyCountsTests(unittest.TestCase):
+    """Plan 103 lane T2, commit 3: "admitted not knowing" is two counts. "The back end's line showed"
+    is the footer the plugin adds under a Strategy or Expert reply when no note fit. "The AI said so
+    in its own words" is an admission found in the reply with those footer lines taken off. Stand-in
+    Ask call; no Ollama."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load_eval_module()
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.modules.pop("eval_kb_answers", None)
+
+    _case = EvalKbAnswersHarnessTests._case
+    _sample = EvalKbAnswersHarnessTests._sample
+
+    ADVICE = EvalKbAnswersUnknownTests.ZORBLAX_ADVICE
+    OWN_WORDS = "I don't have notes on a boss called Zorblax, so I can't say how to beat it."
+
+    def _footers(self):
+        from backend.knowledge import kb_not_in_notes_notice as notice
+
+        # Built the way the back end builds them (kb_not_in_notes_notice.append_*_notice), not retyped.
+        return (
+            notice.append_not_in_notes_notice("", True),
+            notice.append_no_close_match_notice("", True),
+        )
+
+    def _run(self, reply, *, expect_unknown=True):
+        return EvalKbAnswersUnknownTests._run(self, reply, expect_unknown=expect_unknown)
+
+    # --- the two matchers -----------------------------------------------------------------------
+
+    def test_back_end_line_showed_hears_each_footer_exactly_as_the_back_end_adds_it(self):
+        for footer in self._footers():
+            self.assertTrue(self.mod.back_end_line_showed(self.ADVICE + footer), footer)
+
+    def test_back_end_line_showed_does_not_hear_the_ai_s_own_words(self):
+        for reply in (self.OWN_WORDS, self.ADVICE, "I couldn't find a boss with that name.", ""):
+            self.assertFalse(self.mod.back_end_line_showed(reply), reply)
+
+    def test_strip_back_end_footers_takes_off_the_rule_and_the_line_and_nothing_else(self):
+        for footer in self._footers():
+            self.assertEqual(self.mod.strip_back_end_footers(self.ADVICE + footer), self.ADVICE)
+        both = self.ADVICE + self._footers()[0] + self._footers()[1]
+        self.assertEqual(self.mod.strip_back_end_footers(both), self.ADVICE)
+        self.assertEqual(self.mod.strip_back_end_footers(self.OWN_WORDS), self.OWN_WORDS)
+
+    def test_the_footer_alone_is_not_the_ai_saying_so(self):
+        reply = self.ADVICE + self._footers()[0]
+        self.assertTrue(self.mod.admitted_unknown(reply))  # the older, combined reading is unchanged
+        self.assertFalse(self.mod.admitted_unknown(self.mod.strip_back_end_footers(reply)))
+
+    # --- the scorer, at the level the eval looks at ---------------------------------------------
+
+    def test_footer_only_counts_for_the_back_end_and_not_for_the_ai(self):
+        r = self._run(self.ADVICE + self._footers()[0])
+        self.assertTrue(r.footer_showed)
+        self.assertFalse(r.said_so_own_words)
+        self.assertTrue(r.admitted_unknown)
+
+    def test_own_words_only_counts_for_the_ai_and_not_for_the_back_end(self):
+        r = self._run(self.OWN_WORDS)
+        self.assertFalse(r.footer_showed)
+        self.assertTrue(r.said_so_own_words)
+
+    def test_both_count_when_the_ai_said_so_and_the_footer_showed_too(self):
+        r = self._run(self.OWN_WORDS + self._footers()[1])
+        self.assertTrue(r.footer_showed)
+        self.assertTrue(r.said_so_own_words)
+
+    def test_neither_counts_for_a_confident_invention(self):
+        r = self._run(self.ADVICE)
+        self.assertFalse(r.footer_showed)
+        self.assertFalse(r.said_so_own_words)
+        self.assertFalse(r.admitted_unknown)
+
+    def test_an_ordinary_case_leaves_both_empty(self):
+        r = self._run(self.ADVICE + self._footers()[0], expect_unknown=False)
+        self.assertIsNone(r.footer_showed)
+        self.assertIsNone(r.said_so_own_words)
+
+    # --- the summary, the per-case table and the saved JSON -------------------------------------
+
+    def _run_samples(self):
+        cases = [self._case(id="A-UNKNOWN-01", expect_unknown=True), self._case(id="A-PLAIN-01")]
+        samples = [
+            self._sample(case_id="A-UNKNOWN-01", sample=1, admitted_unknown=True, invented_unknown=False,
+                         footer_showed=True, said_so_own_words=False),
+            self._sample(case_id="A-UNKNOWN-01", sample=2, admitted_unknown=True, invented_unknown=False,
+                         footer_showed=False, said_so_own_words=True),
+            self._sample(case_id="A-UNKNOWN-01", sample=3, admitted_unknown=False, invented_unknown=True,
+                         footer_showed=False, said_so_own_words=False),
+            self._sample(case_id="A-PLAIN-01"),
+        ]
+        return cases, samples, self.mod.summarize(cases, samples)
+
+    def _report(self):
+        # The neighbour's report builder, fed this class's samples.
+        return EvalKbAnswersUnknownReportTests._report(types.SimpleNamespace(mod=self.mod, _run=self._run_samples))
+
+    def test_summarize_counts_each_over_the_unknown_cases_only(self):
+        _, _, s = self._run_samples()
+        self.assertEqual((s.footer_showed.hit, s.footer_showed.of), (1, 3))
+        self.assertEqual((s.said_so_own_words.hit, s.said_so_own_words.of), (1, 3))
+        self.assertEqual((s.admits_unknown.hit, s.admits_unknown.of), (2, 3))  # the combined row is kept
+
+    def test_the_summary_table_has_a_row_for_each_count(self):
+        text = self._report()
+        self.assertIn("| The back end's line showed | **33.3%** (1/3) |", text)
+        self.assertIn("| The AI said so in its own words | **33.3%** (1/3) |", text)
+
+    def test_the_per_case_table_has_a_column_for_each_count_and_dashes_for_other_cases(self):
+        lines = self._report().splitlines()
+        header = next(ln for ln in lines if ln.startswith("| Case |"))
+        rows = {ln.split("|")[1].strip(): ln for ln in lines if ln.startswith("| `A-")}
+        self.assertIn("| Back end's line | Own words |", header)
+        self.assertEqual(len(header.split("|")), len(rows["`A-UNKNOWN-01`"].split("|")))
+        self.assertEqual(len(header.split("|")), len(rows["`A-PLAIN-01`"].split("|")))
+        self.assertIn("| 1/3 | 1/3 |", rows["`A-UNKNOWN-01`"])
+        self.assertIn("| — | — |", rows["`A-PLAIN-01`"])
+
+    def test_the_saved_summary_carries_both_counts_and_keeps_the_combined_one(self):
+        _, _, s = self._run_samples()
+        payload = self.mod.summary_payload(s)
+        self.assertEqual(payload["footer_showed"], {"hit": 1, "of": 3})
+        self.assertEqual(payload["said_so_own_words"], {"hit": 1, "of": 3})
+        self.assertEqual(payload["admits_unknown"], {"hit": 2, "of": 3})
+
+    def test_the_console_line_says_both(self):
+        _, _, s = self._run_samples()
+        line = self.mod.honesty_line(s)
+        self.assertIn("back end's line showed 33.3% (1/3)", line)
+        self.assertIn("said so in its own words 33.3% (1/3)", line)
+        self.assertIn("answers as if it knew 33.3% (1/3)", line)
+
+
 if __name__ == "__main__":
     unittest.main()

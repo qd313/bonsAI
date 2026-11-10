@@ -64,6 +64,8 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import contextlib
+import hashlib
 import itertools
 import json
 import logging
@@ -798,6 +800,70 @@ def call_judge(
     return {"contradicts_note": bool(parsed.get("contradicts_note")), "facts_stated": facts}
 
 
+# --- one seed per try (plan 103 lane T2) -------------------------------------------------------------
+#
+# The Ollama request the plugin sends carries a temperature but no seed, and nothing in the plugin
+# keeps an earlier reply to hand back for a repeated question (searched 2026-11-09; the finding is in
+# plan 103's lane T2 report). So three tries of one question are three real draws from the model --
+# but a short, well-supported answer ("the game keeps going after the final boss, play on") is the
+# same few words on most draws, and the same reply came up two or three times in a row. A seed per try
+# makes the tries explicit and repeatable: try 2 of A-HK-01 sends the same seed in every run, so a
+# run can be repeated exactly, and two runs differ only through ``--seed-base``.
+#
+# Nothing in a production file changes: this swaps the ``urllib`` name inside the plugin's chat
+# module for a stand-in whose ``Request`` adds ``options.seed`` to a chat request while a try is
+# running, and hands everything else (``urlopen``, ``error``) straight to the real thing.
+
+SEED_STATE: dict[str, Any] = {"base": 0, "active": None}
+
+
+def try_seed(case_id: str, sample: int, base: int = 0) -> int:
+    """The seed for one try: the first eight hex digits of SHA-256 of ``<base>:<case id>:<try>``, read
+    as a number and kept between 1 and 2,147,483,646. The same case, try and base always give the same
+    seed; a different case, try or base gives a different one."""
+    digest = hashlib.sha256(f"{base}:{case_id}:{sample}".encode("utf-8")).hexdigest()
+    return int(digest[:8], 16) % 2_147_483_646 + 1
+
+
+@contextlib.contextmanager
+def active_try_seed(seed: Optional[int]):
+    """Every chat request made inside this block carries ``seed``; the seed is put away on the way out,
+    also after an error, so nothing outside a try ever gets one."""
+    SEED_STATE["active"] = seed
+    try:
+        yield
+    finally:
+        SEED_STATE["active"] = None
+
+
+def _seeded_request(url: Any, data: Any = None, *args: Any, **kwargs: Any) -> Any:
+    seed = SEED_STATE["active"]
+    if seed is not None and data and str(url).endswith("/api/chat"):
+        try:
+            body = json.loads(data)
+        except (TypeError, ValueError):
+            body = None
+        if isinstance(body, dict) and isinstance(body.get("options"), dict) and "seed" not in body["options"]:
+            body["options"]["seed"] = seed
+            data = json.dumps(body).encode("utf-8")
+    return urllib.request.Request(url, data, *args, **kwargs)
+
+
+def install_try_seed(chat_stream_module: Any) -> None:
+    """Make the plugin's chat call add the active try's seed to its request (see the block above).
+    ``urlopen`` is looked up on each call, so a test that patches it still sees the patch."""
+    if getattr(chat_stream_module.urllib, "seeded_by_eval", False):
+        return
+    chat_stream_module.urllib = types.SimpleNamespace(
+        error=urllib.error,
+        request=types.SimpleNamespace(
+            Request=_seeded_request,
+            urlopen=lambda *a, **k: urllib.request.urlopen(*a, **k),
+        ),
+        seeded_by_eval=True,
+    )
+
+
 # --- one sample ------------------------------------------------------------------------------
 
 @dataclass
@@ -842,6 +908,8 @@ class SampleResult:
     # and did it instead name the made-up thing with advice around it? None on every other case.
     admitted_unknown: Optional[bool] = None
     invented_unknown: Optional[bool] = None
+    # Plan 103 lane T2: the seed this try sent to the model (see ``try_seed``).
+    seed: Optional[int] = None
 
     @property
     def all_ok(self) -> bool:
@@ -913,17 +981,19 @@ async def run_turn(
 
     plugin._persist_input_transparency = _capture_snapshot  # instance attribute shadows the method
 
+    seed = try_seed(case_id, sample_idx, base=SEED_STATE["base"])
     t0 = time.perf_counter()
     try:
-        result = await run_game_ai_request(
-            plugin,
-            question,
-            ollama_base,
-            app_id,
-            app_name,
-            None,
-            ask_mode,
-        )
+        with active_try_seed(seed):
+            result = await run_game_ai_request(
+                plugin,
+                question,
+                ollama_base,
+                app_id,
+                app_name,
+                None,
+                ask_mode,
+            )
         error = ""
     except Exception as exc:  # the pipeline swallows its own errors; this is harness breakage
         result = {"success": False, "response": ""}
@@ -1060,6 +1130,7 @@ async def run_turn(
         judge_elapsed_s=judge_elapsed_s,
         admitted_unknown=admitted,
         invented_unknown=invented,
+        seed=seed,
     )
 
 
@@ -1531,9 +1602,22 @@ def write_report(
     for k in (
         "model", "ollama", "corpus_version", "corpus_sections", "prompt_variant",
         "kb_placement", "voice_preset", "think_effort", "spoiler_tier", "judge_model",
-        "samples_per_case", "cases", "run_minutes",
+        "seed_base", "samples_per_case", "cases", "run_minutes",
     ):
         lines.append(f"| {k} | `{meta.get(k)}` |")
+    lines.append("")
+    lines.append("## Seeds")
+    lines.append("")
+    lines.append(
+        "Each try sends its own seed to the model: the first eight hex digits of SHA-256 of "
+        "`<seed_base>:<case id>:<try>`, as a number. Repeat this run exactly with the same "
+        "`--seed-base`; use another for fresh draws."
+    )
+    lines.append("")
+    for c in cases:
+        seeded = [(r.sample, r.seed) for r in (by_case.get(c.id) or []) if r.seed is not None]
+        if seeded:
+            lines.append(f"- {c.id}: " + ", ".join(f"try {n} = {s}" for n, s in seeded))
     lines.append("")
     lines.append("## Summary")
     lines.append("")
@@ -1723,6 +1807,14 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument("--fixture", type=Path, default=DEFAULT_FIXTURE)
     parser.add_argument("--work-dir", type=Path, default=DEFAULT_WORK_DIR, help="where the fake plugin keeps settings and logs")
     parser.add_argument("--samples", type=int, default=3, help="answers per case")
+    parser.add_argument(
+        "--seed-base",
+        type=int,
+        default=0,
+        help="every try sends its own seed, made from this number, the case id and the try number "
+        "(the report lists them). The same base repeats a run exactly; a different base is a fresh "
+        "set of draws, which is how two runs on an unchanged library give a noise band.",
+    )
     parser.add_argument("--only", default="", help="comma-separated case ids")
     parser.add_argument("--variant", default="baseline", choices=sorted(VARIANTS), help="prompt variant hook")
     parser.add_argument(
@@ -1853,6 +1945,11 @@ def main(argv: Optional[list[str]] = None) -> int:
 
     plugin = plugin_main.Plugin()
 
+    from backend.ask import ollama_chat_stream  # noqa: E402
+
+    install_try_seed(ollama_chat_stream)
+    SEED_STATE["base"] = args.seed_base
+
     retrieval_log: list[Any] = []
     real_retrieve = gar.retrieve_knowledge_context
 
@@ -1922,7 +2019,7 @@ def main(argv: Optional[list[str]] = None) -> int:
             return 2
         print(
             f"corpus {corpus_version} ({corpus_sections} sections) · model {args.model} · "
-            f"followup-shape {args.followup_shape} · {len(pairs)} pairs × {args.samples} runs"
+            f"followup-shape {args.followup_shape} · seed-base {args.seed_base} · {len(pairs)} pairs × {args.samples} runs"
         )
         t_run = time.perf_counter()
         pair_results: list[SampleResult] = []
@@ -1966,6 +2063,7 @@ def main(argv: Optional[list[str]] = None) -> int:
                     "corpus_version": corpus_version,
                     "corpus_sections": corpus_sections,
                     "followup_shape": args.followup_shape,
+                    "seed_base": args.seed_base,
                     "samples_per_pair": args.samples,
                     "pairs": len(pairs),
                     "run_minutes": run_minutes,
@@ -1987,7 +2085,8 @@ def main(argv: Optional[list[str]] = None) -> int:
     print(
         f"corpus {corpus_version} ({corpus_sections} sections) · model {args.model} · variant {args.variant} · "
         f"kb-placement {args.kb_placement} · voice {args.voice or 'off'} · think {args.think} · "
-        f"spoiler-tier {args.spoiler_tier} · judge {args.judge or 'off'} · {len(cases)} cases × {args.samples}"
+        f"spoiler-tier {args.spoiler_tier} · judge {args.judge or 'off'} · seed-base {args.seed_base} · "
+        f"{len(cases)} cases × {args.samples}"
     )
     t_run = time.perf_counter()
     samples: list[SampleResult] = []
@@ -2075,6 +2174,7 @@ def main(argv: Optional[list[str]] = None) -> int:
             "think_effort": args.think,
             "spoiler_tier": args.spoiler_tier,
             "judge_model": args.judge,
+            "seed_base": args.seed_base,
             "samples_per_case": args.samples,
             "cases": len(cases),
             "run_minutes": run_minutes,

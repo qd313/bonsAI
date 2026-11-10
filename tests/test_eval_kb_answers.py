@@ -1416,5 +1416,139 @@ class EvalKbAnswersReadingSampleTests(unittest.TestCase):
             self.assertIn("--sample-for-reading", err.getvalue())
 
 
+class EvalKbAnswersTrySeedTests(unittest.TestCase):
+    """Plan 103 lane T2, commit 1: every try gets its own seed, so three tries of one question are
+    three different draws and not one. Stand-in Ask call that builds its request through the same
+    ``urllib`` name the real Ollama call uses; no Ollama."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load_eval_module()
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.modules.pop("eval_kb_answers", None)
+
+    _case = EvalKbAnswersHarnessTests._case
+    _sample = EvalKbAnswersHarnessTests._sample
+
+    def setUp(self):
+        # The real chat call's own module, put back exactly as found when the test ends.
+        from backend.ask import ollama_chat_stream as chat_stream
+
+        self.chat_stream = chat_stream
+        original = chat_stream.urllib
+        self.addCleanup(setattr, chat_stream, "urllib", original)
+        self.mod.install_try_seed(chat_stream)
+
+    def _body(self, **options):
+        return json.dumps({"model": "m", "messages": [], "options": {"temperature": 0.4, **options}}).encode("utf-8")
+
+    def _sent_options(self, data, url="http://127.0.0.1:11434/api/chat"):
+        req = self.chat_stream.urllib.request.Request(
+            url, data=data, headers={"Content-Type": "application/json"}, method="POST"
+        )
+        return json.loads(req.data)["options"]
+
+    def _run_try(self, sample_idx, case_id="A-HK-01", seen=None):
+        mod = self.mod
+        chat_stream = self.chat_stream
+        body = self._body()
+        sent = seen if seen is not None else []
+
+        async def fake_run_game_ai_request(plugin, question, ollama_base, app_id, app_name, attachments, ask_mode):
+            sent.append(self._sent_options(body))
+            return {"success": True, "response": "ok", "strategy_guide_branches": None}
+
+        return asyncio.run(
+            mod.run_turn(
+                types.SimpleNamespace(),
+                case_id=case_id, app_id="1", app_name="Game", ask_mode="strategy", question="q",
+                expect_card=None, must_mention=[], must_not_say=[], expect_fence=None,
+                expect_branches=None, expect_attached=None, sample_idx=sample_idx,
+                ollama_base="http://x", retrieval_log=[], capture=mod._ListHandler(),
+                kb_card_names=lambda text: [], run_game_ai_request=fake_run_game_ai_request,
+            )
+        )
+
+    def test_try_seed_differs_between_tries_and_between_cases_and_repeats_exactly(self):
+        seed = self.mod.try_seed
+        seeds = [seed("A-HK-01", n) for n in (1, 2, 3)]
+        self.assertEqual(len(set(seeds)), 3)
+        self.assertEqual(seeds, [seed("A-HK-01", n) for n in (1, 2, 3)])
+        self.assertNotEqual(seed("A-HK-01", 1), seed("A-HK-02", 1))
+        self.assertTrue(all(0 < s < 2**31 for s in seeds))
+
+    def test_a_different_seed_base_gives_different_seeds_for_the_same_tries(self):
+        seed = self.mod.try_seed
+        self.assertNotEqual(seed("A-HK-01", 1, base=0), seed("A-HK-01", 1, base=2))
+        self.assertEqual(seed("A-HK-01", 1), seed("A-HK-01", 1, base=0))
+
+    def test_two_tries_of_one_case_send_different_seeds_to_the_model(self):
+        sent: list = []
+        first = self._run_try(1, seen=sent)
+        second = self._run_try(2, seen=sent)
+        self.assertEqual(len(sent), 2)
+        self.assertNotEqual(sent[0]["seed"], sent[1]["seed"])
+        self.assertEqual(sent[0]["seed"], first.seed)
+        self.assertEqual(sent[1]["seed"], second.seed)
+        self.assertEqual(sent[0]["seed"], self.mod.try_seed("A-HK-01", 1))
+
+    def test_the_same_try_asked_again_sends_the_same_seed_so_a_run_can_be_repeated(self):
+        sent: list = []
+        self._run_try(3, seen=sent)
+        self._run_try(3, seen=sent)
+        self.assertEqual(sent[0]["seed"], sent[1]["seed"])
+
+    def test_the_request_keeps_its_other_options_and_a_request_with_a_seed_is_left_alone(self):
+        self.assertEqual(self._sent_options(self._body(num_predict=5), url="http://x/api/chat").get("temperature"), 0.4)
+        with self.mod.active_try_seed(99):
+            self.assertEqual(self._sent_options(self._body(seed=7)).get("seed"), 7)
+            self.assertNotIn("seed", self._sent_options(self._body(), url="http://x/api/embed"))
+            self.assertEqual(self._sent_options(self._body(num_predict=5))["num_predict"], 5)
+
+    def test_outside_a_try_nothing_is_added(self):
+        self.assertNotIn("seed", self._sent_options(self._body()))
+
+    def test_the_seed_is_put_away_when_the_try_ends_even_after_an_error(self):
+        self._run_try(1)
+        self.assertNotIn("seed", self._sent_options(self._body()))
+        with self.assertRaises(RuntimeError):
+            with self.mod.active_try_seed(5):
+                raise RuntimeError("boom")
+        self.assertNotIn("seed", self._sent_options(self._body()))
+
+    def test_other_urllib_names_the_chat_call_uses_still_work(self):
+        import urllib.error
+        import urllib.request
+
+        self.assertIs(self.chat_stream.urllib.error.HTTPError, urllib.error.HTTPError)
+        with patch("urllib.request.urlopen", return_value="resp") as opener:
+            self.assertEqual(self.chat_stream.urllib.request.urlopen("req", timeout=3), "resp")
+        opener.assert_called_once_with("req", timeout=3)
+
+    def test_the_report_says_the_seed_rule_and_every_try_s_seed(self):
+        cases = [self._case(id="A-HK-01")]
+        samples = [
+            self._sample(case_id="A-HK-01", sample=n, seed=self.mod.try_seed("A-HK-01", n, base=4))
+            for n in (1, 2, 3)
+        ]
+        meta = {"date": "2026-11-09", "label": "t", "samples_per_case": 3, "cases": 1, "seed_base": 4}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "r.md"
+            self.mod.write_report(path, cases=cases, samples=samples, summary=self.mod.summarize(cases, samples), meta=meta)
+            text = path.read_text(encoding="utf-8")
+        head = text.split("## Summary")[0]
+        self.assertIn("| seed_base | `4` |", head)
+        self.assertIn("## Seeds", head)
+        for n in (1, 2, 3):
+            self.assertIn(f"try {n} = {self.mod.try_seed('A-HK-01', n, base=4)}", head)
+
+    def test_the_saved_json_samples_carry_the_seed(self):
+        sample = self._sample(case_id="A-HK-01", sample=1, seed=123)
+        self.assertEqual(self.mod.SampleResult.__dataclass_fields__["seed"].default, None)
+        self.assertEqual({k: v for k, v in sample.__dict__.items()}["seed"], 123)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -11,7 +11,7 @@ Does not: Search the notes, change what the person or the AI is told, or run at 
 PICTURE_GUESS_ON is False (it lands switched off: the four pictures with a note were too few to
 carry an "on" decision). The guess's words never leave the search words: they are not shown, not
 saved and not put in the AI's prompt, and read_guess() lets through only letters, digits and
-spaces, at most 3 lines, 8 words a line and 14 words in all.
+spaces, at most 3 values, 8 words a value and 14 words in all.
 """
 from __future__ import annotations
 
@@ -86,6 +86,11 @@ _MAX_WORDS_IN_ALL = 14
 _NOT_ALNUM = re.compile(r"[^0-9a-z ]+")
 # A line's list mark: bullets, quote or heading marks, "1." or "2)" -- but not a game that starts with a number.
 _LIST_MARK = re.compile(r"^(?:[\s>*_#\-\u2022]+|\d+[.)]\s+)+")
+# A label wherever it stands (not inside a longer word), longest names first: "Boss or enemy:" is one label.
+_INLINE_LABEL = re.compile(
+    r"(?<![0-9A-Za-z])(boss or enemy|enemy or boss|boss|enemies|enemy|game|title|place|location|area|level)\s*:",
+    re.IGNORECASE,
+)
 # "Hornet's" is searched as "Hornet": a stray "s" would match almost any note (see _fts_match_query).
 _POSSESSIVE = re.compile(r"['\u2019]s\b")
 
@@ -141,20 +146,29 @@ def _search_safe(value: str) -> str:
     return " ".join(words[:_MAX_WORDS_PER_LINE])
 
 
+def _labelled_values(text: str) -> list[tuple[str, str]]:
+    """Every ``Game:``, ``Place:`` or ``Enemy:`` (a few other labels count) in the text, wherever it stands,
+    with what follows it up to the next label or the end of its line. Small models sometimes write all three
+    on one line, "Game: X, Place: Y, Enemy: Z", and a line-by-line reader lost the lot."""
+    found = list(_INLINE_LABEL.finditer(text))
+    pairs = []
+    for i, match in enumerate(found):
+        stop = found[i + 1].start() if i + 1 < len(found) else len(text)
+        pairs.append((_LABEL_SLOT[_plain(match.group(1))], text[match.end():stop].strip().split("\n")[0].strip(" \t,;.-")))
+    return pairs
+
+
 def read_guess(reply: str) -> PictureGuess:
-    """Turn the model's reply into a guess. Reads at most three lines; a line starting ``Game:``,
-    ``Place:`` or ``Enemy:`` (a few other labels count) goes to that slot, an unlabelled line goes to the
-    next slot not yet filled, in the order game, place, enemy. A "not sure" value, or a value with no
-    letter or digit left after cleaning, leaves its slot empty. Anything else is thrown away."""
+    """Turn the model's reply into a guess. Reads the first three labelled values (a label may stand on its
+    own line or inside one); a reply with no label at all is read as lines, filling game, place, enemy in
+    that order. A "not sure" value, or a value with no letter or digit left after cleaning, leaves its slot
+    empty. A slot is filled once; anything else is thrown away."""
     guess = PictureGuess()
     taken: set[str] = set()
     lines = [_LIST_MARK.sub("", ln).replace("*", "").strip() for ln in str(reply or "").splitlines()]
-    for line in [ln for ln in lines if ln][:_MAX_LINES]:
-        label, sep, rest = line.partition(":")
-        slot = _LABEL_SLOT.get(_plain(label)) if sep else None
-        value = rest if slot else line
-        if slot is None:
-            slot = next((s for s in _SLOTS if s not in taken), "")
+    text = "\n".join(ln for ln in lines if ln)
+    for slot, value in (_labelled_values(text) or [("", ln) for ln in text.split("\n") if ln])[:_MAX_LINES]:
+        slot = slot or next((name for name in _SLOTS if name not in taken), "")
         if not slot or slot in taken:
             continue
         taken.add(slot)

@@ -76,6 +76,25 @@ class ReadGuessTests(unittest.TestCase):
         guess = read_guess("1. **Game:** Hades\n- **Place:** Tartarus\n* Enemy: Megaera")
         self.assertEqual(guess.search_words, "Hades Tartarus Megaera")
 
+    def test_three_labels_on_one_line_are_read_as_three_values(self):
+        # Seen in the plan 103 measurement: qwen3.5:4b and gemma4:e2b wrote it this way on 5 of 58 pictures.
+        guess = read_guess("Game: Not sure, Place: Water Temple, Enemy: not sure")
+        self.assertEqual((guess.game, guess.place, guess.enemy), ("", "Water Temple", ""))
+        self.assertEqual(guess.not_sure_lines, 2)
+        guess = read_guess("Game: Hollow Knight; Place: Greenpath; Enemy: Hornet.")
+        self.assertEqual(guess.search_words, "Hollow Knight Greenpath Hornet")
+
+    def test_text_before_the_first_label_and_after_a_value_on_its_line_is_not_a_value(self):
+        guess = read_guess("Here is what I see:\nGame: Hades\nthe player is in a room\nPlace: Tartarus")
+        self.assertEqual((guess.game, guess.place), ("Hades", "Tartarus"))
+
+    def test_a_colon_inside_a_title_does_not_start_a_new_value(self):
+        self.assertEqual(read_guess("Game: The Legend of Zelda: Ocarina of Time\nPlace: Water Temple").game,
+                         "The Legend of Zelda Ocarina of Time")
+
+    def test_a_label_word_inside_a_longer_word_is_not_a_label(self):
+        self.assertEqual(read_guess("Game: Hades\nPlace: Basement sublevel: the Elysium").place, "Basement sublevel the Elysium")
+
     def test_a_game_that_begins_with_a_number_keeps_it(self):
         self.assertEqual(read_guess("7 Days to Die").game, "7 Days to Die")
 
@@ -239,7 +258,7 @@ _ATTACHMENTS = [{"path": "C:/pics/boss.jpg", "name": "boss.jpg", "source": "rece
 class GuessPictureTests(unittest.TestCase):
     """The step before the call: which model reads the picture, and what it is shown."""
 
-    def _run(self, settings=None, attachments=None, tags=(_MODEL, "qwen3.5:4b"), images=({"image_b64": "QUJD"},), **kw):
+    def _run(self, settings=None, attachments=None, tags=(_MODEL, "qwen3.5:4b"), images=({"image_b64": "QUJD"},), plugin=None, **kw):
         calls = []
 
         async def fake_call(plugin, **call_kw):
@@ -250,7 +269,7 @@ class GuessPictureTests(unittest.TestCase):
                 patch.object(picture_guess, "list_installed_ollama_tags", lambda base: list(tags)), \
                 patch.object(picture_guess, "choose_window_tokens", lambda base, model, logger=None: 16384), \
                 patch.object(picture_guess, "ask_picture_guess", fake_call):
-            outcome = asyncio.run(guess_picture(_Plugin(), settings or _SETTINGS, _ATTACHMENTS if attachments is None else attachments,
+            outcome = asyncio.run(guess_picture(plugin or _Plugin(), settings or _SETTINGS, _ATTACHMENTS if attachments is None else attachments,
                                                 "127.0.0.1:11434", **kw))
         return outcome, calls
 

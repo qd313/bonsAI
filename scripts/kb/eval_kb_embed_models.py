@@ -276,19 +276,38 @@ def _cases_from_data(data: dict[str, Any], suite: str) -> list[QueryCase]:
     return out
 
 
-# The three inputs that decide whether the eval's saved copy of the library is still current:
-# the two data files the corpus is built from, and the builder itself (a script change can
-# change what a rebuild would produce even with the same data files).
+# The inputs that decide whether the eval's saved copy of the library is still current: the data
+# files the corpus is built from (the seed, the tips, the glossary, and every file in the notes and
+# glossary folders, which the builder reads the same way) and the builder itself (a script change
+# can change what a rebuild would produce even with the same data files).
 CORPUS_STALE_CHECK_RELPATHS = (
     Path("data") / "kb" / "strategy_seed.json",
     Path("data") / "kb" / "compat_patterns.json",
+    Path("data") / "kb" / "glossary_terms.json",
+)
+CORPUS_STALE_CHECK_FOLDERS = (
+    Path("data") / "kb" / "notes",
+    Path("data") / "kb" / "glossary",
 )
 # The builder sits next to this script, so it is found by name beside __file__, not by a folder path.
 BUILDER_SCRIPT = Path(__file__).resolve().parent / "build_rag_db.py"
 
 
-def _default_stale_check_paths() -> list[Path]:
-    return [*(REPO_ROOT / rel for rel in CORPUS_STALE_CHECK_RELPATHS), BUILDER_SCRIPT]
+def _default_stale_check_paths(repo_root: Path | None = None) -> list[Path]:
+    """Every file whose change makes the saved copy out of date, a new notes file included.
+
+    A ``*.sources.json`` file is a note of where rows came from, not library content, and the
+    builder skips it, so it is not watched either.
+    """
+    root = repo_root or REPO_ROOT
+    folder_files = [
+        path
+        for rel in CORPUS_STALE_CHECK_FOLDERS
+        if (root / rel).is_dir()
+        for path in sorted((root / rel).glob("*.json"))
+        if not path.name.endswith(".sources.json")
+    ]
+    return [*(root / rel for rel in CORPUS_STALE_CHECK_RELPATHS), *folder_files, BUILDER_SCRIPT]
 
 
 def _corpus_is_stale(db_mtime: float, input_mtimes: list[float]) -> bool:
@@ -296,8 +315,8 @@ def _corpus_is_stale(db_mtime: float, input_mtimes: list[float]) -> bool:
 
     Pure: takes modification times, not paths, so the rebuild rule is pinned by a test without
     touching a filesystem or Ollama. ``_ensure_seed_db`` is the only caller that stats real
-    files -- the notes (``strategy_seed.json``, ``compat_patterns.json``) and the builder itself
-    (``build_rag_db.py``). A copy that predates any of the three is void: this project spent
+    files -- the library's data (the seed, the tips, the glossary, the notes and glossary
+    folders) and the builder itself (``build_rag_db.py``). A copy that predates any of them is void: this project spent
     weeks quoting search numbers from a copy of the library that had gone stale unnoticed.
     """
     return any(t > db_mtime for t in input_mtimes)

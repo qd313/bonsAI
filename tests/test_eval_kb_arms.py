@@ -687,6 +687,72 @@ class EvalArmsTests(unittest.TestCase):
             self.assertEqual(db_path.read_text(encoding="utf-8"), "rebuilt")
             self.assertIn("rebuilding", captured.getvalue())
 
+    def _repo_with_library_data(self, tmp_dir):
+        """A stand-in repo folder holding every data file the library is built from, all dated 1000."""
+        root = Path(tmp_dir) / "repo"
+        files = {
+            "data/kb/strategy_seed.json": "{}",
+            "data/kb/compat_patterns.json": "[]",
+            "data/kb/glossary_terms.json": "[]",
+            "data/kb/notes/old-game.json": "{}",
+            "data/kb/notes/old-game.sources.json": "{}",
+            "data/kb/glossary/old-game.json": "[]",
+        }
+        for rel, text in files.items():
+            path = root / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+            os.utime(path, (1000, 1000))
+        return root
+
+    def test_the_watched_inputs_include_every_notes_file_and_glossary_file(self):
+        """The saved copy is judged against the notes and glossary folders, not only the two big files."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = self._repo_with_library_data(tmp_dir)
+            watched = {
+                p.relative_to(root).as_posix() for p in self.mod._default_stale_check_paths(root)
+                if root in p.parents
+            }
+        self.assertEqual(watched, {
+            "data/kb/strategy_seed.json",
+            "data/kb/compat_patterns.json",
+            "data/kb/glossary_terms.json",
+            "data/kb/notes/old-game.json",
+            "data/kb/glossary/old-game.json",
+        })  # the .sources.json file is a note of where rows came from, not library content
+
+    def test_a_new_notes_file_makes_the_saved_copy_stale(self):
+        """A copy built before a new notes file was added is rebuilt, not reused."""
+        mod = self.mod
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = self._repo_with_library_data(tmp_dir)
+            out_dir = Path(tmp_dir) / "out"
+            out_dir.mkdir()
+            db_path = out_dir / "corpus.db"
+            db_path.write_text("old copy", encoding="utf-8")
+            copy_time = mod.BUILDER_SCRIPT.stat().st_mtime + 1000  # newer than the builder itself
+            os.utime(db_path, (copy_time, copy_time))
+            calls = []
+
+            def fake_run(cmd, *, check, cwd):
+                calls.append(cmd)
+                db_path.write_text("rebuilt", encoding="utf-8")
+
+            def ensure():
+                with mock.patch.object(mod, "REPO_ROOT", root), mock.patch.object(
+                    mod.subprocess, "run", fake_run
+                ), mock.patch.object(mod, "_ollama_reachable", lambda base, **kw: True):
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        mod._ensure_seed_db(out_dir, ollama_base="http://example.invalid")
+
+            ensure()
+            self.assertEqual(calls, [])  # nothing is newer than the copy: reused
+            new_notes = root / "data" / "kb" / "notes" / "new-game.json"
+            new_notes.write_text("{}", encoding="utf-8")
+            os.utime(new_notes, (copy_time + 10, copy_time + 10))
+            ensure()
+            self.assertEqual(len(calls), 1)  # a notes file newer than the copy: rebuilt
+
     def test_ensure_seed_db_refuses_a_stale_rebuild_when_ollama_is_unreachable(self):
         """Rule: never fall back to measuring the old copy just because Ollama is down."""
         mod = self.mod

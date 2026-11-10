@@ -15,7 +15,7 @@
       "main_revision": "5532404",
       "lines": [
         {
-          "line": "Summary: A ghost found on every board that robs another player of coins or a Star. The Boo Bell item calls one up when you ring it, and a Boo can also serve as a Duel Mode partner.",
+          "line": "Summary: A ghost found on every board that robs another player of coins or a Star. The Boo Bell item lets a player summon one, and a Boo can also serve as a Duel Mode partner.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo",
@@ -27,10 +27,10 @@
               ]
             },
             {
-              "page": "https://www.mariowiki.com/Boo_Bell",
-              "revision": "5443572",
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
               "quoted": [
-                "Boo will steal coins or a star from another player if you use the Boo Bell to ring him up."
+                "The player who uses this item summons Boo."
               ]
             }
           ]
@@ -522,7 +522,7 @@
           ]
         },
         {
-          "line": "Tips: No character begins with a Chain Chomp; you win one from the partner lottery. A powered-up Chain Chomp swells to Shark Chomp size, leaps and slams down on every opponent. Pairing a Bob-omb with a Chomp makes the Millennium Star comment on the pair, but the attack is not raised.",
+          "line": "Tips: No character begins with a Chain Chomp; you win one from the partner lottery. A powered-up Chain Chomp swells to Shark Chomp size, leaps and slams down on every opponent.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_3",
@@ -531,9 +531,7 @@
                 "Chain Chomp",
                 "None",
                 "Attacks opponent and all partners simultaneously.",
-                "Powered Up: It grows to the size of a Shark Chomp, jumps up, and then body slams all opponents.",
-                "The following combinations causes the Millennium Star to comment on it, but the attack does not get raised.",
-                "Bob-omb and Chomp make a dangerous duo!"
+                "Powered Up: It grows to the size of a Shark Chomp, jumps up, and then body slams all opponents."
               ]
             }
           ]
@@ -571,13 +569,6 @@
           "line": "Weak points: Used against you, it takes out your partners in one hit and does nothing to you, the player. A Boo partner that a Thwomp defeats does not hit back as it normally would.",
           "drawn_from": [
             {
-              "page": "https://www.mariowiki.com/Mario_Party_3",
-              "revision": "5520638",
-              "quoted": [
-                "He can take out your opponent's partner in one blow but won't touch your opponent."
-              ]
-            },
-            {
               "page": "https://www.mariowiki.com/Thwomp",
               "revision": "5542350",
               "quoted": [
@@ -600,7 +591,7 @@
           ]
         },
         {
-          "line": "Tips: No character begins with a Thwomp, so one can only turn up through the partner roulette. With two Thwomps, the Millennium Star reduces their salaries by one rather than raising their attack, and it also remarks on a Whomp and Thwomp pairing. The instruction booklet states an attack of 2 by mistake.",
+          "line": "Tips: No character begins with a Thwomp, so one can only turn up through the partner roulette. With two Thwomps, the Millennium Star reduces their salaries by one rather than raising their attack. The instruction booklet states an attack of 2 by mistake.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Thwomp",
@@ -614,7 +605,6 @@
               "page": "https://www.mariowiki.com/Mario_Party_3",
               "revision": "5520638",
               "quoted": [
-                "Whomp and Thwomp make an earth shaking combination!",
                 "The instruction booklet incorrectly states that Thwomp has an attack stat of 2 instead of 0."
               ]
             }
@@ -657,7 +647,7 @@
               "revision": "5499703",
               "quoted": [
                 "When Boo tries to steal coins or a Star from a player holding a Boo Repellant, the item automatically activates, spraying gas at Boo and causing him to flee without stealing anything.",
-                "Each can is good for one use."
+                "Boo Repellant can be used only once"
               ]
             }
           ]
@@ -719,7 +709,7 @@
               "page": "https://www.mariowiki.com/Boo_Bell",
               "revision": "5443572",
               "quoted": [
-                "Boo will steal coins or a star from another player if you use the Boo Bell to ring him up."
+                "Its use is to ring for Boo and ask him to steal coins or a star"
               ]
             }
           ]
@@ -866,8 +856,7 @@
               "page": "https://www.mariowiki.com/Lucky_Lamp",
               "revision": "5447666",
               "quoted": [
-                "Instead of taking the player to the Star Space, it moves the Star to a different space on the board.",
-                "On your command, Mushroom Jeanie will move the Millennium Star to a new location."
+                "Instead of taking the player to the Star Space, it moves the Star to a different space on the board."
               ]
             }
           ]
@@ -987,7 +976,7 @@
               "page": "https://www.mariowiki.com/Lucky_Charm",
               "revision": "5432235",
               "quoted": [
-                "The Lucky Charm lets you send another player to the Game Guy Room to risk all of his or her coins."
+                "Using the Lucky Charm forces the target, which can be the user, to risk all of their Coins in a Game Guy minigame."
               ]
             }
           ]

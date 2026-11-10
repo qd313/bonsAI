@@ -56,6 +56,61 @@
    "source_license": "CC-BY-SA-4.0",
    "source_version": "507545",
    "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 4405,
+   "game_id": 16,
+   "section_type": "enemy",
+   "name": "Prowler",
+   "card": "Summary: A stealthy purple demon that teleports behind or beside you and then leaps in for a fast melee hit that does a lot of damage. It has 1,000 health, or 250 while staggered.\nWeak points: A direct hit from the ballista staggers it at once, and the super shotgun kills it outright at point-blank range. An ice bomb holds it in place so it cannot teleport away.\nLooks like: Like an imp but bigger, with long claws, purple skin and bony plates jutting from its back. Three eyes sit together in the middle of its face, and its jaw has three parts.\nTips: It is most dangerous in a group of other demons, because they keep you busy while it sets up its ambush. When it feels in danger it teleports away and tries another surprise attack. As it rushes in from far away it may shoot quick purple energy bolts.",
+   "source_url": "https://doomwiki.org/wiki/Prowler_(Doom_Eternal)",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "525679",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 4406,
+   "game_id": 16,
+   "section_type": "enemy",
+   "name": "Carcass",
+   "card": "Summary: A cyborg demon that fires ring-shaped lasers, makes shockwaves along the ground and puts up force fields to protect itself and other demons. It is fairly fragile, with 1,200 health, or 240 while staggered.\nWeak points: Its force field resists explosives, but the plasma rifle or a blood punch destroys it easily. Shoot the round mark on the tank it carries on its back and it dies at once.\nLooks like: A zombie human's upper body joined to a robot frame with three insect-like legs, a blaster in its right arm and a dish on its waist.\nTips: It often puts its shield in front of staggered demons, so you cannot glory kill them easily, or when you hold the rocket launcher or sticky bombs. If the shield is close to the carcass, pop it with the plasma rifle; if not, a couple of shots from the ballista or blasts from the super shotgun should be enough. Up close it does a spinning strike with two hits in a row.",
+   "source_url": "https://doomwiki.org/wiki/Carcass",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "578231",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 4407,
+   "game_id": 16,
+   "section_type": "enemy",
+   "name": "Pain elemental",
+   "card": "Summary: A flying demon that makes lost souls and uses them as attacks: spat out as fast homing shots, thrown down as mines, or fired three at a time. Its health is roughly that of a baron of Hell.\nWeak points: The rocket launcher's lock-on burst mod works well because it cannot dodge the guided missiles; two clear volleys kill it. Like other flying demons, it also takes bonus damage from the ballista.\nLooks like: A round, flying, brown demon with one big red eye, a pair of long black horns, muscular arms with big claws and a large mouth with eight mandibles.\nTips: It air-dashes away when it sees a weapon pointed at it, so wait until it is busy with something else or just about to attack. It can push its lost souls into your shots as living shields. Thrown lost souls hit harder than a direct attack, and their splash damage makes tight spaces risky. Skip the meat hook: it may catch a lost soul and leave you in a dangerous spot.",
+   "source_url": "https://doomwiki.org/wiki/Pain_elemental_(Doom_Eternal)",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "574469",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 4408,
+   "game_id": 16,
+   "section_type": "enemy",
+   "name": "Tyrant",
+   "card": "Summary: A cybernetic demon, the next step on from the classic cyberdemon, that fires missiles from an arm cannon. It comes back as a major enemy, often in pairs in later levels, and it survives one direct BFG hit.\nWeak points: It turns slowly and its dash is poor, so the meat hook and super shotgun work as long as you stay behind it. The Crucible kills it in one hit.\nLooks like: A two-legged demon built like the classic cyberdemon: gored belly with exposed ribs and tubing, a weapon in place of its left arm, an energy blade on its right arm, a pair of big horns at each side of the head, and yellowish-white eyes.\nTips: If it cannot see you it launches a missile barrage, and glowing runes mark where the missiles land. When it does see you it takes a moment to aim, so attack then. Its laser cannon is announced by a triple beep: duck behind cover, or dash right at the end so its aim is ruined. Up close it slashes with its blade or sends out shockwaves.",
+   "source_url": "https://doomwiki.org/wiki/Tyrant",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "525868",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 4409,
+   "game_id": 16,
+   "section_type": "item",
+   "name": "Ballista",
+   "card": "Summary: A heavy beam weapon that hits harder per shot than any other weapon before mods, with unmatched accuracy and a slow fire rate. You can get it once you are back from Doom Hunter Base.\nUses: The beam goes straight through lined-up fodder demons when it kills them. Each shot uses 25 cells, so save it for weak points that are too far away to reach with the heavy cannon or sticky bombs, for a hot-swap combo with another weapon, or for airborne enemies like the pain elemental, which takes bonus damage from it.\nTips: Two mods: Arbalest charges a dart that sticks in an enemy and blows up shortly after, but slows you down and needs a reload between shots. Destroyer Blade, after charging, fires a wide horizontal shot that pierces clustered enemies and uses 50 cells. The recoil can be used to gain air time and push yourself across an arena, and a full load with all ammo upgrades is only ten shots.",
+   "source_url": "https://doomwiki.org/wiki/Ballista",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "532382",
+   "crawled_at": "2026-11-10"
   }
  ]
 }

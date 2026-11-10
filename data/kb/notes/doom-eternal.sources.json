@@ -297,6 +297,320 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 4405,
+      "name": "Prowler",
+      "kind": "enemy",
+      "main_page": "https://doomwiki.org/wiki/Prowler_(Doom_Eternal)",
+      "main_revision": "525679",
+      "lines": [
+        {
+          "line": "Summary: A stealthy purple demon that teleports behind or beside you and then leaps in for a fast melee hit that does a lot of damage. It has 1,000 health, or 250 while staggered.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Prowler_(Doom_Eternal)",
+              "revision": "525679",
+              "quoted": [
+                "The prowler employs a stealthy approach, teleporting behind or beside the player before leaping forward for a melee attack, which deals considerable damage and is performed rapidly",
+                "it has a fairly large amount of health, with 1000 HP (250 staggered)."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A direct hit from the ballista staggers it at once, and the super shotgun kills it outright at point-blank range. An ice bomb holds it in place so it cannot teleport away.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Prowler_(Doom_Eternal)",
+              "revision": "525679",
+              "quoted": [
+                "the ballista will stagger the prowler instantly on a direct hit, and the super shotgun will kill it instantly at point-blank range.",
+                "Ice bombs should be used to keep it locked in place, preventing it from teleporting away."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Like an imp but bigger, with long claws, purple skin and bony plates jutting from its back. Three eyes sit together in the middle of its face, and its jaw has three parts.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Prowler_(Doom_Eternal)",
+              "revision": "525679",
+              "quoted": [
+                "a humanoid demon of similar stature to the imp, but is larger with purple skin, long claws, and a number of bony plates projecting from its back.",
+                "it has a spider-like cluster of three eyes in the center of its face. It has a tripartite jaw"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It is most dangerous in a group of other demons, because they keep you busy while it sets up its ambush. When it feels in danger it teleports away and tries another surprise attack. As it rushes in from far away it may shoot quick purple energy bolts.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Prowler_(Doom_Eternal)",
+              "revision": "525679",
+              "quoted": [
+                "makes it especially dangerous if it appears among a group of other monsters, as they may keep the player distracted and unable to notice the prowler's presence until it is ready to strike.",
+                "if it perceives itself to be in danger, it will teleport to safety and try to set up another surprise attack.",
+                "It may also fire fast purple energy blasts as it charges if there is enough distance between it and the player."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4406,
+      "name": "Carcass",
+      "kind": "enemy",
+      "main_page": "https://doomwiki.org/wiki/Carcass",
+      "main_revision": "578231",
+      "lines": [
+        {
+          "line": "Summary: A cyborg demon that fires ring-shaped lasers, makes shockwaves along the ground and puts up force fields to protect itself and other demons. It is fairly fragile, with 1,200 health, or 240 while staggered.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Carcass",
+              "revision": "578231",
+              "quoted": [
+                "The carcass can fire ring-shaped lasers from the concave dish on its waist, create shockwaves along the ground with its arm blaster or create a wall-like force field to protect itself or other monsters",
+                "the carcass is relatively fragile, with 1200 HP (240 staggered)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Its force field resists explosives, but the plasma rifle or a blood punch destroys it easily. Shoot the round mark on the tank it carries on its back and it dies at once.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Carcass",
+              "revision": "578231",
+              "quoted": [
+                "The force field is heavily resistant to explosives, but like that of the shield soldiers, it is easily destroyed by the plasma rifle or a blood punch.",
+                "You can instantly kill a carcass by shooting the circle on the tank on its back."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A zombie human's upper body joined to a robot frame with three insect-like legs, a blaster in its right arm and a dish on its waist.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Carcass",
+              "revision": "578231",
+              "quoted": [
+                "It appears to be the upper torso of a zombified human fused with a robotic chassis with three insectile-like legs and a blaster fused into its right arm.",
+                "the concave dish on its waist"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It often puts its shield in front of staggered demons, so you cannot glory kill them easily, or when you hold the rocket launcher or sticky bombs. If the shield is close to the carcass, pop it with the plasma rifle; if not, a couple of shots from the ballista or blasts from the super shotgun should be enough. Up close it does a spinning strike with two hits in a row.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Carcass",
+              "revision": "578231",
+              "quoted": [
+                "The carcass appears to summon its energy shield most often in front of demons in the stagger state, to prevent the Doom Slayer from being able to easily glory kill them, or when the player is equipped with the rocket launcher or sticky bombs.",
+                "If it summons its shield near itself, use the plasma rifle to detonate it, but otherwise a couple of ballista shots and/or super shotgun blasts should do the trick.",
+                "In close quarters, the carcass uses a spinning strike that hits twice in a row."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4407,
+      "name": "Pain elemental",
+      "kind": "enemy",
+      "main_page": "https://doomwiki.org/wiki/Pain_elemental_(Doom_Eternal)",
+      "main_revision": "574469",
+      "lines": [
+        {
+          "line": "Summary: A flying demon that makes lost souls and uses them as attacks: spat out as fast homing shots, thrown down as mines, or fired three at a time. Its health is roughly that of a baron of Hell.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Pain_elemental_(Doom_Eternal)",
+              "revision": "574469",
+              "quoted": [
+                "The pain elemental retains its ability to spawn lost souls from its classic counterpart.",
+                "they will behave like fast homing projectiles that can be shot down before they hit the player.",
+                "the lost soul remains on the ground as a sort of proximity mine",
+                "generate a trio of lost souls and fire them off in a barrage.",
+                "they have health roughly on par with a baron of Hell"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The rocket launcher's lock-on burst mod works well because it cannot dodge the guided missiles; two clear volleys kill it. Like other flying demons, it also takes bonus damage from the ballista.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Pain_elemental_(Doom_Eternal)",
+              "revision": "574469",
+              "quoted": [
+                "The lock-on burst modification for the rocket launcher can effectively deal with pain elementals as they cannot avoid the path of the guided missiles and two unimpeded volleys are sufficient for a kill.",
+                "Like other flying monsters, it takes extra damage from the ballista."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A round, flying, brown demon with one big red eye, a pair of long black horns, muscular arms with big claws and a large mouth with eight mandibles.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Pain_elemental_(Doom_Eternal)",
+              "revision": "574469",
+              "quoted": [
+                "it is a circular, flying, brown demon with a single large red eye with an orange pupil, two long black horns, two muscular arms with prominent claws",
+                "a large mouth like that of the cacodemon with eight mandibles"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It air-dashes away when it sees a weapon pointed at it, so wait until it is busy with something else or just about to attack. It can push its lost souls into your shots as living shields. Thrown lost souls hit harder than a direct attack, and their splash damage makes tight spaces risky. Skip the meat hook: it may catch a lost soul and leave you in a dangerous spot.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Pain_elemental_(Doom_Eternal)",
+              "revision": "574469",
+              "quoted": [
+                "Pain elementals will try to dodge attacks using an air-dash if they notice a weapon being pointed at them, so it is best to wait until it is either distracted or about to attack before shooting it",
+                "pain elementals may try to use their lost souls as living shields by forcing them to move into the path of incoming projectiles.",
+                "Be warned that these proximity mines deal more damage than a direct attack.",
+                "they will inflict splash damage even if a direct hit is avoided.",
+                "Using the meat hook on a pain elemental is not advised, as it may grapple onto a lost soul by accident and leave the player in a potentially fatal position."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4408,
+      "name": "Tyrant",
+      "kind": "enemy",
+      "main_page": "https://doomwiki.org/wiki/Tyrant",
+      "main_revision": "525868",
+      "lines": [
+        {
+          "line": "Summary: A cybernetic demon, the next step on from the classic cyberdemon, that fires missiles from an arm cannon. It comes back as a major enemy, often in pairs in later levels, and it survives one direct BFG hit.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Tyrant",
+              "revision": "525868",
+              "quoted": [
+                "The tyrant is a new monster in Doom Eternal, and the next iteration in the class of cyberdemons.",
+                "The tyrant mainly attacks by firing missiles from its arm cannon.",
+                "The tyrant is a recurring major enemy",
+                "Later levels frequently have them appear in pairs",
+                "As they have enough health to survive a single direct hit from the BFG-9000"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: It turns slowly and its dash is poor, so the meat hook and super shotgun work as long as you stay behind it. The Crucible kills it in one hit.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Tyrant",
+              "revision": "525868",
+              "quoted": [
+                "It is also slow to turn, so dashing around it is a good way to get a hit in.",
+                "they are vulnerable to the meat hook and the super shotgun so long as the player can stay behind them.",
+                "the most effective way to deal with them is to use the Crucible for an instant kill."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A two-legged demon built like the classic cyberdemon: gored belly with exposed ribs and tubing, a weapon in place of its left arm, an energy blade on its right arm, a pair of big horns at each side of the head, and yellowish-white eyes.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Tyrant",
+              "revision": "525868",
+              "quoted": [
+                "It bears a close resemblance to the classic cyberdemon, with a similar suite of cybernetics, a gored abdomen, and a weapon which replaces its left arm.",
+                "its eyes are not red; instead, they are yellowish-white.",
+                "The tyrant's ribs are exposed, with its intestines replaced with tubing.",
+                "minimal cybernetics along its right arm that can be used to project an energy blade.",
+                "The tyrant has two large horns on each side of its head"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If it cannot see you it launches a missile barrage, and glowing runes mark where the missiles land. When it does see you it takes a moment to aim, so attack then. Its laser cannon is announced by a triple beep: duck behind cover, or dash right at the end so its aim is ruined. Up close it slashes with its blade or sends out shockwaves.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Tyrant",
+              "revision": "525868",
+              "quoted": [
+                "If it cannot see the player, it will launch a missile barrage whose points of impact are marked by glowing runes.",
+                "When it sees the player, it takes a moment for it to take aim, so this window of time can be used to attack.",
+                "which is preceded by a very obvious triple beeping noise",
+                "the player should either take cover or dash at the last moment to ruin its aim.",
+                "In close quarters, it will try to slash the player with its blade or use it to release shockwaves."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4409,
+      "name": "Ballista",
+      "kind": "item",
+      "main_page": "https://doomwiki.org/wiki/Ballista",
+      "main_revision": "532382",
+      "lines": [
+        {
+          "line": "Summary: A heavy beam weapon that hits harder per shot than any other weapon before mods, with unmatched accuracy and a slow fire rate. You can get it once you are back from Doom Hunter Base.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Ballista",
+              "revision": "532382",
+              "quoted": [
+                "it fires an energy beam in a straight line, with a slow fire rate compensated for by high attack power (the highest raw damage per shot of any weapon, excluding mods) and unmatched accuracy.",
+                "can be acquired after returning from the Doom Hunter Base."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: The beam goes straight through lined-up fodder demons when it kills them. Each shot uses 25 cells, so save it for weak points that are too far away to reach with the heavy cannon or sticky bombs, for a hot-swap combo with another weapon, or for airborne enemies like the pain elemental, which takes bonus damage from it.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Ballista",
+              "revision": "532382",
+              "quoted": [
+                "Its shots will pierce through targets if it kills them, making it a good option for lined-up fodder demons.",
+                "As it consumes 25 cells per shot, it is best used either to destroy enemy weak points from distances too far for the heavy cannon or the combat shotgun's sticky bombs to hit, as part of a combo with a different weapon during hot swapping, or against flying enemies such as pain elementals to exploit the bonus damage it does against them."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Two mods: Arbalest charges a dart that sticks in an enemy and blows up shortly after, but slows you down and needs a reload between shots. Destroyer Blade, after charging, fires a wide horizontal shot that pierces clustered enemies and uses 50 cells. The recoil can be used to gain air time and push yourself across an arena, and a full load with all ammo upgrades is only ten shots.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Ballista",
+              "revision": "532382",
+              "quoted": [
+                "Following a brief charging period, the ballista will fire a dart-like projectile that lodges into an enemy and explodes after a short time",
+                "it will reduce movement speed when active and needs to be reloaded in between shots.",
+                "After charging, the ballista fires a wide horizontal projectile. The projectile has a piercing effect, allowing it to clear out multiple clustered enemies in one shot.",
+                "It also uses up 50 cells per shot rather than the normal 25.",
+                "the ballista has a noticeable recoil which can be exploited for increased air time and propelling yourself across an arena.",
+                "With all ammo upgrades, it has the least shots on full ammo (ten) of any weapon in the game."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

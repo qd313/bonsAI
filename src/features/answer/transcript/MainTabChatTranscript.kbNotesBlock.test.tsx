@@ -439,6 +439,84 @@ describe("a fenced reply", () => {
     expect(block(container)).toBeNull();
   });
 
+  /* Plan 103 S1 (call 14): while the cover is shut the answer says notes were used, in neutral words. */
+  const caption = (container: HTMLElement): HTMLElement | null => container.querySelector(".bonsai-kb-notes-covered-caption");
+
+  it("draws a neutral caption, naming no note, under an answer whose cover is still shut", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({ askThreadCollapsed: [coveredTurn("t1", "Broken Vessel")], expandedTurnKey: "t1", strategySpoilerMaskingEnabled: true })}
+      />
+    );
+    expect(block(container)).toBeNull();
+    const line = caption(container);
+    expect(line?.textContent).toBe("Notes were used for this answer — show the spoiler to see them");
+    expect(line?.textContent).not.toContain("Broken Vessel");
+    expect(line?.textContent).not.toContain("hollowknight");
+  });
+
+  it("makes the caption no stop for the D-pad: its own parent is the turn slot, nothing focusable inside it", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({ askThreadCollapsed: [coveredTurn("t1", "Broken Vessel")], expandedTurnKey: "t1", strategySpoilerMaskingEnabled: true })}
+      />
+    );
+    const line = caption(container) as HTMLElement;
+    /* The only Focusable around it is the turn's own slot (which flows its children); the caption adds none. */
+    expect(line.closest('[data-decky-ui="Focusable"]')?.className).toBe("bonsai-chat-turn-slot");
+    expect(line.querySelector('[data-decky-ui], button, [tabindex]')).toBeNull();
+    expect(line.hasAttribute("tabindex")).toBe(false);
+  });
+
+  it("swaps the caption for the real notes line when the cover is opened, and back when it is shut again", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({ askThreadCollapsed: [coveredTurn("t1", "Broken Vessel")], expandedTurnKey: "t1", strategySpoilerMaskingEnabled: true })}
+      />
+    );
+    fireEvent.click(container.querySelector(".bonsai-spoiler-reveal-target button") as HTMLElement);
+    expect(caption(container)).toBeNull();
+    expect(block(container)?.textContent).toContain("Broken Vessel");
+
+    fireEvent.click(container.querySelector(".bonsai-spoiler-expanded button") as HTMLElement);
+    expect(block(container)).toBeNull();
+    expect(caption(container)).not.toBeNull();
+  });
+
+  it("draws no caption when the answer used none of the notes, or covers are off, or there are no notes", () => {
+    const covered = coveredTurn("t1", "Broken Vessel");
+    const props = (turn: AskThreadCollapsedTurn, masking: boolean) =>
+      baseProps({ askThreadCollapsed: [turn], expandedTurnKey: turn.id, strategySpoilerMaskingEnabled: masking });
+    usedRule.countEveryNote = false;
+    try {
+      const unrelated = { ...covered, answer: "```bonsai-spoiler\nUse the dash twice.\n```", question: "what now" };
+      expect(caption(render(<MainTabChatTranscript {...props(unrelated, true)} />).container)).toBeNull();
+    } finally {
+      usedRule.countEveryNote = true;
+    }
+    expect(caption(render(<MainTabChatTranscript {...props(covered, false)} />).container)).toBeNull();
+    const noNotes = { ...covered, transparency: { ...covered.transparency!, kb_attached_notes: [] } };
+    expect(caption(render(<MainTabChatTranscript {...props(noNotes, true)} />).container)).toBeNull();
+  });
+
+  it("draws the caption on the live turn too, while the answer is still writing behind a cover", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: true,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "what is that boss",
+          ollamaResponse: "```bonsai-spoiler\nThat's Broken Vessel.\n```",
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note({ name: "Broken Vessel" })] },
+          transparencySnapshot: null,
+          strategySpoilerMaskingEnabled: true,
+        })}
+      />
+    );
+    expect(block(container)).toBeNull();
+    expect(caption(container)?.textContent).toContain("Notes were used for this answer");
+  });
+
   it("keeps a second covered answer's notes hidden after a cover was opened on the first", () => {
     const first = coveredTurn("t1", "Broken Vessel");
     const second = coveredTurn("t2", "Soul Master");

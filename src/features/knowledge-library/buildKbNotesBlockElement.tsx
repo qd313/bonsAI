@@ -223,6 +223,56 @@ export function kbNotesToShow(
 }
 
 /**
+ * Whether this turn's notes line is only waiting for a cover to be opened: the answer used at least one
+ * note and a shut cover is still drawn (kbNotesToShow would show nothing). Drives the caption below.
+ */
+export function kbNotesAreCovered(
+  turn: { question?: string | null; answer?: string | null },
+  maskingEnabled: boolean | undefined,
+  notes: KbAttachedNote[],
+  facts: TurnSpoilerFacts
+): boolean {
+  if (!kbNotesBlockedBySpoiler(turn.answer, maskingEnabled, facts)) return false;
+  return kbNotesUsedByAnswer(notes, turn.answer, turn.question).length > 0;
+}
+
+/**
+ * What the answer says in place of the notes line while its cover is shut (plan 103 call 14): that notes were
+ * used, and what to do to see them -- never a note's name or its source, which could give the cover away.
+ * The wording follows the block's own neutral titles ("Boss note (spoiler)") and the credit line's
+ * "Sources hidden -- open the notes to see them".
+ */
+const KB_NOTES_COVERED_CAPTION = "Notes were used for this answer — show the spoiler to see them";
+
+/**
+ * The one plain line drawn where the notes line will appear. Not a stop for the D-pad: no Focusable, no
+ * button, nothing to press. The cover above it is the control; opening it replaces this line with the real
+ * block (same place, same turn key). The 8 px box under it is the block's own, so the rows below do not move.
+ */
+function buildKbNotesCoveredCaption(turnKey: string): React.ReactElement {
+  return (
+    <div key={`kb-notes-covered-${turnKey}`} className="bonsai-kb-notes-covered-wrap">
+      <div
+        className="bonsai-kb-notes-covered-caption"
+        style={{
+          marginTop: 8,
+          width: "100%",
+          maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
+          boxSizing: "border-box",
+          padding: "0 10px",
+          color: "#a8916a",
+          fontSize: textPx(11),
+          lineHeight: 1.35,
+        }}
+      >
+        {KB_NOTES_COVERED_CAPTION}
+      </div>
+      <div className="bonsai-kb-notes-covered-gap" aria-hidden="true" style={{ height: 8, pointerEvents: "none" }} />
+    </div>
+  );
+}
+
+/**
  * How Show details' credit line treats this turn's spoiler-protected notes (CreditsView). The
  * credit line names every attached note, so without this it gave away the name the block hides.
  * - A protected note the block shows (the answer used it): the whole credit line stays hidden
@@ -355,9 +405,11 @@ export function buildKbNotesBlockElement(args: {
    * are not shown, so an older answer never borrows the newest one's mark.
    */
   markedNow?: readonly KbAttachedNote[];
+  /** True while the notes wait behind a shut cover (kbNotesAreCovered): the caption is drawn instead of the block. */
+  covered?: boolean;
 }): React.ReactElement | null {
-  const { turnKey, notes, open, onToggle, onMoveUp, onMoveDown, headerRef, onCancel, markedNow } = args;
-  if (!notes.length) return null;
+  const { turnKey, notes, open, onToggle, onMoveUp, onMoveDown, headerRef, onCancel, markedNow, covered } = args;
+  if (!notes.length) return covered ? buildKbNotesCoveredCaption(turnKey) : null;
   const headerLabel = kbNotesHeaderLabel(notes, open);
   const extra = notes.length - 1;
   return (

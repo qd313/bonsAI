@@ -137,6 +137,7 @@ import {
   buildKbNotesBlockElement,
   kbAttachedNotesFrom,
   kbNotesToShow,
+  kbNotesAreCovered,
   kbCreditsView,
   focusKbNotesBlock,
   focusUpPastLiveKbNotesBlock,
@@ -534,6 +535,13 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   /* The live turn's notes as its block shows them: the ones the answer used, judged on what has arrived (see the
      block below). The reply row's "the note was wrong" reasons offer the same notes (plan 98). */
   const liveKbNotesShown = kbNotesToShow(
+    { question: liveQuestion, answer: isAsking ? liveResponseBody : lastExchange?.answer ?? "" },
+    strategySpoilerMaskingEnabled,
+    liveKbNotes,
+    liveSpoilerFacts
+  );
+  /* The same notes still waiting for a cover to be opened: the block's place shows a caption meanwhile (call 14). */
+  const liveKbNotesCovered = kbNotesAreCovered(
     { question: liveQuestion, answer: isAsking ? liveResponseBody : lastExchange?.answer ?? "" },
     strategySpoilerMaskingEnabled,
     liveKbNotes,
@@ -1306,8 +1314,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   const downPastUtilityRow = () =>
                     earlier.downBelowRow(turn, nextTurn, (id) => headerRingProps(id).headerNavRef) ||
                     focusDownFromReplyUtilityRowOrPermHint(queryTurnSlot(turn.id));
-                  const kbNotesHere = kbNotesToShow(turn, strategySpoilerMaskingEnabled,
-                    kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)), archivedSpoilerFacts(turn, turnIndex));
+                  const kbNotesAll = kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex));
+                  const kbNotesFacts = archivedSpoilerFacts(turn, turnIndex);
+                  const kbNotesHere = kbNotesToShow(turn, strategySpoilerMaskingEnabled, kbNotesAll, kbNotesFacts);
                   const actionsEl = buildReplyActionsElement({
                     replyKey: turn.id,
                     rating: showFeedbackHere ? liveReplyFeedbackRating : null,
@@ -1345,6 +1354,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                       turnPiece("kb-notes", buildKbNotesBlockElement({
                         turnKey: turn.id,
                         notes: kbNotesHere,
+                        covered: kbNotesAreCovered(turn, strategySpoilerMaskingEnabled, kbNotesAll, kbNotesFacts),
                         markedNow: showFeedbackHere ? markedNow : undefined,
                         open: isKbNotesOpen(turn.id),
                         onToggle: () => toggleKbNotesOpen(turn.id),
@@ -1563,6 +1573,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   return buildKbNotesBlockElement({
                     turnKey: "live",
                     notes: liveKbNotesShown,
+                    covered: liveKbNotesCovered,
                     markedNow,
                     open: isKbNotesOpen("live"),
                     onToggle: () => toggleKbNotesOpen("live"),

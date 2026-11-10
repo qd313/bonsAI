@@ -437,6 +437,424 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 4505,
+      "name": "Charger ledge charges in versus",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/The_Charger",
+      "main_revision": "173623",
+      "lines": [
+        {
+          "line": "Summary: A Charger that carries or knocks survivors off a high ledge can incapacitate or kill them. The wiki calls a charge deadly beside ledges and cliffs.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Charger",
+              "revision": "173623",
+              "part_of_page": "Good Ambush Spots",
+              "quoted": [
+                "Your charge is deadly near ledges and cliffs."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Charger",
+              "revision": "173623",
+              "part_of_page": "Tactics / Survivors",
+              "quoted": [
+                "Avoid situations where the Charger can knock other Survivors off a high ledge, as it will either kill or incapacitate them."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Charger",
+              "revision": "173623",
+              "part_of_page": "Tactics / Infected",
+              "quoted": [
+                "If there's an area where there's a long drop or lethal area with no boundaries (such as a cliff or the top of a building), you should attempt to charge someone off"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: As the Charger, ambush instead of charging from far away, since survivors dodge a long run, and do not spawn too early because your grunts give you away. A charge can start from a high place without stopping, and a survivor knocked aside near a ledge may be left hanging, or fall to their death if knocked far enough.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Charger",
+              "revision": "173623",
+              "part_of_page": "Tactics / Infected",
+              "quoted": [
+                "Avoid charges from a long distance. The Survivors will react quickly enough to dodge you",
+                "Ambushes will maximize your chance at successfully charging an enemy.",
+                "Spawning too early may alert the Survivors to your presence prematurely due to the Charger's loud grunts",
+                "Chargers can begin their charge from a high place without stopping.",
+                "Survivors that are knocked aside might be incapacitated by hanging if they are close to a high ledge when they are hit.",
+                "if they are knocked far enough past the ledge, they may fall to their deaths."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: As a survivor, never jump to dodge a charge, because even a slight height difference can mean heavy fall damage or instant death. Step aside instead, since he cannot change direction once he charges, and keep bots away because they do not try to dodge. Shoving does nothing; only explosives stumble him.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Charger / Survivors",
+              "quoted": [
+                "never try to jump when a Charger is charging. Even a slight height difference can result in catastrophic fall damage or even instant death."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Charger",
+              "revision": "173623",
+              "part_of_page": "Tactics / Survivors",
+              "quoted": [
+                "The Charger can be fought similar to bullfighting.",
+                "Once he charges, he will be unable to change directions and will run into a straight line until he travels far enough or smashes into something.",
+                "Bots do not make any attempt to dodge a Charger's charge, so keep them away from the Charger if one is present.",
+                "The Charger is completely immune to melee shoves, so don't try to shove him."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Charger",
+              "revision": "173623",
+              "part_of_page": "Abilities",
+              "quoted": [
+                "only explosives — other than the Grenade Launcher — will work in stumbling him."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4506,
+      "name": "Surviving Hunters and Jockeys in versus",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/The_Hunter",
+      "main_revision": "173041",
+      "lines": [
+        {
+          "line": "Summary: In versus a Hunter's pounce or a Jockey's landing knocks back survivors standing near the victim, which can leave them hanging from a ledge, so spread out just enough that the knockback does not reach your teammates.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Tactics / Survivors",
+              "quoted": [
+                "the Hunter's pounce will generate knockback to nearby Survivors if it manages to pin someone. Try to stay away from each other, just to the point where the Hunter won't knockback nearby Survivors if he grabs someone."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Jockey",
+              "revision": "172739",
+              "part_of_page": "Tactics / Survivors",
+              "quoted": [
+                "if a Jockey jumps on someone, nearby Survivors will be knocked back, similar to a Hunter pouncing a Survivor with others nearby. In some areas, this can cause Survivors to hang onto a ledge."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Against the Hunter, keep a teammate close, listen for the growl of one crouched and ready to pounce and warn the others, and shove just as the pounce begins to stun him. Versus Hunters often claw instead of pouncing, so a team health bar that drops unusually fast suggests one is nearby.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Hunter / The Survivors",
+              "quoted": [
+                "Always have at least one buddy close at hand.",
+                "Listen for the distinctive growl the Hunter makes when he is crouched and ready to pounce.",
+                "Once you hear the cues, remind the other Survivors of the Hunter's presence",
+                "shove just as the Hunter starts his pounce. This will knock him back with a stun",
+                "On higher difficulties, and in Versus, the Hunter will often use their claw attack instead of pouncing the Survivors.",
+                "If someone's health meter drops unusually fast, it is usually an indicator that a Hunter is attacking nearby."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Against the Jockey, shove him off and shoot him while he is stunned, and keep moving so you are hard to jump on. If one rides you, steer the opposite way to slow him so a teammate can knock him off. Deal first with Jockeys near hazards such as fire.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Jockey / The Survivors",
+              "quoted": [
+                "Use melee shove to knock Jockeys off. They will be stunned so you can shoot them.",
+                "Keep moving so you are a difficult target to pounce on.",
+                "Move in the opposite direction of where the Jockey is steering you. This will make you move extremely slowly, allowing teammates to come and knock the Jockey off.",
+                "prioritize Jockeys if there are any hazards nearby, such as fire"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4507,
+      "name": "Surviving Smokers and Spitters in versus",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Tactics",
+      "main_revision": "173476",
+      "lines": [
+        {
+          "line": "Summary: In versus the Smoker deals damage while he drags his victim. A Spitter has little health, and a few shots from any weapon kill her.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Players / Infected",
+              "quoted": [
+                "The Smoker now deals damage when he is dragging the Survivor."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Spitter / The Survivors",
+              "quoted": [
+                "A Spitter does not have a lot of health, so a few shots from any weapon can kill her instantly."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Smokers tend to strike from behind or above, though some spawn in front of you. A grabbed teammate is freed by killing or shoving the Smoker or by breaking the tongue, which grows back after about 15 seconds.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Smoker / The Survivors",
+              "quoted": [
+                "Smokers tend to attack from behind or above your location, but some will spawn in front of you"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
+              "revision": "173272",
+              "part_of_page": "Abilities",
+              "quoted": [
+                "Survivors can be rescued by killing/shoving the Smoker, or by attacking and breaking the tongue.",
+                "The Smoker's tongue will slowly grow back after being cut off and can be used to attack again after around 15 seconds."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Shoot a Spitter from range with a Hunting Rifle or Sniper Rifle. If you are caught in her spit, get out at once, and after she dies wait for her acid to fade rather than walking around it, because going around or jumping does not work.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Spitter / The Survivors",
+              "quoted": [
+                "Using a Hunting Rifle or a Sniper Rifle should take care of her easily at long range.",
+                "If you are caught in the spit, get away from it as soon as possible.",
+                "When the Spitter dies, she will leave a small pool of acid around her corpse.",
+                "Wait for the acid to disappear before moving further down.",
+                "Never try to go around a Spitter's acid",
+                "Jumping does not work either."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Expect a versus Spitter to spit in your path in a tight hallway, leaving you to wade through the acid or wait for it to fade, which gives her team time to respawn.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Spitter",
+              "revision": "173128",
+              "part_of_page": "Tactics / Infected",
+              "quoted": [
+                "If you are for some reason unable to spit on the Survivors directly in a tight hallway on Versus, spit in their path.",
+                "They will have two choices: Go through the acid and take damage, or wait until it disappears. If they choose to wait, this will allow your teammates time to respawn."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4508,
+      "name": "Surviving the Tank in versus",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Tactics",
+      "main_revision": "173476",
+      "lines": [
+        {
+          "line": "Summary: A versus Tank has 6000 health and is handed straight to an infected player when the survivors enter the area the Director chose for him, and he is aggressive from the start.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Players / Infected",
+              "quoted": [
+                "The Tank has 6000 health points. The Director will also spawn them on the map when the Survivors enter a designed area, and let an Infected player take control immediately"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Tank",
+              "revision": "173469",
+              "part_of_page": "Infected",
+              "quoted": [
+                "The Tank is immediately aggressive"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Fire beats explosives here: set him alight with a Molotov or gas can and he takes damage over time, dying in about 30 seconds from full health, though in versus burning no longer slows him down.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Tank / The Survivors",
+              "quoted": [
+                "Set the Tank on fire by using either a molotov or a gas can.",
+                "great for limited big damage, but not as effective as fire",
+                "fire, which always does guaranteed damage over time to the Tank"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Tank / The Infected",
+              "quoted": [
+                "A Tank at full health that has been set on fire will die in thirty seconds"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Players / Infected",
+              "quoted": [
+                "this loss of speed from fire in Versus was removed by patches in both games in October 2010"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Keep clear of cars, dumpsters, fallen trees and furniture, because he punches them at survivors and a hit incapacitates at once. Keep your distance and do not let him corner you.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Tank / The Survivors",
+              "quoted": [
+                "Keep clear of cars, fallen trees, furniture, and dumpsters if the Tank is nearby.",
+                "which means an immediate incapacitation if said object hits any one of them",
+                "Keep your distance from the Tank if at all possible.",
+                "Never let the Tank back you into a corner as you can't go anywhere, and most likely you will be taken down."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If he is pounding a downed teammate, shoving or hitting him in the back can pull his attention, which shooting does not. A melee swing does 500 damage to him whatever the weapon, and explosives do around 750.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Tank / The Survivors",
+              "quoted": [
+                "another Survivor can aggravate the Tank and possibly draw its attention from its target by shoving and hitting it in the back.",
+                "Shooting a Tank won't have the same effect",
+                "Melee weapons deal 500 damage per swing at the Tank, regardless of what type.",
+                "Explosives deal around 750 damage to the Tank."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4509,
+      "name": "Infected team combinations in versus",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Tactics",
+      "main_revision": "173476",
+      "lines": [
+        {
+          "line": "Summary: The wiki calls coordination the most important factor in a versus match: a lone Hunter is killed before he does real damage, and a lone Smoker's victim is freed without much effort.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Team tactics / The Infected",
+              "quoted": [
+                "This is by far the most important factor in a Left 4 Dead Versus match.",
+                "If a Hunter pounces on his own, he will just get killed before he can do any real damage.",
+                "If a Smoker tries to constrict a Survivor they will just get freed without any real effort"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Open with the Boomer's bile on as many survivors as possible, then let the Hunters pounce from hiding and the Smoker pull someone away. If the bile lands on one survivor, go after the other three.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Team tactics / The Infected",
+              "quoted": [
+                "The best tactic for coordinating your attacks is to let the Boomer vomit on as many people as he can.",
+                "Then, have the Hunters pounce from their hiding spots and make the Smoker pull someone away.",
+                "If the Boomer vomits on one person, then pounce or constrict the other three who haven't got Boomer bile on them!"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A Smoker can drag a victim through a horde to open a path that a Charger then uses to scare off rescuers. A Spitter should spit over someone just pinned, especially by a Charger or Hunter, and a Charger does well to strike just after bile lands, going for the survivors who are not covered.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Smoker / The Infected",
+              "quoted": [
+                "Smokers can drag a Survivor through a horde, creating a passage. The same passage can be used by a Charger to scare off the Survivors who rush to help their ensnared ally."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Spitter / The Infected",
+              "quoted": [
+                "follow an another attacker Special Infected and immediately spit over a survivor they've just pinned especially from the likes of a Charger or Hunter"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Charger",
+              "revision": "173623",
+              "part_of_page": "Tactics / Infected",
+              "quoted": [
+                "Attacking when Boomer bile has just covered the Survivors is a useful tactic. Aim for the Survivors who aren't covered"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Boomer should usually spawn ahead of the survivors and the Smoker behind them to pull someone back, with Hunters near either to use the chaos. A Tank, a Charger or the horde works as a meat shield for a Hunter.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Team tactics / The Infected",
+              "quoted": [
+                "In general, the Boomer should spawn ahead of the Survivors so he can properly ambush while the Smoker should spawn behind to pull someone back. Hunters should be near the Smoker or the Boomer"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Hunter / The Infected",
+              "quoted": [
+                "Hunters work significantly better with a meat shield (the horde, Charger, Tank)."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

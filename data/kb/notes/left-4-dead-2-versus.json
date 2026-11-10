@@ -56,6 +56,61 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "173476",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4505,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Charger ledge charges in versus",
+      "card": "Summary: A Charger that carries or knocks survivors off a high ledge can incapacitate or kill them. The wiki calls a charge deadly beside ledges and cliffs.\nTips: As the Charger, ambush instead of charging from far away, since survivors dodge a long run, and do not spawn too early because your grunts give you away. A charge can start from a high place without stopping, and a survivor knocked aside near a ledge may be left hanging, or fall to their death if knocked far enough.\nTips: As a survivor, never jump to dodge a charge, because even a slight height difference can mean heavy fall damage or instant death. Step aside instead, since he cannot change direction once he charges, and keep bots away because they do not try to dodge. Shoving does nothing; only explosives stumble him.",
+      "source_url": "https://left4dead.fandom.com/wiki/The_Charger",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173623",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4506,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Surviving Hunters and Jockeys in versus",
+      "card": "Summary: In versus a Hunter's pounce or a Jockey's landing knocks back survivors standing near the victim, which can leave them hanging from a ledge, so spread out just enough that the knockback does not reach your teammates.\nTips: Against the Hunter, keep a teammate close, listen for the growl of one crouched and ready to pounce and warn the others, and shove just as the pounce begins to stun him. Versus Hunters often claw instead of pouncing, so a team health bar that drops unusually fast suggests one is nearby.\nTips: Against the Jockey, shove him off and shoot him while he is stunned, and keep moving so you are hard to jump on. If one rides you, steer the opposite way to slow him so a teammate can knock him off. Deal first with Jockeys near hazards such as fire.",
+      "source_url": "https://left4dead.fandom.com/wiki/The_Hunter",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173041",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4507,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Surviving Smokers and Spitters in versus",
+      "card": "Summary: In versus the Smoker deals damage while he drags his victim. A Spitter has little health, and a few shots from any weapon kill her.\nTips: Smokers tend to strike from behind or above, though some spawn in front of you. A grabbed teammate is freed by killing or shoving the Smoker or by breaking the tongue, which grows back after about 15 seconds.\nTips: Shoot a Spitter from range with a Hunting Rifle or Sniper Rifle. If you are caught in her spit, get out at once, and after she dies wait for her acid to fade rather than walking around it, because going around or jumping does not work.\nTips: Expect a versus Spitter to spit in your path in a tight hallway, leaving you to wade through the acid or wait for it to fade, which gives her team time to respawn.",
+      "source_url": "https://left4dead.fandom.com/wiki/Tactics",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173476",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4508,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Surviving the Tank in versus",
+      "card": "Summary: A versus Tank has 6000 health and is handed straight to an infected player when the survivors enter the area the Director chose for him, and he is aggressive from the start.\nTips: Fire beats explosives here: set him alight with a Molotov or gas can and he takes damage over time, dying in about 30 seconds from full health, though in versus burning no longer slows him down.\nTips: Keep clear of cars, dumpsters, fallen trees and furniture, because he punches them at survivors and a hit incapacitates at once. Keep your distance and do not let him corner you.\nTips: If he is pounding a downed teammate, shoving or hitting him in the back can pull his attention, which shooting does not. A melee swing does 500 damage to him whatever the weapon, and explosives do around 750.",
+      "source_url": "https://left4dead.fandom.com/wiki/Tactics",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173476",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4509,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Infected team combinations in versus",
+      "card": "Summary: The wiki calls coordination the most important factor in a versus match: a lone Hunter is killed before he does real damage, and a lone Smoker's victim is freed without much effort.\nTips: Open with the Boomer's bile on as many survivors as possible, then let the Hunters pounce from hiding and the Smoker pull someone away. If the bile lands on one survivor, go after the other three.\nTips: A Smoker can drag a victim through a horde to open a path that a Charger then uses to scare off rescuers. A Spitter should spit over someone just pinned, especially by a Charger or Hunter, and a Charger does well to strike just after bile lands, going for the survivors who are not covered.\nTips: The Boomer should usually spawn ahead of the survivors and the Smoker behind them to pull someone back, with Hunters near either to use the chaos. A Tank, a Charger or the horde works as a meat shield for a Hunter.",
+      "source_url": "https://left4dead.fandom.com/wiki/Tactics",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173476",
+      "crawled_at": "2026-11-10"
     }
   ]
 }

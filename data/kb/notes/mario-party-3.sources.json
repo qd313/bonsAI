@@ -5,7 +5,7 @@
   "game_id": 28,
   "game": "Mario Party 3",
   "read_on": "2026-11-09",
-  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://www.mariowiki.com/api.php --titles <pages>, run through .scratch/fetch_by_title.py because the wiki's firewall refused the reader's oldid= render call tonight (HTTP 403); the wrapper asks for the page by title instead and refuses the page if the revision returned differs from the one the reader resolved. Page text as rendered by the wiki, link markup removed. Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named (a quote with ' ... ' is several fragments in order, used for table rows). Several Super Mario Wiki pages describe the whole series; a line states a Mario Party 3 fact only where the page says so for Mario Party 3, or says Mario Party 3 behaves as an earlier game does, and a line says so when it does.",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://www.mariowiki.com/api.php --titles <pages>, run through .scratch/fetch_by_title.py because the wiki's firewall refused the reader's oldid= render call tonight (HTTP 403); the wrapper asks for the page by title instead and refuses the page if the revision returned differs from the one the reader resolved. Page text as rendered by the wiki, link markup removed. Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named (a table row is given as one quote per cell, listed in the row's order, so each quote is a word-for-word piece of the page). Several Super Mario Wiki pages describe the whole series; a line states a Mario Party 3 fact only where the page says so for Mario Party 3, or says Mario Party 3 behaves as an earlier game does, and a line says so when it does.",
   "sections": [
     {
       "section_id": 3000,
@@ -15,75 +15,68 @@
       "main_revision": "5532404",
       "lines": [
         {
-          "line": "Summary: A ghost found on every board that steals coins or a Star from another player on behalf of whoever uses it, and the Boo Bell item calls one up on demand. The wiki's Boo page says Boos behave in Mario Party 3 exactly as in the previous two games.",
+          "line": "Summary: A ghost that is a feature on every board and steals coins or a Star from another player; the Boo Bell item calls one up on demand, and a Boo is also a Duel Mode partner.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo",
               "revision": "5532404",
               "quoted": [
-                "Boos are features on every board, behaving identically as in the previous two games. They are part of the returning Boo Bell item once more."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Boo",
-              "revision": "5532404",
-              "quoted": [
-                "they provide the player character with the option stealing either a number of coins from an opponent for free or a Star for 50 coins, on their behalf."
+                "Boos are features on every board",
+                "They are part of the returning Boo Bell item once more.",
+                "One is partnered with Yoshi by default in Duel Mode Partners"
               ]
             },
             {
               "page": "https://www.mariowiki.com/Boo_Bell",
               "revision": "5443572",
               "quoted": [
-                "Its use is to ring for Boo and ask him to steal coins or a star"
+                "Boo will steal coins or a star from another player if you use the Boo Bell to ring him up."
               ]
             }
           ]
         },
         {
-          "line": "Weak points: If a Boo goes after your coins you can fight it off by pressing the A button quickly (the Mario Party 2 rule, which the Boo page says Boos still follow in Mario Party 3). Holding a Boo Repellant makes the Boo flee without stealing anything.",
+          "line": "Weak points: Holding a Boo Repellant makes a Boo flee without stealing anything: the item activates by itself when Boo tries to steal coins or a Star from you. As a duel partner, a Boo that is attacked counterattacks for equal damage before disappearing, but it does not counterattack a Thwomp, and a Chain Chomp only if the Boo is directly in front.",
           "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Boo",
-              "revision": "5532404",
-              "quoted": [
-                "If the Boo tries to steal Coins, the opponent can fight it off by pressing the A button quickly.",
-                "Boos are features on every board, behaving identically as in the previous two games."
-              ]
-            },
             {
               "page": "https://www.mariowiki.com/Boo_Repellant",
               "revision": "5499703",
               "quoted": [
                 "When Boo tries to steal coins or a Star from a player holding a Boo Repellant, the item automatically activates, spraying gas at Boo and causing him to flee without stealing anything."
               ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: Usually a white round ghost with stubby arms and a small tail, with a wide smile showing four upper fangs and a large tongue.",
-          "drawn_from": [
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "If attacked, will counter-attack for equal damage before disappearing."
+              ]
+            },
             {
               "page": "https://www.mariowiki.com/Boo",
               "revision": "5532404",
               "quoted": [
-                "Boos are usually white spherical ghosts with stubby arms and a small tail behind them.",
-                "They have a mouth usually open in a wide smile, with four upper fangs and a large tongue sticking out of it."
+                "it counterattacks an opponent (except Thwomps) to deliver equal damage, and does this to Chain Chomp only if it is directly in front."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Under the Mario Party 2 rules, which the Boo page says carry over, Boo charges five coins to steal coins and can take at most 30 coins or one Star. On Waluigi's Island a Boo instead offers you two paths, one of them rigged to send you back to the start. Boo is also a Duel Mode partner: Yoshi starts with one, and it counterattacks for equal damage.",
+          "line": "Tips: On Waluigi's Island a Boo instead offers you two paths, one of them rigged to send you back to the start. A Boo summoned with the Boo Bell asks whom you want him to steal from and what to steal, and Yoshi starts a Duel Mode game with a Boo as his partner.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo",
               "revision": "5532404",
               "quoted": [
-                "Boo now charges five coins for stealing coins, of which it can take up to thirty of.",
-                "Additionally, the Boo can only steal a maximum of 30 coins or a maximum of one Star.",
                 "Boos have a unique role in Waluigi's Island, where they present two paths to the player character upon being encountered: one of them is rigged and leads to the start, while the other allows the player character to continue along.",
-                "One is partnered with Yoshi by default in Duel Mode Partners; it counterattacks an opponent (except Thwomps) to deliver equal damage"
+                "One is partnered with Yoshi by default in Duel Mode Partners"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "The player who uses this item summons Boo. Boo then asks who the player wants Boo to steal from and what to steal."
               ]
             }
           ]
@@ -98,20 +91,14 @@
       "main_revision": "5520638",
       "lines": [
         {
-          "line": "Summary: Landing on a Bowser Space makes Bowser appear, and he usually tries to steal coins, may give you items, or may curse every player. Bowser Spaces are fairly rare, one to five per board by default.",
+          "line": "Summary: Landing on a Bowser Space makes Bowser appear, and he usually tries to steal coins, may give you items, or may curse every player.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_3",
               "revision": "5520638",
               "quoted": [
-                "Bowser Space ... If this space is landed on, then Bowser appears. He usually tries to steal Coins from players. He may also give players certain items, or cast curses on all players."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Bowser_Space",
-              "revision": "5532948",
-              "quoted": [
-                "Bowser Spaces tend to be fairly rare, with one to five on each board by default"
+                "Bowser Space",
+                "If this space is landed on, then Bowser appears. He usually tries to steal Coins from players. He may also give players certain items, or cast curses on all players."
               ]
             }
           ]
@@ -183,8 +170,10 @@
               "page": "https://www.mariowiki.com/Mario_Party_3",
               "revision": "5520638",
               "quoted": [
-                "Game Guy Space ... Players who land on this space have to hand over all of their Coins to Game Guy.",
-                "Game Guy Space ... When a player lands on this space, then they must hand over all of their Coins to Game Guy."
+                "Game Guy Space",
+                "Players who land on this space have to hand over all of their Coins to Game Guy.",
+                "Game Guy Space",
+                "When a player lands on this space, then they must hand over all of their Coins to Game Guy."
               ]
             }
           ]
@@ -255,7 +244,7 @@
       "main_revision": "5466203",
       "lines": [
         {
-          "line": "Summary: The sour tree on the Woody Woods board: land on one of the Happening Spaces around him and he makes you pick a fruit that costs you, either a Minus Coin Fruit (lose five coins) or a Reverse Block Fruit (roll and move backwards).",
+          "line": "Summary: Woody's hostile counterpart on the Woody Woods board: land on one of the Happening Spaces around him and he makes you pick a fruit that costs you, either a Minus Coin Fruit (lose five coins) or a Reverse Block Fruit (roll and move backwards).",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Evil_Woody",
@@ -294,7 +283,7 @@
           ]
         },
         {
-          "line": "Looks like: The mirror image of Woody: blue with purple leaves and a permanently angry expression.",
+          "line": "Looks like: A tree whose color palette is the inverse of Woody's, blue with purple leaves, with a perpetually angry expression.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Evil_Woody",
@@ -341,7 +330,7 @@
       "main_revision": "5162335",
       "lines": [
         {
-          "line": "Summary: Deep Bloober Sea's sea creatures work against you: a Sushi in a submarine can blast you onto the other path, a giant vacuum anglerfish can suck you in and spit you out, and a giant Blooper Baby calls its mother to carry you across the board.",
+          "line": "Summary: Deep Bloober Sea's sea creatures can move you around the board: a Sushi in a submarine can blast you onto the other path, a giant vacuum anglerfish can suck you in and spit you out, and a giant Blooper Baby calls its mother, whose tentacle takes you to the other side of the board.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Deep_Bloober_Sea",
@@ -355,7 +344,7 @@
           ]
         },
         {
-          "line": "Weak points: At the submarine junction three of the four buttons do nothing and one fires a torpedo that blasts you to the opposite path; the buttons do not reset until the incorrect one is chosen, and sometimes the Sushi fails to notice you at all. Against the anglerfish, keep tapping the button to swim against the suction, or you are sucked in.",
+          "line": "Weak points: At the submarine junction three of the four buttons do nothing and one fires a torpedo that blasts you to the opposite path; the buttons do not reset until the incorrect one is chosen, and sometimes the Sushi fails to notice you at all. Against the anglerfish, tap the button to swim against the suction, or you are sucked in.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Deep_Bloober_Sea",
@@ -391,9 +380,12 @@
               "quoted": [
                 "The arrow on the fish spins around, then points to the bottom, the front, or the right.",
                 "landing near a Sushi, Boo, or back at the start.",
-                "Bowser Spaces ... 5",
-                "Game Guy Spaces ... 2",
-                "Total of Spaces ... 93"
+                "Bowser Spaces",
+                "5",
+                "Game Guy Spaces",
+                "2",
+                "Total of Spaces",
+                "93"
               ]
             }
           ]
@@ -442,7 +434,7 @@
           ]
         },
         {
-          "line": "Looks like: A circle of dynamite with a number in the middle of the explosives, set at five at the start, and a gear in the center of the board with four flashing arrows.",
+          "line": "Looks like: An island of dynamite with a number in the middle of the explosives, which starts at five, and a gear in the center of the board with four flashing arrows.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Waluigi%27s_Island",
@@ -485,7 +477,12 @@
               "page": "https://www.mariowiki.com/Mario_Party_3",
               "revision": "5520638",
               "quoted": [
-                "Chain Chomp ... 1 ... 2 ... -6 ... None ... Attacks opponent and all partners simultaneously."
+                "Chain Chomp",
+                "1",
+                "2",
+                "-6",
+                "None",
+                "Attacks opponent and all partners simultaneously."
               ]
             },
             {
@@ -498,20 +495,13 @@
           ]
         },
         {
-          "line": "Weak points: Its attack is 1. A Boo partner hits back at a Chain Chomp's multi-attack only if the Boo is directly in front of the attacking Chain Chomp.",
+          "line": "Weak points: A Boo partner hits back at a Chain Chomp's multi-attack only if the Boo is directly in front of the attacking Chain Chomp.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_3",
               "revision": "5520638",
               "quoted": [
                 "Will not attack back if hit by a Thwomp or a Chain Chomp in its multi-attack if it is not directly in front of the attacking Chain Chomp."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Chain_Chomp",
-              "revision": "5536195",
-              "quoted": [
-                "an attack of 1"
               ]
             }
           ]
@@ -537,7 +527,9 @@
               "page": "https://www.mariowiki.com/Mario_Party_3",
               "revision": "5520638",
               "quoted": [
-                "Chain Chomp ... None ... Attacks opponent and all partners simultaneously.",
+                "Chain Chomp",
+                "None",
+                "Attacks opponent and all partners simultaneously.",
                 "Powered Up: It grows to the size of a Shark Chomp, jumps up, and then body slams all opponents.",
                 "The following combinations causes the Millennium Star to comment on it, but the attack does not get raised.",
                 "Bob-omb and Chomp make a dangerous duo!"
@@ -575,8 +567,15 @@
           ]
         },
         {
-          "line": "Weak points: It never hurts your hearts, only your partners. A Boo partner that a Thwomp defeats does not hit back as it normally would.",
+          "line": "Weak points: Used against you, it takes out your partners in one hit and does nothing to you, the player. A Boo partner that a Thwomp defeats does not hit back as it normally would.",
           "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "He can take out your opponent's partner in one blow but won't touch your opponent."
+              ]
+            },
             {
               "page": "https://www.mariowiki.com/Thwomp",
               "revision": "5542350",
@@ -587,15 +586,14 @@
           ]
         },
         {
-          "line": "Looks like: Series pages describe Thwomps as living stone blocks, usually rectangular and spiked, often with an angry face.",
+          "line": "Looks like: A blue, cubic stone: in the first six Mario Party console games Thwomps use a more cubic version of their Super Mario 64 design.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Thwomp",
               "revision": "5542350",
               "quoted": [
-                "Thwomps are sentient stone blocks",
-                "spike-encrusted living stones, which are rectangular in shape.",
-                "are often seen with an angry expression on their face."
+                "Thwomps use a more cubic version of their Super Mario 64 design in the first six console games and Mario Party Advance.",
+                "These Thwomps now have their modern facial design, but retain their original blue, cubic shape."
               ]
             }
           ]
@@ -644,7 +642,8 @@
               "page": "https://www.mariowiki.com/Mario_Party_3",
               "revision": "5520638",
               "quoted": [
-                "Boo Repellant ... 10 Coins"
+                "Boo Repellant",
+                "10 Coins"
               ]
             }
           ]
@@ -691,7 +690,9 @@
               "page": "https://www.mariowiki.com/Mario_Party_3",
               "revision": "5520638",
               "quoted": [
-                "Boo Bell ... The player who uses this item summons Boo. Boo then asks who the player wants Boo to steal from and what to steal. ... 15 Coins"
+                "Boo Bell",
+                "The player who uses this item summons Boo. Boo then asks who the player wants Boo to steal from and what to steal.",
+                "15 Coins"
               ]
             },
             {
@@ -765,7 +766,9 @@
               "revision": "5473170",
               "quoted": [
                 "A Plunder Chest is a recurring item in the Mario Party series. It is a treasure chest that can steal an item from another player.",
-                "Mario Party 3 ... 10 Coins ... Only available in Baby Bowser's Shop.",
+                "Mario Party 3",
+                "10 Coins",
+                "Only available in Baby Bowser's Shop.",
                 "In Mario Party 2 and Mario Party 3, it is Princess Peach's favorite item"
               ]
             },
@@ -773,7 +776,8 @@
               "page": "https://www.mariowiki.com/Mario_Party_3",
               "revision": "5520638",
               "quoted": [
-                "Plunder Chest ... 10 Coins"
+                "Plunder Chest",
+                "10 Coins"
               ]
             }
           ]
@@ -833,7 +837,9 @@
               "page": "https://www.mariowiki.com/Mario_Party_3",
               "revision": "5520638",
               "quoted": [
-                "Lucky Lamp ... When used, the Mushroom Jeanie appears. She then moves the Star somewhere else, essentially making it the counter-part of the Magic Lamp. ... 10 Coins"
+                "Lucky Lamp",
+                "When used, the Mushroom Jeanie appears. She then moves the Star somewhere else, essentially making it the counter-part of the Magic Lamp.",
+                "10 Coins"
               ]
             },
             {
@@ -900,7 +906,8 @@
               "page": "https://www.mariowiki.com/Mario_Party_3",
               "revision": "5520638",
               "quoted": [
-                "When used, the player calls Bowser. Bowser then asks who is calling him, the player chooses one of the players (can be the caller). Bowser then performs his events to that player as if the player landed on a Bowser Space. ... 10 Coins"
+                "When used, the player calls Bowser. Bowser then asks who is calling him, the player chooses one of the players (can be the caller). Bowser then performs his events to that player as if the player landed on a Bowser Space.",
+                "10 Coins"
               ]
             },
             {

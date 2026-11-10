@@ -1,0 +1,50 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 2800,
+      "game_id": 26,
+      "section_type": "enemy",
+      "name": "Bowser Space (Bowser's roulette)",
+      "card": "Summary: A board space that brings Bowser out to take your coins. In the first Mario Party you spin a roulette that picks one event, from a plain coin fine to a minigame where the losers pay him.\nWeak points: Where the event is a minigame you can keep your coins by winning it: only the winner of Bowser Balloon Burst keeps them, in Bowser's Face Lift only players who score fewer than 90 points pay, and in Bowser's Tug o' War only the losing side pays.\nTips: Coins for Bowser takes 10 to 50 coins, and Bowser Revolution takes everyone's coins and splits them evenly among all the players. In Bowser's Chance Time the coins always go to Bowser, and the roulette also lists 100 Star Present, 1000 Coin Present and Star Steal, which the cursor never lands on.\nTips: With no coins you are not left empty-handed: Bowser gives you 10 coins in exchange for one Star if you have a Star, and 20 coins if you have no Star either.",
+      "source_url": "https://www.mariowiki.com/Bowser_Space",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5532948",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2801,
+      "game_id": 26,
+      "section_type": "enemy",
+      "name": "Boo",
+      "card": "Summary: A ghost on the boards that steals for whoever passes it: coins from an opponent for free, or a Star for 50 coins. Boos are on every board map except Peach's Birthday Cake.\nWeak points: A Boo only steals when the player who passes it chooses to. The 500-coin No Boo item from the Mushroom Shop keeps Boo off the map, though it does not work on some maps.\nTips: On Luigi's Engine Room every path ends in Warp Pipes that lead to Boo, near the start, and on Bowser's Magma Mountain the free roulette at the purple Stone Head can send you to Boo. DK's Jungle Adventure is the only board with two Boos.",
+      "source_url": "https://www.mariowiki.com/Boo",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5532404",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2802,
+      "game_id": 26,
+      "section_type": "enemy",
+      "name": "Whomp (DK's Jungle Adventure)",
+      "card": "Summary: A guard that blocks a junction on DK's Jungle Adventure until you pay 10 coins. There are three of them.\nWeak points: Paying ten coins is the only way past a Whomp, but you can choose the route it does not guard, and then it blocks the other path after you move past it, which opens the first path for the other three players.\nTips: A Whomp keeps blocking the same path against the other players unless they pay as well. A Coin Stone is a separate gate: you can only pass it with 20 coins, and the path behind it is Bowser's, where you are forced to buy a useless Gold-plated Bowser Statue for ten coins.",
+      "source_url": "https://www.mariowiki.com/Whomp",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5536581",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2803,
+      "game_id": 26,
+      "section_type": "enemy",
+      "name": "Thwomps (Yoshi's Tropical Island)",
+      "card": "Summary: Two toll guards on the bridges between the two islands of Yoshi's Tropical Island. Each asks a fee to let you cross, starting at 1 coin and rising to a limit of 50.\nWeak points: Each Thwomp keeps its own fee, and the next player to cross must pay at least one coin more than the last, so crossing right behind someone costs more. A player who cannot afford the toll has to stay on the same island.\nLooks like: The booklet calls them Blue Thwomps, and in the first six console games Thwomps use a more cubic version of their Super Mario 64 design.\nTips: The Happening Spaces make Bubba the fish take Toad to the opposite island, with Bowser taking his place, and Bowser sells defective Bowser Tubes for 30 coins. You pass either Toad or Bowser every time you circle an island.",
+      "source_url": "https://www.mariowiki.com/Thwomp",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5542350",
+      "crawled_at": "2026-11-09"
+    }
+  ]
+}

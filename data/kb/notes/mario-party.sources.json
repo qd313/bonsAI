@@ -1,0 +1,299 @@
+{
+  "wiki": "Super Mario Wiki (https://www.mariowiki.com/api.php)",
+  "licence_printed_by_fetcher": "Super Mario Wiki (MediaWiki 1.43.11) licence: Attribution-ShareAlike 4.0 International https://creativecommons.org/licenses/by-sa/4.0/",
+  "licence_stored": "CC-BY-SA-4.0 (the fetcher prints 'Attribution-ShareAlike 4.0 International'; the library stores the versioned form, as for the Super Mario 64 and Mario Kart 64 notes)",
+  "game_id": 26,
+  "game": "Mario Party",
+  "read_on": "2026-11-09",
+  "how_read": "Pages read with scripts/kb/fetch_wiki_live_pages.py's own code through a small wrapper (.scratch/fetch_by_page.py, not committed). On 2026-11-09 mariowiki.com answered the reader's request by revision id (action=parse&oldid=...) and its plain-page fallback with HTTP 403, but answered the same render call asked by page name (action=parse&page=...). The wrapper changes only that one call: the licence line, the revision lookup and the text extraction are the reader's own, and the wrapper checks the revision the wiki rendered is the revision the reader looked up (no mismatch warning appeared). The revision below is the one the reader printed. Every quoted fragment was checked, by script, to occur word for word in the fetched page text (whitespace collapsed). The pages are kept in build/wiki-live/mariowiki/ in the helper's copy. Several pages describe the whole series; a line states a first-game fact only where the page says so for Mario Party (a page section for the first game, or a board or shop table of the first game).",
+  "sections": [
+    {
+      "section_id": 2800,
+      "name": "Bowser Space (Bowser's roulette)",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Bowser_Space",
+      "main_revision": "5532948",
+      "lines": [
+        {
+          "line": "Summary: A board space that brings Bowser out to take your coins. In the first Mario Party you spin a roulette that picks one event, from a plain coin fine to a minigame where the losers pay him.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "Any player who lands on this space will meet Bowser, who triggers a roulette."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bowser_Space",
+              "revision": "5532948",
+              "quoted": [
+                "In the first Mario Party, Bowser appears to the player who lands on the Bowser Space in the usual background used for meeting characters on the board and forces them to spin a roulette wheel to decide the event.",
+                "Coins for Bowser: Bowser takes 10–50 Coins from that player.",
+                "Afterward, everyone aside from the winner of the minigame loses Coins to Bowser."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Where the event is a minigame you can keep your coins by winning it: only the winner of Bowser Balloon Burst keeps them, in Bowser's Face Lift only players who score fewer than 90 points pay, and in Bowser's Tug o' War only the losing side pays.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser_Space",
+              "revision": "5532948",
+              "quoted": [
+                "Bowser Balloon Burst: The four players play the minigame Balloon Burst. Afterward, everyone aside from the winner of the minigame loses Coins to Bowser.",
+                "Afterward, players that score fewer than 90 points lose Coins to Bowser.",
+                "Afterward, the losing side loses Coins to Bowser, but if the minigame ends in a tie, everybody loses 10–50 Coins."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Coins for Bowser takes 10 to 50 coins, and Bowser Revolution takes everyone's coins and splits them evenly among all the players. In Bowser's Chance Time the coins always go to Bowser, and the roulette also lists 100 Star Present, 1000 Coin Present and Star Steal, which the cursor never lands on.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser_Space",
+              "revision": "5532948",
+              "quoted": [
+                "Coins for Bowser: Bowser takes 10–50 Coins from that player.",
+                "Bowser Revolution: Bowser takes everyone's Coins and splits them evenly among all the players.",
+                "it is rigged so that Bowser is always on the receiving end of the trade",
+                "100 Star Present / 1000 Coin Present / Star Steal: These events' names are displayed in yellow text on the roulette wheel. The cursor never lands on them."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: With no coins you are not left empty-handed: Bowser gives you 10 coins in exchange for one Star if you have a Star, and 20 coins if you have no Star either.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser_Space",
+              "revision": "5532948",
+              "quoted": [
+                "If the player has at least one Star but no Coins, Bowser gives them 10 Coins in exchange for one Star.",
+                "If the player does not have any Coins or Stars, Bowser gives them 20 Coins."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2801,
+      "name": "Boo",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Boo",
+      "main_revision": "5532404",
+      "lines": [
+        {
+          "line": "Summary: A ghost on the boards that steals for whoever passes it: coins from an opponent for free, or a Star for 50 coins. Boos are on every board map except Peach's Birthday Cake.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Boo",
+              "revision": "5532404",
+              "quoted": [
+                "are recurring ghost enemies",
+                "Boos are on every board map except Peach's Birthday Cake, and they provide the player character with the option stealing either a number of coins from an opponent for free or a Star for 50 coins, on their behalf."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A Boo only steals when the player who passes it chooses to. The 500-coin No Boo item from the Mushroom Shop keeps Boo off the map, though it does not work on some maps.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Boo",
+              "revision": "5532404",
+              "quoted": [
+                "they provide the player character with the option stealing either a number of coins from an opponent for free or a Star for 50 coins, on their behalf."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "No Boo || 500 Coins || Boo won't appear on the map, but it won't work on some maps."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: On Luigi's Engine Room every path ends in Warp Pipes that lead to Boo, near the start, and on Bowser's Magma Mountain the free roulette at the purple Stone Head can send you to Boo. DK's Jungle Adventure is the only board with two Boos.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Luigi%27s_Engine_Room",
+              "revision": "5475503",
+              "quoted": [
+                "No matter where the players go, all paths end in Warp Pipes that lead to Boo, who is near the start."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bowser%27s_Magma_Mountain",
+              "revision": "5504637",
+              "quoted": [
+                "Getting the Star picture takes them to Boo, and Bowser's face takes them to Bowser"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "Eventually, the player will reach a purple-colored Stone Head, who will offer the same roulette block, except free of charge."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
+              "revision": "5475500",
+              "quoted": [
+                "It is also the only stage with two Boos."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2802,
+      "name": "Whomp (DK's Jungle Adventure)",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Whomp",
+      "main_revision": "5536581",
+      "lines": [
+        {
+          "line": "Summary: A guard that blocks a junction on DK's Jungle Adventure until you pay 10 coins. There are three of them.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Whomp",
+              "revision": "5536581",
+              "quoted": [
+                "Whomps guard some junctions in DK's Jungle Adventure in Mario Party. There are three Whomps, and paying them ten Coins is required to pass."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Paying ten coins is the only way past a Whomp, but you can choose the route it does not guard, and then it blocks the other path after you move past it, which opens the first path for the other three players.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Whomp",
+              "revision": "5536581",
+              "quoted": [
+                "paying them ten Coins is required to pass.",
+                "If a player chooses the route not guarded by a Whomp, it begins to block the route instead."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
+              "revision": "5475500",
+              "quoted": [
+                "If a player does not pay Whomp, it blocks the other path after they move past it, which opens the initial path for the three other players."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A Whomp keeps blocking the same path against the other players unless they pay as well. A Coin Stone is a separate gate: you can only pass it with 20 coins, and the path behind it is Bowser's, where you are forced to buy a useless Gold-plated Bowser Statue for ten coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
+              "revision": "5475500",
+              "quoted": [
+                "Whomp continues to block the same path against other players unless they also pay.",
+                "If a player encounters a Coin Stone, they can only pass it if they have 20 Coins.",
+                "If the player chooses to take Bowser's path (behind a Coin Stone), they are forced to buy a useless Gold-plated Bowser Statue for ten Coins."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2803,
+      "name": "Thwomps (Yoshi's Tropical Island)",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Thwomp",
+      "main_revision": "5542350",
+      "lines": [
+        {
+          "line": "Summary: Two toll guards on the bridges between the two islands of Yoshi's Tropical Island. Each asks a fee to let you cross, starting at 1 coin and rising to a limit of 50.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Tropical_Island",
+              "revision": "5475501",
+              "quoted": [
+                "Two Thwomps block the bridges to the opposite island, and request a fee from players if they want to pass to the other island.",
+                "The fee always starts at 1 Coin, but goes up by at least one Coin each time (at payers' discretion) until it reaches the limit of 50 Coins (in Mario Party"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Thwomp",
+              "revision": "5542350",
+              "quoted": [
+                "Up to fifty coins can be paid to the Thwomp before resetting."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Each Thwomp keeps its own fee, and the next player to cross must pay at least one coin more than the last, so crossing right behind someone costs more. A player who cannot afford the toll has to stay on the same island.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Tropical_Island",
+              "revision": "5475501",
+              "quoted": [
+                "and the two Thwomps do not share the same fee.",
+                "must remain on the same island if they cannot afford to pay the toll to cross."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Thwomp",
+              "revision": "5542350",
+              "quoted": [
+                "when another player tries to pass the Thwomp, they must pay at least one more coin than the previous player."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: The booklet calls them Blue Thwomps, and in the first six console games Thwomps use a more cubic version of their Super Mario 64 design.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Tropical_Island",
+              "revision": "5475501",
+              "quoted": [
+                "the Blue Thwomps guarding the bridges continue to raise the price of passage."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Thwomp",
+              "revision": "5542350",
+              "quoted": [
+                "Thwomps use a more cubic version of their Super Mario 64 design in the first six console games and Mario Party Advance."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Happening Spaces make Bubba the fish take Toad to the opposite island, with Bowser taking his place, and Bowser sells defective Bowser Tubes for 30 coins. You pass either Toad or Bowser every time you circle an island.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "The Happening Spaces make Bubba the fish take Toad to the opposite island, Bowser taking his place. Bowser sells defective Bowser Tubes to players for 30 Coins."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Tropical_Island",
+              "revision": "5475501",
+              "quoted": [
+                "a player must pass either Toad (Toadette in Superstars) or Bowser every time they circle an island"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

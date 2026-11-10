@@ -1,6 +1,7 @@
 # 17 — KB online / versus strategy content
 
-**Status:** `NOT STARTED` — discovery locked 2026-08-09 (maintainer chat).
+**Status:** `IN PROGRESS` — discovery locked 2026-08-09 (maintainer chat). Stage 1's groundwork landed
+2026-11-09 in plan 103 lane V1; the first notes and the finale rule follow in plan 103 lanes V2 and R2.
 **Overall effort:** ★★★★ (matches [roadmap.md](../roadmap.md) Backlog § Knowledge base).
 **Roadmap:** [KB online / versus strategy content](../roadmap-kb.md) · related [KB visual maps](../roadmap-kb.md) (later wave in this plan).
 **Adjacent:** [knowledge-base.md](../knowledge-base.md) · [15-corpus-licensing-attribution-plan.md](../../../bonsAI-workshop/archive/15-corpus-licensing-attribution-plan.md) · [spoiler-constitution.md](spoiler-constitution.md) · [rag-eval-query-style.md](../../../bonsAI-workshop/audit/rag-eval-query-style.md) · eval fixture `tests/fixtures/kb_eval_v2.json`.
@@ -17,15 +18,20 @@ bake-off).
 
 **Line numbers drift.** Re-grep before editing.
 
+**File paths refreshed 2026-11-09** (plan 103 lane V1). The August paths had moved: the spoiler risk file is now
+`py_modules/backend/spoilers/spoiler_risk_service.py`, the chip wording is in
+`py_modules/backend/knowledge/knowledge_base_chips.py` (not the service file), the prompts are under
+`py_modules/backend/prompts/`, and the corpus builder is `scripts/kb/build_rag_db.py`.
+
 ## Progress
 
 | Task | Title | ★ | State |
 |---|---|---|---|
 | OV-0 | Discovery lock (this doc) | ★ | ✅ Done 2026-08-09 |
-| OV-1.1…1.4 | Schema, spoiler table, finale prompt rule | ★★ | ☐ Not started |
-| OV-2.1…2.4 | L4D2 versus **role cards** + eval sign-off (first ship gate) | ★★★ | ☐ Not started |
-| OV-3.1…3.3 | L4D2 deepen — callouts, survival, realism, No Mercy versus | ★★★ | ☐ Not started |
-| OV-4.1…4.4 | CS2 (`730`) — licence gate, aliases, starter cards | ★★★★ | ☐ Not started |
+| OV-1.1…1.4 | Schema, spoiler table, finale prompt rule | ★★ | ▶ 1.1, 1.2 and 1.4 ✅ 2026-11-09 (plan 103 lane V1); 1.3 (the finale rule) is plan 103 lane R2 |
+| OV-2.1…2.4 | L4D2 versus **role cards** + eval sign-off (first ship gate) | ★★★ | ▶ Planned in plan 103 lane V2: the seven "Playing as …" notes already exist (filed as `mechanic`); V2 re-files them as `versus` and adds ten to fifteen more. Labels: lane Q6 |
+| OV-3.1…3.3 | L4D2 deepen — callouts, survival, realism, No Mercy versus | ★★★ | ▶ The first of these are in lane V2's list; the rest is later |
+| OV-4.1…4.4 | CS2 (`730`) — licence gate, aliases, starter cards | ★★★★ | ☐ Not started (left out of plan 103 on purpose) |
 | OV-5.1…5.3 | Visual maps wave (after callout cards exist) | ★★★ | ☐ Not started |
 | OV-6.1…6.3 | Docs / testing / roadmap writeback | ★★ | ☐ Not started |
 
@@ -75,6 +81,20 @@ title; optional visual map attach once callouts exist.
 | 14 | Ship gate | Signed-off eval labels on **existing** L4D2 versus queries in `kb_eval_v2.json` |
 | 15 | Visual maps | **In scope** as a later wave after callout cards; keeps the separate roadmap row but this plan owns the dependency order |
 
+### Where things stand (2026-11-09, plan 103)
+
+- **The seven role notes exist already.** `Playing as the Tank / Hunter / Jockey / Smoker / Charger / Boomer /
+  Spitter` are in the seed for game 3 (`550`), filed as `mechanic`. Their names and text stay; only their kind
+  changes to `versus` (lane V2). The name-matching test rows point at them by name.
+- **The eighteen existing versus questions** are `V2-S-L4D2-12` to `29` in `kb_eval_v2.json`. Ten carry an
+  `expect_section`; eight are blank (lane Q6 labels them after V2 lands). All ten labelled rows already find their
+  note in the first three, before any new note exists (measured 2026-11-09, lane V1).
+- **Where notes come from** (decision 10 above, changed by plan 103 call 13): the live wiki reader, which prints each
+  page's licence and revision, not only archive dumps. Counter-Strike 2 stays out of plan 103.
+- **Kind words for search are not added yet.** The five new kinds have no entry in the search's kind words
+  (`_TYPE_WORDS`): no labelled question needs one, and a kind word pulls a game's first few notes of that kind in
+  the order they were written. Measure again once the notes of lane V2 exist.
+
 ### Side handling A — product note
 
 Paired survivor/infected (or T/CT) **wordings** still belong in the eval set
@@ -112,7 +132,9 @@ can emit the snapshot line — do not hardcode a second attributions writer here
 Unlocks all content stages. No corpus rebuild required to land code alone, but
 cards must not ship with unknown types before this lands.
 
-- [ ] **OV-1.1 — Document allowed `section_type` values**
+- [x] **OV-1.1 — Document allowed `section_type` values** — done 2026-11-09 (plan 103 lane V1):
+      [knowledge-base.md](../knowledge-base.md) § Note kinds lists every kind, old and new. The builder
+      checks no kind, so no helper change was needed.
   - **Where:** [knowledge-base.md](../knowledge-base.md) (corpus layout / authoring)
     and seed/build helpers under `scripts/` as needed.
   - **Do:** Record `versus`, `coop`, `callout`, `survival`, `realism` alongside
@@ -122,16 +144,18 @@ cards must not ship with unknown types before this lands.
   - **Accept:** A maintainer can author a card without inventing a type string.
   - **Verify:** Doc greppable; seed insert path accepts the new strings.
 
-- [ ] **OV-1.2 — Spoiler risk table**
-  - **Where:** `py_modules/backend/services/spoiler_risk_service.py`
+- [x] **OV-1.2 — Spoiler risk table** — done 2026-11-09 (plan 103 lane V1); tests in
+      `tests/test_spoiler_risk_service.py`.
+  - **Where:** `py_modules/backend/spoilers/spoiler_risk_service.py`
     (`_LOW_SPOILER_SECTION_TYPES` / `_HIGH_SPOILER_SECTION_TYPES`).
   - **Do:** Add the Stage 1 types to **low**. Do not put them on high.
   - **Accept:** Unit coverage in `tests/test_spoiler_risk_service.py` for at least
     one new type → low band contribution.
   - **Verify:** `npm run test:py` (spoiler risk tests).
 
-- [ ] **OV-1.3 — Finale redirect (prompt / constitution)**
-  - **Where:** `ollama_prompts.py` (KB / Strategy policy) +
+- [ ] **OV-1.3 — Finale redirect (prompt / constitution)** — owed to plan 103 lane R2, which alone edits the
+      prompt file. It applies to a note of any of the five new kinds.
+  - **Where:** `py_modules/backend/prompts/ollama_prompts.py` (KB / Strategy policy) +
     [spoiler-constitution.md](spoiler-constitution.md) product rule.
   - **Do:** For L4D2 (and later other campaign+versus titles as needed): do not
     volunteer finale tactics/layout; if asked early, strongly urge focusing on
@@ -140,8 +164,9 @@ cards must not ship with unknown types before this lands.
     exists if the repo already pins similar policy strings.
   - **Verify:** targeted Python tests + doc update.
 
-- [ ] **OV-1.4 — Chip curtail / session RAG (if typed)**
-  - **Where:** `knowledge_base_service.py` `_curtail_section_to_chip` and any
+- [x] **OV-1.4 — Chip curtail / session RAG (if typed)** — done 2026-11-09 (plan 103 lane V1); tests in
+      `tests/test_knowledge_base_chip_wording.py`.
+  - **Where:** `py_modules/backend/knowledge/knowledge_base_chips.py` `_curtail_section_to_chip` and any
     section-type priority lists.
   - **Do:** Ensure new types produce sensible short chip labels (not empty /
     falling through badly).
@@ -171,7 +196,7 @@ for the existing versus-oriented L4D2 eval rows before treating this stage done.
     (e.g. `Playing as the Smoker`, `Playing as the Tank`).
   - **Accept:** Cards cover the role intents that already have non-blank
     `expect_section` targets; remaining blanks stay intentional gaps only.
-  - **Verify:** `python scripts/build_rag_db.py --seed …` succeeds; spot-check
+  - **Verify:** `python scripts/kb/build_rag_db.py --seed …` succeeds; spot-check
     section rows for `550`.
 
 - [ ] **OV-2.3 — Eval label sign-off**
@@ -282,7 +307,7 @@ maps** row as the maps half of this feature (prelim → executable here).
 - [ ] **OV-5.3 — Reply surface**
   - **Do:** Show the map when a grounded callout/level hit carries an asset —
     Deck-readable, focus-safe (no new focus owner without
-    `.cursor/rules/decky-focus-graph.mdc`).
+    AGENTS.md § The Steam Deck focus graph).
   - **Accept:** On-Deck or preview evidence for one pilot; testing row added.
   - **Verify:** **KB-MAP-01** (new) in [testing.md](../testing.md).
 
@@ -302,7 +327,7 @@ polish, but may share reply chrome if that lands first.
 - [ ] **OV-6.3 — roadmap.md**
   - On first gate (Stage 2): leave the backlog row or split into Completed
     (roles) + smaller Planned (deepen / CS2 / maps) per
-    [.cursor/rules/docs-on-ship.mdc](../../.cursor/rules/docs-on-ship.mdc).
+    the docs rules in [AGENTS.md](../../AGENTS.md).
   - Close or retarget **KB visual maps** when Stage 5 lands.
   - Note plan **15** open Q2 resolved (hybrid) when ATTR work next touches that
     file.

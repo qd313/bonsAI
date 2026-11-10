@@ -263,7 +263,7 @@ THIN_CONTEXT_HONESTY_CLAUSE = (
 # Labels the Phase 4 structured enemy/item cards use. Kept here rather than imported from the
 # knowledge base service so the prompt layer takes no dependency on retrieval internals; the
 # two are coupled by the card authoring format, documented in docs/knowledge-base.md.
-_STRUCTURED_CARD_LABELS = ("Weak points:", "Uses:", "Phases:", "Summary:")
+_STRUCTURED_CARD_LABELS = ("Weak points:", "Uses:", "Phases:", "Summary:", "Looks like:")
 
 
 # Matches knowledge_base_service._BLOCK_HEADER exactly. Duplicated rather than imported for the
@@ -586,9 +586,12 @@ def build_system_prompt(
         # instruction would spend tokens on every knowledge-base Ask, and most of them attach
         # prose cards with nothing to label.
         if any(label in early_stripped for label in _STRUCTURED_CARD_LABELS):
+            # "Looks like" joins the list only on a turn whose card has the line, so every other
+            # structured turn reads as it always has.
+            looks_like = " / Looks like" if "Looks like:" in early_stripped else ""
             early_block += (
                 "\nSTRUCTURED CARDS: some attached cards use labelled lines "
-                "(Summary / Weak points / Uses / Tips / Phases). When you draw on one, keep "
+                f"(Summary / Weak points / Uses / Tips / Phases{looks_like}). When you draw on one, keep "
                 "those labels as short bullets rather than dissolving them into a paragraph, "
                 "and drop any label the card does not have.\n"
             )

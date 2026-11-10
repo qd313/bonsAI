@@ -23,8 +23,7 @@
               "quoted": [
                 "The Daikon NT Mantis Blades are manufactured by Arasaka.",
                 "The Mantis Blades are Cyberware for the Arms in Cyberpunk 2077.",
-                "Deal Physical damage.",
-                "10-20% Bleeding chance"
+                "This implant allows you to deal more Physical damage in melee combat, and has a 10-20% chance to apply a Bleed effect."
               ]
             },
             {
@@ -205,8 +204,7 @@
               "quoted": [
                 "from the table: Mfr. Arasaka",
                 "The Gorilla Arms are Cyberware for the Arms in Cyberpunk 2077.",
-                "Deal Physical damage.",
-                "10-20% Bleeding chance"
+                "This implant allows you to deal more Physical damage in melee combat, and have a 10-20% chance to apply a Bleed effect."
               ]
             },
             {
@@ -294,7 +292,7 @@
           ]
         },
         {
-          "line": "Tips: Smart Link goes in the Hands; from Tier 3 it adds 10-20% lock time and 5-15% crit damage. Against Tyger Claws, smart shots miss 50% of the time because of their Masking Ink tattoos.",
+          "line": "Tips: Smart Link (Hands) adds 10-20% target-lock duration and 5-15% crit damage for Smart weapons from Tier 3. Against Tyger Claws, smart shots miss 50% of the time because of their Masking Ink tattoos.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Smart_Link",
@@ -335,7 +333,7 @@
           ]
         },
         {
-          "line": "Uses: Charge a shot so it passes through obstacles. Perks live under Technical Ability, and using them trains the Engineer skill.",
+          "line": "Uses: Charge a shot so it passes through obstacles. Perks for them live under Technical Ability, and using Tech weapons trains the Engineer skill.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
@@ -519,7 +517,7 @@
           ]
         },
         {
-          "line": "Tips: The Wraiths' Revenant (fast melee) has Kerenzikov and Sandevistan Mk.1; a Kang Tao sniper has a Sandevistan. MaxTac officers use Sandevistan Mk.3 and Kerenzikov, and Scavengers use Kerenzikov.",
+          "line": "Tips: The Wraiths' Revenant (fast melee) has Kerenzikov and Sandevistan Mk.1; a Kang Tao sniper has a Sandevistan. MaxTac officers use Sandevistan Mk.3 and Kerenzikov.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Wraiths_Revenant",
@@ -542,13 +540,6 @@
               "revision": "308854",
               "quoted": [
                 "For cyberware, officers make regular use of Sandevistan Mk. 3 and Kerenzikov."
-              ]
-            },
-            {
-              "page": "https://cyberpunk.fandom.com/wiki/Scavengers",
-              "revision": "304833",
-              "quoted": [
-                "Cyberware used by the gang include cyberoptics, pain editors, health monitors, Kerenzikov, and K.E.R.S."
               ]
             }
           ]
@@ -577,7 +568,7 @@
           ]
         },
         {
-          "line": "Tips: Overheat is a combat quickhack that ignites its target and keeps hurting it with Thermal damage. This one also carries EMP grenades and drops Tier 2 to Tier 5 quickhack components.",
+          "line": "Tips: Overheat is a combat quickhack that ignites its target and keeps hurting it with Thermal damage. The Voodoo Boys Netrunner also carries EMP grenades and drops Tier 2 to Tier 5 quickhack components.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Overheat",
@@ -732,7 +723,7 @@
           ]
         },
         {
-          "line": "Looks like: Chrome-heavy bodies and occult tattoos, looking more machine than human.",
+          "line": "Looks like: Chrome-heavy bodies and occult-style tattoos, looking more machine than human.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Maelstrom",
@@ -745,12 +736,13 @@
           ]
         },
         {
-          "line": "Tips: Goons carry frag grenades. The Ironstormer's Medium Subdermal Armor adds 33% Health and 100% Armor.",
+          "line": "Tips: Ranged Goons carry frag grenades. The Ironstormer also wears Medium Subdermal Armor.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Maelstrom_Goon",
               "revision": "283492",
               "quoted": [
+                "The Goon can either be a Ranged or a Melee enemy.",
                 "from the table: Frag Grenades Charge Jump"
               ]
             },
@@ -758,8 +750,7 @@
               "page": "https://cyberpunk.fandom.com/wiki/Maelstrom_Ironstormer",
               "revision": "289152",
               "quoted": [
-                "Medium Subdermal Armor",
-                "Increases Health by 33% and Armor by 100%."
+                "Medium Subdermal Armor"
               ]
             }
           ]
@@ -774,15 +765,14 @@
       "main_revision": "304833",
       "lines": [
         {
-          "line": "Summary: Scavs kidnap people and take their cyberware by force. Expect them everywhere in Night City, most of all in north Pacifica and south Wellsprings.",
+          "line": "Summary: Scavs kidnap people and take their cyberware by force. You can meet them all over Night City.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Scavengers",
               "revision": "304833",
               "quoted": [
                 "They are known for kidnapping people and forcibly harvesting their cyberware.",
-                "Scavengers can be found all over Night City.",
-                "they have a more concentrated presence in northern Pacifica and southern part of Wellsprings."
+                "Scavengers can be found all over Night City."
               ]
             }
           ]
@@ -800,7 +790,7 @@
           ]
         },
         {
-          "line": "Tips: The Vulture (Tier 2, heavy ranged) has Medium Subdermal Armor, adding 33% Health and 100% Armor. Expect pain editors and Kerenzikov from them.",
+          "line": "Tips: Vultures are Tier 2 heavy ranged Scavs, equipped with frag grenades and Medium Subdermal Armor.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Scavengers_Vulture",
@@ -808,15 +798,7 @@
               "quoted": [
                 "The Vulture is a Tier 2 enemy affiliated with the Scavengers in Cyberpunk 2077.",
                 "from the table: Type Heavy Ranged",
-                "Medium Subdermal Armor",
-                "Increases Health by 33% and Armor by 100%."
-              ]
-            },
-            {
-              "page": "https://cyberpunk.fandom.com/wiki/Scavengers",
-              "revision": "304833",
-              "quoted": [
-                "Cyberware used by the gang include cyberoptics, pain editors, health monitors, Kerenzikov, and K.E.R.S."
+                "from the table: Frag Grenades Medium Subdermal Armor Charge Jump"
               ]
             }
           ]
@@ -837,7 +819,7 @@
               "page": "https://cyberpunk.fandom.com/wiki/MaxTac",
               "revision": "308854",
               "quoted": [
-                "MaxTac is a C-SWAT rapid response team of the most combat capable and trained officers the Night City Police Department has to offer.",
+                "At some point during or after the Time of the Red, MAX-TAC was reincorporated into the NCPD.",
                 "In 2077, MaxTac continued to live up to their reputation, hunting down any cyberpsychos and lawbreakers too powerful for the regular officers to handle.",
                 "reaching a maximum wanted rating (five stars) will result in the deployment MaxTac officers, who serve as the final enemy type to hunt V down while wanted.",
                 "On higher difficulties, they are capable of killing V in just a few shots regardless of character level."
@@ -846,13 +828,13 @@
           ]
         },
         {
-          "line": "Tips: Squads have four officers drawn from the Assault, Mantis, Heavy, Netrunner and Sniper roles. Mantis officers have the second highest armor, and officers often use Sandevistan Mk.3 and Kerenzikov.",
+          "line": "Tips: Squads have four officers, each in one of these roles: Assault, Mantis, Heavy, Netrunner or Sniper. Mantis officers have the second highest armor, and officers often use Sandevistan Mk.3 and Kerenzikov.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/MaxTac",
               "revision": "308854",
               "quoted": [
-                "MaxTac officers operate in squads of four each",
+                "MaxTac officers operate in squads of four each and contain an operator for each of four different roles:",
                 "Assault - Frontline fighters who utilize the Ajax and Defender.",
                 "Mantis - Close-quarter specialists who utilize MaxTac-built mantis blades and the Omaha as backup weapons. They hold the second highest armor rating.",
                 "Heavy - Walking tanks in exosuits who utilize the Defender to dish out large amounts of damage in seconds.",

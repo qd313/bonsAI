@@ -15,7 +15,7 @@
       "main_revision": "2060174",
       "lines": [
         {
-          "line": "Summary: A close-range item from the Donkey Kong arcade game. Whoever grabs it swings nonstop, and its knockback is extremely strong, mostly upward.",
+          "line": "Summary: A close-range item from the Donkey Kong arcade game. Whoever grabs it swings nonstop, and its knockback is extremely strong and vertical.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Hammer_(item)",
@@ -66,7 +66,7 @@
       "main_revision": "2049293",
       "lines": [
         {
-          "line": "Summary: A battering item with long reach, nicknamed the lightsaber because it looks like one. You can swing it, charge it or throw it.",
+          "line": "Summary: A battering item with long reach, nicknamed the lightsaber because it looks like one. Holding it adds power, and you can charge it or throw it.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Beam_Sword",
@@ -74,18 +74,7 @@
               "quoted": [
                 "The Beam Sword (ビームソード, Beam Sword) is a long-range battering item.",
                 "It is similar in appearance to a lightsaber, and is often informally referred to as the \"lightsaber\" for this reason.",
-                "it can be wielded and charged for melee attacks or can be thrown, like all other battering items."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Uses: It adds power to your attacks, and throwing it gives you one more option.",
-          "drawn_from": [
-            {
-              "page": "https://www.ssbwiki.com/Beam_Sword",
-              "revision": "2049293",
-              "quoted": [
+                "it can be wielded and charged for melee attacks or can be thrown, like all other battering items.",
                 "the Beam Sword will bolster the player's power, as well as potentially add some options to their game via throwing."
               ]
             }
@@ -128,7 +117,7 @@
           ]
         },
         {
-          "line": "Uses: Swing it for close hits, or use a smash or tilt to fire stars. Falcon's smash fires 5 stars at once and Sheik's fires 2.",
+          "line": "Uses: Swing it for close hits, or use a smash or tilt to fire stars. Falcon's forward smash fires 5 stars at once and Sheik's fires 2.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Star_Rod",
@@ -136,20 +125,22 @@
               "quoted": [
                 "As a battering item, combatants can use the Star Rod to directly hit opponents up close.",
                 "Using either smash attacks or tilts, however, cause the Star Rod to shoot out long-range stars that can hit opponents from a distance",
-                "with Falcon's attacks shooting off 5 stars and Sheik's firing off 2 stars."
+                "with Falcon's attacks shooting off 5 stars and Sheik's firing off 2 stars.",
+                "Particularly powerful variants are found with the forward smashes of Captain Falcon, Marth, Sheik, Pit and Ike"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Throwing it is often better: the semi-spike can ruin a recovery or act as a KO. Reflecting or absorbing moves can stop its stars.",
+          "line": "Tips: Once empty, throwing it is the more practical choice: the semi-spike can ruin a recovery or act as a KO. Reflecting or absorbing moves can stop its stars.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Star_Rod",
               "revision": "2056048",
               "quoted": [
                 "A more practical option, however, is to throw the item towards enemies; the Star Rod, when thrown, deals powerful semi-spike knockback, which can potentially gimp recoveries or act as a general KO move.",
-                "As the stars are considered projectiles by the game, they can be reflected by a variety of moves; in addition, they can also be absorbed."
+                "As the stars are considered projectiles by the game, they can be reflected by a variety of moves; in addition, they can also be absorbed.",
+                "If the Star Rod runs out of stars to shoot, combatants can still use it to directly hit opponents."
               ]
             }
           ]
@@ -425,7 +416,7 @@
           ]
         },
         {
-          "line": "Tips: It ricochets in big arcs over the field, off platforms and walls, and if nobody gets it soon it goes over the side. In Melee, the star's own tune pushes the stage music down until you can barely hear it.",
+          "line": "Tips: It ricochets in big arcs over the field, off platforms and walls, and it can fall off the stage if nobody grabs it in time. In Melee, the star's own tune pushes the stage music down until you can barely hear it.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Super_Star",
@@ -548,7 +539,7 @@
           ]
         },
         {
-          "line": "Weak points: They have no special moves and cannot charge smash attacks, so they depend on high jumps to get back. Their attacks are much weaker copies of Captain Falcon's and Zelda's.",
+          "line": "Weak points: They cannot charge smash attacks, and with no special moves they rely on high jumps to get back. Their attacks are much weaker copies of Captain Falcon's and Zelda's.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Fighting_Wire_Frames",
@@ -639,7 +630,7 @@
           ]
         },
         {
-          "line": "Tips: It gets stronger at each difficulty step, and the top levels give it a lot of attacks that finish you in one hit. A laser leaves each of its fingertips. When it makes a gun shape, it fires one pair of bullets until it has taken 150% damage, and three pairs after that. Its ground slap buries a player; its ground throw cannot normally KO, though it deals big damage and knockback. On Normal or harder, if you take off half its HP within 5 minutes 50 seconds of Classic Mode starting, a second boss joins the fight.",
+          "line": "Tips: It gets stronger at each difficulty step, and the top levels give it a lot of attacks that can finish you in one hit. A laser leaves each of its fingertips. When it makes a gun shape, it fires one pair of bullets until it has taken 150% damage, and three pairs after that. Its ground slap buries a player; its ground throw cannot normally KO, though it deals big damage and knockback. On Normal or harder, if you take off half its HP within 5 minutes 50 seconds of Classic Mode starting, a second boss joins the fight.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Master_Hand_(SSBM)",

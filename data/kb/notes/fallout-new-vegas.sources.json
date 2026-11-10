@@ -1,0 +1,266 @@
+{
+  "wiki": "Fallout Wiki (https://fallout.fandom.com/api.php)",
+  "licence_printed_by_fetcher": "Fallout Wiki (MediaWiki 1.43.10) licence: CC-BY-SA https://www.fandom.com/licensing",
+  "licence_stored": "CC-BY-SA-3.0 (the fetcher prints no version; 3.0 follows Fandom's licensing page, the Fallout: New Vegas notes already in data/kb/strategy_seed.json, and data/kb/NOTICE.md, which lists the Fallout Wiki as CC-BY-SA-3.0)",
+  "game_id": 20,
+  "game": "Fallout: New Vegas",
+  "read_on": "2026-11-10",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://fallout.fandom.com/api.php --titles <pages> (page text as rendered by the wiki, link markup removed). Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named. Every page used is the Fallout: New Vegas page of its subject (or, for Bighorner, Fiends and the other pages that cover only this game, the wiki's own page); no other Fallout game's page or section is used. In-game text the wiki quotes (loading-screen lines, terminal entries, item descriptions) is not used.",
+  "sections": [
+    {
+      "section_id": 3800,
+      "name": "Radscorpions",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout:_New_Vegas)",
+      "main_revision": "4633695",
+      "lines": [
+        {
+          "line": "Summary: Big armored scorpions of the Mojave that run straight at you in packs of two to five, striking with claws and a poisoned tail. They are rough on a low-level Courier, and Damage Threshold means an unprepared Courier struggles to put them down.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout:_New_Vegas)",
+              "revision": "4633695",
+              "quoted": [
+                "As radscorpions almost always move in groups of two to five, they can be very dangerous to low-level players.",
+                "the addition of Damage Threshold makes them harder to kill for an unprepared Courier.",
+                "They tend to charge their intended targets directly and will use their powerful claws and poisoned tails for quick and relentless attacks."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The claws are the softest part, and crippling them stuns the scorpion. Armor-piercing weapons work well against it, with the Guns skill. Do not hope for a head shot bonus: it has no head or other spot that takes extra damage, which blunts V.A.T.S. and ordinary firearms.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout:_New_Vegas)",
+              "revision": "4633695",
+              "quoted": [
+                "Their claws are less-armored than the rest of the carapace; successfully crippling these will stun the radscorpion.",
+                "the creatures are vulnerable to armor-piercing weaponry.",
+                "which makes V.A.T.S. combat and firearms somewhat less effective against them."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Apart from size, an ordinary scorpion with a mottled, dark blue-gray shell. The common kind runs from a large dog to small livestock in size, and the rare queen is bigger than a Corvega.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout:_New_Vegas)",
+              "revision": "4633695",
+              "quoted": [
+                "Apart from their size, they appear visually identical to normal scorpions, with mottled, dark blueish-gray carapaces.",
+                "Their size ranges from that of a large dog to that of small livestock.",
+                "she is larger than a Corvega."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The giant radscorpion is rarer and faster, hits much harder and has a Damage Threshold like a sentry bot's, and some stand just outside Goodsprings and its cemetery, so you can meet one very early. Only two queens are known: one is south of the Nipton Road pit stop, in the scorpion burrow, and the other is in the Searchlight fire station, reached during a side quest. Ruby Nash will cook you a casserole if you bring her a radscorpion gland.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout:_New_Vegas)",
+              "revision": "4633695",
+              "quoted": [
+                "A larger and much more dangerous variant of radscorpion that is faster, as well as rarer than the usual radscorpion.",
+                "has a higher Damage Threshold (on par with that of a sentry bot)",
+                "The player can encounter them very, very early on, since some of them are just outside Goodsprings and Goodsprings Cemetery.",
+                "It does a lot more damage",
+                "Only two are known to exist in the Mojave Wasteland",
+                "One can be found in the scorpion burrow south of the Nipton Road pit stop",
+                "Another queen can be found inside the Searchlight fire station",
+                "accessed during the side quest Wheel of Fortune",
+                "After killing a radscorpion, one can take its gland to Ruby Nash and she will make Ruby's casserole"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3801,
+      "name": "Geckos",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Gecko_(Fallout:_New_Vegas)",
+      "main_revision": "4644847",
+      "lines": [
+        {
+          "line": "Summary: Reptile packs found across the whole Mojave. When one gecko fights, the whole pack joins in, charging or leaping in with open jaws and clawing quickly. Some kinds breathe fire or spit poison from a distance.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Gecko_(Fallout:_New_Vegas)",
+              "revision": "4644847",
+              "quoted": [
+                "Geckos can be found living across the entire Mojave Wasteland",
+                "Geckos are generally found in small packs.",
+                "Once a single gecko attacks something or is attacked, its pack will join the fight.",
+                "They charge or leap at their opponents with their mouths open, ready to snap down.",
+                "some subspecies of geckos can breathe fire or spit a poisonous liquid as a ranged attack."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A lizard with two fins sprouting behind the head, orange-tinted eyes and five fingers and toes, anywhere from a small child's size to taller than a grown adult. Golden geckos have bright gold scales; fire geckos are mottled purple and red with spikes down the back.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Gecko_(Fallout:_New_Vegas)",
+              "revision": "4644847",
+              "quoted": [
+                "Geckos are reptilian and born with a pair of fins behind their heads.",
+                "Their eyes possess an orange tint",
+                "Geckos have evolved with five fingers and five toes.",
+                "they range from the size of a small human child, to heights exceeding that of an average human adult.",
+                "This type of gecko is distinguishable by brilliant golden scales.",
+                "Fire geckos have mottled purple and red hides and prominent spikes on their backs."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Plain geckos, the mildest kind, roam around Goodsprings and near the Mojave Outpost, and along Interstate 15 toward Primm. Golden geckos live in irradiated places such as Crescent Canyon, Vault 34 and Cottonwood crater, and their attacks do heavy radiation damage. Fire geckos favor mountains and caves such as Lucky Jim Mine and Nopah Cave. The Animal Friend perk works on geckos and golden geckos but not on fire geckos, which run if hit by a flare gun. Tanned gecko hides can be made into armor.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Gecko_(Fallout:_New_Vegas)",
+              "revision": "4644847",
+              "quoted": [
+                "Geckos can be found in the areas surrounding Goodsprings, along the Interstate 15 towards Primm, and around the Mojave Outpost.",
+                "These are the least dangerous species of gecko found within the Mojave.",
+                "They can be found around irradiated areas such as Crescent Canyon east and Crescent Canyon west, Vault 34, Cottonwood crater",
+                "exposure to radiation has caused their attacks to inflict significant amounts of radiation damage.",
+                "They can mainly be found in and around mountainous areas and caves, such as the Lucky Jim Mine and Nopah Cave.",
+                "Geckos, green geckos, and golden geckos are classified as animals and are affected by the Animal Friend perk. Fire geckos, however, remain hostile to the Courier despite the perk.",
+                "fire geckos will flee if shot with a flare gun",
+                "the hides, once tanned, can be used to craft several varied types of armor"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3802,
+      "name": "Giant mantises",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Giant_mantis_(Fallout:_New_Vegas)",
+      "main_revision": "4639920",
+      "lines": [
+        {
+          "line": "Summary: Mutated praying mantises that came out of Vault 22 and spread across the Mojave. Each is much smaller than a person, so they swarm whenever they can and mostly leap in to slice with their forelegs.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Giant_mantis_(Fallout:_New_Vegas)",
+              "revision": "4639920",
+              "quoted": [
+                "Giant mantises are mutated praying mantises created by the horticultural experiments that took place in Vault 22.",
+                "They have since escaped from the vault and have spread into the Mojave Wasteland.",
+                "They are still much smaller than humans, but make up for that by attacking in swarms whenever possible.",
+                "giant mantises' attacks mainly consist of jumping and slicing its target in mid-air with their forelegs."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Crippling a mantis's antennae sends it into a frenzy, so it lashes out at anything within reach.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Giant_mantis_(Fallout:_New_Vegas)",
+              "revision": "4639920",
+              "quoted": [
+                "If a mantis' antennae becomes crippled, it will become frenzied and the mantis will begin to attack anything within reach."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Much like a real praying mantis, only far bigger, though still smaller than a person. The young nymphs are tiny, and some die just from being walked over. The Zion Canyon kinds are larger.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Giant_mantis_(Fallout:_New_Vegas)",
+              "revision": "4639920",
+              "quoted": [
+                "their biological traits have remained relatively unchanged when compared with the original specimen, except for significantly increased size.",
+                "They are still much smaller than humans",
+                "Some nymphs can be killed simply by walking over them.",
+                "They are much larger and more dangerous than the other varieties of giant mantis that are found in the Mojave Wasteland."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Weak nymphs turn up early in the Goodsprings schoolhouse and Nevada Highway Patrol station; the adults wait later, around Spring Mt. Ranch State Park and on the road toward Jacobstown. Shooting an ootheca releases about a dozen nymphs, which then attack. Dead mantises can yield eggs and forelegs.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Giant_mantis_(Fallout:_New_Vegas)",
+              "revision": "4639920",
+              "quoted": [
+                "They are usually found early in the game at the Goodsprings schoolhouse and the Nevada Highway Patrol station",
+                "There are quite a few mantises on the way to Jacobstown and around Spring Mt. Ranch State Park.",
+                "encountered later in the game around Spring Mt. Ranch State Park or on the way to Jacobstown",
+                "Shooting a mantis ootheca will release a dozen giant mantis nymphs, which will then attack.",
+                "Mantis eggs and mantis forelegs may be taken from their dead bodies."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3803,
+      "name": "Super mutants and nightkin",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Super_mutant_(Fallout:_New_Vegas)",
+      "main_revision": "4684048",
+      "lines": [
+        {
+          "line": "Summary: Tough armored mutants that favor heavy guns, plus melee weapons like the super sledge. Gunners walk slowly toward you while firing; melee fighters throw frag grenades and then rush in. Plain mutants give way to brutes and masters as you level.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Super_mutant_(Fallout:_New_Vegas)",
+              "revision": "4684048",
+              "quoted": [
+                "Super mutants often use heavy guns and melee weapons such as heavy incinerators and super sledges.",
+                "relying on their superior health and armor for protection from attacks",
+                "The melee variants rush the player after throwing their frag grenades and the ranged mutants will shoot at the player from a distance while they slowly advance",
+                "Standard super mutants appear at lower levels and will be replaced with brutes and masters at higher levels."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Brutes can be told apart by helmets and rough metal armor. Nightkin have deep purplish-blue skin and wear no armor.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Super_mutant_(Fallout:_New_Vegas)",
+              "revision": "4684048",
+              "quoted": [
+                "They can be distinguished by their helmets and crude metal armor.",
+                "Their skin tone is deep purplish-blue in color.",
+                "Nightkin do not have any armor"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Ordinary super mutants are armored to Damage Threshold 15, the same as combat armor; nightkin wear none but shrug off 30 percent of damage. Nightkin use Stealth Boys to creep up on their prey. Black Mountain is the main stronghold. Hostile ones reliably come back at Black Rock Cave, Jack Rabbit Springs and a small cave north of Ranger Station Bravo. The masters at Jacobstown are not hostile. Hostile ones often carry miniguns, light machine guns or super sledges that you can sell.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Super_mutant_(Fallout:_New_Vegas)",
+              "revision": "4684048",
+              "quoted": [
+                "All regular super mutants wear armor which gives them a Damage Threshold of 15, equal to a suit of combat armor.",
+                "Nightkin do not have any armor but benefit from an innate 30% Damage Resistance.",
+                "these volatile beings utilize Stealth Boys to sneak up on their prey.",
+                "The main super mutant stronghold in the Mojave Wasteland is Black Mountain",
+                "the only places with consistently respawning enemy super mutants are Black Rock Cave, Jack Rabbit Springs, and the small cave north of Ranger Station Bravo.",
+                "Masters in Jacobstown speak clearly and are non-hostile.",
+                "Hostile mutants will often carry higher-end weapons such as miniguns, light machine guns, super sledges, and more, which can then be sold elsewhere."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

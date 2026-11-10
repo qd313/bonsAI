@@ -102,6 +102,8 @@ All notable changes to this project are documented in this file.
 - **No stray mic lines in the log with the mic off.** Leaving the screen with the mic off no longer asks the back end to stop a recording that never ran.
 - **Notes for twenty more games, and Left 4 Dead 2 versus notes.** Left 4 Dead 2, Fallout 4, Red Dead Redemption 2, Cyberpunk 2077, Mario Party, Mario Party 2, 3, 6 and 7, Super Smash Bros., Super Smash Bros. Melee, Grand Theft Auto III, Yoshi's Story, Diddy Kong Racing, Fallout: New Vegas, Brotato, Palworld, Skyrim Special Edition, Hollow Knight and DOOM Eternal gain enemy and item notes (14 or 15 each), and Left 4 Dead 2 gains 15 notes on playing versus and as the infected. They arrive with the next library update.
 - **The answer screen's D-pad follows the answer.** Down from the Copy icon reaches the first step of a checklist and Up from step 1 goes back into the answer, not onto Copy. Down from "Hide details" lands on the "This answer / Session" strip, and the details chips step one by one, even when the panel has lost focus. Checked by tests; a Deck check is owed.
+- **Suggestion chips follow your last question.** After an answer, the game's suggestion chips lead with up to four notes closest to what you just asked; the rest follow in the usual order, and a fresh open looks as before. Checked on the PC; a Deck check is owed.
+- **More fixes in the library:** Diddy Kong Racing, Yoshi's Story, Left 4 Dead 2, Hollow Knight, Fallout: New Vegas and Palworld notes now follow their wiki pages on a few points (a tram route, a doctor's bag, Predator Pals, the Charger and Smoker). They arrive with the next library update.
 
 ### Changed
 

@@ -30,6 +30,7 @@
 - [Plan 103 notes moved from the knowledge-base roadmap (2026-11-09)](#plan-103-notes-moved-from-the-knowledge-base-roadmap-2026-11-09)
 - [Plan 103 sweep K1 notes moved from the knowledge base roadmap (2026-11-09)](#plan-103-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-09)
 - [Plan 103 sweep K2 notes moved from the knowledge base roadmap (2026-11-10)](#plan-103-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+- [Plan 103 sweep K3 notes moved from the knowledge base roadmap (2026-11-10)](#plan-103-sweep-k3-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -914,3 +915,127 @@ three wordings, two runs each, are measured on this PC before it is switched on 
 
 **Deck block D0b, 2026-11-09 21:14 to 21:42 EST, the old build (dist `9bc29b3c0500`; handover `workshop:planning/assets/103-handover-D0b.md`):** the readings are in the testing rows (P103-M-COVERED-NOTES, -BROTATO, -CHECKLIST, -DETAILS-STRIP, -SUMUP, -TAB-SECTIONS). The strip: what decided whether Down from "Hide details" lands on the strip was whether the newest answer had a notes line above it (with none, the strip; with one, the notes line first and the strip on a second Down); chat size and a running game did not decide it by themselves, but the two were mixed in these 15 tries and were not separated.
 
+## Plan 103 sweep K3 notes moved from the knowledge base roadmap (2026-11-10)
+
+Written by the plan 103 bookkeeper sweep K3, after the third landing chain (the chips ordered by the last question, the picture's own guess, the last ten games' blind questions, the mod-tip questions, the corrections to older notes) and the middle measurement. Older text is moved word for word, each piece headed by where it stood; the findings the helpers left are at the end.
+
+**Entries and sentences as they stood before this sweep:**
+
+**Where things stand: the answer-test paragraph, as it stood before sweep K3:**
+
+**The answer test was repaired on 2026-11-09 (plan 103):** its three tries used to be follow-ups of each other and sent no seed, so they were not three separate tries (the plugin has no answer cache). Older answer-quality figures must not be compared with new ones. **New baseline, two runs:** facts kept 73.4 and 71.8 in a hundred (two points either way is noise); story cover 39 of 45. Older figures: [Detail](roadmap-kb-details.md#plan-103-notes-moved-from-the-knowledge-base-roadmap-2026-11-09)
+
+**Bugs: older notes the wiki contradicts, the entry's body as it stood before sweep K3:**
+
+  The writers found small places where older notes and their wikis disagree: Left 4 Dead 2 (the Charger note leaves out the grenade launcher), Mario Party, Mario Party 2, 6 and 7, Super Smash Bros., Cyberpunk 2077 and Grand Theft Auto III, and on 2026-11-10 Diddy Kong Racing, Yoshi's Story, Hollow Knight, Fallout: New Vegas and Palworld. The list, game by game: [Detail](roadmap-kb-details.md#plan-103-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-10).
+
+**Bugs: crowding entry, lane R1 paragraph, as it stood before sweep K3:**
+
+  **Plan 103 lane R1, 2026-11-09:** the narrow version gains 8 held-back questions but, with the game's name typed, two lose their right note, which breaks the rule that nothing may be lost: the maintainer's call. Record: `workshop:archive/research/kb-crowding-fix-2026-11-09-p103-r1.md`.
+
+**Bugs: crowding entry, the cause line, as it stood before sweep K3:**
+
+  **The cause and the final-library figure** (after the 51 notes the word search returns up to ten notes instead of three, which pushes a note found only by meaning down the blend; one Mario Kart 64 note slipped out of the first three too): [Detail](roadmap-kb-details.md#plan-103-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-10). Older text: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03)
+
+**Deck check owed: thumbs-down entry, the Deck paragraph, as it stood before sweep K3:**
+
+  **Deck 2026-11-03 (block R1, row P102-UNDO-FOCUS-01), UNCLEAR, not a pass** (`workshop:test-evidence/plan102-P102-UNDO-FOCUS-01.json`). **Second night, 2026-11-09 (plan 103 block D0a), NOT REPRODUCIBLE:** the page kept the window's focus six times of six, so nothing was run (`workshop:test-evidence/plan103-P102-UNDO-FOCUS-01-try2.json`). Not a pass: the row stays as proven by its tests only, on the maintainer's list. The "before the fix" reading is dropped, and the first sighting's evidence: [Detail](roadmap-kb-details.md#plan-103-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-09).
+
+**Deck check owed: screenshot-name entry, as it stood before sweep K3:**
+
+  With a game running and a picture attached, the question now starts "This screenshot is from <game>.", on by default. PC numbers and the first try: [Detail](roadmap-kb-details.md#plan-103-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-09). Still owed. **2026-11-09 (plan 103 block D0a, second try), split:** attaching a placed picture passed (it showed first in the list); the question could not run, both tries timing out at 181 s because God of War and the AI together ran the Deck out of memory (`workshop:test-evidence/plan103-P102-PICTURE-01-try2.json`). See the screenshot entry in Next.
+
+**Deck check owed: hidden-box entry, the still-owed line, as it stood before sweep K3:**
+
+  **Still owed:** STRAT-SPOIL-NAME-01 could not run again on 2026-11-03 (plan 102 block R0): plan 103 block D0a tried it on 2026-11-09 with the rig launching Doom 64: Retribution by its title; the row is **UNCLEAR, not a pass**: two boss questions got general answers with no spoiler box, so there was nothing to open (`workshop:test-evidence/plan103-STRAT-SPOIL-NAME-01.json`). Earlier tries: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03)
+
+**Deck check owed: Brotato entry, as it stood before sweep K3:**
+
+  The rule that opens a cover by itself looked only at the running game, and Brotato was on the no-story list by its Steam number only. Its name is now on both name lists (screen and back end), and with nothing running the screen reads the game from the attached notes. Limit: with no note attached the screen cannot tell the game. Owes **P103-BROTATO-01** on the Deck. Evidence of the sighting `workshop:test-evidence/plan102-P100-HIDE-MORE-SCREEN-01-try2.json`. **Deck 2026-11-09 (block D0b, old build):** the whole answer sat behind a shut cover (`workshop:test-evidence/plan103-P103-M-BROTATO.json`).
+
+**Deck check owed: covered-notes entry, as it stood before sweep K3:**
+
+  A covered answer now shows a caption, "Notes were used for this answer — show the spoiler to see them" (D140 call 14), until its cover is opened. Before, the notes line waited while a cover was shut: a Grand Theft Auto IV answer showed nothing though the log and the saved chat show three notes (`workshop:test-evidence/plan102-P102-THIN-GAMES-01.json`). **Deck 2026-11-09 (block D0b, old build, `workshop:test-evidence/plan103-P103-M-COVERED-NOTES.json`):** a whole cover drew no notes line even once opened; a part cover drew it only after opening. Owes **P103-COVERED-NOTES-01** on the Deck; the caption goes on your checks page too.
+
+**Deck check owed: checklist entry, as it stood before sweep K3:**
+
+  Down from the Copy icon now reaches step 1, and Up from step 1 goes back into the answer, not onto Copy. Old build on the Deck 2026-11-09: Copy 3 of 3 and Mark reply helpful 3 of 3, as reported (`workshop:test-evidence/plan103-P103-M-CHECKLIST.json`). Now proven by tests that fail without the fix, with the page in focus and out of it. Owes **P103-CHECKLIST-COPY-01** (block D2). Older text: [Detail](roadmap-kb-details.md#plan-103-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Deck check owed: details-strip entry, as it stood before sweep K3:**
+
+  The "This answer / Session" strip and the chip grid now have their own D-pad stops, and a chip-to-chip step moves the ring while the page lacks focus. **Not seen on the Deck:** in 15 tries on 2026-11-09 the page never lost focus (`workshop:test-evidence/plan103-P103-M-DETAILS-STRIP.json`), so that half rests on tests. Owes **P103-DETAILS-STRIP-01** (block D2); row P102-UNDO-FOCUS-01 stays unread. Older text: [Detail](roadmap-kb-details.md#plan-103-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Next: suggestion chips entry, as it stood before sweep K3:**
+
+- ★★★ `[KB]` **Suggestion chips ordered by your last question** — **OPEN, split out of Phase 5's second half by D140 call 7 (2026-11-09).**
+  A smarter order for the suggestion chips, so the first ones follow what you just asked. Plan 103 lane C1 builds it if a slot is free late in the session (Deck row P103-CHIP-ORDER-01).
+
+**Next: screenshot measurement entry, the second-set paragraph, as it stood before sweep K3:**
+
+  **Second set, 2026-11-09 (plan 103 lane P1, `a652ac19`):** 29 pictures from 11 games, no boss fight (target 40 with ten bosses). The marks test (lane P3) cannot run without boss pictures: a question for the maintainer (plan 103 § 12, question 3). The picture-search lane must first move a piece out of `game_ai_request.py` (797 of 800 lines): [Detail](roadmap-kb-details.md#plan-103-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-09). Still PARTIAL. [Detail](roadmap-kb-details.md#measure-how-well-the-ai-reads-a-screenshot) · older text: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03) · **From Phase 7 (call 8):** a screenshot feeding the search is not built.
+
+**Next: RAG Phase 5, the blind-questions paragraph, as it stood before sweep K3:**
+
+  **Blind questions:** 294 rows in ten new files under `tests/fixtures/kb_eval/` (counted from the files). **Still to write:** questions for the last ten games, the versus notes and the mod tips. The crowding fix was turned down on its numbers (Bugs). Older text: [Detail](roadmap-kb-details.md#plan-103-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-10) · [Plan](planning/28-phase5-corpus-depth.md)
+
+**Next: honest-answer entry, the measuring paragraph, as it stood before sweep K3:**
+
+  On eight questions no note can answer, with the repaired answer test (2026-11-09, two runs): the AI said so in its own words 0 of 24 times in both runs, the back end's "No close match" line showed in 3 of 24, and it answered as if it knew in 21 of 24. (Plan 102's 3 and 4 of 24 counted the back end's line.) The AI can now be told, before it answers, that the notes do not cover the question; it stays off, and the Speed-mode option waits on you (row P103-HONEST-01 is owed only if it is switched on).  Reports `workshop:archive/research/kb-answer-eval-2026-11-09-p103-before-run1.md` and `-run2.md`.
+
+**Next: mod knowledge entry, the next-step paragraph, as it stood before sweep K3:**
+
+  **Next step:** written permission from the Cyberpunk wiki's admins. **Landed 2026-11-09 (plan 103):** the library's checks accept CC0 sources (lane T3; no note uses it yet) and the first step, 18 basics tips (lane G1, above); the device side stays plan 101's. SMAPI's log folder: [Detail](roadmap-kb-details.md#plan-103-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-09). [Plan 101](planning/101-deep-mod-ai-hints.md) · earlier text: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03)
+
+**Calls: the ten-note samples line, as it stood before sweep K3:**
+
+  Six samples of ten random notes each, in the workshop's checks folder: `workshop:checks/plan103-sample-earlier.md` (the 169 notes plans 100 and 102 added), `plan103-sample-B.md`, `-C.md`, `-D.md`, `-E.md` and `-F.md` (which games each one draws on: [Detail](roadmap-kb-details.md#plan-103-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)). Sample B was drawn before three small last fixes; it is refreshed before you read it. A sample for any later games is added here when its file exists.
+
+**Deck check owed: eight thin games entry, the first line, as it stood before sweep K3:**
+
+  118 notes in the labelled shape: Grand Theft Auto V, Grand Theft Auto IV, Super Mario 64, Paper Mario: The Thousand-Year Door, Doom 64, Donkey Kong 64 and Mario Kart 64 15 each, Pikmin 2 13 (landing commits in [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03)). [Detail](roadmap-kb-details.md#plan-103-notes-moved-from-the-knowledge-base-roadmap-2026-11-09)
+
+**Next: RAG Phase 5, the own-words line, as it stood before sweep K3:**
+
+  **House "own words" pass:** eight files were rewritten after the licence read found lines too close to the wiki's sentences (no fact changed, no note renamed); the lesson is in the lessons file.
+
+**Next: screenshot measurement entry, the step lines, as they stood before sweep K3:**
+
+  Step 1: a labelled picture set and a scoring script. **Step 2, on this PC:** the picture models the Deck offers read far better than its starter model (qwen3.5:4b named the game 97 and the place 70 times in a hundred, against 67 to 70 and 52 to 53). Figures and reports: [Detail](roadmap-kb-details.md#plan-103-notes-moved-from-the-knowledge-base-roadmap-2026-11-09).
+
+**Next: screenshot measurement entry, the second-set line as sweep K3 first wrote it:**
+
+  **Second set, 2026-11-09 (lane P1, `a652ac19`):** 29 pictures from 11 games, no boss fight (target 40 with ten bosses); the marks test (lane P3) cannot run without boss pictures: a question for the maintainer (plan 103 § 12, question 3).
+
+**Next: KB visual maps entry, the route line, as it stood before sweep K3:**
+
+  **A route, one step at a time:** built 2026-10-24 (its entry is in Done); the "Needs: …" part was removed 2026-11-03.
+
+**Next: honest-answer entry, the older-figures line, as it stood before sweep K3:**
+
+  Older figures: [Detail](roadmap-kb-details.md#plan-103-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-09) **One of the eight questions changed on 2026-11-10:** the "cannot be answered" row about the DOOM Eternal Prowler now asks about the Hell Priest, because the Prowler got a note, so the 2026-11-09 counts were measured with the old row and one question of 24 differs from now on.
+
+**Next: mod knowledge entry, the found line, as it stood before sweep K3:**
+
+  **Found:** LOOT's rule lists are CC0 (free to use); the Cyberpunk wiki has no licence; Stardew Valley's sources are NonCommercial or mixed ([Detail](roadmap-kb-details.md#plan-103-notes-moved-from-the-knowledge-base-roadmap-2026-11-09)). Report `workshop:planning/assets/101-mod-knowledge-sources.md`.
+
+**The middle measurement, 2026-11-10 (plan 103 lane X1): the library at 891 notes, 38 games and 185 tips (583 notes and 167 tips before).** Reports in the workshop's `archive/research/`: `kb-embed-bakeoff-2026-11-10-arms-p103-middle.md` (and `.json`), `kb-floor-holdout-2026-11-10-p103-middle.txt` (and `.json`), `kb-answer-eval-2026-11-10-p103-middle-run1.md`, `-run2.md` and `-story.md`.
+
+- **Search, the same 628 held-back questions, right note in the first three:** the blend 581 before, 572 now (92.5 to 91.1 percent); the meaning search alone 580 to 577; the word search alone 534 to 526. **The thirty meaning-only questions:** the blend 23 before, 18 now; the meaning search alone 28 and 28. Fifteen questions lost their note from the first three and one gained it; most were pushed out by a new enemy, item or versus note that shares a word with the question. This is the crowding problem, and it grew with 308 more notes.
+- **The first ten games' 294 blind questions:** 246 find their note in first place, 281 in the first three; 13 miss.
+- **Left 4 Dead 2's 18 labelled questions:** first place 9, first three 17 (11 and 18 before the versus notes). The Left 4 Dead 2 paragraph in the sweep K2 section above says "unchanged" for the first three; this later measurement says 18 before.
+- **Tips reach:** unchanged (19 of 24 reach a tip, 17 the right one, none wrong).
+- **Answers:** facts kept 70.1 and 68.9 percent in two runs (73.4 and 71.8 before; slightly outside the gap between runs); the right note attached 94.9 percent (96.6 before); contradictions and the spoiler cover inside the gap. The honest "I don't know" counts are unchanged (3 of 24 by the plugin's own line, 0 of 24 in the AI's own words), as expected with that sentence switched off. Story-beat questions: a cover showed 39 of 45 times, before and now.
+
+**The crowding fix, measured again on today's library (lane R1b): still turned down, nothing landed.** It brings back 12 of the older held-back questions on the search test and lifts the thirty meaning-only questions from 18 to 25, but it loses 5 of the new held-back questions there, and on the plugin's own search it loses 23 questions and gains 16 (seven fewer right notes of 1,385); an exact word match leaves first place on seven questions; "No close match" newly shows on two. The cause it found: every game's "Starting out" note ranks high by meaning, and the fix lifts it past a note the word search really found. Record: `workshop:archive/research/kb-crowding-fix-2026-11-10-p103-r1b.md`. The trade stays the maintainer's; an idea for a later session is to leave "Starting out" notes out of the lift.
+
+**Suggestion chips ordered by the last question (plan 103 lane C1, landed 2026-11-10, four commits `f1d82a46`, `44ac6b3e`, `3c466baa`, `4c59ac6e`; the last one puts the ordering behind an inner function so the public call keeps its frozen shape):** after an answer, the game's chips lead with up to four notes closest to the question just asked; today's order carries on behind them; a cold open keeps today's order; no new call to a model (the search hands over the vector it already made). Spoiler-kind notes (boss, enemy, dungeon, quest, area, ending, story, puzzle, secret) come forward only if today's chips already offer them or the question itself named them. Measured on this PC, thirty questions in six games: chips about the question's subject among the first three, 12 of 90 before and 33 of 90 after; 10 of 30 questions had one before, 24 after (`workshop:archive/research/2026-11-10-p103-c1-chip-order-thirty-questions.md`). **A limit:** after the first deal the screen's rotation picks at random among the game's chips, so the closest note is sure of only one spot and only until that spot turns over. Deck row owed: P103-CHIP-ORDER-01 (block D3).
+
+**The picture's own guess joins the note search (plan 103 lane P2, six commits, landed switched off):** `c93832e7` (the short first look), `0e764abe` (the test that measures it), `f9309c28` (the reader also understands "Game: X, Place: Y, Enemy: Z" on one line), `a988712e` (a Stop pressed while the picture is shrunk now counts), `087a878b` (the ask path can use the guess in the note search), `d88a7430` (the knowledge-base doc's three rows). Built in both rounds: a short first question to the picture model (game, place, enemy; "not sure" allowed) whose words join the search words only. Off because only four of the 29 labelled pictures name a note and none shows a boss, too few to decide on. Measured on this PC all the same: on those four pictures (five tries each, two typed questions) today's search found the right note 0 of 40 times, and with the guess 17 of 40 for the Deck's starter picture model and 4 of 40 for `qwen3.5:4b`, mostly by generic words; over all 29 pictures the starter model named the game right on 4 and `qwen3.5:4b` on 19; each said something wrong with confidence on 12 and 10. The first call took 1.7 seconds on average (starter model) and 0.7 (qwen) on this PC; not measured on the Deck. Reports in the workshop's `archive/research/`: `picture-guess-search-2026-11-10-p103-p2.md`, `-run2.md` and `-four-x5.md`. **Before it is ever switched on:** more pictures with notes and bosses; a security read; a check that a guessed boss name cannot count as the player having named it for the spoiler rules; the Deck's seconds; the case with no game running. No Deck row (P103-PICTURE-SEARCH-01 runs only if it lands on). The three rows of `docs/knowledge-base.md` that lane P2 wrote agree with these numbers.
+
+**Blind test questions for the last ten games that got notes (lanes Q4, second part, and Q5; 292 rows in ten new files under `tests/fixtures/kb_eval/`, counted from the files):** Super Smash Bros. Melee 30, Grand Theft Auto III 30, Yoshi's Story 30, Diddy Kong Racing 28, Fallout: New Vegas 28, Brotato 30, Palworld 28, Skyrim Special Edition 28, Hollow Knight 30, DOOM Eternal 30. With the ten files that landed before, every one of the 20 games that got notes has its blind questions: 586 rows in 20 files. Nothing was written for Hades, Half-Life 2 and Black Mesa, which got no notes. **Lane Q6, part 1 (`919696de`):** the eight unanswered Left 4 Dead 2 versus questions: six now name a versus note; two stay empty on purpose (`V2-S-L4D2-12` asks about a spot on a finale map, which the notes leave out; `V2-S-L4D2-17` cannot be answered without a campaign). **Part 2 (`73ff224b`):** 36 mod-tip questions, two per tip, in `tests/fixtures/kb_eval/p103-mods.json`; every row reaches the mod tips by the router's own words.
+
+**Corrections to older notes (plan 103 lane M, 2026-11-10, six commits `21268cbf`, `927f18b9`, `ea5136f0`, `849932ae`, `ab00958a`, `c3e2eaa1`; seed file only, 13 lines):** Diddy Kong Racing (four notes), Yoshi's Story (four), Left 4 Dead 2 (the Charger and Smoker notes), Hollow Knight (the Crossroads tram goes to the Resting Grounds), Fallout: New Vegas (the doctor's bag), Palworld (Predator Pals and Raid Bosses). **Left open:** the Left 4 Dead 2 Molotov note (its two pages do not clearly disagree; 75 seconds, 80 and 85 on the harder settings); the Fallout: New Vegas Hardcore note still lists fewer ways to heal a limb than its page does (the page adds the weapon binding ritual and the Auto-Doc); the Palworld wiki's own pages disagree on whether Predator Pals are scripted. The older sightings listed in sweep K2 (Mario Party, Mario Party 2, 6 and 7, Super Smash Bros., Cyberpunk 2077, Grand Theft Auto III) are not named in lane M's list of fixes; the roadmap entry says they were not in it.
+
+**Counts checked by sweep K3 (2026-11-10, counted from the files):** 33 notes files under `data/kb/notes/` hold 477 notes for 32 games; the seed holds 414; together 891 (583 before this session, so 308 are new this session). The 477 is the size of the notes files (it includes 169 notes from plans 100 and 102), not the number new this session; the 308 new this session are 293 for the twenty games plus the 15 versus notes. Sweep K2's roadmap lines (477 in the notes files, 293 for the twenty games) are right; its details line that says "14 or 15 each, 308 notes" counts the versus notes too. Questions: 622 rows in 21 files under `tests/fixtures/kb_eval/` (586 for the 20 games, 36 for the mod tips).
+
+**The Deck, as of the morning of 2026-11-10:** asleep since about 01:10 EST; nothing deployed; blocks D1, D2, D3 and DR have not run. Their runbooks are `docs/planning/assets/103-runbook-block-D1.md`, `-D2.md` and `-D3-DR.md`. Combine OverWiki was still read-only at 06:04 EST on 2026-11-10 (third try), so Half-Life 2 and Black Mesa stay without notes.

@@ -562,7 +562,7 @@
           ]
         },
         {
-          "line": "Tips: On Castaway Bay a player with no Star pays 20 coins instead. On Clockwork Castle a Warp Pipe is the way to get clear of Bowser.",
+          "line": "Tips: On Castaway Bay a player with no Star pays 20 coins instead. On Clockwork Castle DK turns into Bowser at night, and he is the one who hands out the Shadow Star.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Castaway_Bay",
@@ -575,7 +575,7 @@
               "page": "https://www.mariowiki.com/Clockwork_Castle",
               "revision": "5447804",
               "quoted": [
-                "If you need to escape from Bowser or catch DK, don't hesitate to hop into a Warp Pipe."
+                "DK transforms to Bowser. He grants players that get to him or if he gets to them first with a Shadow Star that takes away a Star or 20 coins if they do not have a Star."
               ]
             }
           ]
@@ -590,13 +590,12 @@
       "main_revision": "5533842",
       "lines": [
         {
-          "line": "Summary: A green Orb that only works on yourself: a Bullet Bill carries you past a rival and you pocket 20 coins from them.",
+          "line": "Summary: A green Orb that only works on yourself and steals coins from the opponents you pass.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_6",
               "revision": "5518101",
               "quoted": [
-                "Catch a ride on a Bullet Bill and overtake an opponent to steal 20 coins.",
                 "All of these orbs affect the player or the Dice Block when the player uses them."
               ]
             },
@@ -604,18 +603,20 @@
               "page": "https://www.mariowiki.com/Bullet_Bill_Orb",
               "revision": "5533842",
               "quoted": [
-                "players can use a Bullet Bill Orb only on themselves"
+                "players can use a Bullet Bill Orb only on themselves",
+                "Steals Coins from any opponent the player passes"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Fly past an opponent to take 20 coins from them. It also carries you over roadblocks without setting them off. On Faire Square, where rivals bunch up in the middle of the board, it can hit them for a lot of coins.",
+          "line": "Uses: Any opponent you pass loses 20 coins to you. It also carries you over roadblocks without setting them off. On Faire Square, where rivals bunch up in the middle of the board, it can hit them for a lot of coins.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bullet_Bill_Orb",
               "revision": "5533842",
               "quoted": [
+                "players steal only 20 coins from opponents",
                 "it also allows players to pass roadblocks without triggering them."
               ]
             },
@@ -624,13 +625,6 @@
               "revision": "5246724",
               "quoted": [
                 "As players congregate in the center zone, players with the Bullet Bill Orb can target them for significant coins."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Mario_Party_6",
-              "revision": "5518101",
-              "quoted": [
-                "Catch a ride on a Bullet Bill and overtake an opponent to steal 20 coins."
               ]
             }
           ]
@@ -642,7 +636,7 @@
               "page": "https://www.mariowiki.com/Mario_Party_6",
               "revision": "5518101",
               "quoted": [
-                "Catch a ride on a Bullet Bill and overtake an opponent to steal 20 coins.\" || E. Gadd's Garage and Faire Square || 20 coins"
+                "E. Gadd's Garage and Faire Square || 20 coins"
               ]
             },
             {
@@ -665,13 +659,15 @@
       "main_revision": "5533848",
       "lines": [
         {
-          "line": "Summary: A green Orb that calls in Flutter, who carries you directly to the Star Space.",
+          "line": "Summary: A green Orb that moves you directly to the Star Space.",
           "drawn_from": [
             {
-              "page": "https://www.mariowiki.com/Mario_Party_6",
-              "revision": "5518101",
+              "page": "https://www.mariowiki.com/Flutter_Orb",
+              "revision": "5533848",
               "quoted": [
-                "Flutter will appear and fly you straight to the Star Space!"
+                "Moves the player directly to the Star",
+                "The effect remains the same.",
+                "he flies them to the Star Space."
               ]
             }
           ]
@@ -683,14 +679,14 @@
               "page": "https://www.mariowiki.com/Flutter_Orb",
               "revision": "5533848",
               "quoted": [
-                "players can use a Flutter Orb only on themselves."
+                "players can use a Flutter Orb only on themselves.",
+                "In Mario Party 6, a Flutter Orb can be bought only on Towering Treetop and in E. Gadd's Garage."
               ]
             },
             {
               "page": "https://www.mariowiki.com/Mario_Party_6",
               "revision": "5518101",
               "quoted": [
-                "Flutter will appear and fly you straight to the Star Space!\" || Towering Treetop and E. Gadd's Garage || 30 coins",
                 "A board where the star appears in a random spot, costing twenty coins to purchase, then moves to a different location.",
                 "Stars are obtained the same way as in Towering Treetop."
               ]
@@ -752,7 +748,7 @@
           ]
         },
         {
-          "line": "Uses: Use it before you cross spaces where rivals left trap Orbs. Metal beats most of them: a Thwomp bounces off, a Tweester fizzles out, a Podoboo's fire does nothing, you kick a Bob-omb aside, a Koopa Troopa cannot carry something so heavy and quits, and a Zap Orb's Amps vanish after a failed zap.",
+          "line": "Uses: Use it before you cross spaces where rivals left trap Orbs. Metal beats all six of these: a Thwomp bounces off, a Tweester fizzles out, a Podoboo's fire does nothing, you kick a Bob-omb aside, a Koopa Troopa cannot carry something so heavy and quits, and a Zap Orb's Amps vanish after a failed zap.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Thwomp_Orb",
@@ -972,26 +968,20 @@
       "main_revision": "5533863",
       "lines": [
         {
-          "line": "Summary: A blue Orb found only on Snowflake Lake; it shields you against one Chain Chomp theft.",
+          "line": "Summary: A blue Orb found only on Snowflake Lake that protects you from Chain Chomp.",
           "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Mario_Party_6",
-              "revision": "5518101",
-              "quoted": [
-                "Prevents a Chain Chomp from stealing from you one time. Can't be used or placed.\" || Snowflake Lake || 10 coins"
-              ]
-            },
             {
               "page": "https://www.mariowiki.com/Snack_Orb",
               "revision": "5533863",
               "quoted": [
+                "Prevents Chain Chomp from stealing the user's Coins or Stars",
                 "It is only found on Snowflake Lake"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Just carry one around; it cannot be used or placed. The first time a rival's Chain Chomp comes for you, it triggers by itself: you toss a bone, the Chomp hops over your space to fetch it, and anybody else standing there is spared as well. You can discard the Orb at any time. On a team, even a teammate's Chain Chomp ride can burn your Snack Orb.",
+          "line": "Uses: Just carry one around; you cannot throw it onto a space or use it yourself. When a rival's Chain Chomp comes for you, it triggers by itself: you toss a bone, the Chomp hops over your space to fetch it, and anybody else standing there is spared as well. You can discard the Orb at any time. On a team, even a teammate's Chain Chomp ride can burn your Snack Orb.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_6",
@@ -1012,13 +1002,13 @@
           ]
         },
         {
-          "line": "Tips: An Orb hut charges 10 coins, and one Orb covers a single theft, so buy a fresh one after it is spent.",
+          "line": "Tips: An Orb hut charges 10 coins.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_6",
               "revision": "5518101",
               "quoted": [
-                "Prevents a Chain Chomp from stealing from you one time. Can't be used or placed.\" || Snowflake Lake || 10 coins"
+                "Snowflake Lake || 10 coins"
               ]
             }
           ]
@@ -1033,20 +1023,20 @@
       "main_revision": "5533876",
       "lines": [
         {
-          "line": "Summary: A blue Orb that blocks one theft by Pink Boo; you cannot use it or place it.",
+          "line": "Summary: A blue Orb that protects you from Pink Boo. It works on its own, so there is nothing for you to use or throw.",
           "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Mario_Party_6",
-              "revision": "5518101",
-              "quoted": [
-                "Prevents a Boo from stealing from you one time. Can't be used or placed."
-              ]
-            },
             {
               "page": "https://www.mariowiki.com/Gaddlight",
               "revision": "5533876",
               "quoted": [
                 "it now protects against Pink Boo instead of the ordinary Boo"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "They cannot be thrown on a space or used. Instead, they are used automatically. They can be disposed at any time if the players chooses to, though."
               ]
             }
           ]
@@ -1080,7 +1070,7 @@
               "page": "https://www.mariowiki.com/Mario_Party_6",
               "revision": "5518101",
               "quoted": [
-                "Prevents a Boo from stealing from you one time. Can't be used or placed.\" || Towering Treetop and Castaway Bay || 10 coins"
+                "Towering Treetop and Castaway Bay || 10 coins"
               ]
             },
             {

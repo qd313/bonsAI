@@ -1,0 +1,61 @@
+{
+ "games": [],
+ "aliases": [],
+ "sections": [
+  {
+   "section_id": 3900,
+   "game_id": 36,
+   "section_type": "enemy",
+   "name": "Looter",
+   "card": "Summary: An enemy that runs away from you instead of fighting. Catch and kill it and it drops a Loot Crate plus 8 materials.\nTips: It can only appear from wave 3. Each time it gets a chance to appear, the odds are 10%: the first chance comes 25 seconds after a wave begins, and another every 15 seconds after that. The table gives it 5 health that grows by 30 each wave and a speed between 300 and 400, and lists your base speed as 450.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Enemies",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "8787",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3901,
+   "game_id": 36,
+   "section_type": "enemy",
+   "name": "Gobbler",
+   "card": "Summary: An enemy that hunts down materials, eats them, and grows as it eats.\nWeak points: Its first version is fast but fragile.\nTips: Killing it drops the materials it ate: all of them from its first version, twice as many from the second and three times as many from the third. The later versions are slower but have more health. It has only a 3% chance to appear, and the chance is rolled 10 seconds after a wave begins; it can turn up from wave 1.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Enemies",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "8787",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3902,
+   "game_id": 36,
+   "section_type": "enemy",
+   "name": "Slasher Egg and Slasher",
+   "card": "Summary: A Slasher Egg sits still; leave it alone for 5 seconds and a Slasher hatches from it. A Slasher follows you but backs off when you get close, and hits with a vertical slash from medium range.\nWeak points: An egg only hatches if it is still alive when its 5 seconds run out, so killing it first means no Slasher.\nTips: Neither is met on Danger 0: both start on Danger 1, Slashers from wave 4 and eggs from wave 7. A Slasher starts with 50 health and gains 25 each wave, while an egg starts with 5 and gains 3.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Enemies",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "8787",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3903,
+   "game_id": 36,
+   "section_type": "enemy",
+   "name": "Pursuer",
+   "card": "Summary: A chaser that hurts you on touch and gets faster with every second it keeps chasing you.\nTips: It first appears at wave 11, where the page works its health out as 250 (10 to start plus 24 for each wave after the first), and that is 40% higher on Danger 5. Its speed climbs from 150 to 600 while the page gives your own base speed as 450, and its speed does not change with the wave or the Danger level.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Enemies",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "8787",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3904,
+   "game_id": 36,
+   "section_type": "enemy",
+   "name": "Fly",
+   "card": "Summary: An enemy that moves around you. When your ranged weapons hit it, it answers half the time by shooting out projectiles in random directions.\nTips: The 50% chance applies to ranged hits only, because hits from melee weapons do not make it fire. It starts with 15 health and gains 4 each wave, moves at a random speed between 325 and 375, and is only met from Danger 1 up, starting at wave 4.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Enemies",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "8787",
+   "crawled_at": "2026-11-10"
+  }
+ ]
+}

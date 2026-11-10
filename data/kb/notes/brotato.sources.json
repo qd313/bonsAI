@@ -1,0 +1,217 @@
+{
+  "wiki": "Brotato Wiki (https://brotato.wiki.spellsandguns.com/api.php)",
+  "licence_printed_by_fetcher": "Brotato Wiki (MediaWiki 1.43.11) licence: (none declared)",
+  "licence_stored": "CC-BY-SA-4.0 (the wiki's api declares no licence; every page's footer links its Copyright Policy to https://creativecommons.org/licenses/by-sa/4.0/, and data/kb/NOTICE.md lists the Brotato Wiki as CC-BY-SA-4.0)",
+  "game_id": 36,
+  "game": "Brotato",
+  "read_on": "2026-11-10",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://brotato.wiki.spellsandguns.com/api.php --titles <pages> (page text as rendered by the wiki, link markup removed; the wiki's own search answers nothing, so page titles came from its list of all pages). Every quoted fragment below was checked, by script, to appear word for word (spaces collapsed) in the page text read at the revision named. Table rows on the Enemies page are quoted as the reader prints them: columns separated by '||', in the order Health, +hp/wave, Speed, Damage, +dmg/wave, Knockback Resistance, Materials Dropped, Consumable Drop Rate, Loot Crate Drop Rate, First Wave Appearing, ID. A 'D1 : 4' first wave means the enemy only starts on Danger 1 and up, at wave 4.",
+  "sections": [
+    {
+      "section_id": 3900,
+      "name": "Looter",
+      "kind": "enemy",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Enemies",
+      "main_revision": "8787",
+      "lines": [
+        {
+          "line": "Summary: An enemy that runs away from you instead of fighting. Catch and kill it and it drops a Loot Crate plus 8 materials.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Runs away from the character, drops a Loot Crate and 8 Materials on death"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It can only appear from wave 3. Each time it gets a chance to appear, the odds are 10%: the first chance comes 25 seconds after a wave begins, and another every 15 seconds after that. The table gives it 5 health that grows by 30 each wave and a speed between 300 and 400, and lists your base speed as 450.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Has 10% chance to spawn 25 seconds into a wave, and every 15 seconds thereafter.",
+                "|| 5 || 30 || 300-400 || 1 || 0.85 || 0.0 || 8 || 100% || 100% || 3 || 13",
+                "As a reference for speed, your own base speed is 450."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3901,
+      "name": "Gobbler",
+      "kind": "enemy",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Enemies",
+      "main_revision": "8787",
+      "lines": [
+        {
+          "line": "Summary: An enemy that hunts down materials, eats them, and grows as it eats.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Seeks materials to eat them; eating materials makes it grow."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Its first version is fast but fragile.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Fast but fragile."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Killing it drops the materials it ate: all of them from its first version, twice as many from the second and three times as many from the third. The later versions are slower but have more health. It has only a 3% chance to appear, and the chance is rolled 10 seconds after a wave begins; it can turn up from wave 1.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Killing it makes it drop all the materials it ate.",
+                "Loses speed but gains max HP.",
+                "Killing it makes it drop twice the amount of materials it ate.",
+                "Loses more speed but gains even more max HP.",
+                "Killing it makes it drop triple the materials eaten.",
+                "Has 3% chance to spawn 10 seconds into a wave.",
+                "|| 0.85 || 0.0 || 8 || 100% || 100% || 1 ||"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3902,
+      "name": "Slasher Egg and Slasher",
+      "kind": "enemy",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Enemies",
+      "main_revision": "8787",
+      "lines": [
+        {
+          "line": "Summary: A Slasher Egg sits still; leave it alone for 5 seconds and a Slasher hatches from it. A Slasher follows you but backs off when you get close, and hits with a vertical slash from medium range.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Stays still, dies and spawns a Slasher after 5 seconds unless killed",
+                "Follows the character, runs away if too close, slashes vertically dealing damage from medium range"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: An egg only hatches if it is still alive when its 5 seconds run out, so killing it first means no Slasher.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Stays still, dies and spawns a Slasher after 5 seconds unless killed"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Neither is met on Danger 0: both start on Danger 1, Slashers from wave 4 and eggs from wave 7. A Slasher starts with 50 health and gains 25 each wave, while an egg starts with 5 and gains 3.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "As Danger 1 adds more enemies, they only start spawning for Danger 1 and up.",
+                "|| 50 || 25.0 || 250-300 || 1 || Slash: 1.0 Contact: 1.15 || 0.9 || 3 || 1% || 1% || D1 : 4 || 24",
+                "|| 5 || 3.0 || 0 || 1 || 0.60 || 1.0 (can't knockback) || 1 || 0% || 0% || D1: 7 || 23"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3903,
+      "name": "Pursuer",
+      "kind": "enemy",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Enemies",
+      "main_revision": "8787",
+      "lines": [
+        {
+          "line": "Summary: A chaser that hurts you on touch and gets faster with every second it keeps chasing you.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Chases the character, damages on touch, keeps getting faster each second"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It first appears at wave 11, where the page works its health out as 250 (10 to start plus 24 for each wave after the first), and that is 40% higher on Danger 5. Its speed climbs from 150 to 600 while the page gives your own base speed as 450, and its speed does not change with the wave or the Danger level.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Pursuers don't show up before wave 11, but at wave 11 they would have 10 HP + 10x24 HP = 250 HP. (It is 40% higher for Danger 5 in both cases.)",
+                "|| 10 || 24.0 || 150, charging up to 600 || 1 ||",
+                "As a reference for speed, your own base speed is 450.",
+                "Damage works the same way, while their Speed doesn't change with Wave or Danger level."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3904,
+      "name": "Fly",
+      "kind": "enemy",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Enemies",
+      "main_revision": "8787",
+      "lines": [
+        {
+          "line": "Summary: An enemy that moves around you. When your ranged weapons hit it, it answers half the time by shooting out projectiles in random directions.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Moves around player.",
+                "When hit by Ranged Weapons, 50% chance to fire projectiles in random directions."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The 50% chance applies to ranged hits only, because hits from melee weapons do not make it fire. It starts with 15 health and gains 4 each wave, moves at a random speed between 325 and 375, and is only met from Danger 1 up, starting at wave 4.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "(Melee Weapon hits don't spawn projectiles.)",
+                "|| 15 || 4.0 || 325-375 || 1 ||",
+                "|| 1% || 1% || D1 : 4 || 8"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

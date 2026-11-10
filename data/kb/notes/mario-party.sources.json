@@ -101,25 +101,6 @@
           ]
         },
         {
-          "line": "Weak points: Buying No Boo at the Mushroom Shop for 500 coins removes Boo from the board, but some boards ignore it.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Boo",
-              "revision": "5532404",
-              "quoted": [
-                "they provide the player character with the option stealing either a number of coins from an opponent for free or a Star for 50 coins, on their behalf."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Mario_Party",
-              "revision": "5539722",
-              "quoted": [
-                "No Boo || 500 Coins || Boo won't appear on the map, but it won't work on some maps."
-              ]
-            }
-          ]
-        },
-        {
           "line": "Tips: On Luigi's Engine Room, whichever way you go, every path finishes at Warp Pipes leading to Boo, who stands close to the start. On Bowser's Magma Mountain, the free roulette at the purple Stone Head can send you to Boo. DK's Jungle Adventure is the only board with two Boos.",
           "drawn_from": [
             {
@@ -269,15 +250,8 @@
           ]
         },
         {
-          "line": "Looks like: The Thwomps guarding the bridges are the Blue Thwomps, and they use a boxier take on the Super Mario 64 design.",
+          "line": "Looks like: The Thwomps here use a boxier take on the Super Mario 64 design.",
           "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Yoshi%27s_Tropical_Island",
-              "revision": "5475501",
-              "quoted": [
-                "the Blue Thwomps guarding the bridges continue to raise the price of passage."
-              ]
-            },
             {
               "page": "https://www.mariowiki.com/Thwomp",
               "revision": "5542350",
@@ -335,15 +309,14 @@
           ]
         },
         {
-          "line": "Weak points: It does nothing if you have no Stars when you land on it, it disappears once it has taken a Star, and it does nothing to the player who planted it. Only the first rival who lands there gets robbed.",
+          "line": "Weak points: It does nothing if you have no Stars when you land on it, it disappears once it has taken a Star, and it does nothing to the player who planted it.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Peach%27s_Birthday_Cake",
               "revision": "5465016",
               "quoted": [
                 "though the Piranha Plant disappears after doing so and does nothing if the opponent has no Stars.",
-                "If a player lands on a space with their Piranha Plant or cannot afford to add one to an empty space, nothing occurs.",
-                "Plant \"Strawberry Seeds\" to steal Stars from the first rival to land on that space."
+                "If a player lands on a space with their Piranha Plant or cannot afford to add one to an empty space, nothing occurs."
               ]
             }
           ]
@@ -378,13 +351,6 @@
               "revision": "5539722",
               "quoted": [
                 "If a player lands on this space, they lose 3 Coins. The amount of Coins lost is doubled during the Last Five Turns Event."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Red_Space",
-              "revision": "5406835",
-              "quoted": [
-                "Lose three Coins. (-6 during final 5 turns)"
               ]
             },
             {
@@ -876,24 +842,17 @@
               "quoted": [
                 "A roulette block appears if a player lands on this space. Either the player can receive a Mushroom, which gives the Player the chance to roll another Dice Block, or receive a Poison Mushroom, which forces them to forfeit their next turn's Dice Block roll."
               ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Mushroom_Space",
-              "revision": "5413260",
-              "quoted": [
-                "But if a Poisonous Mushroom appears, the player will lose a turn."
-              ]
             }
           ]
         },
         {
-          "line": "Uses: The Mushroom lets you roll a Dice Block again and move on. The Poisonous Mushroom costs you a turn, though you still join the Mini-Games on a turn you have lost.",
+          "line": "Uses: The Mushroom lets you roll again. The Poisonous Mushroom costs you your next turn.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mushroom_Space",
               "revision": "5413260",
               "quoted": [
-                "If a Mushroom appears when you hit this block, a Dice Block appears and the player can move again. But if a Poisonous Mushroom appears, the player will lose a turn. Players who have lost a turn still participate in Mini-Games."
+                "It triggers a roulette block with a Mushroom, which allows the player to roll again, and a Poisonous Mushroom, which costs them their next turn."
               ]
             }
           ]

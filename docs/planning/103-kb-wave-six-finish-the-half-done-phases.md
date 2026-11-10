@@ -656,11 +656,35 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
 - **Usage at 20:26 EST:** 43 percent of the five-hour window (resets 01:00 EST), 25 percent of the week, 29 percent
   on Fable's own counter.
 
+- **Stopping point A, 21:30 EST (tip `081693d2`, every check green).**
+  1. *Landed:* the bookkeeper's two sweeps; the answer-test fix; the free-to-use sources check; the question loader;
+     the Deck-check scripts; the versus groundwork; the honest answer (switched off); the summing-up fix; the mod
+     tips; the page-reader fix; the two small fixes; the picture set; the covers and notes line; the starter-models
+     box; and notes for ten games (147 notes). *Turned down on its numbers:* the crowding fix (four versions
+     measured; the best one gains about nine questions and loses two when the game's name is typed; the record and
+     the finished patch are in the workshop's research folder, and the trade is the maintainer's). *Stays off:* the
+     honest "I don't know" (the wording works, 17 or 18 of 24 when it reaches every question, but the plugin only
+     notices the gap in 3 of 24 answers; letting it check in Speed mode alone would reach 12 of 24; the record is in
+     the workshop).
+  2. *The Deck:* block D0a ran (four passes, three rows not settled), then the Deck froze: a picture question with
+     God of War running used all its memory. The maintainer restarted it by hand at 21:12. New rules for every
+     later block: no picture question over a heavy game, free memory read before every question and launch, stop
+     at two timeouts. Block D0b started at 21:20 with a fresh driver.
+  3. *Usage:* 70 percent of the five-hour window (resets 01:00 EST), 28 percent of the week, 33 percent on Fable's
+     own counter. No new helper starts before the reset.
+  4. *Next:* D0b's readings, then lane F1 (the answer screen's D-pad) with them in hand; the rewording pass on six
+     notes files; the licence read of Melee and Grand Theft Auto III; the Left 4 Dead 2 versus notes; the blind test
+     questions for the landed notes; notes for the nine games not started, and Half-Life 2 and Black Mesa again if
+     their wiki is back; the picture-search lane; deploy 1 and block D1.
+  5. *Waiting on the maintainer:* questions 3 to 6 below, and three ten-note samples in the workshop's checks folder
+     (`plan103-sample-earlier.md`, `plan103-sample-B.md`, `plan103-sample-C.md`; wait for the session's word, two
+     are being refreshed after last fixes).
+
 **Questions for the maintainer (the safest choice is taken meanwhile):**
 
-2. **The Deck is stuck with God of War running and almost no memory free.** *Taken meanwhile:* nothing is pressed
-   and nothing is ended. Please exit the game on the Deck, or say "end it" and the session ends the game over SSH.
-   Phone alerts are switched off in the app's settings, so this could only be said in the chat.
+2. **Answered 2026-11-09, 21:12 EST:** the Deck was frozen with God of War in the background and an answer half
+   written; the maintainer restarted it by hand. New roadmap bug to file: a question asked over a heavy game can
+   use all the Deck's memory and freeze it; the plugin should check free memory before loading the AI.
 3. **The picture set has no boss pictures** (29 pictures, 11 games, one enemy, four with a library note). The marks
    test needs at least fifteen. *Taken meanwhile:* the marks test waits; the picture-search work will be measured on
    what there is and lands switched off unless it clearly earns "on". Say where more play pictures are, or allow
@@ -683,14 +707,23 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
 
 **Pick-up list (kept current; a new chat can carry on from here):**
 
-- Tip: `d97c88cf`. Nothing landed yet. Every landing waits for K0.
-- In flight, each in `.claude/worktrees/p103-<lane>` on branch `refactor/p103-<lane>`: k0, t1, t2, t3, t4, x0, r1,
-  r2, v1, g1, s1, b1, b2. The Deck driver is on block D0a (runbook `assets/103-runbook-block-D0.md`; its handover
-  will be `workshop:planning/assets/103-handover-D0a.md`).
-- Waiting on T2's landing: X0's answer-test half and R2's measurement. Waiting on the session's pick: R1's variant.
-- Next three acts: land K0, then T2, T3, T1, T4 as they report (read each change first; `scripts/land_lane.sh
-  refactor/p103-<lane> d97c88cf .scratch/p103`, one at a time); start block D0b with a fresh driver when D0a hands
-  over; forward the second opinion's corrections to the running helpers.
+- Tip: `081693d2`, every check green. The session's own running notes, with every helper's id and the lists not yet
+  acted on, are in `.scratch/p103/session-notes.md` in the shared checkout (not in git).
+- Land with `scripts/land_lane.sh <branch> <base> .scratch/p103`, one at a time; several finished helpers can be
+  picked onto one branch in a copy (`.claude/worktrees/p103-land1` or `-land2`) and landed as one batch. Read the
+  script's exit code, not a line it prints. `.scratch/p103/clones.py <base>` lists copied test lines by file.
+- In flight: the Deck driver on block D0b (its handover will be `workshop:planning/assets/103-handover-D0b.md`).
+- Written and checked, not landed: Melee (`refactor/p103-n25`) and Grand Theft Auto III (`refactor/p103-n26`), both
+  waiting for the licence read. Not landing: `refactor/p103-r1` (the crowding fix, turned down).
+- Owed to six landed notes files: the licence reviewer's rewording lists (in the running notes), one follow-up
+  commit per file. Owed to Grand Theft Auto III: drop the two empty "Weak points" lines (notes 3503, 3504).
+- Not started: lanes N27 to N35 (nine games), N17 and N34 again when combineoverwiki.net answers, V2, Q3 and Q4,
+  P2, F1 (after D0b), C1, X1. Blocked on pictures: P3 and P4. Run the reader from the landed tip: it now falls back
+  by itself when a wiki refuses the by-revision call.
+- The Deck: build `9bc29b3c0500` (nothing deployed yet); library 2026.10.25; five saved chats; put-backs owed at
+  the end: the mode chip back to Speed; the long test chat deleted in block DR.
+- Budget rule learned the hard way: read the three counters before every batch; ten to twelve helpers fill a
+  five-hour window in about three quarters of an hour.
 
 ## 13. Report
 

@@ -42,16 +42,21 @@ export function PluginQuickStartInstructionsBody() {
         }}
       >
         <strong style={{ display: "block", marginBottom: 6, color: "#fff" }}>
-          Set where Ollama runs on the Ollama tab first
+          First, choose where the AI runs
         </strong>
-        Ollama usually runs on your <strong>main rig</strong> (not only on the Deck). On the{" "}
-        <strong>Ollama</strong> tab, under <strong>Where AI runs</strong>, enter that PC&apos;s{" "}
-        <strong>LAN IP</strong> (for example{" "}
+        The AI can run in one of two places. Pick one on the <strong>Ollama</strong> tab.
+        <br />
+        <strong>On this Deck:</strong> switch on <strong>Run AI on this Deck</strong>, then press{" "}
+        <strong>Install Ollama</strong>. It works anywhere, but it is slower while a game is running.
+        <br />
+        <strong>On a PC at home:</strong> install Ollama on that PC. Then type its address into{" "}
+        <strong>PC address</strong> (for example{" "}
         <code style={{ fontSize: textPx(12), color: "#b8dcc8" }}>
-          192.168.1.50
+          http://192.168.1.50:11434
         </code>
-        ) or enable <strong>Ollama on this Deck</strong> for local inference.{" "}
-        <strong>You must do this — if the address is empty or wrong, every ask will fail with a connection error.</strong>
+        ) and press <strong>Test connection</strong>. It is much faster.
+        <br />
+        Until one of these is set, every ask fails with a connection error.
       </p>
     <ul
       style={{

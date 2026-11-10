@@ -786,6 +786,23 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
      percent of the week, 53 percent on Fable's own counter. *Waiting on the maintainer:* a look at the Deck
      (question 8); questions 3 to 7.
 
+- **Stopping point D, the end (2026-11-10, afternoon; tip `be9dff83`).**
+  1. *Landed since 09:00:* the last rewrite of the notes (four files rewritten from fact lists, small fixes in seven
+     more, every new file's quotes sorted by where they sit on the page and every quote of a game's own text replaced
+     or dropped, then fact-checked by helpers who had not written it; one landing of 35 commits); the quick-start box
+     made to fit the Deck's screen (found by block D1); the bookkeeper's sweeps K10 and K11.
+  2. *The Deck:* it came back at 10:00 EST and the maintainer said go. Two deploys (`3eabdfa27ab3`, then
+     `1ad7ad9b4bf9` with the final library and the quick-start fix). Blocks D1, D2 (three drivers), D3 (three
+     drivers) and DR ran between 11:00 and 13:15. Checked on the Deck: the Copy icon and checklist (3 of 3 each way);
+     the details strip and its chips, with and without a game; the notes-used line; Brotato; mod tips; versus notes;
+     the quick-start box; the mic log. Just short: one question per game attached a new note for 17 of 20 (line 18).
+     Faint: the chips following the last question. Never shown: the panel out of focus (about 125 reads). Not run:
+     block DP, the saved walks' re-save. The Deck is put back (the published library, the mode chip, the chats, every
+     setting); the new build stays on it.
+  3. *Usage at the end:* 46 percent of the five-hour window, 60 percent of the week, 61 percent on Fable's own counter.
+  4. *Next:* nothing is running. The report is in § 13; the checks page holds the reads and the calls.
+  5. *Waiting on the maintainer:* § 13.1.
+
 **Questions for the maintainer (the safest choice is taken meanwhile):**
 
 2. **Answered 2026-11-09, 21:12 EST:** the Deck was frozen with God of War in the background and an answer half
@@ -809,8 +826,8 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
 7. **The Brotato wiki's licence** is read from its page footer (the wiki's own data gives none). The older Brotato
    notes already rely on it. *Taken meanwhile:* stored as CC BY-SA 4.0. One look at a Brotato wiki page's footer
    settles it.
-8. **The Deck is asleep** (since about 01:10 EST on 2026-11-10) and the rig cannot wake it. *Taken meanwhile:* nothing
-   deployed, block D1 not run. Press its power button and say so.
+8. **Answered 2026-11-10, about 10:05 EST:** "Deck is back online". It had been asleep, not frozen. Every Deck block
+   then ran.
 
 1. **The Deck holds far fewer play pictures than the plan hoped.** Steam's screenshot folders on the Deck cover six
    games, and 77 of the 134 pictures are from one game (Deep Rock Galactic: Survivor). Another 281 pictures sit in
@@ -819,41 +836,384 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
    from what there is, plus the eleven older pictures, and will say plainly if it falls short of "ten games, ten
    bosses". If you have play pictures elsewhere, or want Steam's own folder looked through, say so.
 
-**Pick-up list (kept current; a new chat can carry on from here):**
+**Pick-up list (the session is finished; this is what a later chat starts from):**
 
-- Tip: `c28a14b6`, every check green. The session's own running notes, with every helper's id, every hand-out and the
-  lists not yet acted on, are in `.scratch/p103/` in the shared checkout (not in git): `session-notes.md` first.
-- Land with `scripts/land_lane.sh <branch> <base> .scratch/p103`, one at a time (`.scratch/p103/land_queue.sh` runs
-  the lines of `queue.txt` in order and logs to `chain.log`). Read the exit code. On a failed check the picked commits
-  stay on the tip: fix forward with one more commit.
-- **In flight at 09:00: the last rewrite round,** six helpers in copies `p103-rw3` (Fallout 4), `-rw4` (Red Dead
-  Redemption 2), `-rw5` (Cyberpunk 2077), `-rw6` (Melee), `-rw7` (Left 4 Dead 2 and Grand Theft Auto III, small
-  fixes), `-rw8` (twenty small fixes in Mario Party, 2, 3, 6 and Super Smash Bros.), each cut from `c28a14b6`, each
-  following `.scratch/p103/rewrite-round-2.md`. **When they report:** a fact check of every rewritten line against
-  its quotes by a helper that did not write it (the lesson of this round: the text that lands must be the text that
-  was checked), fixes, then land the six as one batch; then a short bookkeeper sweep; then the checks page's second
-  pass (the samples' text again; calls on the versus notes' cost, the picture model, and the Melee history before a
-  push; the four first-night rows that did not settle).
-- **Then the end:** `python scripts/verify.py --full` on the final tip; the report into § 13. Its text is drafted in
-  `.scratch/p103/report-top.md` (the opening, 13.1, 13.2) and `.scratch/p103/report-draft.md` (13.3 on), joined by
-  `.scratch/p103/fix_rest.py` into `report-final.md`; the second opinion's corrections are in
-  `.scratch/p103/consult-6.md`. Placeholders marked `@@...@@` are still to fill (the rewrite round's result, the tip,
-  the full check, usage).
-- Not landing: `refactor/p103-r1` and `refactor/p103-r1b` (the crowding fix, turned down twice on its numbers).
-  Not written: notes for Hades (licence), Half-Life 2 and Black Mesa (their wiki read-only on three tries). Blocked on
-  boss pictures: P3 and P4. Switched off: the honest "I don't know", the picture's guess.
-- The Deck: build `9bc29b3c0500` (nothing deployed); published library 2026.10.25; five saved chats; the mode chip on
-  Strategy. Not answering since about 01:10 EST (asleep, as far as can be told). When the maintainer says it is awake
-  and to go: `deck_status`, check no game runs, `scripts/build.ps1` from the shared checkout at a green tip with
-  nothing landing, read the build hash (`sha256sum ~/homebrew/plugins/bonsAI/dist/index.js | cut -c1-12`), then one
-  fresh driver per block with that hash: D1 (`103-runbook-block-D1.md`), D2 (`-D2.md`), D3 and then DR
-  (`-D3-DR.md`; tell D3's driver the chip order landed). A watcher on this PC (a background ping) ends when the Deck
-  answers on the network.
-- Budget: read the three counters before every batch. Six consults of six are used.
+- Tip `be9dff83`, every check green, `python scripts/verify.py --full` passing. Nothing pushed, nothing published.
+- What to do next, and what is left and why: § 13.1 and § 13.6. The maintainer's reads and calls are on the checks
+  page, round "Plan 103 (10 Nov)".
+- Not landed, kept on their branches: `refactor/p103-r1` and `refactor/p103-r1b` (the crowding fix, turned down twice);
+  `refactor/p103-fx1` (a notes-used line for answers that used no note: not wanted); eight commits at the end of
+  `refactor/p103-rw11` (repeated "Tips" lines merged in older notes: not wanted).
+- The session's own running notes, every helper's brief and report, the checkers' reports and the hand-outs are in
+  `.scratch/p103/` in the shared checkout (not in git): `session-notes.md` first. Four of six second opinions were
+  used.
+- The Deck: build `1ad7ad9b4bf9`; the published library 2026.10.25; four saved chats (one short test chat);
+  everything else as on 2026-11-09. Deck evidence and the drivers' handovers are in the workshop
+  (`test-evidence/plan103-*`, `planning/assets/103-handover-*.md`).
 
 ## 13. Report
 
-To be written at the end, in the shape § 11 names.
+Written 2026-11-10 by the chat that ran the session (19:30 EST on 9 November to the afternoon of the 10th). Tip
+`be9dff83`; `python scripts/verify.py --full` passed on it in 350 seconds (this report is the one commit after it, and changes only this document). **Nothing was pushed. Nothing was published. `main` was not
+touched.** 264 commits sit on `experimental` ahead of GitHub; until a push they exist only on this PC. A new
+build of the plugin is on your Deck; everything else on it was put back.
+
+**The plan set out to close three half-done entries and closed none of them, though each moved.**
+- *Notes for the 23 games (Phase 5):* 20 games have their notes and their test questions, and the notes were checked
+  on the Deck; Hades, Half-Life 2 and Black Mesa have none; the Deck check came in one game short of its line. PARTIAL.
+- *The screenshot measurement:* the labelled set grew from 11 pictures to 29, not the 40 to 60 hoped for, and holds no
+  boss; the two picture models were never timed on the Deck. Open.
+- *The marked screenshot (visual maps):* its test needs boss pictures and could not run. Open.
+
+The plan's own "after" table (§ 3), filled in as it turned out:
+
+| | Planned | What happened |
+|---|---|---|
+| Half-done knowledge-base entries | 3 down to 0 | still 3 |
+| Games with labelled enemy and item notes | 38 of 38 | 35 of 38 |
+| Notes in the library | about 875 | 891 |
+| Deck tips | about 182 | 185 |
+| Never-started entries (honest answers, versus, mod knowledge) | all three built | all three built; the honest answer is switched off; versus and mod basics are in and checked on the Deck |
+| Search test questions | about 1,500 | 1,558 |
+| Labelled test pictures | 40 to 60, with bosses | 29, no boss |
+| Open knowledge-base bugs (not accepted) | 6 down to 0 to 2 | 6 (three found by today's Deck blocks and rewrite; the Left 4 Dead 2 mix-ups left after the versus fix; older notes their wikis contradict, partly fixed; the new notes crowding the old) |
+| Open bugs on the main roadmap | 11 down to 2 to 4 | 9, six of them new this session (the memory freeze; five small ones from the Deck blocks) |
+| Knowledge-base Deck checks owed | 4 entries down to 0 to 2 | 9 entries: two are your reads, one is accepted, and six still owe something (the strip's out-of-focus half, the Undo walk, the chips' look, three older rows) |
+| Calls waiting on you | 6 down to a few | 2 older reads, 6 samples to read, and the calls on the checks page |
+
+### 13.1 What you need to do next
+
+1. **Open the checks page** ([Checks Only You Can Do](https://claude.ai/code/artifact/3e5ec678-b219-439d-b952-139d75ff2db4)),
+   round "Plan 103 (10 Nov)". It holds your reads (six batches of ten notes, ten picture labels), the calls below with
+   their numbers on the page, the wording looks with the Deck's own pictures, and a table of what the Deck showed.
+   **Batches B and C matter most:** those notes were rewritten on the last morning, after a re-check found that three
+   games' notes had never been put in the plugin's own words and that several files rested lines on the games' own
+   text. A fact check followed the rewrite, by helpers who did not write it; your read is the last check.
+2. **The calls that block something:**
+   - **Boss pictures.** The picture set has none, so the "can the AI mark a boss picture" test did not run and the
+     picture's own guess stays switched off. Take a few screenshots mid-fight, or allow public ones for a private test
+     set, or leave both as "not measured".
+   - **Red Dead Redemption 2's wiki licence** (stored as CC BY-SA 3.0) **and one look at a Brotato wiki page's
+     footer.**
+   - **The honest "I don't know":** built, switched off. Turn it on as it is, let it also check in Speed mode, or
+     leave it.
+   - **The versus notes' cost** (13.5), **which picture model comes first** (on this PC the Deck's starter model named
+     the game on 4 of 29 pictures and the other model on 19; timing on the Deck never ran), and **two Cyberpunk gang
+     notes** whose wiki pages may copy a book.
+3. **The library can be published ahead of the next plugin release, after your read.** It was tried against the
+   released plugin's own code on 1,343 test questions: it opens, nothing errors, and the same right notes attach.
+   Two things are weaker for people on the released plugin until the next release: only 8 of 36 mod questions reach a
+   mod tip (the rest get an ordinary answer, never a wrong tip), and a versus note comes first on more Left 4 Dead 2
+   questions (30 of 68 against 21). What holds it: your read of the samples, and the two licence calls. Beside the
+   decision, not against it: search lost a little as the library grew and again when the notes were reworded (13.7).
+4. **Two things to settle before you push,** because a push cannot be taken back:
+   - **The Red Dead Redemption 2 call.** A push puts those 14 notes, and the wiki sentences kept behind them as
+     sources, into the public repo's history for good.
+   - **Game text in the history.** The first version of the Melee notes copied Nintendo's trophy descriptions into
+     nine notes, and until the last morning several files rested lines on other game text (catalogue blurbs, scanner
+     and database entries, booklet lines). The final files are clean, but the earlier versions are in the history a
+     push would publish. You can push as it is, or ask a session to fold the notes' history into clean commits first.
+
+   Otherwise pushing is sound, and soon is better than late: a push ships nothing to players, and until then this
+   work exists only on this PC.
+5. **Your Deck.** It is back as you had it on 9 November, with these differences: **the new plugin build is on it**
+   (the put-back does not bring the old build back); a short test chat remains beside your three (the two long test
+   chats were deleted, and six old test chats were deleted on the first evening, as your call 6 allowed); two backups
+   of the plugin's settings folder sit in the Deck's home folder, one from plan 102 and one from this plan, each a
+   full copy and so each holding the Steam key the settings hold (say if you want them removed). The published
+   library, the mode chip on Speed, and every setting are as they were (settings compared name by name, no value
+   read).
+6. **A danger that is on every Deck today, the released build included.** A question asked while a heavy game runs
+   can use all the Deck's memory and freeze it. It happened here on 9 November (God of War running, a picture
+   attached); you restarted the Deck by hand. Nothing in the plugin checks free memory before it loads the AI. Filed
+   as a three-star bug, not fixed. Until it is: no picture questions over a big game.
+7. **Ten notes you left on the checks page that nobody has answered** (found while adding the new round; none was
+   changed): "What?" and "I don't understand what you're trying to say" on two items of the 10 October calls; three
+   requests in the same round (a change to the delete-chat menu, a broken internet sub-menu, mock-ups for smaller
+   option boxes); the jerky scrolling; the focus ring on "How to use bonsAI" (you marked it Fail); the
+   decode-and-scroll idea; the thicker icons you saw on the stand-in but not on the Deck; and "You can close it, but
+   if needed we will reopen it". A later session should start from these.
+
+### 13.2 What a player notices
+
+"Checked on the Deck" means a driver saw it on your Deck on 10 November, on the new build, with this session's
+library installed for the test.
+
+**Comes with the library, once it is published:**
+- **Notes for 20 more games' enemies and items:** Left 4 Dead 2, Fallout 4, Red Dead Redemption 2, Cyberpunk 2077,
+  five Mario Party games, both Super Smash Bros. games, Grand Theft Auto III, Yoshi's Story, Diddy Kong Racing,
+  Fallout: New Vegas, Brotato, Palworld, Skyrim, Hollow Knight and DOOM Eternal. *Checked on the Deck:* one question
+  per game attached one of the game's new notes for 17 of the 20 (Fallout 4 needed a third question; Brotato and DOOM
+  Eternal attached only older notes on both tries).
+- **Left 4 Dead 2 versus:** fifteen notes on scoring, spawning, playing each side, ambush spots on three campaigns,
+  Survival and Realism Versus; finales left out on purpose. *Checked on the Deck:* three versus questions attached
+  versus notes; a question about a last map did not give the ending away.
+- **Mod basics:** eighteen short tips, each marked "Researched, unconfirmed". *Checked on the Deck* (new plugin): a
+  Skyrim and a Stardew Valley mod question each attached three.
+- **Thirteen corrected sentences** in older notes.
+
+**Needs the next plugin release as well:**
+- **Down from the Copy icon lands on a checklist's first step, and Up from the first step goes back into the answer.**
+  *Checked on the Deck,* three times out of three each way.
+- **The "This answer / Session" strip and the chips under it are real stops.** *Checked on the Deck* with and without
+  a game running: Down reaches the strip every time and the chips' ring and highlight move together. Whether it also
+  cures the ring jumping past them when the panel has lost focus behind a game rests on tests alone: in about 125
+  reads over three days the Deck never showed that state.
+- **A fully hidden answer says its notes were used** ("Notes were used for this answer — show the spoiler to see
+  them"), and a Brotato question no longer hides its answer. *Checked on the Deck.* The line shows only when the
+  answer really drew on a note, and it can sit behind the dock while the ring is on "Show details".
+- **The quick-start box fits the Deck's screen.** Its title had been hidden under Steam's top bar since October.
+  *Checked on the Deck.* It now looks like the plugin's other confirm boxes, which is yours to judge on the checks
+  page.
+- **Suggestion chips follow your last question, in Strategy and Expert, for the game that is running.** Not in Speed,
+  the mode you use: Speed never works out the question's meaning, and that is what the chips are ordered by. *On the
+  Deck* the effect was real but faint: the row is two slots that each change every few seconds, a matching chip
+  appeared about twelve seconds after one answer, and in a long chat the row sat hidden behind the "Show details"
+  line.
+- **A plain Left 4 Dead 2 question leads with the game's ordinary note, not a versus one,** in Strategy only.
+- **The starter-models box fits the Deck's screen** on a fresh install (not checked: it needs a fresh install); a chat
+  that cannot be summed up should say why (on the Deck one long chat was not summed up and nothing said why: not
+  fixed); the log stays quiet when the mic was never used (*checked on the Deck*).
+- **In the code and switched off:** the honest "I don't know" sentence, and the picture's own guess.
+
+**What got worse:**
+- **Search, a little.** Of 1,558 test questions, 1,325 find their right note in the first three. Nine older questions
+  lost theirs as the library grew by half, and seven more when the notes were reworded shorter.
+- **"How to beat tank" in Left 4 Dead 2.** The versus note about surviving the Tank attaches beside the ordinary Tank
+  note and the answer leans on it; in Speed mode it still comes first. A question about playing the Hunter in versus,
+  asked in Strategy, still leads with the survivors' note.
+- **Three Cyberpunk notes are thin** (two lines each): the rest of what they said came only from the game's own text.
+
+### 13.3 The work by area
+
+Paths are from the repo root. "Popped up" is what nobody planned for; "could have been different" is what would have
+saved time, said without blame.
+
+**The library's notes** (`data/kb/notes/*.json` with a `.sources.json` beside each; `data/kb/strategy_seed.json`;
+`data/kb/compat_patterns.json`; `scripts/kb/fetch_wiki_live_pages.py`, `build_rag_db.py`, `extract_wiki_notes.py`,
+`publish_corpus.py`).
+- *Built.* Twenty-one new notes files (20 games and the versus file), 308 notes, every line traceable to a fetched
+  page and revision in the sources file. One writer per game; a separate checker; a licence reviewer; fix rounds. The
+  build and publish checks accept CC0 sources. The page reader falls back to asking by title when a wiki refuses a
+  by-revision request.
+- *Popped up, and it is the session's main lesson.* The pipeline checked facts before the text was final, and judged
+  "is this the game's own text" by how a quote read. Both were wrong. (1) Eight files were reworded after their fact
+  check, and four games (Left 4 Dead 2, Fallout 4, Red Dead Redemption 2, Cyberpunk 2077) never got the "own words"
+  pass at all; nobody noticed until the second opinion asked which files had been read after their last change. (2)
+  A wiki's licence does not cover the game text it quotes, and readers who judged quotes by reading missed dozens:
+  trophy and booklet text in Melee (found three times), catalogue blurbs and compendium entries in Red Dead
+  Redemption 2, scanner, item and database text in Cyberpunk, guide blurbs in Left 4 Dead 2, booklet lines, a
+  character's speech and a board host's intros in the Mario Party files. The helper that found them looked at where
+  each quote sits on the saved page (a description box, a quote block, an attribution line). On the last morning:
+  four files were rewritten from fact lists, every one of the 21 files' quotes was sorted that way and every
+  game-text quote replaced or its fact dropped, and the rewritten text was fact-checked by helpers who had not
+  written it (three rounds, about fifty small corrections). Both lessons are in `docs/lessons-learned.md`.
+- *Also.* Hades' wiki is non-commercial; Combine OverWiki (Half-Life 2, Black Mesa) answered "Database is read-only"
+  on every try across two days. Lane M corrected thirteen sentences in older notes. Two test rows broke when their
+  subject gained a note; fixed forward.
+- *Left open.* The twelve older notes files from plans 100 and 102 have never had their quotes sorted by where they
+  sit. About twenty "Weak points" lines across the library may hold no weakness. Two Cyberpunk gang pages may copy a
+  book.
+- *Could have been different.* A licence check of each game's wiki before go would have dropped Hades on day one.
+  "Write from a fact list", "sort every quote by where it sits", and "fact-check the final text" in the first brief
+  would have saved two rewording rounds, about a fifth of the session's helper budget.
+
+**Search and the answer test** (`py_modules/backend/knowledge/knowledge_base_service.py`, `knowledge_base_search.py`,
+`knowledge_base_chips.py`, `compat_topic_router.py`, `kb_notes_turn_flags.py`; `scripts/kb/eval_kb_answers.py`,
+`eval_kb_embed_models.py`, `scripts/lib/kb_eval_fixture.py`, `scripts/measure_kb_floor_holdout.py`;
+`tests/fixtures/kb_eval/`).
+- *Built.* Test questions live one file per game (21 new files, 622 rows, every one written by a helper that never
+  saw the notes). The answer test's three tries are three independent tries (they had been asked as follow-ups of the
+  first), and it counts "said so in its own words" apart from the plugin's footer line. Chips:
+  `knowledge_base_chips.py` orders the game's chips by closeness to the last question's vector, which
+  `knowledge_base_service.py` hands over when it makes it (no new model call; taken once; ten-minute life);
+  spoiler-kind notes come forward only if the question named them. The versus rule
+  (`_lead_with_the_note_the_question_names` in `knowledge_base_search.py`): when the first note is a game-mode note
+  and the question names no mode and no side, the ordinary note the question names by title leads; nothing is
+  filtered. Four versus notes lost "in versus" from their names.
+- *Popped up.* (1) Every older answer-quality number was measured with the broken tries and had to be taken again;
+  the new baseline is 73.4 and 71.8 percent of facts kept, so two points is noise. (2) **The crowding fix was built
+  four ways and turned down, then measured again on the bigger library and turned down again.** The second
+  measurement found why it costs: every game's "Starting out" note ranks high by meaning and gets lifted past a note
+  the word search really found. (3) The library grew by half and search paid: on the same 628 older questions the
+  right note is in the first three for 572 (581 before), and the thirty meaning-only questions fell from 23 to 18.
+  (4) The final numbers showed the versus notes had taken two older answers; the versus rule was built and landed
+  the same morning, and repaired half (13.5). (5) The chip order added an optional argument to a function whose call
+  shape a test keeps frozen; fixed forward.
+- *Decided by the session alone, said here so you can disagree:* the chip order's two-line hand-over in the search
+  service and the versus rule both landed without a second opinion (each alone, each with the full checks). The
+  second opinion, asked afterwards, would have landed both.
+- *Could have been different.* The plan's order (the crowding fix first, the notes after) hid that the notes
+  themselves make crowding worse; measuring once in the middle would have shown it a day earlier.
+
+**The prompt and the honest answer** (`py_modules/backend/prompts/ollama_prompts.py`, `main.py`,
+`py_modules/backend/ask/ollama_ask_service.py`, `game_ai_request.py`, `kb_notes_turn_flags.py`).
+- *Built.* The back end tells the instructions whether this turn's notes cover the question, and one sentence is
+  added only on turns where they do not; ordinary turns are byte for byte the same (proven against saved
+  fingerprints). A finale rule for versus-kind notes. The "Looks like" label.
+- *Popped up.* The sentence works when it reaches a question (17 or 18 of 24 admit not knowing) but the plugin only
+  notices the gap on 3 of 24, so switched on as it is it would change almost nothing; letting it also check in Speed
+  mode would reach 12 of 24. That widens what Speed mode does, so it is your call. Landed switched off
+  (`HONEST_UNKNOWN_ON`).
+
+**Pictures** (`py_modules/backend/ask/picture_guess.py`, one call site in `game_ai_request.py`;
+`scripts/kb/eval_screenshot_reading.py`; `tests/fixtures/screenshot_eval_v1.json`; `scripts/deck_place_picture.py`).
+- *Built.* A labelled set of 29 real screenshots (the pictures stay in the workshop). A short first question to the
+  picture model whose answer (game, place, enemy; "not sure" dropped; letters and digits only, fourteen words at
+  most) joins the search words and nothing else. A Stop during that call stops the whole ask.
+- *Popped up.* The Deck's screenshot folders held six games and no bosses, so the marks test (lanes P3 and P4) could
+  not run, and the guess was measured on the four pictures that name a note: 0 of 40 right notes without it, 17 of 40
+  with it on the Deck's starter model, mostly by generic words. Landed switched off (`PICTURE_GUESS_ON`). The request
+  file is at 799 of its 800 allowed lines.
+- *Before it is switched on:* more pictures with notes and bosses; a security read; a check that a boss name guessed
+  from the picture cannot count as the player having named it for the spoiler rules; its seconds and its memory on
+  the Deck with a game running, since it is one more model call on the path that froze the Deck.
+
+**The answer screen and the boxes** (`src/features/answer/bubble/buildAnswerCornerSlots.tsx`,
+`src/features/answer/details/ContextChipLadder.tsx`, `buildDetailsPanelElement.tsx`,
+`src/features/answer/transcript/MainTabChatTranscript.tsx`, `src/shared/dpad/liveTurnFocusGraph.ts`,
+`focusPerTurnRow.ts`, `src/features/knowledge-library/buildKbNotesBlockElement.tsx`,
+`src/features/spoilers/spoilerTitleProfiles.ts`; `src/shared/TwoButtonConfirmModal.tsx`,
+`src/features/about/PluginHelpModal.tsx`, `src/features/downloads/downloadNotice.tsx`; test set-up in
+`src/test-harness/transcriptPanelWalk.tsx` and `deckPopupFit.ts`).
+- *Built.* Covers and the notes line (the caption; a no-story game named in the question). The D-pad: Down from Copy
+  runs the same step that Down from the answer runs; Up from step 1 mirrors it; the strip and the chip grid's root
+  each register their own Steam stop the way the notes line does, and a chip-to-chip step uses Steam's transfer when
+  the page lacks focus. The shared two-button box has a fixed height and scrolls its body, proven by arithmetic read
+  back from the stylesheet; the starter-models box and, since the last morning, the quick-start box use it.
+- *Popped up.* (1) "One open cover shows every answer's notes" was not a bug. (2) The second opinion read the D-pad
+  change and found two presses that would have moved nothing with the page out of focus; both fixed before landing.
+  (3) The Deck found the quick-start box cut off; it had been too tall since October. Fixed and checked on the Deck
+  the same day. (4) The Deck's "a second hidden answer shows no notes line" was the session's own check worded too
+  broadly: the line follows the notes the answer used. A fix was written and not landed, because it would have
+  promised notes and shown none.
+- *Could have been different.* Nothing here; measuring on the Deck before writing (block D0b before lane F1) is why
+  the D-pad fix passed three of three on its first Deck check.
+
+**Voice, chats, the Deck tooling** (`src/features/voice/useVoiceTranscription.ts`;
+`py_modules/backend/chats/chat_summary_service.py`, `chat_summary_failure.py`; `scripts/deck_kb_readback.py`,
+`scripts/deck_place_picture.py`; runbooks `docs/planning/assets/103-runbook-block-D0.md`, `-D1.md`, `-D2.md`,
+`-D3-DR.md`).
+- *Built.* The mic's stray log line came from the screen's clean-up, not from the two callers the brief named. A
+  summing-up that fails says why (the Deck then showed a long chat that was simply not summed up, with nothing said:
+  filed). One call reads back an answer's notes line, covers and the log's attach line; it worked on every run.
+- *Popped up.* A Deck driver fills its working memory in ten to fifteen minutes of rig calls, so each block took two
+  or three drivers with short row lists. Written into `docs/mcp-setup.md`.
+
+### 13.4 A plain guide for a developer
+
+- **Adding notes for a game:** one file `data/kb/notes/<game>.json` plus `<game>.sources.json`, numbers in the game's
+  own hundred, every line resting on a quote in the sources file. Write from a fact list, never from the wiki's
+  sentence. Sort every quote by where it sits on the page and use only the editors' own prose (a bare number or name
+  from a table is fine). Have someone who did not write the final text check it against the quotes. Build with
+  `python scripts/kb/build_rag_db.py --seed --out <dir>`. The rules are `docs/planning/assets/103-helper-rules.md`.
+- **Adding test questions:** a new file in `tests/fixtures/kb_eval/` (its README has the row shape). The writer must
+  not have read the notes. A strategy question that carries a troubleshooting word ("launcher", "crash") is routed to
+  a tip and fails a test: reword it.
+- **The two switches that are off:** `PICTURE_GUESS_ON` in `py_modules/backend/ask/picture_guess.py`, and
+  `HONEST_UNKNOWN_ON` in `py_modules/backend/prompts/ollama_prompts.py`. Each has tests proving a switched-off turn is
+  unchanged.
+- **The chips' order:** `_closest_first` in `knowledge_base_chips.py`; two named thresholds; the screen's rotation
+  (`src/features/preset-carousel/nextChipRule.ts`) is untouched. It needs a meaning search, so it does nothing in
+  Speed.
+- **A game-mode note leading a plain question:** `_lead_with_the_note_the_question_names` in
+  `knowledge_base_search.py`; the mode words are a list beside it. It runs only in the blended search.
+- **A new D-pad stop on the answer screen:** copy the notes line's way (`registerRowNav` in
+  `buildKbNotesBlockElement.tsx`); test it with `src/test-harness/transcriptPanelWalk.tsx`, in focus and out.
+- **A box that must fit the Deck's screen:** use `src/shared/TwoButtonConfirmModal.tsx`; state the fit as arithmetic
+  with `src/test-harness/deckPopupFit.ts`; never a height written as a share of the screen.
+- **Measuring:** search `python scripts/kb/eval_kb_embed_models.py --arms-only --force-rebuild --write-report`; tips
+  `python scripts/measure_kb_floor_holdout.py`; answers `python scripts/kb/eval_kb_answers.py --samples 3` twice with
+  different `--seed-base` values (the gap between the two is the noise). Reports go to the workshop, never the repo.
+
+### 13.5 What failed, and why
+
+- **The Deck froze** (9 November, about 20:15 EST). A driver asked a picture question with God of War running; the
+  AI and the game together used all the memory; you restarted it by hand. Every later runbook reads free memory
+  before each question and launch and bans picture questions over a heavy game. The bug itself is filed, not fixed.
+- **The Deck slept from about 01:10 to 10:00 EST on the 10th,** after the last night block released its hold; nothing
+  on this side can wake it, so the night's Deck work waited for you. All of it then ran between 11:00 and 13:15.
+- **The notes pipeline checked the wrong text** (13.3). It was caught only because the second opinion, reading the
+  report's draft, asked which files had been read after their last change.
+- **The first batch filled the usage window in half an hour** (fifteen helpers at 19:50; 100 percent at 19:59). The
+  counters are read before every batch since.
+- **The crowding fix,** twice. **The honest answer,** built and off. **The marks test,** not run for want of boss
+  pictures. **Notes for three games,** not written.
+- **The versus notes cost two older answers.** Half repaired: the Tank question leads with the right note again but
+  the answer still leans on the versus note, and Speed mode has no such rule.
+- **The one-question-per-game Deck check came in one short** (17 of 20 against a line of 18): for Brotato and DOOM
+  Eternal the older notes about the same enemies won both times.
+- **Four landings needed five fix-forward commits** (a mod tip changing which tip a crash question gets in Speed mode; a
+  copied test set-up; a "nuke launcher" question routed to a tip; an "unanswerable" question whose subject gained a
+  note; the chips' frozen call shape). Each was caught by the full checks at landing; none reached a build.
+- **Two things the session did that it should not have:** it told a fix helper to merge repeated "Tips" lines in
+  every notes file (about seventy older notes; those commits were not landed); and its first Deck runbook named a
+  control that does not exist and allowed the question that froze the Deck.
+
+### 13.6 What is left, and why
+
+| Left | Why | What unblocks it |
+|---|---|---|
+| Publishing the library | Your read of the samples; two licence calls | The checks page |
+| Phase 5 stays PARTIAL | Three games without notes; the Deck check one short; crowding | Another source for Hades, Half-Life 2, Black Mesa; a crowding fix |
+| The marked screenshot (lanes P3, P4); the picture's own guess; timing the picture models on the Deck | No boss pictures; picture questions held back since the freeze | Pictures, or your word on public ones; the memory bug fixed |
+| The honest "I don't know" | Switched off on its numbers | Your call on Speed mode |
+| Crowding in search | The fix costs more than it gains | A later session: leave "Starting out" notes out of the lift (an older switch for that exists, off) |
+| Left 4 Dead 2: the Tank answer; no versus rule in Speed; six test questions without their note | The narrow fix stopped where it would have cost other questions | A later wave, with the numbers in the workshop |
+| Undo, then Down, with the panel out of focus | Three tries on three days; the Deck never showed the state | Proven by tests; stays on your list |
+| The suggestion chips' effect | Real but faint on the Deck; nothing in Speed | Your look; a later session could make the row favour the closest notes for a while |
+| A check of free memory before the AI loads (three stars) | Found, filed, not built | A bug session |
+| New small bugs from today's Deck blocks: the ring above the pane after reopening details (seen 4 of 8); the "notes were used" line behind the dock; a long chat not summed up with nothing said; a tall card on the Session tab behind the dock; a cut suggestion chip; the summed-up note has no D-pad stop | Found, filed | A bug session |
+| Not run on the Deck: the starter box on a fresh install; re-saving the rig's saved walks; four first-night rows that did not settle (the hidden spoiler box on Doom 64; a picture question naming the running game; the Settings tab walk; two covered answers side by side, which cannot be staged) | A fresh install; time; runbook mistakes | Your hand for the first; a later Deck session |
+| The twelve older notes files' quotes, never sorted by where they sit | Found on the last morning | One sweep, pages to fetch again |
+| Small ones: three mod-tip questions reach another topic's tip; about twenty "Weak points" lines with no weakness; the Molotov note; a Fallout: New Vegas note's list of ways to heal a limb; a Yoshi's Story question typed as "ys" gets another game's notes | Seen in the numbers; none worth a risk at the end | A later wave |
+
+### 13.7 The numbers
+
+| | Before (9 Nov) | After (10 Nov) |
+|---|---|---|
+| Notes in the library | 583 | 891 |
+| Tips | 167 | 185 |
+| Games with labelled enemy and item notes | 15 of 38 | 35 of 38 |
+| Search test questions | 936 | 1,558 |
+| The same 628 older held-back questions, right note in the first three | 581 (92.5%) | 572 (91.1%) with the new notes in |
+| The thirty meaning-only questions | 23 | 18 |
+| All 1,558 questions, right note in the first three | n/a | 1,332 before the last rewording, 1,325 after |
+| New questions for the 20 games, right note in the first three | n/a | 548 of 586 before the last rewording (93.5%) |
+| Mod questions: sent to the mod tips / their own tip first / another topic's tip | n/a | 36 of 36 / 30 / 3 |
+| Tips reach, 24 blind sentences (a tip / the right tip / a wrong tip) | 19 / 17 / 0 | 19 / 17 / 0 |
+| Facts kept in answers, two runs | 73.4 and 71.8% | 70.6 and 71.8% (before the versus fix and the last rewording; not measured again) |
+| Admits not knowing, of 24 (the plugin's line / the AI's own words) | 3 / 0 | 3 / 0 |
+| Spoiler cover shown on story-beat questions | 39 of 45 | 39 of 45 |
+| On the Deck: games whose question attached a new note | n/a | 17 of 20 |
+| On the Deck: seconds to the first word in a long chat | n/a | 11.8 (19.8 to the finished answer) |
+
+The slip in facts kept was two Left 4 Dead 2 questions; the versus fix brought one back to 9 of 9 and not the other.
+Reports: the workshop's `archive/research/`, names carrying `p103-before`, `p103-middle`, `p103-after`, `p103-r1`,
+`p103-r1b`, `p103-r2`, `p103-p2`, `p103-c1`, `p103-v3`, `p103-x3`, `p103-rewrite`, `p103-final`. Deck evidence: the
+workshop's `test-evidence/`, files starting `plan103-`; handovers in `planning/assets/`.
+
+**The session itself.** About 18 hours, in five usage windows; about 125 helper starts; 24 landings; two
+deploys and six Deck blocks run by ten drivers; four of six second opinions used (the briefs before go; the
+crowding numbers; the D-pad change; this report's draft, which sent it back with nine corrections). Usage at the end:
+46 percent of the five-hour window, 60 percent of the week, 61 percent on Fable's own counter.
+
+### 13.8 What you could have done differently
+
+Asked for by AGENTS.md; said plainly, and small beside what went right (the eight answers before go, and "go" itself,
+are why the session ran through the night without a question that stopped the work).
+
+- **Phone alerts were off.** When the Deck froze on the first evening the session tried twice to send "the Deck is
+  stuck" to your phone; both were refused because mobile alerts are disabled in the app's settings. You found the
+  frozen Deck yourself about an hour later.
+- **The Deck's own sleep.** Once the last night block released its hold the Deck slept, and nine hours of Deck time
+  were lost. On a night like this one, saying "keep it awake all night" at go (so the hold is never released), or
+  leaving it on its charger with sleep off, keeps the rig able to work.
+- **Boss pictures before go.** Two of the three half-done entries needed pictures of bosses, and the Deck's
+  screenshot folders held none. Ten minutes of screenshots before the session would have let the marks test and the
+  picture guess be decided instead of deferred.
+- **One thing the session should have asked sooner:** whether the Deck could be woken, when it went quiet at 01:10.
+  It asked at about 02:20; you were asleep by then.
 
 ## 14. Subagent reports and follow-ups
 

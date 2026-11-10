@@ -49,7 +49,7 @@
           ]
         },
         {
-          "line": "Tips: He only charges ahead, and running into him squashes you and slows you down. Weapon Balloons in red and blue sit along his course to help you against him. Boulders roll down the mountain now and then, and the second race adds more of them plus falling pillars.",
+          "line": "Tips: Tricky has no tricks beyond charging forward, and if you bump into him he flattens you and you lose speed. Boulders tumble down the mountain from time to time, and the second race throws in extra boulders and falling pillars too. Weapon Balloons of two colours, red and blue, are placed on his course to help you out against him.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Tricky",
@@ -484,7 +484,7 @@
           ]
         },
         {
-          "line": "Uses: Taj hands over the Golden Balloon when you finish a challenge. Each world's challenges unlock only once you have won the race against that world's boss, and every course also asks for a certain number of Golden Balloons before its challenge can be played.",
+          "line": "Uses: A world's challenges stay locked until you have won a race against its boss, and each course also needs its own minimum number of Golden Balloons before you can play its challenge. When you finish a challenge, Taj gives you a Golden Balloon.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Silver_Coin",
@@ -546,11 +546,11 @@
       "section_id": 3707,
       "name": "Red Weapon Balloon (missiles)",
       "kind": "item",
-      "main_page": "https://www.mariowiki.com/Weapon_Balloon",
-      "main_revision": "5186606",
+      "main_page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+      "main_revision": "5435503",
       "lines": [
         {
-          "line": "Summary: The red Weapon Balloon gives missiles, and they get stronger the more red balloons you collect in a row. Every Weapon Balloon colour works this way, up to three levels.",
+          "line": "Summary: The red Weapon Balloon gives missiles, and they get stronger the more red balloons you collect in a row, up to three levels.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -895,7 +895,7 @@
           ]
         },
         {
-          "line": "Tips: Fire Mountain is a plane level where you haul eggs out of the lava pit at the centre back to your nest and wait for them to hatch. Opponents can pinch your eggs or hit you with missiles, and whoever hatches three first wins. Smokey Castle is a car level where you collect bananas and put them in the treasure chests at the middle of the arena, and the first racer to get ten in wins.",
+          "line": "Tips: In Smokey Castle, a car level, you pick up bananas and deposit them in a treasure chest at the arena's centre, and the first to have ten in the chest wins. Fire Mountain is a plane level where you fly eggs from the middle lava pit to your nest and wait for them to hatch, while rivals can steal eggs or shoot missiles to spoil it. The first to hatch three eggs wins.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -911,7 +911,7 @@
           ]
         },
         {
-          "line": "Tips: Icicle Pyramid (a car level) and Darkwater Beach (a hovercraft level) are fights with weapons, and your banana count is your health. Run out and you are out, and the last player left wins.",
+          "line": "Tips: Icicle Pyramid (a car level) and Darkwater Beach (a hovercraft level) are won by being the last driver still in. You knock rivals out with weapons, and since bananas are your health, a driver with none left is out.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -946,7 +946,7 @@
           ]
         },
         {
-          "line": "Uses: Finishing first gives you the Wizpig trophy in gold, second the Taj trophy in silver, and third the T.T. trophy in bronze. Reaching Future Fun Land takes four trophies.",
+          "line": "Uses: A bronze T.T. trophy is the prize for third place, a silver Taj trophy for second and a gold Wizpig trophy for first. You need four trophies in total to enter Future Fun Land.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",

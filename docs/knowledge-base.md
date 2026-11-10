@@ -10,6 +10,7 @@ Maintainer architecture for the **on-Deck offline strategy + compat knowledge ba
 - [Runtime components](#runtime-components)
 - [Maintainer build pipeline](#maintainer-build-pipeline)
 - [Corpus layout on Deck](#corpus-layout-on-deck)
+- [Note kinds (`section_type`)](#note-kinds-section_type)
 - [Title resolution ladder](#title-resolution-ladder)
 - [Trust tiers + `bonsai-cite`](#trust-tiers--bonsai-cite)
 - [Source attribution (2026-08-09)](#source-attribution-2026-08-09)
@@ -112,6 +113,47 @@ Default install path: `~/.bonsai/rag/` containing:
 **Tap-to-define words (`glossary_terms` table).** The underlined words in an answer ("kiting", "overclock" for Deep Rock Galactic: Survivor) come from the library, not from the plugin's code. The table has one row per word per game: the game (its id, and so its title), the word, its other forms, a short peek and the full text. The source is `data/kb/glossary_terms.json`, written into the table by `scripts/kb/build_rag_db.py`. The plugin reads it through `get_rag_corpus_glossary`. A library built before the table existed has none, and then the plugin simply shows no underlined words, with no error. Turning "Use local knowledge base" off also turns the words off. To add words for another game, add rows to the source file and rebuild the library; no plugin change is needed.
 
 Settings: `rag_corpus_path`, `rag_corpus_version`, `use_local_knowledge_base`.
+
+## Note kinds (`section_type`)
+
+Every note has one kind, in its `section_type` field. The build accepts any string and checks it against
+nothing, but four places in the code read the kind, so pick one from this list rather than inventing one
+(plan 17, 2026-11-09):
+
+- **Spoiler risk** (`_HIGH_SPOILER_SECTION_TYPES` and `_LOW_SPOILER_SECTION_TYPES` in
+  `py_modules/backend/spoilers/spoiler_risk_service.py`): a note of a high kind raises the "Spoiler risk" chip;
+  a low kind lowers it when no high kind is attached too; a kind on neither list does neither.
+- **Chip wording** (`_curtail_section_to_chip` in `py_modules/backend/knowledge/knowledge_base_chips.py`): the
+  question a suggestion chip puts in the box, built from the kind and the note's name.
+- **Kind words** (`_TYPE_WORDS` in `py_modules/backend/knowledge/knowledge_base_search.py`): the generic words
+  ("the boss", "this level", "how do I start") that pull a game's notes of that kind in when the question
+  never says the note's own name. Only the kinds marked "words" below have any.
+- **Spoiler fence** (`_BOSS_LIKE_KINDS` in `py_modules/backend/spoilers/strategy_spoiler_policy.py`): only
+  attached `boss` and `enemy` notes are fenced as protected names. No other kind is, the five newest included.
+
+| Kind | What the note holds | Spoiler risk | Chip reads (X is the note's name) | In the library today |
+|---|---|---|---|---|
+| `starting_out` | How to begin a game, named "Starting out in X" | low | How do I get started in X? | yes, words |
+| `boss` | A boss fight | high | How do I beat X? | yes, words |
+| `dungeon` | A dungeon or temple | high | How do I get through X? | yes, words |
+| `area` | A level, map or region | high | Tips for X in this game? | yes, words |
+| `quest` | A quest or mission | high | Tips for X in this game? | yes, words |
+| `encounter` | A single fight that is not a boss | neither | Tips for X in this game? | no, words |
+| `enemy` | An enemy type | neither | How do I deal with X? | yes |
+| `item` | An item, weapon or pickup | neither | How do I use X? | yes |
+| `mechanic` | A game system or rule | low | What should I know about X? | yes, words |
+| `versus` | Playing one side of a team-versus game: a role, a mode or a campaign in it. A campaign or mode is a `name` with this kind, not a kind of its own ("No Mercy versus") | low | How do I play as the Smoker in versus? (a note named "Playing as the Smoker"), otherwise Versus tips for X? | not yet |
+| `coop` | Playing together on one side | low | Co-op tips for X? | not yet |
+| `callout` | A named spot or position, as brief as its page allows | low | What are the callouts for X? | not yet |
+| `survival` | A survival mode, or a way to last in one | low | Survival tips for X? | not yet |
+| `realism` | A realism mode, or what it changes | low | Realism tips for X? | not yet |
+
+When the note's own name already says the mode ("Survival mode", "No Mercy versus"), the chip reads "Tips for
+X?" so it does not say the mode twice. The code also names `tip`, `control` (low), `story`, `ending`, `puzzle`
+and `secret` (high) on the spoiler lists, but no note uses them today. The five newest kinds have no kind words
+yet: on 2026-11-09 none of the ten labelled Left 4 Dead 2 versus questions needed them, and the words would pull
+in a game's first few notes of that kind in the order they were written, not the best ones. Look again once the
+Left 4 Dead 2 versus notes exist.
 
 ## Title resolution ladder
 

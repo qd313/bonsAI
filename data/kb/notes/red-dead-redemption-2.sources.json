@@ -143,25 +143,14 @@
           ]
         },
         {
-          "line": "Weak points: The page names none; snakes try to flee from you, and for a perfect snake skin you have to use a bow with small game arrows.",
+          "line": "Tips: Snakes try to flee from you, and for a perfect snake skin you have to use a bow with small game arrows. A Health Cure removes the venom from you, and horses are always spooked by snakes. Any perfect snake skin, not just a rattlesnake's, can be used to craft the Rattlesnake Vaquero Saddle from the Trapper, which the page calls arguably the best saddle in the game for all-around balance.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Snake_(RDR_2)",
               "revision": "476779",
               "quoted": [
                 "Snakes will attempt to flee from the player",
-                "To get a perfect snake skin you have to use a bow with Small Game Arrows."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: A Health Cure removes the venom from you, and horses are always spooked by snakes. Any perfect snake skin, not just a rattlesnake's, can be used to craft the Rattlesnake Vaquero Saddle from the Trapper, which the page calls arguably the best saddle in the game for all-around balance.",
-          "drawn_from": [
-            {
-              "page": "https://reddead.fandom.com/wiki/Snake_(RDR_2)",
-              "revision": "476779",
-              "quoted": [
+                "To get a perfect snake skin you have to use a bow with Small Game Arrows.",
                 "horses will always be spooked by snakes.",
                 "A Health Cure will remove the venom from the player.",
                 "The Rattlesnake Vaquero Saddle available from the Trapper is arguably the best saddle in the game in terms of all-around balance",
@@ -188,18 +177,6 @@
               "quoted": [
                 "they frequently terrorize the areas of Rhodes and the much-bigger Saint Denis. However, they particularly terrorize Scarlett Meadows",
                 "often commiting crimes like murder and robberies",
-                "They are regularly successful in their crimes due to their amount of manpower, and ammunition unlike other gangs."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Weak points: The page names none; it says their strength is manpower and ammunition.",
-          "drawn_from": [
-            {
-              "page": "https://reddead.fandom.com/wiki/Lemoyne_Raiders",
-              "revision": "466084",
-              "quoted": [
                 "They are regularly successful in their crimes due to their amount of manpower, and ammunition unlike other gangs."
               ]
             }
@@ -346,7 +323,8 @@
                 "Shooting dynamite will cause it to explode. This also applies to the crates of dynamite found around the map and in missions.",
                 "An improved and more dangerous version of the regular Dynamite, with a wider explosion radius, increased damage, and the ability to ignite a fire.",
                 "This upgraded weapon can be crafted using regular Dynamite, Animal Fat, and any type of High Velocity cartridge.",
-                "It can also be used to craft dynamite arrows, which will explode upon impact."
+                "It can also be used to craft dynamite arrows, which will explode upon impact.",
+                "The Pamphlet is found at Hani's Bethel, in a chest below one of the wagons near the house. It is also available from any Fence after completing \"American Distillation\"."
               ]
             }
           ]
@@ -398,6 +376,7 @@
                 "The projectile can also be obtained earlier through looting enemies.",
                 "upgrading Arthur's Ammo Cart to max level will provide two Fire Bottles.",
                 "The volatile version does more damage and has a better impact radius.",
+                "A pamphlet for crafting this variation can be found in a chest at an abandoned campsite in the burned forest, just northwest of Horseshoe Overlook.",
                 "Crafting ingredients require: 1x Animal Fat and 1x Moonshine."
               ]
             }
@@ -563,7 +542,7 @@
               "page": "https://reddead.fandom.com/wiki/Sawed-Off_Shotgun_(RDR_2)",
               "revision": "476800",
               "quoted": [
-                "it is provided by Javier Escuella during the mission \"Enter, Pursued by a Memory\". A second one can be bought from any Gunsmith, for the price of $85."
+                "during the mission \"Enter, Pursued by a Memory\". A second one can be bought from any Gunsmith, for the price of $85."
               ]
             }
           ]
@@ -732,15 +711,16 @@
       "main_revision": "476802",
       "lines": [
         {
-          "line": "Summary: The Lancaster pump-action shotgun, with five rounds, moderate power, low range and low accuracy, and a large ammo capacity and quick reload. It costs $148.",
+          "line": "Summary: The Lancaster pump-action shotgun, a close-combat gun with low range. It costs $148.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Pump-Action_Shotgun_(RDR_2)",
               "revision": "476802",
               "quoted": [
-                "The high-powered Lancaster Pump Shotgun has a large ammo capacity and quick reload capacities.",
-                "!! Power || Moderate !! Range || Low !! Rate of Fire || Moderate !! Reload Speed || Moderate !! Ammo Capacity || 5",
-                "!! Accuracy || Low !! Base price || $148.00"
+                "The high-powered Lancaster Pump Shotgun",
+                "this gun will hold true should you find yourself confronted by wild beast or man in close combat.",
+                "!! Range || Low",
+                "!! Base price || $148.00"
               ]
             }
           ]
@@ -759,15 +739,14 @@
           ]
         },
         {
-          "line": "Tips: It is available from all gunsmiths after the mission \"Pouring Forth Oil IV\", and you can also take it for free at Chez Porter from a weapon case at the top of the ladder in the master bedroom. Your ammo maximum is 60, or 90 with the upgraded bandolier.",
+          "line": "Tips: It is available from all gunsmiths after the mission \"Pouring Forth Oil IV\", and you can also take it for free at Chez Porter from a weapon case at the top of the ladder in the master bedroom.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Pump-Action_Shotgun_(RDR_2)",
               "revision": "476802",
               "quoted": [
                 "This shotgun is available from all gunsmiths after \"Pouring Forth Oil IV\".",
-                "It can also be obtained for free at any time at Chez Porter inside a weapon case at the top of the ladder in the master bedroom.",
-                "!! Ammo Max || 60 (w/o Upgraded Bandolier) 90 (w/ Upgraded Bandolier)"
+                "It can also be obtained for free at any time at Chez Porter inside a weapon case at the top of the ladder in the master bedroom."
               ]
             }
           ]

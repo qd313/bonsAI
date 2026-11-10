@@ -300,6 +300,260 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2204,
+      "name": "Worker Infected",
+      "kind": "enemy",
+      "main_page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+      "main_revision": "173635",
+      "lines": [
+        {
+          "line": "Summary: A construction-crew infected with ear protection, a hard hat and a reflective vest, also called Road Crew. They fill the Hard Rain campaign and also appear in the Left 4 Dead 2 versions of No Mercy, Dead Air, The Sacrifice and The Last Stand. They have 150 health on Normal and above.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Worker Infected",
+              "quoted": [
+                "Dubbed Worker Infected or Road Crew, these Infected populate the Hard Rain campaign.",
+                "They also appear on the Left 4 Dead 2 versions of No Mercy, Dead Air, The Sacrifice and The Last Stand.",
+                "Workers are equipped with ear protection, hardhats, and reflective vests",
+                "150 (Normal, Advanced, Expert, Realism, Survival & Versus)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: They have the same weaknesses as common infected but a little more health. Their ear protection makes them unable to hear pipe bombs, so a thrown pipe bomb is useless unless it lands near them.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "quoted": [
+                "They have the same general weaknesses as their common brethren, but are slightly more resistant to damage than them."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Worker Infected",
+              "quoted": [
+                "Their unique ear protectors make them unable to hear pipe bombs.",
+                "This projectile is useless unless you aim it so it lands within the vicinity of this zombie type."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Ear protectors, a yellow or white hard hat and a reflective vest, which is easiest to spot in the storms of Hard Rain.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "quoted": [
+                "Workers are equipped with ear protection, hardhats, and reflective vests which makes them easier to spot in the downpour.",
+                "Worker Infected: The hard hat is either yellow or white.",
+                "The Worker Infected have reflective vests, which are most noticeable during the storms."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A bile bomb that lands without hitting any infected does not draw them either: they go for the survivors instead, so aim it to hit several infected. They still react to car alarms and to a chainsaw, and they mostly react to movement they see, so you can sneak past one that is looking away.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Worker Infected",
+              "quoted": [
+                "If the bile bomb is thrown without hitting any Infected, they will spawn, but will instead attack the Survivors.",
+                "Use the bile bomb carefully and try to hit multiple targets with it.",
+                "They can still hear car alarms though.",
+                "they still react to the sounds of the chainsaw by going after the Survivor with it.",
+                "This means they pretty much only react to movement they see.",
+                "You can sneak past them if they’re looking the other way"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2205,
+      "name": "Fallen Survivor",
+      "kind": "enemy",
+      "main_page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+      "main_revision": "173635",
+      "lines": [
+        {
+          "line": "Summary: A rare uncommon infected from The Passing, in militia gear with a Molotov, pipe bomb, pills and first aid kit strapped on. It has 1000 health, cannot be set on fire and usually runs away when shot, and killing it can drop some of those items.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Fallen Survivor",
+              "quoted": [
+                "He appears in the DLC campaign The Passing wearing militia attire including a boonie cover and three ammo belts with a strap carrying visible Molotov, Pipe bomb, Pills, and a First Aid Kit.",
+                "the Fallen Survivor is actually a \"rare\" Uncommon Infected",
+                "Immune to flames, high health, runs away if provoked in most cases, can drop First Aid/Pipe Bomb/Molotov/Pain Pills when killed.",
+                "1000"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A melee weapon kills it in one hit, and so do explosive ammo, the M60 and a headshot while it is still idle; a Magnum body shot does 500 damage. A shove briefly stops it running, but do not rely on shoves alone, because shove fatigue makes you wait three seconds.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Fallen Survivor",
+              "quoted": [
+                "As The Fallen Survivor will run away when shot, use a melee weapon to kill him in a single hit.",
+                "The only ways to kill him in one hit are explosive ammunition, melee weapons, the M60, the Heavy Machine Gun, and headshots with any gun while he is idle.",
+                "the Magnum does 500 damage on bodyshot on any mode",
+                "Melee shoving the Fallen Survivor will temporarily stop his attempts at running away.",
+                "shove fatigue will eventually force you to wait three seconds before being able to shove again, giving him an opportunity to escape"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A man in militia clothes with a boonie cover and three ammo belts carrying a Molotov, pipe bomb, pills and first aid kit, in a blue, white or green shirt.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Fallen Survivor",
+              "quoted": [
+                "wearing militia attire including a boonie cover and three ammo belts with a strap carrying visible Molotov",
+                "The Fallen Survivor can be wearing a blue, white, or green shirt."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It can carry any of a Molotov, pipe bomb, pain pills and first aid kit, though sometimes only a single Molotov, and it drops them at random when killed. If it runs off it takes a long time to disappear, and the Director tends to generate another one sooner than usual.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Fallen Survivor",
+              "quoted": [
+                "A Fallen Survivor can carry any/all of the following items, which may be randomly dropped upon his death",
+                "the Fallen Survivor can spawn carrying as little as only one Molotov cocktail.",
+                "While the Fallen Survivor may run and get away, he takes a long time to disappear.",
+                "if the Fallen Survivor successfully gets away and despawn, The Director tends to generate another one sooner in the map than it would."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2206,
+      "name": "Molotov cocktail",
+      "kind": "item",
+      "main_page": "https://left4dead.fandom.com/wiki/Molotov_Cocktail",
+      "main_revision": "173159",
+      "lines": [
+        {
+          "line": "Summary: A throwable weapon that sets a large area on fire for about 15 to 17 seconds. The fire spreads over time and burns every infected that touches it, and common infected that run into it burn to cinders.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Molotov_Cocktail",
+              "revision": "173159",
+              "quoted": [
+                "The Molotov Cocktail is a throwable weapon that engulfs an area with flames for approximately 15 to 17 seconds. The area of effect is quite large and spreads over time before self-extinguishing. The fire will burn all Infected that come into contact with it. Common Infected who run into the flames will burn to cinders, flailing wildly in the process."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Throw it at a choke point just as a horde reaches it, because infected do not try to avoid fire. On high difficulties keep one for a Tank, which cannot put itself out without water: a burning Tank survives on fire alone for 75 seconds on Easy and Normal, 80 on Advanced and 85 on Expert.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Molotov_Cocktail",
+              "revision": "173159",
+              "quoted": [
+                "Infected AI do not attempt to avoid fire in any way.",
+                "Try to throw the Molotov just as they reach the choke point in order to increase the likelihood of burning the entire Horde before the flames expire.",
+                "It is important in Versus and high campaign difficulties to conserve at least one Molotov for the Tank.",
+                "They also can't extinguish themselves (nor can any other ignited Special Infected) unless there is a body of water nearby",
+                "A burning Tank will survive by fire alone for 75 seconds on Easy, Normal, Versus and Survival, 80 seconds on Advanced, and 85 seconds on Expert."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It only goes off when it hits the floor, not a wall or a special infected. Do not hit teammates: on Expert even a full-health survivor can die in the flames, and an incapacitated one inside the fire is hard to revive. Water does not seem to put out Molotov fire in Left 4 Dead 2, but it does put out a burning Tank or special infected.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Molotov_Cocktail",
+              "revision": "173159",
+              "quoted": [
+                "Throwing a Molotov against a wall does not detonate it; it must hit the floor. This also applies to Special Infected; hitting one directly with a Molotov does not detonate it.",
+                "Do not hit teammates. If they are incapacitated inside a fire, it may be difficult to revive them without being incapacitated as well. On Expert difficulty, even Survivors with full health can die from the flames.",
+                "it does not seem to affect them at all in Left 4 Dead 2.",
+                "However, since water will still extinguish a burning Tank or Special Infected"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2207,
+      "name": "Pipe bomb",
+      "kind": "item",
+      "main_page": "https://left4dead.fandom.com/wiki/Pipe_Bomb",
+      "main_revision": "172888",
+      "lines": [
+        {
+          "line": "Summary: A throwable bomb with a bright red light and a loudly beeping detector that draws common infected to it, then explodes 6 seconds after it is thrown. The blast is small, a little over three to four metres on Normal, but a well-placed bomb can kill 20 or more at once.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Pipe_Bomb",
+              "revision": "172888",
+              "quoted": [
+                "a bright red LED and loudly beeping smoke detector to attract Common Infected when armed and thrown. Pipe Bombs explode 6 seconds after being thrown.",
+                "Its blast radius is relatively small, being confined to little over three to four meters (10 to 13 feet) on the normal difficulty setting; however, since a well-deployed Pipe Bomb is usually tightly surrounded by enemies, as many as 20 or more can be killed at once."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Use it to clear an open area of loosely gathered common infected, keep one for a big horde, or draw enemies away from a teammate who is incapacitated or covered in bile. Do not throw several: common infected run to the first and ignore the others.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Pipe_Bomb",
+              "revision": "172888",
+              "quoted": [
+                "This weapon is perfect for quickly clearing out an open area filled with loosely gathered Common Infected, saving ammo and time.",
+                "Keep Pipe Bombs in reserve for dealing with large Hordes.",
+                "Deploy a Pipe Bomb to draw enemies away from a teammate who is either incapacitated or covered in Boomer bile.",
+                "Do not throw multiple Pipe Bombs. Common Infected will run towards the first one thrown and ignore the others."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Throw it low to the ground, and shove away infected that are already close or they may ignore it. Special infected and worker infected are not drawn to it, and a Witch or Tank near the blast is stumbled but does not chase it.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Pipe_Bomb",
+              "revision": "172888",
+              "quoted": [
+                "Throw Pipe Bombs low to the ground, if possible.",
+                "If the Common Infected are too close to you or your allies, they may ignore the Pipe Bomb and attack. Push them away to disengage them so they will chase after the Pipe Bomb.",
+                "Special Infected and Uncommon Worker Infected are not attracted to Pipe Bombs.",
+                "Witches and Tanks can be stumbled or stunned if a Pipe Bomb explodes near them, but won't chase them."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

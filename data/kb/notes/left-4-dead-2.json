@@ -45,6 +45,50 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "173635",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2204,
+      "game_id": 3,
+      "section_type": "enemy",
+      "name": "Worker Infected",
+      "card": "Summary: A construction-crew infected with ear protection, a hard hat and a reflective vest, also called Road Crew. They fill the Hard Rain campaign and also appear in the Left 4 Dead 2 versions of No Mercy, Dead Air, The Sacrifice and The Last Stand. They have 150 health on Normal and above.\nWeak points: They have the same weaknesses as common infected but a little more health. Their ear protection makes them unable to hear pipe bombs, so a thrown pipe bomb is useless unless it lands near them.\nLooks like: Ear protectors, a yellow or white hard hat and a reflective vest, which is easiest to spot in the storms of Hard Rain.\nTips: A bile bomb that lands without hitting any infected does not draw them either: they go for the survivors instead, so aim it to hit several infected. They still react to car alarms and to a chainsaw, and they mostly react to movement they see, so you can sneak past one that is looking away.",
+      "source_url": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173635",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2205,
+      "game_id": 3,
+      "section_type": "enemy",
+      "name": "Fallen Survivor",
+      "card": "Summary: A rare uncommon infected from The Passing, in militia gear with a Molotov, pipe bomb, pills and first aid kit strapped on. It has 1000 health, cannot be set on fire and usually runs away when shot, and killing it can drop some of those items.\nWeak points: A melee weapon kills it in one hit, and so do explosive ammo, the M60 and a headshot while it is still idle; a Magnum body shot does 500 damage. A shove briefly stops it running, but do not rely on shoves alone, because shove fatigue makes you wait three seconds.\nLooks like: A man in militia clothes with a boonie cover and three ammo belts carrying a Molotov, pipe bomb, pills and first aid kit, in a blue, white or green shirt.\nTips: It can carry any of a Molotov, pipe bomb, pain pills and first aid kit, though sometimes only a single Molotov, and it drops them at random when killed. If it runs off it takes a long time to disappear, and the Director tends to generate another one sooner than usual.",
+      "source_url": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173635",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2206,
+      "game_id": 3,
+      "section_type": "item",
+      "name": "Molotov cocktail",
+      "card": "Summary: A throwable weapon that sets a large area on fire for about 15 to 17 seconds. The fire spreads over time and burns every infected that touches it, and common infected that run into it burn to cinders.\nUses: Throw it at a choke point just as a horde reaches it, because infected do not try to avoid fire. On high difficulties keep one for a Tank, which cannot put itself out without water: a burning Tank survives on fire alone for 75 seconds on Easy and Normal, 80 on Advanced and 85 on Expert.\nTips: It only goes off when it hits the floor, not a wall or a special infected. Do not hit teammates: on Expert even a full-health survivor can die in the flames, and an incapacitated one inside the fire is hard to revive. Water does not seem to put out Molotov fire in Left 4 Dead 2, but it does put out a burning Tank or special infected.",
+      "source_url": "https://left4dead.fandom.com/wiki/Molotov_Cocktail",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173159",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2207,
+      "game_id": 3,
+      "section_type": "item",
+      "name": "Pipe bomb",
+      "card": "Summary: A throwable bomb with a bright red light and a loudly beeping detector that draws common infected to it, then explodes 6 seconds after it is thrown. The blast is small, a little over three to four metres on Normal, but a well-placed bomb can kill 20 or more at once.\nUses: Use it to clear an open area of loosely gathered common infected, keep one for a big horde, or draw enemies away from a teammate who is incapacitated or covered in bile. Do not throw several: common infected run to the first and ignore the others.\nTips: Throw it low to the ground, and shove away infected that are already close or they may ignore it. Special infected and worker infected are not drawn to it, and a Witch or Tank near the blast is stumbled but does not chase it.",
+      "source_url": "https://left4dead.fandom.com/wiki/Pipe_Bomb",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "172888",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

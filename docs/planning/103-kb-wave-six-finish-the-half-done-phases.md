@@ -680,6 +680,24 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
      (`plan103-sample-earlier.md`, `plan103-sample-B.md`, `plan103-sample-C.md`; wait for the session's word, two
      are being refreshed after last fixes).
 
+- **Block D0b, 21:14 to 21:42 EST (old build, nothing deployed; the Deck never froze, lowest free memory 6,895 MB).**
+  Put-backs from D0a done: the placed picture is gone and the screenshot switch is off again. Both test chats
+  survived the restart. The read-back script worked on all six runs. Measured: a fully covered answer shows no notes
+  line at all, before or after opening, though three notes were attached (a partly covered one shows it only after
+  opening); a Brotato answer sits behind a shut cover on Default; Up from a checklist's step 1 lands on the Copy
+  icon and Down from the Copy icon skips every step (3 of 3 each); the "This answer / Session" strip is reached by
+  the first Down when no notes line sits above it and by the second Down when one does (15 tries, the page never
+  lost focus, so "cannot be reached" was not reproduced); the old build writes no summing-up log line. Two rows not
+  settled: the live time to the first word of a long chat's answer was not measured, and the runbook's "Terse mode"
+  control does not exist on the Settings tab (a runbook mistake). The Deck is left with the plugin open, the mode
+  chip on Strategy, no game, the AI unloaded and the hold released. Handover:
+  `workshop:planning/assets/103-handover-D0b.md`. Lane F1's task text is ready in
+  `.scratch/p103/brief-F1-additions.md`.
+- **21:45 EST, a pause for the usage window.** 79 percent of the five-hour window (resets 01:00 EST), 29 percent of
+  the week, 33 percent on Fable's own counter. Past the 75 percent line, so no helper starts before 01:00. A
+  background timer runs to the reset; the first batch after it is F1, the rewording passes, the licence read of
+  Melee and Grand Theft Auto III, the versus notes and the first note lanes.
+
 **Questions for the maintainer (the safest choice is taken meanwhile):**
 
 2. **Answered 2026-11-09, 21:12 EST:** the Deck was frozen with God of War in the background and an answer half
@@ -712,7 +730,8 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
 - Land with `scripts/land_lane.sh <branch> <base> .scratch/p103`, one at a time; several finished helpers can be
   picked onto one branch in a copy (`.claude/worktrees/p103-land1` or `-land2`) and landed as one batch. Read the
   script's exit code, not a line it prints. `.scratch/p103/clones.py <base>` lists copied test lines by file.
-- In flight: the Deck driver on block D0b (its handover will be `workshop:planning/assets/103-handover-D0b.md`).
+- In flight: nothing. Block D0b is done (handover `workshop:planning/assets/103-handover-D0b.md`); F1's task text
+  is `.scratch/p103/brief-F1-additions.md` on top of the brief. A timer runs to the 01:00 EST reset.
 - Written and checked, not landed: Melee (`refactor/p103-n25`) and Grand Theft Auto III (`refactor/p103-n26`), both
   waiting for the licence read. Not landing: `refactor/p103-r1` (the crowding fix, turned down).
 - Owed to six landed notes files: the licence reviewer's rewording lists (in the running notes), one follow-up

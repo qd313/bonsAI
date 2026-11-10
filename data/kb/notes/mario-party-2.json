@@ -56,6 +56,61 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5522844",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2905,
+      "game_id": 27,
+      "section_type": "item",
+      "name": "Warp Block",
+      "card": "Summary: An item that swaps your place on the board with a random opponent. It costs 15 coins at an Item Shop and is Yoshi's favorite item.\nUses: A Warp Block appears above you when you use it, and hitting it warps you and swaps positions with a randomly chosen opponent. You can still roll the regular Dice Block on the same turn.\nTips: You can also win one from an Item Mini-Game. In the Item Shop it only shows up in the last five turns, for the players in second, third and fourth place, and on Bowser Land the forced sale costs 17 coins.",
+      "source_url": "https://www.mariowiki.com/Warp_Block",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5525103",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2906,
+      "game_id": 27,
+      "section_type": "item",
+      "name": "Magic Lamp",
+      "card": "Summary: An item that takes you straight to the Star Space. At 30 coins it is the most expensive item in the Item Shop.\nUses: Using it summons the Mushroom Genie, who gives you a ride to the Star Space, where you are asked whether you want to trade 20 coins for a Star.\nTips: You still pay 20 coins for the Star when you arrive, on top of the 30 it costs to buy. The shop offers it only in the last five turns, to third and fourth place. When Bowser's Multiplying Toads puts two Toads on the board, a Magic Lamp always takes you to the real one.",
+      "source_url": "https://www.mariowiki.com/Genie_Lamp",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5462372",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2907,
+      "game_id": 27,
+      "section_type": "item",
+      "name": "Boo Bell",
+      "card": "Summary: A rare item that calls a Boo to steal coins or a Star from an opponent. Neither kind of Item Shop sells it; you win it in an Item Mini-Game.\nUses: Using it summons a Boo, who asks whom to steal from. Stealing coins costs you five coins and stealing a Star costs 50 coins, and the Boo can take at most 30 coins or one Star.\nTips: If a Boo is stealing coins from you, press the A button quickly to fight it off. Baby Bowser's shop on Bowser Land can also give you a Boo Bell for free, as one of four possible gifts, if you pass it in a Bowser Suit.",
+      "source_url": "https://www.mariowiki.com/Boo_Bell",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5443572",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2908,
+      "game_id": 27,
+      "section_type": "item",
+      "name": "Bowser Suit",
+      "card": "Summary: A rare item that disguises you as Bowser and lets you steal 20 coins from any opponent you pass. You usually win it in an Item Mini-Game.\nUses: When used you put on a full-body suit in the likeness of Bowser's body, and you steal 20 coins from any opponent you pass.\nTips: Wearing it changes how Baby Bowsers deal with you: the one on the board always gives you coins when you pass, and on Bowser Land you can change the parade's route for free unless it is the last move, collect 20 coins at the Bowser Bank and get a free item from the forced shop. The regular Item Shops do not sell the suit, but Baby Bowser's shop on Bowser Land can force one on you for 12 coins.",
+      "source_url": "https://www.mariowiki.com/Bowser_Suit",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5470945",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2909,
+      "game_id": 27,
+      "section_type": "item",
+      "name": "Bowser Bomb",
+      "card": "Summary: A rare item that is not yours to aim: if you get one, Bowser uses it at the end of the current turn, and anyone he passes loses all their coins. It is Donkey Kong's favorite item.\nUses: At the end of the turn Baby Bowser turns into Bowser, rolls three Dice Blocks and moves around the board that many spaces, taking all the coins from every player he passes.\nTips: Besides Item Mini-Games, the only way to get one is Baby Bowser's forced sale on Bowser Land, at 12 coins. If you steal one with a Plunder Chest you cannot use it right away. If it goes off while Bowser's Multiplying Toads has put two Toads on the board, it shows which Toad is the false one.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_2",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5506219",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

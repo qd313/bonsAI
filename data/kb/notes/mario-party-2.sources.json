@@ -324,6 +324,355 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2905,
+      "name": "Warp Block",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Warp_Block",
+      "main_revision": "5525103",
+      "lines": [
+        {
+          "line": "Summary: An item that swaps your place on the board with a random opponent. It costs 15 coins at an Item Shop and is Yoshi's favorite item.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Warp_Block",
+              "revision": "5525103",
+              "quoted": [
+                "It is a block that transports the user to another player's space and then swaps that player over to where the user was.",
+                "The Warp Block costs 15 Coins to buy at an Item Shop in Mario Party 2",
+                "The Warp Block is Yoshi's favorite item"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: A Warp Block appears above you when you use it, and hitting it warps you and swaps positions with a randomly chosen opponent. You can still roll the regular Dice Block on the same turn.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "When used, the Warp Block will appear above the player using it. The player will then hit the block – this causes the player to warp and exchange positions on the board with a randomly chosen opponent."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Warp_Block",
+              "revision": "5525103",
+              "quoted": [
+                "Unlike before, the player can use the regular Dice Block on the same turn."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You can also win one from an Item Mini-Game. In the Item Shop it only shows up in the last five turns, for the players in second, third and fourth place, and on Bowser Land the forced sale costs 17 coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Warp_Block",
+              "revision": "5525103",
+              "quoted": [
+                "It can also be obtained during an Item mini-game.",
+                "at the secondary Item Shop in Bowser Land, it costs 17 coins."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
+              "revision": "5449664",
+              "quoted": [
+                "!! Last 5 turns || Mushroom, Skeleton Key, Plunder Chest, Dueling Glove, Golden Mushroom || Mushroom, Skeleton Key, Dueling Glove, Warp Block, Golden Mushroom || Mushroom, Skeleton Key, Warp Block, Golden Mushroom, Magic Lamp",
+                "!! Mid-game || Mushroom, Skeleton Key, Golden Mushroom || Mushroom, Skeleton Key, Plunder Chest, Golden Mushroom || Mushroom, Skeleton Key, Dueling Glove, Golden Mushroom"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2906,
+      "name": "Magic Lamp",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Genie_Lamp",
+      "main_revision": "5462372",
+      "lines": [
+        {
+          "line": "Summary: An item that takes you straight to the Star Space. At 30 coins it is the most expensive item in the Item Shop.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "When used, the player summons the Mushroom Genie. He gives the player a ride on his back and takes the player directly to the Star Space."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
+              "revision": "5449664",
+              "quoted": [
+                "Magic Lamp || 30 coins",
+                "Mushroom || 10 coins || Skeleton Key || 10 coins || Plunder Chest || 15 coins || Dueling Glove || 15 coins || Warp Block || 15 coins || Golden Mushroom || 20 coins || Magic Lamp || 30 coins"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Using it summons the Mushroom Genie, who gives you a ride to the Star Space, where you are asked whether you want to trade 20 coins for a Star.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "The player is then asked whether they wish to trade 20 Coins for a Star or not."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Genie_Lamp",
+              "revision": "5462372",
+              "quoted": [
+                "The Mushroom Genie appears and takes you straight to Toad."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You still pay 20 coins for the Star when you arrive, on top of the 30 it costs to buy. The shop offers it only in the last five turns, to third and fourth place. When Bowser's Multiplying Toads puts two Toads on the board, a Magic Lamp always takes you to the real one.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "The player is then asked whether they wish to trade 20 Coins for a Star or not."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
+              "revision": "5449664",
+              "quoted": [
+                "!! Last 5 turns || Mushroom, Skeleton Key, Plunder Chest, Dueling Glove, Golden Mushroom || Mushroom, Skeleton Key, Dueling Glove, Warp Block, Golden Mushroom || Mushroom, Skeleton Key, Warp Block, Golden Mushroom, Magic Lamp"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Genie_Lamp",
+              "revision": "5462372",
+              "quoted": [
+                "In the Bowser's Multiplying Toads event of Mario Party 2",
+                "a Genie Lamp always takes the user to the real Toad"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2907,
+      "name": "Boo Bell",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Boo_Bell",
+      "main_revision": "5443572",
+      "lines": [
+        {
+          "line": "Summary: A rare item that calls a Boo to steal coins or a Star from an opponent. Neither kind of Item Shop sells it; you win it in an Item Mini-Game.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Boo_Bell",
+              "revision": "5443572",
+              "quoted": [
+                "Its use is to ring for Boo and ask him to steal coins or a star",
+                "The Boo Bell first appears in Mario Party 2, where it can be obtained in an Item Minigame only."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
+              "revision": "5449664",
+              "quoted": [
+                "Neither type of Item Shop sells Boo Bells."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Using it summons a Boo, who asks whom to steal from. Stealing coins costs you five coins and stealing a Star costs 50 coins, and the Boo can take at most 30 coins or one Star.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "When used, the player using it will summon a Boo. Boo will then ask the player whom to steal from, whether it be Coins (this costs five Coins), or a Star (this costs 50 Coins)."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Boo",
+              "revision": "5532404",
+              "quoted": [
+                "Additionally, the Boo can only steal a maximum of 30 coins or a maximum of one Star."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If a Boo is stealing coins from you, press the A button quickly to fight it off. Baby Bowser's shop on Bowser Land can also give you a Boo Bell for free, as one of four possible gifts, if you pass it in a Bowser Suit.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Boo",
+              "revision": "5532404",
+              "quoted": [
+                "If the Boo tries to steal Coins, the opponent can fight it off by pressing the A button quickly."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "If the player passes by this shop while wearing a Bowser Suit, he will instead give the player a Skeleton Key, Golden Mushroom, Boo Bell, or a Magic Lamp for free."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2908,
+      "name": "Bowser Suit",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Bowser_Suit",
+      "main_revision": "5470945",
+      "lines": [
+        {
+          "line": "Summary: A rare item that disguises you as Bowser and lets you steal 20 coins from any opponent you pass. You usually win it in an Item Mini-Game.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser_Suit",
+              "revision": "5470945",
+              "quoted": [
+                "The Bowser Suit makes its debut in Mario Party 2 as a rare item resembling Bowser's face, obtainable only during Item Minigames."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "When used, the player using it will masquerade themselves as Bowser and steals 20 Coins from any opponent they pass."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: When used you put on a full-body suit in the likeness of Bowser's body, and you steal 20 coins from any opponent you pass.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser_Suit",
+              "revision": "5470945",
+              "quoted": [
+                "When used, the user dons a full-body suit in the likeness of Bowser's body and can steal 20 Coins from players they pass"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "steals 20 Coins from any opponent they pass."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Wearing it changes how Baby Bowsers deal with you: the one on the board always gives you coins when you pass, and on Bowser Land you can change the parade's route for free unless it is the last move, collect 20 coins at the Bowser Bank and get a free item from the forced shop. The regular Item Shops do not sell the suit, but Baby Bowser's shop on Bowser Land can force one on you for 12 coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Koopa_Kid",
+              "revision": "5498408",
+              "quoted": [
+                "He will always give the player coins if they are using a Bowser Suit."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bowser_Land",
+              "revision": "5466812",
+              "quoted": [
+                "If the player uses a Bowser Suit and passes by the Bowser Parade Planning Office, the Baby Bowser mistakes the player for Bowser and allows them to change the route of the parade for free unless it is the last move.",
+                "Passing the Bowser Bank in the suit also grants the player 20 Coins.",
+                "passing the shop ran by the Baby Bowser Shopkeeper grants the player with a Skeleton Key, a Golden Mushroom, a Boo Bell, or a Magic Lamp for free."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
+              "revision": "5449664",
+              "quoted": [
+                "Bowser Suits and Bowser Bombs are not sold at Koopa Troopa's shops, but they may be sold by Baby Bowser's shop.",
+                "Bowser Suit || 12 coins"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2909,
+      "name": "Bowser Bomb",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Mario_Party_2",
+      "main_revision": "5506219",
+      "lines": [
+        {
+          "line": "Summary: A rare item that is not yours to aim: if you get one, Bowser uses it at the end of the current turn, and anyone he passes loses all their coins. It is Donkey Kong's favorite item.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "When a player obtains this item in an Item Mini-Game, Bowser will use it at the end of the current turn.",
+                "Any player that Bowser passes will lose all of their Coins.",
+                "This is Donkey Kong's favorite item."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: At the end of the turn Baby Bowser turns into Bowser, rolls three Dice Blocks and moves around the board that many spaces, taking all the coins from every player he passes.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "When used, Baby Bowser will transform into Bowser. Bowser will then roll three Dice Blocks, and will move accordingly."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Koopa_Kid",
+              "revision": "5498408",
+              "quoted": [
+                "who will hit three Dice Blocks and then travel around the board, stealing all coins from any player he passes."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Besides Item Mini-Games, the only way to get one is Baby Bowser's forced sale on Bowser Land, at 12 coins. If you steal one with a Plunder Chest you cannot use it right away. If it goes off while Bowser's Multiplying Toads has put two Toads on the board, it shows which Toad is the false one.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser_Land",
+              "revision": "5466812",
+              "quoted": [
+                "or even a Bowser Bomb (the only way to obtain one outside of item minigames), each costing 12 Coins"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Plunder_Chest",
+              "revision": "5473170",
+              "quoted": [
+                "The stolen item can then be used immediately (unless it is a Bowser Bomb), or held for a later turn as usual."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bowser_Space",
+              "revision": "5532948",
+              "quoted": [
+                "If a Bowser Bomb is used, it will expose the fake Toad as a Baby Bowser."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

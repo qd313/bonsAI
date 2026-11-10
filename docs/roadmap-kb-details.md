@@ -33,6 +33,7 @@
 - [Plan 103 sweep K3 notes moved from the knowledge base roadmap (2026-11-10)](#plan-103-sweep-k3-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 - [Plan 103 end audit K9 notes moved from the knowledge base roadmap (2026-11-10)](#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 - [Plan 103 sweep K10 notes moved from the knowledge-base roadmap (2026-11-10)](#plan-103-sweep-k10-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+- [Plan 103 sweep K11 notes moved from the knowledge-base roadmap (2026-11-10)](#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -1220,3 +1221,51 @@ Moved word for word by the sweep after Deck blocks D1 and D2. The first paragrap
   Tips 168 to 185 (topic "mods") and 36 test questions in `tests/fixtures/kb_eval/p103-mods.json`. Owes **P103-MODS-TIPS-01** on the Deck. [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 
 **The last rewrite of the notes, and its cost (2026-11-10, sweep K10).** A last-morning re-check of the twelve notes files changed after their fact check found the facts held (about three dozen small corrections). Fallout 4, Red Dead Redemption 2 and Cyberpunk 2077 had never had the "own words" pass, and several files rested lines on the games' own text, which a wiki's licence does not cover. Four files were rewritten from fact lists (Fallout 4, Red Dead Redemption 2, Cyberpunk 2077, Melee), seven got small fixes, every one of the 21 new notes files' quotes was sorted by where it sits on its saved page, and a fact check by helpers who did not write the text followed. The search test over all 1,558 questions (right note in the first three): 1,332 before the rewrite, 1,325 after (10 lost, 3 gained: Cyberpunk 2077 four, Fallout 4, Left 4 Dead 2 and Red Dead Redemption 2 one each, three older questions). Report `workshop:archive/research/kb-embed-bakeoff-2026-11-10-arms-p103-final.md` (before: `-p103-v3-final.md`). **Left thin on purpose:** three Cyberpunk notes have two lines each (enemies with reflex boosters, enemy netrunners, robots); the Tomahawk note cannot say "throwing axe". **Left open:** two Cyberpunk gang pages (Tyger Claws, Maelstrom) are laid out like a page the wiki flags as copied from a book but carry no such flag, and their notes were kept; about twenty "Weak points" lines across older and new files may hold no weakness; the twelve older notes files from plans 100 and 102 have never had their quotes sorted this way.
+
+## Plan 103 sweep K11 notes moved from the knowledge-base roadmap (2026-11-10)
+
+Moved word for word by the last sweep, to make room for the results of Deck blocks D2 (third part), D3 and DR. Each paragraph names the entry it stood in.
+
+**strip:**
+
+**Deck 2026-11-10 (block D2):** Down from "Hide details" lands on the strip 3 of 3 with no notes line and the notes line then the strip 3 of 3 with one, also with a game running; Right moves the chips; B closes with the ring on "Show details". The page never lost focus (about 95 reads in parts one and two, about 125 across all of block D2), so the out-of-focus half is still tests only. Not run: two fresh chats, an older answer, a covered answer. Row **P103-DETAILS-STRIP-01** stays owed for those (`workshop:test-evidence/plan103-P103-DETAILS-STRIP-01.json`, `-try2.json`). [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**undo:**
+
+Landed 2026-11-02; UNCLEAR on the Deck 2026-11-03 (`workshop:test-evidence/plan102-P102-UNDO-FOCUS-01.json`); NOT REPRODUCIBLE 2026-11-09, six times of six (`workshop:test-evidence/plan103-P102-UNDO-FOCUS-01-try2.json`).
+
+**chips:**
+
+On this PC, thirty questions in six games: a chip about the subject among the first three 12 of 90 before, 33 of 90 after (`workshop:archive/research/2026-11-10-p103-c1-chip-order-thirty-questions.md`). **A limit:** after the first deal the screen's rotation picks at random (Calls).
+
+**crowd:**
+
+**Final (2026-11-10, lanes R1b and X2):** on 891 notes the crowding grew (572 of 628 in the first three, 581 before). The fix loses 23 questions on the plugin's own search and gains 16, so it stayed turned down; the trade is yours (Calls). Record `workshop:archive/research/kb-crowding-fix-2026-11-10-p103-r1b.md`.
+
+**mods:**
+
+**Landed 2026-11-09 (plan 103):** 18 basics tips (lane G1), CC0 sources through the checks (lane T3); the device side stays plan 101's.
+
+**chips (the per-game reads, as they stood in the entry):**
+
+Deep Rock Galactic: Survivor: the first chip read "How do I beat Dreadnought Twins?" two seconds after the answer, but it had also shown before the question. Hollow Knight: no Broken Vessel chip in any read before the question; "How do I beat Broken Vessel?" appeared about twelve seconds after the answer. In Speed mode the chips did not follow the question, as built.
+
+**versus (as it stood in the entry):**
+
+renamed four versus notes (new names in the Detail) and lets the note a question names by title lead a mode note: the right note attaches for 115 of 140 asks (112 before). Three points open (Bugs).
+
+**Deck header, the put-back paragraph (as it stood in the entry):**
+
+**The Deck is put back (block DR, `workshop:test-evidence/plan103-P103-DR-RESTORE.json`):** the published library 2026.10.25 is back (3,145,728 bytes, by Remove then Download); the two chats the test drivers grew were deleted, four are left (the short test chat and your three); the mode chip is on Speed; "Show Developer tab" is off; no settings key differs from the 9 November backup (names compared, no values read); the quick-start line shows again on the Main tab; the keep-awake hold is released; no game is running and the AI is unloaded. **Not as on 9 November:** the new plugin build stays on the Deck; a settings backup file from this plan and one from plan 102 sit in its home folder; the short test chat exists.
+
+**screenshot entry, the picture guess numbers (as it stood):**
+
+The picture's own guess for the note search (lane P2) landed switched off (call 10): on the four pictures that name a note, 17 right notes with the starter picture model's guess and 4 with `qwen3.5:4b`, against 0 without.
+
+**phase 5 entry, the own-words pass (as it stood):**
+
+**House "own words" pass:** eight files rewritten, no fact changed (the lessons file).
+
+**phase 8 entry, the count (as it stood):**
+
+**As of 2026-11-10:** the build on this PC has 38 games and 583 notes; the source holds 891.

@@ -54,6 +54,7 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Plan 97 fourth sweep notes moved from the roadmap (2026-10-22)](#plan-97-fourth-sweep-notes-moved-from-the-roadmap-2026-10-22)
 - [Plan 103 sweep K2 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k2-notes-moved-from-the-roadmap-2026-11-10)
 - [Plan 103 sweep K10 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k10-notes-moved-from-the-roadmap-2026-11-10)
+- [Plan 103 sweep K11 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k11-notes-moved-from-the-roadmap-2026-11-10)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -821,3 +822,13 @@ Moved word for word when the mic entry passed on the Deck and moved to Done.
 - ★ `[voice]` **With the mic off, the log shows "voice: stop pressed, no recording was running" lines (six in one clean-install run)** — **VERIFY, fixed 2026-11-09 (plan 103 lane B1, `f38156b2`). Was OPEN, found 2026-10-23 (plan 99 clean install).**
   The microphone was never started and its permission was off, yet the log carried six of these lines in one run, near the deck-driver's A presses. Harmless noise. Evidence `workshop:test-evidence/plan99-P99-TIER4-LOG.json`. For 0.6.1.
   **Fixed 2026-11-09:** the cause was the screen's clean-up when it goes away, which asked the back end to stop, not the two callers the plan named; it no longer asks when no recording ran. Owes **P103-MIC-LOG-01**: with the mic off, open and close the panel six times and look for none of the lines (six A presses would not exercise it).
+
+## Plan 103 sweep K11 notes moved from the roadmap (2026-11-10)
+
+Moved word for word when the quick-start box passed on the Deck and moved to Done.
+
+- ★ `[docs]` `[first-run]` **The quick-start box ("Using bonsAI") leads with the home-PC story and never mentions the Install Ollama button** — **VERIFY, fixed 2026-11-09 (plan 103 lane B1, `777bf0dc`). Was OPEN, found 2026-10-23 (plan 99 clean install).**
+  A new player who opens the box on a fresh Deck reads about entering a PC's LAN address and "every ask will fail" first, and is never pointed at the Install Ollama button on this Deck. Evidence `workshop:test-evidence/plan99-P99-TIER4-NO-DEV.json` (its seen field quotes the box).
+  Not a release blocker under plan 71's line; for 0.6.1.
+  **Fixed 2026-11-09:** the box now leads with running the AI on the Deck. Owes **P103-QUICKSTART-01**: a screenshot for the maintainer's eye on the checks page.
+  **Deck 2026-11-10 (plan 103 block D1, build `3eabdfa27ab3`): P103-QUICKSTART-01 FAILED.** The box is on the Main tab and names this Deck first, but its title and first lines were above the top of the screen (`workshop:test-evidence/plan103-P103-QUICKSTART-01.json`). Cause: it used Steam's own popup, which has no height limit; it had been too tall since October and the new opening paragraph added to it. **Fixed 2026-11-10 (`4f1cff37`):** it now uses the plugin's shared two-button box (fixed height, the text scrolls, Down and Up read it, the ring opens on "Got it"), so it also looks like the other confirm boxes; the look is yours to judge from a picture. Owes **P103-QUICKSTART-02**: Deck check running in block D2's third part (no evidence file yet).

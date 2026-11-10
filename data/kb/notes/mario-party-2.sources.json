@@ -15,7 +15,7 @@
       "main_revision": "5468692",
       "lines": [
         {
-          "line": "Summary: An item that lets you roll two Dice Blocks instead of one and move the total of both. It costs 10 coins at an Item Shop and is Mario's favorite item.",
+          "line": "Summary: An item that lets you roll two Dice Blocks instead of one and move the total of both. It costs 10 coins at an Item Shop and is Mario's favorite item; each character has one, and computer players go for theirs when they can.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mushroom",
@@ -24,6 +24,14 @@
                 "When used, the Mushroom allows a player to roll two Dice Blocks instead of just one, traveling a number of spaces equal to the sum of the numbers rolled.",
                 "It can be bought from an Item Shop for 10 coins.",
                 "The Mushroom is Mario's favorite item in this game."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "Each character has a \"preferred\" or \"favorite\" item",
+                "Whenever a computer player has the opportunity to get an item, they will go for their preferred item if possible."
               ]
             }
           ]
@@ -110,7 +118,7 @@
           ]
         },
         {
-          "line": "Tips: From the middle of the game on, the shop's stock list for every placing includes it. On Bowser Land, walking past the Baby Bowser shop in a Bowser Suit makes him hand you one of four items for free: a Skeleton Key, Golden Mushroom, Boo Bell or Magic Lamp.",
+          "line": "Tips: It is on the shop's stock lists in the first five turns for some placings, and on every placing's list from the middle of the game on. On Bowser Land, walking past the Baby Bowser shop in a Bowser Suit makes him hand you one of four items for free: a Skeleton Key, Golden Mushroom, Boo Bell or Magic Lamp.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
@@ -471,7 +479,7 @@
       "main_revision": "5443572",
       "lines": [
         {
-          "line": "Summary: A rare item that calls a Boo to steal coins or a Star from an opponent. Neither kind of Item Shop sells it; you win it in an Item Mini-Game.",
+          "line": "Summary: An item that calls a Boo to steal coins or a Star from an opponent. In this game it comes only from Item Mini-Games, and neither kind of Item Shop sells it.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo_Bell",
@@ -696,7 +704,7 @@
           ]
         },
         {
-          "line": "Weak points: He always gives you coins instead of taking them if you are wearing a Bowser Suit. He starts at one of several set spots beside Toad and moves to Toad's old spot each time the Star is bought, so his position follows the Star Space.",
+          "line": "Weak points: He always gives you coins instead of taking them if you are wearing a Bowser Suit. He starts at one of several set spots beside Toad and moves to Toad's old spot each time the Star is bought.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Koopa_Kid",
@@ -745,21 +753,21 @@
       "main_revision": "5471733",
       "lines": [
         {
-          "line": "Summary: A parade led by Baby Bowser that marches down a set path on Bowser Land every five turns and sends anyone caught in its path back to the start, costing two coins for each space.",
+          "line": "Summary: A parade led by Baby Bowser that travels a set path across Bowser Land and sends anyone it catches back to the start.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser_Parade",
               "revision": "5471733",
               "quoted": [
                 "The Bowser Parade is a parade that occurs regularly in Bowser Land from Mario Party 2. It is led by Baby Bowser",
-                "Anyone caught in the parade's path will be sent back to the start, losing two coins for each space they pass on the way.",
-                "consecutive parades take place every five turns afterwards, up until the end of the game."
+                "The Bowser Parade travels down a set path",
+                "Anyone caught in the parade's path will be sent back to the start"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: Stay off its path when it starts, because Baby Bowser cancels the parade if nobody is in the way. You can pay Baby Bowser five coins at the parade offices at the north, west and east intersections to change its direction, and in a Bowser Suit that is free unless it is the last move.",
+          "line": "Weak points: If nobody is in its path once it starts, Baby Bowser cancels it. At the parade offices at the north, west and east intersections you can pay Baby Bowser five coins to change its direction, and in a Bowser Suit that is free unless it is the last move.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser_Parade",
@@ -779,7 +787,7 @@
           ]
         },
         {
-          "line": "Looks like: Pyramid-shaped floats that look like enemies such as Goomba, Boo and Thwomp, with Baby Bowser at the front.",
+          "line": "Looks like: Pyramid-shaped floats that look like enemies such as Goomba, Boo and Thwomp, led by Baby Bowser.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser_Parade",
@@ -791,91 +799,14 @@
           ]
         },
         {
-          "line": "Tips: The first parade starts at the beginning of the fifth turn, and the last one at the beginning of the last turn, after which the parade offices close. It always starts at the central intersection at the north end of the board and by default runs straight to the south end and then east toward the starting area.",
+          "line": "Tips: It always starts at the central intersection at the north end of the board, and its initial path runs straight to the south end and then east toward the starting area.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser_Parade",
               "revision": "5471733",
               "quoted": [
-                "The first Bowser Parade occurs at the start of the fifth turn",
-                "The final Bowser Parade will occur at the start of the last turn",
-                "The parade planning offices will be closed after this point.",
                 "which always starts at the central intersection at the north end of Bowser Land.",
                 "The Bowser Parade's initial path just travels straight to the south end of the board, and then east towards the starting area."
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "section_id": 2912,
-      "name": "Boo on the boards",
-      "kind": "enemy",
-      "main_page": "https://www.mariowiki.com/Boo",
-      "main_revision": "5532404",
-      "lines": [
-        {
-          "line": "Summary: A ghost thief who steals coins or a Star from a player. The Boo Bell calls one up, and he charges five coins to steal coins.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Boo",
-              "revision": "5532404",
-              "quoted": [
-                "Boos return in Mario Party 2. On boards, they function similarly as before. Their role is also integrated into the Boo Bell item, which summons a Boo.",
-                "Boo now charges five coins for stealing coins, of which it can take up to thirty of.",
-                "Boo has been a major character in the Mario Party series, from being a thief for hire"
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Weak points: When a Boo is stealing coins from you, press the A button quickly to fight it off. It takes at most 30 coins or one Star.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Boo",
-              "revision": "5532404",
-              "quoted": [
-                "If the Boo tries to steal Coins, the opponent can fight it off by pressing the A button quickly.",
-                "Additionally, the Boo can only steal a maximum of 30 coins or a maximum of one Star."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: A white round ghost with stubby arms and a small tail, and a wide open smile with four upper fangs and a big tongue.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Boo",
-              "revision": "5532404",
-              "quoted": [
-                "Boos are usually white spherical ghosts with stubby arms and a small tail behind them. They have a mouth usually open in a wide smile, with four upper fangs and a large tongue sticking out of it."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Stealing coins costs five coins and stealing a Star costs 50 coins. The Boo Bell, which calls a Boo, can be won in Item Mini-Games, and neither Item Shop sells it.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Mario_Party_2",
-              "revision": "5506219",
-              "quoted": [
-                "|| Boo Bell || When used, the player using it will summon a Boo. Boo will then ask the player whom to steal from, whether it be Coins (this costs five Coins), or a Star (this costs 50 Coins)."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Boo_Bell",
-              "revision": "5443572",
-              "quoted": [
-                "The Boo Bell first appears in Mario Party 2, where it can be obtained in an Item Minigame only."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
-              "revision": "5449664",
-              "quoted": [
-                "Neither type of Item Shop sells Boo Bells."
               ]
             }
           ]
@@ -890,14 +821,14 @@
       "main_revision": "5499015",
       "lines": [
         {
-          "line": "Summary: A giant Boo on Horror Land who steals from every opponent at once, for three times the usual Boo fee.",
+          "line": "Summary: A giant Boo on Horror Land who, like a normal Boo, steals coins or Stars, but from every opponent at once.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Big_Boo_(character)",
               "revision": "5499015",
               "quoted": [
                 "In Mario Party 2, Big Boo appears in the Horror Land stage.",
-                "However, Big Boo deals for stealing the coins or the stars from all the opponents, while paying to him three times the amount of coins than a normal Boo would do."
+                "As with a typical Boo, it is able to steal objects from player's rivals, being coins or stars."
               ]
             },
             {
@@ -910,13 +841,13 @@
           ]
         },
         {
-          "line": "Weak points: You can only ask for him at night; in the daytime he is just a giant Boo statue.",
+          "line": "Weak points: You can only ask for him at night.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Big_Boo_(character)",
               "revision": "5499015",
               "quoted": [
-                "Characters can ask for him only in night time; in daytime, Big Boo appears as a giant Boo statue."
+                "Characters can ask for him only in night time"
               ]
             }
           ]
@@ -934,16 +865,8 @@
           ]
         },
         {
-          "line": "Tips: He is in the north-east corner of the board. Players who pass him at night are asked to pay three times the usual fee. Because the night-time path to him needs a Skeleton Key, meeting him is difficult and rare.",
+          "line": "Tips: Because the night-time path to him needs a Skeleton Key, meeting him is difficult and rare.",
           "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Mario_Party_2",
-              "revision": "5506219",
-              "quoted": [
-                "Another feature is the Big Boo on the north-east corner of the board.",
-                "Should players pass by him during the night, he will ask the player passing to pay three times the usual fee."
-              ]
-            },
             {
               "page": "https://www.mariowiki.com/Big_Boo_(character)",
               "revision": "5499015",

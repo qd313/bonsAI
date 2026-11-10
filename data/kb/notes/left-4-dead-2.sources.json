@@ -87,7 +87,7 @@
       "main_revision": "173635",
       "lines": [
         {
-          "line": "Summary: A common infected in a hazmat suit that is immune to fire and may drop a bile bomb when killed. It has 150 health on Normal and above, and appears in Dead Center's Hotel and Streets, the lower floors of the hospital in No Mercy and Rayford's industrial area in The Sacrifice.",
+          "line": "Summary: A common infected in a hazmat suit that is resistant to fire and may drop a bile bomb when killed. It has 150 health on Normal and above, and appears in Dead Center's Hotel and Streets, the lower floors of the hospital in No Mercy and Rayford's industrial area in The Sacrifice.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -95,6 +95,7 @@
               "part_of_page": "CEDA Worker Infected",
               "quoted": [
                 "Immune to flames. Can drop a bile bomb when killed.",
+                "they are resistant to fire, as they do not burst into flames when in the middle of a Molotov's fire",
                 "150 (Normal, Advanced, Expert, Realism, Survival & Versus)",
                 "Dead Center in The Hotel and The Streets. In this game they also appear on the lower floors of the Hospital in No Mercy, and the industrial area of Rayford in the Sacrifice.",
                 "Players will occasionally come across Common Infected wearing a hazmat suit"

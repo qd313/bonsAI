@@ -34,6 +34,39 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "2083405",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3503,
+      "game_id": 35,
+      "section_type": "enemy",
+      "name": "Colombian Cartel",
+      "card": "Summary: A Colombian drug cartel that took parts of Staunton Island and Shoreside Vale and is heavily involved in the drugs trade.\nWeak points: The page gives no weak point; it calls the Cartel exceptionally well armed.\nLooks like: In Grand Theft Auto III members wear Hawaiian shirts, combat pants, Akruba-style hats and cowboy boots.\nTips: Their gang car in Grand Theft Auto III is the Cartel Cruiser. Their main enemies are the Leone Family and the Yakuza.",
+      "source_url": "https://gta.fandom.com/wiki/Colombian_Cartel",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2082250",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3504,
+      "game_id": 35,
+      "section_type": "enemy",
+      "name": "Uptown Yardies",
+      "card": "Summary: A Jamaican gang based on Staunton Island that is found only in Newport and also deals around Liberty Campus.\nWeak points: The page gives no weak point; members carry baseball bats in Grand Theft Auto III.\nLooks like: A black short-sleeved hoodie, tan vest and pants, and brown shoes; both kinds of member look the same.\nTips: Their cars are Yardie Lobo lowriders, which are unique in Grand Theft Auto III for their hydraulic suspension. The Diablos are their rivals.",
+      "source_url": "https://gta.fandom.com/wiki/Uptown_Yardies",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2086756",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3505,
+      "game_id": 35,
+      "section_type": "enemy",
+      "name": "Military (the Army)",
+      "card": "Summary: At a six-star wanted level the Army chases you with soldiers, Barracks OL trucks for pursuit and roadblocks, and Rhino tanks for pursuit.\nWeak points: Soldiers are always armed with M16s, but only two spawn near each Barracks OL at a roadblock, so they are less lethal than SWAT or the FBI. A Rhino shrugs off small arms fire; explosives, molotov cocktails and the flamethrower can damage it.\nTips: Soldiers drop grenades when killed in Grand Theft Auto III. Law enforcement tends not to use the Rhino's main cannon.",
+      "source_url": "https://gta.fandom.com/wiki/Military_(3D_Universe)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2084931",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

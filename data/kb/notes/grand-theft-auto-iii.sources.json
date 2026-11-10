@@ -203,6 +203,202 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3503,
+      "name": "Colombian Cartel",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Colombian_Cartel",
+      "main_revision": "2082250",
+      "lines": [
+        {
+          "line": "Summary: A Colombian drug cartel that took parts of Staunton Island and Shoreside Vale and is heavily involved in the drugs trade.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
+              "revision": "2020213",
+              "quoted": [
+                "The Colombian Cartel or simply the Cartel is a Colombian drug cartel",
+                "they quickly gained control of parts of Staunton Island and Shoreside Vale. They are heavily involved in the drugs trade"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The page gives no weak point; it calls the Cartel exceptionally well armed.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Colombian_Cartel",
+              "revision": "2082250",
+              "quoted": [
+                "The Colombian Cartel is exceptionally well armed"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: In Grand Theft Auto III members wear Hawaiian shirts, combat pants, Akruba-style hats and cowboy boots.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Colombian_Cartel",
+              "revision": "2082250",
+              "quoted": [
+                "Cartel members wear Hawaiian shirts, combat pants, Akruba-style hats and cowboy boots in GTA III."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Their gang car in Grand Theft Auto III is the Cartel Cruiser. Their main enemies are the Leone Family and the Yakuza.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Colombian_Cartel",
+              "revision": "2082250",
+              "quoted": [
+                "Cartel Cruiser (GTA III & GTA Liberty City Stories)"
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
+              "revision": "2020213",
+              "quoted": [
+                "Their main enemies are the Leone Family and the Yakuza."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3504,
+      "name": "Uptown Yardies",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Uptown_Yardies",
+      "main_revision": "2086756",
+      "lines": [
+        {
+          "line": "Summary: A Jamaican gang based on Staunton Island that is found only in Newport and also deals around Liberty Campus.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
+              "revision": "2020213",
+              "quoted": [
+                "The Uptown Yardies or simply the Yardies are an African-Caribbean (mostly Jamaican) criminal organization led by King Courtney, based in Staunton Island."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Uptown_Yardies",
+              "revision": "2086756",
+              "quoted": [
+                "The Yardies can now be solely found in Newport, but appear to be dealing around the Liberty Campus as well"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The page gives no weak point; members carry baseball bats in Grand Theft Auto III.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Baseball_Bat",
+              "revision": "2081043",
+              "quoted": [
+                "Carried by members of the Diablos, Triads and the Uptown Yardies."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A black short-sleeved hoodie, tan vest and pants, and brown shoes; both kinds of member look the same.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Uptown_Yardies",
+              "revision": "2086756",
+              "quoted": [
+                "In GTA III, Uptown Yardie members wear a black short-sleeved hoodie, tan vest and pants, and brown shoes. Both skins of the Yardies appear visually identical in this game."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Their cars are Yardie Lobo lowriders, which are unique in Grand Theft Auto III for their hydraulic suspension. The Diablos are their rivals.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Uptown_Yardies",
+              "revision": "2086756",
+              "quoted": [
+                "The gang drives Yardie Lobo lowriders, which are unique for their use of hydraulic suspension in GTA III."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
+              "revision": "2020213",
+              "quoted": [
+                "Their rivals are the Diablos"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3505,
+      "name": "Military (the Army)",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Military_(3D_Universe)",
+      "main_revision": "2084931",
+      "lines": [
+        {
+          "line": "Summary: At a six-star wanted level the Army chases you with soldiers, Barracks OL trucks for pursuit and roadblocks, and Rhino tanks for pursuit.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Military_(3D_Universe)",
+              "revision": "2084931",
+              "quoted": [
+                "After the player gains a six-star wanted level in any game set in the 3D Universe, the Army will begin to chase the player. On the ground, two military vehicles are used against the player: the Barracks OL, which is used for pursuit and roadblocks, and the Rhino tank for pursuit."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Soldiers are always armed with M16s, but only two spawn near each Barracks OL at a roadblock, so they are less lethal than SWAT or the FBI. A Rhino shrugs off small arms fire; explosives, molotov cocktails and the flamethrower can damage it.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Military_(3D_Universe)",
+              "revision": "2084931",
+              "quoted": [
+                "The soldiers themselves are always armed with M16s.",
+                "they are not as lethal as the SWAT or the FBI, as only two spawn near every Barracks OL seen in the corresponding roadblock."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
+              "revision": "2078662",
+              "quoted": [
+                "The Rhino is practically invincible to small arms fire and collisions; only explosives and the gun mounted on the Police Maverick can inflict damage. Additionally, flame weapons such as the molotov cocktails and the flamethrower are able to damage the tank."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Soldiers drop grenades when killed in Grand Theft Auto III. Law enforcement tends not to use the Rhino's main cannon.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Grenades",
+              "revision": "2087377",
+              "quoted": [
+                "Dropped by Military soldiers when killed."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
+              "revision": "2078662",
+              "quoted": [
+                "Law enforcement tends not to use the main cannon of the vehicle."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

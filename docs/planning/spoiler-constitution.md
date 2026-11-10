@@ -183,6 +183,16 @@ Story/campaign games that feel “laid back” still belong in the protect colum
 13. **Honest promises only.** Promise what code can keep (e.g. named-entity
     display unwrap). Do not promise zero false positives or perfect story
     judgment from a small local model.
+14. **Don’t volunteer a campaign finale.** When a versus, co-op, callout,
+    survival or realism note is attached to the turn (plan 17, task OV-1.3;
+    shipped in plan 103), the AI is told in one sentence: do not offer a
+    campaign finale's tactics or layout unprompted, and if the player asks
+    about one before they are there, help with the problem in front of them
+    first and say the finale can wait. A finale is the big set piece the player
+    has not reached yet, so this is rules 2 and 10 applied to a mode whose notes
+    sit next to the campaign. It adds one sentence to those turns only; every
+    other turn reads exactly as before. The wording lives in
+    `FINALE_RULE_LINE` in `ollama_prompts.py` and a test pins it.
 
 ---
 

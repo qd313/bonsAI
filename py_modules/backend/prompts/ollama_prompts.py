@@ -265,6 +265,19 @@ THIN_CONTEXT_HONESTY_CLAUSE = (
 # two are coupled by the card authoring format, documented in docs/knowledge-base.md.
 _STRUCTURED_CARD_LABELS = ("Weak points:", "Uses:", "Phases:", "Summary:", "Looks like:")
 
+# Plan 103 lane R2 (plan 17, task OV-1.3): the kinds of note that come from versus, co-op, callout,
+# survival and realism play. A card of one of these kinds in the attached block brings one rule
+# about campaign finales (FINALE_RULE_LINE). Found by the card's own header line, the shape
+# kb_attached_notes.py reads: "[Game Title / kind: Name] (trust: tier)".
+FINALE_RULE_NOTE_KINDS = ("versus", "coop", "callout", "survival", "realism")
+_FINALE_RULE_CARD_RE = re.compile(
+    r"\n\[[^/\]]+ / (?:" + "|".join(FINALE_RULE_NOTE_KINDS) + r"): [^\]]+\] \(trust:"
+)
+FINALE_RULE_LINE = (
+    "\nFINALE RULE: Do not volunteer a campaign finale's tactics or layout, and if the player asks "
+    "about one before they are there, help with the problem at hand first and say the finale can wait.\n"
+)
+
 
 # Matches knowledge_base_service._BLOCK_HEADER exactly. Duplicated rather than imported for the
 # same reason as _STRUCTURED_CARD_LABELS above -- only used to find where to splice the
@@ -595,6 +608,9 @@ def build_system_prompt(
                 "those labels as short bullets rather than dissolving them into a paragraph, "
                 "and drop any label the card does not have.\n"
             )
+        # Plan 103 lane R2: a versus-style note brings the finale rule; every other turn is unchanged.
+        if _FINALE_RULE_CARD_RE.search(early_stripped):
+            early_block += FINALE_RULE_LINE
 
     placement = knowledge_block_placement if knowledge_block_placement == "late" else "early"
 

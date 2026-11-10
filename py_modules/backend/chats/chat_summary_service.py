@@ -67,6 +67,7 @@ from backend.chats.chat_summary_plan import (  # noqa: F401 -- re-exported for t
     SummaryPlan,
     plan_summary,
 )
+from backend.chats.chat_summary_failure import REASON_TIMED_OUT, explain_failed_call
 from backend.chats.chat_summary_tidy import known_games_of_chat, tidy_summary_text
 from backend.chats.chat_summary_title import (
     clean_suggested_title,
@@ -156,6 +157,10 @@ class SummaryOutcome:
     summary: Optional[dict]
     seconds: float
     error: str
+    # Why a call that gave no summary ended (``chat_summary_failure``): a short code, and one line
+    # with the server's own words. Blank for a written or a stopped summary.
+    reason: str = ""
+    detail: str = ""
 
 
 def _summary_request_messages(
@@ -344,29 +349,18 @@ async def write_chat_summary(
     covered_n = len(plan.covered_turns)
 
     if deadline_hit.is_set():
-        logger.info(
-            "chat_summary: timed_out in %.1f s — covered %d turns, %d unread, ~%d input "
-            "tokens, model %s",
-            elapsed,
-            covered_n,
-            plan.oldest_turns_unread,
-            input_tokens,
-            model_name,
+        detail = f"the {SUMMARY_TIME_LIMIT_SECONDS}-second limit ran out"
+        _log_unfinished_summary(
+            "timed_out", elapsed, plan, input_tokens, window_tokens, model_name,
+            REASON_TIMED_OUT, detail,
         )
         return SummaryOutcome(
-            status="timed_out", summary=None, seconds=elapsed, error="Summary timed out."
+            status="timed_out", summary=None, seconds=elapsed, error="Summary timed out.",
+            reason=REASON_TIMED_OUT, detail=detail,
         )
 
     if result.get("cancelled"):
-        logger.info(
-            "chat_summary: stopped in %.1f s — covered %d turns, %d unread, ~%d input "
-            "tokens, model %s",
-            elapsed,
-            covered_n,
-            plan.oldest_turns_unread,
-            input_tokens,
-            model_name,
-        )
+        _log_unfinished_summary("stopped", elapsed, plan, input_tokens, window_tokens, model_name)
         return SummaryOutcome(status="stopped", summary=None, seconds=elapsed, error="")
 
     visible = str(result.get("visible_raw") or "") if result.get("success") else ""
@@ -380,20 +374,19 @@ async def write_chat_summary(
             plugin, cleaned, chat=chat, plan=plan, reply_language=reply_language
         )
     if not result.get("success") or not cleaned:
-        if result.get("success"):
-            error = "Model returned an empty summary."
-        else:
-            error = str(result.get("response") or "")
-        logger.info(
-            "chat_summary: failed in %.1f s — covered %d turns, %d unread, ~%d input "
-            "tokens, model %s",
-            elapsed,
-            covered_n,
-            plan.oldest_turns_unread,
-            input_tokens,
-            model_name,
+        error = (
+            "Model returned an empty summary." if result.get("success")
+            else str(result.get("response") or "")
         )
-        return SummaryOutcome(status="failed", summary=None, seconds=elapsed, error=error)
+        reason, detail = explain_failed_call(
+            result, reply_was_empty=bool(result.get("success")), reply_chars=len(visible), kept_chars=len(cleaned)
+        )
+        _log_unfinished_summary(
+            "failed", elapsed, plan, input_tokens, window_tokens, model_name, reason, detail
+        )
+        return SummaryOutcome(
+            status="failed", summary=None, seconds=elapsed, error=error, reason=reason, detail=detail
+        )
 
     previous = plan.previous or {}
     covers_through_turn_id = str(plan.covered_turns[-1].get("id") or "") if plan.covered_turns else ""
@@ -421,6 +414,22 @@ async def write_chat_summary(
         model_name,
     )
     return SummaryOutcome(status="written", summary=summary, seconds=elapsed, error="")
+
+
+def _log_unfinished_summary(
+    status: str, elapsed: float, plan: SummaryPlan, input_tokens: int, window_tokens: int,
+    model_name: str, reason: str = "", detail: str = "",
+) -> None:
+    """The one log line for a summary call that gave nothing to save. A failed or timed-out call
+    says why (``reason``, then the server's own words), and every kind says how big the request
+    was against the window it was sent into -- the two numbers a long chat's failure turns on."""
+    why = f" ({reason}: {detail})" if reason else ""
+    logger.info(
+        "chat_summary: %s in %.1f s%s — covered %d turns, %d unread, ~%d input tokens, "
+        "window %d, model %s",
+        status, elapsed, why, len(plan.covered_turns), plan.oldest_turns_unread, input_tokens,
+        int(window_tokens or 0), model_name,
+    )
 
 
 def _hidden_notes_in(turns: list, model_name: str) -> int:
@@ -532,8 +541,9 @@ async def decide_and_write_chat_summary(
         await chat_turn_recorder.save_chat_summary(plugin, chat_id, outcome.summary)
         return turns, outcome.summary, "written", False
     logger.warning(
-        "ask_ollama: chat summary %s -- answering with today's memory instead (%s)",
+        "ask_ollama: chat summary %s -- answering with today's memory instead (%s: %s)",
         outcome.status,
-        outcome.error or "empty summary",
+        outcome.reason or "unknown",
+        outcome.detail or outcome.error or "empty summary",
     )
     return turns, previous, "failed", False

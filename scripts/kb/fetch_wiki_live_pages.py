@@ -63,6 +63,10 @@ _SKIP_CLASS = re.compile(
 # on 2026-09-05; the tab labels come through as a short line of text, which is harmless.
 _BLOCK_TAGS = {"p", "div", "section", "article", "aside", "br", "tr", "ul", "ol", "dl", "blockquote", "pre"}
 _HEADING = re.compile(r"h([1-6])")
+# Tags with no end tag. They must never go on the open-element stack: an <img> pushed and never
+# popped shifted every later pop by one, so a skipped <figure> stayed skipped past its own end
+# and swallowed the rest of the page (Red Dead wiki: Cougar, Bison, Grizzly came back near empty).
+_VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 
 # scripts/kb/extract_wiki_notes.py needs to tell a table's header cells from its data cells to
 # build a labelled "Label: value" line, and needs the same for Fandom's div-based portable
@@ -92,6 +96,10 @@ class _TextExtractor(HTMLParser):
         return not self._body_only or self._body_root is not None
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag in _VOID_TAGS:
+            if tag == "br" and not self._skip_depth and self._live():
+                self.out.append("\n")
+            return
         cls = " ".join(v or "" for k, v in attrs if k == "class")
         # A <figure> (typeof="mw:File" / "mw:File/Thumb") is always image or video furniture,
         # never article prose -- but modern MediaWiki (1.41+) marks it with that `typeof`
@@ -138,7 +146,7 @@ class _TextExtractor(HTMLParser):
             self.out.append("\n")
 
     def handle_endtag(self, tag: str) -> None:
-        if not self._stack:
+        if tag in _VOID_TAGS or not self._stack:
             return
         skipped = self._stack.pop()
         if skipped:

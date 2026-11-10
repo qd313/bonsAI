@@ -279,5 +279,37 @@ class ByTitleFallbackTests(unittest.TestCase):
         self.assertTrue(manifest["pages"][0].get("refused"))
 
 
+class VoidTagsDoNotEatThePageTests(unittest.TestCase):
+    """Fandom's infobox picture is <figure><a><img ...></a></figure>; <img> has no end tag.
+
+    Cougar, Bison, Grizzly on the Red Dead wiki came back with 9 to 70 characters because the
+    unclosed <img> threw the skip bookkeeping off by one, so the figure's skip lasted past
+    </figure> and swallowed the rest of the page. Markup below is the wiki's, shortened.
+    """
+
+    HTML = (
+        '<div class="mw-parser-output"><aside class="portable-infobox">'
+        '<figure class="pi-item pi-image" data-source="image">'
+        '<a href="/x.png" class="image image-thumbnail"><img src="/x.png" class="pi-image-thumbnail" alt="Puma">'
+        "</a></figure>"
+        '<div class="pi-item pi-data"><h3 class="pi-data-label">Loot</h3>'
+        '<div class="pi-data-value">Cougar Fang <br> Cougar Claw</div></div></aside>'
+        "<p><b>Cougars</b> are a species of animal.</p><h2>Description</h2><p>They hunt alone.</p></div>"
+    )
+
+    def test_text_after_a_picture_with_an_unclosed_img_is_kept(self):
+        text = _render(self.HTML)
+        self.assertIn("Cougars are a species of animal.", text)
+        self.assertIn("They hunt alone.", text)
+        self.assertIn("!! Loot", text)
+
+    def test_a_break_inside_a_value_still_starts_a_new_line(self):
+        text = _render(self.HTML)
+        self.assertIn("Cougar Fang\nCougar Claw", text)
+
+    def test_a_self_closed_break_behaves_the_same(self):
+        self.assertIn("one\ntwo",_render("<p>one<br/>two</p>"))
+
+
 if __name__ == "__main__":
     unittest.main()

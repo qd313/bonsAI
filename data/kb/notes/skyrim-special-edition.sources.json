@@ -15,7 +15,7 @@
       "main_revision": "3661516",
       "lines": [
         {
-          "line": "Summary: Big, ape-like brutes with three black eyes, claws that hit hard and a lot of health that comes back fast during a fight. The pale-furred frost trolls live farther north and higher up and are much tougher than the ordinary cave kind. Every troll leaves troll fat behind.",
+          "line": "Summary: Brutes with claws that hit hard and a lot of health that comes back fast during a fight. The frost trolls live farther north and higher up and are much tougher than the ordinary cave kind. Every troll leaves troll fat behind.",
           "drawn_from": [
             {
               "page": "https://en.uesp.net/wiki/Skyrim:Troll",
@@ -172,14 +172,13 @@
           ]
         },
         {
-          "line": "Looks like: Reddish orange in dungeons and the south of Skyrim, bluish white in the north, ranging from small up to larger than a horse.",
+          "line": "Looks like: Reddish orange in dungeons and the south of Skyrim, bluish white in the north.",
           "drawn_from": [
             {
               "page": "https://en.uesp.net/wiki/Skyrim:Frostbite_Spider",
               "revision": "3278760",
               "quoted": [
-                "one that tends to appear in dungeons and in the more southern areas of Skyrim is reddish orange, while the ones found in the northern areas tends to be bluish white.",
-                "the toughest of all are the spiders which outsize a horse."
+                "one that tends to appear in dungeons and in the more southern areas of Skyrim is reddish orange, while the ones found in the northern areas tends to be bluish white."
               ]
             }
           ]
@@ -238,18 +237,6 @@
           ]
         },
         {
-          "line": "Looks like: Part old crone, part bird.",
-          "drawn_from": [
-            {
-              "page": "https://en.uesp.net/wiki/Skyrim:Hagraven",
-              "revision": "3510988",
-              "quoted": [
-                "Hagravens are a horrific cross between an old crone and a bird."
-              ]
-            }
-          ]
-        },
-        {
           "line": "Tips: A heavily armored warrior can charge in, since armor guards against their claws better than against their spells; with strong elemental resistance, keep your distance and use ranged attacks instead. A hagraven always drops hagraven feathers and sometimes a claw.",
           "drawn_from": [
             {
@@ -302,20 +289,19 @@
           ]
         },
         {
-          "line": "Looks like: A glowing green, woman-shaped figure that is mostly wood. Glowing insects around its body stay visible even when it turns invisible.",
+          "line": "Looks like: Glowing \"insects\" live on its body and stay visible even after it casts invisibility.",
           "drawn_from": [
             {
               "page": "https://en.uesp.net/wiki/Skyrim:Spriggan",
               "revision": "3661515",
               "quoted": [
-                "Spriggans are malevolent nature spirits appearing as glowing, green humanoid females made mostly of wood.",
                 "Although spriggans can cast an invisibility spell on themselves, the glowing \"insects\" that inhabit their bodies are still visible, allowing you to see where the spriggan is even after they cast the spell."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Its poison spray reaches much farther than a Flames spell and does more damage when cast with both hands. A green flash across the screen means it has called wildlife to fight you, and staggering it mid-cast does not stop that. Its loot is taproot.",
+          "line": "Tips: Its poison spray reaches much farther than a Flames spell and does more damage when cast with both hands. A green flash across the screen means it has called wildlife to fight you, and staggering it mid-cast does not stop that. It drops taproot and burnt spriggan wood.",
           "drawn_from": [
             {
               "page": "https://en.uesp.net/wiki/Skyrim:Spriggan",
@@ -338,7 +324,7 @@
       "main_revision": "3664370",
       "lines": [
         {
-          "line": "Summary: Two of the smaller machines met in Dwarven ruins. Spiders are small, agile and very common, often busy mining or repairing things. Spheres were built for combat: they patrol rolled up in a ball until they meet a threat, then unfold into a half-humanoid shape. Either kind can wait inside pipe ports in the walls and ceilings and spring out as you pass.",
+          "line": "Summary: Two kinds of Dwarven machine met in the ruins. Spiders are small, very agile and very common, usually busy mining or working on the ruins' fittings. Spheres were designed for fighting: they patrol curled into a ball until they meet a threat, then rise into a half-humanoid form. Either kind can lie in wait in the wall and ceiling pipes and jump out as you walk past.",
           "drawn_from": [
             {
               "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
@@ -349,19 +335,19 @@
                 "Dwarven spheres are constructs that, unlike Dwarven spiders, were intentionally designed for combat.",
                 "These spheres patrol Dwarven ruins in a condensed spherical form until they encounter a threat, at which point they rise into their semi-humanoid form and attack.",
                 "They can also be found hiding inside of pipe ports along the walls and ceilings of these ruins where they will lay in wait until they notice something walk by, after which they will leap out and attempt to engage whatever alerted them.",
-                "Like Dwarven spiders, they can hide in Dwarven pipes and exit through ports to attack unsuspecting foes that wander too close."
+                "Like Dwarven spiders, they can hide in Dwarven pipes and exit through ports to attack unsuspecting foes that wander too close.",
+                "They are very agile in combat and will attack with a variety of leg stabs"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: Shock spells do normal damage to them, while frost and poison do nothing, and they turn aside a quarter of magic damage. Paralysis does not work on them. Unrelenting Force can knock a spider over; no other kind of automaton falls to it that way.",
+          "line": "Weak points: Unrelenting Force can knock a Dwarven spider down, and no other automaton can be knocked down by it.",
           "drawn_from": [
             {
               "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
               "revision": "3664370",
               "quoted": [
-                "Furthermore, contrary to what one might expect from reading Ruins of Kemel-Ze, Dwarven automatons are not immune to shock, which actually causes them normal damage. Instead, they are immune to frost and poison damage, and boast a 25% resistance to magic.",
                 "Automatons are immune to paralysis, cannot be ragdolled (except for Dwarven spiders), cannot be reanimated, cannot be soul trapped, and have a permanent Waterbreathing ability.",
                 "They are also the only kind of automaton that can be ragdolled with Unrelenting Force."
               ]
@@ -369,21 +355,21 @@
           ]
         },
         {
-          "line": "Looks like: Spiders are small and arachnid-like, and the stronger ones have electrical effects crackling from their core. A sphere rolls as a ball and rises into a half-humanoid shape to fight.",
+          "line": "Looks like: A small, arachnid-like machine; the ones above level 7 also give off electrical effects from the core.",
           "drawn_from": [
             {
               "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
               "revision": "3664370",
               "quoted": [
                 "Dwarven spiders are small, arachnid-like automatons, and are very common in Dwarven ruins.",
-                "These variants are easily distinguished from workers both by name and by the electrical special effects that emanate from their core.",
-                "These spheres patrol Dwarven ruins in a condensed spherical form until they encounter a threat, at which point they rise into their semi-humanoid form and attack."
+                "Variants of the dwarven spider higher than level 7 have access to short-range electric jolts that deal shock damage, and will explode a moment after being killed to deal further shock damage.",
+                "These variants are easily distinguished from workers both by name and by the electrical special effects that emanate from their core."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Spiders above level 7 fire short-range electric jolts and burst with more shock damage a moment after they die, and any spider can leap at you to close the gap. Higher-level spheres shoot darts from arm-mounted crossbows and lunge so fast they are hard to sidestep. Both kinds drop scraps, Dwarven oil and soul gems.",
+          "line": "Tips: Spiders above level 7 can zap you with shock jolts from close range and blow up a moment after dying, dealing more shock damage; any spider can pounce to close the distance. Higher-level spheres shoot darts from arm-mounted crossbows and lunge so fast they are hard to sidestep. Frost and poison do nothing to these machines and paralysis fails, while shock hurts them as normal; a quarter of magic damage is turned aside. Both kinds can drop soul gems, Dwarven oil and scraps.",
           "drawn_from": [
             {
               "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
@@ -394,7 +380,9 @@
                 "Basic Dwarven spheres utilize only melee attacks, but higher level variants use their arm-mounted crossbows to shoot powerful darts at targets with whom they aren't engaged in melee combat.",
                 "their attacks involve a number of very speedy lunges that can close the distance between them and a target rapidly and are very hard to sidestep.",
                 "Dwarven spiders can be looted for Dwarven scraps, a very small chance at precious gems, metal ore, Dwarven Oil, and soul gems once killed.",
-                "When you kill a Dwarven sphere, you will find a number of items on its remains including Dwarven metal scraps, a small chance at precious gems, Dwarven Oil,"
+                "When you kill a Dwarven sphere, you will find a number of items on its remains including Dwarven metal scraps, a small chance at precious gems, Dwarven Oil,",
+                "Furthermore, contrary to what one might expect from reading Ruins of Kemel-Ze, Dwarven automatons are not immune to shock, which actually causes them normal damage. Instead, they are immune to frost and poison damage, and boast a 25% resistance to magic.",
+                "Automatons are immune to paralysis, cannot be ragdolled (except for Dwarven spiders), cannot be reanimated, cannot be soul trapped, and have a permanent Waterbreathing ability."
               ]
             }
           ]
@@ -425,7 +413,7 @@
           ]
         },
         {
-          "line": "Weak points: Stand right against its legs: it cannot lower its arms or tilt its head to hit anything beneath its shoulders. Unrelenting Force staggers it, and used before it wakes it can leave the centurion inactive for a while so you can strike freely. Shock does normal damage, while frost and poison do not hurt it.",
+          "line": "Weak points: Stand right against its legs, which suits a low-level melee fighter: its arms and head cannot angle down to anything beneath shoulder level, so you can circle it and avoid its attacks fairly easily. Unrelenting Force staggers it, and used before it wakes it can leave it dormant for a while so you can strike freely.",
           "drawn_from": [
             {
               "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
@@ -433,8 +421,7 @@
               "quoted": [
                 "If you are a low-level melee character, a surprisingly effective strategy is to get as close to them as possible, to the extent that your character is physically touching the centurion's legs. This is effective because centurions cannot lower their arms or tilt their heads to attack enemies beneath their shoulders, thus enabling you to encircle them and avoid their attacks with relative ease.",
                 "they are immune to nearly all shouts except for Unrelenting Force, which causes them to stagger, and Marked for Death.",
-                "Sometimes when using Unrelenting Force on a centurion before it has activated from within its gantry, it can be rendered inert and it will not activate immediately, enabling you to strike it at will for a time.",
-                "Furthermore, contrary to what one might expect from reading Ruins of Kemel-Ze, Dwarven automatons are not immune to shock, which actually causes them normal damage. Instead, they are immune to frost and poison damage, and boast a 25% resistance to magic."
+                "Sometimes when using Unrelenting Force on a centurion before it has activated from within its gantry, it can be rendered inert and it will not activate immediately, enabling you to strike it at will for a time."
               ]
             }
           ]
@@ -452,7 +439,7 @@
           ]
         },
         {
-          "line": "Tips: A ranged attacker gets a few shots in while it is still powering up. Or get it stuck outside a small hallway, stay out of its steam range and shoot or cast at it from there. Its remains hold a guaranteed Centurion Dynamo Core, plus a grand soul gem, Dwarven scraps, arrows and a few gems.",
+          "line": "Tips: A bow or a spell can land a few hits before it is fully awake. Another plan is to leave it jammed outside a small corridor and shoot from beyond its steam reach. Frost and poison do nothing to it, while shock hurts it as normal. Looting one always gives a Centurion Dynamo Core, and its remains also hold scraps of Dwarven metal, arrows, a few gems and a grand soul gem.",
           "drawn_from": [
             {
               "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
@@ -460,7 +447,8 @@
               "quoted": [
                 "This can oftentimes give ranged attackers a chance to get a few shots in with either their bow or a spell before the automaton can fully activate and engage in melee range.",
                 "Another great strategy is to get them stuck outside of a small hallway and get out of range of their steam attack, allowing you to hit it with ranged attacks.",
-                "When defeated, a centurion can be looted for a guaranteed Centurion Dynamo Core, a Grand Soul Gem, a number of Dwarven scraps, leveled arrows, and a few precious gems."
+                "When defeated, a centurion can be looted for a guaranteed Centurion Dynamo Core, a Grand Soul Gem, a number of Dwarven scraps, leveled arrows, and a few precious gems.",
+                "Furthermore, contrary to what one might expect from reading Ruins of Kemel-Ze, Dwarven automatons are not immune to shock, which actually causes them normal damage. Instead, they are immune to frost and poison damage, and boast a 25% resistance to magic."
               ]
             }
           ]
@@ -498,18 +486,6 @@
               "quoted": [
                 "Chaurus (of all varieties) don't like to cross water (knee- or swimming depths), making archery or magic from a distance viable combat options.",
                 "The suggestion to use melee force against them seems well-founded, because they are less likely to poison you with their melee attacks."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: An earwig-like insect, medium to large in size.",
-          "drawn_from": [
-            {
-              "page": "https://en.uesp.net/wiki/Skyrim:Chaurus",
-              "revision": "3661514",
-              "quoted": [
-                "Chaurus are medium-to-large, hostile, earwig-like creatures found in swamps, marshlands, and deep underground caverns."
               ]
             }
           ]
@@ -563,19 +539,6 @@
                 "They are vulnerable to fire attacks, Dawnbreaker, and Turn Undead.",
                 "Weakness to Fire, 25 pts",
                 "Resist Frost, 100 pts"
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: Wispy, flying spirits of frost.",
-          "drawn_from": [
-            {
-              "page": "https://en.uesp.net/wiki/Skyrim:Ice_Wraith",
-              "revision": "3664113",
-              "quoted": [
-                "Due to their wispy nature, they have a tendency to ignore the landscape, and can become stuck or die on elevated areas.",
-                "Ice Wraiths are hostile frost spirits."
               ]
             }
           ]

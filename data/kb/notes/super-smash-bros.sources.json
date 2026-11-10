@@ -15,7 +15,7 @@
       "main_revision": "2066620",
       "lines": [
         {
-          "line": "Summary: A healing item that lowers the damage percentage of whoever picks it up. In the first game it is called simply Heart, and it recovers all of your damage, taking you down to 0%.",
+          "line": "Summary: A healing item that takes damage off whoever grabs it. The first game just calls it Heart, and there it wipes out all of your damage, down to 0%.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Heart_Container",
@@ -28,7 +28,7 @@
           ]
         },
         {
-          "line": "Uses: It spawns above the ground and floats down slowly, so in the first game players have to fight over the spot where it will land. Once it is grabbed it keeps healing even if you are hit while it works.",
+          "line": "Uses: It appears in the air and drifts down slowly, which in the first game leaves a gap in which fighters battle over its landing spot. After someone has taken it, the healing carries on even if they are hit during it.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Heart_Container",
@@ -42,7 +42,7 @@
           ]
         },
         {
-          "line": "Tips: Taking enough of them in one match earns the Heartthrob bonus, worth 17,000 points in the first game (8,000 in the Japanese version).",
+          "line": "Tips: Collect enough of them in a single match for the Heartthrob bonus, which pays 17,000 points in the first game and 8,000 in its Japanese release.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Heart_Container",
@@ -63,7 +63,7 @@
       "main_revision": "2062573",
       "lines": [
         {
-          "line": "Summary: A red tomato with a black M on it that lowers the damage percentage of whoever picks it up. In the first game it restores a full 100% of your damage; the later games only restore 50%.",
+          "line": "Summary: A red tomato marked with a black M, which takes damage off whoever picks it up. In the first game it clears 100% of your damage; the later games only clear 50%.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Maxim_Tomato",
@@ -78,7 +78,7 @@
           ]
         },
         {
-          "line": "Uses: In the first game any damage you take while it is healing you is ignored. Maxim Tomatoes do not spawn on Hyrule Castle.",
+          "line": "Uses: In the first game, hits you take during the healing do no damage. Hyrule Castle never gets Maxim Tomatoes.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Maxim_Tomato",
@@ -91,7 +91,7 @@
           ]
         },
         {
-          "line": "Tips: Taking enough Maxim Tomatoes in one match earns the Vegetarian bonus, worth 9,000 points in the first game (5,000 in the Japanese version). If every item except the Maxim Tomato is turned off, any containers that fall onto the stage will be empty.",
+          "line": "Tips: Eat enough of them in one match for the Vegetarian bonus: 9,000 points in the first game, 5,000 in its Japanese release. Turn off every item but the Maxim Tomato and the containers that drop onto the stage will hold nothing.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Maxim_Tomato",
@@ -113,7 +113,7 @@
       "main_revision": "2066650",
       "lines": [
         {
-          "line": "Summary: A star that bounces around the stage and makes whoever touches it invincible for ten seconds. The first game calls it the Starman, and it was known by that name until the PAL release of Brawl and the NTSC release of Smash 4.",
+          "line": "Summary: A star that bounces around and gives whoever touches it ten seconds of invincibility. It was called the Starman in the first game, and kept that name until Brawl's PAL release and Smash 4's NTSC release.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Item",
@@ -133,7 +133,7 @@
           ]
         },
         {
-          "line": "Uses: It bounces on the field and off platforms and walls in large arcs, and it can fall off the stage if nobody grabs it in time. Touching an opponent while invincible does not damage them. The fighter sparkles, and a special music theme replaces the stage music until the effect wears off.",
+          "line": "Uses: It hops across the stage in big arcs, rebounding from platforms and walls, and it can drop off the edge if nobody catches it soon enough. Touching an enemy while invincible does them no harm. The fighter glitters, and a dedicated tune takes over from the stage music until the effect ends.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Super_Star",
@@ -148,7 +148,7 @@
           ]
         },
         {
-          "line": "Tips: In the first game it is the one item without the small triangular marker above it. In the series, a fighter who falls off the stage while invincible can still be KO'd.",
+          "line": "Tips: In the first game every item carries a little triangle above it except this one. In the series, invincibility does not save a fighter who falls off the stage: they can still be KO'd.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Item",
@@ -170,7 +170,7 @@
       "main_revision": "2049293",
       "lines": [
         {
-          "line": "Summary: A lightsaber-like sword, often called the lightsaber, that you swing for stronger hits or throw at opponents. The game's own manual says it has the longest range of all the clobbering items when thrown.",
+          "line": "Summary: A sword modelled on the lightsaber, and nicknamed after it, that you swing for stronger hits or throw at opponents. Among the battering items, it travels the farthest when thrown.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Beam_Sword",
@@ -185,7 +185,7 @@
           ]
         },
         {
-          "line": "Uses: While you hold it, your neutral attack, forward tilt, dash attack and forward smash become item swipes. In the first game they deal 12%, 18%, 16% and 25%.",
+          "line": "Uses: Holding it turns your forward smash, dash attack, forward tilt and neutral attack into item swipes. In the first game they deal 25%, 16%, 18% and 12%, in that order.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Item",
@@ -207,7 +207,7 @@
           ]
         },
         {
-          "line": "Tips: Thrown, it does between 13% and 20% depending on the throw. If you are hit while holding it you may drop it: in the first game the chance is the attack's damage divided by 60, so a 6% hit gives a 10% chance.",
+          "line": "Tips: A thrown Beam Sword deals from 13% to 20%, depending on which throw. Getting hit while you hold it can make you drop it: in the first game the odds are the hit's damage over 60, so a hit of 6% gives a 10% chance.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Beam_Sword",
@@ -242,7 +242,7 @@
       "main_revision": "2018945",
       "lines": [
         {
-          "line": "Summary: A wooden bat that turns your forward smash into a single delayed swing that can knock an opponent out in one hit.",
+          "line": "Summary: A wooden bat that changes your forward smash: you wind up and take one slow swing, which can knock an opponent out with a single hit.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Home-Run_Bat",
@@ -255,7 +255,7 @@
           ]
         },
         {
-          "line": "Uses: The swing always takes a set time and cannot be charged. In the first game it uses each fighter's normal item swing, and the wind-up differs by fighter: Link is quickest at 23 frames, while Mario, Luigi and Ness are slowest at 30.",
+          "line": "Uses: Each swing takes the same amount of time, and you cannot charge it. In the first game it reuses each fighter's ordinary item swing, so the wind-up depends on who you play: Link needs only 23 frames, while Mario, Luigi and Ness need the most, at 30.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Home-Run_Bat",
@@ -270,7 +270,7 @@
           ]
         },
         {
-          "line": "Tips: It does most of its damage with the tip of the bat rather than the middle. It is also strong when thrown, doing around 20% damage with high knockback, and swung normally it can KO fairly early, especially with a dash attack or smash throw.",
+          "line": "Tips: Hit with the end of the bat for the most damage, not the centre. Thrown, it is also strong, around 20% with big knockback, and ordinary swings can KO fairly early, above all a dash attack or a smash throw.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Home-Run_Bat",
@@ -293,7 +293,7 @@
       "main_revision": "2060174",
       "lines": [
         {
-          "line": "Summary: A close-range item: whoever grabs it swings it back and forth non-stop, and in the first game each hit does 30% damage with very high knockback.",
+          "line": "Summary: A short-range item: its holder keeps swinging it to and fro, and in the first game every hit does 30% with very high knockback.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Hammer_(item)",
@@ -307,7 +307,7 @@
           ]
         },
         {
-          "line": "Uses: In the series, while you hold it you keep swinging, and you cannot jump in midair, use other attacks or defend. You cannot drop it on purpose; only being sent tumbling makes you let go. The wiki says it can also chain into itself for 60%, which will likely KO.",
+          "line": "Uses: In the series, holding it means you swing without pause and cannot use an air jump, any other attack or a shield. You cannot discard it by choice; only being knocked into a tumble makes you let go. The wiki says it can also follow up on itself for 60%, which will likely KO.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Hammer_(item)",
@@ -321,7 +321,7 @@
           ]
         },
         {
-          "line": "Tips: The item list calls it one of the most feared items for its range, damage and knockback, but in the series its wielder cannot use special moves or jump in the air, so knocking them off a ledge while they swing can KO them. Careful hitbox placement can also interrupt the swing.",
+          "line": "Tips: The item list names it among the items to fear most, because of its reach, damage and knockback. Still, in the series the person holding it has no special moves or air jump, so sending them off a ledge mid-swing can KO them. Carefully placed hitboxes can also cut the swing short.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Item",
@@ -350,7 +350,7 @@
       "main_revision": "2044738",
       "lines": [
         {
-          "line": "Summary: A long-range laser gun that holds 16 shots. In the first game each shot does 10% electric damage with vertical knockback.",
+          "line": "Summary: A long-range laser gun with room for 16 shots. In the first game each shot deals 10% electric damage and knocks the target vertically.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Ray_Gun",
@@ -363,7 +363,7 @@
           ]
         },
         {
-          "line": "Uses: You can fire one shot every 30 frames. Like other shooting items it typically replaces your neutral attack, and once it is empty it only shoots blanks. In the series, the item list says its blasts have infinite horizontal range.",
+          "line": "Uses: You can fire one shot each 30 frames. Like the other shooting items it usually takes over your neutral attack, and when its ammo runs out it fires only blanks. The item list adds that its blasts have unlimited horizontal range.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Ray_Gun",
@@ -383,7 +383,7 @@
           ]
         },
         {
-          "line": "Tips: The shots can be reflected or absorbed, and the gun itself can only be reflected when thrown. In the first two Smash games a fighter could not move while using a shooting item, and firing while walking only arrived in Brawl.",
+          "line": "Tips: A reflect or absorb move can handle the shots, while the gun itself can be reflected only when thrown. In the first two Smash games a fighter had to stand still while using a shooting item; Brawl was when firing on the move became possible.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Ray_Gun",
@@ -412,7 +412,7 @@
       "main_revision": "2063637",
       "lines": [
         {
-          "line": "Summary: A bomb with two little legs and a wind-up key on its back. Thrown at an enemy it explodes with large damage and knockback, but if it is left alone it starts walking around until its timer runs out.",
+          "line": "Summary: A bomb on two stubby legs with a wind-up key sticking out of its back. Its blast does heavy damage and knockback, and it can catch the thrower too.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Bob-omb",
@@ -432,7 +432,7 @@
           ]
         },
         {
-          "line": "Uses: Pick it up and throw it at an opponent. It can also hurt the thrower, and it explodes if it is simply hit by an attack.",
+          "line": "Uses: Pick it up and throw it at an opponent. The thrower can be hurt too, and any attack that hits it sets it off.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Bob-omb",
@@ -446,7 +446,7 @@
           ]
         },
         {
-          "line": "Tips: If nobody picks it up, the game's manual says it starts walking around until its timer runs out. In the series, it then stands up and walks back and forth on the platform it spawned on, turning around at edges, and explodes if it walks into a fighter, or blows itself up after a while if it meets nobody.",
+          "line": "Tips: If nobody grabs it, the game's manual says it wanders off until its countdown reaches zero. In the series it then gets to its feet and paces to and fro along the platform where it appeared, turning at the edges; it goes off if it bumps into a fighter, and otherwise detonates by itself after a while.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Bob-omb",
@@ -475,7 +475,7 @@
       "main_revision": "2062983",
       "lines": [
         {
-          "line": "Summary: The final boss of the 1P Game, fought in stage 11 on Final Destination. It cannot be cleared by knocking it past the edge of the stage; you have to use up its 300 hit points.",
+          "line": "Summary: The 1P Game's final boss, met in stage 11 on Final Destination. Knocking it past the edge of the stage does not clear the stage; only wearing down its 300 hit points does.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/1P_Game",
@@ -489,21 +489,20 @@
           ]
         },
         {
-          "line": "Weak points: Master Hand cannot be launched out of the blast zones and takes no knockback from your attacks, so the only way to win is to deplete his 300 hit points. Once he has under 100 HP left, his Finger Bullet attack fires three pairs of Bullet Bills instead of one pair.",
+          "line": "Weak points: No amount of knockback KOs Master Hand, and he is not pushed back by your hits, so draining his 300 hit points is the only way to win.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Master_Hand_(SSB)",
               "revision": "2062983",
               "quoted": [
                 "receives no knockback from the player's attacks.",
-                "Master Hand cannot be defeated by being launched out of the blast zones. Instead, he has 300 hit points that must be depleted.",
-                "Master Hand makes the shape of a gun, and fires a pair of Bullet Bills. If Master Hand has less than 100 HP remaining, he will fire three pairs."
+                "Master Hand cannot be defeated by being launched out of the blast zones. Instead, he has 300 hit points that must be depleted."
               ]
             }
           ]
         },
         {
-          "line": "Looks like: A large, gloved hand.",
+          "line": "Looks like: A big hand in a glove.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Master_Hand_(SSB)",
@@ -515,7 +514,7 @@
           ]
         },
         {
-          "line": "Tips: Side Punch hits for 20% and punches across the stage, Big Swipe hits for 16% and slaps across the platform, and Floor Sweep sweeps across the stage several times at 12% a swipe. Power Punch hovers over you, then quickly punches down with electric effects.",
+          "line": "Tips: Side Punch is a fist that drives across the stage for 20%. Big Swipe is a wide slap over the platform for 16%. Floor Sweep makes several passes over the stage at 12% per swipe. Power Punch hangs above you, then slams down in a burst of electricity. Below 100 HP, his Finger Bullet fires three pairs of Bullet Bills instead of one pair.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Master_Hand_(SSB)",
@@ -527,7 +526,8 @@
                 "Master Hand makes a wide slapping motion across the platform.",
                 "from the table (first-game page): Floor Sweep (床の掃除) 12% per swipe",
                 "Master Hand sweeps across the stage several times, depending on the length of the platform.",
-                "Master Hand hovers over the target, then quickly punches down with electric effects."
+                "Master Hand hovers over the target, then quickly punches down with electric effects.",
+                "Master Hand makes the shape of a gun, and fires a pair of Bullet Bills. If Master Hand has less than 100 HP remaining, he will fire three pairs."
               ]
             }
           ]
@@ -542,7 +542,7 @@
       "main_revision": "2057092",
       "lines": [
         {
-          "line": "Summary: A sub-boss you fight in stage 9 of the 1P Game, only on the Meta Crystal stage. He rarely flinches, resists grabs and throws at low damage, and his attacks knock you back harder than normal.",
+          "line": "Summary: A sub-boss of the 1P Game's ninth stage, found solely on the Meta Crystal level. Few attacks make him flinch, he shrugs off grabs and throws while his damage is low, and his own hits knock you back unusually far.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Metal_Mario",
@@ -556,7 +556,7 @@
           ]
         },
         {
-          "line": "Weak points: He can take roughly 200% damage before he can be launched (it scales with the difficulty), but he is exceptionally vulnerable to edge-guarding: once he is knocked off the stage, his extreme falling speed badly hurts his recovery. An 8-frame jumpsquat also makes his aerial attacks slow.",
+          "line": "Weak points: He resists launching until he has taken around 200% (this changes with difficulty), yet edge-guarding him works very well: once he is off the stage his huge falling speed wrecks his recovery. His 8-frame jumpsquat also makes his aerial attacks slow.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Metal_Mario",
@@ -570,7 +570,7 @@
           ]
         },
         {
-          "line": "Looks like: At first glance he looks like an alternate costume of Mario.",
+          "line": "Looks like: A quick look makes him seem like Mario in a different outfit.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Metal_Mario",
@@ -582,7 +582,7 @@
           ]
         },
         {
-          "line": "Tips: He never dashes and rarely jumps, pacing across the stage at a steady walk. On lower difficulties he is passive and mostly attacks when he is interrupted, and his aggression and knockback rise on higher settings. His AI is simple, largely walking left and right and occasionally attacking.",
+          "line": "Tips: He does not dash and seldom jumps; he just walks steadily back and forth over the stage. On low difficulties he stays passive and tends to attack only after being interrupted, and he grows more aggressive and knocks harder as the setting rises. His behaviour is basic: mostly strolling left and right with an occasional attack.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Metal_Mario",
@@ -610,7 +610,7 @@
       "main_revision": "2045475",
       "lines": [
         {
-          "line": "Summary: A giant Donkey Kong fought on Kongo Jungle in stage 6 of the 1P Game, where two regular-sized computer partners fight alongside you.",
+          "line": "Summary: A giant Donkey Kong that you meet in the 1P Game's sixth stage, on Congo Jungle, where two normal-sized computer partners help you fight.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/1P_Game",
@@ -629,7 +629,7 @@
           ]
         },
         {
-          "line": "Weak points: He can take up to around 300% damage before he can be launched, and his hits have extra knockback, plus extra reach because of his size. That size also makes him a bigger target, and his AI can be exploited so that he walks back and forth on the top platform, though your partners jumping into him or attacking him often break that pattern.",
+          "line": "Weak points: He can absorb up to about 300% before he can be launched, and his own hits knock harder and reach farther thanks to his size. That size also makes him an easier target, and his AI can be gamed into pacing along the top platform, although your partners often spoil the pattern by jumping into or attacking him.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Giant_Donkey_Kong_(SSB)",
@@ -649,7 +649,7 @@
           ]
         },
         {
-          "line": "Looks like: Donkey Kong with a much larger body.",
+          "line": "Looks like: A Donkey Kong model scaled up to a far bigger size.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Giant_Donkey_Kong_(SSB)",
@@ -661,7 +661,7 @@
           ]
         },
         {
-          "line": "Tips: Keep your partners safe: neither being KO'd gives the DK Defender bonus (10,000 points, 7,000 in the Japanese version), and neither being damaged at all gives the DK Perfect bonus (50,000 points). On higher difficulties he acts more like a level 9 computer player while your partners are lower level.",
+          "line": "Tips: Look after your partners. If neither is KO'd you get the DK Defender bonus (10,000 points, 7,000 in the Japanese release), and if neither takes any damage you get the DK Perfect bonus (50,000 points). Higher difficulties make him play more like a level 9 computer fighter, while your partners stay at lower levels.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/1P_Game",
@@ -690,7 +690,7 @@
       "main_revision": "2064743",
       "lines": [
         {
-          "line": "Summary: Thirty weak purple polygon copies of the twelve fighters, fought in stage 10 of the 1P Game on Duel Zone, never more than three at a time.",
+          "line": "Summary: Thirty feeble purple polygon duplicates of the twelve fighters, met in stage 10 of the 1P Game on Duel Zone, with at most three on screen together.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/1P_Game",
@@ -709,7 +709,7 @@
           ]
         },
         {
-          "line": "Weak points: They are light and can usually be beaten in a single blow, though they get heavier and stronger on higher difficulties. They have no special moves, which hurts their recovery, and they cannot grab. They are passive, mostly walking around the platforms and very rarely attacking.",
+          "line": "Weak points: Being light, they usually fall to one hit, although higher difficulties make them heavier and tougher. Having no special moves cripples their recovery, and they cannot grab. They are passive too: mostly wandering the platforms and hardly ever attacking.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Fighting_Polygon_Team",
@@ -723,7 +723,7 @@
           ]
         },
         {
-          "line": "Looks like: Blocky, shiny purple figures that mostly keep the shape of the fighter they copy.",
+          "line": "Looks like: Angular, glossy purple figures that for the most part follow the outline of the fighter they copy.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Fighting_Polygon_Team",
@@ -735,7 +735,7 @@
           ]
         },
         {
-          "line": "Tips: They pick up items and normally throw a throwing item as soon as they have it. In the bonus stage Race to the Finish they are much more aggressive, chasing you and slowing you down, and you cannot defeat them there.",
+          "line": "Tips: They collect items, and a throwing item usually gets thrown right away. In the bonus stage Race to the Finish they turn far more aggressive, chasing you as far as they can and attacking when you are within reach, and you cannot beat them there, nor can they KO you.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Fighting_Polygon_Team",
@@ -758,7 +758,7 @@
       "main_revision": "2054602",
       "lines": [
         {
-          "line": "Summary: Four tornadoes spawn at random over Hyrule Castle, the stage where Link is the first opponent of the 1P Game, and a fighter caught in one is thrown upward.",
+          "line": "Summary: Hyrule Castle, the stage where the 1P Game's first opponent Link waits, has four tornadoes that appear at random places; anyone they catch gets flung upward.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Hyrule_Castle",
@@ -772,7 +772,7 @@
           ]
         },
         {
-          "line": "Weak points: You can still attack a fighter who is caught in a tornado, and hit them with an aerial when they are released, even meteor smashing them back into the tornado for more damage.",
+          "line": "Weak points: A fighter inside a tornado can still be attacked. Land an aerial the moment they come out, and a meteor smash can drive them back in for more damage.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Hyrule_Castle",
@@ -784,7 +784,7 @@
           ]
         },
         {
-          "line": "Tips: Each lasts around 10 to 20 seconds, drifts in a random direction and may suddenly speed up and home in on a fighter. Someone caught is held for about two seconds, then thrown upward, which KOs between 65% and 130% depending on weight and the tornado's position. In the 1P Game, knocking Link out with a tornado earns the Tornado Clear bonus, 3,000 points.",
+          "line": "Tips: A tornado lasts roughly 10 to 20 seconds and wanders in a random direction, and it can abruptly accelerate and chase a fighter. Anyone caught is held for around two seconds, then flung up, which KOs somewhere from 65% to 130%, depending on weight and where the tornado is. In the 1P Game, a tornado KO on Link gives the Tornado Clear bonus of 3,000 points.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Hyrule_Castle",
@@ -813,7 +813,7 @@
       "main_revision": "2047088",
       "lines": [
         {
-          "line": "Summary: A sea of acid rises and falls under Planet Zebes, the stage where Samus is fought in stage 8 of the 1P Game. Touching it does damage and high knockback, enough to KO a fighter whose damage is high.",
+          "line": "Summary: Planet Zebes, where the 1P Game's eighth stage pits you against Samus, has acid that keeps rising and falling beneath it. Contact deals damage and heavy knockback, which can KO a fighter who already has high damage.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/1P_Game",
@@ -833,7 +833,7 @@
           ]
         },
         {
-          "line": "Weak points: The acid never rises high enough to reach the topmost platform. If you are knocked into it once it has risen enough, it launches you skyward, so you can use your recovery again or simply fall back onto the stage.",
+          "line": "Weak points: The acid never climbs as far as the highest platform. A fighter knocked into it is shot upward, which gives a chance to use the recovery again, or to just drop back to the stage.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Planet_Zebes",
@@ -846,7 +846,7 @@
           ]
         },
         {
-          "line": "Tips: A Starman or any form of strong knockback resistance makes you immune to the acid, but if you fall through it while invincible you self-destruct. Knocking Samus out with the rising acid earns the Acid Clear bonus, 1,500 points (1,000 in the Japanese version).",
+          "line": "Tips: Holding a Starman, or anything else that strongly resists knockback, protects you from the acid; but if you drop past the stage's edge and into it while invincible, you self-destruct. Samus KO'd by the acid earns the Acid Clear bonus: 1,500 points (1,000 in the Japanese release).",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Planet_Zebes",
@@ -875,7 +875,7 @@
       "main_revision": "2056363",
       "lines": [
         {
-          "line": "Summary: Arwing fighters fly past on Sector Z, the stage where Fox is fought in stage 3 of the 1P Game, and fire lasers across the stage that deal large damage and knockback.",
+          "line": "Summary: On Sector Z, where the 1P Game's third stage has you face Fox, Arwings sweep past and shoot lasers over the stage, dealing big damage and knockback.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Sector_Z",
@@ -896,20 +896,7 @@
           ]
         },
         {
-          "line": "Weak points: A fighter standing on an Arwing may be KO'd if it flies offscreen to the top or side, and Arwings tend to barrel roll or fly upside down, which essentially pushes the fighter off. The Great Fox's main guns cannot be stood on and do not fire.",
-          "drawn_from": [
-            {
-              "page": "https://www.ssbwiki.com/Sector_Z",
-              "revision": "2056363",
-              "quoted": [
-                "a character standing on a fighter may be KO'd if the fighter flies offscreen to the top or side; however, the Arwings do tend to barrel roll or fly upside down, which essentially pushes the character off.",
-                "the main guns of the Great Fox cannot be stood on and do not fire."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Knocking Fox out with an Arwing earns the ARWING Clear bonus, 4,000 points (3,000 in the Japanese version). Sector Z is the largest stage in the game.",
+          "line": "Tips: Standing on an Arwing is risky: if it leaves the screen over the top or the side, you can be KO'd, and since Arwings often barrel roll or fly inverted, they effectively throw you off. You cannot stand on the Great Fox's main guns, and they never fire. Knocking Fox out with an Arwing earns the ARWING Clear bonus: 4,000 points (3,000 in the Japanese release). Sector Z is the biggest stage in the game.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/1P_Game",
@@ -922,7 +909,9 @@
               "page": "https://www.ssbwiki.com/Sector_Z",
               "revision": "2056363",
               "quoted": [
-                "Sector Z is the largest stage in Super Smash Bros."
+                "Sector Z is the largest stage in Super Smash Bros.",
+                "a character standing on a fighter may be KO'd if the fighter flies offscreen to the top or side; however, the Arwings do tend to barrel roll or fly upside down, which essentially pushes the character off.",
+                "the main guns of the Great Fox cannot be stood on and do not fire."
               ]
             }
           ]

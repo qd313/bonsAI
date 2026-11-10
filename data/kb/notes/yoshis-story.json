@@ -1,0 +1,39 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 3600,
+      "game_id": 32,
+      "section_type": "boss",
+      "name": "Don Bongo",
+      "card": "Summary: The boss at the end of the level Frustration. He paces across his room, and pots and pans fall from the ceiling while he does.\nWeak points: Three egg hits on his lips beat him. An egg that lands on the rest of his body bounces away.\nLooks like: A plump, dragon-like creature with green skin, yellow spots, thick red lips and a striped yellow belly.\nTips: Walking into him costs no health, because you just bounce off. Only the things falling from the ceiling can hurt you.\nTips: Each hit makes his lips swell, which gives you a slightly easier target, but once they have been hit twice he moves much faster.",
+      "source_url": "https://www.mariowiki.com/Don_Bongo",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5515236",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3601,
+      "game_id": 32,
+      "section_type": "boss",
+      "name": "Cloudjin",
+      "card": "Summary: A genie made of smoke that you face once the level Poochy & Nippy has its 30 fruits eaten. He sends spiked balls rolling down slippery see-saws and breathes fire.\nWeak points: Aim for his stomach with three eggs, and only while his body is solid.\nLooks like: A giant genie made of smoke that floats about.\nTips: Only the Japanese release makes him flash red when an egg hurts him, so in other releases that flash is not a sign to look for.",
+      "source_url": "https://www.mariowiki.com/Cloudjin",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5508641",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3602,
+      "game_id": 32,
+      "section_type": "boss",
+      "name": "Inviso",
+      "card": "Summary: A ghost boss at the end of The Tall Tower. He goes invisible and tries to bump into Yoshi while he calls in Peepers.\nWeak points: It takes three egg hits to beat him.\nLooks like: He is see-through, and the only sign of him is the surroundings reflected on his body.\nTips: An egg that strips a Peeper of its feathers makes it fall, and eating it at that point heals Yoshi fully.",
+      "source_url": "https://www.mariowiki.com/Inviso",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5508642",
+      "crawled_at": "2026-11-10"
+    }
+  ]
+}

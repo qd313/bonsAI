@@ -1,0 +1,224 @@
+{
+  "wiki": "Super Mario Wiki (https://www.mariowiki.com/api.php)",
+  "licence_printed_by_fetcher": "Super Mario Wiki (MediaWiki 1.43.11) licence: Attribution-ShareAlike 4.0 International https://creativecommons.org/licenses/by-sa/4.0/",
+  "licence_stored": "CC-BY-SA-4.0 (the fetcher prints 'Attribution-ShareAlike 4.0 International'; the library stores the versioned form, as for the Mario Party notes)",
+  "game_id": 32,
+  "game": "Yoshi's Story",
+  "read_on": "2026-11-10",
+  "how_read": "Pages read with scripts/kb/fetch_wiki_live_pages.py (--api https://www.mariowiki.com/api.php --titles ...). The wiki refused the reader's by-revision render call, and the reader fell back by itself to asking for the page by title, checking that the revision it rendered is the revision it had looked up; the revision below is the one the reader printed for each page. Every quoted fragment was checked, by script, to occur word for word in the fetched page text (whitespace collapsed). The pages are kept in build/wiki-live/mariowiki/ in the helper's copy. Where a page covers the whole series, a line uses only what the page says about Yoshi's Story.",
+  "sections": [
+    {
+      "section_id": 3600,
+      "name": "Don Bongo",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Don_Bongo",
+      "main_revision": "5515236",
+      "lines": [
+        {
+          "line": "Summary: The boss at the end of the level Frustration. He paces across his room, and pots and pans fall from the ceiling while he does.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Don_Bongo",
+              "revision": "5515236",
+              "quoted": [
+                "In Yoshi's Story, Don Bongo is fought at the end of Stage 3-4: Frustration. He attacks by stomping back and forth across the room, causing pots and pans to rain down from the ceiling."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Three egg hits on his lips beat him. An egg that lands on the rest of his body bounces away.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Don_Bongo",
+              "revision": "5515236",
+              "quoted": [
+                "a Baby Yoshi has to hit him in the lips three times; hitting him anywhere else simply causes the egg to bounce off his blubber."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A plump, dragon-like creature with green skin, yellow spots, thick red lips and a striped yellow belly.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Don_Bongo",
+              "revision": "5515236",
+              "quoted": [
+                "He is a pudgy dragon-like creature with green skin, yellow spots, big red lips, a yellow stomach with stripes, and a big orange-and-yellow belly button."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Walking into him costs no health, because you just bounce off. Only the things falling from the ceiling can hurt you.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Don_Bongo",
+              "revision": "5515236",
+              "quoted": [
+                "The Baby Yoshi does not lose any health if he touches Don Bongo, simply bouncing off him instead. Only the items falling from the ceiling can hurt the Baby Yoshi."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Each hit makes his lips swell, which gives you a slightly easier target, but once they have been hit twice he moves much faster.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Don_Bongo",
+              "revision": "5515236",
+              "quoted": [
+                "After each hit, Don Bongo's lips swell, making them a somewhat easier target, although his movement becomes a lot faster after his lips are hit twice."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3601,
+      "name": "Cloudjin",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Cloudjin",
+      "main_revision": "5508641",
+      "lines": [
+        {
+          "line": "Summary: A genie made of smoke that you face once the level Poochy & Nippy has its 30 fruits eaten. He sends spiked balls rolling down slippery see-saws and breathes fire.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Cloudjin",
+              "revision": "5508641",
+              "quoted": [
+                "He is a smoke djinn that was sent by Baby Bowser to patrol the mountains of Yoshi's Island in Yoshi's Story. As such, a Yoshi must fight him after collecting 30 fruits in Stage 3-3: Poochy & Nippy. He attacks by using large spiked balls and causes them to roll down slippery teeter-totters, and breathes fire at the Yoshi."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Aim for his stomach with three eggs, and only while his body is solid.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Story",
+              "revision": "5520653",
+              "quoted": [
+                "Hitting his stomach with three eggs (while he is tangible) defeats him."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Cloudjin",
+              "revision": "5508641",
+              "quoted": [
+                "A Yoshi's egg can harm Cloudjin while he is tangible"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A giant genie made of smoke that floats about.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Story",
+              "revision": "5520653",
+              "quoted": [
+                "A giant, wind-bending genie that floats around."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Cloudjin",
+              "revision": "5508641",
+              "quoted": [
+                "He is a smoke djinn"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Only the Japanese release makes him flash red when an egg hurts him, so in other releases that flash is not a sign to look for.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Story",
+              "revision": "5520653",
+              "quoted": [
+                "Cloudjin flashes red when hurt in the Japanese version only."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Cloudjin",
+              "revision": "5508641",
+              "quoted": [
+                "causing him to flash red (though not in international releases)."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3602,
+      "name": "Inviso",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Inviso",
+      "main_revision": "5508642",
+      "lines": [
+        {
+          "line": "Summary: A ghost boss at the end of The Tall Tower. He goes invisible and tries to bump into Yoshi while he calls in Peepers.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Inviso",
+              "revision": "5508642",
+              "quoted": [
+                "He is at the end of The Tall Tower.",
+                "Inviso attacks by turning invisible and trying to bump into a Yoshi while summoning Peepers."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: It takes three egg hits to beat him.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Inviso",
+              "revision": "5508642",
+              "quoted": [
+                "The Yoshi can defeat Inviso by hitting him with three eggs."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: He is see-through, and the only sign of him is the surroundings reflected on his body.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Inviso",
+              "revision": "5508642",
+              "quoted": [
+                "Inviso's appearance is somewhat hidden, as he is invisible (minus the fact that the world reflects on him)."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: An egg that strips a Peeper of its feathers makes it fall, and eating it at that point heals Yoshi fully.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Peeper",
+              "revision": "5405842",
+              "quoted": [
+                "When a Peeper is shot down, a puff of smoke appears, and the Peeper loses its feathers and falls away. If a Yoshi eats a Peeper when it loses its feathers, it will heal him back to full health.",
+                "In addition, Inviso summons Peepers during his boss battle."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Story",
+              "revision": "5520653",
+              "quoted": [
+                "If a Yoshi shoots one with an egg, it will lose its feathers and fall down."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

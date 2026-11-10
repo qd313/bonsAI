@@ -2036,3 +2036,11 @@ Two knowledge-base entries that passed on the Deck in block R1, copied word for 
 
   **Plan 102 lane H (`c4d7c54a`, `82a08ad8`, `6a9e7b0a`, `943b0f86`):** a new tip 167 for a Deck that cannot find its PC; 19 of 24 plain sentences now reach a tip and 17 the right one (17 and 15 before), none a wrong one, confirmed on the final library 2026-11-03 (a count from the search-test run, no separate report file). Row P102-FINDPC-01 (block R1) is owed. Older text: [Detail](roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
   **Closed 2026-11-03, passed on the Deck (row P102-FINDPC-01):** tip 167 reached the model and the answer repeats its home-network and port 11434 advice; the Hollow Knight question attached no tip, and the Fallout 4 terminal question attached no network tip (three Fallout 4 notes, weak match). Evidence `workshop:test-evidence/plan102-P102-FINDPC-01.json`.
+
+## Closed 2026-11-09 (plan 103 pre-go audit, D140)
+
+One knowledge-base entry closed by the maintainer's answer to plan 103 call 5 (decision D140, 2026-11-09), copied word for word from [roadmap-kb.md](../roadmap-kb.md) as it stood. The call line that asked about it is in [the long notes](../roadmap-kb-details.md#plan-103-notes-moved-from-the-knowledge-base-roadmap-2026-11-09).
+
+- ★★★ `[KB]` **Card style pass** — **MEASURED 2026-11-02 (plan 102 lane G), a tie; the maintainer decides (Calls).**
+  Fifteen prose cards rewritten as labelled short lines kept every fact in 48 of 90 answers, against 44 of 90 for the prose cards (4.4 points apart), while the same library swung 18 points between its own two runs; four long starting-out cards failed every run in both shapes. **The measurement does not support the pass.** The rewrites are kept as `workshop:archive/research/card-style-rewrites-2026-11-02-p102.patch`.
+  ([D67](audit/maintainer-decisions-archive.md#d67--locked-2026-09-05--structured-cards-accept-prose))

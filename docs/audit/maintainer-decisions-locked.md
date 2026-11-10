@@ -2501,3 +2501,80 @@ Each with the recommendation and the default in brackets. The answers become dec
 12. **Standing rules while you are away** (plan 100's): a fix that fails on the Deck twice moves up one tier; a new one- or two-star bug with a known cause gets one helper round of about an hour; anything blocked gets the safest choice at once and is raised in the chat and in § 12; never push, publish, merge to main, switch branches in the shared folder, type a PIN or password, reload the plugin with a game running. *Default: kept.*
 13. **The monthly read by a person** that the deeper answer checks call for. *Recommendation: the answer test gains a switch that writes ten replies (question, notes attached, reply) to a workshop file for your read; the first file is written tonight. Default: yes.*
 14. **Plan 101's research lane** (the mod-knowledge sources and their licences; read-only; needs the web; nothing in the repo). It is the first step of the ★★★ mod-knowledge entry in the knowledge-base roadmap and runs on its own. *Recommendation: run it as lane J tonight. Default: yes.*
+
+### D140 — LOCKED 2026-11-09 (raised 2026-11-09) — Plan 103, the knowledge-base wave six: the twenty-one calls
+
+Asked by the planning chat for [plan 103](../planning/103-kb-wave-six-finish-the-half-done-phases.md) (its section 2). Calls 1 to 8 were answered in the chat on 2026-11-09; the maintainer then said "go" (about 19:30 EST) and took the default on calls 9 to 21. Usage read when planning ended (about 19:15 EST): 28 percent of the five-hour window, 9 percent of the week, 16 percent on Fable's own weekly counter. **Usage at go (read 2026-11-09, 19:32 EST):** 33 percent of the five-hour window (it resets at 20:00 EST), 10 percent of the week (it resets Wednesday 11 November at 08:00 EST), and 18 percent on Fable's own weekly counter. Number 140 because D138 is reserved by plan 101's asset file (D139 was the last entry written). The plan's section 2, word for word:
+
+**Answered in the chat on 2026-11-09 (they become decision D140; D139 was the last, D138 is reserved by plan 101):**
+
+1. **Notes scope: all 23 games.** Every game that still lacks enemy and item notes in the short labelled shape gets ten
+   to fifteen (about 280 notes), one helper per game, in three batches (§ 5f).
+2. **The four bigger pieces: all in.** A picture finds its notes (with a bigger labelled picture set); the marked
+   screenshot, test first; Left 4 Dead 2 versus notes (plan 17's first three steps, Counter-Strike 2 out); mod basics
+   tips (plan 101's knowledge-cards lane, no scan of the device).
+3. **Bugs: every open bug on both roadmaps a helper can act on.** The six knowledge-base bugs and nine from the main
+   roadmap. The README refilm stays the maintainer's; the tab-sections bug gets a measurement only.
+4. **Reads: a sample of ten.** A separate checker re-reads every note sentence against its source page and the licence
+   reviewer reads every file; the maintainer reads ten random notes per batch on the checks page, and the rest closes
+   on that. This also covers the notes still waiting from plans 100 and 102 (one sample of ten for those 125).
+5. **The four old calls: all four recommended answers.** Keep "This screenshot is from <game>." at the start of a
+   picture question; build the crowding fix (it lands only if no test question loses its right note); close the card
+   style pass as not worth doing; re-run the story-cover check with more tries once the answer test's repeated-answer
+   fault is fixed.
+6. **What the rig may do on the Deck without asking again: all four.** Copy the Steam screenshots already on the Deck
+   to the private workshop (nothing on the Deck changes); place test pictures in the Deck's screenshot folder and
+   remove them at the end; delete saved chats the test drivers made, never the maintainer's; pull one better picture
+   model (about 3 GB) to measure it there, removed at the end.
+7. **Phase 5's other half (a smarter order for the suggestion chips): it moves to its own roadmap entry so Phase 5 can
+   close, and one helper builds it late in the session if a slot is free.**
+8. **Run length: until the list is done or the week reaches 90 percent.** When a five-hour window fills, the session
+   stops starting helpers, waits, and picks up by itself at the reset. A short report at every clean stopping point
+   (§ 5, "Waves").
+
+**Open, each with its default in brackets ("go" takes every default). Answered with "go" on 2026-11-09 at about 19:30 EST: the maintainer took every default, so each default in brackets is the answer to calls 9 to 21:**
+
+9. **Models and efforts** as in § 4. Two notes: the routing table would put Opus at extra-high in the seat that runs the
+   session (Fable is the maintainer's choice); and the bookkeeper is Sonnet medium, not Haiku, because Haiku was tried
+   on bookkeeping in plan 83 and fell short. *[As listed.]*
+10. **A picture question may make one short extra AI call first** ("what game, place and enemy is this?") so the note
+    search has something to go on. A rule from August says no extra call. *[Build it and measure it against today. It
+    lands switched on only for Strategy questions with a screenshot and the library on, and only if the right note is
+    found at least twice as often on the picture set and the extra wait on this PC is under ten seconds. Otherwise it
+    lands switched off. Either way you confirm or revert with the Deck's own timing in hand.]*
+11. **The honest "I don't know".** *[It lands switched on only if the AI says in its own words that its notes do not
+    cover the question in at least half of the tries on the unanswerable questions (today: none in its own words), and
+    ordinary answers keep their facts within the test's own noise over two runs. Otherwise it lands switched off with
+    the numbers, and the call is yours.]*
+12. **The marked screenshot's bar.** *[Build it only if the best of the Deck's picture models averages 7 out of 10 or
+    better on at least 15 boss pictures, graded by Opus. Under the bar the idea is shelved with its numbers and the bar
+    that would reopen it, and the visual-maps entry closes either way.]*
+13. **Where the versus notes come from.** Plan 17 locked "archive dumps only" in August; every note since September came
+    from the live wiki reader, which prints each page's licence and revision. *[The live reader, same credit line.
+    Counter-Strike 2 stays out.]*
+14. **A whole answer behind a spoiler cover shows no notes line today** (on purpose in the code: the line waits until
+    the cover is opened). *[Draw a one-line caption with neutral words and no note titles while the cover is shut, the
+    wording protected notes already use; the full notes line appears when the cover is opened. A screenshot goes on the
+    checks page for your eye, and it is one commit to take back.]*
+15. **Which picture model comes first on the Deck.** On this PC a model the Deck already offers named the place in a
+    picture 70 times in 100 against 52 for the starter model. *[No change this session. Block DP measures speed and
+    memory on the Deck with a game running, and the numbers come to you as a call.]*
+16. **The starter-models box fix needs a fresh install to check on the Deck.** *[Proven by its tests and a look on the PC
+    stand-in; the Deck row goes on the checks page for your hand.]*
+17. **Push and publish.** *[Nothing pushed, nothing published. At the end: "push" from you, and one library publish
+    after your ten-note samples. The library built on 2026-11-03 was never published; this session's build replaces
+    it.]*
+18. **Standing rules while you are away** (plan 102's): a fix that fails on the Deck twice moves up one model tier
+    without asking; a new one- or two-star bug with a known cause gets one helper round of about an hour; anything
+    blocked gets the safest choice at once and is raised in the chat and in § 12; never push, publish, merge to main,
+    switch branches in the shared folder, type a PIN or password, reload the plugin with a game running. *[Kept.]*
+19. **Budget lines.** No new helper past 75 percent of the five-hour window or 90 percent of the week (D128). Read when
+    planning ended (2026-11-09, about 19:15 EST): 28 percent of the five-hour window (it resets at 20:00 EST tonight), 9
+    percent of the week (resets Wednesday 11 November at 08:00 EST), and Fable's own weekly counter at 16 percent.
+    Planning alone moved those from 5, 6 and 11. *[Kept. New: the session says Fable's counter at every stopping point;
+    if it passes 85 percent the session asks you whether to carry on in a new Opus chat from the pick-up list in § 12.]*
+20. **Mod basics.** *[Plan 101's knowledge-cards brief as written, run here as lane G1; plan 101's other lanes and its
+    decision number stay untouched.]*
+21. **Hades and Red Dead Redemption 2** have only own-words notes today, with no wiki cited. *[Each lane first proves a
+    usable licence with the live reader (the game's own wiki; failing that, Wikipedia, as Baldur's Gate 3 did). If
+    neither works, that game gets no new notes and the report says so.]*

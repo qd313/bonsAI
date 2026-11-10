@@ -35,6 +35,7 @@
 - [Plan 102 notes moved from the shelved roadmap (2026-11-02)](#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-02)
 - [Plan 102 notes moved from the knowledge-base roadmap (2026-11-03)](#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03)
 - [Plan 102 notes moved from the shelved roadmap (2026-11-03)](#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-03)
+- [Plan 103 notes moved from the knowledge-base roadmap (2026-11-09)](#plan-103-notes-moved-from-the-knowledge-base-roadmap-2026-11-09)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -938,3 +939,117 @@ with today's shape and the game handed over, qwen3.5:4b named the game 97 and th
 **Hidden spoiler box, the Still owed line as the entry stood:**
 
   **Still owed:** STRAT-SPOIL-NAME-01 could not run again on 2026-11-03 (plan 102 block R0: Doom 64 was not running and a stuck suspend overlay blocked the Home shelf; `workshop:test-evidence/plan102-STRAT-SPOIL-NAME-01.json`; before that 2026-10-25, `workshop:test-evidence/plan100-STRAT-SPOIL-NAME-01.json`): it needs the maintainer's hand launch (on the checks page). [Detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24)
+
+## Plan 103 notes moved from the knowledge-base roadmap (2026-11-09)
+
+Moved word for word by plan 103's audit before anything lands, to make room in the knowledge-base roadmap (it was 0.2 KB under its limit). Each entry there keeps a link here.
+
+**The four calls the maintainer answered on 2026-11-09 (D140), as the list stood. Closed by call 5 of D140: the picture sentence is kept, the crowding fix is built (plan 103 lane R1), the card style pass is closed, and the story-cover check is re-run with more tries (plan 103 lanes T2 and X0):**
+
+- **Keep or undo "This screenshot is from <game>." at the start of a picture question?** — **OPEN, raised 2026-11-03 (plan 102 lane D, call 5).**
+  With the game handed over the AI named the right game 91 and 92 times in a hundred (67 and 70 before) and never mixed up God of War, but named the place on screen only 29 and 30 times (52 and 53 before). It is on by default now. Row P102-PICTURE-01 could not run on 2026-11-03 (the Deck saved no screenshot) and is owed. Reports `workshop:archive/research/screenshot-reading-2026-11-02-p102-s1-run1.md` and `-s1-run2.md`.
+- **Stop the word search handing the blend ten notes? (the crowding fix)** — **OPEN, raised 2026-11-03 (plan 102 lane E).**
+  The fall in facts kept is mostly noise, but after 51 more notes the word search returns up to ten notes instead of three, so one-word coincidences beat a note found only by meaning. The fix (cap the list before blending, or move the floor) touches the search service. See the Bugs entry "The new notes crowd the old ones".
+- **Close the card style pass?** — **OPEN, raised 2026-11-03 (plan 102 lane G).**
+  A tie: fifteen prose cards rewritten in the labelled shape kept every fact in 48 of 90 answers against 44 of 90, while the same library swung 18 points between its own two runs. The rewrites are kept (`workshop:archive/research/card-style-rewrites-2026-11-02-p102.patch`). See the Next entry.
+- **Re-run the "cover on a story question" check with more tries?** — **OPEN, raised 2026-11-03 (plan 102 lane X2).**
+  On the final library a cover showed up on a story-beat question in 11 of 15 answers, against 14 of 15 on 2026-10-25 (plan 100) (three tries on five questions, so one or two answers can swing it). It is a read, not yet a finding. Report `workshop:archive/research/kb-answer-eval-2026-11-03-p102-after.md`.
+
+**Crowding entry, the final-library paragraph as it stood:**
+
+**Final library, 2026-11-03 (lane X2):** of the 236 blind questions for the eight games one older right note slipped out of the first three (a Mario Kart 64 question: "Items and who gets them" fell behind the new "Picking a kart for top speed"), the same cause in one case. The five of the thirty meaning-only questions that the blend loses but the meaning search alone finds (23 against 28) are the same cost. Report `workshop:archive/research/kb-crowding-read-2026-11-02-p102.md`, the phrase-list patch beside it, and `workshop:archive/research/kb-embed-bakeoff-2026-11-03-arms-p102-after.md`. 
+
+**The "Still short" paragraph, as it stood:**
+
+**Still short:** getting to the troubleshooting tips, though better since 2026-10-25. Of 24 fresh plain sentences, 8 reached a tip before the wording fix, 17 after it and 19 now (17 the right one, 15 before the find-my-PC tip of 2026-11-02; counted again on the final library 2026-11-03, rows 19 and 20 reach tip 167), none a wrong one (PC). On the Deck 2026-10-26, 2 of 3 plain sentences reached their tip; the third (a crash sentence) did after the fix, in a chat about another game and, reworded, in a Hollow Knight chat (row P100-TIPS-01-try3).
+
+**RAG Phase 5, the Measured paragraph, as it stood:**
+
+  **Measured:** older results in [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03). **Final library, 2026-11-03:** 230 of the 236 blind questions for plan 102's eight games find their note in the first three (203 first); the word search alone 227, the meaning search alone 224 (`workshop:archive/research/kb-embed-bakeoff-2026-11-03-arms-p102-after.md`). **Deck 2026-10-26:** Portal 2 and (after the fix `b48e4baf`) GTA passed; older text in [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03). Plan 102's notes passed their Deck row (8 of 8, 2026-11-03) and are owed your read (Deck check owed). **Closes** (plan 103 § 5f) when the 23 games' notes and their questions are in, the crowding fix has landed or been turned down on its numbers, and its Deck row P103-NOTES-23-01 has passed; the ten-note samples are a call (Calls), and the chip order is its own entry above. Stays PARTIAL until then.
+
+**The meaning-half entry, the 2026-11-03 re-measure, as it stood:**
+
+**Re-measured on the final library (2026-11-03, plan 102 lane X2, 583 notes, 628 held-back questions, right note in the first three):** the shipping blend 92.5 in a hundred, the meaning search alone 92.4, the word search alone 85.0: a tie on the bigger set (this morning, on 465 notes and 360 questions: 90.8, 92.2 and 85.6). Report `workshop:archive/research/kb-embed-bakeoff-2026-11-03-arms-p102-after.md`.
+
+**The screenshot measurement entry, steps 1 and 2, as they stood:**
+
+Step 1: a labelled picture set and a scoring script; with the game handed over the AI named it 75 times in 100 (58 and 50 on 2026-10-25; runs differ by up to 21 points). **Step 2, on this PC:** the picture models the Deck offers read far better than its starter model (qwen3.5:4b named the game 97 and the place 70 times in a hundred, against 67 to 70 and 52 to 53); the other figures are in [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03). Reports `workshop:archive/research/screenshot-reading-2026-11-02-p102-*.md` (ten files).
+
+**The mod-knowledge entry, the Found paragraph, as it stood:**
+
+  **Found:** LOOT's rule lists are CC0 (free to use); the Cyberpunk community wiki has no licence and will not get one (own-words cards marked "Researched, unconfirmed" only); Stardew Valley's sources are NonCommercial or mixed. The build and publish checks do not accept CC0 yet. Sizes and shares: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03). Report `workshop:planning/assets/101-mod-knowledge-sources.md`.
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+Mostly noise: of the six questions behind the nine-point fall in facts kept, only the Portal 2 gels is a worse answer; two have too-narrow phrase lists and three are noise.
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+Every sentence comes from a wiki page the fetcher read; the FOSS reviewer read every file and nothing blocks publishing (Paper Mario had five story-spoiler risks, fixed before landing).
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+The thumbs-down rows now ask the panel's window for its focus when the ring lands on them, and Down from the notes block no longer dies when the page lacks focus: the press gives way and Steam moves the ring. **Say plainly:** on the Deck the ring will most likely land on the suggestion chips, past the open details panel, a moving press and not yet the stop a person expects (the Bugs entry above).
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+plan 100 gave the four that had none enemy and item notes (Baldur's Gate 3 7, GTA San Andreas 15, The Sims 4 15, Portal 2 14) and **plan 102 (2026-11-02) gave eight thin games 118 more** (15 each, Pikmin 2 13; the games are named in the eight-games entry in Deck check owed).
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+Five of the seven are tabletop lore with no fight advice; you read them in the chat on 2026-10-25 and chose to land them (D137 session).
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01), knowledge base off (DRG-01b) and library absent (DRG-01c; no hidden block was written, so a cover was not tested directly).
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+Leaning the search toward meaning finds the right note first a little more often, but it would bury a new
+  note with no meaning index yet. That reason is gone since 2026-09-07 (every note is now guaranteed an index), but two
+  other objections stand.
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+**A route, one step at a time:** built 2026-10-24 as the look of the strategy checklist (its entry is in Done). The "Needs: …" part on steps that need an item or ability was removed 2026-11-03 (`9615dc19`): it was never drawn in the Deck tries (Done).
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+The junk-phrase fix is in [Done](roadmap.md#done-after-v060) since 2026-10-26 (row P100-THANKS-01-try2, `workshop:test-evidence/plan100-P100-THANKS-01-try2.json`); the 2026-10-24 Deck sightings: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03)
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+plan 100 added 51 notes and two tips, and plan 102 added 118 notes for eight games and one tip. 
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+  **Deck 2026-10-26, MEASURED (row P100-FOUR-GAMES-01):** the Minthara question attached the Minthara note; the answer does not say how the grove ends. Words and evidence: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03).
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+  **As of 2026-10-03:** the source study is done, and the library is at 38 games and 414 notes
+  ([D111](audit/maintainer-decisions-locked.md#d111--locked-2026-09-17-raised-2026-09-17--58-phase-1-the-notes-own-words-on-screen-and-wiki-notes-taken-without-rewriting--nine-calls-before-the-build)).
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+The answer test on this PC read facts kept 68.9 in a hundred on the final library (2026-11-03), 71.2 on 2026-11-02 and 67.2 on 2026-10-25, so runs differ by about four points. Older search and answer figures (85.3 and 79.5 in a hundred, 2026-09), with the wave three caveat: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03).
+
+**Still short:** getting to the troubleshooting tips, though better since 2026-10-25: 19 of 24 fresh plain sentences reach a tip now, none a wrong one (PC). Counts and Deck tries: [Detail](roadmap-kb-details.md#plan-103-notes-moved-from-the-knowledge-base-roadmap-2026-11-09).
+
+**The one-second wait on every question is explained:** the Deck holds one model at a time, so the answering and note-search models push each other out. Full text and evidence: [detail](roadmap-kb-details.md#plan-98-notes-moved-from-the-knowledge-base-roadmap-2026-10-24).
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+Every one of the 38 games has at least one enemy or item note (counted 2026-11-02); with plan 102, 15 of them have those notes in the labelled short-line shape (7 before).
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+Seen three times (once in a chat with one list, twice with two). 
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+Older turns collapse under "N earlier", so two lists never show at once.
+
+**Older sentences moved out so each entry stays short, as they stood:**
+
+The cover was drawn under Default and stayed shut, as under Hide more. "Open after consent" was off in the test, so this may be by design; the evidence file leaves it to the owner.

@@ -337,6 +337,10 @@ Parked work and watched sightings: [roadmap-shelved.md](roadmap-shelved.md).
 Everything closed since v0.6.0 shipped (2026-10-24), one line each, newest first. When this section grows past the
 size limit, its older blocks move to an archive file the way the v0.6.0 ones did.
 
+**Closed 2026-11-09 (plan 103 pre-go audit, D140):**
+
+- ★★★ `[KB]` **Card style pass** — **DONE 2026-11-09, closed by the maintainer, D140, 2026-11-09.** Fifteen prose cards rewritten as labelled short lines kept every fact in 48 of 90 answers against 44 of 90, a tie (the same library swung 18 points between its own two runs); the rewrites are kept (`workshop:archive/research/card-style-rewrites-2026-11-02-p102.patch`). Full entry: [archive](archive/roadmap-completed.md#closed-2026-11-09-plan-103-pre-go-audit-d140).
+
 **Closed 2026-11-03 (plan 102 Deck block R1):**
 
 - ★ `[KB]` **The Sims 4 library holds two fire notes that disagree** — **DONE 2026-11-03, passed on the Deck (row P102-SIMS-FIRE-01; evidence `workshop:test-evidence/plan102-P102-SIMS-FIRE-01.json`).** "The Sims 4: how do I stop a fire" attached the Fire, Fires and Fire sprinkler panel notes; both notes that mention firefighters say a smoke alarm brings them, and the "Fire extinguisher" word's definition agrees. Fixed by lane B (`f81d349e`, `cfbc67d8`). Full entry: [archive](archive/roadmap-completed.md#closed-2026-11-03-plan-102-deck-block-r1).

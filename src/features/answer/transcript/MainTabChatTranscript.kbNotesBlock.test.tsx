@@ -32,6 +32,14 @@ vi.mock("../../knowledge-library/kbNoteUsedByAnswer", async (importOriginal) => 
   };
 });
 
+/* Copy goes through one function; the Brotato tests read what it was handed. */
+const clipboard = vi.hoisted(() => ({ writes: [] as string[] }));
+vi.mock("../reply-actions/clipboardWrite", () => ({
+  writeClipboardText: async (text: string) => {
+    clipboard.writes.push(text);
+  },
+}));
+
 import {
   MainTabChatTranscript,
   focusKbNotesBlock,
@@ -303,7 +311,7 @@ describe("a fenced reply", () => {
         success: true,
         context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
         overflow_skips: [],
-        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki" })],
+        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki", game_title: "Hollow Knight" })],
       },
     };
     const { container } = render(
@@ -322,7 +330,7 @@ describe("a fenced reply", () => {
         success: true,
         context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
         overflow_skips: [],
-        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki" })],
+        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki", game_title: "Hollow Knight" })],
       },
     };
     const { container } = render(
@@ -341,7 +349,7 @@ describe("a fenced reply", () => {
         success: true,
         context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
         overflow_skips: [],
-        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki", card: "The infected husk shaped like you." })],
+        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki", card: "The infected husk shaped like you.", game_title: "Hollow Knight" })],
       },
     };
     const { container } = render(
@@ -370,7 +378,7 @@ describe("a fenced reply", () => {
         success: true,
         context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
         overflow_skips: [],
-        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki" })],
+        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki", game_title: "Hollow Knight" })],
       },
     };
     const { container } = render(
@@ -396,7 +404,7 @@ describe("a fenced reply", () => {
         success: true,
         context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
         overflow_skips: [],
-        kb_attached_notes: [note({ name: noteName, source_host: "hollowknight.wiki" })],
+        kb_attached_notes: [note({ name: noteName, source_host: "hollowknight.wiki", game_title: "Hollow Knight" })],
       },
     };
   }
@@ -507,7 +515,7 @@ describe("a fenced reply", () => {
           expandedTurnKey: "live",
           askThreadDisplayQuestion: "what is that boss",
           ollamaResponse: "```bonsai-spoiler\nThat's Broken Vessel.\n```",
-          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note({ name: "Broken Vessel" })] },
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note({ name: "Broken Vessel", game_title: "Hollow Knight" })] },
           transparencySnapshot: null,
           strategySpoilerMaskingEnabled: true,
         })}
@@ -1087,5 +1095,97 @@ describe("a protected boss note (the answer has no cover of its own)", () => {
       <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: false })} />
     );
     expect(block(container)?.textContent).toContain("Soul Master");
+  });
+});
+
+/*
+ * Plan 103 S1 piece 1: with nothing running a question has no game id and no game name on the screen. The
+ * notes the back end attached name the game it worked out for the turn (their game_title), so a question
+ * about a no-story game such as Brotato gets its covers opened and its Copy press unwrapped.
+ */
+describe("a turn whose game only the attached notes name (nothing running)", () => {
+  const BODY = "Take the shield.";
+  const ANSWER = `Start with armour.\n\n\`\`\`bonsai-spoiler\n${BODY}\n\`\`\`\n\nThen dodge.`;
+  const turnFor = (gameTitle: string, overrides: Partial<AskThreadCollapsedTurn> = {}): AskThreadCollapsedTurn => ({
+    id: "t1",
+    question: "what should i buy in the shop in wave 5",
+    answer: ANSWER,
+    transparency: {
+      route: "ollama",
+      success: true,
+      context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+      overflow_skips: [],
+      kb_attached_notes: [note({ name: "Shop basics", game_title: gameTitle, source_host: "" })],
+    },
+    ...overrides,
+  });
+  const draw = (turn: AskThreadCollapsedTurn, extra: Partial<MainTabChatTranscriptProps> = {}) =>
+    render(
+      <MainTabChatTranscript
+        {...baseProps({ askThreadCollapsed: [turn], expandedTurnKey: turn.id, strategySpoilerMaskingEnabled: true, ...extra })}
+      />
+    );
+
+  beforeEach(() => {
+    resetSpoilerFenceOpenCountForTests();
+    clipboard.writes.length = 0;
+  });
+
+  it("opens the cover by itself when the notes name a no-story game, and shows the notes line", () => {
+    const { container } = draw(turnFor("Brotato"));
+    expect(container.querySelector(".bonsai-spoiler-reveal-target")).toBeNull();
+    expect(container.textContent).toContain(BODY);
+    expect(block(container)?.textContent).toContain("Shop basics");
+  });
+
+  it("keeps the cover shut when the notes name a story game, or two different games", () => {
+    expect(draw(turnFor("Hollow Knight")).container.querySelector(".bonsai-spoiler-reveal-target")).not.toBeNull();
+    const base = turnFor("Brotato");
+    const mixed = {
+      ...base,
+      transparency: {
+        ...base.transparency!,
+        kb_attached_notes: [note({ game_title: "Brotato" }), note({ name: "Other", game_title: "Hollow Knight" })],
+      },
+    };
+    expect(draw(mixed).container.querySelector(".bonsai-spoiler-reveal-target")).not.toBeNull();
+  });
+
+  it("keeps the cover shut under Hide more, and when the question itself names a story game", () => {
+    expect(draw(turnFor("Brotato"), { spoilerTier: "strict" }).container.querySelector(".bonsai-spoiler-reveal-target")).not.toBeNull();
+    const named = turnFor("Brotato", { question: "is brotato as good as hades for a first run" });
+    expect(draw(named).container.querySelector(".bonsai-spoiler-reveal-target")).not.toBeNull();
+  });
+
+  it("opens the live answer's cover the same way, from the notes the poll carries", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: true,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "what should i buy in the shop in wave 5",
+          ollamaResponse: ANSWER,
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note({ name: "Shop basics", game_title: "Brotato" })] },
+          transparencySnapshot: null,
+          strategySpoilerMaskingEnabled: true,
+        })}
+      />
+    );
+    expect(container.querySelector(".bonsai-spoiler-reveal-target")).toBeNull();
+    expect(container.textContent).toContain(BODY);
+  });
+
+  it("copies the opened text, not the hidden-block placeholder, on a Brotato answer", async () => {
+    const { container } = draw(turnFor("Brotato"));
+    fireEvent.click(container.querySelector(".bonsai-reply-copy-corner") as HTMLElement);
+    await vi.waitFor(() => expect(clipboard.writes.length).toBe(1));
+    expect(clipboard.writes[0]).toContain(BODY);
+  });
+
+  it("copies the placeholder on a story game's answer", async () => {
+    const { container } = draw(turnFor("Hollow Knight"));
+    fireEvent.click(container.querySelector(".bonsai-reply-copy-corner") as HTMLElement);
+    await vi.waitFor(() => expect(clipboard.writes.length).toBe(1));
+    expect(clipboard.writes[0]).not.toContain(BODY);
   });
 });

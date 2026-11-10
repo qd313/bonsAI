@@ -159,6 +159,22 @@ export function resolveTitleSpoilerProfile(
 }
 
 /**
+ * The one game the notes attached to a turn belong to, as the library spells it ("" when there are none, a
+ * note names no game, or the notes name two different games). With nothing running a turn has no game id or
+ * name on the screen, but the back end has already worked out the game to pick its notes from, and each note
+ * carries that game's title -- the one place the screen can read it (plan 103 S1). Two games means the
+ * question was about both, so nothing is claimed.
+ */
+export function gameNameFromAttachedNotes(notes: readonly { game_title?: string | null }[] | null | undefined): string {
+  const titles = new Map<string, string>();
+  for (const n of notes ?? []) {
+    const title = (n.game_title ?? "").trim();
+    if (title) titles.set(normalizeTitle(title), title);
+  }
+  return titles.size === 1 ? [...titles.values()][0]! : "";
+}
+
+/**
  * True when the question text itself names a story game from the protect table. Whole-word match
  * on the same names the title fallback uses ("hades" fires on "beat hades", not on "shades").
  * Mirror of `question_names_protected_title` in spoiler_title_profiles.py (plan 77 helper J).

@@ -221,6 +221,7 @@ import {
   drgGlossaryExplainFurtherThreadDisplay,
 } from "../../glossary/glossaryAsk";
 import { protectedNamesFromNotes, type TurnSpoilerFacts } from "../../spoilers/unwrapAskedEntitySpoilerFences";
+import { gameNameFromAttachedNotes } from "../../spoilers/spoilerTitleProfiles";
 import type { SpoilerTier } from "../../settings/bonsaiSettingsSchema";
 import { useEarlierTurnsPill } from "./useEarlierTurnsPill";
 import { buildEarlierList } from "./buildEarlierList";
@@ -496,9 +497,11 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       total: askThreadCollapsed.length,
       liveSnapshot: transparencySnapshot,
     });
-  /* What the spoiler un-hide reads for one turn; protectedNames comes off its notes' marks (D112 #7). */
+  /* What the spoiler un-hide reads for one turn; protectedNames comes off its notes' marks (D112 #7). With nothing
+     running the turn names no game, so its notes' game stands in (gameNameFromAttachedNotes, plan 103 S1). */
   const archivedSpoilerFacts = (turn: AskThreadCollapsedTurn, index: number): TurnSpoilerFacts => ({
-    askQuestion: turn.question, appId: turn.appId ?? null, appName: turn.appName ?? null,
+    askQuestion: turn.question, appId: turn.appId ?? null,
+    appName: turn.appName || gameNameFromAttachedNotes(kbAttachedNotesFrom(archivedTransparencyFor(turn, index))) || null,
     askedEntity: turn.askedEntity ?? null, spoilerConsentEffective: turn.spoilerConsentEffective === true,
     protectedNames: protectedNamesFromNotes(kbAttachedNotesFrom(archivedTransparencyFor(turn, index))),
     spoilerTier,
@@ -522,7 +525,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     ? liveThinking?.kbAttachedNotes ?? [] : kbAttachedNotesFrom(transparencySnapshot);
   const liveSpoilerFacts: TurnSpoilerFacts = {
     askQuestion: liveQuestion || lastExchange?.question || "", appId: ollamaContext?.app_id ?? null,
-    appName: ollamaContext?.app_name || lastExchange?.appName || null,
+    appName: ollamaContext?.app_name || lastExchange?.appName || gameNameFromAttachedNotes(liveKbNotes) || null,
     askedEntity: ollamaContext?.asked_entity || lastExchange?.askedEntity || null,
     /* While the answer is still coming, only the pending poll knows the turn's consent: `lastExchange`
        is empty (or still the PREVIOUS turn's) until the answer completes. */

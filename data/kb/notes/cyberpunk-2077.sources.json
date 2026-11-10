@@ -743,7 +743,8 @@
               "revision": "283492",
               "quoted": [
                 "The Goon can either be a Ranged or a Melee enemy.",
-                "from the table: Frag Grenades Charge Jump"
+                "Ranged",
+                "Frag Grenades"
               ]
             },
             {

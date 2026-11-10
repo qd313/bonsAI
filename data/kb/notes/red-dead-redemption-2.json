@@ -56,6 +56,61 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "464648",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2405,
+      "game_id": 11,
+      "section_type": "item",
+      "name": "Dynamite",
+      "card": "Summary: A thrown explosive with very high power but low range and low accuracy, of which you can carry up to 8. It cannot be customized.\nUses: It can clear out groups of enemies, or blow up mines, trains and safes. Light it and throw it at your target, or put it down, light it and run to a safe distance. It can also blow fish out of the water, but the fish will be of poor quality and you lose a small amount of Honor.\nTips: You cannot buy it from gunsmiths, though some less-than-reputable sellers may stock it; every fence sells it after the mission \"Who the Hell is Leviticus Cornwall?\", and some missions hand it out. Shooting dynamite makes it explode, including the crates of dynamite found around the map. A Volatile Dynamite pamphlet gives a version with a wider explosion radius, more damage and the ability to ignite a fire, crafted from regular dynamite, animal fat and any type of high velocity cartridge; dynamite can also be used to craft dynamite arrows that explode on impact.",
+      "source_url": "https://reddead.fandom.com/wiki/Dynamite_(RDR_2)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "476856",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2406,
+      "game_id": 11,
+      "section_type": "item",
+      "name": "Fire bottle",
+      "card": "Summary: A glass bottle of flammable spirits with a cloth fuse that causes a large fireball on impact. It has high power, low range and low accuracy, and it cannot be customized.\nUses: It is useful for setting fire to stagecoaches or forcing people and animals to retreat.\nTips: You can craft one by combining any type of alcoholic spirit with animal fat, or buy one from some less-than-reputable sellers. Every fence sells it after the mission \"The Fine Joys of Tobacco\", and you can get one earlier by looting enemies. Upgrading the ammo cart to max level provides two fire bottles. The Volatile Fire Bottle does more damage and has a better impact radius, and is crafted from 1 animal fat and 1 moonshine once you have its pamphlet.",
+      "source_url": "https://reddead.fandom.com/wiki/Fire_Bottle_(RDR_2)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "476855",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2407,
+      "game_id": 11,
+      "section_type": "item",
+      "name": "Tomahawk",
+      "card": "Summary: A lightweight thrown axe with moderate power, low range and low accuracy, which can also be used as a close-range melee weapon. It cannot be customized.\nUses: It is ideal for quick thrown attacks, and you can save a trip by picking it up again after throwing. Thrown at an alligator's head, it kills the animal instantly.\nTips: You can buy one from some less-than-reputable sellers, and after the mission \"The First Shall Be Last\" it is available from all fences and the Trapper. Earlier, you can pick one up at Six Point Cabin before the mission \"Paying a Social Call\" while the hideout is not occupied yet, or find one on broken abandoned stagecoaches around Southern Cumberland Forest.",
+      "source_url": "https://reddead.fandom.com/wiki/Tomahawk_(RDR_2)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "477469",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2408,
+      "game_id": 11,
+      "section_type": "item",
+      "name": "Throwing knife",
+      "card": "Summary: A small, balanced knife with moderate power, moderate accuracy and low range, thrown at enemies or used in melee. It cannot be customized.\nUses: It can silently take down enemies at range, and you can save a trip by picking it up again after throwing. Unlike the hunting knife, a throwing knife and its variants can trigger an instant melee takedown if you equip it and aim at an aggressive enemy at close range.\nTips: A poisoned throwing knife, crafted at a campfire from a throwing knife and Oleander Sage, guarantees certain death for an NPC once any attack with it starts, and it makes legendary animals and dangerous wild animals such as grizzly bears, cougars and panthers run away after one attack; it turns back into a regular knife once you recover it. The improved throwing knife, crafted at a campfire from a throwing knife and rare bird feathers, may guarantee an instant kill where a regular one can be survived. You get your first one in the mission \"Paying a Social Call\", and a fence or the Trapper sells them after it.",
+      "source_url": "https://reddead.fandom.com/wiki/Throwing_Knife_(RDR_2)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "476857",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2409,
+      "game_id": 11,
+      "section_type": "item",
+      "name": "Sawed-off shotgun",
+      "card": "Summary: A two-shot shotgun with high power but low range and low accuracy, made for close quarters on foot or on horseback. It can be fired with one hand or dual wielded, and unlike other shotguns it occupies a holster/handgun slot.\nUses: Dual wielding it with a second sawed-off shotgun is highly effective for quickly eliminating anything in your way, man or beast. It takes regular buckshot, incendiary buckshot, slug and explosive slug.\nTips: You are given one in the mission \"Enter, Pursued by a Memory\", and you can buy a second from any gunsmith for $85.",
+      "source_url": "https://reddead.fandom.com/wiki/Sawed-Off_Shotgun_(RDR_2)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "476800",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

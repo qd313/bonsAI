@@ -1775,9 +1775,9 @@ _Copied line for line from the roadmap's Verify entry, nothing reworded, with th
 
 - ★★★ `[reply]` **Terse mode: Speed answers in three lines** — **VERIFY, built 2026-10-14 (plan 93, `9c12ccce`, `223d6abb`, `a21ad0e1`); the old switch passed on the Deck 2026-10-08 (plan 83, row P83-J4-TERSE-TOGGLE).**
   Terse is now the first stop of the Reply style slider (Terse, Caveman, Balanced, Detailed) and applies in every Ask mode; the separate switch is gone; a saved Terse on loads as the Terse stop. Five Speed questions with Terse on gave one line each, 17 to 36 words (`workshop:test-evidence/plan93-M11-TERSE-LINES.json`).
-  Owes row **P93-B13-TERSE-SLIDER** on the Deck: four stops, one per press, no separate switch, and a Speed, Strategy and Expert answer each at most three lines with a menu under it. The earlier built notes, the three-run answer test and the still-open points (a) to (f), word for word: [roadmap-details.md](../roadmap-details.md#plan-93-notes-moved-from-the-roadmap-2026-10-14-docs-sweep-3).
+  Owes row **P93-B13-TERSE-SLIDER** on the Deck: four stops, one per press, no separate switch, and a Speed, Strategy and Expert answer each at most three lines with a menu under it. The earlier built notes, the three-run answer test and the still-open points (a) to (f), word for word: [roadmap-details.md](roadmap-trimmed-2026-10-roadmap-details.md#plan-93-notes-moved-from-the-roadmap-2026-10-14-docs-sweep-3).
 
-**Closed 2026-10-14 (plan 93 Deck block D2, build `0ef34f82`, row P93-B13-TERSE-SLIDER):** passed on the Deck. The Reply style slider has four stops in the order Terse, Caveman, Balanced, Detailed, no separate Terse switch, one stop per press both ways, the ring on the knob, both ends hold, and Down lands on the Thinking buttons. With Terse on, a Speed, a Strategy and an Expert answer were each three lines with a menu of choices under it. Evidence `workshop:test-evidence/plan93-P93-B13-TERSE-SLIDER.json`. The earlier still-open points (a) to (f) are not closed by this row; they stay in [roadmap-details.md](../roadmap-details.md#plan-93-notes-moved-from-the-roadmap-2026-10-14-docs-sweep-3).
+**Closed 2026-10-14 (plan 93 Deck block D2, build `0ef34f82`, row P93-B13-TERSE-SLIDER):** passed on the Deck. The Reply style slider has four stops in the order Terse, Caveman, Balanced, Detailed, no separate Terse switch, one stop per press both ways, the ring on the knob, both ends hold, and Down lands on the Thinking buttons. With Terse on, a Speed, a Strategy and an Expert answer were each three lines with a menu of choices under it. Evidence `workshop:test-evidence/plan93-P93-B13-TERSE-SLIDER.json`. The earlier still-open points (a) to (f) are not closed by this row; they stay in [roadmap-details.md](roadmap-trimmed-2026-10-roadmap-details.md#plan-93-notes-moved-from-the-roadmap-2026-10-14-docs-sweep-3).
 
 ## Closed 2026-10-18 (plan 96, moved from Verify)
 
@@ -1849,7 +1849,7 @@ Two knowledge-base phase entries closed by the maintainer's call, copied from [r
 
 - ★★★★ `[KB]` **RAG Phase 4: extended retrieval** — **PARTIAL.** Chips that show the library exists and the labelled enemy
   and item cards shipped ([D67](../audit/maintainer-decisions-archive.md#d67--locked-2026-09-05--structured-cards-accept-prose)).
-  A running game's own tip and the chip promise passed on the Deck (P78-TIP-CHIP, P78-CHIP-PACE). Still owed: the look at the widest chip labels (PHASE4-CHIPS-01; UNCLEAR again 2026-10-24; measured 2026-10-25, the maintainer judges the pictures: see its testing row). The pace look is closed (plan 99 call 12). [Detail](../roadmap-kb-details.md#rag-phase-4-extended-retrieval)
+  A running game's own tip and the chip promise passed on the Deck (P78-TIP-CHIP, P78-CHIP-PACE). Still owed: the look at the widest chip labels (PHASE4-CHIPS-01; UNCLEAR again 2026-10-24; measured 2026-10-25, the maintainer judges the pictures: see its testing row). The pace look is closed (plan 99 call 12). [Detail](roadmap-trimmed-2026-10-roadmap-kb-details.md#rag-phase-4-extended-retrieval)
   **Closed 2026-10-26 by call 8 (D137):** Phase 4 has nothing left to build. Its last item, the look at the widest chip labels, is the maintainer's eye check on the checks page (row PHASE4-CHIPS-01, MEASURED 2026-10-25: one chip showed, "How to use bonsAI", text fits; evidence `workshop:test-evidence/plan100-P100-PHASE4-CHIPS-01.json` and its three pictures).
 
 - ★★★★ `[KB]` **RAG Phase 7: retrieval infrastructure** — **PARTIAL.** What still matters: add-on packs before a large catalog, a screenshot feeding the search.
@@ -2014,7 +2014,7 @@ Knowledge-base entries closed in plan 102's sweep after the landings, copied wor
 - ★★★ `[KB]` **Deeper answer checks** — **OPEN, added 2026-09-05.** The answer test cannot tell whether a reply was
   helpful or whether the model admitted not knowing. Add questions no card can answer, scored for an honest "I don't
   know", and a monthly read of ten replies by a person. **Sighting 2026-09-26:** a plain tip ("raise Render Scale") became
-  advice that contradicts itself. [Detail](roadmap-kb-details.md#flow-l7-findings)
+  advice that contradicts itself. [Detail](roadmap-trimmed-2026-10-roadmap-kb-details.md#flow-l7-findings)
   **Closed 2026-11-02 as built (plan 102 lane F, landed `9070dead`, `b2828192`, `8c40311d`, `4b1ea742`, `63afa366`, `98c3ffab`):** the answer test scores whether the AI admits it does not know and whether it answers as if it knew; eight questions no note can answer; `--sample-for-reading N` writes N whole replies for a person to read. Measured: on the eight, the AI admitted it in 3 of 24 replies (all three the back end's "No close match" footer, none its own words) and answered as if it knew in 21 of 24 (`workshop:archive/research/kb-answer-eval-2026-11-02-p102-unknown.md`). The finding is a new entry in Next.
 
 ## Closed 2026-11-03 (plan 102 end audit)

@@ -719,6 +719,10 @@ once, the only budget lines are the two percent ceilings the maintainer wrote, a
 other reason is the maintainer's choice alone: the session says the numbers in the chat and asks; it never decides. A
 sentence like the old one is a mistake wherever it appears, and the one in the guide was replaced the same evening.
 
+**A wiki's licence does not cover the game text the wiki quotes.** In plan 103 a licence reviewer read eight finished notes files against their wiki pages. Nothing broke a wiki's own licence, but many lines sat too close to the wiki's sentences, and in the Super Smash Bros. Melee file nine notes carried Nintendo's own trophy text, which a wiki's CC licence does not make free to copy. All were rewritten with no fact changed. Tell note writers this before they start, and ask the licence reviewer to flag quoted game text as well as close wording.
+
+**Tell note writers to write from a fact list, not from the sentence.** Two synonym passes over the DOOM Eternal notes did not pass a second read, because the sentence shape was still the wiki's. A rewrite that began from a short list of the facts, then said them as plain advice, did pass. Hand the writer the facts to say, not the page's lines to reword.
+
 ## 5. Design and screen work
 
 **The drawing is the design.** [major-redesign.md](archive/major-redesign.md) is the agreed look. Work built

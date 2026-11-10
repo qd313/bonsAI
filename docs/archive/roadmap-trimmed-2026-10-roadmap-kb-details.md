@@ -870,3 +870,176 @@ Five tips now carry the plain words people type, and two new tips (165: sound to
 **Unrelated questions entry, the words before the K9 trim:** "thank you very much" attached no notes; "what time is it" still attached three. A fresh-chat re-run 2026-10-25 still attached three for "what time is it"; see the junk-phrase entry in Deck check owed. Word for word:
 
 **Two Bugs entries, the words before the K9 trim:** "Same lost-focus family as plan 97's freeze; the only cure, closing and reopening Quick Access, emptied the question box." and "(the answer came from an old branch button)".
+
+## Moved by plan 103 sweep K2 (2026-11-10)
+
+Two whole sections moved here from `docs/roadmap-kb-details.md`, word for word, to make room. Links inside them may be stale.
+
+### Plan 97 notes moved from the knowledge base roadmap (2026-10-22)
+
+**The knowledge library update treats any different version as newer (older entry, word for word):**
+
+- ★★ `[KB]` **The knowledge library update treats any different version as newer, and installs onto the Deck's own drive without asking where** — **OPEN, found 2026-10-16 (plan 86 step 3 Deck block).**
+  It offered 2026.09.26 as an update over the seed's 2026.10.16. The library had been on the SD card; the update put the same files, byte for byte, on the Deck's own drive. The maintainer said to leave it there tonight. Evidence `workshop:test-evidence/plan86-B6-RESTORE.json`.
+  **2026-10-17 (plan 94 block 3, Deck, build `e9b50cc8`):** the first download now asks where to put the library (Not now / Internal storage / SD card) before the download box. The "different version offered as newer" half was not tested (a fresh install has no older version). Evidence `workshop:test-evidence/plan94-P94-KB-DOWNLOAD.json`.
+
+### Plan 100 follow-up note moved from the knowledge-base roadmap 2026-10-26
+
+**2026-10-25 (lane T follow-up, `5943260b`):** the bare word "storage" no longer routes a question to the storage tips; it needs full, space, free, left, drive, card, sd, microsd, install, gb or "out of" beside it. Found when two blind Portal 2 questions about the Weighted Storage Cube were handed the storage-full tip.
+
+## Moved by plan 103 sweep K2, second part (2026-11-10)
+
+Four whole sections moved here from `docs/roadmap-kb-details.md`, word for word, to keep it under about 100 KB. Links inside them may be stale.
+
+### Wrong-subject notes
+
+**The Black Mesa horse-taming case is fixed:** since `2abaa0ae` it shows the "No close match" line, passed on the Deck 2026-10-03 (`workshop:test-evidence/plan81-P81-KB-NOTES-FIRST.json`). **Two cases are not fixed and were not tried again on 2026-10-03:** a Portal 2 house-buying question and a Hades boss that does not exist. Asking about something the notes do not cover can still attach a note about the wrong subject. Fixing the attachment itself, rather than labelling it, is wave-four note-writing work.
+
+**Found again 2026-09-18:** a Hades "boss at the end of the first area" question
+  attached "Temple of Styx" first and the reply answered about Theseus and Asterius instead of Megaera, steered
+  by the top note (`workshop:test-evidence/plan58p1-QA-NOTES-BLOCK-02.json`).
+
+  **Sighting, 2026-09-26 (plan 70, flow L1):** Hades "who is the first boss" and "the boss at the end of
+  Tartarus" both attached the same wrong note (Theseus and Asterius) and the reply talked about them,
+  twice. Evidence `workshop:test-evidence/plan70-SPOILER-COVER-01.json`.
+
+**Checked 2026-09-26 (plan 70, flow L2): borderline, known fragile, not a regression.** After the "no
+close match" wiring fix landed (`e4c24bdd`), the Black Mesa horse-taming control question — still a
+wrong-subject question with nothing that matches — no longer showed the "no close match" line at all, on
+screen or in the saved chat file. The model instead said in its own words that it had no information on
+the subject, inside its own spoiler cover around otherwise harmless general mechanics. Evidence
+`workshop:test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`.
+
+**Measured the same day with the real code and the current library, on the PC.** Once the game's own
+name is removed from the question, none of "tame" or "horse" appears in any of the three attached notes
+— the note-text fix changes nothing here either way. The line is decided by the older score that judges
+closeness without the game's name, and that score landed at 0.6508 against the 0.65 cut-off: on the
+edge, close enough that ordinary differences between the PC's and the Deck's own embedding numbers can
+flip it. A measured cut-off is not retuned for one question; no code change made.
+
+**Fixed for this case 2026-10-03 (plan 81, `2abaa0ae`), the cut-off untouched:** the "No close match" line now also shows when the word search ranked none of the attached notes and not one word of the question appears in any attached note's title or text, so the meaning score alone supported them. On this PC over 287 test questions with a recorded right note, each asked with the game running and with its name typed (574 asks), the rule changes the line on none of them; the one ask it changes is the horse question. Passed on the Deck 2026-10-03 (plan 81, build `9e68bce1`, row P81-KB-NOTES-FIRST): the horse question showed the line and listed no note. Evidence `workshop:test-evidence/plan81-P81-KB-NOTES-FIRST.json`.
+
+**Moved from the roadmap 2026-10-24 (plan 98 docs sweep 2), word for word:**
+
+  **2026-10-14 (plan 93 Deck block D3, Deep Rock Galactic: Survivor running, Strategy mode):** "How do I buy a house in this game" attached 3 notes (Gold, Nitra, Mining and the run timer) and drew a "From the notes" block (Gold), with no "No close match" line; the AI read "buy" as the in-game Gold shop. Evidence `workshop:test-evidence/plan93-NOTES-BLOCK-04-game-strategy-D3.json`.
+  **Plan 97 (call 8, [D134](audit/maintainer-decisions-locked.md#d134--locked-2026-10-22-raised-2026-10-22--plan-97-the-bug-list-and-the-verify-list-toward-zero-the-second-sweep-the-ten-calls)):** stays out of plan 97.
+
+**Moved from the roadmap 2026-10-24 (plan 98 docs sweep 3), word for word. The wrong-subject entry, before its fix landed:**
+
+- ★★ `[KB]` **Questions with no real answer in the notes can still get notes about the wrong subject (Portal 2 house buying, a Hades boss that does not exist)** — **OPEN, found 2026-09-07, seen again 2026-09-26, 2026-10-14 and 2026-10-24; fix being built (plan 98 lanes L and D).**
+  The Black Mesa horse question is fixed: it shows the "No close match" line since `2abaa0ae` (passed on the Deck 2026-10-03, `workshop:test-evidence/plan81-P81-KB-NOTES-FIRST.json`). A Portal 2 house-buying question and a Hades boss that does not exist can still bring up notes about something else, and the reply follows them. Catching these in general still costs twenty or more right answers elsewhere.
+  **Deck 2026-10-24 (plan 98 block K0, release build `f0b72dae7b65`, the Deck's own screen and AI), MEASURED:** "How do I buy a house in this game" (Deep Rock Galactic: Survivor running) attached Gold, Nitra and Mining and the run timer, and drew no notes block and no "No close match" line. "In Hades, how do I beat the boss called the Bone Hydra" (nothing running) attached Heat and the Pact of Punishment, Theseus and Asterius, and Weapon choice; the whole answer sat behind a closed spoiler box, and the warning line, though it is in the saved reply, did not show. Evidence `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04-READING-3.json`, `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04-READING-4.json`.
+  **Two causes (second opinion, plan 98 consult 1, 2026-10-24):** (1) The line trusts any shared word when a game is running: "buy" in the house question matched "Buys" in the Gold and Nitra notes, which switched the warning off. The fix being built shows the line whenever none of the question's own subject words appears in any attached note. (2) The screen deletes the line when the answer's words echo a note, which is what hid it on the Bone Hydra answer. The fix being built removes that deletion.
+  Older notes (2026-10-14 and the plan 97 call), word for word: [Detail](roadmap-trimmed-2026-10-roadmap-kb-details.md#wrong-subject-notes)
+
+**The "made-up subject" entry (row NOTES-BLOCK-04, the line half), before its fix landed:**
+
+- ★★ `[KB]` **With a made-up subject, the "No close match" line can be skipped when weak notes are attached (row NOTES-BLOCK-04, the line half)** — **OPEN, failed on the Deck 2026-10-22 (plan 97 block B, build `73738058`); both questions passed on 2026-10-24, so it varies between runs.**
+  Deep Rock Galactic: Survivor running, Strategy mode, the Deck's own AI. "Who is the final boss called Zorblax in this game": the line showed and no notes block was drawn (pass). "How do I defeat the boss named Grimthak in this game": no line, and a "Glyphid Dreadnought" notes block was drawn, because the back end attached two weak notes (Glyphid Dreadnought, Dreadnought Twins) and judged them close enough to skip the line; the first question had three weak notes attached and got the line.
+  It depends on what retrieval attaches, not on what the AI wrote; neither boss has a note. Same family as the wrong-subject entry above. Evidence `workshop:test-evidence/plan97-NOTES-BLOCK-04.json`. Row **NOTES-BLOCK-04** stays owed in [testing-manual.md](testing-manual.md).
+  **Deck 2026-10-24 (plan 98 block K0, release build `f0b72dae7b65`, Deep Rock Galactic: Survivor running, Strategy mode), MEASURED:** both questions drew the "No close match" line and no notes block. "Zorblax" had three weak notes attached (Glyphid Dreadnought, Dreadnought Twins, Exploder); "Grimthak" had Glyphid Dreadnought, Dreadnought Twins and Mactera, and did not repeat 2026-10-22 (block drawn, no line). Evidence `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04-READING-1.json`, `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04-READING-2.json`.
+
+### RAG Phase 4: extended retrieval
+
+- ★★★★ **RAG Deck query — extended retrieval (Phase 4)** — **tracks 1–2 shipped 2026-08-19, track 3 blocked**
+  - **Goal:** Richer retrieval shapes — chip visibility, structured cards, per-game compat tips.
+  - **Track 1 (shipped):** chip guarantee (≥1 corpus chip when candidates exist), game chips preferred over
+    shared Deck tips, **Tip** badge on game chips only. On-Deck **PHASE4-CHIPS-01** — **badge direction passed 2026-08-29**: the **Tip** badge lands on the game chip only, never on a shared compat chip or a static seed. **The clipping direction is blocked** by the vanishing-corpus-chip bug in Bugs above, which keeps 5 of the 6 game chips off the screen, so no long label ever renders to measure.
+  - **Track 2 (shipped):** 16 structured cards for the two sample titles — 6 enemy, 6 item, 4 boss —
+    authored with labelled lines (`Summary:` / `Weak points:` / `Uses:` / `Phases:` / `Tips:`), plus a
+    conditional prompt clause that keeps those labels as light bullets in the reply. Corpus 117 → 133
+    sections.
+    On-Deck **PHASE4-CARDS-01** — **not waiting on the device.** Its testing was completed 2026-08-22 (all six questions attach the right card first; the prose-only direction passes). What is left is a **maintainer call**, not a run: with `gemma4:e2b-it-qat` the bullets survive on 4 of 6 questions but the card's own labels on only 1 of 6, and whether to strengthen the prompt, route a larger model, or accept prose is the open question. Detail in [testing.md](testing.md).
+  - **Track 3 (blocked):** per-game troubleshooting tips need an `app_id` column on `compat_patterns` —
+    a **schema v4 bump and a corpus rebuild**, which by Decision 6 (no migration) makes every installed
+    corpus stale until re-downloaded. Retrieval side is already built: it is the same recall-plus-flat-
+    preference shape D22 introduced, so it reuses `preferred_ids` rather than adding a mechanism.
+    Plan: [18-phase4-track3-per-game-compat-tips.md](planning/18-phase4-track3-per-game-compat-tips.md).
+  - **Ship-shape lock relaxed:** Phase 4 was locked to ship all three tracks together. Two shipped without
+    the third because the blocker is a release action rather than effort, and the two that shipped are the
+    visible ones. **Maintainer call owed:** either accept the split or hold tracks 1–2 from the release
+    notes until track 3 lands. [knowledge-base.md](knowledge-base.md) § Phase 4.
+
+**Track 3 built 2026-09-26 (plan 70, helper E):** the schema v4 bump landed with a per-game tip
+column; a game's own tip now joins the search pool ahead of an equally-good shared tip. Five tips
+ship this way, two labelled "Researched, unconfirmed". Deck check owed: row **KB-TIP-PERGAME-01**,
+flow R. See [Library format bump and per-game Deck tips](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#library-format-bump-and-per-game-deck-tips).
+
+**FAILED (Deck) 2026-09-26 (plan 70, flow R):** neither game tried reached its own tip. With Deep Rock
+Galactic: Survivor running, "the text on screen looks blurry on my deck" got generic display-scaling
+advice with no local match at all ("No close match in my notes"); reworded as a troubleshooting-shaped
+question in Speed mode it read "Knowledge base (skipped)" and logged a flat "no_hit" for the game — the
+game's own Render Scale tip (already sitting in the library) was never reached either way. With Fallout
+4 running, "how do I get mods working, what launch options should I use" also missed the maintainer's own
+F4SE tip, attaching an unrelated Stimpaks note instead and inventing generic launch options. The cause in
+both cases: the question never gets sorted as troubleshooting in the first place, and the per-game tip
+pull only runs for questions that do. Fixed the same night, see the next paragraph. Evidence `workshop:test-evidence/plan70-R-R4.json`, `plan70-R-R4-try2.json` (+ two screenshots).
+
+**Fixed 2026-09-26 (helper E2, commit `e1bc0c16`).** A game's own Deck tip now reaches the answer
+whenever a game carrying its own tip is running and the question matches that tip by keyword — no
+longer only when the question was already sorted as troubleshooting. Measured against 114 real
+strategy-mode questions for the four games that carry a tip: 0 wrong pick-ups, 0 notes lost, and the
+matching floor (4.0) sits comfortably below the weakest real question (4.91) and above the worst
+strategy row that should NOT match (3.34). Works in Speed mode and when Strategy mode had locked the
+question to strategy notes instead.
+
+**Passed on the Deck 2026-09-26 (plan 70, flow L7), closed:** every step of that re-check passed —
+Fallout 4 with the game named rather than running, since the question box was dead over the running
+game. The library was published by the maintainer on 2026-09-27. Full readings in
+[Flow L7 findings](#flow-l7-findings). Evidence `workshop:test-evidence/plan70-R4-try3.json`,
+`plan70-R4-try4.json`, `plan70-R4-try6.json`.
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  The chip labels fit on 2026-09-26. **2026-09-30 (plan 78 helper F, `092517c1`, `5e3e0f7e`):** the promise that one of the game's own chips always shows failed on the Deck 2026-09-26 (`workshop:test-evidence/plan70-L6-PHASE4-CHIPS-01.json`). Cause: three of the four chip styles dealt the game's chips only once, and with one chip showing the promised chip sat in a spot that is off screen. Fixed, and the chip promise passed on the Deck 2026-10-01 (rows P78-TIP-CHIP and P78-CHIP-PACE; evidence `workshop:test-evidence/plan78-P78-TIP-CHIP-try2.json`); the maintainer's own look at the pace is still owed, under the Verify entry "The game's own chip never came back, and the chips turned over too slowly".
+
+### Black Mesa's electrified-water question
+
+**Found 2026-09-19.** Asking how to cross the electrified water gave the right, specific answer, but
+the two notes Show details named as used were general early-game notes about starting out and the
+opening tram ride — neither one is the electrified-water note, which does exist in the library. Evidence `workshop:test-evidence/plan61-W3-D-blackmesa.json`.
+**Asked again 2026-09-23 with the exact original
+words, better but not fixed:** the electrified-water note is now attached and the answer is built on it,
+but the two generic notes are still attached too, still listed first, and the block header still names
+"Starting out in Black Mesa" — the same ranking shape as the Hollow Knight "no close match" bug, where
+the right note is found but ranks behind generic ones. Evidence
+`workshop:test-evidence/plan64-BLACKMESA-WATER.json`. **Asked again 2026-09-23 with Black Mesa running: no
+change** — having the game running did not affect this bug either way. Evidence
+`workshop:test-evidence/plan64-BLACKMESA-WATER-running.json`.
+
+**Measured 2026-09-26 (plan 70, helper B): ranking a "Starting out" note lower is not this wave's
+fix.** It helped the search test but hurt the answer test (46 to 41 of 57 right note first), so it
+stays off; it would not have cured this bug alone either, since a second generic note still ranks
+ahead.
+
+**Fixed 2026-10-03 (plan 81, `619842fd`), a different way, with nothing ranked lower:** the word search now leaves the game's name (and its aliases) out of the words it looks for, because it is already limited to the one game and the name only favoured notes with it in their title. Asking "black mesa how do i get across the electrified water" with nothing running now lists the water note first. A question that asks how to start keeps the name. Measured on this PC over the fixture questions, each asked with the game's name typed: the right note first went from 108 to 159 of 287, the right note in the first three from 201 to 209, none lost. On the held-back split the shipped search's first place went from 68.6 to 74.2 percent and its first three from 87.7 to 88.1; the tuning split is unchanged.
+
+**The answer test over the 13 questions whose notes changed (plan 81):** facts kept went from 102 to 105 of 195, so there is no drop overall. Two GTA V questions are lower, 22 to 8 of 30, because the facts the test expects sit in the generic note and its wording check misses a correct paraphrase of the new note; the other 11 questions are higher, 80 to 97 of 165. (The commit message for `619842fd` gives an earlier run of the same test, 70 to 61 of 117 facts kept on the 13 questions; the two runs differ in size.) Passed on the Deck 2026-10-03 (plan 81, build `9e68bce1`, row P81-KB-NOTES-FIRST): the water question listed only its water note, so it came first. Evidence `workshop:test-evidence/plan81-P81-KB-NOTES-FIRST.json`.
+
+### Flow L7 findings
+
+Open items from plan 70's last Deck block, flow L7 (2026-09-26, 21:52 to 23:43). The closed fixes from that block are in the trimmed archive.
+
+**New, open: a chat opened with RB while a game runs is drawn as history, and Down dies on its question
+line.** With Deep Rock Galactic: Survivor running, RB from an empty new chat to the answered Dreadnought
+chat drew it without its Helpful row, "Save chat" row or chip; Down reached the question line and then
+did nothing for six presses while the page's own focus moved to "Show reasoning". Closing and reopening
+the panel drew the chat in full and cleared it. Evidence `workshop:test-evidence/plan70-HIDDEN-RING-recheck.json`,
+`plan70-HIDDEN-RING-recheck-stuck-question-row.png`.
+**New, open: a game's own tip is found only by its own words.** "The words on screen look blurry" in Deep
+Rock Galactic: Survivor attached no tip — its keyword score was 2.0 against the 4.0 cut-off — while "the
+text ... looks blurry" scores 6.9 and finds it. A question that avoids the tip's own words misses it; a
+rescue by meaning search was measured and left for a later lane. Evidence `workshop:test-evidence/plan70-R4-try5.json`.
+**Fixed 2026-10-03 (plan 81, `e78f0d6e`, `6f758ff0`), passed on the Deck 2026-10-03 (build `9e68bce1`, row P81-TIP-BY-MEANING; `workshop:test-evidence/plan81-P81-TIP-BY-MEANING.json`).** In Strategy and Expert mode a game's
+tip is now also found by meaning: "the words on screen look blurry" attaches Render Scale. The boss question is unchanged, and Speed
+mode is unchanged on purpose. Held-back measurements are identical before and after: no right answer lost, no new wrong one.
+Limits: the long Deck sentence that also names the game ("deep rock galactic survivor the words on screen look blurry on my deck,
+what should i change") still misses; one made-up phrase, "how do i launch a mission", now attaches Fallout 4's launch-option tip.
+Test `tests/test_kb_game_tip_meaning.py`.
+
+**New sightings, open:** after a bare follow-up the suggestion chip read "Enable local knowledge base for
+better game tips" though the knowledge base was on (once); the plugin log warned twice that a Strategy
+answer's follow-up choices were not understood, so no choice menu showed (both on troubleshooting turns).
+Evidence `workshop:test-evidence/plan70-R4-try5.json`. And an answer that used the Render Scale tip said text
+blurs when Render Scale is "too high", then said to raise it — the tip says plainly to raise it; the small
+model garbled a clear tip (logged under "Deeper answer checks"). Evidence `workshop:test-evidence/plan70-R4-try6.json`.

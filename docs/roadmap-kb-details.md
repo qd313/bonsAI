@@ -14,27 +14,22 @@
 - [Eval fixture cannot see a recall failure](#eval-fixture-cannot-see-a-recall-failure)
 - [KB visual maps](#kb-visual-maps)
 - [KB online / versus strategy content, and RAG Phase 5](#kb-online--versus-strategy-content-and-rag-phase-5)
-- [RAG Phase 4: extended retrieval](#rag-phase-4-extended-retrieval)
 - [RAG Phase 7, Community tip contribution, RAG Phase 8](#rag-phase-7-community-tip-contribution-rag-phase-8)
 - [A troubleshooting question mostly never reaches the tips](#a-troubleshooting-question-mostly-never-reaches-the-tips)
-- [Wrong-subject notes](#wrong-subject-notes)
 - [Hidden spoiler box stays shut on games with no Steam ID and on name-first questions](#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions)
 - [RAG Phase 8: catalog corpus](#rag-phase-8-catalog-corpus)
 - [Measure how well the AI reads a screenshot](#measure-how-well-the-ai-reads-a-screenshot)
 - [Blind questions done](#blind-questions-done)
 - [Speed mode tip gap](#speed-mode-tip-gap)
 - [Three new games and their notes](#three-new-games-and-their-notes)
-- [Black Mesa's electrified-water question](#black-mesas-electrified-water-question)
 - [KB transparency matches what the model got](#kb-transparency-matches-what-the-model-got)
-- [Flow L7 findings](#flow-l7-findings)
 - [The note's own words under the reply](#the-notes-own-words-under-the-reply)
-- [Plan 97 notes moved from the knowledge base roadmap (2026-10-22)](#plan-97-notes-moved-from-the-knowledge-base-roadmap-2026-10-22)
-- [Plan 100 follow-up note moved from the knowledge-base roadmap 2026-10-26](#plan-100-follow-up-note-moved-from-the-knowledge-base-roadmap-2026-10-26)
 - [Plan 102 notes moved from the shelved roadmap (2026-11-02)](#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-02)
 - [Plan 102 notes moved from the knowledge-base roadmap (2026-11-03)](#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03)
 - [Plan 102 notes moved from the shelved roadmap (2026-11-03)](#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-03)
 - [Plan 103 notes moved from the knowledge-base roadmap (2026-11-09)](#plan-103-notes-moved-from-the-knowledge-base-roadmap-2026-11-09)
 - [Plan 103 sweep K1 notes moved from the knowledge base roadmap (2026-11-09)](#plan-103-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-09)
+- [Plan 103 sweep K2 notes moved from the knowledge base roadmap (2026-11-10)](#plan-103-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -174,60 +169,6 @@ Absorbed into the tiered setting: see [Spoiler coverage should be a setting with
   - **Goal:** Corpus maturity after Phase 4 sample paths; session chip vector ranking.
   - **Status:** Seed deepening largely in remediation PR2; remainder depends Phase 4. [knowledge-base.md](knowledge-base.md) § Phase 5.
 
-## RAG Phase 4: extended retrieval
-
-- ★★★★ **RAG Deck query — extended retrieval (Phase 4)** — **tracks 1–2 shipped 2026-08-19, track 3 blocked**
-  - **Goal:** Richer retrieval shapes — chip visibility, structured cards, per-game compat tips.
-  - **Track 1 (shipped):** chip guarantee (≥1 corpus chip when candidates exist), game chips preferred over
-    shared Deck tips, **Tip** badge on game chips only. On-Deck **PHASE4-CHIPS-01** — **badge direction passed 2026-08-29**: the **Tip** badge lands on the game chip only, never on a shared compat chip or a static seed. **The clipping direction is blocked** by the vanishing-corpus-chip bug in Bugs above, which keeps 5 of the 6 game chips off the screen, so no long label ever renders to measure.
-  - **Track 2 (shipped):** 16 structured cards for the two sample titles — 6 enemy, 6 item, 4 boss —
-    authored with labelled lines (`Summary:` / `Weak points:` / `Uses:` / `Phases:` / `Tips:`), plus a
-    conditional prompt clause that keeps those labels as light bullets in the reply. Corpus 117 → 133
-    sections.
-    On-Deck **PHASE4-CARDS-01** — **not waiting on the device.** Its testing was completed 2026-08-22 (all six questions attach the right card first; the prose-only direction passes). What is left is a **maintainer call**, not a run: with `gemma4:e2b-it-qat` the bullets survive on 4 of 6 questions but the card's own labels on only 1 of 6, and whether to strengthen the prompt, route a larger model, or accept prose is the open question. Detail in [testing.md](testing.md).
-  - **Track 3 (blocked):** per-game troubleshooting tips need an `app_id` column on `compat_patterns` —
-    a **schema v4 bump and a corpus rebuild**, which by Decision 6 (no migration) makes every installed
-    corpus stale until re-downloaded. Retrieval side is already built: it is the same recall-plus-flat-
-    preference shape D22 introduced, so it reuses `preferred_ids` rather than adding a mechanism.
-    Plan: [18-phase4-track3-per-game-compat-tips.md](planning/18-phase4-track3-per-game-compat-tips.md).
-  - **Ship-shape lock relaxed:** Phase 4 was locked to ship all three tracks together. Two shipped without
-    the third because the blocker is a release action rather than effort, and the two that shipped are the
-    visible ones. **Maintainer call owed:** either accept the split or hold tracks 1–2 from the release
-    notes until track 3 lands. [knowledge-base.md](knowledge-base.md) § Phase 4.
-
-**Track 3 built 2026-09-26 (plan 70, helper E):** the schema v4 bump landed with a per-game tip
-column; a game's own tip now joins the search pool ahead of an equally-good shared tip. Five tips
-ship this way, two labelled "Researched, unconfirmed". Deck check owed: row **KB-TIP-PERGAME-01**,
-flow R. See [Library format bump and per-game Deck tips](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#library-format-bump-and-per-game-deck-tips).
-
-**FAILED (Deck) 2026-09-26 (plan 70, flow R):** neither game tried reached its own tip. With Deep Rock
-Galactic: Survivor running, "the text on screen looks blurry on my deck" got generic display-scaling
-advice with no local match at all ("No close match in my notes"); reworded as a troubleshooting-shaped
-question in Speed mode it read "Knowledge base (skipped)" and logged a flat "no_hit" for the game — the
-game's own Render Scale tip (already sitting in the library) was never reached either way. With Fallout
-4 running, "how do I get mods working, what launch options should I use" also missed the maintainer's own
-F4SE tip, attaching an unrelated Stimpaks note instead and inventing generic launch options. The cause in
-both cases: the question never gets sorted as troubleshooting in the first place, and the per-game tip
-pull only runs for questions that do. Fixed the same night, see the next paragraph. Evidence `workshop:test-evidence/plan70-R-R4.json`, `plan70-R-R4-try2.json` (+ two screenshots).
-
-**Fixed 2026-09-26 (helper E2, commit `e1bc0c16`).** A game's own Deck tip now reaches the answer
-whenever a game carrying its own tip is running and the question matches that tip by keyword — no
-longer only when the question was already sorted as troubleshooting. Measured against 114 real
-strategy-mode questions for the four games that carry a tip: 0 wrong pick-ups, 0 notes lost, and the
-matching floor (4.0) sits comfortably below the weakest real question (4.91) and above the worst
-strategy row that should NOT match (3.34). Works in Speed mode and when Strategy mode had locked the
-question to strategy notes instead.
-
-**Passed on the Deck 2026-09-26 (plan 70, flow L7), closed:** every step of that re-check passed —
-Fallout 4 with the game named rather than running, since the question box was dead over the running
-game. The library was published by the maintainer on 2026-09-27. Full readings in
-[Flow L7 findings](#flow-l7-findings). Evidence `workshop:test-evidence/plan70-R4-try3.json`,
-`plan70-R4-try4.json`, `plan70-R4-try6.json`.
-
-Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
-
-  The chip labels fit on 2026-09-26. **2026-09-30 (plan 78 helper F, `092517c1`, `5e3e0f7e`):** the promise that one of the game's own chips always shows failed on the Deck 2026-09-26 (`workshop:test-evidence/plan70-L6-PHASE4-CHIPS-01.json`). Cause: three of the four chip styles dealt the game's chips only once, and with one chip showing the promised chip sat in a spot that is off screen. Fixed, and the chip promise passed on the Deck 2026-10-01 (rows P78-TIP-CHIP and P78-CHIP-PACE; evidence `workshop:test-evidence/plan78-P78-TIP-CHIP-try2.json`); the maintainer's own look at the pace is still owed, under the Verify entry "The game's own chip never came back, and the chips turned over too slowly".
-
 ## RAG Phase 7, Community tip contribution, RAG Phase 8
 
 - ★★★★ **RAG Deck query — retrieval infra (Phase 7)**
@@ -260,54 +201,6 @@ that holds with a game running and not with nothing running. The tip cut-off and
 **Related work landed 2026-09-26 (plan 70, helper C):** the tip cut-off and a false-positive word
 match are now fixed (see [Tip cut-off fix](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#tip-cut-off-fix), [Lan word-boundary fix](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#lan-word-boundary-fix)).
 The "no tip for this" line was retired by the maintainer 2026-09-27 (`db4b3b4a`), since it could never appear. The numbers behind that call are in [No tip line numbers](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#no-tip-line-numbers).
-
-## Wrong-subject notes
-
-**The Black Mesa horse-taming case is fixed:** since `2abaa0ae` it shows the "No close match" line, passed on the Deck 2026-10-03 (`workshop:test-evidence/plan81-P81-KB-NOTES-FIRST.json`). **Two cases are not fixed and were not tried again on 2026-10-03:** a Portal 2 house-buying question and a Hades boss that does not exist. Asking about something the notes do not cover can still attach a note about the wrong subject. Fixing the attachment itself, rather than labelling it, is wave-four note-writing work.
-
-**Found again 2026-09-18:** a Hades "boss at the end of the first area" question
-  attached "Temple of Styx" first and the reply answered about Theseus and Asterius instead of Megaera, steered
-  by the top note (`workshop:test-evidence/plan58p1-QA-NOTES-BLOCK-02.json`).
-
-  **Sighting, 2026-09-26 (plan 70, flow L1):** Hades "who is the first boss" and "the boss at the end of
-  Tartarus" both attached the same wrong note (Theseus and Asterius) and the reply talked about them,
-  twice. Evidence `workshop:test-evidence/plan70-SPOILER-COVER-01.json`.
-
-**Checked 2026-09-26 (plan 70, flow L2): borderline, known fragile, not a regression.** After the "no
-close match" wiring fix landed (`e4c24bdd`), the Black Mesa horse-taming control question — still a
-wrong-subject question with nothing that matches — no longer showed the "no close match" line at all, on
-screen or in the saved chat file. The model instead said in its own words that it had no information on
-the subject, inside its own spoiler cover around otherwise harmless general mechanics. Evidence
-`workshop:test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`.
-
-**Measured the same day with the real code and the current library, on the PC.** Once the game's own
-name is removed from the question, none of "tame" or "horse" appears in any of the three attached notes
-— the note-text fix changes nothing here either way. The line is decided by the older score that judges
-closeness without the game's name, and that score landed at 0.6508 against the 0.65 cut-off: on the
-edge, close enough that ordinary differences between the PC's and the Deck's own embedding numbers can
-flip it. A measured cut-off is not retuned for one question; no code change made.
-
-**Fixed for this case 2026-10-03 (plan 81, `2abaa0ae`), the cut-off untouched:** the "No close match" line now also shows when the word search ranked none of the attached notes and not one word of the question appears in any attached note's title or text, so the meaning score alone supported them. On this PC over 287 test questions with a recorded right note, each asked with the game running and with its name typed (574 asks), the rule changes the line on none of them; the one ask it changes is the horse question. Passed on the Deck 2026-10-03 (plan 81, build `9e68bce1`, row P81-KB-NOTES-FIRST): the horse question showed the line and listed no note. Evidence `workshop:test-evidence/plan81-P81-KB-NOTES-FIRST.json`.
-
-**Moved from the roadmap 2026-10-24 (plan 98 docs sweep 2), word for word:**
-
-  **2026-10-14 (plan 93 Deck block D3, Deep Rock Galactic: Survivor running, Strategy mode):** "How do I buy a house in this game" attached 3 notes (Gold, Nitra, Mining and the run timer) and drew a "From the notes" block (Gold), with no "No close match" line; the AI read "buy" as the in-game Gold shop. Evidence `workshop:test-evidence/plan93-NOTES-BLOCK-04-game-strategy-D3.json`.
-  **Plan 97 (call 8, [D134](audit/maintainer-decisions-locked.md#d134--locked-2026-10-22-raised-2026-10-22--plan-97-the-bug-list-and-the-verify-list-toward-zero-the-second-sweep-the-ten-calls)):** stays out of plan 97.
-
-**Moved from the roadmap 2026-10-24 (plan 98 docs sweep 3), word for word. The wrong-subject entry, before its fix landed:**
-
-- ★★ `[KB]` **Questions with no real answer in the notes can still get notes about the wrong subject (Portal 2 house buying, a Hades boss that does not exist)** — **OPEN, found 2026-09-07, seen again 2026-09-26, 2026-10-14 and 2026-10-24; fix being built (plan 98 lanes L and D).**
-  The Black Mesa horse question is fixed: it shows the "No close match" line since `2abaa0ae` (passed on the Deck 2026-10-03, `workshop:test-evidence/plan81-P81-KB-NOTES-FIRST.json`). A Portal 2 house-buying question and a Hades boss that does not exist can still bring up notes about something else, and the reply follows them. Catching these in general still costs twenty or more right answers elsewhere.
-  **Deck 2026-10-24 (plan 98 block K0, release build `f0b72dae7b65`, the Deck's own screen and AI), MEASURED:** "How do I buy a house in this game" (Deep Rock Galactic: Survivor running) attached Gold, Nitra and Mining and the run timer, and drew no notes block and no "No close match" line. "In Hades, how do I beat the boss called the Bone Hydra" (nothing running) attached Heat and the Pact of Punishment, Theseus and Asterius, and Weapon choice; the whole answer sat behind a closed spoiler box, and the warning line, though it is in the saved reply, did not show. Evidence `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04-READING-3.json`, `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04-READING-4.json`.
-  **Two causes (second opinion, plan 98 consult 1, 2026-10-24):** (1) The line trusts any shared word when a game is running: "buy" in the house question matched "Buys" in the Gold and Nitra notes, which switched the warning off. The fix being built shows the line whenever none of the question's own subject words appears in any attached note. (2) The screen deletes the line when the answer's words echo a note, which is what hid it on the Bone Hydra answer. The fix being built removes that deletion.
-  Older notes (2026-10-14 and the plan 97 call), word for word: [Detail](roadmap-kb-details.md#wrong-subject-notes)
-
-**The "made-up subject" entry (row NOTES-BLOCK-04, the line half), before its fix landed:**
-
-- ★★ `[KB]` **With a made-up subject, the "No close match" line can be skipped when weak notes are attached (row NOTES-BLOCK-04, the line half)** — **OPEN, failed on the Deck 2026-10-22 (plan 97 block B, build `73738058`); both questions passed on 2026-10-24, so it varies between runs.**
-  Deep Rock Galactic: Survivor running, Strategy mode, the Deck's own AI. "Who is the final boss called Zorblax in this game": the line showed and no notes block was drawn (pass). "How do I defeat the boss named Grimthak in this game": no line, and a "Glyphid Dreadnought" notes block was drawn, because the back end attached two weak notes (Glyphid Dreadnought, Dreadnought Twins) and judged them close enough to skip the line; the first question had three weak notes attached and got the line.
-  It depends on what retrieval attaches, not on what the AI wrote; neither boss has a note. Same family as the wrong-subject entry above. Evidence `workshop:test-evidence/plan97-NOTES-BLOCK-04.json`. Row **NOTES-BLOCK-04** stays owed in [testing-manual.md](testing-manual.md).
-  **Deck 2026-10-24 (plan 98 block K0, release build `f0b72dae7b65`, Deep Rock Galactic: Survivor running, Strategy mode), MEASURED:** both questions drew the "No close match" line and no notes block. "Zorblax" had three weak notes attached (Glyphid Dreadnought, Dreadnought Twins, Exploder); "Grimthak" had Glyphid Dreadnought, Dreadnought Twins and Mactera, and did not repeat 2026-10-22 (block drawn, no line). Evidence `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04-READING-1.json`, `workshop:test-evidence/plan98-P98-NOTES-BLOCK-04-READING-2.json`.
 
 ## Hidden spoiler box stays shut on games with no Steam ID and on name-first questions
 
@@ -437,63 +330,12 @@ landing: 8 sentences in the Brotato/Palworld notes (`cc48166d`), and claims in 1
 The two helpers' note lists collided on landing (both had appended to the same lists) and were merged
 by content, not by discarding either. The library is now 38 games, 414 notes.
 
-## Black Mesa's electrified-water question
-
-**Found 2026-09-19.** Asking how to cross the electrified water gave the right, specific answer, but
-the two notes Show details named as used were general early-game notes about starting out and the
-opening tram ride — neither one is the electrified-water note, which does exist in the library. Evidence `workshop:test-evidence/plan61-W3-D-blackmesa.json`.
-**Asked again 2026-09-23 with the exact original
-words, better but not fixed:** the electrified-water note is now attached and the answer is built on it,
-but the two generic notes are still attached too, still listed first, and the block header still names
-"Starting out in Black Mesa" — the same ranking shape as the Hollow Knight "no close match" bug, where
-the right note is found but ranks behind generic ones. Evidence
-`workshop:test-evidence/plan64-BLACKMESA-WATER.json`. **Asked again 2026-09-23 with Black Mesa running: no
-change** — having the game running did not affect this bug either way. Evidence
-`workshop:test-evidence/plan64-BLACKMESA-WATER-running.json`.
-
-**Measured 2026-09-26 (plan 70, helper B): ranking a "Starting out" note lower is not this wave's
-fix.** It helped the search test but hurt the answer test (46 to 41 of 57 right note first), so it
-stays off; it would not have cured this bug alone either, since a second generic note still ranks
-ahead.
-
-**Fixed 2026-10-03 (plan 81, `619842fd`), a different way, with nothing ranked lower:** the word search now leaves the game's name (and its aliases) out of the words it looks for, because it is already limited to the one game and the name only favoured notes with it in their title. Asking "black mesa how do i get across the electrified water" with nothing running now lists the water note first. A question that asks how to start keeps the name. Measured on this PC over the fixture questions, each asked with the game's name typed: the right note first went from 108 to 159 of 287, the right note in the first three from 201 to 209, none lost. On the held-back split the shipped search's first place went from 68.6 to 74.2 percent and its first three from 87.7 to 88.1; the tuning split is unchanged.
-
-**The answer test over the 13 questions whose notes changed (plan 81):** facts kept went from 102 to 105 of 195, so there is no drop overall. Two GTA V questions are lower, 22 to 8 of 30, because the facts the test expects sit in the generic note and its wording check misses a correct paraphrase of the new note; the other 11 questions are higher, 80 to 97 of 165. (The commit message for `619842fd` gives an earlier run of the same test, 70 to 61 of 117 facts kept on the 13 questions; the two runs differ in size.) Passed on the Deck 2026-10-03 (plan 81, build `9e68bce1`, row P81-KB-NOTES-FIRST): the water question listed only its water note, so it came first. Evidence `workshop:test-evidence/plan81-P81-KB-NOTES-FIRST.json`.
-
 ## KB transparency matches what the model got
 
 Passed on the Deck 2026-09-22 and 2026-09-23. Evidence `workshop:test-evidence/plan64-KB-TRANSPARENCY-names.json`. The full readings are in the trimmed archive.
 
 **Sighting, 2026-09-23:** searching the notes by meaning took about 1,070 milliseconds with a game
 running, against 22 to 60 milliseconds measured elsewhere with nothing running.
-
-## Flow L7 findings
-
-Open items from plan 70's last Deck block, flow L7 (2026-09-26, 21:52 to 23:43). The closed fixes from that block are in the trimmed archive.
-
-**New, open: a chat opened with RB while a game runs is drawn as history, and Down dies on its question
-line.** With Deep Rock Galactic: Survivor running, RB from an empty new chat to the answered Dreadnought
-chat drew it without its Helpful row, "Save chat" row or chip; Down reached the question line and then
-did nothing for six presses while the page's own focus moved to "Show reasoning". Closing and reopening
-the panel drew the chat in full and cleared it. Evidence `workshop:test-evidence/plan70-HIDDEN-RING-recheck.json`,
-`plan70-HIDDEN-RING-recheck-stuck-question-row.png`.
-**New, open: a game's own tip is found only by its own words.** "The words on screen look blurry" in Deep
-Rock Galactic: Survivor attached no tip — its keyword score was 2.0 against the 4.0 cut-off — while "the
-text ... looks blurry" scores 6.9 and finds it. A question that avoids the tip's own words misses it; a
-rescue by meaning search was measured and left for a later lane. Evidence `workshop:test-evidence/plan70-R4-try5.json`.
-**Fixed 2026-10-03 (plan 81, `e78f0d6e`, `6f758ff0`), passed on the Deck 2026-10-03 (build `9e68bce1`, row P81-TIP-BY-MEANING; `workshop:test-evidence/plan81-P81-TIP-BY-MEANING.json`).** In Strategy and Expert mode a game's
-tip is now also found by meaning: "the words on screen look blurry" attaches Render Scale. The boss question is unchanged, and Speed
-mode is unchanged on purpose. Held-back measurements are identical before and after: no right answer lost, no new wrong one.
-Limits: the long Deck sentence that also names the game ("deep rock galactic survivor the words on screen look blurry on my deck,
-what should i change") still misses; one made-up phrase, "how do i launch a mission", now attaches Fallout 4's launch-option tip.
-Test `tests/test_kb_game_tip_meaning.py`.
-
-**New sightings, open:** after a bare follow-up the suggestion chip read "Enable local knowledge base for
-better game tips" though the knowledge base was on (once); the plugin log warned twice that a Strategy
-answer's follow-up choices were not understood, so no choice menu showed (both on troubleshooting turns).
-Evidence `workshop:test-evidence/plan70-R4-try5.json`. And an answer that used the Render Scale tip said text
-blurs when Render Scale is "too high", then said to raise it — the tip says plainly to raise it; the small
-model garbled a clear tip (logged under "Deeper answer checks"). Evidence `workshop:test-evidence/plan70-R4-try6.json`.
 
 ## The note's own words under the reply
 
@@ -509,18 +351,6 @@ Older notes, word for word (moved here 2026-10-14, plan 93 docs sweep).
   **2026-10-14 (plan 93 Deck block D3, Strategy mode, game running, two questions):** the line half is UNCLEAR. A made-up boss ("Who is the final boss called Zorblax") showed the "No close match" line and no notes block: PASS. "How do I buy a house in this game" drew a "From the notes" block and no line: FAIL, the known wrong-subject-notes entry above. Evidence `workshop:test-evidence/plan93-NOTES-BLOCK-04-game-strategy-D3.json`.
   **2026-10-14 (plan 93 Deck block C part 2, Deep Rock Galactic: Survivor running, Speed mode, two questions):** no notes block under either answer (the block half passes). The "Not in my notes" line did not show under either; the back end logged "no footer line added". That line shows only in Strategy and Expert by design (`py_modules/backend/knowledge/kb_not_in_notes_notice.py`), so the line half is still owed in Strategy or Expert. The evidence file marks the line half FAIL and only names Speed as a possible cause. Evidence `workshop:test-evidence/plan93-NOTES-BLOCK-04-game.json`.
 
-
-## Plan 97 notes moved from the knowledge base roadmap (2026-10-22)
-
-**The knowledge library update treats any different version as newer (older entry, word for word):**
-
-- ★★ `[KB]` **The knowledge library update treats any different version as newer, and installs onto the Deck's own drive without asking where** — **OPEN, found 2026-10-16 (plan 86 step 3 Deck block).**
-  It offered 2026.09.26 as an update over the seed's 2026.10.16. The library had been on the SD card; the update put the same files, byte for byte, on the Deck's own drive. The maintainer said to leave it there tonight. Evidence `workshop:test-evidence/plan86-B6-RESTORE.json`.
-  **2026-10-17 (plan 94 block 3, Deck, build `e9b50cc8`):** the first download now asks where to put the library (Not now / Internal storage / SD card) before the download box. The "different version offered as newer" half was not tested (a fresh install has no older version). Evidence `workshop:test-evidence/plan94-P94-KB-DOWNLOAD.json`.
-
-## Plan 100 follow-up note moved from the knowledge-base roadmap 2026-10-26
-
-**2026-10-25 (lane T follow-up, `5943260b`):** the bare word "storage" no longer routes a question to the storage tips; it needs full, space, free, left, drive, card, sd, microsd, install, gb or "out of" beside it. Found when two blind Portal 2 questions about the Weighted Storage Cube were handed the storage-full tip.
 
 ## Plan 102 notes moved from the shelved roadmap (2026-11-02)
 
@@ -936,3 +766,151 @@ written and checked, landing: Left 4 Dead 2, Fallout 4, Red Dead Redemption 2, C
 **Older notes the wiki contradicts, the writers' list (2026-11-09; plan 103 lane M takes them):** Left 4 Dead 2: the Charger note says only explosives stumble him, but the wiki says the grenade launcher does not. Mario Party: Eternal Star's odds; "Bowser wanders" on DK's Jungle Adventure; the Bonus Star wording; the Blue-to-Red change on Magma Mountain lasts two turns, not "until the board resets". Mario Party 2: the Dueling Glove's wager and referee; the Bowser Space roulette. Mario Party 6: "the only way to get more Stars" on Snowflake Lake; duels only in the last five turns. Mario Party 7: Pagoda Peak's Star price; Windmillville's full ownership; eight players only in 4-Team Battle; Bowser's Enchanted Inferno has its own mechanic; the Snack Orb's two turns. Super Smash Bros.: the 1P Game note lists two of three bonus stages. Cyberpunk 2077: iconic weapons can be bought. Grand Theft Auto III: a police bribe removes one star, not the whole meter.
 
 **Other findings, one line each:** (1) Grand Theft Auto III in the library is the Definitive Edition, but its wiki describes the original game; lines that could differ now say "In the original game". A check on the Deck would settle them. (2) `py_modules/backend/notes/kb_tip_suggestion_service.py` (about line 56) allows five note kinds for a player's suggested tip; the five new kinds (versus, coop, callout, survival, realism) fall back to "mechanic" there. Not a bug yet. (3) Plan 101's Stardew recipe puts SMAPI's log under the game folder; SMAPI's own source puts it under the game's app-data folder. (4) `py_modules/backend/ask/game_ai_request.py` is at 797 of its 800-line limit after the honest-answer change; the picture-search lane (P2) must move a piece out before it adds its call site. (5) With the honest-answer change the "Looks like" label is kept as a bullet, and the finale rule for versus-style notes landed (spoiler rules page, rule 14). (6) Plan 103's first audit invented four row ids the plan did not name (P103-DP-MODELS, P103-SWEEP, QA-LOOK-01-p103, P103-DR-RESTORE); they are kept.
+
+## Plan 103 sweep K2 notes moved from the knowledge base roadmap (2026-11-10)
+
+Written by the plan 103 bookkeeper sweep K2 after the second landing chain (notes for ten more games, the versus notes, the answer screen's D-pad fixes) and Deck block D0b. Older text is moved word for word, each piece headed by where it stood; the findings the helpers left are at the end.
+
+**Entries and sentences as they stood before this sweep:**
+
+**Where things stand, the first paragraph (as it stood before sweep K2):**
+
+**Where things stand (2026-11-09).** The library people can download is 2026.10.25: 38 games, 414 notes, 164 Deck tips
+and 351 tap-to-define words; the maintainer published it on 2026-10-25 and both channels were read back byte for byte
+([the releases table](knowledge-base.md)). The build on this PC is bigger: version 2026.11.04, **583 notes and 167 tips** (plan 103's 18 mod tips, ids 168 to 185, are in the source and not yet in a build), every note with its meaning vector (`corpus.db` 4,096,000 bytes). It is not published yet (checked 2026-11-09): the maintainer's publish is owed, and GitHub's copy is still dated 2026-10-25. Every one of the 38 games has an enemy or item note; 15 have them in the labelled short-line shape.  The Deck's own copy is
+2026.10.25 (`workshop:test-evidence/plan98-P98-KS-LIBRARY.json`).
+
+**Bugs: older notes the wiki contradicts, as it stood:**
+
+- ★ `[KB]` **Older notes the wiki contradicts, found by the plan 103 note writers** — **OPEN, found 2026-11-09 (plan 103 lane M takes them).**
+  Writing the new notes, the helpers found small places where older notes and their wikis disagree: the Left 4 Dead 2 Charger note says only explosives stumble him, but the wiki says the grenade launcher does not; and older notes for Mario Party, Mario Party 2, 6 and 7, Super Smash Bros., Cyberpunk 2077 and Grand Theft Auto III differ in smaller ways. The list, game by game: [Detail](roadmap-kb-details.md#plan-103-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-09).
+
+**Bugs: page out of focus, Down from the notes block, as it stood:**
+
+- ★★ `[KB]` `[focus]` **With the panel's page out of focus, Down from the notes block skips the open details panel and lands on the suggestion chips** — **OPEN, found 2026-11-02 (plan 102 lane C, in the test setup; not yet seen on the Deck).**
+  After lane C's fix (`1d262a94`, `8ce44695`) Down no longer dies there: the press moves. But the details tabs row and the chip grid have no Steam nodes of their own (plan 97 gave the notes block that), so the ring jumps past the open details panel, a moving press and not yet the stop a person expects. Row P102-UNDO-FOCUS-01 (UNCLEAR on 2026-11-03: the window's focus read true, so the lost-focus state never happened) would read it; on 2026-11-09 the page again kept the window's focus six times of six, so it was not read (`workshop:test-evidence/plan103-P102-UNDO-FOCUS-01-try2.json`).
+
+**Bugs: Up from a checklist's step 1, as it stood:**
+
+- ★★ `[KB]` `[ui]` **Up from a checklist's step 1 lands on the Copy reply text icon, and Down from that icon skips the whole step list and lands on Mark reply helpful** — **OPEN, found 2026-11-03 (plan 102 Deck block R0).**
+  Down from the answer reaches step 1 and the steps walk as they should; the skip is on the way back. Evidence `workshop:test-evidence/plan102-P98-ROUTE-01-try3.json`.
+
+**Bugs: crowding entry, the cause and final-library paragraphs, as they stood:**
+
+  **One real cause in the search:** after the 51 notes the word search returns up to ten notes instead of three, which pushes a note found only by meaning down the blend; four of the five lost slots are worse for a player. **Code reading 2026-11-09:** nothing caps the word list near ten (it can run to 30); a note the word search missed is given a place one past the end of that list, so its credit shrinks as the list grows.
+  **Final library, 2026-11-03 (lane X2):** one older right note slipped out of the first three (Mario Kart 64), the same cause: [Detail](roadmap-kb-details.md#plan-103-notes-moved-from-the-knowledge-base-roadmap-2026-11-09). Older text: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03)
+
+**Next: KB online / versus, the entry as it stood:**
+
+- ★★★★ `[KB]` **KB online / versus strategy content** — **OPEN, discovery locked 2026-08-09.** Multiplayer questions
+  (roles, callouts, co-op) get nothing specific today. Plan: new card kinds, Left 4 Dead 2 first, then Counter-Strike 2,
+  from archive dumps only. Two to three weeks. **Found 2026-11-09:** some of the August plan's file paths are stale (the spoiler-risk file moved to the spoilers folder); the seven "Playing as" notes it planned already exist under another kind (game mechanic); eight of eighteen versus test questions have no note to find. Plan 103 lanes V1, V2 and Q6 build its first three steps for Left 4 Dead 2; Counter-Strike 2 stays out. **Step one landed 2026-11-09 (lane V1):** five note kinds (versus, coop, callout, survival, realism) count as low spoiler risk and have their own chip wording; `docs/knowledge-base.md` lists every note kind; plan 17's file is corrected. The notes themselves (lane V2) are not written yet; row P103-VERSUS-01 is owed once they land. [Plan](planning/17-kb-online-versus-strategy-content.md) ·
+  [Detail](roadmap-kb-details.md#kb-online--versus-strategy-content-and-rag-phase-5)
+
+**Next: RAG Phase 5, the entry as it stood:**
+
+- ★★★★ `[KB]` **RAG Phase 5: depth on the thirteen titles** — **PARTIAL.** The thirteen original titles went from 133 to 164 notes; plan 100 and plan 102 added 51 and 118 notes ([Detail](roadmap-kb-details.md#plan-103-notes-moved-from-the-knowledge-base-roadmap-2026-11-09)). Games with those notes in the labelled shape: 15 of 38 (7 before).
+  **Measured, final library 2026-11-03:** 230 of the 236 blind questions for plan 102's eight games find their note in the first three; older results and the report: [Detail](roadmap-kb-details.md#plan-103-notes-moved-from-the-knowledge-base-roadmap-2026-11-09).
+  **Plan 103 notes (2026-11-09):** ten games' notes are written, checked and landing (14 or 15 each); two more (Melee, Grand Theft Auto III) are checked and wait for the licence read. **No notes for Hades** (its wiki's licence cannot be used). Not written yet: Half-Life 2 (its wiki was read-only all evening) and nine more games. The crowding fix was turned down on its numbers (Bugs), which meets that part of Phase 5's finish. More: [Detail](roadmap-kb-details.md#plan-103-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-09).
+  Two small things the lanes left open for you are in [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03). [Plan](planning/28-phase5-corpus-depth.md) · [Detail](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#plan-100-notes-moved-from-the-knowledge-base-roadmap-2026-10-25)
+
+**Next: Phase 8, the as-of sentence:**
+
+**As of 2026-11-09:** the build on this PC has 38 games and 583 notes.
+
+**Calls: the ten-note samples line, as it stood after the first K2 edit:**
+
+  Ten random notes each: `workshop:checks/plan103-sample-earlier.md` (ten of the 169 notes plans 100 and 102 added), `workshop:checks/plan103-sample-B.md` (the first four games' notes below) and `workshop:checks/plan103-sample-C.md` (the eight party, fighting and Grand Theft Auto III files). Sample B was drawn before three small last fixes; it is refreshed before you read it. Batches D, E and F, drawn after those notes landed: `workshop:checks/plan103-sample-D.md` (Yoshi's Story, Diddy Kong Racing, Left 4 Dead 2 versus), `plan103-sample-E.md` (Fallout: New Vegas, Brotato, Skyrim) and `plan103-sample-F.md` (Palworld, Hollow Knight, DOOM Eternal). Batches for any later games are added here when their file exists.
+
+**Next: screenshot measurement, the second set, long form:**
+
+`tests/fixtures/screenshot_eval_v1.json` holds 29 pictures from 11 games, but only 1 with an enemy (a guess), no boss fight and 4 whose subject has a note; the target was 40 with ten bosses, and the Deck held only six game folders. 
+
+**Deck check owed: hidden-box entry, the still-owed sentence, long form:**
+
+ the rig can now launch a shortcut by its title (Deck tools 0.3.12), so the row no longer needs the maintainer's hand launch; plan 103 block D0a tried it on 2026-11-09 and the row is **UNCLEAR, not a pass**: Doom 64: Retribution launched by its title on the first call, but two boss questions got general answers with no spoiler box, so there was nothing to open
+
+**Deck check owed: thumbs-down entry, second-night wording:**
+
+the page kept the window's focus six times of six, so the four Down presses were not run
+
+**Next: mod knowledge, the landed sentence, long form:**
+
+(lane T3; no note uses it yet) and the first step, 18 basics tips (lane G1, above under Deck check owed); the device side stays plan 101's. One correction is owed to plan 101 (SMAPI's log folder): [Detail](roadmap-kb-details.md#plan-103-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-09).
+
+**Next: RAG Phase 5, the list of the twenty games:**
+
+ (14 or 15 each, 308 notes, counted from the files), each read by a checker and a licence reviewer and then fixed: Left 4 Dead 2, Fallout 4, Red Dead Redemption 2, Cyberpunk 2077, Mario Party, 2, 3, 6 and 7, Super Smash Bros., Melee, Grand Theft Auto III, Yoshi's Story, Diddy Kong Racing, Fallout: New Vegas, Brotato, Palworld, Skyrim Special Edition, Hollow Knight and DOOM Eternal.
+
+**Deck check owed: screenshot-name entry, the PC numbers sentence:**
+
+ The PC numbers (the game named 91 and 92 times in a hundred, up from 67 and 70) and the first try (2026-11-03: nothing attached, nothing tested): [Detail](roadmap-kb-details.md#plan-103-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-09). Still owed.
+
+**Deck check owed: Brotato entry, the block D0b reading in full:**
+
+ **Deck 2026-11-09 (block D0b, old build):** Brotato with nothing running drew its whole answer behind a shut cover on Default, with no no-story line in the log (`workshop:test-evidence/plan103-P103-M-BROTATO.json`); the new build must show it open.
+
+**Deck check owed: covered-notes entry, the block D0b reading in full:**
+
+**Deck 2026-11-09 (block D0b, old build, `workshop:test-evidence/plan103-P103-M-COVERED-NOTES.json`):** a whole-cover answer (Paper Mario, Doopliss) drew no notes line before or after the cover was opened; a part-covered one (Grand Theft Auto IV) drew none before and one after. 
+
+**Next: RAG Phase 5, the own-words paragraph:**
+
+  **House "own words" pass:** the licence reviewer found nothing that broke a wiki's licence but many lines too close to the wiki's sentences, and in the Melee file Nintendo's trophy text copied in nine notes; eight files (Mario Party, 2, 3, 6, 7, Super Smash Bros., Melee, Grand Theft Auto III) were rewritten, no fact changed, no note renamed. The lesson is in the lessons file.
+
+**Next: KB online / versus, steps one and two in full:**
+
+**Step one (lane V1):** five note kinds (versus, coop, callout, survival, realism) count as low spoiler risk and have their own chip wording. **Step two (lane V2):** 15 notes in the versus file (ten versus, three callout, one survival, one realism) and the seven "Playing as the ..." notes re-filed as versus; no finale content (checked twice).
+
+**Bugs: crowding entry, lane R1 paragraph in full:**
+
+the plain version failed one of decision D82's three protected tests; the narrow version passes them and gains 8 held-back questions with none lost in the search test, but with the game's name typed two questions lose their right note, which breaks the rule that nothing may be lost. The trade (about nine questions gained for two lost when the name is typed) is the maintainer's call. Record, patches and the names of the two questions:
+
+**Where things stand: the answer-test paragraph, one sentence in full:**
+
+ Every older answer-quality figure (plan 102's facts kept 68.9 in a hundred, the story-cover 11 of 15) must not be compared with new ones.
+
+**Where things stand: the test-tooling line, as it stood:**
+
+Test tooling since 2026-11-09 (questions in many files, the saved library noticing notes files, two one-call Deck scripts): [Detail](roadmap-kb-details.md#plan-103-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-09).
+
+**Next: RAG Phase 5, the blind questions paragraph, as I first wrote it:**
+
+  **Blind questions:** 294 rows in ten new files under `tests/fixtures/kb_eval/` (Left 4 Dead 2, Fallout 4, Red Dead Redemption 2, Cyberpunk 2077, Mario Party, 2, 3, 6 and 7, Super Smash Bros.), counted from the files. **Still to write:** questions for the last ten games, the versus notes and the mod tips. The crowding fix was turned down on its numbers (Bugs). Older text: [Detail](roadmap-kb-details.md#plan-103-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-10) · [Plan](planning/28-phase5-corpus-depth.md)
+
+**Deck check owed: covered-notes entry, the Fallout 4 sentence:**
+
+ The Fallout 4 computer-terminal sighting (`plan102-P102-FINDPC-01.json`) is a weak-match case, not a covered one.
+
+**Deck check owed: Baldur's Gate 3 entry, the note names:**
+
+: Owlbear, Githyanki Warriors, Minthara, Goblin Horde, Explosive Barrel, Potions, Weapon Poison.
+
+**Deck check owed: mod tips entry, the Proton catch:**
+
+ The licence read found nothing that blocks. One catch: the new tips had moved an old Proton crash tip out of first place in Speed mode; the landing's tests found it and rewording one tip fixed it.
+
+**Next: honest-answer entry, the measuring sentence:**
+
+three wordings, two runs each, are measured on this PC before it is switched on (row P103-HONEST-01 is owed only if it is).
+
+**Next: honest-answer entry, the heading's tail:**
+
+; built, off, measuring.**
+
+**Where things stand: the build sentence:**
+
+, every note with its meaning vector (`corpus.db` 4,096,000 bytes)
+
+**Notes landed by plan 103 since sweep K1, by game (numbers counted from the files on 2026-11-10; 14 or 15 notes each):** Grand Theft Auto III 3500 to 3514, Super Smash Bros. Melee 3400 to 3414, Yoshi's Story 3600 to 3614, Diddy Kong Racing 3700 to 3713, Fallout: New Vegas 3800 to 3813, Brotato 3900 to 3914, Palworld 4000 to 4013, Skyrim Special Edition 4100 to 4113, Hollow Knight 4200 to 4214, DOOM Eternal 4400 to 4414. Left 4 Dead 2 versus 4500 to 4514 (ten versus, three callout, one survival, one realism). Each was read by a checker and a licence reviewer and then fixed. The ten earlier games (Left 4 Dead 2, Fallout 4, Red Dead Redemption 2, Cyberpunk 2077, Mario Party, 2, 3, 6 and 7, Super Smash Bros.) landed before sweep K1. Ten-note samples: `workshop:checks/plan103-sample-earlier.md` (the twelve earlier files, 169 notes), `-B.md` (Left 4 Dead 2, Fallout 4, Red Dead Redemption 2, Cyberpunk 2077; 58 notes), `-C.md` (the eight party, fighting and Grand Theft Auto III files; 119 notes), `-D.md` (Yoshi's Story, Diddy Kong Racing, Left 4 Dead 2 versus; 44 notes), `-E.md` (Fallout: New Vegas, Brotato, Skyrim; 43 notes), `-F.md` (Palworld, Hollow Knight, DOOM Eternal; 44 notes).
+
+**A lesson from the house "own words" pass (also in the lessons file):** the licence reviewer found nothing that broke a wiki's licence but many lines too close to the wiki's sentences, and in the Melee file Nintendo's trophy text copied in nine notes; all rewritten, no fact changed, no note renamed. A wiki's licence does not cover game text the wiki quotes. Two synonym passes on the DOOM Eternal file did not pass a second read; a rewrite from a fact list did.
+
+**Older notes the wiki contradicts, found by lane M's wave on 2026-11-10 (none fixed yet; the first list is in the sweep K1 section above):** Diddy Kong Racing: the amulet piece comes after the second boss race, not the first; the last world opens on four trophies of any medal, with every Golden Balloon and the T.T. amulet also needed for the last fight; T.T. needs a good time to bring out his ghost first; the zipper boost is "slightly faster". Yoshi's Story: a one-heart figure no page gives; the Lucky Fruit roulette; eggs at the ceiling spikes can hurt Baby Bowser; "the game decides which page unlocks". Left 4 Dead 2: the Charger note lacks the grenade launcher exception; the Smoker's tongue does 5 a second when constricting in versus; the Molotov note's 75 to 85 seconds against the Tank page. Hollow Knight: seed note 272 sends the Crossroads tram to the City of Tears, where the page says the Resting Grounds. Fallout: New Vegas: seed note 224 says a doctor's bag fully mends one limb. Palworld: seed note 420 says Predator Pals spawn at random, and a Raid Boss can be fought in a Raid Area.
+
+**Left 4 Dead 2 versus notes (plan 103 lane V2):** no finale content (checked twice). Cost, measured: of the 18 labelled Left 4 Dead 2 search questions, 9 find their note in first place (11 before these notes) and 17 in the first three (unchanged). The Survival note mentions the Tank less, so a Tank question still finds the Tank note.
+
+**No notes this session (2026-11-10):** Hades (its wiki is CC BY-NC-SA and Wikipedia has too little); Half-Life 2 and Black Mesa (combineoverwiki.net answered "Database is read-only" on every read on 2026-11-09 and again on 2026-11-10, three tries each night).
+
+**Deck block D0b, 2026-11-09 21:14 to 21:42 EST, the old build (dist `9bc29b3c0500`; handover `workshop:planning/assets/103-handover-D0b.md`):** the readings are in the testing rows (P103-M-COVERED-NOTES, -BROTATO, -CHECKLIST, -DETAILS-STRIP, -SUMUP, -TAB-SECTIONS). The strip: what decided whether Down from "Hide details" lands on the strip was whether the newest answer had a notes line above it (with none, the strip; with one, the notes line first and the strip on a second Down); chat size and a running game did not decide it by themselves, but the two were mixed in these 15 tries and were not separated.
+

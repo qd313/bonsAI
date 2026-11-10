@@ -1342,3 +1342,68 @@ _The entry's first wording and cause, from before the 2026-10-02 fix. It was tit
   A section with three underlined words took one landing and two scrolls going Up, so Up is not the mirror of Down there; the maintainer's rule (D120 item 6) is that both directions visit the same stops. Evidence `workshop:test-evidence/plan78-QA-FREE-PLAY-01-GAME-try3.json`.
   Cause (the helper's read, 2026-10-01): with the ring on a section the word finder never counts words inside that section as before the ring going Up. A fix needs a change in the word finder, an Up-side memory of the last word passed (the mirror of Down's), and room in the navigation file, which is at 397 of its 400 lines. After the release.
 
+## Moved by plan 103 sweep K2 (2026-11-10)
+
+Three whole sections moved here from `docs/roadmap-details.md`, word for word, to make room. Links inside them may be stale.
+
+### Plan 93 notes moved from the roadmap (2026-10-14, docs sweep 3)
+
+Open entries and older dated notes, word for word, moved here when their entries went to Verify or were rewritten (plan 93 docs sweep 3).
+
+**Terse mode: Speed answers in three lines:**
+
+- ★★★ `[reply]` **Terse mode: Speed answers in three lines** — **PARTIAL, the switch passed on the Deck 2026-10-08 (plan 83, row P83-J4-TERSE-TOGGLE, evidence `workshop:test-evidence/plan83-P83-J4-TERSE-TOGGLE.json`); the answer test ran three times that night and the length cap holds on most answers, not all.**
+  Built: a "Terse mode" switch on the Ollama tab under the Reply style slider, off by default. With it on, a Speed answer is asked to keep to three lines and end with a menu of choices, first answers and follow-ups alike; Strategy, Expert and Speed with it off are as before. Answer test, ten questions with Deep Rock Galactic: Survivor running (plan 83 overnight, 2026-10-08): run 1 (build `0d3af3de`) 10 of 10 within three lines, choice buttons on 4 of 10, three menus shown as raw text; run 2 (`2ccf4075`) 9 of 10 within three lines, buttons on 1 of 10, nine menus shown in a code box; run 3 (`21f62344`) **buttons on 10 of 10 and no raw menu text**, but **7 of 10 within three lines** (8 needed; the three misses ran 4 lines). Cause of the missing buttons: the AI spelled the menu's fence name with an underscore, which the plugin did not read; `21f62344` reads either spelling. Across the three runs 26 of 30 answers fit. Evidence `workshop:test-evidence/plan83-P83N-TERSE-01.json`, `P83N-TERSE-01-AFTER-FIX.json`, `P83N-TERSE-01-FIX2.json`. [Detail](roadmap-details.md#terse-mode-speed-answers-in-three-lines).
+  **Still owed:** (a) the maintainer's call on the length result: TERSE-01 as written (8 of 10 in one run) passed on length in 2 of 3 runs and failed in 1, so it is not marked passed; (b) the stacked full-width buttons (screen work, needs a Deck measurement first); (c) a menu press sends a follow-up saying "I'm at: <label>" and asking for an "If you want to cheat" section, which the terse wording has to talk the AI out of; (d) in the endless terse loop each menu press stores the whole previous composed question as "Earlier I asked", so the question grows with every press (the question is stored in `src/features/ask/flow/useBonsaiAskOrchestration.ts`, about line 776, and quoted back in `src/features/strategy/useStrategyBranchActions.ts`, about line 113); (e) with Terse on, the AI often repeats a menu from an earlier answer ("Which weapon should I focus on first?" under unrelated questions, `workshop:test-evidence/plan83-P83N-TERSE-01-AFTER-FIX.json`); (f) the maintainer's call on whether to keep the reader for a menu written as bare JSON with no fence (`2ccf4075`, tested): that case was never actually seen, it rested on run 1 being misread.
+  **2026-10-13 (plan 93):** the maintainer's call: Terse becomes the first stop of the Reply style slider (Terse, Caveman, Balanced, Detailed) and applies in every Ask mode; the separate switch goes (planned in plan 93). Five Speed questions with Terse on gave one line each, 17 to 36 words; see the closed bug "Terse mode does not seem to shorten answers" in Done. Evidence `workshop:test-evidence/plan93-M11-TERSE-LINES.json`.
+
+**Confirm pop-ups show extra buttons, and are not in the SteamOS style (open entry, word for word):**
+
+- ★★ `[ui]` **Confirm pop-ups show extra buttons, and are not in the SteamOS style** — **OPEN, reported 2026-10-13 by the maintainer.**
+  Clear cache, Clear data and "Turn on internet downloads" each show more than two choices. They should show only the action and Cancel.
+  Check every pop-up in the app for the same extra choice. Every pop-up should look like a normal Steam settings pop-up (the delete-chat one is the model).
+  **2026-10-13 (plan 93):** Clear cache, Clear all plugin data and Remove knowledge base each show three buttons, the ring on the safe one; Delete chat shows two. "Update AI & models" showed no box at all with internet downloads on and the site already accepted; the maintainer's call (2026-10-13): that stays as it is. Evidence `workshop:test-evidence/plan93-P93-M9-CONFIRM-BOXES.json`.
+
+**Open all is reached with Right, not Down (open entry, word for word):**
+
+- ★★ `[focus]` `[tabs]` **Open all is reached with Right, not Down, and the floating Open all button clashes with the tabs** — **OPEN, reported 2026-10-13 by the maintainer.**
+  D-pad Down should reach Open all; today it takes Right. The floating Open all button also overlaps the tab layout.
+  Likely one cause; look at both together.
+  **2026-10-13 (plan 93):** with every section closed, the button is reached by Right only, Down holds still, and the button covers nothing. With sections open and the tab scrolled, the fixed button covers 56 x 14 px of the Connection tuning row's summary text and its 10 x 14 px arrow, and does not move with the scroll. Evidence `workshop:test-evidence/plan93-P93-M2-OPEN-ALL.json`, `plan93-M2-OPEN-ALL-scrolled.png`.
+
+**When an answer finishes streaming, the screen flickers and then jumps to the end (open entry, word for word):**
+
+- ★★★ `[reply]` **When an answer finishes streaming, the screen flickers and then jumps to the end** — **OPEN, reported 2026-10-13 by the maintainer.**
+  After the answer lands, the screen flickers and then scrolls to the end in one jump. It should scroll smoothly and follow the end of the answer as it arrives.
+  **2026-10-13 (plan 93):** measured, a fail: through a 50-second answer (1,316 px tall in a 402 px box) the page stayed at the top and never followed it; about a quarter of a second after the finish it jumped to the end, about 1,265 px, in one step. The maintainer's call (2026-10-13): fixed by building the Features entry "A long answer is cut into sections while it writes" (planned in plan 93); following the end smoothly while it writes is a separate, later piece. Evidence `workshop:test-evidence/plan93-M4-ANSWER-FINISH.json`.
+
+**A long answer is cut into sections while it writes (entry before the 2026-10-14 rewrite, word for word):**
+
+- ★★ `[reply]` **A long answer is cut into sections while it writes, so nothing changes when it finishes** — **OPEN, decided on the mock-up board 2026-10-10 (option A of round 2); carried over 2026-09-24 from plan 05.**
+  Today a long answer arrives as one block; when it finishes it is cut into sections, the Helpful and Not really buttons pop in, and the view jumps to the top and back.
+  Picked: each section closes as soon as it is full, so the answer never changes at the finish. Then only the buttons and Show details fade in under it; the view does not move and the ring stays where it was. The maintainer: better, especially when the D-pad moves while the answer writes.
+  Not chosen: keeping today's rebuild and making it gentler. Touches [plan 69](../../bonsAI-workshop/planning/69-streamed-answers-scramble.md). [P6](../../bonsAI-workshop/archive/05-token-streaming-review.md) · [Mock-up board, tab 3](https://claude.ai/artifact/XyZfUSPGRZdm2P3mTGV9tR) · [notes](demos/mockup-board/README.md).
+
+**Hand-written D-pad moves on some Ollama-tab buttons never run (open entry, word for word):**
+
+- ★ `[focus]` **Hand-written D-pad moves on some Ollama-tab buttons never run** — **OPEN, found 2026-10-12 by plan 92 lane T0.**
+  In the Ollama tab's "where the AI runs" and knowledge-base sections (`OllamaWhereAiRunsSection.tsx`, `KnowledgeBaseSection.tsx`) several hand-written D-pad moves are spread onto Decky Buttons, which never pass move handlers on (for example Test connection's Down, and the knowledge base's Download and Remove). Steam's own move does the work today, so a person notices nothing. The focus-pattern checker misses handlers passed this way.
+
+### Plan 97 sixth sweep notes moved from the roadmap (2026-10-22)
+
+Entries moved here, word for word, when they closed (plan 97 sixth sweep).
+
+**After a Steam box Down stops moving the ring (plan 97 L14), the Verify entry before it closed, word for word:**
+
+- ★★★ `[focus]` **After a Steam box, or the menu closing, Down stops moving the ring until the plugin is reloaded** — **VERIFY, fixed in part 2026-10-22 (plan 97 L14, two rounds: `2b924080`, `6da3e2d7`, `2263aa83`, then `89ee807e`, `37665106`, `24453818`, `d3d7bdf4`); still failing on the Deck. Was OPEN, seen ten times by 2026-10-18 and twice more in plan 97 block B.**
+  Cause, from block B's readings: after a Steam box or the menu closing, the panel's page comes back without the browser's focus (`document.hasFocus()` false); the plugin's own plain focus moves then do nothing while Steam's own transfers still work. Now the moves from the question box, the Ask strip's buttons and the Show reasoning line, and Down from a Settings section line, go through Steam's transfer when the page has lost focus, and each one is logged (`dpad.lostFocusHop`).
+  **Deck 2026-10-22 (plan 97 blocks B and E, a game running):** before the fix Down stayed dead after a Steam box (`workshop:test-evidence/plan97-P97-B-FREEZE-2.json`). On build `15565346`, with the page without focus, 10 of 10 Downs from the question box and Left and Right moved the ring and the hops were logged (row P97-L14-FREEZE, those presses), and Down from a Settings section line passed 3 of 3 (row **P97-L14-SECTIONS**, `plan97-P97-L14-SECTIONS.json`). **But Up from the game's chip row was dead,** so the question row and Show reasoning could not be reached (`plan97-P97-L14-FREEZE.json`). Four more fixes landed since: Up, Left and Right from the chips (`89ee807e`), Left and Right from the question box (`37665106`), walking up and down through an answer (`24453818`), Down from an Ollama or Developer section line (`d3d7bdf4`).
+  **Deck 2026-10-22, second round (build `f124022f`, then `acbaeb72`):** the third try (row **P97-L14-FREEZE-try3**) was UNCLEAR: the no-focus state was not reached in six tries; the control walks with focus all moved (`workshop:test-evidence/plan97-P97-L14-FREEZE-try3.json`). The fourth try (**P97-L14-FREEZE-try4**) reached it after the game ran 11 minutes: Up to the question and Show reasoning, and Left and Right to the paperclip and mode button, PASS; **Down from the last answer section onto a Strategy answer's choice buttons is still dead (10 of 10)**, and once the first three Ups from the box did not move (`workshop:test-evidence/plan97-P97-L14-FREEZE-try4.json`, picture `-try4-down-dead.png`). The chips could not be walked (no chip row).
+  Owed: a third round of fixes, then another try. Every reading: [plan 95 § 13](../../bonsAI-workshop/planning/95-readme-refresh.md#13-appendix-the-d-pad-freeze-readings-from-filming-2026-10-17); older entry: [roadmap-details.md](roadmap-details.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22).
+
+### Plan 98 sweep 4 notes moved from the shelved roadmap (2026-10-24)
+
+Moved word for word from [roadmap-shelved.md](roadmap-shelved.md) to bring it under its size limit.
+
+- ★ `[focus]` `[watching]` **After a tab switch onto About or Search, Steam puts the ring inside the tab, not on the tab bar** — seen on the Deck's own screen 2026-10-12 (plan 92 second night, blocks B and C), recorded as a quirk, not yet judged a bug. On About the ring started on the Reply language dropdown (one Up reached the bar); on Search the Up presses of P90-SEARCH-B started from "Clear the search" right after the switch. A tab's walk is not affected. Seen again on Main and Permissions after an LB or RB switch (the ring on a chip, and on a toggle); the session owner's call is that this is Steam's normal behaviour for any shoulder switch, not a fault. Evidence `workshop:test-evidence/plan92-P92-ABOUT-AFTER.json`, `workshop:test-evidence/plan92-P90-SEARCH-B.json`, `workshop:test-evidence/plan92-P92-FOLD-SWITCH-try2.json`.
+  Unshelves when: a new sighting, or the maintainer wants the ring on the bar after every switch.

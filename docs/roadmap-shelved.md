@@ -47,7 +47,7 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Evidence `workshop:test-evidence/plan77-QA-FREE-PLAY-01.json`.
   Unshelves when: a new sighting.
 
-- ★ `[focus]` `[watching]` **After a tab switch onto About or Search, Steam puts the ring inside the tab, not on the tab bar** — seen on the Deck's own screen 2026-10-12 (plan 92), recorded as a quirk, not judged a bug; the session owner's call is that it is Steam's normal behaviour for a shoulder switch. Word for word: [Detail](roadmap-details.md#plan-98-sweep-4-notes-moved-from-the-shelved-roadmap-2026-10-24).
+- ★ `[focus]` `[watching]` **After a tab switch onto About or Search, Steam puts the ring inside the tab, not on the tab bar** — seen on the Deck's own screen 2026-10-12 (plan 92), recorded as a quirk, not judged a bug; the session owner's call is that it is Steam's normal behaviour for a shoulder switch. Word for word: [Detail](archive/roadmap-trimmed-2026-10-roadmap-details.md#plan-98-sweep-4-notes-moved-from-the-shelved-roadmap-2026-10-24).
   Unshelves when: a new sighting, or the maintainer wants the ring on the bar after every switch.
 
 - ★ `[focus]` `[watching]` **In the AI models box, the first Left on Advanced right after the box opened did nothing** — seen once, 2026-10-12 (plan 92 second night, build `b8d9575f`); every later Left from Advanced worked. Possibly the first press after the box opens is lost. Evidence `workshop:test-evidence/plan92-P92-MODELS-BESIDE-try2.json`.

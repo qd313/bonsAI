@@ -1,0 +1,335 @@
+{
+  "wiki": "Super Mario Wiki (https://www.mariowiki.com/api.php)",
+  "licence_printed_by_fetcher": "Super Mario Wiki (MediaWiki 1.43.11) licence: Attribution-ShareAlike 4.0 International https://creativecommons.org/licenses/by-sa/4.0/",
+  "licence_stored": "CC-BY-SA-4.0 (the fetcher prints 'Attribution-ShareAlike 4.0 International'; the library stores the versioned form, and data/kb/NOTICE.md lists Super Mario Wiki as CC-BY-SA-4.0)",
+  "game_id": 29,
+  "game": "Mario Party 6",
+  "read_on": "2026-11-09",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py logic (page text as rendered by the wiki, link markup removed), asked by page title: the wiki answered HTTP 403 to the reader's render call by revision number tonight, so a small wrapper used the reader's own functions and asked for the render by page title, and checked the revision the wiki rendered equals the revision the reader resolved. Every quoted sentence below was checked, by script, to appear word for word (whitespace collapsed) in the page text read at the revision named. A table row is quoted as its cells joined by ' || ' (a description cell closes with a double quote). Several pages describe a recurring item or character across the whole series; a line states a Mario Party 6 fact only where the page says so for Mario Party 6.",
+  "sections": [
+    {
+      "section_id": 3100,
+      "name": "Bowser Space",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Bowser_Space",
+      "main_revision": "5532948",
+      "lines": [
+        {
+          "line": "Summary: At night in Party Mode the Donkey Kong Spaces of the day turn into Bowser Spaces, and landing on one makes Bowser hold a mini-game or a Bowser Bonus that can cost you coins, Orbs or a Star.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser_Space",
+              "revision": "5532948",
+              "quoted": [
+                "Bowser Spaces appear only during the night in Party Mode, replaced by DK Spaces during the day.",
+                "Bowser takes the coins or Orbs of any player who loses.",
+                "Bowser now hits a special Dice Block in this event, displaying a certain number of coins or Stars. Bowser then steals the number of coins and Stars indicated from the player."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "These replace DK Spaces during the night."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Win the Bowser mini-game: Bowser takes coins or Orbs only from the players who lose and spares the winners. If you have no coins when you land, he gives you 10 coins and starts no mini-game or Bonus.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "He'll take either half or all of the losers' coins, or all of their Orbs while sparing the winners'."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bowser_Space",
+              "revision": "5532948",
+              "quoted": [
+                "Bowser takes the coins or Orbs of any player who loses.",
+                "If a player does not have any coins when landing on a Bowser Space, Bowser gives them 10 coins and does not start a Bowser minigame or Bowser Bonus."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In the Bowser Bonus his special Dice Block can show 5, 10, 20 or 30 coins, or a Star, and he steals that much from the player who landed. If it shows a Star and you have none, he steals nothing. Clockwork Castle has no Bowser Spaces at all.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "The Bowser Bonus may also occur, allowing him to roll a Dice Block to steal either five, 10, 20, 30 coins or even a Star from the player that landed on the space."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bowser_Space",
+              "revision": "5532948",
+              "quoted": [
+                "Bowser then steals the number of coins and Stars indicated from the player.",
+                "If Bowser hits a Star and the player does not have any, Bowser does not steal anything.",
+                "There are no Bowser Spaces or DK Spaces in Clockwork Castle."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3101,
+      "name": "DK Space",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/DK_Space",
+      "main_revision": "5412851",
+      "lines": [
+        {
+          "line": "Summary: By day, the Donkey Kong Spaces on a Party Mode board bring Donkey Kong in for an event: a mini-game where players trade bananas for coins, or a DK Bonus for the player who landed.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "These spaces appear only during the day. Donkey Kong appears and causes an event, such as minigames where players can trade in bananas for coins. The DK Bonus may also occur, allowing the player to roll a DK Barrel to earn either five, 10, 20, 30 coins or even a Star."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: There is nothing to guard against: the events listed for these spaces, the banana mini-game and the DK Bonus, only pay out. At night every one of them is replaced by a Bowser Space, so the day and night meter tells you which one you will meet.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "players can see how many turns the day time has left.",
+                "These spaces appear only during the day."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/DK_Space",
+              "revision": "5412851",
+              "quoted": [
+                "they are only around during the day, as they are replaced with Bowser Spaces at night."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A yellow-orange space with Donkey Kong's face on it; Mario Party 6 is the only game where DK Spaces are yellow-orange instead of blue.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/DK_Space",
+              "revision": "5412851",
+              "quoted": [
+                "this is the only game where DK Spaces are yellow-orange instead of blue and the last one to use DK's face as the space's emblem."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The DK Bonus uses a Dice Block shaped like a barrel, which can pay 5, 10, 20 or 30 coins or even a Star. Clockwork Castle has no DK Spaces, because Donkey Kong walks the board there.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/DK_Space",
+              "revision": "5412851",
+              "quoted": [
+                "The DK Bonus now involves a Dice Block shaped like a barrel",
+                "There are no DK Spaces or Bowser Spaces in Clockwork Castle due to Donkey Kong and Bowser appearing on the board."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "allowing the player to roll a DK Barrel to earn either five, 10, 20, 30 coins or even a Star."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3102,
+      "name": "Chain Chomp",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Snowflake_Lake",
+      "main_revision": "5388531",
+      "lines": [
+        {
+          "line": "Summary: On Snowflake Lake, Chain Chomps live in the board's four doghouses, and a player who pays to ride one steals a Star from every rival it passes. Stars cannot be bought on this board.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Snowflake_Lake",
+              "revision": "5388531",
+              "quoted": [
+                "Unlike other boards in the Mario Party series, players must win by stealing Stars from other players by riding Chain Chomps, found in the four doghouses throughout the board.",
+                "When a player reaches a doghouse, they can pay coins to ride a Chain Chomp.",
+                "Since this board lacks Star Spaces, there are no means of buying Stars."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Chain_Chomp",
+              "revision": "5536195",
+              "quoted": [
+                "The Chain Chomp steals Stars from any player it passes, unless that player has a Snack Orb."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A Snack Orb protects you from one Chain Chomp theft: you throw a bone, the Chomp jumps over your space to catch it and carries on, and anyone else standing on your space is spared too. The Orb works only once, and a Chain Chomp can still use up a teammate's Snack Orb.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Snack_Orb",
+              "revision": "5533863",
+              "quoted": [
+                "the user throws a bone into the air, causing the opponent's Chain-Chomp to jump over the user's space to catch it and then continue moving.",
+                "every player on the same space as the user also does not get hit by Chain-Chomp."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Prevents a Chain Chomp from stealing from you one time. Can't be used or placed.",
+                "Chain Chomps in Snowflake Lake can still use up a teammate's Snack Orb, despite being on the same team."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A black or dark blue metal ball with big round eyes, a wide mouth and sharp teeth, often bigger than Mario.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Chain_Chomp",
+              "revision": "5536195",
+              "quoted": [
+                "Chain Chomps resemble a black or dark blue ball, sometimes with chains attached to them.",
+                "Many descriptions state Chain Chomps are made out of steel, iron or simply metal.",
+                "They have big circular eyes, large gaping mouths, and razor-sharp teeth.",
+                "Chain Chomps appear in various sizes, often bigger than Mario."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Each player starts with 5 Stars (more with a Star handicap), and a ride squishes teammates as well as rivals. A ride costs coins, and the price at night is not the same as by day.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Snowflake_Lake",
+              "revision": "5388531",
+              "quoted": [
+                "Each player starts with 5 Stars (or more depending on the number of Star handicaps).",
+                "Chain Chomp riders that reach other players squish them, including teammates, and steal their Star.",
+                "During the daytime, a ride costs 20 coins, and the player determines the spaces they move with one Dice Block. At night, players can purchase up to three Dice Blocks per ride, with each one costing 10 coins."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3103,
+      "name": "Pink Boo",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Red_Boo",
+      "main_revision": "5415952",
+      "lines": [
+        {
+          "line": "Summary: A pink Boo who sells her stealing at night on Towering Treetop and Castaway Bay: pay 5 coins and she takes coins from a player, pay 40 and she takes a Star.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Towering_Treetop",
+              "revision": "5519594",
+              "quoted": [
+                "Pink Boo offers anyone who passes by it to steal coins or a star for them during the night as well. Players pay 5 coins for Pink Boo to take coins and 40 coins for Pink Boo to take a star from a player."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Castaway_Bay",
+              "revision": "5246726",
+              "quoted": [
+                "This is the only board other than Towering Treetop to feature Pink Boo, who will give her services to someone who comes by as long as it is nighttime."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Red_Boo",
+              "revision": "5415952",
+              "quoted": [
+                "In Mario Party 6, a Pink Boo appears in Towering Treetop and Castaway Bay."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A Boo-Away Orb stops her from stealing from you one time; it works on its own and cannot be used or placed. She only offers her services at night, so the day turns are safe.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Prevents a Boo from stealing from you one time. Can't be used or placed."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Gaddlight",
+              "revision": "5533876",
+              "quoted": [
+                "it now protects against Pink Boo instead of the ordinary Boo"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Castaway_Bay",
+              "revision": "5246726",
+              "quoted": [
+                "as long as it is nighttime."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Red_Boo",
+              "revision": "5415952",
+              "quoted": [
+                "If it is nighttime, she offers to steal either a star or coins."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A pink Boo, sometimes a light red one.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Red_Boo",
+              "revision": "5415952",
+              "quoted": [
+                "are a pink-colored (or occasionally light red-colored) variant of Boo"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In this game she has taken over the job of the ordinary Boo, because Boo is now a playable character. The Boo-Away Orb is sold only on her two boards, for 10 coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Gaddlight",
+              "revision": "5533876",
+              "quoted": [
+                "as Pink Boo has replaced Boo's role in the game, with Boo instead being a playable character.",
+                "The Boo-Away Orb is obtainable only in Towering Treetop and Castaway Bay, as those are the only boards on which Pink Boo can be found."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Prevents a Boo from stealing from you one time. Can't be used or placed.\" || Towering Treetop and Castaway Bay || 10 coins"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

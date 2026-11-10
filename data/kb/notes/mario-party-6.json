@@ -1,0 +1,50 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 3100,
+      "game_id": 29,
+      "section_type": "enemy",
+      "name": "Bowser Space",
+      "card": "Summary: At night in Party Mode the Donkey Kong Spaces of the day turn into Bowser Spaces, and landing on one makes Bowser hold a mini-game or a Bowser Bonus that can cost you coins, Orbs or a Star.\nWeak points: Win the Bowser mini-game: Bowser takes coins or Orbs only from the players who lose and spares the winners. If you have no coins when you land, he gives you 10 coins and starts no mini-game or Bonus.\nTips: In the Bowser Bonus his special Dice Block can show 5, 10, 20 or 30 coins, or a Star, and he steals that much from the player who landed. If it shows a Star and you have none, he steals nothing. Clockwork Castle has no Bowser Spaces at all.",
+      "source_url": "https://www.mariowiki.com/Bowser_Space",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5532948",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3101,
+      "game_id": 29,
+      "section_type": "enemy",
+      "name": "DK Space",
+      "card": "Summary: By day, the Donkey Kong Spaces on a Party Mode board bring Donkey Kong in for an event: a mini-game where players trade bananas for coins, or a DK Bonus for the player who landed.\nWeak points: There is nothing to guard against: the events listed for these spaces, the banana mini-game and the DK Bonus, only pay out. At night every one of them is replaced by a Bowser Space, so the day and night meter tells you which one you will meet.\nLooks like: A yellow-orange space with Donkey Kong's face on it; Mario Party 6 is the only game where DK Spaces are yellow-orange instead of blue.\nTips: The DK Bonus uses a Dice Block shaped like a barrel, which can pay 5, 10, 20 or 30 coins or even a Star. Clockwork Castle has no DK Spaces, because Donkey Kong walks the board there.",
+      "source_url": "https://www.mariowiki.com/DK_Space",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5412851",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3102,
+      "game_id": 29,
+      "section_type": "enemy",
+      "name": "Chain Chomp",
+      "card": "Summary: On Snowflake Lake, Chain Chomps live in the board's four doghouses, and a player who pays to ride one steals a Star from every rival it passes. Stars cannot be bought on this board.\nWeak points: A Snack Orb protects you from one Chain Chomp theft: you throw a bone, the Chomp jumps over your space to catch it and carries on, and anyone else standing on your space is spared too. The Orb works only once, and a Chain Chomp can still use up a teammate's Snack Orb.\nLooks like: A black or dark blue metal ball with big round eyes, a wide mouth and sharp teeth, often bigger than Mario.\nTips: Each player starts with 5 Stars (more with a Star handicap), and a ride squishes teammates as well as rivals. A ride costs coins, and the price at night is not the same as by day.",
+      "source_url": "https://www.mariowiki.com/Snowflake_Lake",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5388531",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3103,
+      "game_id": 29,
+      "section_type": "enemy",
+      "name": "Pink Boo",
+      "card": "Summary: A pink Boo who sells her stealing at night on Towering Treetop and Castaway Bay: pay 5 coins and she takes coins from a player, pay 40 and she takes a Star.\nWeak points: A Boo-Away Orb stops her from stealing from you one time; it works on its own and cannot be used or placed. She only offers her services at night, so the day turns are safe.\nLooks like: A pink Boo, sometimes a light red one.\nTips: In this game she has taken over the job of the ordinary Boo, because Boo is now a playable character. The Boo-Away Orb is sold only on her two boards, for 10 coins.",
+      "source_url": "https://www.mariowiki.com/Red_Boo",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5415952",
+      "crawled_at": "2026-11-09"
+    }
+  ]
+}

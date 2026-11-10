@@ -1,0 +1,334 @@
+{
+  "wiki": "Super Mario Wiki (https://www.mariowiki.com/api.php)",
+  "licence_printed_by_fetcher": "Super Mario Wiki (MediaWiki 1.43.11) licence: Attribution-ShareAlike 4.0 International https://creativecommons.org/licenses/by-sa/4.0/",
+  "licence_stored": "CC-BY-SA-4.0 (the fetcher prints 'Attribution-ShareAlike 4.0 International'; the library stores the versioned form, as for the Mario Party notes)",
+  "game_id": 33,
+  "game": "Diddy Kong Racing",
+  "read_on": "2026-11-10",
+  "how_read": "Pages read with scripts/kb/fetch_wiki_live_pages.py on 2026-11-10; mariowiki.com refused the by-revision render call and the reader fell back by itself to asking by page title (it prints a [fallback] line and checks the revision it rendered is the one it looked up). The revision below is the one the reader printed. Every quoted fragment was checked, by script, to occur word for word in the fetched page text (whitespace collapsed). Table quotes keep the reader's '||' and '!!' cell marks. The pages are kept in build/wiki-live/mariowiki/ in the helper's copy.",
+  "sections": [
+    {
+      "section_id": 3700,
+      "name": "Tricky (Dino Domain's boss race)",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Tricky",
+      "main_revision": "5405970",
+      "lines": [
+        {
+          "line": "Summary: The first world's boss, a triceratops you race in a car up a spiralling mountain in Dino Domain.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Tricky",
+              "revision": "5405970",
+              "quoted": [
+                "Tricky is a large triceratops and the first boss of Diddy Kong Racing",
+                "Tricky is located in Dino Domain, on his own course",
+                "Tricky and the player race up a spiraling mountain"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Tricky Challenge || Car || Tricky races the player character up a spiraling mountain."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Red and blue Weapon Balloons are placed on his course to help you against him. Stay out of his path, because bumping into him squashes you and slows you down, and in the rematch he is faster, so you have to use the balloons to win.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Tricky",
+              "revision": "5405970",
+              "quoted": [
+                "there are red and blue Weapon Balloons to help the player against Tricky",
+                "The player must avoid running into Tricky, who squishes and therefore slows them down.",
+                "In the rematch, Tricky races at a faster speed, so the player has to use Weapon Balloons to win the rematch."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A large red triceratops with yellow stripes on his back and yellow eyes with red irises.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Tricky",
+              "revision": "5405970",
+              "quoted": [
+                "Tricky is a large triceratops",
+                "Tricky's body is red with yellow stripes on his back, and his eyes are yellow with red irises and black pupils."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: He just keeps charging forward. Boulders now and then come down the mountain, and the second race adds more boulders plus pillars that fall.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Beyond constantly charging forward and potentially flattening the player, he has no special behavior. Boulders occasionally travel down the mountain. In the second race, more boulders as well as falling pillars are added."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You can only race him once you have won every other course in the world. After you beat him he sets you the world's Silver Coin challenges, and his piece of the Wizpig amulet only comes after the harder rematch.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Tricky",
+              "revision": "5405970",
+              "quoted": [
+                "where the player can race him after winning every other course in the world",
+                "Tricky then challenges the player to complete every Silver Coin Challenge",
+                "awards the racer with his piece of the Wizpig amulet"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3701,
+      "name": "Bluey (Snowflake Mountain's boss race)",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Bluey",
+      "main_revision": "5407982",
+      "lines": [
+        {
+          "line": "Summary: Snowflake Mountain's boss, a walrus you race in a hovercraft down an icy ski slope.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bluey",
+              "revision": "5407982",
+              "quoted": [
+                "Bluey is a large, blue walrus who lives on Timber's Island",
+                "the player can challenge Bluey in his own course of Snowflake Mountain after winning every race in said world"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Bluey Challenge || Hovercraft || Bluey races on a jagged, icy, downhill ski slope full of trees to act as obstacles."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A large blue walrus with a tuxedo piece at his neck, which the Nintendo DS remake leaves off.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bluey",
+              "revision": "5407982",
+              "quoted": [
+                "Bluey is a large, blue walrus",
+                "He also wears a tuxedo piece on his neck, although not in the remake."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The slope is jagged and lined with trees that get in your way. Like Tricky he only charges ahead, but unlike Tricky he does not squash you.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Bluey races on a jagged, icy, downhill ski slope full of trees to act as obstacles. As with Tricky, his only behavior is stampeding forward, though he does not squish the player character."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The rematch only comes after you finish Snowflake Mountain's Silver Coin challenges. In it Bluey is faster, and a few snowballs are added as extra obstacles.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bluey",
+              "revision": "5407982",
+              "quoted": [
+                "Bluey gives them a new challenge of partaking in Snowflake Mountain's Silver Coin challenges",
+                "where Bluey is faster than before"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "In the second race, a few snowballs are added as further obstacles."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3702,
+      "name": "Bubbler (Sherbet Island's boss race)",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Bubbler",
+      "main_revision": "5504565",
+      "lines": [
+        {
+          "line": "Summary: Sherbet Island's boss, an octopus you race in a hovercraft for three laps around a small island.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bubbler",
+              "revision": "5504565",
+              "quoted": [
+                "Bubbler is a large red octopus and the third boss of Diddy Kong Racing",
+                "Bubbler is only allows the player to race him in his own course in Sherbet Island"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Bubbler Challenge || Hovercraft || Bubbler swims three laps circling the sea around a small island, tossing explosive mines around him."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: You can shoot him. Red Weapon Balloons give you missiles to fire at him during the race.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bubbler",
+              "revision": "5504565",
+              "quoted": [
+                "Bubbler can be attacked by the player shooting missiles at him from red Weapon Balloons."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A large red octopus with yellow eyes, green irises and black pupils.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bubbler",
+              "revision": "5504565",
+              "quoted": [
+                "Bubbler is a large red octopus",
+                "He has yellow eyes with green irises and black pupils."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In the first race he scatters mines in the water around him, and hitting one trips you up.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bubbler",
+              "revision": "5504565",
+              "quoted": [
+                "Bubbler drops aquatic mines to trip his opponent."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "tossing explosive mines around him"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In the rematch he is faster and swaps the mines for giant bubbles that can trap you for a while.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bubbler",
+              "revision": "5504565",
+              "quoted": [
+                "The second race is more challenging, since Bubbler now moves faster and drops bubbles that temporarily encapsulate the player."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "In the second race, he instead launches giant bubbles that can trap the player character."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3703,
+      "name": "Smokey (Dragon Forest's boss race)",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Smokey",
+      "main_revision": "5469847",
+      "lines": [
+        {
+          "line": "Summary: Dragon Forest's boss, a dragon you race in a plane for three laps through caves and fields.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Smokey",
+              "revision": "5469847",
+              "quoted": [
+                "Smokey is a boss in Diddy Kong Racing",
+                "the player can race Smokey at his own course in Dragon Forest",
+                "In the boss race, the player has to race Smokey while in a plane."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Smokey runs and flies three laps through a series of caves and fields."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A dragon with an orange body, a yellow belly, face and feet, and green eyes, which makes him the only boss without yellow eyes.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Smokey",
+              "revision": "5469847",
+              "quoted": [
+                "His body is colored orange with a yellow belly, face, and feet, and his eyes are green (making him the only boss in the game without yellow eyes)."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: He spits clouds of hot ash and drops puffs of fire behind him, and the fire can slow you down. In the rematch he flies faster and drops more of it.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Smokey",
+              "revision": "5469847",
+              "quoted": [
+                "Smokey drops behind puffs of fire that can slow the player.",
+                "In his second race, Smokey flies faster than before and drops behind more fireballs."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "He attacks by spitting clouds of hot ash to be ran into."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Smokey Castle, the challenge level with his name, is not where you meet him, because he does not appear there.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Smokey",
+              "revision": "5469847",
+              "quoted": [
+                "Smokey has a challenge level named after him, Smokey Castle, but he does not appear here."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

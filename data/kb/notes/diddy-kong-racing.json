@@ -1,0 +1,50 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 3700,
+      "game_id": 33,
+      "section_type": "boss",
+      "name": "Tricky (Dino Domain's boss race)",
+      "card": "Summary: The first world's boss, a triceratops you race in a car up a spiralling mountain in Dino Domain.\nWeak points: Red and blue Weapon Balloons are placed on his course to help you against him. Stay out of his path, because bumping into him squashes you and slows you down, and in the rematch he is faster, so you have to use the balloons to win.\nLooks like: A large red triceratops with yellow stripes on his back and yellow eyes with red irises.\nTips: He just keeps charging forward. Boulders now and then come down the mountain, and the second race adds more boulders plus pillars that fall.\nTips: You can only race him once you have won every other course in the world. After you beat him he sets you the world's Silver Coin challenges, and his piece of the Wizpig amulet only comes after the harder rematch.",
+      "source_url": "https://www.mariowiki.com/Tricky",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5405970",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3701,
+      "game_id": 33,
+      "section_type": "boss",
+      "name": "Bluey (Snowflake Mountain's boss race)",
+      "card": "Summary: Snowflake Mountain's boss, a walrus you race in a hovercraft down an icy ski slope.\nLooks like: A large blue walrus with a tuxedo piece at his neck, which the Nintendo DS remake leaves off.\nTips: The slope is jagged and lined with trees that get in your way. Like Tricky he only charges ahead, but unlike Tricky he does not squash you.\nTips: The rematch only comes after you finish Snowflake Mountain's Silver Coin challenges. In it Bluey is faster, and a few snowballs are added as extra obstacles.",
+      "source_url": "https://www.mariowiki.com/Bluey",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5407982",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3702,
+      "game_id": 33,
+      "section_type": "boss",
+      "name": "Bubbler (Sherbet Island's boss race)",
+      "card": "Summary: Sherbet Island's boss, an octopus you race in a hovercraft for three laps around a small island.\nWeak points: You can shoot him. Red Weapon Balloons give you missiles to fire at him during the race.\nLooks like: A large red octopus with yellow eyes, green irises and black pupils.\nTips: In the first race he scatters mines in the water around him, and hitting one trips you up.\nTips: In the rematch he is faster and swaps the mines for giant bubbles that can trap you for a while.",
+      "source_url": "https://www.mariowiki.com/Bubbler",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5504565",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3703,
+      "game_id": 33,
+      "section_type": "boss",
+      "name": "Smokey (Dragon Forest's boss race)",
+      "card": "Summary: Dragon Forest's boss, a dragon you race in a plane for three laps through caves and fields.\nLooks like: A dragon with an orange body, a yellow belly, face and feet, and green eyes, which makes him the only boss without yellow eyes.\nTips: He spits clouds of hot ash and drops puffs of fire behind him, and the fire can slow you down. In the rematch he flies faster and drops more of it.\nTips: Smokey Castle, the challenge level with his name, is not where you meet him, because he does not appear there.",
+      "source_url": "https://www.mariowiki.com/Smokey",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5469847",
+      "crawled_at": "2026-11-10"
+    }
+  ]
+}

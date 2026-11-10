@@ -596,6 +596,9 @@ def _hybrid_retrieve(
         vectors,
         top_k=top_k,
         recall_cards=recall_cards,
+        # The question rides along so the blend can do what the plugin does with it (a game-mode
+        # note does not lead a question that never asked for the mode).
+        question=case.query,
     )
 
 

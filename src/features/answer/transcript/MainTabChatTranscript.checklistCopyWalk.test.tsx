@@ -14,16 +14,10 @@
  * Does not: Scroll (the pane holds the whole turn; liveTurnFocusGraph.checklistWalk.test.ts walks with Steam's
  *           scroll modelled). Does not draw the summed-up note (a chat that summed itself up; its own tests).
  */
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { cleanup } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
-import { mountPanelPage, type PanelPage } from "../../../test-harness/lostFocusPanel";
-import { drawTranscript, type TranscriptWalk } from "../../../test-harness/transcriptPanelWalk";
+import { transcriptPanelEachTest, type TranscriptWalk } from "../../../test-harness/transcriptPanelWalk";
 import { chatProps } from "../../../test-harness/earlierListTestKit";
-import { resetNavFocusRegistry } from "../../../shared/dpad/navFocusRegistry";
-import { resetAnswerStopRegistry } from "../../../shared/dpad/answerStopRegistry";
-import { resetStrategyChecklistNavForTests } from "../../../shared/dpad/strategyChecklistNav";
-import { REPLY_STOP_ORDER, registerReplyStop, setReplyStopUnavailable } from "../../../shared/dpad/replyStopRegistry";
 
 vi.mock("@decky/ui", async () => (await import("../../../test-harness/transcriptPanelWalk")).panelDeckyUi());
 
@@ -74,8 +68,9 @@ const WITH_CHOICES: Partial<MainTabChatTranscriptProps> = {
   onStrategyBranchPick: () => {},
 };
 
-let page: PanelPage;
-let screen: (TranscriptWalk & { unmount: () => void }) | null = null;
+const panel = transcriptPanelEachTest();
+/** The current test's panel page. */
+const page = () => panel.page();
 
 const STAMP = ".bonsai-answer-stop, .bonsai-chat-turn-row-body, .bonsai-chat-details-divider";
 function stopName(el: HTMLElement): string | null {
@@ -87,8 +82,7 @@ function stopName(el: HTMLElement): string | null {
   return null;
 }
 function draw(over: Partial<MainTabChatTranscriptProps> = {}): TranscriptWalk {
-  screen = drawTranscript(page, <MainTabChatTranscript {...props(over)} />, STAMP, stopName);
-  return screen;
+  return panel.draw(<MainTabChatTranscript {...props(over)} />, STAMP, stopName);
 }
 /** The answer's last section, by name, whatever number the cut gave it. */
 function lastSection(s: TranscriptWalk): string {
@@ -96,78 +90,60 @@ function lastSection(s: TranscriptWalk): string {
   return sections[sections.length - 1]!;
 }
 
-beforeEach(() => {
-  resetNavFocusRegistry();
-  resetAnswerStopRegistry();
-  resetStrategyChecklistNavForTests();
-  for (const id of REPLY_STOP_ORDER) {
-    registerReplyStop(id, null);
-    setReplyStopUnavailable(id, false);
-  }
-  page = mountPanelPage();
-});
-afterEach(() => {
-  screen?.unmount();
-  screen = null;
-  cleanup();
-  page.remove();
-  document.body.innerHTML = "";
-});
-
 describe.each([
   ["with the page's focus", true],
   ["with the page's focus gone", false],
 ])("P103-CHECKLIST-COPY-01, %s", (_label, focused) => {
-  it("Down from the Copy icon lands on step 1, three times running", () => {
+  it("Down from the Copy icon lands on step 1, three times running", async () => {
     const s = draw();
     for (let i = 0; i < 3; i++) {
       s.put(COPY);
-      page.setFocused(focused);
-      s.press("onMoveDown");
-      expect(s.nameOf(page.ring())).toBe(STEP_1);
-      expect(s.nameOf(page.active())).toBe(STEP_1);
-      page.setFocused(true);
+      page().setFocused(focused);
+      await s.press("onMoveDown");
+      expect(s.nameOf(page().ring())).toBe(STEP_1);
+      expect(s.nameOf(page().active())).toBe(STEP_1);
+      page().setFocused(true);
     }
   });
 
-  it("Up from step 1 lands on the answer's last section, not on the Copy icon, three times running", () => {
+  it("Up from step 1 lands on the answer's last section, not on the Copy icon, three times running", async () => {
     const s = draw();
     for (let i = 0; i < 3; i++) {
       s.put(STEP_1);
-      page.setFocused(focused);
-      expect(s.press("onMoveUp")).toBe("claimed");
-      expect(s.nameOf(page.ring())).not.toBe(COPY);
-      expect(s.nameOf(page.ring())).toBe(lastSection(s));
-      page.setFocused(true);
+      page().setFocused(focused);
+      expect(await s.press("onMoveUp")).toBe("claimed");
+      expect(s.nameOf(page().ring())).not.toBe(COPY);
+      expect(s.nameOf(page().ring())).toBe(lastSection(s));
+      page().setFocused(true);
     }
   });
 
-  it("walks Up from Helpful through every step to the last section, and Down again to Helpful, no stop twice", () => {
+  it("walks Up from Helpful through every step to the last section, and Down again to Helpful, no stop twice", async () => {
     const s = draw();
     s.put(HELPFUL);
-    page.setFocused(focused);
-    expect(s.walk("onMoveUp", lastSection(s))).toEqual([HELPFUL, ...[...STEPS].reverse(), lastSection(s)]);
-    expect(s.walk("onMoveDown", HELPFUL)).toEqual([lastSection(s), ...STEPS, HELPFUL]);
+    page().setFocused(focused);
+    expect(await s.walk("onMoveUp", lastSection(s))).toEqual([HELPFUL, ...[...STEPS].reverse(), lastSection(s)]);
+    expect(await s.walk("onMoveDown", HELPFUL)).toEqual([lastSection(s), ...STEPS, HELPFUL]);
   });
 
-  it("with the choices drawn too: Down from Copy lands on A, Up from step 1 on the last choice, both walks mirror", () => {
+  it("with the choices drawn too: Down from Copy lands on A, Up from step 1 on the last choice, both walks mirror", async () => {
     const s = draw(WITH_CHOICES);
     s.put(COPY);
-    page.setFocused(focused);
-    s.press("onMoveDown");
-    expect(s.nameOf(page.ring())).toBe(A);
+    page().setFocused(focused);
+    await s.press("onMoveDown");
+    expect(s.nameOf(page().ring())).toBe(A);
 
-    page.setFocused(true);
+    page().setFocused(true);
     s.put(STEP_1);
-    page.setFocused(focused);
-    s.press("onMoveUp");
-    expect(s.nameOf(page.ring())).toBe(B);
+    page().setFocused(focused);
+    await s.press("onMoveUp");
+    expect(s.nameOf(page().ring())).toBe(B);
 
-    page.setFocused(true);
+    page().setFocused(true);
     s.put(HELPFUL);
-    page.setFocused(focused);
-    const up = s.walk("onMoveUp", lastSection(s));
+    page().setFocused(focused);
+    const up = await s.walk("onMoveUp", lastSection(s));
     expect(up).toEqual([HELPFUL, ...[...STEPS].reverse(), B, A, lastSection(s)]);
-    expect(s.walk("onMoveDown", HELPFUL)).toEqual([...up].reverse());
+    expect(await s.walk("onMoveDown", HELPFUL)).toEqual([...up].reverse());
   });
 });

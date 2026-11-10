@@ -5,25 +5,32 @@
  *          order it is drawn inside a pane tall enough that nothing has to scroll, the chips of a Show details
  *          grid laid side by side in one row, Decky's tabindex stamped on the nodes Steam navigates as each is
  *          drawn, and a bounded walk: no stop twice, and Steam's ring and the page's focus on the same stop after
- *          every press.
- * Used for: MainTabChatTranscript.checklistCopyWalk.test.tsx.
+ *          every press. Also a stand-in for the dock's suggestion chips, the stop under the chat.
+ * Used for: MainTabChatTranscript.checklistCopyWalk.test.tsx, MainTabChatTranscript.detailsStripLostFocus.test.tsx.
  * Solves: One copy of the scaffolding these walks need, so each walk test does not carry its own.
  * Does not: Model Steam's scroll-into-view: the pane holds the whole turn. The checklist's walk with Steam's
- *           scroll modelled is liveTurnFocusGraph.checklistWalk.test.ts. Does not mock `@decky/ui`: each test file
- *           does, wrapping the stubs in `withPanelNav`.
+ *           scroll modelled is liveTurnFocusGraph.checklistWalk.test.ts.
  *
  * How it works:
  * 1. `drawTranscript` renders the element into a scroll pane inside the page and stamps a tabindex on every
  *    node matching the test's `stamp` selector (Decky does that on the Deck; the stub does not).
  * 2. A stop is an innermost button or tabindex node, in drawn order. Steam's own Up or Down, for a press no
  *    handler claims, is the stop before or after the ringed one in that order.
- * 3. `walk` presses one way until the ring stops moving, the limit runs out, or it reaches `until`.
+ * 3. Every press lets the page's queued work run before it returns (the chip ladder hands the ring on to its
+ *    open chip a moment after its root takes focus, ContextChipLadder.tsx).
+ * 4. `walk` presses one way until the ring stops moving, the limit runs out, or it reaches `until`.
+ * 5. `transcriptPanelEachTest` registers the per-test hooks: empty registries and a fresh page before, all
+ *    taken down after.
  */
 import type React from "react";
-import { act, render } from "@testing-library/react";
-import { expect } from "vitest";
+import { act, cleanup, render } from "@testing-library/react";
+import { afterEach, beforeEach, expect } from "vitest";
 
-import type { MoveKey, PanelNavEl, PanelPage } from "./lostFocusPanel";
+import { mountPanelPage, type MoveKey, type PanelNavEl, type PanelPage } from "./lostFocusPanel";
+import { resetNavFocusRegistry } from "../shared/dpad/navFocusRegistry";
+import { resetAnswerStopRegistry } from "../shared/dpad/answerStopRegistry";
+import { resetStrategyChecklistNavForTests } from "../shared/dpad/strategyChecklistNav";
+import { REPLY_STOP_ORDER, registerReplyStop, setReplyStopUnavailable } from "../shared/dpad/replyStopRegistry";
 
 /** The innermost nodes Steam navigates: buttons, and the nodes Decky gives a tabindex. */
 const STEAM_NODE = "button, [tabindex]";
@@ -54,16 +61,24 @@ export interface TranscriptWalk {
   /** Steam's ring onto the named stop by its own move. */
   put(name: string): void;
   /** One D-pad press; a press no handler claims is Steam's own step to the neighbouring stop. */
-  press(key: MoveKey): "claimed" | "declined";
+  press(key: MoveKey): Promise<"claimed" | "declined">;
   /** B (`onCancelButton`) or A (`onOKButton`) on the ring, heard by the ringed node or a container round it. */
-  button(kind: "onCancelButton" | "onOKButton"): boolean;
+  button(kind: "onCancelButton" | "onOKButton"): Promise<boolean>;
   /** A bounded walk from the ring; returns every stop it landed on, the start first. */
-  walk(key: MoveKey, until: string, limit?: number): string[];
+  walk(key: MoveKey, until: string, limit?: number): Promise<string[]>;
 }
 
 function rect(top: number, left: number, width: number): DOMRect {
   const bottom = top + ROW_HEIGHT;
   return { top, bottom, left, right: left + width, width, height: ROW_HEIGHT, x: left, y: top, toJSON: () => ({}) } as DOMRect;
+}
+
+/** Let the work a press queued (a microtask, a redraw) run before the test reads where the ring is. */
+async function settle(): Promise<void> {
+  await act(async () => {
+    await Promise.resolve();
+    await Promise.resolve();
+  });
 }
 
 /**
@@ -99,6 +114,23 @@ export function drawTranscript(
     });
   const stamper = new win.MutationObserver(stampAll);
   stamper.observe(pane, { childList: true, subtree: true });
+  /*
+   * Steam draws its ring class itself, so a redraw never takes it off; the stand-in adds it by hand, and React
+   * rewriting a stop's class (a chip becoming the open one) wiped it. Put it back on the stop that held it while
+   * that stop is still drawn; a stop that is gone leaves no ring, as on the Deck.
+   */
+  let lastRing: HTMLElement | null = null;
+  const steamMove = page.steamMove;
+  page.steamMove = (el) => {
+    steamMove(el);
+    lastRing = el;
+  };
+  /* After the stand-in's own listener, which moves the ring with the page's focus while the page has it. */
+  page.doc.addEventListener("focusin", () => (lastRing = page.ring() ?? lastRing), true);
+  const ringKeeper = new win.MutationObserver(() => {
+    if (!page.ring() && lastRing?.isConnected) lastRing.classList.add("gpfocus");
+  });
+  ringKeeper.observe(page.host, { attributes: true, attributeFilter: ["class"], subtree: true });
   render(element, { container: pane });
   stampAll();
 
@@ -119,14 +151,15 @@ export function drawTranscript(
     if (at < 0) return null;
     return all[key === "onMoveDown" ? at + 1 : at - 1] ?? null;
   };
-  const press = (key: MoveKey) => {
+  const press = async (key: MoveKey) => {
     let out: "claimed" | "declined" = "declined";
     act(() => {
       out = page.press(key, key === "onMoveDown" || key === "onMoveUp" ? steamStep(key) : undefined);
     });
+    await settle();
     return out;
   };
-  const button = (kind: "onCancelButton" | "onOKButton") => {
+  const button = async (kind: "onCancelButton" | "onOKButton") => {
     let heard = false;
     act(() => {
       for (let el = page.ring() as PanelNavEl | null; el && !heard; el = el.parentElement as PanelNavEl | null) {
@@ -137,13 +170,14 @@ export function drawTranscript(
         }
       }
     });
+    await settle();
     return heard;
   };
-  const walk = (key: MoveKey, until: string, limit = 24) => {
+  const walk = async (key: MoveKey, until: string, limit = 24) => {
     const trail = [nameOf(page.ring())];
     for (let i = 0; i < limit && trail[trail.length - 1] !== until; i++) {
       const before = page.ring();
-      press(key);
+      await press(key);
       if (page.ring() === before) break;
       const now = nameOf(page.ring());
       const said = `${key} from ${trail[trail.length - 1]} (${trail.join(" -> ")})`;
@@ -161,6 +195,68 @@ export function drawTranscript(
     press,
     button,
     walk,
-    unmount: () => stamper.disconnect(),
+    unmount: () => {
+      stamper.disconnect();
+      ringKeeper.disconnect();
+    },
+  };
+}
+
+/**
+ * The set-up every walk test here shares, as hooks: before each test the registries are emptied and a fresh
+ * panel page is mounted; after it, whatever was drawn is taken down with the page. Call once at a test file's
+ * top level; `page()` is the current test's page, `draw` draws into it (drawTranscript's arguments).
+ */
+export function transcriptPanelEachTest(): {
+  page: () => PanelPage;
+  draw: (element: React.ReactElement, stamp: string, names: (el: HTMLElement) => string | null) => TranscriptWalk;
+} {
+  let page: PanelPage | null = null;
+  let drawn: (TranscriptWalk & { unmount: () => void }) | null = null;
+  beforeEach(() => {
+    resetNavFocusRegistry();
+    resetAnswerStopRegistry();
+    resetStrategyChecklistNavForTests();
+    for (const id of REPLY_STOP_ORDER) {
+      registerReplyStop(id, null);
+      setReplyStopUnavailable(id, false);
+    }
+    page = mountPanelPage();
+  });
+  afterEach(() => {
+    drawn?.unmount();
+    drawn = null;
+    cleanup();
+    page?.remove();
+    document.body.innerHTML = "";
+  });
+  return {
+    page: () => page!,
+    draw: (element, stamp, names) => (drawn = drawTranscript(page!, element, stamp, names)),
+  };
+}
+
+/**
+ * A stand-in for the dock's suggestion chips: one stop drawn after the transcript, named "suggestion chips".
+ * `nav` is its Steam nav node, for the test to register as the chips' own ("preset-carousel"); the chain under
+ * an open Show details panel ends in a transfer onto it, so a press that skips the panel lands here. `onUp` is
+ * what the real chips do with Up (presetRowFocusNav.tsx asks for the lowest stop of the newest answer).
+ */
+export function dockChipsStop(page: PanelPage, onUp: () => boolean): { nav: { current: { TakeFocus: () => boolean } } } {
+  const el = page.doc.createElement("div") as PanelNavEl;
+  el.setAttribute("tabindex", "0");
+  el.setAttribute("aria-label", "suggestion chips");
+  el.__nav = { onMoveUp: onUp };
+  page.host.appendChild(el);
+  return {
+    nav: {
+      current: {
+        TakeFocus: () => {
+          page.steamMove(el);
+          page.transfers.push(el);
+          return true;
+        },
+      },
+    },
   };
 }

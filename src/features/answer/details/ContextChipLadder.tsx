@@ -60,7 +60,8 @@ import { useChipLadderReveal } from "./useChipLadderReveal";
 import { useChipGridOrder } from "./useChipGridOrder";
 import { CHIP_GAP_PX, gridMove, rowsFromBoxes, type GridDirection } from "./chipLadderGrid";
 import { elementHasFocus } from "../../../shared/dpad/uiDocument";
-import { focusRowElement } from "../../../shared/dpad/focusPerTurnRow";
+import { focusRowElement, registerRowNav } from "../../../shared/dpad/focusPerTurnRow";
+import type { NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 import { DECK_HIGHLIGHT_CYAN } from "../../../shared/constants";
 import { textPx } from "../../../styles/textPx";
 
@@ -174,6 +175,30 @@ export function ContextChipLadder({
   /* Each drawn chip's own element, by its index in `chips`; the open chip's index as last drawn. */
   const chipEls = useRef(new Map<number, HTMLElement>());
   const openIndexRef = useRef(0);
+  /*
+   * Each chip's own Steam nav node, by index, and the root's stop (plan 103 F1): a way onto the grid from outside
+   * (focusPerTurnRow.ts's `registerRowNav`, read by `focusRowElement`) is Steam's transfer onto the OPEN chip's
+   * node, so it lands there with the panel's page out of the browser's focus too, where the plain focus() onto
+   * the root moved only the page's focus. Onto the open chip, not onto the root's own node: Steam's transfer into
+   * a container picks a child of its own choosing. Chip-to-chip steps stay plain hops between siblings.
+   */
+  const chipNavs = useRef(new Map<number, NavRefHolder>());
+  const chipNav = (idx: number): NavRefHolder => {
+    let holder = chipNavs.current.get(idx);
+    if (!holder) {
+      holder = { current: null };
+      chipNavs.current.set(idx, holder);
+    }
+    return holder;
+  };
+  const rootStop = useRef<NavRefHolder>({
+    current: {
+      TakeFocus: (gamepad?: boolean) => {
+        const open = chipNavs.current.get(openIndexRef.current)?.current;
+        return typeof open?.TakeFocus === "function" ? open.TakeFocus(gamepad) : false;
+      },
+    },
+  });
   const { duringStep, holdPosition, holdRef, onFocusInside, showRestOfBox } = useChipLadderReveal(ladderElRef, bodyElRef, () =>
     chipEls.current.get(openIndexRef.current),
   );
@@ -332,6 +357,7 @@ export function ContextChipLadder({
       className="bonsai-chip-ladder"
       ref={(el: HTMLElement | null) => {
         ladderElRef.current = el;
+        registerRowNav(el, rootStop.current);
         rootRef?.(el);
       }}
       onFocus={onLadderFocus}
@@ -375,7 +401,7 @@ export function ContextChipLadder({
               }}
               onFocus={() => setActiveIndex(idx)}
               {...deckNav(chipMoves(idx))}
-              {...({ onCancelButton } as Record<string, unknown>)}
+              {...({ onCancelButton, navRef: chipNav(idx) } as Record<string, unknown>)}
               className={
                 isActive
                   ? "bonsai-chip-ladder-chip bonsai-chip-ladder-chip--active"

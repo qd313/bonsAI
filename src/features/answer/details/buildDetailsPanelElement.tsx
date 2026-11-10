@@ -21,10 +21,10 @@ import React from "react";
 import { Focusable } from "@decky/ui";
 import { revealBelowKeeping } from "../../../shared/dpad/chatPanelScroll";
 import { uiGamepadFocusElement } from "../../../shared/dpad/uiDocument";
-import { focusPerTurnRow } from "../../../shared/dpad/focusPerTurnRow";
+import { focusPerTurnRow, registerRowNav } from "../../../shared/dpad/focusPerTurnRow";
 import { focusKbNotesBlock } from "../../knowledge-library/buildKbNotesBlockElement";
 import { focusChatPermissionHintRow } from "../../../shared/dpad/chatTranscriptNavHelpers";
-import { takeNavFocus } from "../../../shared/dpad/navFocusRegistry";
+import { takeNavFocus, type NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 import { takeChipSlotFocus } from "./detailsSlotStore";
 import {
   isDeckDirectionDownEvent,
@@ -59,15 +59,36 @@ import type { CreditsView } from "./contextChipsFromSnapshot";
  * same shape as the KB notes block's own registry (buildKbNotesBlockElement.tsx) and for the same
  * reason: this row is a sibling of Show details, the KB notes block and the ladder/session body
  * inside one turn's own Focusable container, so a plain `.focus()` carries Steam's ring correctly
- * between them without a registry hop (AGENTS.md, "The Steam Deck focus graph"). Only the newest
+ * between them while the panel's page holds the browser's focus (AGENTS.md, "The Steam Deck focus
+ * graph"); the row's own nav node below covers the page without it. Only the newest
  * turn ever mounts one, so at most one entry is ever live at a time in practice, but keyed by turn
  * id anyway to match the pattern every other per-turn registry in this file already uses.
  */
 const detailsTabsRowEls = new Map<string, HTMLElement>();
 
+/**
+ * The tabs row's own Steam nav node, by turn key: the notes line's way (buildKbNotesBlockElement.tsx). With the
+ * panel's page out of the browser's focus the plain focus() above does not carry Steam's ring, so every way onto
+ * the row ("Hide details", the notes line, Up from the chips) said "did not land" and the chain went on to the
+ * suggestion chips past the open panel (plan 103 F1). With the node registered (`registerRowNav`) each of them
+ * takes Steam's transfer first. The Deck never caught the page without focus here
+ * (workshop:test-evidence/plan103-P103-M-DETAILS-STRIP.json); this is the path the code shows.
+ */
+const detailsTabsRowNavs = new Map<string, NavRefHolder>();
+
+function detailsTabsRowNav(turnKey: string): NavRefHolder {
+  let holder = detailsTabsRowNavs.get(turnKey);
+  if (!holder) {
+    holder = { current: null };
+    detailsTabsRowNavs.set(turnKey, holder);
+  }
+  return holder;
+}
+
 function registerDetailsTabsRowEl(turnKey: string, el: HTMLElement | null): void {
   if (el) detailsTabsRowEls.set(turnKey, el);
   else detailsTabsRowEls.delete(turnKey);
+  registerRowNav(el, detailsTabsRowNav(turnKey));
 }
 
 export function focusDetailsTabsRow(turnKey: string): boolean {
@@ -158,6 +179,9 @@ function revealWhenOpened(panel: HTMLElement | null): void {
  * - Only the newest turn (`isNewest`) ever renders the tabs row at all — an older, hand-expanded
  *   turn keeps today's shape, a bare ladder with no tabs, exactly as `SessionContextStrip`'s own
  *   file header already promises ("Older answers show the panel as it is today, with no tabs").
+ * - The tabs row and the ladder's root each carry their own Steam stop (plan 103 F1), so every way onto
+ *   them is Steam's transfer, which still moves the ring when the panel's page has lost the browser's
+ *   focus; the ladder's stop lands on its open chip.
  * - Left/Right switch tabs; Up leaves to Show details (via the existing KB-notes-block-then-
  *   show-details chain every ladder already uses); Down enters whichever tab is active — the
  *   ladder for "This answer", the Sum up button for "Session" (registered, never a page search).
@@ -270,6 +294,7 @@ export function buildDetailsPanelElement(args: {
           revealWhenOpened(el?.parentElement ?? null);
         }}
         {...({
+          navRef: detailsTabsRowNav(turnKey),
           onMoveUp: upPastPanel,
           onMoveDown: focusFirstTabContent,
           onMoveLeft: () => {

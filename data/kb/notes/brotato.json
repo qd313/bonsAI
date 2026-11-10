@@ -111,6 +111,61 @@
    "source_license": "CC-BY-SA-4.0",
    "source_version": "4583",
    "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3910,
+   "game_id": 36,
+   "section_type": "item",
+   "name": "Piggy Bank",
+   "card": "Summary: A Tier 2 economy item that adds 20% to the materials you carry out of the shop at the start of every wave.\nUses: Leave the shop holding 100 materials and the wave starts with 120. The bonus is money only, with no experience. It costs 40 and you can hold one. In Endless Mode it stops working after wave 20.\nTips: The gain compounds: any materials you hold back more than double within four waves and grow about 6.2 times over ten. It is best bought early and saved up, and the page suggests skipping it if you cannot save between rounds. It suits Demon and Streamer, and Saver begins with it.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Piggy_Bank",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "6405",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3911,
+   "game_id": 36,
+   "section_type": "item",
+   "name": "Scared Sausage",
+   "card": "Summary: A Tier 1 item that gives your hits a chance to set enemies on fire.\nUses: Each one gives hits a 25% chance to burn, so holding 4 reaches 100%. The burn deals 1 + (100%) damage every second, lasting at most 3 seconds, as the page writes it. It costs 25 and the limit is 4.\nTips: It also adds 1 to the damage of any other burn, such as the Flamethrower or Incendiary Turret, but a point of Elemental Damage is cheaper than the item, so it is not worth buying just for that. Engineering structures can burn enemies, and so can explosions from Bull, Landmines and Rocket Launcher. Baby Elephant, Cyberball and Riposte cannot, and neither can explosions from Spicy Sauce or Rip and Tear.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Scared_Sausage",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "8579",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3912,
+   "game_id": 36,
+   "section_type": "item",
+   "name": "Silver Bullet",
+   "card": "Summary: A Tier 3 damage item that multiplies your damage versus Elites and bosses.\nUses: Each one raises your damage versus Elites and bosses by 25%, applied on top of your other damage bonuses. It costs 70.\nTips: In the page's example, an attack that does 100 damage and reaches 200 with 100% Damage gets to 250 with one Silver Bullet, and to 400 with four. Jack's +125% bonus versus bosses and Elites is the same effect and adds to it.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Silver_Bullet",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "7601",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3913,
+   "game_id": 36,
+   "section_type": "item",
+   "name": "Coupon",
+   "card": "Summary: A cheap Tier 1 economy item that makes the items in the shop cost less.\nUses: Each Coupon takes 5% off shop item prices, and you can hold up to 5 for 25% off. It costs 15.\nTips: No other item changes shop prices, and this one does not change what rerolls cost. With the character Entrepreneur and 5 Coupons the cut reaches 50%, the most possible. The page ranks it with the stronger items and says it is nearly always worth buying, unless it is first seen around waves 16 to 18 or after.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Coupon",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "6412",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3914,
+   "game_id": 36,
+   "section_type": "item",
+   "name": "Medikit",
+   "card": "Summary: A Tier 4 healing item that gives a large amount of health regeneration, and more of it as each wave goes on.\nUses: It gives +10 HP Regeneration, plus another +2 for every 5 seconds that pass in a wave until that wave ends, and takes away 10 Luck. It costs 95 and is unlocked by winning a run with Doctor.\nTips: The page's table shows the extra regeneration reaching +34 by the 85-second mark, which it calls very potent for the wave 20 boss fight, a fight that lasts 90 seconds.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Medikit",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "6024",
+   "crawled_at": "2026-11-10"
   }
  ]
 }

@@ -440,6 +440,262 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3910,
+      "name": "Piggy Bank",
+      "kind": "item",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Piggy_Bank",
+      "main_revision": "6405",
+      "lines": [
+        {
+          "line": "Summary: A Tier 2 economy item that adds 20% to the materials you carry out of the shop at the start of every wave.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Piggy_Bank",
+              "revision": "6405",
+              "quoted": [
+                "+20% of your materials at the start of waves (stops working at wave 20)",
+                "The Piggy Bank give you 20% of your Materials when you exit the shop and start a new wave."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Leave the shop holding 100 materials and the wave starts with 120. The bonus is money only, with no experience. It costs 40 and you can hold one. In Endless Mode it stops working after wave 20.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Piggy_Bank",
+              "revision": "6405",
+              "quoted": [
+                "For example, if you leave the shop with 100 materials, you will start the wave with 120.",
+                "Piggy Bank doesn't give Experience. It only gives you the Currency Part of Materials.",
+                "Price 40 Limit 1",
+                "While playing in Endless Mode, Piggy Bank stops functioning after wave 20."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The gain compounds: any materials you hold back more than double within four waves and grow about 6.2 times over ten. It is best bought early and saved up, and the page suggests skipping it if you cannot save between rounds. It suits Demon and Streamer, and Saver begins with it.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Piggy_Bank",
+              "revision": "6405",
+              "quoted": [
+                "Any amount held back will more than double over four waves, and will have multiplied by ~6.2 over ten waves.",
+                "Like other Economic items, it is more powerful when bought early, and of little value when bought in the late game.",
+                "If you can't save up materials between rounds, it might be better to skip the Piggy Bank",
+                "The Piggy Bank has strong synergy with characters such as Demon or Streamer",
+                "The Character Saver starts the game with Piggy Bank"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3911,
+      "name": "Scared Sausage",
+      "kind": "item",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Scared_Sausage",
+      "main_revision": "8579",
+      "lines": [
+        {
+          "line": "Summary: A Tier 1 item that gives your hits a chance to set enemies on fire.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Scared_Sausage",
+              "revision": "8579",
+              "quoted": [
+                "Scared Sausage gives any weapon hit, any projectile hit, and any hit by an Engineering structure a 25% chance to inflict burn."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Each one gives hits a 25% chance to burn, so holding 4 reaches 100%. The burn deals 1 + (100%) damage every second, lasting at most 3 seconds, as the page writes it. It costs 25 and the limit is 4.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Scared_Sausage",
+              "revision": "8579",
+              "quoted": [
+                "Each additional Scared Sausage increases the chance to inflict burn by another 25%. It is possible to reach a 100% chance by holding 4 Scared Sausages (which is the count limit for this item).",
+                "The burn effect from Scared Sausage does 1 + (100%) damage each second, for up to 3 seconds.",
+                "Price 25 Limit 4"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It also adds 1 to the damage of any other burn, such as the Flamethrower or Incendiary Turret, but a point of Elemental Damage is cheaper than the item, so it is not worth buying just for that. Engineering structures can burn enemies, and so can explosions from Bull, Landmines and Rocket Launcher. Baby Elephant, Cyberball and Riposte cannot, and neither can explosions from Spicy Sauce or Rip and Tear.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Scared_Sausage",
+              "revision": "8579",
+              "quoted": [
+                "Scared Sausage passively adds 1 to the burn damage of any burn (e.g Flamethrower or Incendiary Turret), except other Scared Sausages.",
+                "Since Scared Sausage costs more than 1 Elemental Damage, it is not economical to buy the item only to increase the burn damage of weapons.",
+                "All Engineering structures can inflict burn, via direct hit as well as explosion hit",
+                "The Explosion from Bull or Landmines can inflict burn, as do explosions from weapons such as Rocket Launcher.",
+                "Baby Elephant, Cyberball, or Riposte can not inflict burn.",
+                "The Explosion from items such as Spicy Sauce or Rip and Tear can not inflict burn."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3912,
+      "name": "Silver Bullet",
+      "kind": "item",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Silver_Bullet",
+      "main_revision": "7601",
+      "lines": [
+        {
+          "line": "Summary: A Tier 3 damage item that multiplies your damage versus Elites and bosses.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Silver_Bullet",
+              "revision": "7601",
+              "quoted": [
+                "Silver Bullet grants 25% Bonus damage against Elites and Bosses Secondary Stat, multiplying any damage you deal to Elites or Bosses."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Each one raises your damage versus Elites and bosses by 25%, applied on top of your other damage bonuses. It costs 70.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Silver_Bullet",
+              "revision": "7601",
+              "quoted": [
+                "Silver Bullet grants 25% Bonus damage against Elites and Bosses Secondary Stat, multiplying any damage you deal to Elites or Bosses.",
+                "Price 70"
+              ]
+            },
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Elite_and_Horde_Waves",
+              "revision": "5302",
+              "quoted": [
+                "The Silver Bullet Item can help you kill the elites, as it increases the damage you deal to them by 25%"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In the page's example, an attack that does 100 damage and reaches 200 with 100% Damage gets to 250 with one Silver Bullet, and to 400 with four. Jack's +125% bonus versus bosses and Elites is the same effect and adds to it.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Silver_Bullet",
+              "revision": "7601",
+              "quoted": [
+                "Then Silver Bullet will multiply that by another 1.25, bringing it to a total of 250 damage. If you had 4 Silver Bullets, the attack would deal 400 damage.",
+                "Silver Bullet is additive with Jack's +125% against Bosses and Elites. It is the same effect."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3913,
+      "name": "Coupon",
+      "kind": "item",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Coupon",
+      "main_revision": "6412",
+      "lines": [
+        {
+          "line": "Summary: A cheap Tier 1 economy item that makes the items in the shop cost less.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Coupon",
+              "revision": "6412",
+              "quoted": [
+                "Coupon reduces the Items Price secondary stat by 5%."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Each Coupon takes 5% off shop item prices, and you can hold up to 5 for 25% off. It costs 15.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Coupon",
+              "revision": "6412",
+              "quoted": [
+                "Coupon reduces the Items Price secondary stat by 5%.",
+                "You can stack up to 5 Coupons for a maximum 25% price reduction.",
+                "Price 15 Limit 5"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: No other item changes shop prices, and this one does not change what rerolls cost. With the character Entrepreneur and 5 Coupons the cut reaches 50%, the most possible. The page ranks it with the stronger items and says it is nearly always worth buying, unless it is first seen around waves 16 to 18 or after.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Coupon",
+              "revision": "6412",
+              "quoted": [
+                "It is the only item in the game that modifies shop prices.",
+                "Coupon does not modify the cost of rerolls in the Shop or rerolling Upgrades.",
+                "The highest cost reduction possible is 50%, on the character Entrepreneur and having the maximum amount of 5 coupons.",
+                "It is generally considered one of the better items in the game, and is nearly always bought in shop when seen, unless it is found at wave 16-18 or later."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3914,
+      "name": "Medikit",
+      "kind": "item",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Medikit",
+      "main_revision": "6024",
+      "lines": [
+        {
+          "line": "Summary: A Tier 4 healing item that gives a large amount of health regeneration, and more of it as each wave goes on.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Medikit",
+              "revision": "6024",
+              "quoted": [
+                "+10 HP Regeneration +2 HP Regeneration every 5 seconds until the end of the wave"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It gives +10 HP Regeneration, plus another +2 for every 5 seconds that pass in a wave until that wave ends, and takes away 10 Luck. It costs 95 and is unlocked by winning a run with Doctor.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Medikit",
+              "revision": "6024",
+              "quoted": [
+                "The Medkit gives a base +10 HP Regeneration and an additional +2 HP regeneration per 5 seconds of time that has passed during a wave.",
+                "-10 Luck",
+                "Price 95 Unlocked by Win a run with Doctor"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The page's table shows the extra regeneration reaching +34 by the 85-second mark, which it calls very potent for the wave 20 boss fight, a fight that lasts 90 seconds.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Medikit",
+              "revision": "6024",
+              "quoted": [
+                "+32 !! +34 This makes the Medkit very potent at healing during the 90 second Boss Fight on Wave 20."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

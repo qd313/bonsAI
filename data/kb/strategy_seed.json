@@ -1430,7 +1430,7 @@
     {
       "section_id": 51,
       "game_id": 3,
-      "section_type": "mechanic",
+      "section_type": "versus",
       "name": "Playing as the Tank",
       "card": "Save him for ground that suits him: mounted guns shred you, so go around rather than through, and wait for the rest of the infected team to be up before you commit. Rocks are for the places they must walk through. Chase the panicking one or the biled one rather than the nearest one, and if a teammate has someone pinned, put your body between that survivor and their friends — the bullets hitting you are bullets not saving them. Someone running at you with a revved chainsaw gets punched before they arrive.",
       "source_url": "https://left4dead.fandom.com/wiki/The_Tank",
@@ -1441,7 +1441,7 @@
     {
       "section_id": 52,
       "game_id": 3,
-      "section_type": "mechanic",
+      "section_type": "versus",
       "name": "Playing as the Hunter",
       "card": "Pounce damage scales with distance — up to 25 on a long one — so height and a run-up matter more than surprise alone. Take the straggler, never the group, and if you have to be near the group, move like a common: the melee claw reads as horde damage until someone checks. In Left 4 Dead 2 the pounce recharges fast, so holding crouch and re-pouncing keeps pressure on.",
       "source_url": "https://left4dead.fandom.com/wiki/The_Hunter",
@@ -1452,7 +1452,7 @@
     {
       "section_id": 53,
       "game_id": 3,
-      "section_type": "mechanic",
+      "section_type": "versus",
       "name": "Playing as the Jockey",
       "card": "The ride is the weapon. Steer towards a witch, a spitter pool, a fire, a ledge or an unfinished tank fight — anywhere the survivor's own team makes things worse. Rides last longer where the map turns: corners, alleys, stairwells. Off a ledge is only worth it when nobody is close enough to pick them back up, otherwise a charger does that job better.",
       "source_url": "https://left4dead.fandom.com/wiki/The_Jockey",
@@ -1463,7 +1463,7 @@
     {
       "section_id": 54,
       "game_id": 3,
-      "section_type": "mechanic",
+      "section_type": "versus",
       "name": "Playing as the Smoker",
       "card": "Patience, then elevation. Wait until the team is busy, then take someone from above — a drop adds fall damage on top of the 3 a second the tongue does, and a hanging victim is far harder to rescue than one dragged along the floor. Pull towards a witch, a fire, or a drop rather than towards yourself; you have no cover. Keep moving, because standing still leaves a green cloud that marks you.",
       "source_url": "https://left4dead.fandom.com/wiki/The_Smoker",
@@ -1474,7 +1474,7 @@
     {
       "section_id": 55,
       "game_id": 3,
-      "section_type": "mechanic",
+      "section_type": "versus",
       "name": "Playing as the Charger",
       "card": "Angle beats timing. A hallway lets you bowl the whole team at once; open ground lets you carry one of them far enough that the rescue costs the others real time. A drop or a hazard on the line turns the charge into a kill outright. Check nothing solid is between you and the target — hitting it stops you dead — and do not spawn early, because the grunting gives away the ambush.",
       "source_url": "https://left4dead.fandom.com/wiki/The_Charger",
@@ -1485,7 +1485,7 @@
     {
       "section_id": 56,
       "game_id": 3,
-      "section_type": "mechanic",
+      "section_type": "versus",
       "name": "Playing as the Boomer",
       "card": "Support, not damage. Set up out of sight, let them walk into range rather than charging in, and spawn just before you puke so the noise does not give you away. Bile on a grouped, distracted team while your teammates are ready is worth more than bile on whoever is nearest. Exploding on purpose in the middle of the mess is a legitimate second use.",
       "source_url": "https://left4dead.fandom.com/wiki/The_Boomer",
@@ -1496,7 +1496,7 @@
     {
       "section_id": 57,
       "game_id": 3,
-      "section_type": "mechanic",
+      "section_type": "versus",
       "name": "Playing as the Spitter",
       "card": "Put the acid where they have to walk — a doorway, an alley, the stairs off a ledge — not in open ground they can step around. Spit from a balcony or a dark corner, since a headshot usually kills you outright and the glow gives you away in the light. Best paired with the horde: near a car alarm or a crowd, the pool is what stops them dealing with either.",
       "source_url": "https://left4dead.fandom.com/wiki/The_Spitter",

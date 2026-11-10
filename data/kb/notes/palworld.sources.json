@@ -1,0 +1,401 @@
+{
+  "wiki": "Palworld Wiki (https://palworld.wiki.gg/api.php)",
+  "licence_printed_by_fetcher": "Palworld Wiki (MediaWiki 1.43.6) licence: Creative Commons Attribution-ShareAlike 4.0 License https://creativecommons.org/licenses/by-sa/4.0",
+  "licence_stored": "CC-BY-SA-4.0 (the fetcher prints 'Creative Commons Attribution-ShareAlike 4.0 License'; the library stores the versioned form, and data/kb/NOTICE.md lists the Palworld Wiki as CC-BY-SA-4.0)",
+  "game_id": 37,
+  "game": "Palworld",
+  "read_on": "2026-11-10",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://palworld.wiki.gg/api.php --titles <pages> (the wiki refuses the by-revision call, so the reader asked by title and checked the revision id it printed; page text as rendered by the wiki, link markup removed). Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named. Table rows are quoted with the reader's '||' cell marker. Where two pages disagreed (the boss time limit, one Tower's normal level, how hard mode is unlocked) the newer Tower page was followed or the figure was left out.",
+  "sections": [
+    {
+      "section_id": 4000,
+      "name": "Zoe and Grizzbolt (Tower boss)",
+      "kind": "boss",
+      "main_page": "https://palworld.wiki.gg/wiki/Zoe_and_Grizzbolt",
+      "main_revision": "43099",
+      "lines": [
+        {
+          "line": "Summary: She runs the Rayne Syndicate and is fought together with her partner Grizzbolt in the Tower in the Windswept Hills. She is the first Faction Leader you are expected to fight, and the page calls her the easiest of them; the Tower lists her at level 10 in normal mode and level 72 in hard mode.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Zoe_and_Grizzbolt",
+              "revision": "43099",
+              "quoted": [
+                "She is the leader of the Rayne Syndicate and her partner Pal is Grizzbolt, with her Tower being located in the Windswept Hills.",
+                "being the first Faction Leader the player is expected to fight.",
+                "Though Zoe is the easiest faction leader boss in the game"
+              ]
+            },
+            {
+              "page": "https://palworld.wiki.gg/wiki/Tower",
+              "revision": "45758",
+              "quoted": [
+                "|| Zoe and Grizzbolt || 10 || 72"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Grizzbolt is Electric-element and mostly uses Electric moves, so the page recommends Ground-element Pals. Gumoss, Rushoar and Fuddler work well early; Dumud is decent too, but being part Water it takes ordinary damage from Electric moves rather than resisting them. The Crossbow, available at level 13, is usually the best weapon, and the Three Shot Bow works well because Grizzbolt is big.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Zoe_and_Grizzbolt",
+              "revision": "43099",
+              "quoted": [
+                "As Grizzbolt is an Electric-element Pal and uses mostly Electric-element attacks, Ground-element Pals are recommended when fighting it.",
+                "Gumoss, Rushoar, and Fuddler, are all good choices and can be obtained very early on.",
+                "Dumud is also a decent choice, though it also being part Water-element means that it'll take normal damage from Grizzbolt's Electric attacks instead of resisting them.",
+                "The Crossbow is typically the best weapon option for this fight as it can be obtained pretty early on (at level 13)",
+                "the Three Shot Bow also works well due to Grizzbolt's large size."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Zoe has two pigtails, one black and one pink, and wears a black beanie with two ear-like shapes and a black leather jacket cut short, its sleeves marked with pink lines.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Zoe_and_Grizzbolt",
+              "revision": "43099",
+              "quoted": [
+                "Her hair is tied into two pigtails, with the left being black and the right being pink",
+                "Her black beanie has two ear-like shapes",
+                "She wears a short black leather jacket with pink lines on the sleeves"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Entering the Tower starts a five-minute clock; if it runs out you are killed and removed, but you can still pick up your dropped items at the entrance. Grizzbolt's Lightning Claw is hard to dodge, so a shield helps if you are not good at dodging, and circling around the pillars avoids most of its attacks. Calling your Pal back just before it is hit and throwing it out again keeps it from being damaged and gets it attacking faster. In hard mode she arrives with a level 55 Syndicate Crusher, which a Rocket Launcher handles, and Grizzbolt gains Grass attacks like Spine Vine and Seed Mine that can leave you ivy-covered, when a Grappling Gun helps you dodge.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Tower",
+              "revision": "45758",
+              "quoted": [
+                "Upon entering a Tower, players are given five minutes to defeat the boss.",
+                "If the time limit expires before the boss is defeated, the player is instantly killed and removed from the Tower.",
+                "players can still recover any dropped items at the Tower's entrance."
+              ]
+            },
+            {
+              "page": "https://palworld.wiki.gg/wiki/Zoe_and_Grizzbolt",
+              "revision": "43099",
+              "quoted": [
+                "Grizzbolt's Lightning Claw attack can be hard to dodge.",
+                "try to rely on your Shield to tank the damage.",
+                "Hiding behind & circling around the pillars allows you to avoid most of Grizzbolt's attacks.",
+                "Calling back your Pal just as Grizzbolt is about to damage it, then throwing it back out, is a good way to avoid it getting damaged and make it attack faster.",
+                "Zoe and Grizzbolt will also spawn alongside a level 55 Syndicate Crusher.",
+                "A Rocket Launcher can be used to easily deal with the Crusher.",
+                "Grizzbolt will now have access to Grass-element attacks such as Spine Vine and Seed Mine",
+                "these attacks have a chance to leave you ivy-covered",
+                "If you find yourself ivy-covered, use a Grappling Gun to dodge attacks."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4001,
+      "name": "Lily and Lyleen (Tower boss)",
+      "kind": "boss",
+      "main_page": "https://palworld.wiki.gg/wiki/Lily_and_Lyleen",
+      "main_revision": "43100",
+      "lines": [
+        {
+          "line": "Summary: She heads the Free Pal Alliance and is fought together with her partner Lyleen in the Tower on the Crescent Moon Shore. She is the second Faction Leader you are expected to fight, and the hard mode version is level 74.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Lily_and_Lyleen",
+              "revision": "43100",
+              "quoted": [
+                "She is the leader of the Free Pal Alliance and her partner Pal is Lyleen, with her Tower being located in the Crescent Moon Shore.",
+                "being the second faction leader the player is expected to fight.",
+                "Boss level: 74"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Lyleen is Grass-element and mostly uses Grass moves, so the page recommends Fire-element Pals, but it also has Water moves such as Acid Rain and Bubble Blast to answer them, so take care. Vanwyrm resists its Grass attacks, and Wixen adds Fire damage to your attacks while it is active. The Fire Arrow Crossbow does extra damage to Lyleen and can burn it.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Lily_and_Lyleen",
+              "revision": "43100",
+              "quoted": [
+                "As Lyleen is a Grass-element Pal and uses mostly Grass-element attacks, Fire-element Pals are recommended when fighting it.",
+                "Lyleen also comes with Water-element attacks like Acid Rain and Bubble Blast for dealing with Fire Pals, so caution is recommended when using them.",
+                "Vanwyrm is a good choice as it resists Lyleen's Grass-element attacks",
+                "Wixen is also a good choice as its Partner Skill increases the player's Attack power and applies Fire-element damage to the player's attacks while Wixen is active.",
+                "The Fire Arrow Crossbow is also a good choice due to it dealing increased damage against Lyleen and having the ability to burn it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Lily has short white hair streaked light green, goes barefoot in a green toga trimmed with golden lines, and wears a branch-shaped crown with ruby fruits on her forehead.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Lily_and_Lyleen",
+              "revision": "43100",
+              "quoted": [
+                "has short white hair with light green streaks.",
+                "She wears a green toga with golden lines.",
+                "On her forehead, she has a crown that resembles a branch with the left side protruding upwards, adorned with rubies that are meant to be fruits."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Keep your distance when Lyleen uses Poison Fog so you do not get poisoned, and expect it to heal itself. In hard mode she brings two level 55 Free Pal Alliance Devouts with Crossbows, and the page says to kill them first, since their electric arrows hamper you for the remainder of the battle. Lyleen also favours Water attacks over Grass there, so an Electric Pal that resists Water can help, and Flame Funnel is among the best attacks against it.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Lily_and_Lyleen",
+              "revision": "43100",
+              "quoted": [
+                "Try to keep your distance so you don't get poisoned when Lyleen uses Poison Fog.",
+                "Lyleen is able to heal itself, which can prove difficult to deal with.",
+                "Lily and Lyleen will also spawn alongside a pair of level 55 Free Pal Alliance Devouts armed with Crossbows.",
+                "Take the Devouts out first so their electric arrows won't hamper you throughout the rest of the fight.",
+                "Lyleen will now use Water-element attacks more than Grass-element attacks",
+                "bringing an Electric Pal to resist Lyleen's Water attacks could prove useful.",
+                "Flame Funnel is one of the best attacks to use against Lyleen."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4002,
+      "name": "Axel and Orserk (Tower boss)",
+      "kind": "boss",
+      "main_page": "https://palworld.wiki.gg/wiki/Axel_and_Orserk",
+      "main_revision": "43102",
+      "lines": [
+        {
+          "line": "Summary: He heads the Brothers of the Eternal Pyre and is fought together with his partner Orserk in the Tower at the top of Mount Obsidian. He is the third Faction Leader you are expected to fight, at level 30 in normal mode and level 76 in hard mode, and his arena has electrified grids that can be switched on to shock unsuspecting players.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Axel_and_Orserk",
+              "revision": "43102",
+              "quoted": [
+                "He is the leader of the Brothers of the Eternal Pyre and his partner Pal is Orserk, with his Tower being located on Mount Obsidian.",
+                "being the third faction leader the player is expected to fight."
+              ]
+            },
+            {
+              "page": "https://palworld.wiki.gg/wiki/Tower",
+              "revision": "45758",
+              "quoted": [
+                "|| Axel and Orserk || 30 || 76",
+                "Axel and Orserk's battlefield has electrified grids which can be activated at will to electrify unsuspecting players"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Orserk is a Dragon and Electric Pal that uses Dragon and Electric attacks, so Ice and Ground Pals are recommended. Reptyro Cryst resists every Orserk attack and has high Defense, so it can soak up hits; Anubis hits hard and adds Ground damage to your attacks while it is active; Wumpo's Snow Bowling is very effective. Even in hard mode Orserk has no Fire attacks, so Ice Pals still work very well.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Axel_and_Orserk",
+              "revision": "43102",
+              "quoted": [
+                "As Orserk is a Dragon / Electric-element Pal and uses Dragon and Electric-element attacks, Ice and Ground-element Pals are recommended when fighting it.",
+                "Reptyro Cryst is a very good choice as it resists all of Orserk's attacks and has high Defense, making it an effective tank.",
+                "Anubis is also a good choice as it is a very strong attacker and applies Ground-element damage to the player's attacks while active.",
+                "Wumpo is also a good choice as its Snow Bowling attack is very effective against Orserk.",
+                "it doesn't have any Fire-element attacks, meaning Ice Pals are still very effective against it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Axel is a young, athletically built man with purple hair whose yellow tips look like lightning bolts, and a black beanie patterned with yellow and purple zigzags.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Axel_and_Orserk",
+              "revision": "43102",
+              "quoted": [
+                "Axel is a young man with an athletic build.",
+                "His hair is purple with yellow tips that resemble lightning bolts.",
+                "sports a black beanie with yellow and purple zigzag patterns on it"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Orserk's Kerauno attack does heavy damage, so dodge it whenever you can. In hard mode he comes with a level 55 Mossanda Lux and a level 55 Relaxaurus Lux, which are weak and fall to area attacks, and Orserk gains Grass attacks such as Crosswind and Solar Blast to answer Ground Pals. Frostallion and Gildane are good hard mode choices because they add Ice or Ground damage to your attacks while you ride them.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Axel_and_Orserk",
+              "revision": "43102",
+              "quoted": [
+                "Orserk's Kerauno attack can deal heavy damage. Try to dodge it whenever possible.",
+                "Axel and Orserk will now spawn alongside a Mossanda Lux and a Relaxaurus Lux, with both being level 55.",
+                "they aren't very strong and can easily be taken out with AOE attacks.",
+                "Orserk now comes with Grass-element attacks like Crosswind and Solar Blast for dealing with Ground-element Pals.",
+                "Frostallion is a good choice due to its high stats and ability to increase the player's Attack power and apply Ice-element damage to the player's attacks while mounted.",
+                "Gildane is also a good choice as it increases the player's Attack power and applies Ground-element damage to the player's attacks while mounted."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4003,
+      "name": "Marcus and Faleris (Tower boss)",
+      "kind": "boss",
+      "main_page": "https://palworld.wiki.gg/wiki/Marcus_and_Faleris",
+      "main_revision": "46928",
+      "lines": [
+        {
+          "line": "Summary: He commands the Palpagos Islands Defense Force and is fought together with his partner Faleris in the Tower in the Desiccated Dunes. He is the fourth Faction Leader you are expected to fight, at level 40 in normal mode and level 78 in hard mode, and the first whose partner can fly.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Marcus_and_Faleris",
+              "revision": "46928",
+              "quoted": [
+                "He is the leader of the Palpagos Islands Defense Force and his partner Pal is Faleris, with his Tower being located in the Desiccated Dunes.",
+                "being the fourth faction leader the player is expected to fight.",
+                "Marcus is the first faction leader to possess a Pal capable of flight."
+              ]
+            },
+            {
+              "page": "https://palworld.wiki.gg/wiki/Tower",
+              "revision": "45758",
+              "quoted": [
+                "|| Marcus and Faleris || 40 || 78"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Faleris is Fire-element and mostly uses Fire moves, so the page recommends Water-element Pals, but it has a few Electric moves to answer them, so be careful. Azurobe adds Water damage to your attacks while you ride it but is slow on land; Suzaku Aqua boosts its own Water attacks while mounted; Jormuntide is a good pick too, though its size makes it hard to dodge with. Curtain Splash and Hydro Slicer rank among the strongest moves to use on Faleris.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Marcus_and_Faleris",
+              "revision": "46928",
+              "quoted": [
+                "As Faleris is a Fire-element Pal and uses mostly Fire-element attacks, Water-element Pals are recommended when fighting it.",
+                "Faleris has some Electric-element attacks for dealing with Water Pals, so caution is recommended when using them.",
+                "Azurobe is a good choice as it increases the player's attack power and applies water element damage to the player's attacks while mounted.",
+                "Azurobe isn't very fast on land, meaning it'll probably get hit more than intended.",
+                "Suzaku Aqua is also a good choice as it boosts the power of its Water-element attacks while mounted.",
+                "Jormuntide is also a good choice, though its large size means that it has a hard time dodging.",
+                "Curtain Splash and Hydro Slicer are two of the best attacks to use on Faleris."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Marcus is a tall, solidly built man with a two-toned beard, wearing a long military coat in a dark colour, with fur at the collar and two stripes on each sleeve.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Marcus_and_Faleris",
+              "revision": "46928",
+              "quoted": [
+                "Marcus is a tall, well-built man",
+                "He has a two-toned beard that is brown with black streaks.",
+                "his long, dark military coat with a fur collar. There are two stripes on the sleeves of the coat."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Weapon-wise, the page favours the Pump-action Shotgun, the Assault Rifle and the Semi-Auto Shotgun at this level. In hard mode he arrives with a team of level 55 PIDF Infantry and PIDF Elites, who are not strong and fall to area attacks, and Selyne helps because its Partner Skill makes Holy Burst hit harder.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Marcus_and_Faleris",
+              "revision": "46928",
+              "quoted": [
+                "The Pump-action Shotgun, Assault Rifle, and Semi-Auto Shotgun are typically the best weapon options for this fight at this level.",
+                "Marcus and Faleris will also spawn alongside a team of PIDF Infantry and PIDF Elites, with all of them being level 55.",
+                "they aren't very strong and can be easily taken out with AOE attacks.",
+                "Selyne is a good choice as its Partner Skill boosts the power of Holy Burst, which can deal high damage."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4004,
+      "name": "Victor and Shadowbeak (Tower boss)",
+      "kind": "boss",
+      "main_page": "https://palworld.wiki.gg/wiki/Victor_and_Shadowbeak",
+      "main_revision": "43104",
+      "lines": [
+        {
+          "line": "Summary: He runs the PAL Genetic Research Unit and is fought together with his partner Shadowbeak in the Tower in the Astral Mountains. The Tower lists him at level 50 in normal mode and level 80 in hard mode.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Victor_and_Shadowbeak",
+              "revision": "43104",
+              "quoted": [
+                "He is the leader of the PAL Genetic Research Unit and his partner Pal is Shadowbeak, with his Tower being located in the Astral Mountains."
+              ]
+            },
+            {
+              "page": "https://palworld.wiki.gg/wiki/Tower",
+              "revision": "45758",
+              "quoted": [
+                "|| Victor and Shadowbeak || 50 || 80"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Shadowbeak is Dark-element and mostly uses Dark moves, so the page recommends Dragon-element Pals, though it has some Ice moves to answer them. Jormuntide Ignis is a strong attacker that takes only normal damage from the Ice attacks, but its size makes it hard to dodge with; Chillet adds Dragon damage to your attacks while you ride it; Vanwyrm Cryst resists everything Shadowbeak throws apart from Flame Funnel.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Victor_and_Shadowbeak",
+              "revision": "43104",
+              "quoted": [
+                "As Shadowbeak is a Dark-element Pal and uses mostly Dark-element attacks, Dragon-element Pals are recommended when fighting it.",
+                "Shadowbeak also has some Ice-element attacks for dealing with Dragon Pals, so caution is recommended when using them.",
+                "Jormuntide Ignis is a good choice as it is a very strong attacker and only takes normal damage from Shadowbeak's Ice attacks, though its large size means that it has a hard time dodging.",
+                "Chillet is also a good choice as it increases the player's Attack power and applies Dragon-element damage to the player's attacks while mounted.",
+                "Vanwyrm Cryst is also a good choice as it resists all of Shadowbeak's attacks (except for Flame Funnel)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Victor is pale and thin, with wavy hair that is black and white, in a long black coat lined in purple, with his eyes covered by a black blindfold.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Victor_and_Shadowbeak",
+              "revision": "43104",
+              "quoted": [
+                "Victor is a pale, thin man with wavy black-and-white hair.",
+                "He wears a long black coat with a purple interior",
+                "a black blindfold over his eyes."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Assault Rifle and Rocket Launcher usually work best at this level. In hard mode he and Shadowbeak split off a copy of themselves at about 30 percent health, with all the same attacks; ignore the copy and aim at the original, which has its health bar pinned to the screen's upper edge while the copy's floats above its head, and beating the original kills the copy too. Vampiric on your Pals plus area attacks like Holy Burst and Air Blade heal you a lot, since they likely hit both.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Victor_and_Shadowbeak",
+              "revision": "43104",
+              "quoted": [
+                "The Assault Rifle and Rocket Launcher are typically the best weapon options for this fight at this level.",
+                "will now summon a clone of themselves when they reach approximately 30% health.",
+                "The clone is as strong as the original and has all of the same attacks.",
+                "Ignore the clone and focus on the original.",
+                "The clone can be distinguished from the real Victor and Shadowbeak by it having its health bar hovering above its head instead of at the top of the screen.",
+                "Defeating the real Victor and Shadowbeak will also kill the clone.",
+                "Having Vampiric on your Pals and using AOE attacks like Holy Burst and Air Blade is very effective as they will likely hit both the real Shadowbeak and the clone, resulting in lots of healing."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

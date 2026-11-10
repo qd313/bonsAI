@@ -45,6 +45,50 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "307846",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2704,
+      "game_id": 8,
+      "section_type": "item",
+      "name": "Smart weapons",
+      "card": "Summary: Guns that fire guided rounds which lock on to targets and seek them out. They are one of the three gun types, alongside Power and Tech, and they only aim themselves if you have a Smart Link implant.\nUses: Letting rounds seek out targets inside the weapon's tracking box. The rounds can curve around obstacles to reach their target, but they travel slower than ordinary bullets and hits are not always guaranteed. Smart Link is Hands cyberware, and a better Smart Link tracks better; from Tier 3 up it also lengthens target-lock duration by 10-20% and adds 5-15% crit damage with Smart weapons.\nTips: Tyger Claws gangers have Masking Ink in their tattoos, which gives them a 50% chance to make smart projectiles miss. The Ping quickhack, from Tier 3, adds 25% lock-on speed with Smart weapons against pinged enemies.",
+      "source_url": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "304721",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2705,
+      "game_id": 8,
+      "section_type": "item",
+      "name": "Tech weapons",
+      "card": "Summary: Guns that use railgun technology, firing projectiles driven by an electromagnetic charge. They are one of the three gun types, alongside Power and Smart. They give up rate of fire for penetrating power, which depends on how long you hold the charge.\nUses: Shooting through obstacles, because a charged shot can penetrate them. Perks for Tech weapons are in the Technical Ability attribute, and using them earns experience in the Engineer skill.\nTips: A Tech weapon cannot take a suppressor, though most accept a custom sight. They use caseless ammunition, typically jacketed steel flechette.",
+      "source_url": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "304721",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2706,
+      "game_id": 8,
+      "section_type": "item",
+      "name": "Cyberdeck",
+      "card": "Summary: The datashard you install in your Neuroport that lets you use quickhacks and Breach Protocol. Breach Protocol cannot be used at all without one.\nUses: Each deck has base RAM that quickhacks spend, a buffer size that sets how many characters you can pick from the Code Matrix in Breach Protocol, and slots for extra quickhacks. It comes with some device quickhacks already installed, and which ones depends on the maker and rises with quality.\nTips: A spent unit of RAM takes 60 seconds outside of combat to come back. Quickhacking perks in the Intelligence attribute and Frontal Cortex cyberware can change how much RAM you have, a higher quality deck gives a bigger buffer, and some enemies resist quickhacks, which raises the RAM needed to hack them.",
+      "source_url": "https://cyberpunk.fandom.com/wiki/Cyberdeck",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "301139",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2707,
+      "game_id": 8,
+      "section_type": "item",
+      "name": "MaxDoc and Bounce Back",
+      "card": "Summary: Two healing consumables. The MaxDoc is a Trauma Team inhaler that instantly restores 50-126 Health. The Bounce Back is an injector that instantly restores 10-30 Health, then regenerates 6-17 Health per second for 10 seconds.\nUses: Restoring Health. The MaxDoc is one instant burst, while the Bounce Back is a smaller burst followed by 10 seconds of regeneration. A Bounce Back upgrades itself automatically when you pick up a higher quality one.\nTips: Both turn up in caches and on enemies. Vendors sell the MaxDoc and Meds Vendors sell the Bounce Back. A stack of consumables holds up to 150 in your inventory.",
+      "source_url": "https://cyberpunk.fandom.com/wiki/MaxDoc",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "297812",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

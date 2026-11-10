@@ -241,6 +241,250 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2704,
+      "name": "Smart weapons",
+      "kind": "item",
+      "main_page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+      "main_revision": "304721",
+      "lines": [
+        {
+          "line": "Summary: Guns that fire guided rounds which lock on to targets and seek them out. They are one of the three gun types, alongside Power and Tech, and they only aim themselves if you have a Smart Link implant.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+              "revision": "304721",
+              "quoted": [
+                "Guns are classified as either Power, Smart, or Tech",
+                "Smart weapons aim for the wielder by using smart rounds that lock on and seek out their targets, though they need to be within the weapons's tracking box.",
+                "The Smart Link cyberware is required to enable smart-targeting"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Letting rounds seek out targets inside the weapon's tracking box. The rounds can curve around obstacles to reach their target, but they travel slower than ordinary bullets and hits are not always guaranteed. Smart Link is Hands cyberware, and a better Smart Link tracks better; from Tier 3 up it also lengthens target-lock duration by 10-20% and adds 5-15% crit damage with Smart weapons.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+              "revision": "304721",
+              "quoted": [
+                "Smart bullets can curve around obstacles to hit their target, but travel slower than conventional rounds.",
+                "with better quality Smart Links improving the tracking ability of the gun, as hits are not always guaranteed."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Smart_Link",
+              "revision": "278451",
+              "quoted": [
+                "The Smart Link is Cyberware for the Hands in Cyberpunk 2077.",
+                "At Tier 3 and above it will increase target-lock duration by 10-20% and Crit Damage with Smart Weapons by 5-15%."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Tyger Claws gangers have Masking Ink in their tattoos, which gives them a 50% chance to make smart projectiles miss. The Ping quickhack, from Tier 3, adds 25% lock-on speed with Smart weapons against pinged enemies.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+              "revision": "304721",
+              "quoted": [
+                "Members of the Tyger Claws gang use Masking Ink in their tattoos that jams the smart-targeting ability, giving them a 50% chance to cause smart projectiles to miss."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Ping",
+              "revision": "278467",
+              "quoted": [
+                "Tier 3 +25% lock-on speed with Smart weapons against Pinged enemies."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2705,
+      "name": "Tech weapons",
+      "kind": "item",
+      "main_page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+      "main_revision": "304721",
+      "lines": [
+        {
+          "line": "Summary: Guns that use railgun technology, firing projectiles driven by an electromagnetic charge. They are one of the three gun types, alongside Power and Smart. They give up rate of fire for penetrating power, which depends on how long you hold the charge.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+              "revision": "304721",
+              "quoted": [
+                "Guns are classified as either Power, Smart, or Tech",
+                "Tech weapons are weapons that use railgun technology, firing projectiles that are propelled with an electromagnetic charge. What they give up in terms of rate of fire they make up for in penetrating power, depending on how long the charge is held."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Shooting through obstacles, because a charged shot can penetrate them. Perks for Tech weapons are in the Technical Ability attribute, and using them earns experience in the Engineer skill.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+              "revision": "304721",
+              "quoted": [
+                "Tech weapons can be charged to fire a bullet capable of penetrating obstacles.",
+                "Perks specifically applying to Tech weapons can be found in the Technical Ability Attribute, and utilizing Tech weapons grants experience for the Engineer skill."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A Tech weapon cannot take a suppressor, though most accept a custom sight. They use caseless ammunition, typically jacketed steel flechette.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+              "revision": "304721",
+              "quoted": [
+                "Tech weapons cannot be fitted with a suppressor, but most of them accept a custom sight.",
+                "These weapons use caseless ammunition, typically jacketed steel flechette."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2706,
+      "name": "Cyberdeck",
+      "kind": "item",
+      "main_page": "https://cyberpunk.fandom.com/wiki/Cyberdeck",
+      "main_revision": "301139",
+      "lines": [
+        {
+          "line": "Summary: The datashard you install in your Neuroport that lets you use quickhacks and Breach Protocol. Breach Protocol cannot be used at all without one.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberdeck",
+              "revision": "301139",
+              "quoted": [
+                "cyberdecks have evolved to be a type of datashard that is installed in one's Neuroport system, and allows its users to perform Netrunner abilities, such as quickhacks and Breach Protocol."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Quickhacking",
+              "revision": "307980",
+              "quoted": [
+                "thus a cyberdeck is mandatory in order to make use of Breach Protocol."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Each deck has base RAM that quickhacks spend, a buffer size that sets how many characters you can pick from the Code Matrix in Breach Protocol, and slots for extra quickhacks. It comes with some device quickhacks already installed, and which ones depends on the maker and rises with quality.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberdeck",
+              "revision": "301139",
+              "quoted": [
+                "In order to perform quickhacks, you require base RAM.",
+                "The buffer size is used during Breach Protocol, and determines the amount of characters you can select from the Code Matrix.",
+                "Every cyberdeck allows for the installation of an additional quickhack.",
+                "The type and amount of preinstalled device quickhacks varies per manufacturer and increases at higher quality."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A spent unit of RAM takes 60 seconds outside of combat to come back. Quickhacking perks in the Intelligence attribute and Frontal Cortex cyberware can change how much RAM you have, a higher quality deck gives a bigger buffer, and some enemies resist quickhacks, which raises the RAM needed to hack them.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberdeck",
+              "revision": "301139",
+              "quoted": [
+                "Once a RAM unit has been used, it will take 60 seconds outside of combat to recover.",
+                "can be modified by perks in the Quickhacking skill tree in the Intelligence attribute or by installing Frontal Cortex cyberware.",
+                "The buffer size can be increased by equipping higher quality cyberdecks.",
+                "Certain enemies may have quickhack resistance, increasing the amount of base RAM required for them to be hacked."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2707,
+      "name": "MaxDoc and Bounce Back",
+      "kind": "item",
+      "main_page": "https://cyberpunk.fandom.com/wiki/MaxDoc",
+      "main_revision": "297812",
+      "lines": [
+        {
+          "line": "Summary: Two healing consumables. The MaxDoc is a Trauma Team inhaler that instantly restores 50-126 Health. The Bounce Back is an injector that instantly restores 10-30 Health, then regenerates 6-17 Health per second for 10 seconds.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/MaxDoc",
+              "revision": "297812",
+              "quoted": [
+                "The MaxDoc is an inhaler manufactured by Trauma Team.",
+                "It allows the user to restore 50-126 Health when used."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Bounce_Back",
+              "revision": "297811",
+              "quoted": [
+                "The Bounce Back allows the user to instantly restore 10-30 Health, and then regenerating an additional 6-17 Health per second for 10 seconds.",
+                "Type Injector"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Restoring Health. The MaxDoc is one instant burst, while the Bounce Back is a smaller burst followed by 10 seconds of regeneration. A Bounce Back upgrades itself automatically when you pick up a higher quality one.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/MaxDoc",
+              "revision": "297812",
+              "quoted": [
+                "Instantly restores 50-126 Health."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Bounce_Back",
+              "revision": "297811",
+              "quoted": [
+                "Item will be upgraded automatically when acquiring a higher quality."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Both turn up in caches and on enemies. Vendors sell the MaxDoc and Meds Vendors sell the Bounce Back. A stack of consumables holds up to 150 in your inventory.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/MaxDoc",
+              "revision": "297812",
+              "quoted": [
+                "Can be acquired from caches, Enemies, and Vendors."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Bounce_Back",
+              "revision": "297811",
+              "quoted": [
+                "Can be acquired from caches, Enemies, and Meds Vendors."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Consumables",
+              "revision": "280993",
+              "quoted": [
+                "These items have a max stack of 150 in your inventory"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

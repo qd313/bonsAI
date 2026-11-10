@@ -188,6 +188,7 @@
               "revision": "2061279",
               "quoted": [
                 "is a shooting item that appears in Super Smash Bros. Melee, Super Smash Bros. Brawl, Super Smash Bros. 4, and Super Smash Bros. Ultimate, based on a real-life peripheral from Nintendo.",
+                "A peripheral device for the Super Nintendo Entertainment System",
                 "Tapping the attack button will fire three small shots in Melee",
                 "Holding down the attack button charges the weapon, allowing for stronger and larger shots and having decent KO potential at full charge."
               ]
@@ -195,7 +196,7 @@
           ]
         },
         {
-          "line": "Uses: Tap the attack button repeatedly for a constant stream of small shots that each do little knockback and damage; the high rate of fire gives a trapping effect, as the opponent has little or no time to act. Hold the button to charge a bigger shot. It has limited ammunition, 48 shots in Melee, and the higher charge levels use more.",
+          "line": "Uses: Tap the attack button repeatedly for a constant stream of small shots that each do little knockback and damage; the high rate of fire gives a trapping effect, as the opponent has little or no time to act. Hold the button to charge a bigger shot. It has limited ammunition, 48 shots in Melee, and different charge levels change the ammo used.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Super_Scope",
@@ -296,7 +297,7 @@
       "main_revision": "2062573",
       "lines": [
         {
-          "line": "Summary: The two healing items: each reduces the damage percentage of whoever picks it up. In Melee the Maxim Tomato heals 50% of a character's damage percentage and the Heart Container heals a total of 100%.",
+          "line": "Summary: Two healing items: each reduces the damage percentage of whoever picks it up. In Melee the Maxim Tomato heals 50% of a character's damage percentage and the Heart Container heals a total of 100%.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Maxim_Tomato",
@@ -387,17 +388,16 @@
           ]
         },
         {
-          "line": "Uses: In Melee the effects last 12 seconds, though the time limit decreases as the fighter takes damage, especially from fire attacks. Weight is multiplied by 3.0 and walking speed by 0.7, while falling speed and gravity are both doubled.",
+          "line": "Uses: In Melee the effects last 12 seconds, though the time limit decreases as the fighter takes damage, especially from fire attacks. Walking speed is multiplied by 0.7 and jump force by 1.55, though not by enough to make up for the faster fall.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Metal_Box",
               "revision": "2060964",
               "quoted": [
                 "The effects last 12 seconds, but the time limit decreases as the fighter takes damage, especially from fire attacks like Bowser's Fire Breath.",
-                "Increases the fighter's weight (3.0× in Melee; 4.5× in Brawl, Smash 4, and Ultimate)",
                 "Decreases the fighter's walking speed slightly (0.7× in Melee, Brawl, and Smash 4; 0.8× in Ultimate).",
-                "Increases the fighter's falling speed (2.0× in Melee and Brawl; 1.7× in Smash 4; 1.4× in Ultimate)",
-                "Increases the fighter's gravity slightly (2.0× in Melee and Brawl; 1.7× in Smash 4 and Ultimate)."
+                "Increases the fighter's jump force (1.55× in Melee and Brawl;",
+                "although usually not by enough to compensate for the gravity and fall speed increase"
               ]
             }
           ]
@@ -531,13 +531,12 @@
           ]
         },
         {
-          "line": "Looks like: The Poison Mushroom is a deceptive look-alike of the Super Mushroom, with a slightly darker coloration and angry eyes.",
+          "line": "Looks like: The Poison Mushroom is a deceptive look-alike of the Super Mushroom, with a duller color scheme and angry eyes.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Poison_Mushroom",
               "revision": "2027685",
               "quoted": [
-                "while also retaining the slightly darker coloration and angry eyes.",
                 "They are mushrooms that deceptively resemble the Super Mushroom, but with a duller color scheme and angry eyes."
               ]
             }
@@ -681,7 +680,7 @@
           ]
         },
         {
-          "line": "Tips: Its power increases with each increment in difficulty, and the highest levels give it many attacks that can KO in one hit. Laser Nail shoots a laser beam from each fingertip; Finger Bullet fires one pair of bullets until it has taken 150% damage and three pairs after that. Power Slap buries the player, and the Vertical Throw cannot KO under normal conditions. Taking half of its HP off within the time limit brings a second boss into the fight.",
+          "line": "Tips: Its power increases with each increment in difficulty, and the highest levels give it many attacks that can KO in one hit. It shoots a laser beam from each fingertip, and its gun-shaped hand fires one pair of bullets until it has taken 150% damage and three pairs after that. A slap at the ground buries the player, and its throw into the ground has high damage and knockback but cannot KO under normal conditions. On Normal difficulty or higher, taking half of its HP off within a total of 5 minutes and 50 seconds since the start of Classic Mode brings a second boss into the fight.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Master_Hand_(SSBM)",
@@ -689,10 +688,18 @@
               "quoted": [
                 "In addition to this increase in HP, his power increases with each increment in difficulty, with the highest levels giving him a multitude of attacks with OHKO potential.",
                 "Master Hand shoots a laser beam from each of his fingertips.",
+                "Master Hand makes the shape of a gun, and fires pairs of bullets.",
                 "He fires one pair if he hasn't taken 150% damage yet, and three pairs if he took 150% damage or more.",
                 "Master Hand slaps the ground. Buries the player.",
-                "High damage and knockback, but cannot KO under normal conditions.",
-                "If the player reduces Master Hand's HP by half, Crazy Hand appears"
+                "Master Hand throws the opponent into the ground.",
+                "High damage and knockback, but cannot KO under normal conditions."
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Crazy_Hand_(SSBM)",
+              "revision": "1902437",
+              "quoted": [
+                "to fight him, one must play Classic Mode on Normal difficulty or higher, reach Master Hand, and reduce Master Hand's HP by half within a total of 5 minutes and 50 seconds since the start of the mode."
               ]
             }
           ]
@@ -707,27 +714,35 @@
       "main_revision": "1902437",
       "lines": [
         {
-          "line": "Summary: A bonus boss that appears in Classic Mode's last fight, alongside the final boss. To face it you must play on Normal difficulty or higher and reduce the final boss's HP by half within a total of 5 minutes and 50 seconds since the start of the mode.",
+          "line": "Summary: A bonus boss that can join Classic Mode's last fight alongside the final boss, but only when the conditions the game sets for it are met.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Crazy_Hand_(SSBM)",
               "revision": "1902437",
               "quoted": [
-                "In Classic Mode, he appears as a bonus boss fought alongside Master Hand; to fight him, one must play Classic Mode on Normal difficulty or higher, reach Master Hand, and reduce Master Hand's HP by half within a total of 5 minutes and 50 seconds since the start of the mode."
+                "In Classic Mode, he appears as a bonus boss fought alongside Master Hand"
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Master_Hand_(SSBM)",
+              "revision": "1952272",
+              "quoted": [
+                "Crazy Hand appears when set conditions are met."
               ]
             }
           ]
         },
         {
-          "line": "Weak points: It starts with the same number of HP that the first boss started with, and you have only one chance to defeat it. Its Spasm attack cannot hit aerial targets, and a Finger Bomb that hits a character before it reaches the ground does only low damage with minimal knockback.",
+          "line": "Weak points: It starts with the same number of HP that the first boss started with. Its move where it lies on the ground and has violent spasms cannot hit aerial targets, and the bombs it drops do only low damage with minimal knockback if they hit a character before reaching the ground.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Crazy_Hand_(SSBM)",
               "revision": "1902437",
               "quoted": [
                 "Crazy Hand starts with the same number of HP that Master Hand started with (dependent on the difficulty).",
-                "You have only one chance to defeat the Crazy Hand.",
+                "Crazy Hand lies on the ground and has violent spasms.",
                 "Very large hitbox and sends opponents upward, but cannot hit aerial targets.",
+                "Crazy Hand drops several bombs.",
                 "If a bomb hits a character before it hits the ground, it does low damage with minimal knockback."
               ]
             }
@@ -746,15 +761,17 @@
           ]
         },
         {
-          "line": "Tips: Most of its attacks are stronger variations of the final boss's, plus a few of its own. Flying Punch can star KO as low as 35%, the Forward Throw can KO at low percentages without DI, and the third poke of Tri-Poke can star KO at middle to high percentages.",
+          "line": "Tips: Most of its attacks are stronger variations of the final boss's, plus a few of its own. The fist it flies in with from behind the stage can star KO as low as 35%, its forward throw can KO at low percentages without DI, and the third of its three pokes can star KO at middle to high percentages.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Crazy_Hand_(SSBM)",
               "revision": "1902437",
               "quoted": [
                 "Most of Crazy Hand's attacks are stronger variations of Master Hand's; however he also has a few unique attacks of his own.",
+                "Crazy Hand flies in from behind the stage as a fist, causing an electrical explosion on crossing the playing field.",
                 "star KOing as low as 35%.",
-                "KOing the player at low percentages without DI.",
+                "Crazy Hand throws the opponent forward with very high horizontal knockback, KOing the player at low percentages without DI.",
+                "Crazy Hand pokes three times.",
                 "being capable of star KOing any players at middle to high percentage."
               ]
             }
@@ -770,14 +787,15 @@
       "main_revision": "2056414",
       "lines": [
         {
-          "line": "Summary: Occasionally an earthquake hits Brinstar and acid starts to rise, sometimes covering parts of the stage. The acid deals damage and moderate knockback, but will not KO until very high percents.",
+          "line": "Summary: Occasionally an earthquake hits Brinstar and acid starts to rise, sometimes covering parts of the stage. The acid deals damage and moderate knockback and will not KO until very high percents, though in Melee a ceiling glitch can make it KO at extremely low percents.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Brinstar",
               "revision": "2056414",
               "quoted": [
                 "Occasionally, an earthquake occurs and, just like Planet Zebes, acid starts to rise, sometimes covering parts of the stage.",
-                "The acid deals damage and moderate knockback, but will not KO until very high percents"
+                "The acid deals damage and moderate knockback, but will not KO until very high percents",
+                "in Melee, the ceiling glitch can cause players to be unfairly K.Oed at extremely low percents by the acid"
               ]
             }
           ]
@@ -840,7 +858,7 @@
       "main_revision": "2064572",
       "lines": [
         {
-          "line": "Summary: The thirty F-Zero Racers are a hazard on Mute City: they drive around the track continuously and damage any player on contact, sending them upwards.",
+          "line": "Summary: The thirty F-Zero Racers are a hazard on Mute City: they drive around the track continuously, though they only appear on certain segments of the track and at alternating times and laps, and they damage any player on contact, sending them upwards.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Mute_City",
@@ -935,7 +953,7 @@
           ]
         },
         {
-          "line": "Tips: The jumbotron shows a symbol for the upcoming variation during a stage transition. Many players wait out the Fire and Rock transformations by moving to the opposite side of the stage from their opponent until the stage returns to neutral. In Melee, on the Fire variant, a character hit towards the right side of the tree's base has a chance of falling through.",
+          "line": "Tips: The jumbotron shows a symbol for the upcoming variation during a stage transition. In Melee tournament play, many players wait out the Fire and Rock transformations by moving to the opposite side of the stage from their opponent until the stage returns to neutral, and many complain that this wastes time. In Melee, on the Fire variant, a character hit towards the right side of the tree's base has a chance of falling through.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Pok%C3%A9mon_Stadium",
@@ -943,6 +961,7 @@
               "quoted": [
                 "which can display the battle itself, a symbol representing the upcoming variation during a stage transition",
                 "Many players will choose to \"wait out\" the Fire and Rock transformations by moving to the opposite side of the stage as their opponent, without approaching or attacking them, until the transformation returns to neutral.",
+                "As a result, many players complain that the transformations result in several minutes of wasted time during a set.",
                 "On the fire variant, if a character gets hit towards the right side of the tree's base, there's a chance they will fall through."
               ]
             }

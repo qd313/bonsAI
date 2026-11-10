@@ -37,7 +37,7 @@
               "quoted": [
                 "Their claws are less-armored than the rest of the carapace; successfully crippling these will stun the radscorpion.",
                 "the creatures are vulnerable to armor-piercing weaponry.",
-                "which makes V.A.T.S. combat and firearms somewhat less effective against them."
+                "radscorpions lack a \"weak point\" that can be targeted for extra damage (they have no \"head,\" for example), which makes V.A.T.S. combat and firearms somewhat less effective against them."
               ]
             }
           ]
@@ -174,7 +174,7 @@
           ]
         },
         {
-          "line": "Looks like: Much like a real praying mantis, only far bigger, though still smaller than a person. The young nymphs are tiny, and some die just from being walked over. The Zion Canyon kinds are larger.",
+          "line": "Looks like: Much like a real praying mantis, only far bigger, though still smaller than a person. The young nymphs are much smaller than the adults, and some die just from being walked over. The Zion Canyon kinds are larger.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Giant_mantis_(Fallout:_New_Vegas)",
@@ -182,6 +182,7 @@
               "quoted": [
                 "their biological traits have remained relatively unchanged when compared with the original specimen, except for significantly increased size.",
                 "They are still much smaller than humans",
+                "They are much smaller and weaker than adult mantises.",
                 "Some nymphs can be killed simply by walking over them.",
                 "They are much larger and more dangerous than the other varieties of giant mantis that are found in the Mojave Wasteland."
               ]
@@ -243,7 +244,7 @@
           ]
         },
         {
-          "line": "Tips: Ordinary super mutants are armored to Damage Threshold 15, the same as combat armor; nightkin wear none but shrug off 30 percent of damage. Nightkin use Stealth Boys to creep up on their prey. Black Mountain is the main stronghold. Hostile ones reliably come back at Black Rock Cave, Jack Rabbit Springs and a small cave north of Ranger Station Bravo. The masters at Jacobstown are not hostile. Hostile ones often carry miniguns, light machine guns or super sledges that you can sell.",
+          "line": "Tips: Ordinary super mutants are armored to Damage Threshold 15, the same as combat armor; nightkin wear none but shrug off 30 percent of damage. Nightkin use Stealth Boys to creep up on their prey. Black Mountain is the main stronghold. Hostile ones reliably come back at Black Rock Cave, Jack Rabbit Springs and a small cave north of Ranger Station Bravo. Hostile ones often carry miniguns, light machine guns or super sledges that you can sell.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Super_mutant_(Fallout:_New_Vegas)",
@@ -254,7 +255,6 @@
                 "these volatile beings utilize Stealth Boys to sneak up on their prey.",
                 "The main super mutant stronghold in the Mojave Wasteland is Black Mountain",
                 "the only places with consistently respawning enemy super mutants are Black Rock Cave, Jack Rabbit Springs, and the small cave north of Ranger Station Bravo.",
-                "Masters in Jacobstown speak clearly and are non-hostile.",
                 "Hostile mutants will often carry higher-end weapons such as miniguns, light machine guns, super sledges, and more, which can then be sold elsewhere."
               ]
             }
@@ -519,13 +519,15 @@
           ]
         },
         {
-          "line": "Tips: Roamers are more dangerous than the plain kind and far more common. Reavers in the Mojave are no stronger than the other kinds and no longer give off radiation. Glowing ones turn up at higher levels where radiation is worst, with much more health and damage and a burst of radiation. Expect ferals in the Vegas sewers and around Hell's Motel, the Devil's Throat and the Nevada Highway Patrol station. The armor they wear is for show.",
+          "line": "Tips: Roamers are more dangerous than the plain kind and far more common. At low levels a reaver is only slightly stronger than a roamer, and in the Mojave it no longer gives off radiation. Glowing ones turn up at higher levels where radiation is worst, with much more health and damage and a burst of radiation. Expect ferals in the Vegas sewers and around Hell's Motel, the Devil's Throat and the Nevada Highway Patrol station. The armor they wear is for show.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Feral_ghoul_(Fallout:_New_Vegas)",
               "revision": "4670863",
               "quoted": [
+                "The feral ghoul roamer is more dangerous than the regular feral ghoul.",
                 "Though it is not as strong as the feral ghoul reaver, it is far more common.",
+                "at lower levels, they are merely slightly stronger than a feral ghoul roamer",
                 "their lunges do not cause as much knockback and they no longer emit radiation.",
                 "These ghouls are found often at higher levels, and at locations where the concentration of radiation is strongest.",
                 "They have significantly more health and damage than the average feral ghoul.",
@@ -846,7 +848,8 @@
               "page": "https://fallout.fandom.com/wiki/Rad-X_(Fallout:_New_Vegas)",
               "revision": "4716628",
               "quoted": [
-                "Three in Charleston Cave."
+                "Three in Charleston Cave.",
+                "Fifteen in Vault 34."
               ]
             }
           ]

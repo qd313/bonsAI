@@ -261,6 +261,351 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3804,
+      "name": "Centaurs",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Centaur_(Fallout:_New_Vegas)",
+      "main_revision": "4716096",
+      "lines": [
+        {
+          "line": "Summary: Mutants that are somewhat humanoid in shape. They fire a slow, high-arcing radioactive spit and whip at close range with their tongues. One alone is no great danger, but they rarely come alone.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Centaur_(Fallout:_New_Vegas)",
+              "revision": "4716096",
+              "quoted": [
+                "all known centaurs are somewhat humanoid in appearance",
+                "a high-arcing, slow-moving saliva projectile",
+                "it utilizes its tongue to whip at any intruders",
+                "Individual centaurs only pose a minor threat, but as a rule of thumb, centaurs rarely travel alone and are usually found with other centaur variants or super mutants.",
+                "They are not as powerful but give the victim dramatically high doses of radiation.",
+                "In close combat, centaurs do low to moderate damage depending on the variant"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: They are slow and clumsy, and the spit travels so slowly that it is easy to sidestep.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Centaur_(Fallout:_New_Vegas)",
+              "revision": "4716096",
+              "quoted": [
+                "the low speed of these projectiles makes them fairly easy to evade.",
+                "They can easily be avoided though, as they are very unagile."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: The common kind keeps only a human-like head and torso, with three long tentacle-like tongues where back spines would be. Evolved centaurs are bigger and more muscular, with thick clusters of tumors on their backs.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Centaur_(Fallout:_New_Vegas)",
+              "revision": "4716096",
+              "quoted": [
+                "only the human-like head and torso remain, and the spines on the back are replaced by three long, tentacle-like tongues.",
+                "they have significantly more muscle mass, as well as thick clusters of tumors growing from their backs."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The tongue lash does little physical damage but a notable amount of radiation. Groups gather at Jack Rabbit Springs, south of Black Mountain, and in the Devil's Throat east of Bitter Springs, where evolved ones and the single giant evolved centaur stay. They respawn there three days after being killed.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Centaur_(Fallout:_New_Vegas)",
+              "revision": "4716096",
+              "quoted": [
+                "Though it does not cause much physical damage, it inflicts a notable amount of radiation damage.",
+                "Some can be found south of Black Mountain, at Jack Rabbit Springs and a large group of them reside in The Devil's Throat, east of Bitter Springs.",
+                "Only one giant evolved centaur can be found in the game, located in the Devil's Throat.",
+                "It normally re-spawns three days after being killed, along with the other centaurs found there."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3805,
+      "name": "Bighorners",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Bighorner",
+      "main_revision": "4695921",
+      "lines": [
+        {
+          "line": "Summary: Mutated sheep, grazing wild in herds of three to seven or kept by settlements like Goodsprings and Jacobstown. They leave you alone until you or their young get close, then they bellow, charge and ram, and the entire herd joins in if one of them is upset.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Bighorner",
+              "revision": "4695921",
+              "quoted": [
+                "Bighorners are mutated bighorn sheep native to the American Southwest.",
+                "Several settlements, such as Goodsprings and Jacobstown, have domesticated them",
+                "primarily found in wild herds of three to seven",
+                "They will not attack unless something comes in proximity to them or their young.",
+                "they will rear their heads up and bellow, afterwards charging and attempting to ram their foe.",
+                "if one member of the herd is distressed, the entire herd becomes aggressive."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: They are about as hardy as a radscorpion. A hit on the horns counts as a head shot, and a critical hit blows the head apart.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Bighorner",
+              "revision": "4695921",
+              "quoted": [
+                "they are squarely on par with a radscorpion in terms of health",
+                "Hitting a bighorner's horns counts as a headshot.",
+                "A Critical Hit will blow up a bighorner's head."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A horned sheep; every bighorner grows horns, whatever its sex. Bulls are larger and stronger, and the young are about a third of full size.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Bighorner",
+              "revision": "4695921",
+              "quoted": [
+                "All bighorners grow horns, regardless of sex.",
+                "Bighorner bulls are stronger, larger versions of bighorners",
+                "Young bighorners are roughly a third of the size of their fully grown counterparts"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The compass shows them hostile, but unprovoked ones do not chase you; leave them be and they graze. Their head-butts are brutal, flinging you back or knocking you down, and they run very fast; bulls in a group keep knocking you over. Hurting one of the young turns its relatives on you, and penned calves in towns are watched by ranchers who turn hostile if you harm them. With the Animal Friend perk they never turn on you.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Bighorner",
+              "revision": "4695921",
+              "quoted": [
+                "if left alone, are content to graze and mind their own business",
+                "Though marked as hostile on the compass, unprovoked bighorners will not actively pursue the player like other creatures",
+                "their head-butting attacks are devastating, capable of sending enemies flying backwards or knocking them down.",
+                "Bighorners can also run very fast.",
+                "their charges will continue to knock the Courier over until they are beyond their range.",
+                "attacking one of these will cause their nearby family members to turn hostile and attack.",
+                "these are often guarded by ranchers that become hostile if any harm comes to their livestock.",
+                "With the Animal Friend perk, bighorners will not turn hostile toward the player, no matter their proximity."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3806,
+      "name": "Giant ants",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Giant_ant_(Fallout:_New_Vegas)",
+      "main_revision": "4652973",
+      "lines": [
+        {
+          "line": "Summary: Large insects with big mandibles that can be a real nuisance early in the game. Workers wear you down with nonstop swarming attacks, and soldiers are the biggest of the usual kinds.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Giant_ant_(Fallout:_New_Vegas)",
+              "revision": "4652973",
+              "quoted": [
+                "These creatures can be a bit of a problem in the early stages of the game.",
+                "What they lack in individual fortitude, they make up for with relentless attacks and swarm tactics.",
+                "The largest and strongest variant of the more common giant ant variants."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A hit on the antennae counts as a critical hit and also sends the ant into a frenzy. A worker's shell is not especially hard next to a radscorpion's.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Giant_ant_(Fallout:_New_Vegas)",
+              "revision": "4652973",
+              "quoted": [
+                "Hitting their antennae will count towards a critical hit and will also frenzy them.",
+                "a worker ant's exoskeleton is not particularly hard compared to radscorpions."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A big ant in a yellow-brown shell with large mandibles and long antennae. The queen is the biggest creature anywhere in the Mojave.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Giant_ant_(Fallout:_New_Vegas)",
+              "revision": "4652973",
+              "quoted": [
+                "Giant ants are large insects protected by a yellow-brown carapace.",
+                "They have large mandibles",
+                "Their long antennae sprout out of the head",
+                "The giant ant queen (or fire ant queen) is the largest creature in the Mojave Wasteland."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They are not fast, so if you fight them from a distance you can simply walk away from them. Workers roam in groups across barren desert, including the Ivanpah race track and Ivanpah Dry Lake; several soldiers are inside the Allied Technologies offices. One queen exists, in the mound south of those offices. At the Nellis array the ants blow up if hit by energy weapons or explosives.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Giant_ant_(Fallout:_New_Vegas)",
+              "revision": "4652973",
+              "quoted": [
+                "they are not particularly swift, and can easily be out-walked if the player character prefers to engage them at range.",
+                "Giant worker ants can usually be found in barren stretches of desert in the Mojave, such as the Ivanpah race track and the Ivanpah Dry Lake.",
+                "Several can be found inside the Allied Technologies offices building.",
+                "Only one giant ant queen appears in Fallout: New Vegas, located in the ant mound south of the Allied Technologies offices",
+                "The ants at the Nellis array will explode when shot with energy weapons or explosives"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3807,
+      "name": "Feral ghouls",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Feral_ghoul_(Fallout:_New_Vegas)",
+      "main_revision": "4670863",
+      "lines": [
+        {
+          "line": "Summary: Ghouls that lost their minds to heavy radiation exposure and attack everyone except their own kind. Shrill and fast, they are dangerous mainly in numbers or to a low-level Courier.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Feral_ghoul_(Fallout:_New_Vegas)",
+              "revision": "4670863",
+              "quoted": [
+                "Due to exposure to high levels of radiation, they have lost the ability to reason",
+                "they have lost the ability to reason and will become hostile towards everyone but their own kind.",
+                "Despite their shrill noise and speed, they are only truly a threat when they have the advantage of numbers, or when the Courier is at a low level."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A plain feral ghoul falls to one or two head shots from a decent ranged weapon, or one solid melee or unarmed hit.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Feral_ghoul_(Fallout:_New_Vegas)",
+              "revision": "4670863",
+              "quoted": [
+                "they are easily dispatched with one or two headshots from any decent ranged weapon or a solid hit from a decent melee or unarmed weapon.",
+                "weaker than standard human opponents"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Like normal ghouls but with deformed faces, skinnier, and moving oddly. The plain kind wears only tattered shorts; reavers wear what look like scraps of metal armor.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Feral_ghoul_(Fallout:_New_Vegas)",
+              "revision": "4670863",
+              "quoted": [
+                "Feral ghouls are similar in appearance to sapient ghouls, but with deformed facial features.",
+                "They are also skinnier and do not walk or run normally.",
+                "wearing only a pair of tattered shorts",
+                "They wear what appears to be the remnants of metal armor."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Roamers are more dangerous than the plain kind and far more common. Reavers in the Mojave are no stronger than the other kinds and no longer give off radiation. Glowing ones turn up at higher levels where radiation is worst, with much more health and damage and a burst of radiation. Expect ferals in the Vegas sewers and around Hell's Motel, the Devil's Throat and the Nevada Highway Patrol station. The armor they wear is for show.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Feral_ghoul_(Fallout:_New_Vegas)",
+              "revision": "4670863",
+              "quoted": [
+                "Though it is not as strong as the feral ghoul reaver, it is far more common.",
+                "their lunges do not cause as much knockback and they no longer emit radiation.",
+                "These ghouls are found often at higher levels, and at locations where the concentration of radiation is strongest.",
+                "They have significantly more health and damage than the average feral ghoul.",
+                "Its secondary attack is when it stretches its arms to the sky then gives off a burst of radiation.",
+                "They are usually found in the Vegas sewers or in areas with high radiation, such as around the Devil's Throat, Hell's Motel and Nevada Highway Patrol station.",
+                "Any armor worn by ghouls appears to be purely cosmetic"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3808,
+      "name": "Sentry bots",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout:_New_Vegas)",
+      "main_revision": "4677325",
+      "lines": [
+        {
+          "line": "Summary: Heavy military robots on wheeled tripod legs, armed with a Gatling laser or minigun on one side and a missile launcher on the other. They have a lot of health, so they are hard to put down, especially at a low level.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout:_New_Vegas)",
+              "revision": "4677325",
+              "quoted": [
+                "Sentry bots found in the Mojave have two arms that end with deadly weapons (a minigun or Gatling laser on the right arm, and a missile launcher on the left arm), and tripod legs with wheels.",
+                "Because of their high health and destructive weapons, sentry bots are formidable combatants and can be difficult to put down, especially fighting them at a low level."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: They are open to electromagnetic pulses, so pulse grenades, pulse mines and any other EMP-producing weapon can hurt them badly. Destroying the combat inhibitor mounted on its back sends it berserk, and it then attacks everything around it.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout:_New_Vegas)",
+              "revision": "4677325",
+              "quoted": [
+                "Being a robot, sentry bots have no defense against electromagnetic pulses (EMP), so they can be heavily damaged by pulse grenades, pulse mines, or any other weapon that produces an EMP.",
+                "sentry bots have a combat inhibitor on the back of their chassis that, when destroyed, will cause the sentry bot to go berserk and attack everything near it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Armored head, wheeled tripod base. The REPCONN ones are shorter, with green eyes instead of red and REPCONN in white across the chest.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout:_New_Vegas)",
+              "revision": "4677325",
+              "quoted": [
+                "They also have armored heads",
+                "tripod legs with wheels",
+                "They are also much shorter in height and have glowing green eyes instead of red.",
+                "emblazoned in white across their chest"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: At long range a sentry bot leans on its missiles; once you are close it switches to the minigun or Gatling laser to avoid splash on itself. Head shots do less damage to it. Hardened sentry bots, met with hardened Mister Gutsies near the crashed vertibird, have about 500 hit points against 300 but no armor at all, and resist pulse grenades better. Twelve REPCONN bots hide in the headquarters and come out if you trip the alarm.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout:_New_Vegas)",
+              "revision": "4677325",
+              "quoted": [
+                "once the target reaches mid to close range, sentry bots rely primarily on their minigun/Gatling laser attachments instead of their missile launchers to avoid splash damage.",
+                "receive less damage from head shots.",
+                "Hardened sentry bots have nearly twice as much health as a standard sentry bot (500 hit points as opposed to 300 hit points).",
+                "they are completely unarmored with a DT of 0",
+                "One result of their increased raw health is a greater resistance to pulse grenades.",
+                "They are encountered along with hardened Mister Gutsies around the crashed vertibird in the Mojave Wasteland.",
+                "with twelve of them hidden within the building.",
+                "If the player trips the alarm system, these bots will emerge from the hidden rooms inside the building."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

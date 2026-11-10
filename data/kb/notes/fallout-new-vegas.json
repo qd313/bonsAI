@@ -45,6 +45,61 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "4684048",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3804,
+      "game_id": 20,
+      "section_type": "enemy",
+      "name": "Centaurs",
+      "card": "Summary: Mutants that are somewhat humanoid in shape. They fire a slow, high-arcing radioactive spit and whip at close range with their tongues. One alone is no great danger, but they rarely come alone.\nWeak points: They are slow and clumsy, and the spit travels so slowly that it is easy to sidestep.\nLooks like: The common kind keeps only a human-like head and torso, with three long tentacle-like tongues where back spines would be. Evolved centaurs are bigger and more muscular, with thick clusters of tumors on their backs.\nTips: The tongue lash does little physical damage but a notable amount of radiation. Groups gather at Jack Rabbit Springs, south of Black Mountain, and in the Devil's Throat east of Bitter Springs, where evolved ones and the single giant evolved centaur stay. They respawn there three days after being killed.",
+      "source_url": "https://fallout.fandom.com/wiki/Centaur_(Fallout:_New_Vegas)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4716096",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3805,
+      "game_id": 20,
+      "section_type": "enemy",
+      "name": "Bighorners",
+      "card": "Summary: Mutated sheep, grazing wild in herds of three to seven or kept by settlements like Goodsprings and Jacobstown. They leave you alone until you or their young get close, then they bellow, charge and ram, and the entire herd joins in if one of them is upset.\nWeak points: They are about as hardy as a radscorpion. A hit on the horns counts as a head shot, and a critical hit blows the head apart.\nLooks like: A horned sheep; every bighorner grows horns, whatever its sex. Bulls are larger and stronger, and the young are about a third of full size.\nTips: The compass shows them hostile, but unprovoked ones do not chase you; leave them be and they graze. Their head-butts are brutal, flinging you back or knocking you down, and they run very fast; bulls in a group keep knocking you over. Hurting one of the young turns its relatives on you, and penned calves in towns are watched by ranchers who turn hostile if you harm them. With the Animal Friend perk they never turn on you.",
+      "source_url": "https://fallout.fandom.com/wiki/Bighorner",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4695921",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3806,
+      "game_id": 20,
+      "section_type": "enemy",
+      "name": "Giant ants",
+      "card": "Summary: Large insects with big mandibles that can be a real nuisance early in the game. Workers wear you down with nonstop swarming attacks, and soldiers are the biggest of the usual kinds.\nWeak points: A hit on the antennae counts as a critical hit and also sends the ant into a frenzy. A worker's shell is not especially hard next to a radscorpion's.\nLooks like: A big ant in a yellow-brown shell with large mandibles and long antennae. The queen is the biggest creature anywhere in the Mojave.\nTips: They are not fast, so if you fight them from a distance you can simply walk away from them. Workers roam in groups across barren desert, including the Ivanpah race track and Ivanpah Dry Lake; several soldiers are inside the Allied Technologies offices. One queen exists, in the mound south of those offices. At the Nellis array the ants blow up if hit by energy weapons or explosives.",
+      "source_url": "https://fallout.fandom.com/wiki/Giant_ant_(Fallout:_New_Vegas)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4652973",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3807,
+      "game_id": 20,
+      "section_type": "enemy",
+      "name": "Feral ghouls",
+      "card": "Summary: Ghouls that lost their minds to heavy radiation exposure and attack everyone except their own kind. Shrill and fast, they are dangerous mainly in numbers or to a low-level Courier.\nWeak points: A plain feral ghoul falls to one or two head shots from a decent ranged weapon, or one solid melee or unarmed hit.\nLooks like: Like normal ghouls but with deformed faces, skinnier, and moving oddly. The plain kind wears only tattered shorts; reavers wear what look like scraps of metal armor.\nTips: Roamers are more dangerous than the plain kind and far more common. Reavers in the Mojave are no stronger than the other kinds and no longer give off radiation. Glowing ones turn up at higher levels where radiation is worst, with much more health and damage and a burst of radiation. Expect ferals in the Vegas sewers and around Hell's Motel, the Devil's Throat and the Nevada Highway Patrol station. The armor they wear is for show.",
+      "source_url": "https://fallout.fandom.com/wiki/Feral_ghoul_(Fallout:_New_Vegas)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4670863",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3808,
+      "game_id": 20,
+      "section_type": "enemy",
+      "name": "Sentry bots",
+      "card": "Summary: Heavy military robots on wheeled tripod legs, armed with a Gatling laser or minigun on one side and a missile launcher on the other. They have a lot of health, so they are hard to put down, especially at a low level.\nWeak points: They are open to electromagnetic pulses, so pulse grenades, pulse mines and any other EMP-producing weapon can hurt them badly. Destroying the combat inhibitor mounted on its back sends it berserk, and it then attacks everything around it.\nLooks like: Armored head, wheeled tripod base. The REPCONN ones are shorter, with green eyes instead of red and REPCONN in white across the chest.\nTips: At long range a sentry bot leans on its missiles; once you are close it switches to the minigun or Gatling laser to avoid splash on itself. Head shots do less damage to it. Hardened sentry bots, met with hardened Mister Gutsies near the crashed vertibird, have about 500 hit points against 300 but no armor at all, and resist pulse grenades better. Twelve REPCONN bots hide in the headquarters and come out if you trip the alarm.",
+      "source_url": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout:_New_Vegas)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4677325",
+      "crawled_at": "2026-11-10"
     }
   ]
 }

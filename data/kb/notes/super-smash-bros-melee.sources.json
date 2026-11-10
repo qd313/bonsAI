@@ -32,7 +32,7 @@
           ]
         },
         {
-          "line": "Uses: Grabbing it sends a player into a state that inflicts significant damage and knockback, but while swinging they cannot jump a second time in the air, use any other attacks or defend.",
+          "line": "Uses: Whoever picks it up enters a special state in which hits cause heavy damage and knockback. While swinging, they cannot jump in midair, use their other attacks or guard.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Hammer_(item)",
@@ -68,7 +68,7 @@
       "main_revision": "2049293",
       "lines": [
         {
-          "line": "Summary: A long-range battering item, similar in appearance to a lightsaber. It can be wielded and charged for melee attacks or thrown, like all other battering items.",
+          "line": "Summary: A battering item with long reach that looks a lot like a lightsaber. You can swing it, charge it for attacks up close, or throw it, as with every other item of its kind.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Beam_Sword",
@@ -109,7 +109,7 @@
           ]
         },
         {
-          "line": "Tips: In Melee its range significantly increases in size, particularly on charged smash attacks. Peach can pull a Beam Sword out with her Vegetable attack, but the chance is slim: 1/768 in Melee.",
+          "line": "Tips: In Melee its reach grows a good deal, most of all on charged smash attacks. Peach can pull a Beam Sword out with her Vegetable attack, but the odds are slim: 1/768 in Melee.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Beam_Sword",
@@ -160,7 +160,7 @@
           ]
         },
         {
-          "line": "Tips: The item has only sixteen stars, and Captain Falcon's smash attack shoots off 5 stars and Sheik's 2, so they use it up quickly. When it runs out, throwing it at enemies is the more practical option: a thrown Star Rod deals powerful semi-spike knockback that can gimp recoveries or act as a general KO move. The stars are projectiles, so they can be reflected or absorbed.",
+          "line": "Tips: Only sixteen stars come with it, and Captain Falcon's smash attack fires 5 of them at once while Sheik's fires 2, so both drain it fast. Once it is empty, throwing it is the better use: a thrown Star Rod gives strong semi-spike knockback, good for ruining a recovery or as an ordinary KO move. The stars are projectiles, so they can be reflected or absorbed.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Star_Rod",
@@ -199,7 +199,7 @@
           ]
         },
         {
-          "line": "Uses: Tap the attack button repeatedly for a constant stream of small shots that each do little knockback and damage; the high rate of fire gives a trapping effect, as the opponent has little or no time to act. Hold the button to charge a bigger shot. It has limited ammunition, 48 shots in Melee, and different charge levels change the ammo used.",
+          "line": "Uses: Tap the attack button repeatedly and a flow of tiny shots comes out, each doing little damage or knockback; the quick fire boxes the opponent in so they have almost no time to act. Hold the button to charge a bigger shot. Ammunition is limited: Melee gives 48 shots, and higher charge levels use more of them.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Super_Scope",
@@ -252,7 +252,7 @@
           ]
         },
         {
-          "line": "Uses: It holds 16 shots. In Melee each shot deals 4% with horizontal knockback and can be fired every 30 frames, which lets it juggle opponents at low percents or carry them to the blast line at mid percents.",
+          "line": "Uses: It carries 16 shots. In Melee a shot does 4% damage, pushes sideways, and the gun can fire once every 30 frames. Because the push is sideways, it keeps opponents bouncing at low percents and drives them toward the blast line at middle percents.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Ray_Gun",
@@ -300,7 +300,7 @@
       "main_revision": "2062573",
       "lines": [
         {
-          "line": "Summary: Two healing items: each reduces the damage percentage of whoever picks it up. In Melee the Maxim Tomato heals 50% of a character's damage percentage and the Heart Container heals a total of 100%.",
+          "line": "Summary: Two items that heal: either one lowers the damage percentage of whoever grabs it. In Melee a Maxim Tomato takes 50% off, and a Heart Container takes off 100% in total.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Maxim_Tomato",
@@ -344,7 +344,7 @@
           ]
         },
         {
-          "line": "Looks like: The Maxim Tomato is a small red tomato with a noticeable black and white M on the front.",
+          "line": "Looks like: A little red tomato marked with a bold black and white M.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Maxim_Tomato",
@@ -356,7 +356,7 @@
           ]
         },
         {
-          "line": "Tips: In the All-Star Rest Area you are given three Heart Containers that can heal all of your damage instead of the standard 100%. Due to a glitch, entering the teleporter in Melee interrupts a Heart Container's healing, so it does not fully heal you.",
+          "line": "Tips: The All-Star Rest Area hands you three Heart Containers, and these heal every point of your damage, not just 100%. A glitch in Melee cuts a Heart Container's healing short if you step into the teleporter, so you are not fully healed.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Heart_Container",
@@ -378,7 +378,7 @@
       "main_revision": "2060964",
       "lines": [
         {
-          "line": "Summary: A transforming item that debuted in Melee: whoever breaks it becomes a Metal fighter for a short time, much heavier but slower and quicker to fall.",
+          "line": "Summary: First seen in Melee, this item makes whoever smashes it become a Metal fighter for a short while. Metal fighters are far heavier and walk more slowly, but fall faster.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Metal_Box",
@@ -386,14 +386,16 @@
               "quoted": [
                 "The Metal Box item debuted as a transforming item in Super Smash Bros. Melee.",
                 "The Metal Box transforms the player's fighter who breaks it into a Metal fighter.",
-                "Your mass is exponentially greater while metallic, making it difficult for others to throw you.",
-                "not only will you move a bit slower, but you'll also fall much more quickly than you ordinarily would."
+                "The effects last 12 seconds",
+                "Increases the fighter's weight (3.0× in Melee",
+                "Decreases the fighter's walking speed slightly (0.7× in Melee",
+                "Increases the fighter's falling speed (2.0× in Melee and Brawl"
               ]
             }
           ]
         },
         {
-          "line": "Uses: In Melee the effects last 12 seconds, though the time limit decreases as the fighter takes damage, especially from fire attacks. Walking speed is multiplied by 0.7 and jump force by 1.55, though not by enough to make up for the faster fall.",
+          "line": "Uses: The effect lasts 12 seconds in Melee, but damage shortens it, fire attacks most of all. Your walking speed is multiplied by 0.7 and your jump force by 1.55, which is usually not enough to offset how fast you fall.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Metal_Box",
@@ -408,7 +410,7 @@
           ]
         },
         {
-          "line": "Tips: The faster fall makes recoveries harder. In Melee, a Metal Box hit by a projectile disappears, but disjointed attacks and any attack from a sword-wielding character still break it and still turn the attacker into a Metal fighter.",
+          "line": "Tips: Falling faster makes it harder to get back to the stage. In Melee a Metal Box vanishes if a projectile touches it, but disjointed attacks, and any hit from a character wielding a sword, still break it and still make the attacker metal.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Metal_Box",
@@ -458,7 +460,7 @@
           ]
         },
         {
-          "line": "Looks like: The fighter who grabs it is given a bright, sparkling appearance.",
+          "line": "Looks like: The fighter who takes it sparkles brightly.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Super_Star",
@@ -470,7 +472,7 @@
           ]
         },
         {
-          "line": "Tips: It ricochets in big arcs over the field, off platforms and walls, and if nobody gets it soon it drops off the edge of the stage. In Melee, the star's own tune pushes the stage music down until you can barely hear it.",
+          "line": "Tips: It ricochets in big arcs over the field, off platforms and walls, and if nobody gets it soon it goes over the side. In Melee, the star's own tune pushes the stage music down until you can barely hear it.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Super_Star",
@@ -538,7 +540,7 @@
           ]
         },
         {
-          "line": "Looks like: The Poison Mushroom is a deceptive look-alike of the Super Mushroom, with a duller color scheme and angry eyes.",
+          "line": "Looks like: A Poison Mushroom is easy to mistake for a Super Mushroom, but it is duller in colour and has angry eyes.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Poison_Mushroom",
@@ -550,7 +552,7 @@
           ]
         },
         {
-          "line": "Tips: Both keep sliding to the right, but in Melee they slide left if they spawn on the right half of the stage. Touching one while under the effect of the other restores your normal size. In Melee, jumping at the moment a Super Mushroom's effects wear off gives a super jump almost as high as two jumps while wearing the Bunny Hood.",
+          "line": "Tips: Both mushrooms drift rightward after they appear, though in Melee one that appears on the stage's right side drifts left instead. If you touch one while the other is working on you, you go back to normal size. In Melee, if you jump just as a Super Mushroom runs out, you get a super jump about the height of two jumps taken in a Bunny Hood.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Super_Mushroom",
@@ -580,7 +582,7 @@
       "main_revision": "1988421",
       "lines": [
         {
-          "line": "Summary: Common enemies in Melee's 1-player modes, in male and female varieties. Generally they are weak and light fighters and are very easy to KO.",
+          "line": "Summary: Enemies you meet often in Melee's single-player modes, with male and female versions. They are mostly weak, light fighters who go down very easily.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Fighting_Wire_Frames",
@@ -608,7 +610,7 @@
           ]
         },
         {
-          "line": "Looks like: A framework of pink lines in a humanoid shape, with the Super Smash Bros. logo on the face and a red heart-like object in the chest; they are larger than the characters they are modelled on.",
+          "line": "Looks like: Pink lines forming the outline of a person. The face bears the logo of Super Smash Bros. and the chest holds something red shaped like a heart. They are bigger than the fighters they copy.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Fighting_Wire_Frames",
@@ -622,7 +624,7 @@
           ]
         },
         {
-          "line": "Tips: Males always home towards your character, while females play a more passive role and rarely attack directly. In Cruel Melee all of them are extremely aggressive, extremely powerful and harder to knock off-stage, so characters cannot survive easily among them. In Adventure Mode they are fought in a low-gravity version of Battlefield, and there and in Multi-Man Melee they cannot be Star or Screen KO'd.",
+          "line": "Tips: Males always chase after your character, while females hang back and seldom go straight for you. In Cruel Melee every one of them is fiercely aggressive, hits very hard and is tougher to knock off the stage, so surviving among them is hard. In Adventure Mode you fight them on a Battlefield with low gravity, and there and in Multi-Man Melee neither Star KOs nor Screen KOs work on them.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Fighting_Wire_Frames",
@@ -647,7 +649,7 @@
       "main_revision": "1952272",
       "lines": [
         {
-          "line": "Summary: The last fight of Classic Mode, fought on the Melee version of Final Destination. It has a set amount of HP that must be depleted to win, and in Melee that amount depends on the difficulty.",
+          "line": "Summary: The closing fight of Classic Mode, set on Melee's Final Destination. You win by draining a fixed amount of HP, and in Melee how much depends on the difficulty.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Master_Hand_(SSBM)",
@@ -661,7 +663,7 @@
           ]
         },
         {
-          "line": "Weak points: In Melee this boss loses the ability to turn around, and its movement depends entirely on the attack it is using and your position: it always returns to its starting position when it is not attacking.",
+          "line": "Weak points: In Melee this boss can no longer turn around. Where it moves is set wholly by the attack it is performing and where you stand, and between attacks it goes back to where it started.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Master_Hand_(SSBM)",
@@ -674,20 +676,20 @@
           ]
         },
         {
-          "line": "Looks like: A white glove; in Melee its wrist fades into nothingness instead of ending in a cuff.",
+          "line": "Looks like: A white glove. In Melee the wrist fades away rather than ending in a cuff.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Master_Hand_(SSBM)",
               "revision": "1952272",
               "quoted": [
-                "just because it wears a white glove doesn't mean it fights clean.",
+                "wears a white glove",
                 "instead of appearing as a glove with a \"cuff\", Master Hand's \"wrist\" fades into nothingness."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Its power increases with each increment in difficulty, and the highest levels give it many attacks that can KO in one hit. It shoots a laser beam from each fingertip, and its gun-shaped hand fires one pair of bullets until it has taken 150% damage and three pairs after that. A slap at the ground buries the player, and its throw into the ground has high damage and knockback but cannot KO under normal conditions. On Normal difficulty or higher, taking half of its HP off within a total of 5 minutes and 50 seconds since the start of Classic Mode brings a second boss into the fight.",
+          "line": "Tips: It gets stronger at each difficulty step, and the top levels give it a lot of attacks that finish you in one hit. A laser leaves each of its fingertips. When it makes a gun shape, it fires one pair of bullets until it has taken 150% damage, and three pairs after that. Its ground slap buries a player; its ground throw cannot normally KO, though it deals big damage and knockback. On Normal or harder, if you take off half its HP within 5 minutes 50 seconds of Classic Mode starting, a second boss joins the fight.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Master_Hand_(SSBM)",
@@ -740,7 +742,7 @@
           ]
         },
         {
-          "line": "Weak points: It starts with the same number of HP that the first boss started with. Its move where it lies on the ground and has violent spasms cannot hit aerial targets, and the bombs it drops do only low damage with minimal knockback if they hit a character before reaching the ground.",
+          "line": "Weak points: Its HP at the start is the same as the first boss's. When it lies on the floor and thrashes, that attack cannot reach anyone in the air, and any bomb it drops that hits a character before landing deals little damage and almost no knockback.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Crazy_Hand_(SSBM)",
@@ -756,7 +758,7 @@
           ]
         },
         {
-          "line": "Looks like: Its basic appearance is exactly the same as the final boss's, apart from being a left hand.",
+          "line": "Looks like: It looks just like the final boss, except that it is a left hand.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Crazy_Hand",
@@ -768,7 +770,7 @@
           ]
         },
         {
-          "line": "Tips: Most of its attacks are stronger variations of the final boss's, plus a few of its own. The fist it flies in with from behind the stage can star KO as low as 35%, its forward throw can KO at low percentages without DI, and the third of its three pokes can star KO at middle to high percentages.",
+          "line": "Tips: Most of its moves are beefed-up versions of the final boss's, with a few that are its own. The fist it flies in with from behind the stage can star KO from as little as 35%, its forward throw can KO at low damage if you do not use DI, and the last of its three pokes can star KO at mid to high percentages.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Crazy_Hand_(SSBM)",
@@ -794,7 +796,7 @@
       "main_revision": "2056414",
       "lines": [
         {
-          "line": "Summary: Occasionally an earthquake hits Brinstar and acid starts to rise, sometimes covering parts of the stage. The acid deals damage and moderate knockback and will not KO until very high percents, though in Melee a ceiling glitch can make it KO at extremely low percents.",
+          "line": "Summary: Every so often a quake shakes Brinstar and acid begins to climb, at times submerging part of the stage. It does damage and medium knockback, and it takes a very high percent before it can KO, although in Melee a glitch with the ceiling lets it KO at extremely low percents.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Brinstar",
@@ -803,20 +805,6 @@
                 "Occasionally, an earthquake occurs and, just like Planet Zebes, acid starts to rise, sometimes covering parts of the stage.",
                 "The acid deals damage and moderate knockback, but will not KO until very high percents",
                 "in Melee, the ceiling glitch can cause players to be unfairly K.Oed at extremely low percents by the acid"
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Weak points: While it is rising it generally prevents characters from being KO'd on the bottom blast line. It rises and pauses at various intervals, rarely reaching its highest point, where it covers everything except the topmost platform, and after a while it subsides.",
-          "drawn_from": [
-            {
-              "page": "https://www.ssbwiki.com/Brinstar",
-              "revision": "2056414",
-              "quoted": [
-                "While it is rising it will generally prevent characters from being KO'd on the bottom blast line.",
-                "It will rise and pause at various intervals, rarely reaching its highest point where it will cover everything except the topmost platform",
-                "After a while, the acid subsides."
               ]
             }
           ]
@@ -835,12 +823,15 @@
           ]
         },
         {
-          "line": "Tips: A character who has grabbed the Super Star can avoid the acid. The fleshy parts that hold the stage together can be weakened by attacks, and while they regenerate they are fall-through. In Melee, contact with the acid makes a unique splash effect with a sizzling sound.",
+          "line": "Tips: While it climbs, it generally stops anyone being KO'd off the lowest blast line. It climbs and halts at irregular spacing, seldom reaches its peak, where everything but the highest platform is covered, and after a while it drains away. Grabbing the Super Star lets a character avoid it. Attacks can wear down the fleshy parts that hold the stage together, and while they regrow you can drop through them. In Melee, touching the acid makes a distinctive splash and a sizzling sound.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Brinstar",
               "revision": "2056414",
               "quoted": [
+                "While it is rising it will generally prevent characters from being KO'd on the bottom blast line.",
+                "It will rise and pause at various intervals, rarely reaching its highest point where it will cover everything except the topmost platform",
+                "After a while, the acid subsides.",
                 "said blob can be weakened by attacks, and when destroyed the main platform gets separated.",
                 "While regenerating, the substance that holds the stage together is fall-through.",
                 "In Melee, when a fighter makes contact with the acid, a unique splash effect erupts from the acid with a distinct sizzling sound."
@@ -865,7 +856,7 @@
       "main_revision": "2064572",
       "lines": [
         {
-          "line": "Summary: The thirty F-Zero Racers are a hazard on Mute City: they drive around the track continuously, though they only appear on certain segments of the track and at alternating times and laps, and they damage any player on contact, sending them upwards.",
+          "line": "Summary: Thirty F-Zero Racers act as a hazard on Mute City. They keep driving around the track, though they appear only on some stretches of it, and only at certain times and on certain laps. Touching one hurts and sends you upward.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Mute_City",
@@ -878,7 +869,7 @@
           ]
         },
         {
-          "line": "Weak points: The racers can be damaged and even destroyed by explosives such as the Motion-Sensor Bomb, powerful attacks and items like the Hammer and Home-Run Bat, and immovable Pokémon like Venusaur or Charizard.",
+          "line": "Weak points: Racers can be hurt, and even blown up, by explosives like the Motion-Sensor Bomb, by strong attacks, by items such as the Home-Run Bat and the Hammer, and by stationary Pokémon such as Venusaur or Charizard.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Mute_City",
@@ -890,7 +881,7 @@
           ]
         },
         {
-          "line": "Tips: A destroyed racer's wreckage stays at the point where it exploded for the rest of the match. Touching the track while the platform is hovering over it also damages you. In Adventure Mode's F-Zero stage a giant \"!\" on the screen warns that cars are approaching, a hit does 35% damage, and you can jump on the pink platforms along the track to avoid them.",
+          "line": "Tips: A racer that is destroyed leaves its wreck lying where it blew up until the match ends. If the platform is floating above the track and you touch the track, you take damage too. On Adventure Mode's F-Zero stage, a large \"!\" appears on screen as cars approach, each hit costs 35%, and pink platforms along the track can be hopped onto to stay clear.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Mute_City",
@@ -920,7 +911,7 @@
       "main_revision": "2063729",
       "lines": [
         {
-          "line": "Summary: After a varying period of time the stage transforms into a random one of four variants, each based on a Pokémon type, then reverts to the basic form and repeats the cycle. The same variant can occur twice in a row.",
+          "line": "Summary: At irregular intervals the stage turns into one of four variants picked at random, each themed on a Pokémon type, then goes back to normal and starts over. The same variant can come up two times running.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Pok%C3%A9mon_Stadium",
@@ -933,21 +924,7 @@
           ]
         },
         {
-          "line": "Weak points: The fire in the background of the Fire variant is purely aesthetic and has no gameplay effect. On the Water variant's windmill, players on the current lowest arm fall, and in Melee the arms are soft.",
-          "drawn_from": [
-            {
-              "page": "https://www.ssbwiki.com/Pok%C3%A9mon_Stadium",
-              "revision": "2063729",
-              "quoted": [
-                "Note that the fire in the background is purely aesthetic and has no gameplay effect.",
-                "Its arms spin slowly and can be stood upon, but players on the current lowest arm fall.",
-                "The arms are soft in Melee and Ultimate but hard in Brawl."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: The basic stage is symmetrical, with one large main platform and two floating soft platforms above it, and a large jumbotron, a crowd and fireworks in the background.",
+          "line": "Looks like: The normal stage is symmetrical: one big main platform with two soft platforms hovering over it. Behind it you see a huge jumbotron, a crowd and fireworks.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Pok%C3%A9mon_Stadium",
@@ -960,12 +937,15 @@
           ]
         },
         {
-          "line": "Tips: The jumbotron shows a symbol for the upcoming variation during a stage transition. In Melee tournament play, many players wait out the Fire and Rock transformations by moving to the opposite side of the stage from their opponent until the stage returns to neutral, and many complain that this wastes time. In Melee, on the Fire variant, a character hit towards the right side of the tree's base has a chance of falling through.",
+          "line": "Tips: The big screen shows a symbol of the coming variant while the stage is changing. In Melee tournaments, many players wait through the Fire and Rock forms by staying on the far side of the stage from their opponent until it returns to normal, and many say this wastes time. On the Fire variant in Melee, a character hit toward the right of the tree's base may fall through. The flames behind the Fire variant are decoration only. On the Water variant's windmill, whoever stands on the lowest arm falls, and in Melee its arms are soft.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Pok%C3%A9mon_Stadium",
               "revision": "2063729",
               "quoted": [
+                "Note that the fire in the background is purely aesthetic and has no gameplay effect.",
+                "Its arms spin slowly and can be stood upon, but players on the current lowest arm fall.",
+                "The arms are soft in Melee and Ultimate but hard in Brawl.",
                 "which can display the battle itself, a symbol representing the upcoming variation during a stage transition",
                 "Many players will choose to \"wait out\" the Fire and Rock transformations by moving to the opposite side of the stage as their opponent, without approaching or attacking them, until the transformation returns to neutral.",
                 "As a result, many players complain that the transformations result in several minutes of wasted time during a set.",

@@ -953,6 +953,205 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3112,
+      "name": "Piranha Plant Orb",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Piranha_Plant_Orb",
+      "main_revision": "5533861",
+      "lines": [
+        {
+          "line": "Summary: A yellow Orb you place on a space: an opponent who lands on it is chewed by a Piranha Plant and must give you half of their coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Any opponent who lands on it must give you half of their coins."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Piranha_Plant_Orb",
+              "revision": "5533861",
+              "quoted": [
+                "it becomes the Piranha Plant Orb that players can only place on a space",
+                "Opponents that land on a space containing the Orb are still eaten by a Piranha Plant and lose half their coins, which are then transferred to the space's owner."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Place it on a space where rivals are likely to stop. If you land on your own space you get 5 coins, and if a rival lands there while you are standing on it, only the rival is chewed.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "If the owner lands on the space, they receive five coins."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Piranha_Plant_Orb",
+              "revision": "5533861",
+              "quoted": [
+                "If a player is already on the space of this orb, and another opponent lands on it, the Piranha Plant chews only the opponent, while the original player gets surprised."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It costs 15 coins and is sold on every board except Towering Treetop and Castaway Bay. It works only on a player who lands on the space, not one who passes, and it stays on the board until someone replaces it or a Star Space appears on that spot.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Any opponent who lands on it must give you half of their coins.\" || All boards except Towering Treetop and Castaway Bay || 15 coins",
+                "These orbs have an effect on a player who lands on the space.",
+                "The orb also stays on the board as long as no one replaces the orb or if a Star Space does not appear on it."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Piranha_Plant_Orb",
+              "revision": "5533861",
+              "quoted": [
+                "it costs fifteen coins at the Orb Shop."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3113,
+      "name": "Snack Orb",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Snack_Orb",
+      "main_revision": "5533863",
+      "lines": [
+        {
+          "line": "Summary: A blue Orb, sold only on Snowflake Lake, that protects you from one Chain Chomp theft.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Prevents a Chain Chomp from stealing from you one time. Can't be used or placed.\" || Snowflake Lake || 10 coins"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Snack_Orb",
+              "revision": "5533863",
+              "quoted": [
+                "It is only found on Snowflake Lake"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Just carry one: you cannot use or place it, and it works by itself the first time an opponent's Chain Chomp reaches you. You throw a bone, the Chomp jumps over your space to catch it, and everyone else standing on your space is spared too. You can throw the Orb away at any time, and a Chain Chomp can still use up a teammate's Snack Orb.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "They cannot be thrown on a space or used. Instead, they are used automatically. They can be disposed at any time if the players chooses to, though.",
+                "Chain Chomps in Snowflake Lake can still use up a teammate's Snack Orb, despite being on the same team."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Snack_Orb",
+              "revision": "5533863",
+              "quoted": [
+                "the user throws a bone into the air, causing the opponent's Chain-Chomp to jump over the user's space to catch it and then continue moving.",
+                "every player on the same space as the user also does not get hit by Chain-Chomp."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It costs 10 coins at an Orb hut and protects only one time, so buy another once it has been used.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Prevents a Chain Chomp from stealing from you one time. Can't be used or placed.\" || Snowflake Lake || 10 coins"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3114,
+      "name": "Boo-Away Orb",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Gaddlight",
+      "main_revision": "5533876",
+      "lines": [
+        {
+          "line": "Summary: A blue Orb that stops Pink Boo from stealing from you one time; it cannot be used or placed.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Prevents a Boo from stealing from you one time. Can't be used or placed."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Gaddlight",
+              "revision": "5533876",
+              "quoted": [
+                "it now protects against Pink Boo instead of the ordinary Boo"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Carry one on Towering Treetop or Castaway Bay and it works by itself when an opponent sends Pink Boo after you. The item inside is a flashlight, the Gaddlight of earlier games, that scares Boo away. You can throw the Orb away at any time.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "They cannot be thrown on a space or used. Instead, they are used automatically. They can be disposed at any time if the players chooses to, though."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Gaddlight",
+              "revision": "5533876",
+              "quoted": [
+                "The Gaddlight reappears in Mario Party 6, now in Orb form as the Boo-Away Orb.",
+                "It is a flashlight that can be used to prevent Boo from stealing from its holder",
+                "flashing the Boo with the item's light to scare it away.",
+                "The Boo-Away Orb retains the Gaddlight's effects from Mario Party 4"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It costs 10 coins at an Orb hut and is sold only on Towering Treetop and Castaway Bay, the only boards where Pink Boo appears.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Prevents a Boo from stealing from you one time. Can't be used or placed.\" || Towering Treetop and Castaway Bay || 10 coins"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Gaddlight",
+              "revision": "5533876",
+              "quoted": [
+                "The Boo-Away Orb is obtainable only in Towering Treetop and Castaway Bay, as those are the only boards on which Pink Boo can be found."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

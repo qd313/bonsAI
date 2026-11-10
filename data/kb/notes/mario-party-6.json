@@ -133,6 +133,39 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5533882",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3112,
+      "game_id": 29,
+      "section_type": "item",
+      "name": "Piranha Plant Orb",
+      "card": "Summary: A yellow Orb you place on a space: an opponent who lands on it is chewed by a Piranha Plant and must give you half of their coins.\nUses: Place it on a space where rivals are likely to stop. If you land on your own space you get 5 coins, and if a rival lands there while you are standing on it, only the rival is chewed.\nTips: It costs 15 coins and is sold on every board except Towering Treetop and Castaway Bay. It works only on a player who lands on the space, not one who passes, and it stays on the board until someone replaces it or a Star Space appears on that spot.",
+      "source_url": "https://www.mariowiki.com/Piranha_Plant_Orb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5533861",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3113,
+      "game_id": 29,
+      "section_type": "item",
+      "name": "Snack Orb",
+      "card": "Summary: A blue Orb, sold only on Snowflake Lake, that protects you from one Chain Chomp theft.\nUses: Just carry one: you cannot use or place it, and it works by itself the first time an opponent's Chain Chomp reaches you. You throw a bone, the Chomp jumps over your space to catch it, and everyone else standing on your space is spared too. You can throw the Orb away at any time, and a Chain Chomp can still use up a teammate's Snack Orb.\nTips: It costs 10 coins at an Orb hut and protects only one time, so buy another once it has been used.",
+      "source_url": "https://www.mariowiki.com/Snack_Orb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5533863",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3114,
+      "game_id": 29,
+      "section_type": "item",
+      "name": "Boo-Away Orb",
+      "card": "Summary: A blue Orb that stops Pink Boo from stealing from you one time; it cannot be used or placed.\nUses: Carry one on Towering Treetop or Castaway Bay and it works by itself when an opponent sends Pink Boo after you. The item inside is a flashlight, the Gaddlight of earlier games, that scares Boo away. You can throw the Orb away at any time.\nTips: It costs 10 coins at an Orb hut and is sold only on Towering Treetop and Castaway Bay, the only boards where Pink Boo appears.",
+      "source_url": "https://www.mariowiki.com/Gaddlight",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5533876",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

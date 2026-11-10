@@ -174,7 +174,7 @@
           ]
         },
         {
-          "line": "Weak points: It shares a common infected's weaknesses. Shoving it honks its nose, and after four honks in a row the next shove kills it. If you kill one at a distance, the infected following it stop and mill about for a moment, so shoot them then.",
+          "line": "Weak points: It shares a common infected's general weaknesses, but is a bit tougher. Shoving it honks its nose, and after four honks in a row the next shove kills it. If you kill one at a distance, the infected following it stop and mill about for a moment, so shoot them then.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -244,14 +244,14 @@
           ]
         },
         {
-          "line": "Weak points: Treat them like common infected, but a bit tougher: 150 health on Normal and above, 50 on Easy. They sprint on all fours.",
+          "line": "Weak points: Treat them like common infected, but a bit tougher: 150 health on Normal and above, 50 on Easy. They sprint on all fours but stumble back on two feet when shoved.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
               "revision": "173635",
               "quoted": [
                 "They have the same general weaknesses as their common brethren, but are slightly more resistant to damage than them.",
-                "Mud Men sprint on all fours low to the ground"
+                "Mud Men sprint on all fours low to the ground, although they stumble back on two feet when shoved."
               ]
             },
             {

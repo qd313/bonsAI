@@ -679,6 +679,326 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2711,
+      "name": "Tyger Claws",
+      "kind": "enemy",
+      "main_page": "https://cyberpunk.fandom.com/wiki/Tyger_Claws",
+      "main_revision": "304844",
+      "lines": [
+        {
+          "line": "Summary: A big Japantown gang that prefers melee weapons, especially ceramic tantos and katanas, with pistols and cheap, unreliable submachine guns as backup. Their tattoos are fortified with microchips to confuse targeting systems.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Tyger_Claws",
+              "revision": "304844",
+              "quoted": [
+                "The Tyger Claws prefer melee weapons, especially ceramic tantos and katanas",
+                "They also pack pistols and submachine guns, the latter usually cheap, plastic, multi-colored and unreliable.",
+                "luminous tattoos of Japanese demons fortified with microchips to confuse targeting systems."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The Hunter, a melee fighter, is a Tier 2 enemy with Weak rarity. Their Masking Ink tattoos give them a 50% chance to cause each Smart weapon projectile to miss.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Tyger_Claws_Hunter",
+              "revision": "286948",
+              "quoted": [
+                "The Hunter is a Tier 2 enemy affiliated with the Tyger Claws in Cyberpunk 2077.",
+                "Type Melee",
+                "Rarity Weak",
+                "50% Chance to not be hit by Smart Weapon projectiles."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+              "revision": "304721",
+              "quoted": [
+                "giving them a 50% chance to cause smart projectiles to miss."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Luminous tattoos of Japanese demons, katanas and fast street bikes.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Tyger_Claws",
+              "revision": "304844",
+              "quoted": [
+                "Tyger foot soldiers were easily recognized by their Asian luminous tattoos, fast street bikes, katanas, and tantos.",
+                "luminous tattoos of Japanese demons"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A Hunter has Break Hold, which makes it nigh-impossible to grab from behind. The gang's cyberware includes reflex boosters, augmented cyberlimbs and pain editors.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Tyger_Claws_Hunter",
+              "revision": "286948",
+              "quoted": [
+                "it'll be nigh-impossible to grab this enemy from behind."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Tyger_Claws",
+              "revision": "304844",
+              "quoted": [
+                "Cyberware used by the gang included reflex boosters, augmented cyberlimbs, pain editors, and electronic countermeasures (ECM) systems disguised as tattoos."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2712,
+      "name": "Maelstrom",
+      "kind": "enemy",
+      "main_page": "https://cyberpunk.fandom.com/wiki/Maelstrom",
+      "main_revision": "304651",
+      "lines": [
+        {
+          "line": "Summary: A gang that controls Watson and the Northside Industrial District, made up of people with heavy cyberware. Its Goon is a Tier 2 enemy of Weak rarity that can be a ranged or a melee fighter, and its Ironstormer is a Tier 2 heavy ranged enemy.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Maelstrom",
+              "revision": "304651",
+              "quoted": [
+                "A gang that controls the districts of Watson and the Northside Industrial District (NID).",
+                "Their physical appearance was distinguished by their dehumanizing heavy cyberware augmentations and occult-inspired tattoos."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Maelstrom_Goon",
+              "revision": "283492",
+              "quoted": [
+                "The Goon is a Tier 2 enemy affiliated with Maelstrom in Cyberpunk 2077.",
+                "Rarity Weak",
+                "The Goon can either be a Ranged or a Melee enemy."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Maelstrom_Ironstormer",
+              "revision": "289152",
+              "quoted": [
+                "Type Heavy Ranged",
+                "The Ironstormer is a Tier 2 enemy affiliated with Maelstrom in Cyberpunk 2077."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The Goon has Weak rarity, while the Ironstormer is rated Rare and wears Medium Subdermal Armor, which increases its Health by 33% and Armor by 100%, and the wiki says an enemy in subdermal armor is much more difficult to throw off balance.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Maelstrom_Goon",
+              "revision": "283492",
+              "quoted": [
+                "Rarity Weak"
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Maelstrom_Ironstormer",
+              "revision": "289152",
+              "quoted": [
+                "Rarity Rare",
+                "Increases Health by 33% and Armor by 100%.",
+                "An enemy with subdermal armor is more resistant to damage and is much more difficult to throw off balance."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Intimidating faceplates and hostile optic implants, and goggle-like cybereyes that glow a ghastly red.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Maelstrom",
+              "revision": "304651",
+              "quoted": [
+                "You can easily recognize them by their intimidating faceplates and hostile optic implants",
+                "Maelstrom members often implant goggle-like cybereyes that glow a ghastly red"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Goons and Ironstormers have Smokey Eye, so they can see you clearly through smoke, and the ranged ones throw frag grenades that can tear you to shreds if you stand in the blast. Members are also fond of mantis blade implants in their lower arms.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Maelstrom_Goon",
+              "revision": "283492",
+              "quoted": [
+                "Smokey Eye The enemy can see you clearly through clouds of smoke.",
+                "Frag Grenades The enemy is equipped with a classic shrapnel grenade. Don't underestimate them – if you find yourself within their blast radius, the shrapnel can tear you to shreds."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Maelstrom_Ironstormer",
+              "revision": "289152",
+              "quoted": [
+                "Smokey Eye The enemy can see you clearly through clouds of smoke.",
+                "Frag Grenades The enemy is equipped with a classic shrapnel grenade."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Maelstrom",
+              "revision": "304651",
+              "quoted": [
+                "Maelstrom members are also fond of lower arm mantis blade implants"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2713,
+      "name": "Scavengers",
+      "kind": "enemy",
+      "main_page": "https://cyberpunk.fandom.com/wiki/Scavengers",
+      "main_revision": "304833",
+      "lines": [
+        {
+          "line": "Summary: Loosely linked gangs that kidnap people and forcibly harvest their cyberware. They are all over Night City, thickest in northern Pacifica and the southern part of Wellsprings. Their Vulture is a Tier 2 heavy ranged enemy with frag grenades.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Scavengers",
+              "revision": "304833",
+              "quoted": [
+                "They are known for kidnapping people and forcibly harvesting their cyberware.",
+                "Scavengers can be found all over Night City.",
+                "they have a more concentrated presence in northern Pacifica and southern part of Wellsprings."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Scavengers_Vulture",
+              "revision": "285638",
+              "quoted": [
+                "The Vulture is a Tier 2 enemy affiliated with the Scavengers in Cyberpunk 2077.",
+                "Type Heavy Ranged",
+                "Frag Grenades"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The wiki rates the gang's threat level as Medium in 2077, and its groups are small bands with little or no internal structure. The Vulture wears Medium Subdermal Armor, which increases its Health by 33% and Armor by 100%.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Scavengers",
+              "revision": "304833",
+              "quoted": [
+                "Threat Level Medium (2077)",
+                "they tend to form small bands with little or no internal hierarchy or structure"
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Scavengers_Vulture",
+              "revision": "285638",
+              "quoted": [
+                "Increases Health by 33% and Armor by 100%."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Tracksuits, Soviet cyberware and criminal tattoos.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Scavengers",
+              "revision": "304833",
+              "quoted": [
+                "Scavengers are recognized by their tracksuits, Soviet cyberware, and criminal tattoos."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Their cyberware includes cyberoptics, pain editors, health monitors and Kerenzikov, which lets an enemy dodge incoming projectiles. A Vulture can also leap with Charge Jump.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Scavengers",
+              "revision": "304833",
+              "quoted": [
+                "Cyberware used by the gang include cyberoptics, pain editors, health monitors, Kerenzikov, and K.E.R.S."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Enemies",
+              "revision": "300063",
+              "quoted": [
+                "A classic and widely-used reflex booster that allows enemies to dodge incoming projectiles."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Scavengers_Vulture",
+              "revision": "285638",
+              "quoted": [
+                "Charge Jump Cybermodified leg joints and reinforced, advanced muscle kinetics allow the enemy to traverse large distances with quick, high jumps."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2714,
+      "name": "MaxTac",
+      "kind": "enemy",
+      "main_page": "https://cyberpunk.fandom.com/wiki/MaxTac",
+      "main_revision": "308854",
+      "lines": [
+        {
+          "line": "Summary: The NCPD's elite unit for hunting cyberpsychos. If you commit crimes until your wanted rating reaches five stars, MaxTac officers are sent after you, the last enemy type to hunt you while you are wanted. They work in squads of four, and on higher difficulties they can kill you in just a few shots whatever your level.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/MaxTac",
+              "revision": "308854",
+              "quoted": [
+                "MaxTac is an elite, special ops division of the NCPD with a singular aim: eliminate cyberpsychos.",
+                "reaching a maximum wanted rating (five stars) will result in the deployment MaxTac officers, who serve as the final enemy type to hunt V down while wanted.",
+                "On higher difficulties, they are capable of killing V in just a few shots regardless of character level.",
+                "MaxTac officers operate in squads of four each"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A squad's netrunner avoids direct combat, and the quickhacks it favours are slow to upload. The Mantis operator, who fights up close with MaxTac-built mantis blades, has the second highest armor rating.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/MaxTac",
+              "revision": "308854",
+              "quoted": [
+                "Netrunner - Field hackers who typically avoid direct combat in favor of utilizing quickhacks that are slow to upload, but cause high amounts of damage.",
+                "Mantis - Close-quarter specialists who utilize MaxTac-built mantis blades and the Omaha as backup weapons. They hold the second highest armor rating."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The roles are Assault (Ajax and Defender), Mantis, Heavy (a walking tank in an exosuit with the Defender), Netrunner and Sniper (Ashura, and a heavier use of Sandevistan). Officers regularly use Sandevistan Mk. 3 and Kerenzikov.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/MaxTac",
+              "revision": "308854",
+              "quoted": [
+                "Assault - Frontline fighters who utilize the Ajax and Defender.",
+                "Heavy - Walking tanks in exosuits who utilize the Defender to dish out large amounts of damage in seconds.",
+                "Sniper - Long-range specialists armed with the Ashura to attack V from a distance. These officers make significantly more use of their Sandevistan.",
+                "For cyberware, officers make regular use of Sandevistan Mk. 3 and Kerenzikov."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

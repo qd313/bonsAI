@@ -122,6 +122,50 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "300063",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2711,
+      "game_id": 8,
+      "section_type": "enemy",
+      "name": "Tyger Claws",
+      "card": "Summary: A big Japantown gang that prefers melee weapons, especially ceramic tantos and katanas, with pistols and cheap, unreliable submachine guns as backup. Their tattoos are fortified with microchips to confuse targeting systems.\nWeak points: The Hunter, a melee fighter, is a Tier 2 enemy with Weak rarity. Their Masking Ink tattoos give them a 50% chance to cause each Smart weapon projectile to miss.\nLooks like: Luminous tattoos of Japanese demons, katanas and fast street bikes.\nTips: A Hunter has Break Hold, which makes it nigh-impossible to grab from behind. The gang's cyberware includes reflex boosters, augmented cyberlimbs and pain editors.",
+      "source_url": "https://cyberpunk.fandom.com/wiki/Tyger_Claws",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "304844",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2712,
+      "game_id": 8,
+      "section_type": "enemy",
+      "name": "Maelstrom",
+      "card": "Summary: A gang that controls Watson and the Northside Industrial District, made up of people with heavy cyberware. Its Goon is a Tier 2 enemy of Weak rarity that can be a ranged or a melee fighter, and its Ironstormer is a Tier 2 heavy ranged enemy.\nWeak points: The Goon has Weak rarity, while the Ironstormer is rated Rare and wears Medium Subdermal Armor, which increases its Health by 33% and Armor by 100%, and the wiki says an enemy in subdermal armor is much more difficult to throw off balance.\nLooks like: Intimidating faceplates and hostile optic implants, and goggle-like cybereyes that glow a ghastly red.\nTips: Goons and Ironstormers have Smokey Eye, so they can see you clearly through smoke, and the ranged ones throw frag grenades that can tear you to shreds if you stand in the blast. Members are also fond of mantis blade implants in their lower arms.",
+      "source_url": "https://cyberpunk.fandom.com/wiki/Maelstrom",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "304651",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2713,
+      "game_id": 8,
+      "section_type": "enemy",
+      "name": "Scavengers",
+      "card": "Summary: Loosely linked gangs that kidnap people and forcibly harvest their cyberware. They are all over Night City, thickest in northern Pacifica and the southern part of Wellsprings. Their Vulture is a Tier 2 heavy ranged enemy with frag grenades.\nWeak points: The wiki rates the gang's threat level as Medium in 2077, and its groups are small bands with little or no internal structure. The Vulture wears Medium Subdermal Armor, which increases its Health by 33% and Armor by 100%.\nLooks like: Tracksuits, Soviet cyberware and criminal tattoos.\nTips: Their cyberware includes cyberoptics, pain editors, health monitors and Kerenzikov, which lets an enemy dodge incoming projectiles. A Vulture can also leap with Charge Jump.",
+      "source_url": "https://cyberpunk.fandom.com/wiki/Scavengers",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "304833",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2714,
+      "game_id": 8,
+      "section_type": "enemy",
+      "name": "MaxTac",
+      "card": "Summary: The NCPD's elite unit for hunting cyberpsychos. If you commit crimes until your wanted rating reaches five stars, MaxTac officers are sent after you, the last enemy type to hunt you while you are wanted. They work in squads of four, and on higher difficulties they can kill you in just a few shots whatever your level.\nWeak points: A squad's netrunner avoids direct combat, and the quickhacks it favours are slow to upload. The Mantis operator, who fights up close with MaxTac-built mantis blades, has the second highest armor rating.\nTips: The roles are Assault (Ajax and Defender), Mantis, Heavy (a walking tank in an exosuit with the Defender), Netrunner and Sniper (Ashura, and a heavier use of Sandevistan). Officers regularly use Sandevistan Mk. 3 and Kerenzikov.",
+      "source_url": "https://cyberpunk.fandom.com/wiki/MaxTac",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "308854",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

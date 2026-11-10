@@ -66,7 +66,7 @@
           ]
         },
         {
-          "line": "Tips: The Koopa Kid may give you a Cursed Mushroom so you can roll only 1 to 5 on your next turn, share everyone's coins out evenly, swap coins or places with another player by roulette, make everyone switch places, or shuffle everyone's Orbs. The game always starts with Bowser tossing three Koopa Kid Orbs onto the board, and getting one from an Orb Space or being forced to buy one at Bowser's shop adds another.",
+          "line": "Tips: The Koopa Kid may give you a Cursed Mushroom so you can roll only 1 to 5 on your next turn, share everyone's coins out evenly, swap coins or places with another player by roulette, make everyone switch places, or shuffle everyone's Orbs. In Party Cruise the game starts with Bowser tossing three Koopa Kid Orbs onto the board, and getting one from an Orb Space or being forced to buy one at Bowser's shop adds another.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Koopa_Kid_Space",
@@ -82,6 +82,13 @@
                 "Getting a Koopa Kid Orb from an Orb Space, which Koopa Kid uses immediately.",
                 "Being forced to buy a Koopa Kid Orb from Bowser's Shop, which Koopa Kid then uses."
               ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_7",
+              "revision": "5488638",
+              "quoted": [
+                "Bowser does not scatter three Koopa Kid Orbs across the board."
+              ]
             }
           ]
         }
@@ -95,7 +102,7 @@
       "main_revision": "5536129",
       "lines": [
         {
-          "line": "Summary: Toadsworth says there are no Stars on Pyramid Park: everyone begins with 5 Stars and you steal them from each other by paying to ride a Chain Chomp and crushing your rivals. The Chain Chomps are found in pyramid dog houses.",
+          "line": "Summary: In Party Cruise, Toadsworth says there are no Stars on Pyramid Park: everyone begins with 5 Stars and you steal them from each other by paying to ride a Chain Chomp and crushing your rivals. The Chain Chomps are found in pyramid dog houses.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Pyramid_Park",
@@ -104,6 +111,13 @@
                 "There are no Stars here! Everyone begins with 5 Stars, and you must use Chain Chomps to steal them from each other!",
                 "While on a Chain Chomp, you can crush your rivals and take their Stars.",
                 "players have to use Chain Chomps – found in pyramid dog houses – to steal Stars from opponents."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_7",
+              "revision": "5488638",
+              "quoted": [
+                "Party Cruise: Players need to pay to ride on Chain Chomps to steal Stars from their opponents."
               ]
             }
           ]
@@ -122,13 +136,12 @@
           ]
         },
         {
-          "line": "Looks like: The three Chain Chomps on the right side of the board are black, and the one at the top on the left is a Red Chomp.",
+          "line": "Looks like: The ordinary Chain Chomps there are black and a Red Chain Chomp offers three Dice Blocks; the Red Chomp is on the left side at the top of the board.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Pyramid_Park",
               "revision": "5536129",
               "quoted": [
-                "There are three Chain Chomps on the right side of the board",
                 "a Red Chomp on the left side located at the top"
               ]
             },
@@ -179,7 +192,7 @@
           ]
         },
         {
-          "line": "Weak points: In Party Cruise its curse is set off by landing on the Green Space in front of it.",
+          "line": "Weak points: In Party Cruise its curse is set off by landing on the Green Space in front of it, so that is the space to stay off if you want to avoid the curse.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Pyramid_Park",
@@ -233,7 +246,7 @@
       "main_revision": "5475239",
       "lines": [
         {
-          "line": "Summary: A black Star hidden in one of the treasure chests that takes one Star from you if you open it. On Grand Canal it is one of the four chests in Blooper's guessing game.",
+          "line": "Summary: A black Star hidden in one of the treasure chests that takes one Star from you if you open it. On Grand Canal in Party Cruise it is one of the four chests in Blooper's guessing game, and in Solo Cruise the chests hold five coins and three Dark Stars.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Ztar",
@@ -247,7 +260,7 @@
               "page": "https://www.mariowiki.com/Grand_Canal",
               "revision": "5536131",
               "quoted": [
-                "The Green Space in front of the juggling Blooper activates a guessing game, where Blooper juggles four chests that have: a Star, five coins, a Dark Star, and nothing"
+                "The Green Space in front of the juggling Blooper activates a guessing game, where Blooper juggles four chests that have: a Star, five coins, a Dark Star, and nothing (in Solo Cruise, there are always five coins, but three Dark Stars)."
               ]
             },
             {
@@ -260,20 +273,15 @@
           ]
         },
         {
-          "line": "Weak points: None are given; if you choose its chest you must take the Dark Star.",
+          "line": "Tips: If you choose the Dark Star's chest you must take it. On Neon Heights in Party Cruise, Bowser Time may put a Dark Star in the chest that held the Bob-omb, and paying Koopa Kid to open it makes you take the Dark Star and lose one Star. The Dark Star disappears if the chest with the regular Star is opened first, and unlike in Mario Party 6 you do not lose 20 coins if you have no Stars.",
           "drawn_from": [
             {
-              "page": "https://www.mariowiki.com/Ztar",
-              "revision": "5475239",
+              "page": "https://www.mariowiki.com/Bowser_Time",
+              "revision": "5520968",
               "quoted": [
-                "If the player chooses this chest, they must take it."
+                "It happens exclusively in the Party Cruise."
               ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: On Neon Heights, Bowser Time may put a Dark Star in the chest that held the Bob-omb, and paying Koopa Kid to open it makes you take the Dark Star and lose one Star. The Dark Star disappears if the chest with the regular Star is opened first, and unlike in Mario Party 6 you do not lose 20 coins if you have no Stars.",
-          "drawn_from": [
+            },
             {
               "page": "https://www.mariowiki.com/Neon_Heights",
               "revision": "5538497",
@@ -286,6 +294,7 @@
               "page": "https://www.mariowiki.com/Ztar",
               "revision": "5475239",
               "quoted": [
+                "If the player chooses this chest, they must take it.",
                 "If the player pays Koopa Kid for this chest, they are forced to take the Dark Star inside.",
                 "Unlike in Mario Party 6, if the player has no Stars, they do not lose 20 coins."
               ]
@@ -296,7 +305,7 @@
     },
     {
       "section_id": 3204,
-      "name": "Bowser's Lovely Lift!",
+      "name": "The Solo Cruise boss minigame",
       "kind": "boss",
       "main_page": "https://www.mariowiki.com/Bowser%27s_Lovely_Lift!",
       "main_revision": "5540060",
@@ -329,7 +338,7 @@
           ]
         },
         {
-          "line": "Tips: Hit four Dice Blocks each turn and the elevator climbs by the total, between 4 and 40 floors. After the 50th floor a Koopa Kid joins Bowser with the same attacks, three fireballs or three missiles and a laser team attack, and in Solo Cruise the game remembers the floor where you lost so you can resume from there.",
+          "line": "Tips: Hit four Dice Blocks each turn and the elevator climbs by the total, between 4 and 40 floors. After the 50th floor a Koopa Kid joins Bowser with the same attacks, three fireballs or three missiles and a laser team attack, and in Solo Cruise the game remembers the floor where you lost so you can resume from there. The minigame's own title is Bowser's Lovely Lift!",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser%27s_Lovely_Lift!",
@@ -339,7 +348,8 @@
                 "The minimum number of floors the player can progress on one turn is four, and the maximum is 40.",
                 "After the 50th floor, a Koopa Kid appears and assists Bowser in attacking. They can perform a team attack with laser beams.",
                 "Individually, the Koopa Kid has the exact same attacks as Bowser: shooting three fireballs or three missiles.",
-                "in the Solo Cruise, the game tracks the floor the player lost on, and allows them (or the opponent) to resume the minigame from that point"
+                "in the Solo Cruise, the game tracks the floor the player lost on, and allows them (or the opponent) to resume the minigame from that point",
+                "Bowser's Lovely Lift! is a boss minigame in Mario Party 7."
               ]
             }
           ]

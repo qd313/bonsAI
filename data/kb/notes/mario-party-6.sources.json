@@ -81,7 +81,7 @@
     {
       "section_id": 3101,
       "name": "DK Space",
-      "kind": "enemy",
+      "kind": "mechanic",
       "main_page": "https://www.mariowiki.com/DK_Space",
       "main_revision": "5412851",
       "lines": [
@@ -93,26 +93,6 @@
               "revision": "5518101",
               "quoted": [
                 "These spaces appear only during the day. Donkey Kong appears and causes an event, such as minigames where players can trade in bananas for coins. The DK Bonus may also occur, allowing the player to roll a DK Barrel to earn either five, 10, 20, 30 coins or even a Star."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Weak points: There is nothing to guard against: the events listed for these spaces, the banana mini-game and the DK Bonus, only pay out. At night every one of them is replaced by a Bowser Space, so the day and night meter tells you which one you will meet.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Mario_Party_6",
-              "revision": "5518101",
-              "quoted": [
-                "players can see how many turns the day time has left.",
-                "These spaces appear only during the day."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/DK_Space",
-              "revision": "5412851",
-              "quoted": [
-                "they are only around during the day, as they are replaced with Bowser Spaces at night."
               ]
             }
           ]
@@ -130,12 +110,13 @@
           ]
         },
         {
-          "line": "Tips: The DK Bonus uses a Dice Block shaped like a barrel, which can pay 5, 10, 20 or 30 coins or even a Star. Clockwork Castle has no DK Spaces, because Donkey Kong walks the board there.",
+          "line": "Tips: The DK Bonus uses a Dice Block shaped like a barrel, which can pay 5, 10, 20 or 30 coins or even a Star. At night every DK Space is replaced by a Bowser Space. Clockwork Castle has no DK Spaces, because Donkey Kong walks the board there.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/DK_Space",
               "revision": "5412851",
               "quoted": [
+                "they are only around during the day, as they are replaced with Bowser Spaces at night.",
                 "The DK Bonus now involves a Dice Block shaped like a barrel",
                 "There are no DK Spaces or Bowser Spaces in Clockwork Castle due to Donkey Kong and Bowser appearing on the board."
               ]
@@ -180,7 +161,7 @@
           ]
         },
         {
-          "line": "Weak points: A Snack Orb protects you from one Chain Chomp theft: you throw a bone, the Chomp jumps over your space to catch it and carries on, and anyone else standing on your space is spared too. The Orb works only once, and a Chain Chomp can still use up a teammate's Snack Orb.",
+          "line": "Weak points: A Snack Orb protects you from one Chain Chomp theft: you throw a bone, the Chomp jumps over your space to catch it and carries on, and anyone else standing on your space is spared too. The Orb works only once. In a team game, teammates share Orbs and are not hurt by each other's traps, but a Chain Chomp ride by a teammate can still use up your Snack Orb.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Snack_Orb",
@@ -195,7 +176,7 @@
               "revision": "5518101",
               "quoted": [
                 "Prevents a Chain Chomp from stealing from you one time. Can't be used or placed.",
-                "Chain Chomps in Snowflake Lake can still use up a teammate's Snack Orb, despite being on the same team."
+                "Teammates share Orbs, coins, Stars, and cannot be affected by each others traps; however, Chain Chomps in Snowflake Lake can still use up a teammate's Snack Orb, despite being on the same team."
               ]
             }
           ]
@@ -265,7 +246,7 @@
           ]
         },
         {
-          "line": "Weak points: A Boo-Away Orb stops her from stealing from you one time; it works on its own and cannot be used or placed. She only offers her services at night, so the day turns are safe.",
+          "line": "Weak points: A Boo-Away Orb stops her from stealing from you one time; it works on its own and cannot be used or placed. She only offers her services at night.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_6",
@@ -365,7 +346,7 @@
           ]
         },
         {
-          "line": "Weak points: Stay off the ? Space at the top of the board at night. The same space is a shower of coins for everyone by day.",
+          "line": "Weak points: When anyone lands on the ? Space at the top of the board at night, the Spiny eggs fall on every character and every player loses coins, not only the one who landed. By day the same space showers coins on everyone.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Woody",
@@ -592,7 +573,7 @@
           ]
         },
         {
-          "line": "Weak points: On Castaway Bay it is Bowser's Battle Yacht, which swaps places with DK's Riverboat whenever someone stops on the riverboat, so check which boat is at the Star Space before you land. On Clockwork Castle it moves with Bowser at night, who gives a Shadow Star to anyone he reaches or who reaches him.",
+          "line": "Weak points: On Castaway Bay it is Bowser's Battle Yacht, which swaps places with DK's Riverboat whenever someone stops on the riverboat, so check which boat is at the Star Space before you land.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Castaway_Bay",
@@ -601,19 +582,11 @@
                 "Whenever someone stops on DK’s Riverboat, it’ll swap places with Bowser’s Battle Yacht!",
                 "makes players hit a circular target on the pole, making a bell sound that switches Bowser's and DK's boats around."
               ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Clockwork_Castle",
-              "revision": "5447804",
-              "quoted": [
-                "He grants players that get to him or if he gets to them first with a Shadow Star that takes away a Star or 20 coins if they do not have a Star.",
-                "land on another space, making that the new Shadow Star Space."
-              ]
             }
           ]
         },
         {
-          "line": "Tips: The loss is 20 coins when you have no Star. On Clockwork Castle the Warp Pipes can get you away from Bowser, and he moves only after all four players have taken their turn.",
+          "line": "Tips: The loss is 20 coins when you have no Star. On Clockwork Castle the Warp Pipes can get you away from Bowser.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Castaway_Bay",
@@ -626,8 +599,7 @@
               "page": "https://www.mariowiki.com/Clockwork_Castle",
               "revision": "5447804",
               "quoted": [
-                "If you need to escape from Bowser or catch DK, don't hesitate to hop into a Warp Pipe.",
-                "After all four players take their turn, Bowser then takes his own turn"
+                "If you need to escape from Bowser or catch DK, don't hesitate to hop into a Warp Pipe."
               ]
             }
           ]
@@ -729,7 +701,7 @@
           ]
         },
         {
-          "line": "Uses: Use it on yourself when the Star Space is far away. It is sold only on Towering Treetop and E. Gadd's Garage, and both boards move the Star to a new spot after each purchase.",
+          "line": "Uses: It can only be used on yourself. On the boards that sell it, the Star moves to a new spot after each purchase.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Flutter_Orb",
@@ -757,7 +729,7 @@
           ]
         },
         {
-          "line": "Tips: It costs 30 coins at an Orb hut. A Star costs 20 coins on both of those boards, so keep that much back after buying it.",
+          "line": "Tips: It costs 30 coins at an Orb hut. On Towering Treetop and E. Gadd's Garage, a Star costs 20 coins.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Flutter_Orb",
@@ -792,20 +764,13 @@
       "main_revision": "5540925",
       "lines": [
         {
-          "line": "Summary: A green Orb that encases you in metal, so you move without being harmed by your rivals' traps.",
+          "line": "Summary: A green Orb that turns the player who uses it into metal.",
           "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Mario_Party_6",
-              "revision": "5518101",
-              "quoted": [
-                "Encase yourself in metal and move without being harmed by rivals' traps."
-              ]
-            },
             {
               "page": "https://www.mariowiki.com/Metal_Mushroom_Orb",
               "revision": "5540925",
               "quoted": [
-                "A Metal Mushroom Orb has the effect of turning the user metal, making them invulnerable to Trap Orbs put on spaces."
+                "A Metal Mushroom Orb has the effect of turning the user metal"
               ]
             }
           ]
@@ -1001,7 +966,7 @@
           ]
         },
         {
-          "line": "Tips: It costs 15 coins and is sold on every board except Towering Treetop and Castaway Bay. It works only on a player who lands on the space, not one who passes, and it stays on the board until someone replaces it or a Star Space appears on that spot.",
+          "line": "Tips: It costs 15 coins and is sold on every board except Towering Treetop and Castaway Bay. It affects a player who lands on the space, and it stays on the board until someone replaces it or a Star Space appears on that spot.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_6",
@@ -1050,14 +1015,14 @@
           ]
         },
         {
-          "line": "Uses: Just carry one: you cannot use or place it, and it works by itself the first time an opponent's Chain Chomp reaches you. You throw a bone, the Chomp jumps over your space to catch it, and everyone else standing on your space is spared too. You can throw the Orb away at any time, and a Chain Chomp can still use up a teammate's Snack Orb.",
+          "line": "Uses: Just carry one: you cannot use or place it, and it works by itself the first time an opponent's Chain Chomp reaches you. You throw a bone, the Chomp jumps over your space to catch it, and everyone else standing on your space is spared too. You can throw the Orb away at any time. In a team game, a Chain Chomp ride by a teammate can still use up your Snack Orb.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_6",
               "revision": "5518101",
               "quoted": [
                 "They cannot be thrown on a space or used. Instead, they are used automatically. They can be disposed at any time if the players chooses to, though.",
-                "Chain Chomps in Snowflake Lake can still use up a teammate's Snack Orb, despite being on the same team."
+                "Teammates share Orbs, coins, Stars, and cannot be affected by each others traps; however, Chain Chomps in Snowflake Lake can still use up a teammate's Snack Orb, despite being on the same team."
               ]
             },
             {

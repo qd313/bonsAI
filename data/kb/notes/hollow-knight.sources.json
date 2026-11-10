@@ -64,7 +64,7 @@
       "main_revision": "200497",
       "lines": [
         {
-          "line": "Summary: A flying spitter that drifts around until you come close, then fires blobs of corrosive liquid from a distance. It usually hunts in packs, and you meet it in the Forgotten Crossroads and at the western end of the Ancient Basin's tram tunnel.",
+          "line": "Summary: A hovering spitter that drifts around until you come close, then fires blobs of corrosive liquid from a distance. It usually hunts in packs, and you meet it in the Forgotten Crossroads and at the western end of the Ancient Basin's tram tunnel.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Aspid_Hunter",
@@ -121,6 +121,7 @@
               "quoted": [
                 "Stands in place until disturbed. Once engaged, it rushes into battle, using two attacks:",
                 "Raises its club and smashes it down",
+                "they still instinctively guard their former posts.",
                 "Only two are found in the Forgotten Crossroads, one east of the False Knight arena and the other right above the north Crystal Peak entrance."
               ]
             }
@@ -273,6 +274,7 @@
               "revision": "200295",
               "quoted": [
                 "They are scholars of the Soul Sanctum who have learnt how to harness the power of SOUL, which they twist into spells and use to teleport.",
+                "it pursues the Knight by teleporting and conjuring homing offensive orbs to attack with.",
                 "They appear in the Soul Sanctum, only to the east of the Soul Master arena. They also appear in the 9th, 10th, 11th and 17th waves of the Trial of the Fool."
               ]
             }
@@ -317,7 +319,7 @@
       "main_revision": "189292",
       "lines": [
         {
-          "line": "Summary: A hovering bug found only in Crystal Peak that stays out of nail reach and shoots crystals at you.",
+          "line": "Summary: A hovering creature found only in Crystal Peak that usually stays out of nail reach and shoots crystals at you.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Crystal_Hunter",
@@ -356,7 +358,7 @@
           ]
         },
         {
-          "line": "Looks like: A hovering bug with crystal growths on its body.",
+          "line": "Looks like: A hovering creature with crystal growths on its body.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Crystal_Hunter",
@@ -439,7 +441,7 @@
       "main_revision": "197871",
       "lines": [
         {
-          "line": "Summary: A crawling creature that rolls into a ball and rams you. It lives in the Ancestral Mound, the Crystallised Mound and the Howling Cliffs, and a stronger kind, the Sharp Baldur, fights in the Colosseum of Fools.",
+          "line": "Summary: A crawling creature that rolls into a ball and launches itself at you. It lives in the Ancestral Mound, the Crystallised Mound and the Howling Cliffs, and a stronger kind, the Sharp Baldur, fights in the Colosseum of Fools.",
           "drawn_from": [
             {
               "page": "https://hollowknight.wiki/w/Baldur",
@@ -505,6 +507,7 @@
               "page": "https://hollowknight.wiki/w/Gruz_Mother",
               "revision": "200527",
               "quoted": [
+                "Gruz Mother is found sleeping in a small arena.",
                 "One Gruz Mother can be found blocking the direct path to an abandoned village at the bottom of the Forgotten Crossroads. She is sleeping, exhausted from carrying her children, and wakes up when struck.",
                 "Two more Gruz Mothers can be fought simultaneously at the end of the Trial of the Warrior."
               ]

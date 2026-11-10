@@ -369,6 +369,39 @@ export function focusStrategyChromeFromAbove(liveSlot: HTMLElement | null): bool
 }
 
 /**
+ * Down from the Copy icon in the answer's corner (plan 103 F1): the summed-up note when this answer has one,
+ * then the first choice button or the checklist's first step when they are drawn, then the reply row's live
+ * stops in reading order (the "What went wrong?" choices only show under greyed thumbs, once rated down). The
+ * choices and the steps were missing, so on the Deck Down from Copy skipped every step and landed on Helpful
+ * (workshop:test-evidence/plan103-P103-M-CHECKLIST.json, 3 of 3). `slot` is the answer's own turn.
+ */
+export function focusDownFromAnswerCorner(slot: HTMLElement | null): boolean {
+  return (
+    focusRegisteredReplyStop("summary-note") ||
+    focusStrategyChromeFromAbove(slot) ||
+    focusRegisteredReplyStop("helpful") ||
+    focusRegisteredReplyStop("reason-chips") ||
+    focusRegisteredReplyStop("note-keep") ||
+    focusRegisteredReplyStop("show-details")
+  );
+}
+
+/**
+ * Up from the checklist's first step (plan 103 F1), the mirror of the way Down comes in: the last choice button
+ * when the choices are drawn too, else the summed-up note, else the answer's last section. Never the Copy icon:
+ * left unclaimed, Steam's own Up picked it as the nearest stop above the list (plan103-P103-M-CHECKLIST.json,
+ * 3 of 3), while Down from the last section goes straight to step 1. `answerKey` is the answer's ("live" or its
+ * turn's id), `slot` its turn.
+ */
+export function focusUpFromStrategyChecklist(slot: HTMLElement | null, answerKey: string): boolean {
+  return (
+    focusLastStrategyBranchFromBelow(slot) ||
+    focusRegisteredReplyStop("summary-note") ||
+    focusLastAnswerChunk(answerKey)
+  );
+}
+
+/**
  * Steam's nav node for the choice buttons ("A. ...", "B. ..."), which only the newest answer draws,
  * so one holder is enough. MainTabChatTranscript hands a fresh holder in on every render.
  */

@@ -202,6 +202,7 @@ import {
   focusReplyNotesLine,
   focusReplyUtilityRow,
   focusLiveAnswerFromBelow,
+  focusUpFromStrategyChecklist,
   queryLiveTurnSlot,
   registerStrategyBranchPickerNav,
   ringIsOnFirstStrategyBranch,
@@ -1048,12 +1049,20 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
 
   const renderStrategyChecklist = (placementKey: string) => {
     if (!strategyChecklistReady || !strategyChecklist || !onStrategyChecklistToggle) return null;
+    /*
+     * Up from step 1 is named, the mirror of Down into it: the last choice button, else the summed-up note,
+     * else the answer's last section. Left to Steam it landed on the Copy icon, the nearest stop above the
+     * list (plan 103 F1, workshop:test-evidence/plan103-P103-M-CHECKLIST.json). Down from the last step stays
+     * Steam's own: the reply row is the next sibling.
+     */
     return (
       <StrategyChecklistPanel
         key={`strategy-checklist-${placementKey}`}
         checklist={strategyChecklist}
         onToggle={onStrategyChecklistToggle}
-        onMoveUpFromFirst={() => false}
+        onMoveUpFromFirst={() =>
+          focusUpFromStrategyChecklist(queryTurnSlot(placementKey) ?? queryLiveTurnSlot(), placementKey)
+        }
         onMoveDownFromLast={() => false}
       />
     );

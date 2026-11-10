@@ -11,7 +11,8 @@
  *     └──────────────────────────────────────────────┘
  *       last section ─ Right ─▶ Copy
  *                    ◀─ Left ── Copy
- *       Down from Copy: the note, Helpful, the first choice, Show details
+ *       Down from Copy: the summed-up note, the first choice button or the checklist's step 1,
+ *         Helpful, the first "What went wrong?" choice, Show details (the first one drawn)
  *       Up from Copy: the answer's last section
  *
  * Used for: buildAnswerBubbleElement.tsx, once per finished answer.
@@ -41,6 +42,11 @@ import { Focusable } from "@decky/ui";
 import { ReplyCopyButton } from "../reply-actions/ReplyCopyButton";
 import { focusLastAnswerChunk } from "./answerBubbleNavigation";
 import { focusRegisteredReplyStop } from "../../../shared/dpad/replyStopRegistry";
+import {
+  focusDownFromAnswerCorner,
+  queryLiveTurnSlot,
+  queryTurnSlot,
+} from "../../../shared/dpad/liveTurnFocusGraph";
 import {
   isDeckDirectionLeftEvent,
   isDownDeckButtonEvent,
@@ -74,21 +80,6 @@ function takeThenFocus(nav: NavHolder, stop: "copy"): boolean {
   return focusRegisteredReplyStop(stop);
 }
 
-/**
- * Down out of the corner: the summed-up note when this answer has one (plan 68), then the thumbs
- * when they render, else the first "What went wrong?" choice when the reply has been rated down (the
- * thumbs are greyed then, and the choices sit right under them), else Show details.
- */
-function downOutOfCorner(): boolean {
-  return (
-    focusRegisteredReplyStop("summary-note") ||
-    focusRegisteredReplyStop("helpful") ||
-    focusRegisteredReplyStop("reason-chips") ||
-    focusRegisteredReplyStop("note-keep") ||
-    focusRegisteredReplyStop("show-details")
-  );
-}
-
 /*
  * In: the answer's key, whether it is still arriving, and the optional handler that switches the
  * icon on (`getAnswerCopyText` for Copy).
@@ -104,6 +95,13 @@ export function buildAnswerCorners(args: AnswerCornerArgs): AnswerCorners {
 
   const rightIntoCorner = () => (showCornerCopy ? takeThenFocus(copyNavRef, "copy") : false);
   const upOutOfCorner = () => focusLastAnswerChunk(answerKey);
+  /*
+   * Down out of the corner: the summed-up note (plan 68), the first choice button or the checklist's first
+   * step (plan 103 F1: without them Down skipped the whole list onto Helpful on the Deck), then the reply row
+   * (liveTurnFocusGraph.ts, `focusDownFromAnswerCorner`). This answer's own turn, found the way the last
+   * section's Down finds it, so both Downs reach the same stop.
+   */
+  const downOutOfCorner = () => focusDownFromAnswerCorner(queryTurnSlot(answerKey) ?? queryLiveTurnSlot());
 
   const slots = (
     <>

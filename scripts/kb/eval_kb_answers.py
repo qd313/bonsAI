@@ -1146,9 +1146,14 @@ async def run_sample(
     run_game_ai_request: Callable[..., Any],
     judge_model: str = "",
 ) -> SampleResult:
-    """Unchanged signature and behaviour: a thin call-through to ``run_turn`` with this case's own
-    fields. Existing single-question cases run this exact path, byte-identically to before
-    ``run_turn`` was split out."""
+    """A thin call-through to ``run_turn`` with this case's own fields, after clearing the plugin's
+    follow-up memory. A try is a first turn: without the clearing, try 2 and try 3 were asked as
+    follow-ups of the try before (the remembered subject and the earlier reply went into the prompt
+    under "FOLLOW-UP CONTEXT"), and the first question of a game inherited the last try of the
+    previous question about the same game (found 2026-11-09, plan 103 lane T2)."""
+    from backend.knowledge import kb_followup_memory
+
+    kb_followup_memory.forget()
     return await run_turn(
         plugin,
         case_id=case.id,

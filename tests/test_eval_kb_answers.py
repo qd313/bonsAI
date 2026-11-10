@@ -1550,5 +1550,66 @@ class EvalKbAnswersTrySeedTests(unittest.TestCase):
         self.assertEqual({k: v for k, v in sample.__dict__.items()}["seed"], 123)
 
 
+class EvalKbAnswersFreshTryTests(unittest.TestCase):
+    """Plan 103 lane T2, commit 2: a try is a first turn. Before this, try 2 and try 3 of a question
+    were asked as follow-ups of the try before (the plugin's follow-up memory kept the subject and
+    the earlier reply, and put "FOLLOW-UP CONTEXT" in the prompt), so only try 1 was a first turn."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load_eval_module()
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.modules.pop("eval_kb_answers", None)
+
+    _case = EvalKbAnswersHarnessTests._case
+
+    def setUp(self):
+        from backend.knowledge import kb_followup_memory
+
+        self.memory = kb_followup_memory
+        self.memory.forget()
+        self.addCleanup(self.memory.forget)
+
+    def _run(self, case, sample_idx, seen):
+        mod = self.mod
+        memory = self.memory
+
+        async def fake_run_game_ai_request(plugin, question, ollama_base, app_id, app_name, attachments, ask_mode):
+            # What the real Ask does first: look up the subject remembered for this game. Then, as
+            # it does at the end of a Strategy turn, remember this turn's own subject and reply.
+            seen.append(memory.recall(app_id=app_id, app_name=app_name, text_resolved_title=""))
+            memory.remember(app_id=app_id, app_name=app_name, text_resolved_title="", subject="The Boss")
+            memory.remember_previous_turn(
+                app_id=app_id, app_name=app_name, text_resolved_title="", question=question, answer="last reply"
+            )
+            return {"success": True, "response": "ok", "strategy_guide_branches": None}
+
+        return asyncio.run(
+            mod.run_sample(
+                types.SimpleNamespace(), case, sample_idx=sample_idx, ollama_base="http://x", retrieval_log=[],
+                capture=mod._ListHandler(), kb_card_names=lambda text: [],
+                run_game_ai_request=fake_run_game_ai_request,
+            )
+        )
+
+    def test_try_two_of_a_question_does_not_see_what_try_one_left_behind(self):
+        case = self._case(id="A-HK-01", app_id="367520", app_name="Hollow Knight")
+        seen: list = []
+        for n in (1, 2, 3):
+            self._run(case, n, seen)
+        self.assertEqual(seen, ["", "", ""])
+
+    def test_the_next_question_of_the_same_game_starts_fresh_too(self):
+        first = self._case(id="A-HK-01", app_id="367520", app_name="Hollow Knight")
+        second = self._case(id="A-HK-02", app_id="367520", app_name="Hollow Knight")
+        seen: list = []
+        self._run(first, 3, seen)
+        self._run(second, 1, seen)
+        self.assertEqual(seen, ["", ""])
+        self.assertEqual(self.memory.recall(app_id="367520", app_name="Hollow Knight", text_resolved_title=""), "The Boss")
+
+
 if __name__ == "__main__":
     unittest.main()

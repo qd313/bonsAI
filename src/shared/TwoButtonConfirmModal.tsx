@@ -7,7 +7,8 @@
  * exactly two buttons side by side. The action is on the left in the look of the Beta Notice's "Got it"
  * (Steam's own primary button: grey at rest, blue with the ring on it); Cancel (or the safe button's own
  * words) is on the right in the plugin's frosted glass, the same height (styles/confirmBoxButtons.ts), and
- * the ring starts on it, so an A pressed by habit changes nothing. B is Cancel. Left and Right step between
+ * the ring starts on it, so an A pressed by habit changes nothing (one box opens on its action instead: the
+ * quick-start box, whose two buttons both only close it; ringStartsOn). B is Cancel. Left and Right step between
  * the two and hold still at the ends. The maintainer's rule of 2026-10-18: Cancel on the right in every box.
  * Since 2026-10-22 Cancel is glass, not Steam's plain button: that one turns solid white the moment the ring
  * lands on it, and the ring starts there, so every box opened with a white block beside a grey one, and the
@@ -23,8 +24,9 @@
  * the starter set's included), KnowledgeBaseSection.tsx (Remove), KbLoweredNotesRow.tsx (Clear lowered notes),
  * PullModelsTryOrder.tsx, usePullModelDeleteConfirm.tsx, usePullModelSubmitSelected.tsx,
  * usePullModelTier2Confirm.tsx, usePullModelToggleSelection.tsx, ChatSlotDeleteModal.tsx (Delete chat),
- * useMdnsOllamaDiscovery.tsx (Find LAN) and useThinkingNoticeGate.tsx (Show thinking / Keep it off), each
- * through showModal.
+ * useMdnsOllamaDiscovery.tsx (Find LAN), useThinkingNoticeGate.tsx (Show thinking / Keep it off) and
+ * PluginHelpModal.tsx (the quick-start box, "Using bonsAI"; until plan 103 Steam's own ConfirmModal, which had no
+ * height limit and opened with its title under Steam's top bar), each through showModal.
  *
  * Solves: Steam's own ConfirmModal always draws a Cancel button beside its OK button, so a box built as
  * "safe choice first" ended with three buttons (Keep cache / Clear / Cancel; plan 93 bug, measured on the
@@ -82,9 +84,14 @@ export type TwoButtonConfirmModalProps = {
   onCancel: () => void;
   /** The action button. */
   onAction: () => void;
+  /**
+   * Where the ring opens: on Cancel (left out), or on the action for a box whose two buttons both only close it
+   * (the quick-start box's Got it, where Steam's own box used to open it).
+   */
+  ringStartsOn?: "cancel" | "action";
 };
 
-/** How many frames the box waits, after its first two, for Cancel's nav node before it gives the ring up. */
+/** How many frames the box waits, after its first two, for the starting button's nav node before giving up. */
 const RING_WAIT_FRAMES = 8;
 
 /** Each button fills half the row; the Focusable is the stop, the button inside it the look. */
@@ -217,10 +224,10 @@ const Choice: React.FC<{
 
 /**
  * In: the title, the words under it, the action's label, the safe button's label when it is not "Cancel",
- * and what each button does (onCancel is also B).
+ * what each button does (onCancel is also B), and where the ring opens when it is not Cancel.
  * Out: the box, built on ModalRoot inside the plugin's popup scope, with the ring handed to the safe
- * button a moment after it opens.
- * Can go wrong: if Steam never fills the safe button's nav node, the ring stays where Steam put it (the
+ * button (or the action, when asked) a moment after it opens.
+ * Can go wrong: if Steam never fills that button's nav node, the ring stays where Steam put it (the
  * action) after RING_WAIT_FRAMES; both buttons still work.
  */
 export function TwoButtonConfirmModal({
@@ -230,6 +237,7 @@ export function TwoButtonConfirmModal({
   cancelLabel = "Cancel",
   onCancel,
   onAction,
+  ringStartsOn = "cancel",
 }: TwoButtonConfirmModalProps) {
   const done = useRef(false);
   const once = (act: () => void) => () => {
@@ -239,18 +247,20 @@ export function TwoButtonConfirmModal({
   };
   const actionNav = useRef<NavRefHolder["current"]>(null);
   const cancelNav = useRef<NavRefHolder["current"]>(null);
+  const startNav = useRef(ringStartsOn === "action" ? actionNav : cancelNav);
   const words = useScrollingWords();
   const { up, down } = words;
 
-  // The ring starts on Cancel. Two frames: the box mounts, then Steam finishes its own first focus pass
-  // (which lands on the action, the first button); then Cancel's nav node is taken, waiting a few more
-  // frames if Steam has not filled it yet. Mount only: running again would pull the ring back.
+  // The ring starts on Cancel (or the action, when asked). Two frames: the box mounts, then Steam finishes its
+  // own first focus pass (which lands on the action, the first button); then the starting button's nav node is
+  // taken, waiting a few more frames if Steam has not filled it yet. Mount only: running again would pull the
+  // ring back.
   useEffect(() => {
     const frame = (run: () => void): number => window.requestAnimationFrame(run);
     let id = 0;
     let waited = 0;
     const take = () => {
-      if (takeHolderFocus(cancelNav) || ++waited >= RING_WAIT_FRAMES) return;
+      if (takeHolderFocus(startNav.current) || ++waited >= RING_WAIT_FRAMES) return;
       id = frame(take);
     };
     id = frame(() => {

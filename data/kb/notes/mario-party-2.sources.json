@@ -1,0 +1,329 @@
+{
+  "wiki": "Super Mario Wiki (https://www.mariowiki.com/api.php)",
+  "licence_printed_by_fetcher": "Super Mario Wiki (MediaWiki 1.43.11) licence: Attribution-ShareAlike 4.0 International https://creativecommons.org/licenses/by-sa/4.0/",
+  "licence_stored": "CC-BY-SA-4.0 (the fetcher prints 'Attribution-ShareAlike 4.0 International'; the library stores the versioned form, and data/kb/NOTICE.md lists Super Mario Wiki as CC-BY-SA-4.0)",
+  "game_id": 27,
+  "game": "Mario Party 2",
+  "read_on": "2026-11-09",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py (the repo's reader) run through a three-line wrapper that asks the render call by page name instead of by revision id, because www.mariowiki.com answers HTTP 403 to action=parse with an oldid; the licence line, revision lookup, text extraction and manifest are the reader's own code. Every quoted sentence below was checked, by script, to appear word for word (white space collapsed) in the page text saved in build/wiki-live/mariowiki at the revision named. Table rows are quoted with their cells joined by ' || '. Several Super Mario Wiki pages describe the whole series; a line states a Mario Party 2 fact only where the page says so for Mario Party 2.",
+  "sections": [
+    {
+      "section_id": 2900,
+      "name": "Mushroom",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Mushroom",
+      "main_revision": "5468692",
+      "lines": [
+        {
+          "line": "Summary: An item that lets you roll two Dice Blocks instead of one and move the total of both. It costs 10 coins at an Item Shop and is Mario's favorite item.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mushroom",
+              "revision": "5468692",
+              "quoted": [
+                "When used, the Mushroom allows a player to roll two Dice Blocks instead of just one, traveling a number of spaces equal to the sum of the numbers rolled.",
+                "It can be bought from an Item Shop for 10 coins.",
+                "The Mushroom is Mario's favorite item in this game."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Use it on your turn to roll two Dice Blocks and move the sum of the two numbers. Rolling the same number on both gives you 10 coins, and double 7s give you 20 coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "When used, this item allows the player to roll two Dice Blocks instead of one. The two digits that the player rolls are added up together, and the player will move that many spaces."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mushroom",
+              "revision": "5468692",
+              "quoted": [
+                "If the player rolls the same number on both Dice Blocks, they are granted 10 coins, or 20 coins for double 7s."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: At 10 coins it ties with the Skeleton Key as the cheapest item in the shop. You can carry only one item at a time, and with one in hand you cannot enter an Item Shop or start an Item Mini-Game, so use it before your next shop or Item Space.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
+              "revision": "5449664",
+              "quoted": [
+                "All items sold at the Item Shop cost at least 10 coins",
+                "Mushroom || 10 coins || Skeleton Key || 10 coins || Plunder Chest || 15 coins",
+                "if they are already carrying an item, they will not be allowed to enter the shop"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "A player can only hold one item at a time in this game.",
+                "The Mini-Game will not be initiated if it is the last turn, or if the player already has an item."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2901,
+      "name": "Golden Mushroom",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Mario_Party_2",
+      "main_revision": "5506219",
+      "lines": [
+        {
+          "line": "Summary: An item that lets you roll three Dice Blocks and move the total of all three. It costs 20 coins at an Item Shop.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "When used, the player using it will roll three Dice Blocks. The digits of all three rolls are added together, and the player will move that many spaces."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
+              "revision": "5449664",
+              "quoted": [
+                "Golden Mushroom || 20 coins"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Use it to roll three Dice Blocks and move the sum of the three numbers. If all three show the same number you get 20 coins, and three 7s give you 50 coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "If the player rolls the same digits on all three Dice Blocks (e.g. three \"10's\"), the player gets 20 Coins. Three \"7's\" result in 50 Coins."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: From the middle of the game on, the shop's stock list for every placing includes it. On Bowser Land, walking past the Baby Bowser shop in a Bowser Suit makes him hand you one of four items for free: a Skeleton Key, Golden Mushroom, Boo Bell or Magic Lamp.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
+              "revision": "5449664",
+              "quoted": [
+                "Mushroom, Skeleton Key, Golden Mushroom",
+                "Mushroom, Skeleton Key, Plunder Chest, Golden Mushroom",
+                "Mushroom, Skeleton Key, Dueling Glove, Golden Mushroom",
+                "Mushroom, Skeleton Key, Plunder Chest, Dueling Glove, Golden Mushroom",
+                "Mushroom, Skeleton Key, Dueling Glove, Warp Block, Golden Mushroom",
+                "Mushroom, Skeleton Key, Warp Block, Golden Mushroom, Magic Lamp"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "If the player passes by this shop while wearing a Bowser Suit, he will instead give the player a Skeleton Key, Golden Mushroom, Boo Bell, or a Magic Lamp for free."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2902,
+      "name": "Skeleton Key",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Skeleton_Key",
+      "main_revision": "5538382",
+      "lines": [
+        {
+          "line": "Summary: An item that opens a locked gate on a board when you reach it, usually giving access to areas you could not otherwise reach. It costs 10 coins at an Item Shop and is Luigi's favorite item.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Skeleton_Key",
+              "revision": "5538382",
+              "quoted": [
+                "that can unlock certain doors on a board, usually opening access to areas that cannot be reached otherwise.",
+                "The Skeleton Key can always be bought at Item Shops for 10 Coins in Mario Party 2",
+                "It is Luigi's favorite item in Mario Party 2 and 3"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "This item is activated automatically whenever a player who possesses it is about to run into a locked gate."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
+              "revision": "5449664",
+              "quoted": [
+                "Skeleton Key || 10 coins"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: At a locked gate the key opens it, you are let through, and the gate locks again. Using one only opens the door, so you can spend it on a door without actually taking that path.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "The key will open the gate – the player will be let through, and the gate will be locked again."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Skeleton_Key",
+              "revision": "5538382",
+              "quoted": [
+                "Using one will only open the door, allowing the player to choose to spend it to open a door but not actually travel that path."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You cannot throw it away to make room for another item: it stays until you use it on a door, unless another player steals it. Item Shops sell it for 10 coins everywhere except Bowser Land, where Baby Bowser can force one on you for 12.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "Unlike in Mario Party 3, the player cannot discard this item if they do not need it."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Skeleton_Key",
+              "revision": "5538382",
+              "quoted": [
+                "Once acquired, a Skeleton Key cannot be discarded to make room for another item - it must be used on a door to get rid of it, if not stolen by another player.",
+                "The Skeleton Key can always be bought at Item Shops for 10 Coins in Mario Party 2, except in Bowser Land, unless Baby Bowser forces the player to buy one for 12 Coins."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2903,
+      "name": "Plunder Chest",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Plunder_Chest",
+      "main_revision": "5473170",
+      "lines": [
+        {
+          "line": "Summary: An item that steals an item from an opponent. It costs 15 coins at an Item Shop and is Peach's favorite item.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Plunder_Chest",
+              "revision": "5473170",
+              "quoted": [
+                "It is a treasure chest that can steal an item from another player.",
+                "In Mario Party 2 and Mario Party 3, it is Princess Peach's favorite item"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
+              "revision": "5449664",
+              "quoted": [
+                "Plunder Chest || 15 coins"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Using it steals an item from an opponent picked at random out of all the opponents who are holding one; you cannot choose whom to rob. You can use the stolen item at once, unless it is a Bowser Bomb, or keep it for a later turn.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Plunder_Chest",
+              "revision": "5473170",
+              "quoted": [
+                "In Mario Party 2, when used, the Plunder Chest steals an item from another player, chosen at random out of all opponents that have items.",
+                "However, you cannot choose which opponent to steal.",
+                "The stolen item can then be used immediately (unless it is a Bowser Bomb), or held for a later turn as usual."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In the Item Shop it shows up for the player in second place in the middle of the game and for the player in first place in the last five turns.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
+              "revision": "5449664",
+              "quoted": [
+                "Mushroom, Skeleton Key, Plunder Chest, Golden Mushroom",
+                "Mushroom, Skeleton Key, Plunder Chest, Dueling Glove, Golden Mushroom",
+                "!! Mid-game || Mushroom, Skeleton Key, Golden Mushroom || Mushroom, Skeleton Key, Plunder Chest, Golden Mushroom || Mushroom, Skeleton Key, Dueling Glove, Golden Mushroom",
+                "!! Last 5 turns || Mushroom, Skeleton Key, Plunder Chest, Dueling Glove, Golden Mushroom || Mushroom, Skeleton Key, Dueling Glove, Warp Block, Golden Mushroom"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2904,
+      "name": "Dueling Glove",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Dueling_Glove",
+      "main_revision": "5522844",
+      "lines": [
+        {
+          "line": "Summary: An item that lets you pick an opponent to duel in a Duel Mini-Game for coins. It costs 15 coins at an Item Shop and is Wario's favorite item.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Dueling_Glove",
+              "revision": "5522844",
+              "quoted": [
+                "The Dueling Glove is used to wager a number of coins decided by the user in Mario Party 2, as the two players compete in a duel minigame specific to the board.",
+                "It is Wario's favorite item",
+                "The Dueling Glove costs 15 coins to buy."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Using it summons a Goomba, then you choose the opponent to duel and how many coins to wager. The most you can wager is the coin count of whichever of the two players has fewer coins before the duel.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "When used, the player using it will summon a Goomba. The player will then choose an opponent to duel in a Duel Mini-Game. After this, the player will have the option to choose how much is to be dueled for.",
+                "The maximum amount of Coins the player can choose is equivalent to the amount of Coins of the participant who has the least amount of Coins prior to the duel."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The wager is always coins. In the Item Shop it appears in the middle of the game for third and fourth place and in the last five turns for first and second place.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_2",
+              "revision": "5506219",
+              "quoted": [
+                "This is always Coins."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
+              "revision": "5449664",
+              "quoted": [
+                "!! Mid-game || Mushroom, Skeleton Key, Golden Mushroom || Mushroom, Skeleton Key, Plunder Chest, Golden Mushroom || Mushroom, Skeleton Key, Dueling Glove, Golden Mushroom",
+                "!! Last 5 turns || Mushroom, Skeleton Key, Plunder Chest, Dueling Glove, Golden Mushroom || Mushroom, Skeleton Key, Dueling Glove, Warp Block, Golden Mushroom"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

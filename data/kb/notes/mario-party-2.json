@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 2900,
+      "game_id": 27,
+      "section_type": "item",
+      "name": "Mushroom",
+      "card": "Summary: An item that lets you roll two Dice Blocks instead of one and move the total of both. It costs 10 coins at an Item Shop and is Mario's favorite item.\nUses: Use it on your turn to roll two Dice Blocks and move the sum of the two numbers. Rolling the same number on both gives you 10 coins, and double 7s give you 20 coins.\nTips: At 10 coins it ties with the Skeleton Key as the cheapest item in the shop. You can carry only one item at a time, and with one in hand you cannot enter an Item Shop or start an Item Mini-Game, so use it before your next shop or Item Space.",
+      "source_url": "https://www.mariowiki.com/Mushroom",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5468692",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2901,
+      "game_id": 27,
+      "section_type": "item",
+      "name": "Golden Mushroom",
+      "card": "Summary: An item that lets you roll three Dice Blocks and move the total of all three. It costs 20 coins at an Item Shop.\nUses: Use it to roll three Dice Blocks and move the sum of the three numbers. If all three show the same number you get 20 coins, and three 7s give you 50 coins.\nTips: From the middle of the game on, the shop's stock list for every placing includes it. On Bowser Land, walking past the Baby Bowser shop in a Bowser Suit makes him hand you one of four items for free: a Skeleton Key, Golden Mushroom, Boo Bell or Magic Lamp.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_2",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5506219",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2902,
+      "game_id": 27,
+      "section_type": "item",
+      "name": "Skeleton Key",
+      "card": "Summary: An item that opens a locked gate on a board when you reach it, usually giving access to areas you could not otherwise reach. It costs 10 coins at an Item Shop and is Luigi's favorite item.\nUses: At a locked gate the key opens it, you are let through, and the gate locks again. Using one only opens the door, so you can spend it on a door without actually taking that path.\nTips: You cannot throw it away to make room for another item: it stays until you use it on a door, unless another player steals it. Item Shops sell it for 10 coins everywhere except Bowser Land, where Baby Bowser can force one on you for 12.",
+      "source_url": "https://www.mariowiki.com/Skeleton_Key",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5538382",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2903,
+      "game_id": 27,
+      "section_type": "item",
+      "name": "Plunder Chest",
+      "card": "Summary: An item that steals an item from an opponent. It costs 15 coins at an Item Shop and is Peach's favorite item.\nUses: Using it steals an item from an opponent picked at random out of all the opponents who are holding one; you cannot choose whom to rob. You can use the stolen item at once, unless it is a Bowser Bomb, or keep it for a later turn.\nTips: In the Item Shop it shows up for the player in second place in the middle of the game and for the player in first place in the last five turns.",
+      "source_url": "https://www.mariowiki.com/Plunder_Chest",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5473170",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2904,
+      "game_id": 27,
+      "section_type": "item",
+      "name": "Dueling Glove",
+      "card": "Summary: An item that lets you pick an opponent to duel in a Duel Mini-Game for coins. It costs 15 coins at an Item Shop and is Wario's favorite item.\nUses: Using it summons a Goomba, then you choose the opponent to duel and how many coins to wager. The most you can wager is the coin count of whichever of the two players has fewer coins before the duel.\nTips: The wager is always coins. In the Item Shop it appears in the middle of the game for third and fourth place and in the last five turns for first and second place.",
+      "source_url": "https://www.mariowiki.com/Dueling_Glove",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5522844",
+      "crawled_at": "2026-11-09"
+    }
+  ]
+}

@@ -5,7 +5,7 @@
   "game_id": 8,
   "game": "Cyberpunk 2077",
   "read_on": "2026-11-09",
-  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://cyberpunk.fandom.com/api.php --titles <pages> (page text as rendered by the wiki, link markup removed; the pages are kept in build/wiki-live/cyberpunk-fandom/). Every quoted passage below was checked, by script, to appear word for word in the page text read at the revision named (table markers removed, white space collapsed). The wiki also covers the tabletop games and the anime; every page used here describes the video game, and a line states a video-game fact only where the page says so for Cyberpunk 2077. Where a page marks something as needing verification, or mentions an ending or a late quest, the note leaves it out.",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://cyberpunk.fandom.com/api.php --titles <pages> (page text as rendered by the wiki, link markup removed; the pages are kept in build/wiki-live/cyberpunk-fandom/). Every quoted passage below was checked, by script, to appear word for word in the page text read at the revision named (white space collapsed). A quote that starts 'from the table: ' is a table cell or row of the page (or cells joined in reading order); it appears on the page only once the wiki's table markers are taken out, so a plain word-for-word search will not find it. The wiki also covers the tabletop games and the anime; every page used here describes the video game, and a line states a video-game fact only where the page says so for Cyberpunk 2077. Where a page marks something as needing verification, or mentions an ending or a late quest, the note leaves it out.",
   "sections": [
     {
       "section_id": 2700,
@@ -140,7 +140,7 @@
               "revision": "307975",
               "quoted": [
                 "Launches an explosive projectile that deals massive Physical damage.",
-                "Mfr. Arasaka"
+                "from the table: Mfr. Arasaka"
               ]
             }
           ]
@@ -195,14 +195,14 @@
               "revision": "307846",
               "quoted": [
                 "Gorilla Arms are lightweight, efficient and hard-hitting arm replacement cyberware.",
-                "Mfr. Arasaka",
+                "from the table: Mfr. Arasaka",
                 "Deal Physical damage. 10-20% Bleeding chance"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Hard-hitting melee. Every point of Body adds 0.5% damage with them. The wiki's weapons page lists them with the blunt weapons, which it calls heavy, slow and non-lethal, with a chance to stun.",
+          "line": "Uses: Hard-hitting melee. Every point of Body adds 0.5% damage with them. The wiki's weapons page groups them with the blunt weapons, a class that has a chance to stun.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Gorilla_Arms",
@@ -216,7 +216,8 @@
               "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
               "revision": "304721",
               "quoted": [
-                "Blunt weapons are heavy, slow and non-lethal. They employ brute force and have a chance to stun their opponents. Blunt weapons include Hammers, One and Two-Handed Clubs, Gorilla Arms, and unarmed/bare fists."
+                "They employ brute force and have a chance to stun their opponents.",
+                "Blunt weapons include Hammers, One and Two-Handed Clubs, Gorilla Arms, and unarmed/bare fists."
               ]
             }
           ]
@@ -313,7 +314,7 @@
       "main_revision": "304721",
       "lines": [
         {
-          "line": "Summary: Guns that use railgun technology, firing projectiles driven by an electromagnetic charge. They are one of the three gun types, alongside Power and Smart. They give up rate of fire for penetrating power, which depends on how long you hold the charge.",
+          "line": "Summary: Guns whose projectiles are pushed by an electromagnetic charge, like a railgun. They are one of the three gun types, with Power and Smart. They fire more slowly but punch through better the longer you hold the charge.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
@@ -339,7 +340,7 @@
           ]
         },
         {
-          "line": "Tips: A Tech weapon cannot take a suppressor, though most accept a custom sight. They use caseless ammunition, typically jacketed steel flechette.",
+          "line": "Tips: A Tech weapon cannot take a suppressor, though most accept a custom sight. Its ammunition is caseless, usually steel flechettes.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
@@ -434,7 +435,7 @@
               "revision": "297811",
               "quoted": [
                 "The Bounce Back allows the user to instantly restore 10-30 Health, and then regenerating an additional 6-17 Health per second for 10 seconds.",
-                "Type Injector"
+                "from the table: Type Injector"
               ]
             }
           ]
@@ -510,7 +511,7 @@
           ]
         },
         {
-          "line": "Weak points: Against Kerenzikov, switch to melee and use a shotgun or a blade. Against the Mk.1 Sandevistan, finish the fight as fast as you can. The Cripple Movement quickhack disables an enemy's movement and the cyberware that supports movement and dodging.",
+          "line": "Weak points: Against Kerenzikov, the page suggests switching to a shotgun or a blade. Against the Mk.1 Sandevistan, finish the fight as fast as you can. The Cripple Movement quickhack disables an enemy's movement and the cyberware that supports movement and dodging.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Enemies",
@@ -524,7 +525,8 @@
               "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Quickhacks",
               "revision": "288796",
               "quoted": [
-                "Cripple Movement 3 →4 → 6 12 0.3 - Disables enemy movement and cyberware that supports movement and dodging."
+                "Cripple Movement",
+                "Disables enemy movement and cyberware that supports movement and dodging."
               ]
             }
           ]
@@ -545,7 +547,7 @@
               "page": "https://cyberpunk.fandom.com/wiki/Sniper_(Kang_Tao)",
               "revision": "296614",
               "quoted": [
-                "Type Fast Sniper",
+                "from the table: Type Fast Sniper",
                 "Sandevistan"
               ]
             },
@@ -569,14 +571,13 @@
       "main_revision": "289193",
       "lines": [
         {
-          "line": "Summary: Enemy netrunners fight with quickhacks instead of guns. The Voodoo Boys Netrunner is a Tier 2 rare enemy that uses the Cyberware Malfunction, Reboot Optics, Ping and Overheat quickhacks, and it also carries EMP grenades.",
+          "line": "Summary: Enemy netrunners use quickhacks against you. The Voodoo Boys Netrunner is a Tier 2 enemy that uses Cyberware Malfunction, Reboot Optics, Ping and Overheat, and it also carries EMP grenades.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Voodoo_Boys_Netrunner",
               "revision": "289193",
               "quoted": [
                 "The Netrunner is a Tier 2 enemy affiliated with the Voodoo Boys in Cyberpunk 2077.",
-                "Rarity Rare",
                 "A skilled enemy netrunner can use a variety of quickhacks* against you, and they won't hesitate.",
                 "*Uses the Cyberware Malfunction, Reboot Optics and Ping quickhacks.",
                 "Overheat A dangerous quickhack that directly attacks your nervous system",
@@ -592,19 +593,21 @@
               "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
               "revision": "304721",
               "quoted": [
-                "EMP Grenade - Applies an EMP effect for 5 sec. - Deals bonus damage against enemy netrunners, drones, mechs, robots and turrets."
+                "EMP Grenade",
+                "Deals bonus damage against enemy netrunners, drones, mechs, robots and turrets."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Overheat makes your body temperature skyrocket and overheats your neural and cybernetic components, and it can also result in combustion. Enemy netrunners can drop quickhacks, and this one's drops include Tier 2 to Tier 5 quickhack components.",
+          "line": "Tips: One of their quickhacks, Overheat, attacks your nervous system and can end in combustion. Enemy netrunners can drop quickhacks, and this one's drops include Tier 2 to Tier 5 quickhack components.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Voodoo_Boys_Netrunner",
               "revision": "289193",
               "quoted": [
-                "making your body temperature skyrocket and overheating your neural and cybernetic components. Can also result in combustion.",
+                "A dangerous quickhack that directly attacks your nervous system",
+                "Can also result in combustion.",
                 "6-8 Tier 2 Quickhack Components",
                 "1 Tier 5 Quickhack Components"
               ]
@@ -640,40 +643,29 @@
           ]
         },
         {
-          "line": "Weak points: The Short Circuit quickhack deals extra damage to mechs, robots, drones and turrets, and EMP grenades deal bonus damage against drones, mechs, robots and turrets. The Detonate Grenade quickhack can also detonate their weakspots.",
+          "line": "Weak points: The Short Circuit quickhack deals extra damage to mechs, robots, drones and turrets, and the Detonate Grenade quickhack can detonate their weakspots.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Quickhacks",
               "revision": "288796",
               "quoted": [
-                "Short Circuit 3 →4 → 5 → 7 → 10 1.5 → 1 → 0.5 - Deals Damage. Mechs, Robots, drones and turrets receive additional damage.",
+                "Short Circuit",
+                "Deals Damage. Mechs, Robots, drones and turrets receive additional damage.",
+                "Detonate Grenade",
                 "Can also detonate weakspots on robots, drones, mechs and turrets."
-              ]
-            },
-            {
-              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
-              "revision": "304721",
-              "quoted": [
-                "Deals bonus damage against enemy netrunners, drones, mechs, robots and turrets."
               ]
             }
           ]
         },
         {
-          "line": "Tips: The Contagion quickhack is ineffective against mechs, robots, drones and turrets. An EMP grenade also disables turrets for as long as its effect lasts.",
+          "line": "Tips: The Contagion quickhack is ineffective against mechs, robots, drones and turrets.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Quickhacks",
               "revision": "288796",
               "quoted": [
+                "Contagion",
                 "Ineffective against mechs, robots, drones and turrets."
-              ]
-            },
-            {
-              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
-              "revision": "304721",
-              "quoted": [
-                "Disables turrets for the duration of the EMP grenade effect."
               ]
             }
           ]
@@ -688,37 +680,16 @@
       "main_revision": "304844",
       "lines": [
         {
-          "line": "Summary: A big Japantown gang that prefers melee weapons, especially ceramic tantos and katanas, with pistols and cheap, unreliable submachine guns as backup. Their tattoos are fortified with microchips to confuse targeting systems.",
+          "line": "Summary: A large Japantown gang that prefers blades and other melee weapons. Its members also carry pistols and submachine guns, the latter usually cheap and unreliable.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Tyger_Claws",
               "revision": "304844",
               "quoted": [
+                "During the 2070s, the Tyger Claws were a ruthless territorial gang based in Japantown.",
+                "They were one of the largest gangs in Night City with a number of approximately 5,500 members in 2077.",
                 "The Tyger Claws prefer melee weapons, especially ceramic tantos and katanas",
-                "They also pack pistols and submachine guns, the latter usually cheap, plastic, multi-colored and unreliable.",
-                "luminous tattoos of Japanese demons fortified with microchips to confuse targeting systems."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Weak points: The Hunter, a melee fighter, is a Tier 2 enemy with Weak rarity. Their Masking Ink tattoos give them a 50% chance to cause each Smart weapon projectile to miss.",
-          "drawn_from": [
-            {
-              "page": "https://cyberpunk.fandom.com/wiki/Tyger_Claws_Hunter",
-              "revision": "286948",
-              "quoted": [
-                "The Hunter is a Tier 2 enemy affiliated with the Tyger Claws in Cyberpunk 2077.",
-                "Type Melee",
-                "Rarity Weak",
-                "50% Chance to not be hit by Smart Weapon projectiles."
-              ]
-            },
-            {
-              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
-              "revision": "304721",
-              "quoted": [
-                "giving them a 50% chance to cause smart projectiles to miss."
+                "They also pack pistols and submachine guns, the latter usually cheap, plastic, multi-colored and unreliable."
               ]
             }
           ]
@@ -737,12 +708,21 @@
           ]
         },
         {
-          "line": "Tips: A Hunter has Break Hold, which makes it nigh-impossible to grab from behind. The gang's cyberware includes reflex boosters, augmented cyberlimbs and pain editors.",
+          "line": "Tips: Their Masking Ink tattoos give them a 50% chance to make smart projectiles miss. The Hunter, a Tier 2 melee enemy, has Break Hold, which makes it nearly impossible to grab from behind. The gang's cyberware includes reflex boosters, augmented cyberlimbs and pain editors.",
           "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+              "revision": "304721",
+              "quoted": [
+                "giving them a 50% chance to cause smart projectiles to miss."
+              ]
+            },
             {
               "page": "https://cyberpunk.fandom.com/wiki/Tyger_Claws_Hunter",
               "revision": "286948",
               "quoted": [
+                "The Hunter is a Tier 2 enemy affiliated with the Tyger Claws in Cyberpunk 2077.",
+                "from the table: Type Melee",
                 "it'll be nigh-impossible to grab this enemy from behind."
               ]
             },
@@ -765,7 +745,7 @@
       "main_revision": "304651",
       "lines": [
         {
-          "line": "Summary: A gang that controls Watson and the Northside Industrial District, made up of people with heavy cyberware. Its Goon is a Tier 2 enemy of Weak rarity that can be a ranged or a melee fighter, and its Ironstormer is a Tier 2 heavy ranged enemy.",
+          "line": "Summary: A heavily augmented gang whose territory is Watson and the Northside Industrial District. Its Goon is a Tier 2 enemy that can be a ranged or a melee fighter, and its Ironstormer is a Tier 2 heavy ranged enemy.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Maelstrom",
@@ -780,7 +760,6 @@
               "revision": "283492",
               "quoted": [
                 "The Goon is a Tier 2 enemy affiliated with Maelstrom in Cyberpunk 2077.",
-                "Rarity Weak",
                 "The Goon can either be a Ranged or a Melee enemy."
               ]
             },
@@ -788,35 +767,14 @@
               "page": "https://cyberpunk.fandom.com/wiki/Maelstrom_Ironstormer",
               "revision": "289152",
               "quoted": [
-                "Type Heavy Ranged",
+                "from the table: Type Heavy Ranged",
                 "The Ironstormer is a Tier 2 enemy affiliated with Maelstrom in Cyberpunk 2077."
               ]
             }
           ]
         },
         {
-          "line": "Weak points: The Goon has Weak rarity, while the Ironstormer is rated Rare and wears Medium Subdermal Armor, which increases its Health by 33% and Armor by 100%, and the wiki says an enemy in subdermal armor is much more difficult to throw off balance.",
-          "drawn_from": [
-            {
-              "page": "https://cyberpunk.fandom.com/wiki/Maelstrom_Goon",
-              "revision": "283492",
-              "quoted": [
-                "Rarity Weak"
-              ]
-            },
-            {
-              "page": "https://cyberpunk.fandom.com/wiki/Maelstrom_Ironstormer",
-              "revision": "289152",
-              "quoted": [
-                "Rarity Rare",
-                "Increases Health by 33% and Armor by 100%.",
-                "An enemy with subdermal armor is more resistant to damage and is much more difficult to throw off balance."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: Intimidating faceplates and hostile optic implants, and goggle-like cybereyes that glow a ghastly red.",
+          "line": "Looks like: Menacing faceplates and optic implants, and goggle-style cybereyes that glow red.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Maelstrom",
@@ -829,7 +787,7 @@
           ]
         },
         {
-          "line": "Tips: Goons and Ironstormers have Smokey Eye, so they can see you clearly through smoke, and the ranged ones throw frag grenades that can tear you to shreds if you stand in the blast. Members are also fond of mantis blade implants in their lower arms.",
+          "line": "Tips: Goons and Ironstormers see you clearly through smoke, and the ranged ones throw frag grenades whose blast can shred you. The Ironstormer's Medium Subdermal Armor adds 33% Health and 100% Armor and makes it much harder to throw off balance. Members also like mantis blade implants in their lower arms.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Maelstrom_Goon",
@@ -844,7 +802,10 @@
               "revision": "289152",
               "quoted": [
                 "Smokey Eye The enemy can see you clearly through clouds of smoke.",
-                "Frag Grenades The enemy is equipped with a classic shrapnel grenade."
+                "Frag Grenades The enemy is equipped with a classic shrapnel grenade.",
+                "Medium Subdermal Armor",
+                "Increases Health by 33% and Armor by 100%.",
+                "An enemy with subdermal armor is more resistant to damage and is much more difficult to throw off balance."
               ]
             },
             {
@@ -866,12 +827,15 @@
       "main_revision": "304833",
       "lines": [
         {
-          "line": "Summary: Loosely linked gangs that kidnap people and forcibly harvest their cyberware. They are all over Night City, thickest in northern Pacifica and the southern part of Wellsprings. Their Vulture is a Tier 2 heavy ranged enemy with frag grenades.",
+          "line": "Summary: A loose set of small groups with no official hierarchy that kidnap people and take their cyberware by force. They are all over Night City, thickest in northern Pacifica and the southern part of Wellsprings. Their Vulture is a Tier 2 heavy ranged enemy with frag grenades.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Scavengers",
               "revision": "304833",
               "quoted": [
+                "The Scavengers, also known as Scavs, are an organization made of multiple groups operating in Night City.",
+                "This loosely defined gang",
+                "Scavengers tend to operate in small groups, with no official hierarchy to unite them",
                 "They are known for kidnapping people and forcibly harvesting their cyberware.",
                 "Scavengers can be found all over Night City.",
                 "they have a more concentrated presence in northern Pacifica and southern part of Wellsprings."
@@ -882,28 +846,8 @@
               "revision": "285638",
               "quoted": [
                 "The Vulture is a Tier 2 enemy affiliated with the Scavengers in Cyberpunk 2077.",
-                "Type Heavy Ranged",
+                "from the table: Type Heavy Ranged",
                 "Frag Grenades"
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Weak points: The wiki rates the gang's threat level as Medium in 2077, and its groups are small bands with little or no internal structure. The Vulture wears Medium Subdermal Armor, which increases its Health by 33% and Armor by 100%.",
-          "drawn_from": [
-            {
-              "page": "https://cyberpunk.fandom.com/wiki/Scavengers",
-              "revision": "304833",
-              "quoted": [
-                "Threat Level Medium (2077)",
-                "they tend to form small bands with little or no internal hierarchy or structure"
-              ]
-            },
-            {
-              "page": "https://cyberpunk.fandom.com/wiki/Scavengers_Vulture",
-              "revision": "285638",
-              "quoted": [
-                "Increases Health by 33% and Armor by 100%."
               ]
             }
           ]
@@ -921,7 +865,7 @@
           ]
         },
         {
-          "line": "Tips: Their cyberware includes cyberoptics, pain editors, health monitors and Kerenzikov, which lets an enemy dodge incoming projectiles. A Vulture can also leap with Charge Jump.",
+          "line": "Tips: Their cyberware includes cyberoptics, pain editors, health monitors and Kerenzikov, which lets an enemy dodge incoming projectiles. A Vulture wears Medium Subdermal Armor, which adds 33% Health and 100% Armor, and can leap with Charge Jump.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/Scavengers",
@@ -941,6 +885,8 @@
               "page": "https://cyberpunk.fandom.com/wiki/Scavengers_Vulture",
               "revision": "285638",
               "quoted": [
+                "Medium Subdermal Armor",
+                "Increases Health by 33% and Armor by 100%.",
                 "Charge Jump Cybermodified leg joints and reinforced, advanced muscle kinetics allow the enemy to traverse large distances with quick, high jumps."
               ]
             }
@@ -956,7 +902,7 @@
       "main_revision": "308854",
       "lines": [
         {
-          "line": "Summary: The NCPD's elite unit for hunting cyberpsychos. If you commit crimes until your wanted rating reaches five stars, MaxTac officers are sent after you, the last enemy type to hunt you while you are wanted. They work in squads of four, and on higher difficulties they can kill you in just a few shots whatever your level.",
+          "line": "Summary: The NCPD's elite unit for hunting cyberpsychos. If you commit crimes until your wanted rating reaches five stars, MaxTac officers are sent after you, the last enemy type to hunt you while you are wanted. A squad has four officers, drawn from five roles, and on higher difficulties a few of their shots can be enough to kill you at any level.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/MaxTac",
@@ -965,33 +911,27 @@
                 "MaxTac is an elite, special ops division of the NCPD with a singular aim: eliminate cyberpsychos.",
                 "reaching a maximum wanted rating (five stars) will result in the deployment MaxTac officers, who serve as the final enemy type to hunt V down while wanted.",
                 "On higher difficulties, they are capable of killing V in just a few shots regardless of character level.",
-                "MaxTac officers operate in squads of four each"
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Weak points: A squad's netrunner avoids direct combat, and the quickhacks it favours are slow to upload. The Mantis operator, who fights up close with MaxTac-built mantis blades, has the second highest armor rating.",
-          "drawn_from": [
-            {
-              "page": "https://cyberpunk.fandom.com/wiki/MaxTac",
-              "revision": "308854",
-              "quoted": [
+                "MaxTac officers operate in squads of four each",
+                "Assault - Frontline fighters who utilize the Ajax and Defender.",
+                "Mantis - Close-quarter specialists who utilize MaxTac-built mantis blades and the Omaha as backup weapons. They hold the second highest armor rating.",
+                "Heavy - Walking tanks in exosuits who utilize the Defender to dish out large amounts of damage in seconds.",
                 "Netrunner - Field hackers who typically avoid direct combat in favor of utilizing quickhacks that are slow to upload, but cause high amounts of damage.",
-                "Mantis - Close-quarter specialists who utilize MaxTac-built mantis blades and the Omaha as backup weapons. They hold the second highest armor rating."
+                "Sniper - Long-range specialists armed with the Ashura to attack V from a distance. These officers make significantly more use of their Sandevistan."
               ]
             }
           ]
         },
         {
-          "line": "Tips: The roles are Assault (Ajax and Defender), Mantis, Heavy (a walking tank in an exosuit with the Defender), Netrunner and Sniper (Ashura, and a heavier use of Sandevistan). Officers regularly use Sandevistan Mk. 3 and Kerenzikov.",
+          "line": "Tips: The roles are Assault (Ajax and Defender), Mantis (close quarters, with the second highest armor rating), Heavy (a walking tank in an exosuit with the Defender), Netrunner (typically avoids direct combat, favours quickhacks that are slow to upload) and Sniper (Ashura, and heavier use of Sandevistan). Officers regularly use Sandevistan Mk. 3 and Kerenzikov.",
           "drawn_from": [
             {
               "page": "https://cyberpunk.fandom.com/wiki/MaxTac",
               "revision": "308854",
               "quoted": [
                 "Assault - Frontline fighters who utilize the Ajax and Defender.",
+                "Mantis - Close-quarter specialists who utilize MaxTac-built mantis blades and the Omaha as backup weapons. They hold the second highest armor rating.",
                 "Heavy - Walking tanks in exosuits who utilize the Defender to dish out large amounts of damage in seconds.",
+                "Netrunner - Field hackers who typically avoid direct combat in favor of utilizing quickhacks that are slow to upload, but cause high amounts of damage.",
                 "Sniper - Long-range specialists armed with the Ashura to attack V from a distance. These officers make significantly more use of their Sandevistan.",
                 "For cyberware, officers make regular use of Sandevistan Mk. 3 and Kerenzikov."
               ]

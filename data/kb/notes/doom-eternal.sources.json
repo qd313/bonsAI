@@ -1,0 +1,302 @@
+{
+  "wiki": "DoomWiki.org (https://doomwiki.org/w/api.php)",
+  "licence_printed_by_fetcher": "DoomWiki.org (MediaWiki 1.31.16) licence: CC BY-SA 4.0 International Doom Wiki:Copyrights",
+  "licence_stored": "CC-BY-SA-4.0 (the fetcher prints 'CC BY-SA 4.0 International'; the library stores the versioned form, and data/kb/NOTICE.md lists The Doom Wiki as CC-BY-SA-4.0)",
+  "game_id": 16,
+  "game": "DOOM Eternal",
+  "read_on": "2026-11-10",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://doomwiki.org/w/api.php --titles <pages> (page text as rendered by the wiki, link markup removed). Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named. Each note draws only on the page of its own subject, and only on what that page says about DOOM Eternal. Where a page quotes the game's own text (dossier tips, upgrade names and descriptions, codex lines), the note states the fact in its own words and does not copy it.",
+  "sections": [
+    {
+      "section_id": 4400,
+      "name": "Revenant",
+      "kind": "enemy",
+      "main_page": "https://doomwiki.org/wiki/Revenant_(Doom_Eternal)",
+      "main_revision": "525864",
+      "lines": [
+        {
+          "line": "Summary: A jetpack demon that flies and fires salvos of guided missiles from its rocket launchers. Its only other attack is a weaker claw swipe.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Revenant_(Doom_Eternal)",
+              "revision": "525864",
+              "quoted": [
+                "The revenant is able to shoot a barrage of guided missiles at the player if it is able to lock on, and retains its flight capabilities",
+                "leaving it with only its much weaker claw swipe",
+                "The Doom Slayer stabs the revenant's jetpack"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Shoot off its rocket launchers and the missile attack is gone. It is left with a weak claw swipe and has to stay on the ground.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Revenant_(Doom_Eternal)",
+              "revision": "525864",
+              "quoted": [
+                "the player is able to shoot off the rocket launchers in order to disable this attack, leaving it with only its much weaker claw swipe and forcing it to fight exclusively on the ground."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Glowing green eyes, no blood on the forehead, fresh cybernetics at the head and neck, and cleaner-looking metal. Its rocket launchers have details that make them look like demonic mouths.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Revenant_(Doom_Eternal)",
+              "revision": "525864",
+              "quoted": [
+                "its eyeballs now glow green, it lacks blood on its forehead, new cybernetics are present on its head and neck, its mouth shape is a bit different, and its metal parts are now cleaner in appearance, with new detailing on the rocket launchers that makes them resemble demonic mouths."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A dash or a double jump breaks its missile lock-on. It can dash too, to get out of the way of your fire.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Revenant_(Doom_Eternal)",
+              "revision": "525864",
+              "quoted": [
+                "Dashing or double-jumping will break its lock-on.",
+                "It can also dash to evade incoming fire."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4401,
+      "name": "Mancubus",
+      "kind": "enemy",
+      "main_page": "https://doomwiki.org/wiki/Mancubus_(Doom_Eternal)",
+      "main_revision": "572772",
+      "lines": [
+        {
+          "line": "Summary: A big, slow heavy demon with arm cannons that throw fireballs from range. Up close it uses flamethrowers and a ground attack that leaves damaging energy on the floor. It has 3,500 health, or 490 while staggered.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Mancubus_(Doom_Eternal)",
+              "revision": "572772",
+              "quoted": [
+                "Mancubi are big and slow.",
+                "the ability to use dual flamethrowers at short range in addition to its usual fireball launchers.",
+                "Its close range area-of-effect attack has been changed to leave an area of damaging energy on the ground",
+                "Class:Heavy",
+                "Health: 3 500 and 490 (when demon is stagger)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Shoot its arm cannons: damaged cannons make its attacks much weaker and switch the flamethrowers off completely. A chainsaw or glory kill on its chest makes it blow up, which hurts and staggers large demons nearby and can kill smaller ones.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Mancubus_(Doom_Eternal)",
+              "revision": "572772",
+              "quoted": [
+                "the mancubus' arm cannons can be damaged, making the attacks from the aforementioned cannons significantly weaker and disabling the flamethrower function entirely.",
+                "It is best to perform a glory kill or chainsaw on the mancubus' chest as this will cause the mancubus to explode and damage and falter large demons or even kill smaller demons within the vicinity."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Two small, greenish eyes, and in its chest an exposed yellow organ like a heart that glows. Armour plating has replaced its original shell.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Mancubus_(Doom_Eternal)",
+              "revision": "572772",
+              "quoted": [
+                "It now has two smaller, greenish eyes, and a yellow exposed heart-like organ in its chest.",
+                "The Doom Slayer is able to spear the glowing heart-like organ in the mancubus' chest",
+                "The armor plating that has replaced their original carapaces"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Fight it from range with heavy hitters. The rocket launcher works because it is too slow to dodge rockets, and the ballista takes its cannons off from far away. The heavy cannon's precision bolt also removes cannons from across an arena, but watch your back while scoped in. Do not let it corner you: its close-range damage is large.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Mancubus_(Doom_Eternal)",
+              "revision": "572772",
+              "quoted": [
+                "Your best strategy is to use heavy-hitting weapons at range, because when you are closer, the mancubus can use its flamethrowers and AOE to deal you large amounts of damage.",
+                "the rocket launcher (they cannot dodge the rockets as they are too slow)",
+                "the ballista (its high damage potential and projectile velocity make it an good weapon for removing their cannons at long range)",
+                "with a special spot saved for the heavy cannon's precision bolt.",
+                "make sure no enemies sneak up on you while you are scoped in.",
+                "Avoid letting mancubi corner you"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4402,
+      "name": "Pinky",
+      "kind": "enemy",
+      "main_page": "https://doomwiki.org/wiki/Pinky_(Doom_Eternal)",
+      "main_revision": "496262",
+      "lines": [
+        {
+          "line": "Summary: A heavily armoured demon whose main attack is a charge. It has 1,000 health, and takes extra damage on its tail or from a blood punch.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Pinky_(Doom_Eternal)",
+              "revision": "496262",
+              "quoted": [
+                "The pinky actually has 1000 HP, but increased damage is dealt to the tail, or by the blood punch.",
+                "The pinky's main attack is to charge at the player"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The tail has no armour, so attack it from behind for the most damage. One direct blood punch kills it outright, even head-on.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Pinky_(Doom_Eternal)",
+              "revision": "496262",
+              "quoted": [
+                "the front of the pinky is heavily armored but its tail has no armor at all, so the player should attack the pinky's tail to inflict the most damage.",
+                "A direct blood punch will instantly kill it, even from the front."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Heavy armour covers its front and none covers its tail.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Pinky_(Doom_Eternal)",
+              "revision": "496262",
+              "quoted": [
+                "the front of the pinky is heavily armored but its tail has no armor at all"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Dodge the charge with a double jump or a dash, and try to make it charge into a wall: that stuns it long enough to hit the tail. An ice bomb freezes it so it cannot turn round. Steady fire wears its front armour down, and the strongest weapons, like the ballista's destroyer blade mod, go straight through it.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Pinky_(Doom_Eternal)",
+              "revision": "496262",
+              "quoted": [
+                "The pinky's main attack is to charge at the player, which the player can avoid by double-jumping or dashing.",
+                "The player should try to trick the pinky into charging into walls, which will stun it long enough for the player to attack its tail.",
+                "The pinky can also be frozen with an ice bomb to stop it turning round.",
+                "persistent attacks can eventually pierce it, and the strongest weapons, such as the ballista's destroyer blade mod, can bypass it entirely."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4403,
+      "name": "Baron of Hell",
+      "kind": "enemy",
+      "main_page": "https://doomwiki.org/wiki/Baron_of_Hell_(Doom_Eternal)",
+      "main_revision": "559109",
+      "lines": [
+        {
+          "line": "Summary: A tough demon carrying two flaming blades. It is fast and aggressive, and it can survive a direct hit from the BFG.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Baron_of_Hell_(Doom_Eternal)",
+              "revision": "559109",
+              "quoted": [
+                "now equipped with a pair of flaming blades",
+                "it is able to survive a direct shot from the BFG.",
+                "the baron is faster and more aggressive than before."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Its skin is an ashy grey-brown, its eyes burn, the flesh inside glows like embers, and its blood is magma. It carries two flaming blades, and its projectiles are orange and red.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Baron_of_Hell_(Doom_Eternal)",
+              "revision": "559109",
+              "quoted": [
+                "the baron of Hell now has an ashy grey-brown complexion with fiery eyes, inner flesh that glows like embers, and magma for blood.",
+                "now equipped with a pair of flaming blades",
+                "have been replaced by fiery orange and red ones."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Stay at a distance, just outside its leaping reach, and swap quickly between your heaviest weapons: the ballista, rocket launcher and super shotgun work well. A blood punch knocks it back and makes it easier to stun, and steady chaingun fire can stall its attacks.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Baron_of_Hell_(Doom_Eternal)",
+              "revision": "559109",
+              "quoted": [
+                "The Slayer's best strategy is to keep their distance, staying just slightly out of its jumping range, and hot-swap between their heaviest ordinance (the ballista, the rocket launcher, and the super shotgun work well).",
+                "The Doom Slayer can knock it back with a blood punch, making it more susceptible to stunning.",
+                "continuous use of the chaingun can stall its attacks."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4404,
+      "name": "Dread knight",
+      "kind": "enemy",
+      "main_page": "https://doomwiki.org/wiki/Dread_knight",
+      "main_revision": "507545",
+      "lines": [
+        {
+          "line": "Summary: A cybernetic Hell knight with an energy blade on each arm. Its arm blades extend its melee reach beyond a Hell knight's, it can throw an energy wave from a distance, and it has more health, but every trick that works on a Hell knight works on it too.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Dread_knight",
+              "revision": "507545",
+              "quoted": [
+                "It is a cybernetic version of the Hell knight, with two energy blades attached to its arms.",
+                "The dread knight's arm blades give it a longer melee range than the Hell knight; it can also use the blades to throw an energy wave when the Doom Slayer is at a distance",
+                "Although the dread knight has higher health than its Hell knight cousin, it remains vulnerable to all of the techniques that are effective against the Hell knight."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A Hell knight with cybernetic upgrades and an energy blade fixed to each arm.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Dread_knight",
+              "revision": "507545",
+              "quoted": [
+                "It is a cybernetic version of the Hell knight, with two energy blades attached to its arms."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It crosses its arms before it throws its energy wave, so you can see it coming and dodge. Its leaping slam leaves a zone of damaging energy around itself, so stay back. Fire the rocket launcher's lock-on burst once to stagger it; the ballista and super shotgun make it flinch, and swapping between them stops it attacking at all.",
+          "drawn_from": [
+            {
+              "page": "https://doomwiki.org/wiki/Dread_knight",
+              "revision": "507545",
+              "quoted": [
+                "the start-up animation is very obvious (it will cross its arms in front of itself)",
+                "When the dread knight performs a leaping slam, it releases a field of harmful energy around it to deter players from getting close while it is vulnerable.",
+                "One lock-on burst from the rocket launcher will stagger it, and the ballista and the super shotgun will flinch it. Hot-swapping between these weapons will prevent it from being able to attack you at all."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

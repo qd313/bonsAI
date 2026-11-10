@@ -1,0 +1,61 @@
+{
+ "games": [],
+ "aliases": [],
+ "sections": [
+  {
+   "section_id": 4400,
+   "game_id": 16,
+   "section_type": "enemy",
+   "name": "Revenant",
+   "card": "Summary: A jetpack demon that flies and fires salvos of guided missiles from its rocket launchers. Its only other attack is a weaker claw swipe.\nWeak points: Shoot off its rocket launchers and the missile attack is gone. It is left with a weak claw swipe and has to stay on the ground.\nLooks like: Glowing green eyes, no blood on the forehead, fresh cybernetics at the head and neck, and cleaner-looking metal. Its rocket launchers have details that make them look like demonic mouths.\nTips: A dash or a double jump breaks its missile lock-on. It can dash too, to get out of the way of your fire.",
+   "source_url": "https://doomwiki.org/wiki/Revenant_(Doom_Eternal)",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "525864",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 4401,
+   "game_id": 16,
+   "section_type": "enemy",
+   "name": "Mancubus",
+   "card": "Summary: A big, slow heavy demon with arm cannons that throw fireballs from range. Up close it uses flamethrowers and a ground attack that leaves damaging energy on the floor. It has 3,500 health, or 490 while staggered.\nWeak points: Shoot its arm cannons: damaged cannons make its attacks much weaker and switch the flamethrowers off completely. A chainsaw or glory kill on its chest makes it blow up, which hurts and staggers large demons nearby and can kill smaller ones.\nLooks like: Two small, greenish eyes, and in its chest an exposed yellow organ like a heart that glows. Armour plating has replaced its original shell.\nTips: Fight it from range with heavy hitters. The rocket launcher works because it is too slow to dodge rockets, and the ballista takes its cannons off from far away. The heavy cannon's precision bolt also removes cannons from across an arena, but watch your back while scoped in. Do not let it corner you: its close-range damage is large.",
+   "source_url": "https://doomwiki.org/wiki/Mancubus_(Doom_Eternal)",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "572772",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 4402,
+   "game_id": 16,
+   "section_type": "enemy",
+   "name": "Pinky",
+   "card": "Summary: A heavily armoured demon whose main attack is a charge. It has 1,000 health, and takes extra damage on its tail or from a blood punch.\nWeak points: The tail has no armour, so attack it from behind for the most damage. One direct blood punch kills it outright, even head-on.\nLooks like: Heavy armour covers its front and none covers its tail.\nTips: Dodge the charge with a double jump or a dash, and try to make it charge into a wall: that stuns it long enough to hit the tail. An ice bomb freezes it so it cannot turn round. Steady fire wears its front armour down, and the strongest weapons, like the ballista's destroyer blade mod, go straight through it.",
+   "source_url": "https://doomwiki.org/wiki/Pinky_(Doom_Eternal)",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "496262",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 4403,
+   "game_id": 16,
+   "section_type": "enemy",
+   "name": "Baron of Hell",
+   "card": "Summary: A tough demon carrying two flaming blades. It is fast and aggressive, and it can survive a direct hit from the BFG.\nLooks like: Its skin is an ashy grey-brown, its eyes burn, the flesh inside glows like embers, and its blood is magma. It carries two flaming blades, and its projectiles are orange and red.\nTips: Stay at a distance, just outside its leaping reach, and swap quickly between your heaviest weapons: the ballista, rocket launcher and super shotgun work well. A blood punch knocks it back and makes it easier to stun, and steady chaingun fire can stall its attacks.",
+   "source_url": "https://doomwiki.org/wiki/Baron_of_Hell_(Doom_Eternal)",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "559109",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 4404,
+   "game_id": 16,
+   "section_type": "enemy",
+   "name": "Dread knight",
+   "card": "Summary: A cybernetic Hell knight with an energy blade on each arm. Its arm blades extend its melee reach beyond a Hell knight's, it can throw an energy wave from a distance, and it has more health, but every trick that works on a Hell knight works on it too.\nLooks like: A Hell knight with cybernetic upgrades and an energy blade fixed to each arm.\nTips: It crosses its arms before it throws its energy wave, so you can see it coming and dodge. Its leaping slam leaves a zone of damaging energy around itself, so stay back. Fire the rocket launcher's lock-on burst once to stagger it; the ballista and super shotgun make it flinch, and swapping between them stops it attacking at all.",
+   "source_url": "https://doomwiki.org/wiki/Dread_knight",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "507545",
+   "crawled_at": "2026-11-10"
+  }
+ ]
+}

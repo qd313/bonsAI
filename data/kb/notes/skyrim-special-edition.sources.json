@@ -1,0 +1,334 @@
+{
+  "wiki": "UESPWiki (https://en.uesp.net/w/api.php)",
+  "licence_printed_by_fetcher": "UESPWiki (MediaWiki 1.32.6) licence: Attribution-ShareAlike 2.5 License UESPWiki:Copyright and Ownership",
+  "licence_stored": "CC-BY-SA-2.5 (the fetcher prints 'Attribution-ShareAlike 2.5 License'; the library stores the versioned form, and data/kb/NOTICE.md lists The Unofficial Elder Scrolls Pages as CC-BY-SA-2.5)",
+  "game_id": 38,
+  "game": "Skyrim Special Edition",
+  "read_on": "2026-11-10",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://en.uesp.net/w/api.php --titles <pages> (page text as rendered by the wiki, link markup removed). Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named. Lines state base-game facts only; where a page also mentions an add-on or Creation Club item, that part was left out.",
+  "sections": [
+    {
+      "section_id": 4100,
+      "name": "Trolls",
+      "kind": "enemy",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Troll",
+      "main_revision": "3661516",
+      "lines": [
+        {
+          "line": "Summary: Big, ape-like brutes with three black eyes, claws that hit hard and a lot of health that comes back fast during a fight. The pale-furred frost trolls live farther north and higher up and are much tougher than the ordinary cave kind. Every troll leaves troll fat behind.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Troll",
+              "revision": "3661516",
+              "quoted": [
+                "Trolls are large, ape-like humanoids endowed with three black eyes",
+                "Their powerful arms and claws deal massive physical damage.",
+                "Trolls are very strong defensively, with high health and the ability to rapidly regenerate all their health during combat.",
+                "The locations inhabited by frost trolls are farther north and at higher elevations than those of their generic cousins",
+                "sometimes called \"cave trolls\"",
+                "Frost trolls are significantly more powerful",
+                "Trolls of any kind will always drop one sample of troll fat upon death."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Fire is their weak spot: it hurts them and slows their healing, though only for a while, and if you stop hitting them for long enough the healing goes back to normal. Lingering-damage poisons are a good stand-in when you have no fire. Paralysis helps too, because once it wears off a troll takes a long time to get back on its feet.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Troll",
+              "revision": "3661516",
+              "quoted": [
+                "Their greatest vulnerability is to fire, which not only damages them but also impairs their capacity to self-heal.",
+                "While the use of fire damage against trolls helps against their fast health regeneration, it doesn't stop it completely. Instead, it slows it way down, and if enough time passes between attacks, their health regeneration will go back to normal, pre-fire damage.",
+                "Lingering Damage Health poisons (either ones you've found or made) are an effective way of dealing with the health regeneration of trolls, making it an effective replacement if you don't have a good source of fire damage.",
+                "Paralysis (either from a poison, spell or enchanting effect) is also a good counter, as trolls have a very long \"getting up\" animation after the paralysis has worn off."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A large, ape-like creature with three black eyes. Frost trolls have white fur.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Troll",
+              "revision": "3661516",
+              "quoted": [
+                "Trolls are large, ape-like humanoids endowed with three black eyes",
+                "They are distinguishable by their white fur."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Keep your health full: a short string of their blows can kill you, and they come in very quick succession. Hit-and-run works badly because they heal, so raise your armor and add fire by spell or enchantment; with several fire-enchanted weapons to pick from, a lighter, faster one may do better than a heavy one. A frost troll always waits on the snowy canyon path to High Hrothgar, whatever your level.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Troll",
+              "revision": "3661516",
+              "quoted": [
+                "Keep your health full when fighting trolls, as two or three of their blows can be lethal and occur in lightning-quick succession.",
+                "Other tactics are to maximize your armor and incorporate fire damage, whether by spell or enchantment.",
+                "If you have more than one fire-enchanted weapon to choose from, lighter, faster weapons may be more effective than heavier, slower ones.",
+                "Using hit-and-run or evasive tactics is less effective, given their ability to self-heal.",
+                "There are several Frost Trolls that will always be found in the game world, regardless of your level:",
+                "One Frost Troll on the path to High Hrothgar, in the snowy canyon portion."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4101,
+      "name": "Giants",
+      "kind": "enemy",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Giant",
+      "main_revision": "3647075",
+      "lines": [
+        {
+          "line": "Summary: Enormous humanoids met at their camps, where they herd mammoths. They leave you alone until you get too close or harm their mammoths, and they stay at level 32 however strong you are.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Giant",
+              "revision": "3647075",
+              "quoted": [
+                "Giants are enormous humanoids with a primitive, albeit very artistic, culture, and can often be found at their camps.",
+                "Giants are normally seen herding mammoths; if you hurt their mammoths or threaten them in any way, the giants will attack.",
+                "Unprovoked giants are passive creatures.",
+                "Giants do not level up with you, but instead have their level set at 32."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A hostile giant will not walk into water and eventually wanders off if you stay in it, a weakness you can use when you are low level. Frost spells slow it, and the Unrelenting Force shout at full strength (all three words) can knock it down. Standing on a cliff it cannot reach helps you survive, and from a doorway it cannot enter you can pelt it with attacks.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Giant",
+              "revision": "3647075",
+              "quoted": [
+                "Hostile giants refuse to enter water, and will eventually walk away if you remain in a body of water.",
+                "This weakness can be exploited if you are taking on a giant but are of a low level.",
+                "using Frost spells to slow them down",
+                "Giants can be ragdolled with all three words of Unrelenting Force",
+                "Exploiting the terrain by staying on cliffs where giants can't reach you can help survival rates",
+                "hiding in a doorway that it cannot come in from, and pelting it with attacks"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: An enormous humanoid dressed in animal hides and furs, in one of three different looks.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Giant",
+              "revision": "3647075",
+              "quoted": [
+                "Giants are enormous humanoids",
+                "There are three different appearances for giants. Each appearance consists of a different set of animal hides and furs."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A giant warns you first: it shakes its club overhead, then stomps the ground and turns hostile if you keep coming. Early on even a blocked blow can kill you, so dodge; you can sprint straight past a giant as it starts a club slam or a stomp, because those hits land in front of it and not in a wide circle. You can loot a giant's chest in front of it if you do not linger.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Giant",
+              "revision": "3647075",
+              "quoted": [
+                "They are not initially hostile, but if you walk too close to them, they will raise their clubs above their heads and shake them at you. If you continue to approach, they will stomp on the ground and become hostile.",
+                "Their attacks, even if successfully blocked, can kill you in one hit. Early on, the best defense is dodging their attacks entirely.",
+                "It is possible to dodge the club slam (usually performed by the giant while he is running towards you) and the stomp by sprinting directly past the giant as he performs the attack.",
+                "but the damage from the attacks are situated directly in front of the giant, not area-of-effect, like what might be expected.",
+                "It is possible to loot a giant's treasure chest right in front of them, as long as you don't stay near them long enough to turn them hostile."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4102,
+      "name": "Frostbite spiders",
+      "kind": "enemy",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Frostbite_Spider",
+      "main_revision": "3278760",
+      "lines": [
+        {
+          "line": "Summary: Giant spiders that attack on sight, in the wilds and in dungeons, usually in lairs hung with webs. Their poison hurts both health and stamina. The small ones are the easiest, then the medium ones, and the toughest are bigger than a horse.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Frostbite_Spider",
+              "revision": "3278760",
+              "quoted": [
+                "Frostbite Spiders are giant arachnids which attack on sight, and can be found both in the wilderness and in dungeons.",
+                "Their lairs are often covered in webs, and usually contain web sacs.",
+                "the smallest ones are the easiest, followed by the medium sized ones, and the toughest of all are the spiders which outsize a horse.",
+                "(spell Frostbite Poison, Health + Stamina Damage, 5 pts for 5 seconds)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Reddish orange in dungeons and the south of Skyrim, bluish white in the north, ranging from small up to larger than a horse.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Frostbite_Spider",
+              "revision": "3278760",
+              "quoted": [
+                "one that tends to appear in dungeons and in the more southern areas of Skyrim is reddish orange, while the ones found in the northern areas tends to be bluish white.",
+                "the toughest of all are the spiders which outsize a horse."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They spit venom from range, even when turned partly away from you, and leap in to bite; without poison resistance almost every hit poisons you. The biggest can outrun you on foot even at a sprint, so you would need a horse to get away. Two giant ones sometimes fight over a corpse in the wild, but if one survives or they spot you first they turn on you. They drop frostbite venom.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Frostbite_Spider",
+              "revision": "3278760",
+              "quoted": [
+                "When at range they spit poisonous venom (spell Frostbite Poison, Health + Stamina Damage, 5 pts for 5 seconds), even if turned partly or fully away from their victims, and can leap onto their targets to attack with their bite.",
+                "Without poison resistance, you will be poisoned by nearly every hit from these monsters.",
+                "The largest of the frostbite spiders can easily outrun you if you attempt to get away on foot without the aid of a horse, even if you sprint.",
+                "Two giant frostbite spiders can be found in a random encounter in the wilds, fighting over a non-lootable desicated corpse. If one of the spiders survives (or if they notice you before they kill each other), one or both will turn on you, instead.",
+                "Loot: Frostbite Venom"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4103,
+      "name": "Hagravens",
+      "kind": "enemy",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Hagraven",
+      "main_revision": "3510988",
+      "lines": [
+        {
+          "line": "Summary: Dangerous half-crone, half-bird creatures that claw you up close and cast destruction magic from afar, often area spells such as Fireball. They show up alone or in threes, often with the Forsworn or in hidden groves and lairs.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Hagraven",
+              "revision": "3510988",
+              "quoted": [
+                "Hagravens are a horrific cross between an old crone and a bird.",
+                "extremely dangerous and equally hostile up close or when casting various Destruction spells from afar, usually preferring area-of-effect spells such as Fireball.",
+                "Hagravens will tend to appear either individually or in groups of three.",
+                "They can often be found in the company of the Forsworn, or dwelling in secret groves and lairs in the wilderness"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Their claws are slow and simple to sidestep, and they turn and walk slowly, so a character of low level can win just by stepping back after each swing of their own. Ice-magic hagravens are the easier kind because they have no area spell.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Hagraven",
+              "revision": "3510988",
+              "quoted": [
+                "It's also worth noting that a hagraven's claw attack is rather slow and easy to dodge. It is entirely possible, and somewhat easy, for even a low level character to defeat one just by moving back slightly after every time you take a swing at them. Hagravens also have a slow turning speed and even slower walking speed, which can also be taken into consideration.",
+                "Ice magic hagravens are easier to deal with than fire-based ones, as the ice-based hagravens lack an area-of-effect spell."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Part old crone, part bird.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Hagraven",
+              "revision": "3510988",
+              "quoted": [
+                "Hagravens are a horrific cross between an old crone and a bird."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A heavily armored warrior can charge in, since armor guards against their claws better than against their spells; with strong elemental resistance, keep your distance and use ranged attacks instead. A hagraven always drops hagraven feathers and sometimes a claw.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Hagraven",
+              "revision": "3510988",
+              "quoted": [
+                "Heavily armored warriors may find it easier to charge in and fight toe-to-toe, because your armor will better protect you against their claws than their Destruction spells. Characters with more elemental resistance might wish to hang back and fight from a distance for similar reasons.",
+                "Hagraven Feathers (1 × 100%)",
+                "Hagraven Claw (1 × 25%)"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4104,
+      "name": "Spriggans",
+      "kind": "enemy",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Spriggan",
+      "main_revision": "3661515",
+      "lines": [
+        {
+          "line": "Summary: Nature spirits that look like glowing green women, mostly wood. They heal themselves, call animals (even normally peaceful ones) to fight for them and summon insect swarms. They hide in foliage with an invisibility spell and strike as you pass, and some step out of tree trunks.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Spriggan",
+              "revision": "3661515",
+              "quoted": [
+                "Spriggans are malevolent nature spirits appearing as glowing, green humanoid females made mostly of wood.",
+                "They can restore themselves to full health easily, and can call various animals to aid them in battle, even normally non-hostile creatures such as foxes and deer.",
+                "Spriggans also have the ability to summon swarms of insects to attack.",
+                "Spriggans can be an unwanted surprise in seemingly peaceful caves and clearings, as they blend in with the foliage using an invisibility spell, then attack when you pass them. Some even seem to inhabit the trunks of trees, stepping from within them when someone comes too close."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Fire is their weakness. Their big self-heal seems to work only once a fight; just before and while they crouch to heal they resist most damage, so little lands until they get back up.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Spriggan",
+              "revision": "3661515",
+              "quoted": [
+                "They are weak to fire.",
+                "Although they are able to heal much of the damage you have done with a special ability, it seems that they can only do this once during battle; they may crouch down multiple times when you bring them to the critical point, but they will no longer keep self-healing.",
+                "Though they are able to negate much damage done to them while they are crouched and healing, they have a stage before that point that the ability activates while they are still up and fighting, resulting in most damage being resisted until they get up from their bleedout."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A glowing green, woman-shaped figure that is mostly wood. Glowing insects around its body stay visible even when it turns invisible.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Spriggan",
+              "revision": "3661515",
+              "quoted": [
+                "Spriggans are malevolent nature spirits appearing as glowing, green humanoid females made mostly of wood.",
+                "Although spriggans can cast an invisibility spell on themselves, the glowing \"insects\" that inhabit their bodies are still visible, allowing you to see where the spriggan is even after they cast the spell."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its poison spray reaches much farther than a Flames spell and does more damage when cast with both hands. A green flash across the screen means it has called wildlife to fight you, and staggering it mid-cast does not stop that. Its loot is taproot.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Spriggan",
+              "revision": "3661515",
+              "quoted": [
+                "The poison spray that spriggans use has a very long range, much longer than the elemental Novice-level Destruction spells (like Flames). They can also cast it with both hands, resulting in more damage to you.",
+                "When the screen lights up with green is when the spriggan has used the ability that calls wildlife to their side, and to fight you. Even if you manage to stagger them just as they are casting it (a flash of green emanates from their body), it doesn't stop the ability from taking effect.",
+                "Loot: Taproot, Burnt Spriggan WoodDB"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

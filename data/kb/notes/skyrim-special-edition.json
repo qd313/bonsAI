@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 4100,
+      "game_id": 38,
+      "section_type": "enemy",
+      "name": "Trolls",
+      "card": "Summary: Big, ape-like brutes with three black eyes, claws that hit hard and a lot of health that comes back fast during a fight. The pale-furred frost trolls live farther north and higher up and are much tougher than the ordinary cave kind. Every troll leaves troll fat behind.\nWeak points: Fire is their weak spot: it hurts them and slows their healing, though only for a while, and if you stop hitting them for long enough the healing goes back to normal. Lingering-damage poisons are a good stand-in when you have no fire. Paralysis helps too, because once it wears off a troll takes a long time to get back on its feet.\nLooks like: A large, ape-like creature with three black eyes. Frost trolls have white fur.\nTips: Keep your health full: a short string of their blows can kill you, and they come in very quick succession. Hit-and-run works badly because they heal, so raise your armor and add fire by spell or enchantment; with several fire-enchanted weapons to pick from, a lighter, faster one may do better than a heavy one. A frost troll always waits on the snowy canyon path to High Hrothgar, whatever your level.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Troll",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3661516",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4101,
+      "game_id": 38,
+      "section_type": "enemy",
+      "name": "Giants",
+      "card": "Summary: Enormous humanoids met at their camps, where they herd mammoths. They leave you alone until you get too close or harm their mammoths, and they stay at level 32 however strong you are.\nWeak points: A hostile giant will not walk into water and eventually wanders off if you stay in it, a weakness you can use when you are low level. Frost spells slow it, and the Unrelenting Force shout at full strength (all three words) can knock it down. Standing on a cliff it cannot reach helps you survive, and from a doorway it cannot enter you can pelt it with attacks.\nLooks like: An enormous humanoid dressed in animal hides and furs, in one of three different looks.\nTips: A giant warns you first: it shakes its club overhead, then stomps the ground and turns hostile if you keep coming. Early on even a blocked blow can kill you, so dodge; you can sprint straight past a giant as it starts a club slam or a stomp, because those hits land in front of it and not in a wide circle. You can loot a giant's chest in front of it if you do not linger.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Giant",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3647075",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4102,
+      "game_id": 38,
+      "section_type": "enemy",
+      "name": "Frostbite spiders",
+      "card": "Summary: Giant spiders that attack on sight, in the wilds and in dungeons, usually in lairs hung with webs. Their poison hurts both health and stamina. The small ones are the easiest, then the medium ones, and the toughest are bigger than a horse.\nLooks like: Reddish orange in dungeons and the south of Skyrim, bluish white in the north, ranging from small up to larger than a horse.\nTips: They spit venom from range, even when turned partly away from you, and leap in to bite; without poison resistance almost every hit poisons you. The biggest can outrun you on foot even at a sprint, so you would need a horse to get away. Two giant ones sometimes fight over a corpse in the wild, but if one survives or they spot you first they turn on you. They drop frostbite venom.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Frostbite_Spider",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3278760",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4103,
+      "game_id": 38,
+      "section_type": "enemy",
+      "name": "Hagravens",
+      "card": "Summary: Dangerous half-crone, half-bird creatures that claw you up close and cast destruction magic from afar, often area spells such as Fireball. They show up alone or in threes, often with the Forsworn or in hidden groves and lairs.\nWeak points: Their claws are slow and simple to sidestep, and they turn and walk slowly, so a character of low level can win just by stepping back after each swing of their own. Ice-magic hagravens are the easier kind because they have no area spell.\nLooks like: Part old crone, part bird.\nTips: A heavily armored warrior can charge in, since armor guards against their claws better than against their spells; with strong elemental resistance, keep your distance and use ranged attacks instead. A hagraven always drops hagraven feathers and sometimes a claw.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Hagraven",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3510988",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4104,
+      "game_id": 38,
+      "section_type": "enemy",
+      "name": "Spriggans",
+      "card": "Summary: Nature spirits that look like glowing green women, mostly wood. They heal themselves, call animals (even normally peaceful ones) to fight for them and summon insect swarms. They hide in foliage with an invisibility spell and strike as you pass, and some step out of tree trunks.\nWeak points: Fire is their weakness. Their big self-heal seems to work only once a fight; just before and while they crouch to heal they resist most damage, so little lands until they get back up.\nLooks like: A glowing green, woman-shaped figure that is mostly wood. Glowing insects around its body stay visible even when it turns invisible.\nTips: Its poison spray reaches much farther than a Flames spell and does more damage when cast with both hands. A green flash across the screen means it has called wildlife to fight you, and staggering it mid-cast does not stop that. Its loot is taproot.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Spriggan",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3661515",
+      "crawled_at": "2026-11-10"
+    }
+  ]
+}

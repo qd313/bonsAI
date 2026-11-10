@@ -15,7 +15,7 @@
       "main_revision": "173635",
       "lines": [
         {
-          "line": "Summary: A riot-armoured infected found in The Parish and Cold Stream and in the Left 4 Dead 2 versions of No Mercy and Dead Air. Its front is immune to bullets and blows, so it can only be killed from behind, with fire, with explosions or with the chainsaw.",
+          "line": "Summary: A riot-armoured infected whose front is immune to bullets and melee, so hit its back, or use fire, explosions or the chainsaw. It appears only in The Parish and Cold Stream, and in No Mercy and Dead Air when you play them in Left 4 Dead 2.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -87,7 +87,7 @@
       "main_revision": "173635",
       "lines": [
         {
-          "line": "Summary: A common infected in a hazmat suit that is resistant to fire and may drop a bile bomb when killed. It has 150 health on Normal and above, and appears in Dead Center's Hotel and Streets, the lower floors of the hospital in No Mercy and Rayford's industrial area in The Sacrifice.",
+          "line": "Summary: An uncommon infected in a hazmat suit that resists fire and sometimes drops a bile bomb, with 150 health on Normal and above. You meet it in Dead Center's Hotel and Streets, on the No Mercy hospital's lower floors and in Rayford's industrial area in The Sacrifice.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -98,7 +98,7 @@
                 "they are resistant to fire, as they do not burst into flames when in the middle of a Molotov's fire",
                 "150 (Normal, Advanced, Expert, Realism, Survival & Versus)",
                 "Dead Center in The Hotel and The Streets. In this game they also appear on the lower floors of the Hospital in No Mercy, and the industrial area of Rayford in the Sacrifice.",
-                "Players will occasionally come across Common Infected wearing a hazmat suit"
+                "The CEDA Worker Infected or CEDA Agent was the first Uncommon Infected to be announced and appear in the Left 4 Dead 2 campaign"
               ]
             }
           ]
@@ -120,7 +120,7 @@
           ]
         },
         {
-          "line": "Looks like: A hazmat suit with a visor, yellow or green (dark blue and white in the No Mercy hospital). The suit has reflective areas, and a bile bomb hangs at its side when it carries one.",
+          "line": "Looks like: A hazmat suit with reflective patches, yellow or green, with dark blue and white ones in the No Mercy hospital. A bile bomb strapped to its side means it may drop one when killed.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -136,7 +136,7 @@
           ]
         },
         {
-          "line": "Tips: If you have a free slot, pick up the bile bomb from its corpse and keep it for later. In the No Mercy hospital they are nearly the only source of bile bombs in the campaign, but they carry one quite rarely.",
+          "line": "Tips: With a free slot, grab the bile bomb from its corpse and save it. In the No Mercy hospital they supply almost all the bile in the campaign, though they seldom carry one.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -229,7 +229,7 @@
       "main_revision": "173635",
       "lines": [
         {
-          "line": "Summary: Infected covered in mud, found in the Swamp Fever campaign and also in the sewers of No Mercy and Death Toll and on The Last Stand's Junkyard map. They sprint on all fours, and a hit from one smears mud across your screen. They have 150 health on Normal and above.",
+          "line": "Summary: Mud-covered infected from Swamp Fever that sprint on all fours. They also lurk on The Last Stand's Junkyard map and in the No Mercy and Death Toll sewers.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -238,15 +238,13 @@
               "quoted": [
                 "The Mud Men appear in the campaign Swamp Fever.",
                 "the Mud Men now appear in the sewers of No Mercy and Death Toll and The Junkyard map of The Last Stand",
-                "Mud Men sprint on all fours low to the ground",
-                "A hit from a Mud Man obscures a player's screen with mud",
-                "150 (Normal, Advanced, Expert, Realism, Survival & Versus)"
+                "Mud Men sprint on all fours low to the ground"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: They have the same weaknesses as common infected but are slightly more resistant to damage, with 150 health on Normal and above (50 on Easy). They are faster because they move on all fours, so shoot them instead of trying to outrun them, and if the mud blurs your view, use a melee weapon.",
+          "line": "Weak points: Treat them like common infected, but a bit tougher: 150 health on Normal and above, 50 on Easy. They are quick, so shoot rather than flee, and swap to melee if mud blocks your view.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -269,15 +267,16 @@
           ]
         },
         {
-          "line": "Looks like: A common infected caked in reflective mud that moves low on all fours, though it stands on two legs when idle and stumbles back on two feet when shoved.",
+          "line": "Looks like: An infected much like a common one, coated in reflective mud. It runs low on all fours but staggers back upright when you shove it.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
               "revision": "173635",
               "part_of_page": "Mud Men",
               "quoted": [
-                "they are covered in mud and use this as camouflage",
-                "they stumble back on two feet when shoved. (Moreover, they stand on two legs when idle)"
+                "they stumble back on two feet when shoved. (Moreover, they stand on two legs when idle)",
+                "They are similar to the Common Infected, except that they are covered in mud and use this as camouflage.",
+                "Mud Men sprint on all fours low to the ground"
               ]
             },
             {
@@ -314,7 +313,7 @@
       "main_revision": "173635",
       "lines": [
         {
-          "line": "Summary: A construction-crew infected with ear protection, a hard hat and a reflective vest, also called Road Crew. They fill the Hard Rain campaign and also appear in the Left 4 Dead 2 versions of No Mercy, Dead Air, The Sacrifice and The Last Stand. They have 150 health on Normal and above.",
+          "line": "Summary: Road Crew infected, also called Worker Infected, wear ear protection and fill Hard Rain. In Left 4 Dead 2 they also appear in No Mercy, Dead Air, The Sacrifice and The Last Stand.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -323,14 +322,13 @@
               "quoted": [
                 "Dubbed Worker Infected or Road Crew, these Infected populate the Hard Rain campaign.",
                 "They also appear on the Left 4 Dead 2 versions of No Mercy, Dead Air, The Sacrifice and The Last Stand.",
-                "Workers are equipped with ear protection, hardhats, and reflective vests",
-                "150 (Normal, Advanced, Expert, Realism, Survival & Versus)"
+                "Workers are equipped with ear protection, hardhats, and reflective vests"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: They have the same weaknesses as common infected but are slightly more resistant to damage, with 150 health on Normal and above (50 on Easy). Their ear protection makes them unable to hear pipe bombs, so a thrown pipe bomb is useless unless it lands near them.",
+          "line": "Weak points: Handle them like common infected, but a bit tougher: 150 health on Normal and above, 50 on Easy. They cannot hear a pipe bomb through their ear protectors, so one only helps if it lands near them.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -353,7 +351,7 @@
           ]
         },
         {
-          "line": "Looks like: Ear protectors, a yellow or white hard hat and a reflective vest, which is easiest to spot in the storms of Hard Rain.",
+          "line": "Looks like: A hard hat in yellow or white, ear protectors and a reflective vest, which stands out most in Hard Rain's storms.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -394,7 +392,7 @@
       "main_revision": "173635",
       "lines": [
         {
-          "line": "Summary: A rare uncommon infected found in The Passing and, since the Last Stand update, also in the Left 4 Dead campaigns No Mercy, Death Toll, Crash Course and The Last Stand. It has 1000 health, cannot be set on fire and usually runs away when shot, and killing it can drop items it carries.",
+          "line": "Summary: A rare uncommon infected with 1000 health that cannot be set on fire, usually runs away when shot and may drop items when killed. It lives in The Passing, plus the original game's No Mercy, Death Toll, Crash Course and The Last Stand since the Last Stand update.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -411,7 +409,7 @@
           ]
         },
         {
-          "line": "Weak points: A melee weapon kills it in one hit, and so do explosive ammo, the M60 and a headshot while it is still idle; a Magnum body shot does 500 damage. A shove briefly stops it running, but do not rely on shoves alone, because shove fatigue makes you wait three seconds.",
+          "line": "Weak points: Kill it with one melee swing, an explosive round, the M60, or a headshot while it still stands idle; a Magnum body shot does 500 damage. A shove halts its escape for a moment, but shove fatigue forces a three-second wait that lets it flee again.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -428,7 +426,7 @@
           ]
         },
         {
-          "line": "Looks like: A man in militia clothes with a boonie cover and three ammo belts carrying a Molotov, pipe bomb, pills and first aid kit, in a blue, white or green shirt.",
+          "line": "Looks like: A man in militia clothes whose shirt is blue, white or green. A boonie hat tops him, and three ammo belts hold a visible Molotov, pipe bomb, pills and first aid kit.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -442,7 +440,7 @@
           ]
         },
         {
-          "line": "Tips: It can carry any of a Molotov, pipe bomb, pain pills and first aid kit, though sometimes only a single Molotov, and it drops them at random when killed. If it runs off it takes a long time to disappear, and the Director tends to generate another one sooner than usual.",
+          "line": "Tips: What it carries varies, sometimes just one Molotov, and it may drop the lot at random when killed. If it gets away it lingers a long while, and the Director often puts a new one in earlier on the map.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -467,7 +465,7 @@
       "main_revision": "173159",
       "lines": [
         {
-          "line": "Summary: A throwable weapon that sets a large area on fire for about 15 to 17 seconds. The fire spreads over time and burns every infected that touches it, and common infected that run into it burn to cinders.",
+          "line": "Summary: A throwable that covers a large area in flames for roughly 15 to 17 seconds, spreading as it burns. Any infected touching the fire burns, and common infected that charge into it burn up.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Molotov_Cocktail",
@@ -479,7 +477,7 @@
           ]
         },
         {
-          "line": "Uses: Throw it at a choke point just as a horde reaches it, because infected do not try to avoid fire. On high difficulties keep one for a Tank, which cannot put itself out without water: a burning Tank survives on fire alone for 75 seconds on Easy and Normal, 80 on Advanced and 85 on Expert.",
+          "line": "Uses: Throw it at a choke point as the horde arrives, because infected never dodge fire. On high difficulties keep one for the Tank, which cannot put itself out away from water and, on fire alone, lasts 75 seconds on Easy and Normal, 80 on Advanced, 85 on Expert.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Molotov_Cocktail",
@@ -495,7 +493,7 @@
           ]
         },
         {
-          "line": "Tips: It only goes off when it hits the floor, not a wall or a special infected. Do not hit teammates: on Expert even a full-health survivor can die in the flames, and an incapacitated one inside the fire is hard to revive.",
+          "line": "Tips: Aim at the floor: it does not go off against a wall or when it strikes a special infected. Keep it off teammates, since an incapacitated one in the flames is hard to revive and, on Expert, even a healthy survivor can burn to death.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Molotov_Cocktail",
@@ -517,7 +515,7 @@
       "main_revision": "172888",
       "lines": [
         {
-          "line": "Summary: A throwable bomb with a bright red light and a loudly beeping detector that draws common infected to it, then explodes 6 seconds after it is thrown. The blast is small, a little over three to four metres on Normal, but a well-placed bomb can kill 20 or more at once.",
+          "line": "Summary: A throwable bomb whose bright red light and loud beeping pull common infected toward it, going off 6 seconds after the throw. Its blast reaches only about three to four metres on Normal, yet a well-placed one can kill 20 or more.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Pipe_Bomb",
@@ -545,7 +543,7 @@
           ]
         },
         {
-          "line": "Tips: In Left 4 Dead 2 it is less effective, because passive infected seem to respond more slowly to its beeping and smoke, and sometimes not at all. Throw it low to the ground, and shove away infected that are already close or they may ignore it. Special infected and worker infected are not drawn to it, and a Witch or Tank near the blast is stumbled but does not chase it.",
+          "line": "Tips: It works worse in Left 4 Dead 2, where idle infected react slowly to it and some not at all. Throw it low, and push away infected that are already close or they attack instead of chasing it. Special infected and Worker Infected are not drawn to it, and a Witch or Tank near the blast stumbles but does not follow.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Pipe_Bomb",
@@ -570,7 +568,7 @@
       "main_revision": "173392",
       "lines": [
         {
-          "line": "Summary: The healing item in the primary slot. It takes five seconds to use on yourself or a teammate, during which you cannot defend yourself, and it restores 80 percent of the missing health, so it never brings anyone back to full.",
+          "line": "Summary: The healing item for the primary slot. Using it takes five seconds on yourself or a teammate and leaves you unable to fight back, and it heals only 80 percent of what is missing, so nobody reaches full health.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Healing_items",
@@ -579,13 +577,14 @@
               "quoted": [
                 "It takes five seconds to use the First Aid Kit to heal yourself or another Survivor, during which you cannot defend yourself in any way.",
                 "First Aid Kits will only restore 80% of the user's missing health.",
-                "Note that First Aid Kits can never bring a Survivor back to 100% health"
+                "Note that First Aid Kits can never bring a Survivor back to 100% health",
+                "Primary healing slot"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Used on a survivor in their final incapacitation state it heals them and resets their incapacitations. After an incapacitation a survivor has only 1 permanent health, so a kit then gives 80 health, and a kit also removes any extra health gained from pills.",
+          "line": "Uses: On a survivor on their last incapacitation it heals them and resets the count. Once incapacitated a survivor keeps only 1 permanent health, so a kit then gives 80, and it also wipes out any extra health from pills.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Healing_items",
@@ -600,7 +599,7 @@
           ]
         },
         {
-          "line": "Tips: Safe rooms and finales always have kits in their first aid cabinets, but on Expert kits are very rare during a level. Under adrenaline the heal takes three seconds instead of five. In Left 4 Dead 2 you can pick up a defibrillator or an ammo upgrade instead of a kit.",
+          "line": "Tips: Safe room cabinets and finales always stock kits, but on Expert you almost never find one mid-level. Adrenaline cuts the use time to three seconds. In Left 4 Dead 2 a defibrillator or ammo upgrade can take a kit's place.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Healing_items",
@@ -653,7 +652,7 @@
           ]
         },
         {
-          "line": "Tips: You cannot carry a defibrillator and a first aid kit at the same time. They do not spawn often, usually one per level, and the Director tends to place one nearby when a survivor is on the verge of death. Someone who dies hanging from a ledge falls and cannot be revived.",
+          "line": "Tips: You cannot carry it together with a first aid kit. Expect about one a level, and the Director often puts one nearby when a survivor is close to dying. Nobody who dies hanging from a ledge can be revived, because they fall away.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Healing_items",
@@ -701,7 +700,7 @@
           ]
         },
         {
-          "line": "Uses: Pills lose one point of temporary health every 3 seconds, so they last at most 150 seconds, and they also remove speed penalties when your total health is above 40. For 15 seconds adrenaline lets you run faster, shove without fatigue and use items, heal and revive faster, and the horde's slowing hits and water no longer slow you.",
+          "line": "Uses: Pills drain one temporary health every 3 seconds, so they last 150 seconds at most, and they also clear speed penalties while your total health is over 40. Adrenaline lasts 15 seconds: you run faster, shove without tiring, heal, revive, reload and switch faster, and neither the horde's slowing hits nor water slow you.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Healing_items",
@@ -709,7 +708,8 @@
               "part_of_page": "Pain Pills",
               "quoted": [
                 "As temporary health decreases by one every 3 seconds, the effects of Pain Pills will last for 150 seconds (2.5 minutes)",
-                "are also capable of removing speed penalties if your total health is greater than 40"
+                "are also capable of removing speed penalties if your total health is greater than 40",
+                "reloading and switching weapons or items"
               ]
             },
             {
@@ -718,14 +718,13 @@
               "part_of_page": "Adrenaline Shot",
               "quoted": [
                 "do not experience melee fatigue, are immune to the Horde's slowing attacks and their speed isn't affected by water.",
-                "It also increases the speed of using First Aid Kits, reviving Survivors",
-                "use items in half the time"
+                "It also increases the speed of using First Aid Kits, reviving Survivors"
               ]
             }
           ]
         },
         {
-          "line": "Tips: A first aid kit removes any extra health you gained from pills. While adrenaline lasts you get tunnel vision and mono sound, which makes it hard to tell where a sound came from.",
+          "line": "Tips: Using a first aid kit removes the extra health pills gave you. Adrenaline narrows your view and flattens the sound to mono, so telling where a noise came from gets hard.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Healing_items",
@@ -755,7 +754,7 @@
       "main_revision": "172015",
       "lines": [
         {
-          "line": "Summary: A single-shot primary weapon, new in Left 4 Dead 2, that fires a slow, looping grenade. The blast kills common infected and weaker special infected in a tight radius and stumbles the rest, except Chargers and Tanks. It holds one grenade with 30 in reserve, takes a long time to reload, and ammo piles cannot refill it.",
+          "line": "Summary: A single-shot primary weapon, new in Left 4 Dead 2, that lobs a slow grenade in an arc. Near the blast, common and weaker special infected die and the rest stumble, except Chargers and Tanks. Reloading is slow, it holds one grenade with 30 spare, and ammo piles cannot refill it.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Grenade_Launcher",
@@ -779,7 +778,7 @@
           ]
         },
         {
-          "line": "Uses: A direct hit does 1000 damage to a Tank. It can also stumble a special infected that is pinning a teammate from a distance, and the pinned player takes no blast damage. Keep its shots for very large groups of infected or a horde.",
+          "line": "Uses: A direct hit on a Tank does 1000 damage. It can also shake a special infected off a pinned teammate from range without hurting that teammate, and its shots are best saved for very big crowds or a spawned horde.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Grenade_Launcher",
@@ -844,7 +843,7 @@
           ]
         },
         {
-          "line": "Uses: It kills a common infected in one shot wherever it hits, even on Expert Realism, and it never needs reloading. An ammo upgrade converts all the rounds left in the belt into incendiary or explosive rounds, so it makes the most of one.",
+          "line": "Uses: One shot kills any common infected wherever it lands, even on Expert Realism, and there is no reloading. An ammo upgrade converts whatever is left in the belt into incendiary or explosive rounds, so it is the best gun for either upgrade.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/M60_Machine_Gun",
@@ -880,7 +879,7 @@
       "main_revision": "168908",
       "lines": [
         {
-          "line": "Summary: A special melee weapon for the sidearm slot, new in Left 4 Dead 2, that does 1000 damage per second and kills a common infected in one hit anywhere on the body. Its fuel cannot be refilled and once the gauge reads empty it is useless, but it burns no fuel while idle.",
+          "line": "Summary: A special melee weapon for the sidearm slot, new in Left 4 Dead 2, that deals 1000 damage per second and kills a common infected in one hit wherever it lands. Its fuel cannot be refilled, so it eventually runs dry, but it burns none while idle.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Chainsaw",
@@ -890,15 +889,14 @@
                 "Just like other melee weapons, the Chainsaw replaces the player's pistols in the side-arm slot.",
                 "clocking in at 1000 DPS",
                 "a Common Infected in just one hit anywhere on the body",
-                "the Chainsaw runs off an internal fuel tank that cannot be refilled",
-                "once the gas gauge hits E, it’s useless.",
-                "The only good news is that the Chainsaw does not use any fuel when idling."
+                "The only good news is that the Chainsaw does not use any fuel when idling.",
+                "Additionally, the Chainsaw runs off an internal fuel tank that cannot be refilled, meaning that it will eventually run out"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Special infected generally die in under half a second, the Charger in a little over, and a Tank takes 3, 4, 6 or 8 seconds on Easy, Normal, Advanced and Expert. It is the only melee weapon that cuts you free from a Smoker's tongue without precise aim or timing.",
+          "line": "Uses: Most special infected die in under half a second, and a Charger in just over; a Tank takes 3, 4, 6 or 8 seconds on Easy, Normal, Advanced and Expert. Only the chainsaw among melee weapons can cut you loose from a Smoker's tongue, and it needs no careful aim or timing.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Chainsaw",
@@ -939,7 +937,7 @@
       "main_revision": "171598",
       "lines": [
         {
-          "line": "Summary: Two ammo upgrades for primary weapons in Left 4 Dead 2, incendiary and explosive, usually found only a few times in a campaign. Put one down and every player can take one extra magazine of special ammo from it.",
+          "line": "Summary: Two upgrades for any primary weapon in Left 4 Dead 2, incendiary and explosive, which turn up only a handful of times per campaign. Set one on the ground and each player can grab a single extra magazine of the special rounds.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Ammo",
@@ -952,7 +950,7 @@
           ]
         },
         {
-          "line": "Uses: Incendiary ammo sets common and special infected on fire, but not CEDA worker infected, Jimmy Gibbs Junior or the Fallen Survivor, and it kills a common infected in one hit. Explosive ammo explodes on any surface, instantly kills all common infected and stumbles any special infected except the Tank.",
+          "line": "Uses: Incendiary rounds set special and common infected alight, but CEDA workers, Jimmy Gibbs Junior and the Fallen Survivor will not burn, and a common infected dies in one hit. Explosive rounds burst on any surface, wipe out every common infected at once and stagger every special infected except the Tank.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Ammo",
@@ -977,7 +975,7 @@
           ]
         },
         {
-          "line": "Tips: Explosive rounds hurt you and nearby teammates at point blank, which can be devastating on Advanced and Expert, and they can set off gas cans, propane tanks, fireworks and oxygen tanks. Using one type while the other is active replaces it, because they do not stack.",
+          "line": "Tips: Fire explosive rounds at point blank and you and nearby teammates take damage, badly so on Advanced and Expert. They also set off gas cans, propane tanks, fireworks and oxygen tanks. Using the other kind replaces the active one, because they do not stack.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Ammo",

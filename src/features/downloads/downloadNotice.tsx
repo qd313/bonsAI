@@ -33,6 +33,11 @@
  * OK and the download in the middle, and Steam's added Cancel made it three buttons (plan 93). No
  * DOM focus() or keydown is involved.
  *
+ * Fit (plan 103): the box's words scroll inside a fixed height, so a long box (the fresh-install starter
+ * set) fits the Deck's own screen. The site lines are pinned to the top of the words and stay on screen while
+ * the rest scrolls under them, and the last block carries no bottom margin, which a scrolling box would keep
+ * and add to the gap above the buttons (TwoButtonConfirmModal.tsx, Gotchas).
+ *
  * Gotcha: opening a box snapshots the whole session, and Decky's remount after it closes restores
  * settings from that snapshot (see useThinkingNoticeGate.tsx, bug b). Turning the permission on
  * therefore also patches the pending snapshot, and saves straight to the back end, so the download
@@ -41,7 +46,7 @@
 import { useEffect, type ReactNode } from "react";
 import { showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
-import { TwoButtonConfirmModal } from "../../shared/TwoButtonConfirmModal";
+import { CONFIRM_BOX_PINNED_STYLE, TwoButtonConfirmModal } from "../../shared/TwoButtonConfirmModal";
 import { DEFAULT_CAPABILITIES, type BonsaiCapabilities } from "../settings/bonsaiSettingsSchema";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
 import { patchPendingSessionSettingsSnapshot } from "../plugin-shell/bonsaiSessionSurvival";
@@ -198,6 +203,16 @@ export function confirmDownload(notices: DownloadNotice[], opts: DownloadBoxOpti
   if (!opts.always && b.enabled && sites.every((s) => seen.has(s))) return Promise.resolve(true);
 
   const asking = !b.enabled;
+  // The closing paragraph, when there is one: what the "Turn on" choice means, or that the notice shows once.
+  const closing = asking ? (
+    <div style={{ color: "#c5d4e3" }}>
+      Internet downloads are off. Turning them on lets bonsAI download only when you press a download button. You
+      can turn them off in Permissions.
+    </div>
+  ) : opts.always ? null : (
+    <div style={{ color: "#c5d4e3" }}>Shown once per site. After that, the size shows on the button.</div>
+  );
+  const belowSites = Boolean(opts.body) || closing !== null;
   return new Promise<boolean>((resolve) => {
     let settled = false;
     const finish = (go: boolean) => {
@@ -211,20 +226,16 @@ export function confirmDownload(notices: DownloadNotice[], opts: DownloadBoxOpti
         title={asking ? "Turn on internet downloads?" : (opts.title ?? "Download from the internet?")}
         body={
           <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
-            {notices.map((n) => (
-              <div key={n.site} style={{ marginBottom: 8 }} data-bonsai-download-notice-line="1">
-                {downloadNoticeLine(n)}
-              </div>
-            ))}
-            {opts.body ? <div style={{ marginBottom: 8 }}>{opts.body}</div> : null}
-            {asking ? (
-              <div style={{ color: "#c5d4e3" }}>
-                Internet downloads are off. Turning them on lets bonsAI download only when you press a download
-                button. You can turn them off in Permissions.
-              </div>
-            ) : opts.always ? null : (
-              <div style={{ color: "#c5d4e3" }}>Shown once per site. After that, the size shows on the button.</div>
-            )}
+            {/* Where each download comes from stays on screen while the rest of a long box scrolls under it. */}
+            <div style={{ ...CONFIRM_BOX_PINNED_STYLE, paddingBottom: belowSites ? 8 : 0 }}>
+              {notices.map((n, i) => (
+                <div key={n.site} style={{ marginBottom: i < notices.length - 1 ? 8 : 0 }} data-bonsai-download-notice-line="1">
+                  {downloadNoticeLine(n)}
+                </div>
+              ))}
+            </div>
+            {opts.body ? <div style={{ marginBottom: closing ? 8 : 0 }}>{opts.body}</div> : null}
+            {closing}
           </div>
         }
         actionLabel={asking ? "Turn on and download" : (opts.actionLabel ?? "Download")}

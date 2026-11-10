@@ -36,6 +36,7 @@ import { TEXT_SCALE, TEXT_SCALE_VAR } from "./text-size/chatTextSize";
 import { usePublishTextScale } from "./text-size/usePublishTextScale";
 import { makeFontSizeReader } from "../test-harness/settledFontSize";
 import { steamRingHolder, type SteamEl } from "../test-harness/steamRing";
+import { pressOnRing } from "../test-harness/deckPopupFit";
 import {
   FOCUS_RING_BTN_CLASS,
   SETTINGS_GLASS_BTN_BACKGROUND,
@@ -59,18 +60,8 @@ afterEach(() => {
   document.documentElement.style.removeProperty(TEXT_SCALE_VAR);
 });
 
-type Move = "onMoveUp" | "onMoveDown" | "onMoveLeft" | "onMoveRight";
-
-/** A D-pad press on the stop that has the ring, the way Steam calls it: the nearest Focusable's handler. */
-function press(key: Move): boolean | undefined {
-  let el: SteamEl | null = steamRingHolder() as SteamEl | null;
-  while (el) {
-    const handler = el.__nav?.[key];
-    if (handler) return handler() as boolean | undefined;
-    el = el.parentElement as SteamEl | null;
-  }
-  return undefined;
-}
+/** A D-pad press on the stop that has the ring, the way Steam calls it (deckPopupFit.ts). */
+const press = pressOnRing;
 
 /** A, the way Steam delivers it: the nearest Focusable's onOKButton. */
 function pressA(button: HTMLElement): void {

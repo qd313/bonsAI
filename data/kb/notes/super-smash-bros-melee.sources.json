@@ -1,0 +1,292 @@
+{
+  "wiki": "SmashWiki (https://www.ssbwiki.com/api.php)",
+  "licence_printed_by_fetcher": "SmashWiki (MediaWiki 1.43.11) licence: Attribution-ShareAlike 4.0 International https://creativecommons.org/licenses/by-sa/4.0/",
+  "licence_stored": "CC-BY-SA-4.0 (the fetcher prints 'Attribution-ShareAlike 4.0 International'; the library stores the versioned form, and data/kb/NOTICE.md lists SmashWiki as CC-BY-SA-4.0)",
+  "game_id": 25,
+  "game": "Super Smash Bros. Melee",
+  "read_on": "2026-11-09",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py logic (page text as rendered by the wiki, link markup removed), run through .scratch/fetch_by_page.py because www.ssbwiki.com answers HTTP 403 to the reader's render call, which asks for the page by oldid; the wrapper asks for the same page by title and checks the revision the wiki returns. Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named. SmashWiki pages cover every Smash game; a line states a Melee fact only where the page says so for Melee (the 'In Super Smash Bros. Melee' trophy text, a sentence naming Melee, or a Melee table column), or describes the item or enemy for the whole series without naming a game.",
+  "sections": [
+    {
+      "section_id": 3400,
+      "name": "Hammer",
+      "kind": "item",
+      "main_page": "https://www.ssbwiki.com/Hammer_(item)",
+      "main_revision": "2060174",
+      "lines": [
+        {
+          "line": "Summary: A close-range item from Donkey Kong: grab it and you run across the screen swinging it back and forth nonstop. It is an extremely powerful item, but you have no recovery move while you carry it.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Hammer_(item)",
+              "revision": "2060174",
+              "quoted": [
+                "The Hammer (ハンマー, Hammer) is a close-range item that appears in all Super Smash Bros. games.",
+                "If you grab the Hammer, you'll run across the screen swinging it back and forth nonstop.",
+                "It's an extremely powerful item, but you have no recovery move when carrying it.",
+                "The hammer comes from the arcade game Donkey Kong."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Grabbing it sends a player into a state that inflicts significant damage and knockback, but while swinging they cannot jump a second time in the air, use any other attacks or defend.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Hammer_(item)",
+              "revision": "2060174",
+              "quoted": [
+                "Upon being grabbed by any player, it sends them into a unique state that inflicts significant damage and knockback.",
+                "they will constantly swing the hammer back and forth, and will be unable to midair jump, use any other attacks, or defend"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Every now and then the mallet head falls off and the wielder ends up completely vulnerable, swinging just the handle; from Melee on there is a 12.5% chance of this as it is picked up, and the fallen Hammer Head can be picked up and thrown as a powerful item. If an opponent is swinging a Hammer, sending them off a ledge can effectively KO them, because they cannot use special moves or a midair jump unless they somehow drop the Hammer.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Hammer_(item)",
+              "revision": "2060174",
+              "quoted": [
+                "Every now and then, the mallet head will fall off, and you'll end up completely vulnerable, swinging just the handle.",
+                "Starting in Melee, there is a 12.5% chance (one out of eight) of the head of the Hammer falling off as it is picked up",
+                "The Hammer Head itself can be picked up and thrown as a powerful item.",
+                "As the wielder of the hammer cannot use special moves or midair jump, sending an opponent off a ledge while they swing the Hammer can effectively KO them unless they can somehow drop the Hammer."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3401,
+      "name": "Beam Sword",
+      "kind": "item",
+      "main_page": "https://www.ssbwiki.com/Beam_Sword",
+      "main_revision": "2049293",
+      "lines": [
+        {
+          "line": "Summary: A long-range battering item, similar in appearance to a lightsaber. It can be wielded and charged for melee attacks or thrown, like all other battering items.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Beam_Sword",
+              "revision": "2049293",
+              "quoted": [
+                "The Beam Sword (ビームソード, Beam Sword) is a long-range battering item.",
+                "It is similar in appearance to a lightsaber, and is often informally referred to as the \"lightsaber\" for this reason.",
+                "it can be wielded and charged for melee attacks or can be thrown, like all other battering items."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: As a battering item it bolsters your power and adds some options through throwing. The blade lengthens in direct proportion to the power of an attack, so it reaches its maximum size when swung as a smash attack, and the length changes depending on who wields it.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Beam_Sword",
+              "revision": "2049293",
+              "quoted": [
+                "the Beam Sword will bolster the player's power, as well as potentially add some options to their game via throwing.",
+                "The blade also lengthens in direct proportion to the power of an attack, so it reaches its maximum size when swung as a smash attack.",
+                "but the length changes depending on who wields it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A distinctive glowing blade that is at first about the size of a short sword.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Beam_Sword",
+              "revision": "2049293",
+              "quoted": [
+                "With its distinctive glowing blade, the Beam Sword is eye-catching and lethal.",
+                "At first, the blade is about the size of a short sword"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In Melee its range significantly increases in size, particularly on charged smash attacks. Peach can pull a Beam Sword out with her Vegetable attack, but the chance is slim: 1/768 in Melee.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Beam_Sword",
+              "revision": "2049293",
+              "quoted": [
+                "In Melee and Brawl, the Beam Sword's range significantly increases in size, particularly in the case of charged smash attacks.",
+                "In Melee and Brawl, a Beam Sword is one of few unusual items Peach can pull out via her Vegetable attack, though the chances of this are slim; 1/768 and 1/480 in Melee and Brawl respectively."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3402,
+      "name": "Star Rod",
+      "kind": "item",
+      "main_page": "https://www.ssbwiki.com/Star_Rod",
+      "main_revision": "2056048",
+      "lines": [
+        {
+          "line": "Summary: A magic wand that holds 16 star shots and sends foes flying at a low angle when thrown. It works as an unusual combination of a battering item and a projectile item.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Star_Rod",
+              "revision": "2056048",
+              "quoted": [
+                "This magic wand holds 16 star shots and sends foes flying at a low angle when thrown.",
+                "the Star Rod acts as an unusual combination of both battering and projectile items."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Hit opponents up close with it, or use smash attacks or tilts to shoot long-range stars that can hit from a distance. It is most powerful when Captain Falcon or Sheik performs a smash attack while holding it.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Star_Rod",
+              "revision": "2056048",
+              "quoted": [
+                "As a battering item, combatants can use the Star Rod to directly hit opponents up close.",
+                "Using either smash attacks or tilts, however, cause the Star Rod to shoot out long-range stars that can hit opponents from a distance",
+                "It's most powerful when Captain Falcon or Sheik performs a Smash Attack while holding it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The item has only sixteen stars, and Captain Falcon's smash attack shoots off 5 stars and Sheik's 2, so they use it up quickly. When it runs out, throwing it at enemies is the more practical option: a thrown Star Rod deals powerful semi-spike knockback that can gimp recoveries or act as a general KO move. The stars are projectiles, so they can be reflected or absorbed.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Star_Rod",
+              "revision": "2056048",
+              "quoted": [
+                "with Falcon's attacks shooting off 5 stars and Sheik's firing off 2 stars.",
+                "The item, however, has only sixteen stars, and using either of the two aforementioned characters can cause the item to quickly deplete its ammunition.",
+                "A more practical option, however, is to throw the item towards enemies; the Star Rod, when thrown, deals powerful semi-spike knockback, which can potentially gimp recoveries or act as a general KO move.",
+                "As the stars are considered projectiles by the game, they can be reflected by a variety of moves; in addition, they can also be absorbed."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3403,
+      "name": "Super Scope",
+      "kind": "item",
+      "main_page": "https://www.ssbwiki.com/Super_Scope",
+      "main_revision": "2061279",
+      "lines": [
+        {
+          "line": "Summary: A long-range shooting item based on a Super Nintendo peripheral. In Melee, tapping the attack button fires three small shots, and holding it charges a stronger, larger shot.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Super_Scope",
+              "revision": "2061279",
+              "quoted": [
+                "is a shooting item that appears in Super Smash Bros. Melee, Super Smash Bros. Brawl, Super Smash Bros. 4, and Super Smash Bros. Ultimate, based on a real-life peripheral from Nintendo.",
+                "Tapping the attack button will fire three small shots in Melee",
+                "Holding down the attack button charges the weapon, allowing for stronger and larger shots and having decent KO potential at full charge."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Tap the attack button repeatedly for a constant stream of small shots that each do little knockback and damage; the high rate of fire gives a trapping effect, as the opponent has little or no time to act. Hold the button to charge a bigger shot. It has limited ammunition, 48 shots in Melee, and the higher charge levels use more.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Super_Scope",
+              "revision": "2061279",
+              "quoted": [
+                "If the player constantly taps the attack button, they will fire a constant stream of small shots, each of which does little knockback and damage.",
+                "The high rate of fire and low knockback causes a \"trapping\" effect as the opponent will have little-to-no time to act",
+                "The Super Scope has limited ammunition, with 48 shots in Melee and Brawl",
+                "Different charge levels will increase the ammo used."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In Melee you could not move while shooting it. The uncharged shots pass through opponents, so a stream can trap several enemies, but their 280 degree knockback angle makes a very weak meteor smash that is ineffective against opponents close to the stage. When it runs out of ammunition it only fires a puff of smoke, and you can throw the weapon for a little extra knockback and damage.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Super_Scope",
+              "revision": "2061279",
+              "quoted": [
+                "In Super Smash Bros. Melee, you could not move while shooting it, but in this game, you can move and jump while blasting!",
+                "In Melee, the uncharged shots have a 280° knockback angle, resulting in a very weak meteor smash, making it ineffective against opponents close to the stage.",
+                "The uncharged shots can also pass through opponents, allowing it to trap multiple enemies",
+                "Attempting to use the Super Scope after it runs out of ammunition causes it to fire nothing but a puff of smoke — at this point, the player can throw the weapon at opponents for a little extra knockback and damage."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3404,
+      "name": "Ray Gun",
+      "kind": "item",
+      "main_page": "https://www.ssbwiki.com/Ray_Gun",
+      "main_revision": "2044738",
+      "lines": [
+        {
+          "line": "Summary: A long-range weapon that is fairly weak, but since it fires so fast it can easily juggle enemies.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Ray_Gun",
+              "revision": "2044738",
+              "quoted": [
+                "The Ray Gun (レイガン, Ray Gun) is a long-range weapon used in all games of the Super Smash Bros. series.",
+                "The Ray Gun is toy-like in appearance and shoots short, fat, highly reflective beams of green light.",
+                "The gun is fairly weak, but since it fires so fast, it can easily juggle enemies."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It holds 16 shots. In Melee each shot deals 4% with horizontal knockback and can be fired every 30 frames, which lets it juggle opponents at low percents or carry them to the blast line at mid percents.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Ray_Gun",
+              "revision": "2044738",
+              "quoted": [
+                "A Ray Gun can be shot 16 times before it runs out of ammunition.",
+                "In Super Smash Bros. Melee, Super Smash Bros. Brawl, and Super Smash Bros. 4 each shot deals 4% without electricity, horizontal knockback, and can be fired every 30 frames.",
+                "The horizontal knockback allows it to easily juggle opponents at low percents or to carry them to the blast line at mid percents."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Toy-like in appearance, with a fat shape, and it fires beams of green light.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Ray_Gun",
+              "revision": "2044738",
+              "quoted": [
+                "The Ray Gun is toy-like in appearance and shoots short, fat, highly reflective beams of green light."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The shots can be reflected or absorbed, while the gun itself, when thrown, can only be reflected. Try dropping it with a few shots left and watch your foes waste time and energy retrieving it.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Ray_Gun",
+              "revision": "2044738",
+              "quoted": [
+                "The shots can be reflected or absorbed, while the gun itself (when thrown) can only be reflected.",
+                "Try dropping it with a few shots left and watch your foes waste time and energy retrieving it."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

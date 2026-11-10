@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 3400,
+      "game_id": 25,
+      "section_type": "item",
+      "name": "Hammer",
+      "card": "Summary: A close-range item from Donkey Kong: grab it and you run across the screen swinging it back and forth nonstop. It is an extremely powerful item, but you have no recovery move while you carry it.\nUses: Grabbing it sends a player into a state that inflicts significant damage and knockback, but while swinging they cannot jump a second time in the air, use any other attacks or defend.\nTips: Every now and then the mallet head falls off and the wielder ends up completely vulnerable, swinging just the handle; from Melee on there is a 12.5% chance of this as it is picked up, and the fallen Hammer Head can be picked up and thrown as a powerful item. If an opponent is swinging a Hammer, sending them off a ledge can effectively KO them, because they cannot use special moves or a midair jump unless they somehow drop the Hammer.",
+      "source_url": "https://www.ssbwiki.com/Hammer_(item)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2060174",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3401,
+      "game_id": 25,
+      "section_type": "item",
+      "name": "Beam Sword",
+      "card": "Summary: A long-range battering item, similar in appearance to a lightsaber. It can be wielded and charged for melee attacks or thrown, like all other battering items.\nUses: As a battering item it bolsters your power and adds some options through throwing. The blade lengthens in direct proportion to the power of an attack, so it reaches its maximum size when swung as a smash attack, and the length changes depending on who wields it.\nLooks like: A distinctive glowing blade that is at first about the size of a short sword.\nTips: In Melee its range significantly increases in size, particularly on charged smash attacks. Peach can pull a Beam Sword out with her Vegetable attack, but the chance is slim: 1/768 in Melee.",
+      "source_url": "https://www.ssbwiki.com/Beam_Sword",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2049293",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3402,
+      "game_id": 25,
+      "section_type": "item",
+      "name": "Star Rod",
+      "card": "Summary: A magic wand that holds 16 star shots and sends foes flying at a low angle when thrown. It works as an unusual combination of a battering item and a projectile item.\nUses: Hit opponents up close with it, or use smash attacks or tilts to shoot long-range stars that can hit from a distance. It is most powerful when Captain Falcon or Sheik performs a smash attack while holding it.\nTips: The item has only sixteen stars, and Captain Falcon's smash attack shoots off 5 stars and Sheik's 2, so they use it up quickly. When it runs out, throwing it at enemies is the more practical option: a thrown Star Rod deals powerful semi-spike knockback that can gimp recoveries or act as a general KO move. The stars are projectiles, so they can be reflected or absorbed.",
+      "source_url": "https://www.ssbwiki.com/Star_Rod",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2056048",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3403,
+      "game_id": 25,
+      "section_type": "item",
+      "name": "Super Scope",
+      "card": "Summary: A long-range shooting item based on a Super Nintendo peripheral. In Melee, tapping the attack button fires three small shots, and holding it charges a stronger, larger shot.\nUses: Tap the attack button repeatedly for a constant stream of small shots that each do little knockback and damage; the high rate of fire gives a trapping effect, as the opponent has little or no time to act. Hold the button to charge a bigger shot. It has limited ammunition, 48 shots in Melee, and the higher charge levels use more.\nTips: In Melee you could not move while shooting it. The uncharged shots pass through opponents, so a stream can trap several enemies, but their 280 degree knockback angle makes a very weak meteor smash that is ineffective against opponents close to the stage. When it runs out of ammunition it only fires a puff of smoke, and you can throw the weapon for a little extra knockback and damage.",
+      "source_url": "https://www.ssbwiki.com/Super_Scope",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2061279",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3404,
+      "game_id": 25,
+      "section_type": "item",
+      "name": "Ray Gun",
+      "card": "Summary: A long-range weapon that is fairly weak, but since it fires so fast it can easily juggle enemies.\nUses: It holds 16 shots. In Melee each shot deals 4% with horizontal knockback and can be fired every 30 frames, which lets it juggle opponents at low percents or carry them to the blast line at mid percents.\nLooks like: Toy-like in appearance, with a fat shape, and it fires beams of green light.\nTips: The shots can be reflected or absorbed, while the gun itself, when thrown, can only be reflected. Try dropping it with a few shots left and watch your foes waste time and energy retrieving it.",
+      "source_url": "https://www.ssbwiki.com/Ray_Gun",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2044738",
+      "crawled_at": "2026-11-09"
+    }
+  ]
+}

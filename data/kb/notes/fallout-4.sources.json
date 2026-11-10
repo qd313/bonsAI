@@ -367,30 +367,27 @@
           ]
         },
         {
-          "line": "Looks like: Most adult mirelurks have a shell and pincers like a horseshoe crab, and the hunter looks like a lobster. A glowing mirelurk has a glowing underside and a buildup of radiation in its eyestalks.",
+          "line": "Looks like: Most adult mirelurks have a shell and pincers like a horseshoe crab, and the hunter looks like a lobster.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mirelurk_(Fallout_4)",
               "revision": "4711714",
               "quoted": [
                 "Most adult mirelurk variants have shells and pincers resembling those of horseshoe crabs",
-                "The hunter variant appears to be a lobster.",
-                "their undersides are positively luminescent and a buildup of radiation in its eyestalks gives them a distinct feature even among \"glowing\" creatures."
+                "The hunter variant appears to be a lobster."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Crippling one set of a mirelurk's legs greatly reduces its mobility, and crippling both sets leaves it unable to move or attack, even face to face with you. Mirelurks have no way to protect themselves against mines or any attack from below. Their thick shells make melee hard because they hide their weak points as you strike, so melee weapons with the legendary modifiers penetrating or exterminator's are useful.",
+          "line": "Tips: Crippling one set of a mirelurk's legs greatly reduces its mobility, and crippling both sets leaves it unable to move or attack, even face to face with you. Mirelurks have no way to protect themselves against mines or any attack from below.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mirelurk_(Fallout_4)",
               "revision": "4711714",
               "quoted": [
                 "The standard variants of mirelurks will have their mobility greatly reduced should one set of their legs be crippled, crippling both sets of legs will render them completely immobile and they will not be able to attack the player, even while face to face with them.",
-                "mirelurks have no way to protect themselves against mines, or any attack from below.",
-                "Because of their thick shells, they can be quite hard to defeat in a melee fight, as they tend to hide their weak points when the player character is about to strike",
-                "melee weapons with the legendary modifiers \"penetrating\" (attacks ignore 30% of enemy's Damage Resistance) and \"exterminator's\" (specific bonus damage to mirelurks) are useful against them."
+                "mirelurks have no way to protect themselves against mines, or any attack from below."
               ]
             }
           ]
@@ -536,56 +533,53 @@
       "main_revision": "4664624",
       "lines": [
         {
-          "line": "Summary: A highly aggressive, fast robot that usually charges you to fight in melee, and most models also carry a laser in the head unit. The basic Assaultron is typically found close to old military bases and roadside transports.",
+          "line": "Summary: A highly aggressive, fast robot that usually charges you to fight in melee, and most models also carry a laser in the head unit.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Assaultron_(Fallout_4)",
               "revision": "4664624",
               "quoted": [
                 "Assaultrons are highly aggressive and fast in combat, usually preferring the use of their hands and any custom attachments to charge at and attack targets in melee.",
-                "Most models of Assaultron house a directed laser weapon in their head unit",
-                "The most common variant of Assaultron, typically found close to old military bases and roadside transports."
+                "Most models of Assaultron house a directed laser weapon in their head unit"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: The head is almost always behind a retractable layer of armor plating, so headshots do reduced damage, but the plates peel back while the laser charges, which is your chance to hit the head directly. Crippling the head permanently takes away its laser, and destroying its legs removes its speed advantage, though it keeps coming by crawling.",
+          "line": "Weak points: The head is almost always behind retractable armor plating, so headshots do reduced damage, but the plates peel back while the laser charges, so you can hit it directly; crippling the head permanently takes away the laser. Destroying its legs removes its speed advantage, but it keeps crawling, and destroying an arm or leg while it still works makes it detonate in a localized explosion akin to a mini nuke; killing it before that gives a normal death.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Assaultron_(Fallout_4)",
               "revision": "4664624",
               "quoted": [
                 "the head is almost always covered behind a retractable layer of armor plating, allowing Assaultrons to take reduced damage from headshots. However, during the charging sequence, the plates will peel back, giving an opportunity to attack directly; if one is able to cripple the Assaultron's head, it will lose the use of its head laser permanently.",
-                "One can remove an Assaultron's speed advantage by targeting and destroying their legs. However, destroying one or both will not stop it completely as it will continue to pursue the target by crawling on the ground."
+                "One can remove an Assaultron's speed advantage by targeting and destroying their legs. However, destroying one or both will not stop it completely as it will continue to pursue the target by crawling on the ground.",
+                "If an Assaultron suffers significant damage, such as destroying one or both of its arms or legs, while still remaining functional, the robot will activate a \"hail mary\" attack similar to a sentry bot's meltdown sequence, where the robot will detonate in a localized explosion akin to a mini nuke and just as damaging; killing the Assaultron before they set off the explosion will still result in a normal death."
               ]
             }
           ]
         },
         {
-          "line": "Looks like: A robot with claws for hands and a head unit that gradually becomes surrounded by red electric energy as the laser charges. The dominator variant has a darker finish and twin blade arms.",
+          "line": "Looks like: A robot with claws for hands and a head unit that gradually becomes surrounded by red electric energy as the laser charges.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Assaultron_(Fallout_4)",
               "revision": "4664624",
               "quoted": [
                 "their standard claws",
-                "the head will gradually become surrounded by red electric energy for around 6-7 seconds if uninterrupted.",
-                "A stronger variant with a darker finish and equipped with twin blade arms"
+                "the head will gradually become surrounded by red electric energy for around 6-7 seconds if uninterrupted."
               ]
             }
           ]
         },
         {
-          "line": "Tips: The laser takes around 6-7 seconds to charge, then the robot stops in place and fires a constant blast for 2-3 seconds that can seriously injure even a high-level character caught off guard and not behind cover, so get behind cover. A badly damaged but working Assaultron can detonate in an explosion as damaging as a mini nuke, and killing it first gives a normal death. The dominator variant uses a stealth field that stops V.A.T.S. targeting until it is in melee range, and only crippling its torso stops that for good.",
+          "line": "Tips: The laser charges for around 6-7 seconds, then the robot stops in place and fires a constant blast for 2-3 seconds that can seriously injure even a high-level character who is not behind cover.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Assaultron_(Fallout_4)",
               "revision": "4664624",
               "quoted": [
-                "the head will gradually become surrounded by red electric energy for around 6-7 seconds if uninterrupted. Once fully charged, it stops in place and fires a constant laser blast for 2-3 seconds. At full charge and if its target is not behind cover beforehand, the laser can inflict a significant amount of damage in a short time, capable of seriously injuring even a high-level Sole Survivor if caught off-guard.",
-                "the robot will activate a \"hail mary\" attack similar to a sentry bot's meltdown sequence, where the robot will detonate in a localized explosion akin to a mini nuke and just as damaging; killing the Assaultron before they set off the explosion will still result in a normal death.",
-                "Unique to this class of Assaultron is its ability to utilize a stealth field akin to a Stealth Boy that prevents being targeted in V.A.T.S. and only reappears when it is in melee range; this ability is only permanently stopped by crippling its torso."
+                "the head will gradually become surrounded by red electric energy for around 6-7 seconds if uninterrupted. Once fully charged, it stops in place and fires a constant laser blast for 2-3 seconds. At full charge and if its target is not behind cover beforehand, the laser can inflict a significant amount of damage in a short time, capable of seriously injuring even a high-level Sole Survivor if caught off-guard."
               ]
             }
           ]
@@ -627,13 +621,12 @@
           ]
         },
         {
-          "line": "Looks like: A robot with a torso, three eyes, arms and a thruster, and the words \"Mister Handy\" written on the back of its body.",
+          "line": "Looks like: The words \"Mister Handy\" are written on the back of its body.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mister_Gutsy_(Fallout_4)",
               "revision": "4699068",
               "quoted": [
-                "right eye, mid-eye, left eye, combat inhibitor, thruster, and arms",
                 "The words \"Mister Handy\" are written on the backside of their body."
               ]
             }
@@ -719,14 +712,13 @@
       "main_revision": "4714832",
       "lines": [
         {
-          "line": "Summary: A football-sized tactical nuclear warhead, as rare as it is powerful, made to be fired from a nuclear catapult weapon.",
+          "line": "Summary: A football-sized tactical nuclear warhead, made to be fired from a nuclear catapult weapon.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mini_nuke_(Fallout_4)",
               "revision": "4714832",
               "quoted": [
-                "The mini nuke is a football-sized tactical nuclear warhead designed for use in a nuclear catapult weapon in Fallout 4.",
-                "A small, football-sized nuclear bomb, as rare as it is powerful."
+                "The mini nuke is a football-sized tactical nuclear warhead designed for use in a nuclear catapult weapon in Fallout 4."
               ]
             }
           ]
@@ -751,13 +743,14 @@
           ]
         },
         {
-          "line": "Tips: Mini nukes are commonly found in the region, sometimes carried by super mutant suiciders, and they appear more often as fixed loot in certain locations, respawning often when you are not playing in Survival mode. Kill a suicider without hitting its right arm and before it can detonate its mini nuke, and you can loot it from the corpse. Weapon emporiums built in settlements occasionally sell them, and rarely an ammo box holds three or four, depending on your Scrounger perk rank. In Survival mode each one weighs 12 units.",
+          "line": "Tips: Mini nukes are sometimes carried by super mutant suiciders, and they also appear as fixed loot in certain locations, respawning often when you are not playing in Survival mode. Kill a suicider without hitting its right arm and before it can detonate its mini nuke, and you can loot it from the corpse. Weapon emporiums built in settlements occasionally sell them, and rarely an ammo box holds three or four, depending on your Scrounger perk rank. In Survival mode each one weighs 12 units.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mini_nuke_(Fallout_4)",
               "revision": "4714832",
               "quoted": [
-                "Mini nukes are commonly found in the region. They are sometimes carried by super mutant suiciders. They appear more frequently as fixed loot in certain locations, respawning often when not playing in Survival mode.",
+                "They are sometimes carried by super mutant suiciders.",
+                "as fixed loot in certain locations, respawning often when not playing in Survival mode.",
                 "If it is killed without hitting its right arm and before it can detonate the held mini nuke, it can be looted off its corpse afterward.",
                 "Mini nukes can be bought from weapon emporiums built in settlements.",
                 "Mini nukes can (rarely) be found in ammo boxes. When found, they will contain either 3 or 4 mini nukes, depending on the player character's Scrounger perk rank."
@@ -808,7 +801,7 @@
           ]
         },
         {
-          "line": "Tips: The loaded junk still counts against your Carry Weight, so a light item such as steel, or pre-War money, which weighs nothing, makes good ammunition. Junk is also useful for building and crafting in settlements, so the choice is which items are worth firing instead of keeping in the workshop. You find the weapon in the ArcJet Systems building, on the table in the rocket control room, which can only be entered after starting the quest Call to Arms; its terminal is Advanced-locked.",
+          "line": "Tips: The loaded junk still counts against your Carry Weight, so a light item such as steel, or pre-War money, which weighs nothing, makes good ammunition. Junk is also useful for building and crafting in settlements, so the choice is which items are worth firing instead of keeping in the workshop. You find the weapon in the ArcJet Systems building, on the table in the rocket control room, which can only be entered during a quest, alongside that quest's companion; its terminal is Advanced-locked.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Junk_Jet_(Fallout_4)",

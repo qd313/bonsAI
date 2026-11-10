@@ -6,18 +6,14 @@ holding. Plan 103 lane V1 gives the versus, co-op, callout, survival and realism
 wording, short enough to sit on a chip and true for any name a note can have.
 """
 
-import os
-import tempfile
 import unittest
-from unittest import mock
 
 from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
 from backend.knowledge import knowledge_base_chips as chips  # noqa: E402
-from backend.knowledge.knowledge_base_cards import close_connection  # noqa: E402
-from test_knowledge_base_chip_pool_size import _build_db  # noqa: E402
+import test_knowledge_base_chip_pool_size as pool  # noqa: E402
 
 
 class NewKindChipWordingTests(unittest.TestCase):
@@ -57,18 +53,8 @@ class NewKindChipWordingTests(unittest.TestCase):
     def test_the_chip_a_player_sees_for_a_versus_note_reads_as_the_new_wording(self):
         """The level the Deck looks at: the chip list for a running game, built from a library
         whose only strategy note is a versus one."""
-        tmp = tempfile.TemporaryDirectory()
-        self.addCleanup(tmp.cleanup)
-        db = os.path.join(tmp.name, "corpus.db")
-        _build_db(db, [("versus", "Playing as the Tank")])
-        self.addCleanup(close_connection, db)
-        with mock.patch.object(chips, "resolve_corpus_db_path", return_value=db), mock.patch.object(
-            chips, "_resolve_game_id", return_value=(1, "exact")
-        ):
-            result = chips.suggest_chip_candidates(
-                {"use_local_knowledge_base": True}, app_id="1", app_name="Test Game"
-            )
-        strategy = [c.text for c in result.candidates if c.domain == "strategy"]
+        # The neighbouring test file's own setup: a small library on disk, then the chip list.
+        strategy = pool.ChipPoolSizeTests._chips_for(self, [("versus", "Playing as the Tank")])
         self.assertEqual(strategy, ["How do I play as the Tank in versus?"])
 
 

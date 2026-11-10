@@ -354,7 +354,7 @@
           ]
         },
         {
-          "line": "Weak points: A Rhino is nearly immune to small-arms fire. Explosives and flame weapons (molotovs, the flamethrower) hurt it, and when you fight a military one the windshield is the only soft spot.",
+          "line": "Weak points: A Rhino is nearly immune to small-arms fire. Explosives and flame weapons (molotovs, the flamethrower) hurt it. The windshield is its only soft spot, which only shows when you hijack a military Rhino.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
@@ -486,14 +486,14 @@
           ]
         },
         {
-          "line": "Tips: When your health hits zero you are wasted: you end up at the nearest hospital, pay a fee, lose every weapon and fail any mission you were on. In the original game, saving at a save point does not restore health, unlike in most other 3D games.",
+          "line": "Tips: When your health hits zero you are wasted: you end up at the nearest hospital, pay a fee, lose every weapon and fail any mission you were on. In the original game, saving at a save point does not restore health, unlike every other 3D Universe game except Advance.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Health",
               "revision": "2063152",
               "quoted": [
                 "When the player's health is completely depleted, the protagonist is considered \"wasted\", and is then transported to the nearest hospital, after which a fee for healthcare will be assessed, and all weapons will be confiscated in the 2D and 3D Universes. Any mission that may have been in progress at the time is considered as failed.",
-                "by visiting a save point to save the game (in all 3D Universe titles, save for GTA III and Grand Theft Auto Advance"
+                "Health can be replenished by picking up a health pickup, employing the services of a prostitute, by eating food (in GTA Vice City, GTA San Andreas, GTA IV and its episodes, GTA V and GTA Online) or by visiting a save point to save the game (in all 3D Universe titles, save for GTA III and Grand Theft Auto Advance, and in all HD Universe titles)."
               ]
             }
           ]

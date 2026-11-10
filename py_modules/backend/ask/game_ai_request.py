@@ -124,6 +124,7 @@ from backend.ask.ollama_service import (
     user_asks_ollama_bonsai_host_or_latency,
 )
 from backend.ask.proton_troubleshooting_logs import collect_proton_troubleshooting_logs
+from backend.ask import picture_guess
 from backend.answer.response_verify import (
     cover_named_spoilers,
     cover_thinking_text,
@@ -591,7 +592,9 @@ async def run_game_ai_request(
                         prev_question, prev_answer
                     )
 
-        if should_kb:
+        # Plan 103 lane P2: with the switch on, a Strategy picture turn asks the picture model what it sees first; its words join the search words only (picture_guess.py).
+        question_for_kb_search, picture_guess_stopped = await picture_guess.add_picture_guess_words(plugin, settings, atts, pc_ip, preferred_model, ask_mode, question_for_kb_search, should_kb, kb_domain)
+        if should_kb and not picture_guess_stopped:
             if isinstance(active_rid, int) and hasattr(plugin, "_publish_thinking_phase_key"):
                 plugin._publish_thinking_phase_key(
                     active_rid,
@@ -865,7 +868,7 @@ async def run_game_ai_request(
         # known now, so the AI is told too (kb_notes_turn_flags.py); the footer step below still writes the line.
         notes_turn_flags = prompt_turn_flags(ask_mode, kb_transparency, kb_coverage_transparency, text_resolved_title,
                                              question_for_kb_search, kb_attached_notes, question_is_courtesy_or_junk)
-        ollama_result = await plugin.ask_ollama(
+        ollama_result = picture_guess.STOPPED_RESULT if picture_guess_stopped else await plugin.ask_ollama(
             question_for_model,
             pc_ip,
             app_id,

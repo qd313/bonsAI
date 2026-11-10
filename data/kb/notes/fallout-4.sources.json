@@ -1,0 +1,335 @@
+{
+  "wiki": "Fallout Wiki (https://fallout.fandom.com/api.php)",
+  "licence_printed_by_fetcher": "Fallout Wiki (MediaWiki 1.43.10) licence: CC-BY-SA https://www.fandom.com/licensing",
+  "licence_stored": "CC-BY-SA-3.0 (the fetcher prints no version; 3.0 follows Fandom's licensing page, the Fallout 4 notes already in data/kb/strategy_seed.json, and data/kb/NOTICE.md, which lists the Fallout Wiki as CC-BY-SA-3.0)",
+  "game_id": 5,
+  "game": "Fallout 4",
+  "read_on": "2026-11-09",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://fallout.fandom.com/api.php --titles <pages> (page text as rendered by the wiki, link markup removed). Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named. Every page used is the Fallout 4 page of its subject; no other Fallout game's page or section is used.",
+  "sections": [
+    {
+      "section_id": 2300,
+      "name": "Stingwings",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Stingwing_(Fallout_4)",
+      "main_revision": "4694740",
+      "lines": [
+        {
+          "line": "Summary: A fast, flying mutant insect with a scorpion-like tail that ends in a deadly sting. You often meet them in swarms, in groups of up to five, and their erratic flying makes them formidable.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Stingwing_(Fallout_4)",
+              "revision": "4694740",
+              "quoted": [
+                "Stingwings appear to be large, mutated insects with extended mouthparts and a scorpion-like tail, ending in a bulbous and deadly sting.",
+                "They can often be found in swarms, and their erratic flying coupled with a venomous sting makes them formidable opponents.",
+                "They are often encountered in groups of up to five"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: It is fragile and can be taken down in relatively few shots even at mid-level, but it is extremely fast and hits fairly hard. Its speed and erratic movement make it very hard to hit without V.A.T.S.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Stingwing_(Fallout_4)",
+              "revision": "4694740",
+              "quoted": [
+                "Fragile but agile, the stingwing can be taken down in relatively few shots even at mid-level.",
+                "It is, however, extremely fast, hits fairly hard",
+                "which can combine to make them very hard to hit without V.A.T.S."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A large mutated insect with extended mouthparts and a scorpion-like tail ending in a bulbous sting. A glowing stingwing has a body that glows from absorbed radiation.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Stingwing_(Fallout_4)",
+              "revision": "4694740",
+              "quoted": [
+                "large, mutated insects with extended mouthparts and a scorpion-like tail, ending in a bulbous and deadly sting.",
+                "A version of the stingwing whose body glows due to an abundance of absorbed radiation."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Expect a dive-bombing attack: it circles you, rushes in to hit once, then goes back to circling, and sometimes it rushes at you in single file. Their nests are large clusters on the ground and walls that ooze bright yellow sap, and when you approach one several stingwings come out to defend it. At higher levels the stingwing chaser, the toughest kind, is fast, hits hard and attacks together with its group.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Stingwing_(Fallout_4)",
+              "revision": "4694740",
+              "quoted": [
+                "fond of a \"dive-bombing\" tactic where it circles the player character and rushes in to hit once before returning to circling.",
+                "Another tactic the stingwing tends to use is to rush at the player character in single file.",
+                "They are known to build large clusters of nests on the ground and walls, with nests themselves oozing a bright yellow sap akin to honey from their entrances. When these nests are approached, multiple stingwings will emerge to fiercely defend them from potential threats.",
+                "Chasers can be considered as the toughest of the stingwing variants. They are fast, hit hard, and are especially dangerous when encountered in groups, as they will attack together. Once the Sole Survivor reaches higher levels, they will spawn in various areas."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2301,
+      "name": "Mole rats",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Mole_rat_(Fallout_4)",
+      "main_revision": "4699294",
+      "lines": [
+        {
+          "line": "Summary: A fast, territorial burrowing rodent, found from the Red Rocket truck stop all the way to the Glowing Sea. Compared to many other enemies mole rats are generally weak, but a swarm can hide from your sight and attack from behind.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mole_rat_(Fallout_4)",
+              "revision": "4699294",
+              "quoted": [
+                "They are highly territorial and will attack anything entering their territory. They move quickly and will attack with a jumping lunge.",
+                "Mole rats are common pests in the wasteland, as they can be encountered as soon as the Red Rocket truck stop and as far as the Glowing Sea. Compared to many other enemies, mole rats are generally weak. However, if allowed to swarm, they may become a problem since they have the ability to easily hide from the player character's sight and attack from behind."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The standard mole rat has a mere 15 hit points and can be killed with a single hit from most weapons. A rabid mole rat is tougher and its bites fester, causing damage over time, but it remains a weak opponent.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mole_rat_(Fallout_4)",
+              "revision": "4699294",
+              "quoted": [
+                "With a mere 15 Hit Points, this enemy can be killed with a single hit from most weapons, making them more of a nuisance than a threat.",
+                "Bites from rabid mole rats fester, causing damage over time. They are tougher than standard mole rats, but remain weak opponents."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A bald, pink animal with large front teeth and small eyes, from the size of a house cat up to a large dog.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mole_rat_(Fallout_4)",
+              "revision": "4699294",
+              "quoted": [
+                "They range in size from a house cat up to a large dog and possibly bigger. They have a bald, pink appearance, with large front teeth and small eyes."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Mole rats in the Commonwealth tunnel to avoid you or to close in unseen, but a faint outline of their tunnel can be seen as they move. They retreat into a tunnel if you stand somewhere they cannot reach, such as on top of a car. Some are landminers with fragmentation mines strapped to their backs, and those detonate on impact and hurt anything close.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mole_rat_(Fallout_4)",
+              "revision": "4699294",
+              "quoted": [
+                "They will tunnel to avoid their enemy or close in to attack unseen, they will also retreat to a tunnel if the player character moves to an area inaccessible to them, such as on top of a car.",
+                "However, a faint outline of their tunnel can be seen as they move.",
+                "it is possible to encounter mole rats with fragmentation mines strapped to their backs. These will detonate on impact, dealing damage to anything in proximity."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2302,
+      "name": "Bloodbugs",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Bloodbug_(Fallout_4)",
+      "main_revision": "4699292",
+      "lines": [
+        {
+          "line": "Summary: A mutated mosquito that attacks in swarms, stabbing you with a needle-like proboscis and drinking your blood, then spitting the blood back at you for a large amount of radiation damage.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Bloodbug_(Fallout_4)",
+              "revision": "4699292",
+              "quoted": [
+                "these mutated insects attack in swarms, piercing their prey with a needle-like proboscis and feeding on their blood.",
+                "The insect then becomes engorged with the victim's blood and can spit the contaminated blood back at its target for a large amount of radiation damage"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Damaging its blood sac makes it lose its spit ability, though the sac is restored if it is given enough time. Its proboscis cannot get through power armor, so against power armor it is left with largely ineffectual stings and its acid spit.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Bloodbug_(Fallout_4)",
+              "revision": "4699292",
+              "quoted": [
+                "Damaging the bloodbug's blood sac causes it to lose its spit ability, but the bloodbug can still suck the victim's blood. If given enough time, the bloodbug's sac will be restored and it will regain its spit attack.",
+                "it's not powerful enough to penetrate power armor. Should they find themselves faced with such heavily armored prey, their range of available attacks becomes limited to largely ineffectual stings and their acid spit"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: About two feet long and muddy brown, with six long limbs, one pair of wings and a long pointed proboscis between two compound eyes. The rare red widow bloodbug has a body tinted red.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Bloodbug_(Fallout_4)",
+              "revision": "4699292",
+              "quoted": [
+                "Bloodbugs appear to be roughly two feet in length from the head to the tip of the abdomen. Bloodbugs possess muddy brown coloration",
+                "bloodbugs possess six long double-jointed limbs, one pair of finely-veined wings and a long, pointed proboscis that extends from between two compound eyes.",
+                "Red widow bloodbug",
+                "but their bodies are tinted red."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A dead brahmin drained of blood and covered in oversized stings is a sign that bloodbugs are nearby. They cling to trees, walls and ceilings while unaware of you, so a seemingly empty room can hold a whole swarm. Once alerted they spread out and surround you, but if most of the swarm is destroyed before it reaches you the survivors will often retreat.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Bloodbug_(Fallout_4)",
+              "revision": "4699292",
+              "quoted": [
+                "Coming across the exsanguinated, gray-skinned husk of a dead brahmin whose body is covered in oversized stings is a significant indicator of knowing there are bloodbugs nearby.",
+                "clinging to trees and structures, as well as walls or the ceiling while indoors and unaware of an enemy's presence. This can result in a nasty surprise when the player character enters a seemingly empty room or subway station and suddenly finds themselves in the middle of an entire bloodbug swarm.",
+                "Once they are alerted to their victim's presence, they will spread out, surround their prey and attack from multiple directions.",
+                "should the majority of the swarm be destroyed before it reaches its prey, the survivors will often retreat."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2303,
+      "name": "Radscorpions",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout_4)",
+      "main_revision": "4367296",
+      "lines": [
+        {
+          "line": "Summary: A big, fast, aggressive mutated scorpion with a poisoned stinger and the ability to burrow. It can deal a large amount of physical and poison damage in only a few hits, and most are found in the Glowing Sea.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout_4)",
+              "revision": "4367296",
+              "quoted": [
+                "Radscorpions are fast runners, extremely aggressive, extraordinarily well armored and will use their powerful claws and poisoned tails to attack enemies quickly and relentlessly; capable of dealing a large amount of physical and poison damage in only a few hits.",
+                "Radscorpions are mostly found within the Glowing Sea.",
+                "the ability to burrow underground in seconds"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Their only weak spot is their relatively small face. Weapons with armor-piercing mods, or the Penetrating legendary modifier, help against their armored exoskeletons.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout_4)",
+              "revision": "4367296",
+              "quoted": [
+                "Their only weak spot is their relatively small face.",
+                "Weapons with armor-piercing mods as well as the Penetrating legendary modifier can help to improve the damage output against their armor reinforced exoskeletons."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A much bigger version of the emperor scorpion, with powerful claws and a poisoned tail. Albino ones are white, deathskull ones are reddish, and glowing ones glow green.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout_4)",
+              "revision": "4367296",
+              "quoted": [
+                "They originated from the North American emperor scorpion",
+                "They have since mutated to become much larger, faster and more venomous than ever before.",
+                "powerful claws and poisoned tails",
+                "albino radscorpions have a noticeable white color",
+                "deathskull radscorpions have a noticeable reddish color",
+                "their body is seen glowing green"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Fight them from a distance if you can. If you shoot one from afar it burrows and comes up close to you, often in melee range, but standing on rocks or on metallic or wooden surfaces stops them tunnelling there. Deathskull radscorpions level with you, so they cannot be pacified, and they are among the most dangerous creatures in the Commonwealth.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout_4)",
+              "revision": "4367296",
+              "quoted": [
+                "radscorpions are powerful melee fighters that should be dealt with preferably from a distance",
+                "If attacked from afar, they will immediately burrow and emerge close to the player character, often in melee range, provided the ground type can be navigated through by them, so it is possible to avoid being caught unprepared by standing on rocks, or metallic/wooden surfaces before attacking.",
+                "These types of radscorpion level with the player character, thus making them impossible to pacify.",
+                "Deathskull radscorpions are easily one of the most dangerous creatures one can encounter while exploring the Commonwealth"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2304,
+      "name": "Yao guai",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Yao_guai_(Fallout_4)",
+      "main_revision": "4656109",
+      "lines": [
+        {
+          "line": "Summary: A ferocious mutated black bear with razor-sharp claws and teeth and a nasty temperament. Wild yao guai attack nearly any other animal or person they meet, deathclaws included.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Yao_guai_(Fallout_4)",
+              "revision": "4656109",
+              "quoted": [
+                "yao guai are mutated American black bears. They are one of the more vicious creatures of the wasteland, having razor sharp claws and teeth, and a nasty temperament.",
+                "Wild yao guai will attack nearly any other animals or people they encounter, including deathclaws."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Unlike many other creatures, yao guai do not take increased damage from being shot in the head. The stunted yao guai, with minor malformations, is less of a threat than the other kinds.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Yao_guai_(Fallout_4)",
+              "revision": "4656109",
+              "quoted": [
+                "Unlike many other creatures, yao guai do not take increased damage from being shot in the head.",
+                "Not as physically imposing as normal yao guai due to minor malformations, past injuries, or arrested development. As a result, they are less of a threat compared to other variants."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A large mutated bear. Albino ones are much lighter in colour, rabid ones have red welts on their sides and face, and the dusky yao guai is darker with more pronounced scars.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Yao_guai_(Fallout_4)",
+              "revision": "4656109",
+              "quoted": [
+                "Yao guai are large, mutated ursines",
+                "These yao guai are much lighter in coloration than a typical yao guai due to a genetic defect causing albinism.",
+                "it has red welts dominating its sides and face",
+                "it has a darker coloration compared to typical yao guai. Additionally, it has more pronounced scars on its body."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Every one of its attacks staggers you, even if you block it, so melee fighting is hard, especially with slow weapons or against a group; time your attacks or you can get stuck in the stagger while it strikes again. They appear as often by day as by night. A dusky yao guai levels with you and is immune to the Animal Friend perk, so it can be an issue at any level.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Yao_guai_(Fallout_4)",
+              "revision": "4656109",
+              "quoted": [
+                "the staggering effect on every one of their attacks, even if the player character is quick enough to block them. For this reason, melee fighting against yao guai might be difficult, especially with slow weapons or if fighting against a group. Attacks must be properly timed, otherwise, the player character might get stuck in the stagger effect, giving yao guai enough time to strike once again.",
+                "They seem to appear as often during the daytime as they do during the night.",
+                "it can be an issue for the player character at any level.",
+                "Dusky yao guai level with the player character and are therefore immune to the Animal Friend perk."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

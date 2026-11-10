@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 2300,
+      "game_id": 5,
+      "section_type": "enemy",
+      "name": "Stingwings",
+      "card": "Summary: A fast, flying mutant insect with a scorpion-like tail that ends in a deadly sting. You often meet them in swarms, in groups of up to five, and their erratic flying makes them formidable.\nWeak points: It is fragile and can be taken down in relatively few shots even at mid-level, but it is extremely fast and hits fairly hard. Its speed and erratic movement make it very hard to hit without V.A.T.S.\nLooks like: A large mutated insect with extended mouthparts and a scorpion-like tail ending in a bulbous sting. A glowing stingwing has a body that glows from absorbed radiation.\nTips: Expect a dive-bombing attack: it circles you, rushes in to hit once, then goes back to circling, and sometimes it rushes at you in single file. Their nests are large clusters on the ground and walls that ooze bright yellow sap, and when you approach one several stingwings come out to defend it. At higher levels the stingwing chaser, the toughest kind, is fast, hits hard and attacks together with its group.",
+      "source_url": "https://fallout.fandom.com/wiki/Stingwing_(Fallout_4)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4694740",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2301,
+      "game_id": 5,
+      "section_type": "enemy",
+      "name": "Mole rats",
+      "card": "Summary: A fast, territorial burrowing rodent, found from the Red Rocket truck stop all the way to the Glowing Sea. Compared to many other enemies mole rats are generally weak, but a swarm can hide from your sight and attack from behind.\nWeak points: The standard mole rat has a mere 15 hit points and can be killed with a single hit from most weapons. A rabid mole rat is tougher and its bites fester, causing damage over time, but it remains a weak opponent.\nLooks like: A bald, pink animal with large front teeth and small eyes, from the size of a house cat up to a large dog.\nTips: Mole rats in the Commonwealth tunnel to avoid you or to close in unseen, but a faint outline of their tunnel can be seen as they move. They retreat into a tunnel if you stand somewhere they cannot reach, such as on top of a car. Some are landminers with fragmentation mines strapped to their backs, and those detonate on impact and hurt anything close.",
+      "source_url": "https://fallout.fandom.com/wiki/Mole_rat_(Fallout_4)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4699294",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2302,
+      "game_id": 5,
+      "section_type": "enemy",
+      "name": "Bloodbugs",
+      "card": "Summary: A mutated mosquito that attacks in swarms, stabbing you with a needle-like proboscis and drinking your blood, then spitting the blood back at you for a large amount of radiation damage.\nWeak points: Damaging its blood sac makes it lose its spit ability, though the sac is restored if it is given enough time. Its proboscis cannot get through power armor, so against power armor it is left with largely ineffectual stings and its acid spit.\nLooks like: About two feet long and muddy brown, with six long limbs, one pair of wings and a long pointed proboscis between two compound eyes. The rare red widow bloodbug has a body tinted red.\nTips: A dead brahmin drained of blood and covered in oversized stings is a sign that bloodbugs are nearby. They cling to trees, walls and ceilings while unaware of you, so a seemingly empty room can hold a whole swarm. Once alerted they spread out and surround you, but if most of the swarm is destroyed before it reaches you the survivors will often retreat.",
+      "source_url": "https://fallout.fandom.com/wiki/Bloodbug_(Fallout_4)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4699292",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2303,
+      "game_id": 5,
+      "section_type": "enemy",
+      "name": "Radscorpions",
+      "card": "Summary: A big, fast, aggressive mutated scorpion with a poisoned stinger and the ability to burrow. It can deal a large amount of physical and poison damage in only a few hits, and most are found in the Glowing Sea.\nWeak points: Their only weak spot is their relatively small face. Weapons with armor-piercing mods, or the Penetrating legendary modifier, help against their armored exoskeletons.\nLooks like: A much bigger version of the emperor scorpion, with powerful claws and a poisoned tail. Albino ones are white, deathskull ones are reddish, and glowing ones glow green.\nTips: Fight them from a distance if you can. If you shoot one from afar it burrows and comes up close to you, often in melee range, but standing on rocks or on metallic or wooden surfaces stops them tunnelling there. Deathskull radscorpions level with you, so they cannot be pacified, and they are among the most dangerous creatures in the Commonwealth.",
+      "source_url": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout_4)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4367296",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2304,
+      "game_id": 5,
+      "section_type": "enemy",
+      "name": "Yao guai",
+      "card": "Summary: A ferocious mutated black bear with razor-sharp claws and teeth and a nasty temperament. Wild yao guai attack nearly any other animal or person they meet, deathclaws included.\nWeak points: Unlike many other creatures, yao guai do not take increased damage from being shot in the head. The stunted yao guai, with minor malformations, is less of a threat than the other kinds.\nLooks like: A large mutated bear. Albino ones are much lighter in colour, rabid ones have red welts on their sides and face, and the dusky yao guai is darker with more pronounced scars.\nTips: Every one of its attacks staggers you, even if you block it, so melee fighting is hard, especially with slow weapons or against a group; time your attacks or you can get stuck in the stagger while it strikes again. They appear as often by day as by night. A dusky yao guai levels with you and is immune to the Animal Friend perk, so it can be an issue at any level.",
+      "source_url": "https://fallout.fandom.com/wiki/Yao_guai_(Fallout_4)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "4656109",
+      "crawled_at": "2026-11-09"
+    }
+  ]
+}

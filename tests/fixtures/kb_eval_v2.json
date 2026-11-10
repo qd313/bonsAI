@@ -201,7 +201,7 @@
       "withheld_card_terms": [],
       "skill_level": "power_user",
       "input_style": "terse",
-      "note": "Maintainer example. Versus content and a map-callout card shape; corpus has neither.",
+      "note": "Maintainer example. Versus content and a map-callout card shape; corpus has neither. Left empty on purpose: the versus notes leave out spots on a finale map.",
       "expect_section": ""
     },
     {
@@ -217,7 +217,7 @@
       "skill_level": "power_user",
       "input_style": "terse",
       "note": "Maintainer example. Note the abbreviation — 'dark carn' is how it gets typed.",
-      "expect_section": ""
+      "expect_section": "Dark Carnival versus ambush spots"
     },
     {
       "id": "V2-S-L4D2-14",
@@ -261,7 +261,7 @@
       ],
       "skill_level": "power_user",
       "input_style": "terse",
-      "expect_section": ""
+      "expect_section": "Versus scoring and distance"
     },
     {
       "id": "V2-S-L4D2-18",
@@ -309,7 +309,7 @@
       "skill_level": "power_user",
       "input_style": "terse",
       "note": "Maintainer example. Three proper nouns and one question mark — no verb at all. Retrieval has to read this as 'is this ordering good' rather than as three separate lookups.",
-      "expect_section": ""
+      "expect_section": "Infected team combinations in versus"
     },
     {
       "id": "V2-S-L4D2-21",
@@ -375,7 +375,7 @@
       "skill_level": "power_user",
       "input_style": "terse",
       "note": "The first thing a versus player has to learn and the corpus has nothing on it.",
-      "expect_section": ""
+      "expect_section": "Versus ghost mode and spawning"
     },
     {
       "id": "V2-S-L4D2-25",
@@ -440,7 +440,7 @@
       "skill_level": "power_user",
       "input_style": "terse",
       "note": "Third sense of 'witch' after S-L4D2-02. Avoid, crown, or exploit are three different answers.",
-      "expect_section": ""
+      "expect_section": "Using the Witch as the infected team"
     },
     {
       "id": "V2-S-L4D2-29",
@@ -455,7 +455,7 @@
       "skill_level": "familiar",
       "input_style": "terse",
       "note": "Survivor-side mirror of S-L4D2-20. The sample had counters to single specials but none to a coordinated push.",
-      "expect_section": ""
+      "expect_section": "Answering combined special attacks in versus"
     },
     {
       "id": "V2-S-L4D2-17",
@@ -470,7 +470,7 @@
       "skill_level": "familiar",
       "input_style": "terse",
       "needs_clarification": "which campaign and chapter",
-      "note": "The class the gold-spider question exposed. Right behaviour is a follow-up question, not a wall of cards. Whether retrieval or the model handles that is undecided.",
+      "note": "The class the gold-spider question exposed. Right behaviour is a follow-up question, not a wall of cards. Whether retrieval or the model handles that is undecided. Left empty on purpose: unanswerable as written.",
       "expect_section": ""
     },
     {

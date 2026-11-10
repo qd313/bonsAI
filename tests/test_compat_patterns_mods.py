@@ -247,6 +247,15 @@ class TheAskAttachesAModsTipTests(unittest.TestCase):
             with self.subTest(question=question):
                 self.assertEqual(self.attached_topics(question)[:1], ["mods"])
 
+    def test_a_proton_crash_question_still_gets_the_crash_tip_first(self):
+        """The mods tips must not move an older answer. Tips 175 and 185 once both said "crash",
+        which made the word "crash" a little less rare across the sheet; BM25 then put tip 5 ("On
+        Windows Steam, Proton is not used...") ahead of tip 127 (force another Proton version) for
+        this question, and a Deck in Speed mode would have shown the Windows tip. Only the word-search
+        order is at stake, so the check lives where that order is built, and it names no tip number."""
+        self.assertEqual(self.attached_topics("why is my game crashing proton issue")[:1], ["crash"])
+        self.assertEqual(self.attached_topics("why is my game crashing proton issue", ask_mode="expert")[:1], ["crash"])
+
     def test_a_longer_answer_gets_several_mods_tips(self):
         self.assertGreaterEqual(self.attached_topics(DECK_CHECK, ask_mode="expert").count("mods"), 3)
 

@@ -1764,7 +1764,7 @@
     "platforms": [
       "deck"
     ],
-    "card": "Researched, unconfirmed: a script extender (SKSE/F4SE) must match the game version. After a patch get it from its own site (SKSE: skse.silverlock.org). Crash at start? Move Data/SKSE/Plugins files out",
+    "card": "Researched, unconfirmed: a script extender (SKSE/F4SE) must match the game version. After a patch get it from its own site (SKSE: skse.silverlock.org). Won't start? Move Data/SKSE/Plugins files out",
     "source_url": "",
     "source_license": "bonsAI-maintainer"
   },

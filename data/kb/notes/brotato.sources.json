@@ -212,6 +212,234 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3905,
+      "name": "Monk",
+      "kind": "enemy",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Enemies",
+      "main_revision": "8787",
+      "lines": [
+        {
+          "line": "Summary: An Elite enemy (Danger 2 and up) that opens by putting 15 Slasher Eggs on the field, then shoots at you, and later runs away while spawning Tentacles.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Spawns 15 Slasher Eggs",
+                "Shoots 5 projectiles each second to the player",
+                "Last 10 seconds, runs away from the player, spawning Tentacles"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its eggs hatch into Slashers after 5 seconds unless they are killed first. From 10 seconds in it fires 5 shots a second at you, and from the 30-second mark it spends 10 seconds running away and spawning Tentacles before going back to shooting. A Tentacle follows you, backs off if you get close, and attacks in a V shape at medium range. Killing the Monk drops a Legendary Loot Crate holding a guaranteed Legendary (tier 4) item.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Stays still, dies and spawns a Slasher after 5 seconds unless killed",
+                "Mutation 2(30 sec): Last 10 seconds, runs away from the player, spawning Tentacles Returns to Mutation 1",
+                "Follows the character, runs away if too close, attacks in \"V\" shape from medium range",
+                "Elites spawn at Elite Waves and drop legendary Loot Crates on death containing a guaranteed tier 4 item (Legendary)."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3906,
+      "name": "Gargoyle",
+      "kind": "enemy",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Enemies",
+      "main_revision": "8787",
+      "lines": [
+        {
+          "line": "Summary: An Elite enemy (Danger 2 and up) that attacks by throwing out circles and bursts of projectiles, in three stages.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Random walk pattern - spawns a big circle of projectiles around itself every 0.3 seconds",
+                "Chases the player - spawning 12 projectiles around itself in random pattern every 0.4 seconds",
+                "Chases the player - spawns a 3 of projectiles in random directions every 0.01 - 0.15 seconds"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: At first it wanders at random, putting out a big circle of projectiles around itself every 0.3 seconds. From 60% health or 30 seconds in, it chases you and fires 12 projectiles around itself at random, every 0.4 seconds. From 30% health or 45 seconds in, it chases you and shoots projectiles off in random directions, once every 0.01 to 0.15 seconds. Killing it drops a Legendary Loot Crate holding a guaranteed Legendary (tier 4) item.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Mutation 1(60%HP/30 sec): Chases the player - spawning 12 projectiles around itself in random pattern every 0.4 seconds",
+                "Mutation 2(30%HP/45 sec): Chases the player - spawns a 3 of projectiles in random directions every 0.01 - 0.15 seconds",
+                "Elites spawn at Elite Waves and drop legendary Loot Crates on death containing a guaranteed tier 4 item (Legendary)."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3907,
+      "name": "Bait",
+      "kind": "item",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Bait",
+      "main_revision": "5577",
+      "lines": [
+        {
+          "line": "Summary: A cheap Tier 2 damage item with a catch: it sends Lampreys after you at the beginning of the next wave.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Bait",
+              "revision": "5577",
+              "quoted": [
+                "Bait provides a significant amount of Damage at a cheap cost, but it comes with a risk.",
+                "between 7 and 8 Lamprey enemies will spawn at the start of the wave to chase you down."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It gives +8% damage and costs 25. Killing the Lampreys it brings pays 7 to 8 extra materials.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Bait",
+              "revision": "5577",
+              "quoted": [
+                "+8 % Damage",
+                "Price 25",
+                "if you manage to kill them, you'll earn yourself an additional 7-8 Materials"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Between 7 and 8 Lampreys come at you, and the page calls them quite dangerous. A Lamprey charges at you every 1.5 seconds and fires projectiles out to either side as it goes.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Bait",
+              "revision": "5577",
+              "quoted": [
+                "The Lampreys are quite dangerous enemies that will charge you while firing projectiles."
+              ]
+            },
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Enemies",
+              "revision": "8787",
+              "quoted": [
+                "Follows the player, charges to the player every 1.5 seconds, shooting projectiles to its left and right during the charge"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3908,
+      "name": "Metal Detector",
+      "kind": "item",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Metal_Detector",
+      "main_revision": "8463",
+      "lines": [
+        {
+          "line": "Summary: A Tier 2 economy item that gives the materials you pick up a chance to count double.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Metal_Detector",
+              "revision": "8463",
+              "quoted": [
+                "+5% chance to double the value of picked up materials"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Each one adds 5% to the chance that a picked-up material is worth double, both as money and as experience. It also gives +6 Luck and +2 Engineering and takes away 5% damage. It costs 40, and you can hold up to 20.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Metal_Detector",
+              "revision": "8463",
+              "quoted": [
+                "Metal detector gives an additive 5% per item chance for any Materials you pick up to have double the value. You gain both double the Money and double Experience.",
+                "+6 Luck +2 Engineering -5 % Damage",
+                "Price 40 Limit 20"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Bagged materials paid out at the start of a wave are worth 4 times as much when it triggers, so you end up with about the same on average whether you let them get bagged or not. The same 4 times applies to Buccaneer's double materials. The page calls it very powerful for Endless Mode.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Metal_Detector",
+              "revision": "8463",
+              "quoted": [
+                "Double value materials from bagged materials dropped at the beginning of a wave gives 4x the value when metal detector triggers.",
+                "This means you gain same amount of materials on average if you let your materials get bagged or not.",
+                "Buccaneer's double materials ability gives 4x materials when Metal Detector triggers.",
+                "It is a very powerful item for Endless Mode, where the ability to gain additional materials is highly valued."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3909,
+      "name": "Recycling Machine",
+      "kind": "item",
+      "main_page": "https://brotato.wiki.spellsandguns.com/Recycling_Machine",
+      "main_revision": "4583",
+      "lines": [
+        {
+          "line": "Summary: A Tier 2 economy item that raises how much you get back when you recycle weapons and items.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Recycling_Machine",
+              "revision": "4583",
+              "quoted": [
+                "Gain 35% more materials from recycling items"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Without it, recycling returns 25% of an item's price. The machine adds 35%, so you get 60% back. It costs 35, and you can only hold one.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Recycling_Machine",
+              "revision": "4583",
+              "quoted": [
+                "The Default is to get 25% back when recycling. Recycling Machine can increase this value by 35% for a total of 60% back.",
+                "Price 35 Limit 1",
+                "Only 1 of each unique item can be equipped"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Entrepreneur's +25% stacks with it for 85% back. The payout follows an item's current price, so it grows with inflation and shrinks if you hold Coupons.",
+          "drawn_from": [
+            {
+              "page": "https://brotato.wiki.spellsandguns.com/Recycling_Machine",
+              "revision": "4583",
+              "quoted": [
+                "This stacks with the +25% from Entrepreneur for a total of 85%.",
+                "Rewards for recycling are based upon the current price of the item, so it increases with inflation, but decreases if you have coupons"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

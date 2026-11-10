@@ -56,6 +56,61 @@
    "source_license": "CC-BY-SA-4.0",
    "source_version": "8787",
    "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3905,
+   "game_id": 36,
+   "section_type": "enemy",
+   "name": "Monk",
+   "card": "Summary: An Elite enemy (Danger 2 and up) that opens by putting 15 Slasher Eggs on the field, then shoots at you, and later runs away while spawning Tentacles.\nTips: Its eggs hatch into Slashers after 5 seconds unless they are killed first. From 10 seconds in it fires 5 shots a second at you, and from the 30-second mark it spends 10 seconds running away and spawning Tentacles before going back to shooting. A Tentacle follows you, backs off if you get close, and attacks in a V shape at medium range. Killing the Monk drops a Legendary Loot Crate holding a guaranteed Legendary (tier 4) item.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Enemies",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "8787",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3906,
+   "game_id": 36,
+   "section_type": "enemy",
+   "name": "Gargoyle",
+   "card": "Summary: An Elite enemy (Danger 2 and up) that attacks by throwing out circles and bursts of projectiles, in three stages.\nTips: At first it wanders at random, putting out a big circle of projectiles around itself every 0.3 seconds. From 60% health or 30 seconds in, it chases you and fires 12 projectiles around itself at random, every 0.4 seconds. From 30% health or 45 seconds in, it chases you and shoots projectiles off in random directions, once every 0.01 to 0.15 seconds. Killing it drops a Legendary Loot Crate holding a guaranteed Legendary (tier 4) item.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Enemies",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "8787",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3907,
+   "game_id": 36,
+   "section_type": "item",
+   "name": "Bait",
+   "card": "Summary: A cheap Tier 2 damage item with a catch: it sends Lampreys after you at the beginning of the next wave.\nUses: It gives +8% damage and costs 25. Killing the Lampreys it brings pays 7 to 8 extra materials.\nTips: Between 7 and 8 Lampreys come at you, and the page calls them quite dangerous. A Lamprey charges at you every 1.5 seconds and fires projectiles out to either side as it goes.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Bait",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "5577",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3908,
+   "game_id": 36,
+   "section_type": "item",
+   "name": "Metal Detector",
+   "card": "Summary: A Tier 2 economy item that gives the materials you pick up a chance to count double.\nUses: Each one adds 5% to the chance that a picked-up material is worth double, both as money and as experience. It also gives +6 Luck and +2 Engineering and takes away 5% damage. It costs 40, and you can hold up to 20.\nTips: Bagged materials paid out at the start of a wave are worth 4 times as much when it triggers, so you end up with about the same on average whether you let them get bagged or not. The same 4 times applies to Buccaneer's double materials. The page calls it very powerful for Endless Mode.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Metal_Detector",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "8463",
+   "crawled_at": "2026-11-10"
+  },
+  {
+   "section_id": 3909,
+   "game_id": 36,
+   "section_type": "item",
+   "name": "Recycling Machine",
+   "card": "Summary: A Tier 2 economy item that raises how much you get back when you recycle weapons and items.\nUses: Without it, recycling returns 25% of an item's price. The machine adds 35%, so you get 60% back. It costs 35, and you can only hold one.\nTips: Entrepreneur's +25% stacks with it for 85% back. The payout follows an item's current price, so it grows with inflation and shrinks if you hold Coupons.",
+   "source_url": "https://brotato.wiki.spellsandguns.com/Recycling_Machine",
+   "source_license": "CC-BY-SA-4.0",
+   "source_version": "4583",
+   "crawled_at": "2026-11-10"
   }
  ]
 }

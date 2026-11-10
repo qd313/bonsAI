@@ -330,6 +330,332 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2305,
+      "name": "Mirelurks",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Mirelurk_(Fallout_4)",
+      "main_revision": "4711714",
+      "lines": [
+        {
+          "line": "Summary: Mutated crustaceans of the swamps, coasts and sewers that mostly come in groups and, in most kinds, have a thick shell that is hard to penetrate even with powerful ballistic weapons. They bury themselves in dirt or mud, and from a distance the rounded back of a shell looks like a large smooth rock.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mirelurk_(Fallout_4)",
+              "revision": "4711714",
+              "quoted": [
+                "Mirelurks will bury themselves in dirt or mud, with the only visual indication that they are present is the rounded backs of their shells, which resemble large, smooth rocks from a distance.",
+                "Mirelurks are mostly found in groups and thus often utilize strength in numbers.",
+                "All mirelurks (excluding mirelurk kings and softshell mirelurks) are protected by a thick shell that is difficult to penetrate, even with powerful ballistic weapons.",
+                "Although mirelurks tend to inhabit polluted rivers, coastal waters, and sewers",
+                "A mirelurk refers to any one of three mutated crustaceans that dwell in the swamps of the Commonwealth"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The face is unarmored but a small target, and a charging mirelurk often lowers its head to protect it, though the face is exposed once it starts close combat. Its extremities are also more vulnerable than the rest of the body, though not as much as the face.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mirelurk_(Fallout_4)",
+              "revision": "4711714",
+              "quoted": [
+                "The face is unarmored but a small target, and when charging a mirelurk will often lower its head to protect this area. However, the face will inevitably be exposed once the creature commences close combat. Extremities are also more vulnerable than the rest of the body, though not as much as the face."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Most adult mirelurks have a shell and pincers like a horseshoe crab, and the hunter looks like a lobster. A glowing mirelurk has a glowing underside and a buildup of radiation in its eyestalks.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mirelurk_(Fallout_4)",
+              "revision": "4711714",
+              "quoted": [
+                "Most adult mirelurk variants have shells and pincers resembling those of horseshoe crabs",
+                "The hunter variant appears to be a lobster.",
+                "their undersides are positively luminescent and a buildup of radiation in its eyestalks gives them a distinct feature even among \"glowing\" creatures."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Crippling one set of a mirelurk's legs greatly reduces its mobility, and crippling both sets leaves it unable to move or attack, even face to face with you. Mirelurks have no way to protect themselves against mines or any attack from below. Their thick shells make melee hard because they hide their weak points as you strike, so melee weapons with the legendary modifiers penetrating or exterminator's are useful.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mirelurk_(Fallout_4)",
+              "revision": "4711714",
+              "quoted": [
+                "The standard variants of mirelurks will have their mobility greatly reduced should one set of their legs be crippled, crippling both sets of legs will render them completely immobile and they will not be able to attack the player, even while face to face with them.",
+                "mirelurks have no way to protect themselves against mines, or any attack from below.",
+                "Because of their thick shells, they can be quite hard to defeat in a melee fight, as they tend to hide their weak points when the player character is about to strike",
+                "melee weapons with the legendary modifiers \"penetrating\" (attacks ignore 30% of enemy's Damage Resistance) and \"exterminator's\" (specific bonus damage to mirelurks) are useful against them."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2306,
+      "name": "Raiders",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Raider_(Fallout_4)",
+      "main_revision": "4726319",
+      "lines": [
+        {
+          "line": "Summary: Hostile gangs found all over the Commonwealth, most thickly around Boston, organised by seniority and ability within the gang. They viciously defend their turf from anything not in their gang.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Raider_(Fallout_4)",
+              "revision": "4726319",
+              "quoted": [
+                "The raiders of the Commonwealth are organized into gangs of various sizes and follow a strict hierarchy based on seniority and ability within the gang. They can be found all over the region, but are especially concentrated in Boston, and viciously defend their turf from anything not in their gang",
+                "Raiders are hostile characters in the Commonwealth in 2287."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A common raider is the weakest of the cannon fodder, armed with pipe guns and little health, and survives only a few hits even from basic weapons. Raider veterans are among the toughest, with a high health pool and higher tier weapons, and they are almost never encountered alone.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Raider_(Fallout_4)",
+              "revision": "4726319",
+              "quoted": [
+                "A common raider is the weakest of the cannon fodder found in Fallout 4. Armed with pipe guns and little health, they tend to survive only a few hits, even from basic weapons, before succumbing.",
+                "They are among the toughest raiders.",
+                "Armed with higher tier weapons such as combat rifles, assault rifles and on occasion laser weapons, these enemies are further bolstered by a high health pool and segments of combat armor. They are almost never encountered alone"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Raider scum wear crudely made welded armor and leather armor, wasters and veterans can wear combat armor, and some scavvers wear raider power armor.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Raider_(Fallout_4)",
+              "revision": "4726319",
+              "quoted": [
+                "They usually are armed with pipe weapons and crudely made welded armor, and also leather armor.",
+                "Wasters are a medium to high level raider. They are the lowest level raider type that can be found with combat armor",
+                "these enemies are further bolstered by a high health pool and segments of combat armor.",
+                "they are the most common raiders that will spawn in raider power armor."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Psychos are melee-dependent, chem-using raiders that charge you and may throw grenades. Survivalists hide behind objects and blindfire around them, and take well aimed shots when they change position. Like other human enemies, raiders will not chase you into Boston Common: they say the area is deadly and retreat.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Raider_(Fallout_4)",
+              "revision": "4726319",
+              "quoted": [
+                "Psychos are melee-dependant chem using raiders that charge at their enemies and may throw grenades.",
+                "They will typically hide behind objects and blindfire around them. When changing hiding positions they will take well aimed shots.",
+                "Like other human enemies, raiders will refuse to chase the player character into Boston Common, making comments about the area being deadly and retreating."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2307,
+      "name": "Sentry bots",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout_4)",
+      "main_revision": "4713427",
+      "lines": [
+        {
+          "line": "Summary: The heaviest class of combat robot, and one of the rarest and most difficult robots to defeat: fast, agile, heavily armed and tough enough to take a direct hit from a mini nuke. The usual loadout is a missile launcher and a minigun.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout_4)",
+              "revision": "4713427",
+              "quoted": [
+                "The heaviest class of combat robot in the United States Armed Forces",
+                "Sentry bots are some of the rarest and the most difficult robots to defeat - fast, agile, heavily armed and resilient enough to absorb a direct hit from a mini nuke.",
+                "with a missile launcher and minigun being the norm"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: After engaging you for too long it enters a cooldown, blasting steam out of its back and exposing its dual fusion cores, and hitting the exposed fusion cores is the best way to damage it. With the Penetrator perk you can target and destroy the cores in V.A.T.S. without waiting. Unlike other robots it has no combat inhibitor.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout_4)",
+              "revision": "4713427",
+              "quoted": [
+                "should a sentry bot engage the player character for too long, they will eventually enter a cooldown period, blasting steam out of their back and exposing their dual fusion cores. Hitting exposed fusion cores is the best way to cause damage to them.",
+                "Players having the Penetrator perk need not wait for cooldown and can use V.A.T.S. to target and destroy the fusion cores immediately",
+                "unlike other robots it completely lacks a combat inhibitor"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A bulky robot about as tall as a human in power armor and nearly twice as wide, whose torso can rotate independently of its legs. Gunner sentry bots have a faded green tint.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout_4)",
+              "revision": "4713427",
+              "quoted": [
+                "(on par in height to a human wearing power armor and nearly twice as wide), appear to have a bulkier construction",
+                "a sentry bot's entire torso is capable of rotating independently of its legs",
+                "they have been reprogrammed by the Gunners and have a faded green tint"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If it loses both main weapons it starts its self-destruct sequence and charges you, and it also explodes on death with the force of a mini nuke, so keep your distance. It often charges into close combat if you come too near, which makes melee weapons a poor choice. It drops at least two fusion cores when destroyed.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout_4)",
+              "revision": "4713427",
+              "quoted": [
+                "After losing both main weapons they will initialize their self-destruct sequence and charge at the player character.",
+                "Since they explode on death with the force of a mini nuke",
+                "sentry bots often charge into close combat to deliver powerful blows with their arms if one ventures too close, thus deterring attackers from any use of melee weapons.",
+                "dropping at least two when they are destroyed"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2308,
+      "name": "Assaultrons",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Assaultron_(Fallout_4)",
+      "main_revision": "4664624",
+      "lines": [
+        {
+          "line": "Summary: A highly aggressive, fast robot that usually charges you to fight in melee, and most models also carry a laser in the head unit. The basic Assaultron is typically found close to old military bases and roadside transports.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Assaultron_(Fallout_4)",
+              "revision": "4664624",
+              "quoted": [
+                "Assaultrons are highly aggressive and fast in combat, usually preferring the use of their hands and any custom attachments to charge at and attack targets in melee.",
+                "Most models of Assaultron house a directed laser weapon in their head unit",
+                "The most common variant of Assaultron, typically found close to old military bases and roadside transports."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The head is almost always behind a retractable layer of armor plating, so headshots do reduced damage, but the plates peel back while the laser charges, which is your chance to hit the head directly. Crippling the head permanently takes away its laser, and destroying its legs removes its speed advantage, though it keeps coming by crawling.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Assaultron_(Fallout_4)",
+              "revision": "4664624",
+              "quoted": [
+                "the head is almost always covered behind a retractable layer of armor plating, allowing Assaultrons to take reduced damage from headshots. However, during the charging sequence, the plates will peel back, giving an opportunity to attack directly; if one is able to cripple the Assaultron's head, it will lose the use of its head laser permanently.",
+                "One can remove an Assaultron's speed advantage by targeting and destroying their legs. However, destroying one or both will not stop it completely as it will continue to pursue the target by crawling on the ground."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A robot with claws for hands and a head unit that gradually becomes surrounded by red electric energy as the laser charges. The dominator variant has a darker finish and twin blade arms.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Assaultron_(Fallout_4)",
+              "revision": "4664624",
+              "quoted": [
+                "their standard claws",
+                "the head will gradually become surrounded by red electric energy for around 6-7 seconds if uninterrupted.",
+                "A stronger variant with a darker finish and equipped with twin blade arms"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The laser takes around 6-7 seconds to charge, then the robot stops in place and fires a constant blast for 2-3 seconds that can seriously injure even a high-level character caught off guard and not behind cover, so get behind cover. A badly damaged but working Assaultron can detonate in an explosion as damaging as a mini nuke, and killing it first gives a normal death. The dominator variant uses a stealth field that stops V.A.T.S. targeting until it is in melee range, and only crippling its torso stops that for good.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Assaultron_(Fallout_4)",
+              "revision": "4664624",
+              "quoted": [
+                "the head will gradually become surrounded by red electric energy for around 6-7 seconds if uninterrupted. Once fully charged, it stops in place and fires a constant laser blast for 2-3 seconds. At full charge and if its target is not behind cover beforehand, the laser can inflict a significant amount of damage in a short time, capable of seriously injuring even a high-level Sole Survivor if caught off-guard.",
+                "the robot will activate a \"hail mary\" attack similar to a sentry bot's meltdown sequence, where the robot will detonate in a localized explosion akin to a mini nuke and just as damaging; killing the Assaultron before they set off the explosion will still result in a normal death.",
+                "Unique to this class of Assaultron is its ability to utilize a stealth field akin to a Stealth Boy that prevents being targeted in V.A.T.S. and only reappears when it is in melee range; this ability is only permanently stopped by crippling its torso."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2309,
+      "name": "Mister Gutsy",
+      "kind": "enemy",
+      "main_page": "https://fallout.fandom.com/wiki/Mister_Gutsy_(Fallout_4)",
+      "main_revision": "4699068",
+      "lines": [
+        {
+          "line": "Summary: A combat robot, the combat version of the civilian Mister Handy, whose weapon varies from a 10mm submachine gun to a laser weapon or sometimes a flamer. Its 10mm submachine gun is able to shred low-level characters, and even ones in power armor, in seconds.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mister_Gutsy_(Fallout_4)",
+              "revision": "4699068",
+              "quoted": [
+                "A dedicated combat variant of their civilian Mister Handy",
+                "the guns can vary from a 10mm submachine gun to a laser weapon or sometimes a flamer, and the damage output also varies between models.",
+                "its 10mm submachine gun is capable of shredding low-level player characters and even power armor equipped player characters in seconds."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: It has several targetable sections: the torso, right eye, middle eye, left eye, combat inhibitor, thruster and arms. If an eye is broken its firing accuracy suffers, and disabling the thruster slows it down and removes its strafing ability. Breaking all of the arms makes it attempt a suicide rush on you.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mister_Gutsy_(Fallout_4)",
+              "revision": "4699068",
+              "quoted": [
+                "Mister Gutsy robots have several targetable sections, including the torso, right eye, mid-eye, left eye, combat inhibitor, thruster, and arms. Breaking all of the arms on a Mister Gutsy will result in it attempting a suicide rush on the Sole Survivor.",
+                "If any of the eyes are broken, the Mister Gutsy's firing accuracy will suffer and disabling the thruster will slow it down and remove its strafing ability."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A robot with a torso, three eyes, arms and a thruster, and the words \"Mister Handy\" written on the back of its body.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mister_Gutsy_(Fallout_4)",
+              "revision": "4699068",
+              "quoted": [
+                "right eye, mid-eye, left eye, combat inhibitor, thruster, and arms",
+                "The words \"Mister Handy\" are written on the backside of their body."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Killshot perk makes the right and middle eyes easier to hit in V.A.T.S., but not the left eye. A neutral Mister Gutsy turns hostile if you look at it while wearing power armor with a targeting HUD mod installed. The Lieutenant and Major Gutsy carry lasers and have bigger health pools, and the Colonel Gutsy appears once you reach level 46 or higher and levels with you.",
+          "drawn_from": [
+            {
+              "page": "https://fallout.fandom.com/wiki/Mister_Gutsy_(Fallout_4)",
+              "revision": "4699068",
+              "quoted": [
+                "The right and middle eye are targeted more easily with the Killshot perk in V.A.T.S., but not the left eye.",
+                "a neutral Mister Gutsy will turn hostile if looked at while the player character is wearing power armor with a targeting HUD mod installed.",
+                "it has a moderately accurate (and moderate damage) laser weapon in place of a 10mm submachine gun and a much larger Hit Point pool",
+                "now having 200 more Hit Points than its predecessor and a higher damage laser",
+                "Colonel Gutsy appears when the player character reaches level 46 or higher. These level with the player character."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

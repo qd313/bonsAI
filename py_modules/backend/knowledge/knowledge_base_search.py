@@ -471,6 +471,54 @@ def _question_without_typed_game_name(
     return " ".join(kept) if kept else question
 
 
+# Plan 103, lane V3. A note about one way of playing (a versus match, Survival, Realism, a named
+# spot) is the right answer for a question that is about that way of playing, and the wrong note to
+# lead with for a question that never said so: "how to beat tank" put "Surviving the Tank" -- a
+# versus note -- ahead of the game's own "Tank" note, because its title holds the same word and its
+# text holds it three more times (measured 2026-11-10, test question A-L4D2-01).
+#
+# So when the first note is of such a kind, the question names neither the mode nor a side, and an
+# ordinary note whose whole title the question spells out (and that the first note's title repeats)
+# is already among the notes that will attach, that ordinary note goes first. The others keep their
+# order and nothing new comes in, so this is a preference and never a filter: a versus note still
+# attaches, and still leads when nothing else fits.
+#
+# A small score penalty on those kinds was tried first and measured the same day: the size that put
+# "Tank" back in front (about 0.0012) and the size that pushed three labelled versus questions out of
+# their first three (about 0.0016) were that close, so it was dropped. This moves a note only when the
+# question spells out its title, and never changes which notes attach.
+_MODE_KINDS = frozenset({"versus", "callout", "survival", "realism"})
+_MODE_WORDS = frozenset({"versus", "vs", "survival", "realism", "callout", "callouts"})
+_MODE_PHRASES = ("playing as", "play as", "as the infected", "infected team", "infected side")
+
+
+def _question_names_a_mode(question: str) -> bool:
+    """True when the question says which way of playing it is about, or which side."""
+    words = " ".join(_name_tokens(question))
+    return bool(_MODE_WORDS.intersection(words.split())) or any(p in words for p in _MODE_PHRASES)
+
+
+def _fold_plural(word: str) -> str:
+    return word[:-1] if len(word) > 3 and word.endswith("s") else word
+
+
+def _lead_with_the_note_the_question_names(
+    cards: list[KnowledgeCard], question: str, *, window: int
+) -> list[KnowledgeCard]:
+    """``cards`` with the ordinary note the question names by title moved to the front, when the
+    first card is a game-mode note the question did not ask for. Only a card inside the first
+    ``window`` can move, so the set that attaches never changes."""
+    if not cards or cards[0].section_type not in _MODE_KINDS or _question_names_a_mode(question):
+        return cards
+    asked = {_fold_plural(w) for w in _name_tokens(question)}
+    leader = {_fold_plural(w) for w in _name_tokens(cards[0].name)}
+    for index, card in enumerate(cards[:window]):
+        title = {_fold_plural(w) for w in _name_tokens(card.name)}
+        if card.section_type not in _MODE_KINDS and title and title <= asked & leader:
+            return [card, *cards[:index], *cards[index + 1 :]]
+    return cards
+
+
 def _search_sections(
     conn: sqlite3.Connection,
     *,

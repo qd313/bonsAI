@@ -176,6 +176,7 @@ from backend.knowledge.knowledge_base_search import (
     _dot_similarity,
     _fts_match_query,
     _genre_fallback,
+    _lead_with_the_note_the_question_names,
     _merge_preferred_first,
     _question_asks_how_to_start,
     _search_compat_patterns,
@@ -797,11 +798,13 @@ def _fuse_cards_by_rrf(
     Raises ``EmbeddingDimensionMismatch`` via ``_dot_similarity`` when the corpus was baked at
     a different dimension; the caller treats that as "disable hybrid for this request".
 
-    ``question`` only matters while `DEMOTE_STARTING_OUT_NOTES` is on (see the module comment
-    above this function) -- it decides whether THIS question is itself asking how to start, in
-    which case a generic note is not demoted. Every caller today leaves it blank, which reads the
-    same as "not asking how to start" -- harmless while the switch stays off, which it does by
-    default.
+    ``question`` is read for two things. While `DEMOTE_STARTING_OUT_NOTES` is on (see the module
+    comment above this function) it decides whether THIS question is itself asking how to start,
+    in which case a generic note is not demoted. And at the very end, it lets a game-mode note
+    (versus, callout, survival, realism) that would lead an answer the question never asked for
+    give the first place to the ordinary note the question names by title -- see
+    `_lead_with_the_note_the_question_names`. Left blank, the second never happens (the eval
+    script's own copy of the blend leaves it blank, so it does not see that reordering yet).
     """
     pool = list(cards)
     if recall_cards:
@@ -859,7 +862,8 @@ def _fuse_cards_by_rrf(
     # Plan 98 lane C: the person's thumbs-downs apply to the final order and only then does the
     # cut to ``top_k`` happen, so a card left out for three downs is replaced by the next one and
     # a card with one or two goes last among the ``top_k`` that would attach.
-    return kb_demote_store.apply_demotes([pool[i] for i in order], top_k)[:top_k]
+    ordered = _lead_with_the_note_the_question_names([pool[i] for i in order], question, window=top_k)
+    return kb_demote_store.apply_demotes(ordered, top_k)[:top_k]
 
 
 def retrieve_knowledge_context(
@@ -1214,6 +1218,7 @@ def retrieve_knowledge_context(
                         top_k=top_k,
                         recall_cards=topic_cards + recall_cards,
                         preferred_ids=preferred_ids,
+                        question=question,
                     )
                 rerank_ms = round((time.perf_counter() - t_rerank) * 1000, 2)
                 retrieval_method = "hybrid"

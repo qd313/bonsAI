@@ -9,33 +9,18 @@ attached "Surviving Hunters and Jockeys in versus" instead of "Playing as the Hu
 Does not: Cover meaning search (no vectors are built here).
 """
 
-import re
 import tempfile
 import unittest
-from pathlib import Path
 
 from backend.knowledge.knowledge_base_service import close_connection, resolve_corpus_db_path, retrieve_knowledge_context
-from build_rag_db_loader import load_build_rag_db
-
-LEFT_4_DEAD_2 = "550"
-_HEADER_RE = re.compile(r"^\[.*: (.*?)\].*\(trust: [^)]+\)\s*$", re.M)
-
-
-def _build_real_library(root: str) -> dict:
-    """The whole shipped library (seed, every notes file, tips), word search only, under ``root``."""
-    builder = load_build_rag_db()
-    # No embedding model on purpose: never reach Ollama from a unit test.
-    builder._list_installed_ollama_tags = lambda *args, **kwargs: []
-    out_dir = Path(root) / "out"
-    builder.build_corpus(out_dir, seed=True, allow_missing_embeddings=True)
-    return {"use_local_knowledge_base": True, "rag_hybrid_retrieval_enabled": False, "rag_corpus_path": str(out_dir)}
+from kb_real_library_support import HEADER_RE, LEFT_4_DEAD_2, build_real_library
 
 
 class PlayingAsTheInfectedTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._tmp = tempfile.TemporaryDirectory()
-        cls.settings = _build_real_library(cls._tmp.name)
+        cls.settings = build_real_library(cls._tmp.name)
 
     @classmethod
     def tearDownClass(cls):
@@ -53,7 +38,7 @@ class PlayingAsTheInfectedTests(unittest.TestCase):
             domain="strategy",
             pc_ip="",
         )
-        return [m.group(1) for m in _HEADER_RE.finditer(result.text_block or "")]
+        return [m.group(1) for m in HEADER_RE.finditer(result.text_block or "")]
 
     def test_the_hunter_question_in_speed_attaches_playing_as_the_hunter(self):
         self.assertEqual(self.attached("tips for playing as the hunter in versus"), ["Playing as the Hunter"])

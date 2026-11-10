@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 3200,
+      "game_id": 30,
+      "section_type": "enemy",
+      "name": "Koopa Kid Space",
+      "card": "Summary: A space that calls up a Koopa Kid when you land on it, and he then does one of several bad things to you or to everyone. In Mario Party 7 these spaces can only be made by Bowser and Koopa Kid.\nWeak points: The space can be removed by placing a different Orb on it, by using Yoshi and Birdo's Egg Orb on it, or when the Star Space moves onto it.\nLooks like: A round green space with the Koopa Kid's face in gold at its centre and a golden frame around it.\nTips: The Koopa Kid may give you a Cursed Mushroom so you can roll only 1 to 5 on your next turn, share everyone's coins out evenly, swap coins or places with another player by roulette, make everyone switch places, or shuffle everyone's Orbs. The game always starts with Bowser tossing three Koopa Kid Orbs onto the board, and getting one from an Orb Space or being forced to buy one at Bowser's shop adds another.",
+      "source_url": "https://www.mariowiki.com/Koopa_Kid_Space",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5463262",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3201,
+      "game_id": 30,
+      "section_type": "enemy",
+      "name": "Chain Chomps on Pyramid Park",
+      "card": "Summary: Toadsworth says there are no Stars on Pyramid Park: everyone begins with 5 Stars and you steal them from each other by paying to ride a Chain Chomp and crushing your rivals. The Chain Chomps are found in pyramid dog houses.\nWeak points: A Snack Orb, found only on this board, protects you for three turns or until a Chain Chomp attacks.\nLooks like: The three Chain Chomps on the right side of the board are black, and the one at the top on the left is a Red Chomp.\nTips: A ride costs 10 coins for one Dice Block or 20 for two, and the Red Chomp gives three Dice Blocks for ten coins; in the last four turns the prices are halved. Matching numbers on the Dice Blocks give no bonus coins while you ride.",
+      "source_url": "https://www.mariowiki.com/Pyramid_Park",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5536129",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3202,
+      "game_id": 30,
+      "section_type": "enemy",
+      "name": "Bowser Sphinx",
+      "card": "Summary: A statue in the centre left of Pyramid Park. When a character lands on the Green Space in front of it, it wakes, thinks you are trying to steal its treasure, and curses everyone with one of three random effects.\nWeak points: In Party Cruise its curse is set off by landing on the Green Space in front of it.\nLooks like: Its body is modelled on the Great Sphinx of Giza and its head looks like Bowser's, wearing a nemes headdress with pink-and-blue striped lappets and a Chain Chomp ornament.\nTips: The curse is one of three effects for all players: all coins are added up and shared out evenly, Blue and Red Spaces swap for two turns, or Chain Chomp rides cost half as much for two turns. A Whomp blocking the path to the Bowser Sphinx charges 10 coins to let you pass.",
+      "source_url": "https://www.mariowiki.com/Bowser_Sphinx",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5405354",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3203,
+      "game_id": 30,
+      "section_type": "enemy",
+      "name": "Dark Star chests",
+      "card": "Summary: A black Star hidden in one of the treasure chests that takes one Star from you if you open it. On Grand Canal it is one of the four chests in Blooper's guessing game.\nWeak points: None are given; if you choose its chest you must take the Dark Star.\nTips: On Neon Heights, Bowser Time may put a Dark Star in the chest that held the Bob-omb, and paying Koopa Kid to open it makes you take the Dark Star and lose one Star. The Dark Star disappears if the chest with the regular Star is opened first, and unlike in Mario Party 6 you do not lose 20 coins if you have no Stars.",
+      "source_url": "https://www.mariowiki.com/Ztar",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5475239",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3204,
+      "game_id": 30,
+      "section_type": "boss",
+      "name": "Bowser's Lovely Lift!",
+      "card": "Summary: A boss minigame against Bowser: you ride an elevator up to the 100th floor while Bowser attacks you. It can only be unlocked in Solo Cruise.\nWeak points: You win by reaching the 100th floor, even if Dice Block numbers are left over, and you lose at once if any attack hits you.\nTips: Hit four Dice Blocks each turn and the elevator climbs by the total, between 4 and 40 floors. After the 50th floor a Koopa Kid joins Bowser with the same attacks, three fireballs or three missiles and a laser team attack, and in Solo Cruise the game remembers the floor where you lost so you can resume from there.",
+      "source_url": "https://www.mariowiki.com/Bowser%27s_Lovely_Lift!",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5540060",
+      "crawled_at": "2026-11-09"
+    }
+  ]
+}

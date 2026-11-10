@@ -672,6 +672,339 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3210,
+      "name": "Zap Orb",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Zap_Orb",
+      "main_revision": "5533883",
+      "lines": [
+        {
+          "line": "Summary: A red Roadblock Orb with an Amp inside. An opponent who passes the space, not only one who lands on it, is shocked and loses three coins for every space he moves past it.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_7",
+              "revision": "5488638",
+              "quoted": [
+                "Roadblock Orbs are orbs with red shells and can be thrown on spaces.",
+                "Any foe who passes it loses three coins for every space he moves past it."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Zap_Orb",
+              "revision": "5533883",
+              "quoted": [
+                "It contains an Amp."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Orb",
+              "revision": "5533903",
+              "quoted": [
+                "Roadblocks affect any player who passes by the space (not just those who land on it)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Set it on a space as a roadblock; it costs 15 coins at an Orb hut and appears on Pagoda Peak, Neon Heights and Windmillville.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Zap_Orb",
+              "revision": "5533883",
+              "quoted": [
+                "It costs 15 coins at an Orb hut, and can be obtained on Pagoda Peak, Neon Heights, and Windmillville."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_7",
+              "revision": "5488638",
+              "quoted": [
+                "Pagoda Peak, Neon Heights, and Windmillville"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The effect happens at once, then the space goes back to normal, and you are immune to your own roadblocks. If a player passes another Zap Orb while one is in effect the Zap Orbs stack up, and the effect wears off if the player runs out of coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Orb",
+              "revision": "5533903",
+              "quoted": [
+                "the effects occur immediately, though, unlike other Character Spaces, the space will revert to normal after activating once. Players are immune to the effects of Roadblocks they place."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Zap_Orb",
+              "revision": "5533883",
+              "quoted": [
+                "In both games, if a player passes by another Zap Orb while one is already in effect, the Zap Orbs stack up. If the player runs out of coins, the effect wears off."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3211,
+      "name": "Thwomp Orb",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Thwomp_Orb",
+      "main_revision": "5533882",
+      "lines": [
+        {
+          "line": "Summary: A red Roadblock Orb: an opponent who passes the space is flattened by a Thwomp and must stop moving, which ends their turn.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_7",
+              "revision": "5488638",
+              "quoted": [
+                "Roadblock Orbs are orbs with red shells and can be thrown on spaces.",
+                "Any opponent who passes it will get Thwomped and must stop moving."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Thwomp_Orb",
+              "revision": "5533882",
+              "quoted": [
+                "Opponents that pass a space containing the Orb get flattened by a Thwomp, ending their turn."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Set it on a space as a roadblock; it appears on Pyramid Park, Neon Heights and Windmillville.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Thwomp_Orb",
+              "revision": "5533882",
+              "quoted": [
+                "In Mario Party 7, it can be obtained on Pyramid Park, Neon Heights, and Windmillville."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_7",
+              "revision": "5488638",
+              "quoted": [
+                "Pyramid Park, Neon Heights, and Windmillville"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A player under a Metal Mushroom Orb is not stopped: the Thwomp is deflected and the roadblock does nothing. A roadblock disappears once it has been triggered.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Thwomp_Orb",
+              "revision": "5533882",
+              "quoted": [
+                "the Thwomp will attempt to crush that player, but it will be deflected, negating the roadblock."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_7",
+              "revision": "5488638",
+              "quoted": [
+                "They are triggered when an opponent passes them and disappear once triggered."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3212,
+      "name": "Metal Mushroom Orb",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Metal_Mushroom_Orb",
+      "main_revision": "5540925",
+      "lines": [
+        {
+          "line": "Summary: A green Self Orb: you turn to metal and are not harmed by the Trap Orbs that rivals put on spaces.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_7",
+              "revision": "5488638",
+              "quoted": [
+                "Self Orbs have a green shell and are used on the player.",
+                "Encase yourself in metal and move without being harmed by rivals' traps."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Metal_Mushroom_Orb",
+              "revision": "5540925",
+              "quoted": [
+                "A Metal Mushroom Orb has the effect of turning the user metal, making them invulnerable to Trap Orbs put on spaces."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Use it on yourself to be safe from rivals' traps; it appears on Pagoda Peak, Windmillville and Bowser's Enchanted Inferno!, and costs between five and thirty coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_7",
+              "revision": "5488638",
+              "quoted": [
+                "Pagoda Peak, Windmillville, and Bowser's Enchanted Inferno!"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Metal_Mushroom_Orb",
+              "revision": "5540925",
+              "quoted": [
+                "The cost of a Metal Mushroom Orb in Mario Party 7 ranges from five to thirty coins."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: While you are metal a Thwomp Orb is deflected, a Bob-omb Orb is kicked away, and a Tweester Orb dissipates with no effect.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Thwomp_Orb",
+              "revision": "5533882",
+              "quoted": [
+                "the Thwomp will attempt to crush that player, but it will be deflected, negating the roadblock."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bob-omb_Orb",
+              "revision": "5533840",
+              "quoted": [
+                "Like Mario Party 6, players kick away the Bob-omb when under the effect of a Metal Mushroom Orb."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Tweester_Orb",
+              "revision": "5533873",
+              "quoted": [
+                "If a player is under the effect of the Metal Mushroom Orb, the Tweester still tries to blow away that player, but it dissipates shortly after with no effect."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3213,
+      "name": "Snack Orb",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Snack_Orb",
+      "main_revision": "5533863",
+      "lines": [
+        {
+          "line": "Summary: A green Self Orb found only on Pyramid Park: you use it on yourself and a thrown bone protects you from Chain Chomp attacks.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_7",
+              "revision": "5488638",
+              "quoted": [
+                "Self Orbs have a green shell and are used on the player.",
+                "Prevents a Chain-Chomp from stealing you once. Lasts for three turns."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Snack_Orb",
+              "revision": "5533863",
+              "quoted": [
+                "In Mario Party 7, the Snack Orb is only found on Pyramid Park",
+                "It serves to protect the player from Chain Chomp, which it does by allowing the player to throw the bone inside the Snack Orb to lead Chain Chomp astray."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Use it on yourself before a Chain Chomp attacks; you are protected for three turns or until a Chain Chomp attacks, which makes you throw the bone automatically.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Snack_Orb",
+              "revision": "5533863",
+              "quoted": [
+                "The player now has to use it on themselves before they are attacked by Chain Chomp",
+                "After using a Snack Orb, the player is protected for three turns or until a Chain Chomp attacks, the latter of which prompts the automatic bone throw."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Other players on your space are not hit either. In practice it protects you from opponents' attacks for only two of their turn cycles, because turns count down after you move through a Dice Block but opponents can only use Chain Chomps between your turns.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Snack_Orb",
+              "revision": "5533863",
+              "quoted": [
+                "It still also prevents other players on the same space as the user from being hit.",
+                "Since turns count down after the player moves through a Dice Block but opponents can only use Chain Chomps between the turns of the user, while the effect of the Snack Orb mechanically lasts for three turns in practice, it only protects the player from opponents's attacks for two of their turn cycles."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3214,
+      "name": "Slow 'Shroom Orb",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Slow_%27Shroom_Orb",
+      "main_revision": "5533880",
+      "lines": [
+        {
+          "line": "Summary: A green Self Orb that slows the Dice Block right down so you can pick the number you roll.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_7",
+              "revision": "5488638",
+              "quoted": [
+                "Self Orbs have a green shell and are used on the player.",
+                "The Dice Block will move slowly."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Slow_%27Shroom_Orb",
+              "revision": "5533880",
+              "quoted": [
+                "allowing players to choose any number to roll.",
+                "Since the Slow 'Shroom Orb essentially allows the player to choose the number that they would like to roll"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Use it on yourself, then hit the button when the number just before the one you want is showing; it appears on every board except Pagoda Peak and Pyramid Park.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Slow_%27Shroom_Orb",
+              "revision": "5533880",
+              "quoted": [
+                "Players do this by hitting when the number that precedes the desired outcome is shown on the Dice Block."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_7",
+              "revision": "5488638",
+              "quoted": [
+                "All boards except Pagoda Peak and Pyramid Park"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The numbers run upward and start again after 10. For example, to get a three you hit the button when the Dice Block shows a two.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Slow_%27Shroom_Orb",
+              "revision": "5533880",
+              "quoted": [
+                "rolls the numbers in ascending order and resetting after 10",
+                "For example, if a player wants to get a three, then the player hits when the Dice Block shows a two."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

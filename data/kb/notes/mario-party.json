@@ -133,6 +133,39 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5539722",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2812,
+      "game_id": 26,
+      "section_type": "item",
+      "name": "Mushroom Space (Mushroom and Poisonous Mushroom)",
+      "card": "Summary: A board space that spins a roulette between a Mushroom, which gives you another roll, and a Poisonous Mushroom, which costs you your next turn.\nUses: The Mushroom lets you roll another Dice Block and move again. The Poisonous Mushroom makes you lose a turn, though a player who has lost a turn still takes part in Mini-Games.\nTips: The result is decided when you land on the space, so you cannot time your jump to pick one.\nTips: Mushroom Spaces per board: DK's Jungle Adventure 3, Yoshi's Tropical Island 3, Peach's Birthday Cake 6, Wario's Battle Canyon 5, Luigi's Engine Room 3, Mario's Rainbow Castle 2, Bowser's Magma Mountain 3 and Eternal Star 3.",
+      "source_url": "https://www.mariowiki.com/Mushroom_Space",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5413260",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2813,
+      "game_id": 26,
+      "section_type": "item",
+      "name": "Chance Time Space (the ! Space)",
+      "card": "Summary: A rare board space marked with an exclamation mark that starts Chance Time, where three Dice Blocks decide who gives what to whom.\nUses: The middle block can make one player give 10, 20 or 30 coins or 1 Star to the other, and two more results, marked with a double arrow, are for all coins and all Stars.\nTips: You can roll the three blocks in any order, picking a character on one side removes that character from the other side, and the blocks speed up after each roll. In the first game a ! Space counts as a Blue Space, and on boards where the Star moves after a purchase it takes the space where the Star has been.\nTips: Bowser's Chance Time, one of the Bowser Space events, is a rigged version: the blocks spin uncontrollably fast, the right block is preset to Bowser, and if the loser has no coins Bowser gives them 10 coins.",
+      "source_url": "https://www.mariowiki.com/Chance_Time_Space",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5405746",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2814,
+      "game_id": 26,
+      "section_type": "item",
+      "name": "Gameballs, Mecha Fly Guy, Talking Parrot and Record",
+      "card": "Summary: Four Mushroom Shop items that are not Dice Blocks, priced 50 to 300 coins: Gameballs, the Mecha Fly Guy, the Talking Parrot and the Record.\nUses: Gameballs (300 coins) are many balls with Mini-Games inside, and what you get is a surprise. The Mecha Fly Guy (100 coins) counts how many times you rotate the Control Stick, for use in the Mini-Game House.\nTips: Gameballs appear in the shop only after at least 30 mini-games have been bought from the Mini-Game House, and can be used until all mini-games are bought.\nTips: The 50-coin Record is what lets the Option House's Juke Box play songs you have already heard in the game, and the 50-coin Talking Parrot speaks characters' voices there at random when you press its button.",
+      "source_url": "https://www.mariowiki.com/Mario_Party",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5539722",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

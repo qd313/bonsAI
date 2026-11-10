@@ -886,6 +886,260 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2812,
+      "name": "Mushroom Space (Mushroom and Poisonous Mushroom)",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Mushroom_Space",
+      "main_revision": "5413260",
+      "lines": [
+        {
+          "line": "Summary: A board space that spins a roulette between a Mushroom, which gives you another roll, and a Poisonous Mushroom, which costs you your next turn.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "A roulette block appears if a player lands on this space. Either the player can receive a Mushroom, which gives the Player the chance to roll another Dice Block, or receive a Poison Mushroom, which forces them to forfeit their next turn's Dice Block roll."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mushroom_Space",
+              "revision": "5413260",
+              "quoted": [
+                "But if a Poisonous Mushroom appears, the player will lose a turn."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: The Mushroom lets you roll another Dice Block and move again. The Poisonous Mushroom makes you lose a turn, though a player who has lost a turn still takes part in Mini-Games.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mushroom_Space",
+              "revision": "5413260",
+              "quoted": [
+                "If a Mushroom appears when you hit this block, a Dice Block appears and the player can move again. But if a Poisonous Mushroom appears, the player will lose a turn. Players who have lost a turn still participate in Mini-Games."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The result is decided when you land on the space, so you cannot time your jump to pick one.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mushroom_Space",
+              "revision": "5413260",
+              "quoted": [
+                "The player cannot time their jump, since the result is decided when they land on the space."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Mushroom Spaces per board: DK's Jungle Adventure 3, Yoshi's Tropical Island 3, Peach's Birthday Cake 6, Wario's Battle Canyon 5, Luigi's Engine Room 3, Mario's Rainbow Castle 2, Bowser's Magma Mountain 3 and Eternal Star 3.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
+              "revision": "5475500",
+              "quoted": [
+                "Mushroom Spaces || 3"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Tropical_Island",
+              "revision": "5475501",
+              "quoted": [
+                "Mushroom Spaces || 3"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Peach%27s_Birthday_Cake",
+              "revision": "5465016",
+              "quoted": [
+                "Mushroom Spaces || 6"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Wario%27s_Battle_Canyon",
+              "revision": "5475502",
+              "quoted": [
+                "Mushroom Spaces || 5"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Luigi%27s_Engine_Room",
+              "revision": "5475503",
+              "quoted": [
+                "Mushroom Spaces || 3"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario%27s_Rainbow_Castle",
+              "revision": "5505144",
+              "quoted": [
+                "Mushroom Spaces || 2"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bowser%27s_Magma_Mountain",
+              "revision": "5504637",
+              "quoted": [
+                "Mushroom Spaces || 3"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Eternal_Star",
+              "revision": "5534414",
+              "quoted": [
+                "Mushroom Spaces || 3"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2813,
+      "name": "Chance Time Space (the ! Space)",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Chance_Time_Space",
+      "main_revision": "5405746",
+      "lines": [
+        {
+          "line": "Summary: A rare board space marked with an exclamation mark that starts Chance Time, where three Dice Blocks decide who gives what to whom.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Chance_Time_Space",
+              "revision": "5405746",
+              "quoted": [
+                "Chance Time Spaces (known as ! Spaces in the first three Mario Party games) are among the rarest type of spaces in the Mario Party series."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Chance_Time",
+              "revision": "5520648",
+              "quoted": [
+                "The first Mario Party establishes Chance Time as rolling three Dice Blocks, lined up from left to right. The left and right blocks correspond to the four player characters in the game, while the middle one specifies how many coins or Stars one must give to the other."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: The middle block can make one player give 10, 20 or 30 coins or 1 Star to the other, and two more results, marked with a double arrow, are for all coins and all Stars.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Chance_Time",
+              "revision": "5520648",
+              "quoted": [
+                "10 coins → - ← 10 coins - 20 coins → - ← 20 coins - 30 coins → - ← 30 coins - 1 Star → - ← 1 Star - ↔ all coins - ↔ all Stars"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "Game-changing events can happen here, from trading Stars or Coins, to giving one Star or 10-30 Coins to someone else."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You can roll the three blocks in any order, picking a character on one side removes that character from the other side, and the blocks speed up after each roll. In the first game a ! Space counts as a Blue Space, and on boards where the Star moves after a purchase it takes the space where the Star has been.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Chance_Time",
+              "revision": "5520648",
+              "quoted": [
+                "The player landing on the \"! Space\" can roll the dice in any order. Selecting a character on either side block removes the character from the other side, so they cannot appear on both at once. The blocks speed up after each roll."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Chance_Time_Space",
+              "revision": "5405746",
+              "quoted": [
+                "In the first game, on boards where the Star moves after a player purchases one, a ! Space will take the space where the Star has been. In the first game as well, they count as Blue Spaces."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Bowser's Chance Time, one of the Bowser Space events, is a rigged version: the blocks spin uncontrollably fast, the right block is preset to Bowser, and if the loser has no coins Bowser gives them 10 coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Chance_Time",
+              "revision": "5520648",
+              "quoted": [
+                "Here, the blocks spin uncontrollably fast from the outset, the middle block's options are to only give coins from left to right, and the right block is preset to Bowser. If the loser has no coins, Bowser will give them 10 coins out of pity."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2814,
+      "name": "Gameballs, Mecha Fly Guy, Talking Parrot and Record",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Mario_Party",
+      "main_revision": "5539722",
+      "lines": [
+        {
+          "line": "Summary: Four Mushroom Shop items that are not Dice Blocks, priced 50 to 300 coins: Gameballs, the Mecha Fly Guy, the Talking Parrot and the Record.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "Gameballs || 300 Coins",
+                "Mecha Fly Guy || 100 Coins",
+                "Record || 50 Coins",
+                "Talking Parrot || 50 Coins"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Gameballs (300 coins) are many balls with Mini-Games inside, and what you get is a surprise. The Mecha Fly Guy (100 coins) counts how many times you rotate the Control Stick, for use in the Mini-Game House.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "Gameballs || 300 Coins || This has many Gameballs with Mini-Games inside. What you get is a surprise.",
+                "Mecha Fly Guy || 100 Coins || This counts how many times you rotate the Control Stick. Use it in the Mini-Game House."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Gameballs appear in the shop only after at least 30 mini-games have been bought from the Mini-Game House, and can be used until all mini-games are bought.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "This item appears after at least 30 mini-games have been bought from the Mini-Game House and can be used until all mini-games are bought."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The 50-coin Record is what lets the Option House's Juke Box play songs you have already heard in the game, and the 50-coin Talking Parrot speaks characters' voices there at random when you press its button.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "The Juke Box becomes available for use after the player buys the Record from the Mushroom Shop for 50 Coins.",
+                "The only prerequisite is that the player must have heard the song in the game itself before it becomes available on the Juke Box.",
+                "By pressing the button, the parrot speaks various voices from various characters in the game randomly."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

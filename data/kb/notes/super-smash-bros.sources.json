@@ -255,7 +255,7 @@
           ]
         },
         {
-          "line": "Uses: Each swing takes the same amount of time, and you cannot charge it. In the first game it reuses each fighter's ordinary item swing, so the wind-up depends on who you play: Link needs only 23 frames, while Mario, Luigi and Ness need the most, at 30.",
+          "line": "Uses: You cannot charge the swing, and a fighter's swing always takes the same time. In the first game it reuses each fighter's ordinary item swing, so that time depends on who you play: Link's swing takes only 23 frames, while Mario, Luigi and Ness take the longest, 30.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Home-Run_Bat",
@@ -421,13 +421,6 @@
                 "They are bomb-like enemies with simple eyes that feature two little legs and a wind-up key on the back.",
                 "Being an explosive, the item can easily inflict large damage and knockback to other players, but it can also potentially harm the attacker."
               ]
-            },
-            {
-              "page": "https://www.ssbwiki.com/Bob-omb",
-              "revision": "2063637",
-              "quoted": [
-                "When grabbed and thrown at an enemy, this item explodes, but if left alone, it will start walking around until its timer reaches zero"
-              ]
             }
           ]
         },
@@ -446,13 +439,12 @@
           ]
         },
         {
-          "line": "Tips: If nobody grabs it, the game's manual says it wanders off until its countdown reaches zero. In the series it then gets to its feet and paces to and fro along the platform where it appeared, turning at the edges; it goes off if it bumps into a fighter, and otherwise detonates by itself after a while.",
+          "line": "Tips: In the series, if nobody picks it up it later gets to its feet and paces to and fro along the platform where it appeared, turning at the edges; it goes off if it bumps into a fighter, and otherwise detonates by itself after a while.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Bob-omb",
               "revision": "2063637",
               "quoted": [
-                "if left alone, it will start walking around until its timer reaches zero",
                 "If a Bob-omb is not picked up, after a while, it will stand up and begin to walk back and forth on the platform it spawned on, turning around at edges. In this state, it will explode if it walks into a player."
               ]
             },
@@ -489,7 +481,7 @@
           ]
         },
         {
-          "line": "Weak points: No amount of knockback KOs Master Hand, and he is not pushed back by your hits, so draining his 300 hit points is the only way to win.",
+          "line": "Weak points: Knockback never KOs the final boss, and your hits do not push it back, so draining its 300 hit points is the only way to win.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Master_Hand_(SSB)",
@@ -582,20 +574,13 @@
           ]
         },
         {
-          "line": "Tips: He does not dash and seldom jumps; he just walks steadily back and forth over the stage. On low difficulties he stays passive and tends to attack only after being interrupted, and he grows more aggressive and knocks harder as the setting rises. His behaviour is basic: mostly strolling left and right with an occasional attack.",
+          "line": "Tips: He just paces back and forth; on low difficulties he rarely attacks, mostly when you interrupt him. Higher difficulties make him bolder and give his hits more knockback.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Metal_Mario",
               "revision": "2057092",
               "quoted": [
                 "Metal Mario never dashes and rarely jumps, instead pacing across the stage at a steady walk. On lower difficulties, he acts passively and attacks infrequently, typically only when he is interrupted. Metal Mario's aggression and knockback increase on higher settings."
-              ]
-            },
-            {
-              "page": "https://www.ssbwiki.com/Metal_Mario_(SSB)",
-              "revision": "2040850",
-              "quoted": [
-                "His AI is very simple, largely just walking left and right and occasionally attacking."
               ]
             }
           ]

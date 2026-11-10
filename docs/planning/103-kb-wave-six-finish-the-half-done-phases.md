@@ -523,6 +523,8 @@ Log, one row per consult: time, the question in one line, the answer in one line
 
 | Time | Question | Answer | What changed | Cost |
 |---|---|---|---|---|
+| 2026-11-09, 19:38 to 19:57 EST | The wave A briefs against the code | Nine corrections, stop nobody | The covers helper tested its third piece through the screen itself and found it was not a bug; the starter-box helper proved the fit at the largest text size and made Down scroll; the crowding helper measured three more tables through the plugin's own search before a setting was picked; lane F1's brief gains three files, the full Down order from the Copy icon, and "notes line first, then the strip". Five of the nine the helpers had already caught themselves | about 285,000 helper tokens |
+| 2026-11-09, 20:16 to 20:23 EST | The crowding fix: a fixed place of 4, of 5, or neither | Land 5 as a partial fix; 4 is the maintainer's call | 5 lands (no measured harm; 8 more held-back questions find their note, none lose it; one of the two Deck-style questions comes back). 4 would bring both back but lets one exact word match slip from first and shows "No close match" beside a right note three times; that trade goes on the checks page with the numbers | about 64,000 helper tokens |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -618,7 +620,59 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
   Each brief's key lines were checked against the code first; one correction went out with a brief (T1's list of
   readers was short by two test files).
 
+- **19:59 EST: the five-hour usage window filled (100 percent).** The session's own slip: it read the counters at go
+  (33 percent) and not again before each batch, and fifteen helpers filled the window in under half an hour. Seven
+  helpers were cut off mid-work; each kept its work and was resumed with one short message after the 20:00 reset. From
+  here the counters are read before every batch.
+- **20:00 to 20:30 EST.** Landed, every check green: the bookkeeper's audit (`a3822267`) and the answer-test fix
+  (`76ef6a7a`). Then eight finished helpers as one batch (the free-to-use sources check, the question loader, the
+  Deck-check scripts, the versus groundwork, the honest answer switched off, the summing-up fix, the mod tips, the
+  page-reader fix; tip `bdce2070`): **one old Python test went red** (the new mod tips changed which tip comes first
+  for a crash question in a test that mocks the meaning search). The tips helper is finding whether that is a real
+  change for a player or the test's own assumption. Nothing else lands until it is green; a second batch (two small
+  fixes, the picture set, the covers and notes line, the starter box) is prepared behind it.
+- **What the helpers found, in short.** The answer test's second and third tries were being asked as follow-ups of
+  the first, so every older answer-quality number needs measuring again; there is no "answer cache". The new baseline:
+  the AI keeps 73.4 and 71.8 percent of its notes' facts over two runs (so two points either way is noise), and on
+  the eight questions its notes cannot answer it said so in its own words 0 times in 24, in both runs. The
+  "one open cover shows every answer's notes" entry is not a bug (a test through the screen passes as the code
+  stands); the same helper found a real one instead: an answer whose cover the plugin opens by itself never showed
+  its notes line. The mic log noise came from the screen's clean-up, not from the two callers the brief named.
+  The page reader is refused by two wikis when it asks by revision; it now falls back to asking by title, and pages
+  that came back nearly empty now come back whole.
+- **Notes so far.** Written: Left 4 Dead 2 (15), Fallout 4 (14), Red Dead Redemption 2 (14), Cyberpunk 2077 (15),
+  Mario Party (15), Mario Party 2 (14), Mario Party 3 (15), Mario Party 6 (15), Mario Party 7 (15), Super Smash Bros.
+  (15), Melee (15), Grand Theft Auto III (15): 177 notes in twelve games. A separate checker has read ten of the
+  twelve files sentence by sentence (every one "small fixes", all made); the
+  licence reviewer has read four. **Hades gets no notes:** its wiki is non-commercial only and Wikipedia has too
+  little. Half-Life 2 waits on its wiki, which was read-only tonight. Nine games are not started.
+- **The Deck, block D0a (19:40 to 20:15 EST).** Passed: setup; the old test chats cleared (six deleted, five chats
+  left); the smoke check; opening the plugin right after a reload, 3 of 3. Not settled: the hidden spoiler box on
+  Doom 64 (the game launched by its title on the first try; neither boss question drew a box); the Undo walk (the
+  page kept its focus six times of six, second night: it goes to the maintainer's list as proven by its tests only).
+  The picture check: a placed picture showed first in the attach list and attached; the question timed out twice.
+  **The block ended with the Deck stuck:** God of War still running, about 770 MB of memory free, reads over SSH
+  timing out, and the rig unable to close the game. Nothing more runs on the Deck until a person closes the game.
+- **Usage at 20:26 EST:** 43 percent of the five-hour window (resets 01:00 EST), 25 percent of the week, 29 percent
+  on Fable's own counter.
+
 **Questions for the maintainer (the safest choice is taken meanwhile):**
+
+2. **The Deck is stuck with God of War running and almost no memory free.** *Taken meanwhile:* nothing is pressed
+   and nothing is ended. Please exit the game on the Deck, or say "end it" and the session ends the game over SSH.
+   Phone alerts are switched off in the app's settings, so this could only be said in the chat.
+3. **The picture set has no boss pictures** (29 pictures, 11 games, one enemy, four with a library note). The marks
+   test needs at least fifteen. *Taken meanwhile:* the marks test waits; the picture-search work will be measured on
+   what there is and lands switched off unless it clearly earns "on". Say where more play pictures are, or allow
+   public boss screenshots for a private test set, or leave the marked-screenshot idea open as "not measured".
+4. **Red Dead Redemption 2's wiki licence.** Its live licence line says CC BY-SA with no version; Fandom's own help
+   page says 3.0 for all its wikis; one page on that wiki from 2009, marked "may be outdated", still says GFDL.
+   *Taken meanwhile:* stored as 3.0, like the library's four other Fandom wikis, with the evidence written beside the
+   notes. Confirm before anything is published, or say to drop that game's notes.
+5. **The crowding fix: the safer setting lands; the stricter one is yours to choose** (the second opinion's table in
+   § 7 has the trade).
+6. **The starter-models box:** the paragraph that explains "Turn on and download" sits last, so it is hidden until
+   Down is pressed. Moving it up changes the order in every download box. *Taken meanwhile:* left where it is.
 
 1. **The Deck holds far fewer play pictures than the plan hoped.** Steam's screenshot folders on the Deck cover six
    games, and 77 of the 134 pictures are from one game (Deep Rock Galactic: Survivor). Another 281 pictures sit in

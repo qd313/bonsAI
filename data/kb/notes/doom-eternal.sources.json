@@ -15,7 +15,7 @@
       "main_revision": "525864",
       "lines": [
         {
-          "line": "Summary: A flying demon with a jetpack. Once it has locked on, it fires volleys of homing missiles from its rocket launchers. Its claw swipe is the only other attack, and it hits much less hard.",
+          "line": "Summary: A flier on a jetpack: once it locks on, its rocket launchers fire a homing barrage. The claw swipe is its only other attack, and much weaker.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Revenant_(Doom_Eternal)",
@@ -29,19 +29,20 @@
           ]
         },
         {
-          "line": "Looks like: Glowing green eyes, cybernetic parts around the head and neck, and rocket launchers detailed so that they look like mouths.",
+          "line": "Looks like: Look for glowing green eyes and rocket launchers shaped like demon mouths.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Revenant_(Doom_Eternal)",
               "revision": "525864",
               "quoted": [
-                "its eyeballs now glow green, it lacks blood on its forehead, new cybernetics are present on its head and neck, its mouth shape is a bit different, and its metal parts are now cleaner in appearance, with new detailing on the rocket launchers that makes them resemble demonic mouths."
+                "its eyeballs now glow green",
+                "new detailing on the rocket launchers that makes them resemble demonic mouths."
               ]
             }
           ]
         },
         {
-          "line": "Tips: It will dash out of the way of your shots too.",
+          "line": "Tips: Dash or double-jump and its missiles lose you. It sidesteps your fire with dashes of its own.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Revenant_(Doom_Eternal)",
@@ -63,7 +64,7 @@
       "main_revision": "572772",
       "lines": [
         {
-          "line": "Summary: A large, slow heavy demon with 3,500 health, or 490 while staggered. Its arm cannons throw fireballs from a distance. Up close it switches to two flamethrowers and a blast that leaves harmful energy lingering on the floor.",
+          "line": "Summary: A hulking, lumbering heavy demon with 3,500 health (490 staggered). It lobs fireballs from afar and torches you close in, with flamethrowers and a floor blast.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Mancubus_(Doom_Eternal)",
@@ -79,7 +80,7 @@
           ]
         },
         {
-          "line": "Weak points: Break its arm cannons and its attacks do far less damage, and the flamethrowers stop working altogether. A chainsaw or glory kill to the chest blows it up: big demons nearby take damage and stagger, and small ones can die.",
+          "line": "Weak points: Damage its arm cannons first: its attacks weaken and the flamethrowers shut off. Chainsaw or glory kill its chest: it explodes, hurting big demons nearby and sometimes killing small ones.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Mancubus_(Doom_Eternal)",
@@ -92,21 +93,21 @@
           ]
         },
         {
-          "line": "Looks like: Two small greenish eyes, armour plating on its body, and a bare, glowing yellow organ that looks like a heart sitting in its chest.",
+          "line": "Looks like: Spot the bare, glowing yellow organ in its chest, shaped like a heart, and its greenish eyes.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Mancubus_(Doom_Eternal)",
               "revision": "572772",
               "quoted": [
-                "It now has two smaller, greenish eyes, and a yellow exposed heart-like organ in its chest.",
-                "The Doom Slayer is able to spear the glowing heart-like organ in the mancubus' chest",
-                "The armor plating that has replaced their original carapaces"
+                "greenish eyes",
+                "a yellow exposed heart-like organ in its chest",
+                "glowing heart-like organ in the mancubus' chest"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Stay at range and use heavy weapons, because its flamethrowers and ground blast hurt a lot up close. The rocket launcher suits it since it is too slow to dodge rockets, and the ballista's speed and damage take cannons off from far away. The heavy cannon's precision bolt scope can snipe cannons from across the arena, but check behind you while scoped. Do not let it pin you in a corner: it is big, and it hits hard at close range.",
+          "line": "Tips: Stay at range with heavy weapons; it is too slow to dodge the rocket launcher's rockets. The ballista can pick off its cannons from far away, and never let it corner you.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Mancubus_(Doom_Eternal)",
@@ -115,8 +116,6 @@
                 "Your best strategy is to use heavy-hitting weapons at range, because when you are closer, the mancubus can use its flamethrowers and AOE to deal you large amounts of damage.",
                 "the rocket launcher (they cannot dodge the rockets as they are too slow)",
                 "the ballista (its high damage potential and projectile velocity make it an good weapon for removing their cannons at long range)",
-                "with a special spot saved for the heavy cannon's precision bolt.",
-                "make sure no enemies sneak up on you while you are scoped in.",
                 "Avoid letting mancubi corner you"
               ]
             }
@@ -132,7 +131,7 @@
       "main_revision": "496262",
       "lines": [
         {
-          "line": "Summary: An armoured demon whose main attack is a charge. It has 1,000 health, but takes bonus damage from hits on its tail and from the blood punch.",
+          "line": "Summary: It mostly just charges at you. It has 1,000 health, but tail hits and the blood punch do bonus damage.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Pinky_(Doom_Eternal)",
@@ -145,20 +144,20 @@
           ]
         },
         {
-          "line": "Weak points: Its tail is completely unarmoured, so hits there do the most damage. A direct blood punch kills it on the spot, whichever side it lands on.",
+          "line": "Weak points: Its tail has no armour, so go round the back and hit that. A direct blood punch kills it outright from any side.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Pinky_(Doom_Eternal)",
               "revision": "496262",
               "quoted": [
-                "the front of the pinky is heavily armored but its tail has no armor at all, so the player should attack the pinky's tail to inflict the most damage.",
+                "its tail has no armor at all",
                 "A direct blood punch will instantly kill it, even from the front."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Double-jump or dash to avoid the charge, and lure it into a wall: it gets stunned long enough for you to hit the tail. Freezing it with an ice bomb keeps it from turning. Sustained fire wears down its front armour, and the very strongest weapons (the ballista's destroyer blade mod, for one) go straight through it.",
+          "line": "Tips: Dodge its charge with a dash or double jump, or bait it into a wall to stun it. While it is stunned you can hit the tail, and an ice bomb stops it turning.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Pinky_(Doom_Eternal)",
@@ -166,8 +165,7 @@
               "quoted": [
                 "The pinky's main attack is to charge at the player, which the player can avoid by double-jumping or dashing.",
                 "The player should try to trick the pinky into charging into walls, which will stun it long enough for the player to attack its tail.",
-                "The pinky can also be frozen with an ice bomb to stop it turning round.",
-                "persistent attacks can eventually pierce it, and the strongest weapons, such as the ballista's destroyer blade mod, can bypass it entirely."
+                "The pinky can also be frozen with an ice bomb to stop it turning round."
               ]
             }
           ]
@@ -182,7 +180,7 @@
       "main_revision": "559109",
       "lines": [
         {
-          "line": "Summary: A fast, aggressive demon that wields two flaming blades. It can survive a single direct BFG hit.",
+          "line": "Summary: A fast, aggressive demon with two flaming blades. One direct BFG shot will not kill it.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Baron_of_Hell_(Doom_Eternal)",
@@ -196,21 +194,19 @@
           ]
         },
         {
-          "line": "Looks like: Grey-brown skin the colour of ash, burning eyes, flesh glowing under the skin like hot coals, and magma in place of blood. It wields two flaming blades, and its shots are orange and red.",
+          "line": "Looks like: Look for grey-brown, ash-coloured skin, fiery eyes and flesh that glows from inside like hot coals.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Baron_of_Hell_(Doom_Eternal)",
               "revision": "559109",
               "quoted": [
-                "the baron of Hell now has an ashy grey-brown complexion with fiery eyes, inner flesh that glows like embers, and magma for blood.",
-                "now equipped with a pair of flaming blades",
-                "have been replaced by fiery orange and red ones."
+                "an ashy grey-brown complexion with fiery eyes, inner flesh that glows like embers, and magma for blood."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Keep your distance, just beyond the reach of its leap, and hot-swap among your heaviest weapons; the ballista, rocket launcher and super shotgun all work. A blood punch knocks it back and makes it easier to stun. Keeping the chaingun firing can hold off its attacks.",
+          "line": "Tips: Stay just outside its leap range and rotate between the rocket launcher, ballista and super shotgun. A blood punch knocks it back for an easier stun, and steady chaingun fire stalls its attacks.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Baron_of_Hell_(Doom_Eternal)",
@@ -233,7 +229,7 @@
       "main_revision": "507545",
       "lines": [
         {
-          "line": "Summary: A Hell knight rebuilt with cybernetics and an energy blade on each arm. The blades give it more reach up close and let it fling a wave of energy at range. It has more health than a Hell knight, but the same ways of beating a Hell knight all work on it as well.",
+          "line": "Summary: A tougher cybernetic Hell knight, so anything that beats a Hell knight works on it too. Its arm blades reach farther in melee and throw an energy wave at range.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Dread_knight",
@@ -247,14 +243,13 @@
           ]
         },
         {
-          "line": "Tips: Watch for it crossing its arms: that is the start of the energy wave, so you can dodge it. When it leaps and slams down, it leaves harmful energy spread around itself, so keep clear. The rocket launcher's lock-on burst staggers it with a single use. The ballista and super shotgun make it flinch, and if you swap between all three it never gets a turn to attack.",
+          "line": "Tips: Dodge as soon as it crosses its arms, because an energy wave follows. One rocket lock-on burst staggers it, and rotating with the ballista and super shotgun keeps it flinching.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Dread_knight",
               "revision": "507545",
               "quoted": [
-                "the start-up animation is very obvious (it will cross its arms in front of itself)",
-                "When the dread knight performs a leaping slam, it releases a field of harmful energy around it to deter players from getting close while it is vulnerable.",
+                "it can also use the blades to throw an energy wave when the Doom Slayer is at a distance, but this can be evaded with enough maneuverability, especially because the start-up animation is very obvious (it will cross its arms in front of itself)",
                 "One lock-on burst from the rocket launcher will stagger it, and the ballista and the super shotgun will flinch it. Hot-swapping between these weapons will prevent it from being able to attack you at all."
               ]
             }
@@ -270,7 +265,7 @@
       "main_revision": "525679",
       "lines": [
         {
-          "line": "Summary: A sneaky purple demon with 1,000 health, or 250 while staggered. It teleports next to or behind you, then pounces with a quick melee attack that does heavy damage.",
+          "line": "Summary: It pops up beside or behind you after a teleport, then pounces with a quick, hard-hitting melee strike. Its health is 1,000, or 250 staggered.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Prowler_(Doom_Eternal)",
@@ -283,7 +278,7 @@
           ]
         },
         {
-          "line": "Weak points: One direct ballista hit staggers it at once, and a super shotgun blast from point-blank range kills it outright. An ice bomb pins it in place so it cannot teleport away.",
+          "line": "Weak points: Up close, a super shotgun blast kills it outright. A direct ballista hit staggers it instantly, and an ice bomb stops it teleporting.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Prowler_(Doom_Eternal)",
@@ -296,28 +291,27 @@
           ]
         },
         {
-          "line": "Looks like: A humanoid demon built like an imp but bigger, with long claws, purple skin and bony plates sticking out of its back. Its face has three eyes clustered together in the middle, and its jaw is in three sections.",
+          "line": "Looks like: Purple hide, three eyes crowded mid-face, and bony plates sticking out of its back.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Prowler_(Doom_Eternal)",
               "revision": "525679",
               "quoted": [
-                "a humanoid demon of similar stature to the imp, but is larger with purple skin, long claws, and a number of bony plates projecting from its back.",
-                "it has a spider-like cluster of three eyes in the center of its face. It has a tripartite jaw"
+                "purple skin, long claws, and a number of bony plates projecting from its back.",
+                "it has a spider-like cluster of three eyes in the center of its face."
               ]
             }
           ]
         },
         {
-          "line": "Tips: It is most dangerous when other demons are around, since they keep you busy and you may not notice it before it strikes. If it feels threatened it teleports away and sets up another ambush. From a distance, it may fire quick purple bolts of energy while it runs at you.",
+          "line": "Tips: Keep checking around you when other demons keep you busy; it strikes while you are distracted. If it feels threatened it teleports away and sets up another ambush.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Prowler_(Doom_Eternal)",
               "revision": "525679",
               "quoted": [
                 "makes it especially dangerous if it appears among a group of other monsters, as they may keep the player distracted and unable to notice the prowler's presence until it is ready to strike.",
-                "if it perceives itself to be in danger, it will teleport to safety and try to set up another surprise attack.",
-                "It may also fire fast purple energy blasts as it charges if there is enough distance between it and the player."
+                "if it perceives itself to be in danger, it will teleport to safety and try to set up another surprise attack."
               ]
             }
           ]
@@ -332,7 +326,7 @@
       "main_revision": "578231",
       "lines": [
         {
-          "line": "Summary: A cyborg demon with 1,200 health, or 240 while staggered, so it is fairly fragile. It fires ring-shaped lasers, sends shockwaves running along the floor from its arm blaster, and raises a force field wall that shields itself or other demons.",
+          "line": "Summary: Not very tough: 1,200 health, or 240 staggered. It shoots ring lasers, sends floor shockwaves, and can wall itself or other demons behind a force field.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Carcass",
@@ -345,7 +339,7 @@
           ]
         },
         {
-          "line": "Weak points: Its force field is highly resistant to explosives, but a plasma rifle shot or a blood punch breaks it easily. A shot to the circle marked on the tank at its back kills it instantly.",
+          "line": "Weak points: Skip explosives on its force field; a plasma rifle shot or blood punch breaks it easily. Aim at the circular spot on its back tank for an instant kill.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Carcass",
@@ -358,20 +352,19 @@
           ]
         },
         {
-          "line": "Looks like: A robot body with three insect-like legs carries the upper half of a zombie human. Its right arm carries a built-in blaster, and a dish sits at its waist.",
+          "line": "Looks like: A zombie's upper body on a three-legged robot frame, with a blaster built into its right arm.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Carcass",
               "revision": "578231",
               "quoted": [
-                "It appears to be the upper torso of a zombified human fused with a robotic chassis with three insectile-like legs and a blaster fused into its right arm.",
-                "the concave dish on its waist"
+                "It appears to be the upper torso of a zombified human fused with a robotic chassis with three insectile-like legs and a blaster fused into its right arm."
               ]
             }
           ]
         },
         {
-          "line": "Tips: It usually puts the shield up in front of staggered demons so you cannot glory kill them with ease, and also when you are holding the rocket launcher or sticky bombs. When the shield is right beside the carcass, detonate it with the plasma rifle; otherwise a pair of ballista shots or super shotgun blasts is enough. Up close, it spins around and lands two hits one after the other.",
+          "line": "Tips: It usually shields staggered demons to stop your glory kills. A plasma rifle shot detonates a shield beside it; otherwise use two ballista shots or super shotgun blasts.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Carcass",
@@ -379,7 +372,7 @@
               "quoted": [
                 "The carcass appears to summon its energy shield most often in front of demons in the stagger state, to prevent the Doom Slayer from being able to easily glory kill them, or when the player is equipped with the rocket launcher or sticky bombs.",
                 "If it summons its shield near itself, use the plasma rifle to detonate it, but otherwise a couple of ballista shots and/or super shotgun blasts should do the trick.",
-                "In close quarters, the carcass uses a spinning strike that hits twice in a row."
+                "main goal is to get around its shields and hit it hard with heavy ordinance"
               ]
             }
           ]
@@ -394,7 +387,7 @@
       "main_revision": "574469",
       "lines": [
         {
-          "line": "Summary: A flying demon that spawns lost souls and attacks with them. They come as quick homing shots, as mines left on the ground, or in a barrage of three. Its health is about the same as a baron of Hell's.",
+          "line": "Summary: It flies, and its lost souls do the attacking: homing shots, ground mines or a barrage of three. Its health is close to a baron of Hell's.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Pain_elemental_(Doom_Eternal)",
@@ -410,7 +403,7 @@
           ]
         },
         {
-          "line": "Weak points: The rocket launcher's lock-on burst mod is a good answer, since it cannot dodge guided missiles: two volleys that connect kill it. As with other flying demons, the ballista does bonus damage to it.",
+          "line": "Weak points: The rocket launcher's lock-on burst mod beats it: missiles follow it, and two volleys that land finish it. The ballista does bonus damage to it as well.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Pain_elemental_(Doom_Eternal)",
@@ -423,30 +416,27 @@
           ]
         },
         {
-          "line": "Looks like: A brown, round demon that flies, with one big red eye, a pair of long black horns, muscular arms with large claws, and a wide mouth with eight mandibles.",
+          "line": "Looks like: Round, brown and airborne, with one big red eye and a pair of long black horns.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Pain_elemental_(Doom_Eternal)",
               "revision": "574469",
               "quoted": [
-                "it is a circular, flying, brown demon with a single large red eye with an orange pupil, two long black horns, two muscular arms with prominent claws",
-                "a large mouth like that of the cacodemon with eight mandibles"
+                "a circular, flying, brown demon with a single large red eye with an orange pupil, two long black horns"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Shoot when it is busy or on the verge of attacking, because it air-dashes away if it sees a weapon aimed at it. It can also push its lost souls in front of your shots to use as shields. The mines hit harder than a direct attack and splash even on a near miss, so tight spaces are risky. Do not use the meat hook on it: you may latch onto one of its lost souls instead and be left somewhere dangerous.",
+          "line": "Tips: Shoot when it is busy or about to attack, because it air-dashes away from aimed weapons. Skip the meat hook, which may grab a lost soul; its mines splash even when they miss.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Pain_elemental_(Doom_Eternal)",
               "revision": "574469",
               "quoted": [
                 "Pain elementals will try to dodge attacks using an air-dash if they notice a weapon being pointed at them, so it is best to wait until it is either distracted or about to attack before shooting it",
-                "pain elementals may try to use their lost souls as living shields by forcing them to move into the path of incoming projectiles.",
-                "Be warned that these proximity mines deal more damage than a direct attack.",
-                "they will inflict splash damage even if a direct hit is avoided.",
-                "Using the meat hook on a pain elemental is not advised, as it may grapple onto a lost soul by accident and leave the player in a potentially fatal position."
+                "Using the meat hook on a pain elemental is not advised, as it may grapple onto a lost soul by accident and leave the player in a potentially fatal position.",
+                "they will inflict splash damage even if a direct hit is avoided."
               ]
             }
           ]
@@ -461,23 +451,23 @@
       "main_revision": "525868",
       "lines": [
         {
-          "line": "Summary: A cybernetic demon that fires missiles from an arm cannon. It is a major enemy that keeps coming back, often two at a time in later levels. One direct BFG hit is not enough to kill it.",
+          "line": "Summary: A cybernetic demon that mostly fires missiles from an arm cannon. It returns as a major enemy, often in pairs later on, and survives one direct BFG hit.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Tyrant",
               "revision": "525868",
               "quoted": [
-                "The tyrant is a new monster in Doom Eternal, and the next iteration in the class of cyberdemons.",
                 "The tyrant mainly attacks by firing missiles from its arm cannon.",
                 "The tyrant is a recurring major enemy",
                 "Later levels frequently have them appear in pairs",
-                "As they have enough health to survive a single direct hit from the BFG-9000"
+                "As they have enough health to survive a single direct hit from the BFG-9000",
+                "Both its right leg and left arm are cybernetics-enhanced, with minimal cybernetics along its right arm that can be used to project an energy blade."
               ]
             }
           ]
         },
         {
-          "line": "Weak points: It turns slowly, so circle behind it with a dash and hit it there. Its own dash is weak, so the meat hook and super shotgun work as long as you keep to its back. The Crucible kills it in one hit.",
+          "line": "Weak points: The Crucible kills it in one hit. Otherwise dash round behind it, since it turns slowly, and use the meat hook and super shotgun there.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Tyrant",
@@ -491,15 +481,12 @@
           ]
         },
         {
-          "line": "Looks like: A two-legged demon with a cybernetic right leg, a weapon in place of its left arm, and an energy blade projecting from its right arm. Its ribs show, tubing fills its belly where intestines would be, and a mechanical-looking spine has vertebrae poking out of the flesh. Each side of its bulbous head carries two big horns, and its eyes are yellowish-white.",
+          "line": "Looks like: Look for four big horns on its head, yellowish-white eyes and bare ribs.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Tyrant",
               "revision": "525868",
               "quoted": [
-                "Both its right leg and left arm are cybernetics-enhanced, with minimal cybernetics along its right arm that can be used to project an energy blade.",
-                "a weapon which replaces its left arm",
-                "The tyrant is bipedal in nature",
                 "The tyrant's ribs are exposed, with its intestines replaced with tubing. Its spine appears to be mechanical, with vertebrae jutting out from the flesh. The tyrant has two large horns on each side of its head, and a bulbous cranium.",
                 "they are yellowish-white"
               ]
@@ -507,17 +494,14 @@
           ]
         },
         {
-          "line": "Tips: When it has no line of sight to you it fires a barrage of missiles, and glowing runes show where they will land. Once it spots you it pauses to aim, which is your chance to attack. An unmistakable triple beep warns of its laser cannon: either duck behind cover or dash right at the end to spoil its aim. Up close it swings the blade, or uses it for shockwaves.",
+          "line": "Tips: Attack in the pause it takes to aim after it spots you. Three beeps mean its laser is coming, so get behind cover or dash right at the end.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Tyrant",
               "revision": "525868",
               "quoted": [
-                "If it cannot see the player, it will launch a missile barrage whose points of impact are marked by glowing runes.",
                 "When it sees the player, it takes a moment for it to take aim, so this window of time can be used to attack.",
-                "which is preceded by a very obvious triple beeping noise",
-                "the player should either take cover or dash at the last moment to ruin its aim.",
-                "In close quarters, it will try to slash the player with its blade or use it to release shockwaves."
+                "Occasionally, it will also use the cyberdemon's laser cannon attack (which is preceded by a very obvious triple beeping noise), in which case the player should either take cover or dash at the last moment to ruin its aim."
               ]
             }
           ]
@@ -532,7 +516,7 @@
       "main_revision": "532382",
       "lines": [
         {
-          "line": "Summary: A heavy energy-beam weapon that fires in a straight line. It shoots slowly, but each shot hits harder than any other weapon's before mods, and no other weapon is as accurate. You get it after coming back from Doom Hunter Base.",
+          "line": "Summary: It fires slowly, but each straight-line beam hits harder than any other weapon's before mods. You get it once you return from Doom Hunter Base.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Ballista",
@@ -545,7 +529,7 @@
           ]
         },
         {
-          "line": "Uses: Its beam passes through demons it kills, so it handles a row of lined-up fodder. Each shot costs 25 cells, so save it for weak points that neither the heavy cannon nor the combat shotgun's sticky bombs can reach, for a hot-swap combo with another weapon, or for flying enemies like the pain elemental, which takes bonus damage from it.",
+          "line": "Uses: Each shot costs 25 cells: save it for faraway weak points and flying demons like the pain elemental. Its beam pierces whatever it kills, so line up fodder.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Ballista",
@@ -558,7 +542,7 @@
           ]
         },
         {
-          "line": "Tips: Arbalest mod: after a short charge it fires a dart that lodges in an enemy and blows up a moment later. It slows you while active and must be reloaded after every shot. Destroyer Blade mod: after charging, it shoots a broad, horizontal blast that pierces a cluster of enemies and costs 50 cells a shot. The recoil is strong enough to give you extra air time or push you across an arena, and with every ammo upgrade a full load is only ten shots, fewer than any other weapon.",
+          "line": "Tips: Arbalest: its dart sticks and blows up later, but you move slower and reload after every shot. Destroyer Blade costs 50 cells but hits a whole cluster with one wide, piercing blast.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Ballista",
@@ -568,8 +552,6 @@
                 "it will reduce movement speed when active and needs to be reloaded in between shots.",
                 "After charging, the ballista fires a wide horizontal projectile. The projectile has a piercing effect, allowing it to clear out multiple clustered enemies in one shot.",
                 "It also uses up 50 cells per shot rather than the normal 25.",
-                "the ballista has a noticeable recoil which can be exploited for increased air time and propelling yourself across an arena.",
-                "With all ammo upgrades, it has the least shots on full ammo (ten) of any weapon in the game.",
                 "Arbalest",
                 "Destroyer Blade"
               ]
@@ -586,7 +568,7 @@
       "main_revision": "525663",
       "lines": [
         {
-          "line": "Summary: An all-round automatic rifle with two mods, Precision Bolt and Micro Missiles. You get it early on, once the second demon fight of the Hell on Earth level is over.",
+          "line": "Summary: An automatic rifle that does a bit of everything, with the Precision Bolt and Micro Missiles mods. It is yours from the Hell on Earth level, after the second fight.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Heavy_cannon",
@@ -601,22 +583,20 @@
           ]
         },
         {
-          "line": "Uses: It is dependable at middle to long range, and two body shots take down most fodder. On its own it struggles against tougher enemies, so use it from a distance to add damage alongside other weapons. The Precision Bolt scope makes shots more accurate and hits weak spots harder, enough to wreck an arachnotron's cannon or a revenant's rocket launchers. Micro Missiles do area damage without the self-damage you risk when firing the rocket launcher up close.",
+          "line": "Uses: Aim at fodder from medium range or farther; two body shots kill most. The Precision Bolt mod hits weak spots hard, enough to wreck an arachnotron's cannon.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Heavy_cannon",
               "revision": "525663",
               "quoted": [
                 "The heavy cannon is a reliable weapon at medium to long range, requiring no more than two body shots to kill most fodder monsters.",
-                "It is not as effective against stronger foes on its own, but can be used to supplement other weapons at long range.",
-                "The Precision Bolt greatly increases the weapon's accuracy and also deals extra damage to weak spots, enabling one to destroy, for example, the arachnotron's cannon or the revenant's rocket launchers.",
-                "micro missiles are best used to deal area-of-effect damage without risking the self-inflicted injury that would come with using the rocket launcher in close quarters."
+                "The Precision Bolt greatly increases the weapon's accuracy and also deals extra damage to weak spots, enabling one to destroy, for example, the arachnotron's cannon or the revenant's rocket launchers."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Precision Bolt is the best mod for Maykr drones, because killing one with a headshot makes it drop plenty of resources. The cannon is hitscan: the result of each shot is fixed the moment you fire. That suits quick fodder at long range, which the plasma rifle cannot hit. Micro Missiles home in slightly, launch as many as six missiles per salvo that explode on impact, and need a reload between salvos.",
+          "line": "Tips: Use Precision Bolt on Maykr drones: a headshot makes them drop lots of resources. The cannon is hitscan, which suits fast fodder at long range that the plasma rifle cannot hit.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Heavy_cannon",
@@ -624,8 +604,7 @@
               "quoted": [
                 "Using the precision bolt is also the best mod to use to kill Maykr drones as they drop a considerable amount of resources once killed with a headshot.",
                 "The heavy cannon is hitscan, meaning whether the shot fired hits or misses is decided when it is fired.",
-                "This can be of use against faster fodder demons at long ranges, especially ones that are too fast for the plasma rifle.",
-                "allowing the firing of up to six explosive missiles which detonate on impact. The missiles have minor homing abilities. Reloading is necessary in between salvos."
+                "This can be of use against faster fodder demons at long ranges, especially ones that are too fast for the plasma rifle."
               ]
             }
           ]
@@ -640,7 +619,7 @@
       "main_revision": "495514",
       "lines": [
         {
-          "line": "Summary: A fast energy rifle that fires small, bright blue orbs of plasma. You first find it in Exultia, right after the trans-dimensional portal.",
+          "line": "Summary: A rapid-fire energy rifle that shoots small blue plasma orbs. It first turns up in Exultia, right after the portal.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Plasma_rifle_(Doom_Eternal)",
@@ -653,7 +632,7 @@
           ]
         },
         {
-          "line": "Uses: Energy shields, such as those of the shield soldier and the carcass, overload under plasma fire and explode, badly hurting whoever holds them and damaging nearby enemies. It also turns off a Doom hunter's body shield so it can be hurt, and wears down an armoured baron's armour. It cannot touch the magic shields of the arch-vile and the marauder.",
+          "line": "Uses: Plasma fire blows up the energy shields that shield soldiers and carcasses carry, hurting them and nearby enemies. It also switches off a Doom hunter's body shield, but cannot touch arch-vile or marauder shields.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Plasma_rifle_(Doom_Eternal)",
@@ -661,14 +640,13 @@
               "quoted": [
                 "Energy shields like the ones used by the shield soldier and carcass will overload and explode if hit by plasma rifle fire, severely damaging the shield's user and damaging other enemies nearby.",
                 "It can also disable the Doom hunter's body shield, exposing it to damage.",
-                "However, it cannot affect the magical shields used by the arch-vile and the marauder.",
-                "you can use it to chip at the armored baron's armor"
+                "However, it cannot affect the magical shields used by the arch-vile and the marauder."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Enemies hit by several orbs in quick succession burst in an energy blast. That helps against crowds but can ruin a glory kill. The Microwave Beam mod is a short-range beam that locks onto an enemy, holds it still and keeps damaging it while the beam lasts. Nothing else you carry can kill a spirit, so keep it stocked when a demon is possessed. The Heat Blast mod fires a cone out in front of the weapon, and you charge it by firing the rifle normally.",
+          "line": "Tips: Several orbs in quick succession make an enemy burst, which can ruin a glory kill. Against a possessed demon, bring the Microwave Beam mod: it is the only thing that kills the spirit.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Plasma_rifle_(Doom_Eternal)",
@@ -676,9 +654,7 @@
               "quoted": [
                 "enemies that are hit by several plasma orbs within a short time will explode in a burst of energy",
                 "While helpful against clustered enemies, this effect can be inconvenient if trying to go for a glory kill.",
-                "fires a concentrated, short-ranged beam of plasma energy that locks onto and immobilizes an enemy, inflicting constant damage as long as the beam is maintained.",
-                "The Microwave Beam mod for the plasma rifle is the only weapon in the player's arsenal that can eliminate a spirit, so it is important to keep it ready and stocked up with ammo when fighting a possessed demon.",
-                "firing in a cone ahead of the gun rather than in a circle centered on the player; as before, it must be charged up by using the plasma rifle's standard fire."
+                "The Microwave Beam mod for the plasma rifle is the only weapon in the player's arsenal that can eliminate a spirit, so it is important to keep it ready and stocked up with ammo when fighting a possessed demon."
               ]
             }
           ]
@@ -693,7 +669,7 @@
       "main_revision": "517829",
       "lines": [
         {
-          "line": "Summary: A bomb fired from the Praetor suit's shoulder launcher that freezes its target solid. The frozen demon cannot move or fight back, and it breaks apart once it has taken enough damage. You choose it over the frag grenade with a toggle button.",
+          "line": "Summary: Shoot it from the shoulder launcher to ice a demon in place until enough damage breaks it apart. A toggle button picks it instead of the frag grenade.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Ice_bomb",
@@ -707,7 +683,7 @@
           ]
         },
         {
-          "line": "Uses: Freeze a target to hit it while it is stuck, to stop a dangerous enemy attacking, or to get away when you are surrounded. Whiplashes move fast, so the ice bomb is especially recommended against them. It also pins a pinky or spectre so you can go for its weak back end. You cannot glory kill a frozen enemy.",
+          "line": "Uses: Freeze a dangerous demon to stop its attacks or to escape, but you cannot glory kill it frozen. Use it on fast whiplashes, or to stop a pinky or spectre so you can hit its back.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Ice_bomb",
@@ -721,7 +697,7 @@
           ]
         },
         {
-          "line": "Tips: How long a freeze lasts depends on the enemy: 4 seconds for most fodder; 2 for pinkies, revenants and cacodemons; 1.5 for mancubi and barons of Hell; 1 for tyrants. Once the bomb is upgraded, each of those lasts longer. It does nothing to demons that a spirit has possessed or a screecher has buffed. The cooldown is 45 seconds, or 35 with the faster cooldown suit upgrade.",
+          "line": "Tips: Freezes last 4 seconds on most fodder, 2 on pinkies, 1.5 on mancubi and barons, 1 on tyrants. Possessed or screecher-buffed demons ignore it; cooldown is 45 seconds, or 35 upgraded.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Ice_bomb",
@@ -747,7 +723,7 @@
       "main_revision": "515758",
       "lines": [
         {
-          "line": "Summary: A quick blast of flame from the Praetor suit's shoulder launcher that lights enemies on fire. You find it at the Fortress of Doom, once Hell on Earth is finished, and it is ready to use whichever grenade type you have selected.",
+          "line": "Summary: A short blast of flame from the shoulder launcher that sets enemies burning. You get it at the Fortress of Doom, and it works whatever grenade is selected.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Flame_belch",
@@ -756,13 +732,14 @@
                 "The flame belch fires a short burst of fire",
                 "found in the Fortress of Doom after completing the Hell on Earth level.",
                 "It is mounted on the equipment launcher attached to the Praetor suit's left shoulder",
-                "it is always available as a separate attack in addition to the currently selected grenade type."
+                "it is always available as a separate attack in addition to the currently selected grenade type.",
+                "Enemies on fire will take additional damage and drop armor shards; killing an enemy while it is on fire will produce a larger shard drop."
               ]
             }
           ]
         },
         {
-          "line": "Uses: Enemies that are on fire take bonus damage and drop armour shards, and one that dies while burning drops more. It is your main way to get armour in a fight, and it works next to the chainsaw and glory kills as part of the combat loop. Sweep left and right as you fire to catch a group.",
+          "line": "Uses: Burning enemies drop armour shards, and more if they die on fire, making it your main armour source. Swing your aim side to side as you fire to hit a group; burning enemies take extra damage.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Flame_belch",
@@ -776,16 +753,14 @@
           ]
         },
         {
-          "line": "Tips: The combat shotgun and super shotgun give extra armour when they kill a burning enemy. The cooldown is 25 seconds, or 12.5 with the Quickdraw Belch suit upgrade. Sentinel crystals buy three upgrades: that shorter cooldown, a longer burn on heavy and super heavy demons, and armour that drops out faster.",
+          "line": "Tips: Its cooldown is 25 seconds, dropping to 12.5 once upgraded. Spend Sentinel crystals on belch upgrades to shorten it or get armour faster.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Flame_belch",
               "revision": "515758",
               "quoted": [
-                "The combat shotgun and super shotgun will produce more armor when killing a burning enemy.",
                 "The flame belch has a cooldown of 25 seconds, or 12.5 seconds with the Quickdraw Belch Praetor Suit upgrade.",
                 "By using Sentinel crystals, the player can unlock three upgrades for the flame belch that boost its capabilities",
-                "Heavy and Super Heavy demons stay on fire longer.",
                 "Demons drop armor at a faster rate.",
                 "Quickdraw Belch"
               ]
@@ -802,7 +777,7 @@
       "main_revision": "515811",
       "lines": [
         {
-          "line": "Summary: A powerful melee strike that you charge up by getting glory kills. Its shockwave also damages enemies around the one you hit. You first pick it up as a glowing artifact in Exultia.",
+          "line": "Summary: Glory kills charge this melee strike, and its shockwave also hits enemies around the target. You first find it as a glowing artifact in Exultia.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Blood_punch",
@@ -816,7 +791,7 @@
           ]
         },
         {
-          "line": "Uses: Pinkies and spectres die instantly, or at least take severe damage, and tougher monsters take heavy damage. It breaks enemy shields, including the arch-vile's magical one. It is very likely to damage a weak point, up to wrecking a cyber-mancubus's armour entirely.",
+          "line": "Uses: Use it to kill or badly hurt pinkies and spectres, and to break shields, even the arch-vile's. It also tends to hit weak points, and can destroy a cyber-mancubus's armour.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Blood_punch",
@@ -830,17 +805,14 @@
           ]
         },
         {
-          "line": "Tips: It uses no ammo, but it needs charging first: two glory kills make one charge, and you can hold only one at a time. It gets three automatic upgrades later in the game: a stronger shockwave, an instant charge from one glory kill on a heavy demon, and room for a second charge. Against a big group of fodder, freeze them, burn them with the flame belch, then blood punch one to take your health and armour to full.",
+          "line": "Tips: Early on, two glory kills make one charge and you hold one; it upgrades as you clear missions. On a fodder crowd, ice bomb and flame belch them, then punch one to refill health and armour.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Blood_punch",
               "revision": "515811",
               "quoted": [
                 "Although it does not require ammo, it must be charged before use by performing glory kills. Two glory kills will provide a single charge, and only one charge can be stored at a time.",
-                "Doom Hunter Base: \"The Blood Punch shockwave is now more powerful.\"",
                 "While it is not upgraded directly, the blood punch receives three automatic upgrades upon clearing the following missions:",
-                "Sentinel Prime: \"Glory kills on Heavy Demons will now instantly charge a Blood Punch.\"",
-                "there is no difference; a glory kill on a Super Heavy demon will likewise instantly charge a single blood punch.",
                 "Urdak: \"Two Blood Punch attacks can now be charged.\"",
                 "If you encounter a large number of fodder enemies in a group, freezing them, flame belching them, and then blood punching one of them is a good way to max out your health and armor"
               ]

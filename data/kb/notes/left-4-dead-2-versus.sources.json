@@ -1,0 +1,442 @@
+{
+  "wiki": "Left 4 Dead Wiki (https://left4dead.fandom.com/api.php)",
+  "licence_printed_by_fetcher": "Left 4 Dead Wiki (MediaWiki 1.43.10) licence: CC-BY-SA https://www.fandom.com/licensing",
+  "licence_stored": "CC-BY-SA-3.0 (the fetcher prints 'CC-BY-SA' with no version; the library stores the versioned form, and data/kb/NOTICE.md lists the Left 4 Dead Wiki as CC-BY-SA-3.0)",
+  "game_id": 3,
+  "game": "Left 4 Dead 2",
+  "read_on": "2026-11-10",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://left4dead.fandom.com/api.php --titles <pages> (page text as rendered by the wiki, link markup removed). Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named (curly apostrophes read as straight), inside the named part of the page. The finale chapter of every campaign is left out of every note on purpose (plan 17's rule). Several pages carry both Left 4 Dead and Left 4 Dead 2 facts; a line states a Left 4 Dead 2 fact only where the page says so or the thing is new in Left 4 Dead 2.",
+  "sections": [
+    {
+      "section_id": 4500,
+      "name": "Versus scoring and distance",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Versus",
+      "main_revision": "172372",
+      "lines": [
+        {
+          "line": "Summary: In Left 4 Dead 2 versus only the team playing the survivors earns points, and most of them come from how far each survivor gets along the chapter. The farthest point a survivor reaches is the one that counts, so a survivor who backtracks and dies keeps the distance made.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "(opening)",
+              "quoted": [
+                "Points are only awarded to teams playing as the Survivors."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Scoring / Left 4 Dead 2",
+              "quoted": [
+                "The distance traveled by each Survivor is the primary source of points for the Survivors.",
+                "The farthest distance a Survivor reaches is the score that Survivor gets (i.e., if a Survivor backtracks and dies, they will receive points for how far they traveled before backtracking)."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A survivor who is alive when the chapter ends is worth 25 more points to the team, unless they die in the safe room before its door shuts. Health and carried items no longer change the score, and reviving a dead survivor with a defibrillator costs 25 points.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Scoring / Left 4 Dead 2",
+              "quoted": [
+                "Every Survivor that lives at the end of the chapter gets a 25-point bonus for their team.",
+                "If the Survivor makes it into the safe room and dies before the saferoom door closes, the 25-point bonus will not count.",
+                "The health or items of the Survivors no longer affects the score.",
+                "Reviving dead Survivors using a Defibrillator results in a 25-point penalty."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If both teams reach the safe room with nobody dead, the team that did more damage as infected gets a 25-point tiebreak; equal scores with a death get no tiebreak. Both sides are told each time the survivors pass another quarter of the route.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Scoring / Left 4 Dead 2",
+              "quoted": [
+                "In the event that both teams reach the safe room with no deaths, a 25-point tiebreak bonus is given to the team who did the most damage as Infected.",
+                "If both teams earn the same score in a level, but not everyone makes it to the safe room (i.e. someone dies), this tiebreaker does not occur.",
+                "The Infected and Survivor sides are notified at 25% intervals of the distance the Survivors have traveled."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: On pace, the wiki tells survivors to concentrate on progressing rather than hunting down a Hunter, especially in versus, yet its Realism Versus page says a slow, careful pace can beat blazing ahead for team points.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Hunter / The Survivors",
+              "quoted": [
+                "your focus should be on progressing, not finding and killing the Hunter. This is especially true in Versus"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Realism_Versus_Mode",
+              "revision": "171548",
+              "part_of_page": "Strategy / Survivors",
+              "quoted": [
+                "sometimes moving slowly and cautiously is much better than trying to blaze ahead and get team points for the team"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4501,
+      "name": "Versus special infected spawn order and mixes",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Versus",
+      "main_revision": "172372",
+      "lines": [
+        {
+          "line": "Summary: When a versus infected player's wait to respawn is over, the AI Director assigns which special infected they become.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Players / Infected",
+              "quoted": [
+                "The AI Director determines which Special Infected \"class\" each player will spawn as once their spawn timer runs out and they enter spawn mode."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In Left 4 Dead 2 versus, the four infected players nearly always get four different specials. The Director seldom deals out four pinners (Smoker, Charger, Hunter, Jockey), which keeps the team from pinning all four survivors in one move; Boomer and Spitter support instead of pinning.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Players / Infected",
+              "quoted": [
+                "In Left 4 Dead 2, the Infected team will almost always consist of four different Special Infected.",
+                "The Director rarely chooses a combination of four \"pinning\" Special Infected.",
+                "\"Pinning\" Infected are the Smoker, Charger, Hunter and the Jockey",
+                "This is so the Infected team cannot simply pin all four players at once, ending the round.",
+                "The Spitter and the Boomer do not pin in their attacks; instead, they play a support role to the other Infected"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Tank is a random extra, at most one per level apart from fixed spawns, and your chance of getting him rises with your score. After the sides swap, the other team usually starts with the same specials in the same places and order.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Players / Infected",
+              "quoted": [
+                "The Tank is a special spawn, randomly occurring, with a maximum of one instance per level",
+                "Control of the Tank is given to a player on the Infected team randomly, with the odds of selection increasing with the player's score."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Director",
+              "revision": "172830",
+              "part_of_page": "Difficulty and Game Modes / Versus Mode",
+              "quoted": [
+                "players on the infected team will usually spawn in the same locations and sequence at the enemy team did.",
+                "if the last round began with a jockey, a boomer, a smoker, and a spitter, the other team will start with the same special infected after the swap."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: With fewer than three infected players, bots fill the empty slots and the Director may spawn two of the same type, or all the bot specials at once. With four infected players the respawn wait can reach 30 seconds, about 20 on average.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Notes",
+              "quoted": [
+                "in the case of less than three Infected players, two Special Infected of the same type may spawn",
+                "The Director can also spawn all of the AI Special Infected at the same time."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Versus Gameplay",
+              "quoted": [
+                "an update in Left 4 Dead 2 has added Special Infected bots in its Versus mode"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Players / Infected",
+              "quoted": [
+                "When there are four Infected, players can wait up to 30 seconds to respawn, although the average is closer to 20 seconds."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4502,
+      "name": "Versus ghost mode and spawning",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Versus",
+      "main_revision": "172372",
+      "lines": [
+        {
+          "line": "Summary: When the respawn timer ends, a versus infected player goes into spawn mode, with a blue tint on the screen, and picks where to appear. The survivors cannot see a ghost, and other infected see it as a blue outline.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Players / Infected",
+              "quoted": [
+                "the Infected player will enter spawn mode which is indicated by a blue tint on screen.",
+                "The player must choose where they want to spawn.",
+                "The Infected player cannot be seen by the Survivor team.",
+                "Other Infected see spawning players as a blue outline."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A spot has to be open ground that is neither too close to nor too far from the survivors, out of their sight, and not a restricted place such as the starting safe room before the survivors leave it.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Players / Infected",
+              "quoted": [
+                "can spawn in any unblocked space, provided that they are not too close to the Survivors or too far from them, they are not in the Survivors' line of sight, and they are not in a restricted area",
+                "the starting safe room prior to the Survivors vacating it"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A ghost passes through doors, breakable objects and some barricades, and nobody can hurt it, but dropping into an instant-kill zone kills it and restarts the timer, as a real death would.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Players / Infected",
+              "quoted": [
+                "Unspawned \"ghost\" infected can move through destructible objects and physics objects, such as doors and certain barricades.",
+                "These unspawned Infected cannot be harmed by other players, either Infected or Survivor",
+                "they will be killed without spawning if they fall into instant-kill zones",
+                "Infected who \"die\" in ghost mode restart their spawn timer as though they had actually died"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If you fall far behind, a message offers to put you in spawn mode at the survivors' location. Survivors can deny a spot by keeping it in sight or close, and a sudden rush that brings a key spot into view can ruin an ambush before the ghost spawns.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Team tactics / The Infected",
+              "quoted": [
+                "When an Infected gets to far behind the Survivors, a message will appear giving the Infected the option of moving closer to the group.",
+                "By pressing this, you will be in the respawn mode at the Survivors' location."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Team tactics / The Survivors",
+              "quoted": [
+                "getting a spot into you or your teammates' line of sight or close proximity, denies your opponents spawning in that location.",
+                "suddenly rush and get a vital location into a Survivor's line of sight before an Infected player at that location has time to react and spawn",
+                "ruining the entire ambush plan"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4503,
+      "name": "Using the Witch as the infected team",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/The_Witch",
+      "main_revision": "173466",
+      "lines": [
+        {
+          "line": "Summary: Nobody can play the Witch in versus, but she works as a trap: one hit from her incapacitates a survivor, so the infected team steers or lures survivors toward her.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Players / Infected",
+              "quoted": [
+                "You cannot play as the Witch, Common Infected, or Uncommon Infected."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Witch",
+              "revision": "173466",
+              "part_of_page": "Mechanics / Aggression and Attacks",
+              "quoted": [
+                "On all difficulties, getting hit by a Witch will deal 100 damage, resulting in instant incapacitation."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Witch",
+              "revision": "173466",
+              "part_of_page": "Tactics / Infected",
+              "quoted": [
+                "you can use her in your tactics"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Smokers can drag survivors to her and Jockeys can steer them toward her. A Spitter can spit near her, since survivors dodging the acid may brush against her or end up close enough to set her off.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Witch",
+              "revision": "173466",
+              "part_of_page": "Tactics / Infected",
+              "quoted": [
+                "Smokers can drag Survivors to the Witch.",
+                "Jockeys can steer Survivors towards the Witch.",
+                "Spitters can protect the Witch by spitting acid near her.",
+                "Survivors will usually attempt to get away from the acid puddles quickly, which may cause them to touch the Witch or get near the Witch"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A crouching Hunter or Boomer in front of her hides her from the survivors, and a Boomer killed near her startles her and sends her after whoever shot him. A non-Tank infected player can also claw her once, which makes her almost enraged.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Witch",
+              "revision": "173466",
+              "part_of_page": "Tactics / Infected",
+              "quoted": [
+                "Hunters and Boomers can crouch in front of the Witch, obscuring her from the Survivors' sight.",
+                "if a Boomer is killed while the Survivors are relatively close to the Witch, the explosion will startle her, sending her after the person who killed the Boomer."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Witch",
+              "revision": "173466",
+              "part_of_page": "Mechanics / Growling Rage",
+              "quoted": [
+                "In Versus, non-Tank infected players can claw the Witch once upon spotting a Survivor, upon which she becomes near enraged."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A Hunter can wait just out of sight near her and pounce whoever goes up to kill her, just before that survivor fires. Pouncing someone she has already downed costs the Hunter nothing and the victim dies twice as fast. Infected see her with a white outline that turns red as she gets angrier.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / Witch / The Infected",
+              "quoted": [
+                "Experienced Hunter players normally crouch just out of sight near the Witch, waiting until a player runs up to attack the Witch and pouncing them just before they get a chance to fire."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Witch",
+              "revision": "173466",
+              "part_of_page": "Tactics / Infected",
+              "quoted": [
+                "If you pounce a Survivor as a Hunter while the Witch has already incapacitated someone and is attacking, you will not be damaged, and the Survivor will die twice as fast."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Players / Infected / Controls of the Infected",
+              "quoted": [
+                "Docile Witches will have a white outline.",
+                "Witches in the process of being startled will have an outline that slowly changes from white to red"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4504,
+      "name": "Answering combined special attacks in versus",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Tactics",
+      "main_revision": "173476",
+      "lines": [
+        {
+          "line": "Summary: A versus infected team often opens with a Boomer's bile, then sends Hunters in and has a Smoker pull someone away, and it picks on the survivors the bile missed. Staying together, holding fire while blind and cutting a Smoker's grab short are the answers.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Team tactics / The Infected",
+              "quoted": [
+                "The best tactic for coordinating your attacks is to let the Boomer vomit on as many people as he can.",
+                "Then, have the Hunters pounce from their hiding spots and make the Smoker pull someone away.",
+                "If the Boomer vomits on one person, then pounce or constrict the other three who haven't got Boomer bile on them!"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Against the Boomer, do not bunch up, so the bile cannot hit all four of you. If he is close, shove him and back away before shooting, and shoot only when he is far from every survivor.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Boomer / The Survivors",
+              "quoted": [
+                "Avoid being too bunched up with the other Survivors.",
+                "There's no sense in all four of you getting puked on at once.",
+                "If the Boomer is too close, it's a good idea to melee-shove them, which will push them back to some degree, then back away to a safe distance before shooting",
+                "Only if the Boomer is sufficiently far away from both yourself and all other Survivors should you shoot them."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If you are covered in bile, hold your fire because friendly fire is the likely result; shove instead and get to a defensible corner. Teammates should stay close to the biled survivor, and a pipe bomb can draw the horde away.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Boomer / The Survivors",
+              "quoted": [
+                "Hold your fire! Since you can't see, friendly fire is the most likely result. Shove instead",
+                "Immediately find the nearest defensible corner",
+                "Stay close to the stricken Survivor.",
+                "Throw a pipe bomb to distract the horde"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: When you hear a Smoker, stay close so nobody is alone. If one grabs you, you get only a few seconds to shoot him and break free, and if he is out of sight a teammate can shove you loose or shoot the tongue.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Special Infected / The Smoker / The Survivors",
+              "quoted": [
+                "When you or one of your teammates hear a Smoker, stay close together and watch out for each other.",
+                "When a Smoker grabs you, you will have a few seconds to free yourself by shooting the Smoker.",
+                "simply shove the Survivor free or shoot the tongue"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

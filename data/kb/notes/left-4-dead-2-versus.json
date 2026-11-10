@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 4500,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Versus scoring and distance",
+      "card": "Summary: In Left 4 Dead 2 versus only the team playing the survivors earns points, and most of them come from how far each survivor gets along the chapter. The farthest point a survivor reaches is the one that counts, so a survivor who backtracks and dies keeps the distance made.\nTips: A survivor who is alive when the chapter ends is worth 25 more points to the team, unless they die in the safe room before its door shuts. Health and carried items no longer change the score, and reviving a dead survivor with a defibrillator costs 25 points.\nTips: If both teams reach the safe room with nobody dead, the team that did more damage as infected gets a 25-point tiebreak; equal scores with a death get no tiebreak. Both sides are told each time the survivors pass another quarter of the route.\nTips: On pace, the wiki tells survivors to concentrate on progressing rather than hunting down a Hunter, especially in versus, yet its Realism Versus page says a slow, careful pace can beat blazing ahead for team points.",
+      "source_url": "https://left4dead.fandom.com/wiki/Versus",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "172372",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4501,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Versus special infected spawn order and mixes",
+      "card": "Summary: When a versus infected player's wait to respawn is over, the AI Director assigns which special infected they become.\nTips: In Left 4 Dead 2 versus, the four infected players nearly always get four different specials. The Director seldom deals out four pinners (Smoker, Charger, Hunter, Jockey), which keeps the team from pinning all four survivors in one move; Boomer and Spitter support instead of pinning.\nTips: The Tank is a random extra, at most one per level apart from fixed spawns, and your chance of getting him rises with your score. After the sides swap, the other team usually starts with the same specials in the same places and order.\nTips: With fewer than three infected players, bots fill the empty slots and the Director may spawn two of the same type, or all the bot specials at once. With four infected players the respawn wait can reach 30 seconds, about 20 on average.",
+      "source_url": "https://left4dead.fandom.com/wiki/Versus",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "172372",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4502,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Versus ghost mode and spawning",
+      "card": "Summary: When the respawn timer ends, a versus infected player goes into spawn mode, with a blue tint on the screen, and picks where to appear. The survivors cannot see a ghost, and other infected see it as a blue outline.\nTips: A spot has to be open ground that is neither too close to nor too far from the survivors, out of their sight, and not a restricted place such as the starting safe room before the survivors leave it.\nTips: A ghost passes through doors, breakable objects and some barricades, and nobody can hurt it, but dropping into an instant-kill zone kills it and restarts the timer, as a real death would.\nTips: If you fall far behind, a message offers to put you in spawn mode at the survivors' location. Survivors can deny a spot by keeping it in sight or close, and a sudden rush that brings a key spot into view can ruin an ambush before the ghost spawns.",
+      "source_url": "https://left4dead.fandom.com/wiki/Versus",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "172372",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4503,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Using the Witch as the infected team",
+      "card": "Summary: Nobody can play the Witch in versus, but she works as a trap: one hit from her incapacitates a survivor, so the infected team steers or lures survivors toward her.\nTips: Smokers can drag survivors to her and Jockeys can steer them toward her. A Spitter can spit near her, since survivors dodging the acid may brush against her or end up close enough to set her off.\nTips: A crouching Hunter or Boomer in front of her hides her from the survivors, and a Boomer killed near her startles her and sends her after whoever shot him. A non-Tank infected player can also claw her once, which makes her almost enraged.\nTips: A Hunter can wait just out of sight near her and pounce whoever goes up to kill her, just before that survivor fires. Pouncing someone she has already downed costs the Hunter nothing and the victim dies twice as fast. Infected see her with a white outline that turns red as she gets angrier.",
+      "source_url": "https://left4dead.fandom.com/wiki/The_Witch",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173466",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4504,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Answering combined special attacks in versus",
+      "card": "Summary: A versus infected team often opens with a Boomer's bile, then sends Hunters in and has a Smoker pull someone away, and it picks on the survivors the bile missed. Staying together, holding fire while blind and cutting a Smoker's grab short are the answers.\nTips: Against the Boomer, do not bunch up, so the bile cannot hit all four of you. If he is close, shove him and back away before shooting, and shoot only when he is far from every survivor.\nTips: If you are covered in bile, hold your fire because friendly fire is the likely result; shove instead and get to a defensible corner. Teammates should stay close to the biled survivor, and a pipe bomb can draw the horde away.\nTips: When you hear a Smoker, stay close so nobody is alone. If one grabs you, you get only a few seconds to shoot him and break free, and if he is out of sight a teammate can shove you loose or shoot the tongue.",
+      "source_url": "https://left4dead.fandom.com/wiki/Tactics",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173476",
+      "crawled_at": "2026-11-10"
+    }
+  ]
+}

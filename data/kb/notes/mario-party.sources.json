@@ -51,7 +51,7 @@
           ]
         },
         {
-          "line": "Tips: The Coins for Bowser event costs the player who landed 10 to 50 coins. Bowser Revolution gathers everyone's coins and shares them out in equal parts. In Bowser's Chance Time the coins always go to Bowser. The wheel also shows Star Steal, 100 Star Present and 1000 Coin Present in yellow text, but the pointer never stops on them.",
+          "line": "Tips: The Coins for Bowser event costs the player who landed 10 to 50 coins. Bowser Revolution gathers everyone's coins and shares them out in equal parts. In Bowser's Chance Time the coins always go to Bowser. The wheel also shows Star Steal, 100 Star Present and 1000 Coin Present in yellow text, but the pointer never stops on them. If you land on a Bowser Space with no coins but at least one Star, Bowser takes a Star and gives you 10 coins; if you have no coins and no Stars, he gives you 20 coins.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser_Space",
@@ -60,18 +60,7 @@
                 "Coins for Bowser: Bowser takes 10–50 Coins from that player.",
                 "Bowser Revolution: Bowser takes everyone's Coins and splits them evenly among all the players.",
                 "it is rigged so that Bowser is always on the receiving end of the trade",
-                "100 Star Present / 1000 Coin Present / Star Steal: These events' names are displayed in yellow text on the roulette wheel. The cursor never lands on them."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: If you land on a Bowser Space with no coins but at least one Star, Bowser takes a Star and gives you 10 coins; if you have no coins and no Stars, he gives you 20 coins.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Bowser_Space",
-              "revision": "5532948",
-              "quoted": [
+                "100 Star Present / 1000 Coin Present / Star Steal: These events' names are displayed in yellow text on the roulette wheel. The cursor never lands on them.",
                 "If the player has at least one Star but no Coins, Bowser gives them 10 Coins in exchange for one Star.",
                 "If the player does not have any Coins or Stars, Bowser gives them 20 Coins."
               ]
@@ -230,26 +219,6 @@
           ]
         },
         {
-          "line": "Weak points: Each Thwomp has its own separate fee, and whoever crosses next has to hand over at least a coin more than the player before. A player who cannot afford the toll is stuck on the island they are on.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Yoshi%27s_Tropical_Island",
-              "revision": "5475501",
-              "quoted": [
-                "and the two Thwomps do not share the same fee.",
-                "must remain on the same island if they cannot afford to pay the toll to cross."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Thwomp",
-              "revision": "5542350",
-              "quoted": [
-                "when another player tries to pass the Thwomp, they must pay at least one more coin than the previous player."
-              ]
-            }
-          ]
-        },
-        {
           "line": "Looks like: The Thwomps here use a boxier take on the Super Mario 64 design.",
           "drawn_from": [
             {
@@ -262,7 +231,7 @@
           ]
         },
         {
-          "line": "Tips: Landing on a Happening Space has Bubba the fish carry Toad over to the other island while Bowser steps into Toad's spot. Bowser charges 30 coins for a faulty Bowser Tube. Every lap around an island takes you past either Toad or Bowser.",
+          "line": "Tips: Landing on a Happening Space has Bubba the fish carry Toad over to the other island while Bowser steps into Toad's spot. Bowser charges 30 coins for a faulty Bowser Tube. Every lap around an island takes you past either Toad or Bowser. Each Thwomp has its own separate fee, and whoever crosses next has to hand over at least a coin more than the player before. A player who cannot afford the toll is stuck on the island they are on.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party",
@@ -275,7 +244,16 @@
               "page": "https://www.mariowiki.com/Yoshi%27s_Tropical_Island",
               "revision": "5475501",
               "quoted": [
-                "a player must pass either Toad (Toadette in Superstars) or Bowser every time they circle an island"
+                "a player must pass either Toad (Toadette in Superstars) or Bowser every time they circle an island",
+                "and the two Thwomps do not share the same fee.",
+                "must remain on the same island if they cannot afford to pay the toll to cross."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Thwomp",
+              "revision": "5542350",
+              "quoted": [
+                "when another player tries to pass the Thwomp, they must pay at least one more coin than the previous player."
               ]
             }
           ]
@@ -383,7 +361,7 @@
           ]
         },
         {
-          "line": "Tips: On Bowser's Magma Mountain, landing on a Happening Space makes the volcano erupt and every Blue Space turns red, so the board has 49 Red Spaces instead of 4. The effect starts on the landing player's turn and runs out two turns later, again on that same player's turn.",
+          "line": "Tips: On Bowser's Magma Mountain, landing on a Happening Space makes the volcano erupt and every Blue Space turns red, so the board has 49 Red Spaces instead of 4. The effect starts on the landing player's turn and runs out two turns later, again on that same player's turn. Red Spaces per board: DK's Jungle Adventure 7, Yoshi's Tropical Island 3, Peach's Birthday Cake 4, Wario's Battle Canyon 7, Luigi's Engine Room 4, Mario's Rainbow Castle 5, Bowser's Magma Mountain 4 and Eternal Star 3.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party",
@@ -397,14 +375,10 @@
               "revision": "5504637",
               "quoted": [
                 "Red Spaces || 4 (49 if a Happening Space has been landed on)",
-                "The event starts on that player's turn, and ends on that player's turn, two turns later."
+                "The event starts on that player's turn, and ends on that player's turn, two turns later.",
+                "Red Spaces || 4 (49"
               ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Red Spaces per board: DK's Jungle Adventure 7, Yoshi's Tropical Island 3, Peach's Birthday Cake 4, Wario's Battle Canyon 7, Luigi's Engine Room 4, Mario's Rainbow Castle 5, Bowser's Magma Mountain 4 and Eternal Star 3.",
-          "drawn_from": [
+            },
             {
               "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
               "revision": "5475500",
@@ -445,13 +419,6 @@
               "revision": "5505144",
               "quoted": [
                 "Red Spaces || 5"
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Bowser%27s_Magma_Mountain",
-              "revision": "5504637",
-              "quoted": [
-                "Red Spaces || 4 (49"
               ]
             },
             {
@@ -541,7 +508,7 @@
           ]
         },
         {
-          "line": "Weak points: A Pisudon offers the switch when a player crosses paths with it, and the switch blocks access to certain paths for the other players.",
+          "line": "Tips: A Pisudon offers the switch when you cross paths with it, and the switch blocks certain paths for the other players.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Pisudon",
@@ -614,7 +581,7 @@
           ]
         },
         {
-          "line": "Tips: Bowser's Claws shoot you off to a random place on the board. The price is 20 coins, or all of yours if you hold 20 or fewer, and nothing if you hold none. The Make As Many Coins As You Want Mecha hands back one coin for the 20 you pay, so you are down 19.",
+          "line": "Tips: Bowser's Claws shoot you off to a random place on the board. The price is 20 coins, or all of yours if you hold 20 or fewer, and nothing if you hold none. The Make As Many Coins As You Want Mecha hands back one coin for the 20 you pay, so you are down 19. Straight after you \"buy\" the Ztar you walk by Koopa Troopa and get 10 coins back. That rises to 20 in the final five turns or when it is the tenth time anyone has gone by him, to 30 on the twentieth time, and onward. On Bowser's Magma Mountain and Eternal Star he sells nothing; he takes a Star instead, or else up to 20 coins from a player who has no Star.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser%27s_bogus_items",
@@ -622,18 +589,7 @@
               "quoted": [
                 "The player will pay 20 coins (or all their coins if they have 20 or less) for the ride, though Bowser will give it to them for free if they have zero coins.",
                 "blast the player to a random area of the board",
-                "thus meaning the player loses 19 coins, due to the one coin they get from the machine."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Straight after you \"buy\" the Ztar you walk by Koopa Troopa and get 10 coins back. That rises to 20 in the final five turns or when it is the tenth time anyone has gone by him, to 30 on the twentieth time, and onward. On Bowser's Magma Mountain and Eternal Star he sells nothing; he takes a Star instead, or else up to 20 coins from a player who has no Star.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Bowser%27s_bogus_items",
-              "revision": "5290899",
-              "quoted": [
+                "thus meaning the player loses 19 coins, due to the one coin they get from the machine.",
                 "immediately after \"buying\" the Ztar, the player will pass Koopa Troopa and earn back 10 coins (20 in the last 5 turns or if it is the 10th time someone has passed Koopa Troopa; 30 for the 20th time; 40 for the 30th time; etc.)",
                 "Bowser does not sell any useless items or provide a worthless service on either Bowser's Magma Mountain or Eternal Star, where he steals either a Star or up to 20 coins if they do not have at least one Star."
               ]
@@ -748,7 +704,7 @@
           ]
         },
         {
-          "line": "Tips: The Casino Box has a cap of 100 Stars and 99,999 coins. At the Mushroom Bank, Porto is where you pick which to save with: the Casino Box, Lucky Box or Coin Box.",
+          "line": "Tips: The Casino Box has a cap of 100 Stars and 99,999 coins. At the Mushroom Bank, Porto is where you pick which to save with: the Casino Box, Lucky Box or Coin Box. Storing at the game's end happens for human-controlled players only.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Casino_Box",
@@ -763,12 +719,7 @@
               "quoted": [
                 "Here is also where the player can choose how they want to save their Coins, whether with the Coin Box, Lucky Box, or Casino Box."
               ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Storing at the game's end happens for human-controlled players only.",
-          "drawn_from": [
+            },
             {
               "page": "https://www.mariowiki.com/Coin_Box_(Mario_Party_series)",
               "revision": "5471296",
@@ -858,7 +809,7 @@
           ]
         },
         {
-          "line": "Tips: You cannot steer the outcome by timing your jump, because it is settled as soon as you land.",
+          "line": "Tips: You cannot steer the outcome by timing your jump, because it is settled as soon as you land. Mushroom Spaces per board: DK's Jungle Adventure 3, Yoshi's Tropical Island 3, Peach's Birthday Cake 6, Wario's Battle Canyon 5, Luigi's Engine Room 3, Mario's Rainbow Castle 2, Bowser's Magma Mountain 3 and Eternal Star 3.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mushroom_Space",
@@ -866,12 +817,7 @@
               "quoted": [
                 "The player cannot time their jump, since the result is decided when they land on the space."
               ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Mushroom Spaces per board: DK's Jungle Adventure 3, Yoshi's Tropical Island 3, Peach's Birthday Cake 6, Wario's Battle Canyon 5, Luigi's Engine Room 3, Mario's Rainbow Castle 2, Bowser's Magma Mountain 3 and Eternal Star 3.",
-          "drawn_from": [
+            },
             {
               "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
               "revision": "5475500",
@@ -985,13 +931,14 @@
           ]
         },
         {
-          "line": "Tips: You can roll the three blocks in whatever order you like. Once you choose a character on one side, that character is gone from the other side, and each roll makes the blocks go faster. In the first game a ! Space counts as a Blue Space, and where the Star relocates after someone buys it, the ! Space is put on the spot the Star last stood on.",
+          "line": "Tips: You can roll the three blocks in whatever order you like. Once you choose a character on one side, that character is gone from the other side, and each roll makes the blocks go faster. In the first game a ! Space counts as a Blue Space, and where the Star relocates after someone buys it, the ! Space is put on the spot the Star last stood on. Bowser's Chance Time, one of the Bowser Space events, is rigged: from the start the blocks whirl too fast to control, Bowser is locked in on the right block, and a loser with nothing gets 10 coins from Bowser, out of pity.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Chance_Time",
               "revision": "5520648",
               "quoted": [
-                "The player landing on the \"! Space\" can roll the dice in any order. Selecting a character on either side block removes the character from the other side, so they cannot appear on both at once. The blocks speed up after each roll."
+                "The player landing on the \"! Space\" can roll the dice in any order. Selecting a character on either side block removes the character from the other side, so they cannot appear on both at once. The blocks speed up after each roll.",
+                "Here, the blocks spin uncontrollably fast from the outset, the middle block's options are to only give coins from left to right, and the right block is preset to Bowser. If the loser has no coins, Bowser will give them 10 coins out of pity."
               ]
             },
             {
@@ -999,18 +946,6 @@
               "revision": "5405746",
               "quoted": [
                 "In the first game, on boards where the Star moves after a player purchases one, a ! Space will take the space where the Star has been. In the first game as well, they count as Blue Spaces."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Bowser's Chance Time, one of the Bowser Space events, is rigged: from the start the blocks whirl too fast to control, Bowser is locked in on the right block, and a loser with nothing gets 10 coins from Bowser, out of pity.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Chance_Time",
-              "revision": "5520648",
-              "quoted": [
-                "Here, the blocks spin uncontrollably fast from the outset, the middle block's options are to only give coins from left to right, and the right block is preset to Bowser. If the loser has no coins, Bowser will give them 10 coins out of pity."
               ]
             }
           ]
@@ -1040,7 +975,7 @@
           ]
         },
         {
-          "line": "Uses: Gameballs cost 300 coins and the Mecha Fly Guy costs 100. The Mecha Fly Guy belongs to the Mini-Game House.",
+          "line": "Uses: Gameballs cost 300 coins and the Mecha Fly Guy costs 100. There is a Mecha Fly Guy in the Mini-Game House.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party",
@@ -1060,24 +995,13 @@
           ]
         },
         {
-          "line": "Tips: Gameballs turn up in the shop once you have bought 30 or more mini-games at the Mini-Game House, and stay usable until every mini-game there is bought.",
+          "line": "Tips: Gameballs turn up in the shop once you have bought 30 or more mini-games at the Mini-Game House, and stay usable until every mini-game there is bought. The Record, at 50 coins, is what unlocks the Option House's Juke Box, and only for songs you have already heard in the game. The 50-coin Talking Parrot plays random character voices there when you press its button.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party",
               "revision": "5539722",
               "quoted": [
-                "This item appears after at least 30 mini-games have been bought from the Mini-Game House and can be used until all mini-games are bought."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The Record, at 50 coins, is what unlocks the Option House's Juke Box, and only for songs you have already heard in the game. The 50-coin Talking Parrot plays random character voices there when you press its button.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Mario_Party",
-              "revision": "5539722",
-              "quoted": [
+                "This item appears after at least 30 mini-games have been bought from the Mini-Game House and can be used until all mini-games are bought.",
                 "The Juke Box becomes available for use after the player buys the Record from the Mushroom Shop for 50 Coins.",
                 "The only prerequisite is that the player must have heard the song in the game itself before it becomes available on the Juke Box.",
                 "By pressing the button, the parrot speaks various voices from various characters in the game randomly."

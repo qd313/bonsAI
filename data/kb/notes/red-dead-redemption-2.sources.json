@@ -20,7 +20,7 @@
       "main_revision": "477291",
       "lines": [
         {
-          "line": "Summary: A big reptile of Bayou Nwa, also in Bluewater Marsh and Scarlett Meadows near the Kamassa River. Once its jaws clamp your torso, you die within moments.",
+          "line": "Summary: The alligator, a big reptile, lives in Bayou Nwa, Bluewater Marsh and parts of Scarlett Meadows. Once its jaws clamp your torso, you die within moments.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Alligator",
@@ -172,14 +172,15 @@
           ]
         },
         {
-          "line": "Tips: Under the rail bridge near Hill Haven Ranch, 8 to 12 mounted Raiders can ambush you without warning. Near Catfish Jacksons, they can hit you with a wagon-mounted Gatling gun and reinforcements, with little cover.",
+          "line": "Tips: Under the rail bridge near Hill Haven Ranch, 8 to 12 mounted Raiders can ambush you without warning. Near Catfish Jacksons, they can hit you with a wagon-mounted Gatling gun and reinforcements, with little cover. Certain Raiders at random camps let you keep two hats, the Military Officer's Hat and Military Forage Cap.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Lemoyne_Raiders",
               "revision": "466084",
               "quoted": [
                 "The Raiders can launch a very dangerous ambush under the rail bridge near Hill Haven Ranch. A gang of 8-12 mounted Raiders will storm the player without warning and attempt to kill them. Mortality rates for the protagonist are notoriously high in this ambush.",
-                "Another random encounter can occur when passing by Catfish Jacksons. The Raiders launch an ambush on the player with a wagon mounted Gatling Gun, while reinforcements arrive and attack the player. Due to a lack of cover, this can be a difficult fight."
+                "Another random encounter can occur when passing by Catfish Jacksons. The Raiders launch an ambush on the player with a wagon mounted Gatling Gun, while reinforcements arrive and attack the player. Due to a lack of cover, this can be a difficult fight.",
+                "The player is able to equip and keep two unique hats from select enemies in random Lemoyne Raider camps. They are the Military Officer's Hat and the Military Forage Cap"
               ]
             }
           ]
@@ -220,7 +221,7 @@
           ]
         },
         {
-          "line": "Tips: Their Volcanic Pistols and double-barreled shotguns make close fights deadly, and they can survive a point-blank shotgun blast. Looting them mostly gives cigarettes, tonics and herbs, but ones in scripted ambushes always carry money.",
+          "line": "Tips: Their Volcanic Pistols and double-barreled shotguns make close fights deadly, and they can survive a point-blank shotgun blast. Looting them mostly gives cigarettes, tonics and herbs, but ones in scripted ambushes always carry money. You can also loot throwing knives from them.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Murfree_Brood",
@@ -230,6 +231,13 @@
                 "The Murfree Brood frequently use Volcanic Pistols and Double-Barreled Shotguns, making close quarters combat with them a very deadly prospect due to the damage they deal.",
                 "the Murfrees don't carry any valuables and players mostly receive cigarettes, tonics, and herbs from looting them.",
                 "Murfrees participating in scripted ambushes against the player will always carry money, however."
+              ]
+            },
+            {
+              "page": "https://reddead.fandom.com/wiki/Throwing_Knife_(RDR_2)",
+              "revision": "476857",
+              "quoted": [
+                "Additionally, they can be found from looted Murfree Brood members."
               ]
             }
           ]
@@ -272,14 +280,16 @@
           ]
         },
         {
-          "line": "Tips: Every fence sells it after \"Who the Hell is Leviticus Cornwall?\", and some missions give it out. A Volatile Dynamite pamphlet is in a chest at Hani's Bethel, and fences sell it after \"American Distillation\".",
+          "line": "Tips: Every fence sells it after \"Who the Hell is Leviticus Cornwall?\", and some missions give it out. A Volatile Dynamite pamphlet is in a chest at Hani's Bethel, and fences sell it after \"American Distillation\". Shooting dynamite or a crate of it sets it off, and you can craft arrows that explode.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Dynamite_(RDR_2)",
               "revision": "476856",
               "quoted": [
                 "This projectile is available from all fences after completing \"Who the Hell is Leviticus Cornwall?\", and is given out during certain missions.",
-                "The Pamphlet is found at Hani's Bethel, in a chest below one of the wagons near the house. It is also available from any Fence after completing \"American Distillation\"."
+                "The Pamphlet is found at Hani's Bethel, in a chest below one of the wagons near the house. It is also available from any Fence after completing \"American Distillation\".",
+                "Shooting dynamite will cause it to explode. This also applies to the crates of dynamite found around the map and in missions.",
+                "It can also be used to craft dynamite arrows, which will explode upon impact."
               ]
             }
           ]
@@ -320,7 +330,7 @@
           ]
         },
         {
-          "line": "Tips: Every fence sells it after \"The Fine Joys of Tobacco\", and you can loot one off enemies earlier. A maxed ammo cart gives two, and the Volatile version does more damage once you find its pamphlet.",
+          "line": "Tips: Every fence sells it after \"The Fine Joys of Tobacco\", and you can loot one off enemies earlier. A maxed ammo cart gives two, and the Volatile version does more damage. Its pamphlet is in a chest at a burned-forest campsite northwest of Horseshoe Overlook.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Fire_Bottle_(RDR_2)",
@@ -345,7 +355,7 @@
       "main_revision": "477469",
       "lines": [
         {
-          "line": "Summary: A thrown weapon with moderate power but low range and low accuracy. It cannot be customized.",
+          "line": "Summary: The tomahawk is a throwing weapon with moderate power but low range and low accuracy. It cannot be customized.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Tomahawk_(RDR_2)",
@@ -371,14 +381,14 @@
           ]
         },
         {
-          "line": "Tips: Every fence and the Trapper sell it after \"The First Shall Be Last\". Earlier, you can take one at Six Point Cabin before \"Paying a Social Call\".",
+          "line": "Tips: Every fence and the Trapper sell it after \"The First Shall Be Last\". Earlier, you can take one at Six Point Cabin before \"Paying a Social Call\". You can also find one on broken stagecoaches around Southern Cumberland Forest.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Tomahawk_(RDR_2)",
               "revision": "477469",
               "quoted": [
                 "This projectile is available from all fences and the trapper after \"The First Shall Be Last\".",
-                "Alternatively it can be obtained earlier at Six Point Cabin before the mission \"Paying a Social Call\" where the hideout would not be occupied yet"
+                "Alternatively it can be obtained earlier at Six Point Cabin before the mission \"Paying a Social Call\" where the hideout would not be occupied yet or can be found on broken abandoned stagecoaches around Southern Cumberland Forest."
               ]
             }
           ]
@@ -419,7 +429,7 @@
           ]
         },
         {
-          "line": "Tips: \"Paying a Social Call\" gives you your first, and a fence or the Trapper sells more afterwards. A poisoned one, made at a campfire with Oleander Sage, kills any NPC and scares off dangerous animals.",
+          "line": "Tips: \"Paying a Social Call\" gives you your first, and a fence or the Trapper sells more afterwards. A poisoned one, made at a campfire with Oleander Sage, kills any NPC and scares off dangerous animals. Poisoned knives turn plain once recovered; the improved knife, made with rare bird feathers, may kill outright.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Throwing_Knife_(RDR_2)",
@@ -428,7 +438,10 @@
                 "This projectile is provided during \"Paying a Social Call\", and can be purchased from a Fence or the Trapper after completion.",
                 "the Poison Throwing Knife, also craftable at a campfire, can be crafted with an existing throwing knife and Oleander Sage.",
                 "Equipping a poisoned throwing knife and initiating any sort of attack with an NPC regardless of health will guarantee certain death.",
-                "Legendary Animals and dangerous wild animals like grizzly bears, cougars and panthers can be dealt with using one poisoned knife attack and they will run away from the player when hit, instead of staying and fighting back."
+                "Legendary Animals and dangerous wild animals like grizzly bears, cougars and panthers can be dealt with using one poisoned knife attack and they will run away from the player when hit, instead of staying and fighting back.",
+                "Poisoned throwing knives turn into regular throwing knives after being recovered.",
+                "The Improved Throwing Knife can be crafted at a campfire with an existing throwing knife and rare bird feathers",
+                "NPCs can survive being hit with a regular throwing knife while improved throwing knives may guarantee an instant kill."
               ]
             }
           ]
@@ -568,14 +581,15 @@
           ]
         },
         {
-          "line": "Tips: Chapter 3's \"Preaching Forgiveness as He Went\" gives you one, and every gunsmith sells it afterwards. Killing a bounty hunter in \"The First Shall Be Last\" gets you one earlier.",
+          "line": "Tips: Chapter 3's \"Preaching Forgiveness as He Went\" gives you one, and every gunsmith sells it afterwards. Killing a bounty hunter in \"The First Shall Be Last\" gets you one earlier. Lawmen at public executions in Valentine and Saint Denis may carry one.",
           "drawn_from": [
             {
               "page": "https://reddead.fandom.com/wiki/Bolt_Action_Rifle_(RDR_2)",
               "revision": "476807",
               "quoted": [
                 "This rifle is provided during \"Preaching Forgiveness as He Went\" in Chapter 3. It is then available from all gunsmiths after the mission.",
-                "The rifle can be obtained early in the Chapter 2 mission \"The First Shall Be Last\" by killing a bounty hunter."
+                "The rifle can be obtained early in the Chapter 2 mission \"The First Shall Be Last\" by killing a bounty hunter.",
+                "The rifle can sometimes be found on lawmen during public executions in Valentine and Saint Denis."
               ]
             }
           ]

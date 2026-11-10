@@ -243,7 +243,7 @@ async def stop_voice_transcription(self):
     async with self._voice_lock:
         session = self._voice_session
     if session is None:
-        logger.info("voice: stop pressed, no recording was running")
+        logger.debug("voice: stop pressed, no recording was running")
         return {
             "stopped": True,
             "status": "idle",

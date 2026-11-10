@@ -4,7 +4,7 @@ import { toaster } from "@decky/api";
 import { describe, expect, it, vi } from "vitest";
 
 import { useVoiceAskInput } from "./useVoiceAskInput";
-import { getRpcCallLog, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
+import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 import { useVoiceTranscription } from "./useVoiceTranscription";
 
 // Spies on the real hook (still calling through to it) so a test can reach into the exact
@@ -307,5 +307,19 @@ describe("useVoiceAskInput when the speech model is still downloading", () => {
     expect(result.current.voiceRecording).toBe(false);
     expect(result.current.voiceStarting).toBe(false);
     expect(getRpcCallLog().some((c) => c.method === "get_voice_transcription_status")).toBe(false);
+  });
+});
+
+describe("useVoiceAskInput on the Main tab with the mic off", () => {
+  it("sends no stop to the back end when the screen comes and goes without a recording", async () => {
+    resetFakeDeckyRpc();
+    const { unmount } = renderHook(() =>
+      useVoiceAskInput({ setUnifiedInput: () => {}, unifiedInput: "", microphoneAccess: true, isAsking: false, uiT }),
+    );
+    unmount();
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 50));
+    });
+    expect(getRpcCallLog().some((c) => c.method === "stop_voice_transcription")).toBe(false);
   });
 });

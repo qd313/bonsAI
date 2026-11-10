@@ -102,6 +102,8 @@ export function useVoiceTranscription(
   const isMountedRef = useRef(true);
   const pollTimerRef = useRef<number | null>(null);
   const recordingRef = useRef(false);
+  /** A start call is on its way to the back end and has not come back yet. */
+  const startPendingRef = useRef(false);
   const baseTextRef = useRef("");
   /** The full box text the microphone last wrote this recording; null until it has written anything. */
   const lastWrittenRef = useRef<string | null>(null);
@@ -249,8 +251,10 @@ export function useVoiceTranscription(
       clearPollTimer();
       baseTextRef.current = currentInput;
       lastWrittenRef.current = null;
+      startPendingRef.current = true;
       try {
         const out = await call<[boolean], StartVoiceResult>("start_voice_transcription", isGameRunningNow());
+        startPendingRef.current = false;
         if (!isMountedRef.current || seq !== voiceSeqRef.current) return out;
         if (!out?.accepted) {
           const msg = out?.reason || out?.error || "Voice input could not start.";
@@ -260,6 +264,7 @@ export function useVoiceTranscription(
         void pollStatusOnce(seq);
         return out;
       } catch (e: unknown) {
+        startPendingRef.current = false;
         recordingRef.current = false;
         throw e;
       }
@@ -275,11 +280,14 @@ export function useVoiceTranscription(
 
   useEffect(() => {
     return () => {
+      // Only a recording (or a start still on its way) can need a stop. With the mic off, leaving the
+      // screen asks the back end to stop nothing, so its log stays free of "stop pressed" lines.
+      const mayBeRecording = recordingRef.current || startPendingRef.current;
       isMountedRef.current = false;
       voiceSeqRef.current += 1;
       recordingRef.current = false;
       clearPollTimer();
-      void call("stop_voice_transcription").catch(() => undefined);
+      if (mayBeRecording) void call("stop_voice_transcription").catch(() => undefined);
     };
   }, [clearPollTimer]);
 

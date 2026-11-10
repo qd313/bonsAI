@@ -141,3 +141,46 @@ describe("a failed status check on the screen", () => {
     expect(onError).not.toHaveBeenCalled();
   });
 });
+
+describe("leaving the screen", () => {
+  it("sends no stop when no recording was ever started (the mic stays off)", async () => {
+    resetFakeDeckyRpc();
+    const { unmount } = mountVoice();
+    unmount();
+    await settle();
+    expect(calls("stop_voice_transcription")).toBe(0);
+  });
+
+  it("still stops a recording that is running when the screen goes away", async () => {
+    resetFakeDeckyRpc();
+    setRpcHandler("start_voice_transcription", () => ({ accepted: true }));
+    setRpcHandler("stop_voice_transcription", () => stoppedReply);
+    holdStatusCheck();
+    const { result, unmount } = mountVoice();
+    await act(async () => {
+      await result.current.startVoiceTranscription("");
+    });
+    unmount();
+    await settle();
+    expect(calls("stop_voice_transcription")).toBe(1);
+  });
+
+  it("still stops a recording whose start call has not come back yet", async () => {
+    resetFakeDeckyRpc();
+    let release: (v: { accepted: boolean }) => void = () => {};
+    setRpcHandler("start_voice_transcription", () => new Promise((r) => (release = r)));
+    setRpcHandler("stop_voice_transcription", () => stoppedReply);
+    const { result, unmount } = mountVoice();
+    let pending: Promise<unknown> = Promise.resolve();
+    act(() => {
+      pending = result.current.startVoiceTranscription("");
+    });
+    unmount();
+    await act(async () => {
+      release({ accepted: true });
+      await pending;
+    });
+    await settle();
+    expect(calls("stop_voice_transcription")).toBeGreaterThanOrEqual(1);
+  });
+});

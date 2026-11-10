@@ -114,12 +114,12 @@ class VoiceStartStopLogging(PluginSettingsFileMixin, unittest.IsolatedAsyncioTes
         self.assertEqual(len(lines), 1)
         self.assertIn("stopped", lines[0])
 
-    async def test_stop_logs_even_when_nothing_was_recording(self) -> None:
+    async def test_stop_with_nothing_recording_is_a_debug_line_not_a_log_line(self) -> None:
         self.plugin._voice_session = None
         await self.plugin.stop_voice_transcription()
-        lines = _lines(self.logger)
-        self.assertEqual(len(lines), 1)
-        self.assertIn("no recording", lines[0])
+        self.assertEqual(_lines(self.logger), [])
+        self.logger.debug.assert_called_once()
+        self.assertIn("no recording", str(self.logger.debug.call_args.args[0]))
 
 
 if __name__ == "__main__":

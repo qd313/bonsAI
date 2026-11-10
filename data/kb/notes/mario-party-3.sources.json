@@ -1,0 +1,404 @@
+{
+  "wiki": "Super Mario Wiki (https://www.mariowiki.com/api.php)",
+  "licence_printed_by_fetcher": "Super Mario Wiki (MediaWiki 1.43.11) licence: Attribution-ShareAlike 4.0 International https://creativecommons.org/licenses/by-sa/4.0/",
+  "licence_stored": "CC-BY-SA-4.0 (the fetcher prints 'Attribution-ShareAlike 4.0 International'; the library stores the versioned form, and data/kb/NOTICE.md lists Super Mario Wiki as CC-BY-SA-4.0)",
+  "game_id": 28,
+  "game": "Mario Party 3",
+  "read_on": "2026-11-09",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://www.mariowiki.com/api.php --titles <pages>, run through .scratch/fetch_by_title.py because the wiki's firewall refused the reader's oldid= render call tonight (HTTP 403); the wrapper asks for the page by title instead and refuses the page if the revision returned differs from the one the reader resolved. Page text as rendered by the wiki, link markup removed. Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named (a quote with ' ... ' is several fragments in order, used for table rows). Several Super Mario Wiki pages describe the whole series; a line states a Mario Party 3 fact only where the page says so for Mario Party 3, or says Mario Party 3 behaves as an earlier game does, and a line says so when it does.",
+  "sections": [
+    {
+      "section_id": 3000,
+      "name": "Boo",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Boo",
+      "main_revision": "5532404",
+      "lines": [
+        {
+          "line": "Summary: A ghost found on every board that steals coins or a Star from another player on behalf of whoever uses it, and the Boo Bell item calls one up on demand. The wiki's Boo page says Boos behave in Mario Party 3 exactly as in the previous two games.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Boo",
+              "revision": "5532404",
+              "quoted": [
+                "Boos are features on every board, behaving identically as in the previous two games. They are part of the returning Boo Bell item once more."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Boo",
+              "revision": "5532404",
+              "quoted": [
+                "they provide the player character with the option stealing either a number of coins from an opponent for free or a Star for 50 coins, on their behalf."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Boo_Bell",
+              "revision": "5443572",
+              "quoted": [
+                "Its use is to ring for Boo and ask him to steal coins or a star"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: If a Boo goes after your coins you can fight it off by pressing the A button quickly (the Mario Party 2 rule, which the Boo page says Boos still follow in Mario Party 3). Holding a Boo Repellant makes the Boo flee without stealing anything.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Boo",
+              "revision": "5532404",
+              "quoted": [
+                "If the Boo tries to steal Coins, the opponent can fight it off by pressing the A button quickly.",
+                "Boos are features on every board, behaving identically as in the previous two games."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Boo_Repellant",
+              "revision": "5499703",
+              "quoted": [
+                "When Boo tries to steal coins or a Star from a player holding a Boo Repellant, the item automatically activates, spraying gas at Boo and causing him to flee without stealing anything."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Usually a white round ghost with stubby arms and a small tail, with a wide smile showing four upper fangs and a large tongue.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Boo",
+              "revision": "5532404",
+              "quoted": [
+                "Boos are usually white spherical ghosts with stubby arms and a small tail behind them.",
+                "They have a mouth usually open in a wide smile, with four upper fangs and a large tongue sticking out of it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Under the Mario Party 2 rules, which the Boo page says carry over, Boo charges five coins to steal coins and can take at most 30 coins or one Star. On Waluigi's Island a Boo instead offers you two paths, one of them rigged to send you back to the start. Boo is also a Duel Mode partner: Yoshi starts with one, and it counterattacks for equal damage.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Boo",
+              "revision": "5532404",
+              "quoted": [
+                "Boo now charges five coins for stealing coins, of which it can take up to thirty of.",
+                "Additionally, the Boo can only steal a maximum of 30 coins or a maximum of one Star.",
+                "Boos have a unique role in Waluigi's Island, where they present two paths to the player character upon being encountered: one of them is rigged and leads to the start, while the other allows the player character to continue along.",
+                "One is partnered with Yoshi by default in Duel Mode Partners; it counterattacks an opponent (except Thwomps) to deliver equal damage"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3001,
+      "name": "Bowser and the Bowser Space",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Mario_Party_3",
+      "main_revision": "5520638",
+      "lines": [
+        {
+          "line": "Summary: Landing on a Bowser Space makes Bowser appear, and he usually tries to steal coins, may give you items, or may curse every player. Bowser Spaces are fairly rare, one to five per board by default.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "Bowser Space ... If this space is landed on, then Bowser appears. He usually tries to steal Coins from players. He may also give players certain items, or cast curses on all players."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bowser_Space",
+              "revision": "5532948",
+              "quoted": [
+                "Bowser Spaces tend to be fairly rare, with one to five on each board by default"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: In Mario Party 3 the event roulette is not random: it always stops on the event the cursor is hanging over when you press the button, so with precise timing you pick the event. A player with no coins is spared: Bowser pays 30, 40 or 50 coins depending on placement and no event happens, and no Stars are lost.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser_Space",
+              "revision": "5532948",
+              "quoted": [
+                "Unlike in previous games, the result of the Bowser Event roulette is not random, allowing the player to select an event from those available with precise timing; the roulette always stops on the event that the cursor is hanging over when",
+                "If a player without any coins lands on a Bowser Space, Bowser pays them either 30, 40, or 50 coins (depending on placement) and does not trigger an event. Unlike in the first Mario Party, no Stars are lost if the player possesses any when this happens."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Bowser flashes a color when an event starts: purple for Bowser's Curse, green for Bowser's Reverse Curse, yellow for Bowser Shuffle and red for Bowser Revolution.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser_Space",
+              "revision": "5532948",
+              "quoted": [
+                "Bowser Revolution: This event is unchanged from the previous games mechanically, but Bowser now flashes red during this event.",
+                "Bowser's Curse: Bowser flashes purple",
+                "Bowser's Reverse Curse: Bowser flashes green",
+                "Bowser Shuffle: Bowser flashes yellow"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Bowser's Curse limits every player's next move to 1 to 3 spaces, like a Poison Mushroom, and Bowser's Reverse Curse makes every player move backwards on their next turn, like a Reverse Mushroom, unless they use an item that cancels the effect. Bowser Shuffle randomly shuffles all four players' positions, and he can also hand you a Bowser Phone (rarely two) or a Bowser Suit for free.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser_Space",
+              "revision": "5532948",
+              "quoted": [
+                "Bowser's Curse: Bowser flashes purple, then places a curse on all four players that forces them to move 1–3 spaces on their next turn, much like a Poison Mushroom, unless they use an item that cancels the effect.",
+                "Bowser's Reverse Curse: Bowser flashes green, then places a curse on all four players that forces them to move backwards on their next turn, much like a Reverse Mushroom, unless they use an item that cancels the effect.",
+                "Bowser Shuffle: Bowser flashes yellow, then uses his magic to randomly shuffle all four players' positions on the board.",
+                "Bowser Phone Giveaway: Bowser gives the player a Bowser Phone for free. Rarely, Bowser gives the player two Bowser Phones.",
+                "Bowser Suit Giveaway: Bowser gives the player a Bowser Suit for free."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3002,
+      "name": "Game Guy and the Game Guy Space",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Game_Guy_Space",
+      "main_revision": "5411750",
+      "lines": [
+        {
+          "line": "Summary: A game-show host who takes all your coins when you land on his space, then runs a luck-based minigame in which you either get them back doubled (or more) or lose them all. Game Guy Spaces turn up in both Party Mode and Duel Mode.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Game_Guy_Space",
+              "revision": "5411750",
+              "quoted": [
+                "If the player lands on that space, Game Guy flies by, takes all of their coins, and then leads the player to a Game Guy minigame. These mostly luck-based minigames determine if the player takes the coins back doubled (or more, depending on the minigame) or if they lose them all."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "Game Guy Space ... Players who land on this space have to hand over all of their Coins to Game Guy.",
+                "Game Guy Space ... When a player lands on this space, then they must hand over all of their Coins to Game Guy."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: His four minigames are Game Guy's Lucky 7, Game Guy's Magic Boxes, Game Guy's Roulette and Game Guy's Sweet Surprise, and they are mostly luck-based. Players can usually double their coins or lose all of them, though they can risk their money for higher multiples.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Game_Guy_Space",
+              "revision": "5411750",
+              "quoted": [
+                "Game Guy's Lucky 7",
+                "Game Guy's Magic Boxes",
+                "Game Guy's Roulette",
+                "Game Guy's Sweet Surprise",
+                "These mostly luck-based minigames"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Game_Guy",
+              "revision": "5412974",
+              "quoted": [
+                "Game Guy owns four minigames: Game Guy's Lucky 7, Game Guy's Magic Boxes, Game Guy's Roulette, and Game Guy's Sweet Surprise.",
+                "Players can usually double their coins or lose all coins, though they can risk their money for higher multiples."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A Shy Guy with a yellowish mask and a bowtie.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Game_Guy",
+              "revision": "5412974",
+              "quoted": [
+                "He is a Shy Guy who sports a yellowish mask, a bowtie, and a natural showman's attitude."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Lucky Charm item sends a chosen player, even yourself, to a Game Guy minigame without landing on his space. You can practice in Game Guy's Room: you start with 10 coins, can bet up to 100, and aim for 1,000; winning unlocks the rare minigame Mario's Puzzle Party Pro, but the room itself opens only after Story Mode is beaten with at least eight S rankings.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Game_Guy",
+              "revision": "5412974",
+              "quoted": [
+                "Players can also call Game Guy on themselves or other players by using the Lucky Charm without needing to land on his space.",
+                "Here, the player is given 10 coins and can bet any number of coins held, up to 100 coins. The goal is to reach 1,000 coins, but losing all of them ends the game. Winning this challenge unlocks the Rare minigame Mario's Puzzle Party Pro"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "The Story Mode must be beaten with at least eight S rankings for this room to be unlocked."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3003,
+      "name": "Evil Woody",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Evil_Woody",
+      "main_revision": "5466203",
+      "lines": [
+        {
+          "line": "Summary: The sour tree on the Woody Woods board: land on one of the Happening Spaces around him and he makes you pick a fruit that costs you, either a Minus Coin Fruit (lose five coins) or a Reverse Block Fruit (roll and move backwards).",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Evil_Woody",
+              "revision": "5466203",
+              "quoted": [
+                "Evil Woody is Woody's counterpart who debuts in Mario Party 3 in Woody Woods.",
+                "he will award them a Minus Coin Fruit (resulting in a loss of five coins) or a Reverse Block Fruit allowing the player to roll again but go in reverse."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "Action Time also happens when a player lands on a Happening Space at the Evil Woody. He makes the player choose from one of these two fruits: a Minus Coin Fruit (which takes away five Coins from the player) or a Reverse Block Fruit (which makes the player roll a Dice Block and go in reverse)."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: You choose one of the two fruits yourself, but if you pick neither Evil Woody always gives you the Reverse Block Fruit, so the only way to avoid the backwards move is to choose the Minus Coin Fruit.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Evil_Woody",
+              "revision": "5466203",
+              "quoted": [
+                "If the player does not choose either fruit, Evil Woody will always give them a Reverse Block Fruit."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "If the player fails to select a fruit in either of these events, they will forcibly receive the dice-related option."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: The mirror image of Woody: blue with purple leaves and a permanently angry expression.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Evil_Woody",
+              "revision": "5466203",
+              "quoted": [
+                "Contrasting with Woody's perpetually happy expression and kind-hearted attitude, Evil Woody has a perpetually angry expression and a hostile attitude. His color palette is also an inversion of Woody's color palette, being blue with purple leaves."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Three ? Spaces surround Evil Woody. The kind Woody on the same board offers a Plus Coin Fruit (five coins) or a Plus Block Fruit (a second dice roll) instead, and if you pick neither he gives you the extra Dice Block.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Evil_Woody",
+              "revision": "5466203",
+              "quoted": [
+                "if a player lands on one of the three ? Spaces surrounding Evil Woody"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "a Plus Coin Fruit (which gives the player five Coins) or a Plus Block Fruit (which makes the player roll the Dice Block a second time)"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Woody",
+              "revision": "5432043",
+              "quoted": [
+                "The player can decide not to choose either fruit; by doing so, Woody always gives an extra Dice Block to the player."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3004,
+      "name": "Deep Bloober Sea's torpedo and anglerfish traps",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Deep_Bloober_Sea",
+      "main_revision": "5162335",
+      "lines": [
+        {
+          "line": "Summary: Deep Bloober Sea's sea creatures work against you: a Sushi in a submarine can blast you onto the other path, a giant vacuum anglerfish can suck you in and spit you out, and a giant Blooper Baby calls its mother to carry you across the board.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Deep_Bloober_Sea",
+              "revision": "5162335",
+              "quoted": [
+                "Every time players get here, the shark makes them press one of four buttons before taking the path they chose.",
+                "Landing on a Happening Space near the giant Blooper Baby makes it call for its mother, whose huge tentacle takes the player to the other side of the board.",
+                "Action Time happens when someone lands on a Happening Space next to a giant vacuum anglerfish."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: At the submarine junction three of the four buttons do nothing and one fires a torpedo that blasts you to the opposite path; the buttons do not reset until the incorrect one is chosen, and sometimes the Sushi fails to notice you at all. Against the anglerfish, keep tapping the button to swim against the suction, or you are sucked in.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Deep_Bloober_Sea",
+              "revision": "5162335",
+              "quoted": [
+                "Three buttons do nothing, allowing safe passage, but one fires a torpedo at the player, blasting them to the opposite path. Additionally, the buttons do not reset until the incorrect one is chosen. Sometimes the Sushi will fail to notice the player, allowing them to safely pass by.",
+                "Players need to tap to swim against the suction. Anyone who fails is sucked into the fish"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A Sushi (a shark) in a submarine looking over the main junction, a giant vacuum anglerfish with an arrow on it that spins, and a giant Blooper Baby.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Deep_Bloober_Sea",
+              "revision": "5162335",
+              "quoted": [
+                "the main one is looked over by a Sushi in a submarine.",
+                "giant vacuum anglerfish",
+                "The arrow on the fish spins around",
+                "the giant Blooper Baby"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The anglerfish's arrow stops pointing to the bottom, the front or the right, and a player who is sucked in lands near a Sushi, near Boo, or back at the start. Of the board's 93 spaces, 5 are Bowser Spaces and 2 are Game Guy Spaces.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Deep_Bloober_Sea",
+              "revision": "5162335",
+              "quoted": [
+                "The arrow on the fish spins around, then points to the bottom, the front, or the right.",
+                "landing near a Sushi, Boo, or back at the start.",
+                "Bowser Spaces ... 5",
+                "Game Guy Spaces ... 2",
+                "Total of Spaces ... 93"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

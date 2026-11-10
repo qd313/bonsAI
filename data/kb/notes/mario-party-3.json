@@ -1,0 +1,61 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 3000,
+      "game_id": 28,
+      "section_type": "enemy",
+      "name": "Boo",
+      "card": "Summary: A ghost found on every board that steals coins or a Star from another player on behalf of whoever uses it, and the Boo Bell item calls one up on demand. The wiki's Boo page says Boos behave in Mario Party 3 exactly as in the previous two games.\nWeak points: If a Boo goes after your coins you can fight it off by pressing the A button quickly (the Mario Party 2 rule, which the Boo page says Boos still follow in Mario Party 3). Holding a Boo Repellant makes the Boo flee without stealing anything.\nLooks like: Usually a white round ghost with stubby arms and a small tail, with a wide smile showing four upper fangs and a large tongue.\nTips: Under the Mario Party 2 rules, which the Boo page says carry over, Boo charges five coins to steal coins and can take at most 30 coins or one Star. On Waluigi's Island a Boo instead offers you two paths, one of them rigged to send you back to the start. Boo is also a Duel Mode partner: Yoshi starts with one, and it counterattacks for equal damage.",
+      "source_url": "https://www.mariowiki.com/Boo",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5532404",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3001,
+      "game_id": 28,
+      "section_type": "enemy",
+      "name": "Bowser and the Bowser Space",
+      "card": "Summary: Landing on a Bowser Space makes Bowser appear, and he usually tries to steal coins, may give you items, or may curse every player. Bowser Spaces are fairly rare, one to five per board by default.\nWeak points: In Mario Party 3 the event roulette is not random: it always stops on the event the cursor is hanging over when you press the button, so with precise timing you pick the event. A player with no coins is spared: Bowser pays 30, 40 or 50 coins depending on placement and no event happens, and no Stars are lost.\nLooks like: Bowser flashes a color when an event starts: purple for Bowser's Curse, green for Bowser's Reverse Curse, yellow for Bowser Shuffle and red for Bowser Revolution.\nTips: Bowser's Curse limits every player's next move to 1 to 3 spaces, like a Poison Mushroom, and Bowser's Reverse Curse makes every player move backwards on their next turn, like a Reverse Mushroom, unless they use an item that cancels the effect. Bowser Shuffle randomly shuffles all four players' positions, and he can also hand you a Bowser Phone (rarely two) or a Bowser Suit for free.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5520638",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3002,
+      "game_id": 28,
+      "section_type": "enemy",
+      "name": "Game Guy and the Game Guy Space",
+      "card": "Summary: A game-show host who takes all your coins when you land on his space, then runs a luck-based minigame in which you either get them back doubled (or more) or lose them all. Game Guy Spaces turn up in both Party Mode and Duel Mode.\nWeak points: His four minigames are Game Guy's Lucky 7, Game Guy's Magic Boxes, Game Guy's Roulette and Game Guy's Sweet Surprise, and they are mostly luck-based. Players can usually double their coins or lose all of them, though they can risk their money for higher multiples.\nLooks like: A Shy Guy with a yellowish mask and a bowtie.\nTips: The Lucky Charm item sends a chosen player, even yourself, to a Game Guy minigame without landing on his space. You can practice in Game Guy's Room: you start with 10 coins, can bet up to 100, and aim for 1,000; winning unlocks the rare minigame Mario's Puzzle Party Pro, but the room itself opens only after Story Mode is beaten with at least eight S rankings.",
+      "source_url": "https://www.mariowiki.com/Game_Guy_Space",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5411750",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3003,
+      "game_id": 28,
+      "section_type": "enemy",
+      "name": "Evil Woody",
+      "card": "Summary: The sour tree on the Woody Woods board: land on one of the Happening Spaces around him and he makes you pick a fruit that costs you, either a Minus Coin Fruit (lose five coins) or a Reverse Block Fruit (roll and move backwards).\nWeak points: You choose one of the two fruits yourself, but if you pick neither Evil Woody always gives you the Reverse Block Fruit, so the only way to avoid the backwards move is to choose the Minus Coin Fruit.\nLooks like: The mirror image of Woody: blue with purple leaves and a permanently angry expression.\nTips: Three ? Spaces surround Evil Woody. The kind Woody on the same board offers a Plus Coin Fruit (five coins) or a Plus Block Fruit (a second dice roll) instead, and if you pick neither he gives you the extra Dice Block.",
+      "source_url": "https://www.mariowiki.com/Evil_Woody",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5466203",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3004,
+      "game_id": 28,
+      "section_type": "enemy",
+      "name": "Deep Bloober Sea's torpedo and anglerfish traps",
+      "card": "Summary: Deep Bloober Sea's sea creatures work against you: a Sushi in a submarine can blast you onto the other path, a giant vacuum anglerfish can suck you in and spit you out, and a giant Blooper Baby calls its mother to carry you across the board.\nWeak points: At the submarine junction three of the four buttons do nothing and one fires a torpedo that blasts you to the opposite path; the buttons do not reset until the incorrect one is chosen, and sometimes the Sushi fails to notice you at all. Against the anglerfish, keep tapping the button to swim against the suction, or you are sucked in.\nLooks like: A Sushi (a shark) in a submarine looking over the main junction, a giant vacuum anglerfish with an arrow on it that spins, and a giant Blooper Baby.\nTips: The anglerfish's arrow stops pointing to the bottom, the front or the right, and a player who is sucked in lands near a Sushi, near Boo, or back at the start. Of the board's 93 spaces, 5 are Bowser Spaces and 2 are Game Guy Spaces.",
+      "source_url": "https://www.mariowiki.com/Deep_Bloober_Sea",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5162335",
+      "crawled_at": "2026-11-09"
+    }
+  ]
+}

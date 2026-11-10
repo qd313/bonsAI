@@ -220,7 +220,7 @@
           ]
         },
         {
-          "line": "Weak points: Their only weak spot is their relatively small face. Weapons with armor-piercing mods, or the Penetrating legendary modifier, help against their armored exoskeletons.",
+          "line": "Weak points: The face is its only weak spot, and a small one. Armor-piercing weapon mods and the Penetrating legendary modifier raise your damage against their reinforced exoskeletons.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Radscorpion_(Fallout_4)",
@@ -287,7 +287,7 @@
           ]
         },
         {
-          "line": "Weak points: Unlike many other creatures, yao guai do not take increased damage from being shot in the head. The stunted yao guai, with minor malformations, is less of a threat than the other kinds.",
+          "line": "Weak points: A shot to the head does no extra damage, unlike with many other creatures. Stunted yao guai, which have minor malformations, are less of a threat than the other kinds.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Yao_guai_(Fallout_4)",
@@ -355,7 +355,7 @@
           ]
         },
         {
-          "line": "Weak points: The face is unarmored but a small target, and a charging mirelurk often lowers its head to protect it, though the face is exposed once it starts close combat. Its extremities are also more vulnerable than the rest of the body, though not as much as the face.",
+          "line": "Weak points: Its face has no armor but is a small target, and a charging mirelurk often ducks its head to guard it, though the face is exposed once it is in close combat. The limbs are more vulnerable than the body, but less so than the face.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mirelurk_(Fallout_4)",
@@ -415,7 +415,7 @@
           ]
         },
         {
-          "line": "Weak points: A common raider is the weakest of the cannon fodder, armed with pipe guns and little health, and survives only a few hits even from basic weapons. Raider veterans are among the toughest, with a high health pool and higher tier weapons, and they are almost never encountered alone.",
+          "line": "Weak points: A common raider is the weakest of the rank-and-file raiders, with pipe guns and little health, and goes down after a few hits even from basic weapons. Raider veterans are among the toughest, with a lot of health and higher-tier weapons, and are almost never alone.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Raider_(Fallout_4)",
@@ -481,7 +481,7 @@
           ]
         },
         {
-          "line": "Weak points: After engaging you for too long it enters a cooldown, blasting steam out of its back and exposing its dual fusion cores, and hitting the exposed fusion cores is the best way to damage it. With the Penetrator perk you can target and destroy the cores in V.A.T.S. without waiting. Unlike other robots it has no combat inhibitor.",
+          "line": "Weak points: If a fight with it drags on, it cools down: it vents steam from its back and exposes two fusion cores, and those exposed cores are the best place to hit it. With the Penetrator perk you can skip the wait and aim at the cores in V.A.T.S. at once. It has no combat inhibitor, unlike other robots.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Sentry_bot_(Fallout_4)",
@@ -608,7 +608,7 @@
           ]
         },
         {
-          "line": "Weak points: It has several targetable sections: the torso, right eye, middle eye, left eye, combat inhibitor, thruster and arms. If an eye is broken its firing accuracy suffers, and disabling the thruster slows it down and removes its strafing ability. Breaking all of the arms makes it attempt a suicide rush on you.",
+          "line": "Weak points: You can target its torso, right eye, middle eye, left eye, combat inhibitor, thruster and arms. Breaking an eye makes its shooting less accurate, and disabling the thruster slows it and stops it strafing. Breaking all of its arms sends it into a suicide rush at you.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Mister_Gutsy_(Fallout_4)",
@@ -672,7 +672,7 @@
           ]
         },
         {
-          "line": "Uses: A mini nuke travels about 20 yards before it hits when the launcher is held level on even terrain, so angle it upward for anything farther. The experimental MIRV launcher mod, which needs Gun Nut 4 and Science! 4, fires six mini nukes in a cluster that separates in mid-air, which drastically reduces range but raises overall damage and area of effect.",
+          "line": "Uses: A mini nuke travels about 20 yards before it hits when the launcher is held level on even terrain, so angle it upward for anything farther. With the experimental MIRV launcher mod (Gun Nut 4 and Science! 4) it launches six mini nukes in one cluster that splits apart in the air, which cuts its range drastically but adds damage and area of effect.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Fat_Man_(Fallout_4)",
@@ -775,7 +775,7 @@
       "main_revision": "4686458",
       "lines": [
         {
-          "line": "Summary: A heavy weapon that fires any junk items you load into its hopper, such as desk fans, tin cans, teddy bears and Nuka-Cola bottles.",
+          "line": "Summary: A heavy weapon that shoots any junk you put in its hopper, for example desk fans, tin cans, teddy bears or Nuka-Cola bottles.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Junk_Jet_(Fallout_4)",
@@ -840,7 +840,7 @@
           ]
         },
         {
-          "line": "Uses: It replenishes a large number of hit points for a drink, 40 per second for 10 seconds, and its listing shows +400 hit points, +100 action points and +5 radiation. It is non-addictive, and in Survival mode it counts as a caffeinated drink.",
+          "line": "Uses: It gives back a lot of hit points for a drink, 40 each second for 10 seconds, and its listing shows +400 hit points, +100 action points and +5 radiation. It is non-addictive, and in Survival mode it counts as a caffeinated drink.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Nuka-Cola_Quantum_(Fallout_4)",

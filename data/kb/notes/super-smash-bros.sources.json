@@ -298,6 +298,322 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3305,
+      "name": "Hammer",
+      "kind": "item",
+      "main_page": "https://www.ssbwiki.com/Hammer_(item)",
+      "main_revision": "2060174",
+      "lines": [
+        {
+          "line": "Summary: A close-range item: whoever grabs it swings it back and forth non-stop, and in the first game each hit does 30% damage with very high knockback.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Hammer_(item)",
+              "revision": "2060174",
+              "quoted": [
+                "is a close-range item that appears in all Super Smash Bros. games.",
+                "it sends them into a unique state that inflicts significant damage and knockback.",
+                "the effects of the Hammer are even more formidable in Super Smash Bros., where the Hammer instead does 30% damage with even more knockback."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: While you hold it you keep swinging, and you cannot jump in midair, use other attacks or defend. You cannot drop it on purpose; only being sent tumbling makes you let go. It can chain into itself for 60%, which will likely KO.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Hammer_(item)",
+              "revision": "2060174",
+              "quoted": [
+                "they will constantly swing the hammer back and forth, and will be unable to midair jump, use any other attacks, or defend.",
+                "The Hammer also cannot be manually dropped unless the user has been sent into a state of tumbling.",
+                "The Hammer can also \"chain\" into itself, doing 60% and likely KOing the opponent."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The item list calls it one of the most feared items for its range, damage and knockback, but its wielder cannot use special moves or jump in the air, so knocking them off a ledge while they swing can KO them. Careful hitbox placement can also interrupt the swing.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Item",
+              "revision": "2061935",
+              "quoted": [
+                "One of the most feared items in the game due to its range, damage, and knockback."
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Hammer_(item)",
+              "revision": "2060174",
+              "quoted": [
+                "As the wielder of the hammer cannot use special moves or midair jump, sending an opponent off a ledge while they swing the Hammer can effectively KO them unless they can somehow drop the Hammer.",
+                "particularly careful hitbox placement by other characters can potentially interrupt the wielder."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3306,
+      "name": "Ray Gun",
+      "kind": "item",
+      "main_page": "https://www.ssbwiki.com/Ray_Gun",
+      "main_revision": "2044738",
+      "lines": [
+        {
+          "line": "Summary: A long-range laser gun that holds 16 shots. In the first game each shot does 10% electric damage with vertical knockback.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Ray_Gun",
+              "revision": "2044738",
+              "quoted": [
+                "A Ray Gun can be shot 16 times before it runs out of ammunition.",
+                "In the original Super Smash Bros. the shots deal 10% electric damage per shot, vertical knockback, and can be fired every 30 frames."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: You can fire one shot every 30 frames, and the blasts have infinite horizontal range. Like other shooting items it replaces your neutral attack, and once it is empty it only shoots blanks.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Ray_Gun",
+              "revision": "2044738",
+              "quoted": [
+                "can be fired every 30 frames."
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Item",
+              "revision": "2061935",
+              "quoted": [
+                "Fires blasts of energy that have infinite horizontal range.",
+                "Shooting items fire projectiles when used, typically replacing the neutral attack and neutral aerial of the user. They all have limited ammunition and will merely shoot blanks once it runs out."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The shots can be reflected or absorbed, and the gun itself can only be reflected when thrown. In the first game you cannot move while firing it: firing while walking only arrived in Brawl.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Ray_Gun",
+              "revision": "2044738",
+              "quoted": [
+                "The shots can be reflected or absorbed, while the gun itself (when thrown) can only be reflected.",
+                "Starting in Brawl, (along with other shooting items) the Ray Gun can be fired while walking."
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Fire_Flower",
+              "revision": "2043156",
+              "quoted": [
+                "While characters could not move while using the item in the first two games, shooting items were later changed in Brawl as to allowing running and jumping while shooting such items"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3307,
+      "name": "Bob-omb",
+      "kind": "item",
+      "main_page": "https://www.ssbwiki.com/Bob-omb",
+      "main_revision": "2063637",
+      "lines": [
+        {
+          "line": "Summary: A bomb with two little legs and a wind-up key on its back. Thrown at an enemy it explodes with large damage and knockback, but if it is left alone it lights its own fuse and starts walking around.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Bob-omb",
+              "revision": "2063637",
+              "quoted": [
+                "They are bomb-like enemies with simple eyes that feature two little legs and a wind-up key on the back.",
+                "Being an explosive, the item can easily inflict large damage and knockback to other players, but it can also potentially harm the attacker."
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Item",
+              "revision": "2061935",
+              "quoted": [
+                "If not grabbed within a few seconds of its appearance, it lights its own fuse and begins walking around, exploding on any character it meets."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Pick it up and throw it at an opponent. It can also hurt the thrower, and it explodes if it is simply hit by an attack.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Bob-omb",
+              "revision": "2063637",
+              "quoted": [
+                "Bob-ombs can be picked up by any player and subsequently thrown at opponents.",
+                "Bob-ombs also explode if they are simply hit by an attack.",
+                "but it can also potentially harm the attacker."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If nobody picks it up, it stands up and walks back and forth on the platform it spawned on, turning around at edges, and explodes if it walks into a fighter. If it meets nobody it blows itself up after a while.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Bob-omb",
+              "revision": "2063637",
+              "quoted": [
+                "If a Bob-omb is not picked up, after a while, it will stand up and begin to walk back and forth on the platform it spawned on, turning around at edges. In this state, it will explode if it walks into a player."
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Item",
+              "revision": "2061935",
+              "quoted": [
+                "If it doesn't meet a character it will blow itself up after a while."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3308,
+      "name": "The 1P Game's final boss",
+      "kind": "boss",
+      "main_page": "https://www.ssbwiki.com/Master_Hand_(SSB)",
+      "main_revision": "2062983",
+      "lines": [
+        {
+          "line": "Summary: The final boss of the 1P Game, fought in stage 11 on Final Destination. It cannot be cleared by knocking it past the edge of the stage; you have to use up its 300 hit points.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/1P_Game",
+              "revision": "2062976",
+              "quoted": [
+                "The final stage takes place at the Final Destination",
+                "it can not be cleared by knocking the opponent out past the blast line, but only by reducing the opponent's stamina to 0 HP.",
+                "Master Hand on all difficulties has 300 HP."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Master Hand cannot be launched out of the blast zones and takes no knockback from your attacks, so the only way to win is to deplete his 300 hit points. Once he has under 100 HP left, his Finger Bullet attack fires three pairs of Bullet Bills instead of one.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Master_Hand_(SSB)",
+              "revision": "2062983",
+              "quoted": [
+                "receives no knockback from the player's attacks.",
+                "Master Hand cannot be defeated by being launched out of the blast zones. Instead, he has 300 hit points that must be depleted.",
+                "Master Hand makes the shape of a gun, and fires a pair of Bullet Bills. If Master Hand has less than 100 HP remaining, he will fire three pairs."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A large, gloved hand.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Master_Hand_(SSB)",
+              "revision": "2062983",
+              "quoted": [
+                "resembling a large, gloved hand"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Side Punch hits for 20% and punches across the stage, Big Swipe hits for 16% and slaps across the platform, and Floor Sweep sweeps across the stage several times at 12% a swipe. Power Punch hovers over you, then quickly punches down with electric effects.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Master_Hand_(SSB)",
+              "revision": "2062983",
+              "quoted": [
+                "Side Punch (サイドパンチ) 20%",
+                "Master Hand makes a fist and punches horizontally across the stage.",
+                "Big Swipe (ビッグスワイプ) 16%",
+                "Master Hand makes a wide slapping motion across the platform.",
+                "Floor Sweep (床の掃除) 12% per swipe",
+                "Master Hand sweeps across the stage several times, depending on the length of the platform.",
+                "Master Hand hovers over the target, then quickly punches down with electric effects."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3309,
+      "name": "Metal Mario",
+      "kind": "boss",
+      "main_page": "https://www.ssbwiki.com/Metal_Mario",
+      "main_revision": "2057092",
+      "lines": [
+        {
+          "line": "Summary: A sub-boss you fight in stage 9 of the 1P Game, only on the Meta Crystal stage. He rarely flinches, resists grabs and throws at low damage, and his attacks knock you back harder than normal.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Metal_Mario",
+              "revision": "2057092",
+              "quoted": [
+                "Metal Mario debuts as a sub-boss in Stage 9 of the 1P Game, fought exclusively on the Meta Crystal stage.",
+                "rarely flinches from standard attacks (never doing so at low damage percentages), resists grabs and throws at low percentages",
+                "While his attacks deal standard damage, they inflict noticeably increased knockback."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: He can take roughly 200% damage before he can be launched (it scales with the difficulty), but he is exceptionally vulnerable to edge-guarding: once he is knocked off the stage, his extreme falling speed badly hurts his recovery. An 8-frame jumpsquat also makes his aerial attacks slow.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Metal_Mario",
+              "revision": "2057092",
+              "quoted": [
+                "allows him to withstand roughly 200% damage before becoming susceptible to being launched, though this threshold scales with the chosen difficulty setting.",
+                "Metal Mario is exceptionally vulnerable to edge-guarding; once knocked offstage, his extreme falling speed severely impairs his recovery",
+                "an 8-frame jumpsquat makes aerial attacks sluggish for Metal Mario to execute."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: At first glance he looks like an alternate costume of Mario.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Metal_Mario",
+              "revision": "2057092",
+              "quoted": [
+                "he visually resembles an alternate costume of Mario at first glance"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: He never dashes and rarely jumps, pacing across the stage at a steady walk. On lower difficulties he is passive and mostly attacks when he is interrupted, and his aggression and knockback rise on higher settings. His AI is simple, largely walking left and right and occasionally attacking.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Metal_Mario",
+              "revision": "2057092",
+              "quoted": [
+                "Metal Mario never dashes and rarely jumps, instead pacing across the stage at a steady walk. On lower difficulties, he acts passively and attacks infrequently, typically only when he is interrupted. Metal Mario's aggression and knockback increase on higher settings."
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Metal_Mario_(SSB)",
+              "revision": "2040850",
+              "quoted": [
+                "His AI is very simple, largely just walking left and right and occasionally attacking."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

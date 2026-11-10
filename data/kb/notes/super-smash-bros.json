@@ -56,6 +56,61 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "2018945",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3305,
+      "game_id": 34,
+      "section_type": "item",
+      "name": "Hammer",
+      "card": "Summary: A close-range item: whoever grabs it swings it back and forth non-stop, and in the first game each hit does 30% damage with very high knockback.\nUses: While you hold it you keep swinging, and you cannot jump in midair, use other attacks or defend. You cannot drop it on purpose; only being sent tumbling makes you let go. It can chain into itself for 60%, which will likely KO.\nTips: The item list calls it one of the most feared items for its range, damage and knockback, but its wielder cannot use special moves or jump in the air, so knocking them off a ledge while they swing can KO them. Careful hitbox placement can also interrupt the swing.",
+      "source_url": "https://www.ssbwiki.com/Hammer_(item)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2060174",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3306,
+      "game_id": 34,
+      "section_type": "item",
+      "name": "Ray Gun",
+      "card": "Summary: A long-range laser gun that holds 16 shots. In the first game each shot does 10% electric damage with vertical knockback.\nUses: You can fire one shot every 30 frames, and the blasts have infinite horizontal range. Like other shooting items it replaces your neutral attack, and once it is empty it only shoots blanks.\nTips: The shots can be reflected or absorbed, and the gun itself can only be reflected when thrown. In the first game you cannot move while firing it: firing while walking only arrived in Brawl.",
+      "source_url": "https://www.ssbwiki.com/Ray_Gun",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2044738",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3307,
+      "game_id": 34,
+      "section_type": "item",
+      "name": "Bob-omb",
+      "card": "Summary: A bomb with two little legs and a wind-up key on its back. Thrown at an enemy it explodes with large damage and knockback, but if it is left alone it lights its own fuse and starts walking around.\nUses: Pick it up and throw it at an opponent. It can also hurt the thrower, and it explodes if it is simply hit by an attack.\nTips: If nobody picks it up, it stands up and walks back and forth on the platform it spawned on, turning around at edges, and explodes if it walks into a fighter. If it meets nobody it blows itself up after a while.",
+      "source_url": "https://www.ssbwiki.com/Bob-omb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2063637",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3308,
+      "game_id": 34,
+      "section_type": "boss",
+      "name": "The 1P Game's final boss",
+      "card": "Summary: The final boss of the 1P Game, fought in stage 11 on Final Destination. It cannot be cleared by knocking it past the edge of the stage; you have to use up its 300 hit points.\nWeak points: Master Hand cannot be launched out of the blast zones and takes no knockback from your attacks, so the only way to win is to deplete his 300 hit points. Once he has under 100 HP left, his Finger Bullet attack fires three pairs of Bullet Bills instead of one.\nLooks like: A large, gloved hand.\nTips: Side Punch hits for 20% and punches across the stage, Big Swipe hits for 16% and slaps across the platform, and Floor Sweep sweeps across the stage several times at 12% a swipe. Power Punch hovers over you, then quickly punches down with electric effects.",
+      "source_url": "https://www.ssbwiki.com/Master_Hand_(SSB)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2062983",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3309,
+      "game_id": 34,
+      "section_type": "boss",
+      "name": "Metal Mario",
+      "card": "Summary: A sub-boss you fight in stage 9 of the 1P Game, only on the Meta Crystal stage. He rarely flinches, resists grabs and throws at low damage, and his attacks knock you back harder than normal.\nWeak points: He can take roughly 200% damage before he can be launched (it scales with the difficulty), but he is exceptionally vulnerable to edge-guarding: once he is knocked off the stage, his extreme falling speed badly hurts his recovery. An 8-frame jumpsquat also makes his aerial attacks slow.\nLooks like: At first glance he looks like an alternate costume of Mario.\nTips: He never dashes and rarely jumps, pacing across the stage at a steady walk. On lower difficulties he is passive and mostly attacks when he is interrupted, and his aggression and knockback rise on higher settings. His AI is simple, largely walking left and right and occasionally attacking.",
+      "source_url": "https://www.ssbwiki.com/Metal_Mario",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2057092",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

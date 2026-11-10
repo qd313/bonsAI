@@ -38,6 +38,8 @@ the Mantis Lords", and three of the maintainer's that nobody touches); the publi
 3. `free -m`; no game (`pgrep -fl SteamLaunch`); `/api/ps` empty.
 4. The library: read `rag_corpus_version`. The seed folder's version:
    `python3 -c "import json;print(json.load(open('/home/deck/homebrew/settings/bonsAI/seed-knowledge-base/corpus-manifest.json'))['version'])"`.
+   **First keep a copy of the published one** (block DR removes it once the published library is back):
+   `cp -a <rag_corpus_path> /home/deck/p103-rag-published-backup` (skip if that folder already exists), then `ls -l` it.
    **Install the session's library:** Settings, Data, "Show Developer tab" on (found off; you put it back at the end);
    the Developer tab; walk to "Install seed knowledge base" (read the ring on it); A; wait up to 60 seconds;
    `rag_corpus_version` now reads the seed's version; `ls -l <rag_corpus_path>/`. Block DR puts the published library

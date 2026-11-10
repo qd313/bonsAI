@@ -56,6 +56,50 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "2044738",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3405,
+      "game_id": 25,
+      "section_type": "item",
+      "name": "Maxim Tomato and Heart Container",
+      "card": "Summary: The two healing items: each reduces the damage percentage of whoever picks it up. In Melee the Maxim Tomato heals 50% of a character's damage percentage and the Heart Container heals a total of 100%.\nUses: After you eat a Maxim Tomato and a brief moment passes, your damage meter slowly drains the amount, whether or not you pick up another item right afterwards. Damage you take while healing is subtracted from what the tomato heals: if an attack does 10% damage, you only recover 40%. Heart Containers drift toward the ground slowly and replenish 100 percentage points of health.\nLooks like: The Maxim Tomato is a small red tomato with a noticeable black and white M on the front.\nTips: In the All-Star Rest Area you are given three Heart Containers that can heal all of your damage instead of the standard 100%. Due to a glitch, entering the teleporter in Melee interrupts a Heart Container's healing, so it does not fully heal you.",
+      "source_url": "https://www.ssbwiki.com/Maxim_Tomato",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2062573",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3406,
+      "game_id": 25,
+      "section_type": "item",
+      "name": "Metal Box",
+      "card": "Summary: A transforming item that debuted in Melee: whoever breaks it becomes a Metal fighter for a short time, much heavier but slower and quicker to fall.\nUses: In Melee the effects last 12 seconds, though the time limit decreases as the fighter takes damage, especially from fire attacks. Weight is multiplied by 3.0 and walking speed by 0.7, while falling speed and gravity are both doubled.\nTips: The faster fall makes recoveries harder. In Melee, a Metal Box hit by a projectile disappears, but disjointed attacks and any attack from a sword-wielding character still break it and still turn the attacker into a Metal fighter.",
+      "source_url": "https://www.ssbwiki.com/Metal_Box",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2060964",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3407,
+      "game_id": 25,
+      "section_type": "item",
+      "name": "Super Star (Starman)",
+      "card": "Summary: An item from the Mario series, known as the Starman in Melee, that makes you invulnerable to all attacks for a short period of time.\nUses: All you need to do is touch it to power up. Melee repeats the first game's behaviour, where the fighter is invincible for ten seconds but does not damage opponents by touching them.\nLooks like: The fighter who grabs it is given a bright, sparkling appearance.\nTips: It bounces around in large arcs and eventually tumbles out of the stage, so touch it before it falls off. In Melee its theme music lowers the stage music's volume until the stage music is extremely difficult to hear.",
+      "source_url": "https://www.ssbwiki.com/Super_Star",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2066650",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3408,
+      "game_id": 25,
+      "section_type": "item",
+      "name": "Super Mushroom and Poison Mushroom",
+      "card": "Summary: Two Mario items that change your size for about ten seconds. The Super Mushroom, which debuted in Melee, makes you giant, and the Poison Mushroom makes you shrink.\nUses: The Super Mushroom raises your size, strength and mass, making it harder for foes to knock you off; in Melee it multiplies weight by 1.6 and the damage of direct attacks by 1.2, but gives no armor, so you still flinch from any knockback. The Poison Mushroom takes away power and mass, making you a prime target to get smashed offscreen with even a light attack.\nLooks like: The Poison Mushroom is a deceptive look-alike of the Super Mushroom, with a slightly darker coloration and angry eyes.\nTips: Both keep sliding to the right, but in Melee they slide left if they spawn on the right half of the stage. Touching one while under the effect of the other restores your normal size. In Melee, jumping at the moment a Super Mushroom's effects wear off gives a super jump almost as high as two jumps while wearing the Bunny Hood.",
+      "source_url": "https://www.ssbwiki.com/Super_Mushroom",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2063635",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

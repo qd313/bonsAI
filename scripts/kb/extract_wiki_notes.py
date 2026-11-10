@@ -165,6 +165,7 @@ _LICENCE_URL_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"by-sa/3\.0"), "CC-BY-SA-3.0"),
     (re.compile(r"by-sa/2\.5"), "CC-BY-SA-2.5"),
     (re.compile(r"/by/4\.0"), "CC-BY-4.0"),
+    (re.compile(r"publicdomain/zero/1\.0"), "CC0-1.0"),
 ]
 _LICENCE_TEXT_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"attribution[\s-]*share\s*alike\s*4\.0", re.I), "CC-BY-SA-4.0"),
@@ -174,6 +175,8 @@ _LICENCE_TEXT_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"attribution[\s-]*share\s*alike\s*2\.5", re.I), "CC-BY-SA-2.5"),
     (re.compile(r"\bby-sa\s*2\.5", re.I), "CC-BY-SA-2.5"),
     (re.compile(r"^attribution\s*4\.0", re.I), "CC-BY-4.0"),
+    (re.compile(r"\bCC0\b", re.I), "CC0-1.0"),
+    (re.compile(r"creative\s*commons\s*zero", re.I), "CC0-1.0"),
 ]
 
 

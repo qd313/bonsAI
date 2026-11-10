@@ -58,6 +58,8 @@ MAINTAINER_LICENSE = "bonsAI-maintainer"
 
 # Licence strings as stored on cards → deed URL (ATTR-2.2). ATTR-5.2 will later refuse an
 # unversioned "CC BY-SA" reaching a published corpus.
+CC0_LICENSE = "CC0-1.0"
+CC0_DEED_URL = "https://creativecommons.org/publicdomain/zero/1.0/"
 _LICENSE_DEED_URLS: dict[str, str] = {
     "CC-BY-4.0": "https://creativecommons.org/licenses/by/4.0/",
     "CC BY 4.0": "https://creativecommons.org/licenses/by/4.0/",
@@ -67,6 +69,8 @@ _LICENSE_DEED_URLS: dict[str, str] = {
     "CC BY-SA 3.0": "https://creativecommons.org/licenses/by-sa/3.0/",
     "CC-BY-SA-4.0": "https://creativecommons.org/licenses/by-sa/4.0/",
     "CC BY-SA 4.0": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "CC0-1.0": CC0_DEED_URL,
+    "CC0 1.0": CC0_DEED_URL,
     "GFDL": "https://www.gnu.org/licenses/fdl-1.3.html",
     "GNU Free Documentation License": "https://www.gnu.org/licenses/fdl-1.3.html",
 }
@@ -81,6 +85,8 @@ def licence_deed_url(license_name: str) -> str:
         return _LICENSE_DEED_URLS[raw]
     key = raw.upper().replace("_", "-")
     compact = key.replace(" ", "")
+    if compact.startswith("CC0"):
+        return CC0_DEED_URL
     for name, url in _LICENSE_DEED_URLS.items():
         if name.upper().replace(" ", "").replace("_", "-") == compact:
             return url
@@ -193,6 +199,8 @@ def _attributions_header_lines() -> list[str]:
         "  source site, the licence, and a link to the material (see the groups below).",
         "- **CC BY cards:** redistribution and adaptation are allowed with attribution under",
         "  that BY deed (no ShareAlike obligation from that card alone).",
+        "- **CC0 cards:** the source gave up every condition, so none apply. Those sources are",
+        "  listed in their own group below, credited as a courtesy only.",
         "- **Maintainer-authored** cards (`bonsAI-maintainer`, no `source_url`) credit nobody",
         "  beyond bonsAI; they are not third-party licensed material.",
         "- **Publish policy (D20):** the published corpus is distributed as one work under",
@@ -212,6 +220,31 @@ def _attributions_header_lines() -> list[str]:
     ]
 
 
+def _attribution_entry_lines(entry: dict[str, Any]) -> list[str]:
+    """The ATTRIBUTIONS.md block for one (source, licence) group."""
+    source = str(entry.get("source") or "").strip()
+    license_name = str(entry.get("license") or "").strip() or "(unspecified)"
+    page_url = str(entry.get("url") or "").strip()
+    deed = licence_deed_url(license_name)
+    captured = str(entry.get("captured") or "").strip()
+    lines = [f"### {source} · {license_name}", ""]
+    if deed:
+        lines.append(f"- Licence: [{license_name}]({deed})")
+    else:
+        lines.append(f"- Licence: {license_name}")
+    if page_url:
+        lines.append(f"- Example page: {page_url}")
+    if captured:
+        lines.append(f"- Oldest capture in this group: {captured}")
+    cards = entry.get("cards") or []
+    if cards:
+        lines.append("- Cards:")
+        for card in cards:
+            lines.append(f"  - {card}")
+    lines.append("")
+    return lines
+
+
 def format_attributions_markdown(conn: sqlite3.Connection) -> str:
     """Build ATTRIBUTIONS.md body from the live corpus connection (ATTR-2 / 3)."""
     entries = sorted(
@@ -220,32 +253,25 @@ def format_attributions_markdown(conn: sqlite3.Connection) -> str:
     )
 
     lines: list[str] = _attributions_header_lines()
-    if not entries:
+    cc0_entries = [e for e in entries if str(e.get("license") or "").strip() == CC0_LICENSE]
+    entries = [e for e in entries if e not in cc0_entries]
+    if not entries and not cc0_entries:
         lines.append("_No third-party sourced cards in this build._")
         lines.append("")
     else:
         for entry in entries:
-            source = str(entry.get("source") or "").strip()
-            license_name = str(entry.get("license") or "").strip() or "(unspecified)"
-            page_url = str(entry.get("url") or "").strip()
-            deed = licence_deed_url(license_name)
-            captured = str(entry.get("captured") or "").strip()
-            lines.append(f"### {source} · {license_name}")
-            lines.append("")
-            if deed:
-                lines.append(f"- Licence: [{license_name}]({deed})")
-            else:
-                lines.append(f"- Licence: {license_name}")
-            if page_url:
-                lines.append(f"- Example page: {page_url}")
-            if captured:
-                lines.append(f"- Oldest capture in this group: {captured}")
-            cards = entry.get("cards") or []
-            if cards:
-                lines.append("- Cards:")
-                for card in cards:
-                    lines.append(f"  - {card}")
-            lines.append("")
+            lines.extend(_attribution_entry_lines(entry))
+        if cc0_entries:
+            lines.extend(
+                [
+                    "## No-conditions sources (CC0)",
+                    "",
+                    "No conditions apply to these sources; they are credited as a courtesy.",
+                    "",
+                ]
+            )
+            for entry in cc0_entries:
+                lines.extend(_attribution_entry_lines(entry))
 
     maintainer_titles = _maintainer_strategy_titles(conn)
     compat_n = int(

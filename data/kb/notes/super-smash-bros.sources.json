@@ -264,7 +264,10 @@
                 "The attack always takes a set amount of time and cannot be charged",
                 "In Smash 64 and Melee, characters use their standard item swinging animation",
                 "In Smash 64 and Melee, swing time varies from character to character, but is much faster overall than in later games.",
-                "from the table (first-game column): SSB Mario 30 Donkey Kong 28 Link 23 Samus 26 Yoshi 27 Kirby 26 Fox 29 Pikachu 27 Luigi 30 Ness 30 Captain Falcon 28 Jigglypuff 26"
+                "Link || 23",
+                "Mario || 30",
+                "Luigi || 30",
+                "Ness || 30"
               ]
             }
           ]

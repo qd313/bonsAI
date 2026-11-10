@@ -36,21 +36,7 @@
           ]
         },
         {
-          "line": "Weak points: Red and blue Weapon Balloons are placed on his course to help you against him. Stay out of his path, because bumping into him squashes you and slows you down, and in the rematch he is faster, so you have to use the balloons to win.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Tricky",
-              "revision": "5405970",
-              "quoted": [
-                "there are red and blue Weapon Balloons to help the player against Tricky",
-                "The player must avoid running into Tricky, who squishes and therefore slows them down.",
-                "In the rematch, Tricky races at a faster speed, so the player has to use Weapon Balloons to win the rematch."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: A large red triceratops with yellow stripes on his back and yellow eyes with red irises.",
+          "line": "Looks like: A big red triceratops. Yellow stripes run along his back, and his yellow eyes have red irises.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Tricky",
@@ -63,8 +49,16 @@
           ]
         },
         {
-          "line": "Tips: He just keeps charging forward. Boulders now and then come down the mountain, and the second race adds more boulders plus pillars that fall.",
+          "line": "Tips: He only charges ahead, and running into him squashes you and slows you down. Weapon Balloons in red and blue sit along his course to help you against him. Boulders roll down the mountain now and then, and the second race adds more of them plus falling pillars.",
           "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Tricky",
+              "revision": "5405970",
+              "quoted": [
+                "there are red and blue Weapon Balloons to help the player against Tricky",
+                "The player must avoid running into Tricky, who squishes and therefore slows them down."
+              ]
+            },
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
               "revision": "5435503",
@@ -75,7 +69,7 @@
           ]
         },
         {
-          "line": "Tips: You can only race him once you have won every other course in the world. After you beat him he sets you the world's Silver Coin challenges, and his piece of the Wizpig amulet only comes after the harder rematch.",
+          "line": "Tips: The race opens only once you have taken all the other courses in his world. Beat him and he sets you that world's Silver Coin challenges, and finishing them opens a harder rematch where he is faster, so use the balloons to win it. His Wizpig amulet piece comes only once you beat that second race.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Tricky",
@@ -83,6 +77,7 @@
               "quoted": [
                 "where the player can race him after winning every other course in the world",
                 "Tricky then challenges the player to complete every Silver Coin Challenge",
+                "In the rematch, Tricky races at a faster speed, so the player has to use Weapon Balloons to win the rematch.",
                 "awards the racer with his piece of the Wizpig amulet"
               ]
             }
@@ -131,7 +126,7 @@
           ]
         },
         {
-          "line": "Tips: The slope is jagged and lined with trees that get in your way. Like Tricky he only charges ahead, but unlike Tricky he does not squash you.",
+          "line": "Tips: The slope is jagged and lined with trees that get in your way. Just as Tricky does, he simply rushes forward, though he never squashes you.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -143,7 +138,7 @@
           ]
         },
         {
-          "line": "Tips: The rematch only comes after you finish Snowflake Mountain's Silver Coin challenges. In it Bluey is faster, and a few snowballs are added as extra obstacles.",
+          "line": "Tips: The rematch only comes after you finish Snowflake Mountain's Silver Coin challenges. In it Bluey is faster, and a handful of snowballs also get in your way.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bluey",
@@ -204,7 +199,7 @@
           ]
         },
         {
-          "line": "Looks like: A large red octopus with yellow eyes, green irises and black pupils.",
+          "line": "Looks like: A large red octopus. His eyes are yellow, the irises green and the pupils black.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bubbler",
@@ -236,7 +231,7 @@
           ]
         },
         {
-          "line": "Tips: In the rematch he is faster and swaps the mines for giant bubbles that can trap you for a while.",
+          "line": "Tips: In the rematch he is faster and trades the mines for huge bubbles that catch you and hold you for a while.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bubbler",
@@ -285,7 +280,7 @@
           ]
         },
         {
-          "line": "Looks like: A dragon with an orange body, a yellow belly, face and feet, and green eyes, which makes him the only boss without yellow eyes.",
+          "line": "Looks like: An orange dragon whose belly, face and feet are yellow. His eyes are green, so he is the one boss that lacks yellow eyes.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Smokey",
@@ -338,7 +333,7 @@
       "main_revision": "5425365",
       "lines": [
         {
-          "line": "Summary: Once you have enough Golden Balloons in Adventure Mode, Taj turns up and challenges you to race him on his flying carpet, each time in a set vehicle, and beating him earns another Golden Balloon.",
+          "line": "Summary: In Adventure Mode, Taj shows up after you have gathered enough Golden Balloons and calls you out to race him in a set vehicle. He rides a flying carpet, and beating him gives you one more Golden Balloon.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -352,16 +347,14 @@
           ]
         },
         {
-          "line": "Weak points: Taj moves slowly in the Car Challenge, which makes it the easy one. The Hovercraft Challenge is somewhat harder, and the Plane Challenge is considered the hardest of the three.",
+          "line": "Weak points: He moves slowly in the Car Challenge, so that race is the easy one to win.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
               "revision": "5435503",
               "quoted": [
                 "Car Challenge is a relatively easy race done in a car.",
-                "This should be very easy for the player because of Taj's slow movement.",
-                "Hovercraft Challenge is the second of Taj's races and is somewhat more difficult than the Car Challenge.",
-                "Plane Challenge is considered to be the hardest of Taj's three races and a plane is used in it."
+                "This should be very easy for the player because of Taj's slow movement."
               ]
             }
           ]
@@ -380,12 +373,14 @@
           ]
         },
         {
-          "line": "Tips: Red flags showing the Nintendo 64 logo mark the route, and you have to follow them. Leaving the track by too far a margin gets you disqualified.",
+          "line": "Tips: The Hovercraft race is a little harder than the Car race, and the Plane race is rated the hardest of his three. The route is marked by red flags bearing the Nintendo 64 logo. Follow them, because straying a long way from the track disqualifies you.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
               "revision": "5435503",
               "quoted": [
+                "Hovercraft Challenge is the second of Taj's races and is somewhat more difficult than the Car Challenge.",
+                "Plane Challenge is considered to be the hardest of Taj's three races and a plane is used in it.",
                 "The racetrack is marked with red flags showing the Nintendo 64 logo and the player has to follow them. If they leave the set track by too far a margin, they will be disqualified."
               ]
             }
@@ -432,7 +427,7 @@
           ]
         },
         {
-          "line": "Looks like: T.T. himself is an animated stopwatch with a red outer shell, a yellow inner case and a blue button on his head, plus black arms and legs with white gloves and shoes.",
+          "line": "Looks like: T.T. is an animated stopwatch. His shell is red on the outside with a yellow case inside, a blue button sits on top of his head, and his black arms and legs end in white gloves and shoes.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/T.T.",
@@ -446,7 +441,7 @@
           ]
         },
         {
-          "line": "Tips: Each course has two times, an unlock time that brings out T.T.'s ghost and then a lower ghost time to beat. Dino Domain's four are Ancient Lake 1:07.00 then 1:01.28, Fossil Canyon 1:37.00 then 1:30.16, Jungle Falls 1:08.00 then 1:02.50 and Hot Top Volcano 1:35.00 then 1:30.71.",
+          "line": "Tips: Each course has two times, an unlock time that brings out T.T.'s ghost and then a lower ghost time to beat. For example, Ancient Lake is 1:07.00 then 1:01.28, Fossil Canyon 1:37.00 then 1:30.16, Jungle Falls 1:08.00 then 1:02.50 and Hot Top Volcano 1:35.00 then 1:30.71.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -489,7 +484,7 @@
           ]
         },
         {
-          "line": "Uses: Taj hands over the Golden Balloon when you finish a challenge. A world's challenges only open after you have beaten its boss once, and each course has its own minimum number of Golden Balloons before you can play its challenge.",
+          "line": "Uses: Taj hands over the Golden Balloon when you finish a challenge. Each world's challenges unlock only once you have won the race against that world's boss, and every course also asks for a certain number of Golden Balloons before its challenge can be played.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Silver_Coin",
@@ -514,7 +509,7 @@
           ]
         },
         {
-          "line": "Tips: Many of the coins are well hidden or sit off the track.",
+          "line": "Tips: Plenty of the coins are concealed well or lie outside the track.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Silver_Coin",
@@ -526,7 +521,7 @@
           ]
         },
         {
-          "line": "Tips: Clearing the Silver Coin Challenge on all four courses of a world sets up the rematch with that world's boss. In Adventure Two the coins are in different places, often hard to reach.",
+          "line": "Tips: Clearing the Silver Coin Challenge on all four courses of a world sets up the rematch with that world's boss. Adventure Two, a harder take on Adventure Mode, shifts the coins to other spots, and many are awkward to get to.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Silver_Coin",
@@ -539,6 +534,7 @@
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
               "revision": "5435503",
               "quoted": [
+                "Adventure Two is played the same as the standard Adventure Mode, but harder.",
                 "the locations of the silver coins are different, often in hard to reach places"
               ]
             }
@@ -554,7 +550,7 @@
       "main_revision": "5186606",
       "lines": [
         {
-          "line": "Summary: The red Weapon Balloon gives missiles, and they get stronger the more red balloons you collect in a row.",
+          "line": "Summary: The red Weapon Balloon gives missiles, and they get stronger the more red balloons you collect in a row. Every Weapon Balloon colour works this way, up to three levels.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -611,25 +607,6 @@
               ]
             }
           ]
-        },
-        {
-          "line": "Tips: Red balloons are how you attack Bubbler, and Tricky's course has some too to help you against him.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Bubbler",
-              "revision": "5504565",
-              "quoted": [
-                "Bubbler can be attacked by the player shooting missiles at him from red Weapon Balloons."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Tricky",
-              "revision": "5405970",
-              "quoted": [
-                "there are red and blue Weapon Balloons to help the player against Tricky"
-              ]
-            }
-          ]
         }
       ]
     },
@@ -641,7 +618,7 @@
       "main_revision": "5186606",
       "lines": [
         {
-          "line": "Summary: The blue Weapon Balloon gives a speed boost that grows stronger the more blue balloons you collect in a row.",
+          "line": "Summary: The blue Weapon Balloon gives a speed boost, in up to three levels.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -654,7 +631,7 @@
           ]
         },
         {
-          "line": "Uses: One blue balloon gives a small boost, two give a larger one and three give the biggest. Letting go of the accelerator button as you use it makes the boost bigger, as with Zippers.",
+          "line": "Uses: One blue balloon gives a small boost, two give a larger one and three give the biggest. With a single balloon, letting go of the accelerator button while you use it gives a bigger boost.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -680,12 +657,13 @@
           ]
         },
         {
-          "line": "Tips: The ROCKETFUEL magic code turns every balloon blue.",
+          "line": "Tips: ROCKETFUEL is a cheat (a magic code, reached from the options menu) that turns every balloon blue.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
               "revision": "5435503",
               "quoted": [
+                "Magic Codes are game cheats, always accessible in the options menu.",
                 "ROCKETFUEL || All balloons are blue"
               ]
             }
@@ -701,7 +679,7 @@
       "main_revision": "5186606",
       "lines": [
         {
-          "line": "Summary: The yellow Weapon Balloon gives a shield, and it lasts longer the more yellow balloons you collect in a row.",
+          "line": "Summary: The yellow Weapon Balloon gives a shield, in up to three levels.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -714,22 +692,15 @@
           ]
         },
         {
-          "line": "Uses: The shield protects you from hits, and any opponent you run into spins out. One balloon gives a short shield, two a longer one and three the longest.",
+          "line": "Uses: The shield blocks hits, and any racer you bump into while it is up spins out. One balloon makes it short, two make it longer and three make it last the longest.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
               "revision": "5435503",
               "quoted": [
                 "A short-lasting shield which protects against hits. If the players run into opponents, the opponents spin out.",
-                "A longer-lasting shield which protects against hits.",
-                "A long-lasting shield."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Weapon_Balloon",
-              "revision": "5186606",
-              "quoted": [
-                "A shield that lasts even longer"
+                "A longer-lasting shield which protects against hits. If the players run into opponents, the opponents spin out.",
+                "A long-lasting shield. If the players run into opponents, the opponents spin out."
               ]
             }
           ]
@@ -747,24 +718,13 @@
           ]
         },
         {
-          "line": "Tips: Touching a balloon of any other colour swaps the shield for that colour's item.",
+          "line": "Tips: BODYARMOR is a cheat (a magic code, reached from the options menu) that turns every balloon yellow.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
               "revision": "5435503",
               "quoted": [
-                "Collecting a balloon of another color cancels it out and replaces it with the new item."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The BODYARMOR magic code turns every balloon yellow.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
-              "revision": "5435503",
-              "quoted": [
+                "Magic Codes are game cheats, always accessible in the options menu.",
                 "BODYARMOR || All balloons are yellow"
               ]
             }
@@ -780,7 +740,7 @@
       "main_revision": "5186606",
       "lines": [
         {
-          "line": "Summary: The green Weapon Balloon gives something you drop, and it gets stronger the more green balloons you collect in a row.",
+          "line": "Summary: The green Weapon Balloon gives something you drop, in up to three levels.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -793,7 +753,7 @@
           ]
         },
         {
-          "line": "Uses: One green balloon gives an oil slick, or a gas cloud if you are in a plane. Two give a land mine, which floats for planes, and three give a bubble that traps a racer who rides into it.",
+          "line": "Uses: One green balloon gives an oil slick, or a gas cloud if you are in a plane. Two give a land mine, which floats for planes, and three give a bubble that snares whoever rides into it, floats them upward until it pops, and costs them a good deal of time.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -826,20 +786,13 @@
           ]
         },
         {
-          "line": "Tips: The bubble holds the racer who rides into it, floats up with them and pops, and it delays them for a significant time. The TOXICOFFENDER magic code turns every balloon green.",
+          "line": "Tips: TOXICOFFENDER is a cheat (a magic code, reached from the options menu) that turns every balloon green.",
           "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Weapon_Balloon",
-              "revision": "5186606",
-              "quoted": [
-                "A bubble that traps a racer that rides into it, floats upward, and pops"
-              ]
-            },
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
               "revision": "5435503",
               "quoted": [
-                "A snare bubble which delays enemies for a significant time",
+                "Magic Codes are game cheats, always accessible in the options menu.",
                 "TOXICOFFENDER || All balloons are green"
               ]
             }
@@ -855,7 +808,7 @@
       "main_revision": "5186606",
       "lines": [
         {
-          "line": "Summary: The rainbow Weapon Balloon gives a magnet, and it gets stronger the more rainbow balloons you collect in a row.",
+          "line": "Summary: The rainbow Weapon Balloon gives a magnet, in up to three levels.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -868,7 +821,7 @@
           ]
         },
         {
-          "line": "Uses: One rainbow balloon gives a weak pull toward the racer in front of you, if they are in range. Two give a magnet with a stronger pull and longer range, and three give a powerful magnet that pulls opponents towards you.",
+          "line": "Uses: A single rainbow balloon gives a weak magnet that tugs you toward a racer ahead, if one is close enough. Two make the pull stronger and the range longer, and three give a powerful magnet that drags opponents back to you.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -880,7 +833,7 @@
           ]
         },
         {
-          "line": "Tips: In the Nintendo 64 game the weak magnet is yellow and the stronger one is red.",
+          "line": "Tips: The weak magnet is yellow and the stronger one is red.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Weapon_Balloon",
@@ -893,12 +846,13 @@
           ]
         },
         {
-          "line": "Tips: The OPPOSITESATTRACT magic code turns every balloon rainbow.",
+          "line": "Tips: OPPOSITESATTRACT is a cheat (a magic code, reached from the options menu) that turns every balloon rainbow.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
               "revision": "5435503",
               "quoted": [
+                "Magic Codes are game cheats, always accessible in the options menu.",
                 "OPPOSITESATTRACT || All balloons are rainbows"
               ]
             }
@@ -941,7 +895,7 @@
           ]
         },
         {
-          "line": "Tips: Fire Mountain is a plane level where you carry eggs from the central lava pit to your nest and wait for them to hatch, and other players can steal eggs or fire missiles at you. The first to hatch three eggs wins. In Smokey Castle, a car level, you store bananas in a treasure chest in the middle, and the first racer with ten in it wins.",
+          "line": "Tips: Fire Mountain is a plane level where you haul eggs out of the lava pit at the centre back to your nest and wait for them to hatch. Opponents can pinch your eggs or hit you with missiles, and whoever hatches three first wins. Smokey Castle is a car level where you collect bananas and put them in the treasure chests at the middle of the arena, and the first racer to get ten in wins.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -957,7 +911,7 @@
           ]
         },
         {
-          "line": "Tips: Icicle Pyramid, a car level, and Darkwater Beach, a hovercraft level, are battles where bananas are your health. When yours run out you are eliminated, and the last one standing wins.",
+          "line": "Tips: Icicle Pyramid (a car level) and Darkwater Beach (a hovercraft level) are fights with weapons, and your banana count is your health. Run out and you are out, and the last player left wins.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -980,7 +934,7 @@
       "main_revision": "5435503",
       "lines": [
         {
-          "line": "Summary: Each world's Trophy Race runs its four tracks back to back for points, and finishing high enough earns a trophy.",
+          "line": "Summary: Each world's Trophy Race strings its four tracks together and scores points, and a high enough finish wins a trophy.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -992,7 +946,7 @@
           ]
         },
         {
-          "line": "Uses: First place earns a gold Wizpig trophy, second a silver Taj trophy and third a bronze T.T. trophy. You need four trophies to reach the fifth world.",
+          "line": "Uses: Finishing first gives you the Wizpig trophy in gold, second the Taj trophy in silver, and third the T.T. trophy in bronze. Reaching Future Fun Land takes four trophies.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -1004,7 +958,7 @@
           ]
         },
         {
-          "line": "Tips: A world's Trophy Race opens once you have cleared its second boss race, and its AI racers are harder than in single races.",
+          "line": "Tips: A world's Trophy Race becomes available once you have beaten that world's boss for the second time. The computer racers in it are tougher than in a single race.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
@@ -1017,7 +971,7 @@
           ]
         },
         {
-          "line": "Tips: Trophy Races can also be played from Tracks mode, where you always use each track's default vehicle.",
+          "line": "Tips: Trophy Races can also be played from Tracks mode, but only in the standard vehicle of each track.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Diddy_Kong_Racing",

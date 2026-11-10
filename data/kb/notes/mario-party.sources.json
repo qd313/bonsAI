@@ -36,15 +36,16 @@
           ]
         },
         {
-          "line": "Weak points: Where the event is a minigame you can keep your coins by winning it: only the winner of Bowser Balloon Burst keeps them, in Bowser's Face Lift only players who score fewer than 90 points pay, and in Bowser's Tug o' War only the losing side pays.",
+          "line": "Weak points: Winning a Bowser minigame only helps in part. In Bowser Balloon Burst everyone except the winner loses coins to Bowser, in Bowser's Face Lift only players who score fewer than 90 points do, and in Bowser's Tug o' War the losing side does. Exceptions: a tie in Balloon Burst or Tug o' War makes everyone lose 10 to 50 coins, if all players reach 90 in Face Lift Bowser steals up to 50 coins from the player who landed, and in Bash 'n' Cash the player who landed wears the Bowser Suit, coins knocked out of them go straight to Bowser, and Bowser takes 15 coins from them if they lose none.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser_Space",
               "revision": "5532948",
               "quoted": [
-                "Bowser Balloon Burst: The four players play the minigame Balloon Burst. Afterward, everyone aside from the winner of the minigame loses Coins to Bowser.",
-                "Afterward, players that score fewer than 90 points lose Coins to Bowser.",
-                "Afterward, the losing side loses Coins to Bowser, but if the minigame ends in a tie, everybody loses 10–50 Coins."
+                "Bowser Balloon Burst: The four players play the minigame Balloon Burst. Afterward, everyone aside from the winner of the minigame loses Coins to Bowser. If the minigame ends in a tie, everyone loses 10–50 Coins.",
+                "Bowser's Face Lift: The four players play the minigame Face Lift. Afterward, players that score fewer than 90 points lose Coins to Bowser. If all players achieve at least 90 points, Bowser steals up to 50 Coins from the player who landed on his space.",
+                "Bowser's Tug o' War: The four players play the minigame Tug o' War, with the player that landed on the Bowser Space taking on the role of the player in the Bowser Suit. Afterward, the losing side loses Coins to Bowser, but if the minigame ends in a tie, everybody loses 10–50 Coins.",
+                "Bash 'n' Cash: The four players play the minigame Bash 'n' Cash, with the player that landed on the Bowser Space taking on the role of the player in the Bowser Suit. Unlike normally, Coins knocked out of the player go straight to Bowser. If the player in the Bowser Suit does not lose any Coins during the minigame, Bowser takes 15 Coins from them."
               ]
             }
           ]
@@ -65,7 +66,7 @@
           ]
         },
         {
-          "line": "Tips: With no coins you are not left empty-handed: Bowser gives you 10 coins in exchange for one Star if you have a Star, and 20 coins if you have no Star either.",
+          "line": "Tips: If you land on a Bowser Space with no coins but at least one Star, Bowser takes a Star and gives you 10 coins; if you have no coins and no Stars, he gives you 20 coins.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser_Space",
@@ -87,7 +88,7 @@
       "main_revision": "5532404",
       "lines": [
         {
-          "line": "Summary: A ghost on the boards that steals for whoever passes it: coins from an opponent for free, or a Star for 50 coins. Boos are on every board map except Peach's Birthday Cake.",
+          "line": "Summary: A ghost on the boards that gives the player the option of stealing: coins from an opponent for free, or a Star for 50 coins. Boos are on every board map except Peach's Birthday Cake.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo",
@@ -100,7 +101,7 @@
           ]
         },
         {
-          "line": "Weak points: A Boo only steals when the player who passes it chooses to. The 500-coin No Boo item from the Mushroom Shop keeps Boo off the map, though it does not work on some maps.",
+          "line": "Weak points: The 500-coin No Boo item from the Mushroom Shop keeps Boo off the map, though it does not work on some maps.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo",
@@ -193,15 +194,27 @@
           ]
         },
         {
-          "line": "Tips: A Whomp keeps blocking the same path against the other players unless they pay as well. A Coin Stone is a separate gate: you can only pass it with 20 coins, and the path behind it is Bowser's, where you are forced to buy a useless Gold-plated Bowser Statue for ten coins.",
+          "line": "Looks like: The wiki describes Whomps as large enemies that resemble rectangular stone slabs with snaggletoothed faces, and says they have red eyes.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Whomp",
+              "revision": "5536581",
+              "quoted": [
+                "They are large enemies that resemble rectangular stone slabs with snaggletoothed faces",
+                "Like Thwomps, they have red eyes"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A Whomp keeps blocking the same path against the other players unless they also pay. If a player encounters a Coin Stone, they can only pass it if they have 20 coins.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
               "revision": "5475500",
               "quoted": [
                 "Whomp continues to block the same path against other players unless they also pay.",
-                "If a player encounters a Coin Stone, they can only pass it if they have 20 Coins.",
-                "If the player chooses to take Bowser's path (behind a Coin Stone), they are forced to buy a useless Gold-plated Bowser Statue for ten Coins."
+                "If a player encounters a Coin Stone, they can only pass it if they have 20 Coins."
               ]
             }
           ]
@@ -336,20 +349,14 @@
           ]
         },
         {
-          "line": "Tips: Piranha Plants can be placed around the board, and a player loses a Star if they land on a spot with one. Peach's Birthday Cake has 14 Happening Spaces to plant from.",
+          "line": "Tips: Peach's Birthday Cake has 14 Happening Spaces, and the Strawberry Seed is planted from one of them.",
           "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Piranha_Plant",
-              "revision": "5542984",
-              "quoted": [
-                "Piranha Plants can be placed around the Peach's Birthday Cake board, with players losing a Star if they land on a spot with one."
-              ]
-            },
             {
               "page": "https://www.mariowiki.com/Peach%27s_Birthday_Cake",
               "revision": "5465016",
               "quoted": [
-                "Happening Spaces || 14"
+                "Happening Spaces || 14",
+                "From a Happening Space, a player can pay 30 Coins to plant a Strawberry Seed"
               ]
             }
           ]
@@ -410,7 +417,7 @@
           ]
         },
         {
-          "line": "Tips: On Bowser's Magma Mountain a Happening Space turns every Blue Space into a Red Space, which makes 49 Red Spaces instead of 4.",
+          "line": "Tips: On Bowser's Magma Mountain a Happening Space turns every Blue Space into a Red Space, which makes 49 Red Spaces instead of 4. The change starts on that player's turn and ends on that player's turn, two turns later.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party",
@@ -423,7 +430,8 @@
               "page": "https://www.mariowiki.com/Bowser%27s_Magma_Mountain",
               "revision": "5504637",
               "quoted": [
-                "Red Spaces || 4 (49 if a Happening Space has been landed on)"
+                "Red Spaces || 4 (49 if a Happening Space has been landed on)",
+                "The event starts on that player's turn, and ends on that player's turn, two turns later."
               ]
             }
           ]
@@ -531,7 +539,7 @@
           ]
         },
         {
-          "line": "Tips: The board has nine Happening Spaces, so the boulder can be set off often. The player in fourth place at the end of the game is chased down the board by a rolling boulder.",
+          "line": "Tips: The board has nine Happening Spaces. The player in fourth place at the end of the game is chased down the board by a rolling boulder.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
@@ -566,7 +574,7 @@
           ]
         },
         {
-          "line": "Weak points: A Pisudon only switches the doors if the player who meets it agrees to pay, and the switch blocks access to certain paths for the other players. The doors also switch by themselves at the start of every turn and when players land on certain Happening Spaces.",
+          "line": "Weak points: A Pisudon offers the switch when a player crosses paths with it, and the switch blocks access to certain paths for the other players.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Pisudon",
@@ -574,25 +582,17 @@
               "quoted": [
                 "the Pisudon offers them the option to switch the set of doors that rise up or go down throughout the board for the price of 20 coins, blocking access of certain paths to the other players."
               ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Luigi%27s_Engine_Room",
-              "revision": "5475503",
-              "quoted": [
-                "The doors switch at the start of every turn, when players land on certain Happening Spaces, or if a robot on the board called Pisudon is paid 20 Coins to switch them."
-              ]
             }
           ]
         },
         {
-          "line": "Tips: One set of doors rises to block specific paths while the other set goes down to open other paths. Happening Spaces on the steam generators near the engine send steam up that propels players to a higher section.",
+          "line": "Tips: It greets the player with \"Hello. I can move the Blue Doors and the Red Doors. Do you want me to move them?\" as it offers the option to switch the doors.",
           "drawn_from": [
             {
-              "page": "https://www.mariowiki.com/Luigi%27s_Engine_Room",
-              "revision": "5475503",
+              "page": "https://www.mariowiki.com/Pisudon",
+              "revision": "5472623",
               "quoted": [
-                "One set rises up to block specific paths, while the other set goes down to open other paths.",
-                "Happening Spaces on steam generators near the engine make steam rise up out of the respective generator, propelling players to a higher section."
+                "“Hello. I can move the Blue Doors and the Red Doors. Do you want me to move them?”"
               ]
             }
           ]
@@ -673,13 +673,13 @@
           ]
         },
         {
-          "line": "Tips: Right after \"buying\" the Ztar you pass Koopa Troopa and earn back 10 coins. On Bowser's Magma Mountain and Eternal Star he sells nothing and steals a Star, or up to 20 coins if you have no Star.",
+          "line": "Tips: Right after \"buying\" the Ztar you pass Koopa Troopa and earn back 10 coins, or 20 in the last 5 turns or on the 10th time someone has passed him (30 for the 20th time, and so on). On Bowser's Magma Mountain and Eternal Star he sells nothing and steals a Star, or up to 20 coins if you have no Star.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser%27s_bogus_items",
               "revision": "5290899",
               "quoted": [
-                "immediately after \"buying\" the Ztar, the player will pass Koopa Troopa and earn back 10 coins",
+                "immediately after \"buying\" the Ztar, the player will pass Koopa Troopa and earn back 10 coins (20 in the last 5 turns or if it is the 10th time someone has passed Koopa Troopa; 30 for the 20th time; 40 for the 30th time; etc.)",
                 "Bowser does not sell any useless items or provide a worthless service on either Bowser's Magma Mountain or Eternal Star, where he steals either a Star or up to 20 coins if they do not have at least one Star."
               ]
             }
@@ -846,7 +846,7 @@
           ]
         },
         {
-          "line": "Uses: No Koopa stops Koopa Troopa's 10 coins for passing the starting point, and No Boo stops Boo's stealing. Neither works on some maps.",
+          "line": "Uses: No Koopa stops Koopa Troopa handing out coins when you pass the starting point, and No Boo keeps Boo off the map. Neither works on some maps.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Koopa_Troopa",
@@ -1027,13 +1027,20 @@
           ]
         },
         {
-          "line": "Uses: The middle block can make one player give 10, 20 or 30 coins or 1 Star to the other, and two more results, marked with a double arrow, are for all coins and all Stars.",
+          "line": "Uses: The middle block can make one player give 10, 20 or 30 coins or 1 Star to the other, and two more results, marked with a double arrow, swap all coins or all Stars.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Chance_Time",
               "revision": "5520648",
               "quoted": [
                 "10 coins → - ← 10 coins - 20 coins → - ← 20 coins - 30 coins → - ← 30 coins - 1 Star → - ← 1 Star - ↔ all coins - ↔ all Stars"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Chance_Time",
+              "revision": "5520648",
+              "quoted": [
+                "icon for \"swap all coins and stars\""
               ]
             },
             {
@@ -1086,7 +1093,7 @@
       "main_revision": "5539722",
       "lines": [
         {
-          "line": "Summary: Four Mushroom Shop items that are not Dice Blocks, priced 50 to 300 coins: Gameballs, the Mecha Fly Guy, the Talking Parrot and the Record.",
+          "line": "Summary: Four of the Mushroom Shop's items, priced 50 to 300 coins: Gameballs, the Mecha Fly Guy, the Talking Parrot and the Record.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party",
@@ -1114,7 +1121,7 @@
           ]
         },
         {
-          "line": "Tips: Gameballs appear in the shop only after at least 30 mini-games have been bought from the Mini-Game House, and can be used until all mini-games are bought.",
+          "line": "Tips: Gameballs appear in the shop after at least 30 mini-games have been bought from the Mini-Game House, and can be used until all mini-games are bought.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party",

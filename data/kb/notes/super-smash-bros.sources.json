@@ -42,15 +42,8 @@
           ]
         },
         {
-          "line": "Tips: The item list calls it the strongest recovery item. Taking enough of them in one match earns the Heartthrob bonus, worth 17,000 points in the first game (8,000 in the Japanese version).",
+          "line": "Tips: Taking enough of them in one match earns the Heartthrob bonus, worth 17,000 points in the first game (8,000 in the Japanese version).",
           "drawn_from": [
-            {
-              "page": "https://www.ssbwiki.com/Item",
-              "revision": "2061935",
-              "quoted": [
-                "Strongest recovery item"
-              ]
-            },
             {
               "page": "https://www.ssbwiki.com/Heart_Container",
               "revision": "2066620",
@@ -120,7 +113,7 @@
       "main_revision": "2066650",
       "lines": [
         {
-          "line": "Summary: A star that bounces around the stage and makes whoever touches it invincible for ten seconds. The first game calls it the Starman; the name Super Star came in later games.",
+          "line": "Summary: A star that bounces around the stage and makes whoever touches it invincible for ten seconds. The first game calls it the Starman, and it was known by that name until the PAL release of Brawl and the NTSC release of Smash 4.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Item",
@@ -155,21 +148,14 @@
           ]
         },
         {
-          "line": "Tips: On Planet Zebes it makes you immune to the acid, so you can walk through it, but if you fall off the stage while invincible you self-destruct because the acid will not bump you back up. In the first game it is the one item without the small triangular marker above it.",
+          "line": "Tips: In the first game it is the one item without the small triangular marker above it. In the series, a fighter who falls off the stage while invincible can still be KO'd.",
           "drawn_from": [
-            {
-              "page": "https://www.ssbwiki.com/Planet_Zebes",
-              "revision": "2047088",
-              "quoted": [
-                "Obtaining a Starman (or any form of strong knockback resistance) grants invulnerability to the acid, allowing the player to walk through it with no obstruction.",
-                "if, while invincible, the player falls off the stage and through the acid, they will self-destruct; the acid will not \"bump\" the player back up"
-              ]
-            },
             {
               "page": "https://www.ssbwiki.com/Item",
               "revision": "2061935",
               "quoted": [
-                "In Smash 64, items (except for Super Stars) have a small triangular indicator above them."
+                "In Smash 64, items (except for Super Stars) have a small triangular indicator above them.",
+                "Users can still be KO'd if they fall off the stage with it."
               ]
             }
           ]
@@ -184,7 +170,7 @@
       "main_revision": "2049293",
       "lines": [
         {
-          "line": "Summary: A glowing sword, often called the lightsaber, that you swing for stronger hits or throw at opponents. The game's own manual says it has the longest range of all the clobbering items when thrown.",
+          "line": "Summary: A lightsaber-like sword, often called the lightsaber, that you swing for stronger hits or throw at opponents. The game's own manual says it has the longest range of all the clobbering items when thrown.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Beam_Sword",
@@ -212,10 +198,10 @@
               "page": "https://www.ssbwiki.com/Beam_Sword",
               "revision": "2049293",
               "quoted": [
-                "Neutral Attack 12%",
-                "Forward Tilt 18%",
-                "Dash Attack 16%",
-                "Forward Smash 25%"
+                "from the table (first-game column): Neutral Attack 12%",
+                "from the table (first-game column): Forward Tilt 18%",
+                "from the table (first-game column): Dash Attack 16%",
+                "from the table (first-game column): Forward Smash 25%"
               ]
             }
           ]
@@ -227,14 +213,14 @@
               "page": "https://www.ssbwiki.com/Beam_Sword",
               "revision": "2049293",
               "quoted": [
-                "Forward tilt throw 15%",
-                "Up tilt throw 16%",
-                "Down tilt throw 13%",
-                "Dash attack throw 19%",
-                "Forward smash throw 19%",
-                "Up smash throw 20%",
-                "Down smash throw 13%",
-                "Air up smash throw 20%"
+                "from the table (first-game column): Forward tilt throw 15%",
+                "from the table (first-game column): Up tilt throw 16%",
+                "from the table (first-game column): Down tilt throw 13%",
+                "from the table (first-game column): Dash attack throw 19%",
+                "from the table (first-game column): Forward smash throw 19%",
+                "from the table (first-game column): Up smash throw 20%",
+                "from the table (first-game column): Down smash throw 13%",
+                "from the table (first-game column): Air up smash throw 20%"
               ]
             },
             {
@@ -278,7 +264,7 @@
                 "The attack always takes a set amount of time and cannot be charged",
                 "In Smash 64 and Melee, characters use their standard item swinging animation",
                 "In Smash 64 and Melee, swing time varies from character to character, but is much faster overall than in later games.",
-                "SSB Mario 30 Donkey Kong 28 Link 23 Samus 26 Yoshi 27 Kirby 26 Fox 29 Pikachu 27 Luigi 30 Ness 30 Captain Falcon 28 Jigglypuff 26"
+                "from the table (first-game column): SSB Mario 30 Donkey Kong 28 Link 23 Samus 26 Yoshi 27 Kirby 26 Fox 29 Pikachu 27 Luigi 30 Ness 30 Captain Falcon 28 Jigglypuff 26"
               ]
             }
           ]
@@ -321,7 +307,7 @@
           ]
         },
         {
-          "line": "Uses: While you hold it you keep swinging, and you cannot jump in midair, use other attacks or defend. You cannot drop it on purpose; only being sent tumbling makes you let go. It can chain into itself for 60%, which will likely KO.",
+          "line": "Uses: In the series, while you hold it you keep swinging, and you cannot jump in midair, use other attacks or defend. You cannot drop it on purpose; only being sent tumbling makes you let go. The wiki says it can also chain into itself for 60%, which will likely KO.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Hammer_(item)",
@@ -335,7 +321,7 @@
           ]
         },
         {
-          "line": "Tips: The item list calls it one of the most feared items for its range, damage and knockback, but its wielder cannot use special moves or jump in the air, so knocking them off a ledge while they swing can KO them. Careful hitbox placement can also interrupt the swing.",
+          "line": "Tips: The item list calls it one of the most feared items for its range, damage and knockback, but in the series its wielder cannot use special moves or jump in the air, so knocking them off a ledge while they swing can KO them. Careful hitbox placement can also interrupt the swing.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Item",
@@ -377,7 +363,7 @@
           ]
         },
         {
-          "line": "Uses: You can fire one shot every 30 frames, and the blasts have infinite horizontal range. Like other shooting items it replaces your neutral attack, and once it is empty it only shoots blanks.",
+          "line": "Uses: You can fire one shot every 30 frames. Like other shooting items it typically replaces your neutral attack, and once it is empty it only shoots blanks. In the series, the item list says its blasts have infinite horizontal range.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Ray_Gun",
@@ -397,7 +383,7 @@
           ]
         },
         {
-          "line": "Tips: The shots can be reflected or absorbed, and the gun itself can only be reflected when thrown. In the first game you cannot move while firing it: firing while walking only arrived in Brawl.",
+          "line": "Tips: The shots can be reflected or absorbed, and the gun itself can only be reflected when thrown. In the first two Smash games a fighter could not move while using a shooting item, and firing while walking only arrived in Brawl.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Ray_Gun",
@@ -426,7 +412,7 @@
       "main_revision": "2063637",
       "lines": [
         {
-          "line": "Summary: A bomb with two little legs and a wind-up key on its back. Thrown at an enemy it explodes with large damage and knockback, but if it is left alone it lights its own fuse and starts walking around.",
+          "line": "Summary: A bomb with two little legs and a wind-up key on its back. Thrown at an enemy it explodes with large damage and knockback, but if it is left alone it starts walking around until its timer runs out.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Bob-omb",
@@ -437,10 +423,10 @@
               ]
             },
             {
-              "page": "https://www.ssbwiki.com/Item",
-              "revision": "2061935",
+              "page": "https://www.ssbwiki.com/Bob-omb",
+              "revision": "2063637",
               "quoted": [
-                "If not grabbed within a few seconds of its appearance, it lights its own fuse and begins walking around, exploding on any character it meets."
+                "When grabbed and thrown at an enemy, this item explodes, but if left alone, it will start walking around until its timer reaches zero"
               ]
             }
           ]
@@ -460,12 +446,13 @@
           ]
         },
         {
-          "line": "Tips: If nobody picks it up, it stands up and walks back and forth on the platform it spawned on, turning around at edges, and explodes if it walks into a fighter. If it meets nobody it blows itself up after a while.",
+          "line": "Tips: If nobody picks it up, the game's manual says it starts walking around until its timer runs out. In the series, it then stands up and walks back and forth on the platform it spawned on, turning around at edges, and explodes if it walks into a fighter, or blows itself up after a while if it meets nobody.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Bob-omb",
               "revision": "2063637",
               "quoted": [
+                "if left alone, it will start walking around until its timer reaches zero",
                 "If a Bob-omb is not picked up, after a while, it will stand up and begin to walk back and forth on the platform it spawned on, turning around at edges. In this state, it will explode if it walks into a player."
               ]
             },
@@ -502,7 +489,7 @@
           ]
         },
         {
-          "line": "Weak points: Master Hand cannot be launched out of the blast zones and takes no knockback from your attacks, so the only way to win is to deplete his 300 hit points. Once he has under 100 HP left, his Finger Bullet attack fires three pairs of Bullet Bills instead of one.",
+          "line": "Weak points: Master Hand cannot be launched out of the blast zones and takes no knockback from your attacks, so the only way to win is to deplete his 300 hit points. Once he has under 100 HP left, his Finger Bullet attack fires three pairs of Bullet Bills instead of one pair.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Master_Hand_(SSB)",
@@ -534,11 +521,11 @@
               "page": "https://www.ssbwiki.com/Master_Hand_(SSB)",
               "revision": "2062983",
               "quoted": [
-                "Side Punch (サイドパンチ) 20%",
+                "from the table (first-game page): Side Punch (サイドパンチ) 20%",
                 "Master Hand makes a fist and punches horizontally across the stage.",
-                "Big Swipe (ビッグスワイプ) 16%",
+                "from the table (first-game page): Big Swipe (ビッグスワイプ) 16%",
                 "Master Hand makes a wide slapping motion across the platform.",
-                "Floor Sweep (床の掃除) 12% per swipe",
+                "from the table (first-game page): Floor Sweep (床の掃除) 12% per swipe",
                 "Master Hand sweeps across the stage several times, depending on the length of the platform.",
                 "Master Hand hovers over the target, then quickly punches down with electric effects."
               ]
@@ -909,7 +896,7 @@
           ]
         },
         {
-          "line": "Weak points: Stay off the Arwings. A fighter standing on one may be KO'd if it flies offscreen to the top or side, and Arwings tend to barrel roll or fly upside down, which essentially pushes you off. The Great Fox's main guns cannot be stood on and do not fire.",
+          "line": "Weak points: A fighter standing on an Arwing may be KO'd if it flies offscreen to the top or side, and Arwings tend to barrel roll or fly upside down, which essentially pushes the fighter off. The Great Fox's main guns cannot be stood on and do not fire.",
           "drawn_from": [
             {
               "page": "https://www.ssbwiki.com/Sector_Z",

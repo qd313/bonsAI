@@ -111,6 +111,61 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "200527",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4210,
+      "game_id": 15,
+      "section_type": "item",
+      "name": "Lumafly Lantern",
+      "card": "Summary: A lantern holding a lumafly that lights up dark areas around you. Sly sells it in Dirtmouth for 1800 Geo.\nUses: It brightens the dark area around you and lets you pay tolls at benches and doors there. It is strictly required for the toll gate between the Forgotten Crossroads and Crystal Peak, in both directions.\nTips: Buy it before you try to cross between the Crossroads and Crystal Peak, since the toll gate there will not work without it. It does nothing in Fog Canyon, Fungal Wastes, Kingdom's Edge or the Hive.",
+      "source_url": "https://hollowknight.wiki/w/Lumafly_Lantern",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "188234",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4211,
+      "game_id": 15,
+      "section_type": "item",
+      "name": "Vessel Fragments",
+      "card": "Summary: Items that raise your maximum SOUL. Three fragments make a Soul Vessel worth 33 SOUL, and the nine fragments in the game give three vessels, doubling your total SOUL capacity.\nUses: SOUL held in your vessels tops up your main meter by itself, after a short delay, whenever it has room. Nail hits fill the vessels at only 6 SOUL a hit, while every other source of SOUL fills them at the normal rate.\nTips: Sly in Dirtmouth sells two, for 550 Geo and 900 Geo; you must have found Sly in the Forgotten Crossroads first, and the second also needs the Shopkeeper's Key. The Seer gives one for 700 Essence, and the Ancient Basin fountain gives one when you drop 3000 Geo into it.\nTips: The rest are found in the world: one in Greenpath near the Queen's Gardens entrance that you cannot enter, one beside the lift in the Forgotten Crossroads once the City of Tears lift is unlocked, one above King's Station near a lift, one in Deepnest above the working tram, and one at the start of the Stag Nest once every Stag Station is open.",
+      "source_url": "https://hollowknight.wiki/w/Vessel_Fragment",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "191248",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4212,
+      "game_id": 15,
+      "section_type": "item",
+      "name": "Quick Focus",
+      "card": "Summary: A charm that makes you focus SOUL about a third faster. Salubra sells it in the Forgotten Crossroads for 800 Geo.\nUses: It heals you faster, which makes healing mid-fight far less risky. It can let you heal where you would otherwise be interrupted, or heal twice where you could heal only once. The short start-up before a focus begins is not made faster.\nTips: It helps most in boss fights and arenas such as the Colosseum of Fools. It pairs with Deep Focus, which slows healing, by cancelling part of that slowdown, though the two cost 7 notches together. Stalwart Shell gives just enough time to heal while you are invincible, and Soul Catcher or Soul Eater with it make healing more frequent and safer.",
+      "source_url": "https://hollowknight.wiki/w/Quick_Focus",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "197102",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4213,
+      "game_id": 15,
+      "section_type": "item",
+      "name": "Wayward Compass",
+      "card": "Summary: A charm that shows where you are on the map. Iselda in Dirtmouth sells it for 220 Geo once you have met Cornifer.\nUses: Your position is shown on the map, even in an area whose map you have not bought.\nTips: It is a good pick for exploring on a first playthrough, but swap it for something combat-minded before a boss fight.",
+      "source_url": "https://hollowknight.wiki/w/Wayward_Compass",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "197076",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4214,
+      "game_id": 15,
+      "section_type": "item",
+      "name": "Tram Pass",
+      "card": "Summary: An item you find inside a wrecked tram in the Failed Tramway in Deepnest. It lets you ride the trams, and it gives the Last Stag something new to say.\nUses: You only need to put it in once per tram, either in the tram's door or in a mechanism at one of its stations. Put it in a station's mechanism while no tram is waiting and that tram starts up and comes to you.\nTips: Five places take it: the south-east Forgotten Crossroads, north of Gruz Mother's arena (to the Resting Grounds); the north-west Resting Grounds (back to the Crossroads); the south-east Deepnest, east of the Hot Spring (to the Ancient Basin); the north-east Ancient Basin, north of Cornifer (to Deepnest and Kingdom's Edge); and the south-west Kingdom's Edge, west of the Hive (to the Ancient Basin).",
+      "source_url": "https://hollowknight.wiki/w/Tram_Pass",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "198459",
+      "crawled_at": "2026-11-10"
     }
   ]
 }

@@ -67,6 +67,50 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "2084931",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3506,
+      "game_id": 35,
+      "section_type": "item",
+      "name": "Body armor",
+      "card": "Summary: Armor that pads your health against gunfire, explosions and fire; in Grand Theft Auto III its pickup is a shield icon, and in the 3D games it gives nearly as many hit points as your full health.\nUses: In the 3D games armor can also pad injuries from falls, collisions with vehicles on foot and even melee attacks.\nTips: In Grand Theft Auto III Ammu-Nation sells it for $3,000 once the mission Last Requests is done, and entering a Police or SWAT Enforcer truck also gives some. A spot in front of every safehouse spawns one after you collect 50 hidden packages.",
+      "source_url": "https://gta.fandom.com/wiki/Body_Armor",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2083689",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3507,
+      "game_id": 35,
+      "section_type": "item",
+      "name": "Health pickups",
+      "card": "Summary: A pickup that restores your health to the maximum; in Grand Theft Auto III they lie in front of every hospital and around Liberty City, often at rest stops, parks and shopping centers.\nUses: Health is a numbered counter with a default maximum of 100%, and a prostitute's services also restore it, to a possible total of 125%.\nTips: If your health runs out you are wasted: you are taken to the nearest hospital, charged a fee and lose all your weapons, and any mission in progress fails. Saving the game does not restore health in Grand Theft Auto III.",
+      "source_url": "https://gta.fandom.com/wiki/Health",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2063152",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3508,
+      "game_id": 35,
+      "section_type": "item",
+      "name": "Adrenaline pills",
+      "card": "Summary: Pills scattered around Liberty City that temporarily boost your speed while slowing down time.\nUses: While time is slowed your aiming speed stays normal, which helps in gun battles with the police or gangs, and you can jump further than normal.\nTips: Entering a vehicle resets the speed to normal. In Grand Theft Auto III there seems to be a glitch where even the smallest drop, such as walking off a sidewalk, can cause considerable damage.",
+      "source_url": "https://gta.fandom.com/wiki/Adrenaline",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2083438",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3509,
+      "game_id": 35,
+      "section_type": "item",
+      "name": "Police bribe",
+      "card": "Summary: A rotating star-shaped police badge pickup that lowers your wanted level by one star; it is a cost-free alternative to respraying your car.\nUses: Higher-level police already chasing you (the Military, SWAT or the FBI, for example) keep pursuing, though no more law enforcement vehicles appear. The exception is the Police Maverick, which gives up at three stars and drops you to two.\nTips: They are scarce, so you have to memorize where they are: some lie in obvious places, some are well hidden, and some sit at a slight height that needs a jump in a car to reach.",
+      "source_url": "https://gta.fandom.com/wiki/Police_Bribes",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2079729",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

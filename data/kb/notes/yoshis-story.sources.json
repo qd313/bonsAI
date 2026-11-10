@@ -415,6 +415,271 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3606,
+      "name": "Heart Fruit and Super Happy",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Heart_Fruit",
+      "main_revision": "5485599",
+      "lines": [
+        {
+          "line": "Summary: A fruit that makes the Yoshi who eats it Super Happy for a short while. It turns up in bubbles, or floats down after you eat six of the same fruit in a row.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Heart_Fruit",
+              "revision": "5485599",
+              "quoted": [
+                "Heart Fruits can be found in bubbles; alternatively, when a Yoshi eats six of the same fruit in a row, a Heart Fruit appears from the sky and slowly floats down. When obtained, the Heart Fruit makes a Yoshi Super Happy."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Super_Happy",
+              "revision": "5455571",
+              "quoted": [
+                "Super Happy Yoshi lasts for only a limited time"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: A Super Happy Yoshi is invincible and stronger, has endless eggs, a longer tongue and extra flutter-jumping, and gets the whole Smile Meter back. A ground pound pops every bubble on screen, turns Shy Guys into Lucky Fruits and peppers into coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Heart_Fruit",
+              "revision": "5485599",
+              "quoted": [
+                "In that form, he is invincible and stronger",
+                "While Super Happy, a Yoshi is given an endless supply of eggs, a longer tongue, and extra flutter-jumping",
+                "When a Yoshi transforms, his health is filled completely.",
+                "When a Yoshi ground-pounds while Super Happy, all onscreen bubbles pop, Shy Guys turn into Lucky Fruits, and peppers turn into coins."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Super_Happy",
+              "revision": "5455571",
+              "quoted": [
+                "the form's invincibility does not protect the Yoshi from fatal hazards"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The effect ends early if you eat a blue Tehee Butterfly, a Black Shy Guy or a pepper, if a Piranha Pest swallows you, or when you move on to an area that turns the page.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Super_Happy",
+              "revision": "5455571",
+              "quoted": [
+                "its effects wear off immediately if a Yoshi eats anything like a blue Tehee Butterfly, a Black Shy Guy, or a pepper or if a Yoshi is eaten by a Piranha Pest.",
+                "Moving to a new area that causes the page to turn also ends the effect early."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Being Super Happy does not save you from the big fish called Blurps, from pits, lava or pistons.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Super_Happy",
+              "revision": "5455571",
+              "quoted": [
+                "Lastly, the form's invincibility does not protect the Yoshi from fatal hazards, such as Blurps, pits, lava, and pistons."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3607,
+      "name": "Special Hearts",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Special_Heart",
+      "main_revision": "5408895",
+      "lines": [
+        {
+          "line": "Summary: Three big hearts hidden in every level. Each one you collect opens one more level on the next page.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Special_Heart",
+              "revision": "5408895",
+              "quoted": [
+                "Each stage has three Special Hearts hidden throughout the stage.",
+                "Each Special Heart opens a new level on the next page"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: After the first page, only the first level of the next page is open unless you collected a Special Heart in the level you just played. You need all three to open every level on that page. Each one also heals the Yoshi fully.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Special_Heart",
+              "revision": "5408895",
+              "quoted": [
+                "only the first level of the next page can be accessed unless a Special Heart is collected in the current level; this applies to all pages past the first page.",
+                "meaning that all three Special Hearts are needed to unlock all the levels on the next page.",
+                "Unlocks a level on the next page; fully heals a Yoshi"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Chimes ring when a Baby Yoshi is close to one, and an egg can be thrown to collect one.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Special_Heart",
+              "revision": "5408895",
+              "quoted": [
+                "Ringing chimes sound when a Baby Yoshi is close to a Special Heart."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Story",
+              "revision": "5520653",
+              "quoted": [
+                "Eggs can also be thrown to collect coins and Special Hearts."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Each Special Heart is worth 100 hearts toward Yoshi's Mood at the end of the level.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Special_Heart",
+              "revision": "5408895",
+              "quoted": [
+                "Special Hearts also boost Yoshi's Mood at the end of a stage",
+                "Special Hearts are worth 100 hearts."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3608,
+      "name": "Power Flower",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Power_Flower_(Yoshi%27s_Story)",
+      "main_revision": "5412549",
+      "lines": [
+        {
+          "line": "Summary: A special sunflower growing from the ground. A Baby Yoshi that eats its head is healed.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Power_Flower_(Yoshi%27s_Story)",
+              "revision": "5412549",
+              "quoted": [
+                "A Power Flower is a special sunflower that appears in Yoshi's Story. It grows from the ground",
+                "The head of a Power Flower can be consumed by a Baby Yoshi"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Eating the head gives back two petals of the Smile Meter. It earns no points, so it does nothing for Yoshi's Mood at the end of the level.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Power_Flower_(Yoshi%27s_Story)",
+              "revision": "5412549",
+              "quoted": [
+                "This allows him to recover two petals on his Smile Meter, but it does not earn him any points, unlike eating a fruit or a Shy Guy, and thus does not improve Yoshi's Mood when the stage is completed."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A sunflower on a green stem with green leaves. The head is yellow with red petals, black eyes and a small red mouth.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Power_Flower_(Yoshi%27s_Story)",
+              "revision": "5412549",
+              "quoted": [
+                "has a green stem with green leaves, as well as a yellow head with red petals, black eyes, and a small red mouth."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The head grows back quickly after it is eaten, so you can keep eating until the Smile Meter is full.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Power_Flower_(Yoshi%27s_Story)",
+              "revision": "5412549",
+              "quoted": [
+                "The head of the Power Flower quickly regrows after being consumed, meaning that the Yoshi can simply keep eating flower heads until his health is fully recovered."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3609,
+      "name": "Bomb Berry",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Bomb_Berry",
+      "main_revision": "5405956",
+      "lines": [
+        {
+          "line": "Summary: A spiked fruit that grows only in the level Jungle Puddle. It tastes horrible to most Yoshis.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bomb_Berry",
+              "revision": "5405956",
+              "quoted": [
+                "Bomb Berries appear only in Jungle Puddle."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Story",
+              "revision": "5520653",
+              "quoted": [
+                "An explosive spiked fruit that tastes horrible to Yoshis (except the Black and White Yoshis)."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It is a hazard, not a meal. Touching one makes the Smile Meter lose petals, and so does eating one, unless the Yoshi is the Black or the White one.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bomb_Berry",
+              "revision": "5405956",
+              "quoted": [
+                "Getting in contact with a Bomb Berry causes a Yoshi to make its Smile Meter lose some petals. Eating it also causes the Yoshi to lose petals (except for the Black and White Yoshis)."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A yellow and red aubergine-shaped fruit covered in green spikes.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bomb_Berry",
+              "revision": "5405956",
+              "quoted": [
+                "Bomb Berries resemble yellow-and-red eggplants and are covered in green spikes."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A Bomb Berry is invisible at first and swells to full size once you walk past. When it gets heavy enough it drops into the water and sinks, and after a while a new one grows in the same spot.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bomb_Berry",
+              "revision": "5405956",
+              "quoted": [
+                "At first, they are invisible, but once the player walks past them, they begin to grow to full size. They continue to grow until their weight causes them to fall off into the water, where they slowly sink to the bottom. A new Bomb Berry then grows from the original spot after a while."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

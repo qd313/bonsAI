@@ -329,6 +329,222 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3704,
+      "name": "Taj's three vehicle races (Car, Hovercraft, Plane)",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Taj",
+      "main_revision": "5425365",
+      "lines": [
+        {
+          "line": "Summary: Once you have enough Golden Balloons in Adventure Mode, Taj turns up and challenges you to race him on his flying carpet, each time in a set vehicle, and beating him earns another Golden Balloon.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "After the player collects enough Golden Balloons in Adventure Mode, Taj will appear and challenge the player to a race in a specific vehicle.",
+                "The player has to race Taj, who rides a flying carpet.",
+                "After Taj is beaten, he will reward the player with another Golden Balloon."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Taj moves slowly in the Car Challenge, which makes it the easy one. The Hovercraft Challenge is somewhat harder, and the Plane Challenge is considered the hardest of the three.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Car Challenge is a relatively easy race done in a car.",
+                "This should be very easy for the player because of Taj's slow movement.",
+                "Hovercraft Challenge is the second of Taj's races and is somewhat more difficult than the Car Challenge.",
+                "Plane Challenge is considered to be the hardest of Taj's three races and a plane is used in it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A blue elephant who is also a genie and rides a magic red carpet.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Taj",
+              "revision": "5425365",
+              "quoted": [
+                "Taj is a blue elephant and a genie who lives on Timber's Island.",
+                "Taj uses a magic red carpet for transportation as well as in his vehicle races"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Red flags showing the Nintendo 64 logo mark the route, and you have to follow them. Leaving the track by too far a margin gets you disqualified.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "The racetrack is marked with red flags showing the Nintendo 64 logo and the player has to follow them. If they leave the set track by too far a margin, they will be disqualified."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Once a race is unlocked you can run it again whenever you like, but each one gives only a single Golden Balloon.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "each of them can be repeated at any time after they have been unlocked (the player will only obtain one Golden Balloon per challenge however)."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3705,
+      "name": "T.T.'s ghosts (Time Trial)",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+      "main_revision": "5435503",
+      "lines": [
+        {
+          "line": "Summary: In Tracks mode, Time Trial has you race T.T.'s best times. It is optional for the adventure, but beating him on every course is what makes T.T. playable.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Time Trial mode is also accessed here, where the player needs to race to beat T.T.'s best times. This is optional in the main game, but it is required to unlock T.T. himself."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/T.T.",
+              "revision": "5405137",
+              "quoted": [
+                "if they can beat T.T. in all races, he will become playable"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: T.T. himself is an animated stopwatch with a red outer shell, a yellow inner case and a blue button on his head, plus black arms and legs with white gloves and shoes.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/T.T.",
+              "revision": "5405137",
+              "quoted": [
+                "T.T. is an animated stopwatch",
+                "T.T. has a pair of two black arms and legs, with a white glove on each hand and a white shoe on each foot.",
+                "There is a blue button on his head, and T.T.'s outer shell is red, while his inner case is yellow."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Each course has two times, an unlock time that brings out T.T.'s ghost and then a lower ghost time to beat. Dino Domain's four are Ancient Lake 1:07.00 then 1:01.28, Fossil Canyon 1:37.00 then 1:30.16, Jungle Falls 1:08.00 then 1:02.50 and Hot Top Volcano 1:35.00 then 1:30.71.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "The player must get good enough times around tracks in Time Trials mode to unlock T.T.'s ghost for each course, and then beat each.",
+                "Course !! Unlock time !! Ghost time",
+                "Ancient Lake || 1:07.00 || 1:01.28 || Fossil Canyon || 1:37.00 || 1:30.16 || Jungle Falls || 1:08.00 || 1:02.50 || Hot Top Volcano || 1:35.00 || 1:30.71"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3706,
+      "name": "Silver Coins (the Silver Coin Challenge)",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Silver_Coin",
+      "main_revision": "5413702",
+      "lines": [
+        {
+          "line": "Summary: Eight coins to find on each course. Collect all eight and win the race to earn a Golden Balloon.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Silver_Coin",
+              "revision": "5413702",
+              "quoted": [
+                "Every course has a Silver Coin Challenge, where the objective is to collect eight Silver Coins and win in first place.",
+                "Collecting every one in a Silver Coin Challenge rewards a Golden Balloon."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "Eight Silver Coins appear in each standard race course for their Coin Challenges."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Taj hands over the Golden Balloon when you finish a challenge. A world's challenges only open after you have beaten its boss once, and each course has its own minimum number of Golden Balloons before you can play its challenge.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Silver_Coin",
+              "revision": "5413702",
+              "quoted": [
+                "When the player's racer completes a Silver Coin Challenge, Taj awards them with a Golden Balloon.",
+                "The player can only participate in a world's Silver Coin Challenges after winning against the world boss in a race, and every race course has their own minimum requirement of Golden Balloons needed to play the challenges."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: In the original game each coin has a colourful N64 icon on its sides.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Silver_Coin",
+              "revision": "5413702",
+              "quoted": [
+                "the Silver Coins have a colorful N64 icon designed on the sides"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Many of the coins are well hidden or sit off the track.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Silver_Coin",
+              "revision": "5413702",
+              "quoted": [
+                "Many of them are well hidden or located off-track."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Clearing the Silver Coin Challenge on all four courses of a world sets up the rematch with that world's boss. In Adventure Two the coins are in different places, often hard to reach.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Silver_Coin",
+              "revision": "5413702",
+              "quoted": [
+                "Completing the Silver Coin Challenge in all four courses of Dino Domain, Snowflake Mountain, Sherbet Island and Dragon Forest engages the player in a rematch against the world's boss"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Diddy_Kong_Racing",
+              "revision": "5435503",
+              "quoted": [
+                "the locations of the silver coins are different, often in hard to reach places"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

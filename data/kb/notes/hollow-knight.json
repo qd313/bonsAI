@@ -56,6 +56,61 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "195606",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4205,
+      "game_id": 15,
+      "section_type": "enemy",
+      "name": "Soul Twister",
+      "card": "Summary: A scholar of the Soul Sanctum that teleports around and throws homing soul orbs at you. You meet it east of the Soul Master's arena, and in later waves of the Trial of the Fool.\nWeak points: It cannot teleport straight after it fires, so dodge the orb by jumping or dashing and then rush in. Nail Arts, Great Slash for one, kill it fast, Dash Slash closes the gap, and Vengeful Spirit or Shade Soul reaches it at range because it does not teleport away from them on purpose.\nTips: It teleports often, so you cannot corner it; small rooms and halls give it fewer angles, which makes its orbs easier to read and gives you more openings. Running is hard, but it will not follow you through a screen transition into another room.",
+      "source_url": "https://hollowknight.wiki/w/Soul_Twister",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "200295",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4206,
+      "game_id": 15,
+      "section_type": "enemy",
+      "name": "Crystal Hunter",
+      "card": "Summary: A hovering bug found only in Crystal Peak that stays out of nail reach and shoots crystals at you.\nWeak points: It fires with a short delay, so it tends to miss unless you stand right under it; jump up and slash it while it prepares the next shot.\nTips: Its shot bursts into a clump of crystals on hitting a surface. The clump fades after a short while, a nail hit breaks it easily, and you can bounce off it with your nail. A nail strike can also deflect the shot itself, though the shot still passes through enemies.\nLooks like: A hovering bug with crystal growths on its body.",
+      "source_url": "https://hollowknight.wiki/w/Crystal_Hunter",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "189292",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4207,
+      "game_id": 15,
+      "section_type": "enemy",
+      "name": "Great Hopper",
+      "card": "Summary: The grown-up form of the Hopper, a big leaper that hops without stopping and shakes the ground each time it lands. You find it in the southeast of Kingdom's Edge and in the Trial of the Conqueror, and hitting the dummy at Oro's backyard sets two on you.\nWeak points: Stand still and step a little to the side to dodge its jumps, and you can strike it after each landing and take no damage. Howling Wraiths or Abyss Shriek can damage it while it is in the air.\nTips: Touching it hurts. Unlike a normal Hopper, it turns around to chase you.\nLooks like: A large hopping creature, the full-grown version of the ordinary Hopper.",
+      "source_url": "https://hollowknight.wiki/w/Great_Hopper",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "190343",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4208,
+      "game_id": 15,
+      "section_type": "enemy",
+      "name": "Baldur",
+      "card": "Summary: A crawling creature that rolls into a ball and rams you. It lives in the Ancestral Mound, the Crystallised Mound and the Howling Cliffs, and a stronger kind, the Sharp Baldur, fights in the Colosseum of Fools.\nWeak points: When it nears you, jump over it and strike down onto it. The Quick Slash or Heavy Blow charm lets you keep knocking it back before it touches you.\nTips: While curled up it rebounds from walls and from other Baldurs, then uncurls after a short time and turns to face you again.\nLooks like: A crawling creature with orange eyes that curls up into a ball.",
+      "source_url": "https://hollowknight.wiki/w/Baldur",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "197871",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4209,
+      "game_id": 15,
+      "section_type": "boss",
+      "name": "Gruz Mother",
+      "card": "Summary: A sleeping boss in a small arena in the Forgotten Crossroads, standing across the direct path to a deserted village at the bottom. She wakes when you hit her, and two more are fought together in the Trial of the Warrior.\nWeak points: She has low health, so the simplest kill is with Vengeful Spirit: six casts or 18 hits with the Old Nail are enough.\nTips: Her repeated slams between floor and ceiling are fast and need good timing, which the Mothwing Cloak makes easier. When she dies in the Crossroads she bursts into 7 or 8 Gruzzers that you must also kill before you can leave. In the Trial of the Warrior two come at once: kill one as fast as you can, and Howling Wraiths or Abyss Shriek works best.",
+      "source_url": "https://hollowknight.wiki/w/Gruz_Mother",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "200527",
+      "crawled_at": "2026-11-10"
     }
   ]
 }

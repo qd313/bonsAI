@@ -257,6 +257,289 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 4205,
+      "name": "Soul Twister",
+      "kind": "enemy",
+      "main_page": "https://hollowknight.wiki/w/Soul_Twister",
+      "main_revision": "200295",
+      "lines": [
+        {
+          "line": "Summary: A scholar of the Soul Sanctum that teleports around and throws homing soul orbs at you. You meet it east of the Soul Master's arena, and in later waves of the Trial of the Fool.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Soul_Twister",
+              "revision": "200295",
+              "quoted": [
+                "They are scholars of the Soul Sanctum who have learnt how to harness the power of SOUL, which they twist into spells and use to teleport.",
+                "They appear in the Soul Sanctum, only to the east of the Soul Master arena. They also appear in the 9th, 10th, 11th and 17th waves of the Trial of the Fool."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: It cannot teleport straight after it fires, so dodge the orb by jumping or dashing and then rush in. Nail Arts, Great Slash for one, kill it fast, Dash Slash closes the gap, and Vengeful Spirit or Shade Soul reaches it at range because it does not teleport away from them on purpose.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Soul_Twister",
+              "revision": "200295",
+              "quoted": [
+                "the best tactic then is to wait for the Soul Twister to conjure an offensive orb and then rush in to attack it after avoiding its projectile, as it cannot teleport immediately after firing a projectile.",
+                "avoiding the orb can be as simple as jumping over or dashing.",
+                "It is recommended to use Nail Arts such as Great Slash to dispatch them quickly. Dash Slash can also help close the range with them.",
+                "Vengeful Spirit/Shade Soul is also useful for attacking at range, as they do not deliberately teleport to avoid projectiles."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It teleports often, so you cannot corner it; small rooms and halls give it fewer angles, which makes its orbs easier to read and gives you more openings. Running is hard, but it will not follow you through a screen transition into another room.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Soul_Twister",
+              "revision": "200295",
+              "quoted": [
+                "It teleports frequently around its territory, making it difficult to hit and impossible to corner.",
+                "Forcing them into smaller rooms and hallways where they have fewer angles of attack is also recommended to make dodging more predictable, and to make it easier to get in hits.",
+                "Fleeing from these enemies is very difficult, as they relentlessly teleport after the Knight upon their activation. However, they do not follow the Knight into other rooms marked via a screen transition."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4206,
+      "name": "Crystal Hunter",
+      "kind": "enemy",
+      "main_page": "https://hollowknight.wiki/w/Crystal_Hunter",
+      "main_revision": "189292",
+      "lines": [
+        {
+          "line": "Summary: A hovering bug found only in Crystal Peak that stays out of nail reach and shoots crystals at you.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Crystal_Hunter",
+              "revision": "189292",
+              "quoted": [
+                "Crystal Hunters can be found only in Crystal Peak.",
+                "Hovers in the air, usually out of melee range, shooting a crystalline projectile at the Knight"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: It fires with a short delay, so it tends to miss unless you stand right under it; jump up and slash it while it prepares the next shot.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Crystal_Hunter",
+              "revision": "189292",
+              "quoted": [
+                "Unless the Knight is directly below them, they tend to miss their attacks as they launch them with a short delay. Jump up and slash at them while they are preparing their next attack."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its shot bursts into a clump of crystals on hitting a surface. The clump fades after a short while, a nail hit breaks it easily, and you can bounce off it with your nail. A nail strike can also deflect the shot itself, though the shot still passes through enemies.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Crystal_Hunter",
+              "revision": "189292",
+              "quoted": [
+                "turns into a cluster of crystals when it makes contact with a surface.",
+                "These clusters dissipate after a short period of time but can otherwise easily be broken with a Nail strike, and can be Nail-bounced on.",
+                "Their crystal shot can be deflected with a Nail strike, but the projectile still passes through enemies."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A hovering bug with crystal growths on its body.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Crystal_Hunter",
+              "revision": "189292",
+              "quoted": [
+                "They use their crystalline growths to fire crystals at intruders.",
+                "Hovers in the air"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4207,
+      "name": "Great Hopper",
+      "kind": "enemy",
+      "main_page": "https://hollowknight.wiki/w/Great_Hopper",
+      "main_revision": "190343",
+      "lines": [
+        {
+          "line": "Summary: The grown-up form of the Hopper, a big leaper that hops without stopping and shakes the ground each time it lands. You find it in the southeast of Kingdom's Edge and in the Trial of the Conqueror, and hitting the dummy at Oro's backyard sets two on you.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Great_Hopper",
+              "revision": "190343",
+              "quoted": [
+                "The adult form of the Hopper, these large creatures attempt to crush prey beneath their bodies.",
+                "Hops continuously up and down, dealing contact damage and shaking the ground when it lands.",
+                "They are found in the southeast part of Kingdom's Edge. Two of them are spawned by hitting the dummy in Oro's backyard. They are also found within the Colosseum of Fools, in the Trial of the Conqueror."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Stand still and step a little to the side to dodge its jumps, and you can strike it after each landing and take no damage. Howling Wraiths or Abyss Shriek can damage it while it is in the air.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Great_Hopper",
+              "revision": "190343",
+              "quoted": [
+                "When standing in one place and moving slightly to the side to avoid its jumps, it is possible to hit it after every landing without taking damage.",
+                "The Howling Wraiths/Abyss Shriek Spell can be used to damage them while they are in the air."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Touching it hurts. Unlike a normal Hopper, it turns around to chase you.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Great_Hopper",
+              "revision": "190343",
+              "quoted": [
+                "dealing contact damage",
+                "Unlike normal Hoppers, it changes direction to chase the Knight."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A large hopping creature, the full-grown version of the ordinary Hopper.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Great_Hopper",
+              "revision": "190343",
+              "quoted": [
+                "The adult form of the Hopper, these large creatures"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4208,
+      "name": "Baldur",
+      "kind": "enemy",
+      "main_page": "https://hollowknight.wiki/w/Baldur",
+      "main_revision": "197871",
+      "lines": [
+        {
+          "line": "Summary: A crawling creature that rolls into a ball and rams you. It lives in the Ancestral Mound, the Crystallised Mound and the Howling Cliffs, and a stronger kind, the Sharp Baldur, fights in the Colosseum of Fools.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Baldur",
+              "revision": "197871",
+              "quoted": [
+                "They are younger Baldurs and crawling creatures who defend themselves by rolling into a ball. A stronger variant called the Sharp Baldur is bred to fight in the Colosseum of Fools.",
+                "They are found in the Ancestral Mound, Crystallised Mound, and the Howling Cliffs."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: When it nears you, jump over it and strike down onto it. The Quick Slash or Heavy Blow charm lets you keep knocking it back before it touches you.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Baldur",
+              "revision": "197871",
+              "quoted": [
+                "Jump over it when it gets close and strike from above while doing so.",
+                "using the Quick Slash or Heavy Blow Charm allow the Knight to continually knock it back before it can make contact."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: While curled up it rebounds from walls and from other Baldurs, then uncurls after a short time and turns to face you again.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Baldur",
+              "revision": "197871",
+              "quoted": [
+                "Rolls into a ball and propels itself towards the Knight, bouncing off walls and other Baldurs. After a short time, it uncurls and reorients itself to face the Knight again."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A crawling creature with orange eyes that curls up into a ball.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Baldur",
+              "revision": "197871",
+              "quoted": [
+                "their eyes during gameplay are orange",
+                "crawling creatures who defend themselves by rolling into a ball"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4209,
+      "name": "Gruz Mother",
+      "kind": "boss",
+      "main_page": "https://hollowknight.wiki/w/Gruz_Mother",
+      "main_revision": "200527",
+      "lines": [
+        {
+          "line": "Summary: A sleeping boss in a small arena in the Forgotten Crossroads, standing across the direct path to a deserted village at the bottom. She wakes when you hit her, and two more are fought together in the Trial of the Warrior.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Gruz_Mother",
+              "revision": "200527",
+              "quoted": [
+                "One Gruz Mother can be found blocking the direct path to an abandoned village at the bottom of the Forgotten Crossroads. She is sleeping, exhausted from carrying her children, and wakes up when struck.",
+                "Two more Gruz Mothers can be fought simultaneously at the end of the Trial of the Warrior."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: She has low health, so the simplest kill is with Vengeful Spirit: six casts or 18 hits with the Old Nail are enough.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Gruz_Mother",
+              "revision": "200527",
+              "quoted": [
+                "Using the Vengeful Spirit Spell is the easiest way to defeat her, as she has relatively low health (6 Vengeful Spirits/18 Old Nail strikes is enough to defeat Gruz Mother)."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Her repeated slams between floor and ceiling are fast and need good timing, which the Mothwing Cloak makes easier. When she dies in the Crossroads she bursts into 7 or 8 Gruzzers that you must also kill before you can leave. In the Trial of the Warrior two come at once: kill one as fast as you can, and Howling Wraiths or Abyss Shriek works best.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Gruz_Mother",
+              "revision": "200527",
+              "quoted": [
+                "Wild Slam: Gruz Mother repeatedly slams herself between the floor and the ceiling",
+                "The Wild Slam attack can be dodged more easily with the Mothwing Cloak since the attack is fast and decent timing is required to avoid it otherwise.",
+                "When Gruz Mother dies in her Forgotten Crossroads encounter, she spawns a swarm of 7-8 Gruzzers that must also be defeated before the Knight can leave the boss area.",
+                "In the Colosseum of Fools, two are fought at once. It is best to kill one Gruz Mother as fast as possible",
+                "Howling Wraiths/Abyss Shriek is the best Spell to defeat Gruz Mother in the Colosseum of Fools."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -110,6 +110,7 @@ from backend.knowledge import kb_followup_memory
 from backend.ollama import ollama_keep_alive_rule
 from backend.commands.input_sanitizer_service import apply_input_sanitizer_lane
 from backend.knowledge.kb_notes_footers import append_kb_notes_footers
+from backend.knowledge.kb_notes_turn_flags import prompt_turn_flags
 from backend.prompts.ollama_prompts import (
     build_reply_followup_context_block,
     extract_strategy_asked_entity,
@@ -860,6 +861,10 @@ async def run_game_ai_request(
         # written to the chat when the Ask is accepted, before this runs -- and the memory builder
         # drops that trailing turn itself. How much of the chat actually reaches the AI, and
         # whether it needs summing up first, is decided inside ask_ollama, not here.
+        # Plan 103 lane R2: whether the reply will end with a "Not in my notes" or "No close match" line is
+        # known now, so the AI is told too (kb_notes_turn_flags.py); the footer step below still writes the line.
+        notes_turn_flags = prompt_turn_flags(ask_mode, kb_transparency, kb_coverage_transparency, text_resolved_title,
+                                             question_for_kb_search, kb_attached_notes, question_is_courtesy_or_junk)
         ollama_result = await plugin.ask_ollama(
             question_for_model,
             pc_ip,
@@ -892,7 +897,7 @@ async def run_game_ai_request(
             strategy_checklist_state=strategy_checklist_state,
             preferred_model=preferred_model,
             user_notes_block=user_notes.block,
-            courtesy_turn=question_is_courtesy_or_junk,
+            courtesy_turn=question_is_courtesy_or_junk, turn_flags=notes_turn_flags,
         )
         elapsed = round(time.time() - start, 1)
         base_response_text = str(ollama_result.get("response", "") or "No response text.")
@@ -1009,13 +1014,9 @@ async def run_game_ai_request(
         # (moved out of this file, plan 78, growth-limit fix).
         if ollama_result.get("success"):
             response_text = append_kb_notes_footers(
-                response_text,
-                ask_mode=ask_mode,
-                kb_transparency=kb_transparency,
-                kb_coverage_transparency=kb_coverage_transparency,
-                text_resolved_title=text_resolved_title,
-                question_for_kb_search=question_for_kb_search,
-                kb_attached_notes=kb_attached_notes,
+                response_text, ask_mode=ask_mode, kb_transparency=kb_transparency,
+                kb_coverage_transparency=kb_coverage_transparency, text_resolved_title=text_resolved_title,
+                question_for_kb_search=question_for_kb_search, kb_attached_notes=kb_attached_notes,
                 courtesy_turn=question_is_courtesy_or_junk,
             )
 

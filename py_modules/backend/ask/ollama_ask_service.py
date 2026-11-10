@@ -53,7 +53,7 @@ import asyncio
 import functools
 import threading
 import time
-from typing import Any, Optional
+from typing import Any, Collection, Optional
 
 import decky
 
@@ -126,7 +126,7 @@ async def run_ask_ollama(
     chat: Optional[dict] = None,
     question_for_display: str = "",
     user_notes_block: str = "",
-    courtesy_turn: bool = False,
+    courtesy_turn: bool = False, turn_flags: Collection[str] = (),
 ) -> dict[str, Any]:
     """Orchestrate attachment prep, prompt assembly, and model fallback request execution.
 
@@ -138,6 +138,9 @@ async def run_ask_ollama(
     ``courtesy_turn`` (plan 100 lane M2): the caller judged the question a thank-you, a greeting or
     an off-topic one. The prompt then asks for one short friendly sentence (see
     ``build_system_prompt``). The caller also sends no ``chat``, so no earlier turn reaches the AI.
+
+    ``turn_flags`` (plan 103 lane R2): named facts the caller worked out about this turn before asking
+    (see ``kb_notes_turn_flags.prompt_turn_flags``); passed straight to the prompt builder.
 
     ``question_for_display`` (plan 70 helper K): the person's own words, exactly as the sanitizer
     passed them along, before the caller may have added a reply_followup chip header or a bare
@@ -214,7 +217,7 @@ async def run_ask_ollama(
         reply_verbosity=reply_verbosity,
         reply_language=reply_language,
         user_notes_block=user_notes_block,
-        glossary_game_title=glossary_game_title, glossary_terms=glossary_terms, courtesy_turn=courtesy_turn,
+        glossary_game_title=glossary_game_title, glossary_terms=glossary_terms, courtesy_turn=courtesy_turn, turn_flags=turn_flags,
     )
     if ask_mode == "strategy":
         # Closes the last gap in the branch-picker chain. With this plus the

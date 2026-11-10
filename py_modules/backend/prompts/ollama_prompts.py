@@ -89,7 +89,7 @@ re-exported here.
 
 import os
 import re
-from typing import Callable, Optional, Sequence
+from typing import Callable, Collection, Optional, Sequence
 
 from backend.power.tdp_intent import is_current_tdp_read_intent
 from backend.strategy.strategy_guide_parse import (
@@ -278,6 +278,46 @@ FINALE_RULE_LINE = (
     "about one before they are there, help with the problem at hand first and say the finale can wait.\n"
 )
 
+# Plan 103 lane R2 (call 11): the honest "I don't know". The back end works out, before the AI is
+# asked, whether one of the two notes footers ("Not in my notes", "No close match") will show on the
+# reply (kb_notes_turn_flags.prompt_turn_flags), and hands the prompt a set of named facts about the
+# turn, ``turn_flags``. The first fact is below; more can join the set without a new argument.
+# Today the footer is the only place the reply says it, and it is the back end's line, not the AI's.
+TURN_FLAG_NOTES_DO_NOT_COVER = "notes_do_not_cover"
+
+# The switch and the pick. OFF until the answer test (three tries per question, the AI's own words
+# counted apart from the footer line) says a wording earns its place; ``HONEST_UNKNOWN_WORDING`` names
+# the one that is used when it is on. Read when a prompt is built, not when this file loads, so a
+# test or a measuring script can flip them. Each wording is one sentence after its label, and none
+# quotes a phrase for the AI to copy, so what it says is its own.
+HONEST_UNKNOWN_ON = False
+HONEST_UNKNOWN_WORDING = "a"
+HONEST_UNKNOWN_WORDINGS = {
+    "a": (
+        "NOTES GAP: The attached notes do not cover this question, so begin your reply by telling the "
+        "player in your own words that you have no notes on it, then give only general help and say "
+        "where you are guessing."
+    ),
+    "b": (
+        "NOTES GAP: Whatever notes are attached here are at best a loose match for this question and "
+        "are not an answer to it, so do not borrow their facts as if they were; say so first in a "
+        "sentence of your own, then help from general knowledge and mark it as such."
+    ),
+    "c": (
+        "NOTES GAP: This question is not covered by the attached notes, so open with one short sentence "
+        "of your own telling the player that, and if you go on from general knowledge, say you may be wrong."
+    ),
+}
+
+
+def _honest_unknown_line(turn_flags: Collection[str]) -> str:
+    """The sentence for a turn whose flag says the notes do not cover it; ``""`` on every other turn
+    and whenever the switch is off. An unknown wording key falls back to the first."""
+    if not HONEST_UNKNOWN_ON or TURN_FLAG_NOTES_DO_NOT_COVER not in turn_flags:
+        return ""
+    wording = HONEST_UNKNOWN_WORDINGS.get(HONEST_UNKNOWN_WORDING) or HONEST_UNKNOWN_WORDINGS["a"]
+    return f"\n{wording}\n"
+
 
 # Matches knowledge_base_service._BLOCK_HEADER exactly. Duplicated rather than imported for the
 # same reason as _STRUCTURED_CARD_LABELS above -- only used to find where to splice the
@@ -410,6 +450,7 @@ def build_system_prompt(
     glossary_game_title: str = "",
     glossary_terms: Sequence[str] = (),
     courtesy_turn: bool = False,
+    turn_flags: Collection[str] = (),
 ) -> str:
     """Build the system message used for Ollama requests from game and attachment context.
 
@@ -443,6 +484,11 @@ def build_system_prompt(
     ``courtesy_turn`` (plan 100 lane M2): a thank-you, a greeting or an off-topic question. The
     prompt is the game line, identity, status line and glossary, then ``COURTESY_TURN_REPLY_BLOCK``
     and the reply language -- none of the Strategy, Expert or Speed orders, the notes or the menu.
+
+    ``turn_flags`` (plan 103 lane R2): named facts about this turn that the caller knew before asking the
+    AI. Today one: ``TURN_FLAG_NOTES_DO_NOT_COVER``, set when the reply will end with a "Not in my
+    notes" or "No close match" line. With it set and ``HONEST_UNKNOWN_ON`` on, one sentence after the
+    attached notes tells the AI to say so in its own words; otherwise the prompt is exactly as before.
 
     ``reply_verbosity``: the Reply style slider's stop. On its Terse stop (plan 93) the length block
     of the other stops is replaced by the three-line rule and the branch-menu requirement
@@ -611,6 +657,8 @@ def build_system_prompt(
         # Plan 103 lane R2: a versus-style note brings the finale rule; every other turn is unchanged.
         if _FINALE_RULE_CARD_RE.search(early_stripped):
             early_block += FINALE_RULE_LINE
+
+    early_block += _honest_unknown_line(turn_flags)
 
     placement = knowledge_block_placement if knowledge_block_placement == "late" else "early"
 

@@ -1,0 +1,50 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 2700,
+      "game_id": 8,
+      "section_type": "item",
+      "name": "Mantis Blades",
+      "card": "Summary: Arasaka arm cyberware for fighting up close with swift, deadly slashes. It deals Physical damage and has a 10-20% chance to make enemies bleed.\nUses: Close-range melee. While you use them you can leap at an enemy within range to deal massive damage, and every point of Reflexes adds 0.5% damage with them. The game counts them as bladed weapons, which the wiki calls perfect for assassination and stealth executions.\nTips: Any Ripperdoc sells them once you reach level 10, and the quality goes up every 10 levels. The Arms slot has room for only one piece of cyberware, so you choose between them and the other arm cyberware.",
+      "source_url": "https://cyberpunk.fandom.com/wiki/Mantis_Blades",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "307995",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2701,
+      "game_id": 8,
+      "section_type": "item",
+      "name": "Monowire",
+      "card": "Summary: Arm cyberware that lets you whip several enemies at once from a distance. It deals Physical damage with a 10-20% chance to make enemies bleed.\nUses: Melee and short-range fighting. It has a quickhack slot that starts empty: once you have the Jailbreak Relic perk you can put a Control quickhack in it, and the quickhack is uploaded to anything hit by a charged attack. Every point of Intelligence adds 0.5% damage with it.\nTips: Any Ripperdoc sells it once you reach level 10, and the quality goes up every 10 levels, up to Tier 5. The Arms slot has room for only one piece of cyberware, so you choose between it and the other arm cyberware.",
+      "source_url": "https://cyberpunk.fandom.com/wiki/Monowire",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "309164",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2702,
+      "game_id": 8,
+      "section_type": "item",
+      "name": "Projectile Launch System",
+      "card": "Summary: Arasaka arm cyberware that launches an explosive projectile for massive Physical damage.\nUses: Aiming and launching an explosive projectile. A charged shot gains +30% damage, +25% explosion radius and +40% dismemberment chance. Every point of Technical Ability adds 0.5% damage with it.\nTips: Any Ripperdoc sells it once you reach level 10, and the quality goes up every 5 levels. The Arms slot has room for only one piece of cyberware, so you choose between it and the other arm cyberware.",
+      "source_url": "https://cyberpunk.fandom.com/wiki/Projectile_Launch_System",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "307975",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2703,
+      "game_id": 8,
+      "section_type": "item",
+      "name": "Gorilla Arms",
+      "card": "Summary: Arasaka arm replacement cyberware that is lightweight, efficient and hard-hitting. It deals Physical damage with a 10-20% chance to make enemies bleed.\nUses: Hard-hitting melee. Every point of Body adds 0.5% damage with them. The wiki's weapons page lists them with the blunt weapons, which it calls heavy, slow and non-lethal, with a chance to stun.\nTips: Any Ripperdoc sells them once you reach level 10, and the quality goes up every 10 levels. The Arms slot has room for only one piece of cyberware, so you choose between them and the other arm cyberware.",
+      "source_url": "https://cyberpunk.fandom.com/wiki/Gorilla_Arms",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "307846",
+      "crawled_at": "2026-11-09"
+    }
+  ]
+}

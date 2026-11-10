@@ -1,0 +1,246 @@
+{
+  "wiki": "Cyberpunk Wiki (https://cyberpunk.fandom.com/api.php)",
+  "licence_printed_by_fetcher": "Cyberpunk Wiki (MediaWiki 1.43.10) licence: CC-BY-SA https://www.fandom.com/licensing",
+  "licence_stored": "CC-BY-SA-3.0 (the fetcher prints 'CC-BY-SA' with no version; the library stores the versioned form its older Cyberpunk notes carry, and data/kb/NOTICE.md lists the Cyberpunk Wiki as CC-BY-SA-3.0)",
+  "game_id": 8,
+  "game": "Cyberpunk 2077",
+  "read_on": "2026-11-09",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://cyberpunk.fandom.com/api.php --titles <pages> (page text as rendered by the wiki, link markup removed; the pages are kept in build/wiki-live/cyberpunk-fandom/). Every quoted passage below was checked, by script, to appear word for word in the page text read at the revision named (table markers removed, white space collapsed). The wiki also covers the tabletop games and the anime; every page used here describes the video game, and a line states a video-game fact only where the page says so for Cyberpunk 2077. Where a page marks something as needing verification, or mentions an ending or a late quest, the note leaves it out.",
+  "sections": [
+    {
+      "section_id": 2700,
+      "name": "Mantis Blades",
+      "kind": "item",
+      "main_page": "https://cyberpunk.fandom.com/wiki/Mantis_Blades",
+      "main_revision": "307995",
+      "lines": [
+        {
+          "line": "Summary: Arasaka arm cyberware for fighting up close with swift, deadly slashes. It deals Physical damage and has a 10-20% chance to make enemies bleed.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Mantis_Blades",
+              "revision": "307995",
+              "quoted": [
+                "Mantis Blades allow you to slice and dice your enemies with swift, deadly slashes.",
+                "Deal Physical damage. 10-20% Bleeding chance",
+                "The Daikon NT Mantis Blades are manufactured by Arasaka."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Close-range melee. While you use them you can leap at an enemy within range to deal massive damage, and every point of Reflexes adds 0.5% damage with them. The game counts them as bladed weapons, which the wiki calls perfect for assassination and stealth executions.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Mantis_Blades",
+              "revision": "307995",
+              "quoted": [
+                "While using the Mantis Blades, you can leap to enemies within range to deal massive damage.",
+                "Reflexes Attuned +0.5% damage with this cyberware per Attribute Point."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+              "revision": "304721",
+              "quoted": [
+                "Bladed weapons are sharp, fast, and deadly. Perfect for assassination and stealth executions. Bladed weapons include Katanas, Machetes, and the Mantis Blades."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Any Ripperdoc sells them once you reach level 10, and the quality goes up every 10 levels. The Arms slot has room for only one piece of cyberware, so you choose between them and the other arm cyberware.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Mantis_Blades",
+              "revision": "307995",
+              "quoted": [
+                "Can be purchased from any Ripperdoc after reaching level 10. Quality increases every 10 levels."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Cyberware",
+              "revision": "308973",
+              "quoted": [
+                "Arms (1 slot)"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2701,
+      "name": "Monowire",
+      "kind": "item",
+      "main_page": "https://cyberpunk.fandom.com/wiki/Monowire",
+      "main_revision": "309164",
+      "lines": [
+        {
+          "line": "Summary: Arm cyberware that lets you whip several enemies at once from a distance. It deals Physical damage with a 10-20% chance to make enemies bleed.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Monowire",
+              "revision": "309164",
+              "quoted": [
+                "Monowire is arm replacement cyberware that allows you to whip multiple enemies at once from a distance.",
+                "Deal Physical damage. 10-20% Bleeding chance"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Melee and short-range fighting. It has a quickhack slot that starts empty: once you have the Jailbreak Relic perk you can put a Control quickhack in it, and the quickhack is uploaded to anything hit by a charged attack. Every point of Intelligence adds 0.5% damage with it.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Monowire",
+              "revision": "309164",
+              "quoted": [
+                "This implant allows you to deal more Physical damage in melee combat and short ranged combat.",
+                "Empty Quickhack Slot",
+                "If the Jailbreak Relic perk has been obtained, the Monowire can be modified with a Control Quickhack. This quickhack will be uploaded to targets that are hit with a charged attack.",
+                "Intelligence Attuned +0.5% damage with this cyberware per Attribute Point."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Any Ripperdoc sells it once you reach level 10, and the quality goes up every 10 levels, up to Tier 5. The Arms slot has room for only one piece of cyberware, so you choose between it and the other arm cyberware.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Monowire",
+              "revision": "309164",
+              "quoted": [
+                "Can be purchased from any Ripperdoc after reaching level 10. Quality increases every 10 levels, up to Tier 5."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Cyberware",
+              "revision": "308973",
+              "quoted": [
+                "Arms (1 slot)"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2702,
+      "name": "Projectile Launch System",
+      "kind": "item",
+      "main_page": "https://cyberpunk.fandom.com/wiki/Projectile_Launch_System",
+      "main_revision": "307975",
+      "lines": [
+        {
+          "line": "Summary: Arasaka arm cyberware that launches an explosive projectile for massive Physical damage.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Projectile_Launch_System",
+              "revision": "307975",
+              "quoted": [
+                "Launches an explosive projectile that deals massive Physical damage.",
+                "Mfr. Arasaka"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Aiming and launching an explosive projectile. A charged shot gains +30% damage, +25% explosion radius and +40% dismemberment chance. Every point of Technical Ability adds 0.5% damage with it.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Projectile_Launch_System",
+              "revision": "307975",
+              "quoted": [
+                "This implant allows you to aim and launch an explosive projectile that deals massive Physical damage.",
+                "Charged shots gain: +30% damage +25% explosion radius +40% dismemberment chance",
+                "Technical Ability Attuned +0.5% damage with this cyberware per Attribute Point."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Any Ripperdoc sells it once you reach level 10, and the quality goes up every 5 levels. The Arms slot has room for only one piece of cyberware, so you choose between it and the other arm cyberware.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Projectile_Launch_System",
+              "revision": "307975",
+              "quoted": [
+                "Can be purchased from any Ripperdoc after reaching level 10. Quality increases every 5 levels."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Cyberware",
+              "revision": "308973",
+              "quoted": [
+                "Arms (1 slot)"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2703,
+      "name": "Gorilla Arms",
+      "kind": "item",
+      "main_page": "https://cyberpunk.fandom.com/wiki/Gorilla_Arms",
+      "main_revision": "307846",
+      "lines": [
+        {
+          "line": "Summary: Arasaka arm replacement cyberware that is lightweight, efficient and hard-hitting. It deals Physical damage with a 10-20% chance to make enemies bleed.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Gorilla_Arms",
+              "revision": "307846",
+              "quoted": [
+                "Gorilla Arms are lightweight, efficient and hard-hitting arm replacement cyberware.",
+                "Mfr. Arasaka",
+                "Deal Physical damage. 10-20% Bleeding chance"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Hard-hitting melee. Every point of Body adds 0.5% damage with them. The wiki's weapons page lists them with the blunt weapons, which it calls heavy, slow and non-lethal, with a chance to stun.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Gorilla_Arms",
+              "revision": "307846",
+              "quoted": [
+                "Body Attuned +0.5% damage with this cyberware per Attribute Point.",
+                "This implant allows you to deal more Physical damage in melee combat, and have a 10-20% chance to apply a Bleed effect."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+              "revision": "304721",
+              "quoted": [
+                "Blunt weapons are heavy, slow and non-lethal. They employ brute force and have a chance to stun their opponents. Blunt weapons include Hammers, One and Two-Handed Clubs, Gorilla Arms, and unarmed/bare fists."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Any Ripperdoc sells them once you reach level 10, and the quality goes up every 10 levels. The Arms slot has room for only one piece of cyberware, so you choose between them and the other arm cyberware.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Gorilla_Arms",
+              "revision": "307846",
+              "quoted": [
+                "Can be purchased from any Ripperdoc after reaching level 10. Quality increases every 10 levels."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Cyberware",
+              "revision": "308973",
+              "quoted": [
+                "Arms (1 slot)"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

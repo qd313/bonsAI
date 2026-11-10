@@ -9,6 +9,10 @@ Purpose: Measure how well the AI reads a screenshot a player attaches to a quest
          better-than-wrong result). It also times the first answer word. The report gives four plain figures
          out of a hundred per model and per way of asking. Roadmap step 1 only: a labelled set and a scoring
          script; nothing in the plugin changes.
+         Lane P2 of plan 103 adds a second mode (--picture-search): for each picture it asks the picture model the
+         plugin's own short first question (py_modules/backend/ask/picture_guess.py), judges the guess against the
+         labels, and, for the pictures that carry an expected note, searches the notes with and without the
+         guess's words and counts how often the right note is among those attached, with the seconds the call added.
 Used for: the screenshot reading measurement of plan 98 (docs/planning/98-kb-feature-wave-and-deck-test-wave.md
           section 5e); the labels are tests/fixtures/screenshot_eval_v0.json and the pictures live outside the
           repo (the workshop's screenshots/plan98 folder, or any folder given with --root).
@@ -23,6 +27,7 @@ Usage:
   python scripts/kb/eval_screenshot_reading.py --only drg-survivor-title-1 --samples 1
   python scripts/kb/eval_screenshot_reading.py --root C:/path/to/pictures --model gemma4:e4b-it-qat
   python scripts/kb/eval_screenshot_reading.py --picture-shape in-question --samples 6 --arms known
+  python scripts/kb/eval_screenshot_reading.py --picture-search --labels tests/fixtures/screenshot_eval_v1.json       --root C:/path/to/plan103-set                                 # the picture's own guess, both models
 
 Needs: Ollama on this PC with the chat model (the Deck's own starter model also reads pictures), and a built
 library at --corpus (python scripts/kb/build_rag_db.py --seed --out ./build/knowledge-base).
@@ -111,6 +116,13 @@ class Picture:
     app_id: str
     app_name: str
     scene_words: list[str] = field(default_factory=list)
+    # Plan 103 lane P1's labels (tests/fixtures/screenshot_eval_v1.json); v0 files carry none of them.
+    place: str = ""
+    place_aliases: list[str] = field(default_factory=list)
+    expect_section: str = ""  # the library note whose subject is on screen, empty when there is none
+    expect_section_also: list[str] = field(default_factory=list)
+    in_library: bool = True
+    confidence: dict = field(default_factory=dict)  # how sure the labeller is of each label
 
 
 def _str_list(raw: Any) -> list[str]:
@@ -153,6 +165,12 @@ def load_pictures(path: Path, only: Optional[set[str]]) -> list[Picture]:
                 app_id=app_id,
                 app_name=str(row.get("app_name") or game).strip() if known else "",
                 scene_words=_str_list(row.get("scene_words")),
+                place=str(row.get("place") or "").strip(),
+                place_aliases=_str_list(row.get("place_aliases")),
+                expect_section=str(row.get("expect_section") or "").strip(),
+                expect_section_also=_str_list(row.get("expect_section_also")),
+                in_library=row.get("in_library") is not False,
+                confidence=dict(row.get("confidence") or {}),
             )
         )
     if only:
@@ -520,6 +538,280 @@ async def ask_picture(
     )
 
 
+# --- the picture's own guess (plan 103 lane P2) ----------------------------------------------
+
+SEARCH_MODELS = "gemma4:e2b-it-qat,qwen3.5:4b"  # the Deck's starter picture model, then the bigger one
+SEARCH_QUESTIONS = ("What should I do here?", "How do I beat this?")  # typed words that name nothing on screen
+ENOUGH_PICTURES_WITH_A_NOTE = 15  # plan 103 call 12 asks for 15 pictures before a number may decide anything
+EXTRA_SECONDS_CEILING = 10.0  # plan 103 call 10: the first call may add under ten seconds on this PC
+KINDS = ("right", "wrong", "unsure", "unchecked")
+
+
+@dataclass
+class GuessVerdict:
+    """One guess against one picture's labels. Each of game, place and enemy is one of KINDS: right and wrong
+    are for something said with confidence, unsure is "not sure" (or nothing), unchecked is something said that
+    the labels cannot judge (the picture has no place or boss label, or the labeller was only guessing)."""
+
+    game: str
+    place: str
+    enemy: str
+    said_not_sure: bool
+
+    @property
+    def confident_wrong(self) -> bool:
+        return "wrong" in (self.game, self.place, self.enemy)
+
+
+def _judge_named(said: str, names: list[str], confidence: str) -> str:
+    if not said.strip():
+        return "unsure"
+    if not names or confidence == "low":
+        return "unchecked"
+    text = _norm(said)
+    return "right" if any(_has_phrase(text, n) for n in names) else "wrong"
+
+
+def judge_guess(guess: Any, pic: Picture, other_games: list[str]) -> GuessVerdict:
+    """Score the three slots of a read guess against the labels. The game goes through the reply reader, so
+    a guess naming two games, or another game, is wrong exactly as it is in the first measurement."""
+    game = read_reply(guess.game, pic, other_games).game if guess.game.strip() else None
+    return GuessVerdict(
+        game="unsure" if game is None else ("right" if game else "wrong"),
+        place=_judge_named(guess.place, [pic.place, *pic.place_aliases] if pic.place else [], pic.confidence.get("place", "")),
+        enemy=_judge_named(guess.enemy, [pic.boss, *pic.boss_aliases] if pic.boss else [], pic.confidence.get("boss", "")),
+        said_not_sure=bool(guess.not_sure_lines),
+    )
+
+
+def note_found(attached: list[str], pic: Picture) -> bool:
+    """True when a note the picture expects (its own, or one it also fits) is among the attached notes, by its
+    exact name, case aside. A near name is not a find."""
+    wanted = {n.strip().lower() for n in [pic.expect_section, *pic.expect_section_also] if n.strip()}
+    return bool(wanted) and any(str(a).strip().lower() in wanted for a in attached)
+
+
+@dataclass
+class SearchRow:
+    picture_id: str
+    model: str
+    sample: int
+    status: str  # written | failed | skipped | stopped
+    seconds: float
+    raw: str
+    words: str  # what the guess added to the search words ("" when it added nothing)
+    verdict: Optional[GuessVerdict]
+    expect: str
+    found_today: dict[str, bool] = field(default_factory=dict)  # typed question -> right note attached
+    found_with: dict[str, bool] = field(default_factory=dict)
+
+
+def measure_picture_search(
+    found: list[tuple[Picture, Path]], models: list[str], questions: tuple[str, ...], samples: int, *,
+    guess_fn: Callable[[Picture, Path, str], Any], search_fn: Callable[[Picture, str], list[str]],
+    others: list[str], join_fn: Callable[[str, Any], str],
+) -> list[SearchRow]:
+    """Ask each model for its guess on each picture (``samples`` tries) and, for a picture with an expected
+    note, search the notes for each typed question with today's words and with the guess's words added.
+
+    ``guess_fn(picture, path, model)`` returns the first call's outcome; ``search_fn(picture, words)`` the names
+    of the notes attached; ``join_fn(typed words, guess)`` the words the notes are searched for. Today's search
+    does not depend on the model or the try, so it is made once per picture and question."""
+    rows: list[SearchRow] = []
+    for pic, path in found:
+        today = {q: note_found(search_fn(pic, q), pic) for q in questions} if pic.expect_section else {}
+        for model in models:
+            for sample in range(1, samples + 1):
+                outcome = guess_fn(pic, path, model)
+                written = outcome.status == "written"
+                words = outcome.guess.search_words if written else ""
+                with_guess = dict(today)
+                if today and words:
+                    with_guess = {q: note_found(search_fn(pic, join_fn(q, outcome.guess)), pic) for q in questions}
+                rows.append(SearchRow(
+                    picture_id=pic.id, model=model, sample=sample, status=outcome.status, seconds=float(outcome.seconds),
+                    raw=str(outcome.raw or ""), words=words, expect=pic.expect_section,
+                    verdict=judge_guess(outcome.guess, pic, others) if written else None,
+                    found_today=dict(today), found_with=with_guess,
+                ))
+    return rows
+
+
+@dataclass
+class SearchFigures:
+    calls: int
+    failed: int
+    mean_s: Optional[float]
+    median_s: Optional[float]
+    max_s: Optional[float]
+    with_note: int  # pictures x tries that carry an expected note
+    pictures_with_note: int
+    today: dict[str, int]  # typed question -> times the right note was attached
+    with_guess: dict[str, int]
+    game: dict[str, int]
+    place: dict[str, int]
+    enemy: dict[str, int]
+    judged: int
+    said_not_sure: int
+    confident_wrong: int
+
+
+def search_figures(rows: list[SearchRow], model: str, questions: tuple[str, ...]) -> SearchFigures:
+    mine = [r for r in rows if r.model == model]
+    noted = [r for r in mine if r.found_today]
+    judged = [r.verdict for r in mine if r.verdict is not None]
+    times = [r.seconds for r in mine]
+    return SearchFigures(
+        calls=len(mine), failed=sum(1 for r in mine if r.status != "written"),
+        mean_s=round(statistics.mean(times), 1) if times else None,
+        median_s=round(statistics.median(times), 1) if times else None,
+        max_s=round(max(times), 1) if times else None,
+        with_note=len(noted), pictures_with_note=len({r.picture_id for r in noted}),
+        today={q: sum(1 for r in noted if r.found_today.get(q)) for q in questions},
+        with_guess={q: sum(1 for r in noted if r.found_with.get(q)) for q in questions},
+        game={k: sum(1 for v in judged if v.game == k) for k in KINDS},
+        place={k: sum(1 for v in judged if v.place == k) for k in KINDS},
+        enemy={k: sum(1 for v in judged if v.enemy == k) for k in KINDS},
+        judged=len(judged), said_not_sure=sum(1 for v in judged if v.said_not_sure),
+        confident_wrong=sum(1 for v in judged if v.confident_wrong),
+    )
+
+
+def landing_verdict(today: int, with_guess: int, n: int, mean_s: Optional[float]) -> tuple[bool, bool, str]:
+    """Plan 103 call 10's two halves: the right note found at least twice as often (and more often at all), and
+    the extra wait under ten seconds. ``today`` and ``with_guess`` are totals over the typed questions."""
+    twice = n > 0 and with_guess > today and with_guess >= 2 * today
+    fast = mean_s is not None and mean_s < EXTRA_SECONDS_CEILING
+    text = (
+        f"found at least twice as often: {'yes' if twice else 'no'} (today {today}, with the guess {with_guess}, "
+        f"out of {n}); extra wait under ten seconds: {'yes' if fast else 'no'} "
+        f"(mean {'n/a' if mean_s is None else f'{mean_s} s'})"
+    )
+    return twice, fast, text
+
+
+def search_report_name(day: str, label: str = "") -> str:
+    clean = re.sub(r"[^A-Za-z0-9._-]+", "-", (label or "").strip()).strip("-.")
+    return f"picture-guess-search-{day}" + (f"-{clean}" if clean else "") + ".md"
+
+
+def format_search_report(meta: dict, rows: list[SearchRow], questions: tuple[str, ...]) -> str:
+    """The report: per model, how often the right note was attached today and with the guess, the seconds the
+    first call added, and what the guess said against the labels."""
+    models = list(meta.get("models") or sorted({r.model for r in rows}))
+    lines = [
+        "# The picture's own guess, joined to the note search",
+        "",
+        f"Models: {', '.join(models) or '?'} | pictures: {meta.get('pictures', '?')} | tries each: {meta.get('samples', '?')}"
+        + (f" | {meta['note']}" if meta.get("note") else ""),
+    ]
+    if meta.get("missing_models"):
+        lines += ["", "Not installed on this PC, so not measured: " + ", ".join(meta["missing_models"]) + "."]
+    for model in models:
+        f = search_figures(rows, model, questions)
+        lines += ["", f"## {model}", ""]
+        if not f.calls:
+            lines.append("No calls were made.")
+            continue
+        lines += [f"The right note, among the notes attached ({f.with_note} tries on {f.pictures_with_note} pictures with a note):", "",
+                  "| Typed question | Found today | Found with the guess |", "|---|---|---|"]
+        for q in questions:
+            lines.append(f"| {q} | {f.today[q]} of {f.with_note} | {f.with_guess[q]} of {f.with_note} |")
+        today, with_guess = sum(f.today.values()), sum(f.with_guess.values())
+        _twice, _fast, text = landing_verdict(today, with_guess, f.with_note * len(questions), f.mean_s)
+        lines += ["", f"Landing rule: {text}.",
+                  f"The first call took {f.mean_s} s on average, {f.median_s} s in the middle, {f.max_s} s at most "
+                  f"({f.calls} calls, {f.failed} gave no guess)."]
+        if f.pictures_with_note < ENOUGH_PICTURES_WITH_A_NOTE:
+            lines.append(f"Only {f.pictures_with_note} pictures carry a note: too few (the bar is {ENOUGH_PICTURES_WITH_A_NOTE}) "
+                         "for these counts to decide anything, so the switch stays off.")
+        lines += ["", f"What the guess said, against the labels ({f.judged} guesses read; {f.said_not_sure} said \"not sure\" somewhere; "
+                  f"{f.confident_wrong} said something wrong with confidence):", "",
+                  "| | right | wrong | not sure | said, but the labels cannot judge |", "|---|---|---|---|---|"]
+        for name, counts in (("game", f.game), ("place", f.place), ("boss or enemy", f.enemy)):
+            lines.append(f"| {name} | {counts['right']} | {counts['wrong']} | {counts['unsure']} | {counts['unchecked']} |")
+    lines += ["", "## Every guess", ""]
+    for r in rows:
+        v = r.verdict
+        judged = "no guess" if v is None else f"game {v.game}, place {v.place}, enemy {v.enemy}"
+        found = ""
+        if r.found_today:
+            found = "; right note today " + "/".join("Y" if r.found_today[q] else "n" for q in questions) \
+                + ", with the guess " + "/".join("Y" if r.found_with.get(q) else "n" for q in questions)
+        lines.append(f"- {r.picture_id} / {r.model} / try {r.sample}: {r.status}, {r.seconds:.1f} s; {judged}{found}")
+        lines.append("  > " + (" ".join((r.raw or "[no reply]").split())[:300]))
+        lines.append(f"  words added: {r.words or '(none)'}")
+    return "\n".join(lines) + "\n"
+
+
+def _installed_models(ollama_base: str) -> list[str]:
+    try:
+        with urllib.request.urlopen(f"{ollama_base}/api/tags", timeout=10) as resp:
+            return [str(m.get("name")) for m in json.loads(resp.read()).get("models") or []]
+    except Exception:
+        return []
+
+
+def run_picture_search(args: argparse.Namespace, found: list[tuple[Picture, Path]], plugin: Any, corpus_version: str) -> int:
+    """The measurement against this PC's AI and the built library, through the plugin's own first-call code."""
+    from backend.ask import picture_guess  # noqa: E402  (needs the fake `decky`, installed by the caller)
+    from backend.knowledge.knowledge_base_service import retrieve_knowledge_context, should_retrieve_knowledge  # noqa: E402
+
+    wanted = [m.strip() for m in args.search_models.split(",") if m.strip()]
+    installed = _installed_models(args.ollama)
+    models = [m for m in wanted if m in installed]
+    missing = [m for m in wanted if m not in installed]
+    if not models:
+        print(f"none of the models is installed ({', '.join(wanted)}); nothing to measure", file=sys.stderr)
+        return 2
+    questions = tuple(args.search_question) or SEARCH_QUESTIONS
+    settings = asyncio.run(plugin.load_settings())
+    others = other_game_names([p for p, _ in found])
+
+    def guess_fn(pic: Picture, path: Path, model: str) -> Any:
+        known = pic.running_game_known
+        attachments = [{"path": str(path), "name": path.name, "source": "recent", "app_id": pic.app_id if known else ""}]
+        return asyncio.run(picture_guess.guess_picture(plugin, settings, attachments, args.ollama, preferred_model=model))
+
+    def search_fn(pic: Picture, words: str) -> list[str]:
+        app_id, app_name = (pic.app_id, pic.app_name) if pic.running_game_known else ("", "")
+        should, domain = should_retrieve_knowledge(
+            use_local_knowledge_base=True, ask_mode="strategy", question=words, app_id=app_id, app_name=app_name,
+            text_resolved_title="")
+        if not should:
+            return []
+        result = retrieve_knowledge_context(
+            settings, ask_mode="strategy", question=words, app_id=app_id, app_name=app_name, domain=domain, pc_ip=args.ollama)
+        return [str(c.get("name") or "") for c in result.attached_ids] if result.attached else []
+
+    print(f"models {', '.join(models)} | {len(found)} pictures x {args.search_samples} tries | questions: {' | '.join(questions)}")
+    rows: list[SearchRow] = []
+    t_run = time.perf_counter()
+    for model in models:
+        _load_model(args.ollama, model)
+        new_rows = measure_picture_search(
+            found, [model], questions, args.search_samples, guess_fn=guess_fn, search_fn=search_fn, others=others,
+            join_fn=picture_guess.with_guess_words)
+        for r in new_rows:
+            print(f"{model:<20} {r.picture_id:<30} {r.status:<8} {r.seconds:>5.1f}s  {r.words or '(no words)'}")
+        rows += new_rows
+    minutes = round((time.perf_counter() - t_run) / 60.0, 1)
+    meta = {"models": models, "missing_models": missing, "pictures": len(found), "samples": args.search_samples,
+            "note": f"run {date.today().isoformat()}, {minutes} min, library {corpus_version}"}
+    report = format_search_report(meta, rows, questions)
+    print()
+    print(report)
+    if args.write_report:
+        sys.path.insert(0, str(ROOT / "scripts" / "lib"))
+        import workshop  # noqa: E402
+
+        out = workshop.research_dir(ROOT) / search_report_name(date.today().isoformat(), args.label)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(report, encoding="utf-8")
+        print(f"Wrote {out}")
+    return 0
+
+
 def _load_model(ollama_base: str, model: str) -> None:
     """Ask the AI to load the model before the first timed ask, so a cold start is not counted as the
     first word of the first picture. A failure is ignored: the first ask then simply carries the load."""
@@ -579,6 +871,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="added to the saved report's file name (screenshot-reading-<date>-<label>.md) so runs on one day "
              "do not overwrite each other")
     parser.add_argument(
+        "--picture-search", action="store_true",
+        help="plan 103 lane P2: measure the picture's own first guess joined to the note search (labels need "
+             "expect_section, so use --labels tests/fixtures/screenshot_eval_v1.json) instead of the reading figures")
+    parser.add_argument("--search-models", default=SEARCH_MODELS, help="comma-separated model tags for --picture-search")
+    parser.add_argument(
+        "--search-question", action="append", default=[],
+        help="a typed question to search the notes with (repeatable; default: two that name nothing on screen)")
+    parser.add_argument("--search-samples", type=int, default=1, help="guesses per picture and model for --picture-search")
+    parser.add_argument(
         "--write-report", action="store_true",
         help="also save the report in the workshop's research folder (never in this repo)")
     return parser
@@ -634,6 +935,8 @@ def main() -> int:
     from backend.ask import game_ai_request as gar  # noqa: E402
 
     plugin = plugin_main.Plugin()
+    if args.picture_search:
+        return run_picture_search(args, found, plugin, corpus_version)
     others = other_game_names([p for p, _ in found])
     arms = ARMS if args.arms == "both" else (args.arms,)
     print(f"model {args.model} | {len(found)} pictures x {args.samples} tries | ways of asking: {', '.join(arms)} "

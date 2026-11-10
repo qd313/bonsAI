@@ -166,6 +166,12 @@ def read_guess(reply: str) -> PictureGuess:
     return guess
 
 
+def with_guess_words(search_words: str, guess: PictureGuess) -> str:
+    """The words the notes are searched for: the ones already there, then the guess's, the way a follow-up's
+    remembered subject is added (kb_followup_memory.augment_search_words). Unchanged when the guess has none."""
+    return f"{search_words} {guess.search_words}" if guess.search_words else search_words
+
+
 def picture_guess_applies(*, ask_mode: str, has_picture: bool, library_on: bool, domain: str, switch: Optional[bool] = None) -> bool:
     """True when this turn gets the extra call: the switch is on, a picture is attached, the library is
     on, the turn is Strategy and its notes search is the strategy one (a troubleshooting turn is not)."""
@@ -275,6 +281,6 @@ async def add_picture_guess_words(
     if outcome.status == "stopped":
         logger.info("picture_guess: stopped by the person after %.1f s", outcome.seconds)
         return search_words, True
-    words = outcome.guess.search_words
-    logger.info("picture_guess: %s in %.1f s, model %s, %d search words added", outcome.status, outcome.seconds, outcome.model or "-", len(words.split()))
-    return (f"{search_words} {words}" if words else search_words), False
+    joined = with_guess_words(search_words, outcome.guess)
+    logger.info("picture_guess: %s in %.1f s, model %s, %d search words added", outcome.status, outcome.seconds, outcome.model or "-", len(joined.split()) - len(search_words.split()))
+    return joined, False

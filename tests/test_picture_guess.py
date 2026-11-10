@@ -31,6 +31,7 @@ from backend.ask.picture_guess import (  # noqa: E402
     guess_picture,
     picture_guess_applies,
     read_guess,
+    with_guess_words,
 )
 
 _URL = "http://127.0.0.1:11434/api/chat"
@@ -114,6 +115,12 @@ class ReadGuessTests(unittest.TestCase):
 
     def test_a_reply_in_another_script_gives_no_words_rather_than_noise(self):
         self.assertEqual(read_guess("Game: \u30bc\u30eb\u30c0\u306e\u4f1d\u8aac").search_words, "")
+
+
+class JoinTests(unittest.TestCase):
+    def test_the_guess_goes_on_the_end_and_nothing_is_added_when_it_has_no_words(self):
+        self.assertEqual(with_guess_words("how do I beat this", PictureGuess(game="Hades", enemy="Megaera")), "how do I beat this Hades Megaera")
+        self.assertEqual(with_guess_words("how do I beat this", PictureGuess(not_sure_lines=3)), "how do I beat this")
 
 
 class GateTests(unittest.TestCase):

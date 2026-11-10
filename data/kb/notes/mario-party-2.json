@@ -111,6 +111,61 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5506219",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2910,
+      "game_id": 27,
+      "section_type": "enemy",
+      "name": "Baby Bowser on the boards",
+      "card": "Summary: A henchman of Bowser's who stands on every board beside Toad and steals 5 coins from any player who passes him. Now and then he gives you 5 coins instead and later says it was an accident.\nWeak points: He always gives you coins instead of taking them if you are wearing a Bowser Suit. He starts at one of several set spots beside Toad and moves to Toad's old spot each time the Star is bought, so his position follows the Star Space.\nLooks like: A miniature version of Bowser.\nTips: Expect to lose 5 coins each time you pass him, since the gift is only occasional. A Bowser Bomb briefly swaps him for Bowser at the end of the turn, and so does a Bowser Space roulette result called Bowser's Appearing Act.",
+      "source_url": "https://www.mariowiki.com/Koopa_Kid",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5498408",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2911,
+      "game_id": 27,
+      "section_type": "enemy",
+      "name": "Bowser Parade",
+      "card": "Summary: A parade led by Baby Bowser that marches down a set path on Bowser Land every five turns and sends anyone caught in its path back to the start, costing two coins for each space.\nWeak points: Stay off its path when it starts, because Baby Bowser cancels the parade if nobody is in the way. You can pay Baby Bowser five coins at the parade offices at the north, west and east intersections to change its direction, and in a Bowser Suit that is free unless it is the last move.\nLooks like: Pyramid-shaped floats that look like enemies such as Goomba, Boo and Thwomp, with Baby Bowser at the front.\nTips: The first parade starts at the beginning of the fifth turn, and the last one at the beginning of the last turn, after which the parade offices close. It always starts at the central intersection at the north end of the board and by default runs straight to the south end and then east toward the starting area.",
+      "source_url": "https://www.mariowiki.com/Bowser_Parade",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5471733",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2912,
+      "game_id": 27,
+      "section_type": "enemy",
+      "name": "Boo on the boards",
+      "card": "Summary: A ghost thief who steals coins or a Star from a player. The Boo Bell calls one up, and he charges five coins to steal coins.\nWeak points: When a Boo is stealing coins from you, press the A button quickly to fight it off. It takes at most 30 coins or one Star.\nLooks like: A white round ghost with stubby arms and a small tail, and a wide open smile with four upper fangs and a big tongue.\nTips: Stealing coins costs five coins and stealing a Star costs 50 coins. The Boo Bell, which calls a Boo, can be won in Item Mini-Games, and neither Item Shop sells it.",
+      "source_url": "https://www.mariowiki.com/Boo",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5532404",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2913,
+      "game_id": 27,
+      "section_type": "enemy",
+      "name": "Big Boo",
+      "card": "Summary: A giant Boo on Horror Land who steals from every opponent at once, for three times the usual Boo fee.\nWeak points: You can only ask for him at night; in the daytime he is just a giant Boo statue.\nLooks like: In the daytime he appears as a giant Boo statue.\nTips: He is in the north-east corner of the board. Players who pass him at night are asked to pay three times the usual fee. Because the night-time path to him needs a Skeleton Key, meeting him is difficult and rare.",
+      "source_url": "https://www.mariowiki.com/Big_Boo_(character)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5499015",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2914,
+      "game_id": 27,
+      "section_type": "enemy",
+      "name": "Bowser Space",
+      "card": "Summary: A space that summons Bowser, and an event picked from the Bowser Roulette then plays out: a bad or game-changing event for the player who landed there, and sometimes for the other players too.\nWeak points: If you have no coins when you land on a Coins for Bowser result, Bowser gives you 10 coins instead. The 10,000 Coin Present, 100 Star Present, Star Steal and Stars-Packed to Go results can come up on the roulette, but Bowser then leaves without doing anything.\nTips: Coins for Bowser is the most common result and appears twice on the wheel, and Bowser's Coin Potluck takes coins from all four players: 10 coins in the first five turns, 30 in the last five and 20 otherwise. Bowser's Multiplying Toads puts two Toads on the board, moves the Star Space and adds a second one; paying the false Toad 20 coins gets you a Ztar that does not count as a Star, a Magic Lamp always leads to the real Toad, and a Bowser Bomb exposes the false one.",
+      "source_url": "https://www.mariowiki.com/Bowser_Space",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5532948",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

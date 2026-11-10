@@ -89,6 +89,50 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5518101",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3108,
+      "game_id": 29,
+      "section_type": "item",
+      "name": "Bullet Bill Orb",
+      "card": "Summary: A green Orb you use on yourself: you catch a ride on a Bullet Bill and overtake an opponent to steal 20 coins.\nUses: Use it to overtake an opponent and steal 20 coins. It also lets you pass roadblocks without triggering them, and on Faire Square, where players crowd around the central Star space, you can target them for significant coins.\nTips: It is sold only on E. Gadd's Garage and Faire Square, for 20 coins at an Orb hut (10 in a flash sale). Using one near the Star Space makes you fly past it, so do not use it right before a Star you want to buy.",
+      "source_url": "https://www.mariowiki.com/Bullet_Bill_Orb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5533842",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3109,
+      "game_id": 29,
+      "section_type": "item",
+      "name": "Flutter Orb",
+      "card": "Summary: A green Orb that makes Flutter appear and fly you straight to the Star Space.\nUses: Use it on yourself when the Star Space is far away. It is sold only on Towering Treetop and E. Gadd's Garage, and both boards move the Star to a new spot after each purchase.\nTips: It costs 30 coins at an Orb hut. A Star costs 20 coins on both of those boards, so keep that much back after buying it.",
+      "source_url": "https://www.mariowiki.com/Flutter_Orb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5533848",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3110,
+      "game_id": 29,
+      "section_type": "item",
+      "name": "Metal Mushroom Orb",
+      "card": "Summary: A green Orb that encases you in metal, so you move without being harmed by your rivals' traps.\nUses: Use it before you walk through spaces where rivals have set trap Orbs. A Thwomp is deflected, a Tweester dissipates with no effect, a Podoboo attack is negated, a Bob-omb is kicked away, a Koopa Troopa gives up because you are too heavy to lift, and a Zap Orb's Amps disappear after trying to shock you.\nTips: Towering Treetop and Faire Square do not have it, which the board pages say makes roadblocks there particularly hard to avoid.",
+      "source_url": "https://www.mariowiki.com/Metal_Mushroom_Orb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5540925",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3111,
+      "game_id": 29,
+      "section_type": "item",
+      "name": "Thwomp Orb",
+      "card": "Summary: A red Orb you set on a space as a roadblock: an opponent who passes it is flattened by a Thwomp and has to stop moving.\nUses: Put it on a space your rivals must cross. On Faire Square it can stop a player from buying Stars, above all at night, when Stars may cost less, and it is often placed on the Red Space right before the fixed Star space.\nTips: It costs 10 coins at an Orb hut, or 5 in a flash sale, and is sold on Towering Treetop, Faire Square and Clockwork Castle. A rival under a Metal Mushroom Orb is not stopped, and a roadblock cannot be replaced until an opponent triggers it.",
+      "source_url": "https://www.mariowiki.com/Thwomp_Orb",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5533882",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

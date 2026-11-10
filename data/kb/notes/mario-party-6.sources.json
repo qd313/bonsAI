@@ -633,6 +633,326 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3108,
+      "name": "Bullet Bill Orb",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Bullet_Bill_Orb",
+      "main_revision": "5533842",
+      "lines": [
+        {
+          "line": "Summary: A green Orb you use on yourself: you catch a ride on a Bullet Bill and overtake an opponent to steal 20 coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Catch a ride on a Bullet Bill and overtake an opponent to steal 20 coins.",
+                "All of these orbs affect the player or the Dice Block when the player uses them."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bullet_Bill_Orb",
+              "revision": "5533842",
+              "quoted": [
+                "players can use a Bullet Bill Orb only on themselves"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Use it to overtake an opponent and steal 20 coins. It also lets you pass roadblocks without triggering them, and on Faire Square, where players crowd around the central Star space, you can target them for significant coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bullet_Bill_Orb",
+              "revision": "5533842",
+              "quoted": [
+                "it also allows players to pass roadblocks without triggering them."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Faire_Square",
+              "revision": "5246724",
+              "quoted": [
+                "As players congregate in the center zone, players with the Bullet Bill Orb can target them for significant coins."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Catch a ride on a Bullet Bill and overtake an opponent to steal 20 coins."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It is sold only on E. Gadd's Garage and Faire Square, for 20 coins at an Orb hut (10 in a flash sale). Using one near the Star Space makes you fly past it, so do not use it right before a Star you want to buy.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Catch a ride on a Bullet Bill and overtake an opponent to steal 20 coins.\" || E. Gadd's Garage and Faire Square || 20 coins"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bullet_Bill_Orb",
+              "revision": "5533842",
+              "quoted": [
+                "it costs 20 coins, or 10 during a flash sale, at an Orb hut",
+                "Using a Bullet Bill Orb near the Star Space causes players to fly past it."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3109,
+      "name": "Flutter Orb",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Flutter_Orb",
+      "main_revision": "5533848",
+      "lines": [
+        {
+          "line": "Summary: A green Orb that makes Flutter appear and fly you straight to the Star Space.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Flutter will appear and fly you straight to the Star Space!"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Use it on yourself when the Star Space is far away. It is sold only on Towering Treetop and E. Gadd's Garage, and both boards move the Star to a new spot after each purchase.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Flutter_Orb",
+              "revision": "5533848",
+              "quoted": [
+                "players can use a Flutter Orb only on themselves."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Flutter will appear and fly you straight to the Star Space!\" || Towering Treetop and E. Gadd's Garage || 30 coins",
+                "A board where the star appears in a random spot, costing twenty coins to purchase, then moves to a different location.",
+                "Stars are obtained the same way as in Towering Treetop."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/E._Gadd%27s_Garage",
+              "revision": "5486706",
+              "quoted": [
+                "The Star will move to a different location as soon as someone grabs it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It costs 30 coins at an Orb hut. A Star costs 20 coins on both of those boards, so keep that much back after buying it.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Flutter_Orb",
+              "revision": "5533848",
+              "quoted": [
+                "It costs 30 coins at an Orb hut."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Towering_Treetop",
+              "revision": "5519594",
+              "quoted": [
+                "On this board, Stars cost 20 coins."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/E._Gadd%27s_Garage",
+              "revision": "5486706",
+              "quoted": [
+                "Rush to the Star Space with 20 coins to buy a Star."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3110,
+      "name": "Metal Mushroom Orb",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Metal_Mushroom_Orb",
+      "main_revision": "5540925",
+      "lines": [
+        {
+          "line": "Summary: A green Orb that encases you in metal, so you move without being harmed by your rivals' traps.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Encase yourself in metal and move without being harmed by rivals' traps."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Metal_Mushroom_Orb",
+              "revision": "5540925",
+              "quoted": [
+                "A Metal Mushroom Orb has the effect of turning the user metal, making them invulnerable to Trap Orbs put on spaces."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Use it before you walk through spaces where rivals have set trap Orbs. A Thwomp is deflected, a Tweester dissipates with no effect, a Podoboo attack is negated, a Bob-omb is kicked away, a Koopa Troopa gives up because you are too heavy to lift, and a Zap Orb's Amps disappear after trying to shock you.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Thwomp_Orb",
+              "revision": "5533882",
+              "quoted": [
+                "the Thwomp will attempt to crush that player, but it will be deflected, negating the roadblock."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Tweester_Orb",
+              "revision": "5533873",
+              "quoted": [
+                "the Tweester still tries to blow away that player, but it dissipates shortly after with no effect."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Podoboo_Orb",
+              "revision": "5533862",
+              "quoted": [
+                "The attack is negated if that player is under the effect of a Metal Mushroom Orb."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bob-omb_Orb",
+              "revision": "5533840",
+              "quoted": [
+                "if the player is under the effect of a Metal Mushroom Orb, they simply kick away the Bob-omb."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Koopa_Troopa_Orb",
+              "revision": "5533855",
+              "quoted": [
+                "Paratroopa will try to lift the player, but it gives up after a while, saying that the player is too heavy to lift."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Zap_Orb",
+              "revision": "5533883",
+              "quoted": [
+                "the Amps will try to shock them, but they disappear after that."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Towering Treetop and Faire Square do not have it, which the board pages say makes roadblocks there particularly hard to avoid.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Towering_Treetop",
+              "revision": "5519594",
+              "quoted": [
+                "The Metal Mushroom Orb does not spawn on this board, making Roadblocks placed on there particularly difficult to avoid."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Faire_Square",
+              "revision": "5246724",
+              "quoted": [
+                "The lack of Metal Mushroom Orbs available in the board makes Roadblocks difficult to avoid"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Metal_Mushroom_Orb",
+              "revision": "5540925",
+              "quoted": [
+                "this orb can be obtained on all boards except Towering Treetop and Faire Square"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3111,
+      "name": "Thwomp Orb",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Thwomp_Orb",
+      "main_revision": "5533882",
+      "lines": [
+        {
+          "line": "Summary: A red Orb you set on a space as a roadblock: an opponent who passes it is flattened by a Thwomp and has to stop moving.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Any opponent who passes it will get Thwomped and must stop moving."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Thwomp_Orb",
+              "revision": "5533882",
+              "quoted": [
+                "players can only place it on a space as a roadblock.",
+                "Opponents that pass a space containing the Orb get flattened by a Thwomp, ending their turn."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Put it on a space your rivals must cross. On Faire Square it can stop a player from buying Stars, above all at night, when Stars may cost less, and it is often placed on the Red Space right before the fixed Star space.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Faire_Square",
+              "revision": "5246724",
+              "quoted": [
+                "The Thwomp Orb, for instance, can prevent a player from obtaining Stars especially at night if it is cheaper than in day.",
+                "It is often placed at the Red Space right before the fixed Star space"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It costs 10 coins at an Orb hut, or 5 in a flash sale, and is sold on Towering Treetop, Faire Square and Clockwork Castle. A rival under a Metal Mushroom Orb is not stopped, and a roadblock cannot be replaced until an opponent triggers it.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Thwomp_Orb",
+              "revision": "5533882",
+              "quoted": [
+                "It costs ten coins or five during a flash sale at the Orb Shop.",
+                "If a player is under the effect of the Metal Mushroom Orb, the Thwomp will attempt to crush that player, but it will be deflected, negating the roadblock."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Any opponent who passes it will get Thwomped and must stop moving.\" || Towering Treetop, Faire Square, and Clockwork Castle || 10 coins"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Faire_Square",
+              "revision": "5246724",
+              "quoted": [
+                "they cannot be replaced until an opponent triggers the effect"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

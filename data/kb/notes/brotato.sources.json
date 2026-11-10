@@ -27,15 +27,14 @@
           ]
         },
         {
-          "line": "Tips: It can only appear from wave 3. Each time it gets a chance to appear, the odds are 10%: the first chance comes 25 seconds after a wave begins, and another every 15 seconds after that. The table gives it 5 health that grows by 30 each wave and a speed between 300 and 400, and lists your base speed as 450.",
+          "line": "Tips: It can only appear from wave 3. Each time it gets a chance to appear, the odds are 10%: the first chance comes 25 seconds after a wave begins, and another every 15 seconds after that.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Enemies",
               "revision": "8787",
               "quoted": [
                 "Has 10% chance to spawn 25 seconds into a wave, and every 15 seconds thereafter.",
-                "|| 5 || 30 || 300-400 || 1 || 0.85 || 0.0 || 8 || 100% || 100% || 3 || 13",
-                "As a reference for speed, your own base speed is 450."
+                "|| 100% || 100% || 3 || 13"
               ]
             }
           ]
@@ -74,7 +73,7 @@
           ]
         },
         {
-          "line": "Tips: Killing it drops the materials it ate: all of them from its first version, twice as many from the second and three times as many from the third. The later versions are slower but have more health. It has only a 3% chance to appear, and the chance is rolled 10 seconds after a wave begins; it can turn up from wave 1.",
+          "line": "Tips: Killing it drops the materials it ate: all of them from its first version, twice as many from the second and three times as many from the third. The later versions are slower but have more health. It has only a 3% chance to appear, and the chance is rolled 10 seconds after a wave begins.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Enemies",
@@ -85,8 +84,7 @@
                 "Killing it makes it drop twice the amount of materials it ate.",
                 "Loses more speed but gains even more max HP.",
                 "Killing it makes it drop triple the materials eaten.",
-                "Has 3% chance to spawn 10 seconds into a wave.",
-                "|| 0.85 || 0.0 || 8 || 100% || 100% || 1 ||"
+                "Has 3% chance to spawn 10 seconds into a wave."
               ]
             }
           ]
@@ -206,6 +204,8 @@
               "quoted": [
                 "(Melee Weapon hits don't spawn projectiles.)",
                 "|| 15 || 4.0 || 325-375 || 1 ||",
+                "Some enemies spawn with a random movement speed. For example, a Baby Alien can spawn with a movement speed between 200 and 300, or a Fly between 325 and 375.",
+                "As Danger 1 adds more enemies, they only start spawning for Danger 1 and up.",
                 "|| 1% || 1% || D1 : 4 || 8"
               ]
             }
@@ -229,7 +229,8 @@
               "quoted": [
                 "Spawns 15 Slasher Eggs",
                 "Shoots 5 projectiles each second to the player",
-                "Last 10 seconds, runs away from the player, spawning Tentacles"
+                "Last 10 seconds, runs away from the player, spawning Tentacles",
+                "=== Elites (Danger 2+)"
               ]
             }
           ]
@@ -267,7 +268,8 @@
               "quoted": [
                 "Random walk pattern - spawns a big circle of projectiles around itself every 0.3 seconds",
                 "Chases the player - spawning 12 projectiles around itself in random pattern every 0.4 seconds",
-                "Chases the player - spawns a 3 of projectiles in random directions every 0.01 - 0.15 seconds"
+                "Chases the player - spawns a 3 of projectiles in random directions every 0.01 - 0.15 seconds",
+                "=== Elites (Danger 2+)"
               ]
             }
           ]
@@ -554,25 +556,25 @@
       "main_revision": "7601",
       "lines": [
         {
-          "line": "Summary: A Tier 3 damage item that multiplies your damage versus Elites and bosses.",
+          "line": "Summary: A Tier 3 damage item that raises your damage versus Elites and bosses.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Silver_Bullet",
               "revision": "7601",
               "quoted": [
-                "Silver Bullet grants 25% Bonus damage against Elites and Bosses Secondary Stat, multiplying any damage you deal to Elites or Bosses."
+                "Silver Bullet grants 25% Bonus damage against Elites and Bosses"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Each one raises your damage versus Elites and bosses by 25%, applied on top of your other damage bonuses. It costs 70.",
+          "line": "Uses: Each one raises your damage versus Elites and bosses by 25%. It costs 70.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Silver_Bullet",
               "revision": "7601",
               "quoted": [
-                "Silver Bullet grants 25% Bonus damage against Elites and Bosses Secondary Stat, multiplying any damage you deal to Elites or Bosses.",
+                "Silver Bullet grants 25% Bonus damage against Elites and Bosses",
                 "Price 70"
               ]
             },
@@ -586,13 +588,14 @@
           ]
         },
         {
-          "line": "Tips: In the page's example, an attack that does 100 damage and reaches 200 with 100% Damage gets to 250 with one Silver Bullet, and to 400 with four. Jack's +125% bonus versus bosses and Elites is the same effect and adds to it.",
+          "line": "Tips: Worked example: an attack that does 100 damage reaches 200 with 100% Damage, then 250 with one Silver Bullet, and 400 with four. Jack's +125% bonus versus bosses and Elites is the same effect, and the two add together.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Silver_Bullet",
               "revision": "7601",
               "quoted": [
-                "Then Silver Bullet will multiply that by another 1.25, bringing it to a total of 250 damage. If you had 4 Silver Bullets, the attack would deal 400 damage.",
+                "if you have an attack that deals 100 damage, and you have 100% Damage, bringing the attack to 200.",
+                "bringing it to a total of 250 damage. If you had 4 Silver Bullets, the attack would deal 400 damage.",
                 "Silver Bullet is additive with Jack's +125% against Bosses and Elites. It is the same effect."
               ]
             }

@@ -89,6 +89,50 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5472623",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2808,
+      "game_id": 26,
+      "section_type": "item",
+      "name": "Bowser's bogus items",
+      "card": "Summary: Useless things Bowser forces you to buy when you pass him on a board, a different one on each of six boards, for 10 to 40 coins.\nUses: None of them helps you. The Gold-plated Bowser Statue is 10 coins on DK's Jungle Adventure, the Bowser Cake 20 on Peach's Birthday Cake, the Bowser Tube 30 on Yoshi's Tropical Island, Bowser's Claws or Cannon 20 on Wario's Battle Canyon, the Make As Many Coins As You Want Mecha 20 on Luigi's Engine Room, and the Ztar 40 on Mario's Rainbow Castle.\nLooks like: The Gold-plated Bowser Statue looks like a miniature version of the Koopa King, the Bowser Cake is a spiked shell with a candle and frosting, and the Ztar is a black star with white eyes.\nTips: Bowser's Claws throw you to a random area of the board for 20 coins, or all your coins if you have 20 or less, and are free if you have none. The Make As Many Coins As You Want Mecha gives you one coin for 20, so you lose 19.\nTips: Right after \"buying\" the Ztar you pass Koopa Troopa and earn back 10 coins. On Bowser's Magma Mountain and Eternal Star he sells nothing and steals a Star, or up to 20 coins if you have no Star.",
+      "source_url": "https://www.mariowiki.com/Bowser%27s_bogus_items",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5290899",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2809,
+      "game_id": 26,
+      "section_type": "item",
+      "name": "Event Block",
+      "card": "Summary: A 200-coin Mushroom Shop item that hides a visit from Boo, Koopa Troopa or Bowser on one space of the board.\nUses: When a player lands on the hidden space, Koopa Troopa gives them 20 coins, Boo steals coins or a Star like normal, or Bowser takes 20 coins, or all they have if they have fewer, and gives them one coin if they have none.\nTips: Once bought, it can be turned on and off at the bank. The coin Bowser gives is canceled out if the player is on a Red Space.",
+      "source_url": "https://www.mariowiki.com/Event_Block",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5431989",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2810,
+      "game_id": 26,
+      "section_type": "item",
+      "name": "Coin Box, Lucky Box and Casino Box",
+      "card": "Summary: Three boxes that store your coins and Stars at the end of a board game: the Coin Box you are given first, the 400-coin Lucky Box and the 300-coin Casino Box.\nUses: The Lucky Box adds a 10% coin bonus to each round's total. The Casino Box spins a roulette after every game: x2 doubles the coins you deposited, -1/2 spits half of them out, and 0 does nothing.\nTips: The Casino Box can hold at most 99,999 coins and 100 Stars. Porto at the Mushroom Bank is where you choose whether to save with the Coin Box, Lucky Box or Casino Box.\nTips: Only human-controlled players have their coins and Stars stored at the end of the board game.",
+      "source_url": "https://www.mariowiki.com/Coin_Box_(Mario_Party_series)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5471296",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2811,
+      "game_id": 26,
+      "section_type": "item",
+      "name": "No Koopa and No Boo",
+      "card": "Summary: Two 500-coin Mushroom Shop items that keep Koopa Troopa or Boo off the board map.\nUses: No Koopa stops Koopa Troopa's 10 coins for passing the starting point, and No Boo stops Boo's stealing. Neither works on some maps.\nTips: The shop lists both with a note that the Eternal Star map must be completed before obtaining the item.",
+      "source_url": "https://www.mariowiki.com/Mario_Party",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5539722",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

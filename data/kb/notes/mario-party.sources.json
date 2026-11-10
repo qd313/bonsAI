@@ -598,6 +598,294 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2808,
+      "name": "Bowser's bogus items",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Bowser%27s_bogus_items",
+      "main_revision": "5290899",
+      "lines": [
+        {
+          "line": "Summary: Useless things Bowser forces you to buy when you pass him on a board, a different one on each of six boards, for 10 to 40 coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser%27s_bogus_items",
+              "revision": "5290899",
+              "quoted": [
+                "Bowser's bogus items are useless items forcibly sold to partiers by Bowser in Mario Party when they pass him on a board.",
+                "Bowser sells this item to players for 10 coins.",
+                "However, the Ztar costs 40 coins as opposed to a regular Star costing 20, making it the most expensive of the bogus items."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: None of them helps you. The Gold-plated Bowser Statue is 10 coins on DK's Jungle Adventure, the Bowser Cake 20 on Peach's Birthday Cake, the Bowser Tube 30 on Yoshi's Tropical Island, Bowser's Claws or Cannon 20 on Wario's Battle Canyon, the Make As Many Coins As You Want Mecha 20 on Luigi's Engine Room, and the Ztar 40 on Mario's Rainbow Castle.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser%27s_bogus_items",
+              "revision": "5290899",
+              "quoted": [
+                "Bowser's bogus items are useless items forcibly sold to partiers by Bowser in Mario Party",
+                "Bowser sells this item to players for 10 coins. It looks like a miniature version of the Koopa King, and is completely worthless.",
+                "he forcibly gives the player this item for 20 coins.",
+                "Bowser demands 30 coins for buying (and in this case, popping) his merchandise",
+                "The player will pay 20 coins (or all their coins if they have 20 or less) for the ride",
+                "Bowser activates this machine in order to create a coin for the player at the cost of 20 coins",
+                "Bowser forces the player to buy a Ztar."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: The Gold-plated Bowser Statue looks like a miniature version of the Koopa King, the Bowser Cake is a spiked shell with a candle and frosting, and the Ztar is a black star with white eyes.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser%27s_bogus_items",
+              "revision": "5290899",
+              "quoted": [
+                "It looks like a miniature version of the Koopa King, and is completely worthless.",
+                "It is just a spiked shell with a candle and frosting, and cannot be eaten."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Ztar",
+              "revision": "5475239",
+              "quoted": [
+                "They appear as black stars with white eyes."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Bowser's Claws throw you to a random area of the board for 20 coins, or all your coins if you have 20 or less, and are free if you have none. The Make As Many Coins As You Want Mecha gives you one coin for 20, so you lose 19.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser%27s_bogus_items",
+              "revision": "5290899",
+              "quoted": [
+                "The player will pay 20 coins (or all their coins if they have 20 or less) for the ride, though Bowser will give it to them for free if they have zero coins.",
+                "blast the player to a random area of the board",
+                "thus meaning the player loses 19 coins, due to the one coin they get from the machine."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Right after \"buying\" the Ztar you pass Koopa Troopa and earn back 10 coins. On Bowser's Magma Mountain and Eternal Star he sells nothing and steals a Star, or up to 20 coins if you have no Star.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser%27s_bogus_items",
+              "revision": "5290899",
+              "quoted": [
+                "immediately after \"buying\" the Ztar, the player will pass Koopa Troopa and earn back 10 coins",
+                "Bowser does not sell any useless items or provide a worthless service on either Bowser's Magma Mountain or Eternal Star, where he steals either a Star or up to 20 coins if they do not have at least one Star."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2809,
+      "name": "Event Block",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Event_Block",
+      "main_revision": "5431989",
+      "lines": [
+        {
+          "line": "Summary: A 200-coin Mushroom Shop item that hides a visit from Boo, Koopa Troopa or Bowser on one space of the board.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Event_Block",
+              "revision": "5431989",
+              "quoted": [
+                "It is bought at the Mushroom Shop for 200 Coins",
+                "It is hidden in one of the spaces on the board, and when a player lands on that space, the Event Block appears. The player would then get one of three events: Boo, Koopa Troopa, or Bowser."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: When a player lands on the hidden space, Koopa Troopa gives them 20 coins, Boo steals coins or a Star like normal, or Bowser takes 20 coins, or all they have if they have fewer, and gives them one coin if they have none.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Event_Block",
+              "revision": "5431989",
+              "quoted": [
+                "Boo steals Coins or a Star like normal. Koopa Troopa falls from the sky, gives the player 20 Coins then walks off screen.",
+                "He takes away 20 Coins or however many the player has if they have fewer. If they have none, Bowser gives them one coin"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Once bought, it can be turned on and off at the bank. The coin Bowser gives is canceled out if the player is on a Red Space.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Event_Block",
+              "revision": "5431989",
+              "quoted": [
+                "upon buying it, it can be turned on and off at the bank.",
+                "The coin given by Bowser is canceled out if they are on a Red Space."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2810,
+      "name": "Coin Box, Lucky Box and Casino Box",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Coin_Box_(Mario_Party_series)",
+      "main_revision": "5471296",
+      "lines": [
+        {
+          "line": "Summary: Three boxes that store your coins and Stars at the end of a board game: the Coin Box you are given first, the 400-coin Lucky Box and the 300-coin Casino Box.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Coin_Box_(Mario_Party_series)",
+              "revision": "5471296",
+              "quoted": [
+                "This is the first item given when the game begins. Its purpose is to store coins and Stars that players acquire at the end of a board game (or Mini-Game Stadium)."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Lucky_Box",
+              "revision": "5431995",
+              "quoted": [
+                "It can be purchased from the Mushroom Shop in Mushroom Village for 400 coins.",
+                "Like the Coin Box, the Lucky Box stores coins and Stars"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Casino_Box",
+              "revision": "5432022",
+              "quoted": [
+                "It can be bought in the Mushroom Shop for 300 coins.",
+                "It stores coins and Stars like the Coin Box"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: The Lucky Box adds a 10% coin bonus to each round's total. The Casino Box spins a roulette after every game: x2 doubles the coins you deposited, -1/2 spits half of them out, and 0 does nothing.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Lucky_Box",
+              "revision": "5431995",
+              "quoted": [
+                "after every round of partying, the player earns an additional 10% coin bonus from that round's total."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Casino_Box",
+              "revision": "5432022",
+              "quoted": [
+                "after every game, it gives the player a chance to win more or lose some coins by roulette.",
+                "the coin amount deposited is doubled.",
+                "half the deposited coins are spat out.",
+                "does nothing."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Casino Box can hold at most 99,999 coins and 100 Stars. Porto at the Mushroom Bank is where you choose whether to save with the Coin Box, Lucky Box or Casino Box.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Casino_Box",
+              "revision": "5432022",
+              "quoted": [
+                "The Casino Box can hold a maximum of 99,999 coins and 100 Stars."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "Here is also where the player can choose how they want to save their Coins, whether with the Coin Box, Lucky Box, or Casino Box."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Only human-controlled players have their coins and Stars stored at the end of the board game.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Coin_Box_(Mario_Party_series)",
+              "revision": "5471296",
+              "quoted": [
+                "However, only human-controlled players will have their coins and Stars stored at the end of the board game."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2811,
+      "name": "No Koopa and No Boo",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Mario_Party",
+      "main_revision": "5539722",
+      "lines": [
+        {
+          "line": "Summary: Two 500-coin Mushroom Shop items that keep Koopa Troopa or Boo off the board map.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "No Koopa || 500 Coins || Koopa Troopa won't appear on the map, but it won't work on some maps.",
+                "No Boo || 500 Coins || Boo won't appear on the map, but it won't work on some maps."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: No Koopa stops Koopa Troopa's 10 coins for passing the starting point, and No Boo stops Boo's stealing. Neither works on some maps.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Koopa_Troopa",
+              "revision": "5540011",
+              "quoted": [
+                "Koopa Troopa awards a player 10 coins each time they pass the starting point in Mario Party, unless the No Koopa item is active or the player is playing on Eternal Star."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Boo",
+              "revision": "5532404",
+              "quoted": [
+                "they provide the player character with the option stealing either a number of coins from an opponent for free or a Star for 50 coins, on their behalf."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "Koopa Troopa won't appear on the map, but it won't work on some maps.",
+                "Boo won't appear on the map, but it won't work on some maps."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The shop lists both with a note that the Eternal Star map must be completed before obtaining the item.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party",
+              "revision": "5539722",
+              "quoted": [
+                "No Koopa || 500 Coins || Koopa Troopa won't appear on the map, but it won't work on some maps. || The Eternal Star map must be completed before obtaining the item.",
+                "No Boo || 500 Coins || Boo won't appear on the map, but it won't work on some maps. || The Eternal Star map must be completed before obtaining the item."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -171,6 +171,13 @@
                 "He is at the end of The Tall Tower.",
                 "Inviso attacks by turning invisible and trying to bump into a Yoshi while summoning Peepers."
               ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Story",
+              "revision": "5520653",
+              "quoted": [
+                "A ghost that remains invisible while releasing Peepers to attack."
+              ]
             }
           ]
         },
@@ -228,7 +235,7 @@
       "main_revision": "5541021",
       "lines": [
         {
-          "line": "Summary: A vast, cheerful cloud made of yellow candy floss, fought at the end of the level Cloud Cruising.",
+          "line": "Summary: A vast, smiling cloud made of yellow cotton candy, fought at the end of the level Cloud Cruising.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Cloud_N._Candy",
@@ -240,7 +247,7 @@
           ]
         },
         {
-          "line": "Weak points: You lick her instead of hitting her. Each lick takes a piece off, and she is beaten once she has been eaten up.",
+          "line": "Weak points: You lick her to beat her. Each lick takes a piece off, and she is beaten once she has been eaten up.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Cloud_N._Candy",
@@ -252,7 +259,7 @@
           ]
         },
         {
-          "line": "Looks like: A very large floating cloud with a smile on it, yellow and fluffy like candy floss.",
+          "line": "Looks like: A very large floating cloud with a smile on it, yellow and fluffy like cotton candy.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Cloud_N._Candy",
@@ -331,7 +338,7 @@
           ]
         },
         {
-          "line": "Tips: Touching the body of a three-headed one does not hurt you, and beating it earns three melons.",
+          "line": "Tips: Touching the body of a three-headed one does not hurt you. Beating a Bone Dragon earns three melons.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bone_Dragon",
@@ -353,12 +360,13 @@
       "main_revision": "5411249",
       "lines": [
         {
-          "line": "Summary: A giant eel-like sea creature in one area of the level Lots O'Jelly Fish, which swims in circles around a Yoshi that comes near. The game treats it as a mini-boss, yet it cannot be beaten.",
+          "line": "Summary: A serpentine enemy in one area of the level Lots O'Jelly Fish, which swims in circles around a Yoshi that comes near. The game treats it as a mini-boss, yet it cannot be beaten.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Snorkel_Snake",
               "revision": "5411249",
               "quoted": [
+                "is a serpentine enemy that appears in Yoshi's Story.",
                 "it is found in a single area of the level Lots O'Jelly Fish, where it waits for a Yoshi to swim nearby. When it spots them, it swims in circles around them, attempting to enclose them within its spiky body"
               ]
             },
@@ -478,7 +486,7 @@
           ]
         },
         {
-          "line": "Tips: Being Super Happy does not save you from the big fish called Blurps, from pits, lava or pistons.",
+          "line": "Tips: Being Super Happy does not save you from fatal hazards such as Blurps, pits, lava or pistons.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Super_Happy",
@@ -499,7 +507,7 @@
       "main_revision": "5408895",
       "lines": [
         {
-          "line": "Summary: Three hearts hidden in every level. Each one you collect opens one more level on the next page.",
+          "line": "Summary: Three hearts hidden in every level. Each one you collect opens a new level on the next page.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Special_Heart",
@@ -644,7 +652,7 @@
           ]
         },
         {
-          "line": "Uses: It is a hazard, not a meal. Touching one makes the Smile Meter lose petals, and so does eating one, unless the Yoshi is the Black or the White one.",
+          "line": "Uses: It is a hazard, not a meal. Touching one makes the Smile Meter lose petals. Eating one does too, except for the Black and White Yoshis.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bomb_Berry",
@@ -656,7 +664,7 @@
           ]
         },
         {
-          "line": "Looks like: A yellow and red aubergine-shaped fruit covered in green spikes.",
+          "line": "Looks like: A yellow and red eggplant-shaped fruit covered in green spikes.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bomb_Berry",
@@ -702,26 +710,13 @@
           ]
         },
         {
-          "line": "Weak points: A ground pound makes it fall on its head, and you can slip past. Be quick, because it soon flips back upright.",
+          "line": "Tips: A ground pound makes it fall on its head, and you can slip past. Be quick, because it soon flips back upright.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Pak_E._Derm",
               "revision": "5513910",
               "quoted": [
                 "To pass, Yoshi has to Ground Pound the ground, and the Pak E. Derm will fall on his head, allowing Yoshi to pass. Yoshi has to act quickly because Pak E. Derm will soon flip back upright."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: An elephant-like creature holding up a stop sign.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Pak_E._Derm",
-              "revision": "5513910",
-              "quoted": [
-                "Pak E. Derms are elephant-like creatures",
-                "They can always be seen carrying a stop sign"
               ]
             }
           ]
@@ -767,7 +762,7 @@
           ]
         },
         {
-          "line": "Looks like: A round flying insect that flashes between pink and blue.",
+          "line": "Looks like: A round flying insect that changes colour from pink to blue.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Tehee_Butterfly",
@@ -822,19 +817,6 @@
               "quoted": [
                 "Black Shy Guys are an aggressive type of Flying Shy Guy found in Yoshi's Story.",
                 "These Shy Guys first appear in Poochy & Nippy."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Looks like: A black Shy Guy that flies.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Black_Shy_Guy_(Yoshi%27s_Story)",
-              "revision": "5408072",
-              "quoted": [
-                "Black Shy Guys are an aggressive type of Flying Shy Guy",
-                "a black version of a normal Shy Guy has artwork"
               ]
             }
           ]

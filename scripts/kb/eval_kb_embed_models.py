@@ -82,6 +82,9 @@ if _WORKSHOP_LIB not in sys.path:
     sys.path.insert(0, _WORKSHOP_LIB)
 import workshop  # noqa: E402
 
+# The questions are read by one shared reader: the main file plus every file in tests/fixtures/kb_eval/.
+import kb_eval_fixture  # noqa: E402
+
 from backend.knowledge.knowledge_base_service import (  # noqa: E402
     HYBRID_FTS_SHORTLIST_K,
     KnowledgeCard,
@@ -219,7 +222,16 @@ def _gate_verdict(
 
 
 def _load_fixture(path: Path, suite: str) -> list[QueryCase]:
-    data = json.loads(path.read_text(encoding="utf-8"))
+    """The cases of one fixture file (the older v0 file, the Spanish probe)."""
+    return _cases_from_data(json.loads(path.read_text(encoding="utf-8")), suite)
+
+
+def _load_v2_cases() -> list[QueryCase]:
+    """Every English question: the main file's, then each file's in tests/fixtures/kb_eval/."""
+    return _cases_from_data(kb_eval_fixture.load_eval_fixture(FIXTURES), "kb_eval_v2")
+
+
+def _cases_from_data(data: dict[str, Any], suite: str) -> list[QueryCase]:
     default_split: Split = data.get("default_split") if data.get("default_split") in ("tune", "holdout") else "tune"
     out: list[QueryCase] = []
     for row in data.get("queries", []):
@@ -1741,7 +1753,7 @@ def run_bakeoff(
 
     # PR2 ship gate: v2 intents + deepened seed. Legacy v0/paraphrase stay available for
     # historical comparison but no longer drive the arm verdict or model recommendation.
-    english_cases = _load_fixture(FIXTURES / "kb_eval_v2.json", "kb_eval_v2")
+    english_cases = _load_v2_cases()
     labeled_cases = [c for c in english_cases if _case_is_labeled(c)]
     spanish_cases = _load_fixture(FIXTURES / "kb_eval_es_probe_v0.json", "spanish_probe")
 
@@ -1969,7 +1981,7 @@ def main() -> int:
             conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
             conn.row_factory = sqlite3.Row
             docs = _load_corpus_docs(conn)
-            cases = _load_fixture(FIXTURES / "kb_eval_v2.json", "kb_eval_v2")
+            cases = _load_v2_cases()
             print(f"Embedding corpus for {BASELINE_MODEL}...", file=sys.stderr)
             vectors_by_id = _build_vectors(args.ollama, BASELINE_MODEL, docs, "prompted")
 

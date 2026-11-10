@@ -278,12 +278,33 @@ class EvalArmsTests(unittest.TestCase):
             )
 
     def test_v2_fixture_has_tune_and_holdout_labeled_cases(self):
-        cases = self.mod._load_fixture(
-            REPO_ROOT / "tests" / "fixtures" / "kb_eval_v2.json", "kb_eval_v2"
-        )
+        cases = self.mod._load_v2_cases()
         labeled = [c for c in cases if self.mod._case_is_labeled(c)]
         self.assertTrue(any(c.split == "tune" for c in labeled))
         self.assertTrue(any(c.split == "holdout" for c in labeled))
+
+    def test_v2_cases_include_every_file_in_the_question_folder(self):
+        """A question written in a new file under tests/fixtures/kb_eval/ is searched and counted."""
+        row = lambda rid, **extra: {  # noqa: E731 - a local shorthand, not an abstraction
+            "id": rid, "domain": "strategy", "query": f"question {rid}", "expect_section": "Card A", **extra
+        }
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            base = Path(tmp_dir)
+            (base / "kb_eval").mkdir()
+            (base / "kb_eval_v2.json").write_text(
+                json.dumps({"default_split": "tune", "queries": [row("M-1")]}), encoding="utf-8"
+            )
+            (base / "kb_eval" / "new-game.json").write_text(
+                json.dumps({"default_split": "holdout", "queries": [row("N-1"), row("N-2", split="tune")]}),
+                encoding="utf-8",
+            )
+            with mock.patch.object(self.mod, "FIXTURES", base):
+                cases = self.mod._load_v2_cases()
+        self.assertEqual(
+            [(c.case_id, c.split, c.suite) for c in cases],
+            [("M-1", "tune", "kb_eval_v2"), ("N-1", "holdout", "kb_eval_v2"), ("N-2", "tune", "kb_eval_v2")],
+        )
+        self.assertTrue(all(self.mod._case_is_labeled(c) for c in cases))
 
     def _rows(self, spec):
         """spec: list of (hit, fts_empty) -> QueryResult rows."""

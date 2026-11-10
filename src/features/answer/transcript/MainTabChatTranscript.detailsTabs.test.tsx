@@ -22,7 +22,7 @@ import { MainTabChatTranscript } from "./MainTabChatTranscript";
 import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
 import type { LastExchangeSnapshot } from "../../../types/backgroundAsk";
 import type { ContextChip, TransparencySnapshot } from "../../../types/inputTransparency";
-import type { AskThreadCollapsedTurn } from "../../../types/bonsaiUi";
+import type { AskThreadCollapsedTurn, ChatSummaryMark } from "../../../types/bonsaiUi";
 
 const hoisted = vi.hoisted(() => ({
   focusableProps: [] as Array<Record<string, unknown>>,
@@ -528,7 +528,7 @@ describe("the This answer / Session tabs, on the newest answer", () => {
    * remount it caused, went with Clear: nothing in this panel opens a Decky modal any more.)
    */
   describe("the summed-up note and the warning line (plan 68)", () => {
-    const summedTurn = (id: string, question: string, chatSummary?: "written" | "failed"): AskThreadCollapsedTurn => ({
+    const summedTurn = (id: string, question: string, chatSummary?: ChatSummaryMark): AskThreadCollapsedTurn => ({
       id,
       question,
       answer: "Keep your distance and strafe.",
@@ -597,6 +597,36 @@ describe("the This answer / Session tabs, on the newest answer", () => {
         "Couldn't sum up the chat this time, so this answer only knows the newest turns. It will try again on your next question."
       );
       expect(container.textContent).not.toContain("summed itself up");
+    });
+
+    // Plan 103 lane B2: the line says why, in the words of the way the call ended. The saved mark is
+    // "failed:<reason>"; a reason the screen has no sentence for keeps the older line.
+    it.each([
+      ["timed_out", "The AI took too long to sum up the chat"],
+      ["no_room", "The chat was too long for the AI's room to sum it up"],
+      ["unreachable", "The AI did not answer when the chat was summed up"],
+      ["cut_off", "The AI stopped answering partway through summing up the chat"],
+      ["model_error", "The AI ran into a problem while summing up the chat"],
+      ["empty", "The AI sent back nothing when the chat was summed up"],
+    ])("a summary that failed as %s says why on the line the player reads", (reason, start) => {
+      const { container } = renderTranscript({
+        ...archivedOnly,
+        expandedTurnKey: "newest-1",
+        askThreadCollapsed: [summedTurn("newest-1", "how do i dodge", `failed:${reason}`)],
+      });
+      expect(container.textContent).toContain(
+        `${start}, so this answer only knows the newest turns. It will try again on your next question.`
+      );
+      expect(container.textContent).not.toContain("Couldn't sum up");
+    });
+
+    it("a failure reason the screen has no sentence for keeps the older line", () => {
+      const { container } = renderTranscript({
+        ...archivedOnly,
+        expandedTurnKey: "newest-1",
+        askThreadCollapsed: [summedTurn("newest-1", "how do i dodge", "failed:something_new")],
+      });
+      expect(container.textContent).toContain("Couldn't sum up the chat this time, so this answer only knows");
     });
 
     it("an ordinary answer has neither", () => {

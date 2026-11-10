@@ -67,7 +67,7 @@ from backend.chats.chat_summary_plan import (  # noqa: F401 -- re-exported for t
     SummaryPlan,
     plan_summary,
 )
-from backend.chats.chat_summary_failure import REASON_TIMED_OUT, explain_failed_call
+from backend.chats.chat_summary_failure import REASON_TIMED_OUT, explain_failed_call, failed_mark
 from backend.chats.chat_summary_tidy import known_games_of_chat, tidy_summary_text
 from backend.chats.chat_summary_title import (
     clean_suggested_title,
@@ -546,4 +546,4 @@ async def decide_and_write_chat_summary(
         outcome.reason or "unknown",
         outcome.detail or outcome.error or "empty summary",
     )
-    return turns, previous, "failed", False
+    return turns, previous, failed_mark(outcome.reason), False

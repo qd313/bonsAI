@@ -21,6 +21,9 @@ How it works:
  4. No connection at all is "unreachable"; a stream that stopped early, or a connection that
     broke while it was being read, is "cut_off".
  5. Anything else is "unknown", with the reply's own text as the detail.
+ 6. ``failed_mark`` turns the code into the mark the answer is saved with (``failed:<code>``, or
+    plain ``failed`` for a code the screen has no sentence for), and ``normalize_summary_mark``
+    is the one place that decides which saved marks are kept.
 """
 
 from __future__ import annotations
@@ -57,6 +60,25 @@ _NO_ROOM_RE = re.compile(
     r"exceed\w* (?:the )?(?:max\w* )?context",
     re.IGNORECASE,
 )
+
+
+def failed_mark(reason: str) -> str:
+    """The mark an answer is saved with when its chat summary failed: ``failed:<reason>`` for a
+    reason the screen has a sentence for, plain ``failed`` for any other."""
+    return f"failed:{reason}" if reason in KNOWN_REASONS else "failed"
+
+
+def normalize_summary_mark(raw: Any) -> str:
+    """A saved chat-summary mark as the chat file may keep it: ``written``, ``failed`` or
+    ``failed:<known reason>``. A reason this build has no sentence for is kept as plain
+    ``failed`` (a chat saved by a newer build still shows the older line); anything else is
+    ``""``, meaning no mark."""
+    text = raw if isinstance(raw, str) else ""
+    if text in ("written", "failed"):
+        return text
+    if text.startswith("failed:"):
+        return failed_mark(text[len("failed:"):])
+    return ""
 
 
 def _one_line(text: Any, limit: int = _DETAIL_CHARS) -> str:

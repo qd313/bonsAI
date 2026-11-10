@@ -278,6 +278,14 @@ describe("turnsToCollapsedTurns", () => {
     expect(collapsed[0]?.chatSummary).toBe("failed");
   });
 
+  it("carries the reason a chat_summary failed onto the collapsed turn", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "and what about that" },
+      { id: "a1", role: "assistant", text: "answer", chat_summary: "failed:timed_out" },
+    ]);
+    expect(collapsed[0]?.chatSummary).toBe("failed:timed_out");
+  });
+
   it("leaves chat_summary unset for a turn that never summed the chat up", () => {
     const { collapsed } = turnsToCollapsedTurns([
       { id: "u1", role: "user", text: "q" },

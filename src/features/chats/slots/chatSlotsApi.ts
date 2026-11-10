@@ -15,6 +15,7 @@
  * question-and-answer rows the screen shows — see chatSlotTurns.ts for that.
  */
 import { callDeckyWithTimeout } from "../../../shared/deckyCall";
+import type { ChatSummaryMark } from "../../../types/bonsaiUi";
 import type { ChatSlotTurnTransparency } from "../../../types/inputTransparency";
 
 export type ChatSlotTurn = {
@@ -61,7 +62,7 @@ export type ChatSlotTurn = {
    * one of these two exact words -- absent otherwise, never "" and never a stored null, the same
    * "absent, not empty" rule the backend's `chat_slot_service.py` follows for `reasoning`.
    */
-  chat_summary?: "written" | "failed";
+  chat_summary?: ChatSummaryMark;
   /**
    * How an assistant turn ended when it was not a finished answer: "stopped" (the person stopped it,
    * the text is what had arrived) or "failed" (the text is the error message). Absent on a finished

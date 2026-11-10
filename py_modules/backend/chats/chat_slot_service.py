@@ -61,6 +61,7 @@ import time
 import uuid
 from typing import Any
 
+from backend.chats.chat_summary_failure import normalize_summary_mark
 from backend.chats.chat_summary_title import MAX_SUGGESTED_TITLE_CHARS
 from backend.ask.ollama_service import REASONING_CUT_NOTE, REASONING_TEXT_CAP_CHARS
 
@@ -403,10 +404,11 @@ def _normalize_turn(raw: Any) -> dict[str, Any] | None:
         turn["reasoning"] = reasoning
     # Plan 68 step 2: whether this answer summed the chat up first, so the screen can draw the
     # note or the warning line straight off the saved turn. Only ever set on an assistant turn,
-    # and only to one of these two exact words -- absent otherwise, the same "absent, not empty"
-    # rule ``reasoning`` follows above, never "" and never a stored ``None``.
-    chat_summary = raw.get("chat_summary")
-    if role == "assistant" and chat_summary in ("written", "failed"):
+    # and only to a mark ``normalize_summary_mark`` keeps ("written", "failed", or "failed:" and
+    # why it failed) -- absent otherwise, the same "absent, not empty" rule ``reasoning``
+    # follows above, never "" and never a stored ``None``.
+    chat_summary = normalize_summary_mark(raw.get("chat_summary"))
+    if role == "assistant" and chat_summary:
         turn["chat_summary"] = chat_summary
     # How an answer that was not a finished one ended: "stopped" (the text is what had arrived) or
     # "failed" (the text is the error message). Lets a chat reopened later tell such a turn from a

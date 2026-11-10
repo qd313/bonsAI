@@ -17,6 +17,12 @@
  */
 import type { ChatSlotTurnTransparency, TransparencySnapshot } from "./inputTransparency";
 
+/**
+ * What a saved answer says about summing the chat up before it (plan 68, plan 103 lane B2): "written",
+ * or "failed" -- with the way it failed after a colon when the back end knew ("failed:timed_out").
+ */
+export type ChatSummaryMark = "written" | "failed" | `failed:${string}`;
+
 export type AppliedResult = {
   tdp_watts: number | null;
   gpu_clock_mhz: number | null;
@@ -153,7 +159,7 @@ export type AskThreadCollapsedTurn = {
    * every turn where summing up did not happen -- "missing" is the ordinary case, the same as
    * `reasoning` above.
    */
-  chatSummary?: "written" | "failed";
+  chatSummary?: ChatSummaryMark;
   /**
    * When the question was asked, in seconds since 1970, straight off the saved turn (plan 79). It is
    * what the "N earlier" list groups by day with. Absent on a turn minted this session before its

@@ -35,8 +35,14 @@ from backend.chats.chat_summary_failure import (
     REASON_UNKNOWN,
     REASON_UNREACHABLE,
     explain_failed_call,
+    failed_mark,
+    normalize_summary_mark,
 )
-from backend.chats.chat_summary_service import SummaryPlan, write_chat_summary
+from backend.chats.chat_summary_service import (
+    SummaryPlan,
+    decide_and_write_chat_summary,
+    write_chat_summary,
+)
 from backend.ollama.token_accounting_service import reset_token_accounting
 from fake_ollama_stream import FakePlugin, ndjson_response, one_line_reply
 
@@ -199,6 +205,46 @@ class WriteChatSummaryReasonTests(unittest.TestCase):
 
         self.assertEqual((outcome.status, outcome.reason), ("written", ""))
         self.assertIn("chat_summary: written in", log)
+
+
+class SummaryMarkTests(unittest.TestCase):
+    """The mark saved on the answer (and read by the screen) carries the reason: "failed:<reason>"."""
+
+    def test_a_failure_mark_carries_a_reason_the_screen_has_a_sentence_for(self):
+        self.assertEqual(failed_mark(REASON_TIMED_OUT), "failed:timed_out")
+        self.assertEqual(failed_mark(REASON_UNKNOWN), "failed")
+        self.assertEqual(failed_mark(""), "failed")
+
+    def test_only_the_marks_the_screen_understands_are_kept(self):
+        for mark in ("written", "failed", "failed:empty", "failed:no_room"):
+            self.assertEqual(normalize_summary_mark(mark), mark)
+        self.assertEqual(normalize_summary_mark("failed:something_new"), "failed")
+        for nothing in ("", None, "bogus", 7):
+            self.assertEqual(normalize_summary_mark(nothing), "")
+
+    @patch("backend.chats.chat_summary_service._title_to_second_guess", return_value="")
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
+    def test_a_summary_that_hit_a_server_error_is_marked_with_why_before_the_answer(
+        self, mock_urlopen, _title
+    ):
+        """The level the Deck looks at: the mark the answer is saved with, which is what decides
+        the line the player reads under their question."""
+        mock_urlopen.side_effect = urllib.error.HTTPError(
+            "http://x/api/chat", 500, "err", {}, io.BytesIO(_RUNNER_STOPPED.encode())
+        )
+        plan = SummaryPlan(needed=True, covered_turns=_TURNS, kept_turns=[], oldest_turns_unread=0, previous=None)
+        with patch("backend.chats.chat_summary_service.plan_summary", return_value=plan):
+            _turns, summary, mark, stopped = asyncio.run(
+                decide_and_write_chat_summary(
+                    FakePlugin(), chat={"id": "c1", "turns": _TURNS}, chat_turns=None,
+                    system_content="system", question="and the next boss?", ask_mode="speed",
+                    think_effort="off", room_tokens=16384, model_name="gemma4:e2b-it-qat",
+                    url="http://127.0.0.1:11434/api/chat", keep_alive="5m", reply_language="english",
+                    active_request_id=None, app_name="Hades", character_enabled=False,
+                    character_preset_id=None,
+                )
+            )
+        self.assertEqual((summary, mark, stopped), (None, "failed:model_error", False))
 
 
 if __name__ == "__main__":

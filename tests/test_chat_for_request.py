@@ -121,7 +121,7 @@ class ChatForRequestTests(unittest.IsolatedAsyncioTestCase):
         """Both "written" and "failed" are real marks that have to ride both the saved turn (so
         a reopened chat still shows the note) and the terminal status (so the screen can paint it
         before the chat reloads)."""
-        for mark in ("written", "failed"):
+        for mark in ("written", "failed", "failed:timed_out"):
             with self.subTest(mark=mark):
                 slot = create_slot(self.tmp, label=f"{mark} chat")
                 sid = slot["id"]
@@ -136,6 +136,16 @@ class ChatForRequestTests(unittest.IsolatedAsyncioTestCase):
                 )
                 self.assertEqual(self._last_assistant_turn(sid).get("chat_summary"), mark)
                 self.assertEqual(self.plugin._background_state.get("chat_summary"), mark)
+
+    async def test_a_failure_reason_the_screen_does_not_know_is_saved_as_plain_failed(self):
+        slot = create_slot(self.tmp, label="new reason chat")
+        sid = slot["id"]
+        await self._run_background_ask(
+            {"success": True, "response": "An answer.", "elapsed_seconds": 0.01,
+             "chat_summary": "failed:something_new"},
+            chat_slot_id=sid,
+        )
+        self.assertEqual(self._last_assistant_turn(sid).get("chat_summary"), "failed")
 
     async def test_a_cancelled_result_saves_no_mark_even_if_chat_summary_was_set(self):
         """A stopped answer gets no mark, whatever the executor's result happened to carry --

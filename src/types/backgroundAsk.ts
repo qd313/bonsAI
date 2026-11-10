@@ -27,6 +27,7 @@
 import type { ModelPolicyDisclosurePayload } from "../features/models/modelPolicy";
 import type {
   AppliedResult,
+  ChatSummaryMark,
   StrategyGuideBranchesPayload,
   StrategyChecklistPayload,
   TurnReasoning,
@@ -169,7 +170,7 @@ export type BackgroundRequestStatus = {
    * stopped request and on any answer that did not need to sum up; absent on a build before this
    * existed.
    */
-  chat_summary?: "written" | "failed" | null;
+  chat_summary?: ChatSummaryMark | null;
   /**
    * What the one-at-a-time job is (plan 68 step 4): an ordinary question, or the *Sum up this
    * chat* button's own job, which saves no turn and has no answer to paint. Absent on a build

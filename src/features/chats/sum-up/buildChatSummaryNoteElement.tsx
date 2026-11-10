@@ -5,7 +5,8 @@
  * summed itself up: "The chat summed itself up before this answer. Press to read what it kept." —
  * on the newest answer a D-pad stop that opens Show details on the Session tab; on an older answer
  * the plain "The chat summed itself up here.". And, when summing up failed or ran out of time,
- * one warning line between the question and the answer saying so.
+ * one warning line between the question and the answer saying so -- and, when the back end knew
+ * how it ended (took too long, no answer, no room, an error, an empty reply), saying that.
  *
  * Used for: MainTabChatTranscript.tsx, on an open archived turn; both read the saved answer's own
  * `chatSummary`, so they stay with that answer after a reload or a restart.
@@ -41,8 +42,27 @@ import { focusSumUpButton } from "./SessionSumUpSection";
 
 const NOTE_NEWEST = "The chat summed itself up before this answer. Press to read what it kept.";
 const NOTE_OLDER = "The chat summed itself up here.";
-const WARNING_FAILED =
-  "Couldn't sum up the chat this time, so this answer only knows the newest turns. It will try again on your next question.";
+const WARNING_AFTER = "so this answer only knows the newest turns. It will try again on your next question.";
+const WARNING_FAILED = `Couldn't sum up the chat this time, ${WARNING_AFTER}`;
+/**
+ * How the warning starts for each way summing up can end (plan 103 lane B2). The saved mark is
+ * "failed:<reason>", the reason being the code `chat_summary_failure.py` gives. A reason with no
+ * sentence here (an older chat, or a newer build's) gets the plain line above.
+ */
+const WARNING_START_BY_REASON: Record<string, string> = {
+  timed_out: "The AI took too long to sum up the chat",
+  no_room: "The chat was too long for the AI's room to sum it up",
+  unreachable: "The AI did not answer when the chat was summed up",
+  cut_off: "The AI stopped answering partway through summing up the chat",
+  model_error: "The AI ran into a problem while summing up the chat",
+  empty: "The AI sent back nothing when the chat was summed up",
+};
+
+function warningText(chatSummary: string): string {
+  const reason = chatSummary.startsWith("failed:") ? chatSummary.slice("failed:".length) : "";
+  if (!Object.prototype.hasOwnProperty.call(WARNING_START_BY_REASON, reason)) return WARNING_FAILED;
+  return `${WARNING_START_BY_REASON[reason]}, ${WARNING_AFTER}`;
+}
 
 /** The 13-pixel squeeze icon the drawing uses: four corners pressed inward. */
 function SqueezeIcon(): React.ReactElement {
@@ -62,10 +82,10 @@ function SqueezeIcon(): React.ReactElement {
 
 /** The warning line, drawn only for an answer whose summary failed or ran out of time. */
 export function buildChatSummaryWarningElement(chatSummary: string | null | undefined): React.ReactElement | null {
-  if (chatSummary !== "failed") return null;
+  if (chatSummary !== "failed" && !chatSummary?.startsWith("failed:")) return null;
   return (
     <div className="bonsai-chat-status-line bonsai-chat-summary-warn" role="status">
-      {WARNING_FAILED}
+      {warningText(chatSummary)}
     </div>
   );
 }

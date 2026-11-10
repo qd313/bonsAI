@@ -761,6 +761,194 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3412,
+      "name": "Brinstar's rising acid",
+      "kind": "enemy",
+      "main_page": "https://www.ssbwiki.com/Brinstar",
+      "main_revision": "2056414",
+      "lines": [
+        {
+          "line": "Summary: Occasionally an earthquake hits Brinstar and acid starts to rise from below, sometimes covering parts of the stage. The acid deals damage and moderate knockback, but will not KO until very high percents.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Brinstar",
+              "revision": "2056414",
+              "quoted": [
+                "Occasionally, an earthquake occurs and, just like Planet Zebes, acid starts to rise, sometimes covering parts of the stage.",
+                "The acid deals damage and moderate knockback, but will not KO until very high percents"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: While it is rising it generally prevents characters from being KO'd on the bottom blast line. It rises and pauses at various intervals, rarely reaching its highest point, where it covers everything except the topmost platform, and after a while it subsides.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Brinstar",
+              "revision": "2056414",
+              "quoted": [
+                "While it is rising it will generally prevent characters from being KO'd on the bottom blast line.",
+                "It will rise and pause at various intervals, rarely reaching its highest point where it will cover everything except the topmost platform",
+                "After a while, the acid subsides."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Yellow acid, with a large pool of it in the background under a brain-like creature.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Brinstar",
+              "revision": "2056414",
+              "quoted": [
+                "Direct references to Brinstar include the yellow acid",
+                "The background is occupied by a large pool of acid with an unidentified life form hanging above it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A character who has grabbed the Super Star can avoid the acid. The fleshy parts that hold the stage together can be weakened by attacks, and while they regenerate they are fall-through. In Melee, contact with the acid makes a unique splash effect with a sizzling sound.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Brinstar",
+              "revision": "2056414",
+              "quoted": [
+                "said blob can be weakened by attacks, and when destroyed the main platform gets separated.",
+                "While regenerating, the substance that holds the stage together is fall-through.",
+                "In Melee, when a fighter makes contact with the acid, a unique splash effect erupts from the acid with a distinct sizzling sound."
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Super_Star",
+              "revision": "2066650",
+              "quoted": [
+                "Characters who have grabbed the Super Star can avoid the acid in Planet Zebes and Brinstar"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3413,
+      "name": "F-Zero racers on Mute City",
+      "kind": "enemy",
+      "main_page": "https://www.ssbwiki.com/Mute_City",
+      "main_revision": "2064572",
+      "lines": [
+        {
+          "line": "Summary: The thirty F-Zero Racers are a hazard on Mute City: they drive around the track continuously and damage any player on contact, sending them upwards.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Mute_City",
+              "revision": "2064572",
+              "quoted": [
+                "The thirty F-Zero Racers are another level hazard.",
+                "They drive around the track continuously (though they only appear on certain segments of the track, and at alternating times and laps) and will damage any player upon contact, sending them upwards."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The racers can be damaged and even destroyed by explosives such as the Motion-Sensor Bomb, powerful attacks and items like the Hammer and Home-Run Bat, and immovable Pokémon like Venusaur or Charizard.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Mute_City",
+              "revision": "2064572",
+              "quoted": [
+                "However, the racers can be damaged and even destroyed by hitting them with explosives (such as the Motion-Sensor Bomb), powerful attacks and items (like the Hammer and Home-Run Bat) and immovable Pokémon (like Venusaur or Charizard)."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A destroyed racer's wreckage stays at the point where it exploded for the rest of the match. Touching the track while the platform is hovering over it also damages you. In Adventure Mode's F-Zero stage a giant \"!\" on the screen warns that cars are approaching, a hit does 35% damage, and you can jump on the pink platforms along the track to avoid them.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Mute_City",
+              "revision": "2064572",
+              "quoted": [
+                "when enough damage is dealt to them by fighters or explosives laid on the track, they will explode and the wreckage will stay at that same point for the rest of the match.",
+                "If a player makes contact with the track while the platform is hovering, they will be damaged"
+              ]
+            },
+            {
+              "page": "https://www.ssbwiki.com/Adventure_Mode_(SSBM)",
+              "revision": "2054666",
+              "quoted": [
+                "A giant \"!\" on the screen indicates that race cars are approaching. If a car hits the player, then they will take 35% damage.",
+                "The player can jump on pink platforms that are situated throughout the stage to avoid being hit by the cars"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3414,
+      "name": "Pokémon Stadium's changing terrain",
+      "kind": "enemy",
+      "main_page": "https://www.ssbwiki.com/Pok%C3%A9mon_Stadium",
+      "main_revision": "2063729",
+      "lines": [
+        {
+          "line": "Summary: After a varying period of time the stage transforms into a random one of four variants, each based on a Pokémon type, then reverts to the basic form and repeats the cycle. The same variant can occur twice in a row.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Pok%C3%A9mon_Stadium",
+              "revision": "2063729",
+              "quoted": [
+                "After a varying period of time, the basic stage transforms into a random one of four variants, each based on a type from the Pokémon series.",
+                "After a while, the stage reverts to the basic form, and the cycle repeats. The same variant can occur consecutively."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The fire in the background of the Fire variant is purely aesthetic and has no gameplay effect. On the Water variant's windmill, players on the current lowest arm fall, and in Melee the arms are soft.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Pok%C3%A9mon_Stadium",
+              "revision": "2063729",
+              "quoted": [
+                "Note that the fire in the background is purely aesthetic and has no gameplay effect.",
+                "Its arms spin slowly and can be stood upon, but players on the current lowest arm fall.",
+                "The arms are soft in Melee and Ultimate but hard in Brawl."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: The basic stage is symmetrical, with one large main platform and two floating soft platforms above it, and a large jumbotron, a crowd and fireworks in the background.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Pok%C3%A9mon_Stadium",
+              "revision": "2063729",
+              "quoted": [
+                "The basic stage is symmetrical and consists of one large main platform, with two floating soft platforms above.",
+                "In the background, a large crowd watches the fight while fireworks go off in the sky. There is a large jumbotron"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The jumbotron shows a symbol for the upcoming variation during a stage transition, so you can see it coming. Many players wait out the Fire and Rock transformations by moving to the opposite side of the stage from their opponent until the stage returns to neutral. In Melee, on the Fire variant, a character hit towards the right side of the tree's base has a chance of falling through.",
+          "drawn_from": [
+            {
+              "page": "https://www.ssbwiki.com/Pok%C3%A9mon_Stadium",
+              "revision": "2063729",
+              "quoted": [
+                "which can display the battle itself, a symbol representing the upcoming variation during a stage transition",
+                "Many players will choose to \"wait out\" the Fire and Rock transformations by moving to the opposite side of the stage as their opponent, without approaching or attacking them, until the transformation returns to neutral.",
+                "On the fire variant, if a character gets hit towards the right side of the tree's base, there's a chance they will fall through."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

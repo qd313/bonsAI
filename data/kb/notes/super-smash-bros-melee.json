@@ -133,6 +133,39 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "1902437",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3412,
+      "game_id": 25,
+      "section_type": "enemy",
+      "name": "Brinstar's rising acid",
+      "card": "Summary: Occasionally an earthquake hits Brinstar and acid starts to rise from below, sometimes covering parts of the stage. The acid deals damage and moderate knockback, but will not KO until very high percents.\nWeak points: While it is rising it generally prevents characters from being KO'd on the bottom blast line. It rises and pauses at various intervals, rarely reaching its highest point, where it covers everything except the topmost platform, and after a while it subsides.\nLooks like: Yellow acid, with a large pool of it in the background under a brain-like creature.\nTips: A character who has grabbed the Super Star can avoid the acid. The fleshy parts that hold the stage together can be weakened by attacks, and while they regenerate they are fall-through. In Melee, contact with the acid makes a unique splash effect with a sizzling sound.",
+      "source_url": "https://www.ssbwiki.com/Brinstar",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2056414",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3413,
+      "game_id": 25,
+      "section_type": "enemy",
+      "name": "F-Zero racers on Mute City",
+      "card": "Summary: The thirty F-Zero Racers are a hazard on Mute City: they drive around the track continuously and damage any player on contact, sending them upwards.\nWeak points: The racers can be damaged and even destroyed by explosives such as the Motion-Sensor Bomb, powerful attacks and items like the Hammer and Home-Run Bat, and immovable Pokémon like Venusaur or Charizard.\nTips: A destroyed racer's wreckage stays at the point where it exploded for the rest of the match. Touching the track while the platform is hovering over it also damages you. In Adventure Mode's F-Zero stage a giant \"!\" on the screen warns that cars are approaching, a hit does 35% damage, and you can jump on the pink platforms along the track to avoid them.",
+      "source_url": "https://www.ssbwiki.com/Mute_City",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2064572",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3414,
+      "game_id": 25,
+      "section_type": "enemy",
+      "name": "Pokémon Stadium's changing terrain",
+      "card": "Summary: After a varying period of time the stage transforms into a random one of four variants, each based on a Pokémon type, then reverts to the basic form and repeats the cycle. The same variant can occur twice in a row.\nWeak points: The fire in the background of the Fire variant is purely aesthetic and has no gameplay effect. On the Water variant's windmill, players on the current lowest arm fall, and in Melee the arms are soft.\nLooks like: The basic stage is symmetrical, with one large main platform and two floating soft platforms above it, and a large jumbotron, a crowd and fireworks in the background.\nTips: The jumbotron shows a symbol for the upcoming variation during a stage transition, so you can see it coming. Many players wait out the Fire and Rock transformations by moving to the opposite side of the stage from their opponent until the stage returns to neutral. In Melee, on the Fire variant, a character hit towards the right side of the tree's base has a chance of falling through.",
+      "source_url": "https://www.ssbwiki.com/Pok%C3%A9mon_Stadium",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "2063729",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

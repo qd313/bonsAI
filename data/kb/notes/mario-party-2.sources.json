@@ -254,7 +254,6 @@
               "revision": "5473170",
               "quoted": [
                 "In Mario Party 2, when used, the Plunder Chest steals an item from another player, chosen at random out of all opponents that have items.",
-                "However, you cannot choose which opponent to steal.",
                 "The stolen item can then be used immediately (unless it is a Bowser Bomb), or held for a later turn as usual."
               ]
             }
@@ -431,13 +430,6 @@
               "revision": "5506219",
               "quoted": [
                 "The player is then asked whether they wish to trade 20 Coins for a Star or not."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Genie_Lamp",
-              "revision": "5462372",
-              "quoted": [
-                "The Mushroom Genie appears and takes you straight to Toad."
               ]
             }
           ]
@@ -690,7 +682,7 @@
       "main_revision": "5498408",
       "lines": [
         {
-          "line": "Summary: A henchman of Bowser who appears once on each board, next to Toad. He takes 5 coins from any player who goes by, though once in a while he hands over 5 coins and then claims it was a mistake.",
+          "line": "Summary: A minion of Bowser who appears once on each board, next to Toad. He takes 5 coins from any player who goes by, though once in a while he hands over 5 coins and then claims it was a mistake.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Koopa_Kid",
@@ -698,7 +690,7 @@
               "quoted": [
                 "A single Baby Bowser appears on every board in the game, in a similar capacity to Toad, who sells Stars.",
                 "If a player passes Baby Bowser, he will steal 5 Coins from that player. However, he occasionally gives a player 5 Coins instead, later claiming that this was an accident.",
-                "This is a henchman of Bowser's. He will steal five coins from you when you pass in front of him."
+                "are minions of Bowser who appear only in the Mario Party series."
               ]
             }
           ]

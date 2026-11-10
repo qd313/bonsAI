@@ -1,0 +1,305 @@
+{
+  "wiki": "Left 4 Dead Wiki (https://left4dead.fandom.com/api.php)",
+  "licence_printed_by_fetcher": "Left 4 Dead Wiki (MediaWiki 1.43.10) licence: CC-BY-SA https://www.fandom.com/licensing",
+  "licence_stored": "CC-BY-SA-3.0 (the fetcher prints 'CC-BY-SA' with no version; the library stores the versioned form, and data/kb/NOTICE.md lists the Left 4 Dead Wiki as CC-BY-SA-3.0)",
+  "game_id": 3,
+  "game": "Left 4 Dead 2",
+  "read_on": "2026-11-09",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://left4dead.fandom.com/api.php --titles <pages> (page text as rendered by the wiki, link markup removed). Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named (curly apostrophes read as straight), inside the named part of the page where one is given. Several pages carry both Left 4 Dead and Left 4 Dead 2 facts; a line states a Left 4 Dead 2 fact only where the page says so or the thing is new in Left 4 Dead 2.",
+  "sections": [
+    {
+      "section_id": 2200,
+      "name": "Riot Infected",
+      "kind": "enemy",
+      "main_page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+      "main_revision": "173635",
+      "lines": [
+        {
+          "line": "Summary: A riot-armoured infected found in The Parish campaign. Its front is immune to bullets and blows, so it can only be killed from behind, with fire, with explosions or with the chainsaw.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Riot Infected",
+              "quoted": [
+                "The Riot Infected or Riot Guard appears in The Parish campaign.",
+                "Riot Infected are immune to bullets, sharp and blunt weaponry such as frying pans if struck from the front. They can only be killed from the back this way, although incendiary and explosive attacks can still kill them as like any other Infected.",
+                "Immune to everything but the Chainsaw/Explosions/Flames on the front side."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Hit it from behind: shove it to stun it and step around it, or shove it off-centre so it spins and shows its back. Fire, explosions and the chainsaw still work from the front.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Riot Infected",
+              "quoted": [
+                "Use a melee shove to stun them before moving around them. Sometimes, the melee shove will spin them around, in which case movement isn't required.",
+                "The spin shove for exposing a Riot Infected's weak side may be done by not directly shoving them from the center, but from the off-center.",
+                "He is vulnerable to flames and explosions.",
+                "The Chainsaw is unaffected by his armor."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: An armoured guard in a helmet with a visor and a light blue (sometimes grey) uniform with a sheathed nightstick. The bands on its arm are reflective, so a flashlight picks them out.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "quoted": [
+                "The uniform is either light blue or gray with a sheathed nightstick. (mostly light blue).",
+                "If one were to view the helmets of Riot Infected",
+                "The visor of the Riot Infected is actually a separate model from the infected model itself.",
+                "The bands on the Riot Infected's arm, along with the word \"Security\" on his chest are reflective",
+                "These reflective areas can be easily seen by turning your flashlight on."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Survivor bots cannot tell it from other infected and waste ammo shooting its front, and it is especially dangerous to an incapacitated player, who often cannot land a shot on its back from the floor. Avoid fighting it where it can crawl, because a crawling one cannot be shoved back.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Riot Infected",
+              "quoted": [
+                "Survivor Bots are unable to differentiate between Riot Infected and other Infected; they will shoot him even from the front, wasting their ammo.",
+                "Riot Infected are particularly dangerous to Incapacitated players, as it is often impossible to land a shot on their backs from the floor.",
+                "make sure to not get in a position where they'll be able to crawl, while crawling they're unable to be shoved back, making them much harder to kill."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2201,
+      "name": "CEDA Worker Infected",
+      "kind": "enemy",
+      "main_page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+      "main_revision": "173635",
+      "lines": [
+        {
+          "line": "Summary: A common infected in a hazmat suit that is immune to fire and may drop a bile bomb when killed. It has 150 health on Normal and above, and appears in Dead Center's Hotel and Streets, the lower floors of the hospital in No Mercy and Rayford's industrial area in The Sacrifice.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "CEDA Worker Infected",
+              "quoted": [
+                "Immune to flames. Can drop a bile bomb when killed.",
+                "150 (Normal, Advanced, Expert, Realism, Survival & Versus)",
+                "Dead Center in The Hotel and The Streets. In this game they also appear on the lower floors of the Hospital in No Mercy, and the industrial area of Rayford in the Sacrifice.",
+                "Players will occasionally come across Common Infected wearing a hazmat suit"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Fire does nothing to it: a Molotov does not light it and incendiary ammo does not ignite it, though the bullets still hit. Shoot it in the head or hit it with a melee weapon.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "CEDA Worker Infected",
+              "quoted": [
+                "they are resistant to fire, as they do not burst into flames when in the middle of a Molotov's fire, and incendiary ammunition do not set them on fire.",
+                "If your primary weapon is loaded with incendiary ammo, it will not light them on fire, but they will still be hit from the bullet.",
+                "Shooting them in the head or damaging them with Melee Weapons is encouraged."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A hazmat suit with a visor, yellow or green (dark blue and white in the No Mercy hospital). The suit has reflective areas, and a bile bomb hangs at its side when it carries one.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "quoted": [
+                "They come in two different varieties: yellow suits and green suits.",
+                "These CEDA Workers are dressed in dark blue and white hazmat suits, instead of yellow and green ones.",
+                "When shot in the face, blood will splatter across the visor",
+                "When killed, there is a chance of them dropping a Bile Bomb (in which case it will be seen strapped to their side).",
+                "The CEDA Worker Infected have reflective areas on their suits."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If you have a free slot, pick up the bile bomb from its corpse and keep it for later. In the No Mercy hospital they are nearly the only source of bile bombs in the campaign, but they carry one quite rarely.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "CEDA Worker Infected",
+              "quoted": [
+                "If you have an empty inventory slot, look for the Bile vial on the Agent’s corpse, pick up the Bile, and use it later.",
+                "These are the only sources of Bile in the campaign (besides 3 unreliable spawns in the warehouse and one spawn right outside the sewer exit), however they carry Bile quite rarely"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2202,
+      "name": "Clown Infected",
+      "kind": "enemy",
+      "main_page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+      "main_revision": "173635",
+      "lines": [
+        {
+          "line": "Summary: A fairground clown found in the Dark Carnival campaign. When it spots survivors it charges, and its squeaky shoes call the infected nearby to join the attack. It has 150 health on Normal and above.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Clown Infected",
+              "quoted": [
+                "They wander around the Dark Carnival campaign and when they spot Survivors, they will charge, calling in other Infected with their noisy, squeaky shoes for a mass attack.",
+                "an agitated Clown in attack mode attracts Common Infected and other Clown Infected loitering nearby",
+                "150 (Normal, Advanced, Expert, Realism, Survival & Versus)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Any attack that hurts a common infected works on it. Shoving it honks its nose, and after four honks in a row the next shove kills it. If you kill one at a distance, the infected following it stop and mill about for a moment, so shoot them then.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Clown Infected",
+              "quoted": [
+                "Although susceptible to all attacks that damage Common Infected",
+                "A single Clown Infected's nose can be honked up to four times in succession, as any more shoves will kill the Infected.",
+                "If a Clown is killed at a distance, all Infected following him will stop, mill around swatting at the air around his corpse, then attack the Survivors shortly afterwards.",
+                "Use this moment to kill them quickly before they realize that you are there."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Oversized squeaky shoes and bright striped trousers (for example pink and blue, red and yellow, or blue and white), and a flower on its chest that sometimes squirts water.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "quoted": [
+                "Clown pants come in a variety of colors, including pink and blue, red and yellow, blue and white, pink and green and white and red",
+                "The flower on the Clown's torso occasionally squirts water.",
+                "their choice in oversized footwear",
+                "The pants have many different colored stripes"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A clown does not make the Director spawn more infected: it only stirs up the ones already nearby, and its pull has no effect during a horde attack. A tight group running in one line behind a clown is easier to shoot than infected arriving from different directions.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Clown Infected",
+              "quoted": [
+                "Actually the Clown Infected is just an agitator of the common infected the Director would already spawn normally.",
+                "In reality, the effects of the Clown Infected are completely nullified during horde attacks as the horde is programmed to attack the Survivors immediately.",
+                "Shooting a tight group of Common Infected running from one direction, following a Clown, is in most cases much easier than sniping them out while they stand around or run at Survivors from different directions."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2203,
+      "name": "Mud Men",
+      "kind": "enemy",
+      "main_page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+      "main_revision": "173635",
+      "lines": [
+        {
+          "line": "Summary: Infected covered in mud, found in the Swamp Fever campaign and also in the sewers of No Mercy and Death Toll and on The Last Stand's Junkyard map. They sprint on all fours, and a hit from one smears mud across your screen. They have 150 health on Normal and above.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Mud Men",
+              "quoted": [
+                "The Mud Men appear in the campaign Swamp Fever.",
+                "the Mud Men now appear in the sewers of No Mercy and Death Toll and The Junkyard map of The Last Stand",
+                "Mud Men sprint on all fours low to the ground",
+                "A hit from a Mud Man obscures a player's screen with mud",
+                "150 (Normal, Advanced, Expert, Realism, Survival & Versus)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: They have the same weaknesses as common infected but a little more health, and they are faster because they move on all fours, so shoot them instead of trying to outrun them. If the mud blurs your view, use a melee weapon.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "quoted": [
+                "They have the same general weaknesses as their common brethren, but are slightly more resistant to damage than them."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Mud Men",
+              "quoted": [
+                "Mudmen are faster than Common Infected as they move on all fours, so fire on them instead of attempting to outrun them.",
+                "using Melee Weapons if your vision is too blurred to see your team"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A common infected caked in reflective mud that moves low on all fours, though it stands on two legs when idle and stumbles back on two feet when shoved.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Mud Men",
+              "quoted": [
+                "they are covered in mud and use this as camouflage",
+                "they stumble back on two feet when shoved. (Moreover, they stand on two legs when idle)"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "quoted": [
+                "The Mudmen's mud is reflective."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A pipe bomb thrown into the swamp pulls nearby mud men to it and kills them easily, and a bile bomb thrown in gathers them in one spot. Turning off gore in the game's settings also turns off the mud blinding.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Mud Men",
+              "quoted": [
+                "Throwing a pipe bomb into the swamp will drag any of them nearby to the bomb, and it will easily kill them.",
+                "Throwing a bile bomb into the swamp can help gather Mud Men in one spot to kill.",
+                "Disabling the gore in the settings of the game will also disable the blinding effects from their attacks."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

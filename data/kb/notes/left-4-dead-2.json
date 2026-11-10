@@ -1,0 +1,50 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 2200,
+      "game_id": 3,
+      "section_type": "enemy",
+      "name": "Riot Infected",
+      "card": "Summary: A riot-armoured infected found in The Parish campaign. Its front is immune to bullets and blows, so it can only be killed from behind, with fire, with explosions or with the chainsaw.\nWeak points: Hit it from behind: shove it to stun it and step around it, or shove it off-centre so it spins and shows its back. Fire, explosions and the chainsaw still work from the front.\nLooks like: An armoured guard in a helmet with a visor and a light blue (sometimes grey) uniform with a sheathed nightstick. The bands on its arm are reflective, so a flashlight picks them out.\nTips: Survivor bots cannot tell it from other infected and waste ammo shooting its front, and it is especially dangerous to an incapacitated player, who often cannot land a shot on its back from the floor. Avoid fighting it where it can crawl, because a crawling one cannot be shoved back.",
+      "source_url": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173635",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2201,
+      "game_id": 3,
+      "section_type": "enemy",
+      "name": "CEDA Worker Infected",
+      "card": "Summary: A common infected in a hazmat suit that is immune to fire and may drop a bile bomb when killed. It has 150 health on Normal and above, and appears in Dead Center's Hotel and Streets, the lower floors of the hospital in No Mercy and Rayford's industrial area in The Sacrifice.\nWeak points: Fire does nothing to it: a Molotov does not light it and incendiary ammo does not ignite it, though the bullets still hit. Shoot it in the head or hit it with a melee weapon.\nLooks like: A hazmat suit with a visor, yellow or green (dark blue and white in the No Mercy hospital). The suit has reflective areas, and a bile bomb hangs at its side when it carries one.\nTips: If you have a free slot, pick up the bile bomb from its corpse and keep it for later. In the No Mercy hospital they are nearly the only source of bile bombs in the campaign, but they carry one quite rarely.",
+      "source_url": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173635",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2202,
+      "game_id": 3,
+      "section_type": "enemy",
+      "name": "Clown Infected",
+      "card": "Summary: A fairground clown found in the Dark Carnival campaign. When it spots survivors it charges, and its squeaky shoes call the infected nearby to join the attack. It has 150 health on Normal and above.\nWeak points: Any attack that hurts a common infected works on it. Shoving it honks its nose, and after four honks in a row the next shove kills it. If you kill one at a distance, the infected following it stop and mill about for a moment, so shoot them then.\nLooks like: Oversized squeaky shoes and bright striped trousers (for example pink and blue, red and yellow, or blue and white), and a flower on its chest that sometimes squirts water.\nTips: A clown does not make the Director spawn more infected: it only stirs up the ones already nearby, and its pull has no effect during a horde attack. A tight group running in one line behind a clown is easier to shoot than infected arriving from different directions.",
+      "source_url": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173635",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2203,
+      "game_id": 3,
+      "section_type": "enemy",
+      "name": "Mud Men",
+      "card": "Summary: Infected covered in mud, found in the Swamp Fever campaign and also in the sewers of No Mercy and Death Toll and on The Last Stand's Junkyard map. They sprint on all fours, and a hit from one smears mud across your screen. They have 150 health on Normal and above.\nWeak points: They have the same weaknesses as common infected but a little more health, and they are faster because they move on all fours, so shoot them instead of trying to outrun them. If the mud blurs your view, use a melee weapon.\nLooks like: A common infected caked in reflective mud that moves low on all fours, though it stands on two legs when idle and stumbles back on two feet when shoved.\nTips: A pipe bomb thrown into the swamp pulls nearby mud men to it and kills them easily, and a bile bomb thrown in gathers them in one spot. Turning off gore in the game's settings also turns off the mud blinding.",
+      "source_url": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173635",
+      "crawled_at": "2026-11-09"
+    }
+  ]
+}

@@ -1,0 +1,262 @@
+{
+  "wiki": "Hollow Knight Wiki (https://hollowknight.wiki/mw/api.php)",
+  "licence_printed_by_fetcher": "Hollow Knight Wiki (MediaWiki 1.43.11) licence: Commons Attribution-ShareAlike https://creativecommons.org/licenses/by-sa/3.0/",
+  "licence_stored": "CC-BY-SA-3.0 (the fetcher prints 'Commons Attribution-ShareAlike' with the by-sa 3.0 address; data/kb/NOTICE.md lists the Hollow Knight Wiki as CC-BY-SA-3.0)",
+  "game_id": 15,
+  "game": "Hollow Knight",
+  "read_on": "2026-11-10",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://hollowknight.wiki/mw/api.php --titles <pages> (page text as rendered by the wiki, link markup removed; the api is under /mw/, not /w/). Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named. Hunter's Journal entries, shop descriptions, Dream Nail dialogue and other text the game itself speaks were not used; every line is in our own words.",
+  "sections": [
+    {
+      "section_id": 4200,
+      "name": "Vengefly",
+      "kind": "enemy",
+      "main_page": "https://hollowknight.wiki/w/Vengefly",
+      "main_revision": "200524",
+      "lines": [
+        {
+          "line": "Summary: A flying enemy that turns up in many areas, from King's Pass and the Forgotten Crossroads to Greenpath and the City of Tears. It hovers in a small area, squawks, then flies at you, and it is among the earliest and simplest enemies in the game.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Vengefly",
+              "revision": "200524",
+              "quoted": [
+                "Vengeflies can be found in the Howling Cliffs, King's Pass, the Forgotten Crossroads, Greenpath, the City of Tears, the Colosseum of Fools, and the Blue Lake.",
+                "Hovers in the air, moving around a small area. Emits a squawk before homing in on the Knight when they come in range.",
+                "One of the first and easiest enemies in the game."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: It flies straight at you once you are in range, so you can wait where you stand and hit it as it arrives, or jump and strike downward onto it.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Vengefly",
+              "revision": "200524",
+              "quoted": [
+                "Either wait and strike when it gets within range, or jump and strike down at it.",
+                "Either way, it will continue to move towards the Knight"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Because it keeps coming at you, you can stay in one spot and keep swinging until it dies. Unlike most enemies, it comes back after you leave the room and return.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Vengefly",
+              "revision": "200524",
+              "quoted": [
+                "making it possible to stay in one place and continue attacking until it is dead.",
+                "The Vengefly is one of the few enemies that respawns upon leaving and re-entering the room."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4201,
+      "name": "Aspid Hunter",
+      "kind": "enemy",
+      "main_page": "https://hollowknight.wiki/w/Aspid_Hunter",
+      "main_revision": "200497",
+      "lines": [
+        {
+          "line": "Summary: A flying spitter that drifts around until you come close, then fires blobs of corrosive liquid from a distance. It usually hunts in packs, and you meet it in the Forgotten Crossroads and at the western end of the Ancient Basin's tram tunnel.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Aspid_Hunter",
+              "revision": "200497",
+              "quoted": [
+                "Aspid Hunters usually hunt in packs and spit corrosive liquid at prey from a distance.",
+                "Aimlessly hovers around until approached by the Knight. It attacks from a distance by spitting blobs of corrosive liquid.",
+                "Aspid Hunters can be found in the Forgotten Crossroads (mainly the area where the Glowing Womb Charm is collected) and in the west side of the Ancient Basin Tram tunnel."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Right when it has finished spitting you get a short opening, so close in and hit it at once.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Aspid_Hunter",
+              "revision": "200497",
+              "quoted": [
+                "After it spits, there is a small window to attack. It is best to get in close and strike as soon as possible."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You can hear the whirring of its wings from far off, so you know one is near before you see it. A tougher version, the Primal Aspid, lives in Kingdom's Edge. Like a few other enemies, it comes back when you leave the room and return.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Aspid_Hunter",
+              "revision": "200497",
+              "quoted": [
+                "They can easily be heard from a distance by the whirring sound their wings make.",
+                "A more powerful variant called Primal Aspids can be found in Kingdom's Edge.",
+                "The Aspid Hunter is one of the few enemies that respawns upon leaving and re-entering the room."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4202,
+      "name": "Husk Guard",
+      "kind": "enemy",
+      "main_page": "https://hollowknight.wiki/w/Husk_Guard",
+      "main_revision": "199437",
+      "lines": [
+        {
+          "line": "Summary: A club-wielding husk that stands at its post until you come near, then rushes in. Only two exist in the Forgotten Crossroads: one just east of where you fight the False Knight, and one above the northern entrance to Crystal Peak.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Husk_Guard",
+              "revision": "199437",
+              "quoted": [
+                "Stands in place until disturbed. Once engaged, it rushes into battle, using two attacks:",
+                "Raises its club and smashes it down",
+                "Only two are found in the Forgotten Crossroads, one east of the False Knight arena and the other right above the north Crystal Peak entrance."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Once its club has come down it is open to your nail. After its shockwave, jump the wave toward it and land one or two hits. You can also hit it once and slip out of range before the club falls, but the gap is small, and the Mothwing Cloak makes it easier.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Husk_Guard",
+              "revision": "199437",
+              "quoted": [
+                "After it uses its club, it can be damaged.",
+                "It is usually possible to jump towards the Husk Guard and get one or two hits in after this attack.",
+                "It is possible to hit the Husk Guard once, then run out of its range before it can bring down its club, however, the window to strike is quite small. This is easier later on with the Mothwing Cloak."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its overhead club slam costs two masks, and its backward hop sends a shockwave left and right along the ground that widens and speeds up as it goes. The guard met before the False Knight can be hit safely from the right-hand platform. Each drops 45 Geo, a high amount this early, and both are near the Stag Station, so they are a quick source of Geo; fight the one by the False Knight's arena early, because it cannot be fought once the Crossroads changes.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Husk_Guard",
+              "revision": "199437",
+              "quoted": [
+                "This attack deals two masks of damage.",
+                "Hops backwards, creating shockwaves that travel horizontally both left and right. These increase in width and speed as they travel.",
+                "The Husk Guard met before facing False Knight can be damaged from a safe zone, by going on the platform to the right.",
+                "Husk Guards drop 45, a very high amount for an early game enemy, and can be used to farm Geo early on. Both guards are located conveniently close to the Stag Station in the Forgotten Crossroads.",
+                "the Husk Guard near the arena of the False Knight is overcome by the Infection and cannot be fought anymore."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4203,
+      "name": "Heavy Sentry",
+      "kind": "enemy",
+      "main_page": "https://hollowknight.wiki/w/Heavy_Sentry",
+      "main_revision": "200467",
+      "lines": [
+        {
+          "line": "Summary: A walking corpse that wields a greatnail and guards the City of Tears, where a few are found; two more stand in the east of the Royal Waterways.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Heavy_Sentry",
+              "revision": "200467",
+              "quoted": [
+                "these walking corpses wield a greatnail, guarding the City of Tears even in death.",
+                "They are mainly found within the City of Tears, in small numbers. Two can be found in the eastern part of the Royal Waterways."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Hit it when it charges: jump over it and strike down, or cast Vengeful Spirit or Shade Soul, because it cannot dodge them then. You can also hit it just after its ordinary overhead swing.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Heavy_Sentry",
+              "revision": "200467",
+              "quoted": [
+                "The best moment to hit them is when they charge.",
+                "Simply jump over them and execute a downward strike or use the Vengeful Spirit/Shade Soul Spell when they charge, as they have no way to avoid it.",
+                "They can also be hit just after their normal Overhead Swing attack."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It has three attacks: an overhead swing, a charge with the nail held out in front, and a hop. The hop is its answer to a jump over it: it rises, hurts on contact and swings again as it lands, so time your jump for its charge.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Heavy_Sentry",
+              "revision": "200467",
+              "quoted": [
+                "Heavy Sentries have three attacks:",
+                "They charge at the Knight with their nail held in front of them.",
+                "When the Knight attempts jumping over them, they react by hopping in the air, dealing contact damage. As they land on the ground, they perform an Overhead Swing attack."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A walking corpse that carries a greatnail.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Heavy_Sentry",
+              "revision": "200467",
+              "quoted": [
+                "these walking corpses wield a greatnail"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4204,
+      "name": "Mantis Youth",
+      "kind": "enemy",
+      "main_page": "https://hollowknight.wiki/w/Mantis_Youth",
+      "main_revision": "195606",
+      "lines": [
+        {
+          "line": "Summary: A young member of the mantis tribe that clings to a wall or the ceiling to ambush you. You find it only inside Mantis Village and by its entrance.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Mantis_Youth",
+              "revision": "195606",
+              "quoted": [
+                "They are young children of the Mantis Tribe, losing their ability to fly when becoming adults.",
+                "Waits, clinging to a wall or ceiling to ambush the Knight.",
+                "They can only be found within and at the entrance of the Mantis Village."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Once it engages, it hovers just beyond nail reach, winds up and lunges; the lunge covers little ground and is simple to avoid, but it floats out of range at once to wind up again. After the Mantis Lords fall, mantises stop attacking you but still hit back if you strike them. Like a few other enemies, it returns when you leave the room and come back.",
+          "drawn_from": [
+            {
+              "page": "https://hollowknight.wiki/w/Mantis_Youth",
+              "revision": "195606",
+              "quoted": [
+                "Once engaged, it hovers around just out of range of Nail attacks before winding up and lunging towards the Knight.",
+                "Their range is short and easy to dodge, but they quickly hover out of range to charge up another attack.",
+                "Once the Mantis Lords are defeated, all Mantises become non-hostile towards the Knight, however, they still retaliate if attacked.",
+                "The Mantis Youth is one of the few enemies that respawns upon leaving and re-entering the room."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -56,3 +56,8 @@ use (`app_id`, `shortcut`, `split`, `intent`, `topic_hint`, `withheld_card_terms
   question never reads the note. A row written with the note in view is `tune`.
 - A file ending `.sources.json` is skipped (it is not a question file). Other files here are ignored unless
   they end `.json`.
+- Tip (compat) rows: the exact lists of missed rows in `tests/test_compat_topic_router.py` name the older rows
+  only. A new file's tip rows are held to a rule instead (`NewFileTipRowsRuleTests` in that test): a row that
+  names `expect_pattern_id` names a tip that exists, with that tip's own topic as `expect_topic`; a row that
+  names only `expect_topic` names a topic the router knows. A tip row the router does not reach is allowed
+  (the floor script reports it); a strategy row that reaches the tips is not. Never add a new row to the lists.

@@ -57,6 +57,7 @@ from backend.knowledge.compat_topic_router import match_compat_corpus_topics
 from backend.knowledge.kb_not_in_notes_notice import should_show_no_close_match_notice
 from backend.knowledge.ollama_embed_service import OllamaEmbedError
 from corpus_build_support import run_seed_build_or_skip
+from script_loader import load_script
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 # Under build/, not dist/: `npm run build` clears dist/, so the test corpus was being deleted
@@ -518,8 +519,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     """The numbers behind GAME_TIP_REROUTE_FLOOR: every tune/holdout strategy-domain question
     in kb_eval_v2.json for a game that ships a per-game tip must score under the floor, or it
     would wrongly get a Deck tip attached to an ordinary strategy answer."""
-    fixture_path = REPO_ROOT / "tests" / "fixtures" / "kb_eval_v2.json"
-    rows = json.loads(fixture_path.read_text(encoding="utf-8"))["queries"]
+    rows = load_script("kb_eval_fixture").load_eval_fixture()["queries"]
     game_names = {
       "2321470": "Deep Rock Galactic: Survivor",
       "377160": "Fallout 4",

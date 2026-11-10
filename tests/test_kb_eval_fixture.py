@@ -10,6 +10,7 @@ Solves: A question written in a new file being quietly left out of a count, or t
 Does not: Search anything, call the AI model, or check that a label names a real note (test_eval_kb_arms does).
 """
 
+import ast
 import json
 import tempfile
 import unittest
@@ -194,6 +195,43 @@ class MeasuringScriptsReadTheFolderTests(unittest.TestCase):
         self.assertIn("OLD-1/running", ids)
         self.assertIn("NEW-1/running", ids)
         self.assertIn("NEW-1/typed", ids)
+
+
+class EveryReaderGoesThroughTheLoaderTests(unittest.TestCase):
+    """No script or test opens the main questions file by its own name, so none can miss a new file."""
+
+    REPO_ROOT = Path(__file__).resolve().parents[1]
+    # The reader itself, and this file (its temporary folders write a file with the main file's name).
+    MAY_NAME_THE_MAIN_FILE = {"scripts/lib/kb_eval_fixture.py", "tests/test_kb_eval_fixture.py"}
+
+    def _python_files(self, *folders):
+        for folder in folders:
+            for path in sorted((self.REPO_ROOT / folder).rglob("*.py")):
+                if "node_modules" not in path.parts and "__pycache__" not in path.parts:
+                    yield path
+
+    def test_nothing_else_names_the_main_file_as_a_path_to_open(self):
+        offenders = []
+        for path in self._python_files("scripts", "tests"):
+            rel = path.relative_to(self.REPO_ROOT).as_posix()
+            if rel in self.MAY_NAME_THE_MAIN_FILE:
+                continue
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            if any(isinstance(n, ast.Constant) and n.value == "kb_eval_v2.json" for n in ast.walk(tree)):
+                offenders.append(rel)
+        self.assertEqual(offenders, [], f"read the questions through scripts/lib/kb_eval_fixture.py instead: {offenders}")
+
+    def test_the_back_end_never_imports_the_loader(self):
+        users = [
+            path.relative_to(self.REPO_ROOT).as_posix()
+            for path in self._python_files("py_modules")
+            if any(
+                (isinstance(n, ast.Import) and any(a.name.split(".")[0] == "kb_eval_fixture" for a in n.names))
+                or (isinstance(n, ast.ImportFrom) and (n.module or "").split(".")[0] == "kb_eval_fixture")
+                for n in ast.walk(ast.parse(path.read_text(encoding="utf-8")))
+            )
+        ]
+        self.assertEqual(users, [])
 
 
 if __name__ == "__main__":

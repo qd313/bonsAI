@@ -22,6 +22,35 @@ from backend.knowledge.compat_topic_router import (  # noqa: E402
     question_targets_compat_corpus,
 )
 from backend.knowledge.knowledge_base_service import should_retrieve_knowledge  # noqa: E402
+from script_loader import load_script  # noqa: E402
+
+MAIN_QUESTIONS_FILE = load_script("kb_eval_fixture").MAIN_FIXTURE_NAME
+
+
+def _all_questions():
+    """Every question (the main file's, then each file's in tests/fixtures/kb_eval/) and the file of each id."""
+    data = load_script("kb_eval_fixture").load_eval_fixture()
+    return data["queries"], data["origins"]
+
+
+def new_file_tip_row_problems(row, tips_by_id, topics):
+    """What breaks the rule for a tip (compat) row that sits in a new question file; empty when it passes.
+
+    A row that names a tip must name one that exists, with that tip's own topic; a row that names
+    only a topic must name a topic the router knows. Whether the router reaches the sentence is
+    not part of the rule: that is measured (scripts/measure_kb_floor_holdout.py), not pinned.
+    """
+    pattern_id = row.get("expect_pattern_id")
+    topic = str(row.get("expect_topic") or "")
+    if pattern_id not in (None, ""):
+        tip = tips_by_id.get(int(pattern_id))
+        if tip is None:
+            return [f"{row['id']}: expect_pattern_id {pattern_id} is not a tip"]
+        if tip["topic"] != topic:
+            return [f"{row['id']}: tip {pattern_id} is about {tip['topic']!r}, not {topic!r}"]
+    elif topic and topic not in topics:
+        return [f"{row['id']}: expect_topic {topic!r} is not a topic the router knows"]
+    return []
 
 
 class CompatTopicRouterTests(unittest.TestCase):
@@ -297,11 +326,11 @@ class CompatTopicRouterTests(unittest.TestCase):
         wants the word "crash" and the person did not say it. **Do not fix that by adding
         this sentence as a term** — it is a blind row and tuning against it spends it.
         """
-        data = json.loads(
-            (REPO_ROOT / "tests" / "fixtures" / "kb_eval_v2.json").read_text(encoding="utf-8")
-        )
-        compat = [q for q in data["queries"] if q["domain"] == "compat"]
-        strategy = [q for q in data["queries"] if q["domain"] == "strategy"]
+        queries, origins = _all_questions()
+        # The exact lists below name rows of the main file. A row from a new file in
+        # tests/fixtures/kb_eval/ is held to the rule in NewFileTipRowsRuleTests, not added here.
+        compat = [q for q in queries if q["domain"] == "compat" and origins[q["id"]] == MAIN_QUESTIONS_FILE]
+        strategy = [q for q in queries if q["domain"] == "strategy"]
 
         holdout = [q for q in compat if q["split"] == "holdout"]
         missed_holdout = [
@@ -359,6 +388,48 @@ class CompatTopicRouterTests(unittest.TestCase):
             q["id"] for q in strategy if question_targets_compat_corpus(q["query"])
         ]
         self.assertEqual(false_positives, [])
+
+
+class NewFileTipRowsRuleTests(unittest.TestCase):
+    """A new question file's tip rows pass by rule: nothing is added to the exact lists above.
+
+    The lists pin the misses of the older, blind rows so a rule edit cannot quietly move them. A
+    new file's tip rows have no such history, so they are held to two rules instead: every
+    strategy row of every file stays off the troubleshooting corpus (that check covers all files
+    above), and a tip row names a tip or topic that exists (below). A new row the router does not
+    reach is allowed and is reported by the measuring script, never added to a list here.
+    """
+
+    TIPS = {
+        int(t["pattern_id"]): t
+        for t in json.loads((REPO_ROOT / "data" / "kb" / "compat_patterns.json").read_text(encoding="utf-8"))
+    }
+
+    def test_every_tip_row_in_a_new_file_names_a_tip_or_topic_that_exists(self):
+        queries, origins = _all_questions()
+        problems = [
+            p
+            for q in queries
+            if q["domain"] == "compat" and origins[q["id"]] != MAIN_QUESTIONS_FILE
+            for p in new_file_tip_row_problems(q, self.TIPS, known_compat_topics())
+        ]
+        self.assertEqual(problems, [])
+
+    def test_the_rule_passes_a_row_that_names_its_tip_and_the_tips_own_topic(self):
+        tip_id, tip = next(iter(self.TIPS.items()))
+        row = {"id": "N-1", "expect_pattern_id": tip_id, "expect_topic": tip["topic"]}
+        self.assertEqual(new_file_tip_row_problems(row, self.TIPS, known_compat_topics()), [])
+        self.assertEqual(new_file_tip_row_problems({"id": "N-2"}, self.TIPS, known_compat_topics()), [])
+
+    def test_the_rule_refuses_a_tip_that_does_not_exist_or_a_topic_that_does_not_match(self):
+        tip_id, tip = next(iter(self.TIPS.items()))
+        topics = known_compat_topics()
+        missing = {"id": "N-3", "expect_pattern_id": 999999, "expect_topic": tip["topic"]}
+        wrong_topic = {"id": "N-4", "expect_pattern_id": tip_id, "expect_topic": "not-a-topic"}
+        unknown_topic = {"id": "N-5", "expect_topic": "not-a-topic"}
+        for row in (missing, wrong_topic, unknown_topic):
+            with self.subTest(row=row["id"]):
+                self.assertEqual(len(new_file_tip_row_problems(row, self.TIPS, topics)), 1)
 
 
 class PlainProblemWordsRouteTests(unittest.TestCase):

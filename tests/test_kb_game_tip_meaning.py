@@ -12,11 +12,11 @@ embedding model with the tip's own stored vector (an exact meaning match) or a v
 other way; the ones marked "real model" ask this PC's Ollama and skip where it is not installed.
 """
 
-import json
 import unittest
 from unittest import mock
 
 from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
+from script_loader import load_script
 
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
@@ -222,8 +222,7 @@ class RealModelTests(unittest.TestCase):
     def test_real_model_no_measured_strategy_row_for_a_tip_game_reaches_a_tip(self):
         """The numbers behind GAME_TIP_MEANING_FLOOR, end to end: every tune/holdout strategy
         question in kb_eval_v2.json for a game that ships its own tip must keep the tip off."""
-        rows = json.loads((REPO_ROOT / "tests" / "fixtures" / "kb_eval_v2.json").read_text(
-            encoding="utf-8"))["queries"]
+        rows = load_script("kb_eval_fixture").load_eval_fixture()["queries"]
         games = {"2321470": "Deep Rock Galactic: Survivor", "377160": "Fallout 4",
                  "1547000": "Grand Theft Auto: San Andreas"}
         conn = _get_connection(str(SEED_DB))

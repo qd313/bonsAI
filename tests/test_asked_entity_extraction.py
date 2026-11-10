@@ -12,10 +12,10 @@ entity over-fences somebody who did name the boss. A *wrong* entity un-fences co
 never asked about and drops the bogus string straight into the prompt.
 """
 
-import json
 import re
 import unittest
-from pathlib import Path
+
+from script_loader import load_script
 
 from backend.prompts.ollama_prompts import (
     extract_strategy_asked_entity,
@@ -23,7 +23,7 @@ from backend.prompts.ollama_prompts import (
 )
 from backend.strategy.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 
-FIXTURE = Path(__file__).resolve().parent / "fixtures" / "kb_eval_v2.json"
+FIXTURE = load_script("kb_eval_fixture")
 
 
 class VerbFirstPhrasingTests(unittest.TestCase):
@@ -345,7 +345,7 @@ class FixtureWideInvariantTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.rows = json.loads(FIXTURE.read_text(encoding="utf-8"))["queries"]
+        cls.rows = FIXTURE.load_eval_fixture()["queries"]
 
     def test_every_extracted_entity_appears_in_the_question(self):
         """The invariant that would have caught the original defect on day one.

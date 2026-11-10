@@ -214,8 +214,7 @@ class EvalArmsTests(unittest.TestCase):
         query from" -- the exact inflation R1 exists to prevent. Adding a card whose title
         leaks into its own query must fail here, not pass review.
         """
-        path = REPO_ROOT / "tests" / "fixtures" / "kb_eval_v2.json"
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = load_script("kb_eval_fixture").load_eval_fixture()
         leaks = []
         for row in data["queries"]:
             normalized = re.sub(r"[^a-z0-9 ]+", " ", row["query"].lower())
@@ -239,9 +238,7 @@ class EvalArmsTests(unittest.TestCase):
         right answer) -- this walks both shapes so a phantom name hiding inside a list cannot
         slip past the check the single-name case already had.
         """
-        data = json.loads(
-            (REPO_ROOT / "tests" / "fixtures" / "kb_eval_v2.json").read_text(encoding="utf-8")
-        )
+        data = load_script("kb_eval_fixture").load_eval_fixture()
         card_names = {s["name"] for s in _all_card_sections()}
         phantom = []
         for row in data["queries"]:
@@ -255,27 +252,30 @@ class EvalArmsTests(unittest.TestCase):
         self.assertEqual(phantom, [], f"labels naming no card in the seed: {phantom}")
 
     def test_fixture_status_tracks_whether_every_title_is_carded(self):
-        """Unsigned while any title lacks cards; approved once the 13-title seed is complete."""
-        data = json.loads(
-            (REPO_ROOT / "tests" / "fixtures" / "kb_eval_v2.json").read_text(encoding="utf-8")
-        )
+        """Unsigned while any title lacks cards; approved once the 13-title seed is complete.
+
+        Holds for the main file and for every file in tests/fixtures/kb_eval/ (a file with no
+        status of its own takes the main file's).
+        """
+        data = load_script("kb_eval_fixture").load_eval_fixture()
         seed = json.loads(
             (REPO_ROOT / "data" / "kb" / "strategy_seed.json").read_text(encoding="utf-8")
         )
         carded = {s["game_id"] for s in _all_card_sections()}
         uncarded = [g["canonical_title"] for g in seed["games"] if g["game_id"] not in carded]
-        if uncarded:
-            self.assertEqual(
-                data["status"],
-                "awaiting_maintainer_signoff",
-                f"fixture claims sign-off while these titles have no cards: {uncarded}",
-            )
-        else:
-            self.assertEqual(
-                data["status"],
-                "approved_for_rebuild_and_bakeoff",
-                "every title is carded — fixture must be approved before PR2 bake-off",
-            )
+        for entry in data["files"]:
+            if uncarded:
+                self.assertEqual(
+                    entry["status"],
+                    "awaiting_maintainer_signoff",
+                    f"{entry['file']} claims sign-off while these titles have no cards: {uncarded}",
+                )
+            else:
+                self.assertEqual(
+                    entry["status"],
+                    "approved_for_rebuild_and_bakeoff",
+                    f"{entry['file']}: every title is carded — fixture must be approved before PR2 bake-off",
+                )
 
     def test_v2_fixture_has_tune_and_holdout_labeled_cases(self):
         cases = self.mod._load_v2_cases()
@@ -291,7 +291,7 @@ class EvalArmsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             base = Path(tmp_dir)
             (base / "kb_eval").mkdir()
-            (base / "kb_eval_v2.json").write_text(
+            (base / load_script("kb_eval_fixture").MAIN_FIXTURE_NAME).write_text(
                 json.dumps({"default_split": "tune", "queries": [row("M-1")]}), encoding="utf-8"
             )
             (base / "kb_eval" / "new-game.json").write_text(

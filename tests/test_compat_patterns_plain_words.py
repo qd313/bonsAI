@@ -17,6 +17,8 @@ import json
 import unittest
 from pathlib import Path
 
+from script_loader import load_script
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 TIPS = json.loads((REPO_ROOT / "data" / "kb" / "compat_patterns.json").read_text(encoding="utf-8"))
 BY_ID = {int(t["pattern_id"]): t for t in TIPS}
@@ -109,7 +111,7 @@ class FindingThePcTipTests(unittest.TestCase):
         self.assertNotIn("steam frame", BY_ID[167]["card"].lower())
 
 
-FIXTURE = json.loads((REPO_ROOT / "tests" / "fixtures" / "kb_eval_v2.json").read_text(encoding="utf-8"))
+FIXTURE = load_script("kb_eval_fixture").load_eval_fixture()
 SYM_ROWS = {q["id"]: q for q in FIXTURE["queries"] if q["id"].startswith("V2-W2-SYM-")}
 # Every blind sentence names its tip now: tip 167 answers the two about finding the PC.
 ROWS_WITH_NO_TIP: set = set()

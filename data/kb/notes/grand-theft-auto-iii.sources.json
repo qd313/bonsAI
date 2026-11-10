@@ -598,6 +598,260 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3510,
+      "name": "Hidden packages",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Hidden_Packages_in_GTA_III",
+      "main_revision": "2078130",
+      "lines": [
+        {
+          "line": "Summary: There are 100 hidden packages around Liberty City, each a white bale sealed with brown tape that pays $1,000, and collecting them also unlocks free weapons.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Hidden_Packages_in_GTA_III",
+              "revision": "2078130",
+              "quoted": [
+                "There are 100 Hidden Packages located all around Liberty City",
+                "They take the appearance of a white bale sealed with brown adhesive tape.",
+                "Each Hidden Package will award the player with $1,000."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Every 10 packages add a permanent weapon spawn in front of the safehouses, announced by pager: 10 pistol, 20 Uzi, 30 grenades, 40 shotgun, 50 body armor, 60 molotov cocktails, 70 AK47, 80 sniper rifle, 90 M16, and at 100 the rocket launcher plus $1,000,000.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Hidden_Packages_in_GTA_III",
+              "revision": "2078130",
+              "quoted": [
+                "For each 10 Hidden Packages collected, a permanent spawn point for a specific item is created in front of all safehouses. The player will be notified of each reward via pager.",
+                "10 Packages: Pistol",
+                "20 Packages: Uzi",
+                "30 Packages: Grenades",
+                "40 Packages: Shotgun",
+                "50 Packages: Body Armor",
+                "60 Packages: Molotov Cocktails",
+                "70 Packages: AK47",
+                "80 Packages: Sniper Rifle",
+                "90 Packages: M16",
+                "100 Packages: Rocket Launcher and $1,000,000"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They must be collected on foot, not from a vehicle. Collecting all of them is required for 100% completion.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Hidden_Packages_in_GTA_III",
+              "revision": "2078130",
+              "quoted": [
+                "which the player must find and collect while on foot. These items cannot be collected while on a vehicle.",
+                "Collecting all Hidden Packages is a requirement for the 100% completion."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3511,
+      "name": "Rocket launcher",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Rocket_Launcher_(3D_Universe)",
+      "main_revision": "2084433",
+      "lines": [
+        {
+          "line": "Summary: A single-shot rocket launcher that can destroy nearly all vehicles and pedestrians; in Grand Theft Auto III Phil Cassidy's Army Surplus in Rockford, Staunton Island sells it for $25,000 after the mission Arms Shortage.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Rocket_Launcher_(3D_Universe)",
+              "revision": "2084433",
+              "quoted": [
+                "Single-shot",
+                "It is capable of massive destruction and power, with the ability to destroy nearly all vehicles and pedestrians.",
+                "Rockford, Staunton Island – Available to buy from Phil Cassidy's Army Surplus after completion of Arms Shortage. ($25,000)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It is heavy, so you are slowed to a jogging pace and cannot jump while it is equipped. The rocket always travels right where the aiming sight is placed, and it can take out pursuing police helicopters but cannot destroy a tank like the Rhino instantly.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Rocket_Launcher_(3D_Universe)",
+              "revision": "2084433",
+              "quoted": [
+                "Its heavy weight will cause the protagonist to be slowed to a jogging pace and not be able to jump while the weapon is equipped except from Grand Theft Auto: Liberty City Stories and onwards. The rocket is also very accurate, as it always travels right where the aiming sight is placed. Much like in the 2D Universe, the Rocket Launcher cannot destroy tanks like the Rhino instantly.",
+                "is also able to take out pursuing police helicopters during wanted levels."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: One spawns at every safehouse after you collect all 100 hidden packages. Another lies on the west side of the roof of the large pink house at the west end of The Homes in Cedar Grove, closest to Cochrane Dam.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Rocket_Launcher_(3D_Universe)",
+              "revision": "2084433",
+              "quoted": [
+                "Spawns at every safehouse after collecting all 100 hidden packages.",
+                "Cedar Grove, Shoreside Vale – On the west side of the roof of the large pink house at the west end of The Homes (closest to Cochrane Dam)."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3512,
+      "name": "AK47 assault rifle",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/AK47",
+      "main_revision": "2083687",
+      "lines": [
+        {
+          "line": "Summary: In Grand Theft Auto III the AK47 has a very high rate of fire but low damage, and Ammu-Nation in Newport sells it for $3,000 once the mission Last Requests is done.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/AK47",
+              "revision": "2083687",
+              "quoted": [
+                "In Grand Theft Auto III, the AK47 behaves rather differently from later games, as it is depicted with a very high rate of fire but low damage",
+                "Newport, Staunton Island - Available to buy from Ammu-Nation after completion of Last Requests ($3,000)."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It cannot be aimed in first person. It has lower recoil than the M16, but the M16 deals far more damage, fires much faster and holds double the magazine.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/AK47",
+              "revision": "2083687",
+              "quoted": [
+                "Unlike the M16 (and unlike the Ruger from Grand Theft Auto: Vice City), it cannot be aimed in first person. It has lower recoil than the M16, but other than that it is outclassed by it, as the M16 deals way more damage and has a much higher fire rate than it, as well as having double the AK's magazine capacity."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: One spawns at each safehouse after you collect 70 hidden packages. Another lies in Trenton on top of Liberty Pharmaceuticals behind the large sign, next to an adrenaline icon, a health icon and a body armor icon; jump from the elevated tracks to reach it.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/AK47",
+              "revision": "2083687",
+              "quoted": [
+                "Safehouses – Spawn at each safehouse after collecting 70 Hidden Packages.",
+                "Trenton, Portland - On top of Liberty Pharmaceuticals (behind the large sign) near an adrenaline icon, a health icon, and a body armor icon. Jump from the elevated tracks near the northeast side of the large complex to access."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3513,
+      "name": "Molotov cocktails",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Molotov_Cocktails",
+      "main_revision": "2076588",
+      "lines": [
+        {
+          "line": "Summary: A thrown bottle that sets vehicles and groups of pedestrians on fire; using one will normally earn a wanted level of up to three stars.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Molotov_Cocktails",
+              "revision": "2076588",
+              "quoted": [
+                "The Molotov Cocktail can set vehicles and groups of pedestrians on fire.",
+                "Use of the Molotov will normally result in a wanted level amounting up to three stars."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Victims on foot catch fire and die if close enough to the flames, and it is one of the deadliest weapons at close range. It is one of only two weapons that can destroy a Rhino, the other being the flamethrower.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Molotov_Cocktails",
+              "revision": "2076588",
+              "quoted": [
+                "Victims on foot will catch fire and die if close enough to the flames.",
+                "It proves to be one of the deadliest weapons for the player when used at close range. It is one of only two weapons which can destroy a Rhino, the other being a Flamethrower."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: One or two molotovs can bring down a police helicopter in the other 3D games, but not in Grand Theft Auto III. In Grand Theft Auto III one spawns at every safehouse after 60 hidden packages, and the pickup on Liberty Campus's upper level gives 10.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Molotov_Cocktails",
+              "revision": "2076588",
+              "quoted": [
+                "one or two Molotovs is capable of taking down an airborne NPC helicopter, making it suitable to fend off pursuing Police Mavericks above during a three-star wanted level on foot (except for Grand Theft Auto III).",
+                "Spawns at every safehouse after collecting 60 Hidden Packages.",
+                "Liberty Campus, Staunton Island – On the upper level on the north part of the Campus Courtyard next to the east set of stairs. This pickup will give you 10 molotovs."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3514,
+      "name": "Rhino tank",
+      "kind": "item",
+      "main_page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
+      "main_revision": "2078662",
+      "lines": [
+        {
+          "line": "Summary: A heavy armored tank with a cannon that appears when you reach a six-star wanted level; it rolls on wheels, not tracks.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
+              "revision": "2078662",
+              "quoted": [
+                "the Rhino appears when the player attains a six-star wanted level.",
+                "Contrary to most real-life tanks, the Rhino uses individual wheels instead of continuous tracks"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It is practically invincible to small arms fire and collisions, and any vehicle it hits explodes or burns, which suits dealing with wanted levels because police cars tend to ram you. Its cannon has devastating firepower against most vehicles.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
+              "revision": "2078662",
+              "quoted": [
+                "The Rhino is practically invincible to small arms fire and collisions",
+                "any vehicle hit will either explode instantly or end up burning instead. This makes the vehicle ideal for dealing with wanted levels, as most police vehicles have a tendency to hit the player's vehicle in an attempt to block their path.",
+                "The Rhino is equipped with a cannon turret, which has devastating firepower against most vehicles."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It handles badly: a wide turning radius, very low acceleration, and side doors that make it easy to be busted or pulled out by a hostile pedestrian. You can obtain one at Portland Harbor once all the emergency vehicles have been collected for Import/Export.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Rhino_(3D_Universe)",
+              "revision": "2078662",
+              "quoted": [
+                "its handling is pretty inferior compared to other heavy vehicles, as, even at low speeds, it has a wide turning radius.",
+                "it has very low acceleration",
+                "The slow speed and presence of doors on the sides makes the player easily vulnerable to being busted by law enforcers or being otherwise pulled out by any hostile pedestrian",
+                "It can be obtained at Portland Harbor once all emergency vehicles have been collected for Import/Export."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

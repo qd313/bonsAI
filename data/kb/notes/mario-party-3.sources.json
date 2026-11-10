@@ -15,7 +15,7 @@
       "main_revision": "5532404",
       "lines": [
         {
-          "line": "Summary: A ghost found on every board that robs another player of coins or a Star. The Boo Bell item calls one up whenever you want, and a Boo can also serve as a Duel Mode partner.",
+          "line": "Summary: A ghost found on every board that robs another player of coins or a Star. The Boo Bell item calls one up when you ring it, and a Boo can also serve as a Duel Mode partner.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo",
@@ -215,7 +215,7 @@
           ]
         },
         {
-          "line": "Tips: The Lucky Charm item sends a chosen player, even yourself, to a Game Guy minigame without landing on his space. In Game Guy's Room you can practise: you start with 10 coins, may bet up to 100, and aim to reach 1,000, and winning earns you Mario's Puzzle Party Pro, a rare minigame. The room itself only opens once Story Mode has been finished with eight or more S rankings.",
+          "line": "Tips: The Lucky Charm item sends a chosen player, even yourself, to a Game Guy minigame without landing on his space. In Game Guy's Room you play his games one after another: you start with 10 coins, may bet up to 100, and aim to reach 1,000, and winning earns you Mario's Puzzle Party Pro, a rare minigame. The room itself only opens once Story Mode has been finished with eight or more S rankings.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Game_Guy",
@@ -229,6 +229,7 @@
               "page": "https://www.mariowiki.com/Mario_Party_3",
               "revision": "5520638",
               "quoted": [
+                "consecutively plays Game Guy's Mini-Games",
                 "The Story Mode must be beaten with at least eight S rankings for this room to be unlocked."
               ]
             }
@@ -244,7 +245,7 @@
       "main_revision": "5466203",
       "lines": [
         {
-          "line": "Summary: Woody's unfriendly twin on the Woody Woods board. Stop on a Happening Space by Evil Woody and you must take one of two costly fruits: a Reverse Block Fruit (you roll, but move backwards) or a Minus Coin Fruit (you lose five coins).",
+          "line": "Summary: Woody's unfriendly counterpart on the Woody Woods board. Stop on a Happening Space by Evil Woody and you must take one of two costly fruits: a Reverse Block Fruit (you roll, but move backwards) or a Minus Coin Fruit (you lose five coins).",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Evil_Woody",

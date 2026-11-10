@@ -111,6 +111,50 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "476800",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2410,
+      "game_id": 11,
+      "section_type": "item",
+      "name": "Cattleman Revolver",
+      "card": "Summary: The revolver you have from the start of the game, a classic all-around sidearm with a good balance of damage, accuracy and fire rate. It holds six rounds and can be dual-wielded and used on horseback.\nUses: It suits close to medium range, and fires fast from the hip. Rifling improves its range, and a longer barrel and improved iron sights improve its accuracy. It can take 3 to 4 shots to kill an NPC hit in the torso, but a single shot to the head, neck or upper chest is enough.\nTips: It takes regular, high velocity, split point, express and explosive revolver ammo. You can buy a second one from any gunsmith or pick one up from slain NPCs. Once your Honor rank is +4 or higher, the Hero's Pearl Grip becomes purchasable at any gunsmith for this weapon only.",
+      "source_url": "https://reddead.fandom.com/wiki/Cattleman_Revolver_(RDR_2)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "476793",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2411,
+      "game_id": 11,
+      "section_type": "item",
+      "name": "Bolt Action Rifle",
+      "card": "Summary: A strong, versatile rifle with five rounds, high power, high range and very high accuracy, but a low rate of fire. It costs $180.\nUses: It is an ideal choice for long-range combat with multiple targets, and with a scope attached it becomes a good substitute for the Carcano Rifle.\nTips: It takes regular, high velocity, split point, express and explosive rifle ammo. It is provided in the Chapter 3 mission \"Preaching Forgiveness as He Went\" and is then available from all gunsmiths; it can also sometimes be found on lawmen during public executions in Valentine and Saint Denis.",
+      "source_url": "https://reddead.fandom.com/wiki/Bolt_Action_Rifle_(RDR_2)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "476807",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2412,
+      "game_id": 11,
+      "section_type": "item",
+      "name": "Carcano Rifle",
+      "card": "Summary: A long, scoped bolt-action sniper rifle with six rounds, high power, very high range and very high accuracy, a low rate of fire and a high reload speed. It costs $190.\nUses: Its quick reload speed makes it ideal for facing several enemies in long-distance combat.\nTips: It takes regular, high velocity, split point, express and explosive rifle ammo. It is free during two story missions, the first being \"The Delights of Van Horn\", and is then available from all gunsmiths. You must look down its scope whatever camera mode you use.",
+      "source_url": "https://reddead.fandom.com/wiki/Carcano_Rifle_(RDR_2)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "476806",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 2413,
+      "game_id": 11,
+      "section_type": "item",
+      "name": "Pump-Action Shotgun",
+      "card": "Summary: The Lancaster pump-action shotgun, with five rounds, moderate power, low range and low accuracy, and a large ammo capacity and quick reload. It costs $148.\nUses: The page says it holds true when you are confronted by a wild beast or a man in close combat. It takes regular buckshot, incendiary buckshot, slug and explosive slug.\nTips: It is available from all gunsmiths after the mission \"Pouring Forth Oil IV\", and you can also take it for free at Chez Porter from a weapon case at the top of the ladder in the master bedroom. Your ammo maximum is 60, or 90 with the upgraded bandolier.",
+      "source_url": "https://reddead.fandom.com/wiki/Pump-Action_Shotgun_(RDR_2)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "476802",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

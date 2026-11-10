@@ -569,6 +569,210 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2410,
+      "name": "Cattleman Revolver",
+      "kind": "item",
+      "main_page": "https://reddead.fandom.com/wiki/Cattleman_Revolver_(RDR_2)",
+      "main_revision": "476793",
+      "lines": [
+        {
+          "line": "Summary: The revolver you have from the start of the game, a classic all-around sidearm with a good balance of damage, accuracy and fire rate. It holds six rounds and can be dual-wielded and used on horseback.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Cattleman_Revolver_(RDR_2)",
+              "revision": "476793",
+              "quoted": [
+                "this revolver is available from the start of the game.",
+                "the Buck Cattleman is a great all-around revolver, featuring a good balance of damage, accuracy and fire rate.",
+                "this gun can also be dual-wielded and used on horseback. This gun has an ammo capacity of six rounds"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It suits close to medium range, and fires fast from the hip. Rifling improves its range, and a longer barrel and improved iron sights improve its accuracy. It can take 3 to 4 shots to kill an NPC hit in the torso, but a single shot to the head, neck or upper chest is enough.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Cattleman_Revolver_(RDR_2)",
+              "revision": "476793",
+              "quoted": [
+                "Suited for close to medium-range combat",
+                "It has a high fire rate when fired from the hip",
+                "It can be upgraded with rifling, which improves the range, as well as a longer barrel and improved iron sights, which improve the accuracy.",
+                "It can take as many as 3-4 shots to kill an NPC if they are shot in the torso, unless they are shot in the head, in the neck or in the upper chest, in which case a single shot is enough."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It takes regular, high velocity, split point, express and explosive revolver ammo. You can buy a second one from any gunsmith or pick one up from slain NPCs. Once your Honor rank is +4 or higher, the Hero's Pearl Grip becomes purchasable at any gunsmith for this weapon only.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Cattleman_Revolver_(RDR_2)",
+              "revision": "476793",
+              "quoted": [
+                "can use Regular, High Velocity, Split Point, Express and Explosive revolver ammo.",
+                "The player can purchase a second model from any gunsmith, or pick one up from slain NPCs.",
+                "Once the player has an Honor rank of +4 or higher (75%+ on the Honor bar), the unique Hero's Pearl Grip will become purchasable at any Gunsmith for this weapon only."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2411,
+      "name": "Bolt Action Rifle",
+      "kind": "item",
+      "main_page": "https://reddead.fandom.com/wiki/Bolt_Action_Rifle_(RDR_2)",
+      "main_revision": "476807",
+      "lines": [
+        {
+          "line": "Summary: A strong, versatile rifle with five rounds, high power, high range and very high accuracy, but a low rate of fire. It costs $180.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Bolt_Action_Rifle_(RDR_2)",
+              "revision": "476807",
+              "quoted": [
+                "!! Power || High !! Range || High !! Rate of Fire || Low",
+                "!! Ammo Capacity || 5",
+                "!! Accuracy || Very High !! Base price || $180.00",
+                "The B.D. & Co. Bolt Action is a strong and versatile rifle, built to perform in any environment."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It is an ideal choice for long-range combat with multiple targets, and with a scope attached it becomes a good substitute for the Carcano Rifle.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Bolt_Action_Rifle_(RDR_2)",
+              "revision": "476807",
+              "quoted": [
+                "making this rifle an ideal choice for long-range combat with multiple targets.",
+                "With a scope attached, this rifle becomes a good substitute for the Carcano Rifle."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It takes regular, high velocity, split point, express and explosive rifle ammo. It is provided in the Chapter 3 mission \"Preaching Forgiveness as He Went\" and is then available from all gunsmiths; it can also sometimes be found on lawmen during public executions in Valentine and Saint Denis.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Bolt_Action_Rifle_(RDR_2)",
+              "revision": "476807",
+              "quoted": [
+                "can use Regular, High Velocity, Split Point, Express and Explosive rifle ammo.",
+                "This rifle is provided during \"Preaching Forgiveness as He Went\" in Chapter 3. It is then available from all gunsmiths after the mission.",
+                "The rifle can sometimes be found on lawmen during public executions in Valentine and Saint Denis."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2412,
+      "name": "Carcano Rifle",
+      "kind": "item",
+      "main_page": "https://reddead.fandom.com/wiki/Carcano_Rifle_(RDR_2)",
+      "main_revision": "476806",
+      "lines": [
+        {
+          "line": "Summary: A long, scoped bolt-action sniper rifle with six rounds, high power, very high range and very high accuracy, a low rate of fire and a high reload speed. It costs $190.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Carcano_Rifle_(RDR_2)",
+              "revision": "476806",
+              "quoted": [
+                "The Sireno Carcano is a long scoped bolt-action rifle that can hold several rounds at once.",
+                "!! Power || High !! Range || Very High !! Rate of Fire || Low !! Reload Speed || High",
+                "!! Ammo Capacity || 6",
+                "!! Accuracy || Very High !! Base price || $190.00"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Its quick reload speed makes it ideal for facing several enemies in long-distance combat.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Carcano_Rifle_(RDR_2)",
+              "revision": "476806",
+              "quoted": [
+                "When combined with the fast firing rate and quick reload speed, this makes it ideal for facing several enemies in long-distance combat."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It takes regular, high velocity, split point, express and explosive rifle ammo. It is free during two story missions, the first being \"The Delights of Van Horn\", and is then available from all gunsmiths. You must look down its scope whatever camera mode you use.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Carcano_Rifle_(RDR_2)",
+              "revision": "476806",
+              "quoted": [
+                "can use Regular, High Velocity, Split Point, Express, and Explosive rifle ammo.",
+                "This rifle can be acquired for free during the missions \"The Delights of Van Horn\" and",
+                "it will also become available from all gunsmiths after completion of the latter.",
+                "It is one of three rifles that the player must look down the sights of regardless of what camera mode you're using"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2413,
+      "name": "Pump-Action Shotgun",
+      "kind": "item",
+      "main_page": "https://reddead.fandom.com/wiki/Pump-Action_Shotgun_(RDR_2)",
+      "main_revision": "476802",
+      "lines": [
+        {
+          "line": "Summary: The Lancaster pump-action shotgun, with five rounds, moderate power, low range and low accuracy, and a large ammo capacity and quick reload. It costs $148.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Pump-Action_Shotgun_(RDR_2)",
+              "revision": "476802",
+              "quoted": [
+                "The high-powered Lancaster Pump Shotgun has a large ammo capacity and quick reload capacities.",
+                "!! Power || Moderate !! Range || Low !! Rate of Fire || Moderate !! Reload Speed || Moderate !! Ammo Capacity || 5",
+                "!! Accuracy || Low !! Base price || $148.00"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: The page says it holds true when you are confronted by a wild beast or a man in close combat. It takes regular buckshot, incendiary buckshot, slug and explosive slug.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Pump-Action_Shotgun_(RDR_2)",
+              "revision": "476802",
+              "quoted": [
+                "this gun will hold true should you find yourself confronted by wild beast or man in close combat.",
+                "can use Regular Buckshots, Incendiary Buckshots, Slug and Explosive Slug shotgun ammo."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It is available from all gunsmiths after the mission \"Pouring Forth Oil IV\", and you can also take it for free at Chez Porter from a weapon case at the top of the ladder in the master bedroom. Your ammo maximum is 60, or 90 with the upgraded bandolier.",
+          "drawn_from": [
+            {
+              "page": "https://reddead.fandom.com/wiki/Pump-Action_Shotgun_(RDR_2)",
+              "revision": "476802",
+              "quoted": [
+                "This shotgun is available from all gunsmiths after \"Pouring Forth Oil IV\".",
+                "It can also be obtained for free at any time at Chez Porter inside a weapon case at the top of the ladder in the master bedroom.",
+                "!! Ammo Max || 60 (w/o Upgraded Bandolier) 90 (w/ Upgraded Bandolier)"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

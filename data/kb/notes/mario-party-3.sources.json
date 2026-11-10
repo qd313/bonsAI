@@ -749,6 +749,323 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3010,
+      "name": "Plunder Chest",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Plunder_Chest",
+      "main_revision": "5473170",
+      "lines": [
+        {
+          "line": "Summary: A treasure chest that steals an item from an opponent you choose. Baby Bowser's shop sells it for 10 coins, and it is Princess Peach's favorite item.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Plunder_Chest",
+              "revision": "5473170",
+              "quoted": [
+                "A Plunder Chest is a recurring item in the Mario Party series. It is a treasure chest that can steal an item from another player.",
+                "Mario Party 3 ... 10 Coins ... Only available in Baby Bowser's Shop.",
+                "In Mario Party 2 and Mario Party 3, it is Princess Peach's favorite item"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "Plunder Chest ... 10 Coins"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: You pick which opponent to rob, and the item taken is chosen randomly if that player holds more than one. The stolen item cannot be used before you roll.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "When the player uses this item, the player gets to choose an opponent to steal an item from. If the designated player has more than one item, the item stolen is chosen randomly."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Plunder_Chest",
+              "revision": "5473170",
+              "quoted": [
+                "the Plunder Chest steals a random item from an opponent of the user's choosing, and the received item cannot be used before rolling."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Barter Box works in a similar way, but the Plunder Chest only steals one item while the Barter Box swaps all of them. Computer-controlled Peach prioritizes it when she can get it.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Barter_Box",
+              "revision": "5430619",
+              "quoted": [
+                "The Plunder Chest works in a similar way; however, the Plunder Chest only steals one item.",
+                "When used, the Barter Box exchanges all of the player's items with the items of another player."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Plunder_Chest",
+              "revision": "5473170",
+              "quoted": [
+                "meaning that as a CPU player she will prioritize it over other items if possible."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3011,
+      "name": "Lucky Lamp",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Mario_Party_3",
+      "main_revision": "5520638",
+      "lines": [
+        {
+          "line": "Summary: A lamp that holds Mushroom Jeanie, who moves the Star to a different space. Baby Bowser's shop sells it for 10 coins, and it is the counterpart of the Magic Lamp.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "Lucky Lamp ... When used, the Mushroom Jeanie appears. She then moves the Star somewhere else, essentially making it the counter-part of the Magic Lamp. ... 10 Coins"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Lucky_Lamp",
+              "revision": "5447666",
+              "quoted": [
+                "The Lucky Lamp is an item found only in Mario Party 3. It is essentially a counterpart to the Magic Lamp."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: When used, Mushroom Jeanie appears at the Star space and moves the Star to a different location on the board, instead of taking you to it as the Magic Lamp does. The manual says she moves the Millennium Star to a new location on your command.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mushroom_Jeanie",
+              "revision": "5485753",
+              "quoted": [
+                "Upon being called, the Mushroom Jeanie will appear at the Star space to move it to another location"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Lucky_Lamp",
+              "revision": "5447666",
+              "quoted": [
+                "Instead of taking the player to the Star Space, it moves the Star to a different space on the board.",
+                "On your command, Mushroom Jeanie will move the Millennium Star to a new location."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In Spiny Desert, where one Millennium Star is a mirage, she always goes to the real one. Besides Baby Bowser's shop, the Lucky Lamp can be won in an item minigame.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mushroom_Jeanie",
+              "revision": "5485753",
+              "quoted": [
+                "in Spiny Desert, where there is a Millennium Star mirage on the board, she will always go to the real Millennium Star."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Lucky_Lamp",
+              "revision": "5447666",
+              "quoted": [
+                "The Lucky Lamp can be bought from Baby Bowser for a little less than a Magic Lamp, and it can also be won in an item minigame."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3012,
+      "name": "Bowser Phone",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Mario_Party_3",
+      "main_revision": "5520638",
+      "lines": [
+        {
+          "line": "Summary: Calls Bowser to give one player a Bowser event, as if they had landed on a Bowser Space. Baby Bowser's shop sells it for 10 coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "When used, the player calls Bowser. Bowser then asks who is calling him, the player chooses one of the players (can be the caller). Bowser then performs his events to that player as if the player landed on a Bowser Space. ... 10 Coins"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Bowser_Phone",
+              "revision": "5410640",
+              "quoted": [
+                "Bowser Phones are sold in Baby Bowser's Item Shops"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: You choose one of your opponents, or yourself, for Bowser to run one of his events on, and you can view the board before deciding. Choosing \"Who do you think?\" lets Bowser pick a random player.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser_Phone",
+              "revision": "5410640",
+              "quoted": [
+                "The player then chooses one of their opponents (or themselves) to have Bowser make them do one of his events, as if they landed on a Bowser Space. The player can also view the board before making a selection. Selecting \"Who do you think?\" results in Bowser choosing a random player."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The chosen player actually goes to meet Bowser at the same castle location as the Bowser Space. A Bowser Space can also hand you a Bowser Phone for free.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bowser_Phone",
+              "revision": "5410640",
+              "quoted": [
+                "the player actually goes to meet Bowser at the same castle location as the Bowser Space.",
+                "may be given for free from a Bowser Space."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3013,
+      "name": "Lucky Charm",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Lucky_Charm",
+      "main_revision": "5432235",
+      "lines": [
+        {
+          "line": "Summary: A rare coin with Game Guy's face on one side that forces a chosen player to risk all their coins in a Game Guy minigame. No shop sells it.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Lucky_Charm",
+              "revision": "5432235",
+              "quoted": [
+                "The Lucky Charm is an item in Mario Party 3. It is a coin depicting Game Guy on one side. Using the Lucky Charm forces the target, which can be the user, to risk all of their Coins in a Game Guy minigame."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Item_Shop_(Mario_Party_series)",
+              "revision": "5449664",
+              "quoted": [
+                "Wacky Watches, Barter Boxes, Koopa Kards, and Lucky Charms are never sold by either Toad's Trading Post or Baby Bowser's Joint"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Using it summons Game Guy, who takes all of the target's coins and starts a Game Guy minigame. The target can be another player or yourself, and the booklet says it lets you send another player to the Game Guy Room to risk all their coins.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "When a player uses this item, they summon Game Guy. Game Guy then takes all of the player's Coins, and a Game Guy minigame is initiated. This can also be used to force another player to play a Game Guy minigame."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Lucky_Charm",
+              "revision": "5432235",
+              "quoted": [
+                "The Lucky Charm lets you send another player to the Game Guy Room to risk all of his or her coins."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You can get one from an Item Space by meeting Toad, rarely from a Hidden Block, or from an Item Bag bought at Baby Bowser's Joint.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Lucky_Charm",
+              "revision": "5432235",
+              "quoted": [
+                "A Lucky Charm can be obtained from an Item Space by meeting Toad or rarely from a hidden block."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Item_Bag",
+              "revision": "5473148",
+              "quoted": [
+                "If purchased from Baby Bowser's Joint, the Item Bag may contain a rare item: a Lucky Charm."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3014,
+      "name": "Wacky Watch",
+      "kind": "item",
+      "main_page": "https://www.mariowiki.com/Wacky_Watch",
+      "main_revision": "5403128",
+      "lines": [
+        {
+          "line": "Summary: A rare item that jumps the game to exactly five turns before the end. It cannot be bought in any Item Shop.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Wacky_Watch",
+              "revision": "5403128",
+              "quoted": [
+                "A Wacky Watch is a rare item appearing only in Mario Party 3. It cannot be bought in any Item Shop",
+                "it sets the game's turn number to exactly five turns before the game ends."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Using it sets the turn number to exactly five turns before the game ends, so it can drastically shorten the game, or make it longer when used within five turns of the end.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Wacky_Watch",
+              "revision": "5403128",
+              "quoted": [
+                "it sets the game's turn number to exactly five turns before the game ends. This can drastically shorten the game, or make it longer when it is used in turns closer than five to the game's end."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_3",
+              "revision": "5520638",
+              "quoted": [
+                "When used, this rare item sets the game to such a time that there are five turns left."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You can get one by meeting Toad on an Item Space or finding it in a Hidden Block, and it is the only item in Mario Party 3 that neither an Item Shop nor an Item Bag gives you. If you use it on what would otherwise be the final turn, the rest of that turn is still played as the final turn, so the Item Shops stay closed.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Wacky_Watch",
+              "revision": "5403128",
+              "quoted": [
+                "players can get it by meeting Toad on an Item Space or finding it in a Hidden Block.",
+                "If a Wacky Watch is used on what would otherwise be the final turn, the game is still played as if it were the final turn for the remainder of the turn (i.e., Item Shops are still closed).",
+                "The Wacky Watch is the only item in Mario Party 3 that cannot be purchased from an Item Shop or Item Bag."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Item_Bag",
+              "revision": "5473148",
+              "quoted": [
+                "It is not possible for an Item Bag from either shopkeeper to contain a Wacky Watch."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

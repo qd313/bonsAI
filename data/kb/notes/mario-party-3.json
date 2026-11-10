@@ -111,6 +111,61 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5520638",
       "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3010,
+      "game_id": 28,
+      "section_type": "item",
+      "name": "Plunder Chest",
+      "card": "Summary: A treasure chest that steals an item from an opponent you choose. Baby Bowser's shop sells it for 10 coins, and it is Princess Peach's favorite item.\nUses: You pick which opponent to rob, and the item taken is chosen randomly if that player holds more than one. The stolen item cannot be used before you roll.\nTips: The Barter Box works in a similar way, but the Plunder Chest only steals one item while the Barter Box swaps all of them. Computer-controlled Peach prioritizes it when she can get it.",
+      "source_url": "https://www.mariowiki.com/Plunder_Chest",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5473170",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3011,
+      "game_id": 28,
+      "section_type": "item",
+      "name": "Lucky Lamp",
+      "card": "Summary: A lamp that holds Mushroom Jeanie, who moves the Star to a different space. Baby Bowser's shop sells it for 10 coins, and it is the counterpart of the Magic Lamp.\nUses: When used, Mushroom Jeanie appears at the Star space and moves the Star to a different location on the board, instead of taking you to it as the Magic Lamp does. The manual says she moves the Millennium Star to a new location on your command.\nTips: In Spiny Desert, where one Millennium Star is a mirage, she always goes to the real one. Besides Baby Bowser's shop, the Lucky Lamp can be won in an item minigame.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5520638",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3012,
+      "game_id": 28,
+      "section_type": "item",
+      "name": "Bowser Phone",
+      "card": "Summary: Calls Bowser to give one player a Bowser event, as if they had landed on a Bowser Space. Baby Bowser's shop sells it for 10 coins.\nUses: You choose one of your opponents, or yourself, for Bowser to run one of his events on, and you can view the board before deciding. Choosing \"Who do you think?\" lets Bowser pick a random player.\nTips: The chosen player actually goes to meet Bowser at the same castle location as the Bowser Space. A Bowser Space can also hand you a Bowser Phone for free.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5520638",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3013,
+      "game_id": 28,
+      "section_type": "item",
+      "name": "Lucky Charm",
+      "card": "Summary: A rare coin with Game Guy's face on one side that forces a chosen player to risk all their coins in a Game Guy minigame. No shop sells it.\nUses: Using it summons Game Guy, who takes all of the target's coins and starts a Game Guy minigame. The target can be another player or yourself, and the booklet says it lets you send another player to the Game Guy Room to risk all their coins.\nTips: You can get one from an Item Space by meeting Toad, rarely from a Hidden Block, or from an Item Bag bought at Baby Bowser's Joint.",
+      "source_url": "https://www.mariowiki.com/Lucky_Charm",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5432235",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3014,
+      "game_id": 28,
+      "section_type": "item",
+      "name": "Wacky Watch",
+      "card": "Summary: A rare item that jumps the game to exactly five turns before the end. It cannot be bought in any Item Shop.\nUses: Using it sets the turn number to exactly five turns before the game ends, so it can drastically shorten the game, or make it longer when used within five turns of the end.\nTips: You can get one by meeting Toad on an Item Space or finding it in a Hidden Block, and it is the only item in Mario Party 3 that neither an Item Shop nor an Item Bag gives you. If you use it on what would otherwise be the final turn, the rest of that turn is still played as the final turn, so the Item Shops stay closed.",
+      "source_url": "https://www.mariowiki.com/Wacky_Watch",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5403128",
+      "crawled_at": "2026-11-09"
     }
   ]
 }

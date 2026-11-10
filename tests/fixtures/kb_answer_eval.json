@@ -1804,15 +1804,15 @@
    "app_id": "782330",
    "app_name": "DOOM Eternal",
    "ask_mode": "strategy",
-   "question": "how do i deal with the prowler in doom eternal",
+   "question": "how do i deal with the hell priest in doom eternal",
    "expect_card": null,
    "must_mention": [],
    "must_not_say": [],
    "expect_unknown": true,
    "unknown_names": [
-    "Prowler"
+    "Hell Priest"
    ],
-   "note": "A real DOOM Eternal enemy that no note covers: the library has DOOM Eternal notes for Marauder, Cacodemon, Whiplash and Arch-vile but none on the Prowler, and no note for any game mentions a prowler (checked against the seed and every notes file on 2026-11-03). A good reply says it has nothing on this one rather than writing tactics as if from a note. Replaced the Pain Elemental on 2026-11-03: the classic Doom 64 note now names one."
+   "note": "A real DOOM Eternal enemy that no note covers: no note or seed card for any game mentions a Hell Priest (checked against the seed and every notes file on 2026-11-10). A good reply says it has nothing on this one rather than writing tactics as if from a note. Replaced the Prowler on 2026-11-10, because a DOOM Eternal note now names it (before that it replaced the Pain Elemental)."
   },
   {
    "id": "A-UNKNOWN-05",

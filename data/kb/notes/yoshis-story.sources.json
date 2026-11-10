@@ -680,6 +680,308 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3610,
+      "name": "Pak E. Derm",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Pak_E._Derm",
+      "main_revision": "5513910",
+      "lines": [
+        {
+          "line": "Summary: An elephant-like creature that stands in your way holding a stop sign. You meet three of them, all in the level Treasure Hunt.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Pak_E._Derm",
+              "revision": "5513910",
+              "quoted": [
+                "Pak E. Derms are elephant-like creatures that first appear in Yoshi's Story. They can always be seen carrying a stop sign with which they do not allow the Yoshis to pass.",
+                "Yoshi encounters three Pak E. Derms in only one level—the P. 1-Beginning level Treasure Hunt."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A ground pound makes it fall on its head, and you can slip past. Be quick, because it soon flips back upright.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Pak_E._Derm",
+              "revision": "5513910",
+              "quoted": [
+                "To pass, Yoshi has to Ground Pound the ground, and the Pak E. Derm will fall on his head, allowing Yoshi to pass. Yoshi has to act quickly because Pak E. Derm will soon flip back upright."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: An elephant-like creature holding up a stop sign.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Pak_E._Derm",
+              "revision": "5513910",
+              "quoted": [
+                "Pak E. Derms are elephant-like creatures",
+                "They can always be seen carrying a stop sign"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It stands in the middle of the path you are taking, and if you switch to the other path it moves over to block that one too.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Pak_E._Derm",
+              "revision": "5513910",
+              "quoted": [
+                "Pak E. Derms stand in the middle of the path Yoshi is taking, and will move to the other path if Yoshi moves to the other path."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3611,
+      "name": "Tehee Butterfly",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Tehee_Butterfly",
+      "main_revision": "5482286",
+      "lines": [
+        {
+          "line": "Summary: A flying butterfly that keeps changing colour between pink and blue. What happens when you eat it depends on its colour at that moment.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Tehee_Butterfly",
+              "revision": "5482286",
+              "quoted": [
+                "They fly around and change color from pink to blue. Eating a pink one restores a Yoshi's health, but eating a blue one depletes it due to bitterness"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Story",
+              "revision": "5520653",
+              "quoted": [
+                "A butterfly that flashes between pink and blue."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A round flying insect that flashes between pink and blue.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Tehee_Butterfly",
+              "revision": "5482286",
+              "quoted": [
+                "are flying spherical insects",
+                "change color from pink to blue"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Eat a pink one to get health back. A blue one is bitter and takes health away. If you eat a blue one while Super Happy, that form ends early.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Tehee_Butterfly",
+              "revision": "5482286",
+              "quoted": [
+                "Eating a pink one restores a Yoshi's health, but eating a blue one depletes it due to bitterness",
+                "If a Yoshi eats a blue Tehee Butterfly while Super Happy, the Super Happy effect ends early."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You can also jump on one as a springboard, which is when the wiki calls it a Tehee Trampoline.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Tehee_Butterfly",
+              "revision": "5482286",
+              "quoted": [
+                "also called Tehee Trampolines in the context of jumping on them as springboards"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3612,
+      "name": "Black Shy Guy (Yoshi's Story)",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Black_Shy_Guy_(Yoshi%27s_Story)",
+      "main_revision": "5408072",
+      "lines": [
+        {
+          "line": "Summary: An aggressive kind of Flying Shy Guy, first met in the level Poochy & Nippy.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Black_Shy_Guy_(Yoshi%27s_Story)",
+              "revision": "5408072",
+              "quoted": [
+                "Black Shy Guys are an aggressive type of Flying Shy Guy found in Yoshi's Story.",
+                "These Shy Guys first appear in Poochy & Nippy."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A black Shy Guy that flies.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Black_Shy_Guy_(Yoshi%27s_Story)",
+              "revision": "5408072",
+              "quoted": [
+                "Black Shy Guys are an aggressive type of Flying Shy Guy",
+                "a black version of a normal Shy Guy has artwork"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In Poochy & Nippy they swoop down from above the screen and drop bombs on you, and those bombs can break rock blocks for you. On Page 6 they hover holding weights that fall automatically if you ground-pound near one.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Black_Shy_Guy_(Yoshi%27s_Story)",
+              "revision": "5408072",
+              "quoted": [
+                "In this level, the Black Shy Guys swoop down from above the screen, dropping bombs on top of the Yoshis. This can be used to the Yoshis' advantage by causing them to break rock blocks. Black Shy Guys also appear on Page 6, hovering about in the air, holding weights to drop on Yoshis that pass underneath them. They automatically drop them if a Yoshi ground-pounds near one."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A ground pound near one does not affect it. Eating one gives a black-spotted egg, but most Yoshis lose three petals of the Smile Meter and Super Happy ends, while the Black and White Yoshis can stomach it and gain two petals.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Black_Shy_Guy_(Yoshi%27s_Story)",
+              "revision": "5408072",
+              "quoted": [
+                "performing a Ground Pound near them does not affect them in any way.",
+                "after eating one, they look disgusted and lose three petals from their Smile Meter. Eating a Black Shy Guy also nullifies the Super Happy form. Black and White Yoshis seem to be able to tolerate Black Shy Guys and gain two petals. When a Black Shy Guy is eaten, it turns into an egg with black spots."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3613,
+      "name": "Air Bag",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Air_Bag",
+      "main_revision": "5470488",
+      "lines": [
+        {
+          "line": "Summary: A giant pink balloon that hides inside a Mystery Crate in the second half of Surprise!!, a first-page level.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Air_Bag",
+              "revision": "5470488",
+              "quoted": [
+                "are giant pink balloon enemies that reside in Mystery Crates in Yoshi's Story.",
+                "Exclusively found in the second half of the Page 1 level Surprise!!"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Hit the two bandages on its belly with an egg or one of Huffin Puffin's chicks, twice. It then deflates until it disappears and leaves a melon.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Air_Bag",
+              "revision": "5470488",
+              "quoted": [
+                "To defeat an Air Bag, the Yoshi must throw an egg or one of Huffin Puffin's chicks at the pair of bandages on its belly twice. Upon defeat, the bandages fall off and the Air Bag deflates until it disappears, leaving a melon."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A big pink balloon with a pair of bandages on its belly.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Air_Bag",
+              "revision": "5470488",
+              "quoted": [
+                "are giant pink balloon enemies",
+                "the pair of bandages on its belly"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its crate cannot be pushed or broken by a ground pound. Shoot an egg or a chick at the crate to make the Air Bag show itself.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Air_Bag",
+              "revision": "5470488",
+              "quoted": [
+                "Mystery Crates that the Baby Yoshis cannot push or destroy via ground-pounding. Air Bags can be revealed by shooting an egg or one of Huffin Puffin's chicks at the crates."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its attack is a strong gust of air that does no damage, but it can push you into other enemies.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Air_Bag",
+              "revision": "5470488",
+              "quoted": [
+                "Air Bags attack by blowing a strong gust of air at a Yoshi that deals no damage, but it can risk pushing them into enemies."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3614,
+      "name": "Blindfold Boo",
+      "kind": "enemy",
+      "main_page": "https://www.mariowiki.com/Blindfold_Boo",
+      "main_revision": "5482052",
+      "lines": [
+        {
+          "line": "Summary: A blindfolded Boo found only in the Ghost Castle, with four of them there: three at the start and one in the tower climb. It finds you by sound.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Blindfold_Boo",
+              "revision": "5482052",
+              "quoted": [
+                "Since it cannot see, a Blindfold Boo relies on sound to guide it. When it hears a sound, such as a Yoshi gathering coins, it homes in on the sound.",
+                "Blindfold Boos appear only in the Ghost Castle, where four of them (three in the beginning and one in the tower climb)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: In this game a Boo with a light-blue blindfold and false pink ears in place of arms.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Blindfold_Boo",
+              "revision": "5482052",
+              "quoted": [
+                "In Yoshi's Story, Blindfold Boos were redesigned to have light-blue blindfolds, rather than black, and have fake pink ears rather than arms."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Nothing you do can hurt it, and once it is chasing you it moves faster than a Yoshi can run. A touch or any attack from it costs three petals of the Smile Meter.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Blindfold_Boo",
+              "revision": "5482052",
+              "quoted": [
+                "they are invulnerable to attacks, and when pursuing a Yoshi, they can move faster than a Yoshi can run. If a Yoshi touches a Blindfold Boo or receives any attack by one, he loses three petals from the Smile Meter."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

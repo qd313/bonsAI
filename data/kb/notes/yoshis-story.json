@@ -111,6 +111,61 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5405956",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3610,
+      "game_id": 32,
+      "section_type": "enemy",
+      "name": "Pak E. Derm",
+      "card": "Summary: An elephant-like creature that stands in your way holding a stop sign. You meet three of them, all in the level Treasure Hunt.\nWeak points: A ground pound makes it fall on its head, and you can slip past. Be quick, because it soon flips back upright.\nLooks like: An elephant-like creature holding up a stop sign.\nTips: It stands in the middle of the path you are taking, and if you switch to the other path it moves over to block that one too.",
+      "source_url": "https://www.mariowiki.com/Pak_E._Derm",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5513910",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3611,
+      "game_id": 32,
+      "section_type": "enemy",
+      "name": "Tehee Butterfly",
+      "card": "Summary: A flying butterfly that keeps changing colour between pink and blue. What happens when you eat it depends on its colour at that moment.\nLooks like: A round flying insect that flashes between pink and blue.\nTips: Eat a pink one to get health back. A blue one is bitter and takes health away. If you eat a blue one while Super Happy, that form ends early.\nTips: You can also jump on one as a springboard, which is when the wiki calls it a Tehee Trampoline.",
+      "source_url": "https://www.mariowiki.com/Tehee_Butterfly",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5482286",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3612,
+      "game_id": 32,
+      "section_type": "enemy",
+      "name": "Black Shy Guy (Yoshi's Story)",
+      "card": "Summary: An aggressive kind of Flying Shy Guy, first met in the level Poochy & Nippy.\nLooks like: A black Shy Guy that flies.\nTips: In Poochy & Nippy they swoop down from above the screen and drop bombs on you, and those bombs can break rock blocks for you. On Page 6 they hover holding weights that fall automatically if you ground-pound near one.\nTips: A ground pound near one does not affect it. Eating one gives a black-spotted egg, but most Yoshis lose three petals of the Smile Meter and Super Happy ends, while the Black and White Yoshis can stomach it and gain two petals.",
+      "source_url": "https://www.mariowiki.com/Black_Shy_Guy_(Yoshi%27s_Story)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5408072",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3613,
+      "game_id": 32,
+      "section_type": "enemy",
+      "name": "Air Bag",
+      "card": "Summary: A giant pink balloon that hides inside a Mystery Crate in the second half of Surprise!!, a first-page level.\nWeak points: Hit the two bandages on its belly with an egg or one of Huffin Puffin's chicks, twice. It then deflates until it disappears and leaves a melon.\nLooks like: A big pink balloon with a pair of bandages on its belly.\nTips: Its crate cannot be pushed or broken by a ground pound. Shoot an egg or a chick at the crate to make the Air Bag show itself.\nTips: Its attack is a strong gust of air that does no damage, but it can push you into other enemies.",
+      "source_url": "https://www.mariowiki.com/Air_Bag",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5470488",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3614,
+      "game_id": 32,
+      "section_type": "enemy",
+      "name": "Blindfold Boo",
+      "card": "Summary: A blindfolded Boo found only in the Ghost Castle, with four of them there: three at the start and one in the tower climb. It finds you by sound.\nLooks like: In this game a Boo with a light-blue blindfold and false pink ears in place of arms.\nTips: Nothing you do can hurt it, and once it is chasing you it moves faster than a Yoshi can run. A touch or any attack from it costs three petals of the Smile Meter.",
+      "source_url": "https://www.mariowiki.com/Blindfold_Boo",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5482052",
+      "crawled_at": "2026-11-10"
     }
   ]
 }

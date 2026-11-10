@@ -102,14 +102,12 @@
       "main_revision": "5536129",
       "lines": [
         {
-          "line": "Summary: No Stars can be bought on Pyramid Park in Party Cruise. Everyone starts with 5 and takes them from one another: pay for a Chain Chomp ride and crush rivals along the way. The Chain Chomps live in the board's pyramid doghouses.",
+          "line": "Summary: On Pyramid Park in Party Cruise you take Stars from your rivals by paying for a Chain Chomp ride. The Chain Chomps are found in the board's pyramid doghouses.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Pyramid_Park",
               "revision": "5536129",
               "quoted": [
-                "There are no Stars here! Everyone begins with 5 Stars, and you must use Chain Chomps to steal them from each other!",
-                "While on a Chain Chomp, you can crush your rivals and take their Stars.",
                 "players have to use Chain Chomps – found in pyramid dog houses – to steal Stars from opponents."
               ]
             },
@@ -371,8 +369,7 @@
               "revision": "5488638",
               "quoted": [
                 "Thrown Orbs are traps that can be throw on a space.",
-                "The Thrown Orbs' shell color is yellow.",
-                "Take 10 coins from any opponent who lands on it."
+                "The Thrown Orbs' shell color is yellow."
               ]
             },
             {
@@ -440,8 +437,7 @@
               "page": "https://www.mariowiki.com/Mario_Party_7",
               "revision": "5488638",
               "quoted": [
-                "The Thrown Orbs' shell color is yellow.",
-                "Any opponent who lands on it must give you half of their coins."
+                "The Thrown Orbs' shell color is yellow."
               ]
             },
             {
@@ -507,8 +503,7 @@
               "page": "https://www.mariowiki.com/Mario_Party_7",
               "revision": "5488638",
               "quoted": [
-                "The Thrown Orbs' shell color is yellow.",
-                "Any opponent who lands on it must give you coins equal to a Dice Block roll."
+                "The Thrown Orbs' shell color is yellow."
               ]
             },
             {
@@ -569,8 +564,7 @@
               "page": "https://www.mariowiki.com/Mario_Party_7",
               "revision": "5488638",
               "quoted": [
-                "The Thrown Orbs' shell color is yellow.",
-                "A foe who lands here will lose a Star. If the foe doesn't have any stars when they land here, they lose 20 coins."
+                "The Thrown Orbs' shell color is yellow."
               ]
             },
             {
@@ -630,8 +624,7 @@
               "page": "https://www.mariowiki.com/Mario_Party_7",
               "revision": "5488638",
               "quoted": [
-                "The Thrown Orbs' shell color is yellow.",
-                "If an opponent lands on it, you can take over up to three of his or her character spaces."
+                "The Thrown Orbs' shell color is yellow."
               ]
             },
             {
@@ -697,15 +690,16 @@
               "page": "https://www.mariowiki.com/Mario_Party_7",
               "revision": "5488638",
               "quoted": [
-                "Roadblock Orbs are orbs with red shells and can be thrown on spaces.",
-                "Any foe who passes it loses three coins for every space he moves past it."
+                "Roadblock Orbs are orbs with red shells and can be thrown on spaces."
               ]
             },
             {
               "page": "https://www.mariowiki.com/Zap_Orb",
               "revision": "5533883",
               "quoted": [
-                "It contains an Amp."
+                "It contains an Amp.",
+                "Opponents that pass through a space containing the orb get shocked by the Amp",
+                "In Mario Party 7, it serves the same purpose, but opponents lose only three coins per space, instead of five."
               ]
             },
             {
@@ -771,8 +765,7 @@
               "page": "https://www.mariowiki.com/Mario_Party_7",
               "revision": "5488638",
               "quoted": [
-                "Roadblock Orbs are orbs with red shells and can be thrown on spaces.",
-                "Any opponent who passes it will get Thwomped and must stop moving."
+                "Roadblock Orbs are orbs with red shells and can be thrown on spaces."
               ]
             },
             {
@@ -838,8 +831,7 @@
               "page": "https://www.mariowiki.com/Mario_Party_7",
               "revision": "5488638",
               "quoted": [
-                "Self Orbs have a green shell and are used on the player.",
-                "Encase yourself in metal and move without being harmed by rivals' traps."
+                "Self Orbs have a green shell and are used on the player."
               ]
             },
             {
@@ -912,8 +904,7 @@
               "page": "https://www.mariowiki.com/Mario_Party_7",
               "revision": "5488638",
               "quoted": [
-                "Self Orbs have a green shell and are used on the player.",
-                "Prevents a Chain-Chomp from stealing you once. Lasts for three turns."
+                "Self Orbs have a green shell and are used on the player."
               ]
             },
             {
@@ -968,14 +959,14 @@
               "page": "https://www.mariowiki.com/Mario_Party_7",
               "revision": "5488638",
               "quoted": [
-                "Self Orbs have a green shell and are used on the player.",
-                "The Dice Block will move slowly."
+                "Self Orbs have a green shell and are used on the player."
               ]
             },
             {
               "page": "https://www.mariowiki.com/Slow_%27Shroom_Orb",
               "revision": "5533880",
               "quoted": [
+                "the Slow 'Shroom Orb slows down the speed of the Dice Block tremendously",
                 "allowing players to choose any number to roll.",
                 "Since the Slow 'Shroom Orb essentially allows the player to choose the number that they would like to roll"
               ]

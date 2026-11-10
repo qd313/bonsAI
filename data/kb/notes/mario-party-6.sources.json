@@ -161,7 +161,7 @@
           ]
         },
         {
-          "line": "Weak points: A Snack Orb stops one Chain Chomp theft: you toss a bone, the Chomp leaps over your space to fetch it and keeps moving, and anyone sharing your space is spared as well. It works one time only. Team games have one catch: teammates share Orbs and cannot trap each other, yet a teammate's Chain Chomp ride can still burn through your Snack Orb.",
+          "line": "Weak points: A Snack Orb stops a Chain Chomp's theft: you toss a bone, the Chomp leaps over your space to fetch it and keeps moving, and anyone sharing your space is spared as well. Team games have one catch: teammates share Orbs and cannot trap each other, yet a teammate's Chain Chomp ride can still burn through your Snack Orb.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Snack_Orb",
@@ -175,7 +175,6 @@
               "page": "https://www.mariowiki.com/Mario_Party_6",
               "revision": "5518101",
               "quoted": [
-                "Prevents a Chain Chomp from stealing from you one time. Can't be used or placed.",
                 "Teammates share Orbs, coins, Stars, and cannot be affected by each others traps; however, Chain Chomps in Snowflake Lake can still use up a teammate's Snack Orb, despite being on the same team."
               ]
             }
@@ -246,13 +245,13 @@
           ]
         },
         {
-          "line": "Weak points: Holding a Boo-Away Orb blocks her theft from you once; it triggers automatically and cannot be used or placed. She works only at night.",
+          "line": "Weak points: Holding a Boo-Away Orb blocks her theft from you; it triggers automatically, so you cannot throw it onto a space or use it yourself. She works only at night.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Party_6",
               "revision": "5518101",
               "quoted": [
-                "Prevents a Boo from stealing from you one time. Can't be used or placed."
+                "They cannot be thrown on a space or used. Instead, they are used automatically. They can be disposed at any time if the players chooses to, though."
               ]
             },
             {
@@ -305,7 +304,7 @@
               "page": "https://www.mariowiki.com/Mario_Party_6",
               "revision": "5518101",
               "quoted": [
-                "Prevents a Boo from stealing from you one time. Can't be used or placed.\" || Towering Treetop and Castaway Bay || 10 coins"
+                "Towering Treetop and Castaway Bay || 10 coins"
               ]
             }
           ]
@@ -549,14 +548,14 @@
           ]
         },
         {
-          "line": "Weak points: On Castaway Bay the Shadow Star comes from Bowser on his Battle Yacht. Anyone stopping on DK's Riverboat makes the two boats trade places, so look at where each boat sits before you land.",
+          "line": "Weak points: On Castaway Bay the Shadow Star comes from Bowser on his Battle Yacht. Landing on a ? Space on a pole marked with a Star Space symbol swaps the two boats, so look at where each boat sits before you land.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Castaway_Bay",
               "revision": "5246726",
               "quoted": [
-                "Whenever someone stops on DK’s Riverboat, it’ll swap places with Bowser’s Battle Yacht!",
-                "makes players hit a circular target on the pole, making a bell sound that switches Bowser's and DK's boats around."
+                "players that stop at Bowser's Battle Yacht will meet up with Bowser, who gives them a Shadow Star",
+                "Landing on the ? Space at any of the poles with a Star Space symbol on it makes players hit a circular target on the pole, making a bell sound that switches Bowser's and DK's boats around."
               ]
             }
           ]
@@ -690,18 +689,11 @@
                 "A board where the star appears in a random spot, costing twenty coins to purchase, then moves to a different location.",
                 "Stars are obtained the same way as in Towering Treetop."
               ]
-            },
-            {
-              "page": "https://www.mariowiki.com/E._Gadd%27s_Garage",
-              "revision": "5486706",
-              "quoted": [
-                "The Star will move to a different location as soon as someone grabs it."
-              ]
             }
           ]
         },
         {
-          "line": "Tips: An Orb hut sells it for 30 coins. A Star costs 20 coins on Towering Treetop and on E. Gadd's Garage.",
+          "line": "Tips: An Orb hut sells it for 30 coins. A Star costs 20 coins on Towering Treetop, and E. Gadd's Garage works the same way.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Flutter_Orb",
@@ -714,14 +706,14 @@
               "page": "https://www.mariowiki.com/Towering_Treetop",
               "revision": "5519594",
               "quoted": [
-                "On this board, Stars cost 20 coins."
+                "Stars, which can be bought for 20 coins, randomly spawn on one of the several predetermined spots on the board."
               ]
             },
             {
-              "page": "https://www.mariowiki.com/E._Gadd%27s_Garage",
-              "revision": "5486706",
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
               "quoted": [
-                "Rush to the Star Space with 20 coins to buy a Star."
+                "Stars are obtained the same way as in Towering Treetop."
               ]
             }
           ]
@@ -833,13 +825,6 @@
           "line": "Summary: A red Orb that goes on a space and acts as a roadblock. An opponent passing over gets squashed by a Thwomp and their move ends there.",
           "drawn_from": [
             {
-              "page": "https://www.mariowiki.com/Mario_Party_6",
-              "revision": "5518101",
-              "quoted": [
-                "Any opponent who passes it will get Thwomped and must stop moving."
-              ]
-            },
-            {
               "page": "https://www.mariowiki.com/Thwomp_Orb",
               "revision": "5533882",
               "quoted": [
@@ -874,17 +859,17 @@
               ]
             },
             {
-              "page": "https://www.mariowiki.com/Mario_Party_6",
-              "revision": "5518101",
-              "quoted": [
-                "Any opponent who passes it will get Thwomped and must stop moving.\" || Towering Treetop, Faire Square, and Clockwork Castle || 10 coins"
-              ]
-            },
-            {
               "page": "https://www.mariowiki.com/Faire_Square",
               "revision": "5246724",
               "quoted": [
                 "they cannot be replaced until an opponent triggers the effect"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Mario_Party_6",
+              "revision": "5518101",
+              "quoted": [
+                "Towering Treetop, Faire Square, and Clockwork Castle || 10 coins"
               ]
             }
           ]
@@ -901,13 +886,6 @@
         {
           "line": "Summary: A yellow Orb that can only be placed on a space. A Piranha Plant bites a rival who stops there, and that rival hands you half their coins.",
           "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Mario_Party_6",
-              "revision": "5518101",
-              "quoted": [
-                "Any opponent who lands on it must give you half of their coins."
-              ]
-            },
             {
               "page": "https://www.mariowiki.com/Piranha_Plant_Orb",
               "revision": "5533861",
@@ -944,9 +922,9 @@
               "page": "https://www.mariowiki.com/Mario_Party_6",
               "revision": "5518101",
               "quoted": [
-                "Any opponent who lands on it must give you half of their coins.\" || All boards except Towering Treetop and Castaway Bay || 15 coins",
                 "These orbs have an effect on a player who lands on the space.",
-                "The orb also stays on the board as long as no one replaces the orb or if a Star Space does not appear on it."
+                "The orb also stays on the board as long as no one replaces the orb or if a Star Space does not appear on it.",
+                "All boards except Towering Treetop and Castaway Bay || 15 coins"
               ]
             },
             {

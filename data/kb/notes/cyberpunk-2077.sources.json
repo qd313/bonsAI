@@ -485,6 +485,200 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2708,
+      "name": "Enemies with Kerenzikov or a Sandevistan",
+      "kind": "enemy",
+      "main_page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Enemies",
+      "main_revision": "300063",
+      "lines": [
+        {
+          "line": "Summary: Some enemies carry reflex boosters. Kerenzikov lets an enemy dodge incoming projectiles. A Sandevistan lets an enemy move with lightning speed, avoid your bullets and close in quickly for melee, and it comes in Mk.1, Mk.2 and Mk.3 versions.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Enemies",
+              "revision": "300063",
+              "quoted": [
+                "A classic and widely-used reflex booster that allows enemies to dodge incoming projectiles.",
+                "This classic implant allows the enemy to move with lightning speed, avoiding your incoming bullets and closing in on you surprisingly quickly to engage in melee combat.",
+                "Sandevistan Mk.1",
+                "Sandevistan Mk.2",
+                "Sandevistan Mk.3"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Against Kerenzikov, switch to melee and use a shotgun or a blade. Against the Mk.1 Sandevistan, finish the fight as fast as you can. The Cripple Movement quickhack disables an enemy's movement and the cyberware that supports movement and dodging.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Enemies",
+              "revision": "300063",
+              "quoted": [
+                "When an enemy uses Kerenzikov, it's better to switch to melee combat, using a shotgun or blade.",
+                "When someone uses this Sandevistan model, it's best to try to finish the fight as fast as you can."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Quickhacks",
+              "revision": "288796",
+              "quoted": [
+                "Cripple Movement 3 →4 → 6 12 0.3 - Disables enemy movement and cyberware that supports movement and dodging."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Wraiths' Revenant, a fast melee enemy, has Kerenzikov and a Mk.1 Sandevistan, and a Kang Tao sniper has a Sandevistan. The wiki says a Mk.2 means you are in deep trouble, and it words the Mk.3 even more strongly.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Wraiths_Revenant",
+              "revision": "287476",
+              "quoted": [
+                "Fast Melee",
+                "Sandevistan Mk.1",
+                "Kerenzikov"
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Sniper_(Kang_Tao)",
+              "revision": "296614",
+              "quoted": [
+                "Type Fast Sniper",
+                "Sandevistan"
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Enemies",
+              "revision": "300063",
+              "quoted": [
+                "When someone uses this Sandevistan model, you're in deep trouble.",
+                "When someone uses this Sandevistan model, you're in deep shit."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2709,
+      "name": "Enemy netrunners",
+      "kind": "enemy",
+      "main_page": "https://cyberpunk.fandom.com/wiki/Voodoo_Boys_Netrunner",
+      "main_revision": "289193",
+      "lines": [
+        {
+          "line": "Summary: Enemy netrunners fight with quickhacks instead of guns. The Voodoo Boys Netrunner is a Tier 2 rare enemy that uses the Cyberware Malfunction, Reboot Optics, Ping and Overheat quickhacks, and it also carries EMP grenades.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Voodoo_Boys_Netrunner",
+              "revision": "289193",
+              "quoted": [
+                "The Netrunner is a Tier 2 enemy affiliated with the Voodoo Boys in Cyberpunk 2077.",
+                "Rarity Rare",
+                "A skilled enemy netrunner can use a variety of quickhacks* against you, and they won't hesitate.",
+                "*Uses the Cyberware Malfunction, Reboot Optics and Ping quickhacks.",
+                "Overheat A dangerous quickhack that directly attacks your nervous system",
+                "EMP Grenades The enemy is equipped with EMP grenades"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: EMP grenades deal bonus damage against enemy netrunners, and also against drones, mechs, robots and turrets.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+              "revision": "304721",
+              "quoted": [
+                "EMP Grenade - Applies an EMP effect for 5 sec. - Deals bonus damage against enemy netrunners, drones, mechs, robots and turrets."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Overheat makes your body temperature skyrocket and overheats your neural and cybernetic components, and it can also result in combustion. Enemy netrunners can drop quickhacks, and this one's drops include Tier 2 to Tier 5 quickhack components.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Voodoo_Boys_Netrunner",
+              "revision": "289193",
+              "quoted": [
+                "making your body temperature skyrocket and overheating your neural and cybernetic components. Can also result in combustion.",
+                "6-8 Tier 2 Quickhack Components",
+                "1 Tier 5 Quickhack Components"
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Quickhacks",
+              "revision": "288796",
+              "quoted": [
+                "They can also drop from enemy netrunners or looted from Airdrops."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2710,
+      "name": "Robots, mechs and drones",
+      "kind": "enemy",
+      "main_page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Enemies",
+      "main_revision": "300063",
+      "lines": [
+        {
+          "line": "Summary: Robots, mechs and drones are enemies you can only destroy. Human enemies can be taken down both lethally and non-lethally, but these cannot.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Enemies",
+              "revision": "300063",
+              "quoted": [
+                "human enemies can be taken down both lethally or non-lethally, while robots, mechs, and drones can only be destroyed."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The Short Circuit quickhack deals extra damage to mechs, robots, drones and turrets, and EMP grenades deal bonus damage against drones, mechs, robots and turrets. The Detonate Grenade quickhack can also detonate their weakspots.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Quickhacks",
+              "revision": "288796",
+              "quoted": [
+                "Short Circuit 3 →4 → 5 → 7 → 10 1.5 → 1 → 0.5 - Deals Damage. Mechs, Robots, drones and turrets receive additional damage.",
+                "Can also detonate weakspots on robots, drones, mechs and turrets."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+              "revision": "304721",
+              "quoted": [
+                "Deals bonus damage against enemy netrunners, drones, mechs, robots and turrets."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Contagion quickhack is ineffective against mechs, robots, drones and turrets. An EMP grenade also disables turrets for as long as its effect lasts.",
+          "drawn_from": [
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Quickhacks",
+              "revision": "288796",
+              "quoted": [
+                "Ineffective against mechs, robots, drones and turrets."
+              ]
+            },
+            {
+              "page": "https://cyberpunk.fandom.com/wiki/Cyberpunk_2077_Weapons",
+              "revision": "304721",
+              "quoted": [
+                "Disables turrets for the duration of the EMP grenade effect."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

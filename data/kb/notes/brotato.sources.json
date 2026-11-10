@@ -124,7 +124,7 @@
           ]
         },
         {
-          "line": "Tips: Neither is met on Danger 0: both start on Danger 1, Slashers from wave 4 and eggs from wave 7. A Slasher starts with 50 health and gains 25 each wave, while an egg starts with 5 and gains 3.",
+          "line": "Tips: Neither appears on Danger 0: both start on Danger 1, Slashers from wave 4 and eggs from wave 7. A Slasher starts with 50 health and gains 25 each wave, while an egg starts with 5 and gains 3.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Enemies",
@@ -159,7 +159,7 @@
           ]
         },
         {
-          "line": "Tips: It first appears at wave 11, where the page works its health out as 250 (10 to start plus 24 for each wave after the first), and that is 40% higher on Danger 5. Its speed climbs from 150 to 600 while the page gives your own base speed as 450, and its speed does not change with the wave or the Danger level.",
+          "line": "Tips: It first appears at wave 11, with 250 health (10 to start plus 24 for each wave after the first), and 40% more than that on Danger 5. Its speed climbs from 150 up to 600, against your own base speed of 450, and the wave and the Danger level do not change its speed.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Enemies",
@@ -325,7 +325,7 @@
           ]
         },
         {
-          "line": "Tips: Between 7 and 8 Lampreys come at you, and the page calls them quite dangerous. A Lamprey charges at you every 1.5 seconds and fires projectiles out to either side as it goes.",
+          "line": "Tips: Between 7 and 8 Lampreys come at you, and they are dangerous. A Lamprey charges at you every 1.5 seconds and fires projectiles out to either side as it goes.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Bait",
@@ -379,7 +379,7 @@
           ]
         },
         {
-          "line": "Tips: Bagged materials paid out at the start of a wave are worth 4 times as much when it triggers, so you end up with about the same on average whether you let them get bagged or not. The same 4 times applies to Buccaneer's double materials. The page calls it very powerful for Endless Mode.",
+          "line": "Tips: A bagged material paid out when a wave starts is worth 4 times its value if this triggers on it, so on average you collect the same total whether or not materials get bagged. Buccaneer's double materials reach 4 times in the same way. It is very strong in Endless Mode, where extra materials matter most.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Metal_Detector",
@@ -429,7 +429,7 @@
           ]
         },
         {
-          "line": "Tips: Entrepreneur's +25% stacks with it for 85% back. The payout follows an item's current price, so it grows with inflation and shrinks if you hold Coupons.",
+          "line": "Tips: Entrepreneur's +25% stacks with it for 85% back. The payout is worked out from the item's price at the moment you recycle: inflation raises it and Coupons lower it.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Recycling_Machine",
@@ -479,7 +479,7 @@
           ]
         },
         {
-          "line": "Tips: The gain compounds: any materials you hold back more than double within four waves and grow about 6.2 times over ten. It is best bought early and saved up, and the page suggests skipping it if you cannot save between rounds. It suits Demon and Streamer, and Saver begins with it.",
+          "line": "Tips: The gain compounds: materials you leave unspent are more than twice as much after four waves, and around 6.2 times as much after ten. It is best bought early, and you may do better without it if you cannot hold materials back from round to round. It suits Demon and Streamer, and Saver begins with it.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Piggy_Bank",
@@ -516,7 +516,7 @@
           ]
         },
         {
-          "line": "Uses: Each one gives hits a 25% chance to burn, so holding 4 reaches 100%. The burn deals 1 + (100%) damage every second, lasting at most 3 seconds, as the page writes it. It costs 25 and the limit is 4.",
+          "line": "Uses: Each one gives hits a 25% chance to burn, so holding 4 reaches 100%. The burn deals 1 + (100%) damage every second, lasting at most 3 seconds. It costs 25 and the limit is 4.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Scared_Sausage",
@@ -637,7 +637,7 @@
           ]
         },
         {
-          "line": "Tips: No other item changes shop prices, and this one does not change what rerolls cost. With the character Entrepreneur and 5 Coupons the cut reaches 50%, the most possible. The page ranks it with the stronger items and says it is nearly always worth buying, unless it is first seen around waves 16 to 18 or after.",
+          "line": "Tips: No other item changes shop prices, and this one does not change what rerolls cost. With the character Entrepreneur and 5 Coupons the cut reaches 50%, the most possible. Players buy it almost every time they see it, except when it first shows up late, around wave 16 to 18 or after.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Coupon",
@@ -687,7 +687,7 @@
           ]
         },
         {
-          "line": "Tips: The page's table shows the extra regeneration reaching +34 by the 85-second mark, which it calls very potent for the wave 20 boss fight, a fight that lasts 90 seconds.",
+          "line": "Tips: By the 85-second mark the extra regeneration reaches +34, which makes it a strong healer in the wave 20 boss fight, a 90-second fight.",
           "drawn_from": [
             {
               "page": "https://brotato.wiki.spellsandguns.com/Medikit",

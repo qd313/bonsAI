@@ -1,0 +1,208 @@
+{
+  "wiki": "GTA Wiki (https://gta.fandom.com/api.php)",
+  "licence_printed_by_fetcher": "GTA Wiki (MediaWiki 1.43.10) licence: CC-BY-SA https://www.fandom.com/licensing",
+  "licence_stored": "CC-BY-SA-3.0 (the fetcher prints no version; 3.0 follows Fandom's licensing page and this repo's data/kb/NOTICE.md, which lists the GTA Wiki as CC-BY-SA-3.0)",
+  "game_id": 35,
+  "game": "Grand Theft Auto III",
+  "read_on": "2026-11-09",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://gta.fandom.com/api.php --titles <pages> (page text as rendered by the wiki, link markup removed). Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named. Several GTA Wiki pages cover many games; a line states a Grand Theft Auto III fact only where the page says so for GTA III or for the 3D games as a whole (GTA III included) with no exception for GTA III. Gang pages mix games in their infoboxes, so only text that names GTA III, or the Gangs in GTA III page, is used for gang facts.",
+  "sections": [
+    {
+      "section_id": 3500,
+      "name": "Diablos gang",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Diablos",
+      "main_revision": "2020207",
+      "lines": [
+        {
+          "line": "Summary: A small Latin American gang that holds the Hepburn Heights district of Portland and is not well armed.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
+              "revision": "2020213",
+              "quoted": [
+                "The Diablos are a Latin American gang led by El Burro and based in Hepburn Heights, Portland."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Diablos",
+              "revision": "2020207",
+              "quoted": [
+                "They are a fairly small gang, and not very well armed.",
+                "Hepburn Heights is now completely under Diablos' control."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: They are poorly armed: in Grand Theft Auto III they use only baseball bats on the street, and guns appear only in missions.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Diablos",
+              "revision": "2020207",
+              "quoted": [
+                "they are poorly armed and use only baseball bats (guns in missions only)."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Members come in two kinds: a red bandana, light blue jeans and a dark blue jacket, or a blue bandana, a dark blue jacket and olive cargo pants.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Diablos",
+              "revision": "2020207",
+              "quoted": [
+                "There are two variants of Diablos - one with a red bandana, light blue jeans, and a dark blue jacket, and another one with a blue bandana, a dark blue jacket, and olive cargo pants."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Their gang car is the Diablo Stallion, in every game they appear in. The Uptown Yardies are their arch rivals.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Diablos",
+              "revision": "2020207",
+              "quoted": [
+                "They drive Diablo Stallions in all of the games they are featured in."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
+              "revision": "2020213",
+              "quoted": [
+                "They are arch rivals of the Uptown Yardies."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3501,
+      "name": "Triad gang",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Liberty_City_Triads_(3D_Universe)",
+      "main_revision": "2082371",
+      "lines": [
+        {
+          "line": "Summary: A Chinese criminal gang that controls the Chinatown and Callahan Point areas of Portland.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
+              "revision": "2020213",
+              "quoted": [
+                "The Triads are a Chinese criminal organization that arrived in the city in 1997, with help from the Sicilian Mafia. They control the Chinatown and the Callahan Point areas of Portland"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The page gives no weak point; members carry baseball bats or pistols.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Liberty_City_Triads_(3D_Universe)",
+              "revision": "2082371",
+              "quoted": [
+                "They carry baseball bats or pistols."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Blue boiler suits and black bandannas.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Liberty_City_Triads_(3D_Universe)",
+              "revision": "2082371",
+              "quoted": [
+                "Triad members wear blue boiler suits and black bandannas."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They are enemies of the Leone Family and have a fierce rivalry with it.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
+              "revision": "2020213",
+              "quoted": [
+                "and are the enemies of the Leone Family.",
+                "They have a fierce rivalry with the Triads."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3502,
+      "name": "Leone Family (the Mafia)",
+      "kind": "enemy",
+      "main_page": "https://gta.fandom.com/wiki/Leone_Crime_Family",
+      "main_revision": "2083405",
+      "lines": [
+        {
+          "line": "Summary: The Italian mafia of Portland, based mostly in Saint Mark's with interests in the Red Light District, Chinatown and Trenton; the wiki calls it the most dangerous gang because of its shotguns.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
+              "revision": "2020213",
+              "quoted": [
+                "the Leone Crime Family is an Italian mafia",
+                "They are based in Portland, in particular Saint Mark's, but also have interests in the Red Light District, Chinatown and Trenton.",
+                "The most dangerous gang is the Leone Family, since they have powerful shotguns"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The page gives no weak point; what to respect is their powerful shotguns, which can easily blow up a normal car in two shots.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
+              "revision": "2020213",
+              "quoted": [
+                "since they have powerful shotguns, which can easily blow up a normal car in two shots."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Henchmen wear black suits, some with sunglasses, and their gang car, the Mafia Sentinel, is gray in Grand Theft Auto III.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Leone_Crime_Family",
+              "revision": "2083405",
+              "quoted": [
+                "In Grand Theft Auto III and Grand Theft Auto: Liberty City Stories, Leone henchmen wear black suits, some with sunglasses.",
+                "The official gang car of the Leone family is the Mafia Sentinel, a modified jet black (gray in GTA III) version of the Sentinel"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Do not drive within range of their shotguns: they make quick work of vehicles. They have a fierce rivalry with the Triads.",
+          "drawn_from": [
+            {
+              "page": "https://gta.fandom.com/wiki/Leone_Crime_Family",
+              "revision": "2083405",
+              "quoted": [
+                "capable of making quick work of vehicles if the player drives within range of their shotguns."
+              ]
+            },
+            {
+              "page": "https://gta.fandom.com/wiki/Gangs_in_GTA_III",
+              "revision": "2020213",
+              "quoted": [
+                "They have a fierce rivalry with the Triads."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

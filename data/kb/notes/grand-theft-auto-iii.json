@@ -1,0 +1,39 @@
+{
+  "games": [],
+  "aliases": [],
+  "sections": [
+    {
+      "section_id": 3500,
+      "game_id": 35,
+      "section_type": "enemy",
+      "name": "Diablos gang",
+      "card": "Summary: A small Latin American gang that holds the Hepburn Heights district of Portland and is not well armed.\nWeak points: They are poorly armed: in Grand Theft Auto III they use only baseball bats on the street, and guns appear only in missions.\nLooks like: Members come in two kinds: a red bandana, light blue jeans and a dark blue jacket, or a blue bandana, a dark blue jacket and olive cargo pants.\nTips: Their gang car is the Diablo Stallion, in every game they appear in. The Uptown Yardies are their arch rivals.",
+      "source_url": "https://gta.fandom.com/wiki/Diablos",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2020207",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3501,
+      "game_id": 35,
+      "section_type": "enemy",
+      "name": "Triad gang",
+      "card": "Summary: A Chinese criminal gang that controls the Chinatown and Callahan Point areas of Portland.\nWeak points: The page gives no weak point; members carry baseball bats or pistols.\nLooks like: Blue boiler suits and black bandannas.\nTips: They are enemies of the Leone Family and have a fierce rivalry with it.",
+      "source_url": "https://gta.fandom.com/wiki/Liberty_City_Triads_(3D_Universe)",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2082371",
+      "crawled_at": "2026-11-09"
+    },
+    {
+      "section_id": 3502,
+      "game_id": 35,
+      "section_type": "enemy",
+      "name": "Leone Family (the Mafia)",
+      "card": "Summary: The Italian mafia of Portland, based mostly in Saint Mark's with interests in the Red Light District, Chinatown and Trenton; the wiki calls it the most dangerous gang because of its shotguns.\nWeak points: The page gives no weak point; what to respect is their powerful shotguns, which can easily blow up a normal car in two shots.\nLooks like: Henchmen wear black suits, some with sunglasses, and their gang car, the Mafia Sentinel, is gray in Grand Theft Auto III.\nTips: Do not drive within range of their shotguns: they make quick work of vehicles. They have a fierce rivalry with the Triads.",
+      "source_url": "https://gta.fandom.com/wiki/Leone_Crime_Family",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "2083405",
+      "crawled_at": "2026-11-09"
+    }
+  ]
+}

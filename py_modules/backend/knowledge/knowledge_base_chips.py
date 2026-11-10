@@ -187,6 +187,32 @@ def _starting_out_game_name(name: str, game_title: str) -> str:
     return n
 
 
+# The four newer kinds that name a way of playing (plan 17): the label the chip leads with, and the
+# words in a note's own name that already say the same thing. "Survival mode" is a note named for
+# its mode, so "Survival tips for Survival mode?" would repeat itself -- "Tips for Survival mode?"
+# reads right for it, and "Survival tips for The Mall atrium?" for a note that only names a place.
+_MODE_CHIP_KINDS: dict[str, tuple[str, tuple[str, ...]]] = {
+    "versus": ("Versus", ("versus",)),
+    "coop": ("Co-op", ("co-op", "coop", "co op", "cooperative")),
+    "survival": ("Survival", ("survival",)),
+    "realism": ("Realism", ("realism",)),
+}
+_PLAYING_AS_PREFIX = "playing as "
+
+
+def _mode_kind_chip(section_type: str, name: str) -> str:
+    """The question for a note whose kind is a key of ``_MODE_CHIP_KINDS``."""
+    label, said_in_name = _MODE_CHIP_KINDS[section_type]
+    lowered = name.lower()
+    # The seven Left 4 Dead 2 role notes are named "Playing as the Smoker": say it as the
+    # question a player would ask, not "Versus tips for Playing as the Smoker?".
+    if section_type == "versus" and lowered.startswith(_PLAYING_AS_PREFIX):
+        return f"How do I play as {name[len(_PLAYING_AS_PREFIX):].strip()} in versus?"
+    if any(word in lowered for word in said_in_name):
+        return f"Tips for {name}?"
+    return f"{label} tips for {name}?"
+
+
 def _curtail_section_to_chip(section_type: str, name: str, *, game_title: str = "") -> str:
     st = (section_type or "").strip().lower()
     n = (name or "").strip()
@@ -206,6 +232,11 @@ def _curtail_section_to_chip(section_type: str, name: str, *, game_title: str = 
         return _truncate_chip_text(f"How do I deal with {n}?")
     if st == "item":
         return _truncate_chip_text(f"How do I use {n}?")
+    if st in _MODE_CHIP_KINDS:
+        return _truncate_chip_text(_mode_kind_chip(st, n))
+    # A callout card is a named spot or position, kept as brief as its page allows.
+    if st == "callout":
+        return _truncate_chip_text(f"What are the callouts for {n}?")
     return _truncate_chip_text(f"What should I know about {n}?")
 
 

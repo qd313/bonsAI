@@ -34,6 +34,39 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "5508642",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3603,
+      "game_id": 32,
+      "section_type": "boss",
+      "name": "Cloud N. Candy",
+      "card": "Summary: A vast, cheerful cloud made of yellow candy floss, fought at the end of the level Cloud Cruising.\nWeak points: You lick her instead of hitting her. Each lick takes a piece off, and she is beaten once she has been eaten up.\nLooks like: A very large floating cloud with a smile on it, yellow and fluffy like candy floss.\nTips: She leaps around and hurts you if you touch her, and the smaller she gets the faster and nimbler she is. Every lick gives some of your health back.",
+      "source_url": "https://www.mariowiki.com/Cloud_N._Candy",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5541021",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3604,
+      "game_id": 32,
+      "section_type": "boss",
+      "name": "Bone Dragon",
+      "card": "Summary: Skeleton dragons with several necks that stand in your way in the level Bone Dragon Pit and now and then spit a fireball.\nWeak points: Hit a head twice with eggs, or ground-pound it twice. On the three-headed kind, every head needs its own two hits.\nLooks like: A big dragon skeleton with more than one neck, like a hydra. The three-headed kind has a body as well.\nTips: Touching the body of a three-headed one does not hurt you, and beating it earns three melons.",
+      "source_url": "https://www.mariowiki.com/Bone_Dragon",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5508638",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 3605,
+      "game_id": 32,
+      "section_type": "boss",
+      "name": "Snorkel Snake",
+      "card": "Summary: A giant eel-like sea creature in one area of the level Lots O'Jelly Fish, which swims in circles around a Yoshi that comes near. The game treats it as a mini-boss, yet it cannot be beaten.\nLooks like: A large white creature with green spikes and a big fin as a tail, with a ball-shaped head that has red eyes and flippers and a long spout for a mouth.\nTips: You cannot throw eggs underwater, so it is practically invincible. What ends the area is defeating the Cheep Cheeps in its lair while you keep clear of it.\nTips: Its body is too short to close a full circle, so a Yoshi it has ringed can still swim out.",
+      "source_url": "https://www.mariowiki.com/Snorkel_Snake",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "5411249",
+      "crawled_at": "2026-11-10"
     }
   ]
 }

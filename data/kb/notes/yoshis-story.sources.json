@@ -219,6 +219,202 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 3603,
+      "name": "Cloud N. Candy",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Cloud_N._Candy",
+      "main_revision": "5541021",
+      "lines": [
+        {
+          "line": "Summary: A vast, cheerful cloud made of yellow candy floss, fought at the end of the level Cloud Cruising.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Cloud_N._Candy",
+              "revision": "5541021",
+              "quoted": [
+                "fought at the end of Cloud Cruising. She is a colossal, buoyant, smiling cloud composed of fluffy yellow cotton candy."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: You lick her instead of hitting her. Each lick takes a piece off, and she is beaten once she has been eaten up.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Cloud_N._Candy",
+              "revision": "5541021",
+              "quoted": [
+                "In order to defeat Cloud N. Candy, a Yoshi has to lick her, which will pick off pieces of her, causing her to shrink until she is fully eaten."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A very large floating cloud with a smile on it, yellow and fluffy like candy floss.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Cloud_N._Candy",
+              "revision": "5541021",
+              "quoted": [
+                "She is a colossal, buoyant, smiling cloud composed of fluffy yellow cotton candy."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: She leaps around and hurts you if you touch her, and the smaller she gets the faster and nimbler she is. Every lick gives some of your health back.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Cloud_N._Candy",
+              "revision": "5541021",
+              "quoted": [
+                "Cloud N. Candy jumps during the fight, damaging the player if they touch her, and as she gets smaller, she becomes quicker and more agile. Each time she is licked, the player will recover some health."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3604,
+      "name": "Bone Dragon",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Bone_Dragon",
+      "main_revision": "5508638",
+      "lines": [
+        {
+          "line": "Summary: Skeleton dragons with several necks that stand in your way in the level Bone Dragon Pit and now and then spit a fireball.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bone_Dragon",
+              "revision": "5508638",
+              "quoted": [
+                "Bone Dragons are large hydra-like dragon skeletons that Yoshis encounter in the Bone Dragon Pit in Yoshi's Story. Bone Dragons usually block a Yoshi's way",
+                "they can attack the Yoshis by occasionally spitting a fireball at them."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Story",
+              "revision": "5520653",
+              "quoted": [
+                "A three-headed skeletal dragon that shoots flames."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Hit a head twice with eggs, or ground-pound it twice. On the three-headed kind, every head needs its own two hits.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bone_Dragon",
+              "revision": "5508638",
+              "quoted": [
+                "to get past one, the Yoshi has to either throw eggs at its head or ground-pound it, with either method taking two hits to defeat the Bone Dragon.",
+                "Each of the heads takes two hits"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A big dragon skeleton with more than one neck, like a hydra. The three-headed kind has a body as well.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bone_Dragon",
+              "revision": "5508638",
+              "quoted": [
+                "large hydra-like dragon skeletons",
+                "a Yoshi encounters a three-headed Bone Dragon, complete with a body."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Touching the body of a three-headed one does not hurt you, and beating it earns three melons.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Bone_Dragon",
+              "revision": "5508638",
+              "quoted": [
+                "Touching the body does not hurt the Yoshi.",
+                "defeating the Bone Dragon earns the Yoshi three melons."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 3605,
+      "name": "Snorkel Snake",
+      "kind": "boss",
+      "main_page": "https://www.mariowiki.com/Snorkel_Snake",
+      "main_revision": "5411249",
+      "lines": [
+        {
+          "line": "Summary: A giant eel-like sea creature in one area of the level Lots O'Jelly Fish, which swims in circles around a Yoshi that comes near. The game treats it as a mini-boss, yet it cannot be beaten.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Snorkel_Snake",
+              "revision": "5411249",
+              "quoted": [
+                "it is found in a single area of the level Lots O'Jelly Fish, where it waits for a Yoshi to swim nearby. When it spots them, it swims in circles around them, attempting to enclose them within its spiky body"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Story",
+              "revision": "5520653",
+              "quoted": [
+                "Despite being treated as a mini-boss, it cannot be defeated"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A large white creature with green spikes and a big fin as a tail, with a ball-shaped head that has red eyes and flippers and a long spout for a mouth.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Snorkel_Snake",
+              "revision": "5411249",
+              "quoted": [
+                "It resembles a large white creature with green spikes and a large fin for a tail. Its head is a large ball with red eyes, flippers, and a spout for a mouth."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: You cannot throw eggs underwater, so it is practically invincible. What ends the area is defeating the Cheep Cheeps in its lair while you keep clear of it.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Snorkel_Snake",
+              "revision": "5411249",
+              "quoted": [
+                "since Yoshis cannot throw eggs underwater, the Snorkel Snake is effectively invincible."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Yoshi%27s_Story",
+              "revision": "5520653",
+              "quoted": [
+                "the Cheep Cheeps in its lair must be defeated while the Yoshi avoids it."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its body is too short to close a full circle, so a Yoshi it has ringed can still swim out.",
+          "drawn_from": [
+            {
+              "page": "https://www.mariowiki.com/Snorkel_Snake",
+              "revision": "5411249",
+              "quoted": [
+                "its body is not long enough for it to make a complete circle, allowing the Yoshis to escape if encircled."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

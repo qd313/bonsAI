@@ -224,11 +224,10 @@ class AskPictureGuessTests(unittest.TestCase):
         self.assertEqual(outcome.guess.search_words, "")
         self.assertEqual(seen["live_response"], "live-response")
 
-    def test_a_stop_left_over_from_the_last_question_does_not_stop_this_call(self):
+    def test_a_stop_already_pressed_when_the_call_starts_is_honoured_by_it(self):
         plugin = _Plugin(stop_pressed=True)
-        outcome, seen = _ask(plugin, lambda cancel: {"success": True, "visible_raw": f"Game: Hades {cancel()}"})
-        self.assertFalse(seen["flag_at_start"])
-        self.assertEqual((outcome.status, outcome.guess.game), ("written", "Hades False"))
+        outcome, _seen = _ask(plugin, lambda cancel: {"success": False, "cancelled": cancel(), "response": ""})
+        self.assertEqual(outcome.status, "stopped")
 
     def test_the_stop_hooks_are_put_back_when_the_call_ends(self):
         plugin = _Plugin()
@@ -284,6 +283,11 @@ class GuessPictureTests(unittest.TestCase):
         self.assertEqual(calls[0]["image_b64"], "QUJD")
         self.assertEqual(calls[0]["window_tokens"], 16384)
         self.assertEqual(outcome.status, "written")
+
+    def test_a_stop_left_over_from_the_last_question_is_lowered_so_it_does_not_stop_this_call(self):
+        plugin = _Plugin(stop_pressed=True)
+        self._run(plugin=plugin)
+        self.assertFalse(plugin._abort_current_ollama_chat.is_set())
 
     def test_a_pinned_model_is_the_one_asked(self):
         _outcome, calls = self._run(preferred_model="qwen3.5:4b")

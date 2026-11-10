@@ -194,12 +194,9 @@ def picture_guess_applies(*, ask_mode: str, has_picture: bool, library_on: bool,
 
 
 def _wire_stop(plugin: Any, url: str, model_name: str):
-    """Make a Stop pressed during this call close this call's connection, and say whether one was
-    pressed. Returns the check. The flag is lowered first: after a Stop it stays raised until the next
-    call lowers it, so a call that did not would stop itself at once (the trap chat_summary_service names)."""
-    abort_evt = getattr(plugin, "_abort_current_ollama_chat", None)
-    if isinstance(abort_evt, threading.Event):
-        abort_evt.clear()
+    """Make a Stop pressed during this call close this call's connection. Returns the three hooks the
+    stream wants: the check that says a Stop was pressed, and the two that tell the plugin which
+    connection is live (the Stop button closes it from there)."""
     plugin._chat_resp_ready_evt = threading.Event()
     plugin._active_ollama_chat_pc_ip = ollama_base_from_chat_url(url)
     plugin._active_ollama_chat_model = str(model_name)
@@ -259,6 +256,12 @@ async def guess_picture(plugin: Any, settings: dict, attachments: Any, pc_ip: st
     cleaned, _paths, refused = screen_ask_attachments(settings, attachments)
     if refused or not cleaned:
         return GuessOutcome("skipped", PictureGuess())
+    # The stop-flag trap (chat_summary_service names it): after a Stop the flag stays raised until the next
+    # call lowers it, and a call that did not would stop itself at once. Lowered here, before the picture is
+    # shrunk and the models are listed, so a Stop pressed during those still counts.
+    abort_evt = getattr(plugin, "_abort_current_ollama_chat", None)
+    if isinstance(abort_evt, threading.Event):
+        abort_evt.clear()
     preset = str(settings.get("screenshot_attachment_preset") or "low")
     images, warnings, errors = await asyncio.to_thread(prepare_attachment_images, cleaned, preset if preset in ("low", "mid", "max") else "low")
     if not images:

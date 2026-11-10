@@ -56,6 +56,50 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": "43104",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4005,
+      "game_id": 37,
+      "section_type": "boss",
+      "name": "Bellanoir (Raid Boss)",
+      "card": "Summary: A Dark-element Pal you cannot find in the world: you summon it as a Raid Boss at a Summoning Altar using Bellanoir's Slab. The page lists it at 294,000 health, and it is the one Raid Boss without an Ultra form.\nWeak points: It uses Dark attacks, so Dragon-element Pals are recommended. Astegon resists its attacks heavily and makes an effective tank; Orserk, Jormuntide and Jormuntide Ignis also resist them and hit hard; Chillet adds Dragon damage to your attacks while you ride it. The Assault Rifle and Rocket Launcher usually work best.\nLooks like: A tall, semi-humanoid figure whose body is a black dress that seems to flow, with red eye-like patterns around the waist, blue-purple flames where legs would be, and an antler-like growth on the left of its forehead.\nTips: Although it is only around level 30, the page says to wait until about level 40 to 45 before trying it. Its Nightmare Ray does heavy damage, so dodge it when you can. Fight it in the Raid Area instead of your base, because Raid Bosses can do mass damage to bases, and you have ten minutes before it despawns and the raid fails.",
+      "source_url": "https://palworld.wiki.gg/wiki/Raid_Bosses",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "45017",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4006,
+      "game_id": 37,
+      "section_type": "boss",
+      "name": "Summoning a Raid Boss (Summoning Altar and slabs)",
+      "card": "Summary: Raid Bosses are the game's toughest fights: powerful Pals you summon yourself at a Summoning Altar, with ten minutes to win. The page lists Bellanoir, Bellanoir Libero, Blazamut Ryu, Xenolord, Hartalis and Moon Lord, most of them also with a stronger Ultra or Master version listed at level 80.\nTips: The Summoning Altar is unlocked in the Ancient Technology tree at tier 33 for 3 points, costs 100 Stone and 20 Paldium Fragment, and can only be built inside a Pal Base. To summon a boss you also need its slab, which you assemble at most Handiwork crafting stations out of fragments from Treasure Chests or Expeditions. At the altar you choose between fighting at your own base and the dedicated Raid Area, and only one Raid Boss can be summoned at a time. If time runs out the boss despawns and the raid fails, though any damage it did to your structures stays; a win drops Ancient Civilization Parts, Ancient Civilization Cores, Training Crystals and a Pal Egg of the boss, except for the Moon Lord, which drops no egg.",
+      "source_url": "https://palworld.wiki.gg/wiki/Raid_Bosses",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "45017",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4007,
+      "game_id": 37,
+      "section_type": "enemy",
+      "name": "Predator Pals",
+      "card": "Summary: Extremely strong versions of ordinary Pals that always attack on sight and cannot be captured. A kill pays out 25 times the experience of the ordinary version, and they have a low chance to appear in place of a regular Pal anywhere on the map, though only certain species can be Predator Pals.\nLooks like: Bigger than a regular Pal, with red eyes that glow, wrapped in a red aura.\nTips: They use three Neutral-element skills: Predator Surge charges up and explodes around itself, Predator Blast fires a sustained beam, and Predator Mark fires three fast beams one after another. They do not show on the world map, but they give off a low humming sound when nearby. They leave Predator Cores and Giant Pal Souls behind, but no Ancient Civilization Parts or Ancient Technology Points. The page's current list includes Direhowl at level 10 and Gildra at level 46.",
+      "source_url": "https://palworld.wiki.gg/wiki/Predator_Pals",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "44501",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4008,
+      "game_id": 37,
+      "section_type": "enemy",
+      "name": "Bounty Targets",
+      "card": "Summary: Named human enemies that act as world bosses at fixed spots on the map, each marked with an icon. They attack on sight, sometimes with a partner Pal, and come back after a set time once beaten.\nLooks like: Human in shape, with glowing red eyes and a purple aura around them.\nTips: Higher-level targets are harder and call for stronger gear, higher-level Pals or more preparation. They always drop Successful Bounty Tokens, more from higher-level ones, which you hand to a Vigilante Bounty Officer for items, and the first defeat also gives Ancient Technology Points. A Bounty Intel Dealer can tell you more about the targets in an area. The list runs from Scoot at level 10 to Ram at level 59, and it marks which ones bring a partner Pal, such as Crash with a Direhowl.",
+      "source_url": "https://palworld.wiki.gg/wiki/Bounty_Targets",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": "39038",
+      "crawled_at": "2026-11-10"
     }
   ]
 }

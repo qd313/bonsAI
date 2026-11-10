@@ -56,6 +56,61 @@
       "source_license": "CC-BY-SA-2.5",
       "source_version": "3661515",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4105,
+      "game_id": 38,
+      "section_type": "enemy",
+      "name": "Dwarven spiders and Dwarven spheres",
+      "card": "Summary: Two of the smaller machines met in Dwarven ruins. Spiders are small, agile and very common, often busy mining or repairing things. Spheres were built for combat: they patrol rolled up in a ball until they meet a threat, then unfold into a half-humanoid shape. Either kind can wait inside pipe ports in the walls and ceilings and spring out as you pass.\nWeak points: Shock spells do normal damage to them, while frost and poison do nothing, and they turn aside a quarter of magic damage. Paralysis does not work on them. Unrelenting Force can knock a spider over; no other kind of automaton falls to it that way.\nLooks like: Spiders are small and arachnid-like, and the stronger ones have electrical effects crackling from their core. A sphere rolls as a ball and rises into a half-humanoid shape to fight.\nTips: Spiders above level 7 fire short-range electric jolts and burst with more shock damage a moment after they die, and any spider can leap at you to close the gap. Higher-level spheres shoot darts from arm-mounted crossbows and lunge so fast they are hard to sidestep. Both kinds drop scraps, Dwarven oil and soul gems.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3664370",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4106,
+      "game_id": 38,
+      "section_type": "boss",
+      "name": "Dwarven centurions",
+      "card": "Summary: The biggest and strongest machines left in the Dwarven ruins, and usually the ruin's boss. A centurion hits as hard as a dragon can and has a steam breath that works like a shout. Most stand still in a charging gantry until you come near, a lever is pulled or you shoot them from range, and some are used as traps.\nWeak points: Stand right against its legs: it cannot lower its arms or tilt its head to hit anything beneath its shoulders. Unrelenting Force staggers it, and used before it wakes it can leave the centurion inactive for a while so you can strike freely. Shock does normal damage, while frost and poison do not hurt it.\nLooks like: A huge, heavily armored warrior shape: one arm ends in a hammer and the other in a battleaxe on a spring.\nTips: A ranged attacker gets a few shots in while it is still powering up. Or get it stuck outside a small hallway, stay out of its steam range and shoot or cast at it from there. Its remains hold a guaranteed Centurion Dynamo Core, plus a grand soul gem, Dwarven scraps, arrows and a few gems.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3664370",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4107,
+      "game_id": 38,
+      "section_type": "enemy",
+      "name": "Chaurus",
+      "card": "Summary: Medium to large earwig-like creatures of swamps, marshes and deep caverns, often kept by Falmer for their chitin. They spit a strong acidic poison that quickly eats through most armor, they climb walls and they have lots of health.\nWeak points: They avoid crossing water, even knee-deep, so arrows and spells from range work well. Their poison lands less often when you fight them up close, so melee is a sound plan.\nLooks like: An earwig-like insect, medium to large in size.\nTips: A resist-poison effect only helps if you apply it before the poison damage begins, so carry cure poison potions and use one quickly after a hit. You can also coat your own weapon with poisons, especially ones that weaken, slow or paralyse the target. The poison keeps working after the chaurus is dead, so watch your health. You cannot eat chaurus, and the chitin they drop is used only in smithing.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Chaurus",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3661514",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4108,
+      "game_id": 38,
+      "section_type": "enemy",
+      "name": "Ice wraiths",
+      "card": "Summary: Hostile frost spirits that fly fast, circle you and hit with strong frost attacks. They live in cold, snowy places, often in Winterhold and the Pale, and are drawn to standing stones and Nordic ruins.\nWeak points: Fire hurts them extra, and Dawnbreaker and Turn Undead also work on them. Frost does nothing to them, since they resist it fully.\nLooks like: Wispy, flying spirits of frost.\nTips: A bite drains stamina, about 21 over three seconds. They also cast a weak wall of frost when attacking or closing in on you, but not while wandering or moving away. They ignore the terrain and can get stuck, or even die, on high ground. Even though they fly, they set off runes. They drop ice wraith teeth and essence.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Ice_Wraith",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3664113",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4109,
+      "game_id": 38,
+      "section_type": "enemy",
+      "name": "Flame, frost and storm atronachs",
+      "card": "Summary: Elemental Daedra that you often meet when an enemy spellcaster has called them up, though you can conjure them too. None of the three kinds can be paralysed, raised as undead servants or turned invisible.\nLooks like: Flame atronachs look like women made of fire in black metal armor. Frost atronachs are oversized humanoids of solid ice. Storm atronachs are the pieces of a shattered statue circling an unseen, electrified centre.\nTips: The flame atronach is the weakest of the three and very agile: it prefers to cast fire from a distance and tries to avoid melee. The frost atronach has a long reach and usually staggers you, but it has no ranged attack, and once you are in reach its chilling cloak slows you. Storm and flame atronachs hover, so they can walk on water. Unbound ones leave fire, frost or void salts. You cannot soul-trap atronachs you summoned yourself, but you can trap another caster's.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Daedra",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3486294",
+      "crawled_at": "2026-11-10"
     }
   ]
 }

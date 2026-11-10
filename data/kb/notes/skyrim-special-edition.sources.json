@@ -329,6 +329,332 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 4105,
+      "name": "Dwarven spiders and Dwarven spheres",
+      "kind": "enemy",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
+      "main_revision": "3664370",
+      "lines": [
+        {
+          "line": "Summary: Two of the smaller machines met in Dwarven ruins. Spiders are small, agile and very common, often busy mining or repairing things. Spheres were built for combat: they patrol rolled up in a ball until they meet a threat, then unfold into a half-humanoid shape. Either kind can wait inside pipe ports in the walls and ceilings and spring out as you pass.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
+              "revision": "3664370",
+              "quoted": [
+                "Dwarven spiders are small, arachnid-like automatons, and are very common in Dwarven ruins.",
+                "They tend to be found mining or working on building or maintaining various objects that are found in their ruins.",
+                "Dwarven spheres are constructs that, unlike Dwarven spiders, were intentionally designed for combat.",
+                "These spheres patrol Dwarven ruins in a condensed spherical form until they encounter a threat, at which point they rise into their semi-humanoid form and attack.",
+                "They can also be found hiding inside of pipe ports along the walls and ceilings of these ruins where they will lay in wait until they notice something walk by, after which they will leap out and attempt to engage whatever alerted them.",
+                "Like Dwarven spiders, they can hide in Dwarven pipes and exit through ports to attack unsuspecting foes that wander too close."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Shock spells do normal damage to them, while frost and poison do nothing, and they turn aside a quarter of magic damage. Paralysis does not work on them. Unrelenting Force can knock a spider over; no other kind of automaton falls to it that way.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
+              "revision": "3664370",
+              "quoted": [
+                "Furthermore, contrary to what one might expect from reading Ruins of Kemel-Ze, Dwarven automatons are not immune to shock, which actually causes them normal damage. Instead, they are immune to frost and poison damage, and boast a 25% resistance to magic.",
+                "Automatons are immune to paralysis, cannot be ragdolled (except for Dwarven spiders), cannot be reanimated, cannot be soul trapped, and have a permanent Waterbreathing ability.",
+                "They are also the only kind of automaton that can be ragdolled with Unrelenting Force."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Spiders are small and arachnid-like, and the stronger ones have electrical effects crackling from their core. A sphere rolls as a ball and rises into a half-humanoid shape to fight.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
+              "revision": "3664370",
+              "quoted": [
+                "Dwarven spiders are small, arachnid-like automatons, and are very common in Dwarven ruins.",
+                "These variants are easily distinguished from workers both by name and by the electrical special effects that emanate from their core.",
+                "These spheres patrol Dwarven ruins in a condensed spherical form until they encounter a threat, at which point they rise into their semi-humanoid form and attack."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Spiders above level 7 fire short-range electric jolts and burst with more shock damage a moment after they die, and any spider can leap at you to close the gap. Higher-level spheres shoot darts from arm-mounted crossbows and lunge so fast they are hard to sidestep. Both kinds drop scraps, Dwarven oil and soul gems.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
+              "revision": "3664370",
+              "quoted": [
+                "Variants of the dwarven spider higher than level 7 have access to short-range electric jolts that deal shock damage, and will explode a moment after being killed to deal further shock damage.",
+                "can also perform a leap attack that will both deal greater damage and close the distance between them and their target",
+                "Basic Dwarven spheres utilize only melee attacks, but higher level variants use their arm-mounted crossbows to shoot powerful darts at targets with whom they aren't engaged in melee combat.",
+                "their attacks involve a number of very speedy lunges that can close the distance between them and a target rapidly and are very hard to sidestep.",
+                "Dwarven spiders can be looted for Dwarven scraps, a very small chance at precious gems, metal ore, Dwarven Oil, and soul gems once killed.",
+                "When you kill a Dwarven sphere, you will find a number of items on its remains including Dwarven metal scraps, a small chance at precious gems, Dwarven Oil,"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4106,
+      "name": "Dwarven centurions",
+      "kind": "boss",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
+      "main_revision": "3664370",
+      "lines": [
+        {
+          "line": "Summary: The biggest and strongest machines left in the Dwarven ruins, and usually the ruin's boss. A centurion hits as hard as a dragon can and has a steam breath that works like a shout. Most stand still in a charging gantry until you come near, a lever is pulled or you shoot them from range, and some are used as traps.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
+              "revision": "3664370",
+              "quoted": [
+                "Dwarven centurions are the largest and strongest creations the Dwemer left behind after their disappearance.",
+                "formidable enemies that typically serve as the boss of their dungeon",
+                "In addition to their incredibly strong melee attacks which can be on par with those of a dragon, they can unleash a powerful steam breath attack that functions like a shout.",
+                "Usually centurions are not found simply wandering around a Dwarven ruin, but instead are found immobile within their charging gantries until they are activated either by proximity, lever, or being attacked at range.",
+                "In some cases these great constructs are even used as traps to prevent any would-be treasure hunter from plundering the ruins they protect."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Stand right against its legs: it cannot lower its arms or tilt its head to hit anything beneath its shoulders. Unrelenting Force staggers it, and used before it wakes it can leave the centurion inactive for a while so you can strike freely. Shock does normal damage, while frost and poison do not hurt it.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
+              "revision": "3664370",
+              "quoted": [
+                "If you are a low-level melee character, a surprisingly effective strategy is to get as close to them as possible, to the extent that your character is physically touching the centurion's legs. This is effective because centurions cannot lower their arms or tilt their heads to attack enemies beneath their shoulders, thus enabling you to encircle them and avoid their attacks with relative ease.",
+                "they are immune to nearly all shouts except for Unrelenting Force, which causes them to stagger, and Marked for Death.",
+                "Sometimes when using Unrelenting Force on a centurion before it has activated from within its gantry, it can be rendered inert and it will not activate immediately, enabling you to strike it at will for a time.",
+                "Furthermore, contrary to what one might expect from reading Ruins of Kemel-Ze, Dwarven automatons are not immune to shock, which actually causes them normal damage. Instead, they are immune to frost and poison damage, and boast a 25% resistance to magic."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A huge, heavily armored warrior shape: one arm ends in a hammer and the other in a battleaxe on a spring.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
+              "revision": "3664370",
+              "quoted": [
+                "Designed in the form of a massively armored warrior with a hammer on one arm and a spring-loaded battleaxe on the other"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A ranged attacker gets a few shots in while it is still powering up. Or get it stuck outside a small hallway, stay out of its steam range and shoot or cast at it from there. Its remains hold a guaranteed Centurion Dynamo Core, plus a grand soul gem, Dwarven scraps, arrows and a few gems.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Dwarven_Automatons",
+              "revision": "3664370",
+              "quoted": [
+                "This can oftentimes give ranged attackers a chance to get a few shots in with either their bow or a spell before the automaton can fully activate and engage in melee range.",
+                "Another great strategy is to get them stuck outside of a small hallway and get out of range of their steam attack, allowing you to hit it with ranged attacks.",
+                "When defeated, a centurion can be looted for a guaranteed Centurion Dynamo Core, a Grand Soul Gem, a number of Dwarven scraps, leveled arrows, and a few precious gems."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4107,
+      "name": "Chaurus",
+      "kind": "enemy",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Chaurus",
+      "main_revision": "3661514",
+      "lines": [
+        {
+          "line": "Summary: Medium to large earwig-like creatures of swamps, marshes and deep caverns, often kept by Falmer for their chitin. They spit a strong acidic poison that quickly eats through most armor, they climb walls and they have lots of health.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Chaurus",
+              "revision": "3661514",
+              "quoted": [
+                "Chaurus are medium-to-large, hostile, earwig-like creatures found in swamps, marshlands, and deep underground caverns.",
+                "They vigorously project a strong acidic poison (spell Chaurus Spit, 7 pts for 7 seconds), which can quickly eat through most armor.",
+                "They can cling to walls and have large amounts of health.",
+                "Chaurus are often found in the company of Falmer, who breed them for their chitin."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: They avoid crossing water, even knee-deep, so arrows and spells from range work well. Their poison lands less often when you fight them up close, so melee is a sound plan.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Chaurus",
+              "revision": "3661514",
+              "quoted": [
+                "Chaurus (of all varieties) don't like to cross water (knee- or swimming depths), making archery or magic from a distance viable combat options.",
+                "The suggestion to use melee force against them seems well-founded, because they are less likely to poison you with their melee attacks."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: An earwig-like insect, medium to large in size.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Chaurus",
+              "revision": "3661514",
+              "quoted": [
+                "Chaurus are medium-to-large, hostile, earwig-like creatures found in swamps, marshlands, and deep underground caverns."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A resist-poison effect only helps if you apply it before the poison damage begins, so carry cure poison potions and use one quickly after a hit. You can also coat your own weapon with poisons, especially ones that weaken, slow or paralyse the target. The poison keeps working after the chaurus is dead, so watch your health. You cannot eat chaurus, and the chitin they drop is used only in smithing.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Chaurus",
+              "revision": "3661514",
+              "quoted": [
+                "Defending yourself with the resist poison effect (only useful if applied before poison damage begins)",
+                "Addressing poison damage as quickly as possible after you are hit, with cure poison potions",
+                "Poisoning your own weapon repeatedly with toxins you can create, find, or buy, especially if you have powerful effects available such as Weakness to Poison, Slow, Paralysis, etc.",
+                "Poison continues to work over time. If you've been hit, watch your health level even after you have killed a chaurus, or your last laugh may be short-lived.",
+                "you cannot eat Chaurus yourself. The chitin they drop can only be used in smithing."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4108,
+      "name": "Ice wraiths",
+      "kind": "enemy",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Ice_Wraith",
+      "main_revision": "3664113",
+      "lines": [
+        {
+          "line": "Summary: Hostile frost spirits that fly fast, circle you and hit with strong frost attacks. They live in cold, snowy places, often in Winterhold and the Pale, and are drawn to standing stones and Nordic ruins.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Ice_Wraith",
+              "revision": "3664113",
+              "quoted": [
+                "Ice Wraiths are hostile frost spirits. They fly quickly, circling the player and attacking with strong frost-based attacks, and are generally found in snowy, cold areas.",
+                "They are attracted to standing stones and other Nordic ruins that dot the landscape of Skyrim",
+                "Ice Wraiths can often be encountered in the snowy regions of Winterhold and The Pale."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Fire hurts them extra, and Dawnbreaker and Turn Undead also work on them. Frost does nothing to them, since they resist it fully.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Ice_Wraith",
+              "revision": "3664113",
+              "quoted": [
+                "They are vulnerable to fire attacks, Dawnbreaker, and Turn Undead.",
+                "Weakness to Fire, 25 pts",
+                "Resist Frost, 100 pts"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Wispy, flying spirits of frost.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Ice_Wraith",
+              "revision": "3664113",
+              "quoted": [
+                "Due to their wispy nature, they have a tendency to ignore the landscape, and can become stuck or die on elevated areas.",
+                "Ice Wraiths are hostile frost spirits."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A bite drains stamina, about 21 over three seconds. They also cast a weak wall of frost when attacking or closing in on you, but not while wandering or moving away. They ignore the terrain and can get stuck, or even die, on high ground. Even though they fly, they set off runes. They drop ice wraith teeth and essence.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Ice_Wraith",
+              "revision": "3664113",
+              "quoted": [
+                "indicates stamina damage (7 per second, 21 damage overall) done over a 3-second period.",
+                "Ice Wraiths cast a low damage wall of frost-type spell when they attack, and sometimes when they are moving towards you, though never when they are roving the wilderness or moving away from you.",
+                "Due to their wispy nature, they have a tendency to ignore the landscape, and can become stuck or die on elevated areas.",
+                "Although Ice Wraiths \"fly\", they still set off runes, such as fire runes.",
+                "Ice Wraith Teeth",
+                "Ice Wraith Essence"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4109,
+      "name": "Flame, frost and storm atronachs",
+      "kind": "enemy",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Daedra",
+      "main_revision": "3486294",
+      "lines": [
+        {
+          "line": "Summary: Elemental Daedra that you often meet when an enemy spellcaster has called them up, though you can conjure them too. None of the three kinds can be paralysed, raised as undead servants or turned invisible.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Daedra",
+              "revision": "3486294",
+              "quoted": [
+                "Atronachs are intelligent elemental Daedra that can be called forth from Oblivion to serve a conjurer in battle against his or her foes.",
+                "Atronachs are all immune to paralysis, cannot be reanimated, and cannot be made invisible by any means.",
+                "Storm Atronachs can be encountered as a hostile enemy, usually summoned by an enemy caster, or you can summon them to aid in combat.",
+                "While typically found in the employ of enemy spellcasters, the player can also conjure them and use them in battle.",
+                "They can be summoned by you, and are occasionally used against you by enemy conjurers."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Flame atronachs look like women made of fire in black metal armor. Frost atronachs are oversized humanoids of solid ice. Storm atronachs are the pieces of a shattered statue circling an unseen, electrified centre.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Daedra",
+              "revision": "3486294",
+              "quoted": [
+                "Flame Atronachs appear as female humanoids engulfed in flame, wearing intricate, black, metal armor.",
+                "Frost Atronachs are Daedric constructs of solid ice that resemble oversized humanoids.",
+                "They appear as a shattered statue, the cluster of its remains quickly revolving around an unseen, electrified center of mass."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The flame atronach is the weakest of the three and very agile: it prefers to cast fire from a distance and tries to avoid melee. The frost atronach has a long reach and usually staggers you, but it has no ranged attack, and once you are in reach its chilling cloak slows you. Storm and flame atronachs hover, so they can walk on water. Unbound ones leave fire, frost or void salts. You cannot soul-trap atronachs you summoned yourself, but you can trap another caster's.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Daedra",
+              "revision": "3486294",
+              "quoted": [
+                "Though they are the weakest type of atronach encountered in Skyrim, they are extremely agile and reasonably proficient in close combat. Flame Atronachs prefer to use their flame-based magic at a distance and will actively try to avoid melee combat if at all possible.",
+                "They have a long melee reach and their attacks usually stagger targets, but they are entirely lacking in ranged options. Still, once caught in melee range of them, their chilling cloak slows targets and prevents easy escape.",
+                "Like Flame Atronachs, the Storm Atronach hovers and thus has the Waterwalking ability.",
+                "When slain, unbound Flame Atronachs will drop Fire Salts, an alchemical ingredient.",
+                "Upon death, unbound Frost Atronachs will have Frost Salts on their remains that can be looted.",
+                "In the destroyed remains of unbound Storm Atronachs, you will find Void Salts that you can take.",
+                "you can no longer soul trap your own summoned Atronachs or Dremora to fill soul gems, although you can soul trap the summoned beings of another caster."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

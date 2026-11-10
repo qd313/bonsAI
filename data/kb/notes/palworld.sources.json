@@ -646,6 +646,279 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 4009,
+      "name": "Skill Fruits",
+      "kind": "item",
+      "main_page": "https://palworld.wiki.gg/wiki/Skill_Fruits",
+      "main_revision": "46019",
+      "lines": [
+        {
+          "line": "Summary: A consumable that teaches a Pal one Active Skill: you pick the fruit in your inventory and choose a Pal from your party.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Skill_Fruits",
+              "revision": "46019",
+              "quoted": [
+                "Skill Fruits are consumable items",
+                "by selecting the Skill Fruit in the inventory, the Active Skill can be taught to any Pal in your party."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Each fruit is tied to one skill, and it does not have to match the Pal's element, so a Fire Pal may be taught a Water move. Any Skill Fruit works on any Pal, and on caught humans too. The page lists every fruit with its rarity from Uncommon to Epic and a power figure, for example Air Cannon as Uncommon with power 40 and Holy Burst as Epic with power 700.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Skill_Fruits",
+              "revision": "46019",
+              "quoted": [
+                "Each Skill Fruit is associated with an Active Skill",
+                "Skill Fruits do not have to be given to Pals with the same typing, so a Fire Pal can learn a Water move, or vice versa.",
+                "Any Skill Fruit can be used on any Pal, regardless of element, as well as caught Humans.",
+                "|| Skill Fruit: Air Cannon || Uncommon || 2 || 40",
+                "|| Skill Fruit: Holy Burst || Epic || 30 || 700"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Most hang from blue-tinted trees around the islands. Dungeon Treasure Chests can hold them as well, and very rarely one is found lying on the ground. The page lists Life Fruit, Power Fruit and Stout Fruit separately, as Legendary fruits that add 10 to a Pal's HP, Attack or Defense Potential.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Skill_Fruits",
+              "revision": "46019",
+              "quoted": [
+                "Skill Fruits are primarily located hanging from blue-tinted trees found around the Palpagos Islands.",
+                "They can also be looted from Treasure Chests in Dungeons, and very rarely may spawn on the ground.",
+                "|| Life Fruit || Legendary || +10 HP Potential",
+                "|| Power Fruit || Legendary || +10 Attack Potential",
+                "|| Stout Fruit || Legendary || +10 Defense Potential"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4010,
+      "name": "Pal Bounty Token",
+      "kind": "item",
+      "main_page": "https://palworld.wiki.gg/wiki/Pal_Bounty_Token",
+      "main_revision": "30652",
+      "lines": [
+        {
+          "line": "Summary: A key item you get the first time you defeat or catch an overworld Alpha Pal. Each one is tied to an element and gives your Pals a lasting boost to the Active Skills of its element.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Pal_Bounty_Token",
+              "revision": "30652",
+              "quoted": [
+                "A Pal Bounty Token is a type of key item obtained by defeating Alpha Pals.",
+                "Each Alpha Pal drops one Pal Bounty Token the first time it is defeated or captured.",
+                "Each Pal Bounty Token corresponds to a specific elemental damage type, such as Fire, Ice, or Dragon, and increases the damage dealt by a Pal's Active Skills of that element."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: The effect applies by itself and for good, with nothing to equip, and it only boosts Pal Active Skills, not your own weapons. Tokens come in small, medium and large grades worth +1%, +2% and +3%, and same-element tokens add together. Some high-level Alpha Pal areas stay closed until you hold certain tokens.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Pal_Bounty_Token",
+              "revision": "30652",
+              "quoted": [
+                "Once obtained, their effects are applied automatically and permanently, without needing to be equipped or activated.",
+                "These bonuses apply only to Pal Active Skills and do not affect player weapon damage.",
+                "|| Small || +1%",
+                "|| Medium || +2%",
+                "|| Large || +3%",
+                "Multiple Pal Bounty Tokens of the same element stack additively",
+                "Some Alpha Pal areas cannot be entered until the player has collected specific Pal Bounty Tokens."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It is not the Successful Bounty Token, which comes from human Bounty Targets and is traded to a Vigilante Officer. You find these in the Key Items part of your inventory, and they cannot be spent, traded, sold or consumed. The same Alpha gives no further token after the first time.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Pal_Bounty_Token",
+              "revision": "30652",
+              "quoted": [
+                "Pal Bounty Tokens are not a currency and are unrelated to Successful Bounty Tokens, which are earned from human fugitives and traded with Vigilante Officers.",
+                "Pal Bounty Tokens are stored in the Key Items section of the inventory.",
+                "Pal Bounty Tokens cannot be consumed, spent, traded, or sold.",
+                "After this initial acquisition, the same Alpha Pal will not grant additional Pal Bounty Tokens through normal defeats."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4011,
+      "name": "Lifmunk Effigy",
+      "kind": "item",
+      "main_page": "https://palworld.wiki.gg/wiki/Lifmunk_Effigy",
+      "main_revision": "41997",
+      "lines": [
+        {
+          "line": "Summary: A small green statue of a Pal, scattered across the islands, that you hand in at a Statue of Power to raise your capture power and make Pals easier to catch.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Lifmunk_Effigy",
+              "revision": "41997",
+              "quoted": [
+                "Lifmunk Effigies are small green statues of the Pal Lifmunk that are scattered throughout the Palpagos Islands.",
+                "They are used to increase the player's Capture Power at a Statue of Power, making it easier to capture Pals."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Put up a Statue of Power yourself, or come across one in the wild, interact with it, and spend effigies on the next capture power level. Each level costs more effigies than the one before. The bonus matters most late in the game, when many high-level Pals break out of most spheres, and the Statue of Power unlocks at level 9 for 2 technology points.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Lifmunk_Effigy",
+              "revision": "41997",
+              "quoted": [
+                "players must either build a Statue of Power or find one out in the wild.",
+                "with the number of effigies required increasing with every level.",
+                "This bonus comes in especially handy in the late game where many high-level Pals can easily break out of most Spheres."
+              ]
+            },
+            {
+              "page": "https://palworld.wiki.gg/wiki/Statue_of_Power",
+              "revision": "45125",
+              "quoted": [
+                "The amount of effigies needed for every enhancement increases with level.",
+                "Required Level 9 Point Cost 2"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They glow bright green, so you can see them from a long way off in the dark. Do not stop at the obvious places: look behind waterfalls, on rocky peaks and inside ruins, and sometimes one sits in a crevice at ground level.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Lifmunk_Effigy",
+              "revision": "41997",
+              "quoted": [
+                "Because of their bright green glow, Lifmunk Effigies are very easy to spot at night, even from far away.",
+                "Don't limit your search to obvious spots. Check behind waterfalls, atop rocky peaks, and even within ruins.",
+                "They can also be found on ground levels, sometimes hidden within crevices."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4012,
+      "name": "Ancient Civilization Parts",
+      "kind": "item",
+      "main_page": "https://palworld.wiki.gg/wiki/Ancient_Civilization_Parts",
+      "main_revision": "36760",
+      "lines": [
+        {
+          "line": "Summary: A Rare crafting material that many Ancient Technology items and structures need, which merchants do not sell. It comes from Alpha and Lucky Pals and from certain Expeditions.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Ancient_Civilization_Parts",
+              "revision": "36760",
+              "quoted": [
+                "Ancient Civilization Parts are a material in Palworld.",
+                "Material Rare",
+                "Ancient Civilization Parts cannot be purchased from any merchants.",
+                "Ancient Civilization Parts are obtained by defeating, capturing, or butchering Alpha or Lucky Pals as well as completing certain Expeditions."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: It goes into many items and structures unlocked from Ancient Technology, into items made from Uncommon or higher Schematics, and into research at the Pal Labor Research Laboratory.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Ancient_Civilization_Parts",
+              "revision": "36760",
+              "quoted": [
+                "They are used to craft many items and structures that are unlocked from Ancient Technology, craft items from uncommon or higher tier Schematics, and perform research at the Pal Labor Research Laboratory."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its drops are listed at 100 percent, for example 4 to 6 from Anubis, 4 to 6 from Bastigor and 1 to 3 from Bellanoir. One part weighs 1 and sells for 100.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Ancient_Civilization_Parts",
+              "revision": "36760",
+              "quoted": [
+                "Anubis ×4–6 • 100%",
+                "Bastigor ×4–6 • 100%",
+                "Bellanoir ×1–3 • 100%",
+                "Weight 1 Sell Price 100"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4013,
+      "name": "Successful Bounty Token",
+      "kind": "item",
+      "main_page": "https://palworld.wiki.gg/wiki/Successful_Bounty_Token",
+      "main_revision": "43325",
+      "lines": [
+        {
+          "line": "Summary: A special currency you get from defeating Bounty Targets, with the tougher targets giving more tokens.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Successful_Bounty_Token",
+              "revision": "43325",
+              "quoted": [
+                "Successful Bounty Tokens are a special currency obtained by defeating Bounty Targets.",
+                "The stronger the bounty, the more Successful Bounty Tokens the player will obtain by defeating them."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Hand them to a Vigilante Bounty Officer to buy items such as Ancient Pal Manuscripts, High Grade Technical Manuals and Pal Reversers.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Successful_Bounty_Token",
+              "revision": "43325",
+              "quoted": [
+                "They can be traded in to a Vigilante Bounty Officer to purchase items like Ancient Pal Manuscripts, High Grade Technical Manuals, Pal Reversers, and more."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: No merchant sells them, so they only come from Bounty Targets. A target can be caught and still gives tokens, and butchering it gives them again, which doubles the yield. It is not the same as the Pal Bounty Token, which comes from Alpha Pals.",
+          "drawn_from": [
+            {
+              "page": "https://palworld.wiki.gg/wiki/Successful_Bounty_Token",
+              "revision": "43325",
+              "quoted": [
+                "Successful Bounty Token cannot be purchased from any merchants.",
+                "Bounty Targets can be captured and will drop their bounty tokens both after being caught and when they are butchered, effectively doubling their yield."
+              ]
+            },
+            {
+              "page": "https://palworld.wiki.gg/wiki/Pal_Bounty_Token",
+              "revision": "30652",
+              "quoted": [
+                "Pal Bounty Tokens are not a currency and are unrelated to Successful Bounty Tokens"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

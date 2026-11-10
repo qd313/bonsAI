@@ -479,14 +479,16 @@ def _question_without_typed_game_name(
 #
 # So when the first note is of such a kind, the question names neither the mode nor a side, and an
 # ordinary note whose whole title the question spells out (and that the first note's title repeats)
-# is already among the notes that will attach, that ordinary note goes first. The others keep their
-# order and nothing new comes in, so this is a preference and never a filter: a versus note still
-# attaches, and still leads when nothing else fits.
+# is anywhere in the ranked list, that ordinary note goes first. The others keep their order, so the
+# last of the notes that attach is the one that makes room: this is a preference and never a filter,
+# and a versus note still attaches, and still leads when nothing else fits.
 #
 # A small score penalty on those kinds was tried first and measured the same day: the size that put
 # "Tank" back in front (about 0.0012) and the size that pushed three labelled versus questions out of
-# their first three (about 0.0016) were that close, so it was dropped. This moves a note only when the
-# question spells out its title, and never changes which notes attach.
+# their first three (about 0.0016) were that close, so it was dropped. Looking only at the notes that
+# already attach was tried too: it fixed the question as asked while the game runs but not the same
+# question with the game's name typed after it, where "Tank" ranks fourth. Looking down the whole list
+# put three more right notes first over the Left 4 Dead 2 asks and lost none.
 _MODE_KINDS = frozenset({"versus", "callout", "survival", "realism"})
 _MODE_WORDS = frozenset({"versus", "vs", "survival", "realism", "callout", "callouts"})
 _MODE_PHRASES = ("playing as", "play as", "as the infected", "infected team", "infected side")
@@ -502,17 +504,14 @@ def _fold_plural(word: str) -> str:
     return word[:-1] if len(word) > 3 and word.endswith("s") else word
 
 
-def _lead_with_the_note_the_question_names(
-    cards: list[KnowledgeCard], question: str, *, window: int
-) -> list[KnowledgeCard]:
+def _lead_with_the_note_the_question_names(cards: list[KnowledgeCard], question: str) -> list[KnowledgeCard]:
     """``cards`` with the ordinary note the question names by title moved to the front, when the
-    first card is a game-mode note the question did not ask for. Only a card inside the first
-    ``window`` can move, so the set that attaches never changes."""
+    first card is a game-mode note the question did not ask for. Nothing else is reordered."""
     if not cards or cards[0].section_type not in _MODE_KINDS or _question_names_a_mode(question):
         return cards
     asked = {_fold_plural(w) for w in _name_tokens(question)}
     leader = {_fold_plural(w) for w in _name_tokens(cards[0].name)}
-    for index, card in enumerate(cards[:window]):
+    for index, card in enumerate(cards):
         title = {_fold_plural(w) for w in _name_tokens(card.name)}
         if card.section_type not in _MODE_KINDS and title and title <= asked & leader:
             return [card, *cards[:index], *cards[index + 1 :]]

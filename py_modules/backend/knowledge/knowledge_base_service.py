@@ -862,7 +862,7 @@ def _fuse_cards_by_rrf(
     # Plan 98 lane C: the person's thumbs-downs apply to the final order and only then does the
     # cut to ``top_k`` happen, so a card left out for three downs is replaced by the next one and
     # a card with one or two goes last among the ``top_k`` that would attach.
-    ordered = _lead_with_the_note_the_question_names([pool[i] for i in order], question, window=top_k)
+    ordered = _lead_with_the_note_the_question_names([pool[i] for i in order], question)
     return kb_demote_store.apply_demotes(ordered, top_k)[:top_k]
 
 

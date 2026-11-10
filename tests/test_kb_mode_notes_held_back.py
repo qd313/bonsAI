@@ -86,10 +86,15 @@ class HeldBackTests(unittest.TestCase):
     def test_a_note_the_question_does_not_name_by_its_title_does_not_take_the_lead(self):
         self.assertEqual(_fuse("how do i survive")[0], "Surviving the Tank")
 
-    def test_a_note_outside_the_notes_that_attach_never_comes_in(self):
-        # The ordinary note is fourth and only three attach: the order stays, nothing new comes in.
-        self.assertEqual(_fuse("how to beat tank", [SURVIVING, PLAYING_AS, BOOMER, TANK], top_k=3)[:2],
-                         ["Surviving the Tank", "Playing as the Tank"])
+    def test_the_note_the_question_names_comes_in_from_further_down_and_the_last_one_makes_room(self):
+        # The same question with the game's name typed after it ranks "Tank" fourth. It still leads.
+        names = [_card(1, "versus", "Surviving the Tank"), PLAYING_AS, BOOMER, TANK]
+        vectors = {1: [1.0, 0.0], 2: [0.97, 0.24], 4: [0.5, 0.86], 3: [0.95, 0.31]}
+        fused = _fuse_cards_by_rrf(names, QUERY_VECTOR, vectors, top_k=3, question="how to beat tank")
+        self.assertEqual([c.name for c in fused], ["Tank", "Surviving the Tank", "Playing as the Tank"])
+
+    def test_an_ordinary_note_the_question_does_not_name_never_takes_the_lead(self):
+        self.assertEqual(_fuse("how to beat the boss")[0], "Surviving the Tank")
 
     def test_a_game_with_no_mode_notes_is_untouched(self):
         plain = [_card(1, "boss", "Surviving the Tank"), PLAYING_AS, TANK, BOOMER]

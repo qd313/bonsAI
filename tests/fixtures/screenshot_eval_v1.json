@@ -1,0 +1,983 @@
+{
+ "about": "Labelled pictures for the next screenshot reading measurement (plan 103, lane P1). Same shape as screenshot_eval_v0.json (v0 stays), plus the fields below. 'file' is a name inside the workshop's screenshots/plan103-set folder (give it to the script with --root); each file is the picture shrunk the way the plugin's Low attachment setting does it (longest side 800, JPEG quality 62). 'source' is where the full-size original sits, under the workshop's screenshots folder. New fields: 'game_named_on_screen' (false when the picture never writes the game's name, so a right answer has to come from what the game looks like); 'place' and 'place_aliases' (an area name, empty when none is legible or certain); 'expect_section' (the name of the library note whose subject is on screen, empty when there is none; 'expect_section_also' lists notes that also fit) - the test in tests/test_screenshot_eval_v1_labels.py checks every one names a real note; 'in_library' (false when the library holds no notes for the game, and its app_id is then only the Deck's own id); 'confidence' (how sure the labeller is of each label: high, medium, low, or none when the label is empty). 'boss' is the boss or named enemy on screen, empty when none; a boss with confidence 'low' is a guess. Pictures were chosen from what the Deck held on 2026-11-09: game screens only, near-duplicates dropped, the performance overlay and Steam's 'Screenshot Taken' pop-up left in where they were.",
+ "version": 1,
+ "pictures": [
+  {
+   "id": "p1-drg-menu",
+   "file": "p1-drg-menu.jpg",
+   "source": "plan103-steam/2321470/20260712-001253.jpg",
+   "game": "Deep Rock Galactic: Survivor",
+   "game_aliases": [
+    "Deep Rock Galactic Survivor",
+    "DRG Survivor",
+    "DRG: Survivor"
+   ],
+   "game_named_on_screen": true,
+   "scene": "menu",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Main menu: Play, Upgrades, Gear, Milestones, Skins, Settings, Quit; the Heavy Duty expansion banner on the right; a hint line at the bottom."
+  },
+  {
+   "id": "p1-drg-splash",
+   "file": "p1-drg-splash.jpg",
+   "source": "plan103-steam/2321470/20261017-164532.jpg",
+   "game": "Deep Rock Galactic: Survivor",
+   "game_aliases": [
+    "Deep Rock Galactic Survivor",
+    "DRG Survivor",
+    "DRG: Survivor"
+   ],
+   "game_named_on_screen": false,
+   "scene": "title",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "medium",
+    "scene": "medium",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Start-up splash: a skull badge and 'Ghost Ship Publishing' on black. The picture never names the game; only the Deck's folder for the game says so."
+  },
+  {
+   "id": "p1-drg-levelup-1",
+   "file": "p1-drg-levelup-1.jpg",
+   "source": "plan103-steam/2321470/20261010020825_1.jpg",
+   "game": "Deep Rock Galactic: Survivor",
+   "game_aliases": [
+    "Deep Rock Galactic Survivor",
+    "DRG Survivor",
+    "DRG: Survivor"
+   ],
+   "game_named_on_screen": false,
+   "scene": "other",
+   "scene_words": [
+    "level up",
+    "upgrade",
+    "upgrades",
+    "choose",
+    "choice",
+    "cards"
+   ],
+   "place": "Elimination Sector 01",
+   "place_aliases": [
+    "Elimination Sector"
+   ],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "in_library": true,
+   "expect_section": "Upgrades and overclocks",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "high",
+    "boss": "none",
+    "expect_section": "high"
+   },
+   "note": "Level Up: three upgrade cards (Bigger Cogs, Mind Blowing, Fast Little Legs) and a Reroll All button, over a dark space background; the mission name 'Elimination Sector 01' top left."
+  },
+  {
+   "id": "p1-drg-levelup-2",
+   "file": "p1-drg-levelup-2.jpg",
+   "source": "plan103-steam/2321470/20261010173739_1.jpg",
+   "game": "Deep Rock Galactic: Survivor",
+   "game_aliases": [
+    "Deep Rock Galactic Survivor",
+    "DRG Survivor",
+    "DRG: Survivor"
+   ],
+   "game_named_on_screen": false,
+   "scene": "other",
+   "scene_words": [
+    "level up",
+    "upgrade",
+    "upgrades",
+    "choose",
+    "choice",
+    "cards"
+   ],
+   "place": "Elimination Sector 01",
+   "place_aliases": [
+    "Elimination Sector"
+   ],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "in_library": true,
+   "expect_section": "Upgrades and overclocks",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "high",
+    "boss": "none",
+    "expect_section": "high"
+   },
+   "note": "Level Up with three NEW WEAPON cards (Arc-Tek Cryo Guard, Warthog Auto 210, Voltaic Shock Fence)."
+  },
+  {
+   "id": "p1-demolition-man-tutorial-1",
+   "file": "p1-demolition-man-tutorial-1.jpg",
+   "source": "plan103-steam/9499488/20260517025801_1.jpg",
+   "game": "Demolition Man",
+   "game_aliases": [
+    "Demolition Man (video game)"
+   ],
+   "game_named_on_screen": false,
+   "scene": "other",
+   "scene_words": [
+    "tutorial",
+    "instruction",
+    "instructions",
+    "controls",
+    "how to play",
+    "training"
+   ],
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "9499488",
+   "app_name": "Demolition Man",
+   "in_library": false,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "medium",
+    "scene": "medium",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "A how-to-play card on a dark blue panel: 'Stand and shoot', with a small gunman sprite below. The picture never names the game; the name comes from the shortcut's name on the Deck."
+  },
+  {
+   "id": "p1-demolition-man-tutorial-2",
+   "file": "p1-demolition-man-tutorial-2.jpg",
+   "source": "plan103-steam/9499488/20260517025807_1.jpg",
+   "game": "Demolition Man",
+   "game_aliases": [
+    "Demolition Man (video game)"
+   ],
+   "game_named_on_screen": false,
+   "scene": "other",
+   "scene_words": [
+    "tutorial",
+    "instruction",
+    "instructions",
+    "controls",
+    "how to play",
+    "training"
+   ],
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "9499488",
+   "app_name": "Demolition Man",
+   "in_library": false,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "medium",
+    "scene": "medium",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Another how-to-play card: 'Brake and shoot', a sprite swinging on a zip line. Same panel as the first."
+  },
+  {
+   "id": "p1-botw-blood-moon",
+   "file": "p1-botw-blood-moon.jpg",
+   "source": "plan103-steam/8655087/20260323014735_1.jpg",
+   "game": "The Legend of Zelda: Breath of the Wild",
+   "game_aliases": [
+    "Breath of the Wild",
+    "Zelda: Breath of the Wild",
+    "The Legend of Zelda Breath of the Wild",
+    "BotW"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "8655087",
+   "app_name": "The Legend of Zelda: Breath of the Wild",
+   "in_library": false,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "medium",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Link standing in tall grass at night in the rain, a red moon rising over the hills, three hearts top left. No enemy visible."
+  },
+  {
+   "id": "p1-botw-glide-night",
+   "file": "p1-botw-glide-night.jpg",
+   "source": "plan103-steam/8655087/20260323014814_1.jpg",
+   "game": "The Legend of Zelda: Breath of the Wild",
+   "game_aliases": [
+    "Breath of the Wild",
+    "Zelda: Breath of the Wild",
+    "The Legend of Zelda Breath of the Wild",
+    "BotW"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "8655087",
+   "app_name": "The Legend of Zelda: Breath of the Wild",
+   "in_library": false,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "medium",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Link gliding over a dark rainy grassland with his paraglider open; a green stamina ring beside him. No enemy visible."
+  },
+  {
+   "id": "p1-botw-glide-red",
+   "file": "p1-botw-glide-red.jpg",
+   "source": "plan103-steam/8655087/20260323014833_1.jpg",
+   "game": "The Legend of Zelda: Breath of the Wild",
+   "game_aliases": [
+    "Breath of the Wild",
+    "Zelda: Breath of the Wild",
+    "The Legend of Zelda Breath of the Wild",
+    "BotW"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "8655087",
+   "app_name": "The Legend of Zelda: Breath of the Wild",
+   "in_library": false,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "medium",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Link gliding over a rocky, red-tinted plain with ash in the air. No enemy visible."
+  },
+  {
+   "id": "p1-oot-canyon-gate",
+   "file": "p1-oot-canyon-gate.jpg",
+   "source": "plan103-steam/10090193/20260224050945_1.jpg",
+   "game": "The Legend of Zelda: Ocarina of Time",
+   "game_aliases": [
+    "Ocarina of Time",
+    "Zelda: Ocarina of Time",
+    "Zelda Ocarina of Time",
+    "OoT",
+    "The Legend of Zelda Ocarina of Time"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "10090193",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Young Link with his small-fairy companion, walking down a sandy canyon path toward a barred gate in a stone wall; four hearts, rupee count and the usual button icons."
+  },
+  {
+   "id": "p1-oot-port-menu",
+   "file": "p1-oot-port-menu.jpg",
+   "source": "plan103-steam/10090193/20260224051435_1.jpg",
+   "game": "The Legend of Zelda: Ocarina of Time",
+   "game_aliases": [
+    "Ocarina of Time",
+    "Zelda: Ocarina of Time",
+    "Zelda Ocarina of Time",
+    "OoT",
+    "The Legend of Zelda Ocarina of Time"
+   ],
+   "game_named_on_screen": false,
+   "scene": "menu",
+   "scene_words": [
+    "menu",
+    "settings",
+    "options",
+    "graphics"
+   ],
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "10090193",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "The PC port's own settings menu (Graphics Options, Enhancements, Randomizer, Network, Dev Tools tabs) drawn over the same canyon scene."
+  },
+  {
+   "id": "p1-oot-navi-prompt",
+   "file": "p1-oot-navi-prompt.jpg",
+   "source": "plan103-steam/10090193/20260224093357_1.jpg",
+   "game": "The Legend of Zelda: Ocarina of Time",
+   "game_aliases": [
+    "Ocarina of Time",
+    "Zelda: Ocarina of Time",
+    "Zelda Ocarina of Time",
+    "OoT",
+    "The Legend of Zelda Ocarina of Time"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "10090193",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Young Link in a sandy canyon, a 'Navi' prompt over the top button; four hearts. A 4K original, shrunk like the rest."
+  },
+  {
+   "id": "p1-oot-grass-corner",
+   "file": "p1-oot-grass-corner.jpg",
+   "source": "plan103-steam/10090193/20260301163655_1.jpg",
+   "game": "The Legend of Zelda: Ocarina of Time",
+   "game_aliases": [
+    "Ocarina of Time",
+    "Zelda: Ocarina of Time",
+    "Zelda Ocarina of Time",
+    "OoT",
+    "The Legend of Zelda Ocarina of Time"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "10090193",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Young Link with sword and shield running along a grassy path between a dirt bank and a stone wall; a green magic bar under five hearts."
+  },
+  {
+   "id": "p1-oot-sages-chamber",
+   "file": "p1-oot-sages-chamber.jpg",
+   "source": "plan103-steam/10090193/20260311015556_1.jpg",
+   "game": "The Legend of Zelda: Ocarina of Time",
+   "game_aliases": [
+    "Ocarina of Time",
+    "Zelda: Ocarina of Time",
+    "Zelda Ocarina of Time",
+    "OoT",
+    "The Legend of Zelda Ocarina of Time"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "Chamber of the Sages",
+   "place_aliases": [
+    "the Sages' chamber",
+    "Chamber of Sages"
+   ],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "10090193",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "medium",
+    "place": "medium",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "A cut-scene: Link and his fairy on a glowing blue water floor with coloured medallion pads, a white-haired figure in a robe on a gold pad, and the line 'But there is still hope...'. Letterboxed."
+  },
+  {
+   "id": "p1-oot-wolfos-pair",
+   "file": "p1-oot-wolfos-pair.jpg",
+   "source": "plan103-steam/10090193/20260318004354_1.jpg",
+   "game": "The Legend of Zelda: Ocarina of Time",
+   "game_aliases": [
+    "Ocarina of Time",
+    "Zelda: Ocarina of Time",
+    "Zelda Ocarina of Time",
+    "OoT",
+    "The Legend of Zelda Ocarina of Time"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "Sacred Forest Meadow",
+   "place_aliases": [
+    "the Forest Meadow",
+    "Sacred Meadow"
+   ],
+   "boss": "Wolfos",
+   "boss_aliases": [
+    "Wolfos pair",
+    "two Wolfos",
+    "wolf",
+    "wolves",
+    "wolf enemies"
+   ],
+   "running_game_known": true,
+   "app_id": "10090193",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "medium",
+    "boss": "low",
+    "expect_section": "none"
+   },
+   "note": "Link, shield out, facing two grey standing wolf-like enemies with glowing yellow eyes and long red tongues, in front of a stone doorway between big tree roots. Taken seconds before the 'Sacred Forest Meadow' title card."
+  },
+  {
+   "id": "p1-oot-forest-meadow-title",
+   "file": "p1-oot-forest-meadow-title.jpg",
+   "source": "plan103-steam/10090193/20260318004402_1.jpg",
+   "game": "The Legend of Zelda: Ocarina of Time",
+   "game_aliases": [
+    "Ocarina of Time",
+    "Zelda: Ocarina of Time",
+    "Zelda Ocarina of Time",
+    "OoT",
+    "The Legend of Zelda Ocarina of Time"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "Sacred Forest Meadow",
+   "place_aliases": [
+    "the Forest Meadow",
+    "Sacred Meadow"
+   ],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "10090193",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "high",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Link with his fairy in a vine-covered stone corridor; the place's name 'Sacred Forest Meadow' is written across the middle of the screen."
+  },
+  {
+   "id": "p1-oot-file-select",
+   "file": "p1-oot-file-select.jpg",
+   "source": "plan103-steam/10090193/20260323015949_1.jpg",
+   "game": "The Legend of Zelda: Ocarina of Time",
+   "game_aliases": [
+    "Ocarina of Time",
+    "Zelda: Ocarina of Time",
+    "Zelda Ocarina of Time",
+    "OoT",
+    "The Legend of Zelda Ocarina of Time"
+   ],
+   "game_named_on_screen": false,
+   "scene": "menu",
+   "scene_words": [
+    "menu",
+    "file select",
+    "select a file",
+    "save file",
+    "title"
+   ],
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "10090193",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "File-select screen: 'Please select a file.' with File 1, File 2, File 3, Copy, Erase, Options over a pink and purple sunset sky."
+  },
+  {
+   "id": "p1-oot-pause-items",
+   "file": "p1-oot-pause-items.jpg",
+   "source": "plan103-steam/10090193/20260413171830_1.jpg",
+   "game": "The Legend of Zelda: Ocarina of Time",
+   "game_aliases": [
+    "Ocarina of Time",
+    "Zelda: Ocarina of Time",
+    "Zelda Ocarina of Time",
+    "OoT",
+    "The Legend of Zelda Ocarina of Time"
+   ],
+   "game_named_on_screen": false,
+   "scene": "pause",
+   "place": "Water Temple",
+   "place_aliases": [
+    "the Water Temple"
+   ],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "10090193",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "in_library": true,
+   "expect_section": "Bottles",
+   "expect_section_also": [
+    "Hookshot and Longshot"
+   ],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "low",
+    "boss": "none",
+    "expect_section": "medium"
+   },
+   "note": "Pause screen, 'Select Item': deku nuts, bombs, a bow, a fire-coloured gem, an ocarina, a hookshot, a hammer, and in the bottom row three empty bottles and a chicken; 'to Equip' hint at the bottom. The words 'Water Temple' show faintly through the menu."
+  },
+  {
+   "id": "p1-oot-water-temple-title",
+   "file": "p1-oot-water-temple-title.jpg",
+   "source": "plan103-steam/10090193/20260413171838_1.jpg",
+   "game": "The Legend of Zelda: Ocarina of Time",
+   "game_aliases": [
+    "Ocarina of Time",
+    "Zelda: Ocarina of Time",
+    "Zelda Ocarina of Time",
+    "OoT",
+    "The Legend of Zelda Ocarina of Time"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "Water Temple",
+   "place_aliases": [
+    "the Water Temple"
+   ],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "10090193",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "high",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Link in a blue tunic walking along a stone floor under dark green water; 'Water Temple' written across the middle; the dungeon map at the right."
+  },
+  {
+   "id": "p1-oot-water-temple-door",
+   "file": "p1-oot-water-temple-door.jpg",
+   "source": "plan103-steam/10090193/20260413172957_1.jpg",
+   "game": "The Legend of Zelda: Ocarina of Time",
+   "game_aliases": [
+    "Ocarina of Time",
+    "Zelda: Ocarina of Time",
+    "Zelda Ocarina of Time",
+    "OoT",
+    "The Legend of Zelda Ocarina of Time"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "Water Temple",
+   "place_aliases": [
+    "the Water Temple"
+   ],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "10090193",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "medium",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Link seen from behind, wading toward a big carved door in a flooded stone hall. The place's name is not on this picture; it is the same visit as the one with the title card."
+  },
+  {
+   "id": "p1-gta3-army-truck",
+   "file": "p1-gta3-army-truck.jpg",
+   "source": "plan103-steam/1546970/20260428201910_1.jpg",
+   "game": "Grand Theft Auto III - The Definitive Edition",
+   "game_aliases": [
+    "Grand Theft Auto III",
+    "GTA III",
+    "GTA 3",
+    "Grand Theft Auto 3",
+    "GTA III Definitive Edition"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "1546970",
+   "app_name": "Grand Theft Auto III - The Definitive Edition",
+   "in_library": true,
+   "expect_section": "Vehicles in Grand Theft Auto III - The Definitive Edition",
+   "expect_section_also": [
+    "The wanted level in Grand Theft Auto III - The Definitive Edition"
+   ],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "medium"
+   },
+   "note": "A parked olive-green military-style truck beside a grassy bank and a fence; the HUD shows a clock, cash, health, a six-star wanted meter with no star lit and a small machine pistol; the radar is bottom left."
+  },
+  {
+   "id": "p1-aperture-desk-job",
+   "file": "p1-aperture-desk-job.jpg",
+   "source": "plan103-steam/1902490/20231206200136_1.jpg",
+   "game": "Aperture Desk Job",
+   "game_aliases": [
+    "Portal: Aperture Desk Job"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "1902490",
+   "app_name": "Aperture Desk Job",
+   "in_library": false,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "low",
+    "scene": "medium",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "A first-person desk with a toilet strapped with guns and rocket tubes between shelving, a blue robot eye hanging at the right, the subtitle 'Are you taking the picture?' and Steam's 'Hold STEAM + R1 Take Screenshot' hint at the top."
+  },
+  {
+   "id": "p1-black-mesa-menu",
+   "file": "p1-black-mesa-menu.jpg",
+   "source": "plan98/black-mesa-menu.png",
+   "game": "Black Mesa",
+   "game_aliases": [
+    "Black Mesa: Source"
+   ],
+   "game_named_on_screen": true,
+   "scene": "menu",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "362890",
+   "app_name": "Black Mesa",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Main menu with a quicksave card for 'Office Complex' and the Campaign / Multiplayer / Achievements tabs."
+  },
+  {
+   "id": "p1-brotato-menu",
+   "file": "p1-brotato-menu.jpg",
+   "source": "plan98/brotato-menu.png",
+   "game": "Brotato",
+   "game_aliases": [],
+   "game_named_on_screen": true,
+   "scene": "menu",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "1942280",
+   "app_name": "Brotato",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Main menu (Start, Profile, Codex, Options, Quit; DLC and Mods on the right) under the big logo."
+  },
+  {
+   "id": "p1-hades-menu",
+   "file": "p1-hades-menu.jpg",
+   "source": "plan98/hades-menu.png",
+   "game": "Hades",
+   "game_aliases": [],
+   "game_named_on_screen": true,
+   "scene": "menu",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "1145360",
+   "app_name": "Hades",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Main menu (Play, Options, Quit) over the title art."
+  },
+  {
+   "id": "p1-half-life-2-menu",
+   "file": "p1-half-life-2-menu.jpg",
+   "source": "plan98/half-life-2-menu.png",
+   "game": "Half-Life 2",
+   "game_aliases": [
+    "Half Life 2",
+    "HL2"
+   ],
+   "game_named_on_screen": true,
+   "scene": "menu",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "220",
+   "app_name": "Half-Life 2",
+   "in_library": true,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Main menu list (Half-Life 2, Episode One, Episode Two, Extras, Options, Quit) over a riverside."
+  },
+  {
+   "id": "p1-god-of-war-menu",
+   "file": "p1-god-of-war-menu.jpg",
+   "source": "plan98/god-of-war-menu.png",
+   "game": "God of War",
+   "game_aliases": [
+    "God of War (2018)"
+   ],
+   "game_named_on_screen": true,
+   "scene": "menu",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "1593500",
+   "app_name": "God of War",
+   "in_library": false,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Main menu (Continue, Load Game, New Game, Settings, Quit Game) over a misty forest."
+  },
+  {
+   "id": "p1-god-of-war-play",
+   "file": "p1-god-of-war-play.jpg",
+   "source": "plan98/god-of-war-play.png",
+   "game": "God of War",
+   "game_aliases": [
+    "God of War (2018)"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "1593500",
+   "app_name": "God of War",
+   "in_library": false,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "A bearded axe-wielder and a boy with a bow in front of a large carved stone shrine; no enemy on screen."
+  },
+  {
+   "id": "p1-god-of-war-pause",
+   "file": "p1-god-of-war-pause.jpg",
+   "source": "plan98/god-of-war-pause.png",
+   "game": "God of War",
+   "game_aliases": [
+    "God of War (2018)"
+   ],
+   "game_named_on_screen": false,
+   "scene": "pause",
+   "place": "",
+   "place_aliases": [],
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "1593500",
+   "app_name": "God of War",
+   "in_library": false,
+   "expect_section": "",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "none",
+    "expect_section": "none"
+   },
+   "note": "Pause menu: Weapons, Armor, Skills, Map, Goals, Codex, Resources tabs and the Leviathan Axe."
+  }
+ ]
+}

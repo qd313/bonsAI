@@ -606,6 +606,37 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
   ended (about 19:15 EST): 28 percent of the five-hour window (resets 20:00 EST), 9 percent of the week, Fable's own
   counter 16 percent (5, 6 and 11 when planning began). The four plan files are uncommitted; the quick check passes
   with them in place. Waiting for "go".
+- **2026-11-09, 19:30 EST: "go".** The maintainer took every default on calls 9 to 21. A fresh chat runs the session
+  (Fable; the app started it at extra-high, not high: a chat cannot change its own effort).
+- **19:32 to 20:05 EST, the first acts.** The four plan files committed (`d97c88cf`, the tip every helper is cut
+  from). Usage at go: 33 percent of the five-hour window (resets 20:00 EST), 10 percent of the week, Fable's own
+  counter 18 percent. The Deck: reachable, armed, nobody holding it. D140 is free. The full check on the tip passed
+  (322 seconds). The library built once on this PC (583 notes, 38 games) and copied into the measuring helpers'
+  copies. The Deck's game screenshots copied to the workshop (`screenshots/plan103-steam/`, 134 pictures in six
+  folders). Thirteen copies cut, each confirmed at the tip, and all of wave A started between 19:50 and 20:05: K0,
+  T1, T2, T3, T4, X0, R1, R2, V1, G1, S1, B1, B2, the Deck driver for block D0a, and the second opinion's consult 1.
+  Each brief's key lines were checked against the code first; one correction went out with a brief (T1's list of
+  readers was short by two test files).
+
+**Questions for the maintainer (the safest choice is taken meanwhile):**
+
+1. **The Deck holds far fewer play pictures than the plan hoped.** Steam's screenshot folders on the Deck cover six
+   games, and 77 of the 134 pictures are from one game (Deep Rock Galactic: Survivor). Another 281 pictures sit in
+   Steam's own folder (pictures taken on Home or in menus, which may show more than a game). *Taken meanwhile:* only
+   the six game folders were copied; Steam's own folder was left on the Deck. The picture set (lane P1) will be built
+   from what there is, plus the eleven older pictures, and will say plainly if it falls short of "ten games, ten
+   bosses". If you have play pictures elsewhere, or want Steam's own folder looked through, say so.
+
+**Pick-up list (kept current; a new chat can carry on from here):**
+
+- Tip: `d97c88cf`. Nothing landed yet. Every landing waits for K0.
+- In flight, each in `.claude/worktrees/p103-<lane>` on branch `refactor/p103-<lane>`: k0, t1, t2, t3, t4, x0, r1,
+  r2, v1, g1, s1, b1, b2. The Deck driver is on block D0a (runbook `assets/103-runbook-block-D0.md`; its handover
+  will be `workshop:planning/assets/103-handover-D0a.md`).
+- Waiting on T2's landing: X0's answer-test half and R2's measurement. Waiting on the session's pick: R1's variant.
+- Next three acts: land K0, then T2, T3, T1, T4 as they report (read each change first; `scripts/land_lane.sh
+  refactor/p103-<lane> d97c88cf .scratch/p103`, one at a time); start block D0b with a fresh driver when D0a hands
+  over; forward the second opinion's corrections to the running helpers.
 
 ## 13. Report
 

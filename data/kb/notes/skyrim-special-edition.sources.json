@@ -655,6 +655,231 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 4110,
+      "name": "Forsworn Briarhearts",
+      "kind": "enemy",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Forsworn",
+      "main_revision": "3650235",
+      "lines": [
+        {
+          "line": "Summary: The boss-level fighters among the Forsworn, a clan of Reachmen, found wherever the Forsworn set up camp. A Briarheart can be a dangerous spellcaster or a melee fighter, and every one is a man.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Forsworn",
+              "revision": "3650235",
+              "quoted": [
+                "The Forsworn, also known as the Madmen of the Reach, are a clan of Reachmen formed following the Markarth Incident in 4E 176.",
+                "Boss-level Forsworn will always be at the highest possible level, and will be identified as \"Forsworn Briarhearts.\"",
+                "Forsworn Briarhearts can be found wherever the Forsworn have set up camp.",
+                "Briarhearts can be deadly spellcasters and melee fighters, and appear at all levels.",
+                "All Briarhearts are male."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: A Briarheart dies at once if you steal its Briar Heart with pickpocketing.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Forsworn",
+              "revision": "3650235",
+              "quoted": [
+                "If the Briar Heart is stolen from them with the Pickpocketing skill, they will immediately die."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A man with a Briar Heart crudely set into his chest cavity and held there by leather straps, in a special kind of Forsworn armor with boots and a headdress.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Forsworn",
+              "revision": "3650235",
+              "quoted": [
+                "Briarhearts are named for the Briar Heart crudely embedded into their chest cavity and held in with leather straps.",
+                "All Briarhearts wear a special variety of Forsworn Armor (which cannot be equipped by the player) in addition to Forsworn Boots and a Forsworn Headdress."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They often have unusually keen hearing, so sneaking up on one is hard. They count as living, not undead: undead-only spells do not affect them, silver weapons gain no bonus against them, and Detect Life finds them where Detect Dead does not.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Forsworn",
+              "revision": "3650235",
+              "quoted": [
+                "They are also frequently scripted to have unusually keen hearing, making it difficult to sneak up on them.",
+                "Despite the ritual they have undergone to gain their power, Briarhearts are not classed as undead NPCs and are immune to undead-specific spells and receive no additional damage from silver weapons.",
+                "They are also detected with Detect Life rather than Detect Dead."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4111,
+      "name": "Soul gems",
+      "kind": "item",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Soul_Gems",
+      "main_revision": "3576308",
+      "lines": [
+        {
+          "line": "Summary: Items that capture the souls of creatures as they die. Once filled, a gem is the power source for enchanting and for recharging enchanted weapons. There are five standard sizes, the smallest petty and the largest grand, and some special kinds.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Soul_Gems",
+              "revision": "3576308",
+              "quoted": [
+                "Soul Gems are miscellaneous items which can be used to trap the souls of dying creatures or NPCs.",
+                "The resulting filled soul gems can be used as power sources for enchanted items, either when initially creating custom enchanted items or when recharging depleted enchanted weapons.",
+                "Soul gems come in a range of capacities, from petty to grand, plus some special soul gems."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: A filled gem powers a custom enchantment when you make it, or recharges a weapon whose enchantment has run down. The standard sizes are petty, lesser, common, greater and grand. Only a black soul gem, or the Black Star, can hold a human soul, and that soul always counts as grand.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Soul_Gems",
+              "revision": "3576308",
+              "quoted": [
+                "The resulting filled soul gems can be used as power sources for enchanted items, either when initially creating custom enchanted items or when recharging depleted enchanted weapons.",
+                "Petty Soul Gem",
+                "Lesser Soul Gem",
+                "Common Soul Gem",
+                "Greater Soul Gem",
+                "Grand Soul Gem",
+                "Only black soul gems and the Black Star can be used to capture the soul of an NPC, which is always a grand soul in size."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If the game says your gem is too small although an empty grand gem is in your pack, you are after a human soul, which needs a black soul gem. Geode veins in Blackreach, and only there, yield two or three empty gems of any size each; grand and black ones start to appear at level 16 and are at their most likely from level 31. Azura's Star holds as much as a grand gem and is not used up.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Soul_Gems",
+              "revision": "3576308",
+              "quoted": [
+                "If you get a message saying that you do not have a large enough soul gem to capture a soul, even though you have an empty grand soul gem in your inventory, it means that you are trying to catch a humanoid soul, which requires a black soul gem.",
+                "Empty soul gems can also be harvested from geode veins, which are only found in Blackreach. Each mined vein will result in 2–3 soul gems of any size, including black soul gems. The mined soul gems are level-dependent; at level 16 grand and black soul gems will start to appear, and the probability for either will max out at level 31.",
+                "Azura's Star",
+                "Equivalent to a grand soul gem, but does not break on use."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4112,
+      "name": "Ebony",
+      "kind": "item",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Ebony",
+      "main_revision": "3656349",
+      "lines": [
+        {
+          "line": "Summary: A very hard, long-lasting black material, like glass in look, that smiths turn into fine armor and weapons.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Ebony",
+              "revision": "3656349",
+              "quoted": [
+                "Ebony is a hard, durable, black glass-like substance that can be forged into high-quality armor and weapons."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Working ebony needs a Smithing skill of 80. Smelting two ebony ores gives one ingot, and mining a vein gives three ores. Armor from it is a level 32 heavy set and weapons are level 36, both built from leather strips and ebony ingots.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Ebony",
+              "revision": "3656349",
+              "quoted": [
+                "Three ebony ores are obtained by mining ebony ore veins.",
+                "One ebony ingot is obtained by smelting two ebony ores.",
+                "Ebony Smithing requires 80 Smithing skill.",
+                "Ebony armor is level 32 heavy armor, made from ebony ingots and leather strips.",
+                "Ebony weapons are level 36 weapons, made from ebony ingots and leather strips."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Narzulbur, an Orc stronghold, holds the main ebony mine, called Gloombound Mine. Falmer loot can hold ore from level 13, blacksmiths may stock ingots from level 27, general goods merchants may too from level 14, and an ingot now and then turns up in a chest.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Ebony",
+              "revision": "3656349",
+              "quoted": [
+                "The primary ebony mine in Skyrim is Gloombound Mine, in the Orc Stronghold of Narzulbur",
+                "Ebony ingots may be sold by blacksmiths starting at level 27 and general goods merchants starting at level 14.",
+                "Ebony ore may be randomly found in Falmer loot starting at level 13.",
+                "Ebony ingots can rarely be found in chests."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4113,
+      "name": "Dragonscale and Dragonplate armor",
+      "kind": "item",
+      "main_page": "https://en.uesp.net/wiki/Skyrim:Dragon_Items",
+      "main_revision": "3640964",
+      "lines": [
+        {
+          "line": "Summary: Top-tier armor made from dragon parts: light Dragonscale and heavy Dragonplate. Dragonscale is the top light armor of the base game, and among heavy sets only Daedric armor beats Dragonplate.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Dragon_Items",
+              "revision": "3640964",
+              "quoted": [
+                "Dragon armors come in light Dragonscale Armor and heavy Dragonplate Armor varieties.",
+                "Dragonscale is the best light armor in the base game.",
+                "beaten only by the elusive Daedric Armor."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: To craft either set you need a perk called Dragon Armor, the last one in the Smithing tree. It asks for Smithing 100 and every perk in one of the two armor branches, light or heavy, and it also doubles how much you improve dragon items. Both sets are level 38 and show up at vendors at that level, and their stats are below Daedric armor.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Dragon_Items",
+              "revision": "3640964",
+              "quoted": [
+                "Dragon items can be crafted if the player has the Dragon Armor perk, the final perk in Smithing's perk tree. Unlocking it requires a Smithing skill of 100 and all of the perks in either the light armor or heavy armor branches of the perk tree.",
+                "The Dragon Armor perk also allows you to improve Dragon items twice as much.",
+                "Dragonscale and Dragonplate Armor is Level 38 armor and will appear in vendors at that level. It is weaker than Daedric Armor in terms of stats."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Each Dragonscale piece is tempered with one dragon scale. In Dragonplate, the cuirass and shield take one dragon bone, and the other three pieces (boots, gauntlets, helmet) are tempered with one dragon scale. A shrine of Akatosh on a hill northeast of Rorikstead holds one dragon scale that comes back every 10 in-game days, so you can start crafting before dragons appear in the world.",
+          "drawn_from": [
+            {
+              "page": "https://en.uesp.net/wiki/Skyrim:Dragon_Items",
+              "revision": "3640964",
+              "quoted": [
+                "All items can be tempered using 1 sample of Dragon Scales, and having the Dragon Armor perk doubles the quality improvement.",
+                "1 Dragon Bone is needed to temper the cuirass and shield.",
+                "1 Dragon Scales is needed to temper the boots, gauntlets and helmet.",
+                "It is possible to craft Dragon items before ever starting Dragon Rising (when Dragons begin to appear in the game world)",
+                "Northeast from the village of Rorikstead is a hill with a shrine of Akatosh, and a single Dragon Scale; this scale respawns every 10 in-game days."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

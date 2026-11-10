@@ -111,6 +111,50 @@
       "source_license": "CC-BY-SA-2.5",
       "source_version": "3486294",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4110,
+      "game_id": 38,
+      "section_type": "enemy",
+      "name": "Forsworn Briarhearts",
+      "card": "Summary: The boss-level fighters among the Forsworn, a clan of Reachmen, found wherever the Forsworn set up camp. A Briarheart can be a dangerous spellcaster or a melee fighter, and every one is a man.\nWeak points: A Briarheart dies at once if you steal its Briar Heart with pickpocketing.\nLooks like: A man with a Briar Heart crudely set into his chest cavity and held there by leather straps, in a special kind of Forsworn armor with boots and a headdress.\nTips: They often have unusually keen hearing, so sneaking up on one is hard. They count as living, not undead: undead-only spells do not affect them, silver weapons gain no bonus against them, and Detect Life finds them where Detect Dead does not.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Forsworn",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3650235",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4111,
+      "game_id": 38,
+      "section_type": "item",
+      "name": "Soul gems",
+      "card": "Summary: Items that capture the souls of creatures as they die. Once filled, a gem is the power source for enchanting and for recharging enchanted weapons. There are five standard sizes, the smallest petty and the largest grand, and some special kinds.\nUses: A filled gem powers a custom enchantment when you make it, or recharges a weapon whose enchantment has run down. The standard sizes are petty, lesser, common, greater and grand. Only a black soul gem, or the Black Star, can hold a human soul, and that soul always counts as grand.\nTips: If the game says your gem is too small although an empty grand gem is in your pack, you are after a human soul, which needs a black soul gem. Geode veins in Blackreach, and only there, yield two or three empty gems of any size each; grand and black ones start to appear at level 16 and are at their most likely from level 31. Azura's Star holds as much as a grand gem and is not used up.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Soul_Gems",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3576308",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4112,
+      "game_id": 38,
+      "section_type": "item",
+      "name": "Ebony",
+      "card": "Summary: A very hard, long-lasting black material, like glass in look, that smiths turn into fine armor and weapons.\nUses: Working ebony needs a Smithing skill of 80. Smelting two ebony ores gives one ingot, and mining a vein gives three ores. Armor from it is a level 32 heavy set and weapons are level 36, both built from leather strips and ebony ingots.\nTips: Narzulbur, an Orc stronghold, holds the main ebony mine, called Gloombound Mine. Falmer loot can hold ore from level 13, blacksmiths may stock ingots from level 27, general goods merchants may too from level 14, and an ingot now and then turns up in a chest.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Ebony",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3656349",
+      "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4113,
+      "game_id": 38,
+      "section_type": "item",
+      "name": "Dragonscale and Dragonplate armor",
+      "card": "Summary: Top-tier armor made from dragon parts: light Dragonscale and heavy Dragonplate. Dragonscale is the top light armor of the base game, and among heavy sets only Daedric armor beats Dragonplate.\nUses: To craft either set you need a perk called Dragon Armor, the last one in the Smithing tree. It asks for Smithing 100 and every perk in one of the two armor branches, light or heavy, and it also doubles how much you improve dragon items. Both sets are level 38 and show up at vendors at that level, and their stats are below Daedric armor.\nTips: Each Dragonscale piece is tempered with one dragon scale. In Dragonplate, the cuirass and shield take one dragon bone, and the other three pieces (boots, gauntlets, helmet) are tempered with one dragon scale. A shrine of Akatosh on a hill northeast of Rorikstead holds one dragon scale that comes back every 10 in-game days, so you can start crafting before dragons appear in the world.",
+      "source_url": "https://en.uesp.net/wiki/Skyrim:Dragon_Items",
+      "source_license": "CC-BY-SA-2.5",
+      "source_version": "3640964",
+      "crawled_at": "2026-11-10"
     }
   ]
 }

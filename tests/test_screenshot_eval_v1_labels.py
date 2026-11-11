@@ -87,6 +87,33 @@ class PictureLabelsV1Tests(unittest.TestCase):
                 self.assertEqual(row["expect_section"], "", row["id"])
         self.assertGreaterEqual(len({r["game"] for r in self.rows}), 10)
 
+    def test_the_maintainers_boss_pictures_are_in_the_set_and_say_where_they_came_from(self):
+        added = [r for r in self.rows if r["id"].startswith("p5-")]
+        self.assertEqual(len(added), 23)
+        self.assertEqual(len(self.rows), 52)
+        self.assertEqual(sum(1 for r in self.rows if r["expect_section"]), 27)
+        self.assertEqual(sum(1 for r in added if r["boss"] and r["id"] != "p5-fallout-4-radscorpion-1"), 22)
+        self.assertGreaterEqual(len({r["game"] for r in added}), 9)
+        for row in added:
+            origin = row["origin"]
+            self.assertIn("https://", origin, row["id"])
+            self.assertIn("approved by the maintainer on 2026-11-11", origin, row["id"])
+            self.assertIn("private test only", origin, row["id"])
+            self.assertTrue(row["source"].startswith("plan103-boss-candidates/originals/"), row["id"])
+            self.assertTrue(row["expect_section"] and row["boss"], f"{row['id']} must carry a boss and a note")
+        # The older pictures were taken on the Deck, so they have nothing to say about a web page.
+        self.assertFalse(any("origin" in r for r in self.rows if not r["id"].startswith("p5-")))
+
+    def test_the_first_deathclaw_is_not_called_an_alpha_and_its_boss_label_is_a_step_lower(self):
+        by_id = {r["id"]: r for r in self.rows}
+        first, brawl = by_id["p5-fallout-4-deathclaw-1"], by_id["p5-fallout-4-deathclaw-3"]
+        self.assertEqual(first["boss"], "Deathclaw")
+        self.assertEqual(first["confidence"]["boss"], "medium")
+        self.assertEqual(brawl["confidence"]["boss"], "high")
+        self.assertFalse(any("alpha" in a.lower() for a in first["boss_aliases"]))
+        self.assertIn("alpha", first["note"].lower())
+        self.assertIn("no variant is claimed", first["note"])
+
 
 if __name__ == "__main__":
     unittest.main()

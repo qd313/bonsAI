@@ -1,5 +1,5 @@
 {
- "about": "Labelled pictures for the next screenshot reading measurement (plan 103, lane P1). Same shape as screenshot_eval_v0.json (v0 stays), plus the fields below. 'file' is a name inside the workshop's screenshots/plan103-set folder (give it to the script with --root); each file is the picture shrunk the way the plugin's Low attachment setting does it (longest side 800, JPEG quality 62). 'source' is where the full-size original sits, under the workshop's screenshots folder. New fields: 'game_named_on_screen' (false when the picture never writes the game's name, so a right answer has to come from what the game looks like); 'place' and 'place_aliases' (an area name, empty when none is legible or certain); 'expect_section' (the name of the library note whose subject is on screen, empty when there is none; 'expect_section_also' lists notes that also fit) - the test in tests/test_screenshot_eval_v1_labels.py checks every one names a real note; 'in_library' (false when the library holds no notes for the game, and its app_id is then only the Deck's own id); 'confidence' (how sure the labeller is of each label: high, medium, low, or none when the label is empty). 'boss' is the boss or named enemy on screen, empty when none; a boss with confidence 'low' is a guess. Pictures were chosen from what the Deck held on 2026-11-09: game screens only, near-duplicates dropped, the performance overlay and Steam's 'Screenshot Taken' pop-up left in where they were.",
+ "about": "Labelled pictures for the next screenshot reading measurement (plan 103, lane P1). Same shape as screenshot_eval_v0.json (v0 stays), plus the fields below. 'file' is a name inside the workshop's screenshots/plan103-set folder (give it to the script with --root); each file is the picture shrunk the way the plugin's Low attachment setting does it (longest side 800, JPEG quality 62). 'source' is where the full-size original sits, under the workshop's screenshots folder. New fields: 'game_named_on_screen' (false when the picture never writes the game's name, so a right answer has to come from what the game looks like); 'place' and 'place_aliases' (an area name, empty when none is legible or certain); 'expect_section' (the name of the library note whose subject is on screen, empty when there is none; 'expect_section_also' lists notes that also fit) - the test in tests/test_screenshot_eval_v1_labels.py checks every one names a real note; 'in_library' (false when the library holds no notes for the game, and its app_id is then only the Deck's own id); 'confidence' (how sure the labeller is of each label: high, medium, low, or none when the label is empty). 'boss' is the boss or named enemy on screen, empty when none; a boss with confidence 'low' is a guess. Pictures were chosen from what the Deck held on 2026-11-09: game screens only, near-duplicates dropped, the performance overlay and Steam's 'Screenshot Taken' pop-up left in where they were. Added on 2026-11-11 (plan 103 follow-up, lane P5): 23 public boss and enemy pictures, files named p5-<game>-<boss>-<n>, whose 'source' is under the workshop's screenshots/plan103-boss-candidates/originals folder and whose 'file' is the 800-pixel copy made there (longest side 800, JPEG quality 62). The new field 'origin' says where such a picture came from (its page address) and that it is a public screenshot approved by the maintainer on 2026-11-11, for a private test only; the older pictures were taken on the Deck and have no 'origin'. For the emulated games (Paper Mario, Pikmin 2, Super Mario 64, Yoshi's Story) the Deck's own shortcut number is not known here, so 'app_id' carries the library's own name for the game and the notes search finds the game by its name. A 'place' is only set where the library note or the wiki page names it and the picture agrees; a picture's 'note' says where the labeller was not sure.",
  "version": 1,
  "pictures": [
   {
@@ -978,6 +978,809 @@
     "expect_section": "none"
    },
    "note": "Pause menu: Weapons, Armor, Skills, Map, Goals, Codex, Resources tabs and the Leviathan Axe."
+  },
+  {
+   "id": "p5-drg-dreadnought",
+   "file": "p5-drg-dreadnought.jpg",
+   "source": "plan103-boss-candidates/originals/deep-rock-galactic-survivor--glyphid-dreadnought--1.jpg",
+   "origin": "Public screenshot, from https://store.steampowered.com/app/2321470/Deep_Rock_Galactic_Survivor/ ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Deep Rock Galactic: Survivor",
+   "game_aliases": [
+    "Deep Rock Galactic Survivor",
+    "DRG Survivor",
+    "DRG: Survivor"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Glyphid Dreadnought",
+   "boss_aliases": [
+    "Dreadnought",
+    "the Dreadnought"
+   ],
+   "running_game_known": true,
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "in_library": true,
+   "expect_section": "Glyphid Dreadnought",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "Top-down view: the miner stands near the middle with a huge red armoured Glyphid Dreadnought at the lower right and a swarm of small bugs all around; damage numbers, the health bar and the weapon row are on screen. The hint at the top reads 'Kill the Dreadnought', so the boss's name is written on the picture."
+  },
+  {
+   "id": "p5-doom-eternal-doom-hunter",
+   "file": "p5-doom-eternal-doom-hunter.jpg",
+   "source": "plan103-boss-candidates/originals/doom-eternal--doom-hunter--1.jpg",
+   "origin": "Public screenshot, from https://doom.fandom.com/wiki/File:DOOM_Eternal_Doom_Hunter.jpg ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "DOOM Eternal",
+   "game_aliases": [
+    "Doom Eternal",
+    "DOOM (2020)"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Doom Hunter",
+   "boss_aliases": [
+    "Doomhunter"
+   ],
+   "running_game_known": true,
+   "app_id": "782330",
+   "app_name": "DOOM Eternal",
+   "in_library": true,
+   "expect_section": "Doom Hunter",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "First-person: a giant horned demon in a cyan energy shield, riding a sled, fills the middle of the frame while the player's gun fires sparks at it; the HUD is hidden. No text on the picture."
+  },
+  {
+   "id": "p5-fallout-4-deathclaw-1",
+   "file": "p5-fallout-4-deathclaw-1.jpg",
+   "source": "plan103-boss-candidates/originals/fallout-4--deathclaw--1.jpg",
+   "origin": "Public screenshot, from https://fallout.fandom.com/wiki/File:FO4_Deathclaw_Default.jpg ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Fallout 4",
+   "game_aliases": [
+    "Fallout4",
+    "FO4"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Deathclaw",
+   "boss_aliases": [
+    "Death Claw",
+    "Deathclaws"
+   ],
+   "running_game_known": true,
+   "app_id": "377160",
+   "app_name": "Fallout 4",
+   "in_library": true,
+   "expect_section": "Deathclaw",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "medium",
+    "place": "none",
+    "boss": "medium",
+    "expect_section": "high"
+   },
+   "note": "A grey-black horned Deathclaw crouches and faces the camera in a dry roadside field with a fence and wrecked buildings behind it; no HUD and it is posed, not fighting. The maintainer wondered whether this is an alpha Deathclaw; the picture does not settle it, so the label is plain 'Deathclaw' with the boss confidence one step lower (medium) and no variant is claimed."
+  },
+  {
+   "id": "p5-fallout-4-deathclaw-3",
+   "file": "p5-fallout-4-deathclaw-3.jpg",
+   "source": "plan103-boss-candidates/originals/fallout-4--deathclaw--3.jpg",
+   "origin": "Public screenshot, from https://fallout.fandom.com/wiki/File:FO4_Deathclaw_Brawl.jpg ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Fallout 4",
+   "game_aliases": [
+    "Fallout4",
+    "FO4"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Deathclaw",
+   "boss_aliases": [
+    "Death Claw",
+    "Deathclaws"
+   ],
+   "running_game_known": true,
+   "app_id": "377160",
+   "app_name": "Fallout 4",
+   "in_library": true,
+   "expect_section": "Deathclaw",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "medium",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "Two Deathclaws lunge at each other in a dry field in front of ruined city buildings; no HUD. It is a duel between two of them, not a fight with the player."
+  },
+  {
+   "id": "p5-fallout-4-radscorpion-1",
+   "file": "p5-fallout-4-radscorpion-1.jpg",
+   "source": "plan103-boss-candidates/originals/fallout-4--radscorpion--1.jpg",
+   "origin": "Public screenshot, from https://fallout.fandom.com/wiki/File:FO4_Radscorpion.jpg ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Fallout 4",
+   "game_aliases": [
+    "Fallout4",
+    "FO4"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Radscorpion",
+   "boss_aliases": [
+    "Radscorpions",
+    "Rad scorpion"
+   ],
+   "running_game_known": true,
+   "app_id": "377160",
+   "app_name": "Fallout 4",
+   "in_library": true,
+   "expect_section": "Radscorpions",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "medium",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "A big dark armoured scorpion with red-orange claws and tail walks across a dry hillside, seen from the side; no HUD and it is only walking. An enemy, not a boss."
+  },
+  {
+   "id": "p5-hk-false-knight-1",
+   "file": "p5-hk-false-knight-1.jpg",
+   "source": "plan103-boss-candidates/originals/hollow-knight--false-knight--1.jpg",
+   "origin": "Public screenshot, from https://store.steampowered.com/app/367520/Hollow_Knight/ ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Hollow Knight",
+   "game_aliases": [
+    "Hollow Knight Voidheart Edition"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "Forgotten Crossroads",
+   "place_aliases": [
+    "the Forgotten Crossroads"
+   ],
+   "boss": "False Knight",
+   "boss_aliases": [
+    "armoured maggot",
+    "armored maggot"
+   ],
+   "running_game_known": true,
+   "app_id": "367520",
+   "app_name": "Hollow Knight",
+   "in_library": true,
+   "expect_section": "False Knight",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "high",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "Side view: the False Knight, a huge pale armoured beetle, swings its mace at the small player knight on the right, with orange-glowing bugs falling; the mask and soul gauge and the Geo count (49) show at the top left."
+  },
+  {
+   "id": "p5-hk-false-knight-2",
+   "file": "p5-hk-false-knight-2.jpg",
+   "source": "plan103-boss-candidates/originals/hollow-knight--false-knight--2.png",
+   "origin": "Public screenshot, from https://hollowknight.fandom.com/wiki/File:Screenshot_HK_False_Knight_03.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Hollow Knight",
+   "game_aliases": [
+    "Hollow Knight Voidheart Edition"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "Forgotten Crossroads",
+   "place_aliases": [
+    "the Forgotten Crossroads"
+   ],
+   "boss": "False Knight",
+   "boss_aliases": [
+    "armoured maggot",
+    "armored maggot"
+   ],
+   "running_game_known": true,
+   "app_id": "367520",
+   "app_name": "Hollow Knight",
+   "in_library": true,
+   "expect_section": "False Knight",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "medium",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "Side view of the False Knight charging left in the same arena, the mace swung out behind it; orange sparks fly and the player is hidden; no HUD."
+  },
+  {
+   "id": "p5-hk-mantis-lords-3",
+   "file": "p5-hk-mantis-lords-3.jpg",
+   "source": "plan103-boss-candidates/originals/hollow-knight--mantis-lords--3.png",
+   "origin": "Public screenshot, from https://hollowknight.fandom.com/wiki/File:Screenshot_HK_Mantis_Lords_04.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Hollow Knight",
+   "game_aliases": [
+    "Hollow Knight Voidheart Edition"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Mantis Lords",
+   "boss_aliases": [
+    "Mantis Lord",
+    "Mantis Sisters"
+   ],
+   "running_game_known": true,
+   "app_id": "367520",
+   "app_name": "Hollow Knight",
+   "in_library": true,
+   "expect_section": "Mantis Lords",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "medium",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "Two Mantis Lords leap out of the cages at both sides with white slash rings, while the third sits on a throne in the middle, in a green-lit hall with spike pits; no HUD. The wiki page says this is the Godhome version of the fight, so the place is left empty (the library note puts the fight in the Mantis Village)."
+  },
+  {
+   "id": "p5-hk-soul-master-1",
+   "file": "p5-hk-soul-master-1.jpg",
+   "source": "plan103-boss-candidates/originals/hollow-knight--soul-master--1.png",
+   "origin": "Public screenshot, from https://hollowknight.fandom.com/wiki/File:Screenshot_HK_Soul_Master_04.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Hollow Knight",
+   "game_aliases": [
+    "Hollow Knight Voidheart Edition"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Soul Master",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "367520",
+   "app_name": "Hollow Knight",
+   "in_library": true,
+   "expect_section": "Soul Master",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "medium",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "The Soul Master floats in the middle in his red cloak with orange soul orbs around him above a pale arena floor; no HUD and no player on screen."
+  },
+  {
+   "id": "p5-hk-watcher-knights-3",
+   "file": "p5-hk-watcher-knights-3.jpg",
+   "source": "plan103-boss-candidates/originals/hollow-knight--watcher-knights--3.png",
+   "origin": "Public screenshot, from https://hollowknight.fandom.com/wiki/File:Screenshot_HK_Watcher_Knight_05.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Hollow Knight",
+   "game_aliases": [
+    "Hollow Knight Voidheart Edition"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "Watcher's Spire",
+   "place_aliases": [
+    "the Watcher's Spire",
+    "Watchers Spire"
+   ],
+   "boss": "Watcher Knights",
+   "boss_aliases": [
+    "Watcher Knight"
+   ],
+   "running_game_known": true,
+   "app_id": "367520",
+   "app_name": "Hollow Knight",
+   "in_library": true,
+   "expect_section": "Watcher Knights",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "medium",
+    "boss": "medium",
+    "expect_section": "high"
+   },
+   "note": "A hall with big chandeliers: one blue armoured knight swings a sword while others lie curled up as balls along the floor; the knights are small and there is no HUD."
+  },
+  {
+   "id": "p5-l4d2-witch-5",
+   "file": "p5-l4d2-witch-5.jpg",
+   "source": "plan103-boss-candidates/originals/left-4-dead-2--witch--5.png",
+   "origin": "Public screenshot, from https://left4dead.fandom.com/wiki/File:Witch_stuck.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Left 4 Dead 2",
+   "game_aliases": [
+    "L4D2",
+    "Left4Dead 2"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "The Witch",
+   "boss_aliases": [
+    "Witch"
+   ],
+   "running_game_known": true,
+   "app_id": "550",
+   "app_name": "Left 4 Dead 2",
+   "in_library": true,
+   "expect_section": "The Witch",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "A pale girl crouches with her hands over her head beside a sheriff's car and a road barrier, in the player's view with the four survivors' health bars (Coach, Ellis, Nick and the player) at the bottom and a red weapon at the right. She is crying, not attacking yet. 4:3 picture."
+  },
+  {
+   "id": "p5-ttyd-cortez-1",
+   "file": "p5-ttyd-cortez-1.jpg",
+   "source": "plan103-boss-candidates/originals/paper-mario-ttyd--cortez--1.png",
+   "origin": "Public screenshot, from https://www.mariowiki.com/File:NM_PMTTYDGCN_Battle_Cortez.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Paper Mario: The Thousand-Year Door",
+   "game_aliases": [
+    "The Thousand-Year Door",
+    "Paper Mario TTYD",
+    "Paper Mario Thousand Year Door",
+    "Paper Mario"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "Pirate's Grotto",
+   "place_aliases": [
+    "Pirates Grotto",
+    "Keelhaul Key"
+   ],
+   "boss": "Cortez",
+   "boss_aliases": [
+    "Cortez the pirate",
+    "pirate skeleton",
+    "skeleton pirate"
+   ],
+   "running_game_known": true,
+   "app_id": "emudeck-ttyd-gcn",
+   "app_name": "Paper Mario: The Thousand-Year Door",
+   "in_library": true,
+   "expect_section": "Cortez (Chapter 5 boss)",
+   "expect_section_also": [
+    "Rawk Hawk, Magnus von Grapple and Cortez"
+   ],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "medium",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "Turn-based battle on a stage: Cortez, a big skeleton pirate in a black hat with a sword, takes up the left half in front of a heap of gold; Mario and a sailor-capped partner stand lower left; HP and FP bars on top and the audience below."
+  },
+  {
+   "id": "p5-ttyd-grodus-1",
+   "file": "p5-ttyd-grodus-1.jpg",
+   "source": "plan103-boss-candidates/originals/paper-mario-ttyd--grodus--1.png",
+   "origin": "Public screenshot, from https://www.mariowiki.com/File:NM_PMTTYDGCN_Battle_Grodus.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Paper Mario: The Thousand-Year Door",
+   "game_aliases": [
+    "The Thousand-Year Door",
+    "Paper Mario TTYD",
+    "Paper Mario Thousand Year Door",
+    "Paper Mario"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "Palace of Shadow",
+   "place_aliases": [
+    "the Palace of Shadow"
+   ],
+   "boss": "Grodus",
+   "boss_aliases": [
+    "Lord Grodus"
+   ],
+   "running_game_known": true,
+   "app_id": "emudeck-ttyd-gcn",
+   "app_name": "Paper Mario: The Thousand-Year Door",
+   "in_library": true,
+   "expect_section": "Grodus (Palace of Shadow boss)",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "medium",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "Turn-based battle on a red-carpet stage with arched windows: Grodus, a small figure in a purple-and-white robe holding a staff, stands at the right while a blue spiky attack effect crosses the middle; Mario's HP bars are on top."
+  },
+  {
+   "id": "p5-ttyd-hooktail-1",
+   "file": "p5-ttyd-hooktail-1.jpg",
+   "source": "plan103-boss-candidates/originals/paper-mario-ttyd--hooktail--1.png",
+   "origin": "Public screenshot, from https://www.mariowiki.com/File:NM_PMTTYDGCN_Battle_Hooktail.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Paper Mario: The Thousand-Year Door",
+   "game_aliases": [
+    "The Thousand-Year Door",
+    "Paper Mario TTYD",
+    "Paper Mario Thousand Year Door",
+    "Paper Mario"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Hooktail",
+   "boss_aliases": [
+    "Hooktail the dragon",
+    "red dragon"
+   ],
+   "running_game_known": true,
+   "app_id": "emudeck-ttyd-gcn",
+   "app_name": "Paper Mario: The Thousand-Year Door",
+   "in_library": true,
+   "expect_section": "Hooktail",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "Turn-based battle: a huge red dragon head fills most of the frame on a wooden stage; Mario and a green koopa partner stand at the left and skeleton and mushroom audience sit below. No HP bars shown."
+  },
+  {
+   "id": "p5-ttyd-magnus-von-grapple-1",
+   "file": "p5-ttyd-magnus-von-grapple-1.jpg",
+   "source": "plan103-boss-candidates/originals/paper-mario-ttyd--magnus-von-grapple--1.png",
+   "origin": "Public screenshot, from https://www.mariowiki.com/File:NM_PMTTYDGCN_Battle_Magnus_von_Grapple.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Paper Mario: The Thousand-Year Door",
+   "game_aliases": [
+    "The Thousand-Year Door",
+    "Paper Mario TTYD",
+    "Paper Mario Thousand Year Door",
+    "Paper Mario"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Magnus von Grapple",
+   "boss_aliases": [
+    "Magnus von Grapple 2.0",
+    "Magnus"
+   ],
+   "running_game_known": true,
+   "app_id": "emudeck-ttyd-gcn",
+   "app_name": "Paper Mario: The Thousand-Year Door",
+   "in_library": true,
+   "expect_section": "Magnus von Grapple (Chapter 2 boss)",
+   "expect_section_also": [
+    "Magnus von Grapple 2.0 (Chapter 7 boss)",
+    "Rawk Hawk, Magnus von Grapple and Cortez"
+   ],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "medium"
+   },
+   "note": "Turn-based battle: a pink robot with a white X on its chest and spring legs stands at the right in front of a black-and-white pattern; Mario and a large lilac partner face it; an 'A' button prompt and a colour bar show. The wiki page does not say whether this is the first or the second Magnus fight, so both notes are listed."
+  },
+  {
+   "id": "p5-ttyd-shadow-queen-1",
+   "file": "p5-ttyd-shadow-queen-1.jpg",
+   "source": "plan103-boss-candidates/originals/paper-mario-ttyd--shadow-queen--1.png",
+   "origin": "Public screenshot, from https://www.mariowiki.com/File:NM_PMTTYDGCN_Final_Battle_Shadow_Queen.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Paper Mario: The Thousand-Year Door",
+   "game_aliases": [
+    "The Thousand-Year Door",
+    "Paper Mario TTYD",
+    "Paper Mario Thousand Year Door",
+    "Paper Mario"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Shadow Queen",
+   "boss_aliases": [
+    "The Shadow Queen"
+   ],
+   "running_game_known": true,
+   "app_id": "emudeck-ttyd-gcn",
+   "app_name": "Paper Mario: The Thousand-Year Door",
+   "in_library": true,
+   "expect_section": "The final battle: hands, patterns and the charge tell",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "medium"
+   },
+   "note": "Turn-based battle in a stone hall: a crowned head and purple coils fill the left and middle; Mario and a small partner in a striped hat stand at the left, with a 'Tap A' prompt and a colour bar. The note it matches is about the final battle as a whole, so which phase this is cannot be told."
+  },
+  {
+   "id": "p5-ttyd-shadow-queen-2",
+   "file": "p5-ttyd-shadow-queen-2.jpg",
+   "source": "plan103-boss-candidates/originals/paper-mario-ttyd--shadow-queen--2.png",
+   "origin": "Public screenshot, from https://www.mariowiki.com/File:NM_PMTTYDGCN_Battle_Shadow_Queen_Full_Glory.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Paper Mario: The Thousand-Year Door",
+   "game_aliases": [
+    "The Thousand-Year Door",
+    "Paper Mario TTYD",
+    "Paper Mario Thousand Year Door",
+    "Paper Mario"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Shadow Queen",
+   "boss_aliases": [
+    "The Shadow Queen"
+   ],
+   "running_game_known": true,
+   "app_id": "emudeck-ttyd-gcn",
+   "app_name": "Paper Mario: The Thousand-Year Door",
+   "in_library": true,
+   "expect_section": "The final battle: hands, patterns and the charge tell",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "medium",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "medium"
+   },
+   "note": "A giant crowned figure with long ribbon-like arms fills most of the frame, a blonde princess held inside its coils; no health bars, so it may be an in-between moment of the fight."
+  },
+  {
+   "id": "p5-ttyd-smorg-1",
+   "file": "p5-ttyd-smorg-1.jpg",
+   "source": "plan103-boss-candidates/originals/paper-mario-ttyd--smorg--1.png",
+   "origin": "Public screenshot, from https://www.mariowiki.com/File:NM_PMTTYDGCN_Battle_Smorg.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Paper Mario: The Thousand-Year Door",
+   "game_aliases": [
+    "The Thousand-Year Door",
+    "Paper Mario TTYD",
+    "Paper Mario Thousand Year Door",
+    "Paper Mario"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "Excess Express",
+   "place_aliases": [
+    "the Excess Express"
+   ],
+   "boss": "Smorg",
+   "boss_aliases": [
+    "Smorgs",
+    "the Smorg"
+   ],
+   "running_game_known": true,
+   "app_id": "emudeck-ttyd-gcn",
+   "app_name": "Paper Mario: The Thousand-Year Door",
+   "in_library": true,
+   "expect_section": "Smorg (Chapter 6 boss)",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "medium",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "Turn-based battle: a huge swarm of small dark creatures with yellow eyes rises in branches up the middle and right of the stage, in front of rocky hills; Mario and a sailor-capped partner stand at the lower left; HP bars on top and 'NICE' shown."
+  },
+  {
+   "id": "p5-pikmin-2-raging-long-legs-1",
+   "file": "p5-pikmin-2-raging-long-legs-1.jpg",
+   "source": "plan103-boss-candidates/originals/pikmin-2--raging-long-legs--1.png",
+   "origin": "Public screenshot, from https://pikmin.fandom.com/wiki/File:Raging_Long_Legs_P2_Challenge_Mode.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Pikmin 2",
+   "game_aliases": [
+    "Pikmin Two",
+    "Pikmin"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Raging Long Legs",
+   "boss_aliases": [
+    "Long Legs",
+    "Raging Longlegs"
+   ],
+   "running_game_known": true,
+   "app_id": "emudeck-pikmin2-gcn",
+   "app_name": "Pikmin 2",
+   "in_library": true,
+   "expect_section": "Beady Long Legs, Man-at-Legs and Raging Long Legs",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "medium",
+    "place": "none",
+    "boss": "medium",
+    "expect_section": "medium"
+   },
+   "note": "Looking up at a huge black round-bodied creature with thin legs and big round feet filling the top centre; the timer (175), the Pikmin counts and a '0/50' counter show, so this is a Challenge Mode level. The top of the boss is cut off and the picture is soft. Place left empty: the library note puts this boss in the Hole of Heroes, which this is not."
+  },
+  {
+   "id": "p5-sm64-bowser-1",
+   "file": "p5-sm64-bowser-1.jpg",
+   "source": "plan103-boss-candidates/originals/super-mario-64--bowser--1.jpg",
+   "origin": "Public screenshot, from https://www.mariowiki.com/File:NM_SM64_The_Final_Battle.jpg ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Super Mario 64",
+   "game_aliases": [
+    "SM64",
+    "Mario 64"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Bowser",
+   "boss_aliases": [
+    "King Bowser",
+    "King Koopa"
+   ],
+   "running_game_known": true,
+   "app_id": "emudeck-sm64-n64",
+   "app_name": "Super Mario 64",
+   "in_library": true,
+   "expect_section": "Bowser: the three fights",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "medium",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "Very close view of Bowser's green head and spiked shell filling the frame in a dark arena over a green floor; the lives (5), coins (21) and star (70) counters show at the top. With 70 stars it is the final fight, by the library note."
+  },
+  {
+   "id": "p5-sm64-king-bob-omb-1",
+   "file": "p5-sm64-king-bob-omb-1.jpg",
+   "source": "plan103-boss-candidates/originals/super-mario-64--king-bob-omb--1.jpg",
+   "origin": "Public screenshot, from https://www.mariowiki.com/File:NM_SM64_Stage_Boss.jpg ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Super Mario 64",
+   "game_aliases": [
+    "SM64",
+    "Mario 64"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "Bob-omb Battlefield",
+   "place_aliases": [
+    "the Bob-omb Battlefield"
+   ],
+   "boss": "King Bob-omb",
+   "boss_aliases": [
+    "King Bomb-omb"
+   ],
+   "running_game_known": true,
+   "app_id": "emudeck-sm64-n64",
+   "app_name": "Super Mario 64",
+   "in_library": true,
+   "expect_section": "King Bob-omb and the Whomp King",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "high",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "A big black bomb with a golden crown and yellow feet stands on a grassy hill while Mario runs toward it at the lower right; the lives (5), coins (27) and star (0) counters show."
+  },
+  {
+   "id": "p5-ys-cloud-n-candy-1",
+   "file": "p5-ys-cloud-n-candy-1.jpg",
+   "source": "plan103-boss-candidates/originals/yoshis-story--cloud-n-candy--1.png",
+   "origin": "Public screenshot, from https://www.mariowiki.com/File:NM_YS_A_Boss_Appears!.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Yoshi's Story",
+   "game_aliases": [
+    "Yoshis Story",
+    "Yoshi Story"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Cloud N. Candy",
+   "boss_aliases": [
+    "Cloud N Candy",
+    "Cloud and Candy"
+   ],
+   "running_game_known": true,
+   "app_id": "emudeck-yoshistory-n64",
+   "app_name": "Yoshi's Story",
+   "in_library": true,
+   "expect_section": "Cloud N. Candy",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "A big smiling yellow cloud with orange feet fills the right third of a blue knitted-cloth backdrop; a small Yoshi stands lower left on a row of fluffy clouds; a smiling flower sits at the top. No text on the picture."
+  },
+  {
+   "id": "p5-ys-don-bongo-1",
+   "file": "p5-ys-don-bongo-1.jpg",
+   "source": "plan103-boss-candidates/originals/yoshis-story--don-bongo--1.png",
+   "origin": "Public screenshot, from https://www.mariowiki.com/File:NM_YS_Boss_Duel.png ; approved by the maintainer on 2026-11-11, for a private test only (never published, never in the repo).",
+   "game": "Yoshi's Story",
+   "game_aliases": [
+    "Yoshis Story",
+    "Yoshi Story"
+   ],
+   "game_named_on_screen": false,
+   "scene": "play",
+   "place": "",
+   "place_aliases": [],
+   "boss": "Don Bongo",
+   "boss_aliases": [
+    "Bongo"
+   ],
+   "running_game_known": true,
+   "app_id": "emudeck-yoshistory-n64",
+   "app_name": "Yoshi's Story",
+   "in_library": true,
+   "expect_section": "Don Bongo",
+   "expect_section_also": [],
+   "confidence": {
+    "game": "high",
+    "scene": "high",
+    "place": "none",
+    "boss": "high",
+    "expect_section": "high"
+   },
+   "note": "A green boss with big purple lips and orange spikes sits at the right in a dark stone arena; a green Yoshi is at the lower left. The wall texture repeats faint 'Mario' and 'Nintendo' lettering."
   }
  ]
 }

@@ -153,36 +153,6 @@
       "expect_section": "Worker Infected"
     },
     {
-      "id": "V2-P103-L4D2-11",
-      "split": "holdout",
-      "domain": "strategy",
-      "app_id": "550",
-      "shortcut": "",
-      "query": "There was a dead survivor on the ground with loot and then it got up and attacked me, what is it?",
-      "intent": "Understand the fallen survivor zombie",
-      "topic_hint": "",
-      "withheld_card_terms": [],
-      "skill_level": "beginner",
-      "input_style": "natural",
-      "note": "Written blind 2026-11-10 from the note's name only",
-      "expect_section": "Fallen Survivor"
-    },
-    {
-      "id": "V2-P103-L4D2-12",
-      "split": "holdout",
-      "domain": "strategy",
-      "app_id": "550",
-      "shortcut": "",
-      "query": "zombie dropped items on death campaign last chapter",
-      "intent": "Understand the item-carrying zombie",
-      "topic_hint": "",
-      "withheld_card_terms": [],
-      "skill_level": "familiar",
-      "input_style": "terse",
-      "note": "Written blind 2026-11-10 from the note's name only",
-      "expect_section": "Fallen Survivor"
-    },
-    {
       "id": "V2-P103-L4D2-13",
       "split": "holdout",
       "domain": "strategy",

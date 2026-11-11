@@ -58,17 +58,6 @@
       "crawled_at": "2026-11-09"
     },
     {
-      "section_id": 2205,
-      "game_id": 3,
-      "section_type": "enemy",
-      "name": "Fallen Survivor",
-      "card": "Summary: A rare uncommon infected with 1000 health that cannot be set on fire, usually runs away when shot and may drop items when killed. It lives in The Passing, plus the original game's No Mercy, Death Toll, Crash Course and The Last Stand since the Last Stand update.\nWeak points: Kill it with one melee swing, an explosive round, the M60, or a headshot while it still stands idle; a Magnum body shot does 500 damage. A shove halts its escape for a moment, but shove fatigue forces a three-second wait that lets it flee again.\nLooks like: A man in militia clothes whose shirt is blue, white or green. A boonie hat tops him, and three ammo belts hold a visible Molotov, pipe bomb, pills and first aid kit.\nTips: What it carries varies, sometimes just one Molotov, and it may drop the lot at random when killed. If it gets away it lingers a long while, and the Director often puts a new one in earlier on the map.",
-      "source_url": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
-      "source_license": "CC-BY-SA-3.0",
-      "source_version": "173635",
-      "crawled_at": "2026-11-09"
-    },
-    {
       "section_id": 2206,
       "game_id": 3,
       "section_type": "item",

@@ -23,6 +23,7 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
 from backend.ask import picture_guess  # noqa: E402
+from backend.ollama.ollama_keep_alive_rule import effective_keep_alive  # noqa: E402
 from backend.ask.picture_guess import (  # noqa: E402
     GuessOutcome,
     PictureGuess,
@@ -36,6 +37,7 @@ from backend.ask.picture_guess import (  # noqa: E402
 
 _URL = "http://127.0.0.1:11434/api/chat"
 _MODEL = "gemma4:e2b-it-qat"
+_PREFERRED = "qwen3.5:4b"
 
 
 def _applies(**changes):
@@ -257,8 +259,13 @@ _ATTACHMENTS = [{"path": "C:/pics/boss.jpg", "name": "boss.jpg", "source": "rece
 class GuessPictureTests(unittest.TestCase):
     """The step before the call: which model reads the picture, and what it is shown."""
 
-    def _run(self, settings=None, attachments=None, tags=(_MODEL, "qwen3.5:4b"), images=({"image_b64": "QUJD"},), plugin=None, **kw):
+    def _run(self, settings=None, attachments=None, tags=(_MODEL, "qwen3.5:4b"), images=({"image_b64": "QUJD"},), plugin=None, windows=None, **kw):
         calls = []
+
+        def fake_window(base, model, logger=None):
+            if windows is not None:
+                windows.append(model)
+            return 16384
 
         async def fake_call(plugin, **call_kw):
             calls.append(call_kw)
@@ -266,18 +273,18 @@ class GuessPictureTests(unittest.TestCase):
 
         with patch.object(picture_guess, "prepare_attachment_images", lambda atts, preset: (list(images), [], [])), \
                 patch.object(picture_guess, "list_installed_ollama_tags", lambda base: list(tags)), \
-                patch.object(picture_guess, "choose_window_tokens", lambda base, model, logger=None: 16384), \
+                patch.object(picture_guess, "choose_window_tokens", fake_window), \
                 patch.object(picture_guess, "ask_picture_guess", fake_call):
             outcome = asyncio.run(guess_picture(plugin or _Plugin(), settings or _SETTINGS, _ATTACHMENTS if attachments is None else attachments,
                                                 "127.0.0.1:11434", **kw))
         return outcome, calls
 
-    def test_the_first_picture_goes_to_the_same_model_the_answer_will_use(self):
+    def test_with_no_preferred_model_installed_the_first_picture_goes_to_the_model_the_answer_will_use(self):
         from backend.ask.ollama_ask_extras import resolve_ask_model_routing
 
-        outcome, calls = self._run()
+        outcome, calls = self._run(tags=(_MODEL,))
         answer_models = resolve_ask_model_routing(
-            requires_vision=True, settings=_SETTINGS, installed_tags=[_MODEL, "qwen3.5:4b"], preferred_model=None,
+            requires_vision=True, settings=_SETTINGS, installed_tags=[_MODEL], preferred_model=None,
             attachment_warnings=[], attachment_errors=[], prepared_image_count=1)[0]
         self.assertEqual(calls[0]["model_name"], answer_models[0])
         self.assertEqual(calls[0]["image_b64"], "QUJD")
@@ -292,6 +299,70 @@ class GuessPictureTests(unittest.TestCase):
     def test_a_pinned_model_is_the_one_asked(self):
         _outcome, calls = self._run(preferred_model="qwen3.5:4b")
         self.assertEqual(calls[0]["model_name"], "qwen3.5:4b")
+
+    def _routed(self, models, **kw):
+        """Run the guess with the route made to list exactly ``models`` (the model-routing step replaced),
+        installed tags as given, and report what the first call was asked."""
+        def fake_route(**route_kw):
+            return (list(models), [], "test", "open_weight", False, {})
+
+        windows = []
+        with patch.object(picture_guess, "resolve_ask_model_routing", fake_route):
+            _outcome, calls = self._run(windows=windows, **kw)
+        return calls, windows
+
+    def test_the_preferred_model_is_asked_when_it_is_installed_and_the_route_lists_it(self):
+        calls, windows = self._routed([_MODEL, _PREFERRED], tags=(_MODEL, _PREFERRED))
+        self.assertEqual(calls[0]["model_name"], _PREFERRED)
+        self.assertEqual(windows, [_PREFERRED])
+        self.assertEqual(picture_guess.PICTURE_GUESS_PREFERRED_MODEL, _PREFERRED)
+
+    def test_the_routes_first_model_is_asked_when_the_preferred_one_is_not_installed(self):
+        calls, _windows = self._routed([_MODEL], tags=(_MODEL,))
+        self.assertEqual(calls[0]["model_name"], _MODEL)
+
+    def test_the_preferred_model_is_not_asked_when_it_is_installed_but_the_route_leaves_it_out(self):
+        # A setting (the model policy, the saved routing order) excluded it: the guess must not bypass that.
+        calls, _windows = self._routed([_MODEL], tags=(_MODEL, _PREFERRED))
+        self.assertEqual(calls[0]["model_name"], _MODEL)
+
+    def test_a_model_the_route_lists_but_that_is_not_installed_is_not_asked(self):
+        calls, _windows = self._routed([_MODEL, _PREFERRED], tags=(_MODEL,))
+        self.assertEqual(calls[0]["model_name"], _MODEL)
+
+    def test_the_guess_model_is_unloaded_at_once_only_when_it_is_not_the_one_the_answer_will_use(self):
+        usual = effective_keep_alive(_SETTINGS.get("ollama_keep_alive"), _URL, log=False)
+        self.assertNotEqual(usual, "0s")
+        differs, _w = self._routed([_MODEL, _PREFERRED], tags=(_MODEL, _PREFERRED))
+        self.assertEqual(differs[0]["keep_alive"], "0s")
+        for name, models, tags in (
+            ("route's first is the preferred model", [_PREFERRED, _MODEL], (_MODEL, _PREFERRED)),
+            ("preferred not installed", [_MODEL], (_MODEL,)),
+            ("route leaves the preferred out", [_MODEL], (_MODEL, _PREFERRED)),
+        ):
+            with self.subTest(name):
+                same, _w = self._routed(models, tags=tags)
+                self.assertEqual(same[0]["keep_alive"], usual)
+
+    def test_a_pinned_model_is_kept_even_when_the_preferred_one_is_also_routed(self):
+        calls, _windows = self._routed([_MODEL, _PREFERRED], tags=(_MODEL, _PREFERRED), preferred_model=_MODEL)
+        self.assertEqual(calls[0]["model_name"], _MODEL)
+        self.assertEqual(calls[0]["keep_alive"], effective_keep_alive(_SETTINGS.get("ollama_keep_alive"), _URL, log=False))
+
+    def test_with_the_switch_off_nothing_at_all_is_called(self):
+        seen = []
+
+        async def fake_call(plugin, **call_kw):
+            seen.append("ask")
+
+        def fake_tags(base):
+            seen.append("tags")
+            return [_MODEL, _PREFERRED]
+
+        with patch.object(picture_guess, "PICTURE_GUESS_ON", False), patch.object(picture_guess, "ask_picture_guess", fake_call),                 patch.object(picture_guess, "list_installed_ollama_tags", fake_tags):
+            result = asyncio.run(add_picture_guess_words(
+                _Plugin(), _SETTINGS, _ATTACHMENTS, "127.0.0.1:11434", None, "strategy", "how do I beat this", True, "strategy"))
+        self.assertEqual((result, seen), (("how do I beat this", False), []))
 
     def test_no_permission_no_picture_no_model_means_no_call(self):
         for name, kwargs in (

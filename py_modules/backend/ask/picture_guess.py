@@ -7,8 +7,8 @@ Used for: game_ai_request.run_game_ai_request, once per picture turn, between th
 check and the search itself; scripts/kb/eval_screenshot_reading.py, which measures the extra call.
 Solves: "How do I beat this" with a boss on screen searched the notes for "how do I beat this" and
 nothing else; the picture was only shown to the AI after the notes had already been chosen.
-Does not: Search the notes, change what the person or the AI is told, or run at all while
-PICTURE_GUESS_ON is False (it lands switched off: the four pictures with a note were too few to
+Does not: Search the notes, change what the person or the AI is told, change which model writes the
+answer, or run at all while PICTURE_GUESS_ON is False (it lands switched off: the four pictures with a note were too few to
 carry an "on" decision). The guess's words never leave the search words: they are not shown, not
 saved and not put in the AI's prompt, and read_guess() lets through only letters, digits and
 spaces, at most 3 values, 8 words a value and 14 words in all.
@@ -43,6 +43,19 @@ logger = decky.logger
 # least twice as often and the extra call adds under ten seconds on the PC; the labelled set had too few
 # pictures with a note (four, none a boss) to say so, so it ships off.
 PICTURE_GUESS_ON = False
+
+# The model the guess asks first, when it is installed and the route would allow it for a picture. The
+# starter model (gemma4:e2b-it-qat) named the right game on 1 of 6 pictures; qwen3.5:4b named it on 3 or 4
+# of 6. With a light game running the starter took about 13 seconds to finish and qwen3.5:4b about 26.
+# The maintainer's call, 2026-11-10: "I would choose the slower one that is right more than half the time."
+# Only the guess uses it: the answer's own model choice is not touched.
+PICTURE_GUESS_PREFERRED_MODEL = "qwen3.5:4b"
+
+# Two models in memory at once has frozen the Deck (a question beside a heavy game filled its memory). When
+# the guess asks a model other than the one the route lists first (the one the answer will most likely
+# use), that call tells Ollama to drop its model the moment it has answered, so the answer never starts
+# with both loaded. When they are the same model the usual hold stays, so the answer finds it ready.
+_UNLOAD_AT_ONCE = "0s"
 
 # Long enough for a cold start of the small model on the Deck; the answer waits behind this call, so a
 # stuck one must end. Past it the question is searched the ordinary way.
@@ -248,11 +261,21 @@ async def ask_picture_guess(plugin: Any, *, url: str, model_name: str, image_b64
     return GuessOutcome("written", read_guess(raw), seconds, model_name, raw=raw)
 
 
+def choose_guess_model(models: list, tags: list, *, pinned: bool = False) -> str:
+    """The model the guess asks: the preferred one when it is installed and among the models the route
+    returned (in any position, so a setting that leaves it out still does), unless the person pinned a
+    model for this ask (their pin stands); otherwise the route's first, as before."""
+    if not pinned and PICTURE_GUESS_PREFERRED_MODEL in models and PICTURE_GUESS_PREFERRED_MODEL in tags:
+        return PICTURE_GUESS_PREFERRED_MODEL
+    return models[0]
+
+
 async def guess_picture(plugin: Any, settings: dict, attachments: Any, pc_ip: str, preferred_model: Optional[str] = None) -> GuessOutcome:
-    """Work out, the way the answer's own call will, which model reads the picture and what the picture
-    looks like to it (the same attachment preset, the same model routing, the same room asked of the
-    server, so the model is not reloaded for the answer), then make the one call. "skipped" when there is
-    no picture to read or no model to read it."""
+    """Work out what the picture looks like to the model (the same attachment preset, the same model
+    routing as the answer's own call) and which model reads it: the preferred one when the route allows it
+    (see choose_guess_model), else the one the answer will use, with the same room asked of the server so
+    that model is not reloaded for the answer. Then make the one call. "skipped" when there is no picture
+    to read or no model to read it."""
     cleaned, _paths, refused = screen_ask_attachments(settings, attachments)
     if refused or not cleaned:
         return GuessOutcome("skipped", PictureGuess())
@@ -275,9 +298,13 @@ async def guess_picture(plugin: Any, settings: dict, attachments: Any, pc_ip: st
     if not tags or not models:
         return GuessOutcome("skipped", PictureGuess())
     url = plugin._build_ollama_chat_url(pc_ip)
-    window = await asyncio.to_thread(choose_window_tokens, base, models[0], logger=logger) or known_window_tokens(base, models[0])
+    pin = str(preferred_model or "").strip()
+    model = choose_guess_model(models, tags, pinned=bool(pin) and pin in tags)
+    window = await asyncio.to_thread(choose_window_tokens, base, model, logger=logger) or known_window_tokens(base, model)
     keep_alive = effective_keep_alive(settings.get("ollama_keep_alive"), url, source="ask")
-    return await ask_picture_guess(plugin, url=url, model_name=models[0], image_b64=images[0]["image_b64"], keep_alive=keep_alive, window_tokens=window)
+    if model != models[0]:
+        keep_alive = _UNLOAD_AT_ONCE
+    return await ask_picture_guess(plugin, url=url, model_name=model, image_b64=images[0]["image_b64"], keep_alive=keep_alive, window_tokens=window)
 
 
 async def add_picture_guess_words(

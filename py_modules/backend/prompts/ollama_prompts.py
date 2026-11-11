@@ -285,13 +285,19 @@ FINALE_RULE_LINE = (
 # Today the footer is the only place the reply says it, and it is the back end's line, not the AI's.
 TURN_FLAG_NOTES_DO_NOT_COVER = "notes_do_not_cover"
 
-# The switch and the pick. OFF until the answer test (three tries per question, the AI's own words
-# counted apart from the footer line) says a wording earns its place; ``HONEST_UNKNOWN_WORDING`` names
-# the one that is used when it is on. Read when a prompt is built, not when this file loads, so a
-# test or a measuring script can flip them. Each wording is one sentence after its label, and none
-# quotes a phrase for the AI to copy, so what it says is its own.
-HONEST_UNKNOWN_ON = False
-HONEST_UNKNOWN_WORDING = "a"
+# The switch and the pick. ON, with wording g, since 2026-11-10: the maintainer asked for it on that day
+# (plan 103 follow-up H1). Measured that day with the answer test, 71 first-turn questions, three tries,
+# two runs, on the real flag: the flag reaches only 6 of 213 answers in the test set (the made-up boss
+# Zorblax and a story-ending question the notes leave out on purpose). With g, 6 of 6 made-up-boss answers
+# opened by saying there are no notes, none invented facts about the boss, and 1 of the 12 flagged answers
+# was long. Every ordinary answer was identical to the switch-off run for the same seed. Forced onto
+# answers the plugin does not flag, the small model still invented facts in 8 of 24 answers, which is why
+# the Speed switch below is off and why the flag is not widened to more turns. The other wordings are
+# kept for later measuring. ``HONEST_UNKNOWN_WORDING`` names the one that is used when it is on. Read when
+# a prompt is built, not when this file loads, so a test or a measuring script can flip them. Each wording
+# is one sentence after its label, and none quotes a phrase for the AI to copy, so what it says is its own.
+HONEST_UNKNOWN_ON = True
+HONEST_UNKNOWN_WORDING = "g"
 # The second switch (plan 103 follow-up H1, 2026-11-10). The two footer lines never show in Speed mode,
 # so without this the flag is never set there and the sentence above never reaches a Speed turn. With it
 # on, ``prompt_turn_flags`` reads a Speed turn the way it reads a Strategy one; the footer step is not

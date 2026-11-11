@@ -444,10 +444,11 @@ class TurnFlagInSpeedModeTests(unittest.TestCase):
     The footer lines never show in Speed and still do not: only the flag changes, and only with the switch on.
     """
 
-    def test_the_switch_is_off_while_the_main_switch_is_off(self):
-        # On for part of 2026-11-10 and put back (see the comment above the switch): it must not sit on while
-        # the main switch is off and unproven.
-        self.assertFalse(ollama_prompts.HONEST_UNKNOWN_ON)
+    def test_main_switch_on_with_wording_g_and_the_speed_switch_off(self):
+        # As the maintainer asked on 2026-11-10 (see the comments above the two switches): the sentence is on
+        # for the turns the flag marks today, with wording g, and the flag is not widened to Speed.
+        self.assertTrue(ollama_prompts.HONEST_UNKNOWN_ON)
+        self.assertEqual(ollama_prompts.HONEST_UNKNOWN_WORDING, "g")
         self.assertFalse(ollama_prompts.HONEST_UNKNOWN_IN_SPEED_ON)
 
     def test_with_the_switch_off_a_speed_turn_is_never_flagged_whatever_the_notes_did(self):

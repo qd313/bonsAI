@@ -35,6 +35,7 @@
 - [Plan 103 sweep K10 notes moved from the knowledge-base roadmap (2026-11-10)](#plan-103-sweep-k10-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 - [Plan 103 sweep K11 notes moved from the knowledge-base roadmap (2026-11-10)](#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 - [Plan 103 sweep K12 notes moved from the knowledge-base roadmap (2026-11-10)](#plan-103-sweep-k12-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+- [Plan 103 sweep K13 notes moved from the knowledge-base roadmap (2026-11-11)](#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -1388,3 +1389,99 @@ and 351 tap-to-define words; the maintainer published it on 2026-10-25 and both 
 - Phase 5 entry: "A first look in block D1: `workshop:test-evidence/plan103-P103-NOTES-EARLY-01.json`"; the by-game list is on the testing row P103-NOTES-23-01.
 - Deck check owed header: "the second model was downloaded and removed" (block DP), and the block DP evidence `workshop:test-evidence/plan103-P103-DP-TIMING.json`.
 - Screenshot entry: "No Deck row unless it goes on (P103-PICTURE-SEARCH-01)."
+
+## Plan 103 sweep K13 notes moved from the knowledge-base roadmap (2026-11-11)
+
+Moved word for word by the sweep after the boss pictures were marked and the two picture tests ran, to make room. Each block names the entry it stood in.
+
+**The paragraph on the three half-done entries (as it stood):**
+
+**Where the three half-done entries end (2026-11-10, after every Deck block):** **Phase 5: PARTIAL** (17 of 20 on the Deck against a line of 18; three games have no notes). **The screenshot measurement: open** (no boss pictures yet; the picture's own guess is built and off). **The visual maps: open** (the marks test could not run). Every Deck check of plan 103 has run, or is named under Deck check owed.
+
+**The checks page line (as it stood):**
+
+**Your checks page:** the round "Plan 103 (10 Nov)" (28 items; the six note samples and the ten picture labels are marked Pass) and a new round "Boss pictures (10 Nov)" (28 pictures to mark, plus one list). Still unmarked there: the three looks and the Deck table. Open calls:
+
+**The boss pictures call (as it stood):**
+
+- **Your look at 28 boss pictures** — **OPEN, raised 2026-11-10.** A helper found 24 boss and 4 enemy pictures on public sites (kept in the workshop, never in the repo); nothing joins the test set until you mark it, and if they fall short you will capture some yourself.
+
+**The visual maps entry (as it stood):**
+
+- ★★★ `[KB]` **KB visual maps** — **PARTIAL; two shapes picked on the mock-up board 2026-10-10, the route built 2026-10-24.** Nothing draws anything in a reply today.
+  **Your screenshot, marked**: up to three numbered marks (hit, avoid, dodge), each saying whether the Deck's AI is sure; an unsure mark is dashed. A scoring test first: a stronger model scores, out of ten, what the Deck's models mark, and helps teach them.
+  Not chosen as drawn: a fuller boss card, a whole-kingdom map. **Plan 103 § 5f: stays open;** the marks test could not run without boss pictures (Calls).
+  [Mock-up board, tab 5](https://claude.ai/artifact/XyZfUSPGRZdm2P3mTGV9tR) · [notes](demos/mockup-board/README.md) · [Detail](roadmap-kb-details.md#kb-visual-maps)
+
+**The screenshot entry (as it stood):**
+
+- ★★★★ `[KB]` `[QA]` **Measure how well the AI reads a screenshot: which game, which area, which boss** — **PARTIAL, added 2026-09-25. Step 1 done 2026-10-24 (plan 98 lane I); step 2 measured 2026-11-02 (plan 102 lane D).**
+  Step 1: a labelled picture set and a scoring script. **Step 2, on this PC:** the Deck's picture models read far better than its starter model (the game named 97 times in a hundred against 67 to 70): [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10).
+  **Plan 103 (2026-11-09 and 10):** the second set (lane P1) has 29 pictures from 11 games, none a boss; 28 public boss pictures wait for your look (Calls). The picture's own guess (lane P2) is still switched off; it now asks `qwen3.5:4b` first when installed and the route allows, unless you pinned a model, and unloads it after (`764c44dd`, your choice). **Block DP, Deck 2026-11-10 (the two models timed through the AI directly):** named the right game 1 of 6 for the starter model against 3, 4 and 3 of 6 for the second; seconds to finish with no game 1.6 against 2.9, with Deep Rock Galactic: Survivor running 13.1 against 26.4 (slowest 17.7 and 36.4); lowest memory free beside the game 3,847 MB and 4,474 MB; none failed (`workshop:test-evidence/plan103-P103-DP-TIMING.json`). **Stays open (plan 103 § 5f):** more pictures, a security read and a spoiler-rule check come before it goes on. Report `workshop:archive/research/picture-guess-search-2026-11-10-p103-p2.md` · [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**The Deck check owed header (as it stood):**
+
+**2026-11-10: every Deck block has run or is named here as not run.** Blocks D1, D2 (three parts), D3, DP and DR ran (build `1ad7ad9b4bf9` for the last parts); the honest answer was checked on the Deck that night (P103-HONEST-02). **Not run:** the saved walks (runbook D3.4, dropped for time) and the starter box on a fresh install (your hand check). A row no block reached stays owed, named in its entry. **Block DP:** both picture models timed (the screenshot entry); the Deck's models, folders and build are as before. **The Deck is put back** (block DR, `workshop:test-evidence/plan103-P103-DR-RESTORE.json`) and again after the honest-answer check: library 2026.10.25, mode chip on Speed, four chats (a test chat grew from 60 to 66 turns), no game, the AI unloaded, the hold released. **Not as on 9 November:** the new plugin build stays on the Deck; two settings backup files (plans 102 and 103) sit in its home folder (Calls). Every put-back, one by one: [Detail](roadmap-kb-details.md#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Phase 5, the blind questions line (as it stood):**
+
+  **Blind questions (counted from the files, 2026-11-10):** 584 rows in 20 files under `tests/fixtures/kb_eval/` (586 before the removal of "Fallen Survivor"); 477 first, 548 in the first three, measured before it. **Plan 103 § 5f: stays PARTIAL:** three games have no notes, the Deck row is one short of its line, and the crowding fix was turned down twice. **Deck, by game:** missed on both questions: Fallout 4, Brotato, DOOM Eternal (the full list is on row P103-NOTES-23-01). [Plan](planning/28-phase5-corpus-depth.md) · [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Suggestion chips entry, the block D3 note (as it stood):**
+
+**Deck 2026-11-10 (block D3, row P103-CHIP-ORDER-01): passes the row's three conditions for both games, weak as proof, and UNCLEAR for what a person sees;** in a long chat the chip row sat hidden behind the "Show details" line, so no picture shows it (`workshop:test-evidence/plan103-P103-CHIP-ORDER-01.json`). **A person's look is still owed.** [Detail](roadmap-kb-details.md#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Closing Show details bug, the third-part note (as it stood):**
+
+**2026-11-10 (block D2, third part, build `1ad7ad9b4bf9`):** on screen 2 tries of 2 with the Session tab showing (off screen 4 of 6 on the build before); seen, not reliable to reproduce (`workshop:test-evidence/plan103-P103-D2-SWEEP.json`).
+
+**Thumbs-down entry, the third-time note (as it stood):**
+
+**Third time, 2026-11-10 (block D2):** focus kept on all 7 reads; the four Downs went notes line, strip, chip (`workshop:test-evidence/plan103-P102-UNDO-FOCUS-01-try3.json`). Not a pass for the out-of-focus state: tests only, on the maintainer's list.
+
+**The versus entry, from 'Landed' (as it stood):**
+
+**Landed:** five note kinds and 15 versus notes (lanes V1, V2); lane V3 renamed four versus notes and lets a note a question names lead a mode note (115 of 140 asks, 112 before; three points open, see Bugs). **Deck 2026-11-10 (block D3): P103-VERSUS-01 PASSED, 3 of 3** (`workshop:test-evidence/plan103-P103-VERSUS-01.json`). The versus notes went out in the 2026.11.10 publish as they are. [Plan](planning/17-kb-online-versus-strategy-content.md) · [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**The honest-opening entry, from 'Before' (as it stood):**
+
+Before: 0 of 24 admitted it. Now (PC, 71 questions, two runs): 6 of 6 made-up-boss answers opened by saying there are no notes, none invented facts about it, every ordinary answer unchanged. **Deck 2026-11-10:** the opening showed 2 of 2, made-up detail was kept out 1 of 2 (new Bugs entry); a call for you: keep it on as it is, or off until the borrowed advice is fixed. The Speed-mode option stays off (Calls). Evidence `workshop:test-evidence/plan103-P103-HONEST-02.json`. [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Where things stand, the end of the final measurement line (as it stood):**
+
+ The last rewrite cost 7 net of 1,558 search-test questions (1,332 to 1,325). [Detail](roadmap-kb-details.md#plan-103-sweep-k10-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**The answered-calls line of 2026-11-10 (evening), from the licences (as it stood):**
+
+; the Brotato and Red Dead Redemption 2 wiki licences are right as stored (CC BY-SA 4.0, 3.0); the Cyberpunk gang notes stay; the library was published; the starter box's paragraph stays last; the slower picture model asks first. The versus notes went out as they are. Old wording of the closed calls: [Detail](roadmap-kb-details.md#plan-103-sweep-k12-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**The picture guess, measured on boss pictures (2026-11-11), the full table:**
+
+Records: `workshop:archive/research/picture-guess-search-2026-11-11-p5-run1.md` and `-run2.md` (each with a `.json` of rows). On this PC, 52 pictures, five guesses per picture and model, two runs. The count is how often the right note was among those attached, over the 27 pictures that carry a note (270 searches) and over the 22 boss pictures (220 searches).
+
+| | Without the guess | With the guess, run 1 | With the guess, run 2 |
+|---|---|---|---|
+| Starter model (`gemma4:e2b-it-qat`), 27 pictures | 45 of 270 | 37 | 33 |
+| Starter model, 22 boss pictures | 45 of 220 | 18 | 19 |
+| Second model (`qwen3.5:4b`), 27 pictures | 45 of 270 | 61 | 71 |
+| Second model, 22 boss pictures | 45 of 220 | 47 | 57 |
+
+- The starter model made the search worse; it never named a boss correctly on the boss pictures (0 of 110 tries, both runs) and named the right game on 4.
+- The second model named the right game on 40 and 42 of 110 tries on boss pictures and the right boss on 15 and 18; its gain is about one and a half times over all noted pictures, not the twice the landing rule asks for.
+- The first call took well under a second on this PC for both (the Deck's times are block DP's: about 13 and 26 seconds beside a light game).
+- So the switch stays off. The maintainer's choice of the second model as the one the guess prefers stands in code (`764c44dd`).
+
+**The marks test (2026-11-11), the full table:**
+
+The plan's bar (call 12): the marked screenshot is built only if the best model averages 7 or more out of 10 on at least 15 boss pictures. 22 boss pictures, four picture models, three tries each (66 tries a model), graded by two Opus helpers by one written rule. Grades: `grades.json` in each model's folder under `workshop:screenshots/plan103-marks/` (for `qwen2.5vl:3b`, under `_run-two-superseded/`).
+
+| Model | Average of 10, all 66 tries | Tries at 7 or more | Tries with a confident ring on the wrong thing | Pictures with any try at 7 or more |
+|---|---|---|---|---|
+| `qwen3.5:4b` | 2.95 | 1 | 35 | 1 of 22 |
+| `qwen2.5vl:3b` (graded on the earlier wording of the question) | 2.89 | 3 | 57 | 1 of 22 |
+| `gemma4:e2b-it-qat` (the starter model) | 2.64 | 6 | 28 | 5 of 22 |
+| `llava:7b` | 2.18 | 1 | 5 | 1 of 22 |
+
+- What the graders saw: when a boss fills the frame a ring sometimes lands on it, almost never on the weak point the note names; many rings sit on the background, the game's own display, or the player's own character or helpers, and are still called "sure"; the kind is often wrong (a "hit" on the one thing that hurts you). The worst: a confident "hit" ring on the player's own gun.
+- How the question was run: its wording was changed twice during the day (the first let a model copy its example; the second let the starter model copy the placeholder word "kind"). The third wording fixed both but made `qwen2.5vl:3b` put two marks on one line, which the strict reader refuses, so that model was graded on the second wording's run, where every reply was readable. The starter model still gave 24 of 66 replies that could not be read on the third wording; each scores 1 by the grading rule, which pulls its average down. Over only the tries that had marks, the averages were 3.15 (`qwen3.5:4b`), 3.69 (the starter), 3.36 (`llava:7b`) and 2.87 (`qwen2.5vl:3b`): still far below 7.
+- So the "your screenshot, marked" shape is measured and not built; the test and the 22 pictures stay, to run again when a better picture model can run on the Deck.

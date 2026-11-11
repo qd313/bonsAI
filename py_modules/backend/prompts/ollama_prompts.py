@@ -333,6 +333,20 @@ HONEST_UNKNOWN_WORDINGS = {
         "and add a few words saying so, but if the name asked about is one you have never heard of, say "
         "that plainly and give no facts about it, only general help marked as general."
     ),
+    # f and g (plan 103 follow-up H1, round two): round one showed the small model obeys an order about WHERE
+    # to say something (a opens with the admission) and mostly ignores a conditional (d and e). So no
+    # conditional here: a's opening order, but one short sentence said once, then help from what the model
+    # itself knows, marked as its own knowledge. g adds one plain order about names it has not heard of.
+    "f": (
+        "NOTES GAP: The attached notes do not cover this question, so open with one short sentence, said once "
+        "and never repeated, saying you have no notes on it, then go straight into help from what you yourself "
+        "know about the game, marked as your own knowledge."
+    ),
+    "g": (
+        "NOTES GAP: The notes do not cover this question, so open with one short sentence, said once, "
+        "saying you have no notes on it, then help from what you yourself know about the game, marked as your "
+        "own knowledge, but never describe or give facts about a name you have not heard of."
+    ),
 }
 
 

@@ -159,8 +159,8 @@ def _switch(on: bool, wording: str = "a"):
 class HonestUnknownSentenceTests(unittest.TestCase):
     """Piece 3, the prompt side: one sentence, only when the turn's flag says the notes do not cover it."""
 
-    def test_there_are_five_wordings_and_each_is_one_sentence(self):
-        self.assertEqual(sorted(HONEST_UNKNOWN_WORDINGS), ["a", "b", "c", "d", "e"])
+    def test_there_are_seven_wordings_and_each_is_one_sentence(self):
+        self.assertEqual(sorted(HONEST_UNKNOWN_WORDINGS), ["a", "b", "c", "d", "e", "f", "g"])
         for key, wording in HONEST_UNKNOWN_WORDINGS.items():
             with self.subTest(wording=key):
                 body = wording.split(": ", 1)[1]
@@ -168,12 +168,15 @@ class HonestUnknownSentenceTests(unittest.TestCase):
                 self.assertEqual(body.count("."), 1)
                 self.assertNotIn(". ", body)
 
-    def test_the_first_three_wordings_are_exactly_as_measured_on_2026_11_09(self):
-        # Plan 103 follow-up H1 added d and e beside these; a, b and c must stay as they were measured.
+    def test_the_first_five_wordings_are_exactly_as_measured(self):
+        # Plan 103 follow-up H1: a, b and c as measured on 2026-11-09, d and e as measured on 2026-11-10;
+        # f and g were added beside them in round two and none of the five may change.
         pinned = {
             "a": (207, "178d6176bac4ae3c6a7b16f8fd3d40ec4925d82bf0de22b3e74c38196bfe66f8"),
             "b": (256, "963c1ecd72257ef53b9945460dc001d7b22ca53c083d6e7c5f9bf3b01f55b63d"),
             "c": (194, "263b0943d72feb5b36950f32cca43d4ec88e5ffd4371dbd2e2b552c654704797"),
+            "d": (282, "f86be708778e211f0b05b62739a2639da7d5058bbee5c931c14062d801bcea73"),
+            "e": (268, "a2d240a5fcdaeac3d7ec84f699b2512ce2cd85b1623c0f22c7d8b0512c7cc101"),
         }
         for key, (length, digest) in pinned.items():
             with self.subTest(wording=key):
@@ -190,6 +193,31 @@ class HonestUnknownSentenceTests(unittest.TestCase):
                 self.assertIn("your own knowledge", body)
                 self.assertIn("say that plainly", body)
                 self.assertIn("general help marked as general", body)
+
+    def test_f_and_g_order_one_short_admission_said_once_then_help_from_the_models_own_knowledge(self):
+        # Round two (2026-11-10): the small model obeys an order about where to say something, so these
+        # keep wording a's opening order, make it one short sentence said once, and send the help on.
+        for key in ("f", "g"):
+            with self.subTest(wording=key):
+                body = HONEST_UNKNOWN_WORDINGS[key].split(": ", 1)[1].lower()
+                self.assertIn("open with one short sentence", body)
+                self.assertIn("said once", body)
+                self.assertIn("no notes on it", body)
+                self.assertIn("what you yourself know about the game", body)
+                self.assertIn("marked as your own knowledge", body)
+                self.assertLess(len(HONEST_UNKNOWN_WORDINGS[key]), 290)
+
+    def test_only_g_orders_no_facts_about_a_name_the_model_has_not_heard_of(self):
+        phrase = "never describe or give facts about a name you have not heard of"
+        self.assertIn(phrase, HONEST_UNKNOWN_WORDINGS["g"])
+        self.assertNotIn("have not heard of", HONEST_UNKNOWN_WORDINGS["f"])
+
+    def test_f_and_g_do_not_ask_for_an_apology_or_a_conditional(self):
+        for key in ("f", "g"):
+            with self.subTest(wording=key):
+                body = HONEST_UNKNOWN_WORDINGS[key].split(": ", 1)[1].lower()
+                for word in ("sorry", "apolog", "if you recognise", "if you recognize", "if you do not"):
+                    self.assertNotIn(word, body)
 
     def test_d_and_e_do_not_ask_for_an_opening_admission_or_an_apology(self):
         for key in ("d", "e"):

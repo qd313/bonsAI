@@ -79,6 +79,7 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
   **Plan 97 (call 1, [D134](audit/maintainer-decisions-locked.md#d134--locked-2026-10-22-raised-2026-10-22--plan-97-the-bug-list-and-the-verify-list-toward-zero-the-second-sweep-the-ten-calls)):** out of plan 97: a filming job for the maintainer's PC and camera settings, not a helper's. Stays open.
 - ★★★ `[ask]` `[ollama]` **A question asked while a heavy game runs can use all the Deck's memory and freeze it** — **OPEN, found 2026-11-09 about 20:15 EST (plan 103 block D0a).**
   A picture question with God of War running: about 770 MB of memory was left, SSH stopped answering, and the maintainer restarted the Deck by hand. The second picture try that night timed out at 181 s for the same reason (`workshop:test-evidence/plan103-P102-PICTURE-01-try2.json`). The plugin should check free memory before loading the AI and say so instead of loading. Evidence `workshop:planning/assets/103-handover-D0a.md`.
+  **Chosen for the next wave (the maintainer, 2026-11-10):** they will talk about it in a separate chat. Nothing else on this entry changed.
 - ★★★ `[focus]` `[tabs]` **Tab sections: the D-pad ring goes wrong after sections are opened (Terse mode unreachable, details line fires on press)** — **PARTIAL: part (a) fixed 2026-10-14 (plan 93, `f60ce2b5`) and passed on the Deck 2026-10-14 (row P93-B15-HELP-LINE, in Done); parts (b) and (c) OPEN, root cause not known yet, reported 2026-10-13 by the maintainer.**
   (b) After opening some sections and walking with the D-pad, Terse mode could not take the ring.
   (c) The maintainer suspects the details text that lengthens a setting throws the ring off. An alternative: keep the sections but show all the details text when a section is opened. Find the root cause before changing the design again.
@@ -336,6 +337,11 @@ Parked work and watched sightings: [roadmap-shelved.md](roadmap-shelved.md).
 
 Everything closed since v0.6.0 shipped (2026-10-24), one line each, newest first. When this section grows past the
 size limit, its older blocks move to an archive file the way the v0.6.0 ones did.
+
+**Closed 2026-11-10 (plan 103 sweep K12, after the maintainer's evening answers):**
+
+- ★ `[KB]` **Baldur's Gate 3's seven notes: the maintainer's read** — **DONE 2026-11-10: your read passed (all six ten-note samples are marked Pass on the checks page, round "Plan 103 (10 Nov)"; the page is the record, there is no evidence file).** Landed 2026-10-25 (plan 100 lanes N1 to N4). Full entry: [Detail](roadmap-kb-details.md#plan-103-sweep-k12-notes-moved-from-the-knowledge-base-roadmap-2026-11-10).
+- ★ `[KB]` **The eight thin games' notes: the maintainer's read** — **DONE 2026-11-10: your read passed (checks page, as above); the Deck half passed 2026-11-03 (row P102-THIN-GAMES-01, evidence `workshop:test-evidence/plan102-P102-THIN-GAMES-01.json`).** Landed 2026-11-02 (plan 102 lanes N5 to N12). Full entry: [Detail](roadmap-kb-details.md#plan-103-sweep-k12-notes-moved-from-the-knowledge-base-roadmap-2026-11-10).
 
 **Closed 2026-11-10 (plan 103 sweep K11, after Deck block D2's third part):**
 

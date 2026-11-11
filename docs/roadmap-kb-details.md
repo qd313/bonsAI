@@ -34,6 +34,7 @@
 - [Plan 103 end audit K9 notes moved from the knowledge base roadmap (2026-11-10)](#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 - [Plan 103 sweep K10 notes moved from the knowledge-base roadmap (2026-11-10)](#plan-103-sweep-k10-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 - [Plan 103 sweep K11 notes moved from the knowledge-base roadmap (2026-11-10)](#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+- [Plan 103 sweep K12 notes moved from the knowledge-base roadmap (2026-11-10)](#plan-103-sweep-k12-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -1269,3 +1270,121 @@ The picture's own guess for the note search (lane P2) landed switched off (call 
 **phase 8 entry, the count (as it stood):**
 
 **As of 2026-11-10:** the build on this PC has 38 games and 583 notes; the source holds 891.
+
+## Plan 103 sweep K12 notes moved from the knowledge-base roadmap (2026-11-10)
+
+Moved word for word by the sweep after the report, to make room for the publish, the maintainer's evening answers, the honest-answer check and block DP. Each paragraph names the entry it stood in.
+
+**The opening paragraph, "Where things stand" (as it stood):**
+
+**Where things stand (2026-11-10).** The library people can download is 2026.10.25: 38 games, 414 notes, 164 Deck tips
+and 351 tap-to-define words; the maintainer published it on 2026-10-25 and both channels were read back byte for byte
+([the releases table](knowledge-base.md)). The build on this PC is older than the source: version 2026.11.04, **583 notes and 167 tips**. It is not published yet (last checked 2026-11-09): the maintainer's publish is owed, and GitHub's copy is still dated 2026-10-25. The Deck's own copy is 2026.10.25 again: block D3 put the session's library on it and block DR put the published one back, read back by version and size (`workshop:test-evidence/plan103-P103-DR-LIBRARY.json`; before that `plan98-P98-KS-LIBRARY.json`).
+**The source now has more than any build** (counted from the files, 2026-11-10, and again by the last sweep): **891 notes**, the seed's 414 plus 477 in 33 notes files for 32 games (**308 new this session**, 583 before), and **185 tips** (plan 103 added mod tips 168 to 185). **35 of the 38 games have labelled short-line notes** (15 before); Hades, Half-Life 2 and Black Mesa do not (Phase 5). A new build and publish are owed.
+
+**The paragraph on the three half-done entries (as it stood):**
+
+**Where the three half-done entries end (2026-11-10, after every Deck block):** **Phase 5 (notes for the 23 games): PARTIAL.** 20 games have notes and test questions, three have none; the Deck row read 17 of 20 against a line of 18; search lost a little as the library grew and again when the notes were reworded (1,325 of 1,558 test questions find their note in the first three). **The screenshot measurement: open.** 29 labelled pictures, none a boss; the picture's own guess is built and switched off; the two picture models were not timed on the Deck (block DP did not run). **The visual maps (marked screenshot): open;** the marks test could not run without boss pictures. Every Deck check of plan 103 has run or is named as not run under Deck check owed.
+
+**Calls: the ten-note samples (as it stood):**
+
+- **Your ten-note samples** — **OPEN, raised 2026-11-09 (D140, call 4).**
+  Six samples of ten random notes each, in the workshop's checks folder: `workshop:checks/plan103-sample-earlier.md` and `plan103-sample-B.md` to `-F.md`. Sample B is refreshed before you read it.
+
+
+**Calls: the checks page line (as it stood):**
+
+**Your checks page has a new round, "Plan 103 (10 Nov)", 28 items.** Its eight calls: the ten-note samples above and these seven.
+
+**Calls: boss pictures (as it stood):**
+
+- **Boss pictures for the marks test** — **OPEN, raised 2026-11-09.** 29 pictures, none a boss: say where play pictures are, allow public boss screenshots for a private set, or leave it "not measured".
+
+**Calls: the Speed-mode option (as it stood):**
+
+- **The honest answer's Speed-mode option** — **OPEN, raised 2026-11-09.** Built and switched off; does Speed mode get it?
+
+**Calls: Red Dead Redemption 2's licence (as it stood):**
+
+- **Red Dead Redemption 2's wiki licence** — **OPEN, raised 2026-11-09.** No version on its licence line; stored as 3.0. Confirm, or drop that game's notes.
+
+**Calls: the Brotato footer (as it stood):**
+
+- **The Brotato wiki's footer** — **OPEN, raised 2026-11-09.** Licence read from a page footer, stored as CC BY-SA 4.0; one look settles it.
+
+**Calls: the starter box's paragraph (as it stood):**
+
+- **The starter box's paragraph order** — **OPEN, raised 2026-11-09.** The "Turn on and download" paragraph sits last; moving it changes every download box. Left as is.
+
+**Deck check owed, the header paragraph (as it stood):**
+
+**2026-11-10: every Deck block has run or is named here as not run.** Blocks D1, D2 (three parts), D3 and DR ran (build `1ad7ad9b4bf9` for the last parts). **Not run:** block DP (the two picture models were not timed on the Deck), the saved walks (runbook D3.4, dropped for time) and the starter box on a fresh install (your hand check). A row no block reached stays owed, named in its entry. **The Deck is put back (block DR, `workshop:test-evidence/plan103-P103-DR-RESTORE.json`):** the published library 2026.10.25 is back, the two chats the test drivers grew are deleted, the mode chip is on Speed, "Show Developer tab" is off, no settings key differs from the 9 November backup, the quick-start line shows again, the keep-awake hold is released, no game runs and the AI is unloaded. **Not as on 9 November:** the new plugin build stays on the Deck; a settings backup file from this plan and one from plan 102 sit in its home folder; the short test chat exists. Every put-back, one by one: [Detail](roadmap-kb-details.md#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Deck check owed: Baldur's Gate 3's notes, the maintainer's read (as it stood):**
+
+- ★ `[KB]` **Baldur's Gate 3's seven notes: the maintainer's read** — **VERIFY, landed 2026-10-25 (plan 100 lanes N1 to N4), owed to your eye.**
+  Seven Wikipedia-only notes (its own wiki is NonCommercial). It closes on your read of ten random notes, not of every note (D140, call 4); that sample covers the 169 notes from plans 100 and 102.
+
+**Deck check owed: the eight thin games, the maintainer's read (as it stood):**
+
+- ★ `[KB]` **The eight thin games' notes: the maintainer's read** — **VERIFY, landed 2026-11-02 (plan 102 lanes N5 to N12); the Deck half passed 2026-11-03; it closes on your read of ten random notes (D140, call 4).**
+  118 notes for eight games. **Deck 2026-11-03 (row P102-THIN-GAMES-01), PASSED 8 of 8** (`workshop:test-evidence/plan102-P102-THIN-GAMES-01.json`). [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Next: the honest "I don't know" entry (as it stood):**
+
+- ★★★ `[KB]` **The AI almost never admits that no note covers the question: 0 of 24 in its own words, in two runs** — **OPEN; the fix is built and switched off (plan 103 lane R2, `fd39eca3`, 2026-11-09).**
+  On eight questions no note can answer, the AI said so in its own words 0 of 24 times and answered as if it knew in 21 (two runs). The fix stays off; the Speed-mode option waits on you (Calls). Reports `workshop:archive/research/kb-answer-eval-2026-11-09-p103-before-run1.md`, `-run2.md`. [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Next: the screenshot measurement, its plan 103 paragraph (as it stood):**
+
+  **Plan 103 (2026-11-09 and 10):** the second set (lane P1) has 29 pictures from 11 games, none a boss (target 40, at least ten bosses or enemies). The picture's own guess for the note search (lane P2) landed switched off (call 10). **Stays open (plan 103 § 5f):** the Deck timing did not run (block DP did not run, so the two picture models were not timed on the Deck); more pictures, a security read and a spoiler-rule check come before it goes on. No Deck row unless it goes on (P103-PICTURE-SEARCH-01). Report `workshop:archive/research/picture-guess-search-2026-11-10-p103-p2.md` · [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Next: Phase 5, its first line (as it stood):**
+
+- ★★★★ `[KB]` **RAG Phase 5: depth on the 23 games** — **PARTIAL.** **Plan 103: 20 of the 23 games now have enemy and item notes in the labelled shape** (14 or 15 each, 293 notes, counted from the files), each read by a checker and a licence reviewer and then fixed (the games: [Detail](roadmap-kb-details.md#plan-103-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)). With them 35 of 38 games have labelled notes (15 before). Each batch closes on your read of ten random notes (D140, call 4; see Calls). **Deck 2026-11-10 (block D3, row P103-NOTES-23-01): 17 of 20 games attached one of their new notes; the line was 18, so it is just short** (`workshop:test-evidence/plan103-P103-NOTES-23-01.json`, `-part2.json`).
+
+**Next: the versus entry (as it stood):**
+
+- ★★★★ `[KB]` **KB online / versus strategy content** — **PARTIAL, discovery locked 2026-08-09; steps one and two landed for Left 4 Dead 2 (2026-11-09, 2026-11-10); a note-order fix landed 2026-11-10 (lane V3).** Multiplayer questions (roles, callouts, co-op) got nothing specific. **Landed:** five note kinds and 15 versus notes (lanes V1, V2); lane V3 (`06039e83`, `d409b7a2`, `9bb27bdf`, `fb86e122`) renamed four versus notes and lets a note a question names by title lead a mode note (115 of 140 asks, 112 before; three points open, see Bugs). **Deck 2026-11-10 (block D3): P103-VERSUS-01 PASSED, 3 of 3** (`workshop:test-evidence/plan103-P103-VERSUS-01.json`): three versus questions each attached versus notes. A question about ambushes on a campaign's last map got a general answer that did not describe the ending, and the Dark Carnival ambush note (4511) attached. [Plan](planning/17-kb-online-versus-strategy-content.md) · [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Deck check owed: the chips entry's body (as it stood):**
+
+  After an answer, the game's chips lead with up to four notes closest to the question just asked. On this PC a chip about the subject was among the first three 12 of 90 before, 33 of 90 after ([Detail](roadmap-kb-details.md#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)). **A limit:** after the first deal the screen's rotation picks at random (Calls). **Deck 2026-11-10 (block D3, row P103-CHIP-ORDER-01): passes the row's three conditions for both games, weak as proof, and UNCLEAR for what a person sees.** The per-game reads: [Detail](roadmap-kb-details.md#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10). The row is two slots that each change by themselves every few seconds, so "the first three chips, in order" does not describe it; in a long chat the chip row sat hidden behind the "Show details" line, so no picture shows it (`workshop:test-evidence/plan103-P103-CHIP-ORDER-01.json`). **A person's look is still owed.** [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Next: Phase 5, the blind-questions line (as it stood):**
+
+  **Blind questions (counted from the files, 2026-11-10):** 586 rows in 20 files under `tests/fixtures/kb_eval/`; 477 first, 548 in the first three. **Plan 103 § 5f: stays PARTIAL:** three games have no notes, the Deck row is one short of its line, and the crowding fix was turned down twice. **Deck, by game (block D3, one retry per game):** passed Left 4 Dead 2, Red Dead Redemption 2, Cyberpunk 2077, Mario Party, Mario Party 2, 3, 6 and 7, Super Smash Bros., Melee, Grand Theft Auto III, Yoshi's Story, Diddy Kong Racing, Fallout: New Vegas, Palworld, Skyrim and Hollow Knight (six on the retry); missed on both questions: Fallout 4 (older notes cover the Deathclaw and power armor; a third question, about an Assaultron, did attach note 2308), Brotato and DOOM Eternal (only older notes attached); not asked, no notes: Hades, Half-Life 2, Black Mesa. A first look in block D1: `workshop:test-evidence/plan103-P103-NOTES-EARLY-01.json`. [Plan](planning/28-phase5-corpus-depth.md) · [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Deck check owed: Undo, the third-time line (as it stood):**
+
+  Earlier nights (2026-11-03, 2026-11-09): [Detail](roadmap-kb-details.md#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10). **Third time, 2026-11-10 (block D2, third part):** the page kept the window's focus on all 7 reads through 6 reopen cycles; with focus kept, the four Downs went notes line, strip, chip, then a scroll inside the same chip (`workshop:test-evidence/plan103-P102-UNDO-FOCUS-01-try3.json`). Not a pass for the out-of-focus state: proven by its tests only, on the maintainer's list. [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Bugs: older notes the wiki contradicts, the fixed line (as it stood):**
+
+  **Fixed 2026-11-10 (lane M, six commits):** Diddy Kong Racing, Yoshi's Story, Left 4 Dead 2 (Charger and Smoker), Hollow Knight (the tram), Fallout: New Vegas (the doctor's bag), Palworld (Predator Pals, Raid Bosses).
+
+**Bugs: notes quotes not yet sorted (as it stood):**
+
+  The twelve older notes files from plans 100 and 102 have never had their quotes sorted that way (a game's own text is not covered by a wiki's licence). Two Cyberpunk 2077 gang pages (Tyger Claws, Maelstrom) are laid out like the page the wiki flags as copied from a book but carry no such flag; their notes were kept. About twenty "Weak points" lines across older and new files may hold no weakness. [Detail](roadmap-kb-details.md#plan-103-sweep-k10-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Next: Phase 5, the three games without notes (as it stood):**
+
+  **No notes for three games:** Hades (its wiki is CC BY-NC-SA; Wikipedia has too little); Half-Life 2 and Black Mesa (their wiki answered "Database is read-only" on every read, three tries each night, 2026-11-09 and 2026-11-10). **Next wave (your call, 2026-11-10): notes for Half-Life 2 and Black Mesa;** Hades stays without (its wiki's licence forbids reuse).
+
+**Next: Phase 5, the first line before the note count changed (as it stood):**
+
+- ★★★★ `[KB]` **RAG Phase 5: depth on the 23 games** — **PARTIAL.** **Plan 103: 20 of the 23 games now have enemy and item notes in the labelled shape** (14 or 15 each, 293 notes, counted from the files), each read by a checker and a licence reviewer and then fixed (the games: [Detail](roadmap-kb-details.md#plan-103-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)). With them 35 of 38 games have labelled notes (15 before). **Your read of ten random notes from each of six samples passed 2026-11-10 (checks page; D140, call 4); the library is published as 2026.11.10, and "Fallen Survivor" (Left 4 Dead 2) leaves at the next publish.** **Deck 2026-11-10 (block D3, row P103-NOTES-23-01): 17 of 20 games attached one of their new notes; the line was 18, so it is just short** (`workshop:test-evidence/plan103-P103-NOTES-23-01.json`, `-part2.json`).
+
+**Next: the versus entry, a phrase cut (as it stood):** "lane V3 (`06039e83`, `d409b7a2`, `9bb27bdf`, `fb86e122`) renamed"
+
+**Bugs: Left 4 Dead 2 mix-ups, a sentence cut (as it stood):** "Six test rows did not get their note back: `V2-S-L4D2-29`, `V2-PARA-S03`, `V2-BLINDT-19`, `V2-BLINDT-23`, `V2-P103-L4D2-13`, `-16`."
+
+**Deck check owed: the details-strip entry, a pointer cut (as it stood):** "The full reading: [Detail](#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)"
+
+**Small phrases cut from entries in the same sweep (as they stood):**
+
+- Honest-answer entry: "On eight questions no note can answer, the AI said so 0 of 24 times"; record `workshop:archive/research/kb-honest-unknown-2026-11-10-h1.md`.
+- Mod knowledge entry: "sources and licences listed 2026-11-02 (plan 102 lane J)"; "Offline answers about mod load order that name the mods on the device".
+- Phase 5 entry: "A first look in block D1: `workshop:test-evidence/plan103-P103-NOTES-EARLY-01.json`"; the by-game list is on the testing row P103-NOTES-23-01.
+- Deck check owed header: "the second model was downloaded and removed" (block DP), and the block DP evidence `workshop:test-evidence/plan103-P103-DP-TIMING.json`.
+- Screenshot entry: "No Deck row unless it goes on (P103-PICTURE-SEARCH-01)."

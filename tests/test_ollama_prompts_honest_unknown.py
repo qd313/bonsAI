@@ -313,11 +313,13 @@ class TurnFlagTests(unittest.TestCase):
 
     def test_cases_the_footer_stays_quiet_on_are_not_flagged(self):
         self.assertEqual(_flags(_NOTHING_ATTACHED, [], courtesy=True), frozenset())
-        self.assertEqual(_flags(_NOTHING_ATTACHED, [], mode="speed"), frozenset())
+        with _speed_switch(False):  # Speed is read by the Strategy rules only when its own switch is on
+            self.assertEqual(_flags(_NOTHING_ATTACHED, [], mode="speed"), frozenset())
         self.assertEqual(_flags(_CUT_FOR_ROOM, []), frozenset())
         self.assertEqual(_flags(_TIP_SHEET_EMPTY, []), frozenset())
         self.assertEqual(_flags(_NOTHING_ATTACHED, [], coverage=_UNCOVERED), frozenset())
 
+    @patch.object(ollama_prompts, "HONEST_UNKNOWN_IN_SPEED_ON", False)  # the footer never shows in Speed; the Speed switch is covered by its own tests below
     def test_the_flag_is_set_exactly_when_the_footer_would_be_added(self):
         cases = itertools.product(
             (_THIN_MATCH, _NOTHING_ATTACHED, _CUT_FOR_ROOM, _TIP_SHEET_EMPTY, _GOOD_MATCH),
@@ -414,8 +416,9 @@ class TurnFlagInSpeedModeTests(unittest.TestCase):
     The footer lines never show in Speed and still do not: only the flag changes, and only with the switch on.
     """
 
-    def test_the_switch_lands_off(self):
-        self.assertFalse(ollama_prompts.HONEST_UNKNOWN_IN_SPEED_ON)
+    def test_the_switch_lands_on(self):
+        # Switched on in plan 103 follow-up H1 after the Speed measurement (see the comment above the switch).
+        self.assertTrue(ollama_prompts.HONEST_UNKNOWN_IN_SPEED_ON)
 
     def test_with_the_switch_off_a_speed_turn_is_never_flagged_whatever_the_notes_did(self):
         with _speed_switch(False):

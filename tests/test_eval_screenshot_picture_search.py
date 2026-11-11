@@ -241,6 +241,30 @@ class FiguresTests(_ScriptCase):
         self.assertEqual(self.mod.search_report_name("2026-11-10", "p103-p2"), "picture-guess-search-2026-11-10-p103-p2.md")
 
 
+class RowsFileTests(_ScriptCase):
+    def test_every_row_is_saved_in_full_and_read_back_so_a_run_can_be_sliced_by_picture(self):
+        verdict = self.mod.GuessVerdict(game="right", place="unsure", enemy="wrong", said_not_sure=True)
+        long_reply = "Hollow Knight. " * 80  # the markdown report cuts a reply at 300 characters; the file must not
+        rows = [
+            self.mod.SearchRow(
+                picture_id="a", model="m", sample=2, status="written", seconds=3.5, raw=long_reply, words="Hollow Knight",
+                verdict=verdict, expect="False Knight", found_today={QUESTIONS[0]: False, QUESTIONS[1]: True},
+                found_with={QUESTIONS[0]: True, QUESTIONS[1]: True}),
+            self.mod.SearchRow(
+                picture_id="b", model="m", sample=1, status="failed", seconds=60.0, raw="", words="", verdict=None,
+                expect="", found_today={}, found_with={}),
+        ]
+        text = self.mod.search_rows_json(rows)
+        self.assertIn(long_reply.strip(), text)
+        back = self.mod.search_rows_from_json(text)
+        self.assertEqual(back, rows)
+        self.assertEqual(self.mod.search_figures(back, "m", QUESTIONS), self.mod.search_figures(rows, "m", QUESTIONS))
+
+    def test_the_rows_file_sits_beside_the_report_with_the_same_name(self):
+        self.assertEqual(
+            self.mod.search_rows_name("2026-11-11", "p5-run1"), "picture-guess-search-2026-11-11-p5-run1.json")
+
+
 class ParserTests(_ScriptCase):
     def test_the_flag_and_its_options_exist_with_the_decks_starter_model_and_qwen_by_default(self):
         args = self.mod.build_parser().parse_args(["--picture-search"])

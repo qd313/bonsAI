@@ -19,7 +19,8 @@ Used for: the screenshot reading measurement of plan 98 (docs/planning/98-kb-fea
 Solves: Attaching a screenshot is a headline feature and nothing measured how well the AI reads one, so every
         change to the picture path, the prompt or the model was judged by eye.
 Does not: Touch the Deck, judge with a second model, change a prompt, or save a report unless asked
-          (--write-report puts one in the workshop's research folder; it is never committed here). Sampling is
+          (--write-report puts one in the workshop's research folder, with a .json file of every row beside it
+          for --picture-search; neither is ever committed here). Sampling is
           stochastic at the shipped temperature, so a figure is a rate over --samples tries, not a verdict.
 
 Usage:
@@ -43,7 +44,7 @@ import statistics
 import sys
 import time
 import urllib.request
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from datetime import date
 from pathlib import Path
 from typing import Any, Callable, Optional
@@ -695,6 +696,25 @@ def search_report_name(day: str, label: str = "") -> str:
     return f"picture-guess-search-{day}" + (f"-{clean}" if clean else "") + ".md"
 
 
+def search_rows_name(day: str, label: str = "") -> str:
+    """The rows file's name: the report's own name with .json, so the two sit side by side."""
+    return search_report_name(day, label)[: -len(".md")] + ".json"
+
+
+def search_rows_json(rows: list[SearchRow]) -> str:
+    """Every row in full. The report cuts each reply short and only totals what the guesses said, so this file
+    is what lets a run be sliced afterwards (the boss pictures alone, say) with the same figures code."""
+    return json.dumps([asdict(r) for r in rows], indent=1, ensure_ascii=False) + "\n"
+
+
+def search_rows_from_json(text: str) -> list[SearchRow]:
+    out: list[SearchRow] = []
+    for raw in json.loads(text):
+        verdict = raw.pop("verdict")
+        out.append(SearchRow(verdict=GuessVerdict(**verdict) if verdict else None, **raw))
+    return out
+
+
 def format_search_report(meta: dict, rows: list[SearchRow], questions: tuple[str, ...]) -> str:
     """The report: per model, how often the right note was attached today and with the guess, the seconds the
     first call added, and what the guess said against the labels."""
@@ -809,6 +829,9 @@ def run_picture_search(args: argparse.Namespace, found: list[tuple[Picture, Path
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(report, encoding="utf-8")
         print(f"Wrote {out}")
+        rows_out = out.with_name(search_rows_name(date.today().isoformat(), args.label))
+        rows_out.write_text(search_rows_json(rows), encoding="utf-8")
+        print(f"Wrote {rows_out}")
     return 0
 
 

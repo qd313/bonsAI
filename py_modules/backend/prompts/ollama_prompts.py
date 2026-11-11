@@ -296,14 +296,15 @@ HONEST_UNKNOWN_WORDING = "a"
 # so without this the flag is never set there and the sentence above never reaches a Speed turn. With it
 # on, ``prompt_turn_flags`` reads a Speed turn the way it reads a Strategy one; the footer step is not
 # touched and still writes nothing in Speed. Read when a turn is flagged, not when this file loads.
-# Switched on 2026-11-10 after this measurement (answer test, 20 ordinary Speed questions plus the 3 Speed
-# questions the notes cannot answer, three tries each, two runs, the main switch on with wording d): no
-# ordinary Speed answer was flagged (0 of 60 in both runs) so none carried the sentence, and facts kept
-# (46 of 60, 47 of 60) and contradictions (0 of 9 both runs) matched the same questions with this switch
-# off. It reached 3 of the 9 Speed answers the notes cannot answer (the made-up boss Grimthak), where the
-# small model still wrote about the boss as if it were real. On its own it shows nothing: it only sets the
-# flag, so a person sees a difference only while ``HONEST_UNKNOWN_ON`` is also on.
-HONEST_UNKNOWN_IN_SPEED_ON = True
+# Off. It was on for part of 2026-11-10 (plan 103 follow-up H1, round one) and is off again because it must not
+# sit on while the main switch is off and unproven. What the Speed measurement showed (answer test, 20 ordinary
+# Speed questions plus the 3 Speed questions the notes cannot answer, three tries, two runs, main switch on):
+# no ordinary Speed answer was flagged (0 of 60 both runs), so none carried a remark, and facts kept (46 of 60,
+# 47 of 60) and contradictions (0 of 9 both runs) matched the same questions with this switch off, with wording
+# d and again with wording g. It flagged 3 of the 9 Speed answers the notes cannot answer, the made-up boss
+# Grimthak, and on all 6 of those answers (3 per run) with each of the two wordings the small model still wrote
+# about the boss as if it were real. Turn it on together with ``HONEST_UNKNOWN_ON`` once a wording is proven.
+HONEST_UNKNOWN_IN_SPEED_ON = False
 HONEST_UNKNOWN_WORDINGS = {
     "a": (
         "NOTES GAP: The attached notes do not cover this question, so begin your reply by telling the "

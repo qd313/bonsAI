@@ -821,6 +821,23 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
      Black Mesa; the defibrillator note; the borrowed-advice bug; noticing more "not covered" questions before the AI
      is asked.
 
+- **The picture tests (2026-11-11, afternoon; tip `ffc9b37b` plus this entry's commit).**
+  1. *The maintainer:* pushed again (GitHub matched this PC at `15fe3f07`); marked all 28 public boss pictures on the
+     checks page, 23 to use and 5 to leave out (22 boss pictures of 19 bosses in 9 games, and one ordinary enemy); then
+     "Yes, run them".
+  2. *Landed, not pushed:* the 23 pictures' labels (the set now holds 52 pictures, 27 with a note); the picture-search
+     test saves its rows; a new test that asks a picture model to mark a boss picture
+     (`scripts/kb/eval_screenshot_marks.py`); the bookkeeper's sweep K13.
+  3. *The picture's own guess:* its landing rule is not met. The starter model made the note search worse (the right
+     note found 45 times of 270 without the guess, 37 and 33 with it); the second model helped about one and a half
+     times (61 and 71), short of twice. It stays switched off.
+  4. *Marks on a boss picture:* four picture models, 22 pictures, three tries each, graded by two Opus helpers by one
+     written rule. Averages out of 10: 2.95, 2.89, 2.64 (the starter model) and 2.18, against a bar of 7. The marked
+     screenshot is not built. The question's wording was changed twice during the day because models copied its
+     example; one model was graded on the earlier wording. The test and the pictures stay for a later, better model.
+  5. *Lesson:* a test question that shows an example or a template gets the example copied back by a small model;
+     count copies apart from answers, and settle the wording on two pictures before a full run.
+
 **Questions for the maintainer (the safest choice is taken meanwhile):**
 
 2. **Answered 2026-11-09, 21:12 EST:** the Deck was frozen with God of War in the background and an answer half

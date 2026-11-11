@@ -2603,3 +2603,9 @@ Asked by the planning chat for [plan 103](../planning/103-kb-wave-six-finish-the
 - **The next wave.** "Let's target Half-Life 2 and Black Mesa for notes during the next wave", and "I want the memory
   freeze bug handled in the next wave, I will talk about that next wave in a separate chat". Also for it, from their
   note on the samples: the defibrillator note should say which campaigns and chapters it is found on.
+- **The boss pictures (answered 2026-11-11, on the checks page and in chat).** Of 28 public screenshots, 23 marked
+  "Use it" and 5 "Leave it out" (three as "Doesn't look like a screenshot, too cinematic looking", one "Not sure about
+  this one", one with no note); then "Yes, run them" for the two picture tests. Both ran the same day: the picture's own
+  guess did not meet its rule and stays off; no picture model reached 3 out of 10 at marking a boss against a bar of 7,
+  so the marked screenshot is not built (call 12). Also theirs, for the next wave: the Fallout 4 Deathclaw note should
+  say in a sentence or two whether variants such as the alpha matter.

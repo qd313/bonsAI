@@ -124,8 +124,36 @@ class ReaderTests(_Case):
         q = self.mod.QUESTION
         for needle in ("up to three", "kind, x, y, three words, sure", "hit", "avoid", "dodge", "not sure", "from 0 to 1"):
             self.assertIn(needle, q)
-        example = q.split("Example: ", 1)[1].split(". If you", 1)[0]
-        self.assertEqual(len(self.mod.read_marks(example).marks), 1, "the example in the question must itself read")
+        self.assertIn("form only", q)
+        self.assertIn("not an answer", q)
+        example = q.split("not an answer: ", 1)[1].split(". If you", 1)[0]
+        self.assertEqual(example, self.mod.EXAMPLE_LINE)
+        got = self.mod.read_marks(example)
+        self.assertEqual((got.marks, got.unread, len(got.copied)), ([], [], 1), "the example itself is read as a copy")
+
+    def test_the_example_is_one_no_real_picture_earns_on_merit(self):
+        self.assertEqual((self.mod.EXAMPLE_X, self.mod.EXAMPLE_Y, self.mod.EXAMPLE_WORDS), (0.04, 0.96, "purple teapot"))
+
+    def test_a_line_with_the_examples_numbers_and_words_is_counted_as_copied_not_read_as_a_mark(self):
+        for line in (
+            "avoid, 0.04, 0.96, purple teapot, sure",
+            "hit, 0.04, 0.96, Purple Teapot, not sure",   # kind and sure changed around the copied numbers and words
+            "1. dodge, .04, 0.96, purple  teapot, sure",  # a list mark, another way of writing a number
+        ):
+            with self.subTest(line=line):
+                got = self.mod.read_marks(line)
+                self.assertEqual((got.marks, got.unread, got.copied), ([], [], [line]))
+                self.assertFalse(got.clean)
+
+    def test_the_numbers_alone_or_the_words_alone_are_not_a_copy(self):
+        got = self.mod.read_marks("hit, 0.04, 0.96, red eye, sure\nhit, 0.5, 0.5, purple teapot, sure")
+        self.assertEqual(len(got.marks), 2)
+        self.assertEqual(got.copied, [])
+
+    def test_a_copied_line_beside_a_real_mark_leaves_the_real_mark_and_the_count_of_marks_alone(self):
+        got = self.mod.read_marks("avoid, 0.04, 0.96, purple teapot, sure\nhit, 0.5, 0.4, red eye, sure")
+        self.assertEqual([m.n for m in got.marks], [1])
+        self.assertEqual(len(got.copied), 1)
 
 
 class WordsTests(_Case):
@@ -320,6 +348,15 @@ class SheetTests(_Case):
         self.assertIn("the library holds no note for this one", sheet)
         self.assertIn("The ask failed: TimeoutError: slow", sheet)
         self.assertIn("Asks that failed: 1.", sheet)
+
+    def test_a_copied_example_is_counted_in_the_sheet_on_its_own_line_and_in_the_top_count(self):
+        copied = self.mod.EXAMPLE_LINE
+        sheet = self.mod.format_sheet("m:1", [self._pic()], [self._try(1, copied), self._try(2, copied + "\nhit, 0.5, 0.5, red eye, sure")],
+                                      {}, {"note": ""})
+        self.assertIn("Replies that copied the question's example: 2.", sheet)
+        self.assertIn(f"- Line that copied the question's example (not a mark): {copied}", sheet)
+        self.assertIn("No mark: the reply only copied the question's example.", sheet)
+        self.assertIn("Lines that did not read: 0.", sheet)
 
     def test_model_folder_has_no_colon(self):
         self.assertEqual(self.mod.model_folder("gemma4:e2b-it-qat"), "gemma4-e2b-it-qat")

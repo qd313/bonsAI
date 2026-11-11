@@ -56,6 +56,10 @@ DEFAULT_MODELS = "gemma4:e2b-it-qat,qwen2.5vl:3b,qwen3.5:4b,llava:7b"
 
 # --- the question ----------------------------------------------------------------------------
 
+# The example in the question shows the form only. Its numbers and words are ones no real picture would earn on
+# merit (the far lower-left corner, a purple teapot), so a model that copies it is caught, not rewarded.
+EXAMPLE_KIND, EXAMPLE_X, EXAMPLE_Y, EXAMPLE_WORDS, EXAMPLE_SURE = "avoid", 0.04, 0.96, "purple teapot", "sure"
+EXAMPLE_LINE = f"{EXAMPLE_KIND}, {EXAMPLE_X}, {EXAMPLE_Y}, {EXAMPLE_WORDS}, {EXAMPLE_SURE}"
 SYSTEM_TEXT = "You look at one video game screenshot and point at things on it. No other text."
 QUESTION = (
     "Mark up to three things on this screenshot that matter when fighting the boss or enemy you can see. "
@@ -63,7 +67,7 @@ QUESTION = (
     "The kind is hit (a weak point to attack), avoid (something that hurts you) or dodge (an attack to step away "
     "from). x is how far across the picture from the left edge and y is how far down from the top edge, each a "
     "number from 0 to 1. Then three words naming the thing. End with sure, or with not sure when you are guessing. "
-    "Example: hit, 0.62, 0.35, glowing red eye, sure. "
+    f"This line shows the form only and is not an answer: {EXAMPLE_LINE}. "
     "If you cannot see a boss or an enemy, write the single word none."
 )
 MAX_MARKS = 3
@@ -93,18 +97,21 @@ class Mark:
 class MarkReading:
     """What one reply turned into. ``marks`` are the first three that read; ``unread`` lists every line that did
     not (kept word for word); ``extra`` counts marks that read but came after the third and were left out;
-    ``said_none`` is a reply that was only the word none (an honest empty answer, not a failure to read)."""
+    ``said_none`` is a reply that was only the word none (an honest empty answer, not a failure to read);
+    ``copied`` lists the lines whose numbers and words are the question's example, word for word: not a mark and
+    not an unread line, counted on their own."""
 
     marks: list[Mark] = field(default_factory=list)
     unread: list[str] = field(default_factory=list)
+    copied: list[str] = field(default_factory=list)
     extra: int = 0
     lines: int = 0
     said_none: bool = False
 
     @property
     def clean(self) -> bool:
-        """The reply read without a single line lost."""
-        return not self.unread and (bool(self.marks) or self.said_none)
+        """The reply read without a single line lost or copied."""
+        return not self.unread and not self.copied and (bool(self.marks) or self.said_none)
 
 
 _NUMBER = r"(?:0(?:\.\d+)?|1(?:\.0+)?|\.\d+)"
@@ -119,9 +126,16 @@ _LIST_MARK = re.compile(r"^(?:\d{1,2}[.)]|[-*•])\s+")
 _THINK = re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE)
 
 
+def _is_example(m: "re.Match[str]") -> bool:
+    """A mark line whose two numbers and words are the question's example's (the kind and the sure do not matter:
+    a model that copies the numbers and the words has copied the example, whatever it changed around them)."""
+    return (float(m.group("x")), float(m.group("y"))) == (EXAMPLE_X, EXAMPLE_Y) and (
+        " ".join(m.group("words").split()).lower() == EXAMPLE_WORDS)
+
+
 def read_marks(reply: str) -> MarkReading:
     """Read a reply strictly. Every non-blank line must be a mark in exactly the asked form (a list mark in front
-    is allowed), or the single word none. A kind that is not hit, avoid or dodge, a number outside 0 to 1 or
+    is allowed), or the single word none. A line with the example's numbers and words is "copied", not a mark. A kind that is not hit, avoid or dodge, a number outside 0 to 1 or
     written as a percent, a missing or wrong sure, or more than six words all leave the line unread. Nothing is
     repaired, reordered or guessed; a line that does not read is kept in ``unread`` so it can be counted."""
     out = MarkReading()
@@ -138,6 +152,9 @@ def read_marks(reply: str) -> MarkReading:
         m = _MARK_LINE.match(body)
         if not m:
             out.unread.append(line)
+            continue
+        if _is_example(m):
+            out.copied.append(line)
             continue
         if len(out.marks) >= MAX_MARKS:
             out.extra += 1
@@ -400,6 +417,7 @@ def format_sheet(model: str, pictures: list[Any], tries: list[Try], advice: dict
     n_none = sum(1 for t in tries if t.reading.said_none and not t.reading.marks)
     n_unread = sum(len(t.reading.unread) for t in tries)
     n_failed = sum(1 for t in tries if t.error)
+    n_copied = sum(1 for t in tries if t.reading.copied)
     lines = [
         f"# Marks on boss pictures: grading sheet for {model}", "",
         meta.get("note", ""), "",
@@ -409,7 +427,8 @@ def format_sheet(model: str, pictures: list[Any], tries: list[Try], advice: dict
         "Kinds: hit is a weak point to attack, avoid is something that hurts you, dodge is an attack to step away from. "
         "Where: the first number is how far across from the left (0 to 1), the second how far down from the top (0 to 1).", "",
         f"Tries: {n_replies}. Marks that read: {n_marks}. Replies that were only the word none: {n_none}. "
-        f"Lines that did not read: {n_unread}. Asks that failed: {n_failed}.", "",
+        f"Lines that did not read: {n_unread}. Replies that copied the question's example: {n_copied}. "
+        f"Asks that failed: {n_failed}.", "",
     ]
     for pic in pictures:
         mine = by_pic.get(pic.id, [])
@@ -434,12 +453,16 @@ def format_sheet(model: str, pictures: list[Any], tries: list[Try], advice: dict
                 lines += [f"- {mark_in_words(m)}" for m in r.marks]
             elif r.said_none:
                 lines.append("- The model answered with the single word none: no marks.")
+            elif r.copied and not r.unread:
+                lines.append("- No mark: the reply only copied the question's example.")
             else:
                 lines.append("- No mark could be read from this reply.")
             if r.extra:
                 lines.append(f"- {r.extra} further mark line(s) after the third were left out.")
             for bad in r.unread:
                 lines.append(f"- Line that did not read: {bad}")
+            for copied in r.copied:
+                lines.append(f"- Line that copied the question's example (not a mark): {copied}")
             if t.full_path:
                 lines.append(f"- Drawn copy: {t.full_path}")
                 lines.append(f"- Preview (260 by 140): {t.preview_path}")

@@ -292,6 +292,11 @@ TURN_FLAG_NOTES_DO_NOT_COVER = "notes_do_not_cover"
 # quotes a phrase for the AI to copy, so what it says is its own.
 HONEST_UNKNOWN_ON = False
 HONEST_UNKNOWN_WORDING = "a"
+# The second switch (plan 103 follow-up H1, 2026-11-10). The two footer lines never show in Speed mode,
+# so without this the flag is never set there and the sentence above never reaches a Speed turn. With it
+# on, ``prompt_turn_flags`` reads a Speed turn the way it reads a Strategy one; the footer step is not
+# touched and still writes nothing in Speed. Read when a turn is flagged, not when this file loads.
+HONEST_UNKNOWN_IN_SPEED_ON = False
 HONEST_UNKNOWN_WORDINGS = {
     "a": (
         "NOTES GAP: The attached notes do not cover this question, so begin your reply by telling the "

@@ -382,5 +382,133 @@ class TurnFlagReachesThePromptEndToEndTests(SmallLibraryAskSetup, unittest.TestC
             self.assertNotIn(wording, self._system_prompt_for(horse_call, horse))
 
 
+def _speed_switch(on: bool):
+    """Hold the second switch (the flag in Speed mode) for one block of a test."""
+    return patch.object(ollama_prompts, "HONEST_UNKNOWN_IN_SPEED_ON", on)
+
+
+_SPEED_CASES = list(
+    itertools.product(
+        (_THIN_MATCH, _NOTHING_ATTACHED, _CUT_FOR_ROOM, _TIP_SHEET_EMPTY, _GOOD_MATCH),
+        ([], _STRAY_NOTES, _EXPLODER),
+        (_COVERED, _UNCOVERED),
+        ("how do I tame a horse", "how do I beat the exploder"),
+        (False, True),
+    )
+)
+
+
+def _each_speed_case(test, check):
+    """Call ``check(transparency, notes, args)`` for every combination of the table above, each one
+    a sub-test labelled with what it holds; ``args`` are the keyword arguments of ``_flags``."""
+    for transparency, notes, coverage, question, courtesy in _SPEED_CASES:
+        label = dict(attached=transparency["kb_attached"], notes=len(notes),
+                     coverage=coverage["kb_coverage_status"], question=question, courtesy=courtesy)
+        with test.subTest(**label):
+            check(transparency, notes, dict(coverage=coverage, question=question, courtesy=courtesy))
+
+
+class TurnFlagInSpeedModeTests(unittest.TestCase):
+    """Piece 3 of follow-up H1: Speed mode can have the flag worked out too, behind its own switch.
+
+    The footer lines never show in Speed and still do not: only the flag changes, and only with the switch on.
+    """
+
+    def test_the_switch_lands_off(self):
+        self.assertFalse(ollama_prompts.HONEST_UNKNOWN_IN_SPEED_ON)
+
+    def test_with_the_switch_off_a_speed_turn_is_never_flagged_whatever_the_notes_did(self):
+        with _speed_switch(False):
+            _each_speed_case(
+                self, lambda t, n, a: self.assertEqual(_flags(t, n, mode="speed", **a), frozenset())
+            )
+
+    def test_with_the_switch_on_a_speed_turn_the_notes_do_not_cover_is_flagged(self):
+        with _speed_switch(True):
+            self.assertEqual(_flags(_NOTHING_ATTACHED, [], mode="speed"), _FLAGGED)
+            self.assertEqual(_flags(_THIN_MATCH, _STRAY_NOTES, mode="speed"), _FLAGGED)
+
+    def test_with_the_switch_on_a_speed_turn_the_notes_cover_is_not_flagged(self):
+        with _speed_switch(True):
+            self.assertEqual(
+                _flags(_GOOD_MATCH, _EXPLODER, mode="speed", question="how do I beat the exploder"), frozenset()
+            )
+
+    def test_with_the_switch_on_the_quiet_cases_stay_quiet_in_speed_too(self):
+        with _speed_switch(True):
+            self.assertEqual(_flags(_NOTHING_ATTACHED, [], mode="speed", courtesy=True), frozenset())
+            self.assertEqual(_flags(_CUT_FOR_ROOM, [], mode="speed"), frozenset())
+            self.assertEqual(_flags(_TIP_SHEET_EMPTY, [], mode="speed"), frozenset())
+            self.assertEqual(_flags(_NOTHING_ATTACHED, [], mode="speed", coverage=_UNCOVERED), frozenset())
+
+    def test_with_the_switch_on_a_speed_turn_is_flagged_exactly_when_a_strategy_footer_would_be_added(self):
+        with _speed_switch(True):
+            _each_speed_case(
+                self,
+                lambda t, n, a: self.assertEqual(
+                    bool(_flags(t, n, mode="speed", **a)), _footer_added(t, n, mode="strategy", **a)
+                ),
+            )
+
+    def test_the_switch_changes_nothing_on_a_strategy_or_expert_turn(self):
+        def same_either_way(t, n, a, mode):
+            with _speed_switch(False):
+                off = _flags(t, n, mode=mode, **a)
+            with _speed_switch(True):
+                on = _flags(t, n, mode=mode, **a)
+            self.assertEqual(on, off)
+
+        for mode in ("strategy", "expert"):
+            _each_speed_case(self, lambda t, n, a: same_either_way(t, n, a, mode))
+
+    def test_the_footer_lines_still_never_show_in_speed_with_the_switch_on(self):
+        with _speed_switch(True):
+            _each_speed_case(self, lambda t, n, a: self.assertFalse(_footer_added(t, n, mode="speed", **a)))
+
+    def test_a_speed_mode_flag_with_the_main_switch_off_changes_no_saved_fingerprint(self):
+        with _switch(False), _speed_switch(True):
+            for name, kw in prompt_cases():
+                with self.subTest(case=name):
+                    self.assertEqual(build_prompt(**kw), build_prompt(turn_flags=_FLAGGED, **kw))
+
+    def test_with_both_switches_on_a_speed_prompt_carries_the_sentence_only_when_flagged(self):
+        wording = HONEST_UNKNOWN_WORDINGS["a"]
+        with _switch(True, "a"), _speed_switch(True):
+            flagged = _build(_PLAIN_CARD, ask_mode="speed", turn_flags=_FLAGGED)
+            clear = _build(_PLAIN_CARD, ask_mode="speed", turn_flags=frozenset())
+        self.assertIn(wording, flagged)
+        self.assertNotIn(wording, clear)
+
+
+class TurnFlagInSpeedModeEndToEndTests(SmallLibraryAskSetup, unittest.TestCase):
+    """The real ask path in Speed mode against the small real library."""
+
+    _HORSE = "How do I tame a horse in Deep Rock Galactic Survivor?"
+    # Speed mode searches by keyword only and with a stricter floor, so the small library's note is
+    # found by a question that is nearly its own words.
+    _BOSS = "Glyphid Dreadnought weak spot"
+
+    def _flags_handed_to_the_model(self, question):
+        plugin = _FakePlugin(self.settings)
+        plugin.reply = "I am not sure about that."
+        asyncio.run(
+            run_game_ai_request(
+                plugin, question, "127.0.0.1:11434", app_id=_DRG_APP_ID, app_name=_DRG_APP_NAME, ask_mode="speed",
+            )
+        )
+        kb_followup_memory.forget()
+        return plugin.ask_calls[0]["turn_flags"]
+
+    def test_with_the_switch_off_neither_question_is_flagged_in_speed(self):
+        with _speed_switch(False):
+            self.assertEqual(self._flags_handed_to_the_model(self._HORSE), frozenset())
+            self.assertEqual(self._flags_handed_to_the_model(self._BOSS), frozenset())
+
+    def test_with_the_switch_on_the_uncovered_question_is_flagged_and_the_covered_one_is_not(self):
+        with _speed_switch(True):
+            self.assertEqual(self._flags_handed_to_the_model(self._HORSE), _FLAGGED)
+            self.assertEqual(self._flags_handed_to_the_model(self._BOSS), frozenset())
+
+
 if __name__ == "__main__":
     unittest.main()

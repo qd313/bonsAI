@@ -31,6 +31,7 @@ from backend.knowledge.kb_not_in_notes_notice import (
     should_show_not_in_notes_notice,
     tip_sheet_turn_came_back_empty,
 )
+from backend.prompts import ollama_prompts
 from backend.prompts.ollama_prompts import TURN_FLAG_NOTES_DO_NOT_COVER
 
 
@@ -48,9 +49,15 @@ def prompt_turn_flags(
 
     A thank-you or off-topic turn searched no notes, so it is never flagged (the footer step
     leaves such a reply untouched too).
+
+    In Speed mode the footer never shows, so by default no Speed turn is flagged. With
+    ``ollama_prompts.HONEST_UNKNOWN_IN_SPEED_ON`` set, a Speed turn is read by the Strategy rules
+    (the footer step is not changed and still writes nothing in Speed).
     """
     if courtesy_turn:
         return frozenset()
+    if ollama_prompts.HONEST_UNKNOWN_IN_SPEED_ON and (ask_mode or "").strip().lower() == "speed":
+        ask_mode = "strategy"
     attached = bool(kb_transparency.get("kb_attached"))
     kb_notes = str(kb_transparency.get("kb_notes") or "")
     tip_sheet_came_back_empty = tip_sheet_turn_came_back_empty(

@@ -552,12 +552,59 @@ SCORING_RULE = (
     "low, not zero.")
 
 
+def try_class(row: dict) -> str:
+    """What a try came to: marks (it has at least one mark), none (the single word), copied (only the question's
+    example), failed (the ask did not answer) or unread (anything else: lines that did not read, or nothing)."""
+    if row.get("error"):
+        return "failed"
+    if row.get("marks"):
+        return "marks"
+    if row.get("said_none"):
+        return "none"
+    if row.get("copied") and not row.get("unread"):
+        return "copied"
+    return "unread"
+
+
+def _marks_key(row: dict) -> tuple:
+    return tuple((m["kind"], m["x"], m["y"], m["words"], m["sure"]) for m in row.get("marks") or [])
+
+
+def tries_to_open(rows: list[dict]) -> dict[str, list[dict]]:
+    """Per model, the tries that have at least one mark, each with ``same_as``: the number of an earlier try on the
+    same picture whose marks are identical (then the grader scores it once), or 0 when it is new."""
+    out: dict[str, list[dict]] = {}
+    firsts: dict[tuple, int] = {}
+    for r in sorted(rows, key=lambda r: (r["model"], r["extra"], r["picture"], r["sample"])):
+        if try_class(r) != "marks":
+            continue
+        key = (r["model"], r["picture"], _marks_key(r))
+        same = firsts.setdefault(key, r["sample"])
+        out.setdefault(r["model"], []).append(dict(r, same_as=0 if same == r["sample"] else same))
+    return out
+
+
+def open_counts(rows: list[dict]) -> dict[str, tuple[int, int]]:
+    """Per model, how many drawn pictures a grader must open: (scored pictures, extra pictures), counting a try
+    that repeats an earlier try's marks once."""
+    counts: dict[str, tuple[int, int]] = {}
+    for model, tries in tries_to_open(rows).items():
+        new = [t for t in tries if not t["same_as"]]
+        counts[model] = (sum(1 for t in new if not t["extra"]), sum(1 for t in new if t["extra"]))
+    return counts
+
+
 def format_index(rows: list[dict]) -> str:
-    """The one file the grader is handed. What the test is, the scoring rule, and a table of every drawn picture:
-    model, picture, try, the drawn copy, and the sheet section that says what the model marked and what its note
-    advises. ``rows`` hold model, picture, sample, full_path, sheet_path and extra (a picture outside the scored set)."""
-    scored = sorted((r for r in rows if not r["extra"]), key=lambda r: (r["model"], r["picture"], r["sample"]))
-    extras = sorted((r for r in rows if r["extra"]), key=lambda r: (r["model"], r["picture"], r["sample"]))
+    """The one file the grader is handed. What the test is, the scoring rule, per model the tries to open (a try
+    with the same marks as an earlier try on its picture is scored once), the tries with no marks (scored by the
+    rule, no picture to open), and a table of every drawn picture. ``rows`` hold model, picture, sample, full_path,
+    sheet_path, extra (a picture outside the scored set) and, from the saved tries, marks, said_none, copied,
+    unread and error."""
+    order = lambda r: (r["model"], r["picture"], r["sample"])  # noqa: E731
+    scored = sorted((r for r in rows if not r["extra"]), key=order)
+    extras = sorted((r for r in rows if r["extra"]), key=order)
+    opens = tries_to_open(rows)
+    counts = open_counts(rows)
     lines = [
         "# Grader index: marks on boss pictures", "",
         "1. A small picture model was shown a game screenshot with a boss on it and asked to mark up to three things: "
@@ -568,14 +615,38 @@ def format_index(rows: list[dict]) -> str:
         "4. Each model has one grading sheet. For each picture it gives the file, the game, the boss, the library note's own "
         "advice for that boss, and each try's marks as words (kind, where as two numbers and in plain words, the three words, "
         "sure or not sure).",
-        "5. You open each drawn copy, read its sheet section, and give the try one score. The table below lists them all.", "",
+        "5. You open each drawn copy, read its sheet section, and give the try one score. The lists below say which to open.", "",
         "## The scoring rule", "", SCORING_RULE, "",
         "Where a mark sits: the first number is how far across the picture from the left (0 to 1), the second how far down "
         "from the top (0 to 1). Pictures marked EXTRA are outside the scored set: grade them if you have room, and keep their "
         "scores apart.", "",
-        f"## Pictures to grade ({len(scored)} scored, {len(extras)} extra)", "",
-        "| Model | Picture | Try | Drawn copy | Sheet section |", "|---|---|---|---|---|",
+        "## 1. Tries to open", "",
+        "Every try that has at least one mark. A try whose marks are identical to an earlier try on the same picture says "
+        "\"same as try N\": give it the same score as that try and do not open it again.", "",
     ]
+    for model in sorted(opens):
+        n_scored, n_extra = counts[model]
+        lines += [f"### {model}: open {n_scored} scored picture(s) and {n_extra} extra", "",
+                  "| Picture | Try | Open or not | Drawn copy | Sheet section |", "|---|---|---|---|---|"]
+        for r in opens[model]:
+            tag = " (EXTRA)" if r["extra"] else ""
+            what = f"same as try {r['same_as']}" if r["same_as"] else "open"
+            lines.append(f"| {r['picture']}{tag} | {r['sample']} | {what} | {r['full_path']} | "
+                         f"{r['sheet_path']} (## {r['picture']}, then ### Try {r['sample']}) |")
+        lines.append("")
+    lines += ["## 2. Tries with no marks at all", "",
+              "There is no mark to look at, so score each by the last clause of the rule: no marks at all on a picture with a "
+              "clear boss scores low, not zero. \"none\" is the model saying it saw no boss; \"copied\" is a reply that only "
+              "repeated the question's own example line; \"unread\" is a reply with no line in the asked form (a line that "
+              "starts with the word kind counts here); \"failed\" is an ask that did not answer.", ""]
+    for kind in ("none", "copied", "unread", "failed"):
+        group = [r for r in scored + extras if try_class(r) == kind]
+        lines += [f"### {kind} ({len(group)})", ""]
+        if group:
+            lines += [f"- {r['model']} | {r['picture']}{' (EXTRA)' if r['extra'] else ''} | try {r['sample']}" for r in group]
+            lines.append("")
+    lines += [f"## Every drawn picture ({len(scored)} scored, {len(extras)} extra)", "",
+              "| Model | Picture | Try | Drawn copy | Sheet section |", "|---|---|---|---|---|"]
     for r in scored + extras:
         tag = " (EXTRA)" if r["extra"] else ""
         lines.append(f"| {r['model']} | {r['picture']}{tag} | {r['sample']} | {r['full_path']} | "
@@ -583,9 +654,9 @@ def format_index(rows: list[dict]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def write_index(out_root: Path, extra_ids: set[str]) -> Path:
-    """Build GRADER-INDEX.md from every model folder under ``out_root`` that holds a finished run's tries.json and
-    sheet (so an index written after one model lists that model, and one written after the last lists all)."""
+def index_rows(out_root: Path, extra_ids: set[str]) -> list[dict]:
+    """One row per saved try, from every model folder under ``out_root`` that holds a finished run's tries.json and
+    sheet (so a folder still being filled is left out)."""
     rows: list[dict] = []
     for folder in sorted(p for p in out_root.iterdir() if p.is_dir()):
         data, sheet = folder / "tries.json", folder / "grading-sheet.md"
@@ -593,9 +664,17 @@ def write_index(out_root: Path, extra_ids: set[str]) -> Path:
             continue
         for t in json.loads(data.read_text(encoding="utf-8")):
             rows.append({"model": t["model"], "picture": t["picture"], "sample": t["sample"], "full_path": t["full_path"],
-                         "sheet_path": str(sheet), "extra": t["picture"] in extra_ids})
+                         "sheet_path": str(sheet), "extra": t["picture"] in extra_ids, "marks": t.get("marks") or [],
+                         "said_none": bool(t.get("said_none")), "copied": t.get("copied") or [],
+                         "unread": t.get("unread") or [], "error": t.get("error") or ""})
+    return rows
+
+
+def write_index(out_root: Path, extra_ids: set[str]) -> Path:
+    """Write GRADER-INDEX.md for every finished model folder (one written after the first model lists that model,
+    one written after the last lists all four)."""
     out = out_root / INDEX_NAME
-    out.write_text(format_index(rows), encoding="utf-8")
+    out.write_text(format_index(index_rows(out_root, extra_ids)), encoding="utf-8")
     return out
 
 
@@ -691,6 +770,9 @@ def main() -> int:
               f"seconds middle {c['seconds_middle']} slowest {c['seconds_slowest']}")
         index = write_index(out_root, extra_ids)
         print(f"Wrote {index}")
+        opened = open_counts(index_rows(out_root, extra_ids))
+        if model in opened:
+            print(f"{model}: a grader opens {opened[model][0]} scored and {opened[model][1]} extra pictures")
     return 0
 
 

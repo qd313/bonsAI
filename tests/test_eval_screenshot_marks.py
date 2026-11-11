@@ -446,7 +446,7 @@ class IndexTests(_Case):
         self.assertIn('0 to 10: is each mark on the thing it names; is the advice right for this boss by its note; a confident '
                       'wrong mark costs more than an honest "not sure"; no marks at all on a picture with a clear boss scores low, '
                       'not zero.', text)
-        self.assertIn("## Pictures to grade (2 scored, 1 extra)", text)
+        self.assertIn("## Every drawn picture (2 scored, 1 extra)", text)
         self.assertIn("| m1 | a | 2 | C:/o/m1/a-try2.png | C:/o/m1/grading-sheet.md (## a, then ### Try 2) |", text)
         self.assertIn("| m1 | x (EXTRA) | 1 |", text)
         self.assertLess(text.index("| m1 | a |"), text.index("| m2 | b |"), "sorted by model, then picture")
@@ -469,6 +469,50 @@ class IndexTests(_Case):
         self.assertIn("1 scored, 0 extra", text)
         self.assertIn("| m1 | a | 1 |", text)
         self.assertNotIn("| m2 |", text)
+
+    def _row(self, model, picture, sample, reply, extra=False, error=""):
+        got = self.mod.read_marks(reply)
+        return {"model": model, "picture": picture, "sample": sample, "full_path": f"C:/o/{model}/{picture}-try{sample}.png",
+                "sheet_path": f"C:/o/{model}/grading-sheet.md", "extra": extra, "marks": [m.__dict__ for m in got.marks],
+                "said_none": got.said_none, "copied": got.copied, "unread": got.unread, "error": error}
+
+    def _grading_rows(self):
+        same = "hit, 0.5, 0.5, head, sure"
+        return [
+            self._row("m1", "a", 1, same), self._row("m1", "a", 2, same), self._row("m1", "a", 3, "hit, 0.5, 0.6, head, sure"),
+            self._row("m1", "b", 1, "none"), self._row("m1", "b", 2, self.mod.EXAMPLE_LINE),
+            self._row("m1", "b", 3, "kind, 0.2, 0.2, a thing, sure"), self._row("m1", "c", 1, "", error="TimeoutError: slow"),
+            self._row("m1", "x", 1, same, extra=True),
+            self._row("m2", "a", 1, same), self._row("m2", "a", 2, "hit, 0.5, 0.5, head, not sure"),
+        ]
+
+    def test_a_try_is_sorted_into_marks_none_copied_unread_or_failed(self):
+        classes = [self.mod.try_class(r) for r in self._grading_rows()]
+        self.assertEqual(classes, ["marks", "marks", "marks", "none", "copied", "unread", "failed", "marks", "marks", "marks"])
+        self.assertEqual(self.mod.try_class(self._row("m", "p", 1, "")), "unread", "an empty reply is unread, not a mark")
+
+    def test_a_try_with_the_same_marks_as_an_earlier_try_on_its_picture_is_listed_as_same_as_that_try(self):
+        opens = self.mod.tries_to_open(self._grading_rows())
+        m1 = {(t["picture"], t["sample"]): t["same_as"] for t in opens["m1"]}
+        self.assertEqual(m1, {("a", 1): 0, ("a", 2): 1, ("a", 3): 0, ("x", 1): 0})
+        m2 = {(t["picture"], t["sample"]): t["same_as"] for t in opens["m2"]}
+        self.assertEqual(m2, {("a", 1): 0, ("a", 2): 0}, "not sure instead of sure is a different mark")
+
+    def test_how_many_pictures_a_grader_must_open_counts_a_repeat_once_and_keeps_extras_apart(self):
+        self.assertEqual(self.mod.open_counts(self._grading_rows()), {"m1": (2, 1), "m2": (2, 0)})
+
+    def test_the_index_lists_tries_to_open_per_model_and_the_markless_tries_split_by_kind(self):
+        text = self.mod.format_index(self._grading_rows())
+        self.assertIn("### m1: open 2 scored picture(s) and 1 extra", text)
+        self.assertIn("### m2: open 2 scored picture(s) and 0 extra", text)
+        self.assertIn("| a | 2 | same as try 1 | C:/o/m1/a-try2.png |", text)
+        self.assertIn("| a | 3 | open | C:/o/m1/a-try3.png |", text)
+        self.assertIn("### none (1)\n\n- m1 | b | try 1", text)
+        self.assertIn("### copied (1)\n\n- m1 | b | try 2", text)
+        self.assertIn("### unread (1)\n\n- m1 | b | try 3", text)
+        self.assertIn("### failed (1)\n\n- m1 | c | try 1", text)
+        self.assertIn("scores low, not zero", text)
+        self.assertNotIn("b-try1.png |", text.split("## Every drawn picture")[0], "no picture to open for a try with no marks")
 
     def test_tries_are_saved_with_the_copy_the_paths_and_the_extra_flag(self):
         import json

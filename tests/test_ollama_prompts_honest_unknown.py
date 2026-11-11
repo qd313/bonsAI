@@ -12,6 +12,7 @@ tests/test_spoiler_tier.py; the tests here check the same thing from the side of
 """
 
 import asyncio
+import hashlib
 import itertools
 import unittest
 from pathlib import Path
@@ -158,14 +159,44 @@ def _switch(on: bool, wording: str = "a"):
 class HonestUnknownSentenceTests(unittest.TestCase):
     """Piece 3, the prompt side: one sentence, only when the turn's flag says the notes do not cover it."""
 
-    def test_there_are_three_wordings_and_each_is_one_sentence(self):
-        self.assertEqual(sorted(HONEST_UNKNOWN_WORDINGS), ["a", "b", "c"])
+    def test_there_are_five_wordings_and_each_is_one_sentence(self):
+        self.assertEqual(sorted(HONEST_UNKNOWN_WORDINGS), ["a", "b", "c", "d", "e"])
         for key, wording in HONEST_UNKNOWN_WORDINGS.items():
             with self.subTest(wording=key):
                 body = wording.split(": ", 1)[1]
                 self.assertTrue(body.endswith("."))
                 self.assertEqual(body.count("."), 1)
                 self.assertNotIn(". ", body)
+
+    def test_the_first_three_wordings_are_exactly_as_measured_on_2026_11_09(self):
+        # Plan 103 follow-up H1 added d and e beside these; a, b and c must stay as they were measured.
+        pinned = {
+            "a": (207, "178d6176bac4ae3c6a7b16f8fd3d40ec4925d82bf0de22b3e74c38196bfe66f8"),
+            "b": (256, "963c1ecd72257ef53b9945460dc001d7b22ca53c083d6e7c5f9bf3b01f55b63d"),
+            "c": (194, "263b0943d72feb5b36950f32cca43d4ec88e5ffd4371dbd2e2b552c654704797"),
+        }
+        for key, (length, digest) in pinned.items():
+            with self.subTest(wording=key):
+                text = HONEST_UNKNOWN_WORDINGS[key]
+                self.assertEqual(len(text), length)
+                self.assertEqual(hashlib.sha256(text.encode("utf-8")).hexdigest(), digest)
+
+    def test_d_and_e_name_both_cases_the_player_may_be_in(self):
+        # The maintainer's ask of 2026-11-10: help from what the model itself knows first, with a short
+        # honest remark; say plainly it does not know a thing it does not recognise, and make nothing up.
+        for key in ("d", "e"):
+            with self.subTest(wording=key):
+                body = HONEST_UNKNOWN_WORDINGS[key].split(": ", 1)[1].lower()
+                self.assertIn("your own knowledge", body)
+                self.assertIn("say that plainly", body)
+                self.assertIn("general help marked as general", body)
+
+    def test_d_and_e_do_not_ask_for_an_opening_admission_or_an_apology(self):
+        for key in ("d", "e"):
+            with self.subTest(wording=key):
+                body = HONEST_UNKNOWN_WORDINGS[key].lower()
+                for word in ("begin your reply", "open with", "sorry", "apolog", "i do not have"):
+                    self.assertNotIn(word, body)
 
     def test_with_the_flag_set_and_the_switch_on_the_instructions_carry_the_sentence(self):
         for key, wording in HONEST_UNKNOWN_WORDINGS.items():

@@ -307,6 +307,20 @@ HONEST_UNKNOWN_WORDINGS = {
         "NOTES GAP: This question is not covered by the attached notes, so open with one short sentence "
         "of your own telling the player that, and if you go on from general knowledge, say you may be wrong."
     ),
+    # d and e (plan 103 follow-up H1, 2026-11-10) are written for the ask of that night: where the
+    # model itself knows the thing asked about, it helps from what it knows with a few words saying
+    # so; where it does not recognise it, it says that plainly and makes up nothing. Neither asks for
+    # an opening admission, so the help comes first.
+    "d": (
+        "NOTES GAP: The attached notes do not cover this question, so if you recognise the thing asked "
+        "about, answer from your own knowledge and say in a few words that this is not from the notes, "
+        "and if you do not recognise it, say that plainly and give only general help marked as general."
+    ),
+    "e": (
+        "NOTES GAP: The attached notes do not cover this question, so help from your own knowledge first "
+        "and add a few words saying so, but if the name asked about is one you have never heard of, say "
+        "that plainly and give no facts about it, only general help marked as general."
+    ),
 }
 
 

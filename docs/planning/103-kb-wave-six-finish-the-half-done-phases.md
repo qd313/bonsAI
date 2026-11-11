@@ -803,6 +803,24 @@ names, and the next three acts, so this chat after a pause, or a new chat, can c
   4. *Next:* nothing is running. The report is in § 13; the checks page holds the reads and the calls.
   5. *Waiting on the maintainer:* § 13.1.
 
+- **After the report (2026-11-10, evening to midnight; tip `8e769e2e` plus this entry's commit).** The report in
+  § 13 describes the afternoon's end state; this is what changed after it.
+  1. *The maintainer:* pushed (GitHub matched this PC at `772b92d2`); passed all six note samples and the ten picture
+     labels; confirmed both wiki licences as stored; published the library (2026.11.10, both download places read back
+     and matched); answered calls in chat (recorded under D140 in the decisions file).
+  2. *Landed after that, not pushed:* the Left 4 Dead 2 note "Fallen Survivor" removed; the picture's own guess (still
+     off) prefers the slower, more accurate picture model; the honest "I don't know" switched ON for the turns the
+     plugin already marks, with a new wording; a Speed-mode option built and left off; the bookkeeper's sweep K12.
+  3. *The Deck:* block DP ran at last (the two picture models timed, with and without a light game); a new build went
+     on (back end only) and one check of the honest answer ran: an honest opening both times, and once borrowed advice
+     about a made-up boss (recorded as a borderline fail; the switch stays on until the maintainer says otherwise).
+     The test chat left on the Deck holds 66 turns; § 13 calls it short, which was wrong.
+  4. *Boss pictures:* 28 public screenshots (20 bosses, 10 games) wait for the maintainer's yes or no on the checks
+     page, round "Boss pictures (10 Nov)"; they are in the workshop, never in the repo.
+  5. *For the next wave (the maintainer plans it in another chat):* the memory freeze bug; notes for Half-Life 2 and
+     Black Mesa; the defibrillator note; the borrowed-advice bug; noticing more "not covered" questions before the AI
+     is asked.
+
 **Questions for the maintainer (the safest choice is taken meanwhile):**
 
 2. **Answered 2026-11-09, 21:12 EST:** the Deck was frozen with God of War in the background and an answer half

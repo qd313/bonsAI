@@ -2578,3 +2578,28 @@ Asked by the planning chat for [plan 103](../planning/103-kb-wave-six-finish-the
 21. **Hades and Red Dead Redemption 2** have only own-words notes today, with no wiki cited. *[Each lane first proves a
     usable licence with the live reader (the game's own wiki; failing that, Wikipedia, as Baldur's Gate 3 did). If
     neither works, that game gets no new notes and the report says so.]*
+
+**Answered after the report, in the chat on the evening of 2026-11-10 (still D140; the maintainer's words quoted):**
+
+- **Push and publish (call 17).** "Also I pushed", then "I want to publish now" and "published". GitHub matched this PC
+  at `772b92d2`; both download places serve library 2026.11.10. The reads that held the publish passed: all six
+  ten-note samples and the ten picture labels are marked Pass on the checks page.
+- **The two wiki licences.** Brotato: "Attribution-ShareAlike 4.0 International: CC BY-SA 4.0". Red Dead Redemption 2:
+  "Creative Commons Attribution-Share Alike License 3.0 (Unported) (CC BY-SA)". Both as stored.
+- **Two Cyberpunk 2077 gang notes.** "Cyberpunk gang can be kept."
+- **The honest "I don't know" (call 11).** "Turn on the I don't know, make sure it's not annoying and if the question
+  can be answered within the small model's reasoning, it should lean on that first." Switched on the same night for the
+  turns the plugin already marks as not covered; the Speed-mode option stays off. The Deck check that followed was a
+  borderline fail (an honest opening both times; once, borrowed advice about a made-up boss), so whether it stays on is
+  an open call.
+- **Which picture model asks the first question (call 15).** After the Deck timing: "I would choose the slower one that
+  is right more than half the time." The picture's own guess, still switched off, now prefers `qwen3.5:4b` when it is
+  installed.
+- **Boss pictures (call 12's blocker).** "see what you can download and use, let me have the final look at the images".
+  Public screenshots may be used for the private test set; each needs the maintainer's own yes on the checks page.
+- **The starter box's explaining paragraph.** "Leave the downloads off paragraph where it is."
+- **The Left 4 Dead 2 "Fallen Survivor" note.** "Remove it." Removed from the repo; it leaves the published library at
+  the next publish.
+- **The next wave.** "Let's target Half-Life 2 and Black Mesa for notes during the next wave", and "I want the memory
+  freeze bug handled in the next wave, I will talk about that next wave in a separate chat". Also for it, from their
+  note on the samples: the defibrillator note should say which campaigns and chapters it is found on.

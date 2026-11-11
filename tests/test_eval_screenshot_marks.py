@@ -339,7 +339,7 @@ class SheetTests(_Case):
             "### Try 1 (4.2s)", '1. hit at (0.50, 0.30), upper centre: "exposed head", sure',
             "Line that did not read: some chatter", "single word none", "No mark could be read from this reply.",
             "Drawn copy: C:/out/m-1/p1-boss-try1.png", "Preview (260 by 140): C:/out/m-1/p1-boss-try1-preview.png",
-            "Lines that did not read: 2.",
+            "Lines that did not read, in all: 2.",
         ):
             self.assertIn(needle, sheet)
 
@@ -356,10 +356,98 @@ class SheetTests(_Case):
         self.assertIn("Replies that copied the question's example: 2.", sheet)
         self.assertIn(f"- Line that copied the question's example (not a mark): {copied}", sheet)
         self.assertIn("No mark: the reply only copied the question's example.", sheet)
-        self.assertIn("Lines that did not read: 0.", sheet)
+        self.assertIn("Lines that did not read, in all: 0.", sheet)
 
     def test_model_folder_has_no_colon(self):
         self.assertEqual(self.mod.model_folder("gemma4:e2b-it-qat"), "gemma4-e2b-it-qat")
+
+
+class CountsTests(_Case):
+    def _t(self, reply, seconds=4.0, error="", picture="a"):
+        return self.mod.Try(picture_id=picture, sample=1, model="m", reply=reply, seconds=seconds, error=error,
+                            reading=self.mod.read_marks(reply))
+
+    def test_the_counts_that_need_no_judging(self):
+        tries = [
+            self._t("hit, 0.5, 0.5, red eye, sure\navoid, 0.2, 0.2, claws, not sure", seconds=3.0),
+            self._t("none", seconds=5.0),
+            self._t(self.mod.EXAMPLE_LINE, seconds=7.0),
+            self._t("I think it is a wolf.", seconds=9.0),
+            self._t("", seconds=99.0, error="TimeoutError: slow"),
+            self._t("dodge, 0.9, 0.1, fire ball, not sure\nhit, 0.1, 0.1, head, sure\nhit, 0.3, 0.3, back, sure", seconds=1.0),
+        ]
+        c = self.mod.sheet_counts(tries)
+        self.assertEqual((c["replies"], c["failed"]), (6, 1))
+        self.assertEqual(c["did_not_parse"], 1, "only the prose reply: the copy, the none and the failed ask are counted apart")
+        self.assertEqual((c["copied"], c["none"], c["unread_lines"]), (1, 1, 1))
+        self.assertEqual((c["marks_total"], c["not_sure"]), (5, 2))
+        self.assertEqual(c["by_mark_count"], [3, 0, 1, 1])
+        self.assertAlmostEqual(c["marks_per_reply"], 1.0)
+        self.assertEqual((c["seconds_middle"], c["seconds_slowest"]), (5.0, 9.0), "a failed ask's wait is not a reply's time")
+
+    def test_counts_over_no_tries_do_not_divide_by_zero(self):
+        c = self.mod.sheet_counts([])
+        self.assertEqual((c["replies"], c["marks_per_reply"], c["seconds_slowest"]), (0, 0.0, 0.0))
+
+    def test_the_sheets_top_gives_the_counts_and_leaves_the_extra_pictures_out_of_them(self):
+        pics = [SimpleNamespace(id="a", file="a.jpg", path="", game="G", boss="B"),
+                SimpleNamespace(id="x", file="x.jpg", path="", game="G", boss="E")]
+        tries = [self._t("hit, 0.5, 0.5, red eye, not sure", picture="a"), self._t("none", picture="x"), self._t("none", picture="x")]
+        sheet = self.mod.format_sheet("m", pics, tries, {}, {"note": "", "extra_ids": ["x"]})
+        for needle in ("- Replies: 1. Asks that failed: 0.", "- Replies that were only the word none: 0.",
+                       "- Marks that said not sure: 1 of 1.", "- Seconds per reply: middle 4.0, slowest 4.0.",
+                       "the 1 extra picture(s) at the end are left out of them", "## x (EXTRA: not in the scored set)"):
+            self.assertIn(needle, sheet)
+        self.assertLess(sheet.index("## a"), sheet.index("## x"), "the extras come after the scored pictures")
+
+
+class IndexTests(_Case):
+    def _rows(self):
+        return [
+            {"model": "m2", "picture": "b", "sample": 1, "full_path": "C:/o/m2/b-try1.png", "sheet_path": "C:/o/m2/grading-sheet.md", "extra": False},
+            {"model": "m1", "picture": "a", "sample": 2, "full_path": "C:/o/m1/a-try2.png", "sheet_path": "C:/o/m1/grading-sheet.md", "extra": False},
+            {"model": "m1", "picture": "x", "sample": 1, "full_path": "C:/o/m1/x-try1.png", "sheet_path": "C:/o/m1/grading-sheet.md", "extra": True},
+        ]
+
+    def test_the_index_has_five_plain_lines_the_scoring_rule_word_for_word_and_one_row_per_drawn_picture(self):
+        text = self.mod.format_index(self._rows())
+        for n in range(1, 6):
+            self.assertIn(f"\n{n}. ", text)
+        self.assertIn('0 to 10: is each mark on the thing it names; is the advice right for this boss by its note; a confident '
+                      'wrong mark costs more than an honest "not sure"; no marks at all on a picture with a clear boss scores low, '
+                      'not zero.', text)
+        self.assertIn("## Pictures to grade (2 scored, 1 extra)", text)
+        self.assertIn("| m1 | a | 2 | C:/o/m1/a-try2.png | C:/o/m1/grading-sheet.md (## a, then ### Try 2) |", text)
+        self.assertIn("| m1 | x (EXTRA) | 1 |", text)
+        self.assertLess(text.index("| m1 | a |"), text.index("| m2 | b |"), "sorted by model, then picture")
+        self.assertLess(text.index("| m2 | b |"), text.index("| m1 | x (EXTRA) |"), "the extras are listed last")
+
+    def test_the_index_is_built_from_every_finished_model_folder_and_skips_an_unfinished_one(self):
+        import json
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for name, finished in (("m1", True), ("m2", False)):
+                (root / name).mkdir()
+                (root / name / "tries.json").write_text(json.dumps([
+                    {"model": name, "picture": "a", "sample": 1, "full_path": f"{tmp}/{name}/a-try1.png"}]), encoding="utf-8")
+                if finished:
+                    (root / name / "grading-sheet.md").write_text("sheet", encoding="utf-8")
+            out = self.mod.write_index(root, {"x"})
+            text = out.read_text(encoding="utf-8")
+        self.assertEqual(out.name, "GRADER-INDEX.md")
+        self.assertIn("1 scored, 0 extra", text)
+        self.assertIn("| m1 | a | 1 |", text)
+        self.assertNotIn("| m2 |", text)
+
+    def test_tries_are_saved_with_the_copy_the_paths_and_the_extra_flag(self):
+        import json
+
+        t = self.mod.Try("x", 1, "m", "avoid, 0.04, 0.96, purple teapot, sure", 2.0, "", self.mod.read_marks(
+            "avoid, 0.04, 0.96, purple teapot, sure"), full_path="f.png", preview_path="p.png")
+        row = json.loads(self.mod.tries_json([t], {"x"}))[0]
+        self.assertEqual((row["copied"], row["marks"], row["full_path"], row["extra_picture"]),
+                         (["avoid, 0.04, 0.96, purple teapot, sure"], [], "f.png", True))
 
 
 class PicturesTests(_Case):
@@ -367,10 +455,13 @@ class PicturesTests(_Case):
         pics = [SimpleNamespace(id="a", boss="Wolfos"), SimpleNamespace(id="b", boss=""), SimpleNamespace(id="c", boss="Gohma")]
         self.assertEqual([p.id for p in self.mod.boss_pictures(pics)], ["a", "c"])
 
-    def test_todays_labels_hold_at_least_the_wolfos_picture_with_a_boss_label(self):
+    def test_todays_labels_give_22_scored_boss_pictures_and_the_two_extras_are_among_the_labelled(self):
         reading = sys.modules["eval_screenshot_reading"]
         labelled = self.mod.boss_pictures(reading.load_pictures(REPO_ROOT / "tests" / "fixtures" / "screenshot_eval_v1.json", None))
-        self.assertIn("p1-oot-wolfos-pair", [p.id for p in labelled])
+        ids = [p.id for p in labelled]
+        for extra in self.mod.EXTRA_IDS:
+            self.assertIn(extra, ids)
+        self.assertEqual(len([i for i in ids if i not in self.mod.EXTRA_IDS]), 22)
 
 
 class AskTests(_Case):

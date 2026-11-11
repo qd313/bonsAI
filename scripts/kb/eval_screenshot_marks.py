@@ -34,6 +34,7 @@ import json
 import math
 import re
 import sqlite3
+import statistics
 import sys
 import time
 import urllib.error
@@ -53,6 +54,8 @@ DEFAULT_CORPUS = ROOT / "build" / "knowledge-base"
 DEFAULT_OLLAMA = reading.DEFAULT_OLLAMA
 # The picture models the Deck offers, the starter first. The script asks only for the ones this PC holds.
 DEFAULT_MODELS = "gemma4:e2b-it-qat,qwen2.5vl:3b,qwen3.5:4b,llava:7b"
+# Pictures that show an enemy, not a boss, or one the first practice run used: run if it costs nothing, kept out of the counts.
+EXTRA_IDS = ("p1-oot-wolfos-pair", "p5-fallout-4-radscorpion-1")
 
 # --- the question ----------------------------------------------------------------------------
 
@@ -406,18 +409,36 @@ def model_folder(model: str) -> str:
     return re.sub(r"[^A-Za-z0-9._-]+", "-", model).strip("-.")
 
 
+def sheet_counts(tries: list[Try]) -> dict:
+    """The figures that need no judging, over the tries given. "Did not parse" is a reply that gave no mark, was not
+    the word none and copied nothing (a copied example and a failed ask are counted on their own)."""
+    answered = [t for t in tries if not t.error]
+    secs = sorted(t.seconds for t in answered)
+    by_count = [sum(1 for t in answered if len(t.reading.marks) == n) for n in range(MAX_MARKS + 1)]
+    total = sum(len(t.reading.marks) for t in answered)
+    middle = round(statistics.median(secs), 1) if secs else 0.0
+    return {
+        "replies": len(tries), "failed": len(tries) - len(answered),
+        "did_not_parse": sum(1 for t in answered if not t.reading.marks and not t.reading.said_none and not t.reading.copied),
+        "unread_lines": sum(len(t.reading.unread) for t in answered),
+        "copied": sum(1 for t in answered if t.reading.copied),
+        "none": sum(1 for t in answered if t.reading.said_none and not t.reading.marks),
+        "marks_total": total, "marks_per_reply": total / len(answered) if answered else 0.0, "by_mark_count": by_count,
+        "not_sure": sum(1 for t in answered for m in t.reading.marks if not m.sure),
+        "seconds_middle": middle, "seconds_slowest": secs[-1] if secs else 0.0,
+    }
+
+
 def format_sheet(model: str, pictures: list[Any], tries: list[Try], advice: dict[str, list[tuple[str, str]]], meta: dict) -> str:
     """One grading sheet: what the grader needs without the repo. Per picture: the file, the game, the boss, the
     note's advice, then every try's marks as words and the path of the drawn copy."""
     by_pic: dict[str, list[Try]] = {}
     for t in tries:
         by_pic.setdefault(t.picture_id, []).append(t)
-    n_replies = len(tries)
-    n_marks = sum(len(t.reading.marks) for t in tries)
-    n_none = sum(1 for t in tries if t.reading.said_none and not t.reading.marks)
-    n_unread = sum(len(t.reading.unread) for t in tries)
-    n_failed = sum(1 for t in tries if t.error)
-    n_copied = sum(1 for t in tries if t.reading.copied)
+    extra_ids = set(meta.get("extra_ids") or ())
+    scored = [t for t in tries if t.picture_id not in extra_ids]
+    c = sheet_counts(scored)
+    pictures = [p for p in pictures if p.id not in extra_ids] + [p for p in pictures if p.id in extra_ids]
     lines = [
         f"# Marks on boss pictures: grading sheet for {model}", "",
         meta.get("note", ""), "",
@@ -426,15 +447,24 @@ def format_sheet(model: str, pictures: list[Any], tries: list[Try], advice: dict
         "thing) costs more than an honest not sure. No marks at all on a picture with a clear boss scores low, not zero. "
         "Kinds: hit is a weak point to attack, avoid is something that hurts you, dodge is an attack to step away from. "
         "Where: the first number is how far across from the left (0 to 1), the second how far down from the top (0 to 1).", "",
-        f"Tries: {n_replies}. Marks that read: {n_marks}. Replies that were only the word none: {n_none}. "
-        f"Lines that did not read: {n_unread}. Replies that copied the question's example: {n_copied}. "
-        f"Asks that failed: {n_failed}.", "",
+        "Counts the script can make without judging (the scored pictures only"
+        + (f"; the {len(extra_ids & set(by_pic))} extra picture(s) at the end are left out of them" if extra_ids & set(by_pic) else "")
+        + "):", "",
+        f"- Replies: {c['replies']}. Asks that failed: {c['failed']}.",
+        f"- Replies that did not parse (no mark read, not none, nothing copied): {c['did_not_parse']}. "
+        f"Lines that did not read, in all: {c['unread_lines']}.",
+        f"- Replies that copied the question's example: {c['copied']}.",
+        f"- Replies that were only the word none: {c['none']}.",
+        f"- Marks per reply: {c['marks_per_reply']:.2f} on average ({c['marks_total']} marks; replies with 0, 1, 2, 3 marks: "
+        + ", ".join(str(n) for n in c["by_mark_count"]) + ").",
+        f"- Marks that said not sure: {c['not_sure']} of {c['marks_total']}.",
+        f"- Seconds per reply: middle {c['seconds_middle']}, slowest {c['seconds_slowest']}.", "",
     ]
     for pic in pictures:
         mine = by_pic.get(pic.id, [])
         if not mine:
             continue
-        lines += [f"## {pic.id}", "",
+        lines += [f"## {pic.id}" + (" (EXTRA: not in the scored set)" if pic.id in extra_ids else ""), "",
                   f"- File: {pic.file or pic.path}", f"- Game: {pic.game}", f"- Boss or enemy on screen: {pic.boss}"]
         notes = advice.get(pic.id) or []
         if notes:
@@ -492,6 +522,71 @@ def _default_root() -> Optional[Path]:
         return None
 
 
+def tries_json(tries: list[Try], extra_ids: set[str]) -> str:
+    """Every try as plain data (the raw reply, what read, what did not, the drawn copy's path), so a run can be
+    read again, and the grader's index built, without asking the model anything."""
+    return json.dumps([
+        {"picture": t.picture_id, "sample": t.sample, "model": t.model, "seconds": t.seconds, "error": t.error,
+         "reply": t.reply, "marks": [m.__dict__ for m in t.reading.marks], "unread": t.reading.unread,
+         "copied": t.reading.copied, "extra": t.reading.extra, "said_none": t.reading.said_none,
+         "full_path": t.full_path, "preview_path": t.preview_path, "extra_picture": t.picture_id in extra_ids}
+        for t in tries], indent=1)
+
+
+INDEX_NAME = "GRADER-INDEX.md"
+SCORING_RULE = (
+    "Score each marked picture 0 to 10: is each mark on the thing it names; is the advice right for this boss by its note; "
+    "a confident wrong mark costs more than an honest \"not sure\"; no marks at all on a picture with a clear boss scores "
+    "low, not zero.")
+
+
+def format_index(rows: list[dict]) -> str:
+    """The one file the grader is handed. What the test is, the scoring rule, and a table of every drawn picture:
+    model, picture, try, the drawn copy, and the sheet section that says what the model marked and what its note
+    advises. ``rows`` hold model, picture, sample, full_path, sheet_path and extra (a picture outside the scored set)."""
+    scored = sorted((r for r in rows if not r["extra"]), key=lambda r: (r["model"], r["picture"], r["sample"]))
+    extras = sorted((r for r in rows if r["extra"]), key=lambda r: (r["model"], r["picture"], r["sample"]))
+    lines = [
+        "# Grader index: marks on boss pictures", "",
+        "1. A small picture model was shown a game screenshot with a boss on it and asked to mark up to three things: "
+        "hit (a weak point to attack), avoid (something that hurts you), dodge (an attack to step away from).",
+        "2. Each mark was drawn on a copy of the screenshot: a ring, numbered, green for hit, red for avoid, amber for dodge; "
+        "a dashed ring means the model said it was not sure.",
+        "3. Each model tried every picture three times; every try has its own drawn copy (a try with no marks is the plain picture).",
+        "4. Each model has one grading sheet. For each picture it gives the file, the game, the boss, the library note's own "
+        "advice for that boss, and each try's marks as words (kind, where as two numbers and in plain words, the three words, "
+        "sure or not sure).",
+        "5. You open each drawn copy, read its sheet section, and give the try one score. The table below lists them all.", "",
+        "## The scoring rule", "", SCORING_RULE, "",
+        "Where a mark sits: the first number is how far across the picture from the left (0 to 1), the second how far down "
+        "from the top (0 to 1). Pictures marked EXTRA are outside the scored set: grade them if you have room, and keep their "
+        "scores apart.", "",
+        f"## Pictures to grade ({len(scored)} scored, {len(extras)} extra)", "",
+        "| Model | Picture | Try | Drawn copy | Sheet section |", "|---|---|---|---|---|",
+    ]
+    for r in scored + extras:
+        tag = " (EXTRA)" if r["extra"] else ""
+        lines.append(f"| {r['model']} | {r['picture']}{tag} | {r['sample']} | {r['full_path']} | "
+                     f"{r['sheet_path']} (## {r['picture']}, then ### Try {r['sample']}) |")
+    return "\n".join(lines) + "\n"
+
+
+def write_index(out_root: Path, extra_ids: set[str]) -> Path:
+    """Build GRADER-INDEX.md from every model folder under ``out_root`` that holds a finished run's tries.json and
+    sheet (so an index written after one model lists that model, and one written after the last lists all)."""
+    rows: list[dict] = []
+    for folder in sorted(p for p in out_root.iterdir() if p.is_dir()):
+        data, sheet = folder / "tries.json", folder / "grading-sheet.md"
+        if not (data.is_file() and sheet.is_file()):
+            continue
+        for t in json.loads(data.read_text(encoding="utf-8")):
+            rows.append({"model": t["model"], "picture": t["picture"], "sample": t["sample"], "full_path": t["full_path"],
+                         "sheet_path": str(sheet), "extra": t["picture"] in extra_ids})
+    out = out_root / INDEX_NAME
+    out.write_text(format_index(rows), encoding="utf-8")
+    return out
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--ollama", default=DEFAULT_OLLAMA, help="Ollama base URL on this PC")
@@ -502,6 +597,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--corpus", type=Path, default=DEFAULT_CORPUS, help="folder with corpus.db, for the notes' advice")
     parser.add_argument("--samples", type=int, default=3, help="tries per picture and model")
     parser.add_argument("--only", default="", help="comma-separated picture ids (they must carry a boss label)")
+    parser.add_argument("--extra", default=",".join(EXTRA_IDS),
+                        help="picture ids run as extras: drawn and listed at the end of the sheet, left out of its counts")
     return parser
 
 
@@ -544,6 +641,8 @@ def main() -> int:
         print(f"none of the models is held on this PC ({', '.join(wanted)})", file=sys.stderr)
         return 2
     db_path = args.corpus.resolve() / "corpus.db"
+    extra_ids = {s.strip() for s in args.extra.split(",") if s.strip()}
+    found.sort(key=lambda pair: pair[0].id in extra_ids)  # the scored pictures first, the extras after
     advice = {pic.id: note_advice(db_path, pic) for pic, _ in found}
     print(f"models {', '.join(models)} (not held: {', '.join(missing) or 'none'}) | {len(found)} pictures x {args.samples} tries")
 
@@ -565,17 +664,21 @@ def main() -> int:
                 draw_marks(picture, parsed.marks).save(full)
                 make_preview(picture, parsed.marks).save(preview)
                 tries.append(Try(pic.id, sample, model, ask.reply, ask.seconds, ask.error, parsed, str(full), str(preview)))
-                print(f"{model:<20} {pic.id:<30} try {sample}: {len(parsed.marks)} marks, {len(parsed.unread)} unread, {ask.seconds}s"
-                      + (f" ERROR {ask.error}" if ask.error else ""))
+                print(f"{model:<20} {pic.id:<30} try {sample}: {len(parsed.marks)} marks, {len(parsed.unread)} unread, "
+                      f"{len(parsed.copied)} copied, {ask.seconds}s" + (f" ERROR {ask.error}" if ask.error else ""))
+            (folder / "tries.json").write_text(tries_json(tries, extra_ids), encoding="utf-8")  # kept as the run goes
         minutes = round((time.perf_counter() - t_run) / 60.0, 1)
-        meta = {"note": f"Run {date.today().isoformat()}, {minutes} min, {args.samples} tries per picture."}
+        meta = {"note": f"Run {date.today().isoformat()}, {minutes} min, {args.samples} tries per picture.",
+                "extra_ids": sorted(extra_ids)}
         sheet = folder / "grading-sheet.md"
         sheet.write_text(format_sheet(model, [p for p, _ in found], tries, advice, meta), encoding="utf-8")
-        (folder / "tries.json").write_text(json.dumps([
-            {"picture": t.picture_id, "sample": t.sample, "model": t.model, "seconds": t.seconds, "error": t.error,
-             "reply": t.reply, "marks": [m.__dict__ for m in t.reading.marks], "unread": t.reading.unread,
-             "extra": t.reading.extra, "said_none": t.reading.said_none} for t in tries], indent=1), encoding="utf-8")
         print(f"Wrote {sheet}")
+        c = sheet_counts([t for t in tries if t.picture_id not in extra_ids])
+        print(f"{model}: {c['replies']} replies, {c['did_not_parse']} did not parse, {c['copied']} copied the example, "
+              f"{c['none']} none, {c['marks_per_reply']:.2f} marks per reply, {c['not_sure']} not sure, "
+              f"seconds middle {c['seconds_middle']} slowest {c['seconds_slowest']}")
+        index = write_index(out_root, extra_ids)
+        print(f"Wrote {index}")
     return 0
 
 

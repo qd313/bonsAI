@@ -66,10 +66,11 @@ EXAMPLE_LINE = f"{EXAMPLE_KIND}, {EXAMPLE_X}, {EXAMPLE_Y}, {EXAMPLE_WORDS}, {EXA
 SYSTEM_TEXT = "You look at one video game screenshot and point at things on it. No other text."
 QUESTION = (
     "Mark up to three things on this screenshot that matter when fighting the boss or enemy you can see. "
-    "Write one line per mark and nothing else, in exactly this form: kind, x, y, three words, sure. "
-    "The kind is hit (a weak point to attack), avoid (something that hurts you) or dodge (an attack to step away "
-    "from). x is how far across the picture from the left edge and y is how far down from the top edge, each a "
-    "number from 0 to 1. Then three words naming the thing. End with sure, or with not sure when you are guessing. "
+    "Write one line per mark and nothing else. Each line has five parts separated by commas: first one of the words "
+    "hit, avoid or dodge; then how far across the picture from the left edge; then how far down from the top edge; "
+    "then three words naming the thing; then sure, or not sure when you are guessing. "
+    "Hit means a weak point to attack, avoid means something that hurts you, dodge means an attack to step away from. "
+    "The two distances are numbers from 0 to 1. "
     f"This line shows the form only and is not an answer: {EXAMPLE_LINE}. "
     "If you cannot see a boss or an enemy, write the single word none."
 )
@@ -102,11 +103,13 @@ class MarkReading:
     not (kept word for word); ``extra`` counts marks that read but came after the third and were left out;
     ``said_none`` is a reply that was only the word none (an honest empty answer, not a failure to read);
     ``copied`` lists the lines whose numbers and words are the question's example, word for word: not a mark and
-    not an unread line, counted on their own."""
+    not an unread line, counted on their own; ``form_copied`` lists the lines that start with the word kind (the
+    placeholder an earlier wording of the question showed): still unread, and also counted on their own."""
 
     marks: list[Mark] = field(default_factory=list)
     unread: list[str] = field(default_factory=list)
     copied: list[str] = field(default_factory=list)
+    form_copied: list[str] = field(default_factory=list)
     extra: int = 0
     lines: int = 0
     said_none: bool = False
@@ -126,6 +129,8 @@ _MARK_LINE = re.compile(
 )
 # A list mark in front of a line is not part of the mark: "1." "2)" "-" "*".
 _LIST_MARK = re.compile(r"^(?:\d{1,2}[.)]|[-*•])\s+")
+# A line that starts with the word kind: a model that read the old template's placeholder as a value.
+_FORM_WORD = re.compile(r"^kind\s*,", re.IGNORECASE)
 _THINK = re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE)
 
 
@@ -155,6 +160,8 @@ def read_marks(reply: str) -> MarkReading:
         m = _MARK_LINE.match(body)
         if not m:
             out.unread.append(line)
+            if _FORM_WORD.match(body):
+                out.form_copied.append(line)
             continue
         if _is_example(m):
             out.copied.append(line)
@@ -422,6 +429,7 @@ def sheet_counts(tries: list[Try]) -> dict:
         "did_not_parse": sum(1 for t in answered if not t.reading.marks and not t.reading.said_none and not t.reading.copied),
         "unread_lines": sum(len(t.reading.unread) for t in answered),
         "copied": sum(1 for t in answered if t.reading.copied),
+        "form_copied": sum(1 for t in answered if t.reading.form_copied),
         "none": sum(1 for t in answered if t.reading.said_none and not t.reading.marks),
         "marks_total": total, "marks_per_reply": total / len(answered) if answered else 0.0, "by_mark_count": by_count,
         "not_sure": sum(1 for t in answered for m in t.reading.marks if not m.sure),
@@ -454,6 +462,7 @@ def format_sheet(model: str, pictures: list[Any], tries: list[Try], advice: dict
         f"- Replies that did not parse (no mark read, not none, nothing copied): {c['did_not_parse']}. "
         f"Lines that did not read, in all: {c['unread_lines']}.",
         f"- Replies that copied the question's example: {c['copied']}.",
+        f"- Replies that copied the form's wording (a line starting with the word kind): {c['form_copied']}.",
         f"- Replies that were only the word none: {c['none']}.",
         f"- Marks per reply: {c['marks_per_reply']:.2f} on average ({c['marks_total']} marks; replies with 0, 1, 2, 3 marks: "
         + ", ".join(str(n) for n in c["by_mark_count"]) + ").",
@@ -490,7 +499,10 @@ def format_sheet(model: str, pictures: list[Any], tries: list[Try], advice: dict
             if r.extra:
                 lines.append(f"- {r.extra} further mark line(s) after the third were left out.")
             for bad in r.unread:
-                lines.append(f"- Line that did not read: {bad}")
+                if bad in r.form_copied:
+                    lines.append(f"- Line that copied the form's wording (not read as a mark): {bad}")
+                else:
+                    lines.append(f"- Line that did not read: {bad}")
             for copied in r.copied:
                 lines.append(f"- Line that copied the question's example (not a mark): {copied}")
             if t.full_path:
@@ -528,7 +540,7 @@ def tries_json(tries: list[Try], extra_ids: set[str]) -> str:
     return json.dumps([
         {"picture": t.picture_id, "sample": t.sample, "model": t.model, "seconds": t.seconds, "error": t.error,
          "reply": t.reply, "marks": [m.__dict__ for m in t.reading.marks], "unread": t.reading.unread,
-         "copied": t.reading.copied, "extra": t.reading.extra, "said_none": t.reading.said_none,
+         "copied": t.reading.copied, "form_copied": t.reading.form_copied, "extra": t.reading.extra, "said_none": t.reading.said_none,
          "full_path": t.full_path, "preview_path": t.preview_path, "extra_picture": t.picture_id in extra_ids}
         for t in tries], indent=1)
 

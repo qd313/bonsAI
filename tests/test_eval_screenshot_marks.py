@@ -122,7 +122,7 @@ class ReaderTests(_Case):
 
     def test_the_question_asks_for_the_form_the_reader_reads(self):
         q = self.mod.QUESTION
-        for needle in ("up to three", "kind, x, y, three words, sure", "hit", "avoid", "dodge", "not sure", "from 0 to 1"):
+        for needle in ("up to three", "five parts separated by commas", "hit, avoid or dodge", "how far across", "how far down", "three words naming the thing", "not sure", "from 0 to 1", "write the single word none"):
             self.assertIn(needle, q)
         self.assertIn("form only", q)
         self.assertIn("not an answer", q)
@@ -130,6 +130,27 @@ class ReaderTests(_Case):
         self.assertEqual(example, self.mod.EXAMPLE_LINE)
         got = self.mod.read_marks(example)
         self.assertEqual((got.marks, got.unread, len(got.copied)), ([], [], 1), "the example itself is read as a copy")
+
+    def test_the_question_shows_no_template_with_placeholder_words_a_model_could_copy(self):
+        q = self.mod.QUESTION
+        for placeholder in ("kind,", "x, y", "form: kind"):
+            self.assertNotIn(placeholder, q)
+        # the only line that looks like a reply line is the teapot one, and it is said not to be an answer
+        reply_like = [part for part in q.split(". ") if part.count(",") >= 4]
+        self.assertEqual(len(reply_like), 1)
+        self.assertIn("not an answer", reply_like[0])
+
+    def test_a_line_starting_with_the_word_kind_stays_unread_and_is_also_counted_as_the_forms_wording(self):
+        got = self.mod.read_marks("kind, 0.35, 0.74, red glowing sword, sure.\nKind, 0.5, 0.5, a head, not sure\nhit, 0.5, 0.5, head, sure")
+        self.assertEqual(len(got.marks), 1)
+        self.assertEqual(got.unread, ["kind, 0.35, 0.74, red glowing sword, sure.", "Kind, 0.5, 0.5, a head, not sure"])
+        self.assertEqual(got.form_copied, got.unread)
+        self.assertFalse(got.clean)
+
+    def test_other_unread_lines_and_kinds_that_merely_start_with_kind_are_not_the_forms_wording(self):
+        got = self.mod.read_marks("kindly hit the head\nhit at the head\nkind of hit, 0.5, 0.5, head, sure")
+        self.assertEqual(len(got.unread), 3)
+        self.assertEqual(got.form_copied, [])
 
     def test_the_example_is_one_no_real_picture_earns_on_merit(self):
         self.assertEqual((self.mod.EXAMPLE_X, self.mod.EXAMPLE_Y, self.mod.EXAMPLE_WORDS), (0.04, 0.96, "purple teapot"))
@@ -357,6 +378,15 @@ class SheetTests(_Case):
         self.assertIn(f"- Line that copied the question's example (not a mark): {copied}", sheet)
         self.assertIn("No mark: the reply only copied the question's example.", sheet)
         self.assertIn("Lines that did not read, in all: 0.", sheet)
+
+    def test_a_line_that_copied_the_forms_wording_is_counted_in_the_top_and_shown_on_its_own_line(self):
+        reply = "kind, 0.35, 0.74, red sword, sure\nhit, 0.5, 0.5, head, sure\nprose line"
+        sheet = self.mod.format_sheet("m:1", [self._pic()], [self._try(1, reply), self._try(2, "hit, 0.5, 0.5, head, sure")],
+                                      {}, {"note": ""})
+        self.assertIn("- Replies that copied the form's wording (a line starting with the word kind): 1.", sheet)
+        self.assertIn("- Line that copied the form's wording (not read as a mark): kind, 0.35, 0.74, red sword, sure", sheet)
+        self.assertIn("- Line that did not read: prose line", sheet)
+        self.assertIn("Lines that did not read, in all: 2.", sheet, "the form's wording is still an unread line too")
 
     def test_model_folder_has_no_colon(self):
         self.assertEqual(self.mod.model_folder("gemma4:e2b-it-qat"), "gemma4-e2b-it-qat")

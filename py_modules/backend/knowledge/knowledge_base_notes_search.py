@@ -30,7 +30,7 @@ import re
 import sqlite3
 from typing import Any
 
-from backend.knowledge.knowledge_base_cards import _get_connection, close_connection
+from backend.knowledge.knowledge_base_cards import _get_connection, close_connection, read_in_own_thread
 from backend.knowledge.knowledge_base_game_match import _resolve_game_id
 from backend.knowledge.knowledge_base_schema import resolve_corpus_db_path
 from backend.knowledge.knowledge_base_search import _fts_match_query, _search_sections
@@ -149,7 +149,7 @@ async def search_rag_corpus_notes(self, word: str = "", game_title: str = ""):
     global _last_fault
     try:
         settings = await self.load_settings()
-        out = await asyncio.to_thread(search_notes, settings, word, game_title)
+        out = await asyncio.to_thread(read_in_own_thread, search_notes, settings, word, game_title)
     except Exception as exc:
         # Once per distinct fault: the screen asks again on every word the person picks.
         fault = f"{type(exc).__name__}: {exc}"

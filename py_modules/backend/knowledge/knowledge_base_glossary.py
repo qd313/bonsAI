@@ -27,7 +27,7 @@ import sqlite3
 from typing import Any
 
 from backend.chats.chat_own_game_title import text_resolved_title_for_turn
-from backend.knowledge.knowledge_base_cards import _get_connection, close_connection
+from backend.knowledge.knowledge_base_cards import _get_connection, close_connection, read_in_own_thread
 from backend.knowledge.knowledge_base_game_match import _resolve_game_id, resolve_title_from_question
 from backend.knowledge.knowledge_base_schema import resolve_corpus_db_path
 
@@ -187,7 +187,7 @@ async def get_rag_corpus_glossary(self, app_id: str = "", question: str = "", ea
     global _last_fault
     try:
         settings = await self.load_settings()
-        out = await asyncio.to_thread(glossary_for_turn, settings, app_id, question, earlier)
+        out = await asyncio.to_thread(read_in_own_thread, glossary_for_turn, settings, app_id, question, earlier)
     except Exception as exc:
         # Once per distinct fault: the screen asks again after a failure.
         fault = f"{type(exc).__name__}: {exc}"

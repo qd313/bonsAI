@@ -35,6 +35,7 @@ from backend.knowledge.knowledge_base_schema import (
     sanitize_corpus_install_dir,
 )
 from backend.knowledge.kb_demote_store import clear_demotes, list_demotes, record_demote
+from backend.knowledge.knowledge_base_cards import read_in_own_thread
 from backend.knowledge.knowledge_base_glossary import (  # noqa: F401 -- main.py reaches it here
     get_rag_corpus_glossary,
 )
@@ -308,6 +309,7 @@ async def get_session_rag_chip_candidates(
     settings = await self.load_settings()
     try:
         result = await asyncio.to_thread(
+            read_in_own_thread,
             suggest_chip_candidates,
             settings,
             app_id=str(app_id or "").strip(),

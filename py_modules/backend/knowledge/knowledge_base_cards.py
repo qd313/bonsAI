@@ -8,10 +8,10 @@ complete with a trust label and a source list.
 
 Used for: Every search result in knowledge_base_search.py turns its rows into
 `KnowledgeCard`s here. knowledge_base_service.py calls `_format_block()` once
-a search has settled on which cards to attach, and holds the one shared
-database connection (`_get_connection()` / `close_connection()`) every other
-knowledge-base file reads through, so there is exactly one open handle per
-corpus file rather than one per caller.
+a search has settled on which cards to attach, and holds the database
+connections (`_get_connection()` / `close_connection()`) every other
+knowledge-base file reads through: one per corpus file per thread, never
+shared between threads (see `_get_connection` for the crash that rule fixes).
 
 Solves: Two different corpus tables (`sections`, `compat_patterns`) need to
 look identical to the rest of the pipeline, and the label describing how much
@@ -40,34 +40,109 @@ from backend.knowledge.knowledge_base_schema import (
 )
 
 _CONN_LOCK = threading.Lock()
-_CONN_BY_PATH: dict[str, sqlite3.Connection] = {}
+# Bumped by close_connection(). A thread whose connection was opened under an older number
+# closes it and opens a fresh one on its next read, so a re-installed corpus is never read
+# through a handle to the old file.
+_GENERATION_BY_PATH: dict[str, int] = {}
+# Every connection still open, with the thread that owns it, so close_connection() can close
+# the ones whose thread has ended (nothing else will) and leave live threads' to their owners.
+_OPEN_BY_PATH: dict[str, list[tuple[threading.Thread, sqlite3.Connection]]] = {}
+_LOCAL = threading.local()
+
+
+def _open(db_path: str) -> sqlite3.Connection:
+    # immutable=1, not just mode=ro: the shipped corpus is written once on the
+    # maintainer PC and never mutated on device. It tells SQLite to skip WAL/locking
+    # machinery entirely, which is what makes reads safe on an exFAT SD card where
+    # lock files are unreliable. The builder now checkpoints and VACUUMs before
+    # shipping, so there is no -wal alongside the file to ignore.
+    # check_same_thread=False only so close_connection() can close a connection whose thread has
+    # ended; no live thread ever reads through another's (see _get_connection).
+    conn = sqlite3.connect(f"file:{db_path}?mode=ro&immutable=1", uri=True, check_same_thread=False)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def _forget(db_path: str, conn: sqlite3.Connection) -> None:
+    """Drop one connection from the open list (caller holds _CONN_LOCK) and close it."""
+    held = _OPEN_BY_PATH.get(db_path, [])
+    _OPEN_BY_PATH[db_path] = [(th, c) for th, c in held if c is not conn]
+    try:
+        conn.close()
+    except sqlite3.Error:
+        pass
 
 
 def _get_connection(db_path: str) -> sqlite3.Connection:
+    """This thread's own read-only connection to the corpus at ``db_path``.
+
+    One connection per thread, never shared. Until 2026-11-11 every thread read through one
+    shared connection, opened with ``check_same_thread=False`` and guarded only while it was
+    being opened. The answer screen asks for its tap-to-define words, chips and notes at the
+    same moment, each in its own worker thread, so two reads ran on one connection at once,
+    and a database error in one read closed the connection under the others. On the Deck
+    (2026-11-11) that crashed the plugin's whole back end inside SQLite 41 s after load; every
+    button then timed out, Install Ollama included. With a connection per thread there is
+    nothing to share, and only the owning thread closes its own while that thread is alive.
+    """
+    conns: dict[str, tuple[int, sqlite3.Connection]] = getattr(_LOCAL, "conns", None) or {}
+    _LOCAL.conns = conns
     with _CONN_LOCK:
-        conn = _CONN_BY_PATH.get(db_path)
-        if conn is None:
-            # immutable=1, not just mode=ro: the shipped corpus is written once on the
-            # maintainer PC and never mutated on device. It tells SQLite to skip WAL/locking
-            # machinery entirely, which is what makes reads safe on an exFAT SD card where
-            # lock files are unreliable. The builder now checkpoints and VACUUMs before
-            # shipping, so there is no -wal alongside the file to ignore.
-            conn = sqlite3.connect(
-                f"file:{db_path}?mode=ro&immutable=1", uri=True, check_same_thread=False
-            )
-            conn.row_factory = sqlite3.Row
-            _CONN_BY_PATH[db_path] = conn
+        generation = _GENERATION_BY_PATH.get(db_path, 0)
+        held = conns.get(db_path)
+        if held is not None and held[0] == generation:
+            return held[1]
+        if held is not None:
+            _forget(db_path, held[1])
+        conn = _open(db_path)
+        conns[db_path] = (generation, conn)
+        _OPEN_BY_PATH.setdefault(db_path, []).append((threading.current_thread(), conn))
         return conn
 
 
 def close_connection(db_path: str) -> None:
+    """Close the corpus at ``db_path`` for everyone, without pulling a connection from under a read.
+
+    This thread's own connection and any left by a thread that has ended are closed now.
+    A live thread's connection is closed by that thread itself, at the start of its next
+    read, because its number is now out of date.
+    """
+    conns: dict[str, tuple[int, sqlite3.Connection]] = getattr(_LOCAL, "conns", None) or {}
     with _CONN_LOCK:
-        conn = _CONN_BY_PATH.pop(db_path, None)
-        if conn is not None:
-            try:
-                conn.close()
-            except sqlite3.Error:
-                pass
+        _GENERATION_BY_PATH[db_path] = _GENERATION_BY_PATH.get(db_path, 0) + 1
+        mine = conns.pop(db_path, None)
+        if mine is not None:
+            _forget(db_path, mine[1])
+        for owner, conn in list(_OPEN_BY_PATH.get(db_path, [])):
+            if not owner.is_alive():
+                _forget(db_path, conn)
+        if not _OPEN_BY_PATH.get(db_path):
+            _OPEN_BY_PATH.pop(db_path, None)
+
+
+def release_thread_connections() -> None:
+    """Close every corpus connection this thread holds; its next read opens a fresh one."""
+    conns: dict[str, tuple[int, sqlite3.Connection]] = getattr(_LOCAL, "conns", None) or {}
+    with _CONN_LOCK:
+        for db_path, (_gen, conn) in list(conns.items()):
+            _forget(db_path, conn)
+            if not _OPEN_BY_PATH.get(db_path):
+                _OPEN_BY_PATH.pop(db_path, None)
+        conns.clear()
+
+
+def read_in_own_thread(fn, /, *args, **kwargs):
+    """Run one whole library read in a worker thread, then close that thread's connections.
+
+    For reads handed to ``asyncio.to_thread``: the worker goes back to a shared pool, so a
+    connection left open there would hold the corpus file until the pool thread happens to
+    read again (on Windows the file then cannot be deleted). Opening the read-only file again
+    on the next read costs a few milliseconds.
+    """
+    try:
+        return fn(*args, **kwargs)
+    finally:
+        release_thread_connections()
 
 
 def _trust_tier_for_compat_row(row: sqlite3.Row) -> str:

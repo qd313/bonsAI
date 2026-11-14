@@ -24,8 +24,13 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
 ## The Deck rules. Every one of these cost a whole evening once
 
 1. **Never press A on the question box.** It opens Steam's on-screen keyboard and leaves the box's D-pad
-   dead until the panel is closed and reopened. To put a question in, use the send-question script, then
-   walk to the Ask button and press A there:
+   dead until the panel is closed and reopened. To put a question in (the way measured on the Deck on
+   2026-11-09, with the Deck tools at 0.3.12): place the ring on the question box first (after an answer
+   nothing holds the ring, so one `deck_walkTo` DOWN places it; with a game up, UP from Ask), then one
+   `deck_typeText` call with the question, `clear: true` and `submit: true`. It sends Enter and never
+   presses A, and it is refused while nothing holds the ring. Check its reply says the text read back as
+   typed. When the runbook names a script that runs a whole list of questions, use that instead.
+   The older way is the fallback: the send-question script, then walk to the Ask button and press A there:
    `ssh deck@192.168.86.52 'python3 - --text "the exact question"' < scripts/deck_send_ask.py`
    The options go INSIDE the quoted remote command, or only the first word arrives and the script still
    prints VERIFIED. A question with an apostrophe cannot survive the outer quotes. Reword it without one,
@@ -60,8 +65,10 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
    Since 2026-09-23, Claude Code's own automatic permission check may refuse an SSH edit of that file; if it
    does, do not look for another way to write it — use the plugin's own screen for that setting if it has
    one, otherwise stop and report.
-8. **Opening the plugin fails once after every deploy or reload.** Check whether it is already open before
-   opening it. A first failure is expected; a second one is worth reporting.
+8. **Opening the plugin right after a deploy or reload** used to fail once. Since the Deck tools 0.3.12
+   the open call waits out the restart and tries again by itself (3 of 3 on the Deck, 2026-11-09). Check
+   whether the plugin is already open before opening it. A failed open is now worth reporting the first
+   time.
 9. **Read what has the highlight before every A.** A is never the last press of a multi-press sequence:
    send the moves, read focus, and only then press A, as its own step, when focus is on the control the
    runbook names. On 2026-09-30 a four-press sequence ending in A landed one stop off and marked a test
@@ -86,10 +93,14 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
     minutes); if it ever comes back shorter, renew before it runs out. The dimmed screensaver can still
     come on while the lock holds and freezes panel animations: a left-stick click wakes the screen and
     moves nothing.
-14. **Games:** the rig can only launch games shown on the Recent Games row. The launch tool only walks
-    right along that row, so go to the row's start first (press Left until focus stops moving); from the
-    far end it refuses. After exiting, confirm over SSH that the game's process is really gone. Steam's
-    own list has read empty while a game was still running.
+14. **Games:** `deck_launchGame` takes a game by `name` or `appid`, or by `title` for a non-Steam shortcut
+    (a shortcut launched by its title on the first try, 2026-11-09). It looks on the Recent Games row
+    first and then tries the Library; the Library walk has stalled past its fifth row, so if the tool
+    refuses, report its own words and do not improvise a route. `deck_listGames` shows what is installed
+    with no press. **Before every launch: unload the Deck's AI and read `free -m`.** A question asked
+    with a heavy game running used all the Deck's memory and froze it on 2026-11-09, so never ask one
+    unless the runbook's row says to. After exiting, confirm over SSH that the game's process is really
+    gone. Steam's own list has read empty while a game was still running.
     **Never reload the plugin while a game is starting, and treat a reload with a game running as a last
     resort.** On 2026-10-01 a reload during a game's start left the game's window behind Steam Home twice
     (Deep Rock Galactic: Survivor, Half-Life 2), and a reload with Black Mesa running and about 550 MB of
@@ -113,14 +124,21 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
     a press sequence or an animation gets a short recording. The maintainer judges these from the checks
     page, with the pictures side by side, and does not go to the Deck to see them (their rule, 2026-10-25).
     On 2026-10-24 the thumbs-down flow passed with no picture saved, so its look could not go on the page.
+18. **Keep the tools' replies small.** Typing, walks, opening the plugin and sweeps can each return tens
+    of thousands of characters, and a driver's memory then fills in ten to fifteen minutes (plan 103: most
+    blocks needed three drivers). Read the page with small expressions that return only the fields the
+    row names. Give every walk, sweep and launch an `outDir` in your scratch folder. If a reply was
+    large, do not make the same call again: use a narrower read. Pass the row's name as `rowId` on every
+    tool call, so the run's own ledger files it.
 
 ## Tools
 
 The rig's tools are the `deck_*` tools from decky-plugin-studio (load them with ToolSearch if they are not
 listed): `deck_readFocus`, `deck_readPage`, `deck_pressButton`, `deck_runSequence`, `deck_walkTo`,
 `deck_sweep`, `deck_assertFocusMove`, `deck_captureScreenshot`, `deck_record`, `deck_openPlugin`,
-`deck_reloadPlugin`, `deck_holdAwake`, `deck_launchGame`, `deck_exitGame`, `deck_saveCheck`,
-`deck_replayChecks`, `deck_readPluginLog`, `deck_status`. **Save every walk that passes with
+`deck_reloadPlugin`, `deck_holdAwake`, `deck_launchGame`, `deck_exitGame`, `deck_listGames`,
+`deck_typeText`, `deck_waitFor`, `deck_pressChord`, `deck_sleepAndWake`, `deck_listMachines`,
+`deck_releaseMachine`, `deck_saveCheck`, `deck_replayChecks`, `deck_readPluginLog`, `deck_status`. **Save every walk that passes with
 `deck_saveCheck`**, named after its row, so later builds can replay it. Saved walks live in the workshop's
 `checks/` folder (`C:\Users\still\Documents\bonsAI-workshop\checks\` on this PC): pass `checksDir` set to that folder on every
 `deck_saveCheck` and `deck_replayChecks` call. The Deck tool's own default is `<workspace>/checks`, which no

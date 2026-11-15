@@ -131,11 +131,21 @@ def memory_limit_mb(settings_dir: Optional[str] = None) -> int:
     return value if 0 < value <= _MAX_LIMIT_MB else MEMORY_LIMIT_MB
 
 
+def _now() -> float:
+    """Seconds on a clock that keeps counting while the Deck sleeps (``CLOCK_BOOTTIME``), else wall time.
+
+    ``time.monotonic()`` stops during sleep, so an unused mark would look fresh after a long one."""
+    try:
+        return time.clock_gettime(time.CLOCK_BOOTTIME)
+    except (AttributeError, OSError):
+        return time.time()
+
+
 def arm_ask_anyway(now: Optional[float] = None) -> None:
     """Mark the next Ask as "asked anyway". Lasts ``ASK_ANYWAY_SECONDS``; the next Ask uses it up."""
     global _armed_at
     with _lock:
-        _armed_at = time.monotonic() if now is None else now
+        _armed_at = _now() if now is None else now
 
 
 def consume_ask_anyway(now: Optional[float] = None) -> bool:
@@ -143,7 +153,7 @@ def consume_ask_anyway(now: Optional[float] = None) -> bool:
     global _armed_at
     with _lock:
         armed, _armed_at = _armed_at, None
-    stamp = time.monotonic() if now is None else now
+    stamp = _now() if now is None else now
     return armed is not None and 0 <= stamp - armed <= ASK_ANYWAY_SECONDS
 
 

@@ -12,6 +12,7 @@ import os
 import re
 import sys
 import tempfile
+import time
 import unittest
 from pathlib import Path
 from typing import Any, Optional
@@ -163,6 +164,21 @@ class ArmedMarkTests(unittest.TestCase):
 
     def test_nothing_armed_means_not_armed(self) -> None:
         self.assertFalse(guard.consume_ask_anyway(now=1.0))
+
+    def test_a_mark_armed_before_a_sleep_has_expired_when_the_deck_wakes(self) -> None:
+        """The clock keeps counting while the Deck sleeps, so an unused mark cannot look fresh after a long sleep."""
+        clock = iter([1000.0, 1000.0 + 8 * 3600])  # armed, then the first ask after eight hours of sleep
+        with patch.object(guard, "_now", side_effect=lambda: next(clock)):
+            guard.arm_ask_anyway()
+            self.assertFalse(guard.consume_ask_anyway())
+
+    def test_the_clock_is_the_one_that_counts_sleep_and_falls_back_to_wall_time(self) -> None:
+        with patch.object(time, "clock_gettime", create=True, side_effect=lambda which: 42.5 if which == 7 else -1.0),                 patch.object(time, "CLOCK_BOOTTIME", 7, create=True):
+            self.assertEqual(guard._now(), 42.5)
+        with patch.object(time, "clock_gettime", create=True, side_effect=OSError("no such clock")),                 patch.object(time, "CLOCK_BOOTTIME", 7, create=True), patch.object(time, "time", return_value=9.0):
+            self.assertEqual(guard._now(), 9.0)
+        with patch.object(time, "clock_gettime", create=True, side_effect=AttributeError("none")),                 patch.object(time, "time", return_value=11.0):
+            self.assertEqual(guard._now(), 11.0)
 
 
 class ArmMethodTests(unittest.IsolatedAsyncioTestCase):

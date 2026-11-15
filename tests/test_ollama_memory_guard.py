@@ -241,6 +241,7 @@ class AskLevelTests(_Standins, unittest.IsolatedAsyncioTestCase):
         self.assertIsNone(out["model_policy_disclosure"])
         check = out["ask_diagnostics"]["memory_check"]
         self.assertEqual((check["available_mb"], check["short"]), (3500, True))
+        self.assertIn("elapsed_seconds", out["ask_diagnostics"])  # the warning ends the turn like the other early returns
 
     async def test_already_loaded_answers(self) -> None:
         self.health = _health(loaded={MODEL: 5800})

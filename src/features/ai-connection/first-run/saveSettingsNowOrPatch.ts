@@ -12,11 +12,13 @@
  * because closing it rebuilds the screen from the session note and a save still on its timer is lost.
  *
  * Does not: Wait for the answer, or update the screen from it; the popup carries the change through
- * the rebuild in the session note. A failed save is logged, not shown: the screen's own automatic save
- * sends the change again with the next edit.
+ * the rebuild in the session note. A failed save is logged, not shown, and remembered (plan 104, B1): the
+ * screen that is rebuilt from the note sends those settings again instead of taking its own copy as already
+ * saved, which is how a first-start change used to be lost.
  */
 import { callDeckyWithTimeout } from "../../../shared/deckyCall";
 import type { BonsaiSettings } from "../../settings/bonsaiSettingsSchema";
+import { rememberUnsavedSettings } from "../../settings/usePluginSettings";
 
 /** In: the patch (or none), the screen's save-what-changed call, and its builder of the payload for a patch. */
 export function saveSettingsNowOrPatch(
@@ -28,7 +30,9 @@ export function saveSettingsNowOrPatch(
     void persistChangedSettingsNow();
     return;
   }
-  callDeckyWithTimeout<[Partial<BonsaiSettings>], unknown>("save_settings", [buildSettingsPayload(patch)]).catch(
-    (err: unknown) => console.error("save_settings failed (first-run popup)", err),
-  );
+  const payload = buildSettingsPayload(patch);
+  callDeckyWithTimeout<[Partial<BonsaiSettings>], unknown>("save_settings", [payload]).catch((err: unknown) => {
+    console.error("save_settings failed (first-run popup)", err);
+    rememberUnsavedSettings(Object.keys(payload));
+  });
 }

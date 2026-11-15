@@ -248,7 +248,7 @@ const SAVE_RETRY_DELAYS_MS = [3000, 10000, 30000, 60000];
 const unsentKeys = new Set<string>();
 
 /** For a save made outside this hook that failed: the rebuilt screen sends these keys again. */
-function rememberUnsavedSettings(keys: string[]): void {
+export function rememberUnsavedSettings(keys: string[]): void {
   for (const k of keys) unsentKeys.add(k);
 }
 

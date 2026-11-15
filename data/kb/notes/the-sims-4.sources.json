@@ -1216,7 +1216,7 @@
         },
         {
           "label": "Tips",
-          "text": "A cheap shower may leave a Sim uncomfortable. If space is tight, pick the open showers from Discover University, Snowy Escape or Lovestruck: you can fit other items right up against them and Sims still walk through, which makes for a smaller bathroom.",
+          "text": "A cheap shower may leave a Sim uncomfortable. If space is tight, pick the open showers from Discover University, Snowy Escape or Lovestruck: other items can sit around them and Sims still walk through, which makes for a smaller bathroom.",
           "drawn_from": [
             {
               "page": "Shower",
@@ -1249,7 +1249,7 @@
       "lines": [
         {
           "label": "Summary",
-          "text": "The taller your walls (or the foundation the stairs are attached to), the longer the staircase gets. You can also drag it sideways to run the whole length of the lot. Spiral staircases do not exist in The Sims 4.",
+          "text": "The taller your walls (or the foundation the stairs are attached to), the longer the staircase gets. You can also drag it sideways to run the whole length of the lot. The Sims 4 has no spiral staircases right now.",
           "drawn_from": [
             {
               "page": "Staircase",

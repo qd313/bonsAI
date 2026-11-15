@@ -103,7 +103,9 @@ export function useSuggestedPromptChips(
         ragCandidatesCacheRef.current.appId === appId &&
         ragCandidatesCacheRef.current.candidates.length > 0
       ) {
-        return ragCandidatesCacheRef.current.candidates;
+        // The closest-to-the-last-question marks belong to the answer they were fetched after; a
+        // reseed of the cached list is not that answer, so it leads with nothing in particular.
+        return ragCandidatesCacheRef.current.candidates.map(({ closest: _spent, ...rest }) => rest);
       }
       const candidates = await fetchSessionRagChipCandidates({
         appId,

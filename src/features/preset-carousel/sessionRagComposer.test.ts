@@ -232,3 +232,61 @@ describe("the game's chip is on screen when the row opens", () => {
     expect(out.map((p) => p.text)).toEqual(["a", "How do I beat the Hive Knight?", "b"]);
   });
 });
+
+describe("the closest notes lead the row after an answer (plan 104, lane C2)", () => {
+  const closestChip = (text: string): SessionRagChipCandidate => ({ ...rag(text), closest: true });
+  const seeds = [staticSeed("a"), staticSeed("b"), staticSeed("c")];
+  const losing = () => 0.99;
+  const winning = () => 0;
+  const others = [rag("G5"), rag("G6"), rag("Any known Proton issues for this game?", "troubleshooting")];
+
+  it("four closest: the row opens on the first three, whatever the rolls say", () => {
+    const candidates = [closestChip("G1"), closestChip("G2"), closestChip("G3"), closestChip("G4"), ...others];
+    for (const random of [losing, winning]) {
+      const out = composeSessionPresets({ staticSeeds: seeds, ragCandidates: candidates, random });
+      expect(out.map((p) => p.text)).toEqual(["G1", "G2", "G3"]);
+      expect(out.every((p) => p.ragTip === true)).toBe(true);
+    }
+  });
+
+  it("two closest: the two on screen are the two closest, and what the rolls left follows in order", () => {
+    const candidates = [closestChip("G1"), closestChip("G2"), ...others];
+    const out = composeSessionPresets({ staticSeeds: seeds, ragCandidates: candidates, random: losing });
+    expect(out.map((p) => p.text)).toEqual(["G1", "G2", "a"]);
+  });
+
+  it("one closest: it leads and the second spot is chosen as usual", () => {
+    const candidates = [closestChip("G1"), ...others];
+    const out = composeSessionPresets({ staticSeeds: seeds, ragCandidates: candidates, random: losing });
+    expect(out[0]!.text).toBe("G1");
+    expect(out.map((p) => p.text)).toEqual(["G1", "a", "c"]);
+  });
+
+  it("a closest chip the rolls had already placed is not shown twice", () => {
+    const candidates = [closestChip("G1"), closestChip("G2"), ...others];
+    const out = composeSessionPresets({ staticSeeds: seeds, ragCandidates: candidates, ragProbability: 1, random: winning });
+    expect(out.map((p) => p.text)).toEqual(["G1", "G2", "G5"]);
+  });
+
+  it("with no closest chips the row is composed exactly as before", () => {
+    const plain = [rag("G1"), rag("G2"), ...others];
+    const rolls = [0.99, 0.99, 0.99];
+    expect(
+      composeSessionPresets({ staticSeeds: seeds, ragCandidates: plain, random: () => rolls.shift() ?? 0.99 }).map((p) => p.text),
+    ).toEqual(["a", "G1", "c"]);
+  });
+
+  it("a pinned test batch still wins over the closest chips", () => {
+    setFrozenTestChips(["pinned one", "pinned two", "pinned three"]);
+    try {
+      const out = composePresetSeedsWithSessionRag({
+        staticSeeds: [staticSeed("pinned one"), staticSeed("pinned two"), staticSeed("pinned three")],
+        ragCandidates: [closestChip("G1"), closestChip("G2"), closestChip("G3")],
+        random: winning,
+      });
+      expect(out.map((p) => p.text)).toEqual(["pinned one", "pinned two", "pinned three"]);
+    } finally {
+      setFrozenTestChips([]);
+    }
+  });
+});

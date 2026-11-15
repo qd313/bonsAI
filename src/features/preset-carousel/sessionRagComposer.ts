@@ -8,7 +8,8 @@
  * nextChipRule's job, shared by all four chip styles.) A chip actually about this game is always tried
  * before a chip about Steam Deck compatibility in general, and if any
  * knowledge-base chip is available at all, this guarantees at least one is
- * visible on screen rather than leaving it possible for none to ever show.
+ * visible on screen rather than leaving it possible for none to ever show. Right after an answer, the
+ * chips the back end marked as closest to the question take the row's first places.
  *
  * Used for: composePresetSeedsWithSessionRag, and the Main tab's preset
  * carousel seed list.
@@ -33,6 +34,11 @@ export type SessionRagChipCandidate = {
   category: string;
   preferAskMode?: AskModeId;
   domain?: string;
+  /**
+   * Set by the fetch on the game's chips the back end named as the closest to the last question
+   * (its closest_count, at most four). Only ever set right after an answer.
+   */
+  closest?: true;
 };
 
 export type ComposeSessionPresetsArgs = {
@@ -155,5 +161,22 @@ export function composeSessionPresets({
     }
   }
 
-  return out;
+  return leadWithClosest(out, ragPool);
+}
+
+/**
+ * Plan 104, lane C2. After an answer the back end names the game's chips closest to what was asked
+ * (see closest on the candidate). They take the first places in the row, in the back end's order, so
+ * the chips on screen are the closest ones; whatever the rolls placed is dealt behind them, and none
+ * shows twice. Only as many as the row has places for: the rest are dealt by the next-chip rule.
+ * With none marked the row is as the rolls left it.
+ */
+function leadWithClosest(out: PresetPrompt[], ragPool: SessionRagChipCandidate[]): PresetPrompt[] {
+  const closest = ragPool.filter((c) => c.closest === true && isGameCandidate(c)).slice(0, out.length);
+  if (closest.length === 0) {
+    return out;
+  }
+  const lead = closest.map(toPresetPrompt);
+  const leadTexts = new Set(lead.map((p) => p.text));
+  return [...lead, ...out.filter((p) => !leadTexts.has(p.text))].slice(0, out.length);
 }

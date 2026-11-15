@@ -15,6 +15,7 @@ import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useSuggestedPromptChips, type UseSuggestedPromptChipsArgs } from "./useSuggestedPromptChips";
 import { LOCAL_KNOWLEDGE_BASE_ADVICE_PRESET_TEXT, setFrozenTestChips } from "./presets";
+import { fetchSessionRagChipCandidates } from "./sessionRagChipCandidates";
 
 vi.mock("./sessionRagChipCandidates", () => ({
   fetchSessionRagChipCandidates: vi.fn(async () => []),
@@ -69,5 +70,46 @@ describe("useSuggestedPromptChips: no 'Enable local knowledge base' chip while i
       }),
     );
     expect(kbChipShown(result.current.suggestedPrompts.map((p) => p.text))).toBe(false);
+  });
+});
+
+describe("useSuggestedPromptChips: the closest notes lead only the row drawn right after an answer", () => {
+  const game = (text: string, closest?: true) => ({
+    text,
+    category: "strategy",
+    domain: "strategy",
+    ...(closest ? { closest } : {}),
+  });
+
+  it("an after-answer reseed opens on the two closest chips; a later reseed of the cached list does not", async () => {
+    vi.mocked(fetchSessionRagChipCandidates).mockResolvedValueOnce([
+      game("How do I beat Boss1?", true),
+      game("How do I use Item4?", true),
+      game("How do I deal with Enemy0?"),
+    ]);
+    const { result } = renderHook(() =>
+      // Settings not yet "loaded", so the cold-open reseed does not take the one prepared answer first.
+      useSuggestedPromptChips({ ...base, useLocalKnowledgeBase: true, settingsLoaded: false }),
+    );
+    await act(async () => {
+      await result.current.reseedSuggestedPrompts("contextual", "strategy", true);
+    });
+    expect(result.current.suggestedPrompts.slice(0, 2).map((p) => p.text)).toEqual([
+      "How do I beat Boss1?",
+      "How do I use Item4?",
+    ]);
+    // Nothing new was asked: the same game's list comes from the cache, and the closest are spent.
+    // Every per-slot roll loses (0.99), so only the closest marks could put two game chips in front.
+    const dice = vi.spyOn(Math, "random").mockReturnValue(0.99);
+    try {
+      await act(async () => {
+        await result.current.reseedSuggestedPrompts("random");
+      });
+    } finally {
+      dice.mockRestore();
+    }
+    const texts = result.current.suggestedPrompts.slice(0, 2).map((p) => p.text);
+    expect(texts).not.toEqual(["How do I beat Boss1?", "How do I use Item4?"]);
+    expect(result.current.suggestedPrompts.filter((p) => p.ragTip === true)).toHaveLength(1);
   });
 });

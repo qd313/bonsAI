@@ -30,6 +30,8 @@ import type { SessionRagChipCandidate } from "./sessionRagComposer";
 type SessionRagChipCandidatesRpcResult = {
   ok?: boolean;
   reason?: string;
+  /** How many of the first candidates are the notes closest to the last question (0 at other times). */
+  closest_count?: number;
   candidates?: Array<{
     text?: string;
     category?: string;
@@ -83,14 +85,18 @@ export async function fetchSessionRagChipCandidates(args: {
     }
     const out: SessionRagChipCandidate[] = [];
     const seen = new Set<string>();
-    for (const raw of result.candidates) {
+    // The back end says how many of the first chips are the closest ones; the row keeps those in front.
+    const closestCount =
+      typeof result.closest_count === "number" && result.closest_count > 0 ? Math.floor(result.closest_count) : 0;
+    result.candidates.forEach((raw, index) => {
       const normalized = normalizeCandidate(raw);
       if (!normalized || seen.has(normalized.text)) {
-        continue;
+        return;
       }
       seen.add(normalized.text);
-      out.push(normalized);
-    }
+      const isClosest = index < closestCount && (normalized.domain || "").toLowerCase() === "strategy";
+      out.push(isClosest ? { ...normalized, closest: true } : normalized);
+    });
     return out;
   } catch (e) {
     // The RPC reports KB-off, a missing corpus and a corpus read failure as

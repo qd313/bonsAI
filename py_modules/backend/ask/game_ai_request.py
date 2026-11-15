@@ -125,6 +125,7 @@ from backend.ask.ollama_service import (
 )
 from backend.ask.proton_troubleshooting_logs import collect_proton_troubleshooting_logs
 from backend.ask import picture_guess
+from backend.ask.kb_turn_transparency import record_kb_turn_facts
 from backend.answer.response_verify import (
     cover_named_spoilers,
     cover_thinking_text,
@@ -154,7 +155,6 @@ from backend.knowledge.kb_attached_notes import (
     _KB_NOTE_HEADER_RE,
     _KB_NOTE_OMITTED_TAIL_RE,
     _kb_note_source_host,
-    _kb_search_log_fields,
     _parse_kb_attached_notes,
     _publish_kb_attached_notes_live,
     kb_choice_log_line,
@@ -659,46 +659,12 @@ async def run_game_ai_request(
         )
         early_context_combined = stacked.text
 
-        # Built *after* stacking, deliberately. Proton logs take budget first and can be
-        # capped at 96 KiB against a 100 KiB ceiling, so recording attached=True straight off
-        # the retrieval result let transparency claim the knowledge base was attached — and
-        # cite its sources — on turns where the block never reached the model at all.
-        if kb_result is not None:
-            kb_survived = kb_result.attached and stacked.knowledge_attached
-            starved = kb_result.attached and not stacked.knowledge_attached
-            kb_transparency = build_knowledge_base_transparency(
-                attached=kb_survived,
-                trust_tier=kb_result.trust_tier if kb_survived else "",
-                sources=kb_result.sources if kb_survived else [],
-                notes="dropped_by_context_budget" if starved else kb_result.notes,
-                timing_ms=kb_result.timing_ms,
-                unavailable_reason=kb_result.unavailable_reason,
-                retrieval_method=kb_result.retrieval_method,
-                kb_domain=kb_domain,
-                best_meaning=kb_result.best_meaning,
-                top_card_keyword_score=kb_result.top_card_keyword_score,
-                best_meaning_without_game_name=kb_result.best_meaning_without_game_name,
-            )
-            # Off by default (Settings -> Advanced -> App activity logging to Desktop, level
-            # Verbose) -- this line only lands in ~/Desktop/bonsAI_logs/bonsai-app-*.log once
-            # that is turned on and filesystem writes are allowed. See _kb_search_log_fields
-            # for why it exists and what each field means. `hasattr` guards the same way the
-            # `_publish_thinking_phase_key` calls above do, since not every caller of this
-            # function (the test doubles in tests/test_game_ai_request*.py) is the real Plugin.
-            if hasattr(plugin, "_maybe_app_log"):
-                await plugin._maybe_app_log(
-                    "ask.kb_search",
-                    "knowledge-base search",
-                    level="verbose",
-                    fields=_kb_search_log_fields(
-                        kb_result,
-                        kb_domain=kb_domain,
-                        app_name=app_name,
-                        kb_survived=kb_survived,
-                        starved=starved,
-                    ),
-                )
-        # Always on, unlike the line above: which notes or tips this question chose (plan 74).
+        # Recorded after stacking, deliberately (kb_turn_transparency.py says why: a note the budget
+        # cut must not be reported as attached). Moved out of this file in plan 104, lane H1.
+        kb_transparency, kb_survived = await record_kb_turn_facts(
+            plugin, kb_result, stacked, kb_transparency=kb_transparency, kb_domain=kb_domain, app_name=app_name
+        )
+        # Always on, unlike the app-activity line recorded above: which notes or tips this question chose (plan 74).
         kb_starved = bool(kb_result and kb_result.attached) and not stacked.knowledge_attached
         logger.info(
             "%s",

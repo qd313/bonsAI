@@ -999,8 +999,8 @@
     "alt_forms": [
       "predator pals"
     ],
-    "peek": "An overpowered Pal variant seen only in scripted encounters; it cannot be captured.",
-    "full_text": "Predator Pals are overpowered variants of ordinary Pals that appear only in their own scripted encounters and cannot be captured. They are one of five distinct kinds of toughest fights, alongside Alpha Pals, Bounty Targets, Faction Leaders and Raid Bosses."
+    "peek": "An overpowered Pal variant that cannot be captured and is missing from the world map.",
+    "full_text": "Predator Pals are overpowered variants of ordinary Pals that you cannot capture and that are missing from the world map. They are one of five distinct kinds of toughest fights, alongside Alpha Pals, Bounty Targets, Faction Leaders and Raid Bosses."
   },
   {
     "term_id": 1097,

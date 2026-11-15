@@ -221,6 +221,61 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "172372",
       "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4520,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Short-handed versus games",
+      "card": "Summary: A versus game can run with as few as two players, one per team, because bots fill the empty infected and survivor slots. Both teams still need at least one human or the game ends.\nTips: A team short on humans is at a real disadvantage as survivors. If every human survivor is killed the round ends, because the computer-controlled survivors cannot get through a level alone.\nTips: The bots playing Ellis and Zoey reach for shotguns in versus instead of the hunting or sniper rifles they take in the campaign, for balance.\nTips: A bot-controlled Hunter shot from a distance cannot leap away as it does in the campaign, so it runs instead and is easy to kill. Its pounce still hurts, up to 25 damage when it starts far enough off.",
+      "source_url": "https://left4dead.fandom.com/wiki/Versus",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "172372",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4521,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Fooling the infected team at ambush spots",
+      "card": "Summary: In versus the infected are people, so survivors can bluff them. Stopping short or backing away as you near a likely ambush spot can draw an infected player into spawning or attacking too early.\nTips: Think the way the infected team would. The wiki's examples of bait spots are a corner, a one-way drop and a Witch. If the bluff works, the survivors can kill the early attacker more safely, or rush past while the infected player's special attack is still recharging.\nTips: Walking or crouch-walking toward a place where a special infected probably hides keeps your outline hidden while you are not firing or shoving, which suits sneaking up on it. It does not help a survivor already in an infected player's sight or covered in bile.\nTips: Coordinating by microphone lets a team keep several spawn spots under watch until it has passed them, which forces the opponents to wait or take a weaker spot.",
+      "source_url": "https://left4dead.fandom.com/wiki/Tactics",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173476",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4522,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Survivor weapons for versus: the mix and the Grenade Launcher",
+      "card": "Summary: The wiki advises a survivor team to carry a mix of close-range and long-range weapons rather than four of the same kind, and to treat the Grenade Launcher as a short-term pick in versus.\nTips: Ideally each player carries something that hits both near and far. One example mix is a sniper rifle with a melee weapon, an assault rifle with a melee weapon, an assault rifle with two pistols, and a shotgun with a magnum.\nTips: Mix the throwables too. Pipe bombs suit horde attacks, a survivor covered in bile, or clearing wide open ground; bile bombs slow a Tank or pull common infected away from the team.\nTips: The Grenade Launcher's aim is shaky, its reload slow, its ammo scarce and its friendly-fire risk high. In versus the wiki says to use it briefly during a panic event, then swap to something less likely to hurt teammates.",
+      "source_url": "https://left4dead.fandom.com/wiki/Tactics",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173476",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4523,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Scavenge rounds, timers and winning",
+      "card": "Summary: Scavenge is a Left 4 Dead 2 team mode: survivors haul up to 22 gas cans to a generator while player-controlled special infected try to stop them. A game is 1, 3 or 5 rounds, and each round has two turns with the sides swapping.\nTips: Survivors start next to the generator with 30 seconds to set up and grab supplies. The infected spawn when that time runs out or a survivor leaves the area around the generator. Then survivors have 1 minute 30 seconds, plus 20 seconds for every can they bring to the generator.\nTips: To win a round the second team must collect one more can than the first. Equal cans go to the faster team, and if neither team gets a can the round goes to the team that lasted longer. The game ends as soon as the trailing team cannot catch up, so a 3-round game ends at two round wins.\nTips: The losing team starts the next round as survivors, the opposite of versus, where the losing team is the infected first. Most round wins takes the game, so a team can win with fewer cans overall.",
+      "source_url": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173082",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4524,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Scavenge gas cans, pouring and overtime",
+      "card": "Summary: Scavenge gas cans always spawn in the same places and glow white, turning orange once picked up and dropped. Pouring one into the generator takes about 2.5 seconds, and any damage from the infected or from fire restarts it; friendly fire does not.\nTips: Only the Spitter can destroy a can with an attack, and only one that has been picked up and dropped before. A can hit by acid flashes and then explodes, which gives survivors a moment to grab it. A destroyed can eventually respawns where it started.\nTips: Overtime starts if the clock runs out while at least one survivor is holding a can. The timer flashes red and survivors have unlimited time to pour another can and extend the round, but once every can is dropped their turn is over. It can happen more than once in a round.\nTips: Adrenaline shots speed up pouring and let a survivor keep pouring while being attacked. Bot-controlled Spitters cannot burn dropped cans in Scavenge.",
+      "source_url": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173082",
+      "crawled_at": "2026-11-15"
     }
   ]
 }

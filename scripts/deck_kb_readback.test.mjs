@@ -170,6 +170,33 @@ test("the two footer lines are told apart", () => {
   assert.equal(plain.noCloseMatchLine || plain.notInMyNotesLine, false);
 });
 
+const THIRD_LINE = "No notes for this game — this answer is from the model's own knowledge.";
+
+test("the third line, 'No notes for this game', is its own value and the two older lines stay as they were", () => {
+  const third = readBack(panel({ slots: [slot({ text: `An answer.<em>${THIRD_LINE}</em>` })] }));
+  assert.equal(third.noNotesForGameLine, true);
+  assert.equal(third.noCloseMatchLine, false);
+  assert.equal(third.notInMyNotesLine, false);
+  // Each older line leaves the new value false.
+  const close = readBack(panel({ slots: [slot({ text: "x — No close match in my notes, leans on the model." })] }));
+  assert.equal(close.noNotesForGameLine, false);
+  assert.equal(close.noCloseMatchLine, true);
+  const none = readBack(panel({ slots: [slot({ text: "Not in my notes — this answer is from the model's own knowledge." })] }));
+  assert.equal(none.noNotesForGameLine, false);
+  assert.equal(none.notInMyNotesLine, true);
+  assert.equal(readBack(panel({ slots: [slot({})] })).noNotesForGameLine, false);
+});
+
+test("the third line is read per answer in the --turns list too", () => {
+  const r = readBack(
+    panel({ slots: [slot({ text: THIRD_LINE }), slot({ text: "Plain." })] }),
+    { turns: 2 },
+  );
+  assert.equal(r.turnList[0].noNotesForGameLine, false);
+  assert.equal(r.turnList[1].noNotesForGameLine, true);
+  assert.equal(r.noNotesForGameLine, false);
+});
+
 test("the focused control is named, the ring wins over the page's own focus, and window focus is reported", () => {
   const markup = panel({
     slots: [slot({ notes: notesBlock({ open: false, label: "Name, show", headName: "Name" }) })],

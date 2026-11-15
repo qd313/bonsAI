@@ -48,6 +48,10 @@ class LogLineTests(unittest.TestCase):
         self.assertIn("No close match in my notes", readback.READBACK_JS)
         self.assertIn("Not in my notes", readback.READBACK_JS)
 
+    def test_the_third_footer_line_is_looked_for_in_its_exact_words(self):
+        # Lane H2 draws this line; its wording is pinned here by hand until the back end holds a constant for it.
+        self.assertIn("No notes for this game — this answer is from the model's own knowledge.", readback.READBACK_JS)
+
     def test_the_newest_attach_line_in_a_log_is_the_one_returned(self):
         old = "2026-11-09 10:00:01 INFO ask_ollama: notes for this answer: 1 note attached (A); no footer line added"
         new = "2026-11-09 10:05:09 INFO ask_ollama: notes for this answer: no notes attached; 'Not in my notes' line"

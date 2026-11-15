@@ -4,7 +4,7 @@
 Purpose: Read the newest answer on the bonsAI Main tab and print one JSON object that holds what a
     knowledge-base Deck check looks at: whether the answer has finished; the notes line (its words, and
     the note names when it is open); how many spoiler covers the answer holds, shut and open; whether
-    the "No close match" or the "Not in my notes" line is there; the game named in the game tag beside
+    the "No close match", the "Not in my notes" or the "No notes for this game" line is there; the game named in the game tag beside
     the Ask button; the control that has the ring and whether the panel's page has the window's focus;
     and the plugin log's newest "notes for this answer" line (the line kb_attach_log_line writes).
     `--turns N` also lists the last N answers, newest first, each with its own notes line, covers and
@@ -171,7 +171,8 @@ READBACK_JS = r"""JSON.stringify((function () {
       open: bubble ? bubble.querySelectorAll('.bonsai-spoiler-collapse-target').length : 0
     },
     noCloseMatchLine: text.indexOf('No close match in my notes') >= 0,
-    notInMyNotesLine: text.indexOf('Not in my notes') >= 0
+    notInMyNotesLine: text.indexOf('Not in my notes') >= 0,
+    noNotesForGameLine: text.indexOf("No notes for this game — this answer is from the model's own knowledge.") >= 0
   };
   };
   var newest = readSlot(slots.length ? slots[slots.length - 1] : null);
@@ -198,6 +199,7 @@ READBACK_JS = r"""JSON.stringify((function () {
     spoilers: newest.spoilers,
     noCloseMatchLine: newest.noCloseMatchLine,
     notInMyNotesLine: newest.notInMyNotesLine,
+    noNotesForGameLine: newest.noNotesForGameLine,
     game: game ? words(game) : null,
     focus: focused ? {label: name(focused), cls: firstClass(focused), via: ring ? 'ring' : 'activeElement'} : null,
     windowFocus: document.hasFocus()

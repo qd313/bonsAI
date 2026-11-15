@@ -41,7 +41,11 @@
  * Gotcha: opening a box snapshots the whole session, and Decky's remount after it closes restores
  * settings from that snapshot (see useThinkingNoticeGate.tsx, bug b). Turning the permission on
  * therefore also patches the pending snapshot, and saves straight to the back end, so the download
- * that starts next is not refused by a back end that has not heard yet.
+ * that starts next is not refused by a back end that has not heard yet. When that save fails, the
+ * yes does not go on as if it had worked (plan 104, B1): the screen goes back to off, nothing
+ * downloads, and a message says the setting could not be saved. It used to be swallowed, and the
+ * press then failed with "check the Internet downloads permission" right after the person had
+ * turned it on.
  */
 import { useEffect, type ReactNode } from "react";
 import { showModal } from "@decky/ui";
@@ -142,8 +146,17 @@ function markSitesSeen(sites: string[]): void {
   }
 }
 
-async function turnOnDownloads(b: PermissionBridge): Promise<void> {
-  const next: BonsaiCapabilities = { ...b.capabilities, internet_downloads: true };
+/** The message when the "yes" could not be saved: says what happened, not that downloads are off. */
+const DOWNLOADS_NOT_SAVED_TOAST = {
+  title: "Could not save the setting",
+  body: "Internet downloads are still off: the setting could not be saved. Try again in a moment.",
+  duration: 6000,
+};
+
+/** True when the back end took the save. False: the screen is back to what it was, and nothing was changed on disk. */
+async function turnOnDownloads(b: PermissionBridge): Promise<boolean> {
+  const before = b.capabilities;
+  const next: BonsaiCapabilities = { ...before, internet_downloads: true };
   b.setCapabilities(next);
   patchPendingSessionSettingsSnapshot({ capabilities: next });
   try {
@@ -153,8 +166,13 @@ async function turnOnDownloads(b: PermissionBridge): Promise<void> {
       [{ capabilities: next }],
       DECKY_RPC_TIMEOUT_MS
     );
+    return true;
   } catch {
-    /* the debounced settings save retries; a refused download then says why */
+    // Not claiming a setting the file does not have: the screen shows off again, so nothing is sent later
+    // behind the person's back and the next press asks the question again.
+    b.setCapabilities(before);
+    patchPendingSessionSettingsSnapshot({ capabilities: before });
+    return false;
   }
 }
 
@@ -247,7 +265,10 @@ export function confirmDownload(notices: DownloadNotice[], opts: DownloadBoxOpti
           markSitesSeen(sites);
           b.onCompleteDeckyModalClose(() => handle.Close());
           if (asking) {
-            void turnOnDownloads(b).then(() => finish(true));
+            void turnOnDownloads(b).then((saved) => {
+              if (!saved) toaster.toast(DOWNLOADS_NOT_SAVED_TOAST);
+              finish(saved);
+            });
           } else {
             finish(true);
           }

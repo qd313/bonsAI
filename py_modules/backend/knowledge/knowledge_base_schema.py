@@ -29,7 +29,10 @@ How it works:
     and compatibility tips, a fast keyword-search index kept in sync by the
     triggers in `FTS_SYNC_TRIGGERS_SQL`, a table of each game's tap-to-define
     words (searched by nothing, read by game only), and, when the download
-    includes them, a table of vectors for meaning-based search.
+    includes them, a table of vectors for meaning-based search. The two
+    load-order tables of `LOAD_ORDER_SCHEMA_SQL` (LOOT's rules for a few games'
+    plugins) are not in that list: the library builder adds them only when it has
+    rules to put in them, so a library built without rules has no such table.
  2. `list_rag_storage_options()`, `default_corpus_dir_internal()` and
     `default_corpus_dir_sd()` work out where the knowledge base can be
     installed -- inside your home folder, or on a plugged-in SD card -- and
@@ -204,6 +207,40 @@ CREATE TABLE IF NOT EXISTS glossary_terms (
 CREATE INDEX IF NOT EXISTS idx_glossary_terms_game_id ON glossary_terms(game_id);
 """
 
+# LOOT's load-order rules for Fallout 4 and Skyrim Special Edition (CC0-1.0). Not part of
+# CREATE_SCHEMA_SQL on purpose: the library builder creates these two tables only when it has
+# rules to write (data/kb/load_order/), so a library built without them has no such table and the
+# reader (rag_corpus_load_order) treats that as "no rule". Nothing searches them: no full-text
+# index, no vectors, and a rule never shows up as a note, a chip or a search hit. Schema version
+# stays 4 on purpose, the same as the glossary table.
+LOAD_ORDER_SCHEMA_SQL = """
+CREATE TABLE IF NOT EXISTS load_order_sources (
+    game_key TEXT PRIMARY KEY,
+    repository TEXT NOT NULL,
+    commit_hash TEXT NOT NULL,
+    commit_date TEXT NOT NULL,
+    licence TEXT NOT NULL,
+    date_read TEXT NOT NULL,
+    groups TEXT NOT NULL DEFAULT '[]'
+);
+
+CREATE TABLE IF NOT EXISTS load_order_rules (
+    rule_id INTEGER PRIMARY KEY,
+    game_key TEXT NOT NULL REFERENCES load_order_sources(game_key) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    name_key TEXT NOT NULL,
+    is_pattern INTEGER NOT NULL DEFAULT 0,
+    plugin_group TEXT,
+    after TEXT NOT NULL DEFAULT '[]',
+    requires TEXT NOT NULL DEFAULT '[]',
+    incompatible TEXT NOT NULL DEFAULT '[]',
+    messages TEXT NOT NULL DEFAULT '[]',
+    UNIQUE (game_key, name)
+);
+
+CREATE INDEX IF NOT EXISTS idx_load_order_rules_key ON load_order_rules(game_key, name_key);
+"""
+
 FTS_SYNC_TRIGGERS_SQL = """
 CREATE TRIGGER IF NOT EXISTS sections_ai AFTER INSERT ON sections BEGIN
     INSERT INTO sections_fts(rowid, name, card) VALUES (new.section_id, new.name, new.card);
@@ -234,6 +271,20 @@ def normalize_alias(text: str) -> str:
     raw = (text or "").strip().lower()
     raw = re.sub(r"[^\w\s]", " ", raw, flags=re.UNICODE)
     return re.sub(r"\s+", " ", raw).strip()
+
+
+_LOAD_ORDER_FILE_ENDINGS = re.compile(r"\.(esp|esm|esl|dll|exe|ba2|bsa|pex|ini)$")
+
+
+def load_order_name_key(name: str) -> str:
+    """A plugin or mod name for comparing: lower case, no file ending, no spaces or underscores.
+
+    "Unofficial Skyrim Patch.esp", "unofficial_skyrim_patch.ESM" and "UnofficialSkyrimPatch" give
+    one key. Only a real file ending (a plugin, a library, a script) is removed, so the ".20" in a
+    version such as "Mod v1.20" stays.
+    """
+    raw = _LOAD_ORDER_FILE_ENDINGS.sub("", (name or "").strip().lower())
+    return re.sub(r"[\s_]+", "", raw)
 
 
 def default_corpus_dir_internal() -> str:

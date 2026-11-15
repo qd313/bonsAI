@@ -46,7 +46,9 @@ from backend.knowledge.knowledge_base_schema import (  # noqa: E402
     DEFAULT_EMBEDDING_DIM,
     DEFAULT_EMBEDDING_MODEL,
     EMBEDDING_VARIANT,
+    LOAD_ORDER_SCHEMA_SQL,
     apply_schema,
+    load_order_name_key,
     normalize_alias,
     pack_embedding_vector,
     write_manifest,
@@ -119,6 +121,10 @@ def licence_string_includes_version(license_name: str) -> bool:
     return bool(re.search(r"\d", raw))
 
 
+def _table_exists(conn: sqlite3.Connection, name: str) -> bool:
+    return conn.execute("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = ?", (name,)).fetchone() is not None
+
+
 def _card_title(game_title: str, section_name: str) -> str:
     game = str(game_title or "").strip()
     name = str(section_name or "").strip()
@@ -161,6 +167,18 @@ def collect_third_party_attribution_sources(conn: sqlite3.Connection) -> list[di
                 "captured": "",
             }
         )
+    if _table_exists(conn, "load_order_sources"):
+        for game_key, repository, commit_date, licence in conn.execute(
+            "SELECT game_key, repository, commit_date, licence FROM load_order_sources ORDER BY game_key"
+        ):
+            sources.append(
+                {
+                    "title": _card_title(LOAD_ORDER_GAMES.get(game_key, game_key), "load-order rules from LOOT"),
+                    "url": repository,
+                    "license": licence,
+                    "captured": commit_date,
+                }
+            )
     return sources
 
 
@@ -603,6 +621,160 @@ def _seed_glossary_terms(conn: sqlite3.Connection) -> int:
     return len(rows)
 
 
+# LOOT's load-order rules (data/kb/load_order/<game>.json, made by scripts/kb/fetch_loot_masterlist.py).
+LOAD_ORDER_GAMES = {"fallout4": "Fallout 4", "skyrimse": "Skyrim Special Edition"}
+_LOAD_ORDER_HEADER_FIELDS = ("game", "repository", "commit", "commit_date", "licence", "date_read")
+_LOAD_ORDER_ITEM_KEYS = ("display", "detail", "condition", "constraint")
+_LOAD_ORDER_LISTS = ("after", "requires", "incompatible")
+_LOAD_ORDER_LINK = re.compile(r"https?://|nexusmods", re.IGNORECASE)
+_ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
+
+
+def _load_order_files() -> list[tuple[str, Any]]:
+    """Every data/kb/load_order/*.json as ``(file label, parsed file)``; none when the folder is missing."""
+    return [(f"load_order/{p.name}", _load_json(p)) for p in _folder_json_files(KB_DATA_DIR / "load_order")]
+
+
+def _holds_link(value: Any) -> bool:
+    if isinstance(value, str):
+        return bool(_LOAD_ORDER_LINK.search(value))
+    if isinstance(value, dict):
+        value = list(value.values())
+    return isinstance(value, list) and any(_holds_link(v) for v in value)
+
+
+def _load_order_header_problems(label: str, data: Any, seen_games: dict[str, str]) -> list[str]:
+    if not isinstance(data, dict) or not isinstance(data.get("header"), dict):
+        return [f"{label}: must be an object with a header"]
+    head = data["header"]
+    problems = [f"{label}: header {f} is missing" for f in _LOAD_ORDER_HEADER_FIELDS if not str(head.get(f) or "").strip()]
+    game = head.get("game")
+    if game and game not in LOAD_ORDER_GAMES:
+        problems.append(f"{label}: game {game!r} is not one of {', '.join(LOAD_ORDER_GAMES)}")
+    elif game in seen_games:
+        problems.append(f"{label}: game {game} appears twice (also in {seen_games[game]})")
+    elif game:
+        seen_games[game] = label
+    if head.get("licence") and head["licence"] != CC0_LICENSE:
+        problems.append(f"{label}: header licence must be {CC0_LICENSE!r}, not {head['licence']!r}")
+    for field in ("commit_date", "date_read"):
+        if head.get(field) and not _ISO_DATE.fullmatch(str(head[field])):
+            problems.append(f"{label}: header {field} must look like 2026-11-01")
+    if head.get("commit") and not re.fullmatch(r"[0-9a-f]{40}", str(head["commit"])):
+        problems.append(f"{label}: header commit must be the full 40-character hash")
+    return problems
+
+
+def _load_order_entry_problems(label: str, entry: Any, seen_names: set[str]) -> list[str]:
+    if not isinstance(entry, dict) or not str(entry.get("name") or "").strip():
+        return [f"{label}: an entry has no name"]
+    name = entry["name"]
+    where = f"{label} entry {name!r}"
+    problems: list[str] = []
+    if name.lower() in seen_names:
+        problems.append(f"{where}: appears twice (names compare without case)")
+    seen_names.add(name.lower())
+    if not isinstance(entry.get("isPattern"), bool):
+        problems.append(f"{where}: isPattern must be true or false")
+    elif entry["isPattern"]:
+        try:
+            re.compile(name)
+        except re.error:
+            problems.append(f"{where}: isPattern is set but the name is not a regular expression (pattern)")
+    if "group" in entry and not isinstance(entry["group"], str):
+        problems.append(f"{where}: group must be text")
+    for field in _LOAD_ORDER_LISTS:
+        items = entry.get(field)
+        if not isinstance(items, list):
+            problems.append(f"{where}: {field} must be a list")
+            continue
+        for item in items:
+            if not isinstance(item, dict) or not str(item.get("name") or "").strip():
+                problems.append(f"{where}: an {field} item has no name")
+            elif any(k not in ("name", *_LOAD_ORDER_ITEM_KEYS) or not isinstance(v, str) for k, v in item.items()):
+                problems.append(f"{where}: an {field} item holds a field the build does not know")
+    messages = entry.get("messages")
+    if not isinstance(messages, list):
+        problems.append(f"{where}: messages must be a list")
+        messages = []
+    for msg in messages:
+        if not isinstance(msg, dict) or msg.get("type") not in ("say", "warn", "error"):
+            problems.append(f"{where}: message type {(msg or {}).get('type')!r} is not say, warn or error")
+        elif not str(msg.get("text") or "").strip():
+            problems.append(f"{where}: a message has no text")
+        elif not isinstance(msg.get("subs"), list) or not all(isinstance(x, str) for x in msg["subs"]):
+            problems.append(f"{where}: message subs must be a list of text")
+        elif msg.get("condition") is not None and not isinstance(msg["condition"], str):
+            problems.append(f"{where}: message condition must be text or null")
+    if not any(entry.get(k) for k in (*_LOAD_ORDER_LISTS, "messages")):
+        problems.append(f"{where}: carries no rule")
+    if _holds_link(entry):
+        problems.append(f"{where}: holds a web link")
+    return problems
+
+
+def _load_order_problems(pairs: list[tuple[str, Any]]) -> list[str]:
+    """Reasons the load-order files cannot be built; empty when every file and entry is fine."""
+    problems: list[str] = []
+    seen_games: dict[str, str] = {}
+    for label, data in pairs:
+        head_problems = _load_order_header_problems(label, data, seen_games)
+        problems.extend(head_problems)
+        if not isinstance(data, dict) or not isinstance(data.get("header"), dict):
+            continue
+        if not isinstance(data.get("groups"), list) or not isinstance(data.get("entries"), list):
+            problems.append(f"{label}: groups and entries must be lists")
+            continue
+        if _holds_link(data["groups"]):
+            problems.append(f"{label}: a group holds a web link")
+        names: set[str] = set()
+        for entry in data["entries"]:
+            problems.extend(_load_order_entry_problems(label, entry, names))
+    return problems
+
+
+def _seed_load_order(conn: sqlite3.Connection) -> int:
+    """Write LOOT's rules into load_order_sources and load_order_rules; returns the rule count.
+
+    With no files in data/kb/load_order/ nothing is created: the library has no such table, the way a
+    library built before the table existed has none, and the reader treats both as "no rule". A bad
+    file stops the build, naming the file and the entry.
+    """
+    pairs = _load_order_files()
+    if not pairs:
+        return 0
+    problems = _load_order_problems(pairs)
+    if problems:
+        raise SystemExit("load_order: " + "; ".join(problems[:12]) + (" ..." if len(problems) > 12 else ""))
+    conn.executescript(LOAD_ORDER_SCHEMA_SQL)
+    dump = lambda value: json.dumps(value, ensure_ascii=False)  # noqa: E731
+    count = 0
+    for _label, data in pairs:
+        head = data["header"]
+        conn.execute(
+            "INSERT INTO load_order_sources(game_key, repository, commit_hash, commit_date, licence, date_read, "
+            "groups) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (head["game"], head["repository"], head["commit"], head["commit_date"], head["licence"],
+             head["date_read"], dump(data["groups"])),
+        )
+        for entry in data["entries"]:
+            count += 1
+            conn.execute(
+                "INSERT INTO load_order_rules(rule_id, game_key, name, name_key, is_pattern, plugin_group, "
+                "after, requires, incompatible, messages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (count, head["game"], entry["name"], load_order_name_key(entry["name"]), int(entry["isPattern"]),
+                 entry.get("group"), dump(entry["after"]), dump(entry["requires"]),
+                 dump(entry["incompatible"]), dump(entry["messages"])),
+            )
+    return count
+
+
+def _load_order_rule_count(conn: sqlite3.Connection) -> int:
+    """How many load-order rules the library holds; 0 when it has no such table."""
+    if not _table_exists(conn, "load_order_rules"):
+        return 0
+    return int(conn.execute("SELECT COUNT(*) FROM load_order_rules").fetchone()[0])
+
 SEED_LABEL = "strategy_seed.json"
 _NOTES_LISTS = ("games", "aliases", "sections")
 
@@ -806,6 +978,7 @@ def seed_sample_corpus(conn: sqlite3.Connection) -> None:
     _seed_strategy_corpus(conn)
     # After the games exist: each word is filed under its game's app id.
     _seed_glossary_terms(conn)
+    _seed_load_order(conn)
     tip_count = _seed_compat_patterns(conn)
     if tip_count == 0:
         conn.execute(
@@ -967,6 +1140,7 @@ def build_corpus(out_dir: Path, *, seed: bool, allow_missing_embeddings: bool = 
     section_total = 0
     compat_total = 0
     glossary_term_count = 0
+    load_order_rule_count = 0
     refusal: str | None = None
     try:
         apply_schema(conn)
@@ -978,6 +1152,7 @@ def build_corpus(out_dir: Path, *, seed: bool, allow_missing_embeddings: bool = 
         embedding_compat_count, compat_total = populate_compat_vectors(conn)
         embeddings_populated = embedding_section_count > 0 or embedding_compat_count > 0
         glossary_term_count = int(conn.execute("SELECT COUNT(*) FROM glossary_terms").fetchone()[0])
+        load_order_rule_count = _load_order_rule_count(conn)
         conn.commit()
 
         section_missing = section_total - embedding_section_count
@@ -1043,6 +1218,8 @@ def build_corpus(out_dir: Path, *, seed: bool, allow_missing_embeddings: bool = 
         # Information only (nothing reads it): lets the maintainer see at publish time that
         # the library carries the tap-to-define words.
         "glossary_term_count": glossary_term_count,
+        # Information only, the same way: LOOT's load-order rules in the library (0 = no such table).
+        "load_order_rule_count": load_order_rule_count,
         "db_filename": CORPUS_DB_FILENAME,
         "db_sha256": db_sha,
         "compressed_filename": compressed.name,

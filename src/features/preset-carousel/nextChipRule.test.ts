@@ -152,3 +152,54 @@ describe("the next-chip rule", () => {
     expect(pick.next.ragTip).toBe(true);
   });
 });
+
+describe("the closest notes not yet shown come first (plan 104, lane C2)", () => {
+  const CLOSEST = [game("C1"), game("C2"), game("C3"), game("C4")];
+  const pool = [...CLOSEST, game("G9")];
+
+  it("after a game chip, the next closest chip comes at once, not only on a one-in-five roll", () => {
+    const pick = chooseNextChip(
+      args({ ragCandidates: pool, current: gameChip("C1"), staying: new Set(["C2"]), anchorIsGame: true, closestPending: ["C3", "C4"] }),
+    );
+    expect(pick.next.text).toBe("C3");
+    expect(pick.next.ragTip).toBe(true);
+    expect(pick.closestPending).toEqual(["C4"]);
+  });
+
+  it("after a general chip it is the same: the next closest chip, in order", () => {
+    const pick = chooseNextChip(args({ ragCandidates: pool, anchorIsGame: false, closestPending: ["C3", "C4"] }));
+    expect(pick.next.text).toBe("C3");
+  });
+
+  it("takes it out of the opening list, so it is not dealt a second time", () => {
+    const pick = chooseNextChip(
+      args({ ragCandidates: pool, queue: [gameChip("C3")], anchorIsGame: true, closestPending: ["C3", "C4"] }),
+    );
+    expect(pick.next.text).toBe("C3");
+    expect(pick.queue.map((p) => p.text)).toEqual([]);
+  });
+
+  it("leaves out a pending chip that is on screen, and carries on to the next", () => {
+    const pick = chooseNextChip(
+      args({ ragCandidates: pool, current: gameChip("C1"), staying: new Set(["C3"]), anchorIsGame: true, closestPending: ["C3", "C4"] }),
+    );
+    expect(pick.next.text).toBe("C4");
+    expect(pick.closestPending).toEqual([]);
+  });
+
+  it("when none is pending the usual rule runs and the pending list stays empty", () => {
+    const usual = chooseNextChip(args({ ragCandidates: pool, current: gameChip("C1"), anchorIsGame: true, random: () => 0.5 }));
+    const none = chooseNextChip(
+      args({ ragCandidates: pool, current: gameChip("C1"), anchorIsGame: true, random: () => 0.5, closestPending: [] }),
+    );
+    expect(none.next.text).toMatch(/^pool-/);
+    expect(usual.next.text).toMatch(/^pool-/);
+    expect(none.closestPending ?? []).toEqual([]);
+  });
+
+  it("a pending chip the back end no longer offers is dropped, not shown", () => {
+    const pick = chooseNextChip(args({ ragCandidates: [game("G9")], anchorIsGame: false, closestPending: ["GONE"] }));
+    expect(pick.next.text).toBe("G9");
+    expect(pick.closestPending).toEqual([]);
+  });
+});

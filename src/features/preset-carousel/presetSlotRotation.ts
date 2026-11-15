@@ -37,6 +37,11 @@ export type SlotRotation = {
   gameRound: readonly string[];
   /** Opening seeds that carry the game's own mark, so a chip's kind is known from its text alone. */
   gameSeeds: readonly string[];
+  /**
+   * Plan 104, lane C2: the game's chips closest to the question just answered that have not been on
+   * screen yet, closest first. Each change takes the next one before any other rule applies.
+   */
+  closestPending: readonly string[];
 };
 
 /** What the next-chip rule needs beyond the rotation itself; every field is for tests. */
@@ -48,6 +53,7 @@ export function startSlotRotation(
   slotCount: number,
 ): { first: PresetPrompt[]; rotation: SlotRotation } {
   const first = seeds.slice(0, slotCount);
+  const onScreen = new Set(first.map((p) => p.text));
   return {
     first,
     rotation: {
@@ -56,6 +62,9 @@ export function startSlotRotation(
       lastIntroduced: first[first.length - 1]?.text ?? null,
       gameRound: first.filter((p) => p.ragTip === true).map((p) => p.text),
       gameSeeds: seeds.filter((p) => p.ragTip === true).map((p) => p.text),
+      closestPending: getSessionRagCarouselCandidates()
+        .filter((c) => c.closest === true && !onScreen.has(c.text))
+        .map((c) => c.text),
     },
   };
 }
@@ -99,6 +108,7 @@ export function nextSlotPreset(
     queue: rotation.queue,
     gameRound: rotation.gameRound,
     avoid: new Set(recent),
+    closestPending: rotation.closestPending,
     drawGeneral: (exclude) => {
       const drawn = getRandomPresetExcluding(new Set(exclude), options);
       // A pool too small to honour the exclusions still must not show one prompt twice.
@@ -108,7 +118,14 @@ export function nextSlotPreset(
   });
   return {
     next: pick.next,
-    rotation: { ...rotation, queue: pick.queue, recent, gameRound: pick.gameRound, lastIntroduced: pick.next.text },
+    rotation: {
+      ...rotation,
+      queue: pick.queue,
+      recent,
+      gameRound: pick.gameRound,
+      lastIntroduced: pick.next.text,
+      closestPending: pick.closestPending ?? rotation.closestPending,
+    },
   };
 }
 

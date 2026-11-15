@@ -7,6 +7,8 @@
  * chance GAME_CHIP_AGAIN_CHANCE. "Anchor" is the chip leaving when one chip is showing, and the chip
  * that stays when two are showing. So with one chip at least every second chip is the game's, with
  * two chips one of the pair is always the game's, and the game's share overall is about 55 in 100.
+ * Right after an answer the chips closest to the question that are not yet shown go first, whatever
+ * the anchor is (closestPending, plan 104 lane C2); once they are all shown the rule above runs.
  *
  * Used for: presetSlotRotation (fade, static, decode) and the carousel's auto-advance tick.
  *
@@ -50,12 +52,19 @@ export type NextChipArgs = {
   random?: () => number;
   /** Chance of another game chip after a game chip; the Developer-tab override sets it, else 0.2. */
   againChance?: number;
+  /**
+   * Plan 104, lane C2. Right after an answer: the texts of the game's chips closest to the question
+   * that have not been on screen yet, closest first. They come before every other rule.
+   */
+  closestPending?: readonly string[];
 };
 
 export type NextChipPick = {
   next: PresetPrompt;
   queue: readonly PresetPrompt[];
   gameRound: readonly string[];
+  /** What is still waiting after this pick (only when the pick was given a list to work from). */
+  closestPending?: readonly string[];
 };
 
 /** The queue with one chip taken out. */
@@ -70,6 +79,14 @@ const without = (queue: readonly PresetPrompt[], text: string) => queue.filter((
  * then the pool, as before this rule existed.
  */
 export function chooseNextChip(args: NextChipArgs): NextChipPick {
+  const pick = chooseByRule(args);
+  // Given a waiting list, hand back what is still waiting: a pick that did not bring one forward found
+  // every waiting chip already shown or no longer offered, so nothing waits.
+  return args.closestPending ? { ...pick, closestPending: pick.closestPending ?? [] } : pick;
+}
+
+/** The rule itself, as described on chooseNextChip, with the closest chips not yet shown ahead of it. */
+function chooseByRule(args: NextChipArgs): NextChipPick {
   const random = args.random ?? Math.random;
   const candidates = args.ragCandidates;
   const againChance = args.againChance ?? GAME_CHIP_AGAIN_CHANCE;
@@ -104,6 +121,16 @@ export function chooseNextChip(args: NextChipArgs): NextChipPick {
   if (knownGameTexts.size === 0) {
     const head = queue[0];
     return head ? result(head, queue.slice(1)) : general();
+  }
+
+  // After an answer, the chips closest to the question that have not been shown come first, one per
+  // change, whichever kind the anchor chip is. One already on screen has had its turn and is dropped.
+  const waiting = (args.closestPending ?? []).filter((text) => !blocked(text));
+  const bringForward = waiting.find((text) => candidates.some((c) => c.text === text && isGameCandidate(c)));
+  if (bringForward !== undefined) {
+    const chosen = candidates.find((c) => c.text === bringForward)!;
+    const later = waiting.slice(waiting.indexOf(bringForward) + 1);
+    return { ...result(toPresetPrompt(chosen), without(queue, bringForward)), closestPending: later };
   }
 
   const wantGame = !args.anchorIsGame || random() < againChance;

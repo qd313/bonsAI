@@ -72,7 +72,12 @@ export function useSuggestedPromptChips(
   const [suggestedPrompts, setSuggestedPrompts] = useState<PresetPrompt[]>(
     () => survivalPeek?.suggestedPrompts ?? getRandomPresets(3, { useLocalKnowledgeBase: a.useLocalKnowledgeBase }),
   );
-  const ragCandidatesCacheRef = useRef<{ appId: string; candidates: SessionRagChipCandidate[] }>({
+  const ragCandidatesCacheRef = useRef<{
+    appId: string;
+    candidates: SessionRagChipCandidate[];
+    /** True while the carousel's published list still carries the closest marks of the last answer. */
+    closestPublished?: boolean;
+  }>({
     appId: "",
     candidates: [],
   });
@@ -104,14 +109,26 @@ export function useSuggestedPromptChips(
         ragCandidatesCacheRef.current.candidates.length > 0
       ) {
         // The closest-to-the-last-question marks belong to the answer they were fetched after; a
-        // reseed of the cached list is not that answer, so it leads with nothing in particular.
-        return ragCandidatesCacheRef.current.candidates.map(({ closest: _spent, ...rest }) => rest);
+        // reseed of the cached list is not that answer, so it leads with nothing in particular. The
+        // cache never holds the marks; the list the carousel draws from loses them here too.
+        const cached = ragCandidatesCacheRef.current.candidates;
+        if (ragCandidatesCacheRef.current.closestPublished) {
+          ragCandidatesCacheRef.current.closestPublished = false;
+          setSessionRagCarouselCandidates(cached, {
+            ...(a.devForceSessionRagChips ? { ragProbability: 1 } : {}),
+          });
+        }
+        return cached;
       }
       const candidates = await fetchSessionRagChipCandidates({
         appId,
         appName,
       });
-      ragCandidatesCacheRef.current = { appId, candidates };
+      ragCandidatesCacheRef.current = {
+        appId,
+        candidates: candidates.map(({ closest: _spent, ...rest }) => rest),
+        closestPublished: candidates.some((c) => c.closest === true),
+      };
       // The carousel tick draws from these too, or the corpus chip seeded below is carried out of
       // the window within about four ticks and never returns. The QA override rides along so it
       // forces the whole carousel rather than only the seeded slots.

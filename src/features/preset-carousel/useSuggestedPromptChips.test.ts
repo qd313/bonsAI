@@ -16,6 +16,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useSuggestedPromptChips, type UseSuggestedPromptChipsArgs } from "./useSuggestedPromptChips";
 import { LOCAL_KNOWLEDGE_BASE_ADVICE_PRESET_TEXT, setFrozenTestChips } from "./presets";
 import { fetchSessionRagChipCandidates } from "./sessionRagChipCandidates";
+import { getSessionRagCarouselCandidates, setSessionRagCarouselCandidates } from "./composePresetSeedsWithSessionRag";
 
 vi.mock("./sessionRagChipCandidates", () => ({
   fetchSessionRagChipCandidates: vi.fn(async () => []),
@@ -111,5 +112,25 @@ describe("useSuggestedPromptChips: the closest notes lead only the row drawn rig
     const texts = result.current.suggestedPrompts.slice(0, 2).map((p) => p.text);
     expect(texts).not.toEqual(["How do I beat Boss1?", "How do I use Item4?"]);
     expect(result.current.suggestedPrompts.filter((p) => p.ragTip === true)).toHaveLength(1);
+  });
+
+  it("the list the rotation draws from carries the marks after an answer and loses them on a cached reseed", async () => {
+    vi.mocked(fetchSessionRagChipCandidates).mockResolvedValueOnce([game("C1", true), game("C2", true), game("C3")]);
+    const { result } = renderHook(() =>
+      useSuggestedPromptChips({ ...base, useLocalKnowledgeBase: true, settingsLoaded: false }),
+    );
+    try {
+      await act(async () => {
+        await result.current.reseedSuggestedPrompts("contextual", "strategy", true);
+      });
+      expect(getSessionRagCarouselCandidates().filter((c) => c.closest).map((c) => c.text)).toEqual(["C1", "C2"]);
+      await act(async () => {
+        await result.current.reseedSuggestedPrompts("random");
+      });
+      expect(getSessionRagCarouselCandidates().some((c) => c.closest)).toBe(false);
+      expect(getSessionRagCarouselCandidates().map((c) => c.text)).toEqual(["C1", "C2", "C3"]);
+    } finally {
+      setSessionRagCarouselCandidates([]);
+    }
   });
 });

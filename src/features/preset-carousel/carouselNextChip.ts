@@ -38,6 +38,10 @@ export function pickCarouselAppend(
   const shown = history.slice(0, focusIndex + 1).filter(isGame).map((p) => p.text);
   const round = [...gameRound.filter((t) => !shown.includes(t)), ...shown];
   const single = visibleSlots <= 1;
+  // After an answer the carousel's history opens on the closest chips; the ones it has not dealt yet
+  // are the history's next appends, closest first.
+  const dealt = new Set(history.map((p) => p.text));
+  const closestPending = candidates.filter((c) => c.closest === true && !dealt.has(c.text)).map((c) => c.text);
   const pick = pickNextChipWithSessionRag({
     current: single ? focused : (history[focusIndex - 1] ?? null),
     staying: single ? new Set<string>() : new Set([focused.text]),
@@ -45,6 +49,7 @@ export function pickCarouselAppend(
     queue: [],
     gameRound: round,
     avoid: new Set(history.map((p) => p.text)),
+    closestPending,
     drawGeneral,
     ...rule,
   });

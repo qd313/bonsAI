@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { setFrozenTestChips, type PresetPrompt } from "./presets";
 import { nextSlotPreset, startSlotRotation } from "./presetSlotRotation";
+import { setSessionRagCarouselCandidates } from "./composePresetSeedsWithSessionRag";
 
 const p = (text: string): PresetPrompt => ({ text, category: "test" });
 
@@ -97,5 +98,42 @@ describe("preset slot rotation", () => {
     const { first, rotation } = startSlotRotation([p("q1"), p("q2"), p("q3")], 1);
     const step = nextSlotPreset(first[0]!, new Set(["q1"]), rotation, undefined, { ragCandidates: game, random: () => 0 });
     expect(step.next.text).toBe("q2");
+  });
+});
+
+describe("the closest notes lead the row's rotation (plan 104, lane C2)", () => {
+  const mark = (text: string) => ({ text, category: "strategy", domain: "strategy", closest: true as const });
+  const closest = [mark("C1"), mark("C2"), mark("C3"), mark("C4")];
+  const gp = (text: string): PresetPrompt => ({ text, category: "strategy", ragTip: true });
+  const seeds = [gp("C1"), gp("C2"), gp("C3")];
+
+  afterEach(() => setSessionRagCarouselCandidates([]));
+
+  it("starts with the closest chips that are not on screen waiting their turn", () => {
+    setSessionRagCarouselCandidates(closest);
+    const { first, rotation } = startSlotRotation(seeds, 2);
+    expect(first.map((s) => s.text)).toEqual(["C1", "C2"]);
+    expect(rotation.closestPending).toEqual(["C3", "C4"]);
+    expect(startSlotRotation(seeds, 1).rotation.closestPending).toEqual(["C2", "C3", "C4"]);
+  });
+
+  it("two spots take the third and fourth closest as they change, then the usual rule", () => {
+    setSessionRagCarouselCandidates(closest);
+    let { first, rotation } = startSlotRotation(seeds, 2);
+    const rule = { ragCandidates: closest, random: () => 0.99 };
+    const shown = [...first];
+    const step = (spot: number) => {
+      const out = nextSlotPreset(shown[spot]!, new Set(shown.map((s) => s.text)), rotation, undefined, rule);
+      rotation = out.rotation;
+      shown[spot] = out.next;
+      return out.next.text;
+    };
+    expect([step(0), step(1)]).toEqual(["C3", "C4"]);
+    expect(rotation.closestPending).toEqual([]);
+  });
+
+  it("with no marks nothing is waiting", () => {
+    setSessionRagCarouselCandidates([{ text: "C1", category: "strategy", domain: "strategy" }]);
+    expect(startSlotRotation(seeds, 2).rotation.closestPending).toEqual([]);
   });
 });

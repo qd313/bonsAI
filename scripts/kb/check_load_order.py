@@ -55,21 +55,28 @@ IMPLICIT_MASTERS = {
     "skyrimse": ["Skyrim.esm", "Update.esm", "Dawnguard.esm", "HearthFires.esm", "Dragonborn.esm"],
 }
 _PLUGIN_ENDINGS = (".esp", ".esm", ".esl")
+# Characters that could move the cursor, recolour or hide text, or reorder it when a name is printed: the C0 and C1
+# control characters, line and paragraph separators, and the invisible direction marks.
+_UNSAFE_CHARS = re.compile(r"[\x00-\x1f\x7f-\x9f\u200e\u200f\u2028\u2029\u202a-\u202e\u2066-\u2069\ufeff]")
 _TOKEN = re.compile(r'\s*(?:active\("((?:[^"\\]|\\.)*)"\)|(\()|(\))|\b(not|and|or)\b)')
 
 
 def parse_plugins(text: str, game: str) -> tuple[list[dict[str, Any]], list[str]]:
     """The plugins in load order as ``{name, active, in_file}``, the game's own masters first, and any notes.
 
-    A master the file leaves out is added as switched on and not ``in_file``, so a rule that needs it is not
-    reported missing and the counts only speak of what the file lists.
+    A name has control characters removed (a file someone sends could carry terminal escape bytes that
+    rewrite the report on screen); a line with nothing left is skipped. A master the file leaves out is
+    added as switched on and not ``in_file``, so a rule that needs it is not reported missing and the
+    counts only speak of what the file lists.
     """
     rows: list[tuple[str, bool]] = []
-    for raw in text.lstrip(chr(0xFEFF)).splitlines():
+    for raw in re.split(r"\r\n|\r|\n", text.lstrip(chr(0xFEFF))):
         line = raw.strip()
         if not line or line.startswith("#"):
             continue
-        rows.append((line.lstrip("*").strip(), line.startswith("*")))
+        name = _UNSAFE_CHARS.sub("", line.lstrip("*")).strip()
+        if name:
+            rows.append((name, line.startswith("*")))
     notes: list[str] = []
     if rows and not any(active for _, active in rows):
         rows = [(name, True) for name, _ in rows]

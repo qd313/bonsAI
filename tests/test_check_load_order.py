@@ -165,6 +165,28 @@ class PluginsFileTests(unittest.TestCase):
         self.assertIn("No line has a star", notes[0])
 
 
+class HostileNameTests(unittest.TestCase):
+    """A plugins.txt someone sends may carry terminal escape bytes in a name; none may reach the report."""
+
+    ESCAPES = "\x1b[2J\x1b[1A\x07\x08\x9b31m‮ "
+
+    def test_control_characters_are_removed_from_a_name(self):
+        plugins, _ = checker.parse_plugins("*Ev" + self.ESCAPES + "il.esp\n", "fallout4")
+        self.assertEqual([p["name"] for p in plugins if p["in_file"]], ["Ev[2J[1A31mil.esp"])
+
+    def test_a_line_with_nothing_left_is_skipped(self):
+        plugins, _ = checker.parse_plugins("*\x1b\x07\n*‮\n*Good.esp\n", "fallout4")
+        self.assertEqual([p["name"] for p in plugins if p["in_file"]], ["Good.esp"])
+
+    def test_a_name_carrying_an_escape_sequence_prints_without_it(self):
+        entries = [_entry("Evil[2J[1A.esp", requires=[{"name": "Base.esp"}])]
+        text = checker.render(_run(entries, "*Evil\x1b[2J\x1b[1A.esp\n*Other\x07.esp\n"))
+        for bad in ("\x1b", "\x07", "\x9b", "‮"):
+            self.assertNotIn(bad, text)
+        self.assertIn("Evil[2J[1A.esp", text)
+        self.assertEqual([c for c in text if ord(c) < 32 and c != "\n"], [])
+
+
 class WordsAndLimitsTests(unittest.TestCase):
     def _text(self, entries, plugins):
         return checker.render(_run(entries, plugins))

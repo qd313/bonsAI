@@ -84,11 +84,11 @@
       "game_id": 37,
       "section_type": "enemy",
       "name": "Predator Pals",
-      "card": "Summary: Extremely strong versions of ordinary Pals that always attack on sight and cannot be captured. A kill pays out 25 times the experience of the ordinary version. They are rare: now and then one spawns at random in place of a regular Pal instead of at a fixed spot, and only certain species can appear this way.\nLooks like: Larger than the ordinary Pal, with eyes that shine red and a red aura around its body.\nTips: They use three Neutral-element skills. Predator Surge charges up, then explodes around the user; Predator Blast builds up power and releases a sustained beam; Predator Mark shoots three fast beams in a row. They are missing from the world map, but you can hear a low hum when one is close. Defeating one drops Predator Cores and Giant Pal Souls, but no Ancient Civilization Parts, and a first kill gives neither Ancient Technology Points nor Pal Bounty Tokens. Species that can appear include Direhowl at level 10 and Gildra at level 46.",
+      "card": "Summary: Extremely strong versions of ordinary Pals that always attack on sight and cannot be captured. A kill pays out 25 times the experience of the ordinary version. Only certain species can appear this way.\nLooks like: Larger than the ordinary Pal, with eyes that shine red and a red aura around its body.\nTips: They use three Neutral-element skills. Predator Surge charges up, then explodes around the user; Predator Blast builds up power and releases a sustained beam; Predator Mark shoots three fast beams in a row. They are missing from the world map, but you can hear a low hum when one is close. Defeating one drops Predator Cores and Giant Pal Souls, but no Ancient Civilization Parts, and a first kill gives neither Ancient Technology Points nor Pal Bounty Tokens.",
       "source_url": "https://palworld.wiki.gg/wiki/Predator_Pals",
       "source_license": "CC-BY-SA-4.0",
-      "source_version": "44501",
-      "crawled_at": "2026-11-10"
+      "source_version": "47234",
+      "crawled_at": "2026-11-15"
     },
     {
       "section_id": 4008,

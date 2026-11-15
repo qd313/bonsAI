@@ -533,20 +533,20 @@
       "name": "Predator Pals",
       "kind": "enemy",
       "main_page": "https://palworld.wiki.gg/wiki/Predator_Pals",
-      "main_revision": "44501",
+      "main_revision": "47234",
       "lines": [
         {
-          "line": "Summary: Extremely strong versions of ordinary Pals that always attack on sight and cannot be captured. A kill pays out 25 times the experience of the ordinary version. They are rare: now and then one spawns at random in place of a regular Pal instead of at a fixed spot, and only certain species can appear this way.",
+          "line": "Summary: Extremely strong versions of ordinary Pals that always attack on sight and cannot be captured. A kill pays out 25 times the experience of the ordinary version. Only certain species can appear this way.",
           "drawn_from": [
             {
               "page": "https://palworld.wiki.gg/wiki/Predator_Pals",
-              "revision": "44501",
+              "revision": "47234",
               "quoted": [
                 "Predator Pals are extremely strong Pals with unique Active Skills and drops.",
                 "Regardless of their species, Predator Pals always attack on sight.",
                 "They cannot be captured",
                 "When defeated, they give 25 times the amount of XP their normal variants would give",
-                "Predator Pals have a low chance of randomly spawning in place of regular Pals rather than spawning in fixed locations. Only certain species of Pals can spawn as Predator Pals."
+                "Only certain species of Pals can spawn as Predator Pals."
               ]
             }
           ]
@@ -556,7 +556,7 @@
           "drawn_from": [
             {
               "page": "https://palworld.wiki.gg/wiki/Predator_Pals",
-              "revision": "44501",
+              "revision": "47234",
               "quoted": [
                 "Predator Pals are similar to Alpha Pals in that they are both larger and stronger than regular Pals, though Predator Pals have glowing red eyes and a red aura that surrounds them."
               ]
@@ -564,11 +564,11 @@
           ]
         },
         {
-          "line": "Tips: They use three Neutral-element skills. Predator Surge charges up, then explodes around the user; Predator Blast builds up power and releases a sustained beam; Predator Mark shoots three fast beams in a row. They are missing from the world map, but you can hear a low hum when one is close. Defeating one drops Predator Cores and Giant Pal Souls, but no Ancient Civilization Parts, and a first kill gives neither Ancient Technology Points nor Pal Bounty Tokens. Species that can appear include Direhowl at level 10 and Gildra at level 46.",
+          "line": "Tips: They use three Neutral-element skills. Predator Surge charges up, then explodes around the user; Predator Blast builds up power and releases a sustained beam; Predator Mark shoots three fast beams in a row. They are missing from the world map, but you can hear a low hum when one is close. Defeating one drops Predator Cores and Giant Pal Souls, but no Ancient Civilization Parts, and a first kill gives neither Ancient Technology Points nor Pal Bounty Tokens.",
           "drawn_from": [
             {
               "page": "https://palworld.wiki.gg/wiki/Predator_Pals",
-              "revision": "44501",
+              "revision": "47234",
               "quoted": [
                 "Predator Surge: Charges up energy and then lets off a huge explosion around itself.",
                 "Predator Blast: Charges up and fires a powerful sustained beam at the target",
@@ -577,9 +577,7 @@
                 "They emit a low pitched humming sound when nearby",
                 "Predator Pals will also drop Predator Cores and Giant Pal Souls when defeated.",
                 "They do not drop Ancient Technology Points or Pal Bounty Tokens when defeated for the first time",
-                "They do not drop Ancient Civilization Parts or valuable items when defeated",
-                "|| Direhowl || 10 || 1",
-                "|| Gildra || 46 || 2-3"
+                "They do not drop Ancient Civilization Parts or valuable items when defeated"
               ]
             }
           ]

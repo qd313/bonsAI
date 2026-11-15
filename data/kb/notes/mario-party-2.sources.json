@@ -834,18 +834,6 @@
           ]
         },
         {
-          "line": "Weak points: You can only ask for him at night.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Big_Boo_(character)",
-              "revision": "5499015",
-              "quoted": [
-                "Characters can ask for him only in night time"
-              ]
-            }
-          ]
-        },
-        {
           "line": "Looks like: By day he is a huge Boo statue.",
           "drawn_from": [
             {
@@ -869,7 +857,8 @@
             }
           ]
         }
-      ]
+      ],
+      "weak_points_review": "W1 2026-11-15: line removed. Big Boo (character) rev 5543818 (cited line rev 5499015) says he can only be asked for at night (a way to meet him, not a way to beat him); no way to stop or avoid his theft is given."
     },
     {
       "section_id": 2914,
@@ -898,19 +887,6 @@
           ]
         },
         {
-          "line": "Weak points: If you have no coins when you land on a Coins for Bowser result, Bowser gives you 10 coins instead. The 10,000 Coin Present, 100 Star Present, Star Steal and Stars-Packed to Go results can come up on the roulette, but if one does, Bowser simply leaves and nothing happens.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Bowser_Space",
-              "revision": "5532948",
-              "quoted": [
-                "If the player does not have any Coins when landing on this event, Bowser will give them 10 Coins.",
-                "While the roulette is capable of landing on these events unlike in the first game, Bowser will leave without doing anything if it happens."
-              ]
-            }
-          ]
-        },
-        {
           "line": "Tips: Coins for Bowser is the commonest result and sits on the wheel twice. Bowser's Coin Potluck draws coins from each of the four players: 10 coins during the first five turns, 30 in the last five and 20 otherwise. Bowser's Multiplying Toads uses a \"magic\" trick to put two Toads on the board, which moves the Star Space and adds a second one. Pay the false Toad 20 coins and he drops the act and hands you a Ztar, which leaves your Star total unchanged. Ride a Magic Lamp and you always reach the real Toad; a Bowser Bomb exposes the fake.",
           "drawn_from": [
             {
@@ -929,7 +905,8 @@
             }
           ]
         }
-      ]
+      ],
+      "weak_points_review": "W1 2026-11-15: line removed. Bowser Space rev 5532948 (Mario Party 2 section) gives the 10-coin payout for a player with no coins and says the star and big-coin results do nothing; none of it is a way to beat or avoid the space."
     }
   ]
 }

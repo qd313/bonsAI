@@ -5,6 +5,7 @@
   "game_id": 19,
   "game": "Grand Theft Auto IV",
   "read_on": "2026-11-02",
+  "quote_sorting": "2026-11-15 (plan 104, lane S2): every page was read again at the revision named on its section, through the wiki's page-render call, and each quote was found on it. Beside each list of quotes, quoted_sits says where each one sits on the page (editors' prose, table cell, or the game's own text) and quoted_at gives the page heading (\"infobox\" for the box at the top of a page); the two lists run in the same order as the quotes. Lines that followed the wiki's sentence too closely were rewritten from a list of the facts, with the same facts. The one fact that rested on the game's own text (the text of an achievement, in the six-star line of section 1504) was dropped. The Weak points line of section 1500 now says how to lose the police at one star, which the page gives in its HUD section.",
   "sections": [
     {
       "section_id": 1500,
@@ -14,7 +15,7 @@
       "main_revision": "2082538",
       "lines": [
         {
-          "line": "Summary: One star is the only level where the police do not use their guns; they try to arrest you instead.",
+          "line": "Summary: Of all six levels, only one star keeps the police from using firearms; they try to arrest you instead.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -22,19 +23,38 @@
               "quoted": [
                 "This is the only level where the police will not use their firearms",
                 "Instead they will seek to arrest the player."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > One Star",
+                "Wanted Levels > One Star"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: The search circle at one star is about two city blocks across, and police cars chase at a moderate speed and try to box you in rather than ram you.",
+          "line": "Weak points: You can lose them by leaving the search circle, which is about two city blocks across at one star, and staying out of it for several seconds: the police then give up and the wanted level goes away. Their cars chase at a moderate speed and try to box you in rather than ram you.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
               "revision": "2082538",
               "quoted": [
                 "Police Cars will chase the player at moderate speed, trying to corral and box in rather than collide with the player's vehicle.",
-                "The search radius for one star is approximately two city blocks in size."
+                "The search radius for one star is approximately two city blocks in size.",
+                "If the player leaves the search radius for a sufficient amount of time, typically several seconds, the cops will abandon their search and the wanted level will dissolve."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > One Star",
+                "Wanted Levels > One Star",
+                "HUD"
               ]
             }
           ]
@@ -54,6 +74,26 @@
                 "The player can get arrested while on foot (only with one star) or in a stationary vehicle.",
                 "In the former case, the player can resist arrest, which will immediately spark a two-star wanted level and cause the police to start firing their guns.",
                 "Maintaining a one-star wanted level for a certain amount of time"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Overview",
+                "Wanted Levels > One Star",
+                "Wanted Levels > One Star",
+                "Wanted Levels > One Star",
+                "Wanted Levels > One Star",
+                "Implications > Apprehension",
+                "Implications > Apprehension",
+                "Wanted Levels > Two Stars"
               ]
             }
           ]
@@ -68,7 +108,7 @@
       "main_revision": "2082538",
       "lines": [
         {
-          "line": "Summary: From two stars the police use their guns, which can include pump shotguns, and in chases they try to overtake you or run you off the road.",
+          "line": "Summary: Two stars is where the police start using firearms, and pump shotguns may be among them; in a chase they try to pull ahead of you or push you off the road.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -76,18 +116,32 @@
               "quoted": [
                 "From two stars onwards, the police will use their firearms, which may include pump shotguns.",
                 "During chases, they will try to overtake the player or run them off-road."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > Two Stars",
+                "Wanted Levels > Two Stars"
               ]
             }
           ]
         },
         {
-          "line": "Danger: More police cars arrive and fit officers in the front passenger seats step out with pump shotguns; if you crash, they use their cars to box you in.",
+          "line": "Danger: More police cars are sent, and the fit officers riding up front climb out with pump shotguns. If you crash, they try to hem you in with their cars.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Liberty_City_Police_Department_(HD_Universe)",
               "revision": "2076054",
               "quoted": [
                 "When the player reaches two stars, additional police vehicles are sent to the area, and the officers in the front passenger seats of the vehicles will step out wielding Pump Shotguns (if fit cops are spotted)."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Overview"
               ]
             },
             {
@@ -95,12 +149,18 @@
               "revision": "2082538",
               "quoted": [
                 "They will also use their cars to try and box the player in if they crash."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > Two Stars"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Two stars come from firing a gun or setting off an explosion near an officer, repeatedly punching an officer, killing many people quickly, destroying a fuel pump at a gas station or a Gruppe 6 Securicar, and resisting arrest.",
+          "line": "Tips: Two stars come from firing a gun or setting off an explosion near an officer, punching an officer again and again, killing many people quickly, wrecking a gas station's fuel pump or a Gruppe 6 Securicar, and resisting arrest.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -112,6 +172,22 @@
                 "Destroying a fuel pump at a gas station",
                 "Destroying a Gruppe 6 Securicar",
                 "Resisting arrest"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > Two Stars",
+                "Wanted Levels > Two Stars",
+                "Wanted Levels > Two Stars",
+                "Wanted Levels > Two Stars",
+                "Wanted Levels > Two Stars",
+                "Wanted Levels > Two Stars"
               ]
             }
           ]
@@ -126,7 +202,7 @@
       "main_revision": "2082538",
       "lines": [
         {
-          "line": "Summary: Three stars bring NOOSE, who set up roadblocks on main roads and bridges and send Cruisers and Patriots (the Patriots try to ram you head-on), plus a Police Maverick overhead that shines a spotlight on you at night and fires when its officers get a clear shot.",
+          "line": "Summary: At three stars NOOSE steps in with Cruisers and Patriots, putting roadblocks across main roads and bridges, and the Patriots try to ram you head-on. A Police Maverick also joins, lighting you up with a spotlight at night and shooting as soon as its officers have a clear line.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -135,18 +211,34 @@
                 "The NOOSE Patriotism and Immigration Authority will step in, setting up roadblocks on main roads and bridges and deploying Cruisers and Patriots to track the player down.",
                 "The NOOSE Patriots will attempt to ram the player head-on",
                 "The LCPD will also deploy a Police Maverick, which will shine a spotlight on the player at night and open fire if the police officers on board get a clear shot."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > Three Stars",
+                "Wanted Levels > Three Stars",
+                "Wanted Levels > Three Stars"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: The helicopter now and then breaks off and retreats if you go underground, stay inside a large structure for a long time, or kill both riflemen on board.",
+          "line": "Weak points: The helicopter breaks off the chase every so often if you drop underground, shelter in a big structure for a long while, or kill both of its riflemen.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
               "revision": "2082538",
               "quoted": [
                 "The helicopter will periodically break off from pursuit and retreat if the player goes underground, stays inside a large structure for a long time, or kills both riflemen on board."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > Three Stars"
               ]
             }
           ]
@@ -163,6 +255,20 @@
                 "Killing or wounding a police officer with a firearm",
                 "Continuing to cause collateral damage (killing civilians/destroying vehicles)",
                 "Continuing to retaliate against the Police."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > Three Stars",
+                "Wanted Levels > Three Stars",
+                "Wanted Levels > Three Stars",
+                "Wanted Levels > Three Stars",
+                "Wanted Levels > Three Stars"
               ]
             },
             {
@@ -170,6 +276,12 @@
               "revision": "2063379",
               "quoted": [
                 "The Police Predator is a fast patrol boat appearing in Grand Theft Auto IV"
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Spawn Behaviour"
               ]
             }
           ]
@@ -184,7 +296,7 @@
       "main_revision": "2082538",
       "lines": [
         {
-          "line": "Summary: At four stars the FIB or the NOOSE Tactical Response Unit join in, in Enforcer armored vans or FIB Buffalo sedans with four officers each, and the search area grows to about the size of Bohan.",
+          "line": "Summary: Four stars sends the FIB or NOOSE's Tactical Response Unit after you, four officers to a vehicle, in Enforcer armored vans or FIB Buffalo sedans. The search area is now roughly the size of Bohan.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -193,6 +305,16 @@
                 "At four stars, the FIB or the NOOSE Tactical Response Unit join the fray and the player will be confronted by Enforcers or FIB Buffaloes",
                 "Tactical Response Unit Officers or FIB Agents come four to a vehicle",
                 "The search area is approximately the size of Bohan."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > Four Stars",
+                "Wanted Levels > Four Stars",
+                "Wanted Levels > Four Stars"
               ]
             },
             {
@@ -200,6 +322,12 @@
               "revision": "2009588",
               "quoted": [
                 "the Enforcer is depicted as a large armored transport van"
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Design"
               ]
             },
             {
@@ -207,18 +335,30 @@
               "revision": "2084326",
               "quoted": [
                 "small groups of the FIB agents will arrive in FIB Buffalo sedans to assist the LCPD"
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description > Grand Theft Auto IV and Episodes of Liberty City"
               ]
             }
           ]
         },
         {
-          "line": "Danger: They carry carbine rifles, some have SMGs and pump shotguns, and they wear body armor, so they take more gunfire before going down.",
+          "line": "Danger: Most carry carbine rifles, a few have SMGs or pump shotguns, and their body armor lets them soak up more gunfire before they drop.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
               "revision": "2082538",
               "quoted": [
                 "armed with Carbine Rifles, although some of them carry SMGs and Pump Shotguns, and wear body armor for protection"
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > Four Stars"
               ]
             },
             {
@@ -226,12 +366,18 @@
               "revision": "2084326",
               "quoted": [
                 "FIB agents are equipped with body armor, allowing them to withstand more gunfire before going down."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description > Grand Theft Auto IV and Episodes of Liberty City"
               ]
             }
           ]
         },
         {
-          "line": "Tips: They can take around 30 seconds to arrive, and the FIB seems more likely to show up when you drive fast or keep switching vehicles. Four stars also come from entering the runway at Francis International Airport or the grounds of the Civilization Committee in Algonquin.",
+          "line": "Tips: They can take around 30 seconds to arrive. Driving fast or switching vehicles all the time seems to make the FIB more likely to turn up. Four stars also come from going onto the runway at Francis International Airport or into the Civilization Committee grounds in Algonquin.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -241,6 +387,18 @@
                 "The FIB seems to be more likely to spawn when the player drives fast and/or constantly switches the vehicles.",
                 "Entering the runway area at Francis International Airport",
                 "Entering the grounds of the Civilization Committee in Algonquin"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > Four Stars",
+                "Wanted Levels > Four Stars",
+                "Wanted Levels > Four Stars",
+                "Wanted Levels > Four Stars"
               ]
             }
           ]
@@ -263,12 +421,20 @@
               "quoted": [
                 "At five stars, the Police Mavericks will leave and be replaced by two NOOSE Annihilators.",
                 "In the main game and The Lost and Damned, all Law Enforcement Officers fire upon the player while in pursuit"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > Five Stars",
+                "Wanted Levels > Five Stars"
               ]
             }
           ]
         },
         {
-          "line": "Danger: Officers try the PIT maneuver to spin you out, FIB and NOOSE units come in equal numbers, and in areas with tall buildings officers with Combat Sniper rifles shoot at you.",
+          "line": "Danger: Officers drive harder, using the PIT maneuver to spin you out. FIB and NOOSE units turn up in equal numbers, and where there are tall buildings, officers with Combat Sniper rifles shoot at you whenever they can see you.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -277,12 +443,22 @@
                 "All Law Enforcement Officers employ more advanced driving techniques, such as the PIT Maneuver, as they try to make the player spin out of control and crash.",
                 "both forces spawning and pursuing the player in equal numbers",
                 "In areas with tall buildings, officers with Combat Sniper rifles will aim and shoot at the player when in their sights."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > Five Stars",
+                "Wanted Levels > Five Stars",
+                "Wanted Levels > Five Stars"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: An Annihilator is very vulnerable to RPGs and assault rifles, and a single rocket straight into the fuselage destroys it.",
+          "line": "Weak points: An Annihilator takes a lot of damage from RPGs, assault rifles and other Annihilators, and one rocket straight into its fuselage can destroy it.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Annihilator",
@@ -290,12 +466,20 @@
               "quoted": [
                 "it is very vulnerable to RPGs, Assault Rifles or other Annihilators",
                 "A single rocket directly to the fuselage can completely destroy the Annihilator"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Performance > Grand Theft Auto IV and Episodes From Liberty City > Armor",
+                "Performance > Grand Theft Auto IV and Episodes From Liberty City > Armor"
               ]
             }
           ]
         },
         {
-          "line": "Tips: At six stars the search area is about the size of Broker and Dukes, the military is not sent, and officers with PSG-1 sniper rifles keep spawning. Surviving six stars for five minutes earns the One Man Army achievement.",
+          "line": "Tips: At six stars the search area covers roughly the borough of Broker and Dukes. No military units are sent, and officers with PSG-1 sniper rifles keep spawning.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -303,9 +487,17 @@
               "quoted": [
                 "At a six-star wanted level, the search area is approximately the size of the borough of Broker and Dukes.",
                 "Unlike previous Grand Theft Auto games, the Military is not deployed.",
-                "The LCPD Officers armed with PSG-1 Sniper Rifles will continue to spawn.",
-                "The player can earn two Achievements/Trophies associated with the Wanted Level",
-                "One Man Army - Survive a six-star Wanted Level for five minutes."
+                "The LCPD Officers armed with PSG-1 Sniper Rifles will continue to spawn."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels > Six Stars",
+                "Wanted Levels > Six Stars",
+                "Wanted Levels > Six Stars"
               ]
             }
           ]
@@ -320,7 +512,7 @@
       "main_revision": "2062574",
       "lines": [
         {
-          "line": "Summary: The police helicopter that arrives at three stars carries a pilot and two riflemen with carbine rifles, and the riflemen shoot you on sight.",
+          "line": "Summary: Three stars brings a Police Maverick with a pilot and two riflemen aboard. The riflemen carry carbine rifles and open fire as soon as they see you.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Liberty_City_Police_Department_(HD_Universe)",
@@ -329,6 +521,16 @@
                 "At three stars, the NOOSE \"Patriotism and Immigration Authority\" will join the fight",
                 "as well as a Police Maverick to oversee the scene and follow fleeing suspects.",
                 "The helicopters will have two LCPD riflemen equipped with Carbine Rifles (or Advanced MGs in The Ballad of Gay Tony) and an LCPD pilot on board; the riflemen will engage the suspect on sight."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Overview",
+                "Overview",
+                "Overview"
               ]
             },
             {
@@ -336,18 +538,30 @@
               "revision": "2062574",
               "quoted": [
                 "programmed to shoot the player with Carbine Rifles"
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Design > Grand Theft Auto IV"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: Its cockpit is exposed, so the people up front can be shot from tall places or with assault rifles, and the lower windows may be a weak spot when it flies above them.",
+          "line": "Weak points: The cockpit is open to fire, so the officers in front can be hit from tall places or with assault rifles. When the helicopter passes over you, its lower windows may be a weak spot too.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Police_Maverick_(HD_Universe)",
               "revision": "2062574",
               "quoted": [
                 "Because of the rather exposed cockpit, the front occupants may get shot from enemies in tall places or armed with assault rifles, considering the lower windows may be a weak spot for them when flying above these."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Performance > Grand Theft Auto IV"
               ]
             }
           ]
@@ -362,6 +576,16 @@
                 "with NOOSE TRU agents replacing police officers in Mavericks at four stars (provided that the FIB does not respond)",
                 "it may be replaced by the Annihilator from higher wanted levels, from five stars and above.",
                 "Obtainable by sniping the pilot, making the helicopter slowly hover to the ground undamaged. It only works 50% of the time; the rest of the time the Police Maverick will spin rapidly around in circles, hitting the ground with fierce force and exploding."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Design > Grand Theft Auto IV",
+                "Design > Grand Theft Auto IV",
+                "Locations > Grand Theft Auto IV"
               ]
             }
           ]
@@ -376,7 +600,7 @@
       "main_revision": "2073171",
       "lines": [
         {
-          "line": "Summary: A loose coalition of Jamaican gangs found mostly around Beechwood City in Broker, with a smaller presence in Schottler and Willis; their cars are painted green, black and gold.",
+          "line": "Summary: Jamaican posses that act as one loose group. You will meet them mostly around Beechwood City in Broker, and less in Schottler and Willis. Their cars are painted green, black and gold, like the Jamaican flag.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Yardies",
@@ -384,6 +608,14 @@
               "quoted": [
                 "They can mainly be found in the Beechwood City region, particularly the Homebrew Café, and have a smaller presence in Schottler and Willis as well.",
                 "They drive around in Voodoos and Huntleys painted in the colors of the Jamaican flag: green, black, and gold."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Description"
               ]
             },
             {
@@ -391,24 +623,36 @@
               "revision": "2087274",
               "quoted": [
                 "The Yardies, sometimes only referred to as the Jamaicans, are a loose coalition of Jamaican posses"
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Gangs > Other Gangs > Yardies"
               ]
             }
           ]
         },
         {
-          "line": "Weapons: They are well armed, with members on the streets carrying pistols, Micro SMGs and pump shotguns.",
+          "line": "Weapons: Street members carry pistols, Micro SMGs and pump shotguns, and are well armed.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Yardies",
               "revision": "2073171",
               "quoted": [
                 "They are well-armed, with members on the streets carrying pistols, Micro Uzis and Pump Shotguns."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Before the mission Shadow they are hostile if you attack them; they welcome you on their turf, and after Shadow they defend you if a pedestrian attacks you.",
+          "line": "Tips: Attack them before the mission Shadow and they turn hostile. They welcome you onto their turf, and once Shadow is done they defend you if you get into a fight or a pedestrian attacks you.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Yardies",
@@ -417,6 +661,16 @@
                 "the Yardies welcome him to their turf.",
                 "If Niko is engaged in a fight or is attacked by a pedestrian, the Yardies will defend him by all means but this will only happen after Shadow.",
                 "Before that mission, Jamaicans will be hostile if you attack them."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Description",
+                "Description"
               ]
             }
           ]
@@ -431,7 +685,7 @@
       "main_revision": "2070202",
       "lines": [
         {
-          "line": "Summary: A Puerto Rican street gang, one of the largest in the game, with turf in South Bohan, Fortside (at night only), Cerveza Heights, East Holland and Alderney City, wearing black and gold or red and blue.",
+          "line": "Summary: A Puerto Rican gang and one of the biggest street gangs in the game. They hold South Bohan, Cerveza Heights, East Holland and Alderney City, plus Fortside but only at night, and dress in black and gold or red and blue.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Spanish_Lords",
@@ -441,6 +695,18 @@
                 "having turf in South Bohan, Fortside (night time only), Cerveza Heights",
                 "East Holland and Alderney City",
                 "Spanish Lords wear black and gold, also red and blue"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Description",
+                "Description",
+                "Description"
               ]
             },
             {
@@ -448,12 +714,18 @@
               "revision": "2087274",
               "quoted": [
                 "The Spanish Lords are a Puerto Rican gang"
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Gangs > Latin Gangs > Spanish Lords"
               ]
             }
           ]
         },
         {
-          "line": "Weapons: At night they usually carry Micro SMGs and pistols, and one whose car you hit may step out with a knife.",
+          "line": "Weapons: At night expect Micro SMGs and pistols. Hit a car with one of them inside and he may get out holding a knife.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Spanish_Lords",
@@ -461,6 +733,14 @@
               "quoted": [
                 "Sometimes, if you hit a car belonging to one while he's in it, the gang member will come out with a Knife.",
                 "At night they usually walk around with Micro-SMGs and Pistols in case of fights."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Description"
               ]
             }
           ]
@@ -475,6 +755,16 @@
                 "In the Alderney City turf, since they share their turf with the Korean Mob, they don't attack each other",
                 "both will attack the player if the car is damaged.",
                 "They will however attack each other if the player provokes a shoot out"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Description",
+                "Description"
               ]
             }
           ]
@@ -489,7 +779,7 @@
       "main_revision": "2083689",
       "lines": [
         {
-          "line": "Summary: A blue vest shown as a blue half-circle bar beside the radar, next to the green health bar; when you aim at an armored target, a small light blue circle shows by the reticle, usually on NOOSE and FIB agents.",
+          "line": "Summary: Body armor is a blue vest. It appears on screen as a blue half-circle meter beside the radar, next to the green health meter. When you aim at a target wearing armor, usually a NOOSE or FIB agent, a small light blue circle shows by the reticle.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Body_Armor",
@@ -498,12 +788,22 @@
                 "When equipped, the HUD will represent it as a blue half-circle bar located next to the radar, along with the green health bar.",
                 "the weapon's reticle will have a smaller, light blue circle next to the health bar, usually seen on NOOSE/FIB agents.",
                 "In most cases, body armor in the games is illustrated as a protective blue vest."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description > HD Universe > Grand Theft Auto IV",
+                "Description > HD Universe > Grand Theft Auto IV",
+                "lead section"
               ]
             }
           ]
         },
         {
-          "line": "Uses: It pads your health against gunfire, explosions and fire, but it gives no protection from falls, being hit by a vehicle on foot, or melee attacks.",
+          "line": "Uses: It soaks up gunfire, explosions and fire so your health lasts longer. It does not protect you from falls, from being hit by a vehicle on foot, or from melee attacks.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Body_Armor",
@@ -511,12 +811,20 @@
               "quoted": [
                 "in effect extending the player's resilience to damage from gunfire, explosions and fire",
                 "It no longer offers protection to falls, collisions with vehicles on foot, or melee attacks (including hand-to-hand combat and melee weapons)"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Description > HD Universe > Grand Theft Auto IV"
               ]
             }
           ]
         },
         {
-          "line": "Where to get it: The underground gun shops sell it for $500 once the mission Do You Have Protection? is done, it lies about the city with a red glow, and getting into an Enforcer van gives you only about a third of the full amount.",
+          "line": "Where to get it: The underground gun shops sell it for $500 once the mission Do You Have Protection? is done. It also lies around the city with a red glow, and an Enforcer van gives you only about a third of a full vest.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Body_Armor",
@@ -526,6 +834,18 @@
                 "Do You Have Protection? (GTA IV)",
                 "armor can be found lying about in specific points of the city (distinguishable by its red glow)",
                 "Enforcer armored vans still provide the player some armor, but only gives the player roughly one third of the maximum amount."
+              ],
+              "quoted_sits": [
+                "table cell",
+                "table cell",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "infobox",
+                "infobox",
+                "Description > HD Universe > Grand Theft Auto IV",
+                "Description > HD Universe > Grand Theft Auto IV"
               ]
             },
             {
@@ -535,6 +855,16 @@
                 "Body Armor",
                 "$500",
                 "Do You Have Protection?"
+              ],
+              "quoted_sits": [
+                "table cell",
+                "table cell",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Weapons",
+                "Weapons",
+                "Locations"
               ]
             }
           ]
@@ -549,7 +879,7 @@
       "main_revision": "2063152",
       "lines": [
         {
-          "line": "Summary: Health packs shaped like medical kits lie all over Liberty City, mostly in out-of-the-way places, at hospitals and in subway stations.",
+          "line": "Summary: Health packs look like medical kits and are scattered across Liberty City: mostly in quiet corners, and also in hospitals and subway stations.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Health",
@@ -557,12 +887,20 @@
               "quoted": [
                 "In GTA IV, health pickups are shaped as medical kits.",
                 "In Grand Theft Auto IV, health packs are found all over Liberty City, generally in out-of-the-way locales, hospitals, and in subway stations."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description > Health pickups",
+                "Description > Health pickups"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Eating at Cluckin' Bell or Burger Shot, or buying from street vendors and vending machines, restores health by different amounts, and drinks usually restore less.",
+          "line": "Uses: Food from Cluckin' Bell, Burger Shot, street vendors or vending machines puts health back by varying amounts, and drinks usually give back less.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Eating",
@@ -570,18 +908,32 @@
               "quoted": [
                 "the player can eat at fast food outlets (Cluckin' Bell and Burger Shot), as well as purchasing from street vendors and vending machines.",
                 "Food or drink replenishes health in varying degrees, with drinking usually replenishing health in smaller amounts."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description > Grand Theft Auto IV",
+                "Description > Grand Theft Auto IV"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Dial 911 and then 2 for an ambulance, and the paramedics restore your health for a fee of up to $950, depending on how hurt you are. Maximum health cannot be raised in GTA IV, and saving the game also refills it.",
+          "line": "Tips: Dial 911, then 2, to call an ambulance; the paramedics restore your health and charge up to $950, depending on how hurt you are. You cannot raise your maximum health in GTA IV, and saving the game also refills it.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Ambulance_(HD_Universe)",
               "revision": "2071232",
               "quoted": [
                 "Ambulances can be obtained by dialing 911 and choosing Ambulance by dialing 2 after the initial call. If the player is injured, paramedics who respond to the player will replenish their health for a fee of up to $950, depending on their remaining health points."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Locations > Grand Theft Auto IV"
               ]
             },
             {
@@ -590,6 +942,14 @@
               "quoted": [
                 "Health increase is no longer possible in the HD Universe games.",
                 "or by visiting a save point to save the game (in all 3D Universe titles, save for GTA III and Grand Theft Auto Advance, and in all HD Universe titles)"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description > Health as a statistic",
+                "Description > Health pickups"
               ]
             }
           ]
@@ -614,6 +974,18 @@
                 "Downtown, Broker, Liberty City",
                 "Chinatown, Algonquin, Liberty City",
                 "Port Tudor, Alderney"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "table cell",
+                "table cell",
+                "table cell"
+              ],
+              "quoted_at": [
+                "Locations",
+                "infobox",
+                "infobox",
+                "infobox"
               ]
             }
           ]
@@ -632,6 +1004,24 @@
                 "Pump Shotgun || $1,200",
                 "Micro SMG || $1,200",
                 "Assault Rifle || $3,500"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "table cell",
+                "table cell",
+                "table cell",
+                "table cell"
+              ],
+              "quoted_at": [
+                "Weapons",
+                "Weapons",
+                "Weapons",
+                "Weapons",
+                "Weapons",
+                "Weapons",
+                "Weapons"
               ]
             }
           ]
@@ -646,6 +1036,16 @@
                 "Players cannot enter the shops if they have a wanted level; upon arriving at the door, it will be locked",
                 "Some pedestrians can be found at the entrance to the shop loitering casually, but they are actually guards who will defend the shop.",
                 "Killing the owner of one of the shops results in the aforementioned guards armed with Combat Shotguns and SMGs attacking the player. It also prevents the player from buying weapons from that shop again for a period of time"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Description",
+                "Description"
               ]
             }
           ]
@@ -668,6 +1068,14 @@
               "quoted": [
                 "this time as four explosive (possibly C-4) blocks with a phone attached to it via improvised wiring.",
                 "The bombs are remote detonated through calling Packie on the cell phone and selecting Detonate."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description > Grand Theft Auto IV",
+                "Description > Grand Theft Auto IV"
               ]
             }
           ]
@@ -680,12 +1088,18 @@
               "revision": "2071122",
               "quoted": [
                 "Using it will not award a wanted level, being a useful weapon for destroying Securicars."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description > Grand Theft Auto IV"
               ]
             }
           ]
         },
         {
-          "line": "Tips: You get car bombs from Packie as a friend favor, delivered to your general location, and you can place them beneath cars, buses and light vans only.",
+          "line": "Tips: Packie sends car bombs to wherever you are as a friend favor. The bombs can only be planted under a car, a bus or a light van.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Car_Bomb",
@@ -693,6 +1107,14 @@
               "quoted": [
                 "Car bombs can be obtained through Patrick McReary as a friend special option",
                 "They will be delivered to the player's general location and the player can place the bombs beneath cars, buses and light vans only."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Locations > Grand Theft Auto IV",
+                "Locations > Grand Theft Auto IV"
               ]
             }
           ]
@@ -707,19 +1129,25 @@
       "main_revision": "2039240",
       "lines": [
         {
-          "line": "Summary: The most powerful weapon in the game: a direct hit destroys any target, and the blast hurts everything near it.",
+          "line": "Summary: Nothing else in the game is as powerful. One direct hit destroys any target, and the blast also hurts everyone close by.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/RPG_(HD_Universe)",
               "revision": "2039240",
               "quoted": [
                 "The RPG is the most powerful weapon in the game, destroying any target with a direct hit and causing heavy casualities with splash damage."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Performance > Grand Theft Auto IV"
               ]
             }
           ]
         },
         {
-          "line": "Uses: You aim over the shoulder, so you can strafe and shoot from behind cover; the rocket explodes by itself at its maximum range and can be deflected if its tip hits a solid surface at an angle of around 25 degrees.",
+          "line": "Uses: You aim over the shoulder, so you can strafe and shoot from behind cover. The rocket blows up by itself at its maximum range, and it glances off a solid surface if it meets it at roughly 25 degrees.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/RPG_(HD_Universe)",
@@ -728,12 +1156,22 @@
                 "the player aims the launcher from the over-the-shoulder perspective, allowing them to strafe while aiming and while behind cover.",
                 "The rocket self-detonates when it reaches its maximum range.",
                 "The rocket can be deflected if the tip hits a solid structure in an angle of around 25 degrees."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Performance > Grand Theft Auto IV",
+                "Performance > Grand Theft Auto IV",
+                "Performance > Grand Theft Auto IV"
               ]
             }
           ]
         },
         {
-          "line": "Tips: The underground gun shops sell it for $15,000 plus $5,000 for each extra rocket once the mission Babysitting is done, and the easiest pickup is on a large boulder in the water north of Northwood. You do not need a direct hit on a helicopter, because the blast can make the pilot lose control and crash.",
+          "line": "Tips: Once you finish the mission Babysitting, the underground gun shops sell the RPG at $15,000, and each extra rocket costs another $5,000. The simplest one to grab is on a big rock in the water north of Northwood. A helicopter does not need a direct hit: the blast can make the pilot lose control and crash.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/RPG_(HD_Universe)",
@@ -743,6 +1181,18 @@
                 "Babysitting (GTA IV)",
                 "Northwood – Can be found on a large boulder in the water north of Northwood. This is the easiest RPG pickup in the city.",
                 "The player does not necessarily need a direct hit on the fuselage of a helicopter to destroy it as the force of a detonating rocket can cause the pilot to lose control and crash."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "table cell",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Locations > Grand Theft Auto IV",
+                "infobox",
+                "Locations > Grand Theft Auto IV",
+                "Performance > Grand Theft Auto IV"
               ]
             }
           ]
@@ -765,6 +1215,14 @@
               "quoted": [
                 "In Grand Theft Auto IV, Molotov Cocktails are made from bottles of Cherenkov Vodka.",
                 "It is the only fire-based weapon the player can use."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Trivia > HD Universe",
+                "Design > Grand Theft Auto IV"
               ]
             }
           ]
@@ -778,6 +1236,14 @@
               "quoted": [
                 "A single bottle can set an enemy on fire, causing them to fall to the ground for a limited time, although a second bottle can be enough to burn them to death",
                 "Armored targets like NOOSE/FIB agents may take a third one, as the body armor will suppress the fire."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Performance > Grand Theft Auto IV",
+                "Performance > Grand Theft Auto IV"
               ]
             }
           ]
@@ -793,6 +1259,18 @@
                 "Molotov Cocktails can be purchased at the Underground Gun Shops for $500.",
                 "They can be used from cars, but it is difficult to do so as the Molotov would have to hit the target directly.",
                 "while four will set it ablaze, and six will completely destroy it or render it inoperable."
+              ],
+              "quoted_sits": [
+                "table cell",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "infobox",
+                "Locations > Grand Theft Auto IV",
+                "Performance > Grand Theft Auto IV",
+                "Performance > Grand Theft Auto IV"
               ]
             },
             {
@@ -800,6 +1278,12 @@
               "revision": "2063857",
               "quoted": [
                 "Molotov Cocktail || $500 || - || The Master and the Molotov"
+              ],
+              "quoted_sits": [
+                "table cell"
+              ],
+              "quoted_at": [
+                "Weapons"
               ]
             }
           ]
@@ -824,12 +1308,24 @@
                 "One can also 'cook' a grenade (hold onto it while it counts down) for a short time before throwing it.",
                 "It begins beeping if it is held for too long, and if not thrown, will explode in the player's hands",
                 "it is possible to throw back grenades that have been thrown at the player."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Performance > Grand Theft Auto IV",
+                "Performance > Grand Theft Auto IV",
+                "Performance > Grand Theft Auto IV",
+                "Trivia > HD Universe"
               ]
             }
           ]
         },
         {
-          "line": "Uses: In GTA IV grenades are much more lethal to you than to enemies: unless one blows up very close to an enemy he will likely survive, and enemies run away from a grenade about to explode.",
+          "line": "Uses: In GTA IV your own grenades are far deadlier to you than to enemies. An enemy will most likely survive unless the grenade lands very close, and enemies run clear of one that is about to explode.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Grenades",
@@ -838,6 +1334,16 @@
                 "grenades are in fact much more lethal to the player than to enemies",
                 "unless a grenade explodes very close to an enemy, they will likely survive",
                 "The enemies will run away from a grenade that is about to explode"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Performance > Grand Theft Auto IV",
+                "Performance > Grand Theft Auto IV",
+                "Performance > Grand Theft Auto IV"
               ]
             }
           ]
@@ -851,6 +1357,14 @@
               "quoted": [
                 "Grenades can be dropped while driving, and are more effective for in-car use than Molotov Cocktails, due to their far superior radius of effect, however the player must take care to remain on the move",
                 "Can be purchased from the Underground Gun Shops after completing the mission Deconstruction for Beginners, for $1,000."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Performance > Grand Theft Auto IV",
+                "Locations > Grand Theft Auto IV"
               ]
             }
           ]

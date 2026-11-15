@@ -584,7 +584,7 @@ the cost.
 
 | Time | Question | Answer | What changed | Cost |
 |---|---|---|---|---|
-| | | | | |
+| 2026-11-15, 16:40 EST | 1. The briefs against the code | Six corrections, the rest holds: Speed mode fetches one note, so V4's rule has nothing to move; G1's "background summing-up" is the Sum up button, which needs its own refusal on screen; T1's wait hangs on a refusal (no log line) and misses H2's new line; H1 needs two of H2's files and must drop the notes after stacking; C2 gets at most four closest chips, not six; B1's refusal is worded in a fourth file, and a clean first start cannot show its fault | V4, G1 and T1 told at once (the session checked the code first); H1, C2 and B1 get the line in their task text; two runbook notes (the memory row in Speed mode; the summed-up note needs a turn that wrote a summary) | 229k tokens, 10 minutes |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -715,9 +715,29 @@ planned again.
   commit after `d58e3155`); plan 105's files and two mock-up folders in the same checkout are the other chat's and
   were left alone. Waiting for "go".
 
-**Questions for the maintainer (the safest choice is taken meanwhile):** none yet.
+- **2026-11-14, about 18:45 EST (the chat running the plan, Opus 5.5 at extra-high):** the first acts. The plan's files
+  are on the tip `770f1e9a`; D141 is free; the Deck queue had nothing open. Usage at go: 7 percent of the five-hour
+  window, 18 percent of the week, 24 percent on Fable's own counter. **The Deck was asleep:** it did not answer, and
+  one press through the rig did not wake it (the same as on 10 November). A phone alert was tried and not sent: phone
+  alerts are off in the app. The library was built once (2026.11.14: 890 notes, 185 tips, 41 seconds) and copied into
+  the measuring copies; thirteen copies were cut at the tip and nine helpers started. **The chat then stopped** a few
+  minutes later, before any helper had changed a file; the PC had stalled on a small file copy while the full check
+  ran beside the helpers' starts.
+- **2026-11-15, 16:10 EST (the same chat, picked up):** the maintainer said "pick up where you left off". Every copy
+  was untouched and usage had barely moved (1, 18, 24). The maintainer woke the Deck at 16:11; the keep-awake hold
+  is taken until 00:11 EST. The Deck ran the older build (`1ad7ad9b4bf9`) without the 11 November crash fix, so the
+  tip is deployed at minute zero (call 29). The full check on the tip passed (510 seconds). The nine helpers were
+  resumed; the four notes lanes (N1, N2, M1, S1) and second-opinion consult 1 started; fourteen helpers at once. Lane
+  T4 finished first (the wiki reader now says "failed" when a wiki is down; one commit) and waits for K0 to land.
 
-**Pick-up list:** not started. A chat told "Run plan 104" begins at § 4, "The session's first acts".
+**Questions for the maintainer (the safest choice is taken meanwhile):** none yet. A note: phone alerts are off in the
+app, so a "truly blocked" alert cannot reach you; the chat is where to look.
+
+**Pick-up list (2026-11-15, 16:35 EST):** tip `770f1e9a`, nothing landed yet. In flight, each on branch
+`refactor/p104-<lane>` in `.claude/worktrees/p104-<lane>`: K0, T1, T2, X0, H2, V4, G1, L1, N1, N2, M1, S1, and the
+second opinion (consult 1). Finished, waiting to land after K0: T4 (`c7f9e176`). Next three acts: deploy the tip and
+start block D0a with a fresh driver; land K0 the moment it reports, then T4; pass consult 1's corrections to the
+running lanes.
 
 ## 13. Report
 

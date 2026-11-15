@@ -749,7 +749,7 @@
           ]
         },
         {
-          "line": "Uses: Used plainly, it gives every limb a small boost; applied from the stats screen to one limb, it fixes far more. In Hardcore mode a doctor, Hydra, sleeping in a bed you own, or the Honest Hearts items healing poultice, daturana and weapon binding ritual will also mend crippled limbs.",
+          "line": "Uses: Used plainly, it gives every limb a small boost; applied from the stats screen to one limb, it fixes far more. In Hardcore mode a doctor, an Auto-Doc, Hydra, sleeping in a bed you own, or the Honest Hearts items healing poultice, daturana and weapon binding ritual will also mend crippled limbs.",
           "drawn_from": [
             {
               "page": "https://fallout.fandom.com/wiki/Doctor%27s_bag_(Fallout:_New_Vegas)",
@@ -757,6 +757,14 @@
               "quoted": [
                 "The bag may be used to heal all limbs for a small amount, or through the stats screen, can be applied to a single limb for a much greater effect.",
                 "in hardcore mode, the only other ways to heal crippled limbs are to be healed by a doctor, using Hydra, sleeping in an owned bed or using the aid items healing poultice, daturana or weapon binding ritual from the Honest Hearts add-on."
+              ]
+            },
+            {
+              "page": "https://fallout.fandom.com/wiki/Hardcore_mode",
+              "revision": "4743926",
+              "part_of_page": "Mechanical changes (table)",
+              "quoted": [
+                "Only a doctor, a doctor's bag, sleeping in certain beds, healing poultice, weapon binding ritual, Auto-Doc, or Hydra can heal a crippled limb."
               ]
             }
           ]

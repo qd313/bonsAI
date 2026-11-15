@@ -181,7 +181,7 @@
         },
         {
           "label": "Tips",
-          "text": "If you stay out of the raid, the grove is lost without you.",
+          "text": "If you skip the raid and spare her, the grove is lost.",
           "from": [
             {
               "page": "Minthara",
@@ -202,7 +202,7 @@
       "lines": [
         {
           "label": "Summary",
-          "text": "Goblins are evil humanoids, one of the most common and weaker monster kinds in the tabletop game. In the first act a goblin horde that worships a cult of the Absolute is up against the druids and the tiefling refugees at the Emerald Grove.",
+          "text": "Goblins are evil humanoids, a common and weaker monster kind in the tabletop game. In the first act a goblin horde that worships a cult of the Absolute is up against the druids and the tiefling refugees at the Emerald Grove.",
           "from": [
             {
               "page": "Goblin (Dungeons & Dragons)",
@@ -284,7 +284,7 @@
         },
         {
           "label": "Uses",
-          "text": "In a fight, treat a barrel as something to use against your enemies; the game counts it as part of the surroundings you can make work for you.",
+          "text": "In a fight, explosive barrels are part of the surroundings you can turn to your advantage.",
           "from": [
             {
               "page": "Baldur's Gate 3",
@@ -392,7 +392,7 @@
         },
         {
           "label": "Tips",
-          "text": "A Polygon reviewer called it unintuitive that weapons are dipped in poison by interacting with the poison as if it were a health potion, rather than through the \"dip weapon\" function.",
+          "text": "You apply it by using the poison item itself, much as you would use a health potion. Polygon's reviewer thought that was unintuitive.",
           "from": [
             {
               "page": "Baldur's Gate 3",

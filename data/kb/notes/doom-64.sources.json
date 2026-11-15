@@ -6,6 +6,7 @@
   "game": "Doom 64",
   "read_on": "2026-11-02",
   "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://doomwiki.org/w/api.php --titles <pages> (page text as rendered by the wiki, link markup removed). Every quoted sentence below was checked, by script, to appear word for word in the page text read at the revision named. Several Doom Wiki pages describe the whole classic series; a line states a Doom 64 fact only where the page says so for Doom 64 or says the Doom 64 data is the same as the original's.",
+  "quote_sorting": "2026-11-15 (plan 104, lane S2): every page was read again at the revision named on its section, through the wiki's page-render call, and each quote was found on it. Beside each list of quotes, quoted_sits says where each one sits on the page (editors' prose, table cell, or the game's own text) and quoted_at gives the page heading (\"lead section\" for the opening paragraphs before the first heading); the two lists run in the same order as the quotes. Lines that followed the wiki's sentences too closely were rewritten from a list of the facts, with the same facts. One quote sat in the game's own text (the instruction manual's description of the BFG9000, in a quote block): the line that rested on it (section 1910, Uses) now rests on the editors' sentence that the weapon spreads damage over a wide area to several targets at once.",
   "sections": [
     {
       "section_id": 1900,
@@ -15,7 +16,7 @@
       "main_revision": "552794",
       "lines": [
         {
-          "line": "Summary: A tough monster that throws green fireballs from a distance and claws you up close. It has 500 hit points, and in Doom 64 it is less pale than the standard Hell knight and looks more like the baron of Hell.",
+          "line": "Summary: A tough monster with 500 hit points. It hurls green fireballs from range and claws you when you are close. In Doom 64 it is less pale than the usual Hell knight and looks closer to the baron of Hell.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Hell_knight",
@@ -24,6 +25,16 @@
                 "Hell knights have both melee and distance attacks, scratching at close range and throwing green fireballs from a distance.",
                 "Possessing 500 hit points, Hell knights present a significant challenge to the player",
                 "Data not listed is the same as for the original version."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Combat characteristics",
+                "Combat characteristics",
+                "Data (note under the table)"
               ]
             },
             {
@@ -31,12 +42,18 @@
               "revision": "559778",
               "quoted": [
                 "the variant found in Doom 64 is less pale in color, and more closely resembles Doom's baron of Hell."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Hell knight"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: It rarely flinches, so the rocket launcher, plasma gun and super shotgun are the best answers, and the chaingun and shotgun also work at close range. Do not fight it in melee: it claws back, and the chainsaw is ineffective against it.",
+          "line": "Weak points: It seldom flinches, so the best weapons are the rocket launcher, plasma gun and super shotgun, and the chaingun or shotgun also do well up close. Stay out of melee: it claws back, and the chainsaw is a poor choice against it.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Hell_knight",
@@ -44,6 +61,14 @@
               "quoted": [
                 "They have a low pain chance that makes the rocket launcher, plasma gun and super shotgun the most effective weapons against them. The chaingun and shotgun are also effective at close range.",
                 "It is not recommended to use a melee attack due to their own scratching melee attack"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             },
             {
@@ -51,12 +76,18 @@
               "revision": "582648",
               "quoted": [
                 "It is ineffective against Hell knights and other demons with powerful attacks and low pain chance."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Its fireballs are faster than an imp's or a cacodemon's and hit hard, but from a distance you can dodge them without much trouble. In Doom 64 Hell knights and barons of Hell can hurt each other with their fireballs, so infighting between the two is possible.",
+          "line": "Tips: Its fireballs travel faster than an imp's or a cacodemon's and do heavy damage, though with enough distance between you they are not hard to sidestep. In Doom 64 Hell knights and barons of Hell can also hurt each other with their missiles, so you can get the two to fight.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Hell_knight",
@@ -64,6 +95,14 @@
               "quoted": [
                 "Hell knight fireballs are faster than imp and cacodemon fireballs and inflict heavy damage.",
                 "With sufficient distance, the projectiles can be dodged without much difficulty"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             },
             {
@@ -71,6 +110,12 @@
               "revision": "559778",
               "quoted": [
                 "they can deal and receive missile damage to and from barons of Hell, so infighting between the two monsters is possible."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Hell knight"
               ]
             }
           ]
@@ -85,7 +130,7 @@
       "main_revision": "577957",
       "lines": [
         {
-          "line": "Summary: One of the toughest monsters in the game, with 1000 hit points; it claws up close and throws fireballs from a distance. In Doom 64 it is red-orange and throws red fireballs, and the green colour goes to the Hell knight instead.",
+          "line": "Summary: With 1000 hit points it is among the most resilient monsters, behind only the cyberdemon and the spiderdemon. It claws when you are close and throws fireballs from range. In Doom 64 it is red-orange and throws red projectiles; green belongs to the Hell knight.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Baron_of_Hell",
@@ -94,12 +139,22 @@
                 "With 1000 hit points, barons are the most resilient of all creatures in Doom save for the cyberdemon and the spiderdemon.",
                 "They attack opponents by scratching when close",
                 "The baron of Hell in Doom 64 is given a red-orange color scheme, rather than green, which is instead used for the Hell knight. They behave the same but launch red projectiles and have a smaller hitbox."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Combat characteristics",
+                "Combat characteristics",
+                "lead section"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: It rarely flinches, so use the rocket launcher, plasma gun or super shotgun. The chaingun and shotgun also work if you can stay at a distance, but they take a while. Melee is risky because you can be clawed.",
+          "line": "Weak points: It seldom flinches and takes very heavy punishment, so go for the rocket launcher, plasma gun or super shotgun. If you can stay far enough away to avoid being hit, the chaingun and shotgun also work, though slowly. Do not melee it: that puts you in claw range.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Baron_of_Hell",
@@ -108,12 +163,22 @@
                 "Because barons take very heavy beatings before going down, and because their pain chance is low, use of the rocket launcher, plasma rifle, or super shotgun is recommended.",
                 "provided that the player can get at sufficient range without being hit, the chaingun and shotgun will also work, but may take a while.",
                 "Melee attacks against them are hazardous, as they put the player at risk of being clawed."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis > General tactics",
+                "Tactical analysis > General tactics",
+                "Tactical analysis > General tactics"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Its fireballs are not too hard to dodge when you have room, especially by circle-strafing, but in a confined space it is much more dangerous. In Doom 64 barons and Hell knights hurt each other with their fireballs and so can end up fighting each other.",
+          "line": "Tips: With enough room its fireballs are fairly easy to dodge, especially while circle-strafing; in cramped spaces it is far more dangerous because it is hard to move around. In Doom 64 barons and Hell knights can hurt each other and end up fighting.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Baron_of_Hell",
@@ -121,6 +186,14 @@
               "quoted": [
                 "given sufficient space, their fireballs are not too hard to dodge (especially by circlestrafing).",
                 "In confined spaces, however, they are hard to move around and can be more lethal."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis > General tactics",
+                "Tactical analysis > General tactics"
               ]
             },
             {
@@ -128,6 +201,12 @@
               "revision": "559778",
               "quoted": [
                 "In Doom 64 barons can also injure and infight with Hell knights, and vice versa."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Baron of Hell"
               ]
             }
           ]
@@ -142,7 +221,7 @@
       "main_revision": "581486",
       "lines": [
         {
-          "line": "Summary: A slow, wide monster with flamethrower arms that spits fireballs in bursts. In Doom 64 it is taller, wears a metal harness with a fuel pack on its back, and its fireballs are smaller and look like fiery brimstone. It first appears in MAP09: Even Simpler.",
+          "line": "Summary: A slow, wide monster whose arms are huge flamethrowers; it spits fireballs in bursts. The Doom 64 version is much taller, with a metal body harness and a fuel pack on its back, and smaller fireballs that look more like fiery brimstone. It first appears in MAP09: Even Simpler.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Mancubus",
@@ -151,6 +230,16 @@
                 "its arms have been replaced by huge flamethrowers",
                 "They first appear in MAP09: Even Simpler, a follow-up to the Doom II map.",
                 "until all three bursts have been discharged"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "Tactical analysis"
               ]
             },
             {
@@ -158,12 +247,18 @@
               "revision": "559778",
               "quoted": [
                 "is significantly taller, and wears a metal body harness with a fuel pack on the back. Its fireballs are smaller and appear more like fiery brimstone."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Mancubus"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: It is slow and a big target, so rapid-fire weapons kill it easily, and the rocket launcher is possibly the most effective weapon against it. It pauses and gives a battle cry before it fires, so even a slow weapon such as the super shotgun can stun it out of attacking.",
+          "line": "Weak points: A mancubus is slow and a large target, so fast-firing weapons kill it easily, and the rocket launcher is probably the best of all. It stops briefly and gives out a battle cry before firing, so even slow weapons such as the super shotgun can stun it and interrupt the attack.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Mancubus",
@@ -171,12 +266,20 @@
               "quoted": [
                 "It is slow and makes a large target, so is easy to kill with rapid-fire weapons. The rocket launcher is possibly the most effective weapon against the mancubus.",
                 "because it will pause briefly before attacking, giving out a distinctive battle cry before firing, it is easy to prevent the attacking using slower weapons to stun, even the super shotgun."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Keep your distance: up close you may take two fireballs instead of one. Once it starts attacking it keeps firing until all three bursts are done, even if you step out of its sight, unless you hurt it mid-burst; you can use that to start monster infighting. In Doom 64 the direction of its fireballs is somewhat different from Doom II.",
+          "line": "Tips: Stay away when it attacks: close up you can be hit by two fireballs instead of one. Once an attack has begun it fires all three bursts even after you leave its line of sight, unless it is hurt in the middle of firing, and you can use this to set monsters fighting each other. In Doom 64 its fireballs go off in a slightly different direction than in Doom II.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Mancubus",
@@ -186,6 +289,18 @@
                 "Once a mancubus has begun to attack its target, it continues to fire (if it remains unhurt while firing) until all three bursts have been discharged, even if the target has moved out of its sight.",
                 "This characteristic of their attack can be abused to cause monster infighting.",
                 "Their function is otherwise the same, although the direction of the fireballs they shoot is somewhat different."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Tactical analysis",
+                "Tactical analysis",
+                "lead section"
               ]
             }
           ]
@@ -200,7 +315,7 @@
       "main_revision": "581272",
       "lines": [
         {
-          "line": "Summary: A cybernetic brain on a big metal spider body. In Doom 64 it has two plasma guns that fire two blue bolts at once in spurts of five, and it keeps firing as long as it can see you. It first appears in MAP14: Eye of the Storm, unless you play the secret levels MAP30: The Lair and MAP32: Hectic first, which also hold some.",
+          "line": "Summary: A cybernetic brain on a large metal spider body. The Doom 64 version has two plasma guns that fire two blue bolts together in spurts of five, and it keeps shooting for as long as it sees you. It first shows up in MAP14: Eye of the Storm, unless you play the secret levels MAP30: The Lair and MAP32: Hectic first, which hold some too.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Arachnotron",
@@ -212,6 +327,22 @@
                 "This body is seated into a metal chassis",
                 "the Doom 64 arachnotrons possess two guns that fire out two blue plasma bolt shots simultaneously, but done so in spurts of five instead of a constant rate of fire, though it will continue firing as long as it can see the player.",
                 "They first appear in MAP14: Eye of the Storm unless the player goes through MAP30: The Lair and MAP32: Hectic, which contain arachnotrons but chronologically come first."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section",
+                "lead section",
+                "lead section",
+                "lead section"
               ]
             },
             {
@@ -220,12 +351,20 @@
               "quoted": [
                 "MAP30: The Lair (secret level)",
                 "MAP32: Hectic (secret level)"
+              ],
+              "quoted_sits": [
+                "table cell",
+                "table cell"
+              ],
+              "quoted_at": [
+                "Levels (list of maps)",
+                "Levels (list of maps)"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: It has a medium pain chance, so rapid-fire weapons such as the chaingun work well. Do not use the chainsaw on it: its size stops the attack reliably connecting.",
+          "line": "Weak points: Its pain chance is medium, so quick-firing weapons like the chaingun do well. Leave the chainsaw alone: the arachnotron is so big that the saw does not reliably connect.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Arachnotron",
@@ -233,12 +372,20 @@
               "quoted": [
                 "They have a medium pain chance, so rapid fire weapons such as the chaingun will work well.",
                 "Using the chainsaw on them is inadvisable due to their size, which prevents the attack from reliably connecting."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Its plasma bursts are among the fastest projectiles around and its high rate of fire can drain your health quickly. Keep attacking, move in broad side-to-side steps and slip out of its line of fire now and then, and you will take little damage. In monster infighting the Doom 64 version often beats even a baron of Hell, but with little health left.",
+          "line": "Tips: Its plasma bursts are some of the fastest shots in the game and its quick firing can drain your health fast. Keep attacking, strafe in wide side-to-side steps and duck out of its line of fire from time to time, and you will take little damage. In Doom 64 it often wins monster fights even against a baron of Hell, though with little health left.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Arachnotron",
@@ -247,6 +394,16 @@
                 "their plasma bursts are among the fastest projectiles, and their high rate of fire can quickly drain the player's health.",
                 "If a player constantly attacks, moves in broad side-to-side movements, and tries to get out of the arachnotron's line of fire periodically, then the player will sustain minimal damage.",
                 "In Doom 64, with their new twin plasma cannons, when provoked into infighting, they will often win even against barons of Hell, but with little health remaining."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             }
           ]
@@ -261,7 +418,7 @@
       "main_revision": "556851",
       "lines": [
         {
-          "line": "Summary: A floating monster with a big mouth that spits balls of lightning and bites. In Doom 64 it is beige-brown with a single yellow-green eye and two arms with broken chains, and it swings its arms as it flies.",
+          "line": "Summary: A floating monster with a huge grinning mouth that spits balls of lightning and bites. The Doom 64 version is beige brown with one yellow-green eye and two arms with broken chains hanging from them, and it swings those arms as it flies.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Cacodemon",
@@ -270,6 +427,16 @@
                 "Cacodemons float slowly through the air",
                 "a large wickedly grinning mouth",
                 "Cacodemons attack by spitting a ball of lightning, or by biting with their gaping maw."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "Combat characteristics"
               ]
             },
             {
@@ -278,24 +445,38 @@
               "quoted": [
                 "becoming beige brown, with a single yellow-green eye, and gaining two arms with broken chains attached",
                 "mostly in the way it swings its arms when in flight"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Cacodemon",
+                "Cacodemon"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: It is slow and flinches easily, so repeating weapons such as the chaingun or the plasma gun push it away until it can barely fight back. The chainsaw can also stun it.",
+          "line": "Weak points: It is slow and flinches easily, so it is a fairly easy target. The chainsaw can disable it, and repeating weapons like the chaingun and plasma gun push it back so much that it can barely fight.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Cacodemon",
               "revision": "556851",
               "quoted": [
                 "Because they are slow, and because their pain chance is high, they are fairly easy targets. The chainsaw can incapacitate them, and repeating weapons such as the chaingun or the plasma gun are very effective against them, as they are pushed away and are nearly unable to fight back."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Its shots are fairly easy to dodge, and with enough room you can fight several at once and take little or no damage. Once alerted it can come flying out of unexpected places. On the Nintendo 64 its shots fly faster than on PC, though the cacodemon itself still moves slowly.",
+          "line": "Tips: Its attacks are easy enough to avoid that, with space, you can fight many at once and take little or no damage. Be ready for cacodemons to come flying from unexpected places once they notice you. On the Nintendo 64 its shots travel faster than on PC, though the cacodemon itself still drifts slowly.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Cacodemon",
@@ -304,6 +485,16 @@
                 "Cacodemon attacks are relatively easy to dodge, and with sufficient space large numbers of cacodemons can be fought while sustaining little or no injury.",
                 "it is not uncommon to see cacodemons flying out of unexpected places once alerted.",
                 "The change to the projectiles' speed is kept in ports based off this version, notably the Sony PlayStation version as well as Doom 64, although cacodemons move slower in the latter just as they do in the original DOS version."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             }
           ]
@@ -318,7 +509,7 @@
       "main_revision": "574468",
       "lines": [
         {
-          "line": "Summary: A floating monster that spits lost souls at you instead of firing a shot. In Doom 64 it is dark pink with a green eye and two mouths in place of arms, so it can spawn two lost souls at the same time, and it gives a low sinister laugh when it spots you.",
+          "line": "Summary: A floating monster that, instead of a normal shot, spews lost souls at you. The Doom 64 version is dark pink with a green eye and has two mouths where arms would be, so it can spit out two lost souls at once, and it lets out a low, sinister laugh when it sees you.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Pain_elemental",
@@ -327,12 +518,22 @@
                 "Instead of shooting a standard projectile, the pain elemental periodically spews lost souls at its opponents",
                 "It is colored dark pink, has a green eye and in place of its arms are two mouths so it can now spawn two lost souls at the same time.",
                 "It gives off a low sinister laugh when it has sighted the player."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Combat characteristics",
+                "lead section",
+                "lead section"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: Focus on the pain elemental itself and leave its lost souls until it is dead. Fast-firing weapons such as the chaingun or the plasma gun work fairly well and usually keep the lost souls at bay. The rocket launcher is not recommended, because it may spit a lost soul while your rocket is in flight, and the blast can hurt you.",
+          "line": "Weak points: Keep your attention on the pain elemental itself, and deal with its lost souls only after it is dead. Quick-firing weapons such as the chaingun and plasma gun usually keep the lost souls away; the rocket launcher is a poor choice, because it may release a lost soul while your rocket is flying, and the blast can hurt you.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Pain_elemental",
@@ -341,12 +542,22 @@
                 "As such, it is vital to focus one's attention on the pain elemental itself as much as possible.",
                 "Fast-firing weapons such as the chainsaw, chaingun or plasma gun work fairly well and usually keep its lost souls at bay, but the rocket launcher is not recommended as the pain elemental may spit a lost soul while the rocket is en route, potentially causing blast damage to the player.",
                 "Only once it is dead is it recommended to begin killing its minions."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Do not stand at point-blank range to stop it spawning, as you could in other versions: in Doom 64 every lost soul that fails to appear, including the ones it spawns when it dies, explodes with damage like an exploding barrel, and two together are roughly a rocket hit. It only spawns lost souls while you are in its line of sight, so hit it hard, then head for cover.",
+          "line": "Tips: Standing at point-blank range no longer stops it spawning lost souls, as it did in other versions. In Doom 64 each lost soul that cannot appear, including those it releases as it dies, blows up for damage comparable to an exploding barrel, and two together are about as bad as a rocket hit. It only spawns lost souls when it has a line of sight to you, so hit it hard and then take cover.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Pain_elemental",
@@ -356,6 +567,18 @@
                 "Each lost soul that fails to materialize, including the ones it spawns at death, will cause a significant amount of damage comparable to an exploding barrel",
                 "getting hit by both is roughly the same as being hit by a rocket.",
                 "Pain elementals will only spawn lost souls when in line of sight of the player, or another monster who struck it. Therefore an effective tactic against the pain elemental is to deliver a strong attack, then quickly head for cover."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section",
+                "Tactical analysis"
               ]
             }
           ]
@@ -370,7 +593,7 @@
       "main_revision": "575500",
       "lines": [
         {
-          "line": "Summary: A towering demon with a rocket launcher mounted on its left arm and 4000 hit points. In Doom 64 it has darker skin and is much larger than on PC, and its rockets leave smoke trails. It is rare, appearing chiefly in the secret levels or late in the game.",
+          "line": "Summary: A huge demon with 4000 hit points whose left arm carries a big rocket launcher. The Doom 64 version has darker skin and is much bigger than the PC one, and its rockets leave smoke trails. Cyberdemons are fairly rare, found mainly in the secret levels or late in the game.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Cyberdemon",
@@ -379,6 +602,16 @@
                 "a large rocket launcher mounted on its left arm",
                 "It attacks by firing barrages of three rockets. It has 4000 hit points and does not receive splash damage from explosions, making it fairly difficult to kill.",
                 "Data not listed is the same as for the original version."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "Combat characteristics",
+                "Data (note under the table)"
               ]
             },
             {
@@ -388,12 +621,22 @@
                 "they have darker colored skin, are slightly stronger and much larger.",
                 "The cyberdemon's rockets leave smoke trails",
                 "Cyberdemons are relatively rare throughout the game, appearing chiefly in the secret levels or later in the game."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Cyberdemon",
+                "Cyberdemon",
+                "Cyberdemon"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: The BFG9000 is the most effective weapon against it, and the plasma gun works fairly well. The rocket launcher also works, but it is a long fight, and rockets must hit it directly because it takes no blast damage. Other weapons and melee take far longer, so avoid them.",
+          "line": "Weak points: The BFG9000 is the best weapon against it, and the plasma gun does fairly well. The rocket launcher also works, but expect a long fight, and the rockets have to hit it directly because it takes no splash damage. Any other weapon, or melee, takes much longer, so avoid them.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Cyberdemon",
@@ -405,12 +648,28 @@
                 "the cyberdemon and the spiderdemon take only direct hit damage, and are immune to all blast damage.",
                 "Killing a cyberdemon with other weapons is significantly more difficult",
                 "It is extremely difficult to kill a cyberdemon with melee attacks"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis > General tactics",
+                "Tactical analysis > General tactics",
+                "Tactical analysis > General tactics",
+                "Combat characteristics",
+                "Tactical analysis > General tactics",
+                "Tactical analysis > General tactics"
               ]
             }
           ]
         },
         {
-          "line": "Tips: It rarely flinches, so you cannot easily stop it attacking: circle-strafe and avoid every rocket, because one will often badly hurt you. In Doom 64 its rockets are faster and come out of the launcher itself, so they head downward at you and can burst on the floor near you, even when no wall is close. On the Watch Me Die skill level, MAP17: Watch Your Step ends with two cyberdemons and MAP24: No Escape has three.",
+          "line": "Tips: It seldom flinches, so you will have trouble interrupting its attacks. Circle-strafe and dodge every rocket, since a single hit can leave you badly hurt. The Doom 64 cyberdemon's rockets are faster and leave from the launcher itself instead of the middle of its body, so they travel downward and can explode on the floor next to you without any wall nearby. On the Watch Me Die skill level, MAP17: Watch Your Step ends with two cyberdemons and MAP24: No Escape holds three.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Cyberdemon",
@@ -422,6 +681,22 @@
                 "its rockets now have a firing offset that has them emerge from the launcher itself instead of from the middle of the monster.",
                 "this results in the rockets being fired in a downward angle towards the player when on levelled height, making splash damage a greater threat as the rockets can hit the ground and explode near the player, meaning the 64 cyberdemon does not need the aid of walls for its splash damage to be a factor.",
                 "MAP17: Watch Your Step featuring a dual cyberdemon battle at the end on the Watch Me Die difficulty, while MAP24: No Escape contains three cyberdemons on Watch Me Die"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis > General tactics",
+                "Tactical analysis > General tactics",
+                "Combat characteristics",
+                "Combat characteristics",
+                "Combat characteristics",
+                "lead section"
               ]
             }
           ]
@@ -436,7 +711,7 @@
       "main_revision": "581317",
       "lines": [
         {
-          "line": "Summary: A flaming flying skull that charges at you with open jaws. In Doom 64 it has black horns and an open skull with fire only on top, and it recovers from each attack much faster than on PC. It attacks viciously, which makes it one of the most dangerous enemies in Doom 64.",
+          "line": "Summary: A flying flaming skull that rams you with its jaws wide open. The Doom 64 version has black horns and an open skull burning only at the top, and it recovers from an attack much faster than the PC version. Its viciousness puts it among the most dangerous enemies in Doom 64.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Lost_soul",
@@ -444,6 +719,14 @@
               "quoted": [
                 "Lost souls use themselves as weapons, charging towards the player with open jaws.",
                 "The Doom 64 variant of the lost soul sports black-colored horns, and has an opened skull with fire emerging only from its top. It is much more aggressive than its DOS counterpart, with a much faster recovery time from its attack."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section"
               ]
             },
             {
@@ -451,12 +734,18 @@
               "revision": "564149",
               "quoted": [
                 "lost souls are weaker with less health, but attack viciously, making them one of the most dangerous enemies"
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Gameplay developments"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: It is weaker than on PC: a single shotgun blast can fell it. You can stop a charge by shooting it while it is attacking, and a chaingun is useful against a crowd, because a shot lost soul becomes helpless until it hits something.",
+          "line": "Weak points: It is physically weaker than on PC, and one shotgun blast can fell it. Shooting it while it charges stops the charge, and a shot lost soul is helpless until it hits something, which makes the chaingun handy against a crowd.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Lost_soul",
@@ -466,12 +755,24 @@
                 "The player can stop a lost soul's charge by shooting it while it is attacking.",
                 "Similarly, a chaingun can be useful against a crowd of lost souls",
                 "if shot when charging, a lost soul becomes essentially helpless until it hits something."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "Tactical analysis",
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             }
           ]
         },
         {
-          "line": "Tips: It is completely silent when it spots you, so the hissing breath as it launches is often the first warning. Do not use rockets on a group: a lost soul may suddenly fly at you and make a rocket blow up close enough to hurt you. They are more often found in groups than alone.",
+          "line": "Tips: Unlike every other monster, it makes no sound when it notices you, so the hiss of its breath as it launches is often your first warning. Rockets are a bad idea against a group: a lost soul can suddenly dart at you and set a rocket off close enough to hurt you. Lost souls usually come in groups rather than alone.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Lost_soul",
@@ -481,6 +782,18 @@
                 "launches itself towards its target at high speed with a hissing breath sound, often the first audible warning of their presence.",
                 "Using rockets against groups of lost souls is strongly discouraged, as there is a considerable chance that a lost soul will suddenly fly towards the player, causing one of the rockets to explode close enough to cause blast damage to the foolish marine.",
                 "they are more often found in groups."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Combat characteristics",
+                "Combat characteristics",
+                "Tactical analysis",
+                "Combat characteristics"
               ]
             }
           ]
@@ -495,7 +808,7 @@
       "main_revision": "552758",
       "lines": [
         {
-          "line": "Summary: Fast monsters that only attack up close. Doom 64's manual calls the demon the bull demon; it has black horns, small red eyes, bigger teeth and claws, and a slightly longer melee reach than on PC. The spectre is the same kind of monster, but in Doom 64 it starts as an opaque green-tinted demon and turns see-through once it spots you.",
+          "line": "Summary: Fast monsters that can only attack up close. In Doom 64 the manual calls the demon the bull demon; it looks meaner, with black horns, smaller red eyes, and bigger teeth and claws, and its melee reach is a little longer. A spectre is the same monster, but in Doom 64 an unaware one looks like an opaque demon tinted green and turns see-through when it spots you.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Demon",
@@ -504,6 +817,16 @@
                 "are unique in their exclusivity to melee attacks",
                 "the demon's fast speed and zig-zag motions",
                 "the manual refers to the monster as the \"bull demon\". It is given a more menacing appearance, with black horns, smaller red eyes, and accentuated teeth and claws. It also has a slightly higher melee range."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section"
               ]
             },
             {
@@ -511,12 +834,18 @@
               "revision": "581664",
               "quoted": [
                 "In Doom 64 specifically, inactive spectres are initially rendered as opaque demons with a green tint (a nod back to the nightmare spectre), becoming translucent upon detecting the player."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Variations"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: They have no ranged attack, so they are no threat at long range. The super shotgun can kill a demon at close range with one blast, a shotgun used hit-and-run works too, and the chaingun is also effective. The chainsaw stops a demon attacking while you saw it, and uses no ammo.",
+          "line": "Weak points: They have no ranged attack, so they pose no danger from far away. The super shotgun can kill a demon at close range in one blast, the chaingun works well too, and a shotgun used hit-and-run is effective. A demon cannot attack while the chainsaw is cutting it, and the chainsaw uses no ammo.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Demon",
@@ -526,12 +855,24 @@
                 "The shotgun is quite effective if you use hit and run, blasting them at close range and retreating while reloading",
                 "can kill a demon at close range with one blast. The chaingun is also substantially effective.",
                 "the demon is unable to attack the player when being damaged with the chainsaw, and the chainsaw does not use up any ammunition."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Combat characteristics",
+                "Tactical analysis",
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             }
           ]
         },
         {
-          "line": "Tips: They run fast and in a zig-zag, closing distance quickly and helping to corner you. Lure them into a tight corridor so they cannot swarm you from all directions, and use the chainsaw there. They are generally the easiest monsters to trick into attacking other enemies.",
+          "line": "Tips: They run fast, often in a zig-zag, so they close the distance quickly and help box you in. Lure them into a tight corridor where they cannot swarm you from every side, and use the chainsaw. Of all monsters, they are generally the easiest to lead into fighting other enemies.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Demon",
@@ -540,6 +881,16 @@
                 "Due to its speed, the demon closes distances very quickly, often running toward the player in a zig-zag pattern, making it harder to hit, and helping corner the player.",
                 "This strategy is especially effective if the player is able to lure the demon(s) into a tight corridor, as they will be able to cut them down without having to worry about being swarmed from all directions.",
                 "are generally the easiest monster to trick into attacking other enemies."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Combat characteristics",
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             }
           ]
@@ -554,7 +905,7 @@
       "main_revision": "582648",
       "lines": [
         {
-          "line": "Summary: A melee weapon that saws anything in reach, roughly a quadruple-speed fist, and it uses no ammo. The Doom 64 version has two blades and the letters U.A.C. engraved on top, and does roughly double the damage of the PC one.",
+          "line": "Summary: A melee weapon that cuts up anything within reach and acts roughly like a fist that hits four times as fast. It uses no ammo. The Doom 64 saw has two blades instead of one, \"U.A.C.\" engraved on top, and does about twice the damage of the PC one.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Chainsaw",
@@ -563,6 +914,16 @@
                 "The chainsaw mutilates enemies close enough to contact.",
                 "it is roughly a quadruple-speed fist.",
                 "The saw has two blades instead of one and the letters \"U.A.C.\" are engraved on top of the weapon. The damage inflicted by this version of the weapon is roughly doubled"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "Notes"
               ]
             },
             {
@@ -570,12 +931,18 @@
               "revision": "552758",
               "quoted": [
                 "the chainsaw does not use up any ammunition."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Best against demons and spectres, which you can usually kill without taking damage, and fairly effective against cacodemons and imps. Its rapid fire works well on enemies that flinch easily, because it keeps them from hitting back. It is ineffective against Hell knights and other demons with powerful attacks and low pain chance.",
+          "line": "Uses: It works best against demons and spectres, which you can usually kill without taking damage, and fairly well against cacodemons and imps. Because it hits so fast, it stops flinch-prone enemies from retaliating. Against Hell knights and other demons that hit hard and rarely flinch, it does not work.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Chainsaw",
@@ -585,12 +952,24 @@
                 "It can also be used fairly effectively against cacodemons, pain elementals, lost souls, and imps.",
                 "works well on enemies with high pain chance, minimizing damage to the player in melee situations.",
                 "It is ineffective against Hell knights and other demons with powerful attacks and low pain chance."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Tactical analysis",
+                "lead section",
+                "Tactical analysis"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Its reach is only 65 map units, barely more than a fist's 64, so you have to be right on top of the target. Against a pack of demons, back into a corner and saw them down one by one. In open areas with several enemies it is a liability, because it kills more slowly than a berserk fist.",
+          "line": "Tips: Its reach is 65 map units, just over a fist's 64, so you have to be right next to your target. Facing a pack of demons, retreat into a corner and cut them down one at a time. In open areas against several enemies it is a liability, since it kills more slowly than a berserk fist.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Chainsaw",
@@ -599,6 +978,16 @@
                 "The chainsaw has a range of 65 map units, slightly larger than the fist's 64 units.",
                 "Expert players confronted by a pack of demons and spectres back into a corner and chainsaw them down one by one",
                 "The chainsaw's disadvantage is its slow killing speed compared to the berserk fist, which becomes a liability when facing multiple enemies in open areas."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             }
           ]
@@ -613,7 +1002,7 @@
       "main_revision": "582641",
       "lines": [
         {
-          "line": "Summary: The ultimate weapon: it fires a big ball of green plasma that can destroy nearly any monster in one shot and spreads damage over a wide area. In Doom 64 it has a darker colour scheme and first turns up in MAP10: The Bleeding.",
+          "line": "Summary: The strongest weapon in the game. It shoots big spheres of green plasma, and one shot can kill almost any monster while its damage also spreads over a wide area to hit several targets at once. The Doom 64 version has a darker look and first appears in MAP10: The Bleeding.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/BFG9000",
@@ -623,22 +1012,48 @@
                 "it is capable of destroying nearly any player or monster with a single shot, and can disperse damage over a wide area to multiple targets simultaneously.",
                 "fires large spheres of green plasma.",
                 "in Doom 64, where it is given a new look with a darker color scheme, it is first introduced in MAP10: The Bleeding."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section",
+                "lead section"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Good for clearing a room. The plasma ball explodes where it hits, and a moment later invisible rays fan out in a cone from you and hurt what they hit. Even cyberdemons, which are immune to blast damage, are hurt by those rays.",
+          "line": "Uses: Its damage spreads across a wide area, so it handles groups well. The plasma ball explodes where it hits, and a moment later 40 invisible rays fan out from you in a cone and hit whatever they reach. The rays hurt even cyberdemons, which cannot be hurt by blast damage.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/BFG9000",
               "revision": "582641",
               "quoted": [
-                "Great for clearing the room of those unwelcome guests.",
                 "If this plasma ball hits a solid object, it explodes and randomly deals between 100 and 800 hit points of damage to the target",
                 "40 invisible tracer rays are emitted from the player in a cone-shaped volume",
                 "Even cyberdemons and spiderdemons, which are immune to blast damage, are affected by these rays.",
-                "The damage calculations are mostly the same as in Doom and Doom II"
+                "The damage calculations are mostly the same as in Doom and Doom II",
+                "it is capable of destroying nearly any player or monster with a single shot, and can disperse damage over a wide area to multiple targets simultaneously."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Combat characteristics > Doom and Doom II",
+                "Combat characteristics > Doom and Doom II",
+                "Combat characteristics > Doom and Doom II",
+                "Combat characteristics > Doom 64",
+                "lead section"
               ]
             }
           ]
@@ -655,6 +1070,20 @@
                 "If the player has turned around, the direction of the rays does not change",
                 "When picked up, the BFG contains 40 energy cell units",
                 "It expends 40 energy cell units per shot."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Combat characteristics > Doom 64",
+                "Combat characteristics > Doom 64",
+                "Combat characteristics > Doom and Doom II",
+                "lead section",
+                "lead section"
               ]
             }
           ]
@@ -677,12 +1106,20 @@
               "quoted": [
                 "Picking it up maxes out both the player's health and armor to 200%. The armor given by a megasphere is equivalent to blue armor.",
                 "though in Doom 64 they display a helmet similar to the player's"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section"
               ]
             }
           ]
         },
         {
-          "line": "Uses: One pickup tops up both health and armour at once. It counts in the items percentage shown at the end of each level.",
+          "line": "Uses: One pickup tops up both health and armour at once. It also counts toward the items percentage on the end-of-level screen.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Megasphere",
@@ -690,6 +1127,14 @@
               "quoted": [
                 "Picking it up maxes out both the player's health and armor to 200%.",
                 "Megaspheres are included in the items percentage displayed at the end of each level."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section"
               ]
             }
           ]
@@ -703,6 +1148,14 @@
               "quoted": [
                 "|| Doom 64 || MAP06: Alpha Quadrant || MAP06: Alpha Quadrant || MAP06: Alpha Quadrant",
                 "|| Doom 64 || 10 || 9 || 9"
+              ],
+              "quoted_sits": [
+                "table cell",
+                "table cell"
+              ],
+              "quoted_at": [
+                "Appearance statistics",
+                "Appearance statistics"
               ]
             }
           ]
@@ -717,7 +1170,7 @@
       "main_revision": "526406",
       "lines": [
         {
-          "line": "Summary: The double-barrelled sawed-off shotgun: two shells per shot and 20 pellets per blast, about three times as damaging as the normal shotgun per shot. In Doom 64 it reloads much faster, in 1.53 seconds against 1.77 in Doom II, and it knocks you back a little when fired. It is one of the most essential weapons in Doom 64.",
+          "line": "Summary: A sawed-off, break-open double-barrelled shotgun. It uses two shells per shot and fires 20 pellets per blast, against seven for the normal shotgun, which makes each shot roughly three times as damaging. In Doom 64 it reloads much faster, in 1.53 seconds against 1.77 in Doom II, and it pushes you back a little when fired. It counts among the weapons you cannot do without in Doom 64.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Super_shotgun",
@@ -728,6 +1181,20 @@
                 "The super shotgun is about three times as damaging as the standard shotgun per shot",
                 "In Doom 64 the super shotgun reloads faster, completing in 1.53s versus 1.77s in Doom II.",
                 "In addition, the gun knocks the player back a bit when fired."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "Combat characteristics",
+                "Combat characteristics",
+                "Notes",
+                "Notes"
               ]
             },
             {
@@ -735,12 +1202,18 @@
               "revision": "564149",
               "quoted": [
                 "This makes it one of the most essential weapons in the game."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Gameplay developments"
               ]
             }
           ]
         },
         {
-          "line": "Uses: One well-aimed blast almost always kills two imps, one demon or one spectre. It lets you hold your own against tough monsters such as Hell knights, arachnotrons and mancubi, and it is often a better choice than the rocket launcher there, because shells are more plentiful than rockets and a short-range rocket blast can hurt you.",
+          "line": "Uses: A well-aimed blast almost always kills two imps, or a single demon or spectre. It lets you hold your own against tough monsters like Hell knights, arachnotrons and mancubi, and it is often a smarter pick than the rocket launcher against them: it is about as powerful, shells are easier to come by than rockets, and a rocket blast at short range can hurt you.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Super_shotgun",
@@ -749,6 +1222,16 @@
                 "One well-aimed blast from a super shotgun almost always kills two imps, one demon, or one spectre",
                 "can enable the player to hold their own against crowds of humanoids or tough monsters (Hell knights, arachnotrons, mancubi).",
                 "It is often sensible to prefer the super shotgun over the rocket launcher in such situations; the super shotgun is similarly powerful, shells are more plentiful than rockets, and a short-range rocket blast can harm the player."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             }
           ]
@@ -765,6 +1248,20 @@
                 "it is advisable to switch back to the shotgun",
                 "The super shotgun is also a bad choice for dealing with lone humanoids scattered in mazes.",
                 "The super shotgun takes the same ammunition as the shotgun"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Tactical analysis",
+                "Tactical analysis",
+                "Tactical analysis",
+                "Combat characteristics"
               ]
             }
           ]
@@ -779,7 +1276,7 @@
       "main_revision": "478391",
       "lines": [
         {
-          "line": "Summary: A rapid-fire gun that shoots bursts of blue plasma and shares your energy cells with the BFG9000. In Doom 64 it has a blue electric tube on top that buzzes constantly.",
+          "line": "Summary: A rapid-fire gun that fires bursts of blue plasma and draws on the same energy cells as the BFG9000. The Doom 64 version has a blue electric tube on its top that buzzes without stopping.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Plasma_gun",
@@ -787,12 +1284,20 @@
               "quoted": [
                 "fires blue and white bursts of plasma. It shares the player's stock of energy cells with the BFG9000 as a source of ammo.",
                 "It has a blue electric tube on top, which makes a constant buzzing sound."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "Combat characteristics > Doom 64"
               ]
             }
           ]
         },
         {
-          "line": "Uses: It is devastating against nearly any single enemy and can be considered the game's jack-of-all-trades. A continuous barrage stops an arachnotron or a mancubus in its tracks and can slow a baron of Hell to about half its normal speed and attack rate.",
+          "line": "Uses: It is devastating against almost any single opponent and works as the game's all-rounder. Firing continuously halts an arachnotron or a mancubus in its tracks and cuts a baron of Hell's speed and attack rate roughly in half.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Plasma_gun",
@@ -801,12 +1306,22 @@
                 "the plasma gun is devastating against nearly any single opponent.",
                 "A continuous barrage will stop an arachnotron, mancubus or revenant dead in its tracks, and even reduce a baron of Hell to about half its normal movement speed and attack frequency.",
                 "it is a very powerful weapon that can be considered the game's jack-of-all trades."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             }
           ]
         },
         {
-          "line": "Tips: In Doom 64 it fires a little slower than on PC, one shot every 0.133 seconds, but there is no pause after you let go of the trigger and the shots travel faster. At long range enemies tend to move too much for a burst to hit, so fire in controlled bursts rather than holding the trigger.",
+          "line": "Tips: In Doom 64 it fires a little slower than on PC, one shot every 0.133 seconds, but there is no pause after you let go of the trigger and the shots travel faster. At long range, targets usually move too much for a stream of shots to land, so fire short controlled bursts instead of holding the trigger down.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Plasma_gun",
@@ -818,6 +1333,22 @@
                 "they have a faster travel speed of 40 units per tic.",
                 "enemies tend to move too much for the bursts to be accurate",
                 "A good tactic to counter this weakness is to fire the plasma gun in controlled bursts, as opposed to fully automatic fire."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Combat characteristics > Doom 64",
+                "Combat characteristics > Doom 64",
+                "Combat characteristics > Doom 64",
+                "Combat characteristics > Doom 64",
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             }
           ]
@@ -832,7 +1363,7 @@
       "main_revision": "577219",
       "lines": [
         {
-          "line": "Summary: A dark gray medikit that raises your health to 100 percent if it was lower and makes your punches far stronger. It also fills the screen with a red haze, which lasts only three seconds in Doom 64.",
+          "line": "Summary: An item that looks like a dark gray medikit. It brings your health up to 100 percent if it was lower and hugely boosts your punch damage. The screen also goes red for a while; in Doom 64 that haze lasts only three seconds.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Berserk",
@@ -841,12 +1372,22 @@
                 "is an item that looks like a dark gray medikit.",
                 "Picking one up greatly increases the damage the player inflicts with their fists, and boosts the player's health to the full normal amount (100 percent, unless it was already 100 or more).",
                 "The red haze lasts approximately 20 seconds, except in Doom 64 where it is three seconds."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "Combat characteristics"
               ]
             }
           ]
         },
         {
-          "line": "Uses: It makes your punch ten times stronger, usually until the level ends or you die: enough to smash humanoids to a pulp, or sometimes kill a demon in one blow. Your current weapon switches to the fist when you pick it up, so you can end up suddenly unarmed.",
+          "line": "Uses: It makes your punch ten times stronger, usually until the level ends or you die: strong enough to turn humanoids to pulp, and sometimes to kill a demon in a single blow. Picking it up switches your current weapon to the fist, so you can suddenly find yourself unarmed.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Berserk",
@@ -856,6 +1397,18 @@
                 "The damage increase is powerful enough to often smash humanoids to a pulp, or even sometimes kill a demon with a single blow.",
                 "When a berserk pack is collected, the player's current weapon will switch to the fist.",
                 "Players grabbing the powerup quickly may find themselves suddenly unarmed"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Combat characteristics",
+                "Combat characteristics",
+                "Combat characteristics",
+                "Combat characteristics"
               ]
             }
           ]
@@ -871,6 +1424,18 @@
                 "This effect might confuse new players, who often believe that the berserk pack's effects last only as long as the red haze is on screen",
                 "Due to its power, the berserk punch is best used for hit-and-run situations, running up to the foe to throw a punch and then quickly retreating or dodging.",
                 "Berserk however has the disadvantage of not doing continuous damage, which leaves the player more open to counterattacks, and requires relatively careful aim."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Tactical analysis",
+                "Combat characteristics",
+                "Tactical analysis",
+                "Tactical analysis"
               ]
             }
           ]

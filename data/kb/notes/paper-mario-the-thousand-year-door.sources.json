@@ -14,7 +14,7 @@
       "main_revision": "5532428",
       "lines": [
         {
-          "line": "Summary: A chartreuse skeleton Koopa that throws bones and builds more Dull Bones to help it; it has 1 HP, 2 attack and 1 defense, and turns up commonly in Hooktail Castle.",
+          "line": "Summary: A Dry Bones variant, chartreuse in colour, that throws bones and builds more Dull Bones to help it; it has 1 HP, 2 attack and 1 defense, and turns up commonly in Hooktail Castle.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Dull_Bones",
@@ -23,15 +23,45 @@
                 "Dull Bones are a chartreuse variant of Dry Bones first seen in Paper Mario: The Thousand-Year Door.",
                 "appear commonly in Hooktail Castle",
                 "They attack by throwing bones at Mario and his partners.",
-                "A Koopa Troopa that became a skeleton.",
-                "Max HP is 1, Attack is 2, and Defense is 1.",
-                "Bone Throw (2), Build (summons Dull Bones)"
+                "Bone Throw (2), Build (summons Dull Bones)",
+                "However, Dull Bones can construct other Dull Bones to help in the battle.",
+                "Max HP || 1 || Attack || 2 || Defense || 1"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "table_cell",
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "Paper Mario series > Paper Mario: The Thousand-Year Door",
+                "Paper Mario series > Paper Mario: The Thousand-Year Door",
+                "Paper Mario: The Thousand-Year Door > GameCube > Moves cell",
+                "Paper Mario series > Paper Mario: The Thousand-Year Door",
+                "Paper Mario: The Thousand-Year Door > GameCube > table cells"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Dull_Bones",
+              "revision": "5532428",
+              "sat_in": "Paper Mario: The Thousand-Year Door > GameCube > Log cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
+            },
+            {
+              "page": "https://www.mariowiki.com/Dull_Bones",
+              "revision": "5532428",
+              "sat_in": "Paper Mario: The Thousand-Year Door > GameCube > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Weak points: A Hammer swing takes one out easily, and a POW Block or Koops's Power Shell is very efficient against a crowd; unlike Dry Bones, they cannot put themselves back together once they are down.",
+          "line": "Weak points: One Hammer hit is enough to knock one down. A POW Block or Koops's Power Shell pays off most when a lot of Dull Bones are on the field, and unlike Dry Bones these never get back up once they are down.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Dull_Bones",
@@ -40,19 +70,46 @@
                 "they are easily taken out by simply using the Hammer.",
                 "Using a POW Block or Koops's Power Shell is also very efficient, especially when there are many Dull Bones in battle.",
                 "Unlike Dry Bones, they cannot reassemble once they are down."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario series > Paper Mario: The Thousand-Year Door",
+                "Paper Mario series > Paper Mario: The Thousand-Year Door",
+                "Paper Mario series > Paper Mario: The Thousand-Year Door"
               ]
             }
           ]
         },
         {
-          "line": "Tips: They use Build to summon more Dull Bones, which is why Goombella says attacks that strike many at once are the most effective.",
+          "line": "Tips: Build lets them summon more Dull Bones, and that is when a POW Block or Koops's Power Shell works best.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Dull_Bones",
               "revision": "5532428",
               "quoted": [
-                "Oh, and they build reinforcements, too! Attacks that can strike multiple Dull Bones at once are the most effective."
+                "Using a POW Block or Koops's Power Shell is also very efficient, especially when there are many Dull Bones in battle.",
+                "Bone Throw (2), Build (summons Dull Bones)"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario series > Paper Mario: The Thousand-Year Door",
+                "Paper Mario: The Thousand-Year Door > GameCube > Moves cell"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Dull_Bones",
+              "revision": "5532428",
+              "sat_in": "Paper Mario: The Thousand-Year Door > GameCube > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
@@ -65,6 +122,14 @@
               "quoted": [
                 "Location(s) || Hooktail Castle, Glitz Pit, Palace of Shadow, Pit of 100 Trials (Levels 1, 4-6, 9)",
                 "Dried Shroom (drop only), Fire Flower, Fright Mask (drop only), Mushroom, POW Block (drop only)"
+              ],
+              "quoted_sits": [
+                "table_cell",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario: The Thousand-Year Door > GameCube > table cells",
+                "Paper Mario: The Thousand-Year Door > GameCube > Items cell"
               ]
             }
           ]
@@ -79,7 +144,7 @@
       "main_revision": "5476379",
       "lines": [
         {
-          "line": "Summary: A large blue Cleft made of metal; the only ones are the two Iron Adonis Twins you face in the Glitz Pit, and each has 6 HP and charges for 4 damage.",
+          "line": "Summary: A big blue Cleft made of metal that nothing can pierce. Only two are known: the Iron Adonis Twins, a team you face in the Glitz Pit; each has 6 HP and its Charge hits for 4.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Iron_Cleft",
@@ -87,49 +152,79 @@
               "quoted": [
                 "The only known Iron Clefts are the two members of The Iron Adonis Twins team in the Glitz Pit.",
                 "They are large blue Clefts made of impenetrable metal.",
-                "Max HP is 6, Attack is 4",
-                "Charge (4, resists counter, Piercing)"
+                "Charge (4, resists counter, Piercing)",
+                "Max HP || 6 || Attack || 4 || Defense || Special; immune to all attacks except Gulp"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "table_cell",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "lead (before the first heading)",
+                "Paper Mario: The Thousand-Year Door > GameCube > Moves cell",
+                "Paper Mario: The Thousand-Year Door > GameCube > table cells"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Iron_Cleft",
+              "revision": "5476379",
+              "sat_in": "Paper Mario: The Thousand-Year Door > GameCube > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Weak points: No attack damages them, not even moves that bypass defense or a perfectly timed Superguard; the only known way to hurt one is Yoshi's Gulp, which hits one Iron Cleft with the other.",
+          "line": "Weak points: Nothing you do damages them, including piercing moves and a perfectly timed Superguard; the only known way to hurt one is Yoshi's Gulp, which uses one Iron Cleft against the other.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Iron_Cleft",
               "revision": "5476379",
               "quoted": [
                 "no attacks will do any damage to them, even moves that bypass defense and if a character executes a perfectly timed Superguard.",
-                "Yoshi's Gulp provides the only known source of damaging these Iron Clefts, as it involves hitting one of the Iron Clefts with the other."
+                "Yoshi's Gulp provides the only known source of damaging these Iron Clefts, as it involves hitting one of the Iron Clefts with the other.",
+                "Defense || Special; immune to all attacks except Gulp"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "lead (before the first heading)",
+                "Paper Mario: The Thousand-Year Door > GameCube > table cells"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Gulp is Yoshi Kid's move: he swallows an enemy and spits it at another enemy.",
+          "line": "Tips: Gulp is a Yoshi Kid move that takes one enemy into his mouth and fires it at a second enemy.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Yoshi_Kid",
               "revision": "5534641",
               "quoted": [
                 "Swallows an enemy and spits it at another enemy."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario: The Thousand-Year Door > Attacks > table cells"
               ]
             }
           ]
-        },
+        }
+      ],
+      "dropped_lines": [
         {
-          "line": "Tips: Their Tattle Log entry treats them as nearly unbeatable, names the other Iron Cleft as the only weapon, and counts running away as a fair choice; the one in green shoes is the younger brother.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Iron_Cleft",
-              "revision": "5476379",
-              "quoted": [
-                "If that's true, the only way to beat one is to whack it with the other one... Running away may not be a bad idea at this point.",
-                "Since this one is wearing green shoes, it must be the younger brother."
-              ]
-            }
-          ]
+          "line_was": "Tips",
+          "why": "S4 2026-11-15: Stood only on the Tattle and the Log (the Tattle's view that running away is fair, the other Iron Cleft as the only weapon, and the younger brother in green shoes). The editors' prose has none of these; the fact that Gulp is the one way to hurt them stays in the Weak points line."
         }
       ]
     },
@@ -148,48 +243,111 @@
               "revision": "5412996",
               "quoted": [
                 "Poison Pokeys are found at the Riverside Station and in floors 41-49 of the Pit of 100 Trials.",
-                "Max HP is 8, Attack is 4, and Defense is 0.",
-                "they can summon more of them to the fight"
+                "they can summon more of them to the fight",
+                "Max HP || 8 || Attack || 4 || Defense || 0",
+                "can induce poison"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "table_cell",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door",
+                "Paper Mario: The Thousand-Year Door > GameCube > table cells",
+                "lead (before the first heading)"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Poison_Pokey",
+              "revision": "5412996",
+              "sat_in": "Paper Mario: The Thousand-Year Door > GameCube > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Weak points: Fire works well, since they are highly susceptible to burning, and the Tattle Log says to take it out quickly.",
+          "line": "Weak points: Fire works well, since Poison Pokeys are highly susceptible to burning.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Poison_Pokey",
               "revision": "5412996",
               "quoted": [
-                "highly susceptible to burning",
-                "Take it out quickly."
+                "highly susceptible to burning"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Poison_Pokey",
+              "revision": "5412996",
+              "sat_in": "Paper Mario: The Thousand-Year Door > GameCube > Log cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Tips: Slam, Body Throw and Bonk do 3, 4 and 5 damage and all poison you, its Pull move brings in another Poison Pokey, and poison slowly drains your HP.",
+          "line": "Tips: Slam, Body Throw and Bonk do 3, 4 and 5 damage and each can poison you, and its Pull move brings in another Poison Pokey.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Poison_Pokey",
               "revision": "5412996",
               "quoted": [
                 "Slam (3, Poison), Body Throw (4, Poison), Pull (summons Poison Pokey), Bonk (5, Poison)",
-                "If you get poisoned, your HP will slowly drain, so you may want to avoid that."
+                "can induce poison"
+              ],
+              "quoted_sits": [
+                "table_cell",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario: The Thousand-Year Door > GameCube > Moves cell",
+                "lead (before the first heading)"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Poison_Pokey",
+              "revision": "5412996",
+              "sat_in": "Paper Mario: The Thousand-Year Door > GameCube > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Tips: A Poison Pokey sometimes drops a Tasty Tonic when it is beaten, which cures poison, and Goombella warns that it has spines all over, so do not touch them.",
+          "line": "Tips: Now and then a beaten Poison Pokey leaves a Tasty Tonic behind, handy for curing any poison it gave you.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Poison_Pokey",
               "revision": "5412996",
               "quoted": [
-                "they sometimes drop a Tasty Tonic when defeated so any poisoning can be cured.",
-                "they have spines all over, so DON'T touch them."
+                "they sometimes drop a Tasty Tonic when defeated so any poisoning can be cured."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Poison_Pokey",
+              "revision": "5412996",
+              "sat_in": "Paper Mario: The Thousand-Year Door > GameCube > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         }
@@ -203,7 +361,7 @@
       "main_revision": "5486982",
       "lines": [
         {
-          "line": "Summary: The giant X-Naut robot that Lord Crump drives as the boss of Chapter 2, in the Great Tree; it has 30 HP, 2 attack and 1 defense.",
+          "line": "Summary: The robot Lord Crump operates as the boss of Chapter 2, activated in the Great Tree; it has 30 HP, 2 attack and 1 defense.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Magnus_von_Grapple",
@@ -211,28 +369,75 @@
               "quoted": [
                 "It serves as the primary boss of Chapter 2.",
                 "Magnus von Grapple is activated by Lord Crump in the Great Tree",
-                "Max HP is 30, Attack is 2, and Defense is 1.",
-                "Lord Crump drives it."
+                "is a robot operated by Lord Crump",
+                "Max HP || 30 || Attack || 2 || Defense || 1"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "lead (before the first heading)",
+                "lead (before the first heading)",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple",
+              "revision": "5486982",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
+            },
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple",
+              "revision": "5486982",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Weak points: Its rocket fists are separate targets with 2 HP and no defense; it sends them out once its own HP reaches twenty, and Flurrie's Gale Force with a perfect action command is sure to remove them.",
+          "line": "Weak points: Its rocket fists count as separate enemies with 2 HP and no defense, and it sends them out once its own HP is down to twenty. A perfectly timed action command on Flurrie's Gale Force always clears them out of the fight.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Magnus_von_Grapple",
               "revision": "5486982",
               "quoted": [
                 "After its HP reaches twenty, Magnus von Grapple uses its turn to separate its hands",
-                "Its fists have Max HP of 2, an Attack of 4, and Defense of 0.",
-                "Notably, the X-Fists are guaranteed to be removed from battle by Flurrie's Gale Force with a perfect action command."
+                "Notably, the X-Fists are guaranteed to be removed from battle by Flurrie's Gale Force with a perfect action command.",
+                "each of which has 2 HP",
+                "Max HP || 2 || Attack || 4 || Defense || 0"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "Battle",
+                "Battle",
+                "Battle",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple",
+              "revision": "5486982",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Tips: While the fists are out it can only jump and stomp the ground, hitting Mario and his partner for 2 piercing damage, which a floating Flurrie is not hurt by, and each fist hits for 4.",
+          "line": "Tips: As long as a fist is still out, its only attack is a jump followed by rapid stomps that shake the ground: 2 piercing damage to Mario and his partner, though Flurrie floats above it and takes none. Each fist rams a party member for 4 damage.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Magnus_von_Grapple",
@@ -240,6 +445,14 @@
               "quoted": [
                 "dealing two points of base piercing damage to both Mario and his partner (other than Flurrie, who is unaffected due to floating above the ground)",
                 "flies into a party member in one of two possible trajectories, dealing four points of base damage."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Battle",
+                "Battle"
               ]
             },
             {
@@ -247,12 +460,18 @@
               "revision": "5523517",
               "quoted": [
                 "Piercing attacks are damage-based attacks in the Super Mario role-playing games that ignore all or almost all defensive capabilities of the opponent."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)"
               ]
             }
           ]
         },
         {
-          "line": "Tips: If both fists are beaten, a new pair is back by its second turn afterwards; after that it picks the stomp 60% of the time and releases the fists 40%, and any fists still out when its HP runs out are defeated at once.",
+          "line": "Tips: Beat both fists and a fresh pair is waiting on its arms two turns later. Each turn after that it uses the stomp, Magnus von Punish, 60% of the time and sends the fists out again 40% of the time. When its own HP hits zero, any fists still in the fight are defeated with it.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Magnus_von_Grapple",
@@ -261,6 +480,16 @@
                 "a new pair returns to Magnus von Grapple's arms at the beginning of its second turn afterwards",
                 "it has, every turn until it releases them, a 60% chance to use Magnus von Punish and a 40% chance to release its X-Fists again.",
                 "Any X-Fists still present when Magnus von Grapple's HP is depleted are instantly defeated."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Battle",
+                "Battle",
+                "Battle"
               ]
             }
           ]
@@ -283,12 +512,20 @@
               "quoted": [
                 "is the main boss of Chapter 4.",
                 "Max HP || 40 || Attack || 4 || Defense || 0 || Location(s) || Creepy Steeple"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: Once his HP drops below 20 he transforms and fights with different moves, and even if you reduce him to zero before that, he transforms anyway and is left with 10 HP.",
+          "line": "Weak points: He transforms once his HP is under 20 and then fights with a different set of moves; and if you take him all the way to zero before that point, the transformation still happens and he is left with 10 HP.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Doopliss",
@@ -296,20 +533,41 @@
               "quoted": [
                 "Once Doopliss' HP drops below 20, he fights by transforming himself into a shadowy outline of Mario and attacking with his moves.",
                 "Even if Doopliss' health is reduced down to zero in the first fight before he copies Mario, his transformation in the battle still happens and Doopliss will have 10 HP"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door",
+                "General information > Battle"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Goombella's Tattle cannot give him a name and shows five question marks, and it notes that he is good at transforming.",
+          "line": "Tips: Goombella's Tattle cannot give him a name; it shows five question marks instead.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Doopliss",
               "revision": "5522260",
               "quoted": [
-                "Doopliss' name is represented by five question marks",
-                "It's apparently really good at transforming itself and other things."
+                "Doopliss' name is represented by five question marks"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Doopliss",
+              "revision": "5522260",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
@@ -321,6 +579,12 @@
               "revision": "5522260",
               "quoted": [
                 "[As Himself] Head Missile (4), Transform (turns into Shadow Mario) [As Shadow Mario] Jump (2x2), Hammer (4)"
+              ],
+              "quoted_sits": [
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > Moves cell"
               ]
             }
           ]
@@ -345,16 +609,47 @@
                 "alongside the other Chapter 5 characters",
                 "deep within Pirate's Grotto on Keelhaul Key.",
                 "In battle, Cortez has three forms.",
-                "Max HP is 20, Attack is 4, and Defense is 1.",
-                "His HP may seem low, but he's a spirit, so even when his HP hits 0, he'll come back.",
                 "Once this first form is defeated, Cortez transforms into a serpentine state",
-                "After his second form is defeated, Cortez abandons a body and returns to a simple floating head."
+                "After his second form is defeated, Cortez abandons a body and returns to a simple floating head.",
+                "Max HP || 60 (has 20 HP per round) || Attack || 4 || Defense || 1"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "History > Paper Mario: The Thousand-Year Door",
+                "lead (before the first heading)",
+                "Battle > First form",
+                "Battle > Second form",
+                "Battle > Third form",
+                "Paper Mario: The Thousand-Year Door > GameCube > table cells"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Cortez",
+              "revision": "5449919",
+              "sat_in": "Paper Mario: The Thousand-Year Door > GameCube > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
+            },
+            {
+              "page": "https://www.mariowiki.com/Cortez",
+              "revision": "5449919",
+              "sat_in": "Paper Mario: The Thousand-Year Door > GameCube > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Weak points: In his second, serpent form, hit the bone pile twice and he opens his rib cage to show a green gem; the gem has no defense and takes 1 extra damage from every attack.",
+          "line": "Weak points: In his serpent form the green gem inside his rib cage is the soft spot: hitting the bone pile twice opens the cage, and the gem then has no defense and every attack does 1 extra damage to it.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Cortez",
@@ -362,12 +657,20 @@
               "quoted": [
                 "Attacking the pile of bones will cause Cortez to lower his upper half, and doing so twice will cause him to open his rib cage, exposing the green gem.",
                 "This gem lacks Cortez's usual 1 defense, and additionally takes 1 more damage than usual from all attacks."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Battle > Second form",
+                "Battle > Second form"
               ]
             }
           ]
         },
         {
-          "line": "Tips: In his last form the four weapons fight on their own; a strong attack that hits everything, such as a Thunder Rage or Vivian's Fiery Jinx, shuts them down for two turns, and Flurrie's Gale Force can blow them off the stage for good.",
+          "line": "Tips: In his last form the four weapons fight on their own. A decent-strength attack that reaches every enemy, like a Thunder Rage or Vivian's Fiery Jinx, shuts them down for two turns, and Flurrie's Gale Force can blow them off the stage for good.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Cortez",
@@ -376,6 +679,16 @@
                 "Using a moderately strong attack that strikes all opponents, such as a Thunder Rage item and Vivian's Fiery Jinx, can disable the weapons simultaneously.",
                 "This effect is temporary, for they reanimate themselves after two turns.",
                 "Flurrie's Gale Force, if successful (though it will not affect Cortez himself), can blow the weapons out of the stage permanently."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Battle > Third form",
+                "Battle > Third form",
+                "Battle > Third form"
               ]
             }
           ]
@@ -392,6 +705,20 @@
                 "If Cortez falls to 10 HP or less, he can absorb souls of the audience to restore his HP",
                 "Cortez can only absorb souls equal to half the current audience members",
                 "it is possible to defeat Cortez with a swift assault before he gets a chance to absorb the souls of the audience."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Battle > First form",
+                "Battle > First form",
+                "Battle > Third form",
+                "Battle > Third form",
+                "Battle > Third form"
               ]
             }
           ]
@@ -415,34 +742,51 @@
                 "In this encounter, Crump uses his X-Nauts as backup.",
                 "After losing to Mario and Co for the third time",
                 "Max HP || 60 (30 per round) || Attack || 3 || Defense || 0 || Location(s) || Keelhaul Key"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door",
+                "Profiles and statistics > GameCube > table cells"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: Go for Crump first: the Tattle Log says the X-Nauts lose their focus on attacking once their leader is down.",
+          "line": "Tips: His only attack is a Body Slam for 3. After round one he heals, and in round two he summons new X-Nauts for the platoon on the turn after the old ones are beaten.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Lord_Crump",
               "revision": "5513572",
               "quoted": [
-                "If we take out their leader, though, they won't have the focus to attack. Get Crump!"
+                "Body Slam (3), Heal (this occurs after Round 1), Summon (In Round 2, Lord Crump will summon replacements for the X-Naut Platoon the following turn.)"
+              ],
+              "quoted_sits": [
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "Profiles and statistics > GameCube > Moves cell"
               ]
             }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Lord_Crump",
+              "revision": "5513572",
+              "sat_in": "Profiles and statistics > GameCube > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
+            }
           ]
-        },
+        }
+      ],
+      "dropped_lines": [
         {
-          "line": "Tips: He only body-slams for 3, heals after round one, and in round two summons replacements for the X-Naut platoon the turn after they fall; Crump himself only attacks plainly, so the X-Nauts around him are the bigger danger.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Lord_Crump",
-              "revision": "5513572",
-              "quoted": [
-                "Body Slam (3), Heal (this occurs after Round 1), Summon (In Round 2, Lord Crump will summon replacements for the X-Naut Platoon the following turn.)",
-                "those X-Nauts all around him are a force to be reckoned with."
-              ]
-            }
-          ]
+          "line_was": "Weak points",
+          "why": "S4 2026-11-15: Stood only on the Tattle's advice to defeat Lord Crump first so the X-Nauts lose their focus. The editors' prose and table cells say nothing like it."
         }
       ]
     },
@@ -454,48 +798,80 @@
       "main_revision": "5509839",
       "lines": [
         {
-          "line": "Summary: A huge mass of small Smorgs that attacks on top of the Excess Express in Chapter 6, with 50 HP, 5 attack and 1 defense; it is the only chapter boss besides the final boss that guards no Crystal Star.",
+          "line": "Summary: A huge mass of small Smorgs that attacks on top of the Excess Express in Chapter 6, with 50 HP; unlike every other chapter boss except the final boss, it guards no Crystal Star.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Smorg",
               "revision": "5509839",
               "quoted": [
                 "When the Smorgs are cornered on the top of the train, they combine into a large Smorg horde that attacks Mario and his party.",
-                "Max HP is 50, Attack is 5, and Defense is 1.",
                 "They appear in the sixth chapter of Paper Mario: The Thousand-Year Door.",
-                "It is the only chapter boss aside from the Shadow Queen that does not guard a Crystal Star."
+                "It is the only chapter boss aside from the Shadow Queen that does not guard a Crystal Star.",
+                "Max HP || Smorg: 50"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door",
+                "lead (before the first heading)",
+                "History > Paper Mario: The Thousand-Year Door",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Smorg",
+              "revision": "5509839",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Weak points: Three tentacles (Smorg Miasmas) surround the body at the start, so defeat them first: in the GameCube game that drops the body's defense to 0, and in the Switch remake the body takes no damage until they are gone.",
+          "line": "Weak points: Three tentacles, the Smorg Miasmas, ring the main body at the start; defeating them exposes the base of the body and lowers its defense, so take them out first.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Smorg",
               "revision": "5509839",
               "quoted": [
                 "At the beginning of the battle, three tentacles, referred to as Smorg Miasmas, surround the main body.",
-                "Defeating the tentacles will drop the body's Defense to 0, making it easier to attack.",
-                "We won't do any damage to the main body unless we defeat the tentacles first."
+                "Once the tentacles are defeated, the magenta Smorgs making up the base will become exposed",
+                "reducing its defense."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door"
               ]
             }
-          ]
-        },
-        {
-          "line": "Tips: The tentacles regenerate, so Goombella says to use that time to deal heavy damage.",
-          "drawn_from": [
+          ],
+          "game_text_not_used": [
             {
               "page": "https://www.mariowiki.com/Smorg",
               "revision": "5509839",
-              "quoted": [
-                "The tentacles will regenerate, but use that time to deal a ton of damage, OK?"
-              ]
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
+            },
+            {
+              "page": "https://www.mariowiki.com/Smorg",
+              "revision": "5509839",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door (Nintendo Switch) > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Tips: After it takes a lot of damage the tentacles change into a pincer claw that does 10 damage, against 5 for the Tentacle Slap.",
+          "line": "Tips: Once it has taken a lot of damage the tentacles reshape into a pincer claw that hits for 10, against 5 for the Tentacle Slap.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Smorg",
@@ -503,9 +879,23 @@
               "quoted": [
                 "After Smorg takes a significant amount of damage, the tentacles change shape into a pincer claw, which deals a large amount of damage to Mario and his partner.",
                 "Tentacle Slap (5), Pinch (10)"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > Moves cell"
               ]
             }
           ]
+        }
+      ],
+      "dropped_lines": [
+        {
+          "line_was": "Tips",
+          "why": "S4 2026-11-15: Stood only on the Tattle's remark that the tentacles regenerate. The editors' prose and table cells do not say it."
         }
       ]
     },
@@ -525,50 +915,128 @@
               "quoted": [
                 "It is the seventh Chapter Boss in the game, and the last boss to hold a Crystal Star.",
                 "is the improved version of Magnus von Grapple controlled by Lord Crump",
-                "Max HP is 70, Attack is 6, and Defense is 2.",
-                "Location(s) || X-Naut Fortress"
+                "Location(s) || X-Naut Fortress",
+                "Max HP || 70 || Attack || 6 || Defense || 2"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "table_cell",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "lead (before the first heading)",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
+              "revision": "5413646",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Weak points: Its X-Punch fists have 5 HP, 9 attack and no defense, Goombella says to take them down early, and Flurrie's Gale Force can blow them away.",
+          "line": "Weak points: Its X-Punch fists are fragile, with 5 HP and no defense, but each hits for 9; Flurrie's Gale Force can blow them away.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
               "revision": "5413646",
               "quoted": [
-                "Each X-Punch has a Max HP of 5, and Attack of 9, and a Defense of 0.",
-                "Take care of those low-HP fists early on",
-                "They deal 9 damage each and can be blown away by Flurrie's Gale Force."
+                "They deal 9 damage each and can be blown away by Flurrie's Gale Force.",
+                "Max HP || 5 || Attack || 9 || Defense || 0"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
+              "revision": "5413646",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
+            },
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
+              "revision": "5413646",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Tips: Its main attack is a drill dive from above for 6 damage to Mario and his partner, and when its HP gets low it adds machine guns.",
+          "line": "Tips: Its main attack is a dive from off-screen that lands on Mario and his partner for 6 damage.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
               "revision": "5413646",
               "quoted": [
                 "Magnus Drill Attack (6 to Mario and Partner)",
-                "Its basic attack is a drill move that drops from above.",
-                "When the body's HP gets low, it'll also fire machine guns"
+                "Magnus von Grapple 2.0's main attack is flying off-screen and then diving down at Mario and his partner, which does six damage."
+              ],
+              "quoted_sits": [
+                "table_cell",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > Moves cell",
+                "lead (before the first heading)"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
+              "revision": "5413646",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
+            },
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
+              "revision": "5413646",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Tips: Its Rapid Fire Cannon sucks up audience members and fires them at whoever is in front for 10 hits of 3 damage, and while the fists are flying you may be hit by the fists and the body in one turn.",
+          "line": "Tips: Its Rapid Fire Cannon pulls in members of the audience, then opens up its front and shoots them at whoever stands first in line: 10 hits of 3 damage each.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
               "revision": "5413646",
               "quoted": [
                 "sucking up the audience, and then opening its front to fire audience members at whomever is in front, which deals 10 hits of three damage each.",
-                "When those fists are flying, you may get attacked by the fists and body in one turn"
+                "Rapid Fire Cannon (3x10)"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > Moves cell"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Magnus_von_Grapple_2.0",
+              "revision": "5413646",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         }
@@ -582,7 +1050,7 @@
       "main_revision": "5408189",
       "lines": [
         {
-          "line": "Summary: Hooktail's older brother, the dragon who guards the Star Stone in the Palace of Shadow, with 80 HP, 8 attack and 2 defense; he is stronger than his sister.",
+          "line": "Summary: Hooktail's older brother, the dragon who guards the Star Stone in the Palace of Shadow, with 80 HP, 8 attack and 2 defense; he is the stronger of the two siblings.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Gloomtail",
@@ -590,27 +1058,63 @@
               "quoted": [
                 "being the older brother of Hooktail",
                 "He lives in the Palace of Shadow and guards the Star Stone",
-                "Max HP is 80, Attack is 8, and Defense is 2.",
-                "Gloomtail is stronger than his sister."
+                "Gloomtail is stronger than his sister.",
+                "Max HP || 80 || Attack || 8 || Defense || 2"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "lead (before the first heading)",
+                "History > Paper Mario: The Thousand-Year Door",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Gloomtail",
+              "revision": "5408189",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Weak points: He stores power with Charge Up (+8), which warns that the 16-damage Megabreath is coming, and Goombella says to use Vivian to hide from those attacks.",
+          "line": "Weak points: Watch for Charge Up (+8): it is the warning that the Megabreath, worth 16 damage, is about to follow.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Gloomtail",
               "revision": "5408189",
               "quoted": [
                 "Charge Up (CHARGE+8; warning for Megabreath), Megabreath (16 to Mario and Partner, Piercing)",
-                "He also stores power for some attacks, so use Vivian to hide to avoid those."
+                "He can also charge up for his signature and strongest attack: his megabreath move, which does up to 16 damage."
+              ],
+              "quoted_sits": [
+                "table_cell",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > Moves cell",
+                "History > Paper Mario: The Thousand-Year Door"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Gloomtail",
+              "revision": "5408189",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Tips: His poison breath lasts at least ten turns and he stomps or chomps whoever is in front for 8; Earthquake does 10 piercing damage but does not work on Vivian or Flurrie.",
+          "line": "Tips: His poison breath lingers for ten turns or more. He also stomps or chomps the character at the front for 8, and his Earthquake does 10 piercing damage, though Vivian and Flurrie are not affected by it.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Gloomtail",
@@ -619,12 +1123,22 @@
                 "He attacks by breathing poison on Mario and his partner (taking at least ten turns to wear off), and stomping or chomping the character in front.",
                 "His earthquake move can be dangerous, but it does not work on Vivian and Flurrie.",
                 "Poison Breath (8 to Mario and Partner, Piercing, Poison), Stomp (8), Chomp (8), Earthquake (10, Piercing; useless against Flurrie and Vivian)"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > Moves cell"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Beating him makes him cough up the chest holding the Star Stone, which unlocks the pedestals in the Palace of Shadow Tower.",
+          "line": "Tips: Once he is beaten he coughs up the chest holding the Star Stone, which is what the pedestals in the Palace of Shadow Tower need.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Gloomtail",
@@ -632,6 +1146,14 @@
               "quoted": [
                 "After defeating Gloomtail, he coughs up the treasure chest containing the Star Stone.",
                 "guards the Star Stone, which is needed to unlock the pedestals in the Palace of Shadow Tower"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door",
+                "lead (before the first heading)"
               ]
             }
           ]
@@ -646,21 +1168,42 @@
       "main_revision": "5412019",
       "lines": [
         {
-          "line": "Summary: The head of the X-Nauts, fought in the Palace of Shadow, with 50 HP, 7 attack and 1 defense; his defense rises by 1 for every Grodus X around him.",
+          "line": "Summary: The head of the X-Nauts, fought in the Palace of Shadow, with 50 HP, 7 attack and 1 defense; each Grodus X he has adds 1 to his defense.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Grodus",
               "revision": "5412019",
               "quoted": [
                 "is the supreme leader of the X-Nauts",
-                "Max HP is 50, Attack is 7, and Defense is 1. But...when he has Grodus Xs surrounding him, his Defense will go up by that number.",
-                "Location(s) || Palace of Shadow"
+                "Location(s) || Palace of Shadow",
+                "Max HP || 50 || Attack || 7 || Defense || 1",
+                "Grodus's Defense is increased by 1 for every Grodus X that he has."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "table_cell",
+                "table_cell",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells",
+                "General information > Powers and abilities"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Grodus",
+              "revision": "5412019",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Weak points: He needs four Grodus Xs to raise a force field and destroying even one breaks it, and an attack on his scepter can stun it, which stops him attacking for a while.",
+          "line": "Weak points: Four Grodus Xs are needed to raise his protective force field, and destroying just one of them breaks it. Hitting his scepter can stun it, and while it is stunned he cannot attack.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Grodus",
@@ -668,6 +1211,14 @@
               "quoted": [
                 "he requires 4 Grodus Xs to create a force field to protect himself. If a single Grodus X is destroyed, the force field breaks.",
                 "His scepter is susceptible to being stunned after being attacked, preventing him from attacking for a while."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "General information > Powers and abilities",
+                "General information > Powers and abilities"
               ]
             }
           ]
@@ -680,6 +1231,12 @@
               "revision": "5412019",
               "quoted": [
                 "Thunderbolt (7, Piercing), Flamethrower (6, Piercing, Burn), Ice Beam (5, Piercing, Frozen), Clock Beam (Stop), Counterattack (Payback), Evade (Dodgy), Dud (indicated by smoke from scepter, 0)"
+              ],
+              "quoted_sits": [
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > Moves cell"
               ]
             }
           ]
@@ -692,6 +1249,12 @@
               "revision": "5412019",
               "quoted": [
                 "Dud (indicated by smoke from scepter, 0)"
+              ],
+              "quoted_sits": [
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > Moves cell"
               ]
             }
           ]
@@ -713,10 +1276,30 @@
               "revision": "5410422",
               "quoted": [
                 "residing at the bottom of the Pit of 100 Trials.",
-                "His body's Max HP is 200, his Attack is 8, and his Defense is 2.",
                 "She is the strongest boss in the game, being stronger than the Shadow Queen",
-                "has the most HP out of any enemy."
+                "has the most HP out of any enemy.",
+                "Max HP || 200 || Attack || 8 || Defense || 2"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Bonetail",
+              "revision": "5410422",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
@@ -728,9 +1311,33 @@
               "revision": "5410422",
               "quoted": [
                 "Recover (+20 HP; max twice)",
-                "His body's Max HP is 200",
-                "When his HP gets low, he'll recover...or reanimate, as the case may be."
+                "Max HP || 200 || Attack || 8 || Defense || 2",
+                "Bonetail can restore 20 HP when having lower HP"
+              ],
+              "quoted_sits": [
+                "table_cell",
+                "table_cell",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > Moves cell",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells",
+                "History > Paper Mario: The Thousand-Year Door"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Bonetail",
+              "revision": "5410422",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
+            },
+            {
+              "page": "https://www.mariowiki.com/Bonetail",
+              "revision": "5410422",
+              "sat_in": "Profiles and statistics > Paper Mario: The Thousand-Year Door > Tattle cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
@@ -744,6 +1351,16 @@
                 "Dangerous Breath (8 to Mario and Partner, Piercing, Sleep (white), Confuse (green), Tiny (purple), Frozen (blue))",
                 "The color of Bonetail's confusion breath has also been changed from green to pink.",
                 "All of her breath attacks can be avoided with Shell Shield or simply guarding."
+              ],
+              "quoted_sits": [
+                "table_cell",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > Moves cell",
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door"
               ]
             }
           ]
@@ -759,6 +1376,18 @@
                 "Stomp (8), Chomp (8)",
                 "If Mario defeats Bonetail, she coughs up a chest containing the Return Postage badge.",
                 "Once defeated, Bonetail cannot be fought again"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "table_cell",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > Moves cell",
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door"
               ]
             }
           ]
@@ -773,7 +1402,7 @@
       "main_revision": "5321829",
       "lines": [
         {
-          "line": "Summary: Hidden collectibles: there are 100 Star Pieces in the game, 98 lying around the world and two given as rewards by Chef Shimi and the Excess Express waitress.",
+          "line": "Summary: Hidden collectibles: the game has 100 Star Pieces in all. 98 sit out in the world, and the last two are rewards from Chef Shimi and from the waitress on the Excess Express.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Star_Piece_(Paper_Mario_series)",
@@ -781,12 +1410,20 @@
               "quoted": [
                 "there are 100 collectible Star Pieces, among which 98 are overworld and two are owned by characters.",
                 "The last two are owned by Chef Shimi and the Excess Express waitress, respectively, and will be given to Mario for fulfilling the corresponding requests."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Trade them for badges with Dazzle in Rogueport Underground; all 100 are needed to get every badge he sells.",
+          "line": "Uses: Dazzle, in Rogueport Underground, swaps badges for Star Pieces, and you need all 100 to buy everything he has.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Star_Piece_(Paper_Mario_series)",
@@ -794,6 +1431,14 @@
               "quoted": [
                 "they are used for trading with Dazzle in Rogueport Underground.",
                 "All 100 Star Pieces are needed to get all of Dazzle's badges."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "History > Paper Mario: The Thousand-Year Door"
               ]
             },
             {
@@ -801,6 +1446,12 @@
               "revision": "5414000",
               "quoted": [
                 "Dazzle is a Star Piece collector found in the Rogueport Underground"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)"
               ]
             }
           ]
@@ -813,12 +1464,18 @@
               "revision": "5414000",
               "quoted": [
                 "Attack FX Y || 1 || Chill Out || 2 || Pretty Lucky || 3 || Happy Flower || 4 || Happy Heart || 4 || Happy Heart P || 4 || Item Hog || 5 || Heart Finder || 6 || Flower Finder || 6 || Peekaboo || 7 || Quick Change || 8 || Flower Saver || 10 || Flower Saver P || 10 || Power Plus || 15 || Power Plus P || 15"
+              ],
+              "quoted_sits": [
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading) > table cells"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Merluvlee will tell you where they are for five coins and Ms. Mowz can detect them as a field ability; buried ones need the Super Boots to flip their panel, and in the GameCube game the Ultra Hammer cannot.",
+          "line": "Tips: For five coins Merluvlee will predict where they are, and Ms. Mowz can sniff them out with her field ability. Some are buried and need the Super Boots to flip their panel; in the GameCube game the Ultra Hammer cannot do it.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Star_Piece_(Paper_Mario_series)",
@@ -827,6 +1484,16 @@
                 "Merluvlee can predict the locations of the Star Pieces for five coins, and Ms. Mowz can detect them for Mario using her field ability",
                 "Some of overworld ones are underground and require Super Boots to get.",
                 "the underground panels can no longer be flipped with the Ultra Hammer."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door"
               ]
             }
           ]
@@ -841,7 +1508,7 @@
       "main_revision": "5512340",
       "lines": [
         {
-          "line": "Summary: A rank-up raises a partner's attack power and HP and teaches it a new move; there are two, Super Rank then Ultra Rank, and Merlon in Rogueport does each one for three Shine Sprites.",
+          "line": "Summary: Ranking up a partner makes its attacks stronger and gives it more HP and a new move. There are two steps, Super Rank and then Ultra Rank, and Merlon in Rogueport does each one for three Shine Sprites.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Level_up",
@@ -849,6 +1516,14 @@
               "quoted": [
                 "which increases their attack power and teaches them a new move, and increases their HP in Paper Mario: The Thousand-Year Door.",
                 "In Paper Mario: The Thousand-Year Door, Merlon can level up Mario's partners, for three Shine Sprites each."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario series > Paper Mario / Paper Mario: The Thousand-Year Door",
+                "Paper Mario series > Paper Mario / Paper Mario: The Thousand-Year Door"
               ]
             },
             {
@@ -856,6 +1531,12 @@
               "revision": "5412676",
               "quoted": [
                 "Mario can visit Merlon to have him upgrade one of Mario's partners for three Shine Sprites. Initially, Mario's partner can be upgraded to Super Rank."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door"
               ]
             }
           ]
@@ -869,6 +1550,14 @@
               "quoted": [
                 "Once Goombella reaches Super Rank, she will gain the Multibonk ability",
                 "Rally Wink || 4 || Gives Mario a second turn in battle."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario: The Thousand-Year Door > Battle abilities",
+                "Paper Mario: The Thousand-Year Door (Nintendo GameCube) > Attacks > table cells"
               ]
             },
             {
@@ -877,6 +1566,14 @@
               "quoted": [
                 "Koops also learns Shell Shield at Super Rank.",
                 "Shell Slam || 6 || Attacks all ground enemies and penetrates their defense."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario: The Thousand-Year Door > Battle abilities",
+                "Paper Mario: The Thousand-Year Door > Attacks > table cells"
               ]
             },
             {
@@ -885,6 +1582,14 @@
               "quoted": [
                 "Lip Lock || 3 || Steals enemies' HP to add to her own. Pierces Defense. || Press when the red star lights up. || Super: 4 Ultra: 6 || Super Rank",
                 "Dodgy Fog || 4 || Makes Mario dodgy for a few turns."
+              ],
+              "quoted_sits": [
+                "table_cell",
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario: The Thousand-Year Door (Nintendo GameCube) > Attacks > table cells",
+                "Paper Mario: The Thousand-Year Door (Nintendo GameCube) > Attacks > table cells"
               ]
             },
             {
@@ -893,6 +1598,14 @@
               "quoted": [
                 "Mini-Egg || 3 || Throws eggs at all the enemies and, if successful, shrinks them.",
                 "Stampede || 6 || Summons a Yoshi herd to attack all enemies."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence",
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario: The Thousand-Year Door > Attacks > table cells",
+                "Paper Mario: The Thousand-Year Door > Attacks > table cells"
               ]
             },
             {
@@ -901,6 +1614,14 @@
               "quoted": [
                 "Hold Fast || 4 || Direct-attackers that touch Bobbery get damaged in battle.",
                 "Bob-ombast || 9 || Damages all enemies in battle."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence",
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells",
+                "Profiles and statistics > Paper Mario: The Thousand-Year Door > table cells"
               ]
             },
             {
@@ -909,6 +1630,14 @@
               "quoted": [
                 "Tease || 3 || Makes all enemies Dizzy.",
                 "Smooch || 10 || Replenishes 10 of Mario's HP."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence",
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario: The Thousand-Year Door > Attacks and stats > table cells",
+                "Paper Mario: The Thousand-Year Door > Attacks and stats > table cells"
               ]
             }
           ]
@@ -921,6 +1650,12 @@
               "revision": "5508749",
               "quoted": [
                 "he has the highest HP total (with 20 in Initial Rank, 30 in Super Rank, and 40 in Ultra Rank)"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario series > Paper Mario: The Thousand-Year Door"
               ]
             },
             {
@@ -928,12 +1663,18 @@
               "revision": "5530661",
               "quoted": [
                 "he has the lowest health of all partners when upgraded, with 15 Health Points at Super Rank and 25 Health Points at Ultra Rank"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario: The Thousand-Year Door > Battle abilities"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Ultra Rank needs the Up Arrow first: after you bring the Sapphire Star back to Rogueport, Merlon gives you a riddle, and the Up Arrow is in a secret room in Hooktail Castle behind a crack in the right wall of the room where you found the Black Key (Bobbery blasts it open, then hit the blue ! Block for the chest); give it to Merlon and he frees the Ultra Stone.",
+          "line": "Tips: Ultra Rank needs the Up Arrow first. Once the Sapphire Star is back in Rogueport, Merlon sets you a puzzle from a star sign he cannot read. The answer is in Hooktail Castle: in the room where you earlier found the Black Key, a crack in the wall on the far right hides a secret room (Bobbery can blast it open) with a blue ! Block, which reveals a chest holding the Up Arrow. Give it to Merlon and he shakes loose the Ultra Stone.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Merlon",
@@ -944,6 +1685,20 @@
                 "Mario must travel to Hooktail Castle in Petal Meadows and make his way to a room where he earlier uncovered a Black Key to find a crack in the rightmost wall.",
                 "Using Admiral Bobbery's ability to blast a hole in the wall, Mario discovers a secret room, where he must hit a blue ! Block to reveal a chest containing an Up Arrow.",
                 "Afterward, Mario must return to Rogueport and give the Up Arrow to Merlon, who then floats up until he crashes into the ceiling, releasing an Ultra Stone that falls to the floor."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door",
+                "History > Paper Mario: The Thousand-Year Door"
               ]
             },
             {
@@ -951,6 +1706,12 @@
               "revision": "5512340",
               "quoted": [
                 "To level up the partners again, Mario must first obtain the Up Arrow. After doing so, Merlon can level them up to the Ultra Rank."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario series > Paper Mario / Paper Mario: The Thousand-Year Door"
               ]
             }
           ]
@@ -966,35 +1727,64 @@
       "main_revision": "5468692",
       "lines": [
         {
-          "line": "Summary: A Mushroom restores 5 HP, a Super Shroom 10 HP and an Ultra Shroom 50 HP, and since partners have HP now, they can heal a partner too.",
+          "line": "Summary: A Mushroom restores 5 HP; the Super Shroom and the Ultra Shroom are the stronger versions, and since partners have HP now, a Mushroom can heal a partner too.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mushroom",
               "revision": "5468692",
               "quoted": [
-                "A feel-good mushroom. Replenishes 5 HP.",
-                "mushrooms can restore a partner's HP also."
+                "mushrooms can restore a partner's HP also.",
+                "In this game, they heal 5 HP when used.",
+                "They heal in the same manner as in the previous game"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario series > Paper Mario: The Thousand-Year Door",
+                "Paper Mario series > Paper Mario",
+                "Paper Mario series > Paper Mario: The Thousand-Year Door"
               ]
             },
             {
               "page": "https://www.mariowiki.com/Super_Mushroom",
               "revision": "5537614",
               "quoted": [
-                "A feel-super mushroom. Replenishes 10 HP.",
                 "Super Mushrooms (originally referred to as Super Shrooms)"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario series > Paper Mario: The Thousand-Year Door"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Mushroom",
+              "revision": "5468692",
+              "sat_in": "History > Paper Mario series > The Thousand-Year Door description cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
+            },
+            {
+              "page": "https://www.mariowiki.com/Super_Mushroom",
+              "revision": "5537614",
+              "sat_in": "History > Paper Mario series > The Thousand-Year Door description cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             },
             {
               "page": "https://www.mariowiki.com/Ultra_Mushroom",
               "revision": "5414790",
-              "quoted": [
-                "A feel-great mushroom. Replenishes 50 HP."
-              ]
+              "sat_in": "History > Paper Mario series > The Thousand-Year Door description cell",
+              "note": "game text (Tattle, Log or item description); not copied here and not used"
             }
           ]
         },
         {
-          "line": "Uses: A Life Shroom (called Life Mushroom in the Switch remake) revives Mario or his partner with 10 HP when they fall, and partners use it automatically as soon as their HP runs out, so you cannot save it for Mario alone.",
+          "line": "Uses: When Mario or a partner is knocked out, a Life Shroom brings them back with 10 HP; it is called a Life Mushroom in the Switch remake. A partner uses it by itself the moment its HP runs out, so you cannot hold one back for Mario.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Life_Mushroom_(Paper_Mario_series)",
@@ -1003,18 +1793,34 @@
                 "Whenever Mario (or his partner in The Thousand-Year Door) is defeated in battle, the Life Mushroom will revive the character and return ten HP to them.",
                 "partners automatically use it if their life is depleted, no matter what.",
                 "referred to as a Life Shroom prior to the Nintendo Switch remake of Paper Mario: The Thousand-Year Door"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "lead (before the first heading)",
+                "lead (before the first heading)"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Super Shrooms are sold at Westside Goods, the souvenir shop, Twilight Shop, Keelhaul Galleria, the Sales Stall and Northwinds Mart; Ultra Shrooms are rare, costing 200 coins at the Deepdown Depot, 67 Pianta tokens at the Pianta Parlor (80 in the Switch remake), or sometimes 120 coins from Charlieton.",
+          "line": "Tips: Super Shrooms are sold at Westside Goods, the souvenir shop, Twilight Shop, Keelhaul Galleria, the Sales Stall and Northwinds Mart. Few places sell Ultra Shrooms: 200 coins at the Deepdown Depot, 67 Pianta tokens at the Pianta Parlor (80 in the Switch remake), and now and then 120 coins from Charlieton.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Super_Mushroom",
               "revision": "5537614",
               "quoted": [
                 "can be bought at Westside Goods, the souvenir shop, Twilight Shop, Keelhaul Galleria, Sales Stall and Northwinds Mart"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Paper Mario series > Paper Mario: The Thousand-Year Door"
               ]
             },
             {
@@ -1022,6 +1828,12 @@
               "revision": "5414790",
               "quoted": [
                 "very few places sell Ultra Mushroom (originally called Ultra Shrooms); however, they may be purchased for 200 coins each at the Deepdown Depot, the shop in Rogueport Underground, and they can also be found in the Pianta Parlor for 67 (80 in the Nintendo Switch remake) pianta tokens. Charlieton occasionally sells Ultra Mushrooms for 120 coins."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Paper Mario series"
               ]
             }
           ]
@@ -1036,6 +1848,16 @@
                 "Life Mushrooms are given away as a shopping prize when the player reaches 150 shop points. They can also be carried by an enemy in battle.",
                 "it then has a high chance of being dropped after the battle is over.",
                 "Ms. Mowz can also use Kiss Thief to steal the item in battle."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "lead (before the first heading)",
+                "lead (before the first heading)"
               ]
             }
           ]

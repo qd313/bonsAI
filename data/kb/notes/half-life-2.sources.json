@@ -448,7 +448,7 @@
           ]
         },
         {
-          "line": "Tips: A zombie ignores fire, electricity and traps that are not in its way. A body in a heap of corpses that still has a headcrab on its head is only playing dead: shoot it first or throw a grenade.",
+          "line": "Tips: A zombie does not notice fire, electricity or traps unless they block its way. Some corpses are not dead: a body with a headcrab still on its head may just be lying still, so shoot it in the head, or throw a grenade if you cannot kill it without waking it.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Zombie",
@@ -467,7 +467,8 @@
               "sits_in": "editors' prose",
               "quoted": [
                 "This tactic was also used by Standard Zombies in Half-Life 2.",
-                "When investigating an area littered with Zombie corpses, check if any still have headcrabs attached to their head, as this is a good sign the Zombie is merely playing dead.",
+                "check if any still have headcrabs attached to their head, as this is a good sign the Zombie is merely playing dead",
+                "shoot them in the head with the Colt Python or Shotgun just in case",
                 "throw a grenade at them if the player is unable to kill them without waking the Zombie up"
               ]
             }
@@ -515,7 +516,7 @@
       "main_revision": "330952",
       "lines": [
         {
-          "line": "Summary: A skeletal zombie with 50 health that climbs, runs and leaps. Its leap hit does 10 and its double slash 6, and it often comes in packs of three to four.",
+          "line": "Summary: A fast, agile zombie with 50 health that climbs, runs and leaps. Its leap hit does 10 and its double slash 6, and it often comes in packs of three to four.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Fast_Zombie",
@@ -535,6 +536,15 @@
                   "label": "Attacks",
                   "value": "Double slash (6)"
                 }
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Zombie",
+              "revision": "330952",
+              "part_of_page": "(opening)",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Fast Zombies are extremely quick and agile, being able to climb, run, and jump faster and farther than a normal zombie."
               ]
             },
             {
@@ -581,7 +591,7 @@
           ]
         },
         {
-          "line": "Tips: Alone it is weak, so the pack is the danger. It is much easier to hit at medium range, it cannot leap at you from behind cover, and it cannot attack you on a ladder, where it gets stuck below you.",
+          "line": "Tips: Alone it is weak, so the pack is the danger. Shoot it at medium range, where it struggles to get round to your side; cover stops its leap, and on a ladder it cannot attack you at all and gets stuck beneath you.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Fast_Zombie",
@@ -590,7 +600,7 @@
               "sits_in": "editors' prose",
               "quoted": [
                 "aren't particularly dangerous on their own because their attacks are fairly weak",
-                "Fast Zombies are actually much easier to hit at medium range",
+                "Fast Zombies are actually much easier to hit at medium range, as it is harder for them to move quickly behind or to the side of the player",
                 "Hiding behind cover will prevent the Fast Zombie from using their leap attack",
                 "Fast Zombies cannot attack the player while on a ladder.",
                 "They will get stuck under the ladder, allowing the player to hack away at them with his Crowbar until they drop."
@@ -684,7 +694,7 @@
           ]
         },
         {
-          "line": "Looks like: Bloated and reddish-purple, bent nearly double under the headcrabs on its back.",
+          "line": "Looks like: Bloated and reddish-purple, hunched forward with its upper body at a right angle to its legs.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Poison_Zombie",
@@ -693,13 +703,14 @@
               "sits_in": "editors' prose",
               "quoted": [
                 "Poison zombies are bloated, reddish purple, slow-moving zombies.",
-                "The Poison Zombie has a heavily stooped posture"
+                "The Poison Zombie has a heavily stooped posture",
+                "its torso forming a 90"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Carry fire to it: pick up a propane tank or gas canister with the gravity gun, light it up from cover, then duck back before it throws more. Grenades and explosive barrels cannot ignite it but still do decent damage.",
+          "line": "Tips: Set it alight with a propane tank or gas canister held in the gravity gun, then get under cover or away before it throws more headcrabs. Grenades or explosive barrels will not set it alight, but they do decent damage.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Poison_Zombie",
@@ -714,7 +725,7 @@
           ]
         },
         {
-          "line": "Tips: A thrown poison headcrab drops you to 1 health, so keep moving up close and do not swing the crowbar at them while other enemies are around. Once all three are thrown it is little threat; the pulse rifle's energy ball disintegrates it.",
+          "line": "Tips: Up close, keep moving as you attack so the thrown headcrabs miss; one that lands drops you to 1 health, so do not swing the crowbar at them while other enemies are about. Once it has thrown all three it is little threat, and a pulse rifle energy ball destroys it outright.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Poison_Zombie",
@@ -813,7 +824,7 @@
           ]
         },
         {
-          "line": "Tips: Its growls warn you before it attacks. Kill the soldier antlions that crowd you, but keep track of the guard. Swap between the crossbow, the RPG and the MP7's grenades so damage never pauses for a reload.",
+          "line": "Tips: Its growls tell you an attack is coming. Soldier antlions that arrive with it can swarm and slow you, so clear the ones in your way while you watch where the guard is. High-damage weapons such as the crossbow and the RPG cut the fight short, and the MP7's grenade launcher is a good alternative.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Antlion_Guard",
@@ -822,16 +833,16 @@
               "sits_in": "editors' prose",
               "quoted": [
                 "Its distinctive growls can also cue the player as to when it is about to attack.",
+                "Be careful when the Guard spawns in with Antlion Soldiers, as they can easily swarm you and impede your movement.",
                 "Kill any that get in your way but keep track of the Guard.",
                 "High-damage weapons such as the Crossbow and the RPG can shorten the amount of time required to take one down.",
-                "Another good alternative is using the grenade launcher on with the MP7.",
-                "Cycling between weapons is a good way of dealing damage to a Guard continuously without pausing to reload"
+                "Another good alternative is using the grenade launcher on with the MP7."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Launching explosive barrels or a car engine with the gravity gun saves ammo. The pulse rifle's secondary fire will not disintegrate it but hurts it badly. If it hurls something at you, dodge it or catch it and throw it back.",
+          "line": "Tips: Switching between weapons keeps the damage coming with no pause to reload. Explosive barrels, or a heavy object such as a car engine, thrown with the gravity gun hurt it and save ammo. A pulse rifle energy ball leaves it badly hurt but alive. If it throws something at you, dodge it, or catch it and send it back.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Antlion_Guard",
@@ -839,6 +850,7 @@
               "part_of_page": "Tactics",
               "sits_in": "editors' prose",
               "quoted": [
+                "Cycling between weapons is a good way of dealing damage to a Guard continuously without pausing to reload",
                 "launching explosive barrels or weighty objects like a car engine using the Gravity Gun can also deal significant damage to a Guard while conserving ammo",
                 "The Pulse Rifle's secondary fire will not disintegrate the Guard, but will heavily damage it.",
                 "be prepared to avoid their projectile or catch it and counter-throw with the Gravity Gun"
@@ -892,21 +904,6 @@
           ]
         },
         {
-          "line": "Weak points: The gravity gun is the best answer: pull one in and punt it into a wall, and it is destroyed at once.",
-          "drawn_from": [
-            {
-              "page": "https://half-life.fandom.com/wiki/Manhack",
-              "revision": "330932",
-              "part_of_page": "Tactics",
-              "sits_in": "editors' prose",
-              "quoted": [
-                "The Gravity Gun is highly if not the most effective weapon against them in combat.",
-                "Manhacks can be pulled into the Gravity Gun's field after which they can be launched into walls or simply punted into one with the primary fire, which instantly destroys them."
-              ]
-            }
-          ]
-        },
-        {
           "line": "Looks like: Three blades spinning so fast they whir, and a single camera eye that glows red while it is active.",
           "drawn_from": [
             {
@@ -947,7 +944,7 @@
           ]
         },
         {
-          "line": "Tips: Against several, use a fast-firing weapon like the SMG or pulse rifle, and deal with them quickly before they distract you from other threats. A manhack thrown through open air without hitting anything is only dazed.",
+          "line": "Tips: The gravity gun is highly effective, if not the most effective, weapon against them: pull one in and punt it into a wall to destroy it. Against several, use a fast-firing weapon like the SMG or pulse rifle, and deal with them quickly before they distract you from other threats.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Manhack",
@@ -955,9 +952,18 @@
               "part_of_page": "Tactics",
               "sits_in": "editors' prose",
               "quoted": [
+                "The Gravity Gun is highly if not the most effective weapon against them in combat.",
+                "Manhacks can be pulled into the Gravity Gun's field after which they can be launched into walls or simply punted into one with the primary fire, which instantly destroys them."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Manhack",
+              "revision": "330932",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
                 "using a weapon with a high rate of fire and high magazine like the SMG or Pulse Rifle can help to deal damage to multiple targets while keeping them at a distance",
-                "It is advised to deal with Manhacks quickly since their presence can often distract the player from other threats.",
-                "Throwing a Manhack to a distance using the Gravity Gun without it making contact with an object will not inflict any damage and just disorient it."
+                "It is advised to deal with Manhacks quickly since their presence can often distract the player from other threats."
               ]
             }
           ]
@@ -997,7 +1003,7 @@
           ]
         },
         {
-          "line": "Weak points: The crowbar kills it in one hit, and it dies if it swallows poison. A burning explosive barrel on its tongue kills it, and the barnacles hanging next to it too.",
+          "line": "Weak points: The crowbar kills it in one hit, and it dies if it swallows poison. Set an explosive barrel alight at the right moment, while a barnacle is trying to eat it, and the blast can kill it, even several close together.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Barnacle",
@@ -1029,7 +1035,7 @@
           ]
         },
         {
-          "line": "Looks like: Little more than a big mouth with two rows of sharp teeth, with a long string-like tongue dangling from a ceiling or overhang.",
+          "line": "Looks like: A ceiling-hung mouth with two rows of sharp teeth and a long thin tongue that dangles down from it.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Barnacle",
@@ -1113,8 +1119,17 @@
           ]
         },
         {
-          "line": "Weak points: Small arms do nothing; the RPG does. A rocket coming in at its rear or side meets a blind spot, and it cannot change target in the middle of a firing cycle, so fire while it is busy with someone else.",
+          "line": "Weak points: Small arms do nothing; only explosives such as the RPG hurt it. A rocket coming in at its rear or side meets a blind spot, and once it has started shooting at one target it cannot switch, so send your rocket while it is busy with another.",
           "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Combine_Gunship",
+              "revision": "332295",
+              "part_of_page": "Application",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Like most Synths, Gunships are invulnerable to small-arms fire and can only be damaged by explosives such as the RPG."
+              ]
+            },
             {
               "page": "https://half-life.fandom.com/wiki/Combine_Gunship",
               "revision": "332295",
@@ -1144,7 +1159,7 @@
           ]
         },
         {
-          "line": "Tips: Never fly a rocket straight at it: steer around its head, zig-zag or corkscrew, or send it high and slam it down from above. A thud from its cannon warns that a burst is coming.",
+          "line": "Tips: Its cannon makes a thud just before it starts to fire, which is your warning. It shoots at a spot ahead of you before it hits you, so you have less time to reach cover.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Combine_Gunship",
@@ -1152,16 +1167,15 @@
               "part_of_page": "Tactics",
               "sits_in": "editors' prose",
               "quoted": [
-                "Avoid firing in a straight trajectory and try to maneuver the rocket around the gunship's head.",
-                "Mixing up trajectories with irregular movements like zig-zagging or corkscrewing",
-                "Alternatively, you can try and shoot high, then slam the missile down above where its gun can fire",
-                "Before firing, the Gunship's pulse cannon emits a mechanical thud-like sound, alerting the player that the Gunship is about to begin its firing cycle"
+                "Before firing, the Gunship's pulse cannon emits a mechanical thud-like sound, alerting the player that the Gunship is about to begin its firing cycle",
+                "Like Striders, Gunships will often fire ahead of the target before directly hitting it",
+                "giving a player less time to seek cover"
               ]
             }
           ]
         },
         {
-          "line": "Tips: It fires ahead of you, and at explosive barrels near you, so stay clear of barrels or set them off first. To cross open ground to a rocket crate, fire a rocket into the air and steer it: the gunship goes after the rocket.",
+          "line": "Tips: A rocket still in flight takes its attention from everything else, which buys you time when you must cross open ground to a rocket crate. In scripted fights such as the one at New Little Odessa it also fires at explosive barrels when you are near them, so keep clear of explosive barrels.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Combine_Gunship",
@@ -1169,10 +1183,10 @@
               "part_of_page": "Tactics",
               "sits_in": "editors' prose",
               "quoted": [
-                "Like Striders, Gunships will often fire ahead of the target before directly hitting it",
-                "Gunships also tend to fire at explosive barrels when an enemy is near them",
-                "the player should always keep distance from explosive barrels or detonate them via small arms fire or the Gravity Gun before the Gunship does",
-                "If the player needs to get across open ground to resupply, fire the rocket into the air and steer it around as long as possible while moving to the next spot of cover. The gunships will be entirely distracted by the missile"
+                "Gunships will always prioritize missiles in the air over any other target.",
+                "If the player needs to get across open ground to resupply, fire the rocket into the air and steer it around as long as possible while moving to the next spot of cover. The gunships will be entirely distracted by the missile",
+                "Gunships also tend to fire at explosive barrels when an enemy is near them (in scripted events, such as the battle at New Little Odessa)",
+                "the player should always keep distance from explosive barrels"
               ]
             }
           ]
@@ -1333,7 +1347,7 @@
           ]
         },
         {
-          "line": "Uses: Close range: best against headcrabs, zombies and, up close, Combine soldiers. It is the most effective weapon against antlions, even from some way off, and very effective against an Antlion Guard.",
+          "line": "Uses: Strongest up close; it loses punch with distance. Its primary fire is effective against weak enemies such as headcrabs and zombies, and it is decent against Combine soldiers up close. Antlions are big targets, so it is rated the best weapon against them, even from some way off; against an Antlion Guard it is very effective when other heavy weapons are unavailable.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/SPAS-12",
@@ -1518,7 +1532,7 @@
       "main_revision": "324929",
       "lines": [
         {
-          "line": "Summary: The main way to heal: a health kit always gives 25 health on any difficulty, and a smaller vial gives 10.",
+          "line": "Summary: Health kits restore a fixed 25 health on every difficulty, and they are your main way of healing in this game. Vials are the smaller version, worth 10.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Medkit",
@@ -1533,7 +1547,7 @@
           ]
         },
         {
-          "line": "Uses: Kits are far more common than wall chargers, which are mostly in Combine-controlled areas, and supply crates in remote areas hold them too. Civil Protection officers and Overwatch soldiers drop vials when they die.",
+          "line": "Uses: Supply crates hold kits, especially far from Combine territory, because wall chargers are rarer and mostly inside it. Dead Civil Protection officers and Overwatch soldiers often drop vials.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Medkit",
@@ -1549,7 +1563,7 @@
           ]
         },
         {
-          "line": "Tips: Crates and drops are likelier to give health when yours is low.",
+          "line": "Tips: A crate or drop is more likely to hold healing when your health is low.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Medkit",
@@ -1564,7 +1578,7 @@
           ]
         },
         {
-          "line": "Tips: Rebels following you pick up kits to heal themselves; to give one a kit, pick it up and stand in front of them.",
+          "line": "Tips: Rebels who follow you take kits to heal themselves; to give one a kit, pick a kit up and stand in front of that rebel.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Medkit",
@@ -1588,7 +1602,7 @@
       "main_revision": "328181",
       "lines": [
         {
-          "line": "Summary: Wall-mounted stations that top up your health or suit power from a limited store. Stand beside one and press the use key; it drains as it works and stops when it runs out or you are full.",
+          "line": "Summary: Wall chargers refill your health or your suit power, but each holds only a limited amount. Press the use key while standing near one; it empties as you draw from it and cuts off when it is dry or you are full.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Charger",

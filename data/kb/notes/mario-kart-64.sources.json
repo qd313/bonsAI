@@ -26,18 +26,32 @@
               "quoted": [
                 "Drops a banana peel, making a racer spin out when it is run over.",
                 "Summons five Bananas behind the racer."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence",
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "Items",
+                "Items"
               ]
             }
           ]
         },
         {
-          "line": "Uses: The Bunch lets you throw each Banana one by one whenever you like, and the Bananas in the trail also block incoming items from hitting you. You can drop only one banana at a time.",
+          "line": "Uses: Each Banana in the Bunch can be thrown whenever you choose, and while the trail sits behind your kart it also stops items that would hit you. Only one banana can be dropped at a time.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Banana_Bunch",
               "revision": "5486284",
               "quoted": [
                 "The player may throw each Banana one-by-one whenever they please, and the Bananas also block incoming items from hitting the player."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart 64"
               ]
             },
             {
@@ -45,18 +59,30 @@
               "revision": "5527757",
               "quoted": [
                 "The player can drop only one banana peel at a time"
+              ],
+              "quoted_sits": [
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "Items"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Held behind your kart, a Banana guards against homing Red Shells and, less well, Green Shells.",
+          "line": "Tips: A Banana trailing behind your kart protects you from homing Red Shells, and does so less well against Green Shells.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Banana_Peel",
               "revision": "5519696",
               "quoted": [
                 "It can also be held behind the kart as a defensive countermeasure against homing Red Shells and, to a lesser extent, Green Shells."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series"
               ]
             }
           ]
@@ -71,7 +97,7 @@
       "main_revision": "5532562",
       "lines": [
         {
-          "line": "Summary: A Green Shell is thrown in a straight line at another racer, and the racer it hits flips over several times. Triple Green Shells put three shells in a ring around your kart.",
+          "line": "Summary: A Green Shell travels in a straight line toward the racer you aim at, and a racer it hits is flipped over several times. Triple Green Shells put three shells in a ring around your kart.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Kart_64",
@@ -79,18 +105,32 @@
               "quoted": [
                 "A shell that can be thrown in a straight line at another racer. If it hits, the racer flips multiple times.",
                 "Summons three Green Shells into a barrier that surrounds the racer that used the item."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence",
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Items",
+                "Items"
               ]
             }
           ]
         },
         {
-          "line": "Uses: A Green Shell bounces off walls a number of times until it hits a target or is destroyed, and holding the stick backwards fires it backwards. With the triple, you throw the shells one at a time or keep them as a shield against items and projectiles, and the ring can also ram other karts.",
+          "line": "Uses: A Green Shell ricochets off walls repeatedly until it hits a target or is destroyed, and holding the stick backwards fires it backwards. With the triple, you throw the shells one at a time or keep them as a shield against items and projectiles, and the ring can also ram other karts.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Kart_64",
               "revision": "5527757",
               "quoted": [
                 "Green Shells can ricochet off walls a number of times until they hit a target or are destroyed."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Items"
               ]
             },
             {
@@ -99,6 +139,14 @@
               "quoted": [
                 "when the player holds the analog stick backwards, the shell now gets fired backwards instead of dropped",
                 "the shells can be used to guard against items and projectiles, as well as turning the kart into a battering ram against other karts"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64",
+                "History > Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -106,12 +154,18 @@
               "revision": "5516810",
               "quoted": [
                 "The player may throw each Green Shell one-by-one whenever they please, and can also use the Green Shells to block incoming items."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart 64"
               ]
             }
           ]
         },
         {
-          "line": "Tips: The triple shells cannot be fired backwards and are slightly harder to aim because they keep rotating around the kart. Computer racers do not get Green Shells in this game.",
+          "line": "Tips: Triple shells cannot be fired backwards, unlike a single one, and spinning around your kart makes them a little harder to aim. Computer racers do not get Green Shells in this game.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Green_Shell",
@@ -119,6 +173,14 @@
               "quoted": [
                 "Unlike the single Green Shell, however, these shells cannot be fired backwards and are slightly harder to aim as they are constantly rotating around the kart.",
                 "Computer-controlled opponents do not receive this item in the game"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64",
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -133,7 +195,7 @@
       "main_revision": "5532695",
       "lines": [
         {
-          "line": "Summary: A Red Shell locks on to the racer directly in front of you. Triple Red Shells put three Red Shells in a ring around your kart.",
+          "line": "Summary: A Red Shell automatically targets the racer immediately ahead of you. Triple Red Shells put three Red Shells in a ring around your kart.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Kart_64",
@@ -141,18 +203,32 @@
               "quoted": [
                 "Red Shells automatically lock on to the racer directly in front of the item user.",
                 "Summons three Red Shells into a barrier that surrounds the racer that used the item."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence",
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Items",
+                "Items"
               ]
             }
           ]
         },
         {
-          "line": "Uses: A Red Shell can only be thrown forward, but it follows the road to hit its target, and it is destroyed if it hits a wall. With the triple, you throw the shells one at a time or keep them as a shield against incoming items.",
+          "line": "Uses: A Red Shell can only go forward, but it keeps to the road to reach its target, and a wall destroys it. With the triple, you throw the shells one at a time or keep them as a shield against incoming items.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Red_Shell",
               "revision": "5532695",
               "quoted": [
                 "Red Shells can be thrown only forward in this game, but they now follow the road to hit the target racer. However, Red Shells get destroyed if they hit any walls or the like."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -160,18 +236,30 @@
               "revision": "5471209",
               "quoted": [
                 "The player may throw each Red Shell one-by-one whenever they please, and can also use the Red Shells to block incoming items."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart 64"
               ]
             }
           ]
         },
         {
-          "line": "Tips: In this game only, a Fake Item Box can block an incoming Red Shell. A Banana held behind your kart also guards against Red Shells.",
+          "line": "Tips: Only in this game can a Fake Item Box stop a Red Shell coming at you. A Banana held behind your kart also guards against Red Shells.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Red_Shell",
               "revision": "5532695",
               "quoted": [
                 "In this game only, Fake Item Boxes can be used to block incoming Red Shells."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -179,6 +267,12 @@
               "revision": "5519696",
               "quoted": [
                 "It can also be held behind the kart as a defensive countermeasure against homing Red Shells"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series"
               ]
             }
           ]
@@ -202,12 +296,22 @@
                 "It is the rarest item",
                 "Once fired, the Spiny Shell travels forward, making a siren sound",
                 "It targets the player character in the lead, flinging them into the air upon contact"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64",
+                "History > Mario Kart series > Mario Kart 64",
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
         },
         {
-          "line": "Uses: It can only be fired forward, never backwards, and it can travel over gaps and jumps. Any other racer in its way is flung into the air too. If you fire it from first place, it turns around and hits you.",
+          "line": "Uses: It goes only forward, never back, and crosses gaps and jumps without trouble. Any other racer in its way is flung into the air too. If you fire it from first place, it turns around and hits you.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Spiny_Shell_(blue)",
@@ -217,12 +321,24 @@
                 "The Spiny Shell can travel over gaps and jumps.",
                 "but this also occurs to other racers in the way",
                 "If the player character uses the Spiny Shell in first place, the item turns around to hit them."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64",
+                "History > Mario Kart series > Mario Kart 64",
+                "History > Mario Kart series > Mario Kart 64",
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
         },
         {
-          "line": "Tips: If the shell hits an obstacle it is destroyed, and it is also destroyed without hurting a racer who is invincible. If the leader is invisible the shell passes through them, though it may make another lap of the course and hit them afterwards.",
+          "line": "Tips: An obstacle in its path destroys it, and so does an invincible racer, whom it fails to hurt. A shell that meets an invisible leader goes straight through, though it can circle the course once more and still hit them later.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Spiny_Shell_(blue)",
@@ -231,6 +347,16 @@
                 "If the Spiny Shell hits an obstacle, it is destroyed.",
                 "If the Spiny Shell strikes an invincible racer, it gets destroyed without damaging the racer.",
                 "If the leader is invisible, it simply passes through them, though it may then simply make another lap of the course and hit them afterwards."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64",
+                "History > Mario Kart series > Mario Kart 64",
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -243,6 +369,12 @@
               "revision": "5535999",
               "quoted": [
                 "there are two sideways Item Boxes that will always contain a Spiny Shell, no matter the player's position. One appears underneath the hot-air balloon in Luigi Raceway, and the second atop the large rock in Koopa Troopa Beach."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -264,6 +396,12 @@
               "revision": "5527757",
               "quoted": [
                 "Gives a racer a short speed boost."
+              ],
+              "quoted_sits": [
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "Items"
               ]
             },
             {
@@ -271,18 +409,30 @@
               "revision": "5485851",
               "quoted": [
                 "they grant the player three consecutive speed boosts that can be used one-by-one."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart 64"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Ramming another racer while boosting from a Mushroom makes them spin out. The triple's effect wears off once the last Mushroom is used.",
+          "line": "Uses: Run into another racer during a Mushroom boost and they spin out. When the last of the three Mushrooms is used, the triple's effect ends.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Dash_Mushroom",
               "revision": "5536331",
               "quoted": [
                 "ramming into another racer while boosting from a Mushroom causes the opponent to spin out"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -290,18 +440,30 @@
               "revision": "5485851",
               "quoted": [
                 "The effect wears off once the last Mushroom is used."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart 64"
               ]
             }
           ]
         },
         {
-          "line": "Tips: In Bowser's Castle, a Mushroom or a Star lets you drive through the grass of the first courtyard and cut off the first two turns.",
+          "line": "Tips: In Bowser's Castle, boost with a Mushroom or use a Star and you can cross the grass in the first courtyard, skipping its first two turns.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser%27s_Castle_(Mario_Kart_64)",
               "revision": "5519520",
               "quoted": [
                 "A notable shortcut can be found at the first courtyard. The player can use Mushrooms or a Star to drive through the grass, cutting off the first two turns."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Mario Kart 64 > Shortcuts"
               ]
             }
           ]
@@ -323,6 +485,12 @@
               "revision": "5536331",
               "quoted": [
                 "the Super Mushroom (renamed the Golden Mushroom in later games)"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -330,12 +498,18 @@
               "revision": "5485845",
               "quoted": [
                 "the Super Mushroom appears simply as a yellow-capped mushroom, though its icon also shows a glow behind it."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
         },
         {
-          "line": "Uses: It gives you endless speed boosts for a limited time: you can boost your speed as many times as you want while it lasts.",
+          "line": "Uses: For a limited time it gives you as many speed boosts as you care to use.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Golden_Dash_Mushroom",
@@ -343,6 +517,14 @@
               "quoted": [
                 "It gives the player an endless amount of speed boosts for a limited time.",
                 "For a limited time, you can boost your speed as many times as you want."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "game_text"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64",
+                "Profiles and statistics > Mario Kart series > Mario Kart 64 > Operation card bio"
               ]
             }
           ]
@@ -355,6 +537,12 @@
               "revision": "5485845",
               "quoted": [
                 "the Super Mushroom appears simply as a yellow-capped mushroom, though its icon also shows a glow behind it."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -369,7 +557,7 @@
       "main_revision": "5532618",
       "lines": [
         {
-          "line": "Summary: A Super Star makes you invincible for about ten seconds: you can drive through items, course obstacles and other racers.",
+          "line": "Summary: For about ten seconds a Super Star makes you invincible and lets you pass through items, obstacles on the course and other racers.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Super_Star",
@@ -377,6 +565,14 @@
               "quoted": [
                 "10.13 seconds for Mario Kart 64",
                 "invincible to all attacks and able to drive through items, course obstacles, and hit other drivers"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series",
+                "History > Mario Kart series"
               ]
             },
             {
@@ -384,6 +580,12 @@
               "revision": "5527757",
               "quoted": [
                 "Makes racers invincible, rendering them impervious to obstacles, other items, and other racers."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Items"
               ]
             }
           ]
@@ -398,6 +600,16 @@
                 "The player receives a speed boost increasing their average speed by 1/3 in all games except Super Mario Kart and Mario Kart: Super Circuit",
                 "Players may also traverse off-road unhindered while under the effects of a Super Star.",
                 "Being hit by a driver using a Super Star causes the driver to flip and lose their currently held item."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series",
+                "History > Mario Kart series",
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -410,6 +622,12 @@
               "revision": "5527757",
               "quoted": [
                 "If a racer, while using a Super Star, hits a wall or the like in such a way that their character exclaims, the Super Star's effect immediately ends."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Items"
               ]
             }
           ]
@@ -422,6 +640,12 @@
               "revision": "5526797",
               "quoted": [
                 "Lightning's effect can be avoided if a racer has a Mega Mushroom, Star, Boo, or Bullet Bill item activated when the bolt strikes"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series"
               ]
             },
             {
@@ -429,6 +653,12 @@
               "revision": "5535999",
               "quoted": [
                 "If the Spiny Shell strikes an invincible racer, it gets destroyed without damaging the racer."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -450,6 +680,12 @@
               "revision": "5526797",
               "quoted": [
                 "The Thunder Bolt returns in Mario Kart 64"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -457,18 +693,30 @@
               "revision": "5527757",
               "quoted": [
                 "all racers except for the one that used the item shrink, slowing them down and allowing them to be run over."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Items"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Shrunk racers cannot use Mushrooms, Super Stars or Boos from their item windows, but they keep the items they hold. Karts that are not shrunk can ram smaller ones to flatten them, and two shrunk racers who run into each other crush each other.",
+          "line": "Uses: A shrunk racer loses nothing it is holding, but a Mushroom, Super Star or Boo sitting in its item window can no longer be used. Karts that kept their size can run over the smaller ones and flatten them, and if two shrunk racers collide, both are crushed.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Kart_64",
               "revision": "5527757",
               "quoted": [
                 "Racers do not lose items as a result, but shrunken racers cannot use Mushrooms, Super Stars, or Boos in their Item Windows."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Items"
               ]
             },
             {
@@ -476,6 +724,12 @@
               "revision": "5526797",
               "quoted": [
                 "Unaffected racers can ram into smaller players to flatten them and if two shrunken racers run into each other, they will both crush each other."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -489,6 +743,14 @@
               "quoted": [
                 "Lightning's effect can be avoided if a racer has a Mega Mushroom, Star, Boo, or Bullet Bill item activated when the bolt strikes",
                 "In Mario Kart 64, Mario Kart: Super Circuit, and Mario Kart: Double Dash!!, when Lightning is used, a sound like that of a tiny alarm is heard during its effect."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series",
+                "History > Mario Kart series"
               ]
             }
           ]
@@ -510,12 +772,18 @@
               "revision": "5519411",
               "quoted": [
                 "They appear identical to regular Item Boxes with a key difference: the question mark inside is upside-down (a ¿ instead of a ?). Karts that collide with one are blasted into the air."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Hold it behind your kart and it blocks incoming shells, as a Banana does. Unlike a Banana it cannot be tossed forward, and if you place it in midair it floats.",
+          "line": "Uses: Held behind your kart it stops incoming shells the way a Banana does, but it cannot be thrown ahead, and one set down in midair stays floating.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Fake_Item_Box",
@@ -523,6 +791,14 @@
               "quoted": [
                 "can be held behind a kart",
                 "Like Bananas, they can be used to block incoming shells, though unlike Bananas, they cannot be tossed forward. If placed in midair, a Fake Item floats"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)",
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -535,6 +811,12 @@
               "revision": "5519411",
               "quoted": [
                 "the question mark inside is upside-down (a ¿ instead of a ?)"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -556,12 +838,18 @@
               "revision": "5532404",
               "quoted": [
                 "When used, a Boo makes the user both invisible and invincible temporarily as it selects an opponent to steal an item from, unless the racers have no items"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
         },
         {
-          "line": "Uses: While it lasts you can pass through items, course obstacles and other racers. Computer racers use Boos too, but their Boos do not steal items.",
+          "line": "Uses: While it lasts you pass straight through items, obstacles on the course and other racers. Computer racers use Boos too, but their Boos do not steal items.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Boo",
@@ -569,6 +857,14 @@
               "quoted": [
                 "A player character affected by a Boo can pass any items, course obstacles, and racers by going through them.",
                 "The CPUs also use Boos, but they do not steal items."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64",
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -581,6 +877,12 @@
               "revision": "5526797",
               "quoted": [
                 "Lightning's effect can be avoided if a racer has a Mega Mushroom, Star, Boo, or Bullet Bill item activated when the bolt strikes"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series"
               ]
             },
             {
@@ -588,6 +890,12 @@
               "revision": "5527757",
               "quoted": [
                 "shrunken racers cannot use Mushrooms, Super Stars, or Boos in their Item Windows."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Items"
               ]
             }
           ]
@@ -611,18 +919,34 @@
                 "They appear in Bowser's Castle and try to flatten any player that races beneath them.",
                 "being blue cubes that lack spikes",
                 "There are also some Thwomps that move from one side to the other, trying to bump players on the ground"
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64",
+                "History > Mario Kart series > Mario Kart 64",
+                "History > Mario Kart series > Mario Kart 64"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: They are obstacles in the course, not something you fight. Run into one and you spin out, but if one steps on you, you are squished flat. A Super Star makes you impervious to obstacles.",
+          "line": "Weak points: Thwomps are obstacles in the course, not something you fight: the ones that drop try to flatten anyone racing beneath them, and the ones that slide from side to side bump racers on the ground and can spin them out. A Super Star lets you drive through course obstacles.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Thwomp",
               "revision": "5536081",
               "quoted": [
                 "Thwomps serve as obstacles in the course."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -630,6 +954,12 @@
               "revision": "5519520",
               "quoted": [
                 "if you run into one, you will spin out. Should you be stepped by one, you'll find yourself squished flat as a pancake."
+              ],
+              "quoted_sits": [
+                "game_text"
+              ],
+              "quoted_sits_at": [
+                "Profiles > Mario Kart 64 > Instruction booklet description"
               ]
             },
             {
@@ -637,12 +967,18 @@
               "revision": "5527757",
               "quoted": [
                 "Makes racers invincible, rendering them impervious to obstacles, other items, and other racers."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Items"
               ]
             }
           ]
         },
         {
-          "line": "Tips: The first corridor after the courtyard has four Thwomps that move around in the air before falling. In the next corridor a pair wait at the start, try to follow you, then fall and return, and the row at the end takes turns falling: one Thwomp in 50cc, two in 100cc and three in 150cc.",
+          "line": "Tips: The first corridor after the courtyard holds four Thwomps; they drift about overhead and then drop onto the track. A pair at the start of the next corridor tracks you, drops, and goes back to where it began, and the row at the far end drops one at a time: one Thwomp in 50cc, two in 100cc, three in 150cc.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Bowser%27s_Castle_(Mario_Kart_64)",
@@ -651,6 +987,16 @@
                 "Once racers leave the courtyard they enter a wide corridor with four Thwomps; these Thwomps will move around in the air before falling onto the track.",
                 "A pair will wait at the beginning of the corridor and then attempt to follow racers before falling and then returning to the beginning of the corridor.",
                 "the number of Thwomps in the row depends on the engine class (one for 50cc, two for 100cc, and three for 150cc), and they will always take turns falling."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Mario Kart 64 > Course layout",
+                "Mario Kart 64 > Course layout",
+                "Mario Kart 64 > Course layout"
               ]
             }
           ]
@@ -664,11 +1010,20 @@
               "quoted": [
                 "enter a room with two more Thwomps; these ones are always at ground level and move from side to side.",
                 "there is an imprisoned slightly larger Thwomp tinted green with yellow teeth due to the vertex shading approximating the yellow lighting, which shakes and laughs if racers go near it."
+              ],
+              "quoted_sits": [
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Mario Kart 64 > Course layout",
+                "Mario Kart 64 > Course layout"
               ]
             }
           ]
         }
-      ]
+      ],
+      "weak_points_review": "S4 2026-11-15: line kept and rewritten. Thwomp rev 5536081 (Mario Kart 64 section) calls Thwomps obstacles in the course and says the dropping ones try to flatten racers beneath them; Super Star rev 5532618 says a Star lets a racer drive through items, course obstacles and other drivers. The Bowser's Castle page's instruction-booklet wording (spin out, squished flat) is game text and no longer stands behind the line."
     },
     {
       "section_id": 2111,
@@ -685,12 +1040,18 @@
               "revision": "5519514",
               "quoted": [
                 "There are two trains that move clockwise around the track constantly, often getting in the way of racers and launching them upward if driven into."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Mario Kart 64 > Course layout"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: Do not drive into the train: judge your approach so it is not across the track when you arrive, and if it is crossing right in front of you, pause until it has gone by. Computer racers always stop at a crossing when the train is there. You can also drive through the gap between the coaches to get past.",
+          "line": "Weak points: Driving into a train launches your kart upward, so keep out of its way. Computer racers always stop at a crossing when the train is there. You can bypass it by driving through the gap between the coaches.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kalimari_Desert",
@@ -699,30 +1060,52 @@
                 "The trick is to time it so that the steam locomotive that crosses the course won't block you. If the train is crossing in front of you, you should temporarily stop.",
                 "CPU drivers always stop at a train track if the train is present.",
                 "One can drive through the gap between the coaches of the train to bypass it."
+              ],
+              "quoted_sits": [
+                "game_text",
+                "editors_prose",
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Profiles > Mario Kart 64 > Instruction booklet description",
+                "Mario Kart 64 > Course layout",
+                "Mario Kart 64 > Course layout"
               ]
             }
           ]
         },
         {
-          "line": "Tips: The train's length depends on the number of players: one coal tender and five passenger cars when you play alone, an engine, a tender and one passenger car in two-player VS, and no tender or passenger cars in two-player Grand Prix or three- and four-player VS.",
+          "line": "Tips: How long the train is depends on how many people play: playing alone gives a coal tender with five passenger cars; two-player VS has a shorter one made of an engine, a tender and a single passenger car; two-player Grand Prix and three- or four-player VS run the train with neither tender nor passenger cars.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kalimari_Desert",
               "revision": "5519514",
               "quoted": [
                 "single-player features one coal tender and five passenger cars; two-player VS mode has shorter trains, an engine, a coal tender, and a passenger car each; two-player Grand Prix and both three- and four-player VS mode have no coal tender or passenger cars."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Mario Kart 64 > Course layout"
               ]
             }
           ]
         },
         {
-          "line": "Tips: The train track can be driven round as a loop, but going the whole way round does not count as a lap and only puts you behind.",
+          "line": "Tips: You can drive all the way around the train track, but that circuit does not count as a lap, so it only costs you places.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kalimari_Desert",
               "revision": "5519514",
               "quoted": [
                 "The train track can be driven around in a loop, but it is not counted as a lap if driven the entire way around and only puts players who take it behind."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Mario Kart 64 > Course layout"
               ]
             }
           ]
@@ -737,13 +1120,19 @@
       "main_revision": "5519510",
       "lines": [
         {
-          "line": "Summary: A giant Yoshi's egg spins around in a large circular area near the end of Yoshi Valley and flattens any racer in its path.",
+          "line": "Summary: A giant Yoshi's egg turns round and round in a big circular area near the end of Yoshi Valley, flattening whoever it meets.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Kart_64",
               "revision": "5527757",
               "quoted": [
                 "A giant Yoshi's egg that spins around, flattening any racer in its path."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Course elements > Enemies, obstacles, and species"
               ]
             },
             {
@@ -751,42 +1140,48 @@
               "revision": "5519510",
               "quoted": [
                 "leads to a large circular area with a rotating, hazardous Giant Egg."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Mario Kart 64 > Course layout"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: The wiki describes no way to stop it; it is part of the course. A rope bridge leads you past the circular area and out of the valley to the finish line.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Yoshi_Valley",
-              "revision": "5519510",
-              "quoted": [
-                "A rope bridge leads them past the area and takes them out of the valley to the grassy area they began in, where they cross the finish line."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Once all the routes have joined, the winding road to the egg has few railings.",
+          "line": "Tips: After the routes come together, the winding road toward the egg has few railings.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Yoshi_Valley",
               "revision": "5519510",
               "quoted": [
                 "Once all the routes have converged, racers take a winding road with few railings that leads to a large circular area"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Mario Kart 64 > Course layout"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Route 5 has a steep 270 degree left turn full of porcupines, which walk from side to side and spin out any racer who hits them.",
+          "line": "Tips: Route 5 includes a steep 270 degree left turn crowded with porcupines; they pace back and forth and spin out a racer that runs into them.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Yoshi_Valley",
               "revision": "5519510",
               "quoted": [
                 "Afterward, it takes a steep 270° left turn full of porcupines before a drop that merges it with route 2"
+              ],
+              "quoted_sits": [
+                "list_item"
+              ],
+              "quoted_sits_at": [
+                "Mario Kart 64 > Course layout"
               ]
             },
             {
@@ -794,11 +1189,18 @@
               "revision": "5527757",
               "quoted": [
                 "Porcupines walk from side to side, spinning out a racer who collides with them."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Course elements > Enemies, obstacles, and species"
               ]
             }
           ]
         }
-      ]
+      ],
+      "weak_points_review": "S4 2026-11-15: line removed. Yoshi Valley rev 5519510 and Mario Kart 64 rev 5527757 give no way to stop, beat or avoid the Giant Egg (the page only says a rope bridge leads racers past the circular area); the Summary and Tips keep the facts."
     },
     {
       "section_id": 2113,
@@ -808,13 +1210,19 @@
       "main_revision": "5523052",
       "lines": [
         {
-          "line": "Summary: Chainless Chomps are lodged in the middle of Rainbow Road, and a racer who collides with one is launched into the air.",
+          "line": "Summary: Several chainless Chomps sit in the middle of Rainbow Road, and a racer who hits one is thrown into the air.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mario_Kart_64",
               "revision": "5527757",
               "quoted": [
                 "Chainless Chomps are embedded into the track, chomping around at random. If a racer collides with one, they are launched into the air."
+              ],
+              "quoted_sits": [
+                "table_cell_sentence"
+              ],
+              "quoted_sits_at": [
+                "Course elements > Enemies, obstacles, and species"
               ]
             },
             {
@@ -822,18 +1230,12 @@
               "revision": "5523052",
               "quoted": [
                 "several Chomps can be found lodged in the middle of the track."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Weak points: The wiki describes no way to stop them; they are part of the course. They travel the course in reverse and slide in a zigzag pattern.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Rainbow_Road_(Mario_Kart_64)",
-              "revision": "5523052",
-              "quoted": [
-                "They continuously travel the course in reverse and slide in a zigzag pattern."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Mario Kart 64 > Course layout"
               ]
             }
           ]
@@ -846,23 +1248,36 @@
               "revision": "5523052",
               "quoted": [
                 "it has rails throughout the entire track."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)"
               ]
             }
           ]
         },
         {
-          "line": "Tips: It is the longest course in the game, 2,000 meters, and takes about two minutes a lap.",
+          "line": "Tips: No course in the game is longer: it measures 2,000 meters, and a lap takes roughly two minutes.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Rainbow_Road_(Mario_Kart_64)",
               "revision": "5523052",
               "quoted": [
                 "It is the longest race course in Mario Kart 64, at 2,000 meters, and it requires about two minutes per lap."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "lead (before the first heading)"
               ]
             }
           ]
         }
-      ]
+      ],
+      "weak_points_review": "S4 2026-11-15: line removed. Rainbow Road rev 5523052 and Mario Kart 64 rev 5527757 say only that the Chomps travel the course in reverse and slide in a zigzag; they give no way to stop, beat or avoid them (the Summary keeps the launch into the air)."
     },
     {
       "section_id": 2114,
@@ -879,6 +1294,12 @@
               "revision": "5519515",
               "quoted": [
                 "these include white cars, turquoise tanker trucks, red box trucks (which can carry three different cargo types), and yellow school buses."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Mario Kart 64 > Course layout"
               ]
             },
             {
@@ -886,47 +1307,54 @@
               "revision": "5527757",
               "quoted": [
                 "If a racer collides with one, they are knocked into the air."
+              ],
+              "quoted_sits": [
+                "table_cell"
+              ],
+              "quoted_sits_at": [
+                "Course elements > Enemies, obstacles, and species"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: The vehicles follow the same route as you, except in Extra, where they drive against you at the speed they have in 150cc. The engine class sets their speed: traffic is slow in 50cc and quite fast in 150cc.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Toad%27s_Turnpike",
-              "revision": "5519515",
-              "quoted": [
-                "The vehicles travel follow the same route as players, except in Extra mode, where they drive against players at the same speed as in 150cc. The engine class also affects how fast the vehicles move; traffic moves slowly in 50cc, but it is quite fast in 150cc."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The larger vehicles go slowly and can block you, especially where the road is two lanes and vehicles travel side by side, which makes it hard to steer between them.",
+          "line": "Tips: Big vehicles crawl along and can get in your way, mostly where the road narrows to two lanes and vehicles run abreast, leaving little room to steer between them.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Toad%27s_Turnpike",
               "revision": "5519515",
               "quoted": [
                 "the larger vehicles go slowly through the road, sometimes blocking the player (especially where the roadway is two lanes, and vehicles often travel side-by-side, making it difficult to steer between them)."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Mario Kart 64 > Course layout"
               ]
             }
           ]
         },
         {
-          "line": "Tips: The road merges into two lanes at the start of the right U-turn and stays that way to the finish line.",
+          "line": "Tips: From the start of the right U-turn the road is only two lanes wide, and it stays that way until the finish line.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Toad%27s_Turnpike",
               "revision": "5519515",
               "quoted": [
                 "At the beginning of the right U-turn, the roadway merges into two lanes, and remains this way until racers pass the finish line."
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "Mario Kart 64 > Course layout"
               ]
             }
           ]
         }
-      ]
+      ],
+      "weak_points_review": "S4 2026-11-15: line removed. Toad's Turnpike rev 5519515 gives the traffic's route and its speed by engine class but no way to stop, beat or avoid it; the Summary and Tips keep the collision and the larger vehicles that block."
     }
   ]
 }

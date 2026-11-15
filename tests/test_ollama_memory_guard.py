@@ -23,7 +23,13 @@ install_fcntl_and_decky_stubs()
 
 from backend.ask.ollama_ask_service import run_ask_ollama  # noqa: E402
 from backend.ollama import ollama_memory_guard as guard  # noqa: E402
-from test_ollama_ask_service import _FakePlugin  # noqa: E402  (the neighbouring test's set-up, reused)
+from test_chat_sum_up_job import (  # noqa: E402  (the neighbouring tests' set-up, reused)
+    _FIXED_MODEL_AND_WINDOW,
+    ChatSlotJobTestCase,
+    SummaryOutcome,
+    _seed_chat,
+)
+from test_ollama_ask_service import _FakePlugin  # noqa: E402
 
 DECK = "127.0.0.1:11434"
 MODEL = "gemma4:e2b-it-qat"
@@ -255,6 +261,57 @@ class AskLevelTests(_Standins, unittest.IsolatedAsyncioTestCase):
         out, calls = await self._ask()
         self.assertTrue(out["success"])
         self.assertEqual(calls, [MODEL])
+
+
+class SumUpButtonTests(ChatSlotJobTestCase):
+    """The Sum up this chat button: with the Deck short on memory its job refuses and starts nothing."""
+
+    def _short(self, short: Optional[bool]) -> Any:
+        verdict = None if short is None else guard.MemoryVerdict(
+            short=short, available_mb=3500, needed_mb=5800, left_mb=-2300, limit_mb=2000, model="test-model",
+            loaded_already=False, need_from="installed size x 1.35",
+        )
+        guard.reset_for_tests()
+        self.addCleanup(guard.reset_for_tests)
+        written: list[int] = []
+
+        async def _write(*_a: Any, **_k: Any) -> SummaryOutcome:
+            written.append(1)
+            return SummaryOutcome(status="failed", summary=None, seconds=0.0, error="stub")
+
+        for target in (
+            patch.object(guard, "check_memory_for_model", return_value=verdict),
+            patch("backend.chats.chat_sum_up_job.write_chat_summary", _write),
+            patch("backend.chats.chat_sum_up_job._pick_model_and_window", return_value=_FIXED_MODEL_AND_WINDOW),
+            patch.object(type(self.plugin), "load_settings", return_value={}),
+        ):
+            target.start()
+            self.addCleanup(target.stop)
+        return written
+
+    async def test_short_memory_refuses_with_low_memory_and_starts_no_job(self) -> None:
+        written = self._short(True)
+        result = await self.plugin.sum_up_chat_slot(_seed_chat(self.tmp, turns=60))
+        self.assertEqual(result, {"accepted": False, "status": "low_memory"})
+        self.assertIsNone(self.plugin._background_task)
+        self.assertEqual(written, [])
+
+    async def test_enough_memory_starts_the_job_as_before(self) -> None:
+        self._short(False)
+        result = await self.plugin.sum_up_chat_slot(_seed_chat(self.tmp, turns=60))
+        self.assertTrue(result["accepted"])
+        await self.plugin._background_task
+
+    async def test_a_check_that_cannot_tell_never_refuses(self) -> None:
+        self._short(None)
+        result = await self.plugin.sum_up_chat_slot(_seed_chat(self.tmp, turns=60))
+        self.assertTrue(result["accepted"])
+        await self.plugin._background_task
+
+    async def test_a_chat_with_nothing_to_sum_up_still_says_so_when_memory_is_short(self) -> None:
+        self._short(True)
+        result = await self.plugin.sum_up_chat_slot(_seed_chat(self.tmp, turns=1))
+        self.assertEqual(result, {"accepted": False, "status": "nothing_to_do"})
 
 
 if __name__ == "__main__":

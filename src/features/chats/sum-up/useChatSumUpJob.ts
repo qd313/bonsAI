@@ -36,6 +36,10 @@ import { REASON_ANSWER_IN_FLIGHT, TOAST_NOTHING_TO_SUM } from "./chatSumUpModel"
 /** Same pace as the Ask's own status poll while no words are streaming (useBackgroundGameAi.ts). */
 export const SUM_UP_POLL_MS = 1200;
 
+/** The back end refused because loading the AI would leave the Deck too little free memory (plan 104 G1). */
+export const SUM_UP_LOW_MEMORY_TOAST =
+  "Not enough free memory on the Deck to sum up right now. Close the game or use the AI on a PC, then try again.";
+
 export const SUM_UP_FAILED_TOAST = "Couldn't sum up the chat this time. The next question will try again.";
 
 export type ChatSumUpJob = {
@@ -119,9 +123,10 @@ export function useChatSumUpJob(onSummaryWritten: (slotId: string) => void): Cha
             poll(slotId);
             return;
           }
-          // The button is greyed out in both of these cases already; this only covers a race.
+          // The button is greyed out in the first two of these cases already; this only covers a race.
           if (res.status === "busy") toaster.toast({ title: "Sum up this chat", body: REASON_ANSWER_IN_FLIGHT, duration: 3500 });
           else if (res.status === "nothing_to_do") toaster.toast({ title: "Sum up this chat", body: TOAST_NOTHING_TO_SUM, duration: 3500 });
+          else if (res.status === "low_memory") toaster.toast({ title: "Sum up this chat", body: SUM_UP_LOW_MEMORY_TOAST, duration: 5000 });
         })
         .catch(() => {
           if (mountedRef.current) toaster.toast({ title: "Sum up this chat", body: SUM_UP_FAILED_TOAST, duration: 4000 });

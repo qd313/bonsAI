@@ -46,6 +46,7 @@ from backend.ollama.local_ollama_setup_service import (
 from backend.ask.ollama_ask_extras import resolve_ask_model_routing
 from backend.prompts.reply_language_service import resolve_effective_reply_language
 from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
+from backend.ollama.ollama_memory_guard import memory_short_for_sum_up
 from backend.ollama.token_accounting_service import choose_window_tokens, known_window_tokens
 
 logger = decky.logger
@@ -120,6 +121,8 @@ async def sum_up_chat_slot(plugin: Any, slot_id: str = "", pc_ip: str = "") -> d
     model_name, window_tokens, url = _pick_model_and_window(settings, str(pc_ip or "").strip())
     allowance = last_memory_allowance_tokens(model_name)
     plan: SummaryPlan = plan_summary(chat, memory_allowance_tokens=allowance, model_name=model_name)
+    if plan.needed and await memory_short_for_sum_up(url, model_name):  # Plan 104 G1: no room to load the AI
+        return {"accepted": False, "status": "low_memory"}
     keep_alive = effective_keep_alive(settings.get("ollama_keep_alive"), url, source="chat sum-up")
     reply_language = resolve_effective_reply_language(settings.get("reply_language"))
     ask_mode = str(settings.get("ask_mode") or "speed")

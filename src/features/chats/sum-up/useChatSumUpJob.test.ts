@@ -11,7 +11,7 @@ import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { toaster } from "@decky/api";
 
-import { SUM_UP_FAILED_TOAST, SUM_UP_POLL_MS, useChatSumUpJob } from "./useChatSumUpJob";
+import { SUM_UP_FAILED_TOAST, SUM_UP_LOW_MEMORY_TOAST, SUM_UP_POLL_MS, useChatSumUpJob } from "./useChatSumUpJob";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../../test-harness/fakeDeckyRpc";
 import { idleBackgroundStatusFixture } from "../../../test-harness/rpcFixtures";
 
@@ -145,6 +145,26 @@ describe("useChatSumUpJob", () => {
     const body = vi.mocked(toaster.toast).mock.calls.map((c) => (c[0] as { body: string }).body).join(" ");
     expect(body).toContain("nothing new to sum up");
     expect(body).not.toContain("still fits");
+  });
+
+  /* Plan 104 G1: a Deck short on free memory refuses the press; nothing starts and the person is told in words. */
+  it("a press with the Deck short on memory shows the low-memory toast and starts no job", async () => {
+    setRpcHandler("sum_up_chat_slot", () => ({ accepted: false, status: "low_memory" }));
+    const { result } = renderHook(() => useChatSumUpJob(vi.fn()));
+    await flush();
+    await act(async () => {
+      result.current.start("chat-1");
+      await Promise.resolve();
+    });
+    await flush();
+    expect(result.current.runningSlotId).toBeNull();
+    expect(toaster.toast).toHaveBeenCalledWith(expect.objectContaining({ body: SUM_UP_LOW_MEMORY_TOAST }));
+    expect(SUM_UP_LOW_MEMORY_TOAST).toBe(
+      "Not enough free memory on the Deck to sum up right now. Close the game or use the AI on a PC, then try again.",
+    );
+    // No status poll was started: only the one on mount asked.
+    await tick();
+    expect(getRpcCallLog().filter((c) => c.method === "get_background_game_ai_status")).toHaveLength(1);
   });
 
   it("a summary still running when the plugin reopens is picked up, clock and all", async () => {

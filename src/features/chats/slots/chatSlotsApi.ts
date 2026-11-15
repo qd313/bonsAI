@@ -172,8 +172,11 @@ export async function deleteChatSlot(slotId: string): Promise<boolean> {
 
 export type SumUpStartResult = {
   accepted: boolean;
-  /** "pending" once started; "busy" while an answer or another summary holds the one slot; "nothing_to_do" while the chat still fits. */
-  status: "pending" | "busy" | "invalid" | "nothing_to_do";
+  /**
+   * "pending" once started; "busy" while an answer or another summary holds the one slot; "nothing_to_do" while the
+   * chat still fits; "low_memory" when the Deck has too little free memory to load the AI (plan 104 G1).
+   */
+  status: "pending" | "busy" | "invalid" | "nothing_to_do" | "low_memory";
   request_id?: number;
 };
 
@@ -191,7 +194,9 @@ export async function sumUpChatSlot(slotId: string, pcIp = ""): Promise<SumUpSta
   const status = res?.status;
   return {
     accepted: res?.accepted === true,
-    status: status === "pending" || status === "busy" || status === "nothing_to_do" ? status : "invalid",
+    status: status === "pending" || status === "busy" || status === "nothing_to_do" || status === "low_memory"
+        ? status
+        : "invalid",
     ...(typeof res?.request_id === "number" ? { request_id: res.request_id } : {}),
   };
 }

@@ -7,7 +7,8 @@ On 2026-11-09 a picture question with God of War running loaded the 5.8 GB model
 memory: free memory fell under 1 GB, both tries timed out at 181 s and the Deck had to be restarted
 by hand (workshop:planning/assets/103-handover-D0a.md). Nothing in the plugin read free memory before.
 Used for: ollama_ask_service.run_ask_ollama (every Ask, between the two "no model" refusals and the
-chat's own summing-up), chat_sum_up_job (the Sum up this chat button), and the one plugin method
+chat's own summing-up, which is then covered), chat_sum_up_job (the Sum up this chat button, which
+refuses with the ``low_memory`` status), and the one plugin method
 ``arm_ollama_ask_anyway`` in main.py, which the screen's "Ask anyway" row calls.
 Solves: A model loaded into too little memory freezes the whole Deck, not just the plugin.
 Does not: Check the AI when it runs on a PC (the Deck's memory does not matter then), block an answer
@@ -37,6 +38,7 @@ import time
 from dataclasses import dataclass
 from typing import Any, Optional
 
+from backend.ask.ollama_window_fit import ollama_base_from_chat_url
 from backend.ollama.ollama_health_probe import probe_ollama_health
 from backend.ollama.ollama_keep_alive_rule import ai_is_on_this_deck
 
@@ -233,3 +235,15 @@ async def ask_memory_warning(
     return {
         "success": False, "response": low_memory_message(verdict), "model_policy_disclosure": None, **reply_extras,
     }
+
+
+async def memory_short_for_sum_up(chat_url: str, model: str) -> bool:
+    """True when the Sum up this chat button would load ``model`` into too little memory (one log line).
+
+    ``chat_url`` is the job's ``.../api/chat`` address. Unlike an Ask there is no "anyway": the button
+    refuses with the ``low_memory`` status and the screen says so. Never uses up an armed "Ask anyway"."""
+    verdict = await asyncio.to_thread(check_memory_for_model, ollama_base_from_chat_url(chat_url), model)
+    if verdict is None:
+        return False
+    logger.info(_log_line("chat sum-up", verdict))
+    return verdict.short

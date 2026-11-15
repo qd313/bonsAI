@@ -59,10 +59,26 @@ class HeldBackTests(unittest.TestCase):
         self.assertEqual(_fuse("")[0], "Surviving the Tank")
 
     def test_a_plain_tank_question_puts_the_game_s_own_note_first(self):
-        self.assertEqual(_fuse("how to beat tank"), ["Tank", "Surviving the Tank", "Playing as the Tank"])
+        self.assertEqual(_fuse("how to beat tank")[0], "Tank")
 
-    def test_the_note_that_attaches_are_the_same_ones_just_in_another_order(self):
-        self.assertEqual(sorted(_fuse("how to beat tank")), sorted(_fuse("")))
+    def test_the_survivors_versus_note_about_the_same_subject_does_not_attach_beside_it(self):
+        # Plan 104, lane V4: the answer used to lean on the versus note that attached second.
+        self.assertEqual(_fuse("how to beat tank"), ["Tank", "Playing as the Tank", "Boomer"])
+
+    def test_a_note_about_playing_as_the_subject_stays_for_a_plain_question(self):
+        # "how to use smoker" asks for exactly this; six older test questions expect it.
+        pool = [TANK, _card(7, "versus", "Surviving the Tank"), _card(8, "versus", "Playing as the Tank")]
+        fused = _fuse_cards_by_rrf(pool, QUERY_VECTOR, {3: [1.0, 0.0], 7: [0.9, 0.43], 8: [0.8, 0.6]}, top_k=3, question="how to use tank")
+        self.assertEqual([c.name for c in fused], ["Tank", "Playing as the Tank"])
+
+    def test_a_versus_note_about_another_subject_still_attaches(self):
+        pool = [SURVIVING, TANK, _card(6, "versus", "Dead Center ambush spots"), PLAYING_AS]
+        vectors = {**VECTORS, 6: [0.8, 0.6]}
+        fused = _fuse_cards_by_rrf(pool, QUERY_VECTOR, vectors, top_k=3, question="how to beat tank")
+        self.assertEqual([c.name for c in fused], ["Tank", "Playing as the Tank", "Dead Center ambush spots"])
+
+    def test_a_question_that_names_a_mode_keeps_every_versus_note_about_the_subject(self):
+        self.assertEqual(_fuse("how to beat tank in versus"), ["Surviving the Tank", "Playing as the Tank", "Tank"])
 
     def test_a_plural_in_the_question_or_the_title_still_matches(self):
         self.assertEqual(_fuse("how to beat tanks")[0], "Tank")
@@ -94,7 +110,7 @@ class HeldBackTests(unittest.TestCase):
         names = [_card(1, "versus", "Surviving the Tank"), PLAYING_AS, BOOMER, TANK]
         vectors = {1: [1.0, 0.0], 2: [0.97, 0.24], 4: [0.5, 0.86], 3: [0.95, 0.31]}
         fused = _fuse_cards_by_rrf(names, QUERY_VECTOR, vectors, top_k=3, question="how to beat tank")
-        self.assertEqual([c.name for c in fused], ["Tank", "Surviving the Tank", "Playing as the Tank"])
+        self.assertEqual([c.name for c in fused], ["Tank", "Playing as the Tank", "Boomer"])
 
     def test_an_ordinary_note_the_question_does_not_name_never_takes_the_lead(self):
         self.assertEqual(_fuse("how to beat the boss")[0], "Surviving the Tank")
@@ -208,7 +224,7 @@ class AskPathTests(unittest.TestCase):
     def test_how_to_beat_tank_attaches_the_tank_note_first(self):
         names = self.attached("how to beat tank")
         self.assertEqual(names[0], "Tank")
-        self.assertIn("Surviving the Tank", names)
+        self.assertNotIn("Surviving the Tank", names)
 
     def test_the_same_question_with_versus_in_it_attaches_the_versus_note_first(self):
         self.assertEqual(self.attached("how to beat tank in versus")[0], "Surviving the Tank")

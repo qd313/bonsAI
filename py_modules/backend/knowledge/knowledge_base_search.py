@@ -480,8 +480,17 @@ def _question_without_typed_game_name(
 # So when the first note is of such a kind, the question names neither the mode nor a side, and an
 # ordinary note whose whole title the question spells out (and that the first note's title repeats)
 # is anywhere in the ranked list, that ordinary note goes first. The others keep their order, so the
-# last of the notes that attach is the one that makes room: this is a preference and never a filter,
-# and a versus note still attaches, and still leads when nothing else fits.
+# last of the notes that attach is the one that makes room, and a versus note still leads when nothing
+# else fits.
+#
+# Plan 104, lane V4: that was a preference and never a filter, and it left the answer leaning on the
+# versus note that attached second (facts kept 0 of 9 on the Tank question). When a question names no
+# mode and no side, a game-mode note about the very subject the leading ordinary note covers (a title
+# word in common) no longer attaches beside it; the next notes in line take its place. Kept: a note
+# about playing as that subject ("Playing as the Smoker"), because a plain "how to use smoker" is
+# asking for exactly that and six older Left 4 Dead 2 test questions expect it; game-mode notes
+# about anything else; and everything when the question names a mode. (Measured 2026-11-15: dropping
+# the "Playing as" notes too pushed six test questions that expect one out of their first three.)
 #
 # A small score penalty on those kinds was tried first and measured the same day: the size that put
 # "Tank" back in front (about 0.0012) and the size that pushed three labelled versus questions out of
@@ -504,18 +513,42 @@ def _fold_plural(word: str) -> str:
     return word[:-1] if len(word) > 3 and word.endswith("s") else word
 
 
+_PLAYING_AS_TITLES = ("playing as", "play as")
+_TITLE_FILLER = frozenset({"the", "a", "an", "of", "in", "on", "and", "or", "to", "as", "for", "with", "at", "by"})
+
+
+def _title_subject(name: str) -> set[str]:
+    """The words of a note's title that name what it is about (plural folded, small words left out)."""
+    return {_fold_plural(w) for w in _name_tokens(name) if w not in _TITLE_FILLER}
+
+
 def _lead_with_the_note_the_question_names(cards: list[KnowledgeCard], question: str) -> list[KnowledgeCard]:
     """``cards`` with the ordinary note the question names by title moved to the front, when the
-    first card is a game-mode note the question did not ask for. Nothing else is reordered."""
-    if not cards or cards[0].section_type not in _MODE_KINDS or _question_names_a_mode(question):
+    first card is a game-mode note the question did not ask for, and with the game-mode notes about
+    that note's subject left out (plan 104, lane V4). Nothing else is reordered or dropped; a
+    question that names a mode or a side gets its list back exactly as it came."""
+    if not cards or _question_names_a_mode(question):
         return cards
-    asked = {_fold_plural(w) for w in _name_tokens(question)}
-    leader = {_fold_plural(w) for w in _name_tokens(cards[0].name)}
-    for index, card in enumerate(cards):
-        title = {_fold_plural(w) for w in _name_tokens(card.name)}
-        if card.section_type not in _MODE_KINDS and title and title <= asked & leader:
-            return [card, *cards[:index], *cards[index + 1 :]]
-    return cards
+    if cards[0].section_type in _MODE_KINDS:
+        asked = {_fold_plural(w) for w in _name_tokens(question)}
+        leader = {_fold_plural(w) for w in _name_tokens(cards[0].name)}
+        for index, card in enumerate(cards):
+            title = {_fold_plural(w) for w in _name_tokens(card.name)}
+            if card.section_type not in _MODE_KINDS and title and title <= asked & leader:
+                cards = [card, *cards[:index], *cards[index + 1 :]]
+                break
+    if cards[0].section_type in _MODE_KINDS:
+        return cards
+    subject = _title_subject(cards[0].name)
+
+    def leaves(card: KnowledgeCard) -> bool:
+        return (
+            card.section_type in _MODE_KINDS
+            and not card.name.lower().startswith(_PLAYING_AS_TITLES)
+            and bool(subject & _title_subject(card.name))
+        )
+
+    return [cards[0]] + [c for c in cards[1:] if not leaves(c)]
 
 
 def _search_sections(

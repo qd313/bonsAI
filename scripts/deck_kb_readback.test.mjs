@@ -18,13 +18,15 @@ const pySource = fs.readFileSync(path.join(HERE, "deck_kb_readback.py"), "utf8")
 const READBACK_JS = /READBACK_JS = r"""([\s\S]*?)"""/.exec(pySource)[1];
 
 // Runs the read-back's page script over the given markup and returns what it reports.
-function readBack(markup, { windowFocus = true, focusSelector = null } = {}) {
+function readBack(markup, { windowFocus = true, focusSelector = null, turns = 0 } = {}) {
   const { window } = new JSDOM(`<!doctype html><body>${markup}</body>`);
   const { document } = window;
   document.hasFocus = () => windowFocus;
   if (focusSelector) document.querySelector(focusSelector).focus();
   globalThis.document = document;
-  return JSON.parse(eval(READBACK_JS));
+  // The Python side swaps this one marker for the count of earlier answers asked for (--turns N).
+  const source = turns ? READBACK_JS.replace("var TURNS_BACK = 0;", `var TURNS_BACK = ${turns};`) : READBACK_JS;
+  return JSON.parse(eval(source));
 }
 
 const cover = `<div class="bonsai-spoiler-reveal-target">Spoiler — tap to show</div>`;
@@ -189,6 +191,58 @@ test("no game tag and no panel are told plainly", () => {
   assert.equal(noTag.turns, 0);
   assert.equal(noTag.finished, false);
   assert.equal(readBack(`<div></div>`).error, "bonsAI panel is not open");
+});
+
+test("the default read-back has no list of earlier answers, so its output is as it was", () => {
+  const r = readBack(panel({ slots: [slot({}), slot({})] }));
+  assert.equal("turnList" in r, false);
+  assert.ok(READBACK_JS.includes("var TURNS_BACK = 0;"), "the marker the Python side swaps is gone");
+});
+
+test("--turns 2 lists the last two answers, newest first, each with its own notes, covers and footer line", () => {
+  const r = readBack(
+    panel({
+      slots: [
+        slot({ text: "Oldest, never listed." }),
+        slot({
+          text: "Not in my notes — this answer is from the model's own knowledge.",
+          covers: cover,
+          notes: notesBlock({ open: false, label: "Mid, show", headName: "Mid" }),
+        }),
+        slot({ text: "Newest.", covers: cover + openCover }),
+      ],
+    }),
+    { turns: 2 },
+  );
+  assert.equal(r.turnList.length, 2);
+  const [newest, mid] = r.turnList;
+  assert.deepEqual(newest.spoilers, { shut: 1, open: 1 });
+  assert.equal(newest.notes.present, false);
+  assert.equal(newest.finished, true);
+  assert.equal(mid.notes.present, true);
+  assert.equal(mid.notes.label, "Mid, show");
+  assert.deepEqual(mid.spoilers, { shut: 1, open: 0 });
+  assert.equal(mid.notInMyNotesLine, true);
+  assert.equal(mid.question, "The question");
+  // The top-level fields still describe the newest answer only.
+  assert.deepEqual(r.spoilers, { shut: 1, open: 1 });
+});
+
+test("--turns 5 on a chat of two answers lists two, not five", () => {
+  const r = readBack(panel({ slots: [slot({}), slot({})] }), { turns: 5 });
+  assert.equal(r.turnList.length, 2);
+});
+
+test("the list's first entry says the same as the top-level fields, so the two cannot disagree", () => {
+  const r = readBack(
+    panel({ slots: [slot({ covers: cover, notes: notesBlock({ open: false, label: "N, show", headName: "N" }) })] }),
+    { turns: 1 },
+  );
+  const first = r.turnList[0];
+  assert.deepEqual(first.notes, r.notes);
+  assert.deepEqual(first.spoilers, r.spoilers);
+  assert.equal(first.finished, r.finished);
+  assert.equal(first.noCloseMatchLine, r.noCloseMatchLine);
 });
 
 // The class names the page script looks for, and the file in src/ that draws each. Both sides must still hold

@@ -11,6 +11,7 @@ Does not: Touch the Deck or the real log folder: every case uses a pretend log f
 
 import importlib.util
 import os
+import sqlite3
 import shutil
 import subprocess
 import tempfile
@@ -87,6 +88,102 @@ class LogFolderTests(unittest.TestCase):
     def test_an_empty_or_missing_folder_gives_nothing(self):
         self.assertIsNone(readback.newest_attach_line(self.dir))
         self.assertIsNone(readback.newest_attach_line(os.path.join(self.dir, "no-such-folder")))
+
+
+class AttachNamesTests(unittest.TestCase):
+    def test_the_names_come_out_of_the_line_the_back_end_writes(self):
+        notes = [{"name": "Exploder"}, {"name": "Soul Master"}]
+        line = kb_not_in_notes_notice.kb_attach_log_line(
+            _ATTACHED, notes, not_in_notes_shown=False, no_close_match_shown=False
+        )
+        self.assertEqual(readback.attach_names(line), ["Exploder", "Soul Master"])
+
+    def test_a_line_with_no_notes_has_no_names(self):
+        line = kb_not_in_notes_notice.kb_attach_log_line(
+            {"kb_attached": False}, [], not_in_notes_shown=True, no_close_match_shown=False
+        )
+        self.assertEqual(readback.attach_names(line), [])
+        self.assertEqual(readback.attach_names(None), [])
+
+    def test_one_note_has_one_name(self):
+        line = kb_not_in_notes_notice.kb_attach_log_line(
+            _ATTACHED, _NOTES, not_in_notes_shown=False, no_close_match_shown=False
+        )
+        self.assertEqual(readback.attach_names(line), ["Exploder"])
+
+
+class RecentAttachLinesTests(LogFolderTests):
+    def test_the_newest_lines_come_back_newest_first_across_files(self):
+        mark = readback.ATTACH_MARKER
+        self._write("2026-11-08.log", "\n".join([f"1 {mark} a", f"2 {mark} b", ""]), 90000)
+        self._write("2026-11-09.log", "\n".join([f"3 {mark} c", "x", f"4 {mark} d", ""]), 10)
+        lines = readback.newest_attach_lines(3, self.dir)
+        self.assertEqual([entry["line"][:1] for entry in lines], ["4", "3", "2"])
+        self.assertEqual(lines[0]["file"], "2026-11-09.log")
+
+    def test_asking_for_one_gives_the_same_line_the_default_read_gives(self):
+        mark = readback.ATTACH_MARKER
+        self._write("2026-11-09.log", "\n".join([f"3 {mark} c", f"4 {mark} d", ""]), 10)
+        self.assertEqual(readback.newest_attach_lines(1, self.dir)[0], readback.newest_attach_line(self.dir))
+
+    def test_an_empty_folder_gives_an_empty_list(self):
+        self.assertEqual(readback.newest_attach_lines(3, self.dir), [])
+
+
+class NoteNumbersTests(unittest.TestCase):
+    def setUp(self):
+        self.dir = tempfile.mkdtemp(prefix="bonsai-readback-db-")
+        self.addCleanup(shutil.rmtree, self.dir, ignore_errors=True)
+        self.db = os.path.join(self.dir, "corpus.db")
+        con = sqlite3.connect(self.db)
+        con.execute("CREATE TABLE sections (section_id INTEGER PRIMARY KEY, game_id INTEGER, section_type TEXT, name TEXT)")
+        con.executemany(
+            "INSERT INTO sections VALUES (?, ?, ?, ?)",
+            [(1000, 4, "enemy", "Owlbear"), (2001, 7, "enemy", "Exploder"), (2002, 7, "boss", "Soul Master"),
+             (3001, 9, "enemy", "Exploder")],
+        )
+        con.commit()
+        con.close()
+
+    def test_each_name_gets_its_number_and_a_repeated_name_gets_every_number(self):
+        found = readback.note_numbers(["Exploder", "soul master", "No Such Note"], self.db)
+        self.assertEqual(found[0], {"name": "Exploder", "numbers": [2001, 3001], "kinds": ["enemy", "enemy"]})
+        self.assertEqual(found[1], {"name": "soul master", "numbers": [2002], "kinds": ["boss"]})
+        self.assertEqual(found[2], {"name": "No Such Note", "numbers": [], "kinds": []})
+
+    def test_a_missing_library_says_so_instead_of_guessing(self):
+        found = readback.note_numbers(["Exploder"], os.path.join(self.dir, "nope.db"))
+        self.assertIsNone(found[0]["numbers"])
+        self.assertIn("library", found[0]["numbersError"])
+
+    def test_the_library_is_only_read(self):
+        before = Path(self.db).read_bytes()
+        readback.note_numbers(["Exploder"], self.db)
+        self.assertEqual(Path(self.db).read_bytes(), before)
+
+
+class TurnReportTests(unittest.TestCase):
+    def test_the_page_turn_and_the_log_line_pair_up_newest_first(self):
+        page = {"turnList": [{"question": "newest q", "finished": True}, {"question": "older q", "finished": True}]}
+        lines = [
+            {"file": "f.log", "line": f"x {readback.ATTACH_MARKER} 1 note attached (A); they are the"},
+            {"file": "f.log", "line": f"x {readback.ATTACH_MARKER} no notes attached; no footer line added"},
+        ]
+        readback.add_turn_numbers(page, lines, None)
+        self.assertEqual(page["turnList"][0]["attached"], [{"name": "A", "numbers": None, "numbersError": "no library path given"}])
+        self.assertEqual(page["turnList"][1]["attached"], [])
+        self.assertEqual(page["turnList"][0]["attachLine"], lines[0]["line"])
+
+    def test_a_turn_with_no_log_line_left_says_so(self):
+        page = {"turnList": [{"question": "q", "finished": True}]}
+        readback.add_turn_numbers(page, [], None)
+        self.assertIsNone(page["turnList"][0]["attachLine"])
+        self.assertEqual(page["turnList"][0]["attached"], [])
+
+    def test_the_marker_the_page_script_swaps_is_in_the_script(self):
+        self.assertIn("var TURNS_BACK = 0;", readback.READBACK_JS)
+        self.assertIn("var TURNS_BACK = 3;", readback.page_script(3))
+        self.assertEqual(readback.page_script(0), readback.READBACK_JS)
 
 
 class PageScriptNodeTests(unittest.TestCase):

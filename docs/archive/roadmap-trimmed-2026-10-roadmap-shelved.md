@@ -219,3 +219,49 @@ Features at its star position and drop its line from the roadmap's Shelved list.
   **Moved to the watch list 2026-09-29 (the maintainer's call, plan 77):** one-off sighting, kept as it was. Unshelves on a new sighting.
 
 - ★ `[focus]` `[watching]` `[shelved]` **A Down press left a long answer section 22% visible behind the tab bar, and a Down in the chip ladder left it 67% visible behind the Ask bar's icon** *— **OPEN, seen once each 2026-09-30 (plan 77, Deck block 4, build `7d84ee3b`).** During the free-play walk, one Down press stalled twice on a long answer section that sat 22% visible behind the tab bar, then moved on with the next Down; and the first Down in the chip ladder left it 67% visible, covered by the Ask bar's corner icon. Neither is one of the two known false alarms. Not reproduced on purpose. Evidence `workshop:test-evidence/plan77-QA-FREE-PLAY-01.json`.* Moved to the watch list 2026-09-30 (the maintainer's call, plan 77): unshelves on a new sighting.
+
+## Watched sightings moved out 2026-11-14 (plan 104 sweep K0)
+
+The oldest watched sightings, moved word for word out of roadmap-shelved.md to make room. Each was seen once or twice in September 2026 and never reproduced. Each comes back to the live list on a new sighting.
+
+- ★ `[focus]` `[watching]` **Down does not move the ring off an unrevealed spoiler block** — seen once, 2026-09-04, never
+  reproduced. The milder form (each cover took one extra Down) is fixed and passed on the Deck: row P76-WALK-COVERS.
+  Evidence `workshop:test-evidence/round35-spoiler-block-down-and-up.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[focus]` `[watching]` **Down from the chat row once skipped the whole answer, after returning from Settings** — seen
+  once, 2026-09-27; not reproduced in six tries. Evidence `workshop:test-evidence/plan72-F-ROW.json`, `workshop:test-evidence/plan76-S8.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[focus]` `[watching]` **Three more one-off focus sightings from free play, 2026-09-26** — the accent-level one is
+  fixed and passed on the Deck (row P76-ACCENT-RING). The other two did not reproduce (`plan76-S3A.json` for the folded turn).
+  What the two were is in [Detail](roadmap-details.md#flow-2b-bugs).
+  Unshelves when: a new sighting.
+
+- ★ `[focus]` `[watching]` **With details open, Down from "N earlier" jumps straight to the notes block** — seen once,
+  2026-09-26. Not reproduced: it visited every stop in order. Evidence `workshop:test-evidence/plan76-P76-M-NEARLIER-DETAILS.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[layout]` `[watching]` **A thin strip of the answer shows through below the game-context line at the bottom of the Main panel**
+  — seen twice, 2026-09-23 (picture `workshop:test-evidence/plan64-BYEYE-01-chat-row.png`); not seen since
+  (`plan72-A8-BOTTOM-STRIP-READING.json`, `plan76-S6.json`).
+  Unshelves when: a new sighting.
+
+- ★ `[layout]` `[watching]` **The "What went wrong?" block once ended 14 pixels under the dock** — seen once, 2026-09-27;
+  on 2026-09-28 it ended 13 px above the dock. Evidence `workshop:test-evidence/plan72-Z-FREEPLAY.json`, `workshop:test-evidence/plan76-S7.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[reply]` `[focus]` `[watching]` **Two more sightings, 2026-09-26 (the chip ladder and two wrong answers)** — the chip
+  ladder steps one chip per press both ways (7 Ups for 7 chips, `plan76-S4.json`). Whether one chip per press is right is
+  the maintainer's call: no decision recorded. The two wrong answers did not reproduce.
+  Unshelves when: a new sighting.
+
+- ★★ `[chat]` `[focus]` `[watching]` **A chat opened with RB while a game runs is drawn as history, and Down dies on its question line** —
+  seen once, 2026-09-26. Closing and reopening the panel fixes it. Not reproduced since; named in the 0.6.0 release notes.
+  Evidence `workshop:test-evidence/plan72-A7-GAME-ii.json`.
+  Unshelves when: a new sighting.
+
+- ★★ `[focus]` `[watching]` **Walking Down while an answer is still arriving loses the ring** — seen once, 2026-09-27
+  (it stuck on the first half-visible answer part, then nothing had focus). Not reproduced in three tries. Evidence
+  `workshop:test-evidence/plan72-A5-DOWN-WHILE-ARRIVING.json`, `workshop:test-evidence/plan76-S9.json`.
+  Unshelves when: a new sighting.

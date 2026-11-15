@@ -36,6 +36,7 @@
 - [Plan 103 sweep K11 notes moved from the knowledge-base roadmap (2026-11-10)](#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 - [Plan 103 sweep K12 notes moved from the knowledge-base roadmap (2026-11-10)](#plan-103-sweep-k12-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 - [Plan 103 sweep K13 notes moved from the knowledge-base roadmap (2026-11-11)](#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
+- [Plan 104 notes moved from the knowledge-base roadmap (2026-11-14)](#plan-104-notes-moved-from-the-knowledge-base-roadmap-2026-11-14)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -1485,3 +1486,38 @@ The plan's bar (call 12): the marked screenshot is built only if the best model 
 - What the graders saw: when a boss fills the frame a ring sometimes lands on it, almost never on the weak point the note names; many rings sit on the background, the game's own display, or the player's own character or helpers, and are still called "sure"; the kind is often wrong (a "hit" on the one thing that hurts you). The worst: a confident "hit" ring on the player's own gun.
 - How the question was run: its wording was changed twice during the day (the first let a model copy its example; the second let the starter model copy the placeholder word "kind"). The third wording fixed both but made `qwen2.5vl:3b` put two marks on one line, which the strict reader refuses, so that model was graded on the second wording's run, where every reply was readable. The starter model still gave 24 of 66 replies that could not be read on the third wording; each scores 1 by the grading rule, which pulls its average down. Over only the tries that had marks, the averages were 3.15 (`qwen3.5:4b`), 3.69 (the starter), 3.36 (`llava:7b`) and 2.87 (`qwen2.5vl:3b`): still far below 7.
 - So the "your screenshot, marked" shape is measured and not built; the test and the 22 pictures stay, to run again when a better picture model can run on the Deck.
+
+## Plan 104 notes moved from the knowledge-base roadmap (2026-11-14)
+
+Moved word for word by the first sweep of plan 104 (K0), to make room before anything landed. Each block names the entry it stood in; the entry keeps a one-line stub and a link here.
+
+**The two "Answered" paragraphs (as they stood):**
+
+**Answered 2026-11-11:** your look at the 28 boss pictures (23 used, 5 left out; the old wording: [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)).
+
+**Answered 2026-11-10 (evening):** the six note samples and ten picture labels passed; the other answers (licences, the Cyberpunk gang notes, the publish, the starter box, the slower model, the versus notes): [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11). Old wording of the closed calls: [Detail](roadmap-kb-details.md#plan-103-sweep-k12-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**The notes card with the switch off (body, as it stood):**
+
+- ★ `[KB]` **A notes card ("From bonsAI's own note") was drawn under an answer with the knowledge library switch OFF** — **ACCEPTED, by design: the maintainer's call 2026-10-18 ("That's fine"); found 2026-10-18 (plan 96 block M, Deck).**
+  A stopped answer with "Use local knowledge base" off still drew a notes card once, and not on another try. The maintainer's call: that is fine (by design). Evidence `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-2.json`.
+
+**The Speed-mode tip gap entry (whole, as it stood):**
+
+- ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **ACCEPTED, 2026-09-28.** The
+  maintainer chose this on 2026-09-05 to save about a second per Speed question
+  ([D62](audit/maintainer-decisions-archive.md#d62--locked-2026-09-05-raised-2026-09-05--the-second-bug-fixing-session-four-calls-before-go)
+  item 2). A stray word match can attach a wrong tip. [Detail](roadmap-kb-details.md#speed-mode-tip-gap)
+
+**The game-card-on-unrelated-questions entry (whole, as it stood):**
+
+- ★★ `[KB]` **Unrelated questions can still get a game card stapled on** — **ACCEPTED 2026-08-27.** Raising the word floor costs real matches and the model mostly ignores a card that does not fit. [D28](audit/maintainer-decisions-archive.md#d28--ordinary-phrases-attach-game-cards-how-hard-should-the-floor-be) · [Detail](roadmap-kb-details.md#ordinary-phrases-attach-game-cards) · earlier sightings: [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**The "what ships loses to its meaning half" entry (whole, as it stood):**
+
+- ★★★★ `[KB]` **What ships loses to its own meaning half on questions nobody tuned against** — **ACCEPTED, decided 2026-09-06.** Weights stay even. [D82](audit/maintainer-decisions-locked.md#d82--open-raised-2026-09-06--leaning-the-search-on-meaning-wins-on-the-measurements-and-breaks-three-rules-we-set-on-purpose) · the finding, the shipping arm and the 2026-11-02 sentence: [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**The troubleshooting-symptom entry (body, as it stood):**
+
+- ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED (D81) for the meaning search; the wording fix landed 2026-10-25 (plan 100 lane T).**
+  The held meaning search stays held. The wording fix is in [Done](roadmap.md#done-after-v060) (row P100-TIPS-01 failed on one of three sentences 2026-10-26; the retry P100-TIPS-01-try3 passed). The find-my-PC part (tip 167, plan 102 lane H) passed on the Deck 2026-11-03. [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)

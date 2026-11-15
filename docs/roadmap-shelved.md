@@ -42,6 +42,8 @@ Long notes for knowledge-base items are in [roadmap-kb-details.md](roadmap-kb-de
 
 Sorted by star, then tag, then title. The last item is a tool note, kept at the end.
 
+Nine of the oldest sightings (each seen once or twice between 2026-09-04 and 2026-09-27 and never reproduced) moved to [the trimmed-shelved archive](archive/roadmap-trimmed-2026-10-roadmap-shelved.md#watched-sightings-moved-out-2026-11-14-plan-104-sweep-k0) on 2026-11-14, word for word; each comes back to this list on a new sighting.
+
 - ★ `[focus]` `[watching]` **A Down press left a long answer section 22% visible behind the tab bar, and a Down in the chip
   ladder left it 67% visible behind the Ask bar's icon** — each seen once, 2026-09-30, not reproduced on purpose.
   Evidence `workshop:test-evidence/plan77-QA-FREE-PLAY-01.json`.
@@ -57,15 +59,6 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   once, 2026-10-01 (plan 78, block 3a). Evidence `workshop:test-evidence/plan78-DOC-SWEEP-01.json`.
   Unshelves when: a new sighting.
 
-- ★ `[focus]` `[watching]` **Down does not move the ring off an unrevealed spoiler block** — seen once, 2026-09-04, never
-  reproduced. The milder form (each cover took one extra Down) is fixed and passed on the Deck: row P76-WALK-COVERS.
-  Evidence `workshop:test-evidence/round35-spoiler-block-down-and-up.json`.
-  Unshelves when: a new sighting.
-
-- ★ `[focus]` `[watching]` **Down from the chat row once skipped the whole answer, after returning from Settings** — seen
-  once, 2026-09-27; not reproduced in six tries. Evidence `workshop:test-evidence/plan72-F-ROW.json`, `workshop:test-evidence/plan76-S8.json`.
-  Unshelves when: a new sighting.
-
 - ★ `[focus]` `[watching]` **Down is dead from the last chip in the Show details chip ladder** — seen once, 2026-10-01
   (plan 78, Deck block 3a). Evidence `workshop:test-evidence/plan78-DOC-SWEEP-01.json`.
   Unshelves when: a new sighting.
@@ -76,15 +69,6 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 
 - ★ `[focus]` `[watching]` **LB and RB do nothing while the ring is on Decky's back arrow** — seen once, 2026-10-03 (plan 81, Deck block 6). No evidence file.
   **2026-10-09 (plan 84 step 6):** the chat's name now shares Decky's row with the arrow. On the Deck's own screen LB on the chat's name switched tabs (it went to About and put the ring on the tab bar). The arrow itself was not re-checked, so this stays on the watch list. Evidence `workshop:test-evidence/plan84-STEP6-DECK.json` (row P84-RING-01).
-  Unshelves when: a new sighting.
-
-- ★ `[focus]` `[watching]` **Three more one-off focus sightings from free play, 2026-09-26** — the accent-level one is
-  fixed and passed on the Deck (row P76-ACCENT-RING). The other two did not reproduce (`plan76-S3A.json` for the folded turn).
-  What the two were is in [Detail](roadmap-details.md#flow-2b-bugs).
-  Unshelves when: a new sighting.
-
-- ★ `[focus]` `[watching]` **With details open, Down from "N earlier" jumps straight to the notes block** — seen once,
-  2026-09-26. Not reproduced: it visited every stop in order. Evidence `workshop:test-evidence/plan76-P76-M-NEARLIER-DETAILS.json`.
   Unshelves when: a new sighting.
 
 - ★ `[KB]` `[watching]` **Four 180-second stalls with a game running (plan 98 block K1), not seen again in block K3** — seen 2026-10-24, four asks in a row gave no answer within 180 seconds.
@@ -101,15 +85,6 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 
 - ★ `[KB]` `[watching]` **With a game running, the meaning search once read about a second** — seen once, 1,070 ms on
   2026-09-23, not seen again. [Detail](roadmap-kb-details.md#kb-transparency-matches-what-the-model-got).
-  Unshelves when: a new sighting.
-
-- ★ `[layout]` `[watching]` **A thin strip of the answer shows through below the game-context line at the bottom of the Main panel**
-  — seen twice, 2026-09-23 (picture `workshop:test-evidence/plan64-BYEYE-01-chat-row.png`); not seen since
-  (`plan72-A8-BOTTOM-STRIP-READING.json`, `plan76-S6.json`).
-  Unshelves when: a new sighting.
-
-- ★ `[layout]` `[watching]` **The "What went wrong?" block once ended 14 pixels under the dock** — seen once, 2026-09-27;
-  on 2026-09-28 it ended 13 px above the dock. Evidence `workshop:test-evidence/plan72-Z-FREEPLAY.json`, `workshop:test-evidence/plan76-S7.json`.
   Unshelves when: a new sighting.
 
 - ★ `[ollama]` `[focus]` `[watching]` **In the AI models Filters panel, Down from "Also try open-weight models" skipped "Any installed model"** —
@@ -134,29 +109,14 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Strategy tries, 2026-10-01 (plan 78, block 3a); the Speed reply was Japanese. Evidence `workshop:test-evidence/plan78-LANG-03.json`.
   Unshelves when: a new sighting.
 
-- ★ `[reply]` `[focus]` `[watching]` **Two more sightings, 2026-09-26 (the chip ladder and two wrong answers)** — the chip
-  ladder steps one chip per press both ways (7 Ups for 7 chips, `plan76-S4.json`). Whether one chip per press is right is
-  the maintainer's call: no decision recorded. The two wrong answers did not reproduce.
-  Unshelves when: a new sighting.
-
 - ★ `[reply]` `[watching]` **While an answer arrives, the start of a sentence that ends up behind a spoiler cover can be read for about a second** — **shelved as watched 2026-10-16 (D131 call 4).** [Full notes](archive/roadmap-trimmed-2026-10-roadmap.md#plan-93-note-shelved-spoiler-sentence-readable).
   Unshelves when: a new sighting.
 
 - ★ `[tabs]` `[watching]` **After a tab change the ring is often on no control, so LB, RB, LT and RT do nothing until a D-pad press** — seen once, 2026-10-10 (plan 87 Deck block 3, build `d96ed0bf`): two RB presses 1.4 s apart gave one tab change. Not reproduced in block 4 (`8608954d`): the ring was on a control after 14 of 14 tab changes, read at 0.5 s and 1.5 s. Evidence `workshop:test-evidence/plan87-P87-F4-TAB-ORDER.json`, `plan87-P87-TAB-CHANGE-RING.json`.
   Unshelves when: a new sighting.
 
-- ★★ `[chat]` `[focus]` `[watching]` **A chat opened with RB while a game runs is drawn as history, and Down dies on its question line** —
-  seen once, 2026-09-26. Closing and reopening the panel fixes it. Not reproduced since; named in the 0.6.0 release notes.
-  Evidence `workshop:test-evidence/plan72-A7-GAME-ii.json`.
-  Unshelves when: a new sighting.
-
 - ★★ `[chips]` `[ui]` `[watching]` **A chip at the edge of the sliding strip reads one third visible to the walk check** — seen on the Deck 2026-10-07 (plan 82, Deck block 4, build `efd4258b`), with and without a game. The strip cuts the chip's words at its edges, so a person sees a clipped chip. More: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-03).
   Unshelves when: the maintainer calls it a clipped label, or a new sighting of a chip cut mid-word.
-
-- ★★ `[focus]` `[watching]` **Walking Down while an answer is still arriving loses the ring** — seen once, 2026-09-27
-  (it stuck on the first half-visible answer part, then nothing had focus). Not reproduced in three tries. Evidence
-  `workshop:test-evidence/plan72-A5-DOWN-WHILE-ARRIVING.json`, `workshop:test-evidence/plan76-S9.json`.
-  Unshelves when: a new sighting.
 
 - ★★ `[ollama]` `[focus]` `[watching]` **A tap outside the AI models screen started the queued downloads and left the D-pad stuck in the Ollama tab** —
   reported by the maintainer 2026-09-16, a touch report the rig cannot reproduce; no evidence file. Needs a try with an

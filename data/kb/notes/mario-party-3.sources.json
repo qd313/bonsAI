@@ -187,30 +187,6 @@
           ]
         },
         {
-          "line": "Weak points: His four minigames are Game Guy's Lucky 7, Magic Boxes, Roulette and Sweet Surprise, and they depend mostly on luck. A typical result is that you double your coins or lose the lot, although you can gamble for bigger multiples.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Game_Guy_Space",
-              "revision": "5411750",
-              "quoted": [
-                "Game Guy's Lucky 7",
-                "Game Guy's Magic Boxes",
-                "Game Guy's Roulette",
-                "Game Guy's Sweet Surprise",
-                "These mostly luck-based minigames"
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Game_Guy",
-              "revision": "5412974",
-              "quoted": [
-                "Game Guy owns four minigames: Game Guy's Lucky 7, Game Guy's Magic Boxes, Game Guy's Roulette, and Game Guy's Sweet Surprise.",
-                "Players can usually double their coins or lose all coins, though they can risk their money for higher multiples."
-              ]
-            }
-          ]
-        },
-        {
           "line": "Looks like: A Shy Guy with a yellowish mask and a bowtie.",
           "drawn_from": [
             {
@@ -243,7 +219,8 @@
             }
           ]
         }
-      ]
+      ],
+      "weak_points_review": "W1 2026-11-15: line removed. Game Guy Space rev 5411750, Game Guy rev 5412974 and Mario Party 3 rev 5545560 list his four luck-based minigames and the double-or-lose result; they give no way to beat or avoid him (the Summary keeps the double-or-lose result)."
     },
     {
       "section_id": 3003,
@@ -552,7 +529,8 @@
             }
           ]
         }
-      ]
+      ],
+      "weak_points_review": "W1 2026-11-15: line kept (borderline). Mario Party 3 rev 5545560 (cited line rev 5520638; the Boo row reads the same) says a Boo partner hits back at a Chain Chomp's multi-hit only when it is directly in front of it, which is the way to answer it."
     },
     {
       "section_id": 3007,
@@ -577,18 +555,6 @@
               "quoted": [
                 "Thwomp has 0 attack and 2 HP, but he can also defeat any partner instantly, though he does nothing against players.",
                 "Thwomp's salary is four coins per turn."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Weak points: Used against you, it takes out your partners in one hit and does nothing to you, the player. A Boo partner that a Thwomp defeats does not hit back as it normally would.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Thwomp",
-              "revision": "5542350",
-              "quoted": [
-                "he can also defeat any partner instantly, though he does nothing against players. If a Boo is defeated by a Thwomp, it will not retaliate like it normally would."
               ]
             }
           ]
@@ -626,7 +592,8 @@
             }
           ]
         }
-      ]
+      ],
+      "weak_points_review": "W1 2026-11-15: line removed. Thwomp rev 5544443 and Mario Party 3 rev 5545560 say a Thwomp partner has no attack on the player, defeats partners at once and stops a Boo from hitting back; that describes its strength, not a way to beat it."
     },
     {
       "section_id": 3008,

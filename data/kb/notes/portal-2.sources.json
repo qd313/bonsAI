@@ -748,7 +748,7 @@
         },
         {
           "label": "Uses",
-          "text": "Walking through it shakes your Portal Gun and clears every portal you had placed, so you start a test with a clean slate. Portals cannot pass through it either.",
+          "text": "Walking through it shakes your Portal Gun and clears every portal you had placed. Portals cannot pass through it either.",
           "from": [
             {
               "page": "Material Emancipation Grill",
@@ -791,7 +791,7 @@
       "lines": [
         {
           "label": "Summary",
-          "text": "Portals can only be placed on flat surfaces that are light in colour; bumpy or dark ones will not take a portal.",
+          "text": "Portals can be placed on any flat surface that is light in colour; bumpy or dark ones will not take a portal.",
           "from": [
             {
               "page": "Surfaces",
@@ -894,7 +894,7 @@
         },
         {
           "label": "Tips",
-          "text": "When you pick one up, its legs fold into the cube. Knocked onto its side or upside down, it kicks its legs about trying to right itself.",
+          "text": "When you pick one up, its legs fold into the cube. Knocked onto its side or upside down, it waves its legs about trying to right itself.",
           "from": [
             {
               "page": "Turrets",

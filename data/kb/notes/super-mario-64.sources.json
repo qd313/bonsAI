@@ -22,17 +22,23 @@
             {
               "page": "Chain Chomp",
               "revision": "5536195",
-              "quote": "A giant Chain Chomp"
+              "quote": "A giant Chain Chomp",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Chain Chomp",
               "revision": "5536195",
-              "quote": "is located on Bob-omb Battlefield in Super Mario 64"
+              "quote": "is located on Bob-omb Battlefield in Super Mario 64",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Chain Chomp",
               "revision": "5536195",
-              "quote": "It is attached to a peg near a cell with the Power Star of"
+              "quote": "It is attached to a peg near a cell with the Power Star of",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -43,28 +49,36 @@
             {
               "page": "Chain Chomp",
               "revision": "5536195",
-              "quote": "In Super Mario games, they are almost entirely invincible"
+              "quote": "In Super Mario games, they are almost entirely invincible",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "General information > Powers and abilities"
             },
             {
               "page": "Chain Chomp",
               "revision": "5536195",
-              "quote": "A Bob-omb, a box, or a Yoshi's egg in the remake can stun Chain Chomp briefly."
+              "quote": "A Bob-omb, a box, or a Yoshi's egg in the remake can stun Chain Chomp briefly.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
         {
           "label": "Tips",
-          "text": "It lunges at you when you are near and takes three wedges of health on contact. Ground-pound its post three times to free it, and it lunges into the nearby cell and clears the gate for the star.",
+          "text": "Keep away from it: when you are close it lunges, and a hit costs three wedges of health. Pound the ground on its post three times and it breaks free, then rushes into the cell beside it, which clears the mission \"Behind Chain Chomp's Gate\".",
           "from": [
             {
               "page": "Chain Chomp",
               "revision": "5536195",
-              "quote": "The Chain Chomp lunges at Mario if he is nearby, taking away three wedges of his health on contact."
+              "quote": "The Chain Chomp lunges at Mario if he is nearby, taking away three wedges of his health on contact.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Chain Chomp",
               "revision": "5536195",
-              "quote": "The Chain Chomp can be freed by ground-pounding its post three times, required for it to lunge into the cell nearby and clear"
+              "quote": "The Chain Chomp can be freed by ground-pounding its post three times, required for it to lunge into the cell nearby and clear",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         }
@@ -85,17 +99,23 @@
             {
               "page": "Boo",
               "revision": "5532404",
-              "quote": "Boos (also called Baby Boos) appear in Super Mario 64"
+              "quote": "Boos (also called Baby Boos) appear in Super Mario 64",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Boo",
               "revision": "5532404",
-              "quote": "Boos are encountered in the courtyard of Peach's Castle and in Big Boo's Haunt."
+              "quote": "Boos are encountered in the courtyard of Peach's Castle and in Big Boo's Haunt.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Boo",
               "revision": "5532404",
-              "quote": "Boos take away two wedges of health on contact."
+              "quote": "Boos take away two wedges of health on contact.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -106,12 +126,16 @@
             {
               "page": "Boo",
               "revision": "5532404",
-              "quote": "Boos are defeated from either a punch, a kick, a Pound the Ground attack"
+              "quote": "Boos are defeated from either a punch, a kick, a Pound the Ground attack",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Boo",
               "revision": "5532404",
-              "quote": "When Boos are looked at, they become partially visible, but are fully opaque otherwise and follow the player character."
+              "quote": "When Boos are looked at, they become partially visible, but are fully opaque otherwise and follow the player character.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -122,7 +146,9 @@
             {
               "page": "Boo",
               "revision": "5532404",
-              "quote": "The Boos in the courtyard hold a Yellow Coin each, and those in Big Boo's Haunt each have a Blue Coin"
+              "quote": "The Boos in the courtyard hold a Yellow Coin each, and those in Big Boo's Haunt each have a Blue Coin",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         }
@@ -143,49 +169,63 @@
             {
               "page": "Big Boo (character)",
               "revision": "5499015",
-              "quote": "acting as the Boos' leader"
+              "quote": "acting as the Boos' leader",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Big Boo (character)",
               "revision": "5499015",
-              "quote": "Big Boo makes his debut in Super Mario 64 as the owner of Big Boo's Haunt, being the boss of \"Go on a Ghost Hunt\", \"Ride Big Boo's Merry-Go-Round\", and \"Big Boo's Balcony\"."
+              "quote": "Big Boo makes his debut in Super Mario 64 as the owner of Big Boo's Haunt, being the boss of \"Go on a Ghost Hunt\", \"Ride Big Boo's Merry-Go-Round\", and \"Big Boo's Balcony\".",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Big Boo (character)",
               "revision": "5499015",
-              "quote": "If this Boo attacks Mario, he loses three wedges of health."
+              "quote": "If this Boo attacks Mario, he loses three wedges of health.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
         {
           "label": "Weak points",
-          "text": "He can be hurt only while visible, by ground-pounding him from above or punching him from the side. Three hits defeat him, and he gets smaller and faster after each one.",
+          "text": "Only hit him while you can see him: pound the ground on him from above or punch him from the side. It takes three hits, and he shrinks and speeds up with every one.",
           "from": [
             {
               "page": "Big Boo (character)",
               "revision": "5499015",
-              "quote": "Big Boo can be attacked only when visible, so Mario has to attack this massive ghost by either ground-pounding him from above or punching him from the side. He takes three hits to defeat, becoming smaller and faster after each hit."
+              "quote": "Big Boo can be attacked only when visible, so Mario has to attack this massive ghost by either ground-pounding him from above or punching him from the side. He takes three hits to defeat, becoming smaller and faster after each hit.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
         {
           "label": "Tips",
-          "text": "In the first two missions you must defeat several nearby Boos to make him appear; in \"Big Boo's Balcony\" he is already there. Like a normal Boo he disappears when looked at and shows again when you turn away, and if you leave the area before he is beaten his health resets.",
+          "text": "In the first two missions beat a few of the Boos around him and he appears; in \"Big Boo's Balcony\" he is already waiting. Like the small Boos he vanishes while you look at him and returns when you look away, and leaving before he is beaten resets his health.",
           "from": [
             {
               "page": "Big Boo (character)",
               "revision": "5499015",
-              "quote": "For the first two missions, Mario needs to defeat several nearby Boos to make him appear, though for the last one, he is automatically present"
+              "quote": "For the first two missions, Mario needs to defeat several nearby Boos to make him appear, though for the last one, he is automatically present",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Big Boo (character)",
               "revision": "5499015",
-              "quote": "Like with the normal Boos, Big Boo disappears when looked at and becomes visible again when Mario turns away."
+              "quote": "Like with the normal Boos, Big Boo disappears when looked at and becomes visible again when Mario turns away.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Big Boo (character)",
               "revision": "5499015",
-              "quote": "if the player leaves the area before completely defeating Big Boo, his health resets."
+              "quote": "if the player leaves the area before completely defeating Big Boo, his health resets.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -196,12 +236,16 @@
             {
               "page": "Big Boo",
               "revision": "5537137",
-              "quote": "In the courtyard itself, it can be found in one of the corners, appearing about twice as large as the other Boos. If Mario defeats it, it drops a birdcage"
+              "quote": "In the courtyard itself, it can be found in one of the corners, appearing about twice as large as the other Boos. If Mario defeats it, it drops a birdcage",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Big Boo",
               "revision": "5537137",
-              "quote": "leading to Big Boo's Haunt."
+              "quote": "leading to Big Boo's Haunt.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         }
@@ -222,17 +266,23 @@
             {
               "page": "Piranha Plant",
               "revision": "5536889",
-              "quote": "They are depicted with green lips in the original version"
+              "quote": "They are depicted with green lips in the original version",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Piranha Plant",
               "revision": "5536889",
-              "quote": "Piranha Plants appear only in Whomp's Fortress"
+              "quote": "Piranha Plants appear only in Whomp's Fortress",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Piranha Plant",
               "revision": "5536889",
-              "quote": "Piranha Plants have a sleepy nature, which is why they are always found asleep; during this, a lullaby plays."
+              "quote": "Piranha Plants have a sleepy nature, which is why they are always found asleep; during this, a lullaby plays.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -243,7 +293,9 @@
             {
               "page": "Piranha Plant",
               "revision": "5536889",
-              "quote": "When a Piranha Plant is either touched or approached quickly by the player character, it wakes up and starts to bite in the direction of the player character, though they stay asleep if approached slowly."
+              "quote": "When a Piranha Plant is either touched or approached quickly by the player character, it wakes up and starts to bite in the direction of the player character, though they stay asleep if approached slowly.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -254,12 +306,16 @@
             {
               "page": "Piranha Plant",
               "revision": "5536889",
-              "quote": "Piranha Plants take away three health points if they bite the player character, or four if he is without his cap"
+              "quote": "Piranha Plants take away three health points if they bite the player character, or four if he is without his cap",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Blue Coin",
               "revision": "5531894",
-              "quote": "Defeating certain enemies causes a Blue Coin to appear, including Koopa Troopas, Piranha Plants, Boos"
+              "quote": "Defeating certain enemies causes a Blue Coin to appear, including Koopa Troopas, Piranha Plants, Boos",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         }
@@ -280,12 +336,16 @@
             {
               "page": "Bob-omb",
               "revision": "5537321",
-              "quote": "Bob-ombs are common enemies in Super Mario 64 and its Nintendo DS version. They first appear on the Bob-omb Battlefield."
+              "quote": "Bob-ombs are common enemies in Super Mario 64 and its Nintendo DS version. They first appear on the Bob-omb Battlefield.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Bob-omb",
               "revision": "5537321",
-              "quote": "When a Bob-omb spots the player, it lights its fuse and then rushes towards them from behind, attempting to damage them when it explodes."
+              "quote": "When a Bob-omb spots the player, it lights its fuse and then rushes towards them from behind, attempting to damage them when it explodes.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -296,12 +356,16 @@
             {
               "page": "Bob-omb",
               "revision": "5537321",
-              "quote": "Unlike in the Super Mario Bros. subseries, Bob-ombs do not harm the player upon contact. Their explosion, however, damages the player by two wedges of health."
+              "quote": "Unlike in the Super Mario Bros. subseries, Bob-ombs do not harm the player upon contact. Their explosion, however, damages the player by two wedges of health.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Bob-omb",
               "revision": "5537321",
-              "quote": "Bob-ombs can be defeated by being kicked or picked up from behind and thrown. This causes them to explode away from the player, leaving behind a coin."
+              "quote": "Bob-ombs can be defeated by being kicked or picked up from behind and thrown. This causes them to explode away from the player, leaving behind a coin.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -312,12 +376,16 @@
             {
               "page": "Bob-omb",
               "revision": "5537321",
-              "quote": "Explosions caused by the bombs can also damage other enemies within the blast."
+              "quote": "Explosions caused by the bombs can also damage other enemies within the blast.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Bob-omb",
               "revision": "5537321",
-              "quote": "After the player character walks away from the area, the Bob-ombs then respawn."
+              "quote": "After the player character walks away from the area, the Bob-ombs then respawn.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -328,17 +396,23 @@
             {
               "page": "Bob-omb",
               "revision": "5537321",
-              "quote": "These Bob-ombs do not chase the player, but they still explode if picked up."
+              "quote": "These Bob-ombs do not chase the player, but they still explode if picked up.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Bob-omb",
               "revision": "5537321",
-              "quote": "A pink variant of Bob-omb called a Bob-omb Buddy is introduced in this game."
+              "quote": "A pink variant of Bob-omb called a Bob-omb Buddy is introduced in this game.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Bob-omb",
               "revision": "5537321",
-              "quote": "Bob-omb Buddies are friendly and give the player character helpful hints. They open cannons"
+              "quote": "Bob-omb Buddies are friendly and give the player character helpful hints. They open cannons",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         }
@@ -359,59 +433,77 @@
             {
               "page": "Chuckya",
               "revision": "5524402",
-              "quote": "Chuckyas (also formatted as Chuck-Yas) are a large purple variant of Bob-omb found in Super Mario 64"
+              "quote": "Chuckyas (also formatted as Chuck-Yas) are a large purple variant of Bob-omb found in Super Mario 64",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Chuckya",
               "revision": "5524402",
-              "quote": "they move about by sliding across the ground on a metal point"
+              "quote": "they move about by sliding across the ground on a metal point",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Chuckya",
               "revision": "5524402",
-              "quote": "Chuckyas are encountered in Wet-Dry World; on Tall, Tall Mountain; in Rainbow Ride; on Tiny-Huge Island's \"huge\" portion; and in Bowser in the Sky"
+              "quote": "Chuckyas are encountered in Wet-Dry World; on Tall, Tall Mountain; in Rainbow Ride; on Tiny-Huge Island's \"huge\" portion; and in Bowser in the Sky",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Chuckya",
               "revision": "5524402",
-              "quote": "When Mario is in range of a Chuckya, it charges towards him"
+              "quote": "When Mario is in range of a Chuckya, it charges towards him",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Chuckya",
               "revision": "5524402",
-              "quote": "Chuckyas patrol small areas."
+              "quote": "Chuckyas patrol small areas.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             }
           ]
         },
         {
           "label": "Weak points",
-          "text": "Pick it up from behind and throw it, and it explodes and releases five coins.",
+          "text": "Lift it from the back and throw it; it explodes and gives up five coins.",
           "from": [
             {
               "page": "Chuckya",
               "revision": "5524402",
-              "quote": "To defeat a Chuckya, Mario must pick it up from behind and throw it, causing it to explode and release five coins."
+              "quote": "To defeat a Chuckya, Mario must pick it up from behind and throw it, causing it to explode and release five coins.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             }
           ]
         },
         {
           "label": "Tips",
-          "text": "If it catches you it throws you in a random direction, sometimes a long way or into a pit. You can escape its grasp by pushing the Control Stick from the inside to the outside 11 times before it throws.",
+          "text": "If it catches you it throws you in a random direction, sometimes a long way or into a pit. To get loose, work the Control Stick from the inside to the outside 11 times before the throw.",
           "from": [
             {
               "page": "Chuckya",
               "revision": "5524402",
-              "quote": "if a Chuckya catches him, it picks him up and throws him in a random direction"
+              "quote": "if a Chuckya catches him, it picks him up and throws him in a random direction",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Chuckya",
               "revision": "5524402",
-              "quote": "Usually, Mario can be thrown down a far distance or even into a pit."
+              "quote": "Usually, Mario can be thrown down a far distance or even into a pit.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Chuckya",
               "revision": "5524402",
-              "quote": "It is possible to escape from a Chuckya's grasp by pressing and/or pushing the Control Stick from the inside to the outside 11 times before the Chuckya throws Mario."
+              "quote": "It is possible to escape from a Chuckya's grasp by pressing and/or pushing the Control Stick from the inside to the outside 11 times before the Chuckya throws Mario.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             }
           ]
         }
@@ -432,27 +524,37 @@
             {
               "page": "Whomp",
               "revision": "5536581",
-              "quote": "appear in Super Mario 64 as enemies in Whomp's Fortress"
+              "quote": "appear in Super Mario 64 as enemies in Whomp's Fortress",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Whomp",
               "revision": "5536581",
-              "quote": "with a singular Whomp appearing in Bowser in the Sky"
+              "quote": "with a singular Whomp appearing in Bowser in the Sky",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Whomp",
               "revision": "5536581",
-              "quote": "They are large enemies that resemble rectangular stone slabs with snaggletoothed faces"
+              "quote": "They are large enemies that resemble rectangular stone slabs with snaggletoothed faces",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Whomp",
               "revision": "5536581",
-              "quote": "Their faces feature permanently angry expression"
+              "quote": "Their faces feature permanently angry expression",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "General information > Physical description"
             },
             {
               "page": "Whomp",
               "revision": "5536581",
-              "quote": "Whomps will patrol back and forth in a small area, attempting to slam Mario into the ground for three damage when he gets near."
+              "quote": "Whomps will patrol back and forth in a small area, attempting to slam Mario into the ground for three damage when he gets near.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -463,28 +565,36 @@
             {
               "page": "Whomp",
               "revision": "5536581",
-              "quote": "They can be defeated by Mario causing them to fall over and subsequently ground-pounding on their sole weak spot, their back"
+              "quote": "They can be defeated by Mario causing them to fall over and subsequently ground-pounding on their sole weak spot, their back",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Whomp",
               "revision": "5536581",
-              "quote": "Pounding the Ground on a Whomp while it lies flat will defeat it, which releases five coins."
+              "quote": "Pounding the Ground on a Whomp while it lies flat will defeat it, which releases five coins.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
         {
           "label": "Tips",
-          "text": "Landing on a Whomp's back releases a coin, up to five times. A trick in the original game lets you jump while it falls, pass through it and stand on its back.",
+          "text": "Each landing on a Whomp's back gives a coin, up to five in all. A trick in the original game lets you jump while it falls, pass through it and stand on its back.",
           "from": [
             {
               "page": "Whomp",
               "revision": "5536581",
-              "quote": "Landing on the back of a Whomp will release a coin up to five times"
+              "quote": "Landing on the back of a Whomp will release a coin up to five times",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Whomp",
               "revision": "5536581",
-              "quote": "A trick in the original version only allows Mario to pass through one and get on its back if he jumps while it falls."
+              "quote": "A trick in the original version only allows Mario to pass through one and get on its back if he jumps while it falls.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         }
@@ -505,12 +615,16 @@
             {
               "page": "Mr. I",
               "revision": "5529491",
-              "quote": "It is a giant, usually motionless eyeball that tracks the player character by rotating."
+              "quote": "It is a giant, usually motionless eyeball that tracks the player character by rotating.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Mr. I",
               "revision": "5529491",
-              "quote": "They are found in Big Boo's Haunt, Lethal Lava Land, and the Hazy Maze Cave. They turn to face Mario, shooting small multicolored bubble projectiles at him if undisturbed."
+              "quote": "They are found in Big Boo's Haunt, Lethal Lava Land, and the Hazy Maze Cave. They turn to face Mario, shooting small multicolored bubble projectiles at him if undisturbed.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -521,7 +635,9 @@
             {
               "page": "Mr. I",
               "revision": "5529491",
-              "quote": "A Mr. I is defeated if Mario runs around it, causing the Mr. I to shrink slightly from trying to keep track and drop a Blue Coin."
+              "quote": "A Mr. I is defeated if Mario runs around it, causing the Mr. I to shrink slightly from trying to keep track and drop a Blue Coin.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -532,7 +648,9 @@
             {
               "page": "Mr. I",
               "revision": "5529491",
-              "quote": "The larger Big Mr. I. can be found in the attic of Big Boo's Haunt."
+              "quote": "The larger Big Mr. I. can be found in the attic of Big Boo's Haunt.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         }
@@ -553,38 +671,50 @@
             {
               "page": "Tox Box",
               "revision": "5536591",
-              "quote": "Tox Boxes are hollow metal boxes that roll along set paths."
+              "quote": "Tox Boxes are hollow metal boxes that roll along set paths.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Tox Box",
               "revision": "5536591",
-              "quote": "Tox Boxes are red, industrial, and metallic boxes with spray-painted faces in Super Mario 64"
+              "quote": "Tox Boxes are red, industrial, and metallic boxes with spray-painted faces in Super Mario 64",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Tox Box",
               "revision": "5536591",
-              "quote": "they are enemies exclusive to Shifting Sand Land"
+              "quote": "they are enemies exclusive to Shifting Sand Land",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Tox Box",
               "revision": "5536591",
-              "quote": "Tox Boxes attempt to flatten Mario by rolling over him. The path is a small maze of tiles surrounded by darker, faster-moving quicksand that sucks Mario in instantly."
+              "quote": "Tox Boxes attempt to flatten Mario by rolling over him. The path is a small maze of tiles surrounded by darker, faster-moving quicksand that sucks Mario in instantly.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
         {
           "label": "Weak points",
-          "text": "It cannot be defeated in the original game. One side of each box is a square hole: stand in it as the box passes over your tile and you survive, but the hole's edges still crush you if you stand under them.",
+          "text": "It cannot be defeated in the original game. One face of each box is a square hole made for you to stand in while the box rolls over your tile; do that and you survive, though the edges around the hole still crush you if you stand beneath them.",
           "from": [
             {
               "page": "Tox Box",
               "revision": "5536591",
-              "quote": "While Tox Boxes cannot be defeated in the original Super Mario 64"
+              "quote": "While Tox Boxes cannot be defeated in the original Super Mario 64",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Tox Box",
               "revision": "5536591",
-              "quote": "the last side is a square hole, which is for Mario to stand in as a Tox Box passes over the tile he is standing on, thus letting him survive without being crushed. However, the edges of the holed side still crush Mario if he stands under them."
+              "quote": "the last side is a square hole, which is for Mario to stand in as a Tox Box passes over the tile he is standing on, thus letting him survive without being crushed. However, the edges of the holed side still crush Mario if he stands under them.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             }
           ]
         },
@@ -595,17 +725,23 @@
             {
               "page": "Tox Box",
               "revision": "5536591",
-              "quote": "If Mario gets squished by a Tox Box's side, he loses three wedges of health."
+              "quote": "If Mario gets squished by a Tox Box's side, he loses three wedges of health.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Tox Box",
               "revision": "5536591",
-              "quote": "Long-jumping into the side of a Tox Box's face that is above quicksand, off the side of the track, makes Mario lose a life instantly, playing the animation as if he has just fallen into the quicksand."
+              "quote": "Long-jumping into the side of a Tox Box's face that is above quicksand, off the side of the track, makes Mario lose a life instantly, playing the animation as if he has just fallen into the quicksand.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Tox Box",
               "revision": "5536591",
-              "quote": "The tiled maze that the Tox Boxes travel on has a few Red Coins on it, as well as the course's only cannon."
+              "quote": "The tiled maze that the Tox Boxes travel on has a few Red Coins on it, as well as the course's only cannon.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         }
@@ -626,17 +762,23 @@
             {
               "page": "Power Star",
               "revision": "5531900",
-              "quote": "can grant Mario access to more levels in-game"
+              "quote": "can grant Mario access to more levels in-game",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Power Star",
               "revision": "5531900",
-              "quote": "By obtaining a Power Star, the corresponding mission is cleared."
+              "quote": "By obtaining a Power Star, the corresponding mission is cleared.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Power Star",
               "revision": "5531900",
-              "quote": "There is a total of 120 Power Stars."
+              "quote": "There is a total of 120 Power Stars.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -647,38 +789,50 @@
             {
               "page": "Power Star",
               "revision": "5531900",
-              "quote": "The various ★ doors and Big Star Doors of the Mushroom Castle require Mario to have at least a certain number of Power Stars (which is displayed on normal doors)."
+              "quote": "The various ★ doors and Big Star Doors of the Mushroom Castle require Mario to have at least a certain number of Power Stars (which is displayed on normal doors).",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Power Star",
               "revision": "5531900",
-              "quote": "A minimum of 70 Power Stars is required to access Bowser in the Sky."
+              "quote": "A minimum of 70 Power Stars is required to access Bowser in the Sky.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Power Star",
               "revision": "5531900",
-              "quote": "Once Mario collects every Power Star, the cannon outside the Mushroom Castle becomes available for use, giving access to the castle's roof."
+              "quote": "Once Mario collects every Power Star, the cannon outside the Mushroom Castle becomes available for use, giving access to the castle's roof.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
         {
           "label": "Tips",
-          "text": "Each course holds seven Power Stars, one of them the secret star for 100 coins, and fifteen stars in all are Secret Stars hidden in secret areas or held by Toads. Eight red coins in a course make a star appear over a Star Marker.",
+          "text": "Every course has seven stars, one of them earned by collecting 100 coins, and fifteen stars in the whole game are Secret Stars, kept in hidden areas or given by Toads. Collecting a course's eight red coins makes a star appear above a Star Marker.",
           "from": [
             {
               "page": "Power Star",
               "revision": "5531900",
-              "quote": "There are seven Power Stars in each course; one is a secret Power Star that Mario can obtain from collecting 100 coins"
+              "quote": "There are seven Power Stars in each course; one is a secret Power Star that Mario can obtain from collecting 100 coins",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Power Star",
               "revision": "5531900",
-              "quote": "Fifteen of them are Secret Stars, either found in secret areas or held by Toads."
+              "quote": "Fifteen of them are Secret Stars, either found in secret areas or held by Toads.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Power Star",
               "revision": "5531900",
-              "quote": "There are eight Red Coins in each course, and collecting all of them causes a Power Star to appear over a Star Marker."
+              "quote": "There are eight Red Coins in each course, and collecting all of them causes a Power Star to appear over a Star Marker.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -689,12 +843,16 @@
             {
               "page": "Power Star",
               "revision": "5531900",
-              "quote": "playing the level again turns the Star into a translucent version of itself"
+              "quote": "playing the level again turns the Star into a translucent version of itself",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             },
             {
               "page": "Power Star",
               "revision": "5531900",
-              "quote": "This Star can be collected, but it does not add to the player's total Star count."
+              "quote": "This Star can be collected, but it does not add to the player's total Star count.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "lead (before the first heading)"
             }
           ]
         }
@@ -715,7 +873,9 @@
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Each of them are worth two Yellow Coins. When eight Red Coins are collected in an area, a Power Star spawns above the nearby Star Marker."
+              "quote": "Each of them are worth two Yellow Coins. When eight Red Coins are collected in an area, a Power Star spawns above the nearby Star Marker.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -726,22 +886,30 @@
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "all three Cap Switch courses have eight Red Coins to obtain: Tower of the Wing Cap, Cavern of the Metal Cap, and Vanish Cap Under the Moat."
+              "quote": "all three Cap Switch courses have eight Red Coins to obtain: Tower of the Wing Cap, Cavern of the Metal Cap, and Vanish Cap Under the Moat.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "This also goes for the Bowser courses: Bowser in the Dark World, Bowser in the Fire Sea, and Bowser in the Sky."
+              "quote": "This also goes for the Bowser courses: Bowser in the Dark World, Bowser in the Fire Sea, and Bowser in the Sky.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "two secret courses that each have only one Power Star from obtaining Red Coins: The Secret Aquarium and Wing Mario Over the Rainbow."
+              "quote": "two secret courses that each have only one Power Star from obtaining Red Coins: The Secret Aquarium and Wing Mario Over the Rainbow.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "The Princess's Secret Slide is the only course (secret or otherwise) to lack Red Coins and thus a corresponding Power Star."
+              "quote": "The Princess's Secret Slide is the only course (secret or otherwise) to lack Red Coins and thus a corresponding Power Star.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -752,42 +920,58 @@
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Bob-omb Battlefield - Find the 8 Red Coins"
+              "quote": "Bob-omb Battlefield - Find the 8 Red Coins",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Whomp's Fortress - Red Coins on the Floating Isle"
+              "quote": "Whomp's Fortress - Red Coins on the Floating Isle",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Jolly Roger Bay - Red Coins on the Ship Afloat"
+              "quote": "Jolly Roger Bay - Red Coins on the Ship Afloat",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Cool, Cool Mountain - Frosty Slide for 8 Red Coins"
+              "quote": "Cool, Cool Mountain - Frosty Slide for 8 Red Coins",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Big Boo's Haunt - Seek the 8 Red Coins"
+              "quote": "Big Boo's Haunt - Seek the 8 Red Coins",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Hazy Maze Cave - Elevate for 8 Red Coins"
+              "quote": "Hazy Maze Cave - Elevate for 8 Red Coins",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Lethal Lava Land - 8-Coin Puzzle with 15 Pieces"
+              "quote": "Lethal Lava Land - 8-Coin Puzzle with 15 Pieces",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Shifting Sand Land - Free Flying for 8 Red Coins"
+              "quote": "Shifting Sand Land - Free Flying for 8 Red Coins",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -798,37 +982,51 @@
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Dire, Dire Docks - Pole-Jumping for Red Coins"
+              "quote": "Dire, Dire Docks - Pole-Jumping for Red Coins",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Snowman's Land - Shell Shreddin' for Red Coins"
+              "quote": "Snowman's Land - Shell Shreddin' for Red Coins",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Wet-Dry World - Go to Town for Red Coins"
+              "quote": "Wet-Dry World - Go to Town for Red Coins",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Tall, Tall Mountain - Scary 'Shrooms, Red Coins"
+              "quote": "Tall, Tall Mountain - Scary 'Shrooms, Red Coins",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Tiny-Huge Island - Wiggler's Red Coins"
+              "quote": "Tiny-Huge Island - Wiggler's Red Coins",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Tick Tock Clock - Stop Time for Red Coins"
+              "quote": "Tick Tock Clock - Stop Time for Red Coins",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Red Coin",
               "revision": "5533785",
-              "quote": "Rainbow Ride - Coins Amassed in a Maze"
+              "quote": "Rainbow Ride - Coins Amassed in a Maze",
+              "quote_sits": "list_of_names",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         }
@@ -849,7 +1047,9 @@
             {
               "page": "Blue Coin",
               "revision": "5531894",
-              "quote": "Blue Coins appear in Super Mario 64 and Super Mario 64 DS, where they are depicted with a darker blue color. Blue Coins are worth five Yellow Coins when collected"
+              "quote": "Blue Coins appear in Super Mario 64 and Super Mario 64 DS, where they are depicted with a darker blue color. Blue Coins are worth five Yellow Coins when collected",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -860,12 +1060,16 @@
             {
               "page": "Blue Coin",
               "revision": "5531894",
-              "quote": "they typically appear from ground-pounding a Blue Coin Block. These Blue Coins appear for a limited time and are unobtainable once the timer expires."
+              "quote": "they typically appear from ground-pounding a Blue Coin Block. These Blue Coins appear for a limited time and are unobtainable once the timer expires.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Blue Coin",
               "revision": "5531894",
-              "quote": "Defeating certain enemies causes a Blue Coin to appear, including Koopa Troopas, Piranha Plants, Boos, Mr. Is, Bookends, Pokeys, and the Small Koopa Troopa. Grand Goombas also give out a Blue Coin if killed using a Ground Pound."
+              "quote": "Defeating certain enemies causes a Blue Coin to appear, including Koopa Troopas, Piranha Plants, Boos, Mr. Is, Bookends, Pokeys, and the Small Koopa Troopa. Grand Goombas also give out a Blue Coin if killed using a Ground Pound.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -876,7 +1080,9 @@
             {
               "page": "Blue Coin",
               "revision": "5531894",
-              "quote": "Blue Coins are also found in the slides on Cool, Cool Mountain (one is present) and Tall, Tall Mountain (three are present), where they start to move away from Mario once he gets close to them, in contrast to the stationary Yellow Coins."
+              "quote": "Blue Coins are also found in the slides on Cool, Cool Mountain (one is present) and Tall, Tall Mountain (three are present), where they start to move away from Mario once he gets close to them, in contrast to the stationary Yellow Coins.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         }
@@ -897,23 +1103,29 @@
             {
               "page": "1-Up Mushroom",
               "revision": "5532595",
-              "quote": "1UP Mushrooms are rendered as 2D assets depicted with green caps and yellow spots in Super Mario 64."
+              "quote": "1UP Mushrooms are rendered as 2D assets depicted with green caps and yellow spots in Super Mario 64.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "1-Up Mushroom",
               "revision": "5532595",
-              "quote": "Grants an extra life (most appearances)"
+              "quote": "Grants an extra life (most appearances)",
+              "quote_sits": "table_cell",
+              "quote_sits_at": "lead (before the first heading)"
             }
           ]
         },
         {
           "label": "Uses",
-          "text": "You find them on top of poles, in some yellow blocks, by touching butterflies that are not explosive, in a small field of flowers, and by flying through a ring of coins.",
+          "text": "They turn up in several ways: at the top of poles, inside some yellow blocks, in a small patch of flowers, from non-explosive butterflies you touch, and for flying through a ring of coins.",
           "from": [
             {
               "page": "1-Up Mushroom",
               "revision": "5532595",
-              "quote": "They are acquired through a variety of methods, such as on top of poles, in some yellow blocks, from touching butterflies that are not explosive, from a small field of flowers, or from flying through a ring of coins."
+              "quote": "They are acquired through a variety of methods, such as on top of poles, in some yellow blocks, from touching butterflies that are not explosive, from a small field of flowers, or from flying through a ring of coins.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -924,7 +1136,9 @@
             {
               "page": "1-Up Mushroom",
               "revision": "5532595",
-              "quote": "Depending on the 1UP Mushroom, it can be either motionless, move away from Mario, or move at him. There are also three 1UP Mushrooms on the roof of the Mushroom Castle."
+              "quote": "Depending on the 1UP Mushroom, it can be either motionless, move away from Mario, or move at him. There are also three 1UP Mushrooms on the roof of the Mushroom Castle.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         }
@@ -945,39 +1159,49 @@
             {
               "page": "Koopa Shell",
               "revision": "5523503",
-              "quote": "Koopa Shells, also referred to as shiny shells (or Shiny Shells), are rare objects in Super Mario 64. They only appear in green"
+              "quote": "Koopa Shells, also referred to as shiny shells (or Shiny Shells), are rare objects in Super Mario 64. They only appear in green",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
         {
           "label": "Uses",
-          "text": "Jump on it to travel fast and ram enemies, which defeats them instantly. Riding a shell lets you cross water, lava, quicksand and deadly quicksand without sinking or being hurt, and holding one underwater lets you swim faster for a short while.",
+          "text": "Jump onto it and you speed along, and ramming an enemy defeats it on the spot. While you ride, you can cross water, lava, quicksand and deadly quicksand and neither sink nor take damage. Carry one in front of you underwater to swim faster for a short time.",
           "from": [
             {
               "page": "Koopa Shell",
               "revision": "5523503",
-              "quote": "When Mario jumps on a Koopa Shell, he can travel at fast speed and ram into enemies to defeat them instantly. Riding a shell also allows Mario to navigate over water, lava, quicksand, and deadly quicksand without sinking or being hurt."
+              "quote": "When Mario jumps on a Koopa Shell, he can travel at fast speed and ram into enemies to defeat them instantly. Riding a shell also allows Mario to navigate over water, lava, quicksand, and deadly quicksand without sinking or being hurt.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Koopa Shell",
               "revision": "5523503",
-              "quote": "if Mario grabs a Koopa Shell while underwater, he can hold the shell in front of him and use it to swim faster in water for a short period of time."
+              "quote": "if Mario grabs a Koopa Shell while underwater, he can hold the shell in front of him and use it to swim faster in water for a short period of time.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
         {
           "label": "Tips",
-          "text": "Shells come from hitting some yellow blocks or from attacking a Koopa Troopa to knock it out of its shell. In the original game the blocks do not refill, but a shell stays until you ride it.",
+          "text": "You get one by hitting certain yellow blocks, or by attacking a Koopa Troopa until it leaves its shell. In the original game the blocks do not refill, but a shell stays until you ride it.",
           "from": [
             {
               "page": "Koopa Shell",
               "revision": "5523503",
-              "quote": "can be obtained by hitting some yellow blocks or attacking a Koopa Troopa to get it out of its shell"
+              "quote": "can be obtained by hitting some yellow blocks or attacking a Koopa Troopa to get it out of its shell",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Koopa Shell",
               "revision": "5523503",
-              "quote": "In the original version, when the player hits the yellow blocks for Koopa Shells, the boxes do not respawn, but shells do not disappear until Mario hitches a ride on one."
+              "quote": "In the original version, when the player hits the yellow blocks for Koopa Shells, the boxes do not respawn, but shells do not disappear until Mario hitches a ride on one.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -988,7 +1212,9 @@
             {
               "page": "Koopa Shell",
               "revision": "5523503",
-              "quote": "in Tiny-Huge Island, Mario can use the shell to ride the wind over the Windswept Valley in the Nintendo 64 version"
+              "quote": "in Tiny-Huge Island, Mario can use the shell to ride the wind over the Windswept Valley in the Nintendo 64 version",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         }
@@ -1009,27 +1235,37 @@
             {
               "page": "Cannon",
               "revision": "5536638",
-              "quote": "Cannons, this time colored blue, are a vital gameplay element in Super Mario 64 and Super Mario 64 DS."
+              "quote": "Cannons, this time colored blue, are a vital gameplay element in Super Mario 64 and Super Mario 64 DS.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Cannon",
               "revision": "5536638",
-              "quote": "the player can use it to fire Mario to previously unreachable areas"
+              "quote": "the player can use it to fire Mario to previously unreachable areas",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Cannon",
               "revision": "5536638",
-              "quote": "There is at least one cannon found in ten levels in these games, as well as one secret stage."
+              "quote": "There is at least one cannon found in ten levels in these games, as well as one secret stage.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Cannon",
               "revision": "5536638",
-              "quote": "The player must successfully locate and talk to the Bob-omb Buddies in each level in order to access the cannon"
+              "quote": "The player must successfully locate and talk to the Bob-omb Buddies in each level in order to access the cannon",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Cannon",
               "revision": "5536638",
-              "quote": "Until they do, the cannons remain covered by a metal hatch with a picture of a Bob-omb Buddy on it, and are inaccessible."
+              "quote": "Until they do, the cannons remain covered by a metal hatch with a picture of a Bob-omb Buddy on it, and are inaccessible.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -1040,43 +1276,57 @@
             {
               "page": "Cannon",
               "revision": "5536638",
-              "quote": "In order to use the cannon, Mario needs to only drop down into this hole."
+              "quote": "In order to use the cannon, Mario needs to only drop down into this hole.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Cannon",
               "revision": "5536638",
-              "quote": "a targeting reticle appears on the screen, allowing the player to aim the cannon where they want Mario to go"
+              "quote": "a targeting reticle appears on the screen, allowing the player to aim the cannon where they want Mario to go",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Cannon",
               "revision": "5536638",
-              "quote": "The player should aim slightly higher than the area they wish to shoot Mario to"
+              "quote": "The player should aim slightly higher than the area they wish to shoot Mario to",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Cannon",
               "revision": "5536638",
-              "quote": "Mario will not take falling damage if he is fired from a cannon."
+              "quote": "Mario will not take falling damage if he is fired from a cannon.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Cannon",
               "revision": "5536638",
-              "quote": "If the player collects a Wing Cap before entering a cannon, the player can fly around as Wing Mario immediately after being fired from the cannon, without needing to perform a Triple Jump to take off first."
+              "quote": "If the player collects a Wing Cap before entering a cannon, the player can fly around as Wing Mario immediately after being fired from the cannon, without needing to perform a Triple Jump to take off first.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
         {
           "label": "Tips",
-          "text": "Cannons cannot be unlocked until the first mission is done. In Bob-omb Battlefield one cannon can never be used because it shoots water bombs.",
+          "text": "A cannon stays locked until the first mission has been completed. In Bob-omb Battlefield one cannon can never be used because it shoots water bombs.",
           "from": [
             {
               "page": "Cannon",
               "revision": "5536638",
-              "quote": "Cannons cannot be unlocked until after the first mission is completed."
+              "quote": "Cannons cannot be unlocked until after the first mission is completed.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             },
             {
               "page": "Cannon",
               "revision": "5536638",
-              "quote": "In Bob-omb Battlefield, there is a cannon controlled by a Bob-omb that Mario can never access due to the cannon shooting water bombs."
+              "quote": "In Bob-omb Battlefield, there is a cannon controlled by a Bob-omb that Mario can never access due to the cannon shooting water bombs.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         },
@@ -1087,7 +1337,9 @@
             {
               "page": "Cannon",
               "revision": "5536638",
-              "quote": "Mario must shoot himself out of a cannon in order to obliterate the topmost section of a nearby wall, which releases the hidden Power Star."
+              "quote": "Mario must shoot himself out of a cannon in order to obliterate the topmost section of a nearby wall, which releases the hidden Power Star.",
+              "quote_sits": "editors_prose",
+              "quote_sits_at": "History > Super Mario series > Super Mario 64 / Super Mario 64 DS"
             }
           ]
         }

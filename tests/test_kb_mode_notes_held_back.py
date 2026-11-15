@@ -6,8 +6,10 @@ question that does say it (versus, vs, survival, realism, "playing as", "infecte
 its versus note first, a game with no such notes is untouched, and when nothing else fits a mode note
 still attaches.
 Used for: `_lead_with_the_note_the_question_names` and `_question_names_a_mode` in
-knowledge_base_search.py, called at the end of `_fuse_cards_by_rrf` in knowledge_base_service.py.
-Solves: plan 103, lane V3 (test question A-L4D2-01, "how to beat tank", Strategy).
+knowledge_base_search.py, called at the end of `_fuse_cards_by_rrf` and in the Speed-mode merge
+`_merge_preferred_first_demoted` in knowledge_base_service.py.
+Solves: plan 103, lane V3 (test question A-L4D2-01, "how to beat tank", Strategy); plan 104, lane V4
+(the same question in Speed mode, which never reaches the blend).
 Does not: Cover the word search or the notes' own words (tests/test_kb_versus_notes_search.py does).
 """
 
@@ -20,6 +22,7 @@ from backend.knowledge.knowledge_base_search import _question_names_a_mode
 from backend.knowledge.knowledge_base_service import (
     KnowledgeCard,
     _fuse_cards_by_rrf,
+    _merge_preferred_first_demoted,
     close_connection,
     resolve_corpus_db_path,
     retrieve_knowledge_context,
@@ -116,6 +119,30 @@ class HeldBackTests(unittest.TestCase):
                     [leader, TANK], QUERY_VECTOR, {1: [1.0, 0.0], 3: [0.9, 0.43]}, top_k=2, question="how to beat tank"
                 )
                 self.assertEqual(fused[0].name, "Tank" if held else "Surviving the Tank")
+
+
+class SpeedMergeTests(unittest.TestCase):
+    """Speed mode does no meaning search and never reaches the blend: it keeps the word order and
+    cuts to one note. The same rule applies there (plan 104, lane V4)."""
+
+    WORD_ORDER = [SURVIVING, BOOMER, TANK, PLAYING_AS]
+
+    def speed(self, question: str, cards=None, top_k: int = 1) -> list[str]:
+        merged = _merge_preferred_first_demoted(cards or self.WORD_ORDER, [], set(), top_k=top_k, question=question)
+        return [c.name for c in merged]
+
+    def test_without_the_question_the_word_order_stands(self):
+        self.assertEqual(self.speed(""), ["Surviving the Tank"])
+
+    def test_a_plain_tank_question_attaches_the_game_s_own_note(self):
+        self.assertEqual(self.speed("how to beat tank"), ["Tank"])
+
+    def test_a_question_that_names_the_mode_keeps_the_versus_note(self):
+        self.assertEqual(self.speed("how to beat the tank in versus"), ["Surviving the Tank"])
+
+    def test_the_note_is_found_even_when_it_sits_far_down_the_word_list(self):
+        filler = [_card(10 + i, "item", f"Item {i}") for i in range(12)]
+        self.assertEqual(self.speed("how to beat tank", [SURVIVING, *filler, TANK]), ["Tank"])
 
 
 class QuestionNamesAModeTests(unittest.TestCase):

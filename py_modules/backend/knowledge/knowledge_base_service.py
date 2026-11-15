@@ -502,13 +502,18 @@ def _merge_preferred_first_demoted(
     preferred_ids: set[int],
     *,
     top_k: int,
+    question: str = "",
 ) -> list[KnowledgeCard]:
-    """`_merge_preferred_first` (the keyword-only order), then the thumbs-down rule, then the
-    cut to ``top_k`` -- so a left-out card is replaced by the next one in line. Nothing marked:
-    exactly what `_merge_preferred_first` alone gave."""
+    """`_merge_preferred_first` (the keyword-only order), then the rule that a game-mode note does
+    not lead a question that never asked for the mode (`_lead_with_the_note_the_question_names`,
+    the one the blend applies; plan 104, lane V4), then the thumbs-down rule, then the cut to
+    ``top_k`` -- so a left-out card is replaced by the next one in line. Nothing marked and no
+    game-mode note leading: exactly what `_merge_preferred_first` alone gave. ``question`` left
+    blank, the mode rule never fires."""
     merged = _merge_preferred_first(
         cards, topic_cards, preferred_ids, top_k=max(top_k, len(cards) + len(topic_cards))
     )
+    merged = _lead_with_the_note_the_question_names(merged, question)
     return kb_demote_store.apply_demotes(merged, top_k)[:top_k]
 
 
@@ -1057,8 +1062,14 @@ def retrieve_knowledge_context(
                 and nomic_embed_available(pc_ip, model=DEFAULT_EMBEDDING_MODEL)
             )
             t_fts = time.perf_counter()
+            # The word-order path (Speed mode, or no meaning search) also reads the whole shortlist
+            # when a game is resolved: the rule that a game-mode note does not lead a question that
+            # never asked for the mode needs to see the ordinary note the question names, and in
+            # Speed mode that note is typically third. Only the first ``top_k`` still attach.
             fts_k = (
-                HYBRID_FTS_SHORTLIST_K if nomic_ready else top_k + kb_demote_store.spare_candidates()
+                HYBRID_FTS_SHORTLIST_K
+                if nomic_ready or game_id is not None
+                else top_k + kb_demote_store.spare_candidates()
             )
             # Only ever search within the resolved game. An unscoped search returns the best
             # keyword match in the whole corpus, which for an uncovered game means another
@@ -1224,10 +1235,14 @@ def retrieve_knowledge_context(
                 retrieval_method = "hybrid"
             except (OllamaEmbedError, EmbeddingDimensionMismatch, IndexError, ValueError):
                 embed_ms = round(max(query_embedding.elapsed_ms, (time.perf_counter() - t_embed) * 1000), 2)
-                cards = _merge_preferred_first_demoted(cards, topic_cards, preferred_ids, top_k=top_k)
+                cards = _merge_preferred_first_demoted(
+                    cards, topic_cards, preferred_ids, top_k=top_k, question=question
+                )
                 retrieval_method = "keyword_embed_unavailable"
         else:
-            cards = _merge_preferred_first_demoted(cards, topic_cards, preferred_ids, top_k=top_k)
+            cards = _merge_preferred_first_demoted(
+                cards, topic_cards, preferred_ids, top_k=top_k, question=question
+            )
 
         # D17 routes every Ask made while a covered game runs, not just Strategy-mode ones.
         # The genre fallback is a generic card with no relation to the question, which is a

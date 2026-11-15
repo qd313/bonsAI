@@ -51,6 +51,14 @@ class PlayingAsTheInfectedTests(unittest.TestCase):
                     [f"Playing as the {special.capitalize()}"],
                 )
 
+    def test_speed_how_to_beat_tank_attaches_the_tank_note(self):
+        # Plan 104, lane V4: Speed never reaches the blend; the word order alone used to put the
+        # versus note about surviving the Tank first.
+        self.assertEqual(self.attached("how to beat tank"), ["Tank"])
+
+    def test_speed_how_to_beat_tank_in_versus_still_attaches_the_versus_note(self):
+        self.assertEqual(self.attached("how to beat tank in versus"), ["Surviving the Tank"])
+
     def test_a_survivor_question_still_finds_the_survivors_note(self):
         names = self.attached("how do survivors deal with a hunter and jockey in versus", ask_mode="strategy")
         self.assertIn("Surviving Hunters and Jockeys", names)

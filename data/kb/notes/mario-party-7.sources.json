@@ -121,7 +121,7 @@
           ]
         },
         {
-          "line": "Weak points: Only this board has the Snack Orb; its timer says three turns, but it really shields you from just two rounds of rival turns, and it ends early if a Chain Chomp attacks.",
+          "line": "Weak points: Only this board has the Snack Orb; it is counted as three turns, but it really shields you from just two rounds of rival turns, and it ends early if a Chain Chomp attacks.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Snack_Orb",
@@ -925,7 +925,7 @@
           ]
         },
         {
-          "line": "Uses: Use it on yourself before a Chain Chomp comes for you. Its timer says three turns, but it really covers just two rounds of rival turns, or ends sooner if a Chain Chomp attacks, in which case the bone is thrown for you automatically.",
+          "line": "Uses: Use it on yourself before a Chain Chomp comes for you. It is counted as three turns, but it really covers just two rounds of rival turns, or ends sooner if a Chain Chomp attacks, in which case the bone is thrown for you automatically.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Snack_Orb",

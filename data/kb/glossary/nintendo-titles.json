@@ -671,8 +671,8 @@
     "term_key": "snack-orb",
     "term": "Snack Orb",
     "alt_forms": ["snack orbs"],
-    "peek": "A Pyramid Park Orb that blocks a Chain Chomp theft; its timer says three turns, but it really covers two rounds of rival turns.",
-    "full_text": "The board-specific Snack Orb blocks a Chain Chomp theft. Its timer says three turns, but it really covers just two rounds of rival turns. It is worth buying the moment you are ahead rather than waiting until a Chain Chomp is already bearing down on you."
+    "peek": "A Pyramid Park Orb that blocks a Chain Chomp theft; it is counted as three turns, but it really covers two rounds of rival turns.",
+    "full_text": "The board-specific Snack Orb blocks a Chain Chomp theft. It is counted as three turns, but it really covers just two rounds of rival turns. It is worth buying the moment you are ahead rather than waiting until a Chain Chomp is already bearing down on you."
   },
   {
     "term_id": 3356,

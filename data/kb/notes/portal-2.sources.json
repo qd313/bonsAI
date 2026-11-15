@@ -199,7 +199,7 @@
         },
         {
           "label": "Tips",
-          "text": "Crushers become more frequent in the final parts of the game and appear often in co-op. In co-op, touching one while floating in an Excursion Funnel hurts you again and again until you move away or die.",
+          "text": "You meet more Crushers as the game nears its end, and they turn up a lot in co-op. In co-op, if you touch one while you are floating in an Excursion Funnel, the damage keeps coming at intervals until you get away from it or die.",
           "from": [
             {
               "page": "Crusher",
@@ -293,7 +293,7 @@
       "lines": [
         {
           "label": "Summary",
-          "text": "Deadly lasers from the same kind of device housing as a Material Emancipation Grill. Anyone in contact with the beams dies instantly.",
+          "text": "A field of lethal beams shot from the same kind of housing a Material Emancipation Grill uses. If you touch the beams you die at once.",
           "from": [
             {
               "page": "Laser Field",
@@ -700,7 +700,7 @@
       "lines": [
         {
           "label": "Summary",
-          "text": "A shimmering light-blue field, also called a fizzler. It vaporizes unauthorized equipment that passes through it and lets you and the Portal Gun through.",
+          "text": "A shimmering light-blue field, also called a fizzler. Cubes, turrets and other objects that pass through it are destroyed, while you and your Portal Gun go through safely.",
           "from": [
             {
               "page": "Material Emancipation Grill",
@@ -722,13 +722,7 @@
               "quote": "(also known as Emancipation Grills or Fizzlers)",
               "quote_sits": "editors' prose",
               "quote_at": "lead section"
-            }
-          ]
-        },
-        {
-          "label": "Uses",
-          "text": "It destroys cubes and turrets sent through it, and no portal can pass through it. It also resets your Portal Gun: any portals you placed are removed.",
-          "from": [
+            },
             {
               "page": "Material Emancipation Grill",
               "revision": "188569",
@@ -749,7 +743,13 @@
               "quote": "When a Sentry Turret passes through the grill, it emits a long \"owowowowowowowow\" sound as it disintegrates.",
               "quote_sits": "editors' prose",
               "quote_at": "Function"
-            },
+            }
+          ]
+        },
+        {
+          "label": "Uses",
+          "text": "Walking through it shakes your Portal Gun and clears every portal you had placed, so you start a test with a clean slate. Portals cannot pass through it either.",
+          "from": [
             {
               "page": "Material Emancipation Grill",
               "revision": "188569",
@@ -768,7 +768,7 @@
         },
         {
           "label": "Tips",
-          "text": "In Portal 2 the grill glows brightly as an object nears it, warning that it will vaporize the object on contact.",
+          "text": "In Portal 2 the grill lights up bright when something gets close, as a warning that the object will be destroyed if it touches the field.",
           "from": [
             {
               "page": "Material Emancipation Grill",
@@ -791,7 +791,7 @@
       "lines": [
         {
           "label": "Summary",
-          "text": "A portal goes only on a light-coloured, flat surface. An uneven or dark surface cannot hold one.",
+          "text": "Portals can only be placed on flat surfaces that are light in colour; bumpy or dark ones will not take a portal.",
           "from": [
             {
               "page": "Surfaces",
@@ -881,7 +881,7 @@
         },
         {
           "label": "Uses",
-          "text": "It is harmless and works like a cube. The only difference is that it hops around aimlessly when it is not placed on a button.",
+          "text": "It cannot hurt you and you can use it like any cube; when it is not sitting on a button it just hops about with no purpose.",
           "from": [
             {
               "page": "Turrets",
@@ -894,7 +894,7 @@
         },
         {
           "label": "Tips",
-          "text": "Pick it up and it pulls its legs into the cube. If it falls on its side or upside down it waves its legs, trying to get up.",
+          "text": "When you pick one up, its legs fold into the cube. Knocked onto its side or upside down, it kicks its legs about trying to right itself.",
           "from": [
             {
               "page": "Turrets",

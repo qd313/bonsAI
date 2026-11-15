@@ -713,6 +713,19 @@ UNKNOWN_ADMISSIONS = (
 _HEDGE_RE = re.compile(r"\b(?:i dont know|i do not know|im not sure|i am not sure)\b(.*)")
 _HEDGE_LOOKAHEAD_WORDS = 6
 
+# The way the model usually says it (plan 104 lane T2): "I do not have specific notes on ...", "I have no
+# specific ...", "I lack a detailed walkthrough ...", "Since I don't have specific guides ...". The reply
+# names what is missing, so the words right after "I do not have" / "I have no" / "I lack" must include
+# one of these, and, as with the hedge above, not "your": "I don't have specific details about your
+# build" is the player's side, not the thing asked about. Phrases written the way ``_fold_apostrophes``
+# leaves a reply. Left out on purpose: "I can't give you" and "I cannot provide" (often about spoilers).
+_LACK_RE = re.compile(r"\b(?:i do not have|i dont have|i have no|i lack)\b(.*)")
+_LACK_OBJECTS = frozenset({
+    "specific", "detailed", "notes", "information", "details", "exact",
+    "guide", "guides", "walkthrough", "walkthroughs", "strategies",
+})
+_LACK_LOOKAHEAD_WORDS = 6
+
 # A reply that merely repeats the name is not advice; this many words is the least a sentence of
 # real tactics takes.
 MIN_ADVICE_WORDS = 12
@@ -731,6 +744,10 @@ def admitted_unknown(reply: str) -> bool:
     for m in _HEDGE_RE.finditer(folded):
         after = re.findall(r"[a-z]+", m.group(1))[:_HEDGE_LOOKAHEAD_WORDS]
         if "you" not in after and "your" not in after:
+            return True
+    for m in _LACK_RE.finditer(folded):
+        after = re.findall(r"[a-z]+", m.group(1))[:_LACK_LOOKAHEAD_WORDS]
+        if "your" not in after and not _LACK_OBJECTS.isdisjoint(after):
             return True
     return False
 

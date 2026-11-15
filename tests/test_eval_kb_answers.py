@@ -1817,5 +1817,84 @@ class EvalKbAnswersCaseSetTests(unittest.TestCase):
         self.assertIn("--set", err.getvalue())
 
 
+class EvalKbAnswersAdmissionPhrasingTests(unittest.TestCase):
+    """Plan 104 lane T2, commit 1: the answer test's "said so in its own words" count read 0 on replies
+    that plainly open with "I do not have specific notes on ...". Every reply below is quoted word for
+    word from the saved answers in the plan 103 honest-answer records (lane H1, round one and two);
+    each was missed before this commit. No Ollama."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load_eval_module()
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.modules.pop("eval_kb_answers", None)
+
+    _run = EvalKbAnswersUnknownTests._run
+
+    REAL_ADMISSIONS = (
+        # wording a, forced: A-UNKNOWN-01 try 1
+        "I do not have specific notes on the final boss Zorblax or detailed strategies for beating it. "
+        "I can give you some general advice based on what I know about the game's mechanics, but I'm guessing here.",
+        # round two: Obsidian Lance
+        "I don't have specific notes on the Obsidian Lance weapon in Hades or which aspect to pick for it, "
+        "so I will give you some general advice based on what I know.",
+        # wording a: A-UNKNOWN-01 try 3
+        "I have no specific notes on the final boss Zorblax in Deep Rock Galactic: Survivor. I can give you "
+        "some general advice on tackling tough encounters.",
+        # wording a: A-UNKNOWN-02 try 1 (comma after "specific")
+        "I do not have specific, step-by-step guides for defeating the boss named Grimthak in Deep Rock "
+        "Galactic: Survivor. Since I lack specific notes on this boss, I can only offer general advice.",
+        # the sentence opens with "Since", the admission is the clause
+        "Since I don't have specific guides for Grimthak, I can only give general advice for tackling bosses in the game.",
+        "Since I lack specific, detailed attack sequences for this particular encounter, I cannot provide the exact move-by-move attack pattern you requested.",
+        "Since I lack a detailed walkthrough for that particular encounter, I can only offer general advice for challenging difficult bosses.",
+        "Since I do not have specific, detailed attack patterns for Quillgrave in my current knowledge base, I will outline the general strategy.",
+        # wording e, record section 5 reply 2
+        "I don't have specific details on a boss named Zorblax in Deep Rock Galactic: Survivor in my current knowledge base.",
+        "I don't have detailed information on the Obsidian Lance's specific strengths or weaknesses, but usually, you should look at how it fits into your current build.",
+        "Since I don't have live gameplay footage or specific, detailed boss guides in my current context, I can only give general advice.",
+    )
+
+    def test_the_phrasings_the_record_says_were_missed_are_now_heard(self):
+        for reply in self.REAL_ADMISSIONS:
+            self.assertTrue(self.mod.admitted_unknown(reply), reply)
+
+    def test_each_phrasing_the_brief_names_is_heard_on_its_own(self):
+        for reply in (
+            "I do not have specific information about that boss.",
+            "I don't have specific information about that boss.",
+            "I have no specific information about that boss.",
+            "I lack specific information about that boss.",
+            "I do not have notes on that boss.",
+            "I do not have any notes on that boss.",
+        ):
+            with self.subTest(reply=reply):
+                self.assertTrue(self.mod.admitted_unknown(reply), reply)
+
+    def test_the_test_s_own_count_hears_a_real_reply_once_the_footer_is_off(self):
+        from backend.knowledge import kb_not_in_notes_notice as notice
+
+        reply = self.REAL_ADMISSIONS[0] + notice.append_no_close_match_notice("", True)
+        r = self._run(reply)
+        self.assertTrue(r.said_so_own_words)  # was False: the whole point of this commit
+        self.assertTrue(r.footer_showed)
+
+    def test_not_having_something_of_the_players_is_still_not_an_admission(self):
+        for reply in (
+            "I don't have specific details about your build, so pick whichever aspect feels good.",
+            "Since I don't have your screenshots or game state, I'll answer in general. Dodge left, then shoot.",
+            "I do not have specific information about your save file, but upgrade the shotgun first.",
+            "I have no way to see your screen. Zorblax is weak to fire; stay behind cover and kite it.",
+        ):
+            with self.subTest(reply=reply):
+                self.assertFalse(self.mod.admitted_unknown(reply), reply)
+
+    def test_a_confident_reply_is_still_not_an_admission(self):
+        for reply in (EvalKbAnswersUnknownTests.ZORBLAX_ADVICE, "You have no specific weakness to worry about here."):
+            self.assertFalse(self.mod.admitted_unknown(reply), reply)
+
+
 if __name__ == "__main__":
     unittest.main()

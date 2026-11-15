@@ -5,6 +5,7 @@
   "game_id": 31,
   "game": "Donkey Kong 64",
   "read_on": "2026-11-02",
+  "quote_sorting": "2026-11-15 (plan 104, lane S3): every page was read again at the revision named on its section, through the wiki's render call (by revision number), and saved under build/wiki-live/mariowiki/ as <page>-r<revision>. Beside each quote, quoted_sits says where it sits on the page (editors' prose, table cell, or the game's own text) and quoted_at the page heading; both lists run in step with quoted. One quote sat in the game's own text: the Prima Official Game Guide line under the Kritter page's 'Profiles and statistics'. It was removed from section 2000's list and the clause it carried ('the Prima guide rates them a one-hit enemy') was dropped from the note. Table cells that hold a whole editors' sentence (the Funky's Store upgrade descriptions) are sorted as editors' prose. Sentences that were the wiki's own wording almost unchanged were rewritten from a fact list; each such line carries a 'reworded' mark.",
   "sections": [
     {
       "section_id": 2000,
@@ -14,7 +15,7 @@
       "main_revision": "5475973",
       "lines": [
         {
-          "line": "Summary: The Kremling Krew's foot soldiers. In Donkey Kong 64 they are simply called Kremlings, and they wear a sleeveless leather jacket with a skull-and-crossbones on the back.",
+          "line": "Summary: The Kremling Krew's foot soldiers. In Donkey Kong 64 they are simply called Kremlings, and each wears a sleeveless leather jacket, with a skull and crossbones across its back.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kritter",
@@ -22,22 +23,37 @@
               "quoted": [
                 "Kritters (known as Kremlings in Donkey Kong 64 and DK: King of Swing) are enemies introduced in Donkey Kong Country. These Kremlings act as the main footsoldiers of the Kremling Krew",
                 "Kritters wear a sleeveless leather jacket with a skull-and-crossbones on the back"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "General information > Physical description"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Weak points: They are often the weakest Kremlings despite their muscular appearance, and the Prima guide rates them a one-hit enemy.",
+          "line": "Weak points: Despite their muscular look, they are usually the weakest of the Kremlings.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kritter",
               "revision": "5475973",
               "quoted": [
-                "They are often the weakest Kremlings despite their muscular appearance.",
-                "Prima Official Game Guide: Don't fear these reptilian nuisances. One hit will send them on their way."
+                "They are often the weakest Kremlings despite their muscular appearance."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
           "line": "Tips: You meet them on Crocodile Isle and in every world except Fungi Forest and Creepy Castle. In Frantic Factory a red kind belches in a set order, and Lanky has to memorize it and repeat it to earn a Golden Banana.",
@@ -48,6 +64,14 @@
               "quoted": [
                 "They are encountered at Crocodile Isle, all worlds barring Fungi Forest and Creepy Castle",
                 "There is a red variety encountered in Frantic Factory, where they belch in a certain order for Lanky to memorize and replicate for a Golden Bananas"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong franchise > Donkey Kong 64",
+                "History > Donkey Kong franchise > Donkey Kong 64"
               ]
             }
           ]
@@ -62,7 +86,7 @@
       "main_revision": "5468756",
       "lines": [
         {
-          "line": "Summary: A pink Kremling in a yellow-orange vest that throws unripe green oranges at the active Kong and can bounce a Kong backward with its belly.",
+          "line": "Summary: A pink Kremling in a yellow-orange vest. It lobs unripe green oranges at whichever Kong you are playing, and it can also knock a Kong backward with a belly bump.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Klump",
@@ -71,12 +95,23 @@
                 "They are now pink and wear a yellow-orange vest over their belly",
                 "Klumps attack the active Kong by throwing unripe, green oranges at them",
                 "Klumps can also bounce the Kong backward with their belly."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Weak points: Klumps resist basic attacks, and a direct hit only stuns one for a while. They are truly beaten only by the shockwave attack, a thrown orange, an instrument move, or Chunky touching them in his Hunky Chunky state.",
+          "line": "Weak points: Klumps resist basic attacks, and a direct hit only stuns one for a while. Besides the shockwave attack, a thrown orange or an instrument move, the only way to really finish one is for Chunky to touch it while in his Hunky Chunky form.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Klump",
@@ -85,12 +120,23 @@
                 "Klumps are among the stronger enemies, as they are resistant to basic attacks",
                 "the direct attack will only stun the Klump for a while",
                 "Klumps can only truly be defeated by the shockwave attack, throwing an orange, using a musical instrument, or if Chunky touches them while in his Hunky Chunky state."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Tips: A beaten Klump salutes, falls over and leaves three oranges. You find them in every level except Frantic Factory, Creepy Castle and the DK Isles hub, and in Fungi Forest only by day, because Skeleton Kremlings take their place at night.",
+          "line": "Tips: A beaten Klump salutes, falls over and leaves three oranges. They show up in every level apart from Frantic Factory, Creepy Castle and the DK Isles hub. In Fungi Forest they are there only by day, and Skeleton Kremlings take over after dark.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Klump",
@@ -100,9 +146,22 @@
                 "When defeated, Klump spins around, does a military salute and then falls down.",
                 "Klumps are encountered in every level except for Frantic Factory, Creepy Castle, and the DK Isles hub.",
                 "In Fungi Forest, Klumps only appear during the day time and are replaced by Skeleton Kremlings at night."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         }
       ]
     },
@@ -124,6 +183,18 @@
                 "All Kasplats wear a leather jacket, sunglasses",
                 "Kasplats attack by slamming on the ground, unleashing a shockwave in the process. They can also punch the active Kong if they approach them.",
                 "They are King K. Rool's bodyguards, of whom he entrusted to guard the blueprints from Snide and the Kongs."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "History",
+                "lead section"
               ]
             }
           ]
@@ -138,12 +209,22 @@
                 "Kasplats are quite resilient, often requiring players to deliver multiple hits to defeat them.",
                 "the Kongs can defeat a Kasplat in a single hit by using their shockwave attack or musical instrument move. Alternatively, five oranges can defeat one.",
                 "this does not occur if Chunky Kong flattens a Kasplat while in Hunky Chunky mode"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History",
+                "History",
+                "History"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Its hair colour shows which Kong can take its blueprint (yellow Donkey, red Diddy, blue Lanky, purple Tiny, green Chunky), and the hair turns white once the blueprint is taken. Every level has five Kasplats except Hideout Helm, which has none.",
+          "line": "Tips: Its hair colour shows which Kong can take its blueprint (yellow Donkey, red Diddy, blue Lanky, purple Tiny, green Chunky), and the hair turns white once the blueprint is taken. Hideout Helm has no Kasplats; every other level has five.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kasplat",
@@ -152,9 +233,20 @@
                 "Kasplats have one of five hair colors: yellow, red, blue, purple or green, corresponding respectively to Donkey, Diddy, Lanky, Tiny or Chunky Kong.",
                 "Once a Kasplat's blueprint has been collected, the Kasplat's hair turns white.",
                 "Every level has five Kasplats, except for Hideout Helm, which does not feature any Kasplats"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History",
+                "History",
+                "History"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         }
       ]
     },
@@ -166,7 +258,7 @@
       "main_revision": "5516812",
       "lines": [
         {
-          "line": "Summary: A yellow flying enemy. Some Zingers dive-bomb the Kong on sight, and others drop unripe green oranges when they notice you.",
+          "line": "Summary: A yellow flying enemy. Some dive at the active Kong the moment they see it, while others let unripe green oranges fall once they spot you.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Zinger",
@@ -174,9 +266,18 @@
               "quoted": [
                 "Unlike previous games, Zingers are only seen in yellow.",
                 "They dive-bomb at the active Kong on sight in DK Isles and some of the earlier levels, while other Zingers drop unripe green Oranges upon noticing them."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong franchise > Donkey Kong 64",
+                "History > Donkey Kong franchise > Donkey Kong 64"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
           "line": "Weak points: An orange, an instrument move or a projectile shot defeats a Zinger. The ones that drop oranges generally respawn after you beat them, and the dive-bombers do not.",
@@ -187,6 +288,14 @@
               "quoted": [
                 "A Zinger can be defeated by an orange, a musical instrument move, or being shot by a projectile.",
                 "Unlike the dive-bombing Zingers, the orange-dropping ones will generally respawn after defeating them."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong franchise > Donkey Kong 64",
+                "History > Donkey Kong franchise > Donkey Kong 64"
               ]
             }
           ]
@@ -201,6 +310,16 @@
                 "Zingers also appear in Jungle Japes, Angry Aztec, Gloomy Galleon (where one is inside of a mechanical fish), Fungi Forest during the daytime (Bats replace them at night), and Crystal Caves.",
                 "Zingers have a robotic variety named Mechanical Zingers, which appear in Frantic Factory in place of Zingers.",
                 "If a Zinger falls into the sand in Angry Aztec from being defeated, it disappears in a burst of flames without releasing any watermelon slice."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong franchise > Donkey Kong 64",
+                "History > Donkey Kong franchise > Donkey Kong 64",
+                "History > Donkey Kong franchise > Donkey Kong 64"
               ]
             }
           ]
@@ -215,7 +334,7 @@
       "main_revision": "5405526",
       "lines": [
         {
-          "line": "Summary: The boss of Frantic Factory and the third boss of the game, a giant metallic jack-in-the-box. Tiny Kong fights him on a floor of 16 glowing tiles.",
+          "line": "Summary: Frantic Factory's boss, the third in the game: a huge jack-in-the-box made of metal. Tiny Kong fights him on a floor of 16 glowing tiles.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Mad_Jack",
@@ -225,9 +344,22 @@
                 "is a large jack-in-the-box from Donkey Kong 64.",
                 "Mad Jack is a giant metallic jack-in-the-box",
                 "Tiny Kong finds herself in a dark room with 16 glowing floor tiles"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "Appearance",
+                "Battle"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
           "line": "Weak points: Pound the switch on the tile that matches the tile Mad Jack stands on with a Simian Slam to electrocute him, and five hits end the fight. The other switch shocks Tiny instead and costs her half a Watermelon of health.",
@@ -239,6 +371,16 @@
                 "Tiny must attack Mad Jack by using Simian Slam on the switch on the same-colored tile as Mad Jack's. This causes the tile to electrocute Mad Jack.",
                 "by hitting the other switch, Tiny Kong is electrocuted instead, causing her to lose half of a Watermelon in health.",
                 "After being electrocuted a fifth time, the floor tile that Mad Jack is standing on collapses."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Battle",
+                "Battle",
+                "Battle"
               ]
             }
           ]
@@ -253,6 +395,16 @@
                 "Tiny must glide between the floor tiles by using Pony Tail Twirl to hop between platforms. Mad Jack cannot hop diagonally.",
                 "After taking a fourth hit, Mad Jack becomes invisible and hops around on the tiles 15 times. In order to track where Mad Jack is, Tiny must watch the sparkles that trail behind him as he jumps.",
                 "If Tiny accidentally falls off the stage, she does not lose at the boss battle. Instead, a floor tile from the lower floor can return Tiny back to fighting Mad Jack."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Battle",
+                "Battle",
+                "Notes"
               ]
             }
           ]
@@ -277,6 +429,18 @@
                 "Fighting Puftoss requires that 250 bananas be fed to Scoff at the Troff 'n' Scoff location in order for Troff to unlock the door that leads to the battle against Puftoss.",
                 "Lanky Kong is the Kong who is selected to fight Puftoss.",
                 "sitting inside of a small motorboat shaped like a coconut half"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section",
+                "lead section"
               ]
             }
           ]
@@ -290,6 +454,14 @@
               "quoted": [
                 "Lanky can damage Puftoss by bringing electrical poles out from the water by driving through all five DK stars, each having a 30-second timer and resetting as he drives through each one. If done on time, the poles generate an electric current that electrocutes Puftoss, otherwise the poles go back into the water.",
                 "Puftoss is defeated after a fifth hit"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section"
               ]
             }
           ]
@@ -305,6 +477,18 @@
                 "The DK stars become increasingly smaller in round, and their corresponding timer decreases by five seconds: starting with 25, then 20, followed by 15, and lastly 10 seconds.",
                 "Puftoss cannot damage Lanky on contact.",
                 "In the second round, he shoots out four fireballs and slams the water, creating two blue shockwaves, which disappear on contact with the electric poles."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section",
+                "lead section"
               ]
             }
           ]
@@ -319,7 +503,7 @@
       "main_revision": "5475274",
       "lines": [
         {
-          "line": "Summary: The boss of Creepy Castle and the seventh, next-to-last boss of the game: a crude cardboard cut-out of King K. Rool worked by two Kritters, fought in an arena walled by a castle rampart, in the rain.",
+          "line": "Summary: Creepy Castle's boss, the seventh and next-to-last in the game: a rough cardboard cut-out of King K. Rool run by two Kritters. You fight it outdoors in a rainstorm, inside a square castle rampart.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/King_Kut_Out",
@@ -329,12 +513,25 @@
                 "It is the boss of Creepy Castle and serves as the seventh and penultimate boss of Donkey Kong 64.",
                 "The battle arena takes place outside during a rainstorm.",
                 "The location itself is enclosed by a castle rampart in the shape of a square."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "Layout",
+                "Layout"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Weak points: Step into the Barrel Cannon that faces it and blast into it. The ninth hit destroys it and the Boss Key drops in the middle of the arena.",
+          "line": "Weak points: Get into the Barrel Cannon that points at it and fire yourself at the boss. The ninth hit destroys it and the Boss Key drops in the middle of the arena.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/King_Kut_Out",
@@ -343,9 +540,20 @@
                 "To attack King Kut Out, the active Kong must enter the cannon facing King Kut Out and blast into it.",
                 "After another three hits, more specifically the ninth hit, King Kut Out is destroyed and its head falls off.",
                 "The Boss Key appears in the center of the arena for the Kongs to obtain."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Battle",
+                "Battle",
+                "Battle"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
           "line": "Tips: A shot with bad timing blasts the Kong out of the arena for good, and the next Kong comes out of the Tag Barrel (by default Tiny, then Chunky, Donkey and Diddy after Lanky). After the third hit a darker decoy follows it from the opposite wall, and blasting at the decoy throws you out. After three more hits it moves faster, so fire just as it appears in front of you; the ghosts that spawn near the cannons can be beaten to regain health.",
@@ -362,6 +570,26 @@
                 "After being hit three more times, King Kut Out's left arm breaks off and it moves even faster",
                 "To hit King Kut Out, the active Kong must immediately blast from the cannon just when King Kut Out appears from the wall in front.",
                 "they can also be defeated to regain health."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Battle",
+                "Battle",
+                "Layout",
+                "Battle",
+                "Battle",
+                "Battle",
+                "Battle",
+                "Battle"
               ]
             }
           ]
@@ -376,7 +604,7 @@
       "main_revision": "5477149",
       "lines": [
         {
-          "line": "Summary: Donkey Kong's own supply of bananas from his hoard, which the Kremlings steal and the Kongs have to recover. There are 200 in the seven worlds and DK Isles, plus a hidden 201st.",
+          "line": "Summary: Donkey Kong's own supply of bananas from his hoard, which the Kremlings steal and the Kongs have to recover. 200 are spread across the seven worlds and the DK Isles hub, and there is also a hidden 201st.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Golden_Banana",
@@ -387,18 +615,39 @@
                 "the Golden Bananas also have to be recovered by his four sidekicks",
                 "There are a total of 200 Golden Bananas to collect in the seven worlds and the hub location, DK Isles.",
                 "There is a hidden 201st Golden Banana that Tiny can obtain from the Banana Fairy Princess, once every Banana Fairy is caught."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Uses: B. Locker keeps you out of the other worlds until you carry a minimum number of Golden Bananas, a different number for each world. Snide also pays one for every blueprint you bring him.",
+          "line": "Uses: Each world's B. Locker stays shut until you carry enough Golden Bananas, and the number needed is different for every world. Snide also pays one for every blueprint you bring him.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Golden_Banana",
               "revision": "5477149",
               "quoted": [
                 "B. Locker allows them to enter if they have at least a minimum of a certain number of Golden Bananas (the requirement is different for each world)."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong 64"
               ]
             },
             {
@@ -406,12 +655,19 @@
               "revision": "5407817",
               "quoted": [
                 "Snide rewards them with a Golden Banana for every one they return."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Tips: Each Kong has to collect five in every world by finishing their own tasks, 25 per world in all. The hidden 201st is larger and carries the Rare logo, and all 201 are needed for 101 percent and the second ending.",
+          "line": "Tips: Each Kong earns five in every world by finishing that Kong's own tasks, 25 in each world. The hidden 201st is larger and carries the Rare logo, and all 201 are needed for 101 percent and the second ending.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Golden_Banana",
@@ -420,9 +676,20 @@
                 "the Kongs each have to collect five Golden Bananas in every world by fulfilling their own unique tasks and challenges, for a total of 25 Golden Bananas per world.",
                 "which is larger in size and sports the Rare logo",
                 "All 201 Golden Bananas are required for achieving a 101% completion rating and unlocking the second ending."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         }
       ]
     },
@@ -434,7 +701,7 @@
       "main_revision": "5407817",
       "lines": [
         {
-          "line": "Summary: The design plans for the Blast-o-Matic, which the Kongs recover for Snide. There are 40 in all, five in every area except Hideout Helm, one for each Kong.",
+          "line": "Summary: Plans for the Blast-o-Matic, which the Kongs have to collect and return to Snide. There are 40 in all, five in every area except Hideout Helm, one for each Kong.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Blueprint",
@@ -442,12 +709,21 @@
               "quoted": [
                 "Blueprints in Donkey Kong 64 are the design plans for the Blast-o-Matic. They are collectible items that the Kongs must recover for Snide. There are 40 blueprints in total.",
                 "Aside from Hideout Helm, every area in the game, including DK Isles, has five blueprints, one for each Kong to collect."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Uses: Each Kong takes their blueprints to Snide's H.Q. and gets a Golden Banana for every one. In Hideout Helm each blueprint also delays the Blast-o-Matic's countdown by a minute.",
+          "line": "Uses: Snide's H.Q. pays each Kong one Golden Banana for every blueprint that Kong hands in. In Hideout Helm each blueprint also delays the Blast-o-Matic's countdown by a minute.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Blueprint",
@@ -455,12 +731,21 @@
               "quoted": [
                 "Each Kong can individually visit Snide's H.Q. with their recovered blueprints, where Snide rewards them with a Golden Banana for every one they return.",
                 "Snide uses the blueprints to delay the Blast-o-Matic's countdown timer by a minute per blueprint."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Tips: Every blueprint is guarded by a Kasplat whose hair colour matches the Kong who can take it, and the wrong Kong sees only a hologram. The Helm countdown starts at ten minutes and can reach 50 with all 40, and once you have recovered them all Snide lets you replay most of the bonus stages.",
+          "line": "Tips: A Kasplat guards every blueprint, and its hair colour matches the one Kong who can take it; any other Kong sees only a hologram. The Helm countdown starts at ten minutes and can reach 50 with all 40, and once you have recovered them all Snide lets you replay most of the bonus stages.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Blueprint",
@@ -470,9 +755,22 @@
                 "If an incorrect Kong is active, the blueprint appears in the form of a hologram, and the Kong cannot collect it.",
                 "By default, the timer starts at ten minutes and can count down from 50 minutes at highest, if all 40 blueprints were collected beforehand.",
                 "after the Kongs recover every blueprint, Snide allows the Kongs to replay most of the Bonus Stages from a sub-menu at his headquarters."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section",
+                "lead section"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         }
       ]
     },
@@ -484,7 +782,7 @@
       "main_revision": "5425695",
       "lines": [
         {
-          "line": "Summary: A collectable that fuels each Kong's barrel ability. They are fairly common in most levels, especially where an ability is needed.",
+          "line": "Summary: A collectable that fuels each Kong's barrel ability. Most levels have a fair number, and they turn up most often where a Kong has to use an ability.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Crystal_Coconut",
@@ -492,18 +790,33 @@
               "quoted": [
                 "Crystal Coconuts are used as fuel for each Kong's Kong Barrel ability",
                 "They are semi-common items that appear in most levels, especially in areas requiring the Kongs to use their ability."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Uses: The coconuts become active once a Kong learns their ability at Cranky's Lab. Strong Kong makes Donkey Kong invincible and lets him cross quicksand and lava, but it ends when the coconuts run out or he uses a Bananaport Pad, and Lanky's OrangSprint burns more coconuts the longer he runs.",
+          "line": "Uses: Crystal Coconuts only start working after a Kong has bought their ability at Cranky's Lab. Strong Kong makes Donkey Kong invincible and lets him cross quicksand and lava, but it ends when the coconuts run out or he uses a Bananaport Pad, and Lanky's OrangSprint burns more coconuts the longer he runs.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Crystal_Coconut",
               "revision": "5425695",
               "quoted": [
                 "When a Kong learns their ability from Cranky's Lab, the Crystal Coconuts become activated."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong 64"
               ]
             },
             {
@@ -513,6 +826,16 @@
                 "Donkey Kong cannot be damaged in his Strong Kong form, also allowing him to move across surfaces such as quicksand and lava.",
                 "Strong Kong is powered by Crystal Coconuts, so if Donkey Kong runs out of Crystal Coconuts, the ability wears off.",
                 "Donkey Kong also loses the power if he uses a Bananaport Pad."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section"
               ]
             },
             {
@@ -520,9 +843,16 @@
               "revision": "5367563",
               "quoted": [
                 "The longer Lanky performs the OrangSprint, the more Crystal Coconuts he will use up."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
           "line": "Tips: A Kong starts able to carry 20, and each Banana Fairy you catch adds one, up to 40 with all 20 fairies. Catching every fairy also unlocks a cheat in the Mystery menu for unlimited coconuts.",
@@ -533,6 +863,14 @@
               "quoted": [
                 "At first, the Kongs can only carry up to 20 Crystal Coconuts, though for each Banana Fairy captured, one more gets added to their maximum. By capturing all 20 Banana Fairies, the Kongs can carry up to 40 Crystal Coconuts",
                 "Capturing every Banana Fairy unlocks a cheat from the Mystery menu that allows for infinite Crystal Coconuts to be used"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong 64",
+                "History > Donkey Kong 64"
               ]
             }
           ]
@@ -547,7 +885,7 @@
       "main_revision": "5407342",
       "lines": [
         {
-          "line": "Summary: A brown medal with a banana in the middle, earned by collecting 75 bananas of your own colour in a level.",
+          "line": "Summary: A brown medal with a banana in its centre; a Kong earns one by picking up 75 bananas of that Kong's own colour in a level.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Banana_Medal",
@@ -555,9 +893,18 @@
               "quoted": [
                 "They are brown medals with a banana spinning in their centers.",
                 "A Kong can obtain a Banana Medal by collecting 75 bananas of their corresponding color in a level."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
           "line": "Uses: There are 40 in all, eight for each Kong, and having 15 lets you play Jetpac in Cranky's Lab. Every medal is needed for 101 percent.",
@@ -569,6 +916,16 @@
                 "There is a total of 40 Banana Medals, with eight for each Kong to obtain.",
                 "If the Kongs have at least 15 Banana Medals, the Kongs can play a classic Rareware title from Cranky's Lab, Jetpac.",
                 "Every Banana Medal is required for 101% completion."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section"
               ]
             }
           ]
@@ -582,6 +939,14 @@
               "quoted": [
                 "In the final level, Hideout Helm, the criterion for obtaining a Banana Medal is different, as each Kong can obtain one after completing two Bonus Barrel challenges.",
                 "The five that appear, however, become permanently unobtainable if the Kongs leave the rooms without collecting them, preventing the player from achieving 101% completion."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section"
               ]
             }
           ]
@@ -608,6 +973,22 @@
                 "Lanky Kong: Grape Shooter",
                 "Tiny Kong: Feather Bow",
                 "Chunky Kong: Pineapple Launcher"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory"
               ]
             }
           ]
@@ -621,6 +1002,14 @@
               "quoted": [
                 "The Coconut Shooter has a limited supply of coconut ammo, which Donkey Kong can use to shoot Banana Balloons, hit Coconut Switches, and snipe enemies from afar.",
                 "Supply Crates (each providing five coconuts)"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section"
               ]
             },
             {
@@ -629,6 +1018,14 @@
               "quoted": [
                 "The Kongs can also visit Funky's Store to have their ammo supply replenished if it is below the maximum amount.",
                 "Funky's Store appears in every level except Hideout Helm."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section"
               ]
             }
           ]
@@ -645,6 +1042,20 @@
                 "Homing Ammo || 5 Banana Bunch Coins || Allows the Kongs to use homing ammo, which causes their shots to home in on enemies.",
                 "|| Fungi Forest || Ammo Belt 2 || 5 Banana Bunch Coins || Increases the maximum capacity of the Kongs' weapons to 200 ammo, and their orange capacity to 30. || Crystal Caves",
                 "Sniper Scope || 7 Banana Bunch Coins || Allows the Kongs to shoot ammo farther while in a first-person view. || Creepy Castle"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory"
               ]
             }
           ]
@@ -671,6 +1082,22 @@
                 "Lanky Kong – trombone (Trombone Tremor)",
                 "Tiny Kong – alto saxophone (Saxophone Slam)",
                 "Chunky Kong – triangle (Triangle Trample)"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory"
               ]
             }
           ]
@@ -684,6 +1111,14 @@
               "quoted": [
                 "By default, their instrument can be used up to ten times without a Music Pad.",
                 "the active Kong can have Candy replenish their instrument's energy, but this is also doable with Headphones."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Inventory",
+                "lead section"
               ]
             },
             {
@@ -691,6 +1126,12 @@
               "revision": "5468756",
               "quoted": [
                 "Klumps can only truly be defeated by the shockwave attack, throwing an orange, using a musical instrument"
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong 64"
               ]
             },
             {
@@ -698,6 +1139,12 @@
               "revision": "5411217",
               "quoted": [
                 "the Kongs can defeat a Kasplat in a single hit by using their shockwave attack or musical instrument move."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History"
               ]
             },
             {
@@ -705,6 +1152,12 @@
               "revision": "5516812",
               "quoted": [
                 "A Zinger can be defeated by an orange, a musical instrument move, or being shot by a projectile."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "History > Donkey Kong franchise > Donkey Kong 64"
               ]
             }
           ]
@@ -721,6 +1174,20 @@
                 "Starting with Crystal Caves, the Kongs can perform up to 20 times if they pay seven Banana Coins. Candy also adds a third Watermelon to the Kongs' health bar.",
                 "Starting with Creepy Castle, the Kongs can perform up to 25 times if they pay nine Banana Coins.",
                 "Jungle Japes, Fungi Forest, and Hideout Helm are the only three worlds to not have a Candy's Music Shop."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "lead section"
               ]
             }
           ]
@@ -746,6 +1213,20 @@
                 "By landing, the Kong generates a small, surrounding green shockwave.",
                 "The move is primarily used for pounding Kong Switches, though it can also be used to attack enemies.",
                 "The three Simian Slams are the only moves at Cranky's Lab that apply to every Kong."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section",
+                "lead section",
+                "lead section"
               ]
             }
           ]
@@ -761,6 +1242,18 @@
                 "Green Switches are the weakest, and at least a Simian Slam is required to activate them.",
                 "Blue Switches are stronger, and at least a Super Simian Slam can activate them.",
                 "Red Switches are the strongest, since only a Super Duper Simian Slam can activate them; this type appears only in Creepy Castle."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section",
+                "lead section"
               ]
             },
             {
@@ -769,6 +1262,14 @@
               "quoted": [
                 "Starting with Fungi Forest, the Kongs can purchase the Super Simian Slam (scientific name: Big Buttus Bashium) for five Banana Bunch Coins at Cranky's Lab.",
                 "Starting with Creepy Castle, the Kongs can purchase the Super Duper Simian Slam (scientific name: Bigga Buttus Bashium) from Cranky's Lab for seven Banana Bunch Coins."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section"
               ]
             }
           ]
@@ -783,6 +1284,16 @@
                 "The Simian Slam is the first move learned at Cranky's Lab and the only one that can be learned for free.",
                 "The Super Simian Slam replaces the original Simian Slam.",
                 "Both the Super Simian Slam and the Super Duper Simian Slam deal the same amount as damage to enemies as the regular Simian Slam."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section"
               ]
             },
             {
@@ -790,6 +1301,12 @@
               "revision": "5410803",
               "quoted": [
                 "Blue Switches begin to appear once the player reaches Fungi Forest. However, one appears in Gloomy Galleon's lobby on DK Isles."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section"
               ]
             }
           ]
@@ -812,6 +1329,14 @@
               "quoted": [
                 "Here, the Kongs can purchase, for a certain amount of Banana Bunch Coins, special potions concocted by Cranky to learn special attacks, ranging from Simian Slam to Hunky Chunky.",
                 "It appears in all of the levels in DK Isles, except for Hideout Helm."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section"
               ]
             }
           ]
@@ -839,6 +1364,42 @@
                 "Hunky Chunky (Frantic Factory): 3 Banana Bunch Coins",
                 "Primate Punch (Frantic Factory): 5 Banana Bunch Coins",
                 "Gorilla Gone (Crystal Caves): 7 Banana Bunch Coins"
+              ],
+              "quoted_sits": [
+                "table cell",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory"
               ]
             }
           ]
@@ -855,6 +1416,20 @@
                 "OrangStand (Angry Aztec): 3 Banana Bunch Coins",
                 "Mini-Monkey (Angry Aztec): 3 Banana Bunch Coins",
                 "Hunky Chunky (Frantic Factory): 3 Banana Bunch Coins"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory",
+                "Inventory"
               ]
             },
             {
@@ -862,6 +1437,12 @@
               "revision": "5523267",
               "quoted": [
                 "Donkey Kong can jump into a Donkey Barrel to activate Strong Kong."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section"
               ]
             },
             {
@@ -869,6 +1450,12 @@
               "revision": "5367563",
               "quoted": [
                 "Lanky can activate it by jumping into a Lanky Barrel."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section"
               ]
             }
           ]

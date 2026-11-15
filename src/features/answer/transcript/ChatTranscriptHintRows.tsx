@@ -3,7 +3,8 @@
  *
  * Purpose: The rows that can sit under the chat's turns: "No game detected", the
  * troubleshooting hint that points at the game-reading permission (with Open Permissions and
- * Dismiss), and the "Open the Ollama tab" row under the "AI is not set up" answer. Moved out of MainTabChatTranscript.tsx unchanged, so that file has room under its
+ * Dismiss), the "Open the Ollama tab" row under the "AI is not set up" answer, and the "Ask anyway" row under the low-memory warning
+ * (plan 104 G1, the same row and the same stop, a second kind). Moved out of MainTabChatTranscript.tsx unchanged, so that file has room under its
  * size limit for the answer's sections (plan 93, lane O3).
  *
  * Used for: MainTabChatTranscript.tsx, in the same place the rows always sat.
@@ -43,6 +44,10 @@ export type ChatTranscriptHintRowsProps = {
   /** The newest answer is "The AI is not set up on this Deck yet" and there is a way to the Ollama tab. */
   showNoAiRow: boolean;
   onNavigateToOllama?: () => void;
+  /** The newest answer is the low-memory warning and the question can be sent again. */
+  showLowMemoryRow?: boolean;
+  /** "Ask anyway": arms the back end's one-shot and sends the same question again. */
+  onAskAnyway?: () => void;
   dismissTroubleshootingPermHint: () => void;
   navTargets: PermHintNavTargets;
 };
@@ -74,7 +79,7 @@ export function ChatTranscriptHintRows(props: ChatTranscriptHintRowsProps) {
     </div>
   </PanelSectionRow>
 ) : null}
-{!isAsking && props.showNoAiRow && props.onNavigateToOllama ? (
+{!isAsking && (props.showNoAiRow ? props.onNavigateToOllama : props.showLowMemoryRow && props.onAskAnyway) ? (
   <PanelSectionRow>
     {/* Same Steam nav node and moves as the troubleshooting row below: the two never show together. */}
     <Focusable
@@ -91,10 +96,10 @@ export function ChatTranscriptHintRows(props: ChatTranscriptHintRowsProps) {
           ref={troubleshootHintButtonRefs[0]}
           // The frosted look the plugin's other buttons wear: Decky's default drew it light (plan96-QA-LOOK3-main.json).
           className={FOCUS_RING_BTN_CLASS}
-          onClick={props.onNavigateToOllama}
+          onClick={props.showNoAiRow ? props.onNavigateToOllama : props.onAskAnyway}
           style={{ ...SETTINGS_GLASS_BTN, fontSize: textPx(11), padding: "4px 10px", minHeight: 34 }}
         >
-          Open the Ollama tab
+          {props.showNoAiRow ? "Open the Ollama tab" : "Ask anyway"}
         </Button>
       </div>
     </Focusable>
@@ -102,6 +107,7 @@ export function ChatTranscriptHintRows(props: ChatTranscriptHintRowsProps) {
 ) : null}
 {!isAsking &&
 !props.showNoAiRow &&
+!props.showLowMemoryRow &&
 !props.gameContextReadEnabled &&
 !props.troubleshootingPermHintDismissed &&
 questionLooksLikeTroubleshootingAsk(unifiedInput) ? (

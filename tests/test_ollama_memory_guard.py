@@ -159,7 +159,27 @@ class ArmedMarkTests(unittest.TestCase):
         self.assertFalse(guard.consume_ask_anyway(now=1.0))
 
 
+class ArmMethodTests(unittest.IsolatedAsyncioTestCase):
+    async def test_the_plugin_method_the_row_calls_arms_the_one_shot(self) -> None:
+        guard.reset_for_tests()
+        self.addCleanup(guard.reset_for_tests)
+        from main import Plugin
+
+        self.assertFalse(guard.consume_ask_anyway())
+        await Plugin().arm_ollama_ask_anyway()
+        self.assertTrue(guard.consume_ask_anyway())
+        self.assertFalse(guard.consume_ask_anyway())
+
+
 class WarningWordsTests(unittest.TestCase):
+    def test_the_screens_opening_words_match_the_back_end(self) -> None:
+        """The "Ask anyway" row finds the warning by its opening; the two must not drift."""
+        ts = (Path(__file__).resolve().parent.parent / "src" / "features" / "answer" / "transcript"
+              / "lowMemoryNotice.ts").read_text(encoding="utf-8")
+        found = re.search(r'LOW_MEMORY_MESSAGE_START\s*=\s*"([^"]+)"', ts)
+        self.assertIsNotNone(found)
+        self.assertEqual(found.group(1), guard.LOW_MEMORY_MESSAGE_START)  # type: ignore[union-attr]
+
     def test_the_warning_says_what_is_free_what_is_needed_what_helps_and_the_risk(self) -> None:
         verdict = guard.MemoryVerdict(
             short=True, available_mb=3500, needed_mb=5800, left_mb=-2300, limit_mb=2000, model=MODEL,

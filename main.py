@@ -211,6 +211,7 @@ from backend.ollama.ollama_mdns_discovery_service import (
     discover_mdns_ollama_hosts as run_mdns_ollama_discovery,
 )
 from backend.ollama import ollama_local_setup_rpc
+from backend.ollama import ollama_memory_guard
 from backend.ollama.ollama_pc_models import prune_after_connection_test
 from backend.ollama import ollama_pull_resume_service
 from backend.voice.voice_transcription_service import (
@@ -1231,6 +1232,12 @@ class Plugin:
         ``pc_ip`` is the PC address kept on the screen side; a name that PC still has stays in the
         saved try order."""
         return await ollama_local_setup_rpc.delete_ollama_model(self, tag, pc_ip)
+
+    async def arm_ollama_ask_anyway(self) -> dict:
+        """The warning's "Ask anyway" row: let the next question load the AI despite the low-memory
+        warning. One use, good for 60 seconds, held in the plugin's memory (never saved)."""
+        ollama_memory_guard.arm_ask_anyway()
+        return {"armed": True}
 
     async def fetch_ollama_catalog_metadata(self, tags: Any = None, pc_ip: str = ""):
         """Live sizes from registry.ollama.ai with offline fallback metadata.

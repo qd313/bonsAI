@@ -162,6 +162,7 @@ import { formatAppliedTuningBannerText } from "../../power/appliedTuningText";
 import { ChatLatencyNotices } from "../notices/ChatLatencyNotices";
 import { ChatTranscriptHintRows } from "./ChatTranscriptHintRows";
 import { isNoAiSetUpAnswer } from "./noAiSetUpNotice";
+import { askAnyway, isLowMemoryAnswer } from "./lowMemoryNotice";
 import type { ModelPolicyDisclosurePayload } from "../../models/modelPolicy";
 import { StrategyChecklistPanel } from "../../strategy/StrategyChecklistPanel";
 import type { BonsaiCapabilityKey } from "../../permissions/permissionDeepLink";
@@ -572,6 +573,14 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   const showLiveResponse =
     Boolean(liveResponseBody.trim()) &&
     !(isAsking && !isStreamingPreview && isPendingPlaceholderResponse(liveResponseBody));
+  // The newest answer a person is reading. A failed turn is saved and reloaded like any other, so by the time it is
+  // read it is the newest archived turn, not the live one (Deck, plan96-P96-F1-NO-AI.json: the row never drew).
+  const newestArchivedTurn = askThreadCollapsed[askThreadCollapsed.length - 1];
+  const newestIsLive = expandedTurnKey === "live" && showLiveResponse;
+  const newestShownAnswer = newestIsLive ? liveResponseBody : newestArchivedTurn?.answer;
+  // The question the low-memory warning answered, for "Ask anyway" to send again.
+  const warnedQuestion = (newestIsLive ? lastExchange?.question || liveQuestion : newestArchivedTurn?.question) ?? "";
+  const warnedDisplay = newestIsLive ? warnedQuestion : newestArchivedTurn?.questionDisplay || warnedQuestion;
   /*
    * The live thinking shows only while the wait is still a wait. The moment the first of the
    * answer arrives the block goes, because the answer needs the room: the visible chat above the
@@ -1670,14 +1679,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   troubleshootingPermHintDismissed={troubleshootingPermHintDismissed}
   unifiedInput={unifiedInput}
   onNavigateToPermissions={onNavigateToPermissions}
-  showNoAiRow={isNoAiSetUpAnswer(
-    expandedTurnKey === "live" && showLiveResponse
-      ? liveResponseBody
-      : // The failed turn is saved and reloaded like any other, so by the time a person reads it, it is the
-        // newest archived turn, not the live one (Deck, plan96-P96-F1-NO-AI.json: the row never drew).
-        askThreadCollapsed[askThreadCollapsed.length - 1]?.answer,
-  )}
+  showNoAiRow={isNoAiSetUpAnswer(newestShownAnswer)}
   onNavigateToOllama={onNavigateToOllama}
+  showLowMemoryRow={isLowMemoryAnswer(newestShownAnswer)}
+  onAskAnyway={onAskOllama && warnedQuestion ? () => void askAnyway(onAskOllama, warnedQuestion, warnedDisplay) : undefined}
   dismissTroubleshootingPermHint={dismissTroubleshootingPermHint}
   navTargets={permHintNavTargets}
 />

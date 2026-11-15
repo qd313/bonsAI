@@ -358,7 +358,7 @@
           ]
         },
         {
-          "line": "Looks like: Stooped, with snail-like skin and a small spare arm on its chest; green bands circle its neck and arms like shackles.",
+          "line": "Looks like: A small extra arm grows from its chest, and it leans forward. Green bands on its neck and arms look like restraints, and its skin looks like a snail's.",
           "drawn_from": [
             {
               "page": "https://black-mesa-source.fandom.com/wiki/Vortigaunt",
@@ -617,7 +617,7 @@
           ]
         },
         {
-          "line": "Tips: The pistols sound silenced. Their boots keep them from being hurt by falls. In an earlier storage area they start hunting you even if they have not seen you; in a later one, all of them but one hunt you and surround you as you arrive.",
+          "line": "Tips: The pistols sound silenced. Their boots keep them from being hurt by falls. They come looking for you rather than waiting in place.",
           "drawn_from": [
             {
               "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
@@ -734,7 +734,7 @@
       "main_revision": "332735",
       "lines": [
         {
-          "line": "Summary: A silent bolt gun that hits extremely hard and carries only 10 bolts.",
+          "line": "Summary: A silent bolt gun that hits very hard but fires slowly and carries only 10 bolts.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
@@ -742,7 +742,8 @@
               "part_of_page": "Weapons and equipment",
               "sits_in": "wiki editors' own prose",
               "quoted": [
-                "the Crossbow deals extremely high damage"
+                "the Crossbow deals extremely high damage",
+                "at the expense of a very low fire rate and much fewer bolts in reserve."
               ]
             },
             {
@@ -766,22 +767,21 @@
           ]
         },
         {
-          "line": "Uses: Every hit does extremely high damage, at a very slow rate of fire.",
+          "line": "Uses: One of the few weapons that can kill an underwater barnacle.",
           "drawn_from": [
             {
-              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
-              "revision": "332735",
-              "part_of_page": "Weapons and equipment",
-              "sits_in": "wiki editors' own prose",
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Barnacle",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
               "quoted": [
-                "the Crossbow deals extremely high damage",
-                "at the expense of a very low fire rate and much fewer bolts in reserve."
+                "All of your weapons except the Crowbar, Glock-17, Crossbow, RPG, Hivehand, and explosives will be useless to kill this Barnacle."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Bolts no longer ricochet in the Steam release. It is one of the few weapons that kill the underwater barnacle.",
+          "line": "Tips: Bolts no longer ricochet in the Steam release.",
           "drawn_from": [
             {
               "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
@@ -790,15 +790,6 @@
               "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
               "quoted": [
                 "From the free mod, the dart can ricochet. This was removed in the steam version."
-              ]
-            },
-            {
-              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
-              "revision": "4567",
-              "part_of_page": "NPCs > Barnacle",
-              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
-              "quoted": [
-                "All of your weapons except the Crowbar, Glock-17, Crossbow, RPG, Hivehand, and explosives will be useless to kill this Barnacle."
               ]
             }
           ]

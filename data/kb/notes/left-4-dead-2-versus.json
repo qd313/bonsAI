@@ -276,6 +276,61 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "173082",
       "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4525,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Scavenge as the infected team",
+      "card": "Summary: Infected in Scavenge are not only trying to put survivors down: stopping the pouring, and making survivors drop their cans, is what ends their turn.\nTips: Go after survivors who carry or pour cans, since any infected attack resets the pour timer. Pinning a lone pourer (pounce, tongue, charge or ride) also makes them drop the can, which matters most in overtime. A plain claw or punch only delays the pour.\nTips: Spitter acid delays a pour without making the survivor drop the can. Spit a few seconds before they reach the generator, because the spit takes time to land and spread before it does damage.\nTips: Do not spawn too eagerly once set-up ends, as the survivors may head somewhere you did not expect. Survivors who are alone and far from both the group and the generator are good targets, and enclosed can spots are good places to wait for a lone survivor.",
+      "source_url": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173082",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4526,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Scavenge as the survivor team",
+      "card": "Summary: Scavenge survivors are told to stay near a teammate, to kill whatever is hitting them before they pour, and to take a Spitter down fast because she can destroy cans and delay the pour.\nTips: Long-range weapons such as the Combat Rifle or Sniper Rifle suit the mode: there are few common infected, and distance helps against special infected that drag survivors away. If you start as survivors, go for the farthest cans first while health and supplies are good; with a weaker team or a strong infected side, take the closest first.\nTips: Juggling cans means tossing one forward, picking up the next and tossing that, so four or five move along at nearly running speed. Gathering several groups before heading back is much faster than one trip per group.\nTips: A Spitter can destroy a can left unattended, even briefly, forcing you through the acid to save it. Adrenaline helps in a pinch, since it speeds the pour and lets you keep pouring while you are hit.",
+      "source_url": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173082",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4527,
+      "game_id": 3,
+      "section_type": "callout",
+      "name": "The Passing versus ambush spots",
+      "card": "Summary: Ambush spots for the infected on the first two chapters of The Passing, The Riverbank and The Underground. High buildings suit Hunters, and Smokers do best on whoever is last in line.\nTips: The Riverbank: sneaking up behind the Bride Witch and staying there makes survivors shoot on instinct and startle her, and a survivor who comes out of one of the tents with footlockers is an easy pounce. A Smoker should pull away survivors who try to kill her, since she stands in the open.\nTips: The Underground: many high buildings help a Hunter, and a lone survivor is the target. A Smoker can pull the last survivor away from the window as the group crosses the pool hall toward the construction site. On the plank three storeys up, pull from the alley below (the common choice, so bring a distraction) or from the roof above.\nTips: The Underground's Crescendo Event: a Hunter can pounce the furthest survivor, who is hidden by the water. A Smoker can snag the last survivor as they drop into the sewer water, and with a Hunter ready to pounce the victim after the drag it is very lethal.",
+      "source_url": "https://left4dead.fandom.com/wiki/The_Hunter",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173041",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4528,
+      "game_id": 3,
+      "section_type": "callout",
+      "name": "Hard Rain versus ambush spots",
+      "card": "Summary: Ambush spots for the infected on the first four chapters of Hard Rain: The Milltown, The Sugar Mill, Mill Escape and Return to Town. The Sugar Mill's Witches and high ground are the main assets.\nTips: The Milltown: houses all over the map give high pounces, especially when survivors must walk between two-storey ones. A Smoker can snare through the large hole in the Burger Tank's roof without being exposed, unless survivors climb the ladder outside, and the chapter always has an alarmed car to drag someone into.\nTips: The Sugar Mill: catwalks, vats, broken buildings and the three-storey mill are launch points for a Hunter. In the cane field, wait for a Boomer's bile, which stops survivors seeing each other's outlines and so hides you; without a Boomer, pounce from the top of the mill. Dragging or steering a survivor into a Witch almost always incapacitates them.\nTips: Mill Escape and Return to Town reuse earlier spots: the Hunter's Sugar Mill tactics work in Mill Escape and its Milltown tactics work in Return to Town. In Return to Town, any rooftop or alleyway will do for a Smoker.",
+      "source_url": "https://left4dead.fandom.com/wiki/The_Hunter",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173041",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4529,
+      "game_id": 3,
+      "section_type": "callout",
+      "name": "The Parish versus ambush spots",
+      "card": "Summary: Ambush spots for the infected on the first four chapters of The Parish: The Waterfront, The Park, The Cemetery and The Quarter. Alarmed cars, bushes and the Cemetery's drops that cannot be climbed back up come up most.\nTips: The Waterfront: tall buildings are Hunter perches, and a Hunter can wait behind the alarmed car at the end of the level and pounce anyone who comes near. A Smoker can climb onto the kitchen's roof and grab survivors through the hole when they are inside.\nTips: The Park: a Hunter can hide in the bushes until a survivor strays from the group, ideally with a Boomer vomiting on the pounced survivor to shield them with common infected. Pouncing the last survivor running to shut off the alarm also slows the team's rescue.\nTips: The Cemetery: a Hunter can pounce on a survivor in the dark sewers, where water covers him, or from behind a car in the alarmed car area; in the Impound Lot a Smoker can drag a survivor into a car and hope the others shoot the car, not him. The Quarter: during its Crescendo Event, drag a survivor to the ground for heavy fall damage.",
+      "source_url": "https://left4dead.fandom.com/wiki/The_Hunter",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173041",
+      "crawled_at": "2026-11-15"
     }
   ]
 }

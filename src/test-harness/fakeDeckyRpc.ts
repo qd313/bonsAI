@@ -30,6 +30,7 @@ export const FRONTEND_RPC_METHODS = [
   "cancel_local_ollama_setup",
   "apply_ollama_local_autostart",
   "get_ollama_local_autostart_status",
+  "arm_ollama_ask_anyway",
   "get_deck_ip",
   "append_app_log",
   "append_desktop_debug_note",
@@ -131,6 +132,7 @@ function defaultHandlers(): Record<string, RpcHandler> {
     start_local_ollama_setup: () => ({ accepted: true }),
     cancel_local_ollama_setup: () => ({ cancel_requested: true }),
     apply_ollama_local_autostart: () => ({ ok: true, changed: true, message: "Started now." }),
+    arm_ollama_ask_anyway: () => ({ armed: true }),
     get_ollama_local_autostart_status: () => ({
       installed: false,
       enabled: false,

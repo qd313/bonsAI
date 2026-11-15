@@ -121,7 +121,7 @@
           ]
         },
         {
-          "line": "Weak points: Only this board has the Snack Orb; it guards you against Chain Chomps for three turns, ending early if one attacks.",
+          "line": "Weak points: Only this board has the Snack Orb; it counts down three turns but in practice guards you for only two rounds of your rivals' turns, ending early if a Chain Chomp attacks.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Snack_Orb",
@@ -129,6 +129,13 @@
               "quoted": [
                 "In Mario Party 7, the Snack Orb is only found on Pyramid Park",
                 "After using a Snack Orb, the player is protected for three turns or until a Chain Chomp attacks"
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Snack_Orb",
+              "revision": "5533863",
+              "quoted": [
+                "Since turns count down after the player moves through a Dice Block but opponents can only use Chain Chomps between the turns of the user, while the effect of the Snack Orb mechanically lasts for three turns in practice, it only protects the player from opponents's attacks for two of their turn cycles."
               ]
             }
           ]
@@ -918,7 +925,7 @@
           ]
         },
         {
-          "line": "Uses: Use it on yourself before a Chain Chomp comes for you. It lasts three turns, or ends sooner if a Chain Chomp attacks, in which case the bone is thrown for you automatically.",
+          "line": "Uses: Use it on yourself before a Chain Chomp comes for you. It counts down three turns but in practice protects you for only two rounds of your rivals' turns, or ends sooner if a Chain Chomp attacks, in which case the bone is thrown for you automatically.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Snack_Orb",
@@ -926,6 +933,13 @@
               "quoted": [
                 "The player now has to use it on themselves before they are attacked by Chain Chomp",
                 "After using a Snack Orb, the player is protected for three turns or until a Chain Chomp attacks, the latter of which prompts the automatic bone throw."
+              ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Snack_Orb",
+              "revision": "5533863",
+              "quoted": [
+                "Since turns count down after the player moves through a Dice Block but opponents can only use Chain Chomps between the turns of the user, while the effect of the Snack Orb mechanically lasts for three turns in practice, it only protects the player from opponents's attacks for two of their turn cycles."
               ]
             }
           ]

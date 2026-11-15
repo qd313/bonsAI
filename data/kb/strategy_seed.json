@@ -4432,7 +4432,7 @@
       "game_id": 30,
       "section_type": "area",
       "name": "Pyramid Park",
-      "card": "Pyramid Park's Stars don't sit on a Star Space at all -- they belong to whoever holds them, and the only way to take one is to pay for a ride on a Chain Chomp and steal it directly from an opponent. This makes the board far more aggressive than most: holding a lead in Stars means expecting to be hunted, and the board-specific Snack Orb, which blocks a Chain Chomp theft for three turns, is worth buying the moment you're ahead rather than waiting until a Chain Chomp is already bearing down on you.",
+      "card": "Pyramid Park's Stars don't sit on a Star Space at all -- they belong to whoever holds them, and the only way to take one is to pay for a ride on a Chain Chomp and steal it directly from an opponent. This makes the board far more aggressive than most: holding a lead in Stars means expecting to be hunted, and the board-specific Snack Orb, which blocks a Chain Chomp theft (it counts down three turns but in practice covers only two rounds of your rivals' turns), is worth buying the moment you're ahead rather than waiting until a Chain Chomp is already bearing down on you.",
       "source_url": "https://www.mariowiki.com/Mario_Party_7",
       "source_license": "CC-BY-SA-4.0",
       "source_version": null,

@@ -797,6 +797,161 @@ def invented_about_unknown(reply: str, names: list[str]) -> bool:
     return any(re.search(r"\b" + re.escape(_fold_apostrophes(n)) + r"\b", folded) for n in names if n.strip())
 
 
+# The sentence every wording of the "no notes" instruction starts with (ollama_prompts.HONEST_UNKNOWN_WORDINGS).
+NOTES_GAP_MARK = "NOTES GAP:"
+
+# --- borrowed advice: a reply that gives detail from notes about something else (plan 104 lane T2) -----
+#
+# When a question has no note of its own, the plugin still attaches whatever notes matched best, and a small
+# model that has just said "I have no notes on Zorblax" can go on to give the attached boss's moves as if
+# they were Zorblax's. ``borrowed_words`` finds that: after the reply's opening sentence, it looks for what is
+# particular to the attached notes and that the question did not contain. Nothing here knows a game. Two
+# signals, both read from the notes the reply was given: (1) a word that is rare across the whole library
+# (a name, a move, a part of a body or a weapon) and not ordinary English or ordinary game advice; (2) three
+# words in a row that the reply shares with the notes ("unlocks later in the story"), at least one of them
+# not common across the library. Both leave out the question's own words and the game's title.
+
+# How many of the library's notes may use a word before it counts as ordinary. A name or a move sits in a
+# handful of notes; "usually", "during", "cannot" sit in dozens.
+ORDINARY_WORD_NOTES = 10
+# A shared three-word run needs one word rarer than this.
+PHRASE_RARE_WORD_NOTES = 40
+
+_ORDINARY_WORDS = frozenset((
+    "with for from they their them its it you your have has had not can will into than when while where "
+    "which what who how each any all some more most other over under between only just very one two three "
+    "four five six many much both either about after before again also back because been being could would "
+    "should might must may does did done get got give gave goes going make made take taken then there these "
+    "those through until upon use used using well went whether without within yourself itself themselves "
+    "keep need needs want like less least still such same own off out once ever even every down away apart along "
+    "attack attacks weak weakness weaknesses point points phase phases boss enemy enemies damage health fight "
+    "tough hit hits kill target targets focus stay avoid move moves movement position area areas time times "
+    "wave waves group level skill ability abilities weapon weapons armor armour break breaks open opens "
+    "save fire distance cover heal defense defence power pattern patterns resource resources big small "
+    "strong safe safely good best key first second last next early late high low full fast slow heavy "
+    "large close behind front side stand place tactic tactics strategy strategies general "
+    "game games player players team class tip tips note notes card cards"
+).split())
+
+_NOTE_LABEL_RE = re.compile(r"^[ \t]*(?:summary|weak points?|uses|tips?|phases|looks like|domain)[ \t]*:[ \t]*", re.I | re.M)
+_CARD_HEADER_RE = re.compile(r"^\[([^\]]*)\][ \t]*\(trust:[^)]*\)[ \t]*$", re.M)
+_NOTES_BLOCK_RE = re.compile(r"--- Local knowledge base[^\n]*---\n(.*?)--- End local knowledge base ---", re.S)
+_BRANCH_FENCE_RE = re.compile(r"```bonsai-strategy-branches.*?```", re.S)
+_NUMBER_RE = re.compile(r"\d[\d.,]*\d|\d")
+
+
+def notes_block_from_system_prompt(system_prompt: str) -> str:
+    """The attached notes as the model was shown them: what sits between the knowledge-base header and its
+    end marker in the system prompt; empty when no notes were attached."""
+    m = _NOTES_BLOCK_RE.search(system_prompt or "")
+    return m.group(1) if m else ""
+
+
+def library_word_notes(root: Optional[Path] = None) -> dict[str, int]:
+    """Stem -> how many of the library's notes use it, read from the notes folder and the seed file of the
+    repo. Empty when they cannot be read (then only the ordinary-word list filters)."""
+    root = root or Path(__file__).resolve().parents[2] / "data" / "kb"
+    texts: list[str] = []
+    try:
+        for path in sorted((root / "notes").glob("*.json")):
+            if path.name.endswith(".sources.json"):
+                continue
+            texts += [str(s.get("card") or "") for s in json.loads(path.read_text(encoding="utf-8")).get("sections", [])]
+        seed = json.loads((root / "strategy_seed.json").read_text(encoding="utf-8"))
+        texts += [str(s.get("card") or "") for s in seed.get("sections", [])]
+    except (OSError, ValueError):
+        return {}
+    count: dict[str, int] = {}
+    for text in texts:
+        for st in {_stem(t) for t in _tokenize(text)}:
+            count[st] = count.get(st, 0) + 1
+    return count
+
+
+_LIBRARY_WORD_NOTES: Optional[dict[str, int]] = None
+
+
+def _default_word_notes() -> dict[str, int]:
+    global _LIBRARY_WORD_NOTES
+    if _LIBRARY_WORD_NOTES is None:
+        _LIBRARY_WORD_NOTES = library_word_notes()
+    return _LIBRARY_WORD_NOTES
+
+
+def _notes_body_and_title_stems(notes_text: str) -> tuple[str, set[str]]:
+    """The notes' own text (card names kept, labels and headers off) and the stems of the game titles."""
+    title_stems: set[str] = set()
+    names: list[str] = []
+    for m in _CARD_HEADER_RE.finditer(notes_text):
+        parts = [p.strip() for p in m.group(1).split(" / ")]
+        title_stems.update(_stem(t) for t in _tokenize(parts[0]))
+        names.append((parts[-1] if len(parts) > 1 else parts[0]).split(": ", 1)[-1])
+    body = _NOTE_LABEL_RE.sub("", _CARD_HEADER_RE.sub("", notes_text))
+    return " ".join(names) + "\n" + body, title_stems
+
+
+def _run_stems(text: str) -> list[list[str]]:
+    """Per clause, the stems of its words with filler words dropped, so "unlocks later in the story" and
+    "unlocks later on in the story" read the same."""
+    return [
+        [_stem(t) for t in _tokenize(clause) if t not in FILLER_WORDS]
+        for clause in re.split(r"[.!?;:,\n]+|--|[()]", text)
+    ]
+
+
+def borrowed_words(
+    reply: str,
+    notes_text: str,
+    question: str = "",
+    game_title: str = "",
+    word_notes: Optional[dict[str, int]] = None,
+) -> list[str]:
+    """What the reply takes from the attached notes after its opening sentence: single words particular to
+    the notes, then shared three-word runs. Empty when nothing was attached or the reply stays general.
+    The footer lines, the branch menu's fence and the first sentence (where the admission sits) are not
+    read; text inside a spoiler fence is read, since the player can open it. ``word_notes`` is
+    ``library_word_notes()`` unless a test passes its own."""
+    if not (notes_text or "").strip():
+        return []
+    rarity = _default_word_notes() if word_notes is None else word_notes
+    body, title_stems = _notes_body_and_title_stems(notes_text)
+    skip = {_stem(t) for t in _tokenize(question)} | title_stems | {_stem(t) for t in _tokenize(game_title)}
+    skip |= {_stem(w) for w in _ORDINARY_WORDS}
+    later_text = " ".join(
+        s for s in _SENTENCE_SPLIT_RE.split(_BRANCH_FENCE_RE.sub(" ", strip_back_end_footers(reply)))[1:] if s.strip()
+    )
+    later_stems = {_stem(t) for t in _tokenize(later_text)}
+    found: list[str] = []
+    seen: set[str] = set()
+    for tok in _tokenize(body):
+        st = _stem(tok)
+        if st in seen or len(tok) < 4 or tok in FILLER_WORDS or st in skip:
+            continue
+        seen.add(st)
+        if rarity.get(st, 0) < ORDINARY_WORD_NOTES and st in later_stems:
+            found.append(tok)
+    later_numbers = _NUMBER_RE.findall(_norm(later_text))
+    for num in _NUMBER_RE.findall(_norm(body)):
+        if len(re.sub(r"\D", "", num)) >= 2 and num in later_numbers:
+            found.append(num)
+    note_runs = {tuple(r[i:i + 3]) for r in _run_stems(body) for i in range(len(r) - 2)}
+    for run in _run_stems(later_text):
+        for i in range(len(run) - 2):
+            tri = tuple(run[i:i + 3])
+            if tri in note_runs and sum(1 for w in tri if w not in skip) >= 2 and any(
+                rarity.get(w, 0) < PHRASE_RARE_WORD_NOTES for w in tri if w not in skip
+            ):
+                found.append(" ".join(tri))
+    return found
+
+
+def borrowed_from_notes(
+    reply: str, notes_text: str, question: str = "", game_title: str = "", word_notes: Optional[dict[str, int]] = None
+) -> bool:
+    """True when ``borrowed_words`` finds anything."""
+    return bool(borrowed_words(reply, notes_text, question, game_title, word_notes))
+
+
 # --- judge column: a second model's opinion, report-only (plan 48, D86 call 4) -----------------
 #
 # A second model reads the same note and reply the fixed checks above just scored, and answers the
@@ -983,6 +1138,10 @@ class SampleResult:
     # what it was (either one) so older reports and ``all_ok`` read as before.
     footer_showed: Optional[bool] = None
     said_so_own_words: Optional[bool] = None
+    # Plan 104 lane T2, only on a turn the plugin marks (the back end's line showed, or the prompt carries
+    # the "NOTES GAP" sentence): after its opening sentence the reply gives detail that belongs to the
+    # attached notes, which were about something else. False when no notes were attached. None otherwise.
+    borrowed_from_notes: Optional[bool] = None
 
     @property
     def all_ok(self) -> bool:
@@ -1107,6 +1266,7 @@ async def run_turn(
     invented: Optional[bool] = None
     footer_showed: Optional[bool] = None
     said_so_own_words: Optional[bool] = None
+    borrowed: Optional[bool] = None
     if expect_unknown and success:
         admitted = admitted_unknown(reply)
         invented = invented_about_unknown(reply, unknown_names or [])
@@ -1150,6 +1310,11 @@ async def run_turn(
                 break
         if isinstance(diag, dict) and diag.get("model_succeeded"):
             model = str(diag.get("model_succeeded"))
+
+    if expect_unknown and success and (footer_showed or NOTES_GAP_MARK in system_prompt):
+        borrowed = borrowed_from_notes(
+            reply, note_text or notes_block_from_system_prompt(system_prompt), question, app_name
+        )
 
     prompt_tokens_est = warning_prompt_tokens
     if prompt_tokens_est is None and system_prompt:
@@ -1210,6 +1375,7 @@ async def run_turn(
         seed=seed,
         footer_showed=footer_showed,
         said_so_own_words=said_so_own_words,
+        borrowed_from_notes=borrowed,
     )
 
 
@@ -1510,6 +1676,8 @@ class Summary:
     # Plan 103 lane T2: ``admits_unknown`` split in two, over the same cases.
     footer_showed = Rate()
     said_so_own_words = Rate()
+    # Plan 104 lane T2: of the marked answers, how many borrowed detail from notes about something else.
+    borrowed_from_notes = Rate()
 
     def __init__(self) -> None:
         self.facts = Rate()
@@ -1528,6 +1696,7 @@ class Summary:
         self.invents_unknown = Rate()
         self.footer_showed = Rate()
         self.said_so_own_words = Rate()
+        self.borrowed_from_notes = Rate()
 
 
 def summarize(cases: list[Case], samples: list[SampleResult]) -> Summary:
@@ -1555,6 +1724,7 @@ def summarize(cases: list[Case], samples: list[SampleResult]) -> Summary:
         s.invents_unknown.add(r.invented_unknown)
         s.footer_showed.add(r.footer_showed)
         s.said_so_own_words.add(r.said_so_own_words)
+        s.borrowed_from_notes.add(r.borrowed_from_notes)
 
         contradiction_agree: Optional[bool] = None
         if r.judge_contradicts is not None and r.notsay_ok is not None:
@@ -1648,8 +1818,20 @@ def honesty_line(summary: Summary) -> str:
         f"no note can answer ({summary.admits_unknown.of} samples): "
         f"back end's line showed {summary.footer_showed.pct()} ({summary.footer_showed.frac()}) · "
         f"said so in its own words {summary.said_so_own_words.pct()} ({summary.said_so_own_words.frac()}) · "
+        f"borrowed notes about something else {summary.borrowed_from_notes.pct()} ({summary.borrowed_from_notes.frac()}) · "
         f"admits either way {summary.admits_unknown.pct()} ({summary.admits_unknown.frac()}) · "
         f"answers as if it knew {summary.invents_unknown.pct()} ({summary.invents_unknown.frac()})"
+    )
+
+
+def honesty_beside_facts(summary: Summary) -> str:
+    """The two honesty counts, worded to sit beside "facts" on the console's first line; empty when no
+    question in the run was one no note can answer."""
+    if not summary.said_so_own_words.of:
+        return ""
+    return (
+        f"said-so-own-words {summary.said_so_own_words.pct()} · "
+        f"borrowed-from-notes {summary.borrowed_from_notes.pct()} · "
     )
 
 
@@ -1672,6 +1854,7 @@ def summary_payload(summary: Summary) -> dict[str, dict[str, int]]:
         "invents_unknown": summary.invents_unknown.__dict__,
         "footer_showed": summary.footer_showed.__dict__,
         "said_so_own_words": summary.said_so_own_words.__dict__,
+        "borrowed_from_notes": summary.borrowed_from_notes.__dict__,
     }
 
 
@@ -1740,6 +1923,7 @@ def write_report(
     lines.append(f"| Answers as if it knew | **{summary.invents_unknown.pct()}** ({summary.invents_unknown.frac()}) | the same questions: the reply names the made-up thing with advice and no admission (lower is better) |")
     lines.append(f"| The back end's line showed | **{summary.footer_showed.pct()}** ({summary.footer_showed.frac()}) | the same questions: the plugin's own \"not in my notes\" line is under the reply (the plugin said it, not the AI) |")
     lines.append(f"| The AI said so in its own words | **{summary.said_so_own_words.pct()}** ({summary.said_so_own_words.frac()}) | the same questions: the reply admits it does not know with the plugin's footer lines taken off |")
+    lines.append(f"| Borrowed advice from the notes | **{summary.borrowed_from_notes.pct()}** ({summary.borrowed_from_notes.frac()}) | the marked answers (the plugin's line showed, or the prompt carried the no-notes sentence): after its opening sentence the reply gives detail from the attached notes, which were about something else (lower is better; a word count against the notes, so it misses paraphrase) |")
     lines.append(f"| Ask succeeded | **{summary.success.pct()}** ({summary.success.frac()}) | pipeline returned a reply |")
     lines.append(f"| Cases with every sample clean | **{summary.cases_all_pass.pct()}** ({summary.cases_all_pass.frac()}) | strictest view |")
     lines.append("")
@@ -2263,7 +2447,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     warned, warn_of = window_warning_count(samples)
     prompt_tokens_mean = mean_prompt_tokens(samples)
     print()
-    print(f"facts {summary.facts.pct()} · no-contradiction {summary.contradictions_clean.pct()} · "
+    print(f"facts {summary.facts.pct()} · {honesty_beside_facts(summary)}no-contradiction {summary.contradictions_clean.pct()} · "
           f"fence-not-misfired {summary.fence_no_misfire.pct()} · fence-when-due {summary.fence_present_when_due.pct()} · "
           f"menu-when-due {summary.branches_when_due.pct()} · card-attached {summary.card_attached.pct()} · "
           f"cases-all-clean {summary.cases_all_pass.pct()} · prompt-chars {prompt_chars} · "

@@ -1955,5 +1955,223 @@ class EvalKbAnswersThirdFooterLineTests(unittest.TestCase):
         self.assertEqual(self.mod.strip_back_end_footers(reply), self.ADVICE)
 
 
+BORROWED_FIXTURE = REPO_ROOT / "tests" / "fixtures" / "kb_eval_borrowed_hand_reading.json"
+
+# A card the way the system prompt shows it, and a library with the word counts frozen, so these tests do
+# not move when notes are added. "overclock" and "nuke" sit in a few notes, "usually" and "during" in dozens.
+_DREADNOUGHT_NOTES = (
+    "Domain: strategy\n\n"
+    "[Deep Rock Galactic: Survivor / boss: Glyphid Dreadnought] (trust: fallback_no_source)\n"
+    "Kite between waves; focus weak-point armor plates as they open. Save overclock/nuke for armor break windows.\n\n"
+    "[Hades / mechanic: Weapon aspects] (trust: fallback_no_source)\n"
+    "Each weapon has alternate aspects, bought with Titan Blood, that change how it plays rather than just its "
+    "numbers. The last aspect for each weapon unlocks later in the story. It usually helps during a long run.\n"
+)
+_FROZEN_WORD_NOTES = {"overclock": 2, "nuke": 4, "plat": 3, "titan": 3, "blood": 9, "alternate": 4, "story": 33,
+                      "unlock": 58, "later": 44, "usually": 61, "dur": 38, "help": 80, "long": 50, "run": 40,
+                      "kite": 2, "armor": 46}  # keys are stems: "during" is "dur", "helps" is "help"
+
+
+class EvalKbAnswersBorrowedFromNotesTests(unittest.TestCase):
+    """Plan 104 lane T2, commit 3: a count of the fault lane H1 must fix. After an honest opening, the reply
+    gives detail from the attached notes, which were about something else. The matcher reads the notes'
+    own rare words and shared runs of words, never a list of games; the test proves it against one reader's
+    verdict on real saved answers. No Ollama."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load_eval_module()
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.modules.pop("eval_kb_answers", None)
+
+    def _borrowed(self, reply, question="how do I beat Zorblax", notes=_DREADNOUGHT_NOTES, title="Deep Rock Galactic: Survivor"):
+        return self.mod.borrowed_words(reply, notes, question, title, _FROZEN_WORD_NOTES)
+
+    OPENING = "I have no notes on Zorblax. "
+
+    # --- the matcher on small examples ----------------------------------------------------------
+
+    def test_a_reply_that_gives_the_attached_notes_moves_is_borrowing(self):
+        words = self._borrowed(self.OPENING + "Save your overclock or a nuke for when the armor plates open.")
+        self.assertIn("overclock", words)
+        self.assertIn("nuke", words)
+
+    def test_a_reply_that_stays_general_is_not_borrowing(self):
+        reply = self.OPENING + "Focus on the weak points, keep your distance, save your abilities and watch its attack patterns."
+        self.assertEqual(self._borrowed(reply), [])
+
+    def test_the_opening_sentence_is_not_read(self):
+        reply = "I have no notes on Zorblax, so no word on an overclock or a nuke. Stay mobile and watch for openings."
+        self.assertEqual(self._borrowed(reply), [])
+
+    def test_a_word_the_question_used_is_not_borrowed(self):
+        reply = self.OPENING + "An overclock helps."
+        self.assertEqual(self._borrowed(reply, question="is an overclock any good against Zorblax"), [])
+        self.assertIn("overclock", self._borrowed(reply))
+
+    def test_a_word_many_notes_use_is_ordinary_not_borrowed(self):
+        reply = self.OPENING + "It usually helps during a long run to kite them."
+        words = self._borrowed(reply)
+        self.assertNotIn("usually", words)
+        self.assertNotIn("during", words)
+        self.assertIn("kite", words)
+
+    def test_the_games_own_title_is_not_borrowed(self):
+        reply = self.OPENING + "Survivor fights reward patience; try to stay alive in Deep Rock Galactic."
+        self.assertEqual(self._borrowed(reply), [])
+
+    def test_a_run_of_words_shared_with_the_notes_is_borrowing_even_with_no_rare_word(self):
+        words = self._borrowed(self.OPENING + "The final form unlocks later in the story, I believe.", question="what is the best aspect")
+        self.assertIn("unlock later story", words)
+
+    def test_nothing_attached_means_nothing_to_borrow(self):
+        self.assertEqual(self.mod.borrowed_words(self.OPENING + "Save your overclock.", "", "q", "g", _FROZEN_WORD_NOTES), [])
+        self.assertFalse(self.mod.borrowed_from_notes(self.OPENING + "Save your overclock.", "   ", "q", "g", _FROZEN_WORD_NOTES))
+
+    def test_the_footer_lines_and_the_branch_menu_are_not_read(self):
+        from backend.knowledge import kb_not_in_notes_notice as notice
+
+        menu = '```bonsai-strategy-branches\n{"options":[{"id":"a","label":"overclock nuke"}]}\n```'
+        reply = self.OPENING + "Stay mobile.\n" + menu + notice.append_no_close_match_notice("", True)
+        self.assertEqual(self._borrowed(reply), [])
+
+    def test_text_inside_a_spoiler_fence_is_read_because_the_player_can_open_it(self):
+        reply = self.OPENING + "Stay mobile.\n```bonsai-spoiler\nUse the nuke when plates open.\n```"
+        self.assertIn("nuke", self._borrowed(reply))
+
+    def test_a_number_from_the_notes_counts(self):
+        notes = "[G / boss: Gruz Mother] (trust: wiki_verified)\nSummary: A sleeping boss.\nTips: She releases 18 Gruzzers."
+        words = self.mod.borrowed_words(self.OPENING + "Expect 18 of them.", notes, "q", "G", {})
+        self.assertIn("18", words)
+        self.assertEqual(self.mod.borrowed_words(self.OPENING + "Expect 3 of them.", notes, "q", "G", {}), [])
+
+    # --- against one reader's verdict on real answers -------------------------------------------
+
+    def _fixture(self):
+        return json.loads(BORROWED_FIXTURE.read_text(encoding="utf-8"))
+
+    def test_the_count_agrees_with_a_hand_reading_of_the_saved_answers(self):
+        # Each set is 24 real answers from the plan 103 runs, read by hand before the count ran. Agreement
+        # is pinned at today's number so a change to the rule has to say what it did to it.
+        pinned = {"zorblax-and-grimthak": 23, "quillgrave-and-obsidian-lance": 23}
+        for fx in self._fixture()["sets"]:
+            agree, wrong = 0, []
+            for a in fx["answers"]:
+                counted = self.mod.borrowed_from_notes(
+                    a["reply"], fx["notes"][a["case"]], fx["questions"][a["case"]], fx["titles"][a["case"]], fx["word_notes"]
+                )
+                if counted == a["hand"]:
+                    agree += 1
+                else:
+                    wrong.append((a["n"], a["source"], "counted" if counted else "not counted", "reader" if a["hand"] else "reader: no"))
+            self.assertEqual(len(fx["answers"]), 24)
+            self.assertEqual(agree, pinned[fx["name"]], (fx["name"], wrong))
+
+    def test_an_answer_with_no_notes_attached_is_never_counted(self):
+        grimthak = [a for fx in self._fixture()["sets"] for a in fx["answers"] if a["case"] == "A-UNKNOWN-02"]
+        fx = self._fixture()["sets"][0]
+        self.assertEqual(len(grimthak), 12)
+        for a in grimthak:
+            self.assertEqual(fx["notes"]["A-UNKNOWN-02"], "")
+            self.assertFalse(self.mod.borrowed_from_notes(a["reply"], "", "q", "g", fx["word_notes"]))
+
+    def test_the_real_fault_is_caught_in_a_real_answer(self):
+        # Round two, wording f, Zorblax try 3 (a made-up boss): "I have no notes on the final boss Zorblax"
+        # and then the Glyphid Dreadnought's own advice.
+        reply = (
+            "I have no notes on the final boss Zorblax in Deep Rock Galactic: Survivor. For strategy on beating him, "
+            "focus on kiting between waves and targeting weak-point armor plates when they open. Save your overclock "
+            "or nuke for windows where armor breaks."
+        )
+        fx = self._fixture()["sets"][0]
+        words = self.mod.borrowed_words(reply, fx["notes"]["A-UNKNOWN-01"], fx["questions"]["A-UNKNOWN-01"], "Deep Rock Galactic: Survivor", fx["word_notes"])
+        self.assertTrue({"overclock", "nuke"} <= set(words), words)
+
+    # --- the scorer, the summary and the report -------------------------------------------------
+
+    def setUp(self):
+        self._saved_library = self.mod._LIBRARY_WORD_NOTES
+        self.mod._LIBRARY_WORD_NOTES = dict(_FROZEN_WORD_NOTES)
+
+    def tearDown(self):
+        self.mod._LIBRARY_WORD_NOTES = self._saved_library
+
+    def _run(self, reply, *, text_block=_DREADNOUGHT_NOTES, system_prompt="", expect_unknown=True):
+        mod = self.mod
+        retrieval_log: list = []
+        plugin = types.SimpleNamespace()
+
+        async def fake_run_game_ai_request(plugin, question, ollama_base, app_id, app_name, attachments, ask_mode):
+            retrieval_log.append(types.SimpleNamespace(attached=bool(text_block), text_block=text_block))
+            if system_prompt:
+                await plugin._persist_input_transparency({"system_prompt": system_prompt})
+            return {"success": True, "response": reply, "strategy_guide_branches": None}
+
+        return asyncio.run(
+            mod.run_turn(
+                plugin, case_id="A-UNKNOWN-T", app_id="2321470", app_name="Deep Rock Galactic: Survivor",
+                ask_mode="strategy", question="how do I beat Zorblax", expect_card=None, must_mention=[],
+                must_not_say=[], expect_fence=None, expect_branches=None, expect_attached=None,
+                expect_unknown=expect_unknown, unknown_names=["Zorblax"], sample_idx=1, ollama_base="http://x",
+                retrieval_log=retrieval_log, capture=mod._ListHandler(), kb_card_names=lambda text: [],
+                run_game_ai_request=fake_run_game_ai_request,
+            )
+        )
+
+    BORROWING = OPENING + "Save your overclock or a nuke for when the armor plates open."
+    GENERAL = OPENING + "Focus on the weak points and keep your distance."
+
+    def _footer(self):
+        from backend.knowledge import kb_not_in_notes_notice as notice
+
+        return notice.append_no_close_match_notice("", True)
+
+    def test_a_marked_turn_that_borrows_is_counted(self):
+        r = self._run(self.BORROWING + self._footer())
+        self.assertTrue(r.footer_showed)
+        self.assertTrue(r.borrowed_from_notes)
+
+    def test_a_marked_turn_that_stays_general_is_counted_as_not_borrowing(self):
+        r = self._run(self.GENERAL + self._footer())
+        self.assertIs(r.borrowed_from_notes, False)
+
+    def test_a_turn_marked_only_by_the_prompt_sentence_is_counted_too(self):
+        prompt = "...\nNOTES GAP: The attached notes do not cover this question, so say so.\n..."
+        self.assertTrue(self._run(self.BORROWING, system_prompt=prompt).borrowed_from_notes)
+        self.assertIs(self._run(self.GENERAL, system_prompt=prompt).borrowed_from_notes, False)
+
+    def test_a_marked_turn_with_no_notes_attached_is_not_borrowing(self):
+        r = self._run(self.BORROWING + self._footer(), text_block="")
+        self.assertIs(r.borrowed_from_notes, False)
+
+    def test_notes_are_read_from_the_system_prompt_when_the_retrieval_log_has_none(self):
+        prompt = ("--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\n" + _DREADNOUGHT_NOTES
+                  + "--- End local knowledge base ---\nNOTES GAP: The attached notes do not cover this.")
+        self.assertTrue(self._run(self.BORROWING, text_block="", system_prompt=prompt).borrowed_from_notes)
+
+    def test_an_unmarked_turn_and_an_ordinary_case_leave_it_empty(self):
+        self.assertIsNone(self._run(self.BORROWING).borrowed_from_notes)
+        self.assertIsNone(self._run(self.BORROWING + self._footer(), expect_unknown=False).borrowed_from_notes)
+
+    def test_the_summary_the_saved_json_and_the_console_lines_carry_the_count(self):
+        samples = [
+            EvalKbAnswersHarnessTests._sample(self, case_id="A-UNKNOWN-01", sample=n, admitted_unknown=True,
+                                              invented_unknown=False, footer_showed=True, said_so_own_words=True,
+                                              borrowed_from_notes=b)
+            for n, b in ((1, True), (2, False), (3, True), (4, None))
+        ]
+        cases = [EvalKbAnswersHarnessTests._case(self, id="A-UNKNOWN-01", expect_unknown=True)]
+        s = self.mod.summarize(cases, samples)
+        self.assertEqual((s.borrowed_from_notes.hit, s.borrowed_from_notes.of), (2, 3))
+        self.assertEqual(self.mod.summary_payload(s)["borrowed_from_notes"], {"hit": 2, "of": 3})
+        self.assertIn("borrowed notes about something else 66.7% (2/3)", self.mod.honesty_line(s))
+        beside = self.mod.honesty_beside_facts(s)
+        self.assertIn("said-so-own-words 100.0%", beside)
+        self.assertIn("borrowed-from-notes 66.7%", beside)
+        self.assertEqual(self.mod.honesty_beside_facts(self.mod.summarize([], [])), "")
+
+
 if __name__ == "__main__":
     unittest.main()

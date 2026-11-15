@@ -35,18 +35,6 @@
           ]
         },
         {
-          "line": "Weak points: They are lightly armed: baseball bats only, except in missions, where they also carry guns.",
-          "drawn_from": [
-            {
-              "page": "https://gta.fandom.com/wiki/Diablos",
-              "revision": "2020207",
-              "quoted": [
-                "they are poorly armed and use only baseball bats (guns in missions only)."
-              ]
-            }
-          ]
-        },
-        {
           "line": "Looks like: Two outfits: red bandana, dark blue jacket and light blue jeans; or blue bandana, olive cargo pants and the same jacket.",
           "drawn_from": [
             {
@@ -77,7 +65,8 @@
             }
           ]
         }
-      ]
+      ],
+      "weak_points_review": "W1 2026-11-15: line removed. Read Diablos (rev 2020207) and Gangs in GTA III (rev 2020213) again: the pages say only that the gang is poorly armed (baseball bats, guns in missions only); no way to beat, stop or avoid them. The Summary keeps 'not well armed'."
     },
     {
       "section_id": 3501,

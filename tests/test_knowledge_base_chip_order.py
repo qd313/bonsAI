@@ -292,6 +292,45 @@ class ChipOrderTests(unittest.TestCase):
             | frozenset(strategy_spoiler_policy._BOSS_LIKE_KINDS),
         )
 
+    # --- plan 104, lane C2: the screen is told how many leading chips are the closest ones ----------
+
+    def test_the_count_is_two_when_two_notes_are_clearly_close(self):
+        cards = _a_big_game()
+        cards[1] = ("boss", "Boss1", _mix(TOWARD, AWAY, 0.9))
+        cards[14] = ("item", "Item4", TOWARD)
+        got = self._chips_for(cards, question=("how do I use item four", TOWARD))
+        self.assertEqual(self._last_result.closest_count, 2)
+        self.assertEqual(got[:2], ["How do I use Item4?", "How do I beat Boss1?"])
+
+    def test_the_count_stops_at_four_however_many_notes_are_close(self):
+        cards = _a_big_game()
+        for index in range(10, 15):  # Item0..4 and Mech0..3: nine close notes, none held back
+            cards[index] = ("item", f"Item{index - 10}", TOWARD)
+        for index in range(15, 19):
+            cards[index] = ("mechanic", f"Mech{index - 15}", TOWARD)
+        self._chips_for(cards, question=("how do I use the things", TOWARD))
+        self.assertEqual(self._last_result.closest_count, chips._CLOSEST_FIRST)
+
+    def test_the_count_is_zero_without_a_question_or_without_a_close_note(self):
+        cards = _a_big_game()
+        cards[14] = ("item", "Item4", TOWARD)
+        self._chips_for(cards)
+        self.assertEqual(self._last_result.closest_count, 0)
+        self._chips_for(cards, question=("anything", [0.0, 0.0, 1.0]))
+        self.assertEqual(self._last_result.closest_count, 0)
+        no_vectors = [(k, n, None) for k, n, _ in _a_big_game()]
+        self._chips_for(no_vectors, question=("anything", TOWARD))
+        self.assertEqual(self._last_result.closest_count, 0)
+
+    def test_the_count_goes_to_the_screen_with_the_candidates(self):
+        cards = _a_big_game()
+        cards[14] = ("item", "Item4", TOWARD)
+        self._chips_for(cards, question=("how do I use item four", TOWARD))
+        payload = chips.session_rag_chip_candidates_to_rpc(self._last_result)
+        self.assertEqual(payload["closest_count"], 1)
+        self.assertEqual(payload["candidates"][0]["text"], "How do I use Item4?")
+        self.assertEqual(chips.session_rag_chip_candidates_to_rpc(chips.SessionRagChipCandidatesResult(ok=False))["closest_count"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

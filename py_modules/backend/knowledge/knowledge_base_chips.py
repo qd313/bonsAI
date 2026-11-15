@@ -143,6 +143,10 @@ class SessionRagChipCandidatesResult:
     ok: bool
     reason: str = ""
     candidates: list[SessionRagChipCandidate] = field(default_factory=list)
+    # How many of the first candidates are the notes closest to the last question (plan 104, lane C2;
+    # at most _CLOSEST_FIRST, fewer when few notes are close, 0 at every other time). The screen leads
+    # with that many before its usual rotation, so it must be told rather than guess.
+    closest_count: int = 0
 
 
 @dataclass
@@ -354,15 +358,17 @@ def _closest_first(
     question: LastQuestion,
     *,
     limit: int,
-) -> list[tuple[str, str]]:
-    """``todays`` with the notes closest to ``question`` moved to the front, or ``todays`` unchanged.
+) -> tuple[list[tuple[str, str]], list[tuple[str, str]]]:
+    """``todays`` with the notes closest to ``question`` moved to the front, and which notes those are.
+
+    Returns ``(order, closest)``: ``closest`` is empty exactly when ``order`` is ``todays`` unchanged.
 
     Unchanged whenever there is nothing sound to go on: a library without vectors, notes without a
     vector, a vector of another length, or no note clearly nearer than the rest. Never a new call to a
     model -- the vector is the one the search already made for this question.
     """
     if not question.vector:
-        return todays
+        return todays, []
     try:
         rows = conn.execute(
             "SELECT s.section_type, s.name, v.embedding FROM sections s "
@@ -371,12 +377,12 @@ def _closest_first(
             (game_id,),
         ).fetchall()
     except sqlite3.OperationalError:
-        return todays
+        return todays, []
     scored: list[tuple[float, str, str]] = []
     for row in rows:
         vec = unpack_embedding_vector(bytes(row["embedding"]))
         if len(vec) != len(question.vector):
-            return todays
+            return todays, []
         scored.append(
             (
                 sum(a * b for a, b in zip(question.vector, vec)),
@@ -385,7 +391,7 @@ def _closest_first(
             )
         )
     if not scored:
-        return todays
+        return todays, []
     bar = max(_CLOSE_ABSOLUTE, sum(s for s, _, _ in scored) / len(scored) + _CLOSE_OVER_AVERAGE)
     offered = set(todays)
     closest: list[tuple[str, str]] = []
@@ -402,8 +408,8 @@ def _closest_first(
             continue
         closest.append((kind, name))
     if not closest:
-        return todays
-    return (closest + [pair for pair in todays if pair not in closest])[:limit]
+        return todays, []
+    return (closest + [pair for pair in todays if pair not in closest])[:limit], closest
 
 
 def _compat_chip_candidates(
@@ -492,6 +498,7 @@ def _chip_candidates_for(
 
         candidates: list[SessionRagChipCandidate] = []
         seen: set[str] = set()
+        closest_count = 0
 
         if game_id is not None:
             # Read once per call, not once per row -- the "starting out" chip names the game
@@ -502,13 +509,16 @@ def _chip_candidates_for(
             game_title = str(game_row["canonical_title"] or "") if game_row else ""
             todays = _list_game_sections_for_chips(conn, game_id)
             question = last_question if last_question is not None else _take_last_question(game_id)
+            closest: list[tuple[str, str]] = []
             if question is not None:
-                todays = _closest_first(conn, game_id, todays, question, limit=_GAME_CHIP_POOL_SIZE)
+                todays, closest = _closest_first(conn, game_id, todays, question, limit=_GAME_CHIP_POOL_SIZE)
             for section_type, name in todays:
                 text = _curtail_section_to_chip(section_type, name, game_title=game_title)
                 if not text or text in seen:
                     continue
                 seen.add(text)
+                if (section_type, name) in closest:
+                    closest_count += 1
                 candidates.append(
                     SessionRagChipCandidate(
                         text=text,
@@ -534,7 +544,7 @@ def _chip_candidates_for(
             candidates.append(compat)
 
         _ = resolution
-        return SessionRagChipCandidatesResult(ok=True, candidates=candidates)
+        return SessionRagChipCandidatesResult(ok=True, candidates=candidates, closest_count=closest_count)
     except sqlite3.Error as exc:
         close_connection(db_path)
         return SessionRagChipCandidatesResult(ok=False, reason=f"corpus_error:{exc}")
@@ -545,6 +555,7 @@ def session_rag_chip_candidates_to_rpc(result: SessionRagChipCandidatesResult) -
     return {
         "ok": result.ok,
         "reason": result.reason,
+        "closest_count": result.closest_count,
         "candidates": [
             {
                 "text": c.text,

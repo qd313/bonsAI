@@ -1,0 +1,621 @@
+{
+  "wiki": "Half-Life Wiki (https://half-life.fandom.com/api.php)",
+  "licence_printed_by_fetcher": "Half-Life Wiki (MediaWiki 1.43.10) licence: CC-BY-SA https://www.fandom.com/licensing",
+  "licence_stored": "CC-BY-SA-3.0 (the fetcher prints 'CC-BY-SA' with no version; the library stores the versioned form, and data/kb/NOTICE.md lists the Half-Life Wiki as CC-BY-SA-3.0, as it does for its other Fandom wikis)",
+  "game_id": 13,
+  "game": "Half-Life 2",
+  "read_on": "2026-11-15",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://half-life.fandom.com/api.php --titles <pages> --out build/wiki-live/halflife (page text as rendered by the wiki, link markup removed; every page was over 7,000 characters, so none is a failed read). Each line was written from a short list of facts taken from the page, not from the page's sentences. Every fragment quoted below was checked, by script, to appear word for word in the page text read at the revision named, inside the named part of the page (curly quotes read as straight). Each quote is marked with where it sits: only the wiki editors' own prose and bare rows of an infobox table (a number, a name) stand behind a line; no quote block, dossier, description box, achievement, journal or other game text of the game's own is used. The notes state facts about Half-Life 2 only: where a page mixes games (Half-Life, the episodes, Half-Life: Alyx), only the sentences or table rows that say Half-Life 2, or that the page gives for the base game's own parts, are used. Several pages (Headcrab, Zombie, Poison Zombie, Fast Zombie, SPAS-12, Barnacle) are cited by other notes besides their own, and each such use is named in that line's evidence.",
+  "sections": [
+    {
+      "section_id": 2600,
+      "name": "Headcrab",
+      "kind": "enemy",
+      "main_page": "https://half-life.fandom.com/wiki/Standard_Headcrab",
+      "main_revision": "330544",
+      "lines": [
+        {
+          "line": "Summary: A small, weak parasite with 10 health and a 5-damage bite. It is a real nuisance in numbers, mostly because you stop noticing it while you deal with something bigger.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Standard_Headcrab",
+              "revision": "330544",
+              "part_of_page": "General information",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Health",
+                  "value": "10 (HL2)"
+                },
+                {
+                  "label": "Attacks",
+                  "value": "Bite (5)"
+                }
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Standard_Headcrab",
+              "revision": "330544",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Standard Headcrabs do not pose much of a threat to Gordon on their own.",
+                "Focusing on the more dangerous enemies, the player might not notice Standard Headcrabs leaping at them.",
+                "The main threat that Headcrabs pose is their numbers."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Its underside: a crowbar swing at it while it leaps kills it in one hit, and gravity gun bursts are easy to land on it. It cannot swim, and drowns if it falls into deep water.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Standard_Headcrab",
+              "revision": "330544",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "a crowbar to the Headcrab's underside while it is leaping will kill it in one swing",
+                "it is fairly simple to hit the Headcrab with Gravity Gun bursts"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Headcrab",
+              "revision": "332708",
+              "part_of_page": "Behavior",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "all headcrabs cannot swim and will drown if they fall into water which submerges them completely"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Headcrab",
+              "revision": "332708",
+              "part_of_page": "Behind the scenes",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "drowning when entering water"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A round, smooth, tan body on four legs, about two feet long, with a round mouth underneath.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Standard_Headcrab",
+              "revision": "330544",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "They have round, smooth, tan-colored bodies and four legs",
+                "about two feet long from front leg to back",
+                "Under the body is a round, lipless mouth"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Keep moving when headcrabs are about. A pistol suits a few of them, the shotgun short to medium range, and the SMG a big group; one hand grenade can clear headcrabs and zombies together.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Standard_Headcrab",
+              "revision": "330544",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "it is preferable to keep moving at all times when Headcrabs are present",
+                "In smaller groups, the 9mm Pistol is ideal against Headcrabs",
+                "the shotgun can easily replace its role in short to medium ranges",
+                "a weapon with a larger ammo capacity, such as the SMG, is a better choice",
+                "a Hand Grenade can be used to take a large group of Headcrabs and Zombies out in one grenade"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If poison headcrabs are mixed in, kill those first. A headcrab cannot hurt you while you are in a vehicle.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Standard_Headcrab",
+              "revision": "330544",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "the Poison Headcrabs should be killed first"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Headcrab",
+              "revision": "332708",
+              "part_of_page": "Behind the scenes",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The Headcrabs in Half-Life 2 cannot attack the player if they are inside a vehicle."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2601,
+      "name": "Fast Headcrab",
+      "kind": "enemy",
+      "main_page": "https://half-life.fandom.com/wiki/Fast_Headcrab",
+      "main_revision": "331261",
+      "lines": [
+        {
+          "line": "Summary: A lanky, very quick headcrab with the same 10 health and 5-damage bite as the ordinary kind. It can bite again sooner than the others, which adds up when several come at you.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Headcrab",
+              "revision": "331261",
+              "part_of_page": "General information",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Attacks",
+                  "value": "Bite (5)"
+                }
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Headcrab",
+              "revision": "331261",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Fast Headcrabs have the same amount of health as a standard headcrab.",
+                "Fast headcrabs deal the same amount of damage as the standard headcrab, but can attack consecutively faster than other headcrab variants due to their quick movements."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Standard_Headcrab",
+              "revision": "330544",
+              "part_of_page": "General information",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Health",
+                  "value": "10 (HL2)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A slim body covered in wart-like bumps, on long, evenly sized legs that end in claws, with no fangs showing outside the mouth.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Headcrab",
+              "revision": "331261",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "They possess a slimmer less weighted body with no visible fangs outside of their mouth cavity.",
+                "They possess wart-like bumps all throughout their skin.",
+                "their legs are much longer and uniform in length",
+                "These thin legs have elongated claws on each end"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It dies to anything that kills an ordinary headcrab, but its speed makes the crowbar and pistol harder to land. Shoot it from a distance; the MP7's fast fire and spread work well on one or a group.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Headcrab",
+              "revision": "331261",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "the player can kill the fast headcrab with the weapons used to kill a headcrab",
+                "fast headcrabs are harder to kill than their cousins due to their quick movements which makes some surefire weapons like the crowbar or pistol harder to use",
+                "The player should take out the fast headcrab at a distance when they can.",
+                "Weapons such as the MP7 can be effective in taking down one or a group of fast headcrabs due to it's high rate of fire and spread."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In dark places one may cling to the ceiling and drop on you, or when a light triggers it, so check overhead. When one gets close, back off or keep it in sight so you can kill it right away.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Headcrab",
+              "revision": "331261",
+              "part_of_page": "Behavior and skills",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "In dark areas, fast headcrabs can attach themselves to overhead surfaces where they will wait to drop down on unsuspecting prey or upon stimulus from a light source."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Headcrab",
+              "revision": "331261",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "the player should try to regain distance or keep visual track of the fast headcrab as to kill it immediately"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2602,
+      "name": "Poison Headcrab",
+      "kind": "enemy",
+      "main_page": "https://half-life.fandom.com/wiki/Poison_Headcrab",
+      "main_revision": "329944",
+      "lines": [
+        {
+          "line": "Summary: A slow, dark headcrab with 35 health. Its bite drops you to 1 health at once; your suit's antidote then slowly brings you back up, a little short of where you were.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Headcrab",
+              "revision": "329944",
+              "part_of_page": "General information",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Health",
+                  "value": "35"
+                },
+                {
+                  "label": "Attacks",
+                  "value": "Venomous bite (Drops the player's health to 1 instantly, which slowly regenerates)"
+                }
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Headcrab",
+              "revision": "329944",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "A bite from a poison headcrab will invariably reduce the player's health to 1, after which the HEV Suit will administer an antidote that will slowly regenerate the player's health minus the headcrab's bite damage."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Headcrab",
+              "revision": "329944",
+              "part_of_page": "Behavior and skills",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The poison headcrab is the slowest of the headcrabs in terms of movement"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Dark skin and long, bristly legs with red joints crossed by a white band; the biggest of the headcrabs, with a bulky body.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Headcrab",
+              "revision": "329944",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The poison headcrab is identifiable by its dark skin and elongated legs.",
+                "It is the largest of the headcrab subspecies seen on Earth with a bulky body and thick long legs.",
+                "covered in bristles like its body",
+                "The skin around the joint is red in color, with a white band running across the joint itself."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It is slow and rattles before it jumps, so sidestep; moving backwards can still get you bitten. It tends to hide, but its sounds give it away, so kill it before the other enemies.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Headcrab",
+              "revision": "329944",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "poison headcrabs are slow to attack and will telegraph their movements",
+                "Avoid the attack by going sideways as moving backwards can still guarantee a hit from the headcrab.",
+                "It's better to take out poison headcrabs first before focusing on other enemies due to their venomous bite.",
+                "they are vocal creatures and will make themselves known with their distinct vocalizations"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Headcrab",
+              "revision": "329944",
+              "part_of_page": "Behavior and skills",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "it will give off a distinct rattling sound before attacking head on"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Headcrab",
+              "revision": "329944",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Poison headcrabs prefer to hide when they can as opposed to staying out in the open"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: One shotgun blast at close range, one .357 shot at any range, or one crowbar hit kills it; a pistol takes many shots.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Headcrab",
+              "revision": "329944",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "one shot at close range will kill a poison headcrab instantly",
+                "the .357 Magnum, which is a one-shot kill at any range",
+                "Poison headcrabs can also be killed with one hit from a crowbar."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Headcrab",
+              "revision": "329944",
+              "part_of_page": "Trivia",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "poison headcrabs can take multiple shots and up to 10 on Hard difficulty"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2603,
+      "name": "Zombie",
+      "kind": "enemy",
+      "main_page": "https://half-life.fandom.com/wiki/Zombie",
+      "main_revision": "331479",
+      "lines": [
+        {
+          "line": "Summary: The ordinary zombie: a person taken over by a headcrab, relentless and tougher than a normal human. It swings objects in its way at you, and some lie still among corpses and rise when you come close.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Zombie",
+              "revision": "331479",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "zombies showcase resilience and strength that are superior compared to normal humans"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Zombie",
+              "revision": "331479",
+              "part_of_page": "Behavior",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Upon sensing a threat, a zombie will move towards that threat with little regard to themselves or the damage they sustain.",
+                "Zombies created by the standard headcrab try and swing objects in their way towards a threat to damage it.",
+                "they will lie motionless on the ground as if they were a corpse, then awaken and move towards a threat that comes too close to them or upon taking damage to their body"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The headcrab on its head: when it dies or comes off, the host dies too. Aim for the head; a double shotgun blast there is a guaranteed kill.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Zombie",
+              "revision": "331479",
+              "part_of_page": "Host Consciousness",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "the host also invariably dies when their resident headcrab is detached or dies"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/SPAS-12",
+              "revision": "330725",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "When dealing with Zombies, the player should aim for the head to avoid fighting the Headcrab; a double shot is the guaranteed kill."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A rotting, decayed body whose hands have turned into claws, with a headcrab on its head.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Zombie",
+              "revision": "331479",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "share the same trait of extensive tissue decay in the body and the mutation of the digits in the hands into claws",
+                "A zombie is created when a headcrab succesfully latches onto a human host and pierces through their skull with its beak."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Zombie",
+              "revision": "330952",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "check if any still have headcrabs attached to their head"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A zombie ignores fire, electricity and traps that are not in its way. A body in a heap of corpses that still has a headcrab on its head is only playing dead: shoot it first or throw a grenade.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Zombie",
+              "revision": "331479",
+              "part_of_page": "Behavior",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "the zombie cannot perceive other forms of danger that can be harmful to itself such as fire or electricity",
+                "Other dangerous hazards such as man-made traps are also not perceived as long as they don't obstruct its movement."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Zombie",
+              "revision": "330952",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "This tactic was also used by Standard Zombies in Half-Life 2.",
+                "When investigating an area littered with Zombie corpses, check if any still have headcrabs attached to their head, as this is a good sign the Zombie is merely playing dead.",
+                "throw a grenade at them if the player is unable to kill them without waking the Zombie up"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The buzz of flies often gives a zombie away. A shotgun is a good choice against every kind, and a zombie that loses its legs can keep coming.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Zombie",
+              "revision": "331479",
+              "part_of_page": "Trivia",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "An often-overlooked effect that signals a Zombie's presence is the buzz of flies"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/SPAS-12",
+              "revision": "330725",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The SPAS-12 is a good weapon to use when dealing with Zombies of any type"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Zombie",
+              "revision": "331479",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "some zombies have also been showcased to survive physical trauma such as the loss of their lower halves"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2604,
+      "name": "Fast Zombie",
+      "kind": "enemy",
+      "main_page": "https://half-life.fandom.com/wiki/Fast_Zombie",
+      "main_revision": "330952",
+      "lines": [
+        {
+          "line": "Summary: A skeletal zombie with 50 health that climbs, runs and leaps. Its leap hit does 10 and its double slash 6, and it often comes in packs of three to four.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Zombie",
+              "revision": "330952",
+              "part_of_page": "General information",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Health",
+                  "value": "50"
+                },
+                {
+                  "label": "Attacks",
+                  "value": "Leaping hit (10)"
+                },
+                {
+                  "label": "Attacks",
+                  "value": "Double slash (6)"
+                }
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Zombie",
+              "revision": "330952",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "they often travel in packs of three to four"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Its head: aim there with the shotgun or the .357. Hit it in mid-leap and it dies on the spot; the crossbow suits that best.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Zombie",
+              "revision": "330952",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "use the shotgun or Colt Python and aim for the head",
+                "Shooting the Zombie as they leap can instantly kill them in mid-air.",
+                "It is recommended to use the Crossbow for this"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: No skin and few organs, so bone and muscle show, with long claws; it stands on two legs to slash but runs and climbs on all fours.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Zombie",
+              "revision": "330952",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Fast Zombies have been stripped completely of their skin and most of their internal organs; bones and muscle tissue are clearly visible throughout the host's body.",
+                "Their claws are also much longer than Standard Zombies.",
+                "Fast Zombies stand on two legs while slashing with their claws or standing up, but move on all fours while running or climbing"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Alone it is weak, so the pack is the danger. It is much easier to hit at medium range, it cannot leap at you from behind cover, and it cannot attack you on a ladder, where it gets stuck below you.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Zombie",
+              "revision": "330952",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "aren't particularly dangerous on their own because their attacks are fairly weak",
+                "Fast Zombies are actually much easier to hit at medium range",
+                "Hiding behind cover will prevent the Fast Zombie from using their leap attack",
+                "Fast Zombies cannot attack the player while on a ladder.",
+                "They will get stuck under the ladder, allowing the player to hack away at them with his Crowbar until they drop."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Listen for its howl. On rooftops stay back from the edge: being startled off it costs fall damage. It climbs gutters that rattle as it comes, so shoot over the side before it reaches the top.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Fast_Zombie",
+              "revision": "330952",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Fast Zombies can be detected by the distinct howling they tend to emit",
+                "the biggest threat is actually falling off by surprise when a Fast Zombie suddenly attacks, thus causing fall damage while the Zombie pursues",
+                "the player will hear a rattling beat, and the gutter will move side-to-side",
+                "Aim over the side of the building and shoot the Zombie before they reach the top."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

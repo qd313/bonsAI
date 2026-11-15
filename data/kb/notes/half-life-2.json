@@ -1,0 +1,61 @@
+{
+ "games": [],
+ "aliases": [],
+ "sections": [
+  {
+   "section_id": 2600,
+   "game_id": 13,
+   "section_type": "enemy",
+   "name": "Headcrab",
+   "card": "Summary: A small, weak parasite with 10 health and a 5-damage bite. It is a real nuisance in numbers, mostly because you stop noticing it while you deal with something bigger.\nWeak points: Its underside: a crowbar swing at it while it leaps kills it in one hit, and gravity gun bursts are easy to land on it. It cannot swim, and drowns if it falls into deep water.\nLooks like: A round, smooth, tan body on four legs, about two feet long, with a round mouth underneath.\nTips: Keep moving when headcrabs are about. A pistol suits a few of them, the shotgun short to medium range, and the SMG a big group; one hand grenade can clear headcrabs and zombies together.\nTips: If poison headcrabs are mixed in, kill those first. A headcrab cannot hurt you while you are in a vehicle.",
+   "source_url": "https://half-life.fandom.com/wiki/Standard_Headcrab",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "330544",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2601,
+   "game_id": 13,
+   "section_type": "enemy",
+   "name": "Fast Headcrab",
+   "card": "Summary: A lanky, very quick headcrab with the same 10 health and 5-damage bite as the ordinary kind. It can bite again sooner than the others, which adds up when several come at you.\nLooks like: A slim body covered in wart-like bumps, on long, evenly sized legs that end in claws, with no fangs showing outside the mouth.\nTips: It dies to anything that kills an ordinary headcrab, but its speed makes the crowbar and pistol harder to land. Shoot it from a distance; the MP7's fast fire and spread work well on one or a group.\nTips: In dark places one may cling to the ceiling and drop on you, or when a light triggers it, so check overhead. When one gets close, back off or keep it in sight so you can kill it right away.",
+   "source_url": "https://half-life.fandom.com/wiki/Fast_Headcrab",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "331261",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2602,
+   "game_id": 13,
+   "section_type": "enemy",
+   "name": "Poison Headcrab",
+   "card": "Summary: A slow, dark headcrab with 35 health. Its bite drops you to 1 health at once; your suit's antidote then slowly brings you back up, a little short of where you were.\nLooks like: Dark skin and long, bristly legs with red joints crossed by a white band; the biggest of the headcrabs, with a bulky body.\nTips: It is slow and rattles before it jumps, so sidestep; moving backwards can still get you bitten. It tends to hide, but its sounds give it away, so kill it before the other enemies.\nTips: One shotgun blast at close range, one .357 shot at any range, or one crowbar hit kills it; a pistol takes many shots.",
+   "source_url": "https://half-life.fandom.com/wiki/Poison_Headcrab",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "329944",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2603,
+   "game_id": 13,
+   "section_type": "enemy",
+   "name": "Zombie",
+   "card": "Summary: The ordinary zombie: a person taken over by a headcrab, relentless and tougher than a normal human. It swings objects in its way at you, and some lie still among corpses and rise when you come close.\nWeak points: The headcrab on its head: when it dies or comes off, the host dies too. Aim for the head; a double shotgun blast there is a guaranteed kill.\nLooks like: A rotting, decayed body whose hands have turned into claws, with a headcrab on its head.\nTips: A zombie ignores fire, electricity and traps that are not in its way. A body in a heap of corpses that still has a headcrab on its head is only playing dead: shoot it first or throw a grenade.\nTips: The buzz of flies often gives a zombie away. A shotgun is a good choice against every kind, and a zombie that loses its legs can keep coming.",
+   "source_url": "https://half-life.fandom.com/wiki/Zombie",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "331479",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2604,
+   "game_id": 13,
+   "section_type": "enemy",
+   "name": "Fast Zombie",
+   "card": "Summary: A skeletal zombie with 50 health that climbs, runs and leaps. Its leap hit does 10 and its double slash 6, and it often comes in packs of three to four.\nWeak points: Its head: aim there with the shotgun or the .357. Hit it in mid-leap and it dies on the spot; the crossbow suits that best.\nLooks like: No skin and few organs, so bone and muscle show, with long claws; it stands on two legs to slash but runs and climbs on all fours.\nTips: Alone it is weak, so the pack is the danger. It is much easier to hit at medium range, it cannot leap at you from behind cover, and it cannot attack you on a ladder, where it gets stuck below you.\nTips: Listen for its howl. On rooftops stay back from the edge: being startled off it costs fall damage. It climbs gutters that rattle as it comes, so shoot over the side before it reaches the top.",
+   "source_url": "https://half-life.fandom.com/wiki/Fast_Zombie",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "330952",
+   "crawled_at": "2026-11-15"
+  }
+ ]
+}

@@ -79,6 +79,7 @@ from backend.ask.ollama_ask_extras import (
 )
 from backend.ask.ollama_service import post_ollama_chat
 from backend.prompts.ollama_prompts import picture_user_message
+from backend.ask.ollama_attempt_outcome import body_looks_out_of_memory, strip_ollama_http_body
 from backend.ask.ollama_loading_line import arm_loading_line, thinking_phase_args
 from backend.answer.response_verify import build_live_spoiler_cover
 from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
@@ -420,11 +421,6 @@ async def run_ask_ollama(
     if isinstance(_abort_ev, threading.Event):
         _abort_ev.clear()
 
-    def _strip_ollama_http_body(payload: dict) -> dict:
-        out = dict(payload)
-        out.pop("body", None)
-        return out
-
     try:
         loop = asyncio.get_running_loop()
         last_failure = {"success": False, "response": "No model attempts executed.", **ollama_extras}
@@ -493,13 +489,13 @@ async def run_ask_ollama(
                     },
                 )
             if result.get("cancelled"):
-                return {**_strip_ollama_http_body(merged), "model_policy_disclosure": None, "cancelled": True}
+                return {**strip_ollama_http_body(merged), "model_policy_disclosure": None, "cancelled": True}
             if result.get("success"):
                 ask_diagnostics["model_succeeded"] = str(result.get("model") or model_name)
                 ask_diagnostics["elapsed_seconds"] = round(time.time() - ask_started, 2)
                 disc = disclosure_for_model(str(result.get("model") or model_name))
                 out = {
-                    **_strip_ollama_http_body(merged),
+                    **strip_ollama_http_body(merged),
                     "model_policy_disclosure": disc,
                     "chat_summary": chat_summary_mark,
                 }
@@ -522,7 +518,7 @@ async def run_ask_ollama(
                     )
                 return out
 
-            last_failure = _strip_ollama_http_body(merged)
+            last_failure = strip_ollama_http_body(merged)
             body = result.get("body") or ""
             if result.get("timed_out") and model_name != models_to_try[-1]:
                 logger.warning(
@@ -534,17 +530,7 @@ async def run_ask_ollama(
                 continue
 
             status = result.get("status")
-            body_lower = body.lower()
-            oomish = any(
-                s in body_lower
-                for s in (
-                    "out of memory",
-                    "failed to allocate",
-                    "resource exhausted",
-                    "cuda error",
-                    "vulkan",
-                )
-            )
+            oomish = body_looks_out_of_memory(body)
             if requires_vision and (
                 (isinstance(status, int) and status in (413, 500, 502, 503, 504)) or oomish
             ):
@@ -555,7 +541,7 @@ async def run_ask_ollama(
                 )
                 continue
 
-            return _strip_ollama_http_body(merged)
+            return strip_ollama_http_body(merged)
 
         ask_diagnostics["elapsed_seconds"] = round(time.time() - ask_started, 2)
         return last_failure

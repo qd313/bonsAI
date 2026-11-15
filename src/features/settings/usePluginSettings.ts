@@ -65,6 +65,11 @@
  *    a full copy of every setting. A change elsewhere that calls the pause
  *    function first cancels a wait already running, so the two paths to
  *    disk cannot both fire for the same change.
+ * 7b. A save that fails is not forgotten (plan 104, lane B1). The settings it did not send are noted
+ *    outside the hook (`unsentKeys`), a try is made again after 3, 10, 30 and 60 seconds, a first
+ *    load that failed is asked again the same way (the person's changes made on the defaults screen
+ *    are laid back over the disk's values and then saved), and a screen rebuilt after a popup sends
+ *    the noted settings instead of taking its restored copy as "already saved".
  * 8. Everything is handed back together at the end: every setting, every
  *    function that changes one, and the loading/saving controls above —
  *    built by spreading `settings` and the generated setters, not by
@@ -228,6 +233,30 @@ function untouchedFieldsWithNewerDiskValue(
   return out as Partial<BonsaiSettingsSnapshotInput>;
 }
 
+/**
+ * How long to wait before each new try at sending what a failed save did not (milliseconds), and how
+ * many tries there are. After the last one the change still waits: the next change on screen, the
+ * panel closing, or a rebuilt screen sends it.
+ */
+const SAVE_RETRY_DELAYS_MS = [3000, 10000, 30000, 60000];
+
+/**
+ * The settings (the back end's key names) whose last save failed, so the screen's value is not yet on
+ * disk. Kept outside the hook because Steam throws the screen away and rebuilds it whenever a popup
+ * opens, and the rebuilt screen would otherwise take its restored value as "already saved".
+ */
+const unsentKeys = new Set<string>();
+
+/** For a save made outside this hook that failed: the rebuilt screen sends these keys again. */
+function rememberUnsavedSettings(keys: string[]): void {
+  for (const k of keys) unsentKeys.add(k);
+}
+
+/** Test only: forget which settings a failed save left unsent. */
+export function clearUnsavedSettingsForTests(): void {
+  unsentKeys.clear();
+}
+
 /** One setter per field, named the way every tab already calls it (`setLatencyWarningSeconds`, …). */
 type SettingsFieldSetters = {
   [K in keyof BonsaiSettingsSnapshotInput as `set${Capitalize<string & K>}`]: Dispatch<
@@ -273,6 +302,11 @@ export function usePluginSettings() {
   const settingsPersistEpochRef = useRef(0);
   const settingsSaveInFlightRef = useRef(0);
   const pluginDataClearSeenAtMountRef = useRef(getPluginDataClearedGeneration());
+  /** Where the tries at a failed save stand: how many have been made, the one waiting, and whether this screen is gone. */
+  const retryAttemptRef = useRef(0);
+  const retryTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const unmountedRef = useRef(false);
+  const healSettingsRef = useRef<() => Promise<void>>(async () => {});
 
   settingsSnapshotForDebouncedSaveRef.current = settings;
   /** Read by the panel-close save below, which must not run while the first load has not succeeded. */
@@ -356,6 +390,26 @@ export function usePluginSettings() {
     });
   }, []);
 
+  /** A save (or the first load) failed: remember which settings did not arrive and try again after a wait. */
+  const noteSaveFailed = useCallback((keys: string[]) => {
+    rememberUnsavedSettings(keys);
+    if (unmountedRef.current || retryTimerRef.current !== undefined) return;
+    const delay = SAVE_RETRY_DELAYS_MS[retryAttemptRef.current];
+    if (delay === undefined) return;
+    retryAttemptRef.current += 1;
+    retryTimerRef.current = setTimeout(() => {
+      retryTimerRef.current = undefined;
+      void healSettingsRef.current();
+    }, delay);
+  }, []);
+
+  /** A save (or a load) got through: these keys are on disk again. */
+  const noteSaveWorked = useCallback((keys: string[] | "all") => {
+    if (keys === "all") unsentKeys.clear();
+    else for (const k of keys) unsentKeys.delete(k);
+    retryAttemptRef.current = 0;
+  }, []);
+
   const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
     const normalized = normalizeSettings(saved);
     const snapshot = snapshotFromBonsaiSettings(normalized);
@@ -401,11 +455,12 @@ export function usePluginSettings() {
         toBonsaiSettingsPayload(settingsSnapshotForDebouncedSaveRef.current),
       ]);
       hydrateFromSettings(saved);
+      noteSaveWorked("all");
       return saved;
     } finally {
       settingsSaveInFlightRef.current -= 1;
     }
-  }, [hydrateFromSettings, pauseDebouncedSettingsSave]);
+  }, [hydrateFromSettings, noteSaveWorked, pauseDebouncedSettingsSave]);
 
   /**
    * Saves what changed on screen since the last confirmed disk state, right now, instead of
@@ -421,17 +476,78 @@ export function usePluginSettings() {
       toBonsaiSettingsPayload(settingsBaselineRef.current),
       toBonsaiSettingsPayload(settingsSnapshotForDebouncedSaveRef.current)
     );
-    if (Object.keys(patch).length === 0) return;
+    if (Object.keys(patch).length === 0) {
+      noteSaveWorked("all");
+      return;
+    }
     settingsSaveInFlightRef.current += 1;
     try {
       const saved = await callDeckyWithTimeout<[Partial<BonsaiSettings>], BonsaiSettings>("save_settings", [patch]);
       confirmSavedSettings(saved);
+      noteSaveWorked(Object.keys(patch));
     } catch (err) {
       console.error("save_settings failed (persist now)", err);
+      noteSaveFailed(Object.keys(patch));
     } finally {
       settingsSaveInFlightRef.current -= 1;
     }
-  }, [pauseDebouncedSettingsSave, confirmSavedSettings]);
+  }, [pauseDebouncedSettingsSave, confirmSavedSettings, noteSaveFailed, noteSaveWorked]);
+
+  /**
+   * A first load failed, so the screen shows defaults and saving is off. Ask again. When the back end
+   * answers, the disk's values are shown, and the few settings the person changed on the defaults screen
+   * meanwhile are laid back on top, so the next automatic save sends exactly those (and nothing the
+   * person did not touch, which could be older than the disk).
+   */
+  const loadAgainAfterFailedLoad = useCallback(async () => {
+    try {
+      const saved = await callDeckyWithTimeout<[], BonsaiSettings>("load_settings", []);
+      const defaults = defaultSettingsSnapshot();
+      const live = settingsSnapshotForDebouncedSaveRef.current;
+      const touched: Record<string, unknown> = {};
+      for (const key of SETTINGS_FIELD_KEYS) {
+        if (JSON.stringify(live[key]) !== JSON.stringify(defaults[key])) touched[key] = live[key];
+      }
+      hydrateFromSettings(saved);
+      noteSaveWorked([]);
+      if (Object.keys(touched).length > 0) {
+        const merged = { ...settingsSnapshotForDebouncedSaveRef.current, ...touched } as BonsaiSettingsSnapshotInput;
+        settingsSnapshotForDebouncedSaveRef.current = merged;
+        setSettings(merged);
+      }
+    } catch (err) {
+      console.error("load_settings failed (try again)", err);
+      noteSaveFailed([]);
+    }
+  }, [hydrateFromSettings, noteSaveFailed, noteSaveWorked]);
+
+  /** What the wait after a failure runs: load again when the first load failed, otherwise send what is unsent. */
+  healSettingsRef.current = async () => {
+    if (settingsPersistEnabledRef.current) await persistChangedSettingsNow();
+    else await loadAgainAfterFailedLoad();
+  };
+
+  /**
+   * A screen that is thrown away leaves no waiting try behind (a rebuilt screen picks the unsent keys up
+   * on its own load). One that never got a good load also leaves its changes noted: the rebuilt screen
+   * would take them from the restored copy as already saved.
+   */
+  useEffect(() => {
+    unmountedRef.current = false;
+    return () => {
+      unmountedRef.current = true;
+      clearTimeout(retryTimerRef.current);
+      retryTimerRef.current = undefined;
+      if (settingsPersistEnabledRef.current) return;
+      const defaults = defaultSettingsSnapshot();
+      const live = settingsSnapshotForDebouncedSaveRef.current;
+      rememberUnsavedSettings(
+        SETTINGS_FIELD_KEYS.filter((k) => JSON.stringify(live[k]) !== JSON.stringify(defaults[k])).map(
+          (k) => SETTINGS_FIELD_BACKEND_KEY[k],
+        ),
+      );
+    };
+  }, []);
 
   /*
    * Plan 78 (entry C): a setting changed less than 400 ms before Quick Access closes was lost,
@@ -484,6 +600,17 @@ export function usePluginSettings() {
         const restored = ignoreRestored ? null : takeRestoredSettingsSnapshot();
         if (restored) {
           hydrateFromSettings(normalizeSettings(toBonsaiSettingsPayload(restored)));
+          if (unsentKeys.size > 0) {
+            // A save before the rebuild failed: for those settings the disk's value is the last confirmed
+            // one, not the restored copy's, so the difference is sent now.
+            const disk = snapshotFromBonsaiSettings(normalizeSettings(saved));
+            const baseline = { ...settingsBaselineRef.current } as Record<string, unknown>;
+            for (const key of SETTINGS_FIELD_KEYS) {
+              if (unsentKeys.has(SETTINGS_FIELD_BACKEND_KEY[key])) baseline[key] = disk[key];
+            }
+            settingsBaselineRef.current = baseline as unknown as BonsaiSettingsSnapshotInput;
+            void persistChangedSettingsNow();
+          }
         } else {
           hydrateFromSettings(saved);
           if (ignoreRestored) {
@@ -514,6 +641,7 @@ export function usePluginSettings() {
         if (cancelled) return;
         setSettingsPersistEnabled(false);
         setSettings(defaultSettingsSnapshot());
+        noteSaveFailed([]);
       })
       .finally(() => {
         void firstRunAnswer.then((firstRun) => {
@@ -527,7 +655,7 @@ export function usePluginSettings() {
     return () => {
       cancelled = true;
     };
-  }, [hydrateFromSettings]);
+  }, [hydrateFromSettings, persistChangedSettingsNow, noteSaveFailed]);
 
   useEffect(() => {
     if (!settingsPersistEnabled) return;
@@ -544,16 +672,18 @@ export function usePluginSettings() {
       callDeckyWithTimeout<[Partial<BonsaiSettings>], BonsaiSettings>("save_settings", [patch])
         .then((saved) => {
           confirmSavedSettings(saved);
+          noteSaveWorked(Object.keys(patch));
         })
         .catch((err) => {
           console.error("save_settings failed", err);
+          noteSaveFailed(Object.keys(patch));
         })
         .finally(() => {
           settingsSaveInFlightRef.current -= 1;
         });
     }, 400);
     return () => clearTimeout(timer);
-  }, [settings, settingsPersistEnabled, confirmSavedSettings]);
+  }, [settings, settingsPersistEnabled, confirmSavedSettings, noteSaveFailed, noteSaveWorked]);
 
   return {
     ...settings,

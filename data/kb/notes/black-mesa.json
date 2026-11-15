@@ -45,6 +45,50 @@
    "source_license": "CC-BY-SA-3.0",
    "source_version": "4567",
    "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 4304,
+   "game_id": 14,
+   "section_type": "enemy",
+   "name": "Barnacle",
+   "card": "Summary: A creature that hangs from the ceiling and pulls up the props and people it grabs with its tongue. It has more health than in the 1998 game.\nTips: It takes three crowbar hits instead of one. Whatever it grabs is squeezed, so a victim cannot survive being freed. On Xen an underwater kind hangs upside down from the bottom; only the crowbar, Glock 17, crossbow, RPG, Hivehand and explosives kill it. One achievement is about a barnacle eating a headcrab ten times.",
+   "source_url": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "4567",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 4305,
+   "game_id": 14,
+   "section_type": "enemy",
+   "name": "Bullsquid",
+   "card": "Summary: A spitting alien predator that stays calm until you come into its sight.\nLooks like: Its eyes sit on the top of its head, like a water hunter's.\nTips: Its acid makes your suit warn of hazardous chemicals. Spit that lands in water slows down and stops, and touching a broken-up blob does no damage.",
+   "source_url": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "4567",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 4306,
+   "game_id": 14,
+   "section_type": "enemy",
+   "name": "Alien Controller",
+   "card": "Summary: An alien that throws clusters of energy balls, dodges when you aim at it and can take over Vortigaunts' minds.\nLooks like: Redesigned since the 1998 game, mostly in its glow, which shows orange while it lifts objects.\nTips: It teleports in when an alarm sounds. Crystals around it act as armour. Kill it and the Vortigaunts it controlled stop attacking.",
+   "source_url": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "4567",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 4307,
+   "game_id": 14,
+   "section_type": "enemy",
+   "name": "Black Ops assassins",
+   "card": "Summary: Female Black Ops assassins fight with a Glock 17 in each hand and do not throw grenades.\nLooks like: Black boots that look like Portal's long-fall boots, and pistols with no visible suppressor.\nTips: The pistols look unsuppressed but sound silenced. Their boots keep them from being hurt by falls. In the rooms where they wait they go hunting even if they have not seen you, then surround you, and there are more of them than in the 1998 game.",
+   "source_url": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "4567",
+   "crawled_at": "2026-11-15"
   }
  ]
 }

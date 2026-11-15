@@ -411,6 +411,283 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 4304,
+      "name": "Barnacle",
+      "kind": "enemy",
+      "main_page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+      "main_revision": "4567",
+      "lines": [
+        {
+          "line": "Summary: A creature that hangs from the ceiling and pulls up the props and people it grabs with its tongue. It has more health than in the 1998 game.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Barnacle",
+              "revision": "4433",
+              "part_of_page": "Introduction",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "appears in various levels on the roof of these levels."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Barnacle",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "Grab up props.",
+                "Slowly descends the tongue after consuming 1 NPC.",
+                "Constricting the NPC when getting grabbed.",
+                "The Barnacle's health is increased thus making the Crowbar hit it 3 times instead of 1."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It takes three crowbar hits instead of one. Whatever it grabs is squeezed, so a victim cannot survive being freed. On Xen an underwater kind hangs upside down from the bottom; only the crowbar, Glock 17, crossbow, RPG, Hivehand and explosives kill it. One achievement is about a barnacle eating a headcrab ten times.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Barnacle",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The Barnacle's health is increased thus making the Crowbar hit it 3 times instead of 1.",
+                "(This prevents the NPC from surviving getting freed)",
+                "In the Xen chapters, the Barnacle also has its underwater counterpart, called Underwater Barnacle.",
+                "All of your weapons except the Crowbar, Glock-17, Crossbow, RPG, Hivehand, and explosives will be useless to kill this Barnacle.",
+                "There is an achievement that relates to a Barnacle devouring a Headcrab 10 times."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Creatures (Xen variations)",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "Beneathicles — Underwater Barnacles attached upside down at the bottom of the water that work like normal Barnacles."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4305,
+      "name": "Bullsquid",
+      "kind": "enemy",
+      "main_page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+      "main_revision": "4567",
+      "lines": [
+        {
+          "line": "Summary: A spitting alien predator that stays calm until you come into its sight.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Bullsquid",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The Bullsquid is always calm when the player is out of sight of it.",
+                "The Bullsquid's acidic spit has more acidic spit than the original."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Creatures (visual changes)",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "more suited for being an aquatic predator"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Its eyes sit on the top of its head, like a water hunter's.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Creatures (visual changes)",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "Bullsquids have their eyes moved to the top of their head, more suited for being an aquatic predator."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its acid makes your suit warn of hazardous chemicals. Spit that lands in water slows down and stops, and touching a broken-up blob does no damage.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Bullsquid",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game); the bullet names the suit's spoken warning, which the note states in its own words and does not copy",
+              "quoted": [
+                "The acidic spit will trigger the H.E.V to say \"Warning, hazardous chemicals detected\"",
+                "If the acidic spit has reached to water, it will move slowly and stop eventually. Trying to touch a frozen/broken acidic spit will not inflict damage."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4306,
+      "name": "Alien Controller",
+      "kind": "enemy",
+      "main_page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+      "main_revision": "4567",
+      "lines": [
+        {
+          "line": "Summary: An alien that throws clusters of energy balls, dodges when you aim at it and can take over Vortigaunts' minds.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Alien Controller",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "Their secondary attack is changed to a cluster bomb type energy balls.",
+                "Can dodge when the player is aiming at it.",
+                "Can mind control Vortigaunts."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Redesigned since the 1998 game, mostly in its glow, which shows orange while it lifts objects.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Alien Controller",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "Their appearance is changed, especially their glow.",
+                "Can levitate objects, can be noticeable by emitting an orange glow."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It teleports in when an alarm sounds. Crystals around it act as armour. Kill it and the Vortigaunts it controlled stop attacking.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Alien Controller",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "Can teleport in when an alarm sounds to control the situation."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Walkthrough > Interloper",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "Alien Controllers will have crystals that they will use for armor."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Creatures (Xen paragraphs)",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "Unlike in the original, the Vortigaunts will immediately resume their passive behavior when the Alien Controllers are killed."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4307,
+      "name": "Black Ops assassins",
+      "kind": "enemy",
+      "main_page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+      "main_revision": "4567",
+      "lines": [
+        {
+          "line": "Summary: Female Black Ops assassins fight with a Glock 17 in each hand and do not throw grenades.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Black Ops Female Assassin",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The Female Assassin equips an Akimbo of Glock-17s.",
+                "The Female Assassin's ability to throw grenades is removed."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Characters",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "They also wield dual Glock 17 pistols (as opposed to a single one like the original game)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Black boots that look like Portal's long-fall boots, and pistols with no visible suppressor.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Characters",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "now wearing what appear to be black Advanced Knee Replacements or Long Fall Boots from the Portal series.",
+                "while they don't have visible suppressors, the sound effects indicate otherwise."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The pistols look unsuppressed but sound silenced. Their boots keep them from being hurt by falls. In the rooms where they wait they go hunting even if they have not seen you, then surround you, and there are more of them than in the 1998 game.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Black Ops Female Assassin",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The Glock-17s are not equipped with suppressors, even though it uses a silenced version of the firing sound.",
+                "The Female Assassin also has Long Fall Boots equipped to save them from falling"
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Walkthrough > Apprehension",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "Even if the assassins didn't see you, their AI will automatically set into hunting mode."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Walkthrough > Lambda Core",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "All of the assassins except 1 will hunt you and surround you when arriving at the storage area. There will be more assassins than the original."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

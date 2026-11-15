@@ -5,6 +5,7 @@
   "game_id": 9,
   "game": "Grand Theft Auto: San Andreas",
   "read_on": "2026-10-25",
+  "quote_sorting": "2026-11-15 (plan 104, lane S1): every page was read again at the revision named on its section, through the wiki's render call. Beside each list of quotes, quoted_sits says where each one sits on the page (editors' prose, table cell, or the game's own text) and quoted_at gives the page heading; the two lists run in the same order as the quotes. Table cells that hold a whole editors' sentence are sorted as editors' prose. No note line changed.",
   "sections": [
     {
       "section_id": 1100,
@@ -24,6 +25,18 @@
                 "In most cases, body armor in the games is illustrated as a protective blue vest.",
                 "extending the player's resilience to damage from gunfire, explosions and fire",
                 "The armor hit points stayed the same until Grand Theft Auto: San Andreas, where the armor is now a bar instead of hit points."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Population Information",
+                "Population Information",
+                "Description",
+                "Description > 3D Universe"
               ]
             }
           ]
@@ -37,6 +50,14 @@
               "quoted": [
                 "The body armor's primary function is to serve as padding for the player health",
                 "the armor in GTA San Andreas and GTA Vice City Stories is an exception, providing no protection to the player from falls"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Description > 3D Universe"
               ]
             }
           ]
@@ -52,6 +73,18 @@
                 "200 (GTA Vice City & GTA San Andreas)",
                 "Doberman (GTA San Andreas)",
                 "In addition to spawning in specific locales, body armor can also be purchased at stores that sell weapons, such as Ammu-Nation, as well as entering the Police/SWAT Enforcer trucks."
+              ],
+              "quoted_sits": [
+                "table cell",
+                "table cell",
+                "table cell",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "infobox",
+                "infobox",
+                "infobox",
+                "Description > 3D Universe"
               ]
             }
           ]
@@ -76,6 +109,18 @@
                 "health pickups are generally shaped as rotating health icon with the symbol of a heart",
                 "In Grand Theft Auto: San Andreas, health pickups appear in San Andreas during gang warfare and in most missions involving a lot of gun fights.",
                 "Health is replenished to maximum"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description > Health pickups",
+                "Description > Health pickups",
+                "Description > Health pickups",
+                "Description > Health pickups"
               ]
             }
           ]
@@ -90,6 +135,16 @@
                 "Health can be also replenished by up to 20% when entering Ambulances or 40% when entering the Hotdog van in Grand Theft Auto: San Andreas.",
                 "by eating food (in GTA Vice City, GTA San Andreas, GTA IV and its episodes, GTA V and GTA Online)",
                 "by visiting a save point to save the game (in all 3D Universe titles, save for GTA III and Grand Theft Auto Advance"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description > Health pickups",
+                "Description > Health pickups",
+                "Description > Health pickups"
               ]
             }
           ]
@@ -103,6 +158,14 @@
               "quoted": [
                 "Health is replenished to maximum, which is a variable scale that can be increased by performing paramedic side missions and exercising (sprinting, swimming, or visiting a gym).",
                 "When the player's health is completely depleted, the protagonist is considered \"wasted\", and is then transported to the nearest hospital, after which a fee for healthcare will be assessed, and all weapons will be confiscated in the 2D and 3D Universes. Any mission that may have been in progress at the time is considered as failed."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description > Health pickups",
+                "Description > Health pickups"
               ]
             }
           ]
@@ -126,6 +189,16 @@
                 "In order to save the progress while not in a mission, the player is required to collect a \"floppy diskette\" save pickup at any available safehouse",
                 "Saving the game also restores the player's full health and skips time in 6 in-game hours.",
                 "The Johnson House is provided to the player as the default save point at the start of the game"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Description",
+                "Description"
               ]
             }
           ]
@@ -141,6 +214,18 @@
                 "Wardrobe: All clothing items purchased from clothing stores will be available at the player's wardrobe",
                 "Collectible Rewards: Items rewarded from collecting specific types of collectibles will be available at certain safehouses.",
                 "Daily Asset Income: Certain safehouses are tied to a specific mission strand which, when completed, will render the safehouse as an asset-type property, with a pickup generating a specific amount of money to be collected daily."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Amenities",
+                "Amenities",
+                "Amenities",
+                "Amenities"
               ]
             }
           ]
@@ -156,6 +241,18 @@
                 "Blue house pickups indicates safehouses or assets that are yet to be unlocked for purchase.",
                 "The player can park a car in the door's way to prevent it from closing and then parking the desired vehicle in the garage.",
                 "Obtaining all 37 save points is a requirement for achieving 100% completion (contributing 15% of the total), costing a total of $879,000."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "List of Save Points > Purchasable Save Points",
+                "List of Save Points > Purchasable Save Points",
+                "Amenities",
+                "Description"
               ]
             }
           ]
@@ -178,6 +275,14 @@
               "quoted": [
                 "A police bribe is a pickup in the Grand Theft Auto series intended to eliminate the player's wanted level.",
                 "the bribe appears as a rotating, star-shaped police badge pickup that will reduce the player's wanted level by one star when picked up"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "3D Universe"
               ]
             }
           ]
@@ -198,6 +303,28 @@
                 "Starting a vehicle school lesson.",
                 "Going to an airport and buying a plane ticket to another city.",
                 "Completing a mission."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Description",
+                "Description",
+                "Description",
+                "Description",
+                "Description",
+                "Description",
+                "Description",
+                "Description"
               ]
             }
           ]
@@ -213,6 +340,18 @@
                 "Some require performing a jump in an automobile to reach, as they are positioned at a slight altitude, being inaccessible on-foot.",
                 "any higher-level police presence (Military, SWAT or FBI for example) in the area prior to obtaining the bribe will continue to pursue the player (assuming a wanted level is still in place), but no more law enforcement vehicles appear.",
                 "The one exception is the Police Maverick, which will disengage from pursuit of a player with a three-star wanted level upon obtaining a police bribe (reducing their wanted level to two stars)."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Description",
+                "3D Universe",
+                "3D Universe"
               ]
             }
           ]
@@ -237,6 +376,18 @@
                 "it spawns like a weapon pickup when not in use, it is activated instantly when the player walks into it, and is dropped when the vehicle exit button is pressed.",
                 "Capacity",
                 "1 (operator)"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "table cell",
+                "table cell"
+              ],
+              "quoted_at": [
+                "Jetpack > Capacity",
+                "Description",
+                "infobox (Jetpack > Capacity)",
+                "infobox"
               ]
             }
           ]
@@ -250,6 +401,14 @@
               "quoted": [
                 "it also makes the player invulnerable to falling, crashing into walls or moving vehicles, landing on top of a moving helicopter and other dangers.",
                 "Only the 'one-handed' weapons can be used while the Jetpack is in use, namely Pistol, Tec-9, Micro SMG and Sawn-off Shotgun."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Weapons"
               ]
             }
           ]
@@ -265,6 +424,18 @@
                 "At Verdant Meadows Airfield following the completion of Green Goo.",
                 "The Jetpack is a great choice for collecting Horseshoes in the Las Venturas area.",
                 "The Jetpack has a much lower altitude limit than the other aircraft vehicles, and it is not ideal for scaling taller buildings"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Locations",
+                "Description",
+                "Description"
               ]
             }
           ]
@@ -287,6 +458,14 @@
               "quoted": [
                 "The Heat-Seeking Rocket Launcher, sometimes referred as Lock on Missile, is a man-portable infrared homing surface-to-air missile in Grand Theft Auto: San Andreas.",
                 "the Heat-Seeking Rocket Launcher automatically selects the nearest available target. When pointed at a vehicle, the marker is green. After waiting for 3–5 seconds, it turns red and the missile is locked on."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Heat-Seeking Rocket Launcher > Firing mode",
+                "Performance > Grand Theft Auto: San Andreas"
               ]
             }
           ]
@@ -300,6 +479,14 @@
               "quoted": [
                 "making it useful for taking out air vehicles, such as Police Mavericks. The missile's flight speed is significantly increased when the target is an aircraft.",
                 "this type of Heat-Seeking rocket can destroy any vehicle instantly."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Performance > Grand Theft Auto: San Andreas",
+                "Performance > Grand Theft Auto: San Andreas"
               ]
             }
           ]
@@ -317,6 +504,22 @@
                 "Tierra Robada – Inside Mike Toreno's ranch upon completion of Vertical Bird.",
                 "Aldea Malvada, Tierra Robada - Beside an abandoned house",
                 "Pilson Intersection, Las Venturas – On the northeast corner of the roof of a parking lot southwest of the intersection"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Performance > Grand Theft Auto: San Andreas",
+                "Performance > Grand Theft Auto: San Andreas",
+                "Locations > Grand Theft Auto: San Andreas",
+                "Locations > Grand Theft Auto: San Andreas",
+                "Locations > Grand Theft Auto: San Andreas",
+                "Locations > Grand Theft Auto: San Andreas"
               ]
             }
           ]
@@ -342,6 +545,20 @@
                 "1-2 HPV1000 bikes with motor officers (only in urban areas)",
                 "Three officers on foot",
                 "1-2 Predator boats (on water)"
+              ],
+              "quoted_sits": [
+                "table cell",
+                "table cell",
+                "table cell",
+                "table cell",
+                "table cell"
+              ],
+              "quoted_at": [
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels"
               ]
             }
           ]
@@ -355,6 +572,14 @@
               "quoted": [
                 "At a one-star wanted level, one officer at a time will pursue and attack the player with a nightstick.",
                 "At this level, the police will eventually lose interest and the player will eventually lose the wanted star on its own, except if they are using a police vehicle."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels",
+                "Wanted Levels"
               ]
             }
           ]
@@ -371,6 +596,20 @@
                 "any mission the player was on will count as failed, and the player is transported to the nearest police station, stripped of all weapons and a small amount of money, ranging from $100 to $1,500.",
                 "It results in a $100 fine if they player gets arrested",
                 "It results in a $200 fine if the player gets busted."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels",
+                "Wanted Levels",
+                "Description",
+                "Wanted Levels",
+                "Wanted Levels"
               ]
             }
           ]
@@ -394,6 +633,16 @@
                 "A Police Maverick is called in to provide air support and drop SWAT members armed with Micro SMGs.",
                 "occasionally set up armed roadblocks on main roads",
                 "At a four-star wanted level, the pursuing Police Maverick is joined by a News Chopper. SWAT teams will give chase in Enforcer vans alongside the regular police cars."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "table cell",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels"
               ]
             }
           ]
@@ -407,6 +656,14 @@
               "quoted": [
                 "Roadblocks now consist of these heavier and larger SWAT vans, making them more difficult to ram through.",
                 "If the News Chopper is shot down by the player, it will get replaced by another Police Maverick and the player is now pursued by two police helicopters. This increases the danger."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels",
+                "Wanted Levels"
               ]
             }
           ]
@@ -423,6 +680,20 @@
                 "This wanted level is automatically triggered when the player enters a region or city that they have not unlocked.",
                 "It results in a $400 fine if the player gets busted.",
                 "It results in a $600 fine if the player gets busted."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels"
               ]
             }
           ]
@@ -449,6 +720,22 @@
                 "1-2 Police Mavericks",
                 "Two Hydra jets (air and Vortex pursuit)",
                 "the local police are supplanted (replaced) by FBI agents which takes over a majority of the chase."
+              ],
+              "quoted_sits": [
+                "table cell",
+                "table cell",
+                "table cell",
+                "table cell",
+                "table cell",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels"
               ]
             }
           ]
@@ -462,6 +749,14 @@
               "quoted": [
                 "The roadblocks now consist of FBI Ranchers. Though these are relatively easier to ram through, the FBI agents can make short work of the player's vehicle.",
                 "The agents also drive very aggressively while they pursuit the player's vehicle, making it easy to crash and lose control."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels",
+                "Wanted Levels"
               ]
             }
           ]
@@ -477,6 +772,18 @@
                 "This level is automatically triggered by entering or flying over a restricted area, which includes Area 69 in Bone County, and Easter Basin Naval Station in San Fierro.",
                 "If the player instead enters the areas surrounding these landmarks before they are unlocked, they will only get four stars.",
                 "It results in a $900 fine if the player gets busted."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels"
               ]
             }
           ]
@@ -502,6 +809,20 @@
                 "Three Predator boats (on water)",
                 "1-2 Police Mavericks",
                 "Three Hydra jets (air and Vortex pursuit)"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "table cell",
+                "table cell",
+                "table cell",
+                "table cell"
+              ],
+              "quoted_at": [
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels",
+                "Wanted Levels"
               ]
             }
           ]
@@ -515,6 +836,14 @@
               "quoted": [
                 "The soldiers have a very high precision and fire rate with their weapons. Also, the tanks may sometimes decide to crush the player. This makes it nearly impossible to survive for a long time on foot.",
                 "The roadblocks now consist of Barracks OL trucks and troops, making it very hard to ram through."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels",
+                "Wanted Levels"
               ]
             }
           ]
@@ -528,6 +857,14 @@
               "quoted": [
                 "the tanks are only used to pursuit and they never fire their cannons.",
                 "If the player's car hits a tank, it will only be lighted up on fire but not immediately explode, which allows for a chance to exit and continue escaping."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels",
+                "Wanted Levels"
               ]
             }
           ]
@@ -542,6 +879,16 @@
                 "The six-star wanted level becomes available after C.R.A.S.H. allows access to Las Venturas with the completion of Yay Ka-Boom-Boom. In practice, it is attainable after completing Learning to Fly.",
                 "This wanted level is not instantly obtained in the game without cheats. This makes it very hard for players to achieve this wanted level.",
                 "It results in a $1,500 fine if the player gets busted."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Description",
+                "Wanted Levels",
+                "Wanted Levels"
               ]
             }
           ]
@@ -563,6 +910,12 @@
               "revision": "2070353",
               "quoted": [
                 "Once the player attains a four star wanted level or higher and is in an aircraft or in a Vortex, two Hydras will pursue and try to shoot down the player."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Trivia > Grand Theft Auto: San Andreas"
               ]
             },
             {
@@ -570,6 +923,12 @@
               "revision": "2082835",
               "quoted": [
                 "enemy Hydra planes will chase the player and attempt to shoot them down using heat-seeking missiles."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels"
               ]
             }
           ]
@@ -582,6 +941,12 @@
               "revision": "2070353",
               "quoted": [
                 "The enemy Hydras should be no match, as they have a penchant for flying in lazy circles and not deploying flares, and as a result they will easily crash into buildings when flying in cities."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Trivia > Grand Theft Auto: San Andreas"
               ]
             }
           ]
@@ -596,6 +961,16 @@
                 "flying an AT-400 or an Andromada will not spawn any Hydra in the sky.",
                 "The Hydra can deploy white flares that will deviate incoming heat-seeking missiles from enemy Hydras at high wanted levels",
                 "Deviating the flares is not always guaranteed to work, as dropping one too early or too late may render it ineffective."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Trivia > Grand Theft Auto: San Andreas",
+                "Performance > Grand Theft Auto San Andreas > Weaponry/Features",
+                "Performance > Grand Theft Auto San Andreas > Weaponry/Features"
               ]
             },
             {
@@ -603,6 +978,12 @@
               "revision": "2082835",
               "quoted": [
                 "The only exception to this is the AT-400, which is a commercial plane, and the Andromada, a cargo plane."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Wanted Levels"
               ]
             }
           ]
@@ -626,6 +1007,16 @@
                 "The Ballas are the largest and most powerful black/Afro-American street gang in Los Santos and have a bitter rivalry with the Grove Street Families.",
                 "The Ballas come in four sets – Front Yard Ballas, Rollin' Heights Ballas, Kilo Tray Ballas and the Temple Drive Ballas.",
                 "their gang color being purple"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Ballas",
+                "Ballas",
+                "Ballas"
               ]
             }
           ]
@@ -638,6 +1029,12 @@
               "revision": "2070195",
               "quoted": [
                 "They are either unarmed or carry Micro SMGs and 9mm pistols, but when in gang wars with them, they have AK47s, SMGs, shotguns, 9mm pistols, Micro SMGs, and baseball bats. In some missions, they are equipped with Tec-9s."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Ballas"
               ]
             }
           ]
@@ -653,6 +1050,18 @@
                 "Killing three members on foot will provoke a gang war, and the area under attack will flash red on the radar. The opposition attack in three waves to defend their land.",
                 "Keep a close eye on the radar, and watch where the attackers are coming from.",
                 "having a plentiful supply of health and armor, as well as plenty of ammo for weapons before starting the war is recommended. If possible, shoot from long distances or from rooftops."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "San Andreas Gangs > Gang Wars and Territory",
+                "San Andreas Gangs > Gang Wars and Territory",
+                "San Andreas Gangs > Gang Wars and Territory",
+                "San Andreas Gangs > Gang Wars and Territory"
               ]
             }
           ]
@@ -675,6 +1084,14 @@
               "quoted": [
                 "The Vagos are a large and powerful Mexican Los Santos street gang that sport yellow bandanas, and occupy a majority of the far north and east areas of Los Santos, namely Las Colinas, East Beach, and Los Flores.",
                 "They are known to attack in large numbers."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Los Santos Vagos",
+                "Los Santos Vagos"
               ]
             }
           ]
@@ -687,6 +1104,12 @@
               "revision": "2070195",
               "quoted": [
                 "They are either unarmed or carry 9mm pistols. During a gang war, they are also equipped with Micro SMGs, SMGs, AK47s, shotguns, and baseball bats. In some missions, they are also equipped with Tec-9s and M4s."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Los Santos Vagos"
               ]
             }
           ]
@@ -701,6 +1124,16 @@
                 "They are sworn enemies of the Varrios Los Aztecas, but are also enemies with the Grove Street Families and Ballas.",
                 "The opposition attack in three waves to defend their land.",
                 "having a plentiful supply of health and armor, as well as plenty of ammo for weapons before starting the war is recommended."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Los Santos Vagos",
+                "San Andreas Gangs > Gang Wars and Territory",
+                "San Andreas Gangs > Gang Wars and Territory"
               ]
             }
           ]
@@ -723,6 +1156,14 @@
               "quoted": [
                 "The Varrios Los Aztecas are a small-time Latin/Mexican Los Santos street gang based in the barrios of El Corona and Little Mexico in addition to Unity Station",
                 "distinctly recognized by their turquoise bandanas"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Varrios Los Aztecas",
+                "Varrios Los Aztecas"
               ]
             }
           ]
@@ -735,6 +1176,12 @@
               "revision": "2070195",
               "quoted": [
                 "They are either unarmed or carry 9mm pistols and Micro SMGs."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Varrios Los Aztecas"
               ]
             }
           ]
@@ -749,6 +1196,16 @@
                 "Gang veterans include Cesar Vialpando, Jose, Sunny, Gal and Hazer.",
                 "Despite the fact that Cesar, a high ranking member (who may also be the leader), is a friend of the protagonist, this gang will be hostile towards the player and may attack CJ and his gang unprovoked.",
                 "They can also be identified by their turquoise bandanas, much like the Varrios Los Aztecas (but not to be confused with them, as they have a strong violent rivalry)."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Varrios Los Aztecas",
+                "Varrios Los Aztecas",
+                "San Fierro Rifa"
               ]
             }
           ]
@@ -771,6 +1228,14 @@
               "quoted": [
                 "The San Fierro Rifa are a Mexican/Hispanic San Fierro street gang that controls the areas of Garcia, Doherty, King's, and Battery Point.",
                 "T-Bone Mendez is the leader of the Rifa."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "San Fierro Rifa",
+                "San Fierro Rifa"
               ]
             }
           ]
@@ -785,6 +1250,16 @@
                 "They are either unarmed or carry just 9mm pistols",
                 "They are the least harmful gang in the game.",
                 "They're known for running away from CJ when they are feeling threatened"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "San Fierro Rifa",
+                "San Fierro Rifa",
+                "San Fierro Rifa"
               ]
             }
           ]
@@ -798,6 +1273,14 @@
               "quoted": [
                 "will often question CJ about his gangbanging status. If the player chooses to respond positively, they will attack.",
                 "They can also be identified by their turquoise bandanas, much like the Varrios Los Aztecas (but not to be confused with them, as they have a strong violent rivalry)."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "San Fierro Rifa",
+                "San Fierro Rifa"
               ]
             }
           ]

@@ -82,6 +82,7 @@ from backend.prompts.ollama_prompts import picture_user_message
 from backend.ask.ollama_loading_line import arm_loading_line, thinking_phase_args
 from backend.answer.response_verify import build_live_spoiler_cover
 from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
+from backend.ollama.ollama_memory_guard import ask_memory_warning
 from backend.settings.settings_service import sanitize_reply_verbosity
 from backend.prompts.reply_language_service import resolve_effective_reply_language
 from backend.ollama.ollama_routing import (
@@ -296,12 +297,12 @@ async def run_ask_ollama(
         reply_language=reply_language,
     )
     ollama_extras["ask_diagnostics"] = ask_diagnostics
+    ask_diagnostics["elapsed_seconds"] = round(time.time() - ask_started, 2)
     if not installed_tags:
         # Ollama is not installed or cannot be reached: whatever the try order or the policy tier
         # says, there is no model to try. Say the AI is not set up (the screen offers a button to
         # the Ollama tab on this opening); the tier message belonged to a case that cannot occur
         # here, since models installed on the host are always tried (P96-F1).
-        ask_diagnostics["elapsed_seconds"] = round(time.time() - ask_started, 2)
         return {
             "success": False,
             "response": ai_not_set_up_message(),
@@ -309,13 +310,14 @@ async def run_ask_ollama(
             **ollama_extras,
         }
     if not models_to_try:
-        ask_diagnostics["elapsed_seconds"] = round(time.time() - ask_started, 2)
         return {
             "success": False,
             "response": no_installed_routing_models_message(installed_tags, requires_vision),
             "model_policy_disclosure": None,
             **ollama_extras,
         }
+    # Plan 104 G1: on this Deck, read free memory before the model loads; short means warn and load nothing.
+    if (short := await ask_memory_warning(ollama_base, models_to_try[0], ask_diagnostics, ollama_extras)): return short  # noqa: E701 -- one line: this file is at the 400-line limit (scripts/ratchet.py)
     ask_diagnostics["models_after_installed_filter"] = list(models_to_try)
     # The chat's own summary, when it has outgrown its room, then what the chat has already
     # covered, appended at the END of what the AI is told (plan 68 step 3) -- one call, so this file

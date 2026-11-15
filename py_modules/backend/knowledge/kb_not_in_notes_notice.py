@@ -671,6 +671,7 @@ def kb_attach_log_line(
     *,
     not_in_notes_shown: bool,
     no_close_match_shown: bool,
+    no_notes_for_game_shown: bool = False,
 ) -> str:
     """One plain log line saying which notes reached the model and which footer, if any, was added.
 
@@ -697,6 +698,8 @@ def kb_attach_log_line(
         footer = "'No close match' line added to the reply (the attached notes were a weak match)"
     elif not_in_notes_shown:
         footer = "'Not in my notes' line added to the reply (nothing matched)"
+    elif no_notes_for_game_shown:
+        footer = "'No notes for this game' line added to the reply (the library holds nothing on the game)"
     else:
         footer = "no footer line added"
     return f"ask_ollama: notes for this answer: {attached}; {footer}"

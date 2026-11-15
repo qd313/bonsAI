@@ -183,5 +183,30 @@ class DecisionTests(unittest.TestCase):
         self.assertEqual(kb_not_in_notes_notice.append_no_notes_for_game_notice("Hi.\n", True), f"Hi.\n\n—\n*{_LINE}*")
 
 
+class LogLineTests(unittest.TestCase):
+    """The plugin log's "notes for this answer" line (read back by the Deck check) names the new line too."""
+
+    def test_the_log_line_names_the_line_when_it_was_added(self):
+        line = kb_not_in_notes_notice.kb_attach_log_line(
+            {"kb_attached": False}, [], not_in_notes_shown=False, no_close_match_shown=False,
+            no_notes_for_game_shown=True)
+        self.assertIn("'No notes for this game' line added", line)
+
+    def test_the_log_line_is_as_it_was_when_it_was_not(self):
+        line = kb_not_in_notes_notice.kb_attach_log_line(
+            {"kb_attached": False}, [], not_in_notes_shown=False, no_close_match_shown=False)
+        self.assertTrue(line.endswith("no footer line added"), line)
+
+    def test_a_real_turn_logs_it(self):
+        from backend.knowledge import kb_notes_footers
+        with patch.object(kb_notes_footers, "logger") as fake_logger:
+            kb_notes_footers.append_kb_notes_footers(
+                "Sell what you grow.", ask_mode="speed",
+                kb_transparency={"kb_attached": False, "kb_domain": "strategy", "kb_notes": "", "kb_sources": []},
+                kb_coverage_transparency={"kb_coverage_status": "app_unresolved"}, text_resolved_title="",
+                question_for_kb_search="how do I get money", kb_attached_notes=[])
+        self.assertIn("'No notes for this game' line added", str(fake_logger.info.call_args_list[0].args[0]))
+
+
 if __name__ == "__main__":
     unittest.main()

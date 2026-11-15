@@ -103,7 +103,8 @@ def append_kb_notes_footers(
     )
     logger.info(kb_attach_log_line(
         kb_transparency, kb_attached_notes,
-        not_in_notes_shown=show_not_in_notes, no_close_match_shown=show_no_close_match))
+        not_in_notes_shown=show_not_in_notes, no_close_match_shown=show_no_close_match,
+        no_notes_for_game_shown=show_no_notes_for_game))
     response_text = append_not_in_notes_notice(response_text, show_not_in_notes)
     response_text = append_no_close_match_notice(response_text, show_no_close_match)
     return append_no_notes_for_game_notice(response_text, show_no_notes_for_game)

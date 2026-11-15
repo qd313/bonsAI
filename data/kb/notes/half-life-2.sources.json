@@ -1178,6 +1178,480 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2610,
+      "name": "Pulse Rifle (AR2)",
+      "kind": "item",
+      "main_page": "https://half-life.fandom.com/wiki/Overwatch_Standard_Issue_Pulse_Rifle",
+      "main_revision": "331713",
+      "lines": [
+        {
+          "line": "Summary: The Combine assault rifle: fully automatic, 30 shots a magazine, up to 90 carried, 8 damage a shot. Its second fire throws an energy ball (up to 3 carried) that kills a human-sized enemy outright.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Overwatch_Standard_Issue_Pulse_Rifle",
+              "revision": "331713",
+              "part_of_page": "Technical specifications",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Magazine size",
+                  "value": "30 pulse plugs"
+                },
+                {
+                  "label": "Maximum ammunition",
+                  "value": "90 pulses (60 reserve and 30 loaded)"
+                },
+                {
+                  "label": "Maximum ammunition",
+                  "value": "3 energy balls (altogether)"
+                },
+                {
+                  "label": "Damage",
+                  "value": "8 per pulse shot (11 in HL2DM)"
+                },
+                {
+                  "label": "Damage",
+                  "value": "1000 per energy ball (instant death to human-sized enemies)"
+                },
+                {
+                  "label": "Fire mode",
+                  "value": "Automatic"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: A short to medium range all-rounder, better than the MP7 because each shot hits much harder. Best where ammo is plentiful, such as against Combine soldiers, whose dropped rifles hold far more ammo than their MP7s.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Overwatch_Standard_Issue_Pulse_Rifle",
+              "revision": "331713",
+              "part_of_page": "Technical specifications",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Range",
+                  "value": "Short to medium"
+                }
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Overwatch_Standard_Issue_Pulse_Rifle",
+              "revision": "331713",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "In most situations, the Pulse Rifle is better than the MP7, and is a good all-around automatic weapon.",
+                "the Pulse Rifle compensates with the much higher damage per shot",
+                "it is best used in situations where nearby ammo is plentiful - that is, when fighting Combine Soldiers as a rifle dropped gives much more ammo compared to the MP7"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Fire in short bursts: recoil is strong and the spread widens while you hold the trigger. It is most accurate standing still, so go for headshots.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Overwatch_Standard_Issue_Pulse_Rifle",
+              "revision": "331713",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The Pulse Rifle's recoil is strong.",
+                "The weapon's spread is much worse when firing the weapon in automatic mode, so firing it in short bursts is highly recommended",
+                "Take advantage of its high stationary accuracy and go for headshots if possible."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Save the energy balls: one goes through a line of enemies and bounces round small rooms, but it breaks up in open sky and leaves about a second after the trigger. Only Overwatch Elites use them, and drop one when killed.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Overwatch_Standard_Issue_Pulse_Rifle",
+              "revision": "331713",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "They are efficient on lined up enemies, since it goes through them all before it hits a wall.",
+                "Using it in small rooms is also efficient, since it bounces on the walls, floor and ceiling.",
+                "the projectile orb disintegrates upon flying out into open air",
+                "it takes about 1 second to launch an orb when the trigger is pulled"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Overwatch_Standard_Issue_Pulse_Rifle",
+              "revision": "331713",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "only Overwatch Elite are allowed to fire the Energy Balls. If the Overwatch Elite is killed, they will drop an Energy ball and the player can pick it up."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2611,
+      "name": "SPAS-12 Shotgun",
+      "kind": "item",
+      "main_page": "https://half-life.fandom.com/wiki/SPAS-12",
+      "main_revision": "330725",
+      "lines": [
+        {
+          "line": "Summary: A pump shotgun: 6 shells loaded, up to 30 carried. Primary fire uses one shell; secondary fire uses two for double the pellets, with a longer wait before the next shot.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/SPAS-12",
+              "revision": "330725",
+              "part_of_page": "Technical specifications",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Magazine size",
+                  "value": "6 shells (HL2)"
+                },
+                {
+                  "label": "Maximum ammunition",
+                  "value": "30 (HL2)"
+                }
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/SPAS-12",
+              "revision": "330725",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The alternate fire mode fires double the amount of pellets in a larger, less tight spread and uses two shells, but has a longer delay between shots."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Close range: best against headcrabs, zombies and, up close, Combine soldiers. It is the most effective weapon against antlions, even from some way off, and very effective against an Antlion Guard.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/SPAS-12",
+              "revision": "330725",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The SPAS-12 is very effective at close range against most targets, but its effectiveness decreases significantly with range because its pellets spread more the farther they go.",
+                "The primary fire is effective against weak enemies, such as Headcrabs, Zombies, Houndeyes, Combine Soldiers and Vortigaunts.",
+                "The SPAS-12 is the most effective weapon against Antlions, even at some distance, due to their hitbox being large.",
+                "It's also very effective against Antlion Guards when other heavy weapons are unavailable.",
+                "makes the SPAS-12 a decent weapon at close range"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: At medium range aim for the middle of the body, since the pellets spread; a point-blank headshot usually kills in one. Reload whenever you can, since an empty magazine takes much longer to refill; pressing fire stops a reload.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/SPAS-12",
+              "revision": "330725",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "it is actually more effective to aim for the center-of-mass at medium ranges, as the pellets are more likely to hit the target",
+                "At close range, a point-blank headshot will, more often than not, result in a one-shot kill.",
+                "Reloading must be done as often as possible, as an empty SPAS-12 magazine takes much longer to reload than other weapons"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/SPAS-12",
+              "revision": "330725",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The reloading process can be interrupted at any time by pressing the fire key."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A box of shells gives 20 and two boxes refill an empty gun; boxes and supply crates are common. A gun found on the ground or dropped by a soldier gives a full 6. Father Grigori hands you your first one in the sixth chapter.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/SPAS-12",
+              "revision": "330725",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "a box of shotgun shells restores 20 shells instead of 12 and is far more common to find",
+                "Two boxes of ammo can fully resupply an empty SPAS-12 with some shells to spare.",
+                "SPAS-12s found on the ground or dropped by Overwatch Soldiers supply a full magazine of 6 rounds.",
+                "a Supply Crate will give the player ammo for shotguns"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/SPAS-12",
+              "revision": "330725",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "In Half-Life 2, the SPAS-12 is first given to Freeman by Father Grigori in the sixth Half-Life 2 chapter"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2612,
+      "name": "Resistance Crossbow",
+      "kind": "item",
+      "main_page": "https://half-life.fandom.com/wiki/Resistance_Crossbow",
+      "main_revision": "329801",
+      "lines": [
+        {
+          "line": "Summary: A homemade sniper crossbow: one red-hot rebar bolt per shot, up to 10 carried, 100 damage (instant death to human-sized enemies). Secondary fire zooms in.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Resistance_Crossbow",
+              "revision": "329801",
+              "part_of_page": "Technical specifications",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Magazine size",
+                  "value": "1"
+                },
+                {
+                  "label": "Maximum ammunition",
+                  "value": "10"
+                },
+                {
+                  "label": "Damage",
+                  "value": "100 (instant death to human-sized enemies)"
+                }
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Resistance_Crossbow",
+              "revision": "329801",
+              "part_of_page": "(opening)",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The primary trigger fires a bolt; the secondary trigger zooms in on targets"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Resistance_Crossbow",
+              "revision": "329801",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "pieces of red-hot steel rebar about 12 inches (30 centimeters) long"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Long-range shots at high-value targets: Overwatch soldiers and Elites, Antlion Guards and Poison Zombies. It is wasted on headcrabs and manhacks.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Resistance_Crossbow",
+              "revision": "329801",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Reserve crossbow bolts for high value targets such as Overwatch Soldiers, Overwatch Elites, Antlion Guards, Poison Zombies, and Hunters.",
+                "Small, weak targets, such as Manhacks and Headcrabs should not be fired upon with the crossbow"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Bolts fly slowly and drop over distance, so aim a little above a far target and lead a moving one. They ricochet off a floor or wall hit at a shallow angle.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Resistance_Crossbow",
+              "revision": "329801",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Users firing over long distances must account for this drop by aiming slightly above the target.",
+                "Aim both above and in front of the target to land the hit.",
+                "the bolt will ricochet if it hits a floor or wall at a shallow angle"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Do not use it on vehicles (the bolt bounces off), on more than one antlion, or on a Strider. It can fire underwater, but the bolt's path is unpredictable there. You first find it next to a dead rebel on Highway 17.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Resistance_Crossbow",
+              "revision": "329801",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Vehicles will have the rebar bounce off it; moreover, its use is the epitome of futility against more than one Antlion, and is suicidal against Striders.",
+                "The crossbow is one of only two ranged weapons capable of firing underwater. However, the bolt's course once it starts traveling through the water gets very unpredictable."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Resistance_Crossbow",
+              "revision": "329801",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "In Half-Life 2, the Crossbow is first discovered next to the rotten body of a Resistance fighter overlooking an Overwatch outpost in the level Highway 17"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2613,
+      "name": "Health kit and health vial",
+      "kind": "item",
+      "main_page": "https://half-life.fandom.com/wiki/Medkit",
+      "main_revision": "324929",
+      "lines": [
+        {
+          "line": "Summary: The main way to heal: a health kit always gives 25 health on any difficulty, and a smaller vial gives 10.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Medkit",
+              "revision": "324929",
+              "part_of_page": "Half-Life 2",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "In Half-Life 2, healthkits always give 25 health points, regardless of the difficulty setting, making them the main source of healing throughout the game",
+                "Healthvials are smaller than healthkits, and give 10 health points."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Kits are far more common than wall chargers, which are mostly in Combine-controlled areas, and supply crates in remote areas hold them too. Civil Protection officers and Overwatch soldiers drop vials when they die.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Medkit",
+              "revision": "324929",
+              "part_of_page": "Half-Life 2",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "as they are much more common and widely dispersed than health chargers, which are often only found in Combine-controlled areas",
+                "Healthkits are also found more prolifically in supply crates in more remote areas",
+                "They are often dropped by Civil Protection officers and Overwatch Soldiers upon their death."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Crates and drops are likelier to give health when yours is low.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Medkit",
+              "revision": "324929",
+              "part_of_page": "Half-Life 2",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "they're more likely to be given in supply crates when the player's health is low",
+                "They are more likely to drop when the player's health is low."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Rebels following you pick up kits to heal themselves; to give one a kit, pick it up and stand in front of them.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Medkit",
+              "revision": "324929",
+              "part_of_page": "Trivia",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Rebels in a squad following the player may pick up medkits to heal themselves or save them to be used later on injured rebels.",
+                "The player can also give a medkit to the squad members by picking up one and standing in front of them."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2614,
+      "name": "Health and suit chargers",
+      "kind": "item",
+      "main_page": "https://half-life.fandom.com/wiki/Charger",
+      "main_revision": "328181",
+      "lines": [
+        {
+          "line": "Summary: Wall-mounted stations that top up your health or suit power from a limited store. Stand beside one and press the use key; it drains as it works and stops when it runs out or you are full.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Charger",
+              "revision": "328181",
+              "part_of_page": "(opening)",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Health and HEV Suit Chargers are wall-mounted devices that give a limited amount of health and power."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Charger",
+              "revision": "328181",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The chargers can be used by staying near them and pressing the USE key.",
+                "Whilst being used, their power drains and eventually they will stop healing or charging.",
+                "In Half-Life 2 and Half-Life: Source they will also stop when the player reaches full health or power."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Health chargers heal you; suit chargers refill suit power, still the main source of it because batteries are less common. Health kits are the main healing item, while chargers are common inside City 17.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Charger",
+              "revision": "328181",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "In Half-Life 2, however, medkits have become the primary healing item, giving 25 health points.",
+                "whereas chargers are common within City 17",
+                "The HEV charger is still the primary source of power, due to batteries being comparatively uncommon."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A health charger has a blue line that shrinks as its store is used up. Away from Combine areas, such as the Wasteland, expect health kits rather than chargers.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Charger",
+              "revision": "328181",
+              "part_of_page": "Health chargers",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The Half-Life 2 variant has a blue line that gets smaller as more supplies are used up"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Charger",
+              "revision": "328181",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Medkits are also considerably more common in Wasteland areas outside of Combine control"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

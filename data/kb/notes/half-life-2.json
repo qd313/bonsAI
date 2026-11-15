@@ -111,6 +111,61 @@
    "source_license": "CC-BY-SA-3.0",
    "source_version": "332295",
    "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2610,
+   "game_id": 13,
+   "section_type": "item",
+   "name": "Pulse Rifle (AR2)",
+   "card": "Summary: The Combine assault rifle: fully automatic, 30 shots a magazine, up to 90 carried, 8 damage a shot. Its second fire throws an energy ball (up to 3 carried) that kills a human-sized enemy outright.\nUses: A short to medium range all-rounder, better than the MP7 because each shot hits much harder. Best where ammo is plentiful, such as against Combine soldiers, whose dropped rifles hold far more ammo than their MP7s.\nTips: Fire in short bursts: recoil is strong and the spread widens while you hold the trigger. It is most accurate standing still, so go for headshots.\nTips: Save the energy balls: one goes through a line of enemies and bounces round small rooms, but it breaks up in open sky and leaves about a second after the trigger. Only Overwatch Elites use them, and drop one when killed.",
+   "source_url": "https://half-life.fandom.com/wiki/Overwatch_Standard_Issue_Pulse_Rifle",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "331713",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2611,
+   "game_id": 13,
+   "section_type": "item",
+   "name": "SPAS-12 Shotgun",
+   "card": "Summary: A pump shotgun: 6 shells loaded, up to 30 carried. Primary fire uses one shell; secondary fire uses two for double the pellets, with a longer wait before the next shot.\nUses: Close range: best against headcrabs, zombies and, up close, Combine soldiers. It is the most effective weapon against antlions, even from some way off, and very effective against an Antlion Guard.\nTips: At medium range aim for the middle of the body, since the pellets spread; a point-blank headshot usually kills in one. Reload whenever you can, since an empty magazine takes much longer to refill; pressing fire stops a reload.\nTips: A box of shells gives 20 and two boxes refill an empty gun; boxes and supply crates are common. A gun found on the ground or dropped by a soldier gives a full 6. Father Grigori hands you your first one in the sixth chapter.",
+   "source_url": "https://half-life.fandom.com/wiki/SPAS-12",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "330725",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2612,
+   "game_id": 13,
+   "section_type": "item",
+   "name": "Resistance Crossbow",
+   "card": "Summary: A homemade sniper crossbow: one red-hot rebar bolt per shot, up to 10 carried, 100 damage (instant death to human-sized enemies). Secondary fire zooms in.\nUses: Long-range shots at high-value targets: Overwatch soldiers and Elites, Antlion Guards and Poison Zombies. It is wasted on headcrabs and manhacks.\nTips: Bolts fly slowly and drop over distance, so aim a little above a far target and lead a moving one. They ricochet off a floor or wall hit at a shallow angle.\nTips: Do not use it on vehicles (the bolt bounces off), on more than one antlion, or on a Strider. It can fire underwater, but the bolt's path is unpredictable there. You first find it next to a dead rebel on Highway 17.",
+   "source_url": "https://half-life.fandom.com/wiki/Resistance_Crossbow",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "329801",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2613,
+   "game_id": 13,
+   "section_type": "item",
+   "name": "Health kit and health vial",
+   "card": "Summary: The main way to heal: a health kit always gives 25 health on any difficulty, and a smaller vial gives 10.\nUses: Kits are far more common than wall chargers, which are mostly in Combine-controlled areas, and supply crates in remote areas hold them too. Civil Protection officers and Overwatch soldiers drop vials when they die.\nTips: Crates and drops are likelier to give health when yours is low.\nTips: Rebels following you pick up kits to heal themselves; to give one a kit, pick it up and stand in front of them.",
+   "source_url": "https://half-life.fandom.com/wiki/Medkit",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "324929",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2614,
+   "game_id": 13,
+   "section_type": "item",
+   "name": "Health and suit chargers",
+   "card": "Summary: Wall-mounted stations that top up your health or suit power from a limited store. Stand beside one and press the use key; it drains as it works and stops when it runs out or you are full.\nUses: Health chargers heal you; suit chargers refill suit power, still the main source of it because batteries are less common. Health kits are the main healing item, while chargers are common inside City 17.\nTips: A health charger has a blue line that shrinks as its store is used up. Away from Combine areas, such as the Wasteland, expect health kits rather than chargers.",
+   "source_url": "https://half-life.fandom.com/wiki/Charger",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "328181",
+   "crawled_at": "2026-11-15"
   }
  ]
 }

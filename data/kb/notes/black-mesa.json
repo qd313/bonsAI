@@ -1,0 +1,50 @@
+{
+ "games": [],
+ "aliases": [],
+ "sections": [
+  {
+   "section_id": 4300,
+   "game_id": 14,
+   "section_type": "enemy",
+   "name": "Alien Grunt",
+   "card": "Summary: A big armoured Xen soldier with 120 health. On Earth it fires hornets in rapid bursts and then charges in; on Xen it is more agile and can jump onto platforms.\nWeak points: The unarmoured part of its torso: one crossbow bolt kills it there, even on Hard.\nLooks like: Large and stocky, with a small extra arm on its chest. It stands more upright and wears more armour than the 1998 original.\nTips: Its hornets do not home in on you. A hornet hit does 9 damage and a punch 30. The kind with no armour and no Hivehand has none to fire and simply charges at you.",
+   "source_url": "https://black-mesa-source.fandom.com/wiki/Alien_Grunt",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "4638",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 4301,
+   "game_id": 14,
+   "section_type": "enemy",
+   "name": "Headcrab",
+   "card": "Summary: A small parasite about the size of a person's head that leaps up to 3 metres (10 feet) at its target. It is the first enemy you meet.\nWeak points: One crowbar hit or two Glock 17 shots kill it on every difficulty. After a missed leap it is in a bad position and turns round very slowly or tries to retreat.\nLooks like: Smooth-skinned, with four short, strong legs. Its look is closer to the Half-Life 2 headcrab than to the 1998 one.\nTips: Some burrow into the ground and come out as you walk up, and its small size makes it hard to hit. Heavy props kill it, it drowns in water, and a flare sets it alight.",
+   "source_url": "https://black-mesa-source.fandom.com/wiki/Headcrab",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "4552",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 4302,
+   "game_id": 14,
+   "section_type": "enemy",
+   "name": "Zombies",
+   "card": "Summary: People taken over by headcrabs. They only fight up close, clawing for 20 damage a hit, and have 50 health. They come as scientists, guards and marines, plus a tougher suited kind.\nWeak points: The suited kind is much tougher than the rest, and its head is the only part its suit does not cover.\nLooks like: A person with a headcrab on the head and a body that is rotting open. Some are torsos that crawl; the suited kind wears an HEV suit.\nTips: They can punch props and objects so that they fly at you. Shots to some body parts stagger them, and a shot from chest to foot can leave the headcrab alive to leave its host. A flare sets them alight.",
+   "source_url": "https://black-mesa-source.fandom.com/wiki/Headcrab_Zombie",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "4559",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 4303,
+   "game_id": 14,
+   "section_type": "enemy",
+   "name": "Vortigaunt",
+   "card": "Summary: An alien that dodges when you aim at it and uses a shockwave when you get close.\nLooks like: Bent forward, with snail-like skin, a small extra arm on the chest and green rings round the neck and arms, like chains.\nTips: On Earth they are always hostile. In the Xen chapters they leave you alone, even if you provoke them, until an Alien Controller takes over their minds; they calm down again when it dies. Their ground slam kills snarks instantly.",
+   "source_url": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "4567",
+   "crawled_at": "2026-11-15"
+  }
+ ]
+}

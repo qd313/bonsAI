@@ -1,0 +1,416 @@
+{
+  "wiki": "Black Mesa Wiki (https://black-mesa-source.fandom.com/api.php), the Fandom wiki about the Black Mesa game itself; and the Half-Life Wiki (https://half-life.fandom.com/api.php), its page 'Black Mesa (game)' only. No Combine OverWiki page is used: its 29 saved pages describe the 1998 game and say nothing about the remake.",
+  "licence_printed_by_fetcher": "Black Mesa Wiki (MediaWiki 1.43.10) licence: CC-BY-SA https://www.fandom.com/licensing; Half-Life Wiki (MediaWiki 1.43.10) licence: CC-BY-SA https://www.fandom.com/licensing",
+  "licence_stored": "CC-BY-SA-3.0 (the fetcher prints 'CC-BY-SA' with no version; the library stores the versioned form, as it does for its other Fandom wikis)",
+  "game_id": 14,
+  "game": "Black Mesa",
+  "read_on": "2026-11-15",
+  "how_read": "scripts/kb/fetch_wiki_live_pages.py --api <the wiki's api.php> --titles <pages> --out build/wiki-live/<wiki> (page text as rendered by the wiki, link markup removed; saved under build/wiki-live/black-mesa-source/ and build/wiki-live/half-life-fandom/). Every quoted sentence below was checked, by script, to appear word for word (spaces collapsed) in the saved page text at the revision named. Each line was written from a short list of facts, not from the page's sentence. Every quote sits in the wiki editors' own prose, in an editors' bullet list of differences, or in an infobox table; the 'sits_in' field of each quote says which. None sits in a quote block, a description box, an attribution line or a trophy, codex or booklet entry. The Black Mesa Wiki's 'Comparisons' page lists, per creature and weapon, how Black Mesa differs from the 1998 Half-Life; the notes use only lines it or the Half-Life Wiki's 'Black Mesa (game)' page say of Black Mesa. Lines that name the free 2012 version only are not used, except where they say the Steam version differs.",
+  "sections": [
+    {
+      "section_id": 4300,
+      "name": "Alien Grunt",
+      "kind": "enemy",
+      "main_page": "https://black-mesa-source.fandom.com/wiki/Alien_Grunt",
+      "main_revision": "4638",
+      "lines": [
+        {
+          "line": "Summary: A big armoured Xen soldier with 120 health. On Earth it fires hornets in rapid bursts and then charges in; on Xen it is more agile and can jump onto platforms.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Alien_Grunt",
+              "revision": "4638",
+              "part_of_page": "Alien Grunt infobox",
+              "sits_in": "bare fact from the page's infobox table",
+              "quoted": [
+                "!! Health: || 120"
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Alien_Grunt",
+              "revision": "4638",
+              "part_of_page": "Appearance",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "Alien Grunts are large bipedal alien from Xen"
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Alien Grunt",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "In the Earthbound chapters, their AI is to shoot hornets rapidly and charge, later in the Xen chapters, their AI appears to be more agile and they can jump onto platforms."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Creatures (Xen paragraph)",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "It should be noted that Alien Grunts are more agile in Xen than they were on Earth, being able to strafe faster and jump towards elevated surfaces."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The unarmoured part of its torso: one crossbow bolt kills it there, even on Hard.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Weapons and equipment",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "being capable of killing an Alien Grunt with one hit in the unarmored part of the torso, even in Hard mode"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Large and stocky, with a small extra arm on its chest. It stands more upright and wears more armour than the 1998 original.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Alien_Grunt",
+              "revision": "4638",
+              "part_of_page": "Appearance",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "Alien Grunts are large bipedal alien from Xen, sporting stocky builds and the classic vestigial chest-arm.",
+                "They both stand further upright and sport more armor than their cousins in Half-Life"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its hornets do not home in on you. A hornet hit does 9 damage and a punch 30. The kind with no armour and no Hivehand has none to fire and simply charges at you.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Alien Grunt",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "However, the hornets aren't homing towards the player.",
+                "The Unarmored without a Hivehand variant is the Alien Grunt that was released from its tube. The unarmored will just charge at you."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Alien_Grunt",
+              "revision": "4638",
+              "part_of_page": "Alien Grunt infobox",
+              "sits_in": "bare fact from the page's infobox table",
+              "quoted": [
+                "- Melee: 30",
+                "- Hornet: 9"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4301,
+      "name": "Headcrab",
+      "kind": "enemy",
+      "main_page": "https://black-mesa-source.fandom.com/wiki/Headcrab",
+      "main_revision": "4552",
+      "lines": [
+        {
+          "line": "Summary: A small parasite about the size of a person's head that leaps up to 3 metres (10 feet) at its target. It is the first enemy you meet.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Headcrab",
+              "revision": "4552",
+              "part_of_page": "Description",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "Headcrabs are nonsentient parasitic aliens originating from Xen.",
+                "Headcrab is the first enemy you encounter in-game.",
+                "Headcrabs are roughly the size of an adult human head.",
+                "enough jumping power to leap up to 3 meters (10ft) into any direction"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: One crowbar hit or two Glock 17 shots kill it on every difficulty. After a missed leap it is in a bad position and turns round very slowly or tries to retreat.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Headcrab",
+              "revision": "4552",
+              "part_of_page": "Description",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "the headcrab will be put in a bad position, requiring it to turn around at a very slow speed or attempt to retreat.",
+                "on all difficulties, they can be killed with one Crowbar hit or two shots from a Glock 17."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Smooth-skinned, with four short, strong legs. Its look is closer to the Half-Life 2 headcrab than to the 1998 one.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Headcrab",
+              "revision": "4552",
+              "part_of_page": "Description",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "Their bodies are covered by smooth skin, and have four short and powerful legs"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Creatures (visual changes)",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "Both the Headcrab's and Vortigaunt's models look closer to their appearances in Half-Life 2."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Some burrow into the ground and come out as you walk up, and its small size makes it hard to hit. Heavy props kill it, it drowns in water, and a flare sets it alight.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Headcrab",
+              "revision": "4552",
+              "part_of_page": "Description",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "One of their main advantages is their small size, making them a difficult target along with the capability of burrowing into the ground and getting out as soon as the target approaches."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Headcrab",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "It can be killed/gibbed with heavy props.",
+                "Can drown from water."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Walkthrough > Unforeseen Consequences",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "in Black Mesa, they can be used to burn Zombies and Headcrabs."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4302,
+      "name": "Zombies",
+      "kind": "enemy",
+      "main_page": "https://black-mesa-source.fandom.com/wiki/Headcrab_Zombie",
+      "main_revision": "4559",
+      "lines": [
+        {
+          "line": "Summary: People taken over by headcrabs. They only fight up close, clawing for 20 damage a hit, and have 50 health. They come as scientists, guards and marines, plus a tougher suited kind.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Headcrab_Zombie",
+              "revision": "4559",
+              "part_of_page": "Headcrab Zombie infobox",
+              "sits_in": "bare fact from the page's infobox table",
+              "quoted": [
+                "|| Damage per hit || 20.",
+                "|| Health || 50.",
+                "|| Weapons || Claws."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Headcrab_Zombie",
+              "revision": "4559",
+              "part_of_page": "Introduction",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "being regular humans with Headcrabs latched onto their head",
+                "They only attack by clawing at their foes, making them only close-quarters threats"
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Headcrab Zombie",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The Headcrab zombie will have 4 different variants such as the scientist zombie, the guard zombie, the marine zombie, and lastly, an armored H.E.V zombie ."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The suited kind is much tougher than the rest, and its head is the only part its suit does not cover.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Creatures (Xen variations)",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "Due to the HEV's resistance, ZEVs are much more durable than the average zombie, leaving only their heads unprotected."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A person with a headcrab on the head and a body that is rotting open. Some are torsos that crawl; the suited kind wears an HEV suit.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Headcrab_Zombie",
+              "revision": "4559",
+              "part_of_page": "Introduction",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "causing their body to decompose and reveal internal organs"
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Headcrab Zombie",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The Headcrab zombie will have torso-only variants similar to Half-Life 2."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Creatures (Xen variations)",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "ZEVs — Zombified scientists wearing HEV Suits"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: They can punch props and objects so that they fly at you. Shots to some body parts stagger them, and a shot from chest to foot can leave the headcrab alive to leave its host. A flare sets them alight.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Headcrab_Zombie",
+              "revision": "4559",
+              "part_of_page": "Introduction",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "can punch props and other objects causing them to fly towards their targets and partially wound them."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Headcrab Zombie",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The Headcrab zombie can be staggered when shot in specific parts of the host's body.",
+                "When shooting the Headcrab zombies in the chest to foot, the Headcrab can survive and leave the host."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Walkthrough > Unforeseen Consequences",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "in Black Mesa, they can be used to burn Zombies and Headcrabs."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4303,
+      "name": "Vortigaunt",
+      "kind": "enemy",
+      "main_page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+      "main_revision": "4567",
+      "lines": [
+        {
+          "line": "Summary: An alien that dodges when you aim at it and uses a shockwave when you get close.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Vortigaunt",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The Vortigaunt will dodge when the player aims at them.",
+                "The Vortigaunt will use a shockwave when the player is near them."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Snark",
+              "revision": "4574",
+              "part_of_page": "In-game",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "Vorts will use their uninterruptible ground slam attack, that kills any snarks instantly"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Bent forward, with snail-like skin, a small extra arm on the chest and green rings round the neck and arms, like chains.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Vortigaunt",
+              "revision": "4387",
+              "part_of_page": "Appearance",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "they are bent forward, with snail like skin color and texture, with a vestigial arm on their chest, they have green rings and bands around their necks and arms similar to chains, or bonds."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: On Earth they are always hostile. In the Xen chapters they leave you alone, even if you provoke them, until an Alien Controller takes over their minds; they calm down again when it dies. Their ground slam kills snarks instantly.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Vortigaunt",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "In the Earthbound chapters, they will be always hostile to the player.",
+                "But they will be hostile, once the Alien Controllers control their minds to attack Gordon Freeman.",
+                "Provoking the Vortiguants in the Xen cahpters will not elicit a response"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Creatures (Xen paragraphs)",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "Unlike in the original, the Vortigaunts will immediately resume their passive behavior when the Alien Controllers are killed."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Snark",
+              "revision": "4574",
+              "part_of_page": "In-game",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "Vorts will use their uninterruptible ground slam attack, that kills any snarks instantly"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

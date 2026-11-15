@@ -688,6 +688,315 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 4308,
+      "name": "Snark",
+      "kind": "item",
+      "main_page": "https://black-mesa-source.fandom.com/wiki/Snark",
+      "main_revision": "4574",
+      "lines": [
+        {
+          "line": "Summary: A thrown beetle-like creature. Once released it chases enemies and bursts in a cloud of acidic blood about 3 metres across.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Snark",
+              "revision": "4574",
+              "part_of_page": "Description",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "exploding from overpressure, spraying chitin and acidic hemolymph fluid within a 3 meter radius.",
+                "Snarks are small, beetle-like xenian creatures"
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Snark",
+              "revision": "4574",
+              "part_of_page": "In-game",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "once chirps intensify, they'll move to explode in localized clouds of acidic blood and snark parts"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Their damage is all explosive, so armour does not reduce it, and a swarm can tear apart Alien Grunts and armoured vehicles. Five easily beat a marine squad; ten to fifteen suit bigger fights.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Snark",
+              "revision": "4574",
+              "part_of_page": "In-game",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "since their damage this time around is 100% explosive, they're capable of ripping alien grunts, HECU armored vehicles",
+                "their armor bonuses don't count against explosives",
+                "A swarm of 5 will easily defeat an HECU squad, but it might be wiser to wait for bigger battles to unleash 10 or 15 of them at once."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Ammo is scarce: under 70 snarks in the whole game, 5 from each nest and 15 carried at most. Unlike the original you can lob them gently or throw them across a room, and drop them. A Vortigaunt's ground slam kills them instantly, so deal with the Vortigaunts first. Their chirps show how much fight they have left.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Snark",
+              "revision": "4574",
+              "part_of_page": "Infobox",
+              "sits_in": "bare fact from the page's infobox table",
+              "quoted": [
+                "!! Capacity: || 5 per nest/15 max capacity."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Snark",
+              "revision": "4574",
+              "part_of_page": "In-game",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "with less than 70 snarks total in the vanilla game",
+                "Unlike in the original game, you're able to both lightly toss them or throw them across the room.",
+                "Vorts will use their uninterruptible ground slam attack, that kills any snarks instantly, so don't use them against xenian formations that include vorts unless you can eliminate the vorts before deploying the snarks.",
+                "Upon tossing them, snarks will emit chirps to tell you how much berserker juice they've left in the tank"
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Weapons and Items > Snarks",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "Similar to the grenade it can be thrown away or dropped."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4309,
+      "name": "Crossbow",
+      "kind": "item",
+      "main_page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+      "main_revision": "332735",
+      "lines": [
+        {
+          "line": "Summary: A hard-hitting, slow-firing bolt gun that carries few bolts.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Weapons and equipment",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "the Crossbow deals extremely high damage",
+                "at the expense of a very low fire rate and much fewer bolts in reserve."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Weapons and Items > Black Mesa Crossbow",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The max darts are reduced from 50 to 10."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: One bolt to the unarmoured part of an Alien Grunt's torso kills it, even on Hard. The darts are said to be treated with neurotoxin, and the gun is silent.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Weapons and equipment",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "being capable of killing an Alien Grunt with one hit in the unarmored part of the torso, even in Hard mode"
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Weapons and Items > Black Mesa Crossbow",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The darts are stated to be neurotoxin-treated darts."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Walkthrough > Questionable Ethics",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "even if you have something silent like the Crossbow"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The fire rate is very low, so make each bolt count; you carry at most 10. Bolts no longer ricochet in the Steam release. It is one of the few weapons that kill the underwater barnacle.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Weapons and equipment",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "at the expense of a very low fire rate and much fewer bolts in reserve."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Weapons and Items > Black Mesa Crossbow",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The max darts are reduced from 50 to 10.",
+                "From the free mod, the dart can ricochet. This was removed in the steam version."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "NPCs > Barnacle",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "All of your weapons except the Crowbar, Glock-17, Crossbow, RPG, Hivehand, and explosives will be useless to kill this Barnacle."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4310,
+      "name": "Flare",
+      "kind": "item",
+      "main_page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+      "main_revision": "4567",
+      "lines": [
+        {
+          "line": "Summary: A flare you can pick up and use as a weapon: it sets enemies on fire.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Weapons and equipment",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "Flares can sometimes be picked up, allowing Gordon to set enemies on fire"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Burns zombies and headcrabs. Early on, before you find the crowbar, it is how you fend off the zombies.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Walkthrough > Unforeseen Consequences",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "in Black Mesa, they can be used to burn Zombies and Headcrabs."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+              "revision": "332735",
+              "part_of_page": "Weapons and equipment",
+              "sits_in": "wiki editors' own prose",
+              "quoted": [
+                "most notably early in the game when he hasn't picked up the crowbar yet and has to fend off zombies."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Fire spreads when there is an exposed gas leak, so keep clear. Flares turn up in labs, and they also mark where a supply cache is close.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Weapons and Items > Flare",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The flare can spread fire when there's an exposed gas leak.",
+                "Flares are commonly found in labs.",
+                "Flares are used to signal where the supply cache is nearby."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4311,
+      "name": "First Aid Kit",
+      "kind": "item",
+      "main_page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+      "main_revision": "4567",
+      "lines": [
+        {
+          "line": "Summary: A health pickup in two sizes: blue gives 10 health and is common, green gives 25 and is rare.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Weapons and Items > First Aid Kit",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "There are 2 variants of the First Aid Kit.",
+                "The blue variant gives you +10 health. These are found commonly throughout Black Mesa.",
+                "The green variant gives you +25 health. These are found rarely throughout Black Mesa."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Uses: Restores health: 10 from a blue kit, 25 from a green one.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Weapons and Items > First Aid Kit",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The blue variant gives you +10 health.",
+                "The green variant gives you +25 health."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Marine medics can drop a kit when killed, and green ones less often than blue. A wall First Aid Station is a separate refill: its tubes and lights show how much is left, and it closes when empty.",
+          "drawn_from": [
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Weapons and Items > First Aid Kit",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "H.E.C.U. Medics can drop these if dead.",
+                "H.E.C.U. Medics may drop them at a lower chance."
+              ]
+            },
+            {
+              "page": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+              "revision": "4567",
+              "part_of_page": "Weapons and Items > First Aid Station",
+              "sits_in": "wiki editors' own bullet list (a list of differences from the 1998 game)",
+              "quoted": [
+                "The First Aid Station has more details, with tubes with some healing juice to see how much is left, led lights to indicate if it's almost drained out.",
+                "It will close when it's empty."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

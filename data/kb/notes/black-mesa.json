@@ -89,6 +89,50 @@
    "source_license": "CC-BY-SA-3.0",
    "source_version": "4567",
    "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 4308,
+   "game_id": 14,
+   "section_type": "item",
+   "name": "Snark",
+   "card": "Summary: A thrown beetle-like creature. Once released it chases enemies and bursts in a cloud of acidic blood about 3 metres across.\nUses: Their damage is all explosive, so armour does not reduce it, and a swarm can tear apart Alien Grunts and armoured vehicles. Five easily beat a marine squad; ten to fifteen suit bigger fights.\nTips: Ammo is scarce: under 70 snarks in the whole game, 5 from each nest and 15 carried at most. Unlike the original you can lob them gently or throw them across a room, and drop them. A Vortigaunt's ground slam kills them instantly, so deal with the Vortigaunts first. Their chirps show how much fight they have left.",
+   "source_url": "https://black-mesa-source.fandom.com/wiki/Snark",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "4574",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 4309,
+   "game_id": 14,
+   "section_type": "item",
+   "name": "Crossbow",
+   "card": "Summary: A hard-hitting, slow-firing bolt gun that carries few bolts.\nUses: One bolt to the unarmoured part of an Alien Grunt's torso kills it, even on Hard. The darts are said to be treated with neurotoxin, and the gun is silent.\nTips: The fire rate is very low, so make each bolt count; you carry at most 10. Bolts no longer ricochet in the Steam release. It is one of the few weapons that kill the underwater barnacle.",
+   "source_url": "https://half-life.fandom.com/wiki/Black_Mesa_(game)",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "332735",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 4310,
+   "game_id": 14,
+   "section_type": "item",
+   "name": "Flare",
+   "card": "Summary: A flare you can pick up and use as a weapon: it sets enemies on fire.\nUses: Burns zombies and headcrabs. Early on, before you find the crowbar, it is how you fend off the zombies.\nTips: Fire spreads when there is an exposed gas leak, so keep clear. Flares turn up in labs, and they also mark where a supply cache is close.",
+   "source_url": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "4567",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 4311,
+   "game_id": 14,
+   "section_type": "item",
+   "name": "First Aid Kit",
+   "card": "Summary: A health pickup in two sizes: blue gives 10 health and is common, green gives 25 and is rare.\nUses: Restores health: 10 from a blue kit, 25 from a green one.\nTips: Marine medics can drop a kit when killed, and green ones less often than blue. A wall First Aid Station is a separate refill: its tubes and lights show how much is left, and it closes when empty.",
+   "source_url": "https://black-mesa-source.fandom.com/wiki/Comparisons",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "4567",
+   "crawled_at": "2026-11-15"
   }
  ]
 }

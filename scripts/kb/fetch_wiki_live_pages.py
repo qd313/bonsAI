@@ -28,6 +28,11 @@ collects url / revid / revision date / licence for every page fetched. Pages tha
 exist are listed at the end and in the manifest as missing; the exit code stays 0 so a
 batch with one bad title still yields the other pages.
 
+A wiki that is down (an api error body such as a read-only database, an HTTP error) or a page whose
+text is under MIN_PAGE_CHARS is printed as "[failed]" with the wiki's own message, listed in the
+manifest as failed with the reason, and never written as a page file. The exit code is 1 when every
+page failed. --search prints the api's error instead of an empty site line.
+
 Table header cells and Fandom portable-infobox labels come through marked "!! ", and their
 data cells / values "|| " -- scripts/kb/extract_wiki_notes.py reads those two markers to build a
 labelled "Label: value" line without guessing which cell was which.
@@ -182,6 +187,22 @@ class RevisionMoved(Exception):
     """The wiki rendered a different revision than the one looked up, so the page is not used."""
 
 
+class ApiError(SystemExit):
+    """The wiki answered, but with an error (an api error body or an HTTP error), not with data."""
+
+
+# Shortest real page saved under build/wiki-live/ (733 pages, 2026-11-15) was Hollow Knight's
+# "Bench" at 138 characters. A wiki with a read-only database once answered with 1 character.
+MIN_PAGE_CHARS = 40
+
+
+def _error_text(body: dict) -> str:
+    err = body.get("error")
+    if not isinstance(err, dict):
+        return ""
+    return f"{err.get('code', 'error')}: {err.get('info', '')}".strip()
+
+
 class ApiRefused(SystemExit):
     """The wiki answered 401/403: it is refusing this call, and asking again will not change that."""
 
@@ -194,12 +215,21 @@ def api_get(api: str, params: dict[str, str], *, retries: int = 3) -> dict:
         try:
             req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
             with urllib.request.urlopen(req, timeout=45) as resp:
-                return json.loads(resp.read().decode("utf-8", errors="replace"))
+                data = json.loads(resp.read().decode("utf-8", errors="replace"))
+            if isinstance(data, dict) and _error_text(data):
+                raise ApiError(_error_text(data))
+            return data
         except urllib.error.HTTPError as exc:
             if exc.code in (401, 403):
                 raise ApiRefused(f"API request refused (HTTP {exc.code}): {url}") from exc
             last = exc
             time.sleep(1.5 * (attempt + 1))
+            if attempt == retries - 1:
+                try:
+                    said = _error_text(json.loads(exc.read().decode("utf-8", errors="replace")))
+                except (ValueError, OSError, AttributeError):
+                    said = ""
+                raise ApiError(f"HTTP {exc.code}" + (f" {said}" if said else "")) from exc
         except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:  # noqa: PERF203
             last = exc
             time.sleep(1.5 * (attempt + 1))
@@ -336,11 +366,20 @@ def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]
 
-    info = site_info(args.api)
+    try:
+        info = site_info(args.api)
+    except ApiError as exc:
+        print(f"[failed] site info: {exc}")
+        return 1
     print(f"[site] {info['sitename']} ({info['generator']}) licence: {info['licence_text'] or '(none declared)'} {info['licence_url']}")
 
     if args.search:
-        for hit in search(args.api, args.search):
+        try:
+            hits = search(args.api, args.search)
+        except ApiError as exc:
+            print(f"[failed] search: {exc}")
+            return 1
+        for hit in hits:
             print("  ", hit)
         return 0
 
@@ -362,8 +401,20 @@ def main() -> int:
     already = {p.get("requested") for p in manifest.get("pages", [])}
 
     missing: list[str] = []
+    failed: list[str] = []
+
+    def _fail(title: str, reason: str) -> None:
+        print(f"[failed] {title!r}: {reason}")
+        failed.append(title)
+        manifest["pages"] = [p for p in manifest["pages"] if p.get("requested") != title]
+        manifest["pages"].append({"requested": title, "failed": reason, "read_on": today})
+
     for title in titles:
-        page = resolve_page(args.api, title)
+        try:
+            page = resolve_page(args.api, title)
+        except ApiError as exc:
+            _fail(title, str(exc))
+            continue
         if not page or not page.get("revid"):
             print(f"[missing] {title}")
             missing.append(title)
@@ -376,6 +427,12 @@ def main() -> int:
             print(f"[refused] {exc}")
             manifest["pages"] = [p for p in manifest["pages"] if p.get("requested") != title]
             manifest["pages"].append({"requested": title, "refused": "revision moved", "read_on": today})
+            continue
+        except ApiError as exc:
+            _fail(title, str(exc))
+            continue
+        if len(text.strip()) < MIN_PAGE_CHARS:
+            _fail(title, f"only {len(text.strip())} characters came back, too short to be a page")
             continue
         slug = slugify(page["title"])
         header = (
@@ -406,11 +463,11 @@ def main() -> int:
         time.sleep(args.pause)
 
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    if missing:
-        print(f"[done] {len(titles) - len(missing)} fetched, {len(missing)} missing: {', '.join(missing)}")
-    else:
-        print(f"[done] {len(titles)} fetched")
-    return 0
+    fetched = len(titles) - len(missing) - len(failed)
+    note = f", {len(missing)} missing: {', '.join(missing)}" if missing else ""
+    note += f", {len(failed)} failed: {', '.join(failed)}" if failed else ""
+    print(f"[done] {fetched} fetched{note}")
+    return 1 if failed and len(failed) == len(titles) else 0
 
 
 if __name__ == "__main__":

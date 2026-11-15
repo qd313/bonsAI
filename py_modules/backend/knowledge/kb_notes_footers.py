@@ -1,8 +1,9 @@
 """Title: The "not in my notes" footers on a finished reply
 
-Purpose: After the model has answered, decide whether the reply gets one of the two short honesty
+Purpose: After the model has answered, decide whether the reply gets one of the three short
 footers about the notes -- "not in my notes" (the search found nothing for a game whose notes are
-covered) or "no close match" (a note came back, but it was a stretch) -- and append it.
+covered), "no close match" (a note came back, but it was a stretch) or "no notes for this game"
+(the library holds nothing on the game, plan 104 lane H2) -- and append it.
 
 Used for: Called by game_ai_request.py's run_game_ai_request, once per successful reply, right
 after the safety notice and before the spoiler cover step.
@@ -23,9 +24,11 @@ import decky
 
 from backend.knowledge.kb_not_in_notes_notice import (
     append_no_close_match_notice,
+    append_no_notes_for_game_notice,
     append_not_in_notes_notice,
     kb_attach_log_line,
     should_show_no_close_match_notice_for_turn,
+    should_show_no_notes_for_game_notice,
     should_show_not_in_notes_notice,
     tip_sheet_turn_came_back_empty,
 )
@@ -44,7 +47,7 @@ def append_kb_notes_footers(
     kb_attached_notes: list[dict[str, Any]],
     courtesy_turn: bool = False,
 ) -> str:
-    """``response_text`` with whichever of the two notes footers this turn earns appended.
+    """``response_text`` with whichever of the three notes footers this turn earns appended.
 
     "Not in my notes" stays off a turn this specific: an Expert or Strategy ask about a game
     whose notes are covered, where this particular question read as troubleshooting and got
@@ -85,8 +88,22 @@ def append_kb_notes_footers(
         question_for_kb_search=question_for_kb_search,
         kb_attached_notes=kb_attached_notes,
     )
+    # The third line (plan 104 lane H2): the library holds nothing for the game. It needs a game
+    # the library does not hold and the two above need one it does, so it never stacks with
+    # them; the `not` terms say so in the code as well.
+    show_no_notes_for_game = (
+        not show_not_in_notes
+        and not show_no_close_match
+        and should_show_no_notes_for_game_notice(
+            kb_coverage_status=str(kb_coverage_transparency.get("kb_coverage_status") or ""),
+            kb_transparency=kb_transparency,
+            kb_attached_notes=kb_attached_notes,
+            question=question_for_kb_search,
+        )
+    )
     logger.info(kb_attach_log_line(
         kb_transparency, kb_attached_notes,
         not_in_notes_shown=show_not_in_notes, no_close_match_shown=show_no_close_match))
     response_text = append_not_in_notes_notice(response_text, show_not_in_notes)
-    return append_no_close_match_notice(response_text, show_no_close_match)
+    response_text = append_no_close_match_notice(response_text, show_no_close_match)
+    return append_no_notes_for_game_notice(response_text, show_no_notes_for_game)

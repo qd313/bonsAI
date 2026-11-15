@@ -1,8 +1,10 @@
 """Title: Knowledge-base attribution notices
 
 Purpose: Output-side notes telling the user a reply came from the model's own training
-knowledge rather than the local knowledge base -- both about the notes (Strategy/Expert only).
-A third line for the tip sheet ("No tip for this") was retired by the maintainer on 2026-09-27:
+knowledge rather than the local knowledge base. Two are about the notes of a game the library
+holds (Strategy/Expert only); the third, "No notes for this game" (plan 104), is for a game it does
+not hold and shows in every mode.
+A line for the tip sheet ("No tip for this") was retired by the maintainer on 2026-09-27:
 four cut-offs were measured and none made it appear without losing right tips.
 Used for: Post-generation step in run_game_ai_request (game_ai_request.py), run once the KB
 attach/coverage/domain signals for the turn are known -- alongside the destructive-advice safety
@@ -24,6 +26,8 @@ from __future__ import annotations
 
 import re
 import sqlite3
+
+from backend.knowledge.kb_other_game_named import other_game_named_in
 
 # Wording decided 1 September, locked 2026-09-07 -- do not reword without the same process.
 _NOT_IN_NOTES_LINE = "Not in my notes — this answer is from the model's own knowledge."
@@ -594,6 +598,71 @@ def append_no_close_match_notice(response_text: str, should_show: bool) -> str:
     if not should_show:
         return response_text
     return (response_text or "").rstrip() + _NO_CLOSE_MATCH_NOTICE
+
+
+# --- "No notes for this game" (plan 104 lane H2, 2026-11-15) -------------------------------
+#
+# The third line, for the games the library holds nothing on. The two lines above only exist for a
+# game the library holds, so a Stardew Valley or Terraria answer came from the model's memory and
+# said nothing about it. The plugin already knows this before the model is asked (Show details
+# prints "KB: none for this game"), so it tells the person, in every Ask mode. Wording proposed by
+# the plan and shown to the maintainer on the checks page; the dash matches the first line.
+_NO_NOTES_FOR_GAME_LINE = "No notes for this game — this answer is from the model's own knowledge."
+
+_NO_NOTES_FOR_GAME_NOTICE = f"\n\n—\n*{_NO_NOTES_FOR_GAME_LINE}*"
+
+# The coverage statuses (summarize_kb_coverage) that mean the library has no notes for the game
+# the turn is about: no entry at all, or an entry with no notes under it.
+_NO_NOTES_STATUSES = frozenset({"app_unresolved", "no_sections"})
+
+# "no_app" is nothing running and no game found for the question. It counts only when the
+# question itself names a well-known game (kb_other_game_named.py) -- the library's own title match
+# already found nothing, or the status would not be "no_app".
+_NO_APP_STATUS = "no_app"
+
+
+def should_show_no_notes_for_game_notice(
+    *,
+    kb_coverage_status: str,
+    kb_transparency: dict,
+    kb_attached_notes: list,
+    question: str,
+) -> bool:
+    """True when the library holds no notes for the game this turn is about.
+
+    The caller has already left out a thank-you or off-topic turn (the footer step returns the
+    reply untouched for those) and never asks when either older line shows, which the two older
+    rules make impossible anyway: they need a game the library holds, this needs one it does not.
+
+    Stays quiet on a turn that went to the shared troubleshooting tips (those are not about one
+    game, whether or not a tip attached), on a note found but cut for room, and whenever a real
+    note about the game reached the model. A genre card does not count as a note: it is attached
+    when nothing matches, carries no sources and is no note about the game, so the line still shows.
+    """
+    status = (kb_coverage_status or "").strip()
+    if status == _NO_APP_STATUS:
+        if not other_game_named_in(question):
+            return False
+    elif status not in _NO_NOTES_STATUSES:
+        return False
+    if (kb_transparency.get("kb_domain") or "").strip().lower() == _COMPAT_DOMAIN:
+        return False
+    kb_notes = str(kb_transparency.get("kb_notes") or "").strip()
+    if kb_notes in (_COMPAT_TIPS_RESOLUTION, _BUDGET_DROPPED_NOTE):
+        return False
+    if kb_transparency.get("kb_attached") and (kb_attached_notes or kb_transparency.get("kb_sources")):
+        return False
+    return True
+
+
+def append_no_notes_for_game_notice(response_text: str, should_show: bool) -> str:
+    """Append the fixed "no notes for this game" line when `should_show`; unchanged otherwise.
+
+    Same stacking rule as the other two: after whatever footer is already there.
+    """
+    if not should_show:
+        return response_text
+    return (response_text or "").rstrip() + _NO_NOTES_FOR_GAME_NOTICE
 
 
 def kb_attach_log_line(

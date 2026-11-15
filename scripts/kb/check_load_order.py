@@ -261,7 +261,10 @@ def render(report: dict[str, Any]) -> str:
         "",
         f"LOOT's list of {date} says:",
     ]
-    out += [f"  - {line}" for line in report["findings"]] or ["  - Nothing that applies among the rules I could check."]
+    out += [f"  - {line}" for line in report["findings"]] or [
+        "  - LOOT's list has no rule among the ones checked that applies to your plugins. "
+        "That does not mean they work together."
+    ]
     out += [
         "",
         f"Rules not checked: {report['unchecked']}. Each depends on something this script does not read "

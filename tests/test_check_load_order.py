@@ -201,7 +201,12 @@ class WordsAndLimitsTests(unittest.TestCase):
 
     def test_an_empty_result_is_not_called_a_clean_bill_of_health(self):
         text = self._text([_entry("A.esp", requires=[{"name": "B.esp"}])], "*B.esp\n*A.esp\n").lower()
-        self.assertIn("nothing that applies among the rules i could check", text)
+        self.assertIn(
+            "loot's list has no rule among the ones checked that applies to your plugins. "
+            "that does not mean they work together.",
+            text,
+        )
+        text = text.replace("that does not mean they work together", "")
         for forbidden in ("safe", "no problems", "work together", "works together", "compatible", "all clear", "fine"):
             self.assertNotIn(forbidden, text)
 

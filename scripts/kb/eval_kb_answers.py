@@ -697,6 +697,7 @@ def claim_group_hit(reply: str, alternatives: list[str]) -> bool:
 UNKNOWN_ADMISSIONS = (
     "not in my notes",
     "no close match in my notes",
+    "no notes for this game",
     "i dont have notes", "i dont have any notes", "i have no notes",
     "i dont have information", "i dont have any information", "i have no information",
     "i dont have details", "i dont have any details",
@@ -752,12 +753,17 @@ def admitted_unknown(reply: str) -> bool:
     return False
 
 
-# The two lines the back end adds under a reply, in the shape it adds them (a rule, then the line in
+# The lines the back end adds under a reply, in the shape it adds them (a rule, then the line in
 # italics). They are the back end speaking, not the model: ``admitted_unknown`` above hears them as an
 # admission, so a reply could "admit not knowing" without the model having said a word of it.
+# The third line (plan 104 lane H2) is for a game the library holds no notes for at all. It is written out
+# here, em dash and all, because the code that draws it is another lane's; a test pins this wording.
+NO_NOTES_FOR_GAME_LINE = "No notes for this game " + chr(0x2014) + " this answer is from the model's own knowledge."
+
 BACK_END_FOOTER_LINES = (
     kb_not_in_notes_notice._NOT_IN_NOTES_LINE,
     kb_not_in_notes_notice._NO_CLOSE_MATCH_LINE,
+    NO_NOTES_FOR_GAME_LINE,
 )
 
 

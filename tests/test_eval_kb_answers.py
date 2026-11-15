@@ -1896,5 +1896,64 @@ class EvalKbAnswersAdmissionPhrasingTests(unittest.TestCase):
             self.assertFalse(self.mod.admitted_unknown(reply), reply)
 
 
+class EvalKbAnswersThirdFooterLineTests(unittest.TestCase):
+    """Plan 104 lane T2, commit 2: lane H2 adds a third line the plugin draws under an answer, for a game
+    the library holds no notes for at all. The answer test must treat it as the plugin speaking, as it
+    does the other two: stripped from the reply before "said so in its own words" is judged, counted
+    under "the back end's line showed", and heard by the older combined reading. The line is written
+    out here, with its real em dash, because the code that draws it is another lane's. No Ollama."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load_eval_module()
+
+    @classmethod
+    def tearDownClass(cls):
+        sys.modules.pop("eval_kb_answers", None)
+
+    _run = EvalKbAnswersUnknownTests._run
+
+    NO_NOTES_LINE = "No notes for this game \u2014 this answer is from the model's own knowledge."
+    FOOTER = "\n\n\u2014\n*" + NO_NOTES_LINE + "*"
+    ADVICE = EvalKbAnswersUnknownTests.ZORBLAX_ADVICE
+
+    def test_the_line_is_worded_exactly_as_lane_h2_draws_it(self):
+        self.assertEqual(self.mod.NO_NOTES_FOR_GAME_LINE, self.NO_NOTES_LINE)
+
+    def test_the_third_line_and_its_rule_are_taken_off_and_nothing_else(self):
+        self.assertEqual(self.mod.strip_back_end_footers(self.ADVICE + self.FOOTER), self.ADVICE)
+        self.assertEqual(self.mod.strip_back_end_footers(self.ADVICE + self.FOOTER.replace("*", "")), self.ADVICE)
+        self.assertEqual(self.mod.strip_back_end_footers(self.ADVICE), self.ADVICE)
+
+    def test_the_third_line_counts_as_the_back_end_speaking(self):
+        self.assertTrue(self.mod.back_end_line_showed(self.ADVICE + self.FOOTER))
+        self.assertTrue(self.mod.admitted_unknown(self.ADVICE + self.FOOTER))
+        self.assertFalse(self.mod.admitted_unknown(self.mod.strip_back_end_footers(self.ADVICE + self.FOOTER)))
+
+    def test_the_test_s_own_count_does_not_credit_the_ai_for_the_third_line(self):
+        r = self._run(self.ADVICE + self.FOOTER)
+        self.assertTrue(r.footer_showed)
+        self.assertFalse(r.said_so_own_words)  # was True before: the stripper left this line in
+        self.assertTrue(r.admitted_unknown)
+        self.assertFalse(r.invented_unknown)
+
+    def test_a_reply_that_says_so_itself_still_counts_with_the_third_line_under_it(self):
+        own = "I don't have notes on a boss called Zorblax, so I can't say how to beat it."
+        r = self._run(own + self.FOOTER)
+        self.assertTrue(r.footer_showed)
+        self.assertTrue(r.said_so_own_words)
+
+    def test_all_three_lines_stack_and_come_off_together(self):
+        from backend.knowledge import kb_not_in_notes_notice as notice
+
+        reply = (
+            self.ADVICE
+            + notice.append_not_in_notes_notice("", True)
+            + notice.append_no_close_match_notice("", True)
+            + self.FOOTER
+        )
+        self.assertEqual(self.mod.strip_back_end_footers(reply), self.ADVICE)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -492,6 +492,12 @@ def _question_without_typed_game_name(
 # about anything else; and everything when the question names a mode. (Measured 2026-11-15: dropping
 # the "Playing as" notes too pushed six test questions that expect one out of their first three.)
 #
+# The other way round (also lane V4): a question that does name a side or a mode and spells out a
+# game-mode note's whole title ("tips for playing as the hunter in versus" spells out "Playing as the
+# Hunter") gets that note first. The meaning search liked the survivors' "Surviving Hunters and
+# Jockeys" better and it led. A question that names a side without spelling a title out ("pouncing ...
+# on the infected team") is left alone: nothing in it says which special infected is meant.
+#
 # A small score penalty on those kinds was tried first and measured the same day: the size that put
 # "Tank" back in front (about 0.0012) and the size that pushed three labelled versus questions out of
 # their first three (about 0.0016) were that close, so it was dropped. Looking only at the notes that
@@ -525,9 +531,17 @@ def _title_subject(name: str) -> set[str]:
 def _lead_with_the_note_the_question_names(cards: list[KnowledgeCard], question: str) -> list[KnowledgeCard]:
     """``cards`` with the ordinary note the question names by title moved to the front, when the
     first card is a game-mode note the question did not ask for, and with the game-mode notes about
-    that note's subject left out (plan 104, lane V4). Nothing else is reordered or dropped; a
-    question that names a mode or a side gets its list back exactly as it came."""
-    if not cards or _question_names_a_mode(question):
+    that note's subject left out (plan 104, lane V4). A question that names a mode or a side gets the
+    game-mode note whose whole title it spells out moved to the front instead; nothing else is
+    reordered or dropped."""
+    if not cards:
+        return cards
+    if _question_names_a_mode(question):
+        spelled = {_fold_plural(w) for w in _name_tokens(question)}
+        for index, card in enumerate(cards):
+            title = _title_subject(card.name)
+            if card.section_type in _MODE_KINDS and title and title <= spelled:
+                return [card, *cards[:index], *cards[index + 1 :]]
         return cards
     if cards[0].section_type in _MODE_KINDS:
         asked = {_fold_plural(w) for w in _name_tokens(question)}

@@ -95,12 +95,15 @@ class HeldBackTests(unittest.TestCase):
             "tank vs save it",
             "tank survival tips",
             "tank in realism",
-            "playing as the tank",
             "how to beat tank as the infected",
             "infected team and the tank",
         ):
             with self.subTest(question=question):
                 self.assertEqual(_fuse(question)[0], "Surviving the Tank")
+
+    def test_a_question_that_spells_out_the_playing_as_title_gets_that_note_first(self):
+        # Plan 104, lane V4: it used to be the survivors' note; the question says exactly which one it wants.
+        self.assertEqual(_fuse("playing as the tank")[0], "Playing as the Tank")
 
     def test_a_note_the_question_does_not_name_by_its_title_does_not_take_the_lead(self):
         self.assertEqual(_fuse("how do i survive")[0], "Surviving the Tank")
@@ -135,6 +138,39 @@ class HeldBackTests(unittest.TestCase):
                     [leader, TANK], QUERY_VECTOR, {1: [1.0, 0.0], 3: [0.9, 0.43]}, top_k=2, question="how to beat tank"
                 )
                 self.assertEqual(fused[0].name, "Tank" if held else "Surviving the Tank")
+
+
+class NamedSideLeadsTests(unittest.TestCase):
+    """Plan 104, lane V4: a question that names a side or a mode and spells out a game-mode note's
+    whole title ("playing as the hunter") gets that note first, not the survivors' note about the same
+    special infected that the meaning search happened to like better."""
+
+    SURVIVING_HUNTERS = _card(11, "versus", "Surviving Hunters and Jockeys")
+    PLAYING_AS_HUNTER = _card(12, "versus", "Playing as the Hunter")
+    HUNTER = _card(13, "enemy", "Hunter")
+    VECTORS = {11: [1.0, 0.0], 12: [0.95, 0.31], 13: [0.9, 0.43]}
+
+    def fuse(self, question: str, top_k: int = 3) -> list[str]:
+        pool = [self.SURVIVING_HUNTERS, self.PLAYING_AS_HUNTER, self.HUNTER]
+        return [c.name for c in _fuse_cards_by_rrf(pool, QUERY_VECTOR, self.VECTORS, top_k=top_k, question=question)]
+
+    def test_playing_as_the_hunter_leads_a_question_that_says_so(self):
+        for question in ("tips for playing as the hunter in versus", "tips for playing as the hunter"):
+            with self.subTest(question=question):
+                self.assertEqual(self.fuse(question)[0], "Playing as the Hunter")
+
+    def test_the_other_notes_keep_their_order_behind_it(self):
+        self.assertEqual(
+            self.fuse("tips for playing as the hunter in versus"),
+            ["Playing as the Hunter", "Surviving Hunters and Jockeys", "Hunter"],
+        )
+
+    def test_a_side_without_the_subject_in_the_title_changes_nothing(self):
+        # "pouncing ... infected team" never spells a title out; the order the blend gave stands.
+        self.assertEqual(self.fuse("any tips for pouncing well when I'm on the infected team")[0], "Surviving Hunters and Jockeys")
+
+    def test_a_title_only_partly_spelled_out_changes_nothing(self):
+        self.assertEqual(self.fuse("how do survivors deal with a hunter in versus")[0], "Surviving Hunters and Jockeys")
 
 
 class SpeedMergeTests(unittest.TestCase):
@@ -194,6 +230,8 @@ class AskPathTests(unittest.TestCase):
         # Boomer's note shares words with the question but not its meaning (the PC's numbers: 15th of 24).
         favourites = {
             "Surviving the Tank": [1.0, 0.0], "Playing as the Tank": [0.97, 0.24], "Tank": [0.95, 0.31], "Boomer": [-1.0, 0.0],
+            # The Strategy Hunter question measured on the PC: the survivors' note ahead of the player's.
+            "Surviving Hunters and Jockeys": [1.0, 0.0], "Playing as the Hunter": [0.6, 0.8], "Hunter": [0.8, 0.6],
         }
         cls.vectors = {sid: favourites.get(name, [0.0, 1.0]) + [0.0] * 766 for sid, name in rows}
 
@@ -225,6 +263,10 @@ class AskPathTests(unittest.TestCase):
         names = self.attached("how to beat tank")
         self.assertEqual(names[0], "Tank")
         self.assertNotIn("Surviving the Tank", names)
+
+    def test_a_hunter_question_from_the_infected_side_attaches_playing_as_the_hunter_first(self):
+        names = self.attached("tips for playing as the hunter in versus")
+        self.assertEqual(names[0], "Playing as the Hunter")
 
     def test_the_same_question_with_versus_in_it_attaches_the_versus_note_first(self):
         self.assertEqual(self.attached("how to beat tank in versus")[0], "Surviving the Tank")

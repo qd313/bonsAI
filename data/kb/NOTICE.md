@@ -30,7 +30,7 @@ The wikis the notes come from, and their licences:
 | The Unofficial Elder Scrolls Pages | en.uesp.net | CC-BY-SA-2.5 |
 | Fallout Wiki | fallout.fandom.com | CC-BY-SA-3.0 |
 | GTA Wiki | gta.fandom.com | CC-BY-SA-3.0 |
-| Half-Life Wiki | half-life.fandom.com | CC-BY-SA-3.0 |
+| Half-Life Wiki (also its "Black Mesa (game)" page, a source for the Black Mesa notes) | half-life.fandom.com | CC-BY-SA-3.0 |
 | Hollow Knight Wiki | hollowknight.wiki | CC-BY-SA-3.0 |
 | Left 4 Dead Wiki | left4dead.fandom.com | CC-BY-SA-3.0 |
 | Palworld Wiki | palworld.wiki.gg | CC-BY-SA-4.0 |

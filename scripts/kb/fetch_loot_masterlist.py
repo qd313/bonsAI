@@ -36,6 +36,11 @@ from typing import Any
 import yaml
 
 REPO_ROOT = next(p for p in Path(__file__).resolve().parents if (p / "main.py").is_file())
+if str(REPO_ROOT / "py_modules") not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT / "py_modules"))
+
+from backend.knowledge.knowledge_base_schema import load_order_is_pattern_name as is_pattern_name  # noqa: E402
+
 OUT_DIR = REPO_ROOT / "data" / "kb" / "load_order"
 
 LICENCE = "CC0-1.0"
@@ -61,11 +66,6 @@ def has_link(text: str) -> bool:
 def strip_links(text: str) -> str:
     """Markdown ``[words](address)`` becomes ``words``; the address is dropped."""
     return _LINK_RE.sub(r"\1", text)
-
-
-def is_pattern_name(name: str) -> bool:
-    """LOOT's own rule: a name with any of ``: \\ * ? |`` is a regular expression, else a file name."""
-    return any(ch in name for ch in ':\\*?|')
 
 
 def _english(value: Any) -> str | None:

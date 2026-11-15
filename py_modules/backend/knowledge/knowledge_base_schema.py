@@ -287,6 +287,11 @@ def load_order_name_key(name: str) -> str:
     return re.sub(r"[\s_]+", "", raw)
 
 
+def load_order_is_pattern_name(name: str) -> bool:
+    """LOOT's own rule: a name holding a colon, a backslash, ``*``, ``?`` or ``|`` is a regular expression."""
+    return any(ch in name for ch in ":\\*?|")
+
+
 _PLUGIN_ENDINGS = (".esp", ".esm", ".esl")
 # A name that already ends like a file (".esp", ".txt") is matched as given; a plain name gets each plugin ending tried.
 _NAME_ENDS_LIKE_A_FILE = re.compile(r"\.[A-Za-z]{2,4}$")

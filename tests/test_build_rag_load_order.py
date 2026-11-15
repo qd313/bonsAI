@@ -23,7 +23,11 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from backend.knowledge.knowledge_base_schema import load_order_name_key, load_order_pattern_matches
+from backend.knowledge.knowledge_base_schema import (
+    load_order_is_pattern_name,
+    load_order_name_key,
+    load_order_pattern_matches,
+)
 from build_rag_db_loader import load_build_rag_db
 from rag_corpus_seed_fixtures import compat_payload, seed_payload
 from script_loader import load_script
@@ -99,6 +103,12 @@ class NameKeyTests(unittest.TestCase):
 
 
 class PatternMatchTests(unittest.TestCase):
+    def test_a_name_is_a_pattern_by_loots_own_characters(self):
+        for name in (r"A.*\.esp", "A|B.esp", "A?.esp", "Left: Dead"):
+            self.assertTrue(load_order_is_pattern_name(name), name)
+        for name in ("ccBGSFO4001-PipBoy(Black).esl", "Plain Mod.esp", "Mod [1.2].esp"):
+            self.assertFalse(load_order_is_pattern_name(name), name)
+
     def test_a_pattern_fits_the_whole_name_without_regard_to_case(self):
         self.assertTrue(load_order_pattern_matches(r"Bashed Patch.*\.esp", "bashed patch, 0.ESP"))
         self.assertFalse(load_order_pattern_matches(r"Bashed Patch.*\.esp", "My Bashed Patch.esp"))

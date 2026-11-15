@@ -30,7 +30,7 @@
         },
         {
           "label": "Tips",
-          "text": "The tabletop books describe owlbears as carnivorous and famed for aggression and ferocity. They live in mated pairs in caves and hunt any creature bigger than a mouse.",
+          "text": "In the tabletop lore an owlbear is a meat-eater with a fierce temper. A mated pair shares a cave, and it will go after anything larger than a mouse.",
           "from": [
             {
               "page": "Owlbear",
@@ -161,7 +161,7 @@
         },
         {
           "label": "Tips",
-          "text": "Your choices are to help her raid the grove, to oppose and kill her and her goblins, or to avoid the raid and keep her alive by knocking her out with non-lethal damage while killing her commanders, or by ignoring her.",
+          "text": "You can join her raid on the grove, fight her and kill her along with her goblins, or skip the raid and spare her: either knock her out with non-lethal damage while you kill her commanders, or simply leave her alone.",
           "from": [
             {
               "page": "Minthara",
@@ -181,33 +181,12 @@
         },
         {
           "label": "Tips",
-          "text": "Avoiding the raid means the grove is slaughtered off-screen; siding with her or keeping her alive lets her reach act two, where she can be rescued and become a full companion.",
+          "text": "If you stay out of the raid, the grove is lost without you.",
           "from": [
             {
               "page": "Minthara",
               "revision": "1366636360",
               "quote": "though this option will cause the grove to be slaughtered off-screen",
-              "quote_sits": "editors' prose",
-              "quote_at": "Appearances"
-            },
-            {
-              "page": "Minthara",
-              "revision": "1366636360",
-              "quote": "Any of these options will allow her to proceed to the game's second act.",
-              "quote_sits": "editors' prose",
-              "quote_at": "Appearances"
-            },
-            {
-              "page": "Minthara",
-              "revision": "1366636360",
-              "quote": "If the player sides with her",
-              "quote_sits": "editors' prose",
-              "quote_at": "Appearances"
-            },
-            {
-              "page": "Minthara",
-              "revision": "1366636360",
-              "quote": "The player can rescue her, after which she will become a full companion",
               "quote_sits": "editors' prose",
               "quote_at": "Appearances"
             }
@@ -223,7 +202,7 @@
       "lines": [
         {
           "label": "Summary",
-          "text": "A common, fairly weak race of evil humanoid monsters in the tabletop game; in the first act a goblin horde that worships a cult of the Absolute faces the druids and tiefling refugees of the Emerald Grove.",
+          "text": "Goblins are evil humanoids, one of the most common and weaker monster kinds in the tabletop game. In the first act a goblin horde that worships a cult of the Absolute is up against the druids and the tiefling refugees at the Emerald Grove.",
           "from": [
             {
               "page": "Goblin (Dungeons & Dragons)",
@@ -305,7 +284,7 @@
         },
         {
           "label": "Uses",
-          "text": "Environmental elements like explosive barrels can be exploited in combat.",
+          "text": "In a fight, treat a barrel as something to use against your enemies; the game counts it as part of the surroundings you can make work for you.",
           "from": [
             {
               "page": "Baldur's Gate 3",
@@ -318,7 +297,7 @@
         },
         {
           "label": "Tips",
-          "text": "Items like explosive barrels can be sent to your camp stash and retrieved later.",
+          "text": "You can send a barrel to your camp stash and take it out again later.",
           "from": [
             {
               "page": "Baldur's Gate 3",
@@ -406,19 +385,6 @@
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
               "quote": "Environmental elements like explosive barrels can be exploited, and weapons can be dipped in poison.",
-              "quote_sits": "editors' prose",
-              "quote_at": "Gameplay > Combat"
-            }
-          ]
-        },
-        {
-          "label": "Uses",
-          "text": "Weapons can be dipped in poison.",
-          "from": [
-            {
-              "page": "Baldur's Gate 3",
-              "revision": "1381526328",
-              "quote": "weapons can be dipped in poison",
               "quote_sits": "editors' prose",
               "quote_at": "Gameplay > Combat"
             }

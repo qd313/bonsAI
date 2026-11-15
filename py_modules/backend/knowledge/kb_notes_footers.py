@@ -46,6 +46,7 @@ def append_kb_notes_footers(
     question_for_kb_search: str,
     kb_attached_notes: list[dict[str, Any]],
     courtesy_turn: bool = False,
+    notes_held_back: bool = False,
 ) -> str:
     """``response_text`` with whichever of the three notes footers this turn earns appended.
 
@@ -57,6 +58,9 @@ def append_kb_notes_footers(
     did not come up empty there. Nor on a thank-you or an off-topic turn (``courtesy_turn``, plan 100
     lane M2): the notes were never searched, so "not in my notes" would be a claim about a search
     nobody ran, and the reply is returned exactly as the model wrote it.
+
+    ``notes_held_back`` (plan 104 lane H1) says the notes were found but kept from the AI. The lines are
+    still decided from what the search found, so "No close match" still shows; only the log line changes.
     """
     if courtesy_turn:
         return response_text
@@ -104,7 +108,7 @@ def append_kb_notes_footers(
     logger.info(kb_attach_log_line(
         kb_transparency, kb_attached_notes,
         not_in_notes_shown=show_not_in_notes, no_close_match_shown=show_no_close_match,
-        no_notes_for_game_shown=show_no_notes_for_game))
+        no_notes_for_game_shown=show_no_notes_for_game, notes_held_back=notes_held_back))
     response_text = append_not_in_notes_notice(response_text, show_not_in_notes)
     response_text = append_no_close_match_notice(response_text, show_no_close_match)
     return append_no_notes_for_game_notice(response_text, show_no_notes_for_game)

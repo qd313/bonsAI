@@ -672,6 +672,7 @@ def kb_attach_log_line(
     not_in_notes_shown: bool,
     no_close_match_shown: bool,
     no_notes_for_game_shown: bool = False,
+    notes_held_back: bool = False,
 ) -> str:
     """One plain log line saying which notes reached the model and which footer, if any, was added.
 
@@ -688,14 +689,23 @@ def kb_attach_log_line(
         count = len(names) or len(kb_transparency.get("kb_sources") or [])
         noun = "note" if count == 1 else "notes"
         listed = f" ({'; '.join(n for n in names if n)})" if any(names) else ""
-        attached = f"{count} {noun} attached{listed}; they are the 'attached chars' in the budget line above"
+        if notes_held_back:
+            # Plan 104 lane H1: the search found them but the AI was not sent them, so the line must not say attached.
+            found = f"{count} {noun}" if count else "a general card"
+            attached = f"notes held back from the AI: {found} found{listed}; none was used"
+        else:
+            attached = f"{count} {noun} attached{listed}; they are the 'attached chars' in the budget line above"
     elif (kb_transparency.get("kb_notes") or "").strip() == _BUDGET_DROPPED_NOTE:
         attached = "no notes attached: a note was found but cut for room"
     else:
         reason = str(kb_transparency.get("kb_unavailable_reason") or "").strip()
         attached = "no notes attached" + (f" ({reason})" if reason else "")
     if no_close_match_shown:
-        footer = "'No close match' line added to the reply (the attached notes were a weak match)"
+        footer = (
+            "'No close match' line added to the reply (the notes found were a weak match)"
+            if notes_held_back
+            else "'No close match' line added to the reply (the attached notes were a weak match)"
+        )
     elif not_in_notes_shown:
         footer = "'Not in my notes' line added to the reply (nothing matched)"
     elif no_notes_for_game_shown:

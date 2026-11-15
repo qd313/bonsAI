@@ -110,7 +110,7 @@ from backend.knowledge import kb_followup_memory
 from backend.ollama import ollama_keep_alive_rule
 from backend.commands.input_sanitizer_service import apply_input_sanitizer_lane
 from backend.knowledge.kb_notes_footers import append_kb_notes_footers
-from backend.knowledge.kb_notes_turn_flags import prompt_turn_flags
+from backend.knowledge.kb_notes_turn_flags import notes_for_the_ai, prompt_turn_flags
 from backend.prompts.ollama_prompts import (
     build_reply_followup_context_block,
     extract_strategy_asked_entity,
@@ -690,6 +690,16 @@ async def run_game_ai_request(
             if kb_result is not None and kb_survived
             else []
         )
+        # Plan 103 lane R2: whether the reply will end with a "Not in my notes" or "No close match" line is
+        # known now, so the AI is told too (kb_notes_turn_flags.py); the footer step below still writes the line.
+        # Plan 104 lane H1: behind a switch the notes of such a turn are then kept from the AI, and the screen
+        # and the log say so (notes_for_the_ai). It reads the stacked turn's facts, so it comes after the stacking.
+        notes_turn_flags = prompt_turn_flags(ask_mode, kb_transparency, kb_coverage_transparency, text_resolved_title,
+                                             question_for_kb_search, kb_attached_notes, question_is_courtesy_or_junk)
+        notes_for_ai = notes_for_the_ai(notes_turn_flags, proton_text=proton_attachment_text,
+                                        context=early_context_combined, kb_transparency=kb_transparency,
+                                        kb_attached_notes=kb_attached_notes)
+        early_context_combined = notes_for_ai.context
 
         read_tdp = is_current_tdp_read_intent(question_for_model)
         wants_grounding = user_wants_power_or_performance_topic(question_for_model)
@@ -797,7 +807,7 @@ async def run_game_ai_request(
             app_name=app_name, title_profile=strategy_title_profile,
         )
         mark_spoiler_protected_notes(kb_attached_notes, spoiler_protected_names_for_turn)
-        _publish_kb_attached_notes_live(plugin, active_rid, kb_attached_notes)
+        _publish_kb_attached_notes_live(plugin, active_rid, notes_for_ai.attached_notes)
 
         spoiler_risk_signals = build_spoiler_risk_signals(
             ask_mode=ask_mode,
@@ -830,10 +840,6 @@ async def run_game_ai_request(
         # written to the chat when the Ask is accepted, before this runs -- and the memory builder
         # drops that trailing turn itself. How much of the chat actually reaches the AI, and
         # whether it needs summing up first, is decided inside ask_ollama, not here.
-        # Plan 103 lane R2: whether the reply will end with a "Not in my notes" or "No close match" line is
-        # known now, so the AI is told too (kb_notes_turn_flags.py); the footer step below still writes the line.
-        notes_turn_flags = prompt_turn_flags(ask_mode, kb_transparency, kb_coverage_transparency, text_resolved_title,
-                                             question_for_kb_search, kb_attached_notes, question_is_courtesy_or_junk)
         ollama_result = picture_guess.STOPPED_RESULT if picture_guess_stopped else await plugin.ask_ollama(
             question_for_model,
             pc_ip,
@@ -986,7 +992,7 @@ async def run_game_ai_request(
                 response_text, ask_mode=ask_mode, kb_transparency=kb_transparency,
                 kb_coverage_transparency=kb_coverage_transparency, text_resolved_title=text_resolved_title,
                 question_for_kb_search=question_for_kb_search, kb_attached_notes=kb_attached_notes,
-                courtesy_turn=question_is_courtesy_or_junk,
+                courtesy_turn=question_is_courtesy_or_junk, notes_held_back=notes_for_ai.held_back,
             )
 
             # D112 #7, the spoiler safety net. Run last, after the honesty footers above, so a
@@ -1044,7 +1050,7 @@ async def run_game_ai_request(
             text_after_sanitizer=effective_display_question,
             ollama_result={
                 **ollama_result,
-                **kb_transparency,
+                **notes_for_ai.transparency,
                 **kb_coverage_transparency,
                 **user_notes.record(),
                 "tdp_cap_watts": pre_cap if tdp_grounding_requested else None,
@@ -1070,7 +1076,7 @@ async def run_game_ai_request(
         # (`get_input_transparency`) exactly as given, with no field allowlist on that path, so
         # adding a key here is enough for the finished turn's own "Show details" reopen to carry
         # it without editing transparency_service.py.
-        ollama_route_snapshot = {**ollama_route_snapshot, "kb_attached_notes": kb_attached_notes}
+        ollama_route_snapshot = {**ollama_route_snapshot, "kb_attached_notes": notes_for_ai.attached_notes}
         await plugin._persist_input_transparency(ollama_route_snapshot)
 
         # D112 #7, the spoiler safety net's third leak: the branch menu's own question and
@@ -1116,7 +1122,7 @@ async def run_game_ai_request(
             # (see `_normalize_turn_transparency` there), and it does.
             "transparency": {
                 **transparency_snapshot_for_chat_slot(ollama_route_snapshot),
-                "kb_attached_notes": kb_attached_notes,
+                "kb_attached_notes": notes_for_ai.attached_notes,
             },
             "model": ollama_result.get("model"),
             "thinking_unsupported": bool(ollama_result.get("thinking_unsupported", False)),
@@ -1131,7 +1137,7 @@ async def run_game_ai_request(
             # per-turn facts this dict already carries flat (strategy_spoiler_asked_entity and so
             # on) -- see _publish_kb_attached_notes_live's docstring for the one thing reading
             # this back out of a *poll* still needs in main.py.
-            "kb_attached_notes": kb_attached_notes,
+            "kb_attached_notes": notes_for_ai.attached_notes,
             "note_offer": note_offer,
         }
     except Exception as exc:

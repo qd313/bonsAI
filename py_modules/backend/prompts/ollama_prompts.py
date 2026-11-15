@@ -311,6 +311,14 @@ HONEST_UNKNOWN_WORDING = "g"
 # Grimthak, and on all 6 of those answers (3 per run) with each of the two wordings the small model still wrote
 # about the boss as if it were real. Turn it on together with ``HONEST_UNKNOWN_ON`` once a wording is proven.
 HONEST_UNKNOWN_IN_SPEED_ON = False
+# Plan 104 lane H1, version one of the fix for what the sentence above could not stop: on the same turn the
+# loosely matching notes are still handed to the AI and the prompt still says to ground the answer in them, so
+# it opened honestly and then borrowed from them (a made-up boss got another boss's weak points). With this on, a
+# turn the flag marks is sent no notes at all (kb_notes_turn_flags.notes_held_back_from_ai); the screen and the log
+# say the notes were held back. Off while it is measured: plan 104 call 12 lets it land switched on only if a made-up
+# boss gets no borrowed detail in at least 5 of 6 answers in both of two runs and ordinary answers keep their facts.
+# Read when a turn is built, not when this file loads, so a test or a measuring script can flip it.
+NOTES_LEFT_OUT_ON = False
 HONEST_UNKNOWN_WORDINGS = {
     "a": (
         "NOTES GAP: The attached notes do not cover this question, so begin your reply by telling the "

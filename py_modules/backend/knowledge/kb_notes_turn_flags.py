@@ -7,7 +7,8 @@ next fact about a turn can join it without another argument threading through th
 
 Used for: Called once per turn by game_ai_request.py's run_game_ai_request, just before it
 asks the model; the result goes to ``ask_ollama`` as ``turn_flags`` and on to
-``build_system_prompt``.
+``build_system_prompt``. The same facts also decide, behind a switch that lands off (plan 104,
+lane H1), whether a marked turn's notes are kept from the AI (``notes_for_the_ai``).
 
 Solves: The two lines are decided after the AI has written (kb_notes_footers.py), so the AI's
 own instructions carried no sign of them: asked about a boss the notes do not have, it answered
@@ -16,7 +17,9 @@ lane R2). Everything the lines are decided from is already known before the call
 two rules can run first. A genre card is attached when nothing matches, so "No close match"
 carries most of these turns and this has to be true for it as much as for "Not in my notes".
 
-Does not: Write either line, append anything to a reply, or search the notes. It repeats the
+Does not: Write either line, append anything to a reply, or search the notes. When it holds notes
+back it changes what the AI is sent and what the screen lists, never the footer step's own facts:
+"No close match" still shows on such a turn. It repeats the
 footer step's own reading of the turn (kb_notes_footers.append_kb_notes_footers) with the same
 functions, and a test pins the two to agree on every combination; it does not replace that
 step, which still decides what the reply ends with.
@@ -24,15 +27,20 @@ step, which still decides what the reply ends with.
 
 from __future__ import annotations
 
-from typing import Any
+from dataclasses import dataclass
+from typing import Any, Collection
 
 from backend.knowledge.kb_not_in_notes_notice import (
     should_show_no_close_match_notice_for_turn,
     should_show_not_in_notes_notice,
     tip_sheet_turn_came_back_empty,
 )
+from backend.knowledge.knowledge_base_chips import stack_context_blocks
 from backend.prompts import ollama_prompts
 from backend.prompts.ollama_prompts import TURN_FLAG_NOTES_DO_NOT_COVER
+
+# What Show details says in place of the notes on a turn whose notes were held back from the AI.
+NOTES_HELD_BACK_REASON = "Notes held back: the ones found were about other things, so the AI was not given them."
 
 
 def prompt_turn_flags(
@@ -81,3 +89,51 @@ def prompt_turn_flags(
         kb_attached_notes=kb_attached_notes,
     )
     return frozenset({TURN_FLAG_NOTES_DO_NOT_COVER}) if (not_in_notes or no_close_match) else frozenset()
+
+
+def notes_held_back_from_ai(turn_flags: Collection[str]) -> bool:
+    """True when this turn's notes are to be kept from the AI: the turn is marked "the notes do not cover
+    this" and ``ollama_prompts.NOTES_LEFT_OUT_ON`` is on (plan 104 lane H1, version one)."""
+    return bool(ollama_prompts.NOTES_LEFT_OUT_ON) and TURN_FLAG_NOTES_DO_NOT_COVER in turn_flags
+
+
+@dataclass(frozen=True)
+class NotesForTheAi:
+    """What a turn sends the AI and what it shows the person, once it is known whether the notes are held back.
+
+    ``context`` is the stacked text for the AI, ``transparency`` the notes facts for the screen and the saved
+    record, ``attached_notes`` the list the screen draws. The footer step still reads the turn's original
+    facts: its two lines are decided from what the search found, and "No close match" must still show.
+    """
+
+    context: str
+    transparency: dict
+    attached_notes: list
+    held_back: bool
+
+
+def notes_for_the_ai(
+    turn_flags: Collection[str],
+    *,
+    proton_text: str,
+    context: str,
+    kb_transparency: dict,
+    kb_attached_notes: list[dict[str, Any]],
+) -> NotesForTheAi:
+    """The turn's notes as the AI and the screen get them. Unchanged unless the turn is marked, the switch is
+    on and a notes block really was attached; then the AI gets only the Proton text, the screen lists no notes
+    and its notes chip says they were held back. Worked out after stacking, so the marking could read the
+    stacked turn's own facts."""
+    if not (notes_held_back_from_ai(turn_flags) and kb_transparency.get("kb_attached")):
+        return NotesForTheAi(context, kb_transparency, kb_attached_notes, False)
+    shown = {
+        **kb_transparency,
+        "kb_attached": False,
+        "kb_trust_tier": "",
+        "kb_sources": [],
+        "kb_notes": "",
+        "kb_unavailable_reason": NOTES_HELD_BACK_REASON,
+    }
+    return NotesForTheAi(
+        stack_context_blocks(proton_text=proton_text, knowledge_text="").text, shown, [], True
+    )

@@ -244,7 +244,7 @@
           ]
         },
         {
-          "line": "Weak points: Treat them like common infected, but a bit tougher: 150 health on Normal and above, 50 on Easy. They sprint on all fours but stumble back on two feet when shoved.",
+          "line": "Weak points: A pipe bomb thrown into the swamp drags nearby mud men in and can blow several up at once. Treat them like common infected, but a bit tougher: 150 health on Normal and above, 50 on Easy. They sprint on all fours but stumble back on two feet when shoved.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
@@ -261,6 +261,15 @@
               "quoted": [
                 "150 (Normal, Advanced, Expert, Realism, Survival & Versus)",
                 "50 (Easy)"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Uncommon_Infected",
+              "revision": "173635",
+              "part_of_page": "Mud Men",
+              "quoted": [
+                "Throwing a pipe bomb into the swamp will drag any of them nearby to the bomb, and it will easily kill them.",
+                "Several of them can be blown up at once."
               ]
             }
           ]

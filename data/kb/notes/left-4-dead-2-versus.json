@@ -166,6 +166,61 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "171548",
       "crawled_at": "2026-11-10"
+    },
+    {
+      "section_id": 4515,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Versus rounds, turns and who plays survivors first",
+      "card": "Summary: In versus a round is two turns: one team plays the survivors, the other plays the infected, and then the sides swap. Each team has up to four players, and only the team on the survivor side earns points.\nTips: Before the game starts, whoever leads the lobby picks the campaign, and each player chooses whether to start on the infected side or the survivor side.\nTips: A turn as survivors ends the moment they reach the end of the chapter, or when all of them are incapacitated or dead. Then the sides swap, and once both turns are done everyone sees the current team scores.\nTips: In the next round, the team with the higher score plays the survivors first. After a tie, the team that was survivors first in the previous round goes first again. Versus is played on Normal difficulty.",
+      "source_url": "https://left4dead.fandom.com/wiki/Versus",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "172372",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4516,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Versus chapters repeat for both teams",
+      "card": "Summary: Every chapter is played twice, once by each team, so the second team to play it finds the items in the same places and the Tank and Witch in similar ones.\nTips: Survivors start each chapter without the weapons, health, gnomes or items they held on the previous map, and the first couple of chapters hand out tier 1 weapons. Safe-room items used in the previous round come back.\nTips: A dead survivor does not return from a rescue closet as in the campaign. In Left 4 Dead 2 the only way back is a defibrillator, which costs the team 25 points.\nTips: Some maps are trimmed for versus: closets and other places where survivors could hold out for ever are removed, so the route is harder on the survivor side.",
+      "source_url": "https://left4dead.fandom.com/wiki/Versus",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "172372",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4517,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Survivor outline colours the infected see",
+      "card": "Summary: A versus infected player sees survivors as coloured outlines, and in Left 4 Dead 2 the colour shows how hurt they are: green when healthy, then yellow, orange and red as health falls.\nTips: The bands count permanent and temporary health together. Over 40 is green, 25 to 39 is yellow, under 25 is orange, and under 10 or incapacitated is red. A survivor at exactly 1 health after being incapacitated, without healing, also shows red.\nTips: A survivor covered in Boomer bile shows purple whatever their health, and infected teammates show blue, spawned or not.",
+      "source_url": "https://left4dead.fandom.com/wiki/Versus",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "172372",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4518,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "What gives a versus survivor away to the infected",
+      "card": "Summary: The infected only see a survivor's outline after that survivor has done something noisy or open. Standing still, walking or crouch-walking stays hidden, unless an infected player has the survivor in sight or the survivor is covered in bile.\nTips: These show the outline: firing a weapon, swinging or shoving, using consumables, moving without crouching or holding the walk key, being pinned, ridden or covered in bile, and being under attack.\nTips: Voice gives you away too: using a microphone, talking, or a typed chatter-box message while the box is open. A survivor at low health keeps commenting on it, which shows their location as well.\nTips: These stay hidden: reloading (though a survivor may call it out), jumping (moving sideways in the air still shows you), moving while crouched or walking, opening or closing doors, picking up or throwing items (they may shout what they hold), and starting a Crescendo event. The infected team does not share what each member can see.",
+      "source_url": "https://left4dead.fandom.com/wiki/Versus",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "172372",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4519,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "How special infected attacks differ when people play them",
+      "card": "Summary: When a person controls a special infected in versus, some attacks work differently from the campaign: the Boomer's bile can arc, the Hunter's pounce does damage, the Smoker hurts while dragging, and the Jockey's leap stuns.\nTips: A versus Boomer can aim upward so his bile lobs over a distance, even from a spot the survivors cannot see, and can re-aim while it is still coming out to catch anyone he missed.\nTips: A versus Hunter's pounce deals damage that grows with the length of the jump, up to 25, and stumbles survivors standing nearby. Chaining wall jumps gets him higher, but then he cannot jump away at once when attacked.\nTips: A human-controlled special infected attacks the moment it spots a survivor, with none of the delay a bot has, and can spawn in the starting safe room once the survivors have left it.",
+      "source_url": "https://left4dead.fandom.com/wiki/Versus",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "172372",
+      "crawled_at": "2026-11-15"
     }
   ]
 }

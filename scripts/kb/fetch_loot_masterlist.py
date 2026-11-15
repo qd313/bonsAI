@@ -9,12 +9,14 @@ Used for: Making data/kb/load_order/fallout4.json and skyrimse.json, which scrip
           turns into the library's load_order tables. Run by the maintainer, never by the plugin.
 Solves: The rules (what a plugin needs, what it must load after, what it is marked as not working
         with) are free to use (CC0-1.0) but arrive as a 1 MB YAML file with web links, other
-        languages and file fingerprints that the check on the Deck neither needs nor may carry.
-        This keeps the rules and leaves the rest, and stops with a plain reason if a web link or
-        the wrong licence slips through.
+        languages and the lists of file fingerprints for "dirty edit" notes, which the check on the
+        Deck neither needs nor may carry. This keeps the rules and leaves the rest, and stops with a
+        plain reason if a web link or the wrong licence slips through.
 Does not: Run on the Deck or at plugin run time, read Nexus Mods (every link to it is dropped and
-          the run stops if one survives), keep messages in other languages, "dirty edit" notes,
-          file fingerprints or web links, or judge whether any rule is right.
+          the run stops if one survives), keep messages in other languages, "dirty edit" notes, the
+          fingerprint lists behind them or web links, or judge whether any rule is right. Conditions
+          are kept as written, including the checksum("file", HASH) tests (file fingerprints) that
+          the checker does not read.
 
     python scripts/kb/fetch_loot_masterlist.py --date-read 2026-11-15
 

@@ -76,6 +76,12 @@ class ShippedLoadOrderFileTests(unittest.TestCase):
             self.assertIn(f"github.com/loot/{game}", line)
         self.assertIn("CC0-1.0", line)
 
+    def test_conditions_are_kept_as_written_including_file_fingerprint_tests(self):
+        # The fetcher's header says so; the checker counts these rules as not checked.
+        for game in GAMES:
+            with self.subTest(game=game):
+                self.assertIn("checksum(", (FOLDER / f"{game}.json").read_text(encoding="utf-8"))
+
     def test_both_files_pass_the_builders_own_row_checks(self):
         pairs = build_rag_db._load_order_files()
         self.assertEqual(sorted(p[0] for p in pairs), ["load_order/fallout4.json", "load_order/skyrimse.json"])

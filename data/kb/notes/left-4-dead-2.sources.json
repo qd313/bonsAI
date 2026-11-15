@@ -574,7 +574,7 @@
           ]
         },
         {
-          "line": "Tips: You cannot carry it together with a first aid kit. Expect about one a level, and the Director often puts one nearby when a survivor is close to dying. Someone who dies by losing their grip on a ledge cannot be revived, because they fall away.",
+          "line": "Tips: You cannot carry it together with a first aid kit. Expect about one a level, and the Director often puts one nearby when a survivor is close to dying. Someone who dies by losing their grip on a ledge cannot be revived, because they fall away. There is no full list by chapter. No Mercy and The Sacrifice do not normally have one lying around: there it comes only in a first aid cabinet when the whole team is hurt (two places in No Mercy, one in The Sacrifice). The pages name some places where one can turn up: the supply closet, bathroom or end room in Dead Center's Hotel, the hotel rooms in Dark Carnival's Highway, two on the scaffolding at Dark Carnival's Concert, and often Hard Rain's Sugar Mill.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Healing_items",
@@ -585,6 +585,49 @@
                 "Defibrillators don't tend to spawn often, usually one per level apart from a few exceptions. If a Survivor is on the verge of death, the Director will tend to spawn one nearby.",
                 "If someone dies from hanging (holding onto a ledge), they cannot be revived using the Defibrillator since they fall and become a ragdoll.",
                 "However, if they are killed by another Survivor whilst hanging via friendly fire (rather than losing their grip and falling to their death) their body may fall into an accessible area that allows them to be defibrillated and revived."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Healing items",
+              "revision": "173392",
+              "part_of_page": "Notes",
+              "quoted": [
+                "For unknown reasons, the Defibrillator does not spawn commonly in the campaigns with the original Survivors, No Mercy and The Sacrifice.",
+                "You can still find a Defibrillator located in first aid cabinets if your entire team is hurting (which means only one possible spawn in The Sacrifice, and two in No Mercy), but they do not randomly spawn like First Aid Kits do."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hotel",
+              "revision": "173409",
+              "part_of_page": "Campaign",
+              "quoted": [
+                "If you're lucky, you will find either a Defibrillator or Pain pills and possibly a Bile bomb or Pipe bomb.",
+                "(There might also be a Defibrillator in the bathroom)",
+                "In the room there could be a Defibrillator, Pain pills, or a Pipe bomb."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Highway",
+              "revision": "171382",
+              "part_of_page": "Campaign",
+              "quoted": [
+                "which can contain an assortment of items, such as molotovs, pipe bombs, gas cans, propane tanks, pain pills, adrenaline shots, ammo piles and defibrillators."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Concert",
+              "revision": "173594",
+              "part_of_page": "Survivor Walkthrough",
+              "quoted": [
+                "Two Defibrillators, one each, can be found on the scaffolding."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Sugar_Mill",
+              "revision": "173175",
+              "part_of_page": "Notes",
+              "quoted": [
+                "Defibrillators spawn frequently on this level, due to the amount of Witches present on this level."
               ]
             }
           ]

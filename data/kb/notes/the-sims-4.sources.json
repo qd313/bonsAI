@@ -3,7 +3,7 @@
   "licence_printed_by_fetcher": "CC-BY-SA https://www.fandom.com/licensing",
   "licence_stored": "CC-BY-SA-3.0 (version set by the coordinator, matching the other Fandom notes)",
   "read_on": "2026-10-25",
-  "quote_sorting": "2026-11-15 (plan 104, lane S1): every page was read again at the revision named on its section, through the wiki's render call. Beside each excerpt, excerpt_sits says where it sits on the page (editors' prose, table cell, or the game's own text) and excerpt_at the page heading. In section 1208 two excerpts that began with the stove catalogue's own sales text (the YumCooker and Schmapple Oven descriptions) were cut down to the table's number cells; no note line changed.",
+  "quote_sorting": "2026-11-15 (plan 104, lane S1): every page was read again at the revision named on its section, through the wiki's render call. Beside each excerpt, excerpt_sits says where it sits on the page (editors' prose, table cell, or the game's own text) and excerpt_at the page heading. Table cells that hold a whole editors' sentence (the computer's Actions and upgrades tables) are sorted as editors' prose. In section 1208 two excerpts that began with the stove catalogue's own sales text (the YumCooker and Schmapple Oven descriptions) were cut down to the table's number cells; no note line changed.",
   "sections": [
     {
       "section_id": 1200,
@@ -1080,21 +1080,21 @@
               "page": "Computer",
               "revision": 1254173,
               "excerpt": "Play Game || Raises fun, depending on computer model. || Depends on Sim's Video Gaming skill.",
-              "excerpt_sits": "table cell",
+              "excerpt_sits": "editors' prose",
               "excerpt_at": "The Sims 4 > Actions"
             },
             {
               "page": "Computer",
               "revision": 1254173,
               "excerpt": "Write || Refines the writing skill, write a book.",
-              "excerpt_sits": "table cell",
+              "excerpt_sits": "editors' prose",
               "excerpt_at": "The Sims 4 > Actions"
             },
             {
               "page": "Computer",
               "revision": 1254173,
               "excerpt": "Program || Refine Programming Skill, Hack, Mod a Game, or Make a Program for money.",
-              "excerpt_sits": "table cell",
+              "excerpt_sits": "editors' prose",
               "excerpt_at": "The Sims 4 > Actions"
             },
             {
@@ -1108,35 +1108,35 @@
               "page": "Computer",
               "revision": 1254173,
               "excerpt": "Household/Move Household || Moves the entire family to another lot.",
-              "excerpt_sits": "table cell",
+              "excerpt_sits": "editors' prose",
               "excerpt_at": "The Sims 4 > Actions"
             },
             {
               "page": "Computer",
               "revision": 1254173,
               "excerpt": "Household/Adopt || Adds a newborn, infant, toddler, or child to the household. Costs §1000.",
-              "excerpt_sits": "table cell",
+              "excerpt_sits": "editors' prose",
               "excerpt_at": "The Sims 4 > Actions"
             },
             {
               "page": "Computer",
               "revision": 1254173,
               "excerpt": "Web/Browse Art || Grants inspired moodlet.",
-              "excerpt_sits": "table cell",
+              "excerpt_sits": "editors' prose",
               "excerpt_at": "The Sims 4 > Actions"
             },
             {
               "page": "Computer",
               "revision": 1254173,
               "excerpt": "Web/Browse Simpedia || Grants focused moodlet.",
-              "excerpt_sits": "table cell",
+              "excerpt_sits": "editors' prose",
               "excerpt_at": "The Sims 4 > Actions"
             },
             {
               "page": "Computer",
               "revision": 1254173,
               "excerpt": "Web/Watch Funny Videos on Sim.tv || Grants playful moodlet.",
-              "excerpt_sits": "table cell",
+              "excerpt_sits": "editors' prose",
               "excerpt_at": "The Sims 4 > Actions"
             }
           ]
@@ -1149,14 +1149,14 @@
               "page": "Computer",
               "revision": 1254173,
               "excerpt": "ECC RAM || Reduces the rate at which the computer breaks || Handiness level 8",
-              "excerpt_sits": "table cell",
+              "excerpt_sits": "editors' prose",
               "excerpt_at": "The Sims 4 > Actions"
             },
             {
               "page": "Computer",
               "revision": 1254173,
               "excerpt": "Better video card || Increases fun at a faster rate when playing a video game || Handiness level 9",
-              "excerpt_sits": "table cell",
+              "excerpt_sits": "editors' prose",
               "excerpt_at": "The Sims 4 > Actions"
             },
             {

@@ -448,7 +448,7 @@
           ]
         },
         {
-          "line": "Tips: A zombie does not notice fire, electricity or traps unless they block its way. Some corpses are not dead: a body with a headcrab still on its head may just be lying still, so shoot it in the head, or throw a grenade if you cannot kill it without waking it.",
+          "line": "Tips: A zombie does not notice fire, electricity or traps unless they block its way. Some corpses are not dead: a body with a headcrab still on its head may just be lying still. Shoot it in the head, or throw a grenade at it, just to be safe.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Zombie",
@@ -670,7 +670,7 @@
           ]
         },
         {
-          "line": "Weak points: Fire: set it alight and the headcrabs on its back burn with it. Kill it before it throws and those headcrabs die too, so a crossbow bolt into the ones on its back ends it early.",
+          "line": "Weak points: Fire: the headcrabs on its back burn along with it. If it dies before it throws them, they die too, so a crossbow bolt into the ones on its back ends it early.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Poison_Zombie",
@@ -710,7 +710,7 @@
           ]
         },
         {
-          "line": "Tips: Set it alight with a propane tank or gas canister held in the gravity gun, then get under cover or away before it throws more headcrabs. Grenades or explosive barrels will not set it alight, but they do decent damage.",
+          "line": "Tips: A propane tank or gas canister held in the gravity gun is the way to get fire onto it. Then slip behind cover or leave the area, since it will keep throwing. Grenades and explosive barrels will not ignite it, but they hurt it fairly well.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Poison_Zombie",
@@ -824,7 +824,7 @@
           ]
         },
         {
-          "line": "Tips: Its growls tell you an attack is coming. Soldier antlions that arrive with it can swarm and slow you, so clear the ones in your way while you watch where the guard is. High-damage weapons such as the crossbow and the RPG cut the fight short, and the MP7's grenade launcher is a good alternative.",
+          "line": "Tips: Listen for its growls, which come before it attacks. Soldier antlions around it will crowd and slow you, so cut down the ones blocking you but know where the guard is. The crossbow and the RPG hit hard and shorten the fight, and the MP7's grenades are another option.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Antlion_Guard",
@@ -944,7 +944,7 @@
           ]
         },
         {
-          "line": "Tips: The gravity gun is highly effective, if not the most effective, weapon against them: pull one in and punt it into a wall to destroy it. Against several, use a fast-firing weapon like the SMG or pulse rifle, and deal with them quickly before they distract you from other threats.",
+          "line": "Tips: The gravity gun is one of your best answers: pull a manhack in, then punt it into a wall to wreck it. Against several, use a fast-firing weapon like the SMG or pulse rifle, and deal with them quickly before they distract you from other threats.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Manhack",
@@ -1003,7 +1003,7 @@
           ]
         },
         {
-          "line": "Weak points: The crowbar kills it in one hit, and it dies if it swallows poison. Set an explosive barrel alight at the right moment, while a barnacle is trying to eat it, and the blast can kill it, even several close together.",
+          "line": "Weak points: The crowbar kills it in one hit, and it dies if it swallows poison. Once it has grabbed an explosive barrel, set the barrel off: it dies, and so can others hanging close by.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Barnacle",
@@ -1347,7 +1347,7 @@
           ]
         },
         {
-          "line": "Uses: Strongest up close; it loses punch with distance. Its primary fire is effective against weak enemies such as headcrabs and zombies, and it is decent against Combine soldiers up close. Antlions are big targets, so it is rated the best weapon against them, even from some way off; against an Antlion Guard it is very effective when other heavy weapons are unavailable.",
+          "line": "Uses: A close-range gun: the pellets spread out, so it loses power the further away the target is. It handles headcrabs and zombies well, and does fine on Combine soldiers up close. Antlions are large, so it is the pick against them even at a distance, and it also works well on an Antlion Guard when you have nothing bigger to hand.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/SPAS-12",
@@ -1547,7 +1547,7 @@
           ]
         },
         {
-          "line": "Uses: Supply crates hold kits, especially far from Combine territory, because wall chargers are rarer and mostly inside it. Dead Civil Protection officers and Overwatch soldiers often drop vials.",
+          "line": "Uses: Look for kits in supply crates, mostly out in the remote areas. Wall chargers are scarcer and sit inside Combine territory. Vials drop from dead Civil Protection officers and Overwatch soldiers.",
           "drawn_from": [
             {
               "page": "https://half-life.fandom.com/wiki/Medkit",

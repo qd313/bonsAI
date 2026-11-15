@@ -349,7 +349,7 @@ and a desk number are a number of nothing. The button's question is fixed, gener
 off, a small cap, so numbers compare across dates. The record is cleared by Clear all plugin data. Nothing
 leaves the device.
 
-### D82 — OPEN, raised 2026-09-06 — Leaning the search on meaning wins on the measurements and breaks three rules we set on purpose
+### D82 — LOCKED 2026-09-06 (raised 2026-09-06) — Leaning the search on meaning wins on the measurements and breaks three rules we set on purpose
 
 **Status: measured, tried, reverted. Nothing changed in the plugin. The numbers below are real and repeatable.**
 
@@ -2609,3 +2609,104 @@ Asked by the planning chat for [plan 103](../planning/103-kb-wave-six-finish-the
   guess did not meet its rule and stays off; no picture model reached 3 out of 10 at marking a boss against a bar of 7,
   so the marked screenshot is not built (call 12). Also theirs, for the next wave: the Fallout 4 Deathclaw note should
   say in a sentence or two whether variants such as the alpha matter.
+
+### D141 — LOCKED 2026-11-14 (raised 2026-11-14) — Plan 104, the knowledge-base wave seven: the thirty-one calls
+
+Asked by the planning chat for [plan 104](../planning/104-kb-wave-seven-honest-answers-and-the-leftovers.md) (its section 2). Calls 1 to 10 were answered in the chat on 2026-11-14; the maintainer then said "go" in the planning chat on the evening of 2026-11-14 and took the default on calls 11 to 31. Usage when planning ended is in call 26. **Usage at go (read by the session 2026-11-14, 18:47 EST):** 7 percent of the five-hour window (it resets at 20:40 EST), 18 percent of the week (it resets Wednesday 18 November at 08:00 EST), and 24 percent on Fable's own weekly counter. Number 141 because D140 was the last entry written, D138 is reserved by plan 101's asset file and D142 by plan 105. The plan's section 2, word for word:
+
+**Answered in the chat on 2026-11-14 (they become decision D141; D140 was the last, D138 is reserved by plan 101, D142
+belongs to plan 105):**
+
+1. **Bugs from the main roadmap: the freeze fix and five small ones.** The check before the AI loads (three stars); a
+   long chat not summed up with nothing said; the summed-up note with no D-pad stop; the tall "What the AI remembers"
+   card on the Session tab; the cut second suggestion chip; the first-start "turn on Internet downloads" message. The
+   README refilm and the tab-sections bug stay out.
+2. **A second chat is planning the rest of the main roadmap (plan 105). It does not run now. This session is the main
+   one.** The two chats agreed the numbers (104, D141 and rows `P104-` here; 105, D142 and `P105-` there) and which
+   entries are whose. If plan 105 starts running while this one still is, the sharing rules in § 9 apply.
+3. **What the rig may do on the Deck without asking again: all four.** Install this session's library for the checks
+   and put the published one back at the end; delete saved chats that the test drivers made, never one of the
+   maintainer's; place test pictures and remove them at the end; delete the two old settings backups in the Deck's
+   home folder (each holds a copy of the Steam key).
+4. **Run length: until the list is done or the week reaches 90 percent.** When a five-hour window passes 75 percent the
+   session stops starting helpers, waits, and picks up by itself at the reset.
+5. **The Deck is held awake for the whole session**, on its charger, and the hold is released at the end.
+6. **Three bigger pieces join:** suggestion chips that keep the closest notes in front; more Left 4 Dead 2 versus
+   notes; load-order data for mods (Fallout 4 and Skyrim). **Not this wave:** the add-on pack trial.
+7. **A game with no notes: a small line under every answer**, drawn by the plugin, in every mode, Speed included.
+8. **Half-Life 2 and Black Mesa notes come from the Half-Life wiki on Fandom**, because their own wiki is still down:
+   Half-Life 2 from Fandom; Black Mesa from the pages of its own wiki that were saved on this PC in September, plus
+   Fandom only where a page speaks about Black Mesa itself.
+9. **Low memory: warn, then let the player ask anyway.** bonsAI loads nothing, shows a warning, and offers a way to
+   send the question regardless.
+10. **Mod data: the data plus a typed lookup, on trial.** A question that names a mod gets that mod's rule attached,
+    worded as what LOOT's list says. It lands switched on only if it finds the right rule for 9 of 10 named mods and
+    never claims two mods work together; otherwise it lands switched off.
+
+**Open, each with its default in brackets ("go" takes every default). Answered with "go" in the planning chat on the evening of 2026-11-14: the maintainer took every default, so each default in brackets is the answer to calls 11 to 31:**
+
+11. **Models and efforts** as in § 4. One note: the bookkeeper is Sonnet medium, not Haiku. Haiku was tried on
+    bookkeeping in plan 83 and fell short, and a wrong roadmap is the one thing this wave must not have. *[As listed.]*
+12. **The honest "I don't know" stays switched on while its fix is built.** The fix (§ 5a) lands switched on only if,
+    on this PC, a made-up boss gets no borrowed detail in at least 5 of 6 answers in both of two runs, and ordinary
+    answers keep their facts within the test's own noise (two points). *[That rule. If neither version passes, both
+    land switched off with their numbers and the call is yours.]*
+13. **The honest opening in Speed mode** (built last wave, off). *[Measured again once the fix is in. It is switched on
+    only if a made-up boss is no longer written about as real in at least 5 of 6 Speed answers and ordinary Speed
+    answers keep their facts. Either way you confirm or revert with the numbers.]*
+14. **The crowding fix, third try** (older questions losing their note as games gain notes). The cause is known now:
+    every game's "Starting out" note gets lifted past a note the word search really found. *[One more try with those
+    notes left out of the lift. It lands switched on only by the strict rule: no test question loses its right note,
+    an exact word match still comes first, "No close match" shows on no new question. If it only wins on balance, it
+    lands switched off and the trade comes to you with the table.]*
+15. **Two notes share the name "Radscorpions"** (Fallout 4, Fallout: New Vegas). Every search stays inside one game, so
+    they never meet; a rename would break five test rows. *[Closed as accepted.]*
+16. **The visual maps entry** (the marked screenshot). Last wave's call said it closes either way once the marks test
+    has run; the test ran and missed its bar (2.95 of 10 against 7). *[Moved to the parked list with its numbers and
+    the bar that reopens it.]*
+17. **The screenshot measurement entry.** Its own finish line from plan 103 is met (52 pictures, every picture model
+    measured, the two best timed on the Deck, the picture's own guess measured twice). *[Closed as measured. The
+    picture's guess stays switched off; its one owed Deck row stays on the list.]*
+18. **Phase 5 (notes for every game) closes** when the Half-Life 2 and Black Mesa notes and their test questions are
+    in and the Deck row passes. Hades stays without notes (your call of 10 November), so the count ends at 37 of 38.
+    *[That finish line.]*
+19. **The versus entry** after this wave has only Counter-Strike 2 left, which stays out. *[It stays PARTIAL with that
+    one line, until you say close it.]*
+20. **Reads: two samples of ten.** One across the new notes (Half-Life 2, Black Mesa, versus) and one from the older
+    notes this wave rewrites. A separate checker reads every sentence of the final text against its page and the
+    licence reviewer reads every file first. *[On the checks page; the library is published only after your read.]*
+21. **The low-memory limit** is set from the Deck's own readings (block D0 reads free memory idle, with the AI loaded,
+    with a light game and with a heavy game; no question is asked over a heavy game). The warning's words and the
+    "Ask anyway" button go on the checks page for your eye. *[The session picks the limit from the readings and the
+    second opinion reads it.]*
+22. **Chips.** *[After an answer, the two chips you see are the two notes closest to what you asked; each spot's next
+    two chips also come from the closest notes (about half a minute in all); then the usual rotation. A recording goes
+    on the checks page.]*
+23. **Checking the first-start fix needs a first start.** *[The rig stages one without wiping anything: it moves the
+    settings file and the Ollama program aside, checks, and puts both back in the same block, verified. "Clear all
+    data" is never used. If you would rather do this check by hand, say so and it goes on the checks page.]*
+24. **Push and publish.** *[Nothing pushed, nothing published. At the end: "push" from you, and one library publish
+    after your two samples. That publish also removes the Left 4 Dead 2 note "Fallen Survivor" from the public
+    library.]*
+25. **Standing rules while you are away** (plan 103's): a fix that fails on the Deck twice moves up one model tier
+    without asking; a new one- or two-star bug with a known cause gets one helper round of about an hour; anything
+    blocked gets the safest choice at once and is raised in the chat and in § 12; never push, publish, merge to main,
+    switch branches in the shared folder, type a PIN or password, reload the plugin with a game running. *[Kept.]*
+26. **Budget lines.** No new helper past 75 percent of the five-hour window or 90 percent of the week (D128), and the
+    counters are read before every batch of helpers. Read when planning ended (2026-11-14, about 15:30 EST): 68
+    percent of the five-hour window (it resets at 15:40 EST), 15 percent of the week (resets Wednesday 18 November,
+    08:00 EST), and Fable's own weekly counter at 20 percent. They were 3, 6 and 8 when planning began; the plan 105
+    planning chat drew on the same counters in those two hours. *[Kept. With Opus running the session, only the
+    second opinion draws on Fable's counter.]*
+27. **Gaps in the Deck tools project** found on the way. *[Written into the findings log, and drafted as issues in a
+    workshop file for you to post. Nothing is posted from the session.]*
+28. **If plan 105 starts while this runs.** *[The sharing rules in § 9: one Deck queue, one landing at a time, one
+    writer per roadmap file, and the usage counters read before every batch by both.]*
+29. **A deploy at minute zero**, so the Deck runs the back-end crash fix of 11 November before anything is checked.
+    *[Yes, unless the Deck already has it. Nothing is running on the Deck when it happens.]*
+30. **The mod lookup's wording.** *[Every line it adds starts "LOOT's list of <date> says"; it never says a mod is
+    safe, and never says two mods work together. The licence reviewer reads it before it lands.]*
+31. **The Session tab's "What the AI remembers" card.** It is 669 px tall on a pane that shows about 300. *[A fixed
+    height that fits; its text scrolls inside with Down and Up, with a "More below" line, the way the two-button boxes
+    have worked since last wave. Plan 105's draft suggested another look for the same card: about ten lines and a
+    "Show all" button. Say so if you prefer that one. A picture goes on the checks page either way.]*

@@ -1,7 +1,7 @@
 # 17 — KB online / versus strategy content
 
 **Status:** `IN PROGRESS` — discovery locked 2026-08-09 (maintainer chat). Stage 1's groundwork landed
-2026-11-09 in plan 103 lane V1; the first notes and the finale rule follow in plan 103 lanes V2 and R2.
+2026-11-09 in plan 103 lane V1; the role notes, ten more versus notes and the finale rule landed in plan 103 (2026-11-09 to 2026-11-10); plan 104 lanes V4 and V5 follow.
 **Overall effort:** ★★★★ (matches [roadmap.md](../roadmap.md) Backlog § Knowledge base).
 **Roadmap:** [KB online / versus strategy content](../roadmap-kb.md) · related [KB visual maps](../roadmap-kb.md) (later wave in this plan).
 **Adjacent:** [knowledge-base.md](../knowledge-base.md) · [15-corpus-licensing-attribution-plan.md](../../../bonsAI-workshop/archive/15-corpus-licensing-attribution-plan.md) · [spoiler-constitution.md](spoiler-constitution.md) · [rag-eval-query-style.md](../../../bonsAI-workshop/audit/rag-eval-query-style.md) · eval fixture `tests/fixtures/kb_eval_v2.json`.
@@ -28,9 +28,9 @@ bake-off).
 | Task | Title | ★ | State |
 |---|---|---|---|
 | OV-0 | Discovery lock (this doc) | ★ | ✅ Done 2026-08-09 |
-| OV-1.1…1.4 | Schema, spoiler table, finale prompt rule | ★★ | ▶ 1.1, 1.2 and 1.4 ✅ 2026-11-09 (plan 103 lane V1); 1.3 (the finale rule) is plan 103 lane R2 |
-| OV-2.1…2.4 | L4D2 versus **role cards** + eval sign-off (first ship gate) | ★★★ | ▶ Planned in plan 103 lane V2: the seven "Playing as …" notes already exist (filed as `mechanic`); V2 re-files them as `versus` and adds ten to fifteen more. Labels: lane Q6 |
-| OV-3.1…3.3 | L4D2 deepen — callouts, survival, realism, No Mercy versus | ★★★ | ▶ The first of these are in lane V2's list; the rest is later |
+| OV-1.1…1.4 | Schema, spoiler table, finale prompt rule | ★★ | ▶ 1.1, 1.2 and 1.4 ✅ 2026-11-09 (plan 103 lane V1); 1.3, the finale rule, is in the code (`FINALE_RULE_LINE`, plan 103 lane R2) |
+| OV-2.1…2.4 | L4D2 versus **role cards** + eval sign-off (first ship gate) | ★★★ | ▶ The seven "Playing as …" notes are filed as `versus` (in the seed) and ten more versus notes are in `data/kb/notes/left-4-dead-2-versus.json` (plan 103 lanes V2 and V3, 2026-11-09 to 2026-11-10); the Deck check P103-VERSUS-01 passed 3 of 3 on 2026-11-10 (`workshop:test-evidence/plan103-P103-VERSUS-01.json`). Three mix-ups are open (plan 104 lane V4). Labels: lane Q6 |
+| OV-3.1…3.3 | L4D2 deepen — callouts, survival, realism, No Mercy versus | ★★★ | ▶ Some of these are in the versus notes above; plan 104 lane V5 adds ten to fifteen more (finales left out); the rest is later |
 | OV-4.1…4.4 | CS2 (`730`) — licence gate, aliases, starter cards | ★★★★ | ☐ Not started (left out of plan 103 on purpose) |
 | OV-5.1…5.3 | Visual maps wave (after callout cards exist) | ★★★ | ☐ Not started |
 | OV-6.1…6.3 | Docs / testing / roadmap writeback | ★★ | ☐ Not started |

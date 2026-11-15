@@ -1150,7 +1150,7 @@ Written by the plan 103 bookkeeper end audit (K9), after the last landing (lane 
 
 - ★★★★ `[KB]` **What ships loses to its own meaning half on questions nobody tuned against** — **ACCEPTED, decided
   2026-09-06.** The finding and its reasons: [Detail](roadmap-kb-details.md#plan-103-notes-moved-from-the-knowledge-base-roadmap-2026-11-09).
-  Weights stay even. [D82](audit/maintainer-decisions-locked.md#d82--open-raised-2026-09-06--leaning-the-search-on-meaning-wins-on-the-measurements-and-breaks-three-rules-we-set-on-purpose) · [Detail](roadmap-kb-details.md#the-shipping-retrieval-arm-loses-to-the-vector-half-alone-on-rows-nobody-tuned-against) · the 2026-11-02 sentence: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03)
+  Weights stay even. [D82](audit/maintainer-decisions-locked.md#d82--locked-2026-09-06-raised-2026-09-06--leaning-the-search-on-meaning-wins-on-the-measurements-and-breaks-three-rules-we-set-on-purpose) · [Detail](roadmap-kb-details.md#the-shipping-retrieval-arm-loses-to-the-vector-half-alone-on-rows-nobody-tuned-against) · the 2026-11-02 sentence: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-knowledge-base-roadmap-2026-11-03)
 
 **Bugs: the ACCEPTED entry on unrelated questions, as it stood before the end audit:**
 
@@ -1515,9 +1515,123 @@ Moved word for word by the first sweep of plan 104 (K0), to make room before any
 
 **The "what ships loses to its meaning half" entry (whole, as it stood):**
 
-- ★★★★ `[KB]` **What ships loses to its own meaning half on questions nobody tuned against** — **ACCEPTED, decided 2026-09-06.** Weights stay even. [D82](audit/maintainer-decisions-locked.md#d82--open-raised-2026-09-06--leaning-the-search-on-meaning-wins-on-the-measurements-and-breaks-three-rules-we-set-on-purpose) · the finding, the shipping arm and the 2026-11-02 sentence: [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+- ★★★★ `[KB]` **What ships loses to its own meaning half on questions nobody tuned against** — **ACCEPTED, decided 2026-09-06.** Weights stay even. [D82](audit/maintainer-decisions-locked.md#d82--locked-2026-09-06-raised-2026-09-06--leaning-the-search-on-meaning-wins-on-the-measurements-and-breaks-three-rules-we-set-on-purpose) · the finding, the shipping arm and the 2026-11-02 sentence: [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 
 **The troubleshooting-symptom entry (body, as it stood):**
 
 - ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED (D81) for the meaning search; the wording fix landed 2026-10-25 (plan 100 lane T).**
   The held meaning search stays held. The wording fix is in [Done](roadmap.md#done-after-v060) (row P100-TIPS-01 failed on one of three sentences 2026-10-26; the retry P100-TIPS-01-try3 passed). The find-my-PC part (tip 167, plan 102 lane H) passed on the Deck 2026-11-03. [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**More moved by the same sweep (the paragraphs the corrections replaced):**
+
+**The "Where things stand" paragraphs of 2026-11-11 (as they stood):**
+
+**Where things stand (2026-11-11).** The library people can download is **2026.11.10**: the maintainer published it on the
+evening of 10 November, and both download places were read back afterwards (each serves 3,677,424 bytes compressed, the same
+fingerprint as the build the Deck tested; [the releases table](knowledge-base.md)). The Deck's own copy was last read back at
+2026.10.25 (block DR, `workshop:test-evidence/plan103-P103-DR-LIBRARY.json`); no later read of it was made.
+**The source has one note fewer than the published library** (counted from the files tonight): **890 notes**, the seed's 414 plus
+476 in 33 notes files for 32 games, and **185 tips**. The published library still holds the Left 4 Dead 2 note "Fallen Survivor";
+the repo dropped it after the publish (your call: "Remove it"), so it leaves at the next publish. **35 of the 38 games have labelled
+short-line notes**; Hades, Half-Life 2 and Black Mesa do not (Phase 5).
+**Final measurement (2026-11-10, lane X2, 891 notes):** 548 of 586 blind questions find their note in the first three (477 first). [Detail](roadmap-kb-details.md#plan-103-sweep-k10-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+**Where the three half-done entries end (2026-11-11, after the boss pictures and the two picture tests):** **Phase 5: PARTIAL** (17 of 20 on the Deck against a line of 18; three games have no notes). **The screenshot measurement: PARTIAL** (boss pictures added; the picture's own guess missed its rule and stays off). **The visual maps: PARTIAL** (the marks test missed its bar, 2.95 of 10 against 7; the marked screenshot is not built). Every Deck check of plan 103 has run, or is named under Deck check owed.
+
+**The open calls as they stood on 2026-11-11 (before D141):**
+
+- **The crowding trade** — **OPEN, raised 2026-11-09.** Turned down twice; try again with "Starting out" notes left out of the lift?
+- **The honest answer's Speed-mode option** — **OPEN, raised 2026-11-09.** Built and left off: on turns the plugin does not mark, the small model still invented facts about made-up names in 8 of 24 answers; in Speed the made-up boss was written about as real in 6 of 6. Does Speed mode get it anyway?
+- **Keep the honest answer on, or off until the borrowed advice is fixed** — **OPEN, raised 2026-11-10 (Deck check P103-HONEST-02).** It is on as you asked. The opening showed 2 of 2 on the Deck; made-up detail was kept out 1 of 2 (see Bugs).
+- **The chips' rotation** — **OPEN, raised 2026-11-10.** After the first deal the screen picks chips at random, so the closest note holds its spot only until they turn over.
+- **Two settings backup files on the Deck** — **OPEN, raised 2026-11-10.** One from plan 102 and one from plan 103 sit in its home folder: keep or remove?
+
+**The Deck check owed paragraph of 2026-11-10 (as it stood):**
+
+**2026-11-10: every Deck block has run or is named here as not run.** **Not run:** the saved walks (runbook D3.4, dropped for time) and the starter box on a fresh install (your hand check). A row no block reached stays owed, named in its entry. **The Deck is put back** (`workshop:test-evidence/plan103-P103-DR-RESTORE.json`), except that the new plugin build stays and two settings backup files sit in its home folder (Calls). Every block and put-back, one by one: [Detail](roadmap-kb-details.md#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**The visual maps entry (whole, as it stood; it moved to the parked list):**
+
+- ★★★ `[KB]` **KB visual maps** — **PARTIAL; two shapes picked on the mock-up board 2026-10-10, the route built 2026-10-24; the marks test ran 2026-11-11 and its bar was missed, so "your screenshot, marked" is measured and NOT built.** Nothing draws anything in a reply today.
+  **Your screenshot, marked**: up to three numbered marks (hit, avoid, dodge), each saying whether the Deck's AI is sure; an unsure mark is dashed. **Marks test (PC, 22 boss pictures, four picture models, three tries each, graded by two Opus helpers by one written rule):** the bar was 7 out of 10 or more on at least 15 pictures. Best average over 66 tries: `qwen3.5:4b` 2.95; at most 5 of 22 pictures had any try at 7 or more. The test and the pictures stay, to run again when a better picture model can run on the Deck.
+  Not chosen as drawn: a fuller boss card, a whole-kingdom map. **Plan 103 § 5f: stays open.** Grades `workshop:screenshots/plan103-marks/qwen3.5-4b/grades.json` and the folders beside it. All four models and how the question was worded: [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
+  [Mock-up board, tab 5](https://claude.ai/artifact/XyZfUSPGRZdm2P3mTGV9tR) · [notes](demos/mockup-board/README.md) · [Detail](roadmap-kb-details.md#kb-visual-maps)
+
+**Entries condensed by the same sweep (as they stood at the start of plan 104, before this sweep's own readings were added):**
+
+**The contradicted-notes entry (as it stood):**
+
+- ★ `[KB]` **Older notes the wiki contradicts, found by the plan 103 note writers** — **PARTIAL, found 2026-11-09 and 2026-11-10; six games' notes fixed 2026-11-10 (plan 103 lane M); three points left open.**
+  **Fixed 2026-11-10 (lane M, six commits):** six games' notes (the games: [Detail](roadmap-kb-details.md#plan-103-sweep-k12-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)).
+  **Left open:** the Left 4 Dead 2 Molotov note; the Fallout: New Vegas Hardcore note (fewer ways to heal a limb than its page); the Palworld wiki's pages disagree on Predator Pals; older sightings (Mario Party, Cyberpunk 2077, others) were not in lane M's list. [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**The unsorted-quotes entry (as it stood):**
+
+- ★ `[KB]` **Notes quotes not yet sorted by where they sit on their page, and two doubtful pages** — **OPEN, found 2026-11-10 (plan 103's last re-check).**
+  The twelve older notes files from plans 100 and 102 have never had their quotes sorted that way (a game's own text is not covered by a wiki's licence). Two Cyberpunk 2077 gang pages (Tyger Claws, Maelstrom) look like a page the wiki flags as copied from a book but carry no flag; their notes are kept (your call, 2026-11-10). About twenty "Weak points" lines may hold no weakness. [Detail](roadmap-kb-details.md#plan-103-sweep-k10-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**The chips entry (as it stood):**
+
+- ★★★ `[KB]` **Suggestion chips ordered by your last question** — **VERIFY, landed 2026-11-10 (plan 103 lane C1, four commits: `f1d82a46`, `44ac6b3e`, `3c466baa`, `4c59ac6e`); split out of Phase 5 by D140 call 7.**
+  After an answer, the game's chips lead with up to four notes closest to the question just asked. On this PC a chip about the subject was among the first three 12 of 90 before, 33 of 90 after. **A limit:** after the first deal the screen's rotation picks at random (Calls). **Deck 2026-11-10 (block D3, row P103-CHIP-ORDER-01): passes the row's three conditions, weak as proof; UNCLEAR for what a person sees; a person's look is still owed** (`workshop:test-evidence/plan103-P103-CHIP-ORDER-01.json`). [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
+
+**The honest-answer Next entry (as it stood):**
+
+- ★★★ `[KB]` **The AI almost never admits that no note covers the question: 0 of 24 in its own words, in two runs** — **PARTIAL; the honest opening is switched ON (wording g, `3f7f9c95`, 2026-11-10) for the turns the plugin marks; the Deck check P103-HONEST-02 FAILED, borderline.**
+  Before: 0 of 24 admitted it; on the PC now 6 of 6 made-up-boss answers open honestly. **Deck 2026-11-10:** the opening showed 2 of 2, made-up detail was kept out 1 of 2 (new Bugs entry); a call for you: keep it on as it is, or off until the borrowed advice is fixed. The Speed-mode option stays off (Calls). Evidence `workshop:test-evidence/plan103-P103-HONEST-02.json`. [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
+
+**The mod knowledge entry (as it stood):**
+
+- ★★★ `[KB]` **Mod knowledge for modded games** — **OPEN, filed 2026-10-27 (plan 101, round 4).** Offline answers about mod load order; Nexus Mods pages are never copied. LOOT's rule lists are CC0 (`workshop:planning/assets/101-mod-knowledge-sources.md`); the Cyberpunk wiki has no licence (next step: its admins' written permission). **Landed 2026-11-09 (plan 103):** 18 basics tips, CC0 sources through the checks; the device side stays plan 101's. [Plan 101](planning/101-deep-mod-ai-hints.md) · [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**The versus entry (as it stood):**
+
+- ★★★★ `[KB]` **KB online / versus strategy content** — **PARTIAL, discovery locked 2026-08-09; steps one and two landed for Left 4 Dead 2 (2026-11-09, 2026-11-10); a note-order fix landed 2026-11-10 (lane V3).** Multiplayer questions got nothing specific. **Landed:** 15 versus notes and a note-order fix (lanes V1 to V3; three points open, see Bugs). **Deck 2026-11-10 (block D3): P103-VERSUS-01 PASSED, 3 of 3** (`workshop:test-evidence/plan103-P103-VERSUS-01.json`). The versus notes went out in the 2026.11.10 publish as they are. [Plan](planning/17-kb-online-versus-strategy-content.md) · [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
+
+**The Phase 5 entry (as it stood):**
+
+- ★★★★ `[KB]` **RAG Phase 5: depth on the 23 games** — **PARTIAL.** **Plan 103: 20 of the 23 games now have enemy and item notes in the labelled shape** (14 or 15 each, 292 notes after one removal), each read by a checker and a licence reviewer and then fixed (the games: [Detail](roadmap-kb-details.md#plan-103-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)). With them 35 of 38 games have labelled notes (15 before). **Your read of ten random notes from each of six samples passed 2026-11-10 (checks page; D140, call 4); the library is published as 2026.11.10, and "Fallen Survivor" (Left 4 Dead 2) leaves at the next publish.** **Deck 2026-11-10 (block D3, row P103-NOTES-23-01): 17 of 20 games attached one of their new notes; the line was 18, so it is just short** (`workshop:test-evidence/plan103-P103-NOTES-23-01.json`, `-part2.json`).
+  **No notes for three games:** Hades (its wiki is CC BY-NC-SA; Wikipedia has too little); Half-Life 2 and Black Mesa (their wiki answered "Database is read-only" on every read, 2026-11-09 and 2026-11-10). **Next wave (your call, 2026-11-10): notes for Half-Life 2 and Black Mesa;** Hades stays without.
+  **Blind questions (counted 2026-11-10):** 584 rows in 20 files under `tests/fixtures/kb_eval/`; 548 in the first three, measured before one removal. **Plan 103 § 5f: stays PARTIAL:** three games have no notes, the Deck row is one short of its line, and the crowding fix was turned down twice. **Deck, by game:** missed on both questions: Fallout 4, Brotato, DOOM Eternal (full list on row P103-NOTES-23-01). [Plan](planning/28-phase5-corpus-depth.md) · [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
+
+**Condensed again by the same sweep (the text as it stood just before):**
+
+**The Installing Ollama timed out entry, as moved in from the main roadmap:**
+
+- ★★★ `[KB]` `[ollama]` **Installing Ollama timed out because bonsAI's back end had crashed in the knowledge library's database code** — **VERIFY, fixed 2026-11-11 (`d58e3155`); owes row P104-KB-THREADS-01 on the Deck. Was OPEN, reported and traced the same day.**
+  The Deck's system log, 2026-11-11: 41 s after the plugin loaded, its back end crashed inside the database library, so every press timed out (Install Ollama included); Decky Loader then grew to 12.6 GB and was killed for lack of memory. After a restart the same fault came back once as a caught error, so it repeats.
+  Cause: every library read (tap-to-define words, chips, notes search, Ask's notes) shared one database connection across threads, and a database error in one read closed it under the others. **Fixed 2026-11-11:** each thread reads through its own connection, and a close reaches another thread only at the start of its next read. A new test runs eight reads at once against a thread that keeps closing; the old code fails it.
+  Owes row **P104-KB-THREADS-01** on the Deck (`docs/testing.md`): after a plugin reload, a few answers opened and Install or Update Ollama pressed, the back end keeps answering. The ★★ first-start entry in the main roadmap's Bugs may be the same crash.
+
+**The Phase 5 entry (as it stood before this condensing):**
+
+- ★★★★ `[KB]` **RAG Phase 5: depth on the 23 games** — **PARTIAL.** **Plan 103: 20 of the 23 games now have enemy and item notes in the labelled shape** (14 or 15 each, 292 notes after one removal), each read by a checker and a licence reviewer; with them 35 of 38 games have labelled notes. Your read of ten random notes from each of six samples passed 2026-11-10 (D140, call 4); the library is published as 2026.11.10. **Deck 2026-11-10 (block D3, row P103-NOTES-23-01): 17 of 20 games attached one of their new notes; the line was 18, so it is just short; missed on both questions: Fallout 4, Brotato, DOOM Eternal** (`workshop:test-evidence/plan103-P103-NOTES-23-01.json`, `-part2.json`; the games: [Detail](roadmap-kb-details.md#plan-103-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)).
+  **No notes for three games:** Hades (its wiki is CC BY-NC-SA; Wikipedia has too little); Half-Life 2 and Black Mesa (their wiki answered "Database is read-only" on every read, 2026-11-09 and 2026-11-10). **What closes Phase 5 (D141 call 18):** the Half-Life 2 and Black Mesa notes (plan 104 lanes N1 and N2) and their test questions are in and the Deck row passes; the count then ends at 37 of 38, Hades staying without. **Their source (call 8):** Half-Life 2 from the Half-Life wiki on Fandom; Black Mesa from the pages of its own wiki saved on this PC in September, plus Fandom only where a page speaks about Black Mesa itself.
+  **Blind questions (counted 2026-11-14):** `tests/fixtures/kb_eval/` holds 620 rows in 21 files: 584 for the 20 games and 36 for the mod tips; 548 in the first three on 2026-11-10, measured before one removal. [Plan](planning/28-phase5-corpus-depth.md) · [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
+
+**The "Answered" stub line (as it stood before this condensing):**
+
+**Answered 2026-11-14 (D141, the thirty-one calls):** the crowding trade (a third try with "Starting out" notes left out, lane R1) and the chips' rotation (the closest chips stay in front for a while, lane C2), among others: [D141](audit/maintainer-decisions-locked.md#d141--locked-2026-11-14-raised-2026-11-14--plan-104-the-knowledge-base-wave-seven-the-thirty-one-calls). **Answered 2026-11-10 and 2026-11-11** (the six note samples, the ten picture labels, the 28 boss pictures, the licences, the Cyberpunk gang notes, the publish, the starter box, the slower model, the versus notes): [Detail](roadmap-kb-details.md#plan-104-notes-moved-from-the-knowledge-base-roadmap-2026-11-14).
+
+**The checks page line (as it stood before this condensing):**
+
+**Your checks page:** the round "Plan 103 (10 Nov)" (28 items; the six note samples and the ten picture labels are marked Pass) and the round "Boss pictures (10 Nov)" (all 28 marked 2026-11-11: 23 "Use it", 5 "Leave it out"). Still unmarked in the first round: the three looks and the Deck table. Open calls:
+
+**The Deck check owed paragraph (as it stood before this condensing):**
+
+**2026-11-14: every Deck block of plan 103 has run or is named here as not run, and the check for the 11 November crash fix, P104-KB-THREADS-01, is named here too (the Installing Ollama entry below).** **Not run:** the saved walks (runbook D3.4, dropped for time) and the starter box on a fresh install (your hand check). A row no block reached stays owed, named in its entry. **The Deck is put back** (`workshop:test-evidence/plan103-P103-DR-RESTORE.json`), except that the new plugin build stays and two settings backup files sit in its home folder (plan 104 block D0a deletes them, D141 call 3). Every block and put-back, one by one: [Detail](roadmap-kb-details.md#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Shortened again by the same sweep (the words taken out, as they stood):**
+
+- Where things stand: the crash-fix paragraph: **The back-end crash fix of 11 November (`d58e3155`):** each thread now reads the library through its own connection, so reads at the same moment cannot crash the back end. It is unit-tested and not yet checked on the Deck: row **P104-KB-THREADS-01** is named under Deck check owed.
+- The details-strip entry, its Deck line:   **Deck 2026-11-10 (block D2):** passed with the page in focus; the page never lost focus (about 125 reads across all of block D2), so the out-of-focus half is still tests only. Row **P103-DETAILS-STRIP-01** stays owed for two fresh chats, an older answer and a covered answer (`workshop:test-evidence/plan103-P103-DETAILS-STRIP-01.json`, `-try2.json`).
+- The Undo entry, its body:   Earlier nights: [Detail](roadmap-kb-details.md#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10). **Third time, 2026-11-10 (block D2):** focus kept; the four Downs went notes line, strip, chip (`workshop:test-evidence/plan103-P102-UNDO-FOCUS-01-try3.json`). Not a pass for the out-of-focus state: tests only, on the maintainer's list.
+- The Radscorpions entry, its record line:   Every search stays inside one game, so the two notes never meet; a rename would break five test rows. Record `workshop:archive/research/picture-guess-search-2026-11-11-p5-run1.md`.
+- The unsorted-quotes entry, the two doubtful pages: Two Cyberpunk 2077 gang pages (Tyger Claws, Maelstrom) look like a page the wiki flags as copied from a book but carry no flag; their notes are kept (your call, 2026-11-10). 
+- The Speed-mode option call: Built and left off: on turns the plugin does not mark, the small model still invented facts about made-up names in 8 of 24 answers; in Speed the made-up boss was written about as real in 6 of 6. It goes on only if a made-up boss is no longer written about as real in at least 5 of 6 Speed answers and ordinary Speed answers keep their facts; you confirm or revert with the numbers.
+- The keep-the-honest-answer-on call, a parenthesis: (the Deck check showed the opening 2 of 2; made-up detail was kept out 1 of 2). 
+
+**Readings from the planning of plan 104, added by the same sweep (2026-11-14):**
+
+- **The six Left 4 Dead 2 rows that did not get their note back, settled.** They are `V2-S-L4D2-29`, `V2-PARA-S03`, `V2-BLINDT-19` and `V2-BLINDT-23` (in `tests/fixtures/kb_eval_v2.json`) and `V2-P103-L4D2-13` and `V2-P103-L4D2-16` (in `tests/fixtures/kb_eval/p103-left-4-dead-2.json`). The long notes above name `V2-S-L4D2-29`; the record `workshop:archive/research/kb-crowding-fix-2026-11-10-p103-r1b.md` names `V2-S-L4D2-11` in its list of ten questions that stay out. Read in the search test's own output (`workshop:archive/research/kb-embed-bakeoff-2026-11-10-arms-p103-v3-before.json`, `-v3-final.json`, `-final.json`): `-29` ("counter boomer smoker combo") expects the versus note "Answering combined special attacks in versus" and gets "Infected team combinations" first, which is a versus-note mix-up, and it misses in all three. `-11` ("pills or medkit before finale") expects "Going down and black and white" and its first three hold no versus note ("The Parish", "Pain pills and adrenaline shot", "First aid kit"): it belongs with the crowding record, not with the versus mix-ups. The six above are the list for lane V4. (The plan 104 brief for lane V4 still says "-29 or -11".)
+- **The 22 "Weak points" lines that name no weakness (counted by the planning chat as 22 of 184; a plain count of lines starting "Weak points" in the notes files and the seed reads 185).** Note numbers by file under `data/kb/notes/` (all 22 read and found in the data on 2026-11-14): `grand-theft-auto-iii.json` 3500; `mario-party.json` 2804, 2805, 2806; `mario-party-2.json` 2913, 2914; `mario-party-3.json` 3002, 3006, 3007; `mario-party-6.json` 3107 (lane W1); `portal-2.json` 1301, 1302, 1303, 1304 (lane S1); `grand-theft-auto-iv.json` 1500 and `grand-theft-auto-v.json` 1405, 1406 (lane S2); `mario-kart-64.json` 2110, 2112, 2113, 2114 (lane S4); `left-4-dead-2.json` 2203 (lane M1). The planning chat's count is 16 clear and 6 borderline; the briefs name five of the borderline ones (2804, 2914, 3006, 3007 and 1302), so the sixth is not named anywhere.
+- **The older sightings the wiki contradicts, with their note numbers** (from the briefs of lanes M1 and M2): lane M1 takes the Fallout 4 Deathclaw (seed section 9), the Left 4 Dead 2 defibrillator (`left-4-dead-2.json` 2209), Molotov (2206) and "Weak points" (2203), the Fallout: New Vegas Hardcore note (seed 224; `fallout-new-vegas.json` 3810 and 3811), Palworld Predator Pals (`palworld.json` 4007; seed 420), the Mario Party 7 Snack Orb (seed 350; `mario-party-7.json` 3201 and 3213) and the Brotato Looter (`brotato.json` 3900). Lane M2 takes seed sections: Mario Party 314, 315, 320, 322, 323 (Bonus Star wording, "Bowser wanders", Magma Mountain, the Eternal Star odds); Mario Party 2 324, 330, 331 (the Dueling Glove; the Bowser Space roulette); Mario Party 6 342, 345 (Snowflake Lake "only way"; duels in the last five turns); Mario Party 7 347, 349, 351, 354 (eight players; the Pagoda Peak price; Windmillville; Enchanted Inferno); Super Smash Bros. 394 (the 1P bonus stages); Cyberpunk 2077 153 (iconic weapons); Grand Theft Auto III 397 (the bribe).

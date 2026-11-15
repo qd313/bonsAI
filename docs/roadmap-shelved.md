@@ -30,6 +30,9 @@ Long notes for knowledge-base items are in [roadmap-kb-details.md](roadmap-kb-de
 
 
 
+- ★★★ `[KB]` **KB visual maps (your screenshot, marked)** — **shelved 2026-11-14 (D141 call 16): measured, not built.** Nothing draws anything in a reply today. The marks test (this PC, 22 boss pictures, four picture models, three tries each, graded by two Opus helpers by one written rule) needed 7 out of 10 or more on at least 15 pictures; the best average over 66 tries was 2.95 (`qwen3.5:4b`) and at most 5 of 22 pictures had any try at 7 or more. Grades `workshop:screenshots/plan103-marks/qwen3.5-4b/grades.json`; the test is `scripts/kb/eval_screenshot_marks.py`. [Detail](roadmap-kb-details.md#kb-visual-maps) · [Mock-up board, tab 5](https://claude.ai/artifact/XyZfUSPGRZdm2P3mTGV9tR)
+  Unshelves when: a picture model the Deck can run averages 7 or more on at least 15 of the 22 boss pictures, graded by Opus by the written rule.
+
 - ★★★★★ `[perms]` `[shelved]` **VAC Phase 2: opponent IDs** *— **shelved 2026-10-16.** Show who you are playing against so you can check their ban record, when the game's data allows it. The Steam ban lookup it stood on was removed in plan 86 step 3 (`357e5b55`), so the idea has nothing to build on. Moved here by the maintainer's call ([plan 86 § 4 call 12](planning/86-clean-up-round-three.md)).*
   Unshelves when: the maintainer wants a ban lookup back.
 

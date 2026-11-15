@@ -312,7 +312,8 @@
             }
           ]
         }
-      ]
+      ],
+      "weak_points_review": "W1 2026-11-15: line kept (borderline). Peach's Birthday Cake rev 5465016 says the Piranha Plant does nothing when the player who lands has no Stars and disappears after one steal: a way to be unharmed by it, so the line names a limit of the trap."
     },
     {
       "section_id": 2805,
@@ -343,19 +344,6 @@
               "revision": "5534414",
               "quoted": [
                 "Red Spaces || 3"
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Weak points: A Red Space costs the same 3 coins that a Blue Space pays, and both figures double during the final five turns, so each Blue Space stop cancels out one Red Space stop.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Mario_Party",
-              "revision": "5539722",
-              "quoted": [
-                "Players gain three Coins from landing on this. The amount of Coins received is doubled in the Last Five Turns Event.",
-                "If a player lands on this space, they lose 3 Coins. The amount of Coins lost is doubled during the Last Five Turns Event."
               ]
             }
           ]
@@ -430,7 +418,8 @@
             }
           ]
         }
-      ]
+      ],
+      "weak_points_review": "W1 2026-11-15: line removed. Mario Party page rev 5545546 (cited line rev 5539722) gives only the 3-coin Red Space loss and Blue Space gain, both doubled in the last five turns; it gives no way to avoid a Red Space."
     },
     {
       "section_id": 2806,
@@ -453,25 +442,6 @@
           ]
         },
         {
-          "line": "Weak points: It only hits players caught in front of it as it rolls down Bowser's path, and a player it sweeps back still lands on a Blue Space and gets its three coins.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/DK%27s_Jungle_Adventure",
-              "revision": "5475500",
-              "quoted": [
-                "Any players in the path of the rolling boulder try to escape it, but end up back towards the start, landing on a Blue Space (which takes effect, granting them three Coins)."
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Mario_Party",
-              "revision": "5539722",
-              "quoted": [
-                "Landing on a Happening Space triggers a rolling boulder which, in turn, chases down any players standing in its way to the path near the start of the board."
-              ]
-            }
-          ]
-        },
-        {
           "line": "Tips: The board has nine Happening Spaces. When the game ends, the boulder chases whoever came fourth down the board.",
           "drawn_from": [
             {
@@ -485,7 +455,8 @@
             }
           ]
         }
-      ]
+      ],
+      "weak_points_review": "W1 2026-11-15: line removed. DK's Jungle Adventure rev 5475500 and Mario Party rev 5545546 say the boulder sends players in its path back toward the start onto a Blue Space; neither gives a way to stop or avoid it."
     },
     {
       "section_id": 2807,

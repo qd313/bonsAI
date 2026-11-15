@@ -583,7 +583,7 @@
           ]
         },
         {
-          "line": "Tips: You cannot carry it together with a first aid kit. Expect about one a level, and the Director often puts one nearby when a survivor is close to dying. Someone who dies by losing their grip on a ledge cannot be revived, because they fall away. There is no full list by chapter. No Mercy and The Sacrifice do not normally have one lying around: there it comes only in a first aid cabinet when the whole team is hurt (two places in No Mercy, one in The Sacrifice). The pages name some places where one can turn up: the supply closet, bathroom or end room in Dead Center's Hotel, the hotel rooms in Dark Carnival's Highway, two on the scaffolding at Dark Carnival's Concert, and often Hard Rain's Sugar Mill.",
+          "line": "Tips: You cannot carry it together with a first aid kit. Expect about one a level, and the Director often puts one nearby when a survivor is close to dying. Someone who dies by losing their grip on a ledge cannot be revived, because they fall away. There is no full list by chapter. No Mercy and The Sacrifice do not normally have one lying around; the pages say it can still show up in a first aid cabinet when the whole team is hurt (two places in No Mercy, one in The Sacrifice). The pages name some places where one can turn up: the supply closet, bathroom or end room in Dead Center's Hotel, the hotel rooms in Dark Carnival's Highway, two on the scaffolding at Dark Carnival's Concert, and often Hard Rain's Sugar Mill. In Survival mode, the Atrium's second floor in Dead Center has one by the ammo and the ferry at Swamp Fever's Plank Country brings one.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Healing_items",
@@ -637,6 +637,24 @@
               "part_of_page": "Notes",
               "quoted": [
                 "Defibrillators spawn frequently on this level, due to the amount of Witches present on this level."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Atrium",
+              "revision": "172714",
+              "part_of_page": "Survival > Second Floor",
+              "quoted": [
+                "A defibrillator by the ammo."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Plank_Country",
+              "revision": "173281",
+              "part_of_page": "Survival",
+              "quoted": [
+                "with the ferry arriving at the 2 minute mark carrying extra items",
+                "Supplies on the ferry:",
+                "- Defibrillator"
               ]
             }
           ]

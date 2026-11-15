@@ -22,6 +22,7 @@ The wikis the notes come from, and their licences:
 
 | Wiki | Site | Licence |
 |---|---|---|
+| Black Mesa Wiki | black-mesa-source.fandom.com | CC-BY-SA-3.0 |
 | Brotato Wiki | brotato.wiki.spellsandguns.com | CC-BY-SA-4.0 |
 | Combine OverWiki (Half-Life, Portal, Black Mesa) | combineoverwiki.net | CC-BY-SA-4.0 |
 | Cyberpunk Wiki | cyberpunk.fandom.com | CC-BY-SA-3.0 |

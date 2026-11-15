@@ -616,6 +616,568 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 2605,
+      "name": "Poison Zombie",
+      "kind": "enemy",
+      "main_page": "https://half-life.fandom.com/wiki/Poison_Zombie",
+      "main_revision": "331729",
+      "lines": [
+        {
+          "line": "Summary: A bloated, slow zombie with 175 health and a 20-damage slash. It carries three poison headcrabs on its back and throws them at you before it fights hand to hand.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Zombie",
+              "revision": "331729",
+              "part_of_page": "General information",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Health",
+                  "value": "175"
+                },
+                {
+                  "label": "Attacks",
+                  "value": "Slash (20)"
+                },
+                {
+                  "label": "Attacks",
+                  "value": "Throw Poison Headcrabs"
+                }
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Zombie",
+              "revision": "331729",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "They are almost always seen carrying three additional Poison Headcrabs on their back.",
+                "A poison zombie will try to empty its load of poison headcrabs first before resorting to melee attacks."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Fire: set it alight and the headcrabs on its back burn with it. Kill it before it throws and those headcrabs die too, so a crossbow bolt into the ones on its back ends it early.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Zombie",
+              "revision": "331729",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The most effective weapon against poison zombies is fire; when hit, the Zombie will set alight the Headcrabs as well.",
+                "When using the Crossbow against it, get away from the poison zombie and aim at the Headcrabs on its back. This way, the Poison Zombie should die without releasing its poison headcrabs."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Zombie",
+              "revision": "331729",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "if the player kills the Poison Zombie before it can \"release\" the Poison Headcrabs from its back, the headcrabs will also die."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Bloated and reddish-purple, bent nearly double under the headcrabs on its back.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Zombie",
+              "revision": "331729",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Poison zombies are bloated, reddish purple, slow-moving zombies.",
+                "The Poison Zombie has a heavily stooped posture"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Carry fire to it: pick up a propane tank or gas canister with the gravity gun, light it up from cover, then duck back before it throws more. Grenades and explosive barrels cannot ignite it but still do decent damage.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Zombie",
+              "revision": "331729",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "A very good tactic is to grab a propane tank or gas canister with the Gravity Gun, pop out of cover, light up the Zombie, and then take cover or leave the area before it throws more headcrabs.",
+                "cannot light the Poison Zombie up, it can inflict decent damage on it"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A thrown poison headcrab drops you to 1 health, so keep moving up close and do not swing the crowbar at them while other enemies are around. Once all three are thrown it is little threat; the pulse rifle's energy ball disintegrates it.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Poison_Zombie",
+              "revision": "331729",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "At close range, move around while attacking to avoid being hit by the thrown headcrabs.",
+                "When a thrown poison headcrab comes into contact, health points will drop to 1",
+                "it is advised not to use the Crowbar against incoming thrown headcrabs, especially when being engaged by other enemies",
+                "The Zombie should be a minimal threat without the hitch-hiking poison headcrabs on its back",
+                "use its alternative fire on the Zombie, which will cause the Zombie to disintegrate"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2606,
+      "name": "Antlion Guard",
+      "kind": "boss",
+      "main_page": "https://half-life.fandom.com/wiki/Antlion_Guard",
+      "main_revision": "331343",
+      "lines": [
+        {
+          "line": "Summary: A huge antlion with 500 health. It charges from afar and butts you up close: a running head smash does 20, a headbutt 10, and it can also fling objects at you.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Antlion_Guard",
+              "revision": "331343",
+              "part_of_page": "Individual information",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Health",
+                  "value": "500"
+                },
+                {
+                  "label": "Attacks",
+                  "value": "Running head smash (20)"
+                },
+                {
+                  "label": "Attacks",
+                  "value": "Headbutt (10)"
+                },
+                {
+                  "label": "Attacks",
+                  "value": "Launch objects"
+                }
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Antlion_Guard",
+              "revision": "331343",
+              "part_of_page": "Behaviors and Skills",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "If the target is some distance away, they will charge forward and try to ram their massive weight against a target.",
+                "the Guard may also fling these objects with great velocity towards a target"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: It turns slowly, so strafing keeps you clear of its attacks, and a charge that ends in a wall stuns it for a few seconds. It is a big target for the shotgun, which is extremely effective against it.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Antlion_Guard",
+              "revision": "331343",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Its attacks can be easily avoided by strafing constantly as the Guard is slower when it is turning.",
+                "Luring it into smashing into walls will stun it for a few seconds, buying the attacker some time to shoot it.",
+                "the SPAS-12 is extremely effective against the Guard, as its big size makes it an easy target and thus absorbs the entirety of the shotgun's blast"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: About 8.6 feet tall, with a hard dark-red shell, bright blue feather-like growths down its back, and a bulky, beak-tipped head it uses as a battering ram.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Antlion_Guard",
+              "revision": "331343",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Antlion Guards are considerably large (8.6 feet in height.) and powerful Antlions.",
+                "They have a hard carapace with a dark-red tint and radiant blue feather-like protrusions adorning their backs.",
+                "a robust center and a beak-like structure at the tip",
+                "charge forward using their head as a battering ram"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Its growls warn you before it attacks. Kill the soldier antlions that crowd you, but keep track of the guard. Swap between the crossbow, the RPG and the MP7's grenades so damage never pauses for a reload.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Antlion_Guard",
+              "revision": "331343",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Its distinctive growls can also cue the player as to when it is about to attack.",
+                "Kill any that get in your way but keep track of the Guard.",
+                "High-damage weapons such as the Crossbow and the RPG can shorten the amount of time required to take one down.",
+                "Another good alternative is using the grenade launcher on with the MP7.",
+                "Cycling between weapons is a good way of dealing damage to a Guard continuously without pausing to reload"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Launching explosive barrels or a car engine with the gravity gun saves ammo. The pulse rifle's secondary fire will not disintegrate it but hurts it badly. If it hurls something at you, dodge it or catch it and throw it back.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Antlion_Guard",
+              "revision": "331343",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "launching explosive barrels or weighty objects like a car engine using the Gravity Gun can also deal significant damage to a Guard while conserving ammo",
+                "The Pulse Rifle's secondary fire will not disintegrate the Guard, but will heavily damage it.",
+                "be prepared to avoid their projectile or catch it and counter-throw with the Gravity Gun"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2607,
+      "name": "Manhack",
+      "kind": "enemy",
+      "main_page": "https://half-life.fandom.com/wiki/Manhack",
+      "main_revision": "330932",
+      "lines": [
+        {
+          "line": "Summary: A small flying drone with 25 health and spinning blades. It crashes into its target with no care for itself, and is deadliest in vents, sewers and other tight places, usually in a group.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Manhack",
+              "revision": "330932",
+              "part_of_page": "Individual information",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Health",
+                  "value": "25"
+                }
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Manhack",
+              "revision": "330932",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "They are programmed with very little concept of self-preservation, careening off walls and through objects in their single-minded pursuit of their target."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Manhack",
+              "revision": "330932",
+              "part_of_page": "Deployment",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The Manhack's razor-sharp blades make them especially deadly in confined spaces such as alleyways, sewers, and small passages where they are most commonly deployed.",
+                "Manhacks rarely travel alone and are usually deployed in large groups."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The gravity gun is the best answer: pull one in and punt it into a wall, and it is destroyed at once.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Manhack",
+              "revision": "330932",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The Gravity Gun is highly if not the most effective weapon against them in combat.",
+                "Manhacks can be pulled into the Gravity Gun's field after which they can be launched into walls or simply punted into one with the primary fire, which instantly destroys them."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Three blades spinning so fast they whir, and a single camera eye that glows red while it is active.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Manhack",
+              "revision": "330932",
+              "part_of_page": "(opening)",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "a flying, gyroscopic drone with three razor-sharp blades that constantly spin at extremely high speeds"
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Manhack",
+              "revision": "330932",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Their spinning blades produce a high-pitched whirring sound, which is often an indicator of their proximity.",
+                "A single camera functions as the Manhack's eye, glowing red when the device is active."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A few pistol or SMG rounds kill it, but it bounces around when hit; a shotgun or magnum shot kills it at once. Three crowbar hits destroy it, though that puts you next to its blades.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Manhack",
+              "revision": "330932",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "A few shots from a pistol or SMG can kill it.",
+                "they often bounce around after being hit which can make shooting one down not so straightforward unless using a weapon that can destroy them instantly in one shot like the shotgun or magnum revolver",
+                "a single hit will cause it to become disoriented and three will destroy it instantly. This is however risky as it involves getting in close range to the Manhack and it's blades."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Against several, use a fast-firing weapon like the SMG or pulse rifle, and deal with them quickly before they distract you from other threats. A manhack thrown through open air without hitting anything is only dazed.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Manhack",
+              "revision": "330932",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "using a weapon with a high rate of fire and high magazine like the SMG or Pulse Rifle can help to deal damage to multiple targets while keeping them at a distance",
+                "It is advised to deal with Manhacks quickly since their presence can often distract the player from other threats.",
+                "Throwing a Manhack to a distance using the Gravity Gun without it making contact with an object will not inflict any damage and just disorient it."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2608,
+      "name": "Barnacle",
+      "kind": "enemy",
+      "main_page": "https://half-life.fandom.com/wiki/Barnacle",
+      "main_revision": "332743",
+      "lines": [
+        {
+          "line": "Summary: A ceiling-hanging mouth with a sticky tongue that hauls up anything that touches it. It has 35 health here and crushes for 10 again and again; it kills other characters outright with a neck snap, but not you.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Barnacle",
+              "revision": "332743",
+              "part_of_page": "Individual information",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Health",
+                  "value": "35 (HL2)"
+                },
+                {
+                  "label": "Attacks / Weapons",
+                  "value": "10, attacks repeatedly(HL2)"
+                },
+                {
+                  "label": "Attacks / Weapons",
+                  "value": "Neck snap (HL2) (instant kill to NPCs only)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: The crowbar kills it in one hit, and it dies if it swallows poison. A burning explosive barrel on its tongue kills it, and the barnacles hanging next to it too.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Barnacle",
+              "revision": "332743",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "The Barnacles are weak against the crowbar, which in both games kills them in a single hit."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Barnacle",
+              "revision": "332743",
+              "part_of_page": "Trivia",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Barnacles cannot eat prey containing neurotoxins or any type of poison."
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Barnacle",
+              "revision": "332743",
+              "part_of_page": "Behavior and skills",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "by setting alight an explosive barrel at the right moment, a player can kill a Barnacle attempting to eat it (or even several closely-attacked Barnacles)"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: Little more than a big mouth with two rows of sharp teeth, with a long string-like tongue dangling from a ceiling or overhang.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Barnacle",
+              "revision": "332743",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "A Barnacle is little more than a large mouth full of two rows of sharp teeth, with a long string-like appendage dangling out of its maw.",
+                "Barnacles attach themselves to ceilings or the undersides of overhangs, from which they lower their sticky tongues."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It takes a moment to tell food from junk and holds one thing at a time, so a tire, barrel or plank on its tongue lets you slip past.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Barnacle",
+              "revision": "332743",
+              "part_of_page": "Behavior and skills",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "In Half-Life 2, Barnacles take a few moments to differentiate between edible and inedible material.",
+                "objects such as tires, barrels or pieces of wood can be used to",
+                "it only grabs one thing at a time"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Four or five pistol shots kill it, and if it grabs you, you can usually kill it before it swallows you. Do not crowbar a high one: you take fall damage as well as its attack.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Barnacle",
+              "revision": "332743",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "4-5 shots from a 9mm pistol will kill them.",
+                "players who become ensnared by its tongue are usually able to kill them before being consumed",
+                "attacking a Barnacle which is high up with a crowbar is generally a bad idea, as the player will take fall damage as well as the Barnacle's attack"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 2609,
+      "name": "Combine Gunship",
+      "kind": "boss",
+      "main_page": "https://half-life.fandom.com/wiki/Combine_Gunship",
+      "main_revision": "332295",
+      "lines": [
+        {
+          "line": "Summary: A big Combine flyer that only explosives hurt: 3, 5 or 7 RPG hits on easy, normal and hard. It shoots your rockets out of the air, and the Combine often send two together.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Combine_Gunship",
+              "revision": "332295",
+              "part_of_page": "Individual information",
+              "sits_in": "infobox table (bare fact)",
+              "table_rows": [
+                {
+                  "label": "Health",
+                  "value": "3 (easy), 5 (normal), 7 (hard) RPG hits"
+                }
+              ]
+            },
+            {
+              "page": "https://half-life.fandom.com/wiki/Combine_Gunship",
+              "revision": "332295",
+              "part_of_page": "Application",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Like most Synths, Gunships are invulnerable to small-arms fire and can only be damaged by explosives such as the RPG.",
+                "they will prioritize shooting down incoming projectiles over enemy hostiles",
+                "the Combine often deploy Gunships in pairs"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Weak points: Small arms do nothing; the RPG does. A rocket coming in at its rear or side meets a blind spot, and it cannot change target in the middle of a firing cycle, so fire while it is busy with someone else.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Combine_Gunship",
+              "revision": "332295",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "try to sneak the rocket through the rear or side arc on it's blindspot",
+                "the gunship cannot change targets in the middle of a firing cycle"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Looks like: A stubby round head and a wide body ending in a huge round rotor; green-brown camouflage with white splotches on top, white with teal underneath.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Combine_Gunship",
+              "revision": "332295",
+              "part_of_page": "Overview",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "It has a round, stubby head with a body that extends wider to it's backside",
+                "the top of half of the Gunship has a camouflage pattern consisting of a green-brownish color mixed with white colored splotches",
+                "The underside is white with accents of teal"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Never fly a rocket straight at it: steer around its head, zig-zag or corkscrew, or send it high and slam it down from above. A thud from its cannon warns that a burst is coming.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Combine_Gunship",
+              "revision": "332295",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Avoid firing in a straight trajectory and try to maneuver the rocket around the gunship's head.",
+                "Mixing up trajectories with irregular movements like zig-zagging or corkscrewing",
+                "Alternatively, you can try and shoot high, then slam the missile down above where its gun can fire",
+                "Before firing, the Gunship's pulse cannon emits a mechanical thud-like sound, alerting the player that the Gunship is about to begin its firing cycle"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: It fires ahead of you, and at explosive barrels near you, so stay clear of barrels or set them off first. To cross open ground to a rocket crate, fire a rocket into the air and steer it: the gunship goes after the rocket.",
+          "drawn_from": [
+            {
+              "page": "https://half-life.fandom.com/wiki/Combine_Gunship",
+              "revision": "332295",
+              "part_of_page": "Tactics",
+              "sits_in": "editors' prose",
+              "quoted": [
+                "Like Striders, Gunships will often fire ahead of the target before directly hitting it",
+                "Gunships also tend to fire at explosive barrels when an enemy is near them",
+                "the player should always keep distance from explosive barrels or detonate them via small arms fire or the Gravity Gun before the Gunship does",
+                "If the player needs to get across open ground to resupply, fire the rocket into the air and steer it around as long as possible while moving to the next spot of cover. The gunships will be entirely distracted by the missile"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

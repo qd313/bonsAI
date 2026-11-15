@@ -56,6 +56,61 @@
    "source_license": "CC-BY-SA-3.0",
    "source_version": "330952",
    "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2605,
+   "game_id": 13,
+   "section_type": "enemy",
+   "name": "Poison Zombie",
+   "card": "Summary: A bloated, slow zombie with 175 health and a 20-damage slash. It carries three poison headcrabs on its back and throws them at you before it fights hand to hand.\nWeak points: Fire: set it alight and the headcrabs on its back burn with it. Kill it before it throws and those headcrabs die too, so a crossbow bolt into the ones on its back ends it early.\nLooks like: Bloated and reddish-purple, bent nearly double under the headcrabs on its back.\nTips: Carry fire to it: pick up a propane tank or gas canister with the gravity gun, light it up from cover, then duck back before it throws more. Grenades and explosive barrels cannot ignite it but still do decent damage.\nTips: A thrown poison headcrab drops you to 1 health, so keep moving up close and do not swing the crowbar at them while other enemies are around. Once all three are thrown it is little threat; the pulse rifle's energy ball disintegrates it.",
+   "source_url": "https://half-life.fandom.com/wiki/Poison_Zombie",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "331729",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2606,
+   "game_id": 13,
+   "section_type": "boss",
+   "name": "Antlion Guard",
+   "card": "Summary: A huge antlion with 500 health. It charges from afar and butts you up close: a running head smash does 20, a headbutt 10, and it can also fling objects at you.\nWeak points: It turns slowly, so strafing keeps you clear of its attacks, and a charge that ends in a wall stuns it for a few seconds. It is a big target for the shotgun, which is extremely effective against it.\nLooks like: About 8.6 feet tall, with a hard dark-red shell, bright blue feather-like growths down its back, and a bulky, beak-tipped head it uses as a battering ram.\nTips: Its growls warn you before it attacks. Kill the soldier antlions that crowd you, but keep track of the guard. Swap between the crossbow, the RPG and the MP7's grenades so damage never pauses for a reload.\nTips: Launching explosive barrels or a car engine with the gravity gun saves ammo. The pulse rifle's secondary fire will not disintegrate it but hurts it badly. If it hurls something at you, dodge it or catch it and throw it back.",
+   "source_url": "https://half-life.fandom.com/wiki/Antlion_Guard",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "331343",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2607,
+   "game_id": 13,
+   "section_type": "enemy",
+   "name": "Manhack",
+   "card": "Summary: A small flying drone with 25 health and spinning blades. It crashes into its target with no care for itself, and is deadliest in vents, sewers and other tight places, usually in a group.\nWeak points: The gravity gun is the best answer: pull one in and punt it into a wall, and it is destroyed at once.\nLooks like: Three blades spinning so fast they whir, and a single camera eye that glows red while it is active.\nTips: A few pistol or SMG rounds kill it, but it bounces around when hit; a shotgun or magnum shot kills it at once. Three crowbar hits destroy it, though that puts you next to its blades.\nTips: Against several, use a fast-firing weapon like the SMG or pulse rifle, and deal with them quickly before they distract you from other threats. A manhack thrown through open air without hitting anything is only dazed.",
+   "source_url": "https://half-life.fandom.com/wiki/Manhack",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "330932",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2608,
+   "game_id": 13,
+   "section_type": "enemy",
+   "name": "Barnacle",
+   "card": "Summary: A ceiling-hanging mouth with a sticky tongue that hauls up anything that touches it. It has 35 health here and crushes for 10 again and again; it kills other characters outright with a neck snap, but not you.\nWeak points: The crowbar kills it in one hit, and it dies if it swallows poison. A burning explosive barrel on its tongue kills it, and the barnacles hanging next to it too.\nLooks like: Little more than a big mouth with two rows of sharp teeth, with a long string-like tongue dangling from a ceiling or overhang.\nTips: It takes a moment to tell food from junk and holds one thing at a time, so a tire, barrel or plank on its tongue lets you slip past.\nTips: Four or five pistol shots kill it, and if it grabs you, you can usually kill it before it swallows you. Do not crowbar a high one: you take fall damage as well as its attack.",
+   "source_url": "https://half-life.fandom.com/wiki/Barnacle",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "332743",
+   "crawled_at": "2026-11-15"
+  },
+  {
+   "section_id": 2609,
+   "game_id": 13,
+   "section_type": "boss",
+   "name": "Combine Gunship",
+   "card": "Summary: A big Combine flyer that only explosives hurt: 3, 5 or 7 RPG hits on easy, normal and hard. It shoots your rockets out of the air, and the Combine often send two together.\nWeak points: Small arms do nothing; the RPG does. A rocket coming in at its rear or side meets a blind spot, and it cannot change target in the middle of a firing cycle, so fire while it is busy with someone else.\nLooks like: A stubby round head and a wide body ending in a huge round rotor; green-brown camouflage with white splotches on top, white with teal underneath.\nTips: Never fly a rocket straight at it: steer around its head, zig-zag or corkscrew, or send it high and slam it down from above. A thud from its cannon warns that a burst is coming.\nTips: It fires ahead of you, and at explosive barrels near you, so stay clear of barrels or set them off first. To cross open ground to a rocket crate, fire a rocket into the air and steer it: the gunship goes after the rocket.",
+   "source_url": "https://half-life.fandom.com/wiki/Combine_Gunship",
+   "source_license": "CC-BY-SA-3.0",
+   "source_version": "332295",
+   "crawled_at": "2026-11-15"
   }
  ]
 }

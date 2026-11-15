@@ -6,6 +6,7 @@
   "game": "Pikmin 2",
   "read_on": "2026-11-02",
   "how_read": "scripts/kb/fetch_wiki_live_pages.py --api https://www.pikminwiki.com/api.php --titles ... (rendered page text; every quote below is a verbatim stretch of that text once runs of whitespace are collapsed to one space; table rows are written 'cell || cell' as the fetcher prints them)",
+  "quote_sorting": "2026-11-15 (plan 104, lane S3): every page was read again at the revision named on its section, through the wiki's render call (by revision number), and saved under build/wiki-live/pikipedia/ as <page>-r<revision>. Beside each quote, quoted_sits says where it sits on the page (editors' prose, table cell, or the game's own text) and quoted_at the page heading; both lists run in step with quoted. No quote sits in the game's own text. The seven cells of the ultra-bitter damage table and the five nectar-egg percentages are bare numbers and names (table cell); the one table cell that holds a whole editors' sentence (the Titan Dweevil's) is sorted as editors' prose. Sentences that were the wiki's own wording almost unchanged were rewritten from a fact list; each such line carries a 'reworded' mark. A few quotes occur under more than one game heading on their page; quoted_at names the Pikmin 2 one.",
   "sections": [
     {
       "section_id": 1800,
@@ -29,12 +30,32 @@
                 "they won't wake up until they are attacked",
                 "An object being carried adjacent to a Bulborb can also wake up the enemy.",
                 "Once awake, they become aggressive and will run towards nearby Pikmin or leaders, lunging in an attempt to eat them."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section",
+                "lead section",
+                "Behavior",
+                "Behavior",
+                "Behavior",
+                "Behavior"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: Purple Pikmin do serious damage, especially when their landing stuns it. If a lot of Pikmin attack at once, it shakes them off and goes back to trying to eat.",
+          "line": "Weak points: Purple Pikmin do serious damage, especially when their landing stuns it. A big crowd hitting it at the same moment gets thrown off, and it goes back to trying to eat.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Bulborb",
@@ -42,12 +63,21 @@
               "quoted": [
                 "A few Purple Pikmin can cause serious damage, especially if they stun the Red Bulborb.",
                 "If there are a lot of Pikmin attacking it at once, it will shake them off and then start trying to eat again."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Strategy > Pikmin 2",
+                "Behavior"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Tips: With an army of at least 30 Pikmin, keep tossing Pikmin onto its back, even if some are shaken off, rather than swarming it. If you wake it by accident, run until it turns around, then make a new pass. With a very small army, wake it and lead it far from where it sleeps; when it walks home and settles down, attacking at that moment gives a few seconds in which it cannot move or bite. In some metal-themed caves you can lead it off the edge by running around a hole in the sublevel.",
+          "line": "Tips: With 30 or more Pikmin, it works better to keep throwing them onto its back one after another than to send them all in together, even though a few get shaken off. If it wakes before your Pikmin have attacked, back away until it turns around, then come at it again. With a very small army, wake it and lead it far from where it sleeps; when it walks home and settles down, attacking at that moment gives a few seconds in which it cannot move or bite. Some caves with a metal theme have a hole in the floor; wake it and run around the hole, and it falls off the stage.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Bulborb",
@@ -58,9 +88,24 @@
                 "If the Pikmin army is very small, another strategy is to wake up the Red Bulborb and make it chase the leader until it goes far enough away from its starting location, at which point it will turn around and return to its original sleeping spot.",
                 "Once it returns there, attacking at the moment it starts sleeping can provide the player with a few crucial seconds in which the Red Bulborb is entirely immobilized and harmless.",
                 "In some metal-themed caves, Red Bulborbs can be led off of the stage by awakening it and quickly running around a hole in the sublevel, causing it to fall off."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Strategy > Pikmin 2",
+                "Strategy > Pikmin 2",
+                "Strategy > Pikmin 2",
+                "Strategy > Pikmin 2",
+                "Strategy > Pikmin 2"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         }
       ]
     },
@@ -84,6 +129,22 @@
                 "they will audibly bark and begin pursuit. Dwarf Bulborbs will never stray far from their territory.",
                 "They can only catch and eat one Pikmin at a time.",
                 "they will slowly chew their catch before swallowing"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section",
+                "Behavior",
+                "Behavior",
+                "Behavior"
               ]
             }
           ]
@@ -99,6 +160,18 @@
                 "killing the Bulborb during this process will free the Pikmin.",
                 "Purple Pikmin are exceptionally effective.",
                 "Rapidly throwing Purple Pikmin in the general vicinity of a group will stun the entire group, as well as likely kill most, if not all of them."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Strategy > With Pikmin",
+                "Behavior",
+                "Strategy > With Pikmin",
+                "Strategy > With Pikmin"
               ]
             },
             {
@@ -106,6 +179,12 @@
               "revision": "353333",
               "quoted": [
                 "a small homing system will swerve the Pikmin's fall and make it land on a nearby enemy"
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Traits and abilities"
               ]
             }
           ]
@@ -121,6 +200,18 @@
                 "This is particularly handy for sublevels with huge numbers of them, such as the Cavern of Chaos's eighth sublevel.",
                 "Exclusively in the first game, pestering one for long enough will prompt it to scream for help, waking up the nearest Spotty Bulborb",
                 "If led outside of a certain range, they will stop chasing their target and return to where they started."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Strategy > With Pikmin",
+                "Strategy > With Pikmin",
+                "lead section",
+                "Behavior"
               ]
             }
           ]
@@ -147,12 +238,28 @@
                 "Fiery Blowhogs typically wander around a very small zone aimlessly",
                 "it will rotate to face them, before spewing out a stream of fire",
                 "In the first two games, when provoked by Pikmin, Fiery Blowhogs will buck them off into an area in front of them and shoot fire."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section",
+                "Behavior",
+                "Behavior",
+                "lead section"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: Purple Pikmin thrown onto it do serious damage and stop it bucking Pikmin off or breathing fire. It is easier to kill in Pikmin 2, so a big group can swarm it straight away. It must breathe in before it breathes out, and it cannot turn or move from the start of that breath until the end, so its flame does not follow anyone who runs away.",
+          "line": "Weak points: Purple Pikmin thrown onto it do serious damage and stop it bucking Pikmin off or breathing fire. It dies more easily in Pikmin 2, so a big group can rush it at once and finish it. It must breathe in before it breathes out, and it cannot turn or move from the start of that breath until the end, so its flame does not follow anyone who runs away.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Fiery_Blowhog",
@@ -162,9 +269,22 @@
                 "throwing Purple Pikmin on it will deal serious damage to the Blowhog, as well as rendering unable to buck the Pikmin off, or breathe fire.",
                 "it must inhale first, which creates a short delay before firing in which the attack may be avoided.",
                 "From the moment the creature begins inhaling to the moment it's done spitting fire, it will not rotate or move, meaning the spray of fire will not follow leaders or Pikmin running away."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Strategy > Pikmin 2",
+                "Strategy > Pikmin 2",
+                "Behavior",
+                "Behavior"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
           "line": "Tips: Any Pikmin type can beat it. Pikmin clinging to it cannot be set alight and Red Pikmin ignore fire; the page warns that being bucked into water is what can kill them, so turn it away from water first. In Pikmin 2 a Blowhog may not fire when only a leader is close to it.",
@@ -175,6 +295,14 @@
               "quoted": [
                 "Fiery Blowhog: This enemy shoots fire towards the player, but can be defeated with any Pikmin type.",
                 "Red Pikmin also exhibit an immunity to fire, in that they ignore the heat"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "In Pikmin 2 > Uses",
+                "Traits and abilities"
               ]
             },
             {
@@ -186,6 +314,20 @@
                 "they cannot be killed, unless the Fiery Blowhog bucks them into water.",
                 "unless the Fiery Blowhog bucks them into water. Make sure you make the Blowhog faces away from any water sources.",
                 "In Pikmin 2, Blowhogs may not shoot fire if only a leader is present nearby."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Strategy > Pikmin 2",
+                "Strategy > Pikmin",
+                "Strategy > Pikmin",
+                "Strategy > Pikmin",
+                "Behavior"
               ]
             }
           ]
@@ -213,6 +355,24 @@
                 "their albino body is much more flatter",
                 "Generally passive, they will only attack by leaping into the air if a leader or Pikmin comes nearby.",
                 "Upon falling, a Wollyhop's attack covers a considerable radius, killing all Pikmin within it."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section",
+                "lead section",
+                "lead section",
+                "Behavior > Pikmin",
+                "Behavior > Pikmin"
               ]
             }
           ]
@@ -226,12 +386,20 @@
               "quoted": [
                 "In Pikmin 2, making use of the Purple Pikmin's slam attack is useful, as they are capable of dealing large amounts of damage with the chance to stun it briefly.",
                 "Swarming is less effective in this game, so you should be throwing your Pikmin instead."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Strategy > With Pikmin",
+                "Strategy > With Pikmin"
               ]
             }
           ]
         },
         {
-          "line": "Tips: When it is in the air, whistle your Pikmin off before it lands, so they do not fly off and possibly lose their maturity. Even a Wollywog killed as it is about to fall still crushes the Pikmin under it.",
+          "line": "Tips: While it is airborne, whistle your Pikmin away before it comes down; otherwise they get thrown off and may lose their growth stage. Killing it just as it is about to drop does not help the Pikmin underneath, who are still crushed.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Wollyhop",
@@ -239,9 +407,18 @@
               "quoted": [
                 "When the Wollyhop is airborne, whistle your Pikmin off before it lands, so they don't fly off and potentially lose their maturity.",
                 "Even if a Wollyhop is defeated as it is about to fall, any Pikmin caught beneath it will still be killed."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Strategy > With Pikmin",
+                "Behavior > Pikmin"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         }
       ]
     },
@@ -264,12 +441,26 @@
                 "Collecting ultra-spicy spray nectar.",
                 "Pikmin 2 and Pikmin 3: Affects all Pikmin in the current leader's squad, regardless of distance.",
                 "The effects wear off after 40 seconds in Pikmin 2."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "Obtaining",
+                "Obtaining",
+                "Effects",
+                "Effects"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Sprayed Pikmin run nearly as fast as flowered White Pikmin and work faster: they attack more often and tear down gates, build bridges and get up from knockdowns quicker. In Pikmin 2 the leaf, bud or flower is replaced by a flashing pink light rather than turning into a flower, and they carry as if flowered, so spraying a squad that is already all flowers is a waste. Their attack power becomes the same for every colour, so Purple Pikmin hit weaker while sprayed. A Pikmin that jumps at its target before hitting, instead of latching on, is not sped up.",
+          "line": "Uses: Sprayed Pikmin move almost as quickly as flowered White Pikmin, and all their work speeds up: hitting, breaking gates, building bridges and recovering from a knockdown. In Pikmin 2 a flashing pink light takes the place of the leaf, bud or flower, and all the spray really does is make them act like flower Pikmin, so using it on a squad that is already all flowers gets you nothing. Their attack power becomes the same for every colour, so Purple Pikmin hit weaker while sprayed. A Pikmin that jumps at its target before hitting, instead of latching on, is not sped up.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Ultra-spicy_spray",
@@ -282,12 +473,31 @@
                 "Technically, any Pikmin type's attack power is changed to 10 in Pikmin 2 and Pikmin 3",
                 "This means that Purple Pikmin and Rock Pikmin experience a decrease in power",
                 "a Pikmin that is attacking without being latched on (evident by them first jumping at the target before landing a blow) will not be sped up."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Effects > Practical effects",
+                "Effects > Practical effects",
+                "Effects > Aesthetic effects",
+                "Effects > Practical effects",
+                "Effects > Practical effects",
+                "Effects > Practical effects",
+                "Effects > Practical effects"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Tips: Spraying already-spicy Pikmin restarts the 40 seconds, and so does an ultra-bitter spray. Pikmin that go into an Onion or the ship lose the effect, and Pikmin that are drowning die faster. If it wears off while Pikmin are carrying something they keep the powered-up carrying speed until they deliver it or drop it, which helps with the Doomsday Apparatus. The Awakening Wood is the place to gather lots of berries.",
+          "line": "Tips: Spraying already-spicy Pikmin restarts the 40 seconds, and so does an ultra-bitter spray. Pikmin that go into an Onion or the ship lose the effect, and Pikmin that are drowning die faster. If the effect runs out while Pikmin are hauling something, they keep the boosted carrying speed until the object is delivered or dropped, which helps with the Doomsday Apparatus. The Awakening Wood is the place to gather lots of berries.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Ultra-spicy_spray",
@@ -297,6 +507,18 @@
                 "If Pikmin enter an Onion or the Hocotate ship, or are converted into a sprout, they will lose their spicy status.",
                 "drowning Pikmin sprayed with an ultra-spicy spray will actually die more quickly than unsprayed Pikmin.",
                 "If the effects of the spray wear off while the Pikmin are carrying the object, they will continue carrying at the same speed as if they were powered up, until they deliver the object or drop it. This makes this exploit particularly useful when retrieving the Doomsday Apparatus"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Use",
+                "Effects",
+                "Effects > Side effects",
+                "Effects > Practical effects"
               ]
             },
             {
@@ -304,9 +526,16 @@
               "revision": "353211",
               "quoted": [
                 "The player can gather lots of ultra-spicy spray berries in the Awakening Wood."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Strategy > Yellow-only strategy"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         }
       ]
     },
@@ -318,7 +547,7 @@
       "main_revision": "349978",
       "lines": [
         {
-          "line": "Summary: The purple spray, made from ten purple Burgeoning Spiderwort berries or found as a concentrated dose. Any enemy or bomb rock in the direction of your cursor is immobilized and slowly turns to stone for about nine seconds: one second for the stone to form and eight of full encasement.",
+          "line": "Summary: The purple spray: collect ten berries from the purple Burgeoning Spiderworts, or find it as a concentrated dose. Point the cursor at an enemy or a bomb rock and it stops moving and gradually turns to stone. In all this lasts nine seconds: one for the stone to form, then eight fully encased.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Ultra-bitter_spray",
@@ -327,12 +556,23 @@
                 "is the purple colored spray in Pikmin 2 that the player can get from ten purple Burgeoning Spiderwort berries, or by finding a concentrated dose.",
                 "Any enemy or bomb-rock in the direction of the cursor instantly becomes immobilized and slowly turns into stone.",
                 "In total, this effect lasts for nine seconds – one second for the stones to form, and eight seconds of complete encasement."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "Petrification",
+                "Petrification"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Uses: Petrifying an enemy that is eating Pikmin saves them, and a bomb rock in mid-countdown freezes, giving you time to run. The enemy shakes just before it breaks free. While it is stone, ordinary Pikmin attacks and leader punches do 1.5 times damage to most enemies, but only a quarter to bosses such as the Empress Bulblax, Man-at-Legs and Beady Long Legs, almost nothing to the Bloysters (0.03 times), and half to the Titan Dweevil, which can only be hurt when unarmed. Purple Pikmin stomps and bomb-rock damage are unchanged.",
+          "line": "Uses: Petrifying an enemy that is eating Pikmin saves them, and a bomb rock in mid-countdown freezes, giving you time to run. The enemy shakes just before it breaks free. While it is stone, ordinary Pikmin attacks and leader punches do 1.5 times damage to most enemies, but only a quarter to bosses such as the Empress Bulblax, Man-at-Legs and Beady Long Legs, almost nothing to the Bloysters (0.03 times), and half to the Titan Dweevil, which can only be hurt when unarmed. A Purple Pikmin's stomp and a bomb rock's damage stay the same either way.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Ultra-bitter_spray",
@@ -348,9 +588,34 @@
                 "Toady Bloyster || 0.03×",
                 "Titan Dweevil || 0.50× || Can only be damaged when unarmed.",
                 "Purple Pikmin stomps and bomb-rock damage is not changed either way."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "table cell",
+                "table cell",
+                "table cell",
+                "table cell",
+                "table cell",
+                "table cell",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Petrification",
+                "Petrification",
+                "Petrification",
+                "Petrification",
+                "Petrification",
+                "Petrification",
+                "Petrification",
+                "Petrification",
+                "Petrification",
+                "Petrification"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
           "line": "Tips: Aim before you press: with no enemy near, the dose is wasted. It is rarer than the spicy spray: fewer berry plants carry it, and you find it only after getting White Pikmin, near the Bulblax Kingdom. A petrified Bumbling Snitchbug drops the leader it was holding. An enemy killed while it is stone crumbles and leaves drops of nectar or spray, and a Titan Dweevil killed that way drops 10 random sprays.",
@@ -364,6 +629,20 @@
                 "ultra-bitter spray is not found until after the acquisition of White Pikmin, near the Bulblax Kingdom.",
                 "Bumbling Snitchbugs will instantly drop whatever leader they are holding.",
                 "When an enemy is defeated while petrified, it will crumble to dust and leave behind some drops of liquid"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Petrification",
+                "lead section",
+                "lead section",
+                "Petrification > Special interactions",
+                "Petrification > Petrified enemy spoils"
               ]
             },
             {
@@ -371,6 +650,12 @@
               "revision": "353211",
               "quoted": [
                 "if the Titan Dweevil is defeated when it is petrified, it will drop 10 random sprays"
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "After the weapons"
               ]
             }
           ]
@@ -385,7 +670,7 @@
       "main_revision": "355733",
       "lines": [
         {
-          "line": "Summary: A large drop of liquid that turns leaf and bud Pikmin into flowers. Any leaf or bud Pikmin that passes a drop on the ground crouches and slurps it for about two seconds, whether it was idle or sent there, and then jumps up with a flower on its head.",
+          "line": "Summary: A large drop of liquid that turns leaf and bud Pikmin into flowers. A leaf or bud Pikmin that comes across a drop on the ground kneels and drinks for about two seconds, whether it was idle or sent over, then springs up with a flower on its head.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Nectar",
@@ -394,12 +679,23 @@
                 "is a substance that increases the maturity of Pikmin, usually to the flower stage.",
                 "It comes in the form of large drops of liquid that Pikmin can drink.",
                 "Any leaf or bud Pikmin that pass by a drop of nectar on the ground will crouch down and begin to slurp it for roughly two seconds, regardless of whether it is idle or has been directed to it. At the end of the slurp, it will jump up and the leaf or bud on its head will turn into a flower."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "In the main series > Usage"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Uses: In Pikmin 2 one drop can be shared by any number of Pikmin, but once the first Pikmin starts drinking, the drop shrinks until it is gone when that Pikmin finishes, so only Pikmin that start drinking in that window are flowered. The window is longer in Pikmin 2 than in the first game. The best way to flower many at once is to get them to swarm in a tight group.",
+          "line": "Uses: In Pikmin 2 any number of Pikmin can share a single drop, but it starts to shrink as soon as the first one begins drinking and has vanished by the time that one is done, so only Pikmin that start drinking during that window become flowers. The window is longer in Pikmin 2 than in the first game. The best way to flower many at once is to get them to swarm in a tight group.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Nectar",
@@ -409,9 +705,22 @@
                 "This means that only Pikmin which start drinking the nectar within this time window will be flowered.",
                 "The time window is quite strict in Pikmin, but lasts longer in Pikmin 2.",
                 "The most effective way to get a large number of Pikmin drinking the same nectar drop is by swarming them in a tight group."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "In the main series > Usage",
+                "In the main series > Usage",
+                "In the main series > Usage",
+                "In the main series > Usage"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
           "line": "Tips: The wiki lists nectar weed patches, piles of rubble, eggs, Honeywisps, Mitites, Bulborb Larvae and petrified enemies among the sources; most give a single drop and sometimes more.",
@@ -428,6 +737,26 @@
                 "Mitites",
                 "Bulborb Larvae",
                 "Petrified or frozen enemies"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "In the main series > Obtaining",
+                "In the main series > Obtaining",
+                "In the main series > Obtaining",
+                "In the main series > Obtaining",
+                "In the main series > Obtaining",
+                "In the main series > Obtaining",
+                "In the main series > Obtaining",
+                "In the main series > Obtaining"
               ]
             }
           ]
@@ -442,7 +771,7 @@
       "main_revision": "349843",
       "lines": [
         {
-          "line": "Summary: A white, semi-round object found in cave alcoves and a few places above ground. Attack it and it breaks open and releases nectar, or sometimes other things, including living creatures. In Pikmin 2 the eggs that Honeywisps hold work the same as eggs on the ground.",
+          "line": "Summary: A white, roundish object sitting in cave alcoves and at a few places on the surface. Attack it and it breaks open and releases nectar, or sometimes other things, including living creatures. In Pikmin 2 the eggs that Honeywisps hold work the same as eggs on the ground.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Nectar_egg",
@@ -451,12 +780,23 @@
                 "A nectar egg (known as an egg prior to Pikmin 3) is a white, semi-round object found in alcoves of caves, and on specific places aboveground.",
                 "They can be attacked, and when broken, they release nectar, although they can also release other things including living creatures.",
                 "The eggs held by Honeywisps in Pikmin 2 function identically to grounded eggs."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Uses: What comes out is chosen at random at the moment the egg breaks: a single drop of nectar half the time (50 percent), two drops 35 percent, a drop of ultra-bitter spray 5 percent, a drop of ultra-spicy spray 5 percent, and a group of ten Mitites 5 percent. In story mode, if the draw is a spray you have not unlocked yet, you get a single drop of nectar instead.",
+          "line": "Uses: What comes out is chosen at random at the moment the egg breaks: a single drop of nectar half the time (50 percent), two drops 35 percent, a drop of ultra-bitter spray 5 percent, a drop of ultra-spicy spray 5 percent, and a group of ten Mitites 5 percent. In story mode, a spray you have not unlocked yet is swapped for a single drop of nectar.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Nectar_egg",
@@ -469,9 +809,28 @@
                 "A drop of ultra-spicy spray || 5%",
                 "A group of ten Mitites || 5%",
                 "In story mode, if the game decided on a drop of spray nectar, but the player has not yet unlocked that spray, the outcome will instead be changed to a single drop of nectar."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "table cell",
+                "table cell",
+                "table cell",
+                "table cell",
+                "table cell",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Contents",
+                "Contents",
+                "Contents",
+                "Contents",
+                "Contents",
+                "Contents",
+                "Contents"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
           "line": "Tips: You can break one with Pikmin, with leader punches, or with an enemy projectile such as a Gatling Groink's mortars. A Purple Pikmin thrown at it breaks it at once and defeats any Mitites inside straight away. Using a leader is also recommended, because a thrown Pikmin that is called back may drink the nectar and waste it.",
@@ -483,6 +842,16 @@
                 "To destroy an egg, it must be attacked with Pikmin, punched at a few times with a leader, or destroyed by an enemy projectile, like a Gatling Groink's mortars.",
                 "For Pikmin 2, it is advisable to throw a Purple Pikmin onto an egg, as this will immediately break it and contained Mitites will be instantly defeated.",
                 "It is also recommended to destroy an egg with a leader, as a Pikmin thrown at the egg may drink the nectar after being called back, wasting it."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "lead section",
+                "lead section"
               ]
             }
           ]
@@ -508,12 +877,26 @@
                 "In Pikmin 2, 5 Blue Pikmin are found in the Awakening Wood.",
                 "They are found chasing a few Wolpoles beyond an electric gate guarded by a Cloaking Burrow-nit at the north of the map.",
                 "Olimar and Louie break down the gate with the Yellow Pikmin"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Traits and abilities",
+                "Traits and abilities",
+                "In Pikmin 2 > Discovery",
+                "In Pikmin 2 > Discovery",
+                "In Pikmin 2 > Discovery"
               ]
             }
           ]
         },
         {
-          "line": "Uses: Required: the Shower Room (its entrance is blocked by a clog underwater), the Submerged Castle (the entrance is underwater and only Blue Pikmin can enter, even with exploits), and the second half of the Valley of Repose, where Blues must destroy a white bramble gate and a clog just past the Emergence Cave; that opens the Subterranean Complex and Frontier Cavern. Only Blue Pikmin can use seesaw blocks that are underwater.",
+          "line": "Uses: Blues are required for the Shower Room, whose entrance is clogged underwater; for the Submerged Castle, whose entrance is under the surface and which no other type can enter, exploits included; and for the second half of the Valley of Repose, where they have to break a white bramble gate and a clog a little way past the Emergence Cave, which opens the Subterranean Complex and the Frontier Cavern. Seesaw blocks under water work only for Blue Pikmin.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Blue_Pikmin",
@@ -526,12 +909,31 @@
                 "Subterranean Complex",
                 "Frontier Cavern",
                 "Air Brake: Only Blue Pikmin can use the seesaw blocks that are underwater."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "In Pikmin 2 > Required uses",
+                "In Pikmin 2 > Required uses",
+                "In Pikmin 2 > Required uses",
+                "In Pikmin 2 > Required uses",
+                "In Pikmin 2 > Required uses",
+                "In Pikmin 2 > Required uses",
+                "In Pikmin 2 > Near-required uses"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Tips: In Pikmin 2 an idle Blue Pikmin that sees a Pikmin drowning nearby runs in, picks it up and throws it to shore, unless the drowning one is too far away. They can also lift a Purple Pikmin out of water. Otherwise their attack, toughness and speed are about average, and they are more likely to die than other types in Pikmin 2.",
+          "line": "Tips: In Pikmin 2 an idle Blue Pikmin that sees a Pikmin drowning nearby runs in, picks it up and throws it to shore, unless the drowning one is too far away. They can also lift a Purple Pikmin out of water. Otherwise their attack, toughness and speed are about average, though in Pikmin 2 they die more often than any other type.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Blue_Pikmin",
@@ -540,6 +942,16 @@
                 "In the first two games, if they are idle and see a nearby Pikmin drowning in water, they will quickly run to them, pick them up, and throw them to shore. However, they will not rescue Pikmin if they are a certain distance away, so they can't always be relied on.",
                 "Blue Pikmin have largely average attack power, durability, mobility, digging speed and throw distance.",
                 "Interestingly, Blue Pikmin are more likely to die than other types in Pikmin 2"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Traits and abilities",
+                "Traits and abilities",
+                "Traits and abilities"
               ]
             },
             {
@@ -547,9 +959,16 @@
               "revision": "353333",
               "quoted": [
                 "Despite their weight, Blue Pikmin can grab them and chuck them out of water just fine in Pikmin 2."
+              ],
+              "quoted_sits": [
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Traits and abilities"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         }
       ]
     },
@@ -561,7 +980,7 @@
       "main_revision": "350121",
       "lines": [
         {
-          "line": "Summary: Pikmin with large ears that can be thrown higher than any other type, which reaches high ledges and lets them latch onto the Beady Long Legs. Pikmin 2 makes them immune to electricity. Five are found in the Perplexing Pool; White Pikmin are needed just to reach them, and a Fiery Bulblax guards the entrance to their Onion.",
+          "line": "Summary: Pikmin with large ears that can be thrown higher than any other type, which reaches high ledges and lets them latch onto the Beady Long Legs. Pikmin 2 makes them immune to electricity. Five are found in the Perplexing Pool; you need White Pikmin just to get there, and a Fiery Bulblax stands guard at the entrance to their Onion.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Yellow_Pikmin",
@@ -571,9 +990,22 @@
                 "Pikmin 2 introduces electrical hazards, with Yellow Pikmin now being immune to them",
                 "a group of five Yellow Pikmin are found in the Perplexing Pool near the center of the map",
                 "White Pikmin are necessary just to reach them, and a Fiery Bulblax guards the entrance to their Onion."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Traits and abilities",
+                "Traits and abilities",
+                "In Pikmin 2 > Discovery",
+                "In Pikmin 2 > Discovery"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
           "line": "Uses: Only Yellow Pikmin can destroy the electric gate in front of the Blue Onion, and they handle electric enemies and hazards that kill other types on contact. None of it is strictly required: no task in Pikmin 2 needs them exclusively. Their old bomb-rock carrying does not work in Pikmin 2, where bomb rocks are only a hazard.",
@@ -586,6 +1018,18 @@
                 "This newfound electrical immunity makes Yellow Pikmin very helpful in dealing with electrical enemies and hazards that can instantly kill other Pikmin types, as well as tearing down electric gates.",
                 "There is no task in Pikmin 2 that requires Yellow Pikmin exclusively.",
                 "Their ability to carry bomb-rocks does not factor into this game, since bomb-rocks now only appear as a hazard for the leaders' squads and cannot be carried by any Pikmin."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "In Pikmin 2 > Near-required uses",
+                "Traits and abilities",
+                "In Pikmin 2 > Required uses",
+                "Traits and abilities"
               ]
             }
           ]
@@ -600,6 +1044,16 @@
                 "Anode Beetle: Two Anode Beetles can create a line of electricity between themselves, fatally electrocuting any non-Yellow Pikmin that come in contact.",
                 "Anode Dweevil: Anode Dweevils, after being attacked themselves, produce an electric field directly below them, shocking and killing any non-Yellow Pikmin underneath.",
                 "Titan Dweevil: One weapon this boss has creates several metal balls that land in the arena and chain together a long electrical current between themselves and the weapon, instantly killing any non-Yellow Pikmin that touch the chain of sparks."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "In Pikmin 2 > Recommended uses",
+                "In Pikmin 2 > Recommended uses",
+                "In Pikmin 2 > Recommended uses"
               ]
             }
           ]
@@ -623,6 +1077,16 @@
                 "These Pikmin have the strength of 10 Pikmin",
                 "When Olimar and Louie venture into the Emergence Cave, they see the top half of a globe, but it requires more than 100 Pikmin to lift – it needs 101.",
                 "find a pair of Violet Candypop Buds"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Traits and abilities",
+                "In Pikmin 2 > Discovery",
+                "In Pikmin 2 > Discovery"
               ]
             }
           ]
@@ -642,12 +1106,32 @@
                 "The best place to get so many would be the Subterranean Complex.",
                 "until you reach the eighth one, with an exit geyser, Candypop Buds and some eggs.",
                 "Use the Queen Candypop Buds first and the Violet Candypop Buds after to produce 15 Purple Pikmin and 2 Red Pikmin, Blue Pikmin or Yellow Pikmin."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "In Pikmin 2 > Mandatory uses",
+                "In Pikmin 2 > Mandatory uses",
+                "In Pikmin 2 > Mandatory uses",
+                "In Pikmin 2 > Mandatory uses",
+                "In Pikmin 2 > Mandatory uses",
+                "In Pikmin 2 > Obtaining Purple Pikmin",
+                "In Pikmin 2 > Obtaining Purple Pikmin",
+                "In Pikmin 2 > Obtaining Purple Pikmin"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Their landing thump stuns most enemies one time in three, for five seconds, and a small homing steer puts them onto a nearby enemy, so the aim need not be exact. The thump kills Shearwigs and Dwarf Bulborbs, breaks nectar eggs at once, defeats Mitites in a wide radius, switches off fire geysers and electric wires, and counts as an attack against poison emitters and Fiery Bulblaxes. They do not panic at Mitites or at the roar of Emperor Bulblaxes, but they are slow, and slower still when carrying. Some bosses are harder to stun or cannot be stunned.",
+          "line": "Tips: Their landing thump stuns most enemies one time in three, for five seconds, and a small homing steer puts them onto a nearby enemy, so the aim need not be exact. The thump kills Shearwigs and Dwarf Bulborbs, breaks nectar eggs at once, defeats Mitites in a wide radius, switches off fire geysers and electric wires, and counts as an attack against poison emitters and Fiery Bulblaxes. They do not panic at Mitites or at the roar of Emperor Bulblaxes, but they are slow, and slower still when carrying. Bosses differ: some are harder to stun and some cannot be stunned at all.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Purple_Pikmin",
@@ -661,9 +1145,30 @@
                 "They also do not panic when encountering Mitites or hearing the roar of Emperor Bulblaxes.",
                 "Purple Pikmin cannot move as quickly as other Pikmin types, and move even slower when carrying objects.",
                 "Some bosses are harder to stun, or may not be stunned at all"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Traits and abilities",
+                "Traits and abilities",
+                "Traits and abilities",
+                "Traits and abilities",
+                "Traits and abilities",
+                "Traits and abilities",
+                "Traits and abilities",
+                "Traits and abilities"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         }
       ]
     },
@@ -675,7 +1180,7 @@
       "main_revision": "355847",
       "lines": [
         {
-          "line": "Summary: The smallest and fastest Pikmin: flowered ones run at least as quickly as a leader with Rush Boots. Their red eyes let them find treasure that is completely buried underground. In Pikmin 2 you make them by throwing Pikmin into the Ivory Candypop Buds on the third sublevel of the White Flower Garden.",
+          "line": "Summary: The smallest and fastest Pikmin, whose flowered form keeps up with a leader wearing Rush Boots, or beats one. Their red eyes let them find treasure that is completely buried underground. In Pikmin 2 you make them by throwing Pikmin into the Ivory Candypop Buds on the third sublevel of the White Flower Garden.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/White_Pikmin",
@@ -686,9 +1191,24 @@
                 "They have red eyes that in Pikmin 2 allow them to locate treasures that are completely buried underground",
                 "Captain Olimar first finds the White Pikmin in the White Flower Garden.",
                 "On the 3rd sublevel, he runs across 3 Ivory Candypop Buds, and throws his available Pikmin into them to turn them into White Pikmin."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Traits and abilities",
+                "Traits and abilities",
+                "Traits and abilities",
+                "In Pikmin 2 > Discovery",
+                "In Pikmin 2 > Discovery"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
           "line": "Uses: Needed for every fully buried treasure: no other type can do it, exploits included. They also stand through poison gas without choking, so they matter when destroying poison emitters, though other types can do it with difficulty. The page recommends them, though they are not strictly needed, against the Doodlebug, the Munge Dweevil and the Titan Dweevil's poison weapon, and for treasures behind poison-emitter gates such as the Seed of Greed, the Anti-hiccup Fungus and the Geographic Projection.",
@@ -708,12 +1228,38 @@
                 "Seed of Greed: The section of the Wistful Wild with this treasure is blocked off by two gates with poison emitters",
                 "Anti-hiccup Fungus: Same as Seed of Greed.",
                 "Geographic Projection: There is a gate covered in poison emitters blocking the way to the treasure."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "In Pikmin 2 > Mandatory uses",
+                "In Pikmin 2 > Mandatory uses",
+                "Traits and abilities",
+                "Traits and abilities",
+                "In Pikmin 2 > Recommended uses",
+                "In Pikmin 2 > Recommended uses",
+                "In Pikmin 2 > Recommended uses",
+                "In Pikmin 2 > Recommended uses",
+                "In Pikmin 2 > Recommended uses",
+                "In Pikmin 2 > Recommended uses",
+                "In Pikmin 2 > Recommended uses"
               ]
             }
           ]
         },
         {
-          "line": "Tips: If an enemy eats one, it ejects poison that hurts the eater at once, often enough to kill a small enemy like a Dwarf Orange Bulborb, but the Pikmin still dies, so keep that as a last resort. Their attack power matches the standard types in Pikmin 2.",
+          "line": "Tips: If an enemy eats one, it ejects poison that hurts the eater at once, often enough to kill a small enemy like a Dwarf Orange Bulborb, but the Pikmin still dies, so keep that as a last resort. In Pikmin 2 they hit as hard as the ordinary colours.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/White_Pikmin",
@@ -721,9 +1267,18 @@
               "quoted": [
                 "Upon being eaten, White Pikmin eject a poisonous fluid into the eater, which poisons them. This causes instant damage, and is often enough to kill smaller enemies, like a Dwarf Orange Bulborb. With that said, this does not prevent the Pikmin's death, so it should be used as a last resort.",
                 "but match the strength of the standard types in Pikmin 2."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Traits and abilities",
+                "Traits and abilities"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         }
       ]
     },
@@ -735,7 +1290,7 @@
       "main_revision": "356475",
       "lines": [
         {
-          "line": "Summary: The first Pikmin type found in every game, with sharp, pointy noses that give them 1.5 times the attack power of most types, and immune to fire. In Pikmin 2 the first Red Pikmin are five fighting a Dwarf Red Bulborb in the Valley of Repose, right next to where Olimar lands.",
+          "line": "Summary: The first Pikmin type found in every game, with sharp, pointy noses that give them 1.5 times the attack power of most types, and immune to fire. In Pikmin 2 you first meet five of them in the Valley of Repose, battling a Dwarf Red Bulborb beside Olimar's landing spot.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Red_Pikmin",
@@ -745,12 +1300,25 @@
                 "Red Pikmin have sharp, pointy noses, and as a result, have above average attack power, at 1.5× that of most types.",
                 "Red Pikmin also exhibit an immunity to fire, in that they ignore the heat",
                 "There are 5 Pikmin fighting a Dwarf Red Bulborb in the Valley of Repose right next to where Olimar lands."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "lead section",
+                "Traits and abilities",
+                "Traits and abilities",
+                "In Pikmin 2 > Discovery"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Uses: No task in Pikmin 2 needs Red Pikmin specifically, but until another type is found they are required by default. They are intended for the Fiery Bulblax, whose flames only they can withstand: its fire goes out if it is submerged, Purple Pikmin can hurt it with their landing, White Pikmin can be eaten by it to poison it, and in certain caves it can be lured into the abyss. They are intended for treasures guarded by a Fiery Bulblax with no water around, such as the Essence of Despair, the Frosty Bauble, the Gemstar Wife and the Insect Condo, and for carrying the Gyroid Bust through fire geysers unless the geysers are destroyed.",
+          "line": "Uses: Nothing in Pikmin 2 can be done only with Red Pikmin, but they are the type you have to use until you find another. They are meant for the Fiery Bulblax, since only they can stand its flames. Other routes exist: submerging it puts its fire out, Purple Pikmin can hurt it when they land on it, White Pikmin poison it if it swallows them, and in certain caves it can be lured into walking off into the abyss. They are intended for treasures guarded by a Fiery Bulblax with no water around, such as the Essence of Despair, the Frosty Bauble, the Gemstar Wife and the Insect Condo, and for carrying the Gyroid Bust through fire geysers unless the geysers are destroyed.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Red_Pikmin",
@@ -763,9 +1331,28 @@
                 "Gemstar Wife: Same as the Essence of Despair.",
                 "Insect Condo: Same as the Essence of Despair.",
                 "Gyroid Bust: They are intended to carry the piece through fire geysers, unless careful timing, whistles, and fast carrying strategies are used or the fire geysers are destroyed."
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "In Pikmin 2 > Uses",
+                "In Pikmin 2 > Uses",
+                "In Pikmin 2 > Uses",
+                "In Pikmin 2 > Uses",
+                "In Pikmin 2 > Uses",
+                "In Pikmin 2 > Uses",
+                "In Pikmin 2 > Uses"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
           "line": "Tips: Their fire immunity matters less in Pikmin 2 than in other games: any Pikmin can destroy fire geysers, Fiery Blowhogs fall easily to Purple Pikmin, and Fiery Dweevils and the Titan Dweevil's flame weapon can be beaten with any type. In 2-Player Battle, player 1 gets Red Pikmin and player 2 gets Blue Pikmin with the same 1.5 times attack power.",
@@ -780,6 +1367,22 @@
                 "Titan Dweevil: This boss can shoot fire out of its flamethrower-based weapon, but can be defeated with any Pikmin type.",
                 "In 2-Player Battle in Pikmin 2, player 1's army is made up of Red Pikmin, while player 2's army is made up of Blue Pikmin.",
                 "Blue Pikmin are given the same 1.5× attack power"
+              ],
+              "quoted_sits": [
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose",
+                "editors' prose"
+              ],
+              "quoted_at": [
+                "Traits and abilities",
+                "Traits and abilities",
+                "In Pikmin 2 > Uses",
+                "In Pikmin 2 > Uses",
+                "Traits and abilities",
+                "Traits and abilities"
               ]
             }
           ]

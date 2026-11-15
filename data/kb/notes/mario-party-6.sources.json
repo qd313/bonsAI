@@ -548,13 +548,14 @@
           ]
         },
         {
-          "line": "Weak points: On Castaway Bay the Shadow Star comes only from stopping on Bowser's Battle Yacht; DK's Riverboat is the safe boat. Landing on a ? Space on a pole marked with a Star Space symbol swaps the two boats.",
+          "line": "Weak points: On Castaway Bay the Shadow Star comes from stopping on Bowser's Battle Yacht; DK's Riverboat sells a Star and gives you a safe ride back. Landing on a ? Space on a pole marked with a Star Space symbol swaps the two boats.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Castaway_Bay",
               "revision": "5246726",
               "quoted": [
                 "players that stop at Bowser's Battle Yacht will meet up with Bowser, who gives them a Shadow Star",
+                "Players that make it to DK's Riverboat make Donkey Kong appear to give the player a Star for 20 coins.",
                 "Landing on the ? Space at any of the poles with a Star Space symbol on it makes players hit a circular target on the pole, making a bell sound that switches Bowser's and DK's boats around.",
                 "He then gives them a safe ride back to the start."
               ]
@@ -582,7 +583,7 @@
           ]
         }
       ],
-      "weak_points_review": "W1 2026-11-15: line rewritten from a fact list. Castaway Bay rev 5246726 (Mario Party 6 rev 5518101): stopping on Bowser's Battle Yacht gives the Shadow Star; DK's Riverboat sells a Star and gives a safe ride back; a ? Space on a pole marked with a Star Space symbol swaps the two boats. The line now names the way to avoid the Shadow Star. Changed after writing: needs a fact check."
+      "weak_points_review": "W1 2026-11-15: line rewritten from a fact list, then reworded after the checker's read. Castaway Bay rev 5246726 (Mario Party 6 rev 5518101): stopping on Bowser's Battle Yacht gives the Shadow Star; DK's Riverboat sells a Star for 20 coins and gives a safe ride back; a ? Space on a pole marked with a Star Space symbol swaps the two boats."
     },
     {
       "section_id": 3108,

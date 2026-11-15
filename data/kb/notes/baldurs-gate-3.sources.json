@@ -15,12 +15,16 @@
             {
               "page": "Owlbear",
               "revision": "1376133251",
-              "quote": "An owlbear is depicted as a cross between a bear and an owl, which \"hugs\" like a bear and attacks with its beak."
+              "quote": "An owlbear is depicted as a cross between a bear and an owl, which \"hugs\" like a bear and attacks with its beak.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "The game features monsters from the Forgotten Realms, including owlbears, gnolls, and mind flayers."
+              "quote": "The game features monsters from the Forgotten Realms, including owlbears, gnolls, and mind flayers.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Narrative > Setting"
             }
           ]
         },
@@ -31,7 +35,9 @@
             {
               "page": "Owlbear",
               "revision": "1376133251",
-              "quote": "owlbears are carnivorous creatures, famed for their aggression and ferocity; they live in mated pairs in caves and hunt any creature bigger than a mouse."
+              "quote": "owlbears are carnivorous creatures, famed for their aggression and ferocity; they live in mated pairs in caves and hunt any creature bigger than a mouse.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Concept"
             }
           ]
         }
@@ -50,12 +56,16 @@
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "the ship comes under attack from githyanki warriors riding red dragons"
+              "quote": "the ship comes under attack from githyanki warriors riding red dragons",
+              "quote_sits": "editors' prose",
+              "quote_at": "Narrative > Plot"
             },
             {
               "page": "Githyanki",
               "revision": "1365291468",
-              "quote": "Alignment || Almost always any evil"
+              "quote": "Alignment || Almost always any evil",
+              "quote_sits": "table cell",
+              "quote_at": "infobox"
             }
           ]
         },
@@ -66,32 +76,44 @@
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "Shadowheart's mysterious prism, a device that is sought after by the githyanki"
+              "quote": "Shadowheart's mysterious prism, a device that is sought after by the githyanki",
+              "quote_sits": "editors' prose",
+              "quote_at": "Narrative > Plot"
             },
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "Of the ten companions, six can be chosen as the player character in the character creator."
+              "quote": "Of the ten companions, six can be chosen as the player character in the character creator.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Narrative > Characters"
             },
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "Shadowheart is a half-human, half-high elf cleric of Shar"
+              "quote": "Shadowheart is a half-human, half-high elf cleric of Shar",
+              "quote_sits": "editors' prose",
+              "quote_at": "Narrative > Characters"
             },
             {
               "page": "Githyanki",
               "revision": "1365291468",
-              "quote": "They are cousins and ancient enemies to the githzerai."
+              "quote": "They are cousins and ancient enemies to the githzerai.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Githyanki",
               "revision": "1365291468",
-              "quote": "The illithid empire was shattered by the slave rebellion"
+              "quote": "The illithid empire was shattered by the slave rebellion",
+              "quote_sits": "editors' prose",
+              "quote_at": "Fictional history"
             },
             {
               "page": "Githyanki",
               "revision": "1365291468",
-              "quote": "Having won the war, Gith continued to treat her people (who would become known as the githyanki"
+              "quote": "Having won the war, Gith continued to treat her people (who would become known as the githyanki",
+              "quote_sits": "editors' prose",
+              "quote_at": "Fictional history"
             }
           ]
         }
@@ -110,22 +132,30 @@
             {
               "page": "Minthara",
               "revision": "1366636360",
-              "quote": "Race || Drow"
+              "quote": "Race || Drow",
+              "quote_sits": "table cell",
+              "quote_at": "infobox"
             },
             {
               "page": "Minthara",
               "revision": "1366636360",
-              "quote": "Class || Paladin"
+              "quote": "Class || Paladin",
+              "quote_sits": "table cell",
+              "quote_at": "infobox"
             },
             {
               "page": "Minthara",
               "revision": "1366636360",
-              "quote": "she leads a band of goblins and other creatures in service of the game's antagonist"
+              "quote": "she leads a band of goblins and other creatures in service of the game's antagonist",
+              "quote_sits": "editors' prose",
+              "quote_at": "Appearances"
             },
             {
               "page": "Minthara",
               "revision": "1366636360",
-              "quote": "This brings her into conflict with a refugee settlement called the Emerald Grove"
+              "quote": "This brings her into conflict with a refugee settlement called the Emerald Grove",
+              "quote_sits": "editors' prose",
+              "quote_at": "Appearances"
             }
           ]
         },
@@ -136,12 +166,16 @@
             {
               "page": "Minthara",
               "revision": "1366636360",
-              "quote": "the player may either help her raid it or oppose and kill her and her goblins"
+              "quote": "the player may either help her raid it or oppose and kill her and her goblins",
+              "quote_sits": "editors' prose",
+              "quote_at": "Appearances"
             },
             {
               "page": "Minthara",
               "revision": "1366636360",
-              "quote": "the player may avoid the raid entirely and keep her alive by either knocking her out with non-lethal damage while killing her commanders or ignoring her entirely"
+              "quote": "the player may avoid the raid entirely and keep her alive by either knocking her out with non-lethal damage while killing her commanders or ignoring her entirely",
+              "quote_sits": "editors' prose",
+              "quote_at": "Appearances"
             }
           ]
         },
@@ -152,22 +186,30 @@
             {
               "page": "Minthara",
               "revision": "1366636360",
-              "quote": "though this option will cause the grove to be slaughtered off-screen"
+              "quote": "though this option will cause the grove to be slaughtered off-screen",
+              "quote_sits": "editors' prose",
+              "quote_at": "Appearances"
             },
             {
               "page": "Minthara",
               "revision": "1366636360",
-              "quote": "Any of these options will allow her to proceed to the game's second act."
+              "quote": "Any of these options will allow her to proceed to the game's second act.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Appearances"
             },
             {
               "page": "Minthara",
               "revision": "1366636360",
-              "quote": "If the player sides with her"
+              "quote": "If the player sides with her",
+              "quote_sits": "editors' prose",
+              "quote_at": "Appearances"
             },
             {
               "page": "Minthara",
               "revision": "1366636360",
-              "quote": "The player can rescue her, after which she will become a full companion"
+              "quote": "The player can rescue her, after which she will become a full companion",
+              "quote_sits": "editors' prose",
+              "quote_at": "Appearances"
             }
           ]
         }
@@ -186,12 +228,16 @@
             {
               "page": "Goblin (Dungeons & Dragons)",
               "revision": "1376133633",
-              "quote": "goblins are a common and fairly weak race of evil humanoid monsters"
+              "quote": "goblins are a common and fairly weak race of evil humanoid monsters",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "local druids and tiefling refugees face off against the goblin horde that worships a cult of the \"Absolute\""
+              "quote": "local druids and tiefling refugees face off against the goblin horde that worships a cult of the \"Absolute\"",
+              "quote_sits": "editors' prose",
+              "quote_at": "Narrative > Plot"
             }
           ]
         },
@@ -202,22 +248,30 @@
             {
               "page": "Goblin (Dungeons & Dragons)",
               "revision": "1376133633",
-              "quote": "The goblin appears in the first edition Monster Manual (1977), where it is described as having a tribal society and dwelling in dismal surroundings."
+              "quote": "The goblin appears in the first edition Monster Manual (1977), where it is described as having a tribal society and dwelling in dismal surroundings.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Publication history > Advanced Dungeons & Dragons 1st edition (1977–1988)"
             },
             {
               "page": "Goblin (Dungeons & Dragons)",
               "revision": "1376133633",
-              "quote": "Goblins are non-human monsters that low-level player characters often face in combat."
+              "quote": "Goblins are non-human monsters that low-level player characters often face in combat.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "Players have access to several locations, including a druids' grove, goblin camp, and a monastery"
+              "quote": "Players have access to several locations, including a druids' grove, goblin camp, and a monastery",
+              "quote_sits": "editors' prose",
+              "quote_at": "Narrative > Setting"
             },
             {
               "page": "Minthara",
               "revision": "1366636360",
-              "quote": "she leads a band of goblins and other creatures in service of the game's antagonist"
+              "quote": "she leads a band of goblins and other creatures in service of the game's antagonist",
+              "quote_sits": "editors' prose",
+              "quote_at": "Appearances"
             }
           ]
         }
@@ -236,12 +290,16 @@
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "Environmental elements like explosive barrels can be exploited"
+              "quote": "Environmental elements like explosive barrels can be exploited",
+              "quote_sits": "editors' prose",
+              "quote_at": "Gameplay > Combat"
             },
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "Items, like explosive barrels, can be sent to a camp stash and retrieved later."
+              "quote": "Items, like explosive barrels, can be sent to a camp stash and retrieved later.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Gameplay > Quests and exploration"
             }
           ]
         },
@@ -252,7 +310,9 @@
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "Environmental elements like explosive barrels can be exploited"
+              "quote": "Environmental elements like explosive barrels can be exploited",
+              "quote_sits": "editors' prose",
+              "quote_at": "Gameplay > Combat"
             }
           ]
         },
@@ -263,7 +323,9 @@
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "Items, like explosive barrels, can be sent to a camp stash and retrieved later."
+              "quote": "Items, like explosive barrels, can be sent to a camp stash and retrieved later.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Gameplay > Quests and exploration"
             }
           ]
         }
@@ -282,12 +344,16 @@
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "Using a spell or potion, players can speak to any encountered animal"
+              "quote": "Using a spell or potion, players can speak to any encountered animal",
+              "quote_sits": "editors' prose",
+              "quote_at": "Gameplay > Quests and exploration"
             },
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "as if they are a health potion"
+              "quote": "as if they are a health potion",
+              "quote_sits": "editors' prose",
+              "quote_at": "Reception"
             }
           ]
         },
@@ -298,7 +364,9 @@
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "Major instructions to a character, like attacking with a sword or casting a spell, consume an action. Smaller commands, like jumping or drinking a potion, consume a bonus action."
+              "quote": "Major instructions to a character, like attacking with a sword or casting a spell, consume an action. Smaller commands, like jumping or drinking a potion, consume a bonus action.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Gameplay > Combat"
             }
           ]
         },
@@ -309,12 +377,16 @@
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "The primary resources are actions, bonus actions, and movement."
+              "quote": "The primary resources are actions, bonus actions, and movement.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Gameplay > Combat"
             },
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "Major instructions to a character, like attacking with a sword or casting a spell, consume an action. Smaller commands, like jumping or drinking a potion, consume a bonus action."
+              "quote": "Major instructions to a character, like attacking with a sword or casting a spell, consume an action. Smaller commands, like jumping or drinking a potion, consume a bonus action.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Gameplay > Combat"
             }
           ]
         }
@@ -333,7 +405,9 @@
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "Environmental elements like explosive barrels can be exploited, and weapons can be dipped in poison."
+              "quote": "Environmental elements like explosive barrels can be exploited, and weapons can be dipped in poison.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Gameplay > Combat"
             }
           ]
         },
@@ -344,7 +418,9 @@
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "weapons can be dipped in poison"
+              "quote": "weapons can be dipped in poison",
+              "quote_sits": "editors' prose",
+              "quote_at": "Gameplay > Combat"
             }
           ]
         },
@@ -355,7 +431,9 @@
             {
               "page": "Baldur's Gate 3",
               "revision": "1381526328",
-              "quote": "Polygon's Maddy Myers criticised some elements as unintuitive, citing how weapons are dipped in poison by interacting with them as if they are a health potion instead of the \"dip weapon\" function"
+              "quote": "Polygon's Maddy Myers criticised some elements as unintuitive, citing how weapons are dipped in poison by interacting with them as if they are a health potion instead of the \"dip weapon\" function",
+              "quote_sits": "editors' prose",
+              "quote_at": "Reception"
             }
           ]
         }

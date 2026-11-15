@@ -20,7 +20,14 @@
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../shared/deckyCall";
 import { STARTER_NOTE_SEARCH_TAG, STARTER_SPEECH_MODELS, TIER1_ESSENTIALS_TAG } from "./deckEssentialsTags";
-import { confirmDownload, DOWNLOADS_OFF_FAILED_LINE, type DownloadNotice } from "../downloads/downloadNotice";
+import {
+  confirmDownload,
+  DOWNLOADS_NOT_SAVED_LINE,
+  DOWNLOADS_OFF_FAILED_LINE,
+  internetDownloadsAreOn,
+  sendDownloadsOnAgain,
+  type DownloadNotice,
+} from "../downloads/downloadNotice";
 import { modelPullNotice, OLLAMA_PROGRAM_NOTICE, SPEECH_MODELS_NOTICE } from "../downloads/downloadSites";
 import type { LocalOllamaSetupStatus } from "../ai-connection/OllamaWhereAiRunsSection.types";
 import {
@@ -74,6 +81,8 @@ export function starterSetBoxBody(engineAlreadyAsked: boolean, downloadsOff = fa
  * `onStatus` hears the run's first status line when the screen keeps one. A screen that shows the run
  * in place passes `onRefused` too: a refusal reason then goes to it (and onto the tab as a failed
  * line) instead of a toast, and the "started" toast is left out because the tab already shows the run.
+ * A "downloads off" refusal while the screen shows them on sends the screen's value once and tries once more
+ * (plan 104, B1); only a second refusal reads as off.
  */
 export function startLocalOllamaSetup(
   profile: string,
@@ -89,13 +98,21 @@ export function startLocalOllamaSetup(
     onStatus?.({ phase: "failed", stage: "", profile, error: reason, done: true });
   };
   if (onRefused) onStatus?.({ phase: "running", stage: "check", profile, done: false });
-  void callDeckyWithTimeout<[{ profile: string }], { accepted?: boolean; reason?: string; error?: string }>(
-    "start_local_ollama_setup",
-    [{ profile }],
-    15000
-  )
-    .then((out) => {
+  // The back end reads its own file for the Internet downloads permission. When it refuses with "downloads
+  // off" while this screen shows them on, the two disagree (a save that never arrived): the screen's value is
+  // sent once and the start is tried once more. Only a second refusal reads as "downloads off".
+  const start = (alreadyResent: boolean): Promise<void> =>
+    callDeckyWithTimeout<[{ profile: string }], { accepted?: boolean; reason?: string; error?: string }>(
+      "start_local_ollama_setup",
+      [{ profile }],
+      15000
+    ).then(async (out) => {
       if (!out?.accepted) {
+        if (out?.error === "downloads_off" && !alreadyResent && internetDownloadsAreOn()) {
+          if (await sendDownloadsOnAgain()) return start(true);
+          refuse(DOWNLOADS_NOT_SAVED_LINE, "Setup not started");
+          return;
+        }
         // In place, the tab's failed line names the likely cause in the same words as the Update press.
         const downloadsOff = out?.error === "downloads_off" && onRefused != null;
         refuse(downloadsOff ? DOWNLOADS_OFF_FAILED_LINE : (out?.reason ?? "Unknown error."), "Setup not started");
@@ -111,10 +128,10 @@ export function startLocalOllamaSetup(
       void callDeckyWithTimeout<[], LocalOllamaSetupStatus>("get_local_ollama_setup_status", [], DECKY_RPC_TIMEOUT_MS)
         .then((st) => onStatus?.(st))
         .catch(() => {});
-    })
-    .catch((e: unknown) => {
-      refuse(formatDeckyRpcError(e), "Setup RPC failed");
     });
+  void start(false).catch((e: unknown) => {
+    refuse(formatDeckyRpcError(e), "Setup RPC failed");
+  });
 }
 
 /**

@@ -111,6 +111,33 @@ export function useDownloadPermissionBridge(b: PermissionBridge): void {
  */
 export const DOWNLOADS_OFF_FAILED_LINE = "Failed (check the Internet downloads permission?)";
 
+/**
+ * The reason the Ollama tab shows (after "Failed:") when the screen's Internet downloads value could not be sent to the
+ * back end, so the back end's file may still say off. Says the setting could not be saved, not that
+ * downloads are off.
+ */
+export const DOWNLOADS_NOT_SAVED_LINE = "The Internet downloads setting could not be saved. Try again in a moment.";
+
+/**
+ * For a download the back end refused as "downloads off" while this screen shows them on: the file the back
+ * end reads and the screen disagree. Sends the screen's value once. True when the back end took it, so the
+ * caller may try the download once more; false when there is nothing to send (the screen does not show them
+ * on) or the save failed.
+ */
+export async function sendDownloadsOnAgain(): Promise<boolean> {
+  if (!bridge || !bridge.enabled) return false;
+  try {
+    await callDeckyWithTimeout<[{ capabilities: BonsaiCapabilities }], unknown>(
+      "save_settings",
+      [{ capabilities: { ...bridge.capabilities, internet_downloads: true } }],
+      DECKY_RPC_TIMEOUT_MS
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /** True when the permission is off and the box can ask (not under the kids lock, which no box can lift). */
 export function internetDownloadsAreOff(): boolean {
   return bridge != null && !bridge.enabled && !bridge.kidsLockActive;

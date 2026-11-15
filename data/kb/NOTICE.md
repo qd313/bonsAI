@@ -33,6 +33,7 @@ The wikis the notes come from, and their licences:
 | Half-Life Wiki (also its "Black Mesa (game)" page, a source for the Black Mesa notes) | half-life.fandom.com | CC-BY-SA-3.0 |
 | Hollow Knight Wiki | hollowknight.wiki | CC-BY-SA-3.0 |
 | Left 4 Dead Wiki | left4dead.fandom.com | CC-BY-SA-3.0 |
+| LOOT's load-order lists (Fallout 4, Skyrim Special Edition) | github.com/loot/fallout4, github.com/loot/skyrimse | CC0-1.0, <https://creativecommons.org/publicdomain/zero/1.0/> |
 | Palworld Wiki | palworld.wiki.gg | CC-BY-SA-4.0 |
 | The Portal Wiki | theportalwiki.com | CC-BY-4.0 |
 | Red Dead Wiki | reddead.fandom.com | CC-BY-SA-3.0 |

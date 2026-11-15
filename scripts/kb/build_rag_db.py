@@ -167,18 +167,6 @@ def collect_third_party_attribution_sources(conn: sqlite3.Connection) -> list[di
                 "captured": "",
             }
         )
-    if _table_exists(conn, "load_order_sources"):
-        for game_key, repository, commit_date, licence in conn.execute(
-            "SELECT game_key, repository, commit_date, licence FROM load_order_sources ORDER BY game_key"
-        ):
-            sources.append(
-                {
-                    "title": _card_title(LOAD_ORDER_GAMES.get(game_key, game_key), "load-order rules from LOOT"),
-                    "url": repository,
-                    "license": licence,
-                    "captured": commit_date,
-                }
-            )
     return sources
 
 
@@ -238,6 +226,24 @@ def _attributions_header_lines() -> list[str]:
     ]
 
 
+def _load_order_credit_lines(conn: sqlite3.Connection) -> list[str]:
+    """The credits block for LOOT's lists, or nothing when the library holds none.
+
+    A courtesy only (CC0 asks for no credit): it names LOOT and gives each game's repository, the commit's
+    date and the day it was read.
+    """
+    if not _table_exists(conn, "load_order_sources"):
+        return []
+    lines = [f"### LOOT, the load-order tool · {CC0_LICENSE}", "", f"- Licence: [{CC0_LICENSE}]({CC0_DEED_URL})"]
+    for game_key, repository, commit_date, date_read in conn.execute(
+        "SELECT game_key, repository, commit_date, date_read FROM load_order_sources ORDER BY game_key"
+    ):
+        label = LOAD_ORDER_GAMES.get(game_key, game_key)
+        lines.append(f"- {label} load-order rules: {repository} (LOOT's list of {commit_date}, read {date_read})")
+    lines.append("")
+    return lines
+
+
 def _attribution_entry_lines(entry: dict[str, Any]) -> list[str]:
     """The ATTRIBUTIONS.md block for one (source, licence) group."""
     source = str(entry.get("source") or "").strip()
@@ -273,13 +279,14 @@ def format_attributions_markdown(conn: sqlite3.Connection) -> str:
     lines: list[str] = _attributions_header_lines()
     cc0_entries = [e for e in entries if str(e.get("license") or "").strip() == CC0_LICENSE]
     entries = [e for e in entries if e not in cc0_entries]
-    if not entries and not cc0_entries:
+    loot_lines = _load_order_credit_lines(conn)
+    if not entries and not cc0_entries and not loot_lines:
         lines.append("_No third-party sourced cards in this build._")
         lines.append("")
     else:
         for entry in entries:
             lines.extend(_attribution_entry_lines(entry))
-        if cc0_entries:
+        if cc0_entries or loot_lines:
             lines.extend(
                 [
                     "## No-conditions sources (CC0)",
@@ -290,6 +297,7 @@ def format_attributions_markdown(conn: sqlite3.Connection) -> str:
             )
             for entry in cc0_entries:
                 lines.extend(_attribution_entry_lines(entry))
+            lines.extend(loot_lines)
 
     maintainer_titles = _maintainer_strategy_titles(conn)
     compat_n = int(

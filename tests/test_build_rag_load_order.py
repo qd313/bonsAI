@@ -281,14 +281,16 @@ class LoadOrderBuildCorpusTests(_LoadOrderBuildBase):
         finally:
             conn.close()
 
-    def test_the_credits_name_loots_lists_as_a_no_conditions_source(self):
+    def test_the_credits_name_loot_and_both_repositories_as_a_no_conditions_source(self):
         self._write("fallout4.json", game_file())
+        self._write("skyrimse.json", game_file("skyrimse", commit_date="2026-10-31"))
         manifest = build_rag_db.build_corpus(self._out("out"), seed=True)
         text = manifest["attributions_markdown"]
-        self.assertIn("No-conditions sources (CC0)", text)
-        self.assertIn("github.com · CC0-1.0", text)
-        self.assertIn("Fallout 4 — load-order rules from LOOT", text)
-        self.assertIn("2026-11-01", text)
+        section = text[text.index("No-conditions sources (CC0)"):]
+        self.assertIn("### LOOT, the load-order tool · CC0-1.0", section)
+        self.assertIn("Fallout 4 load-order rules: https://github.com/loot/fallout4 (LOOT's list of 2026-11-01", section)
+        self.assertIn("Skyrim Special Edition load-order rules: https://github.com/loot/skyrimse (LOOT's list of 2026-10-31", section)
+        self.assertNotIn("github.com · CC0-1.0", text)
         self.assertEqual(text, (self._out("out") / "ATTRIBUTIONS.md").read_text(encoding="utf-8"))
 
     def test_no_credit_is_added_when_there_are_no_rules(self):

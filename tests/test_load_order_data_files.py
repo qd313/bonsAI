@@ -67,6 +67,15 @@ class ShippedLoadOrderFileTests(unittest.TestCase):
                 for e in entries:
                     self.assertTrue(e["after"] or e["requires"] or e["incompatible"] or e["messages"], e["name"])
 
+    def test_the_notice_names_loots_lists_with_their_repositories_and_licence(self):
+        line = next(
+            (l for l in (REPO_ROOT / "data" / "kb" / "NOTICE.md").read_text(encoding="utf-8").splitlines() if "LOOT" in l),
+            "",
+        )
+        for game in GAMES:
+            self.assertIn(f"github.com/loot/{game}", line)
+        self.assertIn("CC0-1.0", line)
+
     def test_both_files_pass_the_builders_own_row_checks(self):
         pairs = build_rag_db._load_order_files()
         self.assertEqual(sorted(p[0] for p in pairs), ["load_order/fallout4.json", "load_order/skyrimse.json"])

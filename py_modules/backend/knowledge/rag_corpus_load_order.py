@@ -24,12 +24,16 @@ the way every other library read has done since 2026-11-11) and never raises.
 from __future__ import annotations
 
 import json
-import re
 import sqlite3
 from typing import Any, Optional
 
 from backend.knowledge.knowledge_base_cards import _get_connection, close_connection
-from backend.knowledge.knowledge_base_schema import load_order_name_key, normalize_alias, resolve_corpus_db_path
+from backend.knowledge.knowledge_base_schema import (
+    load_order_name_key,
+    load_order_pattern_matches,
+    normalize_alias,
+    resolve_corpus_db_path,
+)
 
 import decky
 
@@ -37,9 +41,6 @@ logger = decky.logger
 
 # The longest name worth looking up; anything longer is not a mod's file name, and a pattern is never run on it.
 MAX_NAME_CHARS = 200
-_PLUGIN_ENDINGS = (".esp", ".esm", ".esl")
-# A name that already ends like a file (".esp", ".txt") is matched as given; a plain name gets each plugin ending tried.
-_FILE_ENDING = re.compile(r"\.[A-Za-z]{2,4}$")
 
 _GAME_KEYS = {
     "fallout4": "fallout4",
@@ -68,18 +69,6 @@ def _json_list(raw: Any) -> list[Any]:
     except (TypeError, ValueError):
         return []
     return parsed if isinstance(parsed, list) else []
-
-
-def _pattern_matches(pattern: str, name: str) -> bool:
-    """True when the whole of ``name`` (a plain name: with a plugin ending added) fits ``pattern``."""
-    candidates = [name]
-    if not _FILE_ENDING.search(name):
-        candidates += [name + ending for ending in _PLUGIN_ENDINGS]
-    try:
-        compiled = re.compile(pattern, re.IGNORECASE)
-    except re.error:
-        return False
-    return any(compiled.fullmatch(c) for c in candidates)
 
 
 _COLUMNS = (
@@ -120,7 +109,7 @@ def _find(db_path: str, game_key: str, name: str) -> Optional[dict[str, Any]]:
     for pattern_row in conn.execute(
         _COLUMNS + "WHERE r.game_key = ? AND r.is_pattern = 1 ORDER BY r.rule_id", (game_key,)
     ):
-        if _pattern_matches(str(pattern_row["name"]), name):
+        if load_order_pattern_matches(str(pattern_row["name"]), name):
             return _entry_dict(pattern_row)
     return None
 

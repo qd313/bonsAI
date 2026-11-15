@@ -287,6 +287,26 @@ def load_order_name_key(name: str) -> str:
     return re.sub(r"[\s_]+", "", raw)
 
 
+_PLUGIN_ENDINGS = (".esp", ".esm", ".esl")
+# A name that already ends like a file (".esp", ".txt") is matched as given; a plain name gets each plugin ending tried.
+_NAME_ENDS_LIKE_A_FILE = re.compile(r"\.[A-Za-z]{2,4}$")
+
+
+def load_order_pattern_matches(pattern: str, name: str) -> bool:
+    """True when the whole of ``name`` (a plain name: with a plugin ending added) fits LOOT's ``pattern``.
+
+    Case is ignored. A pattern that is not a valid regular expression matches nothing.
+    """
+    candidates = [name]
+    if not _NAME_ENDS_LIKE_A_FILE.search(name):
+        candidates += [name + ending for ending in _PLUGIN_ENDINGS]
+    try:
+        compiled = re.compile(pattern, re.IGNORECASE)
+    except re.error:
+        return False
+    return any(compiled.fullmatch(c) for c in candidates)
+
+
 def default_corpus_dir_internal() -> str:
     return str(Path.home() / ".bonsai" / "rag")
 

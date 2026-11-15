@@ -23,7 +23,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from backend.knowledge.knowledge_base_schema import load_order_name_key
+from backend.knowledge.knowledge_base_schema import load_order_name_key, load_order_pattern_matches
 from build_rag_db_loader import load_build_rag_db
 from rag_corpus_seed_fixtures import compat_payload, seed_payload
 from script_loader import load_script
@@ -96,6 +96,20 @@ class NameKeyTests(unittest.TestCase):
 
     def test_a_dot_inside_a_name_is_not_taken_for_an_extension(self):
         self.assertEqual(load_order_name_key("Mod v1.20"), "modv1.20")
+
+
+class PatternMatchTests(unittest.TestCase):
+    def test_a_pattern_fits_the_whole_name_without_regard_to_case(self):
+        self.assertTrue(load_order_pattern_matches(r"Bashed Patch.*\.esp", "bashed patch, 0.ESP"))
+        self.assertFalse(load_order_pattern_matches(r"Bashed Patch.*\.esp", "My Bashed Patch.esp"))
+
+    def test_a_plain_name_is_tried_with_each_plugin_ending_but_a_file_ending_is_not_added_to(self):
+        self.assertTrue(load_order_pattern_matches(r"Bashed Patch.*\.esp", "Bashed Patch"))
+        self.assertTrue(load_order_pattern_matches(r"Mod v1\.20\.esm", "Mod v1.20"))
+        self.assertFalse(load_order_pattern_matches(r"Bashed Patch.*\.esp", "Bashed Patch.txt"))
+
+    def test_a_pattern_that_will_not_compile_matches_nothing(self):
+        self.assertFalse(load_order_pattern_matches("Broken(.esp", "Broken(.esp"))
 
 
 class SeedLoadOrderTests(_LoadOrderBuildBase):

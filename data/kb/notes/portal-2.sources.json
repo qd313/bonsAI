@@ -6,6 +6,7 @@
   "licence_stored": "CC-BY-4.0",
   "read_on": "2026-10-25",
   "how_read": "The page text came through the wiki's own query call (action=query, prop=revisions, rvprop=content) at the revisions named below, not through the fetcher's page-render call, which the wiki refused with HTTP 429 all session. Each quote is the page's wikitext with link and spoiler markup removed. Script: .scratch/n4_fetch_wikitext.py (not committed).",
+  "quote_sorting": "2026-11-15 (plan 104, lane S1): every page was read again at the revision named on its section, through the wiki's query call for the page's wikitext, because the render call still answered HTTP 429. Beside each quote, quote_sits says where it sits on the page (editors' prose, table cell, or the game's own text) and quote_at the page heading. One quote that sat in a GLaDOS quotation box (section 1311) was replaced by an editors' image caption. The Weak points lines of sections 1301, 1303 and 1304 were removed because their pages name no way to beat, stop or avoid the thing.",
   "sections": [
     {
       "section_id": 1300,
@@ -22,17 +23,23 @@
             {
               "page": "Sentry Turret",
               "revision": "193100",
-              "quote": "Sentry Turrets are tripod robots"
+              "quote": "Sentry Turrets are tripod robots",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Sentry Turret",
               "revision": "193100",
-              "quote": "The Aperture Sentry Turret has a single red eye, sleek appearance, and predominately white color scheme"
+              "quote": "The Aperture Sentry Turret has a single red eye, sleek appearance, and predominately white color scheme",
+              "quote_sits": "editors' prose",
+              "quote_at": "Overview"
             },
             {
               "page": "Sentry Turret",
               "revision": "193100",
-              "quote": "Moving into their angle of sight however, will cause Turrets to deploy their guns shortly after greeting Chell or Atlas or P-body before opening fire. They will continue to fire until the target is dead or moves out of sight."
+              "quote": "Moving into their angle of sight however, will cause Turrets to deploy their guns shortly after greeting Chell or Atlas or P-body before opening fire. They will continue to fire until the target is dead or moves out of sight.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         },
@@ -43,22 +50,30 @@
             {
               "page": "Sentry Turret",
               "revision": "193100",
-              "quote": "The most common method is knocking them over, causing them to flail and fire wildly before deactivating. This can be done by picking them up and dropping them, or using any object to tip them over."
+              "quote": "The most common method is knocking them over, causing them to flail and fire wildly before deactivating. This can be done by picking them up and dropping them, or using any object to tip them over.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Sentry Turret",
               "revision": "193100",
-              "quote": "direct a Thermal Discouragement Beam onto it (usually via a portal and/or Weighted Pivot Cube), causing it to heat up and explode"
+              "quote": "direct a Thermal Discouragement Beam onto it (usually via a portal and/or Weighted Pivot Cube), causing it to heat up and explode",
+              "quote_sits": "editors' prose",
+              "quote_at": "Tactics"
             },
             {
               "page": "Sentry Turret",
               "revision": "193100",
-              "quote": "the lasers or fizzler can be used to completely destroy them"
+              "quote": "the lasers or fizzler can be used to completely destroy them",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Sentry Turret",
               "revision": "193100",
-              "quote": "Another is to cover it in Repulsion Gel causing it to bounce with increasing force until it either disables in midair, falls into the path of a Thermal Discouragement Beam or falls away into goo or a bottomless pit. Propulsion Gel makes a Turret quite slippery, making knocking it over easier"
+              "quote": "Another is to cover it in Repulsion Gel causing it to bounce with increasing force until it either disables in midair, falls into the path of a Thermal Discouragement Beam or falls away into goo or a bottomless pit. Propulsion Gel makes a Turret quite slippery, making knocking it over easier",
+              "quote_sits": "editors' prose",
+              "quote_at": "Tactics"
             }
           ]
         },
@@ -69,12 +84,16 @@
             {
               "page": "Sentry Turret",
               "revision": "193100",
-              "quote": "Sentry Turrets can be easily spotted by the visible laser beam emitted from their eye at all times"
+              "quote": "Sentry Turrets can be easily spotted by the visible laser beam emitted from their eye at all times",
+              "quote_sits": "editors' prose",
+              "quote_at": "Tactics"
             },
             {
               "page": "Sentry Turret",
               "revision": "193100",
-              "quote": "Portal 2 Sentry Turrets will not attempt to shoot at enemies if glass is between them, although will still track the enemy with the laser pointer (They will, however, shoot at the player when 2 panes are between them and the player in some circumstances). A Hard Light Bridge will prevent the Turret from even detecting the enemy, making it go to sleep."
+              "quote": "Portal 2 Sentry Turrets will not attempt to shoot at enemies if glass is between them, although will still track the enemy with the laser pointer (They will, however, shoot at the player when 2 panes are between them and the player in some circumstances). A Hard Light Bridge will prevent the Turret from even detecting the enemy, making it go to sleep.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Trivia"
             }
           ]
         }
@@ -95,38 +114,30 @@
             {
               "page": "Defective Turret",
               "revision": "185504",
-              "quote": "Defective Turrets, also called \"Crap Turrets\" by Wheatley, are damaged, ammo-less, unfinished, or faultily assembled Sentry Turrets."
+              "quote": "Defective Turrets, also called \"Crap Turrets\" by Wheatley, are damaged, ammo-less, unfinished, or faultily assembled Sentry Turrets.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Defective Turret",
               "revision": "185504",
-              "quote": "They are harmless to Chell"
+              "quote": "They are harmless to Chell",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Defective Turret",
               "revision": "185504",
-              "quote": "They lack the outer white shell of normal turrets, and their insides are visible."
+              "quote": "They lack the outer white shell of normal turrets, and their insides are visible.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Overview"
             },
             {
               "page": "Defective Turret",
               "revision": "185504",
-              "quote": "They also seem to be out of bullets, as when they fire, only a clicking sound is made. After a while, they bizarrely catch on fire and explode."
-            }
-          ]
-        },
-        {
-          "label": "Weak points",
-          "text": "It is harmless to Chell, and its laser guide is off or broken.",
-          "from": [
-            {
-              "page": "Defective Turret",
-              "revision": "185504",
-              "quote": "their laser guide is off or broken"
-            },
-            {
-              "page": "Defective Turret",
-              "revision": "185504",
-              "quote": "They are harmless to Chell"
+              "quote": "They also seem to be out of bullets, as when they fire, only a clicking sound is made. After a while, they bizarrely catch on fire and explode.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Overview"
             }
           ]
         },
@@ -137,7 +148,9 @@
             {
               "page": "Defective Turret",
               "revision": "185504",
-              "quote": "The turrets appearing in Course 5 of Cooperative Testing Initiative look like defective turrets but work and speak properly."
+              "quote": "The turrets appearing in Course 5 of Cooperative Testing Initiative look like defective turrets but work and speak properly.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Trivia"
             }
           ]
         }
@@ -158,12 +171,16 @@
             {
               "page": "Crusher",
               "revision": "188619",
-              "quote": "Crushers appear as large grey panels with a number of steel spikes firmly attached to them."
+              "quote": "Crushers appear as large grey panels with a number of steel spikes firmly attached to them.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Crusher",
               "revision": "188619",
-              "quote": "If a test subject makes contact with a Crusher, they will be forced into the nearest hard surface and killed instantly."
+              "quote": "If a test subject makes contact with a Crusher, they will be forced into the nearest hard surface and killed instantly.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         },
@@ -174,7 +191,9 @@
             {
               "page": "Crusher",
               "revision": "188619",
-              "quote": "When active, a loud crunching noise is emitted in order to warn the player that they are approaching a Crusher, thereby allowing the player to avoid them."
+              "quote": "When active, a loud crunching noise is emitted in order to warn the player that they are approaching a Crusher, thereby allowing the player to avoid them.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Function"
             }
           ]
         },
@@ -185,17 +204,23 @@
             {
               "page": "Crusher",
               "revision": "188619",
-              "quote": "Crushers become more frequent during the final parts of the game"
+              "quote": "Crushers become more frequent during the final parts of the game",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Crusher",
               "revision": "188619",
-              "quote": "also appear frequently in Cooperative Testing Initiative"
+              "quote": "also appear frequently in Cooperative Testing Initiative",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Crusher",
               "revision": "188619",
-              "quote": "In Co-op mode, if the player comes in contact with a Crusher while floating in an Excursion Funnel, the damage caused will be periodic until the player moves away or dies."
+              "quote": "In Co-op mode, if the player comes in contact with a Crusher while floating in an Excursion Funnel, the damage caused will be periodic until the player moves away or dies.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Function"
             }
           ]
         }
@@ -216,28 +241,23 @@
             {
               "page": "Goo",
               "revision": "191434",
-              "quote": "is a common environmental hazard in both Portal and Portal 2"
+              "quote": "is a common environmental hazard in both Portal and Portal 2",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Goo",
               "revision": "191434",
-              "quote": "the goo appears to be mainly brown"
+              "quote": "the goo appears to be mainly brown",
+              "quote_sits": "editors' prose",
+              "quote_at": "Overview"
             },
             {
               "page": "Goo",
               "revision": "191434",
-              "quote": "Any contact with the goo will result in continuous damage that will eventually result in killing Chell, P-body, Atlas, Bendy or whoever you are playing as within a few seconds upon contact."
-            }
-          ]
-        },
-        {
-          "label": "Weak points",
-          "text": "It is only a penalty for a slip: it is there to make you precise with your movement and your portals.",
-          "from": [
-            {
-              "page": "Goo",
-              "revision": "191434",
-              "quote": "Goo is usually present within testing chambers in order to provide a penalty for failure, and to ensure that test subjects are precise with their movements and positioning of their portals."
+              "quote": "Any contact with the goo will result in continuous damage that will eventually result in killing Chell, P-body, Atlas, Bendy or whoever you are playing as within a few seconds upon contact.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Overview"
             }
           ]
         },
@@ -248,12 +268,16 @@
             {
               "page": "Goo",
               "revision": "191434",
-              "quote": "Almost all objects that have fallen into the goo are irretrievable, with the only exception being radios because they are light enough to float on it."
+              "quote": "Almost all objects that have fallen into the goo are irretrievable, with the only exception being radios because they are light enough to float on it.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Overview"
             },
             {
               "page": "Goo",
               "revision": "191434",
-              "quote": "a replacement may be issued immediately if the first one was dropped into the goo (unless the dropper is activated by a button, in which case you may have to press the button again)"
+              "quote": "a replacement may be issued immediately if the first one was dropped into the goo (unless the dropper is activated by a button, in which case you may have to press the button again)",
+              "quote_sits": "editors' prose",
+              "quote_at": "Overview"
             }
           ]
         }
@@ -274,23 +298,16 @@
             {
               "page": "Laser Field",
               "revision": "193070",
-              "quote": "Laser Fields are as its name implies, deadly lasers emitting from the same type of device housing the Fizzlers."
+              "quote": "Laser Fields are as its name implies, deadly lasers emitting from the same type of device housing the Fizzlers.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Laser Field",
               "revision": "193070",
-              "quote": "test subjects in contact with it will die instantly"
-            }
-          ]
-        },
-        {
-          "label": "Weak points",
-          "text": "It is the opposite of a Material Emancipation Grill: any object can be carried through the beams, but you cannot.",
-          "from": [
-            {
-              "page": "Laser Field",
-              "revision": "193070",
-              "quote": "The Laser fields serve as the opposite of the Material Emancipation Grills - any objects can be carried through the beams but test subjects in contact with it will die instantly."
+              "quote": "test subjects in contact with it will die instantly",
+              "quote_sits": "editors' prose",
+              "quote_at": "Overview"
             }
           ]
         },
@@ -301,7 +318,9 @@
             {
               "page": "Laser Field",
               "revision": "193070",
-              "quote": "Discouragement Redirection Cubes cannot redirect any of the beams in the laser field."
+              "quote": "Discouragement Redirection Cubes cannot redirect any of the beams in the laser field.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Trivia"
             }
           ]
         }
@@ -322,12 +341,16 @@
             {
               "page": "Cubes",
               "revision": "191371",
-              "quote": "The Weighted Storage Cube was first introduced in Portal, and remains prevalent in Portal 2."
+              "quote": "The Weighted Storage Cube was first introduced in Portal, and remains prevalent in Portal 2.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Cubes > Weighted Storage Cube"
             },
             {
               "page": "Cubes",
               "revision": "191371",
-              "quote": "In Portal 2 however, the cube is given a blue ring in the center instead of a blue cross, and can turn yellow when placed upon a Super Button."
+              "quote": "In Portal 2 however, the cube is given a blue ring in the center instead of a blue cross, and can turn yellow when placed upon a Super Button.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Cubes > Weighted Storage Cube"
             }
           ]
         },
@@ -338,12 +361,16 @@
             {
               "page": "Cubes",
               "revision": "191371",
-              "quote": "Cubes are common testing elements throughout the Portal series. They are commonly used to press Buttons, disable Turrets, or redirect Lasers."
+              "quote": "Cubes are common testing elements throughout the Portal series. They are commonly used to press Buttons, disable Turrets, or redirect Lasers.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Cubes",
               "revision": "191371",
-              "quote": "The Weighted Companion Cube was first introduced in Portal, and remains prevalent in Portal 2. Similar to the Weighted Storage Cube, the Companion Cube possesses a different design in Portal 2. The Cube functions in the same way as a Weighted Storage Cube, being differentiated to encourage test subjects to feel attached to the Cube."
+              "quote": "The Weighted Companion Cube was first introduced in Portal, and remains prevalent in Portal 2. Similar to the Weighted Storage Cube, the Companion Cube possesses a different design in Portal 2. The Cube functions in the same way as a Weighted Storage Cube, being differentiated to encourage test subjects to feel attached to the Cube.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Cubes > Weighted Companion Cube"
             }
           ]
         },
@@ -354,7 +381,9 @@
             {
               "page": "Cubes",
               "revision": "191371",
-              "quote": "The Discouragement Redirection Cube was introduced in Portal 2. Its main purpose is to redirect the Thermal Discouragement Beam to other places or through portals if necessary. However, the cube has a second use as a Weighted Storage Cube, as it can be used to activate the Heavy-Duty Super Button."
+              "quote": "The Discouragement Redirection Cube was introduced in Portal 2. Its main purpose is to redirect the Thermal Discouragement Beam to other places or through portals if necessary. However, the cube has a second use as a Weighted Storage Cube, as it can be used to activate the Heavy-Duty Super Button.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Cubes > Discouragement Redirection Cube"
             }
           ]
         }
@@ -375,7 +404,9 @@
             {
               "page": "Discouragement Redirection Cube",
               "revision": "169917",
-              "quote": "Each side of the Redirection Cube has a large, round piece of glass in the center. One of the glass sides is more curved than the others, being the lens that the Thermal Discouragement Beam is focused out of when coming into contact with any of the other sides."
+              "quote": "Each side of the Redirection Cube has a large, round piece of glass in the center. One of the glass sides is more curved than the others, being the lens that the Thermal Discouragement Beam is focused out of when coming into contact with any of the other sides.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         },
@@ -386,7 +417,9 @@
             {
               "page": "Discouragement Redirection Cube",
               "revision": "169917",
-              "quote": "Like all cubes, they can be used to hold down buttons. They also have the unique ability to focus a Thermal Discouragement Beam and redirect it through their lens."
+              "quote": "Like all cubes, they can be used to hold down buttons. They also have the unique ability to focus a Thermal Discouragement Beam and redirect it through their lens.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         },
@@ -397,7 +430,9 @@
             {
               "page": "Discouragement Redirection Cube",
               "revision": "169917",
-              "quote": "In co-op mode, when redirecting a beam into receptacles, the beam will auto-aim into the center of the receptacle when the beam is close enough, making beam redirection slightly easier."
+              "quote": "In co-op mode, when redirecting a beam into receptacles, the beam will auto-aim into the center of the receptacle when the beam is close enough, making beam redirection slightly easier.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         }
@@ -418,7 +453,9 @@
             {
               "page": "Propulsion Gel",
               "revision": "193076",
-              "quote": "Propulsion Gel is a bright orange substance that greatly reduces the friction of objects moving across the surface to which it is applied. Propulsion Gel also increases velocity, as objects covered in Propulsion Gel also have their friction reduced, causing them to slide around and be moved more easily."
+              "quote": "Propulsion Gel is a bright orange substance that greatly reduces the friction of objects moving across the surface to which it is applied. Propulsion Gel also increases velocity, as objects covered in Propulsion Gel also have their friction reduced, causing them to slide around and be moved more easily.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         },
@@ -429,12 +466,16 @@
             {
               "page": "Propulsion Gel",
               "revision": "193076",
-              "quote": "The Gel is most useful when applied to long, straight areas, as it allows the player to reach a considerable velocity, thereby allowing the player to jump over large gaps or move quickly past (or through) objects such as Crushers."
+              "quote": "The Gel is most useful when applied to long, straight areas, as it allows the player to reach a considerable velocity, thereby allowing the player to jump over large gaps or move quickly past (or through) objects such as Crushers.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Function"
             },
             {
               "page": "Propulsion Gel",
               "revision": "193076",
-              "quote": "Used in combination with Repulsion Gel, the player can travel a considerable distance, which is vital in situations in which Portals cannot be used."
+              "quote": "Used in combination with Repulsion Gel, the player can travel a considerable distance, which is vital in situations in which Portals cannot be used.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         },
@@ -445,12 +486,16 @@
             {
               "page": "Propulsion Gel",
               "revision": "193076",
-              "quote": "Crouching will slow the character down while on Propulsion Gel"
+              "quote": "Crouching will slow the character down while on Propulsion Gel",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Propulsion Gel",
               "revision": "193076",
-              "quote": "Propulsion Gel can be applied to virtually any surface, and can be placed in different locations through the use of carefully-placed portals."
+              "quote": "Propulsion Gel can be applied to virtually any surface, and can be placed in different locations through the use of carefully-placed portals.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Function"
             }
           ]
         }
@@ -471,7 +516,9 @@
             {
               "page": "Conversion Gel",
               "revision": "185601",
-              "quote": "Conversion Gel is a white gel that enables any surface to have portals placed on them, even if they are not normally portal-conductive."
+              "quote": "Conversion Gel is a white gel that enables any surface to have portals placed on them, even if they are not normally portal-conductive.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         },
@@ -482,7 +529,9 @@
             {
               "page": "Conversion Gel",
               "revision": "185601",
-              "quote": "If it is washed off, the portal will sit unchanged where the gel used to be"
+              "quote": "If it is washed off, the portal will sit unchanged where the gel used to be",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         },
@@ -493,7 +542,9 @@
             {
               "page": "Conversion Gel",
               "revision": "185601",
-              "quote": "Surfaces that are not flat or big enough to fit a portal will not be portal-conductive even when coated in Conversion Gel. This means that Conversion Gel-covered Weighted Storage Cubes will not function as a portal-able surface."
+              "quote": "Surfaces that are not flat or big enough to fit a portal will not be portal-conductive even when coated in Conversion Gel. This means that Conversion Gel-covered Weighted Storage Cubes will not function as a portal-able surface.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         }
@@ -514,7 +565,9 @@
             {
               "page": "Gels",
               "revision": "191504",
-              "quote": "This gel may appear to be regular water with an ability to wash away other types of gels off of surfaces and any objects that have been coated."
+              "quote": "This gel may appear to be regular water with an ability to wash away other types of gels off of surfaces and any objects that have been coated.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Gels > Cleansing Gel"
             }
           ]
         },
@@ -525,7 +578,9 @@
             {
               "page": "Gels",
               "revision": "191504",
-              "quote": "It is destroyed upon touching anything. It has no special properties in regard of the gameplay, and as such, does not affect any surfaces other than ones covered in other gels."
+              "quote": "It is destroyed upon touching anything. It has no special properties in regard of the gameplay, and as such, does not affect any surfaces other than ones covered in other gels.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Gels > Cleansing Gel"
             }
           ]
         },
@@ -536,12 +591,16 @@
             {
               "page": "Gels",
               "revision": "191504",
-              "quote": "A surface or object can take on the properties of only the gel that coated it last."
+              "quote": "A surface or object can take on the properties of only the gel that coated it last.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Gels",
               "revision": "191504",
-              "quote": "Gel cannot be applied to transparent surfaces (such as glass), and will pass through grating (also without painting it)."
+              "quote": "Gel cannot be applied to transparent surfaces (such as glass), and will pass through grating (also without painting it).",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         }
@@ -562,22 +621,30 @@
             {
               "page": "Handheld Portal Device",
               "revision": "193075",
-              "quote": "is the experimental tool designed to place two portals that objects can pass through."
+              "quote": "is the experimental tool designed to place two portals that objects can pass through.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Handheld Portal Device",
               "revision": "193075",
-              "quote": "This is the primary tool players are equipped with to complete Test Chambers."
+              "quote": "This is the primary tool players are equipped with to complete Test Chambers.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Handheld Portal Device",
               "revision": "193075",
-              "quote": "If a portal of the other color is already placed, these two portals will be linked."
+              "quote": "If a portal of the other color is already placed, these two portals will be linked.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Overview"
             },
             {
               "page": "Handheld Portal Device",
               "revision": "193075",
-              "quote": "The Handheld Portal Device also has the ability to pick up and manipulate objects directly in front of it"
+              "quote": "The Handheld Portal Device also has the ability to pick up and manipulate objects directly in front of it",
+              "quote_sits": "editors' prose",
+              "quote_at": "Overview"
             }
           ]
         },
@@ -588,12 +655,16 @@
             {
               "page": "Handheld Portal Device",
               "revision": "193075",
-              "quote": "The Handheld Portal Device is designed to create and place portals on immobile surfaces, or surfaces covered with Conversion Gel that are big enough for the Portals to be opened."
+              "quote": "The Handheld Portal Device is designed to create and place portals on immobile surfaces, or surfaces covered with Conversion Gel that are big enough for the Portals to be opened.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Overview"
             },
             {
               "page": "Handheld Portal Device",
               "revision": "193075",
-              "quote": "If a portal of the same color is already placed, it will be closed and the new one will be used instead, limiting the player to the use of only two portals at a time. Nothing will happen if a portal is shot at an enemy or other object."
+              "quote": "If a portal of the same color is already placed, it will be closed and the new one will be used instead, limiting the player to the use of only two portals at a time. Nothing will happen if a portal is shot at an enemy or other object.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Overview"
             }
           ]
         },
@@ -604,12 +675,16 @@
             {
               "page": "Handheld Portal Device",
               "revision": "193075",
-              "quote": "The glass chamber and a light on the top of the device will glow with the color of the previously placed portal."
+              "quote": "The glass chamber and a light on the top of the device will glow with the color of the previously placed portal.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Overview"
             },
             {
               "page": "Handheld Portal Device",
               "revision": "193075",
-              "quote": "The Portal Device in Portal 2 also lacks the ability to slightly launch/drop objects using the primary and secondary fire keys respectively."
+              "quote": "The Portal Device in Portal 2 also lacks the ability to slightly launch/drop objects using the primary and secondary fire keys respectively.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Portal 2"
             }
           ]
         }
@@ -630,17 +705,23 @@
             {
               "page": "Material Emancipation Grill",
               "revision": "188569",
-              "quote": "Emancipation Grills disintegrate unauthorized Aperture Science equipment and block any portal that passes through, while allowing the player and the Handheld Portal Device to pass without issue."
+              "quote": "Emancipation Grills disintegrate unauthorized Aperture Science equipment and block any portal that passes through, while allowing the player and the Handheld Portal Device to pass without issue.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             },
             {
               "page": "Material Emancipation Grill",
               "revision": "188569",
-              "quote": "Emancipation Grills appear more solid in nature compared to Portal. They are light blue in coloring and have a shimmering water-like appearance."
+              "quote": "Emancipation Grills appear more solid in nature compared to Portal. They are light blue in coloring and have a shimmering water-like appearance.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Appearances > Portal 2"
             },
             {
               "page": "Material Emancipation Grill",
               "revision": "188569",
-              "quote": "(also known as Emancipation Grills or Fizzlers)"
+              "quote": "(also known as Emancipation Grills or Fizzlers)",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         },
@@ -651,27 +732,37 @@
             {
               "page": "Material Emancipation Grill",
               "revision": "188569",
-              "quote": "The primary function of the Emancipation Grill is to vaporize unauthorized Aperture Science equipment that passes through it while allowing test subjects and the Handheld Portal Device to pass through."
+              "quote": "The primary function of the Emancipation Grill is to vaporize unauthorized Aperture Science equipment that passes through it while allowing test subjects and the Handheld Portal Device to pass through.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Function"
             },
             {
               "page": "Material Emancipation Grill",
               "revision": "188569",
-              "quote": "This Aperture Science Material Emancipation Grill will vaporize any unauthorized equipment that passes through it - for instance, the Aperture Science Weighted Storage Cube."
+              "quote": "A vaporized Discouragement Redirection Cube in Portal 2",
+              "quote_sits": "editors' prose",
+              "quote_at": "Gallery"
             },
             {
               "page": "Material Emancipation Grill",
               "revision": "188569",
-              "quote": "When a Sentry Turret passes through the grill, it emits a long \"owowowowowowowow\" sound as it disintegrates."
+              "quote": "When a Sentry Turret passes through the grill, it emits a long \"owowowowowowowow\" sound as it disintegrates.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Function"
             },
             {
               "page": "Material Emancipation Grill",
               "revision": "188569",
-              "quote": "Portals also cannot pass through the Grill."
+              "quote": "Portals also cannot pass through the Grill.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Function"
             },
             {
               "page": "Material Emancipation Grill",
               "revision": "188569",
-              "quote": "The Emancipation Grill also causes the Handheld Portal Device to shake, signaling that it has \"rebooted\", and that any portals that have been placed have now been removed."
+              "quote": "The Emancipation Grill also causes the Handheld Portal Device to shake, signaling that it has \"rebooted\", and that any portals that have been placed have now been removed.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Function"
             }
           ]
         },
@@ -682,7 +773,9 @@
             {
               "page": "Material Emancipation Grill",
               "revision": "188569",
-              "quote": "The Emancipation Grill will glow brightly in Portal 2 as objects approach it to warn the player that it will vaporize the object once they come into contact."
+              "quote": "The Emancipation Grill will glow brightly in Portal 2 as objects approach it to warn the player that it will vaporize the object once they come into contact.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Function"
             }
           ]
         }
@@ -703,7 +796,9 @@
             {
               "page": "Surfaces",
               "revision": "182535",
-              "quote": "a portal can be placed upon any light-colored flat surface, whereas an uneven or dark surface cannot be used in this way."
+              "quote": "a portal can be placed upon any light-colored flat surface, whereas an uneven or dark surface cannot be used in this way.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         },
@@ -714,17 +809,23 @@
             {
               "page": "Surfaces",
               "revision": "182535",
-              "quote": "the portal-able surfaces in the test chambers"
+              "quote": "the portal-able surfaces in the test chambers",
+              "quote_sits": "editors' prose",
+              "quote_at": "Appearance > Portal 2 > Portal-able"
             },
             {
               "page": "Surfaces",
               "revision": "182535",
-              "quote": "tend to be white in appearance"
+              "quote": "tend to be white in appearance",
+              "quote_sits": "editors' prose",
+              "quote_at": "Appearance > Portal 2 > Portal-able"
             },
             {
               "page": "Surfaces",
               "revision": "182535",
-              "quote": "They've been changed from a bronze-like color to black with grey lines"
+              "quote": "They've been changed from a bronze-like color to black with grey lines",
+              "quote_sits": "editors' prose",
+              "quote_at": "Appearance > Portal 2 > Non-portal-able"
             }
           ]
         },
@@ -735,12 +836,16 @@
             {
               "page": "Surfaces",
               "revision": "182535",
-              "quote": "Glass, despite being a flat surface in-game, automatically repels both Portals and Gels."
+              "quote": "Glass, despite being a flat surface in-game, automatically repels both Portals and Gels.",
+              "quote_sits": "editors' prose",
+              "quote_at": "Trivia"
             },
             {
               "page": "Surfaces",
               "revision": "182535",
-              "quote": "In Portal 2, the only way to overcome some puzzles that lack portal-conductive surfaces is through the use of Gels."
+              "quote": "In Portal 2, the only way to overcome some puzzles that lack portal-conductive surfaces is through the use of Gels.",
+              "quote_sits": "editors' prose",
+              "quote_at": "lead section"
             }
           ]
         }
@@ -761,12 +866,16 @@
             {
               "page": "Turrets",
               "revision": "192928",
-              "quote": "Frankenturrets are bizarre Sentry Turret-Weighted Storage Cube hybrids in the single-player campaign of Portal 2."
+              "quote": "Frankenturrets are bizarre Sentry Turret-Weighted Storage Cube hybrids in the single-player campaign of Portal 2.",
+              "quote_sits": "editors' prose",
+              "quote_at": "General > Frankenturret"
             },
             {
               "page": "Turrets",
               "revision": "192928",
-              "quote": "Frankenturrets do not speak, and instead emit incomprehensible chirping sounds."
+              "quote": "Frankenturrets do not speak, and instead emit incomprehensible chirping sounds.",
+              "quote_sits": "editors' prose",
+              "quote_at": "General > Frankenturret"
             }
           ]
         },
@@ -777,7 +886,9 @@
             {
               "page": "Turrets",
               "revision": "192928",
-              "quote": "They are harmless, their the only difference from normal cubes being that Frankenturrets will hop around aimlessly when not placed on a button."
+              "quote": "They are harmless, their the only difference from normal cubes being that Frankenturrets will hop around aimlessly when not placed on a button.",
+              "quote_sits": "editors' prose",
+              "quote_at": "General > Frankenturret"
             }
           ]
         },
@@ -788,7 +899,9 @@
             {
               "page": "Turrets",
               "revision": "192928",
-              "quote": "When picked up by Chell, they retract their legs inside the cube. If they fall over on their sides or upside down, they will wave their legs, trying to get up."
+              "quote": "When picked up by Chell, they retract their legs inside the cube. If they fall over on their sides or upside down, they will wave their legs, trying to get up.",
+              "quote_sits": "editors' prose",
+              "quote_at": "General > Frankenturret"
             }
           ]
         }

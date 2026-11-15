@@ -319,6 +319,15 @@ HONEST_UNKNOWN_IN_SPEED_ON = False
 # boss gets no borrowed detail in at least 5 of 6 answers in both of two runs and ordinary answers keep their facts.
 # Read when a turn is built, not when this file loads, so a test or a measuring script can flip it.
 NOTES_LEFT_OUT_ON = False
+# Plan 104 lane H1, version two, same turns and same landing rule as the switch above: the notes stay in what the AI is
+# sent, but on a marked turn the order "Ground answers in the attached strategy/compat cards when relevant" is swapped for
+# ``NOTES_FENCE_LINE``, one sentence. Only that sentence changes; the order about hiding spoilers and every other line
+# stay. Off while it is measured. Read when a prompt is built, not when this file loads.
+NOTES_FENCED_ON = False
+NOTES_FENCE_LINE = (
+    "The attached cards are about other things in this game, so use one only if it names the thing the player "
+    "asked about, and otherwise take nothing from them."
+)
 HONEST_UNKNOWN_WORDINGS = {
     "a": (
         "NOTES GAP: The attached notes do not cover this question, so begin your reply by telling the "
@@ -682,12 +691,17 @@ def build_system_prompt(
         early_stripped = early_stripped.replace(_KB_BLOCK_HEADER, _KB_BLOCK_HEADER + followup_note, 1)
     early_block = f"\n\n{early_stripped}" if early_stripped else ""
     if early_stripped and "Local knowledge base" in early_stripped:
+        # Plan 104 lane H1: on a marked turn, with its switch on, one sentence stands where the order to ground the
+        # answer in the cards stood. Every other turn reads byte for byte as before.
+        grounding = (
+            NOTES_FENCE_LINE
+            if NOTES_FENCED_ON and TURN_FLAG_NOTES_DO_NOT_COVER in turn_flags
+            else "Ground answers in the attached strategy/compat cards when relevant."
+        )
         early_block += (
-            "\n\nKNOWLEDGE BASE (offline corpus): Ground answers in the attached strategy/compat "
-            "cards when relevant.\n"
+            f"\n\nKNOWLEDGE BASE (offline corpus): {grounding}\n"
             if strategy_kb_relaxed
-            else "\n\nKNOWLEDGE BASE (offline corpus): Ground answers in the attached strategy/compat "
-            "cards when relevant. "
+            else f"\n\nKNOWLEDGE BASE (offline corpus): {grounding} "
             "Put spoilery walkthrough detail inside a hidden block (opening line exactly ```bonsai-spoiler, "
             "closing ``` on its own line) when the user has not opted in.\n"
         )

@@ -681,7 +681,7 @@
         },
         {
           "label": "Uses",
-          "text": "As of patch 95 firefighters come to the lot automatically when an alarm detects a fire, and with a Fire Prevention System Utility Panel on the lot it also sets off sprinklers.",
+          "text": "Since patch 95 an alarm that spots a fire calls firefighters to the lot by itself. If the Fire Prevention System Utility Panel is on the lot, the alarm also makes sprinklers come on over the fire.",
           "drawn_from": [
             {
               "page": "Smoke detector",
@@ -745,7 +745,7 @@
         },
         {
           "label": "Uses",
-          "text": "When a fire breaks out a sprinkler appears above the flames and puts it out, and with a Fire Prevention System Utility Panel on the lot smoke alarms also trigger sprinklers.",
+          "text": "In a fire, a sprinkler pops up over the flames by itself and puts them out. With the Fire Prevention System Utility Panel on the lot, smoke alarms set the sprinklers off too.",
           "drawn_from": [
             {
               "page": "Fire",
@@ -765,7 +765,7 @@
         },
         {
           "label": "Tips",
-          "text": "The sprinkler only appears if there is a ceiling above the fire, and it leaves no puddles.",
+          "text": "It works only when there is a ceiling over the fire, and it does not leave water on the floor.",
           "drawn_from": [
             {
               "page": "Fire",
@@ -844,7 +844,7 @@
         },
         {
           "label": "Uses",
-          "text": "The chef stations from Dine Out are the only stoves that cook experimental food, and a caterer hired for §800 cooks for four hours.",
+          "text": "Only the chef stations from Dine Out can cook experimental food. You can also hire a caterer for §800: they cook for your household and leave after four hours.",
           "drawn_from": [
             {
               "page": "Stove",
@@ -987,7 +987,7 @@
         },
         {
           "label": "Uses",
-          "text": "Chess builds the logic skill in older Sims and the mental skill in children, and a game with a partner also meets the social need.",
+          "text": "Playing teaches children the mental skill and older Sims the logic skill. A Sim can play alone, or with a partner, which also helps the social need.",
           "drawn_from": [
             {
               "page": "Chess table",
@@ -1007,7 +1007,7 @@
         },
         {
           "label": "Tips",
-          "text": "It needs chairs at both ends, and Sims can knock pieces off the table.",
+          "text": "Put a chair at each end or nobody can play. A Sim may also knock pieces off the board.",
           "drawn_from": [
             {
               "page": "Chess table",
@@ -1150,14 +1150,14 @@
               "revision": 1254173,
               "excerpt": "ECC RAM || Reduces the rate at which the computer breaks || Handiness level 8",
               "excerpt_sits": "editors' prose",
-              "excerpt_at": "The Sims 4 > Actions"
+              "excerpt_at": "The Sims 4 > Actions > Upgrades"
             },
             {
               "page": "Computer",
               "revision": 1254173,
               "excerpt": "Better video card || Increases fun at a faster rate when playing a video game || Handiness level 9",
               "excerpt_sits": "editors' prose",
-              "excerpt_at": "The Sims 4 > Actions"
+              "excerpt_at": "The Sims 4 > Actions > Upgrades"
             },
             {
               "page": "Computer",
@@ -1203,7 +1203,7 @@
         },
         {
           "label": "Uses",
-          "text": "A cold shower taken when angry or flirty puts the Sim back to their earlier emotion.",
+          "text": "If your Sim is angry or flirty, a cold shower sends their mood back to what it was before.",
           "drawn_from": [
             {
               "page": "Shower",
@@ -1216,7 +1216,7 @@
         },
         {
           "label": "Tips",
-          "text": "A cheap shower can leave a Sim uncomfortable, and the open showers from Discover University, Snowy Escape and Lovestruck allow more compact bathrooms.",
+          "text": "A cheap shower can make a Sim uncomfortable. The open showers from Discover University, Snowy Escape and Lovestruck block nothing around them and Sims just walk through, so a bathroom can take less space.",
           "drawn_from": [
             {
               "page": "Shower",
@@ -1249,7 +1249,7 @@
       "lines": [
         {
           "label": "Summary",
-          "text": "A staircase's length follows the wall height (or the foundation it sits on) and it can be pulled sideways as long as the lot, but there are no spiral staircases.",
+          "text": "How long a staircase is depends on how tall the walls are (or the foundation it is attached to), and you can drag it sideways until it spans the lot. There are no spiral staircases.",
           "drawn_from": [
             {
               "page": "Staircase",

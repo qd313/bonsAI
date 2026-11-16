@@ -19,7 +19,7 @@
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
-import { revealBelowKeeping } from "../../../shared/dpad/chatPanelScroll";
+import { findScrollablePanel, revealBelowKeeping } from "../../../shared/dpad/chatPanelScroll";
 import { uiGamepadFocusElement } from "../../../shared/dpad/uiDocument";
 import { focusPerTurnRow, registerRowNav } from "../../../shared/dpad/focusPerTurnRow";
 import { focusKbNotesBlock } from "../../knowledge-library/buildKbNotesBlockElement";
@@ -176,8 +176,28 @@ function revealWhenOpened(panel: HTMLElement | null, querySlot: () => HTMLElemen
   if (!panel || revealedPanels.has(panel)) return;
   revealedPanels.add(panel);
   requestAnimationFrame(() => {
-    if (panel.isConnected) revealBelowKeeping(panel, openingLine(querySlot) ?? uiGamepadFocusElement());
+    if (panel.isConnected) revealBelowKeeping(panel, keepWhenOpened(panel, querySlot));
   });
+}
+
+/**
+ * What the reveal above keeps on screen: the line that opened the panel, or the control holding the ring
+ * when the ring truly sits on one in the chat above that line, whichever is higher. The case is the
+ * summed-up note above the answer's reply row (plan 104 F1, the second opinion's consult 4): A on it
+ * opens the panel on the Session tab, and held back by the line alone the scroll could carry the note
+ * off the top while the ring was still on it, which is where the ring stays when the panel's page lacks
+ * the browser's focus and the hop on to "Sum up" cannot carry it. A ring that reads as nothing, as the
+ * page, as the pane, as something in the dock, as the line itself, or as anything below the line (inside
+ * the panel) leaves the line as the limit.
+ */
+function keepWhenOpened(panel: HTMLElement, querySlot: () => HTMLElement | null): HTMLElement | null {
+  const ring = uiGamepadFocusElement();
+  const line = openingLine(querySlot);
+  if (!line) return ring;
+  const pane = findScrollablePanel(panel);
+  const ringInChat =
+    ring && pane && ring !== pane && ring !== line && pane.contains(ring) && !ring.closest(".bonsai-main-tab-dock");
+  return ringInChat && ring.getBoundingClientRect().top < line.getBoundingClientRect().top ? ring : line;
 }
 
 /**

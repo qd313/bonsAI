@@ -281,9 +281,10 @@ answer sections 0..n-1            (Up/Down walk them, unchanged)
   step 1 was left to Steam, which picked Copy, the nearest stop above the list (Deck, 3 of 3,
   `workshop:test-evidence/plan103-P103-M-CHECKLIST.json`). Down from the last section already went to step 1, so
   Copy is now off the up-and-down walk on a checklist answer and is reached by Right, as everywhere else. Down from
-  the last step is still Steam's own onto the reply row. **While the panel's page lacks the browser's focus** both
-  chains pass over the summed-up note: it has no Steam stop yet and a landing on it moved only the page's focus.
-  Device row: P103-CHECKLIST-COPY-01.
+  the last step is still Steam's own onto the reply row. The summed-up note is a stop on both chains **with the panel's
+  page focused and without its focus**: it has its own Steam nav node since plan 104 F1 (`replyStopNavRef("summary-note")`,
+  `buildChatSummaryNoteElement.tsx`), so a landing on it is Steam's transfer (wave six passed over it without focus).
+  Device rows: P103-CHECKLIST-COPY-01, P104-SUMMARY-NOTE-STOP-01.
 
 - **Between the answer and Copy:** every move is Steam's own transfer onto the target slot's nav node (`TakeFocus`)
   followed by the registry focus, never a bare `focus()` across containers.

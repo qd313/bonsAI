@@ -29,11 +29,11 @@
               ],
               "quoted_sits": [
                 "table_cell_sentence",
-                "table_cell"
+                "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Items",
-                "Items"
+                "Items > Banana cell",
+                "Items > Banana Bunch (New) cell"
               ]
             }
           ]
@@ -64,7 +64,7 @@
                 "table_cell"
               ],
               "quoted_sits_at": [
-                "Items"
+                "Items > Banana Bunch (New) cell"
               ]
             }
           ]
@@ -111,8 +111,8 @@
                 "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Items",
-                "Items"
+                "Items > Green Shell cell",
+                "Items > Triple Green Shells (New) cell"
               ]
             }
           ]
@@ -130,7 +130,7 @@
                 "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Items"
+                "Items > Green Shell cell"
               ]
             },
             {
@@ -145,8 +145,8 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64",
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -179,8 +179,8 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64",
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -209,8 +209,8 @@
                 "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Items",
-                "Items"
+                "Items > Red Shell cell",
+                "Items > Triple Red Shells (New) cell"
               ]
             }
           ]
@@ -228,7 +228,7 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -259,7 +259,7 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -303,9 +303,9 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64",
-                "History > Mario Kart series > Mario Kart 64",
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -329,10 +329,10 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64",
-                "History > Mario Kart series > Mario Kart 64",
-                "History > Mario Kart series > Mario Kart 64",
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -354,9 +354,9 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64",
-                "History > Mario Kart series > Mario Kart 64",
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -374,7 +374,7 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -398,10 +398,10 @@
                 "Gives a racer a short speed boost."
               ],
               "quoted_sits": [
-                "table_cell"
+                "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Items"
+                "Items > Mushroom cell"
               ]
             },
             {
@@ -432,7 +432,7 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -490,7 +490,7 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -503,29 +503,34 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
         },
         {
-          "line": "Uses: For a limited time it gives you as many speed boosts as you care to use.",
+          "line": "Uses: Its boosts have no cap, but only until the effect runs out.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Golden_Dash_Mushroom",
               "revision": "5485845",
               "quoted": [
-                "It gives the player an endless amount of speed boosts for a limited time.",
-                "For a limited time, you can boost your speed as many times as you want."
+                "It gives the player an endless amount of speed boosts for a limited time."
               ],
               "quoted_sits": [
-                "editors_prose",
-                "game_text"
+                "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64",
-                "Profiles and statistics > Mario Kart series > Mario Kart 64 > Operation card bio"
+                "Mario Kart series > Mario Kart 64"
               ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Golden_Dash_Mushroom",
+              "revision": "5485845",
+              "sat_in": "Profiles and statistics > Mario Kart series > Mario Kart 64 > Operation card bio",
+              "note": "game text (instruction booklet or operation card); not copied here and not used"
             }
           ]
         },
@@ -542,7 +547,7 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -585,7 +590,7 @@
                 "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Items"
+                "Items > Super Star cell"
               ]
             }
           ]
@@ -609,7 +614,7 @@
               "quoted_sits_at": [
                 "History > Mario Kart series",
                 "History > Mario Kart series",
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -627,7 +632,7 @@
                 "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Items"
+                "Items > Super Star cell"
               ]
             }
           ]
@@ -658,7 +663,7 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -685,7 +690,7 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -698,7 +703,7 @@
                 "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Items"
+                "Items > Thunder Bolt cell"
               ]
             }
           ]
@@ -716,7 +721,7 @@
                 "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Items"
+                "Items > Thunder Bolt cell"
               ]
             },
             {
@@ -729,7 +734,7 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -777,7 +782,7 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -798,7 +803,7 @@
               ],
               "quoted_sits_at": [
                 "lead (before the first heading)",
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -816,7 +821,7 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -843,7 +848,7 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -863,8 +868,8 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64",
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
@@ -895,7 +900,7 @@
                 "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Items"
+                "Items > Thunder Bolt cell"
               ]
             }
           ]
@@ -926,40 +931,33 @@
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64",
-                "History > Mario Kart series > Mario Kart 64",
-                "History > Mario Kart series > Mario Kart 64"
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64"
               ]
             }
           ]
         },
         {
-          "line": "Weak points: Thwomps are obstacles in the course, not something you fight: the ones that drop try to flatten anyone racing beneath them, and the ones that slide from side to side bump racers on the ground and can spin them out. A Super Star lets you drive through course obstacles.",
+          "line": "Weak points: Thwomps are obstacles in the course, not something you fight: the ones that drop try to flatten anyone racing beneath them, and the sliding ones try to bump racers on the ground. A Super Star lets you drive through course obstacles.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Thwomp",
               "revision": "5536081",
               "quoted": [
-                "Thwomps serve as obstacles in the course."
+                "Thwomps serve as obstacles in the course.",
+                "They appear in Bowser's Castle and try to flatten any player that races beneath them.",
+                "There are also some Thwomps that move from one side to the other, trying to bump players on the ground"
               ],
               "quoted_sits": [
+                "editors_prose",
+                "editors_prose",
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "History > Mario Kart series > Mario Kart 64"
-              ]
-            },
-            {
-              "page": "https://www.mariowiki.com/Bowser%27s_Castle_(Mario_Kart_64)",
-              "revision": "5519520",
-              "quoted": [
-                "if you run into one, you will spin out. Should you be stepped by one, you'll find yourself squished flat as a pancake."
-              ],
-              "quoted_sits": [
-                "game_text"
-              ],
-              "quoted_sits_at": [
-                "Profiles > Mario Kart 64 > Instruction booklet description"
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64",
+                "Mario Kart series > Mario Kart 64"
               ]
             },
             {
@@ -972,8 +970,29 @@
                 "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Items"
+                "Items > Super Star cell"
               ]
+            },
+            {
+              "page": "https://www.mariowiki.com/Super_Star",
+              "revision": "5532618",
+              "quoted": [
+                "invincible to all attacks and able to drive through items, course obstacles, and hit other drivers"
+              ],
+              "quoted_sits": [
+                "editors_prose"
+              ],
+              "quoted_sits_at": [
+                "History > Mario Kart series"
+              ]
+            }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Bowser%27s_Castle_(Mario_Kart_64)",
+              "revision": "5519520",
+              "sat_in": "Profiles > Mario Kart 64 > Instruction booklet description",
+              "note": "game text (instruction booklet or operation card); not copied here and not used"
             }
           ]
         },
@@ -1023,7 +1042,7 @@
           ]
         }
       ],
-      "weak_points_review": "S4 2026-11-15: line kept and rewritten. Thwomp rev 5536081 (Mario Kart 64 section) calls Thwomps obstacles in the course and says the dropping ones try to flatten racers beneath them; Super Star rev 5532618 says a Star lets a racer drive through items, course obstacles and other drivers. The Bowser's Castle page's instruction-booklet wording (spin out, squished flat) is game text and no longer stands behind the line."
+      "weak_points_review": "S4 2026-11-15, fix round: line kept and rewritten. Thwomp rev 5536081 (Mario Kart 64 section) calls Thwomps obstacles in the course and says the dropping ones try to flatten racers beneath them and the sliding ones try to bump racers on the ground; Super Star rev 5532618 says a Star lets a racer drive through items, course obstacles and other drivers. The Bowser's Castle page's instruction-booklet wording is game text and no longer stands behind the line."
     },
     {
       "section_id": 2111,
@@ -1051,31 +1070,36 @@
           ]
         },
         {
-          "line": "Weak points: Driving into a train launches your kart upward, so keep out of its way. Computer racers always stop at a crossing when the train is there. You can bypass it by driving through the gap between the coaches.",
+          "line": "Weak points: The computer racers wait at the track whenever the train is on it. You can get past the train yourself by driving through the gap between two of its coaches.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kalimari_Desert",
               "revision": "5519514",
               "quoted": [
-                "The trick is to time it so that the steam locomotive that crosses the course won't block you. If the train is crossing in front of you, you should temporarily stop.",
                 "CPU drivers always stop at a train track if the train is present.",
                 "One can drive through the gap between the coaches of the train to bypass it."
               ],
               "quoted_sits": [
-                "game_text",
                 "editors_prose",
                 "editors_prose"
               ],
               "quoted_sits_at": [
-                "Profiles > Mario Kart 64 > Instruction booklet description",
                 "Mario Kart 64 > Course layout",
                 "Mario Kart 64 > Course layout"
               ]
             }
+          ],
+          "game_text_not_used": [
+            {
+              "page": "https://www.mariowiki.com/Kalimari_Desert",
+              "revision": "5519514",
+              "sat_in": "Profiles > Mario Kart 64 > Instruction booklet description",
+              "note": "game text (instruction booklet or operation card); not copied here and not used"
+            }
           ]
         },
         {
-          "line": "Tips: How long the train is depends on how many people play: playing alone gives a coal tender with five passenger cars; two-player VS has a shorter one made of an engine, a tender and a single passenger car; two-player Grand Prix and three- or four-player VS run the train with neither tender nor passenger cars.",
+          "line": "Tips: How long the train is depends on the mode and the number of players. Alone, you face a coal tender pulling five passenger cars. In two-player VS the train is an engine, a tender and one passenger car. In two-player Grand Prix and in three- or four-player VS it has no tender and no passenger cars.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kalimari_Desert",
@@ -1093,7 +1117,7 @@
           ]
         },
         {
-          "line": "Tips: You can drive all the way around the train track, but that circuit does not count as a lap, so it only costs you places.",
+          "line": "Tips: Nothing stops you circling the train track, but that circuit earns no lap and just sets you back.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kalimari_Desert",
@@ -1132,7 +1156,7 @@
                 "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Course elements > Enemies, obstacles, and species"
+                "Course elements > Enemies, obstacles, and species > Yoshi Valley cell"
               ]
             },
             {
@@ -1194,7 +1218,7 @@
                 "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Course elements > Enemies, obstacles, and species"
+                "Course elements > Enemies, obstacles, and species > Yoshi Valley cell"
               ]
             }
           ]
@@ -1222,7 +1246,7 @@
                 "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Course elements > Enemies, obstacles, and species"
+                "Course elements > Enemies, obstacles, and species > Rainbow Road cell"
               ]
             },
             {
@@ -1309,16 +1333,16 @@
                 "If a racer collides with one, they are knocked into the air."
               ],
               "quoted_sits": [
-                "table_cell"
+                "table_cell_sentence"
               ],
               "quoted_sits_at": [
-                "Course elements > Enemies, obstacles, and species"
+                "Course elements > Enemies, obstacles, and species > Toad's Turnpike cell"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Big vehicles crawl along and can get in your way, mostly where the road narrows to two lanes and vehicles run abreast, leaving little room to steer between them.",
+          "line": "Tips: Large vehicles are slow and may block your way. It is hardest on the two-lane stretches, where vehicles often run side by side and there is little room to steer through.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Toad%27s_Turnpike",
@@ -1336,7 +1360,7 @@
           ]
         },
         {
-          "line": "Tips: From the start of the right U-turn the road is only two lanes wide, and it stays that way until the finish line.",
+          "line": "Tips: The road narrows to two lanes where the right U-turn begins and keeps that width all the way to the finish.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Toad%27s_Turnpike",

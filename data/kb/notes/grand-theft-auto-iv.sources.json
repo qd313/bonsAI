@@ -5,7 +5,7 @@
   "game_id": 19,
   "game": "Grand Theft Auto IV",
   "read_on": "2026-11-02",
-  "quote_sorting": "2026-11-15 (plan 104, lane S2): every page was read again at the revision named on its section, through the wiki's page-render call, and each quote was found on it. Beside each list of quotes, quoted_sits says where each one sits on the page (editors' prose, table cell, or the game's own text) and quoted_at gives the page heading (\"infobox\" for the box at the top of a page); the two lists run in the same order as the quotes. Lines that followed the wiki's sentence too closely were rewritten from a list of the facts, with the same facts. The one fact that rested on the game's own text (the text of an achievement, in the six-star line of section 1504) was dropped. The Weak points line of section 1500 now says how to lose the police at one star, which the page gives in its HUD section.",
+  "quote_sorting": "2026-11-15 (plan 104, lane S2): every page was read again at the revision named on its section, through the wiki's page-render call, and each quote was found on it. Beside each list of quotes, quoted_sits says where each one sits on the page (editors' prose, table cell, or the game's own text) and quoted_at gives the page heading (\"infobox\" for the box at the top of a page); the two lists run in the same order as the quotes. Lines that followed the wiki's sentence too closely were rewritten from a list of the facts, with the same facts. The one fact that rested on the game's own text (the text of an achievement, in the six-star line of section 1504) was dropped. The Weak points line of section 1500 now says how to lose the police at one star, which the page gives in its HUD section. A second wording pass the same day reworded more lines from fact lists, grouped by what a player does, and corrected claims that said more than their quotes (section 1503: \"some\" carry SMGs and pump shotguns; section 1506: Micro Uzis, as the page says; section 1508: \"in most cases\" a blue vest).",
   "sections": [
     {
       "section_id": 1500,
@@ -15,7 +15,7 @@
       "main_revision": "2082538",
       "lines": [
         {
-          "line": "Summary: Of all six levels, only one star keeps the police from using firearms; they try to arrest you instead.",
+          "line": "Summary: At one star the police do not fire at you, and officers aim to arrest you. It is the one level where that is true.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -36,7 +36,7 @@
           ]
         },
         {
-          "line": "Weak points: You can lose them by leaving the search circle, which is about two city blocks across at one star, and staying out of it for several seconds: the police then give up and the wanted level goes away. Their cars chase at a moderate speed and try to box you in rather than ram you.",
+          "line": "Weak points: To shake them, get out of the search circle, roughly two city blocks across at one star, and stay out for several seconds; the police give up and the stars disappear. Until then their cars drive at a moderate pace and try to hem you in rather than hit you.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -108,7 +108,7 @@
       "main_revision": "2082538",
       "lines": [
         {
-          "line": "Summary: Two stars is where the police start using firearms, and pump shotguns may be among them; in a chase they try to pull ahead of you or push you off the road.",
+          "line": "Summary: Two stars is where guns come out, and some officers may carry pump shotguns. In a chase they try to drive past you or push you off the road.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -129,7 +129,7 @@
           ]
         },
         {
-          "line": "Danger: More police cars are sent, and the fit officers riding up front climb out with pump shotguns. If you crash, they try to hem you in with their cars.",
+          "line": "Danger: Reaching two stars sends extra police cars, and the front-seat passengers, when they are fit-type officers, get out holding pump shotguns. After a crash, expect the cars to close in and trap you.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Liberty_City_Police_Department_(HD_Universe)",
@@ -202,7 +202,7 @@
       "main_revision": "2082538",
       "lines": [
         {
-          "line": "Summary: At three stars NOOSE steps in with Cruisers and Patriots, putting roadblocks across main roads and bridges, and the Patriots try to ram you head-on. A Police Maverick also joins, lighting you up with a spotlight at night and shooting as soon as its officers have a clear line.",
+          "line": "Summary: NOOSE joins in at three stars. Its Cruisers and Patriots hunt you down, closing off bridges and main roads with roadblocks, and a Patriot may charge straight at you. A Police Maverick also arrives; after dark it keeps a spotlight on you, and its officers shoot whenever they have a clear line of fire.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -226,7 +226,7 @@
           ]
         },
         {
-          "line": "Weak points: The helicopter breaks off the chase every so often if you drop underground, shelter in a big structure for a long while, or kill both of its riflemen.",
+          "line": "Weak points: The helicopter sometimes gives up and retreats when you kill both riflemen aboard, stay put in a large structure for a long time, or head underground.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -281,7 +281,7 @@
                 "editors' prose"
               ],
               "quoted_at": [
-                "Spawn Behaviour"
+                "lead section"
               ]
             }
           ]
@@ -296,7 +296,7 @@
       "main_revision": "2082538",
       "lines": [
         {
-          "line": "Summary: Four stars sends the FIB or NOOSE's Tactical Response Unit after you, four officers to a vehicle, in Enforcer armored vans or FIB Buffalo sedans. The search area is now roughly the size of Bohan.",
+          "line": "Summary: Four stars adds a heavier response: either the FIB or the NOOSE Tactical Response Unit, riding in Enforcer armored vans or FIB Buffalo sedans with four officers apiece. The search area grows to about the size of Bohan.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -327,7 +327,7 @@
                 "editors' prose"
               ],
               "quoted_at": [
-                "Design"
+                "lead section"
               ]
             },
             {
@@ -346,7 +346,7 @@
           ]
         },
         {
-          "line": "Danger: Most carry carbine rifles, a few have SMGs or pump shotguns, and their body armor lets them soak up more gunfire before they drop.",
+          "line": "Danger: Carbine rifles are what they mostly use, with some carrying SMGs or pump shotguns, and their body armor means more of your gunfire is needed to put them down.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -434,7 +434,7 @@
           ]
         },
         {
-          "line": "Danger: Officers drive harder, using the PIT maneuver to spin you out. FIB and NOOSE units turn up in equal numbers, and where there are tall buildings, officers with Combat Sniper rifles shoot at you whenever they can see you.",
+          "line": "Danger: Chasing officers get more skilled behind the wheel and will try a PIT Maneuver to send you spinning. The two forces, FIB and NOOSE, are present in equal numbers. Around tall buildings, officers with Combat Sniper rifles fire on you whenever you are in view.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -458,7 +458,7 @@
           ]
         },
         {
-          "line": "Weak points: An Annihilator takes a lot of damage from RPGs, assault rifles and other Annihilators, and one rocket straight into its fuselage can destroy it.",
+          "line": "Weak points: RPGs, assault rifles and other Annihilators hurt an Annihilator badly, and a lone rocket into its fuselage can bring it down.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Annihilator",
@@ -549,7 +549,7 @@
           ]
         },
         {
-          "line": "Weak points: The cockpit is open to fire, so the officers in front can be hit from tall places or with assault rifles. When the helicopter passes over you, its lower windows may be a weak spot too.",
+          "line": "Weak points: Shoot the people in the front seats from a high spot or with an assault rifle; the cockpit is exposed. Its lower windows may be a weak spot too when it flies directly over you.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Police_Maverick_(HD_Universe)",
@@ -634,7 +634,7 @@
           ]
         },
         {
-          "line": "Weapons: Street members carry pistols, Micro SMGs and pump shotguns, and are well armed.",
+          "line": "Weapons: Expect pistols, Micro Uzis and pump shotguns from the members on the street.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Yardies",
@@ -779,7 +779,7 @@
       "main_revision": "2083689",
       "lines": [
         {
-          "line": "Summary: Body armor is a blue vest. It appears on screen as a blue half-circle meter beside the radar, next to the green health meter. When you aim at a target wearing armor, usually a NOOSE or FIB agent, a small light blue circle shows by the reticle.",
+          "line": "Summary: Body armor is, in most cases, drawn as a blue vest. On the HUD it is a blue half-circle meter beside the radar, next to the green health meter. Aim at a target in armor, usually a NOOSE or FIB agent, and a small light blue circle shows by the reticle.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Body_Armor",
@@ -1147,7 +1147,7 @@
           ]
         },
         {
-          "line": "Uses: You aim over the shoulder, so you can strafe and shoot from behind cover. The rocket blows up by itself at its maximum range, and it glances off a solid surface if it meets it at roughly 25 degrees.",
+          "line": "Uses: Aiming is over the shoulder, so you can strafe or fire from behind cover. A rocket that flies to its maximum range blows up by itself, and one that strikes a solid surface at around 25 degrees can ricochet away.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/RPG_(HD_Universe)",
@@ -1171,7 +1171,7 @@
           ]
         },
         {
-          "line": "Tips: Once you finish the mission Babysitting, the underground gun shops sell the RPG at $15,000, and each extra rocket costs another $5,000. The simplest one to grab is on a big rock in the water north of Northwood. A helicopter does not need a direct hit: the blast can make the pilot lose control and crash.",
+          "line": "Tips: To buy one, finish the mission Babysitting and visit the underground gun shops: $15,000, then $5,000 per extra rocket. The easiest free pickup is on a big rock in the water, just north of Northwood. Against a helicopter, a near miss can be enough, since the blast can make the pilot lose control and crash.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/RPG_(HD_Universe)",
@@ -1325,7 +1325,7 @@
           ]
         },
         {
-          "line": "Uses: In GTA IV your own grenades are far deadlier to you than to enemies. An enemy will most likely survive unless the grenade lands very close, and enemies run clear of one that is about to explode.",
+          "line": "Uses: In GTA IV a grenade is likelier to kill you than your enemy. Anyone not very close to the blast will probably survive, and enemies retreat from a grenade that is about to go off.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Grenades",

@@ -842,8 +842,8 @@ A note: phone alerts are off in the app, so a "truly blocked" alert cannot reach
 
 **Pick-up list (2026-11-16, 05:30 EST):** every lane landed or written up; every Deck block run; the Deck put back and
 checked with one last question; section 13 written; the checks page has its "Plan 104 (16 Nov)" round; consults 1 to
-6 used. Left for this chat: land the end audit K9, run `python scripts/verify.py --full` on the final tip and write its
-result here. Then the maintainer reads section 13.1 and says "push". Session notes outside the repo:
+6 used; the end audit K9 landed (`f9907e4f9`). **`python scripts/verify.py --full` passed on the final tip `5347659a8`
+(2026-11-16, 05:33 EST, 393 seconds).** Nothing is left for this chat. The maintainer reads section 13.1 and says "push". Session notes outside the repo:
 `side-session-notes/<planning chat>/plan104-pickup.md`.
 
 ## 13. Report
@@ -886,7 +886,7 @@ screen only, and a few checks rest on tests (§ 13.6).
 5. **Two hand checks:** Show details reopened on the **Deck's own screen** (undock it; ten minutes there would also
    settle every other screen row of this plan, which all ran on the external screen); and play **Doom 64:
    Retribution** once, so the spoiler check can find it on the Recent Games shelf.
-6. **Say "push"** when you are ready; `python scripts/verify.py --full` result on the final tip: see § 12's last line.
+6. **Say "push"** when you are ready: `python scripts/verify.py --full` passed on the final tip (`5347659a8`, 05:33 EST).
 
 The checks page: "Checks Only You Can Do", round "Plan 104 (16 Nov)", 16 items with their pictures and a short clip of
 the chips.

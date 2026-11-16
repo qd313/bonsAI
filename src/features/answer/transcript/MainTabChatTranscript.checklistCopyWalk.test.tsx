@@ -12,7 +12,8 @@
  *         the last choice button, else the answer's last section, never on Copy; the steps walk both ways, with
  *         the panel's page holding the browser's focus and without it.
  * Does not: Scroll (the pane holds the whole turn; liveTurnFocusGraph.checklistWalk.test.ts walks with Steam's
- *           scroll modelled). Does not draw the summed-up note (a chat that summed itself up; its own tests).
+ *           scroll modelled). Draws the summed-up note only in the last block (a chat that summed itself up; the
+ *           note's own walk is MainTabChatTranscript.summaryNoteWalk.test.tsx).
  */
 import { describe, expect, it, vi } from "vitest";
 
@@ -159,30 +160,29 @@ function summedUpChat(): MainTabChatTranscriptProps {
   return { ...props({ ollamaResponse: "", askThreadDisplayQuestion: "", expandedTurnKey: turn.id }), askThreadCollapsed: [turn] };
 }
 
-describe("P103-CHECKLIST-COPY-01 under a summed-up note (the second opinion's fix-up)", () => {
-  /* The note has no Steam stop yet: with the page's focus gone a landing on it moved only the page's focus. */
-  it("with the page's focus gone, Up from step 1 lands on the last section and Down from Copy on step 1", async () => {
+/*
+ * Plan 104 F1 part 3: the note has its own Steam stop now, so with the page's focus gone too both go by it. Wave six
+ * passed over it in that state (a landing on it moved only the page's focus); the note's own walk is
+ * MainTabChatTranscript.summaryNoteWalk.test.tsx.
+ */
+describe.each([
+  ["with the page's focus", true],
+  ["with the page's focus gone", false],
+])("P103-CHECKLIST-COPY-01 under a summed-up note, %s", (_label, focused) => {
+  it("Down from Copy and Up from step 1 both land on the note, the ring and the page's focus together", async () => {
     const s = draw(summedUpChat());
     expect(s.stops().map(s.nameOf)).toContain(NOTE);
-    s.put(STEP_1);
-    page().setFocused(false);
-    expect(await s.press("onMoveUp")).toBe("claimed");
-    expect(s.nameOf(page().ring())).toBe(lastSection(s));
+    s.put(COPY);
+    page().setFocused(focused);
+    expect(await s.press("onMoveDown")).toBe("claimed");
+    expect(s.nameOf(page().ring())).toBe(NOTE);
+    expect(s.nameOf(page().active())).toBe(NOTE);
 
     page().setFocused(true);
-    s.put(COPY);
-    page().setFocused(false);
-    expect(await s.press("onMoveDown")).toBe("claimed");
-    expect(s.nameOf(page().ring())).toBe(STEP_1);
-  });
-
-  it("with the page's focus, both still go by the note: Down from Copy and Up from step 1 land on it", async () => {
-    const s = draw(summedUpChat());
-    s.put(COPY);
-    await s.press("onMoveDown");
-    expect(s.nameOf(page().ring())).toBe(NOTE);
     s.put(STEP_1);
-    await s.press("onMoveUp");
+    page().setFocused(focused);
+    expect(await s.press("onMoveUp")).toBe("claimed");
     expect(s.nameOf(page().ring())).toBe(NOTE);
+    expect(s.nameOf(page().active())).toBe(NOTE);
   });
 });

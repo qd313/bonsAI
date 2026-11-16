@@ -29,13 +29,18 @@
  * A opens Show details on the Session tab and moves the ring to *Sum up this chat*. `onOKButton` and
  * `onClick`, never `onActivate` too: Steam fires `onActivate` for A as well, so wiring both would
  * run the opener twice (docs/focus-graph.md).
+ *
+ * The stop carries its own Steam nav node (`replyStopNavRef("summary-note")`, plan 104 F1), so every way
+ * onto it (`focusRegisteredReplyStop`) is Steam's transfer first. Without one only a plain focus() reached
+ * it, and with the panel's page out of the browser's focus that moved the page's focus and not Steam's
+ * ring: Down from the answer, Up from Helpful and Up from the first choice claimed a press that moved nothing.
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
 
 import { focusLastAnswerChunk } from "../../answer/bubble/answerBubbleNavigation";
 import { focusStrategyChromeFromAbove, queryTurnSlot } from "../../../shared/dpad/liveTurnFocusGraph";
-import { focusRegisteredReplyStop, registerReplyStop } from "../../../shared/dpad/replyStopRegistry";
+import { focusRegisteredReplyStop, registerReplyStop, replyStopNavRef } from "../../../shared/dpad/replyStopRegistry";
 import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "../../../shared/dpad/focusNavigation";
 import { elementHasGamepadFocus } from "../../../shared/dpad/uiDocument";
 import { focusSumUpButton } from "./SessionSumUpSection";
@@ -137,6 +142,8 @@ export function buildChatSummaryNoteElement(args: {
       onOKButton={onOpen}
       onClick={onOpen}
       {...({
+        /* Its own Steam nav node, "Show details"'s way, so every way onto the note is Steam's transfer (plan 104 F1). */
+        navRef: replyStopNavRef("summary-note"),
         onMoveUp: up,
         onMoveDown: down,
         onButtonDown: (evt: unknown) => {

@@ -68,6 +68,8 @@ All notable changes to this project are documented in this file.
 
 ### Added
 
+- **A "No notes for this game" line under every answer about a game the library holds nothing on.** With a game such as Stardew Valley, the answer now ends with "No notes for this game — this answer is from the model's own knowledge." in every mode.
+- **Half-Life 2 and Black Mesa notes.** 15 Half-Life 2 notes (headcrab and zombie kinds, the Antlion Guard, weapons, health kits and chargers) and 12 Black Mesa notes arrive with the next library update.
 - **Tap-to-define words for every game in the library.** Underlined words in answers now exist for all of the library's games, not just a few. They arrive with the next library update.
 - **A "How much to hide" setting for story spoilers.** Settings now has a row under Story spoilers: Hide more, Default or Hide less. Hide more also covers bosses, endings and chapters in every game; Hide less covers nothing; Default is the rule as it was. Naming a boss still unlocks it.
 - **A thumbs-down that stops a wrong note coming back.** "Not really" now offers Wrong tip, Outdated and Wrong edition when the answer used a note, and asks which note it was when there were two or three. That note ranks last next time, and after three marks it stops coming back. Undo takes the mark back. Show details tags a lowered note "ranked lower by you".
@@ -112,6 +114,7 @@ All notable changes to this project are documented in this file.
 
 ### Changed
 
+- **Left 4 Dead 2 versus questions lead with the right note.** In Speed mode "how to beat tank" attaches the Tank note; a plain Tank question no longer gets the survivors' versus note beside it; a question about playing as the Hunter in versus leads with "Playing as the Hunter".
 - **The Deck's back end no longer crashes when the knowledge library is read from several places at once.** Each reader now has its own connection to the library. This was the crash behind "Install Ollama timed out"; after a plugin reload on the Deck there was no crash and no database error.
 - **Show details names its chip row "Behind this answer".** The line above the chips now reads "Behind this answer · 1 of 6" instead of "Chip 1 of 6".
 

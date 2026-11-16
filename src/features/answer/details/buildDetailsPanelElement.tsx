@@ -25,6 +25,7 @@ import { focusPerTurnRow, registerRowNav } from "../../../shared/dpad/focusPerTu
 import { focusKbNotesBlock } from "../../knowledge-library/buildKbNotesBlockElement";
 import { focusChatPermissionHintRow } from "../../../shared/dpad/chatTranscriptNavHelpers";
 import { takeNavFocus, type NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
+import { getReplyStop } from "../../../shared/dpad/replyStopRegistry";
 import { takeChipSlotFocus } from "./detailsSlotStore";
 import {
   isDeckDirectionDownEvent,
@@ -146,16 +147,36 @@ export function closeDetailsPanel(args: {
 const revealedPanels = new WeakSet<HTMLElement>();
 
 /**
+ * The line that opened this panel ("Show details", reading "Hide details" now), when it is this turn's.
+ * Only the open answer draws the line, so the reply stop registry holds at most one; a slot that can be
+ * found must contain it.
+ */
+function openingLine(querySlot: () => HTMLElement | null): HTMLElement | null {
+  const line = getReplyStop("show-details");
+  if (!line?.isConnected) return null;
+  const slot = querySlot();
+  return !slot || slot.contains(line) ? line : null;
+}
+
+/**
  * Bring a just-opened panel out from behind the dock, once per opening (plan 70 flow 4.2,
  * workshop:test-evidence/plan70-F4-SHOW-DETAILS.json: the tab row opened at y 617 behind the dock at
  * 600, with no scroll, so only the words "Hide details" changed). A frame later, so the panel's
- * content has laid out; never past the control holding the ring.
+ * content has laid out; never past the line that opened it.
+ *
+ * Held back by that line, not by wherever the ring reads at that instant (plan 104 F1): the scroll
+ * skips its "keep the ring on screen" limit when the ring reads as nothing, as the page, or as
+ * something inside the panel, and then a panel taller than the room scrolls until its own top meets
+ * the pane's, carrying the line above it out of sight. On the Deck's own screen, B then A with the
+ * Session tab showing left "Hide details" at -22 and -39 against a pane top of 52, 4 of 6 tries
+ * (workshop:test-evidence/plan103-P103-DETAILS-STRIP-01.json and -try2.json); the scroll matched
+ * that limit exactly (410 to 715). The ring is still asked when the line cannot be found.
  */
-function revealWhenOpened(panel: HTMLElement | null): void {
+function revealWhenOpened(panel: HTMLElement | null, querySlot: () => HTMLElement | null): void {
   if (!panel || revealedPanels.has(panel)) return;
   revealedPanels.add(panel);
   requestAnimationFrame(() => {
-    if (panel.isConnected) revealBelowKeeping(panel, uiGamepadFocusElement());
+    if (panel.isConnected) revealBelowKeeping(panel, openingLine(querySlot) ?? uiGamepadFocusElement());
   });
 }
 
@@ -265,7 +286,7 @@ export function buildDetailsPanelElement(args: {
         collapsedHint={false}
         rootRef={(el) => {
           registerChipLadderEl(turnKey, el);
-          revealWhenOpened(el?.parentElement ?? null);
+          revealWhenOpened(el?.parentElement ?? null, querySlot);
         }}
         onMoveUpFromLadder={upPastPanel}
         onMoveDownFromLadder={() => focusSessionContextStrip()}
@@ -291,7 +312,7 @@ export function buildDetailsPanelElement(args: {
         flow-children="horizontal"
         ref={(el: HTMLElement | null) => {
           registerDetailsTabsRowEl(turnKey, el);
-          revealWhenOpened(el?.parentElement ?? null);
+          revealWhenOpened(el?.parentElement ?? null, querySlot);
         }}
         {...({
           navRef: detailsTabsRowNav(turnKey),

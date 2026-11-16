@@ -50,6 +50,7 @@ import {
 } from "../../../shared/dpad/chatPanelScroll";
 import { isDownDeckButtonEvent, isUpDeckButtonEvent } from "../../../shared/dpad/focusNavigation";
 import { focusRowElement } from "../../../shared/dpad/focusPerTurnRow";
+import { getReplyStop } from "../../../shared/dpad/replyStopRegistry";
 import {
   registerNavFocus,
   takeNavFocus,
@@ -179,6 +180,39 @@ function showWholeCard(card: HTMLElement): void {
 }
 
 /**
+ * The line that opened the details panel this section sits in ("Show details", reading "Hide details"),
+ * found as the panel's own reveal finds it (plan 104 F1, buildDetailsPanelElement.tsx): the one reply
+ * stop of that name, still on the page, and before `el` (the panel is drawn under its line).
+ */
+function openerLine(el: HTMLElement): HTMLElement | null {
+  const line = getReplyStop("show-details");
+  if (!line?.isConnected) return null;
+  return line.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING ? line : null;
+}
+
+/**
+ * What a scroll on appearing must keep on screen: the ring's control when it reads as one in the chat
+ * above the dock; otherwise (it reads as nothing, as the page, as the pane, or as the dock, which never
+ * scrolls) the line that opened the panel, so B then A with the Session tab showing cannot carry
+ * "Hide details" off the top (-22 and -39 against a pane top of 52, plan103-P103-DETAILS-STRIP-01.json
+ * and -try2.json); the ring as read when no line is found. The ring comes first here, unlike the
+ * panel's reveal: this scroll also runs while the ring is truly elsewhere (on Sum up when a summary
+ * arrives, on the note under an answer), and holding back by the line there would scroll less than
+ * that control needs, or let the note holding the ring leave the top.
+ */
+function keepOnScreen(el: HTMLElement): HTMLElement | null {
+  const ring = uiGamepadFocusElement();
+  const pane = findScrollablePanel(el);
+  if (ring && pane && ring !== pane && pane.contains(ring) && !ring.closest(".bonsai-main-tab-dock")) return ring;
+  return openerLine(el) ?? ring;
+}
+
+/** For a ref: bring `el` out from behind the dock once, keeping keepOnScreen's control on screen. */
+function revealOnAppear(el: HTMLElement | null): void {
+  if (el) revealOnceWhenMounted(el, () => keepOnScreen(el));
+}
+
+/**
  * In: the open chat's summary state (or none yet), whether an answer is being written, and the two
  * ways out of this section -- Up to the tabs row, Down past it to the first turn row.
  * Out: the button, the one reason line when it is greyed out, and the summary card when there is a
@@ -290,7 +324,7 @@ export function SessionSumUpSection(props: {
           className="bonsai-sumup-reason"
           ref={(el) => {
             sumUpReasonEl = el;
-            revealOnceWhenMounted(el, uiGamepadFocusElement);
+            revealOnAppear(el);
           }}
         >
           {view.reason}
@@ -302,7 +336,7 @@ export function SessionSumUpSection(props: {
           ref={(el: HTMLElement | null) => {
             summaryCardEl = el;
             /* Appears behind the dock otherwise, after Sum up or from the note (plan 72). */
-            revealOnceWhenMounted(el, uiGamepadFocusElement);
+            revealOnAppear(el);
           }}
           aria-label="What the AI remembers"
           {...({ navRef: cardNavRef } as Record<string, unknown>)}

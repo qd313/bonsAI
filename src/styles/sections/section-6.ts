@@ -734,6 +734,29 @@ ${buildReplyRatingChoicesSection()}
         .bonsai-scope .bonsai-sumup-card-lines li {
           margin: 0 0 3px;
         }
+        /*
+         * The card's text (its lines and footer) scrolls inside a fixed 190 points, about eleven lines on
+         * Normal, so the whole card fits between the pane's top and the dock on both screens: at its
+         * tallest (Large text, title line wrapped, the More below row) it is 265.35 points, and with the
+         * reveal's 8 above and below, 281.35 of the 299 the Deck's own screen leaves (610 on a monitor).
+         * Fixed points, never a share of the screen. SessionSumUpSection.cardFit.test.tsx works it out
+         * again from these rules. Down and Up scroll it (SessionSumUpSection.tsx).
+         */
+        .bonsai-scope .bonsai-sumup-card-text {
+          max-height: 190px;
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
+        /* The "More below" row under scrolling text: it stays, empty, at the end, so nothing moves. */
+        .bonsai-scope .bonsai-sumup-card-more {
+          height: 18px;
+          line-height: 18px;
+          font-size: ${textPx(10)};
+          color: #8fa8c4;
+          text-align: center;
+          white-space: nowrap;
+          overflow: hidden;
+        }
         .bonsai-scope .bonsai-sumup-card-foot {
           margin-top: 6px;
           padding-top: 6px;

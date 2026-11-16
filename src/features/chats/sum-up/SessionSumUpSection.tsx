@@ -20,25 +20,35 @@
  *      | Down                   ^ Up
  *   [ Sum up this chat ]              <- stop; A starts it, the ring stays; greyed = still a stop, A does nothing
  *      | Down                   ^ Up
- *   What the AI remembers card        <- stop only when a summary exists; A does nothing
- *      | Down                   ^ Up
- *   [ Rename ] [ Keep ]               <- only while the summary holds a title offer (plan 79); A runs
- *      | Down                   ^ Up      it; Left/Right swap between the two (SessionTitleOffer.tsx)
+ *   What the AI remembers card        <- stop only when a summary exists; A does nothing. Down and Up
+ *      | Down                   ^ Up      scroll its text first; at the text's end (Down) or top (Up)
+ *   [ Rename ] [ Keep ]               <- they leave. Rename/Keep: only while the summary holds a title
+ *      | Down                   ^ Up      offer (plan 79); A runs it; Left/Right swap (SessionTitleOffer.tsx)
  *   the turn rows, then the active row's chips (unchanged)
  *
- * The card is a stop because it is usually taller than the room left under the button (83 px on
- * the measured screen against a 200-280 px card), so its bottom sits behind the dock until the ring
- * lands on it and the dock lift scrolls it clear — and a chat with no rows under the card would
- * otherwise have nothing to scroll it into view at all. Down from the last thing here does whatever
- * `onMoveDownPastSection` says: the first turn row when there is one, else (plan 72) the way out of
- * the whole panel that the chip ladder's last Down uses; the caller decides when to consume it.
+ * The card has a fixed height that fits between the pane's top and the dock on both screens (its
+ * rules in section-6.ts give the arithmetic), and its text scrolls inside it, with a "More below"
+ * line while more is below. It is a stop so that text can be read: with the ring on it, Down and Up
+ * move the text a step and the ring stays. Before plan 104 it had no height limit: on a long chat it
+ * was 669 points in a 610-point band, its last lines behind the dock, and the next Down left it for
+ * Rename (workshop:test-evidence/plan104-P104-M-SESSION-CARD.json). Down from the last thing here
+ * does whatever `onMoveDownPastSection` says: the first turn row when there is one, else (plan 72)
+ * the way out of the whole panel that the chip ladder's last Down uses; the caller decides when to
+ * consume it.
  */
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
 
 import { ThinkingSpinnerIcon } from "../../../shared/icons/icons";
 import { elementHasGamepadFocus, uiGamepadFocusElement } from "../../../shared/dpad/uiDocument";
-import { revealBelowKeepingAsItSettles, revealOnceWhenMounted } from "../../../shared/dpad/chatPanelScroll";
+import {
+  findScrollablePanel,
+  panelScrollMax,
+  revealBelowKeepingAsItSettles,
+  revealOnceWhenMounted,
+  scrollElementTopToPaneTop,
+} from "../../../shared/dpad/chatPanelScroll";
+import { isDownDeckButtonEvent, isUpDeckButtonEvent } from "../../../shared/dpad/focusNavigation";
 import { focusRowElement } from "../../../shared/dpad/focusPerTurnRow";
 import {
   registerNavFocus,
@@ -117,6 +127,57 @@ function handRingToNewCard(): () => void {
   };
 }
 
+/** One Down or Up on the card moves its text this far: half of the 190 points it shows, so no line is skipped. */
+const CARD_TEXT_STEP_PX = 96;
+
+/** The sign under the card's text while more of it is below: the words the shared two-button box uses. */
+const MORE_BELOW = "▾ More below (press Down)";
+
+/** The card's text fits (no scrolling, no sign), or scrolls with more below, or scrolls and shows its end. */
+type CardTextView = "fits" | "below" | "end";
+
+/**
+ * In: nothing; the card's text box hands itself over through `setBox` (its ref).
+ * Out: the text's `view`, read off the box when it mounts, when the card takes the ring (`read`), after
+ * every step and on every scroll (a finger on the touch screen scrolls it too); and `step`: 1 (Down) or
+ * -1 (Up) moves the text one step and returns true, or moves nothing at the end it points to and returns
+ * false, so the press goes on out of the card. Scrolls the text only; never moves the ring.
+ */
+function useCardText() {
+  const [box, setBox] = useState<HTMLDivElement | null>(null);
+  const [view, setView] = useState<CardTextView>("fits");
+  const read = useCallback(() => {
+    if (!box) return;
+    const room = panelScrollMax(box);
+    setView(room <= 1 ? "fits" : box.scrollTop < room - 1 ? "below" : "end");
+  }, [box]);
+  useLayoutEffect(() => {
+    if (!box) return undefined;
+    read();
+    box.addEventListener("scroll", read);
+    return () => box.removeEventListener("scroll", read);
+  }, [box, read]);
+  const step = (dir: 1 | -1): boolean => {
+    if (!box) return false;
+    const from = box.scrollTop;
+    box.scrollTop = Math.max(0, Math.min(panelScrollMax(box), from + dir * CARD_TEXT_STEP_PX));
+    read();
+    return Math.abs(box.scrollTop - from) >= 1;
+  };
+  return { setBox, view, read, step };
+}
+
+/**
+ * The card holding the ring shows whole. It always fits between the pane's top and the dock now, so a
+ * top above the pane's (Up from Rename can leave it there: D0 read the old card 66 points above) is
+ * brought back under it at once, and the reveal brings the bottom clear of the dock. Scrolls only.
+ */
+function showWholeCard(card: HTMLElement): void {
+  const pane = findScrollablePanel(card);
+  if (pane && card.getBoundingClientRect().top < pane.getBoundingClientRect().top) scrollElementTopToPaneTop(card, 8);
+  revealBelowKeepingAsItSettles(card, () => card);
+}
+
 /**
  * In: the open chat's summary state (or none yet), whether an answer is being written, and the two
  * ways out of this section -- Up to the tabs row, Down past it to the first turn row.
@@ -185,6 +246,26 @@ export function SessionSumUpSection(props: {
     return undefined;
   }, [view.busy, hasSummary]);
   const downFromButton = () => (summary ? focusSummaryCard() : false) || downFromCard();
+  /* On the card, Down and Up read its text first, and leave it only from the text's end or top. */
+  const cardText = useCardText();
+  const downOnCard = () => cardText.step(1) || downFromCardOrToOffer();
+  const upOnCard = () => cardText.step(-1) || focusSumUpButton();
+  /*
+   * A step scrolls in place and the ring stays, so one press must act once. The move handlers carry it
+   * (Steam calls them); the onButtonDown twin hears only the string-shaped presses tests and desktop
+   * keyboards deliver, never a GamepadEvent, so a press Steam also hands to onButtonDown cannot step
+   * twice: the pairing the answer's own sections use (buildAnswerBubbleElement.tsx, focusNavigation.ts).
+   */
+  const cardMoves = {
+    onMoveDown: downOnCard,
+    onMoveUp: upOnCard,
+    onButtonDown: (evt: unknown) => {
+      if (summaryCardEl && !elementHasGamepadFocus(summaryCardEl)) return false;
+      if (isDownDeckButtonEvent(evt)) return downOnCard();
+      if (isUpDeckButtonEvent(evt)) return upOnCard();
+      return false;
+    },
+  };
 
   return (
     <>
@@ -226,26 +307,34 @@ export function SessionSumUpSection(props: {
           aria-label="What the AI remembers"
           {...({ navRef: cardNavRef } as Record<string, unknown>)}
           /*
-           * Holding the ring, come fully clear of the dock (or keep the top on screen when taller
-           * than the room). The reveal on mount was held back by the ring above it, and Down from
-           * Sum up again put the ring on the card a third behind the question box (plan 72,
-           * plan72-Z-FREEPLAY.json finding 2). Scrolls only.
+           * Holding the ring, show whole above the dock. The reveal on mount was held back by the ring
+           * above it, and Down from Sum up again put the ring on the card a third behind the question
+           * box (plan 72, plan72-Z-FREEPLAY.json finding 2). Scrolls only.
            */
-          onFocus={() => summaryCardEl && revealBelowKeepingAsItSettles(summaryCardEl, () => summaryCardEl)}
-          {...(directionHandlers(() => summaryCardEl, focusSumUpButton, downFromCardOrToOffer) as Record<string, unknown>)}
+          onFocus={() => {
+            cardText.read();
+            if (summaryCardEl) showWholeCard(summaryCardEl);
+          }}
+          {...(cardMoves as Record<string, unknown>)}
         >
           <div className="bonsai-sumup-card-head">
             <span>What the AI remembers</span>
             <span>{summaryCardMeta(summary)}</span>
           </div>
-          <ul className="bonsai-sumup-card-lines">
-            {summaryCardLines(summary.text).map((line, i) => (
-              <li key={i}>{line}</li>
-            ))}
-          </ul>
-          <div className="bonsai-sumup-card-foot">
-            {summaryCardFooter(summary, state?.questionsAfterSummary ?? 0)}
+          {/* A new summary is a new box, read from its top. */}
+          <div className="bonsai-sumup-card-text" key={summary.written_at} ref={cardText.setBox}>
+            <ul className="bonsai-sumup-card-lines">
+              {summaryCardLines(summary.text).map((line, i) => (
+                <li key={i}>{line}</li>
+              ))}
+            </ul>
+            <div className="bonsai-sumup-card-foot">
+              {summaryCardFooter(summary, state?.questionsAfterSummary ?? 0)}
+            </div>
           </div>
+          {cardText.view === "fits" ? null : (
+            <div className="bonsai-sumup-card-more">{cardText.view === "below" ? MORE_BELOW : null}</div>
+          )}
         </Focusable>
       ) : null}
       {offerQuestion ? (

@@ -17,9 +17,10 @@
  * usePermHintNavTargets in the transcript, whose hook order is recorded
  * (tests/test_ask_hook_order.py).
  *
- * While the row holds "Ask anyway" it also registers its node as "ask-anyway", so the question box's Up
- * reaches it before the suggestion chips (plan 104, row P104-M5-WARNING-FOCUS: on the Deck it took two Up
- * presses, through a chip, workshop:test-evidence/plan104-P104-MEMORY-01.json).
+ * While the row shows ("Ask anyway" or "Open the Ollama tab") it also registers its node as
+ * "answer-row-button", so the question box's Up reaches it before the suggestion chips (plan 104, row
+ * P104-M5-WARNING-FOCUS: on the Deck "Ask anyway" took two Up presses, through a chip,
+ * workshop:test-evidence/plan104-P104-MEMORY-01.json; "Open the Ollama tab" had the same route).
  *
  * Does not: Decide what a troubleshooting question looks like (troubleshootingAskHeuristic); it
  * only asks it.
@@ -67,13 +68,15 @@ export type ChatTranscriptHintRowsProps = {
 export function ChatTranscriptHintRows(props: ChatTranscriptHintRowsProps) {
   const { fullBleedRowStyle, isAsking, unifiedInput, onNavigateToPermissions, navTargets } = props;
   const { troubleshootHintNavRef, troubleshootHintButtonEls, troubleshootHintButtonRefs } = navTargets;
-  const askAnywayShown = !isAsking && !props.showNoAiRow && Boolean(props.showLowMemoryRow && props.onAskAnyway);
-  // The warning's button is what a person under it wants next: the box's Up takes this node first (useMainTabAskBarFocus).
+  const answerRowShown =
+    !isAsking && Boolean(props.showNoAiRow ? props.onNavigateToOllama : props.showLowMemoryRow && props.onAskAnyway);
+  // The button under a refusal is what a person reading it wants next: the box's Up takes this node first
+  // (useMainTabAskBarFocus). Registered only while the row shows, so the troubleshooting row keeps the chips' order.
   useEffect(() => {
-    if (!askAnywayShown) return undefined;
-    registerNavFocus("ask-anyway", troubleshootHintNavRef);
-    return () => unregisterNavFocus("ask-anyway", troubleshootHintNavRef);
-  }, [askAnywayShown, troubleshootHintNavRef]);
+    if (!answerRowShown) return undefined;
+    registerNavFocus("answer-row-button", troubleshootHintNavRef);
+    return () => unregisterNavFocus("answer-row-button", troubleshootHintNavRef);
+  }, [answerRowShown, troubleshootHintNavRef]);
   return (
     <>
 {!isAsking && props.showNoGameRow ? (
@@ -92,7 +95,7 @@ export function ChatTranscriptHintRows(props: ChatTranscriptHintRowsProps) {
     </div>
   </PanelSectionRow>
 ) : null}
-{!isAsking && (props.showNoAiRow ? props.onNavigateToOllama : props.showLowMemoryRow && props.onAskAnyway) ? (
+{answerRowShown ? (
   <PanelSectionRow>
     {/* Same Steam nav node and moves as the troubleshooting row below: the two never show together. */}
     <Focusable

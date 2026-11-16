@@ -1,14 +1,17 @@
 /**
- * Title: The question box's Up reaches "Ask anyway" first while the low-memory warning shows (row P104-M5-WARNING-FOCUS)
+ * Title: The question box's Up reaches the button under a refusal first: "Ask anyway" under the low-memory warning
+ *        (row P104-M5-WARNING-FOCUS) and "Open the Ollama tab" under "The AI is not set up"
  * Purpose: Pin what the Deck showed on 2026-11-15 (workshop:test-evidence/plan104-P104-MEMORY-01.json): with the
  *          low-memory warning on screen, the ring sat on the question box and "Ask anyway" took two Up presses,
  *          through a suggestion chip. Here the real transcript draws the warning and its row, a stand-in question
  *          box carries the real ask box's move handlers (useMainTabAskBarFocus), and the chips' stand-in carries the
  *          real chips' Up (chipRowExitUp). One Up from the box must land on "Ask anyway", with the panel's page
  *          holding the browser's focus and without it, and the walk on up must stay bounded with Steam's glide.
- * Used for: ChatTranscriptHintRows.tsx (the row registers itself as "ask-anyway") and useMainTabAskBarFocus.ts
- *           (the box's Up asks for that stop before the chips).
- * Solves: Without the change the first Up lands on the chips; the first test below fails on the old code.
+ *          "Open the Ollama tab" is the same row, a second kind, and had the same two-press route: it gets the
+ *          same one-press order and the same checks.
+ * Used for: ChatTranscriptHintRows.tsx (the row registers itself as "answer-row-button" while either kind shows)
+ *           and useMainTabAskBarFocus.ts (the box's Up asks for that stop before the chips).
+ * Solves: Without the change the first Up lands on the chips; the "one Up" tests below fail on the old code.
  * Does not: Model where Steam puts an unowned ring on the first press after an answer (on the Deck that is the
  *           question box; nothing here decides it), the real ask box's other parts (paperclip, mode button, the
  *           AI's own suggestion chip), or real pixel sizes: every element is a 4 px row in drawn order, so the glide
@@ -36,6 +39,9 @@ const QUESTION = "how do I get past the first troll fight";
 const WARNING =
   "Not enough free memory to start the AI. The Deck has about 3,401 MB free and the AI needs about 5,872 MB, so loading it would use more than is free (bonsAI keeps at least 2,000 MB back). To make room, close the game, pick a smaller model on the Ollama tab, or use the AI on a PC. Asking anyway may freeze the Deck.";
 const ASK_ANYWAY = "Ask anyway";
+const NO_AI_ANSWER =
+  "The AI is not set up on this Deck yet. Open the Ollama tab and use Install Ollama, or point bonsAI at a PC running Ollama.";
+const OPEN_OLLAMA = "Open the Ollama tab";
 const CHIPS = "suggestion chips";
 const BOX = "question box";
 const STAMP = ".bonsai-answer-stop, .bonsai-chat-turn-row-body, .bonsai-chat-details-divider";
@@ -207,12 +213,57 @@ describe.each([
   });
 });
 
-describe("without the warning, the box's Up is as it was", () => {
+/** The "AI is not set up" answer with its row; `onNavigateToOllama` undefined draws no row. */
+function noAiProps(onNavigateToOllama: (() => void) | undefined): Partial<MainTabChatTranscriptProps> {
+  return { ollamaResponse: NO_AI_ANSWER, lastExchange: { question: QUESTION, answer: NO_AI_ANSWER }, onNavigateToOllama };
+}
+
+describe.each([
+  ["with the page's focus", true],
+  ["with the page's focus gone", false],
+])("the \"AI is not set up\" answer's row comes first going up, %s", (_label, focused) => {
+  it("one Up from the question box lands on Open the Ollama tab, not on the suggestion chips", async () => {
+    const s = drawScreen(noAiProps(() => {}));
+    s.put(BOX);
+    page().setFocused(focused);
+    expect(await s.press("onMoveUp")).toBe("claimed");
+    expect(s.nameOf(page().ring())).toBe(OPEN_OLLAMA);
+    expect(s.nameOf(page().active())).toBe(OPEN_OLLAMA);
+  });
+
+  it("Down from Open the Ollama tab still reaches the chips, then the question box", async () => {
+    const s = drawScreen(noAiProps(() => {}));
+    s.put(OPEN_OLLAMA);
+    page().setFocused(focused);
+    expect(await s.walk("onMoveDown", BOX, 4)).toEqual([OPEN_OLLAMA, CHIPS, BOX]);
+  });
+
+  it("A on it, reached by one Up from the box, opens the Ollama tab; B there is left to Steam", async () => {
+    const onNavigateToOllama = vi.fn();
+    const s = drawScreen(noAiProps(onNavigateToOllama));
+    s.put(BOX);
+    page().setFocused(focused);
+    await s.press("onMoveUp");
+    expect(await s.button("onCancelButton")).toBe(false);
+    expect(onNavigateToOllama).not.toHaveBeenCalled();
+    (page().ring() as HTMLButtonElement).click(); // A on a Steam button is its click
+    expect(onNavigateToOllama).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("without either row, the box's Up is as it was", () => {
   it("under an ordinary answer the first Up from the box is the chips", async () => {
     const answer = "Block the troll's overhead slam, then hit its legs.";
     const s = drawScreen({ ollamaResponse: answer, lastExchange: { question: QUESTION, answer } });
     s.put(BOX);
     expect(await s.press("onMoveUp")).toBe("claimed");
+    expect(s.nameOf(page().ring())).toBe(CHIPS);
+  });
+
+  it("under the \"AI is not set up\" answer with no way to the Ollama tab (no row) the first Up is the chips", async () => {
+    const s = drawScreen(noAiProps(undefined));
+    s.put(BOX);
+    await s.press("onMoveUp");
     expect(s.nameOf(page().ring())).toBe(CHIPS);
   });
 

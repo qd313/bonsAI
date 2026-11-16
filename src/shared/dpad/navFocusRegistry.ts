@@ -69,9 +69,10 @@ export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-
   /** The troubleshooting Ask hint row below the transcript — see
    *  MainTabChatTranscript.tsx's `focusChatPermissionHintRow`. */
   | "chat-perm-hint-troubleshoot"
-  /** The same row's node while it holds "Ask anyway" under the low-memory warning (ChatTranscriptHintRows.tsx):
-   *  the question box's Up asks for it before the chips, so the warning's button is one press away (plan 104). */
-  | "ask-anyway"
+  /** The same row's node while it holds the button under a refusal (ChatTranscriptHintRows.tsx): "Ask anyway" under
+   *  the low-memory warning, or "Open the Ollama tab" under "The AI is not set up". The question box's Up asks for
+   *  it before the chips, so that button is one press away (plan 104). */
+  | "answer-row-button"
   /** The mic hint row under the question box (MainTabMicPermissionHintRow.tsx): Open Permissions and
    *  Dismiss side by side; Up and Dismiss hand the ring to the question box (plan 96 F11). */
   | "chat-perm-hint-mic"

@@ -1,6 +1,7 @@
 /**
  * Title: Dock clearance on focus
- * Purpose: Keep the gamepad-focused element visible above the bottom-pinned preset/Ask dock.
+ * Purpose: Keep the gamepad-focused element visible above the bottom-pinned preset/Ask dock, with any plain
+ *          line drawn directly under it that asked to come along (setLineRidingUnder).
  * Used for: MainTab, on the same column useMainTabColumnFill owns.
  * Solves: Steam scrolls a newly focused element into the PANE, but the dock covers the pane's
  *         bottom ~245px, so a control near the end of a reply (Helpful, Show details, the branch
@@ -49,6 +50,35 @@ const STEAM_SCROLL_PADDING_BOTTOM_PX = 80;
 const SETTLE_PASS_DELAYS_MS = [150, 300, 900];
 
 /**
+ * Plain lines with no stop of their own, each drawn directly under one control, by the key their drawer gives.
+ * `under` names that control when asked (it may remount between renders).
+ */
+const linesRidingUnder = new Map<string, { line: HTMLElement; under: () => HTMLElement | null }>();
+
+/**
+ * For a plain line's ref: while the control `under` names is lifted clear of the dock, the line comes clear
+ * with it (plan 104 F1). Today the one caller is "Notes were used for this answer — show the spoiler to see
+ * them", drawn under "Show details" while a cover hides the whole answer: only the control holding the ring
+ * was lifted, so on the Deck's own screen the line sat at y 360 to 390 behind the dock with the ring on
+ * "Show details" (workshop:test-evidence/plan103-P103-COVERED-NOTES-01.json). The line stays words, never a
+ * stop; a null `line` (unmount) forgets the key.
+ */
+export function setLineRidingUnder(key: string, line: HTMLElement | null, under: () => HTMLElement | null): void {
+  if (line) linesRidingUnder.set(key, { line, under });
+  else linesRidingUnder.delete(key);
+}
+
+/** How far below `el`'s own bottom the lift has to clear: to the bottom of a line riding under it, else 0. */
+function roomForLinesBelow(el: HTMLElement, elBottom: number): number {
+  let room = 0;
+  for (const { line, under } of linesRidingUnder.values()) {
+    if (!line.isConnected || under() !== el) continue;
+    room = Math.max(room, line.getBoundingClientRect().bottom - elBottom);
+  }
+  return room;
+}
+
+/**
  * The lift itself, exported for tests. Returns true when it scrolled.
  *
  * `block: "end"` is deliberate: to the browser an element behind the dock is already fully inside
@@ -69,7 +99,9 @@ export function liftAboveDock(el: HTMLElement): boolean {
   if (covered <= 0) return false;
 
   const rect = el.getBoundingClientRect();
-  if (rect.bottom <= dockTop + 1) return false;
+  /* A plain line drawn directly under `el` comes clear with it (setLineRidingUnder): the room below to clear. */
+  const below = roomForLinesBelow(el, rect.bottom);
+  if (rect.bottom + below <= dockTop + 1) return false;
 
   /*
    * A section taller than the readable band cannot clear the dock and keep its start. When its
@@ -80,9 +112,9 @@ export function liftAboveDock(el: HTMLElement): boolean {
    * top (Up from below) still aligns its end, as before.
    */
   const readableBand = dockTop - paneRect.top - CLEARANCE_PAD_PX;
-  const keepsItsStart = rect.bottom - rect.top > readableBand && rect.top >= paneRect.top - 1;
+  const keepsItsStart = rect.bottom + below - rect.top > readableBand && rect.top >= paneRect.top - 1;
   if (!keepsItsStart) {
-    el.style.scrollMarginBottom = `${Math.max(0, Math.ceil(covered) + CLEARANCE_PAD_PX - STEAM_SCROLL_PADDING_BOTTOM_PX)}px`;
+    el.style.scrollMarginBottom = `${Math.max(0, Math.ceil(covered + below) + CLEARANCE_PAD_PX - STEAM_SCROLL_PADDING_BOTTOM_PX)}px`;
     el.scrollIntoView({ block: "end", behavior: "auto" });
   }
 
@@ -110,7 +142,7 @@ export function liftAboveDock(el: HTMLElement): boolean {
    * rather than jumping its start away.
    */
   const after = el.getBoundingClientRect();
-  const stillHidden = after.bottom + CLEARANCE_PAD_PX - dockTop;
+  const stillHidden = after.bottom + below + CLEARANCE_PAD_PX - dockTop;
   if (stillHidden > 1) {
     const headroom = Math.max(0, after.top - paneRect.top);
     const step = Math.min(stillHidden, headroom);

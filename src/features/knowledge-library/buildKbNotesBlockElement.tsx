@@ -26,6 +26,8 @@ import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
 import { focusPerTurnRow, registerRowNav } from "../../shared/dpad/focusPerTurnRow";
 import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "../../shared/dpad/focusNavigation";
 import { focusUpFromBelowContextChipLadder, queryLiveTurnSlot } from "../../shared/dpad/liveTurnFocusGraph";
+import { getReplyStop } from "../../shared/dpad/replyStopRegistry";
+import { setLineRidingUnder } from "../../shared/dpad/useDockClearanceOnFocus";
 import type { ChatSlotTurnTransparency, KbAttachedNote, TransparencySnapshot } from "../../types/inputTransparency";
 import { anySpoilerFenceOpen } from "../answer/markdown/MainTabBonsaiAiMarkdownChunk";
 import { answerKeepsAShutCover, spoilerOptsFromFacts, type TurnSpoilerFacts } from "../spoilers/unwrapAskedEntitySpoilerFences";
@@ -248,12 +250,19 @@ const KB_NOTES_COVERED_CAPTION = "Notes were used for this answer — show the s
  * The one plain line drawn where the notes line will appear. Not a stop for the D-pad: no Focusable, no
  * button, nothing to press. The cover above it is the control; opening it replaces this line with the real
  * block (same place, same turn key). The 8 px box under it is the block's own, so the rows below do not move.
+ *
+ * It sits directly under "Show details" (the reply row's last line), so it rides with that line when the
+ * line is lifted clear of the dock (plan 104 F1, setLineRidingUnder): with the ring on "Show details" it sat
+ * behind the dock at y 360 to 390 on the Deck's own screen (workshop:test-evidence/plan103-P103-COVERED-NOTES-01.json).
  */
 function buildKbNotesCoveredCaption(turnKey: string): React.ReactElement {
   return (
     <div key={`kb-notes-covered-${turnKey}`} className="bonsai-kb-notes-covered-wrap">
       <div
         className="bonsai-kb-notes-covered-caption"
+        ref={(el: HTMLElement | null) =>
+          setLineRidingUnder(`kb-notes-covered-${turnKey}`, el, () => getReplyStop("show-details"))
+        }
         style={{
           marginTop: 8,
           width: "100%",

@@ -800,7 +800,7 @@ planned again.
   version line, the question runner (15 to 19 seconds a question), Terraria (the "No notes" line, no soulslike words),
   the made-up boss with ", give me ..." ("No close match"), the plain Tank and Charger questions (no versus note), the
   chips (both closest within 0.4 seconds), the summed-up note as a stop, "Ask anyway" one Up beside God of War, the
-  "Notes were used" line above the dock, Show details reopened (22 of 22; owed still for the Deck's own screen), the
+  "Notes were used" line above the dock, Show details reopened (20 of 20; owed still for the Deck's own screen), the
   Session card, the look check, the sweep, the Half-Life 2 and Black Mesa notes (Phase 5 closes), the three games plan
   103 missed (20 of 20), the new versus notes (no ending given away), and the two Session card fixes. The saved walks
   could not be replayed on the changed test chat. X2: nothing lost from X0 (older 572 to 574, newer 578 to 580);

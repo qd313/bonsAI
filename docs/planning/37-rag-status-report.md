@@ -82,6 +82,26 @@ next session. Report: plan 100.
 
 **Update 2026-11-10 (plan 103).** Built and landed on `experimental` on 2026-11-09 and 2026-11-10; the Deck fell asleep on 9 November and the rig could not wake it, so the first Deck checks of the new work ran on 10 November after it came back (the last three lines of this paragraph). The library grew to 891 notes in 38 games and 185 tips (published as 2026.11.10 that evening; one Left 4 Dead 2 note, "Fallen Survivor", was removed after and leaves at the next publish, so the source now holds 890): 35 of the 38 games have labelled enemy and item notes (15 before), with 586 blind test questions for 20 of them, 548 finding their note in the first three. Also landed: 18 mod tips, Left 4 Dead 2 versus notes and a rule that stops a versus note taking a question's place, chips that follow your last question, the answer screen's D-pad fixes and several small fixes. **Switched off:** the picture's own guess for the note search (the honest "the notes do not cover this" fix was switched on that evening, see the end of this paragraph); the crowding fix was turned down twice on its numbers. Hades, Half-Life 2 and Black Mesa still have no notes. **Deck checks, 10 November (blocks D1 to D3, then the put-back):** passed on the Deck were the five fixes (Brotato's cover, the covered-answer caption, the Copy icon and checklist walk, the mod tips, the mic log), the quick-start box on its third try, the details strip with the page in focus, three versus questions and the put-back of the whole Deck. **Just short:** the new notes attached for 17 of the 20 games against a line of 18 (Fallout 4, Brotato and DOOM Eternal missed). **Unclear or not run:** the chip order passes its row but no picture shows it, the long-chat sum-up and the out-of-focus details strip rest on tests, and the saved walks and the fresh-install starter box did not run. **Later that night (10 November):** the picture timing ran on the Deck (the slower picture model named the game 3 to 4 times in six against 1 for the starter model, and took about twice as long); the maintainer chose the slower one to ask first (the guess stays off). The honest "the notes do not cover this" opening was switched on; on the Deck it showed 2 of 2 times, but on one made-up boss the reply still gave advice borrowed from a nearby boss's notes (a call for the maintainer). **11 November:** the maintainer approved 23 of 28 public boss pictures, which joined the picture set (22 bosses in 19 games). The picture's own guess did not reach the rule for switching it on (the slower model found the right note about one and a half times as often, not twice), so it stays off; the marks test found the best picture model scores 2.95 out of 10 against a bar of 7, so the marked screenshot is not built. Open: [roadmap-kb.md](../roadmap-kb.md).
 
+**Update 2026-11-16 (plan 104).** Built and landed on `experimental` from 2026-11-14 to 2026-11-16, checked on the Deck
+in eight blocks, nothing pushed and the library not published. The library (2026.11.16, not yet published) holds 932
+notes in 38 games and 185 tips: Half-Life 2 and Black Mesa have their own enemy and item notes at last (Phase 5 closes),
+Left 4 Dead 2 has fifteen more versus notes, and every quote in the twelve older notes files is sorted and its close
+copies reworded. On the Deck every check of this plan's work passed: the new notes attach (the 23-game check reached 20
+of 20, the three games without notes aside), a game the library does not hold says "No notes for this game" under every
+answer and no longer borrows another genre's card, a question ending ", give me ..." about a boss the notes lack says
+"No close match", a plain Left 4 Dead 2 question gets no versus note, both chips after an answer are the closest notes
+within half a second, a low-memory warning with "Ask anyway" stops the AI loading beside a heavy game, and the answer
+screen's D-pad fixes hold (one, Show details reopened, passed only on the external screen; the fault was seen on the
+Deck's own screen). **Switched off on their numbers:** the honest-answer fix that holds back loosely matching notes (it
+would lose a right note on 25 of 39 real "No close match" questions), the crowding fix (its fourth try brings a right
+note back 12 times and loses it 3, against a rule of no losses) and the typed mod lookup (the right rule for 3 of 10
+mods, against 9). **The numbers, start to end of the plan:** right note in the first three on the older held-back
+questions 572 to 574 of 629, nothing lost; the eight questions no note can answer: the answer says so in its own words
+10 times in 24 (none before), and answers as if it knew 8 or 9 times (21 before); facts kept about the same (69.5 and
+74.0, inside the noise). The final library also works with the released 0.6.0 code. The Deck was put back as it was on
+15 November. Open: [roadmap-kb.md](../roadmap-kb.md); the plan's report is § 13 of
+[plan 104](104-kb-wave-seven-honest-answers-and-the-leftovers.md).
+
 **Coverage was the thing wave two set out to fix.** Of the 72 questions a player might plainly ask about
 the twelve games added earlier this month, only 43 had a note behind them a month ago. **64 do now** —
 the other eight were written on purpose to have none, and stay blank as a control, so every question that

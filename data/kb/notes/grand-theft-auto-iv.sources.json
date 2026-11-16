@@ -226,7 +226,7 @@
           ]
         },
         {
-          "line": "Weak points: The helicopter sometimes gives up and retreats when you kill both riflemen aboard, stay put in a large structure for a long time, or head underground.",
+          "line": "Weak points: The helicopter now and then quits the chase if you vanish underground, if you kill the two riflemen aboard, or if you stay shut inside some large structure for a good while.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -434,7 +434,7 @@
           ]
         },
         {
-          "line": "Danger: Chasing officers get more skilled behind the wheel and will try a PIT Maneuver to send you spinning. The two forces, FIB and NOOSE, are present in equal numbers. Around tall buildings, officers with Combat Sniper rifles fire on you whenever you are in view.",
+          "line": "Danger: Chasing officers get more skilled behind the wheel and will try a PIT Maneuver to send you spinning. The two forces, FIB and NOOSE, are present in equal numbers. Sniper officers with Combat Sniper rifles take shots at you from among tall buildings whenever they can see you.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_IV",
@@ -1147,7 +1147,7 @@
           ]
         },
         {
-          "line": "Uses: Aiming is over the shoulder, so you can strafe or fire from behind cover. A rocket that flies to its maximum range blows up by itself, and one that strikes a solid surface at around 25 degrees can ricochet away.",
+          "line": "Uses: A rocket that travels as far as it can go detonates on its own. If its tip strikes a solid structure at around 25 degrees it is deflected instead. You aim over the shoulder, which lets you strafe while aiming and shoot from behind cover.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/RPG_(HD_Universe)",
@@ -1325,7 +1325,7 @@
           ]
         },
         {
-          "line": "Uses: In GTA IV a grenade is likelier to kill you than your enemy. Anyone not very close to the blast will probably survive, and enemies retreat from a grenade that is about to go off.",
+          "line": "Uses: Your own grenades threaten you more than the enemy: an enemy standing at any real distance from the blast will probably live. Enemies also retreat when a grenade is about to go off.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Grenades",

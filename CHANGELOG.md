@@ -112,6 +112,7 @@ All notable changes to this project are documented in this file.
 
 ### Changed
 
+- **The Deck's back end no longer crashes when the knowledge library is read from several places at once.** Each reader now has its own connection to the library. This was the crash behind "Install Ollama timed out"; after a plugin reload on the Deck there was no crash and no database error.
 - **Show details names its chip row "Behind this answer".** The line above the chips now reads "Behind this answer · 1 of 6" instead of "Chip 1 of 6".
 
 ## [0.6.0] - 2026-10-23

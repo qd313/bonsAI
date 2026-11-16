@@ -37,6 +37,7 @@
 - [Plan 103 sweep K12 notes moved from the knowledge-base roadmap (2026-11-10)](#plan-103-sweep-k12-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
 - [Plan 103 sweep K13 notes moved from the knowledge-base roadmap (2026-11-11)](#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
 - [Plan 104 notes moved from the knowledge-base roadmap (2026-11-14)](#plan-104-notes-moved-from-the-knowledge-base-roadmap-2026-11-14)
+- [Plan 104 sweep K1 notes moved from the knowledge-base roadmap (2026-11-15)](#plan-104-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-15)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -1635,3 +1636,29 @@ short-line notes**; Hades, Half-Life 2 and Black Mesa do not (Phase 5).
 - **The six Left 4 Dead 2 rows that did not get their note back, settled.** They are `V2-S-L4D2-29`, `V2-PARA-S03`, `V2-BLINDT-19` and `V2-BLINDT-23` (in `tests/fixtures/kb_eval_v2.json`) and `V2-P103-L4D2-13` and `V2-P103-L4D2-16` (in `tests/fixtures/kb_eval/p103-left-4-dead-2.json`). The long notes above name `V2-S-L4D2-29`; the record `workshop:archive/research/kb-crowding-fix-2026-11-10-p103-r1b.md` names `V2-S-L4D2-11` in its list of ten questions that stay out. Read in the search test's own output (`workshop:archive/research/kb-embed-bakeoff-2026-11-10-arms-p103-v3-before.json`, `-v3-final.json`, `-final.json`): `-29` ("counter boomer smoker combo") expects the versus note "Answering combined special attacks in versus" and gets "Infected team combinations" first, which is a versus-note mix-up, and it misses in all three. `-11` ("pills or medkit before finale") expects "Going down and black and white" and its first three hold no versus note ("The Parish", "Pain pills and adrenaline shot", "First aid kit"): it belongs with the crowding record, not with the versus mix-ups. The six above are the list for lane V4. (The plan 104 brief for lane V4 still says "-29 or -11".)
 - **The 22 "Weak points" lines that name no weakness (counted by the planning chat as 22 of 184; a plain count of lines starting "Weak points" in the notes files and the seed reads 185).** Note numbers by file under `data/kb/notes/` (all 22 read and found in the data on 2026-11-14): `grand-theft-auto-iii.json` 3500; `mario-party.json` 2804, 2805, 2806; `mario-party-2.json` 2913, 2914; `mario-party-3.json` 3002, 3006, 3007; `mario-party-6.json` 3107 (lane W1); `portal-2.json` 1301, 1302, 1303, 1304 (lane S1); `grand-theft-auto-iv.json` 1500 and `grand-theft-auto-v.json` 1405, 1406 (lane S2); `mario-kart-64.json` 2110, 2112, 2113, 2114 (lane S4); `left-4-dead-2.json` 2203 (lane M1). The planning chat's count is 16 clear and 6 borderline; the briefs name five of the borderline ones (2804, 2914, 3006, 3007 and 1302), so the sixth is not named anywhere.
 - **The older sightings the wiki contradicts, with their note numbers** (from the briefs of lanes M1 and M2): lane M1 takes the Fallout 4 Deathclaw (seed section 9), the Left 4 Dead 2 defibrillator (`left-4-dead-2.json` 2209), Molotov (2206) and "Weak points" (2203), the Fallout: New Vegas Hardcore note (seed 224; `fallout-new-vegas.json` 3810 and 3811), Palworld Predator Pals (`palworld.json` 4007; seed 420), the Mario Party 7 Snack Orb (seed 350; `mario-party-7.json` 3201 and 3213) and the Brotato Looter (`brotato.json` 3900). Lane M2 takes seed sections: Mario Party 314, 315, 320, 322, 323 (Bonus Star wording, "Bowser wanders", Magma Mountain, the Eternal Star odds); Mario Party 2 324, 330, 331 (the Dueling Glove; the Bowser Space roulette); Mario Party 6 342, 345 (Snowflake Lake "only way"; duels in the last five turns); Mario Party 7 347, 349, 351, 354 (eight players; the Pagoda Peak price; Windmillville; Enchanted Inferno); Super Smash Bros. 394 (the 1P bonus stages); Cyberpunk 2077 153 (iconic weapons); Grand Theft Auto III 397 (the bribe).
+
+## Plan 104 sweep K1 notes moved from the knowledge-base roadmap (2026-11-15)
+
+Moved word for word by sweep K1 of plan 104, to make room for the landings and the Deck block D0a result. Each block names the entry it stood in; the entry keeps its place or a link here.
+
+**Where things stand: the crash-fix line (as it stood, 2026-11-14)**
+
+**The back-end crash fix of 11 November (`d58e3155`)** is unit-tested and not yet checked on the Deck: row **P104-KB-THREADS-01** (Deck check owed).
+
+**Where things stand: the final-measurement line (as it stood)**
+
+**Final measurement (2026-11-10, lane X2, 891 notes):** 548 of 586 blind questions find their note in the first three (477 first). [Detail](roadmap-kb-details.md#plan-103-sweep-k10-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Calls waiting on you: the two settings backup files (removed 2026-11-15; the evidence file exists)**
+
+- **Two settings backup files on the Deck** — **ANSWERED 2026-11-14 (D141 call 3): delete both (block D0a).** One from plan 102 and one from plan 103 sit in its home folder. This line goes at the next sweep, once `workshop:test-evidence/plan104-P104-D0-BACKUPS.json` exists (it does not yet).
+
+**Deck check owed: the opening paragraph (as it stood, 2026-11-14)**
+
+**2026-11-14: every Deck block of plan 103 has run or is named here as not run, and the check for the 11 November crash fix, P104-KB-THREADS-01, is named here too.** **Not run:** the saved walks (runbook D3.4) and the starter box on a fresh install (your hand check). A row no block reached stays owed, named in its entry. **The Deck is put back** (`workshop:test-evidence/plan103-P103-DR-RESTORE.json`), except that the new plugin build stays and two settings backup files sit in its home folder (plan 104 block D0a deletes them). [Detail](roadmap-kb-details.md#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Deck check owed: the crash-fix entry (as it stood, before it moved to Done 2026-11-15)**
+
+- ★★★ `[KB]` `[ollama]` **Installing Ollama timed out because bonsAI's back end had crashed in the knowledge library's database code** — **VERIFY, fixed 2026-11-11 (`d58e3155`); owes row P104-KB-THREADS-01 on the Deck. Was OPEN, reported and traced the same day.**
+  The Deck's system log, 2026-11-11: 41 s after the plugin loaded, its back end crashed inside the database library, so every press timed out (Install Ollama included). Cause: every library read shared one database connection across threads, and an error in one read closed it under the others. **Fixed 2026-11-11:** each thread reads through its own connection; a new test runs eight reads at once against a thread that keeps closing, and the old code fails it.
+  Owes row **P104-KB-THREADS-01** on the Deck: after a plugin reload, a few answers opened and Install or Update Ollama pressed, the back end keeps answering. The ★★ first-start entry in the main roadmap's Bugs may be the same crash. The log's full account (Decky Loader grew to 12.6 GB and was killed): [Detail](roadmap-kb-details.md#plan-104-notes-moved-from-the-knowledge-base-roadmap-2026-11-14).

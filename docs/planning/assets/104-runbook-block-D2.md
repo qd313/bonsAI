@@ -207,6 +207,21 @@ Replay each with `deck_replayChecks` (`checksDir` = `C:\Users\still\Documents\bo
 would press it, skip that walk and say so. Each that passes is saved again with `deck_saveCheck` under its name plus
 `-p104` (never over the old file). Each that fails: write where it stopped; do not try to mend it.
 
-## D2c.5: hand over
+## D2c.5: "Sum up again" shows whole (row P104-M11-SUMUP-AGAIN-REVEAL; deploy 3 only)
+
+Only if your task says the build is deploy 3 (it carries this fix). The long test chat, Show details, Session. Down onto
+the card, Down to read to its end, then Up until the ring leaves the card. **Pass when** "Sum up again" holds the ring
+and its box sits wholly between the pane's top and the dock's top. Three tries; then once more with Stardew Valley
+(413150) running (AI unloaded before the launch; ask nothing). A picture. `deck_exitGame`; confirm with `pgrep`.
+
+## D2c.6: "More below" follows a Text size change (row P104-M12-MORE-BELOW-STALE; deploy 3 only)
+
+Only on deploy 3. Write the Text size setting as you find it on the put-back list first. On that size, read the card
+to its end (the "More below" line goes blank). Settings, Text size: Large. Back to the Main tab; reopen Show details and
+the Session tab if they closed; Down onto the card. **Pass when** the line reads "More below (press Down)" while text
+remains, Down reads on, and the line goes blank only at the true end. A picture. **Put Text size back** as found and
+read it back.
+
+## D2c.7: hand over
 
 As D2a.6. The handover lists every chat this block made (first question of each) for the put-back.

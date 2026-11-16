@@ -792,6 +792,24 @@ planned again.
   11 and 10). The search check after L2 failed: the PC's measuring scripts cannot load the service without the Deck's
   own module (the full test set passes on other tests' stand-ins); a fix is being built; the Deck is unaffected. Deploy
   2 at 03:37 (build `d27f3400cb1d`); block D2a started. Tip `8f2f96cab`; nothing pushed.
+- **2026-11-16, 03:38 to 05:00 EST (52, 47, 37 at 04:06; 65, 48, 37 at 04:51):** the PC import fix landed (L2's sixth
+  commit; the search check after it clean: one junk question now attaches nothing). K3a (room made in every roadmap and
+  testing file; the landings written; fixed entries moved to "Deck check owed"), M10 (stale comments) and F2's second
+  round ("Sum up again" shows whole after Up; "More below" follows a Text size change) landed; deploy 3 at 04:30 (build
+  `e11d8d05ee2a`). Block D2 in four driver parts, all on the external screen: **every row passed**: the Ollama
+  version line, the question runner (15 to 19 seconds a question), Terraria (the "No notes" line, no soulslike words),
+  the made-up boss with ", give me ..." ("No close match"), the plain Tank and Charger questions (no versus note), the
+  chips (both closest within 0.4 seconds), the summed-up note as a stop, "Ask anyway" one Up beside God of War, the
+  "Notes were used" line above the dock, Show details reopened (22 of 22; owed still for the Deck's own screen), the
+  Session card, the look check, the sweep, the Half-Life 2 and Black Mesa notes (Phase 5 closes), the three games plan
+  103 missed (20 of 20), the new versus notes (no ending given away), and the two Session card fixes. The saved walks
+  could not be replayed on the changed test chat. X2: nothing lost from X0 (older 572 to 574, newer 578 to 580);
+  said so 0 to 10 of 24, as if it knew 21 to 8 or 9; facts kept 69.5 and 74.0 (noise); the final library works with
+  the released 0.6.0 code (no error in 1,464 questions; the same notes on 1,402 of 1,463). Block DR put the Deck back:
+  the four chats as before, Speed, the Developer tab off, the published library 2026.10.25 from the plan's copy
+  (Internet downloads stay off, so the newer published 2026.11.10 is the maintainer's to download), every settings key
+  as before (the session copied the library's version key back from the backup and reloaded the plugin), the plan's
+  two backups removed, the hold released. Tip `bac556499`; nothing pushed.
 
 **Questions for the maintainer (the safest choice is taken meanwhile):**
 - **The honest-answer trade:** switched on today, a made-up boss stops getting another boss's weak points, but 25 of
@@ -815,7 +833,9 @@ planned again.
   (Kept meanwhile.)
 - **Older answers show no Show details strip:** answered by the code, no call needed: on purpose, settled in plan 62
   (only the newest answer carries the Session tab, so it never repeats down the chat).
-- **The Deck's mode chip** was on Speed before this plan; block DR puts it back.
+- **The Deck's mode chip** was on Speed before this plan; block DR put it back.
+- **The newer published library (2026.11.10)** is not on the Deck: the Deck had 2026.10.25 before the plan and has it
+  again. Downloading the newer one needs Internet downloads on for a moment: yours to do.
 
 A note: phone alerts are off in the app, so a "truly blocked" alert cannot reach you; the chat is where to look.
 

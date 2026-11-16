@@ -3292,8 +3292,10 @@ class RrfCrowdingTests(unittest.TestCase):
         """A vector whose cosine with the query [1, 0] is exactly ``similarity``."""
         return [similarity, (1.0 - similarity * similarity) ** 0.5]
 
-    def _fuse(self, words, vectors, *, cap=True, top_k, **kwargs):
-        with mock.patch.object(kb_service, "CROWDING_CAP_ON", cap):
+    def _fuse(self, words, vectors, *, cap=True, first_pick=False, top_k, **kwargs):
+        with mock.patch.object(kb_service, "CROWDING_CAP_ON", cap), mock.patch.object(
+            kb_service, "CROWDING_FIRST_PICK_ON", first_pick
+        ):
             fused = _fuse_cards_by_rrf(words, [1.0, 0.0], vectors, top_k=top_k, **kwargs)
         return [c.name for c in fused]
 
@@ -3494,3 +3496,98 @@ class RrfCrowdingTests(unittest.TestCase):
             )
         self.assertEqual(order[0], "Movement abilities overview")
         self.assertEqual(order[-1], "Starting out in Hollow Knight")
+
+    # --- Version (e), plan 104 lane R1 second try: only the meaning search's first pick is lifted ---
+
+    def _only_first_pick(self, words, vectors, **kwargs):
+        return self._fuse(words, vectors, cap=False, first_pick=True, top_k=len(words) + 3, **kwargs)
+
+    def test_the_first_pick_ships_switched_off(self):
+        self.assertFalse(kb_service.CROWDING_FIRST_PICK_ON)
+
+    def test_with_only_the_first_pick_on_a_note_only_meaning_found_is_lifted(self):
+        words, meaning_only, vectors = self._crowded_pool()
+        order = self._only_first_pick(words, vectors, recall_cards=[meaning_only])
+        self.assertLess(order.index("M"), order.index("W9"))
+
+    def test_with_only_the_first_pick_on_the_second_best_meaning_note_is_not_lifted(self):
+        """M is the meaning search's best match and M2 its second best: the stray word hit W9 still
+        beats M2 (it did before), while M passes it. This is the shape of the seven losses."""
+        words, meaning_only, vectors = self._crowded_pool()
+        second = self._card(98, "M2")
+        vectors[98] = self._unit(0.985)
+        order = self._only_first_pick(words, vectors, recall_cards=[meaning_only, second])
+        self.assertLess(order.index("M"), order.index("W9"))
+        self.assertLess(order.index("W9"), order.index("M2"))
+        # The cap on the same pool lifts both, which is what pushed the right note out of the three.
+        capped = self._fuse(
+            words, vectors, cap=True, top_k=13, recall_cards=[meaning_only, second]
+        )
+        self.assertLess(capped.index("M2"), capped.index("W9"))
+
+    def _word_found_first_pick_pool(self):
+        """Ten word hits. W9, found by the word search but only in 9th place, is the meaning
+        search's best match; W1 to W4 follow it by meaning."""
+        words = [self._card(i, f"W{i}") for i in range(1, 11)]
+        sims = {9: 0.995, 1: 0.99, 2: 0.98, 3: 0.97, 4: 0.96}
+        for i in (5, 6, 7, 8, 10):
+            sims[i] = 0.80 - 0.01 * i
+        return words, {sid: self._unit(sim) for sid, sim in sims.items()}
+
+    def test_the_first_pick_counts_when_the_word_search_found_it_but_ranked_it_low(self):
+        words, vectors = self._word_found_first_pick_pool()
+        before = self._fuse(words, vectors, cap=False, top_k=10)
+        after = self._only_first_pick(words, vectors)
+        self.assertGreater(before.index("W9"), before.index("W3"))
+        self.assertLess(after.index("W9"), after.index("W3"))
+        self.assertEqual(after[0], "W1")  # an exact first-place word match still comes first
+
+    def test_a_word_hit_the_word_search_ranked_high_is_untouched_by_the_first_pick(self):
+        """The first pick's place is a ceiling, never a demotion: a first pick already in 2nd place
+        stays in 2nd place."""
+        words = [self._card(i, f"W{i}") for i in range(1, 11)]
+        vectors = {i: self._unit(0.9 - 0.01 * i) for i in range(1, 11)}
+        vectors[2] = self._unit(0.99)
+        self.assertEqual(
+            self._only_first_pick(words, vectors), self._fuse(words, vectors, cap=False, top_k=10)
+        )
+
+    def test_a_starting_out_note_that_is_the_first_pick_is_not_lifted_and_nobody_takes_its_place(self):
+        words, meaning_only, vectors = self._starting_out_pool("Starting out in Hollow Knight")
+        order = self._only_first_pick(
+            words, vectors, recall_cards=[meaning_only], question="how to get double jump"
+        )
+        self.assertEqual(order[0], "W1")
+        self.assertEqual(
+            order, self._fuse(words, vectors, cap=False, top_k=11, recall_cards=[meaning_only])
+        )
+
+    def test_a_starting_out_first_pick_is_lifted_when_the_question_asks_how_to_start(self):
+        words, meaning_only, vectors = self._starting_out_pool("Starting out in Hollow Knight")
+        order = self._only_first_pick(
+            words, vectors, recall_cards=[meaning_only],
+            question="how do i get started in hollow knight",
+        )
+        self.assertEqual(order[0], "Starting out in Hollow Knight")
+
+    def test_a_kind_pulled_note_is_never_the_first_pick(self):
+        words, meaning_only, vectors = self._crowded_pool()
+        kind_pulled = self._card(100, "K")
+        vectors[100] = self._unit(0.999)
+        pool = words + [meaning_only, kind_pulled]
+        pick = kb_service._meaning_first_pick_index(
+            pool, len(words), [1.0, 0.0], vectors, {99}, ""
+        )
+        self.assertEqual(pool[pick].name, "M")
+
+    def test_with_the_first_pick_switch_off_naming_the_meaning_found_notes_changes_nothing(self):
+        words, meaning_only, vectors = self._crowded_pool()
+        orders = [
+            self._fuse(
+                words, vectors, cap=False, top_k=11, recall_cards=[meaning_only],
+                meaning_found_ids=found,
+            )
+            for found in (None, set(), {99})
+        ]
+        self.assertEqual(orders[0], orders[1])
+        self.assertEqual(orders[0], orders[2])

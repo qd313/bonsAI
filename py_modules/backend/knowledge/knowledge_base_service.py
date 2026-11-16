@@ -770,6 +770,26 @@ RRF_W_VEC = 1.0
 CROWDING_CAP_ON = False
 MEANING_FOUND_WORD_PLACE_CEILING = 5
 
+# Version (e), plan 104 lane R1 second try, a SWITCH, off: the cap above lifts every note the meaning
+# search found, and the notes it lifted past a third-place word hit were the meaning search's
+# second to fourth pick, never its first. CROWDING_FIRST_PICK_ON lifts ONLY the meaning search's
+# single best match (the best cosine among the word hits and the notes the meaning search found; a
+# kind-pulled or topic-pulled note is not a candidate, and a "Starting out" note is not lifted
+# unless the question asks how to start) to word place 5 at the furthest, and it does so whether the
+# word search missed that note or found it and ranked it low. Off, nothing changes.
+#
+# MEASURED 2026-11-16 (plan 104 lane R1, second try) on the 932-note library, beside the cap (a)
+# on the same notes. On the search test (e) gains 12 questions and loses 3 (V2-C-06 a tip,
+# V2-P1-YS-04, V2-P103-CP77-19), where (a) gains 15 and loses 9; on the plugin's own search (e)
+# gains 14 asks and loses 5, where (a) gains 18 and loses 26, and "No close match" newly shows on
+# none, where (a) shows it on 2. So it is much closer, but not clean: the meaning search's first
+# pick is itself sometimes a broader note that sits over the exact word match (Diddy Kong Racing's
+# Golden Balloons note over the Red and Yellow Weapon Balloon notes: two search-test questions lose
+# first place; on the plugin's own search nine asks with the game's name typed do, in other games).
+# The landing rule is not met, so it stays OFF. Tables: kb-crowding-fix-2026-11-16-p104-r1e-tables.md
+# in the workshop.
+CROWDING_FIRST_PICK_ON = False
+
 # --- Rank a generic "Starting out in <game>" note below a specific one (D-plan 70, helper B,
 # bug 2, 2026-09-25) -- MEASUREMENT ONLY, off by default -----------------------------------------
 #
@@ -814,6 +834,34 @@ def _ids_the_cap_lifts(
         for card in pool
         if card.section_id in meaning_found_ids and (asks_to_start or not _is_starting_out_card(card))
     }
+
+
+def _meaning_first_pick_index(
+    pool: list[KnowledgeCard],
+    word_hit_count: int,
+    query_vector: list[float],
+    vectors_by_id: dict[int, list[float]],
+    meaning_found_ids: set[int],
+    question: str,
+) -> Optional[int]:
+    """Where in ``pool`` the meaning search's single best match sits, or None when it is not to be
+    lifted. Candidates are the word hits (the first ``word_hit_count`` entries) and the notes in
+    ``meaning_found_ids``; a card with no vector is not one. Ties go to the earlier entry, as the
+    blend's own sort does. A generic "Starting out" note that tops the list is lifted only when the
+    question asks how to start; when it is not lifted, nobody else takes its place."""
+    best: Optional[tuple[float, int]] = None
+    for index, card in enumerate(pool):
+        vec = vectors_by_id.get(card.section_id)
+        if not vec or (index >= word_hit_count and card.section_id not in meaning_found_ids):
+            continue
+        similarity = _dot_similarity(query_vector, vec)
+        if best is None or similarity > best[0]:
+            best = (similarity, index)
+    if best is None:
+        return None
+    if _is_starting_out_card(pool[best[1]]) and not _question_asks_how_to_start(question):
+        return None
+    return best[1]
 
 
 def _fuse_cards_by_rrf(
@@ -906,21 +954,21 @@ def _fuse_cards_by_rrf(
         if meaning_found_ids is None:
             meaning_found_ids = {card.section_id for card in recall_cards or []}
         lifted_ids = _ids_the_cap_lifts(pool, meaning_found_ids, question)
-    capped_rank = min(fts_missing_rank, MEANING_FOUND_WORD_PLACE_CEILING)
-    scores = [
-        RRF_W_FTS
-        / (
-            RRF_K
-            + (
-                index + 1
-                if index < len(cards)
-                else capped_rank
-                if pool[index].section_id in lifted_ids
-                else fts_missing_rank
-            )
+    first_pick: Optional[int] = None
+    if CROWDING_FIRST_PICK_ON:
+        if meaning_found_ids is None:
+            meaning_found_ids = {card.section_id for card in recall_cards or []}
+        first_pick = _meaning_first_pick_index(
+            pool, len(cards), query_vector, vectors_by_id, meaning_found_ids, question
         )
-        for index in range(len(pool))
-    ]
+
+    def word_place(index: int) -> int:
+        place = index + 1 if index < len(cards) else fts_missing_rank
+        if index == first_pick or (index >= len(cards) and pool[index].section_id in lifted_ids):
+            return min(place, MEANING_FOUND_WORD_PLACE_CEILING)
+        return place
+
+    scores = [RRF_W_FTS / (RRF_K + word_place(index)) for index in range(len(pool))]
 
     by_similarity: list[tuple[float, int]] = []
     vectorless: list[int] = []

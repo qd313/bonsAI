@@ -1570,6 +1570,345 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 4520,
+      "name": "Short-handed versus games",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Versus",
+      "main_revision": "172372",
+      "lines": [
+        {
+          "line": "Summary: Versus works with as few as two players, one per team, because bots take the empty places on both sides. A game still needs at least one human on each team or it ends.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Versus Gameplay",
+              "quoted": [
+                "so now it is possible to have very few players (two players minimum, one on each team), while bots on both teams fill in the missing player slots",
+                "Both teams need at least one human player in order for the game to start or continue properly"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Few humans on the survivor side is a real handicap: once the last human survivor is down the round is over, because bot survivors cannot get through a level by themselves.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Notes",
+              "quoted": [
+                "A team short on players can face a significant disadvantage during the game while playing as Survivors.",
+                "If all human-controlled Survivors are killed, the round will end, since the computer-controlled Survivors cannot continue through the level by themselves."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: In versus the bots playing Ellis and Zoey pick up shotguns rather than the hunting or sniper rifles they favour in the campaign, to keep things balanced.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Notes",
+              "quoted": [
+                "they instead take shotguns in Versus (and Survival) mode for balancing reasons.",
+                "usually take the Hunting Rifle and Sniper Rifle in campaign mode"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A bot-controlled Hunter shot from a distance cannot leap away as it does in the campaign, so it runs instead and is easy to kill. Its pounce still hurts, up to 25 damage when it starts far enough off.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Versus",
+              "revision": "172372",
+              "part_of_page": "Notes",
+              "quoted": [
+                "Since the jump ability is not available in Versus, he will simply run away, making him an easy kill.",
+                "Up to 25 points of damage can be dealt instantly if the pounce originated far enough away."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4521,
+      "name": "Fooling the infected team at ambush spots",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Tactics",
+      "main_revision": "173476",
+      "lines": [
+        {
+          "line": "Summary: The infected in versus are people, so survivors can bluff them: halting or stepping back as you near a likely ambush spot may make an infected player spawn or attack too soon.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Team tactics / The Survivors",
+              "quoted": [
+                "Keep in mind that the enemies are human players, and use specific strategies against them.",
+                "A common trick is the Survivor suddenly stops or back away while approaching supposed ambush spots, such as a corner, a one way drop, or a Witch."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Think like the infected team. Corners, one-way drops and Witches are the classic bait spots. If the bluff works, the early attacker dies more safely, or the team slips past while that player's special attack is still recharging.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Team tactics / The Survivors",
+              "quoted": [
+                "In Versus mode, think as the infected team would think.",
+                "This can easily trick the enemy team to spawn or attack too early, allowing the team to dispose of them more safely, or rush through while their special attack is still in cooldown."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Spawn denial depends on talking: with voices coordinated, a survivor team can keep watch on several likely spawn spots until it has passed them, so the infected must wait or settle for a worse position.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Team tactics / The Survivors",
+              "quoted": [
+                "With good coordination via microphone, a survivor team can keep locations where enemies can spawn for good advantages in check until they get pass, forcing the opponents to either delay their attack or choose an inferior location."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4522,
+      "name": "Survivor weapons for versus: the mix and the Grenade Launcher",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Tactics",
+      "main_revision": "173476",
+      "lines": [
+        {
+          "line": "Summary: The wiki wants a survivor team's guns and throwables varied rather than four copies of one kind, and rates the Grenade Launcher a poor pick for most of versus.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Team tactics / The Survivors",
+              "quoted": [
+                "A team with all shotguns or all sniper rifles is far less balanced than one with a good mix of armaments.",
+                "Left 4 Dead 2's Grenade Launcher is not very useful on most maps when playing in Versus mode."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Give everyone something that reaches both near and far, and cover the gaps: a sniper-rifle player needs a melee weapon for when a horde closes in, and an auto-shotgun player may prefer a magnum, which can free a teammate a Smoker has grabbed.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Team tactics / The Survivors",
+              "quoted": [
+                "ideally each team member will have something that is capable of hitting both near and far targets.",
+                "If you prefer an auto-shotgun as your primary weapon, it might be advisable to take a magnum instead of a melee weapon so you can potentially rescue a fellow Survivor pulled by a Smoker.",
+                "Likewise if you prefer a sniper rifle, you could find yourself in real trouble without a melee weapon if you get surrounded by a horde."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Spread the throwables too and match them to the moment: bile bombs to slow the Tank or pull common infected off a teammate; pipe bombs to clear open ground, break up a horde or help a teammate who has been biled.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Team tactics / The Survivors",
+              "quoted": [
+                "Try to have a good mix of pipebombs, bile bombs, and molotovs.",
+                "Use the pipe bomb during horde attacks, when a survivor has been vomited on, or to clear out large open areas so the team can move faster.",
+                "Use bile to slow down a tank, draw common infected away from players"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Weigh the Grenade Launcher carefully: it hits hard with one shot, but once reload time counts almost any other weapon does more to a single target such as a Tank, its ammo is limited, and its splash easily hurts teammates. If you carry it, use it briefly in a panic event and swap it out afterwards.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Tactics",
+              "revision": "173476",
+              "part_of_page": "Team tactics / The Survivors",
+              "quoted": [
+                "The grenade launcher can do a lot of damage with one shot",
+                "when you count in the reload time it's very possible to do more damage to a single target (such as a Tank) in the same amount of time with almost any other weapon in the game.",
+                "the ammo is limited",
+                "the potential for friendly fire damage is high",
+                "best used temporarily during a panic event",
+                "swapped out for something that makes less collateral damage"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4523,
+      "name": "Scavenge rounds, timers and winning",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+      "main_revision": "173082",
+      "lines": [
+        {
+          "line": "Summary: Scavenge is a Left 4 Dead 2 mode where one team's survivors race to pour gas cans (up to 22 on the map) into a generator while the other team plays the infected. The host sets 1, 3 or 5 rounds, and every round has two turns with the sides trading places.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "(opening)",
+              "quoted": [
+                "Scavenge Mode is a competitive gameplay mode released in Left 4 Dead 2. It is a round-based game in which Survivors attempt to find up to 22 gas cans to refuel a generator (or car), while fighting against player-controlled Special Infected much like in a Versus game.",
+                "Before a game starts, the host can choose the amount of rounds to play (1 round, 3 rounds, 5 rounds)."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Gameplay",
+              "quoted": [
+                "Each round of a game consists of two turns."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: A worked turn: team A spawns beside the generator with 30 seconds to gear up while the infected look for spots. When that runs out, or as soon as a survivor wanders off, the clock starts at 1 minute 30 seconds, and every can poured adds 20 seconds. Say team A pours four cans before time or a wipe-out ends their turn.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Gameplay",
+              "quoted": [
+                "At the start of a round, the Survivors spawn next to the generator and will have 30 seconds to set up and grab their supplies, while the Infected find locations to spawn.",
+                "The timer will start and the Infected will spawn as soon as the set-up time runs out or if a Survivor leaves the designated area around the generator.",
+                "Once the game starts, the Survivors have 1 minute and 30 seconds to find gas cans, with an additional 20 seconds added for each can they bring to the generator.",
+                "When the time runs out or all the Survivors are incapacitated, the teams switch sides."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Team B then plays the survivors and needs five cans to win the round, one more than team A. If both bring in four, the faster team takes it, and if neither pours a can the round goes to whoever lasted longer.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Gameplay",
+              "quoted": [
+                "Next turn, the previously Infected will become the Survivors and will have to get one more gas can than the other team to win the round and end it.",
+                "If both teams collect the same amount of gas cans, the team that did it faster wins the round.",
+                "In the case that both teams do not collect any gas cans, the round goes to the team who held out longer."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Round two opens with the team that lost round one as survivors, the reverse of versus, where the losers start as infected. The match goes to whoever wins the most rounds, not the most cans, and it stops as soon as the trailing team cannot catch up, so a 3-round game is over at two wins.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Gameplay",
+              "quoted": [
+                "Next round, the losing team will start as the Survivors (the opposite of Versus, in which the losing team is Infected first).",
+                "The team that wins the most rounds wins the game.",
+                "In other words, a team can win even if, overall, they collected fewer gas cans than their opponents as long as they win more rounds.",
+                "The game will end as soon as it is impossible for the losing team to win."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4524,
+      "name": "Scavenge gas cans, pouring and overtime",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+      "main_revision": "173082",
+      "lines": [
+        {
+          "line": "Summary: Scavenge cans sit in fixed spots and shine white until someone drops one, then orange. Emptying a can into the generator takes about 2.5 seconds, and the count starts over if infected or flames hurt the pourer, but not if a teammate does.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Gas cans and pouring",
+              "quoted": [
+                "Gas cans have a white aura, so Survivors can see them anywhere on the map. If they are picked up and dropped they will have an orange aura. Gas cans always spawn in the same location on the map.",
+                "It takes about 2.5 seconds to pour fuel into the generator. However, any damage from Infected or from fire will instantly restart the pour timer (friendly fire will not), so a Survivor must not be under attack in order to complete the process."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Spitter acid is the one infected attack that wrecks cans, and only a can someone has lifted and put down. A can under acid blinks and then goes off, and a survivor who reaches it during the blink can still save it. Wrecked cans return to their original spot after a while.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Gas cans and pouring",
+              "quoted": [
+                "The only Infected that can destroy gas cans with its attack is the Spitter. However, the attack only works if the gas can has been previously picked up and dropped.",
+                "While flashing, Survivors will have time to pick up the gas cans before they explode.",
+                "If they get destroyed, they will eventually respawn back at the location they originated."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: If the clock hits zero while a survivor is holding a can, the timer flashes red and the turn goes into overtime: pour another can to extend it, with no limit on how long that takes as long as someone keeps hold of a can. Once every can is on the floor the turn ends. Overtime can happen several times in one round.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Gameplay",
+              "quoted": [
+                "During a game, overtime will occur if the time limit runs out, but at least one Survivor is holding a gas can.",
+                "Overtime is indicated by the timer flashing red.",
+                "During overtime, the Survivors have an indefinite amount of time to pour another gas can into the generator and extend the time, so long as at least one Survivor is holding a gas can at all times. If all the gas cans are dropped, the Survivors' round is over.",
+                "Overtime can occur multiple times during a single round."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Adrenaline makes pouring faster and lets a survivor keep pouring under attack. A bot Spitter is no threat to dropped cans.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Gas cans and pouring",
+              "quoted": [
+                "Adrenaline shots speed up the pouring speed and let Survivors pour in while being attacked."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Notes",
+              "quoted": [
+                "Bot-controlled Spitters cannot burn dropped cans in Scavenge."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

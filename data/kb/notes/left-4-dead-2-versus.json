@@ -221,6 +221,61 @@
       "source_license": "CC-BY-SA-3.0",
       "source_version": "172372",
       "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4520,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Short-handed versus games",
+      "card": "Summary: Versus works with as few as two players, one per team, because bots take the empty places on both sides. A game still needs at least one human on each team or it ends.\nTips: Few humans on the survivor side is a real handicap: once the last human survivor is down the round is over, because bot survivors cannot get through a level by themselves.\nTips: In versus the bots playing Ellis and Zoey pick up shotguns rather than the hunting or sniper rifles they favour in the campaign, to keep things balanced.\nTips: A bot-controlled Hunter shot from a distance cannot leap away as it does in the campaign, so it runs instead and is easy to kill. Its pounce still hurts, up to 25 damage when it starts far enough off.",
+      "source_url": "https://left4dead.fandom.com/wiki/Versus",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "172372",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4521,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Fooling the infected team at ambush spots",
+      "card": "Summary: The infected in versus are people, so survivors can bluff them: halting or stepping back as you near a likely ambush spot may make an infected player spawn or attack too soon.\nTips: Think like the infected team. Corners, one-way drops and Witches are the classic bait spots. If the bluff works, the early attacker dies more safely, or the team slips past while that player's special attack is still recharging.\nTips: Spawn denial depends on talking: with voices coordinated, a survivor team can keep watch on several likely spawn spots until it has passed them, so the infected must wait or settle for a worse position.",
+      "source_url": "https://left4dead.fandom.com/wiki/Tactics",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173476",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4522,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Survivor weapons for versus: the mix and the Grenade Launcher",
+      "card": "Summary: The wiki wants a survivor team's guns and throwables varied rather than four copies of one kind, and rates the Grenade Launcher a poor pick for most of versus.\nTips: Give everyone something that reaches both near and far, and cover the gaps: a sniper-rifle player needs a melee weapon for when a horde closes in, and an auto-shotgun player may prefer a magnum, which can free a teammate a Smoker has grabbed.\nTips: Spread the throwables too and match them to the moment: bile bombs to slow the Tank or pull common infected off a teammate; pipe bombs to clear open ground, break up a horde or help a teammate who has been biled.\nTips: Weigh the Grenade Launcher carefully: it hits hard with one shot, but once reload time counts almost any other weapon does more to a single target such as a Tank, its ammo is limited, and its splash easily hurts teammates. If you carry it, use it briefly in a panic event and swap it out afterwards.",
+      "source_url": "https://left4dead.fandom.com/wiki/Tactics",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173476",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4523,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Scavenge rounds, timers and winning",
+      "card": "Summary: Scavenge is a Left 4 Dead 2 mode where one team's survivors race to pour gas cans (up to 22 on the map) into a generator while the other team plays the infected. The host sets 1, 3 or 5 rounds, and every round has two turns with the sides trading places.\nTips: A worked turn: team A spawns beside the generator with 30 seconds to gear up while the infected look for spots. When that runs out, or as soon as a survivor wanders off, the clock starts at 1 minute 30 seconds, and every can poured adds 20 seconds. Say team A pours four cans before time or a wipe-out ends their turn.\nTips: Team B then plays the survivors and needs five cans to win the round, one more than team A. If both bring in four, the faster team takes it, and if neither pours a can the round goes to whoever lasted longer.\nTips: Round two opens with the team that lost round one as survivors, the reverse of versus, where the losers start as infected. The match goes to whoever wins the most rounds, not the most cans, and it stops as soon as the trailing team cannot catch up, so a 3-round game is over at two wins.",
+      "source_url": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173082",
+      "crawled_at": "2026-11-15"
+    },
+    {
+      "section_id": 4524,
+      "game_id": 3,
+      "section_type": "versus",
+      "name": "Scavenge gas cans, pouring and overtime",
+      "card": "Summary: Scavenge cans sit in fixed spots and shine white until someone drops one, then orange. Emptying a can into the generator takes about 2.5 seconds, and the count starts over if infected or flames hurt the pourer, but not if a teammate does.\nTips: Spitter acid is the one infected attack that wrecks cans, and only a can someone has lifted and put down. A can under acid blinks and then goes off, and a survivor who reaches it during the blink can still save it. Wrecked cans return to their original spot after a while.\nTips: If the clock hits zero while a survivor is holding a can, the timer flashes red and the turn goes into overtime: pour another can to extend it, with no limit on how long that takes as long as someone keeps hold of a can. Once every can is on the floor the turn ends. Overtime can happen several times in one round.\nTips: Adrenaline makes pouring faster and lets a survivor keep pouring under attack. A bot Spitter is no threat to dropped cans.",
+      "source_url": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": "173082",
+      "crawled_at": "2026-11-15"
     }
   ]
 }

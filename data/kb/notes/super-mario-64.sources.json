@@ -121,7 +121,7 @@
         },
         {
           "label": "Weak points",
-          "text": "A punch, a kick or a ground pound defeats it. When you look at one it turns partly see-through; otherwise it is solid and follows you.",
+          "text": "Any punch, kick or ground pound beats it. Look at one and it fades to half-visible; look away and it is solid again and carries on following you.",
           "from": [
             {
               "page": "Boo",
@@ -191,7 +191,7 @@
         },
         {
           "label": "Weak points",
-          "text": "Only hit him while you can see him: pound the ground on him from above or punch him from the side. It takes three hits, and he shrinks and speeds up with every one.",
+          "text": "He takes damage only while he is showing. Drop onto him with a ground pound, or hit him with a punch from the side. Three hits finish him, and each hit leaves him smaller and quicker.",
           "from": [
             {
               "page": "Big Boo (character)",
@@ -331,7 +331,7 @@
       "lines": [
         {
           "label": "Summary",
-          "text": "A common walking bomb that first appears in Bob-omb Battlefield: when it spots you it lights its fuse and rushes at you.",
+          "text": "A common walking bomb whose first stop is Bob-omb Battlefield. Get noticed and it ignites its own fuse and runs at you.",
           "from": [
             {
               "page": "Bob-omb",
@@ -351,7 +351,7 @@
         },
         {
           "label": "Weak points",
-          "text": "Touching one does no harm, but its explosion costs two wedges of health. Kick it, or pick it up from behind and throw it, and it explodes away from you and leaves a coin.",
+          "text": "Walking into one is harmless, but when it blows up it takes two wedges of health. To beat one, kick it, or grab it from behind and toss it; the blast goes off away from you and a coin is left behind.",
           "from": [
             {
               "page": "Bob-omb",
@@ -391,7 +391,7 @@
         },
         {
           "label": "Tips",
-          "text": "A Bob-omb working a cannon does not chase you but still explodes if picked up; the pink Bob-omb Buddies are friendly, give hints and open cannons.",
+          "text": "One Bob-omb that operates a cannon will not chase you, but it still goes off if you pick it up. The pink ones, Bob-omb Buddies, are friendly: they give hints and open the cannons.",
           "from": [
             {
               "page": "Bob-omb",
@@ -482,7 +482,7 @@
         },
         {
           "label": "Tips",
-          "text": "If it catches you it throws you in a random direction, sometimes a long way or into a pit. To get loose, work the Control Stick from the inside to the outside 11 times before the throw.",
+          "text": "If a Chuckya grabs you it hurls you in a random direction, which can mean a long throw or a pit. Getting free takes 11 pushes of the Control Stick, each from inside to outside, before the throw.",
           "from": [
             {
               "page": "Chuckya",
@@ -580,7 +580,7 @@
         },
         {
           "label": "Tips",
-          "text": "Each landing on a Whomp's back gives a coin, up to five in all. A trick in the original game lets you jump while it falls, pass through it and stand on its back.",
+          "text": "Stand on a Whomp's back and it gives up a coin each time you land, five at most. In the original game you can jump while it is falling, slip through it and end up on its back.",
           "from": [
             {
               "page": "Whomp",
@@ -610,7 +610,7 @@
       "lines": [
         {
           "label": "Summary",
-          "text": "A giant eyeball that turns to follow you and, if left alone, shoots small multicoloured bubbles at you; found in Big Boo's Haunt, Lethal Lava Land and Hazy Maze Cave.",
+          "text": "A huge eyeball that swings round to face you and, if you leave it alone, fires little coloured bubbles your way. You find it in Big Boo's Haunt, Lethal Lava Land and Hazy Maze Cave.",
           "from": [
             {
               "page": "Mr. I",
@@ -630,7 +630,7 @@
         },
         {
           "label": "Weak points",
-          "text": "Run around it: it shrinks a little trying to keep track of you, is defeated, and drops a blue coin.",
+          "text": "Circle around it: it tries to keep watching you, shrinks a little, and is beaten, leaving a blue coin.",
           "from": [
             {
               "page": "Mr. I",
@@ -700,7 +700,7 @@
         },
         {
           "label": "Weak points",
-          "text": "It cannot be defeated in the original game. One face of each box is a square hole made for you to stand in while the box rolls over your tile; do that and you survive, though the edges around the hole still crush you if you stand beneath them.",
+          "text": "In the original game you cannot beat one. One face of each box is an open square: stand on a tile as the box rolls onto it and the opening spares you, but the rim around the opening still crushes anything beneath it.",
           "from": [
             {
               "page": "Tox Box",
@@ -1118,7 +1118,7 @@
         },
         {
           "label": "Uses",
-          "text": "They turn up in several ways: at the top of poles, inside some yellow blocks, in a small patch of flowers, from non-explosive butterflies you touch, and for flying through a ring of coins.",
+          "text": "Reach the top of a pole, open some yellow blocks, touch a butterfly that is not an exploding one, walk into a small patch of flowers, or soar through a ring of coins.",
           "from": [
             {
               "page": "1-Up Mushroom",
@@ -1167,7 +1167,7 @@
         },
         {
           "label": "Uses",
-          "text": "Jump onto it and you speed along, and ramming an enemy defeats it on the spot. While you ride, you can cross water, lava, quicksand and deadly quicksand and neither sink nor take damage. Carry one in front of you underwater to swim faster for a short time.",
+          "text": "Hop on and it carries you quickly, and enemies you ram are defeated outright. While you ride it, water, lava, quicksand and deadly quicksand cannot sink or hurt you. If you grab one underwater you can hold it out in front and swim faster for a short while.",
           "from": [
             {
               "page": "Koopa Shell",

@@ -111,12 +111,18 @@ All notable changes to this project are documented in this file.
 - **The AI says so first when your notes do not cover the question.** When the plugin shows "No close match" (a boss the library has never heard of, say), the reply now opens with one short sentence saying it has no notes on that, then helps from what the AI itself knows. Speed mode is unchanged. Checked on the Deck: the opening showed 2 of 2 times, but on one made-up boss the reply still gave advice borrowed from a nearby boss's notes.
 - **Library 2026.11.10 is published.** It carries the notes and tips listed above that were built by then, including the Left 4 Dead 2 versus notes; "They arrive with the next library update" in those lines means this one.
 - **Left 4 Dead 2 loses the "Fallen Survivor" note.** Asking about that rare infected no longer finds a note of its own. The library published on 10 November still has it; it goes at the next library update.
+- **A warning before the AI loads into too little memory.** With a heavy game running, bonsAI now says "Not enough free memory to start the AI" instead of loading it, and offers an "Ask anyway" button. "Sum up this chat" says when it has no memory to run in.
+- **The two chips on screen after an answer are the two closest notes.** The next picks keep to the closest notes not yet shown. On the Deck the second chip took about seven seconds to change.
+- **The log says why a long chat got no new summary.** For each question it now says a summary was made, or that none was due and how many entries the saved one covers.
+- **More Left 4 Dead 2 versus notes.** Fifteen notes on how a versus match runs, Scavenge play for both sides and ambush spots arrive with the next library update.
 
 ### Changed
 
 - **Older notes corrected from the wikis.** The Fallout 4 Deathclaw note says which kind you meet at which level and where its belly is weak; the Left 4 Dead 2 defibrillator note says the wiki gives no chapter-by-chapter list; the Fallout: New Vegas Hardcore note lists the Auto-Doc and the binding ritual; Predator Pals no longer claim how they spawn; the Snack Orb's turns are described correctly. They arrive with the next library update.
 - **Left 4 Dead 2 versus questions lead with the right note.** In Speed mode "how to beat tank" attaches the Tank note; a plain Tank question no longer gets the survivors' versus note beside it; a question about playing as the Hunter in versus leads with "Playing as the Hunter".
 - **The Deck's back end no longer crashes when the knowledge library is read from several places at once.** Each reader now has its own connection to the library. This was the crash behind "Install Ollama timed out"; after a plugin reload on the Deck there was no crash and no database error.
+- **First start: Install Ollama no longer blames Internet downloads while they are on.** A settings save that fails is reported and sent again, and Install Ollama retries once after a "downloads off" refusal.
+- **Twelve older notes files reworded and checked again.** Baldur's Gate 3, Portal 2, The Sims 4, San Andreas, Super Mario 64, Mario Kart 64, Paper Mario: The Thousand-Year Door, Pikmin 2, Donkey Kong 64, Grand Theft Auto IV and V and Doom 64 no longer follow the wikis' sentences. Mario Party, Super Smash Bros., Cyberpunk 2077's iconic weapons, Grand Theft Auto III and eight Black Mesa notes were corrected where the wiki differs. They arrive with the next library update.
 - **Show details names its chip row "Behind this answer".** The line above the chips now reads "Behind this answer · 1 of 6" instead of "Chip 1 of 6".
 
 ## [0.6.0] - 2026-10-23

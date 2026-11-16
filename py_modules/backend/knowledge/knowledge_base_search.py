@@ -614,22 +614,25 @@ def _search_sections(
 
 
 def _genre_fallback(conn: sqlite3.Connection, game_id: Optional[int]) -> Optional[str]:
-    genres = ""
-    if game_id is not None:
-        row = conn.execute("SELECT genres FROM games WHERE game_id = ?", (game_id,)).fetchone()
-        if row and row["genres"]:
-            genres = str(row["genres"]).lower()
-    row = conn.execute(
-        "SELECT card FROM genre_patterns ORDER BY pattern_id LIMIT 1"
-    ).fetchone()
-    if row and "soulslike" in genres:
-        pat = conn.execute(
-            "SELECT card FROM genre_patterns WHERE genre_tags LIKE '%soulslike%' LIMIT 1"
-        ).fetchone()
-        if pat:
-            return str(pat["card"])
-    if row:
-        return str(row["card"])
+    """The general card for the game's genre, or None.
+
+    Only a game the library knows, with a genre on file that a card is tagged for, gets a card
+    (plan 104, row P104-M8-NO-NOTES-GENRE-CARD). It used to hand the first card to every game, so
+    a player asking about Terraria was given "Soulslike basics" and the AI borrowed its words
+    ("Vigor", "Energy") as if they were about Terraria: 3 answers of 3 (lane H1, 2026-11-15). A
+    card for another genre is not help with this game, so a game with no notes of its own and no
+    matching genre gets nothing here, and the turn says so (kb_notes_turn_flags.py).
+    """
+    if game_id is None:
+        return None
+    row = conn.execute("SELECT genres FROM games WHERE game_id = ?", (game_id,)).fetchone()
+    genres = str(row["genres"]).lower() if row and row["genres"] else ""
+    if not genres:
+        return None
+    for pattern in conn.execute("SELECT genre_tags, card FROM genre_patterns ORDER BY pattern_id"):
+        tags = [tag.strip().lower() for tag in str(pattern["genre_tags"] or "").split(",")]
+        if any(tag and tag in genres for tag in tags):
+            return str(pattern["card"])
     return None
 
 

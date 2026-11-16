@@ -589,6 +589,7 @@ the cost.
 | 2026-11-15, 21:25 EST | 5. Lane G1's limit (2,000 MB kept free; the AI counted as 1.42 times its installed size) | Ship both as they are: God of War warns with about 3,000 MB to spare, Deep Rock Galactic: Survivor passes with 810. Medium confidence: each number rests on one reading; games leaving 7,000 to 7,900 MB may be warned for nothing, unmeasured | G1 landed as built; block D1 reads memory and swap before and after the picture question, free memory at 1, 3 and 5 minutes beside God of War, and the limit back at 2,000 after the test file is deleted | about 67,000 tokens, 5 minutes |
 | 2026-11-16, 02:15 EST | 3. R1's tables | Keep every version off. All seven search-test losses came from the meaning search's second to fourth picks, and eight of the fourteen gains are first picks: the next try lifts only the first pick. Keep call 14's bar; ask whether the Fallout 4 "mech suit" line is the search's fault or the line's | R1 ran that version (e) at once on the larger library: 3 losses instead of 9, 12 gains, no new "No close match"; still short of call 14, landed off. The Fallout 4 line is the line's fault (no shared word, meaning score under its cut-off); for the next plan | about 123,000 tokens, 10 minutes |
 | 2026-11-16, 03:00 EST | 4. F1, F2 and G1b before landing | Land F2, then G1b, as they are; F1 last after one change: its reveal scroll must also keep a ring that truly sits above the "Hide details" line (the summed-up note) inside the pane, or the two scrolls fight with the page out of focus; F1's focus document was stale | F1 made the change (`3cbf7d5bc`) and fixed the document; all three landed in that order. The reading that settles it: a frame recorder on the Deck's own screen, in a summed-up chat, through B then A and A on the note | about 166,000 tokens, 11 minutes (after two server overloads) |
+| 2026-11-16, 05:20 EST | 6. Before the report | Read first: nothing pushed or published, the session's build on the Deck, the Deck's Ollama newer than before (the accident); then the three aims switched off; then the two reads of ten notes, which hold the publish. Not "done": the freeze (a warning stands in front; nobody pressed "Ask anyway" beside a heavy game), the new notes (on no Deck until published), every screen fix (external screen only), the chips (one question), honest answers (8 or 9 of 24 still read as if the AI knew). Corrections: the Ollama version fix rests on tests; the Hunter row's part (a) failed; "put back" except Ollama; the released-code check means no errors, 61 questions attach other notes, unjudged | Section 13 follows that order and wording; the end audit K9 got six corrections; one last question asked on the Deck after the put-back | about 137,000 tokens, 11 minutes |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -839,17 +840,253 @@ planned again.
 
 A note: phone alerts are off in the app, so a "truly blocked" alert cannot reach you; the chat is where to look.
 
-**Pick-up list (2026-11-16, 03:40 EST):** tip `8f2f96cab`, deployed as build `d27f3400cb1d`. Landed: every lane
-above. Being built: the fix that lets the PC's measuring scripts load the service again (lane L2, a new copy); then
-the search check after it. Running: block D2a (questions) from `assets/104-runbook-block-D2.md`; then D2b (D-pad) and
-D2c (the new notes: the plan's block D3 rows, since the library on the Deck is already final, so no deploy 3 unless a
-note changes). Then: sweep K3 (the roadmap files are at their size limits: move text out first), X2 on the final tip,
-consult 6 before the report, block DR (put everything back), the checks page group, section 13, `verify.py --full`.
-Session notes outside the repo: `side-session-notes/<planning chat>/plan104-pickup.md`.
+**Pick-up list (2026-11-16, 05:50 EST):** every lane landed or written up; every Deck block run; the Deck put back and
+checked with one last question; section 13 written; the checks page has its "Plan 104 (16 Nov)" round; consults 1 to
+6 used. Left for this chat: land the end audit K9, run `python scripts/verify.py --full` on the final tip and write its
+result here. Then the maintainer reads section 13.1 and says "push". Session notes outside the repo:
+`side-session-notes/<planning chat>/plan104-pickup.md`.
 
 ## 13. Report
 
-Written at the end by the chat that ran the session, in the shape of plan 103 § 13.
+Written at the end by the chat that ran the session (2026-11-16, about 05:40 EST), in the shape of plan 103 § 13, in
+the order the second opinion advised (consult 6).
+
+**The plan set out to make the honest answer honest, finish the notes phases and clear the leftovers. The notes and
+the leftovers are done and checked on the Deck. The three biggest changes to answers landed switched off on their own
+numbers. Nothing is pushed and the library is not published.** About 80 helper runs over two days (2026-11-14 to
+2026-11-16), 188 commits on `experimental`, every landing through the full gates, three deploys and eight Deck blocks
+(fourteen driver runs). Every Deck check of this plan's own work passed, but the screen checks ran on the external
+screen only, and a few checks rest on tests (§ 13.6).
+
+### 13.1 What you need to do next
+
+1. **Where things stand.** Nothing is pushed; the tip of `experimental` is in § 12's last entry. The library 2026.11.16
+   is built and not published. **The Deck runs this session's build** (`e11d8d05ee2a`), with your chats, settings and
+   mode chip (Speed) exactly as on 15 November and the published library you had then (2026.10.25). **Two things
+   differ:** its Ollama is 0.40.16, not 0.40.9, because a driver pressed the Ollama tab's Update button on 15 November
+   expecting a box that was removed in October at your request (going back is your call); and the newer published
+   library (2026.11.10) is not on it, because fetching it needs Internet downloads on for a moment, which is yours to
+   do. Steam's performance overlay is on, as it was. One question asked after the put-back answered in 14 seconds with
+   the right note.
+2. **What the plan aimed at and left switched off** (each a call on the checks page, the safe choice taken meanwhile):
+   - **The honest answer:** holding back loosely matching notes stops a made-up boss borrowing another boss's weak
+     points, but 25 of the 39 real test questions that show "No close match" would lose a right note the search had
+     found. Off; a narrower version is for the next plan.
+   - **The crowding fix:** its best try brings a right note back 12 times and loses it 3 times; your rule allows no
+     losses. Off. Keep the rule, or allow a small loss?
+   - **The typed mod lookup:** the right rule for 3 of the 10 mods it knows (the bar is 9), and once in twenty answers
+     the AI said two mods work together. Off.
+3. **Your two reads of ten notes** (new notes; rewritten older notes) are on the checks page. They hold the publish:
+   the Half-Life 2 and Black Mesa notes reach no Deck, yours included, until the library is published.
+4. **Your other calls,** on the checks page: the Speed-mode honest option (off: it changes nothing); the Update button
+   (one press, as asked in October, or a box first?); whether the AI is also told when a game has no notes (built,
+   measured, not landed: 10 against 11 of 24 answers said they did not know); the 208 MB plan 100 settings backup in
+   the Deck's home folder (it holds a copy of the settings file with your Steam key); four note titles that name a late
+   Paper Mario boss.
+5. **Two hand checks:** Show details reopened on the **Deck's own screen** (undock it; ten minutes there would also
+   settle every other screen row of this plan, which all ran on the external screen); and play **Doom 64:
+   Retribution** once, so the spoiler check can find it on the Recent Games shelf.
+6. **Say "push"** when you are ready; `python scripts/verify.py --full` result on the final tip: see § 12's last line.
+
+The checks page: "Checks Only You Can Do", round "Plan 104 (16 Nov)", 16 items with their pictures and a short clip of
+the chips.
+
+### 13.2 What a player notices
+
+**Comes with the library, once it is published:**
+- **Half-Life 2 and Black Mesa have their own enemy and item notes** (15 and 12): headcrab and zombie kinds, the
+  Antlion Guard, Manhacks, the Gunship, the Pulse Rifle, SPAS-12 and crossbow, health chargers; the Alien Grunt,
+  Bullsquid and others. *Checked on the Deck* with the session's library: each game's questions attached its new notes.
+  This closes Phase 5.
+- **Fifteen more Left 4 Dead 2 versus notes** (Scavenge for both sides, bluffing, short-handed games, ambush spots).
+  *Checked:* two versus questions attached them, and a question about a campaign's last map gave no ending away.
+- **The older notes are cleaner:** every quote in twelve older files is sorted by where it sits and close copies are
+  reworded; older notes the wikis contradict are corrected (the Deathclaw kinds by level, where defibrillators are,
+  Mario Party points, eight Black Mesa notes, Cyberpunk's iconic weapons, Grand Theft Auto III's bribes).
+- **The 23-game check now passes 20 of 20:** Fallout 4, Brotato and DOOM Eternal attach their newer notes.
+
+**Needs the next plugin release as well** (all *checked on the Deck*, on the external screen):
+- **"No notes for this game — this answer is from the model's own knowledge."** under every answer about a game the
+  library does not hold, in every mode.
+- **Such a game no longer borrows another genre's tips:** Terraria had taken "Vigor" and "Energy" from a soulslike card
+  three times in three; now no card attaches.
+- **A question about a boss the notes do not have, ending ", give me the full attack pattern", says "No close
+  match".**
+- **A plain Left 4 Dead 2 question gets no versus note** beside the ordinary one (Tank and Charger checked).
+- **After an answer, both chips are the two closest notes within half a second** (one question checked).
+- **A warning stands in front of loading the AI into too little memory** (beside God of War), with "Ask anyway" one Up
+  press from the question box; "Sum up this chat" says when there is no memory to run in. This is not a cure for the
+  freeze: nobody pressed "Ask anyway" beside a heavy game, and an AI already loaded is not checked again, by design.
+- **The first-start box no longer says "turn on Internet downloads" while they are on** (not seen on a clean first
+  start; the fault only showed after a failed save).
+- **The Ollama tab's version line reads the running version** after a cancelled or failed update (the line matched on
+  the Deck; the update case itself is proven by tests).
+- **The answer screen:** reopening Show details keeps "Hide details" in view (20 of 20); the "Notes were used" line
+  comes up above the question box with "Show details"; the summed-up note is a stop for the D-pad; the Session tab's
+  "What the AI remembers" card fits above the dock, scrolls inside with "More below (press Down)", shows "Sum up again"
+  whole, and follows a change of text size.
+
+**In the code, switched off:** the honest-answer hold-back (two switches), the crowding fix (versions a and e), the
+typed mod lookup, the Speed honest option.
+
+**What got worse:** one Left 4 Dead 2 question (a zombie in a hard hat) now shows "No close match" beside its right
+note, because the versus note that used to sit there and hide the line no longer attaches. Otherwise the search lost
+nothing between the start and the end (§ 13.7).
+
+### 13.3 The work by area
+
+**The library's notes** (`data/kb/notes/half-life-2.json`, `black-mesa.json`, each with a `.sources.json`;
+`data/kb/strategy_seed.json`; the twelve older notes files). N1 wrote the Half-Life 2 notes (2600 to 2614) from the
+Half-Life Wiki on Fandom; N2 the Black Mesa notes (4300 to 4311) from the Black Mesa Wiki on Fandom (CC BY-SA 3.0), after
+finding the Combine OverWiki pages it was given describe the 1998 game. V5 wrote fifteen versus notes (4515 to 4529).
+M1 and M2 corrected older notes against their pages; S1 to S4 cleaned the twelve older files; W1 removed empty "Weak
+points" lines. Every batch was read by a separate checker and the licence reviewer, with one to three fix rounds.
+**Popped up:** M2's credit for a Cyberpunk section had a source link but no read date, so the library build refused it
+and the branch was red for twenty minutes until M2 added the date. **Small leftovers:** a seven-word copy in a Doom 64
+tip, one Doom 64 line ("faster than almost any other projectile"), and one Pikmin 2 line that is the writer's own advice.
+
+**Search and the honest answer** (`py_modules/backend/knowledge/knowledge_base_search.py`,
+`knowledge_base_service.py`, `kb_notes_footers.py`, `kb_not_in_notes_notice.py`, `kb_notes_turn_flags.py`;
+`py_modules/backend/prompts/ollama_prompts.py` for H1's switches). V4, in two rounds: a question that names no mode and
+no side gets no game-mode note beside an ordinary first note, except "Playing as" that same subject; a question that
+spells two or more note titles keeps its team notes. H2 added the "No notes for this game" line in the footer step. M3:
+a general card attaches only to a game with a known matching genre (today none), and a comma-and-request ending is cut
+only when the whole question names nothing. H1 built two ways to stop borrowed advice behind switches, both off (the
+trade above; consult 2). R1 tried the crowding fix twice more (consult 3 suggested the narrower one), both off.
+**Popped up:** M3 also told the AI on no-notes turns, which your call 7 left to the player alone; my task text had asked
+for it by mistake, so that commit was dropped and the question is on your list.
+
+**Mod data** (`data/kb/load_order/fallout4.json` and `skyrimse.json`, from LOOT's CC0 masterlists, 463 and 1,243
+entries; reader `py_modules/backend/knowledge/rag_corpus_load_order.py`; lookup `kb_mod_rule_block.py`, switch
+`MOD_RULE_BLOCK_ON = False`). L1 built the data, the reader and a PC checker. L2 finds a mod by its name's words side by
+side in the question and quotes only rules that always apply, in fixed sentences built by code, labelled as data, names
+cleaned and capped; the security and licence reviewers' items are in ("loads after X, if both are installed", a link
+to LOOT, "only part of LOOT's list"). **Popped up:** L2's import pulled a Deck-only module into code the PC's measuring
+scripts load, so they all stopped (the full test set passed on other tests' stand-ins); a lazy import and a test that
+imports the service in a fresh process fixed it within the hour.
+
+**Chips** (`py_modules/backend/knowledge/knowledge_base_chips.py`, `_closest_first`, `_CLOSEST_MIN = 2`). C2 put the
+closest notes in front; its fix round found the second chip was never late: only one note cleared the closeness bar, so
+the second spot went to an ordinary chip until the rotation changed it. A lone close note now brings the next nearest.
+
+**The memory warning** (`py_modules/backend/ollama/ollama_memory_guard.py`;
+`src/features/answer/transcript/ChatTranscriptHintRows.tsx`, `src/features/ask/bar/useMainTabAskBarFocus.ts`,
+`src/shared/dpad/navFocusRegistry.ts`). G1 warns when free memory minus the AI's need would leave under 2,000 MB; the
+need is the larger of the size seen at the last load and 1.42 times the installed size (consult 5). **Popped up:** G1
+first trusted Ollama's reported 2.3 GB, while the Deck showed a drop of about 6,300 MB; fixed before it landed. G1b
+registers "Ask anyway" (and "Open the Ollama tab") as one D-pad stop the question box's Up takes first; the ring is not
+placed on it by itself, so a stray A cannot send the question.
+
+**First start and the Ollama tab** (`src/features/models/localOllamaStarterSet.tsx` and the settings save path;
+`src/features/ai-connection/useLocalOllamaSetupFlow.tsx`). B1 resends a switch whose save fails and retries a "downloads
+off" refusal while the screen shows them on. M4 re-reads the version after a cancelled or failed update, and found
+the "missing" confirm box was removed on purpose in plan 87; nothing was rebuilt.
+
+**The answer screen** (`src/features/answer/details/buildDetailsPanelElement.tsx`,
+`src/shared/dpad/useDockClearanceOnFocus.ts`, `src/features/knowledge-library/buildKbNotesBlockElement.tsx`,
+`src/features/chats/sum-up/buildChatSummaryNoteElement.tsx`, `src/shared/dpad/liveTurnFocusGraph.ts`,
+`src/features/chats/sum-up/SessionSumUpSection.tsx`, `src/styles/sections/section-6.ts`). F1: the reveal scroll is held
+back by the line that opened the panel, or by the ring's control when it truly sits above that line (consult 4); the
+"Notes were used" line rises with "Show details"; the summed-up note has its own Steam stop and wave six's skip of it is
+gone. F2: the card's text is capped at 190 points and scrolls 96 points a press with "More below"; its own scrolls hold
+the opener line when the ring reads as nothing; "Sum up again" is revealed after Up, with a delayed check for a page
+without focus; a size watcher re-reads "More below" after a text-size change. **Popped up:** older answers carry no
+details strip by design (plan 62), so that question is closed.
+
+**Tools** (`scripts/deck_ask_rows.mjs`; the answer test; the look check; the wiki reader). T1 runs a list of questions
+on the Deck in one call; its fix round found folded "N earlier" turns hid the new answer, so it now tells the new turn
+by its header words and id (15 to 19 seconds a question on the Deck). T2 counts honest answers and borrowed advice. T3
+stops calling a scrolling chip label "cut words". T4 makes the wiki reader say "failed" when a wiki is down. B2 logs why
+no chat summary was made.
+
+**What popped up across the session, and how it was handled.** A new test failed on this PC's Windows line endings
+(fixed first, with `.gitattributes`). The second opinion's model was overloaded twice (consult 4 answered on the third
+try). Two drivers ran out of working memory on big tool replies; small page reads fixed it. Three runbook mistakes were
+mine (what the memory limit file means; a "warns again" step; two Black Mesa examples that older notes cover); the
+drivers caught each. On this Deck the launcher only finds games through Home or the Library grid, so every runbook now
+brings Steam back to Home first. Landings ran through one queue, one at a time, with a search check after each
+search-path landing.
+
+**What you could have done differently.** Very little was needed from you during the run. Two things would have
+helped: the Deck's own screen for one block (the external screen was in use all session, so no screen fix was seen on
+the screen where the faults were first found), and Doom 64: Retribution on the Recent Games shelf. Saying at go that
+October's one-press Update still stands would have kept a driver from pressing it.
+
+### 13.4 A plain guide for a developer
+
+- **Adding notes:** as plan 103 § 13.4. A seed row with a `source_url` needs `crawled_at`, or the library build
+  refuses it.
+- **The switches that are off:** `NOTES_LEFT_OUT_ON` and `NOTES_FENCED_ON` in `ollama_prompts.py`; the crowding
+  switches in `knowledge_base_service.py`; `MOD_RULE_BLOCK_ON` in `kb_mod_rule_block.py`.
+- **Never import a Deck-only module at the top of a module the PC scripts load:** `test_kb_service_imports_without_decky.py`
+  guards the notes search.
+- **The memory warning's numbers:** `MEMORY_LIMIT_MB = 2000` and `LOAD_SIZE_FACTOR = 1.42` in
+  `ollama_memory_guard.py`; a whole number in `ask_memory_limit_mb` in the plugin's settings folder replaces the 2,000
+  reserve, for tests.
+- **A scroll that reveals a panel under the ring:** hold it back by the line that opened the panel; ask where the ring
+  is only when it truly sits on a control above that line (F1 and F2 now agree on this).
+- **A list of questions on the Deck:** `node scripts/deck_ask_rows.mjs --rows <file> --plan <n> --chat "<name>"`
+  (`--dry-run` first; release the driver's lease before, and have the ring on the question box).
+- **Measuring:** as plan 103 § 13.4, plus `python scripts/measure_kb_thin_match.py --line-gate <out> --compare <before>`
+  after any search-path landing.
+
+### 13.5 What failed, and why
+
+- **The honest answer stays off.** Holding back loosely matching notes works on made-up bosses but costs real
+  questions their right note; fencing them failed outright. The next try holds notes back only when the question names
+  a thing no found note names.
+- **The crowding fix, four tries, none within the rule.** Every version that brings older questions' notes back also
+  pushes a few others out; the best loses 3 and gains 12.
+- **The mod lookup, 3 of 10.** Four well-known mods have only rules that depend on other files (nothing safe to quote);
+  people type names differently from file names ("SS2", "USSEP"); one-word names like "Requiem" are too common to match
+  alone.
+- **The page out of focus could not be reached on this Deck:** only Steam's own "Delete chat?" box takes focus away,
+  and it takes the presses. Two checks stay proven by tests only.
+- **Three fixes failed their first Deck check** (the question runner, the plain Tank question, the chips) and passed
+  after one round each.
+- **The saved walks could not be replayed:** they were recorded on a chat that has since grown, and a replay sets up no
+  start of its own.
+- **Two tries at the Doom 64: Retribution spoiler check:** the game is not on the shelf.
+
+### 13.6 What is left, and why
+
+- **Owed on the Deck:** Show details reopened on the Deck's own screen (and the other screen rows there); "Ask anyway"
+  under "The AI is not set up" (not run); the honest-answer row (the fix is off); the Doom 64 spoiler check (the shelf);
+  the mod and crowding rows (off); the two out-of-focus checks (tests only, for good unless another way appears);
+  saving the six D-pad walks again on a fresh chat.
+- **Not to be called done:** the freeze (a warning stands in front of it); the new notes (on no Deck until published);
+  the Ollama version fix (the update case rests on tests); the Hunter question that never says "Hunter" (still misses
+  its note); "works with the released plugin" (no errors in 1,464 questions; 61 attach different notes, unjudged).
+- **For the next knowledge-base plan, cheapest first:** one pass on the Deck's own screen; the narrower honest-answer
+  trigger, with H1's note that the follow-up memory remembers a held-back note; the "No close match" line over a right
+  note that shares no word with the question (Fallout 4 "mech suit", the hard-hat zombie); the mod lookup's list before
+  it could be switched on (name checks at build time, two places that read "notes attached", short names); two versus
+  questions that still miss; three unknowns (a covered answer that drew no "Notes were used" line once; the slow-answer
+  line seen once; the Hunter question).
+- **Small:** the Session card grows 18 points when "More below" appears with the ring on it (only after a text-size
+  change); the three small note leftovers in § 13.3.
+- **The Deck tools:** ten drafted issues in the workshop, nothing filed.
+- **Clean-up:** about fifty helper copies under `.claude/worktrees/p104-*`, to prune once the branch is pushed.
+
+### 13.7 The numbers
+
+| What | Start (X0) | Middle (X1) | End (X2) |
+|---|---|---|---|
+| Right note in the first three, 629 older held-back questions | 572 | 574 | 574 |
+| Same, 620 newer questions | 578 | 579 | 580 |
+| Same, 84 new Half-Life 2, Black Mesa and versus questions | n/a | 79 | 79 |
+| Thirty questions only the meaning search can answer | 18 | 18 | 18 |
+| "No close match" on right-note questions | 25 of 1,375 | 21 of 1,370 | 23 of 1,372 |
+| Facts kept (two runs) | 70.1, 70.6 | 70.6, 72.9 | 69.5, 74.0 |
+| Eight questions no note can answer: says so in its own words (of 24) | 0 | 7, 8 | 10, 10 |
+| Same: answers as if it knew (of 24) | 21 | 11, 10 | 8, 9 |
+
+The two answer runs differ by up to 4.5 points, so facts kept has not moved. The final library opens and errors on
+nothing with the released 0.6.0 code. **Deck:** blocks D0a, D0b, D0c, D1, D1b, D1c, D2 (four parts) and DR; every row
+of this plan's own work passed in the end, on the external screen; three rows needed a second round. **Work:** 188
+commits; about 80 helper runs (Sonnet 5.5 for notes, search, tools, drivers and bookkeeping; Opus 5.5 for the three D-pad
+lanes; Fable at max for six consults). **Usage:** the week went from about 30 to 50 percent (Fable's own 29 to 39);
+the last five-hour window reached 79 percent at the end (no helper was started after it passed 75).
 
 ## 14. Subagent reports and follow-ups
 

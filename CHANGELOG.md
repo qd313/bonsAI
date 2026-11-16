@@ -112,9 +112,16 @@ All notable changes to this project are documented in this file.
 - **Library 2026.11.10 is published.** It carries the notes and tips listed above that were built by then, including the Left 4 Dead 2 versus notes; "They arrive with the next library update" in those lines means this one.
 - **Left 4 Dead 2 loses the "Fallen Survivor" note.** Asking about that rare infected no longer finds a note of its own. The library published on 10 November still has it; it goes at the next library update.
 - **A warning before the AI loads into too little memory.** With a heavy game running, bonsAI now says "Not enough free memory to start the AI" instead of loading it, and offers an "Ask anyway" button. "Sum up this chat" says when it has no memory to run in.
-- **The two chips on screen after an answer are the two closest notes.** The next picks keep to the closest notes not yet shown. On the Deck the second chip took about seven seconds to change.
+- **The two chips on screen after an answer are the two closest notes.** The next picks keep to the closest notes not yet shown. On the Deck the second chip took about seven seconds to change; when only one note is clearly close, the next nearest note now takes the second spot, so both chips are about your question at once.
 - **The log says why a long chat got no new summary.** For each question it now says a summary was made, or that none was due and how many entries the saved one covers.
 - **More Left 4 Dead 2 versus notes.** Fifteen notes on how a versus match runs, Scavenge play for both sides and ambush spots arrive with the next library update.
+- **"Ask anyway" is one Up press from the question box.** Under the low-memory warning, one Up reaches "Ask anyway"; under "The AI is not set up", one Up reaches "Open the Ollama tab". Down from either still reaches the chips. The ring does not start on the button by itself, so a stray A cannot send the question the warning is about.
+- **The Session card fits above the dock.** The "What the AI remembers" card no longer sits half behind the dock: it scrolls inside itself with Down and Up and says "More below (press Down)".
+- **Reopening Show details keeps "Hide details" on screen.** Closing Show details with B and opening it again no longer leaves the ring on a line above the visible pane.
+- **The "Notes were used" line comes out from behind the question box.** Under a hidden answer it now rises above the question box, with "Show details".
+- **The summed-up note under an answer is a D-pad stop.** Down from the answer and Up from "Mark reply helpful" land on it, and opening Show details from it keeps the note on screen.
+- **A game with no notes no longer gets another genre's general card.** A question naming a game the library holds nothing on (Terraria, say) shows the "No notes" line and no longer borrows words from the Soulslike basics card.
+- **A question ending ", give me the full attack pattern" is read for the boss it names.** A made-up boss named that way now shows "No close match" like any other.
 
 ### Changed
 
@@ -124,6 +131,7 @@ All notable changes to this project are documented in this file.
 - **First start: Install Ollama no longer blames Internet downloads while they are on.** A settings save that fails is reported and sent again, and Install Ollama retries once after a "downloads off" refusal.
 - **Twelve older notes files reworded and checked again.** Baldur's Gate 3, Portal 2, The Sims 4, San Andreas, Super Mario 64, Mario Kart 64, Paper Mario: The Thousand-Year Door, Pikmin 2, Donkey Kong 64, Grand Theft Auto IV and V and Doom 64 no longer follow the wikis' sentences. Mario Party, Super Smash Bros., Cyberpunk 2077's iconic weapons, Grand Theft Auto III and eight Black Mesa notes were corrected where the wiki differs. They arrive with the next library update.
 - **Show details names its chip row "Behind this answer".** The line above the chips now reads "Behind this answer · 1 of 6" instead of "Chip 1 of 6".
+- **A plain Left 4 Dead 2 question gets no versus note by accident.** A question with no mode and no side gets no versus or other mode note beside an ordinary first note, except "Playing as" that same subject.
 
 ## [0.6.0] - 2026-10-23
 

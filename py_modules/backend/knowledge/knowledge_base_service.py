@@ -35,6 +35,9 @@ knowledge_base_search.py, and the suggested-question chips plus corpus coverage 
 knowledge_base_chips.py. Everything those files export is re-imported here so every existing
 caller keeps working unchanged.
 
+Plan 104, lane L2: `retrieve_knowledge_context()` hands its result to kb_mod_rule_block.py, which (behind
+one switch, off until measured) adds a Fallout 4 or Skyrim mod's load-order rule when the question names the mod.
+
 How it works:
 
     your question, plus whichever game is running (or one you named)
@@ -134,6 +137,7 @@ from backend.prompts.ollama_prompts import question_matches_troubleshooting_log_
 from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
 
 from backend.knowledge import kb_demote_store
+from backend.knowledge.kb_mod_rule_block import with_mod_rule_block
 from backend.knowledge.knowledge_base_cards import (
     KnowledgeCard,
     _BLOCK_SENTINEL,
@@ -966,7 +970,40 @@ def retrieve_knowledge_context(
     domain: str,
     pc_ip: str = "",
 ) -> KnowledgeRetrievalResult:
-    """Retrieve and format knowledge for early_context_suffix injection."""
+    """Retrieve and format knowledge for early_context_suffix injection.
+
+    The notes and tips search below, then (plan 104, lane L2, behind ``MOD_RULE_BLOCK_ON``) one block
+    with the load-order rule of a Fallout 4 or Skyrim mod the question names, on either route.
+    """
+    result = _retrieve_notes_and_tips(
+        settings,
+        ask_mode=ask_mode,
+        question=question,
+        app_id=app_id,
+        app_name=app_name,
+        shortcut_name=shortcut_name,
+        text_resolved_title=text_resolved_title,
+        domain=domain,
+        pc_ip=pc_ip,
+    )
+    return with_mod_rule_block(
+        result, settings, question=question, app_id=app_id, app_name=app_name, text_resolved_title=text_resolved_title
+    )
+
+
+def _retrieve_notes_and_tips(
+    settings: dict,
+    *,
+    ask_mode: str,
+    question: str,
+    app_id: str,
+    app_name: str,
+    shortcut_name: str = "",
+    text_resolved_title: str = "",
+    domain: str,
+    pc_ip: str = "",
+) -> KnowledgeRetrievalResult:
+    """The search itself: which game, which notes or tips, trimmed to the mode's budget."""
     t0 = time.perf_counter()
     db_path = resolve_corpus_db_path(settings)
     if not db_path:

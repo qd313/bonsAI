@@ -5,7 +5,7 @@
   "game_id": 31,
   "game": "Donkey Kong 64",
   "read_on": "2026-11-02",
-  "quote_sorting": "2026-11-15 (plan 104, lane S3): every page was read again at the revision named on its section, through the wiki's render call (by revision number), and saved under build/wiki-live/mariowiki/ as <page>-r<revision>. Beside each quote, quoted_sits says where it sits on the page (editors' prose, table cell, or the game's own text) and quoted_at the page heading; both lists run in step with quoted. One quote sat in the game's own text: the Prima Official Game Guide line under the Kritter page's 'Profiles and statistics'. It was removed from section 2000's list and the clause it carried ('the Prima guide rates them a one-hit enemy') was dropped from the note. Table cells that hold a whole editors' sentence (the Funky's Store upgrade descriptions) are sorted as editors' prose. Sentences that were the wiki's own wording almost unchanged were rewritten from a fact list; each such line carries a 'reworded' mark.",
+  "quote_sorting": "2026-11-15 (plan 104, lane S3): every page was read again at the revision named on its section, through the wiki's render call (by revision number), and saved under build/wiki-live/mariowiki/ as <page>-r<revision>. Beside each quote, quoted_sits says where it sits on the page (editors' prose, table cell, or the game's own text) and quoted_at the page heading; both lists run in step with quoted. One quote sat in the game's own text: the Prima Official Game Guide line under the Kritter page's 'Profiles and statistics'. It was removed from section 2000's list and the clause it carried ('the Prima guide rates them a one-hit enemy') was dropped from the note. Table cells that hold a whole editors' sentence (the Funky's Store upgrade descriptions) are sorted as editors' prose. Sentences that were the wiki's own wording almost unchanged were rewritten from a fact list; each such line carries a 'reworded' mark. Fix round (same day): ten lines (2000 Summary; 2001 Weak points and Tips; 2002 Summary, Weak points and Tips; 2006 Summary; 2008 Summary, Uses and Tips) were rewritten whole from a fact list. The Kritter 'Weak points' line is removed: the only fact left on the page was that Kritters are often the weakest Kremlings, which names no way to beat them, so that fact moved into the Summary and its quote moved with it. The hair-colour fact is kept in section 2002 only. The four Funky's Store upgrade-description cells stay sorted as editors' prose: the page's wikitext at the cited revision (saved as build/wiki-live/mariowiki/funky-s-store-r5405606.wikitext) shows them as plain table cells with no quote markup or footnote, and the page itself says the Ammo Belts also raise the orange capacity, 'though this is not outright stated by Funky', so the column is the editors' own words. The Blueprint countdown quote now includes its opening clause, which names Hideout Helm (verbatim from the page).",
   "sections": [
     {
       "section_id": 2000,
@@ -15,45 +15,29 @@
       "main_revision": "5475973",
       "lines": [
         {
-          "line": "Summary: The Kremling Krew's foot soldiers. In Donkey Kong 64 they are simply called Kremlings, and each wears a sleeveless leather jacket, with a skull and crossbones across its back.",
+          "line": "Summary: The Kremling Krew's rank-and-file soldiers, called just Kremlings in Donkey Kong 64. Muscular but often the weakest of the lot, they wear a leather jacket with no sleeves, and the back of it carries a skull and crossbones.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kritter",
               "revision": "5475973",
               "quoted": [
                 "Kritters (known as Kremlings in Donkey Kong 64 and DK: King of Swing) are enemies introduced in Donkey Kong Country. These Kremlings act as the main footsoldiers of the Kremling Krew",
-                "Kritters wear a sleeveless leather jacket with a skull-and-crossbones on the back"
+                "Kritters wear a sleeveless leather jacket with a skull-and-crossbones on the back",
+                "They are often the weakest Kremlings despite their muscular appearance."
               ],
               "quoted_sits": [
+                "editors' prose",
                 "editors' prose",
                 "editors' prose"
               ],
               "quoted_at": [
                 "lead section",
-                "General information > Physical description"
-              ]
-            }
-          ],
-          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
-        },
-        {
-          "line": "Weak points: Despite their muscular look, they are usually the weakest of the Kremlings.",
-          "drawn_from": [
-            {
-              "page": "https://www.mariowiki.com/Kritter",
-              "revision": "5475973",
-              "quoted": [
-                "They are often the weakest Kremlings despite their muscular appearance."
-              ],
-              "quoted_sits": [
-                "editors' prose"
-              ],
-              "quoted_at": [
+                "General information > Physical description",
                 "lead section"
               ]
             }
           ],
-          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
+          "reworded": "plan 104, lane S3, 2026-11-15: rewritten from a fact list (first pass, then again in the fix round)"
         },
         {
           "line": "Tips: You meet them on Crocodile Isle and in every world except Fungi Forest and Creepy Castle. In Frantic Factory a red kind belches in a set order, and Lanky has to memorize it and repeat it to earn a Golden Banana.",
@@ -111,7 +95,7 @@
           "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Weak points: Klumps resist basic attacks, and a direct hit only stuns one for a while. Besides the shockwave attack, a thrown orange or an instrument move, the only way to really finish one is for Chunky to touch it while in his Hunky Chunky form.",
+          "line": "Weak points: A Klump counts among the tougher enemies because ordinary attacks barely hurt it, and a direct hit only stuns it for a while. Chunky can finish one simply by touching it in Hunky Chunky form; otherwise it takes the shockwave attack, a thrown orange or an instrument move.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Klump",
@@ -133,10 +117,10 @@
               ]
             }
           ],
-          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
+          "reworded": "plan 104, lane S3, 2026-11-15: rewritten from a fact list (first pass, then again in the fix round)"
         },
         {
-          "line": "Tips: A beaten Klump salutes, falls over and leaves three oranges. They show up in every level apart from Frantic Factory, Creepy Castle and the DK Isles hub. In Fungi Forest they are there only by day, and Skeleton Kremlings take over after dark.",
+          "line": "Tips: You will not meet them in Frantic Factory, Creepy Castle or the DK Isles hub; they are everywhere else, and in Fungi Forest only by day, since Skeleton Kremlings take over at night. Beat one and it spins, salutes and falls over, leaving three oranges.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Klump",
@@ -161,7 +145,7 @@
               ]
             }
           ],
-          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
+          "reworded": "plan 104, lane S3, 2026-11-15: rewritten from a fact list (first pass, then again in the fix round)"
         }
       ]
     },
@@ -173,7 +157,7 @@
       "main_revision": "5411217",
       "lines": [
         {
-          "line": "Summary: A big, muscular Kremling in a leather jacket and sunglasses that guards a blueprint. It slams the ground to send out a shockwave and can punch a Kong that comes close.",
+          "line": "Summary: King K. Rool's bodyguards, each posted to guard a blueprint. They are big, muscular Kremlings in leather jackets and sunglasses. A Kasplat stamps on the ground to send out a shockwave and punches a Kong that gets near.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kasplat",
@@ -197,10 +181,11 @@
                 "lead section"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: rewritten from a fact list (first pass, then again in the fix round)"
         },
         {
-          "line": "Weak points: Kasplats are tough and often take several hits, but a Kong's shockwave attack or instrument move beats one in a single hit, and so do five oranges. Chunky can flatten one in Hunky Chunky mode, but then it drops no blueprint.",
+          "line": "Weak points: Plain hits are slow, since a Kasplat is resilient and usually takes several. The quick ways are a Kong's shockwave attack or instrument move (one hit) or five oranges. Do not flatten one with Chunky in Hunky Chunky mode, because it then leaves no blueprint.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kasplat",
@@ -221,10 +206,11 @@
                 "History"
               ]
             }
-          ]
+          ],
+          "reworded": "plan 104, lane S3, 2026-11-15: rewritten from a fact list (first pass, then again in the fix round)"
         },
         {
-          "line": "Tips: Its hair colour shows which Kong can take its blueprint (yellow Donkey, red Diddy, blue Lanky, purple Tiny, green Chunky), and the hair turns white once the blueprint is taken. Hideout Helm has no Kasplats; every other level has five.",
+          "line": "Tips: Read the hair: yellow is Donkey's, red Diddy's, blue Lanky's, purple Tiny's and green Chunky's, and it turns white once the blueprint has been collected. There are five Kasplats per level, and Hideout Helm has none.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Kasplat",
@@ -246,7 +232,7 @@
               ]
             }
           ],
-          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
+          "reworded": "plan 104, lane S3, 2026-11-15: rewritten from a fact list (first pass, then again in the fix round)"
         }
       ]
     },
@@ -503,7 +489,7 @@
       "main_revision": "5475274",
       "lines": [
         {
-          "line": "Summary: Creepy Castle's boss, the seventh and next-to-last in the game: a rough cardboard cut-out of King K. Rool run by two Kritters. You fight it outdoors in a rainstorm, inside a square castle rampart.",
+          "line": "Summary: A huge, rough cardboard K. Rool built and worked by two Kritters, who is Creepy Castle's boss. It is the seventh boss, one before the last. The arena is outdoors in a rainstorm, a square ringed by a castle rampart.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/King_Kut_Out",
@@ -528,7 +514,7 @@
               ]
             }
           ],
-          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
+          "reworded": "plan 104, lane S3, 2026-11-15: rewritten from a fact list (first pass, then again in the fix round)"
         },
         {
           "line": "Weak points: Get into the Barrel Cannon that points at it and fire yourself at the boss. The ninth hit destroys it and the Boss Key drops in the middle of the arena.",
@@ -701,7 +687,7 @@
       "main_revision": "5407817",
       "lines": [
         {
-          "line": "Summary: Plans for the Blast-o-Matic, which the Kongs have to collect and return to Snide. There are 40 in all, five in every area except Hideout Helm, one for each Kong.",
+          "line": "Summary: Snide needs the Blast-o-Matic's design plans back, and the Kongs are the ones who have to find them. Each area, DK Isles included, holds five, one for each Kong, apart from Hideout Helm; together that makes 40.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Blueprint",
@@ -720,17 +706,17 @@
               ]
             }
           ],
-          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
+          "reworded": "plan 104, lane S3, 2026-11-15: rewritten from a fact list (first pass, then again in the fix round)"
         },
         {
-          "line": "Uses: Snide's H.Q. pays each Kong one Golden Banana for every blueprint that Kong hands in. In Hideout Helm each blueprint also delays the Blast-o-Matic's countdown by a minute.",
+          "line": "Uses: Take blueprints to Snide's H.Q. and he gives that Kong a Golden Banana for each one. They matter again at the end, in Hideout Helm, where Snide spends each blueprint to push the Blast-o-Matic's countdown back by a minute.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Blueprint",
               "revision": "5407817",
               "quoted": [
                 "Each Kong can individually visit Snide's H.Q. with their recovered blueprints, where Snide rewards them with a Golden Banana for every one they return.",
-                "Snide uses the blueprints to delay the Blast-o-Matic's countdown timer by a minute per blueprint."
+                "Blueprints play a somewhat critical role in the final level, Hideout Helm, because Snide uses the blueprints to delay the Blast-o-Matic's countdown timer by a minute per blueprint."
               ],
               "quoted_sits": [
                 "editors' prose",
@@ -742,10 +728,10 @@
               ]
             }
           ],
-          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
+          "reworded": "plan 104, lane S3, 2026-11-15: rewritten from a fact list (first pass, then again in the fix round)"
         },
         {
-          "line": "Tips: A Kasplat guards every blueprint, and its hair colour matches the one Kong who can take it; any other Kong sees only a hologram. The Helm countdown starts at ten minutes and can reach 50 with all 40, and once you have recovered them all Snide lets you replay most of the bonus stages.",
+          "line": "Tips: Each blueprint has a Kasplat guarding it, and only the Kong it belongs to can take it; any other Kong sees a hologram and cannot pick it up. The Helm countdown begins at ten minutes and tops out at 50 if you brought in all 40. Once all of them are recovered, most of the Bonus Stages can be played again from a menu in Snide's headquarters.",
           "drawn_from": [
             {
               "page": "https://www.mariowiki.com/Blueprint",
@@ -770,7 +756,7 @@
               ]
             }
           ],
-          "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
+          "reworded": "plan 104, lane S3, 2026-11-15: rewritten from a fact list (first pass, then again in the fix round)"
         }
       ]
     },

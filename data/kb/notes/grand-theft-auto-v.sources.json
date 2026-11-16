@@ -5,7 +5,7 @@
   "game_id": 18,
   "game": "Grand Theft Auto V",
   "read_on": "2026-11-02",
-  "quote_sorting": "2026-11-15 (plan 104, lane S2): every page was read again at the revision named on its section, through the wiki's page-render call, and each quote was found on it. Beside each list of quotes, quoted_sits says where each one sits on the page (editors' prose, table cell, or the game's own text) and quoted_at gives the page heading (\"infobox\" for the box at the top of a page, \"lead section\" for the opening paragraph); the two lists run in the same order as the quotes. Lines that followed the wiki's sentence too closely were rewritten from a list of the facts, with the same facts. Seven quotes had sat in the game's own text (the Rhino, Stun Gun and Sticky Bombs description quote blocks, and the description column of the snack table): they were replaced by editors' prose or by the bare name and price cells, and the one fact that only the game's own text gave (the Stun Gun's recharge time of about 4 seconds) was dropped. The Weak points line of section 1405 (Ballas) now says how to avoid a fight, which the page gives; the Weak points line of section 1406 (The Lost MC) was removed because its page names no way to beat, stop or avoid them.",
+  "quote_sorting": "2026-11-15 (plan 104, lane S2): every page was read again at the revision named on its section, through the wiki's page-render call, and each quote was found on it. Beside each list of quotes, quoted_sits says where each one sits on the page (editors' prose, table cell, or the game's own text) and quoted_at gives the page heading (\"infobox\" for the box at the top of a page, \"lead section\" for the opening paragraph); the two lists run in the same order as the quotes. Lines that followed the wiki's sentence too closely were rewritten from a list of the facts, with the same facts. Seven quotes had sat in the game's own text (the Rhino, Stun Gun and Sticky Bombs description quote blocks, and the description column of the snack table): they were replaced by editors' prose or by the bare name and price cells, and the one fact that only the game's own text gave (the Stun Gun's recharge time of about 4 seconds) was dropped. The Weak points line of section 1405 (Ballas) now says how to avoid a fight, which the page gives; the Weak points line of section 1406 (The Lost MC) was removed because its page names no way to beat, stop or avoid them. A second wording pass the same day reworded more lines from fact lists, grouped by what a player does, and corrected claims that said more than their quotes (section 1400: no \"three forces\"; section 1408: the red circle shows when Trevor uses the diaphragm; section 1414: only the Ballad of Gay Tony section says a bomb sticks to any surface, so the Summary now says only that it attaches to any vehicle).",
   "sections": [
     {
       "section_id": 1400,
@@ -15,7 +15,7 @@
       "main_revision": "2081922",
       "lines": [
         {
-          "line": "Summary: Three forces chase you. The Los Santos Police Department (LSPD) works inside the city of Los Santos, including its airport and port. The Los Santos County Sheriff's Department (LSSD) also covers Blaine County, and the San Andreas Highway Patrol (SAHP) rides Police Bikes on the highways.",
+          "line": "Summary: Within Los Santos itself, including its airport and port, the police are the LSPD. Out in Blaine County it is the Los Santos County Sheriff's Department (LSSD), which also covers Los Santos County, and on the highways the San Andreas Highway Patrol (SAHP) rides Police Bikes.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Los_Santos_Police_Department_(HD_Universe)",
@@ -144,7 +144,7 @@
       "main_revision": "2083887",
       "lines": [
         {
-          "line": "Summary: At one star officers, soldiers and security guards chase you, and police and soldiers try to arrest you at gunpoint. At two stars police shoot to kill, drive much more aggressively to ram you off the road, and at least three police cars chase you.",
+          "line": "Summary: Early on you are mostly chased and held at gunpoint: at one star police and soldiers want an arrest, and security guards chase too. By two stars the police shoot to kill, at least 3 cars hunt you, and they try to ram you off the road.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_V",
@@ -171,7 +171,7 @@
           ]
         },
         {
-          "line": "Weak points: At one star the police only hold you at gunpoint, and fighting back or running away raises it to two stars at once. Security guards and police on motorcycles open fire straight away instead of arresting you.",
+          "line": "Weak points: One-star police only aim a gun at you, so you can resist by fighting back or running; the price is an instant jump to two stars. Security guards cannot arrest you and shoot at once, and so do police on motorcycles.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_V",
@@ -240,7 +240,7 @@
       "main_revision": "2083887",
       "lines": [
         {
-          "line": "Summary: Three stars brings roadblocks of police cars and police transporters, sometimes with a spike strip put down behind them. A Police Maverick helicopter also follows you overhead, with NOOSE TRU officers aboard.",
+          "line": "Summary: Three stars means two new threats. On the ground, roadblocks of police cars and police transporters close the road, some with a spike strip laid out behind them. In the air, a Police Maverick shadows you carrying NOOSE TRU officers.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_V",
@@ -261,7 +261,7 @@
           ]
         },
         {
-          "line": "Weak points: The helicopter hangs around until every rifleman aboard is dead, then flies back to base, though a new one soon takes its place. At night its spotlight points out your position to the ground units.",
+          "line": "Weak points: Killing every rifleman aboard sends the helicopter back to base, but a replacement arrives quickly. After dark its spotlight marks where you are for the officers on the ground.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_V",
@@ -312,7 +312,7 @@
       "main_revision": "2083887",
       "lines": [
         {
-          "line": "Summary: At four stars NOOSE TRU teams come to kill you, three officers to a vehicle, in FIB Grangers in Los Santos or Sheriff SUVs in Blaine County, with two hanging off the sides firing at you while more shoot from Police Mavericks overhead. At five stars the streets are packed with police and there is hardly any civilian traffic.",
+          "line": "Summary: Four stars sends NOOSE TRU to eliminate you. In Los Santos they come in FIB Grangers and in Blaine County in Sheriff SUVs, three officers per vehicle: the driver, plus two who ride on the sides and shoot. Others fire carbine rifles from Police Mavericks above. By five stars the streets are crowded with police and almost empty of civilian traffic.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_V",
@@ -342,7 +342,7 @@
           ]
         },
         {
-          "line": "Weak points: Their body armour means they take a lot of shots to bring down, but one headshot kills a TRU officer outright, helmet or not, and so does a shot to the legs, at once or through blood loss.",
+          "line": "Weak points: Body armour makes them slow to wear down, so aim for the head or the legs instead: one headshot kills a TRU officer even in a helmet, and a shot to the legs kills too, at once or by blood loss.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Tactical_Response_Unit",
@@ -366,7 +366,7 @@
           ]
         },
         {
-          "line": "Tips: If you hide in a building or take shelter behind tight cover, they use tear gas to flush you out. A Police Maverick may also drop four officers down by rope, or land and let them out.",
+          "line": "Tips: Sheltering in a building or behind tight cover brings tear gas to drive you out. At four stars some helicopters bring four TRU officers, who either rappel down or step out once it has landed.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Tactical_Response_Unit",
@@ -387,7 +387,7 @@
           ]
         },
         {
-          "line": "Tips: Destroying a Police Maverick that is chasing you can push you up to four stars, but you may have to bring down two or more of them first.",
+          "line": "Tips: Downing a pursuing Police Maverick helps get you to four stars, but one is not always enough; two or more may have to fall first.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_V",
@@ -417,7 +417,7 @@
       "main_revision": "2083887",
       "lines": [
         {
-          "line": "Summary: Soldiers are never sent to hunt you down, but if a chase passes near Fort Zancudo, soldiers in Crusaders and Barracks join in and try to arrest you. Inside the base they shoot to kill.",
+          "line": "Summary: The military is not called out to chase you. Near Fort Zancudo, though, soldiers in Crusaders and Barracks can join a chase and try to arrest you, and inside the base they shoot to kill.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_V",
@@ -441,7 +441,7 @@
           ]
         },
         {
-          "line": "Weak points: It blows up after about 3 to 4 tank shells, 5 to 6 RPG shots or 7 to 8 Grenade Launcher shots. A hit on its rear may open the fuel tank, and if you set the trail of fuel alight the tank stops after a few minutes, although its turret still works.",
+          "line": "Weak points: To destroy a Rhino tank you need about 3 to 4 tank shells, 5 to 6 RPG shots or 7 to 8 Grenade Launcher shots. Aim at its back: that can open the fuel tank and leave a trail of fuel; light it and the tank is immobilized after a few minutes, although its turret keeps working.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Rhino_(HD_Universe)",
@@ -483,7 +483,7 @@
           ]
         },
         {
-          "line": "Tips: Going into the base earns four stars. A flight over it earns two, which quickly turn into four unless you move off fast, and a rocket fired from any aircraft earns five stars at once.",
+          "line": "Tips: Entering Fort Zancudo is worth four stars. Overflying it is only worth two, but that jumps to four if you linger, and any rocket fired from an aircraft there brings five stars instantly.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_V",
@@ -693,7 +693,7 @@
       "main_revision": "2079442",
       "lines": [
         {
-          "line": "Summary: Sharks in GTA V are quick and deadly, and they often go for you as soon as they see you. They turn up more at night, appear on the minimap as a red dot, and circle you for a while before striking. Now and then there are two.",
+          "line": "Summary: Sharks are fast and dangerous, and many strike on sight. Watch for a red dot on the minimap, especially at night when they appear more often. A shark will often stalk and circle you first, and sometimes two show up together.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Sharks_(animal)",
@@ -714,7 +714,7 @@
           ]
         },
         {
-          "line": "Weak points: One shot from a boat kills a shark, so keep watch and shoot any you see from the surface before you go under. A boat or Submersible rammed into one also kills it, and stabbing it again and again with a knife works but is extremely hard.",
+          "line": "Weak points: Scan the water from a boat before you dive: a single shot from the boat kills a shark, so shoot any you spot while still on the surface. Ramming one with a boat or a Submersible also kills it. A knife can do it too if you stab repeatedly, but that is extremely difficult.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Sharks_(animal)",
@@ -735,7 +735,7 @@
           ]
         },
         {
-          "line": "Tips: A single bite is enough to kill you, even at full health and armor. If you are too deep or too far out to reach your boat or the shore, head into sunken plane or ship ruins: the shark often swims off.",
+          "line": "Tips: One bite is fatal even at full health and armor. If you are too deep or too far from your boat or the shore to get back, swim into the sunken plane or ship ruins, which often makes the shark leave.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Sharks_(animal)",
@@ -756,7 +756,7 @@
           ]
         },
         {
-          "line": "Tips: The PC, PlayStation 4 and Xbox One versions also have Hammerhead Sharks, which never attack. If you get to the end of the map, the game scripts a shark to show up and kill you.",
+          "line": "Tips: The Hammerhead Sharks added to the PC, PlayStation 4 and Xbox One versions never attack you, unlike the Tiger Sharks. Reach the end of the map, though, and the game spawns a shark that kills you.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Sharks_(animal)",
@@ -786,7 +786,7 @@
       "main_revision": "2084484",
       "lines": [
         {
-          "line": "Summary: Big wild cats that live in the forests and hills of San Andreas, from the Vinewood Hills up to Mount Chiliad. A loud growl often gives a cougar away first; then it charges relentlessly, pounces and kills you at once with a bite to the throat.",
+          "line": "Summary: Cougars are big wild cats living in forested and hilly parts of San Andreas, from the Vinewood Hills to Mount Chiliad. Their loud growl often warns you first. In an attack a cougar charges without letting up, pounces, and kills you instantly with a bite to the throat.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Cougars",
@@ -810,7 +810,7 @@
           ]
         },
         {
-          "line": "Weak points: Cougars flee if you drive or fire a weapon, and they leave you alone while you stand on top of a vehicle. A quick player can also kick one to kill it or knock it out.",
+          "line": "Weak points: Driving or firing a weapon makes a cougar run away, and one will not attack you while you are standing on a vehicle. Reacting fast lets you kick one to kill it or knock it out.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Cougars",
@@ -852,7 +852,7 @@
           ]
         },
         {
-          "line": "Tips: In the Hunting side activity cougars turn up a lot. Like deer, they show as a red circle on the map, which can easily lead you straight into an attack.",
+          "line": "Tips: In the Hunting side activity cougars are frequent. When Trevor uses the diaphragm, they show up as a red circle on the map just like deer, which can trick you into walking straight into an attack.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Cougars",
@@ -1360,7 +1360,7 @@
       "main_revision": "2079763",
       "lines": [
         {
-          "line": "Summary: A Coil handgun that fires a single probe to stun a target. You get it in the mission Monkey Business, and afterwards you can buy it at Ammu-Nation for $100.",
+          "line": "Summary: Coil makes this handgun-class weapon, which launches one electroshocking probe at a time. Michael picks it up during the mission Monkey Business; after that Ammu-Nation sells it for $100.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Stun_Gun",
@@ -1387,7 +1387,7 @@
           ]
         },
         {
-          "line": "Uses: A stunned person drops and cannot get up, and usually dies, though street criminals and animals sometimes get back up as though nothing had happened. A shot to the head puts them down at once, and someone in a vehicle has a good chance of falling out.",
+          "line": "Uses: Stun a pedestrian and he falls and stays down, and he usually dies there. Street criminals and animals are the exception: they sometimes rise again as though unharmed. A hit to the head drops the target at once, and a target in a vehicle will very likely tumble out.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Stun_Gun",
@@ -1447,7 +1447,7 @@
       "main_revision": "2076033",
       "lines": [
         {
-          "line": "Summary: A throwable explosive that sticks to any surface it hits, vehicles included, and goes off whenever you choose. It costs $400 and is unlocked by the mission Friends Reunited.",
+          "line": "Summary: A throwable explosive for planting on vehicles; you pick the moment it goes off. It costs $400 and is unlocked by the mission Friends Reunited.",
           "drawn_from": [
             {
               "page": "https://gta.fandom.com/wiki/Sticky_Bombs",
@@ -1456,13 +1456,11 @@
                 "$400 (GTA V)",
                 "Friends Reunited (GTA V)",
                 "Sticky Bombs are throwable explosives",
-                "they can be thrown and stick to any surface they hit",
-                "They can then be detonated by pressing Down on the D-pad or shooting them."
+                "can stick to any vehicle, and can be detonated at any time"
               ],
               "quoted_sits": [
                 "table cell",
                 "table cell",
-                "editors' prose",
                 "editors' prose",
                 "editors' prose"
               ],
@@ -1470,8 +1468,7 @@
                 "infobox",
                 "infobox",
                 "lead section",
-                "Performance > The Ballad of Gay Tony",
-                "Performance > The Ballad of Gay Tony"
+                "Performance > Grand Theft Auto V and Online"
               ]
             }
           ]

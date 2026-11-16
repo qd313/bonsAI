@@ -65,17 +65,46 @@ class HeldBackTests(unittest.TestCase):
         # Plan 104, lane V4: the answer used to lean on the versus note that attached second.
         self.assertEqual(_fuse("how to beat tank"), ["Tank", "Playing as the Tank", "Boomer"])
 
+    def test_a_plain_question_gets_no_game_mode_note_about_anything_else_either(self):
+        # Plan 104, lane V4 fix round: the Deck's "what is a good way to deal with a Tank when one shows
+        # up" attached "Versus special infected spawn order and mixes" third; its title shares no word
+        # with "Tank", so the same-subject rule let it through. Only the Tank player's note stays.
+        pool = [
+            TANK,
+            PLAYING_AS,
+            _card(20, "versus", "Versus special infected spawn order and mixes"),
+            _card(21, "survival", "Holding out in Survival mode"),
+            _card(22, "callout", "Dead Center versus ambush spots"),
+            _card(23, "realism", "Realism Versus"),
+            BOOMER,
+        ]
+        vectors = {**VECTORS, **{i: [0.8, 0.6] for i in (20, 21, 22, 23)}}
+        fused = _fuse_cards_by_rrf(pool, QUERY_VECTOR, vectors, top_k=4, question="what is a good way to deal with a Tank when one shows up")
+        self.assertEqual([c.name for c in fused], ["Tank", "Playing as the Tank", "Boomer"])
+
+    def test_a_question_that_names_several_of_the_notes_keeps_the_team_notes(self):
+        # "charger then boomer then spitter?" is about the infected team's combinations without saying so.
+        pool = [
+            _card(30, "enemy", "Boomer"),
+            _card(31, "enemy", "Spitter"),
+            _card(32, "versus", "Infected team combinations"),
+            _card(33, "enemy", "Charger"),
+        ]
+        vectors = {30: [1.0, 0.0], 31: [0.95, 0.31], 32: [0.9, 0.43], 33: [0.8, 0.6]}
+        fused = _fuse_cards_by_rrf(pool, QUERY_VECTOR, vectors, top_k=4, question="charger then boomer then spitter?")
+        self.assertIn("Infected team combinations", [c.name for c in fused])
+
     def test_a_note_about_playing_as_the_subject_stays_for_a_plain_question(self):
         # "how to use smoker" asks for exactly this; six older test questions expect it.
         pool = [TANK, _card(7, "versus", "Surviving the Tank"), _card(8, "versus", "Playing as the Tank")]
         fused = _fuse_cards_by_rrf(pool, QUERY_VECTOR, {3: [1.0, 0.0], 7: [0.9, 0.43], 8: [0.8, 0.6]}, top_k=3, question="how to use tank")
         self.assertEqual([c.name for c in fused], ["Tank", "Playing as the Tank"])
 
-    def test_a_versus_note_about_another_subject_still_attaches(self):
-        pool = [SURVIVING, TANK, _card(6, "versus", "Dead Center ambush spots"), PLAYING_AS]
+    def test_a_versus_note_about_another_subject_does_not_attach_either(self):
+        pool = [SURVIVING, TANK, _card(6, "versus", "Dead Center ambush spots"), PLAYING_AS, BOOMER]
         vectors = {**VECTORS, 6: [0.8, 0.6]}
         fused = _fuse_cards_by_rrf(pool, QUERY_VECTOR, vectors, top_k=3, question="how to beat tank")
-        self.assertEqual([c.name for c in fused], ["Tank", "Playing as the Tank", "Dead Center ambush spots"])
+        self.assertEqual([c.name for c in fused], ["Tank", "Playing as the Tank", "Boomer"])
 
     def test_a_question_that_names_a_mode_keeps_every_versus_note_about_the_subject(self):
         self.assertEqual(_fuse("how to beat tank in versus"), ["Surviving the Tank", "Playing as the Tank", "Tank"])
@@ -232,6 +261,8 @@ class AskPathTests(unittest.TestCase):
             "Surviving the Tank": [1.0, 0.0], "Playing as the Tank": [0.97, 0.24], "Tank": [0.95, 0.31], "Boomer": [-1.0, 0.0],
             # The Strategy Hunter question measured on the PC: the survivors' note ahead of the player's.
             "Surviving Hunters and Jockeys": [1.0, 0.0], "Playing as the Hunter": [0.6, 0.8], "Hunter": [0.8, 0.6],
+            # The Deck's third note on a plain Tank question (plan 104, block D1).
+            "Versus special infected spawn order and mixes": [0.9, 0.43],
         }
         cls.vectors = {sid: favourites.get(name, [0.0, 1.0]) + [0.0] * 766 for sid, name in rows}
 
@@ -263,6 +294,12 @@ class AskPathTests(unittest.TestCase):
         names = self.attached("how to beat tank")
         self.assertEqual(names[0], "Tank")
         self.assertNotIn("Surviving the Tank", names)
+
+    def test_a_plain_tank_question_attaches_no_versus_note_but_the_tank_players(self):
+        names = self.attached("what is a good way to deal with a Tank when one shows up")
+        self.assertEqual(names[0], "Tank")
+        self.assertNotIn("Versus special infected spawn order and mixes", names)
+        self.assertNotIn("Holding out in Survival mode", names)
 
     def test_a_hunter_question_from_the_infected_side_attaches_playing_as_the_hunter_first(self):
         names = self.attached("tips for playing as the hunter in versus")

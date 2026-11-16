@@ -485,12 +485,15 @@ def _question_without_typed_game_name(
 #
 # Plan 104, lane V4: that was a preference and never a filter, and it left the answer leaning on the
 # versus note that attached second (facts kept 0 of 9 on the Tank question). When a question names no
-# mode and no side, a game-mode note about the very subject the leading ordinary note covers (a title
-# word in common) no longer attaches beside it; the next notes in line take its place. Kept: a note
-# about playing as that subject ("Playing as the Smoker"), because a plain "how to use smoker" is
-# asking for exactly that and six older Left 4 Dead 2 test questions expect it; game-mode notes
-# about anything else; and everything when the question names a mode. (Measured 2026-11-15: dropping
-# the "Playing as" notes too pushed six test questions that expect one out of their first three.)
+# mode and no side, no game-mode note attaches beside the leading ordinary note; the next notes in line
+# take its place. (First written for notes about the same subject only, a title word in common; the
+# Deck's "what is a good way to deal with a Tank when one shows up" then attached "Versus special
+# infected spawn order and mixes" third, a title that shares nothing with "Tank" -- fix round, 2026-11-16.)
+# Kept: a note about playing as the leading note's subject ("Playing as the Smoker"), because a plain
+# "how to use smoker" is asking for exactly that and six older Left 4 Dead 2 test questions expect it
+# (measured 2026-11-15: dropping those too pushed all six out of their first three); everything when the
+# question names a mode; and everything when it spells out two or more notes' titles ("charger then
+# boomer then spitter?" is about the infected team's play).
 #
 # The other way round (also lane V4): a question that does name a side or a mode and spells out a
 # game-mode note's whole title ("tips for playing as the hunter in versus" spells out "Playing as the
@@ -554,12 +557,17 @@ def _lead_with_the_note_the_question_names(cards: list[KnowledgeCard], question:
     if cards[0].section_type in _MODE_KINDS:
         return cards
     subject = _title_subject(cards[0].name)
+    spelled = {_fold_plural(w) for w in _name_tokens(question)}
+    named = [c for c in cards if c.section_type not in _MODE_KINDS and (t := _title_subject(c.name)) and t <= spelled]
+    if len(named) > 1:
+        # "charger then boomer then spitter?" names several notes at once: that is a question about
+        # them together, which is the infected team's play, so its team notes stay.
+        return cards
 
     def leaves(card: KnowledgeCard) -> bool:
-        return (
-            card.section_type in _MODE_KINDS
-            and not card.name.lower().startswith(_PLAYING_AS_TITLES)
-            and bool(subject & _title_subject(card.name))
+        # Every game-mode note leaves, whatever its title, except one about playing as the subject.
+        return card.section_type in _MODE_KINDS and not (
+            card.name.lower().startswith(_PLAYING_AS_TITLES) and subject & _title_subject(card.name)
         )
 
     return [cards[0]] + [c for c in cards[1:] if not leaves(c)]

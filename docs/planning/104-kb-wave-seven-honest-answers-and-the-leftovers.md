@@ -840,7 +840,7 @@ planned again.
 
 A note: phone alerts are off in the app, so a "truly blocked" alert cannot reach you; the chat is where to look.
 
-**Pick-up list (2026-11-16, 05:50 EST):** every lane landed or written up; every Deck block run; the Deck put back and
+**Pick-up list (2026-11-16, 05:30 EST):** every lane landed or written up; every Deck block run; the Deck put back and
 checked with one last question; section 13 written; the checks page has its "Plan 104 (16 Nov)" round; consults 1 to
 6 used. Left for this chat: land the end audit K9, run `python scripts/verify.py --full` on the final tip and write its
 result here. Then the maintainer reads section 13.1 and says "push". Session notes outside the repo:
@@ -848,7 +848,7 @@ result here. Then the maintainer reads section 13.1 and says "push". Session not
 
 ## 13. Report
 
-Written at the end by the chat that ran the session (2026-11-16, about 05:40 EST), in the shape of plan 103 § 13, in
+Written at the end by the chat that ran the session (2026-11-16, about 05:25 EST), in the shape of plan 103 § 13, in
 the order the second opinion advised (consult 6).
 
 **The plan set out to make the honest answer honest, finish the notes phases and clear the leftovers. The notes and
@@ -1056,7 +1056,7 @@ October's one-press Update still stands would have kept a driver from pressing i
   saving the six D-pad walks again on a fresh chat.
 - **Not to be called done:** the freeze (a warning stands in front of it); the new notes (on no Deck until published);
   the Ollama version fix (the update case rests on tests); the Hunter question that never says "Hunter" (still misses
-  its note); "works with the released plugin" (no errors in 1,464 questions; 61 attach different notes, unjudged).
+  its note); "works with the released plugin" (no errors in 1,464 questions; about sixty attach different notes (62 by set, 66 by order), unjudged).
 - **For the next knowledge-base plan, cheapest first:** one pass on the Deck's own screen; the narrower honest-answer
   trigger, with H1's note that the follow-up memory remembers a held-back note; the "No close match" line over a right
   note that shares no word with the question (Fallout 4 "mech suit", the hard-hat zombie); the mod lookup's list before

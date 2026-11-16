@@ -211,6 +211,12 @@ real.
 
 ---
 
+**A branch can pass every test and still break the PC's measuring scripts.** Plan 104's mod lookup made the
+notes search import a module that loads the Deck's own `decky` module at the top. The full test set passed, because
+other test files load a stand-in for it first; every PC measuring script then stopped on the first import. Run one
+measuring script (the line gate) after any knowledge-base landing, and import Deck-only modules inside the function
+that needs them. `tests/test_kb_service_imports_without_decky.py` now guards the notes search.
+
 ## 3. Checking work on the Steam Deck
 
 The device is the only proof for anything about focus or layout. These are the things that waste an
@@ -520,6 +526,17 @@ start a driver.
 
 **A keep-awake lock that refuses Steam's idle suspend can leave the suspend overlay stuck over Home.** Plan 102 block R0 (2026-11-03): at about 10:04 Steam tried to suspend the idle Deck, the rig's lock refused it, and the overlay stayed on the Home screen. L3, B and A do not clear it; the plugin panel still opens on top of it, but Home and game launches are blocked, so three rows could not run. A real sleep and wake, the maintainer's touch or the power button clears it. Two smaller traps from the same block: a walk tool called with `saveAs` wrote a file into the repo checkout (`runs\r01-walk-ask.json`, deleted), and the replay tool hashes the repo checkout's build, not the Deck's, so a replay on a different build than the checkout's reads as a mismatch.
 
+**Deck drivers run out of working memory on big tool replies, not on long blocks.** In plan 104 two drivers
+stopped mid-block: a replay returned 90 to 100 KB, a 22-step sequence about 20 KB, a walk about 10 KB. Write the
+runbook to use single presses and small page reads, never the listing, replay or sweep tools unless the row needs
+them, and split a long block between drivers.
+
+**A put-back has two halves: the files and the setting that names them.** Plan 104's driver copied the published
+library's files back, but the setting that records the library's version still named the session's library; with it,
+the plugin's Update would have called the old library newer than the published one and never fetched it. Compare
+every settings key with the plan's backup (names only) after the files are back, and reload the plugin after a
+settings fix so the screen does not write its old copy back.
+
 ## 4. Briefing helpers
 
 **Tell the helper what is allowed to stay.** Hand over a list of things a tool flagged without
@@ -727,6 +744,16 @@ sentence like the old one is a mistake wherever it appears, and the one in the g
 
 **The text that lands must be the text that was fact-checked.** A rewording pass after the checker's read needs its own read by someone who did not write it.
 
+**Check every "build this" in a task text against the maintainer's calls before sending it.** In plan 104 the
+session asked a helper to tell the AI when a game has no notes; the maintainer's call had said that line is for the
+player only. The helper noticed the tension, and its commit was dropped before landing. Briefs have contradicted their
+plans before (plan 98); the task text written mid-session is the same risk.
+
+**Land finished branches through one queue.** Plan 104 landed its last seventeen branches through a small runner that reads a
+queue file one line at a time (`<branch> <base> <tag>`, or a line that runs the search check), so a branch that
+finished could be added while another was landing, without editing a running script. One landing at a time; a
+search-path branch gets its search check on the next line; the runner stops at the first failure.
+
 ## 5. Design and screen work
 
 **The drawing is the design.** [major-redesign.md](archive/major-redesign.md) is the agreed look. Work built
@@ -832,6 +859,10 @@ snapshot and the `.scratch/` folder, which every lane leaves behind. Remove copi
 helper's own link-stripping steps (section 1 says why).
 
 ---
+
+**`python -m unittest tests.<file>` run from the main checkout loads the main checkout's tests,** not the
+helper copy's, even with the copy's paths set. Run tests from inside the copy's paths or with a small runner that sets
+them first (lane R1, plan 104).
 
 ## 7. Documents
 

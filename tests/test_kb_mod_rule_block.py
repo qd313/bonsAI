@@ -80,6 +80,8 @@ RULES = {
         rule("Many Friends.esp", after=[f"Friend {i}.esp" for i in range(8)]),
         rule("Blacksmith Forge Water Fix SE.esp", after=["Water.esp"]),
         rule("Arthmoor's Village.esp", after=["Base Village.esp"]),
+        rule("Sim Settlements.esm", after=["Base Game Fix.esm"]),
+        rule("Sim Settlements Chapter 2.esm", after=["Chapter One.esm"]),
     ],
     "fallout4": [
         rule("Armorsmith Extended.esp", after=["EAMR.esp"]),
@@ -190,6 +192,13 @@ class FindingTheModTests(Library):
         self.assertEqual(
             len(self.names("better vampires and alternate start live another life and immersive citizens and skyui")), 2
         )
+
+    def test_a_name_followed_by_a_number_is_not_the_same_mod(self):
+        # "Sim Settlements 2" is another mod than "Sim Settlements"; a wrong rule is worse than none.
+        self.assertEqual(self.names("where does sim settlements 2 go"), [])
+        self.assertEqual(self.names("where does sim settlements go"), ["Sim Settlements.esm"])
+        self.assertEqual(self.names("sim settlements chapter 2 load order"), ["Sim Settlements Chapter 2.esm"])
+        self.assertEqual(self.names("is better vampires 1.2 ok"), [])
 
     def test_the_games_own_title_is_not_a_mod(self):
         self.assertEqual(self.names("how do I set up Skyrim Special Edition mods"), [])

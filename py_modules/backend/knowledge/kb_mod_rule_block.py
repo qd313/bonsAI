@@ -26,6 +26,8 @@ How a mod is found in the question (the rule, so a measurement can name what it 
    A one-word name written with a digit or in capitals of four letters or more ("SKSE64", "3DNPC",
    "ATLM") is found. Any other one-word name of six letters or more is found only when the question
    also holds a word that speaks of mods (mod, mods, plugin, esp, patch, LOOT, "load order" ...).
+ - A name straight followed by a number in the question does not match unless it ends in a number
+   itself ("Sim Settlements 2" is not "Sim Settlements").
  - A name shorter than five letters (six for a plain one-word name), a name that is the game's own
    title, and a name that is a pattern are never matched.
  - Longest name first; a shorter name that overlaps a longer one found is dropped; at most two mods.
@@ -211,6 +213,10 @@ def _names_the_question_holds(index: dict[str, list[tuple[str, bool, bool, bool]
                 break
             for name, worth, alternate, needs_cue in index.get(run, ()):
                 if needs_cue and not cue:
+                    continue
+                # "Sim Settlements 2" is not "Sim Settlements": a number right after a name that does
+                # not end in one is another mod or a version, and a wrong rule is worse than none.
+                if not run[-1].isdigit() and end + 1 < len(words) and words[end + 1].isdigit():
                     continue
                 hits.append((len(run), start, end, alternate, name, worth))
     # Longest run-together name first; a name found whole before one found with its edition word cut;

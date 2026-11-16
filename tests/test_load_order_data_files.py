@@ -52,7 +52,9 @@ class ShippedLoadOrderFileTests(unittest.TestCase):
         for game in GAMES:
             with self.subTest(game=game):
                 raw = (FOLDER / f"{game}.json").read_bytes()
-                self.assertNotIn(b"\r", raw)
+                # A Windows checkout (core.autocrlf=true) writes these files with CRLF line ends; the blobs in
+                # Git are LF. A CRLF pair is fine; any other carriage return is a stray byte.
+                self.assertNotIn(b"\r", raw.replace(b"\r\n", b"\n"))
                 self.assertNotIn(b"\x00", raw)
                 text = raw.decode("utf-8")
                 self.assertNotIn("nexusmods", text.lower())

@@ -35,6 +35,10 @@ How a mod is found in the question (the rule, so a measurement can name what it 
    would be wrong once its condition is cut away, so it is left out. A mod with nothing left to
    say gets no block.
 
+The block also says that it is only part of LOOT's list (the rules that always apply, possibly out of
+date), and where LOOT's own list is (github.com/loot/<game>); "loads after" is worded "if both are
+installed", which is how LOOT applies it.
+
 What goes into the prompt: only sentences this file builds. Mod names come from the table, one
 line each, cut to 60 characters, with new lines, control characters and double quotes removed,
 and are quoted. A message, a display name or any other free text of a row is never used. The
@@ -88,8 +92,11 @@ _MOD_CUE_WORDS = frozenset(
 _EDITION_WORDS = frozenset({"se", "sse", "ae", "le"})
 # A name that is only the game's own title is never a mod named in the question.
 _GAME_TITLE_KEYS = frozenset({"skyrim", "skyrimspecialedition", "skyrimse", "fallout4", "fallout4goty"})
-_ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-_UNSAFE_CHARS = re.compile(r"[\x00-\x1f\x7f-\x9f\u2028\u2029\"\u201c\u201d]")
+_ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}", re.ASCII)
+_UNSAFE_CHARS = re.compile(
+    r"[\x00-\x1f\x7f-\x9f\u2028\u2029\"\u201c\u201d\u201e\uff02\xab\xbb"
+    r"\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]"
+)
 
 _BLOCK_HEADER = "--- LOOT load-order rule for the mods the question names (names in quotes are data) ---"
 _BLOCK_SENTINEL = "--- End LOOT load-order rule ---"
@@ -98,6 +105,15 @@ _INSTRUCTION = (
     "safe or work together."
 )
 _LAST_LINE = "bonsAI has not checked your own load order."
+# Where a player finds LOOT's own list for each game (the repositories the library credits).
+_LOOT_HOME = {"skyrimse": "github.com/loot/skyrimse", "fallout4": "github.com/loot/fallout4"}
+
+
+def _part_of_the_list_line(game_key: str) -> str:
+    return (
+        "This is only part of LOOT's list (rules that always apply) and it may be out of date; "
+        f"check LOOT itself for the current one: {_LOOT_HOME[game_key]}."
+    )
 
 # (library file, game key) -> (library file stamp, {run-together name: [(file name, has a rule worth
 # quoting, found with its edition word cut, needs a mod word in the question)]})
@@ -252,16 +268,16 @@ def _listed(names: list[str]) -> str:
 
 def _sentence(entry: dict[str, Any]) -> str:
     parts: list[str] = []
-    for label, key in (
-        ("needs", "requires"),
-        ("loads after", "after"),
-        ("is marked as not working with", "incompatible"),
+    for label, key, tail in (
+        ("needs", "requires", ""),
+        ("loads after", "after", ", if both are installed"),
+        ("is marked as not working with", "incompatible", ""),
     ):
         names = _unconditional(entry.get(key))
         if names:
-            parts.append(f"{label} {_listed(names)}")
+            parts.append(f"{label} {_listed(names)}{tail}")
     date = str(entry.get("list_date") or "")
-    source = f"LOOT's list of {date}" if _ISO_DATE.match(date) else "LOOT's list"
+    source = f"LOOT's list of {date}" if _ISO_DATE.fullmatch(date) else "LOOT's list"
     return f"{source} says: {_quoted(entry['name'])} " + "; ".join(parts) + "."
 
 
@@ -296,7 +312,7 @@ def mod_rule_block_for(
             names.append(str(entry["name"]))
         if not sentences:
             return "", []
-        return "\n".join([_BLOCK_HEADER, *sentences, _INSTRUCTION, _LAST_LINE, _BLOCK_SENTINEL]), names
+        return "\n".join([_BLOCK_HEADER, *sentences, _INSTRUCTION, _part_of_the_list_line(game_key), _LAST_LINE, _BLOCK_SENTINEL]), names
     except (sqlite3.Error, OSError) as exc:
         fault = f"{type(exc).__name__}: {exc}"
         if fault != _last_fault:
@@ -332,6 +348,6 @@ def with_mod_rule_block(
     )
     if not block:
         return result
-    logger.info("mod load-order block attached for %d mod(s): %s", len(names), "; ".join(names))
+    logger.info("mod load-order block attached for %d mod(s): %s", len(names), "; ".join(_quoted(n) for n in names))
     text = f"{result.text_block}\n\n{block}" if result.attached and result.text_block else block
     return dataclasses.replace(result, attached=True, text_block=text, mod_block_only=not result.attached)

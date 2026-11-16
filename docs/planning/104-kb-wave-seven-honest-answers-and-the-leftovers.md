@@ -587,6 +587,8 @@ the cost.
 | 2026-11-15, 16:40 EST | 1. The briefs against the code | Six corrections, the rest holds: Speed mode fetches one note, so V4's rule has nothing to move; G1's "background summing-up" is the Sum up button, which needs its own refusal on screen; T1's wait hangs on a refusal (no log line) and misses H2's new line; H1 needs two of H2's files and must drop the notes after stacking; C2 gets at most four closest chips, not six; B1's refusal is worded in a fourth file, and a clean first start cannot show its fault | V4, G1 and T1 told at once (the session checked the code first); H1, C2 and B1 get the line in their task text; two runbook notes (the memory row in Speed mode; the summed-up note needs a turn that wrote a summary) | 229k tokens, 10 minutes |
 | 2026-11-15, 21:20 EST | 2. Leave the notes out, or fence them (lane H1's tables) | Land both switches off. Left-out passes the made-up-boss bar, but the 71 standard questions hold almost no marked turns, so they cannot see its cost: of the 39 real test questions that show "No close match", 25 had the right note and would lose it (answers with every fact 23 and 24 of 75 fall to 0). Narrow the trigger next plan: hold notes back only when the question names a thing no found note names | H1 landed with both switches off; row P104-HONEST-03 stays owed; the narrower trigger goes to the next knowledge-base plan; the trade goes to the maintainer | about 189,000 tokens, 11 minutes |
 | 2026-11-15, 21:25 EST | 5. Lane G1's limit (2,000 MB kept free; the AI counted as 1.42 times its installed size) | Ship both as they are: God of War warns with about 3,000 MB to spare, Deep Rock Galactic: Survivor passes with 810. Medium confidence: each number rests on one reading; games leaving 7,000 to 7,900 MB may be warned for nothing, unmeasured | G1 landed as built; block D1 reads memory and swap before and after the picture question, free memory at 1, 3 and 5 minutes beside God of War, and the limit back at 2,000 after the test file is deleted | about 67,000 tokens, 5 minutes |
+| 2026-11-16, 02:15 EST | 3. R1's tables | Keep every version off. All seven search-test losses came from the meaning search's second to fourth picks, and eight of the fourteen gains are first picks: the next try lifts only the first pick. Keep call 14's bar; ask whether the Fallout 4 "mech suit" line is the search's fault or the line's | R1 ran that version (e) at once on the larger library: 3 losses instead of 9, 12 gains, no new "No close match"; still short of call 14, landed off. The Fallout 4 line is the line's fault (no shared word, meaning score under its cut-off); for the next plan | about 123,000 tokens, 10 minutes |
+| 2026-11-16, 03:00 EST | 4. F1, F2 and G1b before landing | Land F2, then G1b, as they are; F1 last after one change: its reveal scroll must also keep a ring that truly sits above the "Hide details" line (the summed-up note) inside the pane, or the two scrolls fight with the page out of focus; F1's focus document was stale | F1 made the change (`3cbf7d5bc`) and fixed the document; all three landed in that order. The reading that settles it: a frame recorder on the Deck's own screen, in a summed-up chat, through B then A and A on the note | about 166,000 tokens, 11 minutes (after two server overloads) |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -754,30 +756,76 @@ planned again.
   draws no strip at all; the out-of-focus rows could not run, because the launcher refused the game: Steam's window
   had been left on the Library page, and on this Deck it only finds games from the Home shelf. F2 (the Session card)
   is built and waits for one second-opinion read together with F1. Tip `5d472bb51`; nothing pushed.
+- **2026-11-15, 23:05 to 2026-11-16, 00:25 EST (deploy 1 at 23:04, build `bc209b0029d0`; 63, 39, 34 at 23:05; 69,
+  39, 34 at 00:00):** blocks D1 (two drivers) and D1b. Passed: setup (the test library 2026.11.16 installed; the
+  published library on the Deck, 2026.10.25, backed up), "No notes for this game", Speed's Tank question, the Hunter
+  row's part (b), the screenshot question, the memory check beside a light game (a raised limit warns, "Ask anyway"
+  answers, the limit returns to 2,000; the runbook's "warns again at once" step was wrong: a loaded AI is not checked
+  again), the look check, the sweep, and the long chat's summary log line (it also answers P103-SUMUP-01). Failed: the
+  question runner (it never saw an answer end), the plain Tank question (a versus note third), the chips (the second
+  chip changed 7.4 seconds after the answer; the row allows 5). Unclear: "Ask anyway" took two Up presses. Could not
+  run: the out-of-focus pair (on this Deck the page loses focus only while Steam's own "Delete chat?" box is open, so
+  they stay proven by tests only) and the Doom 64: Retribution spoiler check (not on the Recent Games shelf). Memory
+  beside a picture question with Deep Rock Galactic: Survivor: 8,630 to 2,150 MB available, swap barely moved; God of
+  War alone: 3,821 MB at 60 seconds, about 3,440 at 3 and 5 minutes. The limit file is the reserve kept free, not the
+  AI's need (the runbook said otherwise; the test held).
+- **2026-11-16, 02:00 to 03:38 EST (0, 40, 34 at 02:01; 21, 42, 36 at 02:16; 43, 45, 37 at 03:00):** thirteen helpers,
+  consults 3 and 4. Block D1c: the staged first start passed (no "turn on Internet downloads" message while the switch
+  read on; written "not seen on a clean first start"; everything put back and checked), the two test screenshots
+  removed, Steam's performance overlay left on as found. Landed, one at a time through a queue: M4 (the Ollama tab reads
+  the version again after a cancelled or failed update; the Update button's missing confirm box is by design since plan
+  87, so it becomes a call), the C2 fix (only one note had cleared the closeness bar, so the second chip was an
+  ordinary one; a lone close note now brings the next nearest), the T1 fix (folded earlier turns hid the new answer
+  from the runner), the V4 fix (a plain question gets no game-mode note beside an ordinary lead; search check: two more
+  "No close match" lines, both on one hard-hat question whose right note still attaches; nothing lost), K2 (the
+  roadmap sweep for blocks D0b to D1c), L2 (the typed mod lookup, switched off: the right rule for 3 of the 10 mods
+  the data holds, and one answer in twenty said two mods work together; the security and licence reviewers' small
+  items fixed first), R1 version (e) (consult 3's narrower try: 3 losses instead of 9; still short of call 14; off),
+  M3 (a game with no notes gets no general card; a question ending ", give me ..." is read for the boss it names; its
+  commit that also told the AI was dropped, because call 7's line is for the player), F2 (the Session card fits; its
+  scrolls hold the opener line when the ring reads as nothing), G1b ("Ask anyway" and "Open the Ollama tab" are one Up
+  from the question box; the ring is not parked on "Ask anyway", so a stray A cannot send the question), F1 (Show
+  details reopens with "Hide details" in the pane; the "Notes were used" line lifts with "Show details", and none was
+  drawn on 15 November because that answer used no note; the summed-up note is a stop in both focus states; older
+  answers carry no strip by design, plan 62). X1, the middle numbers: nothing worse (older questions 572 to 574 of 629;
+  facts kept 70.6 and 72.9; the eight questions no note can answer: said so 0 to 7 and 8 of 24, as if it knew 21 to
+  11 and 10). The search check after L2 failed: the PC's measuring scripts cannot load the service without the Deck's
+  own module (the full test set passes on other tests' stand-ins); a fix is being built; the Deck is unaffected. Deploy
+  2 at 03:37 (build `d27f3400cb1d`); block D2a started. Tip `8f2f96cab`; nothing pushed.
 
 **Questions for the maintainer (the safest choice is taken meanwhile):**
 - **The honest-answer trade:** switched on today, a made-up boss stops getting another boss's weak points, but 25 of
   the 39 real test questions that show "No close match" would lose a right note the search had found. Both switches
   are off; a narrower version is for the next plan.
 - **The Speed-mode honest option:** measured again, it changes nothing. Keep it off? (Off meanwhile.)
-- **The crowding fix:** no version passes call 14. Its tables go to the second opinion, then to you (off meanwhile).
+- **The crowding fix:** no version passes call 14. The narrowest try brings the right note back 12 times and loses it
+  3 times (the third try: 15 and 9); your rule allows no losses, so it is off. Keep the rule, or allow a small loss?
+  (Off meanwhile.)
+- **The Ollama Update button** updates at once with one press, as you asked in October. On 15 November a driver
+  expecting a box updated the Deck's Ollama by accident. Keep one press, or ask first? (One press meanwhile.)
+- **Should the AI also be told when a game has no notes?** Today only you see the line. Built and measured (10 against
+  11 of 24 answers said they did not know; too close to call), not landed. (Not told meanwhile.)
+- **Two out-of-focus checks** can only be proven by tests on this Deck: the panel loses focus only while Steam's own
+  "Delete chat?" box is open, and that box takes the presses.
+- **Doom 64: Retribution** needs one play by hand so it shows on the Recent Games shelf for the spoiler check.
 - **A third settings backup on the Deck** (plan 100's, 208 MB, in its home folder) was not in call 3. Delete it?
   (Kept meanwhile.)
 - **Note titles that name a late boss:** "Doopliss (Chapter 4 boss)" names a boss the game hides behind question marks
   at first, and two older test rows use that title; Grodus, Gloomtail and Bonetail are named in other titles. Rename?
   (Kept meanwhile.)
-- **Older answers show no Show details strip** (only the newest answer has one). On purpose? (Unchanged meanwhile.)
+- **Older answers show no Show details strip:** answered by the code, no call needed: on purpose, settled in plan 62
+  (only the newest answer carries the Session tab, so it never repeats down the chat).
 - **The Deck's mode chip** was on Speed before this plan; block DR puts it back.
 
 A note: phone alerts are off in the app, so a "truly blocked" alert cannot reach you; the chat is where to look.
 
-**Pick-up list (2026-11-15, 23:05 EST):** tip `5d472bb51`, the branch green. Landed: every lane above. Built, not
-landed: F2 (`cf47e1aa2`, waits for the F1 + F2 consult). Not started: F1 (Opus extra-high; after the 02:00 reset),
-L2 (after the reset; R1 turned down), X1, the new-bug round (the genre card on games with no notes, the ", give me the
-full attack pattern" ending, the Ollama Update button's missing confirm box, the stale Ollama version on Settings),
-consult 3 (R1's tables). Next three acts: deploy this tip (deploy 1) and check the loader; block D1 with a fresh driver
-from `assets/104-runbook-block-D1.md`; at the reset, F1, L2 and consult 3. Session notes outside the repo:
-`side-session-notes/<planning chat>/plan104-pickup.md`.
+**Pick-up list (2026-11-16, 03:40 EST):** tip `8f2f96cab`, deployed as build `d27f3400cb1d`. Landed: every lane
+above. Being built: the fix that lets the PC's measuring scripts load the service again (lane L2, a new copy); then
+the search check after it. Running: block D2a (questions) from `assets/104-runbook-block-D2.md`; then D2b (D-pad) and
+D2c (the new notes: the plan's block D3 rows, since the library on the Deck is already final, so no deploy 3 unless a
+note changes). Then: sweep K3 (the roadmap files are at their size limits: move text out first), X2 on the final tip,
+consult 6 before the report, block DR (put everything back), the checks page group, section 13, `verify.py --full`.
+Session notes outside the repo: `side-session-notes/<planning chat>/plan104-pickup.md`.
 
 ## 13. Report
 

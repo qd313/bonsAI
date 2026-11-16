@@ -367,12 +367,27 @@ _TRAILING_PHRASES = (
 )
 
 
-def _question_subject_words(question: str, kb_game_name: str) -> set[str]:
-    """The words of the thing the question names (see `_NAMED_THING_RES`), minus filler, the
-    game's own name and the generic advice words; empty when it names nothing."""
-    text = " ".join(re.findall(r"[a-z0-9']+", (question or "").lower()))
-    game = " ".join(re.findall(r"[a-z0-9']+", (kb_game_name or "").lower()))
-    tails = _TRAILING_PHRASES + ((f"in {game}",) if game else ())
+# A comma and then a request, at the end of the question: "..., give me the full attack pattern", "...,
+# tell me everything", "..., explain it", "..., what is the best way". The request is open ended, so no
+# list of endings can hold it, and it hides the name that comes before it from the patterns above, which
+# want the name at the very end (plan 104, row P104-M9-TRAILING-PHRASE: "What is the best way to beat the
+# boss Quillgrave in Hollow Knight, give me the full attack pattern" was never marked as uncovered). Only
+# a request that opens with one of these words counts; a second question ("..., and how do I refill it")
+# is not a request and is left alone. Matched on the lower-cased question before its punctuation goes.
+_TRAILING_REQUEST_RE = re.compile(
+    r",\s*(?:please\s+)?"
+    r"(?:(?:give|tell|show|walk)\s+(?:me|us)\b|explain\b|describe\b|list\b|what(?:'s|\s+is|\s+are)\b)"
+    r".*$",
+    re.DOTALL,
+)
+
+
+def _named_thing(text: str, tails: tuple[str, ...], *, bare_name_allowed: bool) -> str:
+    """The thing ``text`` names (see `_NAMED_THING_RES`), after the trailing phrases are cut; ``""`` if none.
+
+    ``bare_name_allowed`` keeps the three-words-or-fewer rule (a whole question that can only be a name)
+    to the whole question: cut at a comma, what is left is often a preamble ("in hades"), not a name.
+    """
     trimmed = True
     while trimmed:  # "in this run please" goes in two passes
         trimmed = False
@@ -380,14 +395,35 @@ def _question_subject_words(question: str, kb_game_name: str) -> set[str]:
             if text.endswith(" " + tail):
                 text = text[: -len(tail)].strip()
                 trimmed = True
-    thing = ""
     for pattern in _NAMED_THING_RES:
         match = pattern.search(text)
         if match:
-            thing = match.group(1)
-            break
-    if not thing and 0 < len(text.split()) <= 3:
-        thing = text
+            return match.group(1)
+    if bare_name_allowed and 0 < len(text.split()) <= 3:
+        return text
+    return ""
+
+
+def _question_subject_words(question: str, kb_game_name: str) -> set[str]:
+    """The words of the thing the question names (see `_NAMED_THING_RES`), minus filler, the
+    game's own name and the generic advice words; empty when it names nothing.
+
+    The whole question is read first, as it always was. Only when it names nothing is the trailing
+    request cut at its comma (`_TRAILING_REQUEST_RE`) and what is left read again, so a name that a
+    request hid is found and a name the request itself carries is never lost.
+    """
+    lowered = (question or "").lower()
+
+    def words_of(raw: str) -> str:
+        return " ".join(re.findall(r"[a-z0-9']+", raw.lower()))
+
+    game = words_of(kb_game_name or "")
+    tails = _TRAILING_PHRASES + ((f"in {game}",) if game else ())
+    thing = _named_thing(words_of(lowered), tails, bare_name_allowed=True)
+    if not thing:
+        without_request = _TRAILING_REQUEST_RE.sub("", lowered, count=1)
+        if without_request != lowered:
+            thing = _named_thing(words_of(without_request), tails, bare_name_allowed=False)
     return {
         word
         for word in _content_words(thing) - _content_words(kb_game_name)

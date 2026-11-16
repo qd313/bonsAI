@@ -229,7 +229,7 @@ function openSessionTab(screen: Screen, rule: SteamScrollRule | undefined, textP
   const parts = cardParts(1, 1);
   const shown = () => Math.min(textPts, parts.textLimit);
   if (text) {
-    Object.defineProperty(text, "scrollHeight", { configurable: true, value: textPts });
+    Object.defineProperty(text, "scrollHeight", { configurable: true, get: () => textPts });
     Object.defineProperty(text, "clientHeight", { configurable: true, get: shown });
     clampScroll(text, () => textPts - shown());
     act(() => void text.dispatchEvent(new Event("scroll")));
@@ -313,7 +313,13 @@ function openSessionTab(screen: Screen, rule: SteamScrollRule | undefined, textP
     return { problems, places, reads, leftTo, lastLineAtEnd };
   };
 
-  return { pane, button, card, rename: rename!, keep: keep!, text, press, read, wholeInBand, box, moreRow, atEnd, shown };
+  /** The text's own height changes (a new Text size): the browser keeps its scroll inside the new range. */
+  const resizeText = (pts: number) => {
+    textPts = pts;
+    if (text) text.scrollTop = text.scrollTop;
+  };
+
+  return { pane, button, card, rename: rename!, keep: keep!, text, press, read, wholeInBand, box, moreRow, atEnd, shown, resizeText };
 }
 
 beforeEach(() => {
@@ -399,5 +405,77 @@ describe.each(SCREENS)("on $name, with the long test chat's summary (D0's card)"
     expect(steamRingHolder()).toBe(s.card);
     expect(s.text!.scrollTop).toBeLessThan(end);
     expect(s.moreRow()?.textContent).toBe(MORE_BELOW);
+  });
+});
+
+/*
+ * P104-M12: a new Text size changes how tall the card's text is and fires no scroll, so the "More below" line read
+ * at the last scroll or press went stale. The browser's size watcher (ResizeObserver) stands in here: it records what
+ * each watcher observes, and `resize` tells the watchers whose element changed size, as the browser does: what is
+ * inside the text box always, the box itself only when its own height changed (it stays at its 190-point limit
+ * once the text is taller). Large is 1.15 times Normal and Small 0.9 (chatTextSize.ts).
+ */
+describe("after a new Text size, the More below line under the card's text is right (on the Deck's own screen)", () => {
+  const watched: Array<{ seen: Set<Element>; tell: () => void }> = [];
+  /** The text becomes `pts` tall; the watchers on whatever changed size are told. */
+  function resize(s: ReturnType<typeof openSessionTab>, pts: number): void {
+    const text = s.text!;
+    const boxBefore = s.shown();
+    s.resizeText(pts);
+    const changed = (el: Element) => (el === text ? s.shown() !== boxBefore : text.contains(el));
+    act(() => watched.filter((w) => [...w.seen].some(changed)).forEach((w) => w.tell()));
+  }
+  beforeEach(() => {
+    watched.length = 0;
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        private readonly w: { seen: Set<Element>; tell: () => void };
+        constructor(callback: ResizeObserverCallback) {
+          this.w = { seen: new Set<Element>(), tell: () => callback([], this as unknown as ResizeObserver) };
+          watched.push(this.w);
+        }
+        observe(el: Element) {
+          this.w.seen.add(el);
+        }
+        unobserve(el: Element) {
+          this.w.seen.delete(el);
+        }
+        disconnect() {
+          this.w.seen.clear();
+        }
+      },
+    );
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+  const deck = SCREENS[0];
+
+  it("read to the end on Normal, then Large: the line comes back, and Down reads on to the new end before Rename", () => {
+    const s = openSessionTab(deck, "top");
+    s.press("onMoveDown");
+    for (let i = 0; i < 10 && !s.atEnd(); i += 1) s.press("onMoveDown");
+    expect(s.moreRow()?.textContent).toBe("");
+    resize(s, LONG_TEXT_PTS * 1.15);
+    expect(s.moreRow()?.textContent).toBe(MORE_BELOW);
+    const before = s.text!.scrollTop;
+    expect(s.press("onMoveDown")).toBe(true);
+    expect(steamRingHolder()).toBe(s.card);
+    expect(s.text!.scrollTop).toBeGreaterThan(before);
+  });
+
+  it("text that fits on Normal and not on Large: the line appears", () => {
+    const s = openSessionTab(deck, "top", 180);
+    expect(s.moreRow()).toBeNull();
+    resize(s, 180 * 1.15);
+    expect(s.moreRow()?.textContent).toBe(MORE_BELOW);
+  });
+
+  it("text that scrolls on Normal and fits on Small: the line goes", () => {
+    const s = openSessionTab(deck, "top", 200);
+    expect(s.moreRow()?.textContent).toBe(MORE_BELOW);
+    resize(s, 200 * 0.9);
+    expect(s.moreRow()).toBeNull();
   });
 });

@@ -167,7 +167,8 @@ type CardTextView = "fits" | "below" | "end";
 /**
  * In: nothing; the card's text box hands itself over through `setBox` (its ref).
  * Out: the text's `view`, read off the box when it mounts, when the card takes the ring (`read`), after
- * every step and on every scroll (a finger on the touch screen scrolls it too); and `step`: 1 (Down) or
+ * every step, on every scroll (a finger on the touch screen scrolls it too) and whenever the text's size
+ * changes (a new Text size); and `step`: 1 (Down) or
  * -1 (Up) moves the text one step and returns true, or moves nothing at the end it points to and returns
  * false, so the press goes on out of the card. Scrolls the text only; never moves the ring.
  */
@@ -183,7 +184,17 @@ function useCardText() {
     if (!box) return undefined;
     read();
     box.addEventListener("scroll", read);
-    return () => box.removeEventListener("scroll", read);
+    /*
+     * A new Text size makes the text taller or shorter and fires no scroll, so the line read last went
+     * stale (P104-M12). The box itself stays 190 tall once the text passes that, so its contents are
+     * watched too: their size is what changes.
+     */
+    const watch = typeof ResizeObserver === "function" ? new ResizeObserver(() => read()) : null;
+    for (const el of [box, ...Array.from(box.children)]) watch?.observe(el);
+    return () => {
+      box.removeEventListener("scroll", read);
+      watch?.disconnect();
+    };
   }, [box, read]);
   const step = (dir: 1 | -1): boolean => {
     if (!box) return false;

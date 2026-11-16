@@ -114,6 +114,7 @@ All notable changes to this project are documented in this file.
 
 ### Changed
 
+- **Older notes corrected from the wikis.** The Fallout 4 Deathclaw note says which kind you meet at which level and where its belly is weak; the Left 4 Dead 2 defibrillator note says the wiki gives no chapter-by-chapter list; the Fallout: New Vegas Hardcore note lists the Auto-Doc and the binding ritual; Predator Pals no longer claim how they spawn; the Snack Orb's turns are described correctly. They arrive with the next library update.
 - **Left 4 Dead 2 versus questions lead with the right note.** In Speed mode "how to beat tank" attaches the Tank note; a plain Tank question no longer gets the survivors' versus note beside it; a question about playing as the Hunter in versus leads with "Playing as the Hunter".
 - **The Deck's back end no longer crashes when the knowledge library is read from several places at once.** Each reader now has its own connection to the library. This was the crash behind "Install Ollama timed out"; after a plugin reload on the Deck there was no crash and no database error.
 - **Show details names its chip row "Behind this answer".** The line above the chips now reads "Behind this answer · 1 of 6" instead of "Chip 1 of 6".

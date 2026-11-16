@@ -1678,3 +1678,21 @@ Moved word for word by sweep K1 of plan 104, to make room for the landings and t
 - ★★★★ `[KB]` **RAG Phase 5: depth on the 23 games** — **PARTIAL.** **Plan 103: 20 of the 23 games now have enemy and item notes in the labelled shape** (292 notes); with them 35 of 38 games have labelled notes. Your read of ten random notes from each of six samples passed 2026-11-10 (D140, call 4); the library is published as 2026.11.10. **Deck 2026-11-10 (row P103-NOTES-23-01): 17 of 20 games attached a new note; the line was 18, so it is just short; missed on both questions: Fallout 4, Brotato, DOOM Eternal** (`workshop:test-evidence/plan103-P103-NOTES-23-01.json`, `-part2.json`).
   **No notes for three games:** Hades (its wiki is CC BY-NC-SA); Half-Life 2 and Black Mesa (their wiki was down, 2026-11-09 and 2026-11-10). **What closes Phase 5 (D141 call 18):** the Half-Life 2 and Black Mesa notes (plan 104 lanes N1 and N2; the source, call 8: the Half-Life wiki on Fandom, and for Black Mesa the pages of its own wiki saved in September plus Fandom only where a page speaks about Black Mesa itself) and their test questions are in and the Deck row passes; the count then ends at 37 of 38.
   **Blind questions (counted 2026-11-14):** `tests/fixtures/kb_eval/` holds 620 rows in 21 files: 584 for the 20 games and 36 for the mod tips; 548 in the first three on 2026-11-10, measured before one removal. [Plan](planning/28-phase5-corpus-depth.md) · [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
+
+**Next: the Deathclaw and defibrillator note entries (as they stood before they moved to Done, 2026-11-15)**
+
+- ★ `[KB]` **Fallout 4 Deathclaw note: say whether variants such as the alpha matter** — **OPEN, asked 2026-11-11 (the maintainer's note on a boss picture); chosen for the next wave: plan 104 lane M1 (the page lists the variants, the levels they appear at and how they differ).**
+  Their words: "This could be an alpha deathclaw? I'm not sure. In any case, the note should have a sentence or two on the distinction if it's relevant". Notes only; no code.
+
+- ★ `[KB]` **Left 4 Dead 2 defibrillator note: say which campaigns and chapters it is found on** — **OPEN, asked 2026-11-10 (the maintainer's note on sample B); chosen for the next wave: plan 104 lane M1.**
+  The defibrillator note should say where in the campaigns the item is found. The wiki's page gives no chapter list (about one a level, No Mercy and The Sacrifice the exceptions); lane M1 reads the campaign pages too. Notes only; no code.
+
+**Bugs: the answer test's count of "said so in its own words" (as it stood before it moved to Done, 2026-11-15)**
+
+- ★ `[QA]` **The answer test's count of "said so in its own words" misses the usual phrasings** — **OPEN, found 2026-11-10 (the honest-answer measurement).**
+  It read 0 where a hand reading of the same answers found admissions; the test needs the usual phrasings added. A PC-side change; nothing a player notices. Record `workshop:archive/research/kb-honest-unknown-2026-11-10-h1.md`.
+
+**Bugs: older notes the wiki contradicts (as it stood before lane M1's result, 2026-11-15)**
+
+- ★ `[KB]` **Older notes the wiki contradicts, found by the plan 103 note writers** — **PARTIAL, found 2026-11-09 and 2026-11-10; six games' notes fixed 2026-11-10 (plan 103 lane M); three points left open.**
+  Six games' notes were fixed 2026-11-10 (plan 103 lane M); three points were left open: the Left 4 Dead 2 Molotov note, the Fallout: New Vegas Hardcore note (fewer ways to heal a limb than its page) and the Palworld wiki's disagreeing pages on Predator Pals. Older sightings (Mario Party, Cyberpunk 2077, others) were not in lane M's list. **2026-11-14:** plan 104 lanes M1 and M2 check each against its page; the sightings with their note numbers: [Detail](roadmap-kb-details.md#plan-104-notes-moved-from-the-knowledge-base-roadmap-2026-11-14). [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)

@@ -585,6 +585,8 @@ the cost.
 | Time | Question | Answer | What changed | Cost |
 |---|---|---|---|---|
 | 2026-11-15, 16:40 EST | 1. The briefs against the code | Six corrections, the rest holds: Speed mode fetches one note, so V4's rule has nothing to move; G1's "background summing-up" is the Sum up button, which needs its own refusal on screen; T1's wait hangs on a refusal (no log line) and misses H2's new line; H1 needs two of H2's files and must drop the notes after stacking; C2 gets at most four closest chips, not six; B1's refusal is worded in a fourth file, and a clean first start cannot show its fault | V4, G1 and T1 told at once (the session checked the code first); H1, C2 and B1 get the line in their task text; two runbook notes (the memory row in Speed mode; the summed-up note needs a turn that wrote a summary) | 229k tokens, 10 minutes |
+| 2026-11-15, 21:20 EST | 2. Leave the notes out, or fence them (lane H1's tables) | Land both switches off. Left-out passes the made-up-boss bar, but the 71 standard questions hold almost no marked turns, so they cannot see its cost: of the 39 real test questions that show "No close match", 25 had the right note and would lose it (answers with every fact 23 and 24 of 75 fall to 0). Narrow the trigger next plan: hold notes back only when the question names a thing no found note names | H1 landed with both switches off; row P104-HONEST-03 stays owed; the narrower trigger goes to the next knowledge-base plan; the trade goes to the maintainer | about 189,000 tokens, 11 minutes |
+| 2026-11-15, 21:25 EST | 5. Lane G1's limit (2,000 MB kept free; the AI counted as 1.42 times its installed size) | Ship both as they are: God of War warns with about 3,000 MB to spare, Deep Rock Galactic: Survivor passes with 810. Medium confidence: each number rests on one reading; games leaving 7,000 to 7,900 MB may be warned for nothing, unmeasured | G1 landed as built; block D1 reads memory and swap before and after the picture question, free memory at 1, 3 and 5 minutes beside God of War, and the limit back at 2,000 after the test file is deleted | about 67,000 tokens, 5 minutes |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -729,15 +731,53 @@ planned again.
   tip is deployed at minute zero (call 29). The full check on the tip passed (510 seconds). The nine helpers were
   resumed; the four notes lanes (N1, N2, M1, S1) and second-opinion consult 1 started; fourteen helpers at once. Lane
   T4 finished first (the wiki reader now says "failed" when a wiki is down; one commit) and waits for K0 to land.
+- **2026-11-15, 16:20 to 18:45 EST:** the tip was deployed; Decky's loader then failed to start (a loader left from boot
+  still held its port; the chat ended it and started the service at 16:30). Block D0a ran on a second try: the crash fix
+  held on the Deck, the plan 102 and 103 backups were deleted, the memory readings taken (idle 11,962 MB available; the
+  AI loaded 5,649; Deep Rock Galactic: Survivor 8,682; God of War 4,885 with 2,172 MB of swap). A driver pressed the
+  Ollama tab's Update button expecting a confirm box; none opened, and the Deck's Ollama went from 0.40.9 to 0.40.16
+  (a new bug). Landed in two chains: K0, T4, H2, T2, T1, V4 (fixture check: nothing worse), M1, N1, N2, W1, S1, L1.
+  L1's new test failed on this PC's Windows line endings, turning the Python set red. The five-hour window passed 75
+  percent at 16:51 (85 at 18:00), so no helper started until the 21:00 reset.
+- **2026-11-15, 21:00 to 23:02 EST (after the reset; 0, 30, 29 at 21:00; 57, 38, 34 at 21:33):** L1's line-ending fix
+  landed first (the test allows a CRLF pair; `.gitattributes` keeps the two files LF). Then, in four chains: C2, B1, H1
+  (both switches off, consult 2), G1 (consult 5: the estimate now takes the larger of Ollama's size and 1.42 times the
+  installed size), K1 (the roadmap sweep for everything above), V5 (fifteen versus notes, three read rounds), Q1 and Q2
+  (blind questions), T3, S4, S3, S2 (each after a checker and the licence reviewer read it; three fix rounds), R1 (no
+  version meets call 14; landed switched off), M2 (22 older sections; its credit fix for section 153 lacked a read
+  date, the build refused, and the date was added within twenty minutes), B2 (a log line when no summary is due). The
+  search check after R1: on the plugin's own search the "No close match" line moved 23 to 27 of 1,525 right-note asks,
+  the new Half-Life 2 and Black Mesa rows included (misspellings such as "barnicle"), 12 to 13 others, tail 70 to 70.
+  Blocks D0b and D0c ran (handovers in the workshop): the reopen bug did not show in 5 tries; a wholly covered answer
+  now draws no "Notes were used" line at all; the Session card's last 51 px sit behind the dock; the long chip label
+  scrolls fully into view; the Show details strip passed in fresh chats and on a covered answer, but an older answer
+  draws no strip at all; the out-of-focus rows could not run, because the launcher refused the game: Steam's window
+  had been left on the Library page, and on this Deck it only finds games from the Home shelf. F2 (the Session card)
+  is built and waits for one second-opinion read together with F1. Tip `5d472bb51`; nothing pushed.
 
-**Questions for the maintainer (the safest choice is taken meanwhile):** none yet. A note: phone alerts are off in the
-app, so a "truly blocked" alert cannot reach you; the chat is where to look.
+**Questions for the maintainer (the safest choice is taken meanwhile):**
+- **The honest-answer trade:** switched on today, a made-up boss stops getting another boss's weak points, but 25 of
+  the 39 real test questions that show "No close match" would lose a right note the search had found. Both switches
+  are off; a narrower version is for the next plan.
+- **The Speed-mode honest option:** measured again, it changes nothing. Keep it off? (Off meanwhile.)
+- **The crowding fix:** no version passes call 14. Its tables go to the second opinion, then to you (off meanwhile).
+- **A third settings backup on the Deck** (plan 100's, 208 MB, in its home folder) was not in call 3. Delete it?
+  (Kept meanwhile.)
+- **Note titles that name a late boss:** "Doopliss (Chapter 4 boss)" names a boss the game hides behind question marks
+  at first, and two older test rows use that title; Grodus, Gloomtail and Bonetail are named in other titles. Rename?
+  (Kept meanwhile.)
+- **Older answers show no Show details strip** (only the newest answer has one). On purpose? (Unchanged meanwhile.)
+- **The Deck's mode chip** was on Speed before this plan; block DR puts it back.
 
-**Pick-up list (2026-11-15, 16:35 EST):** tip `770f1e9a`, nothing landed yet. In flight, each on branch
-`refactor/p104-<lane>` in `.claude/worktrees/p104-<lane>`: K0, T1, T2, X0, H2, V4, G1, L1, N1, N2, M1, S1, and the
-second opinion (consult 1). Finished, waiting to land after K0: T4 (`c7f9e176`). Next three acts: deploy the tip and
-start block D0a with a fresh driver; land K0 the moment it reports, then T4; pass consult 1's corrections to the
-running lanes.
+A note: phone alerts are off in the app, so a "truly blocked" alert cannot reach you; the chat is where to look.
+
+**Pick-up list (2026-11-15, 23:05 EST):** tip `5d472bb51`, the branch green. Landed: every lane above. Built, not
+landed: F2 (`cf47e1aa2`, waits for the F1 + F2 consult). Not started: F1 (Opus extra-high; after the 02:00 reset),
+L2 (after the reset; R1 turned down), X1, the new-bug round (the genre card on games with no notes, the ", give me the
+full attack pattern" ending, the Ollama Update button's missing confirm box, the stale Ollama version on Settings),
+consult 3 (R1's tables). Next three acts: deploy this tip (deploy 1) and check the loader; block D1 with a fresh driver
+from `assets/104-runbook-block-D1.md`; at the reset, F1, L2 and consult 3. Session notes outside the repo:
+`side-session-notes/<planning chat>/plan104-pickup.md`.
 
 ## 13. Report
 

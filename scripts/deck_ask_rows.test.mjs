@@ -8,11 +8,17 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { JSDOM } from "jsdom";
+
+import { McpStdioClient } from "./lib/mcpStdioClient.mjs";
 
 import {
   STATUS_CMD,
   CONTEXT_EXPR,
   PROGRESS_EXPR,
+  questionKey,
+  isThisTurn,
+  answerFinished,
   RowsFileError,
   parseRowsFile,
   normalizeLine,
@@ -224,11 +230,15 @@ function readbackAfter({ line = "none", attached = [{ name: "Exploder", numbers:
   };
 }
 
-// What the page says about the newest answer while it is being written: how many answer slots there are, whether
-// the newest has a bubble, whether it is still streaming, how long its text is, and whether the reply's action row
-// ("Was this helpful?" and the rest) is drawn.
-const PROGRESS_DONE = { slots: 4, bubble: true, streaming: false, textLen: 100, actions: true };
-const PROGRESS_STUCK = { slots: 4, bubble: true, streaming: true, textLen: 5, actions: false };
+// What the page says about the newest turn: how many turns are drawn, whether it has a bubble, whether it is still
+// streaming, how long its text is, whether the reply's action row is drawn, the turn's id and its header words.
+// The stand-in's default is the shape the Deck really shows in a chat with two or more older turns: they are folded
+// behind "N earlier", so the page draws ONE turn before the question and ONE after it, and the count never changes.
+// A test names only the fields it changes; the rest are filled in (the id is new after the question, the header
+// carries the question just sent).
+const BASE_PROGRESS = { slots: 3, bubble: true, streaming: false, textLen: 80, actions: true, turnId: "turn-old", header: "an earlier question" };
+const PROGRESS_DONE = { streaming: false, textLen: 100, actions: true };
+const PROGRESS_STUCK = { streaming: true, textLen: 5, actions: false };
 const STALE_ATTACHED = [{ name: "StaleNote", numbers: [1] }];
 
 function standIn({
@@ -237,6 +247,7 @@ function standIn({
   walk = {},
   type = {},
   progress = PROGRESS_DONE,
+  baselineProgress = {},
   baseline = READBACK_BASE,
   after = {},
   logLine = true,
@@ -253,6 +264,7 @@ function standIn({
   let readsSinceTyping = 0;
   let sentThisRow = false;
   const typedCount = () => calls.filter((c) => c.name === "deck_typeText").length;
+  let lastQuestion = "";
   const client = {
     async callTool(name, args) {
       calls.push({ name, args });
@@ -260,7 +272,12 @@ function standIn({
       switch (name) {
         case "deck_readPage":
           if (String(args.expression).includes("bonsai-chat-turn-slot")) {
-            const value = progressOf({ poll: polls.n, typedCount: typedCount() });
+            if (!sentThisRow) {
+              const turnId = typedCount() === 0 ? "turn-old" : `turn-new-${typedCount()}`;
+              return asToolResult({ ok: true, value: { ...BASE_PROGRESS, turnId, ...baselineProgress } });
+            }
+            const named = { ...BASE_PROGRESS, turnId: `turn-new-${typedCount()}`, header: lastQuestion };
+            const value = { ...named, ...progressOf({ poll: polls.n, typedCount: typedCount() }) };
             polls.n += 1;
             return asToolResult({ ok: true, value });
           }
@@ -272,6 +289,7 @@ function standIn({
         case "deck_typeText":
           polls.n = 0;
           sentThisRow = true;
+          lastQuestion = String(args.text);
           return asToolResult({ ok: true, matched: true, typed: true, summary: "typed and sent", ...type });
         case "deck_releaseMachine":
           return asToolResult({ released: true, note: "released" });
@@ -339,7 +357,7 @@ test("one row: places the ring, types and sends, waits, reads back, writes one e
   assert.equal(r.results.length, 1);
   assert.match(r.results[0].verdict, /^PASS/);
   const names = r.calls.map((c) => c.name);
-  assert.deepEqual(names.slice(0, 5), ["deck_readPage", "deck_walkTo", "deck_pressButton", "deck_typeText", "deck_readPage"]);
+  assert.deepEqual(names.slice(0, 6), ["deck_readPage", "deck_readPage", "deck_walkTo", "deck_pressButton", "deck_typeText", "deck_readPage"]);
   const type = r.calls.find((c) => c.name === "deck_typeText").args;
   assert.equal(type.text, ROW.question);
   assert.equal(type.clear, true);
@@ -414,21 +432,76 @@ test("the wait ends when the reply's action row is drawn, however long that take
 });
 
 test("a reply that has no action row ends the wait once it is finished and its text has stopped growing", async () => {
-  const quiet = { slots: 4, bubble: true, streaming: false, actions: false };
+  const quiet = { bubble: true, streaming: false, actions: false };
   const r = await runWith([rowWith({ waitSeconds: 60 })], {
     progress: [{ ...quiet, textLen: 10 }, { ...quiet, textLen: 20 }, { ...quiet, textLen: 20 }, { ...quiet, textLen: 20 }],
   });
   assert.equal(r.results[0].timedOut, false);
-  const progressReads = r.calls.filter((c) => c.name === "deck_readPage" && String(c.args.expression).includes("bonsai-chat-turn-slot"));
+  const sent = r.calls.findIndex((c) => c.name === "deck_typeText");
+  const progressReads = r.calls.slice(sent).filter((c) => c.name === "deck_readPage" && String(c.args.expression).includes("bonsai-chat-turn-slot"));
   assert.equal(progressReads.length, 3, "it stopped at the first read that matched the one before it");
 });
 
 test("text that is still growing, or still streaming, is not finished; neither is a turn the page has not drawn yet", async () => {
-  const growing = (poll) => ({ slots: 4, bubble: true, streaming: false, actions: false, textLen: 10 + poll });
+  const growing = (poll) => ({ bubble: true, streaming: false, actions: false, textLen: 10 + poll });
   const a = await runWith([rowWith({ waitSeconds: 10 })], { progress: ({ poll }) => growing(poll) });
   assert.equal(a.results[0].timedOut, true);
-  const b = await runWith([rowWith({ waitSeconds: 10 })], { progress: { ...PROGRESS_DONE, slots: 3 } });
-  assert.equal(b.results[0].timedOut, true, "the slot count never went above the one before the question");
+  const b = await runWith([rowWith({ waitSeconds: 10 })], { progress: { ...PROGRESS_DONE, turnId: "turn-old", header: "an earlier question", textLen: 80 } });
+  assert.equal(b.results[0].timedOut, true, "the page still shows the turn from before the question: its finished answer is not this one");
+});
+
+test("a chat with folded earlier turns: the count of turns on the page is the same before and after, and the answer is still seen to finish", async () => {
+  const r = await runWith([rowWith({ row: "FOLD-A" }), rowWith({ row: "FOLD-B" })]);
+  assert.equal(r.stopped, null);
+  for (const res of r.results) {
+    assert.equal(res.timedOut, false);
+    const { baseline, last } = res.seen.progress;
+    assert.equal(baseline.slots, last.slots, "the turn count did not change, as on the Deck");
+    assert.notEqual(baseline.turnId, last.turnId);
+  }
+  assert.ok(r.clock.t < 60000, "each row ended at its first finished read, not at its limit");
+});
+
+test("a fresh chat: nothing on the page before the question, one turn after it", async () => {
+  const fresh = { slots: 0, bubble: false, streaming: false, textLen: 0, actions: false, turnId: null, header: "" };
+  const r = await runWith([rowWith({ waitSeconds: 60 })], {
+    baselineProgress: fresh,
+    progress: [{ slots: 1, turnId: "live", ...PROGRESS_STUCK }, { slots: 1, turnId: "live", streaming: true, textLen: 40, actions: false }, { slots: 1, ...PROGRESS_DONE }],
+  });
+  assert.equal(r.results[0].timedOut, false);
+  assert.ok(r.clock.t >= 6000);
+});
+
+test("answers that end in the 'No close match' or 'Not in my notes' line, or the third line, finish like any other", async () => {
+  for (const line of ["No close match", "Not in my notes", "No notes for this game"]) {
+    const r = await runWith([rowWith({ expect: { line } })], { after: { line } });
+    assert.equal(r.results[0].timedOut, false, line);
+    assert.match(r.results[0].verdict, /^PASS/, line);
+    assert.equal(r.results[0].seen.line, line);
+  }
+});
+
+test("a question asked again: the old turn with the same words does not count as the answer; the new turn does", async () => {
+  const same = { header: ROW.question, textLen: 80, turnId: "turn-old", ...{ actions: true, streaming: false } };
+  const r = await runWith([rowWith({ waitSeconds: 60 })], {
+    baselineProgress: { header: ROW.question },
+    progress: [same, same, { ...PROGRESS_DONE, textLen: 80 }],
+  });
+  assert.equal(r.results[0].timedOut, false);
+  assert.ok(r.clock.t >= 6000, "it did not accept the old turn on the first two reads");
+});
+
+test("with the answer drawn but no turn id on the page, a changed header is enough to tell it is new", async () => {
+  const r = await runWith([rowWith()], { baselineProgress: { turnId: null }, progress: { ...PROGRESS_DONE, turnId: null } });
+  assert.equal(r.results[0].timedOut, false);
+});
+
+test("a timeout's evidence says what the page showed before the question and at the last read", async () => {
+  const r = await runWith([rowWith({ waitSeconds: 10 })], { progress: PROGRESS_STUCK });
+  const ev = JSON.parse(fs.readFileSync(path.join(r.dir, fs.readdirSync(r.dir)[0]), "utf8"));
+  assert.equal(ev.seen.progress.baseline.turnId, "turn-old");
+  assert.equal(ev.seen.progress.last.streaming, true);
+  assert.equal(ev.seen.progress.question, questionKey(ROW.question));
 });
 
 test("a reply that never finishes is a timeout after the row's own limit", async () => {
@@ -562,7 +635,7 @@ test("text that did not read back as typed: COULD NOT RUN: question not sent, an
   assert.match(r.results[0].verdict, /^COULD NOT RUN: the question was not sent/);
   const ev = JSON.parse(fs.readFileSync(path.join(r.dir, fs.readdirSync(r.dir)[0]), "utf8"));
   assert.ok(/left in the (question )?box/.test(ev.side_effect));
-  assert.equal(r.calls.filter((c) => c.name === "deck_readPage").length, 1, "only the first read of the page was made");
+  assert.equal(r.calls.filter((c) => c.name === "deck_readPage").length, 2, "only the two reads before the question were made, none after");
 });
 
 // ---------------------------------------------------------------------------
@@ -698,9 +771,27 @@ test("the command line refuses to start when the stop switch is on", async () =>
   assert.deepEqual(w.readLog().map((c) => c.name), ["deck_listMachines"]);
 });
 
+// The repo's fake tool server answers a tool with the same text every time, so the page's turns (one read before
+// the question, then reads after it) are answered here and every other tool goes to the real stdio client.
+function clientWithPageReads(w, question) {
+  const cfg = JSON.parse(fs.readFileSync(path.join(w.root, ".mcp.json"), "utf8")).mcpServers["decky-plugin-studio"];
+  const real = new McpStdioClient({ command: cfg.command, args: cfg.args, env: cfg.env, cwd: w.root, name: "fake" });
+  let reads = 0;
+  return {
+    start: () => real.start(),
+    initialize: () => real.initialize(),
+    listTools: () => real.listTools(),
+    close: () => real.close(),
+    callTool: (name, args, timeoutMs) =>
+      name === "deck_readPage" && String(args.expression).includes("bonsai-chat-turn-slot")
+        ? Promise.resolve(asToolResult({ ok: true, value: reads++ === 0 ? BASE_PROGRESS : { ...BASE_PROGRESS, turnId: "turn-new", header: question, textLen: 100 } }))
+        : real.callTool(name, args, timeoutMs),
+  };
+}
+
 test("a normal run takes no lease first, then releases its own at the end", async () => {
   const w = cliWorld();
-  const code = await main(["--rows", w.rowsFile, "--plan", "104"], { repoRoot: w.root, env: w.env, deps: { ssh: w.ssh, readbackSource: "x", sleep: async () => {} }, io: w.io });
+  const code = await main(["--rows", w.rowsFile, "--plan", "104"], { repoRoot: w.root, env: w.env, deps: { client: clientWithPageReads(w, "a question"), ssh: w.ssh, readbackSource: "x", sleep: async () => {} }, io: w.io });
   assert.equal(code, 0, w.err.join("\n"));
   const names = w.readLog().map((c) => c.name);
   assert.equal(names[0], "deck_listMachines");
@@ -839,3 +930,112 @@ for (const [file, token, expr] of EXPR_PINS) {
     if (expr) assert.ok(expr.includes(token), `the page read no longer looks for "${token}"`);
   });
 }
+
+// ---------------------------------------------------------------------------
+// The real page read, run over page shapes built the way the transcript draws them (jsdom), and the finish rule
+// ---------------------------------------------------------------------------
+
+const turnHeader = (id, question, streaming = false) =>
+  `<div class="bonsai-chat-turn-row-header${streaming ? " bonsai-chat-turn-row-header--streaming" : ""}" data-bonsai-turn-id="${id}">` +
+  `<button aria-label="Retry same prompt"></button><div class="bonsai-chat-turn-row-body">${question}</div></div>`;
+const answerBubble = (text, streaming = false) =>
+  `<div class="bonsai-chat-ai-bubble${streaming ? " bonsai-chat-ai-bubble--stream-preview" : ""}"><p>${text}</p></div>`;
+const replyActions = `<div class="bonsai-chat-reply-actions"><span class="bonsai-chat-feedback-row__label">Was this helpful?</span></div>`;
+const turnSlot = (id, question, { text = null, streaming = false, actions = false } = {}) =>
+  `<div class="bonsai-chat-turn-slot">${turnHeader(id, question, streaming)}${text === null ? "" : answerBubble(text, streaming)}${actions ? replyActions : ""}</div>`;
+const earlierPill = (n) => `<div class="bonsai-chat-earlier-pill">${n} earlier</div>`;
+const pageOf = (...parts) => `<div class="bonsai-scope">${parts.join("")}</div>`;
+
+function readProgress(markup) {
+  const { window } = new JSDOM(`<!doctype html><body>${markup}</body>`);
+  globalThis.document = window.document;
+  return eval(PROGRESS_EXPR);
+}
+
+const Q = "In Hollow Knight what is the safest way to deal with the Mantis Lords fight in Mantis Village";
+const KEY = questionKey(Q);
+
+test("fresh chat: no turn, then the live turn streaming, then the finished turn with its reply row", () => {
+  const baseline = readProgress(pageOf());
+  assert.equal(baseline.slots, 0);
+  const asked = readProgress(pageOf(turnSlot("live", Q, { text: "Mantis", streaming: true })));
+  assert.equal(isThisTurn(asked, baseline, KEY), true);
+  assert.equal(answerFinished(asked, null, baseline, KEY), false, "still streaming");
+  const done = readProgress(pageOf(turnSlot("turn-111-0", Q, { text: "The answer.", actions: true })));
+  assert.equal(answerFinished(done, asked, baseline, KEY), true);
+});
+
+test("a chat with folded earlier turns: the same one turn on the page before and after, and the answer is still found", () => {
+  const old = turnSlot("turn-100-6", "Which attacks does Hornet use at Greenpath", { text: "Old answer.", actions: true });
+  const baseline = readProgress(pageOf(earlierPill(7), old));
+  const asked = readProgress(pageOf(earlierPill(7), turnSlot("live", Q, { text: "Mantis", streaming: true })));
+  const done = readProgress(pageOf(earlierPill(7), turnSlot("turn-200-7", Q, { text: "The answer.", actions: true })));
+  // The shape that broke the first runner: the turn count never changes.
+  assert.equal(baseline.slots, 1);
+  assert.equal(asked.slots, 1);
+  assert.equal(done.slots, 1);
+  assert.equal(done.slots > baseline.slots, false);
+  // And the page's own signs do change.
+  assert.equal(baseline.turnId, "turn-100-6");
+  assert.equal(asked.turnId, "live");
+  assert.equal(done.turnId, "turn-200-7");
+  assert.equal(answerFinished(baseline, null, baseline, KEY), false, "the old answer is not mistaken for the new one");
+  assert.equal(answerFinished(asked, null, baseline, KEY), false);
+  assert.equal(answerFinished(done, asked, baseline, KEY), true);
+});
+
+test("a chat with one or two older turns (no pill): the turn count grows and the answer is found", () => {
+  const old = turnSlot("turn-100-0", "Hornet at Greenpath", { text: "Old.", actions: true });
+  const baseline = readProgress(pageOf(old));
+  const done = readProgress(pageOf(old, turnSlot("turn-200-1", Q, { text: "New.", actions: true })));
+  assert.equal(done.slots, 2);
+  assert.equal(answerFinished(done, null, baseline, KEY), true);
+});
+
+test("answers ending in the 'No close match', 'Not in my notes' or 'No notes for this game' line finish the same way", () => {
+  const baseline = readProgress(pageOf(earlierPill(3), turnSlot("turn-100-2", "older", { text: "Old.", actions: true })));
+  for (const footer of [
+    "No close match in my notes, this answer leans on the model's own knowledge.",
+    "Not in my notes \u2014 this answer is from the model's own knowledge.",
+    "No notes for this game \u2014 this answer is from the model's own knowledge.",
+  ]) {
+    const body = `Use the dash.<em>${footer}</em>`;
+    const done = readProgress(pageOf(earlierPill(3), turnSlot("turn-200-3", Q, { text: body, actions: true })));
+    assert.equal(answerFinished(done, null, baseline, KEY), true, footer);
+  }
+});
+
+test("a reply with no action row (a refusal) is finished once its text stopped growing between two reads", () => {
+  const baseline = readProgress(pageOf(earlierPill(3), turnSlot("turn-100-2", "older", { text: "Old.", actions: true })));
+  const first = readProgress(pageOf(earlierPill(3), turnSlot("live", Q, { text: "Not enough memory to answer.", streaming: false })));
+  assert.equal(answerFinished(first, null, baseline, KEY), false, "one read cannot say the text stopped");
+  const second = readProgress(pageOf(earlierPill(3), turnSlot("live", Q, { text: "Not enough memory to answer.", streaming: false })));
+  assert.equal(answerFinished(second, first, baseline, KEY), true);
+  const grown = readProgress(pageOf(earlierPill(3), turnSlot("live", Q, { text: "Not enough memory to answer. More.", streaming: false })));
+  assert.equal(answerFinished(grown, first, baseline, KEY), false, "still growing");
+});
+
+test("the page before the question is never taken for the answer, even when the same words were asked before", () => {
+  const same = turnSlot("turn-100-5", Q, { text: "Old answer to the same words.", actions: true });
+  const baseline = readProgress(pageOf(earlierPill(4), same));
+  assert.equal(answerFinished(readProgress(pageOf(earlierPill(4), same)), null, baseline, KEY), false);
+  const fresh = readProgress(pageOf(earlierPill(4), turnSlot("turn-200-6", Q, { text: "New answer, a different length.", actions: true })));
+  assert.equal(answerFinished(fresh, null, baseline, KEY), true);
+});
+
+test("the turn header's cut question still matches: 60 characters with an ellipsis, spaces squashed", () => {
+  const cut = `${Q.slice(0, 59).trimEnd()}\u2026`;
+  const baseline = readProgress(pageOf(earlierPill(2), turnSlot("turn-1-0", "older one", { text: "x", actions: true })));
+  const done = readProgress(pageOf(earlierPill(2), turnSlot("turn-2-1", cut, { text: "y", actions: true })));
+  assert.equal(answerFinished(done, null, baseline, KEY), true);
+  assert.equal(questionKey("  Many   spaces\nhere  "), "many spaces here");
+});
+
+test("the turn header and reply row names the page read looks for are pinned in the files that draw them", () => {
+  const header = fs.readFileSync(path.join(HERE, "..", "src/features/answer/transcript/buildTurnHeaderElement.tsx"), "utf8");
+  assert.ok(header.includes("data-bonsai-turn-id"));
+  assert.ok(PROGRESS_EXPR.includes("data-bonsai-turn-id"));
+  const reply = fs.readFileSync(path.join(HERE, "..", "src/features/answer/reply-actions/buildReplyActionsElement.tsx"), "utf8");
+  assert.ok(reply.includes("bonsai-chat-feedback-row__label"));
+  assert.ok(PROGRESS_EXPR.includes("bonsai-chat-feedback-row__label"));
+});

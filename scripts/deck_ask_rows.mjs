@@ -77,7 +77,7 @@ export const CONTEXT_EXPR =
   "mode: m ? (m.textContent || '').trim() : null, width: window.innerWidth, height: window.innerHeight}; })()";
 export const PROGRESS_EXPR =
   "(function () { var s = document.querySelector('.bonsai-scope'); " +
-  "if (!s) return {slots: 0, bubble: false, streaming: false, textLen: 0, actions: false}; " +
+  "if (!s) return {slots: 0, bubble: false, streaming: false, textLen: 0, actions: false, turnId: null, header: ''}; " +
   "var slots = s.querySelectorAll('.bonsai-chat-turn-slot'); " +
   "var last = slots.length ? slots[slots.length - 1] : null; " +
   "var bubble = last ? last.querySelector('.bonsai-chat-ai-bubble') : null; " +
@@ -86,7 +86,51 @@ export const PROGRESS_EXPR =
   "(header && header.classList.contains('bonsai-chat-turn-row-header--streaming'))); " +
   "return {slots: slots.length, bubble: Boolean(bubble), streaming: streaming, " +
   "textLen: bubble ? (bubble.textContent || '').length : 0, " +
-  "actions: Boolean(last && last.querySelector('.bonsai-chat-reply-actions'))}; })()";
+  "actions: Boolean(last && (last.querySelector('.bonsai-chat-reply-actions') || last.querySelector('.bonsai-chat-feedback-row__label'))), " +
+  "turnId: header ? header.getAttribute('data-bonsai-turn-id') : null, " +
+  "header: header ? (header.textContent || '').slice(0, 200) : ''}; })()";
+
+const squash = (text) => String(text ?? "").replace(/\s+/g, " ").trim().toLowerCase();
+const KEY_CHARS = 24;
+
+/**
+ * The words of the question that tell its turn from the others: the turn header shows the question
+ * whitespace-squashed and cut at 60 characters, so the first 24 are always there.
+ */
+export function questionKey(question) {
+  return squash(question).slice(0, KEY_CHARS);
+}
+
+/**
+ * Is the newest turn on the page the one for the question just sent? The number of turns on the page cannot say:
+ * a chat with two or more older turns folds them all behind "N earlier", so the page shows one turn before the
+ * question (the newest old one) and one after (the new one), and the count never changes. Instead the newest turn
+ * must show this question's words in its header AND be different from the newest turn before the question: a new
+ * turn id (the live turn is "live", then the finished one gets a fresh id), a longer list of turns, a header that
+ * did not show these words before, or a different answer length (the same question asked again).
+ */
+export function isThisTurn(p, baseline, key) {
+  if (!p || !baseline) return false;
+  if (!key || !squash(p.header).startsWith(key)) return false;
+  return (
+    p.slots > baseline.slots ||
+    (p.turnId != null && p.turnId !== baseline.turnId) ||
+    !squash(baseline.header).startsWith(key) ||
+    p.textLen !== baseline.textLen
+  );
+}
+
+/**
+ * Is this question's answer finished on screen? Its turn is drawn (see isThisTurn), it has an answer bubble that
+ * is not streaming, and either the reply's action row is drawn or the text did not grow since the read before.
+ * `previous` is the read before this one (or null). A reply that ends with a footer line, or a refusal, has no
+ * different shape here: both the line and the action row are inside the same turn.
+ */
+export function answerFinished(p, previous, baseline, key) {
+  if (!isThisTurn(p, baseline, key) || !p.bubble || p.streaming) return false;
+  if (p.actions) return true;
+  return Boolean(isThisTurn(previous, baseline, key) && previous.bubble && !previous.streaming && previous.textLen === p.textLen);
+}
 
 // ---------------------------------------------------------------------------
 // The rows file
@@ -428,8 +472,14 @@ async function runOneRow(row, ctx) {
   if (before.problem) return stop(`readback: ${before.problem}`, null, carry);
   if (before.rb.error) return stop(`panel: ${before.rb.error}`, null, carry);
   if (before.rb.streaming) return stop("an answer is still being written; nothing was asked", null, carry);
-  const baselineTurns = before.rb.turns ?? 0;
   const baselineLine = before.rb.attachLine?.line ?? null;
+
+  // The newest turn on the page now, so the question's own turn can be told from it (see isThisTurn).
+  const baseRead = await callTool(deps, machine, "deck_readPage", { expression: PROGRESS_EXPR, rowId: row.row }, 60000);
+  if (baseRead.fatal) return stop(baseRead.fatal, baseRead.fatal, carry);
+  const baseline = baseRead.data?.ok ? baseRead.data.value : null;
+  if (!baseline) return stop(`page: the turns on the page could not be read (${baseRead.text.slice(0, 100)})`, null, carry);
+  const key = questionKey(row.question);
 
   // 4. The ring on the question box: walk Down to the Ask button (a press places an unowned ring first), then one
   //    Up. The box has no name of its own to walk to, and this is the route measured on the Deck with or without a
@@ -460,10 +510,11 @@ async function runOneRow(row, ctx) {
   const sentAt = deps.now();
   const asked = { ...carry, pressed, side_effect: `asked one question in the chat "${context.chat}"; it is now part of that chat` };
 
-  // 6. Wait until the answer is finished on screen: the reply's action row is drawn, or the reply is no longer
-  //    streaming and its text has stopped growing between two reads. The log line is not waited for.
+  // 6. Wait until the answer is finished on screen: this question's turn is drawn, and the reply's action row is
+  //    drawn or its text has stopped growing between two reads (answerFinished). The log line is not waited for.
   const deadline = sentAt + row.waitSeconds * 1000;
   let previous = null;
+  let last = null;
   let failures = 0;
   let finished = false;
   for (;;) {
@@ -475,9 +526,8 @@ async function runOneRow(row, ctx) {
       if (failures >= MAX_PAGE_READ_FAILURES) return stop(`page: the answer could not be read ${failures} times in a row`, null, asked);
     } else {
       failures = 0;
-      const drawn = p.slots > baselineTurns && p.bubble;
-      const settled = drawn && !p.streaming && previous && previous.bubble && !previous.streaming && previous.textLen === p.textLen && previous.slots === p.slots;
-      if (drawn && ((p.actions && !p.streaming) || settled)) {
+      last = p;
+      if (answerFinished(p, previous, baseline, key)) {
         finished = true;
         break;
       }
@@ -516,6 +566,7 @@ async function runOneRow(row, ctx) {
     ring: rb.focus?.label ?? null,
     pageFocus: Boolean(rb.windowFocus),
     game: rb.game ?? null,
+    progress: { question: key, baseline, last },
     readback: rb,
   };
   if (!finished) {

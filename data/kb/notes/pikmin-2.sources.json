@@ -77,7 +77,7 @@
           "reworded": "plan 104, lane S3, 2026-11-15: the sentence was rewritten from a fact list"
         },
         {
-          "line": "Tips: With 30 or more Pikmin, keep throwing them onto its back one after another and accept that some get shaken off; that beats swarming it. With a very small army, wake it and run it far from where it sleeps. It turns and heads home, and the moment it lies down again you get a few seconds in which it can neither move nor harm you. A Bulborb woken by mistake before your Pikmin have attacked: retreat until it turns around, then start a fresh attack run. Some caves themed on metal let you get rid of it for good: wake it, then quickly circle the hole in the sublevel, and it falls off the stage.",
+          "line": "Tips: With 30 or more Pikmin, keep throwing them onto its back one after another and accept that some get shaken off; that beats swarming it. With a very small army, wake it and run it far from where it sleeps. It turns and heads home, and the moment it lies down again you get a few seconds in which it can neither move nor harm you. A Bulborb woken by mistake before your Pikmin have attacked: retreat until it turns around, then start a fresh attack run. In some metal-themed caves you can wake it, then quickly circle the hole in the sublevel, and it falls off the stage.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Bulborb",
@@ -260,7 +260,7 @@
           "reworded": "plan 104, lane S3, 2026-11-15: rewritten from a fact list (first pass, then again in the fix round)"
         },
         {
-          "line": "Weak points: Throw Purple Pikmin at it: they hurt it badly and stop it throwing Pikmin off or breathing fire. In Pikmin 2 it is also weak enough that a large group can simply rush it. To dodge the flame, run as soon as you see it start to breathe in; there is a short delay before it fires, and from the start of that breath until the fire ends it is rooted and aimed, so anyone who has moved away is not followed.",
+          "line": "Weak points: Throw Purple Pikmin at it: they hurt it badly and stop it throwing Pikmin off or breathing fire. In Pikmin 2 it is also weak enough that a large group can simply rush it. To dodge the flame, run as soon as you see it start to breathe in; there is a short delay before it fires, and from the start of that breath until the fire ends it cannot turn or move, so anyone who has moved away is not followed.",
           "drawn_from": [
             {
               "page": "https://www.pikminwiki.com/Fiery_Blowhog",

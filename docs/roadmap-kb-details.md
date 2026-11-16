@@ -1696,3 +1696,11 @@ Moved word for word by sweep K1 of plan 104, to make room for the landings and t
 
 - ★ `[KB]` **Older notes the wiki contradicts, found by the plan 103 note writers** — **PARTIAL, found 2026-11-09 and 2026-11-10; six games' notes fixed 2026-11-10 (plan 103 lane M); three points left open.**
   Six games' notes were fixed 2026-11-10 (plan 103 lane M); three points were left open: the Left 4 Dead 2 Molotov note, the Fallout: New Vegas Hardcore note (fewer ways to heal a limb than its page) and the Palworld wiki's disagreeing pages on Predator Pals. Older sightings (Mario Party, Cyberpunk 2077, others) were not in lane M's list. **2026-11-14:** plan 104 lanes M1 and M2 check each against its page; the sightings with their note numbers: [Detail](roadmap-kb-details.md#plan-104-notes-moved-from-the-knowledge-base-roadmap-2026-11-14). [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Where things stand: the half-done entries paragraph (as it stood, 2026-11-15)**
+
+**Where the half-done entries end (2026-11-14, D141 calls 15 to 19):** **Phase 5: PARTIAL** (17 of 20 on the Deck against a line of 18; three games have no notes; it closes when the Half-Life 2 and Black Mesa notes are in and the Deck row passes). **The screenshot measurement: closed as measured** (Done). **The visual maps: parked** (Shelved; the marks test missed its bar, 2.95 of 10 against 7). Every Deck check of plan 103 has run, or is named under Deck check owed.
+
+**Calls waiting on you: the Speed-mode option (as it stood before the 2026-11-15 measurement)**
+
+- **The honest answer's Speed-mode option** — **OPEN, raised 2026-11-09; measured again by lane H1 (D141 call 13).** Built and left off: in Speed the made-up boss was written about as real in 6 of 6 (8 of 24 on unmarked turns generally). It goes on only if that falls to under 2 of 6 and ordinary Speed answers keep their facts; you confirm or revert with the numbers.

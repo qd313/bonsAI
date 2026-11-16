@@ -1248,15 +1248,14 @@
       "main_revision": "172372",
       "lines": [
         {
-          "line": "Summary: In versus a round is two turns: one team plays the survivors, the other plays the infected, and then the sides swap. Each team has up to four players, and only the team on the survivor side earns points.",
+          "line": "Summary: A versus round is one turn on each side: team A plays the survivors while team B plays the infected, then they trade places. Each team has up to four players.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
               "revision": "172372",
               "part_of_page": "(opening)",
               "quoted": [
-                "Two separate teams of 4 players take turns playing as the Survivors and the Infected, competing for the most points.",
-                "Points are only awarded to teams playing as the Survivors."
+                "Two separate teams of 4 players take turns playing as the Survivors and the Infected, competing for the most points."
               ]
             },
             {
@@ -1264,13 +1263,13 @@
               "revision": "172372",
               "part_of_page": "Versus Gameplay",
               "quoted": [
-                "Each Round of a versus game consists of two turns."
+                "Each Round of a versus game consists of two turns. One team plays as the Survivors and the other plays as the Infected. When the turn ends, the teams switch sides."
               ]
             }
           ]
         },
         {
-          "line": "Tips: Before the game starts, whoever leads the lobby picks the campaign, and each player chooses whether to start on the infected side or the survivor side.",
+          "line": "Tips: Before the match, the person leading the lobby chooses the campaign, and each player picks the side they want to begin on.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1283,7 +1282,7 @@
           ]
         },
         {
-          "line": "Tips: A turn as survivors ends the moment they reach the end of the chapter, or when all of them are incapacitated or dead. Then the sides swap, and once both turns are done everyone sees the current team scores.",
+          "line": "Tips: The survivors' turn is over as soon as they reach the end of the chapter, or when all of them are down or dead. Once the round is done, both teams see their running totals.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1297,7 +1296,7 @@
           ]
         },
         {
-          "line": "Tips: In the next round, the team with the higher score plays the survivors first. After a tie, the team that was survivors first in the previous round goes first again. Versus is played on Normal difficulty.",
+          "line": "Tips: Whoever is ahead on points gets the survivor role first in the next round. If the totals are level, the team that was survivors first last time keeps that role. Normal difficulty applies throughout.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1320,7 +1319,7 @@
       "main_revision": "172372",
       "lines": [
         {
-          "line": "Summary: Every chapter is played twice, once by each team, so the second team to play it finds the items in the same places and the Tank and Witch in similar ones.",
+          "line": "Summary: Because both teams play every chapter, the second team to play one finds weapons, healing items and other objects in exactly the same places, and the Witch and Tank in much the same spots, give or take a little.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1334,7 +1333,7 @@
           ]
         },
         {
-          "line": "Tips: Survivors start each chapter without the weapons, health, gnomes or items they held on the previous map, and the first couple of chapters hand out tier 1 weapons. Safe-room items used in the previous round come back.",
+          "line": "Tips: Nothing carries over between chapters: survivors lose their weapons, health, gnomes and items, and the first couple of chapters hand out tier 1 weapons. Supplies in the safe room that were used last round are back again.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1348,7 +1347,7 @@
           ]
         },
         {
-          "line": "Tips: A dead survivor does not return from a rescue closet as in the campaign. In Left 4 Dead 2 the only way back is a defibrillator, which costs the team 25 points.",
+          "line": "Tips: Nobody returns from a rescue closet in versus, unlike in the campaign. In Left 4 Dead 2 a teammate holding a defibrillator can still revive a dead survivor.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1356,13 +1355,13 @@
               "part_of_page": "Players / Survivors",
               "quoted": [
                 "Survivors do not respawn in Rescue Closets when they die, unlike the Campaign mode.",
-                "a dead Survivor can be brought back to life if another Survivor happens to have a Defibrillator; this results in a Defibrillator penalty of -25 points the team's score."
+                "a dead Survivor can be brought back to life if another Survivor happens to have a Defibrillator"
               ]
             }
           ]
         },
         {
-          "line": "Tips: Some maps are trimmed for versus: closets and other places where survivors could hold out for ever are removed, so the route is harder on the survivor side.",
+          "line": "Tips: Versus maps are altered a little to stop survivors camping for ever: closets and similar hold-out areas are taken out.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1384,7 +1383,7 @@
       "main_revision": "172372",
       "lines": [
         {
-          "line": "Summary: A versus infected player sees survivors as coloured outlines, and in Left 4 Dead 2 the colour shows how hurt they are: green when healthy, then yellow, orange and red as health falls.",
+          "line": "Summary: As an infected player in versus, a survivor's outline colour shows how hurt they are, so you can pick out the weakest at a glance. Red is the worst off.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1392,13 +1391,13 @@
               "part_of_page": "Players / Infected / Controls of the Infected",
               "quoted": [
                 "Survivors who have health over 40 (permanent and temporary) will have a green outline.",
-                "Survivors in Left 4 Dead 2 who have health lower than 25 will have an orange outline."
+                "Survivors who have health lower than 10 (permanent and temporary) or incapacitated will have a red outline."
               ]
             }
           ]
         },
         {
-          "line": "Tips: The bands count permanent and temporary health together. Over 40 is green, 25 to 39 is yellow, under 25 is orange, and under 10 or incapacitated is red. A survivor at exactly 1 health after being incapacitated, without healing, also shows red.",
+          "line": "Tips: In Left 4 Dead 2, counting permanent and temporary health together: red is under 10 health or incapacitated, orange is under 25, yellow is 25 to 39, and green is over 40. A survivor at exactly 1 health after being incapacitated, without healing, also shows red.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1415,15 +1414,14 @@
           ]
         },
         {
-          "line": "Tips: A survivor covered in Boomer bile shows purple whatever their health, and infected teammates show blue, spawned or not.",
+          "line": "Tips: Purple overrides the health colours: a survivor covered in Boomer bile shows purple whatever their health.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
               "revision": "172372",
               "part_of_page": "Players / Infected / Controls of the Infected",
               "quoted": [
-                "Survivors who are covered in boomer bile, regardless of their health, will have a purple outline.",
-                "Infected Teammates, spawned or not, will have a blue outline."
+                "Survivors who are covered in boomer bile, regardless of their health, will have a purple outline."
               ]
             }
           ]
@@ -1438,7 +1436,7 @@
       "main_revision": "172372",
       "lines": [
         {
-          "line": "Summary: The infected only see a survivor's outline after that survivor has done something noisy or open. Standing still, walking or crouch-walking stays hidden, unless an infected player has the survivor in sight or the survivor is covered in bile.",
+          "line": "Summary: The infected only see a survivor's outline while that survivor is noisy or out in the open. To stay hidden, stand still, walk or crouch-walk and do not fire or shove, unless an infected player has you in sight or you are covered in bile.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Tactics",
@@ -1452,14 +1450,13 @@
           ]
         },
         {
-          "line": "Tips: These show the outline: firing a weapon, swinging or shoving, using consumables, moving without crouching or holding the walk key, being pinned, ridden or covered in bile, and being under attack.",
+          "line": "Tips: To stay unseen, walk or crouch-walk, and do not fire, swing, shove or use items. You also light up when you are pinned, ridden, covered in bile or under attack.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
               "revision": "172372",
               "part_of_page": "Players / Infected / Controls of the Infected",
               "quoted": [
-                "The outline will appear when Survivors have recently performed these actions:",
                 "Shooting with any weapon.",
                 "Using their melee weapon.",
                 "Using their Melee shove.",
@@ -1472,7 +1469,7 @@
           ]
         },
         {
-          "line": "Tips: Voice gives you away too: using a microphone, talking, or a typed chatter-box message while the box is open. A survivor at low health keeps commenting on it, which shows their location as well.",
+          "line": "Tips: Keep your voice down: talking, a live microphone and typing a message in the chatter box all show you to the infected, and a survivor on low health keeps announcing it, which shows their position too.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1489,7 +1486,7 @@
           ]
         },
         {
-          "line": "Tips: These stay hidden: reloading (though a survivor may call it out), jumping (moving sideways in the air still shows you), moving while crouched or walking, opening or closing doors, picking up or throwing items (they may shout what they hold), and starting a Crescendo event. The infected team does not share what each member can see.",
+          "line": "Tips: Safe actions: reloading, jumping, using doors, and picking up or throwing items do not show you, although a survivor may call out what they are doing, and drifting sideways in mid-air does show you. Starting a Crescendo event does not either, but events that make you shoot, melee or talk still give you away. The infected team does not share what each member sees.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1499,10 +1496,10 @@
                 "Reloading; however, Survivors will sometimes yell out",
                 "Jumping.",
                 "Note that moving horizontally mid air without crouching or holding the walk key will still give away their location.",
-                "Moving while crouching or holding the walk key.",
                 "Opening or closing doors.",
                 "Picking up, releasing, or throwing items.",
                 "Starting a Crescendo event",
+                "Although some Crescendo events require player to shoot, melee, or talk, and will still give away their locations.",
                 "Staying in sight of a Special Infected; the Infected team does not share their vision of Survivors."
               ]
             }
@@ -1518,7 +1515,7 @@
       "main_revision": "172372",
       "lines": [
         {
-          "line": "Summary: When a person controls a special infected in versus, some attacks work differently from the campaign: the Boomer's bile can arc, the Hunter's pounce does damage, the Smoker hurts while dragging, and the Jockey's leap stuns.",
+          "line": "Summary: Played by people in versus, the Boomer and the Hunter get tricks their campaign versions lack, and any human infected attacks without the delay that bots have.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1526,14 +1523,13 @@
               "part_of_page": "Players / Infected",
               "quoted": [
                 "Some of the Special Infected also have different attacking mechanics from Campaign mode in Normal:",
-                "The Smoker now deals damage when he is dragging the Survivor.",
-                "The Jockey's leap can also stun the Survivors just like the Hunter's pounce."
+                "As human-controlled Special Infected, there is no delay when spotting a Survivor to attack them."
               ]
             }
           ]
         },
         {
-          "line": "Tips: A versus Boomer can aim upward so his bile lobs over a distance, even from a spot the survivors cannot see, and can re-aim while it is still coming out to catch anyone he missed.",
+          "line": "Tips: Boomer: tilt your aim upward and the bile arcs over, so you can soak survivors from far off or from where they cannot see you. Moving the aim while you spew can bring survivors you missed at first into the splash.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1547,22 +1543,20 @@
           ]
         },
         {
-          "line": "Tips: A versus Hunter's pounce deals damage that grows with the length of the jump, up to 25, and stumbles survivors standing nearby. Chaining wall jumps gets him higher, but then he cannot jump away at once when attacked.",
+          "line": "Tips: Hunter: wall-jumping several times lets you pounce from a greater height, but a Hunter who has done that loses the quick jump away when he comes under fire.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
               "revision": "172372",
               "part_of_page": "Players / Infected",
               "quoted": [
-                "the further they jump into the air, the more damage they do when they hit (up to a 25-point maximum).",
-                "The pounce will also stumble nearby Survivors.",
                 "Experienced players can also do multiple wall jumps to attack the Survivor from higher positions; however, they lose the ability to jump away instantly when being attacked."
               ]
             }
           ]
         },
         {
-          "line": "Tips: A human-controlled special infected attacks the moment it spots a survivor, with none of the delay a bot has, and can spawn in the starting safe room once the survivors have left it.",
+          "line": "Tips: A human-run special infected strikes as soon as it sees a survivor, while a bot-run one still pauses before attacking.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1570,819 +1564,7 @@
               "part_of_page": "Players / Infected",
               "quoted": [
                 "As human-controlled Special Infected, there is no delay when spotting a Survivor to attack them.",
-                "AI-controlled Special Infected will still have their attacks delayed.",
-                "can spawn in the starting safe room provided that the Survivors vacate it"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "section_id": 4520,
-      "name": "Short-handed versus games",
-      "kind": "versus",
-      "main_page": "https://left4dead.fandom.com/wiki/Versus",
-      "main_revision": "172372",
-      "lines": [
-        {
-          "line": "Summary: A versus game can run with as few as two players, one per team, because bots fill the empty infected and survivor slots. Both teams still need at least one human or the game ends.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Versus",
-              "revision": "172372",
-              "part_of_page": "Versus Gameplay",
-              "quoted": [
-                "so now it is possible to have very few players (two players minimum, one on each team), while bots on both teams fill in the missing player slots",
-                "Both teams need at least one human player in order for the game to start or continue properly"
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: A team short on humans is at a real disadvantage as survivors. If every human survivor is killed the round ends, because the computer-controlled survivors cannot get through a level alone.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Versus",
-              "revision": "172372",
-              "part_of_page": "Notes",
-              "quoted": [
-                "A team short on players can face a significant disadvantage during the game while playing as Survivors.",
-                "If all human-controlled Survivors are killed, the round will end, since the computer-controlled Survivors cannot continue through the level by themselves."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The bots playing Ellis and Zoey reach for shotguns in versus instead of the hunting or sniper rifles they take in the campaign, for balance.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Versus",
-              "revision": "172372",
-              "part_of_page": "Notes",
-              "quoted": [
-                "they instead take shotguns in Versus (and Survival) mode for balancing reasons.",
-                "usually take the Hunting Rifle and Sniper Rifle in campaign mode"
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: A bot-controlled Hunter shot from a distance cannot leap away as it does in the campaign, so it runs instead and is easy to kill. Its pounce still hurts, up to 25 damage when it starts far enough off.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Versus",
-              "revision": "172372",
-              "part_of_page": "Notes",
-              "quoted": [
-                "Since the jump ability is not available in Versus, he will simply run away, making him an easy kill.",
-                "Up to 25 points of damage can be dealt instantly if the pounce originated far enough away."
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "section_id": 4521,
-      "name": "Fooling the infected team at ambush spots",
-      "kind": "versus",
-      "main_page": "https://left4dead.fandom.com/wiki/Tactics",
-      "main_revision": "173476",
-      "lines": [
-        {
-          "line": "Summary: In versus the infected are people, so survivors can bluff them. Stopping short or backing away as you near a likely ambush spot can draw an infected player into spawning or attacking too early.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Tactics",
-              "revision": "173476",
-              "part_of_page": "Team tactics / The Survivors",
-              "quoted": [
-                "Keep in mind that the enemies are human players, and use specific strategies against them.",
-                "A common trick is the Survivor suddenly stops or back away while approaching supposed ambush spots, such as a corner, a one way drop, or a Witch."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Think the way the infected team would. The wiki's examples of bait spots are a corner, a one-way drop and a Witch. If the bluff works, the survivors can kill the early attacker more safely, or rush past while the infected player's special attack is still recharging.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Tactics",
-              "revision": "173476",
-              "part_of_page": "Team tactics / The Survivors",
-              "quoted": [
-                "In Versus mode, think as the infected team would think.",
-                "This can easily trick the enemy team to spawn or attack too early, allowing the team to dispose of them more safely, or rush through while their special attack is still in cooldown."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Walking or crouch-walking toward a place where a special infected probably hides keeps your outline hidden while you are not firing or shoving, which suits sneaking up on it. It does not help a survivor already in an infected player's sight or covered in bile.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Tactics",
-              "revision": "173476",
-              "part_of_page": "Team tactics / The Survivors",
-              "quoted": [
-                "This is very useful for sneaking up on a position where a Special Infected is likely to be hiding.",
-                "Note that this will not apply to Survivors in sight of Infected players or Survivors covered in Boomer bile."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Coordinating by microphone lets a team keep several spawn spots under watch until it has passed them, which forces the opponents to wait or take a weaker spot.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Tactics",
-              "revision": "173476",
-              "part_of_page": "Team tactics / The Survivors",
-              "quoted": [
-                "With good coordination via microphone, a survivor team can keep locations where enemies can spawn for good advantages in check until they get pass, forcing the opponents to either delay their attack or choose an inferior location."
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "section_id": 4522,
-      "name": "Survivor weapons for versus: the mix and the Grenade Launcher",
-      "kind": "versus",
-      "main_page": "https://left4dead.fandom.com/wiki/Tactics",
-      "main_revision": "173476",
-      "lines": [
-        {
-          "line": "Summary: The wiki advises a survivor team to carry a mix of close-range and long-range weapons rather than four of the same kind, and to treat the Grenade Launcher as a short-term pick in versus.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Tactics",
-              "revision": "173476",
-              "part_of_page": "Team tactics / The Survivors",
-              "quoted": [
-                "A team with all shotguns or all sniper rifles is far less balanced than one with a good mix of armaments.",
-                "Left 4 Dead 2's Grenade Launcher is not very useful on most maps when playing in Versus mode."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Ideally each player carries something that hits both near and far. One example mix is a sniper rifle with a melee weapon, an assault rifle with a melee weapon, an assault rifle with two pistols, and a shotgun with a magnum.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Tactics",
-              "revision": "173476",
-              "part_of_page": "Team tactics / The Survivors",
-              "quoted": [
-                "It is best for your team to have a mix of close- and far-quarters weapons, and ideally each team member will have something that is capable of hitting both near and far targets.",
-                "an effective mix might be one sniper rifle/melee, one assault rifle/melee, one assault rifle/2 pistol, and one shotgun/magnum (for example)."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Mix the throwables too. Pipe bombs suit horde attacks, a survivor covered in bile, or clearing wide open ground; bile bombs slow a Tank or pull common infected away from the team.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Tactics",
-              "revision": "173476",
-              "part_of_page": "Team tactics / The Survivors",
-              "quoted": [
-                "Try to have a good mix of pipebombs, bile bombs, and molotovs.",
-                "Use the pipe bomb during horde attacks, when a survivor has been vomited on, or to clear out large open areas so the team can move faster.",
-                "Use bile to slow down a tank, draw common infected away from players"
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The Grenade Launcher's aim is shaky, its reload slow, its ammo scarce and its friendly-fire risk high. In versus the wiki says to use it briefly during a panic event, then swap to something less likely to hurt teammates.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Tactics",
-              "revision": "173476",
-              "part_of_page": "Team tactics / The Survivors",
-              "quoted": [
-                "Its accuracy is dubious, the reloading is slow, the ammo is limited, and the potential for friendly fire damage is high.",
-                "best used temporarily during a panic event",
-                "swapped out for something that makes less collateral damage"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "section_id": 4523,
-      "name": "Scavenge rounds, timers and winning",
-      "kind": "versus",
-      "main_page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-      "main_revision": "173082",
-      "lines": [
-        {
-          "line": "Summary: Scavenge is a Left 4 Dead 2 team mode: survivors haul up to 22 gas cans to a generator while player-controlled special infected try to stop them. A game is 1, 3 or 5 rounds, and each round has two turns with the sides swapping.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "(opening)",
-              "quoted": [
-                "Scavenge Mode is a competitive gameplay mode released in Left 4 Dead 2. It is a round-based game in which Survivors attempt to find up to 22 gas cans to refuel a generator (or car), while fighting against player-controlled Special Infected much like in a Versus game.",
-                "Before a game starts, the host can choose the amount of rounds to play (1 round, 3 rounds, 5 rounds)."
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Gameplay",
-              "quoted": [
-                "Each round of a game consists of two turns."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Survivors start next to the generator with 30 seconds to set up and grab supplies. The infected spawn when that time runs out or a survivor leaves the area around the generator. Then survivors have 1 minute 30 seconds, plus 20 seconds for every can they bring to the generator.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Gameplay",
-              "quoted": [
-                "At the start of a round, the Survivors spawn next to the generator and will have 30 seconds to set up and grab their supplies, while the Infected find locations to spawn.",
-                "The timer will start and the Infected will spawn as soon as the set-up time runs out or if a Survivor leaves the designated area around the generator.",
-                "Once the game starts, the Survivors have 1 minute and 30 seconds to find gas cans, with an additional 20 seconds added for each can they bring to the generator."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: To win a round the second team must collect one more can than the first. Equal cans go to the faster team, and if neither team gets a can the round goes to the team that lasted longer. The game ends as soon as the trailing team cannot catch up, so a 3-round game ends at two round wins.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Gameplay",
-              "quoted": [
-                "Next turn, the previously Infected will become the Survivors and will have to get one more gas can than the other team to win the round and end it.",
-                "If both teams collect the same amount of gas cans, the team that did it faster wins the round.",
-                "In the case that both teams do not collect any gas cans, the round goes to the team who held out longer.",
-                "The game will end as soon as it is impossible for the losing team to win."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The losing team starts the next round as survivors, the opposite of versus, where the losing team is the infected first. Most round wins takes the game, so a team can win with fewer cans overall.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Gameplay",
-              "quoted": [
-                "Next round, the losing team will start as the Survivors (the opposite of Versus, in which the losing team is Infected first).",
-                "The team that wins the most rounds wins the game.",
-                "In other words, a team can win even if, overall, they collected fewer gas cans than their opponents as long as they win more rounds."
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "section_id": 4524,
-      "name": "Scavenge gas cans, pouring and overtime",
-      "kind": "versus",
-      "main_page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-      "main_revision": "173082",
-      "lines": [
-        {
-          "line": "Summary: Scavenge gas cans always spawn in the same places and glow white, turning orange once picked up and dropped. Pouring one into the generator takes about 2.5 seconds, and any damage from the infected or from fire restarts it; friendly fire does not.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Gas cans and pouring",
-              "quoted": [
-                "Gas cans have a white aura, so Survivors can see them anywhere on the map. If they are picked up and dropped they will have an orange aura. Gas cans always spawn in the same location on the map.",
-                "It takes about 2.5 seconds to pour fuel into the generator. However, any damage from Infected or from fire will instantly restart the pour timer (friendly fire will not), so a Survivor must not be under attack in order to complete the process."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Only the Spitter can destroy a can with an attack, and only one that has been picked up and dropped before. A can hit by acid flashes and then explodes, which gives survivors a moment to grab it. A destroyed can eventually respawns where it started.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Gas cans and pouring",
-              "quoted": [
-                "The only Infected that can destroy gas cans with its attack is the Spitter. However, the attack only works if the gas can has been previously picked up and dropped.",
-                "While flashing, Survivors will have time to pick up the gas cans before they explode.",
-                "If they get destroyed, they will eventually respawn back at the location they originated."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Overtime starts if the clock runs out while at least one survivor is holding a can. The timer flashes red and survivors have unlimited time to pour another can and extend the round, but once every can is dropped their turn is over. It can happen more than once in a round.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Gameplay",
-              "quoted": [
-                "During a game, overtime will occur if the time limit runs out, but at least one Survivor is holding a gas can.",
-                "Overtime is indicated by the timer flashing red.",
-                "During overtime, the Survivors have an indefinite amount of time to pour another gas can into the generator and extend the time, so long as at least one Survivor is holding a gas can at all times. If all the gas cans are dropped, the Survivors' round is over.",
-                "Overtime can occur multiple times during a single round."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Adrenaline shots speed up pouring and let a survivor keep pouring while being attacked. Bot-controlled Spitters cannot burn dropped cans in Scavenge.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Gas cans and pouring",
-              "quoted": [
-                "Adrenaline shots speed up the pouring speed and let Survivors pour in while being attacked."
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Notes",
-              "quoted": [
-                "Bot-controlled Spitters cannot burn dropped cans in Scavenge."
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "section_id": 4525,
-      "name": "Scavenge as the infected team",
-      "kind": "versus",
-      "main_page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-      "main_revision": "173082",
-      "lines": [
-        {
-          "line": "Summary: Infected in Scavenge are not only trying to put survivors down: stopping the pouring, and making survivors drop their cans, is what ends their turn.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Tactics / Infected",
-              "quoted": [
-                "In Scavenge Mode, it isn't just about incapacitating all of the Survivors. If the timer is low, preventing them from grabbing fuel with simple attacks can help end the Survivors' turn."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Go after survivors who carry or pour cans, since any infected attack resets the pour timer. Pinning a lone pourer (pounce, tongue, charge or ride) also makes them drop the can, which matters most in overtime. A plain claw or punch only delays the pour.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Tactics / Infected",
-              "quoted": [
-                "Try to focus your attacks on Survivors either carrying or pouring the gas cans. Any type of attack by an Infected will reset the pour timer for a Survivor.",
-                "If a lone Survivor is pouring a gas can, pounce, pull, charge, or ride them. This will not only delay the pouring, but make them drop the can.",
-                "This is particularly important in overtime",
-                "The basic Special Infected claw or punch attack will also delay pouring (though it does not make the player drop the gas can)."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Spitter acid delays a pour without making the survivor drop the can. Spit a few seconds before they reach the generator, because the spit takes time to land and spread before it does damage.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Tactics / Infected",
-              "quoted": [
-                "Spitter acid will also delay a Survivor from fueling the generator (though it does not make the player drop the gas can). Make sure to spit a few seconds before they reach the generator.",
-                "it takes a short amount of time for the spit to travel and when the spit hits the ground, it takes a little bit more time to spread, before it does any damage."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Do not spawn too eagerly once set-up ends, as the survivors may head somewhere you did not expect. Survivors who are alone and far from both the group and the generator are good targets, and enclosed can spots are good places to wait for a lone survivor.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Tactics / Infected",
-              "quoted": [
-                "After set-up time ends, don't be too eager to spawn. The Survivors may go to an area nowhere near where you were planning to spawn.",
-                "If there's an opportunity, go for any Survivors that are by themselves and very far away from both the rest of the Survivors and the generator, whether or not they have a gas can.",
-                "Many gas cans are enclosed and hard to reach or see from most spots. These are good areas to camp in case a lone Survivor comes by to grab a gas can."
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "section_id": 4526,
-      "name": "Scavenge as the survivor team",
-      "kind": "versus",
-      "main_page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-      "main_revision": "173082",
-      "lines": [
-        {
-          "line": "Summary: Scavenge survivors are told to stay near a teammate, to kill whatever is hitting them before they pour, and to take a Spitter down fast because she can destroy cans and delay the pour.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Tactics / Survivors",
-              "quoted": [
-                "Always have at least one other Survivor near you at all times.",
-                "Don't try to pour fuel into the generator when you are being hit.",
-                "If you discover a Spitter is on the map, make sure to kill her quickly. She can destroy Gas cans and delay pouring fuel into the generator."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Long-range weapons such as the Combat Rifle or Sniper Rifle suit the mode: there are few common infected, and distance helps against special infected that drag survivors away. If you start as survivors, go for the farthest cans first while health and supplies are good; with a weaker team or a strong infected side, take the closest first.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Tactics / Survivors",
-              "quoted": [
-                "Use long-range weapons, such as the Combat Rifle or Sniper Rifle. There are not that many Common Infected on the maps and using a long-range weapon is better suited for killing Special Infected, especially if they can move Survivors far away from the group.",
-                "If you start the round as Survivors, go for the farthest gas cans first, while your team has very good health and supply slots are filled. However, if your team is not good and/or the Infected team is very good, go for the closest gas cans first."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Juggling cans means tossing one forward, picking up the next and tossing that, so four or five move along at nearly running speed. Gathering several groups before heading back is much faster than one trip per group.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Tactics / Survivors",
-              "quoted": [
-                "Instead of running with a single can in hand, you can \"juggle\" gas cans.",
-                "Done right, and you can juggle 4 or 5 cans at a speed only slightly less than a normal run",
-                "It is significantly faster to collect multiple groups of cans at the same time instead of running back to the generator for each group of cans."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: A Spitter can destroy a can left unattended, even briefly, forcing you through the acid to save it. Adrenaline helps in a pinch, since it speeds the pour and lets you keep pouring while you are hit.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
-              "revision": "173082",
-              "part_of_page": "Tactics / Survivors",
-              "quoted": [
-                "if you leave any unattended even briefly, a Spitter may be able to spit on it, forcing you to go through the spit to save the can or let the can be destroyed.",
-                "use your Adrenaline in a pinch as you can pour gas faster and you will still pour your gas in while getting hit."
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "section_id": 4527,
-      "name": "The Passing versus ambush spots",
-      "kind": "callout",
-      "main_page": "https://left4dead.fandom.com/wiki/The_Hunter",
-      "main_revision": "173041",
-      "lines": [
-        {
-          "line": "Summary: Ambush spots for the infected on the first two chapters of The Passing, The Riverbank and The Underground. High buildings suit Hunters, and Smokers do best on whoever is last in line.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Passing",
-              "revision": "173167",
-              "part_of_page": "References",
-              "quoted": [
-                "The Riverbank / The Underground / The Port"
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
-              "revision": "173041",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Riverbank",
-              "quoted": [
-                "There are a few high buildings around here that you can use to pounce on a Survivor."
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
-              "revision": "173272",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Underground",
-              "quoted": [
-                "Snag the last Survivor as they attempt to jump."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The Riverbank: sneaking up behind the Bride Witch and staying there makes survivors shoot on instinct and startle her, and a survivor who comes out of one of the tents with footlockers is an easy pounce. A Smoker should pull away survivors who try to kill her, since she stands in the open.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
-              "revision": "173041",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Riverbank",
-              "quoted": [
-                "The Bride Witch is one of your greatest assets here. Sneak up behind her and stay there — the Survivors will shoot you on instinct, which will startle the Witch.",
-                "The Survivors may hide in the tents with the footlockers. Pounce on the one that comes out."
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
-              "revision": "173272",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Riverbank",
-              "quoted": [
-                "The Bride Witch is out in an open area, so attempting to pull Survivors to her is out of the question. Instead, pull Survivors away that attempt to kill her"
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The Underground: many high buildings help a Hunter, and a lone survivor is the target. A Smoker can pull the last survivor away from the window as the group crosses the pool hall toward the construction site. On the plank three storeys up, pull from the alley below (the common choice, so bring a distraction) or from the roof above.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
-              "revision": "173041",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Underground",
-              "quoted": [
-                "There are a lot of high buildings that you can use to your advantage.",
-                "Pounce on the loner."
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
-              "revision": "173272",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Underground",
-              "quoted": [
-                "When Survivors cross the pool hall down to the construction site, pull the last Survivor away from the window.",
-                "Survivors have to cross on a plank of wood three stories above the ground.",
-                "The alleyway is the most common, so have some kind of distraction beforehand so the Survivors won't instantly target you."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The Underground's Crescendo Event: a Hunter can pounce the furthest survivor, who is hidden by the water. A Smoker can snag the last survivor as they drop into the sewer water, and with a Hunter ready to pounce the victim after the drag it is very lethal.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
-              "revision": "173041",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Underground",
-              "quoted": [
-                "At the Crescendo Event, pounce on the furthest Survivor — you'll be hidden by the water."
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
-              "revision": "173272",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Underground",
-              "quoted": [
-                "When Survivors activate the Gauntlet Crescendo, they have to drop into the sewer water again, a point of no return. Snag the last Survivor as they attempt to jump. This strategy is very lethal if you have a Hunter to pounce the victim after you snag and drag them back"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "section_id": 4528,
-      "name": "Hard Rain versus ambush spots",
-      "kind": "callout",
-      "main_page": "https://left4dead.fandom.com/wiki/The_Hunter",
-      "main_revision": "173041",
-      "lines": [
-        {
-          "line": "Summary: Ambush spots for the infected on the first four chapters of Hard Rain: The Milltown, The Sugar Mill, Mill Escape and Return to Town. The Sugar Mill's Witches and high ground are the main assets.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/Hard_Rain",
-              "revision": "173634",
-              "part_of_page": "References",
-              "quoted": [
-                "The Milltown / The Sugar Mill / Mill Escape / Return To Town / Town Escape"
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
-              "revision": "173041",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / The Sugar Mill",
-              "quoted": [
-                "The broken-down buildings offer some high vantage points."
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Jockey",
-              "revision": "172739",
-              "part_of_page": "Level Specific Strategy / Hard Rain / The Sugar Mill",
-              "quoted": [
-                "Try to steer a Survivor into a Witch."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The Milltown: houses all over the map give high pounces, especially when survivors must walk between two-storey ones. A Smoker can snare through the large hole in the Burger Tank's roof without being exposed, unless survivors climb the ladder outside, and the chapter always has an alarmed car to drag someone into.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
-              "revision": "173041",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / The Milltown",
-              "quoted": [
-                "There are houses all over this map — use this for some high-damage pounces, especially when the Survivors are forced to walk between two-story ones."
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
-              "revision": "173272",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / The Milltown",
-              "quoted": [
-                "When entering the Burger Tank, there is a large hole in the roof that Smokers can snare Survivors from without being vulnerable (unless the Survivors climb the ladder outside to kill you).",
-                "There is always an alarmed car in this chapter."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The Sugar Mill: catwalks, vats, broken buildings and the three-storey mill are launch points for a Hunter. In the cane field, wait for a Boomer's bile, which stops survivors seeing each other's outlines and so hides you; without a Boomer, pounce from the top of the mill. Dragging or steering a survivor into a Witch almost always incapacitates them.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
-              "revision": "173041",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / The Sugar Mill",
-              "quoted": [
-                "There are also catwalks and vats lining the Survivors' path which serve as excellent launch points, as well as the 3-story mill itself.",
-                "Instead, wait for a Boomer shower, because this disables their ability to see the auras around their teammates, which makes you effectively invisible within the sugar cane. If there is no Boomer, then pounce from the top of the sugar mill"
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
-              "revision": "173272",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / The Sugar Mill",
-              "quoted": [
-                "Anytime you drag a Survivor into a Witch is a good drag, as it will almost certainly incapacitate them."
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Jockey",
-              "revision": "172739",
-              "part_of_page": "Level Specific Strategy / Hard Rain / The Sugar Mill",
-              "quoted": [
-                "Try to steer a Survivor into a Witch. This will almost always result in a Survivor being incapacitated."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: Mill Escape and Return to Town reuse earlier spots: the Hunter's Sugar Mill tactics work in Mill Escape and its Milltown tactics work in Return to Town. In Return to Town, any rooftop or alleyway will do for a Smoker.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
-              "revision": "173041",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / Mill Escape",
-              "quoted": [
-                "The tactics in The Sugar Mill apply here as well"
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
-              "revision": "173041",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / Return to Town",
-              "quoted": [
-                "The tactics in The Milltown apply here as well"
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
-              "revision": "173272",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / Return to Town",
-              "quoted": [
-                "Any rooftop or alleyway will do"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "section_id": 4529,
-      "name": "The Parish versus ambush spots",
-      "kind": "callout",
-      "main_page": "https://left4dead.fandom.com/wiki/The_Hunter",
-      "main_revision": "173041",
-      "lines": [
-        {
-          "line": "Summary: Ambush spots for the infected on the first four chapters of The Parish: The Waterfront, The Park, The Cemetery and The Quarter. Alarmed cars, bushes and the Cemetery's drops that cannot be climbed back up come up most.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Parish",
-              "revision": "172733",
-              "part_of_page": "References",
-              "quoted": [
-                "The Waterfront / The Park / The Cemetery / The Quarter / The Bridge"
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
-              "revision": "173041",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Cemetery",
-              "quoted": [
-                "The alarmed car area is the Survivors' worst nightmare."
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
-              "revision": "173272",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Cemetery",
-              "quoted": [
-                "There are many \"points-of-no-return\" in this map"
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The Waterfront: tall buildings are Hunter perches, and a Hunter can wait behind the alarmed car at the end of the level and pounce anyone who comes near. A Smoker can climb onto the kitchen's roof and grab survivors through the hole when they are inside.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
-              "revision": "173041",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Waterfront",
-              "quoted": [
-                "There are a lot of high buildings here that you can jump off of.",
-                "Hide behind the alarmed car at the end of the level and pounce anyone who comes near."
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
-              "revision": "173272",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Waterfront",
-              "quoted": [
-                "There is a hole in the roof of the kitchen. Get on the roof and grab Survivors when they are in there."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The Park: a Hunter can hide in the bushes until a survivor strays from the group, ideally with a Boomer vomiting on the pounced survivor to shield them with common infected. Pouncing the last survivor running to shut off the alarm also slows the team's rescue.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
-              "revision": "173041",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Park",
-              "quoted": [
-                "Hide in the bushes. Wait until a Survivor is separated from the rest of the group while you stand in the bushes, hidden, and then pounce on them.",
-                "This tactic works extremely well if the Boomer and the Hunter work in unison, with the Boomer vomiting on the pounced Survivor, effectively creating a shield of Common Infected.",
-                "Pounce on the last Survivor running to shut off the alarm — it'll slow the team down trying to save your victim."
-              ]
-            }
-          ]
-        },
-        {
-          "line": "Tips: The Cemetery: a Hunter can pounce on a survivor in the dark sewers, where water covers him, or from behind a car in the alarmed car area; in the Impound Lot a Smoker can drag a survivor into a car and hope the others shoot the car, not him. The Quarter: during its Crescendo Event, drag a survivor to the ground for heavy fall damage.",
-          "drawn_from": [
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
-              "revision": "173041",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Cemetery",
-              "quoted": [
-                "Pounce on a Survivor in the sewers — it's dark and vast under there, and you'll be covered by the water.",
-                "Hiding behind one of the cars and pouncing a Survivor as they come near is a good tactic here."
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
-              "revision": "173272",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Cemetery",
-              "quoted": [
-                "The Impound Lot. This is the major playground for many Specials, especially the Smoker. Drag an unlucky Survivor into a car and hope that the others shoot the car and not you."
-              ]
-            },
-            {
-              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
-              "revision": "173272",
-              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Quarter",
-              "quoted": [
-                "The Crescendo Event will create absolute chaos. Try dragging a Survivor down to the ground, causing them to take a lot of fall damage."
+                "AI-controlled Special Infected will still have their attacks delayed."
               ]
             }
           ]

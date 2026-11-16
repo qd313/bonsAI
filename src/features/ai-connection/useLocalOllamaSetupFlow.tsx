@@ -8,7 +8,8 @@
  * models; and while Internet downloads are off, the failed line plus the "Turn
  * on internet downloads?" box), the Cancel button's RPC, the status-line wording while a setup
  * runs, the poll that reads setup progress every 1.5 seconds, and the effect
- * that runs a connection test automatically once a setup finishes cleanly.
+ * that runs a connection test automatically once a setup finishes cleanly (and, quietly, when a run ends
+ * cancelled or failed, since the program may already have been swapped).
  *
  * Used for: OllamaWhereAiRunsSection, only while "Run AI on this Deck" is
  * on — this is the entire "Local Ollama setup" block of that panel.
@@ -197,14 +198,28 @@ export function useLocalOllamaSetupFlow({
     return () => window.clearInterval(id);
   }, [ollamaLocalOnDeck]);
 
+  /*
+   * A run this tab saw going. When it ends any way but a clean finish (cancelled, or failed part way) the
+   * program file may already be swapped and the server restarted (Deck 2026-11-15: Cancel came after
+   * the swap, 0.40.9 became 0.40.16), so the version line is read again, quietly, once.
+   */
+  const sawRunRef = useRef(false);
+
   useEffect(() => {
     if (!ollamaLocalOnDeck || !localSetupStatus) return;
     if (localSetupStatus.phase === "running") {
       setupAutoTestRanRef.current = false;
+      sawRunRef.current = true;
+      return;
+    }
+    if (sawRunRef.current && localSetupStatus.phase !== "done" && localSetupStatus.phase !== "idle") {
+      sawRunRef.current = false;
+      void onTestConnectionRef.current({ quiet: true });
       return;
     }
     if (localSetupStatus.phase === "done" && localSetupStatus.done !== false && !setupAutoTestRanRef.current && !(localSetupStatus.error ?? "").trim()) {
       setupAutoTestRanRef.current = true;
+      sawRunRef.current = false;
       // A custom pull joins the saved try order in the back end, where the download ends
       // (ollama_local_setup_rpc); this screen only saw the finish while it stayed open.
       toaster.toast({

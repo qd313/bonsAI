@@ -96,6 +96,7 @@ class Result:
     text_block: str = ""
     sources: list = field(default_factory=list)
     notes: str = "no_hit (strategy)"
+    mod_block_only: bool = False
 
 
 class Library(unittest.TestCase):
@@ -364,6 +365,7 @@ class AddingTheBlockTests(Library):
         self.assertTrue(out.attached)
         self.assertEqual(out.sources, [])
         self.assertEqual(out.notes, "no_hit (strategy)")
+        self.assertTrue(out.mod_block_only)
         self.assertTrue(out.text_block.startswith("--- LOOT load-order rule"))
         self.assertIs(result.attached, False, "the argument itself is never changed")
 
@@ -377,6 +379,7 @@ class AddingTheBlockTests(Library):
             out = block.with_mod_rule_block(result, self.settings, question="better vampires mod", text_resolved_title=SKYRIM_TITLE)
         self.assertTrue(out.text_block.startswith(text + "\n\n--- LOOT load-order rule"))
         self.assertEqual(out.sources, result.sources)
+        self.assertFalse(out.mod_block_only)
         self.assertEqual(_parse_kb_attached_notes(out.text_block, kb_domain="strategy", sources=[]), before)
         self.assertEqual(len(before), 1)
         self.assertNotIn("LOOT", before[0]["card"])

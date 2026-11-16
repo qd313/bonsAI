@@ -316,7 +316,8 @@ def with_mod_rule_block(
 
     Switched off, or no mod found: ``result`` itself. Notes attached: the block follows the notes'
     own end marker, so nothing that reads the notes back sees it. Nothing attached: the block alone
-    becomes the text, with no sources and the same route label, the shape a genre card already has.
+    becomes the text, with no sources and the same route label, and ``mod_block_only`` is set so the
+    answer step still treats the turn as one with no note (its honesty line is unchanged).
     """
     if not MOD_RULE_BLOCK_ON:
         return result
@@ -327,4 +328,4 @@ def with_mod_rule_block(
         return result
     logger.info("mod load-order block attached for %d mod(s): %s", len(names), "; ".join(names))
     text = f"{result.text_block}\n\n{block}" if result.attached and result.text_block else block
-    return dataclasses.replace(result, attached=True, text_block=text)
+    return dataclasses.replace(result, attached=True, text_block=text, mod_block_only=not result.attached)

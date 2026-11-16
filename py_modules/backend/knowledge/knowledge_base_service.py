@@ -481,6 +481,10 @@ class KnowledgeRetrievalResult:
     # separate number lines that overlap, so the kind travels with each id. Read by
     # kb_attached_notes.py to tell the screen which note a thumbs-down is about.
     attached_ids: list[dict[str, Any]] = field(default_factory=list)
+    # Plan 104 lane L2: True when `attached` is True only because a mod's load-order block (not a note
+    # or a tip) was added. The block is not a note, so what the honesty lines and the turn flags read
+    # about "did a note attach" is taken from `attached and not mod_block_only` (kb_turn_transparency.py).
+    mod_block_only: bool = False
 
 
 def _attached_ids_for(cards: list[KnowledgeCard], sources: list[dict[str, str]]) -> list[dict[str, Any]]:

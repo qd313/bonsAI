@@ -42,8 +42,12 @@ async def record_kb_turn_facts(
     """
     if kb_result is None:
         return kb_transparency, False
-    kb_survived = kb_result.attached and stacked.knowledge_attached
-    starved = kb_result.attached and not stacked.knowledge_attached
+    # A turn whose only attachment is a mod's load-order block (plan 104, lane L2) attached no note: the
+    # block still goes to the AI, but the facts below, which the honesty lines and turn flags read, stay
+    # what they were with nothing attached.
+    notes_attached = kb_result.attached and not getattr(kb_result, "mod_block_only", False)
+    kb_survived = notes_attached and stacked.knowledge_attached
+    starved = notes_attached and not stacked.knowledge_attached
     kb_transparency = build_knowledge_base_transparency(
         attached=kb_survived,
         trust_tier=kb_result.trust_tier if kb_survived else "",

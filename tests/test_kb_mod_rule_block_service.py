@@ -16,6 +16,7 @@ Does not: Test the wording of the block (test_kb_mod_rule_block.py) or the answe
 
 from __future__ import annotations
 
+import asyncio
 import sqlite3
 import tempfile
 import unittest
@@ -25,13 +26,19 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
+from backend.ask.kb_turn_transparency import record_kb_turn_facts  # noqa: E402
 from backend.knowledge import kb_mod_rule_block as block  # noqa: E402
+from backend.knowledge.kb_not_in_notes_notice import should_show_not_in_notes_notice  # noqa: E402
+from backend.knowledge.kb_notes_turn_flags import prompt_turn_flags  # noqa: E402
 from backend.knowledge.knowledge_base_service import (  # noqa: E402
     close_connection,
     resolve_corpus_db_path,
     resolve_title_from_question,
+    kb_coverage_to_transparency,
     retrieve_knowledge_context,
     should_retrieve_knowledge,
+    stack_context_blocks,
+    summarize_kb_coverage,
 )
 from build_rag_db_loader import load_build_rag_db  # noqa: E402
 from kb_keyword_corpus_support import build_keyword_corpus  # noqa: E402
@@ -137,6 +144,41 @@ class ModBlockAtTheServiceTests(unittest.TestCase):
                 with self.subTest(question=question):
                     result = self.retrieve(question)
                     self.assertNotIn(BLOCK_START, result.text_block)
+
+    def test_a_turn_where_only_the_block_attached_keeps_the_honesty_line_it_had(self):
+        title = resolve_title_from_question(self.settings, MOD_QUESTION)
+
+        def judged(result):
+            stacked = stack_context_blocks(proton_text="", knowledge_text=result.text_block if result.attached else "")
+            transparency, survived = asyncio.run(
+                record_kb_turn_facts(object(), result, stacked, kb_transparency={}, kb_domain="strategy", app_name="")
+            )
+            coverage = kb_coverage_to_transparency(
+                summarize_kb_coverage(self.settings, app_id="", app_name="", text_resolved_title=title)
+            )
+            flags = prompt_turn_flags("strategy", transparency, coverage, title, MOD_QUESTION, [])
+            shows = should_show_not_in_notes_notice(
+                ask_mode="strategy", kb_attached=bool(transparency.get("kb_attached")),
+                kb_coverage_status=coverage["kb_coverage_status"], kb_notes=str(transparency.get("kb_notes") or ""),
+            )
+            kept = {k: v for k, v in transparency.items() if k != "kb_timing_ms"}
+            return kept, survived, flags, shows
+
+        off = self.retrieve(MOD_QUESTION)
+        with self.on():
+            on = self.retrieve(MOD_QUESTION)
+        self.assertIn(BLOCK_START, on.text_block, "the block still goes to the AI")
+        self.assertTrue(on.mod_block_only)
+        facts_off, facts_on = judged(off), judged(on)
+        self.assertEqual(facts_on, facts_off)
+        self.assertTrue(facts_on[3], "the line shows: no note attached and the game is covered")
+        self.assertTrue(facts_on[2], "the turn is flagged as one the notes do not cover")
+        self.assertFalse(facts_on[1])
+
+    def test_a_turn_with_notes_is_not_marked_block_only(self):
+        with self.on():
+            result = self.retrieve(NOTES_AND_MOD_QUESTION)
+        self.assertFalse(result.mod_block_only)
 
 
 if __name__ == "__main__":

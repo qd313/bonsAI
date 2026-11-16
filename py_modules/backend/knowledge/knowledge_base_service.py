@@ -588,8 +588,8 @@ def should_retrieve_knowledge(
     # Safe to be permissive here for the same reason D16 was: retrieval is scoped to the
     # resolved game and still has to clear BM25_RELEVANCE_FLOOR, so an Ask that is not about
     # the game attaches nothing. An unresolved game attaches nothing either -- see the
-    # implicit-route check in retrieve_knowledge_context, which suppresses the generic genre
-    # fallback so this does not staple a boilerplate card to every Ask.
+    # implicit-route check in retrieve_knowledge_context, which suppresses the general genre
+    # card so this does not staple a boilerplate card to every Ask.
     if aid or aname:
         return True, "strategy"
     # D19, last resort. Deliberately below the compat router: "how do I fix proton for portal 2"
@@ -1107,7 +1107,7 @@ def _retrieve_notes_and_tips(
         hybrid_enabled = settings.get("rag_hybrid_retrieval_enabled") is not False
         # D17: strategy cards now attach in any Ask mode, so most strategy retrieval arrives
         # without the user having declared the Ask to be about the game. That weaker evidence
-        # gets a higher relevance bar and no genre-card consolation prize -- see
+        # gets a higher relevance bar and no general genre card -- see
         # IMPLICIT_ROUTE_RELEVANCE_FLOOR and the fallback branch below.
         implicit_route = (ask_mode or "").strip().lower() not in _DECLARED_GAME_ASK_MODES
         # D62 #2: Speed promises the cheap keyword lookup only. Before this, nomic_ready never
@@ -1247,7 +1247,7 @@ def _retrieve_notes_and_tips(
             # keyword match in the whole corpus, which for an uncovered game means another
             # game's cards -- "how do I beat the tank" while playing something unrelated
             # answered with Left 4 Dead 2's Tank card. Wrong-game advice is worse than none,
-            # and the genre fallback below already covers the unresolved case.
+            # and the general-card step below attaches nothing for a game it cannot place.
             cards = (
                 _search_sections(
                     conn,
@@ -1420,10 +1420,11 @@ def _retrieve_notes_and_tips(
             )
 
         # D17 routes every Ask made while a covered game runs, not just Strategy-mode ones.
-        # The genre fallback is a generic card with no relation to the question, which is a
-        # reasonable consolation for "I explicitly asked for strategy and we had nothing" and
-        # pure noise stapled to an ordinary Ask that merely happened while a game was open.
-        # So the fallback stays for the explicit route only.
+        # The general genre card has no relation to the question, so it is pure noise on an
+        # ordinary Ask that merely happened while a game was open. It is tried only on the
+        # explicit route, and even there only for a game the library knows with a genre on
+        # file that a card is tagged for (_genre_fallback, plan 104 lane M3). A game with no
+        # notes and no matching genre gets no card at all; today no game matches.
         implicit_strategy_route = domain != "compat" and implicit_route
 
         fallback_text: Optional[str] = None

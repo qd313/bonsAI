@@ -1265,7 +1265,8 @@ class EvalKbAnswersUnknownFixtureTests(unittest.TestCase):
         titles = {str(g.get("canonical_title", "")).lower() for g in self.games}
         uncovered = [c for c in self.cases if c.app_id not in covered_ids]
         self.assertGreaterEqual(len(uncovered), 2)
-        # Strategy attaches a genre card by design, so an uncovered game is never the control there.
+        # Speed and Expert are the control: an uncovered game gets no general card in any mode now,
+        # but these cases were written for the two modes that never had one.
         self.assertEqual({c.ask_mode for c in uncovered}, {"speed", "expert"})
         for c in uncovered:
             self.assertNotIn(c.app_name.lower(), titles, c.id)

@@ -962,7 +962,7 @@
    "must_not_say": [],
    "expect_fence": null,
    "expect_branches": true,
-   "note": "Uncovered game. Strategy mode deliberately attaches a genre fallback card (Soulslike basics, trust fallback_no_source) when the title is unknown, so attached=True is by design here; expect_card null records that no real card exists. Baseline 2026-09-02: the model fenced the whole tactic on all three samples. Baseline for the D48 no-notes line."
+   "note": "Uncovered game. When this was written, Strategy mode attached a general genre card (Soulslike basics, trust fallback_no_source) to an unknown title. Since 2026-11-16 (plan 104, lane M3) a general card attaches only to a game with a known matching genre, which today is none, so this game now gets no card; expect_card null records that no real card exists. Baseline 2026-09-02: the model fenced the whole tactic on all three samples. Baseline for the D48 no-notes line."
   },
   {
    "id": "A-VAGUE-01",
@@ -1842,7 +1842,7 @@
    "unknown_names": [
     "Skull Cavern"
    ],
-   "note": "A game the library does not cover (no Stardew Valley notes, no alias for it), in Speed mode. Strategy mode is left out of the unknown-game pair on purpose: it attaches a genre card by design."
+   "note": "A game the library does not cover (no Stardew Valley notes, no alias for it), in Speed mode. Strategy mode is left out of the unknown-game pair; it used to attach a general genre card, and since 2026-11-16 (plan 104, lane M3) it attaches none for a game with no matching genre."
   },
   {
    "id": "A-UNKNOWN-07",
@@ -1857,7 +1857,7 @@
    "unknown_names": [
     "Eye of Cthulhu"
    ],
-   "note": "A game the library does not cover (no Terraria notes, no alias for it), in Expert mode. Strategy mode is left out on purpose: it attaches a genre card by design."
+   "note": "A game the library does not cover (no Terraria notes, no alias for it), in Expert mode. Strategy mode is left out; it used to attach a general genre card, and since 2026-11-16 (plan 104, lane M3) it attaches none for a game with no matching genre."
   },
   {
    "id": "A-UNKNOWN-08",

@@ -59,11 +59,15 @@ from typing import Any, Optional
 
 from backend.knowledge.knowledge_base_cards import _get_connection, close_connection
 from backend.knowledge.knowledge_base_schema import resolve_corpus_db_path
-from backend.knowledge.rag_corpus_load_order import rag_corpus_load_order_entry, rag_corpus_load_order_game_key
 
-import decky
+try:  # the Decky host provides its own log; a PC script has no such module and falls back to the standard one
+    import decky
 
-logger = decky.logger
+    logger = decky.logger
+except ImportError:  # pragma: no cover - only outside the Decky host
+    import logging
+
+    logger = logging.getLogger(__name__)
 
 # The switch (plan 104, lane L2, on trial). Off: with_mod_rule_block() returns its argument untouched.
 MOD_RULE_BLOCK_ON = False
@@ -281,13 +285,26 @@ def _sentence(entry: dict[str, Any]) -> str:
     return f"{source} says: {_quoted(entry['name'])} " + "; ".join(parts) + "."
 
 
+def _reader() -> Any:
+    """The load-order reader module, loaded the first time a question needs it.
+
+    Not imported at the top: the reader imports the Decky host module, which a PC script does not have,
+    and this file is imported by the notes search that those scripts load. With the switch off, nothing
+    here ever runs, so the reader is never loaded.
+    """
+    from backend.knowledge import rag_corpus_load_order
+
+    return rag_corpus_load_order
+
+
 def _game_key_for_turn(app_id: Any, app_name: Any, text_resolved_title: Any) -> Optional[str]:
     """Fallout 4 or Skyrim SE: the running game, else (only when none runs) the game the question names."""
+    game_key_of = _reader().rag_corpus_load_order_game_key
     aid = str(app_id or "").strip()
     aname = str(app_name or "").strip()
     if aid or aname:
-        return rag_corpus_load_order_game_key(aid) or rag_corpus_load_order_game_key(aname)
-    return rag_corpus_load_order_game_key(text_resolved_title)
+        return game_key_of(aid) or game_key_of(aname)
+    return game_key_of(text_resolved_title)
 
 
 def mod_rule_block_for(
@@ -305,7 +322,7 @@ def mod_rule_block_for(
         sentences: list[str] = []
         names: list[str] = []
         for name in _names_the_question_holds(_index_for(db_path, game_key), str(question or "")):
-            entry = rag_corpus_load_order_entry(settings, game_key, name)
+            entry = _reader().rag_corpus_load_order_entry(settings, game_key, name)
             if entry is None or not any(_unconditional(entry.get(k)) for k in ("requires", "after", "incompatible")):
                 continue
             sentences.append(_sentence(entry))

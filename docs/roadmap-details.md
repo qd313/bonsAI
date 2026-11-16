@@ -42,7 +42,6 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [The walk check calls a stop hidden when a corner icon merely overlaps its box](#the-walk-check-calls-a-stop-hidden-when-a-corner-icon-merely-overlaps-its-box)
 - [With Voice replies on "When I asked by voice", a spoken question's answer may not read itself aloud](#with-voice-replies-on-when-i-asked-by-voice-a-spoken-questions-answer-may-not-read-itself-aloud)
 - [Roadmap clean-up task: trim this file (done 2026-09-15)](#roadmap-clean-up-task-trim-this-file-done-2026-09-15)
-- [Steam's screen froze after an answer with a game running and the Deck's own AI](#steams-screen-froze-after-an-answer-with-a-game-running-and-the-decks-own-ai)
 - [Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted](#reloading-the-plugin-while-a-heavy-game-is-running-can-leave-steams-interface-gone-until-the-deck-is-restarted)
 - [While reading an answer, the Show details line takes the suggestion chip's place above the question box](#while-reading-an-answer-the-show-details-line-takes-the-suggestion-chips-place-above-the-question-box)
 - [The mic stops after about 3 or 4 seconds of speech](#the-mic-stops-after-about-3-or-4-seconds-of-speech)
@@ -51,7 +50,6 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Plan 96 notes moved from the roadmap (2026-10-18)](#plan-96-notes-moved-from-the-roadmap-2026-10-18)
 - [Plan 97 second sweep notes moved from the roadmap (2026-10-22)](#plan-97-second-sweep-notes-moved-from-the-roadmap-2026-10-22)
 - [Plan 97 third sweep notes moved from the roadmap (2026-10-22)](#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22)
-- [Plan 97 fourth sweep notes moved from the roadmap (2026-10-22)](#plan-97-fourth-sweep-notes-moved-from-the-roadmap-2026-10-22)
 - [Plan 103 sweep K2 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k2-notes-moved-from-the-roadmap-2026-11-10)
 - [Plan 103 sweep K10 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k10-notes-moved-from-the-roadmap-2026-11-10)
 - [Plan 103 sweep K11 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k11-notes-moved-from-the-roadmap-2026-11-10)
@@ -607,26 +605,6 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep
 
 **Clean-up task — trim this file. Done 2026-09-15.** The write-up (what it cost to read, the sizes before and after, and what was left on purpose) is in [archive/roadmap-trimmed-2026-10-roadmap-details.md](archive/roadmap-trimmed-2026-10-roadmap-details.md).
 
-## Steam's screen froze after an answer with a game running and the Deck's own AI
-
-Older dated notes moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 7), to keep the entry to five lines. Nothing was removed.
-
-Moved here word for word on 2026-10-12 (plan 89 docs sweep, pass 4), to keep the entry to five lines:
-
-**2026-10-11 (plan 89, `1f666dba`):** the lever is built (the maintainer's call 8). With a game running and the AI on this Deck, every request now asks Ollama to keep the model about a minute (`keep_alive` 1m) instead of the Unload delay; the log says which value was used. Tests `tests/test_ollama_keep_alive_rule.py`. **Deck 2026-10-11 (plan 89 block 5, build `9b4d0503`): the lever is in place and passed** (row P89-KEEPALIVE-GAME): with no game the model stayed loaded past 150 s (the Unload delay on this Deck is 15 minutes; the log says `keep_alive 15m`); with Deep Rock Galactic: Survivor running the model left memory about 65 s after the answer (log `keep_alive 1m: game running, AI on this Deck (setting 15m)`), with 2,402 to 2,478 MB available while it was loaded (`workshop:test-evidence/plan89-P89-KEEPALIVE-GAME-half1.json`, `-half2.json`). Owed: the reproduction try of the freeze. The freeze itself is not marked fixed. Older notes, including the two later runs that did not reproduce it (plan 81, Deck block 6, evidence `workshop:test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`), are in [roadmap-details.md](roadmap-details.md#steams-screen-froze-after-an-answer-with-a-game-running-and-the-decks-own-ai); the hunt itself is in the [audit note](../../bonsAI-workshop/audit/plan81-freeze-after-answer.md).
-
-  **2026-10-03, hunt written up: [audit note](../../bonsAI-workshop/audit/plan81-freeze-after-answer.md).** The Deck's own AI log shows the model was already loaded when the question was asked and sat idle after the answer, so a cold load does not explain it (a cold load costs about 5.8 GB). The note's best guess, about 60 percent sure, is that the memory went to Steam's own page processes after the answer; which program grew is not known. The same steps after a restart, with 9 GB free, did not freeze (`workshop:test-evidence/plan81-DRG-01c-try2.json`). The freeze is measured again at the very end of the session.
-
-  **2026-10-03, memory measured again (plan 81, Deck block 3b, build `9e68bce1`):** with the Deck's AI unloaded before the game started, 8.2 to 8.7 GB were free with the game up; with the AI loaded and the game running, 2.4 to 3.2 GB (lowest 2372 MB in the 5-second log, never under 1500 MB); no freeze in that block. The log has a gap of about two minutes around the first answer. Evidence `workshop:test-evidence/plan81-P81-B3B-GAME-MEMORY.json`.
-
-  **2026-10-03 (plan 81, Deck block 4b, build `7e963807`), memory with the game:** with the Deck's AI unloaded before the game started (and the small search model too, to get over the 8,000 MB line), 8.3 GB were free with the game up. One question asked then took the lowest free memory to 1,623 MB (about 1.8 GB while the AI stayed loaded), above the 1,500 MB stop line; block 3b's lowest was 2,372 MB. One more question in the same state would not have been safe, so only one was asked. Evidence `workshop:test-evidence/plan81-P81-B4B-GAME-MEMORY.json`.
-
-  **2026-10-03 (plan 81, Deck block 6, build `7e963807`): the two runs.** The AI was already loaded and warm, so the runbook's first short question was skipped. Run A (no page watcher): 2,529 MB free before the question, lowest 2,312 MB, 2,419 MB at 12 minutes; the answer finished about two minutes in; every read of Steam's page answered in 55 to 270 ms and the game was exited cleanly afterwards. Run B (a watcher reading the panel every 200 ms): 2,319 MB free before the question, lowest 2,089 MB; Steam's page process rose to 972 MB around the answer and fell back to 667 MB, and swap use rose from 140 to 214 MB and stayed there; every read answered in 55 to 280 ms. The game stayed flat (about 1.2 GB) and the AI's server flat (about 0.3 to 0.4 GB) in both. The Quick Access panel closed itself about four minutes after the answer in both runs, after which the page was throttled, so the watcher ran at full speed for only about 5.5 of the 12 minutes. A watcher kept at full speed for the whole time, and the original starting point of about 2.0 GB free, were not tried. Evidence `workshop:test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`; the hunt is in the [audit note](../../bonsAI-workshop/audit/plan81-freeze-after-answer.md).
-
-Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
-
-**2026-10-03 (plan 81, Deck block 6, build `7e963807`): not reproduced in two runs.** The same low-memory state as the freeze (about 2.3 to 2.5 GB free, the AI loaded, Deep Rock running), once with nothing else on the page and once with a page watcher reading every 200 ms: Steam answered every read for 12 minutes, no freeze. Only Steam's own page process grew (556 to 705 MB, peak 972 MB); the game and the AI stayed flat. The original freeze started from about 2.0 GB free, which these runs did not reach, and the watcher ran at full speed for only about 5.5 of the 12 minutes. Evidence `workshop:test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`.
-
 ## Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted
 
 Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
@@ -764,38 +742,6 @@ Older entries and dated notes moved here, word for word, when the entries were r
 **The streamed answer's own redraws were costing most of the panel's frame rate (the 2026-10-11 note, word for word):**
 
   **2026-10-11 (plan 89 block 5, build `9b4d0503`, Deep Rock Galactic: Survivor, answer from this PC's AI):** the panel drew a median of about 60 frames a second while the answer wrote (lowest slice 54.9). Not a full fight: the game paused itself on a level-up screen about 40 s into the run. Row SCR-10 stays owed for a real fight; the look is the maintainer's. Evidence `workshop:test-evidence/plan89-SCR-10-FIGHT.json`.
-
-## Plan 97 fourth sweep notes moved from the roadmap (2026-10-22)
-
-Older entries and notes moved here, word for word, when the entries took a new note (plan 97 fourth sweep).
-
-**A faded ghost of the tab bar (plan 97 L15), the "never reproduced" line, word for word:**
-
-  Never reproduced in plan 97: with no game, 155 samples (`workshop:test-evidence/plan97-A-GHOST-NOGAME.json`); with a game, three pop-up rounds (the help chip once, "Delete chat?" twice) read Steam's row hidden at every read and showed no second strip in any screenshot (`plan97-P97-B-GHOST-1.json`, `-2.json`, `-3.json`). The second opinion: every earlier sighting had a finger on the screen.
-
-**Switching tabs with LB/RB should glide (plan 97 G1-build), the known gaps, word for word:**
-
-  Known gaps: Main gets only the line (its content has no box of its own to slide); the old page does not slide out (Steam removes it at once); with a game running only the line moves and the page holds still. The page slide sits inside the pane whose motion an older rule switched off to stop a flash on shoulder switches, so the Deck check watches for a flash.
-
-**While an answer writes it briefly shrinks (plan 97 L4), the entry before the fourth sweep, word for word:**
-
-- ★ `[reply]` **While an answer writes, it briefly shrinks by a line now and then (6 to 27 px)** — **VERIFY, fixed in part 2026-10-22 (plan 97 L4, `e4da5763`, `209f16ff`, `a19f5b8f`; the letter cells moved unchanged in `9b983587`). Was OPEN, found 2026-10-14 (plan 93 Deck block D1); the maintainer said fix it 2026-10-16 (call 1 of D131).**
-  Three causes were measured in a browser with the plugin's stylesheet and fixed: a paragraph break (9 px), a single line break inside a paragraph (about 13 px on the Deck, the larger share) and the end of a list followed by a paragraph (6 px). A dip of about 2.6 px after a heading line remains (and in the two non-default scramble styles), recorded for block E.
-  Owes Deck row **P97-L4-ANSWER-DIPS** (block E3): no drop over 2 px while writing; a heading-line dip of about 3 px is recorded, not failed. Evidence of the failure `workshop:test-evidence/plan93-P93-M4-ANSWER-FINISH-after-try2.json`. Older notes: [roadmap-details.md](roadmap-details.md#plan-97-second-sweep-notes-moved-from-the-roadmap-2026-10-22).
-
-**After a Steam box Down stops moving the ring (plan 97 L14), the entry before the fourth sweep, word for word:**
-
-- ★★★ `[focus]` **After a Steam box, or the menu closing, Down stops moving the ring until the plugin is reloaded** — **VERIFY, fixed 2026-10-22 (plan 97 L14: `2b924080`, `6da3e2d7`, `2263aa83`). Was OPEN, seen ten times by 2026-10-18 and twice more in plan 97 block B.**
-  Cause, from block B's readings: after a Steam box or the menu closing, the panel's page comes back without the browser's focus (`document.hasFocus()` false); the plugin's own plain focus moves then do nothing while Steam's own transfers still work. Now the moves from the question box, the Ask strip's buttons and the Show reasoning line, and Down from a Settings section line, go through Steam's transfer when the page has lost focus, and each one is logged (`dpad.lostFocusHop`). Left and Right from the question box with focus lost may still leave the panel (known).
-  **Deck 2026-10-22 (plan 97 block B, build `73738058`, before the fix):** stuck reproduced after the plugin's "Close menu & take screenshot" and the chord reopen (FREEZE-2: Down dead from the question box; Left, Right, LB/RB, three menu close-and-reopens and a reopen from the Decky list did not clear it, only a plugin reload did) and again after Steam's "Delete chat?" box and B (game up about 6 minutes); FREEZE-1 and FREEZE-3 moved on every Down. Evidence `workshop:test-evidence/plan97-P97-B-FREEZE-1.json`, `-2.json`, `-3.json`, `plan97-P97-B-AFTER-POPUP-FOCUS.json`.
-  Owes Deck rows **P97-L14-FREEZE** and **P97-L14-SECTIONS** (block E11); they count only when the page reads no focus, and are UNCLEAR if that state is not reached in six tries. Every reading: [plan 95 § 13](../../bonsAI-workshop/planning/95-readme-refresh.md#13-appendix-the-d-pad-freeze-readings-from-filming-2026-10-17); older entry: [roadmap-details.md](roadmap-details.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22).
-
-**Opening the plugin with the test rig failed twice after a plugin reload (plan 97), the entry before the fourth sweep, word for word:**
-
-- ★ `[QA]` **Opening the plugin with the test rig failed twice after a plugin reload** — **OPEN, failed again 2026-10-22 (plan 97 block A, build `73738058`); fixed again that night, proof owed. Still failing 2026-10-12 (plan 92, Deck block 2, build `d553a5b4`). The rig fix of 2026-10-11 (rig commits `59d1698`, `28e7325`) was loaded and did not cure it. Was seen 2026-10-11 (plan 88, build `68317980`).**
-  After a plugin reload with no game running, the first try to open the plugin failed in 3 of 3 rounds (round 1 on the connection to Steam's debugger, rounds 2 and 3 because the Quick Access pane did not appear); the next try always worked (round 1 needed a third). Row **P89-RIG-OPEN-AFTER-RELOAD** failed. Evidence `workshop:test-evidence/plan92-P89-RIG-OPEN-AFTER-RELOAD.json`; the first sighting `workshop:test-evidence/p88-DECK-RESTORED.json`.
-  **2026-10-14 (plan 93 lane R):** fixed on a branch in the rig's own repo. **2026-10-22 (plan 97, call 1, [D134](audit/maintainer-decisions-locked.md#d134--locked-2026-10-22-raised-2026-10-22--plan-97-the-bug-list-and-the-verify-list-toward-zero-the-second-sweep-the-ten-calls)):** that branch was merged into the rig's main and the server rebuilt before go; fixed in the rig's repo, and the Deck proof is owed (block A, row **P89-RIG-OPEN-AFTER-RELOAD**).
-  **2026-10-22 (plan 97 block A, Deck, build `73738058`):** the fix merged before go FAILED: the first try failed in 2 of the 2 counted rounds (round 1 not counted, the tool's connection closed). The tool waited for the Quick Access page, not for the plugin's own tab; waiting 90 s with the menu open did not bring the tab back, closing and reopening the menu did. Fixed again that night in the rig's repo (the open call now closes and reopens the menu when the plugin's tab is missing) and merged into its main (`43afc0b`). It loads only in a new chat; proof owed in block D1 (row **P89-RIG-OPEN-AFTER-RELOAD**, second try). Evidence `workshop:test-evidence/plan97-P89-RIG-OPEN-AFTER-RELOAD.json`.
 
 ## Plan 103 sweep K2 notes moved from the roadmap (2026-11-10)
 

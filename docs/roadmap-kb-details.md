@@ -39,6 +39,7 @@
 - [Plan 104 notes moved from the knowledge-base roadmap (2026-11-14)](#plan-104-notes-moved-from-the-knowledge-base-roadmap-2026-11-14)
 - [Plan 104 sweep K1 notes moved from the knowledge-base roadmap (2026-11-15)](#plan-104-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-15)
 - [Plan 104 sweep K2 notes moved from the knowledge-base roadmap (2026-11-16)](#plan-104-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
+- [Plan 104 sweep K3a notes moved from the knowledge-base roadmap (2026-11-16)](#plan-104-sweep-k3a-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -1800,3 +1801,46 @@ short-line notes**; Hades, Half-Life 2 and Black Mesa do not (Phase 5).
 **Where things stand: the free-memory readings sentence (as K2 wrote it)**
 
 Free memory with nothing asked (2026-11-15): 11,962 MB idle, 5,649 with the AI loaded, 8,682 with Deep Rock Galactic: Survivor running, 4,885 with God of War running (2,172 MB of swap) (`workshop:test-evidence/plan104-P104-M-MEMORY-try2.json`).
+
+## Plan 104 sweep K3a notes moved from the knowledge-base roadmap (2026-11-16)
+
+Moved word for word by sweep K3a of plan 104, to make room. Each block names the entry or call it stood in; the entry keeps its place with a shorter text.
+
+**Calls: the borrowed-advice fix and its numbers (as K2 left it)**
+
+- **The borrowed-advice fix and its numbers** — **OPEN, numbers in 2026-11-15 (plan 104 lane H1); landed switched off.** "Leave the notes out" on a marked turn passes the bar: no borrowed advice in 5 runs by hand, and the facts kept were 70.6 and 70.6 against 70.1 and 70.6 before. But it loses nearly all the right-note help on the marked turns where the right note was attached anyway: 61 and 58 percent of the facts kept before, 5 and 6 after. Switched on today, a made-up boss stops getting another boss's weak points, but 25 of the 39 real test questions that show "No close match" would lose a right note the search had found. The second opinion (consult 2) said keep both switches off; the next knowledge-base plan narrows when notes are held back, only when the question names a thing no found note names.
+
+**Calls: updating Ollama starts at once (as K2 wrote it)**
+
+- **Updating Ollama starts at once with one press** — **OPEN, raised 2026-11-16 (plan 104 sweep K2).** The confirm box was removed on purpose on 10 October (plan 87, call 2) because you asked for no popup, and the Deck passed it that day. On 15 November a driver who expected a box updated the Deck's Ollama from 0.40.9 to 0.40.16 by accident; Cancel 50 seconds later did not undo it. Keep it that way, or ask first? Evidence `workshop:test-evidence/plan104-P104-KB-THREADS-01-try2.json`.
+
+**Bugs entry: older notes the wiki contradicts, the lane texts (as K2 left them)**
+
+  **Lane M1** (`be94a633` to `920fa879`) fixed the Hardcore, Predator Pals and Snack Orb points and two glossary entries; the Molotov and the Brotato "Loot Alien" closed with no change. **Lane M2, 2026-11-15 (`2a5be5db4` to `72362d141`):** notes corrected where the wiki differs: Mario Party 1, 2, 6 and 7, Super Smash Bros., Cyberpunk 2077 iconic weapons, Grand Theft Auto III and eight Black Mesa notes. Whether any older sighting is left is not stated in this sweep's list, so the entry stays open. Full lane M1 text and the sightings: [Detail](roadmap-kb-details.md#plan-104-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
+
+**Deck check owed entry: Left 4 Dead 2 versus mix-ups, the rows (as K2 left them)**
+
+  Rows: P104-VERSUS-SPEED-01 PASS (one note attached, the Tank note); P104-VERSUS-TANK-01 FAIL (the Tank note leads, but "Versus special infected spawn order and mixes" is attached third, which the row excuses only for "Playing as the Tank"; a fix is owed); P104-VERSUS-HUNTER-01 (b) PASS ("tips for playing as the hunter in versus" leads with "Playing as the Hunter"), (a) FAIL as expected (Bugs). Evidence `workshop:test-evidence/plan104-P104-VERSUS-SPEED-01.json`, `plan104-P104-VERSUS-TANK-01.json`, `plan104-P104-VERSUS-HUNTER-01.json`.
+
+**Deck check owed entry: focus with the page out of focus, the Deck notes of 2026-11-10 and 2026-11-15 (as K2 left them)**
+
+  **Deck 2026-11-10 (block D2):** passed with the page in focus; the page never lost focus, so the out-of-focus half is tests only. Row **P103-DETAILS-STRIP-01** stays owed for two fresh chats, an older answer and a covered answer (`workshop:test-evidence/plan103-P103-DETAILS-STRIP-01.json`, `-try2.json`).
+  **Deck 2026-11-15 (plan 104 block D0c):** with the page in focus cases a, b and d passed 3 of 3; case c is UNCLEAR (older answers draw no strip); out of focus COULD NOT RUN twice (main roadmap, Verify; Calls).
+
+**Deck check owed entry: thumbs-down after Undo, the Deck notes (as K2 left them)**
+
+  **Third time, 2026-11-10 (block D2):** focus kept; not a pass for the out-of-focus state: tests only, on your list. Earlier nights and the evidence: [Detail](roadmap-kb-details.md#plan-104-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
+  **Deck 2026-11-15 and 16 (plan 104 blocks D0c and D1b):** COULD NOT RUN the out-of-focus half again: the page kept the window's focus except while Steam's own "Delete chat?" box was open. Stays proven by tests only, on your list (Calls). Evidence `workshop:test-evidence/plan104-P102-UNDO-FOCUS-01.json`, `plan104-P104-M-LOSTFOCUS-try2.json`.
+
+**Next entry: mod knowledge for modded games (as K2 left it)**
+
+- ★★★ `[KB]` **Mod knowledge for modded games** — **OPEN, filed 2026-10-27 (plan 101, round 4); basics landed 2026-11-09 (plan 103).** Offline answers about mod load order; Nexus Mods pages are never copied. LOOT's rule lists are CC0; the Cyberpunk wiki has no licence (next step: its admins' written permission). **Plan 104 (D141 calls 6, 10 and 30):** lane L1 builds LOOT's lists for Fallout 4 and Skyrim into the library as their own table (landed 2026-11-15, `f5c3cad5` to `e1f1e02e`: 463 and 1,243 entries; nothing on the Deck); lane L2's typed lookup is on trial, switched on only if it finds the right rule for 9 of 10 named mods. Full text: [Detail](roadmap-kb-details.md#plan-104-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-16) · [Plan 101](planning/101-deep-mod-ai-hints.md) · [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Next entry: KB online / versus strategy content (as K2 left it)**
+
+- ★★★★ `[KB]` **KB online / versus strategy content** — **PARTIAL, discovery locked 2026-08-09; steps one and two landed for Left 4 Dead 2 (2026-11-09, 2026-11-10); a note-order fix landed 2026-11-10 (lane V3).** Multiplayer questions got nothing specific. 15 versus notes and a note-order fix are in; lane V4 fixed the three mix-ups 2026-11-15 (Deck check owed; two points open, see Bugs); **Deck 2026-11-10 (block D3): P103-VERSUS-01 PASSED, 3 of 3** (`workshop:test-evidence/plan103-P103-VERSUS-01.json`); the notes went out in the 2026.11.10 publish. **2026-11-14 (D141 calls 6 and 19):** lane V5 landed 2026-11-15 (`118552d62` to `56209e108`): fifteen more versus and Scavenge notes (4515 to 4529), owing row P104-VERSUS-02 (block D3); then only Counter-Strike 2 is left, which stays out, so the entry stays PARTIAL with that one line until you say close it. [Plan](planning/17-kb-online-versus-strategy-content.md) · [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
+
+**Next entry: RAG Phase 5, depth on the 23 games (as K2 left it)**
+
+- ★★★★ `[KB]` **RAG Phase 5: depth on the 23 games** — **PARTIAL; the Half-Life 2 and Black Mesa notes landed 2026-11-15 (plan 104), their Deck row is owed.** Plan 103: 20 of the 23 games have enemy and item notes in the labelled shape (292 notes); your read of six samples passed (D140, call 4); the library is published as 2026.11.10. **Deck 2026-11-10 (row P103-NOTES-23-01): 17 of 20 games attached a new note, the line was 18; missed on both questions: Fallout 4, Brotato, DOOM Eternal** (`workshop:test-evidence/plan103-P103-NOTES-23-01.json`, `-part2.json`).
+  **Landed 2026-11-15:** lane N1, 15 Half-Life 2 notes (2600 to 2614; `fa1c8dbd` to `0a866724`); lane N2, 12 Black Mesa notes (4300 to 4311; `f4f9128f` to `2dc743c7`). **Still none:** Hades. **What closes Phase 5 (D141 call 18):** row **P104-NOTES-HL2-BM-01** passing on the Deck (block D3). [Plan](planning/28-phase5-corpus-depth.md) · The full paragraph, with the wiki sources: [Detail](roadmap-kb-details.md#plan-104-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)

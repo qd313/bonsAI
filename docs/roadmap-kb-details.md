@@ -1844,3 +1844,104 @@ Moved word for word by sweep K3a of plan 104, to make room. Each block names the
 
 - ★★★★ `[KB]` **RAG Phase 5: depth on the 23 games** — **PARTIAL; the Half-Life 2 and Black Mesa notes landed 2026-11-15 (plan 104), their Deck row is owed.** Plan 103: 20 of the 23 games have enemy and item notes in the labelled shape (292 notes); your read of six samples passed (D140, call 4); the library is published as 2026.11.10. **Deck 2026-11-10 (row P103-NOTES-23-01): 17 of 20 games attached a new note, the line was 18; missed on both questions: Fallout 4, Brotato, DOOM Eternal** (`workshop:test-evidence/plan103-P103-NOTES-23-01.json`, `-part2.json`).
   **Landed 2026-11-15:** lane N1, 15 Half-Life 2 notes (2600 to 2614; `fa1c8dbd` to `0a866724`); lane N2, 12 Black Mesa notes (4300 to 4311; `f4f9128f` to `2dc743c7`). **Still none:** Hades. **What closes Phase 5 (D141 call 18):** row **P104-NOTES-HL2-BM-01** passing on the Deck (block D3). [Plan](planning/28-phase5-corpus-depth.md) · The full paragraph, with the wiki sources: [Detail](roadmap-kb-details.md#plan-104-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
+
+**Bugs entry: the "Notes were used" line behind the dock, the older lines (as K3a found them)**
+
+  It is readable with the ring on the question box; it is not a D-pad stop, so nothing lifts it into view. **2026-11-14:** only the control that has the ring is lifted clear of the dock, and the line is not a stop. Plan 104 lane F1. Evidence `workshop:test-evidence/plan103-P103-COVERED-NOTES-01.json`.
+  **2026-11-15 (block D0b, row P104-M-CAPTION):** on a wholly covered answer the line is not drawn at all (the ★★ entry below).
+
+**Bugs entry: a genre card on a game the library does not hold (as K2 left it)**
+
+- ★★ `[KB]` **On a game the library does not hold, a general genre card still reaches the AI and the answer borrows from it** — **OPEN, found 2026-11-15 (plan 104 lane H1's measurement).**
+  Terraria answers borrowed "Vigor" and "Energy" from the "Soulslike basics" card in 3 of 3. The turn-flags script (`kb_notes_turn_flags.py`) does not mark "No notes for this game" turns.
+
+**Bugs entry: a question ending ", give me the full attack pattern" (as K2 left it)**
+
+- ★ `[KB]` **A question ending ", give me the full attack pattern" is not marked as uncovered, so the honest opening never comes** — **OPEN, found 2026-11-15 (plan 104 lane H1).**
+  The trailing-phrase list in `kb_not_in_notes_notice.py` does not know that ending.
+
+**Bugs entry: a wholly covered answer draws no "Notes were used" line (as K2 left it; closed in K3a as not a fault)**
+
+- ★★ `[ui]` **A wholly covered answer draws no "Notes were used for this answer" line** — **OPEN, found 2026-11-15 (plan 104 Deck block D0b, row P104-M-CAPTION).**
+  With a shut cover and a clarifying question as the whole answer, nothing says notes were used, with the ring on Show details, on the question box or with Show details open. Three notes were attached (False Knight, Watcher Knights, Starting out in Hollow Knight); the details panel lists them once opened. On 2026-11-10 the line was drawn, behind the dock. Evidence `workshop:test-evidence/plan104-P104-M-CAPTION.json`.
+
+**Where things stand: the Deck-today line (as it stood, 2026-11-16 morning)**
+
+**The Deck today (block D1b, 2026-11-16):** plugin build `bc209b0029d0`; the library on it is the test library 2026.11.16, installed in block D1 after the published one was backed up (row P104-D1-SETUP, `workshop:test-evidence/plan104-P104-D1-SETUP.json`); its Ollama is 0.40.16 (a press on the Update button changed it, see Calls); this plan's settings backup is kept. The free-memory readings are in row P104-M-MEMORY.
+
+**Deck check owed: the header paragraph (as it stood)**
+
+**2026-11-16: Deck blocks D0a to D1c of plan 104 have run** (setup, backups, chats, smoke pass, memory readings, the crash-fix check, the blind readings of D0b and D0c, the versus, memory, picture, no-notes-line and summary-log rows of D1, and the chips row of D1b). Lane T1's one-call question runner failed its first try (main roadmap, Bugs). **Not run:** the saved walks (runbook D3.4) and the starter box on a fresh install (your hand check). A row no block reached stays owed, named in its entry. [Detail](roadmap-kb-details.md#plan-104-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
+
+**Calls: the borrowed-advice fix (as K3a first shortened it)**
+
+- **The borrowed-advice fix and its numbers** — **OPEN, numbers in 2026-11-15 (plan 104 lane H1); landed switched off.** Switched on today, a made-up boss stops getting another boss's weak points, but 25 of the 39 real test questions that show "No close match" would lose a right note the search had found. The second opinion (consult 2) said keep both switches off; the next knowledge-base plan narrows when notes are held back. The facts-kept numbers: [Detail](roadmap-kb-details.md#plan-104-sweep-k3a-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
+
+**Bugs entry: Left 4 Dead 2, six test questions (as K2 left it)**
+
+  Plan 104 lane V4 fixed the three mix-ups, but none of the six test rows got its note back, each for its own reason (the lane's report): `V2-S-L4D2-29`, `V2-PARA-S03`, `V2-BLINDT-19`, `V2-BLINDT-23`, `V2-P103-L4D2-13`, `V2-P103-L4D2-16` (files: [Detail](roadmap-kb-details.md#plan-104-notes-moved-from-the-knowledge-base-roadmap-2026-11-14)).
+  **Deck 2026-11-15 (block D1, row P104-VERSUS-HUNTER-01 (a)):** "any advice for pouncing well when I am on the infected team" attached "Infected team combinations", "Scavenge as the infected team" and "Fooling the infected team at ambush spots", and no Hunter note (FAIL, as the lane expected). Evidence `workshop:test-evidence/plan104-P104-VERSUS-HUNTER-01.json`.
+
+**Bugs entry: reopening Show details, the older lines (as K3a first wrote them)**
+
+  Seen with the Session tab showing, 4 of 6 tries across two drivers, never with "This answer" showing; the next Down goes to the strip. Evidence `workshop:test-evidence/plan103-P103-DETAILS-STRIP-01.json` and `-try2.json`. The 2026-11-14 code reading and the later screen tries: [Detail](roadmap-kb-details.md#plan-104-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
+  **Deck 2026-11-15 (block D0b, row P104-M-REOPEN): not reproduced in 5 of 5 tries.** The ring stayed on the divider the whole time ("Hide details" landed at 60 against a pane top of 52 on Session, and at 170 on This answer), and the page scrolled once about 15 ms after the panel appeared. A guard is owed. Evidence `workshop:test-evidence/plan104-P104-M-REOPEN.json`.
+  **Fix landed 2026-11-16 (lane F1):** reopening Show details keeps "Hide details" in the pane.
+
+**Bugs entry: the crowding fix, the third and fourth tries (as K3a first wrote them)**
+
+  **Final (2026-11-10):** the fix still loses more than it gains, so it stayed turned down; every game's "Starting out" note is lifted past a real word match. **Third try:** plan 104 lane R1 (D141 call 14). Full text: [Detail](roadmap-kb-details.md#plan-104-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
+  **Third try, 2026-11-15 (plan 104 lane R1, `aa6ef7f12`): landed switched off.** No version met your bar, so nothing a person sees changes (the search returns what it returned before); the numbers are in the plan. Row P104-CROWDING-01 is not owed while the switch is off.
+  **Fourth try, 2026-11-16 (the second opinion's narrower version, `ef69f461a`): landed switched off.** 12 questions gained a right note and 3 lost one (the third try: 15 and 9), with no new "No close match"; still short of call 14. Whether a small loss is allowed is under Calls.
+
+**Bugs entry: borrowed advice after the honest opening (as K2 left it)**
+
+  A made-up boss, "Grimthak", got the right opening, then advice about weak points on its armor and area attacks, "based on general boss mechanics": borrowed from the nearby Dreadnought notes and hung on a boss that does not exist. **2026-11-14:** on a marked turn the loosely matching notes are still handed to the AI, and the instructions still say to ground the answer in them. Plan 104 lane H1. Evidence `workshop:test-evidence/plan103-P103-HONEST-02.json`.
+  **Landed switched off, 2026-11-15 (plan 104 lane H1, `f8cf84594` to `544fd0992`):** two switches, both off, so nothing a person sees changes. The second opinion (consult 2) said keep them off; the next knowledge-base plan narrows when notes are held back. Row P104-HONEST-03 stays owed (the switches are off); numbers under Calls.
+
+**Next entry: KB online / versus strategy content (as K3a first wrote it)**
+
+- ★★★★ `[KB]` **KB online / versus strategy content** — **PARTIAL, discovery locked 2026-08-09; steps one and two landed for Left 4 Dead 2 (2026-11-09, 2026-11-10); a note-order fix landed 2026-11-10 (lane V3).** Multiplayer questions got nothing specific. 15 versus notes and the note-order fix are in and passed on the Deck (P103-VERSUS-01, 3 of 3); lane V4 fixed the three mix-ups 2026-11-15 (Deck check owed; two points open, see Bugs); lane V5 landed fifteen more versus and Scavenge notes 2026-11-15, owing row P104-VERSUS-02 (block D3). Only Counter-Strike 2 is left, which stays out, so the entry stays PARTIAL until you say close it. [Plan](planning/17-kb-online-versus-strategy-content.md) · Hashes and evidence: [Detail](roadmap-kb-details.md#plan-104-sweep-k3a-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
+
+**Next entry: RAG Phase 5 (as K3a first wrote it)**
+
+- ★★★★ `[KB]` **RAG Phase 5: depth on the 23 games** — **PARTIAL; the Half-Life 2 and Black Mesa notes landed 2026-11-15 (plan 104), their Deck row is owed.** Plan 103: 20 of the 23 games have enemy and item notes in the labelled shape (292 notes); your read of six samples passed (D140, call 4); the library is published as 2026.11.10. **Deck 2026-11-10 (row P103-NOTES-23-01): 17 of 20 games attached a new note, the line was 18; missed on both questions: Fallout 4, Brotato, DOOM Eternal.** **Landed 2026-11-15:** lane N1, 15 Half-Life 2 notes; lane N2, 12 Black Mesa notes. **Still none:** Hades. **What closes Phase 5 (D141 call 18):** row **P104-NOTES-HL2-BM-01** passing on the Deck (block D3). [Plan](planning/28-phase5-corpus-depth.md) · Note numbers, hashes, evidence and the wiki sources: [Detail](roadmap-kb-details.md#plan-104-sweep-k3a-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
+
+**Next entry: the honest opening, the detail line (as K2 left it)**
+
+  Before: 0 of 24 admitted it; on the PC now 6 of 6 made-up-boss answers open honestly. **Deck 2026-11-10:** the opening showed 2 of 2, made-up detail was kept out 1 of 2 (Bugs). Lane H1's fix landed switched off (2026-11-15), so it stays on as it is (D141 call 12); the Speed-mode option stays off (Calls). Evidence `workshop:test-evidence/plan103-P103-HONEST-02.json`. [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
+
+**Deck check owed entry: suggestion chips ordered by your last question, the Deck notes (as K3a first wrote them)**
+
+  After an answer, the game's chips lead with up to four notes closest to the question just asked (PC: 12 of 90 before, 33 of 90 after). Plan 104 lane C2 keeps the closest notes in front for a while. **Deck 2026-11-10 (row P103-CHIP-ORDER-01): passes the row's three conditions, weak as proof; UNCLEAR for what a person sees.** Full text: [Detail](roadmap-kb-details.md#plan-104-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
+  **Deck 2026-11-16 (plan 104 block D1b, rows P104-CHIPS-CLOSEST-01 and P103-CHIP-ORDER-01): FAILED on timing.** The two chips are the closest notes only after about 7 seconds (the row allows 5), then rotate through other chips; a main-roadmap Bugs entry. Evidence `workshop:test-evidence/plan104-P104-CHIPS-CLOSEST-01.json`.
+  **Fix landed 2026-11-16 (lane C2, `6985a5d80`, `922a969c6`):** a lone close note brings the next nearest note, so both chips are about the question at once. Rows P104-CHIPS-CLOSEST-01 and P103-CHIP-ORDER-01 are owed in block D2.
+
+**Deck check owed entry: a cover the plugin opens by itself (as K2 left it)**
+
+  The notes line no longer waits for a cover the screen has already opened. Owes **P103-NOTES-AFTER-AUTO-OPEN-01** on the Deck: Deep Rock Galactic: Survivor running, or Brotato with nothing running, an answer with a cover: no cover is drawn and the notes line is there.
+  **Deck 2026-11-15 (plan 104 block D0b): UNCLEAR, not a pass.** The written condition held in both tries (no shut cover, the notes line there), but neither answer had a cover at all, so the case the row is about never happened. Evidence `workshop:test-evidence/plan104-P103-NOTES-AFTER-AUTO-OPEN-01.json`.
+
+**Next entry: mod knowledge, the lane L2 line (as K3a first wrote it)**
+
+  **Landed switched off 2026-11-16 (plan 104 lane L2, five commits from `0ff9f968a` to `b5ee2fd48`):** the right rule for 3 of the 10 mods the data holds (the bar is 9), none wrong, none on the four no-mod questions; one answer in twenty said two mods work together. Four well-known mods have only conditional rules, so there is nothing to quote (SkyUI, both Unofficial Patches, Homemaker). Before it can be switched on: build-side refusal of odd characters in names; two places in the ask request that read "notes attached"; short names and typos (USSEP, SS2, "ordinater") cannot match. Row P104-MODS-LOOKUP-01: not run (off).
+
+**Next entry: mod knowledge, the lane L2 line (second shortening)**
+
+  **Landed switched off 2026-11-16 (plan 104 lane L2, five commits from `0ff9f968a` to `b5ee2fd48`):** the right rule for 3 of the 10 mods the data holds (the bar is 9), none wrong; one answer in twenty said two mods work together. Four well-known mods have only conditional rules, so nothing to quote (SkyUI, both Unofficial Patches, Homemaker). Before it can be switched on: refuse odd characters in names at build time; two places in the ask request that read "notes attached"; short names and typos (USSEP, SS2, "ordinater") cannot match. Row P104-MODS-LOOKUP-01: not run (off). The no-mod questions and the full numbers: [Detail](roadmap-kb-details.md#plan-104-sweep-k3a-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
+
+**Next entry: mod knowledge, the entry line (as K2 left it)**
+
+- ★★★ `[KB]` **Mod knowledge for modded games** — **OPEN, filed 2026-10-27 (plan 101, round 4); basics landed 2026-11-09 (plan 103).** Offline answers about mod load order; Nexus Mods pages are never copied. LOOT's rule lists are CC0; the Cyberpunk wiki has no licence (next step: its admins' written permission). **Plan 104 (D141 calls 6, 10 and 30):** lane L1 landed LOOT's lists for Fallout 4 and Skyrim as their own table (2026-11-15; nothing on the Deck); lane L2's typed lookup is on trial, switched on only if it finds the right rule for 9 of 10 named mods. Full text: [Detail](roadmap-kb-details.md#plan-104-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-16) · [Plan 101](planning/101-deep-mod-ai-hints.md) · [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Bugs entry: the crowding fix, the third and fourth tries (second shortening)**
+
+  **Third try, 2026-11-15 (plan 104 lane R1, `aa6ef7f12`), and fourth try, 2026-11-16 (the second opinion's narrower version, `ef69f461a`): both landed switched off.** No version met your bar. The fourth try gained 12 questions a right note and lost 3 (the third try: 15 and 9), with no new "No close match"; still short of call 14. Whether a small loss is allowed is under Calls. Row P104-CROWDING-01 is not owed while the switch is off. Earlier tries: [Detail](roadmap-kb-details.md#plan-104-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
+
+**Bugs entry: borrowed advice after the honest opening (second shortening)**
+
+  A made-up boss, "Grimthak", got the right opening, then advice borrowed from the nearby Dreadnought notes, "based on general boss mechanics" (Deck check P103-HONEST-02). On a marked turn the loosely matching notes are still handed to the AI. Evidence `workshop:test-evidence/plan103-P103-HONEST-02.json`. **Landed switched off, 2026-11-15 (plan 104 lane H1, `f8cf84594` to `544fd0992`):** two switches, both off, so nothing a person sees changes; the second opinion (consult 2) said keep them off. Row P104-HONEST-03 stays owed (switches off); numbers under Calls.
+
+**Deck check owed entry: focus with the page out of focus, the Deck line (second shortening)**
+
+  **Deck 2026-11-10 and 2026-11-15 (blocks D2 and D0c):** with the page in focus cases a, b and d passed 3 of 3; case c (an older answer) is closed: older answers draw no strip, by design (plan 62, section 3c); out of focus COULD NOT RUN twice (main roadmap, Verify; Calls). Row **P103-DETAILS-STRIP-01** stays owed for the out-of-focus half. Evidence and the earlier text: [Detail](roadmap-kb-details.md#plan-104-sweep-k3a-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)

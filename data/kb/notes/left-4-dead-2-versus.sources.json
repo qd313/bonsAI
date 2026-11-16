@@ -1909,6 +1909,466 @@
           ]
         }
       ]
+    },
+    {
+      "section_id": 4525,
+      "name": "Scavenge as the infected team",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+      "main_revision": "173082",
+      "lines": [
+        {
+          "line": "Summary: On the infected side of Scavenge, putting every survivor down is only one route: interrupting their fuel runs while the clock drains can end their turn as well.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Tactics / Infected",
+              "quoted": [
+                "In Scavenge Mode, it isn't just about incapacitating all of the Survivors. If the timer is low, preventing them from grabbing fuel with simple attacks can help end the Survivors' turn."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Know what each attack does to a pour: any hit from an infected player restarts it, a plain claw or punch only delays it, and a pounce, tongue, charge or ride on a lone pourer also makes them drop the can. In overtime a dropped can ends the survivors' turn at once.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Tactics / Infected",
+              "quoted": [
+                "Try to focus your attacks on Survivors either carrying or pouring the gas cans. Any type of attack by an Infected will reset the pour timer for a Survivor.",
+                "If a lone Survivor is pouring a gas can, pounce, pull, charge, or ride them. This will not only delay the pouring, but make them drop the can.",
+                "This is particularly important in overtime, because the instant the gas cans are dropped, the Survivor's turn ends.",
+                "The basic Special Infected claw or punch attack will also delay pouring (though it does not make the player drop the gas can)."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Acid also holds a pour up without forcing a drop, but it needs lead time, since it travels and spreads before it hurts: spit while the survivors are still on their way to the generator.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Tactics / Infected",
+              "quoted": [
+                "Spitter acid will also delay a Survivor from fueling the generator (though it does not make the player drop the gas can). Make sure to spit a few seconds before they reach the generator.",
+                "it takes a short amount of time for the spit to travel and when the spit hits the ground, it takes a little bit more time to spread, before it does any damage."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Be patient: when set-up ends, do not rush to spawn, since survivors may head somewhere you did not expect. Lone survivors far from their team and the generator are the best targets, carrying a can or not, and enclosed can spots are good places to wait for a lone collector.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Tactics / Infected",
+              "quoted": [
+                "After set-up time ends, don't be too eager to spawn. The Survivors may go to an area nowhere near where you were planning to spawn.",
+                "If there's an opportunity, go for any Survivors that are by themselves and very far away from both the rest of the Survivors and the generator, whether or not they have a gas can.",
+                "Many gas cans are enclosed and hard to reach or see from most spots. These are good areas to camp in case a lone Survivor comes by to grab a gas can."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4526,
+      "name": "Scavenge as the survivor team",
+      "kind": "versus",
+      "main_page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+      "main_revision": "173082",
+      "lines": [
+        {
+          "line": "Summary: Scavenge survivors stay close to a teammate, deal with attackers before they pour, pick guns for range, and decide which cans to take first by how strong their team looks.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Tactics / Survivors",
+              "quoted": [
+                "Always have at least one other Survivor near you at all times.",
+                "Don't try to pour fuel into the generator when you are being hit.",
+                "If you start the round as Survivors, go for the farthest gas cans first, while your team has very good health and supply slots are filled."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Keep within reach of at least one teammate, and kill whatever is hitting you before you pour, since a hit restarts the pour.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Tactics / Survivors",
+              "quoted": [
+                "Always have at least one other Survivor near you at all times.",
+                "it is best to kill any Infected attacking you first before you put the fuel in."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Long-range guns such as the Combat Rifle or Sniper Rifle suit the mode, because there are few common infected and distance helps against special infected that pull survivors away from the group. Which cans to take first depends on the matchup: the far ones early when health is good and supply slots are full, the near ones when your team is shaky or the infected are strong.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Tactics / Survivors",
+              "quoted": [
+                "Use long-range weapons, such as the Combat Rifle or Sniper Rifle. There are not that many Common Infected on the maps and using a long-range weapon is better suited for killing Special Infected, especially if they can move Survivors far away from the group.",
+                "If you start the round as Survivors, go for the farthest gas cans first, while your team has very good health and supply slots are filled. However, if your team is not good and/or the Infected team is very good, go for the closest gas cans first."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Juggling is a way to move several cans at near running speed: toss one ahead, grab the next, toss that ahead and keep leapfrogging them along. Done right, you can handle four or five at only a little less than a normal run, and gathering several groups before heading back is far quicker than one trip per group.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
+              "revision": "173082",
+              "part_of_page": "Tactics / Survivors",
+              "quoted": [
+                "Instead of running with a single can in hand, you can \"juggle\" gas cans.",
+                "Done right, and you can juggle 4 or 5 cans at a speed only slightly less than a normal run",
+                "It is significantly faster to collect multiple groups of cans at the same time instead of running back to the generator for each group of cans."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4527,
+      "name": "The Passing versus ambush spots",
+      "kind": "callout",
+      "main_page": "https://left4dead.fandom.com/wiki/The_Hunter",
+      "main_revision": "173041",
+      "lines": [
+        {
+          "line": "Summary: Ambush spots for the infected on the first two chapters of The Passing, The Riverbank and The Underground: high buildings for Hunters, and the last survivor in line for Smokers.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Passing",
+              "revision": "173167",
+              "part_of_page": "References",
+              "quoted": [
+                "The Riverbank / The Underground / The Port"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Riverbank",
+              "quoted": [
+                "There are a few high buildings around here that you can use to pounce on a Survivor."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
+              "revision": "173272",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Underground",
+              "quoted": [
+                "Snag the last Survivor as they attempt to jump."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Riverbank: Hunters can use the tall buildings around. The Bride Witch is a weapon too: stand behind her and survivors will shoot at you out of reflex and startle her, and anyone who steps out of the footlocker tents is easy prey. She stands in the open, so a Smoker cannot pull survivors to her, but it can pull away whoever goes after her.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Riverbank",
+              "quoted": [
+                "The Bride Witch is one of your greatest assets here. Sneak up behind her and stay there — the Survivors will shoot you on instinct, which will startle the Witch.",
+                "The Survivors may hide in the tents with the footlockers. Pounce on the one that comes out."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
+              "revision": "173272",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Riverbank",
+              "quoted": [
+                "The Bride Witch is out in an open area, so attempting to pull Survivors to her is out of the question. Instead, pull Survivors away that attempt to kill her"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Underground: plenty of high buildings, and the lone survivor is the target. As the group goes from the pool hall toward the construction site, the last one through is the Smoker's catch, taken from a window. The plank three storeys up gives two pulling points: the alley below, the usual choice, which needs a distraction first so survivors do not target you at once, or the roof above.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Underground",
+              "quoted": [
+                "There are a lot of high buildings that you can use to your advantage.",
+                "Pounce on the loner."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
+              "revision": "173272",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Underground",
+              "quoted": [
+                "When Survivors cross the pool hall down to the construction site, pull the last Survivor away from the window.",
+                "Survivors have to cross on a plank of wood three stories above the ground.",
+                "The alleyway is the most common, so have some kind of distraction beforehand so the Survivors won't instantly target you."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Underground's Crescendo Event: the water hides a Hunter, who can pounce the survivor furthest from the rest. A Smoker can snare the last one to jump into the sewer, a drop they cannot undo, and a Hunter pouncing the dragged victim makes it very lethal.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Underground",
+              "quoted": [
+                "At the Crescendo Event, pounce on the furthest Survivor — you'll be hidden by the water."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
+              "revision": "173272",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Passing / The Underground",
+              "quoted": [
+                "When Survivors activate the Gauntlet Crescendo, they have to drop into the sewer water again, a point of no return. Snag the last Survivor as they attempt to jump. This strategy is very lethal if you have a Hunter to pounce the victim after you snag and drag them back"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4528,
+      "name": "Hard Rain versus ambush spots",
+      "kind": "callout",
+      "main_page": "https://left4dead.fandom.com/wiki/The_Hunter",
+      "main_revision": "173041",
+      "lines": [
+        {
+          "line": "Summary: Ambush spots for the infected on the first four chapters of Hard Rain: The Milltown, The Sugar Mill, Mill Escape and Return to Town. Roofs and other high ground do most of the work, and the cane field hides a Hunter once bile has landed.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/Hard_Rain",
+              "revision": "173634",
+              "part_of_page": "References",
+              "quoted": [
+                "The Milltown / The Sugar Mill / Mill Escape / Return To Town / Town Escape"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / The Sugar Mill",
+              "quoted": [
+                "The broken-down buildings offer some high vantage points.",
+                "Instead, wait for a Boomer shower, because this disables their ability to see the auras around their teammates, which makes you effectively invisible within the sugar cane."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Milltown: the houses are Hunter perches, best when survivors must pass between two-storey ones. The Burger Tank's roof has a large gap where a Smoker is safe unless survivors climb the outside ladder. There is always an alarmed car: the first, second and fourth armed ones sit on the main path near good spots, and a survivor dragged into one may set it off or shoot you and set it off.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / The Milltown",
+              "quoted": [
+                "There are houses all over this map — use this for some high-damage pounces, especially when the Survivors are forced to walk between two-story ones."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
+              "revision": "173272",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / The Milltown",
+              "quoted": [
+                "When entering the Burger Tank, there is a large hole in the roof that Smokers can snare Survivors from without being vulnerable (unless the Survivors climb the ladder outside to kill you).",
+                "There is always an alarmed car in this chapter. The ones you can take advantage of are the first, second and fourth trigger-armed cars as they follow the main path and are near a good area.",
+                "This may trigger it or cause a foolish Survivor to shoot you and trigger the alarm."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Sugar Mill: broken buildings, catwalks, vats and the three-storey mill are launch points, and the pipes along the tops of some walls leading up to the mill are at least twice as high as the vats and catwalks. In the cane field, wait for bile to land, or else pounce from the top of the mill. After bile, a Smoker can snare a clean survivor, or snare one off the edge into the central hole by the Crescendo Event button and leave them hanging.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / The Sugar Mill",
+              "quoted": [
+                "There are also catwalks and vats lining the Survivors' path which serve as excellent launch points, as well as the 3-story mill itself.",
+                "These are at least twice as high as the vats and catwalks",
+                "If there is no Boomer, then pounce from the top of the sugar mill"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
+              "revision": "173272",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / The Sugar Mill",
+              "quoted": [
+                "Have a Boomer vomit on the Survivors and take ones that haven't been puked on",
+                "If you can manage to ensnare a Survivor off the edge into the center hole of the building where they must trigger the Crescendo Event, you could leave the victim hanging as their teammates frantically try to help them up while avoiding the massive Hordes."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: Mill Escape and Return to Town need no new plan: use the Sugar Mill's Hunter spots in the first and the Milltown's in the second. In Return to Town a Smoker can wait on any roof or in any alley.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / Mill Escape",
+              "quoted": [
+                "The tactics in The Sugar Mill apply here as well"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / Return to Town",
+              "quoted": [
+                "The tactics in The Milltown apply here as well"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
+              "revision": "173272",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / Return to Town",
+              "quoted": [
+                "Any rooftop or alleyway will do"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": 4529,
+      "name": "The Parish versus ambush spots",
+      "kind": "callout",
+      "main_page": "https://left4dead.fandom.com/wiki/The_Hunter",
+      "main_revision": "173041",
+      "lines": [
+        {
+          "line": "Summary: Ambush spots for the infected on the first four chapters of The Parish: The Waterfront, The Park, The Cemetery and The Quarter. Alarmed cars, bushes and the Cemetery's one-way drops come up most.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Parish",
+              "revision": "172733",
+              "part_of_page": "References",
+              "quoted": [
+                "The Waterfront / The Park / The Cemetery / The Quarter / The Bridge"
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Cemetery",
+              "quoted": [
+                "The alarmed car area is the Survivors' worst nightmare."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
+              "revision": "173272",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Cemetery",
+              "quoted": [
+                "There are many \"points-of-no-return\" in this map"
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Waterfront: plenty of tall buildings to jump from, and the alarmed car near the end of the chapter hides a Hunter well, since anyone who walks close gets pounced. A Smoker on the kitchen roof can reach survivors through the hole while they are inside.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Waterfront",
+              "quoted": [
+                "There are a lot of high buildings here that you can jump off of.",
+                "Hide behind the alarmed car at the end of the level and pounce anyone who comes near."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
+              "revision": "173272",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Waterfront",
+              "quoted": [
+                "There is a hole in the roof of the kitchen. Get on the roof and grab Survivors when they are in there."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Park: crouch in the bushes and wait for a survivor to split from the group. A Boomer's bile on the pounced survivor then surrounds them with common infected, which makes rescue harder. The alarm tower is a perch for pounces of 10 damage or more, and the last survivor running to switch the alarm off is a good target.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Park",
+              "quoted": [
+                "Hide in the bushes. Wait until a Survivor is separated from the rest of the group while you stand in the bushes, hidden, and then pounce on them.",
+                "This tactic works extremely well if the Boomer and the Hunter work in unison, with the Boomer vomiting on the pounced Survivor, effectively creating a shield of Common Infected.",
+                "Pouncing from the tower with the alarm is a nice spot for 10-plus damage pounces.",
+                "Pounce on the last Survivor running to shut off the alarm — it'll slow the team down trying to save your victim."
+              ]
+            }
+          ]
+        },
+        {
+          "line": "Tips: The Cemetery: water covers a Hunter in the dark sewers, and the cars of the alarmed area hide one too. The Impound Lot is a Smoker's playground: a victim pulled against a car there may draw the team's fire onto the car, and a Jockey who rides someone into its alarmed cars calls several hordes. The Quarter: during its Crescendo Event, pulling a survivor down to ground level costs them heavy fall damage.",
+          "drawn_from": [
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Hunter",
+              "revision": "173041",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Cemetery",
+              "quoted": [
+                "Pounce on a Survivor in the sewers — it's dark and vast under there, and you'll be covered by the water.",
+                "Hiding behind one of the cars and pouncing a Survivor as they come near is a good tactic here."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
+              "revision": "173272",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Cemetery",
+              "quoted": [
+                "The Impound Lot. This is the major playground for many Specials, especially the Smoker. Drag an unlucky Survivor into a car and hope that the others shoot the car and not you."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Smoker",
+              "revision": "173272",
+              "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / The Parish / The Quarter",
+              "quoted": [
+                "The Crescendo Event will create absolute chaos. Try dragging a Survivor down to the ground, causing them to take a lot of fall damage."
+              ]
+            },
+            {
+              "page": "https://left4dead.fandom.com/wiki/The_Jockey",
+              "revision": "172739",
+              "part_of_page": "Level Specific Strategy / The Parish / The Cemetery",
+              "quoted": [
+                "Grabbing a Survivor in the Impound Lot and leading them into the alarmed cars will spawn several hordes that will harass and slow the survivors, giving you and your teammates more time to attack them."
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

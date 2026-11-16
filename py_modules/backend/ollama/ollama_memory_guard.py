@@ -19,8 +19,10 @@ anything, or pick a smaller model for the player.
 How it works:
 1. ``check_memory_for_model()`` reads ``MemAvailable`` from ``/proc/meminfo`` and asks Ollama
    (``probe_ollama_health``) what is installed and what is loaded. A model that is already loaded is
-   never short. Otherwise it needs its loaded size if Ollama has reported one earlier this session
-   (remembered whenever it is seen in ``/api/ps``), else its installed size times ``LOAD_SIZE_FACTOR``.
+   never short. Otherwise it needs the LARGER of two numbers: the loaded size Ollama reported earlier this
+   session (remembered whenever it is seen in ``/api/ps``) and its installed size times ``LOAD_SIZE_FACTOR``.
+   Ollama's own loaded size is not trusted alone: on the Deck it said 2.3 GB for a model that took about
+   5.9 GB of the Deck's memory (see the comment beside ``LOAD_SIZE_FACTOR``).
 2. It is short when ``available - needed`` is under ``memory_limit_mb()``.
 3. ``ask_memory_warning()`` is the Ask's one call. An armed "Ask anyway" (``arm_ask_anyway``, good for
    ``ASK_ANYWAY_SECONDS`` and used up by the next Ask) skips the check. Otherwise it writes the numbers
@@ -52,17 +54,22 @@ except ImportError:  # pragma: no cover - only outside the Decky host
     decky = None
     logger = logging.getLogger(__name__)
 
-# How much free memory the Deck must still have AFTER the AI loads. A starting number, not a measured
-# one: on 2026-11-09 the Deck froze with God of War running when free memory fell from 3,578 MB to 1,370
-# and then 970 MB, and an idle Deck has about 12,000 MB free. 2,000 MB sits above the 970 that froze it
-# and well under idle. Row P104-M-MEMORY reads the Deck itself; the session sets the final number.
+# How much free memory the Deck must still have AFTER the AI loads. On 2026-11-09 the Deck froze with God of
+# War running when free memory fell from 3,578 MB to 1,370 and then 970 MB. The Deck's own readings of
+# 2026-11-15 (plan 104 block D0a, workshop:test-evidence/plan104-P104-M-MEMORY-try2.json), MemAvailable in MB:
+# idle 11,962; with the AI loaded 5,649; Deep Rock Galactic: Survivor running (AI unloaded) 8,682; God of War
+# running (AI unloaded) 4,885 with 2,172 MB of swap already in use. With the 5,872 MB the AI needs
+# (4,135 x 1.42), God of War leaves nothing (warns) and Deep Rock Galactic: Survivor leaves 2,810 MB (does
+# not warn, 810 MB above this limit). 2,000 MB sits above the 970 that froze the Deck and under what a light game leaves, so it stays.
 MEMORY_LIMIT_MB = 2000
-# Installed size to loaded size, measured on this PC's Ollama 0.40.16 (plan 104 lane G1) and on the Deck
-# for the starter model: the Deck loaded gemma4:e2b-it-qat (4,336 MB installed) at about 5,800 MB, a factor
-# of 1.34; plain models here ran 1.1 (4,096-token window) to 1.75 (32,768) of their installed size. This PC
-# reads the starter model at only 0.4 (it does not count that model's CPU-side tables), so the Deck's own
-# number is the one used. A size Ollama has really reported beats this factor.
-LOAD_SIZE_FACTOR = 1.35
+# Loaded size over installed size, from the same readings: loading gemma4:e2b-it-qat (4,135 MB installed,
+# 4,336,358,185 bytes in /api/tags) together with the small search model (about 460 MB) took 6,313 MB of the
+# Deck's available memory (11,962 down to 5,649), so the AI alone took about 5,850 MB: a factor of 1.41.
+# 1.42 is that, rounded up. Ollama's /api/ps said only 2,295,311,891 bytes (2,189 MB) for the same load, so its
+# number is never trusted on its own: the need is the larger of it and installed size x this factor.
+# On this PC the starter model reads even lower (0.4: its CPU-side tables are not counted), and plain models
+# ran 1.1 (4,096-token window) to 1.75 (32,768) of their installed size, so the factor is the Deck's.
+LOAD_SIZE_FACTOR = 1.42
 ASK_ANYWAY_SECONDS = 60.0
 MEMORY_LIMIT_ENV = "BONSAI_ASK_MEMORY_LIMIT_MB"
 MEMORY_LIMIT_FILE = "ask_memory_limit_mb"
@@ -181,13 +188,12 @@ def check_memory_for_model(ollama_base: str, model: str) -> Optional[MemoryVerdi
     limit = memory_limit_mb()
     if model in loaded:
         return MemoryVerdict(False, available, loaded[model], available, limit, model, True, "already loaded")
-    if remembered:
-        needed, source = remembered, "loaded size seen earlier"
-    else:
-        installed = _mb((health.get("model_sizes") or {}).get(model))
-        if installed <= 0:
-            return None
-        needed, source = round(installed * LOAD_SIZE_FACTOR), f"installed size x {LOAD_SIZE_FACTOR}"
+    installed = _mb((health.get("model_sizes") or {}).get(model))
+    estimate = round(installed * LOAD_SIZE_FACTOR)
+    needed = max(remembered or 0, estimate)
+    if needed <= 0:
+        return None
+    source = "loaded size seen earlier" if remembered and remembered >= estimate else f"installed size x {LOAD_SIZE_FACTOR}"
     left = available - needed
     return MemoryVerdict(left < limit, available, needed, left, limit, model, False, source)
 

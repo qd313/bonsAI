@@ -35,6 +35,11 @@ from test_ollama_ask_service import _FakePlugin  # noqa: E402
 DECK = "127.0.0.1:11434"
 MODEL = "gemma4:e2b-it-qat"
 MB = 1024 * 1024
+# The Deck's own readings (plan 104 block D0a, 2026-11-15, plan104-P104-M-MEMORY-try2.json), in MB.
+DECK_INSTALLED_MB = 4135  # gemma4:e2b-it-qat in /api/tags: 4,336,358,185 bytes
+DECK_REPORTED_MB = 2189  # what /api/ps said was loaded: 2,295,311,891 bytes
+DECK_GOD_OF_WAR_MB = 4885  # MemAvailable with God of War running, the AI unloaded
+DECK_DRG_SURVIVOR_MB = 8682  # the same with Deep Rock Galactic: Survivor running
 
 
 def _health(installed_mb: int = 4336, loaded: Optional[dict[str, int]] = None) -> dict[str, Any]:
@@ -90,16 +95,41 @@ class CheckTests(_Standins):
         self.assertTrue(verdict.loaded_already)
         self.assertFalse(verdict.short)
 
-    def test_a_size_ollama_reported_before_beats_the_factor(self) -> None:
-        self.health = _health(loaded={MODEL: 5800})
-        guard.check_memory_for_model(f"http://{DECK}", MODEL)  # remembers 5,800 MB
+    def test_a_reported_size_bigger_than_the_estimate_wins(self) -> None:
+        self.health = _health(loaded={MODEL: 7000})
+        guard.check_memory_for_model(f"http://{DECK}", MODEL)  # remembers 7,000 MB
         self.health = _health()  # unloaded since
-        self.available_mb = 7000
+        self.available_mb = 9000
         verdict = guard.check_memory_for_model(f"http://{DECK}", MODEL)
         assert verdict is not None
-        self.assertEqual(verdict.needed_mb, 5800)
+        self.assertEqual(verdict.needed_mb, 7000)
         self.assertEqual(verdict.need_from, "loaded size seen earlier")
-        self.assertTrue(verdict.short)  # 7000 - 5800 = 1200, under the limit
+        self.assertFalse(verdict.short)  # 9,000 - 7,000 = 2,000: exactly the limit, not under it
+
+    def test_a_reported_size_smaller_than_the_estimate_loses_to_it(self) -> None:
+        """The Deck's own reading: Ollama said 2.3 GB loaded, the Deck's memory fell by about 5.9 GB."""
+        self.health = _health(installed_mb=DECK_INSTALLED_MB, loaded={MODEL: DECK_REPORTED_MB})
+        guard.check_memory_for_model(f"http://{DECK}", MODEL)  # Ollama reports 2,189 MB; remembered
+        self.health = _health(installed_mb=DECK_INSTALLED_MB)  # unloaded since
+        self.available_mb = DECK_GOD_OF_WAR_MB
+        verdict = guard.check_memory_for_model(f"http://{DECK}", MODEL)
+        assert verdict is not None
+        self.assertEqual(verdict.needed_mb, round(DECK_INSTALLED_MB * guard.LOAD_SIZE_FACTOR))
+        self.assertEqual(verdict.need_from, f"installed size x {guard.LOAD_SIZE_FACTOR}")
+        self.assertTrue(verdict.short)
+
+    def test_the_decks_numbers_god_of_war_warns_and_drg_survivor_does_not(self) -> None:
+        """Plan 104 block D0a, 2026-11-15 (plan104-P104-M-MEMORY-try2.json): free memory with each game running."""
+        self.health = _health(installed_mb=DECK_INSTALLED_MB)
+        for game, available, short in (
+            ("God of War", DECK_GOD_OF_WAR_MB, True),
+            ("Deep Rock Galactic: Survivor", DECK_DRG_SURVIVOR_MB, False),
+        ):
+            self.available_mb = available
+            verdict = guard.check_memory_for_model(f"http://{DECK}", MODEL)
+            assert verdict is not None
+            self.assertGreaterEqual(verdict.needed_mb, 5800, game)
+            self.assertEqual(verdict.short, short, f"{game}: {available} MB free, need {verdict.needed_mb}")
 
     def test_the_ai_on_a_pc_is_never_checked(self) -> None:
         with patch.object(guard, "read_available_mb", side_effect=AssertionError("must not read memory")):
@@ -205,7 +235,7 @@ class WarningWordsTests(unittest.TestCase):
     def test_the_warning_says_what_is_free_what_is_needed_what_helps_and_the_risk(self) -> None:
         verdict = guard.MemoryVerdict(
             short=True, available_mb=3500, needed_mb=5800, left_mb=-2300, limit_mb=2000, model=MODEL,
-            loaded_already=False, need_from="installed size x 1.35",
+            loaded_already=False, need_from="installed size x 1.42",
         )
         text = guard.low_memory_message(verdict)
         self.assertTrue(text.startswith(guard.LOW_MEMORY_MESSAGE_START))
@@ -286,7 +316,7 @@ class SumUpButtonTests(ChatSlotJobTestCase):
     def _short(self, short: Optional[bool]) -> Any:
         verdict = None if short is None else guard.MemoryVerdict(
             short=short, available_mb=3500, needed_mb=5800, left_mb=-2300, limit_mb=2000, model="test-model",
-            loaded_already=False, need_from="installed size x 1.35",
+            loaded_already=False, need_from="installed size x 1.42",
         )
         guard.reset_for_tests()
         self.addCleanup(guard.reset_for_tests)

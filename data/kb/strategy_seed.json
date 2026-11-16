@@ -4817,7 +4817,7 @@
       "game_id": 34,
       "section_type": "mechanic",
       "name": "The 1P Game in Super Smash Bros.",
-      "card": "The 1P Game is the only single-player mode in Super Smash Bros., and it is a fixed run rather than a randomised one: every stage, opponent and order stays the same on every playthrough, ending in a fight against the game's boss, Master Hand. Along the way there are eleven regular stages against a growing roster of opponents, plus three optional bonus stages, one after every third fight, that swap combat for a timed challenge like smashing targets or stepping on marked platforms instead. Clearing a stage banks points toward a final score, and most fights carry their own bonus objectives, like knocking a foe out in a specific way, for extra points on top.",
+      "card": "The 1P Game is the only single-player mode in Super Smash Bros., and it is a fixed run rather than a randomised one: every stage, opponent and order stays the same on every playthrough, ending in a fight against the game's boss, Master Hand. The run is eleven stages in all, the last one being Master Hand, and three bonus stages come in between, one after every third fight, that swap combat for a timed challenge with a single stock: smashing ten targets, stepping on ten platforms (each against a two-minute clock), and Race to the Finish, a one-minute dash down five floors to an exit past explosives and bumpers. Clearing a stage banks points toward a final score, and most fights carry their own bonus objectives, like knocking a foe out in a specific way, for extra points on top.",
       "source_url": "https://www.ssbwiki.com/1P_Game",
       "source_license": "CC-BY-SA-4.0",
       "source_version": null,

@@ -127,8 +127,16 @@ LOOK_JS = r"""JSON.stringify((() => {
     // scrollWidth counts the letter-spacing after the last letter, so the Ask pill read 56 in 51 while its word and
     // arrow sat whole inside the box (plan96-P96-F25-ASK-PILL.json): the words count as not fitting only when a
     // child or the text itself reaches past the control's own box.
+    // A chip label that scrolls inside its own window (plan 104 T3, row P104-M-CHIP-CUT: the long label's last word
+    // was in view for 2 s of every pass) is judged by its window, not by its words at one instant: the window must
+    // sit inside the chip's box; the moving words are skipped. A chip with no scroller is judged as before.
+    const scroller = b.querySelector('.bonsai-preset-chip-text--marquee');
     const spills = (() => {
       const past = (q) => q.width > 0 && (q.right > r.right + 1 || q.left < r.left - 1);
+      if (scroller) {
+        if (past(scroller.getBoundingClientRect())) return true;
+        return [...b.children].some((k) => !k.contains(scroller) && past(k.getBoundingClientRect()));
+      }
       if ([...b.children].some((k) => past(k.getBoundingClientRect()))) return true;
       const rng = document.createRange(); rng.selectNodeContents(b); return past(rng.getBoundingClientRect());
     })();

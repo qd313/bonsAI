@@ -1296,7 +1296,7 @@
           ]
         },
         {
-          "line": "Tips: Whoever is ahead on points gets the survivor role first in the next round. If the totals are level, the team that was survivors first last time keeps that role. Normal difficulty applies throughout.",
+          "line": "Tips: The team with the better total takes the survivor side first next round. After a tie nothing changes: the team that opened the last round as survivors opens the next one that way too. Normal difficulty applies throughout.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1333,7 +1333,7 @@
           ]
         },
         {
-          "line": "Tips: Nothing carries over between chapters: survivors lose their weapons, health, gnomes and items, and the first couple of chapters hand out tier 1 weapons. Supplies in the safe room that were used last round are back again.",
+          "line": "Tips: Survivors do not keep their weapons, health, gnomes or items from the previous map, and the first couple of chapters hand out tier 1 weapons. Supplies in the safe room that were used last round are back again.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1361,7 +1361,7 @@
           ]
         },
         {
-          "line": "Tips: Versus maps are altered a little to stop survivors camping for ever: closets and similar hold-out areas are taken out.",
+          "line": "Tips: Some versus maps are altered a little to stop survivors camping for ever: closets and similar hold-out areas are taken out.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1397,7 +1397,7 @@
           ]
         },
         {
-          "line": "Tips: In Left 4 Dead 2, counting permanent and temporary health together: red is under 10 health or incapacitated, orange is under 25, yellow is 25 to 39, and green is over 40. A survivor at exactly 1 health after being incapacitated, without healing, also shows red.",
+          "line": "Tips: In Left 4 Dead 2, counting permanent and temporary health together: red is under 10 health or incapacitated, orange is under 25, yellow is 25 to 39, and green is over 40. A survivor sitting on a single point of health after going down, and not healed since, also shows red.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1486,7 +1486,7 @@
           ]
         },
         {
-          "line": "Tips: Safe actions: reloading, jumping, using doors, and picking up or throwing items do not show you, although a survivor may call out what they are doing, and drifting sideways in mid-air does show you. Starting a Crescendo event does not either, but events that make you shoot, melee or talk still give you away. The infected team does not share what each member sees.",
+          "line": "Tips: Safe actions: reloading, jumping, using doors, and picking up or throwing items do not show you, although a survivor may call out what they are doing, and drifting sideways in mid-air does show you. Starting a Crescendo event does not either, but events that make you shoot, melee or talk still give you away. What one infected player sees is not passed on to the others.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1593,7 +1593,7 @@
           ]
         },
         {
-          "line": "Tips: Few humans on the survivor side is a real handicap: once the last human survivor is down the round is over, because bot survivors cannot get through a level by themselves.",
+          "line": "Tips: Few humans on the survivor side is a real handicap: once the last human survivor is killed the round is over, because bot survivors cannot get through a level by themselves.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
@@ -1621,15 +1621,14 @@
           ]
         },
         {
-          "line": "Tips: A bot-controlled Hunter shot from a distance cannot leap away as it does in the campaign, so it runs instead and is easy to kill. Its pounce still hurts, up to 25 damage when it starts far enough off.",
+          "line": "Tips: A bot-controlled Hunter hit from range cannot spring clear as it does in the campaign, so it simply flees and you can finish it off.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Versus",
               "revision": "172372",
               "part_of_page": "Notes",
               "quoted": [
-                "Since the jump ability is not available in Versus, he will simply run away, making him an easy kill.",
-                "Up to 25 points of damage can be dealt instantly if the pounce originated far enough away."
+                "Since the jump ability is not available in Versus, he will simply run away, making him an easy kill."
               ]
             }
           ]
@@ -1672,7 +1671,7 @@
           ]
         },
         {
-          "line": "Tips: Spawn denial depends on talking: with voices coordinated, a survivor team can keep watch on several likely spawn spots until it has passed them, so the infected must wait or settle for a worse position.",
+          "line": "Tips: Spawn denial works best with good coordination over a microphone: the wiki says a survivor team can then keep watch on spawn spots until it has passed them, so the infected must wait or settle for a worse position.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Tactics",
@@ -1738,7 +1737,7 @@
           ]
         },
         {
-          "line": "Tips: Weigh the Grenade Launcher carefully: it hits hard with one shot, but once reload time counts almost any other weapon does more to a single target such as a Tank, its ammo is limited, and its splash easily hurts teammates. If you carry it, use it briefly in a panic event and swap it out afterwards.",
+          "line": "Tips: Weigh the Grenade Launcher carefully: it hits hard with one shot, but once reload time counts almost any other weapon does more against one big target like a Tank, its ammo is limited, and its splash easily hurts teammates. If you carry it, use it briefly in a panic event and swap it out afterwards.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Tactics",
@@ -1787,7 +1786,7 @@
           ]
         },
         {
-          "line": "Tips: A worked turn: team A spawns beside the generator with 30 seconds to gear up while the infected look for spots. When that runs out, or as soon as a survivor wanders off, the clock starts at 1 minute 30 seconds, and every can poured adds 20 seconds. Say team A pours four cans before time or a wipe-out ends their turn.",
+          "line": "Tips: A worked turn: team A spawns beside the generator with 30 seconds to gear up while the infected look for spots. When that runs out, or as soon as a survivor wanders off, the clock starts at 1 minute 30 seconds, and every can brought to the generator adds 20 seconds. In this example team A gets four cans to the generator before time or a wipe-out ends their turn.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
@@ -1803,7 +1802,7 @@
           ]
         },
         {
-          "line": "Tips: Team B then plays the survivors and needs five cans to win the round, one more than team A. If both bring in four, the faster team takes it, and if neither pours a can the round goes to whoever lasted longer.",
+          "line": "Tips: In this example team B then plays the survivors and needs five cans to win the round, one more than team A's four. If both bring in four, the faster team takes it, and if neither pours a can the round goes to whoever lasted longer.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/Scavenge_Mode",
@@ -2127,7 +2126,7 @@
           ]
         },
         {
-          "line": "Tips: The Underground's Crescendo Event: the water hides a Hunter, who can pounce the survivor furthest from the rest. A Smoker can snare the last one to jump into the sewer, a drop they cannot undo, and a Hunter pouncing the dragged victim makes it very lethal.",
+          "line": "Tips: The Underground's Crescendo Event: the water hides a Hunter, who can pounce the survivor furthest from the rest. A Smoker can snare whoever is last to drop into the sewer, a drop they cannot undo, and a Hunter pouncing the dragged victim makes it very lethal.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/The_Hunter",
@@ -2202,7 +2201,7 @@
           ]
         },
         {
-          "line": "Tips: The Sugar Mill: broken buildings, catwalks, vats and the three-storey mill are launch points, and the pipes along the tops of some walls leading up to the mill are at least twice as high as the vats and catwalks. In the cane field, wait for bile to land, or else pounce from the top of the mill. After bile, a Smoker can snare a clean survivor, or snare one off the edge into the central hole by the Crescendo Event button and leave them hanging.",
+          "line": "Tips: The Sugar Mill: broken buildings, catwalks, vats and the three-storey mill are launch points, and a Hunter can leap onto the pipes along the tops of some walls leading up to the mill, which are higher still. In the cane field, wait for bile to land, or else pounce from the top of the mill. After bile, a Smoker can snare a clean survivor, or snare one off the edge into the middle of the building where the Crescendo Event is triggered and leave them hanging.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/The_Hunter",
@@ -2210,6 +2209,7 @@
               "part_of_page": "Good Ambush Spots / Left 4 Dead 2 / Hard Rain / The Sugar Mill",
               "quoted": [
                 "There are also catwalks and vats lining the Survivors' path which serve as excellent launch points, as well as the 3-story mill itself.",
+                "it is possible to leap up and land on them",
                 "These are at least twice as high as the vats and catwalks",
                 "If there is no Boomer, then pounce from the top of the sugar mill"
               ]
@@ -2226,7 +2226,7 @@
           ]
         },
         {
-          "line": "Tips: Mill Escape and Return to Town need no new plan: use the Sugar Mill's Hunter spots in the first and the Milltown's in the second. In Return to Town a Smoker can wait on any roof or in any alley.",
+          "line": "Tips: For Mill Escape the wiki sends Hunters back to the Sugar Mill's spots, and for Return to Town to the Milltown's. In Return to Town a Smoker can wait on any roof or in any alley.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/The_Hunter",
@@ -2264,7 +2264,7 @@
       "main_revision": "173041",
       "lines": [
         {
-          "line": "Summary: Ambush spots for the infected on the first four chapters of The Parish: The Waterfront, The Park, The Cemetery and The Quarter. Alarmed cars, bushes and the Cemetery's one-way drops come up most.",
+          "line": "Summary: Ambush spots for the infected on the first four chapters of The Parish: The Waterfront, The Park, The Cemetery and The Quarter. The tips cover the Hunter, the Smoker and, in the Cemetery, the Jockey.",
           "drawn_from": [
             {
               "page": "https://left4dead.fandom.com/wiki/The_Parish",

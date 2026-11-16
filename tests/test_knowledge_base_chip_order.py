@@ -327,9 +327,58 @@ class ChipOrderTests(unittest.TestCase):
         cards[14] = ("item", "Item4", TOWARD)
         self._chips_for(cards, question=("how do I use item four", TOWARD))
         payload = chips.session_rag_chip_candidates_to_rpc(self._last_result)
-        self.assertEqual(payload["closest_count"], 1)
+        # One note is clearly close; the next nearest joins it so both chips on screen are about the question.
+        self.assertEqual(payload["closest_count"], 2)
         self.assertEqual(payload["candidates"][0]["text"], "How do I use Item4?")
         self.assertEqual(chips.session_rag_chip_candidates_to_rpc(chips.SessionRagChipCandidatesResult(ok=False))["closest_count"], 0)
+
+    # --- plan 104, lane C2 fix round: one close note still gives the row two chips about the question ---
+
+    def _deep_rock_cards(self):
+        """The thirteen real Deep Rock Galactic: Survivor notes, scored as the Deck's second try saw them.
+
+        The question was about the Dreadnought Twins: only that note cleared the bar (0.739); the next
+        nearest were Mactera (an enemy outside today's ten, never named) and the Glyphid Dreadnought.
+        """
+        def near(cos: float) -> list[float]:
+            return [cos, (1 - cos * cos) ** 0.5, 0.0]
+
+        scores = {
+            "Glyphid Dreadnought": 0.634, "Hollow Bough": 0.55, "Mining and the run timer": 0.55,
+            "Classes": 0.55, "Upgrades and overclocks": 0.55, "Exploder": 0.589, "Praetorian": 0.589,
+            "Acid Spitter": 0.55, "Mactera": 0.636, "Dreadnought Twins": 0.739, "Red Sugar": 0.55,
+            "Nitra": 0.584, "Gold": 0.55,
+        }
+        kinds = {
+            "Glyphid Dreadnought": "boss", "Hollow Bough": "area", "Mining and the run timer": "mechanic",
+            "Classes": "mechanic", "Upgrades and overclocks": "mechanic", "Exploder": "enemy",
+            "Praetorian": "enemy", "Acid Spitter": "enemy", "Mactera": "enemy", "Dreadnought Twins": "boss",
+            "Red Sugar": "item", "Nitra": "item", "Gold": "item",
+        }
+        return [(kinds[name], name, near(score)) for name, score in scores.items()]
+
+    def test_one_close_note_still_puts_two_notes_about_the_question_in_front(self):
+        got = self._chips_for(
+            self._deep_rock_cards(),
+            question=("how should I handle the Dreadnought Twins boss fight and which enemy notes", TOWARD),
+        )
+        self.assertEqual(got[:2], ["How do I beat Dreadnought Twins?", "How do I beat Glyphid Dreadnought?"])
+        # The Deck's second try: one clear note, so chip 2 was an ordinary chip until a later change.
+        self.assertEqual(self._last_result.closest_count, 2)
+
+    def test_the_second_note_is_the_next_nearest_that_the_spoiler_rules_allow(self):
+        cards = self._deep_rock_cards()
+        # Mactera is the next nearest by score, but an enemy the question never named and the ten do not offer.
+        got = self._chips_for(cards, question=("how should I handle the Dreadnought Twins boss fight", TOWARD))
+        self.assertNotIn("How do I deal with Mactera?", got[:2])
+        # Named in the question, it may lead.
+        got = self._chips_for(cards, question=("how should I handle the Dreadnought Twins and Mactera", TOWARD))
+        self.assertEqual(got[:2], ["How do I beat Dreadnought Twins?", "How do I deal with Mactera?"])
+
+    def test_no_close_note_means_no_padding(self):
+        cards = [(k, n, [0.55, (1 - 0.55**2) ** 0.5, 0.0]) for k, n, _ in self._deep_rock_cards()]
+        self._chips_for(cards, question=("anything", TOWARD))
+        self.assertEqual(self._last_result.closest_count, 0)
 
 
 if __name__ == "__main__":

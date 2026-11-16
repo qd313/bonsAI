@@ -78,6 +78,10 @@ _MAX_COMPAT_CHIP_CANDIDATES = 2
 #
 # How many notes may come forward at most.
 _CLOSEST_FIRST = 4
+# When at least one note is clearly close, the row's two chips on screen are both about the question:
+# a lone close note is joined by the next nearest allowed one, however near it is. (The Deck's second
+# try on the Dreadnought Twins had one clear note; the other chip was an ordinary one for seven seconds.)
+_CLOSEST_MIN = 2
 # A note comes forward only when it is clearly nearer the question than the rest of the game's notes: at
 # least this much above the game's average, and at least this close in absolute terms. Cosine on
 # normalised vectors, the same measure the search uses (see knowledge_base_search._dot_similarity).
@@ -396,8 +400,10 @@ def _closest_first(
     offered = set(todays)
     closest: list[tuple[str, str]] = []
     for score, kind, name in sorted(scored, key=lambda row: -row[0]):
-        if score < bar or len(closest) >= _CLOSEST_FIRST:
+        if len(closest) >= _CLOSEST_FIRST:
             break
+        if score < bar and not (closest and len(closest) < _CLOSEST_MIN):
+            break  # below the bar only to make a lone close note a pair (nothing close: no pair)
         if kind.lower() == "starting_out":
             continue  # "how do I get started" is for a new player, not for someone mid-question
         if (

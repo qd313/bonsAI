@@ -53,7 +53,7 @@
           ]
         },
         {
-          "line": "Weak points: A low pain chance means it keeps coming through hits, so use the strongest guns: the rocket launcher, plasma gun or super shotgun. At close range the chaingun and shotgun work too. Do not trade melee blows, since it scratches back, and leave the chainsaw alone: it is ineffective against it.",
+          "line": "Weak points: Do not melee it: it scratches back, and the chainsaw is ineffective against a monster like this. Shoot it instead: its low pain chance means the rocket launcher, plasma gun or super shotgun are the most effective, with the chaingun and shotgun good at close range.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Hell_knight",
@@ -154,7 +154,7 @@
           ]
         },
         {
-          "line": "Weak points: A baron shrugs off a lot of damage and rarely flinches, so reach for the rocket launcher, plasma gun or super shotgun first. The chaingun and shotgun can still do the job if you can get far enough away to avoid being hit, but they are slow. Stay out of reach of its claws: fighting it in melee is dangerous.",
+          "line": "Weak points: Distance and weapon choice decide this fight. Up close, stay out of melee, because its claws are a real hazard. Use the rocket launcher, plasma gun or super shotgun, which suit a monster that rarely flinches and soaks up punishment; the chaingun and shotgun are slow and only work if you can keep far enough away.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Baron_of_Hell",
@@ -178,7 +178,7 @@
           ]
         },
         {
-          "line": "Tips: Open ground is your friend: with space, circle-strafing avoids most of its fireballs. In a tight spot it is much more lethal, because there is nowhere to go. Doom 64 barons and Hell knights can injure and fight each other.",
+          "line": "Tips: Where you fight matters: in a cramped space its fireballs become much deadlier, but in the open you can circle-strafe around most of them. Doom 64 adds a twist: barons and Hell knights can injure each other and end up infighting.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Baron_of_Hell",
@@ -385,7 +385,7 @@
           ]
         },
         {
-          "line": "Tips: The danger is speed: its plasma bursts are among the fastest projectiles and its rate of fire strips health quickly. Keep attacking, sweep side to side in wide moves, and step out of its line of fire now and then to take minimal damage. When monsters fight each other in Doom 64, its twin plasma cannons often beat even a baron of Hell, leaving little health.",
+          "line": "Tips: Health vanishes quickly in its fire: the bolts travel faster than almost any other projectile, and it shoots them so often. Beat it by never stopping: keep attacking, sweep side to side in wide moves, and duck out of its line of fire now and then, and you take minimal damage. When monsters fight each other in Doom 64, its twin plasma cannons often beat even a baron of Hell, leaving little health.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Arachnotron",
@@ -418,7 +418,7 @@
       "main_revision": "556851",
       "lines": [
         {
-          "line": "Summary: Cacodemons drift slowly through the air, grin wickedly with a huge mouth, and attack by spitting balls of lightning or biting. The Doom 64 version is beige brown with one yellow-green eye and two arms trailing broken chains, and the arms swing as it flies.",
+          "line": "Summary: A cacodemon floats slowly, grins with a wide mouth, and either spits a ball of lightning or bites. In Doom 64 it is beige brown, with just one eye, yellow-green, and two arms ending in broken chains; the arms swing as it flies.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Cacodemon",
@@ -458,7 +458,7 @@
           ]
         },
         {
-          "line": "Weak points: It moves slowly and is easily knocked back by hits, so it is a soft target. The chainsaw can disable it, and a stream of fire from the chaingun or plasma gun keeps shoving it away so it hardly gets to fight.",
+          "line": "Weak points: Hits knock it back easily and it moves slowly, which makes it one of the easier targets. Use a chaingun or plasma gun to keep it pushed away so it barely fights back, or the chainsaw to incapacitate it.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Cacodemon",
@@ -476,7 +476,7 @@
           ]
         },
         {
-          "line": "Tips: Given room, you can take on a crowd of them and be barely scratched, since their shots are easy to sidestep. Once they notice you, they sometimes come flying out of places you did not expect. Doom 64, like the PlayStation version, has faster cacodemon shots than the original PC game, but the cacodemons themselves still move slowly.",
+          "line": "Tips: Doom 64 keeps the faster cacodemon shots of the PlayStation version, but the cacodemons themselves are as slow as in DOS. With room to move you can fight many at once and take little or no damage, as the shots are easy to dodge. Watch for ones flying out of unexpected places once alerted.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Cacodemon",
@@ -533,7 +533,7 @@
           ]
         },
         {
-          "line": "Weak points: Aim at the pain elemental and ignore its lost souls until it is dead. Fast-firing weapons such as the chaingun and plasma gun usually hold the souls back. Avoid the rocket launcher: the monster can release a lost soul while your rocket is in the air, and the explosion may hit you.",
+          "line": "Weak points: Kill order matters: the pain elemental first, its lost souls only afterward. Weapon choice matters too: the chaingun and plasma gun fire fast enough to usually keep lost souls at bay, whereas the rocket launcher is risky because a lost soul can be spat out while your rocket is still flying, and the blast can reach you.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Pain_elemental",
@@ -711,7 +711,7 @@
       "main_revision": "581317",
       "lines": [
         {
-          "line": "Summary: A lost soul is its own weapon: it flies at you jaws open. The Doom 64 kind has black horns and an open skull with fire only on top. It is weaker, with less health, but far more aggressive than the PC version and recovers from each attack much faster, which puts it among the deadliest enemies there.",
+          "line": "Summary: The lost soul is a weapon itself, charging with its jaws open. Doom 64's version has black horns and an opened skull with fire only on top; it has less health but is much more aggressive, and recovers much faster after each attack. That viciousness makes it among the deadliest enemies.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Lost_soul",
@@ -745,7 +745,7 @@
           ]
         },
         {
-          "line": "Weak points: One shotgun blast is enough to fell it, as it is weaker than on PC. If you hit it mid-charge, the charge is interrupted and it is helpless until it strikes something, so a chaingun is handy against a crowd.",
+          "line": "Weak points: Fire at a charging lost soul and the charge stops; it is then helpless until it hits something, which is why the chaingun suits a crowd. It is also weaker than on PC: one shotgun blast fells it.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Lost_soul",
@@ -772,7 +772,7 @@
           ]
         },
         {
-          "line": "Tips: Listen for the hiss: lost souls make no sound when alerted, so the breath as one launches is often your first warning. Avoid firing rockets into a pack, since one may dart toward you and set the rocket off near enough to damage you. They tend to come in groups.",
+          "line": "Tips: Rockets are risky in a group, as a lost soul may dart toward you and make a rocket explode near enough to hurt you. Watch for the warning signs: unlike every other monster it makes no sound when alerted, so the hissing breath of its launch is often the first clue. Expect groups more often than singles.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Lost_soul",
@@ -1170,7 +1170,7 @@
       "main_revision": "526406",
       "lines": [
         {
-          "line": "Summary: A sawed-off, break-open double-barrel shotgun that uses two shells a shot and fires 20 pellets per blast, where the normal shotgun fires seven. Per shot it is about three times as damaging as the standard shotgun. In Doom 64 it reloads faster, in 1.53 seconds against 1.77 in Doom II, and it knocks you back slightly when fired; it ranks among the most essential weapons in that game.",
+          "line": "Summary: A sawed-off, break-open double-barrel shotgun. Each shot spends two shells and sends out 20 pellets (the normal shotgun sends seven), so per shot it hits for roughly triple what a standard shotgun does. In Doom 64 it reloads faster: 1.53 seconds against 1.77 in Doom II. It also knocks you back slightly, and it ranks among the most essential weapons in that game.",
           "drawn_from": [
             {
               "page": "https://doomwiki.org/wiki/Super_shotgun",

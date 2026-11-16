@@ -166,6 +166,12 @@ export function useMainTabAskBarFocus(
    * `modalReturnFocusRegistry` needed, and for the same reason.
    */
   const focusFirstPresetChip = useCallback((): boolean => {
+    /*
+     * The low-memory warning's "Ask anyway", while it shows: the one thing a person under that warning can do,
+     * so it comes before the chips (Down from it still reaches them). On the Deck it took two Up presses through
+     * a chip (plan104-P104-MEMORY-01.json). Steam's transfer, registered by ChatTranscriptHintRows.tsx.
+     */
+    if (takeNavFocus("ask-anyway")) return true;
     /* The AI's own suggestion chip, when it shows, sits nearest the box: it is the first stop up. */
     if (takeInjectChipFocus()) return true;
     const host = refs.presetCarouselHostRef.current;

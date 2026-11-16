@@ -401,6 +401,14 @@ that empties the box (only while the box has words), the small ASK. The game tag
   chips (`takeChipSlotFocus`), else the chips' exit Up (`chipRowExitUp`); Down from it is the question box; Left and
   Right are held. Down from the help chip, the suggestion chips and the Show details line lands on it before the box
   (`leaveRowDown` in `MainTabPresetRow.tsx`). Before this the ring went past it both ways and it could only be tapped.
+- **"Ask anyway" comes before the chips while the low-memory warning shows** (plan 104). The row under the warning
+  registers its node as `ask-anyway` (`ChatTranscriptHintRows.tsx`), and Up from the question box takes it first, by
+  Steam's transfer, ahead of the AI's own chip, the help chip, the Show details line and the chips
+  (`focusFirstPresetChip`). Down from it still lands on the chips (or the Show details line in their place), and Up
+  from the chips still lands on it (`chipRowExitUp`), so nothing is lost. On the Deck it had taken two Up presses
+  through a chip (plan104-P104-MEMORY-01.json). After any answer the ring is unowned and Steam's first press puts it
+  on the question box; the plugin does not move the ring onto "Ask anyway" by itself, because a stray A there sends
+  a question the warning says may freeze the Deck.
 - **The strip is its own row, not part of the box's group.** It already was its own Steam focus row
   (`bonsai-unified-input-actions-row`) drawn inside the box's card, and it stays one. Left and Right in the
   box belong to the box (Left: paperclip, Right: mode button, both unchanged); Left and Right in the strip

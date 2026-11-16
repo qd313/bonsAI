@@ -17,10 +17,15 @@
  * usePermHintNavTargets in the transcript, whose hook order is recorded
  * (tests/test_ask_hook_order.py).
  *
+ * While the row holds "Ask anyway" it also registers its node as "ask-anyway", so the question box's Up
+ * reaches it before the suggestion chips (plan 104, row P104-M5-WARNING-FOCUS: on the Deck it took two Up
+ * presses, through a chip, workshop:test-evidence/plan104-P104-MEMORY-01.json).
+ *
  * Does not: Decide what a troubleshooting question looks like (troubleshootingAskHeuristic); it
  * only asks it.
  */
 import type React from "react";
+import { useEffect } from "react";
 import { PanelSectionRow, Button, Focusable } from "@decky/ui";
 import type { BonsaiCapabilityKey } from "../../permissions/permissionDeepLink";
 import { questionLooksLikeTroubleshootingAsk } from "./troubleshootingAskHeuristic";
@@ -28,6 +33,7 @@ import {
   dismissHintKeepingRing,
   troubleshootHintRowNavHandlers,
 } from "../../../shared/dpad/chatTranscriptNavHelpers";
+import { registerNavFocus, unregisterNavFocus } from "../../../shared/dpad/navFocusRegistry";
 import type { PermHintNavTargets } from "./usePermHintNavTargets";
 import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../../../styles/settingsGlassButton";
 import { textPx } from "../../../styles/textPx";
@@ -61,6 +67,13 @@ export type ChatTranscriptHintRowsProps = {
 export function ChatTranscriptHintRows(props: ChatTranscriptHintRowsProps) {
   const { fullBleedRowStyle, isAsking, unifiedInput, onNavigateToPermissions, navTargets } = props;
   const { troubleshootHintNavRef, troubleshootHintButtonEls, troubleshootHintButtonRefs } = navTargets;
+  const askAnywayShown = !isAsking && !props.showNoAiRow && Boolean(props.showLowMemoryRow && props.onAskAnyway);
+  // The warning's button is what a person under it wants next: the box's Up takes this node first (useMainTabAskBarFocus).
+  useEffect(() => {
+    if (!askAnywayShown) return undefined;
+    registerNavFocus("ask-anyway", troubleshootHintNavRef);
+    return () => unregisterNavFocus("ask-anyway", troubleshootHintNavRef);
+  }, [askAnywayShown, troubleshootHintNavRef]);
   return (
     <>
 {!isAsking && props.showNoGameRow ? (

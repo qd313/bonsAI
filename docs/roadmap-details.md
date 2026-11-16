@@ -55,6 +55,7 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Plan 103 sweep K2 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k2-notes-moved-from-the-roadmap-2026-11-10)
 - [Plan 103 sweep K10 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k10-notes-moved-from-the-roadmap-2026-11-10)
 - [Plan 103 sweep K11 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k11-notes-moved-from-the-roadmap-2026-11-10)
+- [Plan 104 sweep K2 notes moved from the roadmap (2026-11-16)](#plan-104-sweep-k2-notes-moved-from-the-roadmap-2026-11-16)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -832,3 +833,46 @@ Moved word for word when the quick-start box passed on the Deck and moved to Don
   Not a release blocker under plan 71's line; for 0.6.1.
   **Fixed 2026-11-09:** the box now leads with running the AI on the Deck. Owes **P103-QUICKSTART-01**: a screenshot for the maintainer's eye on the checks page.
   **Deck 2026-11-10 (plan 103 block D1, build `3eabdfa27ab3`): P103-QUICKSTART-01 FAILED.** The box is on the Main tab and names this Deck first, but its title and first lines were above the top of the screen (`workshop:test-evidence/plan103-P103-QUICKSTART-01.json`). Cause: it used Steam's own popup, which has no height limit; it had been too tall since October and the new opening paragraph added to it. **Fixed 2026-11-10 (`4f1cff37`):** it now uses the plugin's shared two-button box (fixed height, the text scrolls, Down and Up read it, the ring opens on "Got it"), so it also looks like the other confirm boxes; the look is yours to judge from a picture. Owes **P103-QUICKSTART-02**: Deck check running in block D2's third part (no evidence file yet).
+
+
+## Plan 104 sweep K2 notes moved from the roadmap (2026-11-16)
+
+Moved word for word by sweep K2 of plan 104. Each block names the entry it stood in; the entry keeps its place, moved to Verify or Done, or is a call on the knowledge-base roadmap.
+
+**Bugs entry: a long chat was not summed up and nothing said why (as it stood)**
+
+- ★ `[chat]` **A long chat was not summed up and nothing said why; the "summed itself up before this answer" row sits under its answer** — **OPEN, found 2026-11-10 (plan 103 Deck block D1, row P103-SUMUP-01, UNCLEAR).**
+  The long test chat was not summed up, and neither the screen nor the log gave a reason (the test chat did sum up, with a log line and a row on screen). First word 11.8 s, done 19.8 s. Evidence `workshop:test-evidence/plan103-P103-SUMUP-01.json` and `-try2.json`. **2026-11-14:** the plan 105 chat's lookup found no fault (no summary was due; that path writes nothing); plan 104 lane B2 confirms it and adds a log line saying why.
+
+**Bugs entry: on Main, the second suggestion chip's words are cut (as it stood)**
+
+- ★ `[ui]` **On Main, the second suggestion chip's words are cut and reach the screen's right edge** — **OPEN, found 2026-11-10 (plan 103 Deck block D1, row QA-LOOK-01-p103, UNCLEAR).**
+  The look check found About clean; on Main the chip's words are cut. Evidence `workshop:test-evidence/plan103-QA-LOOK-01-p103.json`. **2026-11-14:** probably a long label caught mid-scroll, not a cut label; block D0 confirms, plan 104 lane T3 fixes the look check, and the chip's new look is plan 105's (your call there: keep the sliding, fade the cut ends).
+
+**Bugs entry: the Ollama tab's Update button starts an update with no confirm box (as K1 wrote it; now a call, see the knowledge-base roadmap)**
+
+- ★★ `[ollama]` **The Ollama tab's Update button starts a real Ollama update at once, with no confirm box** — **OPEN, found 2026-11-15 (plan 104 Deck block D0a, row P104-KB-THREADS-01).**
+  A driver pressed A on it expecting a box (the row said one opens). The Deck's Ollama went from 0.40.9 to 0.40.16 at once, and Cancel 50 seconds later did not undo it. The first answer after it timed out at 180 s and the second took 100 s (usually about 20). Evidence `workshop:test-evidence/plan104-P104-KB-THREADS-01-try2.json`.
+
+**Bugs entry: the Settings screen still read the old Ollama version (as it stood)**
+
+- ★ `[ollama]` `[ui]` **The Settings screen still read "Ollama v0.40.9" after the Ollama update had made it 0.40.16** — **OPEN, found 2026-11-15 (plan 104 Deck block D0a).**
+  It still read 0.40.9 when the driver last looked; whether it ever refreshes by itself was not checked. Evidence `workshop:test-evidence/plan104-P104-KB-THREADS-01-try2.json`.
+
+**Bugs entry: first start, Install Ollama asked to turn on Internet downloads (as it stood)**
+
+- ★★ `[ollama]` `[perms]` **First start: Install Ollama failed and asked to turn on Internet downloads, though every permission was already on** — **OPEN, reported 2026-11-11 by the maintainer.**
+  On the first-start run the maintainer switched on all permissions, pressed Install Ollama, and it failed with a message to turn on Internet downloads. Check the whole first-start run: whether the popup reads the permission it just set, or an old copy of it. May be the same crash as the ★★★ entry on the install timing out (fixed 2026-11-11 and passed on the Deck 2026-11-15; it now sits in [Done after v0.6.0](#done-after-v060)): a permission saved after that crash never reached the back end. Plan 104 lane B1.
+
+**Bugs entry: a question asked while a heavy game runs can freeze the Deck (as it stood)**
+
+- ★★★ `[ask]` `[ollama]` **A question asked while a heavy game runs can use all the Deck's memory and freeze it** — **OPEN, found 2026-11-09 about 20:15 EST (plan 103 block D0a).**
+  A picture question with God of War running: the lowest reading in the evidence was 970 MB of memory available (about 900 MB at the end), SSH stopped answering, and the maintainer restarted the Deck by hand. Both picture tries that night timed out, at 181.1 and 181.2 s (`workshop:test-evidence/plan103-P102-PICTURE-01-try2.json`). The plugin should check free memory before loading the AI and say so instead of loading. Evidence `workshop:planning/assets/103-handover-D0a.md`. **Readings 2026-11-15 (block D0a, nothing asked over a game):** available memory 11,962 MB idle, 5,649 with the AI loaded, 8,682 with Deep Rock Galactic: Survivor, 4,885 with God of War and 2,172 MB of swap in use (`workshop:test-evidence/plan104-P104-M-MEMORY-try2.json`).
+  **Plan 104 lane G1; your call of 2026-11-14 (D141 call 9): warn, then let me ask anyway.** bonsAI loads nothing, shows a warning and offers a way to send the question regardless; the limit comes from block D0's readings. (Your 2026-11-10 wish to talk about it in a separate chat is answered.)
+
+**Verify entry: a long chat's summing-up gave up after 68 seconds (as it stood)**
+
+- ★ `[chat]` **A long chat's summing-up gave up after 68 seconds ("Couldn't sum up the chat this time")** — **VERIFY, hardened 2026-11-09 (plan 103 lane B2, `4de0db3e`, `c72e3db2`, `a7256a2b`); cause not proven. Was OPEN, found 2026-10-25 by the Deck driver (plan 98 block KS).**
+  In the test chat (over 40 questions), a Strategy question about Hollow Knight showed "Couldn't sum up the chat this time, so this answer only knows the newest turns" before the answer; the summing-up ran about 68 seconds first. Cause unknown; a model still loading is one guess, unchecked. The answer itself was fine. Evidence `workshop:test-evidence/plan98-P98-GLOSSARY-FIRST-01.json` (side_effect) and its `-answer.png`.
+  **Hardened 2026-11-09:** a summary the AI wrapped in a plain code fence is kept, not thrown away; the log now says why a summary call did not finish ("chat_summary: failed in X s (reason: ...)", "ask_ollama: chat summary failed"), and the line a player reads says why too. The Deck keeps no log from that night, so the cause is not proven. Owes **P103-SUMUP-01**: if it fails again the line says why; one question in the long test chat sums up or says why. **Deck 2026-11-09 (plan 103 block D0b, old build, row P103-M-SUMUP):** in the long test chat the "Couldn't sum up the chat this time" line did not show, and the old build wrote no summary lines to the log (the saved summary dated from 2026-11-04). The live time to the first word was **not measured**: the log's own guess was about 8 s and the whole turn took 28.4 s (`workshop:test-evidence/plan103-P103-M-SUMUP.json`). The row partly could not run.
+  **Deck 2026-11-10 (plan 103 block D1, build `3eabdfa27ab3`, row P103-SUMUP-01): UNCLEAR, not a pass.** The long chat was not summed up and nothing said why; the test chat did sum up. See the new Bugs entry (`workshop:test-evidence/plan103-P103-SUMUP-01.json`, `-try2.json`). The row stays owed.

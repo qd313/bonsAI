@@ -38,6 +38,7 @@
 - [Plan 103 sweep K13 notes moved from the knowledge-base roadmap (2026-11-11)](#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
 - [Plan 104 notes moved from the knowledge-base roadmap (2026-11-14)](#plan-104-notes-moved-from-the-knowledge-base-roadmap-2026-11-14)
 - [Plan 104 sweep K1 notes moved from the knowledge-base roadmap (2026-11-15)](#plan-104-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-15)
+- [Plan 104 sweep K2 notes moved from the knowledge-base roadmap (2026-11-16)](#plan-104-sweep-k2-notes-moved-from-the-knowledge-base-roadmap-2026-11-16)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -1704,3 +1705,98 @@ Moved word for word by sweep K1 of plan 104, to make room for the landings and t
 **Calls waiting on you: the Speed-mode option (as it stood before the 2026-11-15 measurement)**
 
 - **The honest answer's Speed-mode option** — **OPEN, raised 2026-11-09; measured again by lane H1 (D141 call 13).** Built and left off: in Speed the made-up boss was written about as real in 6 of 6 (8 of 24 on unmarked turns generally). It goes on only if that falls to under 2 of 6 and ordinary Speed answers keep their facts; you confirm or revert with the numbers.
+
+
+## Plan 104 sweep K2 notes moved from the knowledge-base roadmap (2026-11-16)
+
+Moved word for word by sweep K2 of plan 104. Each block names the entry or line it stood in; the entry keeps its place, moved to Done, or is rewritten there.
+
+**Where things stand: the Deck-today line (as it stood, 2026-11-15)**
+
+**The Deck today (block D0a, 2026-11-15):** plugin build `1ad7ad9b4bf9`; the library on it is still 2026.10.25; its Ollama is now 0.40.16 (a press on the Update button changed it, see the main roadmap's Bugs); the two old settings backups are gone and this plan's is kept. Free memory with nothing asked: 11,962 MB idle, 5,649 with the AI loaded, 8,682 with Deep Rock Galactic: Survivor running, 4,885 with God of War running (2,172 MB of swap) (`workshop:test-evidence/plan104-P104-M-MEMORY-try2.json`).
+
+**Calls: the borrowed-advice fix and its numbers (as K1 wrote it)**
+
+- **The borrowed-advice fix and its numbers** — **OPEN, numbers in 2026-11-15 (plan 104 lane H1).** "Leave the notes out" on a marked turn passes the bar: no borrowed advice in 5 runs by hand, and the facts kept were 70.6 and 70.6 against 70.1 and 70.6 before. But it loses nearly all the right-note help on the marked turns where the right note was attached anyway: 61 and 58 percent of the facts kept before, 5 and 6 after. It lands switched off; the second opinion reads it at the next window.
+
+**Bugs entry: notes quotes not yet sorted by where they sit on their page (as K1 left it)**
+
+- ★ `[KB]` **Notes quotes not yet sorted by where they sit on their page, and two doubtful pages** — **OPEN, found 2026-11-10 (plan 103's last re-check).**
+  The twelve older notes files from plans 100 and 102 have never had their quotes sorted by where they sit on their page (a game's own text is not covered by a wiki's licence): twelve files, 1,646 quotes, about 150 pages to fetch again (plan 104 lanes S1 to S4). Two Cyberpunk 2077 gang notes are kept (your call, 2026-11-10). **2026-11-14:** 22 of 184 "Weak points" lines name no weakness (16 clear, 6 borderline; the ids: [Detail](roadmap-kb-details.md#plan-104-notes-moved-from-the-knowledge-base-roadmap-2026-11-14)). [Detail](roadmap-kb-details.md#plan-103-sweep-k10-notes-moved-from-the-knowledge-base-roadmap-2026-11-10) **2026-11-15 (lanes W1 and S1):** of the "Weak points" lines, seven empty ones were removed, one rewritten (Mario Party 6 Shadow Star Space) and two kept as real (2804, 3006) (`d2917f35` to `71d33f26`); three more empty Portal 2 ones went with lane S1. Lane S1 (`69473193` to `5b22e24f`) sorted every quote for Baldur's Gate 3, Portal 2, The Sims 4 and San Andreas, replaced one game-text quote and reworded about 40 lines that were close copies: three of the twelve files are done. Lanes S2, S3 and S4 are written and waiting for their readers.
+
+**Deck check owed: the opening paragraph (as it stood, 2026-11-15)**
+
+**2026-11-15: Deck block D0a of plan 104 has run** (setup, backups, chats, smoke pass, memory readings, the crash-fix check; lane T1's one-call question runner, a PC tool, landed and runs in block D1). Every Deck block of plan 103 has run or is named here as not run. **Not run:** the saved walks (runbook D3.4) and the starter box on a fresh install (your hand check). A row no block reached stays owed, named in its entry. [Detail](roadmap-kb-details.md#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Deck check owed: Left 4 Dead 2, three versus-note mix-ups (as K1 wrote it)**
+
+- ★ `[KB]` **Left 4 Dead 2: three versus-note mix-ups (Speed "how to beat tank", a plain Tank question, a Hunter question from the infected side)** — **VERIFY, fixed 2026-11-15 (plan 104 lane V4, `721b4857`, `f012f4ee`, `bae0e43d`); unit-tested; owes rows P104-VERSUS-SPEED-01, P104-VERSUS-TANK-01 and P104-VERSUS-HUNTER-01. Was OPEN, found 2026-11-10 (plan 103 lane V3).**
+  Speed "how to beat tank" attaches the Tank note; a plain Tank question no longer gets the survivors' versus note beside it; "tips for playing as the hunter in versus" leads with "Playing as the Hunter". Not fixed: the six test rows and the pouncing question (Bugs).
+
+**Deck check owed: screenshot reading ignored the game name it was handed (as it stood; now Done, row P102-PICTURE-01 passed)**
+
+- ★★ `[KB]` `[QA]` **Screenshot reading ignored the game name it was handed** — **VERIFY, landed 2026-11-02 (plan 102 lane D, `71389e3f`, `d755670b`); kept, confirmed by the maintainer, D140 (2026-11-09); row P102-PICTURE-01 is still owed.**
+  With a game running and a picture attached, the question now starts "This screenshot is from <game>." **2026-11-09, split:** attaching a placed picture passed; the question could not run (`workshop:test-evidence/plan103-P102-PICTURE-01-try2.json`). Still owed. **2026-11-15 (plan 104 § 5f):** the row now runs with a light game, never God of War: Deep Rock Galactic: Survivor running, and both replies name Deep Rock Galactic: Survivor. [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Deck check owed: a game the library does not hold is never marked "not covered" (as it stood; now Done, row P104-NO-NOTES-LINE-01 passed)**
+
+- ★★ `[KB]` **A game the library does not hold at all (Stardew Valley, Terraria) is never marked "not covered", in any mode** — **VERIFY, fixed 2026-11-15 (plan 104 lane H2, `a19c7055`, `4913a673`); unit-tested; owes row P104-NO-NOTES-LINE-01. Was OPEN, found 2026-11-10 (the honest-answer measurement).**
+  With Stardew Valley (or Terraria named), every answer now ends with "No notes for this game — this answer is from the model's own knowledge." in every mode (your call, D141 call 7). Owes the row on the Deck: Stardew Valley running, one Speed and one Strategy answer; Hollow Knight with nothing running shows no such line. Record `workshop:archive/research/kb-honest-unknown-2026-11-10-h1.md`.
+
+**(Moved by the same sweep to bring the file under its limit.)**
+
+**Where things stand: the 2026-11-14 paragraphs, with the crash-fix line (as they stood)**
+
+**Where things stand (2026-11-14, counted that day from the files).** The library people can download is **2026.11.10**: the maintainer published it on the
+evening of 10 November, and both download places were read back afterwards (each serves 3,677,424 bytes compressed, the same
+fingerprint as the build the Deck tested; [the releases table](knowledge-base.md)). The Deck's own copy was last read back at
+2026.10.25 (block DR, `workshop:test-evidence/plan103-P103-DR-LIBRARY.json`); no later read of it was made.
+**The source has one note fewer than the published library** (a library built from it on 2026-11-14 reads version 2026.11.14): **890 notes**, the seed's 414 plus
+476 in 33 notes files for 32 games, **185 tips** and **351 glossary terms**. The published library still holds the Left 4 Dead 2 note "Fallen Survivor";
+the repo dropped it after the publish (your call: "Remove it"), so it leaves at the next publish. **35 of the 38 games have labelled
+short-line notes**; Hades, Half-Life 2 and Black Mesa do not (Phase 5).
+**The back-end crash fix of 11 November (`d58e3155`) passed on the Deck 2026-11-15** (row P104-KB-THREADS-01, `workshop:test-evidence/plan104-P104-KB-THREADS-01-try2.json`): after a plugin reload there was no crash and no "API misuse" line, and the back end kept answering.
+
+**Calls: the answered line (as it stood)**
+
+**Answered 2026-11-14 (D141, the thirty-one calls):** among others, the crowding trade (a third try, lane R1) and the chips' rotation (the closest chips stay in front for a while, lane C2): [D141](audit/maintainer-decisions-locked.md#d141--locked-2026-11-14-raised-2026-11-14--plan-104-the-knowledge-base-wave-seven-the-thirty-one-calls). **Answered 2026-11-10 and 2026-11-11:** note samples, picture labels, boss pictures, licences, the publish, the starter box, the slower model, the versus notes: [Detail](roadmap-kb-details.md#plan-104-notes-moved-from-the-knowledge-base-roadmap-2026-11-14).
+
+**Bugs entry: older notes the wiki contradicts, the lane M1 paragraph (with lane M2's sentence, as K2 first wrote it)**
+
+  **Lane M1, 2026-11-15 (`be94a633` to `920fa879`):** the Fallout: New Vegas Hardcore note lists the Auto-Doc and the binding ritual; Predator Pals no longer claim how they spawn; the Snack Orb is "counted as three turns" but covers two rounds of rivals' turns; two glossary entries corrected. **Closed with no change:** the Molotov (the pages do not clearly disagree) and the Brotato "Loot Alien" (the wiki has no such name). **Lane M2, 2026-11-15 (`2a5be5db4` to `72362d141`):** notes corrected where the wiki differs: Mario Party 1, 2, 6 and 7, Super Smash Bros., Cyberpunk 2077 iconic weapons, Grand Theft Auto III and eight Black Mesa notes. Whether any older sighting is left is not stated in this sweep's list, so the entry stays open. Sightings with their note numbers: [Detail](roadmap-kb-details.md#plan-104-notes-moved-from-the-knowledge-base-roadmap-2026-11-14). [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Bugs entry: closing Show details with B and reopening with A, the older line (as it stood)**
+
+  Seen with the Session tab showing, 4 of 6 tries across two drivers, never with "This answer" showing; the next Down goes to the strip. **2026-11-14, from reading the code:** the scroll after reopening is held back by where the ring is only if something holds the ring at that instant (plan 104 lane F1, after block D0's reading). Evidence `workshop:test-evidence/plan103-P103-DETAILS-STRIP-01.json` and `-try2.json` (a picture beside each). **Later, 2026-11-10 (block D2, third part):** on screen 2 tries of 2; seen, not reliable to reproduce. [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
+
+**Bugs entry: the crowding entry's final paragraph (as it stood)**
+
+  **Final (2026-11-10, lanes R1b and X2):** the crowding grew on 891 notes; the fix still loses more than it gains, so it stayed turned down. **Cause found 2026-11-10:** every game's "Starting out" note is lifted past a note the word search really found. **Third try:** plan 104 lane R1, your call of 2026-11-14 (D141 call 14). Numbers and record: [Detail](roadmap-kb-details.md#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10). [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Deck check owed: suggestion chips ordered by your last question (as it stood)**
+
+  After an answer, the game's chips lead with up to four notes closest to the question just asked. On this PC a chip about the subject was among the first three 12 of 90 before, 33 of 90 after. **A limit:** after the first deal the screen's rotation picks at random; plan 104 lane C2 (D141 calls 6 and 22) keeps the closest notes in front for a while. **Deck 2026-11-10 (block D3, row P103-CHIP-ORDER-01): passes the row's three conditions, weak as proof; UNCLEAR for what a person sees; a person's look is still owed** (`workshop:test-evidence/plan103-P103-CHIP-ORDER-01.json`). [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
+
+**Next: RAG Phase 5, the landed paragraph (as it stood)**
+
+  **Landed 2026-11-15:** lane N1, 15 Half-Life 2 notes (2600 to 2614: headcrab and zombie kinds, Antlion Guard, Manhack, Barnacle, Gunship, Pulse Rifle, SPAS-12, Crossbow, health kits, chargers; `fa1c8dbd` to `0a866724`); lane N2, 12 Black Mesa notes (4300 to 4311; `f4f9128f` to `2dc743c7`), from the Black Mesa Wiki on Fandom (a remake wiki: the September Combine OverWiki pages turned out to describe the 1998 game) and the Half-Life Wiki's "Black Mesa (game)" page; credits file updated. **Still none:** Hades (its wiki is CC BY-NC-SA). **What closes Phase 5 (D141 call 18):** row **P104-NOTES-HL2-BM-01** passing on the Deck (block D3); the count then ends at 37 of 38. [Plan](planning/28-phase5-corpus-depth.md) · [Detail](roadmap-kb-details.md#plan-103-sweep-k13-notes-moved-from-the-knowledge-base-roadmap-2026-11-11)
+
+**Deck check owed: thumbs-down after Undo, the third-time line (as it stood)**
+
+  **Third time, 2026-11-10 (block D2):** focus kept; the four Downs went notes line, strip, chip (`workshop:test-evidence/plan103-P102-UNDO-FOCUS-01-try3.json`). Not a pass for the out-of-focus state: tests only, on your list. Earlier nights: [Detail](roadmap-kb-details.md#plan-103-sweep-k11-notes-moved-from-the-knowledge-base-roadmap-2026-11-10).
+
+**Deck check owed: hidden spoiler box, the older line (as it stood)**
+
+  A game known only by name opens its box; name-first and knowledge base off passed on the Deck. Plan 103 block D0a, 2026-11-09: two boss questions got general answers with no box (`workshop:test-evidence/plan103-STRAT-SPOIL-NAME-01.json`). [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Next: mod knowledge, the plan 104 and landed sentences (as they stood)**
+
+- ★★★ `[KB]` **Mod knowledge for modded games** — **OPEN, filed 2026-10-27 (plan 101, round 4); basics landed 2026-11-09 (plan 103).** Offline answers about mod load order; Nexus Mods pages are never copied. LOOT's rule lists are CC0; the Cyberpunk wiki has no licence (next step: its admins' written permission). **Plan 104 (D141 calls 6, 10 and 30):** lane L1 builds LOOT's lists for Fallout 4 and Skyrim into the library as their own table; lane L2 adds a typed lookup, on trial: it lands switched on only if it finds the right rule for 9 of 10 named mods, worded "LOOT's list of <date> says", never "safe" and never "these two work together". **Landed 2026-11-15 (lane L1, `f5c3cad5` to `e1f1e02e`, 10 commits):** LOOT's rules for Fallout 4 (463 entries) and Skyrim SE (1,243) are in the library as their own table, with a reader and a PC checker; nothing on the Deck this wave. [Plan 101](planning/101-deep-mod-ai-hints.md) · [Detail](roadmap-kb-details.md#plan-103-end-audit-k9-notes-moved-from-the-knowledge-base-roadmap-2026-11-10)
+
+**Where things stand: the half-done entries line (as it stood)**
+
+**Where the half-done entries end (2026-11-14, D141 calls 15 to 19):** Phase 5 PARTIAL (see Next); the screenshot measurement closed as measured (Done); the visual maps parked (Shelved). [Detail](roadmap-kb-details.md#plan-104-sweep-k1-notes-moved-from-the-knowledge-base-roadmap-2026-11-15)
+
+**Where things stand: the free-memory readings sentence (as K2 wrote it)**
+
+Free memory with nothing asked (2026-11-15): 11,962 MB idle, 5,649 with the AI loaded, 8,682 with Deep Rock Galactic: Survivor running, 4,885 with God of War running (2,172 MB of swap) (`workshop:test-evidence/plan104-P104-M-MEMORY-try2.json`).

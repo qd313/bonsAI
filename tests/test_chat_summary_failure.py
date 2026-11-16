@@ -53,6 +53,18 @@ _TURNS = [
 _RUNNER_STOPPED = "llama runner process has terminated: exit status 2"
 
 
+def _decide_call(chat):
+    """One question's summary decision, with the same plain arguments every test here uses."""
+    return decide_and_write_chat_summary(
+        FakePlugin(), chat=chat, chat_turns=None,
+        system_content="system", question="and the next boss?", ask_mode="speed",
+        think_effort="off", room_tokens=16384, model_name="gemma4:e2b-it-qat",
+        url="http://127.0.0.1:11434/api/chat", keep_alive="5m", reply_language="english",
+        active_request_id=None, app_name="Hades", character_enabled=False,
+        character_preset_id=None,
+    )
+
+
 class _Slow:
     """A response whose first read outlasts the (patched, short) time limit."""
 
@@ -235,16 +247,40 @@ class SummaryMarkTests(unittest.TestCase):
         plan = SummaryPlan(needed=True, covered_turns=_TURNS, kept_turns=[], oldest_turns_unread=0, previous=None)
         with patch("backend.chats.chat_summary_service.plan_summary", return_value=plan):
             _turns, summary, mark, stopped = asyncio.run(
-                decide_and_write_chat_summary(
-                    FakePlugin(), chat={"id": "c1", "turns": _TURNS}, chat_turns=None,
-                    system_content="system", question="and the next boss?", ask_mode="speed",
-                    think_effort="off", room_tokens=16384, model_name="gemma4:e2b-it-qat",
-                    url="http://127.0.0.1:11434/api/chat", keep_alive="5m", reply_language="english",
-                    active_request_id=None, app_name="Hades", character_enabled=False,
-                    character_preset_id=None,
-                )
+                _decide_call({"id": "c1", "turns": _TURNS})
             )
         self.assertEqual((summary, mark, stopped), (None, "failed:model_error", False))
+
+
+class NoSummaryDueLogTests(unittest.TestCase):
+    """A question in a chat that needs no new summary leaves one line saying so (plan 104 B2),
+    so the log tells "not due" apart from "failed" -- the level the driver reads."""
+
+    def _decide(self, chat):
+        with patch("backend.chats.chat_summary_service.logger") as log:
+            result = asyncio.run(
+                _decide_call(chat)
+            )
+        lines = [c.args[0] % c.args[1:] for c in log.info.call_args_list]
+        return result, " | ".join(lines)
+
+    def test_a_chat_with_a_saved_summary_and_room_left_logs_that_none_was_due(self):
+        turns = _TURNS + [
+            {"id": "q1", "role": "user", "text": "and the second boss", "app_name": "Hades"},
+            {"id": "a1", "role": "assistant", "text": "Throw the spear.", "app_name": "Hades"},
+            {"id": "q2", "role": "user", "text": "and the next boss?", "app_name": "Hades"},
+        ]
+        summary = {"text": "Asked about bosses.", "covers_through_turn_id": "a0", "turns_covered": 26}
+        (_t, carried, mark, stopped), logged = self._decide({"id": "c1", "turns": turns, "summary": summary})
+        self.assertEqual((carried, mark, stopped), (summary, "", False))
+        self.assertIn("chat_summary: none due before this answer", logged)
+        self.assertIn("the saved one covers 26 entries", logged)
+        self.assertIn("2 newer entries", logged)
+
+    def test_a_chat_with_no_summary_says_none_saved_yet(self):
+        turns = _TURNS + [{"id": "q1", "role": "user", "text": "and the next boss?", "app_name": "Hades"}]
+        _result, logged = self._decide({"id": "c1", "turns": turns})
+        self.assertIn("none saved yet", logged)
 
 
 if __name__ == "__main__":

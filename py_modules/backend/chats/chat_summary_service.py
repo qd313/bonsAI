@@ -432,6 +432,18 @@ def _log_unfinished_summary(
     )
 
 
+def _log_no_summary_due(previous: Optional[dict], entries_after: int) -> None:
+    """The one log line for a question that needed no new summary: everything after the saved
+    summary still fits today's memory. Without it a long chat that is not summed up looks the
+    same in the log as one that failed to be."""
+    covered = int((previous or {}).get("turns_covered") or 0)
+    saved = f"the saved one covers {covered} entries" if previous else "none saved yet"
+    logger.info(
+        "chat_summary: none due before this answer — %s; %d newer entries all fit the memory",
+        saved, entries_after,
+    )
+
+
 def _hidden_notes_in(turns: list, model_name: str) -> int:
     """How many fenced blocks the covered turns actually had, read the same way the summary
     request itself reads them -- so ``hidden_notes_left_out`` counts what was truly stripped out
@@ -509,6 +521,7 @@ async def decide_and_write_chat_summary(
         model_name=model_name,
     )
     if not plan.needed:
+        _log_no_summary_due(previous, len(plan.kept_turns))
         return turns, previous, "", False
 
     if isinstance(active_request_id, int):

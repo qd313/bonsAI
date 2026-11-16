@@ -86,20 +86,24 @@ next session. Report: plan 100.
 in eight blocks, nothing pushed and the library not published. The library (2026.11.16, not yet published) holds 932
 notes in 38 games and 185 tips: Half-Life 2 and Black Mesa have their own enemy and item notes at last (Phase 5 closes),
 Left 4 Dead 2 has fifteen more versus notes, and every quote in the twelve older notes files is sorted and its close
-copies reworded. On the Deck every check of this plan's work passed: the new notes attach (the 23-game check reached 20
+copies reworded. On the Deck most checks of this plan's work passed: the new notes attach (the 23-game check reached 20
 of 20, the three games without notes aside), a game the library does not hold says "No notes for this game" under every
 answer and no longer borrows another genre's card, a question ending ", give me ..." about a boss the notes lack says
 "No close match", a plain Left 4 Dead 2 question gets no versus note, both chips after an answer are the closest notes
-within half a second, a low-memory warning with "Ask anyway" stops the AI loading beside a heavy game, and the answer
-screen's D-pad fixes hold (one, Show details reopened, passed only on the external screen; the fault was seen on the
-Deck's own screen). **Switched off on their numbers:** the honest-answer fix that holds back loosely matching notes (it
+within half a second, a warning now stands in front of a load into too little memory (this is not proof the freeze is fixed: "Ask anyway" was not pressed beside a
+heavy game, and an AI already loaded is not checked again), and the answer screen's D-pad fixes hold. **What did not pass or is
+not proven:** a pouncing question that never says "Hunter" still does not lead with the Hunter note (it failed on the Deck); the
+Ollama version fix only matched its line, with no update run, so its own case rests on tests; every D-pad and layout check ran on
+the external screen, and Show details reopened is still owed on the Deck's own screen, where the fault was seen. **Switched off on their numbers:** the honest-answer fix that holds back loosely matching notes (it
 would lose a right note on 25 of 39 real "No close match" questions), the crowding fix (its fourth try brings a right
 note back 12 times and loses it 3, against a rule of no losses) and the typed mod lookup (the right rule for 3 of 10
 mods, against 9). **The numbers, start to end of the plan:** right note in the first three on the older held-back
 questions 572 to 574 of 629, nothing lost; the eight questions no note can answer: the answer says so in its own words
 10 times in 24 (none before), and answers as if it knew 8 or 9 times (21 before); facts kept about the same (69.5 and
-74.0, inside the noise). The final library also works with the released 0.6.0 code. The Deck was put back as it was on
-15 November. Open: [roadmap-kb.md](../roadmap-kb.md); the plan's report is § 13 of
+74.0, inside the noise). The final library opens with no error on the released 0.6.0 code in 1,464 questions; about sixty of them attach different
+notes there (62 by set, 66 by order, counted from the two result files) and nobody judged those. The Deck was put back as it was on
+15 November, with the published library 2026.10.25 again, except its Ollama stays at 0.40.16 (it was 0.40.9; a downgrade is the
+maintainer's call); the plugin answered a last question after the put-back. Open: [roadmap-kb.md](../roadmap-kb.md); the plan's report is § 13 of
 [plan 104](104-kb-wave-seven-honest-answers-and-the-leftovers.md).
 
 **Coverage was the thing wave two set out to fix.** Of the 72 questions a player might plainly ask about

@@ -359,9 +359,9 @@ describe.each(SCREENS)("on $name, with the long test chat's summary (D0's card)"
       expect(up.problems).toEqual([]);
       expect(up.places[up.places.length - 1]).toBe(0);
       expect(up.leftTo).toBe(s.button);
-      /* The button is a small stop Steam glides to (the Deck put it at 204.1 after Up from the card, plan 81); it has
-         no reveal of its own for its top, and this change leaves it as it was, so with no glide it is not judged. */
-      if (rule) expect(s.wholeInBand(s.button)).toBe(true);
+      /* Sum up again shows whole too, with or without Steam's glide (the Deck put it at 204.1 with one, plan 81;
+         with none it used to land at -15.5, above the pane, until it brought its own top back: P104-M11). */
+      expect(s.wholeInBand(s.button), `the button at ${s.box(s.button).top} to ${s.box(s.button).bottom}`).toBe(true);
       expect(upPastButton).toBe(0);
     },
   );

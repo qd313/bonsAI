@@ -77,9 +77,36 @@ let sumUpButtonEl: HTMLElement | null = null;
 let summaryCardEl: HTMLElement | null = null;
 let sumUpReasonEl: HTMLElement | null = null;
 
-/** The Sum up button of the Session tab on screen: where Down from the tabs row lands. */
+/** Bring `el`'s top back 8 points under the pane's top when it sits above it. Scrolls only. */
+function topBackUnderPane(el: HTMLElement): void {
+  const pane = findScrollablePanel(el);
+  if (pane && el.getBoundingClientRect().top < pane.getBoundingClientRect().top) scrollElementTopToPaneTop(el, 8);
+}
+
+/** `pass` a frame from now and at 150, 300 and 900 ms: the settle schedule chatPanelScroll.ts's reveals use. */
+function onSettle(pass: () => void): void {
+  requestAnimationFrame(pass);
+  [150, 300, 900].forEach((delayMs) => window.setTimeout(pass, delayMs));
+}
+
+/**
+ * The Sum up button of the Session tab on screen: where Down from the tabs row lands, and Up from the
+ * card or the first turn row. It shows whole once the ring is on it. Up from the card shown at the
+ * pane's top left it 15.5 points above the pane on the Deck's own screen, and only Steam's glide
+ * brought it back (P104-M11). Landed by the plugin's own hop, its top comes back at once. With the
+ * panel's page out of the browser's focus the hop is declined and Steam's own move carries the ring
+ * here, with no focus event to hear, so the same check runs on the settle schedule while the ring
+ * sits on the button. Scrolls only.
+ */
 export function focusSumUpButton(): boolean {
-  return sumUpButtonEl ? focusRowElement(sumUpButtonEl) : false;
+  const button = sumUpButtonEl;
+  if (!button) return false;
+  const landed = focusRowElement(button);
+  if (landed) topBackUnderPane(button);
+  onSettle(() => {
+    if (button.isConnected && elementHasGamepadFocus(button)) topBackUnderPane(button);
+  });
+  return landed;
 }
 
 /** The summary card, when one is showing. */
@@ -174,8 +201,7 @@ function useCardText() {
  * brought back under it at once, and the reveal brings the bottom clear of the dock. Scrolls only.
  */
 function showWholeCard(card: HTMLElement): void {
-  const pane = findScrollablePanel(card);
-  if (pane && card.getBoundingClientRect().top < pane.getBoundingClientRect().top) scrollElementTopToPaneTop(card, 8);
+  topBackUnderPane(card);
   revealBelowKeepingAsItSettles(card, () => card);
 }
 

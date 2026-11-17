@@ -20,7 +20,9 @@
 # Usage: scripts/land_lane.sh <branch> <base-commit> <log-dir> [working-branch]
 #   <branch>          the helper's branch, e.g. refactor/p78a
 #   <base-commit>     the tip the helper's copy was cut from; base..branch is what lands
-#   <log-dir>         where land-<branch>.log is written (the session's scratch folder)
+#   <log-dir>         where land-<branch>.log is written (the session's scratch folder); each gate
+#                     step's full output is kept in land-<branch>-steps/ beside it, and a failing step
+#                     prints "FULL LOG KEPT: <path>"
 #   [working-branch]  defaults to experimental
 # Set LAND_COAUTHOR to the model running the session, e.g. "Claude Opus 5.5 <noreply@anthropic.com>".
 # Exit codes: 1 a precondition failed, 2 a real conflict (cherry-pick left open), 3 a gate failed.
@@ -31,6 +33,16 @@ COAUTHOR="${LAND_COAUTHOR:-Claude Opus 5.5 <noreply@anthropic.com>}"
 LOG="$LOGDIR/land-$(echo "$BR" | tr '/' '-').log"
 cd "$REPO" || exit 1
 exec > "$LOG" 2>&1
+# Each gate step's whole output is kept here (the tail on screen cuts it); a failing step prints the path.
+STEPDIR="${LOG%.log}-steps"; mkdir -p "$STEPDIR"
+# runlog <name> <tail-lines> <command...>: run, keep all output in $STEPDIR/<name>.log, show the last lines.
+runlog() {
+  local n="$1" t="$2" f="$STEPDIR/$1.log"; shift 2
+  "$@" 2>&1 | tee "$f" | tail -"$t"
+  local rc=${PIPESTATUS[0]}
+  [ "$rc" -eq 0 ] || echo "FULL LOG KEPT: $f"
+  return "$rc"
+}
 echo "== land $BR from $BASE onto $WORK at $(date)"
 [ "$(git rev-parse --abbrev-ref HEAD)" = "$WORK" ] || { echo "NOT ON $WORK"; exit 1; }
 [ -z "$(git status --porcelain --untracked-files=no)" ] || { echo "TREE NOT CLEAN"; git status --short; exit 1; }
@@ -74,30 +86,30 @@ npx tsc --noEmit && echo "TSC OK" || { echo "TSC FAIL"; exit 3; }
 # same moment; it passes alone. So a failed run is tried once more before it counts. A real failure
 # fails both times.
 test_ok=1
-npm test 2>&1 | tail -15; [ "${PIPESTATUS[0]}" -eq 0 ] || test_ok=0
+runlog test-1 15 npm test || test_ok=0
 if [ "$test_ok" -eq 0 ]; then
   echo "TESTS FAILED ONCE, retrying (a timeout under load is the usual cause; read both runs)"
-  npm test 2>&1 | tail -25; [ "${PIPESTATUS[0]}" -eq 0 ] && test_ok=1
+  runlog test-2 25 npm test && test_ok=1
 fi
 [ "$test_ok" -eq 1 ] && echo "TEST OK" || { echo "TEST FAIL"; exit 3; }
 py_ok=1
-npm run test:py 2>&1 | tail -8; [ "${PIPESTATUS[0]}" -eq 0 ] || py_ok=0
+runlog py-1 8 npm run test:py || py_ok=0
 if [ "$py_ok" -eq 0 ]; then
   # Plan 102 (2026-11-03): the set failed twice in a night right after the screen tests and passed every time on its
   # own, so one retry; a real failure fails twice and still stops the landing.
   echo "PY FAILED ONCE, retrying (the set has failed under load right after the screen tests and passed on its own)"
-  npm run test:py 2>&1 | tail -40; [ "${PIPESTATUS[0]}" -eq 0 ] && py_ok=1
+  runlog py-2 40 npm run test:py && py_ok=1
 fi
 [ "$py_ok" -eq 1 ] && echo "PY OK" || { echo "PY FAIL"; exit 3; }
 build_ok=1
-npm run build 2>&1 | tail -5; [ "${PIPESTATUS[0]}" -eq 0 ] || build_ok=0
+runlog build-1 5 npm run build || build_ok=0
 if [ "$build_ok" -eq 0 ]; then
   echo "BUILD FAILED ONCE, retrying (a locked version file is the usual cause)"
   sleep 5
-  npm run build 2>&1 | tail -12; [ "${PIPESTATUS[0]}" -eq 0 ] && build_ok=1
+  runlog build-2 12 npm run build && build_ok=1
 fi
 [ "$build_ok" -eq 1 ] && echo "BUILD OK" || { echo "BUILD FAIL"; exit 3; }
-node scripts/check-focus-patterns.mjs 2>&1 | tail -5; [ "${PIPESTATUS[0]}" -eq 0 ] && echo "FOCUS OK" || { echo "FOCUS FAIL"; exit 3; }
-python scripts/verify.py --quick 2>&1 | tail -30; [ "${PIPESTATUS[0]}" -eq 0 ] && echo "QUICK OK" || { echo "QUICK FAIL"; exit 3; }
+runlog focus 5 node scripts/check-focus-patterns.mjs && echo "FOCUS OK" || { echo "FOCUS FAIL"; exit 3; }
+runlog quick 30 python scripts/verify.py --quick && echo "QUICK OK" || { echo "QUICK FAIL"; exit 3; }
 git status --short | head
 echo "== LANDED $BR, tip $(git rev-parse --short HEAD) at $(date)"

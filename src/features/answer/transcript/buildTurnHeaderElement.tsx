@@ -27,6 +27,7 @@ import { noteLostFocusHop, panelLacksFocus } from "../../../shared/dpad/lostFocu
 import { focusStopHonestly, registerRowNav } from "../../../shared/dpad/focusPerTurnRow";
 import { focusReplyNotesLine, focusReplyShowReasoning } from "../../../shared/dpad/liveTurnFocusGraph";
 import { fitOpenQuestionBubble } from "./questionBubbleFit";
+import { clearQuestionCut, markQuestionCut } from "./questionCutCue";
 
 export type BuildTurnHeaderElementArgs = {
   turnId: string;
@@ -261,8 +262,36 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
     .filter(Boolean)
     .join(" ");
 
+  /*
+   * Plan 105 (A5): a CLOSED question that is cut short fades at its right edge while the ring is on it, in
+   * place of its three dots. The title is measured when the ring lands (questionCutCue.ts) and marked with a
+   * data attribute the stylesheet reads together with Steam's own `gpfocus`; the mark is only a measurement,
+   * so a finger that focuses the bubble sees nothing. Both Steam's gamepad call and the DOM focus are wired,
+   * the pair the Reply language row uses (AboutRevealRow.tsx). An open question keeps its bottom fade.
+   */
+  const titleHolder: { current: HTMLElement | null } = { current: null };
+  const cutCueHandlers: Record<string, unknown> = expanded
+    ? {}
+    : {
+        onGamepadFocus: () => markQuestionCut(titleHolder.current),
+        onGamepadBlur: () => clearQuestionCut(titleHolder.current),
+        onFocus: () => markQuestionCut(titleHolder.current),
+        onBlur: () => clearQuestionCut(titleHolder.current),
+      };
+
   const titleSpan = (
-    <span className={titleClassName} data-bonsai-turn-id={turnId} ref={titleRef}>
+    <span
+      className={titleClassName}
+      data-bonsai-turn-id={turnId}
+      ref={
+        expanded
+          ? titleRef
+          : (el: HTMLSpanElement | null) => {
+              titleHolder.current = el;
+              titleRef?.(el);
+            }
+      }
+    >
       {title || "…"}
     </span>
   );
@@ -281,6 +310,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
         aria-expanded={expanded}
         data-bonsai-turn-id={turnId}
         {...headerNavHandlers}
+        {...cutCueHandlers}
       >
         {titleSpan}
       </Focusable>

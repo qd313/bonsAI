@@ -5,7 +5,8 @@
  * question in the transcript: its shape and background, the small Retry
  * icon tucked into its bottom-left corner, the single-line title at rest,
  * and the wrapped, five-line-capped title once the bubble is open with a
- * fade on its last line when the question runs longer than that.
+ * fade on its last line when the question runs longer than that. A closed question that is cut
+ * short fades at its right edge, in place of its dots, while the controller ring is on it.
  *
  * Used for: Folded into section-6.ts's buildSection6Section(), directly
  * after the transcript's own column/row shell rules.
@@ -215,7 +216,7 @@ export function buildQuestionBubbleSection(): string {
          * question, one-liners included, because the mask below used to run unconditionally.
          *
          * The fade is a plain overflow cue, not the focus-driven cut-question cue from the same
-         * decision (that one is a separate Features entry, still unbuilt). It fades a fixed
+         * decision (that one is the right-edge rule for a CLOSED question, below). It fades a fixed
          * one-line-tall band at the bottom via calc(100% - 1.3em) rather than a fixed percentage,
          * so the fade always covers the LAST line actually shown — 1 through 5 — rather than a
          * fraction of a box whose height changes with how much text there is.
@@ -235,5 +236,26 @@ export function buildQuestionBubbleSection(): string {
             #000 calc(100% - 1.3em),
             transparent 100%
           ) !important;
+        }
+        /*
+         * Plan 105 (A5), the maintainer's pick of 2026-09-05 (option A, docs/demos/question-bubble-cue-mockups.html):
+         * a CLOSED question that is cut short ends in three dots at rest, and while the controller ring is on it
+         * the dots give way to a fade at the right-hand edge. Nothing for a finger: only Steam's gpfocus ring
+         * marker turns it on, never :focus or :hover, so a tap that leaves the bubble focused draws nothing.
+         * questionCutCue.ts puts the attribute on the title only when the text really runs past its box (or was
+         * cut at 60 letters), so a short question never fades as if there were more to read.
+         *
+         * Two effects on one edge can erase each other (the maintainer caught that in the drawing: a fade
+         * rubs out dots drawn in the same pixels), so the dots go first: text-overflow: clip, then the fade
+         * alone. The mask sits on the title text and not on the bubble, so the ring round the bubble is not
+         * faded with it. The open question has its own bottom fade above; the two selectors can never match
+         * the same element (collapsed against expanded), so they never stack.
+         */
+        .bonsai-scope
+          .bonsai-chat-turn-row-header--collapsed.gpfocus
+          .bonsai-chat-turn-row-title[data-bonsai-cut] {
+          text-overflow: clip !important;
+          -webkit-mask-image: linear-gradient(to right, #000 0%, #000 72%, transparent 100%) !important;
+          mask-image: linear-gradient(to right, #000 0%, #000 72%, transparent 100%) !important;
         }`;
 }

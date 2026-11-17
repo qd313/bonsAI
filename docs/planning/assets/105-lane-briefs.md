@@ -467,3 +467,32 @@ look, becomes a roadmap entry and a drawing; it is not built this session.
 
 Written at go from plan 104's report, its brief for the entry and its evidence files. Routed by the table in
 AGENTS.md: a D-pad or layout entry goes to Opus at extra-high with the Deck measurement in the brief.
+
+---
+
+## Re-check at go (2026-11-17, against tip `37316e427`)
+
+Four read-only lookups (Sonnet medium) re-found every file and line the briefs name. No brief's premise was dead; plan
+104 closed none of these lanes. What changed, passed to each helper in its task:
+
+- **Paths that were wrong:** `tabBarNav.ts` and `TabIndicatorBar.tsx` are in `src/features/plugin-shell/`;
+  `DeckFocusSlider.tsx` is in `src/features/ai-connection/`; `MainTabUnifiedAskBar.tsx` is in `src/features/ask/bar/`;
+  `useHelpStrip.ts` is in `src/features/folded-tabs/`; `useDisclaimerAndLocalRuntimeGates.tsx` is in
+  `src/features/plugin-shell/`; `answerBubble.ts` is in `src/features/answer/bubble/`.
+- **D2:** the starter set already downloads the two speech models; the lane adds the voice engine build after that
+  step. The voice cancel event is checked once, between the pull and the build; nothing stops the build container.
+- **A2:** plan 104 reworked the Session card (fixed 190 px text box that scrolls, "More below", opener line kept) and
+  the reveal scroll in the details panel; Session-as-a-chip must keep all of it.
+- **A7:** the ten-chat gate also sits in front of plan 104's "Ask anyway" (it calls the same ask function).
+- **B2:** plan 104's chip-order lane added code to `carouselNextChip.ts` and three tests that run all four chip styles;
+  more test files change than the brief says.
+- **E4:** 23 files call Steam's focus transfer directly today (not 21).
+- **T2:** the question runner from plan 104 cannot wait without sending a question; T2 adds that. The read-back script
+  has no local mode yet. The out-of-focus recipe could not be reached in plan 104, so item 4 is skipped.
+- **P1:** two more tests pin "three short lines"; two more back-end lines say "three lines"; the first-sentence count
+  is not a script yet; plan 104's two prompt switches stay as they are.
+- **D5:** an installed model can vanish from the list; the lane fixes it with the dimmed-not-hidden default.
+- **Line numbers** moved in `usePluginSettings.ts` (about 140 lines added by plan 104), `MainTabChatTranscript.tsx`
+  (+9), `buildDetailsPanelElement.tsx`, `useLocalOllamaSetupFlow.tsx`, `main.py` and several others; each helper
+  re-finds them.
+- **Built drawings are git-ignored:** helpers read them from the shared checkout, read-only.

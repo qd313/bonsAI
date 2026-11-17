@@ -23,12 +23,21 @@ import type { AskModeId } from "../ask/bar/askMode";
 import type { PresetPrompt } from "./presets";
 import {
   PRESET_CHIP_HEIGHT_PX,
+  PRESET_MARQUEE_DELAY_S,
   PRESET_MARQUEE_FADE_LENGTH,
   presetScrollPlan,
 } from "./presetRowLayout";
+
+/**
+ * A chip that decodes in starts to slide this long after the last letter the eye can see has settled.
+ * The scramble beyond the chip's right edge is hidden, so that moment, not the last letter, is where the
+ * reveal ends for the person; the Deck timed 0.45 to 0.55 s of stillness when the slide waited out the
+ * ordinary 1.5 s from the reveal's start instead (plan105-P105-CHIP-DECODE-STEP-01).
+ */
+const PRESET_DECODE_SLIDE_LEAD_MS = 100;
 import type { ChipScrollListener } from "./presetChipStay";
 import type { ChipNeedListener } from "./usePresetChipWiden";
-import type { DecodeTextParts } from "./presetChipDecodeText";
+import { PRESET_DECODE_CHAR_MS, type DecodeTextParts } from "./presetChipDecodeText";
 import { joinPresetWithRunningGame } from "./joinPresetWithRunningGame";
 import { textPx } from "../../styles/textPx";
 
@@ -100,7 +109,11 @@ function PresetChipScrollText({
   const wordsRef = useRef<HTMLSpanElement>(null);
   // null until the words and the room have been measured, so the row is not told anything early.
   const [overflowPx, setOverflowPx] = useState<number | null>(null);
+  const [roomPx, setRoomPx] = useState(0);
   const [leg, setLeg] = useState<ScrollLeg>("waiting");
+  // Fixed for this label's life (it is made for a reveal or it is not), so the end of the reveal never
+  // moves the start delay and restarts the slide.
+  const decodedIn = useRef(decode !== undefined).current;
 
   useLayoutEffect(() => {
     const measure = () => {
@@ -108,6 +121,7 @@ function PresetChipScrollText({
       const words = wordsRef.current;
       if (!room || !words || room.clientWidth <= 0) return setOverflowPx(0);
       setOverflowPx(Math.max(0, Math.ceil(words.scrollWidth - room.clientWidth)));
+      setRoomPx(room.clientWidth);
       const need = neededChipWidth(room, words);
       if (need !== null) needRef.current?.(text, need);
     };
@@ -127,7 +141,17 @@ function PresetChipScrollText({
     for (const part of Array.from(layerRef.current?.children ?? [])) part.textContent = "";
   }, [decoding]);
 
-  const plan = presetScrollPlan(overflowPx ?? 0);
+  // Decoding in: the slide starts once the locked letters have filled the room (letters lock at one a
+  // time, so that is the share of the letters that fit), not after the standing wait.
+  const wordsPx = roomPx + (overflowPx ?? 0);
+  const startDelayMs =
+    decodedIn && roomPx > 0 && wordsPx > 0
+      ? Math.min(
+          PRESET_MARQUEE_DELAY_S * 1000,
+          Math.ceil((text.length * roomPx) / wordsPx) * PRESET_DECODE_CHAR_MS + PRESET_DECODE_SLIDE_LEAD_MS,
+        )
+      : undefined;
+  const plan = presetScrollPlan(overflowPx ?? 0, startDelayMs);
   const delayMs = plan?.delayMs;
   const endMs = plan?.endMs;
   const backAtMs = plan?.backAtMs;

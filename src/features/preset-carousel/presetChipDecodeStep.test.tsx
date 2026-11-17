@@ -132,6 +132,48 @@ describe("a chip's decode runs in step with its slide", () => {
     expect(movedAt!).toBeLessThan(decodeMs);
   });
 
+  /**
+   * The Deck (plan105-P105-CHIP-DECODE-STEP-01, D3a, 2026-11-17): two chips of 38 and 31 letters slid 0.55 s and
+   * 0.45 s after the last LETTER THE PERSON CAN SEE had settled. The scramble past the chip's right edge is
+   * hidden, so the decode the eye follows ends when the locked letters reach that edge, not at the last
+   * letter; a slide timed from the reveal's start (1.5 s) left that gap still.
+   */
+  it("the words begin to slide within 0.2 s of the last visible letter settling, with no still wait", () => {
+    for (const words of ["Any known issues running this on Deck?", "What are the best FSR settings?"]) {
+      const { run, container, step, unmount } = renderDecodeRow([words, SHORT, "z"]);
+      step(STAGGER_MS);
+      const startedAt = Date.now();
+      let visibleEndedAt: number | null = null;
+      let slidAt: number | null = null;
+      for (let t = 0; t < 4000 && slidAt === null; t += 16) {
+        step(16);
+        const locked = container.querySelector(".bonsai-preset-chip-churn-layer > span")?.textContent ?? "";
+        if (visibleEndedAt === null && locked.length * PX_PER_CHAR >= ROOM_PX) visibleEndedAt = Date.now() - startedAt;
+        if (run()?.dataset.scrollPhase === "scrolling") slidAt = Date.now() - startedAt;
+      }
+      expect(visibleEndedAt).not.toBeNull();
+      expect(slidAt).not.toBeNull();
+      expect(slidAt! - visibleEndedAt!).toBeLessThanOrEqual(200);
+      expect(slidAt!).toBeGreaterThanOrEqual(visibleEndedAt!); // never before the visible words are written
+      unmount();
+    }
+  });
+
+  it("a chip that only just overflows slides within 0.2 s of its last letter", () => {
+    const words = "Which Steam Deck setting?"; // 25 letters: 161 px in a 131 px room
+    const { run, step } = renderDecodeRow([words, SHORT, "z"]);
+    step(STAGGER_MS);
+    const startedAt = Date.now();
+    const lastLetterAt = PRESET_DECODE_CHAR_MS * words.length;
+    let slidAt: number | null = null;
+    for (let t = 0; t < 4000 && slidAt === null; t += 16) {
+      step(16);
+      if (run()?.dataset.scrollPhase === "scrolling") slidAt = Date.now() - startedAt;
+    }
+    expect(slidAt).not.toBeNull();
+    expect(slidAt! - lastLetterAt).toBeLessThanOrEqual(200);
+  });
+
   it("a short chip's label keeps one width from its first frame to its last, and never slides", () => {
     const { container, step } = renderDecodeRow([SHORT, LONG, "z"]);
     const widths = new Set<number>();

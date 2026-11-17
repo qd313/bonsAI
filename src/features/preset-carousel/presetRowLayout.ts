@@ -107,11 +107,12 @@ export interface PresetScrollPlan {
  * The time line for a label that overflows its room by `overflowPx`, or null when it fits. The
  * chip's scroller (PresetChipScrollText in presetChipButton.tsx) and the stay time below both read
  * this one function, so what is on screen and how long the chip stays cannot drift apart. The chat
- * name (ChatNameWords.tsx) reads only its first pass: delay, crawl, pause.
+ * name (ChatNameWords.tsx) reads only its first pass: delay, crawl, pause. `startDelayMs` replaces the
+ * standing wait before the first move: a chip decoding in slides as soon as the decode the eye can follow is done.
  */
-export function presetScrollPlan(overflowPx: number): PresetScrollPlan | null {
+export function presetScrollPlan(overflowPx: number, startDelayMs?: number): PresetScrollPlan | null {
   if (!(overflowPx > 0)) return null;
-  const delayMs = PRESET_MARQUEE_DELAY_S * 1000;
+  const delayMs = startDelayMs ?? PRESET_MARQUEE_DELAY_S * 1000;
   const crawlMs = (overflowPx / PRESET_MARQUEE_SPEED) * 1000;
   const endMs = delayMs + crawlMs;
   const readPauseMs = PRESET_CHIP_READ_PAUSE_MS;

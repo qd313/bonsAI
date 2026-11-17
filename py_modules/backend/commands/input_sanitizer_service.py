@@ -117,9 +117,23 @@ def _is_low_signal_gibberish(text: str) -> bool:
     alnum = sum(1 for c in text if c.isalnum())
     if len(text) >= 48 and alnum > 0:
         unique = len({c.lower() for c in text if c.isalnum()})
-        if unique / max(alnum, 1) < 0.08:
+        if unique / max(alnum, 1) < 0.08 and not _reads_like_prose(text, unique):
             return True
     return False
+
+
+def _reads_like_prose(text: str, unique_alnum: int) -> bool:
+    """True for a text made of many short words using a normal spread of letters.
+
+    The letter-variety ratio above gets smaller as any text gets longer (an English question
+    uses about 25 different letters whether it is 100 or 500 letters long), so a long, plain
+    question was refused as random characters. Real prose is many short words with a wide
+    spread of letters; a key mash is an unbroken run, or the same few letters over and over.
+    """
+    words = text.split()
+    if len(words) < 8 or unique_alnum < 10:
+        return False
+    return sum(len(w) for w in words) / len(words) <= 12
 
 
 def should_block_after_normalize(text: str) -> tuple[bool, str]:

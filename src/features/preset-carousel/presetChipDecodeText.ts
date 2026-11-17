@@ -48,9 +48,10 @@ export const PRESET_DECODE_CARET_CHAR = "▋";
 
 /**
  * Churn glyph pool for the still-scrambling tail: printable ASCII plus half-width katakana
- * (U+FF66-U+FF9D). Both render half-width. Full-width CJK would not — the chip label reserves
- * its width from frame 0 at the prompt's final character count, so a double-width churn glyph
- * would push a long prompt into the ellipsis mid-animation and undo the whole point of the rewrite.
+ * (U+FF66-U+FF9D). Both render half-width. Full-width CJK would not: a double-width churn glyph
+ * would run past the end of the scramble layer and be cut off mid-glyph. The layer is clipped to the
+ * width of the real words (presetChipButton.tsx, plan 105 lane B3), so the glyphs never change the
+ * chip's width; half-width ones keep the scramble looking like the letters it will become.
  */
 const PRESET_DECODE_GLYPH_POOL: string = (() => {
   let pool = "";

@@ -75,9 +75,10 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
         animationMode="decode"
       />,
     );
-    // Decode draws a different chip structure (scrambled letters until they settle, no plain words
-    // at first); the assertion that matters is that the memo let the update through at all.
-    expect(screen.queryByText("alpha")).toBeNull();
+    // Decode draws a different chip structure (scrambled letters until they settle; since plan 105 the
+    // real words are in the label from the first frame to give it its width, but hidden). The assertion
+    // that matters is that the memo let the update through at all.
+    expect(screen.queryByText("alpha")?.style.visibility).toBe("hidden");
     expect(document.querySelectorAll("button.bonsai-preset-glass--decode").length).toBeGreaterThan(0);
   });
 

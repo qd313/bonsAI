@@ -100,6 +100,8 @@ export function MainTabPresetDecodeSlots(
   );
   /** Per slot: the reveal has settled, so the ordinary (scrolling) label may take over. */
   const [resolved, setResolved] = useState<boolean[]>(() => Array.from({ length: slotCount }, () => false));
+  /** Per slot: how many reveals have begun, so a chip's slide starts with its reveal and not at mount. */
+  const [cycles, setCycles] = useState<number[]>(() => Array.from({ length: slotCount }, () => 0));
   const slotsRef = useRef(slots);
   slotsRef.current = slots;
   // What each settled long label tells the row about its own scroll (presetChipStay.ts).
@@ -151,6 +153,7 @@ export function MainTabPresetDecodeSlots(
       slotsRef.current = next;
       setSlots(next);
     };
+    // Whether the reveal has settled, per slot: `true` lets the real words show over the (now empty) scramble.
     const markResolved = (slotIndex: number, value: boolean) => {
       setResolved((prev) => (prev[slotIndex] === value ? prev : prev.map((v, j) => (j === slotIndex ? value : v))));
     };
@@ -177,6 +180,7 @@ export function MainTabPresetDecodeSlots(
       state[slotIndex] = { prompt, startAt: now, churn, lastRevealedCount: -1, resolved: false, holdEndAt: 0, endsAt: null };
       showInSlot(slotIndex, prompt);
       markResolved(slotIndex, false);
+      setCycles((prev) => prev.map((n, j) => (j === slotIndex ? n + 1 : n)));
       // Frame 0: paint the full-length scramble immediately rather than waiting for the next rAF
       // tick. On a re-begin the churn span is remounting and the ref may still be null; the first
       // tick after React commits repaints it (lastRevealedCount starts at -1).
@@ -210,8 +214,9 @@ export function MainTabPresetDecodeSlots(
         anim.resolved = true;
         anim.holdEndAt = spacer.reserve(slotIndex, now + decodeHoldMs(text, slotCount));
         paintDecodeLabel(labelRefs.current[slotIndex], { locked: text, caret: "", tail: "" });
-        // Hands the label to React: the churn span gives way to the ordinary label, which is where
-        // Steam's Marquee measures the settled text and starts its crawl.
+        // Tells React the reveal is over: the real words, there all along but invisible, show and the
+        // scramble layer is emptied. The sliding label is not swapped or restarted: its time line began
+        // with the reveal (a new `cycles` count remounts it in `begin`), so the slide carries on.
         markResolved(slotIndex, true);
         return;
       }
@@ -274,6 +279,7 @@ export function MainTabPresetDecodeSlots(
             onScrollPlan={(text, report) => stayBoard.report(i, text, report)}
             onNeed={widen.reportNeed(i)}
             stub={widen.stubFor(i)}
+            cycle={cycles[i] ?? 0}
           />
         </div>
       ))}

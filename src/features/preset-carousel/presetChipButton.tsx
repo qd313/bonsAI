@@ -28,6 +28,7 @@ import {
 } from "./presetRowLayout";
 import type { ChipScrollListener } from "./presetChipStay";
 import type { ChipNeedListener } from "./usePresetChipWiden";
+import type { DecodeTextParts } from "./presetChipDecodeText";
 import { joinPresetWithRunningGame } from "./joinPresetWithRunningGame";
 import { textPx } from "../../styles/textPx";
 
@@ -43,6 +44,16 @@ function neededChipWidth(room: HTMLElement, words: HTMLElement): number | null {
   if (!button || room.clientWidth <= 0) return null;
   return Math.ceil(button.offsetWidth - room.clientWidth + words.scrollWidth);
 }
+
+/**
+ * Decode mode's scramble, drawn inside the sliding label instead of in a box of its own. `refs` are the
+ * three spans the reveal loop writes into (the locked letters, the caret, the churning tail); `active`
+ * is true until the last letter has locked.
+ */
+export type ChipDecodeLayer = {
+  refs: Record<keyof DecodeTextParts, (el: HTMLSpanElement | null) => void>;
+  active: boolean;
+};
 
 /** The six legs of a long chip's time line (presetScrollPlan): wait, scroll, stand, snap back, scroll, stand. */
 type ScrollLeg = "waiting" | "crawl1" | "read1" | "back" | "crawl2" | "read2";
@@ -74,10 +85,12 @@ function PresetChipScrollText({
   text,
   onScrollPlan,
   onNeed,
+  decode,
 }: {
   text: string;
   onScrollPlan?: ChipScrollListener;
   onNeed?: ChipNeedListener;
+  decode?: ChipDecodeLayer;
 }) {
   const reportRef = useRef(onScrollPlan);
   reportRef.current = onScrollPlan;
@@ -104,6 +117,15 @@ function PresetChipScrollText({
     watcher.observe(roomRef.current);
     return () => watcher.disconnect();
   }, [text]);
+
+  // The scramble layer holds letters only while the decode runs; when it ends it is emptied in the same
+  // commit that shows the real words, so the two are never drawn over each other.
+  const layerRef = useRef<HTMLSpanElement>(null);
+  const decoding = decode?.active ?? false;
+  useLayoutEffect(() => {
+    if (decoding) return;
+    for (const part of Array.from(layerRef.current?.children ?? [])) part.textContent = "";
+  }, [decoding]);
 
   const plan = presetScrollPlan(overflowPx ?? 0);
   const delayMs = plan?.delayMs;
@@ -185,7 +207,27 @@ function PresetChipScrollText({
           transition,
         }}
       >
-        {text}
+        {decode ? (
+          <>
+            {/* The real words give the label its width from the first frame; the scramble is drawn over
+                them, clipped to that width, so nothing changes size when the last letter locks. */}
+            <span data-bonsai-chip-words="true" style={{ visibility: decoding ? "hidden" : undefined }}>
+              {text}
+            </span>
+            <span
+              ref={layerRef}
+              aria-hidden="true"
+              className={"bonsai-preset-chip-churn-layer" + (decoding ? " bonsai-preset-chip-text--churn" : "")}
+              style={{ display: decoding ? undefined : "none" }}
+            >
+              <span ref={decode.refs.locked} />
+              <span className="bonsai-preset-chip-caret" ref={decode.refs.caret} />
+              <span ref={decode.refs.tail} />
+            </span>
+          </>
+        ) : (
+          text
+        )}
       </span>
     </span>
   );
@@ -202,10 +244,16 @@ export function PresetChipText({
   onScrollPlan,
   onNeed,
   stub,
+  decode,
+  cycle,
 }: {
   text: string;
   scroll: boolean;
+  /** Changes each time the row starts this chip's reveal over, so its slide's time line starts then too. */
+  cycle?: number;
   onScrollPlan?: ChipScrollListener;
+  /** Decode mode's scramble, drawn inside the sliding label (see ChipDecodeLayer). */
+  decode?: ChipDecodeLayer;
   /** Told how wide the chip must be to show every word on one line (for the row's widening). */
   onNeed?: ChipNeedListener;
   /** Shown in place of the words while a neighbour holds the row open: the first word and "...". */
@@ -219,7 +267,15 @@ export function PresetChipText({
     );
   }
   if (!scroll) return <PresetChipPlainText text={text} onNeed={onNeed} />;
-  return <PresetChipScrollText key={text} text={text} onScrollPlan={onScrollPlan} onNeed={onNeed} />;
+  return (
+    <PresetChipScrollText
+      key={`${text}${cycle ?? 0}`}
+      text={text}
+      onScrollPlan={onScrollPlan}
+      onNeed={onNeed}
+      decode={decode}
+    />
+  );
 }
 
 /**

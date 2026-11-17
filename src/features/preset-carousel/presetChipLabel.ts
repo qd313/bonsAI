@@ -107,6 +107,22 @@ export function buildPresetChipLabelCss(): string {
           display: inline-block !important;
           white-space: nowrap !important;
           will-change: transform;
+          position: relative;
+        }
+        /*
+          Decode mode draws its scramble inside the sliding label (plan 105 lane B3), over the real words,
+          which are there from the first frame but invisible until the last letter locks. The layer is as
+          wide as the real words and no wider (max-width 100% of the words, clipped), so a scramble
+          glyph wider than the letter it will become can never push the label out or add to the width the
+          slide measures.
+        */
+        .bonsai-scope button.bonsai-preset-glass .bonsai-preset-chip-churn-layer {
+          position: absolute;
+          left: 0;
+          top: 0;
+          max-width: 100%;
+          overflow: hidden;
+          white-space: nowrap;
         }
         /*
           Decode mode (Ghost in the Shell chip decode -- replaces the old \`stream\` typewriter).

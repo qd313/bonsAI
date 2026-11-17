@@ -2,8 +2,10 @@
  * Title: Preset decode-mode chip button
  *
  * Purpose: Decode mode's chip button (DecodePresetChipButton): the same glass button, badges and
- * settled scrolling label as every other style, with a churn label (three spans written straight
- * from the reveal loop) while the prompt is still being revealed.
+ * scrolling label as every other style. While the prompt is still being revealed the label's real
+ * words are in it but hidden, and a scramble layer (three spans written straight from the reveal loop)
+ * is drawn over them, so the chip is exactly as wide as its settled self from frame 0 and the slide is
+ * one time line from the reveal to the end (plan 105 lane B3).
  *
  * Used for: MainTabPresetDecodeSlots in presetDecodeSlots.tsx, which owns the reveal loop.
  *
@@ -33,13 +35,13 @@ export type DecodeLabelNodes = Record<DecodeLabelPart, HTMLSpanElement | null>;
 export type DecodeLabelRefs = Record<DecodeLabelPart, (el: HTMLSpanElement | null) => void>;
 
 /**
- * The label's text is owned by the reveal effect below while the prompt is still churning, written
- * straight to the churn span's three parts via `labelRefs` — never through React state. React
- * renders those spans empty and never writes into them, so the effect's writes are never fought
- * over; they are blank only during a slot's stagger delay, before its first `begin` call. Every
- * frame after that bypasses React entirely, which is the point of the rewrite (see the module
- * header comment on frame cost). Once the prompt has resolved the churn span is replaced by the
- * ordinary label, so Steam's Marquee measures settled text, never a mid-churn frame.
+ * The scramble is owned by the reveal effect in presetDecodeSlots.tsx while the prompt is still churning,
+ * written straight to the scramble layer's three parts via `labelRefs` — never through React state.
+ * React renders those spans empty and never writes into them (it only empties them once the reveal is
+ * over), so the effect's writes are never fought over; they are blank only during a slot's stagger
+ * delay, before its first `begin` call. Every frame after that bypasses React entirely, which is the
+ * point of the rewrite (see the module header comment on frame cost). The sliding label measures the
+ * real words, which are in it from the first frame, never a mid-churn frame.
  */
 export function DecodePresetChipButton(props: {
   preset: PresetPrompt;
@@ -58,6 +60,8 @@ export function DecodePresetChipButton(props: {
   onNeed?: ChipNeedListener;
   /** The first word and "...", while the chip beside it holds the row open (a settled chip only). */
   stub?: string | null;
+  /** Counts how many times the row has started this slot's reveal; the slide starts over with each. */
+  cycle?: number;
 }) {
   const {
     preset: p,
@@ -72,6 +76,7 @@ export function DecodePresetChipButton(props: {
     onScrollPlan,
     onNeed,
     stub,
+    cycle,
   } = props;
   return (
     <Button
@@ -109,15 +114,15 @@ export function DecodePresetChipButton(props: {
             chip with ragTip=true whose dot never drew in decode mode). One function now, not two
             copies that can go out of sync again. */}
         <PresetChipLeadingBadges p={p} />
-        {resolved ? (
-          <PresetChipText text={p.text} scroll={scroll} onScrollPlan={onScrollPlan} onNeed={onNeed} stub={stub} />
-        ) : (
-          <span className="bonsai-preset-chip-text bonsai-preset-chip-text--churn">
-            <span ref={labelRefs.locked} />
-            <span className="bonsai-preset-chip-caret" ref={labelRefs.caret} />
-            <span ref={labelRefs.tail} />
-          </span>
-        )}
+        <PresetChipText
+          text={p.text}
+          scroll={scroll}
+          onScrollPlan={onScrollPlan}
+          onNeed={onNeed}
+          stub={resolved ? stub : null}
+          decode={{ refs: labelRefs, active: !resolved }}
+          cycle={cycle}
+        />
         {p.beta ? (
           <span
             style={{

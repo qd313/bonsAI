@@ -21,6 +21,7 @@ import { Focusable } from "@decky/ui";
 
 import { isDeckDirectionLeftEvent, isDeckDirectionRightEvent, isDownDeckButtonEvent, isUpDeckButtonEvent } from "../../shared/dpad/focusNavigation";
 import { takeAboveTheChat } from "../../shared/dpad/chatTranscriptNavHelpers";
+import { leftAtEdge } from "../../shared/dpad/leftEdge";
 import { textPx } from "../../styles/textPx";
 import { registerBackLineEl, searchBackNav } from "./searchJumpStore";
 
@@ -56,7 +57,8 @@ export function backLineNavHandlers(down: () => boolean): Record<string, unknown
     navRef: searchBackNav,
     onMoveUp: up,
     onMoveDown: down,
-    onMoveLeft: hold,
+    /* A dead end: the first and second Left in a row hold, the third goes to Steam's menu (leftEdge.ts, plan 105). */
+    onMoveLeft: (evt?: unknown) => leftAtEdge("search-back-line", evt),
     onMoveRight: hold,
     onButtonDown: (button: unknown) => {
       if (isUpDeckButtonEvent(button)) return up();

@@ -21,6 +21,7 @@ import { TextField } from "@decky/ui";
 import { FiSearch } from "react-icons/fi";
 
 import { SearchStop } from "./SearchStop";
+import { leftAtEdge } from "../../shared/dpad/leftEdge";
 import type { SearchWord } from "./searchTypes";
 import type { SearchNav } from "./useSearchNav";
 
@@ -58,8 +59,9 @@ export function SearchFindBox({ nav, value, onType, onPickWord, words }: SearchF
             ...find,
             placeholder: "Chats, settings, notes…",
             "aria-label": "Search for a word",
-            // Left and Right hold still: the field is the whole row.
-            onMoveLeft: () => true,
+            // Left and Right hold still: the field is the whole row. Left is a dead end, so the third Left in a row
+            // goes to Steam's menu (leftEdge.ts, plan 105).
+            onMoveLeft: (evt: unknown) => leftAtEdge("search-box", evt),
             onMoveRight: () => true,
           } as Record<string, unknown>)}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onType(e.target.value)}

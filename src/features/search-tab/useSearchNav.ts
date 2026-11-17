@@ -23,6 +23,7 @@ import { useCallback, useEffect, useRef } from "react";
 
 import { takeHolderFocus } from "../../shared/dpad/chatTranscriptNavHelpers";
 import { takeNavFocus, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
+import { leftAtEdge } from "../../shared/dpad/leftEdge";
 import { searchMove, type SearchDirection, type SearchStopAt } from "./searchNav";
 
 /** How many frames a move waits for a stop that was drawn in the same moment to get its nav node (about 130 ms). */
@@ -154,7 +155,8 @@ export function useSearchNav(
         centers,
         (from, to) => enterAt.current(rows[from]!.key, rows[to]!.key),
       );
-      if (move === "hold") return true;
+      /* A row's start is a dead end for Left: two in a row hold, the third goes to Steam's menu (leftEdge.ts, plan 105). */
+      if (move === "hold") return direction === "left" ? leftAtEdge("search-row") : true;
       if (move === "leave") return takeNavFocus("tab-bar");
       return hop(rows[move.row]!.cells[move.col]!) || true;
     },

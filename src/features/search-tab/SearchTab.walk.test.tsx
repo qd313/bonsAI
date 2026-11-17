@@ -31,6 +31,8 @@ import { CHATS, GAME_NOTES, NOTES, pressOn, ringStop } from "./searchTabTestKit"
 import { registerNavFocus, resetNavFocusRegistry, takeNavFocus } from "../../shared/dpad/navFocusRegistry";
 import { MONITOR_PANE_PX, OWN_SCREEN_PANE_PX } from "../../test-harness/tabBodyWalk";
 import { putSteamRingOn, type SteamEl } from "../../test-harness/steamRing";
+import { DIR_LEFT, hearPress } from "../../test-harness/steamLeftPress";
+import { backLineNavHandlers } from "./SearchBackLine";
 
 type SteamRule = "nearest" | "centerIfHidden" | "center";
 const RULES: SteamRule[] = ["nearest", "centerIfHidden", "center"];
@@ -377,5 +379,58 @@ describe("the walk the Deck did (plan 92, build 649daecc)", () => {
     expect(word(w.press("onMoveUp"))).toBe("claw");
     expect(w.press("onMoveUp").label).toBe("Search for a word");
     w.unmount();
+  });
+});
+
+/* ---- Left out to Steam's menu (plan 105, lane C5, row P105-LEFT-TO-MENU-01) ---- */
+/**
+ * Lefts at the ringed stop, each heard at the page as Steam sends it and then run by the stop's own handler, until a
+ * press is not claimed (Steam's own Left then takes the ring out of the plugin, to its side menu): "moved" along the
+ * row, "held", then "out". The ring goes back to the stop it started on.
+ */
+function leftsHere(): string[] {
+  const start = ringStop()!;
+  const out: string[] = [];
+  for (let i = 0; i < 12 && out[out.length - 1] !== "out"; i++) {
+    const before = ringStop()!;
+    let claimed: boolean | undefined;
+    act(() => {
+      hearPress(before, DIR_LEFT);
+      claimed = pressOn(before, "onMoveLeft");
+    });
+    out.push(claimed !== true ? "out" : ringStop() === before ? "held" : "moved");
+  }
+  act(() => putSteamRingOn(start));
+  return out;
+}
+
+describe("Left out to Steam's menu from every row of the Search tab", () => {
+  for (const steam of RULES) {
+    it(`Steam's rule "${steam}": walking Down after a word is picked, every stop walks Left to its row's start, where two Lefts hold and the third goes out`, async () => {
+      const w = await mountWalk(MONITOR_PANE_PX, steam, "mantis");
+      const seen = new Set<string>();
+      const outcomes: string[] = [];
+      for (let guard = 0; guard < w.stopCount() + 4; guard++) {
+        expect(seen.has(w.label()), `${w.label()} visited twice`).toBe(false);
+        seen.add(w.label());
+        outcomes.push(`${w.label()}: ${leftsHere().join(" ")}`);
+        if (!w.press("onMoveDown").moved) break;
+      }
+      const said = outcomes.join("\n");
+      expect(outcomes.length, said).toBeGreaterThan(5);
+      for (const o of outcomes) expect(o, said).toMatch(/: (moved )*held held out$/);
+      expect(outcomes[0], said).toBe("All games: held held out");
+      expect(outcomes[1], said).toBe("Search for a word: held held out");
+      w.unmount();
+    });
+  }
+
+  it("the Search jump's Back line, over the chat on Main, holds twice and hands the third Left to Steam", () => {
+    const line = backLineNavHandlers(() => true);
+    const left = () => {
+      hearPress(document, DIR_LEFT);
+      return (line.onMoveLeft as () => boolean)();
+    };
+    expect([left(), left(), left()]).toEqual([true, true, false]);
   });
 });

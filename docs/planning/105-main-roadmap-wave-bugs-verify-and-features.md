@@ -554,6 +554,8 @@ whether it settled the matter ("yes", "no", or "went up to max, ground N"), the 
 | 02:55 | medium | D3's built first-time setup, before landing | two fixes first: OK while a switch save is in flight; the beta line could wrap | D3 fixed both | yes | ~90k |
 | 02:58 | medium | C2's built switch, before landing | land as is; the Deck reads the glide at four landings | added to block D3a | yes | ~51k |
 | 03:10 | medium | 7: the rule for Left (C5's plan) | build as planned; a pause ends a run of Lefts; a held Left never counts; leave out the places where code and Deck disagree | C5 told | yes | ~36k |
+| 04:12 | medium | C5's built Left rule, before landing | land after a 150 ms floor, so a held Left can never leave even without Steam's repeat mark | C5 added the floor | yes | ~60k |
+| 09:30 | medium | 8: D4's D-pad chain when Update turns into Cancel and back, and the bar outside the chain | land as is; the Deck should try the swap both ways and the bar appearing under a walk first | none (the swap needs a real Ollama update, the maintainer's call); three small notes filed | yes | ~95k |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -801,6 +803,26 @@ six lookups and four drawing helpers (all Sonnet).
   settings file holds your Steam Web API key).
 - **Your October notes on the checks page** live only in your browser; no session can read them. Paste them in the
   chat if you want each answered.
+- **03:27 to 04:30:** Deck block D3a (the answer's foot, the thumbs row, "N earlier" by game, the widening chip and the
+  Developer halves passed; three things went back to their helpers with the Deck's numbers and landed by 04:30); the
+  rule for Left out to Steam's menu landed; the full checks passed on that tip. The five-hour window was full at 04:07.
+
+**2026-11-17, morning (the same chat, after the reset).**
+- **09:12:** usage 3 percent of the five-hour window, 77 of the week, 45 on Fable's own counter. The wake timer had
+  been lost with the old process, so the chat started two hours after the reset.
+- **09:36:** the Ollama tab's job card, live connection line and download bar landed (seven commits, every check
+  green) after the second opinion said land as is (consult 8). Every code change of the plan has landed. **Not built,
+  for the week's budget:** the same card on the library download and the voice install (lane D4b), the tidy lane, the
+  README clips refilm, the stand-in blocks.
+- **09:40 to 10:13:** the review pass (both reviewers in about six minutes; the report is
+  `assets/105-review-report.md`, posted to you at about 10:00 and waiting for your answer) and the last Deck block,
+  D3b, which ended with the put-back: your settings as at the start, your chat open, the test chat deleted, the
+  keep-awake hold released.
+- **Found after D3b:** the first-time test in D3a (the settings file moved aside, then back) had made the plugin clear
+  what it keeps in Steam's browser. That brought back the "How to use bonsAI" chip, which hides the suggestion chips,
+  so D3b could not check the chips. The session opened the help chip once with real presses, which put its flag back.
+  Other small things kept there (an unsent draft, which note offers you had answered, the last tab) could not be put
+  back. A lesson is in `docs/lessons-learned.md`.
 
 ## 13. Report
 
@@ -812,3 +834,77 @@ The second opinion (§ 7): every consult logged, medium and max, with what it ch
 matter. The review pass (§ 5r): both reviewers' full answers kept here, the report for the maintainer beside the plan. The security reviewer: reads lane D2 (a
 container build and one more download site) and lane T2's scripts (they reach the Deck over SSH). The licence reviewer: reads lane D5's new rows. Focus and layout: A2, A6, C2, C5, D3 and D4 carry
 the second opinion's read before landing and their Deck rows as the gate.
+
+### The review pass: the security reviewer's full answer
+
+**Security review of plan 105 (tip 1b45aa04b)** — the security reviewer (security-auditor, Sonnet high), 2026-11-17 about 09:47 EST, read-only.
+
+The permission gates and the Deck scripts held up. I found two ★★ problems: Stop is not heard during the Ollama program download, and the voice engine build now runs by default without a check of what it fetches. Everything else is ★ or "could not tell". I read the code only and ran nothing.
+
+#### Findings
+
+**1. Stop is not heard while the Ollama program downloads (★★).** What a person notices: on a fresh Deck they press Stop during "Installing Ollama". The card says "Stopping" and nothing stops. The install runs on, for up to 10 minutes. After the install the run restarts the Deck's running Ollama before it ends as "Stopped"; that restart can cut off an answer being written. Where: `py_modules/backend/ollama/local_ollama_setup_service.py` lines 596-598 and 603-610 (one blocking call, no cancel check); lines 889-905 have no cancel check between the install and the restart. The promise it breaks: `src/features/main-tab/firstRunSetupProgress.ts:46` says "Stop works at any moment". Related: the unpack command has no `pipefail`, and unpacks straight over `~/.local` with no checksum; a dropped connection or the 10-minute timeout can leave old and new files mixed, so Ollama can be left broken (a Cancel cannot do this, because it is not heard). Fix: run the install as a process the way `run_stoppable` does and end it on cancel; add `set -o pipefail`; unpack to a temporary folder and swap it in only on success; check cancel before the restart step; until then, change the card's wording. Sure: high.
+
+**2. The voice engine build now runs by default and what it fetches is not checked (★★).** What a person notices: nothing; the build step is ticked by default on first setup. How: the build image is pinned to an exact digest (good), but inside it `apt-get update` and `apt-get install g++ make` fetch unpinned packages. The finished program is copied out and the plugin then runs it, so a tampered package could end up in a program the plugin runs outside the container. Where: `py_modules/backend/voice/voice_engine_build_service.py` lines 236-237 and 284-285, now reached from `ollama_local_setup_rpc.py:161-167` for everyone who leaves the voice row ticked. Rights: `plugin.json` has no root flag, so it likely runs as the Deck's normal user (not confirmed from the repo). Fix: build from an image that already holds the compiler, pinned by digest; or pin the package versions; or record a checksum of the built `whisper-cli` and `whisper-server` and check it before the first run. Sure: medium (path certain; harm could not tell).
+
+**3. A failed Cancel call leaves the card stuck on "Stopping" (★).** If the Cancel call fails or times out, the card shows "Stopping the update" and the download goes on; a second Stop press does nothing. Where: `src/features/downloads/runningJobs.ts:160-163` (`stopping` set, then blocks every later cancel); `src/features/ai-connection/ollamaSetupJob.ts:108` swallows the failure. Fix: have `cancelOllamaSetup` report failure and clear `stopping` so a second press retries; the same for `stopFirstRunSetup`. Sure: high.
+
+**4. Stop in the "missing keys" window leaves Ollama switched off (★).** After Clear all data, a Stop at the wrong moment can leave the Deck's Ollama not running. How: `ensure_ollama_cli_home_ready` (line 332 on) calls `_stop_local_ollama_listener` (305-329), which stops the user's Ollama service and kills `ollama` processes; cancel is checked after the stop (361-363), too late. Fix: start the server again on the cancel path, or check cancel before the stop. Sure: medium. Older than this session, but Stop is now easier to reach.
+
+**5. Turning Internet downloads off does not stop a run in progress (★).** They turn the switch off during setup and downloads keep going, including the long voice engine build. Where: the permission is checked once, at the start (`ollama_local_setup_rpc.py:117`). Fix: check the permission between steps, or have the switch cancel the run. Sure: high.
+
+**6. A made-up name on the "open source" list counts as open source (★).** Typing `someone/mistral:7b` or `someone/moondream` into the custom pull box labels it open source and passes "open source only". Where: `py_modules/backend/ollama/model_policy.py:74-77`; `_split_tag` (92-98) drops the namespace before the exact-tag check at line 141. The older family rules already had this habit; the new list copies it. Fix: let the exact-tag list match only names with no namespace, or only `library/`. Sure: high.
+
+**7. Imported search packs can no longer be removed (★).** Someone who imported a settings-search pack keeps it for good (except by Clear all data). Where: the remove calls are gone from `intent_pack_rpc.py` and `main.py`; the stored packs still load. Fix: drop stored non-bundled packs once, on load; or keep a small remove button. Sure: high.
+
+**8. The Deck chat-placing script can lose a chat-list change (★).** If a chat is made while the script runs, its row can vanish from the list. Where: `scripts/deck_place_chat.py:345` (`place`) and `:377` (`take_back`) read the list, then write it back later. Related: `take_back` writes `original_index_b64` from the record file at line 397 without checking its checksum (only someone who can already edit the checkout could change it). Fix: re-read and compare just before each write; check the decoded bytes against `original_index_sha256`. Sure: medium.
+
+#### Could not tell
+- Download sites may be incomplete: the Ollama program, speech model and image downloads may redirect to other hosts (GitHub, a content network). The code names only ollama.com, registry.ollama.ai, huggingface.co and ghcr.io, plus the compiler fetch in words.
+- Whether Cancel during the container's apt step leaves apt lock files inside the image (it removes the container, so likely not).
+
+#### Looked at and found fine
+- Internet downloads switch: starts as the saved permission (off by default); only a press turns it on; a failed save puts it back; the parental lock blocks it; OK stays grey until a good save; a missing connection fails to "off".
+- Back end checks: `start_local_ollama_setup` and `install_voice_engine` both check the permission and the parental lock; a reload resume goes back through the same start call; the reload note keeps only known words from `leave_out`.
+- Voice download offer: the first microphone press asks first with the sites named; the install needs both the microphone and downloads permissions.
+- Speech models: pinned to an exact commit, checked by size and SHA-256; a Stop removes the half-written file.
+- Stoppable voice run: removes the build container twice and ends the process; a Stop leaves only the pulled image in podman's storage and some files in the voice folder; the program is run again before it counts as ready.
+- Models list: a fixed list of `library` names; a row can only pull its own tag, and only on the person's selection; four large rows marked too big for the Deck; no disk-space check, as before.
+- Deck scripts: host must match `deck@<digits>` exactly (no option can be smuggled in); `spawn` uses no shell; Deck-side commands are fixed text plus a checked id; row names limited to safe letters; a crafted chat or rows file cannot run anything on the Deck or the PC; `--local` reads only 127.0.0.1 and the log and library folders; the record folder `.scratch` is ignored by git.
+- Deletions: nothing still calls the removed pack functions or the removed pixel-art file.
+- Settings: the old animation keys are ignored on load and left out on the next save; hostile values fall back to defaults; `tests/contracts` covers an old file; `tiny` added on both sides; capabilities for a file without them start with microphone and downloads off.
+- Smaller changes: the sanitizer relaxation only lets long plain prose through; `land_lane.sh` is fine.
+
+### The review pass: the licence reviewer's full answer
+
+**Review of the open-source and licence side of plan 105 (tip 1b45aa04b)** — the licence reviewer (foss-advocate, Sonnet high), 2026-11-17 about 09:46 EST, read-only.
+
+I found no serious problem. The new models list, the first-time setup screen and the voice engine are honest and the person stays in control. There are eight small findings.
+
+**What I found**
+
+1. **Cancel can get stuck on "Stopping" (★★, about 70% sure).** A person could press Cancel on an Ollama install, update or setup, see "Stopping…", and have the download carry on anyway. The Cancel request swallows any failure, and there is no message. After the first press the card ignores every later press while it says "Stopping". Files: `src/features/ai-connection/ollamaSetupJob.ts:108-110`, `src/features/downloads/runningJobs.ts:88` and `:162`. The Main-tab Stop has the same shape at `src/features/main-tab/firstRunSetupStore.ts:75`. Fix: if the Cancel request fails or times out, put the button back and show a message. Or let Cancel be pressed again if the status still reads "running" after a few seconds.
+
+2. **The licence file says nothing about the 31 game characters or the downloaded parts (★★, 85% sure).** The plugin ships names and style hints for characters from Nintendo, Rockstar, Valve, Larian and others, under Apache-2.0. A reader of the licence file would not know whose names those are. No file says "not affiliated" or "names belong to their owners". The new ownership document is not linked from the licence file or the README. The licence file also does not say what the plugin downloads at runtime, or under what licence: Ollama (MIT), whisper.cpp (MIT), the speech models (MIT), the answer model and the note-search model (both Apache 2.0, per the plugin's own table and the sources list). Nothing is redistributed in the zip, so this is a clarity gap, not a legal breach. File: `NOTICE:40-44`. Fix: add two short paragraphs. One says the character names belong to their owners and the plugin is not affiliated. The other lists "downloaded when you ask, not in the zip" with each piece's licence.
+
+3. **The site lists name only the first stop (★, about 75% sure on the redirects).** The checklist's voice-engine row says the build "fetches compilers from its own package servers" and names no server. I could not tell which ones, because that depends on what the engine image is built on. The job card says "From ollama.com and registry.ollama.ai" even for an Ollama-only install. It leaves out the compiler servers during a setup. Model, speech and image downloads normally redirect to a content network. I did not test that here. Files: `src/features/ai-connection/first-run/firstRunChecklist.tsx:76-83`, `src/features/ai-connection/ollamaSetupJob.ts:75-79`. Fix: check the image's operating system and name its package servers in both places. Add "and the sites they hand off to" to the notice wording.
+
+4. **Ollama is downloaded and unpacked with no check of the file (★★, certain, but not changed this session).** The checklist now puts "ollama.com, about 1.5 GB" in front of every new person. The speech models and the voice image are pinned and checked. The Ollama tarball is piped straight through `curl | zstd | tar`. File: `py_modules/backend/ollama/local_ollama_setup_service.py:596-598`. Fix: fetch a published checksum and compare, or at least say "no check" in the notes.
+
+5. **The voice engine's compiler install is not pinned (★).** The image is pinned to an exact digest, which is good. But `apt-get install g++ make` takes whatever version the mirror has that day, so two Decks can build slightly different engines. File: `py_modules/backend/voice/voice_engine_build_service.py:236-237` (also `:284-285`). Fix: pin the versions, or write the choice down beside the digest comment.
+
+6. **Two release months in the new models list are not real release months (★, 60% sure on gemma3:270m).** The list uses "the month the maker's page was created". For `gemma4:26b` the month is borrowed from other rows, and the row itself does not say so. Only the sources file does. The new list sorts newest first, so this nudges its order. `gemma3:270m` shows 2025-07. From memory it launched in August 2025, but I could not check. Files: `src/features/models/pullModelCatalogAdded.ts:244` and `:77`. Fix: add a short comment on the gemma4 row. Or leave the month out where it was not read.
+
+7. **A person who chose a chip or answer animation setting now gets the new one (★, 65% sure).** Old choices such as static or carousel chips, or scramble off, are not read any more. Everyone now gets decoding chips and scrambled answers. These controls were on the Developer tab, so the number of people affected is small. Reduced motion is still honoured for chips and scrambling (`presetChipShared.ts:89`, `ScrambledAnswerText.tsx:105`), and a running game turns scrambling off. File: `py_modules/backend/settings/settings_service.py:62-65` (the code comment owns up to the change). Fix: add one line to the changelog. The plan note already says this was chosen on purpose.
+
+8. **The ownership document covers voices but not the character pictures that ship (★).** The document is accurate on what I checked: 31 rows, and the same 31 as the code. The credits I could judge from memory looked right. The five "owner not found" gaps are marked honestly. It says it does not judge names, faces or stories. The pictures that remain (`CharacterPropGlyph`, with a letter, a prop and a tint per character) are not covered. No voice is bundled today; only text style hints ship. So "what still ships" is names, hints and emblems. File: `docs/audit/bundled-characters-voices.md:25-26`. Fix: add one sentence saying what ships now, and one saying emblems were not reviewed.
+
+**What I looked at and found fine**
+
+- Models list licences: all 22 new rows match the licence in the sources file (Apache 2.0, MIT, Gemma Terms or Llama 3.1), fitting each family's known licence apart from gemma4 (item 6), taken from the sources file. Label and class agree with the plugin's licence table (tested). The new exact-tag list is narrow: other Mistral and DeepSeek sizes stay open-weight; the Qwen research-licence sizes stay out of the open class. Every new row has a page link and a licence-text link. Open-weight models are marked "Open weight" or "Research only", never "FOSS"; rows are dimmed, never hidden, keeping pills and buttons; pulling an open-weight model on "Open source only" asks first. Rows with no measured Deck score show a dash and are never suggested.
+- First-time setup screen: five downloads each with size and site; totals add up (6.9 GB with all, 5.8 GB with the least). The note-search model can be unticked; the speech models and the voice engine untick together. Ollama and the answer model are locked on and say "needed"; the person can still choose "Not now" or "Use the AI on my PC". The Internet downloads switch starts at whatever the permission is (off on a fresh install); only the person's press turns it on; OK stays grey until it is on. The parental lock is respected. "Not now" and B download nothing. An unticked piece stays out after a restart and is offered again with a Download confirmation (`voiceFirstUseOffer.ts`).
+- Voice engine: image pinned to an exact digest; speech models from a pinned commit, checked by hash; Cancel removes the build container; a failure never stops the rest of the setup.
+- Deletions: the pixel-art faces are gone; the search-pack export, import and remove code had no screen using it and nothing in `src/` still calls it; packs that are on stay honoured.
+- Dependencies: no package or licence file changed in the 409 files, so no new dependency entered the build.
+
+**Could not tell:** which servers the voice engine's compiler install reaches; the real launch month of `gemma3:270m`; whether `gemma3:270m` is on an older licence text (its licence file differs from the other Gemma 3 rows); whether the starter-set box's size line is right for Ollama when a person comes from the Install Ollama box (a parameter looks reused with a different meaning, in `src/features/models/localOllamaStarterSet.tsx`).

@@ -537,6 +537,16 @@ the plugin's Update would have called the old library newer than the published o
 every settings key with the plan's backup (names only) after the files are back, and reload the plugin after a
 settings fix so the screen does not write its old copy back.
 
+**A Deck test that starts the plugin with no settings file also wipes what the plugin keeps in Steam's browser.**
+Plan 105's driver moved the settings file aside to see the first-time screen (block D3a), then moved it back byte for
+byte. The plugin had taken the missing file for a wiped install and cleared every `bonsai:` key in Steam's browser
+storage: the open chat became a new unsaved chat, and the "How to use bonsAI" chip came back. While that chip is up the
+suggestion chips never draw, so the next block (D3b) saw no chips at all and wrote two rows as failed or not run.
+Before such a test, save the `bonsai:` keys with one small page read; afterwards put back what the plugin's own
+controls can put back (opening the help chip once sets its flag again; the chats menu reopens the chat), and check that
+the chips draw before the next block. Evidence `workshop:test-evidence/plan105-P105-ANSWER-END-01-d3b.json`; the
+clearing call is in the first-run gate (`useDisclaimerAndLocalRuntimeGates.tsx`).
+
 ## 4. Briefing helpers
 
 **Tell the helper what is allowed to stay.** Hand over a list of things a tool flagged without

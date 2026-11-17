@@ -285,6 +285,106 @@ describe("stream scroll follow", () => {
   });
 
   /*
+   * Plan 105 (P105-M-ANSWER-FOLLOW, Deck 2026-11-17): with the ring on a term inside the writing answer
+   * the page stayed at the top and the newest line fell 235 px below the fold. Holding still was too
+   * much: the follow now goes as far as keeps the ring's own top inside the pane, and no further.
+   */
+  describe("with the ring on the writing answer", () => {
+    /** A ring whose on-screen rect moves with the pane, `top` px below the pane's top at rest. */
+    function ringAt(t: ReturnType<typeof makeTranscript>, top: number, parent: HTMLElement = t.anchor) {
+      const control = document.createElement("div");
+      control.className = "gpfocus";
+      control.getBoundingClientRect = () => rect(top - t.scrollTop, top + 30 - t.scrollTop);
+      parent.appendChild(control);
+      return control;
+    }
+
+    it("brings the newest line to the fold when the ring can stay in view", () => {
+      const t = makeTranscript({ contentBottom: 400 });
+      ringAt(t, 200);
+      const { rerender } = mount(t);
+
+      commit(rerender, { text: "first tokens" });
+
+      // 150 px of tail was below the fold and the ring has 200 px of room above it.
+      expect(t.scrollTop).toBe(150);
+    });
+
+    it("stops following where the ring would leave the top of the pane", () => {
+      const t = makeTranscript({ contentBottom: 400 });
+      ringAt(t, 100);
+      const { rerender } = mount(t);
+
+      commit(rerender, { text: "first tokens" });
+      expect(t.scrollTop).toBe(100); // the ring's top is now at the pane's top
+
+      t.grow(120);
+      commit(rerender, { text: "first tokens, more" });
+      expect(t.scrollTop).toBe(100); // no room left: the ring wins over the newest line
+    });
+
+    it("does not follow when the ring is already above the pane", () => {
+      const t = makeTranscript({ contentBottom: 400 });
+      ringAt(t, -80);
+      const { rerender } = mount(t);
+
+      commit(rerender, { text: "first tokens" });
+
+      expect(t.scrollTop).toBe(0);
+    });
+
+    it("is not stopped by a ring that sits on a wrapper around the whole transcript", () => {
+      const t = makeTranscript({ contentBottom: 400 });
+      const wrapper = document.createElement("div");
+      wrapper.className = "gpfocus";
+      wrapper.getBoundingClientRect = () => rect(0 - t.scrollTop, 400 - t.scrollTop);
+      t.scroll.insertBefore(wrapper, t.anchor);
+      wrapper.appendChild(t.anchor);
+      const { rerender } = mount(t);
+
+      commit(rerender, { text: "first tokens" });
+
+      expect(t.scrollTop).toBe(150);
+    });
+  });
+
+  /*
+   * Plan 105 (Deck 2026-11-17, ring on nothing in the transcript): the page did not move at all while
+   * the answer grew from 713 to 1058 px. The follow hangs on one size observer, so when that observer
+   * stays quiet nothing else ever looked. A slow look every so often now catches what it missed.
+   */
+  it("still follows when the size observer never reports", () => {
+    vi.useFakeTimers();
+    const t = makeTranscript({ contentBottom: 400 });
+    const { rerender } = renderHook(
+      ({ text }: { text: string }) => useStreamScrollPin(t.anchorRef, text, true),
+      { initialProps: { text: "" } }
+    ); // no layout() here: the observer stays quiet from the start
+    act(() => rerender({ text: "first tokens" }));
+    expect(t.scrollTop).toBe(0);
+
+    act(() => vi.advanceTimersByTime(600));
+
+    expect(t.scrollTop).toBe(150);
+  });
+
+  it("stops looking when the answer ends", () => {
+    vi.useFakeTimers();
+    const t = makeTranscript({ contentBottom: 400 });
+    const { rerender } = renderHook(
+      ({ text, on }: { text: string; on: boolean }) => useStreamScrollPin(t.anchorRef, text, on),
+      { initialProps: { text: "first", on: true } }
+    );
+    act(() => rerender({ text: "final", on: false }));
+    t.scrollIntoView.mockClear();
+    t.grow(200);
+
+    act(() => vi.advanceTimersByTime(5000));
+
+    expect(t.scrollIntoView).not.toHaveBeenCalled();
+  });
+
+  /*
    * 48px of slack, so nudging the view slightly off the bottom — or a D-pad step that lands just
    * short of it — still counts as watching the answer rather than reading back.
    */

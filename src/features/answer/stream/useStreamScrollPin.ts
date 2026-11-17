@@ -18,6 +18,14 @@ const FOLLOW_SLACK_PX = 48;
 /** A scroll position within this many pixels of one we set is treated as our own. */
 const SELF_SCROLL_EPSILON_PX = 1;
 
+/**
+ * How often, while an answer streams, the follow looks by itself in case the size observer below has
+ * stayed quiet. On the Deck 2026-11-17 (plan 105, P105-M-ANSWER-FOLLOW) the page did not move at all
+ * while an answer grew by 345 px with the ring on nothing in the chat; the observer is the only thing
+ * that looks while streaming, so a look that never comes meant no follow for the whole answer.
+ */
+const FOLLOW_HEARTBEAT_MS = 400;
+
 /** The bottom-pinned preset/Ask dock, which covers the foot of the pane while content overflows. */
 const DOCK_SELECTOR = ".bonsai-main-tab-dock";
 
@@ -63,7 +71,7 @@ const RING_SELECTOR = ".gpfocus";
  * The element holding the gamepad ring when it sits on something that scrolls with the chat — the
  * transcript, or whatever scrolls above it — rather than on the dock. Null otherwise.
  *
- * Following the tail then scrolls the very control the person is on out of sight, and the D-pad's
+ * Following the tail all the way then scrolls the very control the person is on out of sight, and the D-pad's
  * own scrolls rarely take a pin, because a step near the end leaves the tail inside the slack.
  * Measured on device 2026-09-18 (plan61-QA-FREE-PLAY-01-streaming.json): six of eight stops on a
  * walk during a streaming answer were focused but off screen. The ring and not
@@ -74,11 +82,14 @@ const RING_SELECTOR = ".gpfocus";
  * answer below it grew. Only the dock is excluded: it is pinned to the bottom, so a ring on Ask or
  * Stop stays visible and still lets the follow run.
  */
-function ringOnScrollingContent(scroll: HTMLElement): HTMLElement | null {
+function ringOnScrollingContent(scroll: HTMLElement, anchor: HTMLElement): HTMLElement | null {
   const ring = scroll.querySelector<HTMLElement>(RING_SELECTOR);
   if (!ring) return null;
   const dock = scroll.querySelector<HTMLElement>(DOCK_SELECTOR);
-  return dock && dock.contains(ring) ? null : ring;
+  if (dock && dock.contains(ring)) return null;
+  /* A ring on a wrapper around the whole transcript is not a control the follow could carry out of
+     sight: its top is the transcript's top, so "keep it in view" would forbid every scroll. */
+  return ring.contains(anchor) || (dock && ring.contains(dock)) ? null : ring;
 }
 
 /** Whether no part of `el` can be seen in the pane: wholly above it, or wholly at or below the fold. */
@@ -119,8 +130,8 @@ function transcriptTailIsInView(anchor: HTMLElement, scroll: HTMLElement): boole
  * D-pad's own panel steps set `scrollTop`, which fires `scroll` like a swipe does. Stepping down
  * through the answer therefore pins, and stepping to the bottom resumes the follow, without the
  * navigation code knowing this hook exists. A step that lands near the end takes no pin, though,
- * so the follow also holds while the gamepad ring is on the chat above the dock
- * (ringOnScrollingContent).
+ * so while the gamepad ring is on the chat above the dock (ringOnScrollingContent) the follow goes
+ * only as far as keeps the ring's top inside the pane.
  */
 export function useStreamScrollPin(
   anchorRef: RefObject<HTMLElement | null>,
@@ -181,9 +192,11 @@ export function useStreamScrollPin(
     observerFollowsRef.current = true;
     const ro = new ResizeObserver(() => followRef.current());
     ro.observe(anchor);
+    const heartbeat = window.setInterval(() => followRef.current(), FOLLOW_HEARTBEAT_MS);
     return () => {
       observerFollowsRef.current = false;
       ro.disconnect();
+      window.clearInterval(heartbeat);
     };
   }, [anchorRef, enabled]);
 
@@ -270,7 +283,7 @@ export function useStreamScrollPin(
            "do not scroll". */
         return;
       }
-      const ring = ringOnScrollingContent(scroll);
+      const ring = ringOnScrollingContent(scroll, anchor);
       if (!enabled) {
         /*
          * After the finish the tail is never delivered (plan 93: the view does not move). Only a
@@ -286,10 +299,22 @@ export function useStreamScrollPin(
         }
         return;
       }
-      if (ring) return;
-
       const overshoot = tailBelowFold();
       if (overshoot <= 0) return;
+      /*
+       * A ring on the writing answer (or anything else that scrolls with it) is followed only as far
+       * as keeps the ring's top inside the pane: the newest line comes up to the fold while the
+       * control the person is on stays where they can see it. Stopping the follow altogether for
+       * as long as a ring sat there (the first version) left the page at the top for the whole
+       * answer -- Deck 2026-11-17, plan105-P105-M-ANSWER-FOLLOW.json, ring on a term in the answer:
+       * scrollTop 0 throughout, the newest line 235 px below the fold. When there is no room the ring
+       * wins, as it did on 2026-09-18 and 2026-09-23.
+       */
+      const room = ring
+        ? ring.getBoundingClientRect().top - scroll.getBoundingClientRect().top
+        : overshoot;
+      const step = Math.min(overshoot, room);
+      if (step < 1) return;
 
       /*
        * "End of the anchor at the fold", said in the only vocabulary scrollIntoView has: it aligns
@@ -299,7 +324,9 @@ export function useStreamScrollPin(
        * normal flow.
        */
       const covered = scroll.getBoundingClientRect().bottom - visibleBottom(scroll);
-      anchor.style.scrollMarginBottom = `${Math.max(0, Math.ceil(covered))}px`;
+      /* A negative margin leaves the part of the tail the ring's room does not allow below the fold. */
+      const leftBelow = Math.floor(overshoot - step);
+      anchor.style.scrollMarginBottom = `${Math.max(0, Math.ceil(covered)) - leftBelow}px`;
       anchor.scrollIntoView({ block: "end", behavior: "auto" });
       selfWroteTopRef.current = scroll.scrollTop;
     };

@@ -4,7 +4,7 @@
  * Purpose: Pin OllamaConnectionLine.tsx (plan 105, lane D4; board 5 tab 2, round 1 C): not tested yet, checking,
  * connected (the version, the model count and the address; "Started for this check" when the check woke the
  * service) and not reachable (the reason) all draw at the line's one height of 44 px, with the full sentence on the
- * row for the help strip, and Left and Right hold still.
+ * row for the help strip; Right holds still and Left is Steam's own (out to its menu, as from the old button).
  *
  * Does not: run a check or walk the tab (OllamaWhereAiRunsSection.jobCard.test.tsx, OllamaTab.jobWalk.test.tsx).
  */
@@ -46,7 +46,7 @@ describe("the connection line", () => {
       expect(CONNECTION_LINE_HEIGHT_PX).toBe(44);
       const row = container.querySelector<SteamEl>("[data-bonsai-help]")!;
       expect(row.getAttribute("data-bonsai-help")).toBe(detail);
-      expect(row.__nav?.onMoveLeft?.()).toBe(true);
+      expect(row.__nav?.onMoveLeft).toBeUndefined();
       expect(row.__nav?.onMoveRight?.()).toBe(true);
     });
   }

@@ -4,8 +4,8 @@
  * Purpose: Pin JobCard.tsx and jobLook.ts (plan 105, lane D4; board 5 tab 2, round 2): the card shows the job's title,
  * its two lines and its sites, with a fill as wide as the job's share done or moving stripes when the step has no
  * percentage; it reads its stopping title once Cancel is on its way; its parts add up to the drawing's 110 px and the
- * stylesheet draws it at exactly that, so it never changes height; Cancel's Left and Right hold still and its Up and
- * Down are the owner's.
+ * stylesheet draws it at exactly that, so it never changes height; Cancel's Right holds still, its Left is Steam's own
+ * (out to its menu, as from the plain button it stands in for) and its Up and Down are the owner's.
  *
  * Does not: walk the Ollama tab (OllamaWhereAiRunsSection.jobCard.test.tsx does).
  */
@@ -83,10 +83,10 @@ describe("the job card", () => {
     expect(line.slice(0, line.indexOf("}"))).toContain("white-space: nowrap;");
   });
 
-  it("Cancel's Left and Right hold still; Up and Down are the owner's", () => {
+  it("Cancel's Right holds still and its Left is Steam's own; Up and Down are the owner's", () => {
     const { view, up, down } = draw();
     const host = view.container.querySelector<SteamEl>(".bonsai-job-cancel-host")!;
-    expect(host.__nav?.onMoveLeft?.()).toBe(true);
+    expect(host.__nav?.onMoveLeft).toBeUndefined();
     expect(host.__nav?.onMoveRight?.()).toBe(true);
     host.__nav?.onMoveUp?.();
     host.__nav?.onMoveDown?.();

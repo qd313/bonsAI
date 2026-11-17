@@ -9,7 +9,7 @@
  * lands on the bar's Cancel and Up or B goes back; X in the tab cancels the job, not in its first half second; when
  * the run ends with the ring on the bar's Cancel the ring goes back to Open all and the bar says how the run ended.
  * With two jobs out of sight the bar shows the newest and "2 jobs"; Left from Cancel reaches the chip, A on it
- * switches, Right goes back to Cancel.
+ * switches, Right goes back to Cancel. Left at the bar's left end holds twice and the third Left goes to Steam's menu.
  * The bar takes its 56 px off the pane, so the help strip's dock, placed from the pane's bottom, ends where it starts.
  *
  * Does not: know the Deck's real heights (foldedTabWalk.tsx's flow model) or Steam's timing; the Deck row reads them.
@@ -42,6 +42,7 @@ import { JOB_BAR_HEIGHT_PX, buildJobLookSection } from "../downloads/jobLook";
 import { TabHelpStrip } from "../folded-tabs/TabHelpStrip";
 import { noteOllamaSetupStatus } from "./ollamaSetupJob";
 import { publishJob } from "../downloads/runningJobs";
+import { leftsAt, steamRingWorld } from "../../test-harness/steamLeftPress";
 
 const SECTION_IDS = OLLAMA_SECTIONS.map((s) => s.id);
 const RUNNING = { phase: "running", stage: "install", profile: "update_installed", accepted: true };
@@ -195,6 +196,21 @@ describe("two jobs at once", () => {
     const chipHost = screen.getByLabelText("Show the other running job").closest<SteamEl>(".bonsai-job-bar__host")!;
     act(() => void chipHost.__nav?.onMoveRight?.());
     expect(ringName()).toBe(BAR_CANCEL);
+  });
+});
+
+describe("Left on the bar (plan 105 lane C5)", () => {
+  it("with one job, Left on Cancel holds twice and the third goes to Steam's menu; with two, Left goes to the chip first", () => {
+    noteOllamaSetupStatus(RUNNING as never, true);
+    render(
+      <div className="bonsai-decky-tabs-root" data-bonsai-active-tab="settings">
+        <JobBar />
+      </div>,
+    );
+    expect(leftsAt(screen.getByLabelText(BAR_CANCEL), steamRingWorld)).toEqual(["held", "held", "out"]);
+    act(() => publishJob("kb-download", { title: "Updating the library", stoppingTitle: "Stopping", line1: "", line2: "", sites: "", fraction: null }, () => {}, Date.now() + 10));
+    expect(leftsAt(screen.getByLabelText("Cancel: Updating the library"), steamRingWorld)).toEqual(["moved"]);
+    expect(leftsAt(screen.getByLabelText("Show the other running job"), steamRingWorld)).toEqual(["held", "held", "out"]);
   });
 });
 

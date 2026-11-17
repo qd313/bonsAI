@@ -17,8 +17,9 @@
  *
  * Focus: the bar is outside Steam's pane, so every way onto it is a transfer onto a registered node: Down from a
  * folded tab's floating Open all button (`takeJobBar`), landing on Cancel. On the bar: Left from Cancel goes to the
- * "2 jobs" chip and Right from the chip back to Cancel; Up and B go back to where the ring came from; Down holds
- * still; LB and RB switch tabs as from anywhere; X cancels the job shown. When the bar's Cancel goes away under the
+ * "2 jobs" chip and Right from the chip back to Cancel; Left at the bar's left end (the chip, or Cancel alone) holds
+ * twice and the third Left in a row goes out to Steam's menu (leftEdge.ts, plan 105 lane C5); Up and B go back to
+ * where the ring came from; Down holds still; LB and RB switch tabs as from anywhere; X cancels the job shown. When the bar's Cancel goes away under the
  * ring (the job ended, or its card came into sight), the ring goes back to where it came from; with that gone, to
  * the tab's own first stop (the question box on Main), then the tab bar: never on nothing.
  *
@@ -29,6 +30,7 @@ import { Button, Focusable } from "@decky/ui";
 
 import { registerNavFocus, takeNavFocus, unregisterNavFocus, type NavFocusId, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
 import { shoulderSwitchFromPress } from "../../shared/dpad/shoulderSwitch";
+import { leftAtEdge } from "../../shared/dpad/leftEdge";
 import { useHandRingOnGone } from "../../shared/dpad/useHandRingOnGone";
 import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
 import { cancelJob, cancelJobFromX, switchBarJob, useBarView, type BarView } from "./runningJobs";
@@ -87,7 +89,7 @@ function RunningBar({ view, cancelGone }: { view: BarView; cancelGone: (el: HTML
         {view.count > 1 ? (
           <Focusable
             className="bonsai-job-bar__host"
-            {...({ ...common, navRef: moreNavRef, onMoveLeft: () => true, onMoveRight: () => takeNavFocus("job-bar") || true } as Record<string, unknown>)}
+            {...({ ...common, navRef: moreNavRef, onMoveLeft: (e: unknown) => leftAtEdge("job-bar", e), onMoveRight: () => takeNavFocus("job-bar") || true } as Record<string, unknown>)}
           >
             <Button className={`${FOCUS_RING_BTN_CLASS} bonsai-job-bar__more`} onClick={switchBarJob} aria-label="Show the other running job">
               {view.count} jobs
@@ -100,7 +102,7 @@ function RunningBar({ view, cancelGone }: { view: BarView; cancelGone: (el: HTML
           {...({
             ...common,
             navRef: cancelNavRef,
-            onMoveLeft: () => (view.count > 1 ? takeNavFocus("job-bar-more") : false) || true,
+            onMoveLeft: (e: unknown) => (view.count > 1 && takeNavFocus("job-bar-more")) || leftAtEdge("job-bar", e),
             onMoveRight: () => true,
           } as Record<string, unknown>)}
         >

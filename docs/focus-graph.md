@@ -955,11 +955,11 @@ Browse models  >
 -- a run going ---------------------------------------------------------
 [ job card: title, bar, what it is doing, how far, the sites ]  Cancel
    | Down  -> the connection line          ^ Up -> Start the AI with the Deck
-   Left and Right hold still
+   Right holds still; Left is Steam's own (out to its menu, as from Update)
 ------------------------------------------------------------------------
 ( dot ) Connected to this Deck's AI / Ollama v0.40.2 . 3 models . 127.0.0.1:11434   (the connection line)
    | Down  -> the next section's line      ^ Up -> Browse models, or the card's Cancel
-   Left and Right hold still
+   Right holds still; Left is Steam's own (out to its menu, as from Test connection before)
 ```
 
 - **The two switches hold their Up and Down on a Focusable around them** (DenseSwitchRow's `navOnWrapper`), and every
@@ -1009,6 +1009,7 @@ Open all (floating button)
    | Down -> the bar's Cancel, while the bar shows (else holds)      ^ Up, B -> back to Open all
 [ spinner  Updating AI & models      (2 jobs)  [Cancel X] ]
    Left from Cancel -> "2 jobs";  Right from "2 jobs" -> Cancel;  Down holds;  LB / RB switch tabs
+   Left at the bar's left end holds twice; the third Left in a row goes to Steam's menu (§ "Left out to Steam's menu")
 ```
 
 - **Every way onto the bar is a transfer** onto a registered node (`job-bar`, `job-bar-more`): the bar is outside

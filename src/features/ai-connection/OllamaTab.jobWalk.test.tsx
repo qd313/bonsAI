@@ -6,7 +6,9 @@
  * number of presses, the D-pad pressed the way Steam calls it and Steam's own scroll-into-view modelled three ways
  * (foldedTabWalk.tsx). The job card's Cancel stands in for Update and Browse: it is visited once each way, Update
  * and Browse are not stops at all, the connection line is a stop both ways (Down used to skip Test connection while
- * Up landed on it), no stop is visited twice, and every landing is on screen and clear of the strip.
+ * Up landed on it), no stop is visited twice, and every landing is on screen and clear of the strip. Left at every
+ * stop (plan 105 lane C5) moves the ring or reaches Steam's menu; from the card's Cancel and the connection line it is
+ * Steam's own, out on the first press, as from the buttons they stand in for.
  *
  * Does not: know the Deck's real heights (the harness's flow model) or Steam's real timing; the Deck row reads it.
  */
@@ -33,6 +35,7 @@ import { walkFoldedTab, type FoldedLanding } from "../../test-harness/foldedTabW
 import type { SteamFocusScroll } from "../../test-harness/tabBodyWalk";
 import { resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 import { markSettingsLoaded, resetSettingsLoadedSignalForTests } from "../settings/settingsLoadedSignal";
+import { leftsDownWalk, steamRingWorld } from "../../test-harness/steamLeftPress";
 
 const DECK_PANE = 430;
 const RULES: SteamFocusScroll[] = ["nearest", "centerIfHidden", "center"];
@@ -88,4 +91,17 @@ describe("the Ollama tab while an install or update runs", () => {
       w.unmount();
     });
   }
+
+  it("Left at every stop moves the ring or reaches Steam's menu; from Cancel and the connection line it is out at once", async () => {
+    const w = walkFoldedTab({ tabId: OLLAMA_FOLD_TAB, tab: <OllamaTab {...ollamaProps()} />, viewport: DECK_PANE, steam: "nearest", stripHeight: stripHeightFor, tail: 120 });
+    await flush();
+    await flush();
+    const outcomes = leftsDownWalk(w, steamRingWorld, 16);
+    const said = outcomes.map(([n, o]) => `${n}: ${o.join(" ")}`).join("\n");
+    for (const [name, o] of outcomes) expect(["moved", "out"], `${name} never let the ring go:\n${said}`).toContain(o[o.length - 1]);
+    const of = (name: string) => outcomes.find(([n]) => n === name)?.[1].join(" ");
+    expect(of(CANCEL), said).toBe("out");
+    expect(of(TEST), said).toBe("out");
+    w.unmount();
+  });
 });

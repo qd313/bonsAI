@@ -3,6 +3,7 @@ import { cleanup } from "@testing-library/react";
 import { dispatchFakeRpc, resetFakeDeckyRpc } from "./fakeDeckyRpc";
 import { resetLeftEdgeForTests } from "../shared/dpad/leftEdge";
 import { resetOllamaSetupJobForTests } from "../features/ai-connection/ollamaSetupJob";
+import { resetRunningJobsForTests } from "../features/downloads/runningJobs";
 
 vi.mock("@decky/api", () => ({
   call: vi.fn((method: string, ...args: unknown[]) => dispatchFakeRpc(method, args)),
@@ -54,7 +55,8 @@ afterEach(() => {
   resetFakeDeckyRpc();
   /* A run of Lefts at a dead end is module state (leftEdge.ts): one test's presses must not count in the next. */
   resetLeftEdgeForTests();
-  // A run one test left going must not open the next test's Ollama tab on its job card (ollamaSetupJob.ts).
+  // A run one test left going must not open the next test's Ollama tab on its job card, nor stay on the bar (plan 105 D4).
   resetOllamaSetupJobForTests();
+  resetRunningJobsForTests();
   vi.clearAllMocks();
 });

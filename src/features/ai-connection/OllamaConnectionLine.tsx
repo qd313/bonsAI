@@ -13,7 +13,8 @@
  * moved, and the answer showed on a line of its own below, which came and went (board 5's "today").
  *
  * Does not: run the check itself (the section's onTestConnection does), or move the ring: the line is one stop, a
- * Decky Button inside a Focusable that holds the moves the section hands in; Left and Right hold still. The full
+ * Decky Button inside a Focusable that holds the moves the section hands in. Right holds still; Left is Steam's own,
+ * out to its side menu on the first press, as from the Test connection button before it (plan 105 lane C5). The full
  * sentence (a long error, say) rides on the row for the help strip, where the line itself has to cut it short.
  */
 import React from "react";
@@ -66,7 +67,7 @@ export function OllamaConnectionLine({ status, checking, address, onTest, navRef
     <Focusable
       style={{ display: "flex", width: "100%", minWidth: 0 }}
       {...helpAttributes(look.title, look.detail)}
-      {...({ navRef, onMoveUp, onMoveDown, onMoveLeft: () => true, onMoveRight: () => true } as Record<string, unknown>)}
+      {...({ navRef, onMoveUp, onMoveDown, onMoveRight: () => true } as Record<string, unknown>)}
     >
       <Button
         className={FOCUS_RING_BTN_CLASS}

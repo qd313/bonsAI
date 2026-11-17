@@ -18,8 +18,9 @@
  * same hook, and the bar's result goes once the person can read it there.
  *
  * Does not: Decide where the ring goes. Cancel is the card's one stop, a Decky Button inside a Focusable that holds
- * the moves its owner hands in (Up, Down) and a Steam node (`cancelNavRef`) the owner transfers the ring onto; Left
- * and Right hold still, so the ring never leaves the card sideways. A press on Cancel goes through `cancelJob`,
+ * the moves its owner hands in (Up, Down) and a Steam node (`cancelNavRef`) the owner transfers the ring onto. Right
+ * holds still; Left is Steam's own, out to its side menu on the first press, as from the plain buttons the card stands
+ * in for (plan 105 lane C5: Steam already let Left out of a plain button, so nothing counts there). A press on Cancel goes through `cancelJob`,
  * which ignores one in the first half second (a double press on the starting button cannot start and cancel at once).
  */
 import React, { useLayoutEffect, useRef } from "react";
@@ -119,7 +120,6 @@ export function JobCard({
             navRef: cancelNavRef,
             onMoveUp,
             onMoveDown,
-            onMoveLeft: () => true,
             onMoveRight: () => true,
           } as Record<string, unknown>)}
         >

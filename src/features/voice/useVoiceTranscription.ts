@@ -258,7 +258,8 @@ export function useVoiceTranscription(
         if (!isMountedRef.current || seq !== voiceSeqRef.current) return out;
         if (!out?.accepted) {
           const msg = out?.reason || out?.error || "Voice input could not start.";
-          throw new Error(msg);
+          // The back end's code goes with it, so the press can offer a missing download (voiceFirstUseOffer.ts).
+          throw Object.assign(new Error(msg), { code: out?.error });
         }
         recordingRef.current = true;
         void pollStatusOnce(seq);

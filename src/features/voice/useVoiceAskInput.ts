@@ -5,7 +5,9 @@
  * question instead of typing it. Owns whether recording is on, checks
  * permission before starting, writes the recognized words into the
  * question box as they arrive, and shows an error message if anything
- * goes wrong.
+ * goes wrong. When the voice engine or its speech model is not on the Deck
+ * (left out at first-time setup, say), the press offers the download
+ * instead (voiceFirstUseOffer.ts).
  *
  * Used for: The plugin's main screen, which hands `voiceRecording` (is
  * the mic on) and `onMicInput` (what the mic button calls when tapped)
@@ -24,6 +26,7 @@ import { useCallback, useEffect, useRef, useState, type Dispatch, type SetStateA
 import { call, toaster } from "@decky/api";
 
 import { formatDeckyRpcError } from "../../shared/deckyCall";
+import { offerVoiceDownloads, VOICE_DOWNLOAD_MISSING_CODES } from "./voiceFirstUseOffer";
 import { useVoiceTranscription, type VoiceStopOutcome } from "./useVoiceTranscription";
 import type { UiStringVars } from "../../shared/i18n/catalog";
 import type { UiStringKey } from "../../shared/i18n/keys";
@@ -285,6 +288,11 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
       .catch((e: unknown) => {
         setVoiceStarting(false);
         setVoiceRecording(false);
+        // The voice engine or its speech model is not there (left out at first setup, say): offer the download.
+        if (VOICE_DOWNLOAD_MISSING_CODES.includes(String((e as { code?: unknown } | null)?.code ?? ""))) {
+          void offerVoiceDownloads();
+          return;
+        }
         toaster.toast({
           title: "Voice input unavailable",
           body: e instanceof Error ? e.message : formatDeckyRpcError(e),

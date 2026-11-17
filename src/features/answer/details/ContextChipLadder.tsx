@@ -90,8 +90,12 @@ const ACTIVE_CHIP_FILL = "rgba(156, 231, 255, 0.22)";
 const ACTIVE_CHIP_BORDER = DECK_HIGHLIGHT_CYAN;
 const CHIP_BORDER = "rgba(96, 118, 144, 0.55)";
 
-/** One chip's look, open or not, at its drawn place (`order`). */
-function chipStyle(isActive: boolean, order: number): CSSProperties {
+/**
+ * One chip's look, open or not, at its drawn place (`order`). The Session chip (`session`) is dashed, its words in
+ * the caption grey, as drawn: a chip that opens the chat's view, not a fact. The dash is part of the one `border`
+ * value, never a separate `borderStyle`: React rewriting `border` as the chip opens would reset a separate dash.
+ */
+function chipStyle(isActive: boolean, order: number, session = false): CSSProperties {
   return {
     display: "inline-block",
     order,
@@ -109,9 +113,9 @@ function chipStyle(isActive: boolean, order: number): CSSProperties {
     fontWeight: 400,
     padding: "2px 7px",
     borderRadius: 999,
-    border: `1px solid ${isActive ? ACTIVE_CHIP_BORDER : CHIP_BORDER}`,
+    border: `1px ${session ? "dashed" : "solid"} ${isActive ? ACTIVE_CHIP_BORDER : CHIP_BORDER}`,
     background: isActive ? ACTIVE_CHIP_FILL : "rgba(26, 34, 44, 0.88)",
-    color: "#e2e8f0",
+    color: session ? "#9fb7d5" : "#e2e8f0",
     overflow: "hidden",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
@@ -510,8 +514,7 @@ export function ContextChipLadder({
             {...deckNav(chipMoves(SESSION))}
             {...({ onCancelButton, onOKButton: enterSession, navRef: chipNav(SESSION) } as Record<string, unknown>)}
             className={`bonsai-chip-ladder-chip bonsai-chip-ladder-chip--session${sessionOpen ? " bonsai-chip-ladder-chip--active" : ""}`}
-            /* Dashed, its words in the caption grey, as drawn: a chip that opens the chat's view, not a fact. */
-            style={{ ...chipStyle(sessionOpen, drawnOrder.length - 1), borderStyle: "dashed", color: "#9fb7d5" }}
+            style={chipStyle(sessionOpen, drawnOrder.length - 1, true)}
           >
             {session.label}
           </Focusable>

@@ -262,6 +262,22 @@ describe("P105-DETAILS-CHIPS-01: the chips as drawn, Session last", () => {
     expect(session.style.borderStyle).toBe("dashed");
     expect(m.scene.chipBox(SESSION).left).toBeGreaterThan(m.scene.chipBox("Developer").right);
   });
+
+  /* React rewrites a chip's `border` as it opens and closes; a dash kept apart from it was reset to solid. */
+  it("keeps the Session chip dashed and grey as the ring opens it and leaves it again", async () => {
+    const m = mount(undefined, false, MONITOR);
+    const session = () => [...m.ladder.querySelectorAll<HTMLElement>(".bonsai-chip-ladder-chip--session")][0]!;
+    const look = () => [session().style.borderTopStyle, session().style.color];
+    expect(look()).toEqual(["dashed", "rgb(159, 183, 213)"]);
+    arriveOn(m, "Developer");
+    expect(await press(m, "Right")).toBe(true);
+    expect(m.isOpen()).toBe(true);
+    expect(session().classList.contains("bonsai-chip-ladder-chip--active")).toBe(true);
+    expect(look()).toEqual(["dashed", "rgb(159, 183, 213)"]);
+    expect(await press(m, "Left")).toBe(true);
+    expect(m.isOpen()).toBe(false);
+    expect(look()).toEqual(["dashed", "rgb(159, 183, 213)"]);
+  });
 });
 
 describe.each(

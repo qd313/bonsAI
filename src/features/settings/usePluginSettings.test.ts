@@ -7,6 +7,11 @@ import { dispatchFakeRpc, getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from
 import { normalizeSettings } from "./bonsaiSettingsNormalizers";
 import { DEFAULT_LATENCY_WARNING_SECONDS } from "./bonsaiSettingsSchema";
 import { peekDeveloperTabShown, resetDeveloperTabSignalForTests } from "./developerTabSignal";
+import {
+  changeOpenSectionsAsYouWalk,
+  peekOpenSectionsAsYouWalk,
+  resetOpenSectionsAsYouWalkForTests,
+} from "./openSectionsAsYouWalkSignal";
 describe("usePluginSettings", () => {
   beforeEach(() => {
     resetFakeDeckyRpc();
@@ -26,6 +31,21 @@ describe("usePluginSettings", () => {
     await waitFor(() => expect(peekDeveloperTabShown()).toBe(true));
     act(() => result.current.setShowDeveloperTab(false));
     expect(peekDeveloperTabShown()).toBe(false);
+  });
+
+  it("publishes the Open sections as you walk switch and its change function, which saves like any setting (plan 105, C2)", async () => {
+    resetOpenSectionsAsYouWalkForTests();
+    const custom = defaultSettingsFixture();
+    custom.sections_open_as_you_walk = true;
+    setRpcHandler("load_settings", () => custom);
+
+    const { result } = renderHook(() => usePluginSettings());
+
+    await waitFor(() => expect(peekOpenSectionsAsYouWalk()).toBe(true));
+    /* The Developer tab's switch writes through the published function, not a prop: the screen's value follows. */
+    act(() => changeOpenSectionsAsYouWalk(false));
+    expect(result.current.sectionsOpenAsYouWalk).toBe(false);
+    expect(peekOpenSectionsAsYouWalk()).toBe(false);
   });
 
   describe("first run (a start with no settings file)", () => {

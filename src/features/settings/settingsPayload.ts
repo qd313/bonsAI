@@ -79,6 +79,7 @@ export function toBonsaiSettingsPayload(
     dev_force_session_rag_chips: input.devForceSessionRagChips,
     dev_preload_ask_model: input.devPreloadAskModel,
     tab_resume_mode: input.tabResumeMode,
+    sections_open_as_you_walk: input.sectionsOpenAsYouWalk,
     named_ollama_hosts: input.namedOllamaHosts,
     dev_frozen_test_chips: input.devFrozenTestChips,
     voice_stt_model: input.voiceSttModel,

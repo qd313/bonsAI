@@ -77,6 +77,7 @@ function minimalSurvivalSnapshot(
       devPreloadAskModel: false,
       devFrozenTestChips: [],
       tabResumeMode: "resume",
+      sectionsOpenAsYouWalk: false,
       namedOllamaHosts: [],
       voiceSttModel: "tiny.en",
       useLocalKnowledgeBase: false,

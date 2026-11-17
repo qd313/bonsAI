@@ -183,6 +183,11 @@ export type BonsaiSettings = {
   dev_preload_ask_model: boolean;
   /** Which tab a reopen lands on — the three D15 options behind one Developer-tab control. */
   tab_resume_mode: TabResumeMode;
+  /**
+   * Developer-tab switch (plan 105): a folded tab's sections open and close as the D-pad walks through them
+   * (folded-tabs/autoFold.ts). Off by default.
+   */
+  sections_open_as_you_walk: boolean;
   /** Labeled ``host:port`` presets for quick Connection switching (max 4). */
   named_ollama_hosts: NamedOllamaHost[];
   dev_frozen_test_chips: string[];
@@ -240,6 +245,7 @@ export type BonsaiSettingsSnapshotInput = {
   devForceSessionRagChips: boolean;
   devPreloadAskModel: boolean;
   tabResumeMode: TabResumeMode;
+  sectionsOpenAsYouWalk: boolean;
   namedOllamaHosts: NamedOllamaHost[];
   devFrozenTestChips: string[];
   voiceSttModel: VoiceSttModelId;

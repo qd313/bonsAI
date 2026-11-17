@@ -63,6 +63,36 @@
     }
   },
   {
+    "name": "an old settings file predating the open-sections-as-you-walk switch loads it off and leaves everything else untouched",
+    "input": {
+      "reply_verbosity": "detailed",
+      "tab_resume_mode": "always_main"
+    },
+    "expected": {
+      "sections_open_as_you_walk": false,
+      "reply_verbosity": "detailed",
+      "tab_resume_mode": "always_main"
+    }
+  },
+  {
+    "name": "the open-sections-as-you-walk switch needs an explicit true, a truthy string does not turn it on",
+    "input": {
+      "sections_open_as_you_walk": "yes"
+    },
+    "expected": {
+      "sections_open_as_you_walk": false
+    }
+  },
+  {
+    "name": "the open-sections-as-you-walk switch saved on stays on",
+    "input": {
+      "sections_open_as_you_walk": true
+    },
+    "expected": {
+      "sections_open_as_you_walk": true
+    }
+  },
+  {
     "name": "corpus path rejects traversal",
     "input": {
       "rag_corpus_path": "../../etc/passwd"

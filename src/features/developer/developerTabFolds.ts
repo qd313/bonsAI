@@ -79,6 +79,7 @@ export const DEVELOPER_ROW_LABELS = {
   warm: "Warm the Ask model at boot",
   steamInput: "Jump to Steam Input (running game)",
   tabToOpenOn: "Tab to open on",
+  openSectionsAsYouWalk: "Open sections as you walk",
   appLog: "App activity logging to Desktop",
   autoSave: "Auto-save chat to Desktop notes",
   verbose: "Verbose Ask logging to Desktop notes",
@@ -97,6 +98,8 @@ export const DEVELOPER_ROW_HELP = {
   steamInput:
     "Experimental: opens per-game controller configuration for the running game. Requires a focused/running title.",
   tabToOpenOnTail: "Takes effect the next time you close and reopen the plugin.",
+  openSectionsAsYouWalk:
+    "With the D-pad, reaching the last setting of a section opens the next one, and the one you left closes once you reach the next one's second setting. Going up works the same way. Off by default.",
   appLogTail: "Writes bonsai-app-YYYY-MM-DD.log under Desktop/bonsAI_logs/.",
   appLogNeedsPermission: "Enable Save files to Desktop in Permissions to save logs.",
   autoSave: "Append Q+A to Desktop/bonsAI_logs/bonsai-chat-YYYY-MM-DD.md (UTC). Needs Save files to Desktop.",
@@ -146,6 +149,7 @@ export function developerSectionSummaries(v: DeveloperFoldValues): Record<Develo
       { kind: "switch", label: DEVELOPER_ROW_LABELS.warm, on: v.devPreloadAskModel },
       { kind: "button", label: DEVELOPER_ROW_LABELS.steamInput },
     ]),
+    /* The Open sections as you walk switch is left out, so the line stays the drawn one and short. */
     navigation: summarizeSection(title("navigation"), [
       { kind: "choice", label: DEVELOPER_ROW_LABELS.tabToOpenOn, value: tabResumeModeLabel[v.tabResumeMode] },
     ]),

@@ -77,6 +77,7 @@ const NON_DEFAULT: Record<string, unknown> = {
   reply_verbosity: "detailed",
   request_timeout_seconds: 300,
   screenshot_attachment_preset: "max",
+  sections_open_as_you_walk: true,
   show_developer_tab: true,
   show_onscreen_debug_hud: true,
   spoiler_tier: "open",

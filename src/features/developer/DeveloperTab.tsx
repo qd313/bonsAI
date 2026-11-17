@@ -29,7 +29,7 @@
  *
  *     Knowledge base  <- only when a seed-install callback was passed in
  *     Diagnostics              <- HUD toggle, warm-at-boot, Steam Input jump, captured errors, loaded models
- *     Navigation               <- which tab reopens the plugin
+ *     Navigation               <- which tab reopens the plugin; sections that open as the D-pad walks
  *     Logging & exports        <- Desktop log level, auto-save chat, verbose Ask log, QA session-RAG
  *                                 chips + frozen test chips
  *
@@ -67,6 +67,7 @@ import { SectionRows, type DevRow } from "./developerRows";
 import { diagnosticsRows, kbRows } from "./developerRowsDiagnostics";
 import { loggingRows, navigationRows } from "./developerRowsLogging";
 import { useDeveloperTabFocus } from "./useDeveloperTabFocus";
+import { useOpenSectionsAsYouWalk } from "../settings/openSectionsAsYouWalkSignal";
 import type { DeveloperConnectionStatus } from "../ai-connection/developerConnectionStatus";
 
 export type { DeveloperConnectionStatus };
@@ -136,6 +137,8 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = (props) => {
 
   const shown = developerSectionsShown(Boolean(onInstallSeedKnowledgeBase));
   const { chain, hostsFor } = useDeveloperTabFocus(shown.map((s) => s.id));
+  /* Not a prop: the settings hook publishes it with its setter (openSectionsAsYouWalkSignal.ts says why). */
+  const [openSectionsAsYouWalk, setOpenSectionsAsYouWalk] = useOpenSectionsAsYouWalk();
   const summaries = developerSectionSummaries({
     hasSeedKb: Boolean(onInstallSeedKnowledgeBase),
     ragHybridRetrievalEnabled: props.ragHybridRetrievalEnabled,
@@ -169,7 +172,12 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = (props) => {
           lastConnectionStatus,
         });
       case "navigation":
-        return navigationRows({ tabResumeMode: props.tabResumeMode, setTabResumeMode: props.setTabResumeMode });
+        return navigationRows({
+          tabResumeMode: props.tabResumeMode,
+          setTabResumeMode: props.setTabResumeMode,
+          openSectionsAsYouWalk,
+          setOpenSectionsAsYouWalk,
+        });
       case "logging":
         return loggingRows({
           desktopAppLogLevel: props.desktopAppLogLevel,

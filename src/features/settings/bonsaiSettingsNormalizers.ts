@@ -418,6 +418,8 @@ const SIMPLE_FIELDS = {
   tab_resume_mode: enumOf<TabResumeMode>(TAB_RESUME_MODE_OPTIONS, DEFAULT_TAB_RESUME_MODE, {
     trim: true,
   }),
+  // Sections that open and close as the D-pad walks (plan 105); a Developer experiment, off unless explicitly true.
+  sections_open_as_you_walk: boolDefaultFalse,
   // Ask behavior.
   input_sanitizer_user_disabled: boolDefaultFalse,
   latency_timeouts_custom_enabled: boolDefaultFalse,

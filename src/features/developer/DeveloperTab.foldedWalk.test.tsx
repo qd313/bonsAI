@@ -189,6 +189,7 @@ describe("the folded Developer tab, every section open", () => {
           "second boom",
           /^Navigation/,
           /^A · Main: /,
+          "Open sections as you walk",
           /^Logging & exports/,
           /^Off: No app activity log file/,
           "Open Permissions",

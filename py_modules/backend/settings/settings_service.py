@@ -396,6 +396,9 @@ _SIMPLE_FIELDS: dict[str, Any] = {
     # Defaults to "resume" rather than an off-like value: D15 option B is the locked
     # behavior, and this control exists to compare the alternatives, not to gate it.
     "tab_resume_mode": _enum(_VALID_TAB_RESUME_MODES, DEFAULT_TAB_RESUME_MODE, strip=True),
+    # Developer switch (plan 105): a folded tab's sections open and close as the D-pad walks
+    # through them. A screen-only behaviour; the back end only keeps it. Off by default.
+    "sections_open_as_you_walk": _bool_default_false,
     # Ask behavior.
     "input_sanitizer_user_disabled": _bool_default_false,
     "latency_timeouts_custom_enabled": _bool_default_false,

@@ -2,7 +2,7 @@
  * Title: The Developer tab's Navigation and Logging & exports rows
  *
  * Purpose: The rows of the third and fourth Developer sections as lists for SectionRows: which tab the plugin
- * reopens on; the app log level, the Open Permissions button (only while Save files to Desktop is off and a
+ * reopens on and the Open sections as you walk switch; the app log level, the Open Permissions button (only while Save files to Desktop is off and a
  * way to the Permissions tab was passed in), the auto-save and verbose-log switches, the Force session RAG
  * chips switch, and the frozen test chips (their state, the pinned list, the Clear button). One line per
  * setting; the words that change with a pick change with it in the help strip.
@@ -36,7 +36,16 @@ import { DeveloperOptionRow } from "./DeveloperOptionRow";
 import { DevButtonRow, DevInfoStop, type DevRow } from "./developerRows";
 import { DevSwitchRow } from "./developerRowsDiagnostics";
 
-export function navigationRows(args: { tabResumeMode: TabResumeMode; setTabResumeMode: (v: TabResumeMode) => void }): DevRow[] {
+/**
+ * The Navigation section's rows: which tab the plugin reopens on, then the Open sections as you walk switch
+ * (plan 105; its value and change function come from openSectionsAsYouWalkSignal.ts through the tab).
+ */
+export function navigationRows(args: {
+  tabResumeMode: TabResumeMode;
+  setTabResumeMode: (v: TabResumeMode) => void;
+  openSectionsAsYouWalk: boolean;
+  setOpenSectionsAsYouWalk: (v: boolean) => void;
+}): DevRow[] {
   return [
     {
       key: "tab-to-open-on",
@@ -53,6 +62,19 @@ export function navigationRows(args: { tabResumeMode: TabResumeMode; setTabResum
           activeValue={args.tabResumeMode}
           onSelect={args.setTabResumeMode}
           optionHelp={tabToOpenOnHelp}
+          nav={nav}
+        />
+      ),
+    },
+    {
+      key: "open-sections-as-you-walk",
+      stop: true,
+      render: (nav) => (
+        <DevSwitchRow
+          label={DEVELOPER_ROW_LABELS.openSectionsAsYouWalk}
+          help={DEVELOPER_ROW_HELP.openSectionsAsYouWalk}
+          checked={args.openSectionsAsYouWalk}
+          onChange={args.setOpenSectionsAsYouWalk}
           nav={nav}
         />
       ),

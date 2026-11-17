@@ -38,6 +38,7 @@
   "reply_verbosity": "balanced",
   "request_timeout_seconds": 180,
   "screenshot_attachment_preset": "low",
+  "sections_open_as_you_walk": false,
   "show_developer_tab": false,
   "show_onscreen_debug_hud": false,
   "spoiler_tier": "default",

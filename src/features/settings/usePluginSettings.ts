@@ -115,6 +115,7 @@ import { diffBonsaiSettingsPayload, toBonsaiSettingsPayload } from "./settingsPa
 import { saveTabResumeMode } from "../plugin-shell/pluginStorage";
 import { markSettingsLoaded } from "./settingsLoadedSignal";
 import { publishDeveloperTabShown } from "./developerTabSignal";
+import { publishOpenSectionsAsYouWalk } from "./openSectionsAsYouWalkSignal";
 
 /**
  * THE one field list left in this file: every key of `BonsaiSettingsSnapshotInput` (the
@@ -165,6 +166,7 @@ const SETTINGS_FIELD_BACKEND_KEY: Record<keyof BonsaiSettingsSnapshotInput, keyo
   devPreloadAskModel: "dev_preload_ask_model",
   devFrozenTestChips: "dev_frozen_test_chips",
   tabResumeMode: "tab_resume_mode",
+  sectionsOpenAsYouWalk: "sections_open_as_you_walk",
   namedOllamaHosts: "named_ollama_hosts",
   voiceSttModel: "voice_stt_model",
   useLocalKnowledgeBase: "use_local_knowledge_base",
@@ -355,6 +357,11 @@ export function usePluginSettings() {
   useEffect(() => {
     publishDeveloperTabShown(settings.showDeveloperTab);
   }, [settings.showDeveloperTab]);
+
+  // The folded tabs' landing rule and the Developer switch read this, with its setter (openSectionsAsYouWalkSignal.ts).
+  useEffect(() => {
+    publishOpenSectionsAsYouWalk(settings.sectionsOpenAsYouWalk, fieldSetters.setSectionsOpenAsYouWalk);
+  }, [settings.sectionsOpenAsYouWalk, fieldSetters]);
 
   /**
    * What a save's response does: the response is the whole file as it is now, so it becomes the

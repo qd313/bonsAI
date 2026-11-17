@@ -61,6 +61,7 @@ function minimalSnapshot(overrides: Partial<BonsaiSessionSurvivalSnapshot> = {})
       strategySpoilerAutoRevealAfterConsent: false,
       showOnscreenDebugHud: false, devForceSessionRagChips: false, devPreloadAskModel: false, devFrozenTestChips: [],
       tabResumeMode: "resume",
+      sectionsOpenAsYouWalk: false,
       namedOllamaHosts: [],
       voiceSttModel: "tiny.en",
       useLocalKnowledgeBase: false,

@@ -11,8 +11,11 @@
  *                         Steam will not focus.
  *
  *   move-props-on-button  Rule 17. onMoveUp/onMoveDown on a Decky Button. These
- *                         are SteamUI Focusable props; Decky's Button does not
- *                         forward them, so the handler never runs. This is
+ *                         are SteamUI Focusable props; Decky's Button was thought
+ *                         not to forward them. The Deck (2026-11-17,
+ *                         P105-M-PAPERCLIP-LEFT and P105-M-DECKY-BUTTON-LEFT) showed
+ *                         Left handlers on Decky buttons did run and held the ring;
+ *                         Up and Down were not measured. The rule is unchanged. This is
  *                         ABOUT-LINKS-01 -- all four About links unreachable --
  *                         and half of REPLY-DOWN-01.
  *

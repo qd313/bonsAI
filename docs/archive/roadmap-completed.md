@@ -2079,3 +2079,20 @@ One feature entry closed by the maintainer's call of 2026-11-14 (decision D142, 
 - ★ `[ask]` **Intent packs later review** — **OPEN.** The quiet search aliases still ship. The maintainer decides whether to delete them, leave them quiet, or revive them under Developer ([D79](audit/maintainer-decisions-archive.md#d79--locked-2026-09-06-raised-the-same-day--the-steam-settings-shortcuts-move-above-the-question-box)).
   The bundled Deck basics list ships switched on and is the only reason a whole sentence matches a setting: *can you help me with performance* returns three results (2026-09-06).
   Not in scope: bringing back Proton journal inject without a redesign. [Detail](../../bonsAI-workshop/archive/45-settings-shortcut-card.md#5-two-things-about-the-search-that-are-not-obvious).
+
+## Closed 2026-11-17 (plan 105 sweep 1)
+
+Three feature entries closed, copied word for word from [roadmap.md](../roadmap.md) as they stood, each with its closing line.
+
+- ★ `[platform]` **The landing script keeps only the last lines of the Python test run, so a failure there cannot be named** — **OPEN, found 2026-10-24 (plan 98 landings).**
+  Tonight the Python step failed under load in three landings and passed every time it ran alone. Keep the whole Python log so a failing test can be named.
+  **Closed 2026-11-17 (plan 105, `ac1b69b8c`):** the landing script keeps each step's whole log in a file beside the landing log. It is a tool, proven by its lane's demo; no Deck row.
+
+- ★ `[repo]` **Delete two pieces of code no screen uses: the AI characters' pixel-art avatars and the knowledge-pack manager** — **OPEN, found 2026-10-16 (plan 86 step 2), called for deletion in [D133](audit/maintainer-decisions-locked.md#d133--locked-2026-10-16-raised-2026-10-16--plan-86-step-2-approve-the-cut-lists-and-the-folder-map-and-twelve-smaller-calls) call 9.**
+  The avatars are about 1,170 lines that no screen draws. The knowledge-pack manager has no screen: four hook actions and four back-end calls. No player change either way. Where they sit: [folder-map-tabs-settings-models.md](audit/clean-up-round-three/folder-map-tabs-settings-models.md) (the avatar art) and [folder-map-knowledge-search-notes.md](audit/clean-up-round-three/folder-map-knowledge-search-notes.md) (the pack manager).
+  **Closed 2026-11-17 (plan 105):** the old pixel-grid avatars were removed (`830b9fa91`) and the unused search-pack manager was removed (`192666fde`). No Deck row; the smoke pass covers it.
+
+- ★★ `[reply]` **Which bundled characters copy a real person** — **OPEN, filed 2026-09-08 ([D74](audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open)); the gate for the shelved character voices.**
+  All 31 characters are named characters from games or TV, each voiced by a real actor. Owed: a one-line-per-character sweep of who owns it, whose voice it is, and whether a voice could be a type rather than a copy. No code; a document the legal check reads. [Memo](../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).
+  Not needed for 0.6.0 (plan 72): characters are text only. Still the gate before any character gets a voice.
+  **Closed 2026-11-17 (plan 105, `f3735e52c`):** the document is [audit/bundled-characters-voices.md](bundled-characters-voices.md): for each of the 31 characters, whether a voice could be a type rather than a copy of one person's voice. 20 yes, 8 unclear, 3 no.

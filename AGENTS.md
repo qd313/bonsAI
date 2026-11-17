@@ -160,16 +160,16 @@ Full patterns:
   never happened. Inside one container a plain `focus()` is fine. To leave a container, use the
   register, unregister and take functions in
   [navFocusRegistry.ts](src/shared/dpad/navFocusRegistry.ts), which add a null check and a real
-  did-it-work check around the underlying Steam call. Six other files call Steam's transfer directly;
+  did-it-work check around the underlying Steam call. 23 other files call Steam's transfer directly (2026-11-17 count);
   new code uses takeNavFocus.
 - **Know which handler actually fires before wiring one.** The move-up and move-down handlers are
-  props on Steam's focusable wrapper: they do nothing on a Decky button, which does not forward
-  them. The button-down handler fires on both, for **every** button, so read which button it was
-  through the helpers in [focusNavigation.ts](src/shared/dpad/focusNavigation.ts) — never by turning the
-  event into a string. A button-down handler that changes state without checking which button came
-  in will fire on a D-pad press: three controls toggled themselves that way. Checking for keyboard
-  Up and Down is dead code here — a D-pad press sends no keyboard events at all, measured on the
-  device.
+  props on Steam's focusable wrapper. A Decky button was thought to ignore them, yet on the Deck
+  Left handlers ran there and held the ring (P105-M-PAPERCLIP-LEFT, P105-M-DECKY-BUTTON-LEFT,
+  2026-11-17); Up and Down unmeasured. The button-down handler fires on both, for **every** button,
+  so read which button it was through the helpers in [focusNavigation.ts](src/shared/dpad/focusNavigation.ts) — never by turning the
+  event into a string. A button-down handler that ignores which button came in fires on a D-pad
+  press: three controls toggled themselves that way. Checking for keyboard Up and Down is dead code
+  here: a D-pad press sends no keyboard events (measured).
 - **Never overwrite an existing `tabindex`, and never put `-1` on something naturally focusable.**
   Decky sets `tabindex="0"` on the things it navigates, so replacing it removes them from Steam's
   graph. **But adding a missing one can be just as wrong.** A helper used to stamp one onto any

@@ -20,7 +20,7 @@
 import { useEffect } from "react";
 
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
-import { endJob, publishJob, runningJob, type JobFace } from "../downloads/runningJobs";
+import { endJob, publishJob, runningJob, type JobFace, type JobResult } from "../downloads/runningJobs";
 import { setupProgressPercent } from "../main-tab/firstRunSetupProgress";
 import type { StarterLeftOut } from "../models/starterSetLeftOut";
 import { LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS } from "./OllamaWhereAiRunsSection.constants";
@@ -34,11 +34,22 @@ const FOLLOW_MS = 1500;
 const AWAKE = "Keep the Deck awake and online until this finishes.";
 
 type RunKind = "update" | "install" | "setup";
-const TITLES: Record<RunKind, [string, string]> = {
-  update: ["Updating AI & models", "Stopping the update"],
-  install: ["Installing Ollama", "Stopping the install"],
-  setup: ["Setting up the AI", "Stopping the setup"],
+const TITLES: Record<RunKind, [string, string, string]> = {
+  update: ["Updating AI & models", "Stopping the update", "Update"],
+  install: ["Installing Ollama", "Stopping the install", "Install"],
+  setup: ["Setting up the AI", "Stopping the setup", "Setup"],
 };
+
+/** How a run ended, for the bar when its card was out of sight: "Update finished" and the run's own sentence. */
+function resultOf(st: LocalOllamaSetupStatus | null): JobResult | undefined {
+  if (!st) return undefined;
+  const noun = TITLES[kind][2];
+  const error = (st.error ?? "").replace(/`+/g, "").trim();
+  if (st.phase === "done" && !error) return { tone: "ok", title: `${noun} finished`, sentence: (st.result_line ?? "").trim() || "Done." };
+  if (st.phase === "cancelled") return { tone: "quiet", title: `${noun} cancelled`, sentence: error || "Cancelled." };
+  if (st.phase === "failed" || st.phase === "done") return { tone: "bad", title: `${noun} failed`, sentence: error || "It did not finish." };
+  return undefined;
+}
 
 /** The steps with no percentage of their own: what each says. */
 const STEP_LINES: Record<string, [string, string]> = {
@@ -116,7 +127,7 @@ export function noteOllamaSetupStatus(st: LocalOllamaSetupStatus | null, engineR
     }
     publishJob(OLLAMA_SETUP_JOB, ollamaSetupFace(st, kind), cancelOllamaSetup);
   } else {
-    endJob(OLLAMA_SETUP_JOB);
+    endJob(OLLAMA_SETUP_JOB, resultOf(st));
   }
   followWhileAway();
 }

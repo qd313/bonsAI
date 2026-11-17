@@ -3,13 +3,28 @@
  *
  * Purpose: Pin runningJobs.ts (plan 105, lane D4): a job published twice keeps the time it started; a Cancel in the
  * first half second after the start is ignored (a double press on Update cannot start and cancel at once, the plan's
- * small question 4); a later Cancel is sent once and marks the job as stopping; ending a job forgets it.
+ * small question 4); a later Cancel is sent once and marks the job as stopping; ending a job forgets it. The bar's
+ * view: a job wants the bar only while its card is out of sight; with two, the newest first and "2 jobs" switching;
+ * a job ending out of sight leaves its result on the bar for four seconds, a failure until its card is seen; X
+ * cancels the job the bar shows, else the newest.
  *
  * Does not: draw the card (JobCard.test.tsx) or read a run's status (ollamaSetupJob.test.ts).
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { cancelJob, DOUBLE_PRESS_GUARD_MS, endJob, publishJob, resetRunningJobsForTests, runningJob, type JobFace } from "./runningJobs";
+import {
+  barView,
+  cancelJob,
+  cancelJobFromX,
+  DOUBLE_PRESS_GUARD_MS,
+  endJob,
+  noteJobCardSeen,
+  publishJob,
+  resetRunningJobsForTests,
+  runningJob,
+  switchBarJob,
+  type JobFace,
+} from "./runningJobs";
 
 const FACE: JobFace = {
   title: "Updating AI & models",
@@ -48,5 +63,60 @@ describe("running jobs", () => {
     expect(runningJob("a")).toBeNull();
     expect(cancelJob("a", 9000)).toBe(false);
     expect(cancel).not.toHaveBeenCalled();
+  });
+});
+
+describe("the bar's view", () => {
+  it("a job wants the bar only while its card is out of sight", () => {
+    publishJob("a", FACE, () => {}, 1000);
+    expect(barView(2000).job?.id).toBe("a");
+    noteJobCardSeen("a", true);
+    expect(barView(2000)).toMatchObject({ job: null, result: null });
+    noteJobCardSeen("a", false);
+    expect(barView(2000).job?.id).toBe("a");
+  });
+
+  it("two jobs out of sight: the newest, a count of 2, and the switch to the other and back", () => {
+    publishJob("old", FACE, () => {}, 1000);
+    publishJob("new", { ...FACE, title: "Updating the library" }, () => {}, 2000);
+    expect(barView(3000)).toMatchObject({ job: { id: "new" }, count: 2 });
+    switchBarJob();
+    expect(barView(3000).job?.id).toBe("old");
+    switchBarJob();
+    expect(barView(3000).job?.id).toBe("new");
+  });
+
+  it("a job ending out of sight leaves its result for four seconds; a failure stays until its card is seen", () => {
+    publishJob("a", FACE, () => {}, 1000);
+    endJob("a", { tone: "ok", title: "Update finished", sentence: "Updated." }, 10_000);
+    expect(barView(12_000).result).toMatchObject({ id: "a", title: "Update finished" });
+    expect(barView(14_100).result).toBeNull();
+    publishJob("b", FACE, () => {}, 20_000);
+    endJob("b", { tone: "bad", title: "Update failed", sentence: "No network." }, 21_000);
+    expect(barView(99_000).result?.title).toBe("Update failed");
+    noteJobCardSeen("b", true);
+    expect(barView(99_000).result).toBeNull();
+  });
+
+  it("a job ending with its card in sight leaves nothing on the bar", () => {
+    publishJob("a", FACE, () => {}, 1000);
+    noteJobCardSeen("a", true);
+    endJob("a", { tone: "ok", title: "Update finished", sentence: "Updated." }, 2000);
+    expect(barView(2500)).toMatchObject({ job: null, result: null });
+  });
+
+  it("X cancels the job the bar shows, else the newest; with none running it is left alone", () => {
+    const a = vi.fn();
+    const b = vi.fn();
+    publishJob("a", FACE, a, 1000);
+    publishJob("b", FACE, b, 2000);
+    noteJobCardSeen("b", true);
+    expect(cancelJobFromX(5000)).toBe(true);
+    expect(a).toHaveBeenCalledTimes(1);
+    noteJobCardSeen("a", true);
+    expect(cancelJobFromX(5000)).toBe(true);
+    expect(b).toHaveBeenCalledTimes(1);
+    resetRunningJobsForTests();
+    expect(cancelJobFromX(5000)).toBe(false);
   });
 });

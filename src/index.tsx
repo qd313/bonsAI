@@ -173,6 +173,7 @@ import { useTabAndModeGuardEffects } from "./features/plugin-shell/useTabAndMode
 import { ChatTitleView } from "./features/chats/title/ChatTitleView";
 import { setChatTitleLitColor } from "./features/chats/title/chatTitleStore";
 import { tabBarExitDownFor, useTopStripTabBar } from "./features/chats/title/useTopStripTabBar";
+import { JobBar } from "./features/downloads/JobBar";
 
 /*
  * In: nothing — no props. Every value Content needs, it reads from settings,
@@ -1202,6 +1203,8 @@ const Content: React.FC = () => {
               onCancelFromTabHeader,
             } as Record<string, unknown>)}
           />
+          {/* A download's bar while its card is out of sight, on every tab (plan 105 D4): last in the column, under the pane. */}
+          <JobBar />
         </div>
       </React.Fragment>
     </BonsaiPluginShell>

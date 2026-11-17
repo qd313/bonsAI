@@ -13,8 +13,9 @@
  *   Right from any section line puts the ring here (FoldedSection's line does it), and so does Down
  *   from the tab's end: the last section's line, or its last control while it is open (plan 93).
  *   A opens or closes every section and keeps the ring here.
- *   Up, Left or B put the ring back on the section line it came from. Down and Right hold still: the
- *   button is the tab's last stop, and Down going back up would walk in a circle.
+ *   Up, Left or B put the ring back on the section line it came from. Right holds still. Down goes on to the
+ *   bar at the bottom of the panel while a download's card is out of sight (downloads/JobBar.tsx, plan 105 D4),
+ *   and holds still otherwise: the button is then the tab's last stop, and Down going back up would walk in a circle.
  * The section it came from is the last one the ring landed in, kept in foldedTabsStore, so it
  * survives a rebuild of the tab. Every move to and from here is Steam's own transfer onto a registered
  * nav node, never a plain focus() across containers: this button is drawn outside the tab's scroll
@@ -41,6 +42,7 @@ import {
 } from "./foldedTabsStore";
 import { foldAllNavId, takeFoldLine } from "./FoldedSection";
 import { shoulderSwitchFromPress } from "../../shared/dpad/shoulderSwitch";
+import { takeJobBar } from "../downloads/JobBar";
 
 const FOLD_ALL_OPEN_LABEL = "Open all";
 const FOLD_ALL_CLOSE_LABEL = "Close all";
@@ -79,7 +81,7 @@ export function FoldAllButton({ tab, sections }: FoldAllButtonProps): React.Reac
       {...({
         navRef,
         onMoveUp: back,
-        onMoveDown: () => true,
+        onMoveDown: () => takeJobBar(foldAllNavId(tab)) || true,
         onMoveLeft: back,
         onMoveRight: () => true,
         /* LB and RB switch tabs from here as from anywhere: the dock is outside Steam's own Tabs, which never sees them. */

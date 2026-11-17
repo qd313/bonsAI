@@ -95,6 +95,9 @@ export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-
   | "details-slot-line"
   /** The first-time setup's card on the empty chat, its Stop or Start again (FirstRunSetupCard.tsx, plan 105 D3). */
   | "first-run-setup-card"
+  /** The bar at the bottom of the panel while a download's card is out of sight: its Cancel, and its "2 jobs" chip
+   *  (downloads/JobBar.tsx, plan 105 D4). Outside Steam's pane, so every way onto them is a transfer. */
+  | "job-bar" | "job-bar-more"
   /** The newest question's row while it is closed (plan 79): the chips' Up lands here, the stop right
    *  above them, registered by useLiveTurnHeaderRingRestore.ts. */
   | "newest-closed-question"

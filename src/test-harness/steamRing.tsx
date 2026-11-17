@@ -20,7 +20,7 @@ type SteamHandlers = Record<string, ((...args: unknown[]) => unknown) | undefine
 export type SteamEl = HTMLElement & { __nav?: SteamHandlers };
 
 /** The handlers Steam itself calls on a Focusable (focus-graph-patterns). */
-const KEPT = ["onMoveUp", "onMoveDown", "onMoveLeft", "onMoveRight", "onOKButton", "onCancelButton", "onButtonDown"];
+const KEPT = ["onMoveUp", "onMoveDown", "onMoveLeft", "onMoveRight", "onOKButton", "onCancelButton", "onButtonDown", "onSecondaryButton"];
 
 /** Steam's ring onto `el` (or off everything): the `gpfocus` marker on it alone, and the page's focus with it. */
 export function putSteamRingOn(el: HTMLElement | null): void {

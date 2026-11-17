@@ -13,8 +13,12 @@
  *         ring walks near the pane's edge (plan 87 B10, plan 89; useTabBodyFocusScroll).
  *         On a real tab switch it also wears a class saying which side the page comes in from, and the
  *         stylesheet glides it in (plan 97 G1, tabGlide.ts); the class is fixed when the body is built.
- * Does not: Style anything or claim any press but Up at the top; every other move stays with the
- *           controls inside. Never waits for the glide: the next press is handled at once.
+ *         X anywhere in a tab cancels the running download the bar at the bottom shows, or the newest one
+ *         (plan 105, lane D4: "X cancels from anywhere"); Steam hands a button a control does not claim on to
+ *         the containers around it, and this is the outermost one in a tab. With no download running the press
+ *         is left alone. The Main tab has no such container; there X works on the bar itself.
+ * Does not: Style anything or claim any press but Up at the top and X while a download runs; every other move
+ *           stays with the controls inside. Never waits for the glide: the next press is handled at once.
  */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
@@ -23,6 +27,7 @@ import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder }
 import type { BonsaiTabId } from "./tabTitles";
 import { useTabBodyFocusScroll } from "../../shared/dpad/useTabBodyFocusScroll";
 import { tabGlideClass, takeTabGlide } from "./tabGlide";
+import { cancelJobFromX } from "../downloads/runningJobs";
 
 /**
  * Clear space above the first thing in a tab, in px. The top of the pane fades over about 20 px (read off
@@ -71,6 +76,9 @@ export function TabBodyFocusRoot({ id, children }: TabBodyFocusRootProps): React
           on the ghost is better than one that visits it.
         */
         onMoveUp: () => takeNavFocus("tab-bar"),
+        onSecondaryButton: (e: unknown) => {
+          if (cancelJobFromX()) (e as { preventDefault?: () => void })?.preventDefault?.();
+        },
       } as Record<string, unknown>)}
     >
       <div

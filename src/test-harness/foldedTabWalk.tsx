@@ -99,6 +99,8 @@ export interface FoldedTabWalkOptions {
   tail: number;
   /** Lay the boxes out again at every read, so a redraw inside a press is measured at once (see the header). */
   liveLayout?: boolean;
+  /** Drawn in bonsAI's tabs box after the pane, as index.tsx draws the download bar there (plan 105 D4). */
+  afterPane?: React.ReactNode;
 }
 
 const box = (top: number, height: number) =>
@@ -128,6 +130,7 @@ export function walkFoldedTab(opts: FoldedTabWalkOptions): FoldedTabWalk {
       <div className="Tabs_TabContentsScroll" data-pane="">
         <TabBodyFocusRoot id={opts.tabId}>{opts.tab}</TabBodyFocusRoot>
       </div>
+      {opts.afterPane}
     </div>,
   );
   const pane = view.container.querySelector<HTMLElement>("[data-pane]")!;

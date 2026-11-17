@@ -3,11 +3,15 @@
  *
  * Purpose: A small memory, outside React, of every long job the plugin is running (the Ollama tab's install or
  * update now; the knowledge library's download and the voice install next, lane D4b): what its card says (the
- * title, two lines, the sites, how far), when it started, whether a Cancel is on its way, and how to cancel it.
- * The job card (JobCard.tsx) draws one job where its buttons were; the bar at the bottom of the panel (plan 105,
- * board 5 tab 2, round 2 "Elsewhere") reads the same job from here, so the two can never say different things.
+ * title, two lines, the sites, how far), when it started, whether a Cancel is on its way, how to cancel it, and
+ * whether its card is in sight. The job card (JobCard.tsx) draws one job where its buttons were; the bar at the
+ * bottom of the panel (JobBar.tsx; plan 105, board 5 tab 2, round 2 "Elsewhere") reads the same job from here, so
+ * the two can never say different things. The bar shows only the jobs whose card cannot be seen, newest first, one
+ * at a time ("2 jobs" switches), and for a few seconds after one ends out of sight, how it ended (a failure stays
+ * until its card is seen again).
  *
- * Used for: OllamaWhereAiRunsSection.tsx through ollamaSetupJob.ts, which turns the setup run's status into a card.
+ * Used for: OllamaWhereAiRunsSection.tsx through ollamaSetupJob.ts, which turns the setup run's status into a card;
+ * JobCard.tsx (whether its card is in sight); JobBar.tsx; TabBodyFocusRoot.tsx (X cancels from anywhere).
  *
  * Solves: Two things a job's own screen cannot hold. A job outlives the screen that started it: folding its section
  * shut, switching tabs or a Decky box closing all take the screen away, and the job must still be known (and still
@@ -48,8 +52,23 @@ export interface RunningJob {
   stopping: boolean;
 }
 
+/** How a job ended, for the bar when its card was out of sight: "Update finished" and the run's own sentence. */
+export interface JobResult {
+  tone: "ok" | "bad" | "quiet";
+  title: string;
+  sentence: string;
+}
+
+/** How long a result stays on the bar (the drawing's 4 seconds); a failure stays until its card is seen. */
+const RESULT_MS = 4000;
+
 const jobs = new Map<string, RunningJob>();
 const cancels = new Map<string, () => void>();
+/** The jobs whose card is on screen now (JobCard.tsx says so). */
+const seen = new Set<string>();
+const results = new Map<string, { result: JobResult; at: number }>();
+/** The job the person switched the bar to with "2 jobs"; null for the newest. */
+let pinned: string | null = null;
 const listeners = new Set<() => void>();
 let version = 0;
 
@@ -66,11 +85,62 @@ export function publishJob(id: string, face: JobFace, cancel: () => void, now: n
   changed();
 }
 
-/** Job `id` has ended (finished, failed or stopped): it leaves the card and the bar. */
-export function endJob(id: string): void {
+/**
+ * Job `id` has ended (finished, failed or stopped): it leaves the card and the bar. With its card out of sight, the
+ * bar says how it ended (`result`) for a few seconds; a failure stays until the card is seen.
+ */
+export function endJob(id: string, result?: JobResult, now: number = Date.now()): void {
   if (!jobs.delete(id)) return;
   cancels.delete(id);
+  if (result && !seen.has(id)) {
+    results.set(id, { result, at: now });
+    if (result.tone !== "bad") window.setTimeout(changed, RESULT_MS + 20);
+  }
   changed();
+}
+
+/** Job `id`'s card has come into sight (or gone out of it). A result waiting for it is then shown. */
+export function noteJobCardSeen(id: string, inSight: boolean): void {
+  if (inSight === seen.has(id) && !(inSight && results.has(id))) return;
+  if (inSight) {
+    seen.add(id);
+    results.delete(id);
+  } else seen.delete(id);
+  changed();
+}
+
+/** What the bar shows: the job (newest first, or the one switched to), how many want the bar, or a result. */
+export interface BarView {
+  job: RunningJob | null;
+  count: number;
+  result: (JobResult & { id: string }) | null;
+}
+
+/** The bar's view now. Nothing (job and result null) means no bar. */
+export function barView(now: number = Date.now()): BarView {
+  const away = [...jobs.values()].filter((j) => !seen.has(j.id)).sort((a, b) => b.startedAt - a.startedAt);
+  if (away.length) return { job: away.find((j) => j.id === pinned) ?? away[0]!, count: away.length, result: null };
+  const ended = [...results.entries()]
+    .filter(([, r]) => r.result.tone === "bad" || now - r.at < RESULT_MS)
+    .sort((a, b) => b[1].at - a[1].at)[0];
+  return { job: null, count: 0, result: ended ? { id: ended[0], ...ended[1].result } : null };
+}
+
+/** "2 jobs" on the bar: show the next job that wants the bar. */
+export function switchBarJob(): void {
+  const away = [...jobs.values()].filter((j) => !seen.has(j.id)).sort((a, b) => b.startedAt - a.startedAt);
+  if (away.length < 2) return;
+  const at = away.findIndex((j) => j.id === (pinned ?? away[0]!.id));
+  pinned = away[(at + 1) % away.length]!.id;
+  changed();
+}
+
+/** X, from anywhere: cancel the job the bar shows, else the newest running one. Out: true when a job was there. */
+export function cancelJobFromX(now: number = Date.now()): boolean {
+  const target = barView(now).job ?? [...jobs.values()].sort((a, b) => b.startedAt - a.startedAt)[0];
+  if (!target) return false;
+  cancelJob(target.id, now);
+  return true;
 }
 
 /**
@@ -102,9 +172,18 @@ export function useRunningJob(id: string): RunningJob | null {
   return runningJob(id);
 }
 
+/** The bar's view, redrawing the caller when it changes. */
+export function useBarView(): BarView {
+  useSyncExternalStore(subscribe, () => version);
+  return barView();
+}
+
 /** Test-only reset. */
 export function resetRunningJobsForTests(): void {
   jobs.clear();
   cancels.clear();
+  seen.clear();
+  results.clear();
+  pinned = null;
   changed();
 }

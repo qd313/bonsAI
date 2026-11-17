@@ -31,7 +31,7 @@ import { useHandRingOnGone } from "../../shared/dpad/useHandRingOnGone";
 import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
 import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/textPx";
-import { JobCard } from "../downloads/JobCard";
+import { JobCard, useJobFaceInSight } from "../downloads/JobCard";
 import { useRunningJob } from "../downloads/runningJobs";
 import { helpAttributes } from "../folded-tabs/useHelpStrip";
 import { OLLAMA_SETUP_JOB } from "./ollamaSetupJob";
@@ -213,7 +213,21 @@ export function OllamaLocalSetupBlock({
           </Focusable>
         </>
       )}
-      <OllamaSetupStatusLine status={localSetupStatus} busy={localSetupBusy} />
+      {localSetupBusy ? null : <ResultLines status={localSetupStatus} />}
     </Focusable>
+  );
+}
+
+/**
+ * The lines under the buttons, as the job's face once it has ended: the bar's "Update failed" goes once the person
+ * can read the same result here (board 5: the result line counts as the job's face).
+ */
+function ResultLines({ status }: { status: LocalOllamaSetupStatus | null }): React.ReactElement {
+  const ref = React.useRef<HTMLDivElement | null>(null);
+  useJobFaceInSight(OLLAMA_SETUP_JOB, ref);
+  return (
+    <div ref={ref}>
+      <OllamaSetupStatusLine status={status} busy={false} />
+    </div>
   );
 }

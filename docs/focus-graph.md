@@ -994,6 +994,39 @@ Browse models  >
   ways), `OllamaConnectionLine.test.tsx` (its four states) and `OllamaWhereAiRunsSection.inPlaceSetup.test.tsx` (no
   box, the lines). Device row: P105-OLLAMA-BUTTONS-01.
 
+### The download bar at the bottom of the panel (plan 105, lane D4)
+
+While a download runs and its job card cannot be seen (its section folded shut, the card scrolled off, or another
+tab), one bar of 56 px sits at the very bottom of bonsAI's panel, under the help strip: the job's title, what it is
+doing, a thin progress line, Cancel with the X key's glyph, and "2 jobs" when two are out of sight (board 5 tab 2,
+round 2 "Elsewhere"). `downloads/JobBar.tsx`, drawn once by index.tsx as the last child of the tabs box; the card says
+whether it is in sight (`useJobFaceInSight`, `downloads/JobCard.tsx`).
+
+```
+... a folded tab's last line or control
+   | Down
+Open all (floating button)
+   | Down -> the bar's Cancel, while the bar shows (else holds)      ^ Up, B -> back to Open all
+[ spinner  Updating AI & models      (2 jobs)  [Cancel X] ]
+   Left from Cancel -> "2 jobs";  Right from "2 jobs" -> Cancel;  Down holds;  LB / RB switch tabs
+```
+
+- **Every way onto the bar is a transfer** onto a registered node (`job-bar`, `job-bar-more`): the bar is outside
+  Steam's pane. The way back (Up, B, and the bar's Cancel going away under the ring) is to where the ring came from;
+  with that gone, the tab's first stop (the question box on Main), then the tab bar: never on nothing.
+- **When the job ends** out of sight, the bar says how it ended for four seconds ("Update finished", "Update
+  cancelled"; "Update failed" stays until the line under the buttons is in sight) and has no button; a ring on its
+  Cancel goes back to where it came from.
+- **X cancels from anywhere in a tab** (`TabBodyFocusRoot`'s `onSecondaryButton`): the job the bar shows, else the
+  newest. Not in the job's first half second. The Main tab has no container around its whole body, so there X works
+  on the bar only. With no download running the press is left alone.
+- **Room:** the bar is part of the tabs box's column, not drawn over it, and the stylesheet takes its height off
+  Steam's pane (`jobLook.ts`), so the pane, the Main tab's question box and a folded tab's help strip and Open all
+  button (placed from the pane's bottom, TabHelpStrip.tsx) all sit above it, and Steam's scroll keeps the ring clear.
+- Pinned by `OllamaTab.jobBar.test.tsx` (the bar only while the card is out of sight: folded, scrolled off, another
+  tab; Down from Open all, Up and B back; X and its half second; the ring back to Open all when the run ends; two
+  jobs; the dock ending where the bar starts) and `runningJobs.test.ts`. Device row: P105-OLLAMA-BUTTONS-01.
+
 ### The About tab, one line per row (plan 92, lane T3; plan 91 § 6)
 
 The About tab is `AboutTab.tsx`: the title line "About bonsAI" with the version beside it, the "What bonsAI is"

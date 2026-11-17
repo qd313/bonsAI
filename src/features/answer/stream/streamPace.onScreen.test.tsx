@@ -1,6 +1,6 @@
 /**
  * The stream pace at the level the Deck check looks at: the drawn answer. With the AI on a PC
- * fewer scrambled letters trail the writing, they turn real sooner, and the text grows faster;
+ * the scrambled letters turn real sooner, and the text grows faster;
  * with the AI on the Deck the screen is exactly what it was.
  */
 import { act, render, renderHook } from "@testing-library/react";
@@ -8,7 +8,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ScrambledAnswerText } from "./ScrambledAnswerText";
 import { StreamScrambleContext, type StreamScrambleContextValue } from "./streamScrambleContext";
 import { resetLiveScrambleMemoForTests } from "./liveScrambleMemo";
-import { SCRAMBLE_CHURN_MS } from "./streamScrambleMath";
 import { setAiRunsOnPc } from "./streamPace";
 import { useSmoothStreamReveal } from "./useSmoothStreamReveal";
 import { STREAM_BEAT_MS } from "./streamBeat";
@@ -18,10 +17,7 @@ vi.mock("@decky/ui", async () => import("../../../test-harness/fakeDeckyUi"));
 
 type SwitchWindow = Window & { __bonsaiStreamPace?: unknown };
 
-const SETTLE: StreamScrambleContextValue = { enabled: true, style: "settle", color: "green", settleMs: 400 };
-const TAIL: StreamScrambleContextValue = { ...SETTLE, style: "tail" };
-const CHIP: StreamScrambleContextValue = { ...SETTLE, style: "chip" };
-const LONG = "The hammer breaks the weak wall quickly";
+const SETTLE: StreamScrambleContextValue = { enabled: true, settleMs: 400 };
 
 function view(raw: string, value: StreamScrambleContextValue) {
   return (
@@ -66,25 +62,11 @@ function scrambledAfter(raw: string, value: StreamScrambleContextValue, ms: numb
   return left;
 }
 
-describe("the tail behind the writing", () => {
-  it("is 10 letters with the AI on the Deck and 5 with the AI on a PC", () => {
-    expect(scrambledAfter(LONG, TAIL, SCRAMBLE_CHURN_MS * 2)).toBe(10);
-    setAiRunsOnPc(true);
-    expect(scrambledAfter(LONG, TAIL, SCRAMBLE_CHURN_MS * 2)).toBe(5);
-  });
-});
-
 describe("how soon scrambled letters turn real", () => {
-  it("settle style: at 350 ms they are still symbols on the Deck and real on a PC", () => {
+  it("at 350 ms they are still symbols on the Deck and real on a PC", () => {
     expect(scrambledAfter("Hello world", SETTLE, 350)).toBe(10);
     setAiRunsOnPc(true);
     expect(scrambledAfter("Hello world", SETTLE, 350)).toBe(0);
-  });
-
-  it("chip style: a PC has settled more letters in the same time", () => {
-    const onDeck = scrambledAfter(LONG, CHIP, SCRAMBLE_CHURN_MS * 4);
-    setAiRunsOnPc(true);
-    expect(scrambledAfter(LONG, CHIP, SCRAMBLE_CHURN_MS * 4)).toBeLessThan(onDeck);
   });
 });
 

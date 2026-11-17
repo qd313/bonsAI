@@ -18,12 +18,12 @@ afterEach(() => {
 });
 
 describe("the two paces", () => {
-  it("keeps the Deck's own numbers exactly as they were: tail 10, chip speed, drain 0.18 s", () => {
-    expect(DECK_STREAM_PACE).toEqual({ tailLetters: 10, settleSpeedUp: 1, drainSeconds: 0.18 });
+  it("keeps the Deck's own numbers exactly as they were: chip speed, drain 0.18 s", () => {
+    expect(DECK_STREAM_PACE).toEqual({ settleSpeedUp: 1, drainSeconds: 0.18 });
   });
 
-  it("gives the PC a 5-letter tail, a 1.5 times faster settle and a 0.12 s drain", () => {
-    expect(PC_STREAM_PACE).toEqual({ tailLetters: 5, settleSpeedUp: 1.5, drainSeconds: 0.12 });
+  it("gives the PC a 1.5 times faster settle and a 0.12 s drain", () => {
+    expect(PC_STREAM_PACE).toEqual({ settleSpeedUp: 1.5, drainSeconds: 0.12 });
   });
 });
 

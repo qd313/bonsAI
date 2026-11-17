@@ -14,8 +14,8 @@ import { STREAM_SCRAMBLE_OFF, STREAM_SCRAMBLE_STOCK } from "../answer/stream/str
 
 describe("resolveStreamScrambleSettings", () => {
   /* Plan 105: the scramble has no setting. Answers scramble with the stock values (the ones the Developer tab started from). */
-  it("scrambles with the stock values: on, settle, green, 400 ms", () => {
-    expect(STREAM_SCRAMBLE_STOCK).toEqual({ enabled: true, style: "settle", color: "green", settleMs: 400 });
+  it("scrambles with the stock values: on, 400 ms", () => {
+    expect(STREAM_SCRAMBLE_STOCK).toEqual({ enabled: true, settleMs: 400 });
     expect(resolveStreamScrambleSettings()).toBe(STREAM_SCRAMBLE_STOCK);
     expect(resolveStreamScrambleSettings(false)).toBe(STREAM_SCRAMBLE_STOCK);
   });

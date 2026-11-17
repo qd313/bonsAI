@@ -51,7 +51,7 @@ const MENU_OPENERS = [
   "\n\n~~~",
 ];
 
-const SCRAMBLE_ON: StreamScrambleContextValue = { enabled: true, style: "settle", color: "green", settleMs: 400 };
+const SCRAMBLE_ON: StreamScrambleContextValue = { enabled: true, settleMs: 400 };
 const SCRAMBLE_OFF: StreamScrambleContextValue = { ...SCRAMBLE_ON, enabled: false };
 
 function bubble(body: string, scramble: StreamScrambleContextValue) {

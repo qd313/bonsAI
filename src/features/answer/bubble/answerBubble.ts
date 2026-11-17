@@ -360,13 +360,8 @@ export function buildAnswerBubbleSection(): string {
         .bonsai-scope .bonsai-chat-ai-bubble:has(.bonsai-stream-scramble) + .bonsai-reply-copy-corner-slot {
           visibility: hidden !important;
         }
-        .bonsai-scope .bonsai-stream-scramble-churn--dim {
-          opacity: 0.5;
-        }
         .bonsai-scope .bonsai-stream-scramble-churn--green {
           color: #5b9e7e;
         }
-        .bonsai-scope .bonsai-stream-scramble-churn--cyan {
-          color: #7fd3f7;
-        }`;
+`;
 }

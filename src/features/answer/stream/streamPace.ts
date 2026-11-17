@@ -1,14 +1,13 @@
 /**
  * Title: Stream pace, Deck or PC
  *
- * Purpose: The three numbers that set how a streaming answer feels -- how many scrambled letters
- * trail behind the writing, how fast those letters settle, and how fast the text grows to catch up
- * with what the model has sent -- in two sets: the Deck's own, and a tighter one for when the AI
- * runs on a PC (the maintainer's ask, 2026-10-17: keep the decode look, shorter tail, faster
- * scramble, quicker growth). A PC answers faster than the Deck, so the long tail and the slow
+ * Purpose: The two numbers that set how a streaming answer feels -- how fast the scrambled letters
+ * settle, and how fast the text grows to catch up with what the model has sent -- in two sets: the Deck's own, and a tighter one for when the AI
+ * runs on a PC (the maintainer's ask, 2026-10-17: keep the decode look, faster
+ * scramble, quicker growth). A PC answers faster than the Deck, so the slow
  * settle made the writing lag behind what had already arrived.
  *
- * Used for: streamScrambleMath.ts (tail length, settle speed) and useSmoothStreamReveal.ts (how
+ * Used for: streamScrambleMath.ts (settle speed) and useSmoothStreamReveal.ts (how
  * long a backlog takes to drain). The one line that says where the AI runs is in
  * useOllamaConnectionState.ts, which calls setAiRunsOnPc whenever the "AI runs on the Deck"
  * setting is read or changed.
@@ -29,19 +28,17 @@
 import { getUiDocument } from "../../../shared/dpad/uiDocument";
 
 export type StreamPace = {
-  /** Letters kept scrambled at the end of the writing (the "tail" style). */
-  tailLetters: number;
-  /** How many times faster than the decode chips the scrambled letters settle (all styles). */
+  /** How many times faster than the decode chips the scrambled letters settle. */
   settleSpeedUp: number;
   /** Seconds the reveal spends draining whatever text has arrived. */
   drainSeconds: number;
 };
 
 /** The Deck's own pace: today's numbers, which must not change. */
-export const DECK_STREAM_PACE: StreamPace = { tailLetters: 10, settleSpeedUp: 1, drainSeconds: 0.18 };
+export const DECK_STREAM_PACE: StreamPace = { settleSpeedUp: 1, drainSeconds: 0.18 };
 
-/** The pace when the AI runs on a PC: half the tail, one and a half times the settle speed, a third quicker drain. */
-export const PC_STREAM_PACE: StreamPace = { tailLetters: 5, settleSpeedUp: 1.5, drainSeconds: 0.12 };
+/** The pace when the AI runs on a PC: one and a half times the settle speed, a third quicker drain. */
+export const PC_STREAM_PACE: StreamPace = { settleSpeedUp: 1.5, drainSeconds: 0.12 };
 
 let aiRunsOnPc = false;
 

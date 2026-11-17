@@ -969,7 +969,7 @@ describe("Copy in the answer bubble's corner", () => {
 });
 
 describe("the streamed-answer scramble in the bubble (plan 69)", () => {
-  const SCRAMBLE_ON = { enabled: true, style: "settle" as const, color: "green" as const, settleMs: 400 };
+  const SCRAMBLE_ON = { enabled: true, settleMs: 400 };
 
   beforeEach(() => {
     resetAnswerStopRegistry();

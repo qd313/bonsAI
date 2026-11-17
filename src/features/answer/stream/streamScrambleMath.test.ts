@@ -9,8 +9,6 @@ import {
   locateSettlePoint,
   settledMarkdownWithSlot,
   settlePointAfterMoment,
-  settlePointChipPace,
-  settlePointFixedTail,
   withoutInlineMarks,
 } from "./streamScrambleMath";
 import { setAiRunsOnPc } from "./streamPace";
@@ -46,36 +44,6 @@ describe("settlePointAfterMoment", () => {
 
   it("never moves backwards from where it already was", () => {
     expect(settlePointAfterMoment([0, 0, 900], 2, 100, 400)).toBe(2);
-  });
-});
-
-describe("settlePointChipPace", () => {
-  it("settles one letter per 42 ms of credit and skips spaces for free", () => {
-    expect(settlePointChipPace("ab cd", 0, 1)).toEqual({ point: 1, credit: 0 });
-    expect(settlePointChipPace("ab cd", 1, 1)).toEqual({ point: 3, credit: 0 });
-    expect(settlePointChipPace("ab cd", 0, 2.5)).toEqual({ point: 3, credit: 0.5 });
-  });
-
-  it("banks no more than ten letters, so a stall does not end in a burst", () => {
-    const text = "x".repeat(40);
-    expect(settlePointChipPace(text, 0, 25).point).toBe(10);
-  });
-
-  it("drops leftover credit once it has caught up", () => {
-    expect(settlePointChipPace("abc", 0, 7)).toEqual({ point: 3, credit: 0 });
-  });
-});
-
-describe("settlePointFixedTail", () => {
-  it("leaves exactly the last ten letters scrambled, not counting spaces", () => {
-    const text = "one two three four";
-    const point = settlePointFixedTail(text);
-    expect(text.slice(point).replace(/\s/g, "")).toHaveLength(10);
-    expect(text.slice(point)).toBe("o three four");
-  });
-
-  it("scrambles everything when there are fewer letters than that", () => {
-    expect(settlePointFixedTail("short")).toBe(0);
   });
 });
 
@@ -140,20 +108,6 @@ describe("finishProbeAt and locateSettlePoint", () => {
 /* The PC pace (streamPace.ts): the same functions, tighter, only when the AI is on a PC. */
 describe("with the AI on a PC", () => {
   afterEach(() => setAiRunsOnPc(false));
-
-  it("keeps 5 letters scrambled at the end instead of 10", () => {
-    const text = "one two three four";
-    setAiRunsOnPc(true);
-    expect(text.slice(settlePointFixedTail(text)).replace(/\s/g, "")).toHaveLength(5);
-    expect(text.slice(settlePointFixedTail(text))).toBe("e four");
-  });
-
-  it("settles a letter every 28 ms instead of every 42 ms, and hands back unused credit in chip time", () => {
-    setAiRunsOnPc(true);
-    expect(settlePointChipPace("abcdef", 0, 2)).toEqual({ point: 3, credit: 0 });
-    // 1 chip-letter of credit is 1.5 letters: one settles and half a letter's worth stays banked.
-    expect(settlePointChipPace("abcdef", 0, 1)).toEqual({ point: 1, credit: 0.5 / 1.5 });
-  });
 
   it("settles on arrival time a third sooner: 400 ms becomes about 267 ms", () => {
     const arrivals = [0, 0];

@@ -25,7 +25,7 @@ import { resetLiveScrambleMemoForTests } from "./liveScrambleMemo";
 
 vi.mock("@decky/ui", async () => import("../../../test-harness/fakeDeckyUi"));
 
-const SETTLE: StreamScrambleContextValue = { enabled: true, style: "settle", color: "green", settleMs: 400 };
+const SETTLE: StreamScrambleContextValue = { enabled: true, settleMs: 400 };
 
 const RAW =
   "Intro line here.\n\nHere is the list:\n- Keep moving, always.\n- Grab the minerals.\n\nFinally review your deaths and learn from them well.";

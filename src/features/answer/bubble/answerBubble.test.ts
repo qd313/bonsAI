@@ -69,10 +69,9 @@ describe("the streamed-answer scramble's stylesheet (plan 69)", () => {
     expect(symbol).toMatch(/-webkit-text-fill-color:\s*currentColor/);
   });
 
-  it("gives each colour choice its own look", () => {
-    expect(ruleBody(css, ".bonsai-scope .bonsai-stream-scramble-churn--dim")).toMatch(/opacity:\s*0\.5/);
+  it("draws the scrambled letters in the plugin's green, and has no other colour rule", () => {
     expect(ruleBody(css, ".bonsai-scope .bonsai-stream-scramble-churn--green")).toMatch(/color:\s*#5b9e7e/);
-    expect(ruleBody(css, ".bonsai-scope .bonsai-stream-scramble-churn--cyan")).toMatch(/color:\s*#7fd3f7/);
+    expect(css).not.toMatch(/stream-scramble-churn--(dim|cyan|same)/);
   });
 });
 

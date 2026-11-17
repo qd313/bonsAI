@@ -2,7 +2,7 @@
  * Title: Streamed-answer scramble maths
  *
  * Purpose: The pure, timing-free core of the scramble on a streaming answer (plan 69 step 3): where
- * the settle point is for each of the three styles, how fast the last letters settle once the
+ * the settle point is, how fast the last letters settle once the
  * answer has ended, which symbol each unsettled character shows, where in the settled text the
  * churning span goes, and how a finished answer finds the stretch the stream left unsettled. The
  * same shape as the decode chips' own maths file, which this reuses for its symbols and its letter
@@ -18,12 +18,11 @@
  *
  * Does not: Read the clock, schedule anything, touch the DOM, or know about React.
  *
- * How the three styles settle (the maintainer's mockup, plan 69):
- *   settle -- every letter scrambles for the same short time after it arrived, then settles.
- *   chip   -- exactly the decode chip: one letter every 42 ms, whatever the model is doing.
- *   tail   -- the last 10 letters are always scrambled (5 when the AI runs on a PC).
- * With the AI on a PC (streamPace.ts) all three run tighter: every settle is one and a half times
- * quicker, and the tail is 5 letters. The Deck's own numbers are unchanged.
+ * How letters settle (the maintainer's mockup, plan 69): every letter scrambles for the same short
+ * time after it arrived, then settles. (The mockup's other two ways, the decode chips' own pace and
+ * a fixed tail of scrambled letters, went in plan 105 with the settings that picked them.)
+ * With the AI on a PC (streamPace.ts) the settle is one and a half times quicker. The Deck's own
+ * numbers are unchanged.
  * Spaces and line breaks never scramble and never count as letters, so words keep their shape.
  */
 import { makeDecodeChurn, PRESET_DECODE_CHAR_MS } from "../../preset-carousel/presetChipDecodeText";
@@ -31,8 +30,8 @@ import { normalizeIncompleteInline } from "./streamMarkdownPrepare";
 import { STREAM_BEAT_MS } from "./streamBeat";
 import { streamPace } from "./streamPace";
 
-/** Chip pace: one letter settles every this many ms -- the decode chips' own number. */
-export const SCRAMBLE_CHAR_MS = PRESET_DECODE_CHAR_MS;
+/** One letter settles every this many ms once an answer has ended: the decode chips' own number. */
+const SCRAMBLE_CHAR_MS = PRESET_DECODE_CHAR_MS;
 /**
  * The scrambled letters reshuffle once per beat of the answer, together with the text moving on,
  * and the settled letters are handed to the markdown renderer on the same beat.
@@ -40,8 +39,6 @@ export const SCRAMBLE_CHAR_MS = PRESET_DECODE_CHAR_MS;
 export const SCRAMBLE_CHURN_MS = STREAM_BEAT_MS;
 /** Once an answer has ended, its last scrambled letters are all real within this long. */
 export const SCRAMBLE_FINISH_MS = 600;
-/** Chip pace never banks more than this many letters, so a stall does not end in a burst. */
-const CHIP_CREDIT_CAP = 10;
 /** How much text either side of the settle point the stream's end hands over to be found again. */
 const FINISH_PROBE_CHARS = 32;
 /** A probe with fewer letters than this could match in the wrong place, so none is made. */
@@ -91,13 +88,6 @@ export function withoutInlineMarks(text: string): string {
   return text.replace(/[*`]/g, "");
 }
 
-/** Past any spaces and line breaks from `from`: they settle for free. */
-function skipBlanks(text: string, from: number): number {
-  let i = from;
-  while (i < text.length && isBlank(text[i]!)) i += 1;
-  return i;
-}
-
 /**
  * "Settle after a moment": the first letter from `from` on that is still inside its scramble time.
  * `arrivals[i]` is when letter i arrived, on the same clock as `now`; letters arrive in order, so
@@ -115,38 +105,7 @@ export function settlePointAfterMoment(
   return i;
 }
 
-/**
- * "Chip pace": settle one letter per SCRAMBLE_CHAR_MS of `credit` banked since the last step.
- * Returns the new settle point and the credit left over (capped, and zero once caught up).
- */
-export function settlePointChipPace(
-  text: string,
-  from: number,
-  credit: number
-): { point: number; credit: number } {
-  const speedUp = streamPace().settleSpeedUp;
-  let point = skipBlanks(text, from);
-  let left = Math.min(credit * speedUp, CHIP_CREDIT_CAP);
-  while (point < text.length && left >= 1) {
-    point = skipBlanks(text, point + 1);
-    left -= 1;
-  }
-  // The caller banks credit in chip-pace time, so what is left goes back in the same unit.
-  return { point, credit: point >= text.length ? 0 : left / speedUp };
-}
-
-/** "Fixed tail": the settle point that leaves exactly `keep` letters scrambled at the end. */
-export function settlePointFixedTail(text: string, keep: number = streamPace().tailLetters): number {
-  let kept = 0;
-  let i = text.length;
-  while (i > 0 && kept < keep) {
-    i -= 1;
-    if (!isBlank(text[i]!)) kept += 1;
-  }
-  return i;
-}
-
-/** How many of `total` letters are real `elapsedMs` into the finish: all within SCRAMBLE_FINISH_MS, never slower than chip pace. */
+/** How many of `total` letters are real `elapsedMs` into the finish: all within SCRAMBLE_FINISH_MS, never slower than the decode chips' pace. */
 export function lettersSettledInFinish(total: number, elapsedMs: number): number {
   if (total <= 0) return 0;
   const perMs = Math.max(streamPace().settleSpeedUp / SCRAMBLE_CHAR_MS, total / SCRAMBLE_FINISH_MS);

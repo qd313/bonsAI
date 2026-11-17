@@ -28,7 +28,7 @@ import { buildAnswerMarkdownFormattingSection } from "../markdown/answerMarkdown
 
 vi.mock("@decky/ui", async () => import("../../../test-harness/fakeDeckyUi"));
 
-const ON: StreamScrambleContextValue = { enabled: true, style: "tail", color: "green", settleMs: 400 };
+const ON: StreamScrambleContextValue = { enabled: true, settleMs: 400 };
 
 function view(raw: string) {
   return (

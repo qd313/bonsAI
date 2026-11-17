@@ -8,7 +8,7 @@ import { SCRAMBLE_CHURN_MS } from "./streamScrambleMath";
 /* The markdown renderer's spoiler fences use Decky's Focusable; a real DOM stand-in keeps refs working. */
 vi.mock("@decky/ui", async () => import("../../../test-harness/fakeDeckyUi"));
 
-const ON: StreamScrambleContextValue = { enabled: true, style: "settle", color: "green", settleMs: 400 };
+const ON: StreamScrambleContextValue = { enabled: true, settleMs: 400 };
 
 function view(raw: string, streaming: boolean, value: StreamScrambleContextValue = ON) {
   return (
@@ -94,9 +94,9 @@ describe("ScrambledAnswerText, streaming with Settle after a moment", () => {
     expect(after.map((el) => el.getAttribute("data-s"))).not.toEqual(symbolsBefore);
   });
 
-  it("colours the symbols by the chosen colour", () => {
-    const { container } = render(view("Hello world", true, { ...ON, color: "cyan" }));
-    expect(container.querySelector(".bonsai-stream-scramble-churn--cyan")).not.toBeNull();
+  it("draws the symbols in the plugin's green", () => {
+    const { container } = render(view("Hello world", true));
+    expect(container.querySelector(".bonsai-stream-scramble-churn--green")).not.toBeNull();
   });
 
   it("leaves the bold marks out of the symbols and turns them into bold once settled", () => {
@@ -133,23 +133,6 @@ describe("ScrambledAnswerText, streaming with Settle after a moment", () => {
     expect(symbols()).toEqual(afterBeat);
     advance(40);
     expect(symbols()).not.toEqual(afterBeat);
-  });
-});
-
-describe("ScrambledAnswerText, the other two styles", () => {
-  it("Fixed tail keeps the last ten letters scrambled while the answer streams", () => {
-    const { container } = render(view("one two three four", true, { ...ON, style: "tail" }));
-    advance(200);
-    expect(churnText(container).replace(/\s/g, "")).toHaveLength(10);
-    expect(realText(container)).toBe("one tw");
-  });
-
-  it("Chip pace settles one letter every 42 ms, whatever the model is doing", () => {
-    const { container } = render(view("abcdefghijklmnopqrstuvwxyz", true, { ...ON, style: "chip" }));
-    /* Beats at 130 ms (the timer waits out the slack after the first render), then every 110: by
-       the beat at 570 ms, 13 letters' worth of 42 ms has gone by. */
-    advance(580);
-    expect(realText(container)).toBe("abcdefghijklm");
   });
 });
 

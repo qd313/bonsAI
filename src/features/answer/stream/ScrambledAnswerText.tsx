@@ -27,7 +27,7 @@
  *
  * How it works:
  * 1. While streaming, every letter's arrival is timed when a render first shows it. The settle
- *    point moves forward per the chosen style (streamScrambleMath.ts); letters before it are real.
+ *    point moves forward as each letter outlives its scramble time (streamScrambleMath.ts); letters before it are real.
  * 2. The span holds the letters the markdown has not been handed yet, each invisible with a symbol
  *    drawn over it, so the line never re-wraps as symbols change. The symbols reshuffle once per
  *    beat. A letter that settles stays there until the markdown draws it, in the same frame.
@@ -49,15 +49,12 @@ import { StreamMarkdownPieces } from "./StreamMarkdownPieces";
 import { prefersReducedMotion } from "../../preset-carousel/presetChipShared";
 import { StreamScrambleContext } from "./streamScrambleContext";
 import {
-  SCRAMBLE_CHAR_MS,
   SCRAMBLE_CHURN_MS,
   finishProbeAt,
   lettersSettledInFinish,
   locateSettlePoint,
   settledMarkdownWithSlot,
   settlePointAfterMoment,
-  settlePointChipPace,
-  settlePointFixedTail,
 } from "./streamScrambleMath";
 import { freshCells, syncChurnCells, type ChurnCells } from "./churnCells";
 import { beginFinish, continuesShownAnswer, pendingFinish, rememberLiveText } from "./liveScrambleMemo";
@@ -82,6 +79,9 @@ type Finish = { start: number; startedAt: number; handed?: number };
  * a beat delayed a little by a busy page still comes from the reveal, in the reveal's frame.
  */
 const BEAT_SLACK_MS = 20;
+
+/** The unsettled letters are drawn in the plugin's green (answerBubble.ts has the rule). */
+const CHURN_CLASS = "bonsai-stream-scramble-churn bonsai-stream-scramble-churn--green";
 
 function commonPrefixLength(a: string, b: string): number {
   const n = Math.min(a.length, b.length);
@@ -115,8 +115,6 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
   const rawRef = useRef(raw);
   const arrivalsRef = useRef<number[]>([]);
   const settledRef = useRef(0);
-  const creditRef = useRef(0);
-  const lastTickRef = useRef(0);
   const markdownSettledRef = useRef<number | null>(null);
   const finishRef = useRef<Finish | null>(null);
   const timerRef = useRef<number | null>(null);
@@ -149,8 +147,7 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
     const f = finishRef.current;
     const from = f ? f.handed ?? f.start : markdownSettledRef.current ?? text.length;
     syncChurnCells(churn, cellsRef.current, text, from, reshuffle);
-    const className = `bonsai-stream-scramble-churn bonsai-stream-scramble-churn--${settingsRef.current.color}`;
-    if (churn.className !== className) churn.className = className;
+    if (churn.className !== CHURN_CLASS) churn.className = CHURN_CLASS;
   }, []);
 
   /** The span the markdown renderer made for the slot mark; it is rebuilt whenever the slot moves. */
@@ -211,17 +208,7 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
     }
     const text = rawRef.current;
     const settings = settingsRef.current;
-    let point = settledRef.current;
-    if (settings.style === "chip") {
-      const step = settlePointChipPace(text, point, creditRef.current + (now - lastTickRef.current) / SCRAMBLE_CHAR_MS);
-      point = step.point;
-      creditRef.current = step.credit;
-    } else if (settings.style === "tail") {
-      point = Math.max(point, settlePointFixedTail(text));
-    } else {
-      point = settlePointAfterMoment(arrivalsRef.current, point, now, settings.settleMs);
-    }
-    lastTickRef.current = now;
+    const point = settlePointAfterMoment(arrivalsRef.current, settledRef.current, now, settings.settleMs);
     settledRef.current = Math.min(point, text.length);
     const handed = markdownSettledRef.current;
     if (handed !== settledRef.current) {
@@ -258,8 +245,6 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
       /* First streaming render of this section: plain if it continues an answer already on screen. */
       arrivalsRef.current = new Array<number>(raw.length).fill(now);
       settledRef.current = continuesShownAnswer(raw) ? raw.length : 0;
-      creditRef.current = 0;
-      lastTickRef.current = now;
       cellsRef.current = freshCells();
       setMarkdownSettled(settledRef.current);
     } else if (raw.startsWith(previous)) {

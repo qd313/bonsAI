@@ -77,7 +77,7 @@ const CHECKLIST_ITEMS: readonly ChecklistItem[] = [
     name: "Voice engine (whisper.cpp)",
     size: VOICE_ENGINE_DOWNLOAD_SIZE,
     site: "ghcr.io",
-    why: "for voice input; its build fetches compilers from its own package servers",
+    why: "its build fetches compilers from its own package servers",
     tick: "voice",
     row: "voice",
   },

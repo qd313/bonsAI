@@ -18,6 +18,8 @@
  * Does not: Measure the real box in Steam's font; the Deck driver does that before the change counts as done.
  */
 export const FIRST_RUN_BOX = {
+  /** The width the words have inside the box, from the drawing (658 less its 41-point sides; 574 measured). */
+  contentWidthPx: 574,
   /** The gap between the screen's five parts. */
   gapPx: 6,
   /** The title: one line of 16-point words at 1.45. */

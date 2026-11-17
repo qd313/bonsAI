@@ -10,9 +10,13 @@
  * (the largest): about 11 points to spare on Normal. A box taller than the room would be slid up by Steam to show the
  * ring's button (Not now, at the bottom), and its title would go under Steam's top bar, as the starter box once did.
  *
- * Does not: wrap lines or know Steam's font; the title and the beta line are counted as one line each, as drawn
- * (the beta line is 526 of the 574 points it has in the stand-in font). The Deck driver measures the real box in
- * Steam's font before the change counts as done.
+ * Every line that is free to wrap (the title, the beta line, each row's name and small line) must fit on one line
+ * at the box's width with room to spare: its letters are counted at 0.6 of their size each, wider than the stand-in
+ * font's real average (0.48 to 0.53), so a line that passes here does not wrap in Steam's font either. A second line
+ * would cost about 14 points against the 11 to spare.
+ *
+ * Does not: lay out real letters or know Steam's font or the real box width (the drawing's 574 points); the Deck
+ * driver measures the real box in Steam's font before the change counts as done.
  */
 import { render, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -75,6 +79,36 @@ beforeEach(async () => {
 
 afterEach(() => {
   document.body.innerHTML = "";
+});
+
+/** A line's widest likely width: every letter at 0.6 of its size (the stand-in font averages 0.48 to 0.53). */
+const widest = (text: string, sizePx: number) => text.length * sizePx * 0.6;
+
+describe("no line on the first screen can wrap at the box's width", () => {
+  for (const scale of [1, 1.15]) {
+    it(`the title and the beta line, each one line, on ${scale === 1 ? "Normal" : "Large"} text`, () => {
+      for (const name of ["title", "beta"]) {
+        const el = part(name);
+        expect(widest(el.textContent ?? "", px(el.style.fontSize, scale)), name).toBeLessThanOrEqual(FIRST_RUN_BOX.contentWidthPx);
+      }
+    });
+  }
+
+  it("each row's name and its size line, beside its tick box and its site, on Normal text", () => {
+    const rows = Array.from(part("checklist").children).slice(1) as HTMLElement[];
+    expect(rows).toHaveLength(5);
+    for (const row of rows) {
+      const cells = (row.querySelector("button") ?? row).children;
+      const nameCell = cells[1] as HTMLElement;
+      const small = nameCell.querySelector("small") as HTMLElement;
+      const tag = cells[2] as HTMLElement;
+      const tagWidth = widest(tag.textContent ?? "", px(tag.style.fontSize)) + 18;
+      const room = FIRST_RUN_BOX.contentWidthPx - 30 - 2 * 10 - tagWidth;
+      const name = (nameCell.firstChild?.textContent ?? "").trim();
+      expect(widest(name, px(nameCell.style.fontSize)), name).toBeLessThanOrEqual(room);
+      expect(widest(small.textContent ?? "", px(small.style.fontSize)), small.textContent ?? "").toBeLessThanOrEqual(room);
+    }
+  });
 });
 
 describe("the first screen on the Deck's own screen", () => {

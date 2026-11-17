@@ -67,7 +67,8 @@ export const FIRST_RUN_POPUP_WORDS = {
   ok: "OK, install on this Deck",
   pc: "Use the AI on my PC",
   notNow: "Not now",
-  beta: "Beta: the AI can be wrong, and heavy AI can crash a game. Use at your own risk. Not now changes nothing.",
+  /** One line at the box's width, even on Large text (the fit test checks): a second line would not fit the screen. */
+  beta: "Beta: the AI can be wrong, and heavy AI can crash a game. Use at your own risk.",
 } as const;
 
 /** What the gate hands the popup: the settings as they are now, and how to change and save them. */

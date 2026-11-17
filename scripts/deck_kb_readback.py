@@ -13,11 +13,22 @@ Used for: the knowledge-base rows run on the Deck by a driver, in place of fifte
         ssh deck@<ip> 'python3 - --json' < scripts/deck_kb_readback.py
     `--json` prints one object; without it, one line per key. Exit code 1 only when the panel is not open.
     Plan 104 (lane T1): scripts/deck_ask_rows.mjs calls it as `python3 - --json --turns 1` after each question.
+    Plan 105 (lane T2): `--local` reads this PC's own Steam instead (the stand-in), run directly, not over SSH:
+        python scripts/deck_kb_readback.py --local --json --turns 1
+    It takes the plugin log from <Decky folder>/logs/bonsAI (the Decky folder is `--decky-home`, else the
+    DECKY_HOME setting, else ~/homebrew: the homebrew folder in your user folder on the Windows stand-in) and
+    the library from ~/.bonsai/rag/corpus.db, the places the plugin itself writes them. Steam on Windows lists
+    many pages and the hidden desktop window's never answer, so each Quick Access page is tried with a short
+    wait and the first one that answers and holds the panel is read. The printed object gains a "source" key
+    naming the machine, the log folder and whether it was found, so a stand-in reading is never mistaken for a
+    Deck one. `--port N` (the debugging port, 8080 unless Steam was started otherwise) and `--page TEXT` (a
+    word in the page's title or address, QuickAccess unless told otherwise) work in both modes.
 Solves: Plan 103 (lane T4): one knowledge-base check (ask, see which notes attached, count the covers, save
     the evidence) cost fifteen to twenty-five tool calls and nothing read the result back in one go.
 Does not: Press anything or change the page (it reads over the same debugging port deck_send_ask.py uses),
-    run a command, write a file, or read the settings file. The note numbers come from the library file on
-    the Deck, opened for reading only (the plugin log names a note but does not number it); `--corpus PATH`
+    run a command, write a file, or read the settings file (local mode reads the plugin log folder and the
+    library file, and nothing under the Decky folder's settings or plugins folders). The note numbers come
+    from the library file on the Deck, opened for reading only (the plugin log names a note but does not number it); `--corpus PATH`
     names a library other than the one at ~/.bonsai/rag/corpus.db. It prints key names, counts, the notes line
     and the log line; never the answer's text. The list from `--turns` also gives the first 60 characters of
     each question. The class names it looks for are pinned against src/ by
@@ -41,14 +52,18 @@ LOG_TAIL_BYTES = 400000  # the newest log can be large; the line we want is near
 LOG_LINE_MAX = 700
 CORPUS_DB = os.path.join("~", ".bonsai", "rag", "corpus.db")  # where the plugin keeps the installed library
 ATTACH_NAMES_RE = re.compile(r"notes? attached \((.*?)\); they are the")  # the names in kb_attach_log_line
+DEBUG_PORT = 8080  # Steam's debugging port, on the Deck and on the stand-in
+PAGE_WORD = "QuickAccess"  # a word in the title or address of the page the panel lives in
+LOCAL_PAGE_WAIT = 4  # seconds a page may take to answer in local mode before the next one is tried
+PLUGIN_LOG_FOLDER = "bonsAI"  # the plugin's own folder name under <Decky folder>/logs
 
 
 # Transport, as in probe_deck_ui_look.py (a plain WebSocket to Steam's debugging port on the Deck).
-def ws_connect(url):
+def ws_connect(url, wait=10):
     _, rest = url.split("://", 1)
     hostport, path = rest.split("/", 1)
     host, port = hostport.split(":")
-    s = socket.create_connection((host, int(port)), timeout=10)
+    s = socket.create_connection((host, int(port)), timeout=wait)
     key = base64.b64encode(os.urandom(16)).decode()
     s.sendall(
         (f"GET /{path} HTTP/1.1\r\nHost: {hostport}\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n"
@@ -111,12 +126,61 @@ def evaluate(sock, expression):
             return json.loads(result["value"])
 
 
-def connect_qa():
-    targets = json.loads(urllib.request.urlopen("http://127.0.0.1:8080/json/list", timeout=10).read())
-    qa = [t for t in targets if "QuickAccess" in (t.get("title", "") + t.get("url", ""))]
+def matching_pages(port=DEBUG_PORT, word=PAGE_WORD, wait=10):
+    """The debugging port's pages whose title or address holds the word, in the order Steam lists them."""
+    targets = json.loads(urllib.request.urlopen(f"http://127.0.0.1:{port}/json/list", timeout=wait).read())
+    return [t for t in targets if word in (t.get("title", "") + t.get("url", ""))]
+
+
+def connect_qa(port=DEBUG_PORT, word=PAGE_WORD):
+    qa = matching_pages(port, word)
     if not qa:
         raise SystemExit("no Quick Access page: is the menu open?")
     return ws_connect(qa[0]["webSocketDebuggerUrl"])
+
+
+def read_panel_local(script, port=DEBUG_PORT, word=PAGE_WORD, wait=LOCAL_PAGE_WAIT):
+    """Run the page script in the first matching page that answers and holds the panel; (result, page title).
+
+    Steam on Windows lists pages that never answer, so each is given `wait` seconds, then the next is tried. A page
+    that answers without the panel is remembered and returned only when no page has it.
+    """
+    pages = matching_pages(port, word)
+    if not pages:
+        raise SystemExit("no Quick Access page: is the menu open?")
+    no_panel, silent = None, 0
+    for page in pages:
+        try:
+            sock = ws_connect(page["webSocketDebuggerUrl"], wait)
+            try:
+                result = evaluate(sock, script)
+            finally:
+                sock.close()
+        except (OSError, SystemExit):
+            silent += 1
+            continue
+        title = str(page.get("title", ""))[:60]
+        if not result.get("error"):
+            return result, title
+        no_panel = no_panel or (result, title)
+    if no_panel:
+        return no_panel
+    raise SystemExit(f"{len(pages)} page(s) matched but none answered within {wait} s ({silent} silent): is the menu open?")
+
+
+def find_log_dir(decky_home):
+    """The plugin's log folder under a Decky folder: logs/bonsAI, or the same name in any capital letters. (path, found)."""
+    logs = os.path.join(os.path.expanduser(decky_home), "logs")
+    want = os.path.join(logs, PLUGIN_LOG_FOLDER)
+    if os.path.isdir(want):
+        return want, True
+    try:
+        for name in sorted(os.listdir(logs)):
+            if name.lower() == PLUGIN_LOG_FOLDER.lower() and os.path.isdir(os.path.join(logs, name)):
+                return os.path.join(logs, name), True
+    except OSError:
+        pass
+    return want, False
 
 
 # The read, run inside the panel's page. Every class name below is pinned against src/ by the test.
@@ -338,10 +402,24 @@ def main():
     turns = int(option_value(sys.argv, "--turns", "0"))
     if turns < 0 or turns > 20:
         raise SystemExit("--turns takes a number from 1 to 20")
-    result = evaluate(connect_qa(), page_script(turns))
-    result["attachLine"] = newest_attach_line()
+    port = int(option_value(sys.argv, "--port", str(DEBUG_PORT)))
+    word = option_value(sys.argv, "--page", PAGE_WORD)
+    local = "--local" in sys.argv
+    if not local and "--decky-home" in sys.argv:
+        raise SystemExit("--decky-home is only for --local")
+    log_dir, source = LOG_DIR, None
+    if local:
+        home = option_value(sys.argv, "--decky-home", os.environ.get("DECKY_HOME") or os.path.join("~", "homebrew"))
+        log_dir, found = find_log_dir(home)
+        result, title = read_panel_local(page_script(turns), port, word)
+        source = {"machine": "local", "platform": sys.platform, "logDir": log_dir, "logDirFound": found, "port": port, "page": title}
+    else:
+        result = evaluate(connect_qa(port, word), page_script(turns))
+    result["attachLine"] = newest_attach_line(log_dir)
+    if source:
+        result["source"] = source
     if turns and not result.get("error"):
-        add_turn_numbers(result, newest_attach_lines(turns), option_value(sys.argv, "--corpus", CORPUS_DB))
+        add_turn_numbers(result, newest_attach_lines(turns, log_dir), option_value(sys.argv, "--corpus", CORPUS_DB))
     if as_json:
         print(json.dumps(result))
     else:

@@ -404,7 +404,7 @@ question 1 ... question 6       (Up from question 1: transfer to the lit button)
 - **Pinned by** `MainTabChatTranscript.earlierByGame.test.tsx` (the buttons, the flip, and walks Down and Up under
   Steam's scroll three ways with the dock at 290 and lifted to 262: no stop twice, all on screen, Up retracing Down),
   `MainTabChatTranscript.searchJump.test.tsx` (the jump in both groupings, also while a question is being written),
-  `earlierTurnsByGame.test.ts` and `earlierListNav.test.ts`. Device row: P105-EARLIER-BY-GAME-01 (run once 2026-11-17, block D2: unclear, because no question in the test chat had a game name; still owed).
+  `earlierTurnsByGame.test.ts` and `earlierListNav.test.ts`. Device row: P105-EARLIER-BY-GAME-01 (run 2026-11-17: unclear in block D2, because no question in the test chat had a game name; passed in block D3a with a placed chat of three games, `workshop:test-evidence/plan105-P105-EARLIER-BY-GAME-01-try2.json`; the Search jump in both groupings was not run).
 
 ### The ask box's strip (plan 84)
 

@@ -217,16 +217,18 @@ model. You install it from this page instead. It takes a few minutes.
 
 ### 2. Set up the AI
 
-The first time bonsAI opens, two popups walk you through it:
+The first time bonsAI opens, one screen walks you through it. It lists everything it can download, each with
+its size and the site it comes from (about 6.9 GB in all), with tick boxes for the parts you can leave out.
 
 <img src="assets/readme/first-run.gif" alt="The first time bonsAI opens: the beta notice, the Where should the AI run? popup with its PC option, then Install Ollama and the box that turns on downloads for the starter models" width="600">
 
 *Filmed in real time on a Steam Deck, with two pauses cut out.*
 
-- **AI on the Deck** (works anywhere, slower in games): press **Install Ollama**, then **Turn on
-  and download**. That gets Ollama and the starter models, about 6.9 GB.
+- **AI on the Deck** (works anywhere, slower in games): switch on **Internet downloads**, then press
+  **OK, install on this Deck**. The progress shows on the chat, with a Stop button. Anything you untick is
+  offered again when you first use the feature that needs it.
 - **AI on a PC at home** (much faster): install [Ollama](https://ollama.com/download) on the PC
-  first. In the popup, switch off **Run AI on this Deck**, type the PC's address (like
+  first. On the first screen, press **Use the AI on my PC**, type the PC's address (like
   `192.168.1.20`) and press **Test connection**. The [guide](docs/guide.md#running-the-ai-on-a-pc)
   shows how to let the PC accept the connection.
 

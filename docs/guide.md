@@ -185,9 +185,10 @@ details** says when that's switched on.
 bonsAI doesn't contain an AI itself. It talks to **Ollama**, a free program that runs AI models.
 Ollama can run on the Deck or on a PC.
 
-The first time you open bonsAI, right after the beta notice, a popup titled **Where should the AI
-run?** asks which one you want. It offers the same choices as the **Ollama** tab, and **Not now**
-leaves everything as it is. You can change your mind later on the **Ollama** tab.
+The first time you open bonsAI, one screen asks which one you want. It lists what setting up on the Deck
+downloads, each with its size and site; the note-search model, and the speech models with the voice engine, can be
+unticked. Switch on **Internet downloads** and press **OK, install on this Deck**, or press **Use the AI on my PC**.
+**Not now** leaves everything as it is. You can change your mind later on the **Ollama** tab.
 
 | Where | Good for |
 |---|---|

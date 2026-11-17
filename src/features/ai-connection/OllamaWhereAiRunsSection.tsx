@@ -209,6 +209,19 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus | null>(
     () => peekOllamaTabLocalPending()?.connectionStatus ?? null
   );
+  /*
+   * The newest status, also kept outside React's state, so a press that waited for a check reads its answer at once
+   * (the state's new value only arrives with the next render). Written by `recordStatus` with the state, always.
+   */
+  const latestStatusRef = useRef<ConnectionStatus | null>(connectionStatus);
+  const recordStatus = (st: ConnectionStatus | null) => {
+    latestStatusRef.current = st;
+    setConnectionStatus(st);
+  };
+  /** The check running now, so an Install press made before it answered can wait for it. */
+  const probeInFlightRef = useRef<Promise<void> | null>(null);
+  /** True while an Install / Update press waits for that check; the button reads "Checking…" and a second press does nothing. */
+  const [checkingBeforeStart, setCheckingBeforeStart] = useState(false);
   const [connectionTesting, setConnectionTesting] = useState(false);
   const [mdnsDiscovering, setMdnsDiscovering] = useState(false);
   const [mdnsHosts, setMdnsHosts] = useState<MdnsOllamaHost[]>(
@@ -393,7 +406,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   useLayoutEffect(() => {
     const local = consumeOllamaTabLocalPending();
     if (!local) return;
-    setConnectionStatus(local.connectionStatus);
+    recordStatus(local.connectionStatus);
     setMdnsHosts(local.mdnsHosts);
     setMdnsDiscoveryMessage(local.mdnsDiscoveryMessage);
     if (local.connectionStatus != null) {
@@ -431,7 +444,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
       // never be sent as http behind the person's back. The back end refuses it the same way.
       ++probeSeqRef.current;
       const refused = { reachable: false, error: OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE };
-      setConnectionStatus(refused);
+      recordStatus(refused);
       onLastConnectionStatus?.(refused);
       return;
     }
@@ -446,8 +459,11 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     const seq = ++probeSeqRef.current;
     if (!quiet) {
       setConnectionTesting(true);
-      setConnectionStatus(null);
+      recordStatus(null);
     }
+    let finish: () => void = () => {};
+    const running = new Promise<void>((r) => (finish = r));
+    probeInFlightRef.current = running;
     try {
       const result = await callDeckyWithTimeout<[string, number], ConnectionStatus>(
         "test_ollama_connection",
@@ -455,20 +471,46 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
         rpcDeadlineMs
       );
       if (seq !== probeSeqRef.current) return;
-      setConnectionStatus(result);
+      recordStatus(result);
       onLastConnectionStatus?.(result);
       if (result.reachable && !ollamaLocalOnDeck) onPersistOllamaIp(target);
     } catch (e: unknown) {
       if (seq !== probeSeqRef.current) return;
       const failed = { reachable: false, error: formatDeckyRpcError(e) };
-      setConnectionStatus(failed);
+      recordStatus(failed);
       onLastConnectionStatus?.(failed);
     } finally {
       if (!quiet) setConnectionTesting(false);
+      if (probeInFlightRef.current === running) probeInFlightRef.current = null;
+      finish();
     }
   };
 
   onTestConnectionRef.current = onTestConnection;
+
+  /*
+   * Install / Update. Whether this Deck has any model decides what the press does (none: a box offers the starter
+   * models; some: the update runs), and that is only known once the quiet check has answered. A press made before
+   * it answered used to read "no answer" as "has models" and start the engine-only update with no models at all
+   * (the "Checking…" trap; lane D3 took the same trap off the first-time setup). Now the press waits for the check,
+   * the button reading "Checking…", and a second press meanwhile does nothing. No answer at all counts as no models:
+   * the box is a question, so asking is the safe side.
+   */
+  const pressInstallOrUpdate = async () => {
+    if (localSetupBusy || checkingBeforeStart) return;
+    if (latestStatusRef.current == null) {
+      setCheckingBeforeStart(true);
+      try {
+        await (probeInFlightRef.current ?? onTestConnectionRef.current({ quiet: true }));
+      } finally {
+        setCheckingBeforeStart(false);
+      }
+    }
+    const known = latestStatusRef.current;
+    runLocalSetupInPlace(LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED, "ollama-local-setup", {
+      offerStarterModels: !(known?.models?.length ?? 0),
+    });
+  };
 
   // Auto-probe on mount, and again when the on-Deck / network mode changes, so the Install/Update
   // label reflects reachability without Test connection. Typing a new host still waits for an
@@ -631,14 +673,8 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                     registerModalReturnFocusOwner("ollama-local-setup", el as HTMLElement | null);
                   }}
                   className="bonsai-settings-focus-btn"
-                  onClick={() => {
-                    // Runs in place (nothing while a run is going: the button stays a stop so the ring is never on a dead one).
-                    // Known to be empty (engine not up, or up with no models): a box then asks about the starter models.
-                    const noModels = connectionStatus != null && !(connectionStatus.models?.length ?? 0);
-                    runLocalSetupInPlace(LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED, "ollama-local-setup", {
-                      offerStarterModels: noModels,
-                    });
-                  }}
+                  // Runs in place (nothing while a run is going: the button stays a stop so the ring is never on a dead one).
+                  onClick={() => void pressInstallOrUpdate()}
                   style={{
                     flex: "1 1 100%",
                     minHeight: 36,
@@ -659,7 +695,9 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                       : "Install Ollama on this Deck"
                   }
                 >
-                  {localSetupBusy
+                  {checkingBeforeStart
+                    ? "Checking…"
+                    : localSetupBusy
                     ? ollamaEngineReady
                       ? "Updating…"
                       : "Installing…"

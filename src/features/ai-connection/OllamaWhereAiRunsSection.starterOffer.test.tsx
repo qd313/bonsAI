@@ -150,6 +150,40 @@ describe("Install Ollama with no models installed", () => {
   });
 });
 
+describe("Install pressed before the quiet connection check has answered (plan 105, lane D4)", () => {
+  /** A check that answers only when the test says so: what a Deck does in the first second the tab is open. */
+  function slowCheck() {
+    let answer: (v: unknown) => void = () => {};
+    setRpcHandler("test_ollama_connection", () => new Promise((r) => (answer = r)));
+    return (v: unknown) => act(async () => void answer(v));
+  }
+
+  it("waits for the check, then offers the starter models on a Deck with none; it never starts the engine-only update", async () => {
+    const reply = slowCheck();
+    drawOnDeck();
+    await pressInstall("Install Ollama");
+    expect(setupProfiles()).toEqual([]);
+    expect(hoisted.modals).toHaveLength(0);
+    expect(screen.getByLabelText("Install Ollama on this Deck").textContent).toBe("Checking…");
+    await reply({ reachable: false, error: "unreachable" });
+    await settle();
+    expect(hoisted.modals).toHaveLength(1);
+    expect(hoisted.modals[0].props.title).toBe("Also install the starter models?");
+    expect(setupProfiles()).toEqual([]);
+  });
+
+  it("a second press while it waits starts nothing more; with models found the update runs once, with no box", async () => {
+    const reply = slowCheck();
+    drawOnDeck();
+    await pressInstall("Install Ollama");
+    await pressInstall("Checking…");
+    await reply({ reachable: true, version: "0.12.0", models: ["qwen2.5vl:3b"] });
+    await settle();
+    expect(hoisted.modals).toHaveLength(0);
+    expect(setupProfiles()).toEqual(["update_installed"]);
+  });
+});
+
 describe("Install Ollama after the first-time setup left something out (plan 105, lane D3)", () => {
   it("the box and the run leave out the same pieces, and the box says so", async () => {
     window.localStorage.setItem(STARTER_LEFT_OUT_STORAGE_KEY, JSON.stringify(["note_search"]));

@@ -19,6 +19,7 @@ const hoisted = vi.hoisted(() => ({
   calls: [] as { method: string; args: unknown[] }[],
   toasts: [] as unknown[],
   patches: [] as unknown[],
+  failSave: false,
 }));
 
 vi.mock("@decky/ui", async () => {
@@ -36,6 +37,7 @@ vi.mock("../../shared/deckyCall", () => ({
   DECKY_RPC_TIMEOUT_MS: 1000,
   callDeckyWithTimeout: async (method: string, args: unknown[]) => {
     hoisted.calls.push({ method, args });
+    if (hoisted.failSave) throw new Error("save failed");
     return {};
   },
 }));
@@ -46,7 +48,11 @@ vi.mock("../plugin-shell/bonsaiSessionSurvival", () => ({
 import {
   confirmDownload,
   downloadNoticeLine,
+  internetDownloadsAreOff,
+  internetDownloadsAreOn,
+  internetDownloadsSwitchState,
   setDownloadPermissionBridge,
+  setInternetDownloadsFromSwitch,
   DOWNLOAD_SITES_SEEN_STORAGE_KEY,
 } from "./downloadNotice";
 
@@ -75,6 +81,7 @@ beforeEach(() => {
   hoisted.calls = [];
   hoisted.toasts = [];
   hoisted.patches = [];
+  hoisted.failSave = false;
   window.localStorage.clear();
   setDownloadPermissionBridge(null);
 });
@@ -200,5 +207,47 @@ describe("confirmDownload as a button's own box (always)", () => {
     box.pressAction();
     await expect(answer).resolves.toBe(true);
     expect(setCaps).toHaveBeenCalled();
+  });
+});
+
+describe("the first-time setup's Internet downloads switch (plan 105, lane D3)", () => {
+  it("on: saves the whole permissions block now, and the permission reads on at once", async () => {
+    const setCaps = bridge(false);
+    await expect(setInternetDownloadsFromSwitch(true)).resolves.toBe(true);
+    expect(hoisted.calls).toEqual([
+      { method: "save_settings", args: [{ capabilities: { ...DEFAULT_CAPABILITIES, microphone_access: true, internet_downloads: true } }] },
+    ]);
+    expect(setCaps).toHaveBeenLastCalledWith(expect.objectContaining({ internet_downloads: true }));
+    expect(hoisted.patches).toEqual([{ capabilities: expect.objectContaining({ internet_downloads: true }) }]);
+    expect(internetDownloadsAreOn()).toBe(true);
+    expect(internetDownloadsSwitchState()).toEqual({ on: true, kidsLock: false });
+  });
+
+  it("on, with the save failing: back to off on screen and in the session note, and a message says so", async () => {
+    const setCaps = bridge(false);
+    hoisted.failSave = true;
+    await expect(setInternetDownloadsFromSwitch(true)).resolves.toBe(false);
+    expect(setCaps).toHaveBeenLastCalledWith(expect.objectContaining({ internet_downloads: false }));
+    expect(hoisted.patches[hoisted.patches.length - 1]).toEqual({ capabilities: expect.objectContaining({ internet_downloads: false }) });
+    expect(hoisted.toasts).toEqual([expect.objectContaining({ title: "Could not save the setting", body: expect.stringContaining("still off") })]);
+    expect(internetDownloadsAreOn()).toBe(false);
+  });
+
+  it("off: saves off, and a failed save leaves it on with its own message", async () => {
+    bridge(true);
+    await expect(setInternetDownloadsFromSwitch(false)).resolves.toBe(false);
+    expect(internetDownloadsAreOff()).toBe(true);
+    bridge(true);
+    hoisted.failSave = true;
+    await expect(setInternetDownloadsFromSwitch(false)).resolves.toBe(true);
+    expect(hoisted.toasts).toEqual([expect.objectContaining({ body: expect.stringContaining("still on") })]);
+  });
+
+  it("under the parental lock changes nothing and says why", async () => {
+    bridge(false, true);
+    await expect(setInternetDownloadsFromSwitch(true)).resolves.toBe(false);
+    expect(hoisted.calls).toHaveLength(0);
+    expect(hoisted.toasts).toEqual([expect.objectContaining({ title: "Downloads are off" })]);
+    expect(internetDownloadsSwitchState()).toEqual({ on: false, kidsLock: true });
   });
 });

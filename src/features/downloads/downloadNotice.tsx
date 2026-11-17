@@ -13,7 +13,9 @@
  * Used for: every download button (useLocalOllamaSetupFlow, usePullModelSubmitSelected,
  * usePullModelCustomTagPull, KnowledgeBaseSection, VoiceInputSettingsSection), each of which
  * awaits `confirmDownload` right before the call that starts its download. index.tsx keeps the
- * permission bridge below current with `useDownloadPermissionBridge`.
+ * permission bridge below current with `useDownloadPermissionBridge`. The first-time setup's Internet
+ * downloads switch (plan 105, lane D3) reads and saves the permission through it too
+ * (`internetDownloadsSwitchState`, `setInternetDownloadsFromSwitch`), so it is the real permission.
  *
  * Solves: the maintainer's call (plan 71, 2026-09-26): say where every download goes, and let the
  * player switch the internet off without being sent hunting for a switch the first time.
@@ -180,10 +182,24 @@ const DOWNLOADS_NOT_SAVED_TOAST = {
   duration: 6000,
 };
 
-/** True when the back end took the save. False: the screen is back to what it was, and nothing was changed on disk. */
-async function turnOnDownloads(b: PermissionBridge): Promise<boolean> {
+/** While Steam's parental lock is on: nothing is asked and nothing downloads. */
+const KIDS_LOCK_TOAST = { title: "Downloads are off", body: "Parental controls keep internet downloads off.", duration: 5000 };
+
+/** The same for a press that turned them off and could not be saved. */
+const DOWNLOADS_OFF_NOT_SAVED_TOAST = {
+  title: "Could not save the setting",
+  body: "Internet downloads are still on: the setting could not be saved. Try again in a moment.",
+  duration: 6000,
+};
+
+/**
+ * Saves the permission now, on or off. True when the back end took the save; the bridge then reads the new value
+ * at once, because under a Steam box the plugin's panel is closed and would not refresh it. False: the screen is
+ * back to what it was, and nothing was changed on disk.
+ */
+async function saveDownloadsPermission(b: PermissionBridge, on: boolean): Promise<boolean> {
   const before = b.capabilities;
-  const next: BonsaiCapabilities = { ...before, internet_downloads: true };
+  const next: BonsaiCapabilities = { ...before, internet_downloads: on };
   b.setCapabilities(next);
   patchPendingSessionSettingsSnapshot({ capabilities: next });
   try {
@@ -193,14 +209,40 @@ async function turnOnDownloads(b: PermissionBridge): Promise<boolean> {
       [{ capabilities: next }],
       DECKY_RPC_TIMEOUT_MS
     );
+    if (bridge === b) bridge = { ...b, capabilities: next, enabled: on && !b.kidsLockActive };
     return true;
   } catch {
-    // Not claiming a setting the file does not have: the screen shows off again, so nothing is sent later
-    // behind the person's back and the next press asks the question again.
+    // Not claiming a setting the file does not have: the screen shows what it showed before, so nothing is sent
+    // later behind the person's back and the next press asks again.
     b.setCapabilities(before);
     patchPendingSessionSettingsSnapshot({ capabilities: before });
     return false;
   }
+}
+
+const turnOnDownloads = (b: PermissionBridge): Promise<boolean> => saveDownloadsPermission(b, true);
+
+/** What the first-time setup's Internet downloads switch shows: the permission, and whether Steam's lock holds it off. */
+export function internetDownloadsSwitchState(): { on: boolean; kidsLock: boolean } {
+  return { on: bridge?.enabled === true, kidsLock: bridge?.kidsLockActive === true };
+}
+
+/**
+ * The first-time setup's Internet downloads switch (plan 105, lane D3): the real permission, saved the moment it is
+ * switched, both ways, on the same path as the "Turn on internet downloads?" yes (plan 104). Resolves the value the
+ * switch must show now: the new one when the save got through; the old one, with a message saying the setting
+ * could not be saved, when it did not. Under the parental lock nothing changes and the lock's message shows.
+ */
+export async function setInternetDownloadsFromSwitch(on: boolean): Promise<boolean> {
+  const b = bridge;
+  if (!b) return false;
+  if (b.kidsLockActive) {
+    toaster.toast(KIDS_LOCK_TOAST);
+    return false;
+  }
+  if (await saveDownloadsPermission(b, on)) return on;
+  toaster.toast(on ? DOWNLOADS_NOT_SAVED_TOAST : DOWNLOADS_OFF_NOT_SAVED_TOAST);
+  return !on;
 }
 
 /** For a button whose own confirm box this notice replaces. */
@@ -236,11 +278,7 @@ export function confirmDownload(notices: DownloadNotice[], opts: DownloadBoxOpti
   if (!bridge && !opts.always) return Promise.resolve(true);
   const b = bridge ?? NO_ROOT_BRIDGE;
   if (b.kidsLockActive) {
-    toaster.toast({
-      title: "Downloads are off",
-      body: "Parental controls keep internet downloads off.",
-      duration: 5000,
-    });
+    toaster.toast(KIDS_LOCK_TOAST);
     return Promise.resolve(false);
   }
   const sites = notices.map((n) => n.site);

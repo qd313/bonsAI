@@ -180,7 +180,7 @@ _ROLEPLAY_RECENCY_RECAP = (
 
 
 _ROLEPLAY_TERSE_RECAP = (
-    " TERSE REPLY MODE still applies: keep this voice, but write only the three lines it allows "
+    " TERSE REPLY MODE still applies: keep this voice, but stay within the 40 words it allows "
     "(the menu at the end is extra)."
 )
 

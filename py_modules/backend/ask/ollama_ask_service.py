@@ -181,7 +181,7 @@ async def run_ask_ollama(
     keep_alive = effective_keep_alive(settings.get("ollama_keep_alive"), url, source="ask")  # 1m with a game on the Deck
     reply_verbosity = sanitize_reply_verbosity(settings.get("reply_verbosity"))
     reply_language = resolve_effective_reply_language(settings.get("reply_language"))
-    # The Reply style slider's Terse stop (three lines and a menu): in every Ask mode. Decided once
+    # The Reply style slider's Terse stop (about 40 words and a menu): in every Ask mode. Decided once
     # (the rule reply_style_blocks.terse_reply_applies states; written inline here to keep this file
     # under the 400-line check) and handed to the character reminder and the reply reader; the prompt
     # reads the same stop from reply_verbosity itself.

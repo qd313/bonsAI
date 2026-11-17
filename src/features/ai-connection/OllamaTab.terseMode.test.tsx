@@ -78,7 +78,7 @@ describe("Ollama tab: Terse is a stop on the Reply style slider, not a switch", 
     const help = String(
       container.querySelector(".bonsai-reply-verbosity-slider")?.closest("[data-bonsai-help]")?.getAttribute("data-bonsai-help") ?? "",
     );
-    expect(help).toMatch(/Terse gives three short lines and a menu of choices/);
+    expect(help).toMatch(/Terse gives about 40 words and a menu of choices/);
     expect(help).toMatch(/Speed, Strategy and Expert/);
     expect(help).toMatch(/shortens what you see, not how hard the AI thinks/);
     expect(help).not.toMatch(/Speed mode only/i);

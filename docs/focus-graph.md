@@ -1209,7 +1209,7 @@ tab bar
    ...
 [ AI MODELS                                             ▸ ]
    | Down from the last line (or the last row) holds still
-=========== the strip: "TERSE MODE  Speed mode only. Keeps each answer to three short lines…" ===========
+=========== the strip: "Reply style  Terse gives about 40 words and a menu of choices…" ===========
 ```
 
 - **Stops:** each section line (a `Focusable` with `focusable: true` and `noFocusRing`; its class never changes,

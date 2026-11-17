@@ -257,7 +257,7 @@ describe("the Reply style slider's four stops, Terse first (plan 93)", () => {
     const landing = [w.enter(), ...w.walk("down")].find((l) => l.stop.closest("[data-bonsai-reply-verbosity-thumb]"));
     expect(landing?.stripText).toMatch(/^Reply style/);
     expect(landing?.stripText).toMatch(/Terse/);
-    expect(landing?.stripText).toMatch(/three short lines/);
+    expect(landing?.stripText).toMatch(/about 40 words/);
     expect(landing?.stripText).toMatch(/Speed, Strategy and Expert/);
     expect(landing?.stripText).not.toMatch(/Bullet-first vs paragraph depth/);
     w.unmount();

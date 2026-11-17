@@ -2,7 +2,7 @@
  * Title: How long the AI's replies are
  *
  * Purpose: A four-stop slider in the Ollama tab controls how long-winded
- * the AI's answers are: Terse (a few short lines and a menu of choices, in
+ * the AI's answers are: Terse (about 40 words and a menu of choices, in
  * every Ask mode), Caveman (short, blunt, key points only), Balanced (the
  * default, no particular instruction either way), and Detailed (more
  * explanation, examples, and steps). This file holds the four stops, their

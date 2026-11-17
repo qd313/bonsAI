@@ -1,7 +1,7 @@
 """The Terse stop of the Reply style slider: what the AI is told, and where the menu is read.
 
 What a person sees: with the slider on Terse, an answer in any Ask mode (Speed, Strategy or Expert) is
-a few short lines that end with a menu of choices to dig deeper. These tests pin the instructions that
+about 40 words that end with a menu of choices to dig deeper. These tests pin the instructions that
 ask for that, that every other stop is word for word what it was, and that the menu in a Speed or
 Expert reply is actually read out of the answer (it used to be read in Strategy mode only).
 """
@@ -32,9 +32,9 @@ from fake_ollama_stream import ndjson_response  # noqa: E402
 from main import Plugin  # noqa: E402
 
 BRANCH_FENCE = "```bonsai-strategy-branches"
-CAP_SENTENCE = "at most THREE lines"
+CAP_SENTENCE = "at most 40 words in total"
 WORD_CAP_SENTENCE = "No sentence over 15 words."
-LOOSE_SENTENCE = "three-line cap is loosened"
+LOOSE_SENTENCE = "40-word cap is loosened"
 FOLLOWUP_PREFIX = "[Strategy follow-up]"
 
 
@@ -65,7 +65,7 @@ def _terse(question="how do i beat the dreadnought", **kwargs):
 
 
 class TerseSpeedPrompt(unittest.TestCase):
-    def test_a_first_question_carries_the_three_line_rule_and_the_menu_requirement(self):
+    def test_a_first_question_carries_the_forty_word_rule_and_the_menu_requirement(self):
         p = _terse()
         self.assertIn("TERSE REPLY MODE (Speed):", p)
         self.assertIn(CAP_SENTENCE, p)
@@ -85,6 +85,21 @@ class TerseSpeedPrompt(unittest.TestCase):
             "Lead with the answer; no greeting, no recap, no offer to help further. " + WORD_CAP_SENTENCE + "\n",
             p,
         )
+
+    def test_the_cap_is_forty_words_and_no_longer_three_lines(self):
+        # Plan 105 (P105-TERSE-40-01): the Terse cap was "at most THREE lines"; it is now about 40 words.
+        for question in ("how do i beat the dreadnought", "walk me through it step by step"):
+            for mode in ("speed", "strategy", "expert"):
+                block = _terse(question, ask_mode=mode).split("TERSE REPLY MODE", 1)[1]
+                self.assertNotIn("THREE lines", block, (question, mode))
+                self.assertNotIn("three-line", block, (question, mode))
+                self.assertNotIn("A line is one sentence", block, (question, mode))
+                self.assertIn("40", block, (question, mode))
+
+    def test_the_depth_loosening_still_allows_up_to_about_ten(self):
+        block = _terse("walk me through it step by step").split("TERSE REPLY MODE", 1)[1]
+        self.assertIn("up to about ten", block)
+        self.assertIn(LOOSE_SENTENCE, block)
 
     def test_a_follow_up_still_ends_with_the_menu_and_says_so_plainly(self):
         q = f"{FOLLOWUP_PREFIX} I'm at: Weak points.\nEarlier I asked: how do i beat the dreadnought"
@@ -119,7 +134,7 @@ class TerseSpeedPrompt(unittest.TestCase):
         for style in ("balanced", "caveman", "detailed"):
             self.assertNotIn("TERSE REPLY MODE", _prompt(reply_verbosity=style), style)
 
-    def test_a_character_still_picks_the_words_but_in_three_lines(self):
+    def test_a_character_still_picks_the_words_but_within_forty_words(self):
         p = _terse(character_roleplay_on=True)
         self.assertIn(CAP_SENTENCE, p)
         self.assertIn("character", p.split("TERSE REPLY MODE", 1)[1].lower())
@@ -137,7 +152,7 @@ class TerseSpeedPrompt(unittest.TestCase):
         self.assertIn("clear normal prose", p)
         self.assertIn("outside the cap", p)
 
-    def test_fenced_panels_and_code_do_not_count_toward_the_three_lines(self):
+    def test_fenced_panels_and_code_do_not_count_toward_the_words(self):
         p = _terse()
         for free in ("bonsai-strategy-branches", "bonsai-cite", "code blocks", "file paths"):
             self.assertIn(free, p.split("TERSE REPLY MODE", 1)[1], free)
@@ -197,7 +212,7 @@ class TerseInEveryAskMode(unittest.TestCase):
         f"{FOLLOWUP_PREFIX} I'm at: Weak points.\nEarlier I asked: how do i beat the dreadnought",
     )
 
-    def test_expert_first_answer_and_follow_up_carry_the_three_line_rule_and_the_menu(self):
+    def test_expert_first_answer_and_follow_up_carry_the_forty_word_rule_and_the_menu(self):
         for q in self.QUESTIONS:
             p = _terse(q, ask_mode="expert")
             self.assertIn("TERSE REPLY MODE (Expert):", p, q)
@@ -206,7 +221,7 @@ class TerseInEveryAskMode(unittest.TestCase):
             self.assertIn("End EVERY reply", p, q)
             self.assertIn(BRANCH_FENCE, p, q)
 
-    def test_strategy_first_answer_is_three_lines_and_still_ends_with_its_own_branch_menu(self):
+    def test_strategy_first_answer_is_forty_words_and_still_ends_with_its_own_branch_menu(self):
         p = _terse(ask_mode="strategy")
         self.assertIn("TERSE REPLY MODE (Strategy):", p)
         self.assertIn(CAP_SENTENCE, p)
@@ -217,7 +232,7 @@ class TerseInEveryAskMode(unittest.TestCase):
         self.assertIn("STRATEGY GUIDE MODE section", p.split("TERSE REPLY MODE", 1)[1])
         self.assertNotIn("CAVEMAN REPLY STYLE", p)
 
-    def test_strategy_follow_up_is_three_lines_and_a_fresh_menu_not_a_checklist_and_cheat_section(self):
+    def test_strategy_follow_up_is_forty_words_and_a_fresh_menu_not_a_checklist_and_cheat_section(self):
         q = self.QUESTIONS[1]
         p = _terse(q, ask_mode="strategy")
         self.assertIn("TERSE REPLY MODE (Strategy):", p)
@@ -286,7 +301,7 @@ class TheRealAskPath(unittest.IsolatedAsyncioTestCase):
         ):
             return await self.plugin.ask_ollama(question, "127.0.0.1:11434", "", "", ask_mode=ask_mode)
 
-    async def test_a_speed_question_with_terse_on_sends_the_three_line_rule_and_the_menu(self):
+    async def test_a_speed_question_with_terse_on_sends_the_forty_word_rule_and_the_menu(self):
         out = await self._ask("how do i beat the dreadnought", settings={"reply_verbosity": "terse"})
         self.assertTrue(out.get("success"))
         sent = self.sent_system_prompts[0]
@@ -307,7 +322,7 @@ class TheRealAskPath(unittest.IsolatedAsyncioTestCase):
         await self._ask("what does proton do", settings={"terse_mode": True})
         self.assertNotIn("TERSE REPLY MODE", self.sent_system_prompts[0])
 
-    async def test_a_character_on_the_real_path_still_gets_the_three_line_rule(self):
+    async def test_a_character_on_the_real_path_still_gets_the_forty_word_rule(self):
         settings = {
             "reply_verbosity": "terse",
             "ai_character_enabled": True,
@@ -319,7 +334,7 @@ class TheRealAskPath(unittest.IsolatedAsyncioTestCase):
         sent = self.sent_system_prompts[0]
         self.assertIn(CAP_SENTENCE, sent)
         self.assertIn("lighthouse keeper", sent)
-        self.assertIn("three lines", sent.split("lighthouse keeper", 1)[1])
+        self.assertIn("40 words", sent.split("lighthouse keeper", 1)[1])
 
     async def test_another_stop_or_no_setting_sends_no_terse_rule_in_any_mode(self):
         for mode in ("speed", "strategy", "expert"):

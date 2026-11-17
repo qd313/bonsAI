@@ -1,6 +1,6 @@
 """Title: Reading a choice menu the AI wrote as bare JSON
 
-Purpose: On the Terse stop of the Reply style slider (answers in three lines) the AI is asked to end every answer with a
+Purpose: On the Terse stop of the Reply style slider (answers of about 40 words) the AI is asked to end every answer with a
 menu of choices, written as a fenced block. The small model on the Deck sometimes writes the menu
 as a plain JSON object with no fence (three answers in ten on 2026-10-08), and the plugin used to
 show that JSON as text inside the answer. This file finds such a menu at the end of the answer,

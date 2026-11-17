@@ -149,7 +149,7 @@ export type BonsaiSettings = {
   ollama_keep_alive: OllamaKeepAliveDuration;
   /**
    * Global reply prose style (Terse / Caveman / Balanced / Detailed); Balanced = no verbosity inject.
-   * Terse is the short answer (three lines, then a menu) in every Ask mode; it was the separate
+   * Terse is the short answer (about 40 words, then a menu) in every Ask mode; it was the separate
    * `terse_mode` switch before plan 93.
    */
   reply_verbosity: ReplyVerbosityId;

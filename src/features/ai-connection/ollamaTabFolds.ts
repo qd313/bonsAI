@@ -48,7 +48,7 @@ export const OLLAMA_ROW_HELP = {
   useKnowledgeBase:
     "Ground Strategy and troubleshooting Asks with downloaded offline cards (keyword or Keyword + meaning search).",
   replyStyle:
-    "Terse gives three short lines and a menu of choices to dig deeper, in Speed, Strategy and Expert. It shortens what you see, not how hard the AI thinks. Caveman is blunt and brief, Balanced is the default, Detailed explains more.",
+    "Terse gives about 40 words and a menu of choices to dig deeper, in Speed, Strategy and Expert. It shortens what you see, not how hard the AI thinks. Caveman is blunt and brief, Balanced is the default, Detailed explains more.",
   timeouts: "Warning = slow-reply nudge. Timeout = abort if still busy.",
   keepAlive: "How long Ollama keeps the model in memory after a prompt (VRAM on the host).",
 } as const;

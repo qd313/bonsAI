@@ -76,9 +76,9 @@ def build_reply_language_block(reply_language: str) -> str:
 def build_terse_reply_block(
     question: str, *, character_roleplay_on: bool = False, ask_mode: str = "speed"
 ) -> str:
-    """The Terse stop: three lines, then a menu of ways to go deeper, in any Ask mode.
+    """The Terse stop: about 40 words, then a menu of ways to go deeper, in any Ask mode.
 
-    Wording only. Nothing counts lines, trims a reply or asks again; the cost of that choice (a
+    Wording only. Nothing counts words, trims a reply or asks again; the cost of that choice (a
     cap that is a tendency, not a guarantee) is written up in docs/roadmap-details.md. This takes
     the place of the Reply style block entirely (the Terse stop is the slider's stop, so no other
     stop's length block is sent with it), and a
@@ -92,13 +92,13 @@ def build_terse_reply_block(
     is_followup = (question or "").lstrip().startswith(STRATEGY_FOLLOWUP_PREFIX)
     if user_asks_for_detail_depth(question):
         cap = (
-            "The player asked for depth, so the three-line cap is loosened for this one reply: use as "
+            "The player asked for depth, so the 40-word cap is loosened for this one reply: use as "
             "many sentences or bullets as the answer needs, up to about ten, still answer-first, "
             "still no filler. No sentence over 15 words.\n"
         )
     else:
         cap = (
-            "Write at most THREE lines in total before the menu. A line is one sentence or one bullet. "
+            "Write at most 40 words in total before the menu: two or three short sentences, and stop as soon as the question is answered. "
             "Lead with the answer; no greeting, no recap, no offer to help further. "
             "No sentence over 15 words.\n"
         )
@@ -146,7 +146,7 @@ def build_terse_reply_block(
         "carefully as you need, then compress. A screenshot question gets the same cap.\n"
         "It overrides the REPLY STYLE setting and any other wording about length or thoroughness.\n"
         f"{voice}"
-        "Not counted toward the lines: fenced panels (the menu below, a ```json TDP block, "
+        "Not counted toward the words: fenced panels (the menu below, a ```json TDP block, "
         "```bonsai-cite```, ```bonsai-spoiler```), code blocks and file paths.\n"
         "Auto-clarity: for irreversible or destructive warnings (delete, wipe, format, remove "
         "prefix/compatdata), write that warning in clear normal prose outside the cap, then go back "

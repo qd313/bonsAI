@@ -46,7 +46,8 @@ import { textPx } from "../../../styles/textPx";
  *
  * 1. Pull the possible sections off the chip: bullets, paths, attribution
  *    entries, and any raw JSON blob.
- * 2. Always show the title from chipBodyTitle().
+ * 2. Always show the title from chipBodyTitle(), and under it the chip's full label (the chip itself
+ *    shows only its short name since plan 105) unless that label is the title.
  * 3. If there is attribution, show it first, as a highlighted block with
  *    source, license, and capture date.
  * 4. Then any file paths, one per line.
@@ -89,7 +90,16 @@ export function ChipExpandedBody({
         lineHeight: 1.45,
       }}
     >
-      <div style={{ fontWeight: 700, marginBottom: 6 }}>{chipBodyTitle(chip)}</div>
+      <div style={{ fontWeight: 700, marginBottom: 6 }}>
+        {chipBodyTitle(chip)}
+        {/* Plan 105: the chip shows only its short name, so the box keeps the full wording, small and grey under
+            the title, as drawn (density board, tab 1, round 2 A). Not when it would repeat the title. */}
+        {chip.label && chip.label !== chipBodyTitle(chip) ? (
+          <div className="bonsai-chip-body-full" style={{ display: "block", fontSize: textPx(10), fontWeight: 400, color: "#9fb7d5", marginTop: 1 }}>
+            {chip.label}
+          </div>
+        ) : null}
+      </div>
       {attribution.length > 0 ? (
         <div
           style={{

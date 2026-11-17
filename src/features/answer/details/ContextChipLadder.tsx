@@ -447,7 +447,8 @@ export function ContextChipLadder({
                 whiteSpace: "nowrap",
               }}
             >
-              {chip.label}
+              {/* Only the fact, as drawn (plan 105); the full wording is in the box under its title. */}
+              {chip.short_label?.trim() || chip.label}
             </Focusable>
           );
         })}

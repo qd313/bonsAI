@@ -50,6 +50,7 @@ from __future__ import annotations
 import re
 from typing import Any, Optional
 
+from backend.answer import chip_short_labels as short
 from backend.knowledge.knowledge_base_cards import _COMPAT_GAME_TITLE
 from backend.spoilers.spoiler_risk_service import (
     compute_spoiler_risk_band,
@@ -524,6 +525,7 @@ def _developer_chip(snapshot: dict[str, Any], skips: list[str]) -> dict[str, Any
         "id": "developer",
         "rank": 999,
         "label": "Developer details",
+        "short_label": "Developer",
         "attached": True,
         "tier_class": "",
         "body": _chip_body(
@@ -548,7 +550,8 @@ def build_context_chips_manifest(
         # fact and the raw record; the answer chips (spoiler band, model, knowledge base) do not apply.
         chips.append(
             {
-                "id": "local_command", "rank": rank, "label": "Local note command", "attached": True, "tier_class": "",
+                "id": "local_command", "rank": rank, "label": "Local note command", "short_label": "",
+                "attached": True, "tier_class": "",
                 "body": _chip_body(title="Local note command", bullets=["Answered on this Deck. The AI was not asked."]),
             }
         )
@@ -570,6 +573,7 @@ def build_context_chips_manifest(
                 "id": "proton_logs",
                 "rank": rank,
                 "label": "Read Proton log tail" if snapshot.get("proton_log_excerpt_attached") else "Proton logs (skipped)",
+                "short_label": "Proton log" if snapshot.get("proton_log_excerpt_attached") else "",
                 "attached": bool(snapshot.get("proton_log_excerpt_attached")),
                 "tier_class": "",
                 "body": _chip_body(title="Proton / Steam logs", paths=paths, bullets=bullets),
@@ -592,6 +596,7 @@ def build_context_chips_manifest(
                 "id": "journal",
                 "rank": rank,
                 "label": f"Inject {journal_count} prior tries" if journal_count else "Experiment journal",
+                "short_label": short.journal_short_label(journal_count),
                 "attached": bool(snapshot.get("proton_journal_attached")),
                 "tier_class": "",
                 "body": _chip_body(title="Proton experiment journal", bullets=bullets_j),
@@ -607,6 +612,7 @@ def build_context_chips_manifest(
                 "id": "screenshot",
                 "rank": rank,
                 "label": f"Attach {img_count or len(att_paths)} screenshot(s)",
+                "short_label": short.screenshot_short_label(img_count or len(att_paths)),
                 "attached": img_count > 0 or len(att_paths) > 0,
                 "tier_class": "",
                 "body": _chip_body(
@@ -671,6 +677,7 @@ def build_context_chips_manifest(
                 "id": "kb",
                 "rank": rank,
                 "label": chip_label,
+                "short_label": short.kb_short_label(bool(snapshot.get("kb_attached"))),
                 "attached": bool(snapshot.get("kb_attached")),
                 "tier_class": "",
                 "body": _chip_body(
@@ -699,6 +706,7 @@ def build_context_chips_manifest(
                     status=kb_coverage_status,
                     section_count=kb_section_count,
                 ),
+                "short_label": short.kb_coverage_short_label(kb_coverage_status, kb_section_count),
                 "attached": kb_coverage_status == "sections" and kb_section_count > 0,
                 "tier_class": "",
                 "body": _chip_body(
@@ -720,6 +728,7 @@ def build_context_chips_manifest(
                 "id": "tdp",
                 "rank": rank,
                 "label": "Read current TDP",
+                "short_label": short.tdp_short_label(tdp_w),
                 "attached": True,
                 "tier_class": "",
                 "body": _chip_body(
@@ -737,6 +746,7 @@ def build_context_chips_manifest(
                 "id": "reply_verbosity",
                 "rank": rank,
                 "label": f"Reply style: {reply_verbosity}",
+                "short_label": short.reply_style_short_label(reply_verbosity),
                 "attached": True,
                 "tier_class": "",
                 "body": _chip_body(
@@ -760,6 +770,7 @@ def build_context_chips_manifest(
                     seconds=snapshot.get("reasoning_seconds"),
                     tokens=snapshot.get("reasoning_tokens"),
                 ),
+                "short_label": short.reasoning_short_label(snapshot.get("reasoning_seconds")),
                 "attached": True,
                 "tier_class": "",
                 "body": _chip_body(
@@ -784,6 +795,7 @@ def build_context_chips_manifest(
             "id": "spoiler_risk",
             "rank": rank,
             "label": spoiler_risk_chip_label(spoiler_band),
+            "short_label": short.spoiler_short_label(spoiler_band),
             "attached": True,
             "tier_class": "",
             "body": _chip_body(
@@ -803,11 +815,13 @@ def build_context_chips_manifest(
     if isinstance(disclosure, dict) or model_name:
         src_class = ""
         label = "Model routing"
+        short_model = short.model_short_label(model_name)
         if isinstance(disclosure, dict):
             src_class = str(disclosure.get("source_class") or "")
             m = str(disclosure.get("model") or model_name or "").strip()
             tier_num = disclosure.get("tier")
             label = f"Routed {m}" if m else "Model policy"
+            short_model = short.model_short_label(m)
             if tier_num is not None:
                 label += f" · Tier {tier_num}"
         elif model_name:
@@ -820,6 +834,7 @@ def build_context_chips_manifest(
                 "id": "model",
                 "rank": rank,
                 "label": label,
+                "short_label": short_model,
                 "attached": bool(model_name),
                 "tier_class": _tier_class_from_source_class(src_class),
                 "body": _chip_body(title="Model source policy", bullets=bullets_m or [label]),
@@ -840,6 +855,7 @@ def build_context_chips_manifest(
                 "id": "spy",
                 "rank": rank,
                 "label": "Spy",
+                "short_label": "",
                 "attached": True,
                 "tier_class": "",
                 "body": _chip_body(title="The Spy was lying", bullets=bullets_spy),

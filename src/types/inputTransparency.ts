@@ -83,7 +83,13 @@ type ContextChipBody = {
 export type ContextChip = {
   id: string;
   rank: number;
+  /** The chip's full wording ("Thinking: Balanced · 16 s · ~445 tokens"): drawn under the open box's title. */
   label: string;
+  /**
+   * Plan 105: the words on the chip itself, only the fact ("Thought 16 s"; chip_short_labels.py). Empty when the
+   * label is short already; absent on a chip saved before plan 105. Either way the chip shows `label`.
+   */
+  short_label?: string;
   attached: boolean;
   tier_class: string;
   body: ContextChipBody;

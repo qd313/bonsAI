@@ -16,15 +16,19 @@
  * Kept here, the open set and the way back outlive any rebuild.
  *
  * Does not: Save anything to disk. The open set lasts while the plugin stays loaded, and a person
- * switching tabs closes it again (the maintainer's call of 2026-10-12, replacing plan 92 § 14, call 3);
- * a new session starts with every section closed. Does not move the ring.
+ * switching tabs puts it back to the start (the maintainer's call of 2026-10-12, replacing plan 92 § 14,
+ * call 3); a new session starts the same way. Does not move the ring.
  *
- * Gotchas: A tab's first visit has every section closed; that state is written the first time the tab
- * asks.
+ * Gotchas: A tab's first visit, and every return to it after a tab switch, has its first section open and
+ * the rest shut (plan 105, lane C1; the first section is the first of the list the tab asks with, so on the
+ * Developer tab it is the first one on screen). That state is written the first time the tab asks. A jump from
+ * the Search tab (openSection) opens its own section in place of that default, not beside it.
  */
 
 interface TabFold {
   open: Set<string>;
+  /** True while `open` is only the start-of-tab default; the person has not opened or closed anything yet. */
+  standing: boolean;
 }
 
 const tabs = new Map<string, TabFold>();
@@ -38,11 +42,11 @@ function changed(): void {
   for (const l of Array.from(listeners)) l();
 }
 
-/** The tab's state, made with the first-visit default (every section closed) when it has none yet. */
-function tabFold(tab: string, _sections: readonly string[]): TabFold {
+/** The tab's state, made with the start-of-tab default (its first section open, the rest shut) when it has none yet. */
+function tabFold(tab: string, sections: readonly string[]): TabFold {
   let fold = tabs.get(tab);
   if (!fold) {
-    fold = { open: new Set() };
+    fold = { open: new Set(sections.slice(0, 1)), standing: true };
     tabs.set(tab, fold);
   }
   return fold;
@@ -54,17 +58,27 @@ export function isSectionOpen(tab: string, sections: readonly string[], section:
 
 /** Open a closed section or close an open one; the others stay as they are. */
 export function toggleSection(tab: string, sections: readonly string[], section: string): void {
-  const { open } = tabFold(tab, sections);
-  if (open.has(section)) open.delete(section);
-  else open.add(section);
+  const fold = tabFold(tab, sections);
+  fold.standing = false;
+  if (fold.open.has(section)) fold.open.delete(section);
+  else fold.open.add(section);
   changed();
 }
 
-/** Open a section and leave it open if it already is; the others stay as they are (the Search tab's jump to a setting). */
-export function openSection(tab: string, sections: readonly string[], section: string): void {
-  const { open } = tabFold(tab, sections);
-  if (open.has(section)) return;
-  open.add(section);
+/**
+ * Open a section and leave it open if it already is (the Search tab's jump to a setting). Where the person has not
+ * opened or closed anything since the tab started over, the jump's section is the one open, in place of the first
+ * section; after that, the others stay as they are.
+ */
+export function openSection(tab: string, _sections: readonly string[], section: string): void {
+  const fold = tabs.get(tab);
+  if (!fold || fold.standing) {
+    tabs.set(tab, { open: new Set([section]), standing: false });
+    changed();
+    return;
+  }
+  if (fold.open.has(section)) return;
+  fold.open.add(section);
   changed();
 }
 
@@ -77,16 +91,18 @@ export function allSectionsOpen(tab: string, sections: readonly string[]): boole
 export function setAllSections(tab: string, sections: readonly string[], openAll: boolean): void {
   const fold = tabFold(tab, sections);
   fold.open = new Set(openAll ? sections : []);
+  fold.standing = false;
   changed();
 }
 
 /**
- * A person switched tabs (the bar, LB or RB, Y): every folded tab's sections close again and the section
- * to return to is forgotten. The one caller is the plugin shell, which alone knows a switch from a popup
- * closing and the tab being rebuilt; a rebuilt tab never comes through here.
+ * A person switched tabs (the bar, LB or RB, Y): every folded tab starts over, so it opens with its first section
+ * open the next time it is drawn, whatever was open when they left; and the section to return to is forgotten.
+ * The one caller is the plugin shell, which alone knows a switch from a popup closing and the tab being rebuilt;
+ * a rebuilt tab never comes through here.
  */
 export function closeAllFoldedSections(): void {
-  for (const fold of tabs.values()) fold.open = new Set();
+  tabs.clear();
   lastSections.clear();
   changed();
 }

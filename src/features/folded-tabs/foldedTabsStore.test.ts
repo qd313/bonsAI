@@ -1,7 +1,9 @@
 /**
  * Title: The folded tabs' memory: which sections are open, and where the ring was
- * Purpose: Pin the store under every folded tab (plan 91 § 2b): a tab's first visit has every section closed;
- *          opening one leaves the others as they are; Open all and Close all; the tabs do not share an open set;
+ * Purpose: Pin the store under every folded tab (plan 91 § 2b): a tab's first visit has its first section open
+ *          (plan 105, lane C1) and the rest closed; switching tabs gives the first section back, every time;
+ *          a jump into one section opens that one in place of the first; opening one leaves the others as they
+ *          are; Open all and Close all; the tabs do not share an open set;
  *          a listener hears every change; and the section the ring last landed in is kept for the Open all
  *          button's way back. It lives outside React, which is what lets it outlast a rebuilt tab
  *          (FoldedSection.test.tsx mounts and unmounts the real lines over it).
@@ -10,6 +12,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   allSectionsOpen,
+  closeAllFoldedSections,
   foldSectionToReturnTo,
   foldedTabsVersion,
   isSectionOpen,
@@ -26,9 +29,50 @@ const IDS = ["where", "kb", "reply"];
 beforeEach(() => resetFoldedTabsForTests());
 
 describe("the folded tabs' store", () => {
-  it("a first visit has no section open", () => {
-    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([false, false, false]);
+  it("a first visit has the first section open and the others closed", () => {
+    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([true, false, false]);
     expect(allSectionsOpen("ollama", IDS)).toBe(false);
+  });
+
+  it("the first section is the first of the list the tab asks with (the ones on screen), not of a longer list", () => {
+    const SHOWN = ["diagnostics", "navigation"];
+    expect(SHOWN.map((id) => isSectionOpen("developer", SHOWN, id))).toEqual([true, false]);
+  });
+
+  it("a tab with no sections has nothing to open and does not fail", () => {
+    expect(allSectionsOpen("empty", [])).toBe(true);
+    expect(isSectionOpen("empty", [], "x")).toBe(false);
+  });
+
+  it("coming back to a tab opens its first section again, whatever was left open or shut", () => {
+    toggleSection("ollama", IDS, "reply");
+    toggleSection("ollama", IDS, "where");
+    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([false, false, true]);
+    closeAllFoldedSections();
+    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([true, false, false]);
+    setAllSections("ollama", IDS, false);
+    closeAllFoldedSections();
+    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([true, false, false]);
+  });
+
+  it("Close all keeps every section shut until the person switches tabs", () => {
+    setAllSections("ollama", IDS, false);
+    expect(IDS.some((id) => isSectionOpen("ollama", IDS, id))).toBe(false);
+  });
+
+  it("a jump into a section opens that section instead of the first, on a tab not yet drawn or drawn only by default", () => {
+    openSection("ollama", IDS, "reply");
+    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([false, false, true]);
+    closeAllFoldedSections();
+    expect(isSectionOpen("ollama", IDS, "where")).toBe(true);
+    openSection("ollama", IDS, "kb");
+    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([false, true, false]);
+  });
+
+  it("once the person has opened or closed anything, a jump adds to what they have", () => {
+    toggleSection("ollama", IDS, "reply");
+    openSection("ollama", IDS, "kb");
+    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([true, true, true]);
   });
 
   it("opening a section opens it once, leaves the others as they are, and tells the listeners only when something changed", () => {
@@ -45,11 +89,11 @@ describe("the folded tabs' store", () => {
 
   it("toggling one section leaves the others as they are; several can be open", () => {
     toggleSection("ollama", IDS, "reply");
-    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([false, false, true]);
-    toggleSection("ollama", IDS, "where");
     expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([true, false, true]);
+    toggleSection("ollama", IDS, "where");
+    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([false, false, true]);
     toggleSection("ollama", IDS, "reply");
-    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([true, false, false]);
+    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([false, false, false]);
   });
 
   it("opens or closes every section at once", () => {

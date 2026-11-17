@@ -9,11 +9,11 @@
  *
  * Solves: Steam keeps the pane that holds a tab where it was. Measured on the Deck's own screen 2026-10-12
  * (plan92-P92-FOLD-KEEPS-PLACE): the Ollama tab scrolled 408 px down, LB then RB, came back 330 px down with its
- * first line off screen. With every section closed on arrival (foldedTabsStore.closeAllFoldedSections) the tab
- * is short, and it should be seen from its top.
+ * first line off screen. With only the first section open on arrival (foldedTabsStore.closeAllFoldedSections starts
+ * every tab over) the tab is short, and it should be seen from its top.
  *
- * The ring: Steam brings the ring back to the control it was last on in that tab. Every section is closed on
- * arrival, so that control is gone, and the ring could be left on nothing or on the tab it came from. On the
+ * The ring: Steam brings the ring back to the control it was last on in that tab. Every section but the first is
+ * shut on arrival, so that control is usually gone, and the ring could be left on nothing or on the tab it came from. On the
  * Deck the ring came back to a "Terse mode" toggle deep in Reply style, and went to "Retry same prompt" on Main.
  * So after a shoulder switch the tab's first section line takes the ring (Steam's own transfer onto the line's nav
  * node) unless it is there already. Not only when the ring is on nothing: on 2026-10-12 (plan92-P92-FOLD-SWITCH)

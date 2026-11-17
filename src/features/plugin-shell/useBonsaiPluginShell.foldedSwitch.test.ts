@@ -1,8 +1,9 @@
 /**
- * Title: A real tab switch closes every folded section; a popup closing over the tab does not
+ * Title: A real tab switch puts every folded tab back to its first section; a popup closing over the tab does not
  * Purpose: Pin the maintainer's call of 2026-10-12 at the one place that knows a person switched tabs
  *          (useBonsaiPluginShell): arriving on a folded tab by the bar, by LB or RB (Steam's own switch),
- *          or by Y (which calls the bar's function) shows every section closed. It must NOT close them when
+ *          or by Y (which calls the bar's function) shows only its first section open, as it did on the first
+ *          visit, whatever was open when they left (plan 105, lane C1). It must NOT do that when
  *          the tab is rebuilt after a popup (a remount is not a switch), when Steam's spurious jump to Main
  *          after a popup is sent back to the tab by the post-popup lock, or when the tab asked for is the
  *          one already showing.
@@ -37,25 +38,34 @@ beforeEach(() => {
 });
 afterEach(() => vi.useRealTimers());
 
-describe("a real tab switch closes every folded section", () => {
-  it("the bar: Ollama with two sections open, to Main and back, shows none open", () => {
+describe("a real tab switch puts every folded tab back to its first section", () => {
+  it("the bar: Ollama with sections opened, to Main and back, shows only the first open", () => {
     const { result } = mountOnOllama();
     openTwo();
-    expect(openIds()).toEqual(["reply", "models"]);
+    expect(openIds()).toEqual(["where", "reply", "models"]);
     act(() => result.current.selectTab("main"));
     act(() => result.current.selectTab(OLLAMA_FOLD_TAB));
     expect(result.current.currentTab).toBe(OLLAMA_FOLD_TAB);
-    expect(openIds()).toEqual([]);
+    expect(openIds()).toEqual(["where"]);
   });
 
-  it("LB or RB (Steam's own switch): Ollama to Main and back shows none open", () => {
+  it("closing the first section does not stop it opening again on the way back", () => {
+    const { result } = mountOnOllama();
+    toggleSection(OLLAMA_FOLD_TAB, IDS, "where");
+    expect(openIds()).toEqual([]);
+    act(() => result.current.selectTab("main"));
+    act(() => result.current.selectTab(OLLAMA_FOLD_TAB));
+    expect(openIds()).toEqual(["where"]);
+  });
+
+  it("LB or RB (Steam's own switch): Ollama to Main and back shows only the first open", () => {
     const { result } = mountOnOllama();
     openTwo();
     act(() => result.current.onTabsShowTab("main"));
-    expect(openIds()).toEqual([]);
+    expect(openIds()).toEqual(["where"]);
     toggleSection(OLLAMA_FOLD_TAB, IDS, "kb");
     act(() => result.current.onTabsShowTab(OLLAMA_FOLD_TAB));
-    expect(openIds()).toEqual([]);
+    expect(openIds()).toEqual(["where"]);
   });
 
   it("the way back (the section the ring last landed in) is forgotten with them", async () => {
@@ -73,7 +83,7 @@ describe("what is not a switch leaves the sections as they are", () => {
     openTwo();
     act(() => result.current.selectTab(OLLAMA_FOLD_TAB));
     act(() => result.current.onTabsShowTab(OLLAMA_FOLD_TAB));
-    expect(openIds()).toEqual(["reply", "models"]);
+    expect(openIds()).toEqual(["where", "reply", "models"]);
   });
 
   it("the tab being rebuilt after a popup (unmounted and mounted again) keeps them open", () => {
@@ -82,7 +92,7 @@ describe("what is not a switch leaves the sections as they are", () => {
     first.unmount();
     const again = mountOnOllama();
     expect(again.result.current.currentTab).toBe(OLLAMA_FOLD_TAB);
-    expect(openIds()).toEqual(["reply", "models"]);
+    expect(openIds()).toEqual(["where", "reply", "models"]);
   });
 
   it("the post-popup lock sending Steam's jump to Main back to Ollama keeps them open", () => {
@@ -99,7 +109,7 @@ describe("what is not a switch leaves the sections as they are", () => {
       vi.advanceTimersByTime(200);
     });
     expect(result.current.currentTab).toBe(OLLAMA_FOLD_TAB);
-    expect(openIds()).toEqual(["reply", "models"]);
+    expect(openIds()).toEqual(["where", "reply", "models"]);
   });
 
   it("Steam naming the tab already showing after a popup keeps them open", () => {
@@ -111,7 +121,7 @@ describe("what is not a switch leaves the sections as they are", () => {
       result.current.finalizeShowModalAndRestoreActiveTab(() => {});
     });
     act(() => result.current.onTabsShowTab(OLLAMA_FOLD_TAB));
-    expect(openIds()).toEqual(["reply", "models"]);
+    expect(openIds()).toEqual(["where", "reply", "models"]);
   });
 
   it("a restore after a remount, which sets the tab directly, keeps them open", () => {
@@ -119,7 +129,7 @@ describe("what is not a switch leaves the sections as they are", () => {
     openTwo();
     act(() => result.current.setCurrentTab("settings"));
     act(() => result.current.setCurrentTab(OLLAMA_FOLD_TAB));
-    expect(openIds()).toEqual(["reply", "models"]);
+    expect(openIds()).toEqual(["where", "reply", "models"]);
   });
 });
 

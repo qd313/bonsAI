@@ -188,12 +188,15 @@ describe("B from there", () => {
     await waitFor(() => expect(ringLabel()).toBe("Internet downloads, bonsAI Permissions"), { timeout: 3000 });
   });
 
-  it("leaves nothing open behind: after coming back, every Settings section is shut", async () => {
+  it("leaves nothing open behind: the jump opens only its own section, and after coming back the Settings tab starts over with its first one", async () => {
+    const ids = settingsSectionIds();
+    const openNow = () => ids.filter((id) => isSectionOpen("settings", ids, id));
     await searchFor("text size");
     pressA("Text size, bonsAI Settings > Text size");
     await waitFor(() => expect(lineOpen("textsize")).toBe("true"));
+    expect(openNow()).toEqual(["textsize"]);
     pressB();
     await screen.findByLabelText("Hollow Knight");
-    expect(settingsSectionIds().some((id) => isSectionOpen("settings", settingsSectionIds(), id))).toBe(false);
+    expect(openNow()).toEqual([ids[0]]);
   });
 });

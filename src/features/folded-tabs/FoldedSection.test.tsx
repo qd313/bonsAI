@@ -19,7 +19,7 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { FoldedSection, foldAllNavId, foldLineBelow, type FoldChainSection } from "./FoldedSection";
-import { foldSectionToReturnTo, personPressCount, resetFoldedTabsForTests, toggleSection } from "./foldedTabsStore";
+import { foldSectionToReturnTo, personPressCount, resetFoldedTabsForTests } from "./foldedTabsStore";
 import { registerNavFocus, resetNavFocusRegistry, unregisterNavFocus } from "../../shared/dpad/navFocusRegistry";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 
@@ -67,10 +67,10 @@ beforeEach(() => {
 afterEach(() => cleanup());
 
 describe("a folded section", () => {
-  it("on a first visit, every section is folded to its line", () => {
+  it("on a first visit, the first section is open and the others are folded to their lines", () => {
     const { container } = render(<Tab chain={CHAIN} />);
-    expect(openIds(container)).toEqual([]);
-    expect(container.querySelector('[data-row="a"]')).toBeNull();
+    expect(openIds(container)).toEqual(["a"]);
+    expect(container.querySelector('[data-row="a"]')).not.toBeNull();
     expect(container.querySelector('[data-row="b"]')).toBeNull();
     expect(line(container, "b").textContent).toContain("Section b");
     expect(line(container, "b").textContent).toContain("sum b");
@@ -78,7 +78,6 @@ describe("a folded section", () => {
 
   it("A opens a folded section and closes an open one; the chevron and the line's data follow", () => {
     const { container } = render(<Tab chain={CHAIN} />);
-    pressA(line(container, "a"));
     pressA(line(container, "b"));
     expect(openIds(container)).toEqual(["a", "b"]);
     expect(line(container, "b").textContent).toContain("▾");
@@ -89,7 +88,6 @@ describe("a folded section", () => {
 
   it("several sections can be open at once", () => {
     const { container } = render(<Tab chain={CHAIN} />);
-    pressA(line(container, "a"));
     pressA(line(container, "b"));
     pressA(line(container, "c"));
     expect(openIds(container)).toEqual(["a", "b", "c"]);
@@ -97,7 +95,6 @@ describe("a folded section", () => {
 
   it("the open set survives the tab being unmounted and mounted again (a Decky popup closing)", () => {
     const first = render(<Tab chain={CHAIN} />);
-    pressA(line(first.container, "a"));
     pressA(line(first.container, "c"));
     pressA(line(first.container, "a"));
     first.unmount();
@@ -141,7 +138,6 @@ describe("a section line's D-pad moves", () => {
   it("Down: into an open section's first control; on to the next line when closed; the last line to the Open all button", () => {
     const entered: string[] = [];
     const chain: FoldChainSection[] = CHAIN.map((s) => ({ ...s, enterFromTop: () => (entered.push(s.id), true) }));
-    toggleSection(TAB, ["a", "b", "c"], "a");
     const { container } = render(<Tab chain={chain} />);
     const button = foldAllButton();
     expect(line(container, "a").__nav?.onMoveDown?.()).toBe(true);
@@ -188,7 +184,6 @@ describe("a section line's D-pad moves", () => {
   it("Up: the previous section's last control when it is open, else its line; the first line goes to the tab bar", () => {
     const left: string[] = [];
     const chain: FoldChainSection[] = CHAIN.map((s) => ({ ...s, enterFromBottom: () => (left.push(s.id), true) }));
-    toggleSection(TAB, ["a", "b", "c"], "a");
     const { container } = render(<Tab chain={chain} />);
     line(container, "b").__nav?.onMoveUp?.();
     expect(left).toEqual(["a"]);

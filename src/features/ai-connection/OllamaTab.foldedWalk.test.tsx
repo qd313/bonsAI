@@ -10,7 +10,8 @@
  *          top. Down from the tab's end (the last line, or the last control with every section open) reaches
  *          the floating button and holds there (plan 93); Up from it comes back. Right from Reply style reaches
  *          the button, A opens every section (it reads Close all), Up returns to Reply style. Closed, the tab is
- *          under one screen of the Deck's own (430 points); with the first section opened, under one and a half.
+ *          under one screen of the Deck's own (430 points); with the first section opened, which is how a tab
+ *          now starts (plan 105, lane C1), under one and a half.
  * Used for: OllamaTab.tsx and the folded-tabs pieces (src/features/folded-tabs/).
  * Does not: Know the Deck's real heights: foldedTabWalk.tsx lays the stops out by a flow model, and the Deck
  *           walk measures the truth.
@@ -106,15 +107,16 @@ describe("the folded Ollama tab, every section closed", () => {
     w.unmount();
   });
 
-  it("on a first visit no section is open", () => {
+  it("on a first visit only the first section is open, and the tab is under one and a half screens (plan 105, lane C1)", () => {
     const w = walk(DECK_PANE, "nearest");
     const open = Array.from(w.container.querySelectorAll<HTMLElement>('.bonsai-fold-line[data-open="true"]'));
-    expect(open).toEqual([]);
-    expect(w.contentHeight() - TAIL).toBeLessThan(DECK_PANE);
+    expect(open.map((el) => el.dataset.bonsaiFoldLine)).toEqual(["where"]);
+    expect(w.contentHeight() - TAIL).toBeLessThan(DECK_PANE * 1.5);
     w.unmount();
   });
 
-  it("with Where AI runs opened, the tab is under one and a half screens", () => {
+  it("with Where AI runs opened after Close all, the tab is under one and a half screens", () => {
+    setAllSections(OLLAMA_FOLD_TAB, SECTION_IDS, false);
     toggleSection(OLLAMA_FOLD_TAB, SECTION_IDS, "where");
     const w = walk(DECK_PANE, "nearest");
     const open = Array.from(w.container.querySelectorAll<HTMLElement>('.bonsai-fold-line[data-open="true"]'));
@@ -127,6 +129,7 @@ describe("the folded Ollama tab, every section closed", () => {
 describe("A on a closed section line only opens the section", () => {
   it("A on the closed AI models line (and on Where AI runs) opens the sections and runs no button's action", () => {
     const openHub = vi.fn();
+    setAllSections(OLLAMA_FOLD_TAB, SECTION_IDS, false);
     const w = walk(DECK_PANE, "nearest", { onOpenOllamaModelsHub: openHub });
     for (const id of ["where", "models"]) {
       const line = w.container.querySelector<HTMLElement>(`[data-bonsai-fold-line="${id}"]`) as SteamEl;

@@ -134,7 +134,8 @@ describe("a Permissions entry", () => {
     expect(tabs).toEqual(["permissions"]);
     expect(peekPermissionJumpFocusTarget()).toBe("internet_downloads");
     expect(peekPermissionJumpReturnTab()).toBe("search");
-    expect(SETTINGS_IDS.some((id) => isSectionOpen("settings", SETTINGS_IDS, id))).toBe(false);
+    /* Only the tab's own start-of-tab section (the first) is open; the jump opened none. */
+    expect(SETTINGS_IDS.filter((id) => isSectionOpen("settings", SETTINGS_IDS, id))).toEqual([SETTINGS_IDS[0]]);
     expect(liveBonsaiSettingJump()?.tab).toBe("permissions");
   });
 

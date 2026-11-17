@@ -69,6 +69,24 @@ const helpOf = (c: HTMLElement, label: string): string | null =>
 beforeEach(() => resetFoldedTabsForTests());
 afterEach(() => cleanup());
 
+describe("the folded Developer tab on a first visit (plan 105, lane C1)", () => {
+  const openNames = (c: HTMLElement) =>
+    lines(c)
+      .filter((l) => l.getAttribute("data-open") === "true")
+      .map(lineName);
+
+  it("opens the knowledge-base section, the first one drawn, when a seed install was passed in", () => {
+    const { container } = render(<DeveloperTab {...props()} />);
+    expect(openNames(container)).toEqual(["Knowledge base"]);
+  });
+
+  it("opens Diagnostics, the first one drawn, without a seed-install callback", () => {
+    const { container } = render(<DeveloperTab {...props({ onInstallSeedKnowledgeBase: undefined })} />);
+    expect(openNames(container)).toEqual(["Diagnostics"]);
+    expect(container.querySelectorAll(".bonsai-fold-body")).toHaveLength(1);
+  });
+});
+
 describe("the folded Developer tab, every section closed", () => {
   beforeEach(() => setAllSections(DEVELOPER_FOLD_TAB, SECTION_IDS, false));
 

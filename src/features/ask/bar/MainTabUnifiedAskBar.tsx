@@ -97,6 +97,7 @@ import {
   isRightNavigationEvent,
 } from "../../../shared/dpad/focusNavigation";
 import { uiActiveElement } from "../../../shared/dpad/uiDocument";
+import { leftAtEdge } from "../../../shared/dpad/leftEdge";
 import { formatBytes, toFileUri } from "../../media/mediaFormat";
 import {
   screenshotMediaErrorCapability,
@@ -581,8 +582,12 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                * MainTabChatTranscript.tsx): claim the move on onMoveLeft itself, the handler
                * Steam actually invokes on device, with the onButtonDown twin only for the
                * string-shaped presses tests and desktop keyboards deliver (focusNavigation.ts).
+               * Since plan 105 (lane C5) the first and second Left in a row hold and the third goes
+               * to Steam's menu (leftEdge.ts). Greyed while an answer writes, the paperclip is
+               * reached only by Steam's own step after the mode button or the box handed a Left
+               * on, so a Left here then goes straight on too.
                */
-              onMoveLeft: () => true,
+              onMoveLeft: (evt: unknown) => (isAsking ? false : leftAtEdge("ask-paperclip", evt)),
               onButtonDown: (button: unknown) => (isDeckDirectionLeftEvent(button) ? true : false),
               onMoveRight: () => focusAskModeButton(),
               ...(showAiCharacterChrome ? { onMoveUp: () => focusAiCharacterAvatar() } : {}),
@@ -685,8 +690,9 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
               className="bonsai-askbar-target bonsai-ask-mode-trigger"
               {...({
                 /* The paperclip rests during an answer but would still take the ring (measured on the Deck
-                   2026-10-14): decided by our own state, so the mode button is the strip's left end then. */
-                onMoveLeft: () => (isAsking ? true : focusAttachPaperclip()),
+                   2026-10-14): decided by our own state, so the mode button is the strip's left end then,
+                   a dead end whose third Left in a row goes to Steam (leftEdge.ts). */
+                onMoveLeft: (evt: unknown) => (isAsking ? leftAtEdge("ask-mode", evt) : focusAttachPaperclip()),
                 onMoveRight: () => focusMicOrStop(),
                 ...(askModeMenuOpen
                   ? {

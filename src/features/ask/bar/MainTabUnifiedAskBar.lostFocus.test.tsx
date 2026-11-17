@@ -13,6 +13,9 @@
  *         transfer or decline, letting Steam's own step move the ring; and the page's focus and the ring must
  *         agree afterwards. With the page's focus present, the routes are the ones the strip test pins
  *         (MainTab.askStrip.deck.test.tsx).
+ *          Also, in the same page with its focus present or gone, Left out to Steam's menu (plan 105, lane C5, rows
+ *          P105-LEFT-TO-MENU-01 and LEFT-HOLDS-STILL-01): on the strip's dead ends the first and second Left hold
+ *          and the third reaches Steam's menu; a Left that moves never counts; a held-down Left never leaves.
  * Does not: Prove the Deck's ring moves: that is row P97-L14-FREEZE. Steam's own step is given by each test
  *           (the next or previous stop along the strip's row, which is how Steam walks a row's children).
  */
@@ -23,6 +26,7 @@ import { mountPanelPage, type MoveKey, type PanelPage } from "../../../test-harn
 import { getRpcCallLog, resetFakeDeckyRpc } from "../../../test-harness/fakeDeckyRpc";
 import { resetNavFocusRegistry } from "../../../shared/dpad/navFocusRegistry";
 import { LOST_FOCUS_HOP_LOG_TAG } from "../../../shared/dpad/lostFocusHop";
+import { DIR_RIGHT, hearPress, pressLeft, type LeftResult } from "../../../test-harness/steamLeftPress";
 
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../../../test-harness/fakeDeckyUi");
@@ -299,5 +303,71 @@ describe("with the page's focus present, the routes are unchanged", () => {
       seen.push(nameOf(page.ring()));
     }
     expect(seen).toEqual([ASK, CLEAR, MIC, MODE, PAPERCLIP]);
+  });
+});
+
+/** Left as Steam delivers it (steamLeftPress.ts): `n` presses, each "held", "moved" or "out" to Steam's menu. */
+function lefts(n: number, repeat = false): LeftResult[] {
+  const out: LeftResult[] = [];
+  for (let i = 0; i < n; i++) act(() => void out.push(pressLeft({ ring: page.ring, move: page.steamMove }, repeat).result));
+  return out;
+}
+
+describe("Left out to Steam's menu from the strip's dead ends (plan 105, lane C5)", () => {
+  it("on the paperclip the first and second Left hold (LEFT-HOLDS-STILL-01) and the third reaches Steam's menu", () => {
+    mount();
+    act(() => page.steamMove(byLabel(PAPERCLIP)));
+    expect(lefts(2)).toEqual(["held", "held"]);
+    expect(nameOf(page.ring())).toBe(PAPERCLIP);
+    expect(lefts(1)).toEqual(["out"]);
+    expect(nameOf(page.ring())).toBe("Steam's menu");
+  });
+
+  it("a Left that moves never counts: the box's Left reaches the paperclip, then two Lefts hold and the third goes out", () => {
+    mount();
+    act(() => page.steamMove(box()));
+    expect(lefts(4)).toEqual(["moved", "held", "held", "out"]);
+  });
+
+  it("a Right between starts the run again, so two old Lefts never add up with new ones", () => {
+    mount();
+    act(() => page.steamMove(byLabel(PAPERCLIP)));
+    expect(lefts(2)).toEqual(["held", "held"]);
+    act(() => {
+      hearPress(page.ring()!, DIR_RIGHT);
+      page.press("onMoveRight");
+    });
+    expect(nameOf(page.ring())).toBe(MODE);
+    expect(lefts(4)).toEqual(["moved", "held", "held", "out"]);
+  });
+
+  it("held down, Left on the paperclip counts once and never leaves", () => {
+    mount();
+    act(() => page.steamMove(byLabel(PAPERCLIP)));
+    expect(lefts(1)).toEqual(["held"]);
+    expect(new Set(lefts(30, true))).toEqual(new Set(["held"]));
+    expect(nameOf(page.ring())).toBe(PAPERCLIP);
+  });
+
+  it("while an answer writes, the mode button holds twice, Steam's own third Left lands on the greyed paperclip, and the next goes out", () => {
+    mount({ isAsking: true });
+    act(() => page.steamMove(byLabel(MODE)));
+    expect(lefts(2)).toEqual(["held", "held"]);
+    expect(lefts(1)).toEqual(["moved"]);
+    expect(nameOf(page.ring())).toBe(PAPERCLIP);
+    expect(lefts(1)).toEqual(["out"]);
+  });
+
+  it("while an answer writes, the question box holds twice and hands the third Left to Steam", () => {
+    mount({ isAsking: true });
+    act(() => page.steamMove(box()));
+    expect(lefts(3)).toEqual(["held", "held", "out"]);
+  });
+
+  it("with the page's focus gone, the paperclip still holds twice and hands the third Left to Steam", () => {
+    mount();
+    act(() => page.steamMove(byLabel(PAPERCLIP)));
+    page.setFocused(false);
+    expect(lefts(3)).toEqual(["held", "held", "out"]);
   });
 });

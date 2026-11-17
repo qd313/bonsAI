@@ -41,6 +41,7 @@ import { takeDetailsSlotLineFocus } from "../../answer/details/detailsSlotStore"
 import { takeInjectChipFocus } from "../../preset-carousel/injectChipNav";
 import { elementHasGamepadFocus } from "../../../shared/dpad/uiDocument";
 import { panelLacksFocus, plainHop, transferHop } from "../../../shared/dpad/lostFocusHop";
+import { leftAtEdge } from "../../../shared/dpad/leftEdge";
 
 export type MainTabAskBarFocusRefs = {
   unifiedInputFieldLayerRef: React.Ref<HTMLDivElement>;
@@ -247,8 +248,9 @@ export function useMainTabAskBarFocus(
     () =>
       ({
         onMoveUp: () => focusFirstPresetChip(),
-        /* The paperclip rests while an answer is written but still takes the ring on the Deck: hold still. */
-        onMoveLeft: () => (isAskInFlight ? true : focusAttachPaperclip()),
+        /* The paperclip rests while an answer is written but still takes the ring on the Deck: hold still,
+           and the third Left in a row goes to Steam's menu (leftEdge.ts, plan 105). */
+        onMoveLeft: (evt: unknown) => (isAskInFlight ? leftAtEdge("question-box", evt) : focusAttachPaperclip()),
         onMoveDown: () => {
           /*
            * The box's Down since plan 84: the small Ask button sits in the strip right under the box,

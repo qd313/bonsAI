@@ -1,6 +1,7 @@
 import { afterEach, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
 import { dispatchFakeRpc, resetFakeDeckyRpc } from "./fakeDeckyRpc";
+import { resetLeftEdgeForTests } from "../shared/dpad/leftEdge";
 
 vi.mock("@decky/api", () => ({
   call: vi.fn((method: string, ...args: unknown[]) => dispatchFakeRpc(method, args)),
@@ -50,5 +51,7 @@ afterEach(() => {
   // later `screen` queries see earlier tests' markup.
   cleanup();
   resetFakeDeckyRpc();
+  /* A run of Lefts at a dead end is module state (leftEdge.ts): one test's presses must not count in the next. */
+  resetLeftEdgeForTests();
   vi.clearAllMocks();
 });

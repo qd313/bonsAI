@@ -24,6 +24,7 @@
  * of the others finds anything to do, and every later pass of this one measures and stops.
  */
 import { findScrollablePanel, panelScrollMax, readableBottomOf } from "../../../shared/dpad/chatPanelScroll";
+import { elementHasFocus, elementHasGamepadFocus } from "../../../shared/dpad/uiDocument";
 
 /** Steam's own scroll area keeps this much clear at its top (docs/lessons-learned.md § 3). */
 const STEAM_TOP_MARGIN_PX = 116;
@@ -157,19 +158,39 @@ type PlacementPass = {
 };
 
 /**
- * Place the open chip and its box (placementDelta), measuring them now. Does nothing when the chip or its box has
- * no box yet (not drawn) or there is no pane. Returns how far it asked the pane to scroll (0: it did not).
+ * How far to lift a chip that has no chip box of its own (the Session chip, plan 105): just clear of the dock when it
+ * lies behind it, else nothing, and never down. Its box is the Session view, which keeps its own scrolls (the card,
+ * the reason line and Sum up bring themselves out from behind the dock, keeping the chip on screen, scrolling up);
+ * a pass that also brought the chip down onto Steam's line, as placementDelta does for a chip, would pull against
+ * those, one up and one down at every settle pass. Lifting only, the two always agree. Only while the chip itself
+ * holds the ring (the page's focus or Steam's marker): a landing inside its box (A on the summed-up note puts the
+ * ring on Sum up) is the Session view's to place, and it keeps the note above on screen (plan 104).
+ */
+function liftChipAloneDelta(g: Pick<PlacementGeometry, "chipTop" | "chipBottom" | "readableBottom">): number {
+  const lowestChipTop = g.readableBottom - DOCK_CLEARANCE_PX - (g.chipBottom - g.chipTop);
+  return Math.max(0, g.chipTop - lowestChipTop);
+}
+
+/**
+ * Place the open chip and its box (placementDelta), measuring them now. A chip with no box (the Session chip, whose
+ * box is the Session view) is only lifted clear of the dock (liftChipAloneDelta). Does nothing when the chip has no
+ * box on screen yet (not drawn) or there is no pane. Returns how far it asked the pane to scroll (0: it did not).
  */
 export function placeOpenChip(
   chip: HTMLElement | null | undefined,
   box: HTMLElement | null | undefined,
   pass: PlacementPass = {},
 ): number {
-  if (!chip || !box) return 0;
+  if (!chip) return 0;
   const pane = findScrollablePanel(chip);
   if (!pane) return 0;
   const c = chip.getBoundingClientRect();
   if (!(c.bottom - c.top > 0)) return 0;
+  if (!box) {
+    if (!elementHasFocus(chip) && !elementHasGamepadFocus(chip)) return 0;
+    const lift = liftChipAloneDelta({ chipTop: c.top, chipBottom: c.bottom, readableBottom: readableBottomOf(pane) });
+    return lift > 0 && scrollPaneSmoothlyBy(pane, lift, pass.hold) ? lift : 0;
+  }
   const grid = chip.parentElement?.getBoundingClientRect();
   const delta = placementDelta({
     chipTop: c.top,

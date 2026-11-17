@@ -10,8 +10,11 @@
  *           (deckAnswerWalk.ts's rules) and the plugin's lift after every press. The Session box is a stand-in with one
  *           stop, Sum up, reached the way buildDetailsPanelElement.tsx wires it (`session.enter`, and Up from it by
  *           the ladder's own root, which hands the ring to its open chip).
+ *          With the panel's page out of the browser's focus (the second opinion's consult 4): a step onto a Session
+ *          chip drawn behind the dock lifts it clear, as a step onto any chip is placed.
  * Does not: Draw the real Session view (MainTabChatTranscript.sessionChip.test.tsx walks that), or measure text: the
- *           widths are the drawing's.
+ *           widths are the drawing's. Without the page's focus Steam's transfer is modelled as the node taking the
+ *           page's focus (each chip's `navRef`), and no focus event reaches the plugin's lift off the dock.
  */
 import React from "react";
 import { act, render } from "@testing-library/react";
@@ -19,6 +22,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Focusable } from "@decky/ui";
 
 import { ContextChipLadder, type SessionChip } from "./ContextChipLadder";
+import type { ChipLadderPaneOptions } from "../../../test-harness/deckChipLadderPane";
 import type { ContextChip, TransparencySnapshot } from "../../../types/inputTransparency";
 import { resetUiDocument } from "../../../shared/dpad/uiDocument";
 import { focusRowElement } from "../../../shared/dpad/focusPerTurnRow";
@@ -26,7 +30,16 @@ import { deckChipLadderPane } from "../../../test-harness/deckChipLadderPane";
 import { WALK_RULES } from "../../../test-harness/deckAnswerWalk";
 
 /* Steam calls the move handlers of the element holding focus, so the walk needs each element's own. */
-const hoisted = vi.hoisted(() => ({ propsByEl: new WeakMap<Element, Record<string, unknown>>() }));
+const hoisted = vi.hoisted(() => ({
+  propsByEl: new WeakMap<Element, Record<string, unknown>>(),
+  /* The panel's page out of the browser's focus, as plan 103's readings saw it with a game running. */
+  lost: false,
+}));
+
+vi.mock("../../../shared/dpad/uiDocument", async (importOriginal) => {
+  const real = await importOriginal<typeof import("../../../shared/dpad/uiDocument")>();
+  return { ...real, uiWindowMissingFocus: () => (hoisted.lost ? window : real.uiWindowMissingFocus()) };
+});
 
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../../../test-harness/fakeDeckyUi");
@@ -35,6 +48,18 @@ vi.mock("@decky/ui", async () => {
     function CapturingFocusable(props, ref) {
       const keep = (el: HTMLDivElement | null) => {
         if (el) hoisted.propsByEl.set(el, props);
+        /* Steam's transfer onto this node: the ring, and the page's focus with it, land on the node (Decky stamps the
+           tabindex on every node Steam navigates; the stub does not). */
+        const nav = props.navRef as { current: unknown } | undefined;
+        if (el && nav && typeof nav === "object") {
+          nav.current = {
+            TakeFocus: () => {
+              if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+              el.focus();
+              return true;
+            },
+          };
+        }
         if (typeof ref === "function") ref(el);
         else if (ref) ref.current = el;
       };
@@ -81,7 +106,13 @@ type Screen = { paneTop?: number; paneBottom?: number; dockTop?: number; ladderD
 const MONITOR: Screen = { ladderDocTop: 389.5 };
 const SMALL: Screen = { paneBottom: 366, dockTop: 290, ladderDocTop: 300 };
 
-function mount(rule: (typeof WALK_RULES)[number], steamTopMargin: boolean, screen: Screen, startOpen = false) {
+function mount(
+  rule: (typeof WALK_RULES)[number],
+  steamTopMargin: boolean,
+  screen: Screen,
+  startOpen = false,
+  paneOptions: Partial<ChipLadderPaneOptions> = {},
+) {
   const scene = deckChipLadderPane({
     ...screen,
     rowWidth: 287.2,
@@ -90,6 +121,7 @@ function mount(rule: (typeof WALK_RULES)[number], steamTopMargin: boolean, scree
     boxHeights: { ...Object.fromEntries(DRAWN.map(([l, , b]) => [l, b])), [SESSION]: SESSION_BOX },
     rule,
     steamTopMargin,
+    ...paneOptions,
   });
   const above = document.createElement("button");
   above.textContent = "Hide details";
@@ -240,6 +272,7 @@ async function walk(m: Mounted, dir: Dir, until: string, limit = 14) {
 
 beforeEach(() => {
   hoisted.propsByEl = new WeakMap();
+  hoisted.lost = false;
   vi.useFakeTimers();
   resetUiDocument();
 });
@@ -324,5 +357,38 @@ describe.each(
     const down = await walk(m, "Down", "suggestion chip");
     expect(down.problems).toEqual([]);
     expect(down.stops).toEqual(["Developer", "suggestion chip"]);
+  });
+});
+
+/*
+ * The second opinion's consult 4 on plan 105: the Session chip has no chip box, and the chips' placement stood down
+ * without one, so a Session chip stepped onto behind the dock stayed there unless the plugin's lift off the dock
+ * ran, which it cannot without the page's focus (no focus event reaches it). Steam's glide is left out and the lift
+ * is off, so only the chips' own placement can move it. The Session row is put behind the dock the way a reader's
+ * finger leaves it: the first Down on gemma4:e2b shows its box's end, the pane is scrolled back, and the second Down
+ * moves on, as a second Down always does.
+ */
+describe.each([
+  ["with the page's focus", false],
+  ["with the page's focus gone", true],
+])("a Session chip drawn behind the dock, %s", (_label, lost) => {
+  it("a step Down onto it lifts it clear of the dock, by a smooth scroll, upward only", async () => {
+    const m = mount(undefined, false, { ladderDocTop: 600 }, false, { scrollTop: 88, dockLift: false });
+    arriveOn(m, "gemma4:e2b");
+    hoisted.lost = lost;
+    m.scene.pane.scrollTop = 88;
+    expect(await press(m, "Down")).toBe(true);
+    expect(nameOf(m, document.activeElement)).toBe("gemma4:e2b");
+    m.scene.pane.scrollTop = 88;
+    expect(m.scene.chipBox(SESSION).bottom).toBeGreaterThan(m.scene.dockTop);
+    const before = m.scene.pane.scrollTop;
+    expect(await press(m, "Down")).toBe(true);
+    expect(nameOf(m, document.activeElement)).toBe(SESSION);
+    expect(m.isOpen()).toBe(true);
+    const chip = m.scene.chipBox(SESSION);
+    expect(chip.bottom, "the Session chip's bottom against the dock").toBeLessThanOrEqual(m.scene.dockTop);
+    expect(chip.top).toBeGreaterThanOrEqual(m.scene.paneTop);
+    expect(m.scene.pane.scrollTop).toBeGreaterThan(before);
+    expect(m.scene.smoothScrolls.length).toBeGreaterThan(0);
   });
 });

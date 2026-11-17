@@ -26,6 +26,7 @@ import asyncio
 from typing import Any, Callable, Optional
 
 from backend.ollama.ollama_routing import tag_in_names
+from backend.ollama.starter_left_out import left_out_sentence, mark_piece, piece_for_tag
 
 STARTER_SPEECH_MODELS: tuple[str, ...] = ("tiny.en", "base.en")
 
@@ -100,12 +101,20 @@ async def run_starter_downloads(
     is None when the engine was not attempted, "" when it is ready, else the plain reason it failed.
     """
     installed = await asyncio.to_thread(list_installed)
+    # How far each piece got is recorded as it goes (starter_left_out.py), so a stopped run can say what it kept.
+    for tag in split_present_tags(tags, installed)[1]:
+        mark_piece(state, piece_for_tag(tag), "done")
 
     def on_step(n: int, total: int, tag: str) -> None:
         state.update(pull_step=n, total_pull_steps=total, current_tag=tag, progress_text="")
 
+    def pull_and_mark(tag: str) -> tuple[bool, str]:
+        ok, err = pull_one(tag)
+        mark_piece(state, piece_for_tag(tag), "done" if ok else ("waiting" if cancelled() else "failed"))
+        return ok, err
+
     pulled, present, pull_failures = await asyncio.to_thread(
-        lambda: pull_starter_tags(tags, installed, pull_one, log, cancelled, on_step)
+        lambda: pull_starter_tags(tags, installed, pull_and_mark, log, cancelled, on_step)
     )
     speech_failures: Optional[dict[str, str]] = None
     if speech_download is not None:
@@ -115,6 +124,7 @@ async def run_starter_downloads(
         )
         if cancelled():
             raise RuntimeError("Cancelled.")
+        mark_piece(state, "speech", "failed" if speech_failures else "done")
     engine_failure: Optional[str] = None
     if engine_build is not None:
         state["current_tag"] = ""
@@ -123,6 +133,7 @@ async def run_starter_downloads(
         )
         if cancelled():
             raise RuntimeError("Cancelled.")
+        mark_piece(state, "voice", "failed" if engine_failure else "done")
     return {
         "pulled": pulled,
         "present": present,
@@ -159,6 +170,7 @@ def starter_summary(
     speech_failures: Optional[dict[str, str]],
     microphone_enabled: bool,
     engine_failure: Optional[str] = None,
+    left_out: tuple[str, ...] | list[str] = (),
 ) -> tuple[str, str]:
     """(what went well, what failed) as plain sentences; the second is empty when nothing failed.
 
@@ -178,6 +190,8 @@ def starter_summary(
         good.append("Voice engine ready.")
     if not microphone_enabled and (engine_failure == "" or (speech_failures is not None and len(speech_failures) < len(STARTER_SPEECH_MODELS))):
         good.append("Turn on Voice input (microphone) in the Permissions tab to use it.")
+    if left_out:
+        good.append(left_out_sentence(left_out))
     bad: list[str] = []
     for tag, why in pull_failures.items():
         bad.append(f"{tag} did not download ({why}).")

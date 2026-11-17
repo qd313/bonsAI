@@ -94,6 +94,7 @@ from backend.ollama.ollama_urls import normalize_ollama_base
 from backend.ollama.local_setup_progress_text import progress_text_from_line
 from backend.ollama.ollama_pull_failure_text import format_ollama_pull_failure as _format_ollama_pull_failure
 from backend.ollama.starter_set_extras import apply_starter_outcome, run_starter_downloads
+from backend.ollama.starter_left_out import drop_left_out_tags, mark_piece, starter_pieces_at_start
 from backend.ollama.ollama_server_restart import (
     ServeControl,
     record_result,
@@ -792,8 +793,13 @@ async def run_local_setup(
     speech_download: Optional[Callable[[Callable[[str], None], Callable[[str], None], Any], dict[str, str]]] = None,
     microphone_enabled: bool = False,
     engine_build: Optional[Callable[[Callable[[str], None], Callable[[str], None], Any], str]] = None,
+    leave_out: tuple[str, ...] = (),
 ) -> None:
     """Populate ``state`` while installing / pulling models. Plain dict for JSON-RPC compatibility.
+
+    ``leave_out`` (the starter set only, starter_left_out.py) names the pieces the person unticked on the
+    first-time setup: the note-search model leaves the pull list, and the run's status keeps a record of how
+    far each piece got (``starter_pieces``) and its closing line says what was left out.
 
     For the "tier1_essentials" profile (the starter set) a model already installed is not downloaded again,
     a download that fails does not stop the others, and ``speech_download`` (the voice engine's own path,
@@ -854,6 +860,9 @@ async def run_local_setup(
                 tags = resolve_tier2_multimodal_pull_tags()
             if not tags:
                 raise RuntimeError(f"Unknown pull profile: {profile!r}.")
+            if prof == "tier1_essentials":
+                tags = drop_left_out_tags(tags, leave_out)
+                state["starter_pieces"] = starter_pieces_at_start(leave_out)
         state["pull_tags"] = list(tags)
         state["total_pull_steps"] = len(tags)
         models_dir = os.environ.get("OLLAMA_MODELS") or str(Path.home() / ".ollama" / "models")
@@ -883,6 +892,7 @@ async def run_local_setup(
                 cancelled=cancelled,
                 force_reinstall=is_update_installed,
             )
+            mark_piece(state, "ollama", "done")
         installed_now = state.get("stage") == "install"
         await emit_stage(state.get("stage", "install"))
 
@@ -960,7 +970,7 @@ async def run_local_setup(
         state["current_tag"] = ""
         record_result(state, prof, starter["pulled"] if starter else tags, restart_info, ollama_bin, _env_for_ollama_cli(ollama_bin))
         if starter:
-            apply_starter_outcome(state, starter, microphone_enabled)
+            apply_starter_outcome(state, {**starter, "left_out": leave_out}, microphone_enabled)
         log("[bonsAI] Local Ollama setup finished." if state["phase"] == "done" else f"[bonsAI] Setup finished with a problem: {state['error']}")
         await emit_stage(state["stage"], {"error": state["error"][:200]} if state["phase"] == "failed" else None)
 

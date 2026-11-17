@@ -71,6 +71,7 @@ from backend.ollama import ollama_pull_resume_service as pull_resume
 from backend.knowledge.ollama_embed_service import forget_embed_availability_after_pull
 from backend.ollama.starter_speech_models import download_speech_models
 from backend.ollama.starter_voice_engine import build_voice_engine
+from backend.ollama.starter_left_out import parse_leave_out
 from backend.core.capabilities import capability_enabled, downloads_off_refusal
 
 import decky
@@ -79,12 +80,17 @@ logger = decky.logger
 
 
 async def start_local_ollama_setup(self, data: Any = None):
-    """Install/start Ollama on this Linux host and pull Tier-1 FOSS tags (runs in background)."""
+    """Install/start Ollama on this Linux host and pull Tier-1 FOSS tags (runs in background).
+
+    For the starter set, ``leave_out`` may name the pieces the person unticked on the first-time setup
+    (starter_left_out.py); it is kept in the reload note, so a restart leaves out the same pieces.
+    """
     prof = ""
     if isinstance(data, dict):
         prof = str(data.get("profile", data.get("Profile", "")) or "").strip()
     elif isinstance(data, str):
         prof = data.strip()
+    leave_out = parse_leave_out(data.get("leave_out")) if isinstance(data, dict) and prof == "tier1_essentials" else ()
     settings = await self.load_settings()
     if not settings.get("ollama_local_on_deck"):
         out = {
@@ -147,18 +153,18 @@ async def start_local_ollama_setup(self, data: Any = None):
         # builds the voice engine (starter_voice_engine.py). Both are downloads and a build, not listening, so
         # they go ahead with the microphone permission off; the run's closing sentence says the microphone is
         # still off. The Internet downloads permission, checked above, is the only gate.
-        starter_kwargs: dict[str, Any] = {}
+        # With the speech models and the voice engine left out (first-time setup), neither step is handed in.
+        starter_kwargs: dict[str, Any] = {"leave_out": leave_out}
         if prof == "tier1_essentials":
             plugin_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-            starter_kwargs = {
-                "speech_download": lambda log, progress, cancel: download_speech_models(
+            starter_kwargs["microphone_enabled"] = capability_enabled(settings, "microphone_access")
+            if "voice" not in leave_out:
+                starter_kwargs["speech_download"] = lambda log, progress, cancel: download_speech_models(
                     plugin_root, decky.DECKY_PLUGIN_SETTINGS_DIR, log, progress, cancel
-                ),
-                "engine_build": lambda log, progress, cancel: build_voice_engine(
+                )
+                starter_kwargs["engine_build"] = lambda log, progress, cancel: build_voice_engine(
                     plugin_root, decky.DECKY_PLUGIN_SETTINGS_DIR, log, progress, cancel
-                ),
-                "microphone_enabled": capability_enabled(settings, "microphone_access"),
-            }
+                )
 
         async def runner() -> None:
             assert self._local_ollama_cancel_event is not None
@@ -184,13 +190,13 @@ async def start_local_ollama_setup(self, data: Any = None):
                 # keeps the note, so the download starts again on load.
                 pull_resume.clear_note_unless_unloading(decky.DECKY_PLUGIN_SETTINGS_DIR)
 
-        pull_resume.write_note(decky.DECKY_PLUGIN_SETTINGS_DIR, profile=prof, tags=[])
+        pull_resume.write_note(decky.DECKY_PLUGIN_SETTINGS_DIR, profile=prof, tags=[], leave_out=list(leave_out))
         self._local_ollama_setup_task = asyncio.create_task(runner())
 
     await self._maybe_app_log(
         "local_setup.start",
         "setup accepted",
-        fields={"profile": prof, "accepted": True},
+        fields={"profile": prof, "accepted": True, "leave_out": list(leave_out)},
     )
     return {"accepted": True}
 

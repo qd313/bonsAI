@@ -46,14 +46,17 @@ def note_path(settings_dir: str) -> str:
     return os.path.join(settings_dir, NOTE_FILENAME)
 
 
-def write_note(settings_dir: str, *, profile: str, tags: list[str]) -> None:
+def write_note(settings_dir: str, *, profile: str, tags: list[str], leave_out: Optional[list[str]] = None) -> None:
     """Note a download that just started. A note for the same download that is already there
-    (one this very restart came from) keeps its restart count, so the count can add up."""
+    (one this very restart came from) keeps its restart count, so the count can add up. `leave_out` is
+    the starter set's left-out pieces (first-time setup), so the restart leaves out the same ones."""
     previous = read_note(settings_dir, now=None)
-    same = previous is not None and previous["profile"] == profile and previous["tags"] == list(tags)
+    left = list(leave_out or [])
+    same = previous is not None and (previous["profile"], previous["tags"], previous["leave_out"]) == (profile, list(tags), left)
     note = {
         "profile": profile,
         "tags": list(tags),
+        "leave_out": left,
         "started_at": previous["started_at"] if same and previous else time.time(),
         "restarts": previous["restarts"] if same and previous else 0,
     }
@@ -94,7 +97,10 @@ def read_note(settings_dir: str, *, now: Optional[float] = None) -> Optional[dic
         return None
     if now is not None and now - started_at > MAX_NOTE_AGE_SECONDS:
         return None
-    return {"profile": profile, "tags": tags, "started_at": started_at, "restarts": restarts}
+    # A note from before the list existed, or a broken list, leaves nothing out.
+    raw_left = raw.get("leave_out")
+    leave_out = [str(p) for p in raw_left if isinstance(p, str)] if isinstance(raw_left, list) else []
+    return {"profile": profile, "tags": tags, "leave_out": leave_out, "started_at": started_at, "restarts": restarts}
 
 
 def clear_note(settings_dir: str) -> None:
@@ -142,7 +148,7 @@ async def resume_interrupted_download(
     if note["profile"] == "custom":
         out = await rpc.pull_ollama_models(plugin, list(note["tags"]))
     else:
-        out = await rpc.start_local_ollama_setup(plugin, {"profile": note["profile"]})
+        out = await rpc.start_local_ollama_setup(plugin, {"profile": note["profile"], "leave_out": note["leave_out"]})
     accepted = bool(isinstance(out, dict) and out.get("accepted"))
     await plugin._maybe_app_log(
         "local_setup.resume",

@@ -30,7 +30,7 @@ const FOLLOW_HEARTBEAT_MS = 400;
 const DOCK_SELECTOR = ".bonsai-main-tab-dock";
 
 /**
- * How long after an Ask ends the hook keeps an eye on the ring.
+ * How long after an Ask ends the hook keeps an eye on the ring and brings the answer's foot up.
  *
  * These passes used to deliver the answer's TAIL into view, because the slot reload after the
  * finish rebuilt the transcript and threw the pane back to 0 (measured 2026-08-31). Since plan 93
@@ -38,10 +38,25 @@ const DOCK_SELECTOR = ".bonsai-main-tab-dock";
  * and the tail delivery was itself the jump the maintainer reported: on the Deck 2026-10-13
  * (plan93-M4-ANSWER-FINISH.json) the pane sat at 0 for the whole 50 s answer and then jumped
  * 1,264.7 px to the end 0.26 s after the finish. The maintainer's pick: at the finish the view does
- * not move. What is left is one narrow case: the ring is on a control in the chat and that control
- * is wholly out of view (a rebuild the twin could not prevent), and then only that control comes back.
+ * not move by a page.
+ *
+ * Plan 105 (Deck 2026-11-17, plan105-P105-M-ANSWER-END.json) brought back one small piece of it. The
+ * streaming follow keeps the newest line at the fold, and the "Was this helpful?" row, Show details
+ * and the rest of the answer's foot are drawn only once the Ask ends, below where the follow left
+ * the page: it stopped 96.6 px short (Hades) and 167.6 px short (Stardew), with the Helpful buttons
+ * behind the dock or off screen, and the dock then held Show details where the chips belong. So when
+ * the page was following (no pin, nothing moved by the person since the finish, the ring not on a
+ * control in the chat) the foot comes up to the fold, by at most FINISH_DELIVERY_MAX_PX: a foot's
+ * worth, never a page.
  */
 const DELIVERY_WINDOW_MS = 1200;
+
+/**
+ * The most the foot of an answer is brought up at the finish. The rows under an answer are about
+ * 120 to 170 px; the 1,264.7 px jump of plan 93 came from a page that never followed, and more than
+ * this below the fold means exactly that, so the view stays where it is.
+ */
+const FINISH_DELIVERY_MAX_PX = 400;
 
 /** When those passes run, counted from the commit that ended the Ask. */
 const DELIVERY_PASS_DELAYS_MS = [300, 900];
@@ -114,8 +129,9 @@ function transcriptTailIsInView(anchor: HTMLElement, scroll: HTMLElement): boole
 
 /**
  * While tokens stream in, keep the newest text on screen — unless the user has scrolled up, in which
- * case hold exactly where they left off. When the Ask ends the view stays where it is (plan 93): for
- * a short window the hook only brings back a control the ring is on that is wholly out of view.
+ * case hold exactly where they left off. When the Ask ends the view does not jump by a page (plan
+ * 93): for a short window the hook brings back a control the ring is on that is wholly out of view,
+ * or, with the ring not on the chat, brings up the answer's foot by a few hundred px at most (plan 105).
  *
  * HOW it scrolls matters more than when: assigning `scrollTop` on Steam's TabContentsScroll is a
  * no-op on device. Steam's own scroller re-asserts its recorded position around every commit, so a
@@ -147,6 +163,8 @@ export function useStreamScrollPin(
   const wasEnabledRef = useRef(false);
   /** Wall-clock end of the post-Ask delivery window; 0 when no delivery is owed. */
   const deliverUntilRef = useRef(0);
+  /** Where the pane stood at the finish, or after the last foot delivery: a scroll by the person since cancels the next one. */
+  const finishTopRef = useRef<number | null>(null);
   /** The latest pass, for the observer below to call; set by the follow effect each commit. */
   const followRef = useRef<() => void>(() => {});
   /** True while the observer below is the one following the stream, so commits need not. */
@@ -160,7 +178,7 @@ export function useStreamScrollPin(
   const justEnded = wasEnabledRef.current && !enabled;
 
   /*
-   * Reset on every transition, including *into* streaming: a pin taken during the previous answer —
+   * Reset on the way *into* streaming: a pin taken during the previous answer —
    * or by the `expandedTurnKey` scrollIntoView that fires as a turn opens — would otherwise survive
    * into this one and freeze the view before a single token had arrived.
    *
@@ -170,7 +188,9 @@ export function useStreamScrollPin(
    * making the very next scroll event look like the user's.
    */
   useLayoutEffect(() => {
-    pinnedTopRef.current = null;
+    /* Not at the finish: a person who scrolled up to read keeps that pin, so the foot of the answer
+       is not brought up from under them (plan 105). The next answer clears it as it begins. */
+    if (enabled) pinnedTopRef.current = null;
   }, [anchorRef, enabled]);
 
   /*
@@ -273,6 +293,8 @@ export function useStreamScrollPin(
     const anchor = anchorRef.current;
     const scroll = findTabContentsScroll(anchor);
     if (!anchor || !scroll) return;
+    if (enabled) finishTopRef.current = null;
+    else if (justEnded) finishTopRef.current = scroll.scrollTop;
 
     const tailBelowFold = () => anchor.getBoundingClientRect().bottom - visibleBottom(scroll);
 
@@ -286,17 +308,31 @@ export function useStreamScrollPin(
       const ring = ringOnScrollingContent(scroll, anchor);
       if (!enabled) {
         /*
-         * After the finish the tail is never delivered (plan 93: the view does not move). Only a
-         * ring stranded wholly out of view on a control in the chat is brought back, "nearest", the
-         * lift taking it out from behind the dock -- never the answer's end, which on the Deck
-         * 2026-09-23 (plan 64) left a ring on "40 earlier" 656 px above the pane. A ring on the dock,
-         * or on something already in view, moves nothing.
+         * After the finish. A ring stranded wholly out of view on a control in the chat is brought
+         * back, "nearest", the lift taking it out from behind the dock -- never the answer's end,
+         * which on the Deck 2026-09-23 (plan 64) left a ring on "40 earlier" 656 px above the pane.
+         * A ring on a control in the chat that can be seen moves nothing either.
          */
-        if (ring && whollyOutOfView(ring, scroll)) {
-          ring.scrollIntoView({ block: "nearest", behavior: "auto" });
-          liftAboveDock(ring);
-          selfWroteTopRef.current = scroll.scrollTop;
+        if (ring) {
+          if (whollyOutOfView(ring, scroll)) {
+            ring.scrollIntoView({ block: "nearest", behavior: "auto" });
+            liftAboveDock(ring);
+            selfWroteTopRef.current = scroll.scrollTop;
+          }
+          return;
         }
+        /*
+         * Otherwise the page was following, so the answer's foot (the rating row, Show details),
+         * drawn only now, comes up to the fold -- unless the person has scrolled since the finish,
+         * or the foot is further down than a foot can be (see FINISH_DELIVERY_MAX_PX).
+         */
+        const below = tailBelowFold();
+        const moved =
+          finishTopRef.current === null ||
+          Math.abs(scroll.scrollTop - finishTopRef.current) > SELF_SCROLL_EPSILON_PX;
+        if (below <= 0 || below > FINISH_DELIVERY_MAX_PX || moved) return;
+        bringTailToFold(below, below);
+        finishTopRef.current = scroll.scrollTop;
         return;
       }
       const overshoot = tailBelowFold();
@@ -315,14 +351,19 @@ export function useStreamScrollPin(
         : overshoot;
       const step = Math.min(overshoot, room);
       if (step < 1) return;
+      bringTailToFold(overshoot, step);
+    };
 
-      /*
-       * "End of the anchor at the fold", said in the only vocabulary scrollIntoView has: it aligns
-       * to the pane's bottom edge, which the dock covers, and scroll-margin-bottom is the knob
-       * that moves that target up by the covered strip. Recomputed every pass because the strip is
-       * ~245px while the dock overlays and 0 once the pane is at max scroll with the dock back in
-       * normal flow.
-       */
+    /**
+     * Scroll the tail up by `step` of the `overshoot` it sits below the fold.
+     *
+     * "End of the anchor at the fold", said in the only vocabulary scrollIntoView has: it aligns
+     * to the pane's bottom edge, which the dock covers, and scroll-margin-bottom is the knob
+     * that moves that target up by the covered strip. Recomputed every pass because the strip is
+     * ~245px while the dock overlays and 0 once the pane is at max scroll with the dock back in
+     * normal flow.
+     */
+    const bringTailToFold = (overshoot: number, step: number) => {
       const covered = scroll.getBoundingClientRect().bottom - visibleBottom(scroll);
       /* A negative margin leaves the part of the tail the ring's room does not allow below the fold. */
       const leftBelow = Math.floor(overshoot - step);

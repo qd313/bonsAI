@@ -376,6 +376,7 @@ describe("stream scroll follow", () => {
       { initialProps: { text: "first", on: true } }
     );
     act(() => rerender({ text: "final", on: false }));
+    act(() => vi.advanceTimersByTime(2000)); // past the window in which the foot is brought up
     t.scrollIntoView.mockClear();
     t.grow(200);
 
@@ -514,27 +515,28 @@ describe("after the answer finishes", () => {
     return hook;
   }
 
-  it("does not move the pane on the commit that ends the Ask, though the tail is below the fold", () => {
+  it("does not jump a page on the commit that ends the Ask, though the tail is far below the fold", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mountAsk(t);
     expect(t.scrollTop).toBe(150);
     t.scrollIntoView.mockClear();
 
-    // Growth the streaming passes never saw: the final text and "follow off" land together.
-    t.grow(200);
+    // Growth the streaming passes never saw, a page of it (plan 93's 1,264 px): the final text and
+    // "follow off" land together. A foot's worth comes up (see "the answer's foot" below), this does not.
+    t.grow(1000);
     commit(rerender, { text: "final answer text", on: false });
 
     expect(t.scrollTop).toBe(150);
     expect(t.scrollIntoView).not.toHaveBeenCalled();
   });
 
-  it("does not move the pane in the passes after the finish either", () => {
+  it("does not jump a page in the passes after the finish either", () => {
     vi.useFakeTimers();
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mountAsk(t);
     t.scrollIntoView.mockClear();
 
-    t.grow(200);
+    t.grow(1000);
     commit(rerender, { text: "final answer text", on: false });
     act(() => vi.advanceTimersByTime(2000));
 
@@ -597,6 +599,127 @@ describe("after the answer finishes", () => {
 
     expect(t.scrollIntoView.mock.calls.length).toBe(callsAfterWindow);
     expect(t.scrollTop).toBe(0);
+  });
+});
+
+/*
+ * Plan 105 (P105-M-ANSWER-END, Deck 2026-11-17): a long answer finished with the page 96.6 px (Hades)
+ * and 167.6 px (Stardew) short of its end. The "Was this helpful?" row, Show details and the rest of
+ * the answer's foot are drawn only once the Ask ends, below where the follow had left the page, so
+ * the Helpful buttons sat behind the dock or off screen. This is that screen: a dock covering the
+ * foot of the pane, a row that appears at the finish, and where its box is afterwards.
+ */
+describe("the answer's foot at the finish", () => {
+  const DOCK_TOP = 180;
+  const ROW_HEIGHT = 116;
+
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+    document.body.innerHTML = "";
+  });
+
+  /** A transcript with the Ask dock sticky over the pane's last 70 px, and a streaming answer that has been followed. */
+  function longAnswer() {
+    const t = makeTranscript({ contentBottom: 400 });
+    const dock = document.createElement("div");
+    dock.className = "bonsai-main-tab-dock";
+    dock.getBoundingClientRect = () => rect(DOCK_TOP, VIEWPORT_BOTTOM);
+    t.scroll.appendChild(dock);
+    const hook = renderHook(
+      ({ text, on }: { text: string; on: boolean }) => useStreamScrollPin(t.anchorRef, text, on),
+      { initialProps: { text: "streaming", on: true } }
+    );
+    layout();
+    return { t, dock, rerender: hook.rerender };
+  }
+
+  /** The finish: the rating row appears at the foot of the transcript in the same commit the Ask ends. */
+  function finishWithRow(t: ReturnType<typeof makeTranscript>, rerender: (p: { text: string; on: boolean }) => void) {
+    const rowTop = t.anchor.getBoundingClientRect().bottom + t.scrollTop;
+    const row = document.createElement("div");
+    row.className = "bonsai-reply-actions";
+    row.getBoundingClientRect = () => rect(rowTop - t.scrollTop, rowTop + ROW_HEIGHT - t.scrollTop);
+    t.anchor.appendChild(row);
+    t.grow(ROW_HEIGHT);
+    commit(rerender, { text: "final answer text", on: false });
+    return row;
+  }
+
+  it("brings the rating row fully above the dock when the page was following", () => {
+    const { t, rerender } = longAnswer();
+    expect(t.anchor.getBoundingClientRect().bottom).toBe(DOCK_TOP); // following: the tail sits at the fold
+
+    const row = finishWithRow(t, rerender);
+
+    expect(row.getBoundingClientRect().top).toBeGreaterThanOrEqual(0);
+    expect(row.getBoundingClientRect().bottom).toBeLessThanOrEqual(DOCK_TOP);
+    expect(t.directWrites).toBe(0); // by scrollIntoView, as everything here is
+  });
+
+  it("moves the page by the row's own height at the finish, and no more", () => {
+    const { t, rerender } = longAnswer();
+    const before = t.scrollTop;
+
+    const row = finishWithRow(t, rerender);
+
+    // The same numbers the Deck measured, in miniature: the row starts below the fold...
+    expect(row.getBoundingClientRect().bottom).toBeLessThanOrEqual(DOCK_TOP);
+    // ...and the page moved by the row's own height, no more.
+    expect(t.scrollTop - before).toBe(ROW_HEIGHT);
+  });
+
+  it("moves nothing when the person had scrolled up to read", () => {
+    const { t, rerender } = longAnswer();
+    act(() => t.userScrollTo(20));
+    t.scrollIntoView.mockClear();
+
+    finishWithRow(t, rerender);
+
+    expect(t.scrollTop).toBe(20);
+    expect(t.scrollIntoView).not.toHaveBeenCalled();
+  });
+
+  it("moves nothing when the ring is on a control in the chat that can be seen", () => {
+    const { t, rerender } = longAnswer();
+    const chip = document.createElement("div");
+    chip.className = "gpfocus";
+    chip.getBoundingClientRect = () => rect(100 - 0, 140 - 0);
+    chip.scrollIntoView = vi.fn();
+    t.anchor.appendChild(chip);
+    t.scrollIntoView.mockClear();
+    const top = t.scrollTop;
+
+    finishWithRow(t, rerender);
+
+    expect(t.scrollTop).toBe(top);
+    expect(t.scrollIntoView).not.toHaveBeenCalled();
+    expect(chip.scrollIntoView).not.toHaveBeenCalled();
+  });
+
+  it("still brings the row up when the ring is on the question box in the dock", () => {
+    const { t, dock, rerender } = longAnswer();
+    const box = document.createElement("div");
+    box.className = "gpfocus";
+    dock.appendChild(box);
+
+    const row = finishWithRow(t, rerender);
+
+    expect(row.getBoundingClientRect().bottom).toBeLessThanOrEqual(DOCK_TOP);
+  });
+
+  it("stands down when the person scrolls in the second after the finish", () => {
+    vi.useFakeTimers();
+    const { t, rerender } = longAnswer();
+    finishWithRow(t, rerender);
+    act(() => t.userScrollTo(60));
+    t.grow(80); // a late block (notes) arrives below the fold
+    t.scrollIntoView.mockClear();
+
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(t.scrollTop).toBe(60);
+    expect(t.scrollIntoView).not.toHaveBeenCalled();
   });
 });
 

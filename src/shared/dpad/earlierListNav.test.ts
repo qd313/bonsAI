@@ -11,6 +11,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { earlierLineNavHandlers, gameButtonNavHandlers } from "./chatTranscriptNavHelpers";
+import { DIR_LEFT, hearPress } from "../../test-harness/steamLeftPress";
 
 /** Steam's own D-pad press as `onButtonDown` receives it: a GamepadEvent whose detail names the button. */
 const STEAM_LEFT = { detail: { button: 11 } };
@@ -74,5 +75,29 @@ describe("the 'N earlier' line's flip", () => {
     const moves = earlierLineNavHandlers(null);
     expect((moves.onMoveLeft as () => boolean)()).toBe(true);
     expect(moves.onMoveRight).toBeUndefined();
+  });
+});
+
+/*
+ * Plan 105, lane C5 (consult 7): each Left reaching the button-down twin and the move handler both, as Steam hands it on
+ * the Deck. The twin claims it and flips nothing; the move handler flips on the first and second Left in a row and
+ * declines the third, so the list ends as it was and the ring goes out to Steam's menu.
+ */
+describe("the flip line's Left through the button-down twin as well as the move handler", () => {
+  it("flips twice in three presses and hands the third to Steam", () => {
+    const flip = vi.fn();
+    const moves = earlierLineNavHandlers(null, flip);
+    const twin = moves.onButtonDown as (b: unknown) => boolean;
+    const move = moves.onMoveLeft as (e?: unknown) => boolean;
+    const presses = [0, 1, 2].map(() => {
+      hearPress(document, DIR_LEFT);
+      return [twin(STEAM_LEFT), move()];
+    });
+    expect(presses).toEqual([
+      [true, true],
+      [true, true],
+      [true, false],
+    ]);
+    expect(flip).toHaveBeenCalledTimes(2);
   });
 });

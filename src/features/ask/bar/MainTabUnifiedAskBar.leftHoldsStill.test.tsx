@@ -42,6 +42,7 @@ vi.mock("@decky/ui", async () => {
 
 import { MainTabUnifiedAskBar, type MainTabUnifiedAskBarProps } from "./MainTabUnifiedAskBar";
 import { resetNavFocusRegistry } from "../../../shared/dpad/navFocusRegistry";
+import { hearPress } from "../../../test-harness/steamLeftPress";
 
 /**
  * The shape Decky actually delivers to `onButtonDown`: a `GamepadEvent`, which is a `CustomEvent`
@@ -142,5 +143,41 @@ describe("Left on the paperclip", () => {
     const onButtonDown = paperclip?.onButtonDown as (button: unknown) => boolean;
     expect(onButtonDown(gamepadEvent(DIR_LEFT))).toBe(true);
     expect(onButtonDown(gamepadEvent(DIR_RIGHT))).toBe(false);
+  });
+});
+
+/*
+ * Plan 105, lane C5 (consult 7): on the Deck Steam hands one D-pad press to the button-down twin as well as to the move
+ * handler. The twin claims a Left but never counts it, so the count is the move handler's alone: three presses still
+ * hold twice and hand the third to Steam, and Lefts that reach only the twin never add to the count.
+ */
+describe("the paperclip's Left through the button-down twin as well as the move handler", () => {
+  it("each press reaching both: the twin claims every one, the move handler holds twice and declines the third", () => {
+    render(<MainTabUnifiedAskBar {...buildProps()} />);
+    const paperclip = buttonProps("bonsai-unified-input-corner-left")!;
+    const twin = paperclip.onButtonDown as (b: unknown) => boolean;
+    const move = paperclip.onMoveLeft as (e?: unknown) => boolean;
+    const presses = [0, 1, 2].map(() => {
+      hearPress(document, DIR_LEFT);
+      return [twin(gamepadEvent(DIR_LEFT)), move()];
+    });
+    expect(presses).toEqual([
+      [true, true],
+      [true, true],
+      [true, false],
+    ]);
+  });
+
+  it("Lefts that reach only the twin hold and never count: the next move-handler Left is still the first", () => {
+    render(<MainTabUnifiedAskBar {...buildProps()} />);
+    const paperclip = buttonProps("bonsai-unified-input-corner-left")!;
+    const twin = paperclip.onButtonDown as (b: unknown) => boolean;
+    const move = paperclip.onMoveLeft as (e?: unknown) => boolean;
+    for (let i = 0; i < 5; i++) expect(twin(gamepadEvent(DIR_LEFT))).toBe(true);
+    const moves = [0, 1, 2].map(() => {
+      hearPress(document, DIR_LEFT);
+      return move();
+    });
+    expect(moves).toEqual([true, true, false]);
   });
 });

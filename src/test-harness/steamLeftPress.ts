@@ -20,6 +20,7 @@
 import { act } from "@testing-library/react";
 
 import { putSteamRingOn } from "./steamRing";
+import { advanceLeftEdgeClockForTests } from "../shared/dpad/leftEdge";
 
 /** Steam's button numbers (`@decky/ui`, `GamepadButton`). */
 export const DIR_LEFT = 11;
@@ -28,8 +29,16 @@ export const DIR_DOWN = 10;
 
 type NavEl = HTMLElement & { __nav?: Record<string, ((e?: unknown) => unknown) | undefined> };
 
-/** A press heard at the panel's page: `vgp_onbuttondown` on `at` (a control, or the page), bubbling, as on the Deck. */
-export function hearPress(at: Element | Document, button: number, repeat = false): void {
+/** A person's separate presses come this far apart; a held-down Left repeats this fast (leftEdge.ts's floor sits between). */
+const PRESS_GAP_MS = 400;
+const REPEAT_GAP_MS = 50;
+
+/**
+ * A press heard at the panel's page: `vgp_onbuttondown` on `at` (a control, or the page), bubbling, as on the Deck. A
+ * Left also moves the count's clock on by `gapMs`: a separate press's gap by default, a repeat's when `repeat`.
+ */
+export function hearPress(at: Element | Document, button: number, repeat = false, gapMs?: number): void {
+  if (button === DIR_LEFT) advanceLeftEdgeClockForTests(gapMs ?? (repeat ? REPEAT_GAP_MS : PRESS_GAP_MS));
   const doc = (at as Element).ownerDocument ?? (at as Document);
   const Custom = (doc.defaultView ?? window).CustomEvent;
   at.dispatchEvent(new Custom("vgp_onbuttondown", { detail: { button, is_repeat: repeat, source: 0 }, bubbles: true }));

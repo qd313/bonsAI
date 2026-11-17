@@ -13,7 +13,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   LEFT_PRESSES_TO_LEAVE,
+  LEFT_REPEAT_FLOOR_MS,
   LEFT_RUN_PAUSE_MS,
+  advanceLeftEdgeClockForTests,
   leftActedInPlace,
   leftAtEdge,
   leftEdgePress,
@@ -92,7 +94,8 @@ describe("what starts a run again", () => {
     vi.advanceTimersByTime(LEFT_RUN_PAUSE_MS + 1);
     expect(lefts(3)).toEqual(["held", "held", "leave"]);
     lefts(2);
-    vi.advanceTimersByTime(LEFT_RUN_PAUSE_MS - 200);
+    /* The third press itself comes 400 ms on (steamLeftPress.ts), so 1.8 s in all. */
+    vi.advanceTimersByTime(LEFT_RUN_PAUSE_MS - 600);
     expect(left()).toBe("leave");
   });
 
@@ -136,7 +139,9 @@ describe("Left held down", () => {
     left();
     hearPress(page, DIR_LEFT);
     expect(leftEdgePress("paperclip", { detail: { button: DIR_LEFT, is_repeat: true } })).toBe("repeat");
+    advanceLeftEdgeClockForTests(400);
     expect(leftEdgePress("paperclip", { detail: { button: DIR_LEFT, is_repeat: false } })).toBe("held");
+    advanceLeftEdgeClockForTests(400);
     expect(leftEdgePress("paperclip", { detail: { button: DIR_LEFT, is_repeat: false } })).toBe("leave");
   });
 
@@ -150,5 +155,32 @@ describe("Left held down", () => {
     hearPress(page, DIR_LEFT, true);
     expect(leftEdgePress("paperclip")).toBe("repeat");
     expect(leftEdgePress("paperclip")).toBe("unheard");
+  });
+});
+
+describe("the time floor (consult 7): a held Left never leaves, even with no repeat mark", () => {
+  /** A fresh-marked Left (no repeat mark), `gap` ms after the last. */
+  const tapAfter = (gap: number) => {
+    hearPress(page, DIR_LEFT, false, gap);
+    return leftEdgePress("paperclip");
+  };
+
+  it("is about 150 ms", () => {
+    expect(LEFT_REPEAT_FLOOR_MS).toBe(150);
+  });
+
+  it("three Lefts 100 ms apart never leave; nor do ten", () => {
+    expect([100, 100, 100].map(tapAfter)).toEqual(["held", "repeat", "repeat"]);
+    expect(Array.from({ length: 10 }, () => tapAfter(100))).not.toContain("leave");
+  });
+
+  it("three Lefts 400 ms apart do leave", () => {
+    expect([400, 400, 400].map(tapAfter)).toEqual(["held", "held", "leave"]);
+  });
+
+  it("a held Left whose repeats carry no mark (a first repeat after 450 ms, then every 100 ms) counts at most twice", () => {
+    const out = [tapAfter(400), tapAfter(450), ...Array.from({ length: 30 }, () => tapAfter(100))];
+    expect(out.filter((o) => o === "held").length).toBeLessThanOrEqual(2);
+    expect(out).not.toContain("leave");
   });
 });

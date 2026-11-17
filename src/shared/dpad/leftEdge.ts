@@ -29,7 +29,10 @@
  *    heard is "repeat". A call with nothing heard at all is "unheard": not counted either (the safer side, so a
  *    held Left can never leave), but a place whose Left also does something (the "N earlier" line's flip) still
  *    does it, as before this file. The very first call, made before the listener could hear anything, counts:
- *    a held first press then counts once and its repeats, heard, do not.
+ *    a held first press then counts once and its repeats, heard, do not. A time floor backs the repeat mark
+ *    (consult 7): a fresh Left that comes within `LEFT_REPEAT_FLOOR_MS` (about 150 ms) of the last Left call does
+ *    not count either, so a held Left can never leave even if Steam leaves the mark off. The cost: taps quicker than
+ *    about seven a second count as one, so a very fast spammer leaves once the taps slow a little.
  * 3. The run starts again on: any other button the plugin knows (Up, Down, Right, A, B, X, Y, View, Menu, the
  *    shoulders and triggers), heard at the same page; a finger on the screen; the panel hiding or showing; a
  *    Left at another place or with Steam's ring on another control than the last counted one; about two seconds
@@ -45,6 +48,8 @@ import { getUiDocument, uiGamepadFocusElement } from "./uiDocument";
 export const LEFT_PRESSES_TO_LEAVE = 3;
 /** With no Left for this long, a run starts again (consult 7: "about two seconds"). */
 export const LEFT_RUN_PAUSE_MS = 2000;
+/** A fresh Left this soon after the last Left call does not count: the pace of a held-down repeat (consult 7). */
+export const LEFT_REPEAT_FLOOR_MS = 150;
 
 /**
  * What one Left at a dead end does: hold and count it ("held"), hold a held-down repeat ("repeat"), hold a press the
@@ -64,6 +69,11 @@ let run: Run = empty();
 let heardFresh = false;
 let heardRepeat = false;
 const listening = new WeakSet<Document>();
+/** When the last Left call at a dead end came, counted or not (for the floor). */
+let lastCallAt = Number.NEGATIVE_INFINITY;
+/** Time a test has moved on by hand (`advanceLeftEdgeClockForTests`); always 0 in the plugin. */
+let testClockOffset = 0;
+const clock = (): number => Date.now() + testClockOffset;
 
 function restart(): void {
   run = empty();
@@ -102,8 +112,8 @@ function listen(doc: Document): boolean {
 /**
  * In: the dead end's name (one per kind of place, e.g. "ask-paperclip") and, when Steam hands the move handler
  * its press, that press. Out: "held" (claim it, the run counted one), "repeat" (claim it, a held-down Left that
- * does not count), "unheard" (claim it, nothing heard for it, not counted) or "leave" (decline it, so Steam's own
- * Left takes the ring out).
+ * does not count, or a fresh one too soon after the last), "unheard" (claim it, nothing heard for it, not counted)
+ * or "leave" (decline it, so Steam's own Left takes the ring out).
  * Can go wrong: nothing; with no panel document yet the global one is used.
  */
 export function leftEdgePress(place: string, evt?: unknown): LeftEdgeOutcome {
@@ -114,13 +124,16 @@ export function leftEdgePress(place: string, evt?: unknown): LeftEdgeOutcome {
   const heard = said || heardFresh || heardRepeat || firstHearing;
   heardFresh = false;
   heardRepeat = false;
-  const now = Date.now();
+  const now = clock();
+  const tooSoon = now - lastCallAt < LEFT_REPEAT_FLOOR_MS;
+  lastCallAt = now;
   const stop = uiGamepadFocusElement();
   if (run.place !== place || run.stop !== stop || now - run.lastAt > LEFT_RUN_PAUSE_MS) {
     run = { count: 0, place, stop, lastAt: now };
   }
   run.lastAt = now;
   if (!fresh) return heard ? "repeat" : "unheard";
+  if (tooSoon) return "repeat";
   run.count += 1;
   if (run.count < LEFT_PRESSES_TO_LEAVE) return "held";
   restart();
@@ -142,4 +155,11 @@ export function resetLeftEdgeForTests(): void {
   restart();
   heardFresh = false;
   heardRepeat = false;
+  lastCallAt = Number.NEGATIVE_INFINITY;
+  testClockOffset = 0;
+}
+
+/** Test-only: move the count's clock on by `ms`, as the time between a person's presses. */
+export function advanceLeftEdgeClockForTests(ms: number): void {
+  testClockOffset += ms;
 }

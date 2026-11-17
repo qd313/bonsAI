@@ -101,6 +101,7 @@ import { tryMoveUpWithPanelScroll } from "../../shared/dpad/settingsPanelScroll"
 import { registerModalReturnFocusOwner } from "../../shared/dpad/modalReturnFocusRegistry";
 import { OllamaSavedHostsRows } from "./OllamaSavedHostsRows";
 import { OllamaLocalSetupBlock, type LocalSetupEntry } from "./OllamaLocalSetupBlock";
+import { OllamaConnectionLine } from "./OllamaConnectionLine";
 import { lastRunningOllamaSetupStatus, noteOllamaSetupStatus, useOllamaSetupStatusReader } from "./ollamaSetupJob";
 import { useOllamaLocalAutostart } from "./useOllamaLocalAutostart";
 import { useMdnsOllamaDiscovery } from "./useMdnsOllamaDiscovery";
@@ -220,6 +221,8 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   /** True while an Install / Update press waits for that check; the button reads "Checking…" and a second press does nothing. */
   const [checkingBeforeStart, setCheckingBeforeStart] = useState(false);
   const [connectionTesting, setConnectionTesting] = useState(false);
+  /** True while any check is out, the quiet one when the tab opens included: the connection line reads "Checking". */
+  const [probing, setProbing] = useState(false);
   const [mdnsDiscovering, setMdnsDiscovering] = useState(false);
   const [mdnsHosts, setMdnsHosts] = useState<MdnsOllamaHost[]>(
     () => peekOllamaTabLocalPending()?.mdnsHosts ?? []
@@ -285,21 +288,12 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   );
 
   /*
-   * Put the ring on a button of the chain, unless the plugin itself has it greyed. A greyed Decky
-   * button is not a disabled control: it keeps its place in Steam's graph and takes the ring
-   * (measured 2026-09-16, 2026-10-12), so asking the button whether it is `disabled` never skips
-   * one -- that is how Down from Update landed on greyed Browse and Cancel could not be reached.
-   * `greyed` is the plugin's own state for that button.
+   * Test connection is greyed exactly when its own `disabled` prop below says so: only with the AI on a PC. On this
+   * Deck it is the connection line, a stop in every state (a check, or a setup run, going included), so the chain
+   * through it is the same both ways. A greyed Decky button is not a disabled control: it keeps its place in Steam's
+   * graph and takes the ring (measured 2026-09-16, 2026-10-12), so the plugin's own state decides, never `disabled`.
    */
-  const focusChainBtn = useCallback((ref: { current: HTMLButtonElement | null }, greyed: boolean): boolean => {
-    const el = ref.current;
-    if (!el || greyed) return false;
-    focusInTabBody(el);
-    return true;
-  }, []);
-
-  /* Test connection is greyed exactly when its own `disabled` prop below says so. */
-  const testConnectionGreyed = connectionTesting || localSetupBusy || (!ollamaLocalOnDeck && !ollamaIp.trim());
+  const testConnectionGreyed = !ollamaLocalOnDeck && (connectionTesting || !ollamaIp.trim());
 
   /* Find LAN's own Steam node: after its box closes the ring comes back through Steam's transfer, then a plain focus if that did not land it. */
   const findLanNavRef = useRef<SteamNode>(null);
@@ -335,8 +329,8 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   );
 
   const focusConnectionTestBtn = useCallback(
-    (): boolean => focusChainBtn(connectionTestBtnRef ?? { current: null }, testConnectionGreyed),
-    [connectionTestBtnRef, focusChainBtn, testConnectionGreyed],
+    (): boolean => !testConnectionGreyed && takeTestConnection(),
+    [takeTestConnection, testConnectionGreyed],
   );
 
   /** Down from the last button of the chain: Test connection, or (it is disabled while a setup runs) on to the next section. */
@@ -456,6 +450,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     let finish: () => void = () => {};
     const running = new Promise<void>((r) => (finish = r));
     probeInFlightRef.current = running;
+    setProbing(true);
     try {
       const result = await callDeckyWithTimeout<[string, number], ConnectionStatus>(
         "test_ollama_connection",
@@ -474,6 +469,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     } finally {
       if (!quiet) setConnectionTesting(false);
       if (probeInFlightRef.current === running) probeInFlightRef.current = null;
+      if (seq === probeSeqRef.current) setProbing(false);
       finish();
     }
   };
@@ -666,6 +662,22 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
               gap: 6,
             }}
           >
+            {ollamaLocalOnDeck ? (
+              <OllamaConnectionLine
+                status={connectionStatus}
+                checking={connectionTesting || probing}
+                address={OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP}
+                // A check while a setup runs could start the service under the installer: A waits until it ends.
+                onTest={() => void (localSetupBusy || connectionTesting ? undefined : onTestConnection())}
+                navRef={testRowNavRef}
+                onMoveUp={handleMoveUpFromConnection}
+                onMoveDown={() => {
+                  onMoveDownFromConnectionRow?.();
+                  return true;
+                }}
+                buttonRef={connectionTestBtnRef}
+              />
+            ) : (
             <Focusable
               className="bonsai-settings-connection-row"
               flow-children="horizontal"
@@ -680,69 +692,53 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 boxSizing: "border-box",
               }}
             >
-              {!ollamaLocalOnDeck ? (
+              <div
+                ref={(box) => {
+                  // focus-patterns-allow: element-scoped query on this component's own wrapper, for the input Steam's text field draws (the Search find box does the same).
+                  addressInputRef.current = box?.querySelector("input") ?? null;
+                }}
+                style={{
+                  flex: "1 1 auto",
+                  minWidth: 0,
+                  overflow: "hidden",
+                }}
+              >
                 <div
-                  ref={(box) => {
-                    // focus-patterns-allow: element-scoped query on this component's own wrapper, for the input Steam's text field draws (the Search find box does the same).
-                    addressInputRef.current = box?.querySelector("input") ?? null;
-                  }}
                   style={{
-                    flex: "1 1 auto",
-                    minWidth: 0,
-                    overflow: "hidden",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontVariant: "small-caps",
-                      letterSpacing: "0.06em",
-                      fontSize: textPx(11),
-                      fontWeight: 600,
-                      color: "#b8c6d6",
-                      marginBottom: 2,
-                    }}
-                  >
-                    PC address
-                  </div>
-                  <TextField
-                    label=""
-                    value={ollamaIp}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onOllamaIpChange(e.target.value)}
-                    {...({ onMoveDown: handleMoveDownFromAddress, onMoveUp: takeSaveRow, navRef: addressNavRef } as Record<string, unknown>)}
-                    style={{
-                      width: "100%",
-                      minWidth: 0,
-                      maxWidth: "100%",
-                    }}
-                  />
-                  <div className="bonsai-prose" style={{ fontSize: textPx(10), color: "#6b7c90", marginTop: 4, lineHeight: 1.35 }}>
-                    {OLLAMA_ROW_HELP.pcAddress}
-                  </div>
-                  {isHttpsOllamaAddress(ollamaIp) ? (
-                    <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "tomato", marginTop: 4 }}>
-                      {OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE}
-                    </div>
-                  ) : null}
-                </div>
-              ) : (
-                <div
-                  className="bonsai-prose"
-                  style={{
-                    flex: "1 1 auto",
+                    fontVariant: "small-caps",
+                    letterSpacing: "0.06em",
                     fontSize: textPx(11),
+                    fontWeight: 600,
                     color: "#b8c6d6",
-                    lineHeight: 1.35,
-                    paddingBottom: 8,
+                    marginBottom: 2,
                   }}
                 >
-                  Ollama runs on this Deck at <span style={{ color: "#9ce7ff" }}>127.0.0.1:11434</span>
+                  PC address
                 </div>
-              )}
+                <TextField
+                  label=""
+                  value={ollamaIp}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => onOllamaIpChange(e.target.value)}
+                  {...({ onMoveDown: handleMoveDownFromAddress, onMoveUp: takeSaveRow, navRef: addressNavRef } as Record<string, unknown>)}
+                  style={{
+                    width: "100%",
+                    minWidth: 0,
+                    maxWidth: "100%",
+                  }}
+                />
+                <div className="bonsai-prose" style={{ fontSize: textPx(10), color: "#6b7c90", marginTop: 4, lineHeight: 1.35 }}>
+                  {OLLAMA_ROW_HELP.pcAddress}
+                </div>
+                {isHttpsOllamaAddress(ollamaIp) ? (
+                  <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "tomato", marginTop: 4 }}>
+                    {OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE}
+                  </div>
+                ) : null}
+              </div>
               {/* A Decky Button never passes move handlers on, so Steam's moves are caught on this wrapper. */}
               <Focusable
                 {...focusableMoves(() => handleMoveUpFromConnection(), onMoveDownFromConnectionRow)}
                 {...({ onMoveRight: handleMoveRightFromTest, navRef: testRowNavRef } as Record<string, unknown>)}
-                /* Folded (plan 91): beside the address on this Deck too, not on a line of its own. */
                 style={{ display: "flex", flex: "0 0 auto", alignSelf: "flex-end" }}
               >
               <Button
@@ -755,9 +751,9 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 style={{
                   marginBottom: 2,
                   minHeight: 38,
-                  minWidth: ollamaLocalOnDeck ? 0 : 68,
+                  minWidth: 68,
                   height: 38,
-                  maxWidth: ollamaLocalOnDeck ? undefined : 68,
+                  maxWidth: 68,
                   padding: "0 8px",
                   fontSize: textPx(11),
                   fontWeight: 600,
@@ -768,7 +764,8 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 }}
                 aria-label={connectionTesting ? "Testing Ollama connection" : "Test connection to Ollama"}
               >
-                {connectionTesting ? "…" : "Test connection"}
+                {/* A word, at the button's own width, not a lone "…" (board 5, tab 2). */}
+                {connectionTesting ? "Testing" : "Test connection"}
               </Button>
               </Focusable>
               {findLanShown ? (
@@ -810,6 +807,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 </Focusable>
               ) : null}
             </Focusable>
+            )}
             {!ollamaLocalOnDeck ? (
               <div
                 className="bonsai-prose"
@@ -887,7 +885,9 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             </div>
           </PanelSectionRow>
         ) : null}
+        {/* With the AI on this Deck the connection line above says all of this itself. */}
         {connectionStatus &&
+        !ollamaLocalOnDeck &&
         !(
           connectionStatus.error === OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE &&
           !ollamaLocalOnDeck &&

@@ -6,7 +6,7 @@
  * Browse for one job card and the ring is on the card's Cancel on the same press; a second A in the first half second
  * cancels nothing (a double press cannot start and cancel at once); a later A cancels once and the card reads
  * "Stopping the update"; when the run ends the card goes and the ring is on Update, never on nothing; Browse models
- * has no dots.
+ * has no dots. The connection line keeps one height and the ring through a check, and A on it waits while a run goes.
  *
  * Does not: know Steam's real timing; the Deck row reads the ring after each change.
  */
@@ -34,6 +34,7 @@ import { putSteamRingOn, steamRingHolder } from "../../test-harness/steamRing";
 const UPDATE = "Update AI engine and installed models";
 const BROWSE = "Browse and pull Ollama models";
 const CANCEL = "Cancel local Ollama setup";
+const LINE = "[data-bonsai-connection-line]";
 const RUNNING = { phase: "running", stage: "install", profile: "update_installed", done: false, accepted: true };
 
 let status: Record<string, unknown> = { phase: "idle", stage: "", profile: "", done: true };
@@ -125,5 +126,37 @@ describe("Update AI & models becomes one job card", () => {
     expect(byLabel(BROWSE)!.textContent).toBe("Browse models›");
     expect(byLabel(BROWSE)!.textContent).not.toContain("…");
     expect(screen.getByText("From ollama.com and registry.ollama.ai")).toBeTruthy();
+  });
+});
+
+describe("the connection line", () => {
+  it("keeps one height and the ring through a check: Checking the connection, then Connected to this Deck's AI", async () => {
+    let answer: (v: unknown) => void = () => {};
+    draw();
+    await screen.findByText("Connected to this Deck's AI");
+    const line = document.querySelector<HTMLElement>(LINE)!;
+    expect(line.style.height).toBe("44px");
+    setRpcHandler("test_ollama_connection", () => new Promise((r) => (answer = r)));
+    act(() => putSteamRingOn(line));
+    await act(async () => void fireEvent.click(line));
+    expect(screen.getByText("Checking the connection")).toBeTruthy();
+    expect(steamRingHolder()).toBe(line);
+    expect(line.style.height).toBe("44px");
+    expect(line.textContent).not.toContain("…");
+    await act(async () => void answer({ reachable: false, error: "Connection refused" }));
+    expect(screen.getByText("Not reachable: Test again")).toBeTruthy();
+    expect(screen.getByText("Connection refused")).toBeTruthy();
+    expect(steamRingHolder()).toBe(document.querySelector(LINE));
+    expect(document.querySelector<HTMLElement>(LINE)!.style.height).toBe("44px");
+  });
+
+  it("A on it while a run goes starts no check: one could start the service under the installer", async () => {
+    status = RUNNING;
+    draw();
+    await screen.findByLabelText(CANCEL);
+    await screen.findByText("Connected to this Deck's AI");
+    const before = getRpcCallLog().filter((c) => c.method === "test_ollama_connection").length;
+    await act(async () => void fireEvent.click(document.querySelector<HTMLElement>(LINE)!));
+    expect(getRpcCallLog().filter((c) => c.method === "test_ollama_connection")).toHaveLength(before);
   });
 });

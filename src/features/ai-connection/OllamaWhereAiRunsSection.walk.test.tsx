@@ -166,24 +166,26 @@ describe("Where AI runs on a Deck", () => {
     await screen.findByLabelText("Cancel local Ollama setup");
     expect(document.querySelector(`[aria-label="${UPDATE}"]`)).toBeNull();
     expect(document.querySelector(`[aria-label="${BROWSE}"]`)).toBeNull();
-    // The stand-in tells the Deck's truth: a greyed button is not native-disabled and would take the ring.
-    expect(isGreyedDeckyButton(document.querySelector(`[aria-label="${TEST}"]`))).toBe(true);
+    // The connection line is a stop in every state, a run going included: never greyed, so never a dead stop.
+    await screen.findByLabelText(TEST);
+    expect(isGreyedDeckyButton(document.querySelector(`[aria-label="${TEST}"]`))).toBe(false);
   });
 
-  it("while a setup runs the chain walks Down and Up through the card's Cancel, each stop once, with Test greyed and skipped by the plugin's own state", async () => {
+  it("while a setup runs the chain walks Down and Up through the card's Cancel and the connection line, each stop once", async () => {
     setRpcHandler("get_local_ollama_setup_status", () => ({ phase: "running", stage: "install", log_tail: [] }));
     const { exitDown } = draw();
     const CANCEL = "Cancel local Ollama setup";
     await screen.findByLabelText(CANCEL);
+    await screen.findByLabelText(TEST);
     await act(async () => void (document.querySelector(`[aria-label="${RUN}"]`) as HTMLElement).focus());
 
     const down: string[] = [here()];
-    for (let i = 0; i < 8 && here() !== CANCEL; i++) {
+    for (let i = 0; i < 8 && here() !== TEST; i++) {
       expect(press(here(), "onMoveDown")).toBe(true);
       down.push(here());
     }
-    expect(down).toEqual([RUN, BOOT, CANCEL]);
-    press(CANCEL, "onMoveDown");
+    expect(down).toEqual([RUN, BOOT, CANCEL, TEST]);
+    press(TEST, "onMoveDown");
     expect(exitDown).toHaveBeenCalledTimes(1);
 
     const up: string[] = [here()];
@@ -191,8 +193,8 @@ describe("Where AI runs on a Deck", () => {
       expect(press(here(), "onMoveUp")).toBe(true);
       up.push(here());
     }
-    expect(up).toEqual([CANCEL, BOOT, RUN]);
-    expect(new Set([...down, ...up]).size).toBe(3);
+    expect(up).toEqual([TEST, CANCEL, BOOT, RUN]);
+    expect(new Set([...down, ...up]).size).toBe(4);
   });
 
   it("each switch's Up and Down sit on a Focusable around it, not on the switch, so Down from Start the AI lands on Update", async () => {

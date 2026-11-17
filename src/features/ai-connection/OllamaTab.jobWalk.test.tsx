@@ -5,7 +5,8 @@
  * run going, Where AI runs open as on a first visit, walked Down from the tab bar to the end and back Up a bounded
  * number of presses, the D-pad pressed the way Steam calls it and Steam's own scroll-into-view modelled three ways
  * (foldedTabWalk.tsx). The job card's Cancel stands in for Update and Browse: it is visited once each way, Update
- * and Browse are not stops at all, no stop is visited twice, and every landing is on screen and clear of the strip.
+ * and Browse are not stops at all, the connection line is a stop both ways (Down used to skip Test connection while
+ * Up landed on it), no stop is visited twice, and every landing is on screen and clear of the strip.
  *
  * Does not: know the Deck's real heights (the harness's flow model) or Steam's real timing; the Deck row reads it.
  */
@@ -36,6 +37,7 @@ import { markSettingsLoaded, resetSettingsLoadedSignalForTests } from "../settin
 const DECK_PANE = 430;
 const RULES: SteamFocusScroll[] = ["nearest", "centerIfHidden", "center"];
 const CANCEL = "Cancel local Ollama setup";
+const TEST = "Test connection to Ollama";
 /** The plugin's ring on a plain button reaches 4 px outside it (2 px outline, 2 px offset: scopeBase.ts). */
 const RING_REACH = 4;
 
@@ -73,13 +75,15 @@ describe("the Ollama tab while an install or update runs", () => {
       const down = [w.enter(), ...w.walk("down")];
       expect(repeats(down), names(down).join(" | ")).toBe(0);
       const order = names(down);
-      expect(order.slice(0, 4)).toEqual([expect.stringMatching(/^Where AI runs/), "Run AI on this Deck", "Start the AI with the Deck", CANCEL]);
+      expect(order.slice(0, 5)).toEqual([expect.stringMatching(/^Where AI runs/), "Run AI on this Deck", "Start the AI with the Deck", CANCEL, TEST]);
+      expect(order[5]).toMatch(/^Knowledge base/);
       expect(order.some((n) => /Update AI|Install Ollama|Browse/.test(n))).toBe(false);
       checkLandings(down, `${steam} down`);
       const up = w.walk("up");
       expect(repeats(up), names(up).join(" | ")).toBe(0);
       expect(names(up).filter((n) => n === CANCEL)).toHaveLength(1);
-      expect(names(up).slice(-4)).toEqual([CANCEL, "Start the AI with the Deck", "Run AI on this Deck", expect.stringMatching(/^Where AI runs/)]);
+      // The same stops both ways: Up through Where AI runs is Down's order turned round.
+      expect(names(up).slice(-5)).toEqual([TEST, CANCEL, "Start the AI with the Deck", "Run AI on this Deck", expect.stringMatching(/^Where AI runs/)]);
       checkLandings(up, `${steam} up`);
       w.unmount();
     });

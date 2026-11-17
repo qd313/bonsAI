@@ -951,10 +951,14 @@ Start the AI with the Deck (switch)
 Update AI & models   (reads "Checking..." while a press waits for the connection check)
    | Down  -> Browse models                ^ Up -> Start the AI with the Deck
 Browse models  >
-   | Down  -> Test connection, else on     ^ Up -> Update AI & models
+   | Down  -> the connection line          ^ Up -> Update AI & models
 -- a run going ---------------------------------------------------------
 [ job card: title, bar, what it is doing, how far, the sites ]  Cancel
-   | Down  -> Test connection, else on     ^ Up -> Start the AI with the Deck
+   | Down  -> the connection line          ^ Up -> Start the AI with the Deck
+   Left and Right hold still
+------------------------------------------------------------------------
+( dot ) Connected to this Deck's AI / Ollama v0.40.2 . 3 models . 127.0.0.1:11434   (the connection line)
+   | Down  -> the next section's line      ^ Up -> Browse models, or the card's Cancel
    Left and Right hold still
 ```
 
@@ -972,14 +976,23 @@ Browse models  >
   Update cannot start and cancel at once. Later, A sends the cancel once and the card reads "Stopping the update".
 - **When the run ends** (finished, failed or cancelled) the card goes and a ring on Cancel goes to Update (Deck
   2026-10-14, plan93-P93-B10-CANCEL.json); a ring anywhere else stays where it is.
+- **The connection line is Test connection and its result in one** (`OllamaConnectionLine.tsx`; board 5 tab 2, round 1
+  C), 44 px in every state: "Not tested yet", "Checking the connection" (also while the quiet check runs as the tab
+  opens), "Connected to this Deck's AI" or "Not reachable: Test again", with the full sentence on the row for the help
+  strip. It is a stop in every state, a run going included, so the chain through it is the same Down and Up (before,
+  Test connection was greyed during a run: Down skipped it, Up from the next line landed on it). A on it while a run
+  goes starts no check (a check can start the service under the installer). The ring stays on it through a check:
+  the line's words change, the element does not. With the AI on a PC the row keeps the address box, Test connection
+  (which reads "Testing" while it checks, not a lone "…") and Find LAN side by side, as before.
 - **The lines under the buttons are not a stop.** Plain text: the last result (or the hint before any run) and the sites
   the downloads come from, read from the back end's setup status, so a rebuilt tab still shows them. The raw installer
   lines are not on the tab any more; they go to the plugin's log.
 - Pinned by `OllamaWhereAiRunsSection.walk.test.tsx` (the walk, with and without a run),
   `OllamaWhereAiRunsSection.jobCard.test.tsx` (the ring on Cancel at the press, the half-second guard, the ring on
-  Update at the end, read off Steam's marker), `OllamaTab.jobWalk.test.tsx` (the whole tab walked with a run going,
-  Steam's scroll modelled) and `OllamaWhereAiRunsSection.inPlaceSetup.test.tsx` (no box, the lines). Device row:
-  P105-OLLAMA-BUTTONS-01.
+  Update at the end, read off Steam's marker; the connection line's height and ring through a check),
+  `OllamaTab.jobWalk.test.tsx` (the whole tab walked with a run going, Steam's scroll modelled, the same stops both
+  ways), `OllamaConnectionLine.test.tsx` (its four states) and `OllamaWhereAiRunsSection.inPlaceSetup.test.tsx` (no
+  box, the lines). Device row: P105-OLLAMA-BUTTONS-01.
 
 ### The About tab, one line per row (plan 92, lane T3; plan 91 § 6)
 

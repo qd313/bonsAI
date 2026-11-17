@@ -88,8 +88,8 @@ describe("OllamaWhereAiRunsSection Find LAN", () => {
     expect(screen.queryByText("Find LAN")).toBeNull();
     act(() => publishDeveloperTabShown(true));
     expect(screen.queryByText("Find LAN")).toBeNull();
-    // The rest of the connection row stays.
-    expect(screen.getByText("Test connection")).toBeTruthy();
+    // The connection line stands in for the row on this Deck (plan 105, lane D4): one line that is the Test button.
+    expect(document.querySelector("[data-bonsai-connection-line]")).not.toBeNull();
   });
 
   it("asks first, searches, lists the PC it found, and Use fills the address", async () => {

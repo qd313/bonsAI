@@ -404,7 +404,7 @@ question 1 ... question 6       (Up from question 1: transfer to the lit button)
 - **Pinned by** `MainTabChatTranscript.earlierByGame.test.tsx` (the buttons, the flip, and walks Down and Up under
   Steam's scroll three ways with the dock at 290 and lifted to 262: no stop twice, all on screen, Up retracing Down),
   `MainTabChatTranscript.searchJump.test.tsx` (the jump in both groupings, also while a question is being written),
-  `earlierTurnsByGame.test.ts` and `earlierListNav.test.ts`. Device row: P105-EARLIER-BY-GAME-01 (not yet run).
+  `earlierTurnsByGame.test.ts` and `earlierListNav.test.ts`. Device row: P105-EARLIER-BY-GAME-01 (run once 2026-11-17, block D2: unclear, because no question in the test chat had a game name; still owed).
 
 ### The ask box's strip (plan 84)
 
@@ -1085,7 +1085,7 @@ Try order for [ Text ][ Pictures ] [ Reset order ]               (only with a ho
   every row's star, Done, and back) with every landing in sight under the list's own scroll model. `pullModelsStripMove.test.ts`
   pins the pure choice; `pullModelWords.test.ts` the words; `pullModelsListLayout.test.ts` the list's columns.
 - **Device row:** P105-MODELS-BOX-01 (the default view as drawn, each filter, a walk of the whole list with every stop visible, an
-  installed model always shown).
+  installed model always shown). Passed on the Deck 2026-11-17 (block D2, `workshop:test-evidence/plan105-P105-MODELS-BOX-01.json`): the default view and a walk of 14 Downs and 15 Ups with every stop visible; the switches and word buttons were not pressed.
 
 ### The Search tab (plan 92, lane N3)
 

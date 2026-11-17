@@ -68,7 +68,7 @@ describe("PullModelsModal -- B while typing a model name closes just that row", 
       expect(el).not.toBeNull();
       return el!;
     });
-    expect(container.querySelector(".bonsai-pullmodels-filtercol")!.contains(row)).toBe(true);
+    expect(container.querySelector(".bonsai-pullmodels-strip")!.contains(row)).toBe(true);
     const onCancelButton = hoisted.propsByEl.get(row)?.onCancelButton as ((evt: unknown) => boolean) | undefined;
     expect(typeof onCancelButton).toBe("function");
 

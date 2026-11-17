@@ -2,12 +2,12 @@
  * Title: "Type a name" in the AI models box's filters column
  *
  * Purpose: The chip that, pressed, turns into a small field for typing any model name by hand, with
- * its Pull button and a close "×". It sits near the bottom of the filters column (plan 91 § 2a); it
- * used to share the old Filters row, and before that had a whole row of its own (plan 62, § 3e #4).
+ * its Pull button and a close "×". It sits after the words in the filter strip (plan 105); it
+ * used to be at the foot of the filters column (plan 91 § 2a) and before that shared the old Filters row, and before that had a whole row of its own (plan 62, § 3e #4).
  *
- * Used for: PullModelsFiltersColumn.tsx, one of the column's stops.
+ * Used for: PullModelsFiltersStrip.tsx, one of the strip's stops.
  *
- * Solves: Keeps the typed-name pull (its field, its busy flag, its hook) in one piece the column can
+ * Solves: Keeps the typed-name pull (its field, its busy flag, its hook) in one piece the strip can
  * place, instead of inside the box's own file, which is at its size limit.
  *
  * Does not: Decide the column's walk. The column hands in the Up/Down/Right moves for this stop

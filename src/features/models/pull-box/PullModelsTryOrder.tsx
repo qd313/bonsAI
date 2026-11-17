@@ -40,9 +40,10 @@ import type { NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 import { TwoButtonConfirmModal } from "../../../shared/TwoButtonConfirmModal";
 import { handRingTo } from "./pullModelsBoxMemory";
 import { PullModelsPcRow } from "./PullModelsPcRow";
-import type { PullModelEntry, PullModelModeFilterId } from "../pullModelCatalog";
+import type { PullModelEntry } from "../pullModelCatalog";
 import type { ModelPolicyTierId } from "../modelPolicy";
-import { entryMatchesLicenceTier, entryMatchesModeFilters, isTagInstalled } from "./pullModelFilters";
+import { entryMatchesLicenceTier, isTagInstalled } from "./pullModelFilters";
+import { entryMatchesWord } from "./pullModelWords";
 import { isHighVramTag } from "../modelRoutingOrder";
 import {
   placeCountHidden,
@@ -105,10 +106,11 @@ export function usePullModelTryNav(a: {
   /** The table's catalog, licence pick, Ask-mode filters and live sizes: what the "On the PC" group is filtered and drawn with. */
   catalog: PullModelEntry[];
   tier: ModelPolicyTierId;
-  modeFilters: ReadonlySet<PullModelModeFilterId>;
+  /** The picked word, or null. */
+  word: string | null;
   liveSizeGbByTag: Record<string, number>;
 }) {
-  const { host, installedTags, loading, refreshKey, flatRows, reveal, catalog, tier, modeFilters, liveSizeGbByTag } = a;
+  const { host, installedTags, loading, refreshKey, flatRows, reveal, catalog, tier, word, liveSizeGbByTag } = a;
   const places = useTryOrderPlaces({ host, deckInstalled: installedTags, deckLoading: loading, refreshKey });
   const enabled = places.status !== "off";
   const onPcReady = places.onPc && places.status === "ready";
@@ -121,7 +123,7 @@ export function usePullModelTryNav(a: {
     ? places.order
         .filter((t) => {
           const e = entryOf(t);
-          return !e || (entryMatchesLicenceTier(e, tier) && entryMatchesModeFilters(e, modeFilters));
+          return !e || (entryMatchesLicenceTier(e, tier) && entryMatchesWord(e, word));
         })
         .sort((x, y) => x.localeCompare(y))
     : [];

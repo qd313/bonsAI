@@ -72,23 +72,23 @@ describe("the model list's last row", () => {
     expect((lastRow!.onMoveDown as () => boolean)()).toBe(false);
   });
 
-  it("walks Down from the last essential onto an installed model's row shown under Essentials only", async () => {
-    // Deck, plan 64 flow G: a model pulled by typed name had no row in this view. It has one now,
-    // below the essentials, and the D-pad has to reach it.
-    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: ["qwen2.5:1.5b"] }));
+  it("walks Down from the last row before it onto an installed Expert model's row shown while Fits this Deck is on", async () => {
+    // Deck, plan 64 flow G: a model pulled by typed name had no row in this view. It keeps its row now (plan 105:
+    // the Expert group is left out under Fits this Deck, unless the model is installed), and the D-pad has to reach it.
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: ["qwen2.5:14b"] }));
     const scrollIntoView = vi.fn();
     const original = Element.prototype.scrollIntoView;
     Element.prototype.scrollIntoView = scrollIntoView;
     try {
       const { container } = renderModal();
       await waitFor(() => {
-        expect(container.querySelector('[aria-label="Use qwen2.5:1.5b for Ask"]')).not.toBeNull();
+        expect(container.querySelector('[aria-label="Use qwen2.5:14b for Ask"]')).not.toBeNull();
       });
-      // The licence setting no longer hides qwen2.5vl:3b (plan 105): it is the last essential, drawn dimmed.
-      const lastEssential = latestByAriaLabel("Select qwen2.5vl:3b to pull");
-      expect((lastEssential!.onMoveDown as () => boolean)()).toBe(true);
+      // The last row of the group before the Expert one is the oldest "More models" row, llava:7b.
+      const lastBefore = latestByAriaLabel("Select llava:7b to pull");
+      expect((lastBefore!.onMoveDown as () => boolean)()).toBe(true);
       expect(container.contains(document.activeElement)).toBe(true);
-      expect(document.activeElement?.closest("[class*='row']")?.textContent ?? "").toContain("qwen2.5:1.5b");
+      expect(document.activeElement?.closest("[class*='row']")?.textContent ?? "").toContain("qwen2.5:14b");
     } finally {
       Element.prototype.scrollIntoView = original;
     }

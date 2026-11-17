@@ -1,15 +1,13 @@
 /**
  * Title: What the AI models box remembers while the plugin stays open
  *
- * Purpose: The AI models box's one memory kept outside every component: the Good for and Show filter
- * picks, so closing the box and opening it again shows the same filters. Also the one helper that
- * hands Steam's ring to a part of the box (Steam's own transfer onto that part's nav node), and the
- * plain sibling move used inside one part. (Until plan 92's second night it also remembered the
- * column's stop and the list's row the ring was last on, for Right and Left; those now go to what
- * sits beside the ring, pullModelsBeside.ts, and nothing is remembered for them.)
+ * Purpose: The AI models box's one memory kept outside every component: the picked word and the "Fits this Deck"
+ * switch, so closing the box and opening it again shows the same list. Also the one helper that hands Steam's
+ * ring to a part of the box (Steam's own transfer onto that part's nav node), and the plain sibling move used
+ * inside one part.
  *
- * Used for: PullModelsModal.tsx (the filter picks, the transfers), PullModelsFiltersColumn.tsx,
- * pullModelsBeside.ts and PullModelsTryOrder.tsx (the transfers and the sibling move).
+ * Used for: PullModelsModal.tsx (the picks, the transfers), PullModelsFiltersStrip.tsx and PullModelsTryOrder.tsx
+ * (the transfers and the sibling move).
  *
  * Solves: A Decky popup rebuilds what is behind it when it closes, and the box itself is a popup, so
  * a pick kept in a component's state is lost the moment the box closes
@@ -17,26 +15,21 @@
  * pick is not here: it is a saved setting, saved on Done as it always was.
  *
  * Does not: Save anything to disk, decide where the ring goes (the box does), or move the ring by a
- * plain `focus()`.
+ * plain `focus()` across parts.
  */
 import { useCallback, useState } from "react";
-import type { PullModelModeFilterId } from "../pullModelCatalog";
 import { refocusPanelWindowIfLost, type NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 
-/** The Good for and Show picks: everything the column filters by except the licence. */
+/** What the strip filters by besides the licence: the picked word (null for none) and the "Fits this Deck" switch. */
 export type PullModelsSessionFilters = {
-  modeFilters: ReadonlySet<PullModelModeFilterId>;
-  installedOnly: boolean;
-  essentialsOnly: boolean;
-  recentlyAddedOnly: boolean;
+  word: string | null;
+  fitsDeck: boolean;
 };
 
-/** Where Clear puts the picks back to, and where a fresh plugin starts: Deck essentials only, the rest off. */
-export const DEFAULT_SESSION_FILTERS: PullModelsSessionFilters = {
-  modeFilters: new Set(),
-  installedOnly: false,
-  essentialsOnly: true,
-  recentlyAddedOnly: false,
+/** Where a fresh plugin starts: Fits this Deck on, no word picked. */
+const DEFAULT_SESSION_FILTERS: PullModelsSessionFilters = {
+  word: null,
+  fitsDeck: true,
 };
 
 let sessionFilters: PullModelsSessionFilters = DEFAULT_SESSION_FILTERS;
@@ -44,7 +37,7 @@ let sessionFilters: PullModelsSessionFilters = DEFAULT_SESSION_FILTERS;
 type FiltersChange = Partial<PullModelsSessionFilters> | ((prev: PullModelsSessionFilters) => Partial<PullModelsSessionFilters>);
 
 /**
- * The box's Good for and Show picks as React state that starts from, and writes through to, the
+ * The box's picks as React state that starts from, and writes through to, the
  * session's memory. Out: the picks, and one function that changes some of them (an object, or a
  * function of the picks as they are).
  */

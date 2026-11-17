@@ -40,12 +40,6 @@ export type ModelPolicyDisclosurePayload = {
   read_more_anchor: string;
 };
 
-export const MODEL_POLICY_TIER_IDS: readonly ModelPolicyTierId[] = [
-  "open_source_only",
-  "open_weight",
-  "non_foss",
-];
-
 export const DEFAULT_MODEL_POLICY_TIER: ModelPolicyTierId = "open_source_only";
 
 export function normalizeModelPolicyTier(value: unknown): ModelPolicyTierId {

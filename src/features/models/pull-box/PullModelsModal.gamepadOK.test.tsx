@@ -1,8 +1,8 @@
 /**
  * Title: Every button on the Pull models picker answers the Steam A button
  *
- * Used for: `PullModelsModal.tsx`'s controls and the filters column beside its list
- * (`PullModelsFiltersColumn.tsx`: Clear, every licence, Good for and Show row, the custom-tag chip and
+ * Used for: `PullModelsModal.tsx`'s controls and the filter strip above its list
+ * (`PullModelsFiltersStrip.tsx`: the two switches, every word, the custom-tag chip and
  * field, the starter set and the Suggested chips), plus every catalog row's select/pin star and delete X.
  *
  * Solves: found on the Deck 2026-09-21 (workshop:test-evidence/plan62-MODELS-FILTERS-01-A-closes-
@@ -71,23 +71,23 @@ describe("PullModelsModal -- every control answers A, not just Advanced", () => 
   beforeEach(() => resetPullModelsBoxMemory());
   afterEach(() => cleanup());
 
-  it("gives every button in the box, the filters column's included, an onOKButton", async () => {
+  it("gives every button in the box, the filter strip's included, an onOKButton", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: ["qwen3.5:4b"] }));
     const { container } = renderModal();
     await waitFor(() => {
       expect(container.querySelector('[aria-label="Use qwen3.5:4b for Ask"]')).not.toBeNull();
     });
-    const column = container.querySelector(".bonsai-pullmodels-filtercol")!;
-    // Clear, ten filter rows, "Type a name" and the starter set at the least.
-    expect(column.querySelectorAll("button").length).toBeGreaterThanOrEqual(13);
+    const column = container.querySelector(".bonsai-pullmodels-strip")!;
+    // Two switches, the words, "Type a name" and the starter set at the least.
+    expect(column.querySelectorAll("button").length).toBeGreaterThanOrEqual(8);
     expect(withoutOk(container)).toEqual([]);
   });
 
-  it("pressing A on a Good for row ticks it, and the press stops there instead of closing the screen", async () => {
+  it("pressing A on a word picks it, and the press stops there instead of closing the screen", async () => {
     const { container } = renderModal();
     const vision = await waitFor(() => {
-      const el = container.querySelector('.bonsai-pullmodels-filtercol-row[aria-label="Vision"]');
-      expect(el).not.toBeNull();
+      const el = Array.from(container.querySelectorAll(".bonsai-pullmodels-word")).find((b) => b.textContent === "pictures");
+      expect(el).toBeDefined();
       return el!;
     });
     const stopPropagation = vi.fn();

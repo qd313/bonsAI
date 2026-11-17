@@ -21,43 +21,41 @@
  * place in the try order (see PullModelsTryOrder.tsx and useTryOrderPlaces.ts).
  * The New-badge record math lives in utils/pullModelNewBadge.ts, the
  * shared request/prop types live in PullModelsModal.types.ts, the
- * table/filters-column matching and row model live in
- * utils/pullModelFilters.ts — the first two are re-exported below so
- * nothing else needs to change its imports — and the filters column itself
- * is PullModelsFiltersColumn.tsx.
+ * table checks live in pullModelFilters.ts and the word buttons in
+ * pullModelWords.ts — the first two are re-exported below so
+ * nothing else needs to change its imports — and the filter strip itself
+ * is PullModelsFiltersStrip.tsx.
  *
  * How it works:
  *
  *     ┌─ AI models ──────────────────────────────── [ Advanced › ] ┐  <- the hub's title row
- *     │ Installed N · X GB   Queue N · X GB   catalog/size src ↻     │
- *     │ ┌ filters column ┐ ┌ Try order for [Text][Pictures] [Reset] ┐ │
- *     │ │ 7 match  Clear │ │ Pull│Model    │Size│Modes│Fit│Try│Del  │ │
- *     │ │ LICENCE  (•) … │ │  ★  │tag…     │4GB │Chat…│★★★│1▲▼│ X   │ │
- *     │ │ GOOD FOR [ ] 5 │ │  ☐  │tag…     │…   │…    │…  │   │     │ │
- *     │ │ SHOW     [✔] … │ │                                       │ │
- *     │ │ [Type a name]… │ │  Right -> the nearest row to the ring │ │
- *     │ └────────────────┘ └ <- Left from a row's star ─────────────┘ │
+ *     │ Installed N · X GB   Queue N · X GB   catalog/size src      │
+ *     │ [Fits this Deck (o)] [Open source only (o)]       17 models  │  <- the filter strip (plan 105)
+ *     │ Pick a word to narrow the list                               │
+ *     │ (chat) (pictures) (strategy) (qwen) … [Type a name] [chip]   │
+ *     │ Try order for [Text][Pictures] [Reset]   (only with a host)  │
+ *     │ Pull│Model         │Size │Good for       │Deck fit│Try│Del   │
+ *     │  ★  │tag…          │4 GB │Chat · Pictures│★★★     │1▲▼│ X    │
  *     │        Done / Pull selected (N) · X GB          Cancel        │
  *     └────────────────────────────────────────────────────────────────┘
  *
- *     Advanced <-> Clear, the same both ways (downFromAboveRef; the header line's Refresh button was removed, plan 93)
- *     Up from the switch, or from the first row (no switch) -> Advanced (onMoveUpFromTop)
- *     Down past the column's last stop, or past the list's last row -> Steam carries it to Done
+ *     Advanced <-> the strip's first switch, the same both ways (downFromAboveRef)
+ *     Up from the first row (no switch) -> the strip; Up from the strip's first line -> Advanced (onMoveUpFromTop)
+ *     Down past the strip's last line -> the switch or the first row (a transfer); past the last row -> Steam carries it to Done
  *
  * 1. refreshInstalledAndMeta() runs on mount: tests the connection to this
  *    Deck's own Ollama to learn which tags are already installed, then
  *    fetches live size metadata for every catalog tag — one after the other,
  *    falling back to offline data on any failure.
  * 2. Tags are matched against the catalog (isTagInstalled(),
- *    isCatalogModelTagInList()) and filtered — by the licence tier
- *    (entryMatchesLicenceTier(), the same three tiers the old Policy
- *    section chose), the ticked Ask-mode filters (entryMatchesModeFilters()),
- *    installedOnly, essentialsOnly, recentlyAddedOnly — into the grouped,
- *    sectioned table built by tableSections. All of them sit in the filters
- *    column beside the list, always on screen (plan 91 § 2a; they hid
- *    behind a "Filters · N on" button before). The Good for and Show picks
- *    last for the session (pullModelsBoxMemory.ts); the licence is saved on
- *    Done by the hub.
+ *    isCatalogModelTagInList()) and filtered — by the Fits this Deck switch
+ *    (the Expert group is left out unless a model is installed) and the
+ *    picked word (entryMatchesWord()) — into the grouped, sectioned table
+ *    built by tableSections. The licence setting never removes a row: a model
+ *    outside it is drawn dimmed (entryMatchesLicenceTier()), and an installed
+ *    model is always drawn. Both switches and the words sit in the strip above
+ *    the list, always on screen (plan 105). The word and Fits this Deck last for
+ *    the session (pullModelsBoxMemory.ts); the licence is saved on Done by the hub.
  * 3. Pressing a row's star/checkmark either queues an uninstalled model
  *    with toggleSelected() (confirming first for a large "stretch"
  *    download, and for switching to Tier 2 if it is open-weight), or, for
@@ -69,19 +67,19 @@
  *    same Tier 2 confirmation if the queue holds an open-weight model
  *    under Tier 1; onPullCustomTag() is a separate one-off path for typing
  *    in any tag by hand, validated before it is ever sent.
- * 6. Every button on the table and in the column wires its own
- *    Up/Down/Left/Right by hand (rowNavHandlers() for table cells) so the
- *    D-pad walks the grid in a fixed, predictable order instead of
- *    Steam's automatic guess. Right from the column and Left from a row's
- *    star cross between the two by Steam's own transfer onto the other
- *    side's nav node, then a sibling focus onto the stop nearest the
- *    ring, measured at the press (pullModelsBeside.ts); held when none is.
+ * 6. Every button on the table and in the strip wires its own
+ *    Up/Down/Left/Right by hand (rowNavHandlers() for table cells, the strip's
+ *    own measured moves for the strip) so the D-pad walks the grid in a fixed,
+ *    predictable order instead of Steam's automatic guess. The ring crosses
+ *    between the strip, the try-order switch and the list only by Steam's own
+ *    transfer onto the other part's nav node (toStrip, toStripBottom,
+ *    downFromStrip); Left from a row's star is held.
  * 7. The whole panel renders two ways: as its own modal by default
  *    (wrapped in ConfirmModal, with Pull selected/Cancel as its footer),
  *    or, when embedded is true, as a bare panel inside another modal (the
  *    AI models hub), reporting its own footer state up through
  *    onFooterStateChange() instead of drawing one.
- * 8. The column's foot carries "Type a name", "Install the starter set" while the starter model is
+ * 8. The strip's last pills are "Type a name", "Install the starter set" while the starter model is
  *    not installed (it asks first with the size, then starts the setup run the old Tier 1 button
  *    started), and the Suggested models.
  * 9. With a host given, a Text / Pictures switch sits above the list and every installed row
@@ -112,15 +110,15 @@ import {
   PULL_MODEL_CATALOG,
   formatGtaStars,
   formatPullModelTags,
+  formatPullModelTagsPlain,
   formatSizeGb,
   isDeckDailyPullModel,
   isEmbeddingOnlyTag,
   type PullModelEntry,
 } from "../pullModelCatalog";
 import { PullModelLicenceSlot } from "./PullModelLicenceSlot";
-import { PullModelsFiltersColumn } from "./PullModelsFiltersColumn";
+import { PullModelsFiltersStrip, type FiltersStripApi } from "./PullModelsFiltersStrip";
 import { focusAndReveal, handRingTo, usePullModelsSessionFilters } from "./pullModelsBoxMemory";
-import { usePullModelsBeside, type FiltersColumnApi } from "./pullModelsBeside";
 import { PullModelsTableHeader } from "./PullModelsTableHeader";
 import { usePullModelTryNav } from "./PullModelsTryOrder";
 import { isDeprioritizedOllamaTag } from "../deprioritizedModels";
@@ -146,7 +144,7 @@ import {
 } from "./pullModelNewBadge";
 import type { PullModelsModalProps } from "./PullModelsModal.types";
 export type { PullModelsFooterState, PullModelsModalProps } from "./PullModelsModal.types";
-import { entryMatchesLicenceTier, findUnavailableRegistryTags, formatModesShort, isTagInstalled, resolveRowSizeGb } from "./pullModelFilters";
+import { entryMatchesLicenceTier, findUnavailableRegistryTags, isTagInstalled, resolveRowSizeGb } from "./pullModelFilters";
 import type { NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 export { findUnavailableRegistryTags };
 
@@ -187,7 +185,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const {
     activeRoutingTag,
     modelPolicyTier = "open_source_only",
-    modelPolicyNonFossUnlocked = false,
     onSelectModelPolicyTier,
     onApplyTier2Policy,
     onBeforeNestedDeckyModal,
@@ -203,9 +200,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const mergedCatalog = BUILT_IN_CATALOG;
   const [installedTags, setInstalledTags] = useState<Set<string>>(() => new Set());
   const [selectedTags, setSelectedTags] = useState<Set<string>>(() => new Set());
-  // The Good for and Show picks, kept for the session so a closed and reopened box shows the same (plan 91 § 2a).
+  // The picked word and the Fits this Deck switch, kept for the session so a closed and reopened box shows the same list.
   const [filters, changeFilters] = usePullModelsSessionFilters();
-  const { modeFilters, installedOnly, essentialsOnly, recentlyAddedOnly } = filters;
   const [sizeSource, setSizeSource] = useState<"live" | "offline">("offline");
   const [liveSizeGbByTag, setLiveSizeGbByTag] = useState<Record<string, number>>({});
   const [loadingMeta, setLoadingMeta] = useState(true);
@@ -217,10 +213,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const stretchConfirmedRef = useRef<Set<string>>(new Set());
   const openWeightTierConfirmedRef = useRef<Set<string>>(new Set());
   const shellRef = useRef<HTMLDivElement | null>(null);
-  /** The two sides' nav nodes (Steam fills them): Right and Left cross between them by Steam's transfer. */
-  const columnNavRef = useRef<NavRefHolder["current"]>(null);
+  /** The strip's and the list's nav nodes (Steam fills them): the ring crosses between them by Steam's transfer. */
+  const stripNavRef = useRef<NavRefHolder["current"]>(null);
   const listNavRef = useRef<NavRefHolder["current"]>(null);
-  const columnApi = useRef<FiltersColumnApi | null>(null);
+  const stripApi = useRef<FiltersStripApi | null>(null);
   const footerPullRef = useRef<HTMLElement | null>(null);
   const selectCellRefs = useRef<(HTMLElement | null)[]>([]);
   const deleteCellRefs = useRef<(HTMLElement | null)[]>([]);
@@ -241,50 +237,51 @@ export function PullModelsModal(props: PullModelsModalProps) {
 
   // Lifted into usePullModelTableData. It must stay at exactly this point in the hook list:
   // React matches hooks by the order they run, not by name.
-  const { tableSections, flatRows, installedCatalogCount, installedTotalGb, selectedTotalGb, modeCounts } = usePullModelTableData({
-    mergedCatalog,
-    installedTags,
-    modeFilters,
-    installedOnly,
-    essentialsOnly,
-    recentlyAddedOnly,
-    pullRecord,
-    liveSizeGbByTag,
-    selectedTags,
-  });
+  const { tableSections, flatRows, installedCatalogCount, installedTotalGb, selectedTotalGb, words, activeWord, offBigCount } =
+    usePullModelTableData({
+      mergedCatalog,
+      installedTags,
+      fitsDeck: filters.fitsDeck,
+      word: filters.word,
+      liveSizeGbByTag,
+      selectedTags,
+    });
 
   // The Try column and switch (useTryOrderPlaces.ts); off, and drawing nothing, unless the box was given a host.
-  const tryNav = usePullModelTryNav({ host: props.tryOrderHost, installedTags, loading: loadingMeta, refreshKey: pinnedAskTag, flatRows, reveal: focusAndReveal, catalog: mergedCatalog, tier: modelPolicyTier, modeFilters, liveSizeGbByTag });
+  const tryNav = usePullModelTryNav({ host: props.tryOrderHost, installedTags, loading: loadingMeta, refreshKey: pinnedAskTag, flatRows, reveal: focusAndReveal, catalog: mergedCatalog, tier: modelPolicyTier, word: activeWord, liveSizeGbByTag });
   const rowTotal = flatRows.length + tryNav.pcCount; // the Deck's rows, then the "On the PC" rows
 
-  /** Up out of the top of the box (Clear, the switch, the first row): the hub's Advanced link, else Steam's own move. */
+  /** Up out of the top of the box (the strip's first line): the hub's Advanced link, else Steam's own move. */
   const leaveTop = useCallback((): boolean => onMoveUpFromTop?.() ?? false, [onMoveUpFromTop]);
 
-  /*
-   * Advanced and the column's Clear, the same both ways (the header line's Refresh button between them is gone,
-   * plan 93). Each hop is Steam's transfer onto the other part's nav node.
-   */
-  const toClear = (): boolean => {
-    if (!handRingTo(columnNavRef)) return false;
-    columnApi.current?.focusStop(null);
+  /** Onto the strip's first switch (Down from Advanced): Steam's transfer onto the strip, then a plain move inside it. */
+  const toStrip = (): boolean => {
+    if (!handRingTo(stripNavRef)) return false;
+    stripApi.current?.focusStop(null);
     return true;
   };
   useEffect(() => {
     if (!downFromAboveRef) return;
-    downFromAboveRef.current = toClear;
+    downFromAboveRef.current = toStrip;
     return () => {
       downFromAboveRef.current = null;
     };
   });
+  /** Up from the switch row or the first row: onto the strip's last line, the stop nearest `near`. False leaves it to the caller. */
+  const toStripBottom = (near: HTMLElement | null): boolean => {
+    if (!handRingTo(stripNavRef)) return false;
+    stripApi.current?.focusBottomNear(near);
+    return true;
+  };
 
   /**
-   * Up out of the first row: the try-order switch above the list, else the Advanced link. The list goes
-   * back to its top first: walking down leaves it scrolled, and a first model left half under the sticky
+   * Up out of the first row: the try-order switch above the list, else the strip, else the Advanced link. The list
+   * goes back to its top first: walking down leaves it scrolled, and a first model left half under the sticky
    * column-header row was what the Deck showed on 2026-10-02 (plan79-P79-M9-MODELS-BOX-TOP.json).
    */
   const leaveListUp = useCallback((): boolean => {
     if (listRef.current) listRef.current.scrollTop = 0;
-    return tryNav.focusSwitch() || leaveTop();
+    return tryNav.focusSwitch() || toStripBottom(null) || leaveTop();
   }, [leaveTop, tryNav.focusSwitch]);
 
   const findModalFooterButton = useCallback((labelPrefix: string): HTMLElement | null => {
@@ -356,9 +353,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
     return () => window.cancelAnimationFrame(id);
   }, [findModalFooterButton, selectedTags.size, pullBusy]);
 
-  /** Right from the column and Left from a row's star: the nearest stop within reach, by Steam's transfer; held when none is. */
-  const { enterList, enterColumn } = usePullModelsBeside({ listNavRef, columnNavRef, columnApi, listRef, headerRef: listHeaderRef, selectCellRefs, focusRowCell, switchChip: tryNav.switchChip, enterSwitch: tryNav.enterSwitch });
-
   const rowNavHandlers = useCallback(
     (rowIndex: number, cell: "select" | "delete", installed: boolean) => ({
       onMoveUp: () => {
@@ -389,10 +383,11 @@ export function PullModelsModal(props: PullModelsModalProps) {
       },
       onMoveLeft: () => {
         if (cell === "delete") return tryNav.focusPlaceDown(rowIndex) || focusRowCell(rowIndex, "select");
-        return enterColumn(rowIndex);
+        // Nothing sits to the left of a star now (the filters are above the list): the press is held.
+        return true;
       },
     }),
-    [leaveListUp, focusNextRowSelect, focusPrevRowSelect, focusRowCell, tryNav, enterColumn]
+    [leaveListUp, focusNextRowSelect, focusPrevRowSelect, focusRowCell, tryNav]
   );
 
   const recommendedEntries = useMemo(
@@ -419,6 +414,14 @@ export function PullModelsModal(props: PullModelsModalProps) {
 
   /** Down past the try-order switch: the first table row. */
   const moveDownPastSwitch = (): boolean => focusRowCell(0, "select") || focusFooterPull();
+  /** Up from the try-order switch: the strip's last line, else the Advanced link. */
+  const moveUpFromSwitch = (): boolean => toStripBottom(tryNav.switchChip()) || leaveTop();
+  /** Down from the strip: the try-order switch if there is one, else the first row by Steam's transfer onto the list. False leaves it to Steam (Done). */
+  const downFromStrip = (): boolean => {
+    if (tryNav.enterSwitch()) return true;
+    if (!rowTotal || !handRingTo(listNavRef)) return false;
+    return focusRowCell(0, "select");
+  };
   const tryCell = (tag: string, rowIndex: number, installed: boolean) =>
     tryNav.cell({
       tag, rowIndex, installed, okButtonRuns,
@@ -511,6 +514,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
       "bonsai-pullmodels-table-row--data",
       installed ? "bonsai-pullmodels-table-row--installed" : "",
       isDeckDailyPullModel(entry) ? "" : "bonsai-pullmodels-table-row--stretch",
+      entry.needsPc ? "bonsai-pullmodels-table-row--big" : "",
       outsideLicence ? "bonsai-pullmodels-table-row--dim" : "",
     ]
       .filter(Boolean)
@@ -575,9 +579,16 @@ export function PullModelsModal(props: PullModelsModalProps) {
             <PullModelLicenceSlot entry={entry} />
           </span>
         </div>
-        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-col--size" role="cell">{formatSizeGb(sizeGb)}</div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-col--size" role="cell">
+          {formatSizeGb(sizeGb)}
+          {entry.needsPc ? (
+            <em className="bonsai-pullmodels-size-note bonsai-pullmodels-size-note--big">too big for this Deck</em>
+          ) : !isDeckDailyPullModel(entry) ? (
+            <em className="bonsai-pullmodels-size-note">slow on a Deck</em>
+          ) : null}
+        </div>
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-col--modes" role="cell" title={formatPullModelTags(entry.tags)}>
-          {formatModesShort(entry.tags)}
+          {formatPullModelTagsPlain(entry.tags)}
         </div>
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--stars" role="cell">
           {formatGtaStars(entry.rating)}
@@ -736,20 +747,19 @@ export function PullModelsModal(props: PullModelsModalProps) {
             </span>
           </div>
 
-          {/* One Focusable laid out as a row: Steam moves only along a container's flow, so the two sides are
-              its children side by side, and a Down that neither side takes leaves the pair for the dialog's
-              footer (Done) instead of stepping from the column into the list (plan 92's About-tab lesson). */}
-          <Focusable className="bonsai-pullmodels-split" flow-children="row">
-            <PullModelsFiltersColumn
-              navRef={columnNavRef}
-              apiRef={columnApi}
+          {/* One Focusable laid out as a column: the filter strip, the try-order switch and the list, top to bottom.
+              A Down that none of them takes leaves the group for the dialog's footer (Done). */}
+          <Focusable className="bonsai-pullmodels-main" flow-children="column">
+            <PullModelsFiltersStrip
+              navRef={stripNavRef}
+              apiRef={stripApi}
               filters={filters}
               changeFilters={changeFilters}
               tier={modelPolicyTier}
-              nonFossUnlocked={modelPolicyNonFossUnlocked}
               onSelectTier={onSelectModelPolicyTier}
               matchCount={rowTotal}
-              modeCounts={modeCounts}
+              words={words}
+              activeWord={activeWord}
               installedTags={installedTags}
               suggested={recommendedEntries}
               selectedTags={selectedTags}
@@ -758,40 +768,48 @@ export function PullModelsModal(props: PullModelsModalProps) {
               onPullAccepted={onPullAccepted}
               focusAfterRedraw={focusAfterRedraw}
               okButtonRuns={okButtonRuns}
-              toList={enterList}
+              downFromStrip={downFromStrip}
               upFromTop={leaveTop}
             />
-            <div className="bonsai-pullmodels-listside">
-              {tryNav.bar({ okButtonRuns, onMoveUp: leaveTop, onMoveDown: moveDownPastSwitch, nested: { before: onBeforeNestedDeckyModal, complete: completeNestedModalClose } })}
-              <Focusable
-                ref={listRef}
-                className="bonsai-pullmodels-list"
-                aria-busy={loadingMeta}
-                {...({ navRef: listNavRef } as Record<string, unknown>)}
-              >
-                {rowTotal > 0 ? (
-                  <div className={`bonsai-pullmodels-table${tryNav.enabled ? " bonsai-pullmodels-table--try" : ""}`} role="table">
-                    <PullModelsTableHeader headerRef={listHeaderRef} withTry={tryNav.enabled} />
-                    <div role="rowgroup">
-                      {tableSections.map((section) => (
-                        <div key={section.title}>
-                          <div className="bonsai-pullmodels-group-title">{section.title}</div>
-                          {section.rows.map((row) => {
-                            const rowIndex = rowCounter++;
-                            if (row.kind === "catalog") {
-                              return renderCatalogRow(row.entry, rowIndex);
-                            }
-                            return renderOtherRow(row.tag, rowIndex);
-                          })}
-                        </div>
-                      ))}
-                      {tryNav.pcGroup({ startIndex: rowCounter, bindSelect: bindSelectRef, nav: (i) => rowNavHandlers(i, "select", false), okButtonRuns })}
-                    </div>
+            {tryNav.bar({ okButtonRuns, onMoveUp: moveUpFromSwitch, onMoveDown: moveDownPastSwitch, nested: { before: onBeforeNestedDeckyModal, complete: completeNestedModalClose } })}
+            <Focusable
+              ref={listRef}
+              className="bonsai-pullmodels-list"
+              aria-busy={loadingMeta}
+              {...({ navRef: listNavRef } as Record<string, unknown>)}
+            >
+              {rowTotal > 0 ? (
+                <div className={`bonsai-pullmodels-table${tryNav.enabled ? " bonsai-pullmodels-table--try" : ""}`} role="table">
+                  <PullModelsTableHeader headerRef={listHeaderRef} withTry={tryNav.enabled} />
+                  <div role="rowgroup">
+                    {tableSections.map((section) => (
+                      <div key={section.title}>
+                        {section.showTitle ? <div className="bonsai-pullmodels-group-title">{section.title}</div> : null}
+                        {section.rows.map((row) => {
+                          const rowIndex = rowCounter++;
+                          if (row.kind === "catalog") {
+                            return renderCatalogRow(row.entry, rowIndex);
+                          }
+                          return renderOtherRow(row.tag, rowIndex);
+                        })}
+                      </div>
+                    ))}
+                    {tryNav.pcGroup({ startIndex: rowCounter, bindSelect: bindSelectRef, nav: (i) => rowNavHandlers(i, "select", false), okButtonRuns })}
                   </div>
-                ) : (
-                  <div className="bonsai-pullmodels-empty">No models match the current filters.</div>
-                )}
-              </Focusable>
+                </div>
+              ) : (
+                <div className="bonsai-pullmodels-empty">
+                  <b>Nothing matches.</b> Press the picked word again, or turn a switch off.
+                </div>
+              )}
+              {offBigCount > 0 ? (
+                <div className="bonsai-pullmodels-more-note">
+                  {offBigCount} bigger {offBigCount === 1 ? "model is" : "models are"} off: turn off Fits this Deck.
+                </div>
+              ) : null}
+            </Focusable>
+            <div className="bonsai-pullmodels-legend">
+              Dimmed: your licence setting would not use it. <i>Orange edge: slow on a Deck. Red edge: too big for this Deck.</i>
             </div>
           </Focusable>
         </BonsaiModalScope>

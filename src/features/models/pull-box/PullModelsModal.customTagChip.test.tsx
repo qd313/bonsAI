@@ -84,7 +84,7 @@ describe('"Type a model name" starts as a chip, not a field', () => {
       expect(document.activeElement).toBe(closeBtn);
     });
     // The field opens where the chip was, at the foot of the filters column (plan 91).
-    const column = container.querySelector(".bonsai-pullmodels-filtercol")!;
+    const column = container.querySelector(".bonsai-pullmodels-strip")!;
     expect(column.contains(container.querySelector('[aria-label="Pull custom model tag"]'))).toBe(true);
   });
 });

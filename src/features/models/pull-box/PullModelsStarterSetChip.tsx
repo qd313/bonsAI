@@ -7,7 +7,7 @@
  * one-press way to get started on a Deck with no models, now that the Ollama tab's "Install options..."
  * button is gone.
  *
- * Used for: PullModelsFiltersColumn.tsx, drawn until the whole set is there: the answer model and the
+ * Used for: PullModelsFiltersStrip.tsx, drawn until the whole set is there: the answer model and the
  * note-search model installed in Ollama, and both speech models on disk. The speech models are read from
  * the voice engine's status; until that answers (or if it cannot), only Ollama's two models decide. A run
  * this button started is watched: when it ends "done" the button goes at once, and when it ends any other

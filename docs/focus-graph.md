@@ -1010,85 +1010,61 @@ tab bar
 
 ### The AI models box's filters column (plan 91, M1)
 
-The filters sit in a column to the left of the model list, always on screen (`PullModelsFiltersColumn.tsx`, inside
-`PullModelsModal.tsx`, inside the AI models screen `OllamaModelsHubModal.tsx`). It replaces plan 62's "Filters · N on"
-button and the panel it opened over the list: that route (Down or B inside the panel closing it) is gone.
+Gone in plan 105 (lane D5): the filters column beside the list, its Right and Left to the list's stars (`pullModelsBeside.ts`)
+and its eleven rows are replaced by the strip above the list, described in the next section. The licence pick is now one
+switch, the Good for and Show picks are the words and one switch, and nothing sits beside the list, so Left from a star is
+held. This heading stays so older links to it still land here.
+
+### The AI models box's filter strip (plan 105, lane D5)
+
+The filters sit in a strip above the model list, always on screen (`PullModelsFiltersStrip.tsx`, inside `PullModelsModal.tsx`,
+inside the AI models screen `OllamaModelsHubModal.tsx`). Board 5, tab 3, option C: two switches and the words the list builds
+for itself.
 
 ```
-title row: "AI models"  ................  [ Advanced › ]      (its own Focusable, so it can be a transfer target)
-   | Down  ^ Up                                ^ Up from the switch, or from the first row with no switch
-Installed 3 · 9 GB   Queue 0 · 0 GB   Live sizes [ ↻ ]   (the header line; ↻ in its own Focusable)
-   | Down  ^ Up        (Advanced <-> ↻ <-> Clear; ↻ skipped both ways while greyed, the list loading)
-[ 7 models match        Clear ] <-> [ Text ][ Pictures ][ Reset order ]   (the try-order switch, level with Clear)
-LICENCE   (•) Open source only     -> ☆ row 1 (32 px below)   Right from a column stop -> the nearest stop on the right
-          ( ) Also try open-weight <-> ☆ row 1                Left from a row's star   -> the nearest filter
-          ( ) Any installed model  x-  ☆ row 2 -> Also try    (both measured at the press, within 1.5 model rows,
-GOOD FOR  [ ] Speed               <-> ☆ row 3                 about 52 px; held only when nothing is that close)
-SHOW      [ ] Installed only ...      |
-[ Type a name ] [ Install the starter set ] SUGGESTED [ chip ] [ chip ]
-   | Down past the last stop -> Steam's own (Done)   | Down past the last row -> Steam's own (Done), as before
-[ Done ]  [ Cancel ]
+title row: "AI models"  ................  [ Advanced > ]
+Installed 3 . 9 GB   Queue 0 . 0 GB   Live sizes                (the header line, not a stop)
+[ Fits this Deck (o) ] [ Open source only (o) ]       30 models  <- line 1: two switches, Up from either -> Advanced
+Pick a word to narrow the list
+(chat) (pictures) (strategy) (coding) (qwen) (gemma) (llama) (phi) (llava) (3 more words v)   <- the words wrap onto lines
+[ Type a name ] [ Install the starter set ] Suggested [ chip ] [ chip ]                        <- the chips follow the words
+   | Down from the last line: the try-order switch, else the first row of the list (a transfer onto it)
+Try order for [ Text ][ Pictures ] [ Reset order ]               (only with a host; Up from it -> the strip's last line)
+ Pull | Model | Size | Good for | Deck fit | Try | Del
+  star  ...                                                       Up from the first row -> the switch, else the strip
+[ Done ]  [ Cancel ]                                              Down past the last row -> Steam's own, Done
 ```
 
-- **Stops:** Clear, the ten filter rows (the greyed third licence row is skipped until it is unlocked: the column skips
-  it by its own knowledge that the row is off, because on the Deck a greyed button carries only a `Disabled` class, not
-  the browser's `disabled`, and a plain `focus()` lands on it; plan 92's second round), "Type a name"
-  (or, once open, its field row, whose landing is the "×"), "Install the starter set" while the starter model is
-  missing, and each Suggested chip. All are plain buttons directly inside one `Focusable` (the column), so Up and Down
-  between them are plain sibling `focus()` moves (`step()` in the column file). **The one exception, carried over
-  unchanged:** the open "Type a name" row is its own horizontal `Focusable` (Left and Right between the field, Pull and
-  "×" are Steam's own, and it owns B), and the moves into it (the chip opening onto "×", Down onto it) and out of it are
-  plain `focus()` hops, exactly as they were from the old Filters row since plan 62. Watch it on the Deck; if the ring
-  stays behind there, the fix is a transfer onto that row's nav node.
-- **Right and Left between the column and the list go to what sits beside the ring** (plan 92's second night; the
-  maintainer's call after the Deck's map, plan92-P92-M-MODELS-MAP.json, found Right from 10 of 12 column stops landing
-  32 to 100 px above or below the ring on "the list's remembered row"). At the press, `pullModelsBeside.ts` measures the
-  ring's button and the candidates on the other side: for Right, the try-order switch's active chip and each row's star
-  whose centre is in sight in the list (below its sticky header row, above its bottom edge); for Left, the column's
-  stops whose centre is in sight in the column (the column hands over only the stops that can take the ring, the
-  greyed licence row left out by its own state). It picks the nearest centre within **one and a half model rows**
-  (`BESIDE_REACH_ROWS` times the first drawn row's height, about 52 px on the Deck: the session's call, because a held
-  press feels dead); with none that near, or no rows at all, the press is **held**, which on the Deck's own screen
-  happens only with an empty list. Left from a star level with the greyed row goes to the nearest other filter. Both sides scroll on their
-  own, so nothing is read from a stored index. A press straight back (Right then Left, or Left then Right) returns to
-  where the first came from while that is still level. The ring crosses only by Steam's own transfer (`handRingTo`, a
-  `TakeFocus` on the list's, the column's or the switch row's `navRef`), then a sibling `focus()` onto the chosen stop.
-  Right always lands on a row's star (or a PC row's up button), never its Remove. Left from the switch is Steam's own.
-- **Advanced, Refresh (↻) and Clear, the same order both ways** (plan 92's second round: on the Deck Down went
-  Advanced, Refresh, Clear by Steam's own guess, but Up from Clear skipped Refresh). Down from Advanced is the hub's own
-  handler, calling the box's `downFromAboveRef`: a transfer onto the header line's `Focusable` (Refresh), or, while
-  Refresh is greyed, onto the column and its Clear. Down from Refresh is a transfer onto the column, then Clear. Up from
-  Clear is a transfer onto Refresh, or onto Advanced while Refresh is greyed; Up from Refresh is the screen's
-  `onMoveUpFromTop`, a transfer onto the Advanced link's own `Focusable`. A greyed Refresh is skipped by the box's own
-  state (the list loading or refreshing), never by asking the button, because on the Deck a greyed button still takes
-  the ring. Right from Refresh goes to Advanced and Left from Advanced to Refresh, by the beside rule above (`isBeside`, the
-  same one and a half rows: they sit about 31 px apart on the Deck; never onto a greyed Refresh); Left on Refresh is Steam's own. Up from the try-order switch, or from the first row when there is
-  no switch, goes straight to Advanced as before. Without the screen (no handler) the press is Steam's own.
-- **Down past the last stop** returns `false`, so Steam carries the ring on to the dialog's Done, the same rule the
-  list's last row follows (focus-graph-patterns: a container's last stop must not claim Down).
-- **The containers and their flow.** Steam moves the ring between a container's children only along its
-  `flow-children`, and a container with no flow on that axis hands the press to its parent (plan 92, the About tab's
-  dead Down). So: the column is `flow-children="column"` with every row a direct nav child (the group headings and
-  row wrappers are plain divs); the column and the list sit in one `Focusable` with `flow-children="row"`
-  (`.bonsai-pullmodels-split`), so a Down neither side takes leaves the pair for the footer instead of stepping from
-  the column into the list; the list's own `Focusable` has no flow, so Steam never steps from a row's star along to
-  its Remove. The walk test models exactly this rule, with a stand-in for the dialog's body and footer.
-- **Left** inside the column is held (nothing sits to its left). **B** is not claimed in the column, so it does what it
-  does for the box; the one exception is the open "Type a name" field row, whose B closes just the field.
-- **The Good for and Show picks** live in a module-level store (`pullModelsBoxMemory.ts`), because closing a Decky popup
-  rebuilds what is behind it (lessons § 3). The licence pick is saved on Done, as before. Nothing is remembered for Right
-  and Left any more (the two "come back here" memories of plan 91 went with the beside rule).
-- **Where the ring opens** is unchanged: on Advanced, Steam's first stop in the screen.
-- **Tests:** `PullModelsFiltersColumn.test.tsx` (steamRing stand-in, so a bare cross-container `focus()` fails): the rows
-  and headings, the counts against the rows drawn under both licence picks, Clear, Advanced, Refresh and Clear mirrored (and Refresh skipped while greyed), Down left to
-  Steam, Done keeping the picks, and a bounded walk of the whole box from Advanced with Steam's scroll in a short column
-  and list. Its last block lays the box out on the Deck's own map (each side with its own scroll) and presses Right and
-  Left from the measured stops and rows, with two bounded walks (down the column pressing Right and back at every stop,
-  down the list pressing Left and back at every row: no stop twice, no dead press, every landing within reach, never the
-  greyed row); `pullModelsBeside.test.ts` pins the pure choice. Its button stand-in draws a greyed button the Deck's
-  way: a `Disabled` class, still focusable. `PullModelsFiltersColumn.layout.test.ts` works the list's
-  grid out from the stylesheet's numbers (the Model column no more than 10 per cent narrower than M-A's 124.3).
-- **Device rows:** P91-MODELS-COLUMN-WALK, -FILTERS, -DONE-KEEPS, -WIDTH (plan 91 § 5, block 4).
+- **Stops:** the two switches, each shown word, "N more words" while there are more than nine, "Type a name" (or, once open,
+  its field row, whose landing is the "x"), "Install the starter set" while the starter model is missing, and each Suggested
+  chip. All are plain buttons directly inside one `Focusable` (the strip, `flow-children="column"`, with a `navRef`).
+- **Moves inside the strip are the strip's own plain sibling `focus()` moves** (safe: one container). Because the words wrap and
+  the lines differ in width, no stop knows its neighbours by index: at the press the strip measures every drawn stop
+  (`pullModelsStripMove.ts`: `stripRows`, `stripTarget`) and goes **Left or Right** along its line (held at the ends, so the ring
+  never leaves the strip sideways), **Up or Down** to the stop on the next line whose centre is nearest across. **Up from the
+  first line** is the box's `upFromTop` (the hub's Advanced link, by Steam's transfer); **Down from the last line** is
+  `downFromStrip`: Steam's transfer onto the try-order switch's row (`enterSwitch`), or, with no switch, onto the list's `navRef`
+  and then a plain move onto the first row's star. A starter chip that vanishes under the ring (its run ended) hands the ring
+  to the last stop left.
+- **Into the strip:** Down from Advanced is the hub's own handler calling the box's `downFromAboveRef`: a transfer onto the strip,
+  then its first switch. Up from the try-order switch is `moveUpFromSwitch`: a transfer onto the strip, then the last-line stop
+  nearest the switch (`focusBottomNear`), else Advanced. Up from the list's first row is `leaveListUp`: the switch if drawn, else
+  the strip the same way, else Advanced.
+- **The list:** a star's Left is held (nothing sits left of it any more); Right and the Try column are as before.
+- **The containers:** the strip, the try-order switch row and the list are three children of one `Focusable`
+  (`.bonsai-pullmodels-main`, `flow-children="column"`), so a Down that none takes leaves the group for the dialog's footer.
+- **A press on any stop** runs through `onOKButton` as well as `onClick` (the screen is a confirm box with its own OK).
+- **The picks** (the picked word and "Fits this Deck") live in a module-level store (`pullModelsBoxMemory.ts`), because closing a
+  Decky popup rebuilds what is behind it (lessons § 3). "Open source only" is the saved licence setting: the switch only proposes
+  a change to it, saved on Done by the hub. A model outside the licence setting is dimmed, never hidden, and an installed model is
+  always listed.
+- **Tests:** `PullModelsFiltersStrip.test.tsx` (steamRing stand-in, so a bare cross-container `focus()` fails): the strip and its
+  words, the count against the rows drawn, the switches, A on each, the picks kept, Advanced to the first switch and back, Up from
+  the list onto the strip, Left and Right held, and one bounded walk of the whole box (Advanced, every strip stop line by line,
+  every row's star, Done, and back) with every landing in sight under the list's own scroll model. `pullModelsStripMove.test.ts`
+  pins the pure choice; `pullModelWords.test.ts` the words; `pullModelsListLayout.test.ts` the list's columns.
+- **Device row:** P105-MODELS-BOX-01 (the default view as drawn, each filter, a walk of the whole list with every stop visible, an
+  installed model always shown).
 
 ### The Search tab (plan 92, lane N3)
 

@@ -57,11 +57,11 @@ describe("PullModelsModal buttons do not submit an enclosing form", () => {
     expect(container.querySelector('[aria-label="Deselect qwen3.5:4b"]')).not.toBeNull();
   });
 
-  it("ticking a row in the filters column does not submit the form", () => {
+  it("pressing a word in the filter strip does not submit the form", () => {
     const onSubmit = vi.fn((e: FormEvent<HTMLFormElement>) => e.preventDefault());
     const { container } = renderInForm(onSubmit);
 
-    const vision = container.querySelector('.bonsai-pullmodels-filtercol-row[aria-label="Vision"]') as HTMLButtonElement;
+    const vision = Array.from(container.querySelectorAll(".bonsai-pullmodels-word")).find((b) => b.textContent === "pictures") as HTMLButtonElement;
     fireEvent.click(vision);
 
     expect(onSubmit).not.toHaveBeenCalled();

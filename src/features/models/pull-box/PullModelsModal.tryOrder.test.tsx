@@ -525,7 +525,8 @@ describe("a model the filters hide", () => {
     const gemma = Array.from(container.querySelectorAll(".bonsai-pullmodels-table-row--data")).find((r) => r.textContent?.includes("gemma3:4b"));
     expect(gemma?.querySelector(".bonsai-pullmodels-place-num")?.textContent).toBe("2");
     expect(container.textContent).not.toContain("hidden by the filters");
-    fireEvent.click(container.querySelector('button[aria-label="Strategy"]') as HTMLButtonElement);
+    const strategy = Array.from(container.querySelectorAll(".bonsai-pullmodels-word")).find((b) => b.textContent === "strategy");
+    fireEvent.click(strategy as HTMLButtonElement);
     await waitFor(() => expect(container.textContent).toContain("1 model in the order is hidden by the filters."));
     expect(placeOf(container, "qwen3.5:4b")).toBe("1");
     expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("3");
@@ -564,7 +565,7 @@ describe("walking the box with the D-pad", () => {
     // The switch above the list, on the side that is on, is where the walk starts (Steam's own Down from the title row).
     button(container, "Try order for text questions").focus();
     const visited: Element[] = [document.activeElement!];
-    for (let guard = 0; guard < 40; guard++) {
+    for (let guard = 0; guard < 60; guard++) {
       if (!press("onMoveDown")) break;
       const el = document.activeElement!;
       expect(visited, `stop visited twice: ${labelOf(el)}`).not.toContain(el);
@@ -572,12 +573,14 @@ describe("walking the box with the D-pad", () => {
       visited.push(el);
       below(el, `down at ${labelOf(el)}`);
     }
-    // The switch plus the three answering models' stars and the note-search model's own star.
-    expect(visited.length).toBe(1 + 4);
+    // The switch, then every star in the list once: the box opens on every model that fits a Deck (plan 105), so the
+    // walk is the whole list, the three answering models and the note-search model's own star among them.
+    expect(visited.length).toBe(1 + list.querySelectorAll(".bonsai-pullmodels-slot").length);
+    expect(visited.length).toBeGreaterThan(30);
     expect(list.scrollTop).toBeGreaterThanOrEqual(0);
 
     const up: Element[] = [];
-    for (let guard = 0; guard < 40; guard++) {
+    for (let guard = 0; guard < 60; guard++) {
       const el = document.activeElement!;
       if (labelOf(el) === "Try order for text questions") break;
       expect(up, `stop visited twice on the way up: ${labelOf(el)}`).not.toContain(el);
@@ -589,7 +592,8 @@ describe("walking the box with the D-pad", () => {
     expect(labelOf(document.activeElement!)).toBe("Try order for text questions");
     expect(up.length).toBe(visited.length - 1);
     expect(list.scrollTop).toBe(0);
-    // Up from the switch leaves the box's top for the Advanced link (plan 91; it was the Filters button).
+    // Up from the switch goes to the filter strip's last line by Steam's transfer (plan 105); with no strip drawn
+    // under this test's stand-in for Steam, the press falls to the Advanced link.
     expect(press("onMoveUp")).toBe(true);
     expect(upToAdvanced).toHaveBeenCalledTimes(1);
   });

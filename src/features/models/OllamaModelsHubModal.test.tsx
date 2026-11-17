@@ -7,7 +7,7 @@
  * press was the only thing that saved it. PullModelsModal is stubbed here on purpose: this file's
  * own contract (what Done does, which sections exist) does not need the real catalog table, the
  * RPC calls or the filters column behind it — those have their own coverage in
- * PullModelsFiltersColumn.test.tsx. ConfirmModal's fake never calls the real onOK/onCancel it
+ * PullModelsFiltersStrip.test.tsx. ConfirmModal's fake never calls the real onOK/onCancel it
  * is given (its stub throws both away, matching Steam's own chrome living outside this file's
  * DOM), so this file captures them directly instead of trying to click a stub into firing them.
  *

@@ -47,17 +47,12 @@ function setInstalledModels(models: string[]) {
 }
 
 /**
- * The picker defaults to "Essentials only", which shows just the three one-pull multimodal
- * presets (all "essentials"-group, all vision-capable). A "smallest"-group, text-only tag like
- * qwen2.5:1.5b or llama3.2:3b needs this off to appear as a catalog row at all.
- *
- * Deck essentials only is a row of the filters column beside the list (plan 91), always on screen.
+ * The box opens with "Fits this Deck" on, which leaves out the Expert (large) group; every other model is listed
+ * (plan 105). Turning the switch off adds the Expert group. A no-op when an earlier test already turned it off.
  */
 function showAllGroups(container: HTMLElement) {
-  const toggle = container.querySelector(
-    '[aria-label="Deck essentials only — show Tier 1 and Tier 2 one-model presets"]'
-  ) as HTMLButtonElement;
-  fireEvent.click(toggle);
+  const toggle = container.querySelector('[aria-label^="Fits this Deck"]') as HTMLButtonElement;
+  if (toggle.getAttribute("aria-pressed") === "true") fireEvent.click(toggle);
 }
 
 describe("isEmbeddingOnlyTag", () => {
@@ -271,7 +266,7 @@ describe("PullModelsModal 'Use for Ask' pin", () => {
    * Deck, plan 64 flow G (plan64-PRELOAD-01-try2.json): qwen2.5:1.5b pulled by typed name had no
    * row in the default Essentials-only view -- no star, no Remove -- while the header counted it.
    */
-  it("gives an installed model its row even with Essentials only on", async () => {
+  it("gives an installed model its row whatever the switches say", async () => {
     setInstalledModels(["qwen2.5:1.5b"]);
     const { container } = renderModal();
     await waitFor(() => {
@@ -279,13 +274,14 @@ describe("PullModelsModal 'Use for Ask' pin", () => {
     });
   });
 
-  it("still hides a non-essential model that is not installed while Essentials only is on", async () => {
-    setInstalledModels(["gemma4:e2b-it-qat"]);
+  it("leaves out an Expert (large) model that is not installed while Fits this Deck is on, and keeps one that is", async () => {
+    setInstalledModels(["gemma4:e2b-it-qat", "qwen2.5:14b"]);
     const { container } = renderModal();
     await waitFor(() => {
       expect(container.querySelector('[aria-label="Use gemma4:e2b-it-qat for Ask"]')).not.toBeNull();
     });
-    expect(container.textContent).not.toContain("qwen2.5:1.5b");
+    expect(container.querySelector('[aria-label="Use qwen2.5:14b for Ask"]')).not.toBeNull();
+    expect(container.querySelector('[aria-label="Select gemma4:12b-it-qat to pull"]')).toBeNull();
   });
 
   it("shows the hollow star for an installed model with no saved try-order yet", async () => {
@@ -431,7 +427,7 @@ describe("PullModelsModal 'New' badge", () => {
 });
 
 describe("PullModelsModal Expert (large) group visibility", () => {
-  it("shows the Expert (large) group, stretch entries included, once Essentials only is off", async () => {
+  it("shows the Expert (large) group, stretch entries included, once Fits this Deck is off", async () => {
     // Found while wiring the Expert group's bake-off order (workshop:planning/41-deck-model-survey.md
     // § 9, D73): filteredCatalog dropped every "stretch" entry no matter how the Essentials-only
     // toggle was set -- toggle on excluded anything that was not "essentials", toggle off excluded
@@ -439,12 +435,15 @@ describe("PullModelsModal Expert (large) group visibility", () => {
     // show the group at all.
     setInstalledModels([]);
     const { container } = renderModal();
+    await waitFor(() => {
+      expect(container.querySelector('[aria-label="Select qwen3.5:4b to pull"]')).not.toBeNull();
+    });
+    expect(container.querySelector('[aria-label="Select gemma4:12b-it-qat to pull"]')).toBeNull();
     showAllGroups(container);
 
     await waitFor(() => {
-      expect(container.textContent).toContain("Expert (large)");
+      expect(container.querySelector('[aria-label="Select gemma4:12b-it-qat to pull"]')).not.toBeNull();
     });
-    expect(container.querySelector('[aria-label="Select gemma4:12b-it-qat to pull"]')).not.toBeNull();
     expect(container.querySelector('[aria-label="Select qwen2.5:14b to pull"]')).not.toBeNull();
   });
 });

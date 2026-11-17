@@ -1,26 +1,19 @@
 /**
- * Title: Pull models table filtering and the filters column's row model
+ * Title: Pull models table checks
  *
- * Purpose: The pure matching checks PullModelsModal.tsx runs a catalog entry through (installed?
- * matches the licence tier? matches a Good for filter? on the live registry?), plus the flat,
- * ordered row list that drives the filters column beside the list and the words each row shows.
+ * Purpose: The pure checks PullModelsModal.tsx runs a catalog entry through (installed? inside the licence
+ * setting, so drawn dimmed when it is not? on the live registry?).
  *
- * Used for: usePullModelTableData.ts's table filtering and counts, and PullModelsFiltersColumn.tsx
- * (FILTER_PANEL_ROWS, its headings and labels, and the D-pad walk over it).
+ * Used for: the table in PullModelsModal.tsx, usePullModelTableData.ts's counts and the try-order group.
  *
- * Solves: keeps "does this entry match?" and "what does this filter row say?" as one small set of
- * pure functions, testable and readable apart from the screen's state and rendering.
+ * Solves: keeps "does this entry match?" as one small set of pure functions, testable and readable apart from
+ * the screen's state and rendering.
  *
  * Does not: hold any screen state (which filters are on, which tags are installed) — those stay in
  * PullModelsModal.tsx, which calls these with its own state on every render.
  */
-import {
-  PULL_MODEL_MODE_FILTER_OPTIONS,
-  type PullModelEntry,
-  type PullModelModeFilterId,
-  type PullModelUseTag,
-} from "../pullModelCatalog";
-import { MODEL_POLICY_TIER_IDS, MODEL_POLICY_TIER_LABELS_PLAIN, type ModelPolicyTierId } from "../modelPolicy";
+import type { PullModelEntry } from "../pullModelCatalog";
+import type { ModelPolicyTierId } from "../modelPolicy";
 import type { CatalogMetadataResponse } from "./PullModelsModal.types";
 
 /**
@@ -42,17 +35,6 @@ export function findUnavailableRegistryTags(
   if (!meta || meta.source !== "live") return [];
   const tagMeta = meta.tags ?? {};
   return tags.filter((tag) => tagMeta[tag]?.exists !== true);
-}
-
-const SHORT_TAG: Record<PullModelUseTag, string> = { chat: "Chat", vision: "Vis", ocr: "OCR", strategy: "Strat", coding: "Code" };
-
-/**
- * The list's Modes cell in short words ("Chat Vis OCR Strat"), so it reads on two lines in the narrow
- * track the filters column leaves it (plan 91; the long words, "Chat · Vision · Ocr · Strategy", are
- * the cell's title). Spaces, not dots, so the line breaks between words.
- */
-export function formatModesShort(tags: ReadonlyArray<PullModelUseTag>): string {
-  return tags.map((t) => SHORT_TAG[t] ?? t).join(" ");
 }
 
 export function normalizeInstalledSet(models: string[]): Set<string> {
@@ -81,22 +63,6 @@ export function resolveRowSizeGb(entry: PullModelEntry, liveSizes: Record<string
   return entry.sizeGb;
 }
 
-function entryMatchesModeFilter(entry: PullModelEntry, mode: PullModelModeFilterId): boolean {
-  if (mode === "speed") return entry.tags.includes("chat");
-  if (mode === "strategy") return entry.tags.includes("strategy");
-  if (mode === "expert") return entry.group === "stretch" || (entry.tags.includes("strategy") && (entry.rating ?? 0) >= 5);
-  return entry.tags.includes("vision") || entry.tags.includes("ocr");
-}
-
-/** No mode ticked shows everything; one or more ticked shows anything that fits *any* of them. */
-export function entryMatchesModeFilters(entry: PullModelEntry, modes: ReadonlySet<PullModelModeFilterId>): boolean {
-  if (modes.size === 0) return true;
-  for (const mode of modes) {
-    if (entryMatchesModeFilter(entry, mode)) return true;
-  }
-  return false;
-}
-
 /**
  * The Licence filter, replacing the old standalone Policy tier buttons (plan 62, § 3d) — it is
  * the point of the change, so it filters the list exactly the way the three tiers read: Tier 1
@@ -107,54 +73,4 @@ export function entryMatchesLicenceTier(entry: PullModelEntry, tier: ModelPolicy
   if (tier === "open_source_only") return entry.licenseClass === "foss";
   if (tier === "open_weight") return entry.licenseClass === "foss" || entry.licenseClass === "open_weight";
   return true;
-}
-
-/**
- * One row in the filters column (plan 62, § 3d; a column since plan 91) — the filters, grouped under
- * three headings. Licence is a three-way pick (like the old Policy buttons); the rest are independent
- * toggles. A flat, ordered array rather than nested objects because the column's Up/Down walk goes
- * through it by a single row index.
- */
-export type FilterPanelRow =
-  | { kind: "licence"; tier: ModelPolicyTierId }
-  | { kind: "mode"; id: PullModelModeFilterId }
-  | { kind: "installedOnly" }
-  | { kind: "essentialsOnly" }
-  | { kind: "recentlyAdded" };
-
-export const FILTER_PANEL_ROWS: readonly FilterPanelRow[] = [
-  ...MODEL_POLICY_TIER_IDS.map((tier): FilterPanelRow => ({ kind: "licence", tier })),
-  ...PULL_MODEL_MODE_FILTER_OPTIONS.map((opt): FilterPanelRow => ({ kind: "mode", id: opt.id })),
-  { kind: "installedOnly" },
-  { kind: "essentialsOnly" },
-  { kind: "recentlyAdded" },
-];
-
-export function filterPanelRowKey(row: FilterPanelRow): string {
-  if (row.kind === "licence") return `licence-${row.tier}`;
-  if (row.kind === "mode") return `mode-${row.id}`;
-  return row.kind;
-}
-
-/** The drawing's words for the three groups (plan 91 § 2a): Licence, Good for, Show. */
-export function filterPanelRowGroupHeading(row: FilterPanelRow): string {
-  if (row.kind === "licence") return "License";
-  if (row.kind === "mode") return "Good for";
-  return "Show";
-}
-
-export function filterPanelRowLabel(row: FilterPanelRow): string {
-  if (row.kind === "licence") return MODEL_POLICY_TIER_LABELS_PLAIN[row.tier];
-  if (row.kind === "mode") {
-    return PULL_MODEL_MODE_FILTER_OPTIONS.find((opt) => opt.id === row.id)?.label ?? row.id;
-  }
-  if (row.kind === "installedOnly") return "Installed only";
-  if (row.kind === "essentialsOnly") return "Deck essentials only";
-  return "Recently added";
-}
-
-/** Same text as filterPanelRowLabel, except Deck essentials only keeps its longer spoken description. */
-export function filterPanelRowAriaLabel(row: FilterPanelRow): string {
-  if (row.kind === "essentialsOnly") return "Deck essentials only — show Tier 1 and Tier 2 one-model presets";
-  return filterPanelRowLabel(row);
 }

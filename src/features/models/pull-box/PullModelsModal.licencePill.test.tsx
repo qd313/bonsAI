@@ -25,9 +25,7 @@ function renderModal() {
 
 function showAllGroups(container: HTMLElement) {
   // The box remembers this pick for the session, so an earlier test may already have switched it off.
-  const toggle = container.querySelector(
-    '[aria-label="Deck essentials only — show Tier 1 and Tier 2 one-model presets"]'
-  ) as HTMLButtonElement;
+  const toggle = container.querySelector('[aria-label^="Fits this Deck"]') as HTMLButtonElement;
   if (toggle.getAttribute("aria-pressed") === "true") fireEvent.click(toggle);
 }
 

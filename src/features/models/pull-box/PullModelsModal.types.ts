@@ -43,6 +43,8 @@ export type VisibleTableRow = VisibleCatalogRow | VisibleOtherRow;
 
 export type TableSection = {
   title: string;
+  /** False for a catalog group: the drawn list is one list and does not head its groups (plan 105). */
+  showTitle: boolean;
   rows: VisibleTableRow[];
 };
 
@@ -60,7 +62,7 @@ export type PullModelsModalProps = {
   modelPolicyTier?: ModelPolicyTierId;
   /** Gates the "Any installed model" licence row exactly like it gated the old Tier 3 button. */
   modelPolicyNonFossUnlocked?: boolean;
-  /** Licence row picked directly in the filters column — a draft, saved the same way the three
+  /** Licence row picked directly with the strip's "Open source only" switch — a draft, saved the same way the three
    *  Policy buttons were (see OllamaModelsHubModal's Done handling). */
   onSelectModelPolicyTier?: (tier: ModelPolicyTierId) => void;
   onApplyTier2Policy?: () => void | Promise<void>;
@@ -71,12 +73,12 @@ export type PullModelsModalProps = {
   /** When true, render panel body only (for AI models hub). */
   embedded?: boolean;
   onFooterStateChange?: (state: PullModelsFooterState) => void;
-  /** Up out of the top of the box (the filters column's Clear, the try-order switch, or the first row
-   *  with no switch): the hub hands the ring to its Advanced link by Steam's transfer. Left out, or
+  /** Up out of the top of the box (the filter strip's first line, or the first row
+   *  with nothing between): the hub hands the ring to its Advanced link by Steam's transfer. Left out, or
    *  false, and the press is Steam's own. */
   onMoveUpFromTop?: () => boolean;
   /** Filled by the box while it is drawn, emptied when it goes: Down from the hub's Advanced link calls it to hand
-   *  the ring to the column's Clear (plan 93: the header's Refresh button, which sat between them, is gone). */
+   *  the ring to the strip's first switch (plan 93: the header's Refresh button, which sat between them, is gone). */
   downFromAboveRef?: { current: (() => boolean) | null };
   /** Which computer answers and the saved orders. Given: the box shows the try-order switch and each
    *  installed row's place (PullModelsTryOrder.tsx). Left out: Browse models looks as it always did. */

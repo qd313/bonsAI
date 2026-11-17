@@ -25,7 +25,7 @@
  * How it works: (1) the types and the four group ids come first — essentials,
  * smallest ("More models"), stretch ("Expert (large)"), specialist; (2) small
  * lookup helpers used by the Pull Models screen and its recommendation logic
- * (`isEmbeddingOnlyTag`, `isDeckDailyPullModel`, `isDeckEssentialsPullModel`);
+ * (`isEmbeddingOnlyTag`, `isDeckDailyPullModel`);
  * (3) `PULL_MODEL_CATALOG` itself, the flat list of entries, grouped in the
  * source file the same way the screen groups them even though the screen
  * re-sorts within each group, with the 22 rows added in plan 105 after them
@@ -87,22 +87,6 @@ export const PULL_MODEL_GROUP_ORDER: readonly PullModelGroup[] = [
   "specialist",
 ];
 
-/**
- * The four "Good for" filters offered in the models screen's filters column (plan 62, § 3d; a
- * column since plan 91). Replaces the old single-select filter row (all/speed/strategy/expert/vision/coding):
- * "All" is gone because these are independent tickable rows now (ticking none shows every mode),
- * and "Coding" was dropped on purpose — nothing in the catalog is coding-only and no Ask mode
- * matches it. A model matches this group when it fits *any* ticked mode (OR, not AND).
- */
-export const PULL_MODEL_MODE_FILTER_OPTIONS = [
-  { id: "speed", label: "Speed" },
-  { id: "strategy", label: "Strategy" },
-  { id: "expert", label: "Expert" },
-  { id: "vision", label: "Vision" },
-] as const;
-
-export type PullModelModeFilterId = (typeof PULL_MODEL_MODE_FILTER_OPTIONS)[number]["id"];
-
 /** Pull models table header — curated 1–6 ★ score for quality/fit on Steam Deck. */
 export const PULL_MODEL_RATING_COLUMN_LABEL = "Deck fit";
 
@@ -125,11 +109,6 @@ export function isEmbeddingOnlyTag(tag: string): boolean {
 
 export function isDeckDailyPullModel(entry: PullModelEntry): boolean {
   return entry.group !== "stretch";
-}
-
-/** One-pull Deck presets shown by default in Browse models. */
-export function isDeckEssentialsPullModel(entry: PullModelEntry): boolean {
-  return entry.group === "essentials";
 }
 
 export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
@@ -493,6 +472,19 @@ export function formatGtaStars(rating: number | undefined): string {
 
 export function formatPullModelTags(tags: ReadonlyArray<PullModelUseTag>): string {
   return tags.map((t) => t.charAt(0).toUpperCase() + t.slice(1)).join(" · ");
+}
+
+const PLAIN_TAG: Record<PullModelUseTag, string> = {
+  chat: "Chat",
+  vision: "Pictures",
+  ocr: "Screen text",
+  strategy: "Strategy",
+  coding: "Coding",
+};
+
+/** The list's Good for cell, in plain words ("Chat · Pictures · Screen text · Strategy"), as board 5 draws it. */
+export function formatPullModelTagsPlain(tags: ReadonlyArray<PullModelUseTag>): string {
+  return tags.map((t) => PLAIN_TAG[t] ?? t).join(" · ");
 }
 
 export function bytesToGb(bytes: number): number {

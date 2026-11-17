@@ -16,8 +16,7 @@
  * Does not: Pull, remove or star anything, or decide the order; the Try cell does the moving.
  */
 import type { ReactNode } from "react";
-import { formatGtaStars, formatPullModelTags, formatSizeGb, type PullModelEntry } from "../pullModelCatalog";
-import { formatModesShort } from "./pullModelFilters";
+import { formatGtaStars, formatPullModelTags, formatPullModelTagsPlain, formatSizeGb, type PullModelEntry } from "../pullModelCatalog";
 import { PullModelLicenceSlot } from "./PullModelLicenceSlot";
 
 export function PullModelsPcRow(props: {
@@ -53,7 +52,7 @@ export function PullModelsPcRow(props: {
         role="cell"
         title={entry ? formatPullModelTags(entry.tags) : undefined}
       >
-        {entry ? formatModesShort(entry.tags) : "Other"}
+        {entry ? formatPullModelTagsPlain(entry.tags) : "Other"}
       </div>
       <div className="bonsai-pullmodels-col bonsai-pullmodels-col--stars" role="cell">
         {entry ? formatGtaStars(entry.rating) : "—"}

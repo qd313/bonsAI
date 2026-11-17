@@ -178,11 +178,11 @@ describe("Browse models: the button goes away on the open screen when the run en
 });
 
 describe("Browse models: Install the starter set", () => {
-  it("is in the filters column when the starter model is not installed, and gone once it is", async () => {
+  it("is in the filter strip when the starter model is not installed, and gone once it is", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: [] }));
     const first = renderModal();
     await waitFor(() => expect(chip(first.container)).not.toBeNull());
-    expect(first.container.querySelector(".bonsai-pullmodels-filtercol")!.contains(chip(first.container))).toBe(true);
+    expect(first.container.querySelector(".bonsai-pullmodels-strip")!.contains(chip(first.container))).toBe(true);
     first.unmount();
 
     setRpcHandler("test_ollama_connection", () => ({
@@ -230,7 +230,7 @@ describe("Browse models: Install the starter set", () => {
     expect(setupCalls().map((c) => c.args)).toEqual([[{ profile: "tier1_essentials" }]]);
   });
 
-  it("answers the Steam A button like every other control here, and Up and Down walk the filters column", async () => {
+  it("answers the Steam A button like every other control here, and Left, Right and Down walk the filter strip", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: [] }));
     const { container } = renderModal();
     await waitFor(() => expect(chip(container)).not.toBeNull());
@@ -241,10 +241,26 @@ describe("Browse models: Install the starter set", () => {
     expect(stop).toHaveBeenCalledTimes(1);
     expect(hoisted.modal?.props.title).toBe("Install the starter set?");
 
-    // It is one stop of the filters column (plan 91): Down to the first Suggested chip under it, Up to "Type a name".
-    expect((props.onMoveDown as () => boolean)()).toBe(true);
-    expect(document.activeElement?.getAttribute("aria-label")).toMatch(/^Queue /);
-    expect((props.onMoveUp as () => boolean)()).toBe(true);
-    expect(document.activeElement?.getAttribute("aria-label")).toBe("Type a model name by hand");
+    // It is one stop of the filter strip (plan 105), laid out as the Deck draws it: "Type a name" and the starter set
+    // side by side, the Suggested chips on the line under them. jsdom has no layout, so the places are given here.
+    const at = (left: number, top: number) => ({ left, top, width: 80, height: 22, right: left + 80, bottom: top + 22, x: left, y: top, toJSON: () => ({}) }) as DOMRect;
+    const spy = vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(function (this: Element) {
+      const label = this.getAttribute("aria-label") ?? this.textContent ?? "";
+      if (label === "Type a model name by hand") return at(0, 74);
+      if (label === LABEL) return at(90, 74);
+      if (/^Queue /.test(label)) return at(0, 100);
+      return at(0, 0);
+    });
+    try {
+      expect((props.onMoveLeft as () => boolean)()).toBe(true);
+      expect(document.activeElement?.getAttribute("aria-label")).toBe("Type a model name by hand");
+      const typeName = latest("Type a model name by hand")!;
+      expect((typeName.onMoveRight as () => boolean)()).toBe(true);
+      expect(document.activeElement?.getAttribute("aria-label")).toBe(LABEL);
+      expect((props.onMoveDown as () => boolean)()).toBe(true);
+      expect(document.activeElement?.getAttribute("aria-label")).toMatch(/^Queue /);
+    } finally {
+      spy.mockRestore();
+    }
   });
 });

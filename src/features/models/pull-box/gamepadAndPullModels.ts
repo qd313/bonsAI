@@ -138,10 +138,10 @@ export function buildGamepadFocusRingStylesheet(): string {
         .bonsai-scope button.bonsai-pullmodels-slot:focus-visible,
         .bonsai-scope button.bonsai-pullmodels-delete-btn.gpfocus,
         .bonsai-scope button.bonsai-pullmodels-delete-btn:focus-visible,
-        .bonsai-scope button.bonsai-pullmodels-filtercol-row.gpfocus,
-        .bonsai-scope button.bonsai-pullmodels-filtercol-row:focus-visible,
-        .bonsai-scope button.bonsai-pullmodels-filtercol-clear.gpfocus,
-        .bonsai-scope button.bonsai-pullmodels-filtercol-clear:focus-visible {
+        .bonsai-scope button.bonsai-pullmodels-switch.gpfocus,
+        .bonsai-scope button.bonsai-pullmodels-switch:focus-visible,
+        .bonsai-scope button.bonsai-pullmodels-word.gpfocus,
+        .bonsai-scope button.bonsai-pullmodels-word:focus-visible {
           ${ring}
         }
         /* A glass button inside a popup (the two-button confirm box's Cancel, the first-run popup's Not
@@ -187,24 +187,20 @@ export function buildModalPortalStylesheet(): string {
 
 
 /**
- * The filters column and the list beside it (plan 91, M1), sized from the Deck's own box (plan 92, M-A:
- * the box's content is 572.9 wide, the list's box 568.9). The column is as narrow as its words allow
- * (the drawing's 196 left the list too little), and the list lost its Date column; what is left of the
- * list is shared out by these tracks. PullModelsFiltersColumn.layout.test.ts reads them back and works
- * the grid out: the Model column must stay within 10 per cent of the 124.3 it had (M-A), so at least 112.
+ * The list under the filter strip, sized as board 5's tab 3 draws it (plan 105; the box's content is 572.9 wide, the
+ * list's box 568.9, plan 92 M-A). The filters column that used to take 178 px beside it is gone, so the list is the
+ * box's whole width and the Good for words and the size notes have room. pullModelsListLayout.test.ts reads the
+ * tracks back and works the grid out.
  */
-export const PULL_MODELS_FILTER_COLUMN_PX = 170;
-export const PULL_MODELS_SPLIT_GAP_PX = 8;
-/** A row's gap between columns and its padding at each side (5 above and below, as before). */
 export const PULL_MODELS_ROW_GAP_PX = 4;
 export const PULL_MODELS_ROW_PAD_X_PX = 4;
-/** Left to right: Pull, Model, Size, Modes, Deck fit, Try (only with a host), Del. A number is fixed; [min, fr] shares the rest. */
+/** Left to right: Pull, Model, Size, Good for, Deck fit, Try (only with a host), Del. A number is fixed; [min, fr] shares the rest. */
 export const PULL_MODELS_TRACKS = {
   pull: 26,
-  model: [112, 2],
-  size: [36, 0.5],
-  modes: [44, 0.85],
-  fit: [40, 0.5],
+  model: [150, 2.4],
+  size: 92,
+  modes: [120, 1.8],
+  fit: 56,
   try: 64,
   del: 24,
 } as const;
@@ -212,7 +208,7 @@ export const PULL_MODELS_TRACKS = {
 function pullModelsGrid(withTry: boolean): string {
   const t = PULL_MODELS_TRACKS;
   const flex = ([min, fr]: readonly [number, number]) => `minmax(${min}px, ${fr}fr)`;
-  const tracks = [`${t.pull}px`, flex(t.model), flex(t.size), flex(t.modes), flex(t.fit)];
+  const tracks = [`${t.pull}px`, flex(t.model), `${t.size}px`, flex(t.modes), `${t.fit}px`];
   if (withTry) tracks.push(`${t.try}px`);
   tracks.push(`${t.del}px`);
   return tracks.join(" ");
@@ -330,125 +326,145 @@ export function buildPullModelsStylesheet(): string {
           flex-shrink: 0 !important;
           min-height: 24px !important;
         }
-        /* The filters column and the list, side by side (plan 91 § 2a). The row takes what the box
-           gives it; each side scrolls on its own, so the counts line above never moves. */
-        .bonsai-scope .bonsai-pullmodels-split {
+        /* The strip, the try-order switch and the list, top to bottom (plan 105; board 5, tab 3, option C). The list
+           takes what is left and scrolls on its own, so the strip above it never moves. */
+        .bonsai-scope .bonsai-pullmodels-main {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          flex: 1 1 auto;
+          min-height: 0;
+          min-width: 0;
+        }
+        .bonsai-scope .bonsai-pullmodels-strip {
+          flex: none;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+        .bonsai-scope .bonsai-pullmodels-strip-switches {
           display: flex;
           flex-direction: row;
-          align-items: stretch;
-          gap: ${PULL_MODELS_SPLIT_GAP_PX}px;
-          flex: 1 1 auto;
-          min-height: 0;
-          min-width: 0;
-        }
-        .bonsai-scope .bonsai-pullmodels-filtercol {
-          flex: 0 0 ${PULL_MODELS_FILTER_COLUMN_PX}px;
-          width: ${PULL_MODELS_FILTER_COLUMN_PX}px;
-          min-height: 0;
-          overflow-y: auto;
-          overflow-x: hidden;
-          display: flex;
-          flex-direction: column;
-          gap: 3px;
-          box-sizing: border-box;
-          padding: 2px 4px 4px 2px;
-          border-right: 1px solid rgba(255,255,255,0.08);
-        }
-        .bonsai-scope .bonsai-pullmodels-listside {
-          flex: 1 1 auto;
-          min-width: 0;
-          min-height: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-        .bonsai-scope .bonsai-pullmodels-filtercol-top {
-          display: flex;
           align-items: center;
-          justify-content: space-between;
           gap: 6px;
-          padding: 0 0 2px 2px;
         }
-        .bonsai-scope .bonsai-pullmodels-filtercol-count {
-          font-size: ${textPx(11)};
-          font-weight: 700;
-          color: var(--bonsai-pullmodels-accent);
-        }
-        .bonsai-scope .bonsai-pullmodels-filtercol-clear {
-          flex-shrink: 0 !important;
-          min-width: 0 !important;
-          min-height: 20px !important;
-          padding: 1px 8px !important;
-          font-size: ${textPx(10)} !important;
-          border-radius: 4px !important;
-          border: 1px solid rgba(255,255,255,0.14) !important;
-          background: rgba(255,255,255,0.04) !important;
-          color: #b8cce0 !important;
-        }
-        .bonsai-scope .bonsai-pullmodels-filtercol-title {
-          font-size: ${textPx(10)};
-          font-weight: 700;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          color: #8fa8c4;
-          padding: 4px 2px 1px;
-        }
-        .bonsai-scope .bonsai-pullmodels-filtercol-group-row {
-          display: flex;
-          flex-direction: column;
-        }
-        /* One tickable row: tick, words (two lines at most), and for a Good for row its count. */
-        .bonsai-scope .bonsai-pullmodels-filtercol-row {
+        .bonsai-scope .bonsai-pullmodels-switch {
+          flex: 1 1 0 !important;
           display: flex !important;
           flex-direction: row !important;
           align-items: center !important;
-          justify-content: flex-start !important;
-          gap: 6px !important;
-          width: 100% !important;
+          justify-content: space-between !important;
           min-width: 0 !important;
-          min-height: 24px !important;
-          padding: 2px 8px !important;
-          font-size: ${textPx(10)} !important;
-          line-height: 1.2 !important;
-          border-radius: 3px !important;
-          border: 1px solid rgba(255,255,255,0.08) !important;
-          background: rgba(255,255,255,0.03) !important;
-          color: #c5d4e3 !important;
-          text-align: left !important;
+          height: 30px !important;
+          min-height: 30px !important;
+          padding: 0 10px !important;
+          font-size: ${textPx(11.5)} !important;
+          color: #dcdedf !important;
+          background: rgba(255,255,255,0.04) !important;
+          border: 1px solid rgba(255,255,255,0.14) !important;
+          border-radius: 4px !important;
         }
-        .bonsai-scope .bonsai-pullmodels-filtercol-row--on {
-          border-color: rgba(56,189,248,0.55) !important;
-          background: rgba(56,189,248,0.14) !important;
-          color: #e0f2fe !important;
+        .bonsai-scope .bonsai-pullmodels-switch-knob {
+          position: relative;
+          display: inline-block;
+          flex: none;
+          width: 30px;
+          height: 16px;
+          border-radius: 8px;
+          background: #32373d;
         }
-        .bonsai-scope .bonsai-pullmodels-filtercol-row[disabled] {
-          opacity: 0.4 !important;
+        .bonsai-scope .bonsai-pullmodels-switch-knob::after {
+          content: "";
+          position: absolute;
+          top: 1px;
+          left: 1px;
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          background: #fdfeff;
         }
-        .bonsai-scope .bonsai-pullmodels-filtercol-tick {
-          flex-shrink: 0;
-          width: 12px;
-          color: var(--bonsai-pullmodels-accent);
+        .bonsai-scope .bonsai-pullmodels-switch--on .bonsai-pullmodels-switch-knob {
+          background: #1a9fff;
+        }
+        .bonsai-scope .bonsai-pullmodels-switch--on .bonsai-pullmodels-switch-knob::after {
+          left: 15px;
+        }
+        .bonsai-scope .bonsai-pullmodels-strip-count {
+          flex: none;
+          font-size: ${textPx(11)};
           font-weight: 700;
+          color: var(--bonsai-pullmodels-accent);
+          padding: 0 2px;
+          white-space: nowrap;
         }
-        .bonsai-scope .bonsai-pullmodels-filtercol-label {
-          flex: 1 1 auto;
-          min-width: 0;
-          white-space: normal;
-        }
-        .bonsai-scope .bonsai-pullmodels-filtercol-n {
-          flex-shrink: 0;
-          font-size: ${textPx(9)};
-          color: #9fb7d5;
-        }
-        /* "Type a name", the starter set and the Suggested models, at the foot of the column. */
-        .bonsai-scope .bonsai-pullmodels-filtercol-chips {
+        /* The words, then "Type a name", the starter set and the Suggested models: one wrapping line of pills. */
+        .bonsai-scope .bonsai-pullmodels-find {
           display: flex;
           flex-wrap: wrap;
+          align-items: center;
           gap: 4px;
-          padding-top: 6px;
+          padding-top: 4px;
         }
-        .bonsai-scope .bonsai-pullmodels-filtercol-chips .bonsai-pullmodels-filtercol-title {
+        .bonsai-scope .bonsai-pullmodels-find-label {
           flex-basis: 100%;
+          font-size: ${textPx(9.5)};
+          color: #8fa8c4;
+        }
+        .bonsai-scope .bonsai-pullmodels-find-suggested {
+          font-size: ${textPx(9.5)};
+          color: #8fa8c4;
+          padding: 0 2px;
+        }
+        .bonsai-scope .bonsai-pullmodels-word {
+          min-width: 0 !important;
+          height: 22px !important;
+          min-height: 22px !important;
+          padding: 0 9px !important;
+          font-size: ${textPx(10.5)} !important;
+          white-space: nowrap;
+          border-radius: 11px !important;
+          border: 1px solid rgba(255,255,255,0.16) !important;
+          background: rgba(255,255,255,0.05) !important;
+          color: #dce8f4 !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-word--on {
+          background: rgba(56,189,248,0.2) !important;
+          border-color: rgba(56,189,248,0.65) !important;
+          color: #fff !important;
+          font-weight: 700;
+        }
+        .bonsai-scope .bonsai-pullmodels-word--more {
+          color: var(--bonsai-pullmodels-accent) !important;
+          border-style: dashed !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-legend {
+          flex: none;
+          font-size: ${textPx(9.5)};
+          line-height: 1.3;
+          color: #8fa8c4;
+        }
+        .bonsai-scope .bonsai-pullmodels-legend i {
+          font-style: normal;
+          color: #fbbf24;
+        }
+        .bonsai-scope .bonsai-pullmodels-more-note {
+          font-size: ${textPx(10)};
+          line-height: 1.35;
+          color: #fbbf24;
+          padding: 8px 6px 4px;
+        }
+        /* Under the size: why a row is marked (slow on a Deck, too big for this Deck). */
+        .bonsai-scope .bonsai-pullmodels-size-note {
+          display: block;
+          font-style: normal;
+          font-size: ${textPx(8)};
+          line-height: 1.15;
+          color: #fbbf24;
+          white-space: nowrap;
+        }
+        .bonsai-scope .bonsai-pullmodels-size-note--big {
+          color: #f87171;
+          font-weight: 700;
         }
         .bonsai-scope .bonsai-pullmodels-custom-tag {
           flex-basis: 100%;
@@ -559,6 +575,9 @@ export function buildPullModelsStylesheet(): string {
         .bonsai-scope .bonsai-pullmodels-table-row--dim .bonsai-pullmodels-col--modes,
         .bonsai-scope .bonsai-pullmodels-table-row--dim .bonsai-pullmodels-col--stars {
           opacity: 0.5;
+        }
+        .bonsai-scope .bonsai-pullmodels-table-row--big {
+          border-left: 2px solid rgba(248, 113, 113, 0.7);
         }
         .bonsai-scope .bonsai-pullmodels-table-row--installed {
           border-left: 2px solid rgba(156, 231, 255, 0.45);
@@ -709,10 +728,10 @@ export function buildPullModelsStylesheet(): string {
           white-space: nowrap;
           font-size: ${textPx(9)};
         }
-        /* Modes, short words on up to two lines ("Chat Vis" / "OCR Strat"): two 9 px lines are 21 px,
-           inside the row's 24 px buttons, so the row does not grow. The full words are its title. */
+        /* Good for, plain words on up to two lines ("Chat · Pictures · Screen text ·" / "Strategy"): two 9.5 px
+           lines are about 22 px, inside the row's 24 px buttons, so the row does not grow. */
         .bonsai-scope .bonsai-pullmodels-col--modes {
-          font-size: ${textPx(9)};
+          font-size: ${textPx(9.5)};
           line-height: 1.15;
           white-space: normal;
           overflow: hidden;

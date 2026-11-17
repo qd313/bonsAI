@@ -3,15 +3,14 @@
  *
  * Purpose: Turns the raw merged catalog and the screen's filter/installed state into everything
  * the table itself renders: the grouped, sectioned row list, the flat row list the D-pad walks by
- * index, the header's installed/queued counts and sizes, and the count beside each Good for choice
- * in the filters column.
+ * index, the header's installed/queued counts and sizes, and the word buttons the strip above the list draws.
  *
- * Used for: PullModelsModal.tsx's table body, its header summary line and its filters column.
+ * Used for: PullModelsModal.tsx's table body, its header summary line and its filter strip.
  *
  * Solves: keeps one clear pipeline — filter, group, section, flatten, total — instead of scattering
  * these derivations through the render body, and keeps each step's own dependency list next to it.
  *
- * Does not: decide the filters themselves (the filters column and its state stay in the screen) or
+ * Does not: decide the filters themselves (the strip and its state stay in the screen) or
  * choose the catalog (the built-in list in data/pullModelCatalog.ts). This only reshapes what it is handed.
  *
  * Caution: Lifted out of PullModelsModal.tsx with the order of its own hooks unchanged, because
@@ -23,31 +22,23 @@ import { useMemo } from "react";
 import {
   PULL_MODEL_GROUP_LABELS,
   PULL_MODEL_GROUP_ORDER,
-  PULL_MODEL_MODE_FILTER_OPTIONS,
   comparePullModelEntriesNewestFirst,
   comparePullModelEntriesStretchOrder,
   type PullModelEntry,
   type PullModelGroup,
-  type PullModelModeFilterId,
 } from "../pullModelCatalog";
 import { isCatalogModelTagInList } from "./mergePullModelCatalog";
-import {
-  entryMatchesModeFilters,
-  isTagInstalled,
-  resolveRowSizeGb,
-} from "./pullModelFilters";
-import { isRecentPullModelTag, type PullModelPullRecord } from "./pullModelNewBadge";
+import { isTagInstalled, resolveRowSizeGb } from "./pullModelFilters";
+import { buildPullModelWords, entryMatchesWord, type PullModelWord } from "./pullModelWords";
 import type { TableSection } from "./PullModelsModal.types";
-import { isDeckEssentialsPullModel } from "../pullModelCatalog";
 
 export type UsePullModelTableDataArgs = {
   mergedCatalog: readonly PullModelEntry[];
   installedTags: Set<string>;
-  modeFilters: ReadonlySet<PullModelModeFilterId>;
-  installedOnly: boolean;
-  essentialsOnly: boolean;
-  recentlyAddedOnly: boolean;
-  pullRecord: PullModelPullRecord;
+  /** The "Fits this Deck" switch: on, a model that is slow or too big for a Deck is left out unless it is installed. */
+  fitsDeck: boolean;
+  /** The picked word, or null. A word the list no longer has (a switch changed under it) counts as none. */
+  word: string | null;
   liveSizeGbByTag: Record<string, number>;
   selectedTags: Set<string>;
 };
@@ -58,87 +49,48 @@ export type PullModelTableData = {
   installedCatalogCount: number;
   installedTotalGb: number;
   selectedTotalGb: number;
-  /**
-   * Beside each Good for choice: how many rows the list would draw if that choice were the only Good
-   * for tick, under the licence and Show picks as they are. With that one choice ticked it is the
-   * number of rows the list draws, which is what the Deck check reads (plan 91 § 4, M1).
-   */
-  modeCounts: Record<PullModelModeFilterId, number>;
+  /** The word buttons: built from the models the switches leave, before a word narrows them. */
+  words: PullModelWord[];
+  /** The picked word if the list still has it, else null. */
+  activeWord: string | null;
+  /** How many models "Fits this Deck" is leaving out (not installed, in the Expert group). */
+  offBigCount: number;
 };
 
 /** Own the filter -> group -> section -> flatten -> total pipeline behind the table. */
 export function usePullModelTableData(a: UsePullModelTableDataArgs): PullModelTableData {
-  const {
-    mergedCatalog,
-    installedTags,
-    modeFilters,
-    installedOnly,
-    essentialsOnly,
-    recentlyAddedOnly,
-    pullRecord,
-    liveSizeGbByTag,
-    selectedTags,
-  } = a;
+  const { mergedCatalog, installedTags, fitsDeck, word, liveSizeGbByTag, selectedTags } = a;
 
   const otherInstalledTags = useMemo(() => {
     const out: string[] = [];
-    // Not in the curated catalog, so there is no license or mode data to check the Licence /
-    // Ask-mode filters against -- only "Recently added" (the New badge, tracked by tag alone)
-    // applies to this section, same as it always applied to these rows' own badge.
+    // Not in the curated catalog, so there is no licence or word data to check them against: they are listed
+    // at the end whenever no word is picked.
     for (const t of installedTags) {
       if (!isCatalogModelTagInList(mergedCatalog, t)) out.push(t);
     }
-    const filtered = recentlyAddedOnly
-      ? out.filter((t) => isRecentPullModelTag(pullRecord, t, Date.now()))
-      : out;
-    filtered.sort((a, b) => a.localeCompare(b));
-    return filtered;
-  }, [installedTags, mergedCatalog, recentlyAddedOnly, pullRecord]);
+    out.sort((x, y) => x.localeCompare(y));
+    return out;
+  }, [installedTags, mergedCatalog]);
 
-  /** Every filter but Good for, which the caller checks (the table with the real ticks, a count with one). */
-  const shownBesidesGoodFor = useMemo(() => {
-    const now = Date.now();
-    return (entry: PullModelEntry): boolean => {
-      // The licence setting no longer hides a row (plan 105): a model outside it is drawn dimmed by the
-      // table, and an installed model is always drawn. The check used to sit here, ahead of the
-      // installed-model rule below, so an installed model outside the setting vanished from the list
-      // while the header still counted it.
-      if (installedOnly && !isTagInstalled(entry.tag, installedTags)) return false;
-      // Essentials only ON: show just the essentials group. OFF: show everything else,
-      // stretch (Expert large) included -- it used to be dropped here too, through a
-      // second "daily driver" check that excluded it in both toggle states, so the
-      // Expert group could never be shown at all (found while wiring its bake-off order,
-      // workshop:planning/41-deck-model-survey.md § 9, D73).
-      //
-      // A model already on this Deck always keeps its row, though: Essentials only is about what
-      // to download, and hiding an installed model left no star to use it for Ask and no Remove
-      // unless you knew to open Filters -- while the header still counted it (Deck, plan 64 flow
-      // G: qwen2.5:1.5b pulled by typed name, "Installed 3", no row; plan64-PRELOAD-01-try2.json).
-      if (essentialsOnly && !isDeckEssentialsPullModel(entry) && !isTagInstalled(entry.tag, installedTags)) {
-        return false;
-      }
-      if (recentlyAddedOnly) {
-        const installed = isTagInstalled(entry.tag, installedTags);
-        if (!installed || !isRecentPullModelTag(pullRecord, entry.tag, now)) return false;
-      }
-      return true;
-    };
-  }, [installedOnly, essentialsOnly, recentlyAddedOnly, installedTags, pullRecord]);
-
-  const filteredCatalog = useMemo(
-    () => mergedCatalog.filter((entry) => shownBesidesGoodFor(entry) && entryMatchesModeFilters(entry, modeFilters)),
-    [mergedCatalog, shownBesidesGoodFor, modeFilters]
+  /**
+   * The list the switches leave. The licence setting never takes a row out (it dims it, plan 105), and a model
+   * already on this Deck always keeps its row: the header counts it, and hiding it left no star to use it for Ask
+   * and no Remove (Deck, plan 64 flow G; plan 105 found the licence check had the same effect).
+   */
+  const pool = useMemo(
+    () => mergedCatalog.filter((entry) => !fitsDeck || entry.group !== "stretch" || isTagInstalled(entry.tag, installedTags)),
+    [mergedCatalog, fitsDeck, installedTags]
   );
 
-  const modeCounts = useMemo(() => {
-    const counts = {} as Record<PullModelModeFilterId, number>;
-    const shown = mergedCatalog.filter(shownBesidesGoodFor);
-    for (const { id } of PULL_MODEL_MODE_FILTER_OPTIONS) {
-      const only = new Set<PullModelModeFilterId>([id]);
-      counts[id] = shown.filter((entry) => entryMatchesModeFilters(entry, only)).length;
-    }
-    return counts;
-  }, [mergedCatalog, shownBesidesGoodFor]);
+  const words = useMemo(() => buildPullModelWords(pool), [pool]);
+  const activeWord = word && words.some((w) => w.id === word) ? word : null;
+
+  const filteredCatalog = useMemo(() => pool.filter((entry) => entryMatchesWord(entry, activeWord)), [pool, activeWord]);
+
+  const offBigCount = useMemo(
+    () => (fitsDeck ? mergedCatalog.filter((e) => e.group === "stretch" && !isTagInstalled(e.tag, installedTags)).length : 0),
+    [mergedCatalog, fitsDeck, installedTags]
+  );
 
   const groupedCatalog = useMemo(() => {
     const map = new Map<PullModelGroup, PullModelEntry[]>();
@@ -160,22 +112,24 @@ export function usePullModelTableData(a: UsePullModelTableDataArgs): PullModelTa
     for (const group of PULL_MODEL_GROUP_ORDER) {
       const entries = groupedCatalog.get(group) ?? [];
       if (!entries.length) continue;
+      // The groups keep their order (essentials first) but are not headed on screen: the drawn list is one list.
       sections.push({
         title: PULL_MODEL_GROUP_LABELS[group],
+        showTitle: false,
         rows: entries.map((entry) => ({ kind: "catalog", entry, group })),
       });
     }
-    // Under a Good for tick the section is left out: nothing says a model the catalog does not know is
-    // good for Vision, and the count beside Vision has to match the rows drawn (plan 91; the Deck's
-    // nomic-embed-text row stayed listed under Vision before). The header's counts still include them.
-    if (!installedOnly && modeFilters.size === 0 && otherInstalledTags.length > 0) {
+    // Under a picked word the section is left out: nothing says a model the catalog does not know is
+    // a chat model. The header's counts still include them.
+    if (activeWord === null && otherInstalledTags.length > 0) {
       sections.push({
         title: "Other installed (not in curated catalog)",
+        showTitle: true,
         rows: otherInstalledTags.map((tag) => ({ kind: "other", tag })),
       });
     }
     return sections;
-  }, [groupedCatalog, installedOnly, modeFilters, otherInstalledTags]);
+  }, [groupedCatalog, activeWord, otherInstalledTags]);
 
   const flatRows = useMemo(() => tableSections.flatMap((s) => s.rows), [tableSections]);
 
@@ -213,6 +167,8 @@ export function usePullModelTableData(a: UsePullModelTableDataArgs): PullModelTa
     installedCatalogCount,
     installedTotalGb,
     selectedTotalGb,
-    modeCounts,
+    words,
+    activeWord,
+    offBigCount,
   };
 }

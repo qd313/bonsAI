@@ -1,9 +1,10 @@
 /**
  * Title: The starter models: what they are, what the box says, and how they start
  *
- * Purpose: The starter set is three kinds of download: the answer model (gemma4:e2b-it-qat, which can
+ * Purpose: The starter set is four kinds of download: the answer model (gemma4:e2b-it-qat, which can
  * chat, read screenshots and help in Strategy mode), the note-search model (nomic-embed-text) and the two
- * speech models the microphone reads from (tiny.en and base.en). This file holds the one place that says what the starter set is, the
+ * speech models the microphone reads from (tiny.en and base.en), then the voice engine that reads them, built on the
+ * Deck from an image on ghcr.io. This file holds the one place that says what the starter set is, the
  * words of the box that asks before downloading it, the call that starts the download, and the
  * one-press "ask first, then start" used by the Browse models screen.
  *
@@ -14,7 +15,7 @@
  * one the old "Install options..." button started), so they share this instead of each copying it.
  *
  * Does not: install Ollama's engine by itself (the setup run does that when the engine is missing),
- * download anything itself (the back end's setup run fetches all three kinds, see starter_set_extras.py),
+ * download anything itself (the back end's setup run fetches all four kinds, see starter_set_extras.py),
  * or offer the second, bigger Gemma 4 model: that one is only reachable through Browse models now.
  */
 import { toaster } from "@decky/api";
@@ -28,7 +29,7 @@ import {
   sendDownloadsOnAgain,
   type DownloadNotice,
 } from "../downloads/downloadNotice";
-import { modelPullNotice, OLLAMA_PROGRAM_NOTICE, SPEECH_MODELS_NOTICE } from "../downloads/downloadSites";
+import { modelPullNotice, OLLAMA_PROGRAM_NOTICE, SPEECH_MODELS_NOTICE, VOICE_ENGINE_NOTICE } from "../downloads/downloadSites";
 import type { LocalOllamaSetupStatus } from "../ai-connection/OllamaWhereAiRunsSection.types";
 import {
   LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
@@ -44,7 +45,7 @@ export const STARTER_SET_BUTTON_LABEL = "Install the starter set";
 /** The Ollama program's site is listed first only when this box also installs Ollama itself. */
 export function starterSetNotices(opts: { withOllama?: boolean } = {}): DownloadNotice[] {
   const program = opts.withOllama ? [OLLAMA_PROGRAM_NOTICE] : [];
-  return [...program, modelPullNotice([TIER1_ESSENTIALS_TAG, STARTER_NOTE_SEARCH_TAG], "about 4.6 GB"), SPEECH_MODELS_NOTICE];
+  return [...program, modelPullNotice([TIER1_ESSENTIALS_TAG, STARTER_NOTE_SEARCH_TAG], "about 4.6 GB"), SPEECH_MODELS_NOTICE, VOICE_ENGINE_NOTICE];
 }
 
 /** What the box says under the site line; `engineAlreadyAsked` is true for the follow-up box of Install Ollama; `downloadsOff` makes its Cancel sentence say nothing is installed. */
@@ -55,13 +56,14 @@ export function starterSetBoxBody(engineAlreadyAsked: boolean, downloadsOff = fa
         The starter set is the answer model <span style={{ color: "#9ce7ff" }}>{TIER1_ESSENTIALS_TAG}</span>, which can
         chat, read screenshots and text in pictures, and help in Strategy mode; the note-search model{" "}
         <span style={{ color: "#9ce7ff" }}>{STARTER_NOTE_SEARCH_TAG}</span>; and the speech models{" "}
-        <span style={{ color: "#9ce7ff" }}>{STARTER_SPEECH_MODELS.join(" and ")}</span> for the microphone.{" "}
+        <span style={{ color: "#9ce7ff" }}>{STARTER_SPEECH_MODELS.join(" and ")}</span> and the voice engine for the microphone.{" "}
         {LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB}
       </div>
       <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
         A model you already have is not downloaded again. If one download fails the others still go ahead, and the
-        tab says which one failed. The speech models download even with the microphone permission off; Voice input
-        stays off until you turn it on in the Permissions tab.
+        tab says which one failed. The speech models download and the voice engine is built on this Deck, which can
+        take several minutes, even with the microphone permission off; Voice input stays off until you turn it on
+        in the Permissions tab.
       </div>
       {engineAlreadyAsked ? (
         <div style={{ marginBottom: 8, color: "#c5d4e3" }}>

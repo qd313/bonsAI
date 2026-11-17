@@ -52,6 +52,16 @@ export const SPEECH_MODELS_NOTICE: DownloadNotice = {
   size: "about 230 MB",
 };
 
+/**
+ * The voice engine, which the starter set builds last (starter_voice_engine.py): an image pulled from ghcr.io,
+ * then a container that fetches compilers from its own package servers and compiles the program.
+ */
+export const VOICE_ENGINE_NOTICE: DownloadNotice = {
+  site: VOICE_ENGINE_IMAGE_SITE,
+  what: "the voice engine's build image, which then fetches its compilers from its own package servers",
+  size: null,
+};
+
 /** The library's size is only known once its list file has been fetched. */
 export const KNOWLEDGE_LIBRARY_NOTICES: DownloadNotice[] = [
   { site: HUGGING_FACE_SITE, what: "the knowledge library", size: null },
@@ -62,11 +72,7 @@ export const KNOWLEDGE_LIBRARY_NOTICES: DownloadNotice[] = [
 export function voiceEngineNotices(opts: { engineReady: boolean; modelReady: boolean; model: string }): DownloadNotice[] {
   const out: DownloadNotice[] = [];
   if (!opts.engineReady) {
-    out.push({
-      site: VOICE_ENGINE_IMAGE_SITE,
-      what: "the voice engine's build image, which then fetches its compilers from its own package servers",
-      size: null,
-    });
+    out.push(VOICE_ENGINE_NOTICE);
   }
   if (!opts.modelReady) {
     out.push({ site: HUGGING_FACE_SITE, what: `the ${opts.model} speech model`, size: null });

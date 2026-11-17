@@ -3,8 +3,9 @@
 Purpose: The starter set is more than the answer model. A first setup downloads three kinds of thing:
 the answer model (gemma4:e2b-it-qat), the note-search model (nomic-embed-text, both through Ollama), and
 the two speech models the microphone reads from (tiny.en and base.en, through the voice engine's own
-download, not Ollama). This file runs the Ollama half one tag at a time (a model already there is not
-downloaded again; one failing leaves the next going ahead), runs the speech download it is handed, and
+download, not Ollama), and then the voice engine program itself, built on the Deck (starter_voice_engine.py).
+This file runs the Ollama half one tag at a time (a model already there is not downloaded again; one
+failing leaves the next going ahead), runs the speech download and the engine build it is handed, and
 writes the plain sentences that say what was downloaded, what was already there, and which piece failed.
 
 Used for: run_local_setup (local_ollama_setup_service.py) for the "tier1_essentials" profile only.
@@ -12,8 +13,9 @@ Used for: run_local_setup (local_ollama_setup_service.py) for the "tier1_essenti
 Solves: Keeps the starter set's downloads reported in one place, in words a person reads on the AI
 models tab, and keeps that logic out of the 1000-line Ollama setup file.
 
-Does not: Download the speech models (starter_speech_models.py does, so this file, which the Ollama setup
-file imports, never imports the voice download that imports the Ollama setup file back), pull anything itself,
+Does not: Download the speech models or build the engine (starter_speech_models.py and starter_voice_engine.py
+do, so this file, which the Ollama setup file imports, never imports the voice code that imports the Ollama
+setup file back), pull anything itself,
 or check the microphone permission: downloading a file is not listening, so the sentence only says when the
 microphone is still off.
 """
@@ -26,6 +28,15 @@ from typing import Any, Callable, Optional
 from backend.ollama.ollama_routing import tag_in_names
 
 STARTER_SPEECH_MODELS: tuple[str, ...] = ("tiny.en", "base.en")
+
+# Said when the voice engine could not be built. The Browse models button for the starter set goes once the
+# models are on the Deck, so this names the button that builds the engine on its own. The run's other
+# sentences already say what did go ahead.
+ENGINE_FAILED_SENTENCE = (
+    "The microphone step failed: the voice engine did not build ({why}). "
+    "To try again, turn on Voice input (microphone) in the Permissions tab, then press Install voice engine "
+    "in Settings."
+)
 
 
 def split_present_tags(tags: list[str], installed: list[str]) -> tuple[list[str], list[str]]:
@@ -80,10 +91,13 @@ async def run_starter_downloads(
     cancelled: Callable[[], bool],
     speech_download: Optional[Callable[[Callable[[str], None], Callable[[str], None], Any], dict[str, str]]],
     cancel_event: Any,
+    engine_build: Optional[Callable[[Callable[[str], None], Callable[[str], None], Any], str]] = None,
 ) -> dict[str, Any]:
-    """The starter set's downloads: the Ollama tags, then (if handed in) the speech models.
+    """The starter set's downloads: the Ollama tags, then (if handed in) the speech models, then the voice engine.
 
-    Returns the outcome for `apply_starter_outcome`. Only a cancel stops the run early (it raises).
+    Returns the outcome for `apply_starter_outcome`. Only a cancel stops the run early (it raises); one that
+    comes in before the engine step means the engine is not started at all. `engine_failure` in the outcome
+    is None when the engine was not attempted, "" when it is ready, else the plain reason it failed.
     """
     installed = await asyncio.to_thread(list_installed)
 
@@ -101,7 +115,21 @@ async def run_starter_downloads(
         )
         if cancelled():
             raise RuntimeError("Cancelled.")
-    return {"pulled": pulled, "present": present, "pull_failures": pull_failures, "speech_failures": speech_failures}
+    engine_failure: Optional[str] = None
+    if engine_build is not None:
+        state["current_tag"] = ""
+        engine_failure = await asyncio.to_thread(
+            lambda: engine_build(log, lambda text: state.update(progress_text=text), cancel_event)
+        )
+        if cancelled():
+            raise RuntimeError("Cancelled.")
+    return {
+        "pulled": pulled,
+        "present": present,
+        "pull_failures": pull_failures,
+        "speech_failures": speech_failures,
+        "engine_failure": engine_failure,
+    }
 
 
 def apply_starter_outcome(state: dict[str, Any], outcome: dict[str, Any], microphone_enabled: bool) -> None:
@@ -130,10 +158,12 @@ def starter_summary(
     pull_failures: dict[str, str],
     speech_failures: Optional[dict[str, str]],
     microphone_enabled: bool,
+    engine_failure: Optional[str] = None,
 ) -> tuple[str, str]:
     """(what went well, what failed) as plain sentences; the second is empty when nothing failed.
 
-    `speech_failures` is None when the speech models were not attempted (a cancelled run).
+    `speech_failures` is None when the speech models were not attempted (a cancelled run). `engine_failure`
+    is None when the voice engine was not built, "" when it is ready, else the plain reason it failed.
     """
     good: list[str] = []
     if pulled:
@@ -144,11 +174,16 @@ def starter_summary(
         ok = [m for m in STARTER_SPEECH_MODELS if m not in speech_failures]
         if ok:
             good.append(f"Speech models ready: {_join(ok)}.")
-            if not microphone_enabled:
-                good.append("Turn on Voice input (microphone) in the Permissions tab to use them.")
+    if engine_failure == "":
+        good.append("Voice engine ready.")
+    if not microphone_enabled and (engine_failure == "" or (speech_failures is not None and len(speech_failures) < len(STARTER_SPEECH_MODELS))):
+        good.append("Turn on Voice input (microphone) in the Permissions tab to use it.")
     bad: list[str] = []
     for tag, why in pull_failures.items():
         bad.append(f"{tag} did not download ({why}).")
     for model_id, why in (speech_failures or {}).items():
         bad.append(f"The {model_id} speech model did not download ({why}).")
-    return " ".join(good), (" ".join(bad) + " The rest went ahead; press Install the starter set again to retry." if bad else "")
+    if engine_failure:
+        bad.append(ENGINE_FAILED_SENTENCE.format(why=engine_failure))
+    retry = " The rest went ahead; press Install the starter set again to retry." if (pull_failures or speech_failures) else ""
+    return " ".join(good), (" ".join(bad) + retry if bad else "")

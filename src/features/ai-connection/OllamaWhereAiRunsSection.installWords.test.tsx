@@ -127,7 +127,7 @@ describe("Install Ollama with Internet downloads off (F10)", () => {
 });
 
 describe("The words around the install (F13)", () => {
-  it("the Install box names ollama.com first, then the models, then the speech models", async () => {
+  it("the Install box names ollama.com first, then the models, then the speech models, then ghcr.io for the voice engine", async () => {
     bridge(true);
     drawOnDeck();
     await pressInstall();
@@ -138,6 +138,11 @@ describe("The words around the install (F13)", () => {
     expect(ollama).toBeGreaterThanOrEqual(0);
     expect(ollama).toBeLessThan(registry);
     expect(registry).toBeLessThan(speech);
+    // The starter set also builds the voice engine, so the box names its image site before anything starts.
+    const engine = text.indexOf("https://ghcr.io");
+    expect(engine).toBeGreaterThan(speech);
+    expect(text).toContain("the voice engine's build image");
+    expect(text).toContain("the voice engine is built on this Deck");
   });
 
   it("with downloads on, Cancel is said to install Ollama only", async () => {

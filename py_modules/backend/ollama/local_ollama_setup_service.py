@@ -848,13 +848,15 @@ async def run_local_setup(
     on_verbose_line: Optional[Callable[[str], None]] = None,
     speech_download: Optional[Callable[[Callable[[str], None], Callable[[str], None], Any], dict[str, str]]] = None,
     microphone_enabled: bool = False,
+    engine_build: Optional[Callable[[Callable[[str], None], Callable[[str], None], Any], str]] = None,
 ) -> None:
     """Populate ``state`` while installing / pulling models. Plain dict for JSON-RPC compatibility.
 
     For the "tier1_essentials" profile (the starter set) a model already installed is not downloaded again,
     a download that fails does not stop the others, and ``speech_download`` (the voice engine's own path,
-    handed in by the RPC) fetches the speech models after the Ollama ones. The run then ends "failed" with a
-    sentence naming each piece that did not download; see starter_set_extras.py.
+    handed in by the RPC) fetches the speech models after the Ollama ones, and ``engine_build`` (the voice
+    engine's own install) builds the voice engine last. The run then ends "failed" with a sentence naming each
+    piece that did not download or build; see starter_set_extras.py.
     """
 
     prof = (profile or "").strip()
@@ -995,7 +997,7 @@ async def run_local_setup(
         # The starter set pulls its own way (starter_set_extras.py); every other profile stops at the first failure.
         starter = (await run_starter_downloads(
             state, tags, lambda: list_installed_ollama_tags(DEFAULT_BASE),
-            lambda t: run_ollama_pull(ollama_bin, t, log, cancelled), log, cancelled, speech_download, cancel_event)
+            lambda t: run_ollama_pull(ollama_bin, t, log, cancelled), log, cancelled, speech_download, cancel_event, engine_build)
             if prof == "tier1_essentials" else None)
         for i, tag in enumerate(tags if starter is None else []):
             if cancelled():

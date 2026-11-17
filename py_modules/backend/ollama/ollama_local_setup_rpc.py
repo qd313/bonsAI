@@ -70,6 +70,7 @@ from backend.ollama.ollama_try_order_prune import prune_saved_orders_to_installe
 from backend.ollama import ollama_pull_resume_service as pull_resume
 from backend.knowledge.ollama_embed_service import forget_embed_availability_after_pull
 from backend.ollama.starter_speech_models import download_speech_models
+from backend.ollama.starter_voice_engine import build_voice_engine
 from backend.core.capabilities import capability_enabled, downloads_off_refusal
 
 import decky
@@ -142,14 +143,18 @@ async def start_local_ollama_setup(self, data: Any = None):
         setup_loop = asyncio.get_running_loop()
         on_stage, on_verbose_line = make_local_ollama_setup_hooks(self, setup_loop)
 
-        # The starter set also downloads the speech models, through the voice engine's own download. That
-        # is a file download, not listening, so it goes ahead with the microphone permission off; the
-        # run's closing sentence says the microphone is still off.
+        # The starter set also downloads the speech models, through the voice engine's own download, and then
+        # builds the voice engine (starter_voice_engine.py). Both are downloads and a build, not listening, so
+        # they go ahead with the microphone permission off; the run's closing sentence says the microphone is
+        # still off. The Internet downloads permission, checked above, is the only gate.
         starter_kwargs: dict[str, Any] = {}
         if prof == "tier1_essentials":
             plugin_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
             starter_kwargs = {
                 "speech_download": lambda log, progress, cancel: download_speech_models(
+                    plugin_root, decky.DECKY_PLUGIN_SETTINGS_DIR, log, progress, cancel
+                ),
+                "engine_build": lambda log, progress, cancel: build_voice_engine(
                     plugin_root, decky.DECKY_PLUGIN_SETTINGS_DIR, log, progress, cancel
                 ),
                 "microphone_enabled": capability_enabled(settings, "microphone_access"),

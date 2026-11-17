@@ -14,7 +14,8 @@
  *
  * The ring: Steam brings the ring back to the control it was last on in that tab. Every section but the first is
  * shut on arrival, so that control is usually gone, and the ring could be left on nothing or on the tab it came from. On the
- * Deck the ring came back to a "Terse mode" toggle deep in Reply style, and went to "Retry same prompt" on Main.
+ * Deck the ring came back to a switch deep in Reply style (the Terse mode switch of 2026-10-12, since replaced by
+ * the Reply style slider's first stop), and went to "Retry same prompt" on Main.
  * So after a shoulder switch the tab's first section line takes the ring (Steam's own transfer onto the line's nav
  * node) unless it is there already. Not only when the ring is on nothing: on 2026-10-12 (plan92-P92-FOLD-SWITCH)
  * Steam itself put the ring on the LAST line, inside the tab, twice. A ring Steam placed on arrival is not the

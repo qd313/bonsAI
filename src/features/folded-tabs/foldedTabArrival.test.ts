@@ -5,8 +5,9 @@
  *          screen. Measured on the Deck's own screen 2026-10-12 (plan92-P92-FOLD-KEEPS-PLACE): Steam keeps the
  *          pane where it was, 408 px down, and brings it back 330 px down, the first line off screen.
  *          The ring (after Steam's own shoulder switch): Steam sends it back to the control it was last on in
- *          the tab, which is gone once every section is closed (the Deck left it on a "Terse mode" toggle's old
- *          place, and on Main's "Retry same prompt"; on 2026-10-12 it came back on the LAST line twice, a ring
+ *          the tab, which is gone once its section is closed (the Deck left it where the Terse mode switch of
+ *          the time had been, a switch the Reply style slider has since replaced, and on Main's "Retry same
+ *          prompt"; on 2026-10-12 it came back on the LAST line twice, a ring
  *          Steam had placed inside the tab). A ring Steam placed on arrival is not the person's: until the
  *          person presses something, the first section line has it; after a press, nothing moves it. A person
  *          who came by the bar keeps the ring where it is.

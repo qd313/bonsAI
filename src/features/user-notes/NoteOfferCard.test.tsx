@@ -40,6 +40,7 @@ import {
   simulateScreenReload,
 } from "./userNotesStore";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
+import { pressLeft, type LeftResult } from "../../test-harness/steamLeftPress";
 import { REPLY_STOP_ORDER, registerReplyStop } from "../../shared/dpad/replyStopRegistry";
 import { resetUiDocument } from "../../shared/dpad/uiDocument";
 
@@ -367,6 +368,23 @@ describe("the D-pad on the card", () => {
     expect(press("onMoveLeft")).toBe(true);
     expect(press("onMoveRight")).toBe(true);
     expect(ringOn()).toMatch(/^Who this note is for/);
+  });
+
+  /* Plan 105, lane C5: Left as Steam delivers it (heard at the page, then the handlers, then Steam's own step). */
+  it("at Keep and on the For line two Lefts hold and the third reaches Steam's menu", () => {
+    start();
+    const world = { ring: () => steamRingHolder(), move: putSteamRingOn };
+    const three = (): LeftResult[] =>
+      [0, 1, 2].map(() => {
+        let r: LeftResult = "held";
+        act(() => void (r = pressLeft(world).result));
+        return r;
+      });
+    expect(three()).toEqual(["held", "held", "out"]);
+    putSteamRingOn(document.querySelector<HTMLElement>('[aria-label="Keep this note"]'));
+    press("onMoveDown");
+    expect(ringOn()).toMatch(/^Who this note is for/);
+    expect(three()).toEqual(["held", "held", "out"]);
   });
 
   it("every stop carries and claims all four directions, none visited twice on a full walk", () => {

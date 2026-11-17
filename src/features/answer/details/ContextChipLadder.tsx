@@ -64,6 +64,7 @@ import { useChipLadderReveal } from "./useChipLadderReveal";
 import { useChipGridOrder } from "./useChipGridOrder";
 import { CHIP_GAP_PX, gridMove, rowsFromBoxes, type GridDirection } from "./chipLadderGrid";
 import { elementHasFocus } from "../../../shared/dpad/uiDocument";
+import { leftAtEdge } from "../../../shared/dpad/leftEdge";
 import { focusRowElement, registerRowNav } from "../../../shared/dpad/focusPerTurnRow";
 import type { NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 import { noteLostFocusHop, panelLacksFocus } from "../../../shared/dpad/lostFocusHop";
@@ -416,8 +417,10 @@ export function ContextChipLadder({
      * Left off the first chip with nothing above to take it is held, as it was before the grid: a press
      * nothing claims is Steam's own, and Steam's own Left carried the ring out of the plugin into its
      * side tabs on the Deck (2026-10-10, plan87-QA-FREE-PLAY-01-NOGAME.json). Up keeps its old fall-through.
+     * That held Left is a dead end: the first and second Left in a row hold and the third goes to Steam's menu (leftEdge.ts, plan 105).
      */
-    return Boolean(onMoveUpFromLadder?.()) || dir === "left";
+    if (onMoveUpFromLadder?.()) return true;
+    return dir === "left" && leftAtEdge("chip-ladder");
   };
   const chipMoves = (idx: number) => ({
     onMoveLeft: () => press(idx, "left"),

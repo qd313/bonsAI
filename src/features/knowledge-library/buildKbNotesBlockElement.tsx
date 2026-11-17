@@ -23,6 +23,7 @@
 import React from "react";
 import { Focusable } from "@decky/ui";
 import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
+import { leftAtEdge } from "../../shared/dpad/leftEdge";
 import { focusPerTurnRow, registerRowNav } from "../../shared/dpad/focusPerTurnRow";
 import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "../../shared/dpad/focusNavigation";
 import { focusUpFromBelowContextChipLadder, queryLiveTurnSlot } from "../../shared/dpad/liveTurnFocusGraph";
@@ -434,8 +435,9 @@ export function buildKbNotesBlockElement(args: {
         navRef: kbNotesBlockNav(turnKey),
         onMoveUp: () => onMoveUp(),
         onMoveDown: () => onMoveDown(),
-        /* Left and Right are held (plan 87): with no handler Steam's own Left carries the ring out of the plugin. */
-        onMoveLeft: () => true,
+        /* Left and Right are held (plan 87): with no handler Steam's own Left carries the ring out of the plugin.
+           Since plan 105 the first and second Left in a row hold and the third goes to Steam's menu (leftEdge.ts). */
+        onMoveLeft: (evt: unknown) => leftAtEdge("notes-block", evt),
         onMoveRight: () => true,
         onButtonDown: (evt: unknown) => {
           const el = kbNotesBlockEls.get(turnKey);

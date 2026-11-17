@@ -32,6 +32,7 @@ import { buildBonsaiScopeStylesheet } from "../../../styles/bonsaiScopeStyleshee
 import { buildDetailsSlotSection } from "./detailsSlotStyles";
 import { PANE_TOP } from "../../../test-harness/deckAnswerWalk";
 import { resetDetailsSlotStore } from "./detailsSlotStore";
+import { DIR_RIGHT, hearPress, pressLeft, type LeftResult } from "../../../test-harness/steamLeftPress";
 import { PRESET_CHIP_HEIGHT_PX } from "../../preset-carousel/presetRowLayout";
 
 type Handlers = Partial<Record<"onMoveUp" | "onMoveDown" | "onMoveLeft" | "onMoveRight" | "onOKButton" | "onCancelButton", (e?: unknown) => unknown>>;
@@ -979,5 +980,47 @@ describe("an answer finishing while the ring is on a chip, size watchers live", 
     } finally {
       globalThis.ResizeObserver = StandIn;
     }
+  });
+});
+
+/* ---------- Left out to Steam's menu (plan 105, lane C5) ---------- */
+/** Up to `n` Lefts as Steam delivers them (steamLeftPress.ts), each followed by Steam's glide; stops once one moves. */
+function threeLefts(n = 3): LeftResult[] {
+  const world = { ring: () => (ring() === document.body ? null : ring()), move: (el: HTMLElement) => el.focus() };
+  const out: LeftResult[] = [];
+  for (let i = 0; i < n && out[out.length - 1] !== "moved" && out[out.length - 1] !== "out"; i++) {
+    let r: LeftResult = "held";
+    act(() => {
+      r = pressLeft(world).result;
+    });
+    steamGlide(ring());
+    settle();
+    out.push(r);
+  }
+  return out;
+}
+
+describe("Left out to Steam's menu from the dock's slot (plan 105, lane C5, row P105-LEFT-TO-MENU-01)", () => {
+  it.each(["top", "padded"] as const)("on the slot's line two Lefts hold and the third reaches Steam's menu (%s glide)", (r) => {
+    rule = r;
+    renderChat();
+    scrollChatTo(300);
+    focusQuestionBox();
+    press("onMoveUp");
+    expect(nameOf(ring())).toBe("slot line");
+    expect(threeLefts()).toEqual(["held", "held", "out"]);
+    expect(ring()?.getAttribute("aria-label")).toBe("Steam's menu");
+  });
+
+  it("Left, Right (held), Left, Left on the slot's line keeps the ring there: the Right starts the run again", () => {
+    renderChat();
+    scrollChatTo(300);
+    focusQuestionBox();
+    press("onMoveUp");
+    expect(threeLefts(1)).toEqual(["held"]);
+    act(() => hearPress(ring()!, DIR_RIGHT));
+    expect(press("onMoveRight")).toBe(true);
+    expect(nameOf(ring())).toBe("slot line");
+    expect(threeLefts()).toEqual(["held", "held", "out"]);
   });
 });

@@ -25,9 +25,11 @@
  * 2. Held down, Left repeats. Only a fresh press counts: a repeat holds and never leaves. Steam marks a repeat
  *    in the press it sends to the panel's page (`vgp_onbuttondown`, `detail.is_repeat`); a listener on that page,
  *    in the capture phase, notes each Left it hears, fresh or repeat. A call counts when a fresh Left was heard
- *    since the last call, or when the handler itself was handed a press marked fresh. A call with nothing heard
- *    for it is not counted (the safer side), except the very first call, made before the listener could hear
- *    anything: a held first press then counts once and its repeats, heard, do not.
+ *    since the last call, or when the handler itself was handed a press marked fresh. A call with only repeats
+ *    heard is "repeat". A call with nothing heard at all is "unheard": not counted either (the safer side, so a
+ *    held Left can never leave), but a place whose Left also does something (the "N earlier" line's flip) still
+ *    does it, as before this file. The very first call, made before the listener could hear anything, counts:
+ *    a held first press then counts once and its repeats, heard, do not.
  * 3. The run starts again on: any other button the plugin knows (Up, Down, Right, A, B, X, Y, View, Menu, the
  *    shoulders and triggers), heard at the same page; a finger on the screen; the panel hiding or showing; a
  *    Left at another place or with Steam's ring on another control than the last counted one; about two seconds
@@ -44,8 +46,11 @@ export const LEFT_PRESSES_TO_LEAVE = 3;
 /** With no Left for this long, a run starts again (consult 7: "about two seconds"). */
 export const LEFT_RUN_PAUSE_MS = 2000;
 
-/** What one Left at a dead end does: hold and count it, hold a held-down repeat, or hand the press to Steam. */
-export type LeftEdgeOutcome = "held" | "repeat" | "leave";
+/**
+ * What one Left at a dead end does: hold and count it ("held"), hold a held-down repeat ("repeat"), hold a press the
+ * page did not hear ("unheard"), or hand the press to Steam ("leave").
+ */
+export type LeftEdgeOutcome = "held" | "repeat" | "unheard" | "leave";
 
 /** Steam's button numbers (`@decky/ui`, `components/FooterLegend.d.ts`, `GamepadButton`; as focusNavigation.ts). */
 const DIR_LEFT = 11;
@@ -55,8 +60,9 @@ const OTHER_BUTTONS = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14]);
 type Run = { count: number; place: string | null; stop: Element | null; lastAt: number };
 const empty = (): Run => ({ count: 0, place: null, stop: null, lastAt: 0 });
 let run: Run = empty();
-/** A fresh Left heard at the panel's page since the last call at a dead end (a repeat is not noted). */
+/** What the panel's page heard of Left since the last call at a dead end: a fresh press, a repeat. */
 let heardFresh = false;
+let heardRepeat = false;
 const listening = new WeakSet<Document>();
 
 function restart(): void {
@@ -74,9 +80,11 @@ function onPress(evt: Event): void {
   const press = readPress(evt);
   if (!press) return;
   if (press.button === DIR_LEFT) {
-    if (press.repeat !== true) heardFresh = true;
+    if (press.repeat === true) heardRepeat = true;
+    else heardFresh = true;
   } else if (OTHER_BUTTONS.has(press.button)) {
     heardFresh = false;
+    heardRepeat = false;
     restart();
   }
 }
@@ -94,21 +102,25 @@ function listen(doc: Document): boolean {
 /**
  * In: the dead end's name (one per kind of place, e.g. "ask-paperclip") and, when Steam hands the move handler
  * its press, that press. Out: "held" (claim it, the run counted one), "repeat" (claim it, a held-down Left that
- * does not count) or "leave" (decline it, so Steam's own Left takes the ring out).
+ * does not count), "unheard" (claim it, nothing heard for it, not counted) or "leave" (decline it, so Steam's own
+ * Left takes the ring out).
  * Can go wrong: nothing; with no panel document yet the global one is used.
  */
 export function leftEdgePress(place: string, evt?: unknown): LeftEdgeOutcome {
   const firstHearing = listen(getUiDocument());
   const own = readPress(evt);
-  const fresh = own?.button === DIR_LEFT && own.repeat !== null ? !own.repeat : heardFresh || firstHearing;
+  const said = own?.button === DIR_LEFT && own.repeat !== null;
+  const fresh = said ? !own!.repeat : heardFresh || firstHearing;
+  const heard = said || heardFresh || heardRepeat || firstHearing;
   heardFresh = false;
+  heardRepeat = false;
   const now = Date.now();
   const stop = uiGamepadFocusElement();
   if (run.place !== place || run.stop !== stop || now - run.lastAt > LEFT_RUN_PAUSE_MS) {
     run = { count: 0, place, stop, lastAt: now };
   }
   run.lastAt = now;
-  if (!fresh) return "repeat";
+  if (!fresh) return heard ? "repeat" : "unheard";
   run.count += 1;
   if (run.count < LEFT_PRESSES_TO_LEAVE) return "held";
   restart();
@@ -129,4 +141,5 @@ export function leftActedInPlace(): void {
 export function resetLeftEdgeForTests(): void {
   restart();
   heardFresh = false;
+  heardRepeat = false;
 }

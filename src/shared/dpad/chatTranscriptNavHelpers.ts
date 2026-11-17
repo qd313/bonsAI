@@ -11,6 +11,7 @@
  * what a D-pad press on an already-mounted row should do.
  */
 import { refocusPanelWindowIfLost, takeNavFocus, type NavRefHolder } from "./navFocusRegistry";
+import { leftAtEdge, leftEdgePress } from "./leftEdge";
 import {
   focusContextChipLadder,
   focusContextHint,
@@ -87,10 +88,12 @@ export function focusDownFromReplyUtilityRowOrPermHint(liveSlot: HTMLElement | n
  * given to the Ollama sliders for the identical escape (DeckFocusSlider.tsx, 2026-09-04): claim the
  * move on `onMoveLeft` itself, the handler Steam actually invokes, with the `onButtonDown` twin
  * only for the string-shaped presses tests and desktop keyboards deliver (focusNavigation.ts).
+ * Since plan 105 (lane C5) the hold is a dead end's: the first and second Left in a row hold and the
+ * third goes to Steam's menu (leftEdge.ts). The twin never counts: Steam hands it the same press.
  */
 export function earlierPillLeftNavHandlers(): Record<string, unknown> {
   return {
-    onMoveLeft: () => true,
+    onMoveLeft: (evt?: unknown) => leftAtEdge("earlier-list", evt),
     onButtonDown: (button: unknown) => (isDeckDirectionLeftEvent(button) ? true : false),
   };
 }
@@ -261,6 +264,9 @@ export function questionMoveUpOut(above: NavRefHolder | null | undefined): () =>
  * handlers only: Steam hands the same press to `onButtonDown` too, and a twin that flipped there would flip the
  * list back. Steam's press is still claimed there, as the hold always claimed it; a string-shaped press (tests,
  * a desktop keyboard) flips.
+ * Left counts as a run all the same (plan 105, lane C5, consult 7): the first and second Left in a row flip, so
+ * the list ends as it was, and the third goes to Steam's menu (leftEdge.ts); a Left held down flips once. Without
+ * that, Left here flipped for ever and never let the ring out, on Main's first stop under the tab bar.
  */
 export function earlierLineNavHandlers(nextTurnId: string | null | undefined, flip?: () => void): Record<string, unknown> {
   const base = earlierPillNavHandlers(nextTurnId);
@@ -269,10 +275,16 @@ export function earlierLineNavHandlers(nextTurnId: string | null | undefined, fl
     flip?.();
     return true;
   };
+  const flipLeft = (evt?: unknown) => {
+    const press = leftEdgePress("earlier-flip", evt);
+    /* Not on a held-down repeat; a press the page did not hear still flips, as it did before the count. */
+    if (press === "held" || press === "unheard") flip?.();
+    return press !== "leave";
+  };
   return {
     ...base,
     onMoveUp: up,
-    ...(flip ? { onMoveLeft: sideways, onMoveRight: sideways } : {}),
+    ...(flip ? { onMoveLeft: flipLeft, onMoveRight: sideways } : {}),
     onButtonDown: (button: unknown) => {
       if (isUpDeckButtonEvent(button)) return up();
       if (flip) {

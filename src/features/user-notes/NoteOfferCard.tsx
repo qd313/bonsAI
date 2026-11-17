@@ -50,6 +50,7 @@ import {
   isDeckDirectionUpEvent,
 } from "../../shared/dpad/focusNavigation";
 import { focusRegisteredReplyStop, registerReplyStop, replyStopNavRef } from "../../shared/dpad/replyStopRegistry";
+import { leftAtEdge } from "../../shared/dpad/leftEdge";
 import { uiGamepadFocusElement, elementHasFocus, elementHasGamepadFocus, getUiDocument } from "../../shared/dpad/uiDocument";
 
 type NavHolder = { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null | undefined };
@@ -281,6 +282,8 @@ export function NoteOfferCard({ replyKey, onMoveUpOut, onMoveDownOut }: NoteOffe
   const toEdit = () => hop(editNav, editEl.current);
   const toNotNow = () => hop(notNowNav, notNowEl.current);
   const hold = () => true;
+  /* Keep, the row's left end, and the For line: the first and second Left in a row hold and the third goes to Steam's menu (leftEdge.ts, plan 105). */
+  const holdLeft = () => leftAtEdge("note-card");
 
   return (
     <div className="bonsai-note-card" data-bonsai-note-card="offered">
@@ -296,7 +299,7 @@ export function NoteOfferCard({ replyKey, onMoveUpOut, onMoveDownOut }: NoteOffe
           aria-label="Keep this note"
           onOKButton={() => void keep()}
           onClick={() => void keep()}
-          {...stopProps(() => keepEl.current, { up: onMoveUpOut, down: toFor, left: hold, right: toEdit }, replyStopNavRef("note-keep"))}
+          {...stopProps(() => keepEl.current, { up: onMoveUpOut, down: toFor, left: holdLeft, right: toEdit }, replyStopNavRef("note-keep"))}
         >
           Keep
         </Focusable>
@@ -334,7 +337,7 @@ export function NoteOfferCard({ replyKey, onMoveUpOut, onMoveDownOut }: NoteOffe
         aria-label={`Who this note is for. ${forLine(scopeIsGame, gameTitle)} Press to change.`}
         onOKButton={toggleOfferScope}
         onClick={toggleOfferScope}
-        {...stopProps(() => forEl.current, { up: toKeep, down: onMoveDownOut, left: hold, right: hold }, replyStopNavRef("note-for"))}
+        {...stopProps(() => forEl.current, { up: toKeep, down: onMoveDownOut, left: holdLeft, right: hold }, replyStopNavRef("note-for"))}
       >
         {forLine(scopeIsGame, gameTitle)}
       </Focusable>

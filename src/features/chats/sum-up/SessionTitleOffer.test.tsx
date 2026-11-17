@@ -17,6 +17,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SessionSumUpSection } from "./SessionSumUpSection";
 import type { ChatSumUpState } from "./chatSumUpModel";
 import { resetUiDocument } from "../../../shared/dpad/uiDocument";
+import { DIR_LEFT, hearPress } from "../../../test-harness/steamLeftPress";
 
 /* Every Focusable's latest props, by aria-label: how the tests press what Steam would press. */
 const seen = vi.hoisted(() => ({ props: new Map<string, Record<string, unknown>>() }));
@@ -194,6 +195,18 @@ describe("walking the Sum up section with the D-pad when an offer shows", () => 
     expect(ring()).toBe(CARD);
     expect(press(CARD, "onMoveUp")).toBe(true);
     expect(ring()).toBe(BUTTON);
+  });
+
+  /* Plan 105, lane C5: each Left heard at the page as Steam sends it, then Rename's own handler. */
+  it("Left at Rename, the row's left end, holds twice and hands the third to Steam", () => {
+    const { container } = render(section(stateWith({})));
+    startOn(container, RENAME);
+    const left = () => {
+      hearPress(el(container, RENAME), DIR_LEFT);
+      return press(RENAME, "onMoveLeft");
+    };
+    expect([left(), left(), left()]).toEqual([true, true, false]);
+    expect(document.activeElement?.getAttribute("aria-label")).toBe(RENAME);
   });
 
   it("with no offer the card's Down still leaves the section as before", () => {

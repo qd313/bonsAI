@@ -64,6 +64,7 @@ import {
 } from "../../../shared/dpad/focusNavigation";
 import { elementHasFocus, elementHasGamepadFocus, getUiDocument, uiGamepadFocusElement } from "../../../shared/dpad/uiDocument";
 import { pressThenHandRingOn } from "../../../shared/dpad/handRingOnWhenGone";
+import { leftAtEdge } from "../../../shared/dpad/leftEdge";
 import { refocusPanelWindowIfLost } from "../../../shared/dpad/navFocusRegistry";
 import { registerReplyStop, replyStopNavRef } from "../../../shared/dpad/replyStopRegistry";
 import { formatDeckyRpcError } from "../../../shared/deckyCall";
@@ -360,6 +361,8 @@ export function renderDemoteRows(a: DemoteRowsArgs): React.ReactElement {
   const { replyKey, view, notes, disabled } = a;
   const parts = partsFor(replyKey);
   const hold = () => true;
+  /* A row's left end, and every pick of the one-column list: the first and second Left in a row hold and the third goes to Steam's menu (leftEdge.ts, plan 105). */
+  const holdLeft = () => leftAtEdge("demote-chip");
   const state = view.state;
   const error = state.error ? (
     <div className="bonsai-chat-reply-chip-error bonsai-kb-demote-error" role="alert">
@@ -381,7 +384,7 @@ export function renderDemoteRows(a: DemoteRowsArgs): React.ReactElement {
             className: "bonsai-kb-demote-undo",
             label: "Undo, the note ranks as before",
             nav: replyStopNavRef("reason-chips"),
-            moves: { up: a.upOut, down: a.downOut, left: hold, right: hold },
+            moves: { up: a.upOut, down: a.downOut, left: holdLeft, right: hold },
             onPress: undo,
             disabled,
             elRef: (el) => {
@@ -424,7 +427,7 @@ export function renderDemoteRows(a: DemoteRowsArgs): React.ReactElement {
               moves: {
                 up: i === 0 ? a.upOut : () => focusWhich(replyKey, i - 1),
                 down: i === last ? a.downOut : () => focusWhich(replyKey, i + 1),
-                left: hold,
+                left: holdLeft,
                 right: hold,
               },
               onPress: () =>
@@ -473,7 +476,7 @@ export function renderDemoteRows(a: DemoteRowsArgs): React.ReactElement {
             moves: {
               up: () => a.upFromReason(i),
               down: a.downOut,
-              left: i > 0 ? () => focusReason(replyKey, i - 1) : hold,
+              left: i > 0 ? () => focusReason(replyKey, i - 1) : holdLeft,
               right: i < DEMOTE_REASONS.length - 1 ? () => focusReason(replyKey, i + 1) : hold,
             },
             onPress: () => choose(reason.id, i),

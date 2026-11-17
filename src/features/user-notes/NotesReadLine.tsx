@@ -46,6 +46,7 @@ import {
 } from "../../shared/dpad/focusNavigation";
 import { focusRegisteredReplyStop, registerReplyStop, replyStopNavRef } from "../../shared/dpad/replyStopRegistry";
 import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
+import { leftAtEdge } from "../../shared/dpad/leftEdge";
 import type { ChatSlotTurnTransparency, TransparencySnapshot } from "../../types/inputTransparency";
 import { openUserNotesSheet } from "./UserNotesSheet";
 
@@ -152,7 +153,8 @@ export function NotesReadLine({ turnKey, notes }: { turnKey: string; notes: Note
         navRef: replyStopNavRef("notes-line"),
         onMoveUp: up,
         onMoveDown: down,
-        onMoveLeft: hold,
+        /* A dead end: the first and second Left in a row hold and the third goes to Steam's menu (leftEdge.ts, plan 105). */
+        onMoveLeft: () => leftAtEdge("notes-line"),
         onMoveRight: hold,
         onButtonDown: (evt: unknown) => {
           if (el.current && !elementHasGamepadFocus(el.current)) return false;

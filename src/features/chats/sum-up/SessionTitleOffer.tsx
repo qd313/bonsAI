@@ -30,6 +30,7 @@ import { Focusable } from "@decky/ui";
 
 import { isDeckDirectionLeftEvent, isDeckDirectionRightEvent } from "../../../shared/dpad/focusNavigation";
 import { elementHasGamepadFocus } from "../../../shared/dpad/uiDocument";
+import { leftAtEdge } from "../../../shared/dpad/leftEdge";
 import { focusRowElement } from "../../../shared/dpad/focusPerTurnRow";
 import { revealBelowKeepingAsItSettles } from "../../../shared/dpad/chatPanelScroll";
 import { TITLE_OFFER_KEEP, TITLE_OFFER_YES } from "./chatSumUpModel";
@@ -151,7 +152,7 @@ export function SessionTitleOffer(props: {
         onOKButton={onRename}
         onClick={onRename}
         onFocus={reveal(() => renameEl)}
-        {...buttonHandlers(() => renameEl, { up: onMoveUpToCard, down: onMoveDownPastOffer, left: () => true, right: focusKeep })}
+        {...buttonHandlers(() => renameEl, { up: onMoveUpToCard, down: onMoveDownPastOffer, left: () => leftAtEdge("title-offer"), right: focusKeep })}
       >
         {TITLE_OFFER_YES}
       </Focusable>

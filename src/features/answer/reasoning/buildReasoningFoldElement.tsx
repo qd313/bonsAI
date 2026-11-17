@@ -47,6 +47,7 @@ import { Focusable } from "@decky/ui";
 import { reasoningFoldLabel, tidyReasoningText, type LiveStepLine } from "./reasoningDisplay";
 import { registerReplyStop, replyStopNavRef } from "../../../shared/dpad/replyStopRegistry";
 import { elementHasGamepadFocus } from "../../../shared/dpad/uiDocument";
+import { leftAtEdge } from "../../../shared/dpad/leftEdge";
 import {
   isDeckDirectionDownEvent,
   isDeckDirectionUpEvent,
@@ -233,7 +234,8 @@ export function buildReasoningOpenBlock(
         navRef: nav?.handles.blockNav,
         onMoveDown: () => moveDown(),
         onMoveUp: () => moveUp(),
-        onMoveLeft: () => true,
+        /* A dead end: the first and second Left in a row hold and the third goes to Steam's menu (leftEdge.ts, plan 105). */
+        onMoveLeft: (evt: unknown) => leftAtEdge("reasoning-block", evt),
         onMoveRight: () => true,
         /* String-shaped presses only (tests, a desktop keyboard), so one press never fires both. */
         onButtonDown: (button: unknown) => {

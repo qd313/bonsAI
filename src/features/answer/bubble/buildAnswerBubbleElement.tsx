@@ -82,6 +82,7 @@ import {
   queryTurnSlot,
 } from "../../../shared/dpad/liveTurnFocusGraph";
 import { uiGamepadFocusElement } from "../../../shared/dpad/uiDocument";
+import { leftAtEdge } from "../../../shared/dpad/leftEdge";
 import {
   isDeckDirectionLeftEvent,
   isDeckDirectionRightEvent,
@@ -187,6 +188,7 @@ function captureBubble(answerKey: string): HTMLElement | null {
  * handleAnswerBubbleMoveDown/handleAnswerBubbleMoveUp above), so there is nothing for either
  * direction to reach here. The last section's own Right-into-Copy hand-off overrides this default
  * where it applies — it is spread in after `stopNavProps` as the last section's `lastNav`, below.
+ * Left at a section is a dead end: the first and second Left in a row hold and the third goes to Steam's menu (leftEdge.ts, plan 105).
  */
 export function stopNavProps(
   moveDown: () => boolean,
@@ -208,7 +210,7 @@ export function stopNavProps(
     },
     onMoveDown: () => moveDown(),
     onMoveUp: () => moveUp(),
-    onMoveLeft: () => true,
+    onMoveLeft: (evt: unknown) => leftAtEdge("answer-section", evt),
     onMoveRight: () => true,
     onButtonDown: (button: unknown) => {
       if (isDownDeckButtonEvent(button)) return moveDown();

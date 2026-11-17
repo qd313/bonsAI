@@ -30,6 +30,7 @@ import { NotesReadLine, buildNotesReadLine, notesLineLabel, notesReadFromSnapsho
 import { UserNotesSheet } from "./UserNotesSheet";
 import { getUserNotesState, resetUserNotesStore, setNotesModalHooks } from "./userNotesStore";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
+import { pressLeft } from "../../test-harness/steamLeftPress";
 import { useAskBarInitialRingClaim } from "../ask/bar/useAskBarInitialRingClaim";
 import { registerNavFocus, resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
 import { REPLY_STOP_ORDER, registerReplyStop } from "../../shared/dpad/replyStopRegistry";
@@ -315,5 +316,17 @@ describe("the D-pad on the line", () => {
     for (const dir of ["onMoveUp", "onMoveDown", "onMoveLeft", "onMoveRight"] as Dir[]) {
       expect(typeof line.__nav?.[dir]).toBe("function");
     }
+  });
+
+  it("two Lefts hold and the third reaches Steam's menu (plan 105, lane C5)", () => {
+    const { container } = render(<NotesReadLine turnKey="t1" notes={{ read: 1, off: 0 }} />);
+    putSteamRingOn(container.querySelector<HTMLElement>(".bonsai-notes-line"));
+    const world = { ring: () => steamRingHolder(), move: putSteamRingOn };
+    const results = [0, 1, 2].map(() => {
+      let r = "";
+      act(() => void (r = pressLeft(world).result));
+      return r;
+    });
+    expect(results).toEqual(["held", "held", "out"]);
   });
 });

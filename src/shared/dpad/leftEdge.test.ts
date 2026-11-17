@@ -142,6 +142,13 @@ describe("Left held down", () => {
 
   it("does not count a Left nobody heard, except the very first on a new page (heard before anything could listen)", () => {
     expect(leftEdgePress("paperclip")).toBe("held");
-    for (let i = 0; i < 10; i++) expect(leftEdgePress("paperclip")).toBe("repeat");
+    for (let i = 0; i < 10; i++) expect(leftEdgePress("paperclip")).toBe("unheard");
+  });
+
+  it("tells a held-down repeat from a press it heard nothing of", () => {
+    left();
+    hearPress(page, DIR_LEFT, true);
+    expect(leftEdgePress("paperclip")).toBe("repeat");
+    expect(leftEdgePress("paperclip")).toBe("unheard");
   });
 });

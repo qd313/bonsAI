@@ -56,6 +56,7 @@ import { chipRowExitUp } from "../../preset-carousel/presetRowFocusNav";
 import { findScrollablePanel, readableBottomOf } from "../../../shared/dpad/chatPanelScroll";
 import { registerNavFocus, takeNavFocus, unregisterNavFocus, type NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 import { uiGamepadFocusElement } from "../../../shared/dpad/uiDocument";
+import { leftAtEdge } from "../../../shared/dpad/leftEdge";
 import {
   clearLineForcedOnRing,
   currentDetailsLine,
@@ -253,7 +254,8 @@ function DetailsSlotLine(props: { shown: boolean; open: boolean; onMoveDown: () 
         navRef,
         onMoveUp: () => chipRowExitUp(),
         onMoveDown: () => props.onMoveDown() === true,
-        onMoveLeft: () => true,
+        /* A dead end: the first and second Left in a row hold and the third goes to Steam's menu (leftEdge.ts, plan 105). */
+        onMoveLeft: (evt: unknown) => leftAtEdge("details-slot-line", evt),
         onMoveRight: () => true,
       } as Record<string, unknown>)}
     >

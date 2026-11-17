@@ -1,7 +1,8 @@
 /**
  * Title: What the "N earlier" part of a long chat puts on screen
  * Purpose: Decide, for the transcript, the "N earlier" line, the day lines under it once it is open,
- * which older questions are drawn as rows, and what A and B do on each line.
+ * the game buttons of an open day that mixes games (plan 105), which older questions are drawn as rows
+ * and the small tag each wears, and what A and B do on each line and button.
  * Used for: MainTabChatTranscript.tsx, in front of and between the turn rows.
  * Solves: The transcript file is far past its size limit. This keeps the whole earlier-list decision
  * in one place, so the transcript only draws what it is handed.
@@ -17,12 +18,21 @@
 import type { ReactElement } from "react";
 import type { NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 import type { AskThreadCollapsedTurn } from "../../../types/bonsaiUi";
-import { dayLineText, layoutEarlierByDay, moreLineText, type EarlierDay, type EarlierMore } from "./earlierTurnsByDay";
+import {
+  dayLineText,
+  firstPageOfDayGame,
+  layoutEarlierList,
+  moreLineText,
+  type EarlierDay,
+  type EarlierGameChoice,
+  type EarlierMore,
+} from "./earlierTurnsByDay";
 import {
   dayLineNav,
   earlierLineNavHandlers,
   earlierPillNav,
   earlierPillNavHandlers,
+  gameButtonNav,
   moreLineNav,
   takeHolderFocus,
 } from "../../../shared/dpad/chatTranscriptNavHelpers";
@@ -30,7 +40,7 @@ import { takeOpenQuestionText } from "./buildTurnHeaderElement";
 import { isUpDeckButtonEvent } from "../../../shared/dpad/focusNavigation";
 import { SearchBackLine, backLineNavHandlers } from "../../search-tab/SearchBackLine";
 import { backLineShowsFor, backToSearch, searchBackNav } from "../../search-tab/searchJumpStore";
-import { EarlierListLine } from "./EarlierListLine";
+import { EarlierGameRow, EarlierListLine } from "./EarlierListLine";
 
 export type BuildEarlierListArgs = {
   /** Every finished turn, oldest first. */
@@ -46,6 +56,12 @@ export type BuildEarlierListArgs = {
   morePresses?: ReadonlyMap<string, number>;
   /** "Show N more" pressed: show the day's next questions, ring to the first of them. */
   showMoreOfDay?: (dayKey: string, firstNewId: string) => void;
+  /** The game button lit in each open day that mixes games (none listed: All). */
+  dayGames?: ReadonlyMap<string, string>;
+  /** A on a game button that is not lit: light it, which starts that day over at six. */
+  pickDayGame?: (dayKey: string, gameKey: string) => void;
+  /** A question row's own nav node, for Down from a game button when the question has no text stop of its own. */
+  headerNavOf?: (turnId: string) => NavRefHolder;
   expandedTurnKey: string | null;
   onTurnActivate?: (key: string | "live") => void;
   /** Whether the "Back to where you were" line shows; when left out, whether a live jump points into these turns. */
@@ -68,11 +84,17 @@ export type EarlierList = {
   navAbove: (turnId: string) => NavRefHolder | null;
   /** The same for the live turn: the last day line drawn after the last row, if any. */
   navAboveLive: () => NavRefHolder | null;
+  /** The small tag the row for `turnId` wears (its game under All, its day in the game list), if any. */
+  rowTag: (turnId: string) => string | undefined;
   /** The "Show N more" line to draw right under the row for `turnId`, if that row ends an open day with more. */
   moreLinesAfter: (turnId: string) => ReactElement[] | null;
   /** Whether a line (a day line, or this row's own "Show N more") is the next stop below the row for `turn`, whose next row is `nextTurn` (undefined: below the last row). */
   lineFollows: (turn: AskThreadCollapsedTurn, nextTurn: AskThreadCollapsedTurn | undefined) => boolean;
-  /** Up from the closed row for `turnId` when the Back line is the stop right above it (a short chat, no "N earlier" line): the transfer onto the Back line; else undefined. */
+  /**
+   * Up from the row for `turnId` when what is right above it needs a transfer: the lit game button when the row
+   * is the first question under a day's game buttons (plan 105), or the Back line in a short chat with no
+   * "N earlier" line; else undefined.
+   */
   firstRowMoveUp: (turnId: string) => (() => boolean) | undefined;
   /**
    * Down out of the open turn `turn` (whose next row is `nextTurn`) onto what is drawn right under it: its own
@@ -99,7 +121,7 @@ export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
   const hasLine = earlierCount >= 2;
   const layout =
     hasLine && earlierExpanded
-      ? layoutEarlierByDay({ turns, earlierCount, openDays, morePresses: a.morePresses })
+      ? layoutEarlierList({ turns, earlierCount, openDays, morePresses: a.morePresses, dayGames: a.dayGames })
       : null;
   const turnsToRender = layout ? layout.shown : hasLine ? turns.slice(earlierCount) : turns;
   const afterEarlier = showLiveTurn ? "live" : null;
@@ -114,27 +136,72 @@ export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
     }
   };
 
-  /* `nextTurnId` is the turn drawn right under the line when the next stop down is a turn. */
+  const closeDay = (day: EarlierDay) => {
+    reopenNewestIfHidden(day.turns);
+    toggleDay(day.key);
+  };
+  /* The game buttons of each open day that mixes games, and the nav node of the lit one. */
+  const choicesOf = (dayKey: string): EarlierGameChoice[] | undefined => layout?.gameChoices.get(dayKey);
+  const litNav = (dayKey: string): NavRefHolder | null => {
+    const lit = choicesOf(dayKey)?.find((c) => c.picked);
+    return lit ? gameButtonNav(dayKey, lit.key) : null;
+  };
+  /* `nextTurnId` is the turn drawn right under the line when the next stop down is a turn; with game
+     buttons under an open day's line, Down goes to the lit button instead (plan 105). */
   const dayLine = (day: EarlierDay, nextTurnId: string | null) => {
-    const close = () => {
-      reopenNewestIfHidden(day.turns);
-      toggleDay(day.key);
-    };
+    const lit = litNav(day.key);
     return (
       <EarlierListLine
         key={`earlier-day-${day.key}`}
         kind="day"
         text={dayLineText(day)}
         open={openDays.has(day.key)}
-        onToggle={() => (openDays.has(day.key) ? close() : toggleDay(day.key))}
-        onClose={close}
-        nav={earlierPillNavHandlers(nextTurnId, dayLineNav(day.key))}
+        onToggle={() => (openDays.has(day.key) ? closeDay(day) : toggleDay(day.key))}
+        onClose={() => closeDay(day)}
+        nav={earlierPillNavHandlers(lit ? () => takeHolderFocus(lit) : nextTurnId, dayLineNav(day.key))}
       />
     );
   };
-  /* A run of day lines in front of a turn: only the last has that turn right under it. */
+  /* Down from a game button: the first question under the row, its text first so the ring never stops on
+     Retry, else its row: the same pair `downBelowRow` uses. */
+  const takeQuestion = (turnId: string) =>
+    takeOpenQuestionText(turnId) || (a.headerNavOf ? takeHolderFocus(a.headerNavOf(turnId)) : false);
+  /* The row of game buttons under an open day's line, right over `firstTurnId`, the first question it shows. */
+  const gameRow = (day: EarlierDay, choices: EarlierGameChoice[], firstTurnId: string) => (
+    <EarlierGameRow
+      key={`earlier-games-${day.key}`}
+      dayKey={day.key}
+      choices={choices}
+      onPick={(gameKey) => {
+        const kept = new Set(firstPageOfDayGame(day, gameKey));
+        reopenNewestIfHidden(day.turns.filter((t) => !kept.has(t)));
+        a.pickDayGame?.(day.key, gameKey);
+      }}
+      onClose={() => {
+        /* The line stays drawn and the row goes: the ring moves first, so it is never left on nothing. */
+        takeHolderFocus(dayLineNav(day.key));
+        closeDay(day);
+      }}
+      up={() => takeHolderFocus(dayLineNav(day.key))}
+      down={() => takeQuestion(firstTurnId)}
+    />
+  );
+  /* A run of day lines in front of a turn: only the last has that turn right under it, and only that one can be
+     open with game buttons (an open day's line is always followed by its own first question). */
   const run = (days: EarlierDay[], turnId: string | null) =>
-    days.length ? days.map((day, i) => dayLine(day, i === days.length - 1 ? turnId : null)) : null;
+    days.length
+      ? days.flatMap((day, i) => {
+          const last = i === days.length - 1;
+          const line = dayLine(day, last ? turnId : null);
+          const choices = last && turnId ? choicesOf(day.key) : undefined;
+          return choices && turnId ? [line, gameRow(day, choices, turnId)] : [line];
+        })
+      : null;
+  /* The lit button over the row for `turnId`, when that row is the first question under a day's buttons. */
+  const litNavAbove = (turnId: string): NavRefHolder | null => {
+    const days = layout?.daysBefore.get(turnId);
+    return days?.length ? litNav(days[days.length - 1]!.key) : null;
+  };
 
   /* The "Show N more" line under an open day's last shown question. Down from it goes where Down
      from that question would have gone: the day line below it, or else the next question. */
@@ -210,9 +277,16 @@ export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
     },
     navAbove: (turnId) => {
       const days = layout?.daysBefore.get(turnId);
-      return days?.length ? dayLineNav(days[days.length - 1]!.key) : moreNavAbove(turnId) ?? (backIsAbove(turnId) ? searchBackNav : null);
+      return days?.length
+        ? litNavAbove(turnId) ?? dayLineNav(days[days.length - 1]!.key)
+        : moreNavAbove(turnId) ?? (backIsAbove(turnId) ? searchBackNav : null);
     },
-    firstRowMoveUp: (turnId) => (backIsAbove(turnId) ? () => takeHolderFocus(searchBackNav) : undefined),
+    firstRowMoveUp: (turnId) => {
+      const lit = litNavAbove(turnId);
+      if (lit) return () => takeHolderFocus(lit);
+      return backIsAbove(turnId) ? () => takeHolderFocus(searchBackNav) : undefined;
+    },
+    rowTag: (turnId) => layout?.tags.get(turnId),
     navAboveLive: () => {
       const days = layout?.trailingDays;
       if (days?.length) return dayLineNav(days[days.length - 1]!.key);

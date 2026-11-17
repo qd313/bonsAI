@@ -1,6 +1,7 @@
 /**
  * Title: Turn header element builder
- * Purpose: Build the question bubble for a turn — its text, and the Retry icon in its corner.
+ * Purpose: Build the question bubble for a turn — its text, the Retry icon in its corner, and an older
+ *   question's small game or day tag in the "N earlier" list (plan 105).
  * Used for: MainTabChatTranscript history and live turn slot rendering.
  * Solves: Consistent header focus behavior and expand/collapse activation on Deck.
  * Does not: Render answer body — see buildAnswerBubbleElement. Does not decide what Retry re-asks
@@ -33,6 +34,11 @@ export type BuildTurnHeaderElementArgs = {
   turnId: string;
   title: string;
   expanded: boolean;
+  /**
+   * A small tag at the end of the bubble, after the question (plan 105): an older question's game when its open
+   * day shows every game, or its day in the "N earlier" list grouped by game. Left out, the bubble is as before.
+   */
+  tag?: string;
   variant?: "history" | "live";
   isStreaming?: boolean;
   onActivate: () => void;
@@ -166,6 +172,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
     turnId,
     title,
     expanded,
+    tag,
     variant = "history",
     isStreaming = false,
     onActivate,
@@ -186,6 +193,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
     variant === "live" ? "bonsai-chat-turn-row-header--live" : "bonsai-chat-turn-row-header--history",
     expanded ? "bonsai-chat-turn-row-header--expanded" : "bonsai-chat-turn-row-header--collapsed",
     isStreaming ? "bonsai-chat-turn-row-header--streaming" : "",
+    tag ? "bonsai-chat-turn-row-header--tagged" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -194,7 +202,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
    * Option D (plan 72): the open bubble shrinks to its longest line. Measured again only when the
    * text, Retry or the open state changes (the key), or the column's width does.
    */
-  const fitKey = `${onRetry ? "retry" : "plain"}|${title}`;
+  const fitKey = `${onRetry ? "retry" : "plain"}|${tag ?? ""}|${title}`;
   const outerRef = (el: HTMLElement | null) => {
     headerRef?.(el);
     fitOpenQuestionBubble(el, expanded, fitKey);
@@ -279,7 +287,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
         onBlur: () => clearQuestionCut(titleHolder.current),
       };
 
-  const titleSpan = (
+  const titleText = (
     <span
       className={titleClassName}
       data-bonsai-turn-id={turnId}
@@ -294,6 +302,14 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
     >
       {title || "…"}
     </span>
+  );
+  const titleSpan = tag ? (
+    <>
+      {titleText}
+      <span className="bonsai-chat-turn-row-tag">{tag}</span>
+    </>
+  ) : (
+    titleText
   );
 
   /*

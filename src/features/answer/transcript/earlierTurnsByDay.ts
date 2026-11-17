@@ -210,6 +210,16 @@ export function gameChoicesOfDay(day: EarlierDay, pickedKey?: string): EarlierGa
   ];
 }
 
+/** A day's questions under one game button (All: every one of them). */
+function dayTurnsOfGame(day: EarlierDay, gameKey: string): AskThreadCollapsedTurn[] {
+  return gameKey === ALL_GAMES ? day.turns : day.turns.filter((turn) => gameOfTurn(turn).key === gameKey);
+}
+
+/** The questions an open day shows right after a game button is pressed: the first six of that game (All: of the day). */
+export function firstPageOfDayGame(day: EarlierDay, gameKey: string): AskThreadCollapsedTurn[] {
+  return dayTurnsOfGame(day, gameKey).slice(0, DAY_PAGE_SIZE);
+}
+
 function groupsOf(turns: AskThreadCollapsedTurn[], grouping: EarlierGrouping, now: Date): EarlierDay[] {
   return grouping === "game" ? groupEarlierTurnsByGame(turns) : groupEarlierTurnsByDay(turns, now);
 }
@@ -276,7 +286,7 @@ export function layoutEarlierList(args: {
       gameChoices.set(day.key, choices);
       const picked = choices.find((c) => c.picked)!;
       if (picked.key === ALL_GAMES) tagOf = (turn) => cutName(gameOfTurn(turn).label, TAG_NAME_MAX);
-      else list = day.turns.filter((turn) => gameOfTurn(turn).key === picked.key);
+      list = dayTurnsOfGame(day, picked.key);
     }
     const count = shownCountForDay(list.length, morePresses?.get(day.key) ?? 0);
     list.slice(0, count).forEach((turn) => place(turn, tagOf?.(turn)));

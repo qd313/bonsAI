@@ -741,8 +741,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
 
   /* The "N earlier" line's open/close state and which days are open under it — lifted into its
      own hook, called from exactly the spot this block occupied (tests/test_ask_hook_order.py). */
-  const { earlierExpanded, setEarlierExpanded, openDays, toggleDay, morePresses, showMoreOfDay } =
-    useEarlierTurnsPill({ askThreadCollapsed, showLiveTurn, headerNavFor: (id) => headerRingProps(id).headerNavRef });
+  const earlierState = useEarlierTurnsPill({ askThreadCollapsed, showLiveTurn, headerNavFor: (id) => headerRingProps(id).headerNavRef });
 
   /* Whether an OPEN question's title really overflows its five-line cap — lifted into its own
      hook, called from exactly the spot this block occupied (see useTitleOverflow.ts). */
@@ -1130,14 +1129,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     turns: askThreadCollapsed,
     earlierCount,
     showLiveTurn,
-    earlierExpanded,
-    setEarlierExpanded,
-    openDays,
-    toggleDay,
-    morePresses,
-    showMoreOfDay,
+    ...earlierState,
     expandedTurnKey,
     onTurnActivate,
+    headerNavOf: (id) => headerRingProps(id).headerNavRef,
   });
   const archivedTurnsToRender = earlier.turnsToRender;
 
@@ -1208,6 +1203,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   ? buildExpandedTurnTitle(turn.questionDisplay || turn.question)
                   : buildCollapsedTurnTitle(turn.questionDisplay || turn.question),
               expanded: expandedTurnKey === turn.id,
+              tag: earlier.rowTag(turn.id),
               /* Only the OPEN turn's title can overflow its cap — measuring a closed, single-line
                  ellipsis title would be meaningless, so no ref is handed to the rest. */
               titleRef: expandedTurnKey === turn.id ? measureTitleOverflow(turn.id) : undefined,

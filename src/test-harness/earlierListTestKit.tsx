@@ -7,8 +7,11 @@
  * words, the transcript rendered with the props it needs, the selectors for the lines and rows, and a D-pad
  * press that follows Steam's order (the focused element's handler, then each container's, then Steam's own step).
  *
- * Used for: the two test files above, and MainTabChatTranscript.olderTurnDownToNewer.test.tsx. `steamScroll` (Steam's
- * scroll-into-view in three rules) moved here from the first so the third walks the same model.
+ * Used for: the two test files above, MainTabChatTranscript.olderTurnDownToNewer.test.tsx and
+ * MainTabChatTranscript.earlierByGame.test.tsx. `steamScroll` (Steam's scroll-into-view in three rules) moved here
+ * from the first so the others walk the same model. An open day's game buttons (plan 105) are stops too, named
+ * `game:<name>`, and a row of them shares one band in the scroll model; a row's small tag reads `row:<question>
+ * [<tag>]`; the dock can be lifted, as a running game lifts it.
  *
  * Solves: One copy of the stand-ins and the press model, so a change to how the ring is modelled changes both.
  *
@@ -112,6 +115,8 @@ export function renderChat(extra: Partial<MainTabChatTranscriptProps>, turns: As
 
 export const LINE = ".bonsai-chat-earlier-pill-row";
 export const ROW = ".bonsai-chat-turn-row-header:not(.bonsai-chat-turn-row-header--with-retry)";
+/** One game button in an open day's row (plan 105). */
+export const GAME = ".bonsai-chat-earlier-game";
 
 /** The controls the ring can sit on: the stops Steam walks, not the containers around them. */
 const STOP_SELECTOR = [
@@ -119,6 +124,7 @@ const STOP_SELECTOR = [
   /* The "Back to where you were" line a jump from the Search tab draws over the chat. */
   ".bonsai-search-back-row",
   LINE,
+  GAME,
   ROW,
   ".bonsai-chat-turn-row-body",
   ".bonsai-answer-stop",
@@ -145,8 +151,13 @@ export function lineEl(container: HTMLElement, text: string): HTMLElement {
   return found;
 }
 
+/** A question row's own words, without its small tag. */
+function questionWords(row: Element): string {
+  return row.querySelector(".bonsai-chat-turn-row-title")?.textContent ?? row.textContent ?? "";
+}
+
 export function rowTexts(container: HTMLElement): string[] {
-  return Array.from(container.querySelectorAll(`.bonsai-chat-turn-slot ${ROW}`)).map((el) => el.textContent ?? "");
+  return Array.from(container.querySelectorAll(`.bonsai-chat-turn-slot ${ROW}`)).map(questionWords);
 }
 
 export function isRetry(el: Element | null): boolean {
@@ -159,8 +170,12 @@ export function nameOf(el: Element | null): string {
   if (isRetry(h)) return "RETRY";
   if (h.classList.contains("bonsai-search-back-row")) return "back";
   if (h.matches(LINE)) return `line:${h.querySelector(".bonsai-chat-earlier-pill")?.textContent}`;
+  if (h.matches(GAME)) return `game:${h.querySelector(".bonsai-chat-earlier-game-name")?.textContent}`;
   if (h.classList.contains("bonsai-chat-turn-row-body")) return `question:${h.textContent}`;
-  if (h.classList.contains("bonsai-chat-turn-row-header")) return `row:${h.textContent}`;
+  if (h.classList.contains("bonsai-chat-turn-row-header")) {
+    const tag = h.querySelector(".bonsai-chat-turn-row-tag")?.textContent;
+    return `row:${questionWords(h)}${tag ? ` [${tag}]` : ""}`;
+  }
   if (h.classList.contains("bonsai-chat-reasoning-fold")) return "reasoning-line";
   if (h.classList.contains("bonsai-answer-stop")) return `answer:${h.textContent?.slice(0, 12)}`;
   return h.getAttribute("aria-label") ?? h.textContent?.trim() ?? h.className;
@@ -249,20 +264,30 @@ export function openEarlier(container: HTMLElement, stamp: () => void): void {
 /* ---- Steam's scroll-into-view, modelled on the Deck's Quick Access numbers ---- */
 const PANE_TOP = 88;
 const DOCK_TOP = 290;
+/** Where the dock starts with a game running: its action row lifts the readable band's end (deckAnswerWalk's WALK_DOCKS). */
+export const DOCK_TOP_IN_GAME = 262;
 export type ScrollRule = "top" | "padded" | "center";
 
 /**
  * Lays the stops out in one column and scrolls like Steam after each landing: "top" aligns a stop that
  * is not wholly in the readable band to the pane's top, "padded" puts it 116 px below, "center" also
- * re-centres a stop that was already on screen. Boxes follow the scroll, as on the Deck.
+ * re-centres a stop that was already on screen. Boxes follow the scroll, as on the Deck. The buttons of one
+ * game row share a band 22 px tall, the drawing's button height. `dockTop` is where the readable band ends.
  */
-export function steamScroll(container: HTMLElement, rule: ScrollRule) {
+export function steamScroll(container: HTMLElement, rule: ScrollRule, dockTop = DOCK_TOP) {
   const state = { scrollTop: 0 };
   const boxes = new Map<Element, [number, number]>();
   let y = PANE_TOP;
+  let band = null as { row: Element; box: [number, number] } | null;
   for (const el of stops(container)) {
-    const h = el.matches(LINE) ? 26 : 34;
+    const row = el.matches(GAME) ? el.parentElement : null;
+    if (row && band?.row === row) {
+      boxes.set(el, band.box);
+      continue;
+    }
+    const h: number = row ? 22 : el.matches(LINE) ? 26 : 34;
     boxes.set(el, [y, y + h]);
+    band = row ? { row, box: [y, y + h] } : null;
     y += h + 8;
   }
   const rectOf = (el: Element): [number, number] => {
@@ -273,15 +298,15 @@ export function steamScroll(container: HTMLElement, rule: ScrollRule) {
     const el = document.activeElement;
     if (!el || !boxes.has(el)) return;
     const [top, bottom] = rectOf(el);
-    const onScreen = top >= PANE_TOP && bottom <= DOCK_TOP;
+    const onScreen = top >= PANE_TOP && bottom <= dockTop;
     if (rule === "top" && !onScreen) state.scrollTop += top - PANE_TOP;
     if (rule === "padded" && !onScreen) state.scrollTop += top - (PANE_TOP + 116);
-    if (rule === "center") state.scrollTop += (top + bottom) / 2 - (PANE_TOP + DOCK_TOP) / 2;
+    if (rule === "center") state.scrollTop += (top + bottom) / 2 - (PANE_TOP + dockTop) / 2;
     state.scrollTop = Math.max(0, state.scrollTop);
   };
   const visible = (el: Element) => {
     const [top, bottom] = rectOf(el);
-    return top >= PANE_TOP && bottom <= DOCK_TOP;
+    return top >= PANE_TOP && bottom <= dockTop;
   };
   return { after, visible };
 }

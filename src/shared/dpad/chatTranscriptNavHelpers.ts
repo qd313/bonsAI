@@ -2,7 +2,8 @@
  * Title: Small D-pad nav helpers for the chat transcript
  * Purpose: A handful of standalone Focusable move handlers the transcript wires onto specific
  * rows — the permission-hint rows below it, the reply utility row's Down chain, the "N earlier"
- * pill's Left, and the first archived turn header's Up — each one fixing one measured device bug.
+ * pill's Left, and the first archived turn header's Up — each one fixing one measured device bug;
+ * plus the lines of the opened "N earlier" list and the game buttons of an open day (plan 105).
  * Used for: MainTabChatTranscript.tsx.
  * Solves: Keeps four small, independently-tested move handlers out of the transcript file's own
  * body, since none of them close over any of that component's state.
@@ -15,7 +16,12 @@ import {
   focusContextHint,
   focusSessionContextStrip,
 } from "./liveTurnFocusGraph";
-import { isDeckDirectionLeftEvent, isDownDeckButtonEvent, isUpDeckButtonEvent } from "./focusNavigation";
+import {
+  isDeckDirectionLeftEvent,
+  isDeckDirectionRightEvent,
+  isDownDeckButtonEvent,
+  isUpDeckButtonEvent,
+} from "./focusNavigation";
 import { takeOpenQuestionText } from "../../features/answer/transcript/buildTurnHeaderElement";
 import { elementHasGamepadFocus } from "./uiDocument";
 import { focusUpPastLiveKbNotesBlock } from "../../features/knowledge-library/buildKbNotesBlockElement";
@@ -113,6 +119,45 @@ export function moreLineNav(dayKey: string): NavRefHolder {
   return dayLineNav(`more:${dayKey}`);
 }
 
+/** The Steam nav node of one game button in an open day's row (plan 105), kept by day and game like the lines'. */
+export function gameButtonNav(dayKey: string, gameKey: string): NavRefHolder {
+  return dayLineNav(`game-button:${dayKey}:${gameKey}`);
+}
+
+/**
+ * One game button's moves (plan 105, the drawing's option C): Left and Right walk the row in reading order,
+ * across a wrap, and hold still at its ends (Left through the shared hold above, so a later change to what an
+ * edge's Left does reaches this row too; a Right nobody claims would carry the ring out of the plugin). Up and
+ * Down leave the row from either band: Up to the day line, Down to the first question under the row. Every hop
+ * is Steam's own transfer onto the target's nav node, so nothing depends on Steam's flow through a wrapped row
+ * (docs/lessons-learned.md: a row left to Steam's flow has dropped presses on the Deck).
+ */
+export function gameButtonNavHandlers(moves: {
+  nav: NavRefHolder;
+  before: NavRefHolder | null;
+  after: NavRefHolder | null;
+  up: () => boolean;
+  down: () => boolean;
+}): Record<string, unknown> {
+  const hold = earlierPillLeftNavHandlers();
+  const left = () => (moves.before ? takeHolderFocus(moves.before) || true : (hold.onMoveLeft as () => boolean)());
+  const right = () => (moves.after ? takeHolderFocus(moves.after) || true : true);
+  return {
+    navRef: moves.nav,
+    onMoveLeft: left,
+    onMoveRight: right,
+    onMoveUp: moves.up,
+    onMoveDown: moves.down,
+    onButtonDown: (button: unknown) => {
+      if (isDeckDirectionLeftEvent(button)) return left();
+      if (isDeckDirectionRightEvent(button)) return right();
+      if (isUpDeckButtonEvent(button)) return moves.up();
+      if (isDownDeckButtonEvent(button)) return moves.down();
+      return false;
+    },
+  };
+}
+
 /** The "N earlier" line's element while it is on screen, so a press from outside can tell it is there. */
 let earlierLineEl: HTMLElement | null = null;
 export function registerEarlierLineEl(el: HTMLElement | null, prev?: HTMLElement | null): void {
@@ -133,20 +178,22 @@ export function takeEarlierLine(): boolean {
 
 /**
  * The "N earlier" pill's moves: Left holds still (above) and Down goes to the question below it
- * (plan 79). `nextTurnId` is the turn drawn right under the pill. Left alone, Steam entered that
+ * (plan 79). `next` is the turn drawn right under the pill. Left alone, Steam entered that
  * turn's row on its first control, which is Retry, so Down stopped on Retry before the question
  * (workshop:test-evidence/plan79-P79-M8-EARLIER-RETRY.json). The transfer goes onto the question text;
  * a next turn without Retry has no such stop, the call reports false and Down stays Steam's own.
+ * `next` may instead be the Down move itself: an open day's line with game buttons under it sends Down
+ * to the lit button (plan 105).
  */
 export function earlierPillNavHandlers(
-  nextTurnId: string | null | undefined,
+  next: string | (() => boolean) | null | undefined,
   nav: NavRefHolder = earlierPillNav
 ): Record<string, unknown> {
   /* The line's own nav node, so the question's Up can hand the ring back to it (questionMoveUpOut).
      Day lines pass their own holder: each line needs one of its own. */
   const left: Record<string, unknown> = { ...earlierPillLeftNavHandlers(), navRef: nav };
-  if (!nextTurnId) return left;
-  const down = () => takeOpenQuestionText(nextTurnId);
+  if (!next) return left;
+  const down = typeof next === "function" ? next : () => takeOpenQuestionText(next);
   return {
     ...left,
     onMoveDown: down,

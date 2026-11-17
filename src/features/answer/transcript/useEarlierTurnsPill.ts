@@ -9,7 +9,9 @@
  * opened and handed the ring to the first revealed row).
  * It also counts the "Show N more" presses of each open day (a day shows six questions, then six more
  * per press), forgets them whenever the day or the whole list closes, and hands Steam's ring to the
- * first newly shown question once a press has drawn it.
+ * first newly shown question once a press has drawn it. It keeps which game button is lit in each open
+ * day that mixes games (plan 105; none kept: All), forgotten the same way, and a pick starts the day over
+ * at six.
  * A jump from the Search tab (plan 90 § 3d) asks this hook, through searchJumpStore.ts, to put the chat on
  * one question: once the chat is loaded it opens "N earlier", opens the day that holds the question,
  * presses "Show N more" as often as needed, and hands the ring to the question's row. It also redraws the
@@ -60,10 +62,23 @@ export interface EarlierTurnsPill {
   morePresses: ReadonlyMap<string, number>;
   /** "Show N more" pressed on a day: show its next questions and put the ring on `firstNewId`. */
   showMoreOfDay: (dayKey: string, firstNewId: string) => void;
+  /** The game button lit in each open day that mixes games (a day not listed: All). */
+  dayGames: ReadonlyMap<string, string>;
+  /** A game button pressed: light it; the day starts over at six. */
+  pickDayGame: (dayKey: string, gameKey: string) => void;
 }
 
 const NO_DAYS: ReadonlySet<string> = new Set();
 const NO_PRESSES: ReadonlyMap<string, number> = new Map();
+const NO_PICKS: ReadonlyMap<string, string> = new Map();
+
+/** `map` without `key`, the same object when it had none. */
+function without<V>(map: ReadonlyMap<string, V>, key: string): ReadonlyMap<string, V> {
+  if (!map.has(key)) return map;
+  const next = new Map(map);
+  next.delete(key);
+  return next;
+}
 
 /**
  * Every hook below must keep its position. React matches hooks by the order they run in.
@@ -74,6 +89,7 @@ export function useEarlierTurnsPill(a: UseEarlierTurnsPillArgs): EarlierTurnsPil
   const [earlierExpanded, setExpanded] = useState(false);
   const [openDays, setOpenDays] = useState<ReadonlySet<string>>(NO_DAYS);
   const [morePresses, setMorePresses] = useState<ReadonlyMap<string, number>>(NO_PRESSES);
+  const [dayGames, setDayGames] = useState<ReadonlyMap<string, string>>(NO_PICKS);
   /* The question the ring goes to once the press that shows it has been drawn. */
   const ringOnTurn = useRef<string | null>(null);
   /* Redraws when a jump starts, finishes revealing or ends: the Back line and the reveal below follow the store.
@@ -98,6 +114,7 @@ export function useEarlierTurnsPill(a: UseEarlierTurnsPillArgs): EarlierTurnsPil
     setExpanded(false);
     setOpenDays(NO_DAYS);
     setMorePresses(NO_PRESSES);
+    setDayGames(NO_PICKS);
   }, [earlierIdentity]);
 
   const setEarlierExpanded = useCallback((expanded: boolean) => {
@@ -105,6 +122,7 @@ export function useEarlierTurnsPill(a: UseEarlierTurnsPillArgs): EarlierTurnsPil
     if (!expanded) {
       setOpenDays(NO_DAYS);
       setMorePresses(NO_PRESSES);
+      setDayGames(NO_PICKS);
     }
   }, []);
   const toggleDay = useCallback((dayKey: string) => {
@@ -113,13 +131,13 @@ export function useEarlierTurnsPill(a: UseEarlierTurnsPillArgs): EarlierTurnsPil
       if (!next.delete(dayKey)) next.add(dayKey);
       return next;
     });
-    /* Opening or closing a day starts it over at six questions. */
-    setMorePresses((prev) => {
-      if (!prev.has(dayKey)) return prev;
-      const next = new Map(prev);
-      next.delete(dayKey);
-      return next;
-    });
+    /* Opening or closing a day starts it over at six questions, with All lit. */
+    setMorePresses((prev) => without(prev, dayKey));
+    setDayGames((prev) => without(prev, dayKey));
+  }, []);
+  const pickDayGame = useCallback((dayKey: string, gameKey: string) => {
+    setDayGames((prev) => new Map(prev).set(dayKey, gameKey));
+    setMorePresses((prev) => without(prev, dayKey));
   }, []);
   const showMoreOfDay = useCallback((dayKey: string, firstNewId: string) => {
     ringOnTurn.current = firstNewId;
@@ -138,6 +156,8 @@ export function useEarlierTurnsPill(a: UseEarlierTurnsPillArgs): EarlierTurnsPil
       setExpanded(true);
       setOpenDays(new Set([place.dayKey]));
       setMorePresses(place.presses > 0 ? new Map([[place.dayKey, place.presses]]) : NO_PRESSES);
+      /* The presses were counted with All lit, so the day opens on All. */
+      setDayGames(NO_PICKS);
     }
     ringOnTurn.current = want.turnId;
     jumpRing.current = want.turnId;
@@ -171,5 +191,5 @@ export function useEarlierTurnsPill(a: UseEarlierTurnsPillArgs): EarlierTurnsPil
     settleRing({ take, onTarget: () => ringOnTurnRow(id), alive: () => alive.current });
   });
 
-  return { earlierExpanded, setEarlierExpanded, openDays, toggleDay, morePresses, showMoreOfDay };
+  return { earlierExpanded, setEarlierExpanded, openDays, toggleDay, morePresses, showMoreOfDay, dayGames, pickDayGame };
 }

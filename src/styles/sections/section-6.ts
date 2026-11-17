@@ -595,6 +595,64 @@ ${buildReplyRatingChoicesSection()}
           line-height: 1;
           color: #8fa8c4;
         }
+        /* Plan 105: the game buttons of an open day that mixes games (mock-up board tab 1, round 2,
+           option C, its .e2-chips as measured there): right-aligned, wrapping when the names do not
+           fit, 22px tall and 4px apart; the lit one filled. The name is the drawing's colour and size,
+           the count a little smaller beside it. */
+        .bonsai-scope .bonsai-chat-earlier-games {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          gap: 4px;
+          padding: 2px 6px 4px;
+        }
+        .bonsai-scope .bonsai-chat-earlier-game {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          height: 22px;
+          box-sizing: border-box;
+          padding: 0 7px;
+          border-radius: 11px;
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          color: #9fb7d5;
+          font-size: ${textPx(10)};
+          white-space: nowrap;
+        }
+        .bonsai-scope .bonsai-chat-earlier-game-count {
+          font-size: ${textPx(8.5)};
+          color: #6b7c90;
+        }
+        .bonsai-scope .bonsai-chat-earlier-game--on {
+          background: rgba(56, 189, 248, 0.2);
+          border-color: #38bdf8;
+          color: #fff;
+        }
+        .bonsai-scope .bonsai-chat-earlier-game--on .bonsai-chat-earlier-game-count {
+          color: #dce6f2;
+        }
+        /* The small tag at the end of an older question in the opened list (plan 105): its game while
+           its day shows every game, its day when the list is grouped by game. The bubble becomes a row
+           so the tag keeps its place after the question's own cut line. */
+        .bonsai-scope .bonsai-chat-turn-row-header.bonsai-chat-turn-row-header--tagged {
+          display: flex !important;
+          align-items: baseline;
+          gap: 4px;
+        }
+        .bonsai-scope .bonsai-chat-turn-row-header--tagged .bonsai-chat-turn-row-title {
+          flex: 1 1 auto;
+          min-width: 0;
+        }
+        .bonsai-scope .bonsai-chat-turn-row-tag {
+          flex: none;
+          font-size: ${textPx(8.5)};
+          font-weight: 600;
+          color: #6b7c90;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 3px;
+          padding: 0 4px;
+          white-space: nowrap;
+        }
 
         /* Empty slot / create-position preview, directly under the slot row. */
         .bonsai-scope .bonsai-chat-empty-state {

@@ -280,6 +280,50 @@ export function focusInTabBody(el: HTMLElement): void {
 const LATE_LOOK_MS = 160;
 
 /**
+ * How long after a held stop was put back a layout change above it still puts it back: long enough for a section that
+ * has just opened to draw its own late lines (Where AI runs' status, on the Deck about 4 frames after it opened, plan
+ * 105 block D3a), short of anything a person would call a new moment.
+ */
+const LATE_GROWTH_MS = 1500;
+
+/**
+ * After a held stop was put back at screen top `want.top`, keep it there for a moment more, until the next landing or
+ * tap. A ResizeObserver on the tab body hears a later change of the page's layout (a section that has just opened
+ * drawing more lines) after layout and before that frame is painted, and turns the pane by however far that change
+ * moved the row in the page, so the row stays put in the same frame and the person never sees it move; a scroll in
+ * between (Steam's own) is left as it is. A look about ten frames later catches Steam's own glide, which changes no
+ * box: it puts the row back only when its place was inside Steam's band, so a glide Steam needed is never fought.
+ */
+function keepHeldStop(body: BodyState, pane: HTMLElement, el: HTMLElement, want: DOMRect): void {
+  const landings = body.landings;
+  const heldAt = performance.now();
+  const stillHeld = () => el.isConnected && body.landings === landings && body.lastPointerAt <= heldAt;
+  if (typeof ResizeObserver !== "undefined") {
+    let inPage = contentBox(el, pane).top;
+    const watch = new ResizeObserver(() => {
+      if (!stillHeld()) return watch.disconnect();
+      const now = contentBox(el, pane).top;
+      const grown = now - inPage;
+      inPage = now;
+      if (Math.abs(grown) >= 1) pane.scrollTop = pane.scrollTop + grown;
+    });
+    watch.observe(body.root);
+    setTimeout(() => watch.disconnect(), LATE_GROWTH_MS);
+  }
+  setTimeout(() => {
+    if (!stillHeld()) return;
+    const d = el.getBoundingClientRect().top - want.top;
+    if (Math.abs(d) < 2) return;
+    const style = getComputedStyle(pane);
+    const top = pane.getBoundingClientRect().top;
+    const bandTop = top + px(style.scrollPaddingTop, STEAM_PAD_TOP_PX) - EDGE_SLACK_PX;
+    const bandBottom = top + pane.clientHeight - px(style.scrollPaddingBottom, STEAM_PAD_BOTTOM_PX) + EDGE_SLACK_PX;
+    if (want.top < bandTop || want.bottom > bandBottom) return;
+    pane.scrollTop = pane.scrollTop + d;
+  }, LATE_LOOK_MS);
+}
+
+/**
  * Before a change of a tab body's layout around the control the ring is on (a folded section opening or closing
  * above it while the ring stays put, folded-tabs/autoFold.ts), note where the control sits on the screen, and, if
  * the landing's own plan then turns the pane, where the plan puts it (placeFor updates the note). The function
@@ -288,11 +332,10 @@ const LATE_LOOK_MS = 160;
  * closes near the end of the page, the browser pulls the pane back to the page's new end before anything here runs,
  * and only the screen place counts that pull. It moves the plan's remembered last place by however far the control
  * moved in the page, or the next press would read the jump as a move the other way. Nothing happens when the control
- * did not move (a change below it), or it is gone. When it did turn the pane, it looks once more about ten frames
- * later: if the control has drifted since (Steam's own glide, aimed before the change, carrying on), and the place it
- * was put back to is inside Steam's band, it is put back again; any landing or tap since then cancels that look.
- * The browser's own scroll anchoring is off while the switch that makes these changes is on (foldedTabs.ts), so it
- * never adds a correction of its own.
+ * did not move (a change below it), or it is gone. When the change was above it, it keeps the control there a moment
+ * more (keepHeldStop): a later growth of the page is put back in the frame it happens, and Steam's glide about ten
+ * frames later. The browser's own scroll anchoring is off while the switch that makes these changes is on
+ * (foldedTabs.ts), so it never adds a correction of its own.
  */
 export function holdTabBodyStop(el: HTMLElement): () => void {
   const body = Array.from(bodies).find((b) => b.root !== el && b.root.contains(el));
@@ -307,22 +350,10 @@ export function holdTabBodyStop(el: HTMLElement): () => void {
     const moved = contentBox(el, pane).top - before;
     const drifted = el.getBoundingClientRect().top - held.top;
     if (body.lastTop !== null) body.lastTop += moved;
-    if (Math.abs(drifted) < 0.5) return;
-    pane.scrollTop = pane.scrollTop + drifted;
-    const want = el.getBoundingClientRect();
-    const landings = body.landings;
-    const heldAt = performance.now();
-    setTimeout(() => {
-      if (!el.isConnected || body.landings !== landings || body.lastPointerAt > heldAt) return;
-      const drift = el.getBoundingClientRect().top - want.top;
-      if (Math.abs(drift) < 2) return;
-      const style = getComputedStyle(pane);
-      const top = pane.getBoundingClientRect().top;
-      const bandTop = top + px(style.scrollPaddingTop, STEAM_PAD_TOP_PX) - EDGE_SLACK_PX;
-      const bandBottom = top + pane.clientHeight - px(style.scrollPaddingBottom, STEAM_PAD_BOTTOM_PX) + EDGE_SLACK_PX;
-      if (want.top < bandTop || want.bottom > bandBottom) return;
-      pane.scrollTop = pane.scrollTop + drift;
-    }, LATE_LOOK_MS);
+    /* A change below the control moved nothing of it: nothing to put back, nothing to keep. */
+    if (Math.abs(drifted) < 0.5 && Math.abs(moved) < 0.5) return;
+    if (Math.abs(drifted) >= 0.5) pane.scrollTop = pane.scrollTop + drifted;
+    keepHeldStop(body, pane, el, el.getBoundingClientRect());
   };
 }
 

@@ -1,0 +1,152 @@
+<style>
+/* ---------- board 5, tab 2: the Ollama tab's "Where AI runs" section, today and three ways to fold Cancel in ----------
+   Sizes and colours are the plugin's own: the glass button (36 tall, cyan fill, 11 px, 600), the log box, the
+   red Cancel, the dense rows and fold lines the density board picked (43-tabs.css). Only .b5t2- names are new. */
+.b5t2 .dt-scroll { padding-bottom: 130px; }
+.b5t2 .k-foldbody { padding-bottom: 2px; }
+.b5t2 .k-line { padding: 0 12px 5px; font-size: 10px; color: #8fa0b4; }
+
+/* the install block */
+.b5t2-setup { display: flex; flex-direction: column; gap: 8px; padding: 8px 12px 8px; }
+.b5t2-lbl { font-size: 11px; font-weight: 600; letter-spacing: 0.03em; color: #b8c6d6; }
+.b5t2-lbl span { font-weight: 400; color: #9fb7d5; margin-left: 8px; }
+.b5t2-ic { display: inline-flex; width: 14px; height: 14px; flex: none; }
+.b5t2-ic svg { width: 100%; height: 100%; display: block; }
+
+/* the glass button as the plugin draws it */
+.b5t2-btn { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; min-height: 36px; padding: 6px 8px; font-size: 11px; font-weight: 600; border-radius: 4px; border: 1px solid rgba(56,189,248,.55); background: linear-gradient(180deg, rgba(56,189,248,.22) 0%, rgba(14,116,144,.35) 100%); color: #e0f2fe; text-align: center; transition: transform 110ms ease, filter 110ms ease, background 140ms ease; }
+.b5t2-btn.alt { justify-content: space-between; border: 1px solid rgba(255,255,255,.22); background: linear-gradient(180deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.06) 100%); color: #e8eef5; }
+.b5t2-btn.old { border: 1px solid rgba(56,189,248,.45); background: linear-gradient(180deg, rgba(56,189,248,.15) 0%, rgba(14,116,144,.28) 100%); }
+.b5t2-btn.dark, .b5t2-btn[disabled].old { background: rgba(14,32,48,.5); }
+.b5t2-btn[disabled] { opacity: .55; cursor: default; }
+.b5t2-btn.pressed, .b5t2-mini.pressed, .b5t2-live.pressed, .b5t2-gbtn.pressed { transform: scale(.975); filter: brightness(1.35); }
+.b5t2-row { display: flex; gap: 8px; }
+.b5t2-cancel { width: auto; flex: 0 1 auto; padding: 6px 10px; border: 1px solid rgba(248,113,113,.45); background: rgba(48,24,26,.65); color: #fecaca; }
+.b5t2-cancelrow { display: flex; }
+
+/* the job button: progress fills it from the left */
+.b5t2-btn.job { justify-content: space-between; padding: 6px 10px; background: rgba(10,24,36,.75); border-color: rgba(255,255,255,.34); color: #fff; }
+.b5t2-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, rgba(56,189,248,.42), rgba(56,189,248,.68)); transition: width 160ms linear; z-index: 0; }
+.b5t2-fill.ind { width: 100%; background: repeating-linear-gradient(-45deg, rgba(56,189,248,.34) 0 10px, rgba(56,189,248,.12) 10px 20px); background-size: 28px 28px; animation: b5t2-slide .9s linear infinite; }
+@keyframes b5t2-slide { to { background-position: 28px 0; } }
+@keyframes b5t2-pulse { 50% { opacity: .35; } }
+@keyframes b5t2-spin { to { transform: rotate(360deg); } }
+.b5t2-bl, .b5t2-br { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 6px; }
+.b5t2-br { font-variant-numeric: tabular-nums; font-weight: 700; color: #e0f2fe; }
+.b5t2-btn.stopping { border-color: rgba(248,113,113,.55); }
+.b5t2-btn.stopping .b5t2-fill { animation: none; background: rgba(248,113,113,.38); }
+.b5t2-spin { width: 12px; height: 12px; border-radius: 50%; border: 2px solid rgba(224,242,254,.3); border-top-color: #e0f2fe; animation: b5t2-spin .8s linear infinite; flex: none; display: inline-block; }
+@media (prefers-reduced-motion: reduce) { .b5t2-fill.ind, .b5t2-spin, .b5t2-dot.busy { animation: none; } }
+
+/* the lines under a button */
+.b5t2-zone { display: flex; flex-direction: column; gap: 2px; }
+.b5t2-z1 { font-size: 11px; color: #9ce7ff; line-height: 1.35; }
+.b5t2-z2 { font-size: 10px; color: #8fa0b4; line-height: 1.35; }
+.b5t2-z3 { font-size: 10px; color: #6b7c90; line-height: 1.35; }
+.b5t2-z1.ok, .b5t2-ok { color: #86efac; }
+.b5t2-z1.bad, .b5t2-bad { color: tomato; }
+.b5t2-z1.mute { color: #9fb7d5; }
+.b5t2-hint { font-size: 10px; color: #6b7c90; line-height: 1.35; }
+.b5t2-stage { font-size: 11px; color: #9ce7ff; line-height: 1.4; }
+.b5t2-res { font-size: 11px; line-height: 1.35; }
+.b5t2-pre { margin: 0; width: 100%; box-sizing: border-box; max-height: 200px; overflow-y: auto; font-family: Consolas, "Liberation Mono", monospace; font-size: 10px; line-height: 1.35; color: #aab8ca; background: rgba(8,14,22,.85); border: 1px solid rgba(72,98,124,.35); border-radius: 4px; padding: 8px 10px; white-space: pre-wrap; word-break: break-word; scrollbar-width: none; }
+
+/* B: one job card */
+.b5t2-card { display: flex; flex-direction: column; gap: 6px; padding: 8px 10px 9px; border-radius: 6px; border: 1px solid rgba(56,189,248,.4); background: rgba(10,24,36,.75); }
+.b5t2-ch { display: flex; align-items: center; gap: 8px; min-height: 28px; }
+.b5t2-ct { flex: 1; min-width: 0; font-size: 12px; font-weight: 700; color: #e8eef5; }
+.b5t2-mini { flex: none; height: 28px; padding: 0 10px; border-radius: 4px; border: 1px solid rgba(248,113,113,.5); background: rgba(48,24,26,.6); color: #fecaca; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; transition: transform 110ms ease, filter 110ms ease; }
+.b5t2-mini.stopping { background: rgba(248,113,113,.28); }
+.b5t2-bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,.12); position: relative; overflow: hidden; flex: none; }
+.b5t2-bar .b5t2-fill { transition: width 160ms linear; }
+.b5t2-key { display: inline-grid; place-items: center; min-width: 14px; height: 14px; padding: 0 3px; border-radius: 3px; background: #c9d1da; color: #1a1d21; font-size: 9px; font-weight: 800; font-style: normal; }
+
+/* C: the live status line */
+.b5t2-live { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 6px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,.2); background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)); color: #e8eef5; text-align: left; transition: transform 110ms ease, filter 110ms ease; }
+.b5t2-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; background: #6b7c90; }
+.b5t2-dot.ok { background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,.55); }
+.b5t2-dot.bad { background: #f87171; box-shadow: 0 0 6px rgba(248,113,113,.5); }
+.b5t2-dot.busy { background: #fbbf24; animation: b5t2-pulse 1s ease-in-out infinite; }
+.b5t2-lt { flex: 1; min-width: 0; }
+.b5t2-l1 { font-size: 12px; font-weight: 600; line-height: 1.25; }
+.b5t2-l2 { font-size: 10px; color: #9fb7d5; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b5t2-re { flex: none; width: 16px; height: 16px; color: #9ce7ff; display: inline-flex; }
+.b5t2-re svg { width: 100%; height: 100%; }
+
+/* the test row, today and the steadier button */
+.b5t2-testblk { display: flex; flex-direction: column; gap: 6px; padding: 6px 12px 6px; }
+.b5t2-trow { display: flex; align-items: flex-end; gap: 8px; }
+.b5t2-tt { flex: 1 1 auto; min-width: 0; font-size: 11px; color: #b8c6d6; line-height: 1.35; padding-bottom: 8px; }
+.b5t2-tt .cy { color: #9ce7ff; }
+.b5t2-gbtn { flex: 0 0 auto; height: 38px; margin-bottom: 2px; padding: 0 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,.22); background: linear-gradient(180deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.06) 100%); color: #e8eef5; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: transform 110ms ease, filter 110ms ease; }
+.b5t2-gbtn.steady { height: 34px; min-width: 112px; margin-bottom: 0; align-self: center; }
+.b5t2-testblk .b5t2-trow.steadyrow .b5t2-tt { padding-bottom: 0; }
+.b5t2-tres { font-size: 12px; line-height: 1.35; }
+
+/* the dock: the help strip, and in the wild option the job bar above it */
+.b5t2-dock { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; display: flex; flex-direction: column; }
+.b5t2-dock .k-strip { position: static; }
+.b5t2-wbar { position: relative; display: flex; align-items: center; gap: 8px; padding: 9px 10px 7px; background: #18232f; border-top: 1px solid rgba(56,189,248,.5); }
+.b5t2-wbar .b5t2-bar { position: absolute; left: 0; right: 0; top: 0; height: 3px; border-radius: 0; }
+.b5t2-wt { flex: 1; min-width: 0; font-size: 11px; color: #dcdedf; line-height: 1.3; }
+.b5t2-wt b { color: #fff; }
+.b5t2-wt small { display: block; font-size: 10px; color: #8fa0b4; }
+
+/* the knowledge library and voice excerpts */
+.b5t2-cap { padding: 6px 12px 2px; font-size: 9.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #6b7c90; border-top: 1px dashed rgba(255,255,255,.12); margin-top: 6px; }
+.b5t2-cap:first-child { border-top: 0; margin-top: 0; }
+.b5t2-blk { display: flex; flex-direction: column; gap: 8px; padding: 6px 12px 8px; }
+.b5t2-info { font-size: 12px; line-height: 1.45; color: #9fb7d5; }
+.b5t2-info.sm { font-size: 11px; line-height: 1.4; }
+.b5t2-pair { display: flex; gap: 8px; align-items: stretch; }
+.b5t2-pair .b5t2-btn { min-height: 44px; }
+.b5t2-pair .big { flex: 1.6 1 0; min-width: 0; }
+.b5t2-pair .small { flex: .9 1 0; min-width: 72px; }
+.b5t2-btn.glass { border: 1px solid rgba(255,255,255,.22); background: linear-gradient(180deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.06) 100%); color: #e8eef5; }
+.b5t2-btn.glass.job { background: rgba(10,24,36,.75); border-color: rgba(255,255,255,.34); }
+.b5t2-btn.red { border: 1px solid rgba(248,113,113,.5); background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)); color: #fecaca; }
+.b5t2-btn.voice { min-height: 38px; font-size: 12px; }
+
+/* the ring on every drawn button: the plugin's white ring, 2 px out */
+.qam .b5t2-btn[data-stop].ring, .qam .b5t2-mini[data-stop].ring, .qam .b5t2-live[data-stop].ring, .qam .b5t2-gbtn[data-stop].ring { outline: 2px solid rgba(255,255,255,.88); outline-offset: 2px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.45); }
+
+/* the controls and readouts under a card */
+.b5t2-steps { display: flex; flex-wrap: wrap; gap: 5px 6px; align-items: center; font-size: 12px; color: var(--ink-2); }
+.b5t2-steps .g { color: var(--ink-3); font-weight: 600; margin-right: 2px; }
+.b5t2-steps .sp { flex-basis: 100%; height: 0; }
+.b5t2-steps button { background: var(--card-line); color: var(--ink); border: 0; border-radius: 999px; padding: 3px 10px; font: inherit; font-size: 12px; cursor: pointer; }
+.b5t2-steps button[aria-pressed="true"] { background: var(--leaf); color: var(--leaf-ink); }
+.b5t2-note { margin: 0; font-size: 12.5px; color: var(--ink-3); }
+
+/* ---------- round 2: the card, the live line and the bar as one look ----------
+   The bar sits at the very bottom edge with the help strip on top of it, so the strip can never be covered and the
+   bar never moves when the strip's words come and go. The list keeps room for both (the script sets its bottom room). */
+.b5t2-r2 .dt-scroll { padding-bottom: 24px; }
+.b5t2-dock2 { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; display: flex; flex-direction: column; }
+.b5t2-dock2 .k-strip { position: static; }
+.b5t2-wb { position: relative; display: flex; flex-direction: column; gap: 1px; padding: 6px 10px 9px; background: #18232f; border-top: 1px solid rgba(56,189,248,.5); transition: background 140ms ease; }
+.b5t2-wb + .b5t2-wb { border-top-color: rgba(255,255,255,.14); }
+.b5t2-wr1 { display: flex; align-items: center; gap: 8px; min-height: 26px; }
+.b5t2-wtt { flex: 1; min-width: 0; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b5t2-wr2 { font-size: 10px; line-height: 13px; min-height: 13px; padding-left: 20px; color: #8fa0b4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.b5t2-wb .b5t2-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; border-radius: 0; background: rgba(255,255,255,.1); }
+.b5t2-wi { flex: none; display: inline-flex; width: 12px; height: 12px; }
+.b5t2-wb.res.okk .b5t2-wi { color: #86efac; }
+.b5t2-wb.res.bad { border-top-color: rgba(248,113,113,.6); }
+.b5t2-wb.res.bad .b5t2-wi, .b5t2-wb.res.bad .b5t2-wr2 { color: #fca5a5; }
+.b5t2-wb.res .b5t2-wr2 { padding-left: 20px; }
+.b5t2-mini.compact { height: 26px; padding: 0 9px; }
+.b5t2-more { flex: none; height: 26px; padding: 0 9px; border-radius: 13px; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: #e8eef5; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; gap: 3px; transition: transform 110ms ease, filter 110ms ease; }
+.b5t2-more .b5t2-ic { width: 11px; height: 11px; }
+.b5t2-more.pressed { transform: scale(.96); filter: brightness(1.35); }
+.qam .b5t2-more[data-stop].ring { outline: 2px solid rgba(255,255,255,.88); outline-offset: 2px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.45); }
+.b5t2-mini .b5t2-key { margin-left: 1px; }
+
+/* the card folds to one line only in the drawing where the bar shows whenever you leave */
+.b5t2-cw .b5t2-away { display: none; align-items: center; gap: 8px; min-height: 28px; padding: 4px 10px; border-radius: 6px; border: 1px dashed rgba(56,189,248,.38); font-size: 10.5px; color: #8fa0b4; }
+.b5t2-cw.away .b5t2-card { display: none; }
+.b5t2-cw.away .b5t2-away { display: flex; }
+.b5t2-card .b5t2-ch { min-height: 28px; }
+.b5t2-note2 { margin: 6px 12px; font-size: 10.5px; color: #6b7c90; line-height: 1.4; }
+.b5t2-steps .vs, .d-measure .vs { color: var(--ink-3); }
+</style>

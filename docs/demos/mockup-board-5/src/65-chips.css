@@ -1,0 +1,88 @@
+<style>
+/* ============================================================
+   Tab 5 (suggestion chips): softer cut ends. Every rule starts with .b5t5.
+   The chip is the plugin's own (src/features/preset-carousel/presetChipLabel.ts and
+   styles/sections/section-6.ts): 26 tall, 8 side padding, 11 px words, a glass gradient, and a pale
+   blue tint over it when the ring is on it. The row is 32 tall (26 plus 5 for the chip's shadow).
+   ============================================================ */
+.b5t5-row { flex: none; height: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; align-items: start; overflow: hidden; box-sizing: border-box; }
+.b5t5-row.b5t5-inset { padding: 0 8px; }
+.b5t5-chip { width: 100%; min-width: 0; height: 26px; padding: 0 8px; border-radius: 4px; box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  font-size: 11px; line-height: 1.2; color: #c4d3e2; white-space: nowrap; overflow: hidden;
+  background: linear-gradient(180deg, rgba(56,70,84,.5) 0%, rgba(16,22,30,.55) 100%);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 2px 3px rgba(0,0,0,.4);
+  transition: opacity 1.5s ease-in-out; }
+.b5t5-chip.b5t5-in { transition: opacity 1.2s ease-in-out; }
+.qam .b5t5-chip[data-stop].ring { outline: none;
+  background: linear-gradient(rgba(56,189,248,.20), rgba(56,189,248,.20)), linear-gradient(180deg, rgba(56,70,84,.5) 0%, rgba(16,22,30,.55) 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 2px 3px rgba(0,0,0,.4); color: #eef7fd; }
+/* the room the words slide in, and the words (as wide as they are, on one line) */
+.b5t5-room { display: block; flex: 0 1 auto; min-width: 0; max-width: 100%; overflow: hidden; white-space: nowrap; }
+.b5t5-run { display: inline-block; white-space: nowrap; will-change: transform; vertical-align: top; }
+/* at rest with a cut: the words end in "…" (the plugin's own fallback when motion is reduced) */
+.b5t5-room.b5t5-ell .b5t5-run { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+
+/* Wild: the words wrap onto two lines, nothing slides, nothing is cut but a third line */
+.b5t5-row.b5t5-two { height: auto; align-items: stretch; padding-bottom: 5px; }
+.b5t5-two .b5t5-chip { height: auto; min-height: 26px; padding: 5px 8px 5px; white-space: normal; }
+.b5t5-two .b5t5-room { white-space: normal; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 13px; }
+.b5t5-two .b5t5-run { display: inline; white-space: normal; }
+
+/* ============================================================
+   Round 2 (2026-11-15): one line that slides as today; two lines only while the ring is on the chip.
+   Every rule here starts with .b5t5-r2 / .b5t5-ra / .b5t5-rb / .b5t5-rc / .b5t5-c2 / .b5t5-slot / .b5t5-set.
+   The open and close take 160 ms, eased out. Heights and widths animate; the words wrap at once.
+   ============================================================ */
+.b5t5-v-2a, .b5t5-v-2b, .b5t5-v-2c { --b5t5-ms: 160ms; --b5t5-ease: cubic-bezier(.2,.7,.3,1); }
+.b5t5-r2row { flex: none; height: 32px; display: flex; gap: 6px; align-items: flex-start; box-sizing: border-box; position: relative; overflow: hidden;
+  transition: height var(--b5t5-ms) var(--b5t5-ease); }
+.b5t5-slot { flex: 1 1 0; min-width: 0; height: 26px; position: relative; }
+.b5t5-c2 { transition: opacity 1.5s ease-in-out, height var(--b5t5-ms) var(--b5t5-ease), padding var(--b5t5-ms) var(--b5t5-ease),
+  width var(--b5t5-ms) var(--b5t5-ease), left var(--b5t5-ms) var(--b5t5-ease), border-color var(--b5t5-ms) ease; }
+.b5t5-c2.b5t5-in { transition: opacity 1.2s ease-in-out, height var(--b5t5-ms) var(--b5t5-ease), padding var(--b5t5-ms) var(--b5t5-ease); }
+/* the opened chip: a quick fade back if it was in the middle of the row's own fade, and a crisper edge than the ring tint alone */
+.b5t5-c2.b5t5-sel { transition: opacity .15s linear, height var(--b5t5-ms) var(--b5t5-ease), padding var(--b5t5-ms) var(--b5t5-ease),
+  width var(--b5t5-ms) var(--b5t5-ease), left var(--b5t5-ms) var(--b5t5-ease), border-color var(--b5t5-ms) ease; }
+.b5t5-c2.b5t5-sel { border-color: rgba(156,231,255,.45); }
+.b5t5-instant, .b5t5-instant * { transition: none !important; }
+
+/* A: the whole row grows; the opened chip is two lines tall (the same 38 points, and 5 for the shadow, as round 1's Wild) */
+.b5t5-ra:has(.b5t5-sel) { height: 43px; }
+.b5t5-ra .b5t5-c2.b5t5-sel, .b5t5-rb .b5t5-c2.b5t5-sel { height: 38px; padding: 5px 8px; }
+.b5t5-ra .b5t5-c2.b5t5-sel .b5t5-room, .b5t5-rb .b5t5-c2.b5t5-sel .b5t5-room { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  line-height: 13px; overflow: hidden; max-width: 100%; }
+.b5t5-ra .b5t5-c2.b5t5-sel .b5t5-run, .b5t5-rb .b5t5-c2.b5t5-sel .b5t5-run { display: inline; white-space: normal; max-width: none; text-overflow: clip; }
+
+/* B: the chip stays in its one-line slot and grows upward over the chat's bottom edge. An opaque base under the glass so the
+   answer text under it does not show through, and a shadow cast upward so its top edge parts from the answer's border. */
+.b5t5-rb { overflow: visible; }
+.b5t5-rb .b5t5-c2 { position: absolute; left: 0; bottom: 0; width: 100%; }
+.b5t5-rb .b5t5-c2.b5t5-sel { z-index: 5; }
+.qam .b5t5-rb .b5t5-c2[data-stop].b5t5-sel {
+  background: linear-gradient(rgba(56,189,248,.20), rgba(56,189,248,.20)), linear-gradient(180deg, rgba(56,70,84,.5) 0%, rgba(16,22,30,.55) 100%), var(--q-bg);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 -3px 8px rgba(0,0,0,.6), 0 2px 3px rgba(0,0,0,.4); }
+.qam .b5t5-rb .b5t5-c2[data-stop].ring.b5t5-sel { box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 -3px 8px rgba(0,0,0,.6), 0 2px 3px rgba(0,0,0,.4); }
+
+/* C: the slots have their own widths (set from the script); the opened chip takes the row, the others shrink to a stub */
+.b5t5-rc .b5t5-slot { flex: 0 0 auto; transition: width var(--b5t5-ms) var(--b5t5-ease); }
+.b5t5-rc .b5t5-c2 { transition: opacity 1.5s ease-in-out, border-color var(--b5t5-ms) ease; }
+.b5t5-rc .b5t5-c2.b5t5-sel { transition: opacity .15s linear, border-color var(--b5t5-ms) ease; }
+.b5t5-rc .b5t5-room { flex: 0 1 auto; }
+
+/* the three-way switch above each panel */
+.b5t5-set { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+.b5t5-set button { background: none; border: 1px solid var(--card-line); border-radius: 8px; padding: 5px 10px; font-size: 13px; color: var(--ink-2); cursor: pointer; }
+.b5t5-set button[aria-pressed="true"] { background: var(--card); color: var(--ink); border-color: var(--focus); }
+
+@media (prefers-reduced-motion: reduce) {
+  .b5t5-r2row, .b5t5-slot, .b5t5-c2 { transition: none !important; }
+}
+
+/* the note under each panel */
+.b5t5-measure { margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.b5t5-measure b { font-family: var(--font-mono); font-size: 13px; color: var(--leaf); font-weight: 500; }
+.b5t5-measure .vs { color: var(--ink-3); }
+.b5t5-hint { margin: 6px 0 0; font-size: 13px; color: var(--ink-3); }
+</style>

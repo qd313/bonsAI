@@ -1,0 +1,61 @@
+<style>
+/* Headline first: today against with it. Page layout only; the panel itself comes from the
+   second mock-up board's kit (docs/demos/mockup-board-2/src), so sizes and colours are the Deck's. */
+.hf-intro { color: var(--ink-2); max-width: 78ch; margin: 14px 0 0; }
+.hf-intro b { color: var(--ink); }
+.hf-tools { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 16px 0 6px; }
+.hf-ex { margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--card-line); }
+.hf-ex h2 { font-family: var(--font-display); font-size: 22px; line-height: 1.15; margin: 0; text-wrap: balance; }
+.hf-ex h2 small { display: block; font-family: var(--font-body); font-size: 13px; font-weight: 500; color: var(--ink-3); margin-top: 4px; }
+.hf-pair { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 14px; align-items: flex-start; }
+.hf-card { background: var(--card); border: 1px solid var(--card-line); border-radius: 12px; padding: 14px; min-width: 0; }
+.hf-card h3 { margin: 0 0 2px; font-size: 15px; font-weight: 600; }
+.hf-card h3 em { font-style: normal; color: var(--leaf); }
+.hf-card > p { margin: 0 0 12px; font-size: 13px; color: var(--ink-3); max-width: 44ch; }
+.hf-stage { zoom: var(--zoom, 1); }
+.hf-label { font-size: 12px; color: var(--ink-3); margin: 14px 0 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+/* Steam's reply-ready notification: two lines, each cut where Steam cuts it */
+.hf-toast { width: 300px; background: #23262e; border-radius: 3px; padding: 9px 12px 10px; display: grid; grid-template-columns: 30px 1fr; gap: 0 10px; align-items: center; font-family: var(--q-font); box-shadow: 0 6px 18px rgba(0,0,0,.45); }
+.hf-toast i { grid-row: span 2; width: 30px; height: 30px; border-radius: 4px; background: #1a9fff; display: grid; place-items: center; color: #fff; font-style: normal; font-weight: 800; font-size: 13px; }
+.hf-toast b { font-size: 13px; line-height: 17px; color: #fff; font-weight: 700; white-space: nowrap; overflow: hidden; }
+.hf-toast span { font-size: 12px; line-height: 16px; color: #b8bcbf; white-space: nowrap; overflow: hidden; }
+.hf-same { border-style: dashed; }
+/* The first line of the answer, when the drawing is switched to bold */
+.hf-bold .hf-head { font-weight: 700; color: #fff6d2; }
+.hf-note { margin-top: 34px; padding: 14px 16px; border: 1px solid var(--card-line); border-radius: 12px; color: var(--ink-2); max-width: 86ch; }
+.hf-note b { color: var(--ink); }
+.hf-note ul { margin: 8px 0 0; padding-left: 20px; }
+.k2-answer ol { margin: 6px 0 0; padding-left: 16px; }
+.k2-answer ol li + li { margin-top: 5px; }
+</style>
+<div class="wrap">
+  <header class="masthead">
+    <div>
+      <h1><span class="sprout">bonsAI</span> · Headline first: today and with it</h1>
+      <p>Three real answers from the answer test of 2 November, each drawn twice at the Deck's real size: as the AI wrote it, and with one short opening line that carries the point. Under each panel is the reply-ready popup you see over a game, which shows only the answer's first words.</p>
+    </div>
+  </header>
+  <p class="hf-intro"><b>What the feature is:</b> the AI is asked to open every answer with one short sentence that stands alone and gives nothing away. Nothing new is drawn on screen; the words change. <b>Left</b> is today. <b>Right</b> is the same answer with a headline. The headlines here were written by hand from each answer's own later sentences, to show the idea; the real ones would be the AI's, measured on the answer test before anything lands.</p>
+  <div class="hf-tools">
+    <div class="zoom" role="group" aria-label="Panel size">
+      <span>Panel size</span>
+      <button type="button" data-z="1" aria-pressed="true">1×</button>
+      <button type="button" data-z="1.5" aria-pressed="false">1.5×</button>
+      <button type="button" data-z="2" aria-pressed="false">2×</button>
+    </div>
+    <div class="zoom" role="group" aria-label="How the headline is drawn">
+      <span>The headline is drawn</span>
+      <button type="button" data-b="0" aria-pressed="true">as plain text</button>
+      <button type="button" data-b="1" aria-pressed="false">in bold</button>
+    </div>
+  </div>
+  <main id="hf-main"></main>
+  <div class="hf-note">
+    <b>What to weigh.</b>
+    <ul>
+      <li><b>For it:</b> the popup over a game becomes useful by itself (you may not need to open the panel), and the first thing in the panel is the thing to do.</li>
+      <li><b>Against it:</b> it is one more instruction for the small AI on the Deck to follow, so it can slip; and an answer that already opens well gains nothing (the third example). In September, 2 of 10 answers already opened with a line that stands alone.</li>
+      <li><b>"In bold"</b> is an extra the roadmap entry does not ask for. It needs the AI to mark its first line reliably, so it is a little more work and a little more risk.</li>
+    </ul>
+  </div>
+</div>

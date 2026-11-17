@@ -1,0 +1,72 @@
+<style>
+/* ============================================================
+   Tab 1 (sections): shading, bold titles, first section open.
+   Everything here starts with .b5t1 so it cannot touch another tab.
+   The base look (section line, rows, strip) is the density board's, as the plugin ships it
+   (src/features/folded-tabs/foldedTabs.ts); these rules change only the options.
+   ============================================================ */
+
+/* The ring on a section line, as the plugin draws it (.bonsai-fold-line.gpfocus): Steam's row fill,
+   a 2 px white ring inside the line, and a faint inner halo. The density board's old drawing left
+   the ring out; here it is back so every option is judged with it. */
+.b5t1 .qam .k-fold[data-stop].ring {
+  background: #32373d; color: #fff;
+  outline: 2px solid rgba(255,255,255,.85); outline-offset: -2px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.55);
+}
+.b5t1 .qam .k-fold.ring .k-fs { color: #dcdedf; }
+
+/* Each section is one wrapper: its line, then its settings while it is open. */
+.b5t1-sec { position: relative; }
+.b5t1 .k-fold { border-left: 3px solid transparent; padding-left: 9px; }
+
+/* The dock over the bottom of the panel: a band the panel's colour holding Open all, then the strip. */
+.b5t1-dock { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; background: #0e141b; display: flex; flex-direction: column; align-items: stretch; }
+.b5t1-allrow { display: flex; justify-content: flex-end; padding: 8px 10px 8px 0; }
+.b5t1-all { display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 10px 0 8px; border-radius: 2px; border: 0; background: #32373d; color: #dcdedf; font-size: 11px; font-weight: 400; box-shadow: 0 3px 10px rgba(0,0,0,.55); }
+.b5t1-all .b5t1-alli { font-size: 13px; }
+.qam .b5t1-all[data-stop].ring { outline: none; box-shadow: 0 3px 10px rgba(0,0,0,.55); background: #fff; color: #0e141b; }
+.b5t1-strip { background: #23262e; border-top: 1px solid #3d4450; padding: 6px 12px 8px; font-size: 11px; line-height: 15px; color: #dcdedf; }
+.b5t1-strip b { color: #e8eef5; }
+.b5t1-strip .b5t1-sl { display: block; font-size: 10px; line-height: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #8b929a; }
+.b5t1-strip:empty { display: none; }
+
+/* The note under each panel */
+.b5t1-measure { margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.b5t1-measure b { font-family: var(--font-mono); font-size: 13px; color: var(--leaf); font-weight: 500; }
+.b5t1-measure .vs { color: var(--ink-3); }
+
+/* ---------- A: only the section line is shaded, titles bolder ---------- */
+.b5t1-v-a .b5t1-line { background: #1b2530; }
+.b5t1-v-a .b5t1-line .k-ft { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; color: #d7dadd; }
+.b5t1-v-a .b5t1-line.open .k-ft { color: #fff; }
+.b5t1-v-a .b5t1-line.open { border-bottom-color: #0e141b; }
+
+/* ---------- B: the whole open section is one shaded block, line and settings together ---------- */
+.b5t1-v-b .b5t1-sec { margin: 5px 6px 0; border-radius: 4px; background: #131b24; overflow: hidden; box-shadow: 0 0 0 1px #1c2530; }
+.b5t1-v-b .b5t1-sec.open { background: #131b24; box-shadow: 0 0 0 1px #26313e; }
+.b5t1-v-b .b5t1-line { background: #1b2531; border-bottom: 0; min-height: 34px; }
+.b5t1-v-b .b5t1-line .k-ft { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; color: #d7dadd; }
+.b5t1-v-b .b5t1-line.open .k-ft { color: #fff; }
+.b5t1-v-b .k-foldbody { border-bottom: 0; padding: 2px 0 6px; }
+.b5t1-v-b .k-row, .b5t1-v-b .k-sl { border-bottom-color: #1d2631; }
+.b5t1-v-b .k-seg { border-bottom-color: #1d2631; }
+.b5t1-v-b .b5t1-sec:last-child { margin-bottom: 4px; }
+
+/* ---------- C: a coloured bar down the left of an open section, with a faint tint ---------- */
+.b5t1-v-c .b5t1-sec.open { background: rgba(82,216,138,.08); box-shadow: inset 3px 0 0 #52d88a; }
+.b5t1-v-c .b5t1-line { border-left-color: transparent; }
+.b5t1-v-c .b5t1-line .k-ft { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; color: #b7b9bb; }
+.b5t1-v-c .b5t1-line.open .k-ft { color: #fff; }
+.b5t1-v-c .b5t1-sec.open .k-foldbody { border-bottom-color: rgba(82,216,138,.22); }
+.b5t1-v-c .b5t1-sec.open .k-row, .b5t1-v-c .b5t1-sec.open .k-sl, .b5t1-v-c .b5t1-sec.open .k-seg { border-bottom-color: rgba(82,216,138,.10); }
+.b5t1-v-c .b5t1-sec.open .b5t1-line { border-bottom-color: rgba(82,216,138,.22); }
+
+/* ---------- Wild: the settings sit in a darker well under their line ---------- */
+.b5t1-v-w .b5t1-line .k-ft { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; color: #d7dadd; }
+.b5t1-v-w .b5t1-line.open .k-ft { color: #fff; }
+.b5t1-v-w .b5t1-line { background: #151d27; }
+.b5t1-v-w .b5t1-sec.open .k-foldbody { background: #080b0f; box-shadow: inset 0 5px 6px -4px rgba(0,0,0,.85), inset 0 -4px 5px -4px rgba(0,0,0,.7); padding: 4px 0 6px; border-bottom: 0; }
+.b5t1-v-w .b5t1-sec.open .k-row, .b5t1-v-w .b5t1-sec.open .k-sl, .b5t1-v-w .b5t1-sec.open .k-seg { border-bottom-color: #131920; }
+.b5t1-v-w .b5t1-sec.open .k-opt, .b5t1-v-w .b5t1-sec.open .k-btn:not(.cyan) { background-color: #1a2029; }
+</style>

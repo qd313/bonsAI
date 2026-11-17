@@ -56,6 +56,27 @@ _LIMITED_LICENCE_FAMILIES: Final[frozenset[str]] = frozenset(("qwen", "llava-lla
 # on purpose, with a reason written here.
 KEPT_IN_TIER_1_PENDING_CALL: Final[frozenset[tuple[str, str]]] = frozenset()
 
+# Exact tags that carry an open-source licence inside a family the name rules class as open weight or leave
+# unknown (a whole Mistral or DeepSeek family is NOT open: other Mistral sizes use other licences, and DeepSeek's
+# 8b and 70b distills are built on Llama). Each is checked before any family rule. Sources: the licence text on
+# the tag's own Ollama page, read 2026-11-17 (listed in src/features/models/pullModelCatalog.sources.md).
+_OPEN_LICENCE_EXACT_TAGS: Final[frozenset[str]] = frozenset((
+    "mistral:7b",  # Apache 2.0: ollama.com/library/mistral:7b (licence blob 43070e2d4e53)
+    "deepseek-r1:1.5b",  # MIT: ollama.com/library/deepseek-r1:1.5b (licence blob 6e4c38e1172f)
+    "deepseek-r1:7b",  # MIT: ollama.com/library/deepseek-r1:7b
+    "smollm2:1.7b",  # Apache 2.0: ollama.com/library/smollm2:1.7b (licence blob 58d1e17ffe51)
+    "moondream",  # Apache 2.0: ollama.com/library/moondream:latest (licence blob c71d239df917); the bare name is :latest
+    "moondream:latest",  # the same blob
+    "moondream:1.8b",  # the same blob
+))
+
+
+def _is_open_licence_exact_tag(name: str) -> bool:
+    """True for a tag in the exact-tag list above (repo prefix and case ignored; no tag given means none, not latest)."""
+    base, tag = _split_tag(name)
+    return (f"{base}:{tag}" if tag else base) in _OPEN_LICENCE_EXACT_TAGS
+
+
 def _normalize_base_model(name: str) -> str:
     """First path segment of Ollama model id (before `:`), after optional `repo/` prefix."""
     raw = (name or "").strip().lower()
@@ -116,6 +137,9 @@ def classify_ollama_model_name(name: str) -> ModelSourceClass:
     base = _normalize_base_model(name)
     if not base:
         return "unknown"
+
+    if _is_open_licence_exact_tag(name):
+        return "foss"
 
     if _has_limited_licence(name):
         return "open_weight"

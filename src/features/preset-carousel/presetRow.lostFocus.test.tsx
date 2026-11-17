@@ -20,6 +20,7 @@ import { Button } from "@decky/ui";
 import { mountPanelPage, type MoveKey, type PanelPage } from "../../test-harness/lostFocusPanel";
 import { resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
 import type { KbAttachedNote } from "../../types/inputTransparency";
+import { pressLeft, type LeftResult } from "../../test-harness/steamLeftPress";
 
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../../test-harness/fakeDeckyUi");
@@ -168,5 +169,33 @@ describe("with the page's focus present, the chips' moves are unchanged", () => 
     });
     expect(nameOf(page.ring())).toBe(CHIPS[1]);
     expectTogether("Right");
+  });
+});
+
+/* Plan 105, lane C5 (row P105-LEFT-TO-MENU-01): Left as Steam delivers it, heard at the page, then the chips' handlers. */
+describe("Left out to Steam's menu from the chip row's left end", () => {
+  const lefts = (n: number): LeftResult[] => {
+    const out: LeftResult[] = [];
+    for (let i = 0; i < n; i++) act(() => void out.push(pressLeft({ ring: page.ring, move: page.steamMove }).result));
+    return out;
+  };
+
+  it("from the last chip: two Lefts walk to the first (they never count), then two hold and the third reaches Steam's menu", () => {
+    act(() => page.steamMove(chip(CHIPS.length - 1)));
+    expect(lefts(5)).toEqual(["moved", "moved", "held", "held", "out"]);
+    expect(page.ring()?.getAttribute("aria-label")).toBe("Steam's menu");
+  });
+
+  it("with the page's focus gone, the first chip still holds twice and hands the third Left to Steam", () => {
+    act(() => page.steamMove(chip(0)));
+    page.setFocused(false);
+    expect(lefts(3)).toEqual(["held", "held", "out"]);
+  });
+
+  it("held down, Left on the first chip never leaves", () => {
+    act(() => page.steamMove(chip(0)));
+    const out: LeftResult[] = [];
+    for (let i = 0; i < 20; i++) act(() => void out.push(pressLeft({ ring: page.ring, move: page.steamMove }, i > 0).result));
+    expect(new Set(out)).toEqual(new Set(["held"]));
   });
 });

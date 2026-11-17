@@ -11,6 +11,8 @@
  * Does not: Move Steam's ring across containers itself; Down and Up call the registered handovers
  *           the caller supplies (plain `focus()` is only safe between siblings of one container).
  */
+import { leftAtEdge } from "../../shared/dpad/leftEdge";
+
 export type ChipNavHandlers = {
   onMoveLeft: () => boolean;
   onMoveRight: () => boolean;
@@ -59,6 +61,8 @@ export type BuildChipNavHandlersArgs = {
  * chip and Right at the last both claim the move without moving by default: Steam's choice for
  * "left of the first chip" is the Quick Access rail, which walks the user out of the plugin by
  * accident. `advanceAtEnd`, when supplied, gets first refusal at the last chip.
+ * Left at the first chip is a dead end (plan 105, lane C5): the first and second Left in a row hold, with the edge
+ * glow, and the third goes to Steam's menu (leftEdge.ts), with no glow, since the ring leaves the row.
  */
 export function buildChipNavHandlers(args: BuildChipNavHandlersArgs): ChipNavHandlers {
   const { index, count, focusChip, exitDown, exitUp, advanceAtEnd, onBlockedEdge, lostFocus } = args;
@@ -67,6 +71,7 @@ export function buildChipNavHandlers(args: BuildChipNavHandlersArgs): ChipNavHan
   return {
     onMoveLeft: () => {
       if (index > 0) return hop(index - 1);
+      if (!leftAtEdge("chip-row")) return false;
       onBlockedEdge?.("left");
       return true;
     },

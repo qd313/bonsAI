@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { buildChipNavHandlers } from "./presetRowNav";
+import { DIR_LEFT, hearPress } from "../../test-harness/steamLeftPress";
 
 function make(index: number, count: number, advanceAtEnd?: () => boolean) {
   const focusChip = vi.fn((_: number) => true);
@@ -101,6 +102,25 @@ describe("preset row D-pad handlers", () => {
       expect(onBlockedEdge).toHaveBeenCalledWith("left");
       // The plain handlers (no onBlockedEdge supplied) still behave exactly as before.
       expect(handlers.onMoveLeft()).toBe(true);
+    });
+
+    /* Plan 105, lane C5: each Left heard at the page as Steam sends it, then the first chip's own handler. */
+    it("at the first chip, two Lefts in a row hold with the glow and the third goes to Steam with none", () => {
+      const onBlockedEdge = vi.fn();
+      const first = buildChipNavHandlers({
+        index: 0,
+        count: 3,
+        focusChip: vi.fn(() => true),
+        exitDown: vi.fn(() => true),
+        exitUp: vi.fn(() => false),
+        onBlockedEdge,
+      });
+      const left = () => {
+        hearPress(document, DIR_LEFT);
+        return first.onMoveLeft();
+      };
+      expect([left(), left(), left()]).toEqual([true, true, false]);
+      expect(onBlockedEdge).toHaveBeenCalledTimes(2);
     });
 
     it("does not fire on Left away from the first chip", () => {

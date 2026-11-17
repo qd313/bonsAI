@@ -21,6 +21,7 @@ import { MainTab } from "../main-tab/MainTab";
 import type { MainTabProps } from "../main-tab/MainTab";
 import { resetUiDocument } from "../../shared/dpad/uiDocument";
 import { registerNavFocus, resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
+import { pressLeft } from "../../test-harness/steamLeftPress";
 
 type Handlers = Partial<Record<"onMoveUp" | "onMoveDown" | "onMoveLeft" | "onMoveRight", (e?: unknown) => unknown>>;
 type NavEl = HTMLElement & { __nav?: Handlers };
@@ -191,6 +192,15 @@ describe("the AI's own suggestion chip below the suggestion chips", () => {
     expect(press("onMoveLeft")).toBe(true);
     expect(press("onMoveRight")).toBe(true);
     expect(nameOf(ring())).toBe("suggestion from the AI");
+  });
+
+  /* Plan 105, lane C5: Left as Steam delivers it (heard at the page, then the handlers, then Steam's own step). */
+  it("on the AI's chip: two Lefts in a row hold and the third reaches Steam's menu", () => {
+    press("onMoveUp");
+    const world = { ring: () => ring(), move: (el: HTMLElement) => el.focus() };
+    const out: string[] = [];
+    for (let i = 0; i < 3; i++) act(() => void out.push(pressLeft(world).result));
+    expect(out).toEqual(["held", "held", "out"]);
   });
 });
 

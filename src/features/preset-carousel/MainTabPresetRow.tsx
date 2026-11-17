@@ -29,6 +29,7 @@ import { DetailsSlot } from "../answer/details/DetailsSlot";
 import { PRESET_CHIP_HEIGHT_PX } from "./presetRowLayout";
 import { chipRowExitUp } from "./presetRowFocusNav";
 import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
+import { leftAtEdge } from "../../shared/dpad/leftEdge";
 import { takeChipSlotFocus } from "../answer/details/detailsSlotStore";
 import { registerInjectChipNav, takeInjectChipFocus, unregisterInjectChipNav } from "./injectChipNav";
 import { joinPresetWithRunningGame } from "./joinPresetWithRunningGame";
@@ -57,7 +58,8 @@ function HelpChipRoot(props: { focusUnifiedTextField: () => boolean; children: R
         navRef,
         onMoveUp: () => chipRowExitUp(),
         onMoveDown: () => props.focusUnifiedTextField() === true,
-        onMoveLeft: () => true,
+        /* A dead end: the first and second Left in a row hold, the third goes to Steam's menu (leftEdge.ts, plan 105). */
+        onMoveLeft: (evt: unknown) => leftAtEdge("help-chip", evt),
         onMoveRight: () => true,
       } as Record<string, unknown>)}
     >
@@ -85,7 +87,8 @@ function InjectChipRoot(props: { focusUnifiedTextField: () => boolean; children:
         navRef,
         onMoveUp: () => takeChipSlotFocus() || chipRowExitUp(),
         onMoveDown: () => props.focusUnifiedTextField() === true,
-        onMoveLeft: () => true,
+        /* The same dead end as the help chip's (leftEdge.ts, plan 105). */
+        onMoveLeft: (evt: unknown) => leftAtEdge("ai-chip", evt),
         onMoveRight: () => true,
       } as Record<string, unknown>)}
     >

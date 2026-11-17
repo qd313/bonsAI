@@ -52,8 +52,6 @@ export function toBonsaiSettingsPayload(
     desktop_debug_note_auto_save: input.desktopDebugNoteAutoSave,
     desktop_ask_verbose_logging: input.desktopAskVerboseLogging,
     desktop_app_log_level: input.desktopAppLogLevel,
-    preset_chip_fade_animation_enabled: input.presetChipAnimation === "fade",
-    preset_chip_animation: input.presetChipAnimation,
     preset_single_chip: input.presetSingleChip,
     input_sanitizer_user_disabled: input.inputSanitizerUserDisabled,
     capabilities: input.capabilities,
@@ -88,10 +86,6 @@ export function toBonsaiSettingsPayload(
     rag_hybrid_retrieval_enabled: input.ragHybridRetrievalEnabled,
     rag_corpus_path: input.ragCorpusPath,
     rag_corpus_version: input.ragCorpusVersion,
-    stream_scramble_enabled: input.streamScrambleEnabled,
-    stream_scramble_style: input.streamScrambleStyle,
-    stream_scramble_color: input.streamScrambleColor,
-    stream_scramble_settle_ms: input.streamScrambleSettleMs,
   };
   return patch ? { ...base, ...patch } : base;
 }

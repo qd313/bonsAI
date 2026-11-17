@@ -12,6 +12,7 @@
  */
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { stubReducedMotion } from "../../test-harness/reducedMotion";
 import { act, cleanup, render } from "@testing-library/react";
 
 import { MainTab } from "../main-tab/MainTab";
@@ -67,7 +68,7 @@ function Harness() {
     onAskOllama: async () => {}, onTurnActivate: () => {}, onRetryLastResponse: () => {},
     suggestedPrompts: [{ text: "How can I optimize for battery life?" }], showPluginHelpChip: true,
     onOpenPluginHelp: () => {},
-    presetChipAnimation: "static", recentScreenshots: [],
+    recentScreenshots: [],
     setUnifiedInput: () => {}, presetCarouselInject: null, setIsUnifiedInputFocused: () => {},
     isUnifiedInputFocused: false, ollamaIp: "127.0.0.1",
     onOpenScreenshotBrowser: () => {}, onTakeScreenshot: () => {}, onCancelAsk: () => {}, onMicInput: () => {},
@@ -110,6 +111,10 @@ function press(key: keyof Handlers): boolean {
 }
 
 beforeEach(() => {
+
+  /* The row decodes its chips unless the system asks for less motion (plan 105); this test reads plain chips. */
+
+  stubReducedMotion(true);
   resetUiDocument();
   resetNavFocusRegistry();
   hoisted.transfers = [];
@@ -128,6 +133,7 @@ beforeEach(() => {
   act(() => root.querySelector<HTMLElement>('[data-decky-ui="TextField"]')!.focus());
 });
 afterEach(() => {
+  vi.unstubAllGlobals();
   cleanup();
   document.body.innerHTML = "";
 });

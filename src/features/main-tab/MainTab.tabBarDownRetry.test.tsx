@@ -19,6 +19,7 @@
  */
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { stubReducedMotion } from "../../test-harness/reducedMotion";
 import { act, cleanup, render } from "@testing-library/react";
 
 import { MainTab } from "./MainTab";
@@ -233,10 +234,15 @@ function walk(container: HTMLElement, dir: "Up" | "Down", cap: number): string[]
 
 describe("Down from the tab bar lands on the first question, not on Retry (plan 79, plan 84 step 5)", () => {
   beforeEach(() => {
+    /* The row decodes its chips unless the system asks for less motion (plan 105); this test reads plain chips. */
+    stubReducedMotion(true);
     resetUiDocument();
     resetChatTitleStore();
   });
-  afterEach(() => cleanup());
+  afterEach(() => {
+    cleanup();
+    vi.unstubAllGlobals();
+  });
 
   it("a one-question chat has no earlier pill, but the question and its Retry are on the page", () => {
     const { container } = renderMainTab([turn("t1", QUESTION)], "t1");

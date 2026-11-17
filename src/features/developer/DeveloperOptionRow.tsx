@@ -14,7 +14,7 @@
  * option the ring is on as soon as the ring lands on it, not only the chosen one; the row's words show
  * when the ring is on the row but on none of the buttons.
  *
- * Used for: DeveloperTab.tsx's Tab to open on, App activity logging and Animations rows.
+ * Used for: DeveloperTab.tsx's Tab to open on and App activity logging rows.
  *
  * Solves: Without this, every new button-row setting on the Developer tab repeats the same style object and
  * Focusable wiring by hand, which is how a row's look and its D-pad behavior would slowly drift from the others.

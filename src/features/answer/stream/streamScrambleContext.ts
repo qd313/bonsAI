@@ -1,41 +1,33 @@
 /**
  * Title: The streamed-answer scramble setting, as one bundle
  *
- * Purpose: Four settings decide whether a streaming answer's newest text
+ * Purpose: Four values decide whether a streaming answer's newest text
  * scrambles through symbols for a moment before settling into real letters,
  * and if so how. This file is the one place those four values are grouped
- * into a single `StreamScrambleSettings` object, and the one place a React
- * context for carrying that object exists.
+ * into a single `StreamScrambleSettings` object, the one place the stock
+ * values live, and the one place a React context for carrying that object
+ * exists.
  *
- * Used for: `DeveloperTab.tsx`, which reads and changes the group as one
- * prop and one change function instead of four of each; `MainTab.tsx`,
- * which builds the context value and wraps the chat transcript in its
- * provider; and the answer-bubble code that will read it from the context
- * (plan 69 step 3, not built yet).
+ * Used for: `MainTab.tsx`, which builds the context value (the stock values,
+ * or the off value while a game runs) and wraps the chat transcript in its
+ * provider; and the answer-bubble code that reads it from the context.
  *
- * Solves: Threading four separate values (and, on the Developer tab, four
- * separate setters) through the plugin's main screen to every tab that
- * touches them was the single largest driver of that screen's own
- * `shell_props_to_tabs` count — the automatic check on how many things it
- * hands down. Grouping them into one value and one change function keeps
- * that count from growing with every field this setting has, and gives the
- * chat transcript's answer bubble the same one object through a context,
- * because both `MainTabChatTranscript.tsx` and the Ask hook that feeds it
- * are already at their size limit with no room for a new prop either.
+ * Solves: Gives the chat transcript's answer bubble the four values as one
+ * object through a context, because both `MainTabChatTranscript.tsx` and the
+ * Ask hook that feeds it are already at their size limit with no room for a
+ * new prop.
  *
- * Does not: Read or write the underlying settings — see
- * `bonsaiSettingsSchema.ts` and `usePluginSettings.ts` for that. This file
- * only defines the shape the four values travel in and the context that
- * carries it partway down the tree.
+ * Does not: Read or write any saved setting. There is none: since plan 105
+ * answers always scramble (the Developer tab's switch, style, colour and time
+ * rows are gone), and an old settings file that still holds those keys has
+ * them ignored.
  */
 import React from "react";
-import {
-  DEFAULT_STREAM_SCRAMBLE_COLOR,
-  DEFAULT_STREAM_SCRAMBLE_SETTLE_MS,
-  DEFAULT_STREAM_SCRAMBLE_STYLE,
-  type StreamScrambleColor,
-  type StreamScrambleStyle,
-} from "../../settings/bonsaiSettingsSchema";
+
+/** How the newest letters look while they are unsettled. */
+export type StreamScrambleStyle = "settle" | "chip" | "tail";
+/** The colour an unsettled letter is drawn in. */
+export type StreamScrambleColor = "same" | "dim" | "green" | "cyan";
 
 export type StreamScrambleSettings = {
   enabled: boolean;
@@ -44,13 +36,16 @@ export type StreamScrambleSettings = {
   settleMs: number;
 };
 
-/** The switch off, at the schema's own defaults — what a reader sees before `MainTab` provides the real values, and what the Developer tab starts from on a fresh install. */
-export const STREAM_SCRAMBLE_OFF: StreamScrambleSettings = {
-  enabled: false,
-  style: DEFAULT_STREAM_SCRAMBLE_STYLE,
-  color: DEFAULT_STREAM_SCRAMBLE_COLOR,
-  settleMs: DEFAULT_STREAM_SCRAMBLE_SETTLE_MS,
+/** What every answer scrambles with: on, letters settle one after another, green, 400 ms (the values the Developer tab offered as its defaults). */
+export const STREAM_SCRAMBLE_STOCK: StreamScrambleSettings = {
+  enabled: true,
+  style: "settle",
+  color: "green",
+  settleMs: 400,
 };
+
+/** The stock values with the switch off: what a reader sees before `MainTab` provides the real value, and what a running game gets. */
+export const STREAM_SCRAMBLE_OFF: StreamScrambleSettings = { ...STREAM_SCRAMBLE_STOCK, enabled: false };
 
 /**
  * What the context carries: the four settings, plus whether the answer on screen was stopped --

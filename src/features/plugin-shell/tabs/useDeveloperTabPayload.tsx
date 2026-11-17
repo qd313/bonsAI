@@ -52,8 +52,6 @@ export function useDeveloperTabPayload({
   desktopAppLogLevel,
   setDesktopAppLogLevel,
   filesystemWrite,
-  presetChipAnimation,
-  setPresetChipAnimation,
   showOnscreenDebugHud,
   setShowOnscreenDebugHud,
   devForceSessionRagChips,
@@ -69,8 +67,6 @@ export function useDeveloperTabPayload({
   installSeedKnowledgeBase,
   showDeveloperTab,
   onJumpToPermission,
-  streamScramble,
-  onStreamScrambleChange,
 }: UseDeveloperTabPayloadArgs): React.ReactElement {
   // Dependency list preserved verbatim from index.tsx: the settings setters are stable
   // identities from usePluginSettings and were deliberately left out.
@@ -89,8 +85,6 @@ export function useDeveloperTabPayload({
         setDesktopAppLogLevel={setDesktopAppLogLevel}
         filesystemWrite={filesystemWrite}
         onJumpToPermission={onJumpToPermission}
-        presetChipAnimation={presetChipAnimation}
-        setPresetChipAnimation={setPresetChipAnimation}
         showOnscreenDebugHud={showOnscreenDebugHud}
         setShowOnscreenDebugHud={setShowOnscreenDebugHud}
         devForceSessionRagChips={devForceSessionRagChips}
@@ -104,8 +98,6 @@ export function useDeveloperTabPayload({
         tabResumeMode={tabResumeMode}
         setTabResumeMode={setTabResumeMode}
         onInstallSeedKnowledgeBase={showDeveloperTab ? installSeedKnowledgeBase : undefined}
-        streamScramble={streamScramble}
-        onStreamScrambleChange={onStreamScrambleChange}
       />
     ),
     [
@@ -116,7 +108,6 @@ export function useDeveloperTabPayload({
       desktopAskVerboseLogging,
       desktopAppLogLevel,
       filesystemWrite,
-      presetChipAnimation,
       showOnscreenDebugHud,
       devForceSessionRagChips,
       devPreloadAskModel,
@@ -126,8 +117,6 @@ export function useDeveloperTabPayload({
       installSeedKnowledgeBase,
       showDeveloperTab,
       onJumpToPermission,
-      streamScramble,
-      onStreamScrambleChange,
     ]
   );
 }

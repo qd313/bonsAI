@@ -31,8 +31,7 @@ describe("settings defaults contract", () => {
   });
 
   it("is idempotent over the defaults", () => {
-    // Guards the migration normalizers: presetChipAnimation reads the legacy
-    // preset_chip_fade_animation_enabled, and screenshotAttachmentPreset reads the legacy
+    // Guards the migration normalizers: screenshotAttachmentPreset reads the legacy
     // screenshot_max_dimension. A migration that re-fires on already-migrated data would
     // change a saved value on every load.
     const once = normalizeSettings({ ...contract });

@@ -1,0 +1,11 @@
+{
+  "latency_warning_seconds": 20,
+  "reply_verbosity": "detailed",
+  "desktop_app_log_level": "verbose",
+  "preset_chip_animation": "carousel",
+  "preset_chip_fade_animation_enabled": false,
+  "stream_scramble_enabled": true,
+  "stream_scramble_style": "tail",
+  "stream_scramble_color": "cyan",
+  "stream_scramble_settle_ms": 900
+}

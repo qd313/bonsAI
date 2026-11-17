@@ -53,8 +53,7 @@ class SettingsDefaultsContractTests(unittest.TestCase):
     def test_sanitizing_the_contract_is_idempotent(self) -> None:
         """Feeding the defaults back in must not change them.
 
-        Guards the migration sanitizers specifically: `preset_chip_animation` reads the legacy
-        `preset_chip_fade_animation_enabled`, and `screenshot_attachment_preset` reads the
+        Guards the migration sanitizers specifically: `screenshot_attachment_preset` reads the
         legacy `screenshot_max_dimension`. A migration that re-fires on already-migrated data
         would round-trip a user's saved value into a different one on every load.
         """

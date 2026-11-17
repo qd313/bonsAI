@@ -1,4 +1,7 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
+import { repoRoot } from "../../test-harness/repoPaths";
 import { REPLY_LANGUAGE_FOLLOW_SYSTEM } from "../../shared/i18n/replyLanguage";
 import {
   DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
@@ -8,10 +11,6 @@ import {
   DEFAULT_REPLY_VERBOSITY,
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
   DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
-  DEFAULT_STREAM_SCRAMBLE_SETTLE_MS,
-  STREAM_SCRAMBLE_SETTLE_MS_CHOICES,
-  STREAM_SCRAMBLE_SETTLE_MS_MAX,
-  STREAM_SCRAMBLE_SETTLE_MS_MIN,
   type DesktopAppLogLevel,
   type AskThinkEffortId,
   type TabResumeMode,
@@ -25,17 +24,17 @@ import {
 import { toBonsaiSettingsPayload } from "./settingsPayload";
 import { buildResponseText, formatAppliedTuningBannerText } from "../power/appliedTuningText";
 
+const REMOVED_ANIMATION_KEYS = [
+  "preset_chip_animation",
+  "preset_chip_fade_animation_enabled",
+  "stream_scramble_enabled",
+  "stream_scramble_style",
+  "stream_scramble_color",
+  "stream_scramble_settle_ms",
+];
+
 /** Regression tests for normalization bounds and response formatting behavior. */
 describe("settings contracts", () => {
-  it("the Developer tab's settle-time buttons are all inside the clamp range and include the default", () => {
-    for (const choice of STREAM_SCRAMBLE_SETTLE_MS_CHOICES) {
-      expect(choice).toBeGreaterThanOrEqual(STREAM_SCRAMBLE_SETTLE_MS_MIN);
-      expect(choice).toBeLessThanOrEqual(STREAM_SCRAMBLE_SETTLE_MS_MAX);
-    }
-    expect(STREAM_SCRAMBLE_SETTLE_MS_CHOICES).toContain(DEFAULT_STREAM_SCRAMBLE_SETTLE_MS);
-  });
-
-
   it("normalizeSettings: a settings file saved with removed settings (voice replies, UI scale) still loads and the old keys are not carried", () => {
     const loaded = normalizeSettings({
       voice_reply_mode: "always",
@@ -65,6 +64,23 @@ describe("settings contracts", () => {
     expect("steam_web_api" in loaded.capabilities).toBe(false);
     expect(loaded.capabilities.filesystem_write).toBe(true);
     expect(loaded.latency_warning_seconds).toBe(45);
+  });
+
+  /**
+   * Plan 105: chips always decode and answers always scramble, so the six animation settings are gone. A
+   * settings file a Deck saved before that, with all six at non-default values, must load with no error, bring
+   * none of them back, and keep its ordinary values (the Python half is in tests/test_settings_service.py).
+   */
+  it("normalizeSettings: a saved file that still carries the six removed animation settings loads, and none comes back", () => {
+    const saved = JSON.parse(
+      readFileSync(resolve(repoRoot(), "tests", "contracts", "settings-old-animation-keys.json"), "utf-8"),
+    ) as Record<string, unknown>;
+    for (const key of REMOVED_ANIMATION_KEYS) expect(key in saved, `fixture lacks ${key}`).toBe(true);
+    const loaded = normalizeSettings(saved as never);
+    for (const key of REMOVED_ANIMATION_KEYS) expect(key in loaded, key).toBe(false);
+    expect(loaded.latency_warning_seconds).toBe(20);
+    expect(loaded.reply_verbosity).toBe("detailed");
+    expect(loaded.desktop_app_log_level).toBe("verbose");
   });
 
   it("normalizes latency warning to configured bounds and step", () => {
@@ -125,7 +141,6 @@ describe("settings contracts", () => {
     expect(settings.ai_character_preset_id).toBe("");
     expect(settings.ai_character_custom_text).toBe("");
     expect(settings.ai_character_accent_intensity).toBe(DEFAULT_AI_CHARACTER_ACCENT_INTENSITY);
-    expect(settings.preset_chip_fade_animation_enabled).toBe(true);
     expect(settings.input_sanitizer_user_disabled).toBe(false);
     expect(settings.ask_mode).toBe(DEFAULT_ASK_MODE);
     expect(settings.ollama_keep_alive).toBe(DEFAULT_OLLAMA_KEEP_ALIVE);
@@ -301,16 +316,6 @@ describe("settings contracts", () => {
     expect(normalizeSettings({}).show_developer_tab).toBe(false);
   });
 
-  it("normalizes preset chip fade: only explicit false disables", () => {
-    expect(normalizeSettings({ preset_chip_fade_animation_enabled: false }).preset_chip_fade_animation_enabled).toBe(
-      false
-    );
-    expect(normalizeSettings({ preset_chip_fade_animation_enabled: true }).preset_chip_fade_animation_enabled).toBe(
-      true
-    );
-    expect(normalizeSettings({}).preset_chip_fade_animation_enabled).toBe(true);
-  });
-
   it("normalizes capability flags to explicit booleans", () => {
     const settings = normalizeSettings({
       capabilities: {
@@ -342,8 +347,6 @@ describe("settings contracts", () => {
       desktopDebugNoteAutoSave: true,
       desktopAskVerboseLogging: false,
       desktopAppLogLevel: "off",
-      presetChipFadeAnimationEnabled: true,
-      presetChipAnimation: "fade",
       presetSingleChip: false,
       inputSanitizerUserDisabled: false,
       capabilities: DEFAULT_CAPABILITIES,
@@ -375,10 +378,6 @@ describe("settings contracts", () => {
       ragHybridRetrievalEnabled: true,
       ragCorpusPath: "",
       ragCorpusVersion: "",
-      streamScrambleEnabled: false,
-      streamScrambleStyle: "settle",
-      streamScrambleColor: "green",
-      streamScrambleSettleMs: 400,
       textModelRoutingOrder: [],
       visionModelRoutingOrder: [],
     });
@@ -411,8 +410,6 @@ describe("settings contracts", () => {
       desktopDebugNoteAutoSave: false,
       desktopAskVerboseLogging: false,
       desktopAppLogLevel: "off" as const,
-      presetChipFadeAnimationEnabled: true,
-      presetChipAnimation: "fade" as const,
       presetSingleChip: false,
       inputSanitizerUserDisabled: false,
       capabilities: DEFAULT_CAPABILITIES,
@@ -444,10 +441,6 @@ describe("settings contracts", () => {
       ragHybridRetrievalEnabled: true,
       ragCorpusPath: "",
       ragCorpusVersion: "",
-      streamScrambleEnabled: false,
-      streamScrambleStyle: "settle" as const,
-      streamScrambleColor: "green" as const,
-      streamScrambleSettleMs: 400,
       textModelRoutingOrder: [],
       visionModelRoutingOrder: [],
     };
@@ -558,8 +551,6 @@ describe("settings contracts", () => {
       desktopDebugNoteAutoSave: normalized.desktop_debug_note_auto_save,
       desktopAskVerboseLogging: normalized.desktop_ask_verbose_logging,
       desktopAppLogLevel: normalized.desktop_app_log_level,
-      presetChipFadeAnimationEnabled: normalized.preset_chip_fade_animation_enabled,
-      presetChipAnimation: normalized.preset_chip_animation,
       presetSingleChip: normalized.preset_single_chip,
       inputSanitizerUserDisabled: normalized.input_sanitizer_user_disabled,
       capabilities: normalized.capabilities,
@@ -594,10 +585,6 @@ describe("settings contracts", () => {
       ragHybridRetrievalEnabled: normalized.rag_hybrid_retrieval_enabled,
       ragCorpusPath: normalized.rag_corpus_path,
       ragCorpusVersion: normalized.rag_corpus_version,
-      streamScrambleEnabled: normalized.stream_scramble_enabled,
-      streamScrambleStyle: normalized.stream_scramble_style,
-      streamScrambleColor: normalized.stream_scramble_color,
-      streamScrambleSettleMs: normalized.stream_scramble_settle_ms,
       textModelRoutingOrder: normalized.text_model_routing_order ?? [],
       visionModelRoutingOrder: normalized.vision_model_routing_order ?? [],
     });

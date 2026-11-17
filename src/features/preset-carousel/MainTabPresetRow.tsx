@@ -10,8 +10,8 @@
  *
  * Used for: MainTab, in the row directly above the Ask bar.
  *
- * Solves: Keeps which preset animation is picked and which Ask mode is
- * preferred wired up in one place instead of crowding the main screen file,
+ * Solves: Keeps how the chips arrive (decode, or plain swaps when the system asks
+ * for less motion) and which Ask mode is preferred wired up in one place instead of crowding the main screen file,
  * and gives the help chip the whole row to itself rather than stacking it
  * above the chips — the row stays the same height either way.
  *
@@ -23,6 +23,7 @@ import { Button, Focusable } from "@decky/ui";
 import type { PresetPrompt } from "./presets";
 import type { AskModeId } from "../ask/bar/askMode";
 import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
+import { prefersReducedMotion } from "./presetChipShared";
 import { useChipsHeldUnderRing } from "./useChipsHeldUnderRing";
 import { DetailsSlot } from "../answer/details/DetailsSlot";
 import { PRESET_CHIP_HEIGHT_PX } from "./presetRowLayout";
@@ -97,7 +98,6 @@ export type MainTabPresetRowProps = {
   suggestedPrompts: PresetPrompt[];
   showPluginHelpChip: boolean;
   onOpenPluginHelp: () => void;
-  presetChipAnimation?: "fade" | "carousel" | "static" | "decode";
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
   onPresetPreferAskMode?: (mode: AskModeId) => void;
   presetCarouselInject?: { text: string } | null;
@@ -111,7 +111,7 @@ export type MainTabPresetRowProps = {
 
 /*
  * In: the current list of suggested prompts, whether the help chip should
- * still be showing, which animation style is chosen for the chips, whether an
+ * still be showing, whether the chips decode or swap plainly, whether an
  * Ask is in flight, and the callbacks that fill in the question box and move
  * focus into it.
  * Out: the row itself — either the help chip, or the animated chips — plus,
@@ -129,7 +129,7 @@ export type MainTabPresetRowProps = {
  *    read exactly the same as the old ones.
  * 3. Draw the row's host element. Inside it: the help chip while it has not
  *    been dismissed, otherwise MainTabPresetAnimatedChips() with the current
- *    suggestions and animation settings, inside DetailsSlot(), which swaps in
+ *    suggestions and how they arrive, inside DetailsSlot(), which swaps in
  *    the answer's Show details line while that line is out of sight.
  * 4. After that: an extra chip if the game handed one in, a same-sized blank
  *    placeholder while one is expected but not here yet, or nothing.
@@ -138,7 +138,6 @@ export function MainTabPresetRow({
   suggestedPrompts,
   showPluginHelpChip,
   onOpenPluginHelp,
-  presetChipAnimation = "fade",
   setUnifiedInput,
   onPresetPreferAskMode,
   presetCarouselInject = null,
@@ -199,10 +198,7 @@ export function MainTabPresetRow({
   return (
     <div
       ref={presetCarouselHostRef}
-      className={
-        "bonsai-full-bleed-row bonsai-preset-row-host" +
-        (presetChipAnimation === "fade" ? " bonsai-preset-row-host--fade-anim" : "")
-      }
+      className="bonsai-full-bleed-row bonsai-preset-row-host"
       style={{ display: "grid", minWidth: 0, width: "100%", boxSizing: "border-box" }}
     >
       {showPluginHelpChip ? (
@@ -236,8 +232,7 @@ export function MainTabPresetRow({
           <MainTabPresetAnimatedChips
             seeds={chips.seeds}
             setUnifiedInput={setUnifiedInput}
-            fadeAnimationEnabled={presetChipAnimation === "fade"}
-            animationMode={presetChipAnimation}
+            animationMode={prefersReducedMotion() ? "static" : "decode"}
             onPreferAskMode={onPresetPreferAskMode}
             onCarouselExitDown={leaveRowDown}
             useLocalKnowledgeBase={useLocalKnowledgeBase}

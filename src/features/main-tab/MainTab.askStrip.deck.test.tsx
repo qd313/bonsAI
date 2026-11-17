@@ -25,6 +25,7 @@
 import { isGreyedDeckyButton } from "../../test-harness/fakeDeckyUi";
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { stubReducedMotion } from "../../test-harness/reducedMotion";
 import { act, cleanup, fireEvent, render } from "@testing-library/react";
 
 import { MainTab } from "./MainTab";
@@ -135,7 +136,7 @@ function Harness({ context, over }: { context: OllamaContextUi | Record<string, 
     liveReplyFeedbackRating: null, onReplyFeedback: () => {}, onReplyMicroAction: () => {},
     onAskOllama: async () => {}, onTurnActivate: () => {}, onRetryLastResponse: () => {},
     suggestedPrompts: [{ text: "How can I optimize for battery life?" }], showPluginHelpChip: false,
-    presetChipAnimation: "static", recentScreenshots: [],
+    recentScreenshots: [],
     setUnifiedInput: () => {}, presetCarouselInject: null, setIsUnifiedInputFocused: () => {},
     isUnifiedInputFocused: false, ollamaIp: "127.0.0.1",
     onOpenScreenshotBrowser: () => {}, onTakeScreenshot: () => {}, onCancelAsk: () => {}, onMicInput: () => {},
@@ -283,6 +284,10 @@ const CLEAR = "Clear";
 const ASK = "Ask";
 
 beforeEach(() => {
+
+  /* The row decodes its chips unless the system asks for less motion (plan 105); this test reads plain chips. */
+
+  stubReducedMotion(true);
   vi.useFakeTimers();
   resetUiDocument();
   resetNavFocusRegistry();
@@ -296,6 +301,7 @@ beforeEach(() => {
   };
 });
 afterEach(() => {
+  vi.unstubAllGlobals();
   cleanup();
   document.head.innerHTML = "";
   document.body.innerHTML = "";

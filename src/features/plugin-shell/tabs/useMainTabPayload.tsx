@@ -154,7 +154,6 @@ export function useMainTabPayload({
     showPluginHelpChip,
     useLocalKnowledgeBase,
     onOpenPluginHelp,
-    presetChipAnimation,
     presetSingleChip,
     onRetryLastResponse,
     liveReplyFeedbackRating,
@@ -250,7 +249,6 @@ export function useMainTabPayload({
     isForeignPendingAsk,
     generatingSlotId,
     unreadSlotIds,
-    streamScramble,
   } = props;
 
   // Dependency list preserved from index.tsx, with the names it depended on translated to the
@@ -268,7 +266,6 @@ export function useMainTabPayload({
         showPluginHelpChip={showPluginHelpChip}
         useLocalKnowledgeBase={useLocalKnowledgeBase}
         onOpenPluginHelp={onOpenPluginHelp}
-        presetChipAnimation={presetChipAnimation}
         presetSingleChip={presetSingleChip}
         onRetryLastResponse={onRetryLastResponse}
         liveReplyFeedbackRating={liveReplyFeedbackRating}
@@ -369,7 +366,6 @@ export function useMainTabPayload({
         isForeignPendingAsk={isForeignPendingAsk}
         generatingSlotId={generatingSlotId}
         unreadSlotIds={unreadSlotIds}
-        streamScramble={streamScramble}
       />
     ),
     // ANY NEW PROP MUST BE ADDED TO THIS LIST. It is hand-maintained and nothing
@@ -382,9 +378,7 @@ export function useMainTabPayload({
       suggestedPrompts,
       showPluginHelpChip,
       useLocalKnowledgeBase,
-      presetChipAnimation,
       presetSingleChip,
-      streamScramble,
       unifiedInput,
       unifiedInputSurfacePx,
       usesNativeMultilineField,

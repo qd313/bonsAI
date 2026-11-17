@@ -35,7 +35,6 @@ function renderRow(isAsking: boolean) {
       suggestedPrompts={seeds}
       showPluginHelpChip={false}
       onOpenPluginHelp={vi.fn()}
-      presetChipAnimation="carousel"
       setUnifiedInput={vi.fn()}
       isAsking={isAsking}
       focusUnifiedTextField={() => false}

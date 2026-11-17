@@ -142,7 +142,6 @@ import { useQamPanelHeightGuard } from "./features/plugin-shell/useQamPanelHeigh
 import { useQamPanelSideBleed } from "./features/plugin-shell/useQamPanelSideBleed";
 import { useTabStripBodyOffset } from "./features/plugin-shell/useTabStripBodyOffset";
 import { usePluginSettings } from "./features/settings/usePluginSettings";
-import type { StreamScrambleSettings } from "./features/answer/stream/streamScrambleContext";
 import { useReplyLanguage } from "./shared/i18n/useReplyLanguage";
 import { useIntentPacks } from "./features/search-tab/useIntentPacks";
 import { useScreenshotBrowser } from "./features/media/useScreenshotBrowser";
@@ -306,8 +305,6 @@ const Content: React.FC = () => {
     setDesktopAskVerboseLogging,
     desktopAppLogLevel,
     setDesktopAppLogLevel,
-    presetChipAnimation,
-    setPresetChipAnimation,
     presetSingleChip,
     setPresetSingleChip,
     askMode,
@@ -356,14 +353,6 @@ const Content: React.FC = () => {
     ragHybridRetrievalEnabled,
     setRagHybridRetrievalEnabled,
     ragCorpusVersion,
-    streamScrambleEnabled,
-    setStreamScrambleEnabled,
-    streamScrambleStyle,
-    setStreamScrambleStyle,
-    streamScrambleColor,
-    setStreamScrambleColor,
-    streamScrambleSettleMs,
-    setStreamScrambleSettleMs,
     settingsLoaded,
     settingsFirstRun,
     hydrateFromSettings,
@@ -803,39 +792,12 @@ const Content: React.FC = () => {
   // TAB CONTENT
   // =====================================================================
 
-  /*
-   * Grouped into one value and one change function, rather than the four settings and four
-   * setters travelling separately, so the Main tab and the Developer tab below each cost this
-   * screen one thing to hand down instead of four -- see streamScrambleContext.ts for why that
-   * count matters here.
-   */
-  const streamScramble: StreamScrambleSettings = useMemo(
-    () => ({
-      enabled: streamScrambleEnabled,
-      style: streamScrambleStyle,
-      color: streamScrambleColor,
-      settleMs: streamScrambleSettleMs,
-    }),
-    [streamScrambleEnabled, streamScrambleStyle, streamScrambleColor, streamScrambleSettleMs],
-  );
-  const onStreamScrambleChange = useCallback(
-    (patch: Partial<StreamScrambleSettings>) => {
-      if (patch.enabled !== undefined) setStreamScrambleEnabled(patch.enabled);
-      if (patch.style !== undefined) setStreamScrambleStyle(patch.style);
-      if (patch.color !== undefined) setStreamScrambleColor(patch.color);
-      if (patch.settleMs !== undefined) setStreamScrambleSettleMs(patch.settleMs);
-    },
-    [setStreamScrambleEnabled, setStreamScrambleStyle, setStreamScrambleColor, setStreamScrambleSettleMs],
-  );
-
   const mainTab = useMainTabPayload({
     suggestedPrompts,
     showPluginHelpChip: !pluginHelpDismissed,
     useLocalKnowledgeBase,
     onOpenPluginHelp: openPluginHelpModal,
-    presetChipAnimation,
     presetSingleChip,
-    streamScramble,
     onRetryLastResponse,
     liveReplyFeedbackRating,
     onReplyFeedback,
@@ -1049,8 +1011,6 @@ const Content: React.FC = () => {
     setDesktopAppLogLevel,
     filesystemWrite: gatedCapabilities.filesystem_write,
     onJumpToPermission: jumpToPermission,
-    presetChipAnimation,
-    setPresetChipAnimation,
     showOnscreenDebugHud,
     setShowOnscreenDebugHud,
     devForceSessionRagChips,
@@ -1065,8 +1025,6 @@ const Content: React.FC = () => {
     setTabResumeMode,
     installSeedKnowledgeBase,
     showDeveloperTab,
-    streamScramble,
-    onStreamScrambleChange,
   });
 
   const aboutTab = useAboutTabPayload({

@@ -58,6 +58,7 @@ import type { ChatListRow } from "../chats/sum-up/chatSumUpModel";
 import type { BonsaiCapabilityKey } from "../permissions/permissionDeepLink";
 import {
   STREAM_SCRAMBLE_OFF,
+  STREAM_SCRAMBLE_STOCK,
   StreamScrambleContext,
   type StreamScrambleContextValue,
   type StreamScrambleSettings,
@@ -73,7 +74,6 @@ export type MainTabProps = {
   showPluginHelpChip: boolean;
   useLocalKnowledgeBase?: boolean;
   onOpenPluginHelp: () => void;
-  presetChipAnimation?: "fade" | "carousel" | "static" | "decode";
   /** "One suggestion chip" setting: the row shows one chip with the whole column. Off by default. */
   presetSingleChip?: boolean;
   onRetryLastResponse?: () => void;
@@ -184,8 +184,6 @@ export type MainTabProps = {
   generatingSlotId?: string | null;
   /** Slots that finished an answer while the user was elsewhere. Drives the solid green dot. */
   unreadSlotIds?: ReadonlySet<string>;
-  /** Streamed answers scramble their newest text before settling, like the decode chips. Undefined or omitted is the same as the switch being off. */
-  streamScramble?: StreamScrambleSettings;
 };
 
 /*
@@ -227,21 +225,17 @@ export type MainTabProps = {
  */
 
 /**
- * In: the one `streamScramble` prop `MainTab` received — undefined for a caller that never heard
- * of the setting (an older test fixture, one built before this shipped) — and whether a game runs.
- * Out: the `StreamScrambleSettings` object the context provides: the given value as-is when
- * there is one, or the shared `STREAM_SCRAMBLE_OFF` constant (switch off, schema defaults)
- * otherwise, and always while a game runs (lighterWhileGameRuns.ts): with a game running the
- * panel drew 10 to 20 frames a second while an answer arrived (plan 70), and the scramble alone
- * cost about 10 with nothing running (plan 69).
- * Can go wrong: nothing — a missing prop is exactly the same as the switch being off.
+ * In: whether a game runs.
+ * Out: the `StreamScrambleSettings` object the context provides: every answer scrambles with the
+ * shared `STREAM_SCRAMBLE_STOCK` values (there is no setting, plan 105), except while the Deck's
+ * A/B switch asks for the scramble to be skipped with a game running (lighterWhileGameRuns.ts): with
+ * a game running the panel drew 10 to 20 frames a second while an answer arrived (plan 70), and the
+ * scramble alone cost about 10 with nothing running (plan 69).
+ * Can go wrong: nothing.
  */
-export function resolveStreamScrambleSettings(
-  streamScramble: StreamScrambleSettings | undefined,
-  gameRunning = false,
-): StreamScrambleSettings {
+export function resolveStreamScrambleSettings(gameRunning = false): StreamScrambleSettings {
   if (lighterWhileGameRuns(gameRunning).scramble) return STREAM_SCRAMBLE_OFF;
-  return streamScramble ?? STREAM_SCRAMBLE_OFF;
+  return STREAM_SCRAMBLE_STOCK;
 }
 
 /**
@@ -356,9 +350,9 @@ export function MainTab(props: MainTabProps) {
   const scrambleSkipped = lighterWhileGameRuns(gameRunning).scramble;
   /* Plus whether the answer on screen was stopped: its scrambled letters then turn real at once. */
   const streamScrambleContextValue: StreamScrambleContextValue = useMemo(
-    () => ({ ...resolveStreamScrambleSettings(props.streamScramble, gameRunning), stopped: props.askStopped === true }),
+    () => ({ ...resolveStreamScrambleSettings(gameRunning), stopped: props.askStopped === true }),
     // eslint-disable-next-line react-hooks/exhaustive-deps -- scrambleSkipped: see above
-    [props.streamScramble, props.askStopped, gameRunning, scrambleSkipped],
+    [props.askStopped, gameRunning, scrambleSkipped],
   );
 
   return (
@@ -393,7 +387,6 @@ export function MainTab(props: MainTabProps) {
             showPluginHelpChip={props.showPluginHelpChip}
             useLocalKnowledgeBase={props.useLocalKnowledgeBase}
             onOpenPluginHelp={props.onOpenPluginHelp}
-            presetChipAnimation={props.presetChipAnimation}
             presetSingleChip={props.presetSingleChip}
             setUnifiedInput={props.setUnifiedInput}
             onPresetPreferAskMode={props.onPresetPreferAskMode}

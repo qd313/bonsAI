@@ -34,7 +34,7 @@ How it works:
  2. A setting whose rule needs something more -- another setting's value, an
     old name it migrated from, a nested structure, or a caller-supplied list
     of valid choices -- gets its own function instead
-    (`sanitize_preset_chip_animation()`, `sanitize_show_developer_tab()`,
+    (`sanitize_show_developer_tab()`,
     `sanitize_named_ollama_hosts()`, and others), and is applied by hand
     rather than through the table.
  3. `sanitize_settings()` runs every simple field through its table entry,
@@ -56,19 +56,16 @@ How it works:
     mid-save cannot leave settings.json half-written.
 
 Gotchas:
- - `preset_chip_fade_animation_enabled` is kept only because the screen
-   still reads it. It is worked out from `preset_chip_animation` rather than
-   saved on its own, because saving it independently could disagree with the
-   setting it is meant to describe.
  - A setting removed or renamed in a newer version does not vanish silently.
-   `sanitize_preset_chip_animation()` and `sanitize_show_developer_tab()` are
-   two examples of a value from an older install being carried forward to
-   its replacement, rather than falling back to the default -- which would
-   otherwise look to the person like the setting had reset itself.
+   `sanitize_show_developer_tab()` is an example of a value from an older
+   install being carried forward to its replacement, rather than falling back
+   to the default -- which would otherwise look to the person like the setting
+   had reset itself. The opposite case is the chip and answer animation
+   settings (plan 105): chips always decode and answers always scramble, so
+   an old file's six animation keys are simply not read and not written back.
 """
 
 import json
-import math
 import os
 import re
 from typing import Any, Callable
@@ -121,37 +118,6 @@ def _enum(options: frozenset[str], default: str, *, strip: bool = False, lower: 
             if candidate in options:
                 return candidate
         return default
-
-    return _coerce
-
-
-def _clamped_whole_number(default: int, minimum: int, maximum: int):
-    """A whole number clamped to ``[minimum, maximum]``, or ``default`` for anything that is not
-    a finite number.
-
-    ``bool`` is checked first because ``bool`` is a subclass of ``int`` in Python -- without that
-    check, a hand-edited ``true``/``false`` would silently become ``1``/``0`` instead of falling
-    back to the default. A float is truncated towards zero (matching the frontend's
-    ``Math.trunc``), and ``math.isfinite`` rejects ``NaN`` and the infinities before that
-    truncation runs. The final clamp is wrapped against ``OverflowError`` so a pathological input
-    can never escape this as an exception instead of a default.
-    """
-
-    def _coerce(value: Any) -> int:
-        if isinstance(value, bool):
-            return default
-        if isinstance(value, int):
-            whole = value
-        elif isinstance(value, float):
-            if not math.isfinite(value):
-                return default
-            whole = int(value)
-        else:
-            return default
-        try:
-            return max(minimum, min(maximum, whole))
-        except OverflowError:
-            return default
 
     return _coerce
 
@@ -209,8 +175,6 @@ def sanitize_ask_mode(
 
 _VALID_DESKTOP_APP_LOG_LEVELS = frozenset({"off", "default", "verbose"})
 
-_VALID_PRESET_CHIP_ANIMATION = frozenset({"fade", "carousel", "static", "decode"})
-
 # Which tab a reopen lands on -- one value per option in roadmap D15. Read only by the
 # frontend; the backend's job here is to let the key survive a save_settings round trip.
 _VALID_TAB_RESUME_MODES = frozenset({"always_main", "resume", "resume_recent"})
@@ -221,37 +185,6 @@ DEFAULT_TAB_RESUME_MODE = "resume"
 # costs latency and tokens, and an unrecognised value must not turn it on.
 _VALID_ASK_THINK_EFFORTS = frozenset({"off", "low", "medium", "high"})
 DEFAULT_ASK_THINK_EFFORT = "off"
-
-# How a streaming answer's newest letters look before they settle (roadmap "Streamed answers
-# arrive with the same scramble as the decode chips", plan 69). Off by default -- see D119.
-_VALID_STREAM_SCRAMBLE_STYLES = frozenset({"settle", "chip", "tail"})
-DEFAULT_STREAM_SCRAMBLE_STYLE = "settle"
-_VALID_STREAM_SCRAMBLE_COLORS = frozenset({"same", "dim", "green", "cyan"})
-DEFAULT_STREAM_SCRAMBLE_COLOR = "green"
-DEFAULT_STREAM_SCRAMBLE_SETTLE_MS = 400
-MIN_STREAM_SCRAMBLE_SETTLE_MS = 100
-MAX_STREAM_SCRAMBLE_SETTLE_MS = 1000
-
-
-def sanitize_preset_chip_animation(value: Any, legacy_fade: Any) -> str:
-    """Main-tab preset chip animation mode; migrates from legacy fade boolean when unset.
-
-    ``stream`` was retired by the Ghost in the Shell chip-decode rewrite. A Deck whose
-    settings.json still holds it maps forward to ``decode`` rather than falling through to the
-    ``fade`` default below -- a silent downgrade to fade would read as "the setting reset itself."
-    Python is authoritative here (D13); ``normalizePresetChipAnimation`` in
-    bonsaiSettingsNormalizers.ts mirrors this exact mapping.
-    """
-    if isinstance(value, str):
-        t = value.strip()
-        if t == "stream":
-            return "decode"
-        if t in _VALID_PRESET_CHIP_ANIMATION:
-            return t
-    if legacy_fade is False:
-        return "static"
-    return "fade"
-
 
 
 def sanitize_show_developer_tab(value: Any, legacy_show_debug_tab: Any = None) -> bool:
@@ -489,18 +422,6 @@ _SIMPLE_FIELDS: dict[str, Any] = {
     # ``default`` is the long-standing rule, ``open`` covers nothing (plan 98, D50). A missing or
     # unrecognised value reads as ``default``, so an old file keeps today's behaviour.
     "spoiler_tier": _enum(frozenset({"strict", "default", "open"}), "default", strip=True),
-    # Developer-tab switch: a streaming answer's newest text scrambles for a moment before
-    # settling, the way a decode chip does. Off by default (plan 69).
-    "stream_scramble_enabled": _bool_default_false,
-    "stream_scramble_style": _enum(
-        _VALID_STREAM_SCRAMBLE_STYLES, DEFAULT_STREAM_SCRAMBLE_STYLE, strip=True
-    ),
-    "stream_scramble_color": _enum(
-        _VALID_STREAM_SCRAMBLE_COLORS, DEFAULT_STREAM_SCRAMBLE_COLOR, strip=True
-    ),
-    "stream_scramble_settle_ms": _clamped_whole_number(
-        DEFAULT_STREAM_SCRAMBLE_SETTLE_MS, MIN_STREAM_SCRAMBLE_SETTLE_MS, MAX_STREAM_SCRAMBLE_SETTLE_MS
-    ),
 }
 
 
@@ -541,10 +462,6 @@ def sanitize_settings(
     mp_tier, mp_unlock = reconcile_model_policy_tier(
         raw.get("model_policy_tier"), raw.get("model_policy_non_foss_unlocked")
     )
-    preset_chip_animation = sanitize_preset_chip_animation(
-        raw.get("preset_chip_animation"),
-        raw.get("preset_chip_fade_animation_enabled"),
-    )
     out: dict[str, Any] = {name: coerce(raw.get(name)) for name, coerce in _SIMPLE_FIELDS.items()}
 
     # Everything below needs something a table row cannot express: another field's value,
@@ -570,20 +487,6 @@ def sanitize_settings(
             ),
             # Read a legacy key as well as their own.
             "screenshot_attachment_preset": resolve_screenshot_attachment_preset(raw, "low"),
-            "preset_chip_animation": preset_chip_animation,
-            # Deprecated, and derived from the live field rather than read independently.
-            #
-            # D13 resolved the TS/Python split here **towards TypeScript**, against the general
-            # "Python is authoritative" rule, because reading this key on its own produces a
-            # self-contradictory payload: ``preset_chip_animation: "carousel"`` alongside
-            # ``preset_chip_fade_animation_enabled: True`` says fades are on while a non-fade
-            # animation is selected. The frontend already derived it on both the normalize and
-            # the save path (``settingsPayload.ts``), so Python was the odd one out.
-            #
-            # Harmless where it is consumed: ``MainTabPresetRow`` gates on
-            # ``presetChipAnimation === "fade" && presetChipFadeAnimationEnabled``, so the flag
-            # is only ever read when the animation is already ``fade``.
-            "preset_chip_fade_animation_enabled": preset_chip_animation == "fade",
             "show_developer_tab": sanitize_show_developer_tab(
                 raw.get("show_developer_tab"), raw.get("show_debug_tab")
             ),

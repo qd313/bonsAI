@@ -2,10 +2,10 @@
  * Title: An answer's text, scrambling into place as it streams
  *
  * Purpose: Draws one section of an answer the way the markdown renderer always has, except that,
- * with the Developer tab's Scramble animation switch on, the newest letters churn through symbols
- * for a moment before settling into the real ones -- the decode chips' look, on the live answer
- * (plan 69 step 3, the maintainer's mockup). With the switch off, under reduced motion, or for any
- * section with nothing to scramble, it renders exactly what the bubble rendered before.
+ * while the scramble is on (always, since plan 105, except while a game runs and the Deck's test
+ * switch asks for it off), the newest letters churn through symbols for a moment before settling
+ * into the real ones -- the decode chips' look, on the live answer (plan 69 step 3, the maintainer's
+ * mockup). With the scramble off, under reduced motion, or for any section with nothing to scramble, it renders exactly what the bubble rendered before.
  *
  * Used for: buildAnswerBubbleElement.tsx, for the live tail of a streaming answer and for every
  * other section, streaming or finished (a finished section only scrambles while the stream's last

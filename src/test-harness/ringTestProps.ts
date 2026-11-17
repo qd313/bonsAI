@@ -9,7 +9,6 @@
  *           and its lost-focus test, plan 97).
  * Does not: Render anything or assert anything itself.
  */
-import { STREAM_SCRAMBLE_OFF } from "../features/answer/stream/streamScrambleContext";
 import type { DeveloperTabProps } from "../features/developer/DeveloperTab";
 import type { SettingsTabProps } from "../features/settings/SettingsTab";
 import type { OllamaTabProps } from "../features/ai-connection/OllamaTab";
@@ -57,8 +56,6 @@ export function developerProps(): DeveloperTabProps {
     desktopAppLogLevel: "default",
     setDesktopAppLogLevel: () => {},
     filesystemWrite: false,
-    presetChipAnimation: "fade",
-    setPresetChipAnimation: () => {},
     showOnscreenDebugHud: false,
     setShowOnscreenDebugHud: () => {},
     devForceSessionRagChips: false,
@@ -71,8 +68,6 @@ export function developerProps(): DeveloperTabProps {
     setRagHybridRetrievalEnabled: () => {},
     tabResumeMode: "resume",
     setTabResumeMode: () => {},
-    streamScramble: STREAM_SCRAMBLE_OFF,
-    onStreamScrambleChange: () => {},
   };
 }
 

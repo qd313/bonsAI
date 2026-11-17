@@ -4,11 +4,12 @@
  */
 import React from "react";
 import { render } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MainTabPresetRow } from "./MainTabPresetRow";
 import type { PresetPrompt } from "./presets";
 import { PRESET_VISIBLE_SLOTS } from "./presetRowLayout";
 import { resetFakeDeckyRpc } from "../../test-harness/fakeDeckyRpc";
+import { stubReducedMotion } from "../../test-harness/reducedMotion";
 
 const seed = (text: string): PresetPrompt => ({ text, category: "general" });
 
@@ -18,7 +19,6 @@ function renderRow(showPluginHelpChip: boolean, presetSingleChip = false) {
       suggestedPrompts={[seed("alpha"), seed("bravo"), seed("charlie")]}
       showPluginHelpChip={showPluginHelpChip}
       onOpenPluginHelp={vi.fn()}
-      presetChipAnimation="static"
       setUnifiedInput={vi.fn()}
       isAsking={false}
       focusUnifiedTextField={() => false}
@@ -31,6 +31,22 @@ function renderRow(showPluginHelpChip: boolean, presetSingleChip = false) {
 describe("MainTabPresetRow", () => {
   beforeEach(() => {
     resetFakeDeckyRpc();
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  /* Plan 105: there is no chip-animation setting. The row decodes its chips unless the system asks for less motion. */
+  it("draws every chip as a decode chip when nothing asks for less motion", () => {
+    const { container } = renderRow(false);
+    expect(container.querySelectorAll("button.bonsai-preset-glass--decode")).toHaveLength(PRESET_VISIBLE_SLOTS);
+  });
+
+  it("draws plain swapping chips, not decode chips, when the system asks for less motion", () => {
+    stubReducedMotion(true);
+    const { container } = renderRow(false);
+    expect(container.querySelectorAll(".bonsai-preset-carousel-slot")).toHaveLength(PRESET_VISIBLE_SLOTS);
+    expect(container.querySelectorAll("button.bonsai-preset-glass--decode")).toHaveLength(0);
   });
 
   it("the help chip owns the whole row while it shows", () => {

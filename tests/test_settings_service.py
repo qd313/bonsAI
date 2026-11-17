@@ -4,9 +4,7 @@ import unittest
 from pathlib import Path
 
 from backend.settings.settings_service import (
-    _clamped_whole_number,
     load_settings,
-    sanitize_preset_chip_animation,
     sanitize_settings,
     save_settings,
 )
@@ -68,7 +66,6 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertEqual(sanitized["ai_character_preset_id"], "")
         self.assertEqual(sanitized["ai_character_custom_text"], "")
         self.assertEqual(sanitized["ai_character_accent_intensity"], "balanced")
-        self.assertTrue(sanitized["preset_chip_fade_animation_enabled"])
         self.assertFalse(sanitized["input_sanitizer_user_disabled"])
         self.assertEqual(sanitized["ask_mode"], "speed")
         self.assertEqual(sanitized["ollama_keep_alive"], "5m")
@@ -287,45 +284,6 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertEqual(_sanitized({"ask_think_effort": " high "})["ask_think_effort"], "high")
         for bad in ("HIGH", "maximum", "", None, True, 3):
             self.assertEqual(_sanitized({"ask_think_effort": bad})["ask_think_effort"], "off")
-
-    def test_sanitize_preset_chip_animation_accepts_decode(self):
-        self.assertEqual(sanitize_preset_chip_animation("decode", True), "decode")
-
-    def test_sanitize_preset_chip_animation_migrates_legacy_stream_to_decode(self):
-        """`stream` was retired by the chip-decode rewrite; it must not fall through to `fade`."""
-        self.assertEqual(sanitize_preset_chip_animation("stream", True), "decode")
-        self.assertEqual(sanitize_preset_chip_animation("stream", False), "decode")
-
-    def test_sanitize_preset_chip_fade_animation_enabled_false_only_for_literal_false(self):
-        """Preset chip fades stay enabled unless JSON false is stored."""
-        off = sanitize_settings(
-            data={"preset_chip_fade_animation_enabled": False},
-            default_latency_warning_seconds=15,
-            default_request_timeout_seconds=120,
-            min_latency_warning_seconds=5,
-            max_latency_warning_seconds=300,
-            min_request_timeout_seconds=10,
-            max_request_timeout_seconds=300,
-            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
-            default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "expert"},
-            default_ask_mode="speed",
-        )
-        self.assertFalse(off["preset_chip_fade_animation_enabled"])
-        garbled = sanitize_settings(
-            data={"preset_chip_fade_animation_enabled": "no"},
-            default_latency_warning_seconds=15,
-            default_request_timeout_seconds=120,
-            min_latency_warning_seconds=5,
-            max_latency_warning_seconds=300,
-            min_request_timeout_seconds=10,
-            max_request_timeout_seconds=300,
-            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
-            default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "expert"},
-            default_ask_mode="speed",
-        )
-        self.assertTrue(garbled["preset_chip_fade_animation_enabled"])
 
     def test_sanitize_settings_orders_latency_before_timeout_when_inverted(self):
         """Conflicting warning/timeout values are adjusted so warning stays strictly below timeout."""
@@ -624,6 +582,48 @@ class SettingsServiceTests(unittest.TestCase):
             self.assertTrue(loaded["capabilities"]["filesystem_write"])
             self.assertEqual(json.loads(settings_path.read_text(encoding="utf-8")), {})
 
+    @staticmethod
+    def _write_file_with_removed_animation_settings(settings_path: Path) -> None:
+        """The saved file as a Deck wrote it before plan 105: all six animation keys, non-default."""
+        fixture = Path(__file__).parent / "contracts" / "settings-old-animation-keys.json"
+        settings_path.write_text(fixture.read_text(encoding="utf-8"), encoding="utf-8")
+
+    _REMOVED_ANIMATION_KEYS = (
+        "preset_chip_animation",
+        "preset_chip_fade_animation_enabled",
+        "stream_scramble_enabled",
+        "stream_scramble_style",
+        "stream_scramble_color",
+        "stream_scramble_settle_ms",
+    )
+
+    def test_a_file_saved_with_the_removed_animation_keys_still_loads_and_the_keys_are_dropped(self):
+        """Plan 105: chips decode and answers scramble with no setting. An older file that still
+        holds the six animation keys loads with no error, none of them comes back, and the
+        ordinary values in it are intact."""
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_path = Path(tmp) / "settings.json"
+            self._write_file_with_removed_animation_settings(settings_path)
+            loaded = load_settings(str(settings_path), _sanitize_with_defaults, _Logger())
+            for key in self._REMOVED_ANIMATION_KEYS:
+                self.assertNotIn(key, loaded)
+            self.assertEqual(loaded["latency_warning_seconds"], 20)
+            self.assertEqual(loaded["reply_verbosity"], "detailed")
+            self.assertEqual(loaded["desktop_app_log_level"], "verbose")
+
+    def test_saving_over_a_file_with_the_removed_animation_keys_removes_them_from_disk(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_path = Path(tmp) / "settings.json"
+            self._write_file_with_removed_animation_settings(settings_path)
+            logger = _Logger()
+            current = load_settings(str(settings_path), _sanitize_with_defaults, logger)
+            save_settings(str(settings_path), tmp, {"latency_warning_seconds": 25}, current, _sanitize_with_defaults, logger)
+            on_disk = json.loads(settings_path.read_text(encoding="utf-8"))
+            for key in self._REMOVED_ANIMATION_KEYS:
+                self.assertNotIn(key, on_disk)
+            self.assertEqual(on_disk["latency_warning_seconds"], 25)
+            self.assertEqual(on_disk["reply_verbosity"], "detailed")
+
     def test_load_save_settings_round_trip(self):
         """Ensure load/save helpers persist sanitized values and reload them consistently."""
         logger = _Logger()
@@ -779,46 +779,6 @@ class SettingsServiceTests(unittest.TestCase):
             self.assertFalse(settings_path.with_suffix(".json.tmp").exists())
             loaded = load_settings(str(settings_path), sanitize_fn, logger)
             self.assertEqual(loaded["latency_warning_seconds"], 42)
-
-
-class ClampedWholeNumberFieldKindTests(unittest.TestCase):
-    """Direct tests of `_clamped_whole_number`, the field kind behind `stream_scramble_settle_ms`."""
-
-    def setUp(self) -> None:
-        self.coerce = _clamped_whole_number(default=400, minimum=100, maximum=1000)
-
-    def test_a_value_in_range_passes_through(self):
-        self.assertEqual(self.coerce(500), 500)
-
-    def test_a_value_below_the_minimum_clamps_up(self):
-        self.assertEqual(self.coerce(1), 100)
-
-    def test_a_value_above_the_maximum_clamps_down(self):
-        self.assertEqual(self.coerce(999999), 1000)
-
-    def test_a_non_whole_number_is_cut_to_its_whole_part(self):
-        self.assertEqual(self.coerce(400.9), 400)
-        self.assertEqual(self.coerce(100.1), 100)
-
-    def test_a_bool_is_not_treated_as_an_int_even_though_it_is_one_in_python(self):
-        self.assertEqual(self.coerce(True), 400)
-        self.assertEqual(self.coerce(False), 400)
-
-    def test_a_string_gives_the_default(self):
-        self.assertEqual(self.coerce("400"), 400)
-
-    def test_none_gives_the_default(self):
-        self.assertEqual(self.coerce(None), 400)
-
-    def test_a_list_gives_the_default(self):
-        self.assertEqual(self.coerce([400]), 400)
-
-    def test_nan_gives_the_default(self):
-        self.assertEqual(self.coerce(float("nan")), 400)
-
-    def test_infinity_gives_the_default(self):
-        self.assertEqual(self.coerce(float("inf")), 400)
-        self.assertEqual(self.coerce(float("-inf")), 400)
 
 
 class RememberWhatITypedSwitchTests(unittest.TestCase):

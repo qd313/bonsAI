@@ -18,7 +18,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { repoRoot } from "../../test-harness/repoPaths";
 import { DeveloperTab, type DeveloperTabProps } from "./DeveloperTab";
-import { STREAM_SCRAMBLE_OFF } from "../answer/stream/streamScrambleContext";
 import { resetFoldedTabsForTests, setAllSections, toggleSection } from "../folded-tabs/foldedTabsStore";
 import { DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS, DEVELOPER_ROW_HELP, DEVELOPER_ROW_LABELS } from "./developerTabFolds";
 import { HELP_TEXT_ATTR } from "../folded-tabs/useHelpStrip";
@@ -36,8 +35,6 @@ function props(overrides: Partial<DeveloperTabProps> = {}): DeveloperTabProps {
     desktopAppLogLevel: "off",
     setDesktopAppLogLevel: () => {},
     filesystemWrite: true,
-    presetChipAnimation: "fade",
-    setPresetChipAnimation: () => {},
     showOnscreenDebugHud: false,
     setShowOnscreenDebugHud: () => {},
     devForceSessionRagChips: false,
@@ -52,8 +49,6 @@ function props(overrides: Partial<DeveloperTabProps> = {}): DeveloperTabProps {
     setTabResumeMode: () => {},
     onInstallSeedKnowledgeBase: async () => {},
     onSteamInputPhase1Jump: () => {},
-    streamScramble: STREAM_SCRAMBLE_OFF,
-    onStreamScrambleChange: () => {},
     ...overrides,
   };
 }
@@ -90,14 +85,13 @@ describe("the folded Developer tab on a first visit (plan 105, lane C1)", () => 
 describe("the folded Developer tab, every section closed", () => {
   beforeEach(() => setAllSections(DEVELOPER_FOLD_TAB, SECTION_IDS, false));
 
-  it("is five one-line sections, each with its summary, and no row drawn", () => {
+  it("is four one-line sections, each with its summary, and no row drawn", () => {
     const { container } = render(<DeveloperTab {...props()} />);
     expect(lines(container).map((l) => [lineName(l), lineSummary(l)])).toEqual([
       ["Knowledge base", "Hybrid retrieval (meaning search) on"],
       ["Diagnostics", "On-screen debug HUD off · Warm the Ask model at boot off"],
       ["Navigation", "Tab to open on: B · Resume"],
       ["Logging & exports", "App activity logging to Desktop: Off · 0 of 3 on"],
-      ["Animations", "Preset suggestions: fade · Scramble animation off"],
     ]);
     expect(container.querySelectorAll(".bonsai-fold-body")).toHaveLength(0);
     expect(container.querySelector(".bonsai-dense-row")).toBeNull();
@@ -105,7 +99,7 @@ describe("the folded Developer tab, every section closed", () => {
 
   it("leaves the knowledge-base section out without a seed-install callback", () => {
     const { container } = render(<DeveloperTab {...props({ onInstallSeedKnowledgeBase: undefined })} />);
-    expect(lines(container).map(lineName)).toEqual(["Diagnostics", "Navigation", "Logging & exports", "Animations"]);
+    expect(lines(container).map(lineName)).toEqual(["Diagnostics", "Navigation", "Logging & exports"]);
   });
 
   it("the summaries follow the settings", () => {
@@ -139,7 +133,10 @@ describe("the folded Developer tab, every section open: one line per setting, th
     >;
     const stripTags = (s: string) => s.replace(/<br>/g, " ").replace(/<[^>]+>/g, "");
     let checked = 0;
-    for (const item of data.Developer!.items) {
+    /* Board 2 still draws a last section, Animations; it is gone from the tab (plan 105). */
+    const drawn = data.Developer!.items;
+    const animations = drawn.findIndex((i) => i.t === "sec" && i.label === "Animations");
+    for (const item of animations === -1 ? drawn : drawn.slice(0, animations)) {
       const words = item.descs ? item.descs[item.sel ?? 0] : item.desc;
       if (!words) continue;
       /* The board's "Jump to Steam Input" row is a button with the label of its words. */
@@ -147,7 +144,7 @@ describe("the folded Developer tab, every section open: one line per setting, th
       expect(helpOf(container, label), label).toBe(stripTags(words));
       checked += 1;
     }
-    expect(checked).toBe(11);
+    expect(checked).toBe(10);
   });
 
   it("every open section's rows sit inside a PanelSection, which is what gives them their side gap", () => {
@@ -178,17 +175,16 @@ describe("the folded Developer tab, every section open: one line per setting, th
     expect(container.textContent).not.toContain("Takes effect the next time");
   });
 
-  it("an option row's strip words change with the pick: Tab to open on, App activity logging, How letters settle", () => {
-    const { container, rerender } = render(<DeveloperTab {...props({ streamScramble: { ...STREAM_SCRAMBLE_OFF, enabled: true } })} />);
+  it("an option row's strip words change with the pick: Tab to open on, App activity logging", () => {
+    const { container, rerender } = render(<DeveloperTab {...props()} />);
     const tab = "Tab to open on";
     expect(helpOf(container, tab)).toBe("Reopen lands on the tab you left. Shipped default. Takes effect the next time you close and reopen the plugin.");
-    rerender(<DeveloperTab {...props({ tabResumeMode: "resume_recent", streamScramble: { ...STREAM_SCRAMBLE_OFF, enabled: true } })} />);
+    rerender(<DeveloperTab {...props({ tabResumeMode: "resume_recent" })} />);
     expect(helpOf(container, tab)).toBe("Reopen resumes the tab within 5 minutes, then falls back to Main. Takes effect the next time you close and reopen the plugin.");
-    rerender(<DeveloperTab {...props({ desktopAppLogLevel: "verbose", streamScramble: { ...STREAM_SCRAMBLE_OFF, enabled: true, style: "tail" } })} />);
+    rerender(<DeveloperTab {...props({ desktopAppLogLevel: "verbose" })} />);
     expect(helpOf(container, DEVELOPER_ROW_LABELS.appLog)).toBe(
       "Default events plus RPC details, setup log lines, and frontend errors. Writes bonsai-app-YYYY-MM-DD.log under Desktop/bonsAI_logs/.",
     );
-    expect(helpOf(container, "How letters settle")).toBe("The last 10 letters are always scrambled.");
   });
 
   it("with Save files to Desktop off, the logging row says so and Open Permissions jumps to it", () => {

@@ -30,7 +30,7 @@
  *
  * How it works: Most settings are declared as one row in the `SIMPLE_FIELDS` table near the
  * bottom, built from one of a handful of shared field-kind functions near the top of the file
- * (`boolDefaultFalse`, `enumOf`, `clampedWholeNumber`, and the rest) — mirroring
+ * (`boolDefaultFalse`, `enumOf`, and the rest) — mirroring
  * `_SIMPLE_FIELDS` in settings_service.py row for row. `normalizeSettings()` runs every row
  * through its coercer, then layers the handful of settings that need something a table row
  * cannot express — a legacy key, another field's value, or a nested structure — on top by
@@ -70,12 +70,8 @@ import {
   DEFAULT_ASK_MODE,
   DEFAULT_DESKTOP_APP_LOG_LEVEL,
   DEFAULT_LATENCY_WARNING_SECONDS,
-  DEFAULT_PRESET_CHIP_ANIMATION,
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
-  DEFAULT_STREAM_SCRAMBLE_COLOR,
-  DEFAULT_STREAM_SCRAMBLE_SETTLE_MS,
-  DEFAULT_STREAM_SCRAMBLE_STYLE,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
   DEFAULT_CHAT_TEXT_SIZE,
   CHAT_TEXT_SIZE_OPTIONS,
@@ -90,12 +86,7 @@ import {
   MAX_REQUEST_TIMEOUT_SECONDS,
   MIN_LATENCY_WARNING_SECONDS,
   MIN_REQUEST_TIMEOUT_SECONDS,
-  PRESET_CHIP_ANIMATION_OPTIONS,
   REQUEST_TIMEOUT_STEP_SECONDS,
-  STREAM_SCRAMBLE_COLOR_OPTIONS,
-  STREAM_SCRAMBLE_SETTLE_MS_MAX,
-  STREAM_SCRAMBLE_SETTLE_MS_MIN,
-  STREAM_SCRAMBLE_STYLE_OPTIONS,
   TAB_RESUME_MODE_OPTIONS,
   DEFAULT_TAB_RESUME_MODE,
   VOICE_STT_MODEL_OPTIONS,
@@ -103,10 +94,7 @@ import {
   type BonsaiSettings,
   type DesktopAppLogLevel,
   type NamedOllamaHost,
-  type PresetChipAnimation,
   type ScreenshotAttachmentPreset,
-  type StreamScrambleColor,
-  type StreamScrambleStyle,
   type TabResumeMode,
   type UnifiedInputPersistenceMode,
   type ChatTextSize,
@@ -264,24 +252,6 @@ function normalizeUnifiedInputPersistenceMode(value: unknown): UnifiedInputPersi
 }
 
 /**
- * A whole number clamped to `[minimum, maximum]`, or `fallback` for anything that is not a
- * finite number. Mirrors Python's `_clamped_whole_number` in settings_service.py: a non-whole
- * number is cut to its whole part with `Math.trunc` (matching Python's `int()` truncation
- * towards zero), and `Number.isFinite` rejects `NaN` and the infinities before that runs.
- */
-function clampedWholeNumber(
-  fallback: number,
-  minimum: number,
-  maximum: number,
-): (value: unknown) => number {
-  return (value: unknown): number => {
-    if (typeof value !== "number" || !Number.isFinite(value)) return fallback;
-    const whole = Math.trunc(value);
-    return Math.max(minimum, Math.min(maximum, whole));
-  };
-}
-
-/**
  * QA-only: exact questions pinned into the preset carousel, in order. Mirrors Python's
  * `sanitize_frozen_test_chips`. Free text by design — the older compile-time freeze resolved
  * entries against the built-in preset list, which is why it could never hold a real QA question.
@@ -338,23 +308,6 @@ function normalizeRagCorpusPath(value: unknown): string {
   if (!raw) return "";
   if (raw.replace(/\\/g, "/").includes("..")) return "";
   return raw.slice(0, 512);
-}
-
-function normalizePresetChipAnimation(
-  value: unknown,
-  legacyFadeEnabled: unknown,
-): PresetChipAnimation {
-  if (typeof value === "string") {
-    const t = value.trim();
-    // Migrated away in the Ghost in the Shell chip-decode rewrite: a Deck whose settings.json
-    // still holds the retired `stream` mode maps forward to its replacement rather than falling
-    // through to the `fade` default below, which would read as "the setting reset itself."
-    // Mirrors `sanitize_preset_chip_animation` in settings_service.py (Python is authoritative, D13).
-    if (t === "stream") return "decode";
-    if (PRESET_CHIP_ANIMATION_OPTIONS.includes(t as PresetChipAnimation)) return t as PresetChipAnimation;
-  }
-  if (legacyFadeEnabled === false) return "static";
-  return DEFAULT_PRESET_CHIP_ANIMATION;
 }
 
 function normalizeShowDeveloperTab(value: unknown, legacyShowDebugTab?: unknown): boolean {
@@ -511,24 +464,6 @@ const SIMPLE_FIELDS = {
   voice_stt_model: enumOf<VoiceSttModelId>(VOICE_STT_MODEL_OPTIONS, DEFAULT_VOICE_STT_MODEL, {
     trim: true,
   }),
-  // Developer-tab switch: a streaming answer's newest text scrambles before settling. Off by
-  // default (plan 69).
-  stream_scramble_enabled: boolDefaultFalse,
-  stream_scramble_style: enumOf<StreamScrambleStyle>(
-    STREAM_SCRAMBLE_STYLE_OPTIONS,
-    DEFAULT_STREAM_SCRAMBLE_STYLE,
-    { trim: true },
-  ),
-  stream_scramble_color: enumOf<StreamScrambleColor>(
-    STREAM_SCRAMBLE_COLOR_OPTIONS,
-    DEFAULT_STREAM_SCRAMBLE_COLOR,
-    { trim: true },
-  ),
-  stream_scramble_settle_ms: clampedWholeNumber(
-    DEFAULT_STREAM_SCRAMBLE_SETTLE_MS,
-    STREAM_SCRAMBLE_SETTLE_MS_MIN,
-    STREAM_SCRAMBLE_SETTLE_MS_MAX,
-  ),
 } as const satisfies { [K in keyof BonsaiSettings]?: (value: unknown) => BonsaiSettings[K] };
 
 type SimpleFieldKey = keyof typeof SIMPLE_FIELDS;
@@ -551,11 +486,6 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     raw.request_timeout_seconds ?? DEFAULT_REQUEST_TIMEOUT_SECONDS,
   );
   const modelPolicy = reconcileModelPolicySettings(raw.model_policy_tier, raw.model_policy_non_foss_unlocked);
-  const presetChipAnimation = normalizePresetChipAnimation(
-    raw.preset_chip_animation,
-    raw.preset_chip_fade_animation_enabled,
-  );
-
   const showDeveloperTab = normalizeShowDeveloperTab(raw.show_developer_tab, rawRecord?.show_debug_tab);
 
   return {
@@ -574,10 +504,6 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     // itself is not in the result, so the next save does not write it again.
     reply_verbosity: rawRecord?.terse_mode === true ? "terse" : normalizeReplyVerbosity(raw.reply_verbosity),
     show_developer_tab: showDeveloperTab,
-    preset_chip_animation: presetChipAnimation,
-    // Deprecated, and derived from the live field rather than read independently — Python
-    // matches this since D13, because reading it on its own can contradict the animation.
-    preset_chip_fade_animation_enabled: presetChipAnimation === "fade",
     // Structured or list-valued.
     capabilities: normalizeCapabilities(raw.capabilities),
     named_ollama_hosts: normalizeNamedOllamaHosts(raw.named_ollama_hosts),

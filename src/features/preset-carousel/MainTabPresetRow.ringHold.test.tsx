@@ -16,21 +16,23 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MainTabPresetRow } from "./MainTabPresetRow";
 import { setFrozenTestChips, type PresetPrompt } from "./presets";
 import { resetFakeDeckyRpc } from "../../test-harness/fakeDeckyRpc";
+import { stubReducedMotion } from "../../test-harness/reducedMotion";
 
-type Mode = "fade" | "static" | "carousel" | "decode";
-const MODES: readonly Mode[] = ["fade", "static", "carousel", "decode"];
+/* The row has two looks: plain swaps when the system asks for less motion, decode otherwise (plan 105). */
+type Mode = "static" | "decode";
+const MODES: readonly Mode[] = ["static", "decode"];
 
 const seed = (text: string): PresetPrompt => ({ text, category: "general" });
 const seeds = [seed("q1"), seed("q2"), seed("q3")];
 
 function renderRow(mode: Mode) {
+  stubReducedMotion(mode === "static");
   const setUnifiedInput = vi.fn();
   const view = render(
     <MainTabPresetRow
       suggestedPrompts={seeds}
       showPluginHelpChip={false}
       onOpenPluginHelp={vi.fn()}
-      presetChipAnimation={mode}
       setUnifiedInput={setUnifiedInput}
       isAsking={false}
       focusUnifiedTextField={() => false}
@@ -45,14 +47,12 @@ function renderRow(mode: Mode) {
   return { ...view, setUnifiedInput, firstStop };
 }
 
-/** Everything that moves on screen: the words, each chip button's opacity, and the carousel's window. */
+/** Everything that moves on screen: the words and each chip button's opacity. */
 function frame(container: HTMLElement): string {
   const slots = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-preset-carousel-slot"));
-  const track = container.querySelector<HTMLElement>(".bonsai-preset-carousel-track");
   return JSON.stringify({
     text: container.textContent,
     opacity: slots.map((s) => s.querySelector<HTMLElement>("button")?.style.opacity),
-    window: track?.style.getPropertyValue("--bonsai-preset-window-start") ?? null,
   });
 }
 
@@ -76,6 +76,7 @@ describe("MainTabPresetRow: the chips hold still while the ring is on them", () 
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.unstubAllGlobals();
     setFrozenTestChips([]);
     document.body.innerHTML = "";
   });

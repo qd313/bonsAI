@@ -76,16 +76,7 @@ export type DesktopAppLogLevel = "off" | "default" | "verbose";
  * `always_main` = A, `resume` = B (locked default), `resume_recent` = C.
  */
 export type TabResumeMode = "always_main" | "resume" | "resume_recent";
-export type PresetChipAnimation = "fade" | "carousel" | "static" | "decode";
 export type ScreenshotAttachmentPreset = "low" | "mid" | "max";
-/**
- * How a streaming answer's newest letters look before they settle into real text: scramble for a
- * moment after arriving (`settle`, the default), settle at the decode chips' own pace (`chip`),
- * or always keep a fixed tail of letters scrambled (`tail`).
- */
-export type StreamScrambleStyle = "settle" | "chip" | "tail";
-/** Colour of the still-scrambled letters while a streamed answer settles. */
-export type StreamScrambleColor = "same" | "dim" | "green" | "cyan";
 
 /** High-impact capability toggles; keep keys aligned with backend `capabilities` and Permission Center UI. */
 export type BonsaiCapabilities = {
@@ -123,10 +114,6 @@ export type BonsaiSettings = {
   desktop_ask_verbose_logging: boolean;
   /** App activity log level written to Desktop/bonsAI_logs/bonsai-app-YYYY-MM-DD.log (requires filesystem_write). */
   desktop_app_log_level: DesktopAppLogLevel;
-  /** @deprecated Prefer `preset_chip_animation`; kept for migration from older settings.json. */
-  preset_chip_fade_animation_enabled: boolean;
-  /** Main-tab preset chips: crossfade cycle, vertical carousel, or static rotation without opacity animation. */
-  preset_chip_animation: PresetChipAnimation;
   /**
    * When true, the suggestion row shows one chip with the whole 300px column instead of two side
    * by side. Off (two chips) is the shipped default (D43, 2026-09-01).
@@ -212,14 +199,6 @@ export type BonsaiSettings = {
   rag_corpus_path: string;
   /** Installed corpus manifest version string. */
   rag_corpus_version: string;
-  /** Developer-tab switch: a streaming answer's newest text scrambles before settling. Off by default. */
-  stream_scramble_enabled: boolean;
-  /** How the scramble settles into real letters; `settle` is the shipped default. */
-  stream_scramble_style: StreamScrambleStyle;
-  /** Colour of the still-scrambled letters; `green` is the shipped default. */
-  stream_scramble_color: StreamScrambleColor;
-  /** Milliseconds each letter scrambles for in the `settle` style, clamped to 100–1000. */
-  stream_scramble_settle_ms: number;
 };
 
 /** Fields mirrored from React state / hook before `save_settings` RPC. */
@@ -234,8 +213,6 @@ export type BonsaiSettingsSnapshotInput = {
   desktopDebugNoteAutoSave: boolean;
   desktopAskVerboseLogging: boolean;
   desktopAppLogLevel: DesktopAppLogLevel;
-  presetChipFadeAnimationEnabled: boolean;
-  presetChipAnimation: PresetChipAnimation;
   presetSingleChip: boolean;
   inputSanitizerUserDisabled: boolean;
   capabilities: BonsaiCapabilities;
@@ -270,14 +247,6 @@ export type BonsaiSettingsSnapshotInput = {
   ragHybridRetrievalEnabled: boolean;
   ragCorpusPath: string;
   ragCorpusVersion: string;
-  /** Developer-tab switch: a streaming answer's newest text scrambles before settling. Off by default. */
-  streamScrambleEnabled: boolean;
-  /** How the scramble settles into real letters; `settle` is the shipped default. */
-  streamScrambleStyle: StreamScrambleStyle;
-  /** Colour of the still-scrambled letters; `green` is the shipped default. */
-  streamScrambleColor: StreamScrambleColor;
-  /** Milliseconds each letter scrambles for in the `settle` style, clamped to 100–1000. */
-  streamScrambleSettleMs: number;
 };
 
 export type AppliedResultLike = {
@@ -317,8 +286,6 @@ export const MAX_FROZEN_TEST_CHIPS = 12;
 export const FROZEN_TEST_CHIP_MAX_LEN = 160;
 export const DEFAULT_DESKTOP_APP_LOG_LEVEL: DesktopAppLogLevel = "off";
 export const DESKTOP_APP_LOG_LEVEL_OPTIONS: DesktopAppLogLevel[] = ["off", "default", "verbose"];
-export const DEFAULT_PRESET_CHIP_ANIMATION: PresetChipAnimation = "fade";
-export const PRESET_CHIP_ANIMATION_OPTIONS: PresetChipAnimation[] = ["fade", "carousel", "static", "decode"];
 /** Fixed host:port for on-device Ollama (matches `refactor_helpers.DEFAULT_OLLAMA_*`). */
 export const OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP = "127.0.0.1:11434";
 export const DEFAULT_ASK_MODE: AskModeId = "speed";
@@ -339,12 +306,3 @@ export const DEFAULT_AI_CHARACTER_PRESET_ID = "";
 export const DEFAULT_AI_CHARACTER_CUSTOM_TEXT = "";
 export { DEFAULT_AI_CHARACTER_ACCENT_INTENSITY };
 
-export const STREAM_SCRAMBLE_STYLE_OPTIONS: StreamScrambleStyle[] = ["settle", "chip", "tail"];
-export const DEFAULT_STREAM_SCRAMBLE_STYLE: StreamScrambleStyle = "settle";
-export const STREAM_SCRAMBLE_COLOR_OPTIONS: StreamScrambleColor[] = ["same", "dim", "green", "cyan"];
-export const DEFAULT_STREAM_SCRAMBLE_COLOR: StreamScrambleColor = "green";
-export const DEFAULT_STREAM_SCRAMBLE_SETTLE_MS = 400;
-export const STREAM_SCRAMBLE_SETTLE_MS_MIN = 100;
-export const STREAM_SCRAMBLE_SETTLE_MS_MAX = 1000;
-/** The Developer tab's five quick-pick buttons for the settle time (Appendix A of plan 69). */
-export const STREAM_SCRAMBLE_SETTLE_MS_CHOICES = [300, 400, 500, 600, 800] as const;

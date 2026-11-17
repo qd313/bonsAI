@@ -32,11 +32,9 @@
  *     Navigation               <- which tab reopens the plugin
  *     Logging & exports        <- Desktop log level, auto-save chat, verbose Ask log, QA session-RAG
  *                                 chips + frozen test chips
- *     Animations               <- preset chip animation, scramble switch + its settle style, settle
- *                                 time and colour rows (shown only while it is on)
  *
  * 1. The section names, summaries and every row's longer words live in developerTabFolds.ts. Each section's
- *    rows are a list (developerRowsDiagnostics.tsx, developerRowsLogging.tsx, developerRowsAnimations.tsx)
+ *    rows are a list (developerRowsDiagnostics.tsx, developerRowsLogging.tsx)
  *    drawn by SectionRows, which hands the first stop's Up to the section's line and the last stop's Down to
  *    the next line; Steam's own step along the tab's one column (FoldedColumn) does the rest.
  * 2. The "Tab to open on" and "App activity logging" rows are each a horizontal row of buttons built from a
@@ -46,21 +44,15 @@
  *    disables its own button while running, calls the passed-in
  *    onInstallSeedKnowledgeBase, and shows a toast only if that fails.
  * 4. Everything else here reads and writes one setting directly, with no local state of its own; every change
- *    goes straight back out through the setter it was handed. The four scramble settings arrive as a single
- *    `streamScramble` object and change through a single `onStreamScrambleChange(patch)` function — see
- *    streamScrambleContext.ts for why.
- * 5. The Animations section's "How letters settle" and "Scrambled letter colour" rows only render while the
- *    Scramble animation switch is on, and "How long each letter scrambles" only while it is on **and** the
- *    settle style is picked — a row that is not drawn is not focusable, so turning the switch off while the
- *    ring sits on it leaves the ring on the switch rather than stranding it on a row that just vanished.
+ *    goes straight back out through the setter it was handed. (The Animations section went in plan 105:
+ *    chips always decode and answers always scramble, so there is nothing left to set.)
  */
 import React from "react";
 import { toaster } from "@decky/api";
 import { PanelSection } from "@decky/ui";
-import type { DesktopAppLogLevel, PresetChipAnimation, TabResumeMode } from "../settings/bonsaiSettingsSchema";
+import type { DesktopAppLogLevel, TabResumeMode } from "../settings/bonsaiSettingsSchema";
 import { formatDeckyRpcError } from "../../shared/deckyCall";
 import type { BonsaiCapabilityKey } from "../permissions/permissionDeepLink";
-import type { StreamScrambleSettings } from "../answer/stream/streamScrambleContext";
 import { chainIds, FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../folded-tabs/FoldedSection";
 import { FoldAllButton } from "../folded-tabs/FoldAllButton";
 import { TabHelpStrip } from "../folded-tabs/TabHelpStrip";
@@ -74,7 +66,6 @@ import {
 import { SectionRows, type DevRow } from "./developerRows";
 import { diagnosticsRows, kbRows } from "./developerRowsDiagnostics";
 import { loggingRows, navigationRows } from "./developerRowsLogging";
-import { animationsRows } from "./developerRowsAnimations";
 import { useDeveloperTabFocus } from "./useDeveloperTabFocus";
 import type { DeveloperConnectionStatus } from "../ai-connection/developerConnectionStatus";
 
@@ -95,9 +86,6 @@ export type DeveloperTabProps = {
   filesystemWrite: boolean;
   onJumpToPermission?: (capability: BonsaiCapabilityKey) => void;
 
-  presetChipAnimation: PresetChipAnimation;
-  setPresetChipAnimation: (v: PresetChipAnimation) => void;
-
   showOnscreenDebugHud: boolean;
   setShowOnscreenDebugHud: (v: boolean) => void;
   devForceSessionRagChips: boolean;
@@ -114,11 +102,6 @@ export type DeveloperTabProps = {
   setTabResumeMode: (v: TabResumeMode) => void;
   /** Dev/QA: install seed KB from Deck path (build.ps1 deploy). */
   onInstallSeedKnowledgeBase?: () => Promise<void>;
-
-  /** Streamed answers scramble their newest text before settling, like the decode chips. Off by default. */
-  streamScramble: StreamScrambleSettings;
-  /** Changes whichever fields the patch names; fields left out are untouched. */
-  onStreamScrambleChange: (patch: Partial<StreamScrambleSettings>) => void;
 };
 
 /**
@@ -134,7 +117,7 @@ export type DeveloperTabProps = {
  * runInstallSeedKb() — every other row is a direct settings read/write.
  */
 export const DeveloperTab: React.FC<DeveloperTabProps> = (props) => {
-  const { capturedErrors, onClearErrors, onSteamInputPhase1Jump, lastConnectionStatus, onInstallSeedKnowledgeBase, streamScramble } = props;
+  const { capturedErrors, onClearErrors, onSteamInputPhase1Jump, lastConnectionStatus, onInstallSeedKnowledgeBase } = props;
   const [seedKbBusy, setSeedKbBusy] = React.useState(false);
 
   const runInstallSeedKb = () => {
@@ -163,8 +146,6 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = (props) => {
     desktopDebugNoteAutoSave: props.desktopDebugNoteAutoSave,
     desktopAskVerboseLogging: props.desktopAskVerboseLogging,
     devForceSessionRagChips: props.devForceSessionRagChips,
-    presetChipAnimation: props.presetChipAnimation,
-    scrambleEnabled: streamScramble.enabled,
   });
 
   const rowsFor = (id: DeveloperSectionId): DevRow[] => {
@@ -203,13 +184,6 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = (props) => {
           setForceChips: props.setDevForceSessionRagChips,
           frozenChips: props.devFrozenTestChips,
           setFrozenChips: props.setDevFrozenTestChips,
-        });
-      case "animations":
-        return animationsRows({
-          presetChipAnimation: props.presetChipAnimation,
-          setPresetChipAnimation: props.setPresetChipAnimation,
-          streamScramble,
-          onStreamScrambleChange: props.onStreamScrambleChange,
         });
     }
   };

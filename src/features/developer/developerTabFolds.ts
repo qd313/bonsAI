@@ -1,8 +1,8 @@
 /**
  * Title: The Developer tab's folded sections: their names, their summaries, and the rows' longer text
  *
- * Purpose: What the folded Developer tab (plan 91 § 2b, plan 92 lane T2) says about itself: the five
- * sections in order (Knowledge base, Diagnostics, Navigation, Logging & exports, Animations),
+ * Purpose: What the folded Developer tab (plan 91 § 2b, plan 92 lane T2) says about itself: the four
+ * sections in order (Knowledge base, Diagnostics, Navigation, Logging & exports),
  * each one's summary line from the current settings, the labels the tab's choice rows
  * show, and the longer text of each row that the strip shows, word for word as the tab used to print it
  * under or above the row (the density board's data file, docs/demos/mockup-board-2/src/42-tabs-data.js,
@@ -20,11 +20,9 @@
 import {
   TAB_RESUME_RECENT_WINDOW_MS,
   type DesktopAppLogLevel,
-  type StreamScrambleColor,
-  type StreamScrambleStyle,
   type TabResumeMode,
 } from "../settings/bonsaiSettingsSchema";
-import { summarizeSection, type SummaryRow } from "../folded-tabs/sectionSummary";
+import { summarizeSection } from "../folded-tabs/sectionSummary";
 
 /** The Developer tab's id, as its TabBodyFocusRoot and the fold store know it. */
 export const DEVELOPER_FOLD_TAB = "developer";
@@ -34,7 +32,6 @@ export const DEVELOPER_SECTIONS = [
   { id: "diagnostics", title: "Diagnostics" },
   { id: "navigation", title: "Navigation" },
   { id: "logging", title: "Logging & exports" },
-  { id: "animations", title: "Animations" },
 ] as const;
 
 export type DeveloperSectionId = (typeof DEVELOPER_SECTIONS)[number]["id"];
@@ -74,30 +71,6 @@ export const tabResumeModeDescription: Record<TabResumeMode, string> = {
   resume_recent: `Reopen resumes the tab within ${TAB_RESUME_RECENT_WINDOW_MINUTES} minutes, then falls back to Main.`,
 };
 
-export const streamScrambleStyleLabel: Record<StreamScrambleStyle, string> = {
-  settle: "Settle",
-  chip: "Chip pace",
-  tail: "Fixed tail",
-};
-export const streamScrambleStyleDescription: Record<StreamScrambleStyle, string> = {
-  settle: "Each letter scrambles for a moment after it arrives, then settles.",
-  chip: "Letters settle one at a time at the decode chips' pace, so a long answer stays scrambled until near the end.",
-  tail: "The last 10 letters are always scrambled.",
-};
-
-export const streamScrambleColorLabel: Record<StreamScrambleColor, string> = {
-  same: "Same",
-  dim: "Dimmer",
-  green: "Green",
-  cyan: "Cyan",
-};
-export const streamScrambleColorAriaLabel: Record<StreamScrambleColor, string> = {
-  same: "Same as text",
-  dim: "Dimmer",
-  green: "bonsAI green",
-  cyan: "Streaming cyan",
-};
-
 /** The rows' names, as the tab draws them and the summary writes them. */
 export const DEVELOPER_ROW_LABELS = {
   installSeedKb: "Install seed knowledge base",
@@ -111,11 +84,6 @@ export const DEVELOPER_ROW_LABELS = {
   verbose: "Verbose Ask logging to Desktop notes",
   forceChips: "Force session RAG chips",
   frozenChips: "Frozen test chips",
-  presetAnimation: "Preset suggestions",
-  scramble: "Scramble animation",
-  howLettersSettle: "How letters settle",
-  settleTime: "How long each letter scrambles",
-  scrambleColour: "Scrambled letter colour",
 } as const;
 
 /** The rows' longer text (the strip shows it while the ring is on the row), as the tab printed it before it folded. */
@@ -139,8 +107,6 @@ export const DEVELOPER_ROW_HELP = {
     "None pinned — the carousel is sampling normally. A pinned batch replaces the carousel with exact questions in order and stops it reseeding, so a QA row is one press per case instead of typing the sentence. Set the list from the host while preparing a run.",
   frozenPinned: (count: number) =>
     `${count} pinned. The carousel is showing these and will not reseed. Session RAG chips are suppressed while a batch is active, so corpus-chip checks cannot pass until you clear it.`,
-  scramble:
-    "New answer text scrambles through symbols for a moment before it settles into letters, like the decode chips. Off by default.",
 } as const;
 
 /** The strip's words for "Tab to open on": the picked mode's line, then when it takes effect. */
@@ -165,20 +131,6 @@ export interface DeveloperFoldValues {
   desktopDebugNoteAutoSave: boolean;
   desktopAskVerboseLogging: boolean;
   devForceSessionRagChips: boolean;
-  presetChipAnimation: string;
-  scrambleEnabled: boolean;
-}
-
-/**
- * The animations section's summary rows: the preset animation and the scramble switch. The scramble's own
- * three rows (how letters settle, for how long, their colour) are details of the switch, shown only while it is
- * on, and are left out of the line so it stays short.
- */
-function animationsSummaryRows(v: DeveloperFoldValues): SummaryRow[] {
-  return [
-    { kind: "choice", label: DEVELOPER_ROW_LABELS.presetAnimation, value: v.presetChipAnimation },
-    { kind: "switch", label: DEVELOPER_ROW_LABELS.scramble, on: v.scrambleEnabled },
-  ];
 }
 
 /** Each section's summary line, from the tab's current settings. */
@@ -203,6 +155,5 @@ export function developerSectionSummaries(v: DeveloperFoldValues): Record<Develo
       { kind: "switch", label: DEVELOPER_ROW_LABELS.verbose, on: v.desktopAskVerboseLogging },
       { kind: "switch", label: DEVELOPER_ROW_LABELS.forceChips, on: v.devForceSessionRagChips },
     ]),
-    animations: summarizeSection(title("animations"), animationsSummaryRows(v)),
   };
 }

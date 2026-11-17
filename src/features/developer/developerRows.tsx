@@ -8,7 +8,7 @@
  * It also holds the two row shapes more than one section uses: a button row and a read-only line.
  *
  * Used for: DeveloperTab.tsx and the Developer section files (developerRowsDiagnostics.tsx,
- * developerRowsLogging.tsx, developerRowsAnimations.tsx).
+ * developerRowsLogging.tsx).
  *
  * Solves: Rows come and go (the Clear button, the captured errors, the scramble rows), so which stop is the
  * first and which the last is only known when the list is drawn. Working it out here, from the rows

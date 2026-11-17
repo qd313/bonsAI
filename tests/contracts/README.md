@@ -46,10 +46,12 @@ migrations and clamps most likely to drift next.
 
 **Python is authoritative** where the two disagree, because `save_settings` decides what
 reaches disk: a frontend that reads a value the backend will not store is the broken
-combination. D13 resolved one setting the other way —
-`preset_chip_fade_animation_enabled` is derived from `preset_chip_animation`, matching what
-TypeScript already did on both its normalize and save paths, because reading the deprecated key
-independently produces a self-contradictory payload.
+combination.
+
+**Removed settings are not read.** The chip animation and answer scramble settings went in plan 105
+(chips always decode, answers always scramble). `settings-old-animation-keys.json` is a saved file that
+still carries all six old keys; both languages load it with no error and drop them
+(`tests/test_settings_service.py`, `src/features/settings/settingsContracts.test.ts`).
 
 ## `spoiler-title-profiles.json`
 

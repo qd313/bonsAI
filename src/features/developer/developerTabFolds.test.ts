@@ -1,10 +1,12 @@
 /**
  * Title: The Developer tab's folded sections, against the drawing
- * Purpose: Pin plan 91 § 2b's summary rule to the drawing's own lines for the six Developer sections
- *          (docs/demos/mockup-board-2/src/42-tabs-data.js and 44-tabs.js, the state they draw: scramble off,
- *          hybrid retrieval on, the tab reopening on the tab you left, app logging off, preset fade), and
+ * Purpose: Pin plan 91 § 2b's summary rule to the drawing's own lines for the Developer sections
+ *          (docs/demos/mockup-board-2/src/42-tabs-data.js and 44-tabs.js, the state they draw: hybrid
+ *          retrieval on, the tab reopening on the tab you left, app logging off), and
  *          check every Developer row's longer text word for word against the board's own data file, so a
  *          row the code has and the checklist lacks (or the other way round) fails here.
+ *          The drawing still shows an Animations section; plan 105 removed it (chips always decode and
+ *          answers always scramble), so the drawing's last section is left out of every comparison below.
  * Used for: developerTabFolds.ts.
  * Does not: Draw the tab (DeveloperTab.folded.test.tsx does) or walk it (DeveloperTab.foldedWalk.test.tsx).
  */
@@ -35,8 +37,6 @@ const DRAWN: DeveloperFoldValues = {
   desktopDebugNoteAutoSave: false,
   desktopAskVerboseLogging: false,
   devForceSessionRagChips: false,
-  presetChipAnimation: "fade",
-  scrambleEnabled: false,
 };
 
 type BoardItem = { t: string; label: string; desc?: string; descs?: string[]; sel?: number; post?: string };
@@ -46,20 +46,22 @@ function boardDeveloperItems(): BoardItem[] {
   const file = path.join(repoRoot(), "docs", "demos", "mockup-board-2", "src", "42-tabs-data.js");
   const data = new Function(`${fs.readFileSync(file, "utf8")}; return TAB_DATA;`)() as Record<string, { items: BoardItem[] }>;
   /* The drawing still carries the decision number in one label; the tab does not show it. */
-  return data.Developer!.items.map((i) => ({ ...i, label: i.label?.replace(/ \(D\d+\)/, "") }));
+  const items = data.Developer!.items.map((i) => ({ ...i, label: i.label?.replace(/ \(D\d+\)/, "") }));
+  /* Board 2 draws a fifth section, Animations, last. It is gone from the tab (plan 105). */
+  const animations = items.findIndex((i) => i.t === "sec" && i.label === "Animations");
+  return animations === -1 ? items : items.slice(0, animations);
 }
 
 /** The drawing's own tag-stripping (44-tabs.js, `stripTags`): line breaks become spaces, tags go. */
 const stripTags = (s: string) => s.replace(/<br>/g, " ").replace(/<[^>]+>/g, "");
 
 describe("the Developer tab's section list", () => {
-  it("names the five sections in the drawing's order", () => {
+  it("names the four sections in the drawing's order, less its Animations section (plan 105)", () => {
     expect(DEVELOPER_SECTIONS.map((s) => s.title)).toEqual([
       "Knowledge base",
       "Diagnostics",
       "Navigation",
       "Logging & exports",
-      "Animations",
     ]);
     expect(boardDeveloperItems().filter((i) => i.t === "sec").map((i) => i.label)).toEqual(
       DEVELOPER_SECTIONS.map((s) => s.title),
@@ -67,8 +69,9 @@ describe("the Developer tab's section list", () => {
   });
 
   it("leaves the knowledge-base section out when no seed-install callback was passed", () => {
-    expect(developerSectionsShown(false).map((s) => s.id)).toEqual(["diagnostics", "navigation", "logging", "animations"]);
-    expect(developerSectionsShown(true)).toHaveLength(5);
+    expect(developerSectionsShown(false).map((s) => s.id)).toEqual(["diagnostics", "navigation", "logging"]);
+    expect(developerSectionsShown(true)).toHaveLength(4);
+    expect(DEVELOPER_SECTIONS.map((s) => s.id)).not.toContain("animations");
   });
 });
 
@@ -79,7 +82,6 @@ describe("a Developer section's summary line, as the drawing writes it", () => {
       diagnostics: "On-screen debug HUD off · Warm the Ask model at boot off",
       navigation: "Tab to open on: B · Resume",
       logging: "App activity logging to Desktop: Off · 0 of 3 on",
-      animations: "Preset suggestions: fade · Scramble animation off",
     });
   });
 
@@ -92,19 +94,11 @@ describe("a Developer section's summary line, as the drawing writes it", () => {
       desktopAppLogLevel: "verbose",
       desktopAskVerboseLogging: true,
       devForceSessionRagChips: true,
-      presetChipAnimation: "decode",
     });
     expect(s.kb).toBe("Hybrid retrieval (meaning search) off");
     expect(s.diagnostics).toBe("On-screen debug HUD on · Warm the Ask model at boot off");
     expect(s.navigation).toBe("Tab to open on: C · 5 min");
     expect(s.logging).toBe("App activity logging to Desktop: Verbose · 2 of 3 on");
-    expect(s.animations).toBe("Preset suggestions: decode · Scramble animation off");
-  });
-
-  it("Animations says whether the scramble switch is on, and leaves its three detail rows out so the line stays short", () => {
-    expect(developerSectionSummaries({ ...DRAWN, scrambleEnabled: true }).animations).toBe(
-      "Preset suggestions: fade · Scramble animation on",
-    );
   });
 });
 
@@ -123,7 +117,6 @@ describe("every Developer row's longer text, word for word against the board's d
     [DEVELOPER_ROW_LABELS.verbose]: DEVELOPER_ROW_HELP.verbose,
     /* The board puts the frozen-chips block after the Force switch's words; the tab gives it its own row. */
     [DEVELOPER_ROW_LABELS.forceChips]: DEVELOPER_ROW_HELP.forceChips,
-    [DEVELOPER_ROW_LABELS.scramble]: DEVELOPER_ROW_HELP.scramble,
   };
 
   it("each board row that has words matches what the tab hands the strip", () => {

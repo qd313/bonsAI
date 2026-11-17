@@ -4,7 +4,9 @@
  * Purpose: Lists the Settings tab's sections in order with where the ring enters each one from above
  * (its first control) and from below (its last), which the section lines use for Down into an open
  * section and Up into the open section above (plan 91 § 6; FoldedSection.tsx). Also hands each section
- * body a ref, so those two entries find their control inside that body and nowhere else.
+ * body a ref, so those two entries find their control inside that body and nowhere else. Each entry also
+ * carries finders for the same two controls (`firstStop`, `lastStop`), which find without moving: "Open
+ * sections as you walk" (autoFold.ts) reads them to know a section's first and last setting.
  *
  * Used for: SettingsTab.tsx.
  *
@@ -52,13 +54,18 @@ function stopsIn(host: HTMLElement): HTMLElement[] {
   return all.filter((el) => !el.querySelector(STOP_SELECTOR));
 }
 
-function focusStop(host: HTMLElement | null | undefined, last: boolean, entryOfLastRow?: string): boolean {
-  if (!host) return false;
+/** The stop a section is entered on, found without moving anything (the walk's rule reads it too, autoFold.ts). */
+function findStop(host: HTMLElement | null | undefined, last: boolean, entryOfLastRow?: string): HTMLElement | null {
+  if (!host) return null;
   const stops = stopsIn(host);
   // A section ending in a row of buttons enters on that row's entry button from below.
   // focus-patterns-allow: element-scoped query on the section body's own ref, the sanctioned pattern (useOllamaTabFocus.ts).
   const entry = entryOfLastRow && last ? host.querySelector<HTMLElement>(entryOfLastRow) : null;
-  const target = entry && stops.includes(entry) ? entry : last ? stops[stops.length - 1] : stops[0];
+  return (entry && stops.includes(entry) ? entry : last ? stops[stops.length - 1] : stops[0]) ?? null;
+}
+
+function focusStop(host: HTMLElement | null | undefined, last: boolean, entryOfLastRow?: string): boolean {
+  const target = findStop(host, last, entryOfLastRow);
   if (!target) return false;
   return plainHop(target, last ? "settings-line-up-into-section" : "settings-line-down", () => focusInTabBody(target));
 }
@@ -87,6 +94,8 @@ export function useSettingsTabFocus() {
         id,
         enterFromTop: () => focusStop(hosts.current.get(id), false),
         enterFromBottom: () => focusStop(hosts.current.get(id), !FIRST_BUTTON_BOTH_WAYS.has(id), ENTRY_BUTTON_OF_LAST_ROW[id]),
+        firstStop: () => findStop(hosts.current.get(id), false),
+        lastStop: () => findStop(hosts.current.get(id), !FIRST_BUTTON_BOTH_WAYS.has(id), ENTRY_BUTTON_OF_LAST_ROW[id]),
       })),
     [],
   );

@@ -19,7 +19,10 @@
  * Every one of these moves the ring through Steam's own transfer onto a registered nav node
  * (`takeNavFocus`), or through the section's own focus callbacks, which stay inside the tab body.
  * Whether a section is open lives in foldedTabsStore, so a Decky popup closing (which rebuilds the
- * tab) does not fold it shut.
+ * tab) does not fold it shut. With the Developer switch "Open sections as you walk" on, the ring's landings
+ * open and close sections too (autoFold.ts): a section hands its tab's chain in and, after each redraw,
+ * lets the ringed control be put back where it was. The line's own moves stay as written above: Down from
+ * a line finds the section already open, because it opened when the ring reached the end of the one above.
  *
  * Does not: Draw the rows or wire them: the tab draws them inside, and a section's last control hands
  * Down to the next line itself (`foldLineBelow`; the last section's, to the Open all button). Does not
@@ -28,11 +31,13 @@
  * Gotchas: The line's class never changes; open or closed is a data attribute. Steam writes its own
  * focus marker (`gpfocus`) into the class attribute, and React rewriting it would wipe the ring.
  */
-import React, { useEffect, useRef, useSyncExternalStore } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useSyncExternalStore } from "react";
 import { Focusable } from "@decky/ui";
 
 import { registerNavFocus, takeNavFocus, unregisterNavFocus, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
 import { panelLacksFocus } from "../../shared/dpad/lostFocusHop";
+import { useOpenSectionsAsYouWalk } from "../settings/openSectionsAsYouWalkSignal";
+import { applyHeldFoldStop, rememberFoldChain } from "./autoFold";
 import {
   foldedTabsVersion,
   isSectionOpen,
@@ -53,8 +58,10 @@ import { FOLD_SECTION_ATTR } from "./useHelpStrip";
  * forwards) still goes to the next thing below. A tab wraps all its FoldedSections in one of these.
  */
 export function FoldedColumn({ children }: { children?: React.ReactNode }): React.ReactElement {
+  /* While "Open sections as you walk" is on, the stylesheet turns the browser's own scroll anchoring off (foldedTabs.ts). */
+  const [walkOpens] = useOpenSectionsAsYouWalk();
   return (
-    <Focusable className="bonsai-fold-column" flow-children="vertical">
+    <Focusable className="bonsai-fold-column" flow-children="vertical" data-bonsai-walk-opens={walkOpens ? "true" : undefined}>
       {children}
     </Focusable>
   );
@@ -67,6 +74,10 @@ export interface FoldChainSection {
   enterFromTop?: () => boolean;
   /** Put the ring on the section's last control; false when it has none on screen. */
   enterFromBottom?: () => boolean;
+  /** The control `enterFromTop` puts the ring on, found without moving it; null when it is not on screen (autoFold.ts). */
+  firstStop?: () => HTMLElement | null;
+  /** The control `enterFromBottom` puts the ring on, found without moving it; null when it is not on screen. */
+  lastStop?: () => HTMLElement | null;
 }
 
 /** The registered nav id of tab `tab`'s line for section `section`. */
@@ -131,6 +142,9 @@ export function FoldedSection({ tab, chain, id, title, summary, children }: Fold
     registerNavFocus(key, navRef);
     return () => unregisterNavFocus(key, navRef);
   }, [tab, id]);
+  /* "Open sections as you walk" (autoFold.ts): the tab's chain for the landing rule, and the ringed control put back after a redraw. */
+  useEffect(() => rememberFoldChain(tab, chain), [tab, chain]);
+  useLayoutEffect(() => applyHeldFoldStop(tab));
 
   const at = ids.indexOf(id);
   /*

@@ -8,7 +8,8 @@
  *
  * Used for: FoldedSection (open or closed), FoldAllButton (open all, close all, the way back),
  * useHelpStrip (which section the ring last landed in), on the Ollama tab now and the Settings and
- * Developer tabs next, and bonsaiSettingJump.ts (opening the section a Search result points into).
+ * Developer tabs next, bonsaiSettingJump.ts (opening the section a Search result points into), and
+ * autoFold.ts (the sections the walk keeps open while "Open sections as you walk" is on).
  *
  * Solves: Closing a Decky popup rebuilds the whole tab behind it (docs/lessons-learned.md § 3). A flag
  * kept inside a component would fold every section shut each time the AI models box, the thinking
@@ -93,6 +94,20 @@ export function setAllSections(tab: string, sections: readonly string[], openAll
   fold.open = new Set(openAll ? sections : []);
   fold.standing = false;
   changed();
+}
+
+/**
+ * Exactly the sections in `open` open, the rest shut: the walk's rule (autoFold.ts, "Open sections as you walk").
+ * The tab no longer stands at its start. When those are already the open ones, nothing is announced and nothing
+ * redraws; returns whether anything changed.
+ */
+export function setOpenSections(tab: string, sections: readonly string[], open: ReadonlySet<string>): boolean {
+  const fold = tabFold(tab, sections);
+  fold.standing = false;
+  if (fold.open.size === open.size && Array.from(open).every((s) => fold.open.has(s))) return false;
+  fold.open = new Set(open);
+  changed();
+  return true;
 }
 
 /**

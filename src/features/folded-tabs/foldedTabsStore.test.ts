@@ -4,6 +4,7 @@
  *          (plan 105, lane C1) and the rest closed; switching tabs gives the first section back, every time;
  *          a jump into one section opens that one in place of the first; opening one leaves the others as they
  *          are; Open all and Close all; the tabs do not share an open set;
+ *          the walk's exact set (plan 105), silent when nothing changes;
  *          a listener hears every change; and the section the ring last landed in is kept for the Open all
  *          button's way back. It lives outside React, which is what lets it outlast a rebuilt tab
  *          (FoldedSection.test.tsx mounts and unmounts the real lines over it).
@@ -20,6 +21,7 @@ import {
   rememberFoldSection,
   resetFoldedTabsForTests,
   setAllSections,
+  setOpenSections,
   subscribeFoldedTabs,
   toggleSection,
 } from "./foldedTabsStore";
@@ -126,5 +128,28 @@ describe("the folded tabs' store", () => {
     rememberFoldSection("ollama", "kb");
     rememberFoldSection("settings", "data");
     expect(foldSectionToReturnTo("ollama")).toBe("kb");
+  });
+});
+
+describe("the walk's exact set (setOpenSections, plan 105 'Open sections as you walk')", () => {
+  it("opens exactly the sections given, and the tab no longer stands at its start: a Search jump then adds to them", () => {
+    expect(setOpenSections("ollama", IDS, new Set(["kb", "reply"]))).toBe(true);
+    expect(IDS.filter((id) => isSectionOpen("ollama", IDS, id))).toEqual(["kb", "reply"]);
+    openSection("ollama", IDS, "where");
+    expect(IDS.filter((id) => isSectionOpen("ollama", IDS, id))).toEqual(["where", "kb", "reply"]);
+  });
+
+  it("announces nothing and redraws nothing when those are already the open ones, but still marks the tab as walked", () => {
+    const heard = vi.fn();
+    const stop = subscribeFoldedTabs(heard);
+    const before = foldedTabsVersion();
+    /* The start-of-tab default is the first section alone; the same set again changes nothing. */
+    expect(setOpenSections("ollama", IDS, new Set(["where"]))).toBe(false);
+    expect(heard).not.toHaveBeenCalled();
+    expect(foldedTabsVersion()).toBe(before);
+    /* No longer standing: a Search jump now adds its section instead of replacing the first one. */
+    openSection("ollama", IDS, "reply");
+    expect(IDS.filter((id) => isSectionOpen("ollama", IDS, id))).toEqual(["where", "reply"]);
+    stop();
   });
 });

@@ -15,6 +15,11 @@
  *           arithmetic for the text it shows.
  *           The Deck walk measures the truth (plan 91 § 5, P91-FOLD-OLLAMA and P91-STRIP); this pins the logic:
  *           the order, no stop twice, the size of each move, and the ringed row clear of the strip.
+ *           By default the boxes are laid out once per landing. `liveLayout` (plan 105, "Open sections as you
+ *           walk") lays them out again whenever one is read, as a browser does, so a section that opens or closes
+ *           inside a press is measured at once; each landing then also says how far the redraw moved the ringed stop
+ *           on screen after the plugin had placed it (`redrawShift`), and how far the plugin turned the pane to hold it
+ *           (`held`).
  */
 import React from "react";
 import { act, render } from "@testing-library/react";
@@ -55,6 +60,17 @@ export interface FoldedLanding {
   stripTop: number | null;
   /** The strip's words as the landing left them ("" while it is hidden). */
   stripText: string;
+  /** With `liveLayout`: how far the redraw after the landing moved the stop on screen, after the plugin placed it. */
+  redrawShift: number;
+  /** With `liveLayout`: how far the pane was turned during that redraw (the plugin holding the stop in place). */
+  held: number;
+  /** With `liveLayout`: the stop's top and bottom on the screen after the redraw, before Steam's own scroll. */
+  placedTop: number;
+  placedBottom: number;
+  /** With `liveLayout`: the pane was at its top or its end after the redraw, so it could not turn any further. */
+  pinned: boolean;
+  /** How far the pane moved at this press, not counting `held` (what a person sees the page do). */
+  pageMoved: number;
 }
 
 export interface FoldedTabWalk {
@@ -81,6 +97,8 @@ export interface FoldedTabWalkOptions {
   stripHeight: (lines: number) => number;
   /** Room the tab leaves under its last line (foldedTabs.ts). */
   tail: number;
+  /** Lay the boxes out again at every read, so a redraw inside a press is measured at once (see the header). */
+  liveLayout?: boolean;
 }
 
 const box = (top: number, height: number) =>
@@ -138,14 +156,37 @@ export function walkFoldedTab(opts: FoldedTabWalkOptions): FoldedTabWalk {
   const stripHeightNow = (): number => heightOf(strip());
 
   /** Decky stamps tabindex="0" on the controls it navigates; the stubs do not. */
+  /*
+   * With `liveLayout`, also the Focusable stand-ins (steamRing.tsx), which stamp their own in a ref callback: a box
+   * read in the middle of React's commit (the plugin's own layout effect) may come before a later sibling's refs, and
+   * a browser's heights never wait for a tabindex, so neither does the flow model.
+   */
+  const stampable = opts.liveLayout
+    ? "button:not([disabled]), [data-decky-ui='ToggleField'], [data-decky-ui='Focusable']"
+    : "button:not([disabled]), [data-decky-ui='ToggleField']";
   const stamp = () => {
-    root.querySelectorAll<HTMLElement>("button:not([disabled]), [data-decky-ui='ToggleField']").forEach((b) => {
+    root.querySelectorAll<HTMLElement>(stampable).forEach((b) => {
       if (!b.hasAttribute("tabindex")) b.setAttribute("tabindex", "0");
     });
   };
 
+  /** Where the flow model last put each stop: its top in the body's own coordinates, and its height. */
+  const placed = new Map<HTMLElement, [top: number, height: number]>();
+  let laying = false;
+  /** A stop's box on the screen now; with `liveLayout`, laid out again first, as a browser would. */
+  const rectOf = (el: HTMLElement): DOMRect => {
+    if (opts.liveLayout && !laying) layout();
+    const [top, h] = placed.get(el) ?? [0, 0];
+    return box(PANE_TOP + INSET + top - scrollTop, h);
+  };
+  const place = (el: HTMLElement, top: number, h: number) => {
+    placed.set(el, [top, h]);
+    el.getBoundingClientRect = () => rectOf(el);
+  };
+
   /** The flow model: every stop and every run of words under the tab body, top to bottom. */
   const layout = () => {
+    laying = true;
     stamp();
     /* The strip's own measured height, as the landing watcher reads it: the stylesheet's arithmetic for its words. */
     const s = strip();
@@ -171,7 +212,7 @@ export function walkFoldedTab(opts: FoldedTabWalkOptions): FoldedTabWalk {
           }
         };
         collect(el);
-        for (const c of across) c.getBoundingClientRect = () => box(PANE_TOP + INSET + top - scrollTop, 38);
+        for (const c of across) place(c, top, 38);
         y += 38 + GAP;
         return;
       }
@@ -183,8 +224,7 @@ export function walkFoldedTab(opts: FoldedTabWalkOptions): FoldedTabWalk {
             : el.closest("[data-bonsai-reply-verbosity-thumb], [data-bonsai-ollama-keepalive-thumb]") || el.closest(".bonsai-dual-slider")
               ? 40
               : 38;
-        const top = y;
-        el.getBoundingClientRect = () => box(PANE_TOP + INSET + top - scrollTop, h);
+        place(el, y, h);
         y += h + GAP;
         return;
       }
@@ -199,8 +239,22 @@ export function walkFoldedTab(opts: FoldedTabWalkOptions): FoldedTabWalk {
     Array.from(root.children).forEach((c) => visit(c as HTMLElement));
     height = y;
     scrollTop = Math.min(scrollTop, maxScroll());
+    laying = false;
   };
   layout();
+
+  /*
+   * With `liveLayout`: where the plugin left the stop focus landed on, read after the tab's own focus listener (it
+   * plans in the capture phase; this listens in the bubble phase), and the pane's place then; the landing compares
+   * both with the state after the redraw.
+   */
+  let afterPlan: { el: HTMLElement; top: number; scroll: number } | null = null;
+  if (opts.liveLayout) {
+    pane.addEventListener("focusin", (e) => {
+      const el = e.target as HTMLElement;
+      afterPlan = { el, top: el.getBoundingClientRect().top, scroll: scrollTop };
+    });
+  }
 
   let ringEl: HTMLElement | null = null;
   /** Where the ring is after a move: Steam's marker when a transfer put it there, else the page's focus. */
@@ -229,6 +283,14 @@ export function walkFoldedTab(opts: FoldedTabWalkOptions): FoldedTabWalk {
 
   let presses = 0;
   const landing = (el: HTMLElement, before: number): FoldedLanding => {
+    /* The redraw is done (act has flushed it); Steam's own scroll has not run yet. */
+    const seen = afterPlan;
+    afterPlan = null;
+    const same = seen !== null && (seen.el === el || el.contains(seen.el) || seen.el.contains(el));
+    const placedBox = el.getBoundingClientRect();
+    const redrawShift = same ? placedBox.top - seen.top : 0;
+    const held = same ? scrollTop - seen.scroll : 0;
+    const pinned = scrollTop <= 0.5 || scrollTop >= maxScroll() - 0.5;
     layout();
     steamScrolls(el);
     const r = el.getBoundingClientRect();
@@ -243,6 +305,12 @@ export function walkFoldedTab(opts: FoldedTabWalkOptions): FoldedTabWalk {
       top: r.top,
       bottom: r.bottom,
       stripTop: sh > 0 ? PANE_TOP + opts.viewport - sh : null,
+      redrawShift,
+      held,
+      placedTop: placedBox.top,
+      placedBottom: placedBox.bottom,
+      pinned,
+      pageMoved: Math.abs(scrollTop - before - held),
     };
   };
 
@@ -325,14 +393,31 @@ export function walkFoldedTab(opts: FoldedTabWalkOptions): FoldedTabWalk {
     if (!to || to === from) return null;
     ringEl = to;
     if (!root.contains(to)) {
+      afterPlan = null;
       const moved = Math.abs(scrollTop - before);
+      const outside = (top: number, bottom: number): FoldedLanding => ({
+        press: presses++,
+        stop: to as HTMLElement,
+        name: nameOf(to as HTMLElement),
+        moved,
+        top,
+        bottom,
+        stripTop: null,
+        stripText: "",
+        redrawShift: 0,
+        held: 0,
+        placedTop: top,
+        placedBottom: bottom,
+        pinned: false,
+        pageMoved: moved,
+      });
       /* The floating button: fixed over the pane's bottom, its gap above the strip (hidden: the ring left the body). */
       if (to.closest("[data-bonsai-fold-all]")) {
         const bottom = PANE_TOP + opts.viewport - stripHeightNow() - FOLD_ALL_GAP_PX;
-        return { press: presses++, stop: to, name: nameOf(to), moved, top: bottom - FOLD_ALL_HEIGHT_PX, bottom, stripTop: null, stripText: "" };
+        return outside(bottom - FOLD_ALL_HEIGHT_PX, bottom);
       }
       /* Off the tab body otherwise (the tab bar): no landing in the pane to measure. */
-      return { press: presses++, stop: to, name: nameOf(to), moved, top: NaN, bottom: NaN, stripTop: null, stripText: "" };
+      return outside(NaN, NaN);
     }
     return landing(to, before);
   };

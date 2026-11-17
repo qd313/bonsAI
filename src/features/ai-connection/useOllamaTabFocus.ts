@@ -15,7 +15,8 @@
  *
  * Folded (plan 91 § 2b): it also lists the tab's five sections in order with each one's first and last
  * control (`chain`), which the section lines use for Down into an open section and Up into the open
- * section above.
+ * section above. Each entry also carries finders for those two controls (`firstStop`, `lastStop`), which
+ * find without moving: "Open sections as you walk" reads them to know a section's first and last setting.
  *
  * Does not: Move the ring across containers. These are plain hops between controls of the one tab
  * body, through `focusInTabBody`, which plans the pane's place first so the browser's own scroll on
@@ -39,18 +40,33 @@ function hopInTabBody(el: HTMLElement): boolean {
 import type { FoldChainSection } from "../folded-tabs/FoldedSection";
 
 /**
- * Give focus to the first matching stop inside one row's own container. The query is scoped to the
- * element handed in (a ref the row registered), never the page: under Decky the global document is
- * the wrong one. Returns false, leaving focus alone, when the row is not on screen or has no stop,
- * so the caller can let Steam's own move carry on.
+ * The first matching stop inside one row's own container, or null when the row is not on screen or has none. The
+ * query is scoped to the element handed in (a ref the row registered), never the page: under Decky the global
+ * document is the wrong one. It only finds; nothing moves (the walk's rule reads it, autoFold.ts).
+ */
+function firstStopIn(host: HTMLElement | null, selector: string): HTMLElement | null {
+  if (!host) return null;
+  // focus-patterns-allow: element-scoped query on the row's own ref, the sanctioned pattern (it moved here from OllamaTab.tsx unchanged).
+  return host.querySelector<HTMLElement>(selector);
+}
+
+/**
+ * Give focus to the first matching stop inside one row's own container. Returns false, leaving focus alone, when the
+ * row is not on screen or has no stop, so the caller can let Steam's own move carry on.
  */
 function focusFirstStopIn(host: HTMLElement | null, selector: string): boolean {
-  if (!host) return false;
-  // focus-patterns-allow: element-scoped query on the row's own ref, the sanctioned pattern (it moved here from OllamaTab.tsx unchanged).
-  const target = host.querySelector<HTMLElement>(selector);
-  if (!target) return false;
-  return hopInTabBody(target);
+  const target = firstStopIn(host, selector);
+  return target ? hopInTabBody(target) : false;
 }
+
+/** Hop onto what `find` finds; false when it finds nothing. */
+function hopOnto(find: () => HTMLElement | null): boolean {
+  const target = find();
+  return target ? hopInTabBody(target) : false;
+}
+
+const ANY_STOP = "[tabindex], button, input";
+const KNOB = "[tabindex], button";
 
 /** The tab's row refs and its hop helpers, as OllamaTab.tsx used to declare them itself. */
 export function useOllamaTabFocus() {
@@ -80,74 +96,69 @@ export function useOllamaTabFocus() {
     registerModalReturnFocusOwner("ollama-thinking-effort", el);
   }, []);
 
-  const focusOllamaKeepAliveThumb = useCallback((): boolean => {
-    return focusFirstStopIn(ollamaKeepAliveThumbHostRef.current, "[tabindex], button");
-  }, []);
-
-  const focusLatencyWarningThumb = useCallback((): boolean => {
-    return focusFirstStopIn(latencyWarningThumbHostRef.current, "[tabindex], button");
-  }, []);
-
-  const focusKbToggle = useCallback((): boolean => {
-    return focusFirstStopIn(kbToggleHostRef.current, "[tabindex], button, input");
-  }, []);
-
-  const focusReplyVerbosityThumb = useCallback((): boolean => {
-    return focusFirstStopIn(replyVerbosityThumbHostRef.current, "[tabindex], button");
-  }, []);
-
+  /*
+   * The finders: each section's first and last control, found inside its row's own ref without moving anything.
+   * The hops below are "find, then hop"; the walk's rule (autoFold.ts) uses the finders alone.
+   */
+  const findOllamaKeepAliveThumb = useCallback(() => firstStopIn(ollamaKeepAliveThumbHostRef.current, KNOB), []);
+  const findKbToggle = useCallback(() => firstStopIn(kbToggleHostRef.current, ANY_STOP), []);
+  const findReplyVerbosityThumb = useCallback(() => firstStopIn(replyVerbosityThumbHostRef.current, KNOB), []);
   // Element-scoped query on the row's own ref — never a global document.querySelector,
   // which under Decky searches a 14-element shell rather than the plugin's DOM.
-  const focusThinkingEffortRow = useCallback((): boolean => {
-    return focusFirstStopIn(thinkingEffortHostRef.current, "button:not([disabled])");
-  }, []);
-
-  const focusKbUpFromReplyVerbosity = useCallback((): boolean => {
-    // Cancel is checked first because it only exists while a download runs, and during
-    // one both of the buttons below it are disabled — focusing either would be a no-op.
-    // The "Lowered notes" row's Clear sits under that row, nearest the Reply style line, so it comes first.
-    if (kbLoweredClearBtnRef.current) return hopInTabBody(kbLoweredClearBtnRef.current);
-    if (kbCancelBtnRef.current) return hopInTabBody(kbCancelBtnRef.current);
-    if (kbDownloadBtnRef.current) return hopInTabBody(kbDownloadBtnRef.current);
-    if (kbRemoveBtnRef.current) return hopInTabBody(kbRemoveBtnRef.current);
-    return focusKbToggle();
-  }, [focusKbToggle]);
-
+  const findThinkingEffortRow = useCallback(() => firstStopIn(thinkingEffortHostRef.current, "button:not([disabled])"), []);
+  /*
+   * The knowledge base's last control, for Up from the Reply style line. Cancel is checked before the two buttons
+   * because it only exists while a download runs, and during one both of them are disabled — focusing either would
+   * be a no-op. The "Lowered notes" row's Clear sits under that row, nearest the Reply style line, so it comes first.
+   */
+  const findKbLast = useCallback(
+    (): HTMLElement | null =>
+      kbLoweredClearBtnRef.current ?? kbCancelBtnRef.current ?? kbDownloadBtnRef.current ?? kbRemoveBtnRef.current ?? findKbToggle(),
+    [findKbToggle],
+  );
   /*
    * Where AI runs' last control, for Up from the next line: Test connection. When it is greyed (a test or a
    * setup running) it still takes the ring on the Deck, so it is no use asking the button; the ring lands
    * on it and its own Up (Where AI runs, `handleMoveUpFromConnection`) goes on to Cancel or Browse by the
    * plugin's own state.
    */
-  const focusConnectionTestBtn = useCallback((): boolean => {
-    const el = connectionTestBtnRef.current;
-    if (!el) return false;
-    return hopInTabBody(el);
-  }, []);
-
+  const findConnectionTestBtn = useCallback((): HTMLElement | null => connectionTestBtnRef.current, []);
   /* Where AI runs' first control (Run AI on this Deck), for Down from its line. */
-  const focusWhereFirst = useCallback(
-    (): boolean => focusFirstStopIn(whereBodyRef.current, "[tabindex], button:not([disabled]), input"),
-    [],
-  );
+  const findWhereFirst = useCallback(() => firstStopIn(whereBodyRef.current, "[tabindex], button:not([disabled]), input"), []);
+  const findCustomTimeoutsToggle = useCallback(() => firstStopIn(customTimeoutsHostRef.current, ANY_STOP), []);
+  const findModelsBtn = useCallback((): HTMLElement | null => modelsBtnRef.current, []);
 
-  const focusCustomTimeoutsToggle = useCallback(
-    (): boolean => focusFirstStopIn(customTimeoutsHostRef.current, "[tabindex], button, input"),
-    [],
-  );
-
-  const focusModelsBtn = useCallback((): boolean => {
-    return modelsBtnRef.current ? hopInTabBody(modelsBtnRef.current) : false;
-  }, []);
+  const focusOllamaKeepAliveThumb = useCallback(() => hopOnto(findOllamaKeepAliveThumb), [findOllamaKeepAliveThumb]);
+  const focusLatencyWarningThumb = useCallback((): boolean => focusFirstStopIn(latencyWarningThumbHostRef.current, KNOB), []);
+  const focusKbToggle = useCallback(() => hopOnto(findKbToggle), [findKbToggle]);
+  const focusReplyVerbosityThumb = useCallback(() => hopOnto(findReplyVerbosityThumb), [findReplyVerbosityThumb]);
+  const focusThinkingEffortRow = useCallback(() => hopOnto(findThinkingEffortRow), [findThinkingEffortRow]);
+  const focusKbUpFromReplyVerbosity = useCallback(() => hopOnto(findKbLast), [findKbLast]);
+  const focusConnectionTestBtn = useCallback(() => hopOnto(findConnectionTestBtn), [findConnectionTestBtn]);
+  const focusWhereFirst = useCallback(() => hopOnto(findWhereFirst), [findWhereFirst]);
+  const focusCustomTimeoutsToggle = useCallback(() => hopOnto(findCustomTimeoutsToggle), [findCustomTimeoutsToggle]);
+  const focusModelsBtn = useCallback(() => hopOnto(findModelsBtn), [findModelsBtn]);
 
   /* The five sections in order, with each one's first and last control: the folded tab's D-pad chain. */
   const chain = useMemo<FoldChainSection[]>(
     () => [
-      { id: "where", enterFromTop: focusWhereFirst, enterFromBottom: focusConnectionTestBtn },
-      { id: "kb", enterFromTop: focusKbToggle, enterFromBottom: focusKbUpFromReplyVerbosity },
-      { id: "reply", enterFromTop: focusReplyVerbosityThumb, enterFromBottom: focusThinkingEffortRow },
-      { id: "tuning", enterFromTop: focusCustomTimeoutsToggle, enterFromBottom: focusOllamaKeepAliveThumb },
-      { id: "models", enterFromTop: focusModelsBtn, enterFromBottom: focusModelsBtn },
+      { id: "where", enterFromTop: focusWhereFirst, enterFromBottom: focusConnectionTestBtn, firstStop: findWhereFirst, lastStop: findConnectionTestBtn },
+      { id: "kb", enterFromTop: focusKbToggle, enterFromBottom: focusKbUpFromReplyVerbosity, firstStop: findKbToggle, lastStop: findKbLast },
+      {
+        id: "reply",
+        enterFromTop: focusReplyVerbosityThumb,
+        enterFromBottom: focusThinkingEffortRow,
+        firstStop: findReplyVerbosityThumb,
+        lastStop: findThinkingEffortRow,
+      },
+      {
+        id: "tuning",
+        enterFromTop: focusCustomTimeoutsToggle,
+        enterFromBottom: focusOllamaKeepAliveThumb,
+        firstStop: findCustomTimeoutsToggle,
+        lastStop: findOllamaKeepAliveThumb,
+      },
+      { id: "models", enterFromTop: focusModelsBtn, enterFromBottom: focusModelsBtn, firstStop: findModelsBtn, lastStop: findModelsBtn },
     ],
     [
       focusConnectionTestBtn,
@@ -159,6 +170,15 @@ export function useOllamaTabFocus() {
       focusReplyVerbosityThumb,
       focusThinkingEffortRow,
       focusWhereFirst,
+      findConnectionTestBtn,
+      findCustomTimeoutsToggle,
+      findKbLast,
+      findKbToggle,
+      findModelsBtn,
+      findOllamaKeepAliveThumb,
+      findReplyVerbosityThumb,
+      findThinkingEffortRow,
+      findWhereFirst,
     ],
   );
 

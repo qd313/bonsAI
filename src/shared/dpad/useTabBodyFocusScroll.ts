@@ -29,7 +29,10 @@
  * every landing in its body, on the same event, before the plan. The watcher hands back how much of
  * the pane's bottom it now covers (the strip, sized for the ringed row's text), and the plan's bottom
  * margin grows by that much, so the ringed row is placed clear of it. A ring leaving the body tells the
- * watcher with null.
+ * watcher with null, and a landing a tap brought says so.
+ *
+ * Held stops (plan 105, "Open sections as you walk"): when a landing makes the folded tab open or close a section
+ * above the ringed control, `holdTabBodyStop` keeps that control where it is on screen across the redraw.
  */
 import { useEffect, type RefObject } from "react";
 import { findTabContentsScroll, panelScrollMax } from "./chatPanelScroll";
@@ -181,9 +184,10 @@ function scrollPlaceFor(
 
 /**
  * Told of every landing in one tab's body (null: the ring left it) before the plan runs; returns how many
- * px at the pane's bottom it covers now, which the plan keeps the ringed control clear of.
+ * px at the pane's bottom it covers now, which the plan keeps the ringed control clear of. `landing.pointer` is
+ * true when a tap or click just before brought focus there (the plan leaves those to Steam's own scroll).
  */
-export type TabBodyLandingWatcher = (target: HTMLElement | null) => number;
+export type TabBodyLandingWatcher = (target: HTMLElement | null, landing?: { pointer: boolean }) => number;
 
 interface LandingWatch {
   watcher: TabBodyLandingWatcher;
@@ -218,20 +222,28 @@ interface BodyState {
   lastPointerAt: number;
   /** The element `focusInTabBody` has just planned for, so its focus event does not plan a second step. */
   planned: HTMLElement | null;
+  /** Counts the landings, so a late look-back (holdTabBodyStop) knows the ring has moved on since. */
+  landings: number;
+  /** The control holdTabBodyStop is keeping in place, and its top on the screen as the plan left it. */
+  held: { el: HTMLElement; top: number } | null;
 }
 
 const bodies = new Set<BodyState>();
 
 /** Plan and write the pane's place for focus landing on `target`; false when nothing was planned. */
 function placeFor(body: BodyState, target: HTMLElement): boolean {
+  body.landings += 1;
   const watch = body.tabId === null ? undefined : landingWatchers.get(body.tabId);
-  const covered = Math.max(0, watch?.watcher(target) ?? 0);
-  if (performance.now() - body.lastPointerAt < POINTER_QUIET_MS) return false;
+  const pointer = performance.now() - body.lastPointerAt < POINTER_QUIET_MS;
+  const covered = Math.max(0, watch?.watcher(target, { pointer }) ?? 0);
+  if (pointer) return false;
   const place = scrollPlaceFor(body.root, target, body.lastTop, covered, watch);
   if (!place) return false;
   body.lastTop = place.top;
   const pane = findTabContentsScroll(body.root);
   if (pane && Math.abs(place.scrollTop - pane.scrollTop) >= 1) pane.scrollTop = place.scrollTop;
+  /* A control held across a redraw still to come is kept where this plan has just put it. */
+  if (body.held?.el === target) body.held.top = target.getBoundingClientRect().top;
   return true;
 }
 
@@ -261,11 +273,64 @@ export function focusInTabBody(el: HTMLElement): void {
   el.focus();
 }
 
+/**
+ * How long after a held stop was put back the late look runs: Steam's own glide takes 3 or 4 frames
+ * (plan89-M1-TAB-WALK.json), so by about ten frames it has ended.
+ */
+const LATE_LOOK_MS = 160;
+
+/**
+ * Before a change of a tab body's layout around the control the ring is on (a folded section opening or closing
+ * above it while the ring stays put, folded-tabs/autoFold.ts), note where the control sits on the screen, and, if
+ * the landing's own plan then turns the pane, where the plan puts it (placeFor updates the note). The function
+ * returned, called once the change is drawn, turns the pane by however far the control has moved on the screen, so
+ * it stays where it was and only the rows above the change slide. The screen, not the page: when a section above
+ * closes near the end of the page, the browser pulls the pane back to the page's new end before anything here runs,
+ * and only the screen place counts that pull. It moves the plan's remembered last place by however far the control
+ * moved in the page, or the next press would read the jump as a move the other way. Nothing happens when the control
+ * did not move (a change below it), or it is gone. When it did turn the pane, it looks once more about ten frames
+ * later: if the control has drifted since (Steam's own glide, aimed before the change, carrying on), and the place it
+ * was put back to is inside Steam's band, it is put back again; any landing or tap since then cancels that look.
+ * The browser's own scroll anchoring is off while the switch that makes these changes is on (foldedTabs.ts), so it
+ * never adds a correction of its own.
+ */
+export function holdTabBodyStop(el: HTMLElement): () => void {
+  const body = Array.from(bodies).find((b) => b.root !== el && b.root.contains(el));
+  const pane = body ? findTabContentsScroll(body.root) : null;
+  if (!body || !pane) return () => {};
+  const before = contentBox(el, pane).top;
+  const held = { el, top: el.getBoundingClientRect().top };
+  body.held = held;
+  return () => {
+    if (body.held === held) body.held = null;
+    if (!el.isConnected) return;
+    const moved = contentBox(el, pane).top - before;
+    const drifted = el.getBoundingClientRect().top - held.top;
+    if (body.lastTop !== null) body.lastTop += moved;
+    if (Math.abs(drifted) < 0.5) return;
+    pane.scrollTop = pane.scrollTop + drifted;
+    const want = el.getBoundingClientRect();
+    const landings = body.landings;
+    const heldAt = performance.now();
+    setTimeout(() => {
+      if (!el.isConnected || body.landings !== landings || body.lastPointerAt > heldAt) return;
+      const drift = el.getBoundingClientRect().top - want.top;
+      if (Math.abs(drift) < 2) return;
+      const style = getComputedStyle(pane);
+      const top = pane.getBoundingClientRect().top;
+      const bandTop = top + px(style.scrollPaddingTop, STEAM_PAD_TOP_PX) - EDGE_SLACK_PX;
+      const bandBottom = top + pane.clientHeight - px(style.scrollPaddingBottom, STEAM_PAD_BOTTOM_PX) + EDGE_SLACK_PX;
+      if (want.top < bandTop || want.bottom > bandBottom) return;
+      pane.scrollTop = pane.scrollTop + drift;
+    }, LATE_LOOK_MS);
+  };
+}
+
 export function useTabBodyFocusScroll(rootRef: RefObject<HTMLElement | null>, tabId?: string): void {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const body: BodyState = { root, tabId: tabId ?? null, lastTop: null, lastPointerAt: -Infinity, planned: null };
+    const body: BodyState = { root, tabId: tabId ?? null, lastTop: null, lastPointerAt: -Infinity, planned: null, landings: 0, held: null };
     bodies.add(body);
 
     const onPointer = () => {

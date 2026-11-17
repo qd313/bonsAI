@@ -21,7 +21,8 @@
  *
  * Does not: Scroll anything, or move the ring. Does not know any row's text: it reads whatever the
  * row carries. Does not show anything for a section line, a control with no text, or a ring outside
- * the tab: the strip hides then.
+ * the tab: the strip hides then. Does not decide which sections open as the ring walks: it hands each
+ * D-pad landing to autoFold.ts, which does nothing unless that Developer switch is on.
  *
  * Gotchas: A row whose text follows its value (Thinking: the picked level's description) rewrites the
  * attribute when the value changes; the strip watches the attribute of the row it is showing and
@@ -32,6 +33,7 @@ import { useEffect, type RefObject } from "react";
 import { watchTabBodyLandings } from "../../shared/dpad/useTabBodyFocusScroll";
 import { FOLDED_TAB_SCROLL_STEP_FRACTION } from "../../shared/dpad/tabBodyScrollPlan";
 import { rememberFoldSection } from "./foldedTabsStore";
+import { foldOnLanding } from "./autoFold";
 
 /** The row's longer text, shown in the strip while the ring is on the row or on a control inside it. */
 export const HELP_TEXT_ATTR = "data-bonsai-help";
@@ -108,10 +110,14 @@ export function useHelpStrip(tabId: string, partsRef: RefObject<HelpStripElement
       }
       return showHelpFor(parts, host);
     };
-    const stop = watchTabBodyLandings(tabId, (target) => {
+    const stop = watchTabBodyLandings(tabId, (target, landing) => {
       if (!target) return show(null);
       const section = target.closest<HTMLElement>(`[${FOLD_SECTION_ATTR}]`)?.getAttribute(FOLD_SECTION_ATTR);
-      if (section) rememberFoldSection(tabId, section);
+      if (section) {
+        rememberFoldSection(tabId, section);
+        /* "Open sections as you walk" (off unless switched on): the D-pad's landings open and close sections; a tap's do not. */
+        if (!landing?.pointer) foldOnLanding(tabId, target, section);
+      }
       return show(helpHost(target));
     }, {
       stepFraction: FOLDED_TAB_SCROLL_STEP_FRACTION,

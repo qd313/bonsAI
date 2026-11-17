@@ -4,7 +4,8 @@
  * Purpose: Lists the tab's sections in order with where the ring enters each from above and from below, which
  * is what the section lines (FoldedSection) need: Down from an open line goes into the section's first stop,
  * Up from the line below goes into the section above's last stop. Also hands each section the place its stops'
- * elements are kept (developerRows.tsx fills it as the rows are drawn).
+ * elements are kept (developerRows.tsx fills it as the rows are drawn), and finds those two stops without moving
+ * anything, for "Open sections as you walk" (autoFold.ts).
  *
  * Used for: DeveloperTab.tsx.
  *
@@ -34,23 +35,28 @@ const STOP_SELECTOR = "[tabindex], button, input";
  * carry a tabindex of its own, and landing on it would be landing beside the control, outside the row's words;
  * so the first match with no other match inside it is the one taken.
  */
-function focusStopIn(host: HTMLElement | null | undefined): boolean {
-  if (!host) return false;
+function stopIn(host: HTMLElement | null | undefined): HTMLElement | null {
+  if (!host) return null;
   // focus-patterns-allow: element-scoped query on the row's own element, the sanctioned pattern (the Ollama tab's focusFirstStopIn does the same).
   const all = Array.from(host.querySelectorAll<HTMLElement>(STOP_SELECTOR));
-  const target = all.find((el) => !all.some((other) => other !== el && el.contains(other)));
+  return all.find((el) => !all.some((other) => other !== el && el.contains(other))) ?? null;
+}
+
+function focusStopIn(host: HTMLElement | null | undefined): boolean {
+  const target = stopIn(host);
   if (!target) return false;
   /* False only while the page lacks the browser's focus and the ring did not follow (plan 97, lostFocusHop.ts). */
   return plainHop(target, "developer-tab", () => focusInTabBody(target));
 }
 
-function firstStop(hosts: Hosts): boolean {
-  return focusStopIn(hosts.current.find((h) => h));
+/** The section's first and last stop's element, as the rows kept them. */
+function firstHost(hosts: Hosts): HTMLElement | undefined {
+  return hosts.current.find((h): h is HTMLElement => Boolean(h));
 }
 
-function lastStop(hosts: Hosts): boolean {
+function lastHost(hosts: Hosts): HTMLElement | undefined {
   const live = hosts.current.filter((h): h is HTMLElement => Boolean(h));
-  return focusStopIn(live[live.length - 1]);
+  return live[live.length - 1];
 }
 
 /** The chain for the sections on screen (ids in order), and each section's place to keep its stops. */
@@ -65,8 +71,11 @@ export function useDeveloperTabFocus(ids: readonly string[]): {
     () =>
       key.split("|").map((id) => ({
         id,
-        enterFromTop: () => firstStop(hostsFor(id)),
-        enterFromBottom: () => lastStop(hostsFor(id)),
+        enterFromTop: () => focusStopIn(firstHost(hostsFor(id))),
+        enterFromBottom: () => focusStopIn(lastHost(hostsFor(id))),
+        /* Found without moving anything: the walk's rule reads them ("Open sections as you walk", autoFold.ts). */
+        firstStop: () => stopIn(firstHost(hostsFor(id))),
+        lastStop: () => stopIn(lastHost(hostsFor(id))),
       })),
     // hostsFor only reads a ref: it is the same for every render.
     // eslint-disable-next-line react-hooks/exhaustive-deps

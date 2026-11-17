@@ -214,6 +214,15 @@ export function buildFoldedTabsSection(): string {
           flex: none;
           height: ${FOLD_TAIL_PX}px;
         }
+        /*
+         * While "Open sections as you walk" is on (autoFold.ts), a section can open or close above the ringed row, and
+         * the plugin keeps that row in place itself (holdTabBodyStop). The browser's own scroll anchoring would sometimes
+         * add a second correction, depending on which row it picked to anchor, so it is off for the whole tab body then;
+         * with the switch off nothing here applies.
+         */
+        .bonsai-scope .bonsai-tab-body-root:has(.bonsai-fold-column[data-bonsai-walk-opens="true"]) {
+          overflow-anchor: none;
+        }
 
         /*
          * The dock: drawn in bonsAI's tabs box beside Steam's pane, over the pane's bottom (TabHelpStrip.tsx).

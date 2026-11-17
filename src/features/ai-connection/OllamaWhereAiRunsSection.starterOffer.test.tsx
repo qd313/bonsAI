@@ -35,6 +35,7 @@ import { markSettingsLoaded, resetSettingsLoadedSignalForTests } from "../settin
 import { resetModalReturnFocusRegistry } from "../../shared/dpad/modalReturnFocusRegistry";
 import { setDownloadPermissionBridge } from "../downloads/downloadNotice";
 import { drawConfirmBox } from "../../test-harness/confirmBoxProbe";
+import { STARTER_LEFT_OUT_STORAGE_KEY } from "../models/starterSetLeftOut";
 
 function drawOnDeck() {
   return render(
@@ -80,6 +81,7 @@ beforeEach(() => {
   setDownloadPermissionBridge(null);
   hoisted.modals = [];
   setRpcHandler("start_local_ollama_setup", () => ({ accepted: true }));
+  window.localStorage.removeItem(STARTER_LEFT_OUT_STORAGE_KEY);
   markSettingsLoaded();
 });
 
@@ -145,5 +147,22 @@ describe("Install Ollama with no models installed", () => {
     await pressInstall("Update AI & models");
     expect(hoisted.modals).toHaveLength(0);
     expect(setupProfiles()).toEqual(["update_installed"]);
+  });
+});
+
+describe("Install Ollama after the first-time setup left something out (plan 105, lane D3)", () => {
+  it("the box and the run leave out the same pieces, and the box says so", async () => {
+    window.localStorage.setItem(STARTER_LEFT_OUT_STORAGE_KEY, JSON.stringify(["note_search"]));
+    setRpcHandler("test_ollama_connection", () => ({ reachable: false, error: "unreachable" }));
+    drawOnDeck();
+    await pressInstall("Install Ollama");
+    const text = textOf(hoisted.modals[0]);
+    expect(text).not.toContain("nomic-embed-text");
+    expect(text).toContain("huggingface.co");
+    expect(text).toContain("Left out, as you chose at first setup: the note-search model.");
+    (hoisted.modals[0].props.onAction as () => void)();
+    await settle();
+    const starts = getRpcCallLog().filter((c) => c.method === "start_local_ollama_setup").map((c) => c.args[0]);
+    expect(starts).toEqual([{ profile: "tier1_essentials", leave_out: ["note_search"] }]);
   });
 });

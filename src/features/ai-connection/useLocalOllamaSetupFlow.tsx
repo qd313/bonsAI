@@ -42,6 +42,7 @@ import {
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
 } from "./OllamaWhereAiRunsSection.constants";
 import { startLocalOllamaSetup, starterSetBoxBody, starterSetNotices } from "../models/localOllamaStarterSet";
+import { readStarterLeftOut, type StarterLeftOut } from "../models/starterSetLeftOut";
 import { rememberReturnWhileBoxOpens } from "../downloads/rememberReturnWhileBoxOpens";
 import type { ModalReturnFocusId } from "../../shared/dpad/modalReturnFocusRegistry";
 import {
@@ -137,6 +138,7 @@ export function useLocalOllamaSetupFlow({
         // A Deck with no models: one box asks whether to also install the starter models. Cancel (or B)
         // installs the engine only, as before.
         let chosen: string = profile;
+        let leaveOut: StarterLeftOut[] = [];
         if (!opts?.offerStarterModels && internetDownloadsAreOff()) {
           // Downloads are off: say so on the tab AND ask to turn them on, as the Install buttons do.
           // The note that returns the ring here is armed only because this box really opens.
@@ -148,21 +150,26 @@ export function useLocalOllamaSetupFlow({
         if (opts?.offerStarterModels) {
           // With downloads off this box reads "Turn on internet downloads?" and Cancel installs nothing:
           // nothing starts and the status line stays as it was (plan 96 F10).
+          // What the person left out on the first-time setup stays out here too, and the box says so.
           const askedToTurnOn = internetDownloadsAreOff();
+          const leftOut = readStarterLeftOut();
           const wantsStarter = await rememberReturnWhileBoxOpens(returnId, () =>
-            confirmDownload(starterSetNotices({ withOllama: true }), {
+            confirmDownload(starterSetNotices({ withOllama: true, leftOut }), {
               always: true,
               title: "Also install the starter models?",
-              body: starterSetBoxBody(true, askedToTurnOn),
+              body: starterSetBoxBody(true, askedToTurnOn, leftOut),
               actionLabel: "Install Ollama and the starter models",
             })
           );
           if (!wantsStarter && askedToTurnOn) return;
-          if (wantsStarter) chosen = LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS;
+          if (wantsStarter) {
+            chosen = LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS;
+            leaveOut = leftOut;
+          }
         }
         setRefusal("");
         setupAutoTestRanRef.current = false;
-        startLocalOllamaSetup(chosen, setLocalSetupStatus, setRefusal);
+        startLocalOllamaSetup(chosen, setLocalSetupStatus, setRefusal, leaveOut);
       })();
     },
     [localSetupBusy]

@@ -46,6 +46,7 @@ import { PullModelsModal } from "./PullModelsModal";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../../test-harness/fakeDeckyRpc";
 import { setDownloadPermissionBridge } from "../../downloads/downloadNotice";
 import { drawConfirmBox } from "../../../test-harness/confirmBoxProbe";
+import { STARTER_LEFT_OUT_STORAGE_KEY } from "../starterSetLeftOut";
 
 const LABEL = "Install the starter set";
 
@@ -73,6 +74,7 @@ beforeEach(() => {
   hoisted.buttonProps = [];
   setDownloadPermissionBridge(null);
   setRpcHandler("start_local_ollama_setup", () => ({ accepted: true }));
+  window.localStorage.removeItem(STARTER_LEFT_OUT_STORAGE_KEY);
   // jsdom has no scrollIntoView; the screen's own focus helper calls it after every landing.
   Element.prototype.scrollIntoView = vi.fn();
 });
@@ -229,7 +231,7 @@ describe("Browse models: Install the starter set", () => {
     fireEvent.click(chip(container)!);
     (hoisted.modal!.props.onAction as () => void)();
     await settle();
-    expect(setupCalls().map((c) => c.args)).toEqual([[{ profile: "tier1_essentials" }]]);
+    expect(setupCalls().map((c) => c.args)).toEqual([[{ profile: "tier1_essentials", leave_out: [] }]]);
   });
 
   it("answers the Steam A button like every other control here, and Left, Right and Down walk the filter strip", async () => {
@@ -265,4 +267,60 @@ describe("Browse models: Install the starter set", () => {
       spy.mockRestore();
     }
   });
+});
+
+/*
+ * Plan 105, lane D3: what the person left out on the first-time setup stays out of this button and its box, and the
+ * box says so. The note behind it lives in the device's browser storage; losing it may only bring back a box that
+ * lists every piece with its site before anything downloads, never a download without a press.
+ */
+describe("Browse models: a piece left out on the first-time setup", () => {
+  const leaveOut = (pieces: unknown) => window.localStorage.setItem(STARTER_LEFT_OUT_STORAGE_KEY, JSON.stringify(pieces));
+
+  it("is gone when everything not left out is there", async () => {
+    leaveOut(["note_search", "voice"]);
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: ["gemma4:e2b-it-qat"] }));
+    setRpcHandler("get_voice_engine_status", voiceStatus(false, false));
+    const { container } = renderModal();
+    await waitFor(() => expect(container.textContent).toContain("Installed 1 ·"));
+    await settle();
+    expect(chip(container)).toBeNull();
+  });
+
+  it("leaves the same pieces out of the box and the run, and the box says so", async () => {
+    leaveOut(["voice"]);
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: [] }));
+    const { container } = renderModal();
+    await waitFor(() => expect(chip(container)).not.toBeNull());
+    fireEvent.click(chip(container)!);
+    const text = boxText();
+    expect(text).toContain("nomic-embed-text");
+    expect(text).not.toContain("huggingface.co");
+    expect(text).not.toContain("ghcr.io");
+    expect(text).toContain("about 4.6 GB in all (the answer model and the note-search model)");
+    expect(text).toContain("Left out, as you chose at first setup: the speech models and the voice engine.");
+    expect(setupCalls()).toHaveLength(0);
+    (hoisted.modal!.props.onAction as () => void)();
+    await settle();
+    expect(setupCalls().map((c) => c.args)).toEqual([[{ profile: "tier1_essentials", leave_out: ["voice"] }]]);
+  });
+
+  for (const [why, note] of [["lost", null], ["unreadable", "{not json"], ["holding a word it does not know", '["answer"]']] as const) {
+    it(`with the note ${why}, the box lists every piece with its site before anything downloads`, async () => {
+      if (note !== null) window.localStorage.setItem(STARTER_LEFT_OUT_STORAGE_KEY, note);
+      setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: [] }));
+      const { container } = renderModal();
+      await waitFor(() => expect(chip(container)).not.toBeNull());
+      fireEvent.click(chip(container)!);
+      const text = boxText();
+      for (const words of ["nomic-embed-text", "registry.ollama.ai", "huggingface.co", "ghcr.io", "about 5.3 GB in all"]) {
+        expect(text).toContain(words);
+      }
+      expect(text).not.toContain("Left out");
+      expect(setupCalls()).toHaveLength(0);
+      (hoisted.modal!.props.onAction as () => void)();
+      await settle();
+      expect(setupCalls().map((c) => c.args)).toEqual([[{ profile: "tier1_essentials", leave_out: [] }]]);
+    });
+  }
 });

@@ -37,7 +37,9 @@ import {
   SPEECH_MODELS_DOWNLOAD_SIZE,
   totalDownloadSize,
   VOICE_ENGINE_DOWNLOAD_SIZE,
+  type DownloadSize,
 } from "../downloads/downloadSizes";
+import { readStarterLeftOut, starterLeftOutLine, type StarterLeftOut } from "./starterSetLeftOut";
 import type { LocalOllamaSetupStatus } from "../ai-connection/OllamaWhereAiRunsSection.types";
 import {
   LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
@@ -49,44 +51,80 @@ import { textPx } from "../../styles/textPx";
 /** The words on the box's download button, and on the Browse models button that opens the same box. */
 export const STARTER_SET_BUTTON_LABEL = "Install the starter set";
 
-/** The Ollama program's site is listed first only when this box also installs Ollama itself. */
-export function starterSetNotices(opts: { withOllama?: boolean } = {}): DownloadNotice[] {
+/**
+ * The Ollama program's site is listed first only when this box also installs Ollama itself. A piece the person left
+ * out on the first-time setup (starterSetLeftOut.ts) is not listed, because it is not downloaded.
+ */
+export function starterSetNotices(opts: { withOllama?: boolean; leftOut?: readonly StarterLeftOut[] } = {}): DownloadNotice[] {
+  const leftOut = opts.leftOut ?? [];
   const program = opts.withOllama ? [OLLAMA_PROGRAM_NOTICE] : [];
+  const noteSearch = !leftOut.includes("note_search");
   const models = modelPullNotice(
-    [TIER1_ESSENTIALS_TAG, STARTER_NOTE_SEARCH_TAG],
-    totalDownloadSize([ANSWER_MODEL_DOWNLOAD_SIZE, NOTE_SEARCH_MODEL_DOWNLOAD_SIZE]),
+    noteSearch ? [TIER1_ESSENTIALS_TAG, STARTER_NOTE_SEARCH_TAG] : [TIER1_ESSENTIALS_TAG],
+    totalDownloadSize(noteSearch ? [ANSWER_MODEL_DOWNLOAD_SIZE, NOTE_SEARCH_MODEL_DOWNLOAD_SIZE] : [ANSWER_MODEL_DOWNLOAD_SIZE]),
   );
-  return [...program, models, SPEECH_MODELS_NOTICE, VOICE_ENGINE_NOTICE];
+  const voice = leftOut.includes("voice") ? [] : [SPEECH_MODELS_NOTICE, VOICE_ENGINE_NOTICE];
+  return [...program, models, ...voice];
 }
 
 /**
  * The box's size sentence: the total of every piece it downloads, Ollama included when the box installs it too
- * (plan 105, § 12: the old "about 4.5 GiB in all" was the models alone).
+ * (plan 105, § 12: the old "about 4.5 GiB in all" was the models alone), and nothing that was left out.
  */
-export function starterSetSizeLine(withOllama: boolean): string {
-  const pieces = [ANSWER_MODEL_DOWNLOAD_SIZE, NOTE_SEARCH_MODEL_DOWNLOAD_SIZE, SPEECH_MODELS_DOWNLOAD_SIZE, VOICE_ENGINE_DOWNLOAD_SIZE];
-  const total = totalDownloadSize(withOllama ? [OLLAMA_DOWNLOAD_SIZE, ...pieces] : pieces);
-  const names = "the answer model, the note-search model, the speech models and the voice engine";
-  return `Rough download: ${total} in all (${withOllama ? `Ollama, ${names}` : names}).`;
+export function starterSetSizeLine(withOllama: boolean, leftOut: readonly StarterLeftOut[] = []): string {
+  const parts: [string, DownloadSize][] = [
+    ...(withOllama ? ([["Ollama", OLLAMA_DOWNLOAD_SIZE]] as [string, DownloadSize][]) : []),
+    ["the answer model", ANSWER_MODEL_DOWNLOAD_SIZE],
+    ...(leftOut.includes("note_search") ? [] : ([["the note-search model", NOTE_SEARCH_MODEL_DOWNLOAD_SIZE]] as [string, DownloadSize][])),
+    ...(leftOut.includes("voice")
+      ? []
+      : ([
+          ["the speech models", SPEECH_MODELS_DOWNLOAD_SIZE],
+          ["the voice engine", VOICE_ENGINE_DOWNLOAD_SIZE],
+        ] as [string, DownloadSize][])),
+  ];
+  const names = parts.map(([name]) => name);
+  const joined = names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}` : names[0];
+  return `Rough download: ${totalDownloadSize(parts.map(([, size]) => size))} in all (${joined}).`;
 }
 
-/** What the box says under the site line; `engineAlreadyAsked` is true for the follow-up box of Install Ollama; `downloadsOff` makes its Cancel sentence say nothing is installed. */
-export function starterSetBoxBody(engineAlreadyAsked: boolean, downloadsOff = false) {
+const TAG_STYLE = { color: "#9ce7ff" };
+
+/**
+ * What the box says under the site line; `engineAlreadyAsked` is true for the follow-up box of Install Ollama;
+ * `downloadsOff` makes its Cancel sentence say nothing is installed; `leftOut` drops what the person left out on the
+ * first-time setup and adds a line saying so.
+ */
+export function starterSetBoxBody(engineAlreadyAsked: boolean, downloadsOff = false, leftOut: readonly StarterLeftOut[] = []) {
+  const noteSearch = !leftOut.includes("note_search");
+  const voice = !leftOut.includes("voice");
+  const leftOutLine = starterLeftOutLine(leftOut);
   return (
     <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
       <div style={{ marginBottom: 8 }}>
-        The starter set is the answer model <span style={{ color: "#9ce7ff" }}>{TIER1_ESSENTIALS_TAG}</span>, which can
-        chat, read screenshots and text in pictures, and help in Strategy mode; the note-search model{" "}
-        <span style={{ color: "#9ce7ff" }}>{STARTER_NOTE_SEARCH_TAG}</span>; and the speech models{" "}
-        <span style={{ color: "#9ce7ff" }}>{STARTER_SPEECH_MODELS.join(" and ")}</span> and the voice engine for the microphone.{" "}
-        {starterSetSizeLine(engineAlreadyAsked)}
+        The starter set is the answer model <span style={TAG_STYLE}>{TIER1_ESSENTIALS_TAG}</span>, which can chat, read
+        screenshots and text in pictures, and help in Strategy mode
+        {noteSearch ? (
+          <>
+            ; the note-search model <span style={TAG_STYLE}>{STARTER_NOTE_SEARCH_TAG}</span>
+          </>
+        ) : null}
+        {voice ? (
+          <>
+            ; and the speech models <span style={TAG_STYLE}>{STARTER_SPEECH_MODELS.join(" and ")}</span> and the voice
+            engine for the microphone
+          </>
+        ) : null}
+        . {starterSetSizeLine(engineAlreadyAsked, leftOut)}
       </div>
       <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
         A model you already have is not downloaded again. If one download fails the others still go ahead, and the
-        tab says which one failed. The speech models download and the voice engine is built on this Deck, which can
-        take several minutes, even with the microphone permission off; Voice input stays off until you turn it on
-        in the Permissions tab.
+        tab says which one failed.
+        {voice
+          ? " The speech models download and the voice engine is built on this Deck, which can take several minutes, even with the microphone permission off; Voice input stays off until you turn it on in the Permissions tab."
+          : null}
       </div>
+      {leftOutLine ? <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{leftOutLine}</div> : null}
       {engineAlreadyAsked ? (
         <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
           {downloadsOff
@@ -106,12 +144,14 @@ export function starterSetBoxBody(engineAlreadyAsked: boolean, downloadsOff = fa
  * in place passes `onRefused` too: a refusal reason then goes to it (and onto the tab as a failed
  * line) instead of a toast, and the "started" toast is left out because the tab already shows the run.
  * A "downloads off" refusal while the screen shows them on sends the screen's value once and tries once more
- * (plan 104, B1); only a second refusal reads as off.
+ * (plan 104, B1); only a second refusal reads as off. `leaveOut` (the starter set only) names what the person left
+ * out on the first-time setup; the back end keeps it for a restart after a reload (starter_left_out.py).
  */
 export function startLocalOllamaSetup(
   profile: string,
   onStatus?: (s: LocalOllamaSetupStatus) => void,
-  onRefused?: (reason: string) => void
+  onRefused?: (reason: string) => void,
+  leaveOut: readonly StarterLeftOut[] = []
 ): void {
   const refuse = (reason: string, toastTitle: string) => {
     if (!onRefused) {
@@ -126,9 +166,9 @@ export function startLocalOllamaSetup(
   // off" while this screen shows them on, the two disagree (a save that never arrived): the screen's value is
   // sent once and the start is tried once more. Only a second refusal reads as "downloads off".
   const start = (alreadyResent: boolean): Promise<void> =>
-    callDeckyWithTimeout<[{ profile: string }], { accepted?: boolean; reason?: string; error?: string }>(
+    callDeckyWithTimeout<[{ profile: string; leave_out?: StarterLeftOut[] }], { accepted?: boolean; reason?: string; error?: string }>(
       "start_local_ollama_setup",
-      [{ profile }],
+      [profile === LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS ? { profile, leave_out: [...leaveOut] } : { profile }],
       15000
     ).then(async (out) => {
       if (!out?.accepted) {
@@ -160,16 +200,18 @@ export function startLocalOllamaSetup(
 
 /**
  * Browse models' "Install the starter set": the download notice first (the sites, the sizes, the ring
- * on Cancel), then the same setup run the old Tier 1 button started. Resolves true when it started.
+ * on Cancel), then the same setup run the old Tier 1 button started. Resolves true when it started. What the
+ * person left out on the first-time setup stays out, and the box says so; with no note, every piece is listed.
  */
 export async function askThenInstallStarterSet(): Promise<boolean> {
-  const go = await confirmDownload(starterSetNotices(), {
+  const leftOut = readStarterLeftOut();
+  const go = await confirmDownload(starterSetNotices({ leftOut }), {
     always: true,
     title: "Install the starter set?",
-    body: starterSetBoxBody(false),
+    body: starterSetBoxBody(false, false, leftOut),
     actionLabel: STARTER_SET_BUTTON_LABEL,
   });
   if (!go) return false;
-  startLocalOllamaSetup(LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS);
+  startLocalOllamaSetup(LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS, undefined, undefined, leftOut);
   return true;
 }

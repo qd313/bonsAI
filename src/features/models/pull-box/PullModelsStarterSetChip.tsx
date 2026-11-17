@@ -8,7 +8,8 @@
  * button is gone.
  *
  * Used for: PullModelsFiltersStrip.tsx, drawn until the whole set is there: the answer model and the
- * note-search model installed in Ollama, and both speech models on disk. The speech models are read from
+ * note-search model installed in Ollama, and both speech models on disk (a piece the person left out on the
+ * first-time setup does not count, starterSetLeftOut.ts). The speech models are read from
  * the voice engine's status; until that answers (or if it cannot), only Ollama's two models decide. A run
  * this button started is watched: when it ends "done" the button goes at once, and when it ends any other
  * way the speech models are read again (so the button follows what is really on the Deck).
@@ -35,6 +36,7 @@ import { STARTER_NOTE_SEARCH_TAG, STARTER_SPEECH_MODELS, TIER1_ESSENTIALS_TAG } 
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../../shared/deckyCall";
 import { isTagInstalled } from "./pullModelFilters";
 import { askThenInstallStarterSet, STARTER_SET_BUTTON_LABEL } from "../localOllamaStarterSet";
+import { readStarterLeftOut } from "../starterSetLeftOut";
 
 export function PullModelsStarterSetChip(props: {
   installedTags: Set<string>;
@@ -66,8 +68,11 @@ export function PullModelsStarterSetChip(props: {
       alive = false;
     };
   }, [installedTags.size, lookAgain]);
-  const ollamaPartThere = isTagInstalled(TIER1_ESSENTIALS_TAG, installedTags) && isTagInstalled(STARTER_NOTE_SEARCH_TAG, installedTags);
-  const speechMissing = speechReady != null && STARTER_SPEECH_MODELS.some((m) => speechReady[m] !== true);
+  // A piece left out on the first-time setup does not count: its own feature offers it (starterSetLeftOut.ts).
+  const leftOut = readStarterLeftOut();
+  const noteSearchThere = leftOut.includes("note_search") || isTagInstalled(STARTER_NOTE_SEARCH_TAG, installedTags);
+  const ollamaPartThere = isTagInstalled(TIER1_ESSENTIALS_TAG, installedTags) && noteSearchThere;
+  const speechMissing = !leftOut.includes("voice") && speechReady != null && STARTER_SPEECH_MODELS.some((m) => speechReady[m] !== true);
   if (runDone || (ollamaPartThere && !speechMissing)) return null;
   const press = () => {
     void askThenInstallStarterSet().then((started) => {

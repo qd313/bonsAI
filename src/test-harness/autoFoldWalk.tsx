@@ -134,7 +134,7 @@ export function walkSeeing(w: FoldedTabWalk, direction: "down" | "up", bound = B
   return out;
 }
 
-const names = (seen: Seen[]) => seen.filter((s) => s.section !== null).map((s) => s.l.name);
+export const names = (seen: Seen[]) => seen.filter((s) => s.section !== null).map((s) => s.l.name);
 const repeats = (seen: Seen[]) => seen.length - new Set(seen.map((s) => s.l.stop)).size;
 
 /**
@@ -187,7 +187,7 @@ function checkLandings(seen: Seen[], viewport: number, label: string, unlimitedM
 /** The every-section-open walk's stops, Down then Up, per tab: they depend on the D-pad's moves, not the pane or the scroll. */
 const references = new Map<string, { down: string[]; up: string[] }>();
 
-function everyOpenWalk(t: TabCase): { down: string[]; up: string[] } {
+export function everyOpenWalk(t: TabCase): { down: string[]; up: string[] } {
   const known = references.get(t.tabId);
   if (known) return known;
   setAllSections(t.tabId, t.ids, true);

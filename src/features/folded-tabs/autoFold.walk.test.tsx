@@ -25,11 +25,15 @@ vi.mock("@decky/ui", async () => {
 
 import { buildFoldedTabsSection } from "./foldedTabs";
 import type { FoldedLanding, FoldedTabWalk } from "../../test-harness/foldedTabWalk";
+import { putSteamRingOn } from "../../test-harness/steamRing";
 import {
   BOUND,
   DECK_PANE,
+  DEVELOPER_CASE,
   OLLAMA_CASE,
   PANE_TOP,
+  everyOpenWalk,
+  names,
   openNow,
   resetAutoFoldWalk,
   seeing,
@@ -78,6 +82,33 @@ describe("on the Ollama tab, in the maintainer's words", () => {
     expect(openNow(w.container)).toEqual(["reply", "tuning"]);
     w.unmount();
   });
+});
+
+describe("arriving on a tab with the switch on (the Deck, plan 105 block D3a: Ollama 1 of 3, Developer 1 of 2)", () => {
+  /*
+   * On arrival Steam may put the ring somewhere other than the first section: back on a control it last held, or on
+   * the LAST line (foldedTabArrival.ts records both). That landing used to close the first section and open nothing,
+   * and then no landing ever opened anything again: the Deck saw every section shut and five lines walked past.
+   */
+  const stray = [
+    { t: OLLAMA_CASE, line: "models", what: "the last line, as after a shoulder switch" },
+    { t: DEVELOPER_CASE, line: "navigation", what: "a closed section's line, as Steam's way back from the tab bar to a control it last held" },
+  ];
+  for (const { t, line, what } of stray) {
+    it(`${t.name}: a stray first landing on ${what}, then the first line: the first section is open, and Down opens every section in turn`, () => {
+      const reference = everyOpenWalk(t);
+      switchOn();
+      const w = walk(t, DECK_PANE, "nearest");
+      expect(openNow(w.container)).toEqual([t.ids[0]]);
+      act(() => putSteamRingOn(w.container.querySelector<HTMLElement>(`[data-bonsai-fold-line="${line}"]`)));
+      expect(openNow(w.container).length, "some section stays open after the stray landing").toBeGreaterThan(0);
+      /* The arrival code (or Down from the tab bar) then puts the ring on the first line. */
+      const down = [seeing(w, w.enter()), ...walkSeeing(w, "down")];
+      expect(down[0]!.open).toEqual([t.ids[0]]);
+      expect(names(down)).toEqual(reference.down);
+      w.unmount();
+    });
+  }
 });
 
 describe("the switch off means nothing changed", () => {

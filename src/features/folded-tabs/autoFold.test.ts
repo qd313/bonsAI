@@ -3,8 +3,9 @@
  * Purpose: Pin "Open sections as you walk" as a table, landing by landing, in the maintainer's own order: walking
  *          Down, the next section opens at the last setting of one, both stay open on its line and its first
  *          setting, and the one left closes at its second setting; walking Up is the mirror; a one-setting section
- *          has three open for one landing; a line never opens its own section, and the line of an open section opens
- *          the one above (where Up from the Open all button lands); the ring's own section never closes.
+ *          has three open for one landing; a line opens its own section only when none would be left open, and the
+ *          line of an open section opens the one above (where Up from the Open all button lands); the ring's own
+ *          section never closes.
  * Used for: autoFold.ts (sectionsOpenAfterLanding).
  * Does not: Walk a real tab (the *.autoFoldWalk tests do) or measure the page.
  */
@@ -60,9 +61,17 @@ describe("walking Up", () => {
 });
 
 describe("what the rule leaves alone", () => {
-  it("a line never opens its own section: a section the person closed stays closed as the ring passes", () => {
-    expect(walk([], [line("a"), line("b")])).toEqual([[], []]);
+  it("a line does not open its own section while another stays open: a section the person closed stays closed as the ring passes", () => {
     expect(walk(["a"], [line("b")])).toEqual([["a"]]);
+    expect(walk(["a", "c"], [line("b")])).toEqual([["a"]]);
+  });
+
+  it("never every section shut: a line landing that would leave none open opens its own (a stray first landing on arrival)", () => {
+    /* Then the next line keeps it, as the neighbour across that boundary. */
+    expect(walk([], [line("a"), line("b")])).toEqual([["a"], ["a"]]);
+    expect(walk([], [line("c")])).toEqual([["c"]]);
+    /* Steam's first landing on the tab is its last line, then the arrival puts the ring on the first line. */
+    expect(walk(["a"], [line("d"), line("a")])).toEqual([["d"], ["a"]]);
   });
 
   it("the line of an open section opens the one above, as its first setting does: Up from the Open all button lands there", () => {

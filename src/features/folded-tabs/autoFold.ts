@@ -22,9 +22,10 @@
  * (holdTabBodyStop in useTabBodyFocusScroll.ts) and puts it back once the change is drawn.
  *
  * Does not: Act on a tap (only the D-pad walks), when the switch is off, or on a landing outside the body (the Open
- * all button, the tab bar). Does not open a section from its own line: a section the person closed stays closed as
- * the ring passes it, until the walk reaches the last setting of the section above. Does not move the ring, and never
- * closes the ring's own section.
+ * all button, the tab bar). Does not open a section from its own line while another stays open: a section the person
+ * closed stays closed as the ring passes it, until the walk reaches the last setting of the section above. Never
+ * leaves every section shut (a line that would opens its own). Does not move the ring, and never closes the ring's
+ * own section.
  *
  * Gotchas: With the switch on, Open all opens every section only until the ring lands in the list again; then the
  * rule folds them back (the session's call, plan 105 consult 3). Up from the Open all button lands on a section's
@@ -64,7 +65,14 @@ export function sectionsOpenAfterLanding(order: readonly string[], open: Readonl
     keep.add(below);
     opens.add(below);
   }
-  return new Set([...Array.from(open).filter((s) => keep.has(s)), ...opens]);
+  const after = new Set([...Array.from(open).filter((s) => keep.has(s)), ...opens]);
+  /*
+   * Never every section shut: from there no landing could open anything again. A line landing that would leave none
+   * open opens its own section (on the Deck, Steam's first landing on a tab could be its last line, or a line it went
+   * back to from the tab bar, and the walk then found every section shut and opened nothing, plan 105 block D3a).
+   */
+  if (after.size === 0) after.add(place.section);
+  return after;
 }
 
 /** Each folded tab's chain, as its sections hand it in. */

@@ -54,7 +54,7 @@ How it works:
    serve` by hand and waits for it whenever it finds it not already running.
 4. It then works out which model tags the chosen profile needs, and downloads each one in turn
    with `run_ollama_pull()`, which streams the AI download's own progress lines back to the tab
-   as they arrive. If a pull fails, `_format_ollama_pull_failure()` cleans up the raw output —
+   as they arrive. If a pull fails, `_format_ollama_pull_failure()` (ollama_pull_failure_text.py) cleans up the raw output —
    Ollama's progress display redraws the same line over and over with a spinner, which is noise
    for a person reading it — and puts the one useful sentence first.
    After an Update replaced the program file, the Ollama that is already running is still the OLD
@@ -75,7 +75,6 @@ from __future__ import annotations
 
 import asyncio
 import os
-import re
 import shutil
 import signal
 import subprocess
@@ -93,6 +92,7 @@ from backend.ollama.ollama_routing import (
 from backend.ollama.ollama_reply_limits import read_json_capped
 from backend.ollama.ollama_urls import normalize_ollama_base
 from backend.ollama.local_setup_progress_text import progress_text_from_line
+from backend.ollama.ollama_pull_failure_text import format_ollama_pull_failure as _format_ollama_pull_failure
 from backend.ollama.starter_set_extras import apply_starter_outcome, run_starter_downloads
 from backend.ollama.ollama_server_restart import (
     ServeControl,
@@ -104,12 +104,6 @@ from backend.ollama.ollama_server_restart import (
 OLLAMA_OFFICIAL_INSTALL_SH = "https://ollama.com/install.sh"
 DEFAULT_BASE = normalize_ollama_base("127.0.0.1:11434")[2]
 MAX_LOG_TAIL_LINES = 120
-_ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]|\x1b\].*?\x07")
-
-
-def strip_ansi_escape_sequences(text: str) -> str:
-    return _ANSI_ESCAPE_RE.sub("", text or "")
-
 
 _LD_STRIP_KEYS = frozenset(
     (
@@ -699,57 +693,6 @@ def run_official_linux_install(shell_log: Callable[[str], None]) -> tuple[bool, 
         return False, "Installation timed out (try installing Ollama from Desktop Konsole)."
     except Exception as exc:
         return False, str(exc)
-
-
-"""Braille spinner frames Ollama draws while it works. Ordinary characters, so the ANSI strip
-leaves them; a failure after ten redraws otherwise repeats one word ten times."""
-_SPINNER_FRAME_RE = re.compile(r"[⠀-⣿]+")
-_REPEATED_BLANKS_RE = re.compile(r"\s{2,}")
-"""A phrase repeated back to back, which is what a redraw looks like once the spinner frame
-between the copies is gone. Ollama redraws with a carriage return rather than a newline, so the
-repeats sit inside one line and splitting on lines does not see them. Bounded to 38 characters so
-the backtracking stays cheap on the 480-character tail this is used on."""
-_REPEATED_PHRASE_RE = re.compile(r"(?<!\S)(\S.{1,38}?\S)(?:\s+\1)+(?!\S)")
-
-
-def _format_ollama_pull_failure(tag: str, code: int, tail_lines: list[str]) -> str:
-    """Human-readable pull failure: what to do about it first, the raw output after.
-
-    The order matters now, and it did not before. Until the pull picker grew a field for typing
-    any model name, every pull came from a curated list, so a tag that does not exist was nearly
-    unreachable and almost nobody saw this line. Measured on the Deck 2026-09-05 (PULL-CUSTOM-02):
-    a made-up name produced a message opening with ``ollama pull ... failed with exit code 1. Last
-    output: pulling manifest ⠋ pulling manifest ⠙ pulling manifest ⠹ ...`` and ending with the one
-    sentence a person can act on. Spinner frames first, the answer last.
-
-    So the advice leads, the command's own words follow, and the spinner frames are dropped —
-    they are animation, repeated once per redraw, and carry nothing.
-    """
-    # Ollama animates progress by redrawing the same line with a different spinner frame, so the
-    # tail is mostly the same words over and over. Strip the frames (ordinary characters, so the
-    # ANSI strip leaves them) and then drop consecutive repeats, which is what a redraw is.
-    cleaned: list[str] = []
-    for raw_line in strip_ansi_escape_sequences("\n".join(tail_lines)).splitlines():
-        line = _REPEATED_BLANKS_RE.sub(" ", _SPINNER_FRAME_RE.sub("", raw_line)).strip()
-        if line and (not cleaned or cleaned[-1] != line):
-            cleaned.append(line)
-    tail_text = _REPEATED_PHRASE_RE.sub(r"\1", " ".join(cleaned))
-    tail_snip = tail_text[-480:] if tail_text else ""
-
-    low = tail_text.casefold()
-    advice = ""
-    if "id_ed25519" in low and "no such file" in low:
-        advice = (
-            "Ollama’s ~/.ollama folder is missing keys (often after Clear all data). "
-            "Tap Install Ollama on the Ollama tab, or run ``ollama serve`` once in Konsole."
-        )
-    elif "manifest" in low and ("not exist" in low or "does not exist" in low):
-        advice = f"Tag «{tag}» is not on the Ollama library — try gemma4:e2b-it-qat or qwen3.5:4b."
-
-    detail = f"ollama pull {tag} failed with exit code {code}"
-    if tail_snip:
-        detail += f". Last output: {tail_snip}"
-    return f"{advice} {detail}" if advice else detail
 
 
 def run_ollama_pull(

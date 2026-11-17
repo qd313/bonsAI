@@ -17,7 +17,8 @@
  *    carries the newest open state and handler; a cleanup only clears the entry it owns.
  * 2. `slotShouldShowLine()` is the drawing's rule, in numbers: the answer (its header to its line,
  *    or to the bottom of its open panel) overlaps the reading area, and the line itself is not
- *    wholly inside that area. While the slot already shows the line, the real one must be 8 px
+ *    wholly inside that area (not at the bottom edge once the pane is scrolled to its end: the line
+ *    cannot come further in). While the slot already shows the line, the real one must be 8 px
  *    inside the area before the chip comes back, so the slot does not blink at the edge.
  * 3. `pressDetailsSlotLine()` is A on the slot's line: the ring goes to the real line first through
  *    Steam's own transfer to its registered stop, then the line's own handler runs, then the real
@@ -126,6 +127,12 @@ export type DetailsSlotGeometry = {
   turnBottom: number;
   lineTop: number;
   lineBottom: number;
+  /**
+   * The pane is scrolled as far down as it goes. The line cannot come any further inside, so the 8 px
+   * of holding on at the bottom edge would keep the slot on the line for good (plan 105: the line
+   * stood 3 px above the dock at the end of a long answer, and the chips never came back).
+   */
+  paneAtEnd?: boolean;
 };
 
 /** The answer (its header to its line, or to the bottom of its open panel) overlaps the reading area. */
@@ -136,12 +143,14 @@ export function isReadingThisAnswer(g: DetailsSlotGeometry): boolean {
 /**
  * The drawing's rule (details-line-swap.html, `computeOwner`). `showingNow` adds the 8 px the real
  * line must come inside the area before the chip returns; a pixel of slack keeps a line pinned at
- * exactly 8 px (A on the slot) from reading as 7.99.
+ * exactly 8 px (A on the slot) from reading as 7.99. At the bottom edge the 8 px is not asked of a pane
+ * that cannot scroll any further (`paneAtEnd`): there is nothing to blink against, and nowhere further to go.
  */
 export function slotShouldShowLine(g: DetailsSlotGeometry, showingNow: boolean): boolean {
   if (!isReadingThisAnswer(g)) return false;
   const margin = showingNow ? DETAILS_LINE_TOP_PAD_PX - 1 : 0;
-  return g.lineBottom > g.bandBottom - margin || g.lineTop < g.bandTop + margin;
+  const bottomMargin = g.paneAtEnd ? 0 : margin;
+  return g.lineBottom > g.bandBottom - bottomMargin || g.lineTop < g.bandTop + margin;
 }
 
 /** The pass times after the first scroll: Steam glides the ring's target a moment after it lands. */

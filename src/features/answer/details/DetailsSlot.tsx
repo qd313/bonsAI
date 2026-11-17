@@ -133,6 +133,7 @@ function measureFace(host: HTMLElement | null, showingNow: boolean): Measured {
     turnBottom: line.open ? turnBox.bottom : lineBox.bottom,
     lineTop: lineBox.top,
     lineBottom: lineBox.bottom,
+    paneAtEnd: pane.scrollHeight > pane.clientHeight && pane.scrollHeight - pane.scrollTop - pane.clientHeight <= 1,
   };
   return {
     showLine: slotShouldShowLine(geometry, showingNow && !ringOnLine),

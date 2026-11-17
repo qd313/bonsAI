@@ -378,6 +378,30 @@ describe("what the slot above the question box holds as the chat scrolls (the dr
     ]);
   });
 
+  /*
+   * Plan 105 (plan105-P105-ANSWER-END-01.json, Deck 2026-11-17): after a long answer the page came up to
+   * its very end, the real line stood 3 px above the dock, and the slot kept showing "Show details" for
+   * a minute: 8 px of holding on at the edge, asked of a pane that cannot scroll one pixel further.
+   */
+  it("brings the chip back when the page has come up to its end, the line 1 px inside the dock", () => {
+    renderChat();
+    scrollChatTo(300); // the answer is read, its line behind the dock: the slot holds the line
+    expect(slotHolds()).toBe("line: Show details ↓");
+
+    /* The page ends here: the line is on screen by 1 px, as at 470 in the walk above, and cannot go further. */
+    Object.defineProperty(pane, "scrollHeight", { value: 470 + (PANE_BOTTOM - PANE_TOP), configurable: true });
+    scrollChatTo(470);
+
+    expect(slotHolds()).toBe("chip");
+  });
+
+  it("keeps the line for a page that still scrolls on, the same 1 px inside the dock", () => {
+    renderChat();
+    scrollChatTo(300);
+    scrollChatTo(470);
+    expect(slotHolds()).toBe("line: Show details ↓");
+  });
+
   it("keeps the dock the same height: both faces sit in one cell as tall as a suggestion chip", () => {
     renderChat();
     const css = buildDetailsSlotSection();

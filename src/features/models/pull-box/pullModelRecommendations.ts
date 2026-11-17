@@ -43,7 +43,7 @@ export function scorePullModelPerformance(entry: PullModelEntry): number {
   const gb = Math.max(entry.sizeGb, 0.35);
   const multimodal =
     entry.tags.includes("vision") && entry.tags.includes("chat") ? 1.35 : entry.tags.includes("vision") ? 1.15 : 1;
-  return (entry.rating / gb) * multimodal;
+  return ((entry.rating ?? 0) / gb) * multimodal;
 }
 
 function entryIsSwissArmyMultimodal(entry: PullModelEntry): boolean {
@@ -68,7 +68,7 @@ function installedSwissArmyEntry(
 function entryCoversRole(entry: PullModelEntry, role: PullCoverageRole): boolean {
   const tags = ROLE_TAGS[role];
   if (role === "expert") {
-    return entry.group === "stretch" || (entry.tags.includes("strategy") && entry.rating >= 5);
+    return entry.group === "stretch" || (entry.tags.includes("strategy") && (entry.rating ?? 0) >= 5);
   }
   return tags.some((t) => entry.tags.includes(t));
 }

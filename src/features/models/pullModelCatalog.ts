@@ -28,7 +28,8 @@
  * (`isEmbeddingOnlyTag`, `isDeckDailyPullModel`, `isDeckEssentialsPullModel`);
  * (3) `PULL_MODEL_CATALOG` itself, the flat list of entries, grouped in the
  * source file the same way the screen groups them even though the screen
- * re-sorts within each group; (4) two comparators the screen sorts a group
+ * re-sorts within each group, with the 22 rows added in plan 105 after them
+ * (pullModelCatalogAdded.ts; their sources are in pullModelCatalog.sources.md); (4) two comparators the screen sorts a group
  * with — `comparePullModelEntriesNewestFirst` for every group except stretch,
  * and `comparePullModelEntriesStretchOrder` for the stretch ("Expert (large)")
  * group alone, which orders its five bake-off candidates by a fixed ranking
@@ -37,6 +38,8 @@
  * handful of small formatting helpers for the screen (star rating, size, tag
  * list, short date).
  */
+import { PULL_MODEL_CATALOG_ADDED_2026_11 } from "./pullModelCatalogAdded";
+
 export type PullModelLicenseClass = "foss" | "open_weight" | "non_foss" | "unknown";
 
 export type PullModelUseTag = "chat" | "vision" | "ocr" | "strategy" | "coding";
@@ -47,13 +50,26 @@ export interface PullModelEntry {
   tag: string;
   params: string;
   sizeGb: number;
-  /** Public model-family release month (YYYY-MM), not Ollama tag publish date. */
+  /**
+   * Public model-family release month (YYYY-MM), not Ollama tag publish date. For the rows added in
+   * plan 105 it is the month the maker's own public model page was created; pullModelCatalog.sources.md
+   * names that page for each one.
+   */
   releasedYm: string;
   license: string;
   licenseClass: PullModelLicenseClass;
   group: PullModelGroup;
   tags: ReadonlyArray<PullModelUseTag>;
-  rating: 1 | 2 | 3 | 4 | 5 | 6;
+  /**
+   * Curated 1-6 star Deck-fit score. Left out on a row nobody has measured on a Deck yet (the rows
+   * added in plan 105 have none): the list shows a dash and the recommender never suggests it.
+   */
+  rating?: 1 | 2 | 3 | 4 | 5 | 6;
+  /**
+   * True when the download is too big for a Deck to run (over 12 GB; a Deck has 16 GB of memory in
+   * all). The row is still listed and says so, never hidden. Only on "stretch" rows.
+   */
+  needsPc?: true;
   blurb: string;
 }
 
@@ -431,6 +447,7 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     rating: 3,
     blurb: "Coding/tool-use bonus; low priority for a gamer unless scripting.",
   },
+  ...PULL_MODEL_CATALOG_ADDED_2026_11,
 ] as const;
 
 /** Sort catalog entries newest-first within a group. */
@@ -468,7 +485,8 @@ export function formatSizeGb(gb: number): string {
   return `${gb.toFixed(gb >= 10 ? 0 : 1)} GB`;
 }
 
-export function formatGtaStars(rating: number): string {
+export function formatGtaStars(rating: number | undefined): string {
+  if (rating === undefined) return "—";
   const n = Math.max(1, Math.min(6, Math.round(rating)));
   return "★".repeat(n);
 }

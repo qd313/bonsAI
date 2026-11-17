@@ -84,7 +84,7 @@ export function resolveRowSizeGb(entry: PullModelEntry, liveSizes: Record<string
 function entryMatchesModeFilter(entry: PullModelEntry, mode: PullModelModeFilterId): boolean {
   if (mode === "speed") return entry.tags.includes("chat");
   if (mode === "strategy") return entry.tags.includes("strategy");
-  if (mode === "expert") return entry.group === "stretch" || (entry.tags.includes("strategy") && entry.rating >= 5);
+  if (mode === "expert") return entry.group === "stretch" || (entry.tags.includes("strategy") && (entry.rating ?? 0) >= 5);
   return entry.tags.includes("vision") || entry.tags.includes("ocr");
 }
 

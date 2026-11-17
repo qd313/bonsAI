@@ -1,5 +1,12 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { PULL_MODEL_CATALOG, comparePullModelEntriesStretchOrder } from "./pullModelCatalog";
+import {
+  PULL_MODEL_CATALOG,
+  comparePullModelEntriesNewestFirst,
+  comparePullModelEntriesStretchOrder,
+  formatGtaStars,
+} from "./pullModelCatalog";
 
 // Sept 2026 bake-off additions to the Expert (large) group (workshop:planning/41-deck-model-survey.md,
 // D73): the models that beat today's Gemma 4 on the answer test, now offered for download.
@@ -49,16 +56,15 @@ describe("comparePullModelEntriesStretchOrder", () => {
     const stretchEntries = PULL_MODEL_CATALOG.filter((e) => e.group === "stretch");
     const sortedTags = [...stretchEntries].sort(comparePullModelEntriesStretchOrder).map((e) => e.tag);
 
-    expect(sortedTags).toEqual([
-      "gemma4:12b-it-qat",
-      "qwen3.5:9b",
-      "granite4.2:8b",
-      "gemma4:e4b-it-qat",
-      "lfm2.5:8b",
-      "llama3.2-vision:11b",
-      "qwen2.5:14b",
-      "minicpm-v:8b",
-    ]);
+    const bakeOff = ["gemma4:12b-it-qat", "qwen3.5:9b", "granite4.2:8b", "gemma4:e4b-it-qat", "lfm2.5:8b"];
+    const rest = stretchEntries
+      .filter((e) => !bakeOff.includes(e.tag))
+      .sort(comparePullModelEntriesNewestFirst)
+      .map((e) => e.tag);
+    expect(sortedTags.slice(0, 5)).toEqual(bakeOff);
+    expect(sortedTags.slice(5)).toEqual(rest);
+    // The three older picks are still there, after the newer rows.
+    for (const tag of ["llama3.2-vision:11b", "qwen2.5:14b", "minicpm-v:8b"]) expect(rest).toContain(tag);
   });
 });
 
@@ -80,5 +86,46 @@ describe("PULL_MODEL_CATALOG licence labels", () => {
     expect(byTag("qwen2.5:3b")?.licenseClass).toBe("open_weight");
     expect(byTag("qwen2.5-coder:3b")?.license).toMatch(/^Qwen Research/);
     expect(byTag("qwen2.5-coder:3b")?.licenseClass).toBe("open_weight");
+  });
+});
+
+// Plan 105, lane D5: the list grew by 22 rows, each read from the model's own Ollama page on 2026-11-17.
+describe("PULL_MODEL_CATALOG rows added in plan 105", () => {
+  const sources = readFileSync(resolve(process.cwd(), "src/features/models/pullModelCatalog.sources.md"), "utf8");
+  const unrated = PULL_MODEL_CATALOG.filter((e) => e.rating === undefined);
+
+  it("has 48 rows, each tag once", () => {
+    expect(PULL_MODEL_CATALOG).toHaveLength(48);
+    expect(new Set(PULL_MODEL_CATALOG.map((e) => e.tag)).size).toBe(48);
+  });
+
+  it("names every new row, unrated as it is, in the sources list beside the catalog", () => {
+    expect(unrated).toHaveLength(22);
+    for (const e of unrated) {
+      expect(sources, `${e.tag} needs a line in pullModelCatalog.sources.md`).toContain(`| \`${e.tag}\` |`);
+      expect(sources).toContain(`https://ollama.com/library/${e.tag}`);
+    }
+  });
+
+  it("marks a model too big for a Deck, shows it, and keeps it in the Expert group", () => {
+    const big = PULL_MODEL_CATALOG.filter((e) => e.needsPc);
+    expect(big.map((e) => e.tag).sort()).toEqual(["gemma3:27b", "gemma4:26b", "gpt-oss:20b", "qwen3.5:27b"]);
+    for (const e of big) {
+      expect(e.group).toBe("stretch");
+      expect(e.sizeGb).toBeGreaterThan(12);
+    }
+    for (const e of PULL_MODEL_CATALOG.filter((x) => !x.needsPc)) expect(e.sizeGb, e.tag).toBeLessThan(12);
+  });
+
+  it("shows a dash, not a made-up star score, for a row nobody has measured", () => {
+    expect(formatGtaStars(undefined)).toBe("—");
+    expect(formatGtaStars(4)).toBe("★★★★");
+  });
+
+  it("gives the open-source class only to Apache or MIT, and Gemma and Llama rows the open-weight class", () => {
+    const byTag = (tag: string) => PULL_MODEL_CATALOG.find((e) => e.tag === tag);
+    expect(byTag("gemma3:12b")?.licenseClass).toBe("open_weight");
+    expect(byTag("llama3.1:8b")?.licenseClass).toBe("open_weight");
+    expect(byTag("phi4:14b")?.licenseClass).toBe("foss");
   });
 });

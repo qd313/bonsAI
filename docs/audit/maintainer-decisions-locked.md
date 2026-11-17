@@ -2710,3 +2710,98 @@ belongs to plan 105):**
     height that fits; its text scrolls inside with Down and Up, with a "More below" line, the way the two-button boxes
     have worked since last wave. Plan 105's draft suggested another look for the same card: about ten lines and a
     "Show all" button. Say so if you prefer that one. A picture goes on the checks page either way.]*
+
+### D142 — LOCKED 2026-11-16 (raised 2026-11-14) — Plan 105, the main roadmap wave (bugs, Verify and features): the thirty-one calls
+
+Asked by the planning chat for [plan 105](../planning/105-main-roadmap-wave-bugs-verify-and-features.md) (its section 2). Calls 1 to 14 were answered in the chat on 2026-11-14 (call 14 changed on 2026-11-15 and was settled on 2026-11-16, after the drawings); calls 29 to 31 were added by the maintainer on 2026-11-16, after the picks. The maintainer then said "Implement plan 105" in the chat on 2026-11-16 at about 23:45 EST. That is "go": every default in calls 15 to 28 is taken, and the eight small questions in the plan's section 12 take their defaults, except question 7 (the checklist: a plain list or boxes you can untick), which the maintainer's pick answered: boxes you can untick, round 4's B. Calls 29 to 31 are as written below. **Usage at go (read by the session 2026-11-16, 23:51 EST):** 12 percent of the five-hour window, 52 percent of the week (it resets Wednesday 18 November at 08:00 EST), and 41 percent on Fable's own weekly counter. Number 142 because D141 was plan 104's and D140 the one before it; D138 stays reserved by plan 101's asset file. The plan's section 2, word for word:
+
+**Answered in the chat on 2026-11-14 (they become decision D142; D141 is plan 104's):**
+
+1. **Scope: the main roadmap.** Every one- and two-star bug, the Verify list, the one- and two-star features, and
+   some three-star items (calls 2 and 4). Bugs found on the way are filed, reported, and given one honest try.
+2. **Harder fixes: the tab-sections D-pad bug is in. The memory check before the AI loads is plan 104's** (its
+   low-memory warning lane), and your answer on what it does was passed on: "Should warn with ask anyway" (a plain
+   warning that there is not enough free memory with the game open, and a button that loads the AI regardless).
+3. **The two knowledge-base items are plan 104's** ("Those last two should be handled by the other session"): the
+   borrowed advice after the honest "no notes" opening, and a game the library does not hold at all. Both are in its
+   plan already. **No overlap is left** (you asked me to check every item): plan 104 has the whole knowledge-base
+   roadmap and the six main-roadmap entries named at the top of this file; nothing in § 5 below touches them. Whatever
+   plan 104 leaves open of those six comes to this plan as a lane, with its evidence (call 22).
+4. **Bigger features, all four:** sections that open by themselves (a Developer switch); first-time setup with fewer
+   steps; the AI models list made bigger with simpler filters; the Ollama tab's look with Cancel folded into its
+   buttons. Each is drawn first and built from your pick.
+5. **Headline first: build it, as plain text** (after the mock-up). It lands switched on only if the answer test shows
+   more answers opening with their point and no loss of facts; otherwise switched off with the numbers.
+6. **Decode becomes the default animation** for answers and chips, and the animation settings leave the Developer
+   tab. Today's Decode values are the stock values; a short clip goes on the checks page for your eye. **Only the
+   thumbs row** ("Was this helpful?" and its two buttons) animates in under an answer.
+7. **Not picked, so they stay as they are on the list:** the reasoning line in a character's voice; retiring the three
+   voice ideas (Voice follow-ups, Spoilers by voice, Headset mode).
+8. **The README clips: the session refilms them at the end**, once the bug and Verify checks are through, with the
+   recorder's full-quality setting and the AI on the PC. You judge the clips on the checks page before they replace
+   today's.
+9. **Order: plan 104 first, then this plan.**
+10. **Both test machines, the whole session**, with your condition: "give me ample warning to stay off this PC while
+    you're driving it. Provide ETAs before you start the lanes." So: a timetable at go, and every stand-in window is
+    announced in the chat and to your phone at least 30 minutes ahead (§ 6).
+11. **Pacing: all-out bursts.** Up to fifteen helpers at once (call 29; it was twenty), none held back. When a five-hour window fills, everything
+    waits for the reset, the Deck checks included, and picks up by itself. It stops for good at 90 percent of the week.
+12. **The drawings: made now, in the planning chat** (board 5), so your picks are in hand before go.
+13. **Intent packs: leave the list quiet and close the entry.** Its unused import and export manager is deleted (your
+    October call).
+14. **The "cut" suggestion chip: soften it, drawn first.** Keep the sliding, make the cut ends fade clearly, stop the
+    row a little short of the screen's edges. On board 5. **Changed 2026-11-15, after the drawings: "Two lines only
+    when selected"** (one line that slides as today; two lines only while the ring is on the chip). **Settled
+    2026-11-16, at your second look: the selected chip takes the row, on one line** (no second line; your note:
+    "Saves the most vertical space, which is still precious"). The picks for all five tabs are in § 12.
+
+**Open, each with its default in brackets ("go" takes every default):**
+
+15. **Models and efforts** as in § 4. The bookkeeper is Sonnet medium, not Haiku: Haiku was tried on bookkeeping in
+    plan 83 and fell short, and you want the roadmap right. *[As listed.]*
+16. **Decode as the default removes two chip styles for good.** The repo does not allow code nothing uses, so with the
+    setting gone the "fade" and "carousel" styles are deleted; "static" stays as the reduced-motion look. This also
+    closes the entry about the four chip styles sharing no code. *[Delete the two. One commit to take back.]*
+17. **A very small Text size.** *[A fourth choice, "Tiny", at 80 percent: an answer's letters go from 10.8 px to 9.6 px.
+    A picture goes on the checks page.]*
+18. **Terse answers.** *[About 40 words; the longer Terse reply you get after asking to dig deeper keeps its "up to
+    about ten lines".]*
+19. **Left reaches the Quick Access Menu.** *[Measured first on the Deck: which edges already let Left out. Then one
+    rule: when Left has nowhere to go inside bonsAI, the third Left in a row hands the press to Steam. The tab bar keeps
+    wrapping.]*
+20. **The starter set also builds the voice engine.** That build needs a container tool on the Deck and pulls from
+    GitHub's container site. *[It runs even with the microphone permission off, since it only builds a program; the
+    download box names the extra site before anything starts; if the build fails the starter set still finishes and
+    says the microphone step failed.]*
+21. **The ten notes you left on the checks page in October that nobody has answered** (plan 103's report lists them;
+    plan 104 passes them to this plan): two "I don't understand" notes, three requests (a change to the delete-chat
+    menu, a broken internet sub-menu, mock-ups for smaller option boxes), the jerky scrolling, the focus ring on the
+    "How to use bonsAI" chip, the decode-and-scroll idea, the thicker icons you saw on the stand-in but not on the
+    Deck, and "You can close it, but if needed we will reopen it". *[The session reads them first. Each gets an answer
+    on the page. A small request becomes a helper round this session; a bigger one becomes a roadmap entry, drawn
+    first if it changes a look; the two unclear items are rewritten in plain words.]*
+22. **Plan 104's leftovers.** *[Whatever plan 104 leaves open from its six main-roadmap entries comes here as a lane,
+    with plan 104's evidence in the brief.]*
+23. **The second screen.** *[The look checks run on the Deck's own screen. The docked run happens only if you dock the
+    Deck when the session asks; otherwise that half stays owed.]*
+24. **Two documents that do not match the code.** *[The sentence is fixed, not the code: 21 screen files call Steam's
+    focus transfer directly, not six. The Decky-button question gets one decisive Deck reading (§ 6, block D0), and the
+    wrong document is corrected.]*
+25. **Hand checks.** Seven Verify entries need your hands (§ 3). *[They go on the checks page in a "plan 105" round
+    with their pictures; nothing else waits for them.]*
+26. **Push and publish.** *[Nothing pushed, nothing published. At the end: "push" from you.]*
+27. **Standing rules while you are away** (plan 103's call 18). *[Kept: a fix that fails on the Deck twice moves up one
+    model tier without asking; a new one- or two-star bug with a known cause gets one helper round of about an hour;
+    anything blocked gets the safest choice at once and is raised in the chat and in § 12; never push, publish, merge
+    to main, switch branches in the shared folder, type a PIN or password, or reload the plugin with a game running.]*
+28. **The second opinion.** *Answered 2026-11-16, see call 30.* (It was: up to ten consults of Fable at max.)
+
+**Added by you on 2026-11-16, after the picks:**
+
+29. **At most fifteen helpers at once** for this plan (it was twenty). The two drivers and a second-opinion consult
+    count toward the fifteen.
+30. **Fable at medium is the second opinion, on trial.** It is asked much more often than Fable at max was going to
+    be. **Fable at max is asked only for what the medium consult could not solve.** Every consult of either kind is
+    logged, and the report says whether the trial should become the rule (§ 7).
+31. **One pass by the security reviewer and the open-source reviewer over the whole session, with a report you
+    review.** Nothing in that report is fixed, waved away or filed before you have read it (§ 5r).

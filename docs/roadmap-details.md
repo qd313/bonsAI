@@ -54,6 +54,7 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Plan 103 sweep K10 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k10-notes-moved-from-the-roadmap-2026-11-10)
 - [Plan 103 sweep K11 notes moved from the roadmap (2026-11-10)](#plan-103-sweep-k11-notes-moved-from-the-roadmap-2026-11-10)
 - [Plan 104 sweep K2 notes moved from the roadmap (2026-11-16)](#plan-104-sweep-k2-notes-moved-from-the-roadmap-2026-11-16)
+- [Plan 105 notes moved from the roadmap (2026-11-17)](#plan-105-notes-moved-from-the-roadmap-2026-11-17)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -827,3 +828,42 @@ Moved word for word by sweep K2 of plan 104. Each block names the entry it stood
 
 - ★★ `[ollama]` `[perms]` **First start: Install Ollama failed and asked to turn on Internet downloads, though every permission was already on** — **VERIFY, fixed 2026-11-15 (plan 104 lane B1, `081785a01` to `59fe02415`); unit-tested; owes row P104-FIRST-RUN-01, not yet recorded on the Deck. Was OPEN, reported 2026-11-11 by the maintainer.**
   The first-start box no longer says "turn on Internet downloads" while the switch reads on. A settings save that fails is reported and sent again, and Install Ollama retries once after a "downloads off" refusal. Owes the row on a staged first start (settings file and Ollama program moved aside, everything put back after). The original report: [Detail](roadmap-details.md#plan-104-sweep-k2-notes-moved-from-the-roadmap-2026-11-16).
+
+## Plan 105 notes moved from the roadmap (2026-11-17)
+
+Moved word for word by sweep K0 of plan 105 to make room in the roadmap. Each block names the entry it stood in; the entry keeps its place and a link here.
+
+**Bugs entry: two documents disagree about a Decky button (the two 2026-10-22 notes, as they stood)**
+
+  **2026-10-22 (plan 97 block A and L17, the monitor, build `73738058`):** Left from the Ask strip's Clear button landed on Voice input 3 of 3 times (`workshop:test-evidence/plan97-A-DECKY-BUTTON.json`). That is both where the button's own handler sends the ring and the control just left of Clear on screen, so the read cannot tell the two apart. The library's source cannot decide it either (the button is Steam's own, found at run time). Stays open.
+  **2026-10-22 (plan 97 block E, build `15565346`):** the decisive read was taken and is undecided again. While an answer streams, Left from Clear landed on Stop generation; idle, on Voice input; both are the 20 px box directly to its left, so the handler's target and Steam's own neighbour are the same control (`workshop:test-evidence/plan97-P97-E-DECKY-BUTTON.json`). Row **P97-E-DECKY-BUTTON** measured, not decided.
+
+**Bugs entry: tab sections (the 2026-10-17 and 2026-11-09 notes, as they stood)**
+
+  **2026-10-17 (plan 94 block 6) and 2026-10-22 (plan 97 L14, `6da3e2d7`):** the Settings case (Down from an open section line stopped moving after a Steam pop-up) is covered by the freeze fix, now Done; row **P97-L14-SECTIONS** passed on the Deck 2026-10-22: Down from an open section line moved the ring 3 of 3 with the page without focus, on the Ollama, Settings (Data) and Developer tabs (`workshop:test-evidence/plan97-P97-L14-SECTIONS-try3.json`, control `-try2.json`). That row never owed parts (b) and (c), so they stay open and untouched. The 2026-10-17 note, word for word: [roadmap-details.md](roadmap-details.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22). The 2026-10-13 note (plan 93): [roadmap-details.md](roadmap-details.md#plan-94-notes-moved-from-the-roadmap-2026-10-17).
+  **Deck 2026-11-09 (plan 103 block D0b, old build, row P103-M-TAB-SECTIONS):** a 20-press walk with three sections open: every stop was visible, no setting changed, and the last four Down presses did not move because the ring was already on the last button. Whether Terse mode takes the ring is **UNCLEAR, not a pass**: the control is not on the Settings tab, so the walk could not reach it (the runbook named a control that is not drawn there) (`workshop:test-evidence/plan103-P103-M-TAB-SECTIONS.json`). Parts (b) and (c) stay open.
+
+**Features entry: AI models screen (the 2026-10-13 and 2026-10-14 notes, as they stood)**
+
+  **2026-10-13 (plan 93):** the maintainer wants the "Deck essentials only" filter rethought as part of this. Side reading from the Deck: with "Deck essentials only" ticked, the licence pick changes nothing (4 rows either way). Evidence `workshop:test-evidence/plan93-P93-M13-GEMMA-FILTER.json`.
+  **2026-10-14 (plan 93):** the maintainer thinks the Gemma model was hidden by another filter, maybe "Deck essentials only", when the Bugs entry about it was closed as not reproduced (the model is offered under "Open source only" in the catalog and in the AI models screen). Evidence `workshop:test-evidence/plan93-M13b-GEMMA-PICKER.json`.
+
+**Features entry: What bonsAI costs a running game (the 2026-10-02 and 2026-10-10 note, as it stood)**
+
+  With Deep Rock Galactic: Survivor on a menu mid-mission (2026-10-02) the game held 43 to 44 frames a second against 45 idle. Not yet tried in a real fight. Evidence `workshop:test-evidence/plan79-SCR-10-MISSION.json`. **2026-10-10 (plan 87 Deck block 5b, build `8608954d`): UNCLEAR.** 59.4 frames a second over 60 s with an answer streaming from this PC's AI for 11 of the 60 s, but the game was most likely paused on its Level Up screen, so it was not a live fight. A live-fight number stays owed. Evidence `workshop:test-evidence/plan87-P87-FIGHT-FRAME-RATE.json`.
+
+**Verify entry: a note offer after a screen-only reload (the 2026-10-22 note, as it stood)**
+
+  **Deck 2026-10-22 (plan 97 block C, build `73738058`): COULD NOT RUN the screen-only reload.** Reloading only the Quick Access page left it blank and only a plugin reload brought the panel back. After a plugin reload (which restarts the back end too) the card did not come back and the handled mark stayed in the browser's storage: that fits the fix but is not the screen-only case. Stays here as **proven by its tests only**, and goes on the maintainer's list. Evidence `workshop:test-evidence/plan97-P93-B6-NOTE-OFFER.json`.
+
+**Verify entry: the sweep for lopsided buttons (the 2026-10-18 notes of plan 96 blocks D and E, as they stood)**
+
+  **Deck 2026-10-18 (plan 96 blocks D and E):** on build `a29f9eb0` the look check found nothing on Settings, Permissions, Search, Developer, Ollama and About, and one thing on Main, the Ask pill (56 in 51) (`workshop:test-evidence/plan96-QA-LOOK2-Settings.json`, and the same name ending `-Permissions`, `-Search`, `-Developer`, `-Ollama`, `-About`, `-Main`). After the check learned that words must really spill (`331d4b56`), block E's Main run (build `f7413dbc`) had no Ask finding; one was left, the new "Open the Ollama tab" button reading light, fixed in `bba825e5` (`workshop:test-evidence/plan96-QA-LOOK3-main.json`). Row P96-F25-ASK-PILL passed.
+
+**Verify entry: the faded ghost of the tab bar (the 2026-10-22 note, as it stood)**
+
+  **Deck 2026-10-22 (plan 97 block E10, build `15565346`, Deep Rock Galactic: Survivor running): row P97-L15-GHOST passed on the pop-up route.** Three "Delete chat?" rounds, Steam's row hidden at every read (0.65 s to 10.2 s after B), no second strip in any screenshot, LB and RB still switched tabs, and no `tabBar.steamRowShown` line in the plugin log or the journal (`workshop:test-evidence/plan97-P97-L15-GHOST.json`). The earlier runs that also never showed it: [roadmap-details.md](archive/roadmap-details-closed.md#plan-97-fourth-sweep-notes-moved-from-the-roadmap-2026-10-22).
+
+**Verify entry: the streamed answer's frame rate (the 2026-10-22 note, as it stood)**
+
+  **2026-10-22 (plan 97 block B, build `73738058`, Deep Rock Galactic: Survivor):** the real fight COULD NOT RUN. One A at the game's title screen opened its save-slot screen (three saved games, each with a delete button), and the runbook stops there; no frame rate was sampled. Row SCR-10 stays owed for a real fight. Evidence `workshop:test-evidence/plan97-SCR-10.json`. The 2026-10-11 note, word for word: [roadmap-details.md](roadmap-details.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22).

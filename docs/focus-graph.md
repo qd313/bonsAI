@@ -420,7 +420,7 @@ question box
    | Down: small ASK (Stop while an answer is being written)
    ^ Up: from mode, mic or Stop, X and ASK; the paperclip keeps its own Up
 [paperclip] (game tag) ........ [mode] [mic or Stop] [X, only with words] [ASK]
-   Left and Right walk the row; Left holds still on the paperclip, Right on the last live stop
+   Left and Right walk the row; Left holds on the paperclip (the third in a row goes to Steam), Right on the last live stop
 ```
 
 Stops, left to right: the paperclip, the mode button, the mic (Stop while an answer is being written), the X
@@ -428,7 +428,8 @@ that empties the box (only while the box has words), the small ASK. The game tag
 
 - **Order and ends.** Right walks paperclip, mode, mic or Stop, X, ASK, and holds still on ASK. Left walks
   back and holds still on the paperclip, as before (past it Steam would hand the ring to its own Quick Access
-  rail, LEFT-HOLDS-STILL-01). While an answer is being written ASK rests, so the walk ends on Stop, or on the
+  rail, LEFT-HOLDS-STILL-01); since plan 105 the third Left in a row there does go to that rail, on purpose
+  (§ "Left out to Steam's menu"). While an answer is being written ASK rests, so the walk ends on Stop, or on the
   X when the box has words: Right there holds still rather than land on a button that does nothing. The
   paperclip rests during an answer too, as it did before this step, so then the walk's left end is the mode
   button.
@@ -1580,3 +1581,43 @@ _Code: `src/features/answer/reply-actions/kbDemoteRows.tsx` (`landOn`), `src/sha
   chain then runs on to the suggestion chips' transfer, past the open details panel: a moving press, not yet the stop a person expects.
   Since plan 103 F1 the details tabs row and the chip grid have their own Steam nodes, so that press lands on the tabs row (§ "The
   Show details chips grid", "Coming in from outside").
+
+### Left out to Steam's menu (plan 105, lane C5)
+
+_Code: `src/shared/dpad/leftEdge.ts` (`leftAtEdge`, `leftEdgePress`, `leftActedInPlace`). The maintainer's call 19, shaped by
+consult 7. Deck readings before: `workshop:test-evidence/plan105-P105-M-LEFT-EDGES.json`. Device row: P105-LEFT-TO-MENU-01, with
+LEFT-HOLDS-STILL-01 again._
+
+```
+a dead end (bonsAI holds Left, nothing moves)
+   Left    -> holds (counted 1)
+   Left    -> holds (counted 2)
+   Left    -> declined: Steam's own Left takes the ring to its side menu; the count starts again
+   Right from the menu: Steam's own, back into bonsAI (the Deck: the same control, 9 times of 10)
+```
+
+- **Where it applies.** Only where bonsAI held Left for ever: the ask strip's paperclip (and the mode button and the question
+  box while an answer is written), an answer's sections, the open reasoning block, the notes block, the Show details line in
+  the chips' place, the "N earlier" line, the day and "Show N more" lines, the game buttons' All, the demote chips, the note
+  card's Keep and For line, the notes line, the title offer's Rename, the Show details chips' first chip, the suggestion chips'
+  first chip, the help chip, the AI's own chip, the Search tab's row starts and find box, the Back line, a slider at its first
+  stop. Where Steam already let Left out at once (section lines, switches, choice rows, the About dropdown, plain buttons,
+  Decky's back arrow) nothing changed. The tab bar keeps wrapping and never counts.
+- **Left out, for now.** "Suggest as a tip", the thumbs, the troubleshooting and microphone hint rows and About's QR still
+  hold Left in the code, yet the Deck let Left out of them on the first press; the next Deck block reads three Lefts there.
+- **A Left that moves never counts**: along a row, the question box onto the paperclip, a slider's step (`leftActedInPlace`).
+  The "N earlier" line about two or more games is the exception: Left flips the list there, so the first and second Left
+  flip (the list ends as it was) and the third goes out; Right still flips.
+- **What starts the count again**: any other button (heard at the panel's document, `vgp_onbuttondown`, capture phase), a
+  finger, the panel hiding or showing, a Left at another place or with the ring on another control, about two seconds with
+  no Left, and the hand-off itself. A button the plugin does not know (stick and pad touches, back buttons) does neither.
+- **Held down, Left never leaves.** Only a fresh press counts: a repeat (Steam's `is_repeat` on the press the page hears)
+  holds without counting, and a press the page heard nothing of holds without counting too. The very first press after the
+  page is new counts, since nothing could listen before it.
+- **The hand-off is a declined press**, the step Steam took before the 2026-09-16 fix. No transfer, no `focus()`, no page
+  search; the `onButtonDown` twins never count (Steam hands them the same press). Steam's step from the mode button or the
+  question box while an answer is written lands on the greyed paperclip, which then passes Left straight on.
+- **Pinned by** `leftEdge.test.ts`, `MainTabUnifiedAskBar.lostFocus.test.tsx`, `MainTabChatTranscript.leftToMenu.test.tsx`
+  (a bounded Up walk, Steam's scroll three ways), `DetailsSlot.deck.test.tsx`, `presetRow.lostFocus.test.tsx`, the folded
+  walks of the Ollama, Settings and Developer tabs, and `SearchTab.walk.test.tsx`; presses go through
+  `src/test-harness/steamLeftPress.ts`.

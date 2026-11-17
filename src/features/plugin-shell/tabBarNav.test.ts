@@ -8,6 +8,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { buildTabBarNavHandlers, neighbourTab, tabBarSides } from "./tabBarNav";
+import { DIR_LEFT, hearPress } from "../../test-harness/steamLeftPress";
 
 /** The tabs in the strip's order, since plan 92: Search first, left of Main. Seven with the Developer tab on, six without. */
 const SEVEN = ["search", "main", "ollama", "settings", "permissions", "developer", "about"] as const;
@@ -62,6 +63,20 @@ describe("buildTabBarNavHandlers", () => {
     const last = make("about");
     expect(last.h.onMoveRight()).toBe(true);
     expect(last.selectTab).toHaveBeenCalledWith("search");
+  });
+
+  /* Plan 105, lane C5 (call 19): the tab bar keeps wrapping; a run of Lefts there is never handed to Steam. */
+  it("keeps wrapping on a run of Lefts: every Left in a row switches tab and claims the press", () => {
+    let current = "main";
+    const visited: string[] = [];
+    for (let i = 0; i < 7; i++) {
+      hearPress(document, DIR_LEFT);
+      const { h, selectTab } = make(current);
+      expect(h.onMoveLeft(), `Left ${i + 1}`).toBe(true);
+      current = selectTab.mock.calls[0]![0] as string;
+      visited.push(current);
+    }
+    expect(visited).toEqual(["search", "about", "developer", "permissions", "settings", "ollama", "main"]);
   });
 
   it("switches on LB and RB itself, because Steam cannot see a bumper pressed outside its Tabs", () => {

@@ -46,6 +46,17 @@ export function readStarterLeftOut(): StarterLeftOut[] {
   }
 }
 
+/** Kept when the first-time setup's OK is pressed; an empty choice removes the note. */
+export function rememberStarterLeftOut(leftOut: readonly StarterLeftOut[]): void {
+  try {
+    const clean = onlyLeftOutPieces([...leftOut]);
+    if (clean.length) window.localStorage.setItem(STARTER_LEFT_OUT_STORAGE_KEY, JSON.stringify(clean));
+    else window.localStorage.removeItem(STARTER_LEFT_OUT_STORAGE_KEY);
+  } catch {
+    /* storage unavailable: a later box lists every piece again before anything downloads */
+  }
+}
+
 const LEFT_OUT_WORDS: Record<StarterLeftOut, { what: string; offer: string }> = {
   note_search: { what: "the note-search model", offer: "The knowledge base offers it when you use it." },
   voice: { what: "the speech models and the voice engine", offer: "Voice input offers them the first time you use it." },

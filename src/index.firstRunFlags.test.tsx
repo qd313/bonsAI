@@ -5,16 +5,19 @@
  * browser storage, so the "already seen" flags (beta notice, where-the-AI-runs popup, help chip, ...)
  * survived and a reinstalled plugin showed no first-run screens. The back end now says when it
  * started with no settings file. These tests mount the whole plugin with the stale flags set and look
- * at what a person sees: the Beta Notice popup and the help chip.
+ * at what a person sees: the first-time setup popup (one popup since plan 105, lane D3, in place of the
+ * Beta Notice box and the old where-the-AI-runs popup) and the help chip. One more presses the popup the
+ * way a person does, with the whole plugin behind it: the Internet downloads switch saves the real
+ * permission, and OK starts the starter set with what was unticked left out.
  *
  * Used for: src/features/plugin-shell/useDisclaimerAndLocalRuntimeGates.tsx, src/index.tsx.
  *
- * Solves: nobody could see the beta notice or the help chip a second time without Clear all data.
+ * Solves: nobody could see the first-run screens or the help chip a second time without Clear all data.
  *
  * Does not: test the back end's answer itself (tests/test_settings_first_run.py) or the notices'
  * wording (the wording tests).
  */
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ReactElement } from "react";
 
@@ -62,7 +65,8 @@ async function mountAndSettle(content: ReactElement) {
   return view;
 }
 
-const betaNotices = () => hoisted.titles.filter((t) => t.includes("Beta Notice"));
+const popups = () => hoisted.boxes.filter((b) => b.props.host);
+const noticeBoxes = () => hoisted.titles.filter((t) => t !== "");
 
 describe("first run after a wipe, with stale flags left in Steam's storage", () => {
   beforeEach(() => {
@@ -73,14 +77,18 @@ describe("first run after a wipe, with stale flags left in Steam's storage", () 
     for (const [key, value] of Object.entries(STALE_FLAGS)) window.localStorage.setItem(key, value);
   });
 
-  it("shows the Beta Notice and brings the help chip back when the back end reports a first run", async () => {
+  it("shows the first-time setup popup, no other box, and brings the help chip back when the back end reports a first run", async () => {
     setRpcHandler("get_settings_first_run", () => ({ first_run: true }));
     await mountAndSettle(await freshContent());
 
-    expect(betaNotices()).toHaveLength(1);
+    expect(popups()).toHaveLength(1);
+    expect(noticeBoxes()).toHaveLength(0);
     expect(screen.queryByLabelText(HELP_CHIP)).not.toBeNull();
+    // The stale flags went; the popup marked its own two as it opened.
     for (const key of Object.keys(STALE_FLAGS)) {
-      expect(window.localStorage.getItem(key), key).toBeNull();
+      const now = window.localStorage.getItem(key);
+      if (key === "bonsai:disclaimer-accepted" || key === "bonsai:first-run-where-ai-runs-seen-v1") expect(now, key).toBe("1");
+      else expect(now, key).toBeNull();
     }
   });
 
@@ -88,7 +96,7 @@ describe("first run after a wipe, with stale flags left in Steam's storage", () 
     setRpcHandler("get_settings_first_run", () => ({ first_run: false }));
     await mountAndSettle(await freshContent());
 
-    expect(betaNotices()).toHaveLength(0);
+    expect(popups()).toHaveLength(0);
     expect(screen.queryByLabelText(HELP_CHIP)).toBeNull();
     for (const [key, value] of Object.entries(STALE_FLAGS)) {
       expect(window.localStorage.getItem(key), key).toBe(value);
@@ -101,60 +109,53 @@ describe("first run after a wipe, with stale flags left in Steam's storage", () 
     });
     await mountAndSettle(await freshContent());
 
-    expect(betaNotices()).toHaveLength(0);
+    expect(popups()).toHaveLength(0);
     expect(window.localStorage.getItem("bonsai:disclaimer-accepted")).toBe("1");
   });
 
-  it("clears once: a panel rebuilt after the popup closes keeps what the person just clicked", async () => {
+  it("clears once: a panel rebuilt after the popup closes does not show it again", async () => {
     // The real back end says "first run" once per start; Decky rebuilds the panel around every popup.
     let asked = 0;
     setRpcHandler("get_settings_first_run", () => ({ first_run: asked++ === 0 }));
     const content = await freshContent();
     const first = await mountAndSettle(content);
-    expect(betaNotices()).toHaveLength(1);
+    expect(popups()).toHaveLength(1);
 
-    window.localStorage.setItem("bonsai:disclaimer-accepted", "1");
     first.unmount();
     await mountAndSettle(content);
 
-    expect(betaNotices()).toHaveLength(1);
-    expect(window.localStorage.getItem("bonsai:disclaimer-accepted")).toBe("1");
-  });
-
-  it("after the Beta Notice is accepted, asks where the AI should run, once, with the help chip on screen", async () => {
-    setRpcHandler("get_settings_first_run", () => ({ first_run: true }));
-    await mountAndSettle(await freshContent());
-    const popups = () => hoisted.boxes.filter((b) => b.props.host);
-    const beta = hoisted.boxes.find((b) => String(b.props.strTitle ?? "").includes("Beta Notice"));
-    expect(beta).toBeTruthy();
-    // Not before the Beta Notice is accepted.
-    expect(popups()).toHaveLength(0);
-
-    await act(async () => {
-      (beta!.props.onOK as () => void)();
-    });
-    await waitFor(() => expect(popups()).toHaveLength(1));
-    expect(screen.queryByLabelText(HELP_CHIP)).not.toBeNull();
-    expect(window.localStorage.getItem("bonsai:first-run-where-ai-runs-seen-v1")).toBe("1");
-    // Neither the old notice nor a second popup follows.
-    expect(hoisted.titles.some((t) => t.includes("Local runtime"))).toBe(false);
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 60));
-    });
     expect(popups()).toHaveLength(1);
+    expect(window.localStorage.getItem("bonsai:first-run-where-ai-runs-seen-v1")).toBe("1");
   });
 
-  it("a switch changed in the popup reaches the back end before the popup closes", async () => {
+  it("the popup's switch saves the real permission, and OK starts the starter set with the unticked piece left out", async () => {
     setRpcHandler("get_settings_first_run", () => ({ first_run: true }));
     await mountAndSettle(await freshContent());
-    const beta = hoisted.boxes.find((b) => String(b.props.strTitle ?? "").includes("Beta Notice"));
-    await act(async () => {
-      (beta!.props.onOK as () => void)();
-    });
-    await waitFor(() => expect(hoisted.boxes.some((b) => b.props.host)).toBe(true));
-    const host = hoisted.boxes.find((b) => b.props.host)!.props.host as {
-      saveSettingsNow: (patch: Record<string, unknown>) => void;
-    };
+    const popup = render(popups()[0] as unknown as ReactElement);
+    const ok = () => popup.getByLabelText("OK, install on this Deck");
+
+    // Grey OK while downloads are off: nothing starts.
+    fireEvent.click(ok());
+    await act(async () => void (await new Promise((r) => setTimeout(r, 0))));
+    expect(getRpcCallLog().some((c) => c.method === "start_local_ollama_setup")).toBe(false);
+
+    fireEvent.click(popup.getByRole("switch", { name: "Note-search model nomic-embed-text" }));
+    await act(async () => void fireEvent.click(popup.getByRole("switch", { name: "Internet downloads" })));
+    await waitFor(() => expect(popup.getByRole("switch", { name: "Internet downloads" }).getAttribute("aria-checked")).toBe("true"));
+    const saved = getRpcCallLog().filter((c) => c.method === "save_settings").map((c) => c.args[0] as { capabilities?: Record<string, unknown> });
+    expect(saved.some((p) => p.capabilities?.internet_downloads === true)).toBe(true);
+
+    await act(async () => void fireEvent.click(ok()));
+    await waitFor(() => expect(getRpcCallLog().some((c) => c.method === "start_local_ollama_setup")).toBe(true));
+    const starts = getRpcCallLog().filter((c) => c.method === "start_local_ollama_setup").map((c) => c.args[0]);
+    expect(starts).toEqual([{ profile: "tier1_essentials", leave_out: ["note_search"] }]);
+    expect(popups()[0]).toBeTruthy();
+  });
+
+  it("a setting the popup's PC screen changes reaches the back end before the popup closes", async () => {
+    setRpcHandler("get_settings_first_run", () => ({ first_run: true }));
+    await mountAndSettle(await freshContent());
+    const host = popups()[0].props.host as { saveSettingsNow: (patch: Record<string, unknown>) => void };
     await act(async () => {
       host.saveSettingsNow({ ollama_local_on_deck: false });
     });

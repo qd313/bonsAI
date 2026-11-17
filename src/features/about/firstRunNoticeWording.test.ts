@@ -1,7 +1,7 @@
 /**
  * Guards the words a new player reads in their first minutes against claims that stopped being true.
  * bonsAI stopped changing the power limit on 2026-07-30 and the "Adjust power limits" switch went with it,
- * and the where-the-AI-runs popup must name the real tab and switch.
+ * and the first-time setup popup must not bring back the old boxes' claims.
  */
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
@@ -24,13 +24,13 @@ describe("first-run notice wording", () => {
     expect(gates).not.toMatch(/Adjust power limits/i);
   });
 
-  it("the where-the-AI-runs popup names the Ollama tab and the real switch", () => {
+  it("the first-time setup popup names no old place, and no old notice box is left", () => {
     expect(popup).not.toMatch(/Under Connection/);
     expect(popup).not.toMatch(/Ollama on Deck in Settings/);
-    // Plan 96 N1 replaced the Local runtime notice: the popup says where to change it later, and names the switch.
-    expect(popup).toMatch(/You can change this later on the Ollama tab/);
-    expect(popup).toMatch(/Run AI on this Deck/);
+    // Plan 105 D3: one popup; the Beta Notice and the Local runtime notice boxes are gone.
     expect(gates).not.toMatch(/strTitle="bonsAI - Local runtime/);
+    expect(gates).not.toMatch(/strTitle="bonsAI - Beta Notice/);
+    expect(gates).not.toMatch(/ConfirmModal/);
   });
 
   it("no first-run notice names the old starter model or its old size", () => {

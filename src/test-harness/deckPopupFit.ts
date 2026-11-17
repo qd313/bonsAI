@@ -47,6 +47,9 @@ const DECK_POPUP = {
 export const DECK_POPUP_ROOM =
   DECK_POPUP.visibleBottom - DECK_POPUP.visibleTop - DECK_POPUP.layerPadTop - DECK_POPUP.layerPadBottom;
 
+/** The box's own frame above and below what it draws (26 each), for a test that adds up its own parts. */
+export const DECK_POPUP_FRAME_PX = DECK_POPUP.framePad;
+
 /** A span on the screen, top and bottom, in points. */
 export type Span = [top: number, bottom: number];
 

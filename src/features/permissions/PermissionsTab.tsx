@@ -56,6 +56,12 @@ type Props = {
   kidsLockActive?: boolean;
 };
 
+/** The Internet downloads row's words; the first-time setup's switch (FirstRunDownloadsSwitch.tsx) shows the same. */
+export const INTERNET_DOWNLOADS_PERMISSION_WORDS = {
+  title: "Internet downloads",
+  description: "Lets bonsAI download Ollama, models and the knowledge library. Off: nothing downloads.",
+} as const;
+
 const ROWS: {
   key: keyof BonsaiCapabilities;
   focusId: PermissionFocusTargetId;
@@ -77,8 +83,7 @@ const ROWS: {
   {
     key: "internet_downloads",
     focusId: "internet_downloads",
-    title: "Internet downloads",
-    description: "Lets bonsAI download Ollama, models and the knowledge library. Off: nothing downloads.",
+    ...INTERNET_DOWNLOADS_PERMISSION_WORDS,
   },
 ];
 

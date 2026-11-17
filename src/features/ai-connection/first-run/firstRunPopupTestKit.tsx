@@ -3,11 +3,13 @@
  *
  * Purpose: What the popup's tests share: @decky/ui with Steam's ring modelled (the Focusable and text field
  * stand-ins of the Search tab's tests), a switch that can be pressed and tells its words, a ModalRoot that
- * keeps its B handler on the element, and a showModal that records the boxes opened over the popup (the
- * download notice). Plus the helpers that press the D-pad on whichever stop has the ring, climbing to the
- * Focusable that owns the handler the way Steam's move events do, and read which stop that is by its words.
+ * keeps its B handler on the element, and a showModal that records the boxes opened over the popup (Find
+ * LAN's box). Plus the helpers that press the D-pad and A on whichever stop has the ring, climbing to the
+ * Focusable that owns the handler the way Steam's move and button events do, read which stop that is by its
+ * words. (The Internet downloads permission the plugin root hands over is firstRunTestBridge.ts: it imports
+ * @decky/ui's users, which this file, loaded by the @decky/ui stand-in itself, must not.)
  *
- * Used for: FirstRunWhereAiRunsModal.test.tsx and FirstRunWhereAiRunsModal.walk.test.tsx.
+ * Used for: FirstRunWhereAiRunsModal.test.tsx, .walk.test.tsx, .saveFails.test.tsx and .fit.test.tsx.
  *
  * Solves: One copy of the stand-ins, so the behaviour test and the walk test read the same popup.
  *
@@ -76,7 +78,7 @@ export function pressB(root: HTMLElement): void {
   (root.querySelector('[data-decky-ui="ModalRoot"]') as unknown as { __cancel?: () => void } | null)?.__cancel?.();
 }
 
-type Move = "onMoveUp" | "onMoveDown" | "onMoveLeft" | "onMoveRight";
+type Move = "onMoveUp" | "onMoveDown" | "onMoveLeft" | "onMoveRight" | "onOKButton";
 
 /**
  * A move press on the stop that has the ring, the way Steam calls it: the handler of the nearest Focusable
@@ -117,3 +119,4 @@ export function popupHost(over: Partial<FirstRunWhereAiRunsHost> = {}): FirstRun
     ...over,
   };
 }
+

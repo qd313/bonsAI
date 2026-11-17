@@ -1,8 +1,9 @@
 /**
  * Title: What the first-run gate's tests share
  *
- * Purpose: A stand-in for @decky/ui whose showModal records every box the gate opens (the Beta Notice, a
- * Steam confirm box, the where-the-AI-runs popup) instead of drawing it, and the host the screen hands the gate.
+ * Purpose: A stand-in for @decky/ui whose showModal records every box the gate opens (the first-time setup popup,
+ * and any Steam confirm box, which a test expects never to see now) instead of drawing it, and the host the screen
+ * hands the gate.
  *
  * Used for: the useDisclaimerAndLocalRuntimeGates tests.
  *
@@ -32,8 +33,6 @@ export const resetShown = () => {
   shown.length = 0;
 };
 export const popups = () => shown.filter((s) => s.host);
-export const betaNotices = () => shown.filter((s) => s.title.includes("Beta Notice"));
-export const runtimeNotices = () => shown.filter((s) => s.title.includes("Local runtime"));
 
 export function deckyUiRecordingModals(): Record<string, unknown> {
   return {

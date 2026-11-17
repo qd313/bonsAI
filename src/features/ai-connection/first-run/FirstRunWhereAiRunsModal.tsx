@@ -1,38 +1,37 @@
 /**
- * Title: The first-run popup "Where should the AI run?"
+ * Title: The first-time setup popup: one first screen with a checklist, the Internet downloads switch, then OK
  *
- * Purpose: Right after a new player closes the Beta Notice, this popup asks where the AI should run: on
- * this Deck (the switch starts on) or on a PC on the home network. It is the Ollama tab's "Where the AI
- * runs" section drawn as a popup. With the switch on it offers the Start-with-the-Deck switch, the real
- * state of the local Ollama setup and Install Ollama (the same notice-then-run flow as the tab, shown
- * right here); with it off it offers the PC address with Find LAN beside it, and Test connection. The foot is
- * the action on the left (in Steam's blue primary button, the look of the Beta Notice's "Got it") and "Not now"
- * on the right; "Not now" holds the ring when the popup opens, and it, and B, close the popup and leave
- * everything as it is (the maintainer's rule of 2026-10-18: Cancel on the right in every box).
+ * Purpose: The one box a new player sees the first time bonsAI opens (plan 105, lane D3; board 5, tab 4, round 4 B,
+ * as picked on 2026-11-16). Top to bottom: "Welcome to bonsAI. Where should the AI run?"; the checklist of the five
+ * downloads with their sizes and sites and tick boxes (firstRunChecklist.tsx; Ollama and the answer model locked
+ * on); the real Internet downloads switch in the Permissions tab's words, saved the moment it is switched
+ * (FirstRunDownloadsSwitch.tsx); one row of three buttons, "OK, install on this Deck", "Use the AI on my PC" and
+ * "Not now"; and one short beta line. OK is grey until the switch is on, and a press on grey OK moves the ring to
+ * the switch and does nothing else. OK starts every ticked download (the starter set, with what was unticked left
+ * out) and closes the box. "Use the AI on my PC" opens the second screen (FirstRunPcScreen.tsx). "Not now", and B,
+ * close the box and change nothing: nothing downloads, and the switch stays as the person left it.
  *
- * Used for: useDisclaimerAndLocalRuntimeGates.tsx, which opens it once after the Beta Notice.
+ * Used for: useDisclaimerAndLocalRuntimeGates.tsx, which opens it once on a first open (it replaced the Beta Notice
+ * box and the old "Where should the AI run?" popup, whose PC half is the second screen now).
  *
- * Solves: A new player was never asked where the AI runs: the plugin silently assumed this Deck, showed a
- * one-line warning and left the Ollama tab to be found. The warning (the game slows while the AI answers)
- * is now the help line under the first switch.
+ * Solves: First-time setup took six presses and three boxes (the Beta Notice, the popup, the download box), and
+ * pressing Install while the popup still said "Checking…" started a setup with no AI model. There is no check on
+ * this screen any more: OK always starts the starter set, which skips whatever is already on the Deck.
  *
- * Does not: Own the settings. Each change is applied to the plugin's screen, saved to the back end at once
- * (closing a Decky box rebuilds the screen and throws away a save still waiting on its timer) and carried
- * through that rebuild in the session note; see the host the gate hands in. Does not download anything by
- * itself: Install Ollama opens the download notice first. The tab keeps the same section for later; the
- * setup flow, the startup entry and Find LAN here are the tab's own hooks (useLocalOllamaSetupFlow,
- * useOllamaLocalAutostart, useMdnsOllamaDiscovery), the connection test the shared plain function.
+ * Does not: Own the settings. The switch saves through the download notice's permission save (plan 104's path:
+ * a failed save puts it back with a message); the PC screen's changes are applied to the plugin's screen, saved to
+ * the back end at once and carried through the rebuild in the session note (see the host the gate hands in). Does
+ * not draw the run's progress: that is the Main tab's job once the box closes.
  *
- * Focus: one column of stops (useFirstRunPopupNav.ts), every one answering all four directions; the foot
- * row is [Install Ollama | Update AI & models | Test connection] [Not now]. See docs/focus-graph.md,
- * "The first-run popup (plan 96 N1)".
+ * Focus: one column of stops per screen (useFirstRunPopupNav.ts), every stop answering all four directions, the
+ * ring starting on the safe button (Not now; Back on the PC screen), Down from the switch landing on OK once it can
+ * be pressed and on Not now before. See docs/focus-graph.md, "The first-time setup popup (plan 105 D3)".
  */
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ModalRoot, TextField } from "@decky/ui";
+import React, { useEffect, useRef, useState } from "react";
+import { ModalRoot } from "@decky/ui";
 
 import { BonsaiModalScope } from "../../../shared/BonsaiModalScope";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../../shared/deckyCall";
-import { registerModalReturnFocusOwner } from "../../../shared/dpad/modalReturnFocusRegistry";
 import { textPx } from "../../../styles/textPx";
 import type { BonsaiSettings, BonsaiSettingsSnapshotInput } from "../../settings/bonsaiSettingsSchema";
 import {
@@ -40,44 +39,41 @@ import {
   patchPendingSessionSettingsSnapshot,
   peekBonsaiSessionPendingRestore,
 } from "../../plugin-shell/bonsaiSessionSurvival";
-import type { SearchStopProps } from "../../search-tab/useSearchNav";
-import { isHttpsOllamaAddress, OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE } from "../ollamaAddress";
-import { LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED } from "../OllamaWhereAiRunsSection.constants";
-import type { ConnectionStatus, LocalOllamaSetupStatus, MdnsOllamaHost } from "../OllamaWhereAiRunsSection.types";
-import { OLLAMA_ROW_HELP } from "../ollamaTabFolds";
-import { OllamaSetupStatusLine } from "../OllamaSetupStatusLine";
-import { useLocalOllamaSetupFlow } from "../useLocalOllamaSetupFlow";
+import { internetDownloadsSwitchState, setInternetDownloadsFromSwitch } from "../../downloads/downloadNotice";
+import { startLocalOllamaSetup } from "../../models/localOllamaStarterSet";
+import { rememberStarterLeftOut, type StarterLeftOut } from "../../models/starterSetLeftOut";
+import { LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS } from "../OllamaWhereAiRunsSection.constants";
+import type { ConnectionStatus, MdnsOllamaHost } from "../OllamaWhereAiRunsSection.types";
 import { useMdnsOllamaDiscovery } from "../useMdnsOllamaDiscovery";
-import { useOllamaLocalAutostart } from "../useOllamaLocalAutostart";
-import { FIRST_RUN_HELP_STYLE, PopupButton, PopupSwitch } from "./FirstRunPopupParts";
+import { FIRST_RUN_BOX } from "./firstRunBoxLayout";
+import { FirstRunChecklist, leftOutFromTicks, type ChecklistTicks } from "./firstRunChecklist";
+import { FirstRunDownloadsSwitch } from "./FirstRunDownloadsSwitch";
+import { FirstRunPcScreen } from "./FirstRunPcScreen";
+import { PopupButton } from "./FirstRunPopupParts";
 import { probeOllama, probeTarget } from "./ollamaConnectionProbe";
-import { FOOT_ACTION, FOOT_NOT_NOW, useFirstRunPopupNav } from "./useFirstRunPopupNav";
+import {
+  FIRST_SCREEN_ROWS,
+  FOOT_NOT_NOW,
+  FOOT_OK,
+  FOOT_PC,
+  PC_FOOT_BACK,
+  PC_SCREEN_ROWS,
+  useFirstRunPopupNav,
+} from "./useFirstRunPopupNav";
 
-/** Every word the popup says, in one place, so the wording test and the screen read the same. */
+/** Every word of the first screen that is not in the checklist or the switch, in one place for the tests. */
 export const FIRST_RUN_POPUP_WORDS = {
-  title: "Where should the AI run?",
-  lead:
-    "bonsAI needs Ollama, a free program that runs the AI. It can run on this Deck or on a PC on your home network. " +
-    "You can change this later on the Ollama tab.",
-  runOnDeck: "Run AI on this Deck",
-  runOnDeckHelp:
-    "Works anywhere, no PC needed. The AI and your game share the Deck's chip, so both slow down while it answers.",
-  autostart: "Start the AI with the Deck",
-  autostartHelp: "Starts it each time the Deck turns on, so the first answer comes sooner.",
-  installNote:
-    "Install Ollama downloads it and the starter models, about 6.9 GB. You are asked before anything downloads.",
-  pcAddress: "PC address",
-  pcNeeds: "The PC needs Ollama with a model, and must accept connections from your network.",
+  title: "Welcome to bonsAI. Where should the AI run?",
+  ok: "OK, install on this Deck",
+  pc: "Use the AI on my PC",
   notNow: "Not now",
-  close: "Close",
-  install: "Install Ollama",
-  update: "Update AI & models",
-  test: "Test connection",
+  beta: "Beta: the AI can be wrong, and heavy AI can crash a game. Use at your own risk. Not now changes nothing.",
 } as const;
 
 /** What the gate hands the popup: the settings as they are now, and how to change and save them. */
 export type FirstRunWhereAiRunsHost = {
   ollamaLocalOnDeck: boolean;
+  /** Kept for the gate's host; the first screen no longer shows the Start-with-the-Deck switch (the Ollama tab does). */
   ollamaLocalAutostart: boolean;
   ollamaIp: string;
   /** The plugin screen's own setters, so the screen agrees with the popup if it is still mounted. */
@@ -86,15 +82,15 @@ export type FirstRunWhereAiRunsHost = {
   setOllamaIp: (ip: string) => void;
   /** Writes the address to the device's storage (the tab does this only after a test that connected). */
   persistOllamaIp: (ip: string) => void;
-  /** Saves a patch to the back end right now, before the popup can close and rebuild the screen. */
-  saveSettingsNow: (patch: Partial<BonsaiSettings>) => void;
+  /** Saves a patch to the back end right now, before the popup can close and rebuild the screen; settles when tried. */
+  saveSettingsNow: (patch: Partial<BonsaiSettings>) => void | Promise<void>;
   onBeforeDeckyModal: () => void;
   onCompleteDeckyModalClose: (close: () => void) => void;
 };
 
 export type FirstRunWhereAiRunsModalProps = {
   host: FirstRunWhereAiRunsHost;
-  /** Not now, B, and the Close that takes its place once a setup has run: closes the popup. */
+  /** Not now, B on the first screen, OK after it starts the setup, and Ask your first question: close the popup. */
   onClose: () => void;
 };
 
@@ -104,61 +100,54 @@ function rememberAddressThroughRebuild(ip: string): void {
   if (pending) captureBonsaiSessionForModal({ ...pending, ollamaIp: ip });
 }
 
-const noop = () => {};
+/** The ring onto a screen's safe button, two frames after it is drawn (Steam finishes its own first focus pass first). */
+function useRingOnOpen(land: () => void, key: string): void {
+  const landRef = useRef(land);
+  landRef.current = land;
+  useEffect(() => {
+    let inner = 0;
+    const outer = requestAnimationFrame(() => {
+      inner = requestAnimationFrame(() => landRef.current());
+    });
+    return () => {
+      cancelAnimationFrame(outer);
+      if (inner) cancelAnimationFrame(inner);
+    };
+  }, [key]);
+}
+
+const TITLE_STYLE = { fontSize: textPx(FIRST_RUN_BOX.titlePx), fontWeight: 700, color: "#ffffff", lineHeight: FIRST_RUN_BOX.titleLineHeight };
+const BETA_STYLE = { fontSize: textPx(FIRST_RUN_BOX.betaPx), lineHeight: FIRST_RUN_BOX.betaLineHeight, color: "#8fa0b4", userSelect: "none" as const };
 
 /**
- * The popup. In: the settings as they are now with the ways to change and save them (the host), and the
- * one close. Out: the box. What can go wrong: a failed save or test is shown or logged, never left as a
- * button that stays busy; a download refused for any reason shows on the setup line.
+ * The popup. In: the settings as they are now with the ways to change and save them (the host), and the one close.
+ * Out: the box. What can go wrong: a failed switch save puts the switch back with a message and OK stays grey; a
+ * refused setup start shows its message; a failed test shows on its line.
  */
 export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsModalProps): React.ReactElement {
+  const [screen, setScreen] = useState<"first" | "pc">("first");
+  const [ticks, setTicks] = useState<ChecklistTicks>({ note_search: true, voice: true });
+  const [initialSwitch] = useState(internetDownloadsSwitchState);
+  /** What the switch shows (at once on a press), and what has been saved (OK and Down follow this one). */
+  const [shownOn, setShownOn] = useState(initialSwitch.on);
+  const [savedOn, setSavedOn] = useState(initialSwitch.on);
+  const [switchBusy, setSwitchBusy] = useState(false);
+  const [starting, setStarting] = useState(false);
   const [onDeck, setOnDeck] = useState(host.ollamaLocalOnDeck);
-  const [autostart, setAutostart] = useState(host.ollamaLocalAutostart);
   const [ip, setIp] = useState(host.ollamaIp);
   const [connection, setConnection] = useState<ConnectionStatus | null>(null);
   const [testing, setTesting] = useState(false);
   const [deckIp, setDeckIp] = useState("...");
-  const [setupStatus, setSetupStatus] = useState<LocalOllamaSetupStatus | null>(null);
-  const [autostartBusy, setAutostartBusy] = useState(false);
   const [mdnsDiscovering, setMdnsDiscovering] = useState(false);
   const [mdnsHosts, setMdnsHosts] = useState<MdnsOllamaHost[]>([]);
   const [mdnsMessage, setMdnsMessage] = useState<string | null>(null);
-  const findLanShown = !onDeck;
-  const setupBusy = setupStatus?.phase === "running";
-  const nav = useFirstRunPopupNav();
   const probeSeq = useRef(0);
-  const setupAutoTestRanRef = useRef(false);
-  const onTestRef = useRef<(opts?: { quiet?: boolean }) => Promise<void>>(async () => {});
-  // After the download box over the popup closes, the ring comes back to the action button through the
-  // popup's own Steam transfer, not a plain focus (the advisor's one note before landing, plan 96 N1).
-  const setReturnOwner = useCallback(
-    (el: HTMLElement | null) => registerModalReturnFocusOwner("ollama-local-setup", el, () => nav.focusStop("foot", FOOT_ACTION)),
-    [nav],
-  );
+  const savedOnRef = useRef(savedOn);
+  savedOnRef.current = savedOn;
 
-  /** The test, for whichever place the AI is set to run. A newer test's answer is the only one kept. */
-  const runTest = async (opts?: { quiet?: boolean }) => {
-    const target = probeTarget(onDeck, ip);
-    if (!target) return;
-    const seq = ++probeSeq.current;
-    if (!opts?.quiet) {
-      setTesting(true);
-      setConnection(null);
-    }
-    const result = await probeOllama(target);
-    if (!opts?.quiet) setTesting(false);
-    if (seq !== probeSeq.current || !result) return;
-    setConnection(result);
-    // As on the tab: an address that answered is the one to remember; the Deck's own never replaces it.
-    if (result.reachable && !onDeck) host.persistOllamaIp(target);
-  };
-  onTestRef.current = runTest;
-
-  // With the AI on this Deck, look once (and again when the switch comes back on) so the setup line is true.
-  useEffect(() => {
-    if (!onDeck) return;
-    void onTestRef.current({ quiet: true });
-  }, [onDeck]);
+  const firstNav = useFirstRunPopupNav(FIRST_SCREEN_ROWS, (_from, to) => (to === "foot" ? (savedOnRef.current ? FOOT_OK : FOOT_NOT_NOW) : null));
+  const pcNav = useFirstRunPopupNav(PC_SCREEN_ROWS, (_from, to) => (to === "foot" ? PC_FOOT_BACK : to === "address" ? 0 : null));
+  useRingOnOpen(() => (screen === "pc" ? pcNav.focusStop("foot", PC_FOOT_BACK) : firstNav.focusStop("foot", FOOT_NOT_NOW)), screen);
 
   useEffect(() => {
     callDeckyWithTimeout<[], string>("get_deck_ip", [], DECKY_RPC_TIMEOUT_MS)
@@ -167,26 +156,60 @@ export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsM
   }, []);
 
   const commit = (patch: Partial<BonsaiSettings>, snapshot: Partial<BonsaiSettingsSnapshotInput>) => {
-    host.saveSettingsNow(patch);
     patchPendingSessionSettingsSnapshot(snapshot);
+    return host.saveSettingsNow(patch);
   };
-
-  const changeOnDeck = (next: boolean) => {
+  const setAiOnDeck = (next: boolean) => {
     setOnDeck(next);
-    setConnection(null);
     host.setOllamaLocalOnDeck(next);
-    commit({ ollama_local_on_deck: next }, { ollamaLocalOnDeck: next });
+    return commit({ ollama_local_on_deck: next }, { ollamaLocalOnDeck: next });
   };
 
-  const { handleToggleAutostart } = useOllamaLocalAutostart({
-    setAutostartStatus: noop,
-    setAutostartBusy,
-    setOllamaLocalAutostart: (next) => {
-      setAutostart(next);
-      host.setOllamaLocalAutostart(next);
-      commit({ ollama_local_autostart: next }, { ollamaLocalAutostart: next });
-    },
-  });
+  /* ---- the first screen ---- */
+  const toggleTick = (tick: StarterLeftOut) => setTicks((prev) => ({ ...prev, [tick]: !prev[tick] }));
+
+  const pressSwitch = () => {
+    if (switchBusy) return;
+    const want = !shownOn;
+    if (!initialSwitch.kidsLock) setShownOn(want);
+    setSwitchBusy(true);
+    void setInternetDownloadsFromSwitch(want).then((now) => {
+      setShownOn(now);
+      setSavedOn(now);
+      setSwitchBusy(false);
+    });
+  };
+
+  const pressOk = () => {
+    if (starting) return;
+    setStarting(true);
+    void (async () => {
+      const leaveOut = leftOutFromTicks(ticks);
+      rememberStarterLeftOut(leaveOut);
+      // The back end checks its own file before it starts: the AI on this Deck must be on disk first.
+      if (!onDeck) await setAiOnDeck(true);
+      startLocalOllamaSetup(LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS, undefined, undefined, leaveOut);
+      onClose();
+    })();
+  };
+
+  /* ---- the PC screen ---- */
+  const runTest = async () => {
+    const target = probeTarget(false, ip);
+    if (!target) return;
+    const seq = ++probeSeq.current;
+    setTesting(true);
+    setConnection(null);
+    const result = await probeOllama(target);
+    setTesting(false);
+    if (seq !== probeSeq.current || !result) return;
+    setConnection(result);
+    // As on the tab: an address that answered is the one to remember, and the AI now runs on that PC.
+    if (result.reachable) {
+      host.persistOllamaIp(target);
+      void setAiOnDeck(false);
+    }
+  };
 
   const changeIp = (next: string) => {
     setIp(next);
@@ -199,8 +222,8 @@ export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsM
     setMdnsDiscovering,
     setMdnsHosts,
     setMdnsDiscoveryMessage: setMdnsMessage,
-    ollamaLocalOnDeck: onDeck,
-    localSetupBusy: setupBusy,
+    ollamaLocalOnDeck: false,
+    localSetupBusy: false,
     onBeforeDeckyModal: host.onBeforeDeckyModal,
     onCompleteDeckyModalClose: host.onCompleteDeckyModalClose,
   });
@@ -211,198 +234,60 @@ export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsM
     // eslint-disable-next-line react-hooks/exhaustive-deps -- reacts to a new result only
   }, [mdnsHosts]);
 
-  const { formatLocalSetupStageLine, runLocalSetupInPlace } = useLocalOllamaSetupFlow({
-    ollamaLocalOnDeck: onDeck,
-    localSetupStatus: setupStatus,
-    setLocalSetupStatus: setSetupStatus,
-    localSetupBusy: setupBusy,
-    setupAutoTestRanRef,
-    onBeforeDeckyModal: host.onBeforeDeckyModal,
-    onCompleteDeckyModalClose: host.onCompleteDeckyModalClose,
-    onTestConnectionRef: onTestRef,
-  });
-
-  // The ring starts on Not now. Two frames: the popup mounts, then Steam finishes its own first focus pass.
-  useEffect(() => {
-    let inner = 0;
-    const outer = requestAnimationFrame(() => {
-      inner = requestAnimationFrame(() => nav.focusStop("foot", FOOT_NOT_NOW));
-    });
-    return () => {
-      cancelAnimationFrame(outer);
-      if (inner) cancelAnimationFrame(inner);
-    };
-    // Mount only: running again would pull the ring back from wherever the person moved it.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const ready = Boolean(connection?.reachable);
-  const modelCount = connection?.models?.length ?? 0;
-  const setupRan = setupStatus != null && setupStatus.phase !== "idle";
-  const setupWord = setupBusy
-    ? formatLocalSetupStageLine(setupStatus)
-    : ready
-      ? `Installed${modelCount > 0 ? ` (${modelCount} model${modelCount === 1 ? "" : "s"})` : ""}`
-      : connection === null
-        ? "Checking…"
-        : "Not installed";
-  const pressPrimary = () => {
-    if (!onDeck) {
-      void runTest();
-      return;
-    }
-    // Known to be empty (the engine is not up, or is up with no models): the box asks about the starter models.
-    const noModels = connection != null && !modelCount;
-    runLocalSetupInPlace(LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED, "ollama-local-setup", { offerStarterModels: noModels });
-  };
-  const primaryLabel = onDeck
-    ? setupBusy
-      ? ready
-        ? "Updating…"
-        : "Installing…"
-      : ready
-        ? FIRST_RUN_POPUP_WORDS.update
-        : FIRST_RUN_POPUP_WORDS.install
-    : testing
-      ? "Testing…"
-      : FIRST_RUN_POPUP_WORDS.test;
+  const back = () => setScreen("first");
 
   return (
-    <ModalRoot onCancel={onClose}>
+    <ModalRoot onCancel={screen === "pc" ? back : onClose}>
       <BonsaiModalScope>
-        <div
-          className="bonsai-prose"
-          data-bonsai-first-run-popup=""
-          style={{ display: "flex", flexDirection: "column", gap: 8, textAlign: "left", fontSize: textPx(12), lineHeight: 1.4, color: "#cdd9e6" }}
-        >
-          <div style={{ fontSize: textPx(16), fontWeight: 700, color: "#ffffff" }}>{FIRST_RUN_POPUP_WORDS.title}</div>
-          <div>{FIRST_RUN_POPUP_WORDS.lead}</div>
-          <PopupSwitch
-            stop={nav.stop("run", 0)}
-            label={FIRST_RUN_POPUP_WORDS.runOnDeck}
-            help={FIRST_RUN_POPUP_WORDS.runOnDeckHelp}
-            checked={onDeck}
-            onChange={changeOnDeck}
-          />
-          {onDeck ? (
-            <>
-              <PopupSwitch
-                stop={nav.stop("start", 0)}
-                label={FIRST_RUN_POPUP_WORDS.autostart}
-                help={FIRST_RUN_POPUP_WORDS.autostartHelp}
-                checked={autostart}
-                disabled={autostartBusy}
-                onChange={handleToggleAutostart}
-              />
-              <div style={{ fontSize: textPx(11), fontWeight: 600, color: "#b8c6d6" }} aria-live="polite">
-                Local Ollama setup: <span style={{ fontWeight: 400, color: "#9fb7d5" }}>{setupWord}</span>
-              </div>
-              {setupRan ? (
-                <OllamaSetupStatusLine status={setupStatus} stageLine={formatLocalSetupStageLine(setupStatus)} busy={setupBusy} />
-              ) : null}
-              <div style={FIRST_RUN_HELP_STYLE}>{FIRST_RUN_POPUP_WORDS.installNote}</div>
-            </>
-          ) : (
-            <>
-              <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", gap: 8 }}>
-                <div style={{ flex: "1 1 auto", minWidth: 0 }}>
-                  <div style={{ fontVariant: "small-caps", letterSpacing: "0.06em", fontSize: textPx(11), fontWeight: 600, color: "#b8c6d6", marginBottom: 2 }}>
-                    {FIRST_RUN_POPUP_WORDS.pcAddress}
-                  </div>
-                  <AddressField stop={nav.stop("address", 0)} value={ip} onChange={changeIp} />
-                </div>
-                {findLanShown ? (
-                  <PopupButton
-                    stop={nav.stop("address", 1)}
-                    label={mdnsDiscovering ? "…" : "Find LAN"}
-                    ariaLabel="Find Ollama on LAN via mDNS"
-                    fill={false}
-                    greyed={mdnsDiscovering || testing}
-                    onPress={openMdnsDiscoveryConfirm}
-                  />
-                ) : null}
-              </div>
-              <div style={FIRST_RUN_HELP_STYLE}>{OLLAMA_ROW_HELP.pcAddress}</div>
-              {isHttpsOllamaAddress(ip) ? (
-                <div style={{ fontSize: textPx(11), color: "tomato" }}>{OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE}</div>
-              ) : null}
-              <div style={FIRST_RUN_HELP_STYLE}>
-                {"This Deck's IP: "}
-                <span style={{ color: "#b8c6d6", fontVariantNumeric: "tabular-nums" }}>{deckIp}</span>
-                {". "}
-                {FIRST_RUN_POPUP_WORDS.pcNeeds}
-              </div>
-              {findLanShown && mdnsMessage ? <div style={FIRST_RUN_HELP_STYLE}>{mdnsMessage}</div> : null}
-              <TestResultLine
-                status={connection}
-                hidden={connection?.error === OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE && isHttpsOllamaAddress(ip)}
-              />
-            </>
-          )}
-          <div style={{ display: "flex", flexDirection: "row", gap: 8, marginTop: 4 }}>
-            <PopupButton
-              stop={nav.stop("foot", FOOT_ACTION)}
-              label={primaryLabel}
-              ariaLabel={onDeck ? "Install Ollama on this Deck" : "Test the connection to the PC"}
-              look="primary"
-              greyed={onDeck ? setupBusy : testing || !ip.trim()}
-              onPress={pressPrimary}
-              buttonRef={setReturnOwner}
-            />
-            <PopupButton
-              stop={nav.stop("foot", FOOT_NOT_NOW)}
-              label={setupRan ? FIRST_RUN_POPUP_WORDS.close : FIRST_RUN_POPUP_WORDS.notNow}
-              ariaLabel={setupRan ? "Close this window" : "Not now: set up the AI later on the Ollama tab"}
-              look="plain"
-              onPress={onClose}
+        {screen === "pc" ? (
+          <div className="bonsai-prose" data-bonsai-first-run-popup="pc" style={{ display: "flex", flexDirection: "column", gap: 8, textAlign: "left", fontSize: textPx(12), lineHeight: 1.4, color: "#cdd9e6" }}>
+            <FirstRunPcScreen
+              nav={pcNav}
+              ip={ip}
+              onIpChange={changeIp}
+              deckIp={deckIp}
+              connection={connection}
+              testing={testing}
+              mdnsDiscovering={mdnsDiscovering}
+              mdnsMessage={mdnsMessage}
+              onFindLan={openMdnsDiscoveryConfirm}
+              onTest={() => void runTest()}
+              onDone={onClose}
+              onBack={back}
             />
           </div>
-        </div>
+        ) : (
+          <div
+            className="bonsai-prose"
+            data-bonsai-first-run-popup="first"
+            style={{ display: "flex", flexDirection: "column", gap: FIRST_RUN_BOX.gapPx, textAlign: "left", fontSize: textPx(12), lineHeight: 1.4, color: "#cdd9e6" }}
+          >
+            <div data-bonsai-first-run-part="title" style={TITLE_STYLE}>
+              {FIRST_RUN_POPUP_WORDS.title}
+            </div>
+            <FirstRunChecklist ticks={ticks} onToggle={toggleTick} stop={firstNav.stop} />
+            <FirstRunDownloadsSwitch on={shownOn} kidsLock={initialSwitch.kidsLock} stop={firstNav.stop("allow", 0)} onPress={pressSwitch} />
+            <div data-bonsai-first-run-part="foot" style={{ display: "flex", flexDirection: "row", gap: 8, marginTop: FIRST_RUN_BOX.footMarginTopPx, height: FIRST_RUN_BOX.footHeightPx }}>
+              <PopupButton
+                stop={firstNav.stop("foot", FOOT_OK)}
+                label={FIRST_RUN_POPUP_WORDS.ok}
+                ariaLabel={FIRST_RUN_POPUP_WORDS.ok}
+                look="primary"
+                greyed={!savedOn || starting}
+                onPress={pressOk}
+                onGreyPress={() => {
+                  if (!savedOn) firstNav.focusStop("allow", 0);
+                }}
+              />
+              <PopupButton stop={firstNav.stop("foot", FOOT_PC)} label={FIRST_RUN_POPUP_WORDS.pc} ariaLabel={FIRST_RUN_POPUP_WORDS.pc} look="plain" onPress={() => setScreen("pc")} />
+              <PopupButton stop={firstNav.stop("foot", FOOT_NOT_NOW)} label={FIRST_RUN_POPUP_WORDS.notNow} ariaLabel={FIRST_RUN_POPUP_WORDS.notNow} look="plain" onPress={onClose} />
+            </div>
+            <div data-bonsai-first-run-part="beta" style={BETA_STYLE}>
+              {FIRST_RUN_POPUP_WORDS.beta}
+            </div>
+          </div>
+        )}
       </BonsaiModalScope>
     </ModalRoot>
-  );
-}
-
-/** The PC address box: Steam's text field, whose stop is the input inside it (a ref on the field holds the component). */
-function AddressField({
-  stop,
-  value,
-  onChange,
-}: {
-  stop: SearchStopProps;
-  value: string;
-  onChange: (next: string) => void;
-}): React.ReactElement {
-  const { ref, ...rest } = stop;
-  return (
-    // focus-patterns-allow: element-scoped query on this component's own wrapper, to hand the walk the input, as the Search tab's find box does.
-    <div ref={(box) => ref(box ? (box.querySelector("input") ?? box) : null)}>
-      <TextField
-        label=""
-        value={value}
-        spellCheck={false}
-        {...(rest as Record<string, unknown>)}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
-      />
-    </div>
-  );
-}
-
-/** The one line a test leaves under the address: connected (green) or the reason it did not (red). */
-function TestResultLine({ status, hidden }: { status: ConnectionStatus | null; hidden: boolean }): React.ReactElement | null {
-  if (!status || hidden) return null;
-  if (status.reachable) {
-    const n = status.models?.length ?? 0;
-    return (
-      <div style={{ fontSize: textPx(12), color: "#81c784" }} aria-live="polite">
-        Connected · Ollama v{status.version}
-        {n > 0 ? ` · ${n} model${n === 1 ? "" : "s"}` : ""}
-      </div>
-    );
-  }
-  return (
-    <div style={{ fontSize: textPx(12), color: "tomato" }} aria-live="polite">
-      Unreachable — {status.error}
-    </div>
   );
 }

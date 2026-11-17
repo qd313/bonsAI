@@ -1,20 +1,21 @@
 /**
- * Title: Walking the first-run popup with the D-pad
+ * Title: Walking the first-time setup popup with the D-pad
  *
- * Purpose: Draws the real popup with Steam's ring modelled and presses the D-pad the way Steam calls the
- * move handlers: the ring starts on Not now, the right-hand foot button (the action is on the left, plan 96,
- * 2026-10-18); Up and Down walk the column (Run AI switch, then the Start-with-the-Deck switch or the PC
- * address row, then the foot, entered on Not now); Left and Right move between the two foot buttons and
- * between the address field and Find LAN; every stop answers all four directions (a press that
- * goes nowhere returns true, so Steam never steps on by itself); Up from the first switch holds; no stop is
- * visited twice on a walk and every button in the popup is a stop. The Deck row measures the real thing.
+ * Purpose: Draws the real popup with Steam's ring modelled and presses the D-pad the way Steam calls the move
+ * handlers. First screen (plan 105, lane D3): the ring starts on Not now; the stops are the three tick rows that can
+ * be unticked, the Internet downloads switch and the three foot buttons (Ollama and the answer model are not stops);
+ * Up and Down walk the column and Up from the top row holds; Down from the switch lands on OK once the switch is on
+ * and on Not now before; Left and Right walk the foot and hold at its ends; every stop answers all four directions (a
+ * press that goes nowhere returns true, so Steam never steps on by itself); a walk from either end visits no stop
+ * twice and stops by itself. PC screen: the ring starts on Back; the address field and Find LAN, then the foot.
  *
- * Used for: FirstRunWhereAiRunsModal.tsx, useFirstRunPopupNav.ts (plan 96, N1; AGENTS.md "Adding a new control").
+ * Used for: FirstRunWhereAiRunsModal.tsx, useFirstRunPopupNav.ts (AGENTS.md "Adding a new control").
  *
- * Solves: a popup whose buttons are not reachable by D-pad, or whose walk revisits a stop or leaves the
- * popup, passes every other test and is dead on the Deck.
+ * Solves: a popup whose stops are not reachable by D-pad, or whose walk revisits a stop or leaves the popup, passes
+ * every other test and is dead on the Deck.
  *
- * Does not: Know Steam's spatial walk (this popup does not use it) or the Deck's real positions.
+ * Does not: Know Steam's spatial walk (this popup does not use it) or scroll anything: the box fits the Deck's screen
+ * (FirstRunWhereAiRunsModal.fit.test.tsx), so Steam has nothing to scroll into view. The Deck row measures the rest.
  */
 import { act, render, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -23,21 +24,28 @@ vi.mock("@decky/ui", async () => (await import("./firstRunPopupTestKit")).deckyU
 
 import { FirstRunWhereAiRunsModal } from "./FirstRunWhereAiRunsModal";
 import { popupHost, press, resetBoxes, ringName } from "./firstRunPopupTestKit";
-import { resetFakeDeckyRpc, setRpcHandler } from "../../../test-harness/fakeDeckyRpc";
+import { permissionBridge } from "./firstRunTestBridge";
+import { resetFakeDeckyRpc } from "../../../test-harness/fakeDeckyRpc";
 import { markSettingsLoaded, resetSettingsLoadedSignalForTests } from "../../settings/settingsLoadedSignal";
-import { rememberModalReturnFocus, restoreModalReturnFocusWithRetry } from "../../../shared/dpad/modalReturnFocusRegistry";
 
-const NOT_NOW = "Not now: set up the AI later on the Ollama tab";
-const INSTALL = "Install Ollama on this Deck";
-const TEST = "Test the connection to the PC";
-const RUN = "Run AI on this Deck";
-const START = "Start the AI with the Deck";
+const NOTE = "Note-search model nomic-embed-text";
+const SPEECH = "Speech models tiny.en and base.en";
+const VOICE = "Voice engine (whisper.cpp)";
+const SWITCH = "Internet downloads";
+const OK = "OK, install on this Deck";
+const PC = "Use the AI on my PC";
+const NOT_NOW = "Not now";
 const FIELD = "PC address field";
 const FIND = "Find Ollama on LAN via mDNS";
+const TEST = "Test the connection to the PC";
+const BACK = "Back to the first screen";
+const MOVES = ["onMoveUp", "onMoveDown", "onMoveLeft", "onMoveRight"] as const;
 
-async function mount(onDeck: boolean) {
-  render(<FirstRunWhereAiRunsModal host={popupHost({ ollamaLocalOnDeck: onDeck })} onClose={vi.fn()} />);
+async function mount(downloadsOn = false) {
+  permissionBridge(downloadsOn);
+  const view = render(<FirstRunWhereAiRunsModal host={popupHost()} onClose={vi.fn()} />);
   await waitFor(() => expect(ringName()).toBe(NOT_NOW));
+  return view;
 }
 
 /** One press from where the ring is; returns the handler's answer and where the ring is now. */
@@ -49,66 +57,73 @@ function step(key: Parameters<typeof press>[0]): { answer: boolean | undefined; 
   return { answer, at: ringName() };
 }
 
+/** Presses `key` until the ring stops moving (at most 12 presses); returns every stop it stood on, in order. */
+function walk(key: (typeof MOVES)[number]): string[] {
+  const seen = [ringName()];
+  for (let i = 0; i < 12; i++) {
+    const { at } = step(key);
+    if (at === seen[seen.length - 1]) return seen;
+    seen.push(at);
+  }
+  throw new Error(`the walk ${key} never stopped: ${seen.join(" > ")}`);
+}
+
 beforeEach(() => {
   resetFakeDeckyRpc();
   resetBoxes();
   resetSettingsLoadedSignalForTests();
   markSettingsLoaded();
-  setRpcHandler("test_ollama_connection", () => ({ reachable: false, error: "Connection refused" }));
+  window.localStorage.clear();
 });
 
-describe("the popup's walk, switch on", () => {
-  it("starts on Not now and walks Up through the column to the top, where Up holds, then Down back with no stop twice", async () => {
-    await mount(true);
-    const up = [step("onMoveUp").at, step("onMoveUp").at];
-    expect(up).toEqual([START, RUN]);
-    expect(step("onMoveUp")).toEqual({ answer: true, at: RUN });
-    const walk = [RUN, step("onMoveDown").at, step("onMoveDown").at];
-    expect(walk).toEqual([RUN, START, NOT_NOW]);
-    expect(new Set(walk).size).toBe(walk.length);
+describe("the first screen's walk", () => {
+  it("starts on Not now, walks Up to the top row and holds there, and back Down to Not now, no stop twice", async () => {
+    await mount();
+    const up = walk("onMoveUp");
+    expect(up).toEqual([NOT_NOW, SWITCH, VOICE, SPEECH, NOTE]);
+    expect(step("onMoveUp")).toEqual({ answer: true, at: NOTE });
+    const down = walk("onMoveDown");
+    expect(down).toEqual([NOTE, SPEECH, VOICE, SWITCH, NOT_NOW]);
+    expect(new Set(up).size).toBe(up.length);
+    expect(new Set(down).size).toBe(down.length);
   });
 
-  it("Left from Not now reaches the action, Right comes back, and both hold at their ends", async () => {
+  it("Down from the switch lands on OK once Internet downloads are on", async () => {
     await mount(true);
+    expect(step("onMoveUp").at).toBe(SWITCH);
+    expect(step("onMoveDown").at).toBe(OK);
+  });
+
+  it("Left and Right walk the foot and hold at both ends; Up from any foot button lands on the switch; Down holds", async () => {
+    await mount();
+    expect(walk("onMoveLeft")).toEqual([NOT_NOW, PC, OK]);
+    expect(step("onMoveLeft")).toEqual({ answer: true, at: OK });
+    expect(walk("onMoveRight")).toEqual([OK, PC, NOT_NOW]);
     expect(step("onMoveRight")).toEqual({ answer: true, at: NOT_NOW });
-    expect(step("onMoveLeft").at).toBe(INSTALL);
-    expect(step("onMoveLeft")).toEqual({ answer: true, at: INSTALL });
-    expect(step("onMoveRight").at).toBe(NOT_NOW);
-  });
-
-  it("Down from the foot holds still, and Up from the action lands on the switch above, not off the popup", async () => {
-    await mount(true);
     expect(step("onMoveDown")).toEqual({ answer: true, at: NOT_NOW });
-    step("onMoveLeft");
-    expect(step("onMoveDown")).toEqual({ answer: true, at: INSTALL });
-    expect(step("onMoveUp").at).toBe(START);
+    for (const left of [0, 1, 2]) {
+      for (let i = 0; i < left; i++) step("onMoveLeft");
+      expect(step("onMoveUp").at).toBe(SWITCH);
+      step("onMoveDown");
+      expect(ringName()).toBe(NOT_NOW);
+    }
   });
 
-  it("after the download notice closes over the popup the ring comes back to the action, the left-hand foot button", async () => {
-    await mount(true);
-    step("onMoveUp");
-    expect(ringName()).toBe(START);
-    rememberModalReturnFocus("ollama-local-setup");
-    act(() => {
-      restoreModalReturnFocusWithRetry();
-    });
-    await waitFor(() => expect(ringName()).toBe(INSTALL));
-  });
-
-  it("every stop answers all four directions, and the four stops are the two switches and the two buttons", async () => {
-    const paths: Array<[string, Array<Parameters<typeof press>[0]>]> = [
-      [RUN, ["onMoveUp", "onMoveUp"]],
-      [START, ["onMoveUp"]],
+  it("every stop answers all four directions, and the seven stops are the three rows, the switch and the three buttons", async () => {
+    const paths: Array<[string, Array<(typeof MOVES)[number]>]> = [
+      [NOTE, ["onMoveUp", "onMoveUp", "onMoveUp", "onMoveUp"]],
+      [SPEECH, ["onMoveUp", "onMoveUp", "onMoveUp"]],
+      [VOICE, ["onMoveUp", "onMoveUp"]],
+      [SWITCH, ["onMoveUp"]],
       [NOT_NOW, []],
-      [INSTALL, ["onMoveLeft"]],
+      [PC, ["onMoveLeft"]],
+      [OK, ["onMoveLeft", "onMoveLeft"]],
     ];
     for (const [name, path] of paths) {
-      for (const key of ["onMoveUp", "onMoveDown", "onMoveLeft", "onMoveRight"] as const) {
-        const view = render(<FirstRunWhereAiRunsModal host={popupHost({ ollamaLocalOnDeck: true })} onClose={vi.fn()} />);
-        await waitFor(() => expect(ringName()).toBe(NOT_NOW));
+      for (const key of MOVES) {
+        const view = await mount();
         for (const p of path) step(p);
         expect(ringName()).toBe(name);
-        // A press that goes nowhere answers true, so Steam never steps on by itself.
         expect(step(key).answer, `${name} ${key}`).toBe(true);
         view.unmount();
       }
@@ -116,25 +131,31 @@ describe("the popup's walk, switch on", () => {
   });
 });
 
-describe("the popup's walk, switch off", () => {
-  it("goes Run AI switch, PC address, then the foot, and Down from the field lands on Not now, never Test connection", async () => {
-    await mount(false);
-    expect([step("onMoveUp").at, step("onMoveUp").at]).toEqual([FIELD, RUN]);
-    expect(step("onMoveDown").at).toBe(FIELD);
-    expect(step("onMoveDown").at).toBe(NOT_NOW);
+describe("the PC screen's walk", () => {
+  async function onPcScreen() {
+    const view = await mount();
+    step("onMoveLeft");
+    act(() => void press("onOKButton"));
+    await waitFor(() => expect(ringName()).toBe(BACK));
+    return view;
+  }
+
+  it("starts on Back; Up reaches the field and holds there; Down from the field lands on Back, never Test connection", async () => {
+    await onPcScreen();
+    expect(step("onMoveUp").at).toBe(FIELD);
+    expect(step("onMoveUp")).toEqual({ answer: true, at: FIELD });
+    expect(step("onMoveDown").at).toBe(BACK);
     expect(step("onMoveLeft").at).toBe(TEST);
-    // Up from Test connection goes to the field, the first stop of the row it enters.
+    expect(step("onMoveLeft")).toEqual({ answer: true, at: TEST });
     expect(step("onMoveUp").at).toBe(FIELD);
   });
 
-  it("Right from the field reaches Find LAN (shown for everyone) and Left comes back; it holds at its end", async () => {
-    await mount(false);
+  it("Right from the field reaches Find LAN and holds there; Down from Find LAN lands on Back", async () => {
+    await onPcScreen();
     step("onMoveUp");
     expect(step("onMoveRight").at).toBe(FIND);
     expect(step("onMoveRight")).toEqual({ answer: true, at: FIND });
-    expect(step("onMoveDown").at).toBe(NOT_NOW);
-    expect(step("onMoveUp").at).toBe(FIELD);
-    step("onMoveRight");
-    expect(step("onMoveLeft").at).toBe(FIELD);
+    expect(step("onMoveDown").at).toBe(BACK);
+    expect(step("onMoveRight")).toEqual({ answer: true, at: BACK });
   });
 });

@@ -38,9 +38,10 @@ export const LAST_TAB_AT_STORAGE_KEY = "bonsai:last-tab-at";
  */
 export const TAB_RESUME_MODE_STORAGE_KEY = "bonsai:tab-resume-mode";
 /**
- * The first-run "Where should the AI run?" popup has been shown (plan 96, N1). It replaced the old
- * "Local runtime (beta)" notice, whose own flag is no longer read or written. `bonsai:`-prefixed so
- * *Clear all plugin data* and the first-run clear take it with every other flag.
+ * The first-time setup popup has been shown (plan 96, N1; since plan 105, lane D3, the one popup that also
+ * carries the beta line, and showing it sets DISCLAIMER_STORAGE_KEY too). It replaced the old "Local runtime
+ * (beta)" notice, whose own flag is no longer read or written. `bonsai:`-prefixed so *Clear all plugin data*
+ * and the first-run clear take it with every other flag.
  */
 export const FIRST_RUN_WHERE_AI_RUNS_SEEN_STORAGE_KEY = "bonsai:first-run-where-ai-runs-seen-v1";
 /**

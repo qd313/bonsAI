@@ -6,8 +6,8 @@
  * reason it did not answer). An https address is refused here, never tried, and the wait is long for
  * this Deck's own address because testing it can itself start the service.
  *
- * Used for: the first-run "Where should the AI run?" popup (FirstRunWhereAiRunsModal.tsx), which has no
- * Ollama tab around it to own the test.
+ * Used for: the first-time setup popup's "Use the AI on my PC" screen (FirstRunWhereAiRunsModal.tsx), which has
+ * no Ollama tab around it to own the test.
  *
  * Solves: The popup needs the same test the Ollama tab's section runs, with the same refusals and the
  * same waits, without mounting that whole section.

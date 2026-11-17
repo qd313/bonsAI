@@ -169,7 +169,7 @@ words ...
   `flow-children="horizontal"`; the order in the page is the order on screen (no row-reverse).
 - **The ring starts on Cancel.** Steam's own first focus lands on the first button (the action), so the box hands
   the ring to Cancel's nav node two frames after it mounts, waiting a few more frames if Steam has not filled the
-  node (`takeHolderFocus`, the first-run popup's mechanism). Closing the box before then cancels the wait.
+  node (`takeHolderFocus`, the first-time setup popup's mechanism). Closing the box before then cancels the wait.
 - **Left and Right** are handlers on each button's `Focusable` (Steam calls them): Left from Cancel hands the ring to
   the action's nav node, Right from the action hands it back, and Right from Cancel and Left from the action hold
   still. **Up and Down hold still** on both (one row, nothing to reach).
@@ -181,58 +181,53 @@ words ...
   found on Cancel, Right holds, Left reaches the action, Up and Down hold, A and B. jsdom cannot show where Steam's
   own first focus lands or what the blue looks like, so the Deck row (P96-CANCEL-RIGHT) is the real check.
 
-### The first-run popup (plan 96 N1)
+### The first-time setup popup (plan 105 D3; was the first-run popup of plan 96 N1)
 
-The popup "Where should the AI run?" (`FirstRunWhereAiRunsModal.tsx`, opened once by
-`useDisclaimerAndLocalRuntimeGates.tsx` after the Beta Notice) is one column of stops in Steam's own box
-(`ModalRoot`). It reuses the Search tab's mechanism (`useSearchNav.ts` and the pure `searchNav.ts`, through
-`useFirstRunPopupNav.ts`): every stop is a `Focusable` with its own nav node and all four move handlers, and
-every hop is Steam's transfer onto that nav node, never a plain `focus()`, because a text field and a switch
-are containers of their own for Steam. The one rule that differs from the Search tab: Up from the top stop
-holds still (a popup has no tab bar above it).
+The one box a new player sees (`FirstRunWhereAiRunsModal.tsx`, opened once by `useDisclaimerAndLocalRuntimeGates.tsx`;
+it replaced the Beta Notice box and the old "Where should the AI run?" popup) has two screens, each one column of
+stops in Steam's own box (`ModalRoot`). It reuses the Search tab's mechanism (`useSearchNav.ts` and the pure
+`searchNav.ts`, through `useFirstRunPopupNav.ts`): every stop is a `Focusable` with its own nav node and all four
+move handlers, and every hop is Steam's transfer onto that nav node, never a plain `focus()`, because a row, a text
+field and a button are containers of their own for Steam. The one rule that differs from the Search tab: Up from
+the top row holds still (a popup has no tab bar above it).
 
 ```
-switch on                                   switch off
-[Run AI on this Deck]                       [Run AI on this Deck]
-        |                                           |
-[Start the AI with the Deck]                [PC address field] -- Right -> [Find LAN]   (Find LAN: Developer tab on only)
-        |                                           |
-[Install Ollama | Update AI & models] [Not now]     [Test connection] [Not now]     (Left / Right between the two;
-                                       ^ the ring starts here                      Down from above lands on Not now)
+first screen                                              PC screen ("Use the AI on my PC")
+  AI engine (Ollama)          (locked on, not a stop)
+  Answer model                (locked on, not a stop)
+[ ] Note-search model         <- top: Up holds            [PC address field] -- Right -> [Find LAN]
+[ ] Speech models                                                 |
+[ ] Voice engine                                          [Test connection | Ask your first question] [Back]
+[Internet downloads      (o)]                                                                          ^ ring starts
+        |  Down: OK once the switch is on, Not now before
+[OK, install on this Deck] [Use the AI on my PC] [Not now]
+                                                  ^ the ring starts here
 ```
 
-Plan 96 (2026-10-18, the maintainer's rule "Cancel on the right in every box") swapped the foot row: the action
-is on the left, in Steam's blue primary button (the look of the Beta Notice's "Got it"), and Not now is on the
-right, in the plugin's frosted glass at the same height (since 2026-10-22; Steam's plain button before, which
-turned solid white under the ring).
-
-- **The ring starts on Not now,** the foot's second stop (index 1). Steam's own first focus would pick the first
-  switch, so the popup hands the ring to Not now's nav node two frames after it mounts (the character picker's
-  two-frame rule), once.
-- **Stops:** the two switches (Steam's `ToggleField` inside a `Focusable` that carries the stop), the address
-  field (the stop is the `input`, found through the wrapper the way the Search tab's find box does it), Find
-  LAN, and the two foot buttons. Titles, help lines and the status lines are text, not stops.
-- **Up and Down walk the column.** Down from the switches goes to the next row; Down from the address row goes
-  to Not now, and Up from the foot goes to the address field (or the Start switch): the address row is entered on
-  its first stop and the foot on Not now (`FOOT_NOT_NOW`), never on whichever stop is nearest in x, so a Down from
-  the field can never land on Test connection and an A pressed by habit does the safe thing. Down from the foot holds still.
-- **Left and Right** move along a row (the action and Not now beside it; the address field and Find LAN) and hold
-  still at both ends; on a switch they hold still. A press that goes nowhere still returns true, so Steam never
-  steps on by itself.
-- **A** on a switch is Steam's own; A on a button is `onOKButton` on its `Focusable` and a tap is `onClick`, with
-  the Search tab's press guard (a click within 400 ms of an A is the same press). A greyed action (a test or setup
-  already running) stays a stop and does nothing.
-- **B** is Not now: `ModalRoot`'s `onCancel`. Not now, B and Close (the label Not now takes once an install has
-  run) all call the same close, once.
-- **After the download notice closes over the popup** the shell hands the ring back to the action button, which
-  registers itself as the `"ollama-local-setup"` return target while the popup is open (the foot's first stop,
-  `FOOT_ACTION`; the registered element is the `Focusable` around the button, because Steam's primary button may
-  not pass a ref on).
-- **Test:** `FirstRunWhereAiRunsModal.walk.test.tsx` starts on Not now, walks Up and back Down in both modes (no
-  stop twice, Up from the top holds), presses all four directions on every stop, checks Left reaches the action
-  and Right holds on Not now, the ring coming back to the action after the download notice, and Find LAN's row.
-  `FirstRunWhereAiRunsModal.test.tsx` reads the foot left to right and checks the two looks. jsdom has
-  no spatial walk and no real Steam ring, so the Deck rows (P96-N1-FIRST-RUN-POPUP, P96-CANCEL-RIGHT) are the real check.
+- **The ring starts on the safe button:** Not now on the first screen, Back on the PC screen, two frames after the
+  screen is drawn (the character picker's two-frame rule), once per screen.
+- **Stops, first screen (7):** the three tick rows that can be unticked, the Internet downloads switch and the three
+  foot buttons. The two locked rows are text. Each tick row and the switch is a whole-row Decky `Button` inside its
+  `Focusable` (`PopupButton`, look "row"); the switch is the drawn 40-point row, not Steam's taller `ToggleField`,
+  because the screen has about 11 points to spare (`firstRunBoxLayout.ts`, the fit test).
+- **Up and Down walk the column.** Up from any foot button lands on the switch. Down from the switch lands on OK once
+  the switch is on (its save has come back good) and on Not now before, so an A pressed by habit after that Down
+  never starts a download the person has not allowed. Down from the foot holds still.
+- **Left and Right** move along the foot and hold at both ends; on a tick row and on the switch they hold still. A
+  press that goes nowhere still returns true, so Steam never steps on by itself.
+- **A** is `onOKButton` on the stop's `Focusable` and a tap is `onClick`, with the Search tab's press guard (a click
+  within 400 ms of an A is the same press). A on a tick row ticks or unticks it (the speech models and the voice
+  engine together); A on the switch switches it and saves; A on **grey OK** moves the ring to the switch (Steam's
+  transfer) and does nothing else; A on OK starts the setup and closes the box.
+- **B** is Not now on the first screen and Back on the PC screen (`ModalRoot`'s `onCancel`).
+- **PC screen:** Down from the address row lands on Back, never on Test connection; Up from the foot lands on the
+  field; Right from the field reaches Find LAN and holds there.
+- **Test:** `FirstRunWhereAiRunsModal.walk.test.tsx` starts on Not now, walks Up to the top and back Down with no stop
+  twice and both walks stopping by themselves, presses all four directions on every stop, checks Down from the switch
+  in both states, the foot's Left and Right and its Up, and the PC screen's walk. `FirstRunWhereAiRunsModal.test.tsx`
+  presses the shortest way (Up, A, Down, A) and grey OK. `FirstRunWhereAiRunsModal.fit.test.tsx` adds the screen's
+  heights against the Deck's popup room, so Steam never has to scroll it. jsdom has no spatial walk and no real Steam
+  ring, so the Deck row (P105-FIRST-RUN-STEPS-01) is the real check.
 
 ### Where the ring starts when the plugin opens
 

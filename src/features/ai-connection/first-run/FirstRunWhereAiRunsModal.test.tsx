@@ -1,47 +1,56 @@
 /**
- * Title: The first-run popup "Where should the AI run?", as a person sees it
+ * Title: The first-time setup popup, pressed as a person presses it
  *
- * Purpose: Draws the real popup and checks what a new player reads and can do: the words (title, lead, the
- * two switches and their help lines, the install note, the PC address and its hint), the ring starting on
- * Not now, a switch changed inside the popup being saved before it can close, Not now and B leaving
- * everything as it was, Test connection showing its result line inside the popup, Install Ollama opening
- * the download notice, and Find LAN showing for everyone beside the address (not with the AI on this Deck).
+ * Purpose: Plan 105, lane D3 (board 5, tab 4, round 4 B). The real popup is drawn with Steam's ring modelled and
+ * pressed with the D-pad and A the way Steam calls the handlers, and what a person sees and what reaches the back
+ * end are read: the first screen's words (the checklist with sizes and sites, the switch in the Permissions tab's
+ * words, three buttons, the beta line, and nothing of the old boxes); each tick box and the total; the shortest
+ * way (Up, A, Down, A: four presses) saving the real permission and starting the starter set; grey OK moving the
+ * ring to the switch and doing nothing else; a left-out piece sent as left out and kept for later offers; OK never
+ * starting the engine-only setup however early it is pressed (the old "Checking…" trap); B and Not now changing
+ * nothing; the parental lock; and the PC screen.
  *
- * Used for: FirstRunWhereAiRunsModal.tsx and its parts (plan 96, N1).
- *
- * Solves: a first-run popup that looks right and does nothing, or changes a setting only on screen.
- *
- * Does not: walk every direction of the D-pad (FirstRunWhereAiRunsModal.walk.test.tsx does) or prove the
- * ring on the device; the Deck row does.
+ * Does not: prove the ring or the box's height on the Deck (the walk test and the fit test go further; the Deck
+ * driver measures the real box in Steam's font).
  */
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { act, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@decky/ui", async () => (await import("./firstRunPopupTestKit")).deckyUiForFirstRunPopup());
 
-import { OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE } from "../ollamaAddress";
 import { FIRST_RUN_POPUP_WORDS, FirstRunWhereAiRunsModal } from "./FirstRunWhereAiRunsModal";
-import { boxes, popupHost, pressB, resetBoxes, ringName } from "./firstRunPopupTestKit";
+import { boxes, popupHost, press, pressB, resetBoxes, ringName } from "./firstRunPopupTestKit";
+import { permissionBridge } from "./firstRunTestBridge";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../../test-harness/fakeDeckyRpc";
 import { markSettingsLoaded, resetSettingsLoadedSignalForTests } from "../../settings/settingsLoadedSignal";
+import { readStarterLeftOut } from "../../models/starterSetLeftOut";
+import { setDownloadPermissionBridge } from "../../downloads/downloadNotice";
 
-const NOT_NOW = "Not now";
+const SWITCH = "Internet downloads";
+const NOTE = "Note-search model nomic-embed-text";
+const SPEECH = "Speech models tiny.en and base.en";
+const VOICE = "Voice engine (whisper.cpp)";
+
+const calls = (method: string) => getRpcCallLog().filter((c) => c.method === method);
 const text = () => document.body.textContent ?? "";
+const settle = () => act(async () => void (await new Promise((r) => setTimeout(r, 0))));
+const total = () => document.querySelector("[data-bonsai-first-run-total]")?.textContent;
+const checked = (name: string) => screen.getByRole("switch", { name }).getAttribute("aria-checked");
 
-function open(host = popupHost(), onClose = vi.fn()) {
+async function open(over = {}) {
+  const onClose = vi.fn();
+  const host = popupHost(over);
   const view = render(<FirstRunWhereAiRunsModal host={host} onClose={onClose} />);
-  return { view, host, onClose };
+  await waitFor(() => expect(ringName()).toBe(FIRST_RUN_POPUP_WORDS.notNow));
+  return { view, onClose, host };
 }
 
-const addressBox = () => document.querySelector('input[data-decky-ui="TextField"]') as HTMLInputElement;
-const pressButton = (name: string) => fireEvent.click(screen.getByLabelText(name));
-
-/** The ask-first box is the shared two-button box: Search on the left, Cancel on the right. Press Search. */
-function pressSearchInAskFirstBox() {
-  const { container } = render(boxes[0]);
-  const buttons = Array.from(container.querySelectorAll("button"));
-  expect(buttons.map((b) => b.textContent)).toEqual(["Search", "Cancel"]);
-  fireEvent.click(buttons[0]);
+async function step(key: Parameters<typeof press>[0]): Promise<string> {
+  await act(async () => {
+    press(key);
+  });
+  await settle();
+  return ringName();
 }
 
 beforeEach(() => {
@@ -50,198 +59,208 @@ beforeEach(() => {
   resetSettingsLoadedSignalForTests();
   markSettingsLoaded();
   window.localStorage.clear();
-  setRpcHandler("test_ollama_connection", () => ({ reachable: false, error: "Connection refused" }));
+  setDownloadPermissionBridge(null);
 });
-afterEach(() => vi.useRealTimers());
 
-describe("what the popup says", () => {
-  it("asks where the AI should run, with the switch on and its warning as the help line", async () => {
-    open();
-    expect(text()).toContain("Where should the AI run?");
-    expect(text()).toContain(
-      "bonsAI needs Ollama, a free program that runs the AI. It can run on this Deck or on a PC on your home network. You can change this later on the Ollama tab.",
-    );
-    expect(screen.getByRole("switch", { name: "Run AI on this Deck" }).getAttribute("aria-checked")).toBe("true");
-    expect(text()).toContain(
-      "Works anywhere, no PC needed. The AI and your game share the Deck's chip, so both slow down while it answers.",
-    );
-    expect(screen.getByRole("switch", { name: "Start the AI with the Deck" }).getAttribute("aria-checked")).toBe("false");
-    expect(text()).toContain("Starts it each time the Deck turns on, so the first answer comes sooner.");
-    expect(text()).toContain(
-      "Install Ollama downloads it and the starter models, about 6.9 GB. You are asked before anything downloads.",
-    );
-    await waitFor(() => expect(text()).toContain("Local Ollama setup: Not installed"));
-    // Two buttons in the foot, the action on the left and Not now on the right.
-    const foot = ["Install Ollama", NOT_NOW].map((w) => screen.getByText(w));
-    expect(foot[0].compareDocumentPosition(foot[1]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+describe("the first screen, as drawn", () => {
+  it("shows the checklist with every size and site, the switch in the Permissions tab's words, three buttons and the beta line", async () => {
+    permissionBridge(false);
+    await open();
+    expect(text()).toContain(FIRST_RUN_POPUP_WORDS.title);
+    for (const words of [
+      "AI engine (Ollama)about 1.5 GB · neededollama.com",
+      "Answer model gemma4:e2b-it-qatabout 4.3 GB · neededregistry.ollama.ai",
+      `${NOTE}about 270 MB · for the knowledge baseregistry.ollama.ai`,
+      `${SPEECH}about 230 MB · for voice input, ticks with the row belowhuggingface.co`,
+      `${VOICE}about 500 MB · for voice input; its build fetches compilers from its own package serversghcr.io`,
+      "Internet downloadsLets bonsAI download Ollama, models and the knowledge library. Off: nothing downloads.",
+      "OK, install on this DeckUse the AI on my PCNot now",
+      FIRST_RUN_POPUP_WORDS.beta,
+    ]) {
+      expect(text()).toContain(words);
+    }
+    expect(total()).toBe("about 6.9 GB in all");
+    expect(checked(SWITCH)).toBe("false");
+    // Nothing of the old boxes: no Beta Notice, no Start-with-the-Deck or microphone switch, no "Checking…".
+    expect(text()).not.toMatch(/Beta Notice|Start the AI with the Deck|microphone|Checking/);
   });
 
-  it("draws the action in Steam's blue primary button (the look of Got it) and Not now in the plugin's glass look, both 32 high", async () => {
-    open();
-    const action = screen.getByLabelText("Install Ollama on this Deck");
-    const notNow = screen.getByLabelText("Not now: set up the AI later on the Ollama tab");
-    expect(action.getAttribute("data-decky-ui")).toBe("DialogButtonPrimary");
-    expect(notNow.getAttribute("data-decky-ui")).toBe("Button");
-    // The action's colours are Steam's: no fill, border or words colour of its own.
-    expect(action.style.background).toBe("");
-    expect(action.style.border).toBe("");
-    expect(action.style.color).toBe("");
-    // Not now wears the plugin's frosted glass.
-    expect(notNow.style.background).toContain("linear-gradient");
-    expect(action.style.height).toBe("32px");
-    expect(notNow.style.height).toBe("32px");
-  });
-
-  it("with the switch off the foot reads Test connection on the left and Not now on the right", async () => {
-    open(popupHost({ ollamaLocalOnDeck: false }));
-    const foot = ["Test connection", NOT_NOW].map((w) => screen.getByText(w));
-    expect(foot[0].compareDocumentPosition(foot[1]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-  });
-
-  it("says the real state once Ollama answers, and offers to update instead of install", async () => {
-    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: ["a", "b"] }));
-    open();
-    await waitFor(() => expect(text()).toContain("Local Ollama setup: Installed (2 models)"));
-    expect(screen.getByText(FIRST_RUN_POPUP_WORDS.update)).toBeTruthy();
-  });
-
-  it("with the switch off shows the bare-address field, its hint, this Deck's IP and Test connection, not the install note", async () => {
-    open(popupHost({ ollamaLocalOnDeck: false }));
-    await waitFor(() => expect(text()).toContain("This Deck's IP: 192.168.1.100"));
-    expect(text()).toContain("PC address");
-    expect(text()).toContain("Just the PC's address, for example 192.168.1.20. bonsAI adds Ollama's usual port (11434) when you leave it out.");
-    expect(text()).toContain("The PC needs Ollama with a model, and must accept connections from your network.");
-    expect(text()).not.toContain("about 6.9 GB");
-    expect(screen.queryByRole("switch", { name: "Start the AI with the Deck" })).toBeNull();
-    expect(screen.getByText("Test connection")).toBeTruthy();
-    expect(screen.queryByText("Install Ollama")).toBeNull();
-  });
-
-  it("shows Find LAN beside the address for everyone, with the Developer tab off", () => {
-    open(popupHost({ ollamaLocalOnDeck: false }));
-    expect(screen.getByText("Find LAN")).toBeTruthy();
-    const field = addressBox();
-    const button = screen.getByLabelText("Find Ollama on LAN via mDNS");
-    // After the address field in the same row.
-    expect(field.compareDocumentPosition(button) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-  });
-
-  it("hides Find LAN while the AI runs on this Deck", () => {
-    open(popupHost({ ollamaLocalOnDeck: true }));
-    expect(screen.queryByText("Find LAN")).toBeNull();
-  });
-
-  it("Find LAN asks first, searches, and fills the address with the PC it found", async () => {
-    setRpcHandler("discover_mdns_ollama_hosts", () => ({
-      ok: true,
-      hosts: [{ label: "gaming-pc", host: "192.168.1.77:11434", port: 11434, verified: true }],
-    }));
-    open(popupHost({ ollamaLocalOnDeck: false }));
-    pressButton("Find Ollama on LAN via mDNS");
-    await waitFor(() => expect(boxes).toHaveLength(1));
-    expect(getRpcCallLog().some((c) => c.method === "discover_mdns_ollama_hosts")).toBe(false);
-    pressSearchInAskFirstBox();
-    await waitFor(() => expect(addressBox().value).toBe("192.168.1.77:11434"));
-  });
-
-  it("Find LAN says so when nothing is found", async () => {
-    setRpcHandler("discover_mdns_ollama_hosts", () => ({ ok: true, hosts: [], hint: "No Ollama services found here." }));
-    open(popupHost({ ollamaLocalOnDeck: false }));
-    pressButton("Find Ollama on LAN via mDNS");
-    await waitFor(() => expect(boxes).toHaveLength(1));
-    pressSearchInAskFirstBox();
-    await waitFor(() => expect(text()).toContain("No Ollama services found here."));
+  it("the two locked rows are not stops; the three others are, and the speech models and the voice engine tick together", async () => {
+    permissionBridge(false);
+    await open();
+    expect(screen.queryByRole("switch", { name: "AI engine (Ollama)" })).toBeNull();
+    expect(screen.queryByRole("switch", { name: "Answer model gemma4:e2b-it-qat" })).toBeNull();
+    expect([await step("onMoveUp"), await step("onMoveUp")]).toEqual([SWITCH, VOICE]);
+    await step("onOKButton");
+    expect([checked(SPEECH), checked(VOICE)]).toEqual(["false", "false"]);
+    expect(total()).toBe("about 6.1 GB in all");
+    expect(await step("onMoveUp")).toBe(SPEECH);
+    await step("onOKButton");
+    expect([checked(SPEECH), checked(VOICE)]).toEqual(["true", "true"]);
+    expect(await step("onMoveUp")).toBe(NOTE);
+    await step("onOKButton");
+    expect(total()).toBe("about 6.6 GB in all");
+    await step("onMoveDown");
+    await step("onOKButton");
+    expect(total()).toBe("about 5.8 GB in all");
   });
 });
 
-describe("the ring and the close", () => {
-  it("starts on Not now", async () => {
-    open();
-    await waitFor(() => expect(ringName()).toContain(NOT_NOW));
+describe("the shortest way to the first question", () => {
+  it("Up, A, Down, A: the switch saves the real permission, Down lands on OK, OK starts the starter set and closes", async () => {
+    const setCapabilities = permissionBridge(false);
+    const { onClose } = await open();
+    expect(await step("onMoveUp")).toBe(SWITCH);
+    await step("onOKButton");
+    expect(checked(SWITCH)).toBe("true");
+    const saves = calls("save_settings");
+    expect(saves.map((c) => (c.args[0] as { capabilities?: { internet_downloads?: boolean } }).capabilities?.internet_downloads)).toEqual([true]);
+    expect(setCapabilities).toHaveBeenLastCalledWith(expect.objectContaining({ internet_downloads: true }));
+    expect(await step("onMoveDown")).toBe(FIRST_RUN_POPUP_WORDS.ok);
+    await step("onOKButton");
+    await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
+    expect(calls("start_local_ollama_setup").map((c) => c.args[0])).toEqual([{ profile: "tier1_essentials", leave_out: [] }]);
+    // OK comes after the save: the back end has the permission before the start reaches it.
+    const order = getRpcCallLog().map((c) => c.method).filter((m) => m === "save_settings" || m === "start_local_ollama_setup");
+    expect(order).toEqual(["save_settings", "start_local_ollama_setup"]);
+    expect(boxes).toHaveLength(0);
   });
 
-  it("Not now closes it and changes nothing: no setting set, nothing saved", async () => {
-    const { host, onClose } = open();
-    await waitFor(() => expect(ringName()).toContain(NOT_NOW));
-    pressButton("Not now: set up the AI later on the Ollama tab");
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(host.saveSettingsNow).not.toHaveBeenCalled();
-    expect(host.setOllamaLocalOnDeck).not.toHaveBeenCalled();
-    expect(host.setOllamaLocalAutostart).not.toHaveBeenCalled();
-    expect(host.setOllamaIp).not.toHaveBeenCalled();
-    expect(getRpcCallLog().some((c) => c.method === "save_settings")).toBe(false);
+  it("a piece left unticked is sent as left out and kept for the later offers", async () => {
+    permissionBridge(true);
+    const { onClose } = await open();
+    for (let i = 0; i < 4; i++) await step("onMoveUp");
+    expect(ringName()).toBe(NOTE);
+    await step("onOKButton");
+    for (let i = 0; i < 4; i++) await step("onMoveDown");
+    expect(ringName()).toBe(FIRST_RUN_POPUP_WORDS.ok);
+    await step("onOKButton");
+    await waitFor(() => expect(onClose).toHaveBeenCalled());
+    expect(calls("start_local_ollama_setup").map((c) => c.args[0])).toEqual([{ profile: "tier1_essentials", leave_out: ["note_search"] }]);
+    expect(readStarterLeftOut()).toEqual(["note_search"]);
   });
 
-  it("B does the same as Not now", () => {
-    const { view, host, onClose } = open();
-    pressB(view.container);
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(host.saveSettingsNow).not.toHaveBeenCalled();
+  it("OK never starts the engine-only setup, however early it is pressed: there is no check to wait for", async () => {
+    permissionBridge(true);
+    setRpcHandler("test_ollama_connection", () => new Promise(() => {}));
+    setRpcHandler("get_local_ollama_setup_status", () => new Promise(() => {}));
+    render(<FirstRunWhereAiRunsModal host={popupHost()} onClose={vi.fn()} />);
+    await act(async () => void screen.getByLabelText(FIRST_RUN_POPUP_WORDS.ok).click());
+    await settle();
+    expect(calls("start_local_ollama_setup").map((c) => (c.args[0] as { profile: string }).profile)).toEqual(["tier1_essentials"]);
+    expect(boxes).toHaveLength(0);
   });
 });
 
-describe("a switch changed in the popup is saved before it can close", () => {
-  it("Run AI on this Deck turned off is saved at once, the popup still open", () => {
-    const { host, onClose } = open();
-    fireEvent.click(screen.getByRole("switch", { name: "Run AI on this Deck" }));
-    expect(host.saveSettingsNow).toHaveBeenCalledWith({ ollama_local_on_deck: false });
-    expect(host.setOllamaLocalOnDeck).toHaveBeenCalledWith(false);
+describe("OK while the switch is off", () => {
+  it("is grey: a press moves the ring to the switch and does nothing else", async () => {
+    permissionBridge(false);
+    const { onClose } = await open();
+    expect(await step("onMoveLeft")).toBe(FIRST_RUN_POPUP_WORDS.pc);
+    expect(await step("onMoveLeft")).toBe(FIRST_RUN_POPUP_WORDS.ok);
+    expect(await step("onOKButton")).toBe(SWITCH);
+    expect(calls("start_local_ollama_setup")).toHaveLength(0);
+    expect(calls("save_settings")).toHaveLength(0);
     expect(onClose).not.toHaveBeenCalled();
-    // The popup now draws the PC half.
-    expect(screen.getByText("PC address")).toBeTruthy();
-    expect(screen.queryByRole("switch", { name: "Start the AI with the Deck" })).toBeNull();
+    expect(checked(SWITCH)).toBe("false");
   });
 
-  it("Start the AI with the Deck turned on is saved at once and asks the back end for the startup entry", async () => {
-    const { host } = open();
-    fireEvent.click(screen.getByRole("switch", { name: "Start the AI with the Deck" }));
-    expect(host.saveSettingsNow).toHaveBeenCalledWith({ ollama_local_autostart: true });
-    expect(host.setOllamaLocalAutostart).toHaveBeenCalledWith(true);
-    await waitFor(() =>
-      expect(getRpcCallLog().some((c) => c.method === "apply_ollama_local_autostart" && c.args[0] === true)).toBe(true),
-    );
+  it("Down from the switch lands on Not now while it is off", async () => {
+    permissionBridge(false);
+    await open();
+    await step("onMoveUp");
+    expect(await step("onMoveDown")).toBe(FIRST_RUN_POPUP_WORDS.notNow);
+  });
+
+  it("a switch whose save fails goes back off with a message, and OK stays grey", async () => {
+    permissionBridge(false);
+    setRpcHandler("save_settings", () => {
+      throw new Error("back end not answering");
+    });
+    await open();
+    await step("onMoveUp");
+    await step("onOKButton");
+    await waitFor(() => expect(checked(SWITCH)).toBe("false"));
+    expect(await step("onMoveDown")).toBe(FIRST_RUN_POPUP_WORDS.notNow);
+    await step("onMoveLeft");
+    await step("onMoveLeft");
+    expect(await step("onOKButton")).toBe(SWITCH);
+    expect(calls("start_local_ollama_setup")).toHaveLength(0);
+  });
+
+  it("under Steam's parental lock the switch says why and nothing is saved", async () => {
+    permissionBridge(false, true);
+    await open();
+    expect(text()).toContain("Parental controls keep internet downloads off.");
+    await step("onMoveUp");
+    await step("onOKButton");
+    expect(checked(SWITCH)).toBe("false");
+    expect(calls("save_settings")).toHaveLength(0);
   });
 });
 
-describe("Test connection, with the switch off", () => {
-  it("tests the typed address and shows the result inside the popup, and remembers an address that answered", async () => {
-    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.6.1", models: ["gemma4:e2b-it-qat"] }));
-    const { host } = open(popupHost({ ollamaLocalOnDeck: false }));
-    fireEvent.change(addressBox(), { target: { value: "192.168.1.20" } });
-    expect(host.setOllamaIp).toHaveBeenCalledWith("192.168.1.20");
-    pressButton("Test the connection to the PC");
-    await waitFor(() => expect(text()).toContain("Connected · Ollama v0.6.1 · 1 model"));
-    const call = getRpcCallLog().find((c) => c.method === "test_ollama_connection");
-    expect(call?.args[0]).toBe("192.168.1.20");
+describe("leaving the first screen", () => {
+  it("Not now and B close it and change nothing; a switch turned on first stays on, as on the Permissions tab", async () => {
+    permissionBridge(false);
+    const first = await open();
+    await step("onOKButton");
+    expect(first.onClose).toHaveBeenCalledTimes(1);
+    expect(getRpcCallLog().filter((c) => c.method !== "get_deck_ip")).toEqual([]);
+    first.view.unmount();
+
+    const second = await open();
+    await step("onMoveUp");
+    await step("onOKButton");
+    pressB(second.view.container);
+    expect(second.onClose).toHaveBeenCalledTimes(1);
+    expect(calls("start_local_ollama_setup")).toHaveLength(0);
+    expect(calls("save_settings")).toHaveLength(1);
+    expect(readStarterLeftOut()).toEqual([]);
+  });
+});
+
+describe("Use the AI on my PC", () => {
+  it("opens the PC screen with the ring on Back; B and Back return to the first screen", async () => {
+    permissionBridge(false);
+    const { view } = await open();
+    await step("onMoveLeft");
+    await step("onOKButton");
+    await waitFor(() => expect(ringName()).toBe("Back to the first screen"));
+    expect(text()).toContain("Nothing is downloaded on this path. Back changes nothing.");
+    expect(text()).toContain("This Deck's IP: 192.168.1.100");
+    pressB(view.container);
+    await waitFor(() => expect(ringName()).toBe(FIRST_RUN_POPUP_WORDS.notNow));
+    expect(text()).toContain(FIRST_RUN_POPUP_WORDS.title);
+  });
+
+  it("a test that connects keeps the address, sets the AI to the PC, and turns the button into Ask your first question", async () => {
+    permissionBridge(false);
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.40.6", models: ["qwen3:8b"] }));
+    const { onClose, host } = await open({ ollamaIp: "192.168.1.20" });
+    await step("onMoveLeft");
+    await step("onOKButton");
+    await waitFor(() => expect(ringName()).toBe("Back to the first screen"));
+    await step("onMoveLeft");
+    await step("onOKButton");
+    await waitFor(() => expect(text()).toContain("Connected · Ollama v0.40.6 · 1 model"));
     expect(host.persistOllamaIp).toHaveBeenCalledWith("192.168.1.20");
+    expect(host.saveSettingsNow).toHaveBeenCalledWith({ ollama_local_on_deck: false });
+    expect(ringName()).toBe("Ask your first question: close this window");
+    await step("onOKButton");
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("shows why it did not connect, and does not remember the address", async () => {
-    const { host } = open(popupHost({ ollamaLocalOnDeck: false, ollamaIp: "192.168.1.20" }));
-    pressButton("Test the connection to the PC");
-    await waitFor(() => expect(text()).toContain("Unreachable — Connection refused"));
-    expect(host.persistOllamaIp).not.toHaveBeenCalled();
-  });
-
-  it("refuses an https address in words, without trying it", async () => {
-    open(popupHost({ ollamaLocalOnDeck: false, ollamaIp: "https://pc.local" }));
-    pressButton("Test the connection to the PC");
-    await new Promise((r) => setTimeout(r, 30));
-    expect(text()).toContain(OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE);
-    expect(getRpcCallLog().some((c) => c.method === "test_ollama_connection")).toBe(false);
-  });
-});
-
-describe("Install Ollama", () => {
-  it("opens the download notice (the starter-models question on a Deck with no models) and starts nothing until it is answered", async () => {
-    open();
-    await waitFor(() => expect(text()).toContain("Local Ollama setup: Not installed"));
-    pressButton("Install Ollama on this Deck");
-    await waitFor(() => expect(boxes).toHaveLength(1));
-    const box = boxes[0].props as { title: string; actionLabel: string; onCancel: () => void };
-    expect(box.title).toBe("Also install the starter models?");
-    expect(box.actionLabel).toBe("Install Ollama and the starter models");
-    expect(getRpcCallLog().some((c) => c.method === "start_local_ollama_setup")).toBe(false);
-    act(() => box.onCancel());
+  it("OK after the AI was set to a PC puts it back on this Deck, saved, before the setup starts", async () => {
+    permissionBridge(true);
+    const order: string[] = [];
+    const saveSettingsNow = vi.fn(async (patch: Record<string, unknown>) => {
+      await new Promise((r) => setTimeout(r, 5));
+      order.push(`saved ${JSON.stringify(patch)}`);
+    });
+    setRpcHandler("start_local_ollama_setup", () => (order.push("start"), { accepted: true }));
+    const { onClose } = await open({ ollamaLocalOnDeck: false, saveSettingsNow });
+    await act(async () => void screen.getByLabelText(FIRST_RUN_POPUP_WORDS.ok).click());
+    await waitFor(() => expect(onClose).toHaveBeenCalled());
+    expect(order).toEqual(['saved {"ollama_local_on_deck":true}', "start"]);
   });
 });

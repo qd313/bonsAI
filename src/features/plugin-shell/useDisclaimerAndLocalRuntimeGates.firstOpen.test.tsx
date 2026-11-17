@@ -1,40 +1,51 @@
 /**
- * Title: The "Where should the AI run?" popup on the first open
+ * Title: The first-time setup popup on the first open
  *
- * Purpose: After the Beta Notice has been accepted, a person who has never seen the popup is asked
- * where the AI should run, once, whatever the switch says (it starts on; a saved "off" is asked too, and
- * the popup shows the real setting). Nothing shows before the settings have loaded, to a person who
- * has already seen it, or when the screen does not hand the gate the settings the popup needs. The old
- * "Local runtime (beta)" notice is gone and never shows.
+ * Purpose: A person who has never seen the popup gets it once (plan 105, lane D3: one popup in place of the Beta
+ * Notice box and the old "Where should the AI run?" popup), whatever the switch says, and the popup is handed the
+ * real setting. Opening it marks both old flags seen. Nothing shows before the settings have loaded, to a person who
+ * has already seen it, or when the screen does not hand the gate the settings the popup needs. No Steam notice box of
+ * any kind opens (no Beta Notice, no Local runtime notice). After Clear all data it is shown again.
  *
- * Used for: the hook in useDisclaimerAndLocalRuntimeGates.tsx (plan 96, N1).
+ * Used for: the hook in useDisclaimerAndLocalRuntimeGates.tsx.
  *
- * Solves: a new player silently running the AI on the Deck without ever being asked.
+ * Solves: a new player silently running the AI on the Deck without ever being asked, or clicking through two boxes
+ * before the one that matters.
  *
  * Does not: check the popup's words or walk its buttons (FirstRunWhereAiRunsModal's own tests do).
  */
-import { renderHook } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useDisclaimerAndLocalRuntimeGates } from "./useDisclaimerAndLocalRuntimeGates";
-import { gateHooks, popups, runtimeNotices, shown, resetShown } from "./firstRunGateTestKit";
+import { gateHooks, popups, shown, resetShown } from "./firstRunGateTestKit";
 
 vi.mock("@decky/ui", async () => (await import("./firstRunGateTestKit")).deckyUiRecordingModals());
+
+const noticeBoxes = () => shown.filter((s) => s.title !== "");
 
 beforeEach(() => {
   resetShown();
   window.localStorage.clear();
-  window.localStorage.setItem("bonsai:disclaimer-accepted", "1");
 });
 
-describe("the where-the-AI-runs popup on the first open", () => {
-  it("shows once on a first open, and not again on the next open", () => {
+describe("the first-time setup popup on the first open", () => {
+  it("shows once on a first open with no other box, marks both old flags seen, and not again on the next open", () => {
     const first = renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, gateHooks()));
     expect(popups()).toHaveLength(1);
+    expect(noticeBoxes()).toHaveLength(0);
+    expect(window.localStorage.getItem("bonsai:disclaimer-accepted")).toBe("1");
+    expect(window.localStorage.getItem("bonsai:first-run-where-ai-runs-seen-v1")).toBe("1");
     first.unmount();
 
     shown.length = 0;
     renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, gateHooks()));
     expect(popups()).toHaveLength(0);
+  });
+
+  it("shows to an older install that accepted the old Beta Notice but never saw the popup", () => {
+    window.localStorage.setItem("bonsai:disclaimer-accepted", "1");
+    renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, gateHooks()));
+    expect(popups()).toHaveLength(1);
   });
 
   it("is asked when the saved switch is off too, and hands the popup the real setting", () => {
@@ -53,13 +64,17 @@ describe("the where-the-AI-runs popup on the first open", () => {
     window.localStorage.setItem("bonsai:first-run-where-ai-runs-seen-v1", "1");
     renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, gateHooks()));
     expect(popups()).toHaveLength(0);
+    expect(noticeBoxes()).toHaveLength(0);
   });
 
-  it("never shows the old Local runtime (beta) notice, flag set or not", () => {
-    renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, gateHooks()));
-    window.localStorage.removeItem("bonsai:first-run-where-ai-runs-seen-v1");
-    window.localStorage.removeItem("bonsai:local-runtime-beta-dismissed-v1");
-    renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, gateHooks()));
-    expect(runtimeNotices()).toHaveLength(0);
+  it("after Clear all data it shows again, once", () => {
+    const { result } = renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, gateHooks()));
+    expect(popups()).toHaveLength(1);
+    // What the reset does: the flags go, the "opened" note is cleared, then the replay is asked for.
+    window.localStorage.clear();
+    result.current.localRuntimeBetaPromptIssuedRef.current = false;
+    act(() => result.current.showDisclaimerModalAgain());
+    expect(popups()).toHaveLength(2);
+    expect(noticeBoxes()).toHaveLength(0);
   });
 });

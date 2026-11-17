@@ -11,8 +11,10 @@
  * Solves: A switch changed inside the first-run popup must be on disk before the popup can close,
  * because closing it rebuilds the screen from the session note and a save still on its timer is lost.
  *
- * Does not: Wait for the answer, or update the screen from it; the popup carries the change through
- * the rebuild in the session note. A failed save is logged, not shown, and remembered (plan 104, B1): the
+ * Does not: Update the screen from the answer; the popup carries the change through the rebuild in the
+ * session note. It hands back a promise that settles when the save has been tried (never rejects), for the one
+ * caller that must have the change on disk before its next call (the first-time setup's OK, which starts the
+ * setup the back end checks against its own file). A failed save is logged, not shown, and remembered (plan 104, B1): the
  * screen that is rebuilt from the note sends those settings again instead of taking its own copy as already
  * saved, which is how a first-start change used to be lost.
  */
@@ -25,14 +27,14 @@ export function saveSettingsNowOrPatch(
   patch: Partial<BonsaiSettings> | undefined,
   persistChangedSettingsNow: () => Promise<void>,
   buildSettingsPayload: (patch?: Partial<BonsaiSettings>) => Partial<BonsaiSettings>,
-): void {
-  if (!patch) {
-    void persistChangedSettingsNow();
-    return;
-  }
+): Promise<void> {
+  if (!patch) return persistChangedSettingsNow().catch(() => {});
   const payload = buildSettingsPayload(patch);
-  callDeckyWithTimeout<[Partial<BonsaiSettings>], unknown>("save_settings", [payload]).catch((err: unknown) => {
-    console.error("save_settings failed (first-run popup)", err);
-    rememberUnsavedSettings(Object.keys(payload));
-  });
+  return callDeckyWithTimeout<[Partial<BonsaiSettings>], unknown>("save_settings", [payload]).then(
+    () => {},
+    (err: unknown) => {
+      console.error("save_settings failed (first-run popup)", err);
+      rememberUnsavedSettings(Object.keys(payload));
+    },
+  );
 }

@@ -37,6 +37,7 @@ import { useCallback, useEffect, useRef, type MutableRefObject, type RefObject }
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
 import type { LocalOllamaSetupStatus } from "./OllamaWhereAiRunsSection.types";
+import { localSetupStageLine } from "./localSetupStageLine";
 import {
   LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
@@ -87,24 +88,8 @@ export function useLocalOllamaSetupFlow({
   /** Called once when a setup finishes cleanly, so the tab re-reads the autostart line (F13). */
   onSetupDoneRef?: RefObject<() => void>;
 }) {
-  const formatLocalSetupStageLine = useCallback((st: LocalOllamaSetupStatus | null) => {
-    if (!st || st.phase !== "running") return "";
-    const stage = st.stage ?? "";
-    if (stage === "pull" && (st.total_pull_steps ?? 0) > 0) {
-      const cur = st.current_tag ? ` — ${st.current_tag}` : "";
-      const progress = st.progress_text ? ` · ${st.progress_text}` : "";
-      return `Pull ${st.pull_step ?? 0}/${st.total_pull_steps}${cur}${progress}`;
-    }
-    const map: Record<string, string> = {
-      check: "Checking…",
-      install: "Installing Ollama…",
-      restart: "Restarting Ollama so the new version is the one running…",
-      service: "Starting Ollama service…",
-      pull: "Pulling models…",
-      complete: "Finishing…",
-    };
-    return map[stage] || (stage ? `${stage}…` : "Working…");
-  }, []);
+  // The words are shared with the first-time setup's card on the Main tab (localSetupStageLine.ts).
+  const formatLocalSetupStageLine = useCallback((st: LocalOllamaSetupStatus | null) => localSetupStageLine(st), []);
 
   const cancelLocalSetup = useCallback(async () => {
     try {

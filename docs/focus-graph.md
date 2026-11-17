@@ -229,6 +229,32 @@ first screen                                              PC screen ("Use the AI
   heights against the Deck's popup room, so Steam never has to scroll it. jsdom has no spatial walk and no real Steam
   ring, so the Deck row (P105-FIRST-RUN-STEPS-01) is the real check.
 
+### The first-time setup's card on the Main tab (plan 105 D3)
+
+After OK on the first-time setup popup, the empty chat shows a card in place of its picture (`FirstRunSetupCard.tsx`,
+drawn by `MainTabChatTranscript.tsx` through `FirstRunSetupCardOrEmpty` while a first-time setup started on this load).
+It has one stop, its button: Stop while the run goes, Start again after a Stop, a refusal or a problem, none once the
+AI is ready. The button is a Decky `Button` inside a `Focusable` registered as the nav node `first-run-setup-card`.
+
+```
+[ Setting up the AI on this Deck            ]
+[ Pull 1/2 — gemma4:e2b-it-qat · 43% ...    ]
+[ ======-----                               ]
+[ [ Stop ]                                  ]   <- the card's one stop
+  [chip] [chip] [chip]                          Up from the chips lands on Stop (chipRowExitUp tries the card first)
+  [question box]
+```
+
+- **Up from the suggestion chips** lands on the card's button: `chipRowExitUp` (presetRowFocusNav.ts) asks for
+  `first-run-setup-card` before the chat's own stops. The card only shows on an empty chat, where nothing else is above.
+- **Up from the button** goes where the chat's top goes (`takeAboveTheChat`: the chat's name, or the tab bar);
+  **Down** goes back to the chips (`preset-carousel`, the question box if the chips are not there); **Left and
+  Right** hold still. Every hop is Steam's transfer onto a registered nav node.
+- **A** is `onOKButton` on the `Focusable`, a tap is `onClick`. When the button goes away under the ring (the run
+  ended), `useHandRingOnGone` hands the ring to the question box (`unified-input`), so it is never on nothing.
+- **Test:** `FirstRunSetupCard.test.tsx` (Steam's ring modelled): Up from the chips lands on the button, Up and Down
+  leave by the registered nodes, Left and Right hold, and the ring goes to the question box when the button goes.
+
 ### Where the ring starts when the plugin opens
 
 _Moved here from AGENTS.md on 2026-09-27, word for word, to keep that file under its size limit._

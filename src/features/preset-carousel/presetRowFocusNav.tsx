@@ -207,6 +207,7 @@ export function usePresetRowNav(
  * Up out of the suggestion chips: the stop just above the dock, tried in the order the comment in
  * usePresetRowNav's `handlersFor` explains. Its own named function so the Show details line, when it
  * takes the chip's place above the question box (DetailsSlot.tsx), leaves by exactly the same way.
+ * The first-time setup's card (FirstRunSetupCard.tsx, plan 105 D3) is tried first: it only shows on an empty chat.
  *
  * With the newest question closed (an older one open, plan 79) its row is the stop right above, and
  * nothing of the newest reply is drawn: the reply's Show details is found by name, not by turn, so
@@ -215,6 +216,7 @@ export function usePresetRowNav(
  */
 export function chipRowExitUp(): boolean {
   return (
+    takeNavFocus("first-run-setup-card") ||
     takeNavFocus("chat-perm-hint-troubleshoot") ||
     takeNavFocus("newest-closed-question") ||
     focusBottomOfNewestReply() ||

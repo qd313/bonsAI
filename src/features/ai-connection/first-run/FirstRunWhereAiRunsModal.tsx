@@ -21,7 +21,8 @@
  * Does not: Own the settings. The switch saves through the download notice's permission save (plan 104's path:
  * a failed save puts it back with a message); the PC screen's changes are applied to the plugin's screen, saved to
  * the back end at once and carried through the rebuild in the session note (see the host the gate hands in). Does
- * not draw the run's progress: that is the Main tab's job once the box closes.
+ * not draw the run's progress: OK hands the run to the Main tab's card (main-tab/FirstRunSetupCard.tsx, through
+ * firstRunSetupStore.ts), which shows it with Stop once the box closes.
  *
  * Focus: one column of stops per screen (useFirstRunPopupNav.ts), every stop answering all four directions, the
  * ring starting on the safe button (Not now; Back on the PC screen), Down from the switch landing on OK once it can
@@ -40,9 +41,8 @@ import {
   peekBonsaiSessionPendingRestore,
 } from "../../plugin-shell/bonsaiSessionSurvival";
 import { internetDownloadsSwitchState, setInternetDownloadsFromSwitch } from "../../downloads/downloadNotice";
-import { startLocalOllamaSetup } from "../../models/localOllamaStarterSet";
+import { beginFirstRunSetup } from "../../main-tab/firstRunSetupStore";
 import { rememberStarterLeftOut, type StarterLeftOut } from "../../models/starterSetLeftOut";
-import { LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS } from "../OllamaWhereAiRunsSection.constants";
 import type { ConnectionStatus, MdnsOllamaHost } from "../OllamaWhereAiRunsSection.types";
 import { useMdnsOllamaDiscovery } from "../useMdnsOllamaDiscovery";
 import { FIRST_RUN_BOX } from "./firstRunBoxLayout";
@@ -188,7 +188,7 @@ export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsM
       rememberStarterLeftOut(leaveOut);
       // The back end checks its own file before it starts: the AI on this Deck must be on disk first.
       if (!onDeck) await setAiOnDeck(true);
-      startLocalOllamaSetup(LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS, undefined, undefined, leaveOut);
+      beginFirstRunSetup(leaveOut);
       onClose();
     })();
   };

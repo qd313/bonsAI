@@ -50,6 +50,13 @@ export type LocalOllamaSetupStatus = {
   ollama_version?: string;
   /** True when a newer program is installed but the running server could not be replaced. */
   needs_device_restart?: boolean;
+  /**
+   * The starter set only: how far each piece got (starter_left_out.py): "waiting", "done", "failed" or "left_out",
+   * for ollama, answer, note_search, speech and voice. The first-time setup's card reads what was kept from it.
+   */
+  starter_pieces?: Record<string, string>;
+  /** Set on the back end's status of a run it has taken (ollama_local_setup_rpc.py). */
+  accepted?: boolean;
 };
 
 /** Mirrors `get_ollama_local_autostart_status` (main.py) — the Deck startup entry's real state. */

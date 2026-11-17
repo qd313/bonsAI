@@ -93,6 +93,8 @@ export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-
   | "session-summary-card"
   /** The Show details line while it stands in the chip's place above the question box (DetailsSlot.tsx). */
   | "details-slot-line"
+  /** The first-time setup's card on the empty chat, its Stop or Start again (FirstRunSetupCard.tsx, plan 105 D3). */
+  | "first-run-setup-card"
   /** The newest question's row while it is closed (plan 79): the chips' Up lands here, the stop right
    *  above them, registered by useLiveTurnHeaderRingRestore.ts. */
   | "newest-closed-question"

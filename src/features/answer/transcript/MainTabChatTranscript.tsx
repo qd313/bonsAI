@@ -239,6 +239,7 @@ import {
 } from "../../chats/sum-up/buildChatSummaryNoteElement";
 import type { ChatSumUpState } from "../../chats/sum-up/chatSumUpModel";
 import { textPx } from "../../../styles/textPx";
+import { FirstRunSetupCardOrEmpty } from "../../main-tab/FirstRunSetupCard";
 
 /* Re-exported so tests that import these focus helpers from this file (their home before this
  * split) need no edit — the block itself now lives in buildKbNotesBlockElement.tsx. */
@@ -1140,10 +1141,12 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     <>
 {(showEmptySlotPreview || (askThreadCollapsed.length === 0 && !showLiveTurn)) && (
   <PanelSectionRow>
+    <FirstRunSetupCardOrEmpty>
     <div className="bonsai-chat-empty-state" aria-hidden>
       <img src={bonsaiLogo} className="bonsai-chat-empty-logo" alt="" />
       <div className="bonsai-chat-empty-caption">Ask anything — this slot keeps its own history.</div>
     </div>
+    </FirstRunSetupCardOrEmpty>
   </PanelSectionRow>
 )}
 {!showEmptySlotPreview && (askThreadCollapsed.length > 0 || showLiveTurn) && (

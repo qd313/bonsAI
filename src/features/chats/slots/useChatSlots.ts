@@ -434,9 +434,11 @@ export function useChatSlots({
          * No new chat is not always a failure: at ten chats the back end refuses (plan 87 F2), and a
          * question sent with no chat is answered on screen but never saved, so the answer vanished
          * when the screen reloaded from no chat. Deleting a chat to make room is never ours to do
-         * here (only the Delete chat box does that), and asking the person first needs the Ask path
-         * to stop before it sends, which this hook cannot do. So the question goes into the newest
-         * chat, and the person is told. Any other refusal keeps the old behaviour: ask unsaved.
+         * here (only the Delete chat box does that). Normally the Ask never gets this far at ten chats:
+         * its first step (useAskAtChatLimit.tsx, plan 105) opens the "pick a chat to delete" list before
+         * anything is sent. This is the safety net for a chat list that was a moment stale: the question
+         * goes into the newest chat, and the person is told. Any other refusal keeps the old behaviour:
+         * ask unsaved.
          */
         const rows = await refreshSummaries();
         const newest = rows[0];

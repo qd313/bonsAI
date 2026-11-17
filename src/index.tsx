@@ -160,6 +160,7 @@ import { desktopNoteExchangeFor, useDesktopNoteSaveModal } from "./features/user
 import { usePluginHelpModal } from "./features/about/usePluginHelpModal";
 import { useBonsaiAskOrchestration } from "./features/ask/flow/useBonsaiAskOrchestration";
 import { useChatSlots } from "./features/chats/slots/useChatSlots";
+import { useAskAtChatLimit } from "./features/chats/slots/useAskAtChatLimit";
 import { useDisclaimerAndLocalRuntimeGates } from "./features/plugin-shell/useDisclaimerAndLocalRuntimeGates";
 import { useSessionResetActions } from "./features/settings/useSessionResetActions";
 import { useSessionRestoreAfterRemount } from "./features/plugin-shell/useSessionRestoreAfterRemount";
@@ -234,6 +235,8 @@ const Content: React.FC = () => {
   }, [setCurrentTab]);
 
   const pendingSessionRestoreFinalizeRef = useRef(false);
+  /* Ten chats and none open: the Ask asks which chat to delete first (useAskAtChatLimit, filled in below). */
+  const holdAskAtChatLimitRef = useRef<((question: string, opts?: { threadQuestionDisplay?: string }) => boolean) | null>(null);
   const pluginDataClearSeenRef = useRef(getPluginDataClearedGeneration());
 
   // --- Unified input/search state ---
@@ -524,6 +527,7 @@ const Content: React.FC = () => {
     activeSlotIdRef,
     ensureActiveSlotForAsk: (question) =>
       ensureActiveSlotForAskRef.current?.(question) ?? Promise.resolve(null),
+    holdAskAtChatLimit: (question, opts) => holdAskAtChatLimitRef.current?.(question, opts) ?? false,
     onSlotTurnsChanged: () => {
       void reloadSlotTranscriptRef.current?.();
     },
@@ -551,6 +555,15 @@ const Content: React.FC = () => {
   });
   reloadSlotTranscriptRef.current = chatSlots.reloadActiveSlotTranscript;
   ensureActiveSlotForAskRef.current = chatSlots.ensureActiveSlotForAsk;
+  holdAskAtChatLimitRef.current = useAskAtChatLimit({
+    summaries: chatSlots.summaries,
+    activeSlotIdRef,
+    createSlot: chatSlots.createSlot,
+    deleteSlot: chatSlots.deleteSlot,
+    ask: onAskOllama,
+    onBeforeNestedDeckyModal: captureSessionBeforeModal,
+    onCompleteNestedDeckyModalClose: finalizeShowModalAndRestoreActiveTab,
+  });
 
   useEffect(() => {
     void chatSlots.refreshSummaries();

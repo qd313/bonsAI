@@ -1054,6 +1054,15 @@ export function useBonsaiAskOrchestration(
         toaster.toast({ title: "PC IP required", body: "Set your Ollama PC IP before asking.", duration: 4000 });
         return;
       }
+      /*
+       * Ten chats saved and none open: the list that asks which chat to delete opens now, and the
+       * question is sent from there once a fresh chat exists. It stops here, before the thread is
+       * touched, the question box is cleared (that happens only after the send goes out) and
+       * `setIsAsking(true)` runs, so Cancel or B leaves everything as it was, question included.
+       * The other two `setIsAsking(true)` calls are not submit paths: the pending poll repainting an
+       * answer already running, and the "busy" reply to a send that already happened.
+       */
+      if (a.holdAskAtChatLimit?.(q, opts)) return;
 
       const arch = pendingArchiveTurnRef.current;
       /*

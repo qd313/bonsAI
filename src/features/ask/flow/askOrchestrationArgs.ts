@@ -58,6 +58,12 @@ export type UseBonsaiAskOrchestrationArgs = {
    * the data loss this arg exists to prevent.
    */
   ensureActiveSlotForAsk?: (question: string) => Promise<string | null>;
+  /**
+   * Called first, once the question is known: true means "hold it" (ten chats are saved and none is open,
+   * so the list that asks which chat to delete is now on screen and sends the question itself after a
+   * delete). The Ask then stops without clearing the question box or starting the spinner.
+   */
+  holdAskAtChatLimit?: (question: string, opts?: { threadQuestionDisplay?: string }) => boolean;
   /** Reload slot transcript from disk after terminal Ask completion. */
   onSlotTurnsChanged?: () => void;
   /** Which slot the backend is generating for right now, or null when nothing is pending. */

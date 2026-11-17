@@ -18,8 +18,9 @@ import {
 } from "./liveTurnFocusGraph";
 import {
   isDeckDirectionLeftEvent,
-  isDeckDirectionRightEvent,
   isDownDeckButtonEvent,
+  isLeftNavigationKey,
+  isRightNavigationKey,
   isUpDeckButtonEvent,
 } from "./focusNavigation";
 import { takeOpenQuestionText } from "../../features/answer/transcript/buildTurnHeaderElement";
@@ -148,9 +149,12 @@ export function gameButtonNavHandlers(moves: {
     onMoveRight: right,
     onMoveUp: moves.up,
     onMoveDown: moves.down,
+    /* The twin for string-shaped presses only (tests, a desktop keyboard). Steam hands every D-pad press to
+       `onButtonDown` as well as to the move handler, so a twin that matched it would move the ring twice. */
     onButtonDown: (button: unknown) => {
-      if (isDeckDirectionLeftEvent(button)) return left();
-      if (isDeckDirectionRightEvent(button)) return right();
+      const key = String(button ?? "");
+      if (isLeftNavigationKey(key)) return left();
+      if (isRightNavigationKey(key)) return right();
       if (isUpDeckButtonEvent(button)) return moves.up();
       if (isDownDeckButtonEvent(button)) return moves.down();
       return false;

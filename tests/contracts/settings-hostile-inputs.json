@@ -510,6 +510,15 @@
     }
   },
   {
+    "name": "the Tiny chat text size is kept, trimmed or not",
+    "input": {
+      "chat_text_size": " tiny "
+    },
+    "expected": {
+      "chat_text_size": "tiny"
+    }
+  },
+  {
     "name": "an old settings file with no chat text size reads as normal",
     "input": {},
     "expected": {

@@ -223,7 +223,7 @@ describe("the Settings tab's moves out of a section", () => {
     act(() => void line("textsize").__nav?.onMoveDown?.());
     /* Into an open section the tab hops with its own focus (focusInTabBody), onto the row's first button. */
     expect(document.activeElement?.closest('[data-bonsai-chat-text-size-row="true"]')).not.toBeNull();
-    expect(document.activeElement?.textContent).toBe("Small");
+    expect(document.activeElement?.textContent).toBe("Tiny");
   });
 });
 

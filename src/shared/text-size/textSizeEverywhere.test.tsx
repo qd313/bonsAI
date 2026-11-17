@@ -3,7 +3,7 @@
  * Purpose: Render the real chat (a question, its answer and the opened Show details panel) next to the tab
  *          bar's label, the chat's name in Decky's bar and a Settings text, with the real stylesheet for each
  *          Text size, read the font size the browser would settle on, and check every one of them moves by
- *          the chosen step (Small 0.9, Large 1.15) and none of them by the step twice. Normal must read
+ *          the chosen step (Tiny 0.8, Small 0.9, Large 1.15) and none of them by the step twice. Normal must read
  *          today's numbers exactly.
  * Used for: plan 87 F6 (the Text size setting) and plan 89 S1 (it now reaches every word in the plugin).
  * Does not: Lay anything out. jsdom has no layout, so whether Large still fits a long word in the 300 px
@@ -140,7 +140,7 @@ describe("Text size scales every word by the chosen step", () => {
   const normal = measure("normal");
 
   it("steps the question, the answer, the Show details text, the tab bar label, the chat's name and the Settings text by the chosen amount", () => {
-    for (const size of ["small", "large"] as const) {
+    for (const size of ["tiny", "small", "large"] as const) {
       const m = measure(size);
       const step = TEXT_SCALE[size];
       for (const key of ALL) expect(m[key], `${size}: ${key}`).toBeCloseTo(normal[key] * step, 5);
@@ -148,6 +148,7 @@ describe("Text size scales every word by the chosen step", () => {
     for (const key of ALL) {
       expect(measure("large")[key], key).toBeGreaterThan(normal[key]);
       expect(measure("small")[key], key).toBeLessThan(normal[key]);
+      expect(measure("tiny")[key], key).toBeLessThan(measure("small")[key]);
     }
   });
 
@@ -208,7 +209,7 @@ describe("the chat's name in Decky's bar, which sits outside bonsAI's box", () =
 
   it("follows the step the plugin root hands it through the title store: name 13 and small line 8 on Normal, scaled on Small and Large", () => {
     const read = makeFontSizeReader(css);
-    for (const size of ["small", "normal", "large"] as const) {
+    for (const size of ["tiny", "small", "normal", "large"] as const) {
       const { container, unmount } = drawTitle(textScaleValue(size));
       const words = container.querySelector(".bonsai-chat-title__words")!;
       const sub = container.querySelector(".bonsai-chat-title__sub")!;

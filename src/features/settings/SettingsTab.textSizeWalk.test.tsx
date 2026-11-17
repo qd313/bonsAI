@@ -2,7 +2,7 @@
  * Title: Settings tab -- the D-pad walk with the Text size row in it
  * Purpose: Walk the Settings tab from its first stop to its last (Down), and back (Up), with Steam's
  *          own step modelled as "the next stop in drawing order", and check the new Text size row
- *          adds three stops that are each visited once, sit between Screenshot quality and
+ *          adds four stops that are each visited once, sit between Screenshot quality and
  *          Remember what I typed, and carry no move handler of their own that could swallow a press.
  * Used for: plan 87 F6. A control that is wired to its own Left/Right/Up/Down handlers can leave a
  *           dead press; this row has none, so Steam's own walk decides every step.
@@ -46,16 +46,17 @@ describe("Settings tab walk with the Text size row", () => {
       // Down visits the stops in drawing order and Up the same ones backwards, so the one list is the walk.
       expect(stops.length).toBeGreaterThan(6);
 
-      const first = names.indexOf("Set text size to Small");
+      const first = names.indexOf("Set text size to Tiny");
       expect(first).toBeGreaterThan(0);
-      expect(names.slice(first, first + 3)).toEqual([
+      expect(names.slice(first, first + 4)).toEqual([
+        "Set text size to Tiny",
         "Set text size to Small",
         "Set text size to Normal",
         "Set text size to Large",
       ]);
       // Right under Screenshot quality (its last choice), right above Remember what I typed.
       expect(names[first - 1]).toBe("Set screenshot quality to Best detail");
-      expect(names[first + 3]).toBe("Remember what I typed");
+      expect(names[first + 4]).toBe("Remember what I typed");
     });
   }
 
@@ -67,7 +68,7 @@ describe("Settings tab walk with the Text size row", () => {
     const set = Object.entries(row!.__nav ?? {}).filter(([, handler]) => handler).map(([key]) => key);
     expect(set).toEqual(["onMoveUp", "onMoveDown"]);
     const buttonsInRow = Array.from(row!.querySelectorAll<HTMLElement>("button"));
-    expect(buttonsInRow).toHaveLength(3);
+    expect(buttonsInRow).toHaveLength(4);
     for (const b of buttonsInRow) expect(b.hasAttribute("disabled")).toBe(false);
   });
 });

@@ -114,7 +114,7 @@ describe("the folded Settings tab, every section open", () => {
     /^Screenshot quality/,
     "Set screenshot quality to Save memory",
     /^Text size/,
-    "Set text size to Small",
+    "Set text size to Tiny",
     /^Remember what I typed/,
     "Remember what I typed",
     /^Story spoilers/,
@@ -214,7 +214,7 @@ describe("the folded Settings tab, every section open", () => {
     for (const l of [w.enter(), ...w.walk("down")]) seen.set(l.name, l.stripText);
     expect(seen.get("Remember what I typed")).toBe(`Remember what I typed${SETTINGS_ROW_HELP.remember}`);
     expect(seen.get("Show Developer tab")).toBe(`Show Developer tab${SETTINGS_ROW_HELP.developerTab}`);
-    expect(seen.get("Set text size to Small")).toBe(`Text size${SETTINGS_ROW_HELP.textSize}`);
+    expect(seen.get("Set text size to Tiny")).toBe(`Text size${SETTINGS_ROW_HELP.textSize}`);
     expect(seen.get("Set screenshot quality to Save memory")).toBe(`Screenshot quality${SETTINGS_ROW_HELP.screenshot}`);
     expect(seen.get("Clear cache...")).toBe("");
     for (const [name, text] of seen) if (/ section(:|$)/.test(name)) expect(text, name).toBe("");

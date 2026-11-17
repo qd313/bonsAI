@@ -1,6 +1,6 @@
 /**
  * Title: Settings tab -- Text size row
- * Purpose: Pin the Text size row: three choices (Small, Normal, Large) in that order, the saved one is
+ * Purpose: Pin the Text size row: four choices (Tiny, Small, Normal, Large) in that order, the saved one is
  *          marked, a press saves the choice that was pressed, and the row sits where a person looks
  *          (right under Screenshot quality) in the real Settings tab.
  * Used for: plan 87 F6, the Text size setting.
@@ -17,20 +17,21 @@ function buttons(): HTMLButtonElement[] {
 }
 
 describe("Settings tab Text size row", () => {
-  it("shows Small, Normal and Large in that order", () => {
+  it("shows Tiny, Small, Normal and Large in that order", () => {
     render(<SettingsTabChatTextSizeRow setting={{ value: "normal", set: () => {} }} />);
-    expect(buttons().map((b) => b.textContent)).toEqual(["Small", "Normal", "Large"]);
+    expect(buttons().map((b) => b.textContent)).toEqual(["Tiny", "Small", "Normal", "Large"]);
   });
 
   it("marks only the saved choice as pressed", () => {
     for (const [saved, index] of [
-      ["small", 0],
-      ["normal", 1],
-      ["large", 2],
+      ["tiny", 0],
+      ["small", 1],
+      ["normal", 2],
+      ["large", 3],
     ] as const) {
       const { unmount } = render(<SettingsTabChatTextSizeRow setting={{ value: saved, set: () => {} }} />);
       expect(buttons().map((b) => b.getAttribute("aria-pressed"))).toEqual(
-        [0, 1, 2].map((i) => String(i === index)),
+        [0, 1, 2, 3].map((i) => String(i === index)),
       );
       unmount();
     }
@@ -39,10 +40,11 @@ describe("Settings tab Text size row", () => {
   it("saves the choice that was pressed", () => {
     const setChatTextSize = vi.fn();
     render(<SettingsTabChatTextSizeRow setting={{ value: "normal", set: setChatTextSize }} />);
-    const [small, , large] = buttons();
+    const [tiny, small, , large] = buttons();
     fireEvent.click(large);
     fireEvent.click(small);
-    expect(setChatTextSize.mock.calls).toEqual([["large"], ["small"]]);
+    fireEvent.click(tiny);
+    expect(setChatTextSize.mock.calls).toEqual([["large"], ["small"], ["tiny"]]);
   });
 
   it("says it changes every word, not only the chat's, in the words the strip shows: no 'tabs and Settings stay the same'", () => {

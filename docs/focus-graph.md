@@ -82,19 +82,19 @@ the session context strip)
 
 ### The Text size row (plan 87, F6)
 
-A Settings row of three buttons, Small / Normal / Large (`SettingsTabChatTextSizeRow.tsx`), drawn under
+A Settings row of four buttons, Tiny / Small / Normal / Large (`SettingsTabChatTextSizeRow.tsx`), drawn under
 Screenshot quality and above Remember what I typed. It is built the way Screenshot quality
-is: one `Focusable` with `flow-children="horizontal"` holding three plain buttons.
+is: one `Focusable` with `flow-children="horizontal"` holding four plain buttons.
 
 ```
 Screenshot quality (Small / Balanced / Best detail)
    | Down                                ^ Up
-Text size:   [Small]  [Normal]  [Large]      Left / Right move along the three
+Text size:   [Tiny]  [Small]  [Normal]  [Large]      Left / Right move along the four
    | Down                                ^ Up
 Remember what I typed (toggle)
 ```
 
-- **Stops:** exactly three, the three buttons. The container and the paragraph above it are not stops.
+- **Stops:** exactly four, the four buttons. The container and the paragraph above it are not stops.
 - **Moves:** Left and Right are not written by hand: the row and its buttons carry no `onMoveLeft` /
   `onMoveRight`, so Steam's own walk decides them and no sideways press can be swallowed. Since the Settings tab
   folded (plan 92 T1, the last section of this file) the row carries `onMoveUp` / `onMoveDown` only, to go to its
@@ -1461,7 +1461,7 @@ tab bar
   open section above, go to the section's first and last control (`useSettingsTabFocus.ts`): the three
   single-row choice sections enter on their first button from either side.
 - **The Text size row** carries only Up and Down now. Left and Right are Steam's own and move the ring along
-  Small / Normal / Large, the pane not at all (plan 89; `SettingsTab.textSizeWalk.test.tsx`, and the Deck
+  Tiny / Small / Normal / Large, the pane not at all (plan 89; `SettingsTab.textSizeWalk.test.tsx`, and the Deck
   check). A on a button saves the choice.
 - **The rows that open their own popups keep them:** Install / Reinstall voice engine asks the download notice
   first (`VoiceInputSettingsSection.downloadNotice.test.tsx`); the character picker button remembers itself

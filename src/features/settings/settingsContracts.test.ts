@@ -168,8 +168,10 @@ describe("settings contracts", () => {
     expect("terse_mode" in old({})).toBe(false);
   });
 
-  it("normalizes chat_text_size: missing key reads as normal; only small, normal, large are kept", () => {
+  it("normalizes chat_text_size: missing key reads as normal; only tiny, small, normal, large are kept", () => {
     expect(normalizeSettings({}).chat_text_size).toBe("normal");
+    expect(normalizeSettings({ chat_text_size: "tiny" }).chat_text_size).toBe("tiny");
+    expect(normalizeSettings({ chat_text_size: " tiny " }).chat_text_size).toBe("tiny");
     expect(normalizeSettings({ chat_text_size: "small" }).chat_text_size).toBe("small");
     expect(normalizeSettings({ chat_text_size: "large" }).chat_text_size).toBe("large");
     expect(normalizeSettings({ chat_text_size: " large " }).chat_text_size).toBe("large");

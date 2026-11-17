@@ -60,10 +60,10 @@ export { DEFAULT_MODEL_POLICY_TIER };
 export type UnifiedInputPersistenceMode = "persist_all" | "no_persist";
 /**
  * How big the words are drawn, everywhere in the plugin (plan 87 F6, widened by plan 89): the chat, the
- * tab bar, the chat's name, the chips, the question box and every other tab. Small and Large step either
- * side of Normal; the rows keep their heights.
+ * tab bar, the chat's name, the chips, the question box and every other tab. Tiny and Small step below
+ * Normal, Large above it (Tiny is plan 105); the rows keep their heights.
  */
-export type ChatTextSize = "small" | "normal" | "large";
+export type ChatTextSize = "tiny" | "small" | "normal" | "large";
 /**
  * How much a Strategy answer hides (plan 98, D50): `strict` also covers bosses, endings and chapters,
  * `default` is the long-standing rule, `open` covers nothing. The row's buttons read Hide more, Default, Hide less.
@@ -296,7 +296,7 @@ export const LATENCY_WARNING_STEP_SECONDS = 5;
 export const REQUEST_TIMEOUT_STEP_SECONDS = 10;
 export const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode = "no_persist";
 export const DEFAULT_CHAT_TEXT_SIZE: ChatTextSize = "normal";
-export const CHAT_TEXT_SIZE_OPTIONS: ChatTextSize[] = ["small", "normal", "large"];
+export const CHAT_TEXT_SIZE_OPTIONS: ChatTextSize[] = ["tiny", "small", "normal", "large"];
 export const DEFAULT_SPOILER_TIER: SpoilerTier = "default";
 /** In the order the row draws them: Hide more, Default, Hide less. */
 export const SPOILER_TIER_OPTIONS: SpoilerTier[] = ["strict", "default", "open"];

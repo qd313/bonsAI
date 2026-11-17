@@ -9,7 +9,9 @@ import { describe, expect, it } from "vitest";
 import { TEXT_SCALE, TEXT_SCALE_VAR, withTextScale } from "./chatTextSize";
 
 describe("chat text size steps", () => {
-  it("has Small below Normal, Normal exactly 1 (today's size) and Large above", () => {
+  it("has Tiny below Small, Small below Normal, Normal exactly 1 (today's size) and Large above", () => {
+    expect(TEXT_SCALE.tiny).toBe(0.8);
+    expect(TEXT_SCALE.tiny).toBeLessThan(TEXT_SCALE.small);
     expect(TEXT_SCALE.normal).toBe(1);
     expect(TEXT_SCALE.small).toBeLessThan(1);
     expect(TEXT_SCALE.large).toBeGreaterThan(1);
@@ -21,5 +23,6 @@ describe("chat text size steps", () => {
     expect(style[TEXT_SCALE_VAR]).toBe("1.15");
     expect(style["--bonsai-ui-scale"]).toBe("1.2");
     expect((withTextScale({}, "normal") as Record<string, string>)[TEXT_SCALE_VAR]).toBe("1");
+    expect((withTextScale({}, "tiny") as Record<string, string>)[TEXT_SCALE_VAR]).toBe("0.8");
   });
 });

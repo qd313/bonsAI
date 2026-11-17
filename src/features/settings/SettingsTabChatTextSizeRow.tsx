@@ -1,7 +1,7 @@
 /**
  * Title: Settings tab -- Text size row
  *
- * Purpose: The "Text size" choice in Settings: Small, Normal or Large, drawn as three buttons side
+ * Purpose: The "Text size" choice in Settings: Tiny, Small, Normal or Large, drawn as four buttons side
  * by side, the same shape as Screenshot quality. It sets how big the words are
  * everywhere in bonsAI: the tab bar, the chat's name, the chat itself, the chips, the question box and
  * every other tab (plan 89). Steam's own controls, whose size Steam sets, may not follow.
@@ -15,8 +15,8 @@
  * Does not: Scale anything. The size is written to `--bonsai-text-scale` on the plugin's root
  * (src/shared/text-size/chatTextSize.ts) and every font size in the plugin reads it (src/styles/textPx.ts).
  *
- * Focus: one `Focusable` with `flow-children="horizontal"` holding three buttons (SettingsTabChoiceRow).
- * Left and Right are Steam's own and move the ring along the three, scrolling the page not at all (plan 89).
+ * Focus: one `Focusable` with `flow-children="horizontal"` holding four buttons (SettingsTabChoiceRow).
+ * Left and Right are Steam's own and move the ring along the four, scrolling the page not at all (plan 89).
  * The row carries only Up and Down, handed in by the tab (`nav`) to go to its section's line and the next
  * line (see docs/focus-graph.md, "The Text size row").
  */

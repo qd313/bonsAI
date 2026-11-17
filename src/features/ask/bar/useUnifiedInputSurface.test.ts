@@ -219,6 +219,7 @@ describe("question box height does not follow the Text size", () => {
   });
 
   const scales: Array<[string, string]> = [
+    ["Tiny", "0.8"],
     ["Small", "0.9"],
     ["Normal", "1"],
     ["Large", "1.15"],
@@ -245,11 +246,11 @@ describe("question box height does not follow the Text size", () => {
     return result.current.unifiedInputSurfacePx;
   }
 
-  it("a one-line box is today's Normal height (44) on Small, Normal and Large", () => {
+  it("a one-line box is today's Normal height (44) on Tiny, Small, Normal and Large", () => {
     for (const [, scale] of scales) expect(heightFor(scale, 1)).toBe(44);
   });
 
-  it("two lines and three lines grow the box by the same fixed amount on all three sizes", () => {
+  it("two lines and three lines grow the box by the same fixed amount on all four sizes", () => {
     for (const [, scale] of scales) {
       expect(heightFor(scale, 2)).toBe(59);
       expect(heightFor(scale, 3)).toBe(73);

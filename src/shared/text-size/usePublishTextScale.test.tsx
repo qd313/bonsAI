@@ -34,7 +34,7 @@ function popupWordsSize(): number {
 
 describe("the Text size step in Steam's shared page, where plain popups are drawn", () => {
   it("makes a popup's words 12 on Normal, and the step times 12 on Small and Large", () => {
-    for (const size of ["normal", "small", "large"] as const) {
+    for (const size of ["normal", "tiny", "small", "large"] as const) {
       const { unmount } = renderHook(() => usePublishTextScale(size));
       expect(popupWordsSize(), size).toBeCloseTo(12 * TEXT_SCALE[size], 5);
       unmount();

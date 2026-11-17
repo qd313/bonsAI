@@ -122,7 +122,7 @@ describe("Text size on the chips, the question box and the Settings row", () => 
   });
 
   it("makes each one bigger on Large and smaller on Small, by exactly the step", () => {
-    for (const size of ["small", "large"] as const) {
+    for (const size of ["tiny", "small", "large"] as const) {
       const m = readSurfaces(size);
       for (const key of Object.keys(normal) as Array<keyof Reads>) {
         expect(m[key], `${size}: ${key}`).toBeCloseTo(normal[key] * TEXT_SCALE[size], 5);

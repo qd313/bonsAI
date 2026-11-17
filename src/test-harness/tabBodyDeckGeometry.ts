@@ -51,7 +51,7 @@ export const TAB_GEOMETRY: Record<"ollama" | "settings" | "permissions" | "devel
       [115, 22, "Adjust UI automatically"],
       [209, 36, "Apply UI scale"],
       [365, 44, "Set screenshot quality to Save mem"],
-      [545, 36, "Set text size to Small"],
+      [545, 36, "Set text size to Tiny"],
       [669, 22, "Remember what I typed"],
       [861, 22, "Hide spoilers until I tap"],
       [1015, 22, "Show one chip instead of two"],
@@ -65,7 +65,7 @@ export const TAB_GEOMETRY: Record<"ollama" | "settings" | "permissions" | "devel
     ],
     /* On the same line as stop 3 (the Text size choices) and stop 13 (Clear all data... beside Clear cache...):
        Left and Right reach them, Down and Up do not (SettingsTabChatTextSizeRow.tsx, SettingsTab.tsx). */
-    beside: { 3: ["Set text size to Normal", "Set text size to Large"], 13: ["Clear all data..."] },
+    beside: { 3: ["Set text size to Small", "Set text size to Normal", "Set text size to Large"], 13: ["Clear all data..."] },
   },
   permissions: {
     contentHeight: 762,

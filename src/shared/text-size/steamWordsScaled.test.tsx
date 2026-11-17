@@ -41,7 +41,7 @@ import type { ChatTextSize } from "../../features/settings/bonsaiSettingsSchema"
 import type { BonsaiCapabilities } from "../../features/settings/bonsaiSettingsSchema";
 import { makeFontSizeReader } from "../../test-harness/settledFontSize";
 
-const SIZES: ChatTextSize[] = ["small", "normal", "large"];
+const SIZES: ChatTextSize[] = ["tiny", "small", "normal", "large"];
 const read = makeFontSizeReader("");
 
 /** The font size the browser settles on for the first element inside `root` that matches `selector`. */

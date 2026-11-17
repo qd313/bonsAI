@@ -57,6 +57,7 @@ export const SCREENSHOT_PRESET_LABEL: Record<ScreenshotAttachmentPreset, string>
 };
 
 export const CHAT_TEXT_SIZE_LABEL: Record<ChatTextSize, string> = {
+  tiny: "Tiny",
   small: "Small",
   normal: "Normal",
   large: "Large",

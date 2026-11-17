@@ -15,6 +15,9 @@
  * Solves: The first-time setup used to keep its progress inside a box the person had to close, with no Stop in it;
  * Stop was a red Cancel on the Ollama tab.
  *
+ * While it is up it is the run's card on Main, so the download bar at the bottom of the panel (downloads/JobBar.tsx,
+ * plan 105 D4) does not show the same run beside it: the card wins.
+ *
  * Does not: Start anything by itself (Start again is a press), or show after a plugin reload (the Ollama tab does).
  *
  * Focus: the card has one stop, its button (Stop or Start again), a Decky Button inside a Focusable registered as the
@@ -36,6 +39,8 @@ import { localSetupStageLine } from "../ai-connection/localSetupStageLine";
 import type { LocalOllamaSetupStatus } from "../ai-connection/OllamaWhereAiRunsSection.types";
 import { setupProgressPercent, setupSitesLine, stoppedLine } from "./firstRunSetupProgress";
 import { startFirstRunSetupAgain, stopFirstRunSetup, useFirstRunSetup } from "./firstRunSetupStore";
+import { noteJobCardSeen } from "../downloads/runningJobs";
+import { OLLAMA_SETUP_JOB } from "../ai-connection/ollamaSetupJob";
 
 /** How often the card reads the run's status while it shows (the Ollama tab reads at the same pace). */
 const POLL_MS = 1500;
@@ -118,6 +123,12 @@ export function FirstRunSetupCard(): React.ReactElement | null {
     registerNavFocus("first-run-setup-card", navRef);
     return () => unregisterNavFocus("first-run-setup-card", navRef);
   }, []);
+  // Up, this card is the run's card: the bar keeps the same run off Main (plan 105 D4; the card wins).
+  useEffect(() => {
+    if (!setup.active) return;
+    noteJobCardSeen(OLLAMA_SETUP_JOB, true, "first-run-card");
+    return () => noteJobCardSeen(OLLAMA_SETUP_JOB, false, "first-run-card");
+  }, [setup.active]);
 
   if (!setup.active) return null;
   const status = setup.accepted ? (polled ?? setup.status) : setup.status;

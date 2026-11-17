@@ -64,8 +64,13 @@ const RESULT_MS = 4000;
 
 const jobs = new Map<string, RunningJob>();
 const cancels = new Map<string, () => void>();
-/** The jobs whose card is on screen now (JobCard.tsx says so). */
-const seen = new Set<string>();
+/**
+ * Per job, which of its cards are on screen now: JobCard.tsx says so for the card in its tab ("card"), and a second
+ * card for the same job elsewhere says so under its own name (the first-time setup's card on Main, "first-run-card"),
+ * so the two can come and go in any order (a tab still sliding away unmounts after the new one mounts).
+ */
+const seen = new Map<string, Set<string>>();
+const cardInSight = (id: string): boolean => (seen.get(id)?.size ?? 0) > 0;
 const results = new Map<string, { result: JobResult; at: number }>();
 /** The job the person switched the bar to with "2 jobs"; null for the newest. */
 let pinned: string | null = null;
@@ -92,20 +97,25 @@ export function publishJob(id: string, face: JobFace, cancel: () => void, now: n
 export function endJob(id: string, result?: JobResult, now: number = Date.now()): void {
   if (!jobs.delete(id)) return;
   cancels.delete(id);
-  if (result && !seen.has(id)) {
+  if (result && !cardInSight(id)) {
     results.set(id, { result, at: now });
     if (result.tone !== "bad") window.setTimeout(changed, RESULT_MS + 20);
   }
   changed();
 }
 
-/** Job `id`'s card has come into sight (or gone out of it). A result waiting for it is then shown. */
-export function noteJobCardSeen(id: string, inSight: boolean): void {
-  if (inSight === seen.has(id) && !(inSight && results.has(id))) return;
+/**
+ * Job `id`'s card has come into sight (or gone out of it); `who` names which card, when a job has more than one. While
+ * any of its cards is in sight the job keeps off the bar, and a result waiting for it is shown there and goes.
+ */
+export function noteJobCardSeen(id: string, inSight: boolean, who = "card"): void {
+  const cards = seen.get(id) ?? new Set<string>();
+  if (inSight === cards.has(who) && !(inSight && results.has(id))) return;
   if (inSight) {
-    seen.add(id);
+    cards.add(who);
     results.delete(id);
-  } else seen.delete(id);
+  } else cards.delete(who);
+  seen.set(id, cards);
   changed();
 }
 
@@ -118,7 +128,7 @@ export interface BarView {
 
 /** The bar's view now. Nothing (job and result null) means no bar. */
 export function barView(now: number = Date.now()): BarView {
-  const away = [...jobs.values()].filter((j) => !seen.has(j.id)).sort((a, b) => b.startedAt - a.startedAt);
+  const away = [...jobs.values()].filter((j) => !cardInSight(j.id)).sort((a, b) => b.startedAt - a.startedAt);
   if (away.length) return { job: away.find((j) => j.id === pinned) ?? away[0]!, count: away.length, result: null };
   const ended = [...results.entries()]
     .filter(([, r]) => r.result.tone === "bad" || now - r.at < RESULT_MS)
@@ -128,7 +138,7 @@ export function barView(now: number = Date.now()): BarView {
 
 /** "2 jobs" on the bar: show the next job that wants the bar. */
 export function switchBarJob(): void {
-  const away = [...jobs.values()].filter((j) => !seen.has(j.id)).sort((a, b) => b.startedAt - a.startedAt);
+  const away = [...jobs.values()].filter((j) => !cardInSight(j.id)).sort((a, b) => b.startedAt - a.startedAt);
   if (away.length < 2) return;
   const at = away.findIndex((j) => j.id === (pinned ?? away[0]!.id));
   pinned = away[(at + 1) % away.length]!.id;

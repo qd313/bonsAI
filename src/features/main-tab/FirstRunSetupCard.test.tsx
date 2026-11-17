@@ -26,6 +26,8 @@ import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../test-harn
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 import { registerNavFocus, resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
 import { chipRowExitUp } from "../preset-carousel/presetRowFocusNav";
+import { JobBar } from "../downloads/JobBar";
+import { noteOllamaSetupStatus } from "../ai-connection/ollamaSetupJob";
 
 const running = (extra: Record<string, unknown> = {}) => ({
   phase: "running",
@@ -154,5 +156,28 @@ describe("the card's stop on the D-pad", () => {
     expect(nav.onMoveDown!()).toBe(true);
     expect(chips).toHaveBeenCalledTimes(1);
     expect(nav.onOKButton).toBeTypeOf("function");
+  });
+});
+
+describe("the first-time setup's card and the download bar (plan 105, lane D4)", () => {
+  it("while the card is up on Main the bar does not show the same run; once it goes, the bar does", async () => {
+    // The run was seen on the Ollama tab (its card there is out of sight now), so it wants the bar.
+    noteOllamaSetupStatus(running() as never, true);
+    render(
+      <div className="bonsai-decky-tabs-root" data-bonsai-active-tab="main">
+        <FirstRunSetupCardOrEmpty>
+          <div>Ask anything — this slot keeps its own history.</div>
+        </FirstRunSetupCardOrEmpty>
+        <JobBar />
+      </div>,
+    );
+    const jobBar = () => document.querySelector("[data-bonsai-job-bar]");
+    expect(jobBar()).not.toBeNull();
+    act(() => beginFirstRunSetup(["voice"]));
+    await waitFor(() => expect(card()).toContain("Pull 1/2 — gemma4:e2b-it-qat"));
+    expect(jobBar()).toBeNull();
+    act(() => resetFirstRunSetupForTests());
+    expect(card()).toBe("");
+    expect(jobBar()).not.toBeNull();
   });
 });

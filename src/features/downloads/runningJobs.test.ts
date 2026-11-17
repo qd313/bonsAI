@@ -120,3 +120,16 @@ describe("the bar's view", () => {
     expect(cancelJobFromX(5000)).toBe(false);
   });
 });
+
+describe("two cards for one job", () => {
+  it("while either is in sight the job keeps off the bar, whichever order the two come and go in", () => {
+    publishJob("a", FACE, () => {}, 1000);
+    noteJobCardSeen("a", true, "first-run-card");
+    noteJobCardSeen("a", true);
+    // The tab's card goes after the other came (a tab still sliding away): the other still holds the job off the bar.
+    noteJobCardSeen("a", false);
+    expect(barView(2000).job).toBeNull();
+    noteJobCardSeen("a", false, "first-run-card");
+    expect(barView(2000).job?.id).toBe("a");
+  });
+});

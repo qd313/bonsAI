@@ -1020,6 +1020,9 @@ Open all (floating button)
 - **X cancels from anywhere in a tab** (`TabBodyFocusRoot`'s `onSecondaryButton`): the job the bar shows, else the
   newest. Not in the job's first half second. The Main tab has no container around its whole body, so there X works
   on the bar only. With no download running the press is left alone.
+- **The first-time setup's card on Main wins.** While it is up (`main-tab/FirstRunSetupCard.tsx`), the bar does not
+  show the same run on Main; the two cards for one run are kept apart in `runningJobs.ts`, so the order a tab slides
+  away and the next one comes in does not matter.
 - **Room:** the bar is part of the tabs box's column, not drawn over it, and the stylesheet takes its height off
   Steam's pane (`jobLook.ts`), so the pane, the Main tab's question box and a folded tab's help strip and Open all
   button (placed from the pane's bottom, TabHelpStrip.tsx) all sit above it, and Steam's scroll keeps the ring clear.

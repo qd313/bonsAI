@@ -74,6 +74,7 @@
 import React from "react";
 import { Focusable } from "@decky/ui";
 import { BonsaiChatSecondaryButton } from "./BonsaiChatSecondaryButton";
+import { ThumbsDecodeText } from "./ThumbsDecodeText";
 import { ThumbDownOutlineIcon, ThumbUpOutlineIcon } from "../../../shared/icons/icons";
 import type { ReplyMicroActionId } from "./replyMicroActions";
 import { replyMicroActionById } from "./replyMicroActions";
@@ -127,6 +128,8 @@ import type { ReplySuggestTipView } from "./useReplySuggestTip";
 /* Option E, the maintainer's pick (plan 72): two short-worded chips on top, three below. */
 const CHIP_ROW_REFINE: ReplyMicroActionId[] = ["bad_information", "misidentified_game"];
 const CHIP_ROW_LENGTH: ReplyMicroActionId[] = ["unfenced_spoiler", "too_long", "too_short"];
+/* The thumbs row's three pieces start this far apart when they decode in (ThumbsDecodeText). */
+const THUMBS_DECODE_STEP_MS = 150;
 
 export type BuildReplyActionsElementArgs = {
   replyKey: string;
@@ -707,7 +710,10 @@ export function buildReplyActionsElement(
       {savedLabel}
       {showThumbs ? (
         <>
-          <span className="bonsai-chat-feedback-row__label">Was this helpful?</span>
+          {/* The words decode in once per answer (plan 105); the buttons are stops from the first frame. */}
+          <span className="bonsai-chat-feedback-row__label">
+            <ThumbsDecodeText text="Was this helpful?" answerKey={replyKey} />
+          </span>
           <Focusable
             className="bonsai-chat-reply-actions-row"
             flow-children="horizontal"
@@ -740,7 +746,7 @@ export function buildReplyActionsElement(
                     replyStop="helpful"
                   >
                     <ThumbUpOutlineIcon size={14} />
-                    Helpful
+                    <ThumbsDecodeText text="Helpful" answerKey={replyKey} delayMs={THUMBS_DECODE_STEP_MS} />
                   </BonsaiChatSecondaryButton>
                 </Focusable>
                 <BonsaiChatSecondaryButton
@@ -750,7 +756,7 @@ export function buildReplyActionsElement(
                   replyStop="not-really"
                 >
                   <ThumbDownOutlineIcon size={14} />
-                  Not really
+                  <ThumbsDecodeText text="Not really" answerKey={replyKey} delayMs={THUMBS_DECODE_STEP_MS * 2} />
                 </BonsaiChatSecondaryButton>
               </>
             ) : null}

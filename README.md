@@ -224,7 +224,7 @@ The first time bonsAI opens, two popups walk you through it:
 *Filmed in real time on a Steam Deck, with two pauses cut out.*
 
 - **AI on the Deck** (works anywhere, slower in games): press **Install Ollama**, then **Turn on
-  and download**. That gets Ollama and the starter models, about 4.6 GB.
+  and download**. That gets Ollama and the starter models, about 6.9 GB.
 - **AI on a PC at home** (much faster): install [Ollama](https://ollama.com/download) on the PC
   first. In the popup, switch off **Run AI on this Deck**, type the PC's address (like
   `192.168.1.20`) and press **Test connection**. The [guide](docs/guide.md#running-the-ai-on-a-pc)

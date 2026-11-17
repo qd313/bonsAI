@@ -216,7 +216,9 @@ describe("Browse models: Install the starter set", () => {
     expect(text).not.toContain("qwen2.5vl");
     expect(text).toContain("nomic-embed-text");
     expect(text).toContain("tiny.en and base.en");
-    expect(text).toContain("about 4.5 GiB");
+    // Ollama is already there on this box, so its total is the four other pieces (plan 105, § 12).
+    expect(text).toContain("about 5.3 GB in all");
+    expect(text).not.toContain("GiB");
     expect(text).toContain("registry.ollama.ai");
     expect(text).toContain("huggingface.co");
 

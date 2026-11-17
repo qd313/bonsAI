@@ -102,7 +102,10 @@ describe("Install Ollama with no models installed", () => {
     expect(text).toContain("note-search model");
     expect(text).toContain("tiny.en and base.en");
     expect(text).toContain("speech models");
-    expect(text).toContain("about 4.5 GiB");
+    // The total counts Ollama itself and the voice engine, not the models alone (plan 105, § 12).
+    expect(text).toContain("about 6.9 GB in all");
+    expect(text).toContain("https://ollama.com to download Ollama, if it is not installed yet (about 1.5 GB)");
+    expect(text).not.toContain("GiB");
     expect(text).toContain("huggingface.co");
     expect(text).toContain("registry.ollama.ai");
     expect(text).toContain("installs Ollama only");

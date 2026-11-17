@@ -68,7 +68,7 @@ describe("what the popup says", () => {
     expect(screen.getByRole("switch", { name: "Start the AI with the Deck" }).getAttribute("aria-checked")).toBe("false");
     expect(text()).toContain("Starts it each time the Deck turns on, so the first answer comes sooner.");
     expect(text()).toContain(
-      "Install Ollama downloads it and the starter models, about 4.6 GB. You are asked before anything downloads.",
+      "Install Ollama downloads it and the starter models, about 6.9 GB. You are asked before anything downloads.",
     );
     await waitFor(() => expect(text()).toContain("Local Ollama setup: Not installed"));
     // Two buttons in the foot, the action on the left and Not now on the right.
@@ -111,7 +111,7 @@ describe("what the popup says", () => {
     expect(text()).toContain("PC address");
     expect(text()).toContain("Just the PC's address, for example 192.168.1.20. bonsAI adds Ollama's usual port (11434) when you leave it out.");
     expect(text()).toContain("The PC needs Ollama with a model, and must accept connections from your network.");
-    expect(text()).not.toContain("about 4.6 GB");
+    expect(text()).not.toContain("about 6.9 GB");
     expect(screen.queryByRole("switch", { name: "Start the AI with the Deck" })).toBeNull();
     expect(screen.getByText("Test connection")).toBeTruthy();
     expect(screen.queryByText("Install Ollama")).toBeNull();

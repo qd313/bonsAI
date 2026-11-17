@@ -30,11 +30,18 @@ import {
   type DownloadNotice,
 } from "../downloads/downloadNotice";
 import { modelPullNotice, OLLAMA_PROGRAM_NOTICE, SPEECH_MODELS_NOTICE, VOICE_ENGINE_NOTICE } from "../downloads/downloadSites";
+import {
+  ANSWER_MODEL_DOWNLOAD_SIZE,
+  NOTE_SEARCH_MODEL_DOWNLOAD_SIZE,
+  OLLAMA_DOWNLOAD_SIZE,
+  SPEECH_MODELS_DOWNLOAD_SIZE,
+  totalDownloadSize,
+  VOICE_ENGINE_DOWNLOAD_SIZE,
+} from "../downloads/downloadSizes";
 import type { LocalOllamaSetupStatus } from "../ai-connection/OllamaWhereAiRunsSection.types";
 import {
   LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
   LOCAL_SETUP_NETWORK_AND_POWER_HINT,
-  LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB,
   OLLAMA_MODELS_DISK_HINT,
 } from "../ai-connection/OllamaWhereAiRunsSection.constants";
 import { textPx } from "../../styles/textPx";
@@ -45,7 +52,22 @@ export const STARTER_SET_BUTTON_LABEL = "Install the starter set";
 /** The Ollama program's site is listed first only when this box also installs Ollama itself. */
 export function starterSetNotices(opts: { withOllama?: boolean } = {}): DownloadNotice[] {
   const program = opts.withOllama ? [OLLAMA_PROGRAM_NOTICE] : [];
-  return [...program, modelPullNotice([TIER1_ESSENTIALS_TAG, STARTER_NOTE_SEARCH_TAG], "about 4.6 GB"), SPEECH_MODELS_NOTICE, VOICE_ENGINE_NOTICE];
+  const models = modelPullNotice(
+    [TIER1_ESSENTIALS_TAG, STARTER_NOTE_SEARCH_TAG],
+    totalDownloadSize([ANSWER_MODEL_DOWNLOAD_SIZE, NOTE_SEARCH_MODEL_DOWNLOAD_SIZE]),
+  );
+  return [...program, models, SPEECH_MODELS_NOTICE, VOICE_ENGINE_NOTICE];
+}
+
+/**
+ * The box's size sentence: the total of every piece it downloads, Ollama included when the box installs it too
+ * (plan 105, § 12: the old "about 4.5 GiB in all" was the models alone).
+ */
+export function starterSetSizeLine(withOllama: boolean): string {
+  const pieces = [ANSWER_MODEL_DOWNLOAD_SIZE, NOTE_SEARCH_MODEL_DOWNLOAD_SIZE, SPEECH_MODELS_DOWNLOAD_SIZE, VOICE_ENGINE_DOWNLOAD_SIZE];
+  const total = totalDownloadSize(withOllama ? [OLLAMA_DOWNLOAD_SIZE, ...pieces] : pieces);
+  const names = "the answer model, the note-search model, the speech models and the voice engine";
+  return `Rough download: ${total} in all (${withOllama ? `Ollama, ${names}` : names}).`;
 }
 
 /** What the box says under the site line; `engineAlreadyAsked` is true for the follow-up box of Install Ollama; `downloadsOff` makes its Cancel sentence say nothing is installed. */
@@ -57,7 +79,7 @@ export function starterSetBoxBody(engineAlreadyAsked: boolean, downloadsOff = fa
         chat, read screenshots and text in pictures, and help in Strategy mode; the note-search model{" "}
         <span style={{ color: "#9ce7ff" }}>{STARTER_NOTE_SEARCH_TAG}</span>; and the speech models{" "}
         <span style={{ color: "#9ce7ff" }}>{STARTER_SPEECH_MODELS.join(" and ")}</span> and the voice engine for the microphone.{" "}
-        {LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB}
+        {starterSetSizeLine(engineAlreadyAsked)}
       </div>
       <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
         A model you already have is not downloaded again. If one download fails the others still go ahead, and the

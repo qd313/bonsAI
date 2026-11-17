@@ -65,7 +65,7 @@ export const FIRST_RUN_POPUP_WORDS = {
   autostart: "Start the AI with the Deck",
   autostartHelp: "Starts it each time the Deck turns on, so the first answer comes sooner.",
   installNote:
-    "Install Ollama downloads it and the starter models, about 4.6 GB. You are asked before anything downloads.",
+    "Install Ollama downloads it and the starter models, about 6.9 GB. You are asked before anything downloads.",
   pcAddress: "PC address",
   pcNeeds: "The PC needs Ollama with a model, and must accept connections from your network.",
   notNow: "Not now",

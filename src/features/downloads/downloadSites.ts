@@ -8,10 +8,17 @@
  *
  * Used for: the call sites of `confirmDownload` (downloadNotice.tsx).
  *
- * Does not: know a size the code does not know. Ollama itself, the voice engine, the voice models
- * and the knowledge library have no size in the code ahead of time; their notices say so.
+ * Does not: know a size the code does not know. The knowledge library and a single speech model have no size
+ * in the code ahead of time; their notices say so. Ollama's and the voice engine's sizes were looked up on
+ * 2026-11-16 and are kept, with their sources, in downloadSizes.ts.
  */
 import type { DownloadNotice } from "./downloadNotice";
+import {
+  NOTE_SEARCH_MODEL_DOWNLOAD_SIZE,
+  OLLAMA_DOWNLOAD_SIZE,
+  SPEECH_MODELS_DOWNLOAD_SIZE,
+  VOICE_ENGINE_DOWNLOAD_SIZE,
+} from "./downloadSizes";
 
 /** local_ollama_setup_service.py: OLLAMA_OFFICIAL_INSTALL_SH and the ollama.com/download tarballs. */
 const OLLAMA_SITE = "https://ollama.com";
@@ -28,7 +35,7 @@ const GITHUB_SITE = "https://github.com";
 export const OLLAMA_PROGRAM_NOTICE: DownloadNotice = {
   site: OLLAMA_SITE,
   what: "Ollama, if it is not installed yet",
-  size: null,
+  size: OLLAMA_DOWNLOAD_SIZE.label,
 };
 
 /** "Update AI & models": the newest Ollama, then newer copies of the models already installed. */
@@ -43,13 +50,13 @@ export function modelPullNotice(tags: readonly string[], size: string | null): D
 }
 
 /** KnowledgeBaseSection.tsx's own title for the meaning-search model offer says about 270 MB. */
-export const MEANING_SEARCH_MODEL_NOTICE: DownloadNotice = modelPullNotice(["nomic-embed-text"], "about 270 MB");
+export const MEANING_SEARCH_MODEL_NOTICE: DownloadNotice = modelPullNotice(["nomic-embed-text"], NOTE_SEARCH_MODEL_DOWNLOAD_SIZE.label);
 
 /** The starter set's two speech models (voice_model_download_service.py: tiny.en 78 MB, base.en 148 MB). */
 export const SPEECH_MODELS_NOTICE: DownloadNotice = {
   site: HUGGING_FACE_SITE,
   what: "the tiny.en and base.en speech models",
-  size: "about 230 MB",
+  size: SPEECH_MODELS_DOWNLOAD_SIZE.label,
 };
 
 /**
@@ -59,7 +66,7 @@ export const SPEECH_MODELS_NOTICE: DownloadNotice = {
 export const VOICE_ENGINE_NOTICE: DownloadNotice = {
   site: VOICE_ENGINE_IMAGE_SITE,
   what: "the voice engine's build image, which then fetches its compilers from its own package servers",
-  size: null,
+  size: VOICE_ENGINE_DOWNLOAD_SIZE.label,
 };
 
 /** The library's size is only known once its list file has been fetched. */

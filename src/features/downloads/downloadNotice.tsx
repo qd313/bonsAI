@@ -202,6 +202,10 @@ async function saveDownloadsPermission(b: PermissionBridge, on: boolean): Promis
   const next: BonsaiCapabilities = { ...before, internet_downloads: on };
   b.setCapabilities(next);
   patchPendingSessionSettingsSnapshot({ capabilities: next });
+  // Off reads as off at once, while its save is on its way: nothing (the one-time "send it again" above
+  // included) may treat the permission as on after the person turned it off. On waits for the save.
+  if (!on && bridge === b) bridge = { ...b, capabilities: next, enabled: false };
+  const turningOffBridge = bridge;
   try {
     // The back end tidies the whole permissions block on save, so it is sent whole.
     await callDeckyWithTimeout<[{ capabilities: BonsaiCapabilities }], unknown>(
@@ -209,9 +213,10 @@ async function saveDownloadsPermission(b: PermissionBridge, on: boolean): Promis
       [{ capabilities: next }],
       DECKY_RPC_TIMEOUT_MS
     );
-    if (bridge === b) bridge = { ...b, capabilities: next, enabled: on && !b.kidsLockActive };
+    if (bridge === b || bridge === turningOffBridge) bridge = { ...b, capabilities: next, enabled: on && !b.kidsLockActive };
     return true;
   } catch {
+    if (!on && bridge === turningOffBridge) bridge = b;
     // Not claiming a setting the file does not have: the screen shows what it showed before, so nothing is sent
     // later behind the person's back and the next press asks again.
     b.setCapabilities(before);

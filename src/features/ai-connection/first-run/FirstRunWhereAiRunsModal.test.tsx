@@ -165,6 +165,29 @@ describe("OK while the switch is off", () => {
     expect(checked(SWITCH)).toBe("false");
   });
 
+  it("switched off and OK pressed before that save returns: OK is grey, nothing starts, the ring goes to the switch", async () => {
+    permissionBridge(true);
+    let release: (() => void) | null = null;
+    setRpcHandler("save_settings", () => new Promise((r) => (release = () => r({}))));
+    const { onClose } = await open();
+    await step("onMoveUp");
+    await step("onOKButton");
+    expect(checked(SWITCH)).toBe("false");
+    // Down then A while the off is still being saved: Down lands on Not now, and A on OK does nothing.
+    expect(await step("onMoveDown")).toBe(FIRST_RUN_POPUP_WORDS.notNow);
+    await act(async () => void screen.getByLabelText(FIRST_RUN_POPUP_WORDS.ok).click());
+    await settle();
+    expect(calls("start_local_ollama_setup")).toHaveLength(0);
+    expect(onClose).not.toHaveBeenCalled();
+    expect(ringName()).toBe(SWITCH);
+    await act(async () => release?.());
+    await settle();
+    await act(async () => void screen.getByLabelText(FIRST_RUN_POPUP_WORDS.ok).click());
+    await settle();
+    expect(calls("start_local_ollama_setup")).toHaveLength(0);
+    expect(checked(SWITCH)).toBe("false");
+  });
+
   it("Down from the switch lands on Not now while it is off", async () => {
     permissionBridge(false);
     await open();

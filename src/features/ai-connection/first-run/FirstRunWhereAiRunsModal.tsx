@@ -142,10 +142,15 @@ export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsM
   const [mdnsHosts, setMdnsHosts] = useState<MdnsOllamaHost[]>([]);
   const [mdnsMessage, setMdnsMessage] = useState<string | null>(null);
   const probeSeq = useRef(0);
-  const savedOnRef = useRef(savedOn);
-  savedOnRef.current = savedOn;
+  /**
+   * OK may start the downloads only when the switch shows on, its save has come back good, and no other switch
+   * save is still on its way: a press that turned it off and was not saved yet must never leave OK blue.
+   */
+  const okReady = shownOn && savedOn && !switchBusy;
+  const okReadyRef = useRef(okReady);
+  okReadyRef.current = okReady;
 
-  const firstNav = useFirstRunPopupNav(FIRST_SCREEN_ROWS, (_from, to) => (to === "foot" ? (savedOnRef.current ? FOOT_OK : FOOT_NOT_NOW) : null));
+  const firstNav = useFirstRunPopupNav(FIRST_SCREEN_ROWS, (_from, to) => (to === "foot" ? (okReadyRef.current ? FOOT_OK : FOOT_NOT_NOW) : null));
   const pcNav = useFirstRunPopupNav(PC_SCREEN_ROWS, (_from, to) => (to === "foot" ? PC_FOOT_BACK : to === "address" ? 0 : null));
   useRingOnOpen(() => (screen === "pc" ? pcNav.focusStop("foot", PC_FOOT_BACK) : firstNav.focusStop("foot", FOOT_NOT_NOW)), screen);
 
@@ -181,7 +186,7 @@ export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsM
   };
 
   const pressOk = () => {
-    if (starting) return;
+    if (starting || !okReadyRef.current) return;
     setStarting(true);
     void (async () => {
       const leaveOut = leftOutFromTicks(ticks);
@@ -273,10 +278,10 @@ export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsM
                 label={FIRST_RUN_POPUP_WORDS.ok}
                 ariaLabel={FIRST_RUN_POPUP_WORDS.ok}
                 look="primary"
-                greyed={!savedOn || starting}
+                greyed={!okReady || starting}
                 onPress={pressOk}
                 onGreyPress={() => {
-                  if (!savedOn) firstNav.focusStop("allow", 0);
+                  if (!okReady) firstNav.focusStop("allow", 0);
                 }}
               />
               <PopupButton stop={firstNav.stop("foot", FOOT_PC)} label={FIRST_RUN_POPUP_WORDS.pc} ariaLabel={FIRST_RUN_POPUP_WORDS.pc} look="plain" onPress={() => setScreen("pc")} />

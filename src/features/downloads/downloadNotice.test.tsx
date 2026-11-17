@@ -20,6 +20,7 @@ const hoisted = vi.hoisted(() => ({
   toasts: [] as unknown[],
   patches: [] as unknown[],
   failSave: false,
+  hold: null as Promise<void> | null,
 }));
 
 vi.mock("@decky/ui", async () => {
@@ -37,6 +38,7 @@ vi.mock("../../shared/deckyCall", () => ({
   DECKY_RPC_TIMEOUT_MS: 1000,
   callDeckyWithTimeout: async (method: string, args: unknown[]) => {
     hoisted.calls.push({ method, args });
+    if (hoisted.hold) await hoisted.hold;
     if (hoisted.failSave) throw new Error("save failed");
     return {};
   },
@@ -51,6 +53,7 @@ import {
   internetDownloadsAreOff,
   internetDownloadsAreOn,
   internetDownloadsSwitchState,
+  sendDownloadsOnAgain,
   setDownloadPermissionBridge,
   setInternetDownloadsFromSwitch,
   DOWNLOAD_SITES_SEEN_STORAGE_KEY,
@@ -82,6 +85,7 @@ beforeEach(() => {
   hoisted.toasts = [];
   hoisted.patches = [];
   hoisted.failSave = false;
+  hoisted.hold = null;
   window.localStorage.clear();
   setDownloadPermissionBridge(null);
 });
@@ -249,5 +253,27 @@ describe("the first-time setup's Internet downloads switch (plan 105, lane D3)",
     expect(hoisted.calls).toHaveLength(0);
     expect(hoisted.toasts).toEqual([expect.objectContaining({ title: "Downloads are off" })]);
     expect(internetDownloadsSwitchState()).toEqual({ on: false, kidsLock: true });
+  });
+});
+
+describe("turning Internet downloads off while that save is still on its way", () => {
+  it("reads as off at once, so the one-time 'send it again' can never turn it back on", async () => {
+    bridge(true);
+    let release = () => {};
+    hoisted.hold = new Promise<void>((r) => (release = r));
+    const turningOff = setInternetDownloadsFromSwitch(false);
+    expect(internetDownloadsAreOn()).toBe(false);
+    await expect(sendDownloadsOnAgain()).resolves.toBe(false);
+    expect(hoisted.calls.filter((c) => JSON.stringify(c.args).includes('"internet_downloads":true'))).toHaveLength(0);
+    release();
+    await expect(turningOff).resolves.toBe(false);
+    expect(internetDownloadsAreOn()).toBe(false);
+  });
+
+  it("a failed off puts the permission back on, as the file still says", async () => {
+    bridge(true);
+    hoisted.failSave = true;
+    await expect(setInternetDownloadsFromSwitch(false)).resolves.toBe(true);
+    expect(internetDownloadsAreOn()).toBe(true);
   });
 });

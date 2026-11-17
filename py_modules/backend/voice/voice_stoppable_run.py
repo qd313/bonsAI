@@ -30,31 +30,47 @@ CANCELLED_MESSAGE = "Binary install cancelled."
 POLL_SECONDS = 0.5
 
 
+def _remove_container(
+    env: Optional[dict[str, str]],
+    podman: Optional[str],
+    container_name: Optional[str],
+) -> None:
+    """`podman rm -f <name>`, errors ignored (the container may not exist yet, or any more)."""
+    if not (podman and container_name):
+        return
+    try:
+        subprocess.run(
+            [podman, "rm", "-f", container_name],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            env=env,
+            check=False,
+        )
+    except Exception:
+        pass
+
+
 def _stop_step(
     proc: "subprocess.Popen[str]",
     env: Optional[dict[str, str]],
     podman: Optional[str],
     container_name: Optional[str],
 ) -> None:
-    """End a step: remove its container first (so the work inside stops), then end the podman process."""
-    if podman and container_name:
-        try:
-            subprocess.run(
-                [podman, "rm", "-f", container_name],
-                capture_output=True,
-                text=True,
-                timeout=30,
-                env=env,
-                check=False,
-            )
-        except Exception:
-            pass
+    """End a step: remove its container first (so the work inside stops), then end the podman process.
+
+    The container is removed a second time after the process has ended: a Cancel in the first second can
+    run the first remove before the container exists, and a container that appears just after would
+    otherwise run on (its shell ignores the stop signal) until the time limit.
+    """
+    _remove_container(env, podman, container_name)
     if proc.poll() is None:
         proc.terminate()
         try:
             proc.wait(timeout=5)
         except subprocess.TimeoutExpired:
             proc.kill()
+    _remove_container(env, podman, container_name)
     try:
         proc.communicate(timeout=10)
     except Exception:

@@ -2096,3 +2096,12 @@ Three feature entries closed, copied word for word from [roadmap.md](../roadmap.
   All 31 characters are named characters from games or TV, each voiced by a real actor. Owed: a one-line-per-character sweep of who owns it, whose voice it is, and whether a voice could be a type rather than a copy. No code; a document the legal check reads. [Memo](../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).
   Not needed for 0.6.0 (plan 72): characters are text only. Still the gate before any character gets a voice.
   **Closed 2026-11-17 (plan 105, `f3735e52c`):** the document is [audit/bundled-characters-voices.md](bundled-characters-voices.md): for each of the 31 characters, whether a voice could be a type rather than a copy of one person's voice. 20 yes, 8 unclear, 3 no.
+
+## Closed 2026-11-17 (plan 105 sweep 2)
+
+One feature entry closed, copied word for word from [roadmap.md](../roadmap.md) as it stood, with its closing line.
+
+- ★★ `[chips]` **The four chip styles still differ in small ways, and share no drawing code** — **OPEN, held until after the release ([D121](audit/maintainer-decisions-locked.md#d121--locked-2026-09-30-raised-2026-09-30--plan-78-a-wider-bug-session-and-an-unattended-deck-pass-the-eleven-calls) call 10).**
+  Folding them into one shared engine is a reshaping of code, so it waits. The rules for which chip comes next and how long it stays were already made the same in plan 78.
+  What else differs (restart after an answer, wait after the highlight leaves, recent chips avoided, how each first appears) has not been re-checked against the code since.
+  **Closed 2026-11-17 (plan 105 lane B2, `7238b87fe`, `eaf1e07b8`):** the fade and sideways-carousel chip styles were removed, and the answer scramble's unused looks; the chip row is decode, or plain swaps for less motion. No Deck row of its own; the Deck rows for the new default, P105-DECODE-DEFAULT-01 and P105-OLD-SETTINGS-01, are still owed.

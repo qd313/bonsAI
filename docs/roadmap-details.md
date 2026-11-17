@@ -867,3 +867,42 @@ Moved word for word by sweep K0 of plan 105 to make room in the roadmap. Each bl
 **Verify entry: the streamed answer's frame rate (the 2026-10-22 note, as it stood)**
 
   **2026-10-22 (plan 97 block B, build `73738058`, Deep Rock Galactic: Survivor):** the real fight COULD NOT RUN. One A at the game's title screen opened its save-slot screen (three saved games, each with a delete button), and the runbook stops there; no frame rate was sampled. Row SCR-10 stays owed for a real fight. Evidence `workshop:test-evidence/plan97-SCR-10.json`. The 2026-10-11 note, word for word: [roadmap-details.md](roadmap-details.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22).
+
+**Sweep 2 (2026-11-17): entries as they stood before the Deck's block D1 results and the landings were written in (each now has a new Verify, Bugs or Features entry)**
+
+*Features entry: a long answer is cut into sections while it writes (the 2026-11-14 lookup and the block D0 note, as they stood)*
+
+  Plan 105's lookup (2026-11-14): the view does follow the end of a writing answer, but in jumps, and it stops whenever the ring is on the answer (which would explain the Deck run where the page stayed at the top). **Deck 2026-11-17 (plan 105 block D0, row P105-M-ANSWER-FOLLOW, `workshop:test-evidence/plan105-P105-M-ANSWER-FOLLOW.json`):** the page did not follow at all in either case measured, with nothing holding the ring and with the ring on a term inside the writing answer; the scroll position stayed at 0 throughout while the answer's newest text went below the visible area. A fix lands in the next batch (lane A8; not yet).
+  The status line then read: PARTIAL: the cutting while it writes is built (2026-10-14, plan 93) and passed on the Deck 2026-10-14 (row P93-M4-ANSWER-FINISH-after, in Done); the view following the end of the answer smoothly while it writes is NOT built. Decided on the mock-up board 2026-10-10 (option A of round 2); carried over 2026-09-24 from plan 05.
+
+*Bugs entry: Clear hid an answer (as it stood)*
+
+  After a long question was refused, A on the X emptied the box, and the answer to the last question also vanished from the view (the question bubble stayed; the answer and its feedback buttons were gone). Whether the saved chat still holds the turn was not checked; seen once. Evidence `workshop:test-evidence/plan105-P105-M-PAPERCLIP-LEFT.json` (its side note) and the driver's handover `workshop:planning/assets/105-handover-D0.md`.
+
+*Bugs entry: the AI models box, an installed model can vanish (as it stood)*
+
+  The licence check runs before the rule that keeps installed models on screen, so with the default "open source only" setting an installed model outside it can drop out of the list while the count at the top still counts it. This may be the "hidden Gemma" the maintainer reported in October (see the AI models screen entry in Features). Same screen: it opens with 2 rows, not 3, because that setting hides one of the three "Deck essentials" models. Lane D5's area; row **P105-MODELS-BOX-01**.
+
+*Features entry: AI models screen (as it stood)*
+
+  Only a few models show up now. Grow the catalog a lot. The filters are confusing; cut them down to a few clear ones. Chosen for plan 105 (the maintainer, 2026-11-14, D142 call 4), look picked 2026-11-15: board 5, tab 3, C (word buttons and two switches); lane D5.
+
+*Features entry: Terse answers capped at about 40 words (as it stood)*
+
+  Today Terse asks for three lines, and three model lines wrap to nine or more screen lines on the Deck's panel. The cap becomes about 40 words. Related: the Done entry on the Terse slider stop (row P93-B13-TERSE-SLIDER).
+
+*Features entry: "N earlier" one game at a time (as it stood)*
+
+  An open day starts with a row of game buttons (All, each game asked about that day, No game). A on one shows only that game's questions, six at a time, and each row carries its game's name. Left or Right on the "N earlier" line flips the whole list: by day, as now, or one line per game across every day, each question stamped with its day. The maintainer: some players remember the day, some remember the game; this serves both. Each saved question already stores its game, so no new data is needed. Not chosen: a busy day that splits by game on its own, or questions sorted by game with labels.
+
+*Features entry: Decode as the default (as it stood)*
+
+  Decode becomes the default for both answers and chips, and the animation settings leave the Developer tab. Call 6: today's Decode values are the stock values; a short clip goes on the checks page for the maintainer's eye. Call 16 (default taken at go): the "fade" and "carousel" chip styles are deleted, "static" stays as the reduced-motion look (lane B2). Only the thumbs row ("Was this helpful?" and its two buttons) animates in under an answer (call 6; lane A4).
+
+*Features entry: Headline first (as it stood)*
+
+  Status line: OPEN, filed 2026-09-08. Not yet (D99): it waited for its own go; chosen for plan 105 (the maintainer, 2026-11-14, D142 call 5): build it, as plain text, after the mock-up (lane P1). It lands switched on only if the answer test shows more answers opening with their point and no loss of facts; otherwise switched off, with the numbers. The model would open every answer with one short sentence that carries the point and gives nothing away. The 2026-09-12 count: 2 of 10 answers already did, 0 of 10 gave anything away. By the maintainer's own rule that means build it, but they said not yet.
+
+*Features entry: finish the controller test rig (the 2026-11-16 note, as it stood)*
+
+  **2026-11-16 (plan 104 block D2c):** saved walks that depend on chat contents cannot be replayed on a changed chat: four replayed and none matched (the test chat had changed since they were saved, and a replay sets up no start of its own); the two Ollama-tab walks were not run. Evidence `workshop:test-evidence/plan104-P104-D2C4-REPLAYS.json`.

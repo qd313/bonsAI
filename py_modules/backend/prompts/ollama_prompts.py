@@ -130,6 +130,7 @@ from backend.prompts.ask_topic_instructions import (
 )
 from backend.prompts.reply_style_blocks import (
     user_asks_for_detail_depth,
+    build_headline_first_block,
     build_reply_language_block,
     build_reply_verbosity_block,
     build_terse_reply_block,
@@ -807,7 +808,7 @@ def build_system_prompt(
         middle += build_answer_depth_blocks(question, ask_mode=ask_mode, reply_verbosity=reply_verbosity)
         return _assemble(
             dynamic_block + general_block + glossary_block,
-            middle + language_block + verbosity_block,
+            middle + language_block + build_headline_first_block() + verbosity_block,
             tail,
         )
 
@@ -964,7 +965,7 @@ def build_system_prompt(
     language_block = build_reply_language_block(reply_language)
     return _assemble(
         dynamic_block + general_block + glossary_block,
-        middle + language_block + verbosity_block,
+        middle + language_block + build_headline_first_block() + verbosity_block,
         tail,
     )
 

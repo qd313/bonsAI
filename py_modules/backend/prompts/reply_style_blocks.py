@@ -73,6 +73,26 @@ def build_reply_language_block(reply_language: str) -> str:
     )
 
 
+# Plan 105 (row P105-HEADLINE-01): "Headline first". One sentence in the prompt asks the AI to open the answer
+# with one short sentence that carries the point, so the reply-ready popup over a game (it shows only the first
+# words), a spoken answer and the first thing in the panel are useful by themselves. Nothing is drawn differently;
+# only the words change. It sits here, with the other reply-shape rules, rather than in ollama_prompts.py: it shapes
+# how the reply reads, not what it is about, and the one switch below turns it off completely.
+HEADLINE_FIRST_ON = False
+HEADLINE_FIRST_LINE = (
+    "HEADLINE FIRST: After the status line, open the answer with one short sentence that tells the player the main "
+    "thing to do or know, plain enough to make sense if it is all they read and giving away no spoiler, late boss "
+    "or ending; then go on with the answer exactly as you would have, keeping every detail from the notes."
+)
+
+
+def build_headline_first_block() -> str:
+    """The Headline-first sentence as its own paragraph, or nothing while the switch is off."""
+    if not HEADLINE_FIRST_ON:
+        return ""
+    return f"\n\n{HEADLINE_FIRST_LINE}\n"
+
+
 def build_terse_reply_block(
     question: str, *, character_roleplay_on: bool = False, ask_mode: str = "speed"
 ) -> str:

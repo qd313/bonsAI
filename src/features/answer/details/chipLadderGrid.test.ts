@@ -10,12 +10,14 @@ import { describe, expect, it } from "vitest";
 import { gridMove, packChipRows, rowsFromBoxes, rowWidthOf, type ChipBox } from "./chipLadderGrid";
 
 const MEASURED = [143.7, 92.9, 102.9, 120.2, 205.7, 94.6, 150, 102.1];
+/* The gap of that run; the grid's own gap is 4 px since plan 105's smaller chips. */
+const GAP_2026_10 = 6;
 
 describe("packing the chips into rows", () => {
   it("packs the eight measured chips into five rows, each no wider than the 300 px column", () => {
-    const rows = packChipRows(MEASURED, 300)!;
+    const rows = packChipRows(MEASURED, 300, GAP_2026_10)!;
     expect(rows).toEqual([[0, 1], [2, 3], [4], [5, 6], [7]]);
-    for (const row of rows) expect(rowWidthOf(row, MEASURED)).toBeLessThanOrEqual(300);
+    for (const row of rows) expect(rowWidthOf(row, MEASURED, GAP_2026_10)).toBeLessThanOrEqual(300);
     expect(rows.flat().sort((a, b) => a - b)).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
   });
 
@@ -28,9 +30,9 @@ describe("packing the chips into rows", () => {
 
   it("fits every row at any column width the Deck's wrapping allows (it wrapped them the same way)", () => {
     for (const width of [251, 260, 284, 300, 305]) {
-      const rows = packChipRows(MEASURED, width)!;
+      const rows = packChipRows(MEASURED, width, GAP_2026_10)!;
       expect(rows).toEqual([[0, 1], [2, 3], [4], [5, 6], [7]]);
-      for (const row of rows) expect(rowWidthOf(row, MEASURED)).toBeLessThanOrEqual(width + 0.5);
+      for (const row of rows) expect(rowWidthOf(row, MEASURED, GAP_2026_10)).toBeLessThanOrEqual(width + 0.5);
     }
   });
 
@@ -66,7 +68,7 @@ function drawnBoxes(rows: number[][], widths: number[]): (i: number) => ChipBox 
 }
 
 describe("where each press goes", () => {
-  const packed = packChipRows(MEASURED, 288)!;
+  const packed = packChipRows(MEASURED, 288, GAP_2026_10)!;
   const boxOf = drawnBoxes(packed, MEASURED);
   const rows = rowsFromBoxes(packed.flat(), boxOf);
 

@@ -21,11 +21,12 @@
  * end of an earlier row saves a whole row; only then does it. For the eight chips measured on the
  * Deck on 2026-10-09 the two give the same five rows: every row can hold at most two of them (the
  * three narrowest side by side need 301.6 px) and the 205.7 px Thinking chip fits beside none, so
- * five rows is the fewest possible at 300 px with today's 6 px gaps.
+ * five rows was the fewest possible at 300 px with the 6 px gaps of then. Since plan 105 the chips carry
+ * short names in smaller pills 4 px apart, and the usual eight take three rows.
  */
 
-/** The space between two chips, across and down; the same 6 px the ladder's styles use. */
-export const CHIP_GAP_PX = 6;
+/** The space between two chips, across and down: 4 px, as plan 105's drawing has it (6 px before). */
+export const CHIP_GAP_PX = 4;
 
 /** Rounding slack: a chip measured 0.4 px wider than the room left still fits (the Deck reads to 0.1 px). */
 const FIT_SLACK_PX = 0.5;

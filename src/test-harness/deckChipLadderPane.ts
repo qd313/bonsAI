@@ -3,7 +3,8 @@
  *
  * Purpose: Test helper for the chip-grid walk tests (plan 87 F3). Gives a rendered ContextChipLadder the
  *          layout the Deck draws: the chips wrapped in drawn order (their CSS `order`) into rows of the
- *          measured width, 24.4 px tall and 6 px apart; the open chip's details box under the whole grid at
+ *          measured width, as tall and as far apart as the ladder's own styles draw them (18 px and 4 px since
+ *          plan 105; 24.4 and 6 before, a test can still ask for those); the open chip's details box under the whole grid at
  *          the height measured for that chip; the held block after it; and a pane whose scroll height follows
  *          all of that, so the browser's clamp of a too-far scroll happens here as it does on the Deck.
  *          After every press, Steam's own glide to the chip that took focus runs (deckAnswerWalk.ts's three
@@ -23,11 +24,20 @@
 import { liftForFocus } from "../shared/dpad/useDockClearanceOnFocus";
 import { steamGlide, steamScrollIntoView, type SteamScrollRule } from "./deckAnswerWalk";
 
-/** The caption ("Behind this answer · N of M", 14.8 tall) and its 6 px margin above the grid. */
+/*
+ * The grid's own sizes are read off the rendered ladder's inline styles (plan 105), so a test lays out what the
+ * code draws: the gap between chips across and down (`gap`), the room between the grid and the box
+ * (`marginBottom`), and the chip's height (its line height, its padding above and below, a 1 px border each
+ * side). The fallbacks are the 2026-10 Deck measurements, for a ladder that sets none of them.
+ */
+/** The old caption ("Behind this answer · N of M", 14.8 tall) and its 6 px margin, when one is drawn above the grid. */
 const CAPTION_PX = 20.8;
-/** The gap between chips across and down, and between the grid and the details box. */
-const CHIP_GAP = 6;
-const GRID_TO_BOX = 8;
+const FALLBACK_CHIP_GAP = 6;
+const FALLBACK_GRID_TO_BOX = 8;
+/** The chip measured on the Deck before plan 105 (10 px words, no line height of its own). */
+const FALLBACK_CHIP_PX = 24.4;
+/** The chip's border, each side: 1 px on the Deck (the board's 0.8 is its screen's pixel rounding). */
+const CHIP_BORDER_PX = 1;
 /** The toggle above the ladder: its height, and the gap from its bottom to the ladder's top. */
 const TOGGLE_PX = 28;
 const TOGGLE_GAP_PX = 8.5;
@@ -47,7 +57,11 @@ export interface ChipLadderPaneOptions {
   scrollTop?: number;
   /** The grid's width: the chips wrap at this. */
   rowWidth?: number;
+  /** The grid's sizes, in place of the ones read off the drawn ladder (a test replaying an older Deck run). */
   chipHeight?: number;
+  chipGap?: number;
+  gridToBox?: number;
+  captionPx?: number;
   /** Each chip's measured width, by its label. */
   chipWidths: Record<string, number>;
   /** The details box's height, by the open chip's label. */
@@ -101,7 +115,6 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
   const dockTop = o.dockTop ?? 658.4;
   const below = o.below ?? 108.9;
   const rowWidth = o.rowWidth ?? 288;
-  const chipH = o.chipHeight ?? 24.4;
   const clientHeight = paneBottom - paneTop;
 
   const pane = document.createElement("div");
@@ -119,9 +132,22 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
   const openLabel = () => part(".bonsai-chip-ladder-chip--active")?.textContent ?? "";
   const heldPx = () => parseFloat(part(".bonsai-chip-ladder-hold")?.style.height || "0") || 0;
   const boxPx = () => (o.boxHeights[openLabel()] ?? 0) + (o.boxExtra?.px ?? 0);
+  /* The grid's sizes as drawn (see the constants above). */
+  const gridStyle = () => part(".bonsai-chip-ladder-grid")?.style;
+  const chipGap = () => o.chipGap ?? (parseFloat(gridStyle()?.gap ?? "") || FALLBACK_CHIP_GAP);
+  const gridToBox = () => o.gridToBox ?? (parseFloat(gridStyle()?.marginBottom ?? "") || FALLBACK_GRID_TO_BOX);
+  const captionPx = () => o.captionPx ?? (part(".bonsai-chip-ladder-grid")?.previousElementSibling ? CAPTION_PX : 0);
+  const chipHeight = () => {
+    if (o.chipHeight) return o.chipHeight;
+    const style = chips()[0]?.style;
+    const line = parseFloat(style?.lineHeight ?? "");
+    return line > 0 ? line + 2 * (parseFloat(style!.padding) || 0) + 2 * CHIP_BORDER_PX : FALLBACK_CHIP_PX;
+  };
 
   /* The browser's wrapping: chips in drawn order, a new row when the next one does not fit. */
   const layout = () => {
+    const gap = chipGap();
+    const chipH = chipHeight();
     const drawn = chips()
       .map((el, i) => ({ el, order: el.style.order === "" ? i : Number(el.style.order) }))
       .sort((a, b) => a.order - b.order);
@@ -130,17 +156,17 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
     let x = 0;
     drawn.forEach(({ el }, n) => {
       const w = Math.min(o.chipWidths[el.textContent ?? ""] ?? 80, rowWidth);
-      if (n > 0 && x + CHIP_GAP + w > rowWidth + 0.5) {
+      if (n > 0 && x + gap + w > rowWidth + 0.5) {
         row += 1;
         x = 0;
-      } else if (n > 0) x += CHIP_GAP;
+      } else if (n > 0) x += gap;
       at.set(el, { x, row, w });
       x += w;
     });
     const rows = drawn.length ? row + 1 : 0;
-    const gridTop = o.ladderDocTop + CAPTION_PX;
-    const gridH = rows * chipH + Math.max(0, rows - 1) * CHIP_GAP;
-    const boxTop = gridTop + gridH + GRID_TO_BOX;
+    const gridTop = o.ladderDocTop + captionPx();
+    const gridH = rows * chipH + Math.max(0, rows - 1) * gap;
+    const boxTop = gridTop + gridH + gridToBox();
     const holdTop = boxTop + boxPx();
     return { at, gridTop, gridH, boxTop, holdTop, end: holdTop + heldPx() };
   };
@@ -205,7 +231,8 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
         const l = layout();
         const p = l.at.get(chip);
         if (!p) return rect(0, 0, 0, 0);
-        const t = screen(l.gridTop + p.row * (chipH + CHIP_GAP));
+        const chipH = chipHeight();
+        const t = screen(l.gridTop + p.row * (chipH + chipGap()));
         return rect(t, t + chipH, p.x, p.x + p.w);
       };
       chip.scrollIntoView = steamScrollIntoView(pane, chip, paneBottom);
@@ -292,6 +319,11 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
     steamLine: paneTop + STEAM_LINE_PX,
     /** How many rows the chips wrapped into. */
     rowCount: () => new Set([...layout().at.values()].map((p) => p.row)).size,
+    /**
+     * The room the chips take above the open box: from the top of the ladder's own top margin to the box's top,
+     * what the density board's readout measures (plan 105: 73 px drawn, 213 px before).
+     */
+    roomAboveBox: () => layout().boxTop - o.ladderDocTop + (parseFloat(ladder?.style.marginTop ?? "") || 0),
   };
 }
 export type ChipLadderPane = ReturnType<typeof deckChipLadderPane>;

@@ -381,21 +381,10 @@ export function ContextChipLadder({
         rootRef?.(el);
       }}
       onFocus={onLadderFocus}
-      style={{ marginTop: 8, width: "100%", maxWidth: "100%", minWidth: 0 }}
+      /* The grid sits 6 px under what is above it and 6 px over its box, as drawn (plan 105). No counting line
+         ("Behind this answer · N of M") any more: the drawing drops it, and the open chip's fill says which one is open. */
+      style={{ marginTop: 6, width: "100%", maxWidth: "100%", minWidth: 0 }}
     >
-      <div
-        style={{
-          fontSize: textPx(10),
-          fontWeight: 600,
-          // Grey, not cyan: the counter is a caption, and the only thing on this row allowed to be
-          // coloured is the chip you are on.
-          color: "rgba(159, 183, 213, 0.9)",
-          letterSpacing: "0.03em",
-          marginBottom: 6,
-        }}
-      >
-        Behind this answer · {drawnOrder.indexOf(safeIndex) + 1} of {chips.length}
-      </div>
       <div
         className="bonsai-chip-ladder-grid"
         ref={(el) => {
@@ -406,7 +395,7 @@ export function ContextChipLadder({
           flexDirection: "row",
           flexWrap: "wrap",
           gap: CHIP_GAP_PX,
-          marginBottom: 8,
+          marginBottom: 6,
           width: "100%",
           alignItems: "flex-start",
         }}
@@ -434,10 +423,15 @@ export function ContextChipLadder({
                 width: "fit-content",
                 maxWidth: "100%",
                 flex: "0 0 auto",
-                /* The same size and weight on every chip: a bigger open chip changed widths and re-wrapped the rows. */
-                fontSize: textPx(10),
+                /*
+                 * The same size and weight on every chip: a bigger open chip changed widths and re-wrapped the rows.
+                 * The smaller pill of plan 105's drawing (density board, tab 1, round 2 A): 9.5 px words on a 12 px
+                 * line, 2 by 7 px padding, so a chip is 18 px tall and the usual eight take three rows, not five.
+                 */
+                fontSize: textPx(9.5),
+                lineHeight: "12px",
                 fontWeight: 400,
-                padding: "4px 10px",
+                padding: "2px 7px",
                 borderRadius: 999,
                 border: `1px solid ${isActive ? ACTIVE_CHIP_BORDER : CHIP_BORDER}`,
                 background: isActive ? ACTIVE_CHIP_FILL : "rgba(26, 34, 44, 0.88)",

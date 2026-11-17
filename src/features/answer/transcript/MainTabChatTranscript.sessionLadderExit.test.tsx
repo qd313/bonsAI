@@ -110,8 +110,9 @@ function press(direction: "onMoveDown" | "onMoveUp" | "onMoveRight"): boolean {
   return handled;
 }
 
-function counter(container: HTMLElement): string {
-  return container.querySelector(".bonsai-details-session-body .bonsai-chip-ladder")?.textContent ?? "";
+/* The open chip of the Session tab's ladder (the counting line above the chips went with plan 105's drawing). */
+function openChip(container: HTMLElement): string {
+  return container.querySelector(".bonsai-details-session-body .bonsai-chip-ladder-chip--active")?.textContent ?? "";
 }
 
 /** A registered nav node whose TakeFocus Steam would honour. */
@@ -136,10 +137,10 @@ describe("the Session tab's chip ladder: Down off the last chip", () => {
     const input = navNode("unified-input");
     const { container } = renderTranscript();
     openSessionTabLadder(container);
-    expect(counter(container)).toContain("Behind this answer · 1 of 2");
+    expect(openChip(container)).toBe("Game context");
 
     expect(press("onMoveDown")).toBe(true);
-    expect(counter(container)).toContain("Behind this answer · 2 of 2");
+    expect(openChip(container)).toBe("Routed gemma3");
     expect(presets).not.toHaveBeenCalled();
 
     expect(press("onMoveDown")).toBe(true);
@@ -182,9 +183,9 @@ describe("the Session tab's chip ladder: Down off the last chip", () => {
     const { container } = renderTranscript();
     openSessionTabLadder(container);
     press("onMoveDown");
-    expect(counter(container)).toContain("Behind this answer · 2 of 2");
+    expect(openChip(container)).toBe("Routed gemma3");
     expect(press("onMoveUp")).toBe(true);
-    expect(counter(container)).toContain("Behind this answer · 1 of 2");
+    expect(openChip(container)).toBe("Game context");
     expect(press("onMoveUp")).toBe(true);
     expect(document.activeElement?.classList.contains("bonsai-details-session-row")).toBe(true);
   });

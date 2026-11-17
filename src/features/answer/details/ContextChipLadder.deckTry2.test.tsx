@@ -66,6 +66,8 @@ const LABELS = CHIPS.map(([label]) => label);
  * 413 with the first chip open and 680 with Developer details open, as the Deck reported.
  */
 const SCREEN = { paneTop: 52.2, paneBottom: 766, dockTop: 657.6, ladderDocTop: 610.2, below: 108.7 };
+/* That run's grid, before plan 105's smaller chips: the caption above it, 24.4 px chips 6 px apart, 8 px to the box. */
+const GRID_2026_10 = { captionPx: 20.8, chipHeight: 24.4, chipGap: 6, gridToBox: 8 };
 const START_SCROLL = 387.5;
 
 function chip(label: string, i: number): ContextChip {
@@ -84,6 +86,7 @@ type Mounted = {
 function mount(glideDecidedOnFocus: boolean, ringMarker = false, firstBox?: number): Mounted {
   const scene = deckChipLadderPane({
     ...SCREEN,
+    ...GRID_2026_10,
     scrollTop: START_SCROLL,
     chipWidths: Object.fromEntries(CHIPS.map(([l, w]) => [l, w])),
     boxHeights: Object.fromEntries(CHIPS.map(([l, , b], i) => [l, i === 0 && firstBox ? firstBox : b])),

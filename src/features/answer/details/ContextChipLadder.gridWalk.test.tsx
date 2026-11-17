@@ -186,9 +186,7 @@ function walk(m: ReturnType<typeof mount>, dir: Dir, limit = 12) {
       if (stops.includes(name)) problems.push(`press ${i}: ${name} visited twice`);
       stops.push(name);
       if (!m.ladder.contains(ring)) break;
-      const caption = /Behind this answer · (\d+) of 8/.exec(m.ladder.textContent ?? "");
       if (!ring?.classList.contains("bonsai-chip-ladder-chip--active")) problems.push(`press ${i}: ${name} is not the open chip`);
-      if (!caption) problems.push(`press ${i}: no caption`);
     }
   }
   return { stops, problems };
@@ -215,7 +213,7 @@ describe("the chips are packed into rows that fit the column", () => {
     const tops = LABELS.map((l) => scene.chipBox(l).top);
     expect(new Set(tops).size).toBe(5);
     for (const l of LABELS) expect(scene.chipBox(l).right).toBeLessThanOrEqual(288);
-    expect(ladder.textContent).toContain("Behind this answer · 1 of 8");
+    expect(ladder.querySelector(".bonsai-chip-ladder-chip--active")?.textContent).toBe(LABELS[0]);
   });
 });
 
@@ -261,12 +259,13 @@ describe.each(WALK_RULES.flatMap((rule) => [false, true].map((margin) => [rule ?
   },
 );
 
-describe("the caption counts chips in drawn order", () => {
-  it("names the chip the ring is on at every step", () => {
+/* The counting line ("Behind this answer · N of 8") went with plan 105's drawing; the open chip's fill is the cue. */
+describe("the open chip follows the ring in drawn order", () => {
+  it("fills the chip the ring is on at every step", () => {
     const m = mount();
     arriveOn(m.scene, m.ladder, LABELS[0]!);
     for (let n = 1; n <= 8; n += 1) {
-      expect(m.ladder.textContent).toContain(`Behind this answer · ${n} of 8`);
+      expect(m.ladder.querySelector(".bonsai-chip-ladder-chip--active")?.textContent).toBe(LABELS[n - 1]);
       expect(document.activeElement?.textContent).toBe(LABELS[n - 1]);
       if (n < 8) press(m.scene, "Right");
     }

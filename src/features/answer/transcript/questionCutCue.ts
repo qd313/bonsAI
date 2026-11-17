@@ -20,7 +20,7 @@
  */
 
 /** The attribute the stylesheet reads. Present only while the ring is on a closed, cut question. */
-export const QUESTION_CUT_ATTRIBUTE = "data-bonsai-cut";
+const QUESTION_CUT_ATTRIBUTE = "data-bonsai-cut";
 
 /**
  * In: the closed question's title span.
@@ -29,7 +29,7 @@ export const QUESTION_CUT_ATTRIBUTE = "data-bonsai-cut";
  * happened to fit.
  * Can go wrong: nothing; a title with no layout (a detached node) reads as not cut.
  */
-export function isQuestionTitleCut(title: HTMLElement): boolean {
+function isQuestionTitleCut(title: HTMLElement): boolean {
   if (title.scrollWidth - title.clientWidth > 1) return true;
   return (title.textContent ?? "").trimEnd().endsWith("…");
 }

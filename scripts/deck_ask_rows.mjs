@@ -46,13 +46,13 @@ const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, "..");
 
 const MCP_SERVER_NAME = "decky-plugin-studio";
-const DEFAULT_HOST = "deck@192.168.86.52";
+export const DEFAULT_HOST = "deck@192.168.86.52";
 const HOST_RE = /^deck@\d{1,3}(\.\d{1,3}){3}$/;
 const MIN_FREE_MB_WITH_GAME = 3000;
 const DEFAULT_WAIT_SECONDS = 240;
-const POLL_MS = 3000;
-const LOG_GRACE_READS = 2; // after the answer is finished, how many more times to look for the log line
-const MAX_PAGE_READ_FAILURES = 3;
+export const POLL_MS = 3000;
+export const LOG_GRACE_READS = 2; // after the answer is finished, how many more times to look for the log line
+export const MAX_PAGE_READ_FAILURES = 3;
 const REQUIRED_TOOLS = ["deck_listMachines", "deck_readPage", "deck_walkTo", "deck_pressButton", "deck_typeText", "deck_releaseMachine"];
 const ASK_BUTTON_LABEL = "Ask"; // the aria-label of the Ask button (AskStripSendButtons.tsx); the box is one Up from it
 
@@ -66,7 +66,7 @@ const EXPECT_KEYS = ["notesInclude", "notesExclude", "line", "covers"];
 export const STATUS_CMD =
   "free -m; echo '@@GAME'; pgrep -f '[S]teamLaunch AppId'; echo '@@DATE'; date '+%Y-%m-%d %H:%M:%S %Z'; " +
   "echo '@@BUILD'; sha256sum ~/homebrew/plugins/bonsAI/dist/index.js | cut -c1-12";
-const READBACK_CMD = "python3 - --json --turns 1";
+export const READBACK_CMD = "python3 - --json --turns 1";
 
 // Page reads (read-only). Every class name is pinned against src/ by the test, as the read-back's are.
 export const CONTEXT_EXPR =
@@ -182,8 +182,12 @@ function checkExpect(id, expect) {
   return expect;
 }
 
-/** Parses the rows file's text into rows with every default filled, or throws a RowsFileError. */
-export function parseRowsFile(text, { defaultChat = null } = {}) {
+/**
+ * Parses the rows file's text into rows with every default filled, or throws a RowsFileError. With
+ * `questionOptional` (scripts/deck_wait_answer.mjs, where the driver sends the question) a row may have no question
+ * and no chat; both come back null.
+ */
+export function parseRowsFile(text, { defaultChat = null, questionOptional = false } = {}) {
   let parsed;
   try {
     parsed = JSON.parse(text);
@@ -205,15 +209,16 @@ export function parseRowsFile(text, { defaultChat = null } = {}) {
     for (const key of Object.keys(raw)) {
       if (!ROW_KEYS.includes(key)) throw new RowsFileError(`row "${id}" has a field this script does not know: "${key}"`);
     }
-    if (typeof raw.question !== "string" || !raw.question.trim()) throw new RowsFileError(`row "${id}" has no "question"`);
-    if (/[\r\n]/.test(raw.question)) throw new RowsFileError(`row "${id}": the question must be one line`);
-    if (raw.question.length > 500) throw new RowsFileError(`row "${id}": the question is longer than 500 characters`);
+    const noQuestion = questionOptional && raw.question === undefined;
+    if (!noQuestion && (typeof raw.question !== "string" || !raw.question.trim())) throw new RowsFileError(`row "${id}" has no "question"`);
+    if (!noQuestion && /[\r\n]/.test(raw.question)) throw new RowsFileError(`row "${id}": the question must be one line`);
+    if (!noQuestion && raw.question.length > 500) throw new RowsFileError(`row "${id}": the question is longer than 500 characters`);
     const wait = raw.waitSeconds ?? DEFAULT_WAIT_SECONDS;
     if (!Number.isInteger(wait) || wait < 10 || wait > 900) {
       throw new RowsFileError(`row "${id}": waitSeconds must be a whole number from 10 to 900`);
     }
     const chat = raw.chat ?? defaultChat;
-    if (typeof chat !== "string" || !chat.trim()) {
+    if (!(questionOptional && chat === null) && (typeof chat !== "string" || !chat.trim())) {
       throw new RowsFileError(
         `row "${id}" names no chat, and the command gave no --chat: a question is only ever asked in a test chat, so name it`,
       );
@@ -221,7 +226,7 @@ export function parseRowsFile(text, { defaultChat = null } = {}) {
     if (raw.mode !== undefined && (typeof raw.mode !== "string" || !raw.mode.trim())) {
       throw new RowsFileError(`row "${id}": mode must be a word such as Strategy`);
     }
-    return { row: id, question: raw.question, chat: chat.trim(), mode: raw.mode ?? null, waitSeconds: wait, expect: checkExpect(id, raw.expect) };
+    return { row: id, question: noQuestion ? null : raw.question, chat: chat === null ? null : chat.trim(), mode: raw.mode ?? null, waitSeconds: wait, expect: checkExpect(id, raw.expect) };
   });
 }
 
@@ -277,12 +282,12 @@ export function parseStatusReport(text) {
 }
 
 /** The note names an attach line lists (the read-back's own pattern), for a read-back that lacks the numbered list. */
-function namesInAttachLine(line) {
+export function namesInAttachLine(line) {
   const m = /notes? attached \((.*?)\); they are the/.exec(line ?? "");
   return m ? m[1].split("; ").map((n) => n.trim()).filter(Boolean) : [];
 }
 
-function lineShown(rb) {
+export function lineShown(rb) {
   if (rb.noCloseMatchLine) return "No close match";
   if (rb.notInMyNotesLine) return "Not in my notes";
   if (rb.noNotesForGameLine) return "No notes for this game";
@@ -412,7 +417,7 @@ async function callTool(deps, machine, name, args, timeoutMs) {
   }
 }
 
-async function readbackOnce(deps, host) {
+export async function readbackOnce(deps, host) {
   const out = await deps.ssh(READBACK_CMD, { input: deps.readbackSource });
   if (out.code === null || out.code === 255) return { fatal: `the Deck did not answer over SSH (${(out.stderr || "").slice(0, 100)})` };
   try {
@@ -426,7 +431,7 @@ async function readbackOnce(deps, host) {
 // One row, and the list
 // ---------------------------------------------------------------------------
 
-const stopText = (reason) => `COULD NOT RUN: ${reason}`;
+export const stopText = (reason) => `COULD NOT RUN: ${reason}`;
 
 async function runOneRow(row, ctx) {
   const { deps, machine, host } = ctx;
@@ -593,10 +598,11 @@ function evidenceFor(res) {
 }
 
 /**
- * Runs the rows in order. deps: { client, ssh, evidenceDir, now, sleep, readbackSource, say }.
+ * Runs the rows in order. deps: { client, ssh, evidenceDir, now, sleep, readbackSource, say }. `runRow` runs one
+ * row (scripts/deck_wait_answer.mjs passes its own, which sends nothing).
  * Returns { results, stopped, exitCode }; never throws for a Deck-side problem.
  */
-export async function runRows({ rows, plan, deps, machine = null, host = DEFAULT_HOST }) {
+export async function runRows({ rows, plan, deps, machine = null, host = DEFAULT_HOST, runRow = runOneRow }) {
   const ctx = { deps, machine, host, build: null };
   const results = [];
   let stopped = null;
@@ -606,7 +612,7 @@ export async function runRows({ rows, plan, deps, machine = null, host = DEFAULT
     if (stopped) {
       res = { row: row.row, seen: null, timedOut: false, pressed: [], side_effect: "none", setup: { question: row.question }, expected: row.expect ?? null, verdict: stopText(`the list stopped (${stopped}); nothing was asked`) };
     } else {
-      res = await runOneRow(row, ctx);
+      res = await runRow(row, ctx);
       timeoutsInARow = res.timedOut ? timeoutsInARow + 1 : 0;
       if (res.fatal) stopped = res.fatal;
       else if (timeoutsInARow >= 2) stopped = "two timeouts in a row";

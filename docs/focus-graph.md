@@ -335,6 +335,56 @@ whatever Down from question 6 reached before: the next day line, or the next que
 - **Not backed by a device row yet.** The bookkeeper owns `docs/testing.md`; the D-pad walk it needs is
   in the lane report.
 
+### Game buttons in an open day, and the list flipped by game (plan 105)
+
+The drawing is the first mock-up board, tab 1, round 2, options C and Wild. A day under "N earlier" that holds
+questions about two or more games ("No game", a question with no game name, counts as one) opens with a row of
+buttons under its line: All, each game asked that day in the order first asked, then No game, each with its count.
+The lit button decides which questions show, six at a time with "Show N more"; under All each row wears a small tag
+with its game. When the older questions are about two or more games, the "N earlier" line reads "N earlier · by day
+‹ ›", and Left or Right on it flips the whole list to one line per game across every day (No game last), each row
+then tagged with its day. Code: `earlierTurnsByDay.ts` (the grouping and the layout), `buildEarlierList.tsx`,
+`EarlierListLine.tsx` (`EarlierGameRow`), `useEarlierTurnsPill.ts` (the grouping in force, decided there only),
+`chatTranscriptNavHelpers.ts` (`gameButtonNavHandlers`, `earlierLineNavHandlers`'s flip).
+
+```
+"16 earlier · by day ‹ ›"     Left / Right: flip to by game (ring stays)    Up: Back line, else above the chat
+   | Down (Steam's step)
+day line "Yesterday · 12" (open)
+   | Down: transfer to the lit button                     ^ Up (Steam's step)
+[ All 12 ] [ Hollow Knight 8 ] [ Hades 2 ] [ Deep Rock… 1 ] [ No game 1 ]     Left / Right along the row, held at both ends
+   | Down: the first question's text, else its row        ^ Up from any button: transfer to the day line
+question 1 ... question 6       (Up from question 1: transfer to the lit button)
+   | Down                                                 ^ Up
+"Show 6 more"  ->  the next day line  ->  ...  ->  the newest question's text (never its Retry)
+```
+
+- **Every hop onto or along the buttons is Steam's own transfer** onto the button's nav node
+  (`gameButtonNav`), so nothing depends on Steam's flow through a row that wraps (the drawing's busy day wraps
+  five buttons onto two bands). Up and Down leave the row from either band; Left and Right reach every button in
+  reading order. Left at All goes through the shared hold (`earlierPillLeftNavHandlers`), Right at the last
+  button holds too (a Right nobody claims carries the ring out of the plugin).
+- **A on a button lights it and the ring stays on the button** (the drawing moved the ring to the first question;
+  every line in this list keeps the ring where A was pressed, plan79-P79-EARLIER-BY-DAY.json). A on the lit button
+  does nothing. A pick that hides the open older question gives the open answer back to the newest.
+- **B on a button** hands the ring to the day line first, then closes the day, so the ring is never on a button
+  that is gone. Closing the day or the list, or flipping, forgets the pick (back to All) and the presses.
+- **The flip is the "N earlier" line's own move**, not the shared hold: on this line Left is an action, not a dead
+  end. It runs from `onMoveLeft` / `onMoveRight` only. Steam hands the same press to `onButtonDown` too, and a twin
+  that flipped there would flip the list back, so that twin answers string-shaped presses only; the game buttons'
+  twins are built the same way, or one Left would move two buttons. The flip keeps the list open or closed as it
+  was and closes every line under it; the line itself is never redrawn.
+- **Grouped by game**, the game lines behave exactly as day lines (A opens and closes, B closes while open, Left
+  holds, Down from the last line over the newest question goes to its text). There are no buttons in this grouping.
+- **The jump from the Search tab** opens the line that holds the question in the grouping in force: its day on All,
+  or its game line, with "Show N more" pressed as needed (`locateEarlierTurn` takes the grouping). The grouping is
+  decided once, in `useEarlierTurnsPill.ts`, and both the drawing and the jump read it.
+- **The choice is remembered while the plugin runs** (every chat, and the Main tab drawn again); it is not saved.
+- **Pinned by** `MainTabChatTranscript.earlierByGame.test.tsx` (the buttons, the flip, and walks Down and Up under
+  Steam's scroll three ways with the dock at 290 and lifted to 262: no stop twice, all on screen, Up retracing Down),
+  `MainTabChatTranscript.searchJump.test.tsx` (the jump in both groupings, also while a question is being written),
+  `earlierTurnsByGame.test.ts` and `earlierListNav.test.ts`. Device row: P105-EARLIER-BY-GAME-01 (not yet run).
+
 ### The ask box's strip (plan 84)
 
 Plan 84 step 2 folds two rows of the ask area into the question box's bottom strip: the big ASK button

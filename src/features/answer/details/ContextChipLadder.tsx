@@ -379,8 +379,8 @@ export function ContextChipLadder({
   /*
    * Into the Session chip's box, onto Sum up (plan 105): its Down, its Right (the last chip's Right goes where the
    * bottom row's Down goes) and its A. The box's stops sit under the grid, inside this ladder, and Sum up's own
-   * hop says whether the ring got there; when it did not (the panel's page out of the browser's focus), the press
-   * is Steam's, whose own Down from the chip lands on Sum up, the stop drawn right under it.
+   * hop says whether the ring got there; when it did not (the panel's page out of the browser's focus), a Down is
+   * Steam's, whose own Down from the chip lands on Sum up, the stop drawn right under it, and a Right is held (`press`).
    */
   const enterSession = () => Boolean(session?.enter());
   /*
@@ -405,7 +405,13 @@ export function ContextChipLadder({
     if (dir === "down" && showRestOfBox()) return true;
     const move = gridMove(rowsFromBoxes(drawnOrder, boxOf), boxOf, idx, dir);
     if ("to" in move) return stepTo(move.to);
-    if (move.leave === "down") return idx === SESSION ? enterSession() : leaveDown();
+    /*
+     * On the Session chip, Down and Right go into its box. Right is held when the box cannot take the ring (the
+     * panel's page out of the browser's focus, the second opinion's consult 4), as Left off the first chip is below:
+     * Steam's own Down from the chip lands on Sum up, drawn right under it, but its own Right has nowhere in the
+     * panel to go and could carry the ring out of the plugin.
+     */
+    if (move.leave === "down") return idx === SESSION ? enterSession() || dir === "right" : leaveDown();
     /*
      * Left off the first chip with nothing above to take it is held, as it was before the grid: a press
      * nothing claims is Steam's own, and Steam's own Left carried the ring out of the plugin into its

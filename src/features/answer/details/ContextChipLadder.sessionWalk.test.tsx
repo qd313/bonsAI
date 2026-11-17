@@ -11,7 +11,8 @@
  *           stop, Sum up, reached the way buildDetailsPanelElement.tsx wires it (`session.enter`, and Up from it by
  *           the ladder's own root, which hands the ring to its open chip).
  *          With the panel's page out of the browser's focus (the second opinion's consult 4): a step onto a Session
- *          chip drawn behind the dock lifts it clear, as a step onto any chip is placed.
+ *          chip drawn behind the dock lifts it clear, as a step onto any chip is placed; Right on it is held when its
+ *          box cannot take the ring, never given to Steam.
  * Does not: Draw the real Session view (MainTabChatTranscript.sessionChip.test.tsx walks that), or measure text: the
  *           widths are the drawing's. Without the page's focus Steam's transfer is modelled as the node taking the
  *           page's focus (each chip's `navRef`), and no focus event reaches the plugin's lift off the dock.
@@ -390,5 +391,15 @@ describe.each([
     expect(chip.top).toBeGreaterThanOrEqual(m.scene.paneTop);
     expect(m.scene.pane.scrollTop).toBeGreaterThan(before);
     expect(m.scene.smoothScrolls.length).toBeGreaterThan(0);
+  });
+
+  it("Right on the Session chip goes into its box when it can, and is held, never Steam's, when it cannot", async () => {
+    const m = mount(undefined, false, MONITOR, true);
+    arriveOn(m, SESSION);
+    hoisted.lost = lost;
+    const claimed = await press(m, "Right");
+    /* With the page's focus the hop onto Sum up lands; without it the hop is declined, and the press is held. */
+    expect(claimed).toBe(true);
+    expect(nameOf(m, document.activeElement)).toBe(lost ? SESSION : SUM_UP);
   });
 });

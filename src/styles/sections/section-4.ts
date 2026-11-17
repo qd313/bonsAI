@@ -279,6 +279,14 @@ export function buildSection4Section(): string {
           background: linear-gradient(rgba(56, 189, 248, 0.20), rgba(56, 189, 248, 0.20)), linear-gradient(180deg, rgba(56, 70, 84, 0.5) 0%, rgba(16, 22, 30, 0.55) 100%) !important;
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 2px 3px rgba(0, 0, 0, 0.4) !important;
         }
+        /* The agent chip takes the same blue fill, and only the fill: its orange ring and glow (section-6.ts)
+           stay, so this rule leaves box-shadow alone. section-6.ts sets the agent chip's background
+           with !important at a lower weight than this selector, so the extra class here is what lets
+           the fill show (row CHIP-BUTTON-06: the ring was on the chip and nothing changed). */
+        .bonsai-scope button.bonsai-preset-glass.bonsai-pyro-inject-chip.gpfocus,
+        :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass.bonsai-pyro-inject-chip:focus-visible {
+          background: linear-gradient(rgba(56, 189, 248, 0.20), rgba(56, 189, 248, 0.20)), linear-gradient(180deg, rgba(56, 70, 84, 0.5) 0%, rgba(16, 22, 30, 0.55) 100%) !important;
+        }
         /* The label brightens with the fill, so the whole chip reads as the live one. Decode used to
            be excluded here (its label owned its own colour); that rule is gone (bug fix
            2026-09-19), so a focused decode chip now brightens like every other mode. */

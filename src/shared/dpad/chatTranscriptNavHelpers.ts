@@ -18,6 +18,7 @@ import {
 } from "./liveTurnFocusGraph";
 import {
   isDeckDirectionLeftEvent,
+  isDeckDirectionRightEvent,
   isDownDeckButtonEvent,
   isLeftNavigationKey,
   isRightNavigationKey,
@@ -253,15 +254,32 @@ export function questionMoveUpOut(above: NavRefHolder | null | undefined): () =>
  * (`firstArchivedHeaderMoveUp` below, measured 2026-09-04): so the line claims Up the same way the
  * first question row did before the line stayed on screen. `nextTurnId` is null while the day
  * lines are showing, since the next stop down is then a day line and Steam's own Down is right.
+ *
+ * With `flip` (plan 105: the older questions are about two or more games), Left and Right both flip the list
+ * between days and games and the ring stays put. That is this line's own move, not the shared hold
+ * (`earlierPillLeftNavHandlers`), which every other line and the ask bar keep. The flip runs from the move
+ * handlers only: Steam hands the same press to `onButtonDown` too, and a twin that flipped there would flip the
+ * list back. Steam's press is still claimed there, as the hold always claimed it; a string-shaped press (tests,
+ * a desktop keyboard) flips.
  */
-export function earlierLineNavHandlers(nextTurnId: string | null | undefined): Record<string, unknown> {
+export function earlierLineNavHandlers(nextTurnId: string | null | undefined, flip?: () => void): Record<string, unknown> {
   const base = earlierPillNavHandlers(nextTurnId);
   const up = () => takeAboveTheChat();
+  const sideways = () => {
+    flip?.();
+    return true;
+  };
   return {
     ...base,
     onMoveUp: up,
+    ...(flip ? { onMoveLeft: sideways, onMoveRight: sideways } : {}),
     onButtonDown: (button: unknown) => {
       if (isUpDeckButtonEvent(button)) return up();
+      if (flip) {
+        const key = String(button ?? "");
+        if (isLeftNavigationKey(key) || isRightNavigationKey(key)) return sideways();
+        if (isDeckDirectionLeftEvent(button) || isDeckDirectionRightEvent(button)) return true;
+      }
       return (base.onButtonDown as (b: unknown) => boolean)(button);
     },
   };

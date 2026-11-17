@@ -1,5 +1,5 @@
 /**
- * Title: "N earlier" by game: the game buttons of an open day (plan 105, lane A6)
+ * Title: "N earlier" by game: the game buttons of an open day, and the list flipped to group by game (plan 105, lane A6)
  * Purpose: Pin what the Deck check P105-EARLIER-BY-GAME-01 looks at, on the real transcript: a day that mixes games
  *          opens with a row of buttons (All, its games in the order first asked, No game last, each with its count);
  *          A on one leaves only that game's questions under the day, six at a time, and the ring stays on the button
@@ -8,7 +8,10 @@
  *          from a button to the first question's text (else its row), Up back the same way, Left and Right along the
  *          row holding at both ends, B handing the ring to the day line before the row goes. Bounded walks with
  *          Steam's scroll modelled three ways, with the dock where it is and lifted by a running game: no stop
- *          twice, every landing on screen, Up retracing Down.
+ *          twice, every landing on screen, Up retracing Down. The flip (the drawing's option Wild): Left or Right on
+ *          "N earlier" turns "· by day" to "· by game" with the ring kept on the line, the list then one line per game
+ *          across every day (No game last), each question wearing its day; only offered when the older questions are
+ *          about two or more games; remembered for the plugin's run.
  * Used for: MainTabChatTranscript.tsx, buildEarlierList.tsx, EarlierListLine.tsx, earlierTurnsByDay.ts,
  *           useEarlierTurnsPill.ts and chatTranscriptNavHelpers.ts together.
  * Does not: Model Steam's real geometry for an unclaimed Up or Down (the kit's stop order stands in, as in
@@ -21,6 +24,7 @@ import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
 import type { AskThreadCollapsedTurn } from "../../../types/bonsaiUi";
 import { resetNavFocusRegistry } from "../../../shared/dpad/navFocusRegistry";
 import { resetUiDocument } from "../../../shared/dpad/uiDocument";
+import { resetEarlierGrouping } from "./useEarlierTurnsPill";
 import {
   DOCK_TOP_IN_GAME, GAME, LINE, NOW, activate, focusOn, isRetry, lineEl, nameOf, openEarlier, press,
   renderChat as renderChatWith, rowTexts, seconds, steamScroll, taken, turn, walk,
@@ -72,6 +76,7 @@ function pick(container: HTMLElement, stamp: () => void, name: string) {
 beforeEach(() => {
   resetUiDocument();
   resetNavFocusRegistry();
+  resetEarlierGrouping();
   taken.length = 0;
   vi.useFakeTimers({ toFake: ["Date"] });
   vi.setSystemTime(NOW);
@@ -327,6 +332,160 @@ describe("the walk over a day with its game buttons, with Steam's own scroll mod
     const up = walk(container, "Up", after);
     expect(up.slice(0, down.length)).toEqual([...down].reverse());
     expect(new Set(up).size).toBe(up.length);
+    expect(seenVisible.every(Boolean)).toBe(true);
+  });
+});
+
+/* ---- The flip: Left or Right on "N earlier" groups the list by game (the drawing's option Wild) ---- */
+
+const top = (container: HTMLElement) => container.querySelector<HTMLElement>(LINE)!;
+const topWords = (container: HTMLElement) => top(container).querySelector(".bonsai-chat-earlier-pill")?.textContent;
+const lineWords = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll(LINE)).map((el) => el.querySelector(".bonsai-chat-earlier-pill")?.textContent ?? "");
+/** The chat's games, by game: Hades first (Monday's), then Hollow Knight, Deep Rock, and No game last. */
+const GAME_LINES = ["Hades · 4", "Hollow Knight · 10", "Deep Rock Galactic: Survivor · 1", "No game · 1"];
+
+function flip(container: HTMLElement, dir: "Left" | "Right" = "Left") {
+  focusOn(top(container));
+  expect(press(container, dir)).toBe(true);
+}
+
+describe("Left or Right on 'N earlier' flips the list between days and games", () => {
+  it("the line names the grouping and ends in ‹ ›; Left and Right flip it, and the ring stays on that same line", () => {
+    const { container } = renderChat();
+    const line = top(container);
+    expect(topWords(container)).toBe("16 earlier · by day");
+    expect(line.querySelector(".bonsai-chat-earlier-flip")?.textContent).toBe("‹ ›");
+    flip(container, "Left");
+    expect(topWords(container)).toBe("16 earlier · by game");
+    expect(document.activeElement).toBe(line);
+    expect(top(container)).toBe(line);
+    flip(container, "Right");
+    expect(topWords(container)).toBe("16 earlier · by day");
+    expect(document.activeElement).toBe(line);
+  });
+
+  it("flipped while open: one line per game across every day, No game last, every line closed, no buttons", () => {
+    const { container, stamp } = openDay();
+    pick(container, stamp, "Hades");
+    flip(container);
+    stamp();
+    expect(lineWords(container)).toEqual(["16 earlier · by game", ...GAME_LINES]);
+    expect(rowTexts(container)).toEqual([NEWEST.question]);
+    expect(buttons(container)).toEqual([]);
+    expect(top(container).getAttribute("aria-expanded")).toBe("true");
+  });
+
+  it("flipped while closed only the words change; opening then shows the game lines", () => {
+    const { container, stamp } = renderChat();
+    flip(container);
+    expect(lineWords(container)).toEqual(["16 earlier · by game"]);
+    openEarlier(container, stamp);
+    expect(lineWords(container)).toEqual(["16 earlier · by game", ...GAME_LINES]);
+  });
+
+  it("a game line opens its questions from every day, oldest first, each wearing its day, six at a time", () => {
+    const { container, stamp } = renderChat();
+    flip(container);
+    openEarlier(container, stamp);
+    activate(lineEl(container, "Hollow Knight · 10"));
+    stamp();
+    expect(rowTexts(container).slice(0, 6)).toEqual(KNIGHT);
+    expect(tags(container).slice(0, 6)).toEqual(Array(6).fill("Yesterday"));
+    const more = showLine(container)!;
+    expect(more.textContent).toContain("Show 4 more");
+    focusOn(more);
+    activate(more);
+    stamp();
+    expect(rowTexts(container).slice(6, 10)).toEqual(["yesterday question 11", "yesterday question 12", "today question 1", "today question 2"]);
+    expect(tags(container).slice(6, 10)).toEqual(["Yesterday", "Yesterday", "Today", "Today"]);
+    expect(nameOf(document.activeElement)).toBe("row:yesterday question 11 [Yesterday]");
+    /* Every line still says how many it holds, and the newest question wears nothing. */
+    expect(tags(container)[10]).toBeNull();
+  });
+
+  it("a game line hears A and B like a day line, and Left on it holds still", () => {
+    const { container, stamp } = renderChat();
+    flip(container);
+    openEarlier(container, stamp);
+    const hades = lineEl(container, "Hades · 4") as NavEl;
+    activate(hades);
+    stamp();
+    expect(hades.getAttribute("aria-expanded")).toBe("true");
+    focusOn(hades);
+    expect(press(container, "Left")).toBe(true);
+    expect(document.activeElement).toBe(hades);
+    act(() => {
+      hades.__nav?.onCancelButton?.({ preventDefault: () => {} });
+    });
+    expect(hades.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("flipping while an older answer is open opens the newest answer again", () => {
+    const onTurnActivate = vi.fn();
+    const { container } = openDay({ onTurnActivate }, "y4");
+    flip(container);
+    expect(onTurnActivate).toHaveBeenCalledWith("n1");
+  });
+
+  it("a chat whose older questions are all one game: no words, no ‹ ›, and Left and Right do what they did", () => {
+    const oneGame = [...MONDAY, asked("Hades", "m3", "monday hades 3", seconds(8, 28, 10)), NEWEST];
+    const { container } = renderChat({}, oneGame);
+    expect(topWords(container)).toBe("3 earlier");
+    expect(top(container).querySelector(".bonsai-chat-earlier-flip")).toBeNull();
+    focusOn(top(container));
+    expect(press(container, "Left")).toBe(true);
+    expect(topWords(container)).toBe("3 earlier");
+    /* Right was never claimed on this line, and still is not. */
+    expect(press(container, "Right")).toBe(false);
+  });
+
+  it("the choice is remembered: the Main tab drawn again opens by game, and a one-game chat still by day", () => {
+    const first = renderChat();
+    flip(first.container);
+    first.unmount();
+    const again = renderChat();
+    expect(topWords(again.container)).toBe("16 earlier · by game");
+    again.unmount();
+    const oneGame = renderChat({}, [...MONDAY, asked("Hades", "m3", "monday hades 3", seconds(8, 28, 10)), NEWEST]);
+    openEarlier(oneGame.container, oneGame.stamp);
+    expect(lineWords(oneGame.container)).toEqual(["3 earlier", "Mon 28 Sep · 3"]);
+  });
+});
+
+describe("the walk over the list grouped by game, with Steam's own scroll modelled", () => {
+  const CASES = (["top", "padded", "center"] as ScrollRule[]).flatMap((rule) => [
+    [rule, 290],
+    [rule, DOCK_TOP_IN_GAME],
+  ]) as Array<[ScrollRule, number]>;
+
+  it.each(CASES)("under the %s rule with the dock at %i: Down then Up visit the same stops, none twice, all on screen", (rule, dock) => {
+    const { container, stamp } = renderChat();
+    flip(container);
+    openEarlier(container, stamp);
+    activate(lineEl(container, "Hollow Knight · 10"));
+    stamp();
+    const model = steamScroll(container, rule, dock);
+    focusOn(top(container));
+    model.after();
+    const seenVisible: boolean[] = [];
+    const after = () => {
+      model.after();
+      seenVisible.push(model.visible(document.activeElement!));
+    };
+    const down = walk(container, "Down", after);
+    expect(down).toEqual([
+      "line:16 earlier · by game",
+      "line:Hades · 4",
+      "line:Hollow Knight · 10",
+      ...KNIGHT.map((q) => `row:${q} [Yesterday]`),
+      "line:Show 4 more",
+      "line:Deep Rock Galactic: Survivor · 1",
+      "line:No game · 1",
+      `row:${NEWEST.question}`,
+    ]);
+    const up = walk(container, "Up", after);
+    expect(up).toEqual([...down].reverse());
     expect(seenVisible.every(Boolean)).toBe(true);
   });
 });

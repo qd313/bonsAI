@@ -7,7 +7,9 @@
  *          you were" line is the first stop above "N earlier" (Down goes to "N earlier", Up comes back, Up from
  *          it leaves for the tab bar, Left and Right hold still) and a walk over the whole list visits no stop
  *          twice; A on it ends the jump and switches to the Search tab with the word, the game and the match
- *          remembered; and the memory survives the Main tab being thrown away and drawn again (lessons § 3).
+ *          remembered; and the memory survives the Main tab being thrown away and drawn again (lessons § 3). In a chat
+ *          about several games (plan 105) the jump opens the question's day on All when the list is grouped by day,
+ *          and its game line when it is grouped by game, also while the newest question is still being written.
  * Used for: searchJumpStore.ts, useEarlierTurnsPill.ts, buildEarlierList.tsx, SearchBackLine.tsx.
  * Does not: Press anything on the Search tab itself (SearchTab.jump.test.tsx does).
  */
@@ -26,6 +28,7 @@ import {
   getSearchJump, pendingJumpReveal, registerSearchTabSwitch, resetSearchJump, startSearchJump, peekSearchArrival,
 } from "../../search-tab/searchJumpStore";
 import { readSearchSaved, resetSearchSaved } from "../../search-tab/searchTabStore";
+import { resetEarlierGrouping } from "./useEarlierTurnsPill";
 
 vi.mock("@decky/ui", async () => (await import("../../../test-harness/earlierListNavStub")).deckyUiWithNavNodes());
 
@@ -60,6 +63,7 @@ beforeEach(() => {
   resetNavFocusRegistry();
   resetSearchJump();
   resetSearchSaved();
+  resetEarlierGrouping();
   taken.length = 0;
   vi.useFakeTimers({ toFake: ["Date", "setTimeout"] });
   vi.setSystemTime(NOW);
@@ -327,5 +331,81 @@ describe("the ring ends on the question once the tab has settled", () => {
     const before = taken.length;
     settle(3000);
     expect(taken.length).toBe(before);
+  });
+});
+
+/*
+ * Plan 105: the list can be grouped by game. Whichever grouping is in force, the jump must open the line that is
+ * drawn and holds the question; the grouping is decided once (useEarlierTurnsPill.ts) and both read it.
+ */
+describe("the jump in a chat about several games, in either grouping (plan 105)", () => {
+  const game = (name: string, id: string, day: number, hour: number) => ({
+    ...turn(id, `${name} question ${id}`, seconds(8, day, hour)),
+    appName: name,
+  });
+  /* Day 20: Hades, Hollow Knight x3, no game. Day 21: Hollow Knight x6, Hades. Then the newest (Hades). */
+  const MIXED: AskThreadCollapsedTurn[] = [
+    game("Hades", "a1", 20, 6), game("Hollow Knight", "a2", 20, 7), game("Hollow Knight", "a3", 20, 8),
+    game("", "a4", 20, 9), game("Hollow Knight", "a5", 20, 10),
+    ...[1, 2, 3, 4, 5, 6].map((n) => game("Hollow Knight", `b${n}`, 21, 6 + n)),
+    game("Hades", "b7", 21, 14),
+    game("Hades", "newest", 22, 9),
+  ];
+  const LIVE = { askThreadDisplayQuestion: "a question still being written", isAsking: true };
+
+  /** The person flips the list to game, as on the Deck: Left on "N earlier", then the Main tab is drawn again later. */
+  function pickByGame() {
+    const out = renderChatWith({}, MIXED, "newest");
+    focusOn(out.container.querySelector<HTMLElement>(LINE)!);
+    press(out.container, "Left");
+    expect(lines(out.container)[0]).toContain("· by game");
+    out.unmount();
+    taken.length = 0;
+  }
+
+  it("by day: the question's day opens on All, so it is among the rows, and the ring reaches it through its nav node", () => {
+    start("a5");
+    const { container } = renderChatWith({}, MIXED, "newest");
+    expect(lines(container)[0]).toBe("12 earlier · by day");
+    expect(dayLine(container, "Sun 20 Sep").getAttribute("aria-expanded")).toBe("true");
+    expect(container.querySelector('.bonsai-chat-earlier-game[aria-pressed="true"]')?.textContent).toContain("All");
+    expect(rowTexts(container)).toContain("Hollow Knight question a5");
+    expect(lastTaken()).toContain("Hollow Knight question a5");
+  });
+
+  it("by game: the question's game line opens with Show N more pressed as needed, and the ring reaches the question", () => {
+    pickByGame();
+    start("b5");
+    const { container } = renderChatWith({}, MIXED, "newest");
+    expect(lines(container)[0]).toBe("12 earlier · by game");
+    expect(dayLine(container, "Hollow Knight · 9").getAttribute("aria-expanded")).toBe("true");
+    expect(dayLine(container, "Hades · 2").getAttribute("aria-expanded")).toBe("false");
+    /* b5 is Hollow Knight's eighth question: one press of Show N more brought it in. */
+    expect(rowTexts(container)).toEqual([
+      ...["a2", "a3", "a5", "b1", "b2", "b3", "b4", "b5", "b6"].map((id) => `Hollow Knight question ${id}`),
+    ]);
+    expect(lastTaken()).toContain("Hollow Knight question b5");
+    expect(taken[taken.length - 1]!.contains(document.activeElement)).toBe(true);
+  });
+
+  it("by game while the newest question is still being written: the line drawn is the one opened, and the ring reaches the question", () => {
+    pickByGame();
+    start("a4");
+    const { container } = renderChatWith(LIVE, MIXED, "live");
+    /* With a question being written, every finished one is an older one, the last Hades question too. */
+    expect(lines(container)[0]).toBe("13 earlier · by game");
+    expect(dayLine(container, "No game · 1").getAttribute("aria-expanded")).toBe("true");
+    expect(dayLine(container, "Hades · 3").getAttribute("aria-expanded")).toBe("false");
+    expect(rowTexts(container)).toEqual(["question a4", "a question still being written"]);
+    expect(lastTaken()).toContain("question a4");
+  });
+
+  it("by day while the newest question is still being written: the newest finished question is found under its own day", () => {
+    start("newest");
+    const { container } = renderChatWith(LIVE, MIXED, "live");
+    expect(lines(container)[0]).toBe("13 earlier · by day");
+    expect(dayLine(container, "Tue 22 Sep").getAttribute("aria-expanded")).toBe("true");
+    expect(rowTexts(container)).toContain("Hades question newest");
+    expect(lastTaken()).toContain("Hades question newest");
   });
 });

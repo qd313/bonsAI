@@ -595,6 +595,13 @@ ${buildReplyRatingChoicesSection()}
           line-height: 1;
           color: #8fa8c4;
         }
+        /* Plan 105: "‹ ›" at the right end of the "N earlier" line when Left and Right flip the list between
+           days and games (the drawing's option Wild, its .e2-flip). */
+        .bonsai-scope .bonsai-chat-earlier-flip {
+          font-size: ${textPx(10)};
+          letter-spacing: 2px;
+          color: #9ce7ff;
+        }
         /* Plan 105: the game buttons of an open day that mixes games (mock-up board tab 1, round 2,
            option C, its .e2-chips as measured there): right-aligned, wrapping when the names do not
            fit, 22px tall and 4px apart; the lit one filled. The name is the drawing's colour and size,

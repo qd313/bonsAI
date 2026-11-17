@@ -4,7 +4,8 @@
  * line at the end of an open line, and the row of game buttons an open day carries when it mixes games
  * (plan 105: All, each game, No game). Each line is one D-pad stop: A opens or closes it (on "Show N more":
  * brings in the next questions), and B closes it while it is open ("Show N more" never claims B). Each game
- * button is one stop: A lights it (the questions under the row become that game's), B closes the day.
+ * button is one stop: A lights it (the questions under the row become that game's), B closes the day. When the
+ * list can be flipped between days and games, the "N earlier" line ends in "‹ ›" (Left or Right flips it).
  * Used for: MainTabChatTranscript.tsx (through buildEarlierList.tsx), in front of the older questions of a long chat.
  * Solves: Opening "N earlier" used to bring back every older question as its own row. The lines
  * keep that to a handful of stops, and each opens on its own (earlierTurnsByDay.ts says which).
@@ -37,6 +38,8 @@ export type EarlierListLineProps = {
   onClose?: () => void;
   /** The Left / Down / Up handlers from chatTranscriptNavHelpers.ts. */
   nav: Record<string, unknown>;
+  /** The "N earlier" line only: Left and Right flip the list's grouping, shown by "‹ ›" at its right end (plan 105). */
+  flips?: boolean;
 };
 
 /** Steam's B handler: run `close` and keep the press from going on to Steam's own back. */
@@ -50,7 +53,7 @@ function claimB(close: () => void): Record<string, unknown> {
 }
 
 export function EarlierListLine(props: EarlierListLineProps) {
-  const { text, kind, open = false, onToggle, onClose, nav } = props;
+  const { text, kind, open = false, onToggle, onClose, nav, flips = false } = props;
   const closeWithB = open && onClose ? claimB(onClose) : {};
   /* The "N earlier" line says it is on screen, so Down from the tab bar can land on it. */
   const mounted = useRef<HTMLElement | null>(null);
@@ -73,6 +76,11 @@ export function EarlierListLine(props: EarlierListLineProps) {
       <span className="bonsai-chat-earlier-pill">{text}</span>
       <span className="bonsai-chat-earlier-rule" />
       {kind === "day" || (kind === "earlier" && open) ? <span className="bonsai-chat-earlier-chev">{open ? "▾" : "▸"}</span> : null}
+      {flips ? (
+        <span className="bonsai-chat-earlier-flip" aria-hidden="true">
+          ‹ ›
+        </span>
+      ) : null}
     </Focusable>
   );
 }

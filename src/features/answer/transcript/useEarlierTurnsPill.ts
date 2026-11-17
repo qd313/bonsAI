@@ -11,7 +11,11 @@
  * per press), forgets them whenever the day or the whole list closes, and hands Steam's ring to the
  * first newly shown question once a press has drawn it. It keeps which game button is lit in each open
  * day that mixes games (plan 105; none kept: All), forgotten the same way, and a pick starts the day over
- * at six.
+ * at six. And it decides, in this one place, how the list is grouped (plan 105): by day, or flipped by game,
+ * which is offered only when the older questions are about two or more games. The drawing (buildEarlierList.tsx)
+ * and the Search jump below both read that one answer, so a jump never opens a line that is not drawn. The
+ * person's choice is remembered for as long as the plugin runs, across chats and a redrawn Main tab; it is
+ * not saved to disk.
  * A jump from the Search tab (plan 90 § 3d) asks this hook, through searchJumpStore.ts, to put the chat on
  * one question: once the chat is loaded it opens "N earlier", opens the day that holds the question,
  * presses "Show N more" as often as needed, and hands the ring to the question's row. It also redraws the
@@ -25,7 +29,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import type { AskThreadCollapsedTurn } from "../../../types/bonsaiUi";
 import { takeOpenQuestionText } from "./buildTurnHeaderElement";
 import { takeHolderFocus } from "../../../shared/dpad/chatTranscriptNavHelpers";
-import { locateEarlierTurn } from "./earlierTurnsByDay";
+import { locateEarlierTurn, offersGameGrouping, type EarlierGrouping } from "./earlierTurnsByDay";
 import type { NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 import { getUiDocument, uiGamepadFocusElement } from "../../../shared/dpad/uiDocument";
 import { settleRing } from "../../../shared/dpad/settleRing";
@@ -66,11 +70,26 @@ export interface EarlierTurnsPill {
   dayGames: ReadonlyMap<string, string>;
   /** A game button pressed: light it; the day starts over at six. */
   pickDayGame: (dayKey: string, gameKey: string) => void;
+  /** How the list is grouped now: "game" only when the flip is offered and the person picked it. */
+  grouping: EarlierGrouping;
+  /** Whether Left and Right on the "N earlier" line flip the grouping (two or more games among the older questions). */
+  flipOffered: boolean;
+  /** Left or Right on the "N earlier" line: the other grouping, every line under it closed, picks and presses forgotten. */
+  flipGrouping: () => void;
 }
 
 const NO_DAYS: ReadonlySet<string> = new Set();
 const NO_PRESSES: ReadonlyMap<string, number> = new Map();
 const NO_PICKS: ReadonlyMap<string, string> = new Map();
+
+/* The grouping the person last picked, for as long as the plugin runs: every chat, and the Main tab drawn
+   again after a Search jump, opens in it. */
+let pickedGrouping: EarlierGrouping = "day";
+
+/** Back to grouping by day, as the plugin starts. For tests, which share this module between cases. */
+export function resetEarlierGrouping(): void {
+  pickedGrouping = "day";
+}
 
 /** `map` without `key`, the same object when it had none. */
 function without<V>(map: ReadonlyMap<string, V>, key: string): ReadonlyMap<string, V> {
@@ -90,6 +109,12 @@ export function useEarlierTurnsPill(a: UseEarlierTurnsPillArgs): EarlierTurnsPil
   const [openDays, setOpenDays] = useState<ReadonlySet<string>>(NO_DAYS);
   const [morePresses, setMorePresses] = useState<ReadonlyMap<string, number>>(NO_PRESSES);
   const [dayGames, setDayGames] = useState<ReadonlyMap<string, string>>(NO_PICKS);
+  const [wanted, setWanted] = useState<EarlierGrouping>(() => pickedGrouping);
+  /* The one place the grouping in force is decided. The older questions are counted as the transcript counts
+     them (MainTabChatTranscript.tsx's `earlierTurns`): all of them under a live question, else all but the newest. */
+  const earlierCount = showLiveTurn ? askThreadCollapsed.length : askThreadCollapsed.length - 1;
+  const flipOffered = earlierCount >= 2 && offersGameGrouping(askThreadCollapsed, earlierCount);
+  const grouping: EarlierGrouping = flipOffered ? wanted : "day";
   /* The question the ring goes to once the press that shows it has been drawn. */
   const ringOnTurn = useRef<string | null>(null);
   /* Redraws when a jump starts, finishes revealing or ends: the Back line and the reveal below follow the store.
@@ -143,6 +168,14 @@ export function useEarlierTurnsPill(a: UseEarlierTurnsPillArgs): EarlierTurnsPil
     ringOnTurn.current = firstNewId;
     setMorePresses((prev) => new Map(prev).set(dayKey, (prev.get(dayKey) ?? 0) + 1));
   }, []);
+  const flipGrouping = useCallback(() => {
+    const next: EarlierGrouping = pickedGrouping === "game" ? "day" : "game";
+    pickedGrouping = next;
+    setWanted(next);
+    setOpenDays(NO_DAYS);
+    setMorePresses(NO_PRESSES);
+    setDayGames(NO_PICKS);
+  }, []);
 
   /* A jump from the Search tab: once its chat is loaded, show its question and ask for the ring there. This
      runs after the reset above (same hook, later effect), so a chat switch cannot fold it away again. */
@@ -150,20 +183,20 @@ export function useEarlierTurnsPill(a: UseEarlierTurnsPillArgs): EarlierTurnsPil
     const want = pendingJumpReveal();
     if (!want || !askThreadCollapsed.some((t) => t.id === want.turnId)) return;
     markJumpRevealed();
-    const earlierCount = showLiveTurn ? askThreadCollapsed.length : askThreadCollapsed.length - 1;
-    const place = earlierCount >= 2 ? locateEarlierTurn(askThreadCollapsed, earlierCount, want.turnId) : null;
+    /* The same grouping the list is drawn in: the question's day, or its game line. */
+    const place = earlierCount >= 2 ? locateEarlierTurn(askThreadCollapsed, earlierCount, want.turnId, undefined, grouping) : null;
     if (place) {
       setExpanded(true);
       setOpenDays(new Set([place.dayKey]));
       setMorePresses(place.presses > 0 ? new Map([[place.dayKey, place.presses]]) : NO_PRESSES);
-      /* The presses were counted with All lit, so the day opens on All. */
+      /* The presses were counted with All lit, so a day opens on All. */
       setDayGames(NO_PICKS);
     }
     ringOnTurn.current = want.turnId;
     jumpRing.current = want.turnId;
     jumpRingUntil.current = Date.now() + RING_WAIT_MS;
     setRingTick((n) => n + 1);
-  }, [askThreadCollapsed, jump, showLiveTurn]);
+  }, [askThreadCollapsed, jump, earlierCount, grouping]);
 
   /* After the commit that drew the new questions: Steam's own transfer onto the first of them. The
      "Show N more" line is a different container from the question rows, and it may be gone by now. */
@@ -191,5 +224,17 @@ export function useEarlierTurnsPill(a: UseEarlierTurnsPillArgs): EarlierTurnsPil
     settleRing({ take, onTarget: () => ringOnTurnRow(id), alive: () => alive.current });
   });
 
-  return { earlierExpanded, setEarlierExpanded, openDays, toggleDay, morePresses, showMoreOfDay, dayGames, pickDayGame };
+  return {
+    earlierExpanded,
+    setEarlierExpanded,
+    openDays,
+    toggleDay,
+    morePresses,
+    showMoreOfDay,
+    dayGames,
+    pickDayGame,
+    grouping,
+    flipOffered,
+    flipGrouping,
+  };
 }

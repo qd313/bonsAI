@@ -5,12 +5,12 @@
  * act a second time: a game button would move the ring two buttons, and the "N earlier" line's flip would flip
  * the list and flip it back. These pin that the twins answer only string-shaped presses (tests, a desktop
  * keyboard) and that the move handlers carry the real press.
- * Used for: chatTranscriptNavHelpers.ts (`gameButtonNavHandlers`).
+ * Used for: chatTranscriptNavHelpers.ts (`gameButtonNavHandlers`, `earlierLineNavHandlers`).
  * Does not: Draw anything; MainTabChatTranscript.earlierByGame.test.tsx walks the real transcript.
  */
 import { describe, expect, it, vi } from "vitest";
 
-import { gameButtonNavHandlers } from "./chatTranscriptNavHelpers";
+import { earlierLineNavHandlers, gameButtonNavHandlers } from "./chatTranscriptNavHelpers";
 
 /** Steam's own D-pad press as `onButtonDown` receives it: a GamepadEvent whose detail names the button. */
 const STEAM_LEFT = { detail: { button: 11 } };
@@ -48,5 +48,31 @@ describe("a game button's moves", () => {
     const moves = gameButtonNavHandlers({ nav: { current: null }, before: null, after: null, up: () => true, down: () => true });
     expect((moves.onMoveLeft as () => boolean)()).toBe(true);
     expect((moves.onMoveRight as () => boolean)()).toBe(true);
+  });
+});
+
+describe("the 'N earlier' line's flip", () => {
+  it("Left and Right each flip once through the move handlers, and claim the press", () => {
+    const flip = vi.fn();
+    const moves = earlierLineNavHandlers(null, flip);
+    expect((moves.onMoveLeft as () => boolean)()).toBe(true);
+    expect((moves.onMoveRight as () => boolean)()).toBe(true);
+    expect(flip).toHaveBeenCalledTimes(2);
+  });
+
+  it("Steam's own Left or Right reaching onButtonDown is claimed but flips nothing, so one press is one flip", () => {
+    const flip = vi.fn();
+    const buttonDown = earlierLineNavHandlers(null, flip).onButtonDown as (b: unknown) => boolean;
+    expect(buttonDown(STEAM_LEFT)).toBe(true);
+    expect(buttonDown(STEAM_RIGHT)).toBe(true);
+    expect(flip).not.toHaveBeenCalled();
+    expect(buttonDown("ArrowRight")).toBe(true);
+    expect(flip).toHaveBeenCalledTimes(1);
+  });
+
+  it("without a flip, Left still holds still and Right is left to Steam, as before", () => {
+    const moves = earlierLineNavHandlers(null);
+    expect((moves.onMoveLeft as () => boolean)()).toBe(true);
+    expect(moves.onMoveRight).toBeUndefined();
   });
 });

@@ -2,7 +2,8 @@
  * Title: What the "N earlier" part of a long chat puts on screen
  * Purpose: Decide, for the transcript, the "N earlier" line, the day lines under it once it is open,
  * the game buttons of an open day that mixes games (plan 105), which older questions are drawn as rows
- * and the small tag each wears, and what A and B do on each line and button.
+ * and the small tag each wears, and what A and B do on each line and button. Grouped by game (plan 105,
+ * Left or Right on "N earlier"), the lines under it are one per game and the same code draws them.
  * Used for: MainTabChatTranscript.tsx, in front of and between the turn rows.
  * Solves: The transcript file is far past its size limit. This keeps the whole earlier-list decision
  * in one place, so the transcript only draws what it is handed.
@@ -25,6 +26,7 @@ import {
   moreLineText,
   type EarlierDay,
   type EarlierGameChoice,
+  type EarlierGrouping,
   type EarlierMore,
 } from "./earlierTurnsByDay";
 import {
@@ -62,6 +64,15 @@ export type BuildEarlierListArgs = {
   pickDayGame?: (dayKey: string, gameKey: string) => void;
   /** A question row's own nav node, for Down from a game button when the question has no text stop of its own. */
   headerNavOf?: (turnId: string) => NavRefHolder;
+  /**
+   * How the open list is grouped, as useEarlierTurnsPill.ts decided it (plan 105): one line per day, or one line
+   * per game. Never decided here, so the drawing and the Search jump cannot disagree. Left out: by day.
+   */
+  grouping?: EarlierGrouping;
+  /** Whether Left and Right on the "N earlier" line flip the grouping; then the line names the grouping. */
+  flipOffered?: boolean;
+  /** Left or Right on the "N earlier" line, while the flip is offered. */
+  flipGrouping?: () => void;
   expandedTurnKey: string | null;
   onTurnActivate?: (key: string | "live") => void;
   /** Whether the "Back to where you were" line shows; when left out, whether a live jump points into these turns. */
@@ -113,15 +124,15 @@ export type EarlierList = {
 
 /**
  * Work out the earlier list for one render: with the line closed only the turns after the earlier ones
- * show; opened, the day lines show with the questions of the open days. Each line carries its own nav
- * node, so a question's Up (questionMoveUpOut) can hand the ring to exactly the line over it.
+ * show; opened, the day (or game) lines show with the questions of the open ones. Each line carries its own
+ * nav node, so a question's Up (questionMoveUpOut) can hand the ring to exactly the line over it.
  */
 export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
   const { turns, earlierCount, showLiveTurn, earlierExpanded, setEarlierExpanded, openDays, toggleDay } = a;
   const hasLine = earlierCount >= 2;
   const layout =
     hasLine && earlierExpanded
-      ? layoutEarlierList({ turns, earlierCount, openDays, morePresses: a.morePresses, dayGames: a.dayGames })
+      ? layoutEarlierList({ turns, earlierCount, grouping: a.grouping, openDays, morePresses: a.morePresses, dayGames: a.dayGames })
       : null;
   const turnsToRender = layout ? layout.shown : hasLine ? turns.slice(earlierCount) : turns;
   const afterEarlier = showLiveTurn ? "live" : null;
@@ -227,9 +238,17 @@ export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
     reopenNewestIfHidden(turns.slice(0, earlierCount));
     setEarlierExpanded(false);
   };
+  /* Left or Right on "N earlier" (plan 105): every line under it closes, so an open older answer among them
+     hands the open answer back to the newest, as closing the list does. The ring stays on the line. */
+  const flip = a.flipOffered && a.flipGrouping
+    ? () => {
+        if (earlierExpanded) reopenNewestIfHidden(turns.slice(0, earlierCount));
+        a.flipGrouping?.();
+      }
+    : undefined;
   /* Up from "N earlier" is the stop above the chat, unless the Back line is drawn over it. */
   const earlierNav = (): Record<string, unknown> => {
-    const base = earlierLineNavHandlers(earlierExpanded ? null : turnsToRender[0]?.id ?? afterEarlier);
+    const base = earlierLineNavHandlers(earlierExpanded ? null : turnsToRender[0]?.id ?? afterEarlier, flip);
     if (!backLive) return base;
     const upToBack = () => takeHolderFocus(searchBackNav);
     return {
@@ -241,7 +260,8 @@ export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
   const earlierLine = hasLine ? (
     <EarlierListLine
       kind="earlier"
-      text={`${earlierCount} earlier`}
+      text={a.flipOffered ? `${earlierCount} earlier · by ${a.grouping ?? "day"}` : `${earlierCount} earlier`}
+      flips={a.flipOffered}
       open={earlierExpanded}
       onToggle={() => (earlierExpanded ? closeAll() : setEarlierExpanded(true))}
       onClose={closeAll}

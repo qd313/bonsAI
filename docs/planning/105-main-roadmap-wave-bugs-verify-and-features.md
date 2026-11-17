@@ -545,6 +545,15 @@ whether it settled the matter ("yes", "no", or "went up to max, ground N"), the 
 
 | Time | Level | Question | Answer | What changed | Settled? | Cost |
 |---|---|---|---|---|---|---|
+| 11-17 00:20 | medium | 1: the briefs against the code at the new tip | D2's Cancel cannot stop the build; the mode-button reading cannot tell the answers apart; B3 needs a measurement; land C3 before P1; D4b needs a machine without the engine | D2 made the build's stop real; the driver read the paperclip; B3 got a Deck measurement | yes | ~62k tokens |
+| 00:27 | medium | 2: the "N earlier" by-game D-pad design | build, with three changes (one place decides the grouping; Down lands on the question's text; a test reset) | A6 built with them | yes | ~64k |
+| 00:33 | medium | 5: removing the animation settings (B2's plan) | build; delete decode's own reduced-motion branch; the scramble's unused looks as a third commit; carousel focus code to a later small lane | B2 built with them | yes | ~51k |
+| 00:46 | medium | 3: the tab-sections walk and the switch design | the old bug is gone; build the switch now with four changes | C2 built with them | yes | ~60k |
+| 02:17 | medium | A6's built change, before landing | land as is; one real Left and one real Right on the Deck | none | yes | ~82k |
+| 02:18 | medium | 4: the Show details rewrite against the focus rules and plan 104 | land after the Session chip lifts clear of the dock and a lost-focus Right is held; three rows is right | A2 made both | yes | ~106k |
+| 02:55 | medium | D3's built first-time setup, before landing | two fixes first: OK while a switch save is in flight; the beta line could wrap | D3 fixed both | yes | ~90k |
+| 02:58 | medium | C2's built switch, before landing | land as is; the Deck reads the glide at four landings | added to block D3a | yes | ~51k |
+| 03:10 | medium | 7: the rule for Left (C5's plan) | build as planned; a pause ends a run of Lefts; a held Left never counts; leave out the places where code and Deck disagree | C5 told | yes | ~36k |
 
 ## 8. Things to bring to the maintainer's attention
 
@@ -766,6 +775,32 @@ six lookups and four drawing helpers (all Sonnet).
 1. All five of board 5's looks are picked. Left: the small questions above, each with a default.
 2. Calls 15 to 28: "go" takes every default.
 3. Whether to dock the Deck once for the second-screen look checks (§ 4, step 7).
+
+**2026-11-17, the run (an Opus chat, told "Implement plan 105" at 23:45 on the 16th).**
+
+- **Go:** usage 12 percent of the five-hour window, 52 of the week, 41 on Fable's own counter. The PC is kept awake by
+  the app; the Deck is held awake all session. The full checks passed on the starting tip in 15 minutes.
+- **The briefs' re-check** (four lookups): no brief out of date; many moved lines; written at the end of the briefs
+  file. **Your call at 00:20:** five more helpers over the fifteen, held until your "go" (00:22). The five-hour window
+  filled at about 01:05; everything paused and picked up after 02:10.
+- **Landed by 03:26, every batch through the full checks** (some batches of several lanes at once to save time; the
+  batches were green): the agent chip's blue fill; the landing script's full log; the old avatars and the unused pack
+  manager gone; the characters' voices document; Tiny text; the starter set builds the voice engine (Cancel stops the
+  build); the ten-chat delete list on Ask; the first section open and the shaded sections; the cut question's fade;
+  a long answer followed while it writes; the driver scripts; a long question no longer refused; Terse at about 40
+  words; Headline first (built, switched off on its numbers); "N earlier" by game; the AI models box; Decode as the
+  default; the Show details chips; the thumbs row; the new first-time setup; sections that open as you walk; the
+  widening chip; the answer's foot after a long answer. Three bookkeeper sweeps keep the roadmap current.
+- **Deck blocks:** D0 (measurements: the old tab-sections bug is gone; Decky buttons do run their Left handler; the
+  page did not follow a writing answer; the left edges), D1 and D2 (passes listed in the roadmap and testing rows; the
+  bold-heading spoiler row passed at last). One failure found a real bug (the page stopping short after a long
+  answer), fixed the same hour.
+- **Stand-in (this PC):** three tries could not run: Big Picture would not come forward (you fixed it), then the
+  Deck tool cannot install from a copy of the repo, then Decky's own panel errors on this PC with both builds. **It
+  waits for you to restart Steam** (or update Decky to 3.3.1, your call). Its backup is outside every repo (the
+  settings file holds your Steam Web API key).
+- **Your October notes on the checks page** live only in your browser; no session can read them. Paste them in the
+  chat if you want each answered.
 
 ## 13. Report
 

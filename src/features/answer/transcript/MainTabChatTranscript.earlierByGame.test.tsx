@@ -18,13 +18,14 @@
  *           MainTabChatTranscript.earlierByDay.test.tsx).
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { act, cleanup } from "@testing-library/react";
+import { act, cleanup, fireEvent } from "@testing-library/react";
 
 import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
 import type { AskThreadCollapsedTurn } from "../../../types/bonsaiUi";
 import { resetNavFocusRegistry } from "../../../shared/dpad/navFocusRegistry";
 import { resetUiDocument } from "../../../shared/dpad/uiDocument";
 import { resetEarlierGrouping } from "./useEarlierTurnsPill";
+import { buildQuestionBubbleSection } from "./questionBubble";
 import {
   DOCK_TOP_IN_GAME, GAME, LINE, NOW, activate, focusOn, isRetry, lineEl, nameOf, openEarlier, press,
   renderChat as renderChatWith, rowTexts, seconds, steamScroll, taken, turn, walk,
@@ -268,6 +269,44 @@ describe("the D-pad over the game buttons", () => {
     expect(press(container, "Down")).toBe(true);
     expect(isRetry(document.activeElement)).toBe(false);
     expect(nameOf(document.activeElement)).toBe("question:today knight");
+  });
+});
+
+/*
+ * Lane A5 (landed first): a closed question cut short fades at its right edge while the ring is on it. A row wearing
+ * this lane's tag must keep that cue, and the fade must sit on the question's words only, never on the tag.
+ */
+describe("a tagged closed question keeps the cut question's fade, on its words only", () => {
+  const LONG = "how do I get past the second phase of the boss without losing all of my health potions";
+
+  it("the ring on it marks the words as cut, never the tag, and the mark goes when the ring leaves", () => {
+    const chat = [
+      ...MONDAY,
+      asked("Hades", "l1", LONG, seconds(9, 1, 8)),
+      asked("", "l2", "a short one", seconds(9, 1, 9)),
+      NEWEST,
+    ];
+    const { container } = openDay({}, null, chat, "Yesterday · 2");
+    const header = container.querySelector<HTMLElement>('.bonsai-chat-turn-row-header[data-bonsai-turn-id="l1"]')!;
+    expect(header.classList.contains("bonsai-chat-turn-row-header--collapsed")).toBe(true);
+    const words = header.querySelector(".bonsai-chat-turn-row-title")!;
+    const tag = header.querySelector(".bonsai-chat-turn-row-tag")!;
+    expect(tag.textContent).toBe("Hades");
+    expect(words.contains(tag)).toBe(false);
+    /* jsdom has no layout: the words count as cut because the question was cut at 60 letters. */
+    fireEvent.focus(header);
+    expect(words.getAttribute("data-bonsai-cut")).toBe("true");
+    expect(tag.hasAttribute("data-bonsai-cut")).toBe(false);
+    fireEvent.blur(header);
+    expect(words.hasAttribute("data-bonsai-cut")).toBe(false);
+  });
+
+  it("the stylesheet's fade is keyed on the words alone, so the tag beside them is never faded", () => {
+    const css = buildQuestionBubbleSection();
+    const fade = css.slice(css.lastIndexOf(".bonsai-scope"));
+    expect(fade).toContain(".bonsai-chat-turn-row-title[data-bonsai-cut]");
+    expect(fade).toContain("mask-image");
+    expect(css).not.toContain("bonsai-chat-turn-row-tag");
   });
 });
 

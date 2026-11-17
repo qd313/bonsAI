@@ -1,9 +1,9 @@
 /**
- * Title: The chip row over minutes, in every style
+ * Title: The chip row over minutes, in both looks
  * Purpose: Pin what the Deck check looks at, with fake time and a seeded random source. With a game
  *          running that has its own chips: with one chip showing, never two general chips in a row and a
  *          little over half of all chips the game's own; with two chips, one of the two is always the
- *          game's own. Each of the four styles (fade, carousel, static, decode) must obey the same rule.
+ *          game's own. Each of the two looks (static, decode) must obey the same rule.
  *          Commit 2 adds the pace: chips a minute at one chip and at two, and the two spots never
  *          changing at the same moment.
  * Used for: plan 78 helper F, commit 1 (which chip comes next). Before it, three styles refilled from
@@ -15,10 +15,10 @@ import { afterEach, describe, expect, it } from "vitest";
 import { setFrozenTestChips } from "./presets";
 import { simulateChipRow, type ChipEvent, type ChipStyle } from "../../test-harness/chipRowSimulation";
 
-const STYLES: ChipStyle[] = ["fade", "carousel", "static", "decode"];
+const STYLES: ChipStyle[] = ["static", "decode"];
 const SEEDS = [11, 29];
-/** Seven minutes for the default style, three for the others, as the Deck check runs them. */
-const minutesFor = (style: ChipStyle) => (style === "fade" ? 7 : 3);
+/** Three minutes a look, as the Deck check runs them. */
+const MINUTES = 3;
 
 afterEach(() => setFrozenTestChips([]));
 
@@ -32,7 +32,7 @@ describe.each(STYLES)("%s style with a game that has its own chips", (style) => 
     let game = 0;
     let all = 0;
     for (const seed of SEEDS) {
-      const { events } = simulateChipRow({ style, single: true, minutes: minutesFor(style), seed });
+      const { events } = simulateChipRow({ style, single: true, minutes: MINUTES, seed });
       const chips = appeared(events);
       for (let i = 1; i < chips.length; i++) {
         expect(
@@ -50,7 +50,7 @@ describe.each(STYLES)("%s style with a game that has its own chips", (style) => 
 
   it("two chips: one of the two on screen is always the game's own", () => {
     for (const seed of SEEDS) {
-      const { gameOnScreen } = simulateChipRow({ style, single: false, minutes: minutesFor(style), seed });
+      const { gameOnScreen } = simulateChipRow({ style, single: false, minutes: MINUTES, seed });
       const bare = gameOnScreen.filter((s) => s.total === 2 && s.count === 0);
       expect(bare.length, `${style} seed ${seed}: first at ${bare[0]?.t} ms`).toBe(0);
     }
@@ -63,7 +63,7 @@ describe.each(STYLES)("%s style with a game that has its own chips", (style) => 
  * over at about 12 s each, 6 to 10 a minute across the two. The same pace in every style.
  */
 describe.each(STYLES)("%s style pace", (style) => {
-  const minutes = minutesFor(style);
+  const minutes = MINUTES;
   /** Chips that appeared after the opening ones, per minute. */
   const perMinute = (events: ChipEvent[]) => events.filter((e) => e.t > 0).length / minutes;
 
@@ -80,7 +80,7 @@ describe.each(STYLES)("%s style pace", (style) => {
       const { events } = simulateChipRow({ style, single: false, minutes, seed });
       expect(perMinute(events), `${style} seed ${seed}`).toBeGreaterThanOrEqual(6);
       expect(perMinute(events), `${style} seed ${seed}`).toBeLessThanOrEqual(10);
-      // The sliding style has one window and one change at a time; the others have two spots.
+      // Two spots, never changing together.
       const times = events.filter((e) => e.t > 0).map((e) => e.t).sort((a, b) => a - b);
       for (let i = 1; i < times.length; i++) {
         // One sample (100 ms) of reading error on each side.

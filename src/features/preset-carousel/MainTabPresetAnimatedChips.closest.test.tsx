@@ -14,7 +14,7 @@ import { setFrozenTestChips } from "./presets";
 import { composeSessionPresets, type SessionRagChipCandidate } from "./sessionRagComposer";
 import { simulateChipRow, type ChipStyle } from "../../test-harness/chipRowSimulation";
 
-const STYLES: ChipStyle[] = ["fade", "carousel", "static", "decode"];
+const STYLES: ChipStyle[] = ["static", "decode"];
 
 const game = (text: string, closest?: true): SessionRagChipCandidate => ({
   text,

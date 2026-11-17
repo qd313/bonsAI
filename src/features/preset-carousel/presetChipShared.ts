@@ -1,16 +1,16 @@
 /**
  * Title: Preset chip shared timing and seed helpers
  *
- * Purpose: The small pieces every animation mode in MainTabPresetAnimatedChips.tsx needs alike —
- * the per-slot stagger, the reduced-motion check, normalizeThreeSeeds (which
+ * Purpose: The small pieces both chip looks in MainTabPresetAnimatedChips.tsx need alike —
+ * the per-slot stagger, the reduced-motion check, seedsKeyFrom, normalizeThreeSeeds (which
  * fills out a short seed list to exactly three prompts), and the row's own prop contract
  * (MainTabPresetAnimatedChipsProps).
  *
- * Used for: MainTabPresetAnimatedChipsInner (fade/static), MainTabPresetDecodeSlots and
- * MainTabPresetSidewaysCarousel, all in src/features/preset-carousel/MainTabPresetAnimatedChips.tsx.
+ * Used for: MainTabPresetPlainSlots (the static look) and MainTabPresetDecodeSlots, and the row
+ * above them (MainTabPresetRow reads prefersReducedMotion).
  *
- * Solves: Keeps the per-slot stagger and the "always exactly three seeds" contract in one place, so the four animation
- * modes cannot quietly drift apart on either. The prop type lives here too (not in the component
+ * Solves: Keeps the per-slot stagger and the "always exactly three seeds" contract in one place, so the two chip
+ * looks cannot quietly drift apart on either. The prop type lives here too (not in the component
  * file) so that MainTabPresetDecodeSlots, in its own file, can read it without importing back
  * from the component file that imports MainTabPresetDecodeSlots — an import cycle the front-end
  * ratchet catches.
@@ -21,14 +21,16 @@ import type React from "react";
 import { getRandomPresets, type PresetPrompt, type PresetSamplerOptions } from "./presets";
 import type { AskModeId } from "../ask/bar/askMode";
 
-/* Fade lengths are in presetPace.ts: one set for one chip showing, one for two. */
 /** Stagger each slot's first appearance so the chips never move in lockstep. */
 const PRESET_SLOT_STAGGER_MS: readonly number[] = [750, 1300, 1700];
 export function slotStaggerMs(slotIndex: number): number {
   return PRESET_SLOT_STAGGER_MS[slotIndex] ?? PRESET_SLOT_STAGGER_MS[PRESET_SLOT_STAGGER_MS.length - 1]!;
 }
 
-export type SlotFade = { opacity: number; transitionMs: number };
+/** A key for a list of seeds: it changes when any seed's words change, so a row can tell it was reseeded. */
+export function seedsKeyFrom(seeds: PresetPrompt[]): string {
+  return seeds.map((s) => s.text).join("\u0000");
+}
 
 /**
  * Three contextual seeds still arrive from upstream (and a frozen QA batch is applied at count
@@ -46,15 +48,14 @@ export function normalizeThreeSeeds(
   ];
 }
 
-export type PresetChipAnimationMode = "fade" | "carousel" | "static" | "decode";
+/** decode = Ghost in the Shell scramble-to-resolve reveal (the default); static = plain swaps, for less motion. */
+export type PresetChipAnimationMode = "static" | "decode";
 
 export type MainTabPresetAnimatedChipsProps = {
-  /** When upstream presets change (e.g. after ask), carousel re-seeds from this list. */
+  /** When upstream presets change (e.g. after ask), the row re-seeds from this list. */
   seeds: PresetPrompt[];
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
-  /** When false, chips stay fully opaque and prompts rotate after hold without opacity transitions. */
-  fadeAnimationEnabled?: boolean;
-  /** fade = opacity crossfade; carousel = sideways window on a history; static = no opacity animation; decode = Ghost in the Shell scramble-to-resolve reveal. */
+  /** decode (the default) or static; see PresetChipAnimationMode. */
   animationMode?: PresetChipAnimationMode;
   /** If a preset declares `preferAskMode`, apply it when the chip is chosen. */
   onPreferAskMode?: (mode: AskModeId) => void;

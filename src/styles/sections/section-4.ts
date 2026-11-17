@@ -79,7 +79,6 @@ import { BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX, DOCK_ROW_GAP_PX, PRESET_CHIP_
 import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
   PRESET_CHIP_GAP_PX,
-  PRESET_VISIBLE_SLOTS,
 } from "../../features/preset-carousel/presetRowLayout";
 import { buildPresetChipLabelCss } from "../../features/preset-carousel/presetChipLabel";
 
@@ -172,13 +171,6 @@ export function buildSection4Section(): string {
           margin-bottom: calc(${DOCK_ROW_GAP_PX}px - ${PRESET_CHIP_SHADOW_ROOM_PX}px) !important;
         }
 
-        /* Fade mode had 12px under its chips; since plan 72 it has the same row gap as every mode. */
-        .bonsai-scope .bonsai-preset-row-host--fade-anim {
-          gap: 3px !important;
-          margin-bottom: calc(${DOCK_ROW_GAP_PX}px - ${PRESET_CHIP_SHADOW_ROOM_PX}px) !important;
-          margin-top: 0 !important;
-        }
-
         ${buildPresetChipLabelCss()}
 
         .bonsai-scope .bonsai-chat-response-stack {
@@ -205,45 +197,6 @@ export function buildSection4Section(): string {
         }
         .bonsai-scope .bonsai-preset-across > .bonsai-preset-carousel-slot {
           flex: 1 1 0 !important;
-          min-width: 0 !important;
-        }
-        /*
-          Sideways carousel. The track holds the whole history (up to five chips) as a flex row and
-          the viewport clips it to one row's width; the chips outside the window are simply clipped
-          and still focusable, so a D-pad step onto one slides it into view. Each chip is an equal
-          share of the viewport, and the slide is a calc on the window-start index the component
-          writes to --bonsai-preset-window-start: one step is (100% + gap) / N, which is exactly one
-          chip plus one gap for any N. No pixel is ever measured.
-        */
-        /* This viewport hides anything outside itself too, so it clips the shadow in carousel mode
-           even after the row above gained room: 5px given, the same 5px taken back off its height,
-           so the shadow shows and nothing on screen moves. */
-        .bonsai-scope .bonsai-preset-carousel-viewport {
-          width: 100% !important;
-          min-width: 0 !important;
-          overflow: hidden !important;
-          padding-bottom: 5px !important;
-          margin-bottom: -5px !important;
-        }
-        .bonsai-scope .bonsai-preset-carousel-track {
-          display: flex !important;
-          flex-direction: row !important;
-          gap: ${PRESET_CHIP_GAP_PX}px !important;
-          width: 100% !important;
-          min-width: 0 !important;
-          will-change: transform !important;
-          /*
-            --bonsai-preset-visible-slots lets the "one suggestion chip" setting override the
-            window width per render (MainTabPresetAnimatedChips writes it alongside
-            --bonsai-preset-window-start); the fallback is PRESET_VISIBLE_SLOTS, the shipped
-            default, for the rare case nothing wrote the variable.
-          */
-          transform: translateX(
-            calc(-1 * var(--bonsai-preset-window-start, 0) * (100% + ${PRESET_CHIP_GAP_PX}px) / var(--bonsai-preset-visible-slots, ${PRESET_VISIBLE_SLOTS}))
-          ) !important;
-        }
-        .bonsai-scope .bonsai-preset-carousel-track > .bonsai-preset-carousel-slot {
-          flex: 0 0 calc((100% - ${PRESET_CHIP_GAP_PX}px * (var(--bonsai-preset-visible-slots, ${PRESET_VISIBLE_SLOTS}) - 1)) / var(--bonsai-preset-visible-slots, ${PRESET_VISIBLE_SLOTS})) !important;
           min-width: 0 !important;
         }
         /*

@@ -18,8 +18,7 @@
  * the test run without saying so. This is where that is checked and
  * respected.
  *
- * Does not: Move the carousel's own highlight — see carouselState and the
- * Main tab's carousel screen for that.
+ * Does not: Draw or move the chips; the row (MainTabPresetAnimatedChips) does.
  */
 import { TEMP_PRESET_CAROUSEL_FROZEN, frozenTestChipsActive } from "./presets";
 import type { PresetPrompt } from "./presets";

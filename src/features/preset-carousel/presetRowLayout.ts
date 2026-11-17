@@ -5,9 +5,9 @@
  *          pace for one chip or two (presetPace.ts), with the estimate of what a scrolling label needs (the row replaces a long chip by the chip's own
  *          measured time line instead, presetChipStay.ts; the estimate stands in until the chip has
  *          reported, and for a chip that does not scroll).
- * Used for: MainTabPresetAnimatedChips, carouselState (window size), sessionRagComposer (which slot
+ * Used for: MainTabPresetAnimatedChips, sessionRagComposer (which slot
  *           the corpus guarantee converts), section-4 styles.
- * Solves: One place for "two across" (D43, 2026-09-01) so the composer, the carousel window and the
+ * Solves: One place for "two across" (D43, 2026-09-01) so the composer, the chip row and the
  *         row never disagree about what is on screen.
  * Does not: Measure anything — widths come from CSS (design-language rule 4). The character estimate
  *           here only sizes a hold time; the fit check that decides whether a label scrolls is made
@@ -26,7 +26,7 @@ export const PRESET_VISIBLE_SLOTS = 2;
 /**
  * The row's actual visible-slot count for this render: 1 when the "one suggestion chip" setting
  * is on, otherwise `PRESET_VISIBLE_SLOTS`. `PRESET_VISIBLE_SLOTS` keeps meaning "the shipped
- * default" — carouselState.test.ts pins it at exactly 2 — and every call site that currently
+ * default" — presetRowLayout.test.ts pins it at exactly 2 — and every call site that currently
  * reads the constant directly should read this instead, so the setting overrides at the point of
  * use rather than by changing what the default means.
  */

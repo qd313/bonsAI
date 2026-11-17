@@ -21,18 +21,11 @@ import {
 } from "./MainTabPresetAnimatedChips";
 import { setFrozenTestChips, type PresetPrompt } from "./presets";
 import { composeDecodeParts } from "./presetChipDecodeText";
-import { CAROUSEL_HISTORY_MAX } from "./carouselState";
-import {
-  PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
-  PRESET_VISIBLE_SLOTS,
-  presetTurnMs,
-} from "./presetRowLayout";
+import { PRESET_CHIP_BLOCKED_EDGE_FLASH_MS, PRESET_VISIBLE_SLOTS } from "./presetRowLayout";
 import { registerNavFocus, resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
 import { resetFakeDeckyRpc } from "../../test-harness/fakeDeckyRpc";
 
 const seed = (text: string): PresetPrompt => ({ text, category: "general" });
-/** One turn of a short chip with the default two showing: how long the carousel waits per step. */
-const CAROUSEL_STEP_MS = presetTurnMs("q1", PRESET_VISIBLE_SLOTS);
 
 function renderChips(props: Partial<React.ComponentProps<typeof MainTabPresetAnimatedChips>> = {}) {
   return render(
@@ -79,12 +72,13 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
       <MainTabPresetAnimatedChips
         seeds={[seed("alpha"), seed("bravo"), seed("charlie")]}
         setUnifiedInput={vi.fn()}
-        animationMode="carousel"
+        animationMode="decode"
       />,
     );
-    // Carousel mode renders a different chip structure; the assertion that matters
-    // is that the memo let the update through at all.
-    expect(screen.queryByText("alpha")).toBeTruthy();
+    // Decode draws a different chip structure (scrambled letters until they settle, no plain words
+    // at first); the assertion that matters is that the memo let the update through at all.
+    expect(screen.queryByText("alpha")).toBeNull();
+    expect(document.querySelectorAll("button.bonsai-preset-glass--decode").length).toBeGreaterThan(0);
   });
 
   it("keeps the decode-mode chips focusable while glyphs are still churning", () => {
@@ -95,13 +89,13 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
 
   /*
    * Roadmap "A pinned test batch is not badged": PresetChipLabel draws the amber Test badge for
-   * fade / carousel / static, but decode mode draws its own label from scratch
+   * the static look, but decode mode draws its own label from scratch
    * (DecodePresetChipButton) and never carried the badge over -- on the Deck, where the pinned
    * chip animation setting is decode, a frozen QA batch showed no badge anywhere
    * (workshop:test-evidence/plan47-frozen-chip-findings.json, finding_1).
    */
   it("badges a pinned test chip in every animation mode, including decode", () => {
-    for (const mode of ["static", "fade", "carousel", "decode"] as const) {
+    for (const mode of ["static", "decode"] as const) {
       const { container, unmount } = renderChips({
         animationMode: mode,
         seeds: [
@@ -128,7 +122,7 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
    * function, so the two checks cannot drift apart again; this test is the pin.
    */
   it("badges a note-sourced (ragTip) chip in every animation mode, including decode", () => {
-    for (const mode of ["static", "fade", "carousel", "decode"] as const) {
+    for (const mode of ["static", "decode"] as const) {
       const { container, unmount } = renderChips({
         animationMode: mode,
         seeds: [
@@ -147,8 +141,8 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
 
   /* Two chips side by side since 2026-09-01 (D43). The row was one chip for a day (2026-08-31)
      and three stacked rows before that. */
-  it("renders PRESET_VISIBLE_SLOTS chips side by side in fade / static / decode", () => {
-    for (const mode of ["static", "fade", "decode"] as const) {
+  it("renders PRESET_VISIBLE_SLOTS chips side by side in static / decode", () => {
+    for (const mode of ["static", "decode"] as const) {
       const { container, unmount } = renderChips({ animationMode: mode });
       const row = container.querySelector(".bonsai-preset-carousel-focus-root.bonsai-preset-across");
       expect(row, `${mode}: the chips share one horizontal focus container`).toBeTruthy();
@@ -163,8 +157,8 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
    * flex share (section-6.ts), so a single slot child automatically takes the whole row -- no
    * extra width math needed here, only that exactly one slot renders.
    */
-  it("renders one chip, with the whole row, in fade / static / decode when presetSingleChip is on", () => {
-    for (const mode of ["static", "fade", "decode"] as const) {
+  it("renders one chip, with the whole row, in static / decode when presetSingleChip is on", () => {
+    for (const mode of ["static", "decode"] as const) {
       const { container, unmount } = renderChips({ animationMode: mode, presetSingleChip: true });
       const row = container.querySelector(".bonsai-preset-carousel-focus-root.bonsai-preset-across");
       expect(row, `${mode}: the chips share one horizontal focus container`).toBeTruthy();
@@ -191,53 +185,6 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
     expect(
       container.querySelectorAll(".bonsai-preset-carousel-focus-root.bonsai-preset-across > .bonsai-preset-carousel-slot"),
     ).toHaveLength(1);
-  });
-
-  it("carousel mode is a window on the history with the focused chip marked", () => {
-    const { container } = renderChips({ animationMode: "carousel" });
-    expect(container.querySelector(".bonsai-preset-carousel-viewport")).toBeTruthy();
-    // Every seed is in the history track (clipped or not); exactly one carries the current marker.
-    expect(container.querySelectorAll(".bonsai-preset-carousel-track > .bonsai-preset-carousel-slot")).toHaveLength(3);
-    const focused = container.querySelectorAll(".bonsai-preset-carousel-slot--focus");
-    expect(focused).toHaveLength(1);
-    expect(focused[0]?.textContent).toContain("alpha");
-    // Only the two chips in the window are focus stops; the third is rendered for the slide but
-    // is not somewhere the ring can land (found on device 2026-09-01: a focusable off-screen first
-    // child made Steam skip the whole row on a fresh panel).
-    const visible = Array.from(container.querySelectorAll(".bonsai-preset-carousel-slot")).map((s) =>
-      s.getAttribute("data-bonsai-preset-visible"),
-    );
-    expect(visible).toEqual(["true", "true", "false"]);
-  });
-
-  /*
-   * "One suggestion chip" setting in carousel mode: the window narrows to one, so the focused chip
-   * is the only one that is both a visible chip and a focus stop -- "the first and last chip are
-   * the same chip" (roadmap `[chips]` ★★★). --bonsai-preset-visible-slots is what the CSS reads
-   * to size and slide the track (section-4.ts); with one slot it must read "1", not the
-   * PRESET_VISIBLE_SLOTS default.
-   */
-  it("carousel mode: presetSingleChip narrows the window to one chip and writes the CSS variable", () => {
-    const { container } = renderChips({ animationMode: "carousel", presetSingleChip: true });
-    const track = container.querySelector(".bonsai-preset-carousel-track") as HTMLElement | null;
-    expect(track).toBeTruthy();
-    expect(track!.style.getPropertyValue("--bonsai-preset-visible-slots")).toBe("1");
-
-    const focused = container.querySelectorAll(".bonsai-preset-carousel-slot--focus");
-    expect(focused).toHaveLength(1);
-    expect(focused[0]?.textContent).toContain("alpha");
-
-    const visible = Array.from(container.querySelectorAll(".bonsai-preset-carousel-slot")).map((s) =>
-      s.getAttribute("data-bonsai-preset-visible"),
-    );
-    // Only the focused chip is on screen; the other two are rendered (for the slide) but clipped.
-    expect(visible).toEqual(["true", "false", "false"]);
-  });
-
-  it("carousel mode without the setting still writes PRESET_VISIBLE_SLOTS to the CSS variable", () => {
-    const { container } = renderChips({ animationMode: "carousel" });
-    const track = container.querySelector(".bonsai-preset-carousel-track") as HTMLElement | null;
-    expect(track!.style.getPropertyValue("--bonsai-preset-visible-slots")).toBe(String(PRESET_VISIBLE_SLOTS));
   });
 
   /* The Tip badge exists to be seen at a glance (Phase 4 track 1); only the prompt text scrolls.
@@ -274,7 +221,6 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
     const declaredProps = [
       "seeds",
       "setUnifiedInput",
-      "fadeAnimationEnabled",
       "animationMode",
       "onPreferAskMode",
       "onCarouselExitDown",
@@ -390,25 +336,7 @@ describe("MainTabPresetAnimatedChips decode mode", () => {
 
   afterEach(() => {
     vi.useRealTimers();
-    Reflect.deleteProperty(window, "matchMedia");
   });
-
-  function mockReducedMotion(matches: boolean) {
-    Object.defineProperty(window, "matchMedia", {
-      writable: true,
-      configurable: true,
-      value: vi.fn().mockImplementation((query: string) => ({
-        matches: matches && query === "(prefers-reduced-motion: reduce)",
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    });
-  }
 
   /*
    * Maintainer bug report, 2026-09-19: "A preset chip's icon and its text are coloured the same
@@ -417,7 +345,7 @@ describe("MainTabPresetAnimatedChips decode mode", () => {
    * words too -- only the dot is meant to carry the accent colour. The stylesheet is a plain
    * string in this test environment (no cascade), so this checks the one place decode's label
    * colour can now come from: the Button's own inline style, set inline for the same reason
-   * PresetChipButton (fade/static/carousel) already sets it there.
+   * PresetChipButton (static) already sets it there.
    */
   it("gives a decode-mode chip's label the normal chip-text colour, not the accent", () => {
     const { container } = render(
@@ -499,39 +427,6 @@ describe("MainTabPresetAnimatedChips decode mode", () => {
     }
   });
 
-  it("prefers-reduced-motion swaps each chip's text in instantly, with no caret and no scroll", () => {
-    mockReducedMotion(true);
-    vi.useFakeTimers();
-    try {
-      const { container } = render(
-        <MainTabPresetAnimatedChips
-          seeds={[seed("alpha"), seed("bravo"), seed("charlie")]}
-          setUnifiedInput={vi.fn()}
-          animationMode="decode"
-        />,
-      );
-
-      // The reduced-motion path only ever uses setTimeout (never requestAnimationFrame), so
-      // advancing fake timers past the slot's stagger delay is enough to settle it — no
-      // rAF-timing ambiguity to worry about here.
-      act(() => {
-        vi.advanceTimersByTime(2000);
-      });
-
-      const labels = Array.from(
-        container.querySelectorAll(".bonsai-preset-glass--decode .bonsai-preset-chip-text"),
-      );
-      expect(labels).toHaveLength(PRESET_VISIBLE_SLOTS);
-      expect(labels.map((l) => l.textContent)).toEqual(["alpha", "bravo"]);
-      for (const label of labels) {
-        expect(label.textContent).not.toContain(PRESET_DECODE_CARET_CHAR);
-        // Reduced motion: the plain cut-off label, never the scrolling one.
-        expect(label.classList.contains("bonsai-preset-chip-text--marquee")).toBe(false);
-      }
-    } finally {
-      vi.useRealTimers();
-    }
-  });
 });
 
 /*
@@ -600,54 +495,6 @@ describe("MainTabPresetAnimatedChips askRestartToken (D58 #3: an Ask restarts th
     expect(firstSlotText(container)).toBe("q1");
   });
 
-  it("carousel mode: a bumped token restarts the auto-advance without touching existing history", () => {
-    // More entries than the carousel's window keeps, so the auto-tick has real batch entries left
-    // to walk through rather than degenerating to repeats once the whole batch is on screen.
-    const batch = Array.from({ length: CAROUSEL_HISTORY_MAX + 3 }, (_, i) => `q${i + 1}`);
-    setFrozenTestChips(batch);
-    vi.useFakeTimers();
-    const seeds = [seed("q1"), seed("q2"), seed("q3")];
-    const newestText = (container: HTMLElement) =>
-      container.querySelector(".bonsai-preset-carousel-slot--focus")?.textContent ?? null;
-
-    const { container, rerender } = render(
-      <MainTabPresetAnimatedChips
-        seeds={seeds}
-        setUnifiedInput={vi.fn()}
-        animationMode="carousel"
-        askRestartToken={0}
-      />,
-    );
-
-    // Several minutes in, the carousel is still stepping (plan 72: no more one-minute rest).
-    act(() => {
-      vi.advanceTimersByTime(4 * 60_000);
-    });
-    const before = newestText(container);
-    act(() => {
-      vi.advanceTimersByTime(CAROUSEL_STEP_MS + 500);
-    });
-    expect(newestText(container)).not.toBe(before);
-    const stalledAt = newestText(container);
-
-    // Bumping the token alone must not move anything: unlike static/decode, the carousel has a
-    // persistent, browsable history worth keeping across an Ask, so a restart only extends the
-    // ticker's deadline.
-    rerender(
-      <MainTabPresetAnimatedChips
-        seeds={seeds}
-        setUnifiedInput={vi.fn()}
-        animationMode="carousel"
-        askRestartToken={1}
-      />,
-    );
-    expect(newestText(container)).toBe(stalledAt);
-
-    act(() => {
-      vi.advanceTimersByTime(CAROUSEL_STEP_MS + 500);
-    });
-    expect(newestText(container)).not.toBe(stalledAt);
-  });
 });
 
 /*
@@ -655,7 +502,7 @@ describe("MainTabPresetAnimatedChips askRestartToken (D58 #3: an Ask restarts th
  * was not registered (an empty chat has none), and Steam's own fallback then walked one chip to
  * the left per press -- four wasted presses before a fifth finally reached the chat slot row
  * (runs/PRESET-ROW-up-from-chips-probe.json). `usePresetRowNav` is shared by every animation mode,
- * so fixing its `exitUp` composition here covers fade, static, decode and carousel at once.
+ * so fixing its `exitUp` composition here covers static and decode at once.
  */
 describe("usePresetRowNav exitUp (D58 #2: Up leaves the row at once)", () => {
   afterEach(() => {

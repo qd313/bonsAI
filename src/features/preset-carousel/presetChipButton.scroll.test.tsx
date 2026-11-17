@@ -172,7 +172,6 @@ describe("a chip in the row does not leave in the middle of a scroll or of the p
         seeds={[seed(longA), seed(longB)]}
         setUnifiedInput={vi.fn()}
         animationMode="static"
-        fadeAnimationEnabled={false}
         presetSingleChip
       />,
     );

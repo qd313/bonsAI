@@ -1,13 +1,12 @@
 /**
  * Title: Preset chip button
  *
- * Purpose: The chip button itself, shared by fade, static and carousel mode (decode mode draws
+ * Purpose: The chip button itself, used by the static look (decode mode draws
  * its own button around the same badges and scrolling text — see DecodePresetChipButton in
- * MainTabPresetAnimatedChips.tsx): the scrolling prompt text, the pinned Test/Tip badges before
+ * presetDecodeChipButton.tsx): the scrolling prompt text, the pinned Test/Tip badges before
  * it, the [beta] tag, and the click handler that fills the Ask box.
  *
- * Used for: MainTabPresetAnimatedChipsInner and MainTabPresetSidewaysCarousel, both in
- * src/features/preset-carousel/MainTabPresetAnimatedChips.tsx.
+ * Used for: MainTabPresetPlainSlots in src/features/preset-carousel/MainTabPresetAnimatedChips.tsx.
  *
  * Solves: One badge-drawing function (PresetChipLeadingBadges) shared by every label so the "is
  * this chip pinned/note-sourced" check and "does its badge draw" check cannot drift apart again —
@@ -27,7 +26,6 @@ import {
   presetScrollPlan,
 } from "./presetRowLayout";
 import type { ChipScrollListener } from "./presetChipStay";
-import type { SlotFade } from "./presetChipShared";
 import { joinPresetWithRunningGame } from "./joinPresetWithRunningGame";
 import { textPx } from "../../styles/textPx";
 
@@ -274,14 +272,6 @@ export function PresetChipButton(props: {
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
   onPreferAskMode?: (mode: AskModeId) => void;
   scroll: boolean;
-  dimmed?: boolean;
-  /**
-   * Fade and static styles: the button's own opacity and how long it takes to get there. The fade
-   * sits on the button, not on a box around it, so a reader of the button sees it fall before the
-   * words change (plan82-P79-LONG-CHIPS-NOGAME.json read the button and saw 1.00 throughout).
-   */
-  fade?: SlotFade;
-  focusable?: boolean;
   buttonRef?: (el: HTMLElement | null) => void;
   navHandlers?: Record<string, unknown>;
   /** The chip row just claimed a Left/Right press without moving anywhere -- ran out of chips. */
@@ -294,9 +284,6 @@ export function PresetChipButton(props: {
     setUnifiedInput,
     onPreferAskMode,
     scroll,
-    dimmed,
-    fade,
-    focusable = true,
     buttonRef,
     navHandlers,
     blockedEdge,
@@ -307,7 +294,7 @@ export function PresetChipButton(props: {
       className={"bonsai-preset-glass" + (blockedEdge ? " bonsai-preset-chip-blocked-edge" : "")}
       ref={buttonRef}
       {...(navHandlers ?? {})}
-      focusable={focusable}
+      focusable
       onClick={() => {
         setUnifiedInput(joinPresetWithRunningGame(p.text));
         if (p.preferAskMode && onPreferAskMode) {
@@ -318,10 +305,7 @@ export function PresetChipButton(props: {
         width: "100%",
         minHeight: PRESET_CHIP_HEIGHT_PX,
         fontSize: textPx(11),
-        color: dimmed ? "#8fa3b8" : "#c4d3e2",
-        opacity: fade ? fade.opacity : dimmed ? 0.55 : 1,
-        transform: dimmed ? "scale(0.96)" : "scale(1)",
-        transition: `opacity ${fade ? `${fade.transitionMs}ms ease-in-out` : "420ms ease"}, transform 420ms ease, color 420ms ease`,
+        color: "#c4d3e2",
       }}
     >
       <PresetChipLabel p={p} scroll={scroll} onScrollPlan={onScrollPlan} />

@@ -6,11 +6,10 @@
  *          its words stopped, because the row replaced a chip on its own beat (a length-based hold)
  *          and the scroll only set a floor. These tests read the row the way the screen shows it
  *          with fake timers: from the moment a chip's words reach their end (the label's scroll
- *          phase reads "end") to the moment the chip leaves (fade style: its spot starts to fade
- *          out; plain and decode styles: the words are replaced). The label's real width is set
+ *          phase reads "end") to the moment the chip leaves (the words are replaced). The label's real width is set
  *          wider than the row's own character estimate, as it is on the Deck, so a stay time worked
  *          out from a character count would be wrong here.
- * Used for: presetChipStay.ts, the fade / plain / decode rows (MainTabPresetAnimatedChips.tsx,
+ * Used for: presetChipStay.ts, the static and decode rows (MainTabPresetAnimatedChips.tsx,
  *           presetDecodeSlots.tsx), PresetChipScrollText in presetChipButton.tsx.
  * Does not: Prove it on the Deck. The check this owes: with a game running, over 200 s, every long
  *           chip leaves 0.7 to 1.4 s after its words reach their end the second time (plan 96 F22: each long chip
@@ -21,9 +20,8 @@ import { act, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
 import { setFrozenTestChips, type PresetPrompt } from "./presets";
-import { PRESET_CHIP_READ_PAUSE_MS, presetHoldMs, presetScrollPlan } from "./presetRowLayout";
+import { PRESET_CHIP_READ_PAUSE_MS, presetScrollPlan, presetTurnMs } from "./presetRowLayout";
 import { presetPace } from "./presetPace";
-import { slotStaggerMs } from "./presetChipShared";
 
 /** Wider than the row's own estimate (6.45), as real words are on the Deck. */
 const REAL_PX_PER_CHAR = 7.2;
@@ -47,7 +45,7 @@ const seed = (text: string): PresetPrompt => ({ text, category: "general" });
 /** Long chips of different lengths, so no two share a time line. */
 const LONGS = [64, 71, 78, 85, 92, 99].map((n, i) => String.fromCharCode(97 + i).repeat(n));
 
-type Style = "fade" | "static" | "decode";
+type Style = "static" | "decode";
 
 /**
  * Plays a row and returns, for every long chip seen, the milliseconds from its words reaching their
@@ -59,13 +57,12 @@ function playRow(style: Style, single: boolean, forMs: number): number[] {
       seeds={LONGS.slice(0, 3).map(seed)}
       setUnifiedInput={vi.fn()}
       animationMode={style}
-      fadeAnimationEnabled={style === "fade"}
       presetSingleChip={single}
     />,
   );
   const slots = () => Array.from(view.container.querySelectorAll<HTMLElement>(".bonsai-preset-carousel-slot"));
-  type Seen = { text: string | null; endedAt: number | null; opacity: string };
-  const seen: Seen[] = slots().map(() => ({ text: null, endedAt: null, opacity: "0" }));
+  type Seen = { text: string | null; endedAt: number | null };
+  const seen: Seen[] = slots().map(() => ({ text: null, endedAt: null }));
   const gaps: number[] = [];
   for (let t = 0; t < forMs; t += 50) {
     act(() => {
@@ -75,17 +72,14 @@ function playRow(style: Style, single: boolean, forMs: number): number[] {
       const run = slot.querySelector<HTMLElement>(".bonsai-preset-chip-text-run");
       const text = run?.textContent ?? null;
       const was = seen[i]!;
-      const opacity = slot.querySelector<HTMLElement>("button")?.style.opacity ?? "0";
-      const fadeStarted = style === "fade" && was.opacity === "1" && opacity === "0";
-      const replaced = style !== "fade" && was.text !== null && text !== was.text;
-      if (was.endedAt !== null && (fadeStarted || replaced)) gaps.push(t - was.endedAt);
+      const replaced = was.text !== null && text !== was.text;
+      if (was.endedAt !== null && replaced) gaps.push(t - was.endedAt);
       if (text !== was.text) {
         was.text = text;
         was.endedAt = null;
       }
       // the SECOND end: the chip reads its words twice and only then may leave
       if (was.endedAt === null && run?.dataset.scrollPhase === "end" && run.dataset.scrollPass === "2") was.endedAt = t;
-      was.opacity = opacity;
     });
   }
   return gaps;
@@ -104,7 +98,7 @@ describe("a long chip leaves one pause after its words stop", () => {
     document.body.innerHTML = "";
   });
 
-  const styles: Style[] = ["fade", "static", "decode"];
+  const styles: Style[] = ["static", "decode"];
   for (const style of styles) {
     it(`${style}, one chip: every long chip leaves 0.7 to 1.4 s after its words stop for the second time`, () => {
       restore = standInForLayout(284);
@@ -137,7 +131,6 @@ describe("a long chip leaves one pause after its words stop", () => {
         seeds={same.slice(0, 3).map(seed)}
         setUnifiedInput={vi.fn()}
         animationMode="static"
-        fadeAnimationEnabled={false}
       />,
     );
     const words = () =>
@@ -165,7 +158,6 @@ describe("a long chip leaves one pause after its words stop", () => {
         seeds={LONGS.slice(0, 3).map(seed)}
         setUnifiedInput={vi.fn()}
         animationMode="static"
-        fadeAnimationEnabled={false}
         presetSingleChip
       />,
     );
@@ -200,13 +192,12 @@ describe("a long chip leaves one pause after its words stop", () => {
         <MainTabPresetAnimatedChips
           seeds={[long, "r".repeat(99), "s".repeat(99)].map(seed)}
           setUnifiedInput={vi.fn()}
-          animationMode="fade"
+          animationMode="static"
           presetSingleChip={single}
         />,
       );
       const first = () => view.container.querySelector<HTMLElement>(".bonsai-preset-carousel-slot");
       const wordsOf = () => first()?.querySelector<HTMLElement>(".bonsai-preset-chip-text-run")?.textContent ?? null;
-      const opacity = () => first()?.querySelector<HTMLElement>("button")?.style.opacity ?? "0";
       let shownAt: number | null = null;
       let shownText: string | null = null;
       let left: number | null = null;
@@ -217,8 +208,7 @@ describe("a long chip leaves one pause after its words stop", () => {
           shownAt = t;
           shownText = text;
         }
-        if (shownAt !== null && opacity() === "0" && t - shownAt > 2_000) left = t;
-        else if (shownAt !== null && text !== shownText) left = t;
+        if (shownAt !== null && text !== shownText) left = t;
       }
       expect(shownAt).not.toBeNull();
       expect(left).not.toBeNull();
@@ -235,16 +225,16 @@ describe("a long chip leaves one pause after its words stop", () => {
       <MainTabPresetAnimatedChips
         seeds={[seed("Short one"), seed("Short two"), seed("Short three")]}
         setUnifiedInput={vi.fn()}
-        animationMode="fade"
+        animationMode="static"
         presetSingleChip
       />,
     );
-    const opacity = () => view.container.querySelector<HTMLElement>(".bonsai-preset-carousel-slot button")!.style.opacity;
-    // Fade-in starts after the first spot's stagger and takes 1.2 s; the hold follows; then the fade-out.
-    const fadeOutAt = slotStaggerMs(0) + 1200 + presetHoldMs("Short one", 1);
-    act(() => vi.advanceTimersByTime(fadeOutAt - 100));
-    expect(opacity()).toBe("1");
+    const words = () => view.container.querySelector<HTMLElement>(".bonsai-preset-carousel-slot button")!.textContent;
+    const first = words();
+    const leavesAt = presetTurnMs("Short one", 1);
+    act(() => vi.advanceTimersByTime(leavesAt - 100));
+    expect(words()).toBe(first);
     act(() => vi.advanceTimersByTime(200));
-    expect(opacity()).toBe("0");
+    expect(words()).not.toBe(first);
   });
 });

@@ -8,7 +8,7 @@
  *         wait its turn instead of never appearing; and a pinned batch longer than the row has to be
  *         walked in order, which "first entry not on screen" alone cannot do with fewer than three
  *         slots (it ping-ponged between the first two when the row was one chip, 2026-08-31).
- * Does not: Drive carousel mode, which keeps a history — see carouselState and sessionRagComposer.
+ * Does not: Pick the game's chips for a fresh row — see sessionRagComposer.
  */
 import {
   getFrozenTestChips,

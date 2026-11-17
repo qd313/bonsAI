@@ -1,6 +1,6 @@
 /**
  * Title: Chip row simulation
- * Purpose: Run the real suggestion chip row, in any of its four styles, for a stretch of simulated
+ * Purpose: Run the real suggestion chip row, in either of its two looks (static, decode), for a stretch of simulated
  *          time and record every chip it shows, with the time it appeared and whether it carries the
  *          game's Tip badge. It is the level the Deck check looks at: chips a minute, how many are
  *          the game's own, whether two general chips ever run back to back.
@@ -15,7 +15,7 @@ import type { PresetPrompt } from "../features/preset-carousel/presets";
 import { setSessionRagCarouselCandidates } from "../features/preset-carousel/composePresetSeedsWithSessionRag";
 import type { SessionRagChipCandidate } from "../features/preset-carousel/sessionRagComposer";
 
-export type ChipStyle = "fade" | "carousel" | "static" | "decode";
+export type ChipStyle = "static" | "decode";
 export type ChipEvent = { t: number; spot: number; text: string; game: boolean };
 export type ChipSimulation = {
   /** Every chip that appeared, in order (the chips on screen at the start are events at t = 0). */
@@ -62,10 +62,9 @@ function openingSeeds(): PresetPrompt[] {
   ];
 }
 
-function readSpots(container: HTMLElement, style: ChipStyle): { text: string; game: boolean; resolved: boolean }[] {
+function readSpots(container: HTMLElement): { text: string; game: boolean; resolved: boolean }[] {
   const slots = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-preset-carousel-slot"));
-  const shown = style === "carousel" ? slots.filter((s) => s.getAttribute("data-bonsai-preset-visible") === "true") : slots;
-  return shown.map((slot) => ({
+  return slots.map((slot) => ({
     text: slot.querySelector("button")?.textContent ?? "",
     game: slot.querySelector(".bonsai-preset-chip-tip-badge") !== null,
     // Decode draws scrambled letters until a chip has settled, so only its settled text is a name.
@@ -93,7 +92,6 @@ export function simulateChipRow(opts: {
       seeds={opts.seeds ?? openingSeeds()}
       setUnifiedInput={vi.fn()}
       animationMode={style}
-      fadeAnimationEnabled={style === "fade"}
       useLocalKnowledgeBase
       presetSingleChip={single}
     />,
@@ -106,32 +104,23 @@ export function simulateChipRow(opts: {
   const churnStart = new Map<number, number>();
   try {
     for (let t = 0; t <= minutes * 60_000; t += SAMPLE_MS) {
-      const spots = readSpots(view.container, style);
+      const spots = readSpots(view.container);
       const settled = spots.filter((s) => s.resolved);
       gameOnScreen.push({ t, count: settled.filter((s) => s.game).length, total: settled.length });
-      if (style === "carousel") {
-        // The carousel's window slides along its history: a chip is new when it was not on screen
-        // a moment ago, wherever in the window it now sits.
-        spots.forEach((spot, i) => {
-          if (!previous.includes(spot.text)) events.push({ t, spot: i, text: spot.text, game: spot.game });
-        });
-        previous = spots.map((s) => s.text);
-      } else {
-        spots.forEach((spot, i) => {
-          if (!spot.resolved) {
-            if (!pendingChurn.has(i)) {
-              pendingChurn.add(i);
-              churnStart.set(i, t);
-            }
-            return;
+      spots.forEach((spot, i) => {
+        if (!spot.resolved) {
+          if (!pendingChurn.has(i)) {
+            pendingChurn.add(i);
+            churnStart.set(i, t);
           }
-          const wasChurning = pendingChurn.delete(i);
-          if (previous[i] !== spot.text || wasChurning) {
-            events.push({ t: wasChurning ? (churnStart.get(i) ?? t) : t, spot: i, text: spot.text, game: spot.game });
-          }
-          previous[i] = spot.text;
-        });
-      }
+          return;
+        }
+        const wasChurning = pendingChurn.delete(i);
+        if (previous[i] !== spot.text || wasChurning) {
+          events.push({ t: wasChurning ? (churnStart.get(i) ?? t) : t, spot: i, text: spot.text, game: spot.game });
+        }
+        previous[i] = spot.text;
+      });
       act(() => {
         vi.advanceTimersByTime(SAMPLE_MS);
       });

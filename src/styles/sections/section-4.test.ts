@@ -18,7 +18,6 @@ import { buildAnswerBubbleSection } from "../../features/answer/bubble/answerBub
 import { buildBonsaiScopeAccentInlineStyle } from "../../features/characters/characterUiAccent";
 import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
-  PRESET_VISIBLE_SLOTS,
 } from "../../features/preset-carousel/presetRowLayout";
 import { DOCK_ROW_GAP_PX, PRESET_CHIP_SHADOW_ROOM_PX } from "../../shared/constants";
 
@@ -126,33 +125,6 @@ describe("the decode chip's typing caret (section 4 CSS)", () => {
   });
 });
 
-describe("carousel track width reads the one-suggestion-chip override (section 4 CSS)", () => {
-  const css = buildSection4Section();
-
-  it("the slide distance falls back to PRESET_VISIBLE_SLOTS but reads --bonsai-preset-visible-slots", () => {
-    // MainTabPresetAnimatedChips writes --bonsai-preset-visible-slots on the track (alongside
-    // --bonsai-preset-window-start) so the "one suggestion chip" setting can override the window
-    // width per render without a rebuild; PRESET_VISIBLE_SLOTS is only the fallback for the rare
-    // case nothing wrote the variable.
-    expect(css).toContain(
-      `var(--bonsai-preset-visible-slots, ${PRESET_VISIBLE_SLOTS}))`,
-    );
-    const transformMatch = css.match(/transform:\s*translateX\(([\s\S]*?)\)\s*!important;/);
-    expect(transformMatch).toBeTruthy();
-    expect(transformMatch![1]).toContain("var(--bonsai-preset-visible-slots");
-  });
-
-  it("each chip's share of the row also reads the same variable, not a baked-in pixel width", () => {
-    const flexMatch = css.match(
-      /\.bonsai-scope \.bonsai-preset-carousel-track > \.bonsai-preset-carousel-slot\s*\{([^}]*)\}/,
-    );
-    expect(flexMatch).toBeTruthy();
-    expect(flexMatch![1]).toContain("var(--bonsai-preset-visible-slots");
-    // No pixel width is measured or hard-coded here (design-language rule 4).
-    expect(flexMatch![1]).not.toMatch(/\d+px\s*\)\s*\/\s*\d/);
-  });
-});
-
 describe("room under the suggestion chips (section 4 CSS)", () => {
   const css = buildSection4Section();
 
@@ -183,16 +155,10 @@ describe("room under the suggestion chips (section 4 CSS)", () => {
     return Number(new Function(`return (${expr});`)());
   }
   const ROW = /\.bonsai-scope \.bonsai-preset-row-host\s*\{([^}]*)\}/;
-  const FADE_ROW = /\.bonsai-scope \.bonsai-preset-row-host--fade-anim\s*\{([^}]*)\}/;
   const BOX = /\.bonsai-scope \.bonsai-unified-input-host\.bonsai-full-bleed-row\s*\{([^}]*)\}/;
 
   it("puts the chip one row gap above the question box", () => {
     const chipToBox = px(declared(ROW, "padding-bottom")) + px(declared(ROW, "margin-bottom"));
-    expect(chipToBox).toBeCloseTo(DOCK_ROW_GAP_PX, 6);
-  });
-
-  it("does the same in fade mode, the default, which has its own rule", () => {
-    const chipToBox = px(declared(ROW, "padding-bottom")) + px(declared(FADE_ROW, "margin-bottom"));
     expect(chipToBox).toBeCloseTo(DOCK_ROW_GAP_PX, 6);
   });
 
@@ -209,13 +175,5 @@ describe("room under the suggestion chips (section 4 CSS)", () => {
 
   it("still keeps 5px under the chips inside the row, so the row does not cut the chip's shadow", () => {
     expect(px(declared(ROW, "padding-bottom"))).toBe(PRESET_CHIP_SHADOW_ROOM_PX);
-  });
-
-  it("lets the shadow out of the carousel's own clipping box without changing its height", () => {
-    const match = css.match(/\.bonsai-scope \.bonsai-preset-carousel-viewport\s*\{([^}]*)\}/);
-    expect(match).toBeTruthy();
-    const body = match![1]!;
-    expect(body).toMatch(/padding-bottom:\s*5px\s*!important/);
-    expect(body).toMatch(/margin-bottom:\s*-5px\s*!important/);
   });
 });

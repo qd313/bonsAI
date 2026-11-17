@@ -71,7 +71,7 @@ const STATIC_SEEDS = [
   { text: "Any Steam Input issues for this game?", category: "troubleshooting" },
 ];
 
-const STYLES: ChipStyle[] = ["fade", "carousel", "static", "decode"];
+const STYLES: ChipStyle[] = ["static", "decode"];
 
 beforeEach(() => call.mockReset());
 afterEach(() => setFrozenTestChips([]));

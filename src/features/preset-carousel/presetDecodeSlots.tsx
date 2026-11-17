@@ -6,7 +6,8 @@
  * caret. The chip button it draws is DecodePresetChipButton, in presetDecodeChipButton.tsx.
  *
  * Used for: MainTabPresetAnimatedChipsInner in src/features/preset-carousel/MainTabPresetAnimatedChips.tsx,
- * when the chip-animation setting is "decode".
+ * whenever the row is not drawing the static look (plan 105: decode unless the system asks for less
+ * motion; the row decides, and under less motion this component is not drawn at all).
  *
  * Solves: Runs the reveal on a single shared requestAnimationFrame loop, writing straight to each
  * label's text through refs rather than React state, so a churning chip does not force a
@@ -23,11 +24,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { PresetPrompt } from "./presets";
 import { DecodePresetChipButton, type DecodeLabelNodes, type DecodeLabelRefs, type DecodeLabelPart } from "./presetDecodeChipButton";
 import { PresetRowFocusRoot, usePresetRowNav } from "./presetRowFocusNav";
-import { effectivePresetVisibleSlots, presetTurnMs } from "./presetRowLayout";
+import { effectivePresetVisibleSlots } from "./presetRowLayout";
 import { makeChangeSpacer } from "./changeSpacing";
 import { makeChipStayBoard } from "./presetChipStay";
 import { nextSlotPreset, startSlotRotation, type SlotRotation } from "./presetSlotRotation";
-import { seedsKeyFrom } from "./carouselState";
 import {
   composeDecodeParts,
   decodeHoldMs,
@@ -41,12 +41,9 @@ import {
 import {
   type MainTabPresetAnimatedChipsProps,
   normalizeThreeSeeds,
-  prefersReducedMotion,
+  seedsKeyFrom,
   slotStaggerMs,
 } from "./presetChipShared";
-
-/** How often a reduced-motion chip held by `rowHeld` checks whether it may change yet. */
-const PRESET_DECODE_HOLD_RECHECK_MS = 500;
 
 
 /**
@@ -80,7 +77,7 @@ function paintDecodeLabel(nodes: DecodeLabelNodes | undefined, parts: DecodeText
  * label need, not per-frame.
  */
 export function MainTabPresetDecodeSlots(
-  props: Omit<MainTabPresetAnimatedChipsProps, "fadeAnimationEnabled" | "animationMode">,
+  props: Omit<MainTabPresetAnimatedChipsProps, "animationMode">,
 ) {
   const {
     seeds,
@@ -94,7 +91,6 @@ export function MainTabPresetDecodeSlots(
   } = props;
   const samplerOptions = { useLocalKnowledgeBase };
   const seedsKey = seedsKeyFrom(seeds);
-  const reducedMotion = prefersReducedMotion();
   const slotCount = effectivePresetVisibleSlots(presetSingleChip);
   const nav = usePresetRowNav(slotCount, onCarouselExitDown, { holdStill });
 
@@ -161,32 +157,6 @@ export function MainTabPresetDecodeSlots(
       }, ms);
       timeouts.push(id);
     };
-
-    // prefers-reduced-motion: reduce — swap the text in instantly, no churn, no caret blink.
-    // Each slot still keeps its own stagger before its first appearance (flavor shared with every
-    // other mode, not part of the "churn" the rule is about); every swap after that is instant.
-    if (reducedMotion) {
-      const runReduced = (slotIndex: number, prompt: PresetPrompt, firstDelay: number) => {
-        pushTimeout(() => {
-          showInSlot(slotIndex, prompt);
-          markResolved(slotIndex, true);
-          const next = () => {
-            if (!mayStartNextCycle()) return;
-            if (nav.rowHeld()) {
-              pushTimeout(next, PRESET_DECODE_HOLD_RECHECK_MS);
-              return;
-            }
-            runReduced(slotIndex, pickNext(prompt), 0);
-          };
-          pushTimeout(next, spacer.delay(slotIndex, Date.now(), presetTurnMs(prompt.text, slotCount)));
-        }, firstDelay);
-      };
-      first.forEach((prompt, i) => runReduced(i, prompt, slotStaggerMs(i)));
-      return () => {
-        cancelled = true;
-        timeouts.forEach((id) => window.clearTimeout(id));
-      };
-    }
 
     // Full decode path. One shared rAF loop drives every slot; DOM writes are throttled to a lock
     // advance, a churn refresh, or a caret blink — not every frame. See the module header.
@@ -273,7 +243,7 @@ export function MainTabPresetDecodeSlots(
     // askRestartToken restarts this whole effect on every completed Ask (D58 #3) even when
     // seedsKey is unchanged, which is exactly what happens under a pinned QA batch: it always
     // resolves to the same three chips, so seedsKey alone never signals that an Ask happened.
-  }, [seedsKey, seeds, reducedMotion, useLocalKnowledgeBase, slotCount, askRestartToken, stayBoard]);
+  }, [seedsKey, seeds, useLocalKnowledgeBase, slotCount, askRestartToken, stayBoard]);
 
   return (
     <PresetRowFocusRoot className="bonsai-preset-across">
@@ -286,7 +256,7 @@ export function MainTabPresetDecodeSlots(
           <DecodePresetChipButton
             preset={p}
             resolved={resolved[i] ?? false}
-            scroll={!reducedMotion}
+            scroll
             labelRefs={labelRefSetters[i]!}
             setUnifiedInput={setUnifiedInput}
             onPreferAskMode={onPreferAskMode}

@@ -102,8 +102,9 @@ describe("Update AI & models, in place", () => {
     draw();
     await pressUpdate();
 
-    expect(await screen.findByText(/Pull 1\/2 — a:1/)).toBeTruthy();
-    expect(screen.getByText(/Downloading 6e4c38e1172f: 43% 1\.3 GB\/3\.2 GB/)).toBeTruthy();
+    // The job card's plain words for the moving line (plan 105, lane D4), not the installer's own.
+    expect(await screen.findByText("Downloading model 1 of 2 · a:1")).toBeTruthy();
+    expect(screen.getByText(/^1\.3 GB of 3\.2 GB/)).toBeTruthy();
 
     status = DONE;
     expect(await screen.findByText("Updated to Ollama 0.40.2 and restarted it. 2 models refreshed.", {}, { timeout: 4000 })).toBeTruthy();
@@ -140,12 +141,18 @@ describe("Update AI & models, in place", () => {
     expect(await screen.findByText(/Updated to Ollama 0\.40\.2/)).toBeTruthy();
   });
 
-  it("the Update button stays enabled while it runs, so the ring never sits on a dead button", async () => {
-    status = RUNNING;
+  it("while it runs one card stands in for the buttons, with an enabled Cancel and no box of installer lines", async () => {
+    status = { ...RUNNING, log_tail: ["[bonsAI] Re-running official Ollama installer to update the binary…"] };
     draw();
-    await screen.findByText(/Pull 1\/2 — a:1/);
-    const btn = screen.getByLabelText("Update AI engine and installed models") as HTMLButtonElement;
-    expect(btn.disabled).toBe(false);
-    expect(btn.textContent).toContain("Updating");
+    await screen.findByText("Downloading model 1 of 2 · a:1");
+    const cancel = screen.getByLabelText("Cancel local Ollama setup") as HTMLButtonElement;
+    expect(cancel.disabled).toBe(false);
+    expect(cancel.getAttribute("aria-disabled")).toBeNull();
+    expect(screen.getByText("Updating AI & models")).toBeTruthy();
+    expect(screen.getByText("From ollama.com and registry.ollama.ai")).toBeTruthy();
+    // The installer's own lines go to the plugin's log only (plan 105, small question 2).
+    expect(screen.queryByLabelText("Local Ollama setup log")).toBeNull();
+    expect(screen.queryByText(/Re-running official Ollama installer/)).toBeNull();
+    expect(screen.queryByLabelText("Update AI engine and installed models")).toBeNull();
   });
 });

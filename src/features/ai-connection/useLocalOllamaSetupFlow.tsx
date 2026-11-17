@@ -6,8 +6,7 @@
  * models", which runs in place on the tab with no box (only on a Deck with no
  * models, one box asks the real question, whether to also install the starter
  * models; and while Internet downloads are off, the failed line plus the "Turn
- * on internet downloads?" box), the Cancel button's RPC, the status-line wording while a setup
- * runs, the poll that reads setup progress every 1.5 seconds, and the effect
+ * on internet downloads?" box), the poll that reads setup progress every 1.5 seconds, and the effect
  * that runs a connection test automatically once a setup finishes cleanly (and, quietly, when a run ends
  * cancelled or failed, since the program may already have been swapped).
  *
@@ -18,13 +17,14 @@
  * self-contained concern in it out on its own — nothing outside this flow
  * reads or writes the setup status except the panel's own JSX, which still
  * reads `localSetupStatus` directly (it stays a prop of the panel, not of
- * this hook) to draw the log tail and the phase line.
+ * this hook) to draw the job card and the result line.
  *
  * Does not: Own `localSetupStatus` or the derived `localSetupBusy` flag —
- * the panel's own JSX renders the log tail and the error line from that
+ * the panel's own JSX renders the job card and the error line from that
  * state directly, so it stays in the panel and is handed in here as values
  * and a setter. The starter models' words and the call that starts a setup
- * live in localOllamaStarterSet.tsx, shared with Browse models.
+ * live in localOllamaStarterSet.tsx, shared with Browse models. Cancel and
+ * the card's words are ollamaSetupJob.ts's (plan 105, lane D4).
  * Does not run the connection test itself; it only unblocks the ref the
  * panel's own onTestConnection is stashed behind.
  *
@@ -37,7 +37,6 @@ import { useCallback, useEffect, useRef, type MutableRefObject, type RefObject }
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
 import type { LocalOllamaSetupStatus } from "./OllamaWhereAiRunsSection.types";
-import { localSetupStageLine } from "./localSetupStageLine";
 import {
   LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
@@ -62,8 +61,7 @@ import { UPDATE_AI_NOTICES } from "../downloads/downloadSites";
 let heldDownloadsOffLine = false;
 
 /**
- * The starter-models question, the in-place run, the Cancel RPC, the status-line wording, the setup poll, and the
- * auto-test-after-done effect. Every hook below must keep its position — React matches hooks by
+ * The starter-models question, the in-place run, the setup poll, and the auto-test-after-done effect. Every hook below must keep its position — React matches hooks by
  * the order they run in.
  */
 export function useLocalOllamaSetupFlow({
@@ -88,17 +86,6 @@ export function useLocalOllamaSetupFlow({
   /** Called once when a setup finishes cleanly, so the tab re-reads the autostart line (F13). */
   onSetupDoneRef?: RefObject<() => void>;
 }) {
-  // The words are shared with the first-time setup's card on the Main tab (localSetupStageLine.ts).
-  const formatLocalSetupStageLine = useCallback((st: LocalOllamaSetupStatus | null) => localSetupStageLine(st), []);
-
-  const cancelLocalSetup = useCallback(async () => {
-    try {
-      await callDeckyWithTimeout<[], { cancel_requested?: boolean }>("cancel_local_ollama_setup", [], 8000);
-    } catch {
-      /* best-effort */
-    }
-  }, []);
-
   /*
    * Update AI & models and the first-time Install run right here on the tab: no download box. The
    * line under the button shows the run (OllamaSetupStatusLine.tsx), read from the back end's status.
@@ -111,6 +98,13 @@ export function useLocalOllamaSetupFlow({
     refusalRef.current = reason;
     heldDownloadsOffLine = reason === DOWNLOADS_OFF_FAILED_LINE;
   };
+  /*
+   * True from the press until the back end has answered the start. The tab shows the run at once (a running status
+   * before the back end has taken it), and a poll answering in between still reads the run before (idle, or the last
+   * run's end) and would take the job card away under the ring for a moment; until then such an answer waits. At most
+   * as long as the start's own deadline (15 seconds), so a start whose answer is lost cannot hold the poll for ever.
+   */
+  const startingUntilRef = useRef(0);
 
   const runLocalSetupInPlace = useCallback(
     (
@@ -154,7 +148,15 @@ export function useLocalOllamaSetupFlow({
         }
         setRefusal("");
         setupAutoTestRanRef.current = false;
-        startLocalOllamaSetup(chosen, setLocalSetupStatus, setRefusal, leaveOut);
+        startingUntilRef.current = Date.now() + 15000;
+        let ownFirst = true;
+        const heard = (st: LocalOllamaSetupStatus) => {
+          // The first status is the tab's own "running" before the back end answered; the next is the answer.
+          if (!ownFirst) startingUntilRef.current = 0;
+          ownFirst = false;
+          setLocalSetupStatus(st);
+        };
+        startLocalOllamaSetup(chosen, heard, setRefusal, leaveOut);
       })();
     },
     [localSetupBusy]
@@ -174,6 +176,8 @@ export function useLocalOllamaSetupFlow({
         DECKY_RPC_TIMEOUT_MS
       )
         .then((st) => {
+          if (st.phase === "running") startingUntilRef.current = 0;
+          else if (Date.now() < startingUntilRef.current) return;
           if (st.phase !== "idle") setRefusal("");
           // Downloads were turned on elsewhere (the Permissions tab): the old reason no longer applies.
           else if (refusalRef.current === DOWNLOADS_OFF_FAILED_LINE && internetDownloadsAreOn()) setRefusal("");
@@ -224,5 +228,5 @@ export function useLocalOllamaSetupFlow({
     }
   }, [ollamaLocalOnDeck, localSetupStatus]);
 
-  return { formatLocalSetupStageLine, cancelLocalSetup, runLocalSetupInPlace };
+  return { runLocalSetupInPlace };
 }

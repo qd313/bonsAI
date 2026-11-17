@@ -30,6 +30,7 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { useLocalOllamaSetupFlow } from "./useLocalOllamaSetupFlow";
+import { ollamaSetupFace } from "./ollamaSetupJob";
 import type { LocalOllamaSetupStatus } from "./OllamaWhereAiRunsSection.types";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 
@@ -88,10 +89,8 @@ describe("Install Ollama and Update AI & models run in place", () => {
     expect(hoisted.modals).toBe(0);
   });
 
-  it("the status line has a word for the restart step", () => {
-    const f = flow();
-    expect(
-      f.formatLocalSetupStageLine({ phase: "running", stage: "restart", profile: "update_installed" })
-    ).toContain("Restarting Ollama");
+  it("the job card has a word for the restart step", () => {
+    const face = ollamaSetupFace({ phase: "running", stage: "restart", profile: "update_installed" }, "update");
+    expect(face.line1).toBe("Restarting Ollama");
   });
 });

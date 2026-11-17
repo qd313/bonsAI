@@ -115,22 +115,18 @@ describe("Cancel ends the run with the ring on it", () => {
     await waitFor(() => expect(here()).toBe(UPDATE), { timeout: 2000 });
   });
 
-  it("when the ring was somewhere else (Update), the run ending does not move it", async () => {
+  it("when the ring was somewhere else (the switch above the card), the run ending does not move it", async () => {
     setRpcHandler("get_local_ollama_setup_status", () => ({ phase: "running", stage: "install", log_tail: [] }));
     draw();
     await screen.findByLabelText(CANCEL);
-    giveUpdateRowASteamNode(true);
-    const takeFocus = vi.fn();
-    for (const [el, props] of hoisted.focusables) {
-      const holder = props.navRef as { current: unknown } | undefined;
-      if (holder && el.contains(byLabel(UPDATE))) holder.current = { TakeFocus: takeFocus };
-    }
-    await act(async () => void byLabel(UPDATE)!.focus());
+    const boot = document.querySelector<HTMLElement>('[data-bonsai-help-label="Start the AI with the Deck"]')!;
+    const switchEl = boot.querySelector<HTMLElement>('[data-decky-ui="ToggleField"]')!;
+    switchEl.setAttribute("tabindex", "0");
+    await act(async () => void switchEl.focus());
 
     setRpcHandler("get_local_ollama_setup_status", () => ({ phase: "cancelled", stage: "", log_tail: [] }));
     await waitFor(() => expect(byLabel(CANCEL)).toBeNull(), { timeout: 5000 });
     await act(async () => new Promise((r) => setTimeout(r, 400)));
-    expect(takeFocus).not.toHaveBeenCalled();
-    expect(here()).toBe(UPDATE);
+    expect(document.activeElement).toBe(switchEl);
   });
 });

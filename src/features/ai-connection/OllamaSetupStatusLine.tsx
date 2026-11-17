@@ -1,110 +1,80 @@
 /**
- * Title: The line under Update AI & models and Install Ollama
+ * Title: The lines under Update AI & models and Install Ollama
  *
- * Purpose: Shows what the local Ollama setup run is doing, in place on the Ollama tab with no box:
- * while it runs, one line that changes (the stage, or the model being downloaded with its newest
- * progress); when it ends, one line with the result (the sentence the back end wrote, which names the
- * version now answering) or the reason it failed or was cancelled, in plain words.
+ * Purpose: What the "Local Ollama setup" block says under its two buttons when no run is going (board 5, tab 2,
+ * round 2: `b5t2Zone2`): the hint before any run, or the last run's result (the sentence the back end wrote, which
+ * names the version now answering), the reason it failed, or that it was cancelled; and under that, always, the sites
+ * the downloads come from. While a run goes it says nothing: the job card above shows the run.
  *
- * Used for: OllamaWhereAiRunsSection, directly under the Cancel row of the "Local Ollama setup" block.
+ * Used for: OllamaLocalSetupBlock.tsx, directly under the buttons (or the card).
  *
- * Solves: Update and Install used to open a download box and then showed only a bare stage word; the
- * maintainer asked (plan 87, call 2) for the run to be seen right on the tab. Everything here is read
- * from the setup status the back end keeps (polled by useLocalOllamaSetupFlow), never from this
- * component's own memory, because closing a Decky box rebuilds the tab and in-memory state is lost.
+ * Solves: The maintainer asked to see a run on the tab (plan 87, call 2); plan 105 moved the moving line onto the job
+ * card and took the box of raw installer lines off the tab (the plan's small question 2; the lines still go to the
+ * plugin's log). Before, "Cancelled" was drawn red like a failure, and no line said where the downloads come from.
+ * Everything here is read from the setup status the back end keeps, never from this component's own memory, because
+ * closing a Decky box rebuilds the tab and in-memory state is lost.
  *
- * Does not: take the ring. Every element here is plain text; the Cancel button and the Update button
- * above it are the only stops.
+ * Does not: take the ring. Every element here is plain text.
  */
+import type { CSSProperties, ReactElement } from "react";
 import type { LocalOllamaSetupStatus } from "./OllamaWhereAiRunsSection.types";
 import { DOWNLOADS_OFF_FAILED_LINE } from "../downloads/downloadNotice";
 import { textPx } from "../../styles/textPx";
 
 const SUCCESS_TEXT = "#86efac";
+/** Where Install and Update download from (downloadSites.ts: OLLAMA_SITE and OLLAMA_REGISTRY_SITE). */
+const SITES_LINE = "From ollama.com and registry.ollama.ai";
+const LINE: CSSProperties = { fontSize: textPx(11), lineHeight: 1.35 };
 
 /** Backticks in the back end's error text are for a terminal, not for a person. */
 function plainWords(text: string): string {
   return text.replace(/`+/g, "");
 }
 
-/** In: the setup status the back end keeps, the stage wording for a run in progress, and whether one is running. Out: the lines to draw under the buttons. */
-export function OllamaSetupStatusLine({
-  status,
-  stageLine,
-  busy,
-}: {
-  status: LocalOllamaSetupStatus | null;
-  stageLine: string;
-  busy: boolean;
-}) {
-  const logLines = status?.log_tail ?? [];
-  const ended = status != null && status.phase !== "running" && status.phase !== "idle";
-  const failed = status?.phase === "failed" || status?.phase === "cancelled";
-  const doneLine = status?.phase === "done" && !(status.error ?? "").trim() ? ((status.result_line ?? "").trim() || "Done.") : "";
-
-  if (!status || (!busy && !ended && logLines.length === 0)) {
+/** The result line for a run that has ended, or null for none (no run yet, or still going). */
+function resultLine(status: LocalOllamaSetupStatus | null): ReactElement | null {
+  if (!status || status.phase === "running" || status.phase === "idle") return null;
+  if (status.phase === "done" && !(status.error ?? "").trim()) {
     return (
-      <div className="bonsai-prose" style={{ fontSize: textPx(10), color: "#6b7c90", userSelect: "none" }}>
-        Install the official daemon, restart the service if needed, then pull models. Prefer stable Wi‑Fi.
+      <div className="bonsai-prose bonsai-settings-bleed" style={{ ...LINE, color: SUCCESS_TEXT }} aria-live="polite">
+        <span aria-hidden="true">✓ </span>
+        <span>{(status.result_line ?? "").trim() || "Done."}</span>
       </div>
     );
   }
+  if (!status.error) return null;
+  const quiet = status.phase === "cancelled";
   return (
-    <>
-      {status.phase === "running" ? (
-        <div className="bonsai-settings-bleed" style={{ fontSize: textPx(11), color: "#9ce7ff", lineHeight: 1.4 }} aria-live="polite">
-          {stageLine}
+    <div
+      className="bonsai-prose bonsai-settings-bleed"
+      style={{ ...LINE, color: quiet ? "#9fb7d5" : "tomato", whiteSpace: "pre-wrap" }}
+      aria-live="polite"
+    >
+      {quiet || status.error === DOWNLOADS_OFF_FAILED_LINE ? plainWords(status.error) : `Failed: ${plainWords(status.error)}`}
+    </div>
+  );
+}
+
+/** In: the setup status the back end keeps, and whether a run is going. Out: the lines under the buttons. */
+export function OllamaSetupStatusLine({
+  status,
+  busy,
+}: {
+  status: LocalOllamaSetupStatus | null;
+  busy: boolean;
+}) {
+  if (busy) return null;
+  const result = resultLine(status);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 2, userSelect: "none" }}>
+      {result ?? (
+        <div className="bonsai-prose" style={{ fontSize: textPx(10), color: "#8fa0b4", lineHeight: 1.35 }}>
+          Install the official daemon, restart the service if needed, then pull models. Prefer stable Wi‑Fi.
         </div>
-      ) : null}
-      {doneLine ? (
-        <div
-          className="bonsai-prose bonsai-settings-bleed"
-          style={{ fontSize: textPx(11), color: SUCCESS_TEXT, lineHeight: 1.35 }}
-          aria-live="polite"
-        >
-          {doneLine}
-        </div>
-      ) : null}
-      {failed && status.error ? (
-        <div
-          className="bonsai-prose bonsai-settings-bleed"
-          style={{ fontSize: textPx(11), color: "tomato", lineHeight: 1.35, whiteSpace: "pre-wrap" }}
-          aria-live="polite"
-        >
-          {status.phase === "cancelled" || status.error === DOWNLOADS_OFF_FAILED_LINE
-            ? plainWords(status.error)
-            : `Failed: ${plainWords(status.error)}`}
-        </div>
-      ) : null}
-      {logLines.length > 0 ? (
-        <pre
-          className="bonsai-settings-bleed"
-          style={{
-            margin: 0,
-            width: "100%",
-            boxSizing: "border-box",
-            maxHeight: 200,
-            overflowY: "auto",
-            fontFamily: "Consolas, 'Liberation Mono', monospace",
-            fontSize: textPx(10),
-            lineHeight: 1.35,
-            color: "#aab8ca",
-            background: "rgba(8,14,22,0.85)",
-            border: "1px solid rgba(72,98,124,0.35)",
-            borderRadius: 4,
-            padding: "8px 10px",
-            whiteSpace: "pre-wrap",
-            wordBreak: "break-word",
-          }}
-          aria-label="Local Ollama setup log"
-        >
-          {logLines.join("\n")}
-        </pre>
-      ) : busy ? (
-        <div className="bonsai-prose" style={{ fontSize: textPx(10), color: "#6b7c90", userSelect: "none" }}>
-          Setup is running. The line above changes as it goes; a first-time install can take a few minutes.
-        </div>
-      ) : null}
-    </>
+      )}
+      <div className="bonsai-prose" style={{ fontSize: textPx(10), color: "#6b7c90", lineHeight: 1.35 }}>
+        {SITES_LINE}
+      </div>
+    </div>
   );
 }

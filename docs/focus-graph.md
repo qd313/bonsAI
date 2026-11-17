@@ -936,41 +936,50 @@ Stops: the tab bar (one stop, step 4's) and the chat's name (step 5's). Decky's 
 - **Not backed by a device row yet.** Rows P84-HEIGHT-01, P84-OTHER-01, P84-BACK-01, P84-QAM-01 and P84-RING-01
   (plan 84 § 6) are in the lane report.
 
-### The Ollama tab's setup buttons (plan 87, B13 + B14)
+### The Ollama tab's setup buttons (plan 87, B13 + B14; plan 105, lane D4)
 
 Update AI & models (Install Ollama on a Deck with no engine) runs in place on the tab: no box. The block is
-`OllamaWhereAiRunsSection.tsx`; its chain is hand-wired with `focus()` between sibling rows of one panel.
+`OllamaLocalSetupBlock.tsx` inside `OllamaWhereAiRunsSection.tsx`. While a run goes, Update and Browse give way to
+one job card (`downloads/JobCard.tsx`, board 5 tab 2, round 2 B) whose only stop is its Cancel.
 
 ```
 Run AI on this Deck (switch)
    | Down                                  ^ Up
 Start the AI with the Deck (switch)
-   | Down                                  ^ Up
-Update AI & models   (never disabled; reads "Updating..." while a run goes)
-   | Down  -> Browse models, else Cancel   ^ Up -> Start the AI with the Deck
-Browse models...     (disabled while a run goes)
-   | Down  -> Test connection              ^ Up -> Update AI & models
-Cancel               (drawn only while a run goes)
-   | Down  -> Test connection, else on     ^ Up -> Update AI & models, else Start the AI with the Deck
+   | Down -> Update, or the card's Cancel  ^ Up
+-- no run --------------------------------------------------------------
+Update AI & models   (reads "Checking..." while a press waits for the connection check)
+   | Down  -> Browse models                ^ Up -> Start the AI with the Deck
+Browse models  >
+   | Down  -> Test connection, else on     ^ Up -> Update AI & models
+-- a run going ---------------------------------------------------------
+[ job card: title, bar, what it is doing, how far, the sites ]  Cancel
+   | Down  -> Test connection, else on     ^ Up -> Start the AI with the Deck
+   Left and Right hold still
 ```
 
 - **The two switches hold their Up and Down on a Focusable around them** (DenseSwitchRow's `navOnWrapper`), and every
-  move onto a switch or onto Update is Steam's transfer onto that row's node. A ToggleField's own handler is not
-  honoured: Steam's own move runs after it, which on the Deck took Down from "Start the AI with the Deck" past Update
-  onto Browse (plan 105 block D1, plan105-P105-D1-SWEEP.json; not seen again on the follow-up, P105-M-DOWN-SKIPS).
-- **The Update button is never disabled.** Before, the press opened a download box and the button was disabled while
-  the run went on; a disabled button refuses a plain `focus()`, and the ring would have been left on it. Now the
-  ring stays where it is after the press. A press on Update while a run goes does nothing.
-- **Down from Update** goes to Browse models; while a run goes Browse is disabled, so it goes to Cancel (before, it
-  returned `false` and the press landed nowhere). **Up from Cancel** goes to Update, then to the switch above.
-- **The line under the buttons is not a stop.** It is plain text (the stage, the newest download progress, then the
-  result or the reason it failed). It has no `tabIndex`, takes no ring and is read from the back end's setup status,
-  so a rebuilt tab still shows it.
-- **The one box left** is the starter-models question on a Deck with no models (the ring opens on "Not now", and the
-  shell hands the ring back to the Update button when it closes, as `ollama-local-setup` in
-  `modalReturnFocusRegistry.ts`). It is a question with a choice, not a progress notice.
-- Pinned by `OllamaWhereAiRunsSection.walk.test.tsx` (the walk, with a run going) and
-  `OllamaWhereAiRunsSection.inPlaceSetup.test.tsx` (no box, the lines). Device row: the plan 87 Ollama block.
+  move onto a switch, onto Update, Browse or the card's Cancel is Steam's transfer onto that row's node first, then
+  the button's own focus if that did not land it. A ToggleField's own handler is not honoured: Steam's own move runs
+  after it, which on the Deck took Down from "Start the AI with the Deck" past Update onto Browse (plan 105 block D1,
+  plan105-P105-D1-SWEEP.json; not seen again on the follow-up, P105-M-DOWN-SKIPS).
+- **A on Update puts the ring on the card's Cancel on the same press.** Update leaves the page with the ring on it, and
+  its row hands the ring on (`useHandRingOnGone`) through Steam's transfer onto Cancel's node. When the press first
+  opens a box (the starter models question, or "Turn on internet downloads?"), the box closing rebuilds the tab and
+  the shell hands the ring back to whichever owns `ollama-local-setup` then: Cancel once the run has started, else
+  Update.
+- **A on Cancel in the first half second does nothing** (`runningJobs.ts`, `DOUBLE_PRESS_GUARD_MS`): a double press on
+  Update cannot start and cancel at once. Later, A sends the cancel once and the card reads "Stopping the update".
+- **When the run ends** (finished, failed or cancelled) the card goes and a ring on Cancel goes to Update (Deck
+  2026-10-14, plan93-P93-B10-CANCEL.json); a ring anywhere else stays where it is.
+- **The lines under the buttons are not a stop.** Plain text: the last result (or the hint before any run) and the sites
+  the downloads come from, read from the back end's setup status, so a rebuilt tab still shows them. The raw installer
+  lines are not on the tab any more; they go to the plugin's log.
+- Pinned by `OllamaWhereAiRunsSection.walk.test.tsx` (the walk, with and without a run),
+  `OllamaWhereAiRunsSection.jobCard.test.tsx` (the ring on Cancel at the press, the half-second guard, the ring on
+  Update at the end, read off Steam's marker), `OllamaTab.jobWalk.test.tsx` (the whole tab walked with a run going,
+  Steam's scroll modelled) and `OllamaWhereAiRunsSection.inPlaceSetup.test.tsx` (no box, the lines). Device row:
+  P105-OLLAMA-BUTTONS-01.
 
 ### The About tab, one line per row (plan 92, lane T3; plan 91 § 6)
 

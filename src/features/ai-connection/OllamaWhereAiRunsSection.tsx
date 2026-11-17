@@ -25,11 +25,12 @@
  *     ┌─ Where AI runs ──────────────────────────────────┐
  *     │ [ Run AI on this Deck ]         toggle              │
  *     │ [ Start the AI with the Deck ]  toggle (autostart)  │
- *     │  — if Run-on-Deck is ON —                            │
+ *     │  — if Run-on-Deck is ON — (OllamaLocalSetupBlock)    │
  *     │ [ Install Ollama / Update AI & models ]              │
- *     │ [ Browse models… ]                                   │
- *     │ [ Cancel ]  (only while a setup runs)                │
- *     │ setup log / status line                              │
+ *     │ [ Browse models  › ]                                 │
+ *     │   while a setup runs, both give way to one job card  │
+ *     │   with Cancel at its top right (JobCard)             │
+ *     │ last result / sites line                             │
  *     │  — if Run-on-Deck is OFF —                            │
  *     │ Saved Ollama hosts (LAN)  <- quick-pick buttons      │
  *     │ Save current PC address as quick host                │
@@ -49,9 +50,9 @@
  *    the starter models; yes runs the engine-then-models setup, no installs
  *    the engine only.
  * 3. While a local setup runs, a poll every 1.5 seconds reads its status
- *    and fills in the log tail on screen; once it reports done with no
- *    error, a separate effect runs the connection test again automatically
- *    and, if this was an update, refreshes the model catalog.
+ *    and the job card shows it in plain words (ollamaSetupJob.ts); once it
+ *    reports done with no error, a separate effect runs the connection test
+ *    again automatically and, if this was an update, refreshes the model catalog.
  * 4. runMdnsDiscovery() searches the local network for other Ollama
  *    services advertised over mDNS/Bonjour — offered to everyone, but only
  *    when Ask is not already pointed at this Deck.
@@ -64,9 +65,9 @@
  *   Start-at-boot toggle → Install/Update → Browse → Test connection — and
  *   Up/Down on every one of them is wired by hand to match it, because
  *   Steam's own automatic layout guess does not follow it correctly here.
- *   While a setup runs, Install/Update and Browse are disabled and the
- *   chain is Start-at-boot toggle → Cancel → Test connection.
- * - The "Browse models…" button on this panel registers itself as the
+ *   While a setup runs, the job card's Cancel stands in for Install/Update
+ *   and Browse, and the chain is Start-at-boot toggle → Cancel → Test connection.
+ * - The "Browse models" button on this panel registers itself as the
  *   return-focus target for the models hub modal. A second, less-used
  *   entry point to the same hub exists on the main Ollama tab but is not
  *   wired the same way — only this one needs to be, since it is the one
@@ -97,12 +98,10 @@ import {
   unregisterOllamaTabLocalGetter,
 } from "./ollamaTabLocalSurvival";
 import { tryMoveUpWithPanelScroll } from "../../shared/dpad/settingsPanelScroll";
-import {
-  registerModalReturnFocusOwner,
-  rememberModalReturnFocus,
-} from "../../shared/dpad/modalReturnFocusRegistry";
+import { registerModalReturnFocusOwner } from "../../shared/dpad/modalReturnFocusRegistry";
 import { OllamaSavedHostsRows } from "./OllamaSavedHostsRows";
-import { OllamaSetupStatusLine } from "./OllamaSetupStatusLine";
+import { OllamaLocalSetupBlock, type LocalSetupEntry } from "./OllamaLocalSetupBlock";
+import { lastRunningOllamaSetupStatus, noteOllamaSetupStatus, useOllamaSetupStatusReader } from "./ollamaSetupJob";
 import { useOllamaLocalAutostart } from "./useOllamaLocalAutostart";
 import { useMdnsOllamaDiscovery } from "./useMdnsOllamaDiscovery";
 import { tabMdnsDiscovery } from "./mdnsDiscoveryStore";
@@ -122,12 +121,10 @@ import {
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
 } from "./OllamaWhereAiRunsSection.constants";
 import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../../styles/settingsGlassButton";
-import { useHandRingOnGone } from "../../shared/dpad/useHandRingOnGone";
 import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
 import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
 import { textPx } from "../../styles/textPx";
 import { DenseSwitchRow } from "../folded-tabs/DenseRow";
-import { helpAttributes } from "../folded-tabs/useHelpStrip";
 import { OLLAMA_ROW_HELP } from "./ollamaTabFolds";
 
 export type { OllamaWhereAiRunsSectionProps } from "./OllamaWhereAiRunsSection.types";
@@ -230,7 +227,19 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   const [mdnsDiscoveryMessage, setMdnsDiscoveryMessage] = useState<string | null>(
     () => peekOllamaTabLocalPending()?.mdnsDiscoveryMessage ?? null
   );
-  const [localSetupStatus, setLocalSetupStatus] = useState<LocalOllamaSetupStatus | null>(null);
+  /*
+   * The setup run's status. A tab rebuilt mid-run (a Decky box closing, the section opened again) starts from the run
+   * it was showing, so the job card is there at once; every status also goes to the job card's memory
+   * (ollamaSetupJob.ts), which keeps reading it while this tab is not on screen.
+   */
+  const [localSetupStatus, setLocalSetupStatusState] = useState<LocalOllamaSetupStatus | null>(lastRunningOllamaSetupStatus);
+  /* Whether Ollama answered the last check: undefined before any answer (a run seen then is called an update). */
+  const engineReadyRef = useRef<boolean | undefined>(undefined);
+  const setLocalSetupStatus = useCallback((st: LocalOllamaSetupStatus | null) => {
+    noteOllamaSetupStatus(st, engineReadyRef.current);
+    setLocalSetupStatusState(st);
+  }, []);
+  useOllamaSetupStatusReader();
   const localSetupBusy = localSetupStatus?.phase === "running";
   const setupAutoTestRanRef = useRef(false);
   const onTestConnectionRef = useRef<(opts?: { quiet?: boolean }) => Promise<void>>(async () => {});
@@ -255,9 +264,8 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   const ollamaIpConnectionNavRef = useRef<HTMLDivElement>(null);
   const ollamaLocalToggleNavRef = useRef<HTMLDivElement>(null);
   const ollamaAutostartToggleNavRef = useRef<HTMLDivElement>(null);
-  const installUpdateBtnRef = useRef<HTMLButtonElement | null>(null);
-  const browseModelsBtnRef = useRef<HTMLButtonElement | null>(null);
-  const cancelSetupBtnRef = useRef<HTMLButtonElement | null>(null);
+  /* The "Local Ollama setup" block's way in: Update (or the job card's Cancel) from above, Browse (or Cancel) from below. */
+  const localSetupEntryRef = useRef<LocalSetupEntry>(null);
 
   /*
    * The two switches' Steam nodes: the Focusable each switch's moves sit on (DenseSwitchRow's `navOnWrapper`). Steam
@@ -293,17 +301,6 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   /* Test connection is greyed exactly when its own `disabled` prop below says so. */
   const testConnectionGreyed = connectionTesting || localSetupBusy || (!ollamaLocalOnDeck && !ollamaIp.trim());
 
-  /* Onto Update / Install from the switch above or the button below: Steam's transfer onto its row, then its own focus. */
-  const updateRowNavRef = useRef<SteamNode>(null);
-  const focusInstallUpdateBtn = useCallback((): boolean => takeRowThenFocus(updateRowNavRef, installUpdateBtnRef.current), []);
-
-  /*
-   * Cancel is taken away when the run ends (cancelled, finished or failed). With the ring on it, nothing
-   * held the ring afterwards until the next Down (Deck, 2026-10-14, plan93-P93-B10-CANCEL.json). The ring
-   * goes to the Update / Install button: Steam's own transfer onto its row first, then the button's own
-   * focus if that did not land it.
-   */
-  const cancelRowRef = useHandRingOnGone(() => void takeRowThenFocus(updateRowNavRef, installUpdateBtnRef.current));
   /* Find LAN's own Steam node: after its box closes the ring comes back through Steam's transfer, then a plain focus if that did not land it. */
   const findLanNavRef = useRef<SteamNode>(null);
   const findLanBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -336,11 +333,6 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     (): boolean => takeRowThenFocus(testRowNavRef, connectionTestBtnRef?.current),
     [connectionTestBtnRef],
   );
-  const focusBrowseModelsBtn = useCallback(
-    (): boolean => focusChainBtn(browseModelsBtnRef, localSetupBusy),
-    [focusChainBtn, localSetupBusy],
-  );
-  const focusCancelSetupBtn = useCallback((): boolean => focusChainBtn(cancelSetupBtnRef, false), [focusChainBtn]);
 
   const focusConnectionTestBtn = useCallback(
     (): boolean => focusChainBtn(connectionTestBtnRef ?? { current: null }, testConnectionGreyed),
@@ -374,16 +366,16 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
 
   /**
    * Local Deck setup vertical chain: toggle → Start-at-boot toggle → Install/Update → Browse → Test.
-   * While a setup runs, Install/Update and Browse are disabled and Cancel stands in for them.
+   * While a setup runs the job card's Cancel stands in for Install/Update and Browse (OllamaLocalSetupBlock.tsx).
    * The startup-entry toggle sits right under "Run AI on this Deck" in both branches (local install
    * UI shown or not), so both the "on" fallback and the "off" plain fallback land on it rather than
    * back on the first toggle.
    */
   const handleMoveUpFromConnection = useCallback((): boolean => {
-    if (ollamaLocalOnDeck && (focusBrowseModelsBtn() || focusCancelSetupBtn())) return true;
+    if (ollamaLocalOnDeck && localSetupEntryRef.current?.enterFromBottom()) return true;
     if (!ollamaLocalOnDeck && (takeAddress() || takeSaveRow())) return true;
     return tryMoveUpWithPanelScroll(ollamaIpConnectionNavRef.current, focusAutostartToggle);
-  }, [focusAutostartToggle, focusBrowseModelsBtn, focusCancelSetupBtn, ollamaLocalOnDeck, takeAddress, takeSaveRow]);
+  }, [focusAutostartToggle, ollamaLocalOnDeck, takeAddress, takeSaveRow]);
 
   /* Folded (plan 91): Up from the first switch goes to the section's own line, which the tab hands in. */
   const handleMoveUpFromLocalToggle = useCallback((): boolean => {
@@ -399,9 +391,9 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   }, [focusLocalToggle]);
 
   const handleMoveDownFromAutostartToggle = useCallback((): boolean => {
-    if (ollamaLocalOnDeck && (focusInstallUpdateBtn() || focusCancelSetupBtn())) return true;
+    if (ollamaLocalOnDeck && localSetupEntryRef.current?.enterFromTop()) return true;
     return moveDownToTestOrOn();
-  }, [focusCancelSetupBtn, focusInstallUpdateBtn, moveDownToTestOrOn, ollamaLocalOnDeck]);
+  }, [moveDownToTestOrOn, ollamaLocalOnDeck]);
 
   useLayoutEffect(() => {
     const local = consumeOllamaTabLocalPending();
@@ -534,6 +526,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   }, [ollamaLocalOnDeck, settingsLoaded]);
 
   const ollamaEngineReady = Boolean(connectionStatus?.reachable);
+  engineReadyRef.current = connectionStatus == null ? undefined : ollamaEngineReady;
 
   const { openMdnsDiscoveryConfirm } = useMdnsOllamaDiscovery({
     mdnsDiscovering,
@@ -549,7 +542,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     returnFocusId: "ollama-find-lan",
   });
 
-  const { formatLocalSetupStageLine, cancelLocalSetup, runLocalSetupInPlace } = useLocalOllamaSetupFlow({
+  const { runLocalSetupInPlace } = useLocalOllamaSetupFlow({
     ollamaLocalOnDeck,
     localSetupStatus,
     setLocalSetupStatus,
@@ -632,155 +625,20 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
         </PanelSectionRow>
         {ollamaLocalOnDeck ? (
           <PanelSectionRow>
-            <Focusable
-              className="bonsai-settings-bleed"
-              flow-children="vertical"
-              style={{
-                width: "100%",
-                maxWidth: "100%",
-                minWidth: 0,
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
+            <OllamaLocalSetupBlock
+              connectionStatus={connectionStatus}
+              localSetupStatus={localSetupStatus}
+              localSetupBusy={localSetupBusy}
+              checkingBeforeStart={checkingBeforeStart}
+              onPressInstallOrUpdate={() => void pressInstallOrUpdate()}
+              onBrowse={() => {
+                onBeforeDeckyModal();
+                onOpenOllamaModelsHub({ initialSection: "browse" });
               }}
-            >
-              <div
-                className="bonsai-prose"
-                style={{ fontSize: textPx(11), color: "#b8c6d6", fontWeight: 600, letterSpacing: "0.03em", userSelect: "none" }}
-              >
-                Local Ollama setup
-                {connectionStatus?.reachable && Array.isArray(connectionStatus.models) ? (
-                  <span style={{ fontWeight: 400, color: "#9fb7d5", marginLeft: 8 }}>
-                    Installed: {connectionStatus.models.length}
-                  </span>
-                ) : null}
-              </div>
-              <Focusable
-                flow-children="horizontal"
-                style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}
-                {...focusableMoves(() => focusAutostartToggle(), () => focusBrowseModelsBtn() || focusCancelSetupBtn())}
-                {...({ navRef: updateRowNavRef } as Record<string, unknown>)}
-                {...helpAttributes(
-                  ollamaEngineReady ? "Update AI & models" : "Install Ollama",
-                  localSetupBusy ? OLLAMA_ROW_HELP.setupBusy : ollamaEngineReady ? undefined : OLLAMA_ROW_HELP.setupFirstTime,
-                )}
-              >
-                <Button
-                  ref={(el) => {
-                    installUpdateBtnRef.current = el as HTMLButtonElement | null;
-                    // Its box (the download notice) rebuilds this tab on close; the shell hands the
-                    // ring back here rather than leaving it on the tab bar (plan72-F3-DL.json).
-                    registerModalReturnFocusOwner("ollama-local-setup", el as HTMLElement | null);
-                  }}
-                  className="bonsai-settings-focus-btn"
-                  // Runs in place (nothing while a run is going: the button stays a stop so the ring is never on a dead one).
-                  onClick={() => void pressInstallOrUpdate()}
-                  style={{
-                    flex: "1 1 100%",
-                    minHeight: 36,
-                    minWidth: 0,
-                    padding: "6px 8px",
-                    fontSize: textPx(11),
-                    fontWeight: 600,
-                    borderRadius: 4,
-                    border: "1px solid rgba(56,189,248,0.55)",
-                    background: localSetupBusy
-                      ? "rgba(14,32,48,0.5)"
-                      : "linear-gradient(180deg, rgba(56,189,248,0.22) 0%, rgba(14,116,144,0.35) 100%)",
-                    color: "#e0f2fe",
-                  }}
-                  aria-label={
-                    ollamaEngineReady
-                      ? "Update AI engine and installed models"
-                      : "Install Ollama on this Deck"
-                  }
-                >
-                  {checkingBeforeStart
-                    ? "Checking…"
-                    : localSetupBusy
-                    ? ollamaEngineReady
-                      ? "Updating…"
-                      : "Installing…"
-                    : ollamaEngineReady
-                      ? "Update AI & models"
-                      : "Install Ollama"}
-                </Button>
-              </Focusable>
-              <Focusable
-                flow-children="horizontal"
-                style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}
-                {...focusableMoves(() => focusInstallUpdateBtn(), () => moveDownToTestOrOn())}
-              >
-                <Button
-                  className={FOCUS_RING_BTN_CLASS}
-                  ref={(el) => {
-                    browseModelsBtnRef.current = el as HTMLButtonElement | null;
-                    // This is the button users actually press to reach the models hub; the one on
-                    // OllamaTab is a second, less-used entry point. Wiring only that one is why
-                    // the 2026-08-04 focus log showed armedId: null for this modal.
-                    registerModalReturnFocusOwner("ollama-models-hub", el as HTMLElement | null);
-                  }}
-                  disabled={localSetupBusy}
-                  onClick={() => {
-                    rememberModalReturnFocus("ollama-models-hub");
-                    onBeforeDeckyModal();
-                    onOpenOllamaModelsHub({ initialSection: "browse" });
-                  }}
-                  style={{
-                    flex: "1 1 160px",
-                    minHeight: 36,
-                    minWidth: 0,
-                    padding: "6px 8px",
-                    fontSize: textPx(11),
-                    fontWeight: 600,
-                    borderRadius: 4,
-                    border: "1px solid rgba(56,189,248,0.45)",
-                    background: localSetupBusy
-                      ? "rgba(14,32,48,0.5)"
-                      : "linear-gradient(180deg, rgba(56,189,248,0.15) 0%, rgba(14,116,144,0.28) 100%)",
-                    color: "#e0f2fe",
-                  }}
-                  aria-label="Browse and pull Ollama models"
-                >
-                  Browse models…
-                </Button>
-              </Focusable>
-              {localSetupBusy ? (
-                <Focusable
-                  flow-children="horizontal"
-                  style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}
-                  {...focusableMoves(() => focusInstallUpdateBtn() || focusAutostartToggle(), () => moveDownToTestOrOn())}
-                  ref={cancelRowRef}
-                >
-                  <Button
-                    className={FOCUS_RING_BTN_CLASS}
-                    ref={(el) => {
-                      cancelSetupBtnRef.current = el as HTMLButtonElement | null;
-                    }}
-                    onClick={() => void cancelLocalSetup()}
-                    style={{
-                      flex: "0 1 auto",
-                      minHeight: 36,
-                      padding: "6px 10px",
-                      fontSize: textPx(11),
-                      fontWeight: 600,
-                      borderRadius: 4,
-                      border: "1px solid rgba(248,113,113,0.45)",
-                      background: "rgba(48,24,26,0.65)",
-                      color: "#fecaca",
-                    }}
-                    aria-label="Cancel local Ollama setup"
-                  >
-                    Cancel
-                  </Button>
-                </Focusable>
-              ) : null}
-              <OllamaSetupStatusLine
-                status={localSetupStatus}
-                stageLine={formatLocalSetupStageLine(localSetupStatus)}
-                busy={localSetupBusy}
-              />
-            </Focusable>
+              onMoveUpOut={focusAutostartToggle}
+              onMoveDownOut={moveDownToTestOrOn}
+              entryRef={localSetupEntryRef}
+            />
           </PanelSectionRow>
         ) : null}
         {!ollamaLocalOnDeck ? (

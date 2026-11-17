@@ -230,7 +230,7 @@ the same network and point it at the PC that streams your Frame games.
 
 ![The AI models window: filters, license labels, sizes and how well each model fits the Deck](../assets/readme/ai-models.png)
 
-**Ollama → Browse models…** shows models you can download. Filter by what they're good at, whether
+**Ollama → Browse models** shows models you can download. Filter by what they're good at, whether
 they can see pictures, or what's already installed. Models too big for the Deck are marked. **Install
 the starter set** gets the recommended set in one press: the answer model gemma4:e2b-it-qat, the note-search model nomic-embed-text and the speech models tiny.en and base.en.
 

@@ -116,7 +116,7 @@ curl -s http://127.0.0.1:11434/api/tags
 ollama run qwen2.5:1.5b "Hello from bonsAI"
 ```
 
-**In-app model management:** With **Ollama on this Deck** enabled, open **Ollama → Browse models…** (or the AI models hub) to open the Pull Models picker — the bundled catalog. Live registry sizes when online (offline fallback), multi-select pull, and per-row delete. Progress appears in the Local Ollama setup log on the Ollama tab.
+**In-app model management:** With **Ollama on this Deck** enabled, open **Ollama → Browse models** (or the AI models hub) to open the Pull Models picker — the bundled catalog. Live registry sizes when online (offline fallback), multi-select pull, and per-row delete. Progress appears on the job card on the Ollama tab (what is downloading, how far, the sites, Cancel); the raw installer lines go to the plugin's log.
 
 **Maintainers — add a recommended model:** it needs a plugin release (the bundled catalog and the Ask routing chains in `backend/ollama/ollama_routing.py`). The plugin no longer downloads a model list from GitHub.
 

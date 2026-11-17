@@ -160,38 +160,21 @@ describe("Where AI runs on a Deck", () => {
     expect(up).toEqual([TEST, BROWSE, UPDATE, BOOT, RUN]);
   });
 
-  it("while a setup runs, Update stays a stop, Browse and Test are disabled and Cancel is reached: no press lands nowhere", async () => {
+  it("while a setup runs the job card stands in for Update and Browse: neither is drawn, so neither can take the ring", async () => {
     setRpcHandler("get_local_ollama_setup_status", () => ({ phase: "running", stage: "install", log_tail: [] }));
-    const { exitDown } = draw();
-    const CANCEL = "Cancel local Ollama setup";
-    await screen.findByLabelText(CANCEL);
-    await act(async () => void (document.querySelector(`[aria-label="${BOOT}"]`) as HTMLElement).focus());
-
-    // The Update button is never disabled, so the ring is never left on a dead button after the press.
-    press(BOOT, "onMoveDown");
-    expect(here()).toBe(UPDATE);
-    // Browse is disabled while a setup runs, so Down from Update lands on Cancel.
-    press(UPDATE, "onMoveDown");
-    expect(here()).toBe(CANCEL);
-    // Test connection is disabled too, so Down from Cancel hands on to the next section.
-    press(CANCEL, "onMoveDown");
-    expect(exitDown).toHaveBeenCalledTimes(1);
-    // Up from Cancel goes back to Update, and from there to the switch.
-    press(CANCEL, "onMoveUp");
-    expect(here()).toBe(UPDATE);
-    press(UPDATE, "onMoveUp");
-    expect(here()).toBe(BOOT);
+    draw();
+    await screen.findByLabelText("Cancel local Ollama setup");
+    expect(document.querySelector(`[aria-label="${UPDATE}"]`)).toBeNull();
+    expect(document.querySelector(`[aria-label="${BROWSE}"]`)).toBeNull();
+    // The stand-in tells the Deck's truth: a greyed button is not native-disabled and would take the ring.
+    expect(isGreyedDeckyButton(document.querySelector(`[aria-label="${TEST}"]`))).toBe(true);
   });
 
-  it("while a setup runs the whole chain walks Down and Up through Cancel, each stop once, with Browse and Test greyed but skipped by the plugin's own state", async () => {
+  it("while a setup runs the chain walks Down and Up through the card's Cancel, each stop once, with Test greyed and skipped by the plugin's own state", async () => {
     setRpcHandler("get_local_ollama_setup_status", () => ({ phase: "running", stage: "install", log_tail: [] }));
     const { exitDown } = draw();
     const CANCEL = "Cancel local Ollama setup";
     await screen.findByLabelText(CANCEL);
-    // The stand-in tells the Deck's truth: a greyed button is not native-disabled and would take the ring.
-    expect(isGreyedDeckyButton(document.querySelector(`[aria-label="${BROWSE}"]`))).toBe(true);
-    expect(isGreyedDeckyButton(document.querySelector(`[aria-label="${TEST}"]`))).toBe(true);
-    expect((document.querySelector(`[aria-label="${BROWSE}"]`) as HTMLButtonElement).disabled).toBe(false);
     await act(async () => void (document.querySelector(`[aria-label="${RUN}"]`) as HTMLElement).focus());
 
     const down: string[] = [here()];
@@ -199,7 +182,7 @@ describe("Where AI runs on a Deck", () => {
       expect(press(here(), "onMoveDown")).toBe(true);
       down.push(here());
     }
-    expect(down).toEqual([RUN, BOOT, UPDATE, CANCEL]);
+    expect(down).toEqual([RUN, BOOT, CANCEL]);
     press(CANCEL, "onMoveDown");
     expect(exitDown).toHaveBeenCalledTimes(1);
 
@@ -208,8 +191,8 @@ describe("Where AI runs on a Deck", () => {
       expect(press(here(), "onMoveUp")).toBe(true);
       up.push(here());
     }
-    expect(up).toEqual([CANCEL, UPDATE, BOOT, RUN]);
-    expect(new Set([...down, ...up]).size).toBe(4);
+    expect(up).toEqual([CANCEL, BOOT, RUN]);
+    expect(new Set([...down, ...up]).size).toBe(3);
   });
 
   it("each switch's Up and Down sit on a Focusable around it, not on the switch, so Down from Start the AI lands on Update", async () => {

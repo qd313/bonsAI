@@ -65,7 +65,8 @@ async function endRunWith(end: Record<string, unknown>) {
   draw();
   expect(await screen.findByText(/Ollama v0\.40\.9/)).toBeTruthy();
   status = RUNNING;
-  await screen.findByText("Installing Ollama…", { exact: false }, { timeout: 4000 });
+  // The job card's line for the install step (plan 105, lane D4: the card stands in for the buttons while it runs).
+  await screen.findByText("Installing the newest Ollama", {}, { timeout: 4000 });
   // The program is swapped and restarted while the run is going; then the run ends the given way.
   runningVersion = "0.40.16";
   status = end;

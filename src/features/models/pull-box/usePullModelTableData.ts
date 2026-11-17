@@ -30,10 +30,8 @@ import {
   type PullModelGroup,
   type PullModelModeFilterId,
 } from "../pullModelCatalog";
-import type { ModelPolicyTierId } from "../modelPolicy";
 import { isCatalogModelTagInList } from "./mergePullModelCatalog";
 import {
-  entryMatchesLicenceTier,
   entryMatchesModeFilters,
   isTagInstalled,
   resolveRowSizeGb,
@@ -50,7 +48,6 @@ export type UsePullModelTableDataArgs = {
   essentialsOnly: boolean;
   recentlyAddedOnly: boolean;
   pullRecord: PullModelPullRecord;
-  modelPolicyTier: ModelPolicyTierId;
   liveSizeGbByTag: Record<string, number>;
   selectedTags: Set<string>;
 };
@@ -79,7 +76,6 @@ export function usePullModelTableData(a: UsePullModelTableDataArgs): PullModelTa
     essentialsOnly,
     recentlyAddedOnly,
     pullRecord,
-    modelPolicyTier,
     liveSizeGbByTag,
     selectedTags,
   } = a;
@@ -103,7 +99,10 @@ export function usePullModelTableData(a: UsePullModelTableDataArgs): PullModelTa
   const shownBesidesGoodFor = useMemo(() => {
     const now = Date.now();
     return (entry: PullModelEntry): boolean => {
-      if (!entryMatchesLicenceTier(entry, modelPolicyTier)) return false;
+      // The licence setting no longer hides a row (plan 105): a model outside it is drawn dimmed by the
+      // table, and an installed model is always drawn. The check used to sit here, ahead of the
+      // installed-model rule below, so an installed model outside the setting vanished from the list
+      // while the header still counted it.
       if (installedOnly && !isTagInstalled(entry.tag, installedTags)) return false;
       // Essentials only ON: show just the essentials group. OFF: show everything else,
       // stretch (Expert large) included -- it used to be dropped here too, through a
@@ -124,7 +123,7 @@ export function usePullModelTableData(a: UsePullModelTableDataArgs): PullModelTa
       }
       return true;
     };
-  }, [modelPolicyTier, installedOnly, essentialsOnly, recentlyAddedOnly, installedTags, pullRecord]);
+  }, [installedOnly, essentialsOnly, recentlyAddedOnly, installedTags, pullRecord]);
 
   const filteredCatalog = useMemo(
     () => mergedCatalog.filter((entry) => shownBesidesGoodFor(entry) && entryMatchesModeFilters(entry, modeFilters)),

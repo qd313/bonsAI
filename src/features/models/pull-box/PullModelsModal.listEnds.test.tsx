@@ -84,7 +84,8 @@ describe("the model list's last row", () => {
       await waitFor(() => {
         expect(container.querySelector('[aria-label="Use qwen2.5:1.5b for Ask"]')).not.toBeNull();
       });
-      const lastEssential = latestByAriaLabel("Select qwen3.5:4b to pull");
+      // The licence setting no longer hides qwen2.5vl:3b (plan 105): it is the last essential, drawn dimmed.
+      const lastEssential = latestByAriaLabel("Select qwen2.5vl:3b to pull");
       expect((lastEssential!.onMoveDown as () => boolean)()).toBe(true);
       expect(container.contains(document.activeElement)).toBe(true);
       expect(document.activeElement?.closest("[class*='row']")?.textContent ?? "").toContain("qwen2.5:1.5b");

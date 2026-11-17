@@ -146,7 +146,7 @@ import {
 } from "./pullModelNewBadge";
 import type { PullModelsModalProps } from "./PullModelsModal.types";
 export type { PullModelsFooterState, PullModelsModalProps } from "./PullModelsModal.types";
-import { findUnavailableRegistryTags, formatModesShort, isTagInstalled, resolveRowSizeGb } from "./pullModelFilters";
+import { entryMatchesLicenceTier, findUnavailableRegistryTags, formatModesShort, isTagInstalled, resolveRowSizeGb } from "./pullModelFilters";
 import type { NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 export { findUnavailableRegistryTags };
 
@@ -249,7 +249,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
     essentialsOnly,
     recentlyAddedOnly,
     pullRecord,
-    modelPolicyTier,
     liveSizeGbByTag,
     selectedTags,
   });
@@ -505,11 +504,14 @@ export function PullModelsModal(props: PullModelsModalProps) {
       Boolean(activeRoutingTag && activeRoutingTag === entry.tag) || deleteBusyTag === entry.tag;
     const navSelect = rowNavHandlers(rowIndex, "select", installed);
     const navDelete = rowNavHandlers(rowIndex, "delete", installed);
+    // Outside the licence setting: still listed (and an installed one is always listed), but dimmed (plan 105).
+    const outsideLicence = !entryMatchesLicenceTier(entry, modelPolicyTier);
     const rowClass = [
       "bonsai-pullmodels-table-row",
       "bonsai-pullmodels-table-row--data",
       installed ? "bonsai-pullmodels-table-row--installed" : "",
       isDeckDailyPullModel(entry) ? "" : "bonsai-pullmodels-table-row--stretch",
+      outsideLicence ? "bonsai-pullmodels-table-row--dim" : "",
     ]
       .filter(Boolean)
       .join(" ");
@@ -518,7 +520,13 @@ export function PullModelsModal(props: PullModelsModalProps) {
     const isNew = installed && isRecentPullModelTag(pullRecord, entry.tag, Date.now());
 
     return (
-      <div key={entry.tag} className={rowClass} role="row" data-row-index={rowIndex}>
+      <div
+        key={entry.tag}
+        className={rowClass}
+        role="row"
+        data-row-index={rowIndex}
+        title={outsideLicence ? "Your licence setting would not use this one." : undefined}
+      >
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--pull" role="cell">
           {installed ? (
             <Button

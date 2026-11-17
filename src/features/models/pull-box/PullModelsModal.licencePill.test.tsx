@@ -4,8 +4,8 @@
  * Purpose: Pin plan 77 (licence labels, round 3). A row whose licence label is not Apache or MIT
  * shows that licence's name in the pill instead of a green "FOSS" (found on the Deck, P77-LICENCE-FILTER).
  * Both Qwen 3B sizes that used to sit in "Open source only" despite Qwen's Research licence
- * (qwen2.5vl:3b and qwen2.5:3b) left that class in plan 93, so "Open source only" does not list them
- * at all; they appear once the open-weight setting is on.
+ * (qwen2.5vl:3b and qwen2.5:3b) left that class in plan 93, so "Open source only" draws them dimmed (plan 105:
+ * a model outside the setting is dimmed, not hidden).
  *
  * Plan 96 F18: every row that is not open source now carries an amber pill naming why ("Research only"
  * for the Qwen 3B sizes, "Open weight", "Not open", "Unknown"); before, those rows had no pill at all
@@ -78,15 +78,15 @@ describe("pullModelLicencePillText", () => {
 });
 
 describe("licence pill in the list", () => {
-  it("does not list the two Qwen Research 3B models under Open source only, and keeps FOSS on the open ones", async () => {
+  it("lists the two Qwen Research 3B models dimmed under Open source only, with a Research only pill, and keeps FOSS on the open ones", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: [] }));
     const { container } = renderModal();
     await waitFor(() => expect(pillFor(container, "qwen3.5:4b")).not.toBeNull());
-    expect(pillFor(container, "qwen2.5vl:3b")).toBeNull();
+    expect(pillFor(container, "qwen2.5vl:3b")).toBe("Research only"); // shown, not hidden (plan 105)
     expect(pillFor(container, "qwen3.5:4b")).toBe("FOSS");
     showAllGroups(container);
     await waitFor(() => expect(pillFor(container, "qwen2.5:7b")).not.toBeNull());
-    expect(pillFor(container, "qwen2.5:3b")).toBeNull();
+    expect(pillFor(container, "qwen2.5:3b")).toBe("Research only");
     expect(pillFor(container, "qwen2.5:7b")).toBe("FOSS");
   });
 

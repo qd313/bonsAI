@@ -294,14 +294,14 @@ describe("the column beside the list", () => {
     }
   );
 
-  it("counts the Good for choices under the licence pick: more open-weight models than open-source ones", async () => {
+  it("counts the Good for choices the same under either licence pick: the pick dims a row, it never hides one (plan 105)", async () => {
     const one = await openBox({ modelPolicyTier: "open_source_only" });
     tap(rowButton(one.container, "Deck essentials only"));
     const openSource = countBeside(one.container, "Speed");
     one.unmount();
     const two = await openBox({ modelPolicyTier: "open_weight" });
     expect(ticked(two.container, "Deck essentials only")).toBe(false); // kept for the session
-    expect(countBeside(two.container, "Speed")).toBeGreaterThan(openSource);
+    expect(countBeside(two.container, "Speed")).toBe(openSource);
   });
 
   it("Clear puts Good for and Show back (Deck essentials only on, the rest off) and leaves the licence pick alone", async () => {

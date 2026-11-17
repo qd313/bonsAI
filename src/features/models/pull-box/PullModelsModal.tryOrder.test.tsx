@@ -508,7 +508,8 @@ describe("what the old order screens refused, now said inside the box", () => {
 
 describe("a model the filters hide", () => {
   it("keeps its place; the numbers skip it and one quiet line says how many", async () => {
-    // gemma3:4b is open-weight: the default licence filter (open source only) hides its row.
+    // gemma3:4b is open-weight. The licence setting only dims it now (plan 105), so what hides it is a Good for
+    // tick it does not match: Strategy.
     setRpcHandler("test_ollama_connection", () => ({
       reachable: true,
       models: ["gemma3:4b", "qwen3.5:4b", "gemma4:e2b-it-qat"],
@@ -519,8 +520,15 @@ describe("a model the filters hide", () => {
     }));
     const { container } = renderBox(DECK, { modelPolicyTier: "open_source_only" });
     await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("3"));
+    // Dimmed, not hidden: gemma3:4b still has its row and its place, and no line says anything is hidden.
+    // (The list writes " !" after a tag Ask tries last, so the row is found by its words, not by its exact name.)
+    const gemma = Array.from(container.querySelectorAll(".bonsai-pullmodels-table-row--data")).find((r) => r.textContent?.includes("gemma3:4b"));
+    expect(gemma?.querySelector(".bonsai-pullmodels-place-num")?.textContent).toBe("2");
+    expect(container.textContent).not.toContain("hidden by the filters");
+    fireEvent.click(container.querySelector('button[aria-label="Strategy"]') as HTMLButtonElement);
+    await waitFor(() => expect(container.textContent).toContain("1 model in the order is hidden by the filters."));
     expect(placeOf(container, "qwen3.5:4b")).toBe("1");
-    expect(container.textContent).toContain("1 model in the order is hidden by the filters.");
+    expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("3");
   });
 });
 

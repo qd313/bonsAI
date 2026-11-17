@@ -553,6 +553,13 @@ export function buildPullModelsStylesheet(): string {
         .bonsai-scope .bonsai-pullmodels-table-row--stretch {
           border-left: 2px solid rgba(251, 146, 60, 0.55);
         }
+        /* A model outside the licence setting is dimmed, not hidden (plan 105): its words fade, its buttons do not. */
+        .bonsai-scope .bonsai-pullmodels-table-row--dim .bonsai-pullmodels-tag-name,
+        .bonsai-scope .bonsai-pullmodels-table-row--dim .bonsai-pullmodels-col--size,
+        .bonsai-scope .bonsai-pullmodels-table-row--dim .bonsai-pullmodels-col--modes,
+        .bonsai-scope .bonsai-pullmodels-table-row--dim .bonsai-pullmodels-col--stars {
+          opacity: 0.5;
+        }
         .bonsai-scope .bonsai-pullmodels-table-row--installed {
           border-left: 2px solid rgba(156, 231, 255, 0.45);
         }

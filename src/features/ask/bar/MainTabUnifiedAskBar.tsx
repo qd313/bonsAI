@@ -500,7 +500,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                 presetId={aiCharacterAvatarPresetId ?? "__custom__"}
                 size={18}
                 badgeLetter={aiCharacterAvatarBadgeLetter}
-                art="prop"
               />
             </Focusable>
             {aiCharacterDebugLine ? (

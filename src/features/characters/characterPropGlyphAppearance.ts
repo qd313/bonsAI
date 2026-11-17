@@ -57,7 +57,7 @@ interface CharacterPropEntry {
   tint: string;
 }
 
-/** Keyed by the character keys in src/features/characters/characterPlaceholderEmoticonGrids.ts */
+/** Keyed by the character keys in characterCatalog.ts */
 export const CHARACTER_PROPS: Record<string, CharacterPropEntry> = {
   tf2_scout: { letter: "SC", prop: "bat", tint: "#4ecdc4" },
   tf2_soldier: { letter: "SO", prop: "launcher", tint: "#7a9e6a" },

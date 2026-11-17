@@ -21,9 +21,6 @@
     "src/features/models/pull-box/PullModelsModal.tsx": {
       "limit": 935
     },
-    "src/features/characters/characterPlaceholderEmoticonGrids.ts": {
-      "limit": 993
-    },
     "src/features/ask/flow/useBonsaiAskOrchestration.ts": {
       "limit": 1061
     },

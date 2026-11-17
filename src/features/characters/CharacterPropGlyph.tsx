@@ -9,7 +9,7 @@
  * lit, tinted disc.
  *
  * Used for: The main tab's Ask bar avatar (18px) and every character picker
- * avatar (26px), reached through CharacterRoleplayEmoticon's `art="prop"`
+ * avatar (26px), reached through CharacterRoleplayEmoticon
  * path.
  *
  * Solves: The older 8x8/16x16 pixel-grid art (still used elsewhere in

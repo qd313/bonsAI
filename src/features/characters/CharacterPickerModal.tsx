@@ -235,7 +235,6 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
           key={okButtonPreviewPresetId}
           presetId={okButtonPreviewPresetId}
           size={PICKER_AVATAR_PX}
-          art="prop"
           badgeLetter={okButtonPreviewBadgeLetter}
         />
         <span>OK</span>
@@ -531,7 +530,6 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
                   <CharacterRoleplayEmoticon
                     presetId={entry.id}
                     size={PICKER_AVATAR_PX}
-                    art="prop"
                     badgeLetter={resolveAvatarBadgeLetterFromDisplayLabel(entry.label)}
                   />
                   <span
@@ -625,7 +623,7 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
               />
             </div>
             <div style={{ flexShrink: 0 }} aria-hidden>
-              <CharacterRoleplayEmoticon presetId="__random__" size={PICKER_AVATAR_PX} art="prop" />
+              <CharacterRoleplayEmoticon presetId="__random__" size={PICKER_AVATAR_PX} />
             </div>
           </div>
           {runningStrip === undefined && showSlowSpinner && (
@@ -740,7 +738,6 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
                       <CharacterRoleplayEmoticon
                         presetId={entry.id}
                         size={PICKER_AVATAR_PX}
-                        art="prop"
                         badgeLetter={resolveAvatarBadgeLetterFromDisplayLabel(entry.label)}
                       />
                       <span
@@ -810,7 +807,6 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
               <CharacterRoleplayEmoticon
                 presetId="__custom__"
                 size={PICKER_AVATAR_PX}
-                art="prop"
                 badgeLetter={customFieldBadgeLetter}
               />
             </div>

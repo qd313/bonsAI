@@ -826,7 +826,178 @@ six lookups and four drawing helpers (all Sonnet).
 
 ## 13. Report
 
-(Written at the end of the session.)
+Written at the end by the chat that ran the session (2026-11-17, about 10:45 EST).
+
+**You have not answered the security and licence review yet** (`assets/105-review-report.md`, posted at about 10:00).
+Until you do, nothing in it is fixed or filed, and this session is not ready to push.
+
+**The plan set out to clear the main roadmap's small bugs and Verify rows and to build four picked features. Every
+code change it planned has landed except one follow-on lane, and most were checked on the Deck. Nothing is pushed.**
+About 60 helper runs over one night and a morning (2026-11-16 23:45 to 2026-11-17 10:45), 84 commits on
+`experimental`, every landing through the full checks, four deploys and five Deck blocks. The stand-in (this PC) could
+run nothing: Decky's own panel fails there until Steam is restarted.
+
+### 13.1 What you need to do next
+
+1. **Answer the review** (`assets/105-review-report.md`): for each entry, fix now, file for later, or leave it. Items
+   1, 2 and 5 are the ones I would fix first: Cancel does nothing while Ollama itself downloads; the voice engine's
+   build fetches its tools unchecked; a failed Cancel leaves the card stuck on "Stopping".
+2. **Where things stand.** Nothing is pushed. The tip of `experimental` is in the last line of this section. **The
+   Deck runs this session's build** (`1b45aa04b`) with your settings as at the start of the night, your usual chat open
+   ("chat 1 of 4"), no test chats left, the AI unloaded and the keep-awake hold released. **Three things differ:**
+   - A first-time test in the night cleared the small things the plugin keeps in Steam's browser. I put back what the
+     plugin's own buttons can put back (the "How to use bonsAI" chip is dismissed again, so your suggestion chips
+     show). Lost for good: an unsent draft in the question box if you had one, which note offers you had already
+     answered (some may be offered again), the last tab you were on, and the "left out at first setup" choice of the
+     starter set (only matters if you left something out). The lesson is in `docs/lessons-learned.md`.
+   - Five settings backups are in the Deck's home folder (`p105-settings-backup*.json`). They hold a copy of your
+     settings file, which has your Steam key in it. Say if I should delete them.
+   - Ollama is still 0.40.16 from plan 104, as before this plan.
+3. **Calls waiting for you** (each has the safe choice in place):
+   - **Headline first** is built and switched off: answers that stand alone in their first sentence went from 14-16
+     to 35-39 percent, but it gave mild hints on "how does it end" questions and a few more answers contradicted
+     themselves. On or off?
+   - **Ask at ten chats:** on Cancel or B nothing is sent and your question stays in the box. Is that what you want?
+   - **The first-time setup** (built from your round 4 B pick): "Start the AI with the Deck" is not on the first screen
+     (it stays on the Ollama tab, as drawn); the total says about 6.9 GB even on a Deck that already has Ollama; the
+     "left out" choice is kept in Steam's browser, so if it is lost the next box lists every download again before
+     anything starts.
+   - **The Ollama tab's job card:** its Cancel swap can only be tried on the Deck by starting a real Ollama update. Say
+     yes and the next session tries it (it would update the Deck's Ollama).
+4. **Restart Steam on this PC** (or update Decky to 3.3.1, your call) so the stand-in can run its blocks again.
+5. **Your October notes on the checks page** live only in your browser. Paste them in the chat to have each answered.
+6. **Hand checks** (they belong on the checks page in a "plan 105" round; I did not make that round, to keep the week
+   under 90 percent): the first-time setup by your own hands once; Tiny text by eye; the decoding answers and chips;
+   the widening chip; Headline first on three real answers if you want to see it before deciding.
+7. **Say "push"** once the review is answered. `python scripts/verify.py --full` passed on the final code (`066ffb2c5`, 10:29 EST, in 400 s); the only commit after it is this report.
+
+### 13.2 What a player notices
+
+**Checked on the Deck:**
+- **The first section of every tab with sections is open when you arrive,** and an open section is one shaded block.
+- **"Show details" shows short facts in small chips, three rows,** with "Session" as the dashed last chip; Down from
+  "Hide details" lands on the first chip.
+- **"Was this helpful?" decodes in after an answer,** and its buttons work while it does.
+- **"N earlier" can group by game:** Left or Right on the line flips between days and games; a day with several games
+  opens a row of game buttons.
+- **The AI models box lists 48 models (was 26),** with two switches and word buttons instead of eleven filters; a model
+  outside your licence setting is dimmed, never hidden, and an installed model never vanishes.
+- **Answers and chips decode for everyone;** the Animations section is gone from the Developer tab. Old settings files
+  still load.
+- **A long answer follows into view while it writes, and ends with its feedback row above the question box.**
+- **A long, ordinary question is no longer refused** as "random characters".
+- **Terse answers are at most about 40 words** (16, 23 and 21 in the check).
+- **A long chip takes the row while the ring is on it,** so every word shows on one line.
+- **The first-time setup is one screen:** the five downloads with their sizes and sites, boxes to leave some out, the
+  Internet downloads switch (off until you turn it on), then OK. It fits the Deck's screen with nothing wrapped.
+- **Left goes out to Steam's menu:** the third Left in a row from most places in bonsAI (the first from places that
+  never held it); the tab bar still wraps.
+- **The Ollama tab's "Where AI runs" walks in order** with Update never skipped, and Test connection is one status
+  line that keeps its height.
+- The bold heading with a hidden line inside it draws properly (an October row, closed at last).
+
+**Built and tested, not yet seen on the Deck:** the starter set also builds the voice engine, so the microphone works
+straight after (with a real Cancel); asking with ten chats saved and none open asks which to delete first; Tiny text;
+the cut question's fade; the agent chip's blue fill; Update and Install turning into a job card with Cancel, and a bar
+at the panel's foot while that card is out of sight; the suggestion chips coming back after a long answer; a chip's
+slide starting about 0.2 s after its decode.
+
+**Gone:** the old pixel-grid avatars (every character shows its emblem) and the unused search-pack manager.
+
+### 13.3 The work by area
+
+- **Bookkeeping and tools** (K0, T1, T2): room made in the roadmap twice; decision D142; the landing script keeps
+  every gate step's whole log (`scripts/land_lane.sh`); a driver can place a hand-written chat on the Deck and take it
+  away (`scripts/deck_place_chat.py`), wait for its own answer (`scripts/deck_wait_answer.mjs`), and read the
+  stand-in's library (`scripts/deck_kb_readback.py`). The placed chat closed the bold-heading row and the by-game row,
+  both stuck for weeks because the AI never wrote the needed shape.
+- **The chat** (A2, A4, A5, A6, A7, A8, N1, N2; `src/features/answer/**`, `src/features/chats/**`): the Show details
+  rewrite went through the second opinion twice (the Session chip lifts clear of the dock; a lost-focus Right is
+  held). "N earlier" by game (A6) was designed on one page first and changed three ways by the second opinion before a
+  line was written. The answer's foot after a long answer (N2) failed on the Deck once (97 to 168 px short), was fixed
+  within the hour, and passed. **What popped up:** A5's two helpers were exported but unused and broke the quick check
+  (made private, `9989fb9b6`); A6 clashed with A5 in the turn header and was rebased keeping both.
+- **Chips and animation** (B1, B2, B3; `src/features/preset-carousel/**`, both settings files): Decode as the default
+  removed six settings keys and three chip styles; an old file still loads and the keys go at the next save. The
+  decode-into-slide pause went from 1.5 s to 0.5 s on the Deck, then a fix aims at about 0.2 s (not re-timed).
+- **Tabs and sections** (C1, C2, C3; `src/features/folded-tabs/**`): the old tab-sections bug was already gone (measured
+  in block D0 and closed). "Open sections as you walk" is a Developer switch, off by default; arrivals and the walk
+  pass on the Deck, but the ringed row still jumps 20.8 px for about a tenth of a second at one landing.
+- **Left out to Steam's menu** (C5; `src/shared/dpad/leftEdge.ts` and every place that held Left): two Lefts hold, the
+  third goes out; a pause or any other button starts the count again; a held Left never counts (a 150 ms floor added
+  after the second opinion). **Found on the Deck:** the dock's Show details line lets Left out on the first press
+  though the code holds it (filed).
+- **Downloads and setup** (D2, D3, D4, D5; `src/features/ai-connection/**`, `src/features/downloads/**`,
+  `py_modules/backend/ollama/**`, `py_modules/backend/voice/**`): the voice engine joins the starter set with a Cancel
+  that really stops the image pull and the build; the first-time screen; the job card and bar; the 48-model list with
+  a sources file naming where every fact came from. D3 got two fixes from the second opinion before landing (OK stays
+  grey while a switch save is in flight; the beta line held to one line), and both held on the Deck. D5's licence read
+  found five open-licence models wrongly dimmed (fixed with exact-name overrides).
+- **Answers** (P1): Terse is capped by words; Headline first is built and off.
+- **Clean-up** (E2, E3): avatars and the pack manager removed; `docs/audit/bundled-characters-voices.md` records who
+  voices each of the 31 characters.
+- **What I could have done differently:** back up the plugin's browser storage before the first-time test (it cost
+  the last block two rows); keep a wake timer that survives the chat's own process (the morning started two hours
+  late); write the D3b runbook's expected chip-row count from the drawing, not from the previous block.
+
+### 13.4 A plain guide for a developer
+
+- **A job that downloads** publishes itself to `src/features/downloads/runningJobs.ts` (`publishJob`, `endJob`); its
+  card (`JobCard.tsx`) and the panel-foot bar (`JobBar.tsx`) read from there, and the bar shows only while every card
+  of that job is out of sight (`noteJobCardSeen`). The Ollama setup is the one job today (`ollamaSetupJob.ts`); D4b
+  would add the library download and the voice install.
+- **The first-time setup** lives in `src/features/ai-connection/first-run/`; the checklist rows and sizes in
+  `firstRunChecklist.tsx` and `src/features/downloads/downloadSizes.ts`; the progress card on the chat in
+  `src/features/main-tab/FirstRunSetupCard.tsx`. A start with no settings file clears the plugin's browser storage
+  (`useDisclaimerAndLocalRuntimeGates.tsx`).
+- **Left out to Steam's menu:** one count in `src/shared/dpad/leftEdge.ts`; a control that held Left calls it instead
+  of returning true. `docs/focus-graph.md`, "Left out to Steam's menu", lists every place.
+- **The models list:** hand-kept rows in `src/features/models/pullModelCatalog.ts` and `pullModelCatalogAdded.ts`,
+  each fact sourced in `pullModelCatalog.sources.md`; the licence class is checked against the back end's table by a
+  test.
+
+### 13.5 What failed, and why
+
+- **The stand-in ran no block:** Big Picture would not come forward (you fixed it), the Deck tool cannot install from
+  a copy of the repo, and then Decky's own panel fails on this PC with both builds. It needs Steam restarted.
+- **Two rows could not be checked in the last block** (the chips after a long answer, the decode-into-slide timing):
+  the night's first-time test had brought back the help chip, which hides the suggestion chips. Not a code fault.
+- **"Open sections as you walk" still jumps once** (20.8 px for about 0.1 s, was 37.6 px for 7 frames). It is off by
+  default; the entry is open with the numbers.
+- **The Show details line lets Left out at once on the Deck,** unlike the code; filed.
+- **Process:** a landing's tests stalled for 14 minutes once (killed; the retry passed); a driver overwrote an earlier
+  recording by reusing its name; the wake timer was lost after the five-hour reset.
+
+### 13.6 What is left, and why
+
+- **Not built, for the week's budget:** lane D4b (the library download and the voice install on the same job card,
+  with the voice install's first Cancel), the tidy lane (dead code A2 and B2 left behind), the README clips refilm,
+  and the stand-in blocks S1 and S2 (also blocked on Steam). Each is an open roadmap entry saying so.
+- **Owed on the Deck:** the chips after a long answer; the decode-into-slide timing; Left on a suggestion chip and on
+  "Suggest as a tip"; the job card's Cancel swap (needs your yes); the agent chip's fill (no agent chip appeared all
+  night).
+- **The review's 14 findings,** waiting for you.
+- **New bugs filed tonight, all one star:** Up from "Open all" skips the last section's own controls; ResizeObserver
+  warnings fill the Diagnostics log; Tiny's Show details line is 8.0 px, not 7.2; three notes on the job card from the
+  second opinion; the Show details line's first-press Left.
+
+### 13.7 The numbers
+
+- **Usage:** the week went from 52 to about 81 percent (one five-hour window cost about 12 points of it); Fable's own
+  counter from 41 to 46. The five-hour window filled twice (about 01:05 and 04:07).
+- **Commits:** 84 on `experimental` since `37316e427`; 409 files changed.
+- **Roadmap entries of this plan** (counted from the files by the last sweep): 20 in Done, 11 in Verify, 12 open.
+  Testing rows starting `P105-`: 24 closed, 16 open.
+- **Deck blocks:** D0, D1, D2, D3a, D3b (five drivers, about 2 h 20 min of driving in all); the stand-in: three tries,
+  none ran.
+- **The second opinion on trial (Fable at medium):** 11 consults, each about 1 to 3 minutes and 36 to 106 thousand
+  tokens. All 11 settled the question at medium; none went up to max. Nine changed something before it was built or
+  landed, and the Deck later bore out the ones it could test: the first-time screen's two fixes held (nothing wrapped,
+  OK grey), the held-Left floor held (a 3 s hold stays), the "old bug is gone" call was right, and the glide it asked
+  to have measured is the one thing still failing. **Verdict: keep Fable at medium for every D-pad or layout change
+  before it lands; max was never needed.**
+- **The review pass:** two reviewers, about 6 minutes each; 14 findings, none above two stars; 12 confirmed in the code,
+  2 partly (a download network's hand-offs and one model's release month could not be told).
 
 ## 14. Subagent reports and follow-ups
 

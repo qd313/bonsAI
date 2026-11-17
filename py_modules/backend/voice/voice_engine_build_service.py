@@ -31,10 +31,12 @@ import os
 import struct
 import subprocess
 import tempfile
+import uuid
 import wave
-from typing import Optional
+from typing import Any, Optional
 
 from backend.voice.voice_transcript_decode_service import WHISPER_CLI_INFERENCE_ARGS
+from backend.voice.voice_stoppable_run import run_stoppable
 from backend.voice.voice_whisper_runtime import (
     CHANNELS,
     SAMPLE_RATE,
@@ -172,12 +174,17 @@ def _run_whisper_container_build(
     env: dict[str, str],
     bin_dir: str,
     build_script: str,
+    cancel_event: Any = None,
 ) -> None:
-    run = subprocess.run(
+    """Run the compile in a named container. A Cancel (cancel_event set) removes the container and raises."""
+    container = f"bonsai-whisper-build-{uuid.uuid4().hex[:8]}"
+    run = run_stoppable(
         [
             podman,
             "run",
             "--rm",
+            "--name",
+            container,
             "--entrypoint",
             "bash",
             "-v",
@@ -186,10 +193,11 @@ def _run_whisper_container_build(
             "-lc",
             build_script,
         ],
-        capture_output=True,
-        text=True,
-        timeout=1800,
         env=env,
+        timeout=1800,
+        cancel_event=cancel_event,
+        podman=podman,
+        container_name=container,
     )
     if run.returncode != 0:
         err = (run.stderr or run.stdout or "podman whisper build failed")[:500]
@@ -213,6 +221,7 @@ def _build_whisper_cli_in_container(
     env: dict[str, str],
     plugin_root: str,
     settings_dir: str,
+    cancel_event: Any = None,
 ) -> str:
     """Compile whisper-cli + whisper-server inside the podman image (AVX2-only ggml)."""
     dest = voice_whisper_cli_path(plugin_root, settings_dir)
@@ -238,7 +247,7 @@ cp -a /tmp/bonsai-whisper-build/ggml/src/libggml*.so* /out/ 2>/dev/null || true
 """
     )
 
-    _run_whisper_container_build(podman, env, bin_dir, build_script)
+    _run_whisper_container_build(podman, env, bin_dir, build_script, cancel_event)
 
     if not os.path.isfile(dest):
         raise RuntimeError("whisper-cli build finished but binary is missing from voice_bin.")
@@ -261,6 +270,7 @@ def _build_whisper_server_in_container(
     env: dict[str, str],
     plugin_root: str,
     settings_dir: str,
+    cancel_event: Any = None,
 ) -> str:
     """Compile whisper-server only when whisper-cli is already CPU-safe in voice_bin."""
     server_dest = voice_whisper_server_path(plugin_root, settings_dir)
@@ -281,7 +291,7 @@ cp /tmp/bonsai-whisper-build/bin/whisper-server /out/
 """
     )
 
-    _run_whisper_container_build(podman, env, bin_dir, build_script)
+    _run_whisper_container_build(podman, env, bin_dir, build_script, cancel_event)
 
     if not os.path.isfile(server_dest):
         raise RuntimeError("whisper-server build finished but binary is missing from voice_bin.")

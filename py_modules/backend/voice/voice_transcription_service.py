@@ -130,6 +130,7 @@ from backend.voice.voice_engine_build_service import (
     _whisper_inference_ok,
     _write_silence_wav,
 )
+from backend.voice.voice_stoppable_run import run_stoppable
 from backend.voice.voice_model_download_service import (
     DEFAULT_VOICE_STT_MODEL,
     VALID_VOICE_STT_MODELS,
@@ -287,13 +288,8 @@ def install_whisper_cli(
 
     env = _env_for_host_system_tools()
     stage("binary_pull_start", image=WHISPER_CPP_IMAGE)
-    pull = subprocess.run(
-        [podman, "pull", WHISPER_CPP_IMAGE],
-        capture_output=True,
-        text=True,
-        timeout=900,
-        env=env,
-    )
+    # Stoppable: a Cancel (the starter set's, or the voice install's own flag) ends the pull within a second or two.
+    pull = run_stoppable([podman, "pull", WHISPER_CPP_IMAGE], env=env, timeout=900, cancel_event=cancel_event)
     if pull.returncode != 0:
         raise RuntimeError((pull.stderr or pull.stdout or "podman pull failed")[:500])
     if cancel_event.is_set():
@@ -301,7 +297,7 @@ def install_whisper_cli(
 
     if ready_path and not server_ready:
         stage("binary_build_start", target="whisper-server")
-        _build_whisper_server_in_container(podman, env, plugin_root, settings_dir)
+        _build_whisper_server_in_container(podman, env, plugin_root, settings_dir, cancel_event)
         stage("binary_ready", path=ready_path)
         return
 
@@ -311,7 +307,7 @@ def install_whisper_cli(
         return
 
     stage("binary_build_start")
-    dest = _build_whisper_cli_in_container(podman, env, plugin_root, settings_dir)
+    dest = _build_whisper_cli_in_container(podman, env, plugin_root, settings_dir, cancel_event)
 
     model_path = voice_model_path(plugin_root, settings_dir, DEFAULT_VOICE_STT_MODEL)
     if os.path.isfile(model_path):

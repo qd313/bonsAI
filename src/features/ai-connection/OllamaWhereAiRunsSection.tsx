@@ -137,6 +137,34 @@ function focusableMoves(onMoveUp: () => boolean, onMoveDown: (() => void) | (() 
   return { onMoveUp, onMoveDown };
 }
 
+/** The object Steam puts in a Focusable's `navRef` once its node is mounted. */
+type SteamNode = { TakeFocus?: (gamepad?: boolean) => unknown } | null;
+
+/**
+ * The ring onto `target`: Steam's own transfer onto the node of the row around it first, then the target's own
+ * focus if that did not land it (a sibling inside one container, where a plain focus is safe). False with no target.
+ */
+function takeRowThenFocus(node: { current: SteamNode }, target: HTMLElement | null | undefined): boolean {
+  if (!target) return false;
+  try {
+    node.current?.TakeFocus?.(true);
+  } catch {
+    /* the check below decides */
+  }
+  if (!elementHasGamepadFocus(target)) focusInTabBody(target);
+  return true;
+}
+
+const STOP_QUERY = "[tabindex], button, input";
+
+/** The innermost stop inside `host` (a switch inside the wrapper that holds its moves), never the wrapper itself. */
+function innermostStop(host: HTMLElement | null): HTMLElement | null {
+  // focus-patterns-allow: element-scoped query on this component's own row ref, never the page.
+  const all = host ? Array.from(host.querySelectorAll<HTMLElement>(STOP_QUERY)) : [];
+  // focus-patterns-allow: element-scoped query inside the same row, to skip a wrapper that holds a stop.
+  return all.find((el) => !el.querySelector(STOP_QUERY)) ?? null;
+}
+
 /**
  * The whole panel. See "How it works" above for the layout and flow.
  *
@@ -218,22 +246,22 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   const browseModelsBtnRef = useRef<HTMLButtonElement | null>(null);
   const cancelSetupBtnRef = useRef<HTMLButtonElement | null>(null);
 
-  const focusLocalToggle = useCallback((): boolean => {
-    const host = ollamaLocalToggleNavRef.current;
-    const target = host?.querySelector<HTMLElement>("[tabindex], button, input");
-    if (!target) return false;
-    focusInTabBody(target);
-    return true;
-  }, []);
-
-  const focusAutostartToggle = useCallback((): boolean => {
-    const host = ollamaAutostartToggleNavRef.current;
-    // focus-patterns-allow: element-scoped query on this component's own wrapper ref, same sanctioned pattern as focusLocalToggle two blocks above.
-    const target = host?.querySelector<HTMLElement>("[tabindex], button, input");
-    if (!target) return false;
-    focusInTabBody(target);
-    return true;
-  }, []);
+  /*
+   * The two switches' Steam nodes: the Focusable each switch's moves sit on (DenseSwitchRow's `navOnWrapper`). Steam
+   * does not honour a ToggleField's own move handler: its own move runs after it, which on the Deck (block D1,
+   * plan105-P105-D1-SWEEP.json) took Down from "Start the AI with the Deck" past Update onto Browse. A move onto a
+   * switch is Steam's transfer onto its wrapper, then a plain focus on the switch itself if that did not land it.
+   */
+  const runSwitchNavRef = useRef<SteamNode>(null);
+  const bootSwitchNavRef = useRef<SteamNode>(null);
+  const focusLocalToggle = useCallback(
+    (): boolean => takeRowThenFocus(runSwitchNavRef, innermostStop(ollamaLocalToggleNavRef.current)),
+    [],
+  );
+  const focusAutostartToggle = useCallback(
+    (): boolean => takeRowThenFocus(bootSwitchNavRef, innermostStop(ollamaAutostartToggleNavRef.current)),
+    [],
+  );
 
   /*
    * Put the ring on a button of the chain, unless the plugin itself has it greyed. A greyed Decky
@@ -252,7 +280,9 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   /* Test connection is greyed exactly when its own `disabled` prop below says so. */
   const testConnectionGreyed = connectionTesting || localSetupBusy || (!ollamaLocalOnDeck && !ollamaIp.trim());
 
-  const focusInstallUpdateBtn = useCallback((): boolean => focusChainBtn(installUpdateBtnRef, false), [focusChainBtn]);
+  /* Onto Update / Install from the switch above or the button below: Steam's transfer onto its row, then its own focus. */
+  const updateRowNavRef = useRef<SteamNode>(null);
+  const focusInstallUpdateBtn = useCallback((): boolean => takeRowThenFocus(updateRowNavRef, installUpdateBtnRef.current), []);
 
   /*
    * Cancel is taken away when the run ends (cancelled, finished or failed). With the ring on it, nothing
@@ -260,30 +290,11 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
    * goes to the Update / Install button: Steam's own transfer onto its row first, then the button's own
    * focus if that did not land it.
    */
-  const updateRowNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
-  const cancelRowRef = useHandRingOnGone(() => {
-    try {
-      updateRowNavRef.current?.TakeFocus?.(true);
-    } catch {
-      /* the check below decides */
-    }
-    const update = installUpdateBtnRef.current;
-    if (!elementHasGamepadFocus(update)) focusInstallUpdateBtn();
-  });
+  const cancelRowRef = useHandRingOnGone(() => void takeRowThenFocus(updateRowNavRef, installUpdateBtnRef.current));
   /* Find LAN's own Steam node: after its box closes the ring comes back through Steam's transfer, then a plain focus if that did not land it. */
-  const findLanNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
+  const findLanNavRef = useRef<SteamNode>(null);
   const findLanBtnRef = useRef<HTMLButtonElement | null>(null);
-  const takeFindLan = useCallback((): boolean => {
-    try {
-      findLanNavRef.current?.TakeFocus?.(true);
-    } catch {
-      /* the check below decides */
-    }
-    const el = findLanBtnRef.current;
-    if (!el) return false;
-    if (!elementHasGamepadFocus(el)) focusInTabBody(el);
-    return true;
-  }, []);
+  const takeFindLan = useCallback((): boolean => takeRowThenFocus(findLanNavRef, findLanBtnRef.current), []);
   /*
    * Up from the connection row (Find LAN, Test connection) with the AI on a PC: the PC address box, else the Save
    * row, never past them. Steam's own move skipped both and the old fall-back went to the second switch 5 of 5
@@ -292,21 +303,11 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
    * Search tab's find box uses). The address box is a sibling of the buttons inside the row, so a plain focus is
    * a safe second try there; the Save row is another row, so only Steam's transfer moves the ring onto it.
    */
-  const addressNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
+  const addressNavRef = useRef<SteamNode>(null);
   /* The input inside Steam's text field: a `ref` on the field itself would hold Steam's component, not an element. */
   const addressInputRef = useRef<HTMLInputElement | null>(null);
-  const saveRowNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
-  const takeAddress = useCallback((): boolean => {
-    const el = addressInputRef.current;
-    if (!el) return false;
-    try {
-      addressNavRef.current?.TakeFocus?.(true);
-    } catch {
-      /* the check below decides */
-    }
-    if (!elementHasGamepadFocus(el)) focusInTabBody(el);
-    return true;
-  }, []);
+  const saveRowNavRef = useRef<SteamNode>(null);
+  const takeAddress = useCallback((): boolean => takeRowThenFocus(addressNavRef, addressInputRef.current), []);
   const takeSaveRow = useCallback((): boolean => {
     const node = saveRowNavRef.current;
     if (!node || typeof node.TakeFocus !== "function") return false;
@@ -317,18 +318,11 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     }
   }, []);
   /* The connection row's Steam nodes, so a move onto Test connection (Down from the address, Left from Find LAN) is a transfer. */
-  const testRowNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
-  const takeTestConnection = useCallback((): boolean => {
-    const el = connectionTestBtnRef?.current;
-    if (!el) return false;
-    try {
-      testRowNavRef.current?.TakeFocus?.(true);
-    } catch {
-      /* the check below decides */
-    }
-    if (!elementHasGamepadFocus(el)) focusInTabBody(el);
-    return true;
-  }, [connectionTestBtnRef]);
+  const testRowNavRef = useRef<SteamNode>(null);
+  const takeTestConnection = useCallback(
+    (): boolean => takeRowThenFocus(testRowNavRef, connectionTestBtnRef?.current),
+    [connectionTestBtnRef],
+  );
   const focusBrowseModelsBtn = useCallback(
     (): boolean => focusChainBtn(browseModelsBtnRef, localSetupBusy),
     [focusChainBtn, localSetupBusy],
@@ -549,7 +543,9 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
               nav={{
                 onMoveUp: () => handleMoveUpFromLocalToggle(),
                 onMoveDown: () => handleMoveDownFromLocalToggle(),
+                navRef: runSwitchNavRef,
               }}
+              navOnWrapper
             />
           </div>
         </PanelSectionRow>
@@ -568,7 +564,9 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
               nav={{
                 onMoveUp: () => handleMoveUpFromAutostartToggle(),
                 onMoveDown: () => handleMoveDownFromAutostartToggle(),
+                navRef: bootSwitchNavRef,
               }}
+              navOnWrapper
             >
             {autostartStatus?.reason ? (
               <div

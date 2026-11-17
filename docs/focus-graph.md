@@ -954,6 +954,10 @@ Cancel               (drawn only while a run goes)
    | Down  -> Test connection, else on     ^ Up -> Update AI & models, else Start the AI with the Deck
 ```
 
+- **The two switches hold their Up and Down on a Focusable around them** (DenseSwitchRow's `navOnWrapper`), and every
+  move onto a switch or onto Update is Steam's transfer onto that row's node. A ToggleField's own handler is not
+  honoured: Steam's own move runs after it, which on the Deck took Down from "Start the AI with the Deck" past Update
+  onto Browse (plan 105 block D1, plan105-P105-D1-SWEEP.json; not seen again on the follow-up, P105-M-DOWN-SKIPS).
 - **The Update button is never disabled.** Before, the press opened a download box and the button was disabled while
   the run went on; a disabled button refuses a plain `focus()`, and the ring would have been left on it. Now the
   ring stays where it is after the press. A press on Update while a run goes does nothing.

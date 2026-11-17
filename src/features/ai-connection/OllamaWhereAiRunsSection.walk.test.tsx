@@ -5,8 +5,8 @@
  * runs" section is drawn on a Deck (Run AI on this Deck on) and read as a person would see it: the
  * "Install options..." button, its Tier 1 / Tier 2 choices and the "Install model bundles" label are
  * gone. The hand-wired vertical chain is then walked through the move handlers Steam really calls on
- * the device (a Focusable's, never a Decky Button's: `press` below finds the nearest Focusable that has
- * one), Down from the first switch to the end and Up back again:
+ * the device (a Focusable's, never a Decky Button's or a switch's own: `press` below finds the nearest
+ * Focusable that has one), Down from the first switch to the end and Up back again:
  * Run AI on this Deck, Start the AI with the Deck, Install/Update, Browse models, Test connection,
  * each visited exactly once, in a bounded number of presses, with no press that lands nowhere.
  *
@@ -101,12 +101,13 @@ function draw() {
 const here = () => document.activeElement?.getAttribute("aria-label") ?? "(nothing)";
 /*
  * A press the way Steam delivers it. A Decky Button never passes `onMoveDown`/`onMoveUp` on, so for a
- * button the handler Steam calls is the nearest Focusable around it that has one; a switch (our own
- * `DenseSwitchRow` passes its handlers on) keeps its own.
+ * button the handler Steam calls is the nearest Focusable around it that has one. A switch is the same in
+ * effect: Steam runs a ToggleField's own handler but does not take it as having claimed the press, and its
+ * own move runs after it (DenseRow.tsx; Down from "Start the AI with the Deck" went past Update onto Browse,
+ * block D1, plan105-P105-D1-SWEEP.json). So only a Focusable's handler counts here, for a switch too.
  */
 const press = (label: string, dir: "onMoveDown" | "onMoveUp") => {
   const el = document.querySelector(`[aria-label="${label}"]`) as HTMLElement;
-  if (el.getAttribute("data-decky-ui") !== "Button") return (hoisted.props.get(label)![dir] as () => unknown)();
   for (let up: HTMLElement | null = el.parentElement; up; up = up.parentElement) {
     const handler = hoisted.focusables.get(up)?.[dir] as (() => unknown) | undefined;
     if (handler) return handler();
@@ -209,6 +210,21 @@ describe("Where AI runs on a Deck", () => {
     }
     expect(up).toEqual([CANCEL, UPDATE, BOOT, RUN]);
     expect(new Set([...down, ...up]).size).toBe(4);
+  });
+
+  it("each switch's Up and Down sit on a Focusable around it, not on the switch, so Down from Start the AI lands on Update", async () => {
+    draw();
+    await screen.findByText("Update AI & models");
+    for (const name of [RUN, BOOT]) {
+      const own = hoisted.props.get(name)!;
+      expect(own.onMoveDown, `${name}: its own handler would be overruled`).toBeUndefined();
+      expect(own.onMoveUp).toBeUndefined();
+    }
+    await act(async () => void (document.querySelector(`[aria-label="${BOOT}"]`) as HTMLElement).focus());
+    expect(press(BOOT, "onMoveDown")).toBe(true);
+    expect(here()).toBe(UPDATE);
+    expect(press(UPDATE, "onMoveUp")).toBe(true);
+    expect(here()).toBe(BOOT);
   });
 
   it("Up from Test connection reaches Browse when no setup runs, by a Focusable Steam calls", async () => {

@@ -42,12 +42,16 @@ import type { FoldChainSection } from "../folded-tabs/FoldedSection";
 /**
  * The first matching stop inside one row's own container, or null when the row is not on screen or has none. The
  * query is scoped to the element handed in (a ref the row registered), never the page: under Decky the global
- * document is the wrong one. It only finds; nothing moves (the walk's rule reads it, autoFold.ts).
+ * document is the wrong one. It only finds; nothing moves (the walk's rule reads it, autoFold.ts). With `innermost`,
+ * a match that holds another match is skipped: a switch whose moves sit on a Focusable around it (DenseSwitchRow's
+ * `navOnWrapper`) is found as the switch itself, never its wrapper.
  */
-function firstStopIn(host: HTMLElement | null, selector: string): HTMLElement | null {
+function firstStopIn(host: HTMLElement | null, selector: string, innermost = false): HTMLElement | null {
   if (!host) return null;
   // focus-patterns-allow: element-scoped query on the row's own ref, the sanctioned pattern (it moved here from OllamaTab.tsx unchanged).
-  return host.querySelector<HTMLElement>(selector);
+  if (!innermost) return host.querySelector<HTMLElement>(selector);
+  // focus-patterns-allow: element-scoped query on the row's own ref, as above.
+  return Array.from(host.querySelectorAll<HTMLElement>(selector)).find((el) => !el.querySelector(selector)) ?? null;
 }
 
 /**
@@ -124,7 +128,7 @@ export function useOllamaTabFocus() {
    */
   const findConnectionTestBtn = useCallback((): HTMLElement | null => connectionTestBtnRef.current, []);
   /* Where AI runs' first control (Run AI on this Deck), for Down from its line. */
-  const findWhereFirst = useCallback(() => firstStopIn(whereBodyRef.current, "[tabindex], button:not([disabled]), input"), []);
+  const findWhereFirst = useCallback(() => firstStopIn(whereBodyRef.current, "[tabindex], button:not([disabled]), input", true), []);
   const findCustomTimeoutsToggle = useCallback(() => firstStopIn(customTimeoutsHostRef.current, ANY_STOP), []);
   const findModelsBtn = useCallback((): HTMLElement | null => modelsBtnRef.current, []);
 

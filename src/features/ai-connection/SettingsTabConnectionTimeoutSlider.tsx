@@ -41,6 +41,7 @@ import {
 } from "./deckSliderMath";
 import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
 import { textPx } from "../../styles/textPx";
+import { leftActedInPlace, leftAtEdge } from "../../shared/dpad/leftEdge";
 
 export type SettingsTabConnectionTimeoutSliderProps = {
   warningSec: number;
@@ -174,6 +175,10 @@ export function SettingsTabConnectionTimeoutSlider(props: SettingsTabConnectionT
   const handleThumbDirection = useCallback(
     (thumb: ThumbKind, dir: "left" | "right"): boolean => {
       if (editingThumb === thumb) {
+        /* At its least value a step moves nothing: a dead end, whose third Left goes to Steam's menu (leftEdge.ts). */
+        const atLeast = thumb === "warning" ? warningSec <= MIN_LATENCY_WARNING_SECONDS : timeoutSec <= MIN_REQUEST_TIMEOUT_SECONDS;
+        if (dir === "left" && atLeast) return leftAtEdge("timeout-slider");
+        if (dir === "left") leftActedInPlace();
         const delta =
           thumb === "warning"
             ? LATENCY_WARNING_STEP_SECONDS * (dir === "right" ? 1 : -1)
@@ -190,6 +195,8 @@ export function SettingsTabConnectionTimeoutSlider(props: SettingsTabConnectionT
         focusThumb("warning");
         return true;
       }
+      /* Left on the warning knob, the track's left end: a dead end (leftEdge.ts, plan 105). */
+      if (dir === "left") return leftAtEdge("timeout-slider");
       return true;
     },
     [applyTimeout, applyWarning, editingThumb, focusThumb, timeoutSec, warningSec],

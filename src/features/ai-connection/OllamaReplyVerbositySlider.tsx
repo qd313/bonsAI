@@ -85,7 +85,12 @@ export function OllamaReplyVerbositySlider(props: OllamaReplyVerbositySliderProp
       thumbHostRef={thumbHostRef}
       thumbHostProps={{ "data-bonsai-reply-verbosity-thumb": "1" }}
       onSelectClientX={selectClientX}
-      onStepLeft={() => applyIndex(Math.max(0, index - 1))}
+      onStepLeft={() => {
+        /* At the first stop nothing moves: the slider's Left is then a dead end (leftEdge.ts, plan 105). */
+        if (index <= 0) return false;
+        applyIndex(index - 1);
+        return true;
+      }}
       onStepRight={() => applyIndex(Math.min(maxIdx, index + 1))}
       onMoveUp={onMoveUp}
       onMoveDown={onMoveDown}

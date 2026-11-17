@@ -31,9 +31,12 @@
  *    jumps the thumb straight there.
  * 3. The thumb's D-pad handlers are built once by `buildDeckThumbNavHandlers()`,
  *    which turns `onStepLeft`/`onStepRight` into Left/Right presses that
- *    always claim the move, and passes `onMoveUp`/`onMoveDown` straight
+ *    claim the move, and passes `onMoveUp`/`onMoveDown` straight
  *    through so a parent section can bridge the slider into its own
- *    vertical flow.
+ *    vertical flow. A Left that steps the value never counts towards
+ *    leaving; at the first stop (`onStepLeft` says false) Left is a dead
+ *    end, so the third Left in a row there goes to Steam's menu
+ *    (leftEdge.ts, plan 105).
  * 4. `DeckFocusSliderThumb()` wraps the visible dot in its own Focusable,
  *    tracks whether it is focused, dragging, or being edited, and forwards
  *    pointer drags on the dot itself back through `onPointerSelect` — the
@@ -49,6 +52,7 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
 import { textPx } from "../../styles/textPx";
+import { leftActedInPlace, leftAtEdge } from "../../shared/dpad/leftEdge";
 
 export type DeckSliderThumbVisualState = {
   focused: boolean;
@@ -57,7 +61,8 @@ export type DeckSliderThumbVisualState = {
 };
 
 export type DeckFocusSliderThumbNavProps = {
-  onMoveLeft: () => boolean | void;
+  /** Handed Steam's press when Steam passes one (leftEdge.ts reads its repeat mark). */
+  onMoveLeft: (evt?: unknown) => boolean | void;
   onMoveRight: () => boolean | void;
   onMoveUp?: () => boolean | void;
   onMoveDown?: () => boolean | void;
@@ -90,7 +95,7 @@ export function buildDeckThumbNavHandlers(nav: DeckFocusSliderThumbNavProps): Re
   return {
     onMoveUp: () => nav.onMoveUp?.() ?? false,
     onMoveDown: () => nav.onMoveDown?.() ?? false,
-    onMoveLeft: () => nav.onMoveLeft() ?? true,
+    onMoveLeft: (evt?: unknown) => nav.onMoveLeft(evt) ?? true,
     onMoveRight: () => nav.onMoveRight() ?? true,
   };
 }
@@ -243,7 +248,8 @@ export type DeckFocusSliderProps = {
   thumbHostRef?: React.Ref<HTMLDivElement>;
   thumbHostProps?: React.HTMLAttributes<HTMLDivElement> & Record<string, unknown>;
   onSelectClientX: (clientX: number) => void;
-  onStepLeft: () => void;
+  /** One stop left; false when the knob is already at its first stop and nothing moved. */
+  onStepLeft: () => boolean | void;
   onStepRight: () => void;
   onMoveUp?: () => boolean;
   onMoveDown?: () => boolean;
@@ -362,8 +368,9 @@ export function DeckFocusSlider(props: DeckFocusSliderProps) {
 
   const thumbNav = useMemo(
     (): DeckFocusSliderThumbNavProps => ({
-      onMoveLeft: () => {
-        onStepLeft();
+      onMoveLeft: (evt?: unknown) => {
+        if (onStepLeft() === false) return leftAtEdge("slider", evt);
+        leftActedInPlace();
         return true;
       },
       onMoveRight: () => {

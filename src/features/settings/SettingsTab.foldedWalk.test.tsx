@@ -39,6 +39,7 @@ import { walkFoldedTab, type FoldedLanding } from "../../test-harness/foldedTabW
 import { paintedFrom, worstFoldAllCover } from "../../test-harness/foldAllCover";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 import type { SteamFocusScroll } from "../../test-harness/tabBodyWalk";
+import { leftsDownWalk, steamRingWorld } from "../../test-harness/steamLeftPress";
 
 const DECK_PANE = 430;
 const MONITOR_PANE = 741;
@@ -288,3 +289,16 @@ describe("the floating Open all button on the Settings tab", () => {
 });
 
 export {};
+
+/* Plan 105, lane C5 (row P105-LEFT-TO-MENU-01): the Settings tab holds Left nowhere, so nothing here changed. */
+describe("Left at every stop of the Settings tab", () => {
+  it.each(RULES)("Steam's rule %s: walking Down with every section open, every stop moves the ring or lets Left out to Steam's menu at once, as the Deck measured", (steam) => {
+    openAllSettingsSections();
+    const w = walk(DECK_PANE, steam);
+    const outcomes = leftsDownWalk(w, steamRingWorld);
+    const said = outcomes.map(([n, o]) => `${n}: ${o.join(" ")}`).join("\n");
+    expect(outcomes.length, said).toBeGreaterThan(8);
+    for (const [, o] of outcomes) expect(["moved", "out"], said).toContain(o.join(" "));
+    w.unmount();
+  });
+});

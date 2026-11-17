@@ -24,7 +24,7 @@ import {
   GAME, LINE, NOW, activate, focusOn, lineEl, nameOf, openEarlier, press, renderChat, seconds, steamScroll, turn,
   type ScrollRule,
 } from "../../../test-harness/earlierListTestKit";
-import { DIR_RIGHT, hearPress, pressLeft, type LeftResult } from "../../../test-harness/steamLeftPress";
+import { DIR_RIGHT, hearPress, leftsAt, pressLeft, type LeftResult } from "../../../test-harness/steamLeftPress";
 
 vi.mock("@decky/ui", async () => (await import("../../../test-harness/earlierListNavStub")).deckyUiWithNavNodes());
 
@@ -51,19 +51,10 @@ const world = {
   move: (el: HTMLElement) => el.focus(),
 };
 
-/** Up to `n` Lefts as Steam delivers them, stopping once one moves the ring; then the ring goes back where it was. */
-function leftsAt(stop: HTMLElement, stamp: () => void, n = 3, repeat = false): LeftResult[] {
-  const out: LeftResult[] = [];
-  for (let i = 0; i < n; i++) {
-    let r: LeftResult = "held";
-    act(() => {
-      r = pressLeft(world, repeat && i > 0).result;
-    });
-    stamp();
-    out.push(r);
-    if (r !== "held") break;
-  }
-  act(() => stop.focus());
+/** Lefts at `stop` until the ring moves or leaves, then back on `stop` (steamLeftPress.ts); Decky's tabindex after. */
+function leftsHere(stop: HTMLElement, stamp: () => void): LeftResult[] {
+  const out = leftsAt(stop, world);
+  stamp();
   return out;
 }
 const top = (container: HTMLElement) => container.querySelector<HTMLElement>(LINE)!;
@@ -88,7 +79,7 @@ describe("the \"N earlier\" line", () => {
   it("about one game: two Lefts hold and the third reaches Steam's menu", () => {
     const { container, stamp } = renderChat({}, ONE_GAME, null);
     focusOn(top(container));
-    expect(leftsAt(top(container), stamp)).toEqual(DEAD_END);
+    expect(leftsHere(top(container), stamp)).toEqual(DEAD_END);
   });
 
   it("about two games: the first and second Left flip the list, which ends as it was, and the third reaches Steam's menu", () => {
@@ -109,13 +100,16 @@ describe("the \"N earlier\" line", () => {
     expect(third).toBe("out");
     expect(topWords(container)).toContain("by day");
     act(() => line.focus());
-    expect(leftsAt(line, stamp)).toEqual(DEAD_END);
+    expect(leftsHere(line, stamp)).toEqual(DEAD_END);
   });
 
   it("a Left held down flips once and never leaves", () => {
     const { container, stamp } = renderChat({}, MIXED, null);
     focusOn(top(container));
-    expect(leftsAt(top(container), stamp, 20, true)).toEqual(Array(20).fill("held"));
+    const out: LeftResult[] = [];
+    for (let i = 0; i < 20; i++) act(() => void out.push(pressLeft(world, i > 0).result));
+    stamp();
+    expect(out).toEqual(Array(20).fill("held"));
     expect(topWords(container)).toContain("by game");
   });
 
@@ -144,13 +138,13 @@ describe("an open day", () => {
     stamp();
     const day = lineEl(container, DAY);
     focusOn(day);
-    expect(leftsAt(day, stamp)).toEqual(DEAD_END);
+    expect(leftsHere(day, stamp)).toEqual(DEAD_END);
     const all = gameButton(container, "All");
     focusOn(all);
-    expect(leftsAt(all, stamp)).toEqual(DEAD_END);
+    expect(leftsHere(all, stamp)).toEqual(DEAD_END);
     const hades = gameButton(container, "Hades");
     focusOn(hades);
-    expect(leftsAt(hades, stamp)).toEqual(["moved"]);
+    expect(leftsHere(hades, stamp)).toEqual(["moved"]);
   });
 });
 
@@ -170,7 +164,7 @@ describe("a bounded Up walk from the newest answer to the top, with Steam's own 
       const here = world.ring()!;
       expect(visited.has(here), `${nameOf(here)} visited twice`).toBe(false);
       visited.add(here);
-      outcomes.push([nameOf(here), leftsAt(here, stamp).join(" ")]);
+      outcomes.push([nameOf(here), leftsHere(here, stamp).join(" ")]);
       if (!press(container, "Up", scroll.after) || world.ring() === here) break;
     }
     const said = outcomes.map(([n, o]) => `${n}: ${o}`).join("\n");

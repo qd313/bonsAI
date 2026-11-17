@@ -12,11 +12,14 @@
  *          the button, A opens every section (it reads Close all), Up returns to Reply style. Closed, the tab is
  *          under one screen of the Deck's own (430 points); with the first section opened, which is how a tab
  *          now starts (plan 105, lane C1), under one and a half.
+ *          And Left at every stop (plan 105, lane C5): each moves the ring inside bonsAI or reaches Steam's menu; a
+ *          slider steps to its first stop first, and there two Lefts hold and the third goes out.
  * Used for: OllamaTab.tsx and the folded-tabs pieces (src/features/folded-tabs/).
  * Does not: Know the Deck's real heights: foldedTabWalk.tsx lays the stops out by a flow model, and the Deck
  *           walk measures the truth.
  */
 import { act, cleanup } from "@testing-library/react";
+import { useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@decky/ui", async () => {
@@ -40,6 +43,7 @@ import { walkFoldedTab, type FoldedLanding } from "../../test-harness/foldedTabW
 import { paintedFrom, worstFoldAllCover } from "../../test-harness/foldAllCover";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 import type { SteamFocusScroll } from "../../test-harness/tabBodyWalk";
+import { leftsDownWalk, steamRingWorld } from "../../test-harness/steamLeftPress";
 import type { ReplyVerbosityId } from "../settings/replyVerbosity";
 import { ragCorpusStatusFixture, resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 
@@ -225,7 +229,8 @@ describe("the Reply style slider's four stops, Terse first (plan 93)", () => {
       act(() => putSteamRingOn(knob));
       act(() => void knob.__nav?.onMoveRight?.());
       act(() => void knob.__nav?.onMoveLeft?.());
-      expect(picked, order[i]).toEqual([order[Math.min(3, i + 1)], order[Math.max(0, i - 1)]]);
+      /* At Terse, the first stop, Left steps nothing and so reports nothing: it is a dead end there (plan 105, lane C5). */
+      expect(picked, order[i]).toEqual(i === 0 ? [order[1]] : [order[Math.min(3, i + 1)], order[i - 1]]);
       w.unmount();
     }
   });
@@ -373,4 +378,58 @@ describe("the Knowledge base section with lowered notes (plan 100)", () => {
     ]);
     w.unmount();
   });
+});
+
+/* ---- Left out to Steam's menu (plan 105, lane C5, row P105-LEFT-TO-MENU-01) ---- */
+/** The Ollama tab with its three sliders holding their own values, as the plugin's settings do. */
+function LiveSliders(o: Partial<OllamaTabProps>) {
+  const [replyVerbosity, setReplyVerbosity] = useState<ReplyVerbosityId>("balanced");
+  const [ollamaKeepAlive, setOllamaKeepAlive] = useState<OllamaTabProps["ollamaKeepAlive"]>("5m");
+  return (
+    <OllamaTab
+      {...props()}
+      {...o}
+      replyVerbosity={replyVerbosity}
+      setReplyVerbosity={setReplyVerbosity}
+      ollamaKeepAlive={ollamaKeepAlive}
+      setOllamaKeepAlive={setOllamaKeepAlive}
+    />
+  );
+}
+
+describe("Left out to Steam's menu at every stop of the Ollama tab (plan 105, lane C5)", () => {
+  for (const steam of RULES) {
+    it(`Steam's rule "${steam}": walking Down with every section open, no stop twice, every stop moves the ring or reaches Steam's menu; a slider steps to its first stop first, then two Lefts hold and the third goes out`, () => {
+      setAllSections(OLLAMA_FOLD_TAB, SECTION_IDS, true);
+      const w = walkFoldedTab({
+        tabId: OLLAMA_FOLD_TAB,
+        tab: <LiveSliders latencyTimeoutsCustomEnabled />,
+        viewport: DECK_PANE,
+        steam,
+        stripHeight: stripHeightFor,
+        tail: TAIL,
+      });
+      const knob = (stop: HTMLElement, name: string) =>
+        stop.closest("[data-bonsai-reply-verbosity-thumb]") ? "Reply style knob" : stop.closest("[data-bonsai-ollama-keepalive-thumb]") ? "Keep loaded knob" : name;
+      /* Room for Keep models loaded to step down all its stops before its two holds. */
+      const outcomes = leftsDownWalk(w, steamRingWorld, 16, knob);
+      const said = outcomes.map(([n, o]) => `${n}: ${o.join(" ")}`).join("\n");
+      expect(outcomes.length, said).toBeGreaterThanOrEqual(18);
+      for (const [name, o] of outcomes) {
+        const last = o[o.length - 1];
+        expect(["moved", "out"], `${name} never let the ring go:\n${said}`).toContain(last);
+        if (last === "out" && o.length > 1) expect(o.slice(-3), `${name}:\n${said}`).toEqual(["held", "held", "out"]);
+      }
+      const of = (name: string) => outcomes.find(([n]) => n === name)?.[1].join(" ");
+      /* Balanced, then Caveman, then Terse (two steps that do not count), then two holds and out. */
+      expect(of("Reply style knob"), said).toBe("held held held held out");
+      expect(of("Keep loaded knob"), said).toMatch(/^(held )*held held out$/);
+      /* The wait knob of Timeouts, not being edited: the track's left end, a dead end. */
+      expect(of("Timeouts"), said).toBe("held held out");
+      /* Section lines are Steam's own, out on the first Left, as the Deck measured; Close all goes back to its line. */
+      expect(outcomes.filter(([n]) => / section(: |$)/.test(n)).every(([, o]) => o.join(" ") === "out"), said).toBe(true);
+      expect(of("Close all sections"), said).toBe("moved");
+      w.unmount();
+    });
+  }
 });

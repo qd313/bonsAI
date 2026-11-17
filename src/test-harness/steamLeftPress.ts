@@ -9,15 +9,22 @@
  *          (`flow-children="horizontal"`) and, at a left edge, out to Steam's menu.
  * Used for: the Left-out tests of the ask strip, the chat, the folded tabs and the Search tab. Works with every
  *           harness that keeps Steam's move handlers on the element as `__nav` (steamRing.tsx, lostFocusPanel.tsx,
- *           searchTabTestKit.tsx, earlierListNavStub.tsx).
+ *           searchTabTestKit.tsx, earlierListNavStub.tsx). `leftsAt` presses at one stop of a walk until the ring
+ *           moves or leaves, and puts it back, so a walk can go on; `leftsDownWalk` does that at every stop of a
+ *           folded tab's walk (foldedTabWalk.tsx) with `steamRingWorld`.
  * Does not: Hand the move handler any press of its own: on the Deck it is not known whether Steam does, so the
  *           counter must work from the press heard at the page alone (leftEdge.ts). Does not walk Steam's
  *           spatial search beyond a row: the menu stands for everything outside the plugin.
  */
 
+import { act } from "@testing-library/react";
+
+import { putSteamRingOn } from "./steamRing";
+
 /** Steam's button numbers (`@decky/ui`, `GamepadButton`). */
 export const DIR_LEFT = 11;
 export const DIR_RIGHT = 12;
+export const DIR_DOWN = 10;
 
 type NavEl = HTMLElement & { __nav?: Record<string, ((e?: unknown) => unknown) | undefined> };
 
@@ -92,4 +99,60 @@ export function pressLeft(world: SteamLeftWorld, repeat = false): { result: Left
   const at = ring !== from ? ring : focus !== active && focus !== doc.body ? focus : from;
   if (at && at.hasAttribute("data-steam-menu")) return { result: "out", at };
   return { result: at === from ? "held" : "moved", at };
+}
+
+/**
+ * Lefts at `stop` as Steam delivers them, until one moves the ring or puts it on Steam's menu, at most `cap`; the
+ * press that brought the ring here (a Down) is heard first, as on the Deck, and the ring is put back on `stop` after,
+ * so a walk can go on from it. Every press runs inside React's `act`.
+ */
+export function leftsAt(stop: HTMLElement, world: SteamLeftWorld, cap = 8): LeftResult[] {
+  act(() => world.move(stop));
+  hearPress(stop, DIR_DOWN);
+  const out: LeftResult[] = [];
+  for (let i = 0; i < cap && out[out.length - 1] !== "moved" && out[out.length - 1] !== "out"; i++) {
+    let r: LeftResult = "held";
+    act(() => {
+      r = pressLeft(world).result;
+    });
+    out.push(r);
+  }
+  act(() => world.move(stop));
+  return out;
+}
+
+/** Steam's ring as steamRing.tsx models it in a walk: the page's focus, moved by Steam's own move or transfer. */
+export const steamRingWorld: SteamLeftWorld = {
+  ring: () => {
+    // focus-patterns-allow: the walk moves the page's focus as Steam's ring.
+    const el = document.activeElement as HTMLElement | null;
+    return el && el !== document.body ? el : null;
+  },
+  move: (el) => putSteamRingOn(el),
+};
+
+/** The two calls of a walk this needs (foldedTabWalk.tsx's). */
+interface DownWalk {
+  enter(): { stop: HTMLElement; name: string };
+  press(direction: "down"): { stop: HTMLElement; name: string } | null;
+}
+
+/**
+ * Down a walk from its first stop to its end, with `leftsAt` at every stop: each stop's name (or `nameOf`'s) and its
+ * Lefts, in order. Throws on a stop the walk lands on twice.
+ */
+export function leftsDownWalk(
+  w: DownWalk,
+  world: SteamLeftWorld,
+  cap = 8,
+  nameOf: (stop: HTMLElement, name: string) => string = (_s, n) => n,
+): Array<[string, LeftResult[]]> {
+  const seen = new Set<HTMLElement>();
+  const out: Array<[string, LeftResult[]]> = [];
+  for (let l: { stop: HTMLElement; name: string } | null = w.enter(); l; l = w.press("down")) {
+    if (seen.has(l.stop)) throw new Error(`the walk landed on ${l.name} twice`);
+    seen.add(l.stop);
+    out.push([nameOf(l.stop, l.name), leftsAt(l.stop, world, cap)]);
+  }
+  return out;
 }

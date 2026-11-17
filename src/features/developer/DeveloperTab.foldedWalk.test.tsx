@@ -38,6 +38,7 @@ import { walkFoldedTab, type FoldedLanding } from "../../test-harness/foldedTabW
 import { paintedFrom, worstFoldAllCover } from "../../test-harness/foldAllCover";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 import type { SteamFocusScroll } from "../../test-harness/tabBodyWalk";
+import { leftsDownWalk, steamRingWorld } from "../../test-harness/steamLeftPress";
 
 const noop = () => {};
 const DECK_PANE = 430;
@@ -364,3 +365,16 @@ describe("the floating Open all button on the Developer tab", () => {
 });
 
 export {};
+
+/* Plan 105, lane C5 (row P105-LEFT-TO-MENU-01): the Developer tab holds Left nowhere, so nothing here changed. */
+describe("Left at every stop of the Developer tab", () => {
+  it.each(RULES)("Steam's rule %s: walking Down with every section open, every stop moves the ring or lets Left out to Steam's menu at once, as the Deck measured", (steam) => {
+    setAllSections(DEVELOPER_FOLD_TAB, SECTION_IDS, true);
+    const w = walk(DECK_PANE, steam);
+    const outcomes = leftsDownWalk(w, steamRingWorld);
+    const said = outcomes.map(([n, o]) => `${n}: ${o.join(" ")}`).join("\n");
+    expect(outcomes.length, said).toBeGreaterThan(8);
+    for (const [, o] of outcomes) expect(["moved", "out"], said).toContain(o.join(" "));
+    w.unmount();
+  });
+});

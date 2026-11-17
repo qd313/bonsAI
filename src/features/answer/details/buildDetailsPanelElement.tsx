@@ -1,40 +1,32 @@
 /**
  * Title: The Show details panel
  *
- * Purpose: Builds the panel a turn's "Show details" line opens (plan 62 3c) — on the newest turn,
- * the "This answer / Session · N" tabs row plus whichever tab's own body is active; on any older,
- * hand-expanded turn, today's bare chip ladder with no tabs.
+ * Purpose: Builds the panel a turn's "Show details" line opens: the chip ladder, and on the newest turn its last
+ * chip, the dashed Session chip, whose box is the chat's Session view (plan 105; until then a "This answer /
+ * Session · N" tabs row sat above the chips, plan 62 3c). On any older, hand-expanded turn, the bare ladder.
  *
  * Used for: MainTabChatTranscript, once per turn while that turn's details panel is open.
  *
  * Solves: A plain function, not a component (like `buildKbNotesBlockElement` and
  * `buildReplyActionsElement`, and for the same reason: a test can call it directly and read the
  * returned element's own props, rather than rendering the whole transcript and hunting through a
- * mocked `Focusable` tree for one row). Keeps the tabs row's own small per-turn focus registry and
- * the chip ladder's own registry together with the one function that draws both of them.
+ * mocked `Focusable` tree for one row). Keeps the chip ladder's own per-turn registry together with
+ * the one function that draws it.
  *
  * Does not: Decide whether a turn's transparency snapshot has anything to show — the caller only
  * calls this while `transparencyUiAvailable` says yes. See `buildDetailsPanelElement`'s own leading
  * comment below for the focus graph.
  */
 import React from "react";
-import { Focusable } from "@decky/ui";
 import { findScrollablePanel, revealBelowKeeping } from "../../../shared/dpad/chatPanelScroll";
 import { uiGamepadFocusElement } from "../../../shared/dpad/uiDocument";
-import { focusPerTurnRow, registerRowNav } from "../../../shared/dpad/focusPerTurnRow";
+import { focusPerTurnRow } from "../../../shared/dpad/focusPerTurnRow";
 import { focusKbNotesBlock } from "../../knowledge-library/buildKbNotesBlockElement";
 import { focusChatPermissionHintRow } from "../../../shared/dpad/chatTranscriptNavHelpers";
-import { takeNavFocus, type NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
+import { takeNavFocus } from "../../../shared/dpad/navFocusRegistry";
 import { getReplyStop } from "../../../shared/dpad/replyStopRegistry";
 import { takeChipSlotFocus } from "./detailsSlotStore";
 import {
-  isDeckDirectionDownEvent,
-  isDeckDirectionLeftEvent,
-  isDeckDirectionRightEvent,
-  isDeckDirectionUpEvent,
-} from "../../../shared/dpad/focusNavigation";
-import {
-  focusContextChipLadder,
   focusReplyShowDetails,
   focusReplyUtilityRow,
   focusSessionContextStrip,
@@ -56,48 +48,17 @@ import type {
 import type { CreditsView } from "./contextChipsFromSnapshot";
 
 /**
- * The newest turn's own "This answer / Session · N" tabs row (plan 62 3c), one per turn key —
- * same shape as the KB notes block's own registry (buildKbNotesBlockElement.tsx) and for the same
- * reason: this row is a sibling of Show details, the KB notes block and the ladder/session body
- * inside one turn's own Focusable container, so a plain `.focus()` carries Steam's ring correctly
- * between them while the panel's page holds the browser's focus (AGENTS.md, "The Steam Deck focus
- * graph"); the row's own nav node below covers the page without it. Only the newest
- * turn ever mounts one, so at most one entry is ever live at a time in practice, but keyed by turn
- * id anyway to match the pattern every other per-turn registry in this file already uses.
+ * The "This answer / Session · N" tabs row's way in (plan 62 3c). Plan 105 removed the row: Session is the
+ * ladder's last chip now, so there is never a row to land on and this always says no. It is kept only so the
+ * five Down chains in MainTabChatTranscript.tsx that ask for it first (each goes on to `focusChipLadderRow`,
+ * the chips) need no edit in a round where other lanes work in that file; remove it with those calls.
  */
-const detailsTabsRowEls = new Map<string, HTMLElement>();
-
-/**
- * The tabs row's own Steam nav node, by turn key: the notes line's way (buildKbNotesBlockElement.tsx). With the
- * panel's page out of the browser's focus the plain focus() above does not carry Steam's ring, so every way onto
- * the row ("Hide details", the notes line, Up from the chips) said "did not land" and the chain went on to the
- * suggestion chips past the open panel (plan 103 F1). With the node registered (`registerRowNav`) each of them
- * takes Steam's transfer first. The Deck never caught the page without focus here
- * (workshop:test-evidence/plan103-P103-M-DETAILS-STRIP.json); this is the path the code shows.
- */
-const detailsTabsRowNavs = new Map<string, NavRefHolder>();
-
-function detailsTabsRowNav(turnKey: string): NavRefHolder {
-  let holder = detailsTabsRowNavs.get(turnKey);
-  if (!holder) {
-    holder = { current: null };
-    detailsTabsRowNavs.set(turnKey, holder);
-  }
-  return holder;
-}
-
-function registerDetailsTabsRowEl(turnKey: string, el: HTMLElement | null): void {
-  if (el) detailsTabsRowEls.set(turnKey, el);
-  else detailsTabsRowEls.delete(turnKey);
-  registerRowNav(el, detailsTabsRowNav(turnKey));
-}
-
-export function focusDetailsTabsRow(turnKey: string): boolean {
-  return focusPerTurnRow(detailsTabsRowEls, turnKey);
+export function focusDetailsTabsRow(_turnKey: string): boolean {
+  return false;
 }
 
 /**
- * The chip ladder's own root, per turn, registered the same way the tabs row above is.
+ * The chip ladder's own root, per turn, registered by name.
  *
  * Why a registry rather than the existing `focusContextChipLadder` page query: measured on the
  * Deck 2026-09-21 (build 29ca207). With the details panel open on "This answer", Down from the
@@ -112,9 +73,10 @@ export function focusDetailsTabsRow(turnKey: string): boolean {
  * UNKNOWN case of that trade-off; this is the measurement, and the answer is yes.
  *
  * `focusPerTurnRow` is the fix because it is the one already proven on this device, in this
- * container, on the same night: the tabs row directly above is also a bare `.Panel.Focusable`, is
- * focused through this same helper, and took the ring correctly. Stamping our own component's root
- * is not the ancestor-climbing stamp that caused the 2026-09-04 damage.
+ * container, on the same night: the tabs row then drawn above (gone since plan 105) was also a bare
+ * `.Panel.Focusable`, focused through this same helper, and took the ring correctly. Stamping our own
+ * component's root is not the ancestor-climbing stamp that caused the 2026-09-04 damage. The root
+ * carries its own Steam stop (plan 103 F1), a transfer onto its open chip, the Session chip included.
  */
 const chipLadderEls = new Map<string, HTMLElement>();
 
@@ -129,7 +91,7 @@ export function focusChipLadderRow(turnKey: string): boolean {
 
 /**
  * B's one way out of an open Show details panel: shut it and hand the ring back to the Show
- * details line that opened it. The tabs row and the ladder below use it, and so does the "From
+ * details line that opened it. The ladder and the Session box use it, and so does the "From
  * the notes" block above the panel (plan 74 lane 3) -- a stop with no B of its own let the press
  * fall through to Steam's back-out, which threw the ring to the tab bar and left the panel open.
  */
@@ -201,35 +163,33 @@ function keepWhenOpened(panel: HTMLElement, querySlot: () => HTMLElement | null)
 }
 
 /**
- * Focus graph, written before the control existed per AGENTS.md ("The Steam Deck focus graph") and
- * design-language.md Rule 8:
+ * Focus graph (plan 105; docs/focus-graph.md, "The Show details chips grid"):
  *
- *   Hide details (the existing "show-details" reply stop, unchanged)
- *      | Down                                          ^ Up
- *   This answer | Session · N        <- new stop, only on the newest turn ("bonsai-details-tabs-row")
- *      | Down                                          ^ Up
- *   This answer tab: the chip ladder ("bonsai-chip-ladder"), one stop per chip since plan 79,
- *   Down off its last chip to what sits below the panel, the Session tab's way
- *   Session tab (plan 68): Sum up this chat, the summary card when there is one, then the turn row
- *   list and the active row's own chips (SessionContextTabBody; its own graph is drawn in
- *   SessionSumUpSection.tsx). No Clear.
- *      | Down off the Session tab's last chip (plan 72)
+ *   Hide details (the "show-details" reply stop), or the notes line under it when one is drawn
+ *      | Down                                          ^ Up (from the top row, or Left off the first chip)
+ *   the chips, in rows: this answer's own, then the dashed Session chip last ("bonsai-chip-ladder")
+ *      Left/Right step through them in drawn order, Up/Down cross a row; the open box follows the ring
+ *      | Down off the bottom row, from an answer chip        | Down, Right or A on the Session chip
+ *      | (after showing the rest of a tall box)               v
+ *      |                                  the Session box: Sum up this chat, the summary card, the chat's
+ *      |                                  questions and the open question's own chips (SessionContextTabBody;
+ *      |                                  its own graph is drawn in SessionSumUpSection.tsx). Up from Sum up
+ *      |                                  goes back to the Session chip.
+ *      v                                        | Down off the box's last stop
  *   a permission hint row below the chat, else the suggestion chips, else the question box --
  *   Steam's own transfer each time (`downPastPanel`), since all three sit outside this turn.
  *
- * - Only the newest turn (`isNewest`) ever renders the tabs row at all — an older, hand-expanded
- *   turn keeps today's shape, a bare ladder with no tabs, exactly as `SessionContextStrip`'s own
- *   file header already promises ("Older answers show the panel as it is today, with no tabs").
- * - The tabs row and the ladder's root each carry their own Steam stop (plan 103 F1), so every way onto
- *   them is Steam's transfer, which still moves the ring when the panel's page has lost the browser's
- *   focus; the ladder's stop lands on its open chip.
- * - Left/Right switch tabs; Up leaves to Show details (via the existing KB-notes-block-then-
- *   show-details chain every ladder already uses); Down enters whichever tab is active — the
- *   ladder for "This answer", the Sum up button for "Session" (registered, never a page search).
- * - B, from anywhere inside either tab's content, closes the whole panel and hands the ring back
- *   to the still-mounted Show details / Hide details line — not just the local re-collapse
- *   `ContextChipLadder` does on its own B press, which is why both the tabs row's own
- *   `onCancelButton` and the ladder's `onExpandChange` call the same `closePanel` below.
+ * - Only the newest turn (`isNewest`) carries the Session chip, so it never repeats down the chat; an
+ *   older, hand-expanded turn keeps the bare ladder.
+ * - The ladder's root carries its own Steam stop (plan 103 F1), a transfer onto its open chip, so every
+ *   way onto the chips (Down from Hide details, Up from Sum up, Up from below) is Steam's transfer, which
+ *   still moves the ring when the panel's page has lost the browser's focus.
+ * - Which box is open survives B then A: `detailsTab` is the transcript's ("session": the Session chip is
+ *   open), so A on the summed-up note can open the panel with it open.
+ * - B, from any chip or anywhere inside the Session box, closes the whole panel and hands the ring back
+ *   to the still-mounted Show details / Hide details line -- not just the local re-collapse
+ *   `ContextChipLadder` does on its own B press, which is why both the ladder's `onExpandChange` and
+ *   the Session box's `onRequestClose` call the same `closePanel` below.
  */
 export function buildDetailsPanelElement(args: {
   turnKey: string;
@@ -237,6 +197,7 @@ export function buildDetailsPanelElement(args: {
   snapshot: TransparencySnapshot | ChatSlotTurnTransparency | null;
   devDiagnostics: AskDiagnosticsSnapshot | null;
   isNewest: boolean;
+  /** Which box is open on the newest turn: an answer chip's ("answer") or the Session chip's ("session"). */
   detailsTab: "answer" | "session";
   setDetailsTab: (tab: "answer" | "session") => void;
   sessionLiveTurn: SessionContextTurn | null;
@@ -244,13 +205,13 @@ export function buildDetailsPanelElement(args: {
   sessionHighlightTurnId: string | null;
   setSessionHighlightTurnId: (id: string | null) => void;
   setTransparencyDetailsOpen: (open: boolean) => void;
-  /** Plan 68: the open chat's summary and the Sum up button's job, for the Session tab. */
+  /** Plan 68: the open chat's summary and the Sum up button's job, for the Session box. */
   sumUp?: ChatSumUpState | null;
   /** Plan 68: an answer is being written right now (the Sum up button is greyed out). */
   answerInFlight?: boolean;
   /**
    * How a turn's credit line treats a spoiler the rest of the screen hides (CreditsView,
-   * contextChipsFromSnapshot.ts) — asked per turn key, so the Session tab's rows answer for their
+   * contextChipsFromSnapshot.ts) — asked per turn key, so the Session box's rows answer for their
    * own turn. Absent: credits always show.
    */
   creditsViewFor?: (
@@ -292,7 +253,7 @@ export function buildDetailsPanelElement(args: {
 
   if (!isNewest) {
     /*
-     * Unchanged: an older, hand-expanded turn keeps today's bare ladder, no tabs.
+     * Unchanged: an older, hand-expanded turn keeps the bare ladder, no Session chip.
      *
      * `onMoveDownFromLadder` keeps the same shape it always had — try the standalone strip below —
      * even though plan 62 3c removed that strip: `focusSessionContextStrip()` (liveTurnFocusGraph.ts,
@@ -320,110 +281,53 @@ export function buildDetailsPanelElement(args: {
 
   const closePanel = () =>
     closeDetailsPanel({ setTransparencyDetailsOpen, setSessionHighlightTurnId, querySlot });
-  const focusFirstTabContent = () =>
-    detailsTab === "answer"
-      ? focusChipLadderRow(turnKey) || focusContextChipLadder(querySlot())
-      : focusSumUpButton();
+  /* The Session chip's box: the chat's Session view, drawn by the ladder under the grid while the chip is open. */
+  const sessionBox = (
+    <SessionContextTabBody
+      liveTurn={sessionLiveTurn}
+      archivedTurns={archivedTurns}
+      highlightTurnId={sessionHighlightTurnId}
+      onHighlightClear={() => setSessionHighlightTurnId(null)}
+      /* Up from Sum up: back onto the Session chip, by the ladder's own stop (a transfer onto its open chip). */
+      onMoveUpFromTop={() => focusChipLadderRow(turnKey) || upPastPanel()}
+      onRequestClose={closePanel}
+      onMoveDownPastTab={downPastPanel}
+      sumUp={sumUp}
+      answerInFlight={answerInFlight}
+      creditsViewFor={creditsViewFor}
+    />
+  );
 
   return (
-    <>
-      <Focusable
-        className="bonsai-details-tabs-row"
-        flow-children="horizontal"
-        ref={(el: HTMLElement | null) => {
-          registerDetailsTabsRowEl(turnKey, el);
-          revealWhenOpened(el?.parentElement ?? null, querySlot);
-        }}
-        {...({
-          navRef: detailsTabsRowNav(turnKey),
-          onMoveUp: upPastPanel,
-          onMoveDown: focusFirstTabContent,
-          onMoveLeft: () => {
-            if (detailsTab !== "session") return false;
-            setDetailsTab("answer");
-            return true;
-          },
-          onMoveRight: () => {
-            if (detailsTab !== "answer") return false;
-            setDetailsTab("session");
-            return true;
-          },
-          onButtonDown: (evt: unknown) => {
-            if (isDeckDirectionUpEvent(evt)) return upPastPanel();
-            if (isDeckDirectionDownEvent(evt)) return focusFirstTabContent();
-            if (isDeckDirectionLeftEvent(evt) && detailsTab === "session") {
-              setDetailsTab("answer");
-              return true;
-            }
-            if (isDeckDirectionRightEvent(evt) && detailsTab === "answer") {
-              setDetailsTab("session");
-              return true;
-            }
-            return false;
-          },
-          /*
-           * B closes the whole panel. `onCancelButton` + `preventDefault`, not `onButtonDown`
-           * checking the button code: measured on device 2026-08-28 (GlossaryTermChip.tsx,
-           * buildReasoningFoldElement.tsx) that `onButtonDown` does receive B, but returning
-           * `true` from it does NOT stop Steam also backing the ring out of the panel — only
-           * `onCancelButton` genuinely consumes the press. Safe to attach unconditionally: this
-           * row only exists while Show details is open, so there is no "closed" state of this
-           * same node where B ought to fall through instead.
-           */
-          onCancelButton: (evt: unknown) => {
-            closePanel();
-            (evt as { preventDefault?: () => void })?.preventDefault?.();
-          },
-        } as Record<string, unknown>)}
-        style={{ display: "flex", flexDirection: "row", width: "100%", gap: 4, marginTop: 8 }}
-      >
-        <span
-          className={`bonsai-details-tab${detailsTab === "answer" ? " bonsai-details-tab--active" : ""}`}
-          onClick={() => setDetailsTab("answer")}
-        >
-          This answer
-        </span>
-        <span
-          className={`bonsai-details-tab${detailsTab === "session" ? " bonsai-details-tab--active" : ""}`}
-          onClick={() => setDetailsTab("session")}
-        >
-          {`Session · ${sessionRowCount}`}
-        </span>
-      </Focusable>
-      {detailsTab === "answer" ? (
-        <ContextChipLadder
-          snapshot={snapshot}
-          collapsedHint={false}
-          rootRef={(el) => registerChipLadderEl(turnKey, el)}
-          onMoveUpFromLadder={() => focusDetailsTabsRow(turnKey) || upPastPanel()}
-          /*
-           * Down off the last chip leaves the panel by name, the Session tab's way (plan 72). It
-           * used to fall through to Steam's own guess, which found the suggestion chips from the
-           * ladder as a whole; since plan 79 the ring is on one chip nested inside the ladder, so
-           * the guess would start from somewhere else. `focusSessionContextStrip()` stays first
-           * for the older-turn branch's reason above: it safely reports false.
-           */
-          onMoveDownFromLadder={() => focusSessionContextStrip() || downPastPanel()}
-          devDiagnostics={devDiagnostics}
-          creditsView={creditsView}
-          onExpandChange={(expanded) => {
-            if (!expanded) closePanel();
-          }}
-        />
-      ) : (
-        <SessionContextTabBody
-          liveTurn={sessionLiveTurn}
-          archivedTurns={archivedTurns}
-          highlightTurnId={sessionHighlightTurnId}
-          onHighlightClear={() => setSessionHighlightTurnId(null)}
-          onMoveUpFromTop={() => focusDetailsTabsRow(turnKey) || upPastPanel()}
-          onRequestClose={closePanel}
-          onMoveDownPastTab={downPastPanel}
-          sumUp={sumUp}
-          answerInFlight={answerInFlight}
-          creditsViewFor={creditsViewFor}
-        />
-      )}
-    </>
+    <ContextChipLadder
+      snapshot={snapshot}
+      collapsedHint={false}
+      rootRef={(el) => {
+        registerChipLadderEl(turnKey, el);
+        revealWhenOpened(el?.parentElement ?? null, querySlot);
+      }}
+      /* Up off the top row: Hide details, or the notes line under it (no tabs row between since plan 105). */
+      onMoveUpFromLadder={upPastPanel}
+      /*
+       * Down off the bottom row leaves the panel by name, the Session box's way (plan 72). It used to
+       * fall through to Steam's own guess, which found the suggestion chips from the ladder as a whole;
+       * since plan 79 the ring is on one chip nested inside the ladder, so the guess would start from
+       * somewhere else. `focusSessionContextStrip()` stays first for the older-turn branch's reason
+       * above: it safely reports false.
+       */
+      onMoveDownFromLadder={() => focusSessionContextStrip() || downPastPanel()}
+      devDiagnostics={devDiagnostics}
+      creditsView={creditsView}
+      onExpandChange={(expanded) => {
+        if (!expanded) closePanel();
+      }}
+      session={{
+        label: `Session · ${sessionRowCount}`,
+        open: detailsTab === "session",
+        onOpenChange: (open) => setDetailsTab(open ? "session" : "answer"),
+        box: sessionBox,
+        enter: focusSumUpButton,
+      }}
+    />
   );
 }

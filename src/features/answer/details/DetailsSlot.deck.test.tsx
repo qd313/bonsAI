@@ -83,8 +83,8 @@ const HEADER: Box = [100, 130];
 const SECTIONS: Box[] = [[140, 320], [328, 508], [516, 696]];
 const RATING: Box = [704, 736];
 const LINE: Box = [744, 759];
-const TABS: Box = [767, 800];
-const LADDER: Box = [808, 1100];
+/* The panel's chips and their box, under the line (the "This answer | Session" row above them went in plan 105). */
+const LADDER: Box = [767, 1100];
 /** The slot's two faces share the chip's height (read from the chip, never typed here as a number). */
 const SLOT_FACE: Box = [DOCK_TOP, DOCK_TOP + PRESET_CHIP_HEIGHT_PX];
 const ASK_BAR: Box = [DOCK_TOP + PRESET_CHIP_HEIGHT_PX + 2, PANE_BOTTOM];
@@ -97,7 +97,7 @@ function rect(top: number, bottom: number): DOMRect {
   return { top, bottom, left: 0, right: 300, width: 300, height: bottom - top, x: 0, y: top, toJSON: () => ({}) } as DOMRect;
 }
 function panelOpen(): boolean {
-  return Boolean(pane.querySelector(".bonsai-details-tabs-row"));
+  return Boolean(pane.querySelector(".bonsai-chip-ladder"));
 }
 /** The box the Deck would give `el`: fixed in the dock, scrolling everywhere else. */
 function screenBox(el: Element): Box {
@@ -112,7 +112,6 @@ function screenBox(el: Element): Box {
 }
 function pageBox(el: Element): Box {
   if (el.closest(".bonsai-chat-details-divider")) return LINE;
-  if (el.closest(".bonsai-details-tabs-row")) return TABS;
   if (el.closest(".bonsai-chip-ladder")) return LADDER;
   const stop = el.closest(".bonsai-answer-stop");
   if (stop) {
@@ -475,10 +474,10 @@ describe("A, B and Hide details ↑ on the slot's line", () => {
       expect(hoisted.transfers.map(nameOf)).toContain("real line");
       expect(nameOf(ring())).toBe("real line");
       // The details opened in the chat, right under the real line, not in the dock.
-      const tabs = pane.querySelector(".bonsai-details-tabs-row");
-      expect(tabs).not.toBeNull();
-      expect(tabs!.closest(".bonsai-main-tab-dock")).toBeNull();
-      expect(realLine().compareDocumentPosition(tabs!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      const chips = pane.querySelector(".bonsai-chip-ladder");
+      expect(chips).not.toBeNull();
+      expect(chips!.closest(".bonsai-main-tab-dock")).toBeNull();
+      expect(realLine().compareDocumentPosition(chips!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
       expect(realLine().textContent).toContain("Hide details ↑");
       // The real line sits 8 px below the top of the reading area.
       expect(realLine().getBoundingClientRect().top).toBe(PANE_TOP + 8);
@@ -494,9 +493,9 @@ describe("A, B and Hide details ↑ on the slot's line", () => {
     focusQuestionBox();
     press("onMoveUp");
     press("onOKButton");
-    expect(pane.querySelector(".bonsai-details-tabs-row")).not.toBeNull();
+    expect(pane.querySelector(".bonsai-chip-ladder")).not.toBeNull();
     press("onCancelButton");
-    expect(pane.querySelector(".bonsai-details-tabs-row")).toBeNull();
+    expect(pane.querySelector(".bonsai-chip-ladder")).toBeNull();
     expect(nameOf(ring())).toBe("real line");
   });
 
@@ -519,7 +518,7 @@ describe("A, B and Hide details ↑ on the slot's line", () => {
 
     press("onOKButton");
 
-    expect(pane.querySelector(".bonsai-details-tabs-row")).toBeNull();
+    expect(pane.querySelector(".bonsai-chip-ladder")).toBeNull();
     expect(realLine().textContent).toContain("Show details ↓");
     expect(nameOf(ring())).toBe("real line");
     expect(realLine().getBoundingClientRect().top).toBe(PANE_TOP + 8);

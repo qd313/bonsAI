@@ -484,7 +484,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
 
   const onToggleTransparencyDetails = makeToggleTransparencyDetails("live");
 
-  /** Plan 68: A on the summed-up note opens Show details on the Session tab, ring on Sum up. */
+  /** Plan 68: A on the summed-up note opens Show details with its Session chip open (plan 105), ring on Sum up. */
   const openSessionTabFromNote = () => {
     setSessionHighlightTurnId(null);
     setDetailsTab("session");

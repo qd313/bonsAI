@@ -44,9 +44,13 @@
  * (chipLadderGrid.ts). Each chip's place is a CSS `order`, never a moved
  * element, so a re-pack cannot take Steam's ring off the chip holding it.
  * docs/focus-graph.md, "The Show details chips grid", lists every move.
+ *
+ * Since plan 105 the chips show short names in smaller pills, with no counting line above them, and on the
+ * newest answer the last chip is the dashed Session chip (`SessionChip`), whose box is the chat's Session view,
+ * in place of the "This answer | Session" tabs row that used to sit above the grid.
  */
 import { useCallback, useRef, useState } from "react";
-import type { FocusEvent } from "react";
+import type { CSSProperties, FocusEvent, ReactNode } from "react";
 import { Focusable } from "@decky/ui";
 import type {
   AskDiagnosticsSnapshot,
@@ -86,6 +90,34 @@ const ACTIVE_CHIP_FILL = "rgba(156, 231, 255, 0.22)";
 const ACTIVE_CHIP_BORDER = DECK_HIGHLIGHT_CYAN;
 const CHIP_BORDER = "rgba(96, 118, 144, 0.55)";
 
+/** One chip's look, open or not, at its drawn place (`order`). */
+function chipStyle(isActive: boolean, order: number): CSSProperties {
+  return {
+    display: "inline-block",
+    order,
+    boxSizing: "border-box",
+    width: "fit-content",
+    maxWidth: "100%",
+    flex: "0 0 auto",
+    /*
+     * The same size and weight on every chip: a bigger open chip changed widths and re-wrapped the rows.
+     * The smaller pill of plan 105's drawing (density board, tab 1, round 2 A): 9.5 px words on a 12 px
+     * line, 2 by 7 px padding, so a chip is 18 px tall and the usual eight take three rows, not five.
+     */
+    fontSize: textPx(9.5),
+    lineHeight: "12px",
+    fontWeight: 400,
+    padding: "2px 7px",
+    borderRadius: 999,
+    border: `1px solid ${isActive ? ACTIVE_CHIP_BORDER : CHIP_BORDER}`,
+    background: isActive ? ACTIVE_CHIP_FILL : "rgba(26, 34, 44, 0.88)",
+    color: "#e2e8f0",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  };
+}
+
 export type ContextChipLadderProps = {
   snapshot: TransparencySnapshot | ChatSlotTurnTransparency | null | undefined;
   /** When true, show compact hint only until expanded. */
@@ -123,6 +155,27 @@ export type ContextChipLadderProps = {
    * D-pad stop.
    */
   creditsView?: CreditsView;
+  /** Plan 105: the dashed Session chip after this answer's chips, on the newest answer only (SessionChip). */
+  session?: SessionChip;
+};
+
+/**
+ * The Session chip (plan 105, the density board's decided drawing: tab 1, round 2 option A). The newest answer's
+ * Show details used to open on a "This answer | Session · N" tabs row; now Session is the last chip of the grid,
+ * drawn dashed, and its box is the Session view (Sum up this chat, the summary card, the chat's questions), drawn
+ * in the chip box's place while the chip is open. Whether it is open is the caller's, so A on the summed-up note
+ * can open the panel with it open. With no answer chips at all it is the only chip, and open.
+ */
+export type SessionChip = {
+  /** "Session · N", N the chat's questions that attached something. */
+  label: string;
+  open: boolean;
+  /** The ring landed on it (true) or on one of the answer's chips (false). */
+  onOpenChange: (open: boolean) => void;
+  /** Its box: the Session view, drawn inside the ladder, under the grid, while the chip is open. */
+  box: ReactNode;
+  /** Down, Right and A on the chip: the ring into its box, onto Sum up; false when it did not get there. */
+  enter: () => boolean;
 };
 
 /**
@@ -155,6 +208,9 @@ export type ContextChipLadderProps = {
  *    onMoveDownFromLadder/onMoveUpFromLadder so the D-pad can leave the ladder.
  * 5. Draw the chips in packed order, the open chip marked by its fill and border only,
  *    then hand the active chip to ChipExpandedBody() to draw its details below.
+ * 6. With a Session chip (plan 105): it is drawn last, dashed, after the packed chips; the ring on it opens it
+ *    and its box (the caller's Session view) is drawn in ChipExpandedBody()'s place. Down, Right (it is the
+ *    last chip) and A on it hand the ring into that box (`session.enter`); every other press is the grid's.
  */
 export function ContextChipLadder({
   snapshot,
@@ -166,8 +222,11 @@ export function ContextChipLadder({
   devDiagnostics = null,
   rootRef,
   creditsView = CREDITS_SHOWN,
+  session,
 }: ContextChipLadderProps) {
   const chips = chipsFromSnapshot(snapshot);
+  /* The Session chip's index: after every answer chip, in the same maps and the same walk. */
+  const SESSION = chips.length;
   const [expanded, setExpanded] = useState(!collapsedHint);
   const [activeIndex, setActiveIndex] = useState(0);
   const ladderElRef = useRef<HTMLElement | null>(null);
@@ -203,8 +262,9 @@ export function ContextChipLadder({
   const { duringStep, holdPosition, holdRef, onFocusInside, showRestOfBox } = useChipLadderReveal(ladderElRef, bodyElRef, () =>
     chipEls.current.get(openIndexRef.current),
   );
-  /* The chips in the order they are drawn, packed into rows that fit (plan 87 F3). */
-  const drawnOrder = useChipGridOrder(rowElRef, chipEls, chips.length);
+  /* The chips in the order they are drawn, packed into rows that fit (plan 87 F3); the Session chip always last. */
+  const packedOrder = useChipGridOrder(rowElRef, chipEls, chips.length);
+  const drawnOrder = session ? [...packedOrder, SESSION] : packedOrder;
 
   const ringOnChip = (idx: number): boolean => {
     const el = chipEls.current.get(idx);
@@ -219,7 +279,7 @@ export function ContextChipLadder({
     [onExpandChange],
   );
 
-  if (!chips.length) {
+  if (!chips.length && !session) {
     return (
       <div style={{ fontSize: textPx(11), color: "#8fa6bd", marginTop: 8, fontStyle: "italic" }}>
         No context chips for this Ask.
@@ -227,9 +287,11 @@ export function ContextChipLadder({
     );
   }
 
-  const safeIndex = Math.min(activeIndex, chips.length - 1);
+  /* The Session chip is open when the caller says so, or when it is the only chip there is. */
+  const sessionOpen = Boolean(session && (session.open || !chips.length));
+  const safeIndex = sessionOpen ? SESSION : Math.min(activeIndex, chips.length - 1);
   openIndexRef.current = safeIndex;
-  const active = chips[safeIndex];
+  const active = sessionOpen ? null : chips[safeIndex]!;
 
   if (!expanded) {
     return (
@@ -299,12 +361,24 @@ export function ContextChipLadder({
      */
     openIndexRef.current = idx;
     duringStep(() => {
-      setActiveIndex(idx);
+      /* Onto the Session chip its box opens; onto an answer chip the Session box gives way to that chip's. */
+      if (idx === SESSION) session?.onOpenChange(true);
+      else {
+        if (session?.open) session.onOpenChange(false);
+        setActiveIndex(idx);
+      }
       ringOnChip(idx);
     });
     holdPosition();
     return true;
   };
+  /*
+   * Into the Session chip's box, onto Sum up (plan 105): its Down, its Right (the last chip's Right goes where the
+   * bottom row's Down goes) and its A. The box's stops sit under the grid, inside this ladder, and Sum up's own
+   * hop says whether the ring got there; when it did not (the panel's page out of the browser's focus), the press
+   * is Steam's, whose own Down from the chip lands on Sum up, the stop drawn right under it.
+   */
+  const enterSession = () => Boolean(session?.enter());
   /*
    * A box too tall to show with its chip keeps its end behind the dock (the maintainer, 2026-10-08:
    * "it gets to the end and then the focus moves to the text box"). So Down on any chip whose box's
@@ -327,7 +401,7 @@ export function ContextChipLadder({
     if (dir === "down" && showRestOfBox()) return true;
     const move = gridMove(rowsFromBoxes(drawnOrder, boxOf), boxOf, idx, dir);
     if ("to" in move) return stepTo(move.to);
-    if (move.leave === "down") return leaveDown();
+    if (move.leave === "down") return idx === SESSION ? enterSession() : leaveDown();
     /*
      * Left off the first chip with nothing above to take it is held, as it was before the grid: a press
      * nothing claims is Steam's own, and Steam's own Left carried the ring out of the plugin into its
@@ -343,8 +417,8 @@ export function ContextChipLadder({
   });
 
   /*
-   * The root itself is focused by name or class from outside (the tabs row, Up from the chips
-   * below, the reply's own Down chain). Hand that on to the open chip once the focus event has
+   * The root itself is focused by name or class from outside (Down from Hide details, Up from Sum up in
+   * the Session box, Up from below, the reply's own Down chain). Hand that on to the open chip once the focus event has
    * finished, so Steam has seen the root's focus before the chip's and the chip's is the last
    * word. A chip's own focus bubbles here too; it counts as an arrival only if it came from outside.
    */
@@ -408,7 +482,10 @@ export function ContextChipLadder({
               ref={(el: HTMLElement | null) => {
                 if (el) chipEls.current.set(idx, el);
               }}
-              onFocus={() => setActiveIndex(idx)}
+              onFocus={() => {
+                setActiveIndex(idx);
+                if (session?.open) session.onOpenChange(false);
+              }}
               {...deckNav(chipMoves(idx))}
               {...({ onCancelButton, navRef: chipNav(idx) } as Record<string, unknown>)}
               className={
@@ -416,45 +493,42 @@ export function ContextChipLadder({
                   ? "bonsai-chip-ladder-chip bonsai-chip-ladder-chip--active"
                   : "bonsai-chip-ladder-chip"
               }
-              style={{
-                display: "inline-block",
-                order: drawnOrder.indexOf(idx),
-                boxSizing: "border-box",
-                width: "fit-content",
-                maxWidth: "100%",
-                flex: "0 0 auto",
-                /*
-                 * The same size and weight on every chip: a bigger open chip changed widths and re-wrapped the rows.
-                 * The smaller pill of plan 105's drawing (density board, tab 1, round 2 A): 9.5 px words on a 12 px
-                 * line, 2 by 7 px padding, so a chip is 18 px tall and the usual eight take three rows, not five.
-                 */
-                fontSize: textPx(9.5),
-                lineHeight: "12px",
-                fontWeight: 400,
-                padding: "2px 7px",
-                borderRadius: 999,
-                border: `1px solid ${isActive ? ACTIVE_CHIP_BORDER : CHIP_BORDER}`,
-                background: isActive ? ACTIVE_CHIP_FILL : "rgba(26, 34, 44, 0.88)",
-                color: "#e2e8f0",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
+              style={chipStyle(isActive, drawnOrder.indexOf(idx))}
             >
               {/* Only the fact, as drawn (plan 105); the full wording is in the box under its title. */}
               {chip.short_label?.trim() || chip.label}
             </Focusable>
           );
         })}
+        {session ? (
+          <Focusable
+            key="bonsai-session-chip"
+            ref={(el: HTMLElement | null) => {
+              if (el) chipEls.current.set(SESSION, el);
+            }}
+            onFocus={() => session.onOpenChange(true)}
+            {...deckNav(chipMoves(SESSION))}
+            {...({ onCancelButton, onOKButton: enterSession, navRef: chipNav(SESSION) } as Record<string, unknown>)}
+            className={`bonsai-chip-ladder-chip bonsai-chip-ladder-chip--session${sessionOpen ? " bonsai-chip-ladder-chip--active" : ""}`}
+            /* Dashed, its words in the caption grey, as drawn: a chip that opens the chat's view, not a fact. */
+            style={{ ...chipStyle(sessionOpen, drawnOrder.length - 1), borderStyle: "dashed", color: "#9fb7d5" }}
+          >
+            {session.label}
+          </Focusable>
+        ) : null}
       </div>
-      <ChipExpandedBody
-        chip={active}
-        devDiagnostics={active.id === "developer" ? devDiagnostics : null}
-        creditsView={creditsView}
-        bodyRef={(el) => {
-          bodyElRef.current = el;
-        }}
-      />
+      {active ? (
+        <ChipExpandedBody
+          chip={active}
+          devDiagnostics={active.id === "developer" ? devDiagnostics : null}
+          creditsView={creditsView}
+          bodyRef={(el) => {
+            bodyElRef.current = el;
+          }}
+        />
+      ) : (
+        session?.box
+      )}
       {/* Empty, 0 high until a step to a shorter panel would shorten the pane under its scroll (useChipLadderReveal). */}
       <div aria-hidden="true" className="bonsai-chip-ladder-hold" ref={holdRef} style={{ height: 0 }} />
     </Focusable>

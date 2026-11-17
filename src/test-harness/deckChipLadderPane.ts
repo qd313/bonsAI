@@ -132,6 +132,11 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
   const openLabel = () => part(".bonsai-chip-ladder-chip--active")?.textContent ?? "";
   const heldPx = () => parseFloat(part(".bonsai-chip-ladder-hold")?.style.height || "0") || 0;
   const boxPx = () => (o.boxHeights[openLabel()] ?? 0) + (o.boxExtra?.px ?? 0);
+  /* The open chip's box: the ladder's own child, a chip's details or, with the Session chip open, the Session box. */
+  const openBox = () =>
+    ([...(ladder?.children ?? [])] as HTMLElement[]).find(
+      (c) => c.classList.contains("bonsai-chip-body") || c.classList.contains("bonsai-details-session-body"),
+    ) ?? null;
   /* The grid's sizes as drawn (see the constants above). */
   const gridStyle = () => part(".bonsai-chip-ladder-grid")?.style;
   const chipGap = () => o.chipGap ?? (parseFloat(gridStyle()?.gap ?? "") || FALLBACK_CHIP_GAP);
@@ -237,7 +242,7 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
       };
       chip.scrollIntoView = steamScrollIntoView(pane, chip, paneBottom);
     }
-    const body = part(".bonsai-chip-body");
+    const body = openBox();
     if (body) {
       body.getBoundingClientRect = () => {
         const l = layout();
@@ -309,8 +314,8 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
     dockTop,
     /** Where the chip with this label is on screen. */
     chipBox: (label: string) => box(chips().find((c) => c.textContent === label) ?? null),
-    /** The open chip's details box on screen. */
-    detailsBox: () => box(part(".bonsai-chip-body")),
+    /** The open chip's details box on screen (the Session box while the Session chip is open). */
+    detailsBox: () => box(openBox()),
     /** The top edge of the grid's first row. */
     rowTop: () => box(part(".bonsai-chip-ladder-grid")).top,
     /** Where the stop drawn before the ladder (the toggle) is on screen. */

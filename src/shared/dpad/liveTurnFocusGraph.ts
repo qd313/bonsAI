@@ -274,7 +274,7 @@ export function focusReplyUtilityRow(liveSlot: HTMLElement | null): boolean {
  * `focusDeckOwner` above deliberately will not do this, and it is right not to: it climbs to the
  * nearest `.Panel.Focusable` ancestor, which is often one of Steam's, and stamping a `tabindex` on
  * one of those is what dropped a permission row out of Steam's navigation on 2026-09-04. But our
- * own rows -- the chip ladder, the details tabs row, the "From the notes" block -- carry no
+ * own rows -- the chip ladder, the details tabs row (gone since plan 105), the "From the notes" block -- carry no
  * `tabindex` on device either and hold nothing natively focusable inside them, so `focusDeckOwner`
  * honestly reports false for them and the caller's move dies. Measured on the Deck 2026-09-21: the
  * chip ladder was in exactly that state and Up/Down past it walked out of the plugin entirely.
@@ -303,11 +303,12 @@ export function focusOwnBonsaiRow(el: HTMLElement | null | undefined): boolean {
  * slot row ran on every press, which is the whole bug.
  *
  * Tried in bottom-up order, so Up lands on the nearest thing above the dock rather than the top of
- * the reply: the open details panel's own last stop first — the chip ladder (the "This answer" tab's,
- * or the Session tab's active row's), else, on a Session tab with no rows, the summary card or the
- * Sum up button (plan 68: the last stop, not the top of the tab) — then the tabs row itself, then
- * the notes block, then the Show details line, then an answer still writing (its last section), then the
- * reply's utility row. Each one reports false
+ * the reply: the open details panel's own last stop first. Since plan 105 the Session view is the box
+ * of the chips' last chip, drawn inside the chips' own ladder, so with the Session chip open that box's
+ * stops come first — its open question's chips, else (a chat with no such questions) the summary card or
+ * the Sum up button (plan 68: the last stop, not the top) — and only then the chips themselves, whose
+ * stop lands on the open chip. Then the notes block, then the Show details line, then an answer still
+ * writing (its last section), then the reply's utility row. Each one reports false
  * when it is not mounted, so a closed panel, a reply with no notes and an empty chat all fall
  * through cleanly.
  */
@@ -317,10 +318,10 @@ export function focusBottomOfNewestReply(): boolean {
   const slot = slots.length > 0 ? slots[slots.length - 1] : null;
   if (!slot) return false;
   const bottomUp = [
-    ".bonsai-chip-ladder",
+    ".bonsai-details-session-body .bonsai-chip-ladder",
     ".bonsai-sumup-card",
     ".bonsai-sumup-btn",
-    ".bonsai-details-tabs-row",
+    ".bonsai-chip-ladder",
     ".bonsai-kb-notes-block",
   ];
   for (const selector of bottomUp) {

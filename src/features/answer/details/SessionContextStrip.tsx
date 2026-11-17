@@ -1,23 +1,24 @@
 /**
- * Title: The Session tab, inside a turn's own Show details panel
+ * Title: The Session view, the Session chip's box inside the newest answer's Show details panel
  *
  * Purpose: What the AI carries from this chat, in one tab: at the top, *Sum up this chat* and the
  * summary the AI remembers in place of the chat's older turns (plan 68); below it, the list of
  * every turn that attached anything extra to what was actually sent to the AI — a screenshot, a log
- * excerpt, a memory note — with the active row's own chips. The tab lives in the newest answer's
- * Show details panel as "Session · N" (plan 62 3c); older answers keep the plain single-tab panel,
- * so it never repeats down the chat.
+ * excerpt, a memory note — with the active row's own chips. It is the box of the newest answer's last
+ * Show details chip, the dashed "Session · N" (plan 105; a tab beside "This answer" from plan 62 3c),
+ * drawn under the chips while that chip holds the ring; older answers have no Session chip, so it never
+ * repeats down the chat.
  *
- * Used for: MainTabChatTranscript's `buildDetailsPanelElement`, mounted only while the "Session"
- * tab is the one showing, on the newest turn only.
+ * Used for: MainTabChatTranscript's `buildDetailsPanelElement`, which hands it to the chip ladder as the
+ * Session chip's box: mounted only while that chip is open, on the newest turn only.
  *
  * Solves: One place to see and manage what the AI knows about this conversation, and to audit what
  * context reached it, without scrolling back up and rereading each answer.
  *
  * Does not: Build the "what was actually sent" snapshot, write a summary, or fetch either from the
  * back end. It is handed built snapshots and the open chat's summary state, and only draws them.
- * Does not decide when it is showing at all — that is `detailsTab === "session"`, owned by the
- * caller.
+ * Does not decide when it is showing at all — that is the Session chip being open (`detailsTab ===
+ * "session"`, owned by the transcript).
  *
  * Gotchas:
  * - No header, no open/closed state of its own: Show details itself is what opens and closes this
@@ -128,7 +129,7 @@ export type SessionContextTabBodyProps = {
   archivedTurns?: AskThreadCollapsedTurn[];
   highlightTurnId?: string | null;
   onHighlightClear?: () => void;
-  /** D-pad Up off the top of this body (the Sum up button) -> the "This answer / Session · N" tabs row above it. */
+  /** D-pad Up off the top of this body (the Sum up button) -> the Session chip above it (plan 105). */
   onMoveUpFromTop?: () => boolean;
   /**
    * B anywhere inside this body. Plan 62 3c: "B anywhere inside closes the panel" — the whole Show
@@ -158,8 +159,9 @@ export type SessionContextTabBodyProps = {
 };
 
 /**
- * The Session tab's own content, folded into a turn's Show details panel (plan 62 3c) rather than a
- * standalone box of its own. Top to bottom (plan 68, as drawn): *Sum up this chat* with its reason
+ * The Session view, the Session chip's box in the newest turn's Show details panel (plan 105; a tab
+ * there from plan 62 3c). Drawn in the chip boxes' own look, as the density board draws it (tab 1,
+ * round 2 option A). Top to bottom (plan 68, as drawn): *Sum up this chat* with its reason
  * line and the summary card (SessionSumUpSection.tsx), then the row list and the active row's chip
  * ladder, exactly as before. Clear and its confirm box are gone: summing up keeps a chat's memory
  * where Clear could only throw it away, and nothing is deleted, so there is nothing to confirm.
@@ -197,7 +199,7 @@ export function SessionContextTabBody({
     highlightTurnId && rows.some((r) => r.id === highlightTurnId) ? highlightTurnId : activeId;
   const activeRow = rows.find((r) => r.id === effectiveActive) ?? rows[rows.length - 1];
 
-  /* Up off the first row goes to the summary card or the button above it, then the tabs row. */
+  /* Up off the first row goes to the summary card or the button above it, then the Session chip. */
   const upFromFirstRow = () => focusLastSumUpStop() || (onMoveUpFromTop?.() ?? false);
   /*
    * Down off the last row goes to the active row's chips, by the chips' own registered root, and is
@@ -230,6 +232,11 @@ export function SessionContextTabBody({
         display: "flex",
         flexDirection: "column",
         gap: 6,
+        /* The Session chip's box, in the look every chip's box has (ChipExpandedBody.tsx), as drawn. */
+        padding: "8px 10px",
+        borderRadius: 8,
+        border: "1px solid rgba(100, 140, 180, 0.28)",
+        background: "rgba(14, 22, 32, 0.55)",
       }}
       /*
        * B closes the whole panel via `onRequestClose`, not a local collapse — `onCancelButton` +
@@ -237,7 +244,7 @@ export function SessionContextTabBody({
        * 2026-08-28 (GlossaryTermChip.tsx, buildReasoningFoldElement.tsx) that `onButtonDown`
        * does receive B, but returning `true` does NOT stop Steam also backing the ring out of the
        * panel — only `onCancelButton` genuinely consumes the press. Safe to attach
-       * unconditionally: this body only exists while the Session tab is showing, so there is no
+       * unconditionally: this body only exists while the Session chip is open, so there is no
        * "nothing to close" state of this same node where B ought to fall through instead.
        */
       {...({

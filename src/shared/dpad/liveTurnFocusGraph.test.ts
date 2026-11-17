@@ -404,7 +404,6 @@ describe("liveTurnFocusGraph", () => {
       mountLiveTurn(`
         <div class="bonsai-chat-turn-slot">
           <div class="bonsai-kb-notes-block Panel Focusable"></div>
-          <div class="bonsai-details-tabs-row Panel Focusable"></div>
           <div class="bonsai-chip-ladder Panel Focusable"></div>
         </div>
       `);
@@ -412,13 +411,16 @@ describe("liveTurnFocusGraph", () => {
       expect((document.activeElement as HTMLElement)?.className).toContain("bonsai-chip-ladder");
     });
 
-    it("on a Session tab with no rows, lands on the summary card, else the Sum up button (plan 68)", () => {
+    /* Plan 105: the Session view is the box of the chips' last chip, drawn inside the chips' own ladder. */
+    it("with the Session chip open and no rows, lands on the summary card, else the Sum up button (plan 68)", () => {
       mountLiveTurn(`
         <div class="bonsai-chat-turn-slot">
-          <div class="bonsai-details-tabs-row Panel Focusable"></div>
-          <div class="bonsai-details-session-body Panel Focusable">
-            <div class="bonsai-sumup-btn Panel Focusable"></div>
-            <div class="bonsai-sumup-card Panel Focusable"></div>
+          <div class="bonsai-chip-ladder Panel Focusable">
+            <div class="bonsai-chip-ladder-grid"></div>
+            <div class="bonsai-details-session-body Panel Focusable">
+              <div class="bonsai-sumup-btn Panel Focusable"></div>
+              <div class="bonsai-sumup-card Panel Focusable"></div>
+            </div>
           </div>
         </div>
       `);
@@ -427,9 +429,11 @@ describe("liveTurnFocusGraph", () => {
 
       mountLiveTurn(`
         <div class="bonsai-chat-turn-slot">
-          <div class="bonsai-details-tabs-row Panel Focusable"></div>
-          <div class="bonsai-details-session-body Panel Focusable">
-            <div class="bonsai-sumup-btn Panel Focusable"></div>
+          <div class="bonsai-chip-ladder Panel Focusable">
+            <div class="bonsai-chip-ladder-grid"></div>
+            <div class="bonsai-details-session-body Panel Focusable">
+              <div class="bonsai-sumup-btn Panel Focusable"></div>
+            </div>
           </div>
         </div>
       `);
@@ -437,18 +441,21 @@ describe("liveTurnFocusGraph", () => {
       expect((document.activeElement as HTMLElement)?.className).toContain("bonsai-sumup-btn");
     });
 
-    it("on a Session tab with rows, lands on the active row's chips at the bottom, not the button at the top", () => {
+    it("with the Session chip open and rows, lands on the box's own chips at the bottom, not the chips above it", () => {
       mountLiveTurn(`
         <div class="bonsai-chat-turn-slot">
-          <div class="bonsai-details-session-body Panel Focusable">
-            <div class="bonsai-sumup-btn Panel Focusable"></div>
-            <div class="bonsai-details-session-row Panel Focusable"></div>
-            <div class="bonsai-chip-ladder Panel Focusable"></div>
+          <div class="bonsai-chip-ladder Panel Focusable" id="answer-chips">
+            <div class="bonsai-chip-ladder-grid"></div>
+            <div class="bonsai-details-session-body Panel Focusable">
+              <div class="bonsai-sumup-btn Panel Focusable"></div>
+              <div class="bonsai-details-session-row Panel Focusable"></div>
+              <div class="bonsai-chip-ladder Panel Focusable" id="box-chips"></div>
+            </div>
           </div>
         </div>
       `);
       expect(focusBottomOfNewestReply()).toBe(true);
-      expect((document.activeElement as HTMLElement)?.className).toContain("bonsai-chip-ladder");
+      expect((document.activeElement as HTMLElement)?.id).toBe("box-chips");
     });
 
     it("falls back up the reply when the panel is shut: the notes block, then Show details", () => {

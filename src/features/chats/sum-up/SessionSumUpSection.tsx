@@ -1,7 +1,8 @@
 /**
  * Title: Sum up this chat, and what the AI remembers
  *
- * Purpose: The top of the Session tab (plan 68, as drawn): the *Sum up this chat* button in Clear's
+ * Purpose: The top of the Session view, the Session chip's box under Show details (plan 68, as drawn;
+ * a tab until plan 105): the *Sum up this chat* button in Clear's
  * old look, the one line saying why it is greyed out when it is, and the card showing the summary
  * the AI now carries in place of the chat's older turns.
  *
@@ -16,8 +17,8 @@
  *
  * Focus graph (plan 68 § 6; measured on the Deck 2026-09-25, plan68-3D-SESSION-LAYOUT):
  *
- *   This answer | Session · N        (the tabs row, unchanged)
- *      | Down                   ^ Up
+ *   [Session · N]                     (the dashed Session chip, last of the Show details chips, plan 105)
+ *      | Down, Right or A       ^ Up
  *   [ Sum up this chat ]              <- stop; A starts it, the ring stays; greyed = still a stop, A does nothing
  *      | Down                   ^ Up
  *   What the AI remembers card        <- stop only when a summary exists; A does nothing. Down and Up
@@ -90,7 +91,7 @@ function onSettle(pass: () => void): void {
 }
 
 /**
- * The Sum up button of the Session tab on screen: where Down from the tabs row lands, and Up from the
+ * The Sum up button of the Session view on screen: where Down, Right and A on the Session chip land, and Up from the
  * card or the first turn row. It shows whole once the ring is on it. Up from the card shown at the
  * pane's top left it 15.5 points above the pane on the Deck's own screen, and only Steam's glide
  * brought it back (P104-M11). Landed by the plugin's own hop, its top comes back at once. With the
@@ -251,7 +252,7 @@ function revealOnAppear(el: HTMLElement | null): void {
 
 /**
  * In: the open chat's summary state (or none yet), whether an answer is being written, and the two
- * ways out of this section -- Up to the tabs row, Down past it to the first turn row.
+ * ways out of this section -- Up to the Session chip, Down past it to the first turn row.
  * Out: the button, the one reason line when it is greyed out, and the summary card when there is a
  * summary and nothing is being written. Always draws the button.
  * Can go wrong: the card is a stop only while it is mounted; `focusLastSumUpStop` falls back to the
@@ -260,7 +261,7 @@ function revealOnAppear(el: HTMLElement | null): void {
 export function SessionSumUpSection(props: {
   state: ChatSumUpState | null | undefined;
   answerInFlight: boolean;
-  /** Up off the button: the tabs row above. */
+  /** Up off the button: the Session chip above (the tabs row until plan 105). */
   onMoveUpFromButton: () => boolean;
   /** Down past this section: the first turn row, else the way out of the panel. Its result is
    *  returned as is, so false leaves the press to Steam's own navigation. */

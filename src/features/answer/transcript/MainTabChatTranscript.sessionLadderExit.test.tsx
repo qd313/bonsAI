@@ -1,5 +1,5 @@
 /**
- * Title: Down off the last chip of the Session tab's chip ladder moves on
+ * Title: Down off the last chip of the Session view's chip ladder moves on
  * Purpose: Pin the fix for the roadmap bug "In Show details' Session tab, Down from the last chip of
  *          the chip ladder does not move the ring" (plan 70 flow L6; measured again in plan 72 free
  *          play, workshop:test-evidence/plan72-Z-FREEPLAY.json finding 1: seven Downs and a Right left
@@ -87,16 +87,24 @@ function renderTranscript(overrides: Partial<MainTabChatTranscriptProps> = {}) {
 const OPEN_CHIP = "bonsai-chip-ladder-chip bonsai-chip-ladder-chip--active";
 
 function latestPropsFor(className: string): Record<string, unknown> | undefined {
-  const matches = hoisted.focusableProps.filter((p) => p.className === className);
+  /* `p?.`: with the Session view drawn inside the chips' ladder the captured list has been seen to hold an empty
+     entry (plan 105); nothing the screen draws reads this list, so an empty entry is skipped, not fatal. */
+  const matches = hoisted.focusableProps.filter((p) => p?.className === className);
   return matches[matches.length - 1];
 }
 
-/** Open Show details, switch to the Session tab, and return the chip ladder inside it. */
+/** The ring onto the Session chip, the last of the Show details chips, which opens its box (plan 105). */
+function ringOnSessionChip(container: HTMLElement): void {
+  const chip = container.querySelector<HTMLElement>(".bonsai-chip-ladder-chip--session");
+  expect(chip).not.toBeNull();
+  chip!.setAttribute("tabindex", "-1");
+  act(() => chip!.focus());
+}
+
+/** Open Show details, open the Session chip, and return the chip ladder inside its box. */
 function openSessionTabLadder(container: HTMLElement): HTMLElement {
   fireEvent.click(container.querySelector('[aria-label="Show details"]')!);
-  act(() => {
-    (latestPropsFor("bonsai-details-tabs-row")?.onMoveRight as () => boolean)();
-  });
+  ringOnSessionChip(container);
   const ladder = container.querySelector(".bonsai-details-session-body .bonsai-chip-ladder");
   expect(ladder).not.toBeNull();
   return ladder as HTMLElement;
@@ -131,7 +139,7 @@ afterEach(() => {
   resetNavFocusRegistry();
 });
 
-describe("the Session tab's chip ladder: Down off the last chip", () => {
+describe("the Session view's chip ladder: Down off the last chip", () => {
   it("steps the chips first, then hands the ring to the suggestion chips through Steam's transfer", () => {
     const presets = navNode("preset-carousel");
     const input = navNode("unified-input");
@@ -193,8 +201,9 @@ describe("the Session tab's chip ladder: Down off the last chip", () => {
 
 /*
  * The same dead end one level up: a chat where no question attached anything extra has no rows and
- * no chips in the Session tab, so Sum up (or the summary card under it) is its last stop, and Down
- * there used to be swallowed. It now leaves by the same route as the last chip.
+ * no chips in the Session view, so Sum up (or the summary card under it) is its last stop, and Down
+ * there used to be swallowed. It now leaves by the same route as the last chip. With no answer chips
+ * either, the Session chip is the panel's only chip, and open (plan 105).
  */
 const NO_CHIPS = { ...SNAPSHOT, context_chips: [] } as unknown as TransparencySnapshot;
 
@@ -228,12 +237,10 @@ function openEmptySessionTab(summary: typeof SUMMARY | null): HTMLElement {
     chatSumUp: sumUpState(summary),
   } as Partial<MainTabChatTranscriptProps>);
   fireEvent.click(container.querySelector('[aria-label="Show details"]')!);
-  act(() => {
-    (latestPropsFor("bonsai-details-tabs-row")?.onMoveRight as () => boolean)();
-  });
+  expect(container.querySelector(".bonsai-chip-ladder-chip--session.bonsai-chip-ladder-chip--active")).not.toBeNull();
   expect(container.querySelector(".bonsai-details-session-body")).not.toBeNull();
   expect(container.querySelector(".bonsai-details-session-row")).toBeNull();
-  expect(container.querySelector(".bonsai-chip-ladder")).toBeNull();
+  expect(container.querySelector(".bonsai-details-session-body .bonsai-chip-ladder")).toBeNull();
   return container;
 }
 
@@ -245,7 +252,7 @@ function pressOn(className: string): boolean {
   return handled;
 }
 
-describe("the Session tab with no rows and no chips: Down off its last stop", () => {
+describe("the Session view with no rows and no chips: Down off its last stop", () => {
   it("from Sum up this chat, hands the ring to the suggestion chips", () => {
     const presets = navNode("preset-carousel");
     openEmptySessionTab(null);

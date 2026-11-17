@@ -13,7 +13,7 @@
  * Does not: Prove anything on the device -- that is the Deck re-check row.
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render } from "@testing-library/react";
+import { act, fireEvent, render } from "@testing-library/react";
 
 /* Which notes an answer used has its own tests (kbNoteUsedByAnswer.test.ts); here every attached
    note counts as used so the block's presence depends only on what this file is about -- except
@@ -171,14 +171,14 @@ describe("an answer that hid a spoiler", () => {
     expect(ladderText(container)).toContain("Soul Master");
   });
 
-  it("keeps it hidden on the Session tab's row for that answer too", () => {
+  it("keeps it hidden on the Session view's row for that answer too", () => {
     const { container } = render(<MainTabChatTranscript {...props(uncoveredButProtected, true)} />);
     openShowDetails(container);
-    const sessionTab = Array.from(container.querySelectorAll(".bonsai-details-tab")).find((el) =>
-      (el.textContent ?? "").startsWith("Session")
-    );
-    expect(sessionTab).toBeDefined();
-    fireEvent.click(sessionTab as HTMLElement);
+    /* The Session chip, last of the chips since plan 105: the ring landing on it opens its box. */
+    const sessionChip = container.querySelector<HTMLElement>(".bonsai-chip-ladder-chip--session");
+    expect(sessionChip).not.toBeNull();
+    sessionChip!.setAttribute("tabindex", "-1");
+    act(() => sessionChip!.focus());
     const body = container.querySelector(".bonsai-details-session-body");
     expect(body).not.toBeNull();
     expect(body!.textContent).toContain(HIDDEN_TEXT);

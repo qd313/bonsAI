@@ -13,8 +13,8 @@
  *           Up) and liveTurnFocusGraph.ts (Down from Copy, Up from step 1).
  * Solves: With the page's focus and without it: Down from the last section, Up from Helpful, Up from choice A and
  *         Down from Copy land on the note with Steam's ring and the page's focus together; the walk through it is
- *         bounded and visits no stop twice; A on the note, reached by the walk, opens Show details on the Session
- *         tab; B on it is left to Steam, as on every line of the answer. The page sends no focus events while it
+ *         bounded and visits no stop twice; A on the note, reached by the walk, opens Show details with its Session chip open
+ *         (plan 105; the Session tab before); B on it is left to Steam, as on every line of the answer. The page sends no focus events while it
  *         lacks focus, as on the Deck (transcriptPanelWalk.tsx).
  * Does not: Scroll (the pane holds the whole turn; nothing here depends on where the pane is). The block D0 Deck run
  *           could not put a summed-up note on screen (workshop:test-evidence/plan104-P104-M-SUMMARY-NOTE.json), so no
@@ -129,12 +129,15 @@ describe.each([
     expect(await s.walk("onMoveUp", lastSection(s))).toEqual([...down].reverse());
   });
 
-  it("A on the note, reached by a press, opens Show details on the Session tab; B is left to Steam", async () => {
+  it("A on the note, reached by a press, opens Show details with its Session chip open; B is left to Steam", async () => {
     const s = draw();
     expect(await pressFrom(s, lastSection(s), "onMoveDown", focused)).toBe(NOTE);
     expect(await s.button("onCancelButton")).toBe(false);
     expect(s.nameOf(page().ring())).toBe(NOTE);
     expect(await s.button("onOKButton")).toBe(true);
-    expect(page().host.querySelector(".bonsai-details-tab--active")?.textContent ?? "").toMatch(/^Session · /);
+    /* Plan 105: Session is the last Show details chip, dashed, and its box (Sum up this chat on top) is drawn. */
+    const sessionChip = page().host.querySelector(".bonsai-chip-ladder-chip--session.bonsai-chip-ladder-chip--active");
+    expect(sessionChip?.textContent ?? "").toMatch(/^Session · /);
+    expect(page().host.querySelector(".bonsai-chip-ladder .bonsai-details-session-body .bonsai-sumup-btn")).not.toBeNull();
   });
 });

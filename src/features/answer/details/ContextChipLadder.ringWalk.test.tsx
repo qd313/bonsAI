@@ -133,7 +133,8 @@ async function press(dir: Dir): Promise<boolean> {
 function name(container: HTMLElement, el: Element | null, suggestion: HTMLElement): string {
   if (!el) return "nothing";
   if (el === suggestion) return "suggestion chip";
-  if (el.classList.contains("bonsai-details-tabs-row")) return "tabs row";
+  if (el.getAttribute("aria-label") === "Hide details") return "Hide details";
+  if (el.classList.contains("bonsai-sumup-btn")) return "Sum up";
   if (el.classList.contains("bonsai-chip-ladder-chip")) return `chip ${el.textContent}`;
   if (el.classList.contains("bonsai-chip-ladder")) return "the whole ladder";
   return container.contains(el) ? `other ${el.className}` : "outside";
@@ -143,11 +144,13 @@ function name(container: HTMLElement, el: Element | null, suggestion: HTMLElemen
 function ladderLandingProblems(container: HTMLElement, ring: Element | null): string[] {
   const ladder = container.querySelector(".bonsai-chip-ladder");
   if (!ladder || !ring || !ladder.contains(ring)) return [];
+  /* The Session chip's box sits inside the ladder (plan 105); its stops (Sum up, ...) are not chips. */
+  if (ring.closest(".bonsai-details-session-body")) return [];
   const problems: string[] = [];
   if (!ring.classList.contains("bonsai-chip-ladder-chip")) {
     return [`focus is on ${ring === ladder ? "the whole ladder" : ring.className}, not on a chip`];
   }
-  if (ring.children.length > 0 || !LABELS.includes(ring.textContent ?? "")) {
+  if (ring.children.length > 0 || !(LABELS.includes(ring.textContent ?? "") || ring.textContent === SESSION)) {
     problems.push(`the focused chip holds more than its label: "${ring.textContent}"`);
   }
   if (!ring.classList.contains("bonsai-chip-ladder-chip--active")) problems.push("ring chip is not the open chip");
@@ -169,7 +172,7 @@ async function walk(container: HTMLElement, dir: Dir, suggestion: HTMLElement, l
     if (stops.includes(label)) problems.push(`press ${i}: ${label} visited twice`);
     stops.push(label);
     problems.push(...ladderLandingProblems(container, ring).map((p) => `press ${i}: ${p}`));
-    if (ring === suggestion || label === "tabs row") break;
+    if (ring === suggestion || label === "Hide details" || label === "Sum up") break;
   }
   return { stops, problems };
 }
@@ -183,33 +186,38 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
+/** Open Show details and leave the ring on its line, now reading "Hide details". */
+function openOnHideDetails(container: HTMLElement): void {
+  fireEvent.click(container.querySelector('[aria-label="Show details"]')!);
+  const line = container.querySelector<HTMLElement>('[aria-label="Hide details"]')!;
+  line.setAttribute("tabindex", "-1");
+  line.focus();
+}
+
+/* The newest answer's last chip since plan 105 (no tabs row above the chips any more): its box is the Session view. */
+const SESSION = "Session · 1";
+
 describe("Show details' chip ladder: the ring sits on one chip", () => {
-  it("Down from the tabs row visits each chip once, the ring on that chip, then the suggestion chip", async () => {
+  it("Down from Hide details visits each chip once, the ring on that chip, then the Session chip and Sum up", async () => {
     const { container } = renderTranscript();
     const suggestion = suggestionChip();
-    fireEvent.click(container.querySelector('[aria-label="Show details"]')!);
-    const tabs = container.querySelector<HTMLElement>(".bonsai-details-tabs-row")!;
-    tabs.setAttribute("tabindex", "-1");
-    tabs.focus();
+    openOnHideDetails(container);
 
     const down = await walk(container, "Down", suggestion);
     expect(down.problems).toEqual([]);
-    expect(down.stops).toEqual(["tabs row", ...LABELS.map((l) => `chip ${l}`), "suggestion chip"]);
+    expect(down.stops).toEqual(["Hide details", ...LABELS.map((l) => `chip ${l}`), `chip ${SESSION}`, "Sum up"]);
   });
 
-  it("Up from the last chip visits each chip once on the way back to the tabs row", async () => {
+  it("Up from the Session chip visits each chip once on the way back to Hide details", async () => {
     const { container } = renderTranscript();
     const suggestion = suggestionChip();
-    fireEvent.click(container.querySelector('[aria-label="Show details"]')!);
-    const tabs = container.querySelector<HTMLElement>(".bonsai-details-tabs-row")!;
-    tabs.setAttribute("tabindex", "-1");
-    tabs.focus();
-    for (let i = 0; i < LABELS.length; i += 1) await press("Down");
-    expect(name(container, document.activeElement, suggestion)).toBe(`chip ${LABELS[6]}`);
+    openOnHideDetails(container);
+    for (let i = 0; i <= LABELS.length; i += 1) await press("Down");
+    expect(name(container, document.activeElement, suggestion)).toBe(`chip ${SESSION}`);
 
     const up = await walk(container, "Up", suggestion);
     expect(up.problems).toEqual([]);
-    expect(up.stops).toEqual([...LABELS.map((l) => `chip ${l}`).reverse(), "tabs row"]);
+    expect(up.stops).toEqual([`chip ${SESSION}`, ...LABELS.map((l) => `chip ${l}`).reverse(), "Hide details"]);
   });
 
   it("focus handed to the ladder by name, as Up from below does, lands on the open chip", async () => {

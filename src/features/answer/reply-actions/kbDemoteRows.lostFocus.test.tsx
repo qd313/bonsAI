@@ -5,7 +5,7 @@
  *          Steam's ring is. On the Deck, with a game running, the page was out of focus after Not really and Wrong
  *          tip; a Down walk from Undo reached the notes block and Down died there. The real chat screen (the
  *          answer, the reply row with the reasons, Undo, "Suggest as a tip", Show details open, the notes block, the
- *          details tabs) is drawn inside a page whose focus a test takes away (lostFocusPanel.tsx), and every
+ *          panel's first chip) is drawn inside a page whose focus a test takes away (lostFocusPanel.tsx), and every
  *          press is made the way Steam makes it.
  * Used for: kbDemoteRows.tsx (`landOn`, which every landing on these rows goes through, asks the panel's window
  *           for its focus first), liveTurnFocusGraph.ts (`focusDeckOwner`, the notes block's dead hop), and the walk
@@ -16,7 +16,8 @@
  *         window that takes the focus back lets every hop work again), and with a window that refuses, as the
  *         plan 97 readings saw, that hop declines and Steam's own Down moves the ring.
  * Does not: Prove where Steam's own Down lands on the Deck: lostFocusPanel.tsx models it as the next stop drawn
- *           below (here the details tabs). Does not scroll: the pane is tall enough for the whole turn; the demote
+ *           below (here the panel's first chip; the details tabs until plan 105). Does not scroll: the pane is tall
+ *           enough for the whole turn; the demote
  *           walks with Steam's scroll modelled are buildReplyActionsElement.demote.test.tsx, run with the page's
  *           focus present.
  */
@@ -110,7 +111,6 @@ function stops(): HTMLElement[] {
 function nameOf(el: HTMLElement | null): string {
   if (!el) return "nothing";
   if (el.classList.contains("bonsai-kb-notes-block")) return "notes block";
-  if (el.classList.contains("bonsai-details-tabs-row")) return "details tabs";
   if (el.classList.contains("bonsai-chip-ladder")) return "chip grid";
   return (el.getAttribute("aria-label") ?? el.textContent ?? el.tagName).trim().slice(0, 30);
 }
@@ -228,8 +228,10 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-const WALK = ["Undo, the note ranks as before", "Suggest as a tip", "Hide details", "notes block", "details tabs"];
-const WALK_AFTER_UNDO = ["Wrong tip", "Suggest as a tip", "Hide details", "notes block", "details tabs"];
+/* The walk ends on the first stop past the notes block: the panel's first chip (the details tabs until plan 105). */
+const FIRST_CHIP = "Game context";
+const WALK = ["Undo, the note ranks as before", "Suggest as a tip", "Hide details", "notes block", FIRST_CHIP];
+const WALK_AFTER_UNDO = ["Wrong tip", "Suggest as a tip", "Hide details", "notes block", FIRST_CHIP];
 
 /** The panel's window as a spy: it takes the browser's focus back when asked, or refuses. */
 function panelWindow(grants: boolean) {
@@ -244,14 +246,14 @@ describe("P102-UNDO-FOCUS-01: Down from Undo past the notes block, Show details 
   it("with the page's focus present, asks nothing of the window and every Down moves the ring", async () => {
     const focus = panelWindow(true);
     await markWrongTip(true);
-    expect(walkDown("details tabs")).toEqual(WALK);
+    expect(walkDown(FIRST_CHIP)).toEqual(WALK);
     expect(focus).not.toHaveBeenCalled();
   });
 
   it("with the page's focus gone, the landing on Undo asks the window, and the walk goes past the notes block", async () => {
     const focus = panelWindow(true);
     await markWrongTip(false);
-    expect(walkDown("details tabs")).toEqual(WALK);
+    expect(walkDown(FIRST_CHIP)).toEqual(WALK);
     expect(focus).toHaveBeenCalledTimes(1);
     expect(page.doc.hasFocus()).toBe(true);
   });
@@ -263,7 +265,7 @@ describe("P102-UNDO-FOCUS-01: Down from Undo past the notes block, Show details 
     await pressA();
     expect(page.host.querySelector(".bonsai-kb-demote-done")).toBeNull();
     expect(nameOf(page.ring())).toBe("Wrong tip");
-    expect(walkDown("details tabs")).toEqual(WALK_AFTER_UNDO);
+    expect(walkDown(FIRST_CHIP)).toEqual(WALK_AFTER_UNDO);
     expect(focus).toHaveBeenCalledTimes(1);
   });
 
@@ -278,8 +280,8 @@ describe("P102-UNDO-FOCUS-01: Down from Undo past the notes block, Show details 
   it("a window that refuses, the page out of focus throughout: Down from the notes block still moves the ring", async () => {
     panelWindow(false);
     await markWrongTip(false);
-    /* The notes block's own hops decline, so the press is Steam's: its own Down, onto the details tabs here. */
-    expect(walkDown("details tabs")).toEqual(WALK);
+    /* The notes block's own hops decline, so the press is Steam's: its own Down, onto the first chip here. */
+    expect(walkDown(FIRST_CHIP)).toEqual(WALK);
     expect(page.doc.hasFocus()).toBe(false);
   });
 });

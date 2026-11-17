@@ -1,24 +1,23 @@
 /**
- * Title: The Show details strip and its chips, walked with the D-pad while the panel's page may lack focus (plan 103 F1, part 2)
- * Purpose: Pin row P103-DETAILS-STRIP-01 at the level the Deck check looks at, where Steam's ring is. The strip ("This
- *          answer / Session") and the chip grid's root were stops the plugin knew only by their element: with the
- *          panel's page out of the browser's focus a plain focus() does not carry Steam's ring, so both hops said "did
- *          not land" and the chain under the answer went on to its last step, a transfer onto the suggestion chips: Down
- *          from "Hide details" (or from the notes line) skipped the open panel, and Up from the chips skipped it too.
- *          On the Deck (workshop:test-evidence/plan103-P103-M-DETAILS-STRIP.json, 15 tries) the page never lost its
- *          focus and the strip was always reached, by the first Down without a notes line and by the second with one;
- *          this pins that order and the lost-focus path the code showed.
- * Used for: buildDetailsPanelElement.tsx (the strip's own Steam nav node), ContextChipLadder.tsx (the grid's root
- *           hands Steam's transfer to the open chip's own node), focusPerTurnRow.ts (`registerRowNav`), and the chains
- *           in MainTabChatTranscript.tsx and liveTurnFocusGraph.ts that reach them.
- * Solves: With the page's focus and without it: Down from "Hide details" lands on the strip, or on the notes line
- *         and then the strip; Right on the strip shows Session and keeps the ring there; Down from the strip lands on
- *         the open chip; the walk to the chips and back visits no stop twice; B on the strip and on a chip closes
- *         the panel with the ring on "Show details"; on chips wrapped onto two rows every step (Down between rows,
- *         Left, Right) moves the ring and Down leaves to the suggestion chips (the second opinion's fix-up: a chip
- *         step used to claim the press with the ring left behind). The page sends no focus events while it lacks
- *         focus, as on the Deck (transcriptPanelWalk.tsx).
- * Does not: Scroll (the pane holds the whole turn).
+ * Title: The Show details chips and the Session chip, walked with the D-pad while the panel's page may lack focus
+ * Purpose: Pin rows P103-DETAILS-STRIP-01 and P105-DETAILS-CHIPS-01 at the level the Deck check looks at, where Steam's
+ *          ring is. Plan 103 F1 gave the details panel's ways in their own Steam stops: with the panel's page out of the
+ *          browser's focus a plain focus() does not carry Steam's ring, so a hop onto the panel said "did not land" and
+ *          the chain under the answer went on to the suggestion chips past the open panel. Plan 105 took the "This
+ *          answer / Session" strip away: Down from "Hide details" (or from the notes line) lands on the open chip, and
+ *          Session is the grid's last chip, dashed, its box the chat's Session view with Sum up this chat on top.
+ * Used for: ContextChipLadder.tsx (the grid's root hands Steam's transfer to the open chip's own node, the Session chip
+ *           included), buildDetailsPanelElement.tsx (the Session chip's way into its box and back), focusPerTurnRow.ts
+ *           (`registerRowNav`), and the chains in MainTabChatTranscript.tsx and liveTurnFocusGraph.ts that reach them.
+ * Solves: With the page's focus and without it: Down from "Hide details" lands on the first chip, or on the notes line
+ *         and then the first chip; Right and Left walk every chip once, Session last, its box opening in the chip box's
+ *         place and closing again; on chips wrapped onto rows, Down crosses to the Session chip and goes into its box
+ *         onto Sum up, and Up walks back out; B on the Session chip and on an answer chip closes the panel with the ring
+ *         on "Show details"; coming back, Down from "Hide details" lands on the chip left open, Session included. Every
+ *         walk visits no stop twice and claims no press the ring did not follow. The page sends no focus events while
+ *         it lacks focus, as on the Deck (transcriptPanelWalk.tsx).
+ * Does not: Scroll (the pane holds the whole turn); the walk with Steam's scroll modelled is
+ *           ContextChipLadder.sessionWalk.test.tsx.
  */
 import { describe, expect, it, vi } from "vitest";
 
@@ -45,18 +44,20 @@ const NOTE: KbAttachedNote = {
   domain: "strategy",
   game_title: "Hollow Knight",
 };
-/** Four chips in the Show details grid, in this order (one row, or two of two). */
+/** Four chips in the Show details grid, in this order, then the Session chip (one row, or rows of two). */
 const CHIPS = ["Game context", "Notes", "Model", "Tips"].map((label, i) => ({
   label, rank: i + 1, id: `chip-${i + 1}`, attached: true, tier_class: "", body: { title: label, paths: [], bullets: [] },
 }));
 
 const HIDE = "Hide details";
-const STRIP = "details strip";
 const NOTES = "notes line";
 const DOCK = "suggestion chips";
 const FIRST_CHIP = "Game context";
+const SESSION = "Session · 1";
+const SUM_UP = "Sum up";
+const ALL_CHIPS = [...CHIPS.map((c) => c.label), SESSION];
 
-/** A finished answer on the live turn, not rated, its Show details panel listing three chips. */
+/** A finished answer on the live turn, not rated, its Show details panel listing four chips. */
 function props(answer: string, notes: KbAttachedNote[], over: Partial<MainTabChatTranscriptProps> = {}): MainTabChatTranscriptProps {
   return chatProps(
     {
@@ -85,13 +86,14 @@ const page = () => panel.page();
 
 const STAMP = [
   ".bonsai-answer-stop", ".bonsai-chat-turn-row-body", ".bonsai-chat-details-divider", ".bonsai-kb-notes-block",
-  ".bonsai-details-tabs-row", ".bonsai-chip-ladder-chip", ".bonsai-spoiler-reveal-target",
+  ".bonsai-chip-ladder-chip", ".bonsai-spoiler-reveal-target", ".bonsai-sumup-btn", ".bonsai-details-session-row",
 ].join(", ");
 function stopName(el: HTMLElement): string | null {
-  if (el.classList.contains("bonsai-details-tabs-row")) return STRIP;
   if (el.classList.contains("bonsai-kb-notes-block")) return NOTES;
+  if (el.classList.contains("bonsai-sumup-btn")) return SUM_UP;
   if (el.classList.contains("bonsai-answer-stop")) return `section ${el.getAttribute("data-bonsai-chunk-index")}`;
   if (el.classList.contains("bonsai-chat-turn-row-body")) return "question";
+  if (el.classList.contains("bonsai-details-session-row")) return "session row";
   return null;
 }
 /** Draw the screen with the dock's chips under it, open Show details, and leave the ring on "Hide details". */
@@ -104,68 +106,68 @@ async function drawWithDetailsOpen(p: MainTabChatTranscriptProps, chips?: ChipLa
   expect(screen.nameOf(page().ring())).toBe(HIDE);
   return screen;
 }
-function activeTab(): string {
-  return page().host.querySelector(".bonsai-details-tab--active")?.textContent ?? "";
+/** The words on the open chip of the panel's own grid. */
+function openChip(): string {
+  return page().host.querySelector(".bonsai-chip-ladder > .bonsai-chip-ladder-grid > .bonsai-chip-ladder-chip--active")?.textContent ?? "";
+}
+function sessionBoxDrawn(): boolean {
+  return page().host.querySelector(".bonsai-chip-ladder .bonsai-details-session-body") !== null;
 }
 
 describe.each([
   ["with the page's focus", true],
   ["with the page's focus gone", false],
-])("P103-DETAILS-STRIP-01, %s", (_label, focused) => {
+])("P103-DETAILS-STRIP-01 and P105-DETAILS-CHIPS-01, %s", (_label, focused) => {
   describe.each([
-    ["no notes line above the strip", ANSWER_PLAIN, [] as KbAttachedNote[], [HIDE, STRIP]],
-    ["a notes line between Hide details and the strip", ANSWER_NAMING_NOTE, [NOTE], [HIDE, NOTES, STRIP]],
-  ])("%s", (_shape, answer, notes, toStrip) => {
-    it("Down from Hide details reaches the strip, three times running, through the notes line when one is drawn", async () => {
+    ["no notes line above the chips", ANSWER_PLAIN, [] as KbAttachedNote[], [HIDE, FIRST_CHIP]],
+    ["a notes line between Hide details and the chips", ANSWER_NAMING_NOTE, [NOTE], [HIDE, NOTES, FIRST_CHIP]],
+  ])("%s", (_shape, answer, notes, toChips) => {
+    it("Down from Hide details reaches the first chip, three times running, through the notes line when one is drawn", async () => {
       const s = await drawWithDetailsOpen(props(answer, notes));
       for (let i = 0; i < 3; i++) {
         page().setFocused(focused);
-        expect(await s.walk("onMoveDown", STRIP)).toEqual(toStrip);
+        expect(await s.walk("onMoveDown", FIRST_CHIP)).toEqual(toChips);
         page().setFocused(true);
         s.put(HIDE);
       }
     });
 
-    it("Right on the strip shows Session and keeps the ring on the strip; Left goes back to This answer", async () => {
+    it("Right walks every chip once, Session last, its box opening in the chip box's place; Left walks back", async () => {
       const s = await drawWithDetailsOpen(props(answer, notes));
       page().setFocused(focused);
-      await s.walk("onMoveDown", STRIP);
-      expect(await s.press("onMoveRight")).toBe("claimed");
-      expect(activeTab()).toMatch(/^Session · /);
-      expect(s.nameOf(page().ring())).toBe(STRIP);
-      expect(await s.press("onMoveLeft")).toBe("claimed");
-      expect(activeTab()).toBe("This answer");
-      expect(s.nameOf(page().ring())).toBe(STRIP);
+      await s.walk("onMoveDown", FIRST_CHIP);
+      expect(await s.walk("onMoveRight", SESSION)).toEqual(ALL_CHIPS);
+      expect(openChip()).toBe(SESSION);
+      expect(sessionBoxDrawn()).toBe(true);
+      expect(await s.walk("onMoveLeft", FIRST_CHIP)).toEqual([...ALL_CHIPS].reverse());
+      expect(openChip()).toBe(FIRST_CHIP);
+      expect(sessionBoxDrawn()).toBe(false);
     });
 
-    it("walks Down from Hide details past the strip and the open chip to the suggestion chips, and Up back, no stop twice", async () => {
+    it("B on the Session chip, and B on an answer chip, close the panel and leave the ring on Show details", async () => {
       const s = await drawWithDetailsOpen(props(answer, notes));
       page().setFocused(focused);
-      const down = await s.walk("onMoveDown", DOCK);
-      expect(down).toEqual([...toStrip, FIRST_CHIP, DOCK]);
-      expect(await s.walk("onMoveUp", HIDE)).toEqual([...down].reverse());
-    });
-
-    it("B on the strip, and B on the open chip, close the panel and leave the ring on Show details", async () => {
-      const s = await drawWithDetailsOpen(props(answer, notes));
-      page().setFocused(focused);
-      await s.walk("onMoveDown", STRIP);
+      await s.walk("onMoveDown", FIRST_CHIP);
+      await s.walk("onMoveRight", SESSION);
       expect(await s.button("onCancelButton")).toBe(true);
-      expect(page().host.querySelector(".bonsai-details-tabs-row")).toBeNull();
+      expect(page().host.querySelector(".bonsai-chip-ladder")).toBeNull();
       expect(s.nameOf(page().ring())).toBe("Show details");
 
       page().setFocused(true);
       expect(await s.button("onOKButton")).toBe(true);
+      /* Opened again on the Session chip, left open; Left back to an answer chip, then its B. */
+      expect(openChip()).toBe(SESSION);
       page().setFocused(focused);
-      await s.walk("onMoveDown", FIRST_CHIP);
-      expect(s.nameOf(page().ring())).toBe(FIRST_CHIP);
+      await s.walk("onMoveDown", SESSION);
+      expect(await s.press("onMoveLeft")).toBe("claimed");
+      expect(s.nameOf(page().ring())).toBe("Tips");
       expect(await s.button("onCancelButton")).toBe(true);
       expect(page().host.querySelector(".bonsai-chip-ladder")).toBeNull();
       expect(s.nameOf(page().ring())).toBe("Show details");
     });
   });
 
-  it("Down from the strip lands on the chip that was open, the ring and the page's focus together", async () => {
+  it("Down from Hide details lands on the chip that was open, the ring and the page's focus together", async () => {
     const s = await drawWithDetailsOpen(props(ANSWER_PLAIN, []));
     await s.walk("onMoveDown", FIRST_CHIP);
     /* A step to the next chip, made with the page's focus: chip steps are plain hops between siblings. */
@@ -173,22 +175,31 @@ describe.each([
     expect(s.nameOf(page().ring())).toBe("Notes");
     page().setFocused(focused);
     await s.press("onMoveUp");
-    expect(s.nameOf(page().ring())).toBe(STRIP);
+    expect(s.nameOf(page().ring())).toBe(HIDE);
     await s.press("onMoveDown");
     expect(s.nameOf(page().ring())).toBe("Notes");
     expect(s.nameOf(page().active())).toBe("Notes");
   });
 
-  /* The second opinion's fix-up: a step between chips was a plain focus whose failure was ignored. */
-  it("chips on two rows: Down crosses to the second row, then leaves to the suggestion chips, and Up comes back", async () => {
+  it("chips on rows of two: Down crosses the rows onto the Session chip and into its box onto Sum up, and Up walks back out", async () => {
     const s = await drawWithDetailsOpen(props(ANSWER_PLAIN, []), { chipsPerRow: 2 });
     page().setFocused(focused);
-    const down = await s.walk("onMoveDown", DOCK);
-    expect(down).toEqual([HIDE, STRIP, FIRST_CHIP, "Model", DOCK]);
+    const down = await s.walk("onMoveDown", SUM_UP);
+    expect(down).toEqual([HIDE, FIRST_CHIP, "Model", SESSION, SUM_UP]);
+    expect(sessionBoxDrawn()).toBe(true);
     expect(await s.walk("onMoveUp", HIDE)).toEqual([...down].reverse());
   });
 
-  it("chips on two rows: Right and Left step chip to chip and the ring follows every step", async () => {
+  it("chips on rows of three: Down from an answer chip on the Session chip's row leaves for the suggestion chips, and Up comes back", async () => {
+    const s = await drawWithDetailsOpen(props(ANSWER_PLAIN, []), { chipsPerRow: 3 });
+    page().setFocused(focused);
+    const down = await s.walk("onMoveDown", DOCK);
+    expect(down).toEqual([HIDE, FIRST_CHIP, "Tips", DOCK]);
+    expect(sessionBoxDrawn()).toBe(false);
+    expect(await s.walk("onMoveUp", HIDE)).toEqual([...down].reverse());
+  });
+
+  it("chips on rows of two: Right and Left step chip to chip and the ring follows every step", async () => {
     const s = await drawWithDetailsOpen(props(ANSWER_PLAIN, []), { chipsPerRow: 2 });
     page().setFocused(focused);
     await s.walk("onMoveDown", FIRST_CHIP);
@@ -199,11 +210,11 @@ describe.each([
     }
   });
 
-  it("a covered answer's caption is no stop: Down from Hide details goes straight to the strip", async () => {
+  it("a covered answer's caption is no stop: Down from Hide details goes straight to the chips", async () => {
     const covered = "```bonsai-spoiler\nThat is Charms and notches.\n```";
     const s = await drawWithDetailsOpen(props(covered, [NOTE], { strategySpoilerMaskingEnabled: true }));
     expect(page().host.querySelector(".bonsai-kb-notes-covered-caption")).not.toBeNull();
     page().setFocused(focused);
-    expect(await s.walk("onMoveDown", STRIP)).toEqual([HIDE, STRIP]);
+    expect(await s.walk("onMoveDown", FIRST_CHIP)).toEqual([HIDE, FIRST_CHIP]);
   });
 });

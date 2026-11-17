@@ -34,8 +34,14 @@ const boxFirst = rule(`${S}__summary::before`);
 const text = rule(`${S}__summary-text`);
 const chevron = rule(`${S}__chevron`);
 
-/** The panel's width on the Deck, and the arrow's least distance from its edge (the row's own number). */
-const LINE_W = 300;
+/**
+ * The pane's width on the Deck, the section block's margin at each side (plan 105 lane C1: each section is a block
+ * inset from the pane, read from the rules), the line's width inside it, and the arrow's least distance from the pane's
+ * edge (the row's own number).
+ */
+const PANE_W = 300;
+const BLOCK_SIDE = px((rule(".bonsai-scope .bonsai-fold-section")["margin"] ?? "").split(/\s+/)[1]);
+const LINE_W = PANE_W - 2 * BLOCK_SIDE;
 const ARROW_EDGE_MIN = 8;
 /** Anything shown narrower than this is a sliver (the Deck's "Hi..." was 25 px). */
 const SLIVER_PX = 40;
@@ -59,11 +65,16 @@ function layOut(nameW: number): { summaryW: number; arrowFromEdge: number } {
   const textMargin = px(text["margin-left"]);
   const least = px((text["flex"] ?? "").split(/\s+/)[2]);
   const summaryW = wraps ? (boxW >= textMargin + least ? boxW - textMargin : 0) : boxW;
-  return { summaryW, arrowFromEdge: LINE_W - arrowRight };
+  return { summaryW, arrowFromEdge: LINE_W - arrowRight + BLOCK_SIDE };
 }
 
-/** Name widths the Deck measured or implies (plan 94: line width less padding, gaps, arrow and the shown summary). */
-const MEASURED: Array<[string, number]> = [
+/**
+ * Name widths the Deck measured or implies (plan 94: line width less padding, gaps, arrow and the shown summary), at
+ * 12 points and weight 700. The names are now drawn at 13 and 800 (board 5 tab 1), about this much wider; the Deck
+ * measure after plan 105 replaces the estimate.
+ */
+const NAME_GROWTH = 1.12;
+const MEASURED_AT_12: Array<[string, number]> = [
   ["Story spoilers at Small", 206],
   ["Story spoilers at Normal", 229],
   ["Story spoilers at Large", 263],
@@ -73,6 +84,7 @@ const MEASURED: Array<[string, number]> = [
   ["Knowledge base at Large", 215],
   ["Connection tuning at Large", 160],
 ];
+const MEASURED: Array<[string, number]> = MEASURED_AT_12.map(([label, w]) => [label, Math.round(w * NAME_GROWTH)]);
 
 describe("folded section line at every text size: a summary is useful or absent, the arrow keeps its gap", () => {
   it.each(MEASURED)("%s: no sliver of summary", (_label, nameW) => {
@@ -85,6 +97,10 @@ describe("folded section line at every text size: a summary is useful or absent,
   it("a name wider than the whole line still leaves the arrow its gap", () => {
     expect(layOut(LINE_W * 2).arrowFromEdge).toBeGreaterThanOrEqual(ARROW_EDGE_MIN);
     expect(layOut(LINE_W * 2).summaryW).toBe(0);
+  });
+  it("the block takes 6 points at each side of the line, so the line is 288 wide and the arrow 18 from the pane's edge", () => {
+    expect(LINE_W).toBe(288);
+    expect(layOut(100).arrowFromEdge).toBe(sidePad(line["padding"]) + BLOCK_SIDE);
   });
   it("a short name leaves the summary room to show", () => {
     expect(layOut(100).summaryW).toBeGreaterThanOrEqual(SLIVER_PX);

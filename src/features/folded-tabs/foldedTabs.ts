@@ -4,7 +4,9 @@
  * Purpose: The stylesheet for src/features/folded-tabs (plan 91 § 2b, drawn on the density board's
  * Ollama tab, round 2 option B and round 3 option C: docs/demos/mockup-board-2/src/43-tabs.css). A
  * section line is one row: its name in small capitals, its summary greyed and cut off with an
- * ellipsis, a chevron. The strip is a dark band over the bottom of the panel: the ringed row's name in
+ * ellipsis, a chevron. Each section is one small rounded block a few points in from the sides, its
+ * line a lighter band on top and, while open, its settings on the same shade below (plan 105 lane C1,
+ * board 5 tab 1 option B: docs/demos/mockup-board-5/src/61-sections.css, `.b5t1-v-b`). The strip is a dark band over the bottom of the panel: the ringed row's name in
  * small grey capitals, then its text. The Open all button sits in the bottom-right corner above it, on a
  * band of the panel's own colour across the whole width (plan 93: floating alone, it sat over the words
  * and arrow of whichever row scrolled under it).
@@ -27,6 +29,21 @@ const FOLDED_TAB_IDS = ["ollama", "settings", "developer"] as const;
 /** A section line's least height, and its side padding (the drawing's 34 and 12). */
 const FOLD_LINE_MIN_HEIGHT_PX = 34;
 const FOLD_ROW_SIDE_PAD_PX = 12;
+
+/**
+ * The block each section is drawn as (board 5 tab 1 option B). The block is ${"`"}FOLD_BLOCK_SIDE_PX${"`"} in from each side of the
+ * pane, so a line and its settings are twice that narrower than the 300 the pane gives: foldLineFit.test.ts reads the
+ * margin back out of the rules. Shades, one step apart: the panel (#0e141b), the block, the line, and Steam's own
+ * focus fill (#32373d) a step lighter again, so a ringed line's fill still shows against its shade.
+ */
+const FOLD_BLOCK_GAP_PX = 5;
+const FOLD_BLOCK_SIDE_PX = 6;
+const FOLD_BLOCK_END_PX = 4;
+const FOLD_BLOCK_RADIUS_PX = 4;
+const BLOCK_SHADE = "#131b24";
+const LINE_SHADE = "#1b2531";
+const BLOCK_EDGE = "#1c2530";
+const BLOCK_EDGE_OPEN = "#26313e";
 
 /**
  * A section line's sums (plan 97 L13; the Deck, plan 94: at Large the Story spoilers name pushed its arrow to 3 px
@@ -86,6 +103,24 @@ export function buildFoldedTabsSection(): string {
 /* ==========================================================================
            FOLDED TABS (plan 91 § 2b): section lines, one-line rows, the strip, Open all
            ========================================================================== */
+        /*
+         * The block (the drawing's .b5t1-sec): 5 down from the one above, ${FOLD_BLOCK_SIDE_PX} in from each side, a 4 point radius, a
+         * shade a step lighter than the panel and a one point edge (a step lighter again while open). No overflow cut:
+         * the ring on a line and on a setting inside is drawn at the block's edge and a cut there would clip it; the line
+         * rounds its own corners instead (below).
+         */
+        .bonsai-scope .bonsai-fold-section {
+          margin: ${FOLD_BLOCK_GAP_PX}px ${FOLD_BLOCK_SIDE_PX}px 0;
+          border-radius: ${FOLD_BLOCK_RADIUS_PX}px;
+          background: ${BLOCK_SHADE};
+          box-shadow: 0 0 0 1px ${BLOCK_EDGE};
+        }
+        .bonsai-scope .bonsai-fold-section[data-open="true"] {
+          box-shadow: 0 0 0 1px ${BLOCK_EDGE_OPEN};
+        }
+        .bonsai-scope .bonsai-fold-section:last-child {
+          margin-bottom: ${FOLD_BLOCK_END_PX}px;
+        }
         .bonsai-scope .bonsai-fold-line {
           display: flex;
           align-items: center;
@@ -93,21 +128,29 @@ export function buildFoldedTabsSection(): string {
           min-height: ${FOLD_LINE_MIN_HEIGHT_PX}px;
           padding: 4px ${FOLD_ROW_SIDE_PAD_PX}px;
           box-sizing: border-box;
-          border-bottom: 1px solid #272c32;
+          border-bottom: 0;
+          /* The block's own corners, so the ring on the line is never cut at the block's edge; square underneath while open. */
+          border-radius: ${FOLD_BLOCK_RADIUS_PX}px;
+          background: ${LINE_SHADE};
           color: #b7b9bb;
           cursor: pointer;
         }
         .bonsai-scope .bonsai-fold-line[data-open="true"] {
           color: #ffffff;
+          border-radius: ${FOLD_BLOCK_RADIUS_PX}px ${FOLD_BLOCK_RADIUS_PX}px 0 0;
         }
         .bonsai-scope .bonsai-fold-line__name {
           /* Whole, never an ellipsis: a name too long for the line wraps, so the arrow never moves (the drawing's .k-ft). */
           flex: 0 1 auto;
-          font-size: ${textPx(12)};
-          font-weight: 700;
+          font-size: ${textPx(13)};
+          font-weight: 800;
           letter-spacing: 0.05em;
           text-transform: uppercase;
           white-space: normal;
+          color: #d7dadd;
+        }
+        .bonsai-scope .bonsai-fold-line[data-open="true"] .bonsai-fold-line__name {
+          color: #ffffff;
         }
         .bonsai-scope .bonsai-fold-line__summary {
           /* What the name leaves; one line tall, so words that drop to its second row are never drawn. */
@@ -160,8 +203,7 @@ export function buildFoldedTabsSection(): string {
           color: #dcdedf;
         }
         .bonsai-scope .bonsai-fold-body {
-          padding-bottom: 4px;
-          border-bottom: 1px solid #272c32;
+          padding: 2px 0 6px;
         }
         .bonsai-scope .bonsai-dense-row {
           width: 100%;

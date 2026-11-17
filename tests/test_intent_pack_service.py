@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import os
 import tempfile
 import unittest
@@ -32,60 +31,7 @@ class IntentPackServiceTests(unittest.TestCase):
         }
         self.assertIsNone(svc._sanitize_pack(raw, svc.load_valid_search_targets()))
 
-    def test_merge_import_new_pack(self) -> None:
-        store = svc.default_bundled_store()
-        incoming = {
-            "id": "custom-lan",
-            "label": "LAN",
-            "entries": [
-                {
-                    "target": "Settings > Downloads > Game File Transfer over Local Network",
-                    "aliases": ["lan transfer"],
-                }
-            ],
-        }
-        preview = svc.merge_import_pack(store, incoming, confirm=False)
-        self.assertTrue(preview.get("ok"))
-        self.assertEqual(preview.get("stats", {}).get("added_entries"), 1)
-        applied = svc.merge_import_pack(store, incoming, confirm=True)
-        self.assertIn("store", applied)
-        ids = [p["id"] for p in applied["store"]["packs"]]
-        self.assertIn("custom-lan", ids)
 
-    def test_merge_skips_conflicting_alias(self) -> None:
-        store = {
-            "schema_version": 1,
-            "packs": [
-                {
-                    "id": "a",
-                    "label": "A",
-                    "enabled": True,
-                    "source": "user",
-                    "updated_at": "2026-01-01",
-                    "entries": [
-                        {
-                            "target": "Settings > Display > Brightness",
-                            "aliases": ["glow"],
-                            "synonyms": [],
-                            "expansions": [],
-                        }
-                    ],
-                }
-            ],
-        }
-        incoming = {
-            "id": "b",
-            "label": "B",
-            "entries": [
-                {
-                    "target": "Settings > Internet > Enable Wi-Fi",
-                    "aliases": ["glow"],
-                }
-            ],
-        }
-        result = svc.merge_import_pack(store, incoming, confirm=False)
-        self.assertTrue(result.get("ok"))
-        self.assertGreaterEqual(result.get("stats", {}).get("conflicts", 0), 1)
 
     def test_save_and_load_roundtrip(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -107,33 +53,8 @@ class IntentPackServiceTests(unittest.TestCase):
             reset = svc.reset_intent_packs_file(path, tmp)
             self.assertTrue(any(p.get("id") == "deck-basics" for p in reset.get("packs") or []))
 
-    def test_export_pack_json(self) -> None:
-        store = svc.default_bundled_store()
-        out = svc.export_pack(store, "deck-basics")
-        self.assertTrue(out.get("ok"))
-        parsed = json.loads(out["json"])
-        self.assertEqual(parsed.get("id"), "deck-basics")
 
-    def test_remove_blocks_bundled(self) -> None:
-        store = svc.default_bundled_store()
-        out = svc.remove_pack(store, "deck-basics")
-        self.assertFalse(out.get("ok"))
 
-    def test_import_rejects_bundled_pack_id(self) -> None:
-        store = svc.default_bundled_store()
-        incoming = {
-            "id": "deck-basics",
-            "label": "Poison",
-            "entries": [
-                {
-                    "target": "Settings > Internet > Enable Wi-Fi",
-                    "aliases": ["evil"],
-                }
-            ],
-        }
-        result = svc.merge_import_pack(store, incoming, confirm=False)
-        self.assertFalse(result.get("ok"))
-        self.assertIn("bundled", str(result.get("error", "")).lower())
 
     def test_load_rejects_oversized_file(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

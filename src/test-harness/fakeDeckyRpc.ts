@@ -48,11 +48,7 @@ export const FRONTEND_RPC_METHODS = [
   "install_voice_engine",
   "get_voice_install_status",
   "get_intent_packs",
-  "set_intent_pack_enabled",
   "set_kids_lock_state",
-  "export_intent_pack",
-  "import_intent_pack",
-  "remove_intent_pack",
   "get_reply_language_snapshot",
   "get_strategy_checklist_session",
   "save_strategy_checklist_session",
@@ -191,36 +187,10 @@ function defaultHandlers(): Record<string, RpcHandler> {
     install_voice_engine: () => ({ accepted: true, model_id: "tiny.en" }),
     get_voice_install_status: () => ({ phase: "idle", done: true }),
     get_intent_packs: () => intentPacksFixture(),
-    set_intent_pack_enabled: (...args: unknown[]) => {
-      const enabled = args[1] === true;
-      const fixture = intentPacksFixture();
-      const packId = String(args[0] ?? "");
-      fixture.packs = fixture.packs.map((p) => (p.id === packId ? { ...p, enabled } : p));
-      fixture.summaries = fixture.summaries.map((s) => (s.id === packId ? { ...s, enabled } : s));
-      return { ok: true, ...fixture };
-    },
     set_kids_lock_state: (...args: unknown[]) => ({
       ok: true,
       kids_lock_active: args[0] === true,
     }),
-    export_intent_pack: () => ({
-      ok: true,
-      json: JSON.stringify(intentPacksFixture().packs[0], null, 2),
-    }),
-    import_intent_pack: (...args: unknown[]) => {
-      const payload = args[0];
-      const confirm =
-        payload && typeof payload === "object" && (payload as { confirm?: boolean }).confirm === true;
-      return {
-        ok: true,
-        dry_run: !confirm,
-        pack: intentPacksFixture().packs[0],
-        conflicts: [],
-        stats: { added_entries: 0, merged_entries: 0, conflicts: 0 },
-        ...(confirm ? intentPacksFixture() : {}),
-      };
-    },
-    remove_intent_pack: () => ({ ok: false, error: "Bundled packs cannot be removed (disable instead)" }),
     get_strategy_checklist_session: () => null,
     save_strategy_checklist_session: () => ({ ok: true }),
     clear_strategy_checklist_session: () => ({ ok: true }),

@@ -299,7 +299,6 @@ class Plugin:
         self._voice_install_cancel = threading.Event()
         self._voice_install_state: dict = new_voice_install_state()
         self._settings_save_lock = asyncio.Lock()
-        self._intent_pack_store_lock = asyncio.Lock()
         self._strategy_checklist_store_lock = asyncio.Lock()
         self._rag_corpus_download_lock = asyncio.Lock()
         self._rag_corpus_download_task: Optional[asyncio.Task] = None
@@ -1030,26 +1029,10 @@ class Plugin:
         """Return intent pack summaries and full entries for unified search indexing."""
         return await intent_pack_rpc.get_intent_packs(self)
 
-    async def set_intent_pack_enabled(self, pack_id: str = "", enabled: bool = True):
-        """Enable or disable a search intent pack."""
-        return await intent_pack_rpc.set_intent_pack_enabled(self, pack_id, enabled)
-
     async def set_kids_lock_state(self, active: bool = False):
         """Session Kids master lock from Steam parental `locked` (frontend assertion)."""
         set_kids_lock_active(bool(active))
         return {"ok": True, "kids_lock_active": kids_lock_active()}
-
-    async def export_intent_pack(self, pack_id: str = ""):
-        """Export one intent pack as formatted JSON."""
-        return await intent_pack_rpc.export_intent_pack(self, pack_id)
-
-    async def import_intent_pack(self, payload: Any = None):
-        """Dry-run or confirm-merge import of a single intent pack from JSON."""
-        return await intent_pack_rpc.import_intent_pack(self, payload)
-
-    async def remove_intent_pack(self, pack_id: str = ""):
-        """Remove a user/imported intent pack (bundled packs cannot be removed)."""
-        return await intent_pack_rpc.remove_intent_pack(self, pack_id)
 
     @staticmethod
     def _clean_env() -> dict:

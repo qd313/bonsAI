@@ -5,12 +5,12 @@ search for a word like "mic" find the Voice settings even though the setting
 itself is only labeled "Voice". It stores small lists of extra words --
 other names, related words, and phrases that expand into a search term --
 that each point at a specific place in the settings, both the lists the
-plugin ships with and ones you can export and import between installs. It
+plugin ships with and ones kept on this install. It
 never talks to the AI or the internet; it is a local list to match words
 against.
 
-Used for: The settings-search feature. main.py calls the load, save, import
-and export functions here for the Settings screen's manage-packs panel; the
+Used for: The settings-search feature. main.py calls the load and save
+functions here; the
 screen itself does the actual word matching against these lists at search
 time (src/features/search-tab/intentPackSearch.ts).
 
@@ -36,19 +36,12 @@ How it works:
  3. `ensure_bundled_intent_packs()` re-adds a built-in pack if it is ever
     missing, without touching any pack the person has added or edited
     themselves.
- 4. Importing a pack (`parse_import_payload()`, then `merge_import_pack()`)
-    is a two-step, preview-first flow: it can be checked before being
-    written, and `_merge_pack_entries()` and `_strip_global_term_conflicts()`
-    decide what happens when an imported word already points somewhere else
-    -- the existing mapping wins, and the clash is reported back rather than
-    silently overwritten.
- 5. `save_intent_packs()` writes the cleaned-up store to a temporary file and
+ 4. `save_intent_packs()` writes the cleaned-up store to a temporary file and
     only swaps it into place once the write has finished, the same
     crash-safe pattern used elsewhere in the plugin.
 
 Gotchas:
- - A pack the plugin ships with cannot be deleted -- `remove_pack()` refuses
-   -- only disabled. `BUNDLED_PACK_IDS` lists which ones those are.
+ - `BUNDLED_PACK_IDS` lists the packs the plugin ships with.
  - A saved file that has grown past the size limit is not read at all.
    `load_intent_packs()` falls back to the packs the plugin ships with,
    kept only in memory, rather than trying to parse an oversized file -- but
@@ -342,281 +335,6 @@ def pack_summaries(store: dict[str, Any]) -> list[dict[str, Any]]:
             }
         )
     return out
-
-
-def _term_owner_map(store: dict[str, Any]) -> dict[str, str]:
-    """Map normalized alias/synonym term -> target path across all packs."""
-    owners: dict[str, str] = {}
-    for pack in store.get("packs") or []:
-        if not isinstance(pack, dict):
-            continue
-        for entry in pack.get("entries") or []:
-            if not isinstance(entry, dict):
-                continue
-            target = entry.get("target")
-            if not isinstance(target, str):
-                continue
-            for key in ("aliases", "synonyms"):
-                for term in entry.get(key) or []:
-                    if isinstance(term, str) and term not in owners:
-                        owners[term] = target
-    return owners
-
-
-def _merge_entry_terms(
-    existing: dict[str, Any],
-    incoming: dict[str, Any],
-    conflicts: list[dict[str, str]],
-) -> dict[str, Any]:
-    owners: dict[str, str] = {}
-    for key in ("aliases", "synonyms"):
-        for term in existing.get(key) or []:
-            if isinstance(term, str):
-                owners[term] = str(existing.get("target", ""))
-    merged = {
-        "target": existing["target"],
-        "aliases": list(existing.get("aliases") or []),
-        "synonyms": list(existing.get("synonyms") or []),
-        "expansions": list(existing.get("expansions") or []),
-    }
-    for key in ("aliases", "synonyms", "expansions"):
-        existing_terms = set(merged[key])
-        for term in incoming.get(key) or []:
-            if not isinstance(term, str) or term in existing_terms:
-                continue
-            if key in ("aliases", "synonyms"):
-                owner = owners.get(term)
-                if owner and owner != merged["target"]:
-                    conflicts.append(
-                        {
-                            "term": term,
-                            "existing_target": owner,
-                            "incoming_target": incoming.get("target", ""),
-                        }
-                    )
-                    continue
-                owners[term] = merged["target"]
-            merged[key].append(term)
-            existing_terms.add(term)
-    return merged
-
-
-def _merge_pack_entries(
-    existing_pack: dict[str, Any],
-    incoming_pack: dict[str, Any],
-    conflicts: list[dict[str, str]],
-) -> tuple[dict[str, Any], int]:
-    """Merge entries by target path."""
-    by_target: dict[str, dict[str, Any]] = {}
-    for entry in existing_pack.get("entries") or []:
-        if isinstance(entry, dict) and isinstance(entry.get("target"), str):
-            by_target[entry["target"]] = entry
-    added = 0
-    for entry in incoming_pack.get("entries") or []:
-        if not isinstance(entry, dict) or not isinstance(entry.get("target"), str):
-            continue
-        target = entry["target"]
-        if target in by_target:
-            by_target[target] = _merge_entry_terms(by_target[target], entry, conflicts)
-        else:
-            by_target[target] = entry
-            added += 1
-    merged_pack = {
-        **existing_pack,
-        "label": incoming_pack.get("label") or existing_pack.get("label"),
-        "updated_at": incoming_pack.get("updated_at") or existing_pack.get("updated_at"),
-        "entries": list(by_target.values())[:MAX_ENTRIES_PER_PACK],
-    }
-    return merged_pack, added
-
-
-def parse_import_payload(raw_json: str) -> tuple[dict[str, Any] | None, str | None]:
-    """Parse clipboard/file JSON into a single pack object."""
-    if not isinstance(raw_json, str):
-        return None, "Expected JSON string"
-    if len(raw_json.encode("utf-8")) > MAX_IMPORT_JSON_BYTES:
-        return None, "Import payload too large"
-    try:
-        parsed = json.loads(raw_json)
-    except json.JSONDecodeError as exc:
-        return None, f"Invalid JSON: {exc}"
-    if isinstance(parsed, dict) and isinstance(parsed.get("pack"), dict):
-        parsed = parsed["pack"]
-    if not isinstance(parsed, dict):
-        return None, "Expected a pack object with id, label, and entries"
-    return parsed, None
-
-
-def _strip_global_term_conflicts(
-    pack: dict[str, Any],
-    store: dict[str, Any],
-    conflicts: list[dict[str, str]],
-) -> dict[str, Any]:
-    """Remove alias/synonym terms that already map to a different target in store."""
-    owners = _term_owner_map(store)
-    entries_out: list[dict[str, Any]] = []
-    for entry in pack.get("entries") or []:
-        if not isinstance(entry, dict) or not isinstance(entry.get("target"), str):
-            continue
-        target = entry["target"]
-        cleaned = {
-            "target": target,
-            "aliases": [],
-            "synonyms": [],
-            "expansions": list(entry.get("expansions") or []),
-        }
-        has_direct = False
-        for key in ("aliases", "synonyms"):
-            for term in entry.get(key) or []:
-                if not isinstance(term, str):
-                    continue
-                owner = owners.get(term)
-                if owner and owner != target:
-                    conflicts.append(
-                        {
-                            "term": term,
-                            "existing_target": owner,
-                            "incoming_target": target,
-                        }
-                    )
-                    continue
-                cleaned[key].append(term)
-                owners[term] = target
-                has_direct = True
-        expansions = entry.get("expansions") or []
-        if expansions:
-            cleaned["expansions"] = [t for t in expansions if isinstance(t, str)]
-            if cleaned["expansions"]:
-                has_direct = True
-        if has_direct:
-            entries_out.append(cleaned)
-    if not entries_out:
-        return pack
-    return {**pack, "entries": entries_out}
-
-
-def merge_import_pack(
-    store: dict[str, Any],
-    incoming_raw: dict[str, Any],
-    *,
-    confirm: bool = False,
-) -> dict[str, Any]:
-    """
-    Dry-run or apply import merge.
-
-    Returns dict with ok, store (if confirm), pack preview, conflicts, stats, error.
-    """
-    valid_targets = load_valid_search_targets()
-    incoming = _sanitize_pack(incoming_raw, valid_targets)
-    if not incoming:
-        return {"ok": False, "error": "No valid entries after validation (check targets and terms)"}
-    incoming = {**incoming, "source": "imported"}
-    pack_id = incoming["id"]
-    if pack_id in BUNDLED_PACK_IDS:
-        return {
-            "ok": False,
-            "error": f"Cannot import into bundled pack id {pack_id!r}; choose a different id",
-        }
-    base = sanitize_intent_pack_store(store)
-    conflicts: list[dict[str, str]] = []
-    stats = {"added_entries": 0, "merged_entries": 0, "conflicts": 0}
-    existing_idx = next(
-        (i for i, p in enumerate(base.get("packs") or []) if isinstance(p, dict) and p.get("id") == pack_id),
-        None,
-    )
-    if existing_idx is None:
-        incoming = _strip_global_term_conflicts(incoming, base, conflicts)
-        if not incoming.get("entries"):
-            return {"ok": False, "error": "No valid entries after conflict resolution"}
-        stats["added_entries"] = len(incoming.get("entries") or [])
-        preview_store = {
-            **base,
-            "packs": list(base.get("packs") or []) + [incoming],
-        }
-    else:
-        existing_pack = base["packs"][existing_idx]
-        merged_pack, added = _merge_pack_entries(existing_pack, incoming, conflicts)
-        existing_targets = {
-            e.get("target") for e in existing_pack.get("entries") or [] if isinstance(e, dict)
-        }
-        for entry in incoming.get("entries") or []:
-            if not isinstance(entry, dict):
-                continue
-            target = entry.get("target")
-            if isinstance(target, str) and target in existing_targets:
-                stats["merged_entries"] += 1
-        stats["added_entries"] = added
-        packs = list(base.get("packs") or [])
-        packs[existing_idx] = merged_pack
-        preview_store = {**base, "packs": packs}
-    stats["conflicts"] = len(conflicts)
-    preview_pack = next(
-        (p for p in preview_store.get("packs") or [] if isinstance(p, dict) and p.get("id") == pack_id),
-        incoming,
-    )
-    result: dict[str, Any] = {
-        "ok": True,
-        "pack": preview_pack,
-        "conflicts": conflicts,
-        "stats": stats,
-        "dry_run": not confirm,
-    }
-    if confirm:
-        result["store"] = sanitize_intent_pack_store(preview_store)
-    return result
-
-
-def export_pack(store: dict[str, Any], pack_id: str) -> dict[str, Any]:
-    """Export a single pack as JSON string."""
-    if not isinstance(pack_id, str) or not pack_id.strip():
-        return {"ok": False, "error": "pack_id required"}
-    pack_id = pack_id.strip()
-    for pack in store.get("packs") or []:
-        if isinstance(pack, dict) and pack.get("id") == pack_id:
-            exportable = {
-                "id": pack.get("id"),
-                "label": pack.get("label"),
-                "enabled": pack.get("enabled"),
-                "source": pack.get("source"),
-                "updated_at": pack.get("updated_at"),
-                "entries": pack.get("entries"),
-            }
-            return {"ok": True, "json": json.dumps(exportable, indent=2, ensure_ascii=False)}
-    return {"ok": False, "error": f"Pack not found: {pack_id}"}
-
-
-def set_pack_enabled(store: dict[str, Any], pack_id: str, enabled: bool) -> dict[str, Any]:
-    """Toggle pack enabled flag."""
-    if not isinstance(pack_id, str) or not pack_id.strip():
-        return {"ok": False, "error": "pack_id required"}
-    pack_id = pack_id.strip()
-    base = sanitize_intent_pack_store(store)
-    found = False
-    packs: list[dict[str, Any]] = []
-    for pack in base.get("packs") or []:
-        if not isinstance(pack, dict):
-            continue
-        if pack.get("id") == pack_id:
-            pack = {**pack, "enabled": bool(enabled)}
-            found = True
-        packs.append(pack)
-    if not found:
-        return {"ok": False, "error": f"Pack not found: {pack_id}"}
-    return {"ok": True, "store": {**base, "packs": packs}}
-
-
-def remove_pack(store: dict[str, Any], pack_id: str) -> dict[str, Any]:
-    """Remove imported/user pack; bundled packs cannot be removed."""
-    if not isinstance(pack_id, str) or not pack_id.strip():
-        return {"ok": False, "error": "pack_id required"}
-    pack_id = pack_id.strip()
-    if pack_id in BUNDLED_PACK_IDS:
-        return {"ok": False, "error": "Bundled packs cannot be removed (disable instead)"}
-    base = sanitize_intent_pack_store(store)
-    packs = [p for p in base.get("packs") or [] if isinstance(p, dict) and p.get("id") != pack_id]
-    if len(packs) == len(base.get("packs") or []):
-        return {"ok": False, "error": f"Pack not found: {pack_id}"}
-    return {"ok": True, "store": {**base, "packs": packs}}
 
 
 def reset_intent_packs_file(path: str, settings_dir: str, logger: Any = None) -> dict[str, Any]:

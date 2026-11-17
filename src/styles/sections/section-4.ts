@@ -81,6 +81,7 @@ import {
   PRESET_CHIP_GAP_PX,
 } from "../../features/preset-carousel/presetRowLayout";
 import { buildPresetChipLabelCss } from "../../features/preset-carousel/presetChipLabel";
+import { PRESET_WIDEN_MS, restBasisCss } from "../../features/preset-carousel/presetChipWiden";
 
 /**
  * In: nothing.
@@ -195,9 +196,22 @@ export function buildSection4Section(): string {
           width: 100% !important;
           min-width: 0 !important;
         }
+        /*
+          Each slot takes the CSS length usePresetChipWiden hands it (the custom property), which at rest
+          is an equal share of the row, the same widths flex 1 1 0 gave. It is a length, not a grow
+          factor, so that while the ring is on a chip whose words do not fit, the chip can widen across
+          the row and its neighbour shrink to a stub, and the browser can animate the move
+          (${PRESET_WIDEN_MS} ms, the drawing's 0.16 s; none with reduced motion). Nothing here touches height.
+        */
         .bonsai-scope .bonsai-preset-across > .bonsai-preset-carousel-slot {
-          flex: 1 1 0 !important;
+          flex: 0 1 var(--bonsai-chip-basis, ${restBasisCss(2, PRESET_CHIP_GAP_PX)}) !important;
           min-width: 0 !important;
+          transition: flex-basis ${PRESET_WIDEN_MS}ms cubic-bezier(0.2, 0.7, 0.3, 1);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .bonsai-scope .bonsai-preset-across > .bonsai-preset-carousel-slot {
+            transition: none !important;
+          }
         }
         /*
           The soft blue fill on the chip the D-pad is on. It marks which chip a press would act on, and

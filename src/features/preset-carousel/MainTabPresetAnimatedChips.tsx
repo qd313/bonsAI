@@ -72,6 +72,7 @@ import { nextSlotPreset, startSlotRotation, type SlotRotation } from "./presetSl
 import { PresetChipButton } from "./presetChipButton";
 import { PresetRowFocusRoot, usePresetRowNav } from "./presetRowFocusNav";
 import { MainTabPresetDecodeSlots } from "./presetDecodeSlots";
+import { usePresetChipWiden } from "./usePresetChipWiden";
 import { composeDecodeText, PRESET_DECODE_CARET_CHAR } from "./presetChipDecodeText";
 import {
   type MainTabPresetAnimatedChipsProps,
@@ -122,6 +123,11 @@ function MainTabPresetPlainSlots(props: Omit<MainTabPresetAnimatedChipsProps, "a
   // What each long chip tells the row about its own scroll, so it is replaced one pause after its
   // words stop (presetChipStay.ts).
   const [stayBoard] = useState(makeChipStayBoard);
+  // The chip with the ring takes the row while its words do not fit (usePresetChipWiden.ts).
+  const widen = usePresetChipWiden(
+    slots.map((s) => s.text),
+    slotCount,
+  );
 
   useEffect(() => {
     const initial = normalizeThreeSeeds(seeds, samplerOptions);
@@ -196,7 +202,13 @@ function MainTabPresetPlainSlots(props: Omit<MainTabPresetAnimatedChipsProps, "a
   return (
     <PresetRowFocusRoot className="bonsai-preset-across">
       {slots.map((p, i) => (
-        <div key={`preset-slot-${i}`} className="bonsai-preset-carousel-slot" data-bonsai-preset-visible="true">
+        <div
+          key={`preset-slot-${i}`}
+          className="bonsai-preset-carousel-slot"
+          data-bonsai-preset-visible="true"
+          ref={widen.slotRef(i)}
+          style={widen.slotStyle(i)}
+        >
           {/* No key of its own: one button per slot, only its words change -- decode mode's
               shape. Keyed by its text, a swap destroyed the button holding the ring and nothing
               took it over (plan70-PRESET-ONE-LINE-03.json, static and fade). */}
@@ -206,9 +218,11 @@ function MainTabPresetPlainSlots(props: Omit<MainTabPresetAnimatedChipsProps, "a
             onPreferAskMode={onPreferAskMode}
             scroll={!reducedMotion}
             buttonRef={nav.setButtonRef[i]}
-            navHandlers={nav.handlersFor(i, slots.length)}
+            navHandlers={{ ...nav.handlersFor(i, slots.length), ...widen.ringHandlers(i) }}
             blockedEdge={nav.isBlockedEdge(i)}
             onScrollPlan={(text, report) => stayBoard.report(i, text, report)}
+            onNeed={widen.reportNeed(i)}
+            stub={widen.stubFor(i)}
           />
         </div>
       ))}

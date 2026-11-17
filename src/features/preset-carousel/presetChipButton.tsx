@@ -14,7 +14,8 @@
  * own copy.
  *
  * Does not: Decide the D-pad wiring or the focus container — see presetRowFocusNav in the same
- * folder.
+ * folder. Does not decide when a chip widens or shrinks either (usePresetChipWiden.ts): it only
+ * reports how wide its words need to be and draws the stub words it is given.
  */
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { Button } from "@decky/ui";
@@ -26,8 +27,22 @@ import {
   presetScrollPlan,
 } from "./presetRowLayout";
 import type { ChipScrollListener } from "./presetChipStay";
+import type { ChipNeedListener } from "./usePresetChipWiden";
 import { joinPresetWithRunningGame } from "./joinPresetWithRunningGame";
 import { textPx } from "../../styles/textPx";
+
+/**
+ * How wide the whole chip would need to be for its words to show on one line: the words plus
+ * everything else in the chip (padding, border, badges, tags). Read off the live elements as the
+ * chip's own width less the room the words have, plus the words' own width, so it comes out the same
+ * whether the chip is cramped, comfortable or widened (the chip's other parts do not change size).
+ * null when nothing is laid out yet.
+ */
+function neededChipWidth(room: HTMLElement, words: HTMLElement): number | null {
+  const button = room.closest("button");
+  if (!button || room.clientWidth <= 0) return null;
+  return Math.ceil(button.offsetWidth - room.clientWidth + words.scrollWidth);
+}
 
 /** The six legs of a long chip's time line (presetScrollPlan): wait, scroll, stand, snap back, scroll, stand. */
 type ScrollLeg = "waiting" | "crawl1" | "read1" | "back" | "crawl2" | "read2";
@@ -55,9 +70,19 @@ type ScrollLeg = "waiting" | "crawl1" | "read1" | "back" | "crawl2" | "read2";
  * replaces the chip at the end of this line, one stand after the second pass, rather than guessing
  * from the length of the words.
  */
-function PresetChipScrollText({ text, onScrollPlan }: { text: string; onScrollPlan?: ChipScrollListener }) {
+function PresetChipScrollText({
+  text,
+  onScrollPlan,
+  onNeed,
+}: {
+  text: string;
+  onScrollPlan?: ChipScrollListener;
+  onNeed?: ChipNeedListener;
+}) {
   const reportRef = useRef(onScrollPlan);
   reportRef.current = onScrollPlan;
+  const needRef = useRef(onNeed);
+  needRef.current = onNeed;
   const roomRef = useRef<HTMLSpanElement>(null);
   const wordsRef = useRef<HTMLSpanElement>(null);
   // null until the words and the room have been measured, so the row is not told anything early.
@@ -70,6 +95,8 @@ function PresetChipScrollText({ text, onScrollPlan }: { text: string; onScrollPl
       const words = wordsRef.current;
       if (!room || !words || room.clientWidth <= 0) return setOverflowPx(0);
       setOverflowPx(Math.max(0, Math.ceil(words.scrollWidth - room.clientWidth)));
+      const need = neededChipWidth(room, words);
+      if (need !== null) needRef.current?.(text, need);
     };
     measure();
     if (typeof ResizeObserver === "undefined" || !roomRef.current) return;
@@ -173,13 +200,53 @@ export function PresetChipText({
   text,
   scroll,
   onScrollPlan,
+  onNeed,
+  stub,
 }: {
   text: string;
   scroll: boolean;
   onScrollPlan?: ChipScrollListener;
+  /** Told how wide the chip must be to show every word on one line (for the row's widening). */
+  onNeed?: ChipNeedListener;
+  /** Shown in place of the words while a neighbour holds the row open: the first word and "...". */
+  stub?: string | null;
 }) {
-  if (!scroll) return <span className="bonsai-preset-chip-text">{text}</span>;
-  return <PresetChipScrollText key={text} text={text} onScrollPlan={onScrollPlan} />;
+  if (stub) {
+    return (
+      <span className="bonsai-preset-chip-text bonsai-preset-chip-text--stub" data-bonsai-chip-stub="true">
+        {stub}
+      </span>
+    );
+  }
+  if (!scroll) return <PresetChipPlainText text={text} onNeed={onNeed} />;
+  return <PresetChipScrollText key={text} text={text} onScrollPlan={onScrollPlan} onNeed={onNeed} />;
+}
+
+/**
+ * The words of a chip that does not slide (reduced motion): cut off with an ellipsis when too long,
+ * and, like the sliding label, reporting how wide the chip must be to show them all.
+ */
+function PresetChipPlainText({ text, onNeed }: { text: string; onNeed?: ChipNeedListener }) {
+  const needRef = useRef(onNeed);
+  needRef.current = onNeed;
+  const wordsRef = useRef<HTMLSpanElement>(null);
+  useLayoutEffect(() => {
+    const measure = () => {
+      const words = wordsRef.current;
+      const need = words ? neededChipWidth(words, words) : null;
+      if (need !== null) needRef.current?.(text, need);
+    };
+    measure();
+    if (typeof ResizeObserver === "undefined" || !wordsRef.current) return;
+    const watcher = new ResizeObserver(measure);
+    watcher.observe(wordsRef.current);
+    return () => watcher.disconnect();
+  }, [text]);
+  return (
+    <span ref={wordsRef} className="bonsai-preset-chip-text">
+      {text}
+    </span>
+  );
 }
 
 /**
@@ -241,15 +308,19 @@ function PresetChipLabel({
   p,
   scroll,
   onScrollPlan,
+  onNeed,
+  stub,
 }: {
   p: PresetPrompt;
   scroll: boolean;
   onScrollPlan?: ChipScrollListener;
+  onNeed?: ChipNeedListener;
+  stub?: string | null;
 }) {
   return (
     <span className="bonsai-preset-chip-label">
       <PresetChipLeadingBadges p={p} />
-      <PresetChipText text={p.text} scroll={scroll} onScrollPlan={onScrollPlan} />
+      <PresetChipText text={p.text} scroll={scroll} onScrollPlan={onScrollPlan} onNeed={onNeed} stub={stub} />
       {p.beta ? (
         <span
           style={{
@@ -278,6 +349,10 @@ export function PresetChipButton(props: {
   blockedEdge?: boolean;
   /** Told the long chip's scroll time line, so the row can replace it one pause after it ends. */
   onScrollPlan?: ChipScrollListener;
+  /** Told how wide the chip must be to show every word (the row widens the chip under the ring). */
+  onNeed?: ChipNeedListener;
+  /** The first word and "...", while the chip beside it holds the row open. */
+  stub?: string | null;
 }) {
   const {
     preset: p,
@@ -288,6 +363,8 @@ export function PresetChipButton(props: {
     navHandlers,
     blockedEdge,
     onScrollPlan,
+    onNeed,
+    stub,
   } = props;
   return (
     <Button
@@ -308,7 +385,7 @@ export function PresetChipButton(props: {
         color: "#c4d3e2",
       }}
     >
-      <PresetChipLabel p={p} scroll={scroll} onScrollPlan={onScrollPlan} />
+      <PresetChipLabel p={p} scroll={scroll} onScrollPlan={onScrollPlan} onNeed={onNeed} stub={stub} />
     </Button>
   );
 }

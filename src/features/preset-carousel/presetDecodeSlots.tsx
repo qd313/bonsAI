@@ -27,6 +27,7 @@ import { PresetRowFocusRoot, usePresetRowNav } from "./presetRowFocusNav";
 import { effectivePresetVisibleSlots } from "./presetRowLayout";
 import { makeChangeSpacer } from "./changeSpacing";
 import { makeChipStayBoard } from "./presetChipStay";
+import { usePresetChipWiden } from "./usePresetChipWiden";
 import { nextSlotPreset, startSlotRotation, type SlotRotation } from "./presetSlotRotation";
 import {
   composeDecodeParts,
@@ -103,6 +104,11 @@ export function MainTabPresetDecodeSlots(
   slotsRef.current = slots;
   // What each settled long label tells the row about its own scroll (presetChipStay.ts).
   const [stayBoard] = useState(makeChipStayBoard);
+  // The chip with the ring takes the row while its words do not fit (usePresetChipWiden.ts).
+  const widen = usePresetChipWiden(
+    slots.map((s) => s.text),
+    slotCount,
+  );
 
   const labelRefs = useRef<DecodeLabelNodes[]>([]);
   /** Stable per-slot ref callbacks — an inline arrow per render would churn ref identity and
@@ -252,6 +258,8 @@ export function MainTabPresetDecodeSlots(
           key={`preset-decode-slot-${i}`}
           className="bonsai-preset-carousel-slot"
           data-bonsai-preset-visible="true"
+          ref={widen.slotRef(i)}
+          style={widen.slotStyle(i)}
         >
           <DecodePresetChipButton
             preset={p}
@@ -261,9 +269,11 @@ export function MainTabPresetDecodeSlots(
             setUnifiedInput={setUnifiedInput}
             onPreferAskMode={onPreferAskMode}
             buttonRef={nav.setButtonRef[i]}
-            navHandlers={nav.handlersFor(i, slots.length)}
+            navHandlers={{ ...nav.handlersFor(i, slots.length), ...widen.ringHandlers(i) }}
             blockedEdge={nav.isBlockedEdge(i)}
             onScrollPlan={(text, report) => stayBoard.report(i, text, report)}
+            onNeed={widen.reportNeed(i)}
+            stub={widen.stubFor(i)}
           />
         </div>
       ))}

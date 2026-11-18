@@ -139,6 +139,8 @@ and up would be serious). "My check" is what I found when I read the code myself
 One thing a reviewer raised that I checked and found right: the starter-set box counts Ollama's size only when it is
 the follow-up of Install Ollama, which is when Ollama is downloaded too.
 
-## What I need from you
-For each entry: fix now, file for later, or leave as it is. Items 1, 2 and 5 are the ones I would fix first. Until you
-answer, nothing here is changed, and the final report does not call the session ready to push.
+## Your answer (2026-11-17, in the chat)
+- **Shelved for now:** items 4, 9, 12 and 13. They go into the shelved list, marked as your call.
+- **Everything else goes into plan 106** (`docs/planning/106-plan-105-wrap-up.md`): items 1, 3 and 6 in one lane,
+  5 and 7 in another, 2 and 10 in a third, and 8, 11 and 14 as small fixes. The security reviewer reads the download
+  lanes before they land.

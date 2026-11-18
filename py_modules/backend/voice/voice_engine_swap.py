@@ -31,11 +31,15 @@ from __future__ import annotations
 
 import os
 import shutil
+import time
 import uuid
 
 from backend.voice.voice_engine_record import BUILD_TOOLS_NAME, RECORD_NAME
 
 STAGING_PREFIX = ".bonsai-engine-staging-"
+# A spare folder younger than this may belong to a build still running (the starter set's voice step and the
+# Settings install do not share a lock; a build may take up to 30 minutes), so the crash sweep leaves it alone.
+STAGING_SWEEP_AGE_S = 2 * 60 * 60
 CLI_NAME = "whisper-cli"
 SERVER_NAME = "whisper-server"
 
@@ -52,13 +56,16 @@ def remove_staging(staging: str) -> None:
 
 
 def new_staging_dir(bin_dir: str) -> str:
-    """A fresh, empty spare folder beside `bin_dir`; spare folders left by an earlier crash are removed first."""
+    """A fresh, empty spare folder beside `bin_dir`; spare folders left by an earlier crash (older than two hours,
+    so never one a build still running is using) are removed first."""
     parent = os.path.dirname(bin_dir.rstrip(os.sep)) or "."
     os.makedirs(parent, exist_ok=True)
     try:
+        now = time.time()
         for name in os.listdir(parent):
-            if name.startswith(STAGING_PREFIX):
-                remove_staging(os.path.join(parent, name))
+            path = os.path.join(parent, name)
+            if name.startswith(STAGING_PREFIX) and now - os.lstat(path).st_mtime > STAGING_SWEEP_AGE_S:
+                remove_staging(path)
     except OSError:
         pass
     staging = os.path.join(parent, STAGING_PREFIX + uuid.uuid4().hex[:8])

@@ -17,6 +17,7 @@ import json
 import os
 import shutil
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 
@@ -155,8 +156,17 @@ class StopOrFailureLeavesTheOldEngine(SwapTestCase):
         old_spare = os.path.join(os.path.dirname(self.bin_dir), swap.STAGING_PREFIX + "deadbeef")
         os.makedirs(old_spare)
         _write(old_spare, {"whisper-cli": b"half"})
+        three_hours_ago = time.time() - 3 * 60 * 60
+        os.utime(old_spare, (three_hours_ago, three_hours_ago))
         self.run_build("_build_whisper_cli_in_container", FakeContainer(NEW))
         self.assertFalse(os.path.exists(old_spare))
+
+    def test_a_fresh_spare_folder_of_another_running_build_is_left_alone(self) -> None:
+        busy_spare = os.path.join(os.path.dirname(self.bin_dir), swap.STAGING_PREFIX + "cafef00d")
+        os.makedirs(busy_spare)
+        _write(busy_spare, {"whisper-cli": b"still being built"})
+        self.run_build("_build_whisper_cli_in_container", FakeContainer(NEW))
+        self.assertTrue(os.path.isdir(busy_spare))
 
 
 class ServerOnlyBuildKeepsTheLibraries(SwapTestCase):

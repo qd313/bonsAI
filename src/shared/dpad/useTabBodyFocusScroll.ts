@@ -288,28 +288,30 @@ const LATE_GROWTH_MS = 1500;
 
 /**
  * After a held stop was put back at screen top `want.top`, keep it there for a moment more, until the next landing or
- * tap. A ResizeObserver on the tab body hears a later change of the page's layout (a section that has just opened
- * drawing more lines) after layout and before that frame is painted, and turns the pane by however far that change
- * moved the row in the page, so the row stays put in the same frame and the person never sees it move; a scroll in
- * between (Steam's own) is left as it is. A look about ten frames later catches Steam's own glide, which changes no
- * box: it puts the row back only when its place was inside Steam's band, so a glide Steam needed is never fought.
+ * tap. A MutationObserver on the tab body hears a later change of the page (a section that has just opened drawing its
+ * late lines when the back end answers) in the microtask right after React writes it, before any frame is drawn, and
+ * turns the pane by however far that change moved the row in the page, so the row never moves on screen; a scroll in
+ * between (Steam's own) is left as it is. Not a ResizeObserver: one made here, in the plugin's own window, is not driven
+ * by the panel page's frames (useAskBarInitialRingClaim.ts), and on the Deck it never put the row back before the late
+ * look did, 7 frames on (plan105-P105-SECTIONS-AUTO-01-d3b.json). A MutationObserver's call comes from the one event
+ * loop both pages share, as the help strip's (useHelpStrip.ts). A look about ten frames later catches Steam's own glide,
+ * which changes nothing on the page: it puts the row back only when its place was inside Steam's band, so a glide Steam
+ * needed is never fought.
  */
 function keepHeldStop(body: BodyState, pane: HTMLElement, el: HTMLElement, want: DOMRect): void {
   const landings = body.landings;
   const heldAt = performance.now();
   const stillHeld = () => el.isConnected && body.landings === landings && body.lastPointerAt <= heldAt;
-  if (typeof ResizeObserver !== "undefined") {
-    let inPage = contentBox(el, pane).top;
-    const watch = new ResizeObserver(() => {
-      if (!stillHeld()) return watch.disconnect();
-      const now = contentBox(el, pane).top;
-      const grown = now - inPage;
-      inPage = now;
-      if (Math.abs(grown) >= 1) pane.scrollTop = pane.scrollTop + grown;
-    });
-    watch.observe(body.root);
-    setTimeout(() => watch.disconnect(), LATE_GROWTH_MS);
-  }
+  let inPage = contentBox(el, pane).top;
+  const watch = new MutationObserver(() => {
+    if (!stillHeld()) return watch.disconnect();
+    const now = contentBox(el, pane).top;
+    const grown = now - inPage;
+    inPage = now;
+    if (Math.abs(grown) >= 1) pane.scrollTop = pane.scrollTop + grown;
+  });
+  watch.observe(body.root, { childList: true, subtree: true, characterData: true, attributes: true });
+  setTimeout(() => watch.disconnect(), LATE_GROWTH_MS);
   setTimeout(() => {
     if (!stillHeld()) return;
     const d = el.getBoundingClientRect().top - want.top;
@@ -333,7 +335,7 @@ function keepHeldStop(body: BodyState, pane: HTMLElement, el: HTMLElement, want:
  * and only the screen place counts that pull. It moves the plan's remembered last place by however far the control
  * moved in the page, or the next press would read the jump as a move the other way. Nothing happens when the control
  * did not move (a change below it), or it is gone. When the change was above it, it keeps the control there a moment
- * more (keepHeldStop): a later growth of the page is put back in the frame it happens, and Steam's glide about ten
+ * more (keepHeldStop): a later growth of the page is put back before it is drawn, and Steam's glide about ten
  * frames later. The browser's own scroll anchoring is off while the switch that makes these changes is on
  * (foldedTabs.ts), so it never adds a correction of its own.
  */

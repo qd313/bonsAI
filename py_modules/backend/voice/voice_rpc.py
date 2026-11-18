@@ -49,6 +49,9 @@ import decky
 
 logger = decky.logger
 
+# What the install's state says when the person stopped it (the screen words it for them).
+INSTALL_CANCELLED_LINE = "Install cancelled."
+
 
 async def _require_microphone_access(self) -> tuple[bool, dict[str, Any]]:
     settings = await self.load_settings()
@@ -94,7 +97,8 @@ async def install_voice_engine(self, PLUGIN_ROOT: str, model_id: str = ""):
         if not capability_enabled(await self.load_settings(), "internet_downloads"):
             return downloads_off_refusal()
 
-        self._voice_install_cancel = new_threading_cancel_event()
+        cancel = new_threading_cancel_event()
+        self._voice_install_cancel = cancel
         self._voice_install_state = new_voice_install_state()
         self._voice_install_state.update(
             {"phase": "running", "done": False, "accepted": True, "model_id": mid}
@@ -109,22 +113,31 @@ async def install_voice_engine(self, PLUGIN_ROOT: str, model_id: str = ""):
                     PLUGIN_ROOT,
                     decky.DECKY_PLUGIN_SETTINGS_DIR,
                     self._voice_install_state,
-                    self._voice_install_cancel,
+                    cancel,
                     on_stage,
                 )
+                # A Cancel that came as the engine step finished must not start the speech-model download.
+                if cancel.is_set():
+                    raise RuntimeError(INSTALL_CANCELLED_LINE)
                 await asyncio.to_thread(
                     download_voice_model,
                     PLUGIN_ROOT,
                     decky.DECKY_PLUGIN_SETTINGS_DIR,
                     mid,
                     self._voice_install_state,
-                    self._voice_install_cancel,
+                    cancel,
                     on_stage,
                 )
             except Exception as exc:
-                self._voice_install_state.update(
-                    {"phase": "failed", "done": True, "error": str(exc)[:500]}
-                )
+                if cancel.is_set():
+                    # The person stopped it: not a failure, and no raw program words on the screen.
+                    self._voice_install_state.update(
+                        {"phase": "cancelled", "done": True, "error": INSTALL_CANCELLED_LINE}
+                    )
+                else:
+                    self._voice_install_state.update(
+                        {"phase": "failed", "done": True, "error": str(exc)[:500]}
+                    )
 
         self._voice_install_task = asyncio.create_task(runner())
 

@@ -29,6 +29,7 @@ from backend.core.async_background_job import (
 )
 from backend.core.capabilities import capability_enabled, downloads_off_refusal
 from backend.answer.transparency_service import build_voice_transcribe_snapshot
+from backend.voice.voice_engine_record import ENGINE_CHANGED_LINE
 from backend.voice.voice_model_download_service import (
     VALID_VOICE_STT_MODELS,
     install_in_progress_refusal,
@@ -172,6 +173,10 @@ async def start_voice_transcription(self, PLUGIN_ROOT: str, game_running: bool =
     if busy is not None:
         _log_start_refused(model_id, str(busy["error"]))
         return busy
+    if not ready.get("binary_ready") and ready.get("engine_changed"):
+        # Not the "download it" offer: the engine is there, its files changed. The words say how to rebuild.
+        _log_start_refused(model_id, "engine_changed")
+        return {"accepted": False, "error": "engine_changed", "reason": ENGINE_CHANGED_LINE}
     if not ready.get("binary_ready"):
         _log_start_refused(model_id, "engine_missing")
         return {

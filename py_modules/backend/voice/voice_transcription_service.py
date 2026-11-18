@@ -130,6 +130,7 @@ from backend.voice.voice_engine_build_service import (
     _whisper_inference_ok,
     _write_silence_wav,
 )
+from backend.voice.voice_engine_record import ENGINE_CHANGED_LINE, voice_engine_changed
 from backend.voice.voice_stoppable_run import run_stoppable
 from backend.voice.voice_model_download_service import (
     DEFAULT_VOICE_STT_MODEL,
@@ -334,6 +335,8 @@ def engine_readiness(plugin_root: str, settings_dir: str, model_id: str) -> dict
     return {
         "model_id": model_id,
         "binary_ready": whisper_bin is not None,
+        # True when the engine is there but its files are not the ones that were built (see voice_engine_record.py).
+        "engine_changed": whisper_bin is None and voice_engine_changed(voice_bin_dir(plugin_root, settings_dir)),
         "binary_path": whisper_bin or "",
         "model_ready": model_ready,
         "model_path": model_path if model_ready else "",
@@ -492,7 +495,7 @@ class VoiceTranscriptionSession:
         """
         ready = engine_readiness(self.plugin_root, self.settings_dir, self.model_id)
         if not ready["binary_ready"]:
-            err = (
+            err = ENGINE_CHANGED_LINE if ready.get("engine_changed") else (
                 "whisper-cli is not installed. Open Settings → Voice input and tap "
                 "Install voice engine (downloads whisper-cli + model)."
             )

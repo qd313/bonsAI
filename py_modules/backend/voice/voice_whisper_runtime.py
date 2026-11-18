@@ -41,6 +41,7 @@ import wave
 from typing import Optional
 
 from backend.ollama.local_ollama_setup_service import _env_for_host_system_tools
+from backend.voice.voice_engine_record import check_voice_engine, write_voice_engine_record
 
 
 SAMPLE_RATE = 16000
@@ -125,6 +126,11 @@ def whisper_binary_usable(plugin_root: str, settings_dir: str) -> Optional[str]:
         lib_path = os.path.join(bin_dir, lib)
         if not os.path.isfile(lib_path) and not os.path.islink(lib_path):
             return None
+    # Before any engine program is run, the files must be the ones the build recorded. An engine
+    # built before the record existed is trusted once: it is recorded after it passes the test below.
+    verdict = check_voice_engine(bin_dir)
+    if verdict == "changed":
+        return None
     env = voice_whisper_runtime_env(plugin_root, settings_dir)
     try:
         proc = subprocess.run(
@@ -139,6 +145,10 @@ def whisper_binary_usable(plugin_root: str, settings_dir: str) -> Optional[str]:
             return None
     except Exception:
         return None
+    if verdict == "unrecorded":
+        write_voice_engine_record(
+            bin_dir, "unknown (this engine was built before the record was kept)", [], source="first_use"
+        )
     return path
 
 

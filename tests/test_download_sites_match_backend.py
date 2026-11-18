@@ -4,7 +4,7 @@ Purpose: The notice before each download (src/features/downloads/downloadSites.t
 bonsAI will connect. Those addresses are copies of back-end constants; this fails if a back-end
 download address stops starting with one of the sites the notice can name, so a notice cannot
 quietly name the wrong place after the back end moves.
-Used for: downloadSites.ts against local_ollama_setup_service.py, ollama_catalog_service.py,
+Used for: downloadSites.ts against local_ollama_setup_service.py, ollama_binary_install.py, ollama_catalog_service.py,
 voice_engine_build_service.py, voice_model_download_service.py and knowledge_base_schema.py.
 Does not: Touch the network.
 """
@@ -22,6 +22,7 @@ install_pwd_stub()
 
 from backend.knowledge import knowledge_base_schema as kb  # noqa: E402
 from backend.ollama import local_ollama_setup_service as setup  # noqa: E402
+from backend.ollama import ollama_binary_install as binary  # noqa: E402
 from backend.ollama import ollama_catalog_service as catalog  # noqa: E402
 from backend.voice import voice_engine_build_service as voice_build  # noqa: E402
 from backend.voice import voice_model_download_service as voice_models  # noqa: E402
@@ -38,7 +39,8 @@ class DownloadSitesMatchBackend(unittest.TestCase):
         sites = _notice_sites()
         backend_urls = [
             setup.OLLAMA_OFFICIAL_INSTALL_SH,
-            "https://ollama.com/download",  # the tarball base in run_tarball_user_local_install
+            "https://ollama.com/download",  # what install.sh (the official installer) fetches
+            binary.RELEASES_URL,  # where the program file and its check number come from (github.com)
             f"https://{catalog.REGISTRY_HOST}/",
             "https://" + voice_build.WHISPER_CPP_IMAGE,
             kb.DEFAULT_MANIFEST_HF_URL,
@@ -51,9 +53,9 @@ class DownloadSitesMatchBackend(unittest.TestCase):
                 f"{url} is not under any site the download notice names: {sorted(sites)}",
             )
 
-    def test_tarball_base_is_still_where_the_code_says(self) -> None:
-        src = Path(setup.__file__).read_text(encoding="utf-8")
-        self.assertIn('base = "https://ollama.com/download"', src)
+    def test_the_ollama_file_and_its_check_number_still_come_from_where_the_code_says(self) -> None:
+        src = Path(binary.__file__).read_text(encoding="utf-8")
+        self.assertIn('RELEASES_URL = "https://github.com/ollama/ollama/releases"', src)
 
 
 if __name__ == "__main__":

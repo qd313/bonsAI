@@ -43,8 +43,10 @@ How it works:
 2. It first makes sure the `ollama` program itself is present, installing it with
    `_install_or_update_ollama_binary()` if not — which normally runs Ollama's own official
    installer via `run_official_linux_install()`, but on the Deck's locked-down system folders
-   falls back to `run_tarball_user_local_install()`, unpacking Ollama into the person's own home
-   folder instead. `_prefer_user_prefix_ollama_install_linux()` is what checks, ahead of time,
+   falls back to `run_tarball_user_local_install()`, which puts Ollama into the person's own home
+   folder instead (ollama_binary_install.py: fetched to a spare file, checked against Ollama's
+   published check number, unpacked to a spare folder, swapped in only if all of that worked; a
+   Stop is heard at any moment, and any problem leaves the old Ollama in place). `_prefer_user_prefix_ollama_install_linux()` is what checks, ahead of time,
    whether the normal location can even be written to, so this never wastes time trying the
    locked path first.
 3. Next it makes sure the local Ollama server is actually listening
@@ -61,7 +63,7 @@ How it works:
    one until it is restarted, so the "restart" stage (`restart_server_onto_new_binary()`, in
    ollama_server_restart.py) stops it and starts it again, and the run ends by writing the
    version now answering and one plain result sentence into the status for the tab to show.
-5. Cancelling is checked constantly throughout every stage, and anything that goes wrong, or gets
+5. Cancelling is checked constantly throughout every stage (including once more before the restart), and anything that goes wrong, or gets
    cancelled, is caught by one wrapping try/except and turned into a plain status a person can
    read on the tab, rather than an unhandled error.
 
@@ -92,6 +94,12 @@ from backend.ollama.ollama_routing import (
 from backend.ollama.ollama_reply_limits import read_json_capped
 from backend.ollama.ollama_urls import normalize_ollama_base
 from backend.ollama.local_setup_progress_text import progress_text_from_line
+from backend.ollama.ollama_binary_install import (
+    InstallProblem,
+    InstallStopped,
+    install_ollama_from_release,
+    run_cancellable,
+)
 from backend.ollama.ollama_pull_failure_text import format_ollama_pull_failure as _format_ollama_pull_failure
 from backend.ollama.starter_set_extras import apply_starter_outcome, run_starter_downloads
 from backend.ollama.starter_left_out import drop_left_out_tags, mark_piece, starter_pieces_at_start
@@ -578,63 +586,42 @@ def _prepend_home_local_bin_to_environ(shell_log: Callable[[str], None]) -> None
         shell_log(f"[bonsAI] Prepended ~/.local/bin to PATH ({lbs}).")
 
 
-def run_tarball_user_local_install(shell_log: Callable[[str], None]) -> tuple[bool, str]:
-    """Download official Ollama tarball into ``~/.local`` (writable) when ``/usr`` is immutable."""
-    child_env = _env_for_host_system_tools()
-    home = Path.home()
-    dst = home / ".local"
-    lb = dst / "bin"
-    lb.mkdir(parents=True, exist_ok=True)
-    stem = _ollama_linux_download_stem()
-    base = "https://ollama.com/download"
-    zst_url = f"{base}/{stem}.tar.zst"
-    tgz_url = f"{base}/{stem}.tgz"
-    bash_w = _bash_exe()
-    have_zstd = shutil.which("zstd") is not None
-    shell_log(f"[bonsAI] Immutable /usr — installing Ollama user prefix under {dst} …")
-    if have_zstd:
-        inner = f'set -e; mkdir -p "{lb}" && curl -fsSL "{zst_url}" | zstd -d | tar -xf - -C "{dst}"'
-    else:
-        inner = f'set -e; mkdir -p "{lb}" && curl -fsSL "{tgz_url}" | tar -xzf - -C "{dst}"'
-        shell_log("[bonsAI] zstd not found; using .tgz fallback (slower/larger download).")
+def run_tarball_user_local_install(
+    shell_log: Callable[[str], None], cancelled: Callable[[], bool] = lambda: False
+) -> tuple[bool, str]:
+    """Put Ollama into ``~/.local`` (writable) when ``/usr`` is immutable.
 
-    cmd = [bash_w, "-lc", inner]
+    The fetch, check, unpack and swap are in ollama_binary_install.py. Returns (False, "Cancelled.") after a
+    Stop. A problem (no check number, bad download, failed unpack) is raised as ``InstallProblem`` with a plain
+    message; the old Ollama is left untouched in every case.
+    """
+    stem = _ollama_linux_download_stem()
+    shell_log(f"[bonsAI] Immutable /usr — installing Ollama user prefix under {Path.home() / '.local'} …")
     try:
-        completed = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=600,
-            check=False,
-            env=child_env,
+        install_ollama_from_release(
+            home=Path.home(),
+            file_stem=stem,
+            env=_env_for_host_system_tools(),
+            bash=_bash_exe(),
+            shell_log=shell_log,
+            cancelled=cancelled,
         )
-        stderr = completed.stderr.strip() if completed.stderr else ""
-        stdout = completed.stdout.strip() if completed.stdout else ""
-        ox = lb / "ollama"
-        if ox.is_file():
-            try:
-                os.chmod(str(ox), 0o755)
-            except OSError:
-                pass
-        if stdout:
-            shell_log(stdout)
-        if stderr:
-            shell_log(stderr)
-        if completed.returncode != 0:
-            return False, stderr or stdout or "user-prefix tarball install exited non-zero"
-        if not ox.is_file():
-            return False, f"No ollama binary at {ox} after extract."
         return True, ""
-    except subprocess.TimeoutExpired:
-        return False, "Ollama download/extract timed out (try Desktop Konsole on good Wi‑Fi)."
+    except InstallStopped:
+        shell_log("[bonsAI] Ollama install stopped; nothing was changed.")
+        return False, "Cancelled."
+    except InstallProblem:
+        raise
     except Exception as exc:
         return False, str(exc)
 
 
-def run_official_linux_install(shell_log: Callable[[str], None]) -> tuple[bool, str]:
-    """Install Ollama via official ``install.sh``. Returns (ok, stderr_or_message)."""
+def run_official_linux_install(
+    shell_log: Callable[[str], None], cancelled: Callable[[], bool] = lambda: False
+) -> tuple[bool, str]:
+    """Install Ollama via official ``install.sh``. Returns (ok, stderr_or_message); a Stop gives (False, "Cancelled.")."""
     if _prefer_user_prefix_ollama_install_linux():
-        ok, err = run_tarball_user_local_install(shell_log)
+        ok, err = run_tarball_user_local_install(shell_log, cancelled)
         if ok:
             _prepend_home_local_bin_to_environ(shell_log)
         return ok, err
@@ -655,7 +642,7 @@ def run_official_linux_install(shell_log: Callable[[str], None]) -> tuple[bool, 
         except Exception:
             sudo_nopass_rc = -1
     bash_w = _bash_exe()
-    inner = f'curl -fsSL "{OLLAMA_OFFICIAL_INSTALL_SH}" | sh'
+    inner = f'set -o pipefail; curl -fsSL "{OLLAMA_OFFICIAL_INSTALL_SH}" | sh'
     child_env = _env_for_host_system_tools()
     use_sudo_nopass = (
         os.name != "nt"
@@ -672,14 +659,7 @@ def run_official_linux_install(shell_log: Callable[[str], None]) -> tuple[bool, 
         if sudo_nopass_rc is not None and sudo_nopass_rc != 0:
             shell_log("[bonsAI] Hint: sudo -n unavailable; install needs root — may fail unless you use Desktop Konsole.")
     try:
-        completed = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=600,
-            check=False,
-            env=child_env,
-        )
+        completed = run_cancellable(cmd, env=child_env, timeout=600, cancelled=cancelled)
         stdout = completed.stdout.strip() if completed.stdout else ""
         stderr = completed.stderr.strip() if completed.stderr else ""
         if stdout:
@@ -690,6 +670,8 @@ def run_official_linux_install(shell_log: Callable[[str], None]) -> tuple[bool, 
             return False, stderr or stdout or "install script exited non-zero"
         _prepend_home_local_bin_to_environ(shell_log)
         return True, ""
+    except InstallStopped:
+        return False, "Cancelled."
     except subprocess.TimeoutExpired:
         return False, "Installation timed out (try installing Ollama from Desktop Konsole)."
     except Exception as exc:
@@ -763,7 +745,9 @@ async def _install_or_update_ollama_binary(
     else:
         log("[bonsAI] ollama not found on PATH; running official installer…")
 
-    ok, err = await asyncio.to_thread(lambda: run_official_linux_install(log))
+    ok, err = await asyncio.to_thread(lambda: run_official_linux_install(log, cancelled))
+    if cancelled():
+        raise RuntimeError("Cancelled.")
     if not ok:
         raise RuntimeError(
             "Could not install Ollama automatically. "
@@ -895,6 +879,8 @@ async def run_local_setup(
             mark_piece(state, "ollama", "done")
         installed_now = state.get("stage") == "install"
         await emit_stage(state.get("stage", "install"))
+        if cancelled():  # a Stop during the install must not go on to restart the Deck's running AI
+            raise RuntimeError("Cancelled.")
 
         # The new program file does nothing until the server that is already running is replaced
         # (Deck 2026-10-09: file 0.40.2, server still 0.34.1 after three days).

@@ -73,9 +73,11 @@ function leftOutOf(st: LocalOllamaSetupStatus): StarterLeftOut[] {
 }
 
 function sitesOf(st: LocalOllamaSetupStatus, kind: RunKind): string {
-  if (kind !== "setup") return "From ollama.com and registry.ollama.ai";
+  if (kind !== "setup") return "From ollama.com, github.com and registry.ollama.ai";
   const voice = !leftOutOf(st).includes("voice");
-  return voice ? "From ollama.com, registry.ollama.ai, huggingface.co and ghcr.io" : "From ollama.com and registry.ollama.ai";
+  return voice
+    ? "From ollama.com, github.com, registry.ollama.ai, huggingface.co and ghcr.io"
+    : "From ollama.com, github.com and registry.ollama.ai";
 }
 
 /** The two lines for a download step: which one, then how far and how fast in plain words. */

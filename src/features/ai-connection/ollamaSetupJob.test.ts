@@ -35,7 +35,7 @@ describe("what the card says", () => {
   it("a step with no percentage: plain words and moving stripes", () => {
     const face = ollamaSetupFace({ phase: "running", stage: "check", profile: "update_installed" }, "update");
     expect(face).toMatchObject({ title: "Updating AI & models", stoppingTitle: "Stopping the update", line1: "Checking what is installed", fraction: null });
-    expect(face.sites).toBe("From ollama.com and registry.ollama.ai");
+    expect(face.sites).toBe("From ollama.com, github.com and registry.ollama.ai");
   });
 
   it("a download: which model, then how far and how fast, never the raw installer line", () => {
@@ -49,9 +49,9 @@ describe("what the card says", () => {
   it("the starter run names every site, fewer once Voice input's downloads were left out", () => {
     const st = { ...PULL, profile: "tier1_essentials", starter_pieces: { ollama: "done", answer: "waiting", note_search: "waiting", speech: "waiting", voice: "waiting" } };
     expect(ollamaSetupFace(st, "setup").title).toBe("Setting up the AI");
-    expect(ollamaSetupFace(st, "setup").sites).toBe("From ollama.com, registry.ollama.ai, huggingface.co and ghcr.io");
+    expect(ollamaSetupFace(st, "setup").sites).toBe("From ollama.com, github.com, registry.ollama.ai, huggingface.co and ghcr.io");
     const lean = { ...st, starter_pieces: { ...st.starter_pieces, speech: "left_out", voice: "left_out" } };
-    expect(ollamaSetupFace(lean, "setup").sites).toBe("From ollama.com and registry.ollama.ai");
+    expect(ollamaSetupFace(lean, "setup").sites).toBe("From ollama.com, github.com and registry.ollama.ai");
   });
 });
 

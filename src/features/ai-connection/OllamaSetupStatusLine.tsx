@@ -22,8 +22,8 @@ import { DOWNLOADS_OFF_FAILED_LINE } from "../downloads/downloadNotice";
 import { textPx } from "../../styles/textPx";
 
 const SUCCESS_TEXT = "#86efac";
-/** Where Install and Update download from (downloadSites.ts: OLLAMA_SITE and OLLAMA_REGISTRY_SITE). */
-const SITES_LINE = "From ollama.com and registry.ollama.ai";
+/** Where Install and Update download from (downloadSites.ts: OLLAMA_SITE, GITHUB_SITE and OLLAMA_REGISTRY_SITE). */
+const SITES_LINE = "From ollama.com, github.com and registry.ollama.ai";
 const LINE: CSSProperties = { fontSize: textPx(11), lineHeight: 1.35 };
 
 /** Backticks in the back end's error text are for a terminal, not for a person. */

@@ -43,7 +43,7 @@ export interface JobFace {
   line1: string;
   /** How far and how fast, or what to keep in mind: "1.3 GB of 3.2 GB · 25 MB/s · about 1m left". */
   line2: string;
-  /** Where the downloads come from: "From ollama.com and registry.ollama.ai". */
+  /** Where the downloads come from: "From ollama.com, github.com and registry.ollama.ai". */
   sites: string;
   /** How far the whole job is, 0 to 1; null while the step has no percentage (the bar shows moving stripes). */
   fraction: number | null;

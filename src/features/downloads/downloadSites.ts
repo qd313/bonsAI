@@ -20,7 +20,7 @@ import {
   VOICE_ENGINE_DOWNLOAD_SIZE,
 } from "./downloadSizes";
 
-/** local_ollama_setup_service.py: OLLAMA_OFFICIAL_INSTALL_SH and the ollama.com/download tarballs. */
+/** local_ollama_setup_service.py: OLLAMA_OFFICIAL_INSTALL_SH; and ollama_binary_install.py: RELEASES_URL (GITHUB_SITE). */
 const OLLAMA_SITE = "https://ollama.com";
 /** ollama_catalog_service.py: REGISTRY_HOST -- where `ollama pull` and the size lookups go. */
 const OLLAMA_REGISTRY_SITE = "https://registry.ollama.ai";
@@ -31,16 +31,21 @@ const HUGGING_FACE_SITE = "https://huggingface.co";
 /** knowledge_base_schema.py: DEFAULT_MANIFEST_GITHUB_URL (the library's second source). */
 const GITHUB_SITE = "https://github.com";
 
-/** Ollama is fetched only when it is not installed yet (or on Update). */
+/**
+ * Ollama's program file and its check number come from github.com's release page, the rest from ollama.com, so the
+ * one line names both. It is only listed when the box installs Ollama itself, and no longer than the line it
+ * replaced ("... ollama.com to download Ollama, if it is not installed yet ..."): the starter box pins it to two lines.
+ */
+const OLLAMA_AND_GITHUB_SITES = `${OLLAMA_SITE} and ${GITHUB_SITE}`;
 export const OLLAMA_PROGRAM_NOTICE: DownloadNotice = {
-  site: OLLAMA_SITE,
-  what: "Ollama, if it is not installed yet",
+  site: OLLAMA_AND_GITHUB_SITES,
+  what: "Ollama",
   size: OLLAMA_DOWNLOAD_SIZE.label,
 };
 
 /** "Update AI & models": the newest Ollama, then newer copies of the models already installed. */
 export const UPDATE_AI_NOTICES: DownloadNotice[] = [
-  { site: OLLAMA_SITE, what: "the newest Ollama", size: null },
+  { site: OLLAMA_AND_GITHUB_SITES, what: "the newest Ollama", size: null },
   { site: OLLAMA_REGISTRY_SITE, what: "newer versions of the models you have installed", size: null },
 ];
 

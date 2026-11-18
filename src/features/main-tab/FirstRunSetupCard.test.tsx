@@ -134,6 +134,25 @@ describe("the first-time setup's card", () => {
     await waitFor(() => expect(card()).not.toContain("Could not stop. Try again."));
   });
 
+  it("an old Stop's late failure cannot say it could not stop after a newer Stop worked; a late success clears the words", async () => {
+    await start(["voice"]);
+    const answers: Array<{ resolve: (v: unknown) => void; reject: (e: Error) => void }> = [];
+    setRpcHandler("cancel_local_ollama_setup", () => new Promise((resolve, reject) => answers.push({ resolve, reject })));
+    fireEvent.click(screen.getByLabelText("Stop the setup"));
+    fireEvent.click(screen.getByLabelText("Stop the setup"));
+    expect(answers).toHaveLength(2);
+    await act(async () => answers[1]!.resolve({ cancel_requested: true }));
+    await act(async () => answers[0]!.reject(new Error("the first press answers late")));
+    expect(card()).not.toContain("Could not stop");
+    // The other way round: the newest press fails, then the older one is taken: the words go.
+    fireEvent.click(screen.getByLabelText("Stop the setup"));
+    fireEvent.click(screen.getByLabelText("Stop the setup"));
+    await act(async () => answers[3]!.reject(new Error("refused")));
+    expect(card()).toContain("Could not stop. Try again.");
+    await act(async () => answers[2]!.resolve({ cancel_requested: true }));
+    expect(card()).not.toContain("Could not stop");
+  });
+
   it("a Stop that never answers says the same after its 8 seconds, and Stop sends again", async () => {
     await start(["voice"]);
     setRpcHandler("cancel_local_ollama_setup", () => new Promise(() => {}));

@@ -72,6 +72,9 @@ export function startFirstRunSetupAgain(): void {
   beginFirstRunSetup(state.leaveOut);
 }
 
+/** Counts Stop presses for the whole app and is never reset, so an old press's late answer is told from a newer one. */
+let stopPresses = 0;
+
 /** How long a Stop request may go unanswered before the card says it could not stop (ms). */
 const STOP_TIMEOUT_MS = 8000;
 
@@ -81,11 +84,16 @@ const STOP_TIMEOUT_MS = 8000;
  */
 export function stopFirstRunSetup(): Promise<void> {
   const runId = state.runId;
+  const press = ++stopPresses;
   if (state.stopFailed) update({ stopFailed: false });
   return callDeckyWithTimeout<[], { cancel_requested?: boolean }>("cancel_local_ollama_setup", [], STOP_TIMEOUT_MS).then(
-    () => undefined,
     () => {
-      if (state.runId === runId) update({ stopFailed: true });
+      // A Stop the back end took clears the words, whichever press it was.
+      if (state.runId === runId && state.stopFailed) update({ stopFailed: false });
+    },
+    () => {
+      // Only the newest press may say it failed: an old press answering late must not.
+      if (state.runId === runId && press === stopPresses) update({ stopFailed: true });
     },
   );
 }

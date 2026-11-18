@@ -80,8 +80,12 @@ const jobs = new Map<string, RunningJob>();
 /** Asks the job's owner to stop it. A returned promise is watched: a rejection, or no answer in time, puts Cancel back. */
 type CancelFn = () => void | Promise<unknown>;
 const cancels = new Map<string, CancelFn>();
-/** Per job, which Cancel press is the latest, so an answer to an older press cannot undo a newer one. */
+/**
+ * Per job, which Cancel press is the latest, so an answer to an older press cannot undo a newer one. The numbers come
+ * from one counter for the whole app that is never reset, so a new job that reuses an id never matches an old press.
+ */
 const cancelSeq = new Map<string, number>();
+let pressCount = 0;
 /**
  * Per job, which of its cards are on screen now: JobCard.tsx says so for the card in its tab ("card"), and a second
  * card for the same job elsewhere says so under its own name (the first-time setup's card on Main, "first-run-card"),
@@ -201,7 +205,7 @@ function watchCancel(id: string, seq: number, sent: Promise<unknown>): void {
 export function cancelJob(id: string, now: number = Date.now()): boolean {
   const job = jobs.get(id);
   if (!job || job.stopping || now - job.startedAt < DOUBLE_PRESS_GUARD_MS) return false;
-  const seq = (cancelSeq.get(id) ?? 0) + 1;
+  const seq = ++pressCount;
   cancelSeq.set(id, seq);
   jobs.set(id, { ...job, stopping: true, stopFailed: false });
   changed();

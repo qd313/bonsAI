@@ -122,6 +122,19 @@ describe("a Cancel request that fails or never answers", () => {
     expect(runningJob("a")).toBeNull();
   });
 
+  it("a late failure from an old job cannot put Cancel back on a new job that reuses its id", async () => {
+    let failOld: (e: Error) => void = () => {};
+    publishJob("a", FACE, () => new Promise<never>((_, reject) => (failOld = reject)), STARTED);
+    expect(cancelJob("a")).toBe(true);
+    endJob("a");
+    // The same id starts again (the next setup run) and its own Cancel is on its way.
+    publishJob("a", FACE, () => new Promise<never>(() => {}), STARTED);
+    expect(cancelJob("a")).toBe(true);
+    failOld(new Error("the old job's cancel answers late"));
+    await vi.advanceTimersByTimeAsync(0);
+    expect(runningJob("a")).toMatchObject({ stopping: true, stopFailed: false });
+  });
+
   it("an answer to an older press cannot undo a newer one", async () => {
     const failures: Array<(e: Error) => void> = [];
     publishJob("a", FACE, () => new Promise<never>((_, reject) => failures.push(reject)), STARTED);

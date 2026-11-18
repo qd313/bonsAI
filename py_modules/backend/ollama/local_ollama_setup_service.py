@@ -369,7 +369,16 @@ def ensure_ollama_cli_home_ready(
     _stop_local_ollama_listener(env)
     terminate_setup_started_ollama_serve()
     _ollama_state_home_dir().mkdir(parents=True, exist_ok=True)
+    ok = _make_ollama_keys(shell_log, ollama_bin, cancelled, key)
+    if not ok and cancelled():
+        _leave_ai_running(shell_log, ollama_bin)
+    return ok
 
+
+def _make_ollama_keys(
+    shell_log: Callable[[str], None], ollama_bin: str, cancelled: Callable[[], bool], key: Path
+) -> bool:
+    """The part of ensure_ollama_cli_home_ready after the running Ollama was stopped: start a fresh one, wait for the keys."""
     if not ensure_ollama_server_listening_before_pull(
         shell_log,
         ollama_bin,
@@ -405,6 +414,26 @@ def ensure_ollama_cli_home_ready(
 
     shell_log("[bonsAI] Could not create Ollama keys under ~/.ollama — try ``ollama serve`` in Konsole.")
     return False
+
+
+def _leave_ai_running(shell_log: Callable[[str], None], ollama_bin: str) -> None:
+    """A Stop came after setup had stopped the person's running Ollama: make sure one is running when it ends.
+
+    If nothing answers, start the user unit, then ``ollama serve`` if the unit did not. Whatever answers is then
+    handed back (forget_setup_started_ollama_serve), so Stop's own clean-up does not end it.
+    """
+    try:
+        if not probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=1.5):
+            shell_log("[bonsAI] Stopped while Ollama was being set up again — starting Ollama again so it keeps running.")
+            try_restart_ollama_user_service(shell_log)
+            time.sleep(1.0)
+            if not probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=1.5):
+                ensure_ollama_server_listening_before_pull(
+                    shell_log, ollama_bin, lambda: False, max_listen_probe_iterations=40
+                )
+    except Exception as exc:
+        shell_log(f"[bonsAI] Could not start Ollama again after Stop: {exc}")
+    forget_setup_started_ollama_serve()
 
 
 def recover_loopback_ollama_listening(

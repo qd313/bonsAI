@@ -20,16 +20,11 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
-from ollama_fake_ai import FakeAI  # noqa: E402
+from ollama_fake_ai import FakeAI, run_custom_setup  # noqa: E402
 
 from backend.ollama import local_ollama_setup_service as setup  # noqa: E402
 
 S = "backend.ollama.local_ollama_setup_service"
-LOGGER = type("L", (), {"info": lambda *a, **k: None, "exception": lambda *a, **k: None})()
-
-
-async def _no_wait(_seconds: float) -> None:
-    return None
 
 
 class AStoppedRunLeavesTheEverydayAiRunning(unittest.TestCase):
@@ -37,28 +32,7 @@ class AStoppedRunLeavesTheEverydayAiRunning(unittest.TestCase):
         setup.forget_setup_started_ollama_serve()
 
     def _run(self, ai: FakeAI, pull, *, cancel_event: asyncio.Event) -> dict:
-        state: dict = {"phase": "running", "pull_tags": ["tiny:1b"]}
-
-        async def go() -> None:
-            await setup.run_local_setup(profile="custom", state=state, logger=LOGGER, cancel_event=cancel_event)
-
-        with ExitStack() as stack:
-            for target, kw in {
-                f"{S}.sys.platform": {"new": "linux"},
-                f"{S}.resolve_ollama_executable": {"return_value": "/x/ollama"},
-                f"{S}.probe_ollama_http_ok": {"side_effect": ai.probe},
-                f"{S}.try_restart_ollama_user_service": {},
-                f"{S}.ensure_ollama_cli_home_ready": {"return_value": True},
-                f"{S}.record_result": {},
-                f"{S}.run_ollama_pull": {"side_effect": pull},
-                f"{S}.asyncio.sleep": {"side_effect": _no_wait},
-                f"{S}.time.sleep": {},
-                "subprocess.Popen": {"side_effect": ai.popen},
-                "subprocess.run": {"side_effect": ai.run},
-            }.items():
-                stack.enter_context(patch(target, **kw))
-            asyncio.run(go())
-        return state
+        return run_custom_setup(ai, pull, cancel_event)
 
     def test_run_two_reuses_the_engine_run_one_started_and_a_stop_does_not_end_it(self):
         ai = FakeAI(up=False)

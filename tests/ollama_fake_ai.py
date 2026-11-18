@@ -3,14 +3,18 @@
 Purpose: Lets a test ask "is the Deck's AI still running after this?" without starting anything. It stands in
 for the programs setup uses to start (`ollama serve`) and stop (systemctl, pkill) the engine, and for the
 check that asks whether it answers.
-Used for: tests/test_ollama_setup_engine_marker.py and tests/test_ollama_missing_keys_stop.py.
+Used for: tests/test_ollama_setup_engine_marker.py and tests/test_ollama_missing_keys_stop.py, through
+`run_custom_setup()`, which runs a "custom" setup run (no install step) on top of the pretend engine.
 Does not: Run any program or open any port.
 """
 
 from __future__ import annotations
 
+import asyncio
 import subprocess
-from typing import Any, Optional
+from contextlib import ExitStack
+from typing import Any, Callable, Optional
+from unittest.mock import patch
 
 
 class FakeServe:
@@ -53,3 +57,40 @@ class FakeAI:
         if cmd[:3] == ["systemctl", "--user", "stop"] or cmd[0] == "pkill":
             self.up = False
         return subprocess.CompletedProcess(cmd, 0, "", "")
+
+
+async def _no_wait(_seconds: float) -> None:
+    return None
+
+
+def run_custom_setup(ai: FakeAI, pull: Callable[..., Any], cancel_event: asyncio.Event, *,
+                     sleep: Optional[Callable[[float], None]] = None, keys_ready: bool = True) -> dict:
+    """Run one custom setup run on the pretend engine and return its status.
+
+    `pull` stands in for the model download; `sleep` for time.sleep (a test presses Stop from it);
+    `keys_ready` False runs the real missing-keys step instead of skipping it.
+    """
+    from backend.ollama import local_ollama_setup_service as setup
+
+    S = "backend.ollama.local_ollama_setup_service"
+    logger = type("L", (), {"info": lambda *a, **k: None, "exception": lambda *a, **k: None})()
+    state: dict = {"phase": "running", "pull_tags": ["tiny:1b"]}
+    patches: dict = {
+        f"{S}.sys.platform": {"new": "linux"},
+        f"{S}.resolve_ollama_executable": {"return_value": "/x/ollama"},
+        f"{S}.probe_ollama_http_ok": {"side_effect": ai.probe},
+        f"{S}.try_restart_ollama_user_service": {},
+        f"{S}.record_result": {},
+        f"{S}.run_ollama_pull": {"side_effect": pull},
+        f"{S}.asyncio.sleep": {"side_effect": _no_wait},
+        f"{S}.time.sleep": {"side_effect": sleep} if sleep else {},
+        "subprocess.Popen": {"side_effect": ai.popen},
+        "subprocess.run": {"side_effect": ai.run},
+    }
+    if keys_ready:
+        patches[f"{S}.ensure_ollama_cli_home_ready"] = {"return_value": True}
+    with ExitStack() as stack:
+        for target, kw in patches.items():
+            stack.enter_context(patch(target, **kw))
+        asyncio.run(setup.run_local_setup(profile="custom", state=state, logger=logger, cancel_event=cancel_event))
+    return state

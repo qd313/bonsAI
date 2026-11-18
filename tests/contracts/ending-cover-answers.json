@@ -1,0 +1,45 @@
+{
+  "about": "Answers to an ending question as the back end writes them: the finished cover and what streams (tests/test_ending_question_cover.py). The screen test (MainTabChatTranscript.endingCover.test.tsx) draws these same strings.",
+  "cases": [
+    {
+      "name": "a plain answer",
+      "question": "How does Hollow Knight end?",
+      "model_text": "The game ends after you defeat the final boss, who is the Hollow Knight itself.\n\nThe story then concludes with the player ascending to the Light.",
+      "finished": "```bonsai-spoiler\nThe game ends after you defeat the final boss, who is the Hollow Knight itself.\n\nThe story then concludes with the player ascending to the Light.\n```",
+      "streamed": [
+        [
+          "The game en",
+          "```bonsai-spoiler\nThe game en"
+        ],
+        [
+          "The game ends after you defeat the final boss, who is the Hollow Knigh",
+          "```bonsai-spoiler\nThe game ends after you defeat the final boss, who is the Hollow Knigh"
+        ],
+        [
+          "The game ends after you defeat the final boss, who is the Hollow Knight itself.\n\nThe story then conc",
+          "```bonsai-spoiler\nThe game ends after you defeat the final boss, who is the Hollow Knight itself.\n\nThe story then conc"
+        ]
+      ]
+    },
+    {
+      "name": "an answer with a cover of its own inside",
+      "question": "How does Hollow Knight end?",
+      "model_text": "It ends in the Black Egg.\n\n```bonsai-spoiler\nThe Light wins.\n```\n\nThen the credits roll.",
+      "finished": "```bonsai-spoiler\nIt ends in the Black Egg.\n\nThe Light wins.\n\nThen the credits roll.\n```",
+      "streamed": [
+        [
+          "It ",
+          "```bonsai-spoiler\nIt "
+        ],
+        [
+          "It ends in the Black Egg.\n\n```bonsai-spo",
+          "```bonsai-spoiler\nIt ends in the Black Egg."
+        ],
+        [
+          "It ends in the Black Egg.\n\n```bonsai-spoiler\nThe Light wins.",
+          "```bonsai-spoiler\nIt ends in the Black Egg.\n\nThe Light wins."
+        ]
+      ]
+    }
+  ]
+}

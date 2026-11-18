@@ -11,6 +11,7 @@ cross-runtime plumbing: neither test shells out to the other toolchain.
 | `settings-defaults.json` | `tests/test_settings_contract.py` | `src/features/settings/bonsaiSettingsContract.test.ts` |
 | `settings-hostile-inputs.json` | `tests/test_settings_hostile_contract.py` | `src/features/settings/bonsaiSettingsHostileContract.test.ts` |
 | `spoiler-title-profiles.json` | `tests/test_spoiler_title_profiles_contract.py` | `src/features/spoilers/spoilerTitleProfilesContract.test.ts` |
+| `ending-cover-answers.json` | `tests/test_ending_question_cover.py` | `src/features/answer/transcript/MainTabChatTranscript.endingCover.test.tsx` |
 
 ## `settings-defaults.json`
 
@@ -69,6 +70,14 @@ type, no test, and no build step catching it.
 `cases` pins the resolution rules, not just the tables: AppID beats title-name fallback, the
 AppID is trimmed, and the name fallback is case- and whitespace-insensitive. Adding a title
 means adding it to both tables *and* the fixture.
+
+## `ending-cover-answers.json`
+
+Answers to an ending question ("How does Hollow Knight end?") as the back end writes them: the finished
+text, with the whole answer inside one hidden block, and what the screen is sent while it streams. The
+Python test proves the back end writes exactly these strings; the screen test draws them and proves
+nothing of the answer is in plain view until the cover is opened, from the first word on. Change a string
+here only after changing what the back end writes (`py_modules/backend/spoilers/ending_question_cover.py`).
 
 ### Known asymmetry, deliberately not in the fixture
 

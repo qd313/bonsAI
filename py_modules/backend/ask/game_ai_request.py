@@ -161,6 +161,7 @@ from backend.knowledge.kb_attached_notes import (
     mark_spoiler_protected_notes,
 )
 from backend.media.screenshot_media import lookup_screenshot_vdf_metadata
+from backend.spoilers.ending_question_cover import cover_whole_answer, ending_cover_applies
 from backend.spoilers.spoiler_risk_service import build_spoiler_risk_signals
 from backend.spoilers.spoiler_title_profiles import (
     apply_spoiler_tier,
@@ -840,6 +841,7 @@ async def run_game_ai_request(
         # written to the chat when the Ask is accepted, before this runs -- and the memory builder
         # drops that trailing turn itself. How much of the chat actually reaches the AI, and
         # whether it needs summing up first, is decided inside ask_ollama, not here.
+        ending_cover_consent = strategy_spoiler_consent_effective or bool(spoiler_consent)
         ollama_result = picture_guess.STOPPED_RESULT if picture_guess_stopped else await plugin.ask_ollama(
             question_for_model,
             pc_ip,
@@ -863,7 +865,9 @@ async def run_game_ai_request(
             proton_log_attachment=early_context_combined or None,
             proton_log_transparency=proton_log_transparency,
             followup_subject=followup_subject_for_prompt,
-            strategy_spoiler_consent=strategy_spoiler_consent_effective,
+            # The Ask's own consent flag also reaches the ending-question cover on a turn that is not
+            # Strategy (plan 106 H2); every other reader of this value is Strategy-only.
+            strategy_spoiler_consent=ending_cover_consent,
             strategy_spoiler_asked_entity=strategy_spoiler_asked_entity,
             strategy_spoiler_kb_entity_match=strategy_spoiler_kb_entity_match,
             strategy_domain_guidance=strategy_domain_guidance,
@@ -931,6 +935,14 @@ async def run_game_ai_request(
             # since parsing it never removed it (the traced cause of a reply ending in a raw
             # {"tdp_watts": ...} line). A fenced code sample is left alone.
             response_text = strip_tdp_recommendation_block(response_text)
+
+            # Plan 106 H2: an ending question's WHOLE answer goes inside one cover (the live half is in
+            # ollama_ask_service.py, from the same inputs). Before the notices and footers below, so
+            # they stay outside it. See spoilers/ending_question_cover.py.
+            if ending_cover_applies(
+                effective_display_question, consent=ending_cover_consent, title_profile=strategy_title_profile
+            ):
+                response_text = cover_whole_answer(response_text, done=True)
 
         # Output-side safety check: run once the full reply is in hand (see
         # destructive_advice_guard.py for why this is finished-reply, not per-token). Runs on

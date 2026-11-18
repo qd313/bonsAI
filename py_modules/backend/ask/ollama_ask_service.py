@@ -82,6 +82,7 @@ from backend.prompts.ollama_prompts import picture_user_message
 from backend.ask.ollama_attempt_outcome import body_looks_out_of_memory, strip_ollama_http_body
 from backend.ask.ollama_loading_line import arm_loading_line, thinking_phase_args
 from backend.answer.response_verify import build_live_spoiler_cover
+from backend.spoilers.ending_question_cover import cover_whole_answer, ending_cover_applies
 from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
 from backend.ollama.ollama_memory_guard import ask_memory_warning
 from backend.settings.settings_service import sanitize_reply_verbosity
@@ -254,6 +255,12 @@ async def run_ask_ollama(
         title_profile=strategy_title_profile, question=display_question, system_content=system_content,
     )
 
+    # Plan 106 H2: an ending question ("How does Hollow Knight end?") gets its WHOLE answer inside one
+    # cover, every mode; game_ai_request.py does the same to the finished answer, from the same inputs.
+    cover_ending = ending_cover_applies(
+        display_question, consent=strategy_spoiler_consent, title_profile=strategy_title_profile
+    )
+
     # The model choice moves above the memory step here (plan 68 step 3): it only reads
     # settings, installed models, a pin and whether images are attached, and the memory step
     # right after needs to know which model will answer and how much room it was loaded with
@@ -397,7 +404,7 @@ async def run_ask_ollama(
                     character_preset_id=rp_meta.resolved_preset_id,
                 )
             # D112 #7, the spoiler safety net -- the live half, both the answer and the thinking.
-            display_text = cover_live_spoilers.answer(text, done)
+            display_text = cover_live_spoilers.answer(cover_whole_answer(text, done=done) if cover_ending else text, done)
             covered_reasoning = cover_live_spoilers.thinking(reasoning_partial, done)
             # Plan 57: the model's own thinking, kept in the same poll snapshot the screen already
             # reads every second — so the live lines can move before any answer text exists.

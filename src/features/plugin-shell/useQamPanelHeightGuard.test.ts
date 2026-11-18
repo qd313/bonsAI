@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { fitHeightToHostBottom, useQamPanelHeightGuard } from "./useQamPanelHeightGuard";
 
@@ -23,7 +23,11 @@ class RecordingResizeObserver {
     recorded.unobserved.push(el);
   }
   disconnect() {}
+  constructor(cb: () => void) {
+    callbacks.push(cb);
+  }
 }
+const callbacks: Array<() => void> = [];
 
 /** scope > .bonsai-decky-tabs-root > wrapper > TabContentsScroll — the on-device shape. */
 function buildScope(): { scope: HTMLDivElement; wrapper: HTMLDivElement; pane: HTMLDivElement } {
@@ -73,6 +77,7 @@ describe("fitHeightToHostBottom", () => {
 describe("useQamPanelHeightGuard", () => {
   beforeEach(() => {
     recorded = { observed: [], unobserved: [] };
+    callbacks.length = 0;
     originalRO = (globalThis as Record<string, unknown>).ResizeObserver;
     (globalThis as Record<string, unknown>).ResizeObserver = RecordingResizeObserver;
   });
@@ -158,5 +163,22 @@ describe("useQamPanelHeightGuard", () => {
     await flush();
 
     expect(recorded.observed).toContain(pane);
+  });
+
+  /* The Developer tab's log filled with "ResizeObserver loop completed with undelivered
+     notifications": this callback wrote the pane's height inside the observer's own pass. */
+  it("writes the pane height on the next frame, not inside the observer's callback", async () => {
+    const { scope, pane } = buildScope();
+    scope.getBoundingClientRect = () => ({ height: 700, top: 0, bottom: 700, left: 0, right: 300, width: 300, x: 0, y: 0, toJSON: () => ({}) });
+    pane.getBoundingClientRect = () => ({ height: 650, top: 50, bottom: 700, left: 0, right: 300, width: 300, x: 0, y: 50, toJSON: () => ({}) });
+    renderHook(() => useQamPanelHeightGuard({ current: scope }));
+    scope.style.removeProperty("--bonsai-tab-body-height");
+    const write = vi.spyOn(scope.style, "setProperty");
+
+    for (const cb of callbacks) cb();
+    expect(write.mock.calls.filter((c) => c[0] === "--bonsai-tab-body-height")).toHaveLength(0);
+
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    expect(write.mock.calls.filter((c) => c[0] === "--bonsai-tab-body-height")).toHaveLength(1);
   });
 });

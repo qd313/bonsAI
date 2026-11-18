@@ -169,8 +169,13 @@ export function useQamPanelHeightGuard(scopeRef: React.RefObject<HTMLDivElement 
     let raf = 0;
     let settleRaf = 0;
 
+    /* The write sizes the very pane this watches, so doing it inside the callback makes the browser
+       report "ResizeObserver loop completed with undelivered notifications" (14 lines in the
+       Developer tab's log on the Deck, 2026-11-17). The next frame takes the write out of that pass. */
+    let syncRaf = 0;
     const ro = new ResizeObserver(() => {
-      syncTabBodyViewportHeight(scope);
+      cancelAnimationFrame(syncRaf);
+      syncRaf = requestAnimationFrame(() => syncTabBodyViewportHeight(scope));
     });
     ro.observe(scope);
 
@@ -252,6 +257,7 @@ export function useQamPanelHeightGuard(scopeRef: React.RefObject<HTMLDivElement 
       stopHeader();
       cancelAnimationFrame(raf);
       cancelAnimationFrame(settleRaf);
+      cancelAnimationFrame(syncRaf);
       ro.disconnect();
       structureObserver.disconnect();
       scope.removeEventListener("pointerenter", onPointer);

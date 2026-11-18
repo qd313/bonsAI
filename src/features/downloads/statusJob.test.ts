@@ -127,6 +127,24 @@ describe("the follower: the job reads the status itself while no screen of its o
     expect(readCount).toBe(1);
   });
 
+  it("a screen whose own reading has stopped hands the reading back to the job", async () => {
+    reads = [{ phase: "running" }];
+    let reading = true;
+    const screen = renderHook(() => job.useReader(reading));
+    job.begin();
+    job.accepted();
+    await act(async () => void (await vi.advanceTimersByTimeAsync(3100)));
+    expect(readCount).toBe(0);
+    reading = false;
+    screen.rerender();
+    await act(async () => void (await vi.advanceTimersByTimeAsync(1500)));
+    expect(readCount).toBe(1);
+    reading = true;
+    screen.rerender();
+    await act(async () => void (await vi.advanceTimersByTimeAsync(3100)));
+    expect(readCount).toBe(1);
+  });
+
   it("a read that fails is not the end of the run: the job stays and the next read tries again", async () => {
     let calls = 0;
     const flaky = createStatusJob<St>({

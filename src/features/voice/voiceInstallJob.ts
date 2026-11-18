@@ -127,9 +127,9 @@ export function noteVoiceInstallStatus(st: VoiceJobStatus | null | undefined): v
   job.note(st);
 }
 
-/** The section says it is on screen and reads the status itself, for as long as it is mounted. */
-export function useVoiceInstallJobReader(): void {
-  job.useReader();
+/** The section says it is on screen and reads the status itself, for as long as it is mounted and polling (`reading`). */
+export function useVoiceInstallJobReader(reading: boolean): void {
+  job.useReader(reading);
 }
 
 /** Test-only reset. */

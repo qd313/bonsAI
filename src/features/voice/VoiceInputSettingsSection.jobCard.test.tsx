@@ -147,6 +147,24 @@ describe("the voice install on the card", () => {
     await waitFor(() => expect(ringName()).toMatch(/Install voice engine/));
   });
 
+  it("a progress read that fails while the install goes on does not strand the card: the job reads on and ends it", async () => {
+    let reads = 0;
+    setRpcHandler("get_voice_install_status", () => {
+      reads += 1;
+      if (reads === 1) throw new Error("socket closed");
+      return install;
+    });
+    render(section());
+    await pressInstall();
+    // The section's own poll gave up on that read; the install is still running, so the card stays...
+    await wait(1700);
+    expect(screen.getByLabelText(CANCEL)).toBeTruthy();
+    // ...and the job's own reads see it end.
+    install = { phase: "done", stage: "model_ready", done: true, model_id: "base.en" };
+    await waitFor(() => expect(screen.queryByLabelText(CANCEL)).toBeNull(), { timeout: 5000 });
+    expect(screen.getByText("Install voice engine")).toBeTruthy();
+  });
+
   it("a real failure still shows the back end's reason in red", async () => {
     render(section());
     await pressInstall();

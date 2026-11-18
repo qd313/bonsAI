@@ -109,9 +109,9 @@ export function noteKbLibraryStatus(st: KbJobStatus | null | undefined): void {
   job.note(st);
 }
 
-/** The section says it is on screen and reads the status itself, for as long as it is mounted. */
-export function useKbLibraryJobReader(): void {
-  job.useReader();
+/** The section says it is on screen and reads the status itself, for as long as it is mounted and polling (`reading`). */
+export function useKbLibraryJobReader(reading: boolean): void {
+  job.useReader(reading);
 }
 
 /** Test-only reset. */

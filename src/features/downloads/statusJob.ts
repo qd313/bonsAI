@@ -61,8 +61,11 @@ export interface StatusJob<S> {
   refused: () => void;
   /** A status was read (null: nothing is known; the job ends quietly). */
   note: (st: S | null | undefined) => void;
-  /** A screen of the job's own is on screen and reads the status itself, for as long as it is mounted. */
-  useReader: () => void;
+  /**
+   * A screen of the job's own is on screen and reads the status itself, for as long as it is mounted and `reading` (a
+   * screen whose own reading has stopped, a poll that ended on a failed read, hands the reading back to the job).
+   */
+  useReader: (reading?: boolean) => void;
   /** The last status seen while it was a running one: where a screen rebuilt mid-run starts. */
   lastRunning: () => S | null;
   /** Test-only reset. */
@@ -135,15 +138,16 @@ export function createStatusJob<S>(spec: StatusJobSpec<S>): StatusJob<S> {
       follow();
     },
     note,
-    useReader() {
+    useReader(reading = true) {
       useEffect(() => {
+        if (!reading) return;
         owners += 1;
         follow();
         return () => {
           owners -= 1;
           follow();
         };
-      }, []);
+      }, [reading]);
     },
     lastRunning: () => last,
     reset() {

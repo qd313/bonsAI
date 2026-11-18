@@ -311,7 +311,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   const [downloadBusy, setDownloadBusy] = useState(kbDownloadLikelyInFlight);
   /* The running download as the job card shows it (knowledgeLibraryJob.ts); it outlives this copy of the section. */
   const job = useRunningJob(KB_LIBRARY_JOB);
-  useKbLibraryJobReader();
+  useKbLibraryJobReader(downloadBusy);
   /* A copy built while a download it did not start goes on (a box closing rebuilt the tab) shows the card at once. */
   useLayoutEffect(() => {
     if (kbDownloadLikelyInFlight() && !runningJob(KB_LIBRARY_JOB)) resumeKbLibraryJob(Boolean(ragCorpusVersion));

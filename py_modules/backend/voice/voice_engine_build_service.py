@@ -182,7 +182,8 @@ _APT_SIGNED_ONLY_SCRIPT = r"""
 set -e
 export DEBIAN_FRONTEND=noninteractive
 APT_DIR="${BONSAI_APT_DIR:-/etc/apt}"
-if grep -rEqi 'trusted[ =:]*yes|allow-insecure[ =:]*yes' "$APT_DIR/sources.list" "$APT_DIR/sources.list.d" 2>/dev/null; then
+UNSIGNED_SWITCH="(trusted|allow-insecure)[ =:\"']*(yes|true|1|on)([^a-z0-9]|\$)"
+if grep -rEqi "$UNSIGNED_SWITCH" "$APT_DIR/sources.list" "$APT_DIR/sources.list.d" 2>/dev/null; then
   echo "bonsAI: this image's package sources switch off signature checks, so the build is refused." >&2
   exit 1
 fi

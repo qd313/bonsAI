@@ -115,6 +115,36 @@ class AptGuardRunsForReal(unittest.TestCase):
         self.assertIn("switch off signature checks", err)
         self.assertEqual(calls, "")
 
+    def test_every_way_of_writing_the_switch_refuses_the_build(self) -> None:
+        for source in (
+            "deb [trusted=true] http://archive.ubuntu.com/ubuntu jammy main\n",
+            "deb [trusted=1] http://archive.ubuntu.com/ubuntu jammy main\n",
+            "deb [trusted=on] http://archive.ubuntu.com/ubuntu jammy main\n",
+            "deb [ trusted = TRUE ] http://archive.ubuntu.com/ubuntu jammy main\n",
+            "deb [allow-insecure=true] http://archive.ubuntu.com/ubuntu jammy main\n",
+            "deb [allow-insecure=1] http://archive.ubuntu.com/ubuntu jammy main\n",
+            "deb [allow-insecure=on] http://archive.ubuntu.com/ubuntu jammy main\n",
+            "Types: deb\nURIs: http://archive.ubuntu.com/ubuntu\nTrusted: on\n",
+            "Types: deb\nURIs: http://archive.ubuntu.com/ubuntu\nAllow-Insecure: true\n",
+            'Types: deb\nURIs: http://archive.ubuntu.com/ubuntu\nTrusted: "yes"\n',
+        ):
+            with self.subTest(source=source):
+                code, calls, err = self._run_guard(source)
+                self.assertEqual(code, 1)
+                self.assertIn("switch off signature checks", err)
+                self.assertEqual(calls, "")
+
+    def test_a_source_that_keeps_checks_on_is_not_refused(self) -> None:
+        for source in (
+            "deb [trusted=no] http://archive.ubuntu.com/ubuntu jammy main\n",
+            "deb [signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] http://archive.ubuntu.com/ubuntu jammy main\n",
+            "deb http://archive.ubuntu.com/ubuntu jammy main # a trusted mirror, one of ours\n",
+        ):
+            with self.subTest(source=source):
+                code, calls, _err = self._run_guard(source)
+                self.assertEqual(code, 0)
+                self.assertIn("install -y -qq g++ make", calls)
+
     def test_an_ordinary_source_installs_with_signature_checks_forced_on(self) -> None:
         code, calls, _err = self._run_guard("deb http://archive.ubuntu.com/ubuntu jammy main\n")
         self.assertEqual(code, 0)

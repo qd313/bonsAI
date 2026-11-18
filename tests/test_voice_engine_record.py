@@ -52,13 +52,16 @@ class FakeBuild:
 
 
 class BuildWritesTheRecord(unittest.TestCase):
-    def _run(self, fn_name: str, files: dict[str, bytes]) -> str:
+    def _run(self, fn_name: str, files: dict[str, bytes], already_there: dict[str, bytes] | None = None) -> str:
         tmp = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, tmp, True)
         plugin_root, settings_dir = os.path.join(tmp, "plugin"), os.path.join(tmp, "settings")
         os.makedirs(plugin_root)
         bin_dir = build.voice_bin_dir(plugin_root, settings_dir)
         os.makedirs(bin_dir)
+        for name, data in (already_there or {}).items():
+            with open(os.path.join(bin_dir, name), "wb") as f:
+                f.write(data)
         with patch.object(build, "_run_whisper_container_build", side_effect=FakeBuild(files)), patch.object(
             build, "whisper_binary_usable", return_value="x"
         ):
@@ -80,7 +83,9 @@ class BuildWritesTheRecord(unittest.TestCase):
         self.assertFalse(os.path.exists(os.path.join(bin_dir, record.BUILD_TOOLS_NAME)))
 
     def test_server_only_build_rewrites_the_record_with_the_new_server(self) -> None:
-        bin_dir = self._run("_build_whisper_server_in_container", {"whisper-cli": b"old cli", "whisper-server": b"new server"})
+        bin_dir = self._run(
+            "_build_whisper_server_in_container", {"whisper-server": b"new server"}, {"whisper-cli": b"old cli"}
+        )
         with open(record.record_path(bin_dir), encoding="utf-8") as f:
             saved = json.load(f)
         self.assertEqual(saved["files"]["whisper-server"], {"sha256": _sha(b"new server")})

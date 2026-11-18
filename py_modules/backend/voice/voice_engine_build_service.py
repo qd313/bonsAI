@@ -41,6 +41,7 @@ from backend.voice.voice_engine_record import (
     take_build_tools,
     write_voice_engine_record,
 )
+from backend.voice.voice_engine_swap import new_staging_dir, remove_staging, swap_in_staged_engine
 from backend.voice.voice_transcript_decode_service import WHISPER_CLI_INFERENCE_ARGS
 from backend.voice.voice_stoppable_run import run_stoppable
 from backend.voice.voice_whisper_runtime import (
@@ -263,11 +264,34 @@ def _finalize_voice_bin(plugin_root: str, settings_dir: str) -> None:
             os.chmod(path, 0o755)
 
 
-def _finish_build(plugin_root: str, settings_dir: str, bin_dir: str) -> None:
-    """After a good compile: read the tools record, tidy voice_bin and write the engine record."""
-    tools = take_build_tools(bin_dir)
-    _finalize_voice_bin(plugin_root, settings_dir)
-    write_voice_engine_record(bin_dir, WHISPER_CPP_IMAGE, tools)
+def _build_in_staging(
+    podman: str,
+    env: dict[str, str],
+    plugin_root: str,
+    settings_dir: str,
+    build_script: str,
+    cancel_event: Any,
+    needed: tuple[str, ...],
+    full: bool,
+) -> None:
+    """Compile into a spare folder; only after a good compile swap the new files into the engine folder.
+
+    A Cancel or a failure deletes the spare folder and leaves the old engine as it was (voice_engine_swap.py).
+    """
+    bin_dir = voice_bin_dir(plugin_root, settings_dir)
+    os.makedirs(bin_dir, exist_ok=True)
+    staging = new_staging_dir(bin_dir)
+    try:
+        _run_whisper_container_build(podman, env, staging, build_script, cancel_event)
+        for name in needed:
+            if not os.path.isfile(os.path.join(staging, name)):
+                raise RuntimeError(f"{name} build finished but binary is missing from voice_bin.")
+        tools = take_build_tools(staging)
+        swap_in_staged_engine(staging, bin_dir, full)
+        _finalize_voice_bin(plugin_root, settings_dir)
+        write_voice_engine_record(bin_dir, WHISPER_CPP_IMAGE, tools)
+    finally:
+        remove_staging(staging)
 
 
 def _build_whisper_cli_in_container(
@@ -279,9 +303,7 @@ def _build_whisper_cli_in_container(
 ) -> str:
     """Compile whisper-cli + whisper-server inside the podman image (AVX2-only ggml)."""
     dest = voice_whisper_cli_path(plugin_root, settings_dir)
-    server_dest = voice_whisper_server_path(plugin_root, settings_dir)
     bin_dir = voice_bin_dir(plugin_root, settings_dir)
-    os.makedirs(bin_dir, exist_ok=True)
 
     build_script = (
         _APT_SIGNED_ONLY_SCRIPT
@@ -297,14 +319,9 @@ cp -a /tmp/bonsai-whisper-build/ggml/src/libggml*.so* /out/ 2>/dev/null || true
         + _BUILD_TOOLS_RECORD_SCRIPT
     )
 
-    _run_whisper_container_build(podman, env, bin_dir, build_script, cancel_event)
-
-    if not os.path.isfile(dest):
-        raise RuntimeError("whisper-cli build finished but binary is missing from voice_bin.")
-    if not os.path.isfile(server_dest):
-        raise RuntimeError("whisper-server build finished but binary is missing from voice_bin.")
-
-    _finish_build(plugin_root, settings_dir, bin_dir)
+    _build_in_staging(
+        podman, env, plugin_root, settings_dir, build_script, cancel_event, ("whisper-cli", "whisper-server"), True
+    )
 
     if not whisper_binary_usable(plugin_root, settings_dir):
         raise RuntimeError(
@@ -322,10 +339,12 @@ def _build_whisper_server_in_container(
     settings_dir: str,
     cancel_event: Any = None,
 ) -> str:
-    """Compile whisper-server only when whisper-cli is already CPU-safe in voice_bin."""
+    """Compile whisper-server only when whisper-cli is already CPU-safe in voice_bin.
+
+    Built in the same spare folder as a full build; only whisper-server (and the record) is replaced, the
+    libraries already in voice_bin stay.
+    """
     server_dest = voice_whisper_server_path(plugin_root, settings_dir)
-    bin_dir = voice_bin_dir(plugin_root, settings_dir)
-    os.makedirs(bin_dir, exist_ok=True)
 
     build_script = (
         _APT_SIGNED_ONLY_SCRIPT
@@ -337,10 +356,5 @@ cp /tmp/bonsai-whisper-build/bin/whisper-server /out/
         + _BUILD_TOOLS_RECORD_SCRIPT
     )
 
-    _run_whisper_container_build(podman, env, bin_dir, build_script, cancel_event)
-
-    if not os.path.isfile(server_dest):
-        raise RuntimeError("whisper-server build finished but binary is missing from voice_bin.")
-
-    _finish_build(plugin_root, settings_dir, bin_dir)
+    _build_in_staging(podman, env, plugin_root, settings_dir, build_script, cancel_event, ("whisper-server",), False)
     return server_dest

@@ -29,6 +29,8 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
+import decky  # noqa: E402 -- the stub installed above, or the real one
+
 from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
 
 from backend.voice import voice_engine_record as record  # noqa: E402
@@ -182,6 +184,33 @@ class EngineFromBeforeTheRecord(unittest.TestCase):
         self.assertIn("whisper-cli", saved["files"])
         self.assertIn("whisper-server", saved["files"])
         self.assertEqual(record.check_voice_engine(bin_dir), "ok")
+
+    def test_one_line_is_logged_when_the_record_is_written_this_way(self) -> None:
+        root, settings, bin_dir = _make_engine(self.tmp, with_record=False)
+        with mock.patch.object(runtime.subprocess, "run", side_effect=_usage_run), mock.patch.object(
+            decky.logger, "info"
+        ) as log_info:
+            self.assertTrue(runtime.whisper_binary_usable(root, settings))
+            self.assertEqual(log_info.call_count, 1)
+            line = log_info.call_args.args[0] % log_info.call_args.args[1:]
+            self.assertIn("trusted once", line)
+            self.assertIn("voice engine", line)
+            # The record now exists, so the next start is an ordinary one and writes nothing more.
+            self.assertTrue(runtime.whisper_binary_usable(root, settings))
+            self.assertEqual(log_info.call_count, 1)
+
+    def test_no_line_is_logged_when_the_engine_fails_its_test_or_already_has_a_record(self) -> None:
+        with mock.patch.object(decky.logger, "info") as log_info:
+            root, settings, _bin = _make_engine(self.tmp, with_record=True)
+            with mock.patch.object(runtime.subprocess, "run", side_effect=_usage_run):
+                self.assertTrue(runtime.whisper_binary_usable(root, settings))
+            shutil.rmtree(self.tmp, True)
+            self.tmp = tempfile.mkdtemp()
+            root, settings, _bin = _make_engine(self.tmp, with_record=False)
+            broken = SimpleNamespace(returncode=1, stdout="", stderr="illegal instruction")
+            with mock.patch.object(runtime.subprocess, "run", return_value=broken):
+                self.assertIsNone(runtime.whisper_binary_usable(root, settings))
+        self.assertEqual(log_info.call_count, 0)
 
     def test_after_the_record_is_written_a_change_is_caught(self) -> None:
         root, settings, bin_dir = _make_engine(self.tmp, with_record=False)

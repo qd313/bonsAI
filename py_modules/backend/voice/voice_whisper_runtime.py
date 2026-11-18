@@ -33,15 +33,25 @@ Gotchas:
 from __future__ import annotations
 
 import io
+import logging
 import os
 import re
 import shutil
 import subprocess
 import wave
-from typing import Optional
+from typing import Any, Optional
 
 from backend.ollama.local_ollama_setup_service import _env_for_host_system_tools
 from backend.voice.voice_engine_record import check_voice_engine, write_voice_engine_record
+
+
+def _log() -> Any:
+    try:
+        import decky  # type: ignore[import-not-found]
+
+        return decky.logger
+    except Exception:  # noqa: BLE001 -- a missing or half-built decky never stops a recording
+        return logging.getLogger("bonsai.voice_engine")
 
 
 SAMPLE_RATE = 16000
@@ -146,9 +156,11 @@ def whisper_binary_usable(plugin_root: str, settings_dir: str) -> Optional[str]:
     except Exception:
         return None
     if verdict == "unrecorded":
-        write_voice_engine_record(
+        if write_voice_engine_record(
             bin_dir, "unknown (this engine was built before the record was kept)", [], source="first_use"
-        )
+        ):
+            # One line, so a record made this way (the files were trusted as they were) can be found in the log later.
+            _log().info("voice engine: no record existed, so the files on disk were trusted once and recorded as they are")
     return path
 
 

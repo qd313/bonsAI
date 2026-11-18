@@ -1018,6 +1018,10 @@ Open all (floating button)
 - **When the job ends** out of sight, the bar says how it ended for four seconds ("Update finished", "Update
   cancelled"; "Update failed" stays until the line under the buttons is in sight) and has no button; a ring on its
   Cancel goes back to where it came from.
+- **The "2 jobs" chip has a hand-over too** (plan 106, lane F3). When it leaves under the ring (one of the two jobs ends,
+  or its card comes back into sight) the ring goes to the bar's Cancel; if the bar goes with it (both jobs ended), the
+  way Cancel's own hand-over goes: where the ring came from, else the tab's first stop, else the tab bar. A ring
+  somewhere else stays where it is. Pinned by `JobBar.chipHandOver.test.tsx`.
 - **X cancels from anywhere in a tab** (`TabBodyFocusRoot`'s `onSecondaryButton`): the job the bar shows, else the
   newest. Not in the job's first half second. The Main tab has no container around its whole body, so there X works
   on the bar only. With no download running the press is left alone.

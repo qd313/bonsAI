@@ -21,7 +21,9 @@
  * twice and the third Left in a row goes out to Steam's menu (leftEdge.ts, plan 105 lane C5); Up and B go back to
  * where the ring came from; Down holds still; LB and RB switch tabs as from anywhere; X cancels the job shown. When the bar's Cancel goes away under the
  * ring (the job ended, or its card came into sight), the ring goes back to where it came from; with that gone, to
- * the tab's own first stop (the question box on Main), then the tab bar: never on nothing.
+ * the tab's own first stop (the question box on Main), then the tab bar: never on nothing. The "2 jobs" chip goes the
+ * same way: when it leaves under the ring (one of the two jobs ended, or its card came back) the ring goes to Cancel,
+ * and if the bar goes with it, the way Cancel's own hand-over goes.
  *
  * Does not: Poll or start a job, or decide when a card is in sight (JobCard.tsx does).
  */
@@ -67,7 +69,15 @@ function cancelOnX(e: unknown): void {
 }
 
 /** The bar's parts for a running job: the title row (spinner, title, "2 jobs", Cancel), the facts line, the progress. */
-function RunningBar({ view, cancelGone }: { view: BarView; cancelGone: (el: HTMLElement | null) => void }): React.ReactElement {
+function RunningBar({
+  view,
+  cancelGone,
+  chipGone,
+}: {
+  view: BarView;
+  cancelGone: (el: HTMLElement | null) => void;
+  chipGone: (el: HTMLElement | null) => void;
+}): React.ReactElement {
   const job = view.job!;
   const cancelNavRef = useRef<NavRefHolder["current"]>(null);
   const moreNavRef = useRef<NavRefHolder["current"]>(null);
@@ -88,6 +98,7 @@ function RunningBar({ view, cancelGone }: { view: BarView; cancelGone: (el: HTML
         <span className="bonsai-job-bar__title">{jobTitle(job)}</span>
         {view.count > 1 ? (
           <Focusable
+            ref={chipGone}
             className="bonsai-job-bar__host"
             {...({ ...common, navRef: moreNavRef, onMoveLeft: (e: unknown) => leftAtEdge("job-bar", e), onMoveRight: () => takeNavFocus("job-bar") || true } as Record<string, unknown>)}
           >
@@ -139,13 +150,15 @@ export function JobBar(): React.ReactElement | null {
   const elRef = useRef<HTMLDivElement | null>(null);
   /* Here, not in the running bar: that part goes with its Cancel when the job ends, and the hand-off must outlive it. */
   const cancelGone = useHandRingOnGone(() => void leaveBar());
+  /* The "2 jobs" chip goes when a job ends or its card comes back: a ring on it goes to Cancel, or off the bar with it. */
+  const chipGone = useHandRingOnGone(() => void (takeNavFocus("job-bar") || leaveBar()));
   activeTabOf = () => elRef.current?.closest(".bonsai-decky-tabs-root")?.getAttribute("data-bonsai-active-tab") ?? "";
   if (!view.job && !view.result) return null;
   const tone = view.result?.tone ?? "run";
   return (
     <div ref={elRef} className="bonsai-job-bar" data-bonsai-job-bar={view.job?.id ?? view.result?.id} data-tone={tone} aria-live="polite">
       {view.job ? (
-        <RunningBar view={view} cancelGone={cancelGone} />
+        <RunningBar view={view} cancelGone={cancelGone} chipGone={chipGone} />
       ) : (
         <>
           <div className="bonsai-job-bar__row">

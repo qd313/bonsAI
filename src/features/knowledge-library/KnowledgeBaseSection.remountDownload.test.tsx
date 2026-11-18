@@ -86,13 +86,13 @@ describe("a download that starts in a section that was already replaced", () => 
 
     // The notice says yes; the download starts (in the old copy's own code).
     await act(async () => hoisted.releaseNotice!(true));
-    await waitFor(() => expect(screen.getByText("Downloading…")).toBeTruthy());
-    expect(screen.getByText("Cancel")).toBeTruthy();
+    await waitFor(() => expect(screen.getByText("Downloading the library")).toBeTruthy());
+    expect(screen.getByLabelText("Cancel the library download")).toBeTruthy();
 
     backend = "done";
     await waitFor(() => expect(screen.getByText("Update knowledge base")).toBeTruthy(), { timeout: 5000 });
-    expect(screen.queryByText("Cancel")).toBeNull();
-    expect(screen.queryByText("Downloading…")).toBeNull();
+    expect(screen.queryByLabelText("Cancel the library download")).toBeNull();
+    expect(screen.queryByText("Downloading the library")).toBeNull();
     expect(screen.getByText(/Installed/)).toBeTruthy();
   });
 });

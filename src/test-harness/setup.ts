@@ -4,6 +4,7 @@ import { dispatchFakeRpc, resetFakeDeckyRpc } from "./fakeDeckyRpc";
 import { resetLeftEdgeForTests } from "../shared/dpad/leftEdge";
 import { resetOllamaSetupJobForTests } from "../features/ai-connection/ollamaSetupJob";
 import { resetRunningJobsForTests } from "../features/downloads/runningJobs";
+import { resetKbLibraryJobForTests } from "../features/knowledge-library/knowledgeLibraryJob";
 
 vi.mock("@decky/api", () => ({
   call: vi.fn((method: string, ...args: unknown[]) => dispatchFakeRpc(method, args)),
@@ -57,6 +58,7 @@ afterEach(() => {
   resetLeftEdgeForTests();
   // A run one test left going must not open the next test's Ollama tab on its job card, nor stay on the bar (plan 105 D4).
   resetOllamaSetupJobForTests();
+  resetKbLibraryJobForTests();
   resetRunningJobsForTests();
   vi.clearAllMocks();
 });

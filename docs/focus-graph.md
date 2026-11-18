@@ -1031,6 +1031,47 @@ Open all (floating button)
   tab; Down from Open all, Up and B back; X and its half second; the ring back to Open all when the run ends; two
   jobs; the dock ending where the bar starts) and `runningJobs.test.ts`. Device row: P105-OLLAMA-BUTTONS-01.
 
+### The knowledge library's download card (plan 106, lane F3)
+
+While the knowledge library downloads (a fresh Download, or an Update that found a newer library), one job card
+(`downloads/JobCard.tsx`, the same card as the Ollama tab's) stands in for the whole Download / Update and Remove row in
+`knowledge-library/KnowledgeBaseSection.tsx`, with its Cancel at the top right. `knowledgeLibraryJob.ts` keeps the card
+in step with the back end's status and, while no library section is on screen, reads that status itself every 1.5
+seconds so the bar at the bottom of the panel follows the download to another tab or a folded section.
+
+```
+Use local knowledge base (switch)         [the meaning-search Pull button sits between, when it shows]
+   | Down -> the card's Cancel (Steam's transfer onto its node)      ^ Up -> Steam's own
+-- no download ----------------------------------------------------------
+Update / Download knowledge base     Remove
+-- a download going ------------------------------------------------------
+[ job card: title, bar, what it is doing, how far, the sites ]  Cancel
+   | Down -> Steam's own, to the lowered-notes row or the next section's line      ^ Up -> the switch
+   Right holds still; Left is Steam's own (out to its menu on the first press, as from the buttons it stands in for)
+-------------------------------------------------------------------------
+```
+
+- **A on Update (or the storage picker's pick) puts the ring on the card's Cancel on the same press.** The button
+  leaves the page with the ring on it and its row hands the ring on (`useHandRingOnGone`) through Steam's transfer onto
+  Cancel's node, then the button's own focus if the transfer did not land. A box opened by the press (the picker, the
+  download notice) rebuilds the tab on close: the shell hands the ring back to whichever owns `kb-download` then, which
+  is the card's Cancel while the card is up, else Update.
+- **When the download ends** (finished, failed or cancelled) the card goes and a ring on Cancel goes to Update (the same
+  hand-off the other way); a ring anywhere else stays where it is.
+- **Cancel is the row's only stop while the card is up.** Download / Update and Remove are not drawn then, so Down from
+  the switch lands on Cancel and Up from the next section lands on it (`kbCancelBtnRef`, filled by the card's
+  `cancelButtonRef`).
+- **A on Cancel in the first half second does nothing** (`runningJobs.ts`); a later A sends the stop once and the card reads
+  "Stopping the download". A stop the back end refuses or never answers puts Cancel back with "Could not stop. Try again."
+- **Under the buttons, while no download runs:** the last result ("Download cancelled. Nothing was installed ...", a
+  failure, "Library updated.") and the sites line (`KbLibraryResultLines.tsx`). Plain text, not a stop. It is also the
+  job's face once the download is over: the bar's "Library download failed" stays until a person can read these lines.
+- Pinned by `KnowledgeBaseSection.cardRing.test.tsx` (the ring at the press, Down from the switch, the ring on Update at
+  the end), `OllamaTab.kbJobWalk.test.tsx` (the whole tab walked with a download going, Steam's scroll modelled three
+  ways: Cancel once each way, never Download, Update or Remove, no stop twice; Left), `KnowledgeBaseSection.jobBar.test.tsx`
+  (leave the tab: the bar; come back: it goes; Cancel from the bar; a download that ends while away) and
+  `KnowledgeBaseSection.test.tsx` (the card's words and Cancel). Device row: P105-JOB-CARD-ELSEWHERE-01.
+
 ### The About tab, one line per row (plan 92, lane T3; plan 91 § 6)
 
 The About tab is `AboutTab.tsx`: the title line "About bonsAI" with the version beside it, the "What bonsAI is"

@@ -126,25 +126,31 @@ describe("KnowledgeBaseSection Update reports its outcome", () => {
   });
 
   it("says a newer version was found and shows the download running", async () => {
-    setRpcHandler("update_rag_corpus", () => ({
-      ok: true,
-      updated: true,
-      outcome: "download_started",
-      version: "2026.09.30",
-      accepted: true,
-    }));
+    // The back end starts the download before it answers, so from then on its status says "running".
+    let started = false;
+    setRpcHandler("get_rag_corpus_status", () =>
+      ragCorpusStatusFixture({
+        installed: true,
+        corpus_version: "2026.09.26",
+        ...(started ? { phase: "running", done: false, stage: "download", bytes_downloaded: 1, bytes_total: 4 } : {}),
+      }),
+    );
+    setRpcHandler("update_rag_corpus", () => {
+      started = true;
+      return { ok: true, updated: true, outcome: "download_started", version: "2026.09.30", accepted: true };
+    });
     renderInstalled();
     await pressUpdate();
-    expect(await screen.findByText("Newer version 2026.09.30 found — downloading…")).toBeTruthy();
-    expect(screen.getByText("Downloading…")).toBeTruthy();
+    // The card says it (the row's own "found — downloading…" note would only repeat it).
+    expect(await screen.findByText("Updating the library")).toBeTruthy();
+    expect(screen.queryByText("Newer version 2026.09.30 found — downloading…")).toBeNull();
 
     // Once the download ends the note goes; the Installed line carries the new version.
     setRpcHandler("get_rag_corpus_status", () =>
       ragCorpusStatusFixture({ phase: "done", done: true, installed: true, corpus_version: "2026.09.30" }),
     );
-    await waitFor(() => expect(screen.queryByText("Downloading…")).toBeNull(), { timeout: 4000 });
-    expect(screen.queryByText("Newer version 2026.09.30 found — downloading…")).toBeNull();
-    expect(screen.getByText(/version 2026\.09\.30/)).toBeTruthy();
+    await waitFor(() => expect(screen.queryByText("Updating the library")).toBeNull(), { timeout: 4000 });
+    expect(await screen.findByText(/version 2026\.09\.30/, undefined, { timeout: 4000 })).toBeTruthy();
   });
 
   it("says plainly when the check could not reach the library's site", async () => {

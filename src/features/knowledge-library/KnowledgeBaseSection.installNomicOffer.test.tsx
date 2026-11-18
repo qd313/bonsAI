@@ -68,13 +68,13 @@ async function finishFreshInstall(finalStatus: Record<string, unknown>) {
   await act(async () => {
     pickerProps.onPick("~/.bonsai/rag", "internal");
   });
-  await screen.findByText("Downloading…");
+  await screen.findByText("Downloading the library");
 
   setRpcHandler("get_rag_corpus_status", () =>
     ragCorpusStatusFixture({ phase: "done", done: true, ...finalStatus }),
   );
 
-  await waitFor(() => expect(screen.queryByText("Downloading…")).toBeNull(), { timeout: 4000 });
+  await waitFor(() => expect(screen.queryByText("Downloading the library")).toBeNull(), { timeout: 4000 });
 }
 
 describe("KnowledgeBaseSection meaning-search offer after a fresh install", () => {
@@ -233,7 +233,7 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
     );
     const primary = await screen.findByText("Update knowledge base");
     fireEvent.click(primary);
-    await screen.findByText("Downloading…");
+    await screen.findByText("Updating the library");
 
     setRpcHandler("get_rag_corpus_status", () =>
       ragCorpusStatusFixture({
@@ -245,7 +245,7 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
         embed_model_available: false,
       }),
     );
-    await waitFor(() => expect(screen.queryByText("Downloading…")).toBeNull(), { timeout: 4000 });
+    await waitFor(() => expect(screen.queryByText("Updating the library")).toBeNull(), { timeout: 4000 });
 
     expect(hoisted.modal?.props.title).not.toBe("Also download the meaning-search model (about 270 MB)?");
   });

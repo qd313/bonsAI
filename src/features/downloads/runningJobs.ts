@@ -47,6 +47,8 @@ export interface JobFace {
   sites: string;
   /** How far the whole job is, 0 to 1; null while the step has no percentage (the bar shows moving stripes). */
   fraction: number | null;
+  /** What the bar's one line says, when it is not `line1` (the drawing's "43% · 62 of 148 MB" for the library and the voice install). */
+  barLine?: string;
 }
 
 /** One running job. */

@@ -53,7 +53,7 @@ async function downloadThroughRebuiltScreen() {
   act(() => rebuild());
   expect(await screen.findByText("Download knowledge base")).toBeTruthy();
   await act(async () => hoisted.releaseNotice!(true));
-  await waitFor(() => expect(screen.getByText("Downloading…")).toBeTruthy());
+  await waitFor(() => expect(screen.getByText("Downloading the library")).toBeTruthy());
 }
 
 describe("after Download, with the switch read from the settings hook and the box rebuilding the screen", () => {

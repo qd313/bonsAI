@@ -4,9 +4,12 @@
  * Purpose: The "Knowledge base (offline)" panel on the Ollama tab. A
  * toggle turns on grounding Strategy and troubleshooting answers with a
  * downloaded set of offline strategy cards; below it, a status line and a
- * button that reads Download, Update, or Downloading… depending on what is
- * already installed, next to Cancel (while a download runs) or Remove
- * (once something is installed). Starting a fresh download first opens a
+ * button that reads Download or Update depending on what is already
+ * installed, next to Remove (once something is installed). While a download
+ * runs, one job card (downloads/JobCard.tsx, plan 106 lane F3) stands in for
+ * both buttons, with the download's progress, the sites it comes from and
+ * Cancel; the bar at the bottom of the panel shows the same download whenever
+ * the card is out of sight. Starting a fresh download first opens a
  * small picker for internal storage or an SD card. Under them, only while
  * the person has ranked notes lower with a thumbs-down, a "Lowered notes: N"
  * row with a Clear button that takes every mark back.
@@ -27,7 +30,7 @@
  *     │ [ Use local knowledge base ]  toggle            │
  *     │ status: Installed vX / Not installed             │
  *     │   (+ nomic-embed-text hint/button when needed)   │
- *     │ [ Download / Update ]   [ Cancel / Remove ]      │  <- two-button row
+ *     │ [ Download / Update ]   [ Remove ]               │  <- two-button row, or one job card
  *     │ Lowered notes: N                     [ Clear ]   │  <- only when N > 0
  *     └────────────────────────────────────────────────────┘
  *
@@ -42,11 +45,11 @@
  * 3. Pressing the primary button calls openStoragePicker() when nothing is
  *    installed yet (choose internal storage or an SD card, then
  *    startDownload()), or runUpdate() once a corpus is already installed.
- * 4. The second button slot is whichever of three things fits the current
- *    state: Cancel (cancelDownload()) while a download runs, Remove
- *    (confirmRemove(), which asks first) once something is installed, or
- *    nothing at all otherwise — deliberately, so the row always has at
- *    least one focusable stop while a download is in progress.
+ * 4. The second button slot is Remove (confirmRemove(), which asks first) once
+ *    something is installed, else nothing. While a download runs the whole row
+ *    gives way to the job card (knowledgeLibraryJob.ts keeps it in step with
+ *    the back end, wherever the person is), whose Cancel is the one stop and
+ *    asks the back end to stop the download through runningJobs.ts.
  * 5. An optional nomic-embed-text hint appears once the corpus is
  *    installed and vectorized but the embedding model is not yet on the
  *    Ask host; pullNomicEmbed() only offers a one-press fix when Ask is
@@ -77,7 +80,7 @@
  *   D-pad would skip straight over that button to Download/Update.
  */
 import { isHttpsOllamaAddress } from "../ai-connection/ollamaAddress";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Button, Focusable, PanelSection, PanelSectionRow, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../shared/deckyCall";
@@ -85,6 +88,21 @@ import { tryMoveUpWithPanelScroll } from "../../shared/dpad/settingsPanelScroll"
 import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
 import { useHandRingOnGone } from "../../shared/dpad/useHandRingOnGone";
 import { rememberReturnWhileBoxOpens } from "../downloads/rememberReturnWhileBoxOpens";
+import { JobCard } from "../downloads/JobCard";
+import { runningJob, useRunningJob } from "../downloads/runningJobs";
+import { helpAttributes } from "../folded-tabs/useHelpStrip";
+import { KbLibraryResultLines } from "./KbLibraryResultLines";
+import {
+  beginKbLibraryJob,
+  KB_LIBRARY_JOB,
+  kbLibraryDoneSentence,
+  kbLibraryJobAccepted,
+  kbLibraryJobRefused,
+  noteKbLibraryStatus,
+  resetKbLibraryJobForTests,
+  resumeKbLibraryJob,
+  useKbLibraryJobReader,
+} from "./knowledgeLibraryJob";
 import {
   addKbDownloadListener,
   kbDownloadLikelyInFlight,
@@ -250,6 +268,7 @@ function kbNomicPullLikelyInFlight(): boolean {
 
 /** Test seam: forget any in-flight marker between tests. */
 export function resetKbDownloadInFlightForTests(): void {
+  resetKbLibraryJobForTests();
   resetKbDownloadMarkerForTests();
   resetKbLibrarySignalForTests();
   kbInstallNomicOfferPending = false;
@@ -290,7 +309,14 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
 }) => {
   const [status, setStatus] = useState<RagCorpusStatus | null>(null);
   const [downloadBusy, setDownloadBusy] = useState(kbDownloadLikelyInFlight);
-  const [cancelBusy, setCancelBusy] = useState(false);
+  /* The running download as the job card shows it (knowledgeLibraryJob.ts); it outlives this copy of the section. */
+  const job = useRunningJob(KB_LIBRARY_JOB);
+  useKbLibraryJobReader();
+  /* A copy built while a download it did not start goes on (a box closing rebuilt the tab) shows the card at once. */
+  useLayoutEffect(() => {
+    if (kbDownloadLikelyInFlight() && !runningJob(KB_LIBRARY_JOB)) resumeKbLibraryJob(Boolean(ragCorpusVersion));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, as the copy is built
+  }, []);
   const [updateNote, setUpdateNote] = useState<UpdateNote | null>(null);
   const [nomicPullBusy, setNomicPullBusy] = useState(kbNomicPullLikelyInFlight);
   /** How many notes and tips hold a thumbs-down mark; the "Lowered notes" row shows only above 0. */
@@ -312,9 +338,19 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     return true;
   }, [downloadBtnRefProp]);
 
-  const focusCancelBtn = useCallback((): boolean => {
-    if (cancelBtnRef.current) focusInTabBody(cancelBtnRef.current);
-    return Boolean(cancelBtnRef.current);
+  /** Steam's node for the job card's Cancel: the card's own moves are a transfer onto it. */
+  const cancelNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
+  /** The ring onto the card's Cancel: Steam's transfer first, then the button's own focus if that did not land it. */
+  const takeCancel = useCallback((): boolean => {
+    const el = cancelBtnRef.current;
+    if (!el) return false;
+    try {
+      cancelNavRef.current?.TakeFocus?.(true);
+    } catch {
+      /* the check below decides */
+    }
+    if (!elementHasGamepadFocus(el)) focusInTabBody(el);
+    return true;
   }, []);
 
   const focusNomicBtn = useCallback((): boolean => {
@@ -328,7 +364,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
    * ring goes to the button below it: Steam's own transfer into the action row first, then that
    * button's own focus if the transfer did not land it.
    */
-  const nomicHostRef = useHandRingOnGone(() => {
+  const takePrimaryBtn = useCallback(() => {
     try {
       actionRowNavRef.current?.TakeFocus?.(true);
     } catch {
@@ -339,16 +375,21 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     if (!elementHasGamepadFocus(primary?.closest<HTMLElement>(".bonsai-settings-focus-btn-host") ?? primary)) {
       focusPrimaryBtn();
     }
-  });
+  }, [focusPrimaryBtn]);
+  const nomicHostRef = useHandRingOnGone(takePrimaryBtn);
+  /* The press swaps the buttons for the card: a ring on Download / Update goes to the card's Cancel (the drawing: on the same press). */
+  const primaryRowRef = useHandRingOnGone(() => void takeCancel());
+  /* The download ends and the card goes: a ring on Cancel goes back to Download / Update. */
+  const cancelRowRef = useHandRingOnGone(takePrimaryBtn);
 
   /**
-   * Down from the toggle: while a download runs the primary button is disabled and
-   * Remove is not rendered, so Cancel is the only stop the row has.
+   * Down from the toggle: while a download runs the job card stands in for the buttons, so its Cancel is the only
+   * stop the row has.
    */
   const focusActionRow = useCallback((): boolean => {
-    if (downloadBusy && focusCancelBtn()) return true;
+    if (job && takeCancel()) return true;
     return focusPrimaryBtn();
-  }, [downloadBusy, focusCancelBtn, focusPrimaryBtn]);
+  }, [job, takeCancel, focusPrimaryBtn]);
 
   /** Down from the toggle: the nomic pull button sits between it and the action row
    * whenever the hint is showing, so it must be offered focus first. */
@@ -382,6 +423,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
       );
       setStatus(st);
       noteKbStatusRead(st);
+      noteKbLibraryStatus(st);
       // A download already running on the back end (started before a remount) still gets polled.
       if (st?.phase === "running" && !st.done) setDownloadBusy(true);
       if (
@@ -456,6 +498,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         .then((st) => {
           setStatus(st);
           noteKbStatusRead(st);
+          noteKbLibraryStatus(st);
           if (st?.phase === "failed" && (st.error ?? "").trim()) {
             const errKey = `${st.error}|${st.stage ?? ""}`;
             if (sessionStorage.getItem(KB_FAILURE_TOAST_KEY) !== errKey) {
@@ -473,18 +516,15 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
             void refreshStatus();
           }
         })
-        .catch(() => setDownloadBusy(false));
+        // A read that fails is not the download ending: the card stays and the next read tries again.
+        .catch(() => {});
     }, 1500);
     return () => window.clearInterval(id);
   }, [downloadBusy, refreshStatus, ollamaIp]);
 
-  /**
-   * The download ending is what clears Cancel's own pending state, however it ended, and
-   * an Update's "downloading" note with it (a later fresh download must not reuse it).
-   */
+  /** The download ending clears an Update's "downloading" note (a later fresh download must not reuse it). */
   useEffect(() => {
     if (downloadBusy) return;
-    setCancelBusy(false);
     setUpdateNote((n) => (n?.kind === "downloading" ? null : n));
   }, [downloadBusy]);
 
@@ -527,12 +567,14 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     setKbDownloadMarker(Date.now());
     expectKbInstall();
     setDownloadBusy(true);
+    beginKbLibraryJob(false);
     try {
       const out = await callDeckyWithTimeout<
         [{ install_path: string; storage: string }],
         { accepted?: boolean; reason?: string }
       >("start_rag_corpus_download", [{ install_path: installPath, storage }], 15000);
       if (!out?.accepted) {
+        kbLibraryJobRefused();
         setKbDownloadMarker(null);
         setDownloadBusy(false);
         toaster.toast({
@@ -542,6 +584,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         });
         return;
       }
+      kbLibraryJobAccepted();
       toaster.toast({
         title: "Downloading knowledge base",
         body: "Offline strategy corpus — small download, should finish quickly.",
@@ -551,6 +594,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
       // lands; an Update starts already installed and never sets this.
       kbInstallNomicOfferPending = true;
     } catch (e: unknown) {
+      kbLibraryJobRefused();
       setKbDownloadMarker(null);
       setDownloadBusy(false);
       const msg = formatDeckyRpcError(e);
@@ -646,32 +690,6 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     // of only when downloadBusy/status change, which is what actually decides the ask.
   }, [downloadBusy, status, ollamaLocalOnDeck, onBeforeDeckyModal, onCompleteDeckyModalClose]);
 
-  /**
-   * Asks the backend to set its cancel event. The download does not stop here — the
-   * poll above sees `phase: "cancelled"` a beat later and clears `downloadBusy`, which
-   * is also what returns this button to Remove (or to nothing, if nothing is installed).
-   */
-  const cancelDownload = () => {
-    if (cancelBusy) return;
-    setCancelBusy(true);
-    void callDeckyWithTimeout<[], { cancel_requested?: boolean }>(
-      "cancel_rag_corpus_download",
-      [],
-      DECKY_RPC_TIMEOUT_MS,
-    )
-      .then(() => {
-        toaster.toast({
-          title: "Cancelling download",
-          body: "Stopping the knowledge base download. Partial files are discarded.",
-          duration: 5000,
-        });
-      })
-      .catch((e) => {
-        setCancelBusy(false);
-        toaster.toast({ title: "Cancel failed", body: formatDeckyRpcError(e), duration: 8000 });
-      });
-  };
-
   const openStoragePicker = () => {
     // B or "Not now" rebuilds the tab and the ring would land on the tab bar
     // (plan74-P74-SAFE-FIRST-PICKER.json); the shell hands it back to this button instead.
@@ -743,6 +761,9 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         setKbDownloadMarker(Date.now());
         expectKbInstall();
         setDownloadBusy(true);
+        // The back end started the download before it answered: the card is there, and nothing is held back.
+        beginKbLibraryJob(true);
+        kbLibraryJobAccepted();
       })
       .catch((e) => {
         const err = formatDeckyRpcError(e);
@@ -818,12 +839,6 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
    * `status.corpus_version` comes from the poll that already runs while a download is busy.
    */
   const displayedVersion = (status?.corpus_version ?? "").trim() || ragCorpusVersion;
-  const progress =
-    downloadBusy && status?.bytes_total
-      ? `${status.progress_pct ?? 0}% (${Math.round((status.bytes_downloaded ?? 0) / (1024 * 1024))} / ${Math.round(
-          (status.bytes_total ?? 0) / (1024 * 1024),
-        )} MB)`
-      : null;
   const showNomicHint =
     useLocalKnowledgeBase &&
     installed &&
@@ -844,6 +859,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
    */
   const wasCancelled = status?.phase === "cancelled";
   const errorText = wasCancelled ? "" : (status?.error ?? "").trim();
+  const justInstalled = status?.phase === "done" && !errorText;
 
   return (
     <PanelSection>
@@ -935,26 +951,36 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
               ) : null}
             </div>
           ) : null}
-          {updateNote && (updateNote.kind !== "downloading" || downloadBusy) ? (
+          {updateNote && updateNote.kind !== "downloading" ? (
             <span
               style={{ display: "block", marginTop: 6, color: updateNote.kind === "error" ? "#ff9b9b" : "#9fb7d5" }}
             >
               {updateNote.text}
             </span>
           ) : null}
-          {progress ? <span style={{ display: "block", marginTop: 6 }}>{progress}</span> : null}
-          {wasCancelled && !downloadBusy ? (
-            <span style={{ display: "block", marginTop: 6, color: "#9fb7d5" }}>
-              Download cancelled. Nothing was installed — start it again whenever you like.
-            </span>
-          ) : null}
-          {errorText ? (
-            <span style={{ display: "block", marginTop: 6, color: "#ff9b9b" }}>{errorText}</span>
-          ) : null}
         </div>
       </PanelSectionRow>
       <PanelSectionRow>
+        {job ? (
+          <JobCard
+            job={job}
+            cancelLabel="Cancel the library download"
+            cancelNavRef={cancelNavRef}
+            // Up and Down are Steam's own, as they were from the buttons the card stands in for.
+            onMoveUp={() => false}
+            onMoveDown={() => false}
+            cancelRowRef={cancelRowRef}
+            cancelButtonRef={(el) => {
+              cancelBtnRef.current = el;
+              if (cancelBtnRefProp) cancelBtnRefProp.current = el;
+              // A box opened by the press (the storage picker, the notice) rebuilds the tab on close: the ring comes back here.
+              registerModalReturnFocusOwner("kb-download", el);
+            }}
+            help={helpAttributes(job.face.title, "Cancel stops the download. Nothing half-downloaded is kept.")}
+          />
+        ) : (
         <Focusable
+          ref={primaryRowRef}
           flow-children="horizontal"
           className="bonsai-settings-bleed"
           style={{ display: "flex", flexDirection: "row", alignItems: "stretch", gap: 8, width: "100%" }}
@@ -998,46 +1024,8 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
               </Button>
             </Focusable>
           </div>
-          {/*
-            Second slot, one of three states. While a download runs it is Cancel, and that
-            matters for more than the feature: the primary button is disabled then, so
-            without Cancel the whole row has no focusable stop and the D-pad cannot enter
-            it at all.
-          */}
-          {downloadBusy ? (
-            <div
-              className="bonsai-settings-focus-btn-host"
-              style={{ flex: "0.9 1 0", minWidth: 72, display: "flex", alignItems: "stretch" }}
-            >
-              <Focusable onOKButton={cancelDownload} style={{ width: "100%", display: "flex", alignItems: "stretch" }}>
-                <Button
-                  ref={(el) => {
-                    const btn = el as HTMLButtonElement | null;
-                    cancelBtnRef.current = btn;
-                    if (cancelBtnRefProp) {
-                      cancelBtnRefProp.current = btn;
-                    }
-                  }}
-                  className="bonsai-settings-focus-btn"
-                  onClick={cancelDownload}
-                  disabled={cancelBusy}
-                  style={{
-                    ...SETTINGS_GLASS_BTN_DANGER,
-                    flex: "1 1 auto",
-                    width: "100%",
-                    minHeight: KB_ACTION_ROW_MIN_HEIGHT,
-                    height: KB_ACTION_ROW_MIN_HEIGHT,
-                    boxSizing: "border-box",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {cancelBusy ? "Cancelling…" : "Cancel"}
-                </Button>
-              </Focusable>
-            </div>
-          ) : installed ? (
+          {/* Second slot: Remove once something is installed, else nothing. (While a download runs the card above stands in for this whole row.) */}
+          {installed ? (
             <div
               className="bonsai-settings-focus-btn-host"
               style={{ flex: "0.9 1 0", minWidth: 72, display: "flex", alignItems: "stretch" }}
@@ -1077,7 +1065,18 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
             </div>
           ) : null}
         </Focusable>
+        )}
       </PanelSectionRow>
+      {/* Under the buttons, while no download runs: the last result and the sites the download comes from. */}
+      {job ? null : (
+        <PanelSectionRow>
+          <KbLibraryResultLines
+            cancelled={wasCancelled}
+            doneSentence={justInstalled ? kbLibraryDoneSentence() : null}
+            errorText={errorText}
+          />
+        </PanelSectionRow>
+      )}
       {/* Its own row under the Update / Remove one (that row is fixed 44 high with two slots), drawn whenever a note
           is lowered, the library installed or not: the marks live in their own file. */}
       {loweredCount > 0 ? (

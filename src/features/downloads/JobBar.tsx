@@ -121,7 +121,7 @@ function RunningBar({ view, cancelGone }: { view: BarView; cancelGone: (el: HTML
           </Button>
         </Focusable>
       </div>
-      <div className="bonsai-job-bar__line">{job.face.line1}</div>
+      <div className="bonsai-job-bar__line">{job.face.barLine ?? job.face.line1}</div>
       <div className="bonsai-job-progress bonsai-job-progress--bar" aria-hidden="true">
         <span
           className="bonsai-job-progress__fill"

@@ -162,7 +162,8 @@ describe("the voice install on the card", () => {
     // ...and the job's own reads see it end.
     install = { phase: "done", stage: "model_ready", done: true, model_id: "base.en" };
     await waitFor(() => expect(screen.queryByLabelText(CANCEL)).toBeNull(), { timeout: 5000 });
-    expect(screen.getByText("Install voice engine")).toBeTruthy();
+    // The install button is back (it reads Reinstall once the section has read that the engine is in place).
+    expect(await screen.findByText(/install voice engine/i)).toBeTruthy();
   });
 
   it("a real failure still shows the back end's reason in red", async () => {

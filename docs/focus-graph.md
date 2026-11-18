@@ -1107,9 +1107,16 @@ Install voice engine  (or Reinstall voice engine)
   reads "Stopping the install". A stop the back end refuses or never answers puts Cancel back with "Could not stop. Try
   again." A stopped install ends as "cancelled": under the button, "Install cancelled. Press Install voice engine to start
   again." in the calm colour, not the red of a failure.
+- **A box before the install** ("Turn on internet downloads?", or the once-per-site notice) rebuilds the tab on close. The
+  install button says "it was me" only while a box really opens (`rememberReturnWhileBoxOpens`, id `voice-install`) and
+  the shell's restore reaches whichever owns that id then: the card's Cancel once the install has begun, else the install
+  button, both through Steam's transfer. The rebuilt copy follows the install it did not start and reads its result when
+  it ends, so a failed or cancelled install says why under the button.
 - **Under the button, while no install runs** (`VoiceInstallResultLines.tsx`): the last result and the sites line. Plain text,
   not a stop; it is the job's face once the install is over (the bar's "Voice install failed" stays until it can be read).
-- Pinned by `VoiceInputSettingsSection.jobCard.test.tsx` (the ring at the press and at the end, the card's words by stage,
+- Pinned by `VoiceInputSettingsSection.boxReturn.test.tsx` (press, rebuild the tab, answer yes, end the run failed or
+  cancelled: the ring on Cancel, then on Install, the reason shown; and the same with downloads on and no box),
+  `VoiceInputSettingsSection.jobCard.test.tsx` (the ring at the press and at the end, the card's words by stage,
   Cancel and its half second, a refused stop, the bar when you leave, Cancel from the bar, an install that ends while
   away) and `SettingsTab.voiceJobWalk.test.tsx` (the whole tab walked with an install going, Steam's scroll modelled three
   ways: Cancel once each way, never the install button, no stop twice). Device row: P105-JOB-CARD-ELSEWHERE-01.

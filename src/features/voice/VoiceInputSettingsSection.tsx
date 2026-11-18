@@ -45,6 +45,8 @@ import { PermissionDenyAction } from "../permissions/PermissionDenyAction";
 import { bonsaiSettingRowNav } from "../search-tab/bonsaiSettingRowNav";
 import type { BonsaiCapabilityKey } from "../permissions/permissionDeepLink";
 import { confirmDownload } from "../downloads/downloadNotice";
+import { rememberReturnWhileBoxOpens } from "../downloads/rememberReturnWhileBoxOpens";
+import { registerModalReturnFocusOwner } from "../../shared/dpad/modalReturnFocusRegistry";
 import { JobCard } from "../downloads/JobCard";
 import { runningJob, useRunningJob } from "../downloads/runningJobs";
 import { VoiceInstallResultLines } from "./VoiceInstallResultLines";
@@ -192,6 +194,28 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
     void refreshStatus();
   }, [refreshStatus, voiceSttModel]);
 
+  /*
+   * An install this copy did not start (the notice's box closed and rebuilt the tab before it began) shows up as a
+   * job: this copy then follows it like its own, so the install's result is read when it ends. And whoever ends the
+   * job, this copy reads the install's result once more, so a failed or cancelled install says why under the button.
+   */
+  const sawJobRef = useRef(false);
+  /* What this copy last read of the install: a result it already holds needs no second read. */
+  const installPhaseRef = useRef<string | undefined>(undefined);
+  installPhaseRef.current = engineStatus?.install?.phase;
+  useEffect(() => {
+    if (job && !installBusy) {
+      markVoiceInstallStarted();
+      setInstallBusy(true);
+    }
+    if (job) sawJobRef.current = true;
+    else if (sawJobRef.current) {
+      sawJobRef.current = false;
+      const held = installPhaseRef.current;
+      if (held === undefined || held === "running" || held === "idle") void refreshStatus(false);
+    }
+  }, [job, installBusy, refreshStatus]);
+
   useEffect(() => {
     if (!installBusy) return;
     // Set when this poll has ended, so a tick that fires before React clears the timer does nothing.
@@ -257,7 +281,8 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
     };
     const notices = voiceEngineNotices(missing);
     const toFetch = notices.length ? notices : voiceEngineNotices({ ...missing, engineReady: false, modelReady: false });
-    if (!(await confirmDownload(toFetch))) return;
+    // The notice's box rebuilds the tab on close; the ring comes back to this button, or to the card's Cancel once it is up.
+    if (!(await rememberReturnWhileBoxOpens("voice-install", () => confirmDownload(toFetch)))) return;
     markVoiceInstallStarted();
     setInstallBusy(true);
     beginVoiceInstallJob(missing.engineReady);
@@ -395,6 +420,8 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
             cancelRowRef={cancelRowRef}
             cancelButtonRef={(el) => {
               cancelBtnRef.current = el;
+              // The restore comes from outside this row (the tab was rebuilt): Steam's own transfer, not a plain focus().
+              registerModalReturnFocusOwner("voice-install", el, el ? () => (take(cancelNavRef, el), true) : undefined);
             }}
             help={helpAttributes(job.face.title, "Cancel stops the install. A half-downloaded speech model is not kept.")}
           />
@@ -408,6 +435,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
               <Button
                 ref={(el: HTMLDivElement | null) => {
                   installBtnRef.current = el as HTMLButtonElement | null;
+                  registerModalReturnFocusOwner("voice-install", el as HTMLElement | null, el ? () => (take(installNavRef, el), true) : undefined);
                 }}
                 className={`${FOCUS_RING_BTN_CLASS} ${FOCUS_RING_INSET_CLASS}`}
                 onClick={() => void onDownloadModel()}

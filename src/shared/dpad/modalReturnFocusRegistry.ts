@@ -63,6 +63,11 @@ export type ModalReturnFocusId =
   | "kb-remove"
   /** The library's "Pull nomic-embed-text" button, for its download notice's box (plan 76 lane 2). */
   | "kb-nomic-pull"
+  /**
+   * The Voice input section's install button, and the card's Cancel once the install runs (plan 106 lane F3): its
+   * download notice's box ("Turn on internet downloads?", or the once-per-site notice) rebuilds the tab on close.
+   */
+  | "voice-install"
   /** The library's "Lowered notes" row's Clear button, for its "Clear lowered notes?" box (plan 100). */
   | "kb-lowered-clear"
   | "chat-slot-rename"

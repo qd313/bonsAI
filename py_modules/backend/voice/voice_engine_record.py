@@ -29,6 +29,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import tempfile
 import time
 from typing import Any, Optional
 
@@ -105,18 +106,23 @@ def write_voice_engine_record(bin_dir: str, image: str, tool_lines: Optional[lis
         "files": _fingerprint(bin_dir),
     }
     path = record_path(bin_dir)
-    tmp = f"{path}.tmp"
+    tmp = ""
     try:
-        with open(tmp, "w", encoding="utf-8") as f:
+        # Its own temporary file for every write: the status poll and a build can both write the record, and a
+        # shared name let one overwrite or move the other's half-written file. No dot before the random part, so
+        # the name can never contain ".so" (which would make it count as an engine file).
+        fd, tmp = tempfile.mkstemp(dir=bin_dir, prefix="bonsai-engine-record-", suffix=".tmp")
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
             json.dump(record, f, indent=2, sort_keys=True)
             f.write("\n")
         os.replace(tmp, path)
         return True
     except OSError:
-        try:
-            os.remove(tmp)
-        except OSError:
-            pass
+        if tmp:
+            try:
+                os.remove(tmp)
+            except OSError:
+                pass
         return False
 
 

@@ -115,6 +115,46 @@ class BuildWritesTheRecord(unittest.TestCase):
             self.assertEqual(files["libfoo.so.1"], {"link": "libfoo.so.1.2"})
 
 
+class RecordIsWrittenSafely(unittest.TestCase):
+    """The record's temporary file is its own for every write, and a hostile record never crashes the check."""
+
+    def setUp(self) -> None:
+        self.bin_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.bin_dir, True)
+        with open(os.path.join(self.bin_dir, "whisper-cli"), "wb") as f:
+            f.write(b"cli")
+
+    def test_a_write_does_not_use_or_disturb_the_name_another_writer_may_hold(self) -> None:
+        shared_name = os.path.join(self.bin_dir, record.RECORD_NAME + ".tmp")  # the name every writer used to share
+        with open(shared_name, "w", encoding="utf-8") as f:
+            f.write("another writer's half-written record")
+        self.assertTrue(record.write_voice_engine_record(self.bin_dir, "img", []))
+        with open(shared_name, encoding="utf-8") as f:
+            self.assertEqual(f.read(), "another writer's half-written record")
+        self.assertEqual(record.check_voice_engine(self.bin_dir), "ok")
+
+    def test_no_temporary_file_is_left_after_a_good_or_a_failed_write(self) -> None:
+        self.assertTrue(record.write_voice_engine_record(self.bin_dir, "img", []))
+        with patch.object(record.os, "replace", side_effect=OSError("disk full")):
+            self.assertFalse(record.write_voice_engine_record(self.bin_dir, "img", []))
+        self.assertEqual(sorted(os.listdir(self.bin_dir)), sorted(["whisper-cli", record.RECORD_NAME]))
+
+    def test_the_temporary_name_can_never_look_like_a_library(self) -> None:
+        # Any name with ".so" in it counts as an engine file; the random part must not be able to make one.
+        seen = []
+        real_mkstemp = tempfile.mkstemp
+
+        def spy(*a, **k):
+            fd, path = real_mkstemp(*a, **k)
+            seen.append(os.path.basename(path))
+            return fd, path
+
+        with patch.object(record.tempfile, "mkstemp", side_effect=spy):
+            record.write_voice_engine_record(self.bin_dir, "img", [])
+        self.assertEqual(len(seen), 1)
+        self.assertNotIn(".so", seen[0])
+
+
 @unittest.skipUnless(shutil.which("bash"), "needs bash")
 class ScriptRecordPieceRunsForReal(unittest.TestCase):
     def test_the_scripts_own_record_piece_writes_the_compiler_lines(self) -> None:

@@ -1610,8 +1610,8 @@ Pressing it writes a file to the Desktop notes folder and draws one line under t
 the rating row / its choices / the note card's "For" line     <- Down from any of them lands here
    | Down                                      ^ Up (the "For" line when a card is on offer, else the choices,
 [ Suggest as a tip ]                                Helpful, the branch picker, the summed-up note, the last section)
-   | Down                                      ^ Up                      Left and Right hold still
-the Show details line, as before
+   | Down                                      ^ Up                      Right holds; Left holds twice, the third
+the Show details line, as before                                     goes to Steam's menu (since plan 106 lane F2)
 ```
 
 - **One stop in its own Steam Focusable** (`replyStopNavRef("suggest-tip")`), the moves on that Focusable and not on the
@@ -1661,14 +1661,16 @@ a dead end (bonsAI holds Left, nothing moves)
 
 - **Where it applies.** Only where bonsAI held Left for ever: the ask strip's paperclip (and the mode button and the question
   box while an answer is written), an answer's sections, the open reasoning block, the notes block, the Show details line
-  (the answer's own under it, since plan 106 lane F2, and its copy in the chips' place), the "N earlier" line, the day and
-  "Show N more" lines, the game buttons' All, the demote chips, the note card's Keep and For line, the notes line, the title
-  offer's Rename, the Show details chips' first chip, the suggestion chips' first chip, the help chip, the AI's own chip,
-  the Search tab's row starts and find box, the Back line, a slider at its first stop. Where Steam already let Left out at
-  once (section lines, switches, choice rows, the About dropdown, plain buttons, Decky's back arrow) nothing changed. The
-  tab bar keeps wrapping and never counts.
-- **Left out, for now.** "Suggest as a tip", the thumbs, the troubleshooting and microphone hint rows and About's QR still
-  hold Left in the code, yet the Deck let Left out of them on the first press; the next Deck block reads three Lefts there.
+  (the answer's own under it, since plan 106 lane F2, and its copy in the chips' place), "Suggest as a tip" (plan 106 lane
+  F2), the "N earlier" line, the day and "Show N more" lines, the game buttons' All, the demote chips, the note card's Keep
+  and For line, the notes line, the title offer's Rename, the Show details chips' first chip, the suggestion chips' first
+  chip, the help chip, the AI's own chip, the Search tab's row starts and find box, the Back line, a slider at its first
+  stop. Where Steam already let Left out at once (section lines, switches, choice rows, the About dropdown, plain buttons,
+  Decky's back arrow) nothing changed. The tab bar keeps wrapping and never counts.
+- **Left out, for now.** The thumbs, the troubleshooting and microphone hint rows and About's QR still hold Left in the
+  code, yet the Deck let Left out of them on the first press; the next Deck block reads three Lefts there. ("Suggest as a
+  tip" was on this list; plan 105's block D3b found it holding all three Lefts, as its code said, and plan 106 gave it the
+  count.)
 - **A Left that moves never counts**: along a row, the question box onto the paperclip, a slider's step (`leftActedInPlace`).
   The "N earlier" line about two or more games is the exception: Left flips the list there, so the first and second Left
   flip (the list ends as it was) and the third goes out; Right still flips.

@@ -6,7 +6,8 @@
  *          call goes out with the question and the answer, and the one line under the button reads "Saved <file>.
  *          To send it in: <link>"; with the Desktop permission off the line is the refusal and names the Permissions
  *          tab. The button stays after a rating. It is a stop of the plugin's own, inside the reply row, with
- *          all four moves and a press; Left and Right hold; B is left to Steam.
+ *          all four moves and a press; a first Left and Right hold (the third Left in a row goes out, see the walk
+ *          test); B is left to Steam.
  * Used for: buildReplyActionsElement.tsx, suggestTipRow.tsx, useReplySuggestTip.ts, replyStopRegistry.ts.
  * Does not: Walk the D-pad in the Deck's numbers (buildReplyActionsElement.suggestTipWalk.test.tsx does), or call the
  *           real plugin method (a stand-in records each call).
@@ -166,7 +167,7 @@ describe("A on the button", () => {
 });
 
 describe("the button is a stop of the plugin's own and hears A and B", () => {
-  it("it sits inside the reply row, its container has all four moves, Left and Right hold, and B is left to Steam", () => {
+  it("it sits inside the reply row, its container has all four moves, a first Left and Right hold, and B is left to Steam", () => {
     const m = mount();
     const button = m.button()!;
     expect(button.closest(".bonsai-chat-reply-actions")).not.toBeNull();

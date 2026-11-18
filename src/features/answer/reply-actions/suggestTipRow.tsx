@@ -23,8 +23,8 @@
  *   the rating row, its choices, or the note card's "For" line       Down from any of them lands here
  *      | Down                         ^ Up (the note card's "For" line when a card is on offer, else the choices,
  *   [ Suggest as a tip ]                 Helpful, the branch picker, the summed-up note, the answer's last section)
- *      | Down                         ^ Up                     Left and Right hold still
- *   the Show details line
+ *      | Down                         ^ Up                     Right holds; Left holds twice, the third goes to
+ *   the Show details line                                         Steam's menu (leftEdge.ts)
  *
  * The ring stays on the button after A: the line is drawn under it and nothing the ring stands on goes away.
  * While a new question is asked the button is greyed and the stop is skipped, as the thumbs are.
@@ -34,6 +34,7 @@ import { Focusable } from "@decky/ui";
 
 import { BonsaiChatSecondaryButton } from "./BonsaiChatSecondaryButton";
 import { replyStopNavRef } from "../../../shared/dpad/replyStopRegistry";
+import { leftAtEdge } from "../../../shared/dpad/leftEdge";
 import { textPx } from "../../../styles/textPx";
 import { suggestTipLine, type ReplySuggestTipView } from "./useReplySuggestTip";
 
@@ -63,8 +64,9 @@ export function renderSuggestTipRow(a: SuggestTipRowArgs): React.ReactElement {
           navRef: replyStopNavRef("suggest-tip"),
           onMoveUp: up,
           onMoveDown: down,
-          /* One button: a sideways press holds, so the ring never wanders off the row to a neighbour. */
-          onMoveLeft: () => true,
+          /* One button, so Left has nowhere to go: two Lefts in a row hold and the third goes to Steam's menu (leftEdge.ts,
+             the maintainer's call 19; plan 106 lane F2). Right holds, so the ring never wanders off the row. */
+          onMoveLeft: (evt: unknown) => leftAtEdge("suggest-tip", evt),
           onMoveRight: () => true,
         } as Record<string, unknown>)}
       >

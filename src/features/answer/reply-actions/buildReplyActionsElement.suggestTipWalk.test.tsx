@@ -8,7 +8,8 @@
  *          button; after A on Helpful (the thumbs give way to the saved words) the ring is handed onto the button
  *          and Up from it reaches the answer's last section. No stop is visited twice in a walk, every stop lies
  *          inside the plugin's reply row (so A and B reach it, the lesson of the glossary box in plan 96), every
- *          landing is on screen, and A on the button sends the tip.
+ *          landing is on screen, and A on the button sends the tip. Left on the button, pressed as Steam delivers it:
+ *          two hold and the third reaches Steam's menu (plan 106 lane F2).
  * Used for: buildReplyActionsElement.tsx, suggestTipRow.tsx, replyStopRegistry.ts.
  * Does not: Prove any of it on the Deck. Steam's own step for a press no handler claims is modelled here as the stop
  *           drawn next that way (Left and Right inside the thumbs row, and Down between the two choice rows).
@@ -25,6 +26,7 @@ vi.mock("@decky/ui", async () => {
 
 import { WALK_RULES, deckAnswer, resetDeckAnswerWalk, type SteamScrollRule } from "../../../test-harness/deckAnswerWalk";
 import { putSteamRingOn, type SteamEl } from "../../../test-harness/steamRing";
+import { DIR_RIGHT, hearPress, leftsAt, pressLeft, steamRingWorld, type LeftResult } from "../../../test-harness/steamLeftPress";
 import { buildReplyActionsElement } from "./buildReplyActionsElement";
 import { resetRememberedReplyFeedbackForTests, useReplyFeedbackChips } from "./useReplyFeedbackChips";
 import { resetRememberedReplySuggestTipForTests, useReplySuggestTip, type SuggestTipFn } from "./useReplySuggestTip";
@@ -284,5 +286,43 @@ describe("Down out of the answer", () => {
     act(() => putSteamRingOn(m.a.stops[m.a.stops.length - 1]!));
     act(() => void focusDownFromLiveAnswerBubble(queryTurnSlot(TURN)));
     expect(m.ring()).toBe("Helpful");
+  });
+});
+
+/*
+ * Plan 106 lane F2, the maintainer's call 19: where Left has nowhere to go inside bonsAI, the third Left in a row goes to
+ * Steam. The button held Left for ever (plan 105's block D3b: three Lefts, all stayed, P105-LEFT-TO-MENU-01).
+ */
+describe("Left out to Steam's menu from the button (plan 106 lane F2, row P105-LEFT-TO-MENU-01)", () => {
+  /** `n` Lefts as Steam delivers them (steamLeftPress.ts); `held`: every press after the first is a held-down repeat. */
+  const lefts = (n: number, held = false): LeftResult[] => {
+    const out: LeftResult[] = [];
+    for (let i = 0; i < n; i++) act(() => void out.push(pressLeft(steamRingWorld, held && i > 0).result));
+    return out;
+  };
+
+  it.each(RULES)("two Lefts hold and the third reaches Steam's menu (Steam rule %s, top margin %s)", (rule, margin) => {
+    const m = mount(rule, margin);
+    m.ringOn("Suggest as a tip");
+    expect(leftsAt(document.activeElement as HTMLElement, steamRingWorld)).toEqual(["held", "held", "out"]);
+  });
+
+  it("Left, Right, Left, Left keeps the ring on the button: Right still holds, and starts the run again", () => {
+    const m = mount("padded", true);
+    m.ringOn("Suggest as a tip");
+    expect(lefts(1)).toEqual(["held"]);
+    act(() => hearPress(document.activeElement!, DIR_RIGHT));
+    expect(m.press("onMoveRight")).toBe(true);
+    expect(lefts(2)).toEqual(["held", "held"]);
+    expect(m.ring()).toBe("Suggest as a tip");
+    expect(lefts(1)).toEqual(["out"]);
+  });
+
+  it("a Left held down never leaves and counts as one press: after letting go, the second fresh Left goes out", () => {
+    const m = mount("padded", true);
+    m.ringOn("Suggest as a tip");
+    expect(lefts(12, true)).toEqual(Array(12).fill("held"));
+    expect(m.ring()).toBe("Suggest as a tip");
+    expect(lefts(2)).toEqual(["held", "out"]);
   });
 });

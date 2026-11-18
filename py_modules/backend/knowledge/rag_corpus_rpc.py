@@ -148,6 +148,9 @@ async def start_rag_corpus_download(self, data: Any = None):
         existing = self._rag_corpus_download_task
         if existing is not None and not existing.done():
             return {"accepted": False, "reason": "Knowledge base download already running."}
+        # The switch may have gone off while the lock was waited on: check again right before starting.
+        if not capability_enabled(await self.load_settings(), "internet_downloads"):
+            return downloads_off_refusal()
 
         self._rag_corpus_cancel_event = new_asyncio_cancel_event()
         self._rag_corpus_download_state = new_rag_corpus_download_state()

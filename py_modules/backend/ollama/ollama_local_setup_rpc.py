@@ -132,6 +132,9 @@ async def start_local_ollama_setup(self, data: Any = None):
                 fields={"profile": prof, "accepted": False, "reason": "busy"},
             )
             return out
+        # The switch may have gone off while the lock was waited on: check again right before starting.
+        if not await _internet_downloads_allowed(self):
+            return downloads_off_refusal()
 
         self._local_ollama_cancel_event = new_asyncio_cancel_event()
         new_st = new_local_ollama_setup_state()
@@ -294,6 +297,9 @@ async def _start_custom_ollama_pull(self, pull_tags: list[str]) -> dict[str, Any
         existing = self._local_ollama_setup_task
         if existing is not None and not existing.done():
             return {"accepted": False, "reason": "Setup already running.", "error": "busy"}
+        # The switch may have gone off while the registry check above or the lock was waited on.
+        if not await _internet_downloads_allowed(self):
+            return downloads_off_refusal()
 
         self._local_ollama_cancel_event = new_asyncio_cancel_event()
         new_st = new_local_ollama_setup_state()

@@ -89,6 +89,9 @@ async def install_voice_engine(self, PLUGIN_ROOT: str, model_id: str = ""):
         existing = self._voice_install_task
         if existing is not None and not existing.done():
             return {"accepted": False, "reason": "Voice engine install already running.", "error": "busy"}
+        # The switch may have gone off while the lock was waited on: check again right before starting.
+        if not capability_enabled(await self.load_settings(), "internet_downloads"):
+            return downloads_off_refusal()
 
         self._voice_install_cancel = new_threading_cancel_event()
         self._voice_install_state = new_voice_install_state()

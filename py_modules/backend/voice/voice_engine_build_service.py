@@ -35,6 +35,12 @@ import uuid
 import wave
 from typing import Any, Optional
 
+from backend.voice.voice_engine_record import (
+    BUILD_TOOLS_NAME,
+    RECORD_NAME,
+    take_build_tools,
+    write_voice_engine_record,
+)
 from backend.voice.voice_transcript_decode_service import WHISPER_CLI_INFERENCE_ARGS
 from backend.voice.voice_stoppable_run import run_stoppable
 from backend.voice.voice_whisper_runtime import (
@@ -141,6 +147,7 @@ def _voice_bin_keep_names() -> frozenset[str]:
             "whisper-server",
             VOICE_BIN_CPU_SAFE_MARKER,
             "whisper-server.pid",
+            RECORD_NAME,
         }
     )
 
@@ -176,6 +183,23 @@ APT_SIGNED="-o Acquire::AllowInsecureRepositories=false -o Acquire::AllowDowngra
 apt-get $APT_SIGNED update -qq
 apt-get $APT_SIGNED install -y -qq g++ make
 """
+
+# After the compile: write down what was used, next to the built programs (voice_engine_record.take_build_tools reads
+# it back and the file is deleted). The three BONSAI_ names are only for the test that runs this piece.
+_BUILD_TOOLS_RECORD_SCRIPT = (
+    r"""
+OUT_DIR="${BONSAI_OUT_DIR:-/out}"
+APT_DIR="${BONSAI_APT_DIR:-/etc/apt}"
+{
+  echo "os: $(. "${BONSAI_OS_RELEASE:-/etc/os-release}" && echo "$PRETTY_NAME")"
+  grep -rhE '^(deb |URIs:)' "$APT_DIR/sources.list" "$APT_DIR/sources.list.d" 2>/dev/null | sed 's/^/package source: /' || true
+  echo "g++: $(g++ --version | head -n1)"
+  echo "make: $(make --version | head -n1)"
+  dpkg-query -W -f='package version: ${Package} ${Version}\n' g++ make gcc binutils || true
+} > "$OUT_DIR/"""
+    + BUILD_TOOLS_NAME
+    + '" || true\n'
+)
 
 _WHISPER_CONTAINER_CMAKE = r"""
 cmake -S /app -B /tmp/bonsai-whisper-build -DCMAKE_BUILD_TYPE=Release \
@@ -233,6 +257,13 @@ def _finalize_voice_bin(plugin_root: str, settings_dir: str) -> None:
             os.chmod(path, 0o755)
 
 
+def _finish_build(plugin_root: str, settings_dir: str, bin_dir: str) -> None:
+    """After a good compile: read the tools record, tidy voice_bin and write the engine record."""
+    tools = take_build_tools(bin_dir)
+    _finalize_voice_bin(plugin_root, settings_dir)
+    write_voice_engine_record(bin_dir, WHISPER_CPP_IMAGE, tools)
+
+
 def _build_whisper_cli_in_container(
     podman: str,
     env: dict[str, str],
@@ -257,6 +288,7 @@ cp -a /tmp/bonsai-whisper-build/bin/lib*.so* /out/ 2>/dev/null || true
 cp -a /tmp/bonsai-whisper-build/src/libwhisper.so* /out/ 2>/dev/null || true
 cp -a /tmp/bonsai-whisper-build/ggml/src/libggml*.so* /out/ 2>/dev/null || true
 """
+        + _BUILD_TOOLS_RECORD_SCRIPT
     )
 
     _run_whisper_container_build(podman, env, bin_dir, build_script, cancel_event)
@@ -266,7 +298,7 @@ cp -a /tmp/bonsai-whisper-build/ggml/src/libggml*.so* /out/ 2>/dev/null || true
     if not os.path.isfile(server_dest):
         raise RuntimeError("whisper-server build finished but binary is missing from voice_bin.")
 
-    _finalize_voice_bin(plugin_root, settings_dir)
+    _finish_build(plugin_root, settings_dir, bin_dir)
 
     if not whisper_binary_usable(plugin_root, settings_dir):
         raise RuntimeError(
@@ -296,6 +328,7 @@ def _build_whisper_server_in_container(
 cmake --build /tmp/bonsai-whisper-build --target whisper-server -j4
 cp /tmp/bonsai-whisper-build/bin/whisper-server /out/
 """
+        + _BUILD_TOOLS_RECORD_SCRIPT
     )
 
     _run_whisper_container_build(podman, env, bin_dir, build_script, cancel_event)
@@ -303,5 +336,5 @@ cp /tmp/bonsai-whisper-build/bin/whisper-server /out/
     if not os.path.isfile(server_dest):
         raise RuntimeError("whisper-server build finished but binary is missing from voice_bin.")
 
-    _finalize_voice_bin(plugin_root, settings_dir)
+    _finish_build(plugin_root, settings_dir, bin_dir)
     return server_dest

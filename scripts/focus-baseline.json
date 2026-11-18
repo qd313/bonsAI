@@ -1,10 +1,7 @@
 {
   "note": "Known focus-pattern violations, per file per rule. The check fails only when a count goes UP. Regenerate with: node scripts/check-focus-patterns.mjs --update",
-  "total": 75,
+  "total": 73,
   "counts": {
-    "src/features/ai-connection/OllamaWhereAiRunsSection.tsx": {
-      "page-search": 1
-    },
     "src/features/ai-connection/SettingsTabConnectionTimeoutSlider.tsx": {
       "page-search": 1
     },
@@ -29,7 +26,7 @@
       "ring-question": 1
     },
     "src/features/ask/bar/useMainTabAskBarFocus.ts": {
-      "page-search": 8
+      "page-search": 7
     },
     "src/features/characters/CharacterPickerModal.tsx": {
       "page-search": 2,

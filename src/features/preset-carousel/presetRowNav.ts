@@ -32,16 +32,8 @@ export type BuildChipNavHandlersArgs = {
   /** Hand the ring to whatever sits above the row; true when it moved. */
   exitUp: () => boolean;
   /**
-   * Right at the last chip normally just claims the move without moving (see below). A pinned QA
-   * batch longer than the row is the one case with a real "next" entry waiting (D58 #3): called
-   * only when `index` is already the last chip, and returning `true` means a new entry was pulled
-   * in (focus follows it once it renders — the caller's concern, not this one).
-   */
-  advanceAtEnd?: () => boolean;
-  /**
    * Fired the instant a Left/Right press is claimed *without* moving anywhere — Left at the first
-   * chip, or Right at the last chip when `advanceAtEnd` finds nothing to pull in. Never fires when
-   * `advanceAtEnd` does pull a new entry in (that press moved something; it is not "the end").
+   * chip, or Right at the last chip.
    * Purely a signal for a caller-owned visual cue (the chip-row-out-of-chips glow, roadmap `[chips]`
    * ★★, 2026-09-04) — it changes nothing about the move itself, which is why it is a separate,
    * optional callback rather than folded into the return value.
@@ -60,12 +52,12 @@ export type BuildChipNavHandlersArgs = {
  * Returning `true` claims the move; `false` lets Steam's own navigation decide. Left at the first
  * chip and Right at the last both claim the move without moving by default: Steam's choice for
  * "left of the first chip" is the Quick Access rail, which walks the user out of the plugin by
- * accident. `advanceAtEnd`, when supplied, gets first refusal at the last chip.
+ * accident.
  * Left at the first chip is a dead end (plan 105, lane C5): the first and second Left in a row hold, with the edge
  * glow, and the third goes to Steam's menu (leftEdge.ts), with no glow, since the ring leaves the row.
  */
 export function buildChipNavHandlers(args: BuildChipNavHandlersArgs): ChipNavHandlers {
-  const { index, count, focusChip, exitDown, exitUp, advanceAtEnd, onBlockedEdge, lostFocus } = args;
+  const { index, count, focusChip, exitDown, exitUp, onBlockedEdge, lostFocus } = args;
   /* A chip hop that did not land claims the press only while the page has its focus (see `lostFocus`). */
   const hop = (to: number): boolean => focusChip(to) || !(lostFocus?.() ?? false);
   return {
@@ -78,10 +70,8 @@ export function buildChipNavHandlers(args: BuildChipNavHandlersArgs): ChipNavHan
     onMoveRight: () => {
       if (index < count - 1) {
         return hop(index + 1);
-      } else {
-        const pulledInNext = advanceAtEnd?.() ?? false;
-        if (!pulledInNext) onBlockedEdge?.("right");
       }
+      onBlockedEdge?.("right");
       return true;
     },
     onMoveDown: () => exitDown(),

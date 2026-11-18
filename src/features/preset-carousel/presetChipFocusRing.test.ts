@@ -66,8 +66,7 @@ describe("preset chip focus cue", () => {
     (_name, css) => {
       const ungated = selectorsOf(css).filter(
         (sel) =>
-          (sel.includes("bonsai-preset-carousel-slot--focus") ||
-            sel.includes("bonsai-preset-glass:focus-visible")) &&
+          sel.includes("bonsai-preset-glass:focus-visible") &&
           !isGatedOnTheRing(sel),
       );
       expect(ungated).toEqual([]);
@@ -145,7 +144,7 @@ describe("preset chip focus cue", () => {
     expect(
       selectors.some(
         (sel) =>
-          sel.includes(":not(:has(.gpfocus))") && sel.includes("bonsai-preset-carousel-slot--focus"),
+          sel.includes(":not(:has(.gpfocus))") && sel.includes("bonsai-preset-glass:focus-visible"),
       ),
     ).toBe(true);
   });

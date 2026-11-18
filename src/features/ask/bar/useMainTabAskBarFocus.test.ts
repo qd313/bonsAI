@@ -23,7 +23,7 @@ function buildPresetRow(): { host: HTMLDivElement; chip: HTMLButtonElement } {
   root.className = "bonsai-preset-carousel-focus-root";
 
   const slot = document.createElement("div");
-  slot.className = "bonsai-preset-carousel-slot bonsai-preset-carousel-slot--focus";
+  slot.className = "bonsai-preset-carousel-slot";
   slot.setAttribute("data-bonsai-preset-visible", "true");
 
   const chip = document.createElement("button");

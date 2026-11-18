@@ -646,21 +646,6 @@ describe("usePresetRowNav blocked-edge cue (chip row out of chips, filed 2026-09
     expect(result.current.isBlockedEdge(1)).toBe(false);
   });
 
-  /* D58 #3: Right at the last chip of a pinned batch pulls the next entry in instead of holding
-     still. That is not "the row ran out" -- the roadmap entry says this edge behaviour must not
-     change -- so the cue must stay off. */
-  it("does not flag the chip when advanceAtEnd pulls a new entry in", () => {
-    vi.useFakeTimers();
-    const advanceAtEnd = vi.fn(() => true);
-    const { result } = renderHook(() => usePresetRowNav(3, undefined, { advanceAtEnd }));
-
-    act(() => {
-      press(result.current, "onMoveRight", 2, 3);
-    });
-    expect(advanceAtEnd).toHaveBeenCalledTimes(1);
-    expect(result.current.isBlockedEdge(2)).toBe(false);
-  });
-
   it("restarts the flash window on a second press at the same edge rather than letting it lapse early", () => {
     vi.useFakeTimers();
     const { result } = renderHook(() => usePresetRowNav(3));

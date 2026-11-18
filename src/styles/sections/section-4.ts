@@ -220,12 +220,11 @@ export function buildSection4Section(): string {
           highlighted chip — the fake focus ring found on device 2026-08-28, which fooled the
           maintainer and the QA rig at once. The gates are unchanged and exist for that reason.
 
-          Gate 1 and 2 say "the carousel owns Steam's ring": \`gpfocuswithin\` is what Steam stamps on
-          the ancestor Focusable, and the \`:has(.gpfocus)\` arm covers it directly in case Steam
-          stamps only the chip. Gate 3 keeps the marker on desktop, in the in-IDE preview and on
-          touch, where nothing owns a ring — the fallback \`elementHasGamepadFocus\` uses in
-          uiDocument.ts. The last two arms light the rows whose slots carry no --focus marker at
-          all (fade, static and decode), which get the same fill.
+          The \`.gpfocus\` arm lights the chip Steam's ring is on. The \`:focus-visible\` arm, gated on
+          nothing holding a ring, keeps the fill on desktop, in the in-IDE preview and on touch, where
+          nothing owns a ring — the fallback \`elementHasGamepadFocus\` uses in uiDocument.ts. (Until
+          plan 105 a slot marker, \`--focus\`, carried the sideways carousel's first two gates; the
+          row no longer draws it, so those arms went.)
 
           2026-09-17 (plan 60) changed what these gates draw, not when. See the file header,
           point 2: the blue line round the chip became a lit bar inside its bottom edge. On 2026-10-02
@@ -235,9 +234,6 @@ export function buildSection4Section(): string {
           The two help-chip arms out-rank section-6.ts's green help chip rule, which is as specific as
           the plain \`.gpfocus\` arm and comes later, so it used to win (Deck, 2026-10-22: no change at all).
         */
-        .bonsai-scope .bonsai-preset-carousel-focus-root.gpfocuswithin .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
-        .bonsai-scope .bonsai-preset-carousel-focus-root:has(.gpfocus) .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
-        :root:not(:has(.gpfocus)) .bonsai-scope .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
         .bonsai-scope button.bonsai-preset-glass.gpfocus,
         :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible,
         .bonsai-scope button.bonsai-preset-help-chip.bonsai-preset-glass.gpfocus,
@@ -257,9 +253,6 @@ export function buildSection4Section(): string {
         /* The label brightens with the fill, so the whole chip reads as the live one. Decode used to
            be excluded here (its label owned its own colour); that rule is gone (bug fix
            2026-09-19), so a focused decode chip now brightens like every other mode. */
-        .bonsai-scope .bonsai-preset-carousel-focus-root.gpfocuswithin .bonsai-preset-carousel-slot--focus .bonsai-preset-glass .bonsai-preset-chip-label,
-        .bonsai-scope .bonsai-preset-carousel-focus-root:has(.gpfocus) .bonsai-preset-carousel-slot--focus .bonsai-preset-glass .bonsai-preset-chip-label,
-        :root:not(:has(.gpfocus)) .bonsai-scope .bonsai-preset-carousel-slot--focus .bonsai-preset-glass .bonsai-preset-chip-label,
         .bonsai-scope button.bonsai-preset-glass.gpfocus .bonsai-preset-chip-label,
         :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible .bonsai-preset-chip-label {
           color: #eef7fd !important;

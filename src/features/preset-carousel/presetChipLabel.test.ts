@@ -20,7 +20,7 @@ describe("buildPresetChipLabelCss", () => {
   it("sits before the carousel and focus rules in section 4 (cascade order is unchanged)", () => {
     const section = buildSection4Section();
     const chipAt = section.indexOf(".bonsai-preset-chip-label {");
-    const focusAt = section.indexOf("gpfocuswithin .bonsai-preset-carousel-slot--focus");
+    const focusAt = section.indexOf("button.bonsai-preset-glass.gpfocus,");
     expect(chipAt).toBeGreaterThan(-1);
     expect(focusAt).toBeGreaterThan(chipAt);
   });

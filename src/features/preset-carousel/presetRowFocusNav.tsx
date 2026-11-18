@@ -6,8 +6,8 @@
  * navigation boundary, and usePresetRowNav, the D-pad graph (Left/Right/Up/Down handlers, the
  * "ran out of chips" edge cue) for whichever chips are showing.
  *
- * Used for: MainTabPresetAnimatedChipsInner, MainTabPresetDecodeSlots and
- * MainTabPresetSidewaysCarousel, all in src/features/preset-carousel/MainTabPresetAnimatedChips.tsx.
+ * Used for: the plain-swap chip row (MainTabPresetAnimatedChips.tsx) and the decode chip row
+ * (presetDecodeSlots.tsx).
  *
  * Solves: Left/Right move DOM focus between siblings of one container (safe with a plain
  * `focus()`); Down and Up hand the ring across a container boundary, which needs the registered
@@ -36,44 +36,24 @@ import { panelLacksFocus, plainHop } from "../../shared/dpad/lostFocusHop";
  * the container's nav node, which is the only supported way to move the gamepad ring between
  * containers — a plain `focus()` moves `activeElement` and leaves the ring where it was
  * (navFocusRegistry, measured 2026-08-04). That split is what put a ring on a chip while the D-pad
- * was really on the tab strip, found on device 2026-08-28. Before 2026-09-01 only carousel mode
- * registered; the other modes fell back to the plain `focus()` and inherited that bug.
+ * was really on the tab strip, found on device 2026-08-28.
  */
 export function PresetRowFocusRoot(props: {
   className: string;
   children: React.ReactNode;
-  /**
-   * Fires when the ring enters the row from outside it (the Ask field's Up, the strip's Down), not
-   * on moves between chips. The carousel uses it to land on its marked chip: Steam enters a
-   * container at its first focusable child, which is the older of the two on screen.
-   */
-  onEnterFromOutside?: () => void;
 }) {
   const navRef = useRef<NavRefHolder["current"]>(null);
-  const rootRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     registerNavFocus("preset-carousel", navRef);
     return () => unregisterNavFocus("preset-carousel", navRef);
   }, []);
-  const { onEnterFromOutside } = props;
-  const onFocus = useCallback(
-    (e: React.FocusEvent<HTMLDivElement>) => {
-      if (!onEnterFromOutside) return;
-      const from = e.relatedTarget as Node | null;
-      if (from && rootRef.current?.contains(from)) return;
-      onEnterFromOutside();
-    },
-    [onEnterFromOutside],
-  );
   return (
     <Focusable
-      ref={rootRef}
       /* `navRef` is a real Steam Focusable prop that Decky's types omit — same gap as `onMoveDown`,
          so it goes through the cast the repo already uses for those (SessionContextStrip). */
       {...({ navRef } as Record<string, unknown>)}
       flow-children="horizontal"
       className={`bonsai-preset-carousel-focus-root ${props.className}`}
-      onFocus={onFocus}
     >
       {props.children}
     </Focusable>
@@ -95,12 +75,6 @@ export function usePresetRowNav(
   maxCount: number,
   exitDown?: () => boolean | void,
   options?: {
-    /** False for a chip that is rendered but not a focus stop right now (a carousel chip outside the window). */
-    isFocusable?: (index: number) => boolean;
-    /** Bring a chip that is not a focus stop yet into the window; the caller focuses it once it is. */
-    requestFocus?: (index: number) => boolean;
-    /** Right at the last chip; see buildChipNavHandlers and carouselState.nextFrozenHistoryEntry. */
-    advanceAtEnd?: () => boolean;
     /** An answer is being written; `rowHeld` reports it (MainTabPresetAnimatedChipsProps.holdStill). */
     holdStill?: boolean;
   },
@@ -113,20 +87,16 @@ export function usePresetRowNav(
       }),
     [maxCount],
   );
-  const isFocusable = options?.isFocusable;
-  const requestFocus = options?.requestFocus;
-  const advanceAtEnd = options?.advanceAtEnd;
   const holdStillRef = useRef(options?.holdStill);
   holdStillRef.current = options?.holdStill;
   const focusChip = useCallback(
     (i: number): boolean => {
-      if (isFocusable && !isFocusable(i)) return requestFocus ? requestFocus(i) : false;
       const el = buttonRefs.current[i];
       if (!el) return false;
       /* Siblings of one container; still a plain focus() Steam does not see while the page lacks focus (plan 97). */
       return plainHop(el, "chip");
     },
-    [isFocusable, requestFocus],
+    [],
   );
   /*
    * Which chip, if any, should show the "ran out of chips" edge cue right now (roadmap `[chips]`
@@ -179,11 +149,10 @@ export function usePresetRowNav(
         // first; Up skipped both for Show details (plan70-PERMS-CLEAN-05-06.json). The Save chat to
         // Desktop row that sat below them is gone since plan 72 (it is the chat row's save icon).
         exitUp: chipRowExitUp,
-        advanceAtEnd,
         onBlockedEdge: () => flagBlockedEdge(index),
         lostFocus: panelLacksFocus,
       }) as unknown as Record<string, unknown>,
-    [focusChip, exitDown, advanceAtEnd, flagBlockedEdge],
+    [focusChip, exitDown, flagBlockedEdge],
   );
   /** True for the one chip that should carry the edge-cue class right now. */
   const isBlockedEdge = useCallback((index: number) => blockedEdgeChip?.index === index, [blockedEdgeChip]);

@@ -187,13 +187,9 @@ export function useMainTabAskBarFocus(
     /* The Show details line, while it holds the chip's place (DetailsSlot.tsx); else the chips. */
     if (takeDetailsSlotLineFocus()) return true;
     if (takeNavFocus("preset-carousel")) return true;
-    const btn =
-      host?.querySelector<HTMLElement>(
-        ".bonsai-preset-carousel-slot--focus button.bonsai-preset-glass",
-      ) ??
-      host?.querySelector<HTMLElement>(
-        '.bonsai-preset-carousel-slot[data-bonsai-preset-visible="true"] button.bonsai-preset-glass',
-      );
+    const btn = host?.querySelector<HTMLElement>(
+      '.bonsai-preset-carousel-slot[data-bonsai-preset-visible="true"] button.bonsai-preset-glass',
+    );
     if (!btn) return false;
     btn.focus();
     return elementHasGamepadFocus(btn);

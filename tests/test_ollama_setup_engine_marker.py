@@ -20,7 +20,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
-from ollama_fake_ai import FakeAI, run_custom_setup  # noqa: E402
+from ollama_fake_ai import FakeAI, run_custom_setup, update_run_that_replaces_the_ai  # noqa: E402
 
 from backend.ollama import local_ollama_setup_service as setup  # noqa: E402
 
@@ -91,25 +91,11 @@ class AStopAfterTheRunReplacedTheAiLeavesAnAiRunning(unittest.TestCase):
     def _update_then_stop(self, ai: FakeAI) -> dict:
         cancel = asyncio.Event()
 
-        async def installed(**kw):
-            kw["state"]["stage"] = "install"
-            return "/x/ollama"
-
-        def restart(log, ollama_bin, control):
-            ai.run(["pkill", "-x", "ollama"])  # the person's AI is stopped ...
-            setup.ensure_ollama_server_listening_before_pull(log, ollama_bin, lambda: False)  # ... and the run's own starts
-            return {}
-
         def stopped_pull(*args):
             cancel.set()
             return False, "Cancelled."
 
-        extra = {
-            f"{S}._install_or_update_ollama_binary": {"side_effect": installed},
-            f"{S}.restart_server_onto_new_binary": {"side_effect": restart},
-            f"{S}.list_installed_ollama_tags": {"return_value": ["a:1"]},
-        }
-        return run_custom_setup(ai, stopped_pull, cancel, profile="update_installed", extra=extra)
+        return run_custom_setup(ai, stopped_pull, cancel, profile="update_installed", extra=update_run_that_replaces_the_ai(ai))
 
     def test_a_stop_during_the_model_downloads_leaves_the_replacement_ai_running(self):
         ai = FakeAI(up=True)

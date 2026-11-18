@@ -65,12 +65,14 @@ async def _no_wait(_seconds: float) -> None:
 
 def run_custom_setup(ai: FakeAI, pull: Callable[..., Any], cancel_event: asyncio.Event, *,
                      sleep: Optional[Callable[[float], None]] = None, keys_ready: bool = True,
-                     profile: str = "custom", extra: Optional[dict] = None) -> dict:
+                     profile: str = "custom", extra: Optional[dict] = None,
+                     drive: Optional[Callable[[Any], Any]] = None) -> dict:
     """Run one custom setup run on the pretend engine and return its status.
 
     `pull` stands in for the model download; `sleep` for time.sleep (a test presses Stop from it);
     `keys_ready` False runs the real missing-keys step instead of skipping it; `profile` and `extra` (more
-    patches, target -> patch arguments) let a test reach the install and restart steps too.
+    patches, target -> patch arguments) let a test reach the install and restart steps too; `drive` (an async
+    function given the running task) lets a test cancel the task itself, as the plugin's unload does.
     """
     from backend.ollama import local_ollama_setup_service as setup
 
@@ -95,5 +97,34 @@ def run_custom_setup(ai: FakeAI, pull: Callable[..., Any], cancel_event: asyncio
     with ExitStack() as stack:
         for target, kw in patches.items():
             stack.enter_context(patch(target, **kw))
-        asyncio.run(setup.run_local_setup(profile=profile, state=state, logger=logger, cancel_event=cancel_event))
+        async def go() -> None:
+            run = setup.run_local_setup(profile=profile, state=state, logger=logger, cancel_event=cancel_event)
+            if drive is None:
+                await run
+            else:
+                await drive(asyncio.create_task(run))
+
+        asyncio.run(go())
     return state
+
+
+def update_run_that_replaces_the_ai(ai: FakeAI) -> dict:
+    """The `extra` patches for an update run whose restart step stops the person's AI and starts the run's own."""
+    from backend.ollama import local_ollama_setup_service as setup
+
+    S = "backend.ollama.local_ollama_setup_service"
+
+    async def installed(**kw: Any) -> str:
+        kw["state"]["stage"] = "install"
+        return "/x/ollama"
+
+    def restart(log: Any, ollama_bin: str, control: Any) -> dict:
+        ai.run(["pkill", "-x", "ollama"])  # the person's AI is stopped ...
+        setup.ensure_ollama_server_listening_before_pull(log, ollama_bin, lambda: False)  # ... and the run's own starts
+        return {}
+
+    return {
+        f"{S}._install_or_update_ollama_binary": {"side_effect": installed},
+        f"{S}.restart_server_onto_new_binary": {"side_effect": restart},
+        f"{S}.list_installed_ollama_tags": {"return_value": ["a:1"]},
+    }

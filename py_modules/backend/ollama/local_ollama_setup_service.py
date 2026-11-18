@@ -100,6 +100,7 @@ from backend.ollama.ollama_binary_install import (
     install_ollama_from_release,
     run_cancellable,
 )
+from backend.ollama import ollama_pull_resume_service
 from backend.ollama.ollama_pull_failure_text import format_ollama_pull_failure as _format_ollama_pull_failure
 from backend.ollama.starter_set_extras import apply_starter_outcome, run_starter_downloads
 from backend.ollama.starter_left_out import drop_left_out_tags, mark_piece, starter_pieces_at_start
@@ -414,6 +415,15 @@ def _make_ollama_keys(
 
     shell_log("[bonsAI] Could not create Ollama keys under ~/.ollama — try ``ollama serve`` in Konsole.")
     return False
+
+
+def _a_persons_stop(task_cancelled: bool) -> bool:
+    """False when the run ended because its task was cancelled or the plugin is unloading (not a person's Stop)."""
+    if task_cancelled or ollama_pull_resume_service.is_unloading():
+        return False
+    task = asyncio.current_task()
+    cancelling = getattr(task, "cancelling", None)  # Python 3.11+: a cancel that arrived in the clean-up code itself
+    return not (callable(cancelling) and cancelling())
 
 
 def _leave_ai_running(shell_log: Callable[[str], None], ollama_bin: str) -> None:
@@ -867,6 +877,7 @@ async def run_local_setup(
     def cancelled() -> bool:
         return cancel_event.is_set()
 
+    task_cancelled = False  # the task itself was cancelled (plugin unload, Clear all data), not a person's Stop
     try:
         state.setdefault("phase", "running")
         state["stage"] = "check"
@@ -1004,6 +1015,9 @@ async def run_local_setup(
         log("[bonsAI] Local Ollama setup finished." if state["phase"] == "done" else f"[bonsAI] Setup finished with a problem: {state['error']}")
         await emit_stage(state["stage"], {"error": state["error"][:200]} if state["phase"] == "failed" else None)
 
+    except asyncio.CancelledError:
+        task_cancelled = True
+        raise
     except Exception as exc:
         msg = str(exc)
         log(f"[bonsAI] Setup stopped: {msg}")
@@ -1020,8 +1034,13 @@ async def run_local_setup(
     finally:
         if cancel_event.is_set():
             if ai_was_running:
-                # The run may have replaced the person's AI (the restart step, the keys step): a Stop must leave one running.
-                await asyncio.to_thread(_leave_ai_running, log, ollama_bin or resolve_ollama_executable() or "")
+                if _a_persons_stop(task_cancelled):
+                    # The run may have replaced the person's AI (the restart step, the keys step): a Stop must leave one running.
+                    await asyncio.to_thread(_leave_ai_running, log, ollama_bin or resolve_ollama_executable() or "")
+                else:
+                    # An unload or Clear all data: start nothing (a restart may still be running, and Clear all data
+                    # deletes Ollama a moment later); leave whatever is up as it is.
+                    forget_setup_started_ollama_serve()
             terminate_setup_started_ollama_serve()
         forget_setup_started_ollama_serve()
 

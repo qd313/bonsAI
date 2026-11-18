@@ -36,7 +36,10 @@ model's own public pages, not from memory. The 26 rows that were already in the 
 - `llama3.1:8b` (Llama 3.1 Community Licence) and the three Gemma 3 rows (Gemma Terms of Use) are open-weight, as the
   older Llama 3.2 and Gemma 3 rows already were.
 - `gemma4:26b`: the model page shows Apache 2.0. **Its release month (2026-04) is borrowed from the Gemma 4 family rows
-  already in the list, not read from any page for this model**; no public repository page was found for it.
+  already in the list, not read from any page for this model**; no public repository page was found for it. The row in
+  `pullModelCatalogAdded.ts` carries the same note.
+- `gemma3:270m`: this row first said 2025-07, the month its Hugging Face repo was created. Google's own announcement is
+  dated 14 August 2025 (read 2026-11-17), so the list now shows 2025-08, the public release.
 
 | Tag | Size on the page | Licence | Class in the list | Model page | Licence text | Release month (source) | Read |
 |---|---|---|---|---|---|---|---|
@@ -45,7 +48,7 @@ model's own public pages, not from memory. The 26 rows that were already in the 
 | `qwen3.5:2b` | 2.7GB | Apache 2.0 | foss | https://ollama.com/library/qwen3.5:2b | https://ollama.com/library/qwen3.5:2b/blobs/5f3a3c817e78 | 2026-02 (Qwen/Qwen3.5-2B) | 2026-11-17 |
 | `qwen3-vl:2b` | 1.9GB | Apache 2.0 | foss | https://ollama.com/library/qwen3-vl:2b | https://ollama.com/library/qwen3-vl:2b/blobs/7339fa418c9a | 2025-10 (Qwen/Qwen3-VL-2B-Instruct) | 2026-11-17 |
 | `qwen3-vl:4b` | 3.3GB | Apache 2.0 | foss | https://ollama.com/library/qwen3-vl:4b | https://ollama.com/library/qwen3-vl:4b/blobs/7339fa418c9a | 2025-10 (Qwen/Qwen3-VL-4B-Instruct) | 2026-11-17 |
-| `gemma3:270m` | 292MB | Gemma Terms | open_weight | https://ollama.com/library/gemma3:270m | https://ollama.com/library/gemma3:270m/blobs/3e2c24001f9e | 2025-07 (google/gemma-3-270m-it) | 2026-11-17 |
+| `gemma3:270m` | 292MB | Gemma Terms | open_weight | https://ollama.com/library/gemma3:270m | https://ollama.com/library/gemma3:270m/blobs/3e2c24001f9e | 2025-08 (Google's announcement, developers.googleblog.com/en/introducing-gemma-3-270m/, 14 Aug 2025; the Hugging Face repo google/gemma-3-270m-it was created 2025-07-30, before the public launch) | 2026-11-17 |
 | `smollm2:1.7b` | 1.8GB | Apache 2.0 | foss | https://ollama.com/library/smollm2:1.7b | https://ollama.com/library/smollm2:1.7b/blobs/58d1e17ffe51 | 2024-10 (HuggingFaceTB/SmolLM2-1.7B-Instruct) | 2026-11-17 |
 | `phi3:3.8b` | 2.2GB | MIT | foss | https://ollama.com/library/phi3:3.8b | https://ollama.com/library/phi3:3.8b/blobs/fa8235e5b48f | 2024-04 (microsoft/Phi-3-mini-4k-instruct) | 2026-11-17 |
 | `mistral:7b` | 4.4GB | Apache 2.0 | foss | https://ollama.com/library/mistral:7b | https://ollama.com/library/mistral:7b/blobs/43070e2d4e53 | 2024-05 (mistralai/Mistral-7B-Instruct-v0.3) | 2026-11-17 |

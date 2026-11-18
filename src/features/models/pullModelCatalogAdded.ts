@@ -74,7 +74,7 @@ export const PULL_MODEL_CATALOG_ADDED_2026_11 = [
     tag: "gemma3:270m",
     params: "270M",
     sizeGb: 0.3,
-    releasedYm: "2025-07",
+    releasedYm: "2025-08",
     license: "Gemma Terms",
     licenseClass: "open_weight",
     group: "smallest",
@@ -241,7 +241,7 @@ export const PULL_MODEL_CATALOG_ADDED_2026_11 = [
     tag: "gemma4:26b",
     params: "26B",
     sizeGb: 19,
-    releasedYm: "2026-04",
+    releasedYm: "2026-04", // borrowed from the other Gemma 4 rows, not read from a page for this model (see pullModelCatalog.sources.md)
     license: "Apache 2.0 (Gemma)",
     licenseClass: "foss",
     group: "stretch",

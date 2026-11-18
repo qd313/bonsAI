@@ -107,6 +107,12 @@ describe("PULL_MODEL_CATALOG rows added in plan 105", () => {
     }
   });
 
+  it("shows Gemma 3 270M as August 2025 (Google's announcement) and says where gemma4:26b's month is borrowed", () => {
+    expect(PULL_MODEL_CATALOG.find((e) => e.tag === "gemma3:270m")?.releasedYm).toBe("2025-08");
+    expect(sources).toContain("developers.googleblog.com/en/introducing-gemma-3-270m");
+    expect(sources).toContain("borrowed from the Gemma 4 family rows");
+  });
+
   it("marks a model too big for a Deck, shows it, and keeps it in the Expert group", () => {
     const big = PULL_MODEL_CATALOG.filter((e) => e.needsPc);
     expect(big.map((e) => e.tag).sort()).toEqual(["gemma3:27b", "gemma4:26b", "gpt-oss:20b", "qwen3.5:27b"]);

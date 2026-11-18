@@ -221,6 +221,18 @@ def terminate_setup_started_ollama_serve() -> None:
             pass
 
 
+def forget_setup_started_ollama_serve() -> None:
+    """Stop treating the engine setup started as setup's own, without ending it.
+
+    Once a run is over, an engine it started is the person's everyday AI (on a Deck with no systemd unit it
+    is the only one). A later run that reuses it, or a Stop on that later run, must not end it; only the run
+    that started an engine may end it, and only when that same run is stopped.
+    """
+    global _OLLAMA_SERVE_PROC, _OLLAMA_SERVE_STARTED_BY_SETUP
+    _OLLAMA_SERVE_PROC = None
+    _OLLAMA_SERVE_STARTED_BY_SETUP = False
+
+
 def ensure_ollama_server_listening_before_pull(
     shell_log: Callable[[str], None],
     ollama_bin: str,
@@ -794,6 +806,7 @@ async def run_local_setup(
 
     prof = (profile or "").strip()
     last_stage_emitted = ""
+    forget_setup_started_ollama_serve()  # an engine started before this run (the connection test's wake-up) is not this run's
 
     async def emit_stage(stage: str, extra: Optional[dict[str, Any]] = None) -> None:
         nonlocal last_stage_emitted
@@ -976,6 +989,7 @@ async def run_local_setup(
     finally:
         if cancel_event.is_set():
             terminate_setup_started_ollama_serve()
+        forget_setup_started_ollama_serve()
 
 
 def run_ollama_rm(ollama_bin: str, tag: str) -> tuple[bool, str]:

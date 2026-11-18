@@ -5,8 +5,8 @@ Written 2026-11-17 by the chat that ran plan 105 (Opus, extra-high), from plan 1
 in the chat the same afternoon. Plain language on purpose: this file is for the maintainer first. The pictures that go
 with it: <https://claude.ai/artifact/WHoMiyk8Fe9PZwXh84LjHU> (open it in a web browser signed in to claude.ai).
 
-**Status: READY, waiting for "go".** Small on purpose: about ten helper runs and one or two Deck blocks, so about one
-five-hour window. **Start it after the week resets** (Wednesday 18 November, 08:00 EST): the week stood at about 81 percent
+**Status: READY, waiting for "go".** Small on purpose: about a dozen helper runs and one or two Deck blocks, so about
+one five-hour window. **Start it after the week resets** (Wednesday 18 November, 08:00 EST): the week stood at about 81 percent
 when this was written, and the line is 90.
 
 **Who runs it:** a fresh Opus 5.5 chat at extra-high, told "Run plan 106". It reads every change and lands it. Helpers:
@@ -33,7 +33,10 @@ checks plan 105 could not finish.
    changelog line for the old animation settings, and the characters document not covering the small emblems. The
    bookkeeper writes each into the shelved list, marked as the maintainer's call.
 2. **Headline first is on, as the house style, with no setting.** Done the same afternoon (commit `2c8145fd9`); it
-   reaches the Deck with this plan's first build.
+   reaches the Deck with this plan's first build. **Later the same day: "your notes" win over it** (lane H1). A player
+   who writes an every-game note asking for a different opening (say, "give me the full answer, no summary line
+   first") gets that, not the house style. The bigger idea, ready-made "style notes" listed with your own notes on the
+   Search tab, waits until more house-style rules pile up.
 3. **Yes to a real Ollama update on the Deck,** to test the download card's Cancel (it updates the Deck's Ollama to the
    newest version; today it is 0.40.16).
 4. **Steam on the PC:** the maintainer restarts it (or updates Decky to 3.3.1), which unblocks the stand-in blocks.
@@ -62,7 +65,8 @@ checks plan 105 could not finish.
 - **"Open sections as you walk" no longer jumps** (Developer switch, off by default), and Up from "Open all" stops on
   the last section's own controls instead of skipping them.
 - **Left from the "Show details" line** behaves like the rest of bonsAI (two stay, the third goes to Steam's menu).
-- **Every answer opens with one short sentence that carries the point** (Headline first, now on).
+- **Every answer opens with one short sentence that carries the point** (Headline first, now on), **unless one of your
+  notes asks for a different opening**, in which case the note wins.
 
 ## 4. The work
 
@@ -77,6 +81,7 @@ checks plan 105 could not finish.
 | F2 | **Left on the "Show details" line in the chips' place counts like everywhere else** | Opus extra-high; second opinion before landing | the dock's slot, the Left count | nothing (measured in plan 105) |
 | F3 | **The same download card on the knowledge library and the voice install** (plan 105's lane D4b), plus the three card notes from plan 105's second opinion | Sonnet high; second opinion before landing (the ring moves) | the library download, the voice install, the card and bar | R2 landed (same store) |
 | F4 | The tidy-up plan 105 left: an unused Show details helper and its five calls, unused styles, carousel-only focus options | Sonnet medium | the chat transcript, one stylesheet, the chip row's focus files | F2 landed (same area) |
+| H1 | **Your notes win over Headline first** | Sonnet high | the Headline instruction, its tests, one answer test on the PC's AI | nothing |
 | F5 | Two one-star bugs: the Diagnostics log fills with ResizeObserver warnings; Tiny text's "Show details" line is 8.0 px, not 7.2 (check whether the base is 10 px first) | Sonnet medium | as found | nothing |
 | R | The security reviewer reads R1, R2, R3 and F3 before they land (Sonnet high, model passed by hand) | Sonnet high | read-only | each lane built |
 | W1 | **Deck block** after all landings (§ 6) | Sonnet medium driver | the Deck | every lane landed |
@@ -120,6 +125,17 @@ the final build), and the shelved four.
   "2 jobs" chip needs a hand-over when it vanishes under the ring (this lane makes two kinds of job possible); turning
   "Run AI on this Deck" off mid-run must not drop the job from the card and bar while it carries on.
 - **F4.** Plan 105 § 13.6 names the leftovers; nothing a player sees changes.
+- **H1.** Today the notes sit early in the AI's instructions and the Headline sentence sits near the end, and small
+  models tend to follow what they read last, so a note asking for a different opening may lose. Make the note win: add
+  to the Headline sentence that it steps aside when the person's notes ask for a different way to open or shape the
+  answer (or move the sentence so the notes come after it; say which and why). Keep the prompt tests' rule that the
+  sentence is the only difference when it is on, and that every spoiler fingerprint still matches with it taken out.
+  **The answer test** (on the PC's AI, the answer model the Deck uses): ten questions of plan 105's Headline set, each
+  asked twice, once with no notes and once with an every-game note "Give me the full answer, no summary line first".
+  Pass: with the note, at most one of the ten answers opens with a stand-alone summary line; without it, about as many do
+  as plan 105 measured (about a third or more; ten questions is a small sample, so write both counts in the report and
+  judge the no-note count only against a clear drop). If the note does not win,
+  stop and report rather than make the sentence weaker for everyone.
 - **F5.** As in the roadmap entries filed by plan 105's last sweep.
 
 ## 6. The Deck block (W1) and its rows
@@ -131,7 +147,9 @@ nothing should wipe them); the AI unloaded before any game; the keep-awake hold 
 
 Rows, in order:
 1. **Headline first on three real answers** (each opens with one short sentence that carries the point; no ending
-   given away on a story question). Pictures for the maintainer.
+   given away on a story question). Then **with a note:** keep the every-game note "Give me the full answer, no summary
+   line first" through the plugin's own notes card, ask one more question (it should not open with a summary line),
+   and delete that note on the Search tab afterwards. Pictures for the maintainer.
 2. **The chips after a long answer** (plan 105's owed half) and **the decode flowing into its slide** (about 0.2 s, by
    recording).
 3. **Left** on the first suggestion chip and on "Suggest as a tip"; the "Show details" line after F2.

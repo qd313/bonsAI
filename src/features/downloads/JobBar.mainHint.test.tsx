@@ -9,7 +9,7 @@
  *
  * Does not: make X work on Main. That needs a container around the whole Main body, which changes Main's D-pad graph.
  */
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { JobBar } from "./JobBar";
@@ -51,8 +51,9 @@ describe("the X glyph on the bar's Cancel", () => {
     expect(key()).not.toBeNull();
   });
 
-  it("on Main the bar's Cancel still works when pressed", () => {
+  it("on Main the bar's Cancel still works when pressed (after the half second the bar holds a press for when it appears)", async () => {
     render(<JobBar activeTab="main" />);
+    await act(async () => new Promise<void>((r) => setTimeout(r, 520)));
     fireEvent.click(screen.getByLabelText(BAR_CANCEL));
     expect(cancel).toHaveBeenCalledTimes(1);
   });

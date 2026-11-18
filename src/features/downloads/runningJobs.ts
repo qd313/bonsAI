@@ -101,7 +101,19 @@ let pinned: string | null = null;
 const listeners = new Set<() => void>();
 let version = 0;
 
+/** Which job the bar shows now, and since when: a Cancel pressed on the bar just after this changes is ignored. */
+let barShownId: string | null = null;
+let barShownAt = 0;
+
+/** How long a Cancel on the bar is ignored after the job the bar shows changes (the same half second as the start guard). */
+const BAR_CHANGE_GUARD_MS = DOUBLE_PRESS_GUARD_MS;
+
 function changed(): void {
+  const showing = barView().job?.id ?? null;
+  if (showing !== barShownId) {
+    barShownId = showing;
+    barShownAt = Date.now();
+  }
   version += 1;
   for (const fn of listeners) fn();
 }
@@ -221,6 +233,16 @@ export function cancelJob(id: string, now: number = Date.now()): boolean {
   return true;
 }
 
+/**
+ * Cancel from the bar's button. Like `cancelJob`, and also ignored for half a second after the job the bar shows changes:
+ * with two jobs, a ring left on the bar's Cancel when the shown job ends means the same button now stops the OTHER job,
+ * and a press that was meant for the first must not stop the second.
+ */
+export function cancelBarJob(id: string, now: number = Date.now()): boolean {
+  if (now - barShownAt < BAR_CHANGE_GUARD_MS) return false;
+  return cancelJob(id, now);
+}
+
 /** Job `id` while it runs, else null. */
 export function runningJob(id: string): RunningJob | null {
   return jobs.get(id) ?? null;
@@ -251,5 +273,7 @@ export function resetRunningJobsForTests(): void {
   seen.clear();
   results.clear();
   pinned = null;
+  barShownId = null;
+  barShownAt = 0;
   changed();
 }

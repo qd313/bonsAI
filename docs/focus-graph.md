@@ -1022,6 +1022,10 @@ Open all (floating button)
   or its card comes back into sight) the ring goes to the bar's Cancel; if the bar goes with it (both jobs ended), the
   way Cancel's own hand-over goes: where the ring came from, else the tab's first stop, else the tab bar. A ring
   somewhere else stays where it is. Pinned by `JobBar.chipHandOver.test.tsx`.
+- **A press on the bar's Cancel is ignored for half a second after the job the bar shows changes** (the shown job ends,
+  the bar is switched with the chip, or the bar first appears): with two jobs and the ring left on Cancel, the same button
+  then means the other job, and a press aimed at the first must not stop the second. Same half second as the guard at the
+  start of a job (`cancelBarJob`, `JobBar.shownJobChanges.test.tsx`). X from anywhere is not held back by it.
 - **X cancels from anywhere in a tab** (`TabBodyFocusRoot`'s `onSecondaryButton`): the job the bar shows, else the
   newest. Not in the job's first half second. The Main tab has no container around its whole body, so there X does
   nothing, and the bar's Cancel shows no X glyph on Main (plan 106, lane F3; `JobBar.mainHint.test.tsx`); the D-pad has no way

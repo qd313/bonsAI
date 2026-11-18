@@ -37,7 +37,7 @@ import { shoulderSwitchFromPress } from "../../shared/dpad/shoulderSwitch";
 import { leftAtEdge } from "../../shared/dpad/leftEdge";
 import { useHandRingOnGone } from "../../shared/dpad/useHandRingOnGone";
 import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
-import { cancelJob, cancelJobFromX, jobTitle, switchBarJob, useBarView, type BarView } from "./runningJobs";
+import { cancelBarJob, cancelJobFromX, jobTitle, switchBarJob, useBarView, type BarView } from "./runningJobs";
 
 /** Where the ring came onto the bar from, for Up, B and the bar going away. */
 let cameFrom: NavFocusId | null = null;
@@ -124,7 +124,7 @@ function RunningBar({
           <Button
             className={`${FOCUS_RING_BTN_CLASS} bonsai-job-cancel bonsai-job-cancel--bar`}
             data-stopping={job.stopping ? "true" : "false"}
-            onClick={() => void cancelJob(job.id)}
+            onClick={() => void cancelBarJob(job.id)}
             aria-label={`Cancel: ${job.face.title}`}
           >
             {job.stopping ? "Stopping" : "Cancel"}

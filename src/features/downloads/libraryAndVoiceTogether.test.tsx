@@ -83,6 +83,8 @@ describe("both downloads at once", () => {
     await waitFor(() => expect(calls("cancel_voice_install")).toBe(1));
     expect(calls("cancel_rag_corpus_download")).toBe(0);
     fireEvent.click(screen.getByLabelText("Show the other running job"));
+    // A press just after the shown job changes is held back for half a second (JobBar.shownJobChanges.test.tsx).
+    await wait(520);
     fireEvent.click(screen.getByLabelText("Cancel: Updating the library"));
     await waitFor(() => expect(calls("cancel_rag_corpus_download")).toBe(1));
     expect(calls("cancel_voice_install")).toBe(1);

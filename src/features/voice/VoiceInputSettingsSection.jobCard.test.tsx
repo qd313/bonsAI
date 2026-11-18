@@ -94,7 +94,7 @@ describe("the voice install on the card", () => {
     expect(screen.queryByText("Install voice engine")).toBeNull();
     expect(screen.getByText("Voice engine install")).toBeTruthy();
     expect(screen.getByText("Fetching the build image")).toBeTruthy();
-    expect(screen.getByText("From ghcr.io and huggingface.co, and the build image's package servers")).toBeTruthy();
+    expect(screen.getByText("From ghcr.io, archive.ubuntu.com, security.ubuntu.com and huggingface.co")).toBeTruthy();
   });
 
   it("follows the install: building the engine, the speech model with its share, then checking the file", async () => {

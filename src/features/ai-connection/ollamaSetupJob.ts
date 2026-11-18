@@ -76,7 +76,9 @@ function sitesOf(st: LocalOllamaSetupStatus, kind: RunKind): string {
   if (kind !== "setup") return "From ollama.com, github.com and registry.ollama.ai";
   const voice = !leftOutOf(st).includes("voice");
   return voice
-    ? "From ollama.com, github.com, registry.ollama.ai, huggingface.co and ghcr.io"
+    ? /* The voice build's compilers come from its image's two Ubuntu servers (downloadSites.ts names them in the box;
+         this card's one line says whose they are, to stay short enough not to be cut). */
+      "From ollama.com, github.com, registry.ollama.ai, huggingface.co, ghcr.io and Ubuntu's package servers"
     : "From ollama.com, github.com and registry.ollama.ai";
 }
 

@@ -49,7 +49,7 @@ describe("what the card says", () => {
   it("the starter run names every site, fewer once Voice input's downloads were left out", () => {
     const st = { ...PULL, profile: "tier1_essentials", starter_pieces: { ollama: "done", answer: "waiting", note_search: "waiting", speech: "waiting", voice: "waiting" } };
     expect(ollamaSetupFace(st, "setup").title).toBe("Setting up the AI");
-    expect(ollamaSetupFace(st, "setup").sites).toBe("From ollama.com, github.com, registry.ollama.ai, huggingface.co and ghcr.io");
+    expect(ollamaSetupFace(st, "setup").sites).toBe("From ollama.com, github.com, registry.ollama.ai, huggingface.co, ghcr.io and Ubuntu's package servers");
     const lean = { ...st, starter_pieces: { ...st.starter_pieces, speech: "left_out", voice: "left_out" } };
     expect(ollamaSetupFace(lean, "setup").sites).toBe("From ollama.com, github.com and registry.ollama.ai");
   });

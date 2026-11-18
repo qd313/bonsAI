@@ -36,9 +36,11 @@ export type FirstRunSetupState = {
   status: LocalOllamaSetupStatus | null;
   /** Counts starts, so the card reads afresh after Start again. */
   runId: number;
+  /** True when the last Stop request failed or did not answer in time: the card says so, and Stop sends again. */
+  stopFailed: boolean;
 };
 
-const IDLE: FirstRunSetupState = { active: false, leaveOut: [], refused: "", accepted: false, status: null, runId: 0 };
+const IDLE: FirstRunSetupState = { active: false, leaveOut: [], refused: "", accepted: false, status: null, runId: 0, stopFailed: false };
 let state: FirstRunSetupState = IDLE;
 const listeners = new Set<() => void>();
 
@@ -50,7 +52,7 @@ function update(next: Partial<FirstRunSetupState>): void {
 /** Starts the starter set with what was left unticked, and shows the card on the Main tab. */
 export function beginFirstRunSetup(leaveOut: readonly StarterLeftOut[]): void {
   const runId = state.runId + 1;
-  update({ active: true, leaveOut: [...leaveOut], refused: "", accepted: false, status: null, runId });
+  update({ active: true, leaveOut: [...leaveOut], refused: "", accepted: false, status: null, runId, stopFailed: false });
   startLocalOllamaSetup(
     LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
     (status) => {
@@ -70,9 +72,22 @@ export function startFirstRunSetupAgain(): void {
   beginFirstRunSetup(state.leaveOut);
 }
 
-/** The card's Stop: the same cancel the Ollama tab's Cancel sends. */
-export function stopFirstRunSetup(): void {
-  void callDeckyWithTimeout<[], { cancel_requested?: boolean }>("cancel_local_ollama_setup", [], 8000).catch(() => {});
+/** How long a Stop request may go unanswered before the card says it could not stop (ms). */
+const STOP_TIMEOUT_MS = 8000;
+
+/**
+ * The card's Stop: the same cancel the Ollama tab's Cancel sends. If the request is refused or does not answer within
+ * 8 seconds the card says "Could not stop. Try again." and Stop stays pressable; the next press sends a new request.
+ */
+export function stopFirstRunSetup(): Promise<void> {
+  const runId = state.runId;
+  if (state.stopFailed) update({ stopFailed: false });
+  return callDeckyWithTimeout<[], { cancel_requested?: boolean }>("cancel_local_ollama_setup", [], STOP_TIMEOUT_MS).then(
+    () => undefined,
+    () => {
+      if (state.runId === runId) update({ stopFailed: true });
+    },
+  );
 }
 
 function subscribe(listener: () => void): () => void {

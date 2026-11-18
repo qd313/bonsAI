@@ -117,6 +117,35 @@ describe("the first-time setup's card", () => {
     await waitFor(() => expect(screen.getByLabelText("Stop the setup")).toBeTruthy());
   });
 
+  it("a Stop the back end refuses says it could not stop, and the next Stop sends a new request (plan 106 R2)", async () => {
+    await start(["voice"]);
+    let refuse = true;
+    setRpcHandler("cancel_local_ollama_setup", () => {
+      if (refuse) throw new Error("The back end did not take the cancel");
+      return { cancel_requested: true };
+    });
+    fireEvent.click(screen.getByLabelText("Stop the setup"));
+    await waitFor(() => expect(card()).toContain("Could not stop. Try again."));
+    expect(calls("cancel_local_ollama_setup")).toHaveLength(1);
+    expect(screen.getByLabelText("Stop the setup")).toBeTruthy();
+    refuse = false;
+    fireEvent.click(screen.getByLabelText("Stop the setup"));
+    expect(calls("cancel_local_ollama_setup")).toHaveLength(2);
+    await waitFor(() => expect(card()).not.toContain("Could not stop. Try again."));
+  });
+
+  it("a Stop that never answers says the same after its 8 seconds, and Stop sends again", async () => {
+    await start(["voice"]);
+    setRpcHandler("cancel_local_ollama_setup", () => new Promise(() => {}));
+    fireEvent.click(screen.getByLabelText("Stop the setup"));
+    await act(async () => void (await vi.advanceTimersByTimeAsync(7000)));
+    expect(card()).not.toContain("Could not stop");
+    await act(async () => void (await vi.advanceTimersByTimeAsync(1500)));
+    expect(card()).toContain("Could not stop. Try again.");
+    fireEvent.click(screen.getByLabelText("Stop the setup"));
+    expect(calls("cancel_local_ollama_setup")).toHaveLength(2);
+  });
+
   it("at the end: The AI is ready on this Deck and the run's closing line, no button, and the ring goes to the question box", async () => {
     const questionBox = holder("unified-input");
     await start(["voice"]);

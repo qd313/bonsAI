@@ -110,6 +110,26 @@ describe("Update AI & models becomes one job card", () => {
     expect(screen.getByText("Stopping the update")).toBeTruthy();
   });
 
+  it("a Cancel the back end refuses puts Cancel back with the words, and the next press sends a new request (plan 106 R2)", async () => {
+    let refuse = true;
+    setRpcHandler("cancel_local_ollama_setup", () => {
+      if (refuse) throw new Error("The back end did not take the cancel");
+      return { cancel_requested: true };
+    });
+    draw();
+    await pressUpdate();
+    await waitFor(() => expect(ringName()).toBe(CANCEL));
+    await act(async () => new Promise((r) => setTimeout(r, 520)));
+    await act(async () => void fireEvent.click(byLabel(CANCEL)!));
+    await waitFor(() => expect(screen.getByText("Could not stop. Try again.")).toBeTruthy());
+    expect(byLabel(CANCEL)!.textContent).toBe("CancelX");
+    expect(cancelCalls()).toBe(1);
+    refuse = false;
+    await act(async () => void fireEvent.click(byLabel(CANCEL)!));
+    expect(cancelCalls()).toBe(2);
+    expect(screen.getByText("Stopping the update")).toBeTruthy();
+  });
+
   it("when the run ends the card goes and the ring is on Update, never on nothing", async () => {
     draw();
     await pressUpdate();

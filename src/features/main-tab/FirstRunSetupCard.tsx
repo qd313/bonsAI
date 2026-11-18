@@ -39,7 +39,7 @@ import { localSetupStageLine } from "../ai-connection/localSetupStageLine";
 import type { LocalOllamaSetupStatus } from "../ai-connection/OllamaWhereAiRunsSection.types";
 import { setupProgressPercent, setupSitesLine, stoppedLine } from "./firstRunSetupProgress";
 import { startFirstRunSetupAgain, stopFirstRunSetup, useFirstRunSetup } from "./firstRunSetupStore";
-import { noteJobCardSeen } from "../downloads/runningJobs";
+import { COULD_NOT_STOP, noteJobCardSeen } from "../downloads/runningJobs";
 import { OLLAMA_SETUP_JOB } from "../ai-connection/ollamaSetupJob";
 
 /** How often the card reads the run's status while it shows (the Ollama tab reads at the same pace). */
@@ -133,7 +133,7 @@ export function FirstRunSetupCard(): React.ReactElement | null {
   if (!setup.active) return null;
   const status = setup.accepted ? (polled ?? setup.status) : setup.status;
   const view = viewOf(status, setup.refused, setup.leaveOut);
-  const press = () => (view.button === "stop" ? stopFirstRunSetup() : view.button === "again" ? startFirstRunSetupAgain() : undefined);
+  const press = () => (view.button === "stop" ? void stopFirstRunSetup() : view.button === "again" ? startFirstRunSetupAgain() : undefined);
 
   return (
     <div style={CARD_STYLE} data-bonsai-first-run-card="" aria-live="polite">
@@ -145,6 +145,11 @@ export function FirstRunSetupCard(): React.ReactElement | null {
         </div>
       ) : null}
       {view.note ? <div style={{ fontSize: textPx(10), color: "#8fa0b4", marginBottom: 6 }}>{view.note}</div> : null}
+      {view.button === "stop" && setup.stopFailed ? (
+        <div role="alert" data-bonsai-stop-failed="" style={{ fontSize: textPx(11), color: TONE_COLOR.warn, marginBottom: 6 }}>
+          {COULD_NOT_STOP}
+        </div>
+      ) : null}
       {view.button ? (
         <Focusable
           ref={ringRef}

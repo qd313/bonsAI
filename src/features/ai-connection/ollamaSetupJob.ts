@@ -104,9 +104,12 @@ export function ollamaSetupFace(st: LocalOllamaSetupStatus, kind: RunKind): JobF
   return { title, stoppingTitle, line1, line2, sites: sitesOf(st, kind), fraction: fractionOf(st, kind) };
 }
 
-/** Ask the back end to stop the run (best effort: a refusal or a time-out leaves the run's own status to say). */
-function cancelOllamaSetup(): void {
-  void callDeckyWithTimeout<[], { cancel_requested?: boolean }>("cancel_local_ollama_setup", [], 8000).catch(() => {});
+/**
+ * Ask the back end to stop the run. The request is handed back, not swallowed: runningJobs.ts puts Cancel back and
+ * says "Could not stop. Try again." when it is refused or does not answer within 8 seconds.
+ */
+function cancelOllamaSetup(): Promise<unknown> {
+  return callDeckyWithTimeout<[], { cancel_requested?: boolean }>("cancel_local_ollama_setup", [], 8000);
 }
 
 let lastStatus: LocalOllamaSetupStatus | null = null;

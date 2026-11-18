@@ -3,7 +3,8 @@
  *
  * Purpose: A small memory, outside React, of every long job the plugin is running (the Ollama tab's install or
  * update now; the knowledge library's download and the voice install next, lane D4b): what its card says (the
- * title, two lines, the sites, how far), when it started, whether a Cancel is on its way, how to cancel it, and
+ * title, two lines, the sites, how far), when it started, whether a Cancel is on its way (one that fails or goes
+ * unanswered puts the button back and the card says "Could not stop. Try again."), how to cancel it, and
  * whether its card is in sight. The job card (JobCard.tsx) draws one job where its buttons were; the bar at the
  * bottom of the panel (JobBar.tsx; plan 105, board 5 tab 2, round 2 "Elsewhere") reads the same job from here, so
  * the two can never say different things. The bar shows only the jobs whose card cannot be seen, newest first, one
@@ -25,6 +26,12 @@ import { useSyncExternalStore } from "react";
 
 /** A Cancel pressed within this long of the job starting is ignored: a double press cannot start and cancel at once. */
 export const DOUBLE_PRESS_GUARD_MS = 500;
+
+/** How long a Cancel request may go unanswered before the card gives up on it and puts Cancel back. */
+export const CANCEL_TIMEOUT_MS = 10_000;
+
+/** What the card says when a Cancel request failed or never answered: what happened, then what to do. */
+export const COULD_NOT_STOP = "Could not stop. Try again.";
 
 /** What a running job's card shows (board 5 tab 2: `b5t2Card2`). */
 export interface JobFace {
@@ -50,6 +57,13 @@ export interface RunningJob {
   startedAt: number;
   /** True once a Cancel has been sent: the card reads its stopping title until the owner ends the job. */
   stopping: boolean;
+  /** True when the last Cancel request failed or timed out: Cancel is back, and the card says so. */
+  stopFailed: boolean;
+}
+
+/** The title a card or the bar shows for `job`: the failure words, the stopping title, or the running title. */
+export function jobTitle(job: RunningJob): string {
+  return job.stopFailed ? COULD_NOT_STOP : job.stopping ? job.face.stoppingTitle : job.face.title;
 }
 
 /** How a job ended, for the bar when its card was out of sight: "Update finished" and the run's own sentence. */
@@ -63,7 +77,11 @@ export interface JobResult {
 const RESULT_MS = 4000;
 
 const jobs = new Map<string, RunningJob>();
-const cancels = new Map<string, () => void>();
+/** Asks the job's owner to stop it. A returned promise is watched: a rejection, or no answer in time, puts Cancel back. */
+type CancelFn = () => void | Promise<unknown>;
+const cancels = new Map<string, CancelFn>();
+/** Per job, which Cancel press is the latest, so an answer to an older press cannot undo a newer one. */
+const cancelSeq = new Map<string, number>();
 /**
  * Per job, which of its cards are on screen now: JobCard.tsx says so for the card in its tab ("card"), and a second
  * card for the same job elsewhere says so under its own name (the first-time setup's card on Main, "first-run-card"),
@@ -83,9 +101,9 @@ function changed(): void {
 }
 
 /** Start job `id`, or change what its card says. `cancel` asks the job's owner to stop it; `now` is for tests. */
-export function publishJob(id: string, face: JobFace, cancel: () => void, now: number = Date.now()): void {
+export function publishJob(id: string, face: JobFace, cancel: CancelFn, now: number = Date.now()): void {
   const was = jobs.get(id);
-  jobs.set(id, { id, face, startedAt: was?.startedAt ?? now, stopping: was?.stopping ?? false });
+  jobs.set(id, { id, face, startedAt: was?.startedAt ?? now, stopping: was?.stopping ?? false, stopFailed: was?.stopFailed ?? false });
   cancels.set(id, cancel);
   changed();
 }
@@ -97,6 +115,7 @@ export function publishJob(id: string, face: JobFace, cancel: () => void, now: n
 export function endJob(id: string, result?: JobResult, now: number = Date.now()): void {
   if (!jobs.delete(id)) return;
   cancels.delete(id);
+  cancelSeq.delete(id);
   if (result && !cardInSight(id)) {
     results.set(id, { result, at: now });
     if (result.tone !== "bad") window.setTimeout(changed, RESULT_MS + 20);
@@ -153,16 +172,46 @@ export function cancelJobFromX(now: number = Date.now()): boolean {
   return true;
 }
 
+/** The Cancel request of press `seq` for job `id` failed or never answered: put Cancel back, unless the job moved on. */
+function cancelDidNotLand(id: string, seq: number): void {
+  const job = jobs.get(id);
+  if (!job || !job.stopping || cancelSeq.get(id) !== seq) return;
+  jobs.set(id, { ...job, stopping: false, stopFailed: true });
+  changed();
+}
+
+/** Watch the owner's Cancel request: a rejection or no answer within `CANCEL_TIMEOUT_MS` means it did not land. */
+function watchCancel(id: string, seq: number, sent: Promise<unknown>): void {
+  const timer = window.setTimeout(() => cancelDidNotLand(id, seq), CANCEL_TIMEOUT_MS);
+  sent.then(
+    () => window.clearTimeout(timer),
+    () => {
+      window.clearTimeout(timer);
+      cancelDidNotLand(id, seq);
+    },
+  );
+}
+
 /**
  * Cancel job `id`, the way every Cancel press does. Out: true when the cancel was sent; false when there is no such
- * job, a cancel is already on its way, or the press came within `DOUBLE_PRESS_GUARD_MS` of the start.
+ * job, a cancel is already on its way, or the press came within `DOUBLE_PRESS_GUARD_MS` of the start. If the owner's
+ * request then fails or does not answer in time, the job is no longer stopping and says so (`stopFailed`); the next
+ * press sends a new request.
  */
 export function cancelJob(id: string, now: number = Date.now()): boolean {
   const job = jobs.get(id);
   if (!job || job.stopping || now - job.startedAt < DOUBLE_PRESS_GUARD_MS) return false;
-  jobs.set(id, { ...job, stopping: true });
+  const seq = (cancelSeq.get(id) ?? 0) + 1;
+  cancelSeq.set(id, seq);
+  jobs.set(id, { ...job, stopping: true, stopFailed: false });
   changed();
-  cancels.get(id)?.();
+  let sent: void | Promise<unknown>;
+  try {
+    sent = cancels.get(id)?.();
+  } catch (e) {
+    sent = Promise.reject(e);
+  }
+  if (sent && typeof (sent as Promise<unknown>).then === "function") watchCancel(id, seq, sent as Promise<unknown>);
   return true;
 }
 
@@ -192,6 +241,7 @@ export function useBarView(): BarView {
 export function resetRunningJobsForTests(): void {
   jobs.clear();
   cancels.clear();
+  cancelSeq.clear();
   seen.clear();
   results.clear();
   pinned = null;

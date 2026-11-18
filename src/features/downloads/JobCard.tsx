@@ -28,7 +28,7 @@ import { Button, Focusable } from "@decky/ui";
 
 import { findTabContentsScroll } from "../../shared/dpad/chatPanelScroll";
 import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
-import { cancelJob, noteJobCardSeen, type RunningJob } from "./runningJobs";
+import { cancelJob, jobTitle, noteJobCardSeen, type RunningJob } from "./runningJobs";
 
 /**
  * Is `face` (the card's Cancel, on its top row) wholly on screen: inside Steam's scroll pane, and above the help
@@ -111,7 +111,9 @@ export function JobCard({
   return (
     <div className="bonsai-job-card" data-bonsai-job-card={job.id} aria-live="polite">
       <div className="bonsai-job-card__head">
-        <span className="bonsai-job-card__title">{stopping ? face.stoppingTitle : face.title}</span>
+        <span className="bonsai-job-card__title" data-stop-failed={job.stopFailed ? "true" : "false"}>
+          {jobTitle(job)}
+        </span>
         <Focusable
           ref={cancelRowRef}
           className="bonsai-job-cancel-host"

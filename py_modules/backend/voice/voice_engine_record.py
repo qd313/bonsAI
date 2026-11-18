@@ -139,7 +139,7 @@ def check_voice_engine(bin_dir: str) -> str:
         if not isinstance(saved, dict):
             return "changed"
         return "ok" if saved == _fingerprint(bin_dir) else "changed"
-    except (OSError, ValueError, AttributeError):
+    except (OSError, ValueError, AttributeError, RecursionError):
         return "changed"
 
 

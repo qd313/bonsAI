@@ -154,6 +154,12 @@ class RecordIsWrittenSafely(unittest.TestCase):
         self.assertEqual(len(seen), 1)
         self.assertNotIn(".so", seen[0])
 
+    def test_a_deeply_nested_record_counts_as_changed_instead_of_raising(self) -> None:
+        with open(record.record_path(self.bin_dir), "w", encoding="utf-8") as f:
+            f.write('{"files": ' + "[" * 200000)
+        self.assertEqual(record.check_voice_engine(self.bin_dir), "changed")
+        self.assertTrue(record.voice_engine_changed(self.bin_dir))
+
 
 @unittest.skipUnless(shutil.which("bash"), "needs bash")
 class ScriptRecordPieceRunsForReal(unittest.TestCase):

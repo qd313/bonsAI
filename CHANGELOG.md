@@ -124,6 +124,7 @@ All notable changes to this project are documented in this file.
 - **A question ending ", give me the full attack pattern" is read for the boss it names.** A made-up boss named that way now shows "No close match" like any other. Checked on the Deck on 2026-11-16.
 - **The Ollama tab shows the version really running.** After an Ollama update that was cancelled or stopped part way, the Ollama tab no longer keeps showing the old version. Checked on the Deck on 2026-11-16: the line read v0.40.16, the same as the running Ollama, before and after closing and reopening Quick Access. No update was run there, so the cancelled-update case itself is checked by tests only.
 - **On the Session tab, "Sum up again" shows whole and "More below" stays right.** Up from the top of the "What the AI remembers" card puts "Sum up again" fully inside the pane, and changing Text size no longer leaves the "More below (press Down)" line showing or missing wrongly. Checked on the Deck's external screen on 2026-11-16, also on Large text.
+- **The knowledge library download and the voice install show the same card as the Ollama tab, with Cancel, and the bar at the panel's foot follows them to other tabs.** The voice install gets its first Cancel. The card names every site it uses; the voice build's package servers (archive.ubuntu.com and security.ubuntu.com) and github.com for Ollama are now on the checklist, the download box and the card.
 
 ### Changed
 
@@ -134,6 +135,17 @@ All notable changes to this project are documented in this file.
 - **Twelve older notes files reworded and checked again.** Baldur's Gate 3, Portal 2, The Sims 4, San Andreas, Super Mario 64, Mario Kart 64, Paper Mario: The Thousand-Year Door, Pikmin 2, Donkey Kong 64, Grand Theft Auto IV and V and Doom 64 no longer follow the wikis' sentences. Mario Party, Super Smash Bros., Cyberpunk 2077's iconic weapons, Grand Theft Auto III and eight Black Mesa notes were corrected where the wiki differs. They arrive with the next library update.
 - **Show details names its chip row "Behind this answer".** The line above the chips now reads "Behind this answer · 1 of 6" instead of "Chip 1 of 6".
 - **A plain Left 4 Dead 2 question gets no versus note by accident.** A question with no mode and no side gets no versus or other mode note beside an ordinary first note, except "Playing as" that same subject.
+- **An Ollama install or update can be stopped while it downloads.** Cancel ends the download; the new Ollama is checked against the checksum Ollama publishes and swapped in only when it unpacked, so a cut-off download leaves the old Ollama in place, and a Stop never switches off the AI you are using. Checked on the Deck: a cancelled update left nothing behind and the AI still answered.
+- **A Cancel that does not get through puts the button back.** The card says it could not stop and you can press Cancel again, instead of staying on "Stopping".
+- **Turning Internet downloads off stops a download that is running** (checked on the Deck: under 3 seconds), and Steam's parental lock does too. A stopped library download leaves no half-written file, and a stopped voice install says "cancelled", not "failed".
+- **Turning "Run AI on this Deck" off in the middle of an update keeps the update on the bar with its Cancel.** Checked on the Deck.
+- **The voice engine is built from checked parts.** The build refuses unsigned package sources, writes down what it used, checks the built programs before first use and builds in a spare folder swapped in only on success. Clear all data also removes the kept old copy of Ollama.
+- **A model name with a part before the slash, such as `hf.co/...`, no longer counts as open source.** Under "Open source only" such copies count as unknown and need the unlock. Gemma 3 270M now shows August 2025.
+- **"Open sections as you walk" no longer jumps, and Up from "Open all" stops on the last section's last control.** Checked on the Deck: the ringed row moved 0.4 px at most across every frame of five landings.
+- **Left on an answer's "Show details" line and on "Suggest as a tip" works like everywhere else:** two Lefts stay, the third goes to Steam's menu. Checked on the Deck.
+- **Your notes win over Headline first.** A note that asks for a different opening, such as "Give me the full answer, no summary line first", makes the answer skip the house opening sentence. On this PC's AI 1 of 30 answers opened with a summary line with the note, against 26 of 120 before. Checked on the Deck.
+- **An ending question's whole answer sits inside one spoiler cover.** The opening sentence no longer shows outside it. Checked on the Deck.
+- **The Developer tab's log no longer fills with ResizeObserver warnings.** Checked on the Deck: none in a whole block.
 
 ## [0.6.0] - 2026-10-23
 

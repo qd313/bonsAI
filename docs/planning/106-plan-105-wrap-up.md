@@ -5,7 +5,7 @@ Written 2026-11-17 by the chat that ran plan 105 (Opus, extra-high), from plan 1
 in the chat the same afternoon. Plain language on purpose: this file is for the maintainer first. The pictures that go
 with it: <https://claude.ai/artifact/WHoMiyk8Fe9PZwXh84LjHU> (open it in a web browser signed in to claude.ai).
 
-**Status: RUNNING since 2026-11-17, about 20:30 EST.** The maintainer said "run plan 106" before the reset, knowing
+**Status: RAN 2026-11-17, report § 13.** (Started about 20:30 EST.) The maintainer said "run plan 106" before the reset, knowing
 the week (81 percent at go) would likely pass 90. The rules every helper reads: [assets/106-helper-rules.md](assets/106-helper-rules.md).
 
 **As written (READY):** small on purpose: about a dozen helper runs and one or two Deck blocks, so about

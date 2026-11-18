@@ -547,6 +547,10 @@ controls can put back (opening the help chip once sets its flag again; the chats
 the chips draw before the next block. Evidence `workshop:test-evidence/plan105-P105-ANSWER-END-01-d3b.json`; the
 clearing call is in the first-run gate (`useDisclaimerAndLocalRuntimeGates.tsx`).
 
+**A docked Deck on a slow charger puts Steam's "Slow Charger" dialog on the outside screen, and every screenshot freezes on it.** In plan 106's first Deck block (2026-11-17) every capture came back as the same frame: the dialog with the performance counter at 2 frames a second, while the plugin kept working underneath. The dialog takes no pad input (B, L3, a Down and the Quick Access chord did nothing), so a person had to press Close on the Deck. Closing it also dropped the panel's window focus (the page read as not focused and no ring showed); closing and reopening the Quick Access menu cured that. With the Deck docked, look at one fresh screenshot before a block; if it is that dialog, ask for the Close press first, and after it reopen the menu before reading focus. Evidence `workshop:test-evidence/plan106-P105-HEADLINE-01.json` (its side note) and the handover `workshop:planning/assets/106-handover-W1a.md`.
+
+**On the Deck, Update always downloads Ollama again, even at the newest version; "Install Ollama" skips the download.** Plan 106's driver pressed Update on a Deck already at the newest Ollama (0.40.16) and got a real download of about 2.5 to 3 minutes each time, with the models re-pulled (the `update_installed` profile). A row that must not download has to use Install, not Update. With Internet downloads already on, Update starts at once with no box, and the run ends while you walk, so put the ring where you need it before pressing A. Evidence `workshop:test-evidence/plan106-P106-OLLAMA-CANCEL-01.json` and the handover `workshop:planning/assets/106-handover-W1c.md`.
+
 ## 4. Briefing helpers
 
 **Tell the helper what is allowed to stay.** Hand over a list of things a tool flagged without
@@ -763,6 +767,8 @@ plans before (plan 98); the task text written mid-session is the same risk.
 queue file one line at a time (`<branch> <base> <tag>`, or a line that runs the search check), so a branch that
 finished could be added while another was landing, without editing a running script. One landing at a time; a
 search-path branch gets its search check on the next line; the runner stops at the first failure.
+
+**A second opinion from a stronger model before a D-pad or layout landing changed two of the four this plan.** In plan 106 the Fable second opinion was asked before four such landings. It changed lane F1 (a late change that shortens the page at its end counted twice and dropped the ringed row) and lane F3 (the voice install lost its way back across a question box; two smaller fixes came with it). For lanes F5 and F2 it said to land as they were; for F2 it added Deck checks and confirmed that plan 105's "dock" Left row had really pressed the answer's own line. The tip row joining the Left rule was the session's own call, not the second opinion's. Keep asking before these landings: the tests had passed on both that it changed. Evidence: `workshop:planning/assets/106-session-log.md`.
 
 ## 5. Design and screen work
 

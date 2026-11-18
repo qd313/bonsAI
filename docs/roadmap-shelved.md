@@ -93,6 +93,9 @@ Nine of the oldest sightings (each seen once or twice between 2026-09-04 and 202
 - ★ `[QA]` `[watching]` **The Ollama tab's "Install Ollama" box test failed once during a full run under load** — seen once, 2026-10-16 (plan 86 step 3, at the UI scale landing), and it passed on the retry. 20 reruns (8 alone, 12 at once) all passed. Test: `src/features/ai-connection/OllamaWhereAiRunsSection.starterOffer.test.tsx`.
   Unshelves when: a new failure.
 
+- ★ `[reply]` `[watching]` **The agent chip's suggestion text may also end the Pyro answer as its last paragraph** — possible, seen once, 2026-11-17 (plan 106 Deck block W1c, row CHIP-BUTTON-06). The chip's words ("Smoke-test the Ask flow after updating Ollama tags") also appeared as the last paragraph of the Pyro character's answer. Not tested further. Handover `workshop:planning/assets/106-handover-W1c.md`.
+  Unshelves when: a new sighting.
+
 - ★ `[reply]` `[watching]` **Strategy choice labels stayed English with the reply language set to Japanese** — seen on both
   Strategy tries, 2026-10-01 (plan 78, block 3a); the Speed reply was Japanese. Evidence `workshop:test-evidence/plan78-LANG-03.json`.
   Unshelves when: a new sighting.
@@ -134,6 +137,9 @@ Nine of the oldest sightings (each seen once or twice between 2026-09-04 and 202
 - ★ `[platform]` `[watching]` **The Quick Access panel closes itself about four minutes after an answer with a game running** — seen in both runs of 2026-10-03 (plan 81, Deck block 6), with no hands on the Deck; the screensaver page appeared.
   Evidence `workshop:test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`.
   Unshelves when: a new sighting.
+
+- ★ `[focus]` `[watching]` **An opened spoiler answer is one tall ring stop: Down scrolls it about 12 times before the ring moves on** — possible, seen once, 2026-11-17 (plan 106 Deck block W1d, row P106-ENDING-COVER-01). Whether it is by design is not known. Handover `workshop:planning/assets/106-handover-W1d.md`.
+  Unshelves when: a new sighting, or the maintainer finds it in the way.
 
 - ★ `[focus]` `[watching]` **The first suggestion chip reads 33 to 67 percent visible to the probe while its words churn** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `workshop:test-evidence/plan87-P87-SMOKE-FINAL.json`.
   **Seen again 2026-10-12 (plan 92):** the first Up from the question box on Main lands on a chip the rig reads as 33 to 67 percent visible. More: [Detail](roadmap-kb-details.md#plan-102-notes-moved-from-the-shelved-roadmap-2026-11-03).

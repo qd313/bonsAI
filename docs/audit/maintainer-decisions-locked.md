@@ -2836,3 +2836,5 @@ Asked by the chat that ran plan 105, for [plan 106](../planning/106-plan-105-wra
    that one test and back off after *[no: the card on the library is checked by tests and on the stand-in only]*.
 8. **The ten October notes on the checks page:** paste them in the chat to have each answered *[not part of this plan
    unless pasted]*.
+
+**Addendum, answered in the chat on 2026-11-17 (late, while plan 106 ran; no new decision number, because this widens call 2's house style and is plan 106's own lane H2):** after the Deck's block W1 showed that an ending question's headline can name the final boss and an outcome, the maintainer said: "Yes allow the ending question, but make sure the whole response is spoilered". So Headline first stays on for ending questions too, and the whole answer to an ending question sits inside one spoiler cover, the opening sentence included. Built in lane H2 (`2eef601e2`); Deck row P106-ENDING-COVER-01 (passed in part, block W1 part d).

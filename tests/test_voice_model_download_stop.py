@@ -88,8 +88,55 @@ class TheSpeechModelDownloadHearsAStop(unittest.TestCase):
                 svc.download_voice_model(d, d, "tiny.en", state, cancel)
             installed = [f for _root, _dirs, files in os.walk(d) for f in files]
         self.assertEqual(installed, [])
-        self.assertEqual(state["phase"], "failed")
+        self.assertEqual(state["phase"], "cancelled")
         self.assertEqual(state["error"], "Download cancelled.")
+
+    def test_a_stop_never_makes_the_state_read_failed_even_for_a_moment(self):
+        class Watched(dict):
+            """Writes down every phase and stage the state is given, as the status poll could have seen them."""
+
+            def __init__(self):
+                super().__init__()
+                self.seen = []
+
+            def __setitem__(self, key, value):
+                if key in ("phase", "stage"):
+                    self.seen.append((key, value))
+                super().__setitem__(key, value)
+
+            def update(self, *args, **kwargs):
+                for key, value in dict(*args, **kwargs).items():
+                    self[key] = value
+
+        cancel = threading.Event()
+        state = Watched()
+
+        def stopped_download(url, tmp_path, cancel_event, on_progress=None, max_bytes=None):
+            with open(tmp_path, "wb") as fh:
+                fh.write(b"half")
+            cancel.set()
+            raise RuntimeError(svc.CANCELLED_LINE)
+
+        with tempfile.TemporaryDirectory() as d, patch.object(svc, "_download_model_file", stopped_download):
+            with self.assertRaises(RuntimeError):
+                svc.download_voice_model(d, d, "tiny.en", state, cancel)
+        self.assertNotIn(("phase", "failed"), state.seen)
+        self.assertNotIn(("stage", "failed"), state.seen)
+        self.assertEqual(state["phase"], "cancelled")
+        self.assertTrue(state["done"])
+
+    def test_a_real_failure_with_no_stop_still_reads_failed(self):
+        cancel = threading.Event()
+        state = svc.new_voice_install_state()
+
+        def broken_download(url, tmp_path, cancel_event, on_progress=None, max_bytes=None):
+            raise RuntimeError("could not reach the server")
+
+        with tempfile.TemporaryDirectory() as d, patch.object(svc, "_download_model_file", broken_download):
+            with self.assertRaises(RuntimeError):
+                svc.download_voice_model(d, d, "tiny.en", state, cancel)
+        self.assertEqual(state["phase"], "failed")
+        self.assertEqual(state["stage"], "failed")
 
 
 if __name__ == "__main__":

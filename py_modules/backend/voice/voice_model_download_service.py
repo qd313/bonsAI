@@ -323,6 +323,8 @@ def download_voice_model(
                 os.remove(tmp_path)
         except OSError:
             pass
-        state.update({"phase": "failed", "done": True, "error": str(exc)[:500]})
-        stage("failed", error=str(exc)[:200])
+        # A stop is not a failure: with the cancel flag set the screen must never read "failed", not even for a moment.
+        outcome = "cancelled" if cancel_event.is_set() else "failed"
+        state.update({"phase": outcome, "done": True, "error": str(exc)[:500]})
+        stage(outcome, error=str(exc)[:200])
         raise

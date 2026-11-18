@@ -72,7 +72,7 @@ _OPEN_LICENCE_EXACT_TAGS: Final[frozenset[str]] = frozenset((
 
 
 def _is_open_licence_exact_tag(name: str) -> bool:
-    """True for a tag in the exact-tag list above (repo prefix and case ignored; no tag given means none, not latest)."""
+    """True for a tag in the exact-tag list above (case ignored; no tag given means none, not latest; the caller rules out names with a part before the slash)."""
     base, tag = _split_tag(name)
     return (f"{base}:{tag}" if tag else base) in _OPEN_LICENCE_EXACT_TAGS
 
@@ -138,7 +138,12 @@ def classify_ollama_model_name(name: str) -> ModelSourceClass:
     if not base:
         return "unknown"
 
-    if _is_open_licence_exact_tag(name):
+    # Only Ollama's own library names (nothing before a slash) can be open source: anyone can publish
+    # "someone/mistral:7b", and it is not the model the list was checked against.
+    # ("library/mistral:7b" is the same thing written out in full, so that one prefix is allowed.)
+    own_library = "/" not in (name or "").strip().lower().removeprefix("library/")
+
+    if own_library and _is_open_licence_exact_tag(name):
         return "foss"
 
     if _has_limited_licence(name):
@@ -165,7 +170,7 @@ def classify_ollama_model_name(name: str) -> ModelSourceClass:
         "gpt-oss",
     )
     if _family_match(base, foss_prefixes):
-        return "foss"
+        return "foss" if own_library else "unknown"
 
     # Open-weight industry releases (custom terms; often called "open models")
     open_weight_prefixes = (

@@ -34,6 +34,20 @@ class ModelPolicyTests(unittest.TestCase):
         self.assertEqual(classify_ollama_model_name("gemma4:12b-it-qat"), "foss")
         self.assertEqual(classify_ollama_model_name("gemma4:latest"), "foss")
 
+    def test_made_up_prefix_is_not_open_source(self):
+        """A part before the slash is someone else's upload, never Ollama's own library."""
+        self.assertNotEqual(classify_ollama_model_name("someone/mistral:7b"), "foss")
+        self.assertNotEqual(classify_ollama_model_name("someone/qwen3:8b"), "foss")
+        self.assertNotEqual(classify_ollama_model_name("hf.co/someone/gemma4:latest"), "foss")
+        self.assertNotIn("someone/mistral:7b", filter_model_list(["someone/mistral:7b"], "open_source_only", False))
+
+    def test_own_library_names_still_open_source(self):
+        self.assertEqual(classify_ollama_model_name("mistral:7b"), "foss")
+        self.assertEqual(classify_ollama_model_name("deepseek-r1:7b"), "foss")
+        self.assertEqual(classify_ollama_model_name("qwen3:8b"), "foss")
+        self.assertEqual(classify_ollama_model_name("moondream"), "foss")
+        self.assertEqual(classify_ollama_model_name("library/mistral:7b"), "foss")
+
     def test_classify_granite_foss(self):
         self.assertEqual(classify_ollama_model_name("granite4.2:8b"), "foss")
         self.assertEqual(classify_ollama_model_name("granite4.2:3b"), "foss")

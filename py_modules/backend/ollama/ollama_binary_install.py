@@ -61,6 +61,7 @@ DOWNLOAD_SECONDS = 600
 SMALL_FETCH_SECONDS = 60
 POLL_SECONDS = 0.5
 SPARE_PREFIX = ".bonsai-ollama-update-"
+KEPT_PREFIX = ".bonsai-ollama-KEPT-"  # never matches the sweep: a folder the person was told to keep
 STALE_SPARE_SECONDS = 3600
 _HASH_CHUNK = 4 * 1024 * 1024
 _TAG_REDIRECT = re.compile(r"^https://github\.com/ollama/ollama/releases/tag/(v\d+\.\d+\.\d+(?:-[0-9A-Za-z.]+)?)$")
@@ -208,7 +209,7 @@ def _swap_in(stage: Path, dst: Path, trash: Path) -> None:
             target.parent.mkdir(parents=True, exist_ok=True)
             old: Optional[Path] = None
             if target.exists() or target.is_symlink():
-                old = trash / f"{index}-{target.name}"
+                old = trash / "__".join(target.relative_to(dst).parts)
                 os.replace(target, old)
             done.append((target, old))
             os.replace(new, target)
@@ -224,6 +225,22 @@ def _swap_in(stage: Path, dst: Path, trash: Path) -> None:
         except OSError as exc:
             raise _SwapBroken(str(exc)) from exc
         raise
+
+
+def _keep_old_files(spare: Path, dst: Path) -> Path:
+    """Move the old copy out of the spare folder under a name _sweep_old_spares never removes.
+
+    Only the old files are kept (not the 1.5 GB download); if that rename fails the whole spare folder is
+    renamed instead; if that fails too the spare folder stays as it is. Returns where the old copy now is.
+    """
+    keep = dst / f"{KEPT_PREFIX}{spare.name[len(SPARE_PREFIX):]}"
+    for source in (spare / "old", spare):
+        try:
+            os.replace(source, keep)
+            return keep
+        except OSError:
+            continue
+    return spare
 
 
 def _sweep_old_spares(dst: Path) -> None:
@@ -283,14 +300,20 @@ def install_ollama_from_release(
             if unpacked is not None:
                 shell_log((unpacked.stderr or "").strip()[:300])
             raise InstallProblem(f"Ollama downloaded but could not be unpacked (is the disk full?). {_KEEP_OLD} Free some space and try again.")
-        os.chmod(program, 0o755)
+        if not program.is_symlink():
+            os.chmod(program, 0o755)
         if cancelled():
             raise InstallStopped()
         try:
             _swap_in(stage, dst, spare / "old")
         except _SwapBroken:
-            kept = True
-            raise InstallProblem(f"Ollama could not be put in place and the old copy could not be put back. It is kept in {spare}. Move its 'bin' and 'lib' folders back into ~/.local, then try again.")
+            keep = _keep_old_files(spare, dst)
+            kept = keep == spare
+            raise InstallProblem(
+                "Ollama could not be put in place and the old copy could not be put back. "
+                f"The old copy is kept in {keep}: move its 'bin__ollama' back to ~/.local/bin/ollama and its "
+                "'lib__ollama' back to ~/.local/lib/ollama, then try again."
+            )
         except OSError as exc:
             shell_log(f"[bonsAI] Swap failed and was undone: {exc}")
             raise InstallProblem(f"Ollama could not be put in place. {_KEEP_OLD} Try again.")

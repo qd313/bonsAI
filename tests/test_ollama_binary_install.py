@@ -278,6 +278,53 @@ class TheProgramRunnerEndsWhatItStarted(unittest.TestCase):
 
 
 @unittest.skipIf(binary is None, "new module")
+class AFolderKeptForThePersonIsNeverSweptAway(unittest.TestCase):
+    def test_the_kept_old_copy_survives_an_hour_and_the_next_run(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            world = InstallWorld(tmp)
+
+            def swap_that_breaks(stage, dst, trash):
+                trash.mkdir(parents=True, exist_ok=True)
+                (trash / "bin__ollama").write_text("OLD")
+                raise binary._SwapBroken("put-back failed")
+
+            with patch.object(binary, "_swap_in", side_effect=swap_that_breaks):
+                state = world.run_update()
+            self.assertEqual(state["phase"], "failed")
+            kept = [p for p in world.dst.iterdir() if p.name.startswith(".bonsai-ollama-KEPT-")]
+            self.assertEqual(len(kept), 1, "no kept folder under a name the sweep leaves alone")
+            self.assertIn(kept[0].name, state["error"], "the card must name the folder it kept")
+            self.assertEqual((kept[0] / "bin__ollama").read_text(), "OLD")
+            self.assertEqual([p for p in world.dst.iterdir() if p.name.startswith(binary.SPARE_PREFIX)], [], "spare folder or its 1.5 GB file left")
+            two_hours_ago = __import__("time").time() - 7200
+            os.utime(kept[0], (two_hours_ago, two_hours_ago))
+            world.run_update()  # the next run sweeps old spare folders first
+            self.assertTrue((kept[0] / "bin__ollama").is_file(), "the next run deleted the folder the card told the person to keep")
+
+
+@unittest.skipIf(binary is None, "new module")
+class TheRealReleaseListIsReadRight(unittest.TestCase):
+    def test_the_line_for_the_plain_file_is_picked_among_its_rocm_and_mlx_neighbours(self):
+        plain, rocm, mlx = "87bfafb2acbc89b2e6a1be0a9043de6aa75fb450696f86bc426e65fc448f788d", "50ba6b7d9f4ae9b143c5c20496bf82be597dab0a06a50276b637e22150226f9b", "27bbdf40c1412e22e3ba9e02a0a3ee04168f2beeb705e465ec7d0bee16ce4588"
+        listing = (
+            f"{rocm}  ./ollama-linux-amd64-rocm.tar.zst\n"
+            f"{plain}  ./ollama-linux-amd64.tar.zst\n"
+            f"{mlx}  ./ollama-linux-amd64-mlx.tar.zst\n"
+            f"{'1' * 64}  ./install.sh\n"
+        )
+
+        def fake_curl(args, env, seconds, cancelled):
+            Path(args[args.index("-o") + 1]).write_text(listing)
+            import subprocess
+
+            return subprocess.CompletedProcess(args, 0, "", "")
+
+        with tempfile.TemporaryDirectory() as tmp, patch.object(binary, "_curl", side_effect=fake_curl):
+            got = binary.published_check_number("v0.40.16", "ollama-linux-amd64.tar.zst", Path(tmp), {}, lambda: False)
+        self.assertEqual(got, plain)
+
+
+@unittest.skipIf(binary is None, "new module")
 class ASwapThatFailsPutsTheOldFilesBack(unittest.TestCase):
     def _stage(self, tmp: str) -> tuple[Path, Path, Path]:
         dst, stage, trash = Path(tmp) / "dst", Path(tmp) / "stage", Path(tmp) / "trash"

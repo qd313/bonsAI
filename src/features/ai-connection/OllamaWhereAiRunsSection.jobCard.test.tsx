@@ -145,7 +145,7 @@ describe("Update AI & models becomes one job card", () => {
     await screen.findByText("Installed: 1");
     expect(byLabel(BROWSE)!.textContent).toBe("Browse models›");
     expect(byLabel(BROWSE)!.textContent).not.toContain("…");
-    expect(screen.getByText("From ollama.com, github.com and registry.ollama.ai")).toBeTruthy();
+    expect(screen.getByText("From ollama.com, github.com and ollama.ai")).toBeTruthy();
   });
 });
 

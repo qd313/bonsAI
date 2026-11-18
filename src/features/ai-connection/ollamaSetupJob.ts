@@ -21,6 +21,8 @@ import { useEffect } from "react";
 
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
 import { endJob, publishJob, runningJob, type JobFace, type JobResult } from "../downloads/runningJobs";
+import { VOICE_BUILD_PACKAGE_SITES } from "../downloads/downloadSites";
+import { sitesLine } from "../downloads/siteLine";
 import { setupProgressPercent } from "../main-tab/firstRunSetupProgress";
 import type { StarterLeftOut } from "../models/starterSetLeftOut";
 import { LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS } from "./OllamaWhereAiRunsSection.constants";
@@ -73,13 +75,11 @@ function leftOutOf(st: LocalOllamaSetupStatus): StarterLeftOut[] {
 }
 
 function sitesOf(st: LocalOllamaSetupStatus, kind: RunKind): string {
-  if (kind !== "setup") return "From ollama.com, github.com and registry.ollama.ai";
-  const voice = !leftOutOf(st).includes("voice");
-  return voice
-    ? /* The voice build's compilers come from its image's two Ubuntu servers (downloadSites.ts names them in the box;
-         this card's one line says whose they are, to stay short enough not to be cut). */
-      "From ollama.com, github.com, registry.ollama.ai, huggingface.co, ghcr.io and Ubuntu's package servers"
-    : "From ollama.com, github.com and registry.ollama.ai";
+  const ollama = ["ollama.com", "github.com", "registry.ollama.ai"];
+  if (kind !== "setup" || leftOutOf(st).includes("voice")) return sitesLine(ollama);
+  /* The voice build adds its image's site and its two Ubuntu servers (one "ubuntu.com" here; downloadSites.ts names
+     both in the box). Too long for the card's one line, so sitesLine ends "and N more". */
+  return sitesLine([...ollama, "huggingface.co", "ghcr.io", ...VOICE_BUILD_PACKAGE_SITES]);
 }
 
 /** The two lines for a download step: which one, then how far and how fast in plain words. */

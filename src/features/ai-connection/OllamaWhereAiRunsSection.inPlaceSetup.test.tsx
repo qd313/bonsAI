@@ -149,7 +149,7 @@ describe("Update AI & models, in place", () => {
     expect(cancel.disabled).toBe(false);
     expect(cancel.getAttribute("aria-disabled")).toBeNull();
     expect(screen.getByText("Updating AI & models")).toBeTruthy();
-    expect(screen.getByText("From ollama.com, github.com and registry.ollama.ai")).toBeTruthy();
+    expect(screen.getByText("From ollama.com, github.com and ollama.ai")).toBeTruthy();
     // The installer's own lines go to the plugin's log only (plan 105, small question 2).
     expect(screen.queryByLabelText("Local Ollama setup log")).toBeNull();
     expect(screen.queryByText(/Re-running official Ollama installer/)).toBeNull();

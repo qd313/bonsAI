@@ -19,6 +19,7 @@
  */
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
 import { KEEP_AWAKE_LINE, createStatusJob } from "../downloads/statusJob";
+import { sitesLine } from "../downloads/siteLine";
 import type { JobFace, JobResult } from "../downloads/runningJobs";
 import { setKbDownloadMarker } from "./kbDownloadMarker";
 import { noteKbStatusRead, type KbStatusForSwitch } from "./kbLibrarySignal";
@@ -36,7 +37,7 @@ export type KbJobStatus = KbStatusForSwitch & {
 };
 
 /** Where the library comes from (downloads/downloadSites.ts: KNOWLEDGE_LIBRARY_NOTICES), as the card and the lines under the buttons say it. */
-export const KB_LIBRARY_SITES = "From huggingface.co (github.com if it does not answer)";
+export const KB_LIBRARY_SITES = sitesLine(["huggingface.co", "github.com"], "or");
 const MIB = 1024 * 1024;
 
 /** "update" when a library is already installed (the old one stays until the new one lands), else "download". */

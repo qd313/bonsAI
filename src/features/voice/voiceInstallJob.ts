@@ -23,6 +23,7 @@ import { toaster } from "@decky/api";
 
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
 import { VOICE_BUILD_PACKAGE_SITES } from "../downloads/downloadSites";
+import { sitesLine } from "../downloads/siteLine";
 import { KEEP_AWAKE_LINE, createStatusJob } from "../downloads/statusJob";
 import type { JobFace, JobResult } from "../downloads/runningJobs";
 import { takeVoiceInstallMarker, voiceInstallInStartGrace } from "./voiceInstallBusyStore";
@@ -46,7 +47,7 @@ export type VoiceJobStatus = {
  * downloadSites.ts, kept equal to the back end's list by tests/test_download_sites_match_backend.py) and the speech
  * model on huggingface.co.
  */
-export const VOICE_INSTALL_SITES = `From ghcr.io, ${VOICE_BUILD_PACKAGE_SITES.join(", ")} and huggingface.co`;
+export const VOICE_INSTALL_SITES = sitesLine(["ghcr.io", ...VOICE_BUILD_PACKAGE_SITES, "huggingface.co"]);
 /** Once the engine is in place only the speech model is fetched. */
 const MODEL_ONLY_SITES = "From huggingface.co";
 

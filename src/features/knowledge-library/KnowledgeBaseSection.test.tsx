@@ -92,7 +92,7 @@ describe("KnowledgeBaseSection cancel", () => {
 
     await screen.findByText("Downloading the knowledge library");
     expect(screen.getByText("62 of 210 MB")).toBeTruthy();
-    expect(screen.getByText("From huggingface.co (github.com if it does not answer)")).toBeTruthy();
+    expect(screen.getByText("From huggingface.co or github.com")).toBeTruthy();
     expect(document.querySelector<HTMLElement>(".bonsai-job-progress__fill")!.style.width).toBe("29.5%");
   });
 

@@ -57,6 +57,13 @@ class DownloadSitesMatchBackend(unittest.TestCase):
         src = Path(binary.__file__).read_text(encoding="utf-8")
         self.assertIn('RELEASES_URL = "https://github.com/ollama/ollama/releases"', src)
 
+    def test_the_voice_builds_package_servers_are_named_in_the_notice(self) -> None:
+        src = SITES_TS.read_text(encoding="utf-8")
+        found = re.search(r"VOICE_BUILD_PACKAGE_SITES = \[([^\]]*)\] as const", src)
+        self.assertIsNotNone(found, "downloadSites.ts no longer lists VOICE_BUILD_PACKAGE_SITES")
+        named = tuple(re.findall(r'"([^"]+)"', found.group(1)))
+        self.assertEqual(named, voice_build.VOICE_BUILD_PACKAGE_SERVERS)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -101,6 +101,14 @@ describe("the first-time setup's card", () => {
     expect(screen.getByLabelText("Stop the setup")).toBeTruthy();
   });
 
+  it("with the voice engine in the run, the small print names the build's package servers and the sites they hand off to", async () => {
+    status = running({ starter_pieces: { ollama: "done", answer: "waiting", note_search: "waiting", speech: "waiting", voice: "waiting" } });
+    await start([]);
+    expect(card()).toContain(
+      "Downloads come from ollama.com, github.com, registry.ollama.ai, huggingface.co, ghcr.io, archive.ubuntu.com and security.ubuntu.com, and the sites they hand off to.",
+    );
+  });
+
   it("Stop sends the cancel; then the card says what was kept and what was not installed, and Start again repeats the same run", async () => {
     await start(["voice"]);
     fireEvent.click(screen.getByLabelText("Stop the setup"));

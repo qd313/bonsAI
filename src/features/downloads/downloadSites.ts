@@ -65,12 +65,24 @@ export const SPEECH_MODELS_NOTICE: DownloadNotice = {
 };
 
 /**
+ * The build image's own package servers. The image is Ubuntu's (the whisper.cpp project builds it from ubuntu:22.04), so
+ * its apt sources are archive.ubuntu.com and security.ubuntu.com. The build writes the sources it really used into the
+ * engine record (voice_engine_record.py), so a Deck can confirm these two. Each is a download network that may hand a
+ * file on to another site, hence the last words of the long form.
+ */
+export const VOICE_BUILD_PACKAGE_SITES = ["archive.ubuntu.com", "security.ubuntu.com"] as const;
+/** The short form, for the checklist row, which has one line (its rows are a fixed height). */
+export const VOICE_BUILD_PACKAGE_SITES_SHORT = VOICE_BUILD_PACKAGE_SITES.join(", ");
+/** The long form, for the download box and the setup card's small print. */
+export const VOICE_BUILD_PACKAGE_SITES_LONG = `${VOICE_BUILD_PACKAGE_SITES.join(" and ")}, and the sites they hand off to`;
+
+/**
  * The voice engine, which the starter set builds last (starter_voice_engine.py): an image pulled from ghcr.io,
- * then a container that fetches compilers from its own package servers and compiles the program.
+ * then a container that fetches compilers from the image's package servers and compiles the program.
  */
 export const VOICE_ENGINE_NOTICE: DownloadNotice = {
   site: VOICE_ENGINE_IMAGE_SITE,
-  what: "the voice engine's build image, which then fetches its compilers from its own package servers",
+  what: `the voice engine's build image, which then fetches its compilers from ${VOICE_BUILD_PACKAGE_SITES_LONG}`,
   size: VOICE_ENGINE_DOWNLOAD_SIZE.label,
 };
 

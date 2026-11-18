@@ -62,7 +62,7 @@ describe("the microphone with Voice input's downloads missing", () => {
     const box = drawConfirmBox(hoisted.boxes[0]);
     expect(box.title).toBe("Set up Voice input?");
     expect(box.labels).toEqual(["Download", "Cancel"]);
-    expect(box.text).toContain("https://ghcr.io to download the voice engine's build image, which then fetches its compilers from its own package servers (about 500 MB)");
+    expect(box.text).toContain("https://ghcr.io to download the voice engine's build image, which then fetches its compilers from archive.ubuntu.com and security.ubuntu.com, and the sites they hand off to (about 500 MB)");
     expect(box.text).toContain("https://huggingface.co to download the base.en speech model");
     expect(box.text).not.toContain("whisper-cli");
     expect(installs()).toHaveLength(0);

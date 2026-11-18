@@ -72,7 +72,7 @@ describe("the first screen, as drawn", () => {
       "Answer model gemma4:e2b-it-qatabout 4.3 GB · neededregistry.ollama.ai",
       `${NOTE}about 270 MB · for the knowledge baseregistry.ollama.ai`,
       `${SPEECH}about 230 MB · for voice input, ticks with the row belowhuggingface.co`,
-      `${VOICE}about 500 MB · its build fetches compilers from its own package serversghcr.io`,
+      `${VOICE}about 500 MB · compilers from archive.ubuntu.com, security.ubuntu.comghcr.io`,
       "Internet downloadsLets bonsAI download Ollama, models and the knowledge library. Off: nothing downloads.",
       "OK, install on this DeckUse the AI on my PCNot now",
       FIRST_RUN_POPUP_WORDS.beta,

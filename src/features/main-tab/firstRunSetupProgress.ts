@@ -21,16 +21,18 @@ import {
   SPEECH_MODELS_DOWNLOAD_SIZE,
   VOICE_ENGINE_DOWNLOAD_SIZE,
 } from "../downloads/downloadSizes";
+import { VOICE_BUILD_PACKAGE_SITES } from "../downloads/downloadSites";
 import type { StarterLeftOut } from "../models/starterSetLeftOut";
 
 type Piece = "ollama" | "answer" | "note_search" | "speech" | "voice";
 
-const PIECES: readonly { id: Piece; name: string; mb: number; site: string; also?: string }[] = [
-  { id: "ollama", name: "Ollama", mb: OLLAMA_DOWNLOAD_SIZE.mb, site: "ollama.com", also: "github.com" },
-  { id: "answer", name: "the answer model", mb: ANSWER_MODEL_DOWNLOAD_SIZE.mb, site: "registry.ollama.ai" },
-  { id: "note_search", name: "the note-search model", mb: NOTE_SEARCH_MODEL_DOWNLOAD_SIZE.mb, site: "registry.ollama.ai" },
-  { id: "speech", name: "the speech models", mb: SPEECH_MODELS_DOWNLOAD_SIZE.mb, site: "huggingface.co" },
-  { id: "voice", name: "the voice engine", mb: VOICE_ENGINE_DOWNLOAD_SIZE.mb, site: "ghcr.io" },
+/** `sites`: where the piece comes from. The voice engine's build also reaches its image's package servers. */
+const PIECES: readonly { id: Piece; name: string; mb: number; sites: readonly string[] }[] = [
+  { id: "ollama", name: "Ollama", mb: OLLAMA_DOWNLOAD_SIZE.mb, sites: ["ollama.com", "github.com"] },
+  { id: "answer", name: "the answer model", mb: ANSWER_MODEL_DOWNLOAD_SIZE.mb, sites: ["registry.ollama.ai"] },
+  { id: "note_search", name: "the note-search model", mb: NOTE_SEARCH_MODEL_DOWNLOAD_SIZE.mb, sites: ["registry.ollama.ai"] },
+  { id: "speech", name: "the speech models", mb: SPEECH_MODELS_DOWNLOAD_SIZE.mb, sites: ["huggingface.co"] },
+  { id: "voice", name: "the voice engine", mb: VOICE_ENGINE_DOWNLOAD_SIZE.mb, sites: ["ghcr.io", ...VOICE_BUILD_PACKAGE_SITES] },
 ];
 
 const leftOutPiece = (id: Piece, leaveOut: readonly StarterLeftOut[]) =>
@@ -42,8 +44,11 @@ function joinNames(names: string[]): string {
 
 /** The sites the run reaches, for the card's small print. */
 export function setupSitesLine(leaveOut: readonly StarterLeftOut[]): string {
-  const sites = [...new Set(PIECES.filter((p) => !leftOutPiece(p.id, leaveOut)).flatMap((p) => (p.also ? [p.site, p.also] : [p.site])))];
-  return `Stop works at any moment. Downloads come from ${joinNames(sites)}.`;
+  const counted = PIECES.filter((p) => !leftOutPiece(p.id, leaveOut));
+  const sites = [...new Set(counted.flatMap((p) => p.sites))];
+  // The package servers are download networks that may hand a file on to another site: say so when the voice build runs.
+  const handOff = counted.some((p) => p.id === "voice") ? ", and the sites they hand off to" : "";
+  return `Stop works at any moment. Downloads come from ${joinNames(sites)}${handOff}.`;
 }
 
 /** Which piece is downloading now, from the run's stage and line. */

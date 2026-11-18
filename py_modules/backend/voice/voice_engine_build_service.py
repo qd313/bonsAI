@@ -61,6 +61,12 @@ WHISPER_CPP_IMAGE = (
     "@sha256:c0b535add76d7ff7613c70f32a7a4c794985f94238501e1b5b3b7f0eb56e9685"
 )
 
+# The package servers the build image's apt reaches (the image is Ubuntu's; read from the whisper.cpp project's
+# own image recipe, ubuntu:22.04). The download notice names them (downloadSites.ts: VOICE_BUILD_PACKAGE_SITES) and
+# tests/test_download_sites_match_backend.py keeps the two lists equal. Every build writes the package sources it
+# really used into the engine record, so a Deck can confirm this list.
+VOICE_BUILD_PACKAGE_SERVERS = ("archive.ubuntu.com", "security.ubuntu.com")
+
 VOICE_BIN_CPU_SAFE_MARKER = ".bonsai_cpu_safe"
 
 

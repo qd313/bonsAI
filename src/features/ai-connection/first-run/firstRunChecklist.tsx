@@ -12,8 +12,9 @@
  *
  * Solves: The maintainer's notes on the drawings: "a checklist of all the things it's installing and from what
  * site", with the sizes known (Ollama's included), and "functional tickboxes". The voice engine's row also says
- * its build fetches compilers from the image's own package servers, the same words the download box uses
- * (downloadSites.ts), so every place the setup reaches is named before anything starts.
+ * its build fetches compilers from the image's package servers, which it names (downloadSites.ts; the download box
+ * adds "and the sites they hand off to", which does not fit this one-line row), so every place the setup reaches is
+ * named before anything starts.
  *
  * Does not: Start anything or save anything; the screen reads the ticks when OK is pressed. Does not know whether a
  * piece is already on the Deck (a Deck that already has Ollama still reads about 6.9 GB; nothing is fetched twice).
@@ -33,6 +34,7 @@ import {
 } from "../../downloads/downloadSizes";
 import { STARTER_NOTE_SEARCH_TAG, STARTER_SPEECH_MODELS, TIER1_ESSENTIALS_TAG } from "../../models/deckEssentialsTags";
 import type { StarterLeftOut } from "../../models/starterSetLeftOut";
+import { VOICE_BUILD_PACKAGE_SITES_SHORT } from "../../downloads/downloadSites";
 import { FIRST_RUN_BOX } from "./firstRunBoxLayout";
 import { PopupButton } from "./FirstRunPopupParts";
 
@@ -77,7 +79,7 @@ const CHECKLIST_ITEMS: readonly ChecklistItem[] = [
     name: "Voice engine (whisper.cpp)",
     size: VOICE_ENGINE_DOWNLOAD_SIZE,
     site: "ghcr.io",
-    why: "its build fetches compilers from its own package servers",
+    why: `compilers from ${VOICE_BUILD_PACKAGE_SITES_SHORT}`,
     tick: "voice",
     row: "voice",
   },

@@ -33,6 +33,7 @@ from backend.ollama.local_ollama_setup_service import (
     run_ollama_rm,
     terminate_setup_started_ollama_serve,
 )
+from backend.ollama.ollama_binary_install import KEPT_PREFIX, SPARE_PREFIX
 
 
 def should_teardown_local_ollama_on_clear(settings: dict[str, Any] | None) -> bool:
@@ -48,7 +49,20 @@ def should_teardown_local_ollama_on_clear(settings: dict[str, Any] | None) -> bo
         return True
     if (home / ".local" / "lib" / "ollama").is_dir():
         return True
-    return False
+    return bool(_leftover_install_folders(home))
+
+
+def _leftover_install_folders(home: Path) -> list[Path]:
+    """Folders an Ollama update left in ~/.local: the old copy it kept (KEPT) and a spare folder (update)."""
+    try:
+        return sorted(
+            p
+            for prefix in (KEPT_PREFIX, SPARE_PREFIX)
+            for p in (home / ".local").glob(f"{prefix}*")
+            if p.is_dir() and not p.is_symlink()
+        )
+    except OSError:
+        return []
 
 
 def _path_within_home(path: Path, home: Path) -> bool:
@@ -113,6 +127,14 @@ def teardown_local_ollama_for_plugin_reset(logger: Any) -> dict[str, Any]:
     if local_lib.is_dir():
         shutil.rmtree(local_lib, ignore_errors=True)
         summary["removed_user_prefix_lib"] = str(local_lib)
+
+    # The old Ollama a failed update kept for the person (and any spare folder left beside it): the plugin made
+    # them, so Clear all data removes them too.
+    removed_kept = []
+    for folder in _leftover_install_folders(home):
+        shutil.rmtree(folder, ignore_errors=True)
+        removed_kept.append(folder.name)
+    summary["removed_kept_old_copies"] = removed_kept
 
     cache_dir = home / ".bonsai" / "cache"
     if cache_dir.exists() and _path_within_home(cache_dir, home):

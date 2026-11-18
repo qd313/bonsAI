@@ -231,16 +231,20 @@ def _keep_old_files(spare: Path, dst: Path) -> Path:
     """Move the old copy out of the spare folder under a name _sweep_old_spares never removes.
 
     Only the old files are kept (not the 1.5 GB download); if that rename fails the whole spare folder is
-    renamed instead; if that fails too the spare folder stays as it is. Returns where the old copy now is.
+    renamed instead; if that fails too the spare folder stays as it is. Returns the folder that now holds
+    `bin__ollama` and `lib__ollama`: the kept folder itself, or its `old` folder in the last two cases.
     """
     keep = dst / f"{KEPT_PREFIX}{spare.name[len(SPARE_PREFIX):]}"
-    for source in (spare / "old", spare):
-        try:
-            os.replace(source, keep)
-            return keep
-        except OSError:
-            continue
-    return spare
+    try:
+        os.replace(spare / "old", keep)
+        return keep
+    except OSError:
+        pass
+    try:
+        os.replace(spare, keep)
+        return keep / "old"
+    except OSError:
+        return spare / "old"
 
 
 def _sweep_old_spares(dst: Path) -> None:
@@ -307,12 +311,15 @@ def install_ollama_from_release(
         try:
             _swap_in(stage, dst, spare / "old")
         except _SwapBroken:
-            keep = _keep_old_files(spare, dst)
-            kept = keep == spare
+            holder = _keep_old_files(spare, dst)
+            kept = holder.parent == spare  # no rename worked: the spare folder itself stays
             raise InstallProblem(
                 "Ollama could not be put in place and the old copy could not be put back. "
-                f"The old copy is kept in {keep}: move its 'bin__ollama' back to ~/.local/bin/ollama and its "
-                "'lib__ollama' back to ~/.local/lib/ollama, then try again."
+                f"The old copy is kept in {holder}. To put it back, open Desktop mode and delete "
+                "~/.local/bin/ollama and the folder ~/.local/lib/ollama if they are there (a folder moved onto "
+                "one that exists would land inside it). Then move 'bin__ollama' from the kept folder to "
+                "~/.local/bin/ollama and 'lib__ollama' to ~/.local/lib/ollama, giving each the new name "
+                "(use only the ones that are in the folder). Then try again."
             )
         except OSError as exc:
             shell_log(f"[bonsAI] Swap failed and was undone: {exc}")

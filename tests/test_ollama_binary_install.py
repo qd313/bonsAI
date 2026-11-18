@@ -303,6 +303,63 @@ class AFolderKeptForThePersonIsNeverSweptAway(unittest.TestCase):
 
 
 @unittest.skipIf(binary is None, "new module")
+class TheCardTellsHowToGetTheKeptCopyBack(unittest.TestCase):
+    """The card's words must match where the old files really are, in each shape the old copy can be kept in."""
+
+    def _broken_swap_card(self, refuse) -> tuple[str, Path, InstallWorld]:
+        """Run an update whose swap and put-back both fail; `refuse(src)` says which renames fail on top of that."""
+        real_replace = os.replace
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        world = InstallWorld(tmp.name)
+
+        def swap_that_breaks(stage, dst, trash):
+            trash.mkdir(parents=True, exist_ok=True)
+            (trash / "bin__ollama").write_text("OLD")
+            (trash / "lib__ollama").mkdir()
+            (trash / "lib__ollama" / "libold.so").write_text("OLD")
+            raise binary._SwapBroken("put-back failed")
+
+        def replace(src, dst):
+            if refuse(Path(src)):
+                raise OSError("cannot rename")
+            return real_replace(src, dst)
+
+        with patch.object(binary, "_swap_in", side_effect=swap_that_breaks), patch.object(binary.os, "replace", replace):
+            state = world.run_update()
+        self.assertEqual(state["phase"], "failed")
+        holders = [p.parent for p in world.dst.rglob("bin__ollama")]
+        self.assertEqual(len(holders), 1, f"the old copy should be kept in exactly one place: {holders}")
+        return state["error"], holders[0], world
+
+    def _assert_card_is_right(self, card: str, holder: Path) -> None:
+        self.assertIn(str(holder), card, "the card must name the folder that holds 'bin__ollama' and 'lib__ollama'")
+        self.assertIn("bin__ollama", card)
+        self.assertIn("lib__ollama", card)
+        # Moving a folder onto one that already exists puts it inside; the card says to delete the existing one first.
+        self.assertIn("delete", card)
+        self.assertLess(card.index("delete"), card.index("bin__ollama", card.index("delete")))
+        self.assertNotIn("move its", card)
+
+    def test_the_two_files_kept_directly_in_the_kept_folder(self):
+        card, holder, world = self._broken_swap_card(lambda src: False)
+        self.assertTrue(holder.name.startswith(binary.KEPT_PREFIX))
+        self._assert_card_is_right(card, holder)
+
+    def test_the_whole_spare_folder_renamed_with_the_files_under_old(self):
+        card, holder, world = self._broken_swap_card(lambda src: src.name == "old")
+        self.assertEqual(holder.name, "old")
+        self.assertTrue(holder.parent.name.startswith(binary.KEPT_PREFIX))
+        self._assert_card_is_right(card, holder)
+
+    def test_the_spare_folder_left_where_it_was_when_no_rename_works(self):
+        card, holder, world = self._broken_swap_card(lambda src: src.name == "old" or src.name.startswith(binary.SPARE_PREFIX))
+        self.assertEqual(holder.name, "old")
+        self.assertTrue(holder.parent.name.startswith(binary.SPARE_PREFIX))
+        self._assert_card_is_right(card, holder)
+
+
+@unittest.skipIf(binary is None, "new module")
 class TheRealReleaseListIsReadRight(unittest.TestCase):
     def test_the_line_for_the_plain_file_is_picked_among_its_rocm_and_mlx_neighbours(self):
         plain, rocm, mlx = "87bfafb2acbc89b2e6a1be0a9043de6aa75fb450696f86bc426e65fc448f788d", "50ba6b7d9f4ae9b143c5c20496bf82be597dab0a06a50276b637e22150226f9b", "27bbdf40c1412e22e3ba9e02a0a3ee04168f2beeb705e465ec7d0bee16ce4588"

@@ -170,3 +170,108 @@ Rows, in order:
 ## 7. The report
 
 Plan 106 § 13, in plan 105's shape, short. The checks page round is its own short session afterwards.
+
+---
+
+## 12. Run log (2026-11-17, evening)
+
+- **About 20:15 EST, go.** The maintainer said "run plan 106" before the week reset, knowing it would likely pass 90
+  percent (81 at go). Rules page and status commit `2da63867e`; eight helpers started at once (K0, R1, R2, R3, R4, F1,
+  F2, H1). The Deck had been switched off; the maintainer woke it at 20:24 and it was held awake.
+- **20:26 to 21:04.** K0 landed (D143, the shelved four, entries and rows). F5 found the warnings' cause (the panel
+  height guard wrote inside its own size watcher); Tiny's 8.0 px is right by the scale. R2, R4 and F2 landed. The
+  security reviewer read R2 and found six gaps; R2 and R1 fixed them in place.
+- **21:04 to 22:11.** R1 (with the reviewer's two follow-ups), R2's six follow-ups, R3 (one conflict in the site
+  lists, resolved by hand), H1 (second try: a note about how answers open drops the house opening), F4, F1 (with the
+  second opinion's shrink test), F3 (second-opinion fixes, the speech-download file kept from R2) and R5 (nine security
+  follow-ups, plus the session's sweep-age fix) all landed. Every landing ran the full screen and Python sets, the
+  build, the focus check and the quick check.
+- **22:15.** The session's commit naming the voice build's servers on the cards (`4dfa35f7e`). The stand-in could not
+  run: Steam had been restarted at 09:00, but Big Picture would not come forward without a hand.
+- **22:20 to 23:10, block W1 in four drivers.** Part a stopped after row 1: the Deck was docked to an outside screen on
+  a slow charger, and Steam's "Slow Charger" dialog froze every screenshot until the maintainer closed it (22:40).
+  Part b ran Left and the sections without pictures. At 22:50 the maintainer ruled on the ending question ("allow it,
+  but make sure the whole response is spoilered"): lane H2 built it and landed at 23:02 (`2eef601e2`). Parts c and d
+  ran the real Ollama update, the chips, the agent chip, the ending cover, and the put-back.
+- **About 23:15 to 23:45.** The maintainer: "install the voice engine if you need to test it", "get the most
+  descriptive part of the URL showing", and "investigate" the repeated agent chip text. Lane L1 (the card's site names,
+  `a8ddc36d6`) and the bookkeeper's sweep K9 (`127fadad9`) landed; part e installed the voice engine for real on the
+  Deck and put everything else back. The agent chip text is the Pyro character's joke working as built (13.1).
+
+## 13. Report
+
+### 13.1 What needs you
+
+1. **Community copies of models now count as "unknown"** under "Open source only" (a name with a slash, such as
+   `hf.co/…`). Anyone using one needs the unlock. Chosen on purpose (the old rule called them open source without
+   checking); say if you want it softer.
+2. **The Pyro character's "Agent suggestion" chip repeats the last line of the answer on purpose.** About 3 Pyro
+   answers in 10 get a hidden "manager tip" (five fixed lines, such as "Smoke-test the Ask flow after updating Ollama
+   tags"): the AI is told to end by offering that exact line in character, and the same line becomes the chip. Tonight
+   the AI wrote it bare, so it read like a copy. Say if you want the chip only.
+3. **The stand-in blocks still wait for you:** Steam was restarted, but Big Picture needs a hand to come forward while
+   the PC is locked. Next time you are at the PC, bring Big Picture to the front and say "run the stand-in blocks".
+4. **The card's "Keep the Deck awake and online until this finishes." line is still cut off** on the Deck (the site
+   names below it now fit). Filed ★.
+5. **Nothing is pushed.** 58 commits sit on `experimental` since go, this report included.
+
+### 13.2 What a player notices
+
+- **Cancel works the whole way through an Ollama install or update,** including the download itself, and a cut-off
+  or bad download leaves the old Ollama working (checked against Ollama's own published checksum). A Cancel no longer
+  switches off the AI you are using.
+- **A Cancel that does not get through says "Could not stop. Try again."** and puts the button back. Turning Internet
+  downloads off, or Steam's parental lock coming on, stops a running download.
+- **The voice engine is checked before it runs,** built in a spare folder and swapped in only when the build worked,
+  and the screens name every site it uses.
+- **The knowledge library download and the voice install use the same card and bar as the Ollama tab;** the voice
+  install has its first Cancel.
+- **The card names each site by its telling part,** never cut in the middle: "From ollama.com, github.com and
+  ollama.ai".
+- **"Open sections as you walk" no longer jumps** (0 to 0.4 px on five landings, was 20.8 px), and Up from "Open all"
+  goes back to the last control.
+- **Left on the "Show details" line under an answer, and on "Suggest as a tip",** stays twice and goes to Steam's menu
+  on the third press, like everywhere else.
+- **Your notes beat Headline first:** a note like "Give me the full answer, no summary line first" now gets exactly
+  that (1 answer in 30 opened with a summary line, against about 1 in 5 before).
+- **Asking how a game ends hides the whole answer behind one spoiler cover,** opening sentence included, from the
+  first word.
+- **The Diagnostics log no longer fills with warnings,** and a made-up model name no longer passes "Open source only".
+
+### 13.3 The Deck (block W1, builds `4dfa35f7e`, `2eef601e2` and `127fadad9`)
+
+| Check | Result |
+|---|---|
+| Headline first, three answers | 2 pass; the ending question gave the ending away, which led to the cover |
+| Your note beats Headline first | Pass (the note is removed in the notes sheet, not on the Search tab) |
+| The ending cover | Pass: only the "hidden" chip while writing, one closed cover, the whole answer inside; normal and "spoilers are okay" questions not covered |
+| Chips after a long answer | Pass |
+| Decode into its slide | Pass: no still pause (the slide starts while the letters settle) |
+| Left: answer's own line, the tip, the first chip, Hide details | Pass; the dock's own copy only in its "Hide details" wording |
+| Sections as you walk, five landings | Pass (within 0.4 px for 1.5 s) |
+| Up from "Open all" | Pass on three tabs with the switch on; two switch-off cases not run |
+| Diagnostics log warnings | Pass (none) |
+| The real Ollama update: Cancel, the AI still answers | Pass (0.40.16 before and after) |
+| "Run AI on this Deck" off mid-update; downloads off mid-update | Pass; pass (stopped in under 3 s) |
+| The card: ring on Cancel, the bar, the site names | Pass; the site names whole after lane L1 |
+| Agent chip's blue fill | Pass |
+| The voice engine, installed for real | Pass: the card, its Cancel (nothing left behind), the bar, then a full install with its checked record (g++ 11.4.0, GNU Make 4.3, Ubuntu 22.04.5, only Ubuntu's own servers) |
+| Put back (twice) | Pass: settings as they were, downloads on as you had it, test chat deleted, your chat open, AI unloaded, all seven settings backups deleted, hold released. The voice engine stays installed |
+
+### 13.4 Reviews and second opinions
+
+- **The security reviewer** read every download lane (five reads). Nothing serious in any of them; it found 27 smaller
+  gaps, 18 fixed tonight (two of them worth fixing soon: a stop the speech download ignored, and a Cancel that could
+  switch off your AI), 9 filed as one roadmap entry.
+- **Fable at medium, before each D-pad or layout landing** (four consults): two changed the work before it landed
+  (the sections' late-shrink case, the voice install's way back across a question box); two said land as is (the
+  warnings fix; the Left fix, with extra Deck checks). It confirmed plan 105's "dock" Left row was really the answer's
+  own line. "Suggest as a tip" joining the Left rule was the session's call, from your rule in plan 105.
+
+### 13.5 The numbers
+
+- **Helpers:** 15 lanes (6 of them resumed once or twice for review fixes), 5 security reads, 4 second opinions, 5
+  Deck drivers. Up to 8 at once.
+- **Code:** 58 commits, about 156 files, about 8,600 lines added and 900 removed (tests are most of it).
+- **Usage:** the week went from 81 to about 90 percent; the five-hour window peaked near 76.
+- **Time:** go about 20:15; last landing about 23:30; the Deck put back about 23:45.

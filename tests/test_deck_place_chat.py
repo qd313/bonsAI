@@ -207,7 +207,8 @@ class PlaceTests(WithFolder):
         cid = chat["id"]
         self.assertEqual(
             [c for c, _ in deck.sent],
-            [placer.cmd_read_index(), f"test ! -e {D}/{cid}.json", placer.cmd_write(f"{cid}.json"), placer.cmd_write("index.json")],
+            [placer.cmd_read_index(), f"test ! -e {D}/{cid}.json", placer.cmd_write(f"{cid}.json"), placer.cmd_read_index(),
+             placer.cmd_write("index.json")],
         )
         self.assertEqual(json.loads(deck.files[f"{cid}.json"]), chat)
         rows = json.loads(deck.files["index.json"])["slots"]
@@ -264,6 +265,52 @@ class PlaceTests(WithFolder):
                     placer.place(HOST, self.chat(), deck, self.dir, NOW)
                 self.assertEqual(deck.files, {"index.json": original})
                 self.assertEqual(os.listdir(self.dir), [])
+
+
+class BusyDeck(FakeDeck):
+    """A Deck where a chat is made by hand (the list changes) right after the placed chat's file is written."""
+
+    def __init__(self, files, changes):
+        super().__init__(files)
+        self.changes = list(changes)  # chat lists to swap in, one after each chat-file write
+
+    def __call__(self, command, data=None):
+        result = super().__call__(command, data)
+        written = command.startswith(f"mkdir -p {D} && cat > {D}/placed-")
+        read_after = command == placer.cmd_read_index() and any(c.startswith(f"mkdir -p {D} && cat > {D}/placed-") for c, _ in self.sent[:-1])
+        if (written or read_after) and self.changes:
+            self.files["index.json"] = self.changes.pop(0)  # a read already returned the old copy
+        return result
+
+
+class RaceTests(WithFolder):
+    def test_a_chat_made_on_the_deck_in_between_is_kept_not_dropped(self):
+        deck = BusyDeck({"index.json": an_index(2)}, [an_index(3)])
+        chat = self.chat()
+        record = placer.place(HOST, chat, deck, self.dir, NOW)
+        ids = [r["id"] for r in json.loads(deck.files["index.json"])["slots"]]
+        self.assertIn(chat["id"], ids)
+        self.assertEqual(sorted(i for i in ids if i != chat["id"]), ["c0", "c1", "c2"])
+        # taking back works from the fresh copy and restores the list the Deck had after the new chat was made
+        self.assertEqual(record["original_index_sha256"], placer.sha(an_index(3)))
+        placer.take_back(HOST, chat["id"], deck, self.dir)
+        self.assertEqual(deck.files, {"index.json": an_index(3)})
+
+    def test_a_list_that_keeps_changing_stops_with_nothing_left_and_the_list_untouched(self):
+        deck = BusyDeck({"index.json": an_index(2)}, [an_index(3), an_index(4)])
+        with self.assertRaisesRegex(placer.Refusal, "changed twice"):
+            placer.place(HOST, self.chat(), deck, self.dir, NOW)
+        self.assertEqual(deck.files, {"index.json": an_index(4)})
+        self.assertEqual(os.listdir(self.dir), [])
+        index_writes = [c for c, _ in deck.sent if c == placer.cmd_write("index.json")]
+        self.assertEqual(index_writes, [])
+
+    def test_a_list_that_fills_up_meanwhile_is_refused_not_pushed_past_ten(self):
+        deck = BusyDeck({"index.json": an_index(2)}, [an_index(MAX_CHAT_SLOTS)])
+        with self.assertRaisesRegex(placer.Refusal, "10 chats"):
+            placer.place(HOST, self.chat(), deck, self.dir, NOW)
+        self.assertEqual(deck.files, {"index.json": an_index(MAX_CHAT_SLOTS)})
+        self.assertEqual(os.listdir(self.dir), [])
 
 
 class TakeBackTests(WithFolder):

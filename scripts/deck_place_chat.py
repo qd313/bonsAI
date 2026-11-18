@@ -22,6 +22,9 @@ Does not: Run shell text built from anything but a placed chat's own id, which i
     it placed that chat, and the id must be one this script makes). Place a chat when ten chats are saved or
     when the chat list cannot be read. Read or print settings values. Make the step-list recipe's tick-box
     panel: that panel comes from a separate saved file, so the recipe is a numbered list in the answer only.
+    Lose a chat made on the Deck while it runs: it reads the chat list again right before writing it back, checks
+    that copy's checksum is unchanged, starts once from the fresh copy if it moved, then stops with a plain message
+    (the chat file it wrote is removed; the chat list was not touched).
     The commands it sends over SSH, in the one form `ssh <host> '<command>'`, and no others (D is the Deck's
     chat folder, ~/homebrew/settings/bonsAI/chat_slots):
         if [ -f D/index.json ]; then cat D/index.json; else echo @@NOINDEX; fi
@@ -60,6 +63,10 @@ TURN_KEYS = {"role", "text", "display_text", "asked_entity", "app_id", "app_name
 
 class Refusal(Exception):
     """A plain sentence saying why nothing (more) was done."""
+
+
+class Changed(Exception):
+    """The Deck's chat list moved under the placing (inside place only; turned into a Refusal)."""
 
 
 # ---------------------------------------------------------------------------
@@ -354,17 +361,42 @@ def place(host, chat, run, record_dir, now=None):
     if code != 0:
         raise Refusal(f"a file named {chat_id}.json is already on the Deck; nothing was placed")
     chat_bytes = dump_json(chat)
-    new_index = dump_json(index_with_row(index, index_row(chat)))
-    record = {
-        "version": 1, "host": host, "id": chat_id, "label": chat["label"], "placed_at": int(now if now is not None else time.time()),
-        "original_index_b64": None if original is None else base64.b64encode(original).decode("ascii"),
-        "original_index_sha256": sha(original), "new_index_sha256": sha(new_index), "chat_sha256": sha(chat_bytes),
-    }
     path = record_path(record_dir, chat_id)
-    write_record(path, record)
+
+    def stage(seen):
+        """Work out the new chat list from the list `seen`, and (re)write the record that taking back reads."""
+        rec = {
+            "version": 1, "host": host, "id": chat_id, "label": chat["label"], "placed_at": int(now if now is not None else time.time()),
+            "original_index_b64": None if seen is None else base64.b64encode(seen).decode("ascii"),
+            "original_index_sha256": sha(seen), "chat_sha256": sha(chat_bytes),
+        }
+        data = dump_json(index_with_row(parse_index(seen), index_row(chat)))
+        rec["new_index_sha256"] = sha(data)
+        if os.path.exists(path):
+            os.remove(path)
+        write_record(path, rec)
+        return rec, data
+
+    record, new_index = stage(original)
     try:
-        for name, data in ((f"{chat_id}.json", chat_bytes), ("index.json", new_index)):
-            must(run, cmd_write(name), data)
+        must(run, cmd_write(f"{chat_id}.json"), chat_bytes)
+        # A chat made on the Deck while this ran changes the list; writing the old copy back would drop it.
+        # Read it again right before the write; if it moved, start once from the fresh copy, then stop.
+        for attempt in (1, 2):
+            fresh = read_index(run)
+            if sha(fresh) == record["original_index_sha256"]:
+                break
+            if attempt == 2:
+                raise Changed("the Deck's chat list changed twice while the chat was being placed; nothing was kept")
+            if len(parse_index(fresh)["slots"]) >= MAX_CHAT_SLOTS:
+                raise Changed(f"{MAX_CHAT_SLOTS} chats are saved on the Deck now; nothing was kept")
+            record, new_index = stage(fresh)
+        must(run, cmd_write("index.json"), new_index)
+    except Changed as exc:
+        # The chat list was never written by this script, so only its own file and record are removed.
+        must(run, cmd_remove_chat(chat_id))
+        os.remove(path)
+        raise Refusal(f"{exc}. Run it again.") from exc
     except Refusal as exc:
         try:
             take_back(host, chat_id, run, record_dir)

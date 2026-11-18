@@ -19,9 +19,9 @@
  * into 13.8 px: about 34 letters a line, still room for a 25-letter word, and the answer already
  * breaks any longer word where it must instead of spilling out. A bigger step (1.25) would add a
  * quarter more lines to every answer inside a panel whose answer area is already short. Small turns
- * 12 px into 10.8 px and the smallest line in the details (9 px) into 8.1 px. Tiny (plan 105, the
- * maintainer's call 17) goes below that on purpose, to 9.6 px for the 12 px answer and 7.2 px for the
- * 9 px line: it is the maintainer's choice for a person who wants more words on the screen at once,
+ * 12 px into 10.8 px and the smallest line in the details (the Show details line, 10 px) into 9.0 px. Tiny (plan 105, the
+ * maintainer's call 17) goes below that on purpose, to 9.6 px for the 12 px answer and 8.0 px for the
+ * 10 px line: it is the maintainer's choice for a person who wants more words on the screen at once,
  * and it is not a size the plugin recommends. 0.8 is the floor; the settings row's four buttons were
  * measured to keep whole words in the 300 px choice row with it. The same steps apply to the tab bar's 11 px
  * name (12.65 px on Large inside a fixed 20-point bar) and the 30-point chips (12 px to 13.8 px).

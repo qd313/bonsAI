@@ -1023,8 +1023,10 @@ Open all (floating button)
   way Cancel's own hand-over goes: where the ring came from, else the tab's first stop, else the tab bar. A ring
   somewhere else stays where it is. Pinned by `JobBar.chipHandOver.test.tsx`.
 - **X cancels from anywhere in a tab** (`TabBodyFocusRoot`'s `onSecondaryButton`): the job the bar shows, else the
-  newest. Not in the job's first half second. The Main tab has no container around its whole body, so there X works
-  on the bar only. With no download running the press is left alone.
+  newest. Not in the job's first half second. The Main tab has no container around its whole body, so there X does
+  nothing, and the bar's Cancel shows no X glyph on Main (plan 106, lane F3; `JobBar.mainHint.test.tsx`); the D-pad has no way
+  onto the bar on Main either, so a download started elsewhere is cancelled there by a tap on the bar. With no download
+  running the press is left alone.
 - **The first-time setup's card on Main wins.** While it is up (`main-tab/FirstRunSetupCard.tsx`), the bar does not
   show the same run on Main; the two cards for one run are kept apart in `runningJobs.ts`, so the order a tab slides
   away and the next one comes in does not matter.

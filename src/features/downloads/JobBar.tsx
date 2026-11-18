@@ -19,7 +19,9 @@
  * folded tab's floating Open all button (`takeJobBar`), landing on Cancel. On the bar: Left from Cancel goes to the
  * "2 jobs" chip and Right from the chip back to Cancel; Left at the bar's left end (the chip, or Cancel alone) holds
  * twice and the third Left in a row goes out to Steam's menu (leftEdge.ts, plan 105 lane C5); Up and B go back to
- * where the ring came from; Down holds still; LB and RB switch tabs as from anywhere; X cancels the job shown. When the bar's Cancel goes away under the
+ * where the ring came from; Down holds still; LB and RB switch tabs as from anywhere; X cancels the job shown. On the
+ * Main tab (no container around its body, so X is not heard there, and the D-pad has no way onto the bar) Cancel
+ * shows no X glyph. When the bar's Cancel goes away under the
  * ring (the job ended, or its card came into sight), the ring goes back to where it came from; with that gone, to
  * the tab's own first stop (the question box on Main), then the tab bar: never on nothing. The "2 jobs" chip goes the
  * same way: when it leaves under the ring (one of the two jobs ended, or its card came back) the ring goes to Cancel,
@@ -73,10 +75,12 @@ function RunningBar({
   view,
   cancelGone,
   chipGone,
+  showXHint,
 }: {
   view: BarView;
   cancelGone: (el: HTMLElement | null) => void;
   chipGone: (el: HTMLElement | null) => void;
+  showXHint: boolean;
 }): React.ReactElement {
   const job = view.job!;
   const cancelNavRef = useRef<NavRefHolder["current"]>(null);
@@ -124,7 +128,7 @@ function RunningBar({
             aria-label={`Cancel: ${job.face.title}`}
           >
             {job.stopping ? "Stopping" : "Cancel"}
-            {job.stopping ? null : (
+            {job.stopping || !showXHint ? null : (
               <i className="bonsai-job-key" aria-hidden="true">
                 X
               </i>
@@ -144,8 +148,11 @@ function RunningBar({
   );
 }
 
-/** The bar, or nothing. See the header. */
-export function JobBar(): React.ReactElement | null {
+/**
+ * The bar, or nothing. See the header. `activeTab` is the tab the panel is on: on Main the X key's glyph is left off the
+ * bar's Cancel, because X does nothing there (TabBodyFocusRoot is around every other tab's body, not Main's).
+ */
+export function JobBar({ activeTab }: { activeTab?: string } = {}): React.ReactElement | null {
   const view = useBarView();
   const elRef = useRef<HTMLDivElement | null>(null);
   /* Here, not in the running bar: that part goes with its Cancel when the job ends, and the hand-off must outlive it. */
@@ -158,7 +165,7 @@ export function JobBar(): React.ReactElement | null {
   return (
     <div ref={elRef} className="bonsai-job-bar" data-bonsai-job-bar={view.job?.id ?? view.result?.id} data-tone={tone} aria-live="polite">
       {view.job ? (
-        <RunningBar view={view} cancelGone={cancelGone} chipGone={chipGone} />
+        <RunningBar view={view} cancelGone={cancelGone} chipGone={chipGone} showXHint={activeTab !== "main"} />
       ) : (
         <>
           <div className="bonsai-job-bar__row">

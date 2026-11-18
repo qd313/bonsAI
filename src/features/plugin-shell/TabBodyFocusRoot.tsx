@@ -16,7 +16,7 @@
  *         X anywhere in a tab cancels the running download the bar at the bottom shows, or the newest one
  *         (plan 105, lane D4: "X cancels from anywhere"); Steam hands a button a control does not claim on to
  *         the containers around it, and this is the outermost one in a tab. With no download running the press
- *         is left alone. The Main tab has no such container; there X works on the bar itself.
+ *         is left alone. The Main tab has no such container; there X does nothing and the bar's Cancel shows no X glyph.
  * Does not: Style anything or claim any press but Up at the top and X while a download runs; every other move
  *           stays with the controls inside. Never waits for the glide: the next press is handled at once.
  */

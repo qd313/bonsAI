@@ -1204,7 +1204,7 @@ const Content: React.FC = () => {
             } as Record<string, unknown>)}
           />
           {/* A download's bar while its card is out of sight, on every tab (plan 105 D4): last in the column, under the pane. */}
-          <JobBar />
+          <JobBar activeTab={currentTab} />
         </div>
       </React.Fragment>
     </BonsaiPluginShell>

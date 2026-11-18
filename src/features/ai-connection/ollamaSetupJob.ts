@@ -158,16 +158,20 @@ function followWhileAway(): void {
   }
 }
 
-/** The Ollama tab says it is on screen and reading the run's status itself, for as long as it is mounted. */
-export function useOllamaSetupStatusReader(): void {
+/**
+ * The Ollama tab says it is on screen and reading the run's status itself, for as long as it is mounted and `reading`
+ * (the tab reads only while "Run AI on this Deck" is on; with it off a run that goes on is read here, for the bar).
+ */
+export function useOllamaSetupStatusReader(reading = true): void {
   useEffect(() => {
+    if (!reading) return;
     owners += 1;
     followWhileAway();
     return () => {
       owners -= 1;
       followWhileAway();
     };
-  }, []);
+  }, [reading]);
 }
 
 /** Test-only reset. */

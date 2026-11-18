@@ -239,10 +239,15 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   /* Whether Ollama answered the last check: undefined before any answer (a run seen then is called an update). */
   const engineReadyRef = useRef<boolean | undefined>(undefined);
   const setLocalSetupStatus = useCallback((st: LocalOllamaSetupStatus | null) => {
-    noteOllamaSetupStatus(st, engineReadyRef.current);
+    /*
+     * null is "Run AI on this Deck" going off: the block is hidden, but the run the back end is doing is not stopped, so
+     * the job card's memory keeps it (the bar shows it, with Cancel) and reads its status itself until it ends.
+     */
+    if (st !== null) noteOllamaSetupStatus(st, engineReadyRef.current);
     setLocalSetupStatusState(st);
   }, []);
-  useOllamaSetupStatusReader();
+  /* This tab reads the run's status only while the switch is on; with it off the job reads the status itself. */
+  useOllamaSetupStatusReader(ollamaLocalOnDeck);
   const localSetupBusy = localSetupStatus?.phase === "running";
   const setupAutoTestRanRef = useRef(false);
   const onTestConnectionRef = useRef<(opts?: { quiet?: boolean }) => Promise<void>>(async () => {});

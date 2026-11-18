@@ -19,6 +19,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+import threading
 import unittest
 from types import SimpleNamespace
 from unittest import mock
@@ -136,6 +137,31 @@ class EngineCheckedBeforeStart(unittest.TestCase):
             self.assertIsNone(runtime.whisper_binary_usable(root, settings))
             record.write_voice_engine_record(bin_dir, "image@sha256:abc", ["g++: g++ 11.4.0"])  # what a build does
             self.assertTrue(runtime.whisper_binary_usable(root, settings))
+
+
+class InstallRebuildsAChangedEngine(unittest.TestCase):
+    """The cure the plain words name: Install voice engine builds the engine again instead of calling it ready."""
+
+    def test_install_pulls_and_builds_again_when_the_files_changed(self) -> None:
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, True)
+        root, settings, bin_dir = _make_engine(tmp, with_record=True)
+        # An engine that was proven on this CPU: only the changed file stands between it and "ready".
+        with open(os.path.join(bin_dir, ".bonsai_cpu_safe"), "w", encoding="utf-8") as f:
+            f.write("1")
+        _change(bin_dir, "whisper-cli")
+        stages: list[str] = []
+        pulled = SimpleNamespace(returncode=0, stdout="", stderr="")
+        with mock.patch.object(runtime.subprocess, "run", side_effect=_usage_run), mock.patch.object(
+            service.shutil, "which", return_value="/usr/bin/podman"
+        ), mock.patch.object(service, "run_stoppable", return_value=pulled) as pull, mock.patch.object(
+            service, "_build_whisper_cli_in_container", return_value=os.path.join(bin_dir, "whisper-cli")
+        ) as full_build, mock.patch.object(service, "_build_whisper_server_in_container") as server_build:
+            service.install_whisper_cli(root, settings, {}, threading.Event(), lambda name, _f: stages.append(name))
+        self.assertEqual(pull.call_count, 1)
+        self.assertEqual(full_build.call_count, 1)
+        self.assertEqual(server_build.call_count, 0)
+        self.assertNotEqual(stages[0], "binary_ready")
 
 
 class EngineFromBeforeTheRecord(unittest.TestCase):

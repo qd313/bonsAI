@@ -5,7 +5,7 @@ start/stop/poll a recording). Every function here is a straight hand-off from a 
 of the same name on the plugin class in main.py -- the class keeps the method so the
 screen's call still works, and the method's body just calls the matching function here.
 
-Used for: get_voice_engine_status, install_voice_engine, get_voice_install_status,
+Used for: get_voice_engine_status, install_voice_engine, cancel_voice_install, get_voice_install_status,
 start_voice_transcription, stop_voice_transcription, get_voice_transcription_status.
 
 Solves: Keeps the Settings screen's Voice input panel out of main.py, next to the
@@ -21,6 +21,7 @@ code call it directly too; only the RPC-facing calls to it moved here.
 """
 
 import asyncio
+import threading
 from typing import Any
 
 from backend.core.async_background_job import (
@@ -143,6 +144,23 @@ async def install_voice_engine(self, PLUGIN_ROOT: str, model_id: str = ""):
 
     await self._maybe_app_log("voice.install", "voice engine install accepted", fields={"model_id": mid})
     return {"accepted": True, "model_id": mid}
+
+
+async def cancel_voice_install(self):
+    """Ask the running voice install to stop (the card's Cancel, plan 106 lane F3).
+
+    Sets the install's own stop flag: the engine's image pull and build end within a second or two (their
+    container is removed), and the speech-model download stops its curl the same way. The install then ends with
+    the phase "cancelled". Needs no permission: stopping a download must always be possible. Answers
+    ``{cancel_requested, running}``; with no install running it does nothing and says so.
+    """
+    task = self._voice_install_task
+    cancel = self._voice_install_cancel
+    if task is None or task.done() or not isinstance(cancel, threading.Event):
+        return {"cancel_requested": False, "running": False}
+    cancel.set()
+    await self._maybe_app_log("voice.install", "voice engine install: cancel requested")
+    return {"cancel_requested": True, "running": True}
 
 
 async def get_voice_install_status(self):

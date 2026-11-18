@@ -5,7 +5,9 @@
  * which speech-to-text model powers the microphone button on the Ask bar (a
  * faster, less accurate one, or a slower, more accurate one), shows whether
  * the voice engine is installed and ready, and has a button to install or
- * reinstall it, with a progress line while that runs. If the microphone
+ * reinstall it. While an install runs, one job card (downloads/JobCard.tsx, plan 106 lane F3) stands in for that
+ * button, with what it is doing, how far, the sites it comes from and the install's first Cancel; the bar at the
+ * bottom of the panel shows the same install whenever the card is out of sight. If the microphone
  * permission is off, this section shows a prompt to turn it on instead of
  * letting you install anything.
  *
@@ -24,9 +26,11 @@
  * Focus: Up from the first row (the permission button while the microphone is off, else the model row)
  * and Down from the install button go to the section's line and the next line, handed in by the tab on a
  * `Focusable` around each, since Decky's Button keeps no move handler. The install button's popup (the
- * download notice) is unchanged.
+ * download notice) is unchanged. While the card is up its Cancel is the row's one stop: Down goes on to the next
+ * line as from the button, Up is Steam's own, and the ring goes to Cancel on the same press as the install button
+ * and back to the install button when the install ends (docs/focus-graph.md, "The voice install's card").
  */
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { PanelSection, PanelSectionRow, Button, Focusable } from "@decky/ui";
 import { toaster } from "@decky/api";
 import { VOICE_STT_MODEL_OPTIONS, type VoiceSttModelId } from "../settings/bonsaiSettingsSchema";
@@ -41,9 +45,25 @@ import { PermissionDenyAction } from "../permissions/PermissionDenyAction";
 import { bonsaiSettingRowNav } from "../search-tab/bonsaiSettingRowNav";
 import type { BonsaiCapabilityKey } from "../permissions/permissionDeepLink";
 import { confirmDownload } from "../downloads/downloadNotice";
+import { JobCard } from "../downloads/JobCard";
+import { runningJob, useRunningJob } from "../downloads/runningJobs";
+import { VoiceInstallResultLines } from "./VoiceInstallResultLines";
+import { helpAttributes } from "../folded-tabs/useHelpStrip";
+import { useHandRingOnGone } from "../../shared/dpad/useHandRingOnGone";
+import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
+import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
 import { voiceEngineNotices } from "../downloads/downloadSites";
 import { FOCUS_RING_BTN_CLASS, FOCUS_RING_INSET_CLASS, FOCUS_RING_WRAP_CLASS } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/textPx";
+import {
+  beginVoiceInstallJob,
+  noteVoiceInstallStatus,
+  resumeVoiceInstallJob,
+  useVoiceInstallJobReader,
+  voiceInstallJobAccepted,
+  voiceInstallJobRefused,
+  VOICE_INSTALL_JOB,
+} from "./voiceInstallJob";
 import {
   markVoiceInstallStarted,
   takeVoiceInstallMarker,
@@ -121,6 +141,31 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
 }) => {
   const [engineStatus, setEngineStatus] = useState<VoiceEngineStatus | null>(null);
   const [installBusy, setInstallBusy] = useState(() => voiceInstallMarkerActive());
+  /* The running install as the job card shows it (voiceInstallJob.ts); it outlives this copy of the section. */
+  const job = useRunningJob(VOICE_INSTALL_JOB);
+  useVoiceInstallJobReader();
+  /* A copy built while an install it did not start goes on (a box closing rebuilt the tab) shows the card at once. */
+  useLayoutEffect(() => {
+    if (voiceInstallMarkerActive() && !runningJob(VOICE_INSTALL_JOB)) resumeVoiceInstallJob();
+  }, []);
+  const installNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
+  const cancelNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
+  const installBtnRef = useRef<HTMLButtonElement | null>(null);
+  const cancelBtnRef = useRef<HTMLButtonElement | null>(null);
+  /** The ring onto a stop of this row: Steam's transfer first, then the button's own focus if that did not land it. */
+  const take = (node: { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null }, el: HTMLElement | null): void => {
+    if (!el) return;
+    try {
+      node.current?.TakeFocus?.(true);
+    } catch {
+      /* the check below decides */
+    }
+    if (!elementHasGamepadFocus(el)) focusInTabBody(el);
+  };
+  /* The press swaps the install button for the card: a ring on the button goes to Cancel on the same press. */
+  const installRowRef = useHandRingOnGone(() => take(cancelNavRef, cancelBtnRef.current));
+  /* The install ends and the card goes: a ring on Cancel goes back to the install button. */
+  const cancelRowRef = useHandRingOnGone(() => take(installNavRef, installBtnRef.current));
 
   // resume: false for the read that ends a poll, so a running install seen there does not restart it.
   const refreshStatus = useCallback(async (resume = true) => {
@@ -131,6 +176,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
         DECKY_RPC_TIMEOUT_MS,
       );
       setEngineStatus(st);
+      noteVoiceInstallStatus(st?.install);
       if (resume && st?.install?.phase === "running" && !st.install.done) {
         markVoiceInstallStarted();
         setInstallBusy(true);
@@ -159,6 +205,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
       )
         .then((install) => {
           setEngineStatus((prev) => (prev ? { ...prev, install: install ?? undefined } : prev));
+          noteVoiceInstallStatus(install);
           // A just-started install may still read idle for a moment; that is not the end of it.
           const notYetSeen = install?.phase === "idle" && voiceInstallInStartGrace();
           if (!notYetSeen && (install?.done || install?.phase === "failed" || install?.phase === "done")) {
@@ -213,6 +260,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
     if (!(await confirmDownload(toFetch))) return;
     markVoiceInstallStarted();
     setInstallBusy(true);
+    beginVoiceInstallJob(missing.engineReady);
     try {
       const out = await callDeckyWithTimeout<[string], { accepted?: boolean; reason?: string }>(
         "install_voice_engine",
@@ -220,6 +268,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
         DECKY_RPC_TIMEOUT_MS,
       );
       if (!out?.accepted) {
+        voiceInstallJobRefused();
         takeVoiceInstallMarker();
         setInstallBusy(false);
         toaster.toast({
@@ -229,12 +278,14 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
         });
         return;
       }
+      voiceInstallJobAccepted();
       toaster.toast({
         title: "Installing voice engine",
         body: `Installing whisper-cli and downloading ${voiceSttModel}…`,
         duration: 3000,
       });
     } catch (e: unknown) {
+      voiceInstallJobRefused();
       takeVoiceInstallMarker();
       setInstallBusy(false);
       toaster.toast({
@@ -249,7 +300,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
   const modelReady = Boolean(engineStatus?.model_ready);
   const engineReady = binaryReady && modelReady;
   const install = engineStatus?.install;
-  const progress = install?.progress_pct ?? 0;
+  const cancelled = install?.phase === "cancelled";
   const installActionLabel = installBusy
     ? "Installing…"
     : engineReady
@@ -330,48 +381,60 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
               Tap Install voice engine below (uses podman on SteamOS).
             </>
           ) : null}
-          {installBusy && install?.stage ? (
-            <>
-              <br />
-              {install.stage}
-              {progress > 0 ? ` (${progress}%)` : ""}
-            </>
-          ) : null}
-          {install?.error ? (
-            <>
-              <br />
-              <span style={{ color: "#f87171" }}>{install.error}</span>
-            </>
-          ) : null}
         </div>
       </PanelSectionRow>
       <PanelSectionRow>
-        <div className="bonsai-settings-focus-btn-host">
-          <Focusable
-            className={FOCUS_RING_WRAP_CLASS}
-            onOKButton={() => void onDownloadModel()}
-            {...({ onMoveDown: onMoveDownFromLast } as Record<string, unknown>)}
-          >
-            <Button
-              className={`${FOCUS_RING_BTN_CLASS} ${FOCUS_RING_INSET_CLASS}`}
-              onClick={() => void onDownloadModel()}
-              disabled={installBusy}
-            style={{
-              minHeight: 38,
-              fontSize: textPx(12),
-              fontWeight: 600,
-              padding: "6px 10px",
-              borderRadius: 4,
-              border: "1px solid rgba(255,255,255,0.18)",
-              background: "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%)",
-              color: "#e8eef5",
+        {job ? (
+          <JobCard
+            job={job}
+            cancelLabel="Cancel the voice install"
+            cancelNavRef={cancelNavRef}
+            // Down goes on to the next line as it did from the install button; Up is Steam's own.
+            onMoveUp={() => false}
+            onMoveDown={() => onMoveDownFromLast?.() ?? false}
+            cancelRowRef={cancelRowRef}
+            cancelButtonRef={(el) => {
+              cancelBtnRef.current = el;
             }}
-          >
-            {installActionLabel}
-          </Button>
-        </Focusable>
-        </div>
+            help={helpAttributes(job.face.title, "Cancel stops the install. A half-downloaded speech model is not kept.")}
+          />
+        ) : (
+          <div ref={installRowRef} className="bonsai-settings-focus-btn-host">
+            <Focusable
+              className={FOCUS_RING_WRAP_CLASS}
+              onOKButton={() => void onDownloadModel()}
+              {...({ onMoveDown: onMoveDownFromLast, navRef: installNavRef } as Record<string, unknown>)}
+            >
+              <Button
+                ref={(el: HTMLDivElement | null) => {
+                  installBtnRef.current = el as HTMLButtonElement | null;
+                }}
+                className={`${FOCUS_RING_BTN_CLASS} ${FOCUS_RING_INSET_CLASS}`}
+                onClick={() => void onDownloadModel()}
+                disabled={installBusy}
+                style={{
+                  minHeight: 38,
+                  fontSize: textPx(12),
+                  fontWeight: 600,
+                  padding: "6px 10px",
+                  borderRadius: 4,
+                  border: "1px solid rgba(255,255,255,0.18)",
+                  background: "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%)",
+                  color: "#e8eef5",
+                }}
+              >
+                {installActionLabel}
+              </Button>
+            </Focusable>
+          </div>
+        )}
       </PanelSectionRow>
+      {/* Under the button, while no install runs: the last result and the sites the install comes from. */}
+      {job ? null : (
+        <PanelSectionRow>
+          <VoiceInstallResultLines cancelled={cancelled} errorText={cancelled ? "" : (install?.error ?? "").trim()} />
+        </PanelSectionRow>
+      )}
     </PanelSection>
   );
 };

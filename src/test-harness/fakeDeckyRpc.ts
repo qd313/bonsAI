@@ -46,6 +46,7 @@ export const FRONTEND_RPC_METHODS = [
   "get_voice_transcription_status",
   "get_voice_engine_status",
   "install_voice_engine",
+  "cancel_voice_install",
   "get_voice_install_status",
   "get_intent_packs",
   "set_kids_lock_state",
@@ -185,6 +186,7 @@ function defaultHandlers(): Record<string, RpcHandler> {
       install: { phase: "idle", done: true },
     }),
     install_voice_engine: () => ({ accepted: true, model_id: "tiny.en" }),
+    cancel_voice_install: () => ({ cancel_requested: true, running: true }),
     get_voice_install_status: () => ({ phase: "idle", done: true }),
     get_intent_packs: () => intentPacksFixture(),
     set_kids_lock_state: (...args: unknown[]) => ({

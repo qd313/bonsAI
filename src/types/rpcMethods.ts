@@ -32,7 +32,7 @@
  *   - The count below is written as a comment rather than as a value anything can
  *     read. Nothing would use it, and an unused value fails one of the checks.
  *
- * 68 names at the time this was written.
+ * 69 names at the time this was written.
  */
 export type BonsaiRpcMethod =
   | "abort_background_game_ai"
@@ -45,6 +45,7 @@ export type BonsaiRpcMethod =
   | "ask_ollama"
   | "cancel_local_ollama_setup"
   | "cancel_rag_corpus_download"
+  | "cancel_voice_install"
   | "clear_plugin_data"
   | "clear_rag_corpus_demotes"
   | "clear_strategy_checklist_session"

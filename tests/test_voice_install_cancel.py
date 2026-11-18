@@ -9,7 +9,11 @@ stop; a stop during the model download stops curl within a couple of seconds and
 arrives as the file finishes installs nothing; a second install after a stop starts clean; a real failure is still
 "failed".
 
-Used for: voice_rpc.install_voice_engine, voice_model_download_service.download_voice_model.
+Also (the screen's Cancel, plan 106 lane F3): the new `cancel_voice_install` call answers "nothing running" when there
+is none, stops a running install (which then ends as "cancelled"), is a no-op once the install has ended, and works
+with the microphone permission off (stopping a download is always allowed).
+
+Used for: voice_rpc.install_voice_engine, voice_rpc.cancel_voice_install, voice_model_download_service.download_voice_model.
 Does not: build the engine or touch the network; every slow step is replaced by a fake.
 """
 
@@ -85,6 +89,42 @@ class StoppedVoiceInstall(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestC
         self.assertEqual(state["error"], "Install cancelled.")
         # The speech model is never fetched after a Cancel.
         self.assertEqual(self.model_calls, 0)
+
+    async def test_cancel_with_nothing_running_says_so_and_changes_nothing(self) -> None:
+        out = await self.plugin.cancel_voice_install()
+        self.assertEqual(out, {"cancel_requested": False, "running": False})
+        self.assertEqual(self.plugin._voice_install_state, new_voice_install_state())
+
+    async def test_the_cancel_call_stops_a_running_install_and_it_ends_as_cancelled(self) -> None:
+        release = threading.Event()
+        self.addCleanup(release.set)
+        await self._start_install_that_waits(release)
+        out = await self.plugin.cancel_voice_install()
+        self.assertEqual(out, {"cancel_requested": True, "running": True})
+        await self._wait_until_ended()
+        state = self.plugin._voice_install_state
+        self.assertEqual(state["phase"], "cancelled")
+        self.assertEqual(state["error"], "Install cancelled.")
+        self.assertEqual(self.model_calls, 0)
+
+    async def test_the_cancel_call_after_the_install_ended_is_a_no_op(self) -> None:
+        release = threading.Event()
+        release.set()
+        await self._start_install_that_waits(release)
+        await self._wait_until_ended()
+        out = await self.plugin.cancel_voice_install()
+        self.assertEqual(out, {"cancel_requested": False, "running": False})
+        self.assertFalse(self.plugin._voice_install_cancel.is_set())
+
+    async def test_the_cancel_call_works_with_the_microphone_permission_off(self) -> None:
+        release = threading.Event()
+        self.addCleanup(release.set)
+        await self._start_install_that_waits(release)
+        self._write_settings({"capabilities": {"microphone_access": False, "internet_downloads": False}})
+        out = await self.plugin.cancel_voice_install()
+        self.assertTrue(out["cancel_requested"])
+        await self._wait_until_ended()
+        self.assertEqual(self.plugin._voice_install_state["phase"], "cancelled")
 
     async def test_a_stop_as_the_engine_step_finishes_still_skips_the_model_step(self) -> None:
         release = threading.Event()

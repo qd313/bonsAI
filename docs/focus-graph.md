@@ -1072,6 +1072,42 @@ Update / Download knowledge base     Remove
   (leave the tab: the bar; come back: it goes; Cancel from the bar; a download that ends while away) and
   `KnowledgeBaseSection.test.tsx` (the card's words and Cancel). Device row: P105-JOB-CARD-ELSEWHERE-01.
 
+### The voice install's card (plan 106, lane F3)
+
+While the voice engine installs (Settings tab, "Voice input" section), one job card (`downloads/JobCard.tsx`) stands in for
+the "Install voice engine" / "Reinstall voice engine" button in `voice/VoiceInputSettingsSection.tsx`, with the
+install's first Cancel at its top right. `voiceInstallJob.ts` keeps the card in step with the back end's install status
+and, while no voice section is on screen, reads that status itself every 1.5 seconds so the bar at the bottom of the panel
+follows the install to another tab or a folded section.
+
+```
+STT model row (tiny.en / base.en)
+   | Down -> Steam's own                                              ^ Up -> the section's line
+-- no install ------------------------------------------------------------
+Install voice engine  (or Reinstall voice engine)
+   | Down -> the next line (handed in by the tab)                     ^ Up -> Steam's own
+-- an install going ------------------------------------------------------
+[ job card: title, bar, what it is doing, how far, the sites ]  Cancel
+   | Down -> the next line (the same hand-off)                        ^ Up -> Steam's own
+   Right holds still; Left is Steam's own (out to its menu on the first press, as from the button it stands in for)
+--------------------------------------------------------------------------
+```
+
+- **A on Install puts the ring on the card's Cancel on the same press** (the button leaves the page with the ring on it and
+  its row hands the ring on through Steam's transfer onto Cancel's node, then the button's own focus if that did not land).
+  **When the install ends** (done, failed or cancelled) the card goes and a ring on Cancel goes back to the install button.
+  A ring anywhere else stays where it is.
+- **A on Cancel in the first half second does nothing**; a later A sends the stop once (`cancel_voice_install`) and the card
+  reads "Stopping the install". A stop the back end refuses or never answers puts Cancel back with "Could not stop. Try
+  again." A stopped install ends as "cancelled": under the button, "Install cancelled. Press Install voice engine to start
+  again." in the calm colour, not the red of a failure.
+- **Under the button, while no install runs** (`VoiceInstallResultLines.tsx`): the last result and the sites line. Plain text,
+  not a stop; it is the job's face once the install is over (the bar's "Voice install failed" stays until it can be read).
+- Pinned by `VoiceInputSettingsSection.jobCard.test.tsx` (the ring at the press and at the end, the card's words by stage,
+  Cancel and its half second, a refused stop, the bar when you leave, Cancel from the bar, an install that ends while
+  away) and `SettingsTab.voiceJobWalk.test.tsx` (the whole tab walked with an install going, Steam's scroll modelled three
+  ways: Cancel once each way, never the install button, no stop twice). Device row: P105-JOB-CARD-ELSEWHERE-01.
+
 ### The About tab, one line per row (plan 92, lane T3; plan 91 § 6)
 
 The About tab is `AboutTab.tsx`: the title line "About bonsAI" with the version beside it, the "What bonsAI is"

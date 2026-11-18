@@ -74,7 +74,8 @@ describe("Voice input section after the install finishes", () => {
     mountSection();
     await advance(100);
     expect(screen.getByText(/whisper-cli not installed/)).toBeTruthy();
-    expect(screen.getByText(/Installing…/)).toBeTruthy();
+    // The card stands in for the install button while the install runs.
+    expect(screen.getByText("Voice engine install")).toBeTruthy();
 
     phase = "done";
     await advance(4900);
@@ -111,7 +112,7 @@ describe("Voice input section after the install finishes", () => {
     phase = "idle";
     mountSection();
     await advance(2500);
-    expect(screen.getByText(/Installing…/)).toBeTruthy();
+    expect(screen.getByText("Voice engine install")).toBeTruthy();
 
     phase = "done";
     await advance(4900);

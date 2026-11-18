@@ -2296,6 +2296,10 @@ class Plugin:
         """Install whisper-cli (podman) and download the selected GGUF model (requires microphone_access)."""
         return await voice_rpc.install_voice_engine(self, PLUGIN_ROOT, model_id)
 
+    async def cancel_voice_install(self):
+        """Stop the running voice engine install (the job card's Cancel)."""
+        return await voice_rpc.cancel_voice_install(self)
+
     async def get_voice_install_status(self):
         """Poll voice model download progress."""
         return await voice_rpc.get_voice_install_status(self)

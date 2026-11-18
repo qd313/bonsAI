@@ -73,11 +73,12 @@ class WhereItGoes(unittest.TestCase):
 
 
 class TheSwitch(unittest.TestCase):
-    def test_it_lands_switched_off_until_the_maintainer_decides(self):
+    def test_it_ships_switched_on_as_the_house_style(self):
         # Plan 105: on the answer test it made more first sentences stand alone, but it cost facts kept and let a
-        # little of an ending out on story questions, so the call is the maintainer's (numbers in the commit message).
-        self.assertFalse(reply_style_blocks.HEADLINE_FIRST_ON)
-        self.assertNotIn("HEADLINE FIRST", _prompt("balanced", "speed"))
+        # little of an ending out on story questions; the maintainer chose it as the house style on 2026-11-17,
+        # with no setting for it.
+        self.assertTrue(reply_style_blocks.HEADLINE_FIRST_ON)
+        self.assertIn("HEADLINE FIRST", _prompt("balanced", "speed"))
 
     def test_switched_off_the_clause_is_nowhere(self):
         with _switch(False):

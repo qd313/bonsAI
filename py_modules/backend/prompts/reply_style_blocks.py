@@ -77,8 +77,10 @@ def build_reply_language_block(reply_language: str) -> str:
 # with one short sentence that carries the point, so the reply-ready popup over a game (it shows only the first
 # words), a spoken answer and the first thing in the panel are useful by themselves. Nothing is drawn differently;
 # only the words change. It sits here, with the other reply-shape rules, rather than in ollama_prompts.py: it shapes
-# how the reply reads, not what it is about, and the one switch below turns it off completely.
-HEADLINE_FIRST_ON = False
+# how the reply reads, not what it is about, and the one switch below turns it off completely. It is the house
+# style, not a setting: on since 2026-11-17, the maintainer's call after plan 105's answer test (more first
+# sentences stand alone; a little of an ending can slip out on story questions).
+HEADLINE_FIRST_ON = True
 HEADLINE_FIRST_LINE = (
     "HEADLINE FIRST: After the status line, open the answer with one short sentence that tells the player the main "
     "thing to do or know, plain enough to make sense if it is all they read and giving away no spoiler, late boss "

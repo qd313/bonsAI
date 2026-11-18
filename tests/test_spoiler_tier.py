@@ -44,6 +44,7 @@ from backend.spoilers.strategy_spoiler_policy import (  # noqa: E402
     _strategy_spoiler_policy_block,
     spoiler_cover_required,
 )
+from backend.prompts.reply_style_blocks import build_headline_first_block  # noqa: E402
 from spoiler_default_tier_matrix import (  # noqa: E402
     build_prompt,
     compact_cases,
@@ -89,9 +90,16 @@ class DefaultTierIsTodaysTextTests(unittest.TestCase):
                 self.assertEqual(sha(block), GOLDEN["compact_blocks_sha256"][name], block)
 
     def test_every_whole_system_prompt_reads_as_it_did_on_the_tip(self):
+        # The Headline-first sentence (plan 105, on since 2026-11-17) is the one addition since the golden file was
+        # written; it is taken out before the compare, so every other word must still match byte for byte.
+        headline = build_headline_first_block()
         for name, kw in prompt_cases():
             with self.subTest(case=name):
-                self.assertEqual(sha(build_prompt(**kw)), GOLDEN["prompt_sha256"][name])
+                prompt = build_prompt(**kw)
+                if headline:
+                    self.assertEqual(prompt.count(headline), 1)
+                    prompt = prompt.replace(headline, "", 1)
+                self.assertEqual(sha(prompt), GOLDEN["prompt_sha256"][name])
 
     def test_the_default_tier_leaves_the_games_own_profile_alone(self):
         for profile in ("low_narrative", "protect_progression", "unknown", ""):

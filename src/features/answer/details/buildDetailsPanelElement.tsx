@@ -48,16 +48,6 @@ import type {
 import type { CreditsView } from "./contextChipsFromSnapshot";
 
 /**
- * The "This answer / Session · N" tabs row's way in (plan 62 3c). Plan 105 removed the row: Session is the
- * ladder's last chip now, so there is never a row to land on and this always says no. It is kept only so the
- * five Down chains in MainTabChatTranscript.tsx that ask for it first (each goes on to `focusChipLadderRow`,
- * the chips) need no edit in a round where other lanes work in that file; remove it with those calls.
- */
-export function focusDetailsTabsRow(_turnKey: string): boolean {
-  return false;
-}
-
-/**
  * The chip ladder's own root, per turn, registered by name.
  *
  * Why a registry rather than the existing `focusContextChipLadder` page query: measured on the

@@ -147,7 +147,6 @@ import {
   buildDetailsPanelElement,
   closeDetailsPanel,
   focusChipLadderRow,
-  focusDetailsTabsRow,
 } from "../details/buildDetailsPanelElement";
 import {
   focusChatPermissionHintRow,
@@ -938,7 +937,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
          same chain as the reply row's Down past it, which is not drawn until the answer finishes. */
       onMoveDownWhileWriting: () =>
         focusKbNotesBlock(answerKey) ||
-        focusDetailsTabsRow(answerKey) ||
         focusChipLadderRow(answerKey) ||
         focusDownFromReplyUtilityRowOrPermHint(queryTurnSlot(answerKey) ?? queryLiveTurnSlot()),
     });
@@ -1361,11 +1359,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                       : undefined,
                     suggestTip: showFeedbackHere ? replySuggestTip : undefined,
                     /* Down must reach this turn's own ladder, then the "From the notes" block when
-                       one is attached, then the details panel's own tabs row when the panel is open,
-                       then whatever came after this row before any of them existed. */
+                       one is attached, then whatever came after this row before any of them existed. */
                     onMoveDownFromUtility: () =>
                       focusKbNotesBlock(turn.id) ||
-                      focusDetailsTabsRow(turn.id) ||
                       focusChipLadderRow(turn.id) ||
                       downPastUtilityRow(),
                   });
@@ -1382,7 +1378,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                           focusReplyShowDetails(queryTurnSlot(turn.id)) ||
                           focusReplyUtilityRow(queryTurnSlot(turn.id)),
                         onMoveDown: () =>
-                          focusDetailsTabsRow(turn.id) ||
                           focusChipLadderRow(turn.id) ||
                           downPastUtilityRow(),
                         headerRef: (el: HTMLElement | null) => {
@@ -1569,7 +1564,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   suggestTip: replySuggestTip,
                   onMoveDownFromUtility: () =>
                     focusKbNotesBlock("live") ||
-                    focusDetailsTabsRow("live") ||
                     focusChipLadderRow("live") ||
                     focusDownFromReplyUtilityRowOrPermHint(queryLiveTurnSlot()),
                 })
@@ -1603,7 +1597,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                       focusLiveAnswerFromBelow(queryLiveTurnSlot()) ||
                       focusReplyUtilityRow(queryLiveTurnSlot()),
                     onMoveDown: () =>
-                      focusDetailsTabsRow("live") ||
                       focusChipLadderRow("live") ||
                       focusDownFromReplyUtilityRowOrPermHint(queryLiveTurnSlot()),
                     headerRef: (el: HTMLElement | null) => {

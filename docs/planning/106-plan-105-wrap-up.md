@@ -5,7 +5,10 @@ Written 2026-11-17 by the chat that ran plan 105 (Opus, extra-high), from plan 1
 in the chat the same afternoon. Plain language on purpose: this file is for the maintainer first. The pictures that go
 with it: <https://claude.ai/artifact/WHoMiyk8Fe9PZwXh84LjHU> (open it in a web browser signed in to claude.ai).
 
-**Status: READY, waiting for "go".** Small on purpose: about a dozen helper runs and one or two Deck blocks, so about
+**Status: RUNNING since 2026-11-17, about 20:30 EST.** The maintainer said "run plan 106" before the reset, knowing
+the week (81 percent at go) would likely pass 90. The rules every helper reads: [assets/106-helper-rules.md](assets/106-helper-rules.md).
+
+**As written (READY):** small on purpose: about a dozen helper runs and one or two Deck blocks, so about
 one five-hour window. **Start it after the week resets** (Wednesday 18 November, 08:00 EST): the week stood at about 81 percent
 when this was written, and the line is 90.
 

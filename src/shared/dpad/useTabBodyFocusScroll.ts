@@ -288,27 +288,31 @@ const LATE_GROWTH_MS = 1500;
 
 /**
  * After a held stop was put back at screen top `want.top`, keep it there for a moment more, until the next landing or
- * tap. A MutationObserver on the tab body hears a later change of the page (a section that has just opened drawing its
- * late lines when the back end answers) in the microtask right after React writes it, before any frame is drawn, and
- * turns the pane by however far that change moved the row in the page, so the row never moves on screen; a scroll in
- * between (Steam's own) is left as it is. Not a ResizeObserver: one made here, in the plugin's own window, is not driven
- * by the panel page's frames (useAskBarInitialRingClaim.ts), and on the Deck it never put the row back before the late
- * look did, 7 frames on (plan105-P105-SECTIONS-AUTO-01-d3b.json). A MutationObserver's call comes from the one event
- * loop both pages share, as the help strip's (useHelpStrip.ts). A look about ten frames later catches Steam's own glide,
- * which changes nothing on the page: it puts the row back only when its place was inside Steam's band, so a glide Steam
- * needed is never fought.
+ * tap. A MutationObserver on the tab body hears a later change of the page (a section's late lines when the back end
+ * answers) in the microtask right after React writes it, before any frame is drawn, and turns the pane by however far
+ * that change moved the row in the page, less what the browser already pulled the pane back at the page's end (a change
+ * shortening the page there), so the row never moves on screen; a scroll in between (Steam's own) is left as it is.
+ * Not a ResizeObserver: one made in the plugin's window is not driven by the panel page's frames
+ * (useAskBarInitialRingClaim.ts), and on the Deck it never put the row back before the late look did
+ * (plan105-P105-SECTIONS-AUTO-01-d3b.json). A MutationObserver's call comes from the event loop both pages share, as
+ * the help strip's. A look about ten frames later catches Steam's own glide, which changes nothing on the page, only
+ * when the row's place was inside Steam's band.
  */
 function keepHeldStop(body: BodyState, pane: HTMLElement, el: HTMLElement, want: DOMRect): void {
   const landings = body.landings;
   const heldAt = performance.now();
   const stillHeld = () => el.isConnected && body.landings === landings && body.lastPointerAt <= heldAt;
   let inPage = contentBox(el, pane).top;
+  let scrolled = pane.scrollTop;
   const watch = new MutationObserver(() => {
     if (!stillHeld()) return watch.disconnect();
     const now = contentBox(el, pane).top;
-    const grown = now - inPage;
+    const at = pane.scrollTop;
+    const pulled = at < scrolled && at >= panelScrollMax(pane) - 0.5 ? at - scrolled : 0;
+    const turn = now - inPage - pulled;
     inPage = now;
-    if (Math.abs(grown) >= 1) pane.scrollTop = pane.scrollTop + grown;
+    if (Math.abs(turn) >= 1) pane.scrollTop = at + turn;
+    scrolled = pane.scrollTop;
   });
   watch.observe(body.root, { childList: true, subtree: true, characterData: true, attributes: true });
   setTimeout(() => watch.disconnect(), LATE_GROWTH_MS);

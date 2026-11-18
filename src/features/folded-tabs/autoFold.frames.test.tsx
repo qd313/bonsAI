@@ -85,9 +85,14 @@ function pressUntil(w: FoldedTabWalk, direction: "down" | "up", name: string): F
 /**
  * The landing on `name` walking `direction`, as the Deck made it: the walk reaches the stop, goes back one, lets every
  * reply and timer settle (the Deck's presses were 0.45 to 0.7 s apart), then presses again; the row is then read at
- * every frame for READ_MS. `base` is its top as the landing left it.
+ * every frame for `readMs`. `base` is its top as the landing left it. `beforePress` runs just before that press.
  */
-async function landAndRead(t: TabCase, direction: "down" | "up", name: string) {
+async function landAndRead(
+  t: TabCase,
+  direction: "down" | "up",
+  name: string,
+  { readMs = READ_MS, beforePress }: { readMs?: number; beforePress?: (w: FoldedTabWalk) => void } = {},
+) {
   switchOn();
   const w = walk(t, DECK_PANE, "nearest");
   w.enter();
@@ -95,12 +100,15 @@ async function landAndRead(t: TabCase, direction: "down" | "up", name: string) {
   pressUntil(w, direction, name);
   w.press(direction === "up" ? "down" : "up");
   await settle();
+  beforePress?.(w);
   const landing = w.press(direction);
   expect(landing?.name).toBe(name);
   const l = landing!;
   const base = l.stop.getBoundingClientRect().top;
-  const readings = await readEachFrame(READ_MS, () => l.stop.getBoundingClientRect().top);
-  return { w, l, base, readings };
+  /* How far the pane was from the page's end as the landing left it (0: at its end). */
+  const endGap = w.contentHeight() - DECK_PANE - w.scrollTop();
+  const readings = await readEachFrame(readMs, () => l.stop.getBoundingClientRect().top);
+  return { w, l, base, endGap, readings };
 }
 
 describe("the ringed row read at every frame after a landing that changes a section above it", () => {
@@ -129,6 +137,30 @@ describe("the ringed row read at every frame after a landing that changes a sect
       w.unmount();
     });
   }
+
+  it("at the tab's end, a late change that makes the page shorter above the ring: the row never moves, for the hold's whole 1.5 s", async () => {
+    /*
+     * Settings, Down onto Clear cache..., the tab's last control: AI voice & personality closes above (a hold) and the
+     * pane sits at the page's end. A block of words above the ring in the Data section goes away when a reply comes in
+     * (a section redrawing shorter). The browser pulls the pane back to the page's new end at once, which alone keeps the
+     * row in place on screen; turning the pane again for the same change would push the row down (the second opinion).
+     */
+    let block: HTMLElement | null = null;
+    const { w, l, base, endGap, readings } = await landAndRead(SETTINGS_CASE, "down", "Clear cache...", {
+      readMs: 1500,
+      beforePress: (walking) => {
+        block = document.createElement("div");
+        block.textContent = "A late line of words that goes away once the reply comes in, three lines of the walk's model, about 48 px.";
+        walking.container.querySelector('[data-bonsai-fold-section="data"] .bonsai-fold-body')!.prepend(block);
+        setTimeout(() => block?.remove(), REPLY_MS);
+      },
+    });
+    expect(Math.abs(l.held), "a section closed above the ring and the row was held").toBeGreaterThan(1);
+    expect(endGap, "the landing left the pane at the page's end").toBeCloseTo(0, 5);
+    expect(block!.isConnected, "the block went away during the frames read").toBe(false);
+    expect(framesOff(readings, base, LIMIT_PX)).toEqual([]);
+    w.unmount();
+  });
 
   it("a press before the late line comes in: the line is left to the plan, the plugin turns nothing for the old landing", async () => {
     switchOn();

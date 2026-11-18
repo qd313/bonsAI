@@ -297,11 +297,13 @@ def install_corpus_from_manifest(
                 break
             except Exception as exc:
                 last_err = str(exc)
-                if os.path.isfile(dest):
-                    try:
-                        os.remove(dest)
-                    except OSError:
-                        pass
+                # A stop or a failure part-way leaves the half-written `.part` file as well as, at most, the final name.
+                for leftover in (dest, f"{dest}.part"):
+                    if os.path.isfile(leftover):
+                        try:
+                            os.remove(leftover)
+                        except OSError:
+                            pass
         if last_err:
             raise RuntimeError(last_err or f"Failed to download {fname}")
 

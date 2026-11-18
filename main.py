@@ -1033,7 +1033,11 @@ class Plugin:
 
     async def set_kids_lock_state(self, active: bool = False):
         """Session Kids master lock from Steam parental `locked` (frontend assertion)."""
+        was_active = kids_lock_active()
         set_kids_lock_active(bool(active))
+        if kids_lock_active() and not was_active:
+            # The lock denies downloads like the switch going off, so what is running is stopped the same way.
+            await stop_running_downloads_if_turned_off(self, {"internet_downloads": True}, {"internet_downloads": False})
         return {"ok": True, "kids_lock_active": kids_lock_active()}
 
     @staticmethod

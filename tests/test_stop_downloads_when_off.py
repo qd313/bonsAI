@@ -96,5 +96,36 @@ class TurningDownloadsOffStopsTheRun(PluginSettingsFileMixin, unittest.IsolatedA
         self.assertFalse(self.plugin._voice_install_cancel.is_set())
 
 
+class TheParentalLockStopsRunningDownloadsToo(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase):
+    """The Steam parental lock turns downloads off for the session without saving anything (capabilities.py)."""
+
+    async def asyncSetUp(self) -> None:
+        from backend.core.capabilities import set_kids_lock_active
+
+        self.start_plugin_with_settings_file()
+        self._write_settings({"ollama_local_on_deck": True, **ON})
+        started = patch.object(setup_rpc, "run_local_setup", _stoppable_setup)
+        started.start()
+        self.addCleanup(started.stop)
+        self.addCleanup(set_kids_lock_active, False)
+        set_kids_lock_active(False)
+
+    async def test_the_lock_going_on_mid_run_ends_the_run_as_stopped(self) -> None:
+        out = await self.plugin.start_local_ollama_setup({"profile": "tier1_essentials"})
+        self.assertTrue(out["accepted"], out)
+        task = self.plugin._local_ollama_setup_task
+        await asyncio.sleep(0)
+        await self.plugin.set_kids_lock_state(True)
+        await asyncio.wait_for(task, timeout=2)
+        self.assertEqual((await self.plugin.get_local_ollama_setup_status())["phase"], "cancelled")
+
+    async def test_the_lock_coming_off_or_staying_on_stops_nothing(self) -> None:
+        await self.plugin.set_kids_lock_state(True)
+        with patch.object(self.plugin, "cancel_local_ollama_setup", AsyncMock()) as cancel:
+            await self.plugin.set_kids_lock_state(True)
+            await self.plugin.set_kids_lock_state(False)
+        cancel.assert_not_called()
+
+
 if __name__ == "__main__":
     unittest.main()

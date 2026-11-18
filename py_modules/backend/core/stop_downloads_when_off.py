@@ -5,10 +5,11 @@ middle of a setup and the downloads already running (the AI engine, the models, 
 engine and its build) carried on. This asks each of them to stop, the same way its own Cancel button does, at the
 moment the permission is saved as off.
 Used for: main.py's save_settings, which every way of flipping the switch ends up in (the Permissions tab, the
-first-time setup box, the download notice).
+first-time setup box, the download notice), and set_kids_lock_state, because Steam's parental lock denies downloads
+the same way without saving anything.
 Solves: A person who turns downloads off expects the downloading to stop, not just future downloads to be refused.
-Does not: Cancel anything when the permission was already off or stays on, delete what a stopped download left
-(each download's own stop path does that), or cover the Steam parental lock, which is not a saved setting.
+Does not: Cancel anything when the permission was already off or stays on, or delete what a stopped download left
+(each download's own stop path does that).
 """
 
 from typing import Any
